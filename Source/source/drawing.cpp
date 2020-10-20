@@ -1640,13 +1640,11 @@ void gameplay_state::draw_onion_menu() {
                     more_indicator_item_ids[i], &i_center, &i_size
                 )
             ) {
-                draw_compressed_text(
-                    game.fonts.main,
-                    al_map_rgba(255, 255, 255, 128),
+                draw_bitmap(
+                    game.sys_assets.bmp_more,
                     i_center,
-                    ALLEGRO_ALIGN_CENTER, 1,
-                    i_size,
-                    "..."
+                    point(i % 2 == 0 ? -i_size.x : i_size.x, i_size.y) * 0.8f,
+                    0, map_gray(128)
                 );
             }
         }
@@ -1659,13 +1657,9 @@ void gameplay_state::draw_onion_menu() {
             ONION_HUD_ITEM_PREV_PAGE, &i_center, &i_size
         )
     ) {
-        draw_compressed_text(
-            game.fonts.main,
-            al_map_rgb(255, 255, 255),
-            i_center,
-            ALLEGRO_ALIGN_CENTER, 1,
-            i_size,
-            "<-"
+        draw_bitmap(
+            game.sys_assets.bmp_more,
+            i_center, point(-i_size.x, i_size.y) * 0.5f
         );
         
         draw_textured_box(
@@ -1680,13 +1674,9 @@ void gameplay_state::draw_onion_menu() {
             ONION_HUD_ITEM_NEXT_PAGE, &i_center, &i_size
         )
     ) {
-        draw_compressed_text(
-            game.fonts.main,
-            al_map_rgb(255, 255, 255),
-            i_center,
-            ALLEGRO_ALIGN_CENTER, 1,
-            i_size,
-            "->"
+        draw_bitmap(
+            game.sys_assets.bmp_more,
+            i_center, i_size * 0.5f
         );
         
         draw_textured_box(

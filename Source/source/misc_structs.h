@@ -51,6 +51,7 @@ struct asset_file_names_struct {
     string idle_glow;
     string main_font;
     string main_menu;
+    string more;
     string mouse_button_icon[3];
     string mouse_cursor;
     string mouse_wd_icon;
@@ -463,6 +464,7 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_enemy_spirit;
     ALLEGRO_BITMAP* bmp_icon;
     ALLEGRO_BITMAP* bmp_idle_glow;
+    ALLEGRO_BITMAP* bmp_more;
     ALLEGRO_BITMAP* bmp_mouse_button_icon[3];
     ALLEGRO_BITMAP* bmp_mouse_cursor;
     ALLEGRO_BITMAP* bmp_mouse_wd_icon;

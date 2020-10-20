@@ -38,6 +38,7 @@ asset_file_names_struct::asset_file_names_struct() :
     idle_glow("Idle_glow.png"),
     main_font("Font.png"),
     main_menu("Main_menu.jpg"),
+    more("More.png"),
     mouse_cursor("Mouse_cursor.png"),
     mouse_wd_icon("Mouse_wheel_down_icon.png"),
     mouse_wu_icon("Mouse_wheel_up_icon.png"),
@@ -81,6 +82,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("idle_glow", idle_glow);
     rs.set("main_font", main_font);
     rs.set("main_menu", main_menu);
+    rs.set("more", more);
     rs.set("mouse_cursor", mouse_cursor);
     rs.set("mouse_wheel_down_icon", mouse_wd_icon);
     rs.set("mouse_wheel_up_icon", mouse_wu_icon);
@@ -1681,6 +1683,7 @@ system_asset_list::system_asset_list():
     bmp_enemy_spirit(nullptr),
     bmp_icon(nullptr),
     bmp_idle_glow(nullptr),
+    bmp_more(nullptr),
     bmp_mouse_cursor(nullptr),
     bmp_mouse_wd_icon(nullptr),
     bmp_mouse_wu_icon(nullptr),

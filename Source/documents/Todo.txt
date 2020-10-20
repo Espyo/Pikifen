@@ -4,7 +4,6 @@
 Current tasks (tasks being worked on, but not yet committed)
     Onion menu
         Improve look
-            The arrows indicating there are more types off-screen should be proper graphics, not text
             If the player tries to store a Pikmin they don't have, or call Pikmin not in the Onion, or Pikmin over 100, the corresponding number should flash red
             Make the Onion animations change in size instead of moving up and down?
         Make it so bomb rock Pikmin can enter the Onion too
