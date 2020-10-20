@@ -1403,8 +1403,6 @@ void gameplay_state::draw_onion_menu() {
             ONION_HUD_ITEM_CANCEL, &i_center, &i_size
         )
     ) {
-        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-        
         draw_compressed_text(
             game.fonts.main,
             al_map_rgb(226, 112, 112),
@@ -1412,6 +1410,10 @@ void gameplay_state::draw_onion_menu() {
             ALLEGRO_ALIGN_CENTER, 1,
             i_size,
             "Cancel"
+        );
+        
+        draw_textured_box(
+            i_center, i_size, game.sys_assets.bmp_bubble_box
         );
     }
     
@@ -1421,8 +1423,6 @@ void gameplay_state::draw_onion_menu() {
             ONION_HUD_ITEM_OK, &i_center, &i_size
         )
     ) {
-        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-        
         draw_compressed_text(
             game.fonts.main,
             al_map_rgb(96, 226, 80),
@@ -1430,6 +1430,10 @@ void gameplay_state::draw_onion_menu() {
             ALLEGRO_ALIGN_CENTER, 1,
             i_size,
             "Ok"
+        );
+        
+        draw_textured_box(
+            i_center, i_size, game.sys_assets.bmp_bubble_box
         );
     }
     
@@ -1468,8 +1472,6 @@ void gameplay_state::draw_onion_menu() {
             ONION_HUD_ITEM_SEL_ALL, &i_center, &i_size
         )
     ) {
-        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-        
         draw_compressed_text(
             game.fonts.main,
             al_map_rgb(188, 230, 230),
@@ -1486,19 +1488,13 @@ void gameplay_state::draw_onion_menu() {
                 point(i_size.y * 0.6, i_size.y * 0.6)
             );
         }
+        
+        draw_textured_box(
+            i_center, i_size, game.sys_assets.bmp_bubble_box
+        );
     }
     
     //Onion buttons.
-    if(onion_menu->select_all) {
-        if(
-            onion_menu->hud->get_draw_data(
-                ONION_HUD_ITEM_OALL_BUTTON, &i_center, &i_size
-            )
-        ) {
-            draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-        }
-    }
-    
     for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
         int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
         if(
@@ -1508,15 +1504,29 @@ void gameplay_state::draw_onion_menu() {
         ) {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
-            if(!onion_menu->select_all) {
-                draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-            }
-            
             if(t_ptr->pik_type->bmp_onion_icon) {
                 draw_bitmap(
                     t_ptr->pik_type->bmp_onion_icon, i_center, i_size * 0.8f
                 );
             }
+            
+            if(!onion_menu->select_all) {
+                draw_textured_box(
+                    i_center, i_size, game.sys_assets.bmp_bubble_box
+                );
+            }
+        }
+    }
+    
+    if(onion_menu->select_all) {
+        if(
+            onion_menu->hud->get_draw_data(
+                ONION_HUD_ITEM_OALL_BUTTON, &i_center, &i_size
+            )
+        ) {
+            draw_textured_box(
+                i_center, i_size, game.sys_assets.bmp_bubble_box
+            );
         }
     }
     
@@ -1552,16 +1562,6 @@ void gameplay_state::draw_onion_menu() {
     }
     
     //Squad buttons.
-    if(onion_menu->select_all) {
-        if(
-            onion_menu->hud->get_draw_data(
-                ONION_HUD_ITEM_PALL_BUTTON, &i_center, &i_size
-            )
-        ) {
-            draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-        }
-    }
-    
     for(size_t t = 0; t < onion_menu->on_screen_types.size(); ++t) {
         int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
         if(
@@ -1571,12 +1571,26 @@ void gameplay_state::draw_onion_menu() {
         ) {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
-            if(!onion_menu->select_all) {
-                draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-            }
-            
             draw_bitmap(
                 t_ptr->pik_type->bmp_icon, i_center, i_size * 0.8f
+            );
+            
+            if(!onion_menu->select_all) {
+                draw_textured_box(
+                    i_center, i_size, game.sys_assets.bmp_bubble_box
+                );
+            }
+        }
+    }
+    
+    if(onion_menu->select_all) {
+        if(
+            onion_menu->hud->get_draw_data(
+                ONION_HUD_ITEM_PALL_BUTTON, &i_center, &i_size
+            )
+        ) {
+            draw_textured_box(
+                i_center, i_size, game.sys_assets.bmp_bubble_box
             );
         }
     }
@@ -1645,8 +1659,6 @@ void gameplay_state::draw_onion_menu() {
             ONION_HUD_ITEM_PREV_PAGE, &i_center, &i_size
         )
     ) {
-        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-        
         draw_compressed_text(
             game.fonts.main,
             al_map_rgb(255, 255, 255),
@@ -1654,6 +1666,10 @@ void gameplay_state::draw_onion_menu() {
             ALLEGRO_ALIGN_CENTER, 1,
             i_size,
             "<-"
+        );
+        
+        draw_textured_box(
+            i_center, i_size, game.sys_assets.bmp_bubble_box
         );
     }
     
@@ -1664,8 +1680,6 @@ void gameplay_state::draw_onion_menu() {
             ONION_HUD_ITEM_NEXT_PAGE, &i_center, &i_size
         )
     ) {
-        draw_bitmap(bmp_counter_bubble_standby, i_center, i_size);
-        
         draw_compressed_text(
             game.fonts.main,
             al_map_rgb(255, 255, 255),
@@ -1673,6 +1687,10 @@ void gameplay_state::draw_onion_menu() {
             ALLEGRO_ALIGN_CENTER, 1,
             i_size,
             "->"
+        );
+        
+        draw_textured_box(
+            i_center, i_size, game.sys_assets.bmp_bubble_box
         );
     }
     
@@ -3612,15 +3630,24 @@ void draw_textured_box(
     //Bitmap size.
     const int bmp_w = al_get_bitmap_width(texture);
     const int bmp_h = al_get_bitmap_height(texture);
-    //Corner sizes.
-    const point corner_size(
-        std::min(
-            (float) (bmp_w / 3.0f), size.x / 2.0f
-        ),
-        std::min(
-            (float) (bmp_h / 3.0f), size.y / 2.0f
-        )
+    //Minimum size at which the corner graphics are drawn in full.
+    //Workaround: For some reason there's a seam visible when the edges are
+    //around < 6 pixels wide. I can't figure out why. So I'm bumping
+    //this threshold to be 8 pixels longer than normal.
+    const point corner_treshold(
+        std::max(8.0f, size.x / 2.0f - 8),
+        std::max(8.0f, size.y / 2.0f - 8)
     );
+    //Corner size.
+    point corner_size(bmp_w / 3.0f, bmp_h / 3.0f);
+    if(corner_treshold.x < corner_size.x) {
+        corner_size.x = corner_treshold.x;
+        corner_size.y = corner_size.x * (bmp_w / bmp_h);
+    }
+    if(corner_treshold.y < corner_size.y) {
+        corner_size.y = corner_treshold.y;
+        corner_size.x = corner_size.y * (bmp_h / bmp_w);
+    }
     
     //Initialize the vertexes.
     ALLEGRO_VERTEX vert[total_vertexes];
