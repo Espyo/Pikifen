@@ -1030,6 +1030,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::release_tool);
             efc.change_state("in_group_chasing");
         }
+        efc.new_event(MOB_EV_GO_TO_ONION); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("going_to_onion");
+        }
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader_h");
@@ -1076,6 +1080,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::release_tool);
             efc.change_state("in_group_stopped");
         }
+        efc.new_event(MOB_EV_GO_TO_ONION); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("going_to_onion");
+        }
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader_h");
@@ -1119,6 +1127,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_RELEASE_ORDER); {
             efc.run(pikmin_fsm::release_tool);
             efc.change_state("swarm_chasing");
+        }
+        efc.new_event(MOB_EV_GO_TO_ONION); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("going_to_onion");
         }
         efc.new_event(MOB_EV_ON_LEAVE); {
             efc.run(pikmin_fsm::set_idle_task_reach);
@@ -1169,6 +1181,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_RELEASE_ORDER); {
             efc.run(pikmin_fsm::release_tool);
             efc.change_state("swarm_stopped");
+        }
+        efc.new_event(MOB_EV_GO_TO_ONION); {
+            efc.run(pikmin_fsm::release_tool);
+            efc.change_state("going_to_onion");
         }
         efc.new_event(MOB_EV_ON_LEAVE); {
             efc.run(pikmin_fsm::set_idle_task_reach);

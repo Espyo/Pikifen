@@ -724,7 +724,6 @@ pikmin_nest_struct::pikmin_nest_struct(
 
 
 /* ----------------------------------------------------------------------------
- * Temporary feature to allow Pikmin to be called from the nest.
  * Calls out a Pikmin from inside the nest, if possible.
  * Gives priority to the higher maturities.
  * Returns true if a Pikmin was spawned, false otherwise.
@@ -900,8 +899,13 @@ void pikmin_nest_struct::tick(const float delta_t) {
         }
         
         if(best_type != INVALID) {
+            //Try to call a Pikmin.
             if(call_pikmin(m_ptr, best_type)) {
+                //Call successful! Update the queue.
                 call_queue[best_type]--;
+            } else {
+                //Call failed. Forget the player's request.
+                call_queue[best_type] = 0;
             }
         }
         

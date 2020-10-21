@@ -2,15 +2,9 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Onion menu
-        Improve look
-            Make the Onion animations change in size instead of moving up and down?
-        Make it so bomb rock Pikmin can enter the Onion too
-        Tests:
-            What if more Pikmin spawn and the values the player wants end up going over 100?
-            When queueing Pikmin to take out, keep in mind that if you go to Onion 1, ask for 90 Pikmin, then go to Onion 2 while those Pikmin are still coming out, and try to take out Pikmin, it can't let you take out more than 10
     Misc. stuff
         I was wondering if it would be better to have each pellet posie color have it's own sheet rather than each pellet size --Kman
+        In the area editor, click an object, change some property in a text box, click elsewhere and drag -- you can move the object
         GUI angle picker -- format to show decimals
         Animation editor, bitmap name, as you type it keeps trying to load the bitmap and cause errors as it doesn't find it
         The hit rate description -- is it backwards?    

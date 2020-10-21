@@ -84,8 +84,8 @@ sprites{
 		file=Blue_Onion.png
 		file_pos=0.0000 0.0000
 		file_size=280.0000 320.0000
-		offset=22.0000 0.2000
-		scale=0.5000 0.5000
+		offset=22.1000 0.0000
+		scale=0.5030 0.5030
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000
@@ -186,8 +186,8 @@ sprites{
 		file=Blue_Onion.png
 		file_pos=282.0000 0.0000
 		file_size=280.0000 320.0000
-		offset=22.0000 0.2000
-		scale=0.5000 0.5000
+		offset=22.1000 0.0000
+		scale=0.5030 0.5030
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000
@@ -288,8 +288,8 @@ sprites{
 		file=Blue_Onion.png
 		file_pos=564.0000 0.0000
 		file_size=280.0000 320.0000
-		offset=22.0000 0.2000
-		scale=0.5000 0.5000
+		offset=22.1000 0.0000
+		scale=0.5030 0.5030
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000
@@ -390,8 +390,8 @@ sprites{
 		file=Blue_Onion.png
 		file_pos=846.0000 0.0000
 		file_size=280.0000 320.0000
-		offset=22.0000 0.2000
-		scale=0.5000 0.5000
+		offset=22.1000 0.0000
+		scale=0.5030 0.5030
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000
