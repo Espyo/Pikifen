@@ -46,6 +46,8 @@ const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MIN_INTERVAL = 0.01
 const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_RAMP_TIME = 0.9f;
 //How many Pikmin types can be on-screen per page.
 const size_t gameplay_state::onion_menu_struct::MAX_TYPES_ON_SCREEN = 5;
+//How long to let text turn red for.
+const float gameplay_state::onion_menu_struct::RED_TEXT_DURATION = 1.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -1061,6 +1063,9 @@ void gameplay_state::onion_menu_struct::add_to_group(const size_t type_idx) {
         
     //First, check if there are enough in the Onion to take out.
     if(real_onion_amount - types[type_idx].delta <= 0) {
+        make_widget_red(
+            ONION_HUD_ITEM_O1_AMOUNT + types[type_idx].on_screen_idx
+        );
         return;
     }
     
@@ -1073,6 +1078,7 @@ void gameplay_state::onion_menu_struct::add_to_group(const size_t type_idx) {
         game.states.gameplay->mobs.pikmin_list.size() + total_delta >=
         game.config.max_pikmin_in_field
     ) {
+        make_widget_red(ONION_HUD_ITEM_FIELD);
         return;
     }
     
@@ -1090,6 +1096,11 @@ void gameplay_state::onion_menu_struct::add_to_onion(const size_t type_idx) {
         l_ptr->group->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
     if(real_group_amount + types[type_idx].delta <= 0) {
+        if(types[type_idx].on_screen_idx != INVALID) {
+            make_widget_red(
+                ONION_HUD_ITEM_P1_AMOUNT + types[type_idx].on_screen_idx
+            );
+        }
         return;
     }
     
@@ -1122,6 +1133,16 @@ void gameplay_state::onion_menu_struct::confirm() {
 void gameplay_state::onion_menu_struct::go_to_page(const size_t page) {
     this->page = page;
     update_caches();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes a given widget turn red.
+ * id:
+ *   ID of the widget.
+ */
+void gameplay_state::onion_menu_struct::make_widget_red(const size_t id) {
+    red_widgets[id] = RED_TEXT_DURATION;
 }
 
 
@@ -1239,6 +1260,16 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
                 );
         }
     }
+    
+    //Animate red text, if any.
+    for(auto w = red_widgets.begin(); w != red_widgets.end();) {
+        w->second -= delta_t;
+        if(w->second <= 0.0f) {
+            w = red_widgets.erase(w);
+        } else {
+            ++w;
+        }
+    }
 }
 
 
@@ -1258,12 +1289,17 @@ void gameplay_state::onion_menu_struct::toggle_select_all() {
 void gameplay_state::onion_menu_struct::update_caches() {
     on_screen_types.clear();
     
+    for(size_t t = 0; t < types.size(); ++t) {
+        types[t].on_screen_idx = INVALID;
+    }
+    
     for(
         size_t t = page * ONION_MENU_TYPES_PER_PAGE;
         t < (page + 1) * ONION_MENU_TYPES_PER_PAGE &&
         t < n_ptr->nest_type->pik_types.size();
         ++t
     ) {
+        types[t].on_screen_idx = on_screen_types.size();
         on_screen_types.push_back(&types[t]);
     }
     

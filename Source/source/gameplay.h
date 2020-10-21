@@ -153,6 +153,8 @@ private:
         int delta;
         //Index of this type in the Onion's list. Cache for convenience.
         size_t type_idx;
+        //Index in the on-screen list, or INVALID. Cache for convenience.
+        size_t on_screen_idx;
         //Pikmin type associated. Cache for convenience.
         pikmin_type* pik_type;
         
@@ -183,6 +185,8 @@ private:
         float button_hold_time;
         //How long until the next button activation, from it being held.
         float button_hold_next_activation;
+        //Which widgets are in red right now, if any, and how much time left.
+        map<size_t, float> red_widgets;
         //Total page amount. Cache for convenience.
         size_t nr_pages;
         //Pikmin types currently on-screen. Cache for convenience.
@@ -209,8 +213,10 @@ private:
         static const float BUTTON_REPEAT_MIN_INTERVAL;
         static const float BUTTON_REPEAT_RAMP_TIME;
         static const size_t MAX_TYPES_ON_SCREEN;
+        static const float RED_TEXT_DURATION;
         
     private:
+        void make_widget_red(const size_t id);
         void update_caches();
     };
     

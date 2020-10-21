@@ -1455,9 +1455,20 @@ void gameplay_state::draw_onion_menu() {
             al_map_rgba(188, 230, 230, 128)
         );
         
+        ALLEGRO_COLOR color = al_map_rgb(188, 230, 230);
+        const auto &red_it = onion_menu->red_widgets.find(ONION_HUD_ITEM_FIELD);
+        if(red_it != onion_menu->red_widgets.end()) {
+            color =
+                interpolate_color(
+                    red_it->second,
+                    0, onion_menu->RED_TEXT_DURATION,
+                    color, al_map_rgb(224, 0, 0)
+                );
+        }
+        
         draw_compressed_text(
             game.fonts.main,
-            al_map_rgb(188, 230, 230),
+            color,
             i_center,
             ALLEGRO_ALIGN_CENTER, 1,
             i_size,
@@ -1550,9 +1561,20 @@ void gameplay_state::draw_onion_menu() {
                 al_map_rgba(188, 230, 230, 128)
             );
             
+            ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
+            const auto &red_it = onion_menu->red_widgets.find(hud_item_id);
+            if(red_it != onion_menu->red_widgets.end()) {
+                color =
+                    interpolate_color(
+                        red_it->second,
+                        0, onion_menu->RED_TEXT_DURATION,
+                        color, al_map_rgb(224, 0, 0)
+                    );
+            }
+            
             draw_compressed_text(
                 game.fonts.area_name,
-                al_map_rgb(255, 255, 255),
+                color,
                 i_center,
                 ALLEGRO_ALIGN_CENTER, 1,
                 i_size,
@@ -1615,9 +1637,20 @@ void gameplay_state::draw_onion_menu() {
                 al_map_rgba(188, 230, 230, 128)
             );
             
+            ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
+            const auto &red_it = onion_menu->red_widgets.find(hud_item_id);
+            if(red_it != onion_menu->red_widgets.end()) {
+                color =
+                    interpolate_color(
+                        red_it->second,
+                        0, onion_menu->RED_TEXT_DURATION,
+                        color, al_map_rgb(224, 0, 0)
+                    );
+            }
+            
             draw_compressed_text(
                 game.fonts.area_name,
-                al_map_rgb(255, 255, 255),
+                color,
                 i_center,
                 ALLEGRO_ALIGN_CENTER, 1,
                 i_size,
