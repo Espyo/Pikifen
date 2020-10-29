@@ -856,7 +856,7 @@ void area_editor::process_gui_panel_details() {
                 
                 //Tree shadow angle value.
                 float shadow_angle = normalize_angle(selected_shadow->angle);
-                if(ImGui::SliderAngle("Angle", &shadow_angle, 0, 360)) {
+                if(ImGui::SliderAngle("Angle", &shadow_angle, 0, 360, "%.2f")) {
                     register_change("tree shadow angle change");
                     selected_shadow->angle = shadow_angle;
                 }
@@ -1494,7 +1494,7 @@ void area_editor::process_gui_panel_mob() {
     
     //Object angle value.
     float mob_angle = normalize_angle(m_ptr->angle);
-    if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360)) {
+    if(ImGui::SliderAngle("Angle", &mob_angle, 0, 360, "%.2f")) {
         register_change("object angle change");
         m_ptr->angle = mob_angle;
     }
@@ -2361,7 +2361,7 @@ void area_editor::process_gui_panel_sector() {
             
             //Sector texture rotation value.
             float texture_rotation = normalize_angle(s_ptr->texture_info.rot);
-            if(ImGui::SliderAngle("Angle", &texture_rotation, 0, 360)) {
+            if(ImGui::SliderAngle("Angle", &texture_rotation, 0, 360, "%.2f")) {
                 register_change("sector texture angle change");
                 s_ptr->texture_info.rot = texture_rotation;
                 quick_preview_timer.start();

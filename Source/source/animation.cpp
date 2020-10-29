@@ -589,7 +589,7 @@ void sprite::set_bitmap(
     }
     
     if(file_name != file || !parent_bmp) {
-        parent_bmp = game.bitmaps.get(file_name, node);
+        parent_bmp = game.bitmaps.get(file_name, node, node != NULL);
     }
     
     int parent_w = al_get_bitmap_width(parent_bmp);

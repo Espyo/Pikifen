@@ -104,13 +104,15 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
         //"reached destination" event if the treasure is
         //covering the beam, and not necessarily if the treasure
         //is on the same coordinates as the beam.
-        ship* s_ptr = (ship*) m->carry_info->intended_mob;
-        target_distance =
-            std::max(
-                m->type->radius -
-                s_ptr->shi_type->beam_radius,
-                3.0f
-            );
+        if(m->carry_info->intended_mob) {
+            ship* s_ptr = (ship*) m->carry_info->intended_mob;
+            target_distance =
+                std::max(
+                    m->type->radius -
+                    s_ptr->shi_type->beam_radius,
+                    3.0f
+                );
+        }
     }
     
     m->follow_path(

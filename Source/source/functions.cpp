@@ -1279,6 +1279,8 @@ string strsignal(const int signum) {
  *   String to unescape.
  */
 string unescape_string(const string &s) {
+    if(s.empty()) return s;
+    
     string ret;
     ret.reserve(s.size());
     for(size_t c = 0; c < s.size() - 1;) {

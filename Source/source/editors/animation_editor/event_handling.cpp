@@ -198,12 +198,13 @@ void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  *   Event to handle.
  */
 void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty()) {
+    if(!dialogs.empty() || is_mouse_in_gui) {
         return;
     }
     if(ImGui::GetIO().WantCaptureKeyboard) {
         //A textbox is in use. Clicking could change the state of the animation,
         //so ignore it now, and let Dear ImGui close the box.
+        is_m1_pressed = false;
         return;
     }
     

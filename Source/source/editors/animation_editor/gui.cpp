@@ -748,8 +748,8 @@ void animation_editor::process_gui_panel_animation() {
             }
             set_tooltip(
                 "If this attack can knock back Pikmin, this indicates "
-                "the chance that it will miss.\n"
-                "0 means it will always hit, 50 means it will miss "
+                "the chance that it will hit.\n"
+                "0 means it will always miss, 50 means it will hit "
                 "half the time, etc."
             );
             
@@ -1968,7 +1968,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 if(
                     ImGui::SliderAngle(
                         "Knockback angle", &cur_hitbox->knockback_angle,
-                        0.0f, 360.0f
+                        0.0f, 360.0f, "%.2f"
                     )
                 ) {
                     made_new_changes = true;
@@ -2103,7 +2103,11 @@ void animation_editor::process_gui_panel_sprite_top() {
         
         //Top angle value.
         cur_sprite->top_angle = normalize_angle(cur_sprite->top_angle);
-        if(ImGui::SliderAngle("Angle", &cur_sprite->top_angle, 0.0f, 360.0f)) {
+        if(
+            ImGui::SliderAngle(
+                "Angle", &cur_sprite->top_angle, 0.0f, 360.0f, "%.2f"
+            )
+        ) {
             made_new_changes = true;
         }
         
@@ -2220,7 +2224,9 @@ void animation_editor::process_gui_panel_sprite_transform() {
     
     //Sprite angle value.
     cur_sprite->angle = normalize_angle(cur_sprite->angle);
-    if(ImGui::SliderAngle("Angle", &cur_sprite->angle, 0.0f, 360.0f)) {
+    if(
+        ImGui::SliderAngle("Angle", &cur_sprite->angle, 0.0f, 360.0f, "%.2f")
+    ) {
         made_new_changes = true;
     }
     

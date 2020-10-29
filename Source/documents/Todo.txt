@@ -4,10 +4,6 @@
 Current tasks (tasks being worked on, but not yet committed)
     Misc. stuff
         I was wondering if it would be better to have each pellet posie color have it's own sheet rather than each pellet size --Kman
-        In the area editor, click an object, change some property in a text box, click elsewhere and drag -- you can move the object
-        GUI angle picker -- format to show decimals
-        Animation editor, bitmap name, as you type it keeps trying to load the bitmap and cause errors as it doesn't find it
-        The hit rate description -- is it backwards?    
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
