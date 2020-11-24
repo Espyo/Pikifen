@@ -688,6 +688,45 @@ void area_editor::find_problems() {
         }
     }
     
+    //Path from pile to bridge is blocked by said bridge.
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+        if(m_ptr->category->id != MOB_CATEGORY_PILES) {
+            continue;
+        }
+        
+        for(size_t l = 0; l < m_ptr->links.size(); ++l) {
+            if(m_ptr->links[l]->category->id != MOB_CATEGORY_BRIDGES) {
+                continue;
+            }
+            
+            vector<path_stop*> path =
+                get_path(m_ptr->pos, m_ptr->links[l]->pos, NULL, NULL);
+                
+            for(size_t s = 1; s < path.size(); ++s) {
+                if(
+                    circle_intersects_line(
+                        m_ptr->links[l]->pos,
+                        get_mob_gen_radius(m_ptr->links[l]),
+                        path[s - 1]->pos,
+                        path[s]->pos
+                    )
+                ) {
+                    problem_mob_ptr = m_ptr->links[l];
+                    problem_type = EPT_PILE_BRIDGE_PATH;
+                    problem_title =
+                        "Bridge is blocking the path to itself!";
+                    problem_description =
+                        "The path Pikmin must take from a pile to this "
+                        "bridge is blocked by the unbuilt bridge object "
+                        "itself. Move the path stop to some place a bit "
+                        "before the bridge object.";
+                    return;
+                }
+            }
+        }
+    }
+    
     //Path stops out of bounds.
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];

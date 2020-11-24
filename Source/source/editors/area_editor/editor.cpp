@@ -1104,7 +1104,8 @@ void area_editor::goto_problem() {
     } case EPT_TYPELESS_MOB:
     case EPT_MOB_OOB:
     case EPT_MOB_IN_WALL:
-    case EPT_SECTORLESS_BRIDGE: {
+    case EPT_SECTORLESS_BRIDGE:
+    case EPT_PILE_BRIDGE_PATH: {
 
         if(!problem_mob_ptr) {
             //Uh, old information. Try searching for problems again.
