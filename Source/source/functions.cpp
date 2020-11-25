@@ -29,8 +29,8 @@
 #include "const.h"
 #include "drawing.h"
 #include "game.h"
+#include "game_states/menus.h"
 #include "init.h"
-#include "menus.h"
 #include "utils/backtrace.h"
 #include "utils/string_utils.h"
 

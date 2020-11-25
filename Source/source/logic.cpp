@@ -10,7 +10,7 @@
 
 #include <algorithm>
 
-#include "gameplay.h"
+#include "game_states/gameplay.h"
 
 #include "const.h"
 #include "drawing.h"

@@ -12,12 +12,12 @@
 #ifndef GAMEPLAY_INCLUDED
 #define GAMEPLAY_INCLUDED
 
+#include "../mobs/interactable.h"
+#include "../mobs/onion.h"
+#include "../mobs/pikmin.h"
+#include "../mobs/ship.h"
+#include "../replay.h"
 #include "game_state.h"
-#include "mobs/interactable.h"
-#include "mobs/onion.h"
-#include "mobs/pikmin.h"
-#include "mobs/ship.h"
-#include "replay.h"
 
 
 /* ----------------------------------------------------------------------------

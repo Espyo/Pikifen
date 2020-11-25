@@ -16,8 +16,8 @@
 
 #include <allegro5/allegro.h>
 
-#include "menu_widgets.h"
-#include "mobs/mob.h"
+#include "../menu_widgets.h"
+#include "../mobs/mob.h"
 
 
 using std::size_t;

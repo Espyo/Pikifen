@@ -16,7 +16,7 @@
 #include <allegro5/allegro.h>
 
 #include "game_state.h"
-#include "menu_widgets.h"
+#include "../menu_widgets.h"
 
 
 using std::map;

@@ -14,7 +14,7 @@
 
 #include "../functions.h"
 #include "../game.h"
-#include "../gameplay.h"
+#include "../game_states/gameplay.h"
 #include "../mob_types/leader_type.h"
 #include "../mobs/drop.h"
 #include "../mobs/leader.h"
@@ -2024,8 +2024,8 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     }
     m->track_info =
         new track_info_struct(
-            tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
-        );
+        tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
+    );
 }
 
 

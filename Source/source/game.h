@@ -13,14 +13,14 @@
 
 #include <allegro5/allegro.h>
 
-#include "game_state.h"
+#include "game_states/game_state.h"
 
-#include "editors/animation_editor/editor.h"
-#include "editors/area_editor/editor.h"
 #include "game_config.h"
-#include "gameplay.h"
+#include "game_states/animation_editor/editor.h"
+#include "game_states/area_editor/editor.h"
+#include "game_states/gameplay.h"
+#include "game_states/menus.h"
 #include "liquid.h"
-#include "menus.h"
 #include "mob_script_action.h"
 #include "misc_structs.h"
 #include "options.h"

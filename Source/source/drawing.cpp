@@ -13,11 +13,11 @@
 
 #include "drawing.h"
 
+#include "game_states/gameplay.h"
 #include "animation.h"
 #include "const.h"
 #include "functions.h"
 #include "game.h"
-#include "gameplay.h"
 #include "mobs/group_task.h"
 #include "mobs/pile.h"
 #include "mobs/scale.h"

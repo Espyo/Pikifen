@@ -15,11 +15,12 @@
 
 #include "menus.h"
 
+#include "../drawing.h"
+#include "../functions.h"
+#include "../game.h"
+#include "../load.h"
+#include "../utils/string_utils.h"
 #include "drawing.h"
-#include "functions.h"
-#include "game.h"
-#include "load.h"
-#include "utils/string_utils.h"
 
 
 using std::size_t;

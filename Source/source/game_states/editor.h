@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-#include "../game_state.h"
+#include "game_state.h"
 
 
 using std::map;

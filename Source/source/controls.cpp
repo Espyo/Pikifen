@@ -21,7 +21,7 @@
 #include "drawing.h"
 #include "functions.h"
 #include "game.h"
-#include "gameplay.h"
+#include "game_states/gameplay.h"
 #include "utils/string_utils.h"
 
 
