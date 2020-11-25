@@ -18,6 +18,31 @@
  }]]]>
     </Plugin>
   </Plugins>
+  <VirtualDirectory Name="game_states">
+    <File Name="../source/game_states/menus.h"/>
+    <File Name="../source/game_states/menus.cpp"/>
+    <File Name="../source/game_states/game_state.h"/>
+    <File Name="../source/game_states/game_state.cpp"/>
+    <File Name="../source/game_states/gameplay.h"/>
+    <File Name="../source/game_states/gameplay.cpp"/>
+    <File Name="../source/game_states/editor.h"/>
+    <File Name="../source/game_states/editor.cpp"/>
+    <VirtualDirectory Name="animation_editor">
+      <File Name="../source/game_states/animation_editor/gui.cpp"/>
+      <File Name="../source/game_states/animation_editor/event_handling.cpp"/>
+      <File Name="../source/game_states/animation_editor/editor.h"/>
+      <File Name="../source/game_states/animation_editor/editor.cpp"/>
+      <File Name="../source/game_states/animation_editor/drawing.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="area_editor">
+      <File Name="../source/game_states/area_editor/gui.cpp"/>
+      <File Name="../source/game_states/area_editor/geometry_logic.cpp"/>
+      <File Name="../source/game_states/area_editor/event_handling.cpp"/>
+      <File Name="../source/game_states/area_editor/editor.h"/>
+      <File Name="../source/game_states/area_editor/editor.cpp"/>
+      <File Name="../source/game_states/area_editor/drawing.cpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
   <VirtualDirectory Name="imgui">
     <File Name="../source/imgui/imgui_stdlib.h"/>
     <File Name="../source/imgui/imgui_stdlib.cpp"/>
@@ -184,7 +209,6 @@
     <File Name="../source/particle.h"/>
     <File Name="../source/weather.cpp"/>
     <File Name="../source/mob_script.cpp"/>
-    <File Name="../source/game_state.cpp"/>
     <File Name="../source/menu_widgets.cpp"/>
     <File Name="../source/misc_structs.cpp"/>
     <File Name="../source/functions.h"/>
@@ -197,16 +221,13 @@
     <File Name="../source/drawing.cpp"/>
     <File Name="../source/hazard.h"/>
     <File Name="../source/weather.h"/>
-    <File Name="../source/menus.h"/>
     <File Name="../source/main.cpp"/>
     <File Name="../source/resource.h"/>
     <File Name="../source/misc_structs.h"/>
     <File Name="../source/menu_widgets.h"/>
     <File Name="../source/init.cpp"/>
-    <File Name="../source/menus.cpp"/>
     <File Name="../source/controls.cpp"/>
     <File Name="../source/animation.h"/>
-    <File Name="../source/game_state.h"/>
     <File Name="../source/sector.h"/>
     <File Name="../source/logic.cpp"/>
     <File Name="../source/animation.cpp"/>
@@ -222,8 +243,6 @@
     <File Name="../source/liquid.h"/>
     <File Name="../source/load.h"/>
     <File Name="../source/load.cpp"/>
-    <File Name="../source/gameplay.h"/>
-    <File Name="../source/gameplay.cpp"/>
     <File Name="../source/replay.h"/>
     <File Name="../source/replay.cpp"/>
   </VirtualDirectory>
@@ -274,25 +293,6 @@
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
-  <VirtualDirectory Name="editors">
-    <VirtualDirectory Name="animation_editor">
-      <File Name="../source/editors/animation_editor/gui.cpp"/>
-      <File Name="../source/editors/animation_editor/event_handling.cpp"/>
-      <File Name="../source/editors/animation_editor/drawing.cpp"/>
-      <File Name="../source/editors/animation_editor/editor.cpp"/>
-      <File Name="../source/editors/animation_editor/editor.h"/>
-    </VirtualDirectory>
-    <File Name="../source/editors/editor.cpp"/>
-    <File Name="../source/editors/editor.h"/>
-    <VirtualDirectory Name="area_editor">
-      <File Name="../source/editors/area_editor/gui.cpp"/>
-      <File Name="../source/editors/area_editor/event_handling.cpp"/>
-      <File Name="../source/editors/area_editor/geometry_logic.cpp"/>
-      <File Name="../source/editors/area_editor/drawing.cpp"/>
-      <File Name="../source/editors/area_editor/editor.cpp"/>
-      <File Name="../source/editors/area_editor/editor.h"/>
-    </VirtualDirectory>
-  </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">

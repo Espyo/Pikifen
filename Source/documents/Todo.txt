@@ -6,13 +6,13 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
-    
+    End of day
+        Create a new state: Results
+            Enemies beaten, treasures salvaged, Pikmin born, Pikmin deaths
+            A button to retry, and another to go back to the area menu
     
     --- v0.20.0 ---
     Add rudimentary menus
-        Sunset warning
-        End of day
-            Enemies beaten, treasures salvaged, Pikmin born, Pikmin deaths
         Pause
             Continue, end day, quit
     Sector edge features
@@ -559,6 +559,7 @@ Tasks for later on (I might never implement these)
         And just systemic gameplay in general, like lit Pikmin lighting nearby Pikmin on fire http://www.youtube.com/watch?v=SnpAAX9CkIc
             Red Pikmin can carry flaming coals, which can set enemies on fire
     Enemies don't care about bottomless pits and will gladly walk off when roaming -- is there any way to remedy this?
+    Logic for arachnorbs to move freely, instead of only forward, and to chase a target (thanks Neo)
     Hiding
     Warp point, like in Pikmin 3
         Carrying paths should be able to specify a "portal" link, which internally is considered to be 0-distance. This helps calculate the destinations without considering two warp points as being insanely far apart
