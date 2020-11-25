@@ -5,21 +5,21 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Main game loop logic.
+ * Main gameplay logic.
  */
 
 #include <algorithm>
 
-#include "game_states/gameplay.h"
+#include "gameplay.h"
 
-#include "const.h"
-#include "drawing.h"
-#include "functions.h"
-#include "game.h"
-#include "mobs/group_task.h"
-#include "mobs/pikmin.h"
-#include "mobs/tool.h"
-#include "utils/string_utils.h"
+#include "../../const.h"
+#include "../../drawing.h"
+#include "../../functions.h"
+#include "../../game.h"
+#include "../../mobs/group_task.h"
+#include "../../mobs/pikmin.h"
+#include "../../mobs/tool.h"
+#include "../../utils/string_utils.h"
 
 
 /* ----------------------------------------------------------------------------

@@ -24,7 +24,7 @@
 #include "functions.h"
 #include "game.h"
 #include "game_states/game_state.h"
-#include "game_states/gameplay.h"
+#include "game_states/gameplay/gameplay.h"
 #include "game_states/menus.h"
 #include "imgui/imgui_impl_allegro5.h"
 #include "mob_categories/bouncer_category.h"

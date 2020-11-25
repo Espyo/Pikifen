@@ -19,12 +19,19 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="game_states">
+    <VirtualDirectory Name="gameplay">
+      <File Name="../source/game_states/gameplay/drawing.cpp"/>
+      <File Name="../source/game_states/gameplay/logic.cpp"/>
+      <File Name="../source/game_states/gameplay/gameplay.h"/>
+      <File Name="../source/game_states/gameplay/gameplay.cpp"/>
+    </VirtualDirectory>
+    <File Name="../source/game_states/area_menu.cpp"/>
+    <File Name="../source/game_states/controls_menu.cpp"/>
+    <File Name="../source/game_states/options_menu.cpp"/>
+    <File Name="../source/game_states/main_menu.cpp"/>
     <File Name="../source/game_states/menus.h"/>
-    <File Name="../source/game_states/menus.cpp"/>
     <File Name="../source/game_states/game_state.h"/>
     <File Name="../source/game_states/game_state.cpp"/>
-    <File Name="../source/game_states/gameplay.h"/>
-    <File Name="../source/game_states/gameplay.cpp"/>
     <File Name="../source/game_states/editor.h"/>
     <File Name="../source/game_states/editor.cpp"/>
     <VirtualDirectory Name="animation_editor">
@@ -229,7 +236,6 @@
     <File Name="../source/controls.cpp"/>
     <File Name="../source/animation.h"/>
     <File Name="../source/sector.h"/>
-    <File Name="../source/logic.cpp"/>
     <File Name="../source/animation.cpp"/>
     <File Name="../source/drawing.h"/>
     <File Name="../source/status.h"/>

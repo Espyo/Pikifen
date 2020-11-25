@@ -2,14 +2,14 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
-    
-Next tasks (roughly sorted most important first)
-    --- Known problems ---
+    get_focus_var is not working?
     End of day
         Create a new state: Results
             Enemies beaten, treasures salvaged, Pikmin born, Pikmin deaths
             A button to retry, and another to go back to the area menu
+    
+Next tasks (roughly sorted most important first)
+    --- Known problems ---
     
     --- v0.20.0 ---
     Add rudimentary menus
@@ -56,6 +56,7 @@ Next tasks (roughly sorted most important first)
         Sounds really need a makeover...
         Make the sprite picker in the animation editor show the sprites in the buttons
         A leader can whistle another from a gate and grab them
+        Shift++ and Shift+- to change grid size (thanks Neo)
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
         Whistling lying Pikmin should make them get up and go to you

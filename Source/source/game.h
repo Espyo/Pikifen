@@ -18,7 +18,7 @@
 #include "game_config.h"
 #include "game_states/animation_editor/editor.h"
 #include "game_states/area_editor/editor.h"
-#include "game_states/gameplay.h"
+#include "game_states/gameplay/gameplay.h"
 #include "game_states/menus.h"
 #include "liquid.h"
 #include "mob_script_action.h"

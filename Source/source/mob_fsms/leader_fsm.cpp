@@ -14,7 +14,7 @@
 
 #include "../functions.h"
 #include "../game.h"
-#include "../game_states/gameplay.h"
+#include "../game_states/gameplay/gameplay.h"
 #include "../mob_types/leader_type.h"
 #include "../mobs/drop.h"
 #include "../mobs/leader.h"
