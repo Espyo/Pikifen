@@ -38,6 +38,11 @@ enum EASING_METHODS {
 };
 
 
+void draw_background_logos(
+    const float time_spent, const size_t rows, const size_t cols,
+    const point &logo_size, const ALLEGRO_COLOR &tint,
+    const point &speed, const float rotation_speed
+);
 void draw_bitmap(
     ALLEGRO_BITMAP* bmp, const point &center,
     const point &size, const float angle = 0,

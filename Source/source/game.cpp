@@ -293,7 +293,8 @@ game_state_list::game_state_list() :
     controls_menu(nullptr),
     gameplay(nullptr),
     main_menu(nullptr),
-    options_menu(nullptr) {
+    options_menu(nullptr),
+    results(nullptr) {
     
 }
 
@@ -309,6 +310,7 @@ void game_state_list::destroy() {
     delete gameplay;
     delete main_menu;
     delete options_menu;
+    delete results;
     
     animation_ed = NULL;
     area_ed = NULL;
@@ -317,6 +319,7 @@ void game_state_list::destroy() {
     gameplay = NULL;
     main_menu = NULL;
     options_menu = NULL;
+    results = NULL;
 }
 
 
@@ -331,6 +334,7 @@ void game_state_list::init() {
     gameplay = new gameplay_state();
     main_menu = new main_menu_state();
     options_menu = new options_menu_state();
+    results = new results_state();
 }
 
 

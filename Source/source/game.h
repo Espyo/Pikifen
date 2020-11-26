@@ -20,6 +20,7 @@
 #include "game_states/area_editor/editor.h"
 #include "game_states/gameplay/gameplay.h"
 #include "game_states/menus.h"
+#include "game_states/results.h"
 #include "liquid.h"
 #include "mob_script_action.h"
 #include "misc_structs.h"
@@ -43,6 +44,7 @@ struct game_state_list {
     gameplay_state* gameplay;
     main_menu_state* main_menu;
     options_menu_state* options_menu;
+    results_state* results;
     
     void init();
     void destroy();

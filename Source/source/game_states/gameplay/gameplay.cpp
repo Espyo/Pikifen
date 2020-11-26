@@ -362,7 +362,14 @@ void gameplay_state::leave() {
     }
     
     if(game.states.area_ed->quick_play_area.empty()) {
-        game.change_state(game.states.main_menu);
+        game.states.results->area_name = game.cur_area_data.name;
+        game.states.results->enemies_beaten = 123; //TODO
+        game.states.results->enemies_total = 123; //TODO
+        game.states.results->pikmin_born = 123; //TODO
+        game.states.results->pikmin_deaths = 123; //TODO
+        game.states.results->points_obtained = 123; //TODO
+        game.states.results->points_total = 123; //TODO
+        game.change_state(game.states.results);
     } else {
         game.change_state(game.states.area_ed);
     }

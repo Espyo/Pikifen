@@ -134,3 +134,18 @@ int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
     }
     return final_nr % wrap_limit;
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Wraps a floating point number between the specified interval.
+ * nr:
+ *   Base number.
+ * minimum:
+ *   Minimum of the interval.
+ * maximum:
+ *   Maximum of the interval.
+ */
+float wrap_float(const float nr, const float minimum, const float maximum) {
+    const float diff = maximum - minimum;
+    return minimum + fmod(diff + fmod(nr - minimum, diff), diff);
+}

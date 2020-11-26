@@ -26,6 +26,66 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Draws a series of logos, to serve as a background.
+ * They move along individually, and wrap around when they reach a screen edge.
+ * time_spent:
+ *   How much time has passed.
+ * rows:
+ *   Rows of logos to draw.
+ * cols:
+ *   Columns of logos to draw.
+ * logo_size:
+ *   Width and height of the logos.
+ * tint:
+ *   Tint the logos with this color.
+ * speed:
+ *   Horizontal and vertical movement speed of each logo.
+ * rotation_speed:
+ *   Rotation speed of each logo.
+ */
+void draw_background_logos(
+    const float time_spent, const size_t rows, const size_t cols,
+    const point &logo_size, const ALLEGRO_COLOR &tint,
+    const point &speed, const float rotation_speed
+) {
+    al_hold_bitmap_drawing(true);
+    
+    float spacing_x = (game.win_w + logo_size.x) / cols;
+    float spacing_y = (game.win_h + logo_size.y) / rows;
+    
+    for(size_t c = 0; c < cols; ++c) {
+        for(size_t r = 0; r < rows; ++r) {
+            float x = (c * spacing_x) + time_spent * speed.x;
+            if(r % 2 == 0) {
+                x += spacing_x / 2.0f;
+            }
+            x =
+                wrap_float(
+                    x,
+                    0 - logo_size.x * 0.5f,
+                    game.win_w + logo_size.x * 0.5f
+                );
+            float y =
+                wrap_float(
+                    (r * spacing_y) + time_spent * speed.y,
+                    0 - logo_size.y * 0.5f,
+                    game.win_h + logo_size.y * 0.5f
+                );
+            draw_bitmap(
+                game.sys_assets.bmp_icon,
+                point(x, y),
+                point(logo_size.x, logo_size.y),
+                time_spent * rotation_speed,
+                tint
+            );
+        }
+    }
+    
+    al_hold_bitmap_drawing(false);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws a bitmap.
  * bmp:
  *   The bitmap.

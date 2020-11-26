@@ -40,5 +40,6 @@ float interpolate_number(
 float randomf(float min, float max);
 int randomi(int min, int max);
 int sum_and_wrap(const int nr, const int sum, const int wrap_limit);
+float wrap_float(const float nr, const float minimum, const float maximum);
 
 #endif //ifndef MATH_UTILS_INCLUDED

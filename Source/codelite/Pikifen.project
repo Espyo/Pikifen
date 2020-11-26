@@ -19,6 +19,8 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="game_states">
+    <File Name="../source/game_states/results.cpp"/>
+    <File Name="../source/game_states/results.h"/>
     <VirtualDirectory Name="gameplay">
       <File Name="../source/game_states/gameplay/drawing.cpp"/>
       <File Name="../source/game_states/gameplay/logic.cpp"/>
