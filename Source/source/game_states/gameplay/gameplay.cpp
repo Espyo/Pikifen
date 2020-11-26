@@ -19,6 +19,7 @@
 #include "../../functions.h"
 #include "../../game.h"
 #include "../../load.h"
+#include "../../mobs/pile.h"
 #include "../../misc_structs.h"
 #include "../../utils/string_utils.h"
 
@@ -362,13 +363,6 @@ void gameplay_state::leave() {
     }
     
     if(game.states.area_ed->quick_play_area.empty()) {
-        game.states.results->area_name = game.cur_area_data.name;
-        game.states.results->enemies_beaten = 123; //TODO
-        game.states.results->enemies_total = 123; //TODO
-        game.states.results->pikmin_born = 123; //TODO
-        game.states.results->pikmin_deaths = 123; //TODO
-        game.states.results->points_obtained = 123; //TODO
-        game.states.results->points_total = 123; //TODO
         game.change_state(game.states.results);
     } else {
         game.change_state(game.states.area_ed);
@@ -552,6 +546,36 @@ void gameplay_state::load() {
             cancel_control_id = c;
             break;
         }
+    }
+    
+    game.states.results->area_name = game.cur_area_data.name;
+    game.states.results->enemies_beaten = 0;
+    game.states.results->enemies_total = mobs.enemies.size();
+    game.states.results->pikmin_born = 0;
+    game.states.results->pikmin_deaths = 0;
+    game.states.results->points_obtained = 0;
+    game.states.results->points_total = 0;
+    for(size_t t = 0; t < mobs.treasures.size(); ++t) {
+        game.states.results->points_total +=
+            mobs.treasures[t]->tre_type->points;
+    }
+    for(size_t e = 0; e < mobs.enemies.size(); ++e) {
+        for(size_t s = 0; s < mobs.enemies[e]->specific_spoils.size(); ++s) {
+            mob_type* s_type = mobs.enemies[e]->specific_spoils[s];
+            if(s_type->category->id == MOB_CATEGORY_TREASURES) {
+                game.states.results->points_total +=
+                    ((treasure_type*) s_type)->points;
+            }
+        }
+    }
+    for(size_t p = 0; p < mobs.piles.size(); ++p) {
+        pile* p_ptr = mobs.piles[p];
+        resource_type* res_type = p_ptr->pil_type->contents;
+        if(res_type->delivery_result != RESOURCE_DELIVERY_RESULT_ADD_POINTS) {
+            continue;
+        }
+        game.states.results->points_total +=
+            p_ptr->amount * res_type->point_amount;
     }
     
     //TODO Uncomment this when replays are implemented.

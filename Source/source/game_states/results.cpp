@@ -58,10 +58,6 @@ void results_state::do_drawing() {
         menu_widgets[w]->draw(time_spent);
     }
     
-    /*draw_bitmap(
-        game.sys_assets.bmp_enemy_spirit
-    );*/ //TODO
-    
     game.fade_mgr.draw();
     
     al_flip_display();

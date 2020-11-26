@@ -302,6 +302,8 @@ void pikmin::tick_class_specifics(const float delta_t) {
         game.states.gameplay->particles.add(par);
         
         game.sys_assets.sfx_pikmin_dying.play(0.03, false);
+        
+        game.states.results->pikmin_deaths++;
     }
     
     //Tick the timer for the "missed" attack animation.

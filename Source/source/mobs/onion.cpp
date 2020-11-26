@@ -128,6 +128,8 @@ void onion::spew() {
         
         spew_queue[t]--;
         
+        game.states.results->pikmin_born++;
+        
         unsigned total_after =
             game.states.gameplay->mobs.pikmin_list.size() + 1;
             

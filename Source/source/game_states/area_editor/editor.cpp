@@ -409,6 +409,10 @@ void area_editor::create_area() {
         )
     );
     
+    //Set its name.
+    game.cur_area_data.name = cur_area_name;
+    
+    //Finish up.
     clear_undo_history();
     update_undo_history();
     can_reload = false;

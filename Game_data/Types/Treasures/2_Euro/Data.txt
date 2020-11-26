@@ -2,6 +2,7 @@ name = 2 Euro
 
 height = 2
 max_carriers = 6
+points = 200
 pushable = false
 pushes = true
 radius = 26

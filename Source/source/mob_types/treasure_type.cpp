@@ -22,7 +22,8 @@
  * Creates a type of treasure.
  */
 treasure_type::treasure_type() :
-    mob_type(MOB_CATEGORY_TREASURES) {
+    mob_type(MOB_CATEGORY_TREASURES),
+    points(10) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     
@@ -37,4 +38,16 @@ anim_conversion_vector treasure_type::get_anim_conversions() const {
     anim_conversion_vector v;
     v.push_back(std::make_pair(ANIM_IDLING, "idling"));
     return v;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads properties from a data file.
+ * file:
+ *   File to read from.
+ */
+void treasure_type::load_properties(data_node* file) {
+    reader_setter rs(file);
+    
+    rs.set("points", points);
 }

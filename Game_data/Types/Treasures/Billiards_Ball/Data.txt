@@ -2,6 +2,7 @@ name = Billiards Ball
 
 height = 100
 max_carriers = 30
+points = 100
 pushable = false
 pushes = true
 radius = 45

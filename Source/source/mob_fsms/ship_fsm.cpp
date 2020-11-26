@@ -64,14 +64,18 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_TREASURES: {
+        treasure* t_ptr = (treasure*) delivery;
+        game.states.results->points_obtained += t_ptr->tre_type->points;
         break;
+        
     } case MOB_CATEGORY_RESOURCES: {
         resource* r_ptr = (resource*) delivery;
         if(
             r_ptr->res_type->delivery_result ==
             RESOURCE_DELIVERY_RESULT_ADD_POINTS
         ) {
-        
+            game.states.results->points_obtained +=
+                r_ptr->res_type->point_amount;
         } else if(
             r_ptr->res_type->delivery_result ==
             RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS
@@ -88,6 +92,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             }
         }
         break;
+        
     }
     }
     

@@ -218,4 +218,6 @@ void enemy::start_dying_class_specifics() {
         str.momentum = 100;
         spawn(&str, spoils_to_spawn[s]);
     }
+    
+    game.states.results->enemies_beaten++;
 }
