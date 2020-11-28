@@ -16,12 +16,18 @@
 
 class results_state : public game_state {
 public:
+    //Can the player choose to continue playing?
+    bool can_continue;
     //Name of the area.
     string area_name;
     //How many enemies were beaten.
     size_t enemies_beaten;
     //How many enemies there were in total.
     size_t enemies_total;
+    //Did the player suffer a total leader KO?
+    bool leader_ko;
+    //Did the player run out of time?
+    bool out_of_time;
     //How many Pikmin were born.
     size_t pikmin_born;
     //How many Pikmin died.
@@ -40,6 +46,7 @@ public:
     virtual void do_logic();
     virtual void do_drawing();
     virtual string get_name() const;
+    void reset();
     
 private:
     //Area name widget.

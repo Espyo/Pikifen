@@ -21,8 +21,11 @@
  */
 results_state::results_state() :
     game_state(),
+    can_continue(true),
     enemies_beaten(0),
     enemies_total(0),
+    leader_ko(false),
+    out_of_time(false),
     pikmin_born(0),
     pikmin_deaths(0),
     points_obtained(0),
@@ -173,16 +176,18 @@ void results_state::load() {
     );
     menu_widgets.push_back(retry_widget);
     
-    menu_button* continue_widget =
-        new menu_button(
-        point(game.win_w * 0.50, game.win_h * 0.90),
-        point(game.win_w * 0.25, game.win_h * 0.06),
-    [this] () {
-        continue_playing();
-    },
-    "Keep playing", game.fonts.main
-    );
-    menu_widgets.push_back(continue_widget);
+    if(can_continue) {
+        menu_button* continue_widget =
+            new menu_button(
+            point(game.win_w * 0.50, game.win_h * 0.90),
+            point(game.win_w * 0.25, game.win_h * 0.06),
+        [this] () {
+            continue_playing();
+        },
+        "Keep playing", game.fonts.main
+        );
+        menu_widgets.push_back(continue_widget);
+    }
     
     back_widget =
         new menu_button(
@@ -203,6 +208,24 @@ void results_state::load() {
         game.fonts.area_name
     );
     menu_widgets.push_back(area_name_widget);
+    
+    string finish_reason;
+    if(leader_ko) {
+        finish_reason = "Total leader KO!";
+    } else if(out_of_time) {
+        finish_reason = "Out of time!";
+    }
+    
+    if(!finish_reason.empty()) {
+        menu_text* finish_reason_widget =
+            new menu_text(
+            point(game.win_w * 0.5, game.win_h * 0.175),
+            point(game.win_w * 1.0, game.win_h * 0.10),
+            finish_reason,
+            game.fonts.main, al_map_rgb(255, 192, 192)
+        );
+        menu_widgets.push_back(finish_reason_widget);
+    }
     
     menu_text* time_l_widget =
         new menu_text(
@@ -301,6 +324,23 @@ void results_state::load() {
     game.fade_mgr.start_fade(true, nullptr);
     set_selected_widget(back_widget);
     time_spent = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the state of the results screen.
+ */
+void results_state::reset() {
+    area_name.clear();
+    enemies_beaten = 0;
+    enemies_total = 0;
+    pikmin_born = 0;
+    pikmin_deaths = 0;
+    points_obtained = 0;
+    points_total = 0;
+    time_taken = 0.0f;
+    can_continue = true;
+    leader_ko = false;
 }
 
 

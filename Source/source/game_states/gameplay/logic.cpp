@@ -169,9 +169,19 @@ void gameplay_state::do_gameplay_logic() {
         *************************************/
         
         day_minutes += (game.config.day_minutes_per_irl_sec * game.delta_t);
-        if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
+        if(day_minutes > 60 * 24) {
+            day_minutes -= 60 * 24;
+        }
         
         area_time_passed += game.delta_t;
+        
+        if(day_minutes >= game.config.day_minutes_end) {
+            if(!after_hours) {
+                after_hours = true;
+                game.states.results->out_of_time = true;
+                leave();
+            }
+        }
         
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Logic -- Particles");

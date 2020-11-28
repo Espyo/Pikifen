@@ -56,6 +56,8 @@ public:
 
     gameplay_state();
     
+    //Is the player playing after hours?
+    bool after_hours;
     //How much real time has passed since the area was loaded.
     float area_time_passed;
     //Timer used to fade out the area's title when the area is entered.

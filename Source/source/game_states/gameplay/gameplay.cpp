@@ -170,6 +170,7 @@ void gameplay_hud_manager::tick(const float time) {
  */
 gameplay_state::gameplay_state() :
     game_state(),
+    after_hours(false),
     area_time_passed(0.0f),
     area_title_fade_timer(AREA_TITLE_FADE_DURATION),
     closest_group_member(nullptr),
@@ -541,6 +542,7 @@ void gameplay_state::load() {
     
     day_minutes = game.config.day_minutes_start;
     area_time_passed = 0.0f;
+    after_hours = false;
     
     map<string, string> spray_strs =
         get_var_map(game.cur_area_data.spray_amounts);
@@ -577,14 +579,9 @@ void gameplay_state::load() {
         }
     }
     
+    game.states.results->reset();
     game.states.results->area_name = game.cur_area_data.name;
-    game.states.results->time_taken = 0.0f;
-    game.states.results->enemies_beaten = 0;
     game.states.results->enemies_total = mobs.enemies.size();
-    game.states.results->pikmin_born = 0;
-    game.states.results->pikmin_deaths = 0;
-    game.states.results->points_obtained = 0;
-    game.states.results->points_total = 0;
     for(size_t t = 0; t < mobs.treasures.size(); ++t) {
         game.states.results->points_total +=
             mobs.treasures[t]->tre_type->points;
