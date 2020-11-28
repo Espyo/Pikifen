@@ -77,14 +77,25 @@ game_class::game_class() :
  * Changes to a different game state.
  * new_state:
  *   State to change to.
+ * unload_current:
+ *   If true, the current state is unloaded from memory.
+ * load_new:
+ *   If true, the new state is loaded from memory. If you try to change to
+ *   that state when it is not loaded, things will go wrong.
  */
-void game_class::change_state(game_state* new_state) {
+void game_class::change_state(
+    game_state* new_state, const bool unload_current, const bool load_new
+) {
 
-    if(cur_state) {
+    if(cur_state && unload_current) {
         cur_state->unload();
     }
+    
     cur_state = new_state;
-    cur_state->load();
+    
+    if(load_new) {
+        cur_state->load();
+    }
     
     //Because during the loading screens, there is no activity, on the
     //next frame, the game will assume the time between that and the last
@@ -280,6 +291,16 @@ int game_class::start() {
     }
     
     return 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads a loaded state that never got to be unloaded. This should only
+ * be the case if change_state was called with instructions to not
+ * unload the previous one.
+ */
+void game_class::unload_loaded_state(game_state* loaded_state) {
+    loaded_state->unload();
 }
 
 

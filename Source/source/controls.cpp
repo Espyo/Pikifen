@@ -541,15 +541,7 @@ void gameplay_state::handle_button(
             
             if(!is_down) return;
             
-            is_input_allowed = false;
-            game.fade_mgr.start_fade(
-                false,
-            [this] () {
-                this->leave();
-            }
-            );
-            
-            //paused = true;
+            leave();
             
             break;
             

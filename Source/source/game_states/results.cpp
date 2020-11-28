@@ -33,6 +33,18 @@ results_state::results_state() :
 
 
 /* ----------------------------------------------------------------------------
+ * Leaves the results menu and goes back to the gameplay state to continue
+ * playing the area.
+ */
+void results_state::continue_playing() {
+    game.fade_mgr.start_fade(false, [] () {
+        game.change_state(game.states.gameplay, true, false);
+        game.states.gameplay->enter();
+    });
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the results state.
  */
 void results_state::do_drawing() {
@@ -52,7 +64,13 @@ void results_state::do_drawing() {
         game.win_w * 0.10f, game.win_h * 0.25f,
         game.win_w * 0.90f, game.win_h * 0.75f,
         20.0f, 20.0f,
-        al_map_rgba(112, 106, 193, 96)
+        al_map_rgba(57, 54, 98, 48)
+    );
+    al_draw_filled_rounded_rectangle(
+        game.win_w * 0.10f - 8.0f, game.win_h * 0.25f - 8.0f,
+        game.win_w * 0.90f + 8.0f, game.win_h * 0.75f + 8.0f,
+        20.0f, 20.0f,
+        al_map_rgba(112, 106, 193, 48)
     );
     
     for(size_t w = 0; w < menu_widgets.size(); w++) {
@@ -71,9 +89,33 @@ void results_state::do_drawing() {
 void results_state::do_logic() {
     time_spent += game.delta_t;
     
-    if(floor(time_spent / 2.0f - game.delta_t) < floor(time_spent / 2.0f)) {
-        //Make the area name grow every two seconds.
-        area_name_widget->start_juicy_grow();
+    //Make the different texts grow every two or so seconds.
+    size_t old_time_cp =
+        (size_t) ((time_spent - game.delta_t) * 10) % 25;
+    size_t new_time_cp =
+        (size_t) (time_spent * 10) % 25;
+    if(old_time_cp < new_time_cp) {
+        switch(old_time_cp) {
+        case 0: {
+            area_name_widget->start_juicy_grow();
+            break;
+        } case 2: {
+            time_widget->start_juicy_grow();
+            break;
+        } case 4: {
+            points_widget->start_juicy_grow();
+            break;
+        } case 6: {
+            enemies_widget->start_juicy_grow();
+            break;
+        } case 8: {
+            pikmin_born_widget->start_juicy_grow();
+            break;
+        } case 10: {
+            pikmin_deaths_widget->start_juicy_grow();
+            break;
+        }
+        }
     }
     
     for(size_t w = 0; w < menu_widgets.size(); w++) {
@@ -105,11 +147,12 @@ void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Leaves the results menu and goes to the area menu, or retries.
+ * Leaves the results menu and goes to the area menu.
  */
 void results_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
-        //TODO
+        game.unload_loaded_state(game.states.gameplay);
+        game.change_state(game.states.area_menu);
     });
 }
 
@@ -118,16 +161,13 @@ void results_state::leave() {
  * Loads the results state into memory.
  */
 void results_state::load() {
-    //Finishing touches.
-    game.fade_mgr.start_fade(true, nullptr);
-    
     //Menu widgets.
     menu_button* retry_widget =
         new menu_button(
         point(game.win_w * 0.20, game.win_h * 0.90),
         point(game.win_w * 0.25, game.win_h * 0.06),
     [this] () {
-        leave();
+        retry_area();
     },
     "Retry", game.fonts.main
     );
@@ -138,7 +178,7 @@ void results_state::load() {
         point(game.win_w * 0.50, game.win_h * 0.90),
         point(game.win_w * 0.25, game.win_h * 0.06),
     [this] () {
-        leave();
+        continue_playing();
     },
     "Keep playing", game.fonts.main
     );
@@ -176,14 +216,14 @@ void results_state::load() {
     unsigned char ms = fmod(time_taken * 100, 100);
     unsigned char seconds = fmod(time_taken, 60);
     size_t minutes = time_taken / 60.0f;
-    menu_text* time_t_widget =
+    time_widget =
         new menu_text(
         point(game.win_w * 0.70, game.win_h * 0.30),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(minutes) + ":" + pad_string(i2s(seconds), 2, '0') + "." + i2s(ms),
         game.fonts.counter
     );
-    menu_widgets.push_back(time_t_widget);
+    menu_widgets.push_back(time_widget);
     
     menu_text* points_l_widget =
         new menu_text(
@@ -194,14 +234,14 @@ void results_state::load() {
     );
     menu_widgets.push_back(points_l_widget);
     
-    menu_text* points_t_widget =
+    points_widget =
         new menu_text(
         point(game.win_w * 0.70, game.win_h * 0.40),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(points_obtained) + " / " + i2s(points_total),
         game.fonts.counter
     );
-    menu_widgets.push_back(points_t_widget);
+    menu_widgets.push_back(points_widget);
     
     menu_text* enemies_l_widget =
         new menu_text(
@@ -212,14 +252,14 @@ void results_state::load() {
     );
     menu_widgets.push_back(enemies_l_widget);
     
-    menu_text* enemies_t_widget =
+    enemies_widget =
         new menu_text(
         point(game.win_w * 0.70, game.win_h * 0.50),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(enemies_beaten) + " / " + i2s(enemies_total),
         game.fonts.counter
     );
-    menu_widgets.push_back(enemies_t_widget);
+    menu_widgets.push_back(enemies_widget);
     
     menu_text* pikmin_born_l_widget =
         new menu_text(
@@ -230,14 +270,14 @@ void results_state::load() {
     );
     menu_widgets.push_back(pikmin_born_l_widget);
     
-    menu_text* pikmin_born_t_widget =
+    pikmin_born_widget =
         new menu_text(
         point(game.win_w * 0.70, game.win_h * 0.60),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(pikmin_born),
         game.fonts.counter
     );
-    menu_widgets.push_back(pikmin_born_t_widget);
+    menu_widgets.push_back(pikmin_born_widget);
     
     menu_text* pikmin_deaths_l_widget =
         new menu_text(
@@ -248,15 +288,31 @@ void results_state::load() {
     );
     menu_widgets.push_back(pikmin_deaths_l_widget);
     
-    menu_text* pikmin_deaths_t_widget =
+    pikmin_deaths_widget =
         new menu_text(
         point(game.win_w * 0.70, game.win_h * 0.70),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(pikmin_deaths),
         game.fonts.counter
     );
-    menu_widgets.push_back(pikmin_deaths_t_widget);
+    menu_widgets.push_back(pikmin_deaths_widget);
     
+    //Finishing touches.
+    game.fade_mgr.start_fade(true, nullptr);
+    set_selected_widget(back_widget);
+    time_spent = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Leaves the results menu and goes back to the gameplay state to retry
+ * the area.
+ */
+void results_state::retry_area() {
+    game.fade_mgr.start_fade(false, [] () {
+        game.unload_loaded_state(game.states.gameplay);
+        game.change_state(game.states.gameplay);
+    });
 }
 
 
@@ -264,4 +320,10 @@ void results_state::load() {
  * Unloads the results state from memory.
  */
 void results_state::unload() {
+    //Menu widgets.
+    set_selected_widget(NULL);
+    for(size_t w = 0; w < menu_widgets.size(); w++) {
+        delete menu_widgets[w];
+    }
+    menu_widgets.clear();
 }

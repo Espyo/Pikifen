@@ -215,7 +215,8 @@ gameplay_state::gameplay_state() :
     swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
     swarm_cursor(false),
     throw_can_reach_cursor(true),
-    time_passed(0.0f) {
+    time_passed(0.0f),
+    went_to_results(false) {
     
     swarm_next_arrow_timer.on_end = [this] () {
         swarm_next_arrow_timer.start();
@@ -263,6 +264,35 @@ void gameplay_state::do_logic() {
     }
     do_menu_logic();
     do_aesthetic_logic();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the state is entered, be it from the area menu, be it
+ * from the result menu's "keep playing" option.
+ */
+void gameplay_state::enter() {
+    al_hide_mouse_cursor(game.display);
+    update_transformations();
+    
+    ALLEGRO_MOUSE_STATE mouse_state;
+    al_get_mouse_state(&mouse_state);
+    game.mouse_cursor_s.x = al_get_mouse_state_axis(&mouse_state, 0);
+    game.mouse_cursor_s.y = al_get_mouse_state_axis(&mouse_state, 1);
+    game.mouse_cursor_w = game.mouse_cursor_s;
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+    );
+    leader_cursor_w = game.mouse_cursor_w;
+    leader_cursor_s = game.mouse_cursor_s;
+    
+    hud_items.start_move(true, AREA_INTRO_HUD_MOVE_TIME);
+    if(went_to_results) {
+        game.fade_mgr.start_fade(true, nullptr);
+    }
+    
+    ready_for_input = false;
 }
 
 
@@ -357,17 +387,29 @@ string gameplay_state::get_name() const {
  * Leaves the gameplay state, returning to the main menu, or wherever else.
  */
 void gameplay_state::leave() {
-    if(game.perf_mon) {
-        //Don't register the final frame, since it won't draw anything.
-        game.perf_mon->set_paused(true);
-    }
+    game.fade_mgr.start_fade(
+        false,
+    [this] () {
     
-    if(game.states.area_ed->quick_play_area.empty()) {
-        game.states.results->time_taken = area_time_passed;
-        game.change_state(game.states.results);
-    } else {
-        game.change_state(game.states.area_ed);
+        if(game.perf_mon) {
+            //Don't register the final frame, since it won't draw anything.
+            game.perf_mon->set_paused(true);
+        }
+        
+        al_show_mouse_cursor(game.display);
+        
+        if(game.states.area_ed->quick_play_area.empty()) {
+            game.states.results->time_taken = area_time_passed;
+            went_to_results = true;
+            //Change state, but don't unload this one, since the player
+            //may pick the "keep playing" option in the results screen.
+            game.change_state(game.states.results, false);
+        } else {
+            game.change_state(game.states.area_ed);
+        }
+        
     }
+    );
 }
 
 
@@ -382,8 +424,7 @@ void gameplay_state::load() {
     }
     
     size_t errors_reported_at_start = game.errors_reported_so_far;
-    
-    ready_for_input = false;
+    went_to_results = false;
     
     draw_loading_screen("", "", 1.0f);
     al_flip_display();
@@ -486,19 +527,6 @@ void gameplay_state::load() {
     
     game.cam.set_pos(cur_leader_ptr->pos);
     game.cam.set_zoom(game.options.zoom_mid_level);
-    update_transformations();
-    
-    ALLEGRO_MOUSE_STATE mouse_state;
-    al_get_mouse_state(&mouse_state);
-    game.mouse_cursor_s.x = al_get_mouse_state_axis(&mouse_state, 0);
-    game.mouse_cursor_s.y = al_get_mouse_state_axis(&mouse_state, 1);
-    game.mouse_cursor_w = game.mouse_cursor_s;
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
-    );
-    leader_cursor_w = game.mouse_cursor_w;
-    leader_cursor_s = game.mouse_cursor_s;
     
     cursor_save_timer.on_end = [this] () {
         cursor_save_timer.start();
@@ -596,12 +624,7 @@ void gameplay_state::load() {
     replay_timer.start();
     session_replay.clear();*/
     
-    al_hide_mouse_cursor(game.display);
-    
     area_title_fade_timer.start();
-    hud_items.start_move(true, AREA_INTRO_HUD_MOVE_TIME);
-    
-    //Aesthetic stuff.
     
     if(game.errors_reported_so_far > errors_reported_at_start) {
         print_info(
@@ -618,6 +641,8 @@ void gameplay_state::load() {
         game.perf_mon->set_area_name(game.cur_area_data.name);
         game.perf_mon->leave_state();
     }
+    
+    enter();
 }
 
 

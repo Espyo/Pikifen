@@ -44,10 +44,22 @@ public:
 private:
     //Area name widget.
     menu_text* area_name_widget;
+    //Enemy count text widget.
+    menu_text* enemies_widget;
+    //Pikmin born text widget.
+    menu_text* pikmin_born_widget;
+    //Pikmin deaths text widget.
+    menu_text* pikmin_deaths_widget;
+    //Treasure point count text widget.
+    menu_text* points_widget;
     //Time spent on this state.
     float time_spent;
+    //Time taken text widget.
+    menu_text* time_widget;
     
+    void continue_playing();
     void leave();
+    void retry_area();
 };
 
 

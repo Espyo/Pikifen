@@ -1297,12 +1297,7 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
         }
     }
     if(living_leaders == 0) {
-        game.fade_mgr.start_fade(
-            false,
-        []() {
-            game.states.gameplay->leave();
-        }
-        );
+        game.states.gameplay->leave();
     } else if(game.states.gameplay->cur_leader_ptr == m) {
         change_to_next_leader(true, true);
     }

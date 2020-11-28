@@ -4,9 +4,7 @@
 Current tasks (tasks being worked on, but not yet committed)
     get_focus_var is not working?
     End of day
-        Create a new state: Results
-            Enemies beaten, treasures salvaged, Pikmin born, Pikmin deaths
-            A button to retry, and another to go back to the area menu
+        It needs to get triggered when there's an extinction, leader KO, or time up -- can't continue playing in the first two cases
     Remove the multiplayer stuff from the controls menu, as to not mislead people into thinking multiplayer is a thing yet
     
 Next tasks (roughly sorted most important first)
@@ -129,14 +127,16 @@ Next tasks (roughly sorted most important first)
     --- v0.21.0 ---
     Menus
         Pause screen
-            Radar
-                https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?
-                Go Here!
-                When it is opened, it should fade in to view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
-                Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
-            Should contain the list of Pikmin on the field and such, but also the number of deaths today, and so far
             When "end day" is chosen, it should warn about idle Pikmin that will get left behind
             The total play time should be shown somewhere; useful for speedruns
+            Pauses are full-screen, pause everything, and every player should get their pause menu button, so that if one player is busy mashing, they don't start picking options because somebody else paused
+        Radar
+            https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?
+            Go Here!
+            When it is opened, it should fade in to view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
+            Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
+            Should contain the list of Pikmin on the field and such, but also the number of deaths today, and so far
+            Open it with Tab, and move leader swapping to middle mouse button
         Onion menu
             Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
         Joystick navigation

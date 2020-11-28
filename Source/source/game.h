@@ -157,9 +157,14 @@ public:
     ALLEGRO_VOICE* voice;
     
     //Change to a different state.
-    void change_state(game_state* new_state);
+    void change_state(
+        game_state* new_state,
+        const bool unload_current = true, const bool load_new = true
+    );
     //Get the name of the current state.
     string get_cur_state_name() const;
+    //Unloads a state that never got unloaded.
+    void unload_loaded_state(game_state* loaded_state);
     
     //Program execution.
     int start();
