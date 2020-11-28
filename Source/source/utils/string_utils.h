@@ -34,6 +34,7 @@ string box_string(
 string b2s(const bool b);
 string f2s(const float f);
 bool is_number(const string &s);
+string pad_string(const string &s, const size_t size, const char padding);
 string remove_extension(const string &s);
 string replace_all(
     string s, const string &search, const string &replacement

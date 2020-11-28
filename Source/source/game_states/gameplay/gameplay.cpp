@@ -363,6 +363,7 @@ void gameplay_state::leave() {
     }
     
     if(game.states.area_ed->quick_play_area.empty()) {
+        game.states.results->time_taken = area_time_passed;
         game.change_state(game.states.results);
     } else {
         game.change_state(game.states.area_ed);
@@ -549,6 +550,7 @@ void gameplay_state::load() {
     }
     
     game.states.results->area_name = game.cur_area_data.name;
+    game.states.results->time_taken = 0.0f;
     game.states.results->enemies_beaten = 0;
     game.states.results->enemies_total = mobs.enemies.size();
     game.states.results->pikmin_born = 0;

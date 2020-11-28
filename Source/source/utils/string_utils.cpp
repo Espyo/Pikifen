@@ -104,6 +104,26 @@ bool is_number(const string &s) {
 
 
 /* ----------------------------------------------------------------------------
+ * Pads a given string such that it is at least the given size.
+ * It uses the provided character to pad out the remaining space.
+ * This only pads the left side of the string.
+ * s:
+ *   String to pad.
+ * size:
+ *   Final minimum string size.
+ * padding:
+ *   What character to pad with.
+ */
+string pad_string(const string &s, const size_t size, const char padding) {
+    string result = s;
+    if(size > s.size()) {
+        result.insert(0, size - s.size(), padding);
+    }
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Given a file name as a string, it removes the extension.
  * Returns the string as it is if there is no extension.
  * s:

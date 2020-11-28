@@ -718,9 +718,9 @@ void load_fonts() {
     
     const int COUNTER_FONT_RANGES_SIZE = 6;
     int counter_font_ranges[COUNTER_FONT_RANGES_SIZE] = {
-        0x002D, 0x002D, //Dash
-        0x002F, 0x0039, //Slash and numbers
-        0x0078, 0x0078, //x
+        0x002D, 0x0039, //Dash, dot, slash, numbers
+        0x003A, 0x003A, //Colon
+        0x0078, 0x0078, //Lowercase x
     };
     
     const int VALUE_FONT_RANGES_SIZE = 6;

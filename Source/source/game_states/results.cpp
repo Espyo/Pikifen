@@ -26,7 +26,8 @@ results_state::results_state() :
     pikmin_born(0),
     pikmin_deaths(0),
     points_obtained(0),
-    points_total(0) {
+    points_total(0),
+    time_taken(0.0f) {
     
 }
 
@@ -48,8 +49,8 @@ void results_state::do_drawing() {
     );
     
     al_draw_filled_rounded_rectangle(
-        game.win_w * 0.10f, game.win_h * 0.30f,
-        game.win_w * 0.90f, game.win_h * 0.70f,
+        game.win_w * 0.10f, game.win_h * 0.25f,
+        game.win_w * 0.90f, game.win_h * 0.75f,
         20.0f, 20.0f,
         al_map_rgba(112, 106, 193, 96)
     );
@@ -163,9 +164,30 @@ void results_state::load() {
     );
     menu_widgets.push_back(area_name_widget);
     
+    menu_text* time_l_widget =
+        new menu_text(
+        point(game.win_w * 0.35, game.win_h * 0.30),
+        point(game.win_w * 0.40, game.win_h * 0.10),
+        "Time taken:",
+        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+    );
+    menu_widgets.push_back(time_l_widget);
+    
+    unsigned char ms = fmod(time_taken * 100, 100);
+    unsigned char seconds = fmod(time_taken, 60);
+    size_t minutes = time_taken / 60.0f;
+    menu_text* time_t_widget =
+        new menu_text(
+        point(game.win_w * 0.70, game.win_h * 0.30),
+        point(game.win_w * 0.50, game.win_h * 0.10),
+        i2s(minutes) + ":" + pad_string(i2s(seconds), 2, '0') + "." + i2s(ms),
+        game.fonts.counter
+    );
+    menu_widgets.push_back(time_t_widget);
+    
     menu_text* points_l_widget =
         new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.35),
+        point(game.win_w * 0.35, game.win_h * 0.40),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Treasure points:",
         game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
@@ -174,7 +196,7 @@ void results_state::load() {
     
     menu_text* points_t_widget =
         new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.35),
+        point(game.win_w * 0.70, game.win_h * 0.40),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(points_obtained) + " / " + i2s(points_total),
         game.fonts.counter
@@ -183,7 +205,7 @@ void results_state::load() {
     
     menu_text* enemies_l_widget =
         new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.45),
+        point(game.win_w * 0.35, game.win_h * 0.50),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Enemies:",
         game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
@@ -192,7 +214,7 @@ void results_state::load() {
     
     menu_text* enemies_t_widget =
         new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.45),
+        point(game.win_w * 0.70, game.win_h * 0.50),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(enemies_beaten) + " / " + i2s(enemies_total),
         game.fonts.counter
@@ -201,7 +223,7 @@ void results_state::load() {
     
     menu_text* pikmin_born_l_widget =
         new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.55),
+        point(game.win_w * 0.35, game.win_h * 0.60),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Pikmin born:",
         game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
@@ -210,7 +232,7 @@ void results_state::load() {
     
     menu_text* pikmin_born_t_widget =
         new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.55),
+        point(game.win_w * 0.70, game.win_h * 0.60),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(pikmin_born),
         game.fonts.counter
@@ -219,7 +241,7 @@ void results_state::load() {
     
     menu_text* pikmin_deaths_l_widget =
         new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.65),
+        point(game.win_w * 0.35, game.win_h * 0.70),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Pikmin deaths:",
         game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
@@ -228,7 +250,7 @@ void results_state::load() {
     
     menu_text* pikmin_deaths_t_widget =
         new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.65),
+        point(game.win_w * 0.70, game.win_h * 0.70),
         point(game.win_w * 0.50, game.win_h * 0.10),
         i2s(pikmin_deaths),
         game.fonts.counter

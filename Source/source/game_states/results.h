@@ -30,6 +30,8 @@ public:
     size_t points_obtained;
     //How many treasure points there were in total.
     size_t points_total;
+    //How much time was taken.
+    float time_taken;
     
     results_state();
     virtual void load();
