@@ -107,10 +107,8 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     float time_spent;
     
-    size_t cur_player_nr;
     size_t cur_page_nr;
     
-    menu_text* cur_player_nr_widget;
     menu_text* cur_page_nr_widget;
     menu_text* input_capture_msg_widget;
     vector<menu_widget*> control_widgets;

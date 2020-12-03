@@ -26,9 +26,7 @@ controls_menu_state::controls_menu_state() :
     game_state(),
     bmp_menu_bg(NULL),
     time_spent(0),
-    cur_player_nr(0),
     cur_page_nr(0),
-    cur_player_nr_widget(NULL),
     cur_page_nr_widget(NULL),
     input_capture_msg_widget(NULL),
     capturing_input(false),
@@ -55,10 +53,10 @@ void controls_menu_state::do_drawing() {
     size_t list_nr = 0;
     for(
         ;
-        list_nr < 8 && control_nr < game.options.controls[cur_player_nr].size();
+        list_nr < 8 && control_nr < game.options.controls[0].size();
         ++control_nr, ++list_nr
     ) {
-        control_info* c_ptr = &game.options.controls[cur_player_nr][control_nr];
+        control_info* c_ptr = &game.options.controls[0][control_nr];
         
         draw_control(
             game.fonts.main, *c_ptr,
@@ -105,7 +103,7 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(capturing_input) {
     
         control_info* c_ptr =
-            &game.options.controls[cur_player_nr][input_capture_control_nr];
+            &game.options.controls[0][input_capture_control_nr];
         bool valid = true;
         
         switch(ev.type) {
@@ -190,57 +188,12 @@ void controls_menu_state::load() {
     selected_widget = NULL;
     bmp_menu_bg = NULL;
     cur_page_nr = 0;
-    cur_player_nr = 0;
     capturing_input = false;
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu widgets.
-    menu_widgets.push_back(
-        new menu_text(
-            point(game.win_w * 0.45, game.win_h * 0.10),
-            point(game.win_w * 0.20, game.win_h * 0.08),
-            "Player:", game.fonts.main
-        )
-    );
-    
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.60, game.win_h * 0.10),
-            point(game.win_w * 0.15, game.win_h * 0.08),
-    [this] () {
-        cur_page_nr = 0;
-        cur_player_nr = sum_and_wrap(cur_player_nr, -1, MAX_PLAYERS);
-        cur_player_nr_widget->start_juicy_grow();
-        update();
-    },
-    "<", game.fonts.main
-        )
-    );
-    
-    cur_player_nr_widget =
-        new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.10),
-        point(game.win_w * 0.10, game.win_h * 0.08),
-        "", game.fonts.main
-    );
-    menu_widgets.push_back(cur_player_nr_widget);
-    
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.80, game.win_h * 0.10),
-            point(game.win_w * 0.15, game.win_h * 0.08),
-    [this] () {
-        cur_page_nr = 0;
-        cur_player_nr = sum_and_wrap(cur_player_nr, 1, MAX_PLAYERS);
-        cur_player_nr_widget->start_juicy_grow();
-        update();
-    },
-    ">", game.fonts.main
-        )
-    );
-    
     back_widget =
         new menu_button(
         point(game.win_w * 0.15, game.win_h * 0.10),
@@ -302,10 +255,10 @@ void controls_menu_state::load() {
             point(game.win_w * 0.85, game.win_h * 0.90),
             point(game.win_w * 0.20, game.win_h * 0.07),
     [this] () {
-        if(game.options.controls[cur_player_nr].size()) {
+        if(game.options.controls[0].size()) {
             size_t last_action =
-                game.options.controls[cur_player_nr].back().action;
-            game.options.controls[cur_player_nr].push_back(
+                game.options.controls[0].back().action;
+            game.options.controls[0].push_back(
                 control_info(
                     last_action == N_BUTTONS - 1 ?
                     1 : //The "None" action is 0, so go to 1.
@@ -314,14 +267,14 @@ void controls_menu_state::load() {
                 )
             );
         } else {
-            game.options.controls[cur_player_nr].push_back(
+            game.options.controls[0].push_back(
                 control_info(BUTTON_NONE, "")
             );
         }
         //Go to the new control's page.
-        cur_page_nr = game.options.controls[cur_player_nr].size() / 8.0f;
+        cur_page_nr = game.options.controls[0].size() / 8.0f;
         this->control_widgets[
-        ((game.options.controls[cur_player_nr].size() - 1) % 8) * 5 + 2
+        ((game.options.controls[0].size() - 1) % 8) * 5 + 2
         ]->start_juicy_grow();
         update();
     },
@@ -345,7 +298,7 @@ void controls_menu_state::load() {
         cur_page_nr =
             sum_and_wrap(
                 cur_page_nr, -1,
-                ceil(game.options.controls[cur_player_nr].size() / 8.0)
+                ceil(game.options.controls[0].size() / 8.0)
             );
         cur_page_nr_widget->start_juicy_grow();
         update();
@@ -370,7 +323,7 @@ void controls_menu_state::load() {
         cur_page_nr =
             sum_and_wrap(
                 cur_page_nr, 1,
-                (size_t) ceil(game.options.controls[cur_player_nr].size() / 8.0)
+                (size_t) ceil(game.options.controls[0].size() / 8.0)
             );
         cur_page_nr_widget->start_juicy_grow();
         update();
@@ -413,7 +366,6 @@ void controls_menu_state::unload() {
     menu_widgets.clear();
     control_widgets.clear();
     bottom_widgets.clear();
-    cur_player_nr_widget = NULL;
     cur_page_nr_widget = NULL;
     input_capture_msg_widget = NULL;
     
@@ -430,11 +382,10 @@ void controls_menu_state::update() {
             (size_t)
             (
                 ceil(
-                    game.options.controls[cur_player_nr].size() / 8.0
+                    game.options.controls[0].size() / 8.0
                 ) - 1
             )
         );
-    cur_player_nr_widget->text = i2s(cur_player_nr + 1);
     cur_page_nr_widget->text = i2s(cur_page_nr + 1);
     
     for(size_t cw = 0; cw < control_widgets.size(); ++cw) {
@@ -445,10 +396,10 @@ void controls_menu_state::update() {
     size_t list_nr = 0;
     for(
         ;
-        list_nr < 8 && control_nr < game.options.controls[cur_player_nr].size();
+        list_nr < 8 && control_nr < game.options.controls[0].size();
         ++control_nr, ++list_nr
     ) {
-        control_info* c_ptr = &game.options.controls[cur_player_nr][control_nr];
+        control_info* c_ptr = &game.options.controls[0][control_nr];
         
         string action_name;
         for(size_t b = 0; b < N_BUTTONS; ++b) {
@@ -464,8 +415,8 @@ void controls_menu_state::update() {
         //Delete button.
         ((menu_button*) control_widgets[list_nr * 5 + 0])->click_handler =
         [this, control_nr] () {
-            game.options.controls[cur_player_nr].erase(
-                game.options.controls[cur_player_nr].begin() + control_nr
+            game.options.controls[0].erase(
+                game.options.controls[0].begin() + control_nr
             );
             update();
         };
