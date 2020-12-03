@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Add a mob action to store mob coordinates to a variable (thanks Kman)
+    
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---

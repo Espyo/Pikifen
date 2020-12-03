@@ -331,6 +331,12 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_TYPE);
     } else if(call.args[1] == "other_body_part") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_OTHER_BODY_PART);
+    } else if(call.args[1] == "x") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_X);
+    } else if(call.args[1] == "y") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_Y);
+    } else if(call.args[1] == "z") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_Z);
     } else if(call.args[1] == "weight") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
     } else {
@@ -986,6 +992,18 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
                     data.m->pos, INVALID, NULL
                 )->body_part_name;
         }
+        break;
+        
+    } case MOB_ACTION_GET_INFO_X: {
+        *var = f2s(data.m->pos.x);
+        break;
+        
+    } case MOB_ACTION_GET_INFO_Y: {
+        *var = f2s(data.m->pos.y);
+        break;
+        
+    } case MOB_ACTION_GET_INFO_Z: {
+        *var = f2s(data.m->z);
         break;
         
     } case MOB_ACTION_GET_INFO_WEIGHT: {
