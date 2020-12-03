@@ -9,14 +9,14 @@ script {
         on_enter {
             set_animation idling
             set_hiding true
-            focus parent
-            turn_to_target focused_mob
         }
         on_receive_message {
             set_hiding false
             start_height_effect
             teleport_to_relative 0 0 1000
             set_gravity 1
+            focus parent
+            turn_to_target focused_mob
             set_state ambushing
         }
     }
@@ -24,6 +24,7 @@ script {
     ambushing {
         on_land {
             send_message_to_links landed
+            stop
             stop_height_effect
             start_particles dust_explosion 0 0
             set_state idling
@@ -33,9 +34,6 @@ script {
     idling {
         on_enter {
             set_animation idling
-        }
-        on_tick {
-            turn_to_target focused_mob
         }
         on_receive_message {
             get_info t message

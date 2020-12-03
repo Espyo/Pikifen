@@ -2,8 +2,10 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    get_focus_var is not working?
     Remove the multiplayer stuff from the controls menu, as to not mislead people into thinking multiplayer is a thing yet
+    If you press Shift when snapping is on, it should temporarily turn it on for the grid (thanks Nutty171)
+    Save the snapping mode (thanks Nutty171)
+    Add a mob action to store mob coordinates to a variable (thanks Kman)
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
@@ -437,9 +439,10 @@ Misc things (so I don't forget)
         When there are multiple Onions or ships that something can be delivered to, choose the closest
         Smoother turns when carrying
         If a Red Pikmin is carrying a 1 pellet, and a Yellow joined, shouldn't the destination be Red, and not randomized?
-        Make it so you can line the Pikmin on non-circular fashion -- Neo suggested a parameter to stretch the circle vertically or horizontally
+        Make it so you can line the Pikmin in a non-circular fashion -- Neo suggested a parameter to stretch the circle vertically or horizontally
         When deciding a new random Onion to go to, pick cyclically -- first go with Red (if applicable), then if the player does it again, go Yellow (if applicable), etc. (GitHub issue #8)
-        Stops could probably have a radius
+        Stops could probably have a radius, to reduce the number of stops needed in a room, for instance
+        Pikmin with small items should take specific paths, usually envolving shortcuts (thanks Nutty171)
     For intervals, use the code on the "misc info" text file
     Water depth (thanks ThyCheshireCat)
     A way to add random variation to the knockback angle of a hitbox

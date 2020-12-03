@@ -7,7 +7,7 @@ init {
     set_var max_turn_angle 75
     set_var min_turn_angle 20
     set_var feet_normal_distance 175
-    set_var can_rest false
+    set_var moves_left 0
 }
 
 script {
@@ -28,6 +28,7 @@ script {
             start_height_effect
             teleport_to_relative 0 0 1000
             set_gravity 1
+            get_random_int moves_left 1 3
             send_message_to_links ambush
             set_animation idling
         }
@@ -43,7 +44,6 @@ script {
             set_animation resting
         }
         on_animation_end {
-            set_var can_rest false
             set_state deciding
         }
         on_tick {
@@ -68,8 +68,8 @@ script {
             set_state shaking
         }
         on_animation_end {
-            get_random_int decision 1 2
-            if $decision = 1
+            if $moves_left > 0
+                calculate moves_left $moves_left - 1
                 get_random_int decision 1 3
                 if $decision = 1
                     arachnorb_plan_logic forward
@@ -83,21 +83,17 @@ script {
                     arachnorb_plan_logic ccw_turn
                     set_state move_fr
                 end_if
-                
+            
             else
-                if $can_rest = true
-                    set_state resting
-                else
-                    arachnorb_plan_logic forward
-                    set_state move_fr
-                end_if
+                get_random_int moves_left 1 3
+                set_state resting
+                
             end_if
         }
     }
     
     move_fr {
         on_enter {
-            set_var can_rest true
             set_animation idling
             send_message_to_links move_fr
         }
