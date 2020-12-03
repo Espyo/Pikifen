@@ -394,8 +394,6 @@ private:
     bool show_reference;
     //Render the tree shadows?
     bool show_shadows;
-    //Current cursor snapping mode.
-    unsigned char snap_mode;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
     //Undo history, with the state of the area at each point.
@@ -527,6 +525,8 @@ private:
     void press_circle_sector_button();
     void press_duplicate_mobs_button();
     void press_load_button();
+    void press_grid_interval_decrease_button();
+    void press_grid_interval_increase_button();
     void press_new_mob_button();
     void press_new_path_button();
     void press_new_sector_button();

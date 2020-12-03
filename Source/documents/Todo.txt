@@ -53,7 +53,6 @@ Next tasks (roughly sorted most important first)
         Sounds really need a makeover...
         Make the sprite picker in the animation editor show the sprites in the buttons
         A leader can whistle another from a gate and grab them
-        Shift++ and Shift+- to change grid size (thanks Neo)
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
         Whistling lying Pikmin should make them get up and go to you

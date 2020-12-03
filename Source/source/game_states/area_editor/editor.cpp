@@ -1203,7 +1203,6 @@ void area_editor::load() {
     selection_homogenized = false;
     show_closest_stop = false;
     show_path_preview = false;
-    snap_mode = game.options.area_editor_snap_mode;
     state = EDITOR_STATE_MAIN;
     status_text.clear();
     
@@ -1507,6 +1506,36 @@ void area_editor::press_duplicate_mobs_button() {
         status_text = "Use the canvas to place the duplicated objects.";
         sub_state = EDITOR_SUB_STATE_DUPLICATE_MOB;
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the grid interval decrease button is pressed.
+ */
+void area_editor::press_grid_interval_decrease_button() {
+    game.options.area_editor_grid_interval =
+        std::max(
+            game.options.area_editor_grid_interval * 0.5f,
+            MIN_GRID_INTERVAL
+        );
+    status_text =
+        "Decreased grid interval to " +
+        i2s(game.options.area_editor_grid_interval) + ".";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the grid interval increase button is pressed.
+ */
+void area_editor::press_grid_interval_increase_button() {
+    game.options.area_editor_grid_interval =
+        std::min(
+            game.options.area_editor_grid_interval * 2.0f,
+            MAX_GRID_INTERVAL
+        );
+    status_text =
+        "Increased grid interval to " +
+        i2s(game.options.area_editor_grid_interval) + ".";
 }
 
 
@@ -1862,13 +1891,15 @@ void area_editor::press_selection_filter_button() {
  */
 void area_editor::press_snap_mode_button() {
     if(!is_shift_pressed) {
-        snap_mode = sum_and_wrap(snap_mode, 1, N_SNAP_MODES);
+        game.options.area_editor_snap_mode =
+            sum_and_wrap(game.options.area_editor_snap_mode, 1, N_SNAP_MODES);
     } else {
-        snap_mode = sum_and_wrap(snap_mode, -1, N_SNAP_MODES);
+        game.options.area_editor_snap_mode =
+            sum_and_wrap(game.options.area_editor_snap_mode, -1, N_SNAP_MODES);
     }
     
     status_text = "Set snap mode to ";
-    switch(snap_mode) {
+    switch(game.options.area_editor_snap_mode) {
     case SNAP_GRID: {
         status_text += "grid";
         break;
@@ -1884,8 +1915,6 @@ void area_editor::press_snap_mode_button() {
     }
     }
     status_text += ".";
-    
-    game.options.area_editor_snap_mode = snap_mode;
 }
 
 

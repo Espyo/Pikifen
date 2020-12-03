@@ -1714,7 +1714,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
 
 /* ----------------------------------------------------------------------------
  * Snaps a point to the nearest available snapping space, based on the
- * current snap mode.
+ * current snap mode and Shift key state.
  * p:
  *   Point to snap.
  * ignore_selected:
@@ -1722,10 +1722,10 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
  *   vertexes or edges.
  */
 point area_editor::snap_point(const point &p, const bool ignore_selected) {
-    unsigned char mode_to_use = snap_mode;
+    unsigned char mode_to_use = game.options.area_editor_snap_mode;
     
     if(is_shift_pressed) {
-        if(snap_mode == SNAP_NOTHING) {
+        if(game.options.area_editor_snap_mode == SNAP_NOTHING) {
             mode_to_use = SNAP_GRID;
         } else {
             mode_to_use = SNAP_NOTHING;

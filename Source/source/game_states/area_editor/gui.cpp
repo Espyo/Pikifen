@@ -640,27 +640,21 @@ void area_editor::process_gui_options_dialog() {
         //Increase grid interval button.
         ImGui::SameLine();
         if(ImGui::Button("+")) {
-            game.options.area_editor_grid_interval =
-                std::min(
-                    game.options.area_editor_grid_interval * 2.0f,
-                    MAX_GRID_INTERVAL
-                );
+            press_grid_interval_increase_button();
         }
         set_tooltip(
-            "Increase the spacing on the grid."
+            "Increase the spacing on the grid.",
+            "Shift + Plus"
         );
         
         //Decrease grid interval button.
         ImGui::SameLine();
         if(ImGui::Button("-")) {
-            game.options.area_editor_grid_interval =
-                std::max(
-                    game.options.area_editor_grid_interval * 0.5f,
-                    MIN_GRID_INTERVAL
-                );
+            press_grid_interval_decrease_button();
         }
         set_tooltip(
-            "Decrease the spacing on the grid."
+            "Decrease the spacing on the grid.",
+            "Shift + Minus"
         );
         
         //Auto-backup interval value.
@@ -2785,7 +2779,7 @@ void area_editor::process_gui_toolbar() {
     //Snap mode button.
     ALLEGRO_BITMAP* snap_mode_bmp = NULL;
     string snap_mode_description;
-    switch(snap_mode) {
+    switch(game.options.area_editor_snap_mode) {
     case SNAP_GRID: {
         snap_mode_bmp = editor_icons[ICON_SNAP_GRID];
         snap_mode_description = "grid. Shift disables snapping.";

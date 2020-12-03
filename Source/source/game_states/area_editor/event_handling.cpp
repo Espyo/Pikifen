@@ -121,6 +121,13 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
                 zoom_min_level, zoom_max_level
             );
             
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
+        press_grid_interval_decrease_button();
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS, false, true)) {
+        //Again, not a typo. The plus key is ALLEGRO_KEY_EQUALS.
+        press_grid_interval_increase_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
         if(game.cam.target_zoom == 1.0f) {
             game.cam.target_pos = point();
