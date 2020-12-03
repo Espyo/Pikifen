@@ -1722,9 +1722,17 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
  *   vertexes or edges.
  */
 point area_editor::snap_point(const point &p, const bool ignore_selected) {
-    if(is_shift_pressed) return p;
+    unsigned char mode_to_use = snap_mode;
     
-    switch(snap_mode) {
+    if(is_shift_pressed) {
+        if(snap_mode == SNAP_NOTHING) {
+            mode_to_use = SNAP_GRID;
+        } else {
+            mode_to_use = SNAP_NOTHING;
+        }
+    }
+    
+    switch(mode_to_use) {
     case SNAP_GRID: {
         return
             point(

@@ -24,9 +24,12 @@ const float options_struct::DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
 const bool options_struct::DEF_AREA_EDITOR_SEL_TRANS = false;
 const bool options_struct::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
 const bool options_struct::DEF_AREA_EDITOR_SHOW_TERRITORY = false;
+const unsigned char options_struct::DEF_AREA_EDITOR_SNAP_MODE =
+    area_editor::SNAP_GRID;
 const size_t options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
 const size_t options_struct::DEF_AREA_EDITOR_UNDO_LIMIT = 20;
-const unsigned char options_struct::DEF_AREA_EDITOR_VIEW_MODE = 0;
+const unsigned char options_struct::DEF_AREA_EDITOR_VIEW_MODE =
+    area_editor::VIEW_MODE_TEXTURES;
 const bool options_struct::DEF_DRAW_CURSOR_TRAIL = true;
 const bool options_struct::DEF_EDITOR_MMB_PAN = false;
 const float options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
@@ -56,6 +59,7 @@ options_struct::options_struct() :
     area_editor_sel_trans(DEF_AREA_EDITOR_SEL_TRANS),
     area_editor_show_edge_length(DEF_AREA_EDITOR_SHOW_EDGE_LENGTH),
     area_editor_show_territory(DEF_AREA_EDITOR_SHOW_TERRITORY),
+    area_editor_snap_mode(DEF_AREA_EDITOR_SNAP_MODE),
     area_editor_snap_threshold(DEF_AREA_EDITOR_SNAP_THRESHOLD),
     area_editor_undo_limit(DEF_AREA_EDITOR_UNDO_LIMIT),
     area_editor_view_mode(DEF_AREA_EDITOR_VIEW_MODE),
@@ -149,6 +153,7 @@ void options_struct::load(data_node* file) {
     rs.set("area_editor_selection_transformation", area_editor_sel_trans);
     rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
     rs.set("area_editor_show_territory", area_editor_show_territory);
+    rs.set("area_editor_snap_mode", area_editor_snap_mode);
     rs.set("area_editor_snap_threshold", area_editor_snap_threshold);
     rs.set("area_editor_undo_limit", area_editor_undo_limit);
     rs.set("area_editor_view_mode", area_editor_view_mode);
@@ -309,6 +314,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "area_editor_show_territory",
             b2s(area_editor_show_territory)
+        )
+    );
+    file->add(
+        new data_node(
+            "area_editor_snap_mode",
+            i2s(area_editor_snap_mode)
         )
     );
     file->add(

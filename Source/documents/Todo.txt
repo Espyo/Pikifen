@@ -3,8 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Remove the multiplayer stuff from the controls menu, as to not mislead people into thinking multiplayer is a thing yet
-    If you press Shift when snapping is on, it should temporarily turn it on for the grid (thanks Nutty171)
-    Save the snapping mode (thanks Nutty171)
     Add a mob action to store mob coordinates to a variable (thanks Kman)
     
 Next tasks (roughly sorted most important first)

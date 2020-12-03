@@ -44,6 +44,22 @@ public:
     
     area_editor();
     
+    enum SNAP_MODES {
+        SNAP_GRID,
+        SNAP_VERTEXES,
+        SNAP_EDGES,
+        SNAP_NOTHING,
+        N_SNAP_MODES,
+    };
+    
+    enum VIEW_MODES {
+        VIEW_MODE_TEXTURES,
+        VIEW_MODE_WIREFRAME,
+        VIEW_MODE_HEIGHTMAP,
+        VIEW_MODE_BRIGHTNESS,
+        N_VIEW_MODES,
+    };
+    
 private:
 
     struct texture_suggestion {
@@ -154,22 +170,6 @@ private:
         SELECTION_FILTER_EDGES,
         SELECTION_FILTER_VERTEXES,
         N_SELECTION_FILTERS,
-    };
-    
-    enum SNAP_MODES {
-        SNAP_GRID,
-        SNAP_VERTEXES,
-        SNAP_EDGES,
-        SNAP_NOTHING,
-        N_SNAP_MODES,
-    };
-    
-    enum VIEW_MODES {
-        VIEW_MODE_TEXTURES,
-        VIEW_MODE_WIREFRAME,
-        VIEW_MODE_HEIGHTMAP,
-        VIEW_MODE_BRIGHTNESS,
-        N_VIEW_MODES,
     };
     
     static const float         COMFY_DIST;

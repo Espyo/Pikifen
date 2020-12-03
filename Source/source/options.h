@@ -32,6 +32,7 @@ struct options_struct {
     static const bool DEF_AREA_EDITOR_SEL_TRANS;
     static const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
     static const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
+    static const unsigned char DEF_AREA_EDITOR_SNAP_MODE;
     static const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
     static const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
     static const unsigned char DEF_AREA_EDITOR_VIEW_MODE;
@@ -63,6 +64,8 @@ struct options_struct {
     bool area_editor_show_edge_length;
     //Show the selected mob(s)'s territory?
     bool area_editor_show_territory;
+    //Snap mode to use.
+    unsigned char area_editor_snap_mode;
     //Snap when the cursor is this close to a vertex/edge.
     size_t area_editor_snap_threshold;
     //Maximum number of undo operations.

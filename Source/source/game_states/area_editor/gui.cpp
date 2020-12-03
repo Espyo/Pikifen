@@ -2788,19 +2788,19 @@ void area_editor::process_gui_toolbar() {
     switch(snap_mode) {
     case SNAP_GRID: {
         snap_mode_bmp = editor_icons[ICON_SNAP_GRID];
-        snap_mode_description = "grid.";
+        snap_mode_description = "grid. Shift disables snapping.";
         break;
     } case SNAP_VERTEXES: {
         snap_mode_bmp = editor_icons[ICON_SNAP_VERTEXES];
-        snap_mode_description = "vertexes.";
+        snap_mode_description = "vertexes. Shift disables snapping.";
         break;
     } case SNAP_EDGES: {
         snap_mode_bmp = editor_icons[ICON_SNAP_EDGES];
-        snap_mode_description = "edges.";
+        snap_mode_description = "edges. Shift disables snapping.";
         break;
     } case SNAP_NOTHING: {
         snap_mode_bmp = editor_icons[ICON_SNAP_NOTHING];
-        snap_mode_description = "off. Shift also disables snapping.";
+        snap_mode_description = "off. Shift snaps to grid.";
         break;
     }
     }
@@ -2815,7 +2815,7 @@ void area_editor::process_gui_toolbar() {
         press_snap_mode_button();
     }
     set_tooltip(
-        "Snap mode: " + snap_mode_description,
+        "Current snap mode: " + snap_mode_description,
         "X or Shift + X"
     );
 }

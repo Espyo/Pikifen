@@ -1203,7 +1203,7 @@ void area_editor::load() {
     selection_homogenized = false;
     show_closest_stop = false;
     show_path_preview = false;
-    snap_mode = SNAP_GRID;
+    snap_mode = game.options.area_editor_snap_mode;
     state = EDITOR_STATE_MAIN;
     status_text.clear();
     
@@ -1884,6 +1884,8 @@ void area_editor::press_snap_mode_button() {
     }
     }
     status_text += ".";
+    
+    game.options.area_editor_snap_mode = snap_mode;
 }
 
 
