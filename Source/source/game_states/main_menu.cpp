@@ -22,7 +22,6 @@
  */
 main_menu_state::main_menu_state() :
     game_state(),
-    time_spent(0),
     bmp_menu_bg(NULL),
     logo_min_screen_limit(10.0f, 10.0f),
     logo_max_screen_limit(90.0f, 50.0f),
@@ -58,10 +57,6 @@ void main_menu_state::do_drawing() {
         draw_bitmap_in_box(pik->top, pik->pos, pik_size, pik->angle);
     }
     
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->draw(time_spent);
-    }
-    
     draw_scaled_text(
         game.fonts.main, al_map_rgb(255, 255, 255),
         point(8, game.win_h  - 8),
@@ -79,6 +74,8 @@ void main_menu_state::do_drawing() {
         i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV)
     );
     
+    gui.draw();
+    
     game.fade_mgr.draw();
     
     al_flip_display();
@@ -89,8 +86,6 @@ void main_menu_state::do_drawing() {
  * Ticks a frame's worth of logic.
  */
 void main_menu_state::do_logic() {
-    time_spent += game.delta_t;
-    
     //Animate the logo Pikmin.
     for(size_t p = 0; p < logo_pikmin.size(); ++p) {
         logo_pik* pik = &logo_pikmin[p];
@@ -121,6 +116,8 @@ void main_menu_state::do_logic() {
         }
     }
     
+    gui.tick(game.delta_t);
+    
     //Fade manager needs to come last, because if
     //the fade finishes and the state changes, and
     //after that we still attempt to do stuff in
@@ -146,7 +143,7 @@ string main_menu_state::get_name() const {
 void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    handle_widget_events(ev);
+    gui.handle_event(ev);
 }
 
 
@@ -154,65 +151,112 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * Loads the main menu into memory.
  */
 void main_menu_state::load() {
-    selected_widget = NULL;
-    
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
-    //Menu widgets.
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.5, game.win_h * 0.55),
-            point(game.win_w * 0.8, game.win_h * 0.06),
-    [this] () {
+    //Menu items.
+    gui_item* play_button = new gui_item();
+    play_button->center.x = 0.50;
+    play_button->center.y = 0.55;
+    play_button->size.x = 0.50;
+    play_button->size.y = 0.06;
+    play_button->selectable = true;
+    play_button->on_draw =
+    [play_button, this] (const point & center, const point & size) {
+        draw_button(
+            center, size, "Play", game.fonts.area_name,
+            map_gray(255), play_button->selected
+        );
+    };
+    play_button->on_activate =
+    [] () {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.area_menu);
         });
-    }, "Play", game.fonts.area_name
-        )
-    );
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.5, game.win_h * 0.63),
-            point(game.win_w * 0.8, game.win_h * 0.06),
-    [this] () {
+    };
+    gui.add_item(play_button);
+    
+    gui_item* options_button = new gui_item();
+    options_button->center.x = 0.50;
+    options_button->center.y = 0.63;
+    options_button->size.x = 0.50;
+    options_button->size.y = 0.06;
+    options_button->selectable = true;
+    options_button->on_draw =
+    [options_button, this] (const point & center, const point & size) {
+        draw_button(
+            center, size, "Options", game.fonts.area_name,
+            map_gray(255), options_button->selected
+        );
+    };
+    options_button->on_activate =
+    [] () {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.options_menu);
         });
-    }, "Options", game.fonts.area_name
-        )
-    );
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.5, game.win_h * 0.71),
-            point(game.win_w * 0.8, game.win_h * 0.06),
-    [this] () {
+    };
+    gui.add_item(options_button);
+    
+    gui_item* anim_ed_button = new gui_item();
+    anim_ed_button->center.x = 0.50;
+    anim_ed_button->center.y = 0.71;
+    anim_ed_button->size.x = 0.50;
+    anim_ed_button->size.y = 0.06;
+    anim_ed_button->selectable = true;
+    anim_ed_button->on_draw =
+    [anim_ed_button, this] (const point & center, const point & size) {
+        draw_button(
+            center, size, "Animation editor", game.fonts.area_name,
+            map_gray(255), anim_ed_button->selected
+        );
+    };
+    anim_ed_button->on_activate =
+    [] () {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.animation_ed);
         });
-    }, "Animation editor", game.fonts.area_name
-        )
-    );
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.5, game.win_h * 0.79),
-            point(game.win_w * 0.8, game.win_h * 0.06),
-    [this] () {
+    };
+    gui.add_item(anim_ed_button);
+    
+    gui_item* area_ed_button = new gui_item();
+    area_ed_button->center.x = 0.50;
+    area_ed_button->center.y = 0.79;
+    area_ed_button->size.x = 0.50;
+    area_ed_button->size.y = 0.06;
+    area_ed_button->selectable = true;
+    area_ed_button->on_draw =
+    [area_ed_button, this] (const point & center, const point & size) {
+        draw_button(
+            center, size, "Area editor", game.fonts.area_name,
+            map_gray(255), area_ed_button->selected
+        );
+    };
+    area_ed_button->on_activate =
+    [] () {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.area_ed);
         });
-    }, "Area editor", game.fonts.area_name
-        )
-    );
-    back_widget =
-        new menu_button(
-        point(game.win_w * 0.5, game.win_h * 0.87),
-        point(game.win_w * 0.8, game.win_h * 0.06),
+    };
+    gui.add_item(area_ed_button);
+    
+    gui.back_item = new gui_item();
+    gui.back_item->center.x = 0.50;
+    gui.back_item->center.y = 0.87;
+    gui.back_item->size.x = 0.50;
+    gui.back_item->size.y = 0.06;
+    gui.back_item->selectable = true;
+    gui.back_item->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_button(
+            center, size, "Exit", game.fonts.area_name,
+            map_gray(255), gui.back_item->selected
+        );
+    };
+    gui.back_item->on_activate =
     [] () {
         game.is_game_running = false;
-    }, "Exit", game.fonts.area_name
-    );
-    menu_widgets.push_back(back_widget);
+    };
+    gui.add_item(gui.back_item);
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
@@ -320,7 +364,7 @@ void main_menu_state::load() {
     }
     
     //Finishing touches.
-    set_selected_widget(menu_widgets[0]);
+    gui.set_selected_item(play_button);
     game.fade_mgr.start_fade(true, nullptr);
     
 }
@@ -334,12 +378,8 @@ void main_menu_state::unload() {
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
     
-    //Menu widgets.
-    set_selected_widget(NULL);
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        delete menu_widgets[w];
-    }
-    menu_widgets.clear();
+    //Menu items.
+    gui.destroy();
     
     //Misc.
     logo_pikmin.clear();

@@ -17,6 +17,7 @@
 
 #include "game_state.h"
 #include "../menu_widgets.h"
+#include "../gui.h"
 
 
 using std::map;
@@ -45,11 +46,10 @@ private:
         ALLEGRO_BITMAP* top;
         bool reached_destination;
     };
-    
-    float time_spent;
-    
+        
     ALLEGRO_BITMAP* bmp_menu_bg;
     vector<logo_pik> logo_pikmin;
+    gui_manager gui;
     
     point logo_min_screen_limit;
     point logo_max_screen_limit;
