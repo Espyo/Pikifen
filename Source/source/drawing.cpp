@@ -209,6 +209,46 @@ void draw_bitmap_with_effects(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws a button on the screen.
+ * center:
+ *   Center coordinates.
+ * size:
+ *   Width and height.
+ * text:
+ *   Text inside the button.
+ * font:
+ *   What font to write the text in.
+ * color:
+ *   Color to draw the text with.
+ * selected:
+ *   Is the button currently selected?
+ */
+void draw_button(
+    const point &center, const point &size, const string &text,
+    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const bool selected
+) {
+    draw_compressed_text(
+        font, color, center, ALLEGRO_ALIGN_CENTER, 1, size, text
+    );
+    
+    ALLEGRO_COLOR box_tint =
+        selected ? al_map_rgb(87, 200, 208) : map_gray(255);
+        
+    draw_textured_box(
+        center, size, game.sys_assets.bmp_bubble_box, box_tint
+    );
+    
+    if(selected) {
+        draw_textured_box(
+            center,
+            size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+            game.sys_assets.bmp_focus_box
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws text on the screen, but compresses (scales) it
  * to fit within the specified range.
  * font:

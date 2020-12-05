@@ -56,6 +56,11 @@ void draw_bitmap_in_box(
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const bitmap_effect_info &effects
 );
+void draw_button(
+    const point &center, const point &size, const string &text,
+    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
+    const bool selected
+);
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
     const point &where, const point &max_size

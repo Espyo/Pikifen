@@ -204,6 +204,8 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="source">
+    <File Name="../source/gui.cpp"/>
+    <File Name="../source/gui.h"/>
     <File Name="../source/game_config.cpp"/>
     <File Name="../source/game_config.h"/>
     <File Name="../source/options.cpp"/>
