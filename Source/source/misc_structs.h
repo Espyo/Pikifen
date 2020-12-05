@@ -47,6 +47,7 @@ struct asset_file_names_struct {
     string counter_font;
     string editor_icons;
     string enemy_spirit;
+    string focus_box;
     string icon;
     string idle_glow;
     string main_font;
@@ -462,6 +463,7 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_cursor;
     ALLEGRO_BITMAP* bmp_cursor_invalid;
     ALLEGRO_BITMAP* bmp_enemy_spirit;
+    ALLEGRO_BITMAP* bmp_focus_box;
     ALLEGRO_BITMAP* bmp_icon;
     ALLEGRO_BITMAP* bmp_idle_glow;
     ALLEGRO_BITMAP* bmp_more;

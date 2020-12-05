@@ -1358,7 +1358,7 @@ void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor),
             al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor)
         ),
-        -(time_passed * game.config.cursor_spin_speed),
+        -(game.time_passed * game.config.cursor_spin_speed),
         color
     );
 }

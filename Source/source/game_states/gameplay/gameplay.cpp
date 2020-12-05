@@ -216,7 +216,6 @@ gameplay_state::gameplay_state() :
     swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
     swarm_cursor(false),
     throw_can_reach_cursor(true),
-    time_passed(0.0f),
     went_to_results(false) {
     
     swarm_next_arrow_timer.on_end = [this] () {
@@ -243,8 +242,6 @@ void gameplay_state::do_drawing() {
  * Tick the gameplay logic by one frame.
  */
 void gameplay_state::do_logic() {
-    time_passed += game.delta_t;
-    
     if(game.perf_mon) {
         if(is_input_allowed) {
             //The first frame will have its speed all broken,

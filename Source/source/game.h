@@ -143,6 +143,8 @@ public:
     string team_names[N_MOB_TEAMS];
     //Manager of all floor texture bitmaps.
     bmp_manager textures;
+    //How much time has passed since the program booted.
+    float time_passed;
     //List of weather conditions.
     map<string, weather> weather_conditions;
     //Current fullscreen state.

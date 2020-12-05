@@ -113,7 +113,8 @@ void draw_text_lines(
     const string &text
 );
 void draw_textured_box(
-    const point &center, const point &size, ALLEGRO_BITMAP* texture
+    const point &center, const point &size, ALLEGRO_BITMAP* texture,
+    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
 );
 float ease(
     const unsigned char method, float y

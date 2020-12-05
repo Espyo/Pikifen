@@ -38,6 +38,7 @@ game_class::game_class() :
     perf_mon(nullptr),
     show_system_info(false),
     textures(TEXTURES_FOLDER_NAME),
+    time_passed(0.0f),
     win_fullscreen(options_struct::DEF_WIN_FULLSCREEN),
     win_h(options_struct::DEF_WIN_H),
     win_w(options_struct::DEF_WIN_W),
@@ -152,6 +153,7 @@ void game_class::main_loop() {
                 //Anti speed-burst cap.
                 delta_t = std::min(cur_time - prev_frame_time, 0.2);
                 
+                time_passed += delta_t;
                 game_state* prev_state = cur_state;
                 
                 cur_state->do_logic();

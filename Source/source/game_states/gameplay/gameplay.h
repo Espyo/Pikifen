@@ -288,8 +288,6 @@ private:
     movement_struct swarm_movement;
     //Is it possible for the currently held Pikmin to reach the cursor?
     bool throw_can_reach_cursor;
-    //How many seconds have passed in this state.
-    float time_passed;
     
     void do_aesthetic_logic();
     void do_game_drawing(

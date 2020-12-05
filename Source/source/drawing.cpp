@@ -1657,9 +1657,12 @@ void draw_text_lines(
  *   Width and height of the box.
  * texture:
  *   Texture to use.
+ * tint:
+ *   Tint the texture with this color.
  */
 void draw_textured_box(
-    const point &center, const point &size, ALLEGRO_BITMAP* texture
+    const point &center, const point &size, ALLEGRO_BITMAP* texture,
+    const ALLEGRO_COLOR &tint
 ) {
     al_hold_bitmap_drawing(true);
     
@@ -1693,7 +1696,7 @@ void draw_textured_box(
     //Initialize the vertexes.
     ALLEGRO_VERTEX vert[total_vertexes];
     for(unsigned char v = 0; v < total_vertexes; ++v) {
-        vert[v].color = al_map_rgb(255, 255, 255);
+        vert[v].color = tint;
         vert[v].z = 0;
     }
     

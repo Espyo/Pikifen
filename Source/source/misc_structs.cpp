@@ -34,6 +34,7 @@ asset_file_names_struct::asset_file_names_struct() :
     counter_font("Counter_font.png"),
     editor_icons("Editor_icons.png"),
     enemy_spirit("Enemy_spirit.png"),
+    focus_box("Focus_box.png"),
     icon("Icon.png"),
     idle_glow("Idle_glow.png"),
     main_font("Font.png"),
@@ -78,6 +79,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("counter_font", counter_font);
     rs.set("editor_icons", editor_icons);
     rs.set("enemy_spirit", enemy_spirit);
+    rs.set("focus_box", focus_box);
     rs.set("icon", icon);
     rs.set("idle_glow", idle_glow);
     rs.set("main_font", main_font);
@@ -1681,6 +1683,7 @@ system_asset_list::system_asset_list():
     bmp_cursor(nullptr),
     bmp_cursor_invalid(nullptr),
     bmp_enemy_spirit(nullptr),
+    bmp_focus_box(nullptr),
     bmp_icon(nullptr),
     bmp_idle_glow(nullptr),
     bmp_more(nullptr),
