@@ -12,11 +12,14 @@
 #define GUI_INCLUDED
 
 #include <functional>
+#include <map>
 #include <vector>
 
 #include "const.h"
+#include "utils/data_file.h"
 #include "utils/geometry_utils.h"
 
+using std::map;
 using std::vector;
 
 
@@ -73,7 +76,7 @@ public:
     gui_item* back_item;
     
     //Add an item to the list.
-    void add_item(gui_item* item, const unsigned int id = INVALID);
+    void add_item(gui_item* item, const string &id = "");
     //Draw the items on-screen.
     void draw();
     //Tick one frame of logic.
@@ -84,14 +87,26 @@ public:
     void handle_menu_button(
         const size_t action, const float pos, const size_t player
     );
+    //Registers an item's default centers and size.
+    void register_coords(
+        const string &id,
+        const float cx, const float cy, const float w, const float h
+    );
+    //Reads item coordinates from a data node.
+    void read_coords(data_node* node);
     //Sets the currently selected item.
     void set_selected_item(gui_item* item);
+    
     //Destroys all allocated items and information.
     void destroy();
     
     gui_manager();
     
 private:
+    //Registered default centers.
+    map<string, point> registered_centers;
+    //Registered default sizes.
+    map<string, point> registered_sizes;
     //Is the right button pressed?
     bool right_pressed;
     //Is the up button pressed?

@@ -135,6 +135,8 @@ const string AUDIO_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Audio";
 const string GRAPHICS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Graphics";
+const string GUI_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/GUI";
 const string HAZARDS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Hazards";
 const string LIQUIDS_FOLDER_PATH =

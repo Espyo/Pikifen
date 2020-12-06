@@ -62,6 +62,7 @@ private:
     point logo_pikmin_size;
     map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;
     
+    static const string GUI_FILE_PATH;
 };
 
 

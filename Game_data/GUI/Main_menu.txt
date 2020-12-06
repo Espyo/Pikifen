@@ -1,0 +1,7 @@
+positions {
+    play =             50 55 50 6
+    options =          50 63 50 6
+    animation_editor = 50 71 50 6
+    area_editor =      50 79 50 6
+    exit =             50 87 50 6
+}

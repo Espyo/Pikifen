@@ -17,6 +17,10 @@
 #include "../utils/string_utils.h"
 
 
+const string main_menu_state::GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Main_menu.txt";
+
+
 /* ----------------------------------------------------------------------------
  * Creates a "main menu" state.
  */
@@ -155,11 +159,16 @@ void main_menu_state::load() {
     al_flip_display();
     
     //Menu items.
+    gui.register_coords("play",             50, 55, 50,  6);
+    gui.register_coords("options",          50, 63, 50,  6);
+    gui.register_coords("animation_editor", 50, 71, 50,  6);
+    gui.register_coords("area_editor",      50, 79, 50,  6);
+    gui.register_coords("exit",             50, 87, 50,  6);
+    gui.read_coords(
+        data_node(GUI_FILE_PATH).get_child_by_name("positions")
+    );
+    
     gui_item* play_button = new gui_item();
-    play_button->center.x = 0.50;
-    play_button->center.y = 0.55;
-    play_button->size.x = 0.50;
-    play_button->size.y = 0.06;
     play_button->selectable = true;
     play_button->on_draw =
     [play_button, this] (const point & center, const point & size) {
@@ -174,13 +183,9 @@ void main_menu_state::load() {
             game.change_state(game.states.area_menu);
         });
     };
-    gui.add_item(play_button);
+    gui.add_item(play_button, "play");
     
     gui_item* options_button = new gui_item();
-    options_button->center.x = 0.50;
-    options_button->center.y = 0.63;
-    options_button->size.x = 0.50;
-    options_button->size.y = 0.06;
     options_button->selectable = true;
     options_button->on_draw =
     [options_button, this] (const point & center, const point & size) {
@@ -195,13 +200,9 @@ void main_menu_state::load() {
             game.change_state(game.states.options_menu);
         });
     };
-    gui.add_item(options_button);
+    gui.add_item(options_button, "options");
     
     gui_item* anim_ed_button = new gui_item();
-    anim_ed_button->center.x = 0.50;
-    anim_ed_button->center.y = 0.71;
-    anim_ed_button->size.x = 0.50;
-    anim_ed_button->size.y = 0.06;
     anim_ed_button->selectable = true;
     anim_ed_button->on_draw =
     [anim_ed_button, this] (const point & center, const point & size) {
@@ -216,13 +217,9 @@ void main_menu_state::load() {
             game.change_state(game.states.animation_ed);
         });
     };
-    gui.add_item(anim_ed_button);
+    gui.add_item(anim_ed_button, "animation_editor");
     
     gui_item* area_ed_button = new gui_item();
-    area_ed_button->center.x = 0.50;
-    area_ed_button->center.y = 0.79;
-    area_ed_button->size.x = 0.50;
-    area_ed_button->size.y = 0.06;
     area_ed_button->selectable = true;
     area_ed_button->on_draw =
     [area_ed_button, this] (const point & center, const point & size) {
@@ -237,13 +234,9 @@ void main_menu_state::load() {
             game.change_state(game.states.area_ed);
         });
     };
-    gui.add_item(area_ed_button);
+    gui.add_item(area_ed_button, "area_editor");
     
     gui.back_item = new gui_item();
-    gui.back_item->center.x = 0.50;
-    gui.back_item->center.y = 0.87;
-    gui.back_item->size.x = 0.50;
-    gui.back_item->size.y = 0.06;
     gui.back_item->selectable = true;
     gui.back_item->on_draw =
     [this] (const point & center, const point & size) {
@@ -256,7 +249,7 @@ void main_menu_state::load() {
     [] () {
         game.is_game_running = false;
     };
-    gui.add_item(gui.back_item);
+    gui.add_item(gui.back_item, "exit");
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);

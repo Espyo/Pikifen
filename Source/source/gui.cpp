@@ -11,6 +11,7 @@
 #include "gui.h"
 
 #include "game.h"
+#include "utils/string_utils.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -67,11 +68,19 @@ gui_manager::gui_manager() :
  * item:
  *   Pointer to the new item.
  * id:
- *   If this item has an associated ID, specify it here. INVALID if none.
+ *   If this item has an associated ID, specify it here. Empty string if none.
  */
-void gui_manager::add_item(gui_item* item, const unsigned int id) {
+void gui_manager::add_item(gui_item* item, const string &id) {
+    auto c = registered_centers.find(id);
+    if(c != registered_centers.end()) {
+        item->center = c->second;
+    }
+    auto s = registered_sizes.find(id);
+    if(s != registered_sizes.end()) {
+        item->size = s->second;
+    }
+    
     items.push_back(item);
-    //TODO ID
 }
 
 
@@ -85,6 +94,8 @@ void gui_manager::destroy() {
         delete items[i];
     }
     items.clear();
+    registered_centers.clear();
+    registered_sizes.clear();
 }
 
 
@@ -302,6 +313,51 @@ void gui_manager::handle_menu_button(
         
     }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads item default centers and sizes from a data node.
+ * node:
+ *   Data node to read from.
+ */
+void gui_manager::read_coords(data_node* node) {
+    size_t n_items = node->get_nr_of_children();
+    for(size_t i = 0; i < n_items; ++i) {
+        data_node* item_node = node->get_child(i);
+        vector<string> words = split(item_node->value);
+        if(words.size() < 4) {
+            continue;
+        }
+        register_coords(
+            item_node->name,
+            s2f(words[0]), s2f(words[1]), s2f(words[2]), s2f(words[3])
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers an item's default center and size.
+ * id:
+ *   String ID of the item.
+ * cx:
+ *   Center X, in screen percentage.
+ * cy:
+ *   Center Y, in screen percentage.
+ * w:
+ *   Width, in screen percentage.
+ * h:
+ *   Height, in screen percentage.
+ */
+void gui_manager::register_coords(
+    const string &id,
+    const float cx, const float cy, const float w, const float h
+) {
+    registered_centers[id] =
+        point(cx / 100.0f, cy / 100.0f);
+    registered_sizes[id] =
+        point(w / 100.0f, h / 100.0f);
 }
 
 
