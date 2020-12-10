@@ -29,12 +29,16 @@ Current tasks (tasks being worked on, but not yet committed)
                 Each object has a lambda for what to do when "activated" -- when clicked or when the player presses the "activate" key on it
                 Each object has the ability to capture a key-press and tell the manager not to handle it. This way, a slider widget can use left/right to change its value, instead of the manager using that to change to a different widget
                 When an object is added to the manager's list, it can specify that it's framed inside another
-    Mobs that receive a message should check if it's the exact message they expect. Otherwise, a gimmick area that has objects that broadcast a specific message everywhere may end up activating signs
+        Change the arrow keys logic that detects the next available button
+        Move the title screen logo composition to the GUI/Main_menu.txt file
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
     
     --- v0.20.0 ---
+    Mobs that receive a message should check if it's the exact message they expect. Otherwise, a gimmick area that has objects that broadcast a specific message everywhere may end up activating signs
+    Add a "get_focus_info" action
+    Add a "get_focus_distance" action
     Add rudimentary menus
         Pause
             Continue, retry day, end day, quit
@@ -99,6 +103,7 @@ Next tasks (roughly sorted most important first)
     Missing animations and animation improvements
         Pikmin
             Sighing
+            Idling (bobbing a bit so they aren't static)
             Bored (lying down, looking around, etc.)
             Flailing (also used when caught by an enemy)
             Shaking after leaving the water
@@ -111,6 +116,7 @@ Next tasks (roughly sorted most important first)
             Pushing (add the group task logic too)
             Arms outstretched (add the group task logic too)
         Leader
+            Idling (bobbing a bit so they aren't static)
             Bored
             Throwing (it exists, but isn't being used)
             Thrown (add to the logic of bouncers too)

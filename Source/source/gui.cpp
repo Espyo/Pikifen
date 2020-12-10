@@ -17,11 +17,13 @@
 /* ----------------------------------------------------------------------------
  * Creates a new GUI item.
  */
-gui_item::gui_item() :
+gui_item::gui_item(const bool selectable) :
     visible(true),
-    selectable(false),
+    selectable(selectable),
     selected(false),
     parent(nullptr),
+    offset(0.0f),
+    padding(0.0f),
     juicy_timer(0.0f),
     on_draw(nullptr),
     on_tick(nullptr),
@@ -31,18 +33,54 @@ gui_item::gui_item() :
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the real center coordinates.
+ */
+point gui_item::get_real_center() {
+    if(parent) {
+        point parent_s = parent->get_real_size() - (parent->padding * 2.0f);
+        point parent_c = parent->get_real_center();
+        point result = center * parent_s;
+        result.x += parent_c.x - parent_s.x / 2.0f;
+        result.y += parent_c.y - parent_s.y / 2.0f;
+        result.y += parent_s.y * parent->offset;
+        return result;
+    } else {
+        return point(center.x * game.win_w, center.y * game.win_h);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the real size coordinates.
+ */
+point gui_item::get_real_size() {
+    point mult;
+    if(parent) {
+        mult = parent->get_real_size() - (parent->padding * 2.0f);
+    } else {
+        mult.x = game.win_w;
+        mult.y = game.win_h;
+    }
+    return size * mult;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether the mouse cursor is on top of it.
  */
 bool gui_item::is_mouse_on(const point &cursor_pos) {
-    point c = cursor_pos;
-    c.x /= game.win_w;
-    c.y /= game.win_h;
+    if(parent && !parent->is_mouse_on(cursor_pos)) {
+        return false;
+    }
+    
+    point c = get_real_center();
+    point s = get_real_size();
     return
         (
-            c.x >= center.x - size.x * 0.5 &&
-            c.x <= center.x + size.x * 0.5 &&
-            c.y >= center.y - size.y * 0.5 &&
-            c.y <= center.y + size.y * 0.5
+            cursor_pos.x >= c.x - s.x * 0.5 &&
+            cursor_pos.x <= c.x + s.x * 0.5 &&
+            cursor_pos.y >= c.y - s.y * 0.5 &&
+            cursor_pos.y <= c.y + s.y * 0.5
         );
 }
 
@@ -103,14 +141,33 @@ void gui_manager::destroy() {
  * Draws all items on-screen.
  */
 void gui_manager::draw() {
+    int ocr_x, ocr_y, ocr_w, ocr_h;
     for(size_t i = 0; i < items.size(); ++i) {
         point center = items[i]->center;
-        center.x *= game.win_w;
-        center.y *= game.win_h;
         point size = items[i]->size;
-        size.x *= game.win_w;
-        size.y *= game.win_h;
-        items[i]->on_draw(center, size);
+        point multipliers;
+        gui_item* parent = items[i]->parent;
+        
+        if(parent) {
+            al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
+            point parent_c = parent->get_real_center();
+            point parent_s = parent->get_real_size();
+            al_set_clipping_rectangle(
+                parent_c.x - parent_s.x / 2.0f,
+                parent_c.y - parent_s.y / 2.0f,
+                parent_s.x,
+                parent_s.y
+            );
+        }
+        
+        items[i]->on_draw(
+            items[i]->get_real_center(),
+            items[i]->get_real_size()
+        );
+        
+        if(parent) {
+            al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
+        }
     }
 }
 

@@ -118,7 +118,7 @@ void options_menu_state::do_drawing() {
         point(game.win_w, game.win_h), 0, map_gray(64)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->draw(time_spent);
+        menu_widgets[w]->draw(game.time_passed);
     }
     
     game.fade_mgr.draw();
@@ -131,7 +131,6 @@ void options_menu_state::do_drawing() {
  * Ticks one frame's worth of logic.
  */
 void options_menu_state::do_logic() {
-    time_spent += game.delta_t;
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->tick(game.delta_t);
     }

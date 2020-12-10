@@ -46,7 +46,7 @@ private:
         ALLEGRO_BITMAP* top;
         bool reached_destination;
     };
-        
+    
     ALLEGRO_BITMAP* bmp_menu_bg;
     vector<logo_pik> logo_pikmin;
     gui_manager gui;
@@ -80,7 +80,6 @@ private:
     vector<std::pair<int, int> > resolution_presets;
     
     ALLEGRO_BITMAP* bmp_menu_bg;
-    float time_spent;
     
     menu_checkbox* fullscreen_widget;
     menu_text* resolution_widget;
@@ -106,7 +105,6 @@ public:
     
 private:
     ALLEGRO_BITMAP* bmp_menu_bg;
-    float time_spent;
     
     size_t cur_page_nr;
     
@@ -137,16 +135,13 @@ public:
     
 private:
     ALLEGRO_BITMAP* bmp_menu_bg;
-    float time_spent;
-    size_t cur_page_nr;
     vector<string> areas_to_pick;
     vector<string> area_names;
-    
-    vector<menu_widget*> area_buttons;
-    menu_text* cur_page_nr_widget;
+    gui_manager gui;
     
     void leave();
-    void update();
+    
+    static const string GUI_FILE_PATH;
     
 };
 

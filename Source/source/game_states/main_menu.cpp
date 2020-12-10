@@ -168,8 +168,7 @@ void main_menu_state::load() {
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
-    gui_item* play_button = new gui_item();
-    play_button->selectable = true;
+    gui_item* play_button = new gui_item(true);
     play_button->on_draw =
     [play_button, this] (const point & center, const point & size) {
         draw_button(
@@ -185,8 +184,7 @@ void main_menu_state::load() {
     };
     gui.add_item(play_button, "play");
     
-    gui_item* options_button = new gui_item();
-    options_button->selectable = true;
+    gui_item* options_button = new gui_item(true);
     options_button->on_draw =
     [options_button, this] (const point & center, const point & size) {
         draw_button(
@@ -202,8 +200,7 @@ void main_menu_state::load() {
     };
     gui.add_item(options_button, "options");
     
-    gui_item* anim_ed_button = new gui_item();
-    anim_ed_button->selectable = true;
+    gui_item* anim_ed_button = new gui_item(true);
     anim_ed_button->on_draw =
     [anim_ed_button, this] (const point & center, const point & size) {
         draw_button(
@@ -219,8 +216,7 @@ void main_menu_state::load() {
     };
     gui.add_item(anim_ed_button, "animation_editor");
     
-    gui_item* area_ed_button = new gui_item();
-    area_ed_button->selectable = true;
+    gui_item* area_ed_button = new gui_item(true);
     area_ed_button->on_draw =
     [area_ed_button, this] (const point & center, const point & size) {
         draw_button(
@@ -236,8 +232,7 @@ void main_menu_state::load() {
     };
     gui.add_item(area_ed_button, "area_editor");
     
-    gui.back_item = new gui_item();
-    gui.back_item->selectable = true;
+    gui.back_item = new gui_item(true);
     gui.back_item->on_draw =
     [this] (const point & center, const point & size) {
         draw_button(

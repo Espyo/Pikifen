@@ -40,6 +40,10 @@ public:
     bool selected;
     //If it is placed inside of another item, specify it here.
     gui_item* parent;
+    //Vertical offset of the items inside of it, if any.
+    float offset;
+    //Padding amount, if it has items inside of it.
+    float padding;
     //Timer that controls it growing in size. Used for juice.
     float juicy_timer;
     
@@ -50,10 +54,14 @@ public:
     //What to do when the item is activated.
     std::function<void()> on_activate;
     
+    //Returns the real center coordinates.
+    point get_real_center();
+    //Returns the real size coordinates.
+    point get_real_size();
     //Returns whether the mouse cursor is on top of it.
     bool is_mouse_on(const point &cursor_pos);
     
-    gui_item();
+    gui_item(const bool selectable = false);
 };
 
 

@@ -19,15 +19,16 @@
 #include "../utils/string_utils.h"
 
 
+const string area_menu_state::GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Area_menu.txt";
+
+
 /* ----------------------------------------------------------------------------
  * Creates an "area menu" state.
  */
 area_menu_state::area_menu_state() :
     game_state(),
-    bmp_menu_bg(NULL),
-    time_spent(0),
-    cur_page_nr(0),
-    cur_page_nr_widget(NULL) {
+    bmp_menu_bg(NULL) {
     
 }
 
@@ -41,9 +42,8 @@ void area_menu_state::do_drawing() {
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
         point(game.win_w, game.win_h), 0, map_gray(64)
     );
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->draw(time_spent);
-    }
+    
+    gui.draw();
     
     game.fade_mgr.draw();
     
@@ -56,11 +56,8 @@ void area_menu_state::do_drawing() {
  */
 void area_menu_state::do_logic() {
     game.fade_mgr.tick(game.delta_t);
-    time_spent += game.delta_t;
     
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->tick(game.delta_t);
-    }
+    gui.tick(game.delta_t);
 }
 
 
@@ -80,8 +77,7 @@ string area_menu_state::get_name() const {
 void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    handle_widget_events(ev);
-    
+    gui.handle_event(ev);
 }
 
 
@@ -99,10 +95,7 @@ void area_menu_state::leave() {
  * Loads the area menu into memory.
  */
 void area_menu_state::load() {
-    selected_widget = NULL;
     bmp_menu_bg = NULL;
-    time_spent = 0;
-    cur_page_nr = 0;
     
     //Areas.
     areas_to_pick = folder_to_vector(AREAS_FOLDER_PATH, true);
@@ -131,93 +124,103 @@ void area_menu_state::load() {
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
-    //Menu widgets.
-    back_widget =
-        new menu_button(
-        point(game.win_w * 0.15, game.win_h * 0.10),
-        point(game.win_w * 0.20, game.win_h * 0.06),
+    //Menu items.
+    gui.register_coords("back",        15, 10, 20,  6);
+    gui.register_coords("pick_text",   50, 10, 30, 10);
+    gui.register_coords("list",        49, 55, 77, 70);
+    gui.register_coords("list_scroll", 90, 55,  2, 70);
+    gui.read_coords(
+        data_node(GUI_FILE_PATH).get_child_by_name("positions")
+    );
+    
+    gui.back_item = new gui_item(true);
+    gui.back_item->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_button(
+            center, size, "Back", game.fonts.main,
+            map_gray(255), gui.back_item->selected
+        );
+    };
+    gui.back_item->on_activate =
     [this] () {
         leave();
-    },
-    "Back", game.fonts.main
-    );
-    menu_widgets.push_back(back_widget);
+    };
+    gui.add_item(gui.back_item, "back");
     
-    menu_widgets.push_back(
-        new menu_text(
-            point(game.win_w * 0.5, game.win_h * 0.1),
-            point(game.win_w * 0.3, game.win_h * 0.1),
-            "Pick an area:",
-            game.fonts.main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_CENTER
-        )
-    );
-    
-    for(size_t a = 0; a < 8; ++a) {
-        menu_widgets.push_back(
-            new menu_button(
-                point(game.win_w * 0.5, game.win_h * (0.2 + 0.08 * a)),
-                point(game.win_w * 0.8, game.win_h * 0.06),
-        [] () {
-        
-        },
-        "", game.fonts.area_name
-            )
+    gui_item* pick_text = new gui_item();
+    pick_text->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_compressed_text(
+            game.fonts.main, map_gray(255),
+            center, ALLEGRO_ALIGN_CENTER, 1, size,
+            "Pick an area:"
         );
-        area_buttons.push_back(menu_widgets.back());
-    }
+    };
+    gui.add_item(pick_text, "pick_text");
     
-    menu_widgets.push_back(
-        new menu_text(
-            point(game.win_w * 0.15, game.win_h * 0.9),
-            point(game.win_w * 0.2, game.win_h * 0.1),
-            "Page:", game.fonts.main
-        )
-    );
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.3, game.win_h * 0.9),
-            point(game.win_w * 0.15, game.win_h * 0.1),
-    [this] () {
-        cur_page_nr =
-            sum_and_wrap(
-                cur_page_nr, -1, ceil(areas_to_pick.size() / 8.0)
+    gui_item* list_box = new gui_item();
+    list_box->on_draw =
+    [this] (const point & center, const point & size) {
+        al_draw_rounded_rectangle(
+            center.x - size.x * 0.5,
+            center.y - size.y * 0.5,
+            center.x + size.x * 0.5,
+            center.y + size.y * 0.5,
+            8.0f, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+        );
+    };
+    list_box->padding = 8.0f;
+    gui.add_item(list_box, "list");
+    
+    gui_item* list_scroll = new gui_item();
+    list_scroll->on_draw =
+    [this] (const point & center, const point & size) {
+        al_draw_rounded_rectangle(
+            center.x - size.x * 0.5,
+            center.y - size.y * 0.5,
+            center.x + size.x * 0.5,
+            center.y + size.y * 0.5,
+            8.0f, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+        );
+    };
+    gui.add_item(list_scroll, "list_scroll");
+    
+    gui_item* first_area_button = NULL;
+    for(size_t a = 0; a < areas_to_pick.size(); ++a) {
+        string area_name = area_names[a];
+        string area_folder = areas_to_pick[a];
+        
+        gui_item* area_button = new gui_item(true);
+        area_button->center = point(0.50f, 0.045f + a * 0.10f);
+        area_button->size = point(1.0f, 0.09f);
+        area_button->parent = list_box;
+        area_button->on_draw =
+            [this, area_button, area_name] (
+                const point & center, const point & size
+        ) {
+            draw_button(
+                center, size, area_name,
+                game.fonts.area_name, map_gray(255),
+                area_button->selected
             );
-        cur_page_nr_widget->start_juicy_grow();
-        update();
-    },
-    "<", game.fonts.main
-        )
-    );
-    cur_page_nr_widget =
-        new menu_text(
-        point(game.win_w * 0.4, game.win_h * 0.9),
-        point(game.win_w * 0.1, game.win_h * 0.1),
-        "", game.fonts.main
-    );
-    menu_widgets.push_back(cur_page_nr_widget);
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.5, game.win_h * 0.9),
-            point(game.win_w * 0.15, game.win_h * 0.1),
-    [this] () {
-        cur_page_nr =
-            sum_and_wrap(
-                cur_page_nr, 1, ceil(areas_to_pick.size() / 8.0)
-            );
-        cur_page_nr_widget->start_juicy_grow();
-        update();
-    },
-    ">", game.fonts.main
-        )
-    );
+        };
+        area_button->on_activate =
+        [this, area_folder] () {
+            game.states.gameplay->area_to_load = area_folder;
+            game.fade_mgr.start_fade(false, [] () {
+                game.change_state(game.states.gameplay);
+            });
+        };
+        gui.add_item(area_button);
+        if(!first_area_button) {
+            first_area_button = area_button;
+        }
+    }
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
-    update();
-    if(menu_widgets.size() >= 3) {
-        set_selected_widget(menu_widgets[2]);
-    } else {
-        set_selected_widget(menu_widgets[1]);
+    if(areas_to_pick.size() > 1) {
+        gui.set_selected_item(first_area_button);
     }
     
 }
@@ -231,47 +234,11 @@ void area_menu_state::unload() {
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
     
-    //Menu widgets.
-    set_selected_widget(NULL);
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        delete menu_widgets[w];
-    }
-    menu_widgets.clear();
-    area_buttons.clear();
+    //Menu items.
+    gui.destroy();
+    
+    //Misc
     areas_to_pick.clear();
     area_names.clear();
-    cur_page_nr_widget = NULL;
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the contents of the area menu.
- */
-void area_menu_state::update() {
-    cur_page_nr =
-        std::min(cur_page_nr, (size_t) (ceil(areas_to_pick.size() / 8.0) - 1));
-    cur_page_nr_widget->text = i2s(cur_page_nr + 1);
-    
-    for(size_t aw = 0; aw < area_buttons.size(); ++aw) {
-        area_buttons[aw]->enabled = false;
-    }
-    
-    size_t area_nr = cur_page_nr * 8;
-    size_t list_nr = 0;
-    for(; list_nr < 8 && area_nr < areas_to_pick.size(); ++area_nr, ++list_nr) {
-        string area_name = area_names[area_nr];
-        string area_folder = areas_to_pick[area_nr];
-        
-        ((menu_button*) area_buttons[list_nr])->click_handler =
-        [area_name, area_folder] () {
-            game.states.gameplay->area_to_load = area_folder;
-            game.fade_mgr.start_fade(false, [] () {
-                game.change_state(game.states.gameplay);
-            });
-        };
-        ((menu_button*) area_buttons[list_nr])->text = area_name;
-        area_buttons[list_nr]->enabled = true;
-        
-    }
 }
