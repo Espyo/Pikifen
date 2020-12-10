@@ -15,6 +15,8 @@
 #include <map>
 #include <vector>
 
+#include <allegro5/allegro_font.h>
+
 #include "const.h"
 #include "utils/data_file.h"
 #include "utils/geometry_utils.h"
@@ -26,7 +28,7 @@ using std::vector;
 /* ----------------------------------------------------------------------------
  * An item in the GUI. This can be a HUD element, a button, some text, etc.
  */
-struct gui_item {
+class gui_item {
 public:
     //On-screen position, in screen ratio.
     point center;
@@ -40,7 +42,9 @@ public:
     bool selected;
     //If it is placed inside of another item, specify it here.
     gui_item* parent;
-    //Vertical offset of the items inside of it, if any.
+    //List of children items, that are placed inside this one.
+    vector<gui_item*> children;
+    //Vertical offset (height percentage) of the items inside of it, if any.
     float offset;
     //Padding amount, if it has items inside of it.
     float padding;
@@ -51,9 +55,15 @@ public:
     std::function<void(const point &center, const point &size)> on_draw;
     //What to do when it's time to tick one frame.
     std::function<void(const float time)> on_tick;
+    //What to do when it receives any Allegro event.
+    std::function<void(const ALLEGRO_EVENT &ev)> on_event;
     //What to do when the item is activated.
     std::function<void()> on_activate;
     
+    //Adds a child item.
+    void add_child(gui_item* item);
+    //Returns the bottommost Y coordinate of the item's children items.
+    float get_child_bottom();
     //Returns the real center coordinates.
     point get_real_center();
     //Returns the real size coordinates.
@@ -62,6 +72,62 @@ public:
     bool is_mouse_on(const point &cursor_pos);
     
     gui_item(const bool selectable = false);
+};
+
+
+/* ----------------------------------------------------------------------------
+ * A GUI item with fields ready to make it behave like a button.
+ */
+class button_gui_item : public gui_item {
+public:
+    //Text to display on the button.
+    string text;
+    //Font to display the text with.
+    ALLEGRO_FONT* font;
+    
+    button_gui_item(const string &text, ALLEGRO_FONT* font);
+};
+
+
+class scroll_gui_item;
+
+/* ----------------------------------------------------------------------------
+ * A GUI item with fields ready to make it behave like a list.
+ */
+class list_gui_item : public gui_item {
+public:
+    //What scrollbar item controls it, if any.
+    scroll_gui_item* scroll_item;
+    //What the offset is supposed to be, after it finishes animating.
+    float target_offset;
+    
+    list_gui_item();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * A GUI item with fields ready to make it behave like a scrollbar.
+ */
+class scroll_gui_item : public gui_item {
+public:
+    //What item this scrollbar is in charge of controlling.
+    list_gui_item* list_item;
+    
+    scroll_gui_item();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * A GUI item with fields ready to make it behave like a simple text display.
+ */
+class text_gui_item : public gui_item {
+public:
+    //Text to display.
+    string text;
+    //Font to display the text with.
+    ALLEGRO_FONT* font;
+    
+    text_gui_item(const string &text, ALLEGRO_FONT* font);
 };
 
 

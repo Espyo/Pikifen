@@ -168,14 +168,8 @@ void main_menu_state::load() {
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
-    gui_item* play_button = new gui_item(true);
-    play_button->on_draw =
-    [play_button, this] (const point & center, const point & size) {
-        draw_button(
-            center, size, "Play", game.fonts.area_name,
-            map_gray(255), play_button->selected
-        );
-    };
+    button_gui_item* play_button =
+        new button_gui_item("Play", game.fonts.area_name);
     play_button->on_activate =
     [] () {
         game.fade_mgr.start_fade(false, [] () {
@@ -184,14 +178,8 @@ void main_menu_state::load() {
     };
     gui.add_item(play_button, "play");
     
-    gui_item* options_button = new gui_item(true);
-    options_button->on_draw =
-    [options_button, this] (const point & center, const point & size) {
-        draw_button(
-            center, size, "Options", game.fonts.area_name,
-            map_gray(255), options_button->selected
-        );
-    };
+    button_gui_item* options_button =
+        new button_gui_item("Options", game.fonts.area_name);
     options_button->on_activate =
     [] () {
         game.fade_mgr.start_fade(false, [] () {
@@ -200,14 +188,8 @@ void main_menu_state::load() {
     };
     gui.add_item(options_button, "options");
     
-    gui_item* anim_ed_button = new gui_item(true);
-    anim_ed_button->on_draw =
-    [anim_ed_button, this] (const point & center, const point & size) {
-        draw_button(
-            center, size, "Animation editor", game.fonts.area_name,
-            map_gray(255), anim_ed_button->selected
-        );
-    };
+    button_gui_item* anim_ed_button =
+        new button_gui_item("Animation editor", game.fonts.area_name);
     anim_ed_button->on_activate =
     [] () {
         game.fade_mgr.start_fade(false, [] () {
@@ -216,14 +198,8 @@ void main_menu_state::load() {
     };
     gui.add_item(anim_ed_button, "animation_editor");
     
-    gui_item* area_ed_button = new gui_item(true);
-    area_ed_button->on_draw =
-    [area_ed_button, this] (const point & center, const point & size) {
-        draw_button(
-            center, size, "Area editor", game.fonts.area_name,
-            map_gray(255), area_ed_button->selected
-        );
-    };
+    button_gui_item* area_ed_button =
+        new button_gui_item("Area editor", game.fonts.area_name);
     area_ed_button->on_activate =
     [] () {
         game.fade_mgr.start_fade(false, [] () {
@@ -232,14 +208,8 @@ void main_menu_state::load() {
     };
     gui.add_item(area_ed_button, "area_editor");
     
-    gui.back_item = new gui_item(true);
-    gui.back_item->on_draw =
-    [this] (const point & center, const point & size) {
-        draw_button(
-            center, size, "Exit", game.fonts.area_name,
-            map_gray(255), gui.back_item->selected
-        );
-    };
+    gui.back_item =
+        new button_gui_item("Exit", game.fonts.area_name);
     gui.back_item->on_activate =
     [] () {
         game.is_game_running = false;

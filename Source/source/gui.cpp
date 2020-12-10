@@ -10,8 +10,28 @@
 
 #include "gui.h"
 
+#include "drawing.h"
+#include "functions.h"
 #include "game.h"
 #include "utils/string_utils.h"
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new button GUI item.
+ */
+button_gui_item::button_gui_item(const string &text, ALLEGRO_FONT* font) :
+    gui_item(true),
+    text(text),
+    font(font) {
+    
+    on_draw =
+    [this, text, font] (const point & center, const point & size) {
+        draw_button(
+            center, size, text, font,
+            map_gray(255), selected
+        );
+    };
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -27,8 +47,35 @@ gui_item::gui_item(const bool selectable) :
     juicy_timer(0.0f),
     on_draw(nullptr),
     on_tick(nullptr),
+    on_event(nullptr),
     on_activate(nullptr) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a child item.
+ */
+void gui_item::add_child(gui_item* item) {
+    children.push_back(item);
+    item->parent = this;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the bottommost Y coordinate of the item's children items.
+ */
+float gui_item::get_child_bottom() {
+    float bottommost = 0.0f;
+    for(size_t c = 0; c < children.size(); ++c) {
+        gui_item* c_ptr = children[c];
+        bottommost =
+            std::max(
+                bottommost,
+                c_ptr->center.y + (c_ptr->size.y / 2.0f)
+            );
+    }
+    return bottommost;
 }
 
 
@@ -42,7 +89,7 @@ point gui_item::get_real_center() {
         point result = center * parent_s;
         result.x += parent_c.x - parent_s.x / 2.0f;
         result.y += parent_c.y - parent_s.y / 2.0f;
-        result.y += parent_s.y * parent->offset;
+        result.y -= parent_s.y * parent->offset;
         return result;
     } else {
         return point(center.x * game.win_w, center.y * game.win_h);
@@ -205,6 +252,12 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         handle_menu_button(
             actions[a].button, actions[a].pos, actions[a].player
         );
+    }
+    
+    for(size_t i = 0; i < items.size(); ++i) {
+        if(items[i]->on_event) {
+            items[i]->on_event(ev);
+        }
     }
 }
 
@@ -443,4 +496,132 @@ void gui_manager::tick(const float delta_t) {
             items[i]->on_tick(delta_t);
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new list GUI item.
+ */
+list_gui_item::list_gui_item() :
+    gui_item(),
+    scroll_item(nullptr),
+    target_offset(0.0f) {
+    
+    padding = 8.0f;
+    on_draw =
+    [this] (const point & center, const point & size) {
+        al_draw_rounded_rectangle(
+            center.x - size.x * 0.5,
+            center.y - size.y * 0.5,
+            center.x + size.x * 0.5,
+            center.y + size.y * 0.5,
+            8.0f, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+        );
+    };
+    on_tick =
+    [this] (const float delta_t) {
+        offset += (target_offset - offset) * (10.0f * delta_t);
+    };
+    on_event =
+    [this] (const ALLEGRO_EVENT & ev) {
+        if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+            if(ev.mouse.dz != 0.0f) {
+                float child_bottom = get_child_bottom();
+                if(child_bottom <= 1.0f) {
+                    return;
+                }
+                target_offset =
+                    clamp(
+                        target_offset + (-ev.mouse.dz) * 0.2f,
+                        0.0f,
+                        get_child_bottom() - 1.0f
+                    );
+            }
+        }
+    };
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new scrollbar GUI item.
+ */
+scroll_gui_item::scroll_gui_item() :
+    gui_item(),
+    list_item(nullptr) {
+    
+    on_draw =
+    [this] (const point & center, const point & size) {
+        float bar_y = 0.0f; //Top, in height ratio.
+        float bar_h = 0.0f; //In height ratio.
+        float list_bottom = list_item->get_child_bottom();
+        unsigned char alpha = 48;
+        if(list_bottom > 1.0f) {
+            bar_y = list_item->offset / list_bottom;
+            bar_h = 1.0f / list_bottom;
+            alpha = 128;
+        }
+        
+        al_draw_rounded_rectangle(
+            center.x - size.x * 0.5,
+            center.y - size.y * 0.5,
+            center.x + size.x * 0.5,
+            center.y + size.y * 0.5,
+            8.0f, 8.0f, al_map_rgba(255, 255, 255, alpha), 1.0f
+        );
+        
+        if(bar_h != 0.0f) {
+            draw_textured_box(
+                point(
+                    center.x,
+                    (center.y - size.y * 0.5) +
+                    (size.y * bar_y) +
+                    (size.y * bar_h * 0.5f)
+                ),
+                point(size.x, (size.y * bar_h)),
+                game.sys_assets.bmp_bubble_box
+            );
+        }
+    };
+    on_event =
+    [this] (const ALLEGRO_EVENT & ev) {
+        if(
+            ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
+            ev.mouse.button == 1 &&
+            is_mouse_on(point(ev.mouse.x, ev.mouse.y))
+        ) {
+            float list_bottom = list_item->get_child_bottom();
+            if(list_bottom <= 1.0f) {
+                return;
+            }
+            
+            point c = get_real_center();
+            point s = get_real_size();
+            float bar_h = (1.0f / list_bottom) * s.y;
+            float y1 = (c.y - s.y / 2.0f) + bar_h / 2.0f;
+            float y2 = (c.y + s.y / 2.0f) - bar_h / 2.0f;
+            float click = (ev.mouse.y - y1) / (y2 - y1);
+            click = clamp(click, 0.0f, 1.0f);
+            
+            list_item->target_offset = click * (list_bottom - 1.0f);
+        }
+    };
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new text GUI item.
+ */
+text_gui_item::text_gui_item(const string &text, ALLEGRO_FONT* font) :
+    gui_item(),
+    text(text),
+    font(font) {
+    
+    on_draw =
+    [this, text, font] (const point & center, const point & size) {
+        draw_compressed_text(
+            font, map_gray(255),
+            center, ALLEGRO_ALIGN_CENTER, 1, size,
+            text
+        );
+    };
 }

@@ -133,77 +133,35 @@ void area_menu_state::load() {
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
-    gui.back_item = new gui_item(true);
-    gui.back_item->on_draw =
-    [this] (const point & center, const point & size) {
-        draw_button(
-            center, size, "Back", game.fonts.main,
-            map_gray(255), gui.back_item->selected
-        );
-    };
+    gui.back_item =
+        new button_gui_item("Back", game.fonts.main);
     gui.back_item->on_activate =
     [this] () {
         leave();
     };
     gui.add_item(gui.back_item, "back");
     
-    gui_item* pick_text = new gui_item();
-    pick_text->on_draw =
-    [this] (const point & center, const point & size) {
-        draw_compressed_text(
-            game.fonts.main, map_gray(255),
-            center, ALLEGRO_ALIGN_CENTER, 1, size,
-            "Pick an area:"
-        );
-    };
+    text_gui_item* pick_text =
+        new text_gui_item("Pick an area:", game.fonts.main);
     gui.add_item(pick_text, "pick_text");
     
-    gui_item* list_box = new gui_item();
-    list_box->on_draw =
-    [this] (const point & center, const point & size) {
-        al_draw_rounded_rectangle(
-            center.x - size.x * 0.5,
-            center.y - size.y * 0.5,
-            center.x + size.x * 0.5,
-            center.y + size.y * 0.5,
-            8.0f, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
-        );
-    };
-    list_box->padding = 8.0f;
+    list_gui_item* list_box = new list_gui_item();
     gui.add_item(list_box, "list");
     
-    gui_item* list_scroll = new gui_item();
-    list_scroll->on_draw =
-    [this] (const point & center, const point & size) {
-        al_draw_rounded_rectangle(
-            center.x - size.x * 0.5,
-            center.y - size.y * 0.5,
-            center.x + size.x * 0.5,
-            center.y + size.y * 0.5,
-            8.0f, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
-        );
-    };
+    scroll_gui_item* list_scroll = new scroll_gui_item();
+    list_scroll->list_item = list_box;
+    list_box->scroll_item = list_scroll;
     gui.add_item(list_scroll, "list_scroll");
     
-    gui_item* first_area_button = NULL;
+    button_gui_item* first_area_button = NULL;
     for(size_t a = 0; a < areas_to_pick.size(); ++a) {
         string area_name = area_names[a];
         string area_folder = areas_to_pick[a];
         
-        gui_item* area_button = new gui_item(true);
+        button_gui_item* area_button =
+            new button_gui_item(area_name, game.fonts.area_name);
         area_button->center = point(0.50f, 0.045f + a * 0.10f);
         area_button->size = point(1.0f, 0.09f);
-        area_button->parent = list_box;
-        area_button->on_draw =
-            [this, area_button, area_name] (
-                const point & center, const point & size
-        ) {
-            draw_button(
-                center, size, area_name,
-                game.fonts.area_name, map_gray(255),
-                area_button->selected
-            );
-        };
         area_button->on_activate =
         [this, area_folder] () {
             game.states.gameplay->area_to_load = area_folder;
@@ -211,6 +169,7 @@ void area_menu_state::load() {
                 game.change_state(game.states.gameplay);
             });
         };
+        list_box->add_child(area_button);
         gui.add_item(area_button);
         if(!first_area_button) {
             first_area_button = area_button;
