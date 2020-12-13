@@ -76,6 +76,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     delivery_info(nullptr),
     id(next_mob_id),
     health(type->max_health),
+    smoothed_ratio(1),
     invuln_period(0),
     team(MOB_TEAM_NONE),
     hide(false),
@@ -2245,7 +2246,7 @@ void mob::tick(const float delta_t) {
     //interaction with the world, and since doing logic on a mob that already
     //forgot some things due to deletion is dangerous... Let's constantly
     //check if the mob is scheduled for deletion, and bail if so.
-    
+
     if(to_delete) return;
     
     //Brain.
@@ -2287,7 +2288,16 @@ void mob::tick(const float delta_t) {
         game.perf_mon->finish_measurement();
     }
     if(to_delete) return;
-    
+    //Heath Ratio.
+    if (game.perf_mon) {
+        game.perf_mon->start_measurement("Object -- Health Ratio");
+    }
+    tick_health(delta_t);
+    if (game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    if (to_delete) return;
+
     //Script.
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Object -- Script");
@@ -2344,6 +2354,39 @@ void mob::tick_animation(const float delta_t) {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Ticks one frame of health wheel ratio change
+ * delta_t:
+ *   How many seconds to tick by.
+ */
+void mob::tick_health(const float delta_t) {
+    float amount = 1 * delta_t;
+
+    float ratio = health / type->max_health;
+    
+    // No need to edit smoothed ratio if it already equals the ratio
+    if (smoothed_ratio == ratio) {
+        return;
+    }
+    
+    float difference = ratio - smoothed_ratio;
+    if (difference < 0) {
+        difference *= -1;
+    }
+
+    if (difference < amount) {
+        smoothed_ratio = ratio;
+    }
+    else {
+        if (ratio > smoothed_ratio) {
+            smoothed_ratio += amount;
+        }
+        else {
+            smoothed_ratio -= amount;
+        }
+    }
+
+}
 
 /* ----------------------------------------------------------------------------
  * Ticks the mob's brain for the next frame.

@@ -500,18 +500,12 @@ void draw_fraction(
         ALLEGRO_ALIGN_CENTER, 0, (i2s(needed).c_str())
     );
 }
-
-
 /* ----------------------------------------------------------------------------
  * Draws a health wheel, with a pieslice that's fuller the more HP is full.
  * center:
  *   Center of the wheel.
- * health:
- *   Current amount of health of the mob
- *   whose health we're representing.
- * max_health:
- *   Maximum amount of health of the mob;
- *   health for when it's fully healed.
+ * ratio:
+ *   How much of the health wheel is being filled.
  * radius:
  *   Radius of the wheel (the whole wheel, not just the pieslice).
  * just_chart:
@@ -519,19 +513,18 @@ void draw_fraction(
  *   Used for leader HP on the HUD.
  */
 void draw_health(
-    const point &center,
-    const float health, const float max_health,
+    const point &center, const float ratio, 
     const float radius, const bool just_chart
 ) {
-    float ratio = health / max_health;
     ALLEGRO_COLOR c;
-    if(ratio >= 0.5) {
+    if (ratio >= 0.5) {
         c = al_map_rgb_f(1 - (ratio - 0.5) * 2, 1, 0);
-    } else {
+    }
+    else {
         c = al_map_rgb_f(1, (ratio * 2), 0);
     }
-    
-    if(!just_chart) {
+
+    if (!just_chart) {
         al_draw_filled_circle(
             center.x, center.y, radius, al_map_rgba(0, 0, 0, 128)
         );
@@ -539,13 +532,12 @@ void draw_health(
     al_draw_filled_pieslice(
         center.x, center.y, radius, -TAU / 4, -ratio * TAU, c
     );
-    if(!just_chart) {
+    if (!just_chart) {
         al_draw_circle(
             center.x, center.y, radius + 1, al_map_rgb(0, 0, 0), 2
         );
     }
 }
-
 
 /* ----------------------------------------------------------------------------
  * Draws a liquid sector.

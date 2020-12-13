@@ -232,6 +232,8 @@ public:
     size_t id;
     //Current health.
     float health;
+    //Slowly moves to the current percentage of health a mob has.
+    float smoothed_ratio;
     //During this period, the mob cannot be attacked.
     timer invuln_period;
     //Mob's team (who it can damage); use MOB_TEAM_*.
@@ -420,6 +422,8 @@ protected:
     ) const;
     //Tick its animation logic.
     void tick_animation(const float delta_t);
+    //Tick its health wheel.
+    void tick_health(const float delta_t);
     //Tick the mob's "thinking" logic.
     void tick_brain(const float delta_t);
     //Tick its horizontal movement physics logic.
