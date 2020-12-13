@@ -5,6 +5,8 @@ Source/visual_studio_2019/.vs/
 Source/visual_studio_2019/packages/
 Source/visual_studio_2019/x64/
 Source/visual_studio_2019/Pikifen.vcxproj.user
+Source/visual_studio_2019/Game_data
+Source/visual_studio_2019/User_data
 Source/codelite/Debug/
 Source/codelite/Release/
 Source/codelite/.codelite/
