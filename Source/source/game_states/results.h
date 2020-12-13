@@ -38,6 +38,8 @@ public:
     size_t points_total;
     //How much time was taken.
     float time_taken;
+    //Did the player use debug commands?
+    bool used_debug;
     
     results_state();
     virtual void load();

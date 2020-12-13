@@ -209,6 +209,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 break;
                 
             } case MAKER_TOOL_HURT_MOB: {
+                game.states.results->used_debug = true;
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
                     m->set_health(
@@ -225,6 +226,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 
             } case MAKER_TOOL_NEW_PIKMIN: {
                 if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
+                    game.states.results->used_debug = true;
                     pikmin_type* new_pikmin_type =
                         game.mob_types.pikmin.begin()->second;
                         
@@ -249,6 +251,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 break;
                 
             } case MAKER_TOOL_TELEPORT: {
+                game.states.results->used_debug = true;
                 sector* mouse_sector =
                     get_sector(game.mouse_cursor_w, NULL, true);
                 if(mouse_sector) {

@@ -30,7 +30,8 @@ results_state::results_state() :
     pikmin_deaths(0),
     points_obtained(0),
     points_total(0),
-    time_taken(0.0f) {
+    time_taken(0.0f),
+    used_debug(false) {
     
 }
 
@@ -319,7 +320,17 @@ void results_state::load() {
         game.fonts.counter
     );
     menu_widgets.push_back(pikmin_deaths_widget);
-    
+    if (used_debug) {
+        menu_text* used_debug_widget =
+            new menu_text(
+                point(game.win_w * 0.30, game.win_h * 0.78),
+                point(game.win_w * 0.40, game.win_h * 0.10),
+                "Used debug commands!",
+                game.fonts.main, al_map_rgb(255, 192, 192), ALLEGRO_ALIGN_LEFT
+            );
+        menu_widgets.push_back(used_debug_widget);
+    }
+
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
     set_selected_widget(back_widget);
@@ -341,6 +352,7 @@ void results_state::reset() {
     time_taken = 0.0f;
     can_continue = true;
     leader_ko = false;
+    used_debug = false;
 }
 
 
