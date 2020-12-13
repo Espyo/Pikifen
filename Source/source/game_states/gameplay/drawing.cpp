@@ -1511,14 +1511,14 @@ void gameplay_state::draw_onion_menu() {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
             if(t_ptr->pik_type->bmp_onion_icon) {
-                draw_bitmap(
+                draw_bitmap_in_box(
                     t_ptr->pik_type->bmp_onion_icon, i_center, i_size * 0.8f
                 );
             }
             
             if(!onion_menu->select_all) {
-                draw_textured_box(
-                    i_center, i_size, game.sys_assets.bmp_bubble_box
+                draw_bitmap_in_box(
+                    game.sys_assets.bmp_bubble_box, i_center, i_size
                 );
             }
         }
@@ -1588,13 +1588,13 @@ void gameplay_state::draw_onion_menu() {
         ) {
             onion_menu_type_struct* t_ptr = onion_menu->on_screen_types[t];
             
-            draw_bitmap(
+            draw_bitmap_in_box(
                 t_ptr->pik_type->bmp_icon, i_center, i_size * 0.8f
             );
             
             if(!onion_menu->select_all) {
-                draw_textured_box(
-                    i_center, i_size, game.sys_assets.bmp_bubble_box
+                draw_bitmap_in_box(
+                    game.sys_assets.bmp_bubble_box, i_center, i_size
                 );
             }
         }
