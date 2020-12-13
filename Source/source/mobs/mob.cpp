@@ -2288,15 +2288,6 @@ void mob::tick(const float delta_t) {
         game.perf_mon->finish_measurement();
     }
     if(to_delete) return;
-    //Heath Ratio.
-    if (game.perf_mon) {
-        game.perf_mon->start_measurement("Object -- Health Ratio");
-    }
-    tick_health(delta_t);
-    if (game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
-    if (to_delete) return;
 
     //Script.
     if(game.perf_mon) {
@@ -2352,40 +2343,6 @@ void mob::tick_animation(const float delta_t) {
     if(parent && parent->limb_anim.anim_db) {
         parent->limb_anim.tick(delta_t* mult);
     }
-}
-
-/* ----------------------------------------------------------------------------
- * Ticks one frame of health wheel ratio change
- * delta_t:
- *   How many seconds to tick by.
- */
-void mob::tick_health(const float delta_t) {
-    float amount = 1 * delta_t;
-
-    float ratio = health / type->max_health;
-    
-    // No need to edit smoothed ratio if it already equals the ratio
-    if (smoothed_ratio == ratio) {
-        return;
-    }
-    
-    float difference = ratio - smoothed_ratio;
-    if (difference < 0) {
-        difference *= -1;
-    }
-
-    if (difference < amount) {
-        smoothed_ratio = ratio;
-    }
-    else {
-        if (ratio > smoothed_ratio) {
-            smoothed_ratio += amount;
-        }
-        else {
-            smoothed_ratio -= amount;
-        }
-    }
-
 }
 
 /* ----------------------------------------------------------------------------
@@ -2545,6 +2502,27 @@ void mob::tick_misc_logic(const float delta_t) {
     if(type->blocks_carrier_pikmin && health <= 0) {
         game.states.gameplay->path_mgr.handle_obstacle_clear(this);
     }
+
+    float amount = 1 * delta_t;
+    float ratio = health / type->max_health;
+
+    float difference = ratio - smoothed_ratio;
+    if (difference < 0) {
+        difference *= -1;
+    }
+
+    if (difference < amount) {
+        smoothed_ratio = ratio;
+    }
+    else {
+        if (ratio > smoothed_ratio) {
+            smoothed_ratio += amount;
+        }
+        else {
+            smoothed_ratio -= amount;
+        }
+    }
+
 }
 
 

@@ -422,8 +422,6 @@ protected:
     ) const;
     //Tick its animation logic.
     void tick_animation(const float delta_t);
-    //Tick its health wheel.
-    void tick_health(const float delta_t);
     //Tick the mob's "thinking" logic.
     void tick_brain(const float delta_t);
     //Tick its horizontal movement physics logic.
