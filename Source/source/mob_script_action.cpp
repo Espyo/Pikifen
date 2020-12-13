@@ -347,6 +347,42 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
 }
 
 
+
+
+/* ----------------------------------------------------------------------------
+ * Loading code for the focused mob info getting script action.
+ * call:
+ *   Mob action call that called this.
+ */
+bool mob_action_loaders::get_focus_info(mob_action_call& call) {
+    if (call.args[1] == "chomped_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
+    }
+    else if (call.args[1] == "health") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
+    }
+    else if (call.args[1] == "latched_pikmin") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
+    }
+    else if (call.args[1] == "latched_pikmin_weight") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT);
+    }
+    else if (call.args[1] == "x") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_X);
+    }
+    else if (call.args[1] == "y") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_Y);
+    }
+    else if (call.args[1] == "z") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_Z);
+    }
+    else {
+        report_enum_error(call, 1);
+        return false;
+    }
+    return true;
+}
+
 /* ----------------------------------------------------------------------------
  * Loading code for the "if" mob script action.
  * call:
@@ -1017,6 +1053,52 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Code for the info obtaining focused mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_focus_info(mob_action_run_data& data) {
+    string* var = &(data.m->vars[data.args[0]]);
+    size_t t = s2i(data.args[1]);
+
+    if (data.m->focused_mob == NULL) {
+        return;
+    }
+
+    switch (t) {
+    case MOB_ACTION_GET_INFO_CHOMPED_PIKMIN: {
+        *var = i2s(data.m->focused_mob->chomping_mobs.size());
+        break;
+
+    } case MOB_ACTION_GET_INFO_HEALTH: {
+        *var = i2s(data.m->focused_mob->health);
+        break;
+
+    } case MOB_ACTION_GET_INFO_LATCHED_PIKMIN: {
+        *var = i2s(data.m->focused_mob->get_latched_pikmin_amount());
+        break;
+
+    } case MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT: {
+        *var = i2s(data.m->focused_mob->get_latched_pikmin_weight());
+        break;
+
+    } case MOB_ACTION_GET_INFO_X: {
+        *var = f2s(data.m->focused_mob->pos.x);
+        break;
+
+    } case MOB_ACTION_GET_INFO_Y: {
+        *var = f2s(data.m->focused_mob->pos.y);
+        break;
+
+    } case MOB_ACTION_GET_INFO_Z: {
+        *var = f2s(data.m->focused_mob->z);
+        break;
+
+    } 
+    }
+}
 
 /* ----------------------------------------------------------------------------
  * Code for the decimal number randomization mob script action.

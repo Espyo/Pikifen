@@ -168,15 +168,16 @@
     <ClInclude Include="..\source\const.h" />
     <ClInclude Include="..\source\controls.h" />
     <ClInclude Include="..\source\drawing.h" />
-    <ClInclude Include="..\source\game_states\animation_editor\editor.h" />
-    <ClInclude Include="..\source\game_states\area_editor\editor.h" />
-    <ClInclude Include="..\source\game_states\editor.h" />
     <ClInclude Include="..\source\functions.h" />
     <ClInclude Include="..\source\game.h" />
+	<ClInclude Include="..\source\game_states\animation_editor\editor.h" />
+    <ClInclude Include="..\source\game_states\area_editor\editor.h" />
+	<ClInclude Include="..\source\game_states\editor.h" />
     <ClInclude Include="..\source\game_states\gameplay\gameplay.h" />
+	<ClInclude Include="..\source\game_states\game_state.h" />
+	<ClInclude Include="..\source\game_states\menus.h" />
 	<ClInclude Include="..\source\game_states\results.h" />
     <ClInclude Include="..\source\game_config.h" />
-    <ClInclude Include="..\source\game_states\game_state.h" />
 	<ClInclude Include="..\source\gui.h" />
     <ClInclude Include="..\source\hazard.h" />
     <ClInclude Include="..\source\hitbox.h" />
@@ -191,7 +192,6 @@
     <ClInclude Include="..\source\init.h" />
     <ClInclude Include="..\source\liquid.h" />
     <ClInclude Include="..\source\load.h" />
-    <ClInclude Include="..\source\game_states\menus.h" />
     <ClInclude Include="..\source\menu_widgets.h" />
     <ClInclude Include="..\source\misc_structs.h" />
     <ClInclude Include="..\source\mobs\bouncer.h" />
@@ -293,32 +293,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\animation.cpp" />
-	<ClCompile Include="..\source\game_states\area_menu.cpp" />
-	<ClCompile Include="..\source\game_states\controls_menu.cpp" />
-	<ClCompile Include="..\source\game_states\main_menu.cpp" />
-	<ClCompile Include="..\source\game_states\options_menu.cpp" />
     <ClCompile Include="..\source\controls.cpp" />
     <ClCompile Include="..\source\drawing.cpp" />
-    <ClCompile Include="..\source\game_states\animation_editor\drawing.cpp" />
+    <ClCompile Include="..\source\functions.cpp" />
+    <ClCompile Include="..\source\game.cpp" />
+	<ClCompile Include="..\source\game_config.cpp" />
+	<ClCompile Include="..\source\game_states\animation_editor\drawing.cpp" />
     <ClCompile Include="..\source\game_states\animation_editor\editor.cpp" />
     <ClCompile Include="..\source\game_states\animation_editor\event_handling.cpp" />
     <ClCompile Include="..\source\game_states\animation_editor\gui.cpp" />
-	
     <ClCompile Include="..\source\game_states\area_editor\drawing.cpp" />
     <ClCompile Include="..\source\game_states\area_editor\editor.cpp" />
     <ClCompile Include="..\source\game_states\area_editor\event_handling.cpp" />
     <ClCompile Include="..\source\game_states\area_editor\geometry_logic.cpp" />
     <ClCompile Include="..\source\game_states\area_editor\gui.cpp" />
-	
-    <ClCompile Include="..\source\game_states\editor.cpp" />
-    <ClCompile Include="..\source\functions.cpp" />
-    <ClCompile Include="..\source\game.cpp" />
-    <ClCompile Include="..\source\game_states\gameplay\gameplay.cpp" />
-	<ClCompile Include="..\source\game_states\gameplay\logic.cpp" />
+	<ClCompile Include="..\source\game_states\area_menu.cpp" />
+	<ClCompile Include="..\source\game_states\controls_menu.cpp" />
+	<ClCompile Include="..\source\game_states\editor.cpp" />
 	<ClCompile Include="..\source\game_states\gameplay\drawing.cpp" />
+	<ClCompile Include="..\source\game_states\gameplay\gameplay.cpp" />
+	<ClCompile Include="..\source\game_states\gameplay\logic.cpp" />
+	<ClCompile Include="..\source\game_states\game_state.cpp" />
+	<ClCompile Include="..\source\game_states\main_menu.cpp" />
+	<ClCompile Include="..\source\game_states\options_menu.cpp" />
 	<ClCompile Include="..\source\game_states\results.cpp" />
-    <ClCompile Include="..\source\game_config.cpp" />
-    <ClCompile Include="..\source\game_states\game_state.cpp" />
 	<ClCompile Include="..\source\gui.cpp" />
     <ClCompile Include="..\source\hazard.cpp" />
     <ClCompile Include="..\source\hitbox.cpp" />

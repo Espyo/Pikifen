@@ -30,6 +30,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FOCUS,
     MOB_ACTION_GET_CHOMPED,
     MOB_ACTION_GET_INFO,
+    MOB_ACTION_GET_FOCUS_INFO,
     MOB_ACTION_GET_FOCUS_VAR,
     MOB_ACTION_GET_RANDOM_DECIMAL,
     MOB_ACTION_GET_RANDOM_INT,
@@ -269,6 +270,7 @@ void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
 void get_info(mob_action_run_data &data);
+void get_focus_info(mob_action_run_data& data);
 void get_focus_var(mob_action_run_data &data);
 void get_random_decimal(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
@@ -329,6 +331,7 @@ bool arachnorb_plan_logic(mob_action_call &call);
 bool calculate(mob_action_call &call);
 bool focus(mob_action_call &call);
 bool get_info(mob_action_call &call);
+bool get_focus_info(mob_action_call& call);
 bool if_function(mob_action_call &call);
 bool move_to_target(mob_action_call &call);
 bool receive_status(mob_action_call &call);
