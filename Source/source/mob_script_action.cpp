@@ -971,6 +971,11 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
         ) {
             *var = ((mob*) (data.custom_data_1))->type->category->name;
         }
+        else if (
+            data.call->parent_event == MOB_EV_DAMAGE
+            ) {
+            *var = ((mob*)(data.custom_data_2))->type->category->name;
+        }
         break;
         
     } case MOB_ACTION_GET_INFO_MOB_TYPE: {
@@ -982,6 +987,10 @@ void mob_action_runners::get_info(mob_action_run_data &data) {
             data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
             *var = ((mob*) (data.custom_data_1))->type->name;
+        } else if (
+            data.call->parent_event == MOB_EV_DAMAGE
+        ) {
+            *var = ((mob*)(data.custom_data_2))->type->name;
         }
         break;
         

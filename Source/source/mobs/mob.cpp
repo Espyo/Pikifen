@@ -180,7 +180,7 @@ void mob::apply_attack_damage(
         set_health(true, false, -damage);
         
         hitbox_interaction ev_info(this, victim_h, attack_h);
-        fsm.run_event(MOB_EV_DAMAGE, (void*) &ev_info);
+        fsm.run_event(MOB_EV_DAMAGE, (void*) &ev_info, (void*) attacker);
         
         attacker->cause_spike_damage(this, false);
     }
