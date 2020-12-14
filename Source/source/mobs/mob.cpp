@@ -2503,13 +2503,13 @@ void mob::tick_misc_logic(const float delta_t) {
         game.states.gameplay->path_mgr.handle_obstacle_clear(this);
     }
 
-    float amount = 1 * delta_t;
     float ratio = health / type->max_health;
-
-    float difference = ratio - smoothed_ratio;
+    float difference =  ratio - smoothed_ratio;
     if (difference < 0) {
         difference *= -1;
     }
+
+    float amount = (0.1f + difference * 6) * delta_t;
 
     if (difference < amount) {
         smoothed_ratio = ratio;
