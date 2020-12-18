@@ -263,7 +263,7 @@ void gameplay_state::draw_hud() {
         if(hud_items.get_draw_data(health_id, &i_center, &i_size)) {
             draw_health(
                 i_center,
-                mobs.leaders[l_nr]->smoothed_ratio,
+                mobs.leaders[l_nr]->smoothed_ratio, 1,
                 std::min(i_size.x, i_size.y) * 0.4f,
                 true
             );
@@ -824,7 +824,7 @@ void gameplay_state::draw_ingame_text() {
             mob_ptr->type->show_health &&
             !mob_ptr->hide &&
             mob_ptr->health < mob_ptr->type->max_health &&
-            mob_ptr->health > 0
+            mob_ptr->healthbar_alpha > 0
         ) {
             draw_health(
                 point(
@@ -832,7 +832,8 @@ void gameplay_state::draw_ingame_text() {
                     mob_ptr->pos.y - mob_ptr->type->radius -
                     DEF_HEALTH_WHEEL_RADIUS - 4
                 ),
-                mob_ptr->smoothed_ratio
+                mob_ptr->smoothed_ratio,
+                mob_ptr->healthbar_alpha
             );
         }
         

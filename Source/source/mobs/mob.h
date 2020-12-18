@@ -227,13 +227,17 @@ public:
     //List of mobs it is holding.
     vector<mob*> holding;
     
+    //Healthbar things
+    //Slowly moves to the current percentage of health a mob has. 
+    float smoothed_ratio;
+    //Affects how visible the healthbar is when drawn, decreases to 0 while health <= 0
+    float healthbar_alpha;
+
     //Other properties.
     //Incremental ID. Used for minor things.
     size_t id;
     //Current health.
     float health;
-    //Slowly moves to the current percentage of health a mob has.
-    float smoothed_ratio;
     //During this period, the mob cannot be attacked.
     timer invuln_period;
     //Mob's team (who it can damage); use MOB_TEAM_*.

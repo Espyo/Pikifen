@@ -74,9 +74,10 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     group_spot_index(INVALID),
     carry_info(nullptr),
     delivery_info(nullptr),
+    smoothed_ratio(1),
+    healthbar_alpha(1),
     id(next_mob_id),
     health(type->max_health),
-    smoothed_ratio(1),
     invuln_period(0),
     team(MOB_TEAM_NONE),
     hide(false),
@@ -2505,24 +2506,28 @@ void mob::tick_misc_logic(const float delta_t) {
 
     float ratio = health / type->max_health;
     float difference =  ratio - smoothed_ratio;
+    float ratio_amount = 1.5f * delta_t;
+
     if (difference < 0) {
         difference *= -1;
     }
 
-    float amount = (0.1f + difference * 6) * delta_t;
+    if (health <= 0) {
+        ratio_amount *= 3;
+        if (smoothed_ratio <= 0) {
+            healthbar_alpha -= 3 * delta_t;
+        }
+    }
 
-    if (difference < amount) {
+    if (difference < ratio_amount) {
         smoothed_ratio = ratio;
-    }
-    else {
+    } else {
         if (ratio > smoothed_ratio) {
-            smoothed_ratio += amount;
-        }
-        else {
-            smoothed_ratio -= amount;
+            smoothed_ratio += ratio_amount;
+        } else {
+            smoothed_ratio -= ratio_amount;
         }
     }
-
 }
 
 
