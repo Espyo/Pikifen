@@ -49,7 +49,7 @@ public:
     //Padding amount, if it has items inside of it.
     float padding;
     //Timer that controls it growing in size. Used for juice.
-    float juicy_timer;
+    float juice_timer;
     
     //What to do when it's time to draw it.
     std::function<void(const point &center, const point &size)> on_draw;
@@ -58,20 +58,27 @@ public:
     //What to do when it receives any Allegro event.
     std::function<void(const ALLEGRO_EVENT &ev)> on_event;
     //What to do when the item is activated.
-    std::function<void()> on_activate;
+    std::function<void(const point &cursor_pos)> on_activate;
     
     //Adds a child item.
     void add_child(gui_item* item);
     //Returns the bottommost Y coordinate of the item's children items.
     float get_child_bottom();
+    //Returns the juicy grow amount for the current juicy grow animation.
+    float get_juicy_grow_amount();
     //Returns the real center coordinates.
     point get_real_center();
     //Returns the real size coordinates.
     point get_real_size();
     //Returns whether the mouse cursor is on top of it.
     bool is_mouse_on(const point &cursor_pos);
+    //Starts the process of animation a juicy grow effect.
+    void start_juicy_grow();
     
     gui_item(const bool selectable = false);
+    
+    static const float JUICY_GROW_DURATION;
+    static const float JUICY_GROW_DELTA;
 };
 
 
@@ -89,6 +96,22 @@ public:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * A GUI item with fields ready to make it behave like a checkbox.
+ */
+class check_gui_item : public gui_item {
+public:
+    //Variable that controls the checkmark value.
+    bool* value;
+    //Text to display on the button.
+    string text;
+    //Font to display the text with.
+    ALLEGRO_FONT* font;
+    
+    check_gui_item(bool* value, const string &text, ALLEGRO_FONT* font);
+};
+
+
 class scroll_gui_item;
 
 /* ----------------------------------------------------------------------------
@@ -102,6 +125,26 @@ public:
     float target_offset;
     
     list_gui_item();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * A GUI item with fields ready to make it behave like a previous/next
+ * option picker.
+ */
+class picker_gui_item : public gui_item {
+public:
+    //The text to show before the currently selected option.
+    string base_text;
+    //The currently selected option.
+    string option;
+    
+    //What to do when the user picks the previous option.
+    std::function<void()> on_previous;
+    //What to do when the user picks the next option.
+    std::function<void()> on_next;
+    
+    picker_gui_item(const string &base_text, const string &option);
 };
 
 

@@ -222,13 +222,20 @@ void draw_bitmap_with_effects(
  *   Color to draw the text with.
  * selected:
  *   Is the button currently selected?
+ * juicy_grow_amount:
+ *   If it's in the middle of a juicy grow animation, specify the amount here.
  */
 void draw_button(
     const point &center, const point &size, const string &text,
-    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const bool selected
+    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
+    const bool selected, const float juicy_grow_amount
 ) {
-    draw_compressed_text(
-        font, color, center, ALLEGRO_ALIGN_CENTER, 1, size, text
+    draw_compressed_scaled_text(
+        font, color,
+        center,
+        point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
+        ALLEGRO_ALIGN_CENTER, 1, size,
+        text
     );
     
     ALLEGRO_COLOR box_tint =
@@ -245,6 +252,71 @@ void draw_button(
             game.sys_assets.bmp_focus_box
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws text, scaled, but also compresses (scales) it
+ * to fit within the specified range.
+ * font:
+ *   Font to use.
+ * color:
+ *   Tint the text by this color.
+ * where:
+ *   Coordinates to draw it at.
+ * scale:
+ *   Scale to use.
+ * flags:
+ *   Allegro text render function flags.
+ * valign:
+ *   Vertical align: 0 = top, 1 = middle, 2 = bottom.
+ * max_size:
+ *   The maximum width and height. Use <= 0 to have no limit.
+ * text:
+ *   Text to draw.
+ */
+void draw_compressed_scaled_text(
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
+    const point &where, const point &scale,
+    const int flags, const unsigned char valign,
+    const point &max_size, const string &text
+) {
+
+    if(max_size.x == 0 && max_size.y == 0) return;
+    
+    int x1, x2, y1, y2;
+    al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
+    
+    int text_width = (x2 - x1) * scale.x;
+    int text_height = (y2 - y1) * scale.y;
+    point final_scale = scale;
+    float final_text_height = text_height;
+    
+    if(text_width > max_size.x && max_size.x > 0) {
+        final_scale.x = max_size.x / text_width;
+    }
+    if(text_height > max_size.y && max_size.y > 0) {
+        final_scale.y = max_size.y / text_height;
+        final_text_height = max_size.y;
+    }
+    
+    ALLEGRO_TRANSFORM scale_transform, old_transform;
+    al_copy_transform(&old_transform, al_get_current_transform());
+    al_identity_transform(&scale_transform);
+    al_scale_transform(&scale_transform, final_scale.x, final_scale.y);
+    al_translate_transform(
+        &scale_transform, where.x,
+        (
+            (valign == 1) ?
+            where.y - final_text_height * 0.5 :
+            ((valign == 2) ? where.y - final_text_height : where.y)
+        )
+    );
+    al_compose_transform(&scale_transform, &old_transform);
+    
+    al_use_transform(&scale_transform); {
+        al_draw_text(font, color, 0, 0, flags, text.c_str());
+    }; al_use_transform(&old_transform);
 }
 
 

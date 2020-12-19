@@ -20,6 +20,10 @@
 #include "../utils/string_utils.h"
 
 
+const string options_menu_state::GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Options_menu.txt";
+
+
 /* ----------------------------------------------------------------------------
  * Creates an "options menu" state.
  */
@@ -98,11 +102,8 @@ void options_menu_state::change_resolution(const signed int step) {
     game.options.intended_win_w = resolution_presets[current_r_index].first;
     game.options.intended_win_h = resolution_presets[current_r_index].second;
     
-    if(!warning_widget->enabled) {
-        warning_widget->enabled = true;
-        warning_widget->start_juicy_grow();
-    }
-    resolution_widget->start_juicy_grow();
+    trigger_restart_warning();
+    resolution_picker->start_juicy_grow();
     update();
 }
 
@@ -117,9 +118,8 @@ void options_menu_state::do_drawing() {
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
         point(game.win_w, game.win_h), 0, map_gray(64)
     );
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->draw(game.time_passed);
-    }
+    
+    gui.draw();
     
     game.fade_mgr.draw();
     
@@ -131,10 +131,9 @@ void options_menu_state::do_drawing() {
  * Ticks one frame's worth of logic.
  */
 void options_menu_state::do_logic() {
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->tick(game.delta_t);
-    }
     game.fade_mgr.tick(game.delta_t);
+    
+    gui.tick(game.delta_t);
 }
 
 
@@ -164,7 +163,7 @@ void options_menu_state::go_to_controls() {
 void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    handle_widget_events(ev);
+    gui.handle_event(ev);
 }
 
 
@@ -186,88 +185,81 @@ void options_menu_state::load() {
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
-    //Menu widgets.
-    back_widget =
-        new menu_button(
-        point(game.win_w * 0.15, game.win_h * 0.10),
-        point(game.win_w * 0.20, game.win_h * 0.06),
-    [this] () {
+    //Menu items.
+    gui.register_coords("back",            15, 10, 20,  6);
+    gui.register_coords("fullscreen",      24, 20, 45,  8);
+    gui.register_coords("resolution",      24, 30, 45,  8);
+    gui.register_coords("controls",        24, 40, 45,  8);
+    gui.register_coords("restart_warning", 50, 95, 95, 10);
+    gui.read_coords(
+        data_node(GUI_FILE_PATH).get_child_by_name("positions")
+    );
+    
+    gui.back_item =
+        new button_gui_item("Back", game.fonts.main);
+    gui.back_item->on_activate =
+    [this] (const point &) {
         leave();
-    },
-    "Back", game.fonts.main
-    );
-    menu_widgets.push_back(back_widget);
+    };
+    gui.add_item(gui.back_item, "back");
     
-    fullscreen_widget =
-        new menu_checkbox(
-        point(game.win_w * 0.25, game.win_h * 0.20),
-        point(game.win_w * 0.45, game.win_h * 0.08),
-    [this] () {
-        game.options.intended_win_fullscreen = this->fullscreen_widget->checked;
-        warning_widget->enabled = true;
-        update();
-    },
-    "Fullscreen", game.fonts.main
+    check_gui_item* fullscreen_check =
+        new check_gui_item(
+        &game.options.intended_win_fullscreen,
+        "Fullscreen", game.fonts.main
     );
-    menu_widgets.push_back(fullscreen_widget);
+    fullscreen_check->on_activate =
+    [this] (const point &) {
+        game.options.intended_win_fullscreen =
+            !game.options.intended_win_fullscreen;
+        trigger_restart_warning();
+    };
+    gui.add_item(fullscreen_check, "fullscreen");
     
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.05, game.win_h * 0.30),
-            point(game.win_w * 0.05, game.win_h * 0.08),
+    resolution_picker =
+        new picker_gui_item("Resolution: ", "");
+    resolution_picker->on_previous =
     [this] () {
         change_resolution(-1);
-    },
-    "<", game.fonts.main
-        )
-    );
-    
-    resolution_widget =
-        new menu_text(
-        point(game.win_w * 0.26, game.win_h * 0.30),
-        point(game.win_w * 0.35, game.win_h * 0.08),
-        "Resolution: ", game.fonts.main,
-        al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
-    );
-    menu_widgets.push_back(resolution_widget);
-    
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.45, game.win_h * 0.30),
-            point(game.win_w * 0.05, game.win_h * 0.08),
+    };
+    resolution_picker->on_next =
     [this] () {
         change_resolution(1);
-    },
-    ">", game.fonts.main
-        )
-    );
+    };
+    gui.add_item(resolution_picker, "resolution");
     
-    menu_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.25, game.win_h * 0.40),
-            point(game.win_w * 0.45, game.win_h * 0.08),
-    [this] () {
+    button_gui_item* controls_button =
+        new button_gui_item("Edit controls...", game.fonts.main);
+    controls_button->on_activate =
+    [this] (const point &) {
         go_to_controls();
-    },
-    "Edit controls...", game.fonts.main,
-    al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
-        )
-    );
+    };
+    gui.add_item(controls_button, "controls");
     
-    warning_widget =
-        new menu_text(
-        point(game.win_w * 0.50, game.win_h * 0.95),
-        point(game.win_w * 0.95, game.win_h * 0.10),
-        "Please restart for the changes to take effect.", game.fonts.main
+    warning_text =
+        new text_gui_item(
+        "Please restart for the changes to take effect.",
+        game.fonts.main
     );
-    warning_widget->enabled = false;
-    menu_widgets.push_back(warning_widget);
+    warning_text->visible = false;
+    gui.add_item(warning_text, "restart_warning");
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
-    set_selected_widget(menu_widgets[0]);
+    gui.set_selected_item(gui.back_item);
     update();
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Triggers the restart warning at the bottom of the screen.
+ */
+void options_menu_state::trigger_restart_warning() {
+    if(!warning_text->visible) {
+        warning_text->visible = true;
+        warning_text->start_juicy_grow();
+    }
 }
 
 
@@ -279,13 +271,8 @@ void options_menu_state::unload() {
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
     
-    //Menu widgets.
-    set_selected_widget(NULL);
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        delete menu_widgets[w];
-    }
-    menu_widgets.clear();
-    
+    //Menu items.
+    gui.destroy();
 }
 
 
@@ -305,11 +292,8 @@ void options_menu_state::update() {
         }
     }
     
-    resolution_widget->text =
-        "Resolution: " +
+    resolution_picker->option =
         i2s(game.options.intended_win_w) + "x" +
         i2s(game.options.intended_win_h) +
-        (current_r_index == INVALID ? " (Custom)" : "");
-        
-    fullscreen_widget->checked = game.options.intended_win_fullscreen;
+        (current_r_index == INVALID ? "(Custom)" : "");
 }

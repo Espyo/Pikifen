@@ -80,15 +80,18 @@ private:
     vector<std::pair<int, int> > resolution_presets;
     
     ALLEGRO_BITMAP* bmp_menu_bg;
+    gui_manager gui;
     
-    menu_checkbox* fullscreen_widget;
-    menu_text* resolution_widget;
-    menu_text* warning_widget;
+    picker_gui_item* resolution_picker;
+    text_gui_item* warning_text;
     
     void change_resolution(const signed int step);
     void go_to_controls();
     void update();
     void leave();
+    void trigger_restart_warning();
+    
+    static const string GUI_FILE_PATH;
     
 };
 

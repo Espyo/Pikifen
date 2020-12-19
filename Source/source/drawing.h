@@ -59,11 +59,18 @@ void draw_bitmap_with_effects(
 void draw_button(
     const point &center, const point &size, const string &text,
     ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
-    const bool selected
+    const bool selected,
+    const float juicy_grow_amount = 0.0f
 );
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
     const point &where, const point &max_size
+);
+void draw_compressed_scaled_text(
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
+    const point &where, const point &scale,
+    const int flags, const unsigned char valign,
+    const point &max_size, const string &text
 );
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,

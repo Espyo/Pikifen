@@ -136,7 +136,7 @@ void area_menu_state::load() {
     gui.back_item =
         new button_gui_item("Back", game.fonts.main);
     gui.back_item->on_activate =
-    [this] () {
+    [this] (const point&) {
         leave();
     };
     gui.add_item(gui.back_item, "back");
@@ -163,7 +163,7 @@ void area_menu_state::load() {
         area_button->center = point(0.50f, 0.045f + a * 0.10f);
         area_button->size = point(1.0f, 0.09f);
         area_button->on_activate =
-        [this, area_folder] () {
+        [this, area_folder] (const point&) {
             game.states.gameplay->area_to_load = area_folder;
             game.fade_mgr.start_fade(false, [] () {
                 game.change_state(game.states.gameplay);

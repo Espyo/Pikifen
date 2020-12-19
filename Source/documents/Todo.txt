@@ -36,6 +36,7 @@ Next tasks (roughly sorted most important first)
     --- Known problems ---
     
     --- v0.20.0 ---
+    If you use debug commands, the results screen should say so
     Mobs that receive a message should check if it's the exact message they expect. Otherwise, a gimmick area that has objects that broadcast a specific message everywhere may end up activating signs
     Add a "get_focus_info" action
     Add a "get_focus_distance" action
@@ -123,6 +124,8 @@ Next tasks (roughly sorted most important first)
             Climbing (add the track logic too)
             Sliding (add the track logic too)
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
+    Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
+        Same for whistling and other controls you may need to mash/hold
     Graphics overhaul
         Gates should have a different appearance depending on how damaged they are
         Sprouts should have their tops sway in the wind, and the animation should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Kman's made some)
@@ -623,6 +626,7 @@ Tasks for later on (I might never implement these)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.
             The problem searcher could detect when an enemy's spoils is set to an object that doesn't exist (thanks Nutty171)
+            If it detects an auto-backup that's younger than the saved area, it should ask the user if they want to continue from the backup
         Animation editor
             Version 3.0
                 "Sprite" -> "Pose"?

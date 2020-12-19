@@ -171,7 +171,7 @@ void main_menu_state::load() {
     button_gui_item* play_button =
         new button_gui_item("Play", game.fonts.area_name);
     play_button->on_activate =
-    [] () {
+    [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.area_menu);
         });
@@ -181,7 +181,7 @@ void main_menu_state::load() {
     button_gui_item* options_button =
         new button_gui_item("Options", game.fonts.area_name);
     options_button->on_activate =
-    [] () {
+    [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.options_menu);
         });
@@ -191,7 +191,7 @@ void main_menu_state::load() {
     button_gui_item* anim_ed_button =
         new button_gui_item("Animation editor", game.fonts.area_name);
     anim_ed_button->on_activate =
-    [] () {
+    [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.animation_ed);
         });
@@ -201,7 +201,7 @@ void main_menu_state::load() {
     button_gui_item* area_ed_button =
         new button_gui_item("Area editor", game.fonts.area_name);
     area_ed_button->on_activate =
-    [] () {
+    [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
             game.change_state(game.states.area_ed);
         });
@@ -211,7 +211,7 @@ void main_menu_state::load() {
     gui.back_item =
         new button_gui_item("Exit", game.fonts.area_name);
     gui.back_item->on_activate =
-    [] () {
+    [] (const point &) {
         game.is_game_running = false;
     };
     gui.add_item(gui.back_item, "exit");
