@@ -575,6 +575,15 @@ void init_mob_actions() {
         mob_action_runners::get_info,
         mob_action_loaders::get_info
     );
+
+    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_GET_FOCUS_INFO,
+        "get_focus_info",
+        mob_action_runners::get_focus_info,
+        mob_action_loaders::get_info
+    );
     
     reg_param("this mob's var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("focused mob's var name", MOB_ACTION_PARAM_STRING, true, false);

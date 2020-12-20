@@ -30,6 +30,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FOCUS,
     MOB_ACTION_GET_CHOMPED,
     MOB_ACTION_GET_INFO,
+    MOB_ACTION_GET_FOCUS_INFO,
     MOB_ACTION_GET_FOCUS_VAR,
     MOB_ACTION_GET_RANDOM_DECIMAL,
     MOB_ACTION_GET_RANDOM_INT,
@@ -269,6 +270,7 @@ void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
 void get_info(mob_action_run_data &data);
+void get_focus_info(mob_action_run_data& data);
 void get_focus_var(mob_action_run_data &data);
 void get_random_decimal(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
@@ -348,6 +350,7 @@ void report_enum_error(mob_action_call &call, const size_t arg_nr);
 };
 
 
+void get_info_runner(mob_action_run_data& data, mob* target_mob);
 bool assert_actions(
     const vector<mob_action_call*> &actions, data_node* dn
 );
