@@ -592,20 +592,19 @@ void draw_fraction(
  */
 void draw_health(
     const point &center,
-    const float health, const float max_health,
+    const float ratio, const float alpha,
     const float radius, const bool just_chart
 ) {
-    float ratio = health / max_health;
     ALLEGRO_COLOR c;
     if(ratio >= 0.5) {
-        c = al_map_rgb_f(1 - (ratio - 0.5) * 2, 1, 0);
+        c = al_map_rgba_f(1 - (ratio - 0.5) * 2, 1, 0, alpha);
     } else {
-        c = al_map_rgb_f(1, (ratio * 2), 0);
+        c = al_map_rgba_f(1, (ratio * 2), 0, alpha);
     }
     
     if(!just_chart) {
         al_draw_filled_circle(
-            center.x, center.y, radius, al_map_rgba(0, 0, 0, 128)
+            center.x, center.y, radius, al_map_rgba(0, 0, 0, 128 * alpha)
         );
     }
     al_draw_filled_pieslice(
@@ -613,7 +612,7 @@ void draw_health(
     );
     if(!just_chart) {
         al_draw_circle(
-            center.x, center.y, radius + 1, al_map_rgb(0, 0, 0), 2
+            center.x, center.y, radius + 1, al_map_rgba(0, 0, 0, alpha * 255), 2
         );
     }
 }

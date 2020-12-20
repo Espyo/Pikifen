@@ -227,6 +227,12 @@ public:
     //List of mobs it is holding.
     vector<mob*> holding;
     
+    //Healthbar properties
+    //How much the healthbar will be filled at. Slowly moves to its target amount
+    float healthbar_smoothed_ratio;
+    //Current healthbar alpha. Moves to 0 when health <= 0
+    float healthbar_alpha;
+
     //Other properties.
     //Incremental ID. Used for minor things.
     size_t id;
