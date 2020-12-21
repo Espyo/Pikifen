@@ -270,7 +270,7 @@ void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
 void get_info(mob_action_run_data &data);
-void get_focus_info(mob_action_run_data& data);
+void get_focus_info(mob_action_run_data &data);
 void get_focus_var(mob_action_run_data &data);
 void get_random_decimal(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
@@ -350,10 +350,10 @@ void report_enum_error(mob_action_call &call, const size_t arg_nr);
 };
 
 
-void get_info_runner(mob_action_run_data& data, mob* target_mob);
 bool assert_actions(
     const vector<mob_action_call*> &actions, data_node* dn
 );
+void get_info_runner(mob_action_run_data &data, mob* target_mob);
 void load_init_actions(
     mob_type* mt, data_node* node, vector<mob_action_call*>* actions
 );

@@ -56,9 +56,16 @@
           <li>The position of GUI items in all menus can now be customized, just like the HUD was customizable until now.</li>
         </ul>
       </li>
-      <li>Add new data for the <code>get_info</code> script action: <code>x</code>, <code>y</code>, and <code>z</code>. Use these to get the object's coordinates. (Thanks Kman)</li>
+      <li>
+        Expanded the <code>get_info</code> action:
+        <ul>
+          <li>Added new data: <code>x</code>, <code>y</code>, and <code>z</code>. Use these to get the object's coordinates. (Thanks Kman)</li>
+          <li>Added a new action: <code>get_focus_info</code>. It works like <code>get_info</code>, but when applicable, gets info from the focused mob instead. (Thanks Kman)</li>
+        </ul>
+      </li>
+      <li>Health wheels now transition smoothly to their target value, and also fade away when they are empty. (Thanks Kman)</li>
       <li>Added new system assets: <code>bubble_box</code>, used to draw box-like bubbles in the HUD and menus, <code>focus_box</code>, used to show which GUI item is focused, and <code>more</code>, used for menus to indicate there's more content beyond.</li>
-      <li>Holding Shift when the snapping mode is "nothing" will now snap to the grid. The snapping mode is now also saved to the options. Finally, Shift+Plus and Shift+Minus change the grid spacing. (Thanks Nutty171, Neo)</li>
+      <li>Holding Shift when the snapping mode is "nothing" will now snap to the grid in the area editor. The snapping mode is now also saved to the options. Finally, Shift+Plus and Shift+Minus change the grid spacing. (Thanks Nutty171, Neo)</li>
       <li>The Beady Long Legs's logic was slightly cleaned up.</li>
     </ul>
     

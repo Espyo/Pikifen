@@ -86,7 +86,7 @@ void draw_fraction(
 );
 void draw_health(
     const point &center, const float ratio,
-    const float alpha = 1, const float radius = DEF_HEALTH_WHEEL_RADIUS,
+    const float alpha = 1.0f, const float radius = DEF_HEALTH_WHEEL_RADIUS,
     const bool just_chart = false
 );
 void draw_liquid(

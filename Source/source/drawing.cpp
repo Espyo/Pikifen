@@ -578,12 +578,10 @@ void draw_fraction(
  * Draws a health wheel, with a pieslice that's fuller the more HP is full.
  * center:
  *   Center of the wheel.
- * health:
- *   Current amount of health of the mob
- *   whose health we're representing.
- * max_health:
- *   Maximum amount of health of the mob;
- *   health for when it's fully healed.
+ * ratio:
+ *   Ratio of health that is filled. 0 is empty, 1 is full.
+ * alpha:
+ *   Total opacity of the healt wheel.
  * radius:
  *   Radius of the wheel (the whole wheel, not just the pieslice).
  * just_chart:
