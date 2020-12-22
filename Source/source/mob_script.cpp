@@ -534,13 +534,17 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
     //can know what numbers the events they need correspond to.
     for(size_t s = 0; s < n_new_states; ++s) {
         data_node* state_node = node->get_child(s);
+        bool skip = false;
         for(size_t s2 = 0; s2 < states->size(); ++s2) {
             if((*states)[s2]->name == state_node->name) {
                 //Already exists, probably hardcoded. Skip this.
+                skip = true;
                 continue;
             }
         }
-        states->push_back(new mob_state(state_node->name));
+        if(!skip) {
+            states->push_back(new mob_state(state_node->name));
+        }
     }
     
     for(size_t s = 0; s < states->size(); ++s) {

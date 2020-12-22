@@ -371,6 +371,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("active");
         }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
             efc.run(leader_fsm::be_thrown_by_bouncer);
             efc.change_state("thrown");
@@ -392,6 +398,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
         }
         efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
             efc.run(leader_fsm::be_thrown_by_bouncer);
