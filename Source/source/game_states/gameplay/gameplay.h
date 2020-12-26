@@ -18,25 +18,7 @@
 #include "../../mobs/ship.h"
 #include "../../replay.h"
 #include "../game_state.h"
-
-
-/* ----------------------------------------------------------------------------
- * Manages the HUD items seen during normal gameplay.
- */
-class gameplay_hud_manager : public hud_item_manager {
-public:
-    bool get_draw_data(
-        const size_t id, point* center, point* size
-    ) const;
-    void start_move(const bool in, const float duration);
-    void tick(const float time);
-    gameplay_hud_manager(const size_t item_total);
-    
-private:
-    bool move_in;
-    timer move_timer;
-    bool offscreen;
-};
+#include "../../gui.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -76,8 +58,8 @@ public:
     float day_minutes;
     //Replay of the current day.
     replay day_replay;
-    //Information about all HUD items.
-    gameplay_hud_manager hud_items;
+    //Manager for the gameplay HUD.
+    gui_manager hud;
     //Mob that player 1's leader cursor is on top of, if any.
     mob* leader_cursor_mob;
     //Player 1's leader cursor, in screen coordinates.
@@ -125,15 +107,6 @@ public:
     
 private:
 
-    static const float AREA_INTRO_HUD_MOVE_TIME;
-    static const float AREA_TITLE_FADE_DURATION;
-    static const float CURSOR_INVALID_EFFECT_SPEED;
-    static const float CURSOR_SAVE_INTERVAL;
-    static const size_t ONION_MENU_TYPES_PER_PAGE;
-    static const float SWARM_ARROW_SPEED;
-    static const float SWARM_ARROWS_INTERVAL;
-    
-    
     //When processing inter-mob events, we want the mob to follow them from the
     //closest mob to the one farthest away. As such, this struct saves data on
     //a viable mob, its distance, and the corresponding event.
@@ -317,9 +290,8 @@ private:
     void handle_button(
         const size_t button, const float pos, const size_t player
     );
+    void init_hud();
     void load_game_content();
-    void load_hud_info();
-    void load_hud_coordinates(const int item, string data);
     void process_mob_interactions(mob* m_ptr, size_t m);
     void process_mob_misc_interactions(
         mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
@@ -334,6 +306,14 @@ private:
     );
     void unload_game_content();
     
+    static const float AREA_INTRO_HUD_MOVE_TIME;
+    static const float AREA_TITLE_FADE_DURATION;
+    static const float CURSOR_INVALID_EFFECT_SPEED;
+    static const float CURSOR_SAVE_INTERVAL;
+    static const string HUD_FILE_NAME;
+    static const size_t ONION_MENU_TYPES_PER_PAGE;
+    static const float SWARM_ARROW_SPEED;
+    static const float SWARM_ARROWS_INTERVAL;
 };
 
 

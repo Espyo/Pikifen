@@ -20,6 +20,7 @@
 #include "../utils/string_utils.h"
 
 
+//Path to the GUI information file.
 const string options_menu_state::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu.txt";
 

@@ -34,6 +34,7 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
+    Quite a few files are referring to http://www.pikminfanon when they should be referring to https://www.pikminfanon (thanks Kman)
     
     --- v0.20.0 ---
     If you use debug commands, the results screen should say so

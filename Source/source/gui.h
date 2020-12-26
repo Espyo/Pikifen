@@ -18,11 +18,19 @@
 #include <allegro5/allegro_font.h>
 
 #include "const.h"
+#include "misc_structs.h"
 #include "utils/data_file.h"
 #include "utils/geometry_utils.h"
 
 using std::map;
 using std::vector;
+
+
+enum GUI_MANAGER_ANIMS {
+    GUI_MANAGER_ANIM_NONE,
+    GUI_MANAGER_ANIM_OUT_TO_IN,
+    GUI_MANAGER_ANIM_IN_TO_OUT,
+};
 
 
 /* ----------------------------------------------------------------------------
@@ -213,6 +221,10 @@ public:
     void read_coords(data_node* node);
     //Sets the currently selected item.
     void set_selected_item(gui_item* item);
+    //Starts an animation tha affects all items.
+    void start_animation(
+        const GUI_MANAGER_ANIMS type, const float duration
+    );
     
     //Destroys all allocated items and information.
     void destroy();
@@ -236,6 +248,10 @@ private:
     bool ok_pressed;
     //Is the back button pressed?
     bool back_pressed;
+    //Type of the current animation, if any.
+    GUI_MANAGER_ANIMS anim_type;
+    //Timer for the current animation.
+    timer anim_timer;
     
 };
 

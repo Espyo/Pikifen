@@ -220,7 +220,8 @@ gui_manager::gui_manager() :
     left_pressed(false),
     down_pressed(false),
     ok_pressed(false),
-    back_pressed(false) {
+    back_pressed(false),
+    anim_type(GUI_MANAGER_ANIM_NONE) {
     
 }
 
@@ -288,10 +289,63 @@ void gui_manager::draw() {
             );
         }
         
-        i_ptr->on_draw(
-            i_ptr->get_real_center(),
-            i_ptr->get_real_size()
-        );
+        point final_center = i_ptr->get_real_center();
+        point final_size = i_ptr->get_real_size();
+        
+        if(anim_timer.time_left > 0.0f) {
+            switch(anim_type) {
+            case GUI_MANAGER_ANIM_OUT_TO_IN: {
+                point start_center;
+                float angle =
+                    get_angle(
+                        point(game.win_w, game.win_h) / 2.0f,
+                        final_center
+                    );
+                start_center.x = final_center.x + cos(angle) * game.win_w;
+                start_center.y = final_center.y + sin(angle) * game.win_h;
+                
+                final_center.x =
+                    interpolate_number(
+                        ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                        0.0f, 1.0f, start_center.x, final_center.x
+                    );
+                final_center.y =
+                    interpolate_number(
+                        ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                        0.0f, 1.0f, start_center.y, final_center.y
+                    );
+                break;
+                
+            } case GUI_MANAGER_ANIM_IN_TO_OUT: {
+                point end_center;
+                float angle =
+                    get_angle(
+                        point(game.win_w, game.win_h) / 2.0f,
+                        final_center
+                    );
+                end_center.x = final_center.x + cos(angle) * game.win_w;
+                end_center.y = final_center.y + sin(angle) * game.win_h;
+                
+                final_center.x =
+                    interpolate_number(
+                        ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
+                        0.0f, 1.0f, final_center.x, end_center.x
+                    );
+                final_center.y =
+                    interpolate_number(
+                        ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
+                        0.0f, 1.0f, final_center.y, end_center.y
+                    );
+                break;
+                
+            } default: {
+                break;
+                
+            }
+            }
+        }
+        
+        i_ptr->on_draw(final_center, final_size);
         
         if(parent) {
             al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
@@ -571,9 +625,22 @@ void gui_manager::set_selected_item(gui_item* item) {
 
 
 /* ----------------------------------------------------------------------------
+ * Starts an animation that affects all items.
+ */
+void gui_manager::start_animation(
+    const GUI_MANAGER_ANIMS type, const float duration
+) {
+    anim_type = type;
+    anim_timer.start(duration);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks all items on-screen by one frame of logic.
  */
 void gui_manager::tick(const float delta_t) {
+    anim_timer.tick(delta_t);
+    
     for(size_t i = 0; i < items.size(); ++i) {
         gui_item* i_ptr = items[i];
         if(i_ptr->on_tick) {

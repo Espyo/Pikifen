@@ -285,6 +285,8 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
         }
     }
     
+    hud.handle_event(ev);
+    
 }
 
 

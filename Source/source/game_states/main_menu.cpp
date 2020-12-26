@@ -17,6 +17,7 @@
 #include "../utils/string_utils.h"
 
 
+//Path to the GUI information file.
 const string main_menu_state::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu.txt";
 
