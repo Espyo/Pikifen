@@ -262,7 +262,7 @@ Procedure for every version release
                 Title: <Object name> spritesheet
                 Author: André "Espyo" Silva
                 Keywords: Pikifen spritesheet
-                Description: Spritesheet for the <object name> pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen
+                Description: Spritesheet for the <object name> pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
         Update the Allegro version number on the Compiling page of the manual, if it changed
         Check any changes made on Windows in order to compile, and port them over
         Update the version release date in the changelog

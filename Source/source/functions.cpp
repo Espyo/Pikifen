@@ -1229,7 +1229,9 @@ string standardize_path(const string &path) {
  */
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
-        game.states.gameplay->msg_box = new msg_box_info(text, speaker_bmp);
+        string final_text = unescape_string(text);
+        game.states.gameplay->msg_box =
+            new msg_box_info(final_text, speaker_bmp);
     } else {
         delete game.states.gameplay->msg_box;
         game.states.gameplay->msg_box = NULL;

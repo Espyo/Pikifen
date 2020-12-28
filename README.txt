@@ -5,7 +5,7 @@ A fan-made Pikmin engine that allows users to make and play their own Pikmin con
 To learn more about how to use the engine, please check the included manual, accessible by opening Manual.html.
 
 GitHub page: https://github.com/Espyo/Pikifen
-Pikmin Fanon page: http://www.pikminfanon.com/Pikifen
+Pikmin Fanon page: https://www.pikminfanon.com/wiki/Pikifen
 Discord server: https://discord.gg/qbhz4u3
 
 ===============

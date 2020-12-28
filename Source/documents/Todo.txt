@@ -34,7 +34,6 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
-    Quite a few files are referring to http://www.pikminfanon when they should be referring to https://www.pikminfanon (thanks Kman)
     
     --- v0.20.0 ---
     If you use debug commands, the results screen should say so
@@ -71,6 +70,9 @@ Next tasks (roughly sorted most important first)
     Rock Pikmin
         Should be unable to latch
         Should lunge on their own when attacking
+    Remember to update the Pikmin Fanon wiki page link in the PNG files
+    
+    --- v0.21.0 ---
     Details
         Make bridges open sectors gradually
             If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
@@ -157,8 +159,8 @@ Next tasks (roughly sorted most important first)
         Kman's Adventure area (see #content-sharing)
     Try to compile on Mac
     
-    --- v0.21.0 ---
-    Menus
+    --- v0.22.0 ---
+    Missing menus
         Radar
             Radar page
                 https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?
@@ -186,8 +188,15 @@ Next tasks (roughly sorted most important first)
         Pikmin extinction
             Check Onions, ships, and converters that have Pikmin in the buffer
             Stages should pick whether or not they finish upon Pikmin extinctions, since some puzzle/gimmick stages could involve no Pikmin
+    Challenge mode stuff
+        The idea is to make it so areas have some sort of goal, other than being a sandbox
+        Each stage can override the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
+        Each stage should say what its difficulty is, like it does with the creator and such
+        Each stage should have a goal -- the three main goals from Pikmin 3, Get the Target Score!, Survive!, Reach the Exit!, Deliver X to Y!, Grow X Pikmin!, Defeat Enemy X! Escort X! (partial thanks, Jimble, Kman)
+            And different sub-goals: without getting spotted, until time runs out
+            Each stage should have different scoring criteria. While there is only one goal, the final score should depend on any combination of the following, with varying weights: Pikmin born, Pikmin deaths, time taken, Pokos gathered, enemies killed. It could also have no scoring, just a boolean completion; this is useful for puzzle levels.
     
-    --- v0.22.0 ---
+    --- v0.23.0 ---
     Music
         Day + fight
         Sunset + fight
@@ -299,12 +308,6 @@ Next tasks (roughly sorted most important first)
         Misc
             Does it make sense to create a FOF above a bottomless pit?
             https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
-    Challenge mode stuff
-        Challenge levels can override the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
-        Each stage should say what its difficulty is, like it does with the creator and such
-        Each stage should have a goal -- the three main goals from Pikmin 3, Get the Target Score!, Survive!, Reach the Exit!, Deliver X to Y!, Grow X Pikmin!, Defeat Enemy X! Escort X! (partial thanks, Jimble, Kman)
-            And different sub-goals: without getting spotted, until time runs out
-            Each stage should have different scoring criteria. While there is only one goal, the final score should depend on any combination of the following, with varying weights: Pikmin born, Pikmin deaths, time taken, Pokos gathered, enemies killed. It could also have no scoring, just a boolean completion; this is useful for puzzle levels.
     Multiplayer
         1 struct of info for each player, multiplayer controls
         During loading, show how the screen is going to be split, and show which player is in which screen
