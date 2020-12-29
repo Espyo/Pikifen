@@ -160,8 +160,6 @@ const string SYSTEM_ANIMATIONS_FILE_PATH =
     MISC_FOLDER_PATH + "/System_animations.txt";
 const string SYSTEM_ASSET_FILE_NAMES_FILE_PATH =
     MISC_FOLDER_PATH + "/System_asset_file_names.txt";
-const string TITLE_SCREEN_FILE_PATH =
-    MISC_FOLDER_PATH + "/Title_screen.txt";
 
 enum MAKER_TOOL_IDS {
     MAKER_TOOL_NONE,

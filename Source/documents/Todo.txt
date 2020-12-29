@@ -30,7 +30,6 @@ Current tasks (tasks being worked on, but not yet committed)
                 Each object has the ability to capture a key-press and tell the manager not to handle it. This way, a slider widget can use left/right to change its value, instead of the manager using that to change to a different widget
                 When an object is added to the manager's list, it can specify that it's framed inside another
         Change the arrow keys logic that detects the next available button
-        Move the title screen logo composition to the GUI/Main_menu.txt file
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---

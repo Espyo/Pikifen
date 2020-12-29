@@ -105,6 +105,20 @@
         <li><code>area_editor</code>: Area editor button.
         <li><code>exit</code>: Exit button.
       </ul>
+      <li><b>Logo:</b> The logo that is made of Pikmin can be customized in the <code>logo</code> block.</li>
+      <ul>
+        <li><b><code>min_screen_limit</code></b>: Top-left coordinates of the logo's placement on-screen, in screen width or height percentage.</li>
+        <li><b><code>max_screen_limit</code></b>: Same as above, but for the bottom-right.</li>
+        <li><b><code>pikmin_max_speed</code></b>: Each Pikmin's speed is random. This is the maximum speed possible, in pixels per second.</li>
+        <li><b><code>pikmin_min_speed</code></b>: Same as above, but minimum possible.</li>
+        <li><b><code>pikmin_speed_smoothness</code></b>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
+        <li><b><code>pikmin_sway_amount</code></b>: How many pixels a Pikmin sways left or right when standing still.</li>
+        <li><b><code>pikmin_sway_max_speed</code></b>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
+        <li><b><code>pikmin_sway_min_speed</code></b>: Same as above, but the minimum speed.</li>
+        <li><b><code>pikmin_size</code></b>: Pikmin size, in screen dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the screen width nor 2% of the screen height.</li>
+        <li><b><code>pikmin_types</code></b>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the name of the image in the <code>/Game_data/Graphics</code> folder (extension included).</li>
+        <li><b><code>map</code></b>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
+      </ul>
     </ul>
     
     <h2 id="options_menu">Options menu</h2>

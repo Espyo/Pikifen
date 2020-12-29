@@ -158,6 +158,7 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 void main_menu_state::load() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
+    data_node settings_file(GUI_FILE_PATH);
     
     //Menu items.
     gui.register_coords("play",             50, 55, 50,  6);
@@ -165,9 +166,7 @@ void main_menu_state::load() {
     gui.register_coords("animation_editor", 50, 71, 50,  6);
     gui.register_coords("area_editor",      50, 79, 50,  6);
     gui.register_coords("exit",             50, 87, 50,  6);
-    gui.read_coords(
-        data_node(GUI_FILE_PATH).get_child_by_name("positions")
-    );
+    gui.read_coords(settings_file.get_child_by_name("positions"));
     
     button_gui_item* play_button =
         new button_gui_item("Play", game.fonts.area_name);
@@ -219,10 +218,9 @@ void main_menu_state::load() {
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
-    data_node title_screen_file(TITLE_SCREEN_FILE_PATH);
     
     //Logo pikmin.
-    data_node* logo_node = title_screen_file.get_child_by_name("logo");
+    data_node* logo_node = settings_file.get_child_by_name("logo");
     reader_setter logo_rs(logo_node);
     
     data_node* pik_types_node =
