@@ -546,7 +546,7 @@ void draw_fraction(
     const size_t needed, const ALLEGRO_COLOR &color
 ) {
     float first_y =
-        center.y - (al_get_font_line_height(game.fonts.main) * 3) / 2;
+        center.y - (al_get_font_line_height(game.fonts.standard) * 3) / 2;
     float font_h = al_get_font_line_height(game.fonts.value);
     
     draw_scaled_text(
@@ -1003,9 +1003,9 @@ void draw_loading_screen(
     //Draw the game's logo to the left of the "Loading..." text.
     if(opacity == 1.0f) {
         point icon_pos(
-            game.win_w - 8 - al_get_text_width(game.fonts.main, "Loading...") -
-            8 - al_get_font_line_height(game.fonts.main) * 0.5,
-            game.win_h - 8 - al_get_font_line_height(game.fonts.main) * 0.5
+            game.win_w - 8 - al_get_text_width(game.fonts.standard, "Loading...") -
+            8 - al_get_font_line_height(game.fonts.standard) * 0.5,
+            game.win_h - 8 - al_get_font_line_height(game.fonts.standard) * 0.5
         );
         
         if(
@@ -1014,16 +1014,16 @@ void draw_loading_screen(
         ) {
             draw_bitmap(
                 game.sys_assets.bmp_icon, icon_pos,
-                point(-1, al_get_font_line_height(game.fonts.main)),
+                point(-1, al_get_font_line_height(game.fonts.standard)),
                 0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
         //Draw the "Loading..." text, if we're not fading.
         al_draw_text(
-            game.fonts.main, al_map_rgb(192, 192, 192),
+            game.fonts.standard, al_map_rgb(192, 192, 192),
             game.win_w - 8,
-            game.win_h - 8 - al_get_font_line_height(game.fonts.main),
+            game.win_h - 8 - al_get_font_line_height(game.fonts.standard),
             ALLEGRO_ALIGN_RIGHT, "Loading..."
         );
     }
@@ -1118,7 +1118,7 @@ void draw_notification(
     if(control) {
         text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
         draw_control(
-            game.fonts.main, *control,
+            game.fonts.standard, *control,
             point(
                 -bmp_w * 0.5 + NOTIFICATION_PADDING +
                 NOTIFICATION_CONTROL_SIZE * 0.5,
@@ -1132,7 +1132,7 @@ void draw_notification(
     }
     
     draw_compressed_text(
-        game.fonts.main, map_alpha(NOTIFICATION_ALPHA),
+        game.fonts.standard, map_alpha(NOTIFICATION_ALPHA),
         point(
             (text_box_x1 + text_box_x2) * 0.5,
             (text_box_y1 + text_box_y2) * 0.5

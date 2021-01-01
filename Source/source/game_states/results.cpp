@@ -172,7 +172,7 @@ void results_state::load() {
     [this] () {
         retry_area();
     },
-    "Retry", game.fonts.main
+    "Retry", game.fonts.standard
     );
     menu_widgets.push_back(retry_widget);
     
@@ -184,7 +184,7 @@ void results_state::load() {
         [this] () {
             continue_playing();
         },
-        "Keep playing", game.fonts.main
+        "Keep playing", game.fonts.standard
         );
         menu_widgets.push_back(continue_widget);
     }
@@ -196,7 +196,7 @@ void results_state::load() {
     [this] () {
         leave();
     },
-    "Pick an area", game.fonts.main
+    "Pick an area", game.fonts.standard
     );
     menu_widgets.push_back(back_widget);
     
@@ -222,7 +222,7 @@ void results_state::load() {
             point(game.win_w * 0.5, game.win_h * 0.175),
             point(game.win_w * 1.0, game.win_h * 0.10),
             finish_reason,
-            game.fonts.main, al_map_rgb(255, 192, 192)
+            game.fonts.standard, al_map_rgb(255, 192, 192)
         );
         menu_widgets.push_back(finish_reason_widget);
     }
@@ -232,7 +232,7 @@ void results_state::load() {
         point(game.win_w * 0.35, game.win_h * 0.30),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Time taken:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     menu_widgets.push_back(time_l_widget);
     
@@ -253,7 +253,7 @@ void results_state::load() {
         point(game.win_w * 0.35, game.win_h * 0.40),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Treasure points:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     menu_widgets.push_back(points_l_widget);
     
@@ -271,7 +271,7 @@ void results_state::load() {
         point(game.win_w * 0.35, game.win_h * 0.50),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Enemies:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     menu_widgets.push_back(enemies_l_widget);
     
@@ -289,7 +289,7 @@ void results_state::load() {
         point(game.win_w * 0.35, game.win_h * 0.60),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Pikmin born:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     menu_widgets.push_back(pikmin_born_l_widget);
     
@@ -307,7 +307,7 @@ void results_state::load() {
         point(game.win_w * 0.35, game.win_h * 0.70),
         point(game.win_w * 0.40, game.win_h * 0.10),
         "Pikmin deaths:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     menu_widgets.push_back(pikmin_deaths_l_widget);
     

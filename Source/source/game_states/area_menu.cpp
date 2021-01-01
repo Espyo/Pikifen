@@ -134,7 +134,7 @@ void area_menu_state::load() {
     );
     
     gui.back_item =
-        new button_gui_item("Back", game.fonts.main);
+        new button_gui_item("Back", game.fonts.standard);
     gui.back_item->on_activate =
     [this] (const point&) {
         leave();
@@ -142,7 +142,7 @@ void area_menu_state::load() {
     gui.add_item(gui.back_item, "back");
     
     text_gui_item* pick_text =
-        new text_gui_item("Pick an area:", game.fonts.main);
+        new text_gui_item("Pick an area:", game.fonts.standard);
     gui.add_item(pick_text, "pick_text");
     
     list_gui_item* list_box = new list_gui_item();

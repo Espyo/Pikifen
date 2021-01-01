@@ -444,7 +444,7 @@ font_list::font_list() :
     area_name(nullptr),
     builtin(nullptr),
     counter(nullptr),
-    main(nullptr),
+    standard(nullptr),
     value(nullptr) {
     
 }

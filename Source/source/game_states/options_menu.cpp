@@ -196,7 +196,7 @@ void options_menu_state::load() {
     );
     
     gui.back_item =
-        new button_gui_item("Back", game.fonts.main);
+        new button_gui_item("Back", game.fonts.standard);
     gui.back_item->on_activate =
     [this] (const point &) {
         leave();
@@ -206,7 +206,7 @@ void options_menu_state::load() {
     check_gui_item* fullscreen_check =
         new check_gui_item(
         &game.options.intended_win_fullscreen,
-        "Fullscreen", game.fonts.main
+        "Fullscreen", game.fonts.standard
     );
     fullscreen_check->on_activate =
     [this] (const point &) {
@@ -229,7 +229,7 @@ void options_menu_state::load() {
     gui.add_item(resolution_picker, "resolution");
     
     button_gui_item* controls_button =
-        new button_gui_item("Edit controls...", game.fonts.main);
+        new button_gui_item("Edit controls...", game.fonts.standard);
     controls_button->on_activate =
     [this] (const point &) {
         go_to_controls();
@@ -239,7 +239,7 @@ void options_menu_state::load() {
     warning_text =
         new text_gui_item(
         "Please restart for the changes to take effect.",
-        game.fonts.main
+        game.fonts.standard
     );
     warning_text->visible = false;
     gui.add_item(warning_text, "restart_warning");

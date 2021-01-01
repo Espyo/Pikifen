@@ -58,7 +58,7 @@ void controls_menu_state::do_drawing() {
         control_info* c_ptr = &game.options.controls[0][control_nr];
         
         draw_control(
-            game.fonts.main, *c_ptr,
+            game.fonts.standard, *c_ptr,
             point(game.win_w * 0.83, game.win_h * (0.2 + 0.08 * list_nr)),
             point(game.win_w * 0.23, game.win_h * 0.07)
         );
@@ -199,7 +199,7 @@ void controls_menu_state::load() {
     [this] () {
         leave();
     },
-    "Back", game.fonts.main
+    "Back", game.fonts.standard
     );
     menu_widgets.push_back(back_widget);
     
@@ -208,7 +208,7 @@ void controls_menu_state::load() {
             new menu_button(
                 point(game.win_w * 0.07, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, "-", game.fonts.main
+        [] () { }, "-", game.fonts.standard
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -216,7 +216,7 @@ void controls_menu_state::load() {
             new menu_button(
                 point(game.win_w * 0.16, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, "<", game.fonts.main
+        [] () { }, "<", game.fonts.standard
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -224,7 +224,7 @@ void controls_menu_state::load() {
             new menu_text(
                 point(game.win_w * 0.40, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.39, game.win_h * 0.07),
-                "", game.fonts.main, al_map_rgb(255, 255, 255),
+                "", game.fonts.standard, al_map_rgb(255, 255, 255),
                 ALLEGRO_ALIGN_LEFT
             )
         );
@@ -233,7 +233,7 @@ void controls_menu_state::load() {
             new menu_button(
                 point(game.win_w * 0.65, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, ">", game.fonts.main
+        [] () { }, ">", game.fonts.standard
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -241,7 +241,7 @@ void controls_menu_state::load() {
             new menu_button(
                 point(game.win_w * 0.83, game.win_h * (0.20 + 0.08 * c)),
                 point(game.win_w * 0.26, game.win_h * 0.07),
-        [] () { }, "", game.fonts.main
+        [] () { }, "", game.fonts.standard
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -276,7 +276,7 @@ void controls_menu_state::load() {
         ]->start_juicy_grow();
         update();
     },
-    "New", game.fonts.main
+    "New", game.fonts.standard
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -284,7 +284,7 @@ void controls_menu_state::load() {
         new menu_text(
             point(game.win_w * 0.15, game.win_h * 0.90),
             point(game.win_w * 0.20, game.win_h * 0.08),
-            "Page:", game.fonts.main
+            "Page:", game.fonts.standard
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -301,7 +301,7 @@ void controls_menu_state::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    "<", game.fonts.main
+    "<", game.fonts.standard
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -309,7 +309,7 @@ void controls_menu_state::load() {
         new menu_text(
         point(game.win_w * 0.40, game.win_h * 0.90),
         point(game.win_w * 0.10, game.win_h * 0.08),
-        "", game.fonts.main
+        "", game.fonts.standard
     );
     bottom_widgets.push_back(cur_page_nr_widget);
     menu_widgets.push_back(bottom_widgets.back());
@@ -326,7 +326,7 @@ void controls_menu_state::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    ">", game.fonts.main
+    ">", game.fonts.standard
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -334,7 +334,7 @@ void controls_menu_state::load() {
         new menu_text(
         point(game.win_w * 0.50, game.win_h * 0.90),
         point(game.win_w * 1.00, game.win_h * 0.08),
-        "Waiting for any input...", game.fonts.main
+        "Waiting for any input...", game.fonts.standard
     );
     menu_widgets.push_back(input_capture_msg_widget);
     
