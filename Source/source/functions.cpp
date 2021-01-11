@@ -1090,6 +1090,120 @@ void save_screenshot() {
 
 
 /* ----------------------------------------------------------------------------
+ * Given a list of items, chooses which item comes next geometrically in the
+ * specified direction. Useful for menus with several buttons the player can
+ * select multidirectionally in.
+ * Also, it loops around.
+ * item_coordinates:
+ *   Vector with the center coordinates of all items.
+ * selected_item:
+ *   Index of the selected item.
+ * direction:
+ *   Angle specifying the direction.
+ * loop_region:
+ *   Width and height of the loop region.
+ */
+size_t select_next_item_directionally(
+    const vector<point> item_coordinates, const size_t selected_item,
+    const float direction, const point &loop_region
+) {
+    const float MIN_BLINDSPOT_ANGLE = TAU * 0.17;
+    const float MAX_BLINDSPOT_ANGLE = TAU * 0.33;
+    
+    float normalized_dir = normalize_angle(direction);
+    const point &sel_coords = item_coordinates[selected_item];
+    float best_score = FLT_MAX;
+    size_t best_item = selected_item;
+    
+    //Check each item that isn't the current one.
+    for(size_t i = 0; i < item_coordinates.size(); ++i) {
+    
+        if(i == selected_item) continue;
+        
+        point i_base_coords = item_coordinates[i];
+        
+        //Get the standard coordinates for this item, and make them relative.
+        point i_coords = i_base_coords;
+        i_coords = i_coords - sel_coords;
+        
+        //Rotate the coordinates such that the specified direction
+        //lands to the right.
+        i_coords = rotate_point(i_coords, -normalized_dir);
+        
+        //Check if it's between the blind spot angles.
+        //We get the same result whether the Y is positive or negative,
+        //so let's simplify things and make it positive.
+        float rel_angle =
+            get_angle(point(0, 0), point(i_coords.x, fabs(i_coords.y)));
+        if(
+            rel_angle >= MIN_BLINDSPOT_ANGLE &&
+            rel_angle <= MAX_BLINDSPOT_ANGLE
+        ) {
+            //If so, never let this item be chosen, no matter what. This is
+            //useful to stop a list of items with no vertical variance from
+            //picking another item when the direction is up, for instance.
+            continue;
+        }
+        
+        if(i_coords.x > 0.0f) {
+            //If this item is in front of the selected one,
+            //give it a score like normal.
+            float score = i_coords.x + fabs(i_coords.y);
+            if(score < best_score) {
+                best_score = score;
+                best_item = i;
+            }
+            
+        } else {
+            //If the item is behind, we'll need to loop its coordinates
+            //and score those loop coordinates that land in front.
+            //Unfortunately, there's no way to know how the coordinates
+            //should be looped in order to land in front of the selected
+            //item, so we should just check all loop variations: above, below
+            //to the left, to the right, and combinations.
+            
+            for(char c = -1; c < 2; ++c) {
+                for(char r = -1; r < 2; ++r) {
+                
+                    //If it's the same "screen" as the regular one,
+                    //forget it, since we already checked above.
+                    if(c == 0 && r == 0) {
+                        continue;
+                    }
+                    
+                    //Get the coordinates in this parallel region, and make
+                    //them relative.
+                    i_coords = i_base_coords;
+                    i_coords.x += loop_region.x * c;
+                    i_coords.y += loop_region.y * r;
+                    i_coords = i_coords - sel_coords;
+                    
+                    //Rotate the coordinates such that the specified direction
+                    //lands to the right.
+                    i_coords = rotate_point(i_coords, -normalized_dir);
+                    
+                    //If these coordinates are behind the selected item,
+                    //they cannot be selected.
+                    if(i_coords.x < 0.0f) {
+                        continue;
+                    }
+                    
+                    //Finally, figure out if this is the new best item.
+                    float score = i_coords.x + fabs(i_coords.y);
+                    if(score < best_score) {
+                        best_score = score;
+                        best_item = i;
+                    }
+                }
+            }
+        }
+    }
+    
+    return best_item;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a vector with all items inside a semicolon-separated list.
  * s:
  *   The string containing the list.

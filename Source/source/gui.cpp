@@ -461,7 +461,7 @@ void gui_manager::handle_menu_button(
             for(size_t i = 0; i < items.size(); ++i) {
                 if(items[i]->selectable) {
                     set_selected_item(items[i]);
-                    break;
+                    return;
                 }
             }
         }
@@ -470,79 +470,46 @@ void gui_manager::handle_menu_button(
             return;
         }
         
-        gui_item* closest_item = NULL;
-        dist closest_item_dist;
-        point cur_pivot;
-        point i2_pivot;
+        vector<point> selectables;
+        vector<gui_item*> selectable_ptrs;
+        size_t selectable_idx = INVALID;
+        float direction = 0.0f;
         
-        for(size_t i = 0; i < items.size(); i++) {
+        switch(pressed) {
+        case BUTTON_MENU_DOWN: {
+            direction = TAU * 0.25f;
+            break;
+        }
+        case BUTTON_MENU_LEFT: {
+            direction = TAU * 0.50f;
+            break;
+        }
+        case BUTTON_MENU_UP: {
+            direction = TAU * 0.75f;
+            break;
+        }
+        }
+        
+        for(size_t i = 0; i < items.size(); ++i) {
             gui_item* i_ptr = items[i];
-            if(
-                i_ptr == selected_item ||
-                !i_ptr->selectable
-            ) {
-                continue;
-            }
-            
-            switch(pressed) {
-            case BUTTON_MENU_RIGHT: {
-                cur_pivot.x =
-                    selected_item->center.x + selected_item->size.x * 0.25;
-                cur_pivot.y =
-                    selected_item->center.y;
-                i2_pivot.x = i_ptr->center.x - i_ptr->size.x * 0.25;
-                i2_pivot.y = i_ptr->center.y;
-                
-                if(selected_item->center.x == i_ptr->center.x) continue;
-                if(cur_pivot.x > i2_pivot.x) i2_pivot.x += game.win_w;
-                break;
-            } case BUTTON_MENU_UP: {
-                cur_pivot.x =
-                    selected_item->center.x;
-                cur_pivot.y =
-                    selected_item->center.y - selected_item->size.y * 0.25;
-                i2_pivot.x = i_ptr->center.x;
-                i2_pivot.y = i_ptr->center.y + i_ptr->size.y * 0.25;
-                
-                if(selected_item->center.y == i_ptr->center.y) continue;
-                if(cur_pivot.y < i2_pivot.y) i2_pivot.y -= game.win_h;
-                break;
-            } case BUTTON_MENU_LEFT: {
-                cur_pivot.x =
-                    selected_item->center.x - selected_item->size.x * 0.25;
-                cur_pivot.y =
-                    selected_item->center.y;
-                i2_pivot.x = i_ptr->center.x + i_ptr->size.x * 0.25;
-                i2_pivot.y = i_ptr->center.y;
-                
-                if(selected_item->center.x == i_ptr->center.x) continue;
-                if(cur_pivot.x < i2_pivot.x) i2_pivot.x -= game.win_w;
-                break;
-            } case BUTTON_MENU_DOWN: {
-                cur_pivot.x =
-                    selected_item->center.x;
-                cur_pivot.y =
-                    selected_item->center.y + selected_item->size.y * 0.25;
-                i2_pivot.x = i_ptr->center.x;
-                i2_pivot.y = i_ptr->center.y - i_ptr->size.y * 0.25;
-                
-                if(selected_item->center.y == i_ptr->center.y) continue;
-                if(cur_pivot.y > i2_pivot.y) i2_pivot.y += game.win_h;
-                break;
-            }
-            }
-            
-            dist d(cur_pivot, i2_pivot);
-            
-            if(!closest_item || d <= closest_item_dist) {
-                closest_item = i_ptr;
-                closest_item_dist = d;
+            if(i_ptr->selectable) {
+                if(i_ptr == selected_item) {
+                    selectable_idx = selectables.size();
+                }
+                selectable_ptrs.push_back(i_ptr);
+                selectables.push_back(i_ptr->get_real_center());
             }
         }
         
-        if(closest_item) {
-            set_selected_item(closest_item);
-        }
+        selectable_idx =
+            select_next_item_directionally(
+                selectables,
+                selectable_idx,
+                direction,
+                point(game.win_w, game.win_h)
+            );
+            
+        set_selected_item(selectable_ptrs[selectable_idx]);
         
         break;
         
