@@ -99,8 +99,13 @@ public:
     string text;
     //Font to display the text with.
     ALLEGRO_FONT* font;
+    //Color to tint the text with.
+    ALLEGRO_COLOR color;
     
-    button_gui_item(const string &text, ALLEGRO_FONT* font);
+    button_gui_item(
+        const string &text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255)
+    );
 };
 
 
@@ -115,8 +120,13 @@ public:
     string text;
     //Font to display the text with.
     ALLEGRO_FONT* font;
+    //Color to tint the text with.
+    ALLEGRO_COLOR color;
     
-    check_gui_item(bool* value, const string &text, ALLEGRO_FONT* font);
+    check_gui_item(
+        bool* value, const string &text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255)
+    );
 };
 
 
@@ -177,8 +187,13 @@ public:
     string text;
     //Font to display the text with.
     ALLEGRO_FONT* font;
+    //Color to tint the text with.
+    ALLEGRO_COLOR color;
     
-    text_gui_item(const string &text, ALLEGRO_FONT* font);
+    text_gui_item(
+        const string &text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255)
+    );
 };
 
 

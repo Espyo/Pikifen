@@ -22,15 +22,6 @@
 
 
 /* ----------------------------------------------------------------------------
- * Manages the HUD items seen in the Onion menu.
- */
-class onion_hud_manager : public hud_item_manager {
-public:
-    onion_hud_manager(const size_t item_total);
-};
-
-
-/* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
  */
 class gameplay_state : public game_state {
@@ -149,8 +140,8 @@ private:
         leader* l_ptr;
         //Information on every type's management.
         vector<onion_menu_type_struct> types;
-        //HUD item manager.
-        onion_hud_manager* hud;
+        //GUI manager.
+        gui_manager gui;
         //Is "select all" currently on?
         bool select_all;
         //If it manages more than 5, this is the Pikmin type page index.
@@ -169,18 +160,46 @@ private:
         size_t nr_pages;
         //Pikmin types currently on-screen. Cache for convenience.
         vector<onion_menu_type_struct*> on_screen_types;
+        //List of GUI items for the Onion icons. Cache for convenience.
+        vector<gui_item*> onion_icon_items;
+        //List of GUI items for the Onion buttons. Cache for convenience.
+        vector<gui_item*> onion_button_items;
+        //List of GUI items for the Onion amounts. Cache for convenience.
+        vector<gui_item*> onion_amount_items;
+        //List of GUI items for the group icons. Cache for convenience.
+        vector<gui_item*> group_icon_items;
+        //List of GUI items for the group buttons. Cache for convenience.
+        vector<gui_item*> group_button_items;
+        //List of GUI items for the group amounts. Cache for convenience.
+        vector<gui_item*> group_amount_items;
+        //The button that controls all Onions. Cache for convenience.
+        gui_item* onion_all_button;
+        //The button that controls all groups. Cache for convenience.
+        gui_item* group_all_button;
+        //Left Onion "more..." icon. Cache for convenience.
+        gui_item* onion_more_l_icon;
+        //Right Onion "more..." icon. Cache for convenience.
+        gui_item* onion_more_r_icon;
+        //Left group "more..." icon. Cache for convenience.
+        gui_item* group_more_l_icon;
+        //Right group "more..." icon. Cache for convenience.
+        gui_item* group_more_r_icon;
+        //Previous page button. Cache for convenience.
+        gui_item* prev_page_button;
+        //Next page button. Cache for convenience.
+        gui_item* next_page_button;
         //Is the struct meant to be deleted?
         bool to_delete;
         
         onion_menu_struct(pikmin_nest_struct* n_ptr, leader* l_ptr);
         ~onion_menu_struct();
-        void activate_held_button();
         void add_all_to_group();
         void add_all_to_onion();
         void add_to_group(const size_t type_idx);
         void add_to_onion(const size_t type_idx);
         void confirm();
         void go_to_page(const size_t page);
+        void handle_event(ALLEGRO_EVENT &ev);
         void handle_button(
             const size_t button, const float pos, const size_t player
         );
@@ -195,7 +214,9 @@ private:
         
     private:
         void make_widget_red(const size_t id);
-        void update_caches();
+        void update();
+        
+        static const string GUI_FILE_PATH;
     };
     
     ALLEGRO_BITMAP* bmp_bubble;
@@ -274,7 +295,6 @@ private:
         ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
     );
     void draw_mouse_cursor(const ALLEGRO_COLOR &color);
-    void draw_hud();
     void draw_ingame_text();
     void draw_lighting_filter();
     void draw_message_box();

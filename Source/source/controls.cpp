@@ -286,6 +286,9 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     }
     
     hud.handle_event(ev);
+    if(onion_menu) {
+        onion_menu->gui.handle_event(ev);
+    }
     
 }
 
@@ -865,6 +868,8 @@ void gameplay_state::handle_button(
 void gameplay_state::onion_menu_struct::handle_button(
     const size_t button, const float pos, const size_t player
 ) {
+    //TODO
+    /*
     if(button == BUTTON_THROW && pos >= 0.5f) {
     
         //Ok button press.
@@ -873,13 +878,13 @@ void gameplay_state::onion_menu_struct::handle_button(
             to_delete = true;
             return;
         }
-        
+    
         //Cancel button press.
         if(hud->is_mouse_in(ONION_HUD_ITEM_CANCEL)) {
             to_delete = true;
             return;
         }
-        
+    
         //"Select all" button press.
         if(
             types.size() > 1 &&
@@ -888,7 +893,7 @@ void gameplay_state::onion_menu_struct::handle_button(
             toggle_select_all();
             return;
         }
-        
+    
         //An amount-related button.
         if(cursor_button != INVALID) {
             button_hold_id = cursor_button;
@@ -896,7 +901,7 @@ void gameplay_state::onion_menu_struct::handle_button(
             button_hold_next_activation = BUTTON_REPEAT_MAX_INTERVAL;
             activate_held_button();
         }
-        
+    
         //Previous page button press.
         if(
             types.size() > MAX_TYPES_ON_SCREEN &&
@@ -905,7 +910,7 @@ void gameplay_state::onion_menu_struct::handle_button(
             go_to_page(sum_and_wrap(page, -1, nr_pages));
             return;
         }
-        
+    
         //Next page button press.
         if(
             types.size() > MAX_TYPES_ON_SCREEN &&
@@ -914,12 +919,13 @@ void gameplay_state::onion_menu_struct::handle_button(
             go_to_page(sum_and_wrap(page, 1, nr_pages));
             return;
         }
-        
+    
     } else if(button == BUTTON_THROW && pos < 0.5f) {
     
         button_hold_id = INVALID;
-        
+    
     }
+    */
 }
 
 

@@ -22,16 +22,18 @@ const float gui_item::JUICY_GROW_DURATION = 0.3f;
 /* ----------------------------------------------------------------------------
  * Creates a new button GUI item.
  */
-button_gui_item::button_gui_item(const string &text, ALLEGRO_FONT* font) :
+button_gui_item::button_gui_item(
+    const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
+) :
     gui_item(true),
     text(text),
-    font(font) {
+    font(font),
+    color(color) {
     
     on_draw =
-    [this, text, font] (const point & center, const point & size) {
+    [this, text, font, color] (const point & center, const point & size) {
         draw_button(
-            center, size, text, font,
-            map_gray(255), selected, get_juicy_grow_amount()
+            center, size, text, font, color, selected, get_juicy_grow_amount()
         );
     };
 }
@@ -41,17 +43,20 @@ button_gui_item::button_gui_item(const string &text, ALLEGRO_FONT* font) :
  * Creates a new checkbox GUI item.
  */
 check_gui_item::check_gui_item(
-    bool* value, const string &text, ALLEGRO_FONT* font
+    bool* value, const string &text, ALLEGRO_FONT* font,
+    const ALLEGRO_COLOR &color
 ) :
     gui_item(true),
     value(value),
     text(text),
-    font(font) {
+    font(font),
+    color(color) {
     
     on_draw =
-    [this, text, font, value] (const point & center, const point & size) {
+        [this, text, font, value, color]
+    (const point & center, const point & size) {
         draw_compressed_text(
-            font, map_gray(255),
+            font, color,
             point(center.x - size.x * 0.45, center.y),
             ALLEGRO_ALIGN_LEFT, 1,
             point(size.x * 0.90, size.y),
@@ -271,6 +276,7 @@ void gui_manager::draw() {
         gui_item* i_ptr = items[i];
         
         if(!i_ptr->visible) continue;
+        if(i_ptr->size.x == 0.0f) continue;
         
         point center = i_ptr->center;
         point size = i_ptr->size;
@@ -379,7 +385,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
-        if(selected_item) {
+        if(selected_item && selected_item->on_activate) {
             selected_item->on_activate(point(ev.mouse.x, ev.mouse.y));
         }
     }
@@ -800,18 +806,21 @@ scroll_gui_item::scroll_gui_item() :
 /* ----------------------------------------------------------------------------
  * Creates a new text GUI item.
  */
-text_gui_item::text_gui_item(const string &text, ALLEGRO_FONT* font) :
+text_gui_item::text_gui_item(
+    const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
+) :
     gui_item(),
     text(text),
-    font(font) {
+    font(font),
+    color(color) {
     
     on_draw =
-    [this, text, font] (const point & center, const point & size) {
+    [this, text, font, color] (const point & center, const point & size) {
     
         float juicy_grow_amount = get_juicy_grow_amount();
         
         draw_compressed_scaled_text(
-            font, map_gray(255),
+            font, color,
             center,
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
             ALLEGRO_ALIGN_CENTER, 1, size,

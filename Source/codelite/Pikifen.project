@@ -22,6 +22,7 @@
     <File Name="../source/game_states/results.cpp"/>
     <File Name="../source/game_states/results.h"/>
     <VirtualDirectory Name="gameplay">
+      <File Name="../source/game_states/gameplay/onion_menu.cpp"/>
       <File Name="../source/game_states/gameplay/drawing.cpp"/>
       <File Name="../source/game_states/gameplay/logic.cpp"/>
       <File Name="../source/game_states/gameplay/gameplay.h"/>
