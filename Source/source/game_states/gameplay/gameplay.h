@@ -193,7 +193,6 @@ private:
         void add_to_onion(const size_t type_idx);
         void confirm();
         void go_to_page(const size_t page);
-        void handle_event(ALLEGRO_EVENT &ev);
         void tick(const float delta_t);
         void toggle_select_all();
         
@@ -311,6 +310,7 @@ private:
     void process_mob_touches(
         mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d
     );
+    void process_system_key_press(const int keycode);
     void unload_game_content();
     
     static const float AREA_INTRO_HUD_MOVE_TIME;

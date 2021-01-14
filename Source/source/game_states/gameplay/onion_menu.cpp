@@ -553,14 +553,6 @@ void gameplay_state::onion_menu_struct::go_to_page(const size_t page) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles an Allegro event.
- */
-void gameplay_state::onion_menu_struct::handle_event(ALLEGRO_EVENT &ev) {
-    gui.handle_event(ev);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Makes a given GUI item turn red.
  * item:
  *   The item.
@@ -632,7 +624,7 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
         }
         
         //Finally, remove one request from this type.
-        types[best_type].delta--;
+        types[candidate_types[best_type]].delta--;
         delta_over_limit--;
     }
     

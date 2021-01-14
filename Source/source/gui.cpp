@@ -379,7 +379,7 @@ void gui_manager::draw() {
  *   Event.
  */
 void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
-    //Mousing over a widget and clicking.
+    //Mousing over an item and clicking.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
@@ -451,7 +451,7 @@ void gui_manager::handle_menu_button(
     case BUTTON_MENU_LEFT:
     case BUTTON_MENU_DOWN: {
 
-        //Selecting a different widget with the arrow keys.
+        //Selecting a different item with the arrow keys.
         size_t pressed = BUTTON_NONE;
         
         switch(action) {

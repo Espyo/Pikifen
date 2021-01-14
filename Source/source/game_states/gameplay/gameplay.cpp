@@ -259,6 +259,50 @@ string gameplay_state::get_name() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles an Allegro event.
+ * ev:
+ *   Event to handle.
+ */
+void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+    //Handle the Onion menu first so events don't bleed from gameplay to it.
+    if(onion_menu) {
+        onion_menu->gui.handle_event(ev);
+    }
+    
+    //Check if there are system key presses.
+    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        process_system_key_press(ev.keyboard.keycode);
+    }
+    
+    //Decode any inputs that result in gameplay actions.
+    vector<action_from_event> actions = get_actions_from_event(ev);
+    for(size_t a = 0; a < actions.size(); ++a) {
+        handle_button(actions[a].button, actions[a].pos, actions[a].player);
+    }
+    
+    for(size_t p = 0; p < MAX_PLAYERS; p++) {
+        if(
+            ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
+            game.options.mouse_moves_cursor[p]
+        ) {
+            game.mouse_cursor_s.x = ev.mouse.x;
+            game.mouse_cursor_s.y = ev.mouse.y;
+            game.mouse_cursor_w = game.mouse_cursor_s;
+            
+            al_transform_coordinates(
+                &game.screen_to_world_transform,
+                &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+            );
+        }
+    }
+    
+    //Finally, let the HUD handle events.
+    hud.handle_event(ev);
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes the HUD.
  */
 void gameplay_state::init_hud() {
