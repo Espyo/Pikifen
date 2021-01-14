@@ -15,8 +15,17 @@
 #include "game.h"
 #include "utils/string_utils.h"
 
+
+//When an item does a "juicy grow", change the size by this much.
 const float gui_item::JUICY_GROW_DELTA = 0.05f;
+//When an item does a "juicy grow", this is the full effect duration.
 const float gui_item::JUICY_GROW_DURATION = 0.3f;
+//Interval between auto-repeat activations, at the slowest speed.
+const float gui_manager::AUTO_REPEAT_MAX_INTERVAL = 0.3f;
+//Interval between auto-repeat activations, at the fastest speed.
+const float gui_manager::AUTO_REPEAT_MIN_INTERVAL = 0.011f;
+//How long it takes for the auto-repeat activations to reach max speed.
+const float gui_manager::AUTO_REPEAT_RAMP_TIME = 0.9f;
 
 
 /* ----------------------------------------------------------------------------
@@ -104,6 +113,7 @@ gui_item::gui_item(const bool selectable) :
     parent(nullptr),
     offset(0.0f),
     padding(0.0f),
+    can_auto_repeat(false),
     juice_timer(0.0f),
     on_draw(nullptr),
     on_tick(nullptr),
@@ -226,6 +236,9 @@ gui_manager::gui_manager() :
     down_pressed(false),
     ok_pressed(false),
     back_pressed(false),
+    auto_repeat_on(false),
+    auto_repeat_duration(0.0f),
+    auto_repeat_next_activation(0.0f),
     anim_type(GUI_MANAGER_ANIM_NONE) {
     
 }
@@ -371,23 +384,31 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
     ) {
-        set_selected_item(NULL);
+        gui_item* selection_result = NULL;
         for(size_t i = 0; i < items.size(); ++i) {
             gui_item* i_ptr = items[i];
             if(
                 i_ptr->is_mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
                 i_ptr->selectable
             ) {
-                set_selected_item(i_ptr);
+                selection_result = i_ptr;
                 break;
             }
         }
+        set_selected_item(selection_result);
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
         if(selected_item && selected_item->on_activate) {
             selected_item->on_activate(point(ev.mouse.x, ev.mouse.y));
+            auto_repeat_on = true;
+            auto_repeat_duration = 0.0f;
+            auto_repeat_next_activation = AUTO_REPEAT_MAX_INTERVAL;
         }
+    }
+    
+    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
+        auto_repeat_on = false;
     }
     
     vector<action_from_event> actions = get_actions_from_event(ev);
@@ -522,6 +543,11 @@ void gui_manager::handle_menu_button(
     } case BUTTON_MENU_OK: {
         if(is_down && selected_item) {
             selected_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
+            auto_repeat_on = true;
+            auto_repeat_duration = 0.0f;
+            auto_repeat_next_activation = AUTO_REPEAT_MAX_INTERVAL;
+        } else if(!is_down) {
+            auto_repeat_on = false;
         }
         break;
         
@@ -587,6 +613,11 @@ void gui_manager::register_coords(
  *   Item to select, or NULL for none.
  */
 void gui_manager::set_selected_item(gui_item* item) {
+    if(selected_item == item) {
+        return;
+    }
+    
+    auto_repeat_on = false;
     if(selected_item) {
         selected_item->selected = false;
     }
@@ -612,8 +643,10 @@ void gui_manager::start_animation(
  * Ticks all items on-screen by one frame of logic.
  */
 void gui_manager::tick(const float delta_t) {
+    //Tick the animation.
     anim_timer.tick(delta_t);
     
+    //Tick all items.
     for(size_t i = 0; i < items.size(); ++i) {
         gui_item* i_ptr = items[i];
         if(i_ptr->on_tick) {
@@ -622,6 +655,31 @@ void gui_manager::tick(const float delta_t) {
         if(i_ptr->juice_timer > 0) {
             i_ptr->juice_timer =
                 std::max(0.0f, i_ptr->juice_timer - delta_t);
+        }
+    }
+    
+    //Auto-repeat activations of the selected item, if applicable.
+    if(
+        auto_repeat_on &&
+        selected_item &&
+        selected_item->can_auto_repeat &&
+        selected_item->on_activate
+    ) {
+        auto_repeat_duration += delta_t;
+        auto_repeat_next_activation -= delta_t;
+        
+        while(auto_repeat_next_activation <= 0.0f) {
+            selected_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
+            auto_repeat_next_activation +=
+                clamp(
+                    interpolate_number(
+                        auto_repeat_duration,
+                        0, AUTO_REPEAT_RAMP_TIME,
+                        AUTO_REPEAT_MAX_INTERVAL, AUTO_REPEAT_MIN_INTERVAL
+                    ),
+                    AUTO_REPEAT_MIN_INTERVAL,
+                    AUTO_REPEAT_MAX_INTERVAL
+                );
         }
     }
 }

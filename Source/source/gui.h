@@ -56,6 +56,8 @@ public:
     float offset;
     //Padding amount, if it has items inside of it.
     float padding;
+    //Can this item's activation be auto-repeated by holding the button down?
+    bool can_auto_repeat;
     //Timer that controls it growing in size. Used for juice.
     float juice_timer;
     
@@ -263,11 +265,20 @@ private:
     bool ok_pressed;
     //Is the back button pressed?
     bool back_pressed;
+    //Is the current item's activation auto-repeat mode on?
+    bool auto_repeat_on;
+    //How long the activation button has been held for.
+    float auto_repeat_duration;
+    //How long until the item's next activation, from the button being held.
+    float auto_repeat_next_activation;
     //Type of the current animation, if any.
     GUI_MANAGER_ANIMS anim_type;
     //Timer for the current animation.
     timer anim_timer;
     
+    static const float AUTO_REPEAT_MAX_INTERVAL;
+    static const float AUTO_REPEAT_MIN_INTERVAL;
+    static const float AUTO_REPEAT_RAMP_TIME;
 };
 
 

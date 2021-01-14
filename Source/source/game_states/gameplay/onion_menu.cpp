@@ -18,6 +18,8 @@
 //Path to the GUI information file.
 const string gameplay_state::onion_menu_struct::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Onion_menu.txt";
+//How long to let text turn red for.
+const float gameplay_state::onion_menu_struct::RED_TEXT_DURATION = 1.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -34,10 +36,6 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     l_ptr(l_ptr),
     select_all(false),
     page(0),
-    cursor_button(INVALID),
-    button_hold_id(INVALID),
-    button_hold_time(0.0f),
-    button_hold_next_activation(0.0f),
     nr_pages(0),
     onion_all_button(nullptr),
     group_all_button(nullptr),
@@ -47,6 +45,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     group_more_r_icon(nullptr),
     prev_page_button(nullptr),
     next_page_button(nullptr),
+    field_amount_text(nullptr),
     to_delete(false) {
     
     for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
@@ -55,7 +54,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         );
     }
     
-    nr_pages = ceil(types.size() / (float) MAX_TYPES_ON_SCREEN);
+    nr_pages = ceil(types.size() / (float) ONION_MENU_TYPES_PER_PAGE);
     
     gui.register_coords("instructions",     50,  7, 90, 20);
     gui.register_coords("cancel",           16, 87, 18, 11);
@@ -125,9 +124,10 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     gui.add_item(ok_button, "ok");
     
     //Field amount text.
-    text_gui_item* field_text =
+    field_amount_text =
         new text_gui_item("", game.fonts.main);
-    field_text->on_draw = [this] (const point & center, const point & size) {
+    field_amount_text->on_draw =
+    [this] (const point & center, const point & size) {
         int total_delta = 0;
         for(size_t t = 0; t < this->types.size(); ++t) {
             total_delta += this->types[t].delta;
@@ -141,8 +141,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         );
         
         ALLEGRO_COLOR color = al_map_rgb(188, 230, 230);
-        const auto &red_it = this->red_widgets.find(ONION_HUD_ITEM_FIELD);
-        if(red_it != this->red_widgets.end()) {
+        const auto &red_it = this->red_items.find(field_amount_text);
+        if(red_it != this->red_items.end()) {
             color =
                 interpolate_color(
                     red_it->second,
@@ -161,7 +161,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             i2s(game.states.gameplay->mobs.pikmin_list.size() + total_delta)
         );
     };
-    gui.add_item(field_text, "field");
+    gui.add_item(field_amount_text, "field");
     
     //Select all checkbox.
     check_gui_item* select_all_check =
@@ -201,6 +201,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         [this, t] (const point &) {
             add_to_onion(on_screen_types[t]->type_idx);
         };
+        onion_button->can_auto_repeat = true;
         gui.add_item(onion_button, id);
         onion_button_items.push_back(onion_button);
     }
@@ -212,13 +213,15 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     [this] (const point &) {
         add_all_to_onion();
     };
+    onion_all_button->can_auto_repeat = true;
     gui.add_item(onion_all_button, "onion_all");
     
     //Onion amounts.
     for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
         gui_item* onion_amount_text = new gui_item(false);
         onion_amount_text->on_draw =
-        [this, t] (const point & center, const point & size) {
+            [this, t, onion_amount_text]
+        (const point & center, const point & size) {
             onion_menu_type_struct* t_ptr = this->on_screen_types[t];
             
             size_t real_onion_amount =
@@ -232,10 +235,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             );
             
             ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
-            //TODO
-            /*
-            const auto &red_it = this->red_widgets.find(hud_item_id);
-            if(red_it != this->red_widgets.end()) {
+            const auto &red_it = this->red_items.find(onion_amount_text);
+            if(red_it != this->red_items.end()) {
                 color =
                     interpolate_color(
                         red_it->second,
@@ -243,7 +244,6 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
                         color, al_map_rgb(224, 0, 0)
                     );
             }
-            */
             
             draw_compressed_text(
                 game.fonts.area_name,
@@ -281,6 +281,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         [this, t] (const point &) {
             add_to_group(on_screen_types[t]->type_idx);
         };
+        group_button->can_auto_repeat = true;
         gui.add_item(group_button, id);
         group_button_items.push_back(group_button);
     }
@@ -292,13 +293,15 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     [this] (const point &) {
         add_all_to_group();
     };
+    group_all_button->can_auto_repeat = true;
     gui.add_item(group_all_button, "group_all");
     
     //Group amounts.
     for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
         gui_item* group_amount_text = new gui_item(false);
         group_amount_text->on_draw =
-        [this, t] (const point & center, const point & size) {
+            [this, t, group_amount_text]
+        (const point & center, const point & size) {
             onion_menu_type_struct* t_ptr = this->on_screen_types[t];
             
             size_t real_group_amount =
@@ -312,10 +315,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             );
             
             ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
-            //TODO
-            /*
-            const auto &red_it = this->red_widgets.find(hud_item_id);
-            if(red_it != this->red_widgets.end()) {
+            const auto &red_it = this->red_items.find(group_amount_text);
+            if(red_it != this->red_items.end()) {
                 color =
                     interpolate_color(
                         red_it->second,
@@ -323,7 +324,6 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
                         color, al_map_rgb(224, 0, 0)
                     );
             }
-            */
             
             draw_compressed_text(
                 game.fonts.area_name,
@@ -479,9 +479,10 @@ void gameplay_state::onion_menu_struct::add_to_group(const size_t type_idx) {
         
     //First, check if there are enough in the Onion to take out.
     if(real_onion_amount - types[type_idx].delta <= 0) {
-        make_widget_red(
-            ONION_HUD_ITEM_O1_AMOUNT + types[type_idx].on_screen_idx
-        );
+        size_t screen_idx = types[type_idx].on_screen_idx;
+        if(screen_idx != INVALID) {
+            make_gui_item_red(onion_amount_items[screen_idx]);
+        }
         return;
     }
     
@@ -494,7 +495,7 @@ void gameplay_state::onion_menu_struct::add_to_group(const size_t type_idx) {
         game.states.gameplay->mobs.pikmin_list.size() + total_delta >=
         game.config.max_pikmin_in_field
     ) {
-        make_widget_red(ONION_HUD_ITEM_FIELD);
+        make_gui_item_red(field_amount_text);
         return;
     }
     
@@ -512,10 +513,9 @@ void gameplay_state::onion_menu_struct::add_to_onion(const size_t type_idx) {
         l_ptr->group->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
     if(real_group_amount + types[type_idx].delta <= 0) {
-        if(types[type_idx].on_screen_idx != INVALID) {
-            make_widget_red(
-                ONION_HUD_ITEM_P1_AMOUNT + types[type_idx].on_screen_idx
-            );
+        size_t screen_idx = types[type_idx].on_screen_idx;
+        if(screen_idx != INVALID) {
+            make_gui_item_red(group_amount_items[screen_idx]);
         }
         return;
     }
@@ -561,12 +561,12 @@ void gameplay_state::onion_menu_struct::handle_event(ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Makes a given widget turn red.
- * id:
- *   ID of the widget.
+ * Makes a given GUI item turn red.
+ * item:
+ *   The item.
  */
-void gameplay_state::onion_menu_struct::make_widget_red(const size_t id) {
-    red_widgets[id] = RED_TEXT_DURATION;
+void gameplay_state::onion_menu_struct::make_gui_item_red(gui_item* item) {
+    red_items[item] = RED_TEXT_DURATION;
 }
 
 
@@ -636,43 +636,18 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
         delta_over_limit--;
     }
     
-    //Figure out what amount-related button is under the cursor, if any.
-    size_t old_cursor_button = cursor_button;
-    cursor_button = INVALID;
-    
-    if(cursor_button != old_cursor_button) {
-        button_hold_id = INVALID;
-    }
-    
-    //Repeat the held button, if any.
-    if(button_hold_id != INVALID) {
-        button_hold_time += delta_t;
-        button_hold_next_activation -= delta_t;
-        
-        while(button_hold_next_activation <= 0.0f) {
-            //TODO activate_held_button();
-            button_hold_next_activation +=
-                clamp(
-                    interpolate_number(
-                        button_hold_time,
-                        0, BUTTON_REPEAT_RAMP_TIME,
-                        BUTTON_REPEAT_MAX_INTERVAL, BUTTON_REPEAT_MIN_INTERVAL
-                    ),
-                    BUTTON_REPEAT_MIN_INTERVAL,
-                    BUTTON_REPEAT_MAX_INTERVAL
-                );
-        }
-    }
-    
     //Animate red text, if any.
-    for(auto w = red_widgets.begin(); w != red_widgets.end();) {
+    for(auto w = red_items.begin(); w != red_items.end();) {
         w->second -= delta_t;
         if(w->second <= 0.0f) {
-            w = red_widgets.erase(w);
+            w = red_items.erase(w);
         } else {
             ++w;
         }
     }
+    
+    //Tick the GUI.
+    gui.tick(delta_t);
 }
 
 

@@ -146,16 +146,8 @@ private:
         bool select_all;
         //If it manages more than 5, this is the Pikmin type page index.
         size_t page;
-        //ID of the amount-related button under the cursor.
-        size_t cursor_button;
-        //ID of the amount-related button being held. INVALID for none.
-        size_t button_hold_id;
-        //How long the current amount-related button has been held for.
-        float button_hold_time;
-        //How long until the next button activation, from it being held.
-        float button_hold_next_activation;
-        //Which widgets are in red right now, if any, and how much time left.
-        map<size_t, float> red_widgets;
+        //Which GUI items are in red right now, if any, and how much time left.
+        map<gui_item*, float> red_items;
         //Total page amount. Cache for convenience.
         size_t nr_pages;
         //Pikmin types currently on-screen. Cache for convenience.
@@ -188,6 +180,8 @@ private:
         gui_item* prev_page_button;
         //Next page button. Cache for convenience.
         gui_item* next_page_button;
+        //Field amount text. Cache for convenience.
+        gui_item* field_amount_text;
         //Is the struct meant to be deleted?
         bool to_delete;
         
@@ -200,20 +194,13 @@ private:
         void confirm();
         void go_to_page(const size_t page);
         void handle_event(ALLEGRO_EVENT &ev);
-        void handle_button(
-            const size_t button, const float pos, const size_t player
-        );
         void tick(const float delta_t);
         void toggle_select_all();
         
-        static const float BUTTON_REPEAT_MAX_INTERVAL;
-        static const float BUTTON_REPEAT_MIN_INTERVAL;
-        static const float BUTTON_REPEAT_RAMP_TIME;
-        static const size_t MAX_TYPES_ON_SCREEN;
         static const float RED_TEXT_DURATION;
         
     private:
-        void make_widget_red(const size_t id);
+        void make_gui_item_red(gui_item* item);
         void update();
         
         static const string GUI_FILE_PATH;

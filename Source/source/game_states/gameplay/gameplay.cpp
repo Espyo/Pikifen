@@ -42,17 +42,6 @@ const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another swarm arrow appears.
 const float gameplay_state::SWARM_ARROWS_INTERVAL = 0.1f;
 
-//Interval between button hold activations, at the slowest speed.
-const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MAX_INTERVAL = 0.3f;
-//Interval between button hold activations, at the fastest speed.
-const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MIN_INTERVAL = 0.011f;
-//How long it takes for the button hold activation repeats to reach max speed.
-const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_RAMP_TIME = 0.9f;
-//How many Pikmin types can be on-screen per page.
-const size_t gameplay_state::onion_menu_struct::MAX_TYPES_ON_SCREEN = 5;
-//How long to let text turn red for.
-const float gameplay_state::onion_menu_struct::RED_TEXT_DURATION = 1.0f;
-
 
 /* ----------------------------------------------------------------------------
  * Creates the "gameplay" state.
