@@ -19,18 +19,224 @@
 #include "../utils/string_utils.h"
 
 
+//Path to the GUI information file.
+const string controls_menu_state::GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Controls_menu.txt";
+
+
 /* ----------------------------------------------------------------------------
  * Creates a "controls menu" state.
  */
 controls_menu_state::controls_menu_state() :
     game_state(),
     bmp_menu_bg(NULL),
-    cur_page_nr(0),
-    cur_page_nr_widget(NULL),
-    input_capture_msg_widget(NULL),
+    list_box(nullptr),
     capturing_input(false),
     input_capture_control_nr(0) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a control to the player's controls.
+ */
+void controls_menu_state::add_control() {
+    if(game.options.controls[0].size()) {
+        size_t last_action =
+            game.options.controls[0].back().action;
+        game.options.controls[0].push_back(
+            control_info(
+                last_action == N_BUTTONS - 1 ?
+                1 : //The "None" action is 0, so go to 1.
+                last_action + 1,
+                ""
+            )
+        );
+    } else {
+        game.options.controls[0].push_back(
+            control_info(BUTTON_NONE, "")
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds GUI items about a control to the list.
+ * index:
+ *   Index number of the control.
+ * focus:
+ *   If true, focus on this new control.
+ */
+void controls_menu_state::add_control_gui_items(
+    const size_t index, const bool focus
+) {
+    float items_y = 0.045f + index * 0.08f;
+    
+    //Delete button.
+    button_gui_item* delete_button =
+        new button_gui_item("-", game.fonts.main);
+    delete_button->on_activate =
+    [this, index] (const point &) {
+        delete_control(index);
+        delete_control_gui_items();
+    };
+    delete_button->center = point(0.07f, items_y);
+    delete_button->size = point(0.08f, 0.07f);
+    list_box->add_child(delete_button);
+    gui.add_item(delete_button);
+    
+    //Previous action button.
+    button_gui_item* prev_action_button =
+        new button_gui_item("<", game.fonts.main);
+    prev_action_button->on_activate =
+    [this, index] (const point &) {
+        choose_prev_action(index);
+    };
+    prev_action_button->center = point(0.16f, items_y);
+    prev_action_button->size = point(0.08f, 0.07f);
+    list_box->add_child(prev_action_button);
+    gui.add_item(prev_action_button);
+    
+    //Action name.
+    text_gui_item* action_name_text =
+        new text_gui_item("", game.fonts.main);
+    action_name_text->on_draw =
+        [this, index, action_name_text]
+    (const point & center, const point & size) {
+        control_info* c_ptr = &game.options.controls[0][index];
+        
+        string action_name;
+        for(size_t b = 0; b < N_BUTTONS; ++b) {
+            if(c_ptr->action == game.buttons.list[b].id) {
+                action_name = game.buttons.list[b].name;
+                break;
+            }
+        }
+        
+        float juicy_grow_amount = action_name_text->get_juicy_grow_amount();
+        
+        draw_compressed_scaled_text(
+            game.fonts.main, map_gray(255),
+            center,
+            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
+            ALLEGRO_ALIGN_CENTER, 1, size,
+            action_name
+        );
+    };
+    action_name_text->center = point(0.40f, items_y);
+    action_name_text->size = point(0.39f, 0.07f);
+    list_box->add_child(action_name_text);
+    gui.add_item(action_name_text);
+    
+    //Next action button.
+    button_gui_item* next_action_button =
+        new button_gui_item(">", game.fonts.main);
+    next_action_button->on_activate =
+    [this, index] (const point &) {
+        choose_next_action(index);
+    };
+    next_action_button->center = point(0.65f, items_y);
+    next_action_button->size = point(0.08f, 0.07f);
+    list_box->add_child(next_action_button);
+    gui.add_item(next_action_button);
+    
+    //Control button.
+    button_gui_item* control_button =
+        new button_gui_item("", game.fonts.main);
+    control_button->on_activate =
+    [this, index] (const point &) {
+        choose_button(index);
+    };
+    control_button->on_draw =
+        [this, index, control_button]
+    (const point & center, const point & size) {
+        control_info* c_ptr = &game.options.controls[0][index];
+        
+        draw_control(game.fonts.main, *c_ptr, center, size * 0.8f);
+        
+        draw_button(
+            center, size, "", game.fonts.main, map_gray(255),
+            control_button->selected,
+            control_button->get_juicy_grow_amount()
+        );
+    };
+    control_button->center = point(0.83f, items_y);
+    control_button->size = point(0.26f, 0.07f);
+    list_box->add_child(control_button);
+    gui.add_item(control_button);
+    
+    //Focus, if requested.
+    if(focus) {
+        action_name_text->start_juicy_grow();
+        float list_bottom = list_box->get_child_bottom();
+        if(list_bottom > 1.0f) {
+            list_box->target_offset = list_bottom - 1.0f;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Chooses the button for a given control.
+ * index:
+ *   Index number of the control.
+ */
+void controls_menu_state::choose_button(const size_t index) {
+    capturing_input = true;
+    input_capture_control_nr = index;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Chooses the next action for a given control.
+ * index:
+ *   Index number of the control.
+ */
+void controls_menu_state::choose_next_action(const size_t index) {
+    control_info* c_ptr = &game.options.controls[0][index];
+    c_ptr->action = sum_and_wrap(c_ptr->action, 1, N_BUTTONS);
+    gui_item* action_name_text = list_box->children[index * 5 + 2];
+    ((text_gui_item*) action_name_text)->start_juicy_grow();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Chooses the previous action for a given control.
+ * index:
+ *   Index number of the control.
+ */
+void controls_menu_state::choose_prev_action(const size_t index) {
+    control_info* c_ptr = &game.options.controls[0][index];
+    c_ptr->action = sum_and_wrap(c_ptr->action, -1, N_BUTTONS);
+    gui_item* action_name_text = list_box->children[index * 5 + 2];
+    ((text_gui_item*) action_name_text)->start_juicy_grow();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes a control from the player's controls.
+ * index:
+ *   Index number of the control.
+ */
+void controls_menu_state::delete_control(const size_t index) {
+    game.options.controls[0].erase(
+        game.options.controls[0].begin() + index
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes the GUI items about a control in the list.
+ */
+void controls_menu_state::delete_control_gui_items() {
+    //We only need to delete the latest control GUI items.
+    for(size_t i = 0; i < 5; ++i) {
+        //Iterate through all five items.
+        gui_item* i_ptr = list_box->children[list_box->children.size() - 1];
+        list_box->remove_child(i_ptr);
+        gui.remove_item(i_ptr);
+        delete i_ptr;
+    }
 }
 
 
@@ -44,23 +250,22 @@ void controls_menu_state::do_drawing() {
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
         point(game.win_w, game.win_h), 0, map_gray(64)
     );
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->draw(game.time_passed);
-    }
     
-    size_t control_nr = cur_page_nr * 8;
-    size_t list_nr = 0;
-    for(
-        ;
-        list_nr < 8 && control_nr < game.options.controls[0].size();
-        ++control_nr, ++list_nr
-    ) {
-        control_info* c_ptr = &game.options.controls[0][control_nr];
+    gui.draw();
+    
+    if(capturing_input) {
+        al_draw_filled_rectangle(
+            0, 0, game.win_w, game.win_h,
+            al_map_rgba(24, 24, 32, 192)
+        );
         
-        draw_control(
-            game.fonts.main, *c_ptr,
-            point(game.win_w * 0.83, game.win_h * (0.2 + 0.08 * list_nr)),
-            point(game.win_w * 0.23, game.win_h * 0.07)
+        draw_text_lines(
+            game.fonts.main,
+            al_map_rgb(255, 255, 255),
+            point(game.win_w / 2.0f, game.win_h / 2.0f),
+            ALLEGRO_ALIGN_CENTER,
+            1,
+            "Waiting for any input..."
         );
     }
     
@@ -76,9 +281,7 @@ void controls_menu_state::do_drawing() {
 void controls_menu_state::do_logic() {
     game.fade_mgr.tick(game.delta_t);
     
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->tick(game.delta_t);
-    }
+    gui.tick(game.delta_t);
 }
 
 
@@ -156,12 +359,11 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         if(valid) {
             capturing_input = false;
-            update();
         }
         
     } else {
     
-        handle_widget_events(ev);
+        gui.handle_event(ev);
         
     }
     
@@ -183,168 +385,59 @@ void controls_menu_state::leave() {
  * Loads the controls menu into memory.
  */
 void controls_menu_state::load() {
-    selected_widget = NULL;
     bmp_menu_bg = NULL;
-    cur_page_nr = 0;
     capturing_input = false;
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
-    //Menu widgets.
-    back_widget =
-        new menu_button(
-        point(game.win_w * 0.15, game.win_h * 0.10),
-        point(game.win_w * 0.20, game.win_h * 0.08),
-    [this] () {
+    //Menu items.
+    gui.register_coords("back",        15, 10, 20,  6);
+    gui.register_coords("new",         85, 10, 20,  7);
+    gui.register_coords("list",        48, 55, 86, 80);
+    gui.register_coords("list_scroll", 94, 55,  2, 80);
+    gui.read_coords(
+        data_node(GUI_FILE_PATH).get_child_by_name("positions")
+    );
+    
+    gui.back_item =
+        new button_gui_item("Back", game.fonts.main);
+    gui.back_item->on_activate =
+    [this] (const point &) {
         leave();
-    },
-    "Back", game.fonts.main
-    );
-    menu_widgets.push_back(back_widget);
+    };
+    gui.add_item(gui.back_item, "back");
     
-    for(size_t c = 0; c < 8; c++) {
-        control_widgets.push_back(
-            new menu_button(
-                point(game.win_w * 0.07, game.win_h * (0.20 + 0.08 * c)),
-                point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, "-", game.fonts.main
-            )
-        );
-        menu_widgets.push_back(control_widgets.back());
-        control_widgets.push_back(
-            new menu_button(
-                point(game.win_w * 0.16, game.win_h * (0.20 + 0.08 * c)),
-                point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, "<", game.fonts.main
-            )
-        );
-        menu_widgets.push_back(control_widgets.back());
-        control_widgets.push_back(
-            new menu_text(
-                point(game.win_w * 0.40, game.win_h * (0.20 + 0.08 * c)),
-                point(game.win_w * 0.39, game.win_h * 0.07),
-                "", game.fonts.main, al_map_rgb(255, 255, 255),
-                ALLEGRO_ALIGN_LEFT
-            )
-        );
-        menu_widgets.push_back(control_widgets.back());
-        control_widgets.push_back(
-            new menu_button(
-                point(game.win_w * 0.65, game.win_h * (0.20 + 0.08 * c)),
-                point(game.win_w * 0.08, game.win_h * 0.07),
-        [] () { }, ">", game.fonts.main
-            )
-        );
-        menu_widgets.push_back(control_widgets.back());
-        control_widgets.push_back(
-            new menu_button(
-                point(game.win_w * 0.83, game.win_h * (0.20 + 0.08 * c)),
-                point(game.win_w * 0.26, game.win_h * 0.07),
-        [] () { }, "", game.fonts.main
-            )
-        );
-        menu_widgets.push_back(control_widgets.back());
-        
+    list_box = new list_gui_item();
+    gui.add_item(list_box, "list");
+    
+    scroll_gui_item* list_scroll = new scroll_gui_item();
+    list_scroll->list_item = list_box;
+    list_box->scroll_item = list_scroll;
+    gui.add_item(list_scroll, "list_scroll");
+    
+    button_gui_item* new_button =
+        new button_gui_item("New...", game.fonts.main);
+    new_button->on_activate =
+    [this] (const point &) {
+        add_control();
+        add_control_gui_items(game.options.controls[0].size() - 1, true);
+    };
+    gui.add_item(new_button, "new");
+    
+    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+        add_control_gui_items(c, false);
     }
-    
-    bottom_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.85, game.win_h * 0.90),
-            point(game.win_w * 0.20, game.win_h * 0.07),
-    [this] () {
-        if(game.options.controls[0].size()) {
-            size_t last_action =
-                game.options.controls[0].back().action;
-            game.options.controls[0].push_back(
-                control_info(
-                    last_action == N_BUTTONS - 1 ?
-                    1 : //The "None" action is 0, so go to 1.
-                    last_action + 1,
-                    ""
-                )
-            );
-        } else {
-            game.options.controls[0].push_back(
-                control_info(BUTTON_NONE, "")
-            );
-        }
-        //Go to the new control's page.
-        cur_page_nr = game.options.controls[0].size() / 8.0f;
-        this->control_widgets[
-        ((game.options.controls[0].size() - 1) % 8) * 5 + 2
-        ]->start_juicy_grow();
-        update();
-    },
-    "New", game.fonts.main
-        )
-    );
-    menu_widgets.push_back(bottom_widgets.back());
-    bottom_widgets.push_back(
-        new menu_text(
-            point(game.win_w * 0.15, game.win_h * 0.90),
-            point(game.win_w * 0.20, game.win_h * 0.08),
-            "Page:", game.fonts.main
-        )
-    );
-    menu_widgets.push_back(bottom_widgets.back());
-    bottom_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.30, game.win_h * 0.90),
-            point(game.win_w * 0.15, game.win_h * 0.08),
-    [this] () {
-        cur_page_nr =
-            sum_and_wrap(
-                cur_page_nr, -1,
-                ceil(game.options.controls[0].size() / 8.0)
-            );
-        cur_page_nr_widget->start_juicy_grow();
-        update();
-    },
-    "<", game.fonts.main
-        )
-    );
-    menu_widgets.push_back(bottom_widgets.back());
-    cur_page_nr_widget =
-        new menu_text(
-        point(game.win_w * 0.40, game.win_h * 0.90),
-        point(game.win_w * 0.10, game.win_h * 0.08),
-        "", game.fonts.main
-    );
-    bottom_widgets.push_back(cur_page_nr_widget);
-    menu_widgets.push_back(bottom_widgets.back());
-    bottom_widgets.push_back(
-        new menu_button(
-            point(game.win_w * 0.50, game.win_h * 0.90),
-            point(game.win_w * 0.15, game.win_h * 0.08),
-    [this] () {
-        cur_page_nr =
-            sum_and_wrap(
-                cur_page_nr, 1,
-                (size_t) ceil(game.options.controls[0].size() / 8.0)
-            );
-        cur_page_nr_widget->start_juicy_grow();
-        update();
-    },
-    ">", game.fonts.main
-        )
-    );
-    menu_widgets.push_back(bottom_widgets.back());
-    input_capture_msg_widget =
-        new menu_text(
-        point(game.win_w * 0.50, game.win_h * 0.90),
-        point(game.win_w * 1.00, game.win_h * 0.08),
-        "Waiting for any input...", game.fonts.main
-    );
-    menu_widgets.push_back(input_capture_msg_widget);
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
-    set_selected_widget(menu_widgets[1]);
-    update();
+    if(list_box->children.size()) {
+        gui.set_selected_item(list_box->children[4]);
+    } else {
+        gui.set_selected_item(gui.back_item);
+    }
     
     al_reconfigure_joysticks();
-    
 }
 
 
@@ -356,107 +449,7 @@ void controls_menu_state::unload() {
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
     
-    //Menu widgets.
-    set_selected_widget(NULL);
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        delete menu_widgets[w];
-    }
-    menu_widgets.clear();
-    control_widgets.clear();
-    bottom_widgets.clear();
-    cur_page_nr_widget = NULL;
-    input_capture_msg_widget = NULL;
+    //Menu items.
+    gui.destroy();
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the contents of the controls menu.
- */
-void controls_menu_state::update() {
-    cur_page_nr =
-        std::min(
-            cur_page_nr,
-            (size_t)
-            (
-                ceil(
-                    game.options.controls[0].size() / 8.0
-                ) - 1
-            )
-        );
-    cur_page_nr_widget->text = i2s(cur_page_nr + 1);
-    
-    for(size_t cw = 0; cw < control_widgets.size(); ++cw) {
-        control_widgets[cw]->enabled = false;
-    }
-    
-    size_t control_nr = cur_page_nr * 8;
-    size_t list_nr = 0;
-    for(
-        ;
-        list_nr < 8 && control_nr < game.options.controls[0].size();
-        ++control_nr, ++list_nr
-    ) {
-        control_info* c_ptr = &game.options.controls[0][control_nr];
-        
-        string action_name;
-        for(size_t b = 0; b < N_BUTTONS; ++b) {
-            if(c_ptr->action == game.buttons.list[b].id) {
-                action_name = game.buttons.list[b].name;
-                break;
-            }
-        }
-        
-        for(size_t cw = 0; cw < 5; ++cw) {
-            control_widgets[list_nr * 5 + cw]->enabled = true;
-        }
-        //Delete button.
-        ((menu_button*) control_widgets[list_nr * 5 + 0])->click_handler =
-        [this, control_nr] () {
-            game.options.controls[0].erase(
-                game.options.controls[0].begin() + control_nr
-            );
-            update();
-        };
-        //Previous action.
-        ((menu_button*) control_widgets[list_nr * 5 + 1])->click_handler =
-        [this, c_ptr, list_nr] () {
-            c_ptr->action = sum_and_wrap(c_ptr->action, -1, N_BUTTONS);
-            control_widgets[list_nr * 5 + 2]->start_juicy_grow();
-            update();
-        };
-        //Action name.
-        ((menu_text*) control_widgets[list_nr * 5 + 2])->text = action_name;
-        //Next action.
-        ((menu_button*) control_widgets[list_nr * 5 + 3])->click_handler =
-        [this, c_ptr, list_nr] () {
-            c_ptr->action = sum_and_wrap(c_ptr->action, 1, N_BUTTONS);
-            control_widgets[list_nr * 5 + 2]->start_juicy_grow();
-            update();
-        };
-        //Set button.
-        ((menu_button*) control_widgets[list_nr * 5 + 4])->click_handler =
-        [this, control_nr] () {
-            capturing_input = true;
-            input_capture_control_nr = control_nr;
-            update();
-        };
-        
-        
-    }
-    
-    //Show or hide the "please press something" message.
-    if(capturing_input) {
-        input_capture_msg_widget->enabled = true;
-        for(size_t bw = 0; bw < bottom_widgets.size(); ++bw) {
-            bottom_widgets[bw]->enabled = false;
-        }
-        
-    } else {
-        input_capture_msg_widget->enabled = false;
-        for(size_t bw = 0; bw < bottom_widgets.size(); ++bw) {
-            bottom_widgets[bw]->enabled = true;
-        }
-        
-    }
 }

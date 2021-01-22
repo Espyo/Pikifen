@@ -133,7 +133,8 @@ void gui_item::add_child(gui_item* item) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the bottommost Y coordinate of the item's children items.
+ * Returns the bottommost Y coordinate, in height ratio,
+ * of the item's children items.
  */
 float gui_item::get_child_bottom() {
     float bottommost = 0.0f;
@@ -213,6 +214,20 @@ bool gui_item::is_mouse_on(const point &cursor_pos) {
             cursor_pos.y >= c.y - s.y * 0.5 &&
             cursor_pos.y <= c.y + s.y * 0.5
         );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes an item from the list of children.
+ */
+void gui_item::remove_child(gui_item* item) {
+    for(size_t c = 0; c < children.size(); ++c) {
+        if(children[c] == item) {
+            children.erase(children.begin() + c);
+        }
+    }
+    
+    item->parent = NULL;
 }
 
 
@@ -608,6 +623,27 @@ void gui_manager::register_coords(
 
 
 /* ----------------------------------------------------------------------------
+ * Removes an item from the list.
+ * item:
+ *   Item to remove.
+ */
+void gui_manager::remove_item(gui_item* item) {
+    if(selected_item == item) {
+        set_selected_item(NULL);
+    }
+    if(back_item == item) {
+        back_item = NULL;
+    }
+    
+    for(size_t i = 0; i < items.size(); ++i) {
+        if(items[i] == item) {
+            items.erase(items.begin() + i);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets the given item as the one that is selected, or none.
  * item:
  *   Item to select, or NULL for none.
@@ -716,7 +752,7 @@ list_gui_item::list_gui_item() :
             ev.mouse.dz != 0.0f
         ) {
             float child_bottom = get_child_bottom();
-            if(child_bottom <= 1.0f) {
+            if(child_bottom <= 1.0f && offset == 0.0f) {
                 return;
             }
             target_offset =
@@ -809,7 +845,8 @@ scroll_gui_item::scroll_gui_item() :
         float list_bottom = list_item->get_child_bottom();
         unsigned char alpha = 48;
         if(list_bottom > 1.0f) {
-            bar_y = list_item->offset / list_bottom;
+            float offset = std::min(list_item->offset, list_bottom - 1.0f);
+            bar_y = offset / list_bottom;
             bar_h = 1.0f / list_bottom;
             alpha = 128;
         }

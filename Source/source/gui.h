@@ -82,6 +82,8 @@ public:
     point get_real_size();
     //Returns whether the mouse cursor is on top of it.
     bool is_mouse_on(const point &cursor_pos);
+    //Removes an item from the list of children.
+    void remove_child(gui_item* item);
     //Starts the process of animation a juicy grow effect.
     void start_juicy_grow();
     
@@ -229,13 +231,15 @@ public:
     void handle_menu_button(
         const size_t action, const float pos, const size_t player
     );
+    //Reads item coordinates from a data node.
+    void read_coords(data_node* node);
     //Registers an item's default centers and size.
     void register_coords(
         const string &id,
         const float cx, const float cy, const float w, const float h
     );
-    //Reads item coordinates from a data node.
-    void read_coords(data_node* node);
+    //Removes an item from the list.
+    void remove_item(gui_item* item);
     //Sets the currently selected item.
     void set_selected_item(gui_item* item);
     //Starts an animation tha affects all items.

@@ -20,7 +20,7 @@
     
     <p>All menus and HUDs in <i>Pikifen</i> can be customized. Most of them only allow you to change the position and size of the different elements, but some may allow for more in-depth customizations. Each menu or HUD has its own <a href="text_file.html">text file</a>, located in <code>Game_data/GUI</code>.</p>
     
-    <p>The following sections of this page explain the different menus and HUDs that can be customized. Each section contains the name of all GUI items in that menu/HUD. In the equivalent text file, you can edit the <code>positions</code> block to change the position and size of the items. The format of each line in the <code>positions</code> block is: <code>item = x y w h</code>, where <code>item</code> is its name, <code>x</code> and <code>y</code> are the position, and <code>w</code> and <code>h</code> are the sizes. Note that both the coordinates and sizes are in <i>window percentages</i>. This means an X of 50 will be horizontally exactly in the middle of the window, a H of 30 will make the item take 30% of the window's height, etc. To hide an element, make its properties be 0.</p>
+    <p>The following sections of this page explain the different menus and HUDs that can be customized. Each section contains the name of all editable GUI items in that menu/HUD. In the equivalent text file, you can edit the <code>positions</code> block to change the position and size of the items. The format of each line in the <code>positions</code> block is: <code>item = x y w h</code>, where <code>item</code> is its name, <code>x</code> and <code>y</code> are the position, and <code>w</code> and <code>h</code> are the sizes. Note that both the coordinates and sizes are in <i>window percentages</i>. This means an X of 50 will be horizontally exactly in the middle of the window, a H of 30 will make the item take 30% of the window's height, etc. To hide an element, make its properties be 0.</p>
     
     <h2 id="area_menu">Area menu</h2>
     
@@ -35,61 +35,74 @@
       </ul>
     </ul>
     
+    <h2 id="controls_menu">Controls menu</h2>
+    
+    <ul>
+      <li><b>File name:</b> <code>Controls_menu.txt</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>back</code>: Back button.
+        <li><code>new</code>: New control button.
+        <li><code>list</code>: List of controls.
+        <li><code>list_scroll</code>: Scrollbar for the list.
+      </ul>
+    </ul>
+    
     <h2 id="gameplay">Gameplay</h2>
     
     <ul>
       <li><b>File name:</b> <code>Gameplay.txt</code></li>
       <li><b>Items:</b></li>
       <ul>
-        <li><b><code>time</code></b>: Time of day, represented by the Sun Meter.</li>
-        <li><b><code>day_bubble</code></b>: The bubble for the current day number.</li>
-        <li><b><code>day_nr</code></b>: Current day number.</li>
-        <li><b><code>leader_1_icon</code></b>: Icon of the current leader.</li>
-        <li><b><code>leader_2_icon</code></b>: Icon of the next leader.</li>
-        <li><b><code>leader_3_icon</code></b>: Icon of the next next leader.</li>
-        <li><b><code>leader_1_health</code></b>: Health wheel of the current leader.</li>
-        <li><b><code>leader_2_health</code></b>: Health wheel of the next leader.</li>
-        <li><b><code>leader_3_health</code></b>: Health wheel of the next next leader.</li>
-        <li><b><code>pikmin_standby_icon</code></b>: Icon of the type of Pikmin in standby (the closest Pikmin), sans leaf/bud/flower.</li>
-        <li><b><code>pikmin_standby_m_icon</code></b>: Icon of the maturity of the Pikmin in standby.</li>
-        <li><b><code>pikmin_standby_x</code></b>: Multiplication sign ("&times;"), found to the right of the standby icon in <i>Pikmin</i> and <i>Pikmin 2</i>.</li>
-        <li><b><code>pikmin_standby_nr</code></b>: Number of Pikmin of the standby type.</li>
-        <li><b><code>pikmin_group_nr</code></b>: Number of Pikmin on the leader's group.</li>
-        <li><b><code>pikmin_field_nr</code></b>: Number of Pikmin on the field.</li>
-        <li><b><code>pikmin_total_nr</code></b>: Number of total Pikmin (field + Onions).</li>
-        <li><b><code>pikmin_slash_1</code></b>: One of the slashes that go between the counter numbers. There are three of them to be used at will, depending on how many counter numbers you want visible.</li>
-        <li><b><code>pikmin_slash_2</code></b>: See above.</li>
-        <li><b><code>pikmin_slash_3</code></b>: See above.</li>
-        <li><b><code>spray_1_icon</code></b>: Icon of the spray, when there is only one type, icon of spray #1 (the "up" one), when there are two types, or icon of the currently selected spray, when there are more than 2.</li>
-        <li><b><code>spray_1_amount</code></b>: Same as above, but its amount. This includes the multiplication sign ("&times;").</li>
-        <li><b><code>spray_1_button</code></b>: Same as above, but the button to press.</li>
-        <li><b><code>spray_2_icon</code></b>: Icon of spray #2 (the "down" one), when there are two types.</li>
-        <li><b><code>spray_2_amount</code></b>: Same as above, but its amount. This includes the multiplication sign ("&times;").</li>
-        <li><b><code>spray_2_button</code></b>: Same as above, but the button to press.</li>
-        <li><b><code>spray_prev_icon</code></b>: Icon of the previous spray on the list, when there are more than two types.</li>
-        <li><b><code>spray_prev_button</code></b>: Same as above, but the button to press.</li>
-        <li><b><code>spray_next_icon</code></b>: Icon of the next spray on the list, when there are more than two types.</li>
-        <li><b><code>spray_next_button</code></b>: Same as above, but the button to press.</li>
+        <li><code>time</code>: Time of day, represented by the Sun Meter.</li>
+        <li><code>day_bubble</code>: The bubble for the current day number.</li>
+        <li><code>day_nr</code>: Current day number.</li>
+        <li><code>leader_1_icon</code>: Icon of the current leader.</li>
+        <li><code>leader_2_icon</code>: Icon of the next leader.</li>
+        <li><code>leader_3_icon</code>: Icon of the next next leader.</li>
+        <li><code>leader_1_health</code>: Health wheel of the current leader.</li>
+        <li><code>leader_2_health</code>: Health wheel of the next leader.</li>
+        <li><code>leader_3_health</code>: Health wheel of the next next leader.</li>
+        <li><code>pikmin_standby_icon</code>: Icon of the type of Pikmin in standby (the closest Pikmin), sans leaf/bud/flower.</li>
+        <li><code>pikmin_standby_m_icon</code>: Icon of the maturity of the Pikmin in standby.</li>
+        <li><code>pikmin_standby_x</code>: Multiplication sign ("&times;"), found to the right of the standby icon in <i>Pikmin</i> and <i>Pikmin 2</i>.</li>
+        <li><code>pikmin_standby_nr</code>: Number of Pikmin of the standby type.</li>
+        <li><code>pikmin_group_nr</code>: Number of Pikmin on the leader's group.</li>
+        <li><code>pikmin_field_nr</code>: Number of Pikmin on the field.</li>
+        <li><code>pikmin_total_nr</code>: Number of total Pikmin (field + Onions).</li>
+        <li><code>pikmin_slash_1</code>: One of the slashes that go between the counter numbers. There are three of them to be used at will, depending on how many counter numbers you want visible.</li>
+        <li><code>pikmin_slash_2</code>: See above.</li>
+        <li><code>pikmin_slash_3</code>: See above.</li>
+        <li><code>spray_1_icon</code>: Icon of the spray, when there is only one type, icon of spray #1 (the "up" one), when there are two types, or icon of the currently selected spray, when there are more than 2.</li>
+        <li><code>spray_1_amount</code>: Same as above, but its amount. This includes the multiplication sign ("&times;").</li>
+        <li><code>spray_1_button</code>: Same as above, but the button to press.</li>
+        <li><code>spray_2_icon</code>: Icon of spray #2 (the "down" one), when there are two types.</li>
+        <li><code>spray_2_amount</code>: Same as above, but its amount. This includes the multiplication sign ("&times;").</li>
+        <li><code>spray_2_button</code>: Same as above, but the button to press.</li>
+        <li><code>spray_prev_icon</code>: Icon of the previous spray on the list, when there are more than two types.</li>
+        <li><code>spray_prev_button</code>: Same as above, but the button to press.</li>
+        <li><code>spray_next_icon</code>: Icon of the next spray on the list, when there are more than two types.</li>
+        <li><code>spray_next_button</code>: Same as above, but the button to press.</li>
       </ul>
       <li><b>Files:</b> You can specify what bitmap files some of the HUD items should use in the <code>files</code> block.</li>
       <ul>
-        <li><b><code>bubble</code></b>: Standard, circular bubbles. Used on the standby Pikmin icon, leader icons, etc.</li>
-        <li><b><code>checkbox_check</code></b>: A checkbox's "check". Used in menus.</li>
-        <li><b><code>counter_bubble_field</code></b>: The bubble in which the Pikmin-on-field counter is contained.</li>
-        <li><b><code>counter_bubble_group</code></b>: Same as above, but the in-group counter.</li>
-        <li><b><code>counter_bubble_standby</code></b>: Same as above, but the counter of group members of the current standby type.</li>
-        <li><b><code>counter_bubble_total</code></b>: Same as above, but the Pikmin total counter.</li>
-        <li><b><code>day_bubble</code></b>: The bubble in which the day counter is contained.</li>
-        <li><b><code>distant_pikmin_marker</code></b>: The graphic that gets overlayed on top of the standby Pikmin's icon, to indicate that the closest Pikmin is too far away to grab.</li>
-        <li><b><code>hard_bubble</code></b>: A rough, hard bubble. Used on the Sun Meter, leader icons, etc.</li>
-        <li><b><code>message_box</code></b>: A message box's background.</li>
-        <li><b><code>mouse_button_1_icon</code></b>: Icon that represents the left mouse button.</li>
-        <li><b><code>mouse_button_2_icon</code></b>: Icon that represents the right mouse button.</li>
-        <li><b><code>mouse_button_3_icon</code></b>: Icon that represents the middle mouse button.</li>
-        <li><b><code>mouse_wheel_down_icon</code></b>: Icon that represents the mouse wheel being scrolled down.</li>
-        <li><b><code>mouse_wheel_up_icon</code></b>: Icon that represents the mouse wheel being scrolled up.</li>
-        <li><b><code>no_pikmin_bubble</code></b>: Bubble to show when there are no Pikmin in the group.</li>
-        <li><b><code>sun</code></b>: Icon for the sun in the Sun Meter.</li>
+        <li><code>bubble</code>: Standard, circular bubbles. Used on the standby Pikmin icon, leader icons, etc.</li>
+        <li><code>checkbox_check</code>: A checkbox's "check". Used in menus.</li>
+        <li><code>counter_bubble_field</code>: The bubble in which the Pikmin-on-field counter is contained.</li>
+        <li><code>counter_bubble_group</code>: Same as above, but the in-group counter.</li>
+        <li><code>counter_bubble_standby</code>: Same as above, but the counter of group members of the current standby type.</li>
+        <li><code>counter_bubble_total</code>: Same as above, but the Pikmin total counter.</li>
+        <li><code>day_bubble</code>: The bubble in which the day counter is contained.</li>
+        <li><code>distant_pikmin_marker</code>: The graphic that gets overlayed on top of the standby Pikmin's icon, to indicate that the closest Pikmin is too far away to grab.</li>
+        <li><code>hard_bubble</code>: A rough, hard bubble. Used on the Sun Meter, leader icons, etc.</li>
+        <li><code>message_box</code>: A message box's background.</li>
+        <li><code>mouse_button_1_icon</code>: Icon that represents the left mouse button.</li>
+        <li><code>mouse_button_2_icon</code>: Icon that represents the right mouse button.</li>
+        <li><code>mouse_button_3_icon</code>: Icon that represents the middle mouse button.</li>
+        <li><code>mouse_wheel_down_icon</code>: Icon that represents the mouse wheel being scrolled down.</li>
+        <li><code>mouse_wheel_up_icon</code>: Icon that represents the mouse wheel being scrolled up.</li>
+        <li><code>no_pikmin_bubble</code>: Bubble to show when there are no Pikmin in the group.</li>
+        <li><code>sun</code>: Icon for the sun in the Sun Meter.</li>
       </ul>
     </ul>
     
@@ -107,17 +120,17 @@
       </ul>
       <li><b>Logo:</b> The logo that is made of Pikmin can be customized in the <code>logo</code> block.</li>
       <ul>
-        <li><b><code>min_screen_limit</code></b>: Top-left coordinates of the logo's placement on-screen, in screen width or height percentage.</li>
-        <li><b><code>max_screen_limit</code></b>: Same as above, but for the bottom-right.</li>
-        <li><b><code>pikmin_max_speed</code></b>: Each Pikmin's speed is random. This is the maximum speed possible, in pixels per second.</li>
-        <li><b><code>pikmin_min_speed</code></b>: Same as above, but minimum possible.</li>
-        <li><b><code>pikmin_speed_smoothness</code></b>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
-        <li><b><code>pikmin_sway_amount</code></b>: How many pixels a Pikmin sways left or right when standing still.</li>
-        <li><b><code>pikmin_sway_max_speed</code></b>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
-        <li><b><code>pikmin_sway_min_speed</code></b>: Same as above, but the minimum speed.</li>
-        <li><b><code>pikmin_size</code></b>: Pikmin size, in screen dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the screen width nor 2% of the screen height.</li>
-        <li><b><code>pikmin_types</code></b>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the name of the image in the <code>/Game_data/Graphics</code> folder (extension included).</li>
-        <li><b><code>map</code></b>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
+        <li><code>min_screen_limit</code>: Top-left coordinates of the logo's placement on-screen, in screen width or height percentage.</li>
+        <li><code>max_screen_limit</code>: Same as above, but for the bottom-right.</li>
+        <li><code>pikmin_max_speed</code>: Each Pikmin's speed is random. This is the maximum speed possible, in pixels per second.</li>
+        <li><code>pikmin_min_speed</code>: Same as above, but minimum possible.</li>
+        <li><code>pikmin_speed_smoothness</code>: The closer to their destination, the more the Pikmin slow down, based on this multiplier. <code>0.08</code> is a good number.</li>
+        <li><code>pikmin_sway_amount</code>: How many pixels a Pikmin sways left or right when standing still.</li>
+        <li><code>pikmin_sway_max_speed</code>: Each Pikmin's swaying speed is random. This is the maximum speed, in radians per second (the Y part is ignored when swaying).</li>
+        <li><code>pikmin_sway_min_speed</code>: Same as above, but the minimum speed.</li>
+        <li><code>pikmin_size</code>: Pikmin size, in screen dimension percentage. For instance, <code>3 2</code> means each Pikmin cannot be any larger than 3% of the screen width nor 2% of the screen height.</li>
+        <li><code>pikmin_types</code>: This block specifies the types of Pikmin you'll encounter in the title logo. Except every type is simply defined by the image of its flower. In this block, every line is a type, in the format <code>character = image</code>, where <code>character</code> is a text character representing this Pikmin type in the logo map (see below), and <code>image</code> is the name of the image in the <code>/Game_data/Graphics</code> folder (extension included).</li>
+        <li><code>map</code>: A representation of the logo. The Pikmin are organized in a grid, and that grid is spread to fit in the limits specified above. Every line in this block represents a line in the grid, with every character matching a cell in that line. A character represents a Pikmin type or a blank space, if it's a character specified in the <code>pikmin_types</code> block or a dot (<code>.</code>), respectively.</li>
       </ul>
     </ul>
     
