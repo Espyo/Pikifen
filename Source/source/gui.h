@@ -69,6 +69,10 @@ public:
     std::function<void(const ALLEGRO_EVENT &ev)> on_event;
     //What to do when the item is activated.
     std::function<void(const point &cursor_pos)> on_activate;
+    //What to do when a directional button's pressed with the item selected.
+    std::function<bool(const size_t button_id)> on_menu_dir_button;
+    //What to do when one of its children became the selected item.
+    std::function<void(const gui_item* child)> on_child_selected;
     
     //Adds a child item.
     void add_child(gui_item* item);

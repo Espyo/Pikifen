@@ -118,7 +118,9 @@ gui_item::gui_item(const bool selectable) :
     on_draw(nullptr),
     on_tick(nullptr),
     on_event(nullptr),
-    on_activate(nullptr) {
+    on_activate(nullptr),
+    on_menu_dir_button(nullptr),
+    on_child_selected(nullptr) {
     
 }
 
@@ -532,26 +534,52 @@ void gui_manager::handle_menu_button(
         }
         }
         
+        if(selected_item && selected_item->on_menu_dir_button) {
+            if(selected_item->on_menu_dir_button(pressed)) {
+                //If it returned true, that means the following logic about
+                //changing the current item needs to be skipped.
+                break;
+            }
+        }
+        
+        float min_y = 0;
+        float max_y = game.win_h;
+        
         for(size_t i = 0; i < items.size(); ++i) {
             gui_item* i_ptr = items[i];
             if(i_ptr->selectable) {
+                point i_center = i_ptr->get_real_center();
                 if(i_ptr == selected_item) {
                     selectable_idx = selectables.size();
                 }
+                
+                min_y = std::min(min_y, i_center.y);
+                max_y = std::max(max_y, i_center.y);
+                
                 selectable_ptrs.push_back(i_ptr);
                 selectables.push_back(i_ptr->get_real_center());
             }
         }
         
-        selectable_idx =
+        size_t new_selectable_idx =
             select_next_item_directionally(
                 selectables,
                 selectable_idx,
                 direction,
-                point(game.win_w, game.win_h)
+                point(game.win_w, max_y - min_y)
             );
             
-        set_selected_item(selectable_ptrs[selectable_idx]);
+        if(new_selectable_idx != selectable_idx) {
+            set_selected_item(selectable_ptrs[new_selectable_idx]);
+            if(
+                selected_item->parent &&
+                selected_item->parent->on_child_selected
+            ) {
+                selected_item->parent->on_child_selected(
+                    selected_item
+                );
+            }
+        }
         
         break;
         
@@ -759,9 +787,23 @@ list_gui_item::list_gui_item() :
                 clamp(
                     target_offset + (-ev.mouse.dz) * 0.2f,
                     0.0f,
-                    get_child_bottom() - 1.0f
+                    child_bottom - 1.0f
                 );
         }
+    };
+    on_child_selected =
+    [this] (const gui_item * child) {
+        //Try to center the child.
+        float child_bottom = get_child_bottom();
+        if(child_bottom <= 1.0f && offset == 0.0f) {
+            return;
+        }
+        target_offset =
+            clamp(
+                child->center.y - 0.5f,
+                0.0f,
+                child_bottom - 1.0f
+            );
     };
 }
 
@@ -827,6 +869,18 @@ picker_gui_item::picker_gui_item(
         } else {
             on_previous();
         }
+    };
+    
+    on_menu_dir_button =
+    [this] (const size_t button_id) -> bool{
+        if(button_id == BUTTON_MENU_RIGHT) {
+            on_next();
+            return true;
+        } else if(button_id == BUTTON_MENU_LEFT) {
+            on_previous();
+            return true;
+        }
+        return false;
     };
 }
 

@@ -393,7 +393,7 @@ void controls_menu_state::load() {
     
     //Menu items.
     gui.register_coords("back",        15, 10, 20,  6);
-    gui.register_coords("new",         85, 10, 20,  7);
+    gui.register_coords("new",         80, 10, 30,  7);
     gui.register_coords("list",        48, 55, 86, 80);
     gui.register_coords("list_scroll", 94, 55,  2, 80);
     gui.read_coords(

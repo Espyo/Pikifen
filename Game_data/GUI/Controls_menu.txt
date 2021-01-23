@@ -1,6 +1,6 @@
 positions {
     back =        15 10 20  6
-    new =         85 10 20  7
+    new =         80 10 30  7
     list =        48 55 86 80
     list_scroll = 94 55  2 80
 }
