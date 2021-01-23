@@ -16,6 +16,11 @@
 #include "../utils/string_utils.h"
 
 
+//Path to the GUI information file.
+const string results_state::GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Results_menu.txt";
+
+
 /* ----------------------------------------------------------------------------
  * Creates a "results" state.
  */
@@ -30,7 +35,13 @@ results_state::results_state() :
     pikmin_deaths(0),
     points_obtained(0),
     points_total(0),
-    time_taken(0.0f) {
+    time_taken(0.0f),
+    area_name_text(nullptr),
+    enemies_text(nullptr),
+    pikmin_born_text(nullptr),
+    pikmin_deaths_text(nullptr),
+    points_text(nullptr),
+    time_text(nullptr) {
     
 }
 
@@ -76,9 +87,7 @@ void results_state::do_drawing() {
         al_map_rgba(112, 106, 193, 48)
     );
     
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->draw(time_spent);
-    }
+    gui.draw();
     
     game.fade_mgr.draw();
     
@@ -97,33 +106,32 @@ void results_state::do_logic() {
         (size_t) ((time_spent - game.delta_t) * 10) % 25;
     size_t new_time_cp =
         (size_t) (time_spent * 10) % 25;
+        
     if(old_time_cp < new_time_cp) {
         switch(old_time_cp) {
         case 0: {
-            area_name_widget->start_juicy_grow();
+            area_name_text->start_juicy_grow();
             break;
         } case 2: {
-            time_widget->start_juicy_grow();
+            time_text->start_juicy_grow();
             break;
         } case 4: {
-            points_widget->start_juicy_grow();
+            points_text->start_juicy_grow();
             break;
         } case 6: {
-            enemies_widget->start_juicy_grow();
+            enemies_text->start_juicy_grow();
             break;
         } case 8: {
-            pikmin_born_widget->start_juicy_grow();
+            pikmin_born_text->start_juicy_grow();
             break;
         } case 10: {
-            pikmin_deaths_widget->start_juicy_grow();
+            pikmin_deaths_text->start_juicy_grow();
             break;
         }
         }
     }
     
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        menu_widgets[w]->tick(game.delta_t);
-    }
+    gui.tick(game.delta_t);
     
     game.fade_mgr.tick(game.delta_t);
 }
@@ -145,7 +153,7 @@ string results_state::get_name() const {
 void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    handle_widget_events(ev);
+    gui.handle_event(ev);
 }
 
 
@@ -164,50 +172,55 @@ void results_state::leave() {
  * Loads the results state into memory.
  */
 void results_state::load() {
-    //Menu widgets.
-    menu_button* retry_widget =
-        new menu_button(
-        point(game.win_w * 0.20, game.win_h * 0.90),
-        point(game.win_w * 0.25, game.win_h * 0.06),
-    [this] () {
-        retry_area();
-    },
-    "Retry", game.fonts.main
+    //Menu items.
+    gui.register_coords("retry",                20, 90, 25,  6);
+    gui.register_coords("continue",             50, 90, 25,  6);
+    gui.register_coords("pick_area",            80, 90, 25,  6);
+    gui.register_coords("area_name",            50, 10, 95, 10);
+    gui.register_coords("finish_reason",        50, 17.5, 95, 10);
+    gui.register_coords("time_label",           35, 30, 40, 10);
+    gui.register_coords("time_amount",          70, 30, 50, 10);
+    gui.register_coords("points_label",         35, 40, 40, 10);
+    gui.register_coords("points_amount",        70, 40, 50, 10);
+    gui.register_coords("enemies_label",        35, 50, 40, 10);
+    gui.register_coords("enemies_amount",       70, 50, 50, 10);
+    gui.register_coords("pikmin_born_label",    35, 60, 40, 10);
+    gui.register_coords("pikmin_born_amount",   70, 60, 50, 10);
+    gui.register_coords("pikmin_deaths_label",  35, 70, 40, 10);
+    gui.register_coords("pikmin_deaths_amount", 70, 70, 50, 10);
+    gui.read_coords(
+        data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
-    menu_widgets.push_back(retry_widget);
+    
+    button_gui_item* retry_button =
+        new button_gui_item("Retry", game.fonts.main);
+    retry_button->on_activate =
+    [this] (const point &) {
+        retry_area();
+    };
+    gui.add_item(retry_button, "retry");
     
     if(can_continue) {
-        menu_button* continue_widget =
-            new menu_button(
-            point(game.win_w * 0.50, game.win_h * 0.90),
-            point(game.win_w * 0.25, game.win_h * 0.06),
-        [this] () {
+        button_gui_item* continue_button =
+            new button_gui_item("Keep playing", game.fonts.main);
+        continue_button->on_activate =
+        [this] (const point &) {
             continue_playing();
-        },
-        "Keep playing", game.fonts.main
-        );
-        menu_widgets.push_back(continue_widget);
+        };
+        gui.add_item(continue_button, "continue");
     }
     
-    back_widget =
-        new menu_button(
-        point(game.win_w * 0.80, game.win_h * 0.90),
-        point(game.win_w * 0.25, game.win_h * 0.06),
-    [this] () {
+    gui.back_item =
+        new button_gui_item("Pick an area", game.fonts.main);
+    gui.back_item->on_activate =
+    [this] (const point &) {
         leave();
-    },
-    "Pick an area", game.fonts.main
-    );
-    menu_widgets.push_back(back_widget);
+    };
+    gui.add_item(gui.back_item, "pick_area");
     
-    area_name_widget =
-        new menu_text(
-        point(game.win_w * 0.5, game.win_h * 0.10),
-        point(game.win_w * 1.0, game.win_h * 0.10),
-        area_name,
-        game.fonts.area_name
-    );
-    menu_widgets.push_back(area_name_widget);
+    area_name_text =
+        new text_gui_item(area_name, game.fonts.area_name);
+    gui.add_item(area_name_text, "area_name");
     
     string finish_reason;
     if(leader_ko) {
@@ -217,112 +230,85 @@ void results_state::load() {
     }
     
     if(!finish_reason.empty()) {
-        menu_text* finish_reason_widget =
-            new menu_text(
-            point(game.win_w * 0.5, game.win_h * 0.175),
-            point(game.win_w * 1.0, game.win_h * 0.10),
+        text_gui_item* finish_reason_text =
+            new text_gui_item(
             finish_reason,
             game.fonts.main, al_map_rgb(255, 192, 192)
         );
-        menu_widgets.push_back(finish_reason_widget);
+        gui.add_item(finish_reason_text, "finish_reason");
     }
     
-    menu_text* time_l_widget =
-        new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.30),
-        point(game.win_w * 0.40, game.win_h * 0.10),
-        "Time taken:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+    text_gui_item* time_label_text =
+        new text_gui_item(
+        "Time taken:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
-    menu_widgets.push_back(time_l_widget);
+    gui.add_item(time_label_text, "time_label");
     
     unsigned char ms = fmod(time_taken * 100, 100);
     unsigned char seconds = fmod(time_taken, 60);
     size_t minutes = time_taken / 60.0f;
-    time_widget =
-        new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.30),
-        point(game.win_w * 0.50, game.win_h * 0.10),
+    time_text =
+        new text_gui_item(
         i2s(minutes) + ":" + pad_string(i2s(seconds), 2, '0') + "." + i2s(ms),
         game.fonts.counter
     );
-    menu_widgets.push_back(time_widget);
+    gui.add_item(time_text, "time_amount");
     
-    menu_text* points_l_widget =
-        new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.40),
-        point(game.win_w * 0.40, game.win_h * 0.10),
-        "Treasure points:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+    text_gui_item* points_label_text =
+        new text_gui_item(
+        "Treasure points:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
-    menu_widgets.push_back(points_l_widget);
+    gui.add_item(points_label_text, "points_label");
     
-    points_widget =
-        new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.40),
-        point(game.win_w * 0.50, game.win_h * 0.10),
+    points_text =
+        new text_gui_item(
         i2s(points_obtained) + " / " + i2s(points_total),
         game.fonts.counter
     );
-    menu_widgets.push_back(points_widget);
+    gui.add_item(points_text, "points_amount");
     
-    menu_text* enemies_l_widget =
-        new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.50),
-        point(game.win_w * 0.40, game.win_h * 0.10),
-        "Enemies:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+    text_gui_item* enemies_label_text =
+        new text_gui_item(
+        "Enemies:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
-    menu_widgets.push_back(enemies_l_widget);
+    gui.add_item(enemies_label_text, "enemies_label");
     
-    enemies_widget =
-        new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.50),
-        point(game.win_w * 0.50, game.win_h * 0.10),
+    enemies_text =
+        new text_gui_item(
         i2s(enemies_beaten) + " / " + i2s(enemies_total),
         game.fonts.counter
     );
-    menu_widgets.push_back(enemies_widget);
+    gui.add_item(enemies_text, "enemies_amount");
     
-    menu_text* pikmin_born_l_widget =
-        new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.60),
-        point(game.win_w * 0.40, game.win_h * 0.10),
-        "Pikmin born:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+    text_gui_item* pikmin_born_label_text =
+        new text_gui_item(
+        "Pikmin born:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
-    menu_widgets.push_back(pikmin_born_l_widget);
+    gui.add_item(pikmin_born_label_text, "pikmin_born_label");
     
-    pikmin_born_widget =
-        new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.60),
-        point(game.win_w * 0.50, game.win_h * 0.10),
+    pikmin_born_text =
+        new text_gui_item(
         i2s(pikmin_born),
         game.fonts.counter
     );
-    menu_widgets.push_back(pikmin_born_widget);
+    gui.add_item(pikmin_born_text, "pikmin_born_amount");
     
-    menu_text* pikmin_deaths_l_widget =
-        new menu_text(
-        point(game.win_w * 0.35, game.win_h * 0.70),
-        point(game.win_w * 0.40, game.win_h * 0.10),
-        "Pikmin deaths:",
-        game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+    text_gui_item* pikmin_deaths_label_text =
+        new text_gui_item(
+        "Pikmin deaths:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
-    menu_widgets.push_back(pikmin_deaths_l_widget);
+    gui.add_item(pikmin_deaths_label_text, "pikmin_deaths_label");
     
-    pikmin_deaths_widget =
-        new menu_text(
-        point(game.win_w * 0.70, game.win_h * 0.70),
-        point(game.win_w * 0.50, game.win_h * 0.10),
+    pikmin_deaths_text =
+        new text_gui_item(
         i2s(pikmin_deaths),
         game.fonts.counter
     );
-    menu_widgets.push_back(pikmin_deaths_widget);
+    gui.add_item(pikmin_deaths_text, "pikmin_deaths_amount");
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
-    set_selected_widget(back_widget);
+    gui.set_selected_item(gui.back_item);
     time_spent = 0.0f;
 }
 
@@ -360,10 +346,6 @@ void results_state::retry_area() {
  * Unloads the results state from memory.
  */
 void results_state::unload() {
-    //Menu widgets.
-    set_selected_widget(NULL);
-    for(size_t w = 0; w < menu_widgets.size(); w++) {
-        delete menu_widgets[w];
-    }
-    menu_widgets.clear();
+    //Menu items.
+    gui.destroy();
 }

@@ -193,10 +193,13 @@ public:
     ALLEGRO_FONT* font;
     //Color to tint the text with.
     ALLEGRO_COLOR color;
+    //Allegro flags.
+    int flags;
     
     text_gui_item(
         const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255)
+        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
+        const int flags = ALLEGRO_ALIGN_CENTER
     );
 };
 

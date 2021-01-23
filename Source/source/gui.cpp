@@ -902,23 +902,37 @@ scroll_gui_item::scroll_gui_item() :
  * Creates a new text GUI item.
  */
 text_gui_item::text_gui_item(
-    const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
+    const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,
+    const int flags
 ) :
     gui_item(),
     text(text),
     font(font),
-    color(color) {
+    color(color),
+    flags(flags) {
     
     on_draw =
-    [this, text, font, color] (const point & center, const point & size) {
+        [this, text, font, color, flags]
+    (const point & center, const point & size) {
     
+        int text_x = center.x;
+        switch(flags) {
+        case ALLEGRO_ALIGN_LEFT: {
+            text_x = center.x - size.x * 0.5;
+            break;
+        } case ALLEGRO_ALIGN_RIGHT: {
+            text_x = center.x + size.x * 0.5;
+            break;
+        }
+        }
+        
         float juicy_grow_amount = get_juicy_grow_amount();
         
         draw_compressed_scaled_text(
             font, color,
-            center,
+            point(text_x, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_CENTER, 1, size,
+            flags, 1, size,
             text
         );
     };
