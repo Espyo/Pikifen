@@ -32,12 +32,6 @@ enum FILE_DIALOG_RESULTS {
 };
 
 
-//Disables an enabled widget.
-#define disable_widget(w) (w)->flags |= lafi::FLAG_DISABLED;
-
-//Enables a disabled widget.
-#define enable_widget(w) (w)->flags &= ~lafi::FLAG_DISABLED;
-
 //A custom-made assertion.
 #define engine_assert(expr, message) \
     if(!(expr)) { \

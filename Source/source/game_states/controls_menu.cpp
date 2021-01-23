@@ -400,6 +400,7 @@ void controls_menu_state::load() {
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
+    //Back button.
     gui.back_item =
         new button_gui_item("Back", game.fonts.main);
     gui.back_item->on_activate =
@@ -408,14 +409,17 @@ void controls_menu_state::load() {
     };
     gui.add_item(gui.back_item, "back");
     
+    //Controls list box.
     list_box = new list_gui_item();
     gui.add_item(list_box, "list");
     
+    //Controls list scrollbar.
     scroll_gui_item* list_scroll = new scroll_gui_item();
     list_scroll->list_item = list_box;
     list_box->scroll_item = list_scroll;
     gui.add_item(list_scroll, "list_scroll");
     
+    //New control button.
     button_gui_item* new_button =
         new button_gui_item("New...", game.fonts.main);
     new_button->on_activate =
@@ -425,6 +429,7 @@ void controls_menu_state::load() {
     };
     gui.add_item(new_button, "new");
     
+    //Items for the different controls.
     for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
         add_control_gui_items(c, false);
     }

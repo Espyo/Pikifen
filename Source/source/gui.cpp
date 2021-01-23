@@ -760,12 +760,8 @@ list_gui_item::list_gui_item() :
     padding = 8.0f;
     on_draw =
     [this] (const point & center, const point & size) {
-        al_draw_rounded_rectangle(
-            center.x - size.x * 0.5,
-            center.y - size.y * 0.5,
-            center.x + size.x * 0.5,
-            center.y + size.y * 0.5,
-            8.0f, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+        draw_rounded_rectangle(
+            center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
         );
     };
     on_tick =
@@ -905,12 +901,8 @@ scroll_gui_item::scroll_gui_item() :
             alpha = 128;
         }
         
-        al_draw_rounded_rectangle(
-            center.x - size.x * 0.5,
-            center.y - size.y * 0.5,
-            center.x + size.x * 0.5,
-            center.y + size.y * 0.5,
-            8.0f, 8.0f, al_map_rgba(255, 255, 255, alpha), 1.0f
+        draw_rounded_rectangle(
+            center, size, 8.0f, al_map_rgba(255, 255, 255, alpha), 1.0f
         );
         
         if(bar_h != 0.0f) {

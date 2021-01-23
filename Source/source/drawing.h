@@ -80,6 +80,10 @@ void draw_compressed_text(
 void draw_filled_diamond(
     const point &center, const float radius, const ALLEGRO_COLOR &color
 );
+void draw_filled_rounded_rectangle(
+    const point &center, const point &size, const float radii,
+    const ALLEGRO_COLOR &color
+);
 void draw_fraction(
     const point &center, const size_t current,
     const size_t needed, const ALLEGRO_COLOR &color
@@ -98,6 +102,10 @@ void draw_loading_screen(
 void draw_notification(
     const point &where, const string &text,
     control_info* control = NULL
+);
+void draw_rounded_rectangle(
+    const point &center, const point &size, const float radii,
+    const ALLEGRO_COLOR &color, const float thickness
 );
 void draw_rotated_rectangle(
     const point &center, const point &dimensions,

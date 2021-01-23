@@ -2,35 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Think about how I can mix HUD logic and menu logic, if I at all can
-        Things both need
-            Common
-                Position
-                Size
-            HUD only
-                Unique render code
-            Menu widgets only
-                Mouse interactivity
-                Currently selected widget
-                Repeated render code
-        Things to consider
-            Dynamic widgets, like infintely many registered controls in the list of controls, or infinitey many Pikmin to manage on the Onion menu
-            "Frame" widgets that hold other widgets inside, like the list of controls
-            Widgets that can take any sort of complex interaction, like the radar
-        Idea
-            HUD manager or whatever has a vector of items objects inside
-                Each object has X Y W H
-                Also has a juicy grow time left, "enabled", visible, and selected
-                When an object is constructed, the HUD manager checks the list of registered coordinates and applies the object's X Y W H to those
-                Each object has a lambda for what to do when it's time to render it
-                    There should be pre-built functions to draw buttons, text, etc.
-                    The function takes the X Y W H, and the function is responsible for drawing with those constraints (or not)
-                Each object has a lambda for what to do when it's time to tick its logic one frame
-                Each object has a lambda for what to do when "activated" -- when clicked or when the player presses the "activate" key on it
-                Each object has the ability to capture a key-press and tell the manager not to handle it. This way, a slider widget can use left/right to change its value, instead of the manager using that to change to a different widget
-                When an object is added to the manager's list, it can specify that it's framed inside another
-        Clean the comments for every menu's GUI item declarations
-        Don't forget to delete the old system
+    
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---

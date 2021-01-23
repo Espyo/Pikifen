@@ -74,16 +74,16 @@ void results_state::do_drawing() {
         point(-60.0f, 30.0f), -TAU / 6.0f
     );
     
-    al_draw_filled_rounded_rectangle(
-        game.win_w * 0.10f, game.win_h * 0.25f,
-        game.win_w * 0.90f, game.win_h * 0.75f,
-        20.0f, 20.0f,
+    draw_filled_rounded_rectangle(
+        point(game.win_w * 0.50f, game.win_h * 0.50f),
+        point(game.win_w * 0.80f, game.win_h * 0.50f),
+        20.0f,
         al_map_rgba(57, 54, 98, 48)
     );
-    al_draw_filled_rounded_rectangle(
-        game.win_w * 0.10f - 8.0f, game.win_h * 0.25f - 8.0f,
-        game.win_w * 0.90f + 8.0f, game.win_h * 0.75f + 8.0f,
-        20.0f, 20.0f,
+    draw_filled_rounded_rectangle(
+        point(game.win_w * 0.50f, game.win_h * 0.50f),
+        point(game.win_w * 0.80f, game.win_h * 0.50f) - 16.0f,
+        20.0f,
         al_map_rgba(112, 106, 193, 48)
     );
     
@@ -192,6 +192,7 @@ void results_state::load() {
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
+    //Retry button.
     button_gui_item* retry_button =
         new button_gui_item("Retry", game.fonts.main);
     retry_button->on_activate =
@@ -200,6 +201,7 @@ void results_state::load() {
     };
     gui.add_item(retry_button, "retry");
     
+    //Keep playing button.
     if(can_continue) {
         button_gui_item* continue_button =
             new button_gui_item("Keep playing", game.fonts.main);
@@ -210,6 +212,7 @@ void results_state::load() {
         gui.add_item(continue_button, "continue");
     }
     
+    //Pick an area button.
     gui.back_item =
         new button_gui_item("Pick an area", game.fonts.main);
     gui.back_item->on_activate =
@@ -222,6 +225,7 @@ void results_state::load() {
         new text_gui_item(area_name, game.fonts.area_name);
     gui.add_item(area_name_text, "area_name");
     
+    //Finish reason, if any.
     string finish_reason;
     if(leader_ko) {
         finish_reason = "Total leader KO!";
@@ -238,12 +242,14 @@ void results_state::load() {
         gui.add_item(finish_reason_text, "finish_reason");
     }
     
+    //Time taken label text.
     text_gui_item* time_label_text =
         new text_gui_item(
         "Time taken:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(time_label_text, "time_label");
     
+    //Time taken text.
     unsigned char ms = fmod(time_taken * 100, 100);
     unsigned char seconds = fmod(time_taken, 60);
     size_t minutes = time_taken / 60.0f;
@@ -254,12 +260,14 @@ void results_state::load() {
     );
     gui.add_item(time_text, "time_amount");
     
+    //Points label text.
     text_gui_item* points_label_text =
         new text_gui_item(
         "Treasure points:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(points_label_text, "points_label");
     
+    //Points text.
     points_text =
         new text_gui_item(
         i2s(points_obtained) + " / " + i2s(points_total),
@@ -267,12 +275,14 @@ void results_state::load() {
     );
     gui.add_item(points_text, "points_amount");
     
+    //Enemies label text.
     text_gui_item* enemies_label_text =
         new text_gui_item(
         "Enemies:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(enemies_label_text, "enemies_label");
     
+    //Enemies text.
     enemies_text =
         new text_gui_item(
         i2s(enemies_beaten) + " / " + i2s(enemies_total),
@@ -280,12 +290,14 @@ void results_state::load() {
     );
     gui.add_item(enemies_text, "enemies_amount");
     
+    //Pikmin born label text.
     text_gui_item* pikmin_born_label_text =
         new text_gui_item(
         "Pikmin born:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pikmin_born_label_text, "pikmin_born_label");
     
+    //Pikmin born text.
     pikmin_born_text =
         new text_gui_item(
         i2s(pikmin_born),
@@ -293,12 +305,14 @@ void results_state::load() {
     );
     gui.add_item(pikmin_born_text, "pikmin_born_amount");
     
+    //Pikmin deaths label text.
     text_gui_item* pikmin_deaths_label_text =
         new text_gui_item(
         "Pikmin deaths:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pikmin_deaths_label_text, "pikmin_deaths_label");
     
+    //Pikmin deaths text.
     pikmin_deaths_text =
         new text_gui_item(
         i2s(pikmin_deaths),

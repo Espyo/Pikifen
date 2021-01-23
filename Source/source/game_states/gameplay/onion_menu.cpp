@@ -133,10 +133,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             total_delta += this->types[t].delta;
         }
         
-        al_draw_filled_rounded_rectangle(
-            center.x - size.x / 2.0f, center.y - size.y / 2.0f,
-            center.x + size.x / 2.0f, center.y + size.y / 2.0f,
-            game.win_w * 0.01, game.win_w * 0.01,
+        draw_filled_rounded_rectangle(
+            center, size, game.win_w * 0.01,
             al_map_rgba(188, 230, 230, 128)
         );
         
@@ -187,7 +185,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         [this, t] (const point & center, const point & size) {
             onion_menu_type_struct* t_ptr = this->on_screen_types[t];
             if(t_ptr->pik_type->bmp_onion_icon) {
-                draw_bitmap(
+                draw_bitmap_in_box(
                     t_ptr->pik_type->bmp_onion_icon, center, size * 0.8f
                 );
             }
@@ -227,10 +225,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             size_t real_onion_amount =
                 this->n_ptr->get_amount_by_type(t_ptr->pik_type);
                 
-            al_draw_filled_rounded_rectangle(
-                center.x - size.x / 2.0f, center.y - size.y / 2.0f,
-                center.x + size.x / 2.0f, center.y + size.y / 2.0f,
-                game.win_w * 0.01, game.win_w * 0.01,
+            draw_filled_rounded_rectangle(
+                center, size, game.win_w * 0.01,
                 al_map_rgba(188, 230, 230, 128)
             );
             
@@ -267,7 +263,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         [this, t] (const point & center, const point & size) {
             onion_menu_type_struct* t_ptr = this->on_screen_types[t];
             if(t_ptr->pik_type->bmp_icon) {
-                draw_bitmap(
+                draw_bitmap_in_box(
                     t_ptr->pik_type->bmp_icon, center, size * 0.8f
                 );
             }
@@ -307,10 +303,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             size_t real_group_amount =
                 this->l_ptr->group->get_amount_by_type(t_ptr->pik_type);
                 
-            al_draw_filled_rounded_rectangle(
-                center.x - size.x / 2.0f, center.y - size.y / 2.0f,
-                center.x + size.x / 2.0f, center.y + size.y / 2.0f,
-                game.win_w * 0.01, game.win_w * 0.01,
+            draw_filled_rounded_rectangle(
+                center, size, game.win_w * 0.01,
                 al_map_rgba(188, 230, 230, 128)
             );
             

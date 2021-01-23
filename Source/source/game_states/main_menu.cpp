@@ -168,6 +168,7 @@ void main_menu_state::load() {
     gui.register_coords("exit",             50, 87, 50,  6);
     gui.read_coords(settings_file.get_child_by_name("positions"));
     
+    //Play button.
     button_gui_item* play_button =
         new button_gui_item("Play", game.fonts.area_name);
     play_button->on_activate =
@@ -178,6 +179,7 @@ void main_menu_state::load() {
     };
     gui.add_item(play_button, "play");
     
+    //Options button.
     button_gui_item* options_button =
         new button_gui_item("Options", game.fonts.area_name);
     options_button->on_activate =
@@ -188,6 +190,7 @@ void main_menu_state::load() {
     };
     gui.add_item(options_button, "options");
     
+    //Animation editor button.
     button_gui_item* anim_ed_button =
         new button_gui_item("Animation editor", game.fonts.area_name);
     anim_ed_button->on_activate =
@@ -198,6 +201,7 @@ void main_menu_state::load() {
     };
     gui.add_item(anim_ed_button, "animation_editor");
     
+    //Area editor button.
     button_gui_item* area_ed_button =
         new button_gui_item("Area editor", game.fonts.area_name);
     area_ed_button->on_activate =
@@ -208,6 +212,7 @@ void main_menu_state::load() {
     };
     gui.add_item(area_ed_button, "area_editor");
     
+    //Exit button.
     gui.back_item =
         new button_gui_item("Exit", game.fonts.area_name);
     gui.back_item->on_activate =
