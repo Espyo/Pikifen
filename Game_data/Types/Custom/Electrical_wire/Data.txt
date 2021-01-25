@@ -1,5 +1,6 @@
 name = Electrical wire
 
+area_editor_tips = The object in the area editor represents the center between the two wires, which appear to the relative left and right.
 height = 24
 max_health = 150
 pushable = false

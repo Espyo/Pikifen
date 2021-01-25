@@ -192,6 +192,7 @@ void results_state::load() {
     gui.register_coords("pikmin_born_amount",   70, 60, 50, 10);
     gui.register_coords("pikmin_deaths_label",  35, 70, 40, 10);
     gui.register_coords("pikmin_deaths_amount", 70, 70, 50, 10);
+    gui.register_coords("used_tools",           50, 80, 95, 10);
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -249,6 +250,16 @@ void results_state::load() {
             game.fonts.main, al_map_rgb(255, 192, 192)
         );
         gui.add_item(finish_reason_text, "finish_reason");
+    }
+    
+    //Maker tools usage disclaimer.
+    if(game.maker_tools.used_helping_tools) {
+        text_gui_item* used_tools_text =
+            new text_gui_item(
+            "(Maker tools were used.)", game.fonts.main,
+            al_map_rgb(255, 215, 192)
+        );
+        gui.add_item(used_tools_text, "used_tools");
     }
     
     //Time taken label text.

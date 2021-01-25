@@ -11,13 +11,16 @@ script {
             set_hiding true
         }
         on_receive_message {
-            set_hiding false
-            start_height_effect
-            teleport_to_relative 0 0 1000
-            set_gravity 1
-            focus parent
-            turn_to_target focused_mob
-            set_state ambushing
+            get_info t message
+            if $t = ambush
+                set_hiding false
+                start_height_effect
+                teleport_to_relative 0 0 1000
+                set_gravity 1
+                focus parent
+                turn_to_target focused_mob
+                set_state ambushing
+            end_if
         }
     }
     

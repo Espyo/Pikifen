@@ -732,16 +732,19 @@ void gameplay_state::process_system_key_press(const int keycode) {
         } case MAKER_TOOL_CHANGE_SPEED: {
             game.maker_tools.change_speed =
                 !game.maker_tools.change_speed;
+            game.maker_tools.used_helping_tools = true;
             break;
             
         } case MAKER_TOOL_GEOMETRY_INFO: {
             game.maker_tools.geometry_info =
                 !game.maker_tools.geometry_info;
+            game.maker_tools.used_helping_tools = true;
             break;
             
         } case MAKER_TOOL_HITBOXES: {
             game.maker_tools.hitboxes =
                 !game.maker_tools.hitboxes;
+            game.maker_tools.used_helping_tools = true;
             break;
             
         } case MAKER_TOOL_HURT_MOB: {
@@ -751,12 +754,14 @@ void gameplay_state::process_system_key_press(const int keycode) {
                     true, true, -game.maker_tools.mob_hurting_ratio
                 );
             }
+            game.maker_tools.used_helping_tools = true;
             break;
             
         } case MAKER_TOOL_MOB_INFO: {
             mob* m = get_closest_mob_to_cursor();
             game.maker_tools.info_lock =
                 (game.maker_tools.info_lock == m ? NULL : m);
+            game.maker_tools.used_helping_tools = true;
             break;
             
         } case MAKER_TOOL_NEW_PIKMIN: {
@@ -781,6 +786,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
                     game.mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
                 );
             }
+            game.maker_tools.used_helping_tools = true;
             
             break;
             
@@ -792,6 +798,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
                 cur_leader_ptr->z = mouse_sector->z;
                 game.cam.set_pos(game.mouse_cursor_w);
             }
+            game.maker_tools.used_helping_tools = true;
             break;
             
         }

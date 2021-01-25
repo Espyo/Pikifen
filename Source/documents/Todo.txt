@@ -10,8 +10,6 @@ Next tasks (roughly sorted most important first)
     --- v0.20.0 ---
     Get the instructions for compiling on Mac from having talked with MidnightWhisper (thanks MidnightWhisper)
         Keep in mind fullscreen may lock out
-    If you use debug commands, the results screen should say so
-    Mobs that receive a message should check if it's the exact message they expect. Otherwise, a gimmick area that has objects that broadcast a specific message everywhere may end up activating signs
     Add a "get_focus_info" action
     Add a "get_focus_distance" action
     Sector edge features

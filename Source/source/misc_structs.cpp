@@ -578,6 +578,7 @@ void hud_item_manager::tick(const float time) {
  * Creates a maker tool info struct.
  */
 maker_tools_info::maker_tools_info() :
+    enabled(true),
     area_image_shadows(true),
     area_image_size(2048),
     area_image_mobs(true),
@@ -590,7 +591,8 @@ maker_tools_info::maker_tools_info() :
     info_print_fade_duration(3.0f),
     last_pikmin_type(nullptr),
     mob_hurting_ratio(0.5),
-    use_perf_mon(false) {
+    use_perf_mon(false),
+    used_helping_tools(false) {
     
     info_print_timer = timer(1.0f, [this] () { info_print_text.clear(); });
     for(size_t k = 0; k < 20; ++k) {
