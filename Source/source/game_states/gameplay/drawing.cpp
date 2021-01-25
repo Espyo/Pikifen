@@ -133,6 +133,8 @@ void gameplay_state::do_game_drawing(
         draw_message_box();
     } else if(onion_menu) {
         draw_onion_menu();
+    } else if(pause_menu) {
+        draw_pause_menu();
     } else {
         draw_mouse_cursor(
             change_color_lighting(
@@ -899,6 +901,20 @@ void gameplay_state::draw_onion_menu() {
     );
     
     onion_menu->gui.draw();
+    
+    draw_mouse_cursor(al_map_rgb(188, 230, 230));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the current pause menu.
+ */
+void gameplay_state::draw_pause_menu() {
+    al_draw_filled_rectangle(
+        0, 0, game.win_w, game.win_h, al_map_rgba(24, 64, 60, 200)
+    );
+    
+    pause_menu->gui.draw();
     
     draw_mouse_cursor(al_map_rgb(188, 230, 230));
 }

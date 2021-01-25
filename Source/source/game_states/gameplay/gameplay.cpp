@@ -87,6 +87,7 @@ gameplay_state::gameplay_state() :
     lightmap_bmp(nullptr),
     main_control_id(INVALID),
     onion_menu(nullptr),
+    pause_menu(nullptr),
     paused(false),
     ready_for_input(false),
     selected_spray(0),
@@ -165,6 +166,9 @@ void gameplay_state::enter() {
     hud.start_animation(GUI_MANAGER_ANIM_OUT_TO_IN, AREA_INTRO_HUD_MOVE_TIME);
     if(went_to_results) {
         game.fade_mgr.start_fade(true, nullptr);
+        if(pause_menu) {
+            pause_menu->to_delete = true;
+        }
     }
     
     ready_for_input = false;
@@ -267,6 +271,8 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
     if(onion_menu) {
         onion_menu->gui.handle_event(ev);
+    } else if(pause_menu) {
+        pause_menu->gui.handle_event(ev);
     }
     
     //Check if there are system key presses.
@@ -920,11 +926,13 @@ void gameplay_state::init_hud() {
 
 /* ----------------------------------------------------------------------------
  * Leaves the gameplay state, returning to the main menu, or wherever else.
+ * target:
+ *   Where to leave to.
  */
-void gameplay_state::leave() {
+void gameplay_state::leave(const LEAVE_TARGET target) {
     game.fade_mgr.start_fade(
         false,
-    [this] () {
+    [this, target] () {
     
         if(game.perf_mon) {
             //Don't register the final frame, since it won't draw anything.
@@ -933,14 +941,25 @@ void gameplay_state::leave() {
         
         al_show_mouse_cursor(game.display);
         
-        if(game.states.area_ed->quick_play_area.empty()) {
+        switch(target) {
+        case LEAVE_TO_RETRY: {
+            game.change_state(game.states.gameplay);
+            break;
+        } case LEAVE_TO_FINISH: {
             game.states.results->time_taken = area_time_passed;
             went_to_results = true;
             //Change state, but don't unload this one, since the player
             //may pick the "keep playing" option in the results screen.
             game.change_state(game.states.results, false);
-        } else {
-            game.change_state(game.states.area_ed);
+            break;
+        } case LEAVE_TO_AREA_SELECT: {
+            if(game.states.area_ed->quick_play_area.empty()) {
+                game.change_state(game.states.area_menu);
+            } else {
+                game.change_state(game.states.area_ed);
+            }
+            break;
+        }
         }
         
     }
@@ -1012,7 +1031,7 @@ void gameplay_state::load() {
             "in order to play.",
             NULL, ALLEGRO_MESSAGEBOX_WARN
         );
-        leave();
+        leave(LEAVE_TO_AREA_SELECT);
         return;
     }
     
@@ -1079,6 +1098,7 @@ void gameplay_state::load() {
     day_minutes = game.config.day_minutes_start;
     area_time_passed = 0.0f;
     after_hours = false;
+    paused = false;
     
     map<string, string> spray_strs =
         get_var_map(game.cur_area_data.spray_amounts);
@@ -1271,6 +1291,10 @@ void gameplay_state::unload() {
     if(onion_menu) {
         delete onion_menu;
         onion_menu = NULL;
+    }
+    if(pause_menu) {
+        delete pause_menu;
+        pause_menu = NULL;
     }
     game.maker_tools.info_print_text.clear();
 }

@@ -84,8 +84,14 @@ public:
     //Information about player 1's whistle.
     whistle_struct whistle;
     
+    enum LEAVE_TARGET {
+        LEAVE_TO_RETRY,
+        LEAVE_TO_FINISH,
+        LEAVE_TO_AREA_SELECT,
+    };
+    
     void enter();
-    void leave();
+    void leave(const LEAVE_TARGET target);
     void update_closest_group_member();
     
     virtual void load();
@@ -205,6 +211,23 @@ private:
         static const string GUI_FILE_PATH;
     };
     
+    //Contains information about the pause menu currently being presented to
+    //the player.
+    struct pause_menu_struct {
+    public:
+        //GUI manager.
+        gui_manager gui;
+        //Is the struct meant to be deleted?
+        bool to_delete;
+        
+        pause_menu_struct();
+        ~pause_menu_struct();
+        void tick(const float delta_t);
+        
+    private:
+        static const string GUI_FILE_PATH;
+    };
+    
     ALLEGRO_BITMAP* bmp_bubble;
     ALLEGRO_BITMAP* bmp_counter_bubble_group;
     ALLEGRO_BITMAP* bmp_counter_bubble_field;
@@ -248,6 +271,8 @@ private:
     movement_struct leader_movement;
     //Information about the current Onion menu, if any.
     onion_menu_struct* onion_menu;
+    //Information about the current pause menu, if any.
+    pause_menu_struct* pause_menu;
     //Is the gameplay paused?
     bool paused;
     //The first frame shouldn't allow for input just yet, because
@@ -285,6 +310,7 @@ private:
     void draw_lighting_filter();
     void draw_message_box();
     void draw_onion_menu();
+    void draw_pause_menu();
     void draw_precipitation();
     void draw_system_stuff();
     void draw_tree_shadows();

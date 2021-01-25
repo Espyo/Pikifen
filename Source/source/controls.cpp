@@ -147,7 +147,7 @@ void gameplay_state::handle_button(
     
     bool is_down = (pos >= 0.5);
     
-    if(!msg_box && !onion_menu) {
+    if(!msg_box && !onion_menu && !pause_menu) {
     
         switch(button) {
         case BUTTON_RIGHT:
@@ -380,7 +380,8 @@ void gameplay_state::handle_button(
             
             if(!is_down) return;
             
-            leave();
+            pause_menu = new pause_menu_struct();
+            paused = true;
             
             break;
             
