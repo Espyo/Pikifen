@@ -331,7 +331,7 @@ void init_event_things(
     if(game.options.window_position_hack) al_set_new_window_position(64, 64);
     if(game.win_fullscreen) {
         al_set_new_display_flags(
-            al_get_new_display_flags() | ALLEGRO_FULLSCREEN
+            al_get_new_display_flags() | ALLEGRO_FULLSCREEN_WINDOW
         );
     }
     game.display = al_create_display(game.win_w, game.win_h);
