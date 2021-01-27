@@ -10,6 +10,7 @@ Source/codelite/Release/
 Source/codelite/.codelite/
 Source/codelite/Pikifen.mk
 Source/codelite/Pikifen.txt
+Source/gnu_make/pikifen
 *__pycache__*
 *.vscode*
 allegro.log

@@ -8,8 +8,6 @@ Next tasks (roughly sorted most important first)
     --- Known problems ---
     
     --- v0.20.0 ---
-    Get the instructions for compiling on Mac from having talked with MidnightWhisper (thanks MidnightWhisper)
-        Keep in mind fullscreen may lock out
     Add a "get_focus_info" action
     Add a "get_focus_distance" action
     Sector edge features
@@ -199,6 +197,7 @@ Next tasks (roughly sorted most important first)
         Make it so that only 6 or so sounds can play at once?
         Options
             Volume control for sound effects, music, and ambiance sound effects separately
+                The standard should be at 75%, so players have a leeway if they want everything louder
             Mono/Stereo
         Footsteps should be tied to the terrain texture
         It should be possible to play sounds both in specific frames of animation and in scripts as actions

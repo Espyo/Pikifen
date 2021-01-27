@@ -8,6 +8,8 @@
  * General GUI manager and GUI item classes.
  */
 
+#include <algorithm>
+
 #include "gui.h"
 
 #include "drawing.h"

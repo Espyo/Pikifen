@@ -8,6 +8,8 @@
  * Main menu state class and main menu state-related functions.
  */
 
+#include <algorithm>
+
 #include "menus.h"
 
 #include "../drawing.h"

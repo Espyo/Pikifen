@@ -62,16 +62,17 @@
     
     <p>Follow the instructions for <a href="#vs2019">Visual Studio 2019</a>, but go to the project properties, General, Platform Toolset, and set it to whatever you have.</p>
     
-    <h2 id="linux-g++">Linux - G++ or Clang</h2>
+    <h2 id="linux-g++">Linux - g++ or Clang</h2>
     
     <ol>
       <li>
-        Install Allegro 5.2 on your system using the instructions <a href="https://wiki.allegro.cc/index.php?title=Getting_Started">here</a>.
+        Install Allegro 5.2 on your system using the instructions <a href="https://github.com/liballeg/allegro_wiki/wiki/Quickstart">here</a>.
         <ul>
           <li>If you are on Ubuntu, I recommend <a href="https://wiki.allegro.cc/index.php?title=Install_Allegro_from_Ubuntu_PPAs&oldid=6853">this link</a> (but use 5.2 instead of 5.1 in the steps, of course).</li>
         </ul>
       </li>
       <li>On a terminal, go to the engine's <code>Source/gnu_makefile</code> folder and write <code>make</code>.</li>
+      <li>Move the <code>pikifen</code> binary onto the project's root folder.</li>
     </ol>
     
     <ul>
@@ -79,6 +80,14 @@
       <li>If you prefer to use Clang, edit the <code>makefile</code> file and follow the instructions. Write <code>make clean</code> and then <code>make</code> once more.</li>
       <li>If you prefer to compile with Allegro 5.0.10 instead, edit the <code>makefile</code> file and add a <code>.0</code> after every <code>5</code> in the <code>LDFLAGS</code> line.
     </ul>
+    
+    <h2 id="mac-g++">Mac - g++ or Clang</h2>
+    
+    <ol>
+      <li>Install Allegro 5.2 on your system using the instructions <a href="https://github.com/liballeg/allegro_wiki/wiki/Quickstart">here</a>.</li>
+      <li>On a terminal, go to the engine's <code>Source/gnu_makefile</code> folder and write <code>make</code>.</li>
+      <li>Move the <code>pikifen</code> binary onto the project's root folder.</li>
+    </ol>
     
     <h2 id="notes">Notes</h2>
     

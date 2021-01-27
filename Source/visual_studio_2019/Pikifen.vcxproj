@@ -192,7 +192,6 @@
     <ClInclude Include="..\source\init.h" />
     <ClInclude Include="..\source\liquid.h" />
     <ClInclude Include="..\source\load.h" />
-    <ClInclude Include="..\source\menu_widgets.h" />
     <ClInclude Include="..\source\misc_structs.h" />
     <ClInclude Include="..\source\mobs\bouncer.h" />
     <ClInclude Include="..\source\mobs\bridge.h" />
@@ -313,6 +312,8 @@
     <ClCompile Include="..\source\game_states\gameplay\drawing.cpp" />
     <ClCompile Include="..\source\game_states\gameplay\gameplay.cpp" />
     <ClCompile Include="..\source\game_states\gameplay\logic.cpp" />
+    <ClCompile Include="..\source\game_states\gameplay\onion_menu.cpp" />
+    <ClCompile Include="..\source\game_states\gameplay\pause_menu.cpp" />
     <ClCompile Include="..\source\game_states\game_state.cpp" />
     <ClCompile Include="..\source\game_states\main_menu.cpp" />
     <ClCompile Include="..\source\game_states\options_menu.cpp" />
@@ -330,7 +331,6 @@
     <ClCompile Include="..\source\liquid.cpp" />
     <ClCompile Include="..\source\load.cpp" />
     <ClCompile Include="..\source\main.cpp" />
-    <ClCompile Include="..\source\menu_widgets.cpp" />
     <ClCompile Include="..\source\misc_structs.cpp" />
     <ClCompile Include="..\source\mobs\bouncer.cpp" />
     <ClCompile Include="..\source\mobs\bridge.cpp" />

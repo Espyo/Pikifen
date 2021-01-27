@@ -8,6 +8,8 @@
  * Onion menu classes and functions.
  */
 
+#include <algorithm>
+
 #include "../../game.h"
 #include "../../drawing.h"
 #include "../../functions.h"

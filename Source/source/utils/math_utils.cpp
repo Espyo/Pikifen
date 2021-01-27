@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include "math_utils.h"
+
 
 /* ----------------------------------------------------------------------------
  * Limits the given number to the given range, inclusive.

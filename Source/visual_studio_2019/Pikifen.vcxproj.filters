@@ -13,15 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\editors">
-      <UniqueIdentifier>{8aa2f22b-e9f4-4ba2-9219-0534e3397224}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\editors\animation_editor">
-      <UniqueIdentifier>{1197949b-2406-48d8-b5fc-7445adeed86a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\editors\area_editor">
-      <UniqueIdentifier>{474be91e-8a30-415d-8c50-66d7d5ffd30c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\mob_categories">
       <UniqueIdentifier>{906d8334-4470-472f-a044-8aa67f3b7549}</UniqueIdentifier>
     </Filter>
@@ -39,12 +30,6 @@
     </Filter>
     <Filter Include="Source Files\editors">
       <UniqueIdentifier>{50162837-2d1a-4d43-9720-c1091abfa5c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\editors\animation_editor">
-      <UniqueIdentifier>{0c8bb57f-b61f-416f-9dfa-f06e026e09d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\editors\area_editor">
-      <UniqueIdentifier>{bc32e712-39c3-427c-882a-8ea49fde1b86}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\mob_categories">
       <UniqueIdentifier>{c7e82f34-e7ac-4b97-a7f8-2fdc0e7ccbf5}</UniqueIdentifier>
@@ -67,17 +52,44 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{1b0037dc-6d06-49d9-be94-65c326ca8fca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game_states">
+      <UniqueIdentifier>{ef0e25fc-7219-4bbe-bc2a-53613613ac2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game_states\animation_editor">
+      <UniqueIdentifier>{0c8bb57f-b61f-416f-9dfa-f06e026e09d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game_states\area_editor">
+      <UniqueIdentifier>{bc32e712-39c3-427c-882a-8ea49fde1b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game_states\gameplay">
+      <UniqueIdentifier>{286ceb60-6a2b-4eab-92ef-1c399c0f8e7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game_states">
+      <UniqueIdentifier>{6b4ac33c-7304-4a44-ace5-ff7e4644f91b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editors">
+      <UniqueIdentifier>{8aa2f22b-e9f4-4ba2-9219-0534e3397224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editors\animation_editor">
+      <UniqueIdentifier>{1197949b-2406-48d8-b5fc-7445adeed86a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editors\area_editor">
+      <UniqueIdentifier>{474be91e-8a30-415d-8c50-66d7d5ffd30c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game_states\animation_editor">
+      <UniqueIdentifier>{f1eb4a33-9b0d-428c-a7cf-032819a008e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game_states\area_editor">
+      <UniqueIdentifier>{fd315140-4010-4748-a1ce-16e0008b8473}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game_states\gameplay">
+      <UniqueIdentifier>{1e382ce0-3845-4593-8caa-a2fddf432c60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\editors\animation_editor\editor.h">
-      <Filter>Header Files\editors\animation_editor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\editors\area_editor\editor.h">
-      <Filter>Header Files\editors\area_editor</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\mob_categories\bridge_category.h">
       <Filter>Header Files\mob_categories</Filter>
     </ClInclude>
@@ -291,12 +303,6 @@
     <ClInclude Include="..\source\functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\game_state.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\gameplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\hazard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -310,12 +316,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\load.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\menu_widgets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\menus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\misc_structs.h">
@@ -347,9 +347,6 @@
     </ClInclude>
     <ClInclude Include="..\source\world_component.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\editors\editor.h">
-      <Filter>Header Files\editors</Filter>
     </ClInclude>
     <ClInclude Include="resource1.h">
       <Filter>Header Files</Filter>
@@ -444,26 +441,32 @@
     <ClInclude Include="..\source\utils\imgui_utils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_states\animation_editor\editor.h">
+      <Filter>Header Files\game_states\animation_editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_states\area_editor\editor.h">
+      <Filter>Header Files\game_states\area_editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_states\gameplay\gameplay.h">
+      <Filter>Header Files\game_states\gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_states\editor.h">
+      <Filter>Header Files\game_states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_states\game_state.h">
+      <Filter>Header Files\game_states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_states\menus.h">
+      <Filter>Header Files\game_states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\game_states\results.h">
+      <Filter>Header Files\game_states</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\editors\animation_editor\drawing.cpp">
-      <Filter>Source Files\editors\animation_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\animation_editor\editor.cpp">
-      <Filter>Source Files\editors\animation_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\animation_editor\event_handling.cpp">
-      <Filter>Source Files\editors\animation_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor\drawing.cpp">
-      <Filter>Source Files\editors\area_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor\editor.cpp">
-      <Filter>Source Files\editors\area_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor\event_handling.cpp">
-      <Filter>Source Files\editors\area_editor</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\mob_categories\bridge_category.cpp">
       <Filter>Source Files\mob_categories</Filter>
     </ClCompile>
@@ -674,12 +677,6 @@
     <ClCompile Include="..\source\functions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\game_state.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\gameplay.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\hazard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -695,16 +692,7 @@
     <ClCompile Include="..\source\load.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\logic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\menu_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\menus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\misc_structs.cpp">
@@ -733,9 +721,6 @@
     </ClCompile>
     <ClCompile Include="..\source\world_component.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\editor.cpp">
-      <Filter>Source Files\editors</Filter>
     </ClCompile>
     <ClCompile Include="..\source\mob_categories\bouncer_category.cpp">
       <Filter>Source Files\mob_categories</Filter>
@@ -788,15 +773,6 @@
     <ClCompile Include="..\source\utils\data_file.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\editors\animation_editor\gui.cpp">
-      <Filter>Source Files\editors\animation_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor\geometry_logic.cpp">
-      <Filter>Source Files\editors\area_editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor\gui.cpp">
-      <Filter>Source Files\editors\area_editor</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -829,6 +805,72 @@
     </ClCompile>
     <ClCompile Include="..\source\utils\imgui_utils.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\gui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\gameplay\onion_menu.cpp">
+      <Filter>Source Files\game_states\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\gameplay\pause_menu.cpp">
+      <Filter>Source Files\game_states\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\animation_editor\drawing.cpp">
+      <Filter>Source Files\game_states\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\area_editor\drawing.cpp">
+      <Filter>Source Files\game_states\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\animation_editor\editor.cpp">
+      <Filter>Source Files\game_states\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\area_editor\editor.cpp">
+      <Filter>Source Files\game_states\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\area_editor\event_handling.cpp">
+      <Filter>Source Files\game_states\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\animation_editor\event_handling.cpp">
+      <Filter>Source Files\game_states\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\animation_editor\gui.cpp">
+      <Filter>Source Files\game_states\animation_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\area_editor\gui.cpp">
+      <Filter>Source Files\game_states\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\area_editor\geometry_logic.cpp">
+      <Filter>Source Files\game_states\area_editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\gameplay\drawing.cpp">
+      <Filter>Source Files\game_states\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\gameplay\gameplay.cpp">
+      <Filter>Source Files\game_states\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\gameplay\logic.cpp">
+      <Filter>Source Files\game_states\gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\area_menu.cpp">
+      <Filter>Source Files\game_states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\controls_menu.cpp">
+      <Filter>Source Files\game_states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\editor.cpp">
+      <Filter>Source Files\game_states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\game_state.cpp">
+      <Filter>Source Files\game_states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\main_menu.cpp">
+      <Filter>Source Files\game_states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\options_menu.cpp">
+      <Filter>Source Files\game_states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\game_states\results.cpp">
+      <Filter>Source Files\game_states</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
