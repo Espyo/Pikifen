@@ -740,7 +740,7 @@ void gameplay_state::init_hud() {
                 )
             ) {
                 draw_control(
-                    game.fonts.main,
+                    game.fonts.standard,
                     game.options.controls[0][c], center, size
                 );
                 break;
@@ -800,7 +800,7 @@ void gameplay_state::init_hud() {
                 BUTTON_USE_SPRAY_2
             ) {
                 draw_control(
-                    game.fonts.main,
+                    game.fonts.standard,
                     game.options.controls[0][c], center, size
                 );
                 break;
@@ -844,7 +844,7 @@ void gameplay_state::init_hud() {
                 BUTTON_PREV_SPRAY
             ) {
                 draw_control(
-                    game.fonts.main,
+                    game.fonts.standard,
                     game.options.controls[0][c], center, size
                 );
                 break;
@@ -888,7 +888,7 @@ void gameplay_state::init_hud() {
                 BUTTON_NEXT_SPRAY
             ) {
                 draw_control(
-                    game.fonts.main,
+                    game.fonts.standard,
                     game.options.controls[0][c], center, size
                 );
                 break;
