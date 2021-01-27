@@ -473,19 +473,13 @@ void draw_control(
             al_map_rgba(160, 160, 160, 192), 2
         );
     } else {
-        al_draw_filled_rounded_rectangle(
-            where.x - total_width * 0.5, where.y - total_height * 0.5,
-            where.x + total_width * 0.5, where.y + total_height * 0.5,
-            std::min(16.0, total_width * 0.5),
-            std::min(16.0, total_height * 0.5),
-            map_alpha(192)
+        draw_filled_rounded_rectangle(
+            where, point(total_width, total_height),
+            16.0f, map_alpha(192)
         );
-        al_draw_rounded_rectangle(
-            where.x - total_width * 0.5, where.y - total_height * 0.5,
-            where.x + total_width * 0.5, where.y + total_height * 0.5,
-            std::min(16.0, total_width * 0.5),
-            std::min(16.0, total_height * 0.5),
-            al_map_rgba(160, 160, 160, 192), 2
+        draw_rounded_rectangle(
+            where, point(total_width, total_height),
+            16.0f, al_map_rgba(160, 160, 160, 192), 2.0f
         );
     }
     draw_compressed_text(
@@ -526,6 +520,33 @@ void draw_filled_diamond(
     vert[3].y = center.y;
     
     al_draw_prim(vert, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a filled rounded rectangle.
+ * This is basically Allegro's function, but safer and simpler.
+ * center:
+ *   Center.
+ * size:
+ *   Width and height.
+ * radii:
+ *   Radii of the corners. Will be smaller if the rectangle is too small.
+ * color:
+ *   Color the diamond with this color.
+ */
+void draw_filled_rounded_rectangle(
+    const point &center, const point &size, const float radii,
+    const ALLEGRO_COLOR &color
+) {
+    float final_radii = std::min(radii, size.x / 2.0f);
+    final_radii = std::min(radii, size.y / 2.0f);
+    al_draw_filled_rounded_rectangle(
+        center.x - size.x / 2.0f, center.y - size.y / 2.0f,
+        center.x + size.x / 2.0f, center.y + size.y / 2.0f,
+        final_radii, final_radii,
+        color
+    );
 }
 
 
@@ -1147,6 +1168,35 @@ void draw_notification(
     );
     
     al_use_transform(&old);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a rounded rectangle.
+ * This is basically Allegro's function, but safer and simpler.
+ * center:
+ *   Center.
+ * size:
+ *   Width and height.
+ * radii:
+ *   Radii of the corners. Will be smaller if the rectangle is too small.
+ * color:
+ *   Color the diamond with this color.
+ * thickness:
+ *   Line thickness.
+ */
+void draw_rounded_rectangle(
+    const point &center, const point &size, const float radii,
+    const ALLEGRO_COLOR &color, const float thickness
+) {
+    float final_radii = std::min(radii, size.x / 2.0f);
+    final_radii = std::min(radii, size.y / 2.0f);
+    al_draw_rounded_rectangle(
+        center.x - size.x / 2.0f, center.y - size.y / 2.0f,
+        center.x + size.x / 2.0f, center.y + size.y / 2.0f,
+        final_radii, final_radii,
+        color, thickness
+    );
 }
 
 

@@ -12,7 +12,10 @@ script {
             set_state sparking
         }
         on_receive_message {
-            set_state destroyed
+            get_info m message
+            if $m = destroyed
+                set_state destroyed
+            end_if
         }
     }
     sparking {
@@ -24,7 +27,10 @@ script {
             set_state zapping
         }
         on_receive_message {
-            set_state destroyed
+            get_info m message
+            if $m = destroyed
+                set_state destroyed
+            end_if
         }
     }
     zapping {
@@ -35,7 +41,10 @@ script {
             set_state safe
         }
         on_receive_message {
-            set_state destroyed
+            get_info m message
+            if $m = destroyed
+                set_state destroyed
+            end_if
         }
     }
     destroyed {

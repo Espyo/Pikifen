@@ -12,6 +12,7 @@
 #define RESULTS_INCLUDED
 
 #include "game_state.h"
+#include "../gui.h"
 
 
 class results_state : public game_state {
@@ -49,24 +50,29 @@ public:
     void reset();
     
 private:
-    //Area name widget.
-    menu_text* area_name_widget;
-    //Enemy count text widget.
-    menu_text* enemies_widget;
-    //Pikmin born text widget.
-    menu_text* pikmin_born_widget;
-    //Pikmin deaths text widget.
-    menu_text* pikmin_deaths_widget;
-    //Treasure point count text widget.
-    menu_text* points_widget;
+    //GUI manager.
+    gui_manager gui;
     //Time spent on this state.
     float time_spent;
-    //Time taken text widget.
-    menu_text* time_widget;
+    
+    //Area name GUI item.
+    text_gui_item* area_name_text;
+    //Enemy count GUI item.
+    text_gui_item* enemies_text;
+    //Pikmin born GUI item.
+    text_gui_item* pikmin_born_text;
+    //Pikmin deaths GUI item.
+    text_gui_item* pikmin_deaths_text;
+    //Treasure point count GUI item.
+    text_gui_item* points_text;
+    //Time taken GUI item.
+    text_gui_item* time_text;
     
     void continue_playing();
     void leave();
     void retry_area();
+    
+    static const string GUI_FILE_PATH;
 };
 
 

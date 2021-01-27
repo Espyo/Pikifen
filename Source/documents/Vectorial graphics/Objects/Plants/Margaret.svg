@@ -300,7 +300,7 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>Margaret spritesheet</dc:title>
-        <dc:description>Spritesheet for the Margaret pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:description>Spritesheet for the Margaret pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
         <cc:license
            rdf:resource="https://opensource.org/licenses/MIT" />
         <dc:creator>

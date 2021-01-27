@@ -126,6 +126,8 @@ struct timer {
  * Information about all of the maker tools.
  */
 struct maker_tools_info {
+    //Are the tools enabled?
+    bool enabled;
     //Show tree shadows in the area image tool?
     bool area_image_shadows;
     //Maximum width or height of the area image.
@@ -140,8 +142,6 @@ struct maker_tools_info {
     bool change_speed;
     //Multiplier to change the game speed by.
     float change_speed_mult;
-    //Are the tools enabled?
-    bool enabled;
     //Is the geometry information tool enabled?
     bool geometry_info;
     //Are hitboxes visible in-game?
@@ -164,6 +164,8 @@ struct maker_tools_info {
     float mob_hurting_ratio;
     //Use the performance monitor?
     bool use_perf_mon;
+    //Has the player made use of any tools that could help them play?
+    bool used_helping_tools;
     
     maker_tools_info();
 };

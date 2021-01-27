@@ -20,6 +20,7 @@
 #include "../utils/string_utils.h"
 
 
+//Path to the GUI information file.
 const string options_menu_state::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu.txt";
 
@@ -195,6 +196,7 @@ void options_menu_state::load() {
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
+    //Back button.
     gui.back_item =
         new button_gui_item("Back", game.fonts.standard);
     gui.back_item->on_activate =
@@ -203,6 +205,7 @@ void options_menu_state::load() {
     };
     gui.add_item(gui.back_item, "back");
     
+    //Fullscreen checkbox.
     check_gui_item* fullscreen_check =
         new check_gui_item(
         &game.options.intended_win_fullscreen,
@@ -216,6 +219,7 @@ void options_menu_state::load() {
     };
     gui.add_item(fullscreen_check, "fullscreen");
     
+    //Resolution picker.
     resolution_picker =
         new picker_gui_item("Resolution: ", "");
     resolution_picker->on_previous =
@@ -228,6 +232,7 @@ void options_menu_state::load() {
     };
     gui.add_item(resolution_picker, "resolution");
     
+    //Controls button.
     button_gui_item* controls_button =
         new button_gui_item("Edit controls...", game.fonts.standard);
     controls_button->on_activate =
@@ -236,6 +241,7 @@ void options_menu_state::load() {
     };
     gui.add_item(controls_button, "controls");
     
+    //Warning text.
     warning_text =
         new text_gui_item(
         "Please restart for the changes to take effect.",

@@ -17,6 +17,7 @@
 #include "../utils/string_utils.h"
 
 
+//Path to the GUI information file.
 const string main_menu_state::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu.txt";
 
@@ -157,6 +158,7 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 void main_menu_state::load() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
+    data_node settings_file(GUI_FILE_PATH);
     
     //Menu items.
     gui.register_coords("play",             50, 55, 50,  6);
@@ -164,10 +166,9 @@ void main_menu_state::load() {
     gui.register_coords("animation_editor", 50, 71, 50,  6);
     gui.register_coords("area_editor",      50, 79, 50,  6);
     gui.register_coords("exit",             50, 87, 50,  6);
-    gui.read_coords(
-        data_node(GUI_FILE_PATH).get_child_by_name("positions")
-    );
+    gui.read_coords(settings_file.get_child_by_name("positions"));
     
+    //Play button.
     button_gui_item* play_button =
         new button_gui_item("Play", game.fonts.area_name);
     play_button->on_activate =
@@ -178,6 +179,7 @@ void main_menu_state::load() {
     };
     gui.add_item(play_button, "play");
     
+    //Options button.
     button_gui_item* options_button =
         new button_gui_item("Options", game.fonts.area_name);
     options_button->on_activate =
@@ -188,6 +190,7 @@ void main_menu_state::load() {
     };
     gui.add_item(options_button, "options");
     
+    //Animation editor button.
     button_gui_item* anim_ed_button =
         new button_gui_item("Animation editor", game.fonts.area_name);
     anim_ed_button->on_activate =
@@ -198,6 +201,7 @@ void main_menu_state::load() {
     };
     gui.add_item(anim_ed_button, "animation_editor");
     
+    //Area editor button.
     button_gui_item* area_ed_button =
         new button_gui_item("Area editor", game.fonts.area_name);
     area_ed_button->on_activate =
@@ -208,6 +212,7 @@ void main_menu_state::load() {
     };
     gui.add_item(area_ed_button, "area_editor");
     
+    //Exit button.
     gui.back_item =
         new button_gui_item("Exit", game.fonts.area_name);
     gui.back_item->on_activate =
@@ -218,10 +223,9 @@ void main_menu_state::load() {
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
-    data_node title_screen_file(TITLE_SCREEN_FILE_PATH);
     
     //Logo pikmin.
-    data_node* logo_node = title_screen_file.get_child_by_name("logo");
+    data_node* logo_node = settings_file.get_child_by_name("logo");
     reader_setter logo_rs(logo_node);
     
     data_node* pik_types_node =

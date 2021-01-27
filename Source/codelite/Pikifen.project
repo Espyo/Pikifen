@@ -22,6 +22,8 @@
     <File Name="../source/game_states/results.cpp"/>
     <File Name="../source/game_states/results.h"/>
     <VirtualDirectory Name="gameplay">
+      <File Name="../source/game_states/gameplay/pause_menu.cpp"/>
+      <File Name="../source/game_states/gameplay/onion_menu.cpp"/>
       <File Name="../source/game_states/gameplay/drawing.cpp"/>
       <File Name="../source/game_states/gameplay/logic.cpp"/>
       <File Name="../source/game_states/gameplay/gameplay.h"/>
@@ -220,7 +222,6 @@
     <File Name="../source/particle.h"/>
     <File Name="../source/weather.cpp"/>
     <File Name="../source/mob_script.cpp"/>
-    <File Name="../source/menu_widgets.cpp"/>
     <File Name="../source/misc_structs.cpp"/>
     <File Name="../source/functions.h"/>
     <File Name="../source/spray_type.h"/>
@@ -235,7 +236,6 @@
     <File Name="../source/main.cpp"/>
     <File Name="../source/resource.h"/>
     <File Name="../source/misc_structs.h"/>
-    <File Name="../source/menu_widgets.h"/>
     <File Name="../source/init.cpp"/>
     <File Name="../source/controls.cpp"/>
     <File Name="../source/animation.h"/>

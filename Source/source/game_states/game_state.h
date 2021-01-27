@@ -16,7 +16,6 @@
 
 #include <allegro5/allegro.h>
 
-#include "../menu_widgets.h"
 #include "../mobs/mob.h"
 
 
@@ -29,26 +28,7 @@ using std::vector;
  * You've got the title screen, the options screen, the gameplay screen, etc.
  */
 class game_state {
-protected:
-    void set_selected_widget(menu_widget* widget);
-    void handle_widget_events(ALLEGRO_EVENT ev);
-    
-    bool right_pressed;
-    bool up_pressed;
-    bool left_pressed;
-    bool down_pressed;
-    bool ok_pressed;
-    bool back_pressed;
-    
 public:
-    vector<menu_widget*> menu_widgets;
-    menu_widget* back_widget;
-    menu_widget* selected_widget;
-    
-    void handle_menu_button(
-        const size_t action, const float pos, const size_t player
-    );
-    
     game_state();
     virtual ~game_state() = default;
     virtual void load() = 0;

@@ -188,7 +188,7 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>Leaves object spritesheet</dc:title>
-        <dc:description>Spritesheet for the leaves object pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:description>Spritesheet for the leaves object pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
         <dc:creator>
           <cc:Agent>
             <dc:title>André &quot;Espyo&quot; Silva</dc:title>

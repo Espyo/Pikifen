@@ -179,7 +179,7 @@ void gameplay_state::do_gameplay_logic() {
             if(!after_hours) {
                 after_hours = true;
                 game.states.results->out_of_time = true;
-                leave();
+                leave(LEAVE_TO_FINISH);
             }
         }
         
@@ -575,9 +575,17 @@ void gameplay_state::do_menu_logic() {
             onion_menu = NULL;
             paused = false;
         }
+    } else if(pause_menu) {
+        if(!pause_menu->to_delete) {
+            pause_menu->tick(game.delta_t);
+        } else {
+            delete pause_menu;
+            pause_menu = NULL;
+            paused = false;
+        }
     }
     
-    hud_items.tick(game.delta_t);
+    hud.tick(game.delta_t);
     
     //Process and print framerate and system info.
     if(game.show_system_info) {

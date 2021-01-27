@@ -257,7 +257,6 @@ int game_class::start() {
     init_mob_actions();
     init_mob_categories();
     init_sector_types();
-    init_hud_items();
     load_game_config();
     load_maker_tools();
     save_maker_tools();

@@ -202,7 +202,7 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>White Spectralid spritesheet</dc:title>
-        <dc:description>Spritesheet for the White Spectralid pre-packaged in Pikifen. See http://www.pikminfanon.com/Pikifen</dc:description>
+        <dc:description>Spritesheet for the White Spectralid pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
         <dc:subject>
           <rdf:Bag>
             <rdf:li>Pikifen spritesheet</rdf:li>

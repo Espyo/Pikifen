@@ -19,6 +19,7 @@
 #include "../utils/string_utils.h"
 
 
+//Path to the GUI information file.
 const string area_menu_state::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Area_menu.txt";
 
@@ -133,37 +134,43 @@ void area_menu_state::load() {
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
+    //Back button.
     gui.back_item =
         new button_gui_item("Back", game.fonts.standard);
     gui.back_item->on_activate =
-    [this] (const point&) {
+    [this] (const point &) {
         leave();
     };
     gui.add_item(gui.back_item, "back");
     
+    //Instructions text.
     text_gui_item* pick_text =
         new text_gui_item("Pick an area:", game.fonts.standard);
     gui.add_item(pick_text, "pick_text");
     
+    //Area list box.
     list_gui_item* list_box = new list_gui_item();
     gui.add_item(list_box, "list");
     
+    //Area list scrollbar.
     scroll_gui_item* list_scroll = new scroll_gui_item();
     list_scroll->list_item = list_box;
     list_box->scroll_item = list_scroll;
     gui.add_item(list_scroll, "list_scroll");
     
+    //Items for the various areas.
     button_gui_item* first_area_button = NULL;
     for(size_t a = 0; a < areas_to_pick.size(); ++a) {
         string area_name = area_names[a];
         string area_folder = areas_to_pick[a];
         
+        //Area button.
         button_gui_item* area_button =
             new button_gui_item(area_name, game.fonts.area_name);
         area_button->center = point(0.50f, 0.045f + a * 0.10f);
         area_button->size = point(1.0f, 0.09f);
         area_button->on_activate =
-        [this, area_folder] (const point&) {
+        [this, area_folder] (const point &) {
             game.states.gameplay->area_to_load = area_folder;
             game.fade_mgr.start_fade(false, [] () {
                 game.change_state(game.states.gameplay);

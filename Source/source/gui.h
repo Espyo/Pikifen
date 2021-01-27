@@ -18,11 +18,19 @@
 #include <allegro5/allegro_font.h>
 
 #include "const.h"
+#include "misc_structs.h"
 #include "utils/data_file.h"
 #include "utils/geometry_utils.h"
 
 using std::map;
 using std::vector;
+
+
+enum GUI_MANAGER_ANIMS {
+    GUI_MANAGER_ANIM_NONE,
+    GUI_MANAGER_ANIM_OUT_TO_IN,
+    GUI_MANAGER_ANIM_IN_TO_OUT,
+};
 
 
 /* ----------------------------------------------------------------------------
@@ -48,6 +56,8 @@ public:
     float offset;
     //Padding amount, if it has items inside of it.
     float padding;
+    //Can this item's activation be auto-repeated by holding the button down?
+    bool can_auto_repeat;
     //Timer that controls it growing in size. Used for juice.
     float juice_timer;
     
@@ -59,6 +69,10 @@ public:
     std::function<void(const ALLEGRO_EVENT &ev)> on_event;
     //What to do when the item is activated.
     std::function<void(const point &cursor_pos)> on_activate;
+    //What to do when a directional button's pressed with the item selected.
+    std::function<bool(const size_t button_id)> on_menu_dir_button;
+    //What to do when one of its children became the selected item.
+    std::function<void(const gui_item* child)> on_child_selected;
     
     //Adds a child item.
     void add_child(gui_item* item);
@@ -72,6 +86,8 @@ public:
     point get_real_size();
     //Returns whether the mouse cursor is on top of it.
     bool is_mouse_on(const point &cursor_pos);
+    //Removes an item from the list of children.
+    void remove_child(gui_item* item);
     //Starts the process of animation a juicy grow effect.
     void start_juicy_grow();
     
@@ -91,8 +107,13 @@ public:
     string text;
     //Font to display the text with.
     ALLEGRO_FONT* font;
+    //Color to tint the text with.
+    ALLEGRO_COLOR color;
     
-    button_gui_item(const string &text, ALLEGRO_FONT* font);
+    button_gui_item(
+        const string &text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255)
+    );
 };
 
 
@@ -107,8 +128,13 @@ public:
     string text;
     //Font to display the text with.
     ALLEGRO_FONT* font;
+    //Color to tint the text with.
+    ALLEGRO_COLOR color;
     
-    check_gui_item(bool* value, const string &text, ALLEGRO_FONT* font);
+    check_gui_item(
+        bool* value, const string &text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255)
+    );
 };
 
 
@@ -169,8 +195,16 @@ public:
     string text;
     //Font to display the text with.
     ALLEGRO_FONT* font;
+    //Color to tint the text with.
+    ALLEGRO_COLOR color;
+    //Allegro flags.
+    int flags;
     
-    text_gui_item(const string &text, ALLEGRO_FONT* font);
+    text_gui_item(
+        const string &text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
+        const int flags = ALLEGRO_ALIGN_CENTER
+    );
 };
 
 
@@ -204,15 +238,21 @@ public:
     void handle_menu_button(
         const size_t action, const float pos, const size_t player
     );
+    //Reads item coordinates from a data node.
+    void read_coords(data_node* node);
     //Registers an item's default centers and size.
     void register_coords(
         const string &id,
         const float cx, const float cy, const float w, const float h
     );
-    //Reads item coordinates from a data node.
-    void read_coords(data_node* node);
+    //Removes an item from the list.
+    void remove_item(gui_item* item);
     //Sets the currently selected item.
     void set_selected_item(gui_item* item);
+    //Starts an animation tha affects all items.
+    void start_animation(
+        const GUI_MANAGER_ANIMS type, const float duration
+    );
     
     //Destroys all allocated items and information.
     void destroy();
@@ -236,7 +276,20 @@ private:
     bool ok_pressed;
     //Is the back button pressed?
     bool back_pressed;
+    //Is the current item's activation auto-repeat mode on?
+    bool auto_repeat_on;
+    //How long the activation button has been held for.
+    float auto_repeat_duration;
+    //How long until the item's next activation, from the button being held.
+    float auto_repeat_next_activation;
+    //Type of the current animation, if any.
+    GUI_MANAGER_ANIMS anim_type;
+    //Timer for the current animation.
+    timer anim_timer;
     
+    static const float AUTO_REPEAT_MAX_INTERVAL;
+    static const float AUTO_REPEAT_MIN_INTERVAL;
+    static const float AUTO_REPEAT_RAMP_TIME;
 };
 
 

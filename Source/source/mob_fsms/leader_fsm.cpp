@@ -371,6 +371,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("active");
         }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
             efc.run(leader_fsm::be_thrown_by_bouncer);
             efc.change_state("thrown");
@@ -392,6 +398,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_ANIMATION_END); {
             efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(leader_fsm::left_hazard);
         }
         efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
             efc.run(leader_fsm::be_thrown_by_bouncer);
@@ -1299,7 +1311,7 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
     if(living_leaders == 0) {
         game.states.results->can_continue = false;
         game.states.results->leader_ko = true;
-        game.states.gameplay->leave();
+        game.states.gameplay->leave(gameplay_state::LEAVE_TO_FINISH);
     } else if(game.states.gameplay->cur_leader_ptr == m) {
         change_to_next_leader(true, true);
     }

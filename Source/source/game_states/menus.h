@@ -16,7 +16,6 @@
 #include <allegro5/allegro.h>
 
 #include "game_state.h"
-#include "../menu_widgets.h"
 #include "../gui.h"
 
 
@@ -108,20 +107,23 @@ public:
     
 private:
     ALLEGRO_BITMAP* bmp_menu_bg;
+    gui_manager gui;
     
-    size_t cur_page_nr;
-    
-    menu_text* cur_page_nr_widget;
-    menu_text* input_capture_msg_widget;
-    vector<menu_widget*> control_widgets;
-    //Widgets to hide during the "press something" message.
-    vector<menu_widget*> bottom_widgets;
+    list_gui_item* list_box;
     
     bool capturing_input;
     size_t input_capture_control_nr;
     
-    void update();
+    void add_control();
+    void add_control_gui_items(const size_t index, const bool focus);
+    void choose_button(const size_t index);
+    void choose_next_action(const size_t index);
+    void choose_prev_action(const size_t index);
+    void delete_control(const size_t index);
+    void delete_control_gui_items();
     void leave();
+    
+    static const string GUI_FILE_PATH;
     
 };
 

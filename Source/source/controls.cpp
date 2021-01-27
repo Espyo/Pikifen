@@ -128,167 +128,6 @@ string control_info::stringify() const {
 
 
 /* ----------------------------------------------------------------------------
- * Handles an Allegro event related to hardware input,
- * and triggers the corresponding controls, if any.
- * ev:
- *   Event to handle.
- */
-void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
-        
-            //Debug testing.
-            //TODO remove any debug code that is in here before releasing.
-            
-            
-        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
-        
-            game.show_system_info = !game.show_system_info;
-            
-        } else if(
-            game.maker_tools.enabled &&
-            (
-                (
-                    ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
-                    ev.keyboard.keycode <= ALLEGRO_KEY_F11
-                ) || (
-                    ev.keyboard.keycode >= ALLEGRO_KEY_0 &&
-                    ev.keyboard.keycode <= ALLEGRO_KEY_9
-                )
-            )
-        ) {
-        
-            unsigned char id;
-            if(
-                ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
-                ev.keyboard.keycode <= ALLEGRO_KEY_F11
-            ) {
-                //The first ten indexes are the F2 - F11 keys.
-                id =
-                    game.maker_tools.keys[
-                ev.keyboard.keycode - ALLEGRO_KEY_F2
-                ];
-            } else {
-                //The second ten indexes are the 0 - 9 keys.
-                id =
-                    game.maker_tools.keys[
-                10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
-                ];
-            }
-            
-            switch(id) {
-            case MAKER_TOOL_AREA_IMAGE: {
-                ALLEGRO_BITMAP* bmp = draw_to_bitmap();
-                string file_name =
-                    USER_DATA_FOLDER_PATH + "/Area_" +
-                    sanitize_file_name(game.cur_area_data.name) +
-                    "_" + get_current_time(true) + ".png";
-                    
-                if(!al_save_bitmap(file_name.c_str(), bmp)) {
-                    log_error(
-                        "Could not save the area onto an image,"
-                        " with the name \"" + file_name + "\"!"
-                    );
-                }
-                
-                break;
-                
-            } case MAKER_TOOL_CHANGE_SPEED: {
-                game.maker_tools.change_speed =
-                    !game.maker_tools.change_speed;
-                break;
-                
-            } case MAKER_TOOL_GEOMETRY_INFO: {
-                game.maker_tools.geometry_info =
-                    !game.maker_tools.geometry_info;
-                break;
-                
-            } case MAKER_TOOL_HITBOXES: {
-                game.maker_tools.hitboxes =
-                    !game.maker_tools.hitboxes;
-                break;
-                
-            } case MAKER_TOOL_HURT_MOB: {
-                mob* m = get_closest_mob_to_cursor();
-                if(m) {
-                    m->set_health(
-                        true, true, -game.maker_tools.mob_hurting_ratio
-                    );
-                }
-                break;
-                
-            } case MAKER_TOOL_MOB_INFO: {
-                mob* m = get_closest_mob_to_cursor();
-                game.maker_tools.info_lock =
-                    (game.maker_tools.info_lock == m ? NULL : m);
-                break;
-                
-            } case MAKER_TOOL_NEW_PIKMIN: {
-                if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
-                    pikmin_type* new_pikmin_type =
-                        game.mob_types.pikmin.begin()->second;
-                        
-                    auto p = game.mob_types.pikmin.begin();
-                    for(; p != game.mob_types.pikmin.end(); ++p) {
-                        if(p->second == game.maker_tools.last_pikmin_type) {
-                            ++p;
-                            if(p != game.mob_types.pikmin.end()) {
-                                new_pikmin_type = p->second;
-                            }
-                            break;
-                        }
-                    }
-                    game.maker_tools.last_pikmin_type = new_pikmin_type;
-                    
-                    create_mob(
-                        game.mob_categories.get(MOB_CATEGORY_PIKMIN),
-                        game.mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
-                    );
-                }
-                
-                break;
-                
-            } case MAKER_TOOL_TELEPORT: {
-                sector* mouse_sector =
-                    get_sector(game.mouse_cursor_w, NULL, true);
-                if(mouse_sector) {
-                    cur_leader_ptr->chase(game.mouse_cursor_w, NULL, true);
-                    cur_leader_ptr->z = mouse_sector->z;
-                    game.cam.set_pos(game.mouse_cursor_w);
-                }
-                break;
-                
-            }
-            }
-            
-        }
-    }
-    
-    vector<action_from_event> actions = get_actions_from_event(ev);
-    for(size_t a = 0; a < actions.size(); ++a) {
-        handle_button(actions[a].button, actions[a].pos, actions[a].player);
-    }
-    
-    for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        if(
-            ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
-            game.options.mouse_moves_cursor[p]
-        ) {
-            game.mouse_cursor_s.x = ev.mouse.x;
-            game.mouse_cursor_s.y = ev.mouse.y;
-            game.mouse_cursor_w = game.mouse_cursor_s;
-            
-            al_transform_coordinates(
-                &game.screen_to_world_transform,
-                &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
-            );
-        }
-    }
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles a button "press". Technically, it could also be a button release.
  * button:
  *   The button's ID. Use BUTTON_*.
@@ -308,7 +147,7 @@ void gameplay_state::handle_button(
     
     bool is_down = (pos >= 0.5);
     
-    if(!msg_box && !onion_menu) {
+    if(!msg_box && !onion_menu && !pause_menu) {
     
         switch(button) {
         case BUTTON_RIGHT:
@@ -541,7 +380,8 @@ void gameplay_state::handle_button(
             
             if(!is_down) return;
             
-            leave();
+            pause_menu = new pause_menu_struct();
+            paused = true;
             
             break;
             
@@ -839,83 +679,130 @@ void gameplay_state::handle_button(
             }
         }
         
-    } else if(onion_menu) {
-    
-        //Managing an Onion.
-        onion_menu->handle_button(button, pos, player);
-        
     }
     
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles a button "press" in the Onion menu.
- * Technically, it could also be a button release.
- * button:
- *   The button's ID. Use BUTTON_*.
- * pos:
- *   The position of the button, i.e., how much it's "held".
- *   0 means it was released. 1 means it was fully pressed.
- * player:
- *   Number of the player that pressed.
+ * Processes a key press to check if it should do some "system" action,
+ * like toggle the framerate, or activate a maker tool.
+ * keycode:
+ *   Allegro keycode of the pressed key.
  */
-void gameplay_state::onion_menu_struct::handle_button(
-    const size_t button, const float pos, const size_t player
-) {
-    if(button == BUTTON_THROW && pos >= 0.5f) {
+void gameplay_state::process_system_key_press(const int keycode) {
+    if(keycode == ALLEGRO_KEY_F1) {
     
-        //Ok button press.
-        if(hud->is_mouse_in(ONION_HUD_ITEM_OK)) {
-            confirm();
-            to_delete = true;
-            return;
-        }
+        game.show_system_info = !game.show_system_info;
         
-        //Cancel button press.
-        if(hud->is_mouse_in(ONION_HUD_ITEM_CANCEL)) {
-            to_delete = true;
-            return;
-        }
-        
-        //"Select all" button press.
-        if(
-            types.size() > 1 &&
-            hud->is_mouse_in(ONION_HUD_ITEM_SEL_ALL)
-        ) {
-            toggle_select_all();
-            return;
-        }
-        
-        //An amount-related button.
-        if(cursor_button != INVALID) {
-            button_hold_id = cursor_button;
-            button_hold_time = 0.0f;
-            button_hold_next_activation = BUTTON_REPEAT_MAX_INTERVAL;
-            activate_held_button();
-        }
-        
-        //Previous page button press.
-        if(
-            types.size() > MAX_TYPES_ON_SCREEN &&
-            hud->is_mouse_in(ONION_HUD_ITEM_PREV_PAGE)
-        ) {
-            go_to_page(sum_and_wrap(page, -1, nr_pages));
-            return;
-        }
-        
-        //Next page button press.
-        if(
-            types.size() > MAX_TYPES_ON_SCREEN &&
-            hud->is_mouse_in(ONION_HUD_ITEM_NEXT_PAGE)
-        ) {
-            go_to_page(sum_and_wrap(page, 1, nr_pages));
-            return;
-        }
-        
-    } else if(button == BUTTON_THROW && pos < 0.5f) {
+    } else if(
+        game.maker_tools.enabled &&
+        (
+            (keycode >= ALLEGRO_KEY_F2 && keycode <= ALLEGRO_KEY_F11) ||
+            (keycode >= ALLEGRO_KEY_0 && keycode <= ALLEGRO_KEY_9)
+        )
+    ) {
     
-        button_hold_id = INVALID;
+        unsigned char id;
+        if(keycode >= ALLEGRO_KEY_F2 && keycode <= ALLEGRO_KEY_F11) {
+            //The first ten indexes are the F2 - F11 keys.
+            id = game.maker_tools.keys[keycode - ALLEGRO_KEY_F2];
+        } else {
+            //The second ten indexes are the 0 - 9 keys.
+            id = game.maker_tools.keys[10 + (keycode - ALLEGRO_KEY_0)];
+        }
+        
+        switch(id) {
+        case MAKER_TOOL_AREA_IMAGE: {
+            ALLEGRO_BITMAP* bmp = draw_to_bitmap();
+            string file_name =
+                USER_DATA_FOLDER_PATH + "/Area_" +
+                sanitize_file_name(game.cur_area_data.name) +
+                "_" + get_current_time(true) + ".png";
+                
+            if(!al_save_bitmap(file_name.c_str(), bmp)) {
+                log_error(
+                    "Could not save the area onto an image,"
+                    " with the name \"" + file_name + "\"!"
+                );
+            }
+            
+            break;
+            
+        } case MAKER_TOOL_CHANGE_SPEED: {
+            game.maker_tools.change_speed =
+                !game.maker_tools.change_speed;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_GEOMETRY_INFO: {
+            game.maker_tools.geometry_info =
+                !game.maker_tools.geometry_info;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_HITBOXES: {
+            game.maker_tools.hitboxes =
+                !game.maker_tools.hitboxes;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_HURT_MOB: {
+            mob* m = get_closest_mob_to_cursor();
+            if(m) {
+                m->set_health(
+                    true, true, -game.maker_tools.mob_hurting_ratio
+                );
+            }
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_MOB_INFO: {
+            mob* m = get_closest_mob_to_cursor();
+            game.maker_tools.info_lock =
+                (game.maker_tools.info_lock == m ? NULL : m);
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_NEW_PIKMIN: {
+            if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
+                pikmin_type* new_pikmin_type =
+                    game.mob_types.pikmin.begin()->second;
+                    
+                auto p = game.mob_types.pikmin.begin();
+                for(; p != game.mob_types.pikmin.end(); ++p) {
+                    if(p->second == game.maker_tools.last_pikmin_type) {
+                        ++p;
+                        if(p != game.mob_types.pikmin.end()) {
+                            new_pikmin_type = p->second;
+                        }
+                        break;
+                    }
+                }
+                game.maker_tools.last_pikmin_type = new_pikmin_type;
+                
+                create_mob(
+                    game.mob_categories.get(MOB_CATEGORY_PIKMIN),
+                    game.mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
+                );
+            }
+            game.maker_tools.used_helping_tools = true;
+            
+            break;
+            
+        } case MAKER_TOOL_TELEPORT: {
+            sector* mouse_sector =
+                get_sector(game.mouse_cursor_w, NULL, true);
+            if(mouse_sector) {
+                cur_leader_ptr->chase(game.mouse_cursor_w, NULL, true);
+                cur_leader_ptr->z = mouse_sector->z;
+                game.cam.set_pos(game.mouse_cursor_w);
+            }
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        }
+        }
         
     }
 }

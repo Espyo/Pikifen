@@ -18,34 +18,7 @@
 #include "../../mobs/ship.h"
 #include "../../replay.h"
 #include "../game_state.h"
-
-
-/* ----------------------------------------------------------------------------
- * Manages the HUD items seen during normal gameplay.
- */
-class gameplay_hud_manager : public hud_item_manager {
-public:
-    bool get_draw_data(
-        const size_t id, point* center, point* size
-    ) const;
-    void start_move(const bool in, const float duration);
-    void tick(const float time);
-    gameplay_hud_manager(const size_t item_total);
-    
-private:
-    bool move_in;
-    timer move_timer;
-    bool offscreen;
-};
-
-
-/* ----------------------------------------------------------------------------
- * Manages the HUD items seen in the Onion menu.
- */
-class onion_hud_manager : public hud_item_manager {
-public:
-    onion_hud_manager(const size_t item_total);
-};
+#include "../../gui.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -76,8 +49,8 @@ public:
     float day_minutes;
     //Replay of the current day.
     replay day_replay;
-    //Information about all HUD items.
-    gameplay_hud_manager hud_items;
+    //Manager for the gameplay HUD.
+    gui_manager hud;
     //Mob that player 1's leader cursor is on top of, if any.
     mob* leader_cursor_mob;
     //Player 1's leader cursor, in screen coordinates.
@@ -111,8 +84,14 @@ public:
     //Information about player 1's whistle.
     whistle_struct whistle;
     
+    enum LEAVE_TARGET {
+        LEAVE_TO_RETRY,
+        LEAVE_TO_FINISH,
+        LEAVE_TO_AREA_SELECT,
+    };
+    
     void enter();
-    void leave();
+    void leave(const LEAVE_TARGET target);
     void update_closest_group_member();
     
     virtual void load();
@@ -125,15 +104,6 @@ public:
     
 private:
 
-    static const float AREA_INTRO_HUD_MOVE_TIME;
-    static const float AREA_TITLE_FADE_DURATION;
-    static const float CURSOR_INVALID_EFFECT_SPEED;
-    static const float CURSOR_SAVE_INTERVAL;
-    static const size_t ONION_MENU_TYPES_PER_PAGE;
-    static const float SWARM_ARROW_SPEED;
-    static const float SWARM_ARROWS_INTERVAL;
-    
-    
     //When processing inter-mob events, we want the mob to follow them from the
     //closest mob to the one farthest away. As such, this struct saves data on
     //a viable mob, its distance, and the corresponding event.
@@ -176,53 +146,86 @@ private:
         leader* l_ptr;
         //Information on every type's management.
         vector<onion_menu_type_struct> types;
-        //HUD item manager.
-        onion_hud_manager* hud;
+        //GUI manager.
+        gui_manager gui;
         //Is "select all" currently on?
         bool select_all;
         //If it manages more than 5, this is the Pikmin type page index.
         size_t page;
-        //ID of the amount-related button under the cursor.
-        size_t cursor_button;
-        //ID of the amount-related button being held. INVALID for none.
-        size_t button_hold_id;
-        //How long the current amount-related button has been held for.
-        float button_hold_time;
-        //How long until the next button activation, from it being held.
-        float button_hold_next_activation;
-        //Which widgets are in red right now, if any, and how much time left.
-        map<size_t, float> red_widgets;
+        //Which GUI items are in red right now, if any, and how much time left.
+        map<gui_item*, float> red_items;
         //Total page amount. Cache for convenience.
         size_t nr_pages;
         //Pikmin types currently on-screen. Cache for convenience.
         vector<onion_menu_type_struct*> on_screen_types;
+        //List of GUI items for the Onion icons. Cache for convenience.
+        vector<gui_item*> onion_icon_items;
+        //List of GUI items for the Onion buttons. Cache for convenience.
+        vector<gui_item*> onion_button_items;
+        //List of GUI items for the Onion amounts. Cache for convenience.
+        vector<gui_item*> onion_amount_items;
+        //List of GUI items for the group icons. Cache for convenience.
+        vector<gui_item*> group_icon_items;
+        //List of GUI items for the group buttons. Cache for convenience.
+        vector<gui_item*> group_button_items;
+        //List of GUI items for the group amounts. Cache for convenience.
+        vector<gui_item*> group_amount_items;
+        //The button that controls all Onions. Cache for convenience.
+        gui_item* onion_all_button;
+        //The button that controls all groups. Cache for convenience.
+        gui_item* group_all_button;
+        //Left Onion "more..." icon. Cache for convenience.
+        gui_item* onion_more_l_icon;
+        //Right Onion "more..." icon. Cache for convenience.
+        gui_item* onion_more_r_icon;
+        //Left group "more..." icon. Cache for convenience.
+        gui_item* group_more_l_icon;
+        //Right group "more..." icon. Cache for convenience.
+        gui_item* group_more_r_icon;
+        //Previous page button. Cache for convenience.
+        gui_item* prev_page_button;
+        //Next page button. Cache for convenience.
+        gui_item* next_page_button;
+        //Field amount text. Cache for convenience.
+        gui_item* field_amount_text;
         //Is the struct meant to be deleted?
         bool to_delete;
         
         onion_menu_struct(pikmin_nest_struct* n_ptr, leader* l_ptr);
         ~onion_menu_struct();
-        void activate_held_button();
         void add_all_to_group();
         void add_all_to_onion();
         void add_to_group(const size_t type_idx);
         void add_to_onion(const size_t type_idx);
         void confirm();
         void go_to_page(const size_t page);
-        void handle_button(
-            const size_t button, const float pos, const size_t player
-        );
         void tick(const float delta_t);
         void toggle_select_all();
         
-        static const float BUTTON_REPEAT_MAX_INTERVAL;
-        static const float BUTTON_REPEAT_MIN_INTERVAL;
-        static const float BUTTON_REPEAT_RAMP_TIME;
-        static const size_t MAX_TYPES_ON_SCREEN;
         static const float RED_TEXT_DURATION;
         
     private:
-        void make_widget_red(const size_t id);
-        void update_caches();
+        void make_gui_item_red(gui_item* item);
+        void update();
+        
+        static const string GUI_FILE_PATH;
+    };
+    
+    //Contains information about the pause menu currently being presented to
+    //the player.
+    struct pause_menu_struct {
+    public:
+        //GUI manager.
+        gui_manager gui;
+        //Is the struct meant to be deleted?
+        bool to_delete;
+        
+        pause_menu_struct();
+        ~pause_menu_struct();
+        void tick(const float delta_t);
+        
+    private:
+        static const string GUI_FILE_PATH;
     };
     
     ALLEGRO_BITMAP* bmp_bubble;
@@ -268,6 +271,8 @@ private:
     movement_struct leader_movement;
     //Information about the current Onion menu, if any.
     onion_menu_struct* onion_menu;
+    //Information about the current pause menu, if any.
+    pause_menu_struct* pause_menu;
     //Is the gameplay paused?
     bool paused;
     //The first frame shouldn't allow for input just yet, because
@@ -301,11 +306,11 @@ private:
         ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
     );
     void draw_mouse_cursor(const ALLEGRO_COLOR &color);
-    void draw_hud();
     void draw_ingame_text();
     void draw_lighting_filter();
     void draw_message_box();
     void draw_onion_menu();
+    void draw_pause_menu();
     void draw_precipitation();
     void draw_system_stuff();
     void draw_tree_shadows();
@@ -317,9 +322,8 @@ private:
     void handle_button(
         const size_t button, const float pos, const size_t player
     );
+    void init_hud();
     void load_game_content();
-    void load_hud_info();
-    void load_hud_coordinates(const int item, string data);
     void process_mob_interactions(mob* m_ptr, size_t m);
     void process_mob_misc_interactions(
         mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d,
@@ -332,8 +336,17 @@ private:
     void process_mob_touches(
         mob* m_ptr, mob* m2_ptr, const size_t m, const size_t m2, dist &d
     );
+    void process_system_key_press(const int keycode);
     void unload_game_content();
     
+    static const float AREA_INTRO_HUD_MOVE_TIME;
+    static const float AREA_TITLE_FADE_DURATION;
+    static const float CURSOR_INVALID_EFFECT_SPEED;
+    static const float CURSOR_SAVE_INTERVAL;
+    static const string HUD_FILE_NAME;
+    static const size_t ONION_MENU_TYPES_PER_PAGE;
+    static const float SWARM_ARROW_SPEED;
+    static const float SWARM_ARROWS_INTERVAL;
 };
 
 

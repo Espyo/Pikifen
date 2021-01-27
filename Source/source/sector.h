@@ -88,7 +88,10 @@ struct blockmap {
     vector<vector<vector<edge*> > > edges;
     //Specifies a list of sectors in each block.
     vector<vector<unordered_set<sector*> > >  sectors;
-    size_t n_cols, n_rows;
+    //Number of columns.
+    size_t n_cols;
+    //Number of rows.
+    size_t n_rows;
     
     blockmap();
     size_t get_col(const float x) const;

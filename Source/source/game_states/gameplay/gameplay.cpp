@@ -21,6 +21,7 @@
 #include "../../load.h"
 #include "../../mobs/pile.h"
 #include "../../misc_structs.h"
+#include "../../utils/data_file.h"
 #include "../../utils/string_utils.h"
 
 
@@ -32,137 +33,14 @@ const float gameplay_state::AREA_TITLE_FADE_DURATION = 3.0f;
 const float gameplay_state::CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
 //Every X seconds, the cursor's position is saved, to create the trail effect.
 const float gameplay_state::CURSOR_SAVE_INTERVAL = 0.03f;
+//Path to the GUI information file.
+const string gameplay_state::HUD_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
 //The Onion menu can only show, at most, these many Pikmin types per page.
 const size_t gameplay_state::ONION_MENU_TYPES_PER_PAGE = 5;
 //Swarming arrows move these many units per second.
 const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another swarm arrow appears.
 const float gameplay_state::SWARM_ARROWS_INTERVAL = 0.1f;
-
-//Interval between button hold activations, at the slowest speed.
-const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MAX_INTERVAL = 0.3f;
-//Interval between button hold activations, at the fastest speed.
-const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_MIN_INTERVAL = 0.011f;
-//How long it takes for the button hold activation repeats to reach max speed.
-const float gameplay_state::onion_menu_struct::BUTTON_REPEAT_RAMP_TIME = 0.9f;
-//How many Pikmin types can be on-screen per page.
-const size_t gameplay_state::onion_menu_struct::MAX_TYPES_ON_SCREEN = 5;
-//How long to let text turn red for.
-const float gameplay_state::onion_menu_struct::RED_TEXT_DURATION = 1.0f;
-
-
-/* ----------------------------------------------------------------------------
- * Initializes the gameplay HUD item manager.
- * item_total:
- *   How many HUD items exist in total.
- */
-gameplay_hud_manager::gameplay_hud_manager(const size_t item_total) :
-    hud_item_manager(item_total),
-    move_in(false),
-    move_timer(0),
-    offscreen(false) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Retrieves the data necessary for the drawing routine.
- * Returns false if this element shouldn't be drawn.
- * id:
- *   ID of the HUD item.
- * center:
- *   Pointer to place the final center coordinates in, if any.
- * size:
- *   Pointer to place the final dimensions in, if any.
- */
-bool gameplay_hud_manager::get_draw_data(
-    const size_t id, point* center, point* size
-) const {
-    if(offscreen) return false;
-    if(!hud_item_manager::get_draw_data(id, NULL, NULL)) {
-        return false;
-    }
-    const hud_item* h = &items[id];
-    
-    point normal_coords, final_coords;
-    normal_coords.x = h->center.x * game.win_w;
-    normal_coords.y = h->center.y * game.win_h;
-    
-    if(move_timer.time_left == 0.0f) {
-        final_coords = normal_coords;
-        
-    } else {
-        point start_coords, end_coords;
-        unsigned char ease_method;
-        point offscreen_coords;
-        
-        float angle = get_angle(point(0.5, 0.5), h->center);
-        offscreen_coords.x = h->center.x + cos(angle);
-        offscreen_coords.y = h->center.y + sin(angle);
-        offscreen_coords.x *= game.win_w;
-        offscreen_coords.y *= game.win_h;
-        
-        if(move_in) {
-            start_coords = offscreen_coords;
-            end_coords = normal_coords;
-            ease_method = EASE_OUT;
-        } else {
-            start_coords = normal_coords;
-            end_coords = offscreen_coords;
-            ease_method = EASE_IN;
-        }
-        
-        final_coords.x =
-            interpolate_number(
-                ease(ease_method, 1 - move_timer.get_ratio_left()),
-                0, 1, start_coords.x, end_coords.x
-            );
-        final_coords.y =
-            interpolate_number(
-                ease(ease_method, 1 - move_timer.get_ratio_left()),
-                0, 1, start_coords.y, end_coords.y
-            );
-    }
-    
-    if(center) {
-        *center = final_coords;
-    }
-    if(size) {
-        size->x = h->size.x * game.win_w;
-        size->y = h->size.y * game.win_h;
-    }
-    
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Starts a movement animation.
- * in:
- *   Are the items moving into view, or out of view?
- * duration:
- *   How long this animation lasts for.
- */
-void gameplay_hud_manager::start_move(const bool in, const float duration) {
-    move_in = in;
-    move_timer.start(duration);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Ticks the manager one frame in time.
- * time:
- *   Seconds to tick by.
- */
-void gameplay_hud_manager::tick(const float time) {
-    hud_item_manager::tick(time);
-    move_timer.tick(time);
-    if(!move_in && move_timer.time_left == 0.0f) {
-        offscreen = true;
-    } else {
-        offscreen = false;
-    }
-}
 
 
 /* ----------------------------------------------------------------------------
@@ -178,7 +56,6 @@ gameplay_state::gameplay_state() :
     cur_leader_nr(0),
     cur_leader_ptr(nullptr),
     day_minutes(0.0f),
-    hud_items(N_HUD_ITEMS),
     leader_cursor_mob(nullptr),
     leader_cursor_sector(nullptr),
     msg_box(nullptr),
@@ -210,6 +87,7 @@ gameplay_state::gameplay_state() :
     lightmap_bmp(nullptr),
     main_control_id(INVALID),
     onion_menu(nullptr),
+    pause_menu(nullptr),
     paused(false),
     ready_for_input(false),
     selected_spray(0),
@@ -285,9 +163,12 @@ void gameplay_state::enter() {
     leader_cursor_w = game.mouse_cursor_w;
     leader_cursor_s = game.mouse_cursor_s;
     
-    hud_items.start_move(true, AREA_INTRO_HUD_MOVE_TIME);
+    hud.start_animation(GUI_MANAGER_ANIM_OUT_TO_IN, AREA_INTRO_HUD_MOVE_TIME);
     if(went_to_results) {
         game.fade_mgr.start_fade(true, nullptr);
+        if(pause_menu) {
+            pause_menu->to_delete = true;
+        }
     }
     
     ready_for_input = false;
@@ -382,12 +263,676 @@ string gameplay_state::get_name() const {
 
 
 /* ----------------------------------------------------------------------------
- * Leaves the gameplay state, returning to the main menu, or wherever else.
+ * Handles an Allegro event.
+ * ev:
+ *   Event to handle.
  */
-void gameplay_state::leave() {
+void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+    //Handle the Onion menu first so events don't bleed from gameplay to it.
+    if(onion_menu) {
+        onion_menu->gui.handle_event(ev);
+    } else if(pause_menu) {
+        pause_menu->gui.handle_event(ev);
+    }
+    
+    //Check if there are system key presses.
+    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        process_system_key_press(ev.keyboard.keycode);
+    }
+    
+    //Decode any inputs that result in gameplay actions.
+    vector<action_from_event> actions = get_actions_from_event(ev);
+    for(size_t a = 0; a < actions.size(); ++a) {
+        handle_button(actions[a].button, actions[a].pos, actions[a].player);
+    }
+    
+    for(size_t p = 0; p < MAX_PLAYERS; p++) {
+        if(
+            ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
+            game.options.mouse_moves_cursor[p]
+        ) {
+            game.mouse_cursor_s.x = ev.mouse.x;
+            game.mouse_cursor_s.y = ev.mouse.y;
+            game.mouse_cursor_w = game.mouse_cursor_s;
+            
+            al_transform_coordinates(
+                &game.screen_to_world_transform,
+                &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+            );
+        }
+    }
+    
+    //Finally, let the HUD handle events.
+    hud.handle_event(ev);
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the HUD.
+ */
+void gameplay_state::init_hud() {
+    data_node hud_file_node(HUD_FILE_NAME);
+    
+    hud.register_coords("time",                  40, 10, 70, 10);
+    hud.register_coords("day_bubble",            88, 18, 15, 25);
+    hud.register_coords("day_number",            88, 20, 10, 10);
+    hud.register_coords("leader_1_icon",          7, 90,  8, 10);
+    hud.register_coords("leader_2_icon",          6, 80,  5,  9);
+    hud.register_coords("leader_3_icon",          6, 72,  5,  9);
+    hud.register_coords("leader_1_health",       16, 90,  8, 10);
+    hud.register_coords("leader_2_health",       12, 80,  5,  9);
+    hud.register_coords("leader_3_health",       12, 72,  5,  9);
+    hud.register_coords("pikmin_standby_icon",   30, 91,  8, 10);
+    hud.register_coords("pikmin_standby_m_icon", 35, 88,  4,  8);
+    hud.register_coords("pikmin_standby_x",      38, 91,  7,  8);
+    hud.register_coords("pikmin_standby_nr",     50, 91, 15, 10);
+    hud.register_coords("pikmin_group_nr",       73, 91, 15, 14);
+    hud.register_coords("pikmin_field_nr",       91, 91, 15, 14);
+    hud.register_coords("pikmin_total_nr",        0,  0,  0,  0);
+    hud.register_coords("pikmin_slash_1",        82, 91,  4,  8);
+    hud.register_coords("pikmin_slash_2",         0,  0,  0,  0);
+    hud.register_coords("pikmin_slash_3",         0,  0,  0,  0);
+    hud.register_coords("spray_1_icon",           6, 36,  4,  7);
+    hud.register_coords("spray_1_amount",        13, 37, 10,  5);
+    hud.register_coords("spray_1_button",        10, 42, 10,  5);
+    hud.register_coords("spray_2_icon",           6, 52,  4,  7);
+    hud.register_coords("spray_2_amount",        13, 53, 10,  5);
+    hud.register_coords("spray_2_button",        10, 47, 10,  5);
+    hud.register_coords("spray_prev_icon",        6, 52,  3,  5);
+    hud.register_coords("spray_prev_button",      6, 47,  4,  4);
+    hud.register_coords("spray_next_icon",       13, 52,  3,  5);
+    hud.register_coords("spray_next_button",     13, 47,  4,  4);
+    hud.read_coords(hud_file_node.get_child_by_name("positions"));
+    
+    //Leader health and icons.
+    for(size_t l = 0; l < 3; ++l) {
+        if(mobs.leaders.size() < l + 1) continue;
+        size_t l_nr =
+            (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leaders.size());
+            
+        //Icon.
+        gui_item* leader_icon = new gui_item();
+        leader_icon->on_draw =
+        [this, l_nr] (const point & center, const point & size) {
+            al_draw_filled_circle(
+                center.x, center.y,
+                std::min(size.x, size.y) / 2.0f,
+                change_alpha(mobs.leaders[l_nr]->type->main_color, 128)
+            );
+            draw_bitmap_in_box(
+                mobs.leaders[l_nr]->lea_type->bmp_icon,
+                center, size
+            );
+            draw_bitmap_in_box(bmp_bubble, center, size);
+        };
+        hud.add_item(leader_icon, "leader_" + i2s(l + 1) + "_icon");
+        
+        //Health wheel.
+        gui_item* leader_health = new gui_item();
+        leader_health->on_draw =
+        [this, l_nr] (const point & center, const point & size) {
+            draw_health(
+                center,
+                mobs.leaders[l_nr]->health_wheel_smoothed_ratio, 1.0f,
+                std::min(size.x, size.y) * 0.4f,
+                true
+            );
+            draw_bitmap_in_box(bmp_hard_bubble, center, size);
+        };
+        hud.add_item(leader_health, "leader_" + i2s(l + 1) + "_health");
+    }
+    
+    //Sun Meter.
+    gui_item* sun_meter = new gui_item();
+    sun_meter->on_draw =
+    [this] (const point & center, const point & size) {
+        unsigned char n_hours =
+            (game.config.day_minutes_end -
+             game.config.day_minutes_start) / 60.0f;
+        float day_length =
+            game.config.day_minutes_end - game.config.day_minutes_start;
+        float day_passed_ratio =
+            (float) (day_minutes - game.config.day_minutes_start) /
+            (float) (day_length);
+        float sun_radius = size.y / 2.0;
+        float first_dot_x = (center.x - size.x / 2.0) + sun_radius;
+        float last_dot_x = (center.x + size.x / 2.0) - sun_radius;
+        float dots_y = center.y;
+        //Width, from the center of the first dot to the center of the last.
+        float dots_span = last_dot_x - first_dot_x;
+        float dot_interval = dots_span / (float) n_hours;
+        float sun_meter_sun_angle = area_time_passed * SUN_METER_SUN_SPIN_SPEED;
+        
+        //Larger bubbles at the start, middle and end of the meter.
+        al_hold_bitmap_drawing(true);
+        draw_bitmap(
+            bmp_hard_bubble, point(first_dot_x + dots_span * 0.0, dots_y),
+            point(sun_radius * 0.9, sun_radius * 0.9)
+        );
+        draw_bitmap(
+            bmp_hard_bubble, point(first_dot_x + dots_span * 0.5, dots_y),
+            point(sun_radius * 0.9, sun_radius * 0.9)
+        );
+        draw_bitmap(
+            bmp_hard_bubble, point(first_dot_x + dots_span * 1.0, dots_y),
+            point(sun_radius * 0.9, sun_radius * 0.9)
+        );
+        
+        for(unsigned char h = 0; h < n_hours + 1; ++h) {
+            draw_bitmap(
+                bmp_hard_bubble,
+                point(first_dot_x + h * dot_interval, dots_y),
+                point(sun_radius * 0.6, sun_radius * 0.6)
+            );
+        }
+        al_hold_bitmap_drawing(false);
+        
+        //Static sun.
+        draw_bitmap(
+            bmp_sun,
+            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            point(sun_radius * 1.5, sun_radius * 1.5)
+        );
+        //Spinning sun.
+        draw_bitmap(
+            bmp_sun,
+            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            point(sun_radius * 1.5, sun_radius * 1.5),
+            sun_meter_sun_angle
+        );
+        //Bubble in front the sun.
+        draw_bitmap(
+            bmp_hard_bubble,
+            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            point(sun_radius * 1.5, sun_radius * 1.5),
+            0, al_map_rgb(255, 192, 128)
+        );
+    };
+    hud.add_item(sun_meter, "time");
+    
+    //Day number bubble.
+    gui_item* day_nr_bubble = new gui_item();
+    day_nr_bubble->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_bitmap_in_box(bmp_day_bubble, center, size);
+    };
+    hud.add_item(day_nr_bubble, "day_bubble");
+    
+    //Day number text.
+    gui_item* day_nr_text = new gui_item();
+    day_nr_text->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_compressed_text(
+            game.fonts.counter, al_map_rgb(255, 255, 255),
+            center, ALLEGRO_ALIGN_CENTER, 1,
+            size, i2s(day)
+        );
+    };
+    hud.add_item(day_nr_text, "day_number");
+    
+    //Standby group member icon.
+    gui_item* standby_icon = new gui_item();
+    standby_icon->on_draw =
+    [this] (const point & center, const point & size) {
+        //Standby group member preparations.
+        ALLEGRO_BITMAP* standby_bmp = NULL;
+        ALLEGRO_BITMAP* standby_mat_bmp = NULL;
+        if(
+            cur_leader_ptr && closest_group_member &&
+            cur_leader_ptr->group->cur_standby_type
+        ) {
+            SUBGROUP_TYPE_CATEGORIES c =
+                cur_leader_ptr->group->cur_standby_type->get_category();
+                
+            switch(c) {
+            case SUBGROUP_TYPE_CATEGORY_LEADER: {
+                leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
+                standby_bmp = l_ptr->lea_type->bmp_icon;
+                break;
+                
+            } case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
+                pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
+                standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
+                standby_mat_bmp =
+                    p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
+                break;
+                
+            } default: {
+                standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
+                break;
+                
+            }
+            }
+        }
+        if(!standby_bmp) standby_bmp = bmp_no_pikmin_bubble;
+        
+        draw_bitmap_in_box(standby_bmp, center, size * 0.8);
+        if(closest_group_member_distant) {
+            draw_bitmap_in_box(
+                bmp_distant_pikmin_marker, center, size * 0.8
+            );
+        }
+        draw_bitmap_in_box(bmp_bubble, center, size);
+    };
+    hud.add_item(standby_icon, "pikmin_standby_icon");
+    
+    //Standby group member maturity.
+    gui_item* standby_maturity = new gui_item();
+    standby_maturity->on_draw =
+    [this] (const point & center, const point & size) {
+        //Standby group member preparations.
+        ALLEGRO_BITMAP* standby_bmp = NULL;
+        ALLEGRO_BITMAP* standby_mat_bmp = NULL;
+        if(
+            cur_leader_ptr && closest_group_member &&
+            cur_leader_ptr->group->cur_standby_type
+        ) {
+            SUBGROUP_TYPE_CATEGORIES c =
+                cur_leader_ptr->group->cur_standby_type->get_category();
+                
+            switch(c) {
+            case SUBGROUP_TYPE_CATEGORY_LEADER: {
+                leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
+                standby_bmp = l_ptr->lea_type->bmp_icon;
+                break;
+                
+            } case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
+                pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
+                standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
+                standby_mat_bmp =
+                    p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
+                break;
+                
+            } default: {
+                standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
+                break;
+                
+            }
+            }
+        }
+        if(!standby_bmp) standby_bmp = bmp_no_pikmin_bubble;
+        
+        if(standby_mat_bmp) {
+            draw_bitmap_in_box(standby_mat_bmp, center, size * 0.8);
+            draw_bitmap_in_box(bmp_bubble, center, size);
+        }
+    };
+    hud.add_item(standby_maturity, "pikmin_standby_m_icon");
+    
+    //Pikmin count "x".
+    gui_item* pikmin_count_x = new gui_item();
+    pikmin_count_x->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_compressed_text(
+            game.fonts.counter, al_map_rgb(255, 255, 255),
+            center, ALLEGRO_ALIGN_CENTER, 1, size, "x"
+        );
+    };
+    hud.add_item(pikmin_count_x, "pikmin_standby_x");
+    
+    //Standby group member count.
+    gui_item* standby_count = new gui_item();
+    standby_count->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t n_standby_pikmin = 0;
+        if(cur_leader_ptr->group->cur_standby_type) {
+            for(
+                size_t m = 0; m < cur_leader_ptr->group->members.size();
+                ++m
+            ) {
+                mob* m_ptr = cur_leader_ptr->group->members[m];
+                if(
+                    m_ptr->subgroup_type_ptr ==
+                    cur_leader_ptr->group->cur_standby_type
+                ) {
+                    n_standby_pikmin++;
+                }
+            }
+        }
+        
+        draw_bitmap(bmp_counter_bubble_standby, center, size);
+        draw_compressed_text(
+            game.fonts.counter, al_map_rgb(255, 255, 255),
+            point(center.x + size.x * 0.4, center.y),
+            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, i2s(n_standby_pikmin)
+        );
+    };
+    hud.add_item(standby_count, "pikmin_standby_nr");
+    
+    //Group Pikmin count.
+    gui_item* group_count = new gui_item();
+    group_count->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t pikmin_in_group = cur_leader_ptr->group->members.size();
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            //If this leader is following the current one,
+            //then they're not a Pikmin.
+            //Subtract them from the group count total.
+            if(mobs.leaders[l]->following_group == cur_leader_ptr) {
+                pikmin_in_group--;
+            }
+        }
+        
+        draw_bitmap(bmp_counter_bubble_group, center, size);
+        draw_compressed_text(
+            game.fonts.counter, al_map_rgb(255, 255, 255),
+            point(center.x + size.x * 0.4, center.y),
+            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, i2s(pikmin_in_group)
+        );
+    };
+    hud.add_item(group_count, "pikmin_group_nr");
+    
+    //Field Pikmin count.
+    gui_item* field_count = new gui_item();
+    field_count->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_bitmap(bmp_counter_bubble_field, center, size);
+        draw_compressed_text(
+            game.fonts.counter, al_map_rgb(255, 255, 255),
+            point(center.x + size.x * 0.4, center.y),
+            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, i2s(mobs.pikmin_list.size())
+        );
+    };
+    hud.add_item(field_count, "pikmin_field_nr");
+    
+    //Total Pikmin count.
+    gui_item* total_count = new gui_item();
+    total_count->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t total_pikmin = mobs.pikmin_list.size();
+        for(size_t o = 0; o < mobs.onions.size(); ++o) {
+            onion* o_ptr = mobs.onions[o];
+            for(
+                size_t t = 0;
+                t < o_ptr->oni_type->nest->pik_types.size();
+                ++t
+            ) {
+                for(size_t m = 0; m < N_MATURITIES; ++m) {
+                    total_pikmin += mobs.onions[o]->nest->pikmin_inside[t][m];
+                }
+            }
+        }
+        
+        draw_bitmap(bmp_counter_bubble_total, center, size);
+        draw_compressed_text(
+            game.fonts.counter, al_map_rgb(255, 255, 255),
+            point(center.x + size.x * 0.4, center.y),
+            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, i2s(total_pikmin)
+        );
+    };
+    hud.add_item(total_count, "pikmin_total_nr");
+    
+    //Pikmin counter slashes.
+    for(size_t s = 0; s < 3; ++s) {
+        gui_item* counter_slash = new gui_item();
+        counter_slash->on_draw =
+        [this] (const point & center, const point & size) {
+            draw_compressed_text(
+                game.fonts.counter, al_map_rgb(255, 255, 255),
+                center, ALLEGRO_ALIGN_CENTER, 1, size, "/"
+            );
+        };
+        hud.add_item(counter_slash, "pikmin_slash_" + i2s(s + 1));
+    }
+    
+    //Spray 1 icon.
+    gui_item* spray_1_icon = new gui_item();
+    spray_1_icon->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t top_spray_idx = INVALID;
+        if(game.spray_types.size() <= 2) {
+            top_spray_idx = 0;
+        } else if(game.spray_types.size() > 0) {
+            top_spray_idx = selected_spray;
+        }
+        if(top_spray_idx == INVALID) return;
+        
+        draw_bitmap_in_box(
+            game.spray_types[top_spray_idx].bmp_spray, center, size
+        );
+    };
+    hud.add_item(spray_1_icon, "spray_1_icon");
+    
+    //Spray 1 amount.
+    gui_item* spray_1_amount = new gui_item();
+    spray_1_amount->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t top_spray_idx = INVALID;
+        if(game.spray_types.size() <= 2) {
+            top_spray_idx = 0;
+        } else if(game.spray_types.size() > 0) {
+            top_spray_idx = selected_spray;
+        }
+        if(top_spray_idx == INVALID) return;
+        
+        draw_compressed_text(
+            game.fonts.counter, al_map_rgb(255, 255, 255),
+            point(center.x - size.x / 2.0, center.y),
+            ALLEGRO_ALIGN_LEFT, 1, size,
+            "x" + i2s(spray_stats[top_spray_idx].nr_sprays)
+        );
+    };
+    hud.add_item(spray_1_amount, "spray_1_amount");
+    
+    //Spray 1 button.
+    gui_item* spray_1_button = new gui_item();
+    spray_1_button->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t top_spray_idx = INVALID;
+        if(game.spray_types.size() <= 2) {
+            top_spray_idx = 0;
+        } else if(game.spray_types.size() > 0) {
+            top_spray_idx = selected_spray;
+        }
+        if(top_spray_idx == INVALID) return;
+        
+        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+            if(
+                (
+                    game.options.controls[0][c].action ==
+                    BUTTON_USE_SPRAY_1 &&
+                    game.spray_types.size() <= 2
+                ) || (
+                    game.options.controls[0][c].action ==
+                    BUTTON_USE_SPRAY &&
+                    game.spray_types.size() >= 3
+                )
+            ) {
+                draw_control(
+                    game.fonts.main,
+                    game.options.controls[0][c], center, size
+                );
+                break;
+            }
+        }
+    };
+    hud.add_item(spray_1_button, "spray_1_button");
+    
+    //Spray 2 icon.
+    gui_item* spray_2_icon = new gui_item();
+    spray_2_icon->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t bottom_spray_idx = INVALID;
+        if(game.spray_types.size() == 2) {
+            bottom_spray_idx = 1;
+        }
+        if(bottom_spray_idx == INVALID) return;
+        
+        draw_bitmap_in_box(
+            game.spray_types[bottom_spray_idx].bmp_spray, center, size
+        );
+    };
+    hud.add_item(spray_2_icon, "spray_2_icon");
+    
+    //Spray 2 amount.
+    gui_item* spray_2_amount = new gui_item();
+    spray_2_amount->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t bottom_spray_idx = INVALID;
+        if(game.spray_types.size() == 2) {
+            bottom_spray_idx = 1;
+        }
+        if(bottom_spray_idx == INVALID) return;
+        
+        draw_compressed_text(
+            game.fonts.counter, al_map_rgb(255, 255, 255),
+            point(center.x - size.x / 2.0, center.y),
+            ALLEGRO_ALIGN_LEFT, 1, size,
+            "x" + i2s(spray_stats[bottom_spray_idx].nr_sprays)
+        );
+    };
+    hud.add_item(spray_2_amount, "spray_2_amount");
+    
+    //Spray 2 button.
+    gui_item* spray_2_button = new gui_item();
+    spray_2_button->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t bottom_spray_idx = INVALID;
+        if(game.spray_types.size() == 2) {
+            bottom_spray_idx = 1;
+        }
+        if(bottom_spray_idx == INVALID) return;
+        
+        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+            if(
+                game.options.controls[0][c].action ==
+                BUTTON_USE_SPRAY_2
+            ) {
+                draw_control(
+                    game.fonts.main,
+                    game.options.controls[0][c], center, size
+                );
+                break;
+            }
+        }
+    };
+    hud.add_item(spray_2_button, "spray_2_button");
+    
+    //Previous spray icon.
+    gui_item* prev_spray_icon = new gui_item();
+    prev_spray_icon->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t prev_spray_idx = INVALID;
+        if(game.spray_types.size() >= 3) {
+            prev_spray_idx =
+                sum_and_wrap(selected_spray, -1, game.spray_types.size());
+        }
+        if(prev_spray_idx == INVALID) return;
+        
+        draw_bitmap_in_box(
+            game.spray_types[prev_spray_idx].bmp_spray,
+            center, size
+        );
+    };
+    hud.add_item(prev_spray_icon, "spray_prev_icon");
+    
+    //Previous spray button.
+    gui_item* prev_spray_button = new gui_item();
+    prev_spray_button->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t prev_spray_idx = INVALID;
+        if(game.spray_types.size() >= 3) {
+            prev_spray_idx =
+                sum_and_wrap(selected_spray, -1, game.spray_types.size());
+        }
+        if(prev_spray_idx == INVALID) return;
+        
+        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+            if(
+                game.options.controls[0][c].action ==
+                BUTTON_PREV_SPRAY
+            ) {
+                draw_control(
+                    game.fonts.main,
+                    game.options.controls[0][c], center, size
+                );
+                break;
+            }
+        }
+    };
+    hud.add_item(prev_spray_button, "spray_prev_button");
+    
+    //Next spray icon.
+    gui_item* next_spray_icon = new gui_item();
+    next_spray_icon->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t next_spray_idx = INVALID;
+        if(game.spray_types.size() >= 3) {
+            next_spray_idx =
+                sum_and_wrap(selected_spray, 1, game.spray_types.size());
+        }
+        if(next_spray_idx == INVALID) return;
+        
+        draw_bitmap_in_box(
+            game.spray_types[next_spray_idx].bmp_spray,
+            center, size
+        );
+    };
+    hud.add_item(next_spray_icon, "spray_next_icon");
+    
+    //Next spray button.
+    gui_item* next_spray_button = new gui_item();
+    next_spray_button->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t next_spray_idx = INVALID;
+        if(game.spray_types.size() >= 3) {
+            next_spray_idx =
+                sum_and_wrap(selected_spray, 1, game.spray_types.size());
+        }
+        if(next_spray_idx == INVALID) return;
+        
+        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+            if(
+                game.options.controls[0][c].action ==
+                BUTTON_NEXT_SPRAY
+            ) {
+                draw_control(
+                    game.fonts.main,
+                    game.options.controls[0][c], center, size
+                );
+                break;
+            }
+        }
+    };
+    hud.add_item(next_spray_button, "spray_next_button");
+    
+    //Now, load the file settings.
+    data_node* bitmaps_node = hud_file_node.get_child_by_name("files");
+    
+#define loader(var, name) \
+    var = \
+          game.bitmaps.get( \
+                            bitmaps_node->get_child_by_name(name)->value, \
+                            bitmaps_node->get_child_by_name(name) \
+                          );
+    
+    loader(bmp_bubble,                 "bubble");
+    loader(bmp_counter_bubble_field,   "counter_bubble_field");
+    loader(bmp_counter_bubble_group,   "counter_bubble_group");
+    loader(bmp_counter_bubble_standby, "counter_bubble_standby");
+    loader(bmp_counter_bubble_total,   "counter_bubble_total");
+    loader(bmp_day_bubble,             "day_bubble");
+    loader(bmp_distant_pikmin_marker,  "distant_pikmin_marker");
+    loader(bmp_hard_bubble,            "hard_bubble");
+    loader(bmp_message_box,            "message_box");
+    loader(bmp_no_pikmin_bubble,       "no_pikmin_bubble");
+    loader(bmp_sun,                    "sun");
+    
+#undef loader
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Leaves the gameplay state, returning to the main menu, or wherever else.
+ * target:
+ *   Where to leave to.
+ */
+void gameplay_state::leave(const LEAVE_TARGET target) {
     game.fade_mgr.start_fade(
         false,
-    [this] () {
+    [this, target] () {
     
         if(game.perf_mon) {
             //Don't register the final frame, since it won't draw anything.
@@ -396,14 +941,25 @@ void gameplay_state::leave() {
         
         al_show_mouse_cursor(game.display);
         
-        if(game.states.area_ed->quick_play_area.empty()) {
+        switch(target) {
+        case LEAVE_TO_RETRY: {
+            game.change_state(game.states.gameplay);
+            break;
+        } case LEAVE_TO_FINISH: {
             game.states.results->time_taken = area_time_passed;
             went_to_results = true;
             //Change state, but don't unload this one, since the player
             //may pick the "keep playing" option in the results screen.
             game.change_state(game.states.results, false);
-        } else {
-            game.change_state(game.states.area_ed);
+            break;
+        } case LEAVE_TO_AREA_SELECT: {
+            if(game.states.area_ed->quick_play_area.empty()) {
+                game.change_state(game.states.area_menu);
+            } else {
+                game.change_state(game.states.area_ed);
+            }
+            break;
+        }
         }
         
     }
@@ -475,7 +1031,7 @@ void gameplay_state::load() {
             "in order to play.",
             NULL, ALLEGRO_MESSAGEBOX_WARN
         );
-        leave();
+        leave(LEAVE_TO_AREA_SELECT);
         return;
     }
     
@@ -518,6 +1074,8 @@ void gameplay_state::load() {
     
     path_mgr.handle_area_load();
     
+    init_hud();
+    
     cur_leader_nr = 0;
     cur_leader_ptr = mobs.leaders[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -540,6 +1098,8 @@ void gameplay_state::load() {
     day_minutes = game.config.day_minutes_start;
     area_time_passed = 0.0f;
     after_hours = false;
+    paused = false;
+    game.maker_tools.used_helping_tools = false;
     
     map<string, string> spray_strs =
         get_var_map(game.cur_area_data.spray_amounts);
@@ -649,7 +1209,6 @@ void gameplay_state::load_game_content() {
     load_status_types(true);
     load_spray_types(true);
     load_hazards();
-    load_hud_info();
     load_weather();
     load_spike_damage_types();
     
@@ -681,107 +1240,12 @@ void gameplay_state::load_game_content() {
 
 
 /* ----------------------------------------------------------------------------
- * Loads HUD coordinates of a specific HUD item.
- * item:
- *   Item to load the coordinates for.
- * data:
- *   String containing the coordinate data.
- */
-void gameplay_state::load_hud_coordinates(const int item, string data) {
-    vector<string> words = split(data);
-    if(data.size() < 4) return;
-    
-    hud_items.set_item(
-        item, s2f(words[0]), s2f(words[1]), s2f(words[2]), s2f(words[3])
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads all gameplay HUD info.
- */
-void gameplay_state::load_hud_info() {
-    data_node file(MISC_FOLDER_PATH + "/HUD.txt");
-    if(!file.file_was_opened) return;
-    
-    if(game.perf_mon) {
-        game.perf_mon->start_measurement("HUD info");
-    }
-    
-    //Hud coordinates.
-    data_node* positions_node = file.get_child_by_name("positions");
-    
-#define loader(id, name) \
-    load_hud_coordinates(id, positions_node->get_child_by_name(name)->value)
-    
-    loader(HUD_ITEM_TIME,                  "time");
-    loader(HUD_ITEM_DAY_BUBBLE,            "day_bubble");
-    loader(HUD_ITEM_DAY_NUMBER,            "day_number");
-    loader(HUD_ITEM_LEADER_1_ICON,         "leader_1_icon");
-    loader(HUD_ITEM_LEADER_2_ICON,         "leader_2_icon");
-    loader(HUD_ITEM_LEADER_3_ICON,         "leader_3_icon");
-    loader(HUD_ITEM_LEADER_1_HEALTH,       "leader_1_health");
-    loader(HUD_ITEM_LEADER_2_HEALTH,       "leader_2_health");
-    loader(HUD_ITEM_LEADER_3_HEALTH,       "leader_3_health");
-    loader(HUD_ITEM_PIKMIN_STANDBY_ICON,   "pikmin_standby_icon");
-    loader(HUD_ITEM_PIKMIN_STANDBY_M_ICON, "pikmin_standby_m_icon");
-    loader(HUD_ITEM_PIKMIN_STANDBY_NR,     "pikmin_standby_nr");
-    loader(HUD_ITEM_PIKMIN_STANDBY_X,      "pikmin_standby_x");
-    loader(HUD_ITEM_PIKMIN_GROUP_NR,       "pikmin_group_nr");
-    loader(HUD_ITEM_PIKMIN_FIELD_NR,       "pikmin_field_nr");
-    loader(HUD_ITEM_PIKMIN_TOTAL_NR,       "pikmin_total_nr");
-    loader(HUD_ITEM_PIKMIN_SLASH_1,        "pikmin_slash_1");
-    loader(HUD_ITEM_PIKMIN_SLASH_2,        "pikmin_slash_2");
-    loader(HUD_ITEM_PIKMIN_SLASH_3,        "pikmin_slash_3");
-    loader(HUD_ITEM_SPRAY_1_ICON,          "spray_1_icon");
-    loader(HUD_ITEM_SPRAY_1_AMOUNT,        "spray_1_amount");
-    loader(HUD_ITEM_SPRAY_1_BUTTON,        "spray_1_button");
-    loader(HUD_ITEM_SPRAY_2_ICON,          "spray_2_icon");
-    loader(HUD_ITEM_SPRAY_2_AMOUNT,        "spray_2_amount");
-    loader(HUD_ITEM_SPRAY_2_BUTTON,        "spray_2_button");
-    loader(HUD_ITEM_SPRAY_PREV_ICON,       "spray_prev_icon");
-    loader(HUD_ITEM_SPRAY_PREV_BUTTON,     "spray_prev_button");
-    loader(HUD_ITEM_SPRAY_NEXT_ICON,       "spray_next_icon");
-    loader(HUD_ITEM_SPRAY_NEXT_BUTTON,     "spray_next_button");
-    
-#undef loader
-    
-    //Bitmaps.
-    data_node* bitmaps_node = file.get_child_by_name("files");
-    
-#define loader(var, name) \
-    var = \
-          game.bitmaps.get( \
-                            bitmaps_node->get_child_by_name(name)->value, \
-                            bitmaps_node->get_child_by_name(name) \
-                          );
-    
-    loader(bmp_bubble,                 "bubble");
-    loader(bmp_counter_bubble_field,   "counter_bubble_field");
-    loader(bmp_counter_bubble_group,   "counter_bubble_group");
-    loader(bmp_counter_bubble_standby, "counter_bubble_standby");
-    loader(bmp_counter_bubble_total,   "counter_bubble_total");
-    loader(bmp_day_bubble,             "day_bubble");
-    loader(bmp_distant_pikmin_marker,  "distant_pikmin_marker");
-    loader(bmp_hard_bubble,            "hard_bubble");
-    loader(bmp_message_box,            "message_box");
-    loader(bmp_no_pikmin_bubble,       "no_pikmin_bubble");
-    loader(bmp_sun,                    "sun");
-    
-#undef loader
-    
-    if(game.perf_mon) {
-        game.perf_mon->finish_measurement();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Unloads the "gameplay" state from memory.
  */
 void gameplay_state::unload() {
     al_show_mouse_cursor(game.display);
     
+    hud.destroy();
     path_mgr.clear();
     
     cur_leader_ptr = NULL;
@@ -828,6 +1292,10 @@ void gameplay_state::unload() {
     if(onion_menu) {
         delete onion_menu;
         onion_menu = NULL;
+    }
+    if(pause_menu) {
+        delete pause_menu;
+        pause_menu = NULL;
     }
     game.maker_tools.info_print_text.clear();
 }
@@ -957,453 +1425,4 @@ void gameplay_state::update_transformations() {
     //Screen coordinates to world coordinates.
     game.screen_to_world_transform = game.world_to_screen_transform;
     al_invert_transform(&game.screen_to_world_transform);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Initializes the Onion menu HUD item manager.
- * item_total:
- *   How many HUD items exist in total.
- */
-onion_hud_manager::onion_hud_manager(const size_t item_total) :
-    hud_item_manager(item_total) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an Onion menu struct.
- * n_ptr:
- *   Pointer to the nest information struct.
- * leader_ptr:
- *   Leader responsible.
- */
-gameplay_state::onion_menu_struct::onion_menu_struct(
-    pikmin_nest_struct* n_ptr, leader* l_ptr
-) :
-    n_ptr(n_ptr),
-    l_ptr(l_ptr),
-    select_all(false),
-    page(0),
-    cursor_button(INVALID),
-    button_hold_id(INVALID),
-    button_hold_time(0.0f),
-    button_hold_next_activation(0.0f),
-    nr_pages(0),
-    to_delete(false) {
-    
-    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
-        types.push_back(
-            onion_menu_type_struct(t, n_ptr->nest_type->pik_types[t])
-        );
-    }
-    
-    nr_pages = ceil(types.size() / (float) MAX_TYPES_ON_SCREEN);
-    
-    hud = new onion_hud_manager(N_ONION_HUD_ITEMS);
-    hud->set_item(ONION_HUD_ITEM_TITLE,       50,  7, 90, 20);
-    hud->set_item(ONION_HUD_ITEM_CANCEL,      16, 87, 18, 11);
-    hud->set_item(ONION_HUD_ITEM_OK,          84, 87, 18, 11);
-    hud->set_item(ONION_HUD_ITEM_FIELD,       50, 77, 18,  4);
-    hud->set_item(ONION_HUD_ITEM_SEL_ALL,     50, 89, 24,  6);
-    hud->set_item(ONION_HUD_ITEM_O1_BUTTON,   50, 20,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O2_BUTTON,   50, 20,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O3_BUTTON,   50, 20,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O4_BUTTON,   50, 20,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O5_BUTTON,   50, 20,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_O1_AMOUNT,   50, 29, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_O2_AMOUNT,   50, 29, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_O3_AMOUNT,   50, 29, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_O4_AMOUNT,   50, 29, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_O5_AMOUNT,   50, 29, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P1_BUTTON,   50, 60,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P2_BUTTON,   50, 60,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P3_BUTTON,   50, 60,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P4_BUTTON,   50, 60,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P5_BUTTON,   50, 60,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_P1_AMOUNT,   50, 51, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P2_AMOUNT,   50, 51, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P3_AMOUNT,   50, 51, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P4_AMOUNT,   50, 51, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_P5_AMOUNT,   50, 51, 12,  4);
-    hud->set_item(ONION_HUD_ITEM_OALL_BUTTON, 50, 20,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_PALL_BUTTON, 50, 60,  9, 12);
-    hud->set_item(ONION_HUD_ITEM_PREV_PAGE,    5, 40,  8, 10);
-    hud->set_item(ONION_HUD_ITEM_NEXT_PAGE,   95, 40,  8, 11);
-    hud->set_item(ONION_HUD_ITEM_O_L_MORE,     5, 20,  3,  4);
-    hud->set_item(ONION_HUD_ITEM_O_R_MORE,    95, 20,  3,  4);
-    hud->set_item(ONION_HUD_ITEM_P_L_MORE,     5, 60,  3,  4);
-    hud->set_item(ONION_HUD_ITEM_P_R_MORE,    95, 60,  3,  4);
-    
-    update_caches();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys an Onion menu struct.
- */
-gameplay_state::onion_menu_struct::~onion_menu_struct() {
-    delete hud;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Activates the button currently being held down, either because it was
- * just pressed, or because it was held long enough for another activation.
- */
-void gameplay_state::onion_menu_struct::activate_held_button() {
-    //Individual Onion button.
-    for(size_t t = 0; t < on_screen_types.size(); ++t) {
-        int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
-        if(button_hold_id == hud_item_id) {
-            add_to_onion(on_screen_types[t]->type_idx);
-            return;
-        }
-    }
-    
-    //Individual Pikmin button.
-    for(size_t t = 0; t < on_screen_types.size(); ++t) {
-        int hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
-        if(button_hold_id == hud_item_id) {
-            add_to_group(on_screen_types[t]->type_idx);
-            return;
-        }
-    }
-    
-    //Combined Onion button.
-    if(button_hold_id == ONION_HUD_ITEM_OALL_BUTTON) {
-        add_all_to_onion();
-        return;
-    }
-    
-    //Combined Pikmin button press.
-    if(button_hold_id == ONION_HUD_ITEM_PALL_BUTTON) {
-        add_all_to_group();
-        return;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds one Pikmin of each type from Onion to the group, if possible.
- */
-void gameplay_state::onion_menu_struct::add_all_to_group() {
-    for(size_t t = 0; t < types.size(); ++t) {
-        add_to_group(t);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds one Pikmin of each type from the group to the Onion, if possible.
- */
-void gameplay_state::onion_menu_struct::add_all_to_onion() {
-    for(size_t t = 0; t < types.size(); ++t) {
-        add_to_onion(t);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds one Pikmin from the Onion to the group, if possible.
- * type_idx:
- *   Index of the Onion's Pikmin type.
- */
-void gameplay_state::onion_menu_struct::add_to_group(const size_t type_idx) {
-    size_t real_onion_amount =
-        n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
-        
-    //First, check if there are enough in the Onion to take out.
-    if(real_onion_amount - types[type_idx].delta <= 0) {
-        make_widget_red(
-            ONION_HUD_ITEM_O1_AMOUNT + types[type_idx].on_screen_idx
-        );
-        return;
-    }
-    
-    //Next, check if the addition won't make the field amount hit the limit.
-    int total_delta = 0;
-    for(size_t t = 0; t < types.size(); ++t) {
-        total_delta += types[t].delta;
-    }
-    if(
-        game.states.gameplay->mobs.pikmin_list.size() + total_delta >=
-        game.config.max_pikmin_in_field
-    ) {
-        make_widget_red(ONION_HUD_ITEM_FIELD);
-        return;
-    }
-    
-    types[type_idx].delta++;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds one Pikmin from the group to the Onion, if possible.
- * type_idx:
- *   Index of the Onion's Pikmin type.
- */
-void gameplay_state::onion_menu_struct::add_to_onion(const size_t type_idx) {
-    size_t real_group_amount =
-        l_ptr->group->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
-        
-    if(real_group_amount + types[type_idx].delta <= 0) {
-        if(types[type_idx].on_screen_idx != INVALID) {
-            make_widget_red(
-                ONION_HUD_ITEM_P1_AMOUNT + types[type_idx].on_screen_idx
-            );
-        }
-        return;
-    }
-    
-    types[type_idx].delta--;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Confirms the player's changes, and sets up the Pikmin to climb up the
- * Onion, if any, and sets up the Onion to spit out Pikmin, if any.
- */
-void gameplay_state::onion_menu_struct::confirm() {
-    for(size_t t = 0; t < types.size(); ++t) {
-        if(types[t].delta > 0) {
-            n_ptr->request_pikmin(t, types[t].delta, l_ptr);
-        } else if(types[t].delta < 0) {
-            l_ptr->order_pikmin_to_onion(
-                types[t].pik_type, n_ptr, -types[t].delta
-            );
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Flips to the specified page of Pikmin types.
- * page:
- *   Index of the new page.
- */
-void gameplay_state::onion_menu_struct::go_to_page(const size_t page) {
-    this->page = page;
-    update_caches();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Makes a given widget turn red.
- * id:
- *   ID of the widget.
- */
-void gameplay_state::onion_menu_struct::make_widget_red(const size_t id) {
-    red_widgets[id] = RED_TEXT_DURATION;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Ticks the Onion menu by one frame.
- * time:
- *   How many seconds to tick by.
- */
-void gameplay_state::onion_menu_struct::tick(const float delta_t) {
-
-    //Correct the amount of wanted group members, if they are invalid.
-    int total_delta = 0;
-    
-    for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
-        //Get how many the player really has with them.
-        int real_group_amount =
-            l_ptr->group->get_amount_by_type(
-                n_ptr->nest_type->pik_types[t]
-            );
-            
-        //Make sure the player can't request to store more than what they have.
-        types[t].delta = std::max(-real_group_amount, (int) types[t].delta);
-        
-        //Get how many are really in the Onion.
-        int real_onion_amount =
-            n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[t]);
-            
-        //Make sure the player can't request to call more than the Onion has.
-        types[t].delta = std::min(real_onion_amount, (int) types[t].delta);
-        
-        //Calculate the total delta.
-        total_delta += types[t].delta;
-    }
-    
-    //Make sure the player can't request to have more than the field limit.
-    int delta_over_limit =
-        game.states.gameplay->mobs.pikmin_list.size() + total_delta -
-        game.config.max_pikmin_in_field;
-        
-    while(delta_over_limit > 0) {
-        vector<size_t> candidate_types;
-        
-        for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
-            int real_group_amount =
-                l_ptr->group->get_amount_by_type(
-                    n_ptr->nest_type->pik_types[t]
-                );
-                
-            if((-types[t].delta) < real_group_amount) {
-                //It's possible to take away from this type's delta request.
-                candidate_types.push_back(t);
-            }
-        }
-        
-        //Figure out the type with the largest delta.
-        size_t best_type = 0;
-        int best_type_delta = types[candidate_types[0]].delta;
-        for(size_t t = 1; t < candidate_types.size(); ++t) {
-            if(types[candidate_types[t]].delta > best_type_delta) {
-                best_type = candidate_types[t];
-                best_type_delta = types[candidate_types[t]].delta;
-            }
-        }
-        
-        //Finally, remove one request from this type.
-        types[best_type].delta--;
-        delta_over_limit--;
-    }
-    
-    //Figure out what amount-related button is under the cursor, if any.
-    size_t old_cursor_button = cursor_button;
-    cursor_button = INVALID;
-    
-    if(!select_all) {
-        for(size_t t = 0; t < on_screen_types.size(); ++t) {
-            int hud_item_id = ONION_HUD_ITEM_O1_BUTTON + t;
-            if(hud->is_mouse_in(hud_item_id)) {
-                cursor_button = hud_item_id;
-                break;
-            }
-            hud_item_id = ONION_HUD_ITEM_P1_BUTTON + t;
-            if(hud->is_mouse_in(hud_item_id)) {
-                cursor_button = hud_item_id;
-                break;
-            }
-        }
-    } else  {
-        if(hud->is_mouse_in(ONION_HUD_ITEM_OALL_BUTTON)) {
-            cursor_button = ONION_HUD_ITEM_OALL_BUTTON;
-        } else if(hud->is_mouse_in(ONION_HUD_ITEM_PALL_BUTTON)) {
-            cursor_button = ONION_HUD_ITEM_PALL_BUTTON;
-        }
-    }
-    
-    if(cursor_button != old_cursor_button) {
-        button_hold_id = INVALID;
-    }
-    
-    //Repeat the held button, if any.
-    if(button_hold_id != INVALID) {
-        button_hold_time += delta_t;
-        button_hold_next_activation -= delta_t;
-        
-        while(button_hold_next_activation <= 0.0f) {
-            activate_held_button();
-            button_hold_next_activation +=
-                clamp(
-                    interpolate_number(
-                        button_hold_time,
-                        0, BUTTON_REPEAT_RAMP_TIME,
-                        BUTTON_REPEAT_MAX_INTERVAL, BUTTON_REPEAT_MIN_INTERVAL
-                    ),
-                    BUTTON_REPEAT_MIN_INTERVAL,
-                    BUTTON_REPEAT_MAX_INTERVAL
-                );
-        }
-    }
-    
-    //Animate red text, if any.
-    for(auto w = red_widgets.begin(); w != red_widgets.end();) {
-        w->second -= delta_t;
-        if(w->second <= 0.0f) {
-            w = red_widgets.erase(w);
-        } else {
-            ++w;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Toggles the "select all" mode.
- */
-void gameplay_state::onion_menu_struct::toggle_select_all() {
-    select_all = !select_all;
-    
-    update_caches();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the caches.
- */
-void gameplay_state::onion_menu_struct::update_caches() {
-    on_screen_types.clear();
-    
-    for(size_t t = 0; t < types.size(); ++t) {
-        types[t].on_screen_idx = INVALID;
-    }
-    
-    for(
-        size_t t = page * ONION_MENU_TYPES_PER_PAGE;
-        t < (page + 1) * ONION_MENU_TYPES_PER_PAGE &&
-        t < n_ptr->nest_type->pik_types.size();
-        ++t
-    ) {
-        types[t].on_screen_idx = on_screen_types.size();
-        on_screen_types.push_back(&types[t]);
-    }
-    
-    float splits = on_screen_types.size() + 1;
-    float leftmost = 0.50f;
-    float rightmost = 0.50f;
-    for(size_t t = 0; t < on_screen_types.size(); ++t) {
-        float x = 1.0f / splits * (t + 1);
-        hud->items[ONION_HUD_ITEM_O1_BUTTON + t].center.x = x;
-        hud->items[ONION_HUD_ITEM_O1_AMOUNT + t].center.x = x;
-        hud->items[ONION_HUD_ITEM_P1_BUTTON + t].center.x = x;
-        hud->items[ONION_HUD_ITEM_P1_AMOUNT + t].center.x = x;
-        leftmost =
-            std::min(
-                leftmost,
-                x - hud->items[ONION_HUD_ITEM_O1_BUTTON].size.x / 2.0f
-            );
-        rightmost =
-            std::max(
-                rightmost,
-                x + hud->items[ONION_HUD_ITEM_O1_BUTTON].size.x / 2.0f
-            );
-    }
-    
-    if(nr_pages > 1) {
-        leftmost =
-            std::min(
-                leftmost,
-                hud->items[ONION_HUD_ITEM_O_L_MORE].center.x -
-                hud->items[ONION_HUD_ITEM_O_L_MORE].size.x / 2.0f
-            );
-        rightmost =
-            std::max(
-                rightmost,
-                hud->items[ONION_HUD_ITEM_O_R_MORE].center.x +
-                hud->items[ONION_HUD_ITEM_O_R_MORE].size.x / 2.0f
-            );
-    }
-    
-    hud->items[ONION_HUD_ITEM_OALL_BUTTON].size.x = rightmost - leftmost;
-    hud->items[ONION_HUD_ITEM_PALL_BUTTON].size.x = rightmost - leftmost;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an Onion menu Pikmin type struct.
- */
-gameplay_state::onion_menu_type_struct::onion_menu_type_struct(
-    const size_t idx, pikmin_type* pik_type
-) :
-    delta(0),
-    type_idx(idx),
-    pik_type(pik_type) {
-    
 }

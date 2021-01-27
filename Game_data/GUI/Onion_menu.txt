@@ -1,0 +1,35 @@
+positions {
+    instructions =     50  7 90 20
+    cancel =           16 87 18 11
+    ok =               84 87 18 11
+    field =            50 77 18  4
+    select_all =       50 89 24  6
+    onion_1_button =   50 20  9 12
+    onion_2_button =   50 20  9 12
+    onion_3_button =   50 20  9 12
+    onion_4_button =   50 20  9 12
+    onion_5_button =   50 20  9 12
+    onion_1_amount =   50 29 12  4
+    onion_2_amount =   50 29 12  4
+    onion_3_amount =   50 29 12  4
+    onion_4_amount =   50 29 12  4
+    onion_5_amount =   50 29 12  4
+    group_1_button =   50 60  9 12
+    group_2_button =   50 60  9 12
+    group_3_button =   50 60  9 12
+    group_4_button =   50 60  9 12
+    group_5_button =   50 60  9 12
+    group_1_amount =   50 51 12  4
+    group_2_amount =   50 51 12  4
+    group_3_amount =   50 51 12  4
+    group_4_amount =   50 51 12  4
+    group_5_amount =   50 51 12  4
+    onion_all =        50 20  9 12
+    group_all =        50 60  9 12
+    prev_page =         5 40  8 10
+    next_page =        95 40  8 11
+    onion_left_more =   5 20  3  4
+    onion_right_more = 95 20  3  4
+    group_left_more =   5 60  3  4
+    group_right_more = 95 60  3  4
+}

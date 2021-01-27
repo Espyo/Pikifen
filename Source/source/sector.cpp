@@ -992,6 +992,8 @@ void blockmap::clear() {
     top_left_corner = point();
     edges.clear();
     sectors.clear();
+    n_cols = 0;
+    n_rows = 0;
 }
 
 

@@ -1,0 +1,18 @@
+positions {
+    retry =                20 90 25  6
+    continue =             50 90 25  6
+    pick_area =            80 90 25  6
+    area_name =            50 10 95 10
+    finish_reason =        50 17.5 95 10
+    time_label =           35 30 40 10
+    time_amount =          70 30 50 10
+    points_label =         35 40 40 10
+    points_amount =        70 40 50 10
+    enemies_label =        35 50 40 10
+    enemies_amount =       70 50 50 10
+    pikmin_born_label =    35 60 40 10
+    pikmin_born_amount =   70 60 50 10
+    pikmin_deaths_label =  35 70 40 10
+    pikmin_deaths_amount = 70 70 50 10
+    used_tools =           50 80 95 10
+}
