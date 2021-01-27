@@ -24,7 +24,7 @@ const size_t BACKTRACE_MAX_FRAMES = 30;
 const size_t BACKTRACE_MAX_SYMBOL_LENGTH = 512;
 const size_t BACKTRACE_DEMANGLE_BUFFER_SIZE = 512;
 
-#if defined(__linux__) || (__APPLE__ && __MACH__)
+#if defined(__linux__) || (__APPLE__)
 //Linux and Mac OS.
 
 #include <execinfo.h>
@@ -39,7 +39,7 @@ string demangle_symbol(const string &symbol) {
     size_t offset_size = 0;
     string ret;
     
-#ifdef DARWIN //Mac OS.
+#ifdef __APPLE__ //Mac OS.
     size_t name_start = symbol.find(" _");
     if(name_start != string::npos) {
         module_size = name_start;
