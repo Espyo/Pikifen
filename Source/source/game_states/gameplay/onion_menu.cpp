@@ -96,14 +96,14 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     //Instructions text.
     text_gui_item* instructions_text =
         new text_gui_item(
-        "Call or store Pikmin", game.fonts.main, al_map_rgb(188, 230, 230)
+        "Call or store Pikmin", game.fonts.standard, al_map_rgb(188, 230, 230)
     );
     gui.add_item(instructions_text, "instructions");
     
     //Cancel button.
     gui.back_item =
         new button_gui_item(
-        "Cancel", game.fonts.main, al_map_rgb(226, 112, 112)
+        "Cancel", game.fonts.standard, al_map_rgb(226, 112, 112)
     );
     gui.back_item->on_activate =
     [this] (const point &) {
@@ -114,7 +114,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     //Ok button.
     button_gui_item* ok_button =
         new button_gui_item(
-        "Ok", game.fonts.main, al_map_rgb(96, 226, 80)
+        "Ok", game.fonts.standard, al_map_rgb(96, 226, 80)
     );
     ok_button->on_activate =
     [this] (const point &) {
@@ -125,7 +125,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     
     //Field amount text.
     field_amount_text =
-        new text_gui_item("", game.fonts.main);
+        new text_gui_item("", game.fonts.standard);
     field_amount_text->on_draw =
     [this] (const point & center, const point & size) {
         int total_delta = 0;
@@ -150,7 +150,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         }
         
         draw_compressed_text(
-            game.fonts.main,
+            game.fonts.standard,
             color,
             center,
             ALLEGRO_ALIGN_CENTER, 1,
@@ -165,7 +165,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     check_gui_item* select_all_check =
         new check_gui_item(
         &select_all,
-        "Select all", game.fonts.main, al_map_rgb(188, 230, 230)
+        "Select all", game.fonts.standard, al_map_rgb(188, 230, 230)
     );
     select_all_check->on_activate =
     [this] (const point &) {
@@ -194,7 +194,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         onion_icon_items.push_back(onion_icon);
         
         button_gui_item* onion_button =
-            new button_gui_item("", game.fonts.main);
+            new button_gui_item("", game.fonts.standard);
         onion_button->on_activate =
         [this, t] (const point &) {
             add_to_onion(on_screen_types[t]->type_idx);
@@ -206,7 +206,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     
     //Onion's all button.
     onion_all_button =
-        new button_gui_item("", game.fonts.main);
+        new button_gui_item("", game.fonts.standard);
     onion_all_button->on_activate =
     [this] (const point &) {
         add_all_to_onion();
@@ -272,7 +272,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         group_icon_items.push_back(group_icon);
         
         button_gui_item* group_button =
-            new button_gui_item("", game.fonts.main);
+            new button_gui_item("", game.fonts.standard);
         group_button->on_activate =
         [this, t] (const point &) {
             add_to_group(on_screen_types[t]->type_idx);
@@ -284,7 +284,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     
     //Group's all button.
     group_all_button =
-        new button_gui_item("", game.fonts.main);
+        new button_gui_item("", game.fonts.standard);
     group_all_button->on_activate =
     [this] (const point &) {
         add_all_to_group();
@@ -394,7 +394,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         );
         
         draw_button(
-            center, size, "", game.fonts.main, map_gray(255),
+            center, size, "", game.fonts.standard, map_gray(255),
             prev_page_button->selected,
             prev_page_button->get_juicy_grow_amount()
         );
@@ -417,7 +417,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         );
         
         draw_button(
-            center, size, "", game.fonts.main, map_gray(255),
+            center, size, "", game.fonts.standard, map_gray(255),
             next_page_button->selected,
             next_page_button->get_juicy_grow_amount()
         );

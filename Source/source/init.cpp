@@ -86,7 +86,7 @@ void destroy_misc() {
     al_destroy_bitmap(game.bmp_error);
     al_destroy_font(game.fonts.area_name);
     al_destroy_font(game.fonts.counter);
-    al_destroy_font(game.fonts.main);
+    al_destroy_font(game.fonts.standard);
     al_destroy_font(game.fonts.value);
     
     al_detach_voice(game.voice);
@@ -330,8 +330,13 @@ void init_event_things(
 ) {
     if(game.options.window_position_hack) al_set_new_window_position(64, 64);
     if(game.win_fullscreen) {
+        #ifdef __APPLE__
+        int fs_flags = ALLEGRO_FULLSCREEN_WINDOW;
+        #else
+        int fs_flags = ALLEGRO_FULLSCREEN;
+        #endif
         al_set_new_display_flags(
-            al_get_new_display_flags() | ALLEGRO_FULLSCREEN
+            al_get_new_display_flags() | fs_flags
         );
     }
     game.display = al_create_display(game.win_w, game.win_h);

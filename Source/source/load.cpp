@@ -736,7 +736,7 @@ void load_fonts() {
     //Main font.
     ALLEGRO_BITMAP* temp_font_bmp = load_bmp(game.asset_file_names.main_font);
     if(temp_font_bmp) {
-        game.fonts.main =
+        game.fonts.standard =
             al_grab_font_from_bitmap(
                 temp_font_bmp,
                 STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges

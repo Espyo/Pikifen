@@ -35,7 +35,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     
     //Continue button.
     gui.back_item =
-        new button_gui_item("Continue", game.fonts.main);
+        new button_gui_item("Continue", game.fonts.standard);
     gui.back_item->on_activate =
     [this] (const point &) {
         to_delete = true;
@@ -44,7 +44,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     
     //Retry button.
     button_gui_item* retry_button =
-        new button_gui_item("Retry day", game.fonts.main);
+        new button_gui_item("Retry day", game.fonts.standard);
     retry_button->on_activate =
     [this] (const point &) {
         game.states.gameplay->leave(LEAVE_TO_RETRY);
@@ -53,7 +53,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     
     //Finish button.
     button_gui_item* finish_button =
-        new button_gui_item("Finish day", game.fonts.main);
+        new button_gui_item("Finish day", game.fonts.standard);
     finish_button->on_activate =
     [this] (const point &) {
         game.states.gameplay->leave(LEAVE_TO_FINISH);
@@ -66,7 +66,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
         game.states.area_ed->quick_play_area.empty() ?
         "Quit" :
         "Back to editor",
-        game.fonts.main
+        game.fonts.standard
     );
     quit_button->on_activate =
     [this] (const point &) {

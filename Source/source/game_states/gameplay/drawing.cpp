@@ -272,7 +272,7 @@ void gameplay_state::draw_ingame_text() {
                     point(
                         mob_ptr->pos.x,
                         mob_ptr->pos.y - mob_ptr->type->radius -
-                        al_get_font_line_height(game.fonts.main) * 1.25
+                        al_get_font_line_height(game.fonts.standard) * 1.25
                     ),
                     mob_ptr->carry_info->cur_carrying_strength,
                     mob_ptr->type->weight,
@@ -285,12 +285,12 @@ void gameplay_state::draw_ingame_text() {
             pile* p_ptr = mobs.piles[p];
             if(p_ptr->amount > 0 && p_ptr->pil_type->show_amount) {
                 draw_text_lines(
-                    game.fonts.main,
+                    game.fonts.standard,
                     game.config.carrying_color_stop,
                     point(
                         p_ptr->pos.x,
                         p_ptr->pos.y - p_ptr->type->radius -
-                        al_get_font_line_height(game.fonts.main) * 1.25
+                        al_get_font_line_height(game.fonts.standard) * 1.25
                     ),
                     ALLEGRO_ALIGN_CENTER,
                     1,
@@ -306,7 +306,7 @@ void gameplay_state::draw_ingame_text() {
                     point(
                         t_ptr->pos.x,
                         t_ptr->pos.y - t_ptr->type->radius -
-                        al_get_font_line_height(game.fonts.main) * 1.25
+                        al_get_font_line_height(game.fonts.standard) * 1.25
                     ),
                     t_ptr->get_power(),
                     t_ptr->tas_type->power_goal,
@@ -325,7 +325,7 @@ void gameplay_state::draw_ingame_text() {
                         point(
                             s_ptr->pos.x,
                             s_ptr->pos.y - s_ptr->type->radius -
-                            al_get_font_line_height(game.fonts.main) * 1.25
+                            al_get_font_line_height(game.fonts.standard) * 1.25
                         ),
                         w,
                         s_ptr->sca_type->goal_number,
@@ -333,12 +333,12 @@ void gameplay_state::draw_ingame_text() {
                     );
                 } else {
                     draw_text_lines(
-                        game.fonts.main,
+                        game.fonts.standard,
                         game.config.carrying_color_stop,
                         point(
                             s_ptr->pos.x,
                             s_ptr->pos.y - s_ptr->type->radius -
-                            al_get_font_line_height(game.fonts.main) * 1.25
+                            al_get_font_line_height(game.fonts.standard) * 1.25
                         ),
                         ALLEGRO_ALIGN_CENTER,
                         1,
@@ -803,11 +803,11 @@ void gameplay_state::draw_message_box() {
         bmp_message_box,
         point(
             game.win_w / 2,
-            game.win_h - al_get_font_line_height(game.fonts.main) * 2 - 4
+            game.win_h - al_get_font_line_height(game.fonts.standard) * 2 - 4
         ),
         point(
             game.win_w - 16,
-            al_get_font_line_height(game.fonts.main) * 4
+            al_get_font_line_height(game.fonts.standard) * 4
         )
     );
     
@@ -816,7 +816,7 @@ void gameplay_state::draw_message_box() {
             msg_box->speaker_icon,
             point(
                 40,
-                game.win_h - al_get_font_line_height(game.fonts.main) * 4 - 16
+                game.win_h - al_get_font_line_height(game.fonts.standard) * 4 - 16
             ),
             point(48, 48)
         );
@@ -824,7 +824,7 @@ void gameplay_state::draw_message_box() {
             bmp_bubble,
             point(
                 40,
-                game.win_h - al_get_font_line_height(game.fonts.main) * 4 - 16
+                game.win_h - al_get_font_line_height(game.fonts.standard) * 4 - 16
             ),
             point(64, 64)
         );
@@ -835,11 +835,11 @@ void gameplay_state::draw_message_box() {
     for(size_t l = 0; l < lines.size(); ++l) {
     
         draw_compressed_text(
-            game.fonts.main, al_map_rgb(255, 255, 255),
+            game.fonts.standard, al_map_rgb(255, 255, 255),
             point(
                 24,
                 game.win_h -
-                al_get_font_line_height(game.fonts.main) * (4 - l) + 8
+                al_get_font_line_height(game.fonts.standard) * (4 - l) + 8
             ),
             ALLEGRO_ALIGN_LEFT, 0, point(game.win_w - 64, 0),
             lines[l]

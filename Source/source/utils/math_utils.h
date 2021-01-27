@@ -19,6 +19,7 @@ constexpr float TAU = (float) M_PI * 2.0f;
 #include <cstddef>
 #include <math.h>
 #include <string>
+#include <stdint.h>
 
 
 //Returns a string with a number, adding a leading zero if it's less than 10.

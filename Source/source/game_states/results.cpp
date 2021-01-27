@@ -199,7 +199,7 @@ void results_state::load() {
     
     //Retry button.
     button_gui_item* retry_button =
-        new button_gui_item("Retry", game.fonts.main);
+        new button_gui_item("Retry", game.fonts.standard);
     retry_button->on_activate =
     [this] (const point &) {
         retry_area();
@@ -209,7 +209,7 @@ void results_state::load() {
     //Keep playing button.
     if(can_continue) {
         button_gui_item* continue_button =
-            new button_gui_item("Keep playing", game.fonts.main);
+            new button_gui_item("Keep playing", game.fonts.standard);
         continue_button->on_activate =
         [this] (const point &) {
             continue_playing();
@@ -223,7 +223,7 @@ void results_state::load() {
         game.states.area_ed->quick_play_area.empty() ?
         "Pick an area" :
         "Back to editor",
-        game.fonts.main
+        game.fonts.standard
     );
     gui.back_item->on_activate =
     [this] (const point &) {
@@ -247,7 +247,7 @@ void results_state::load() {
         text_gui_item* finish_reason_text =
             new text_gui_item(
             finish_reason,
-            game.fonts.main, al_map_rgb(255, 192, 192)
+            game.fonts.standard, al_map_rgb(255, 192, 192)
         );
         gui.add_item(finish_reason_text, "finish_reason");
     }
@@ -256,7 +256,7 @@ void results_state::load() {
     if(game.maker_tools.used_helping_tools) {
         text_gui_item* used_tools_text =
             new text_gui_item(
-            "(Maker tools were used.)", game.fonts.main,
+            "(Maker tools were used.)", game.fonts.standard,
             al_map_rgb(255, 215, 192)
         );
         gui.add_item(used_tools_text, "used_tools");
@@ -265,7 +265,7 @@ void results_state::load() {
     //Time taken label text.
     text_gui_item* time_label_text =
         new text_gui_item(
-        "Time taken:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        "Time taken:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(time_label_text, "time_label");
     
@@ -283,7 +283,7 @@ void results_state::load() {
     //Points label text.
     text_gui_item* points_label_text =
         new text_gui_item(
-        "Treasure points:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        "Treasure points:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(points_label_text, "points_label");
     
@@ -298,7 +298,7 @@ void results_state::load() {
     //Enemies label text.
     text_gui_item* enemies_label_text =
         new text_gui_item(
-        "Enemies:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        "Enemies:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(enemies_label_text, "enemies_label");
     
@@ -313,7 +313,7 @@ void results_state::load() {
     //Pikmin born label text.
     text_gui_item* pikmin_born_label_text =
         new text_gui_item(
-        "Pikmin born:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        "Pikmin born:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pikmin_born_label_text, "pikmin_born_label");
     
@@ -328,7 +328,7 @@ void results_state::load() {
     //Pikmin deaths label text.
     text_gui_item* pikmin_deaths_label_text =
         new text_gui_item(
-        "Pikmin deaths:", game.fonts.main, map_gray(255), ALLEGRO_ALIGN_LEFT
+        "Pikmin deaths:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pikmin_deaths_label_text, "pikmin_deaths_label");
     

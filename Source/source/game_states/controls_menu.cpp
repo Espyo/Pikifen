@@ -74,7 +74,7 @@ void controls_menu_state::add_control_gui_items(
     
     //Delete button.
     button_gui_item* delete_button =
-        new button_gui_item("-", game.fonts.main);
+        new button_gui_item("-", game.fonts.standard);
     delete_button->on_activate =
     [this, index] (const point &) {
         delete_control(index);
@@ -87,7 +87,7 @@ void controls_menu_state::add_control_gui_items(
     
     //Previous action button.
     button_gui_item* prev_action_button =
-        new button_gui_item("<", game.fonts.main);
+        new button_gui_item("<", game.fonts.standard);
     prev_action_button->on_activate =
     [this, index] (const point &) {
         choose_prev_action(index);
@@ -99,7 +99,7 @@ void controls_menu_state::add_control_gui_items(
     
     //Action name.
     text_gui_item* action_name_text =
-        new text_gui_item("", game.fonts.main);
+        new text_gui_item("", game.fonts.standard);
     action_name_text->on_draw =
         [this, index, action_name_text]
     (const point & center, const point & size) {
@@ -116,7 +116,7 @@ void controls_menu_state::add_control_gui_items(
         float juicy_grow_amount = action_name_text->get_juicy_grow_amount();
         
         draw_compressed_scaled_text(
-            game.fonts.main, map_gray(255),
+            game.fonts.standard, map_gray(255),
             center,
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
             ALLEGRO_ALIGN_CENTER, 1, size,
@@ -130,7 +130,7 @@ void controls_menu_state::add_control_gui_items(
     
     //Next action button.
     button_gui_item* next_action_button =
-        new button_gui_item(">", game.fonts.main);
+        new button_gui_item(">", game.fonts.standard);
     next_action_button->on_activate =
     [this, index] (const point &) {
         choose_next_action(index);
@@ -142,7 +142,7 @@ void controls_menu_state::add_control_gui_items(
     
     //Control button.
     button_gui_item* control_button =
-        new button_gui_item("", game.fonts.main);
+        new button_gui_item("", game.fonts.standard);
     control_button->on_activate =
     [this, index] (const point &) {
         choose_button(index);
@@ -152,10 +152,10 @@ void controls_menu_state::add_control_gui_items(
     (const point & center, const point & size) {
         control_info* c_ptr = &game.options.controls[0][index];
         
-        draw_control(game.fonts.main, *c_ptr, center, size * 0.8f);
+        draw_control(game.fonts.standard, *c_ptr, center, size * 0.8f);
         
         draw_button(
-            center, size, "", game.fonts.main, map_gray(255),
+            center, size, "", game.fonts.standard, map_gray(255),
             control_button->selected,
             control_button->get_juicy_grow_amount()
         );
@@ -260,7 +260,7 @@ void controls_menu_state::do_drawing() {
         );
         
         draw_text_lines(
-            game.fonts.main,
+            game.fonts.standard,
             al_map_rgb(255, 255, 255),
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             ALLEGRO_ALIGN_CENTER,
@@ -402,7 +402,7 @@ void controls_menu_state::load() {
     
     //Back button.
     gui.back_item =
-        new button_gui_item("Back", game.fonts.main);
+        new button_gui_item("Back", game.fonts.standard);
     gui.back_item->on_activate =
     [this] (const point &) {
         leave();
@@ -421,7 +421,7 @@ void controls_menu_state::load() {
     
     //New control button.
     button_gui_item* new_button =
-        new button_gui_item("New...", game.fonts.main);
+        new button_gui_item("New...", game.fonts.standard);
     new_button->on_activate =
     [this] (const point &) {
         add_control();

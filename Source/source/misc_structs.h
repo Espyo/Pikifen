@@ -261,7 +261,7 @@ struct font_list {
     //Font for HUD counters.
     ALLEGRO_FONT* counter;
     //Font for standard text.
-    ALLEGRO_FONT* main;
+    ALLEGRO_FONT* standard;
     //Font for the carrying / money values.
     ALLEGRO_FONT* value;
     
