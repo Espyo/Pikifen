@@ -32,11 +32,11 @@ float clamp(const float number, const float minimum, const float maximum) {
  * input:
  *   The input number.
  */
-u_int32_t hash_nr(const unsigned int input) {
+uint32_t hash_nr(const unsigned int input) {
     //Robert Jenkins' 32 bit integer hash function.
     //From https://gist.github.com/badboy/6267743
     //This algorithm is the simplest, lightest, fairest one I could find.
-    u_int32_t n = (input + 0x7ED55D16) + (input << 12);
+    uint32_t n = (input + 0x7ED55D16) + (input << 12);
     n = (n ^ 0xC761C23C) ^ (n >> 19);
     n = (n + 0x165667B1) + (n << 5);
     n = (n + 0xD3A2646C) ^ (n << 9);
@@ -53,12 +53,12 @@ u_int32_t hash_nr(const unsigned int input) {
  * input2:
  *   Second input number.
  */
-u_int32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
-    u_int32_t n1 = hash_nr(input1);
+uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
+    uint32_t n1 = hash_nr(input1);
     
     //Same algorithm has in hash_nr() with one argument,
     //but I changed the magic numbers to other random stuff.
-    u_int32_t n2 = (input2 + 0x5D795E0E) + (input2 << 12);
+    uint32_t n2 = (input2 + 0x5D795E0E) + (input2 << 12);
     n2 = (n2 ^ 0xC07C34BD) ^ (n2 >> 19);
     n2 = (n2 + 0x4969B10A) + (n2 << 5);
     n2 = (n2 + 0x583EB559) ^ (n2 << 9);

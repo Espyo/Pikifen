@@ -19,6 +19,7 @@ constexpr float TAU = (float) M_PI * 2.0f;
 #include <cstddef>
 #include <math.h>
 #include <string>
+#include <stdint.h>
 
 
 //Returns a string with a number, adding a leading zero if it's less than 10.
@@ -31,8 +32,8 @@ constexpr float TAU = (float) M_PI * 2.0f;
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
 float clamp(const float number, const float minimum, const float maximum);
-u_int32_t hash_nr(const unsigned int input);
-u_int32_t hash_nr2(const unsigned int input1, const unsigned int input2);
+uint32_t hash_nr(const unsigned int input);
+uint32_t hash_nr2(const unsigned int input1, const unsigned int input2);
 float interpolate_number(
     const float p, const float p1, const float p2,
     const float v1, const float v2
