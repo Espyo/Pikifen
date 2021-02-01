@@ -313,6 +313,8 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_DAY_MINUTES);
     } else if(call.args[1] == "field_pikmin") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_FIELD_PIKMIN);
+    } else if(call.args[1] == "focus_distance") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_FOCUS_DISTANCE);
     } else if(call.args[1] == "frame_signal") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
     } else if(call.args[1] == "health") {
@@ -1784,6 +1786,14 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         
     } case MOB_ACTION_GET_INFO_FIELD_PIKMIN: {
         *var = i2s(game.states.gameplay->mobs.pikmin_list.size());
+        break;
+        
+    } case MOB_ACTION_GET_INFO_FOCUS_DISTANCE: {
+        if(target_mob->focused_mob) {
+            float d =
+                dist(target_mob->pos, target_mob->focused_mob->pos).to_float();
+            *var = f2s(d);
+        }
         break;
         
     } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {
