@@ -2272,6 +2272,8 @@ const float PIKMIN_DISMISS_TIMEOUT = 4.0f;
  *   Unused.
  */
 void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_WALKING);
+    
     m->set_timer(PIKMIN_DISMISS_TIMEOUT);
 }
 

@@ -15,7 +15,6 @@ Next tasks (roughly sorted most important first)
             A "never casts shadows" option for sectors (thanks Neo)
         Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (thanks Tenacious)
     Object physics improvements
-        Pikmin should push each other a bit
         Objects should move with acceleration
         A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
     Improve the way ceramic bridge textures work
