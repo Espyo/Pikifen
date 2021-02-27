@@ -12,6 +12,7 @@ Next tasks (roughly sorted most important first)
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
             Check if it'd make sense to mark not-tall, always-casts-shadow sectors cast a shadow that's just a line, instead of a rectangle with a gradient
+            Maybe small edges, ones that Pikmin can be thrown to in general, should be marked with a less opaque color, but higher ones should be more opaque
             A "never casts shadows" option for sectors (thanks Neo)
         Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (thanks Tenacious)
     Object physics improvements
@@ -33,6 +34,7 @@ Next tasks (roughly sorted most important first)
     Rock Pikmin
         Should be unable to latch
         Should lunge on their own when attacking
+    Dear ImGui slider widgets should have in their tooltip a gray line explaining how they work. Possibly other widgets too
     Remember to update the Pikmin Fanon wiki page link in the PNG files
     
     --- v0.21.0 ---
@@ -294,6 +296,8 @@ Next tasks (roughly sorted most important first)
                 When a Pikmin is on top of a point, it slowly captures for that team, a la TF2. The more Pikmin, the quicker it captures
             Build a Wonder
                 Like in Age of Empires, you can gather materials into a spot, and once you have enough, you can start building a Wonder. If you manage to build it, you win automatically
+            Tag
+                One player's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every player has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
         A way for attack hitboxes to cause no knockback, otherwise Pikmin battles will keep knocking the Pikmin down
             Maybe add three types of knockback: none, flinch (makes leaders reel back in pain and Pikmin fall over), and chuck
         Competitive Mission Mode? Pikmin can't attack each other, and the player with the highest score at the end of the mission wins. Probably requires symmetrical maps, or all players starting in the same spot
@@ -353,6 +357,9 @@ Next tasks (roughly sorted most important first)
         Cutscenes http://www.pikminwiki.com/Cutscenes
             Make all cutscenes skippable
             Either make everything freeze during cutscenes, except for the actors that are part of it, or make everything continue, but health values be frozen (this way, leaders and Pikmin won't get hurt while the player can't react)
+            A cutscene queue, in case multiple ones need to start at once
+            Scripting for them
+                Among other things, a way to move the camera, both with teleport, and smoothly
         Sprouts between areas, days, etc.
             Don't forget that sprouts should turn into flowers overnight
         Wild Pikmin and sprouts should be immune to the sunset

@@ -1,0 +1,73 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Build Pikifen - Debug",
+			"command": "make",
+			"args": [
+				"debug",
+				"-j6",
+				"-f",
+				"Source/gnu_make/makefile"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "always",
+				"echo": true
+			},
+			"detail": "Use make to compile the whole project in a debug build."
+		},
+		{
+			"type": "shell",
+			"label": "Build Pikifen - Release",
+			"command": "make",
+			"args": [
+				"-j6",
+				"-f",
+				"Source/gnu_make/makefile"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"presentation": {
+				"reveal": "always",
+				"echo": true
+			},
+			"detail": "Use make to compile the whole project in a release build."
+		},
+		{
+			"type": "shell",
+			"label": "Clean Pikifen",
+			"command": "make",
+			"args": [
+				"clean",
+				"-f",
+				"Source/gnu_make/makefile"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"presentation": {
+				"reveal": "always",
+				"echo": true
+			},
+			"detail": "Use make to clean the project."
+		}
+	]
+}

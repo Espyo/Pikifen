@@ -75,7 +75,7 @@ bool ImGui::Combo(
             popup_max_height_in_items
         );
         
-    if(item_nr < items.size()) {
+    if(item_nr < (int) items.size()) {
         *current_item = items[item_nr];
     } else {
         *current_item = "";

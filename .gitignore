@@ -16,6 +16,7 @@ Source/gnu_make/pikifen
 allegro.log
 *.lnk
 *.o
+*.d
 *.aps
 User_data/*
 /pikifen

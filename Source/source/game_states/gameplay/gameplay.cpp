@@ -63,6 +63,7 @@ gameplay_state::gameplay_state() :
     precipitation(0),
     swarm_angle(0),
     swarm_magnitude(0.0f),
+    went_to_results(false),
     bmp_bubble(nullptr),
     bmp_counter_bubble_group(nullptr),
     bmp_counter_bubble_field(nullptr),
@@ -93,8 +94,7 @@ gameplay_state::gameplay_state() :
     selected_spray(0),
     swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
     swarm_cursor(false),
-    throw_can_reach_cursor(true),
-    went_to_results(false) {
+    throw_can_reach_cursor(true) {
     
     swarm_next_arrow_timer.on_end = [this] () {
         swarm_next_arrow_timer.start();
@@ -477,7 +477,6 @@ void gameplay_state::init_hud() {
     [this] (const point & center, const point & size) {
         //Standby group member preparations.
         ALLEGRO_BITMAP* standby_bmp = NULL;
-        ALLEGRO_BITMAP* standby_mat_bmp = NULL;
         if(
             cur_leader_ptr && closest_group_member &&
             cur_leader_ptr->group->cur_standby_type
@@ -489,13 +488,6 @@ void gameplay_state::init_hud() {
             case SUBGROUP_TYPE_CATEGORY_LEADER: {
                 leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
                 standby_bmp = l_ptr->lea_type->bmp_icon;
-                break;
-                
-            } case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
-                pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
-                standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
-                standby_mat_bmp =
-                    p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
                 break;
                 
             } default: {

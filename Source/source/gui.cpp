@@ -310,8 +310,6 @@ void gui_manager::draw() {
         if(!i_ptr->visible) continue;
         if(i_ptr->size.x == 0.0f) continue;
         
-        point center = i_ptr->center;
-        point size = i_ptr->size;
         point multipliers;
         gui_item* parent = i_ptr->parent;
         

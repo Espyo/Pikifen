@@ -231,12 +231,12 @@ void animation_editor::process_gui_hitbox_hazards() {
                     semicolon_list_to_vector(cur_hitbox->hazards_str);
                 if(
                     selected_hazard_nr >= 0 &&
-                    selected_hazard_nr < list.size()
+                    selected_hazard_nr < (int) list.size()
                 ) {
                     string hazard_name = list[selected_hazard_nr];
                     cur_hitbox->hazards_str.clear();
                     for(size_t h = 0; h < list.size(); ++h) {
-                        if(h == selected_hazard_nr) continue;
+                        if(h == (size_t) selected_hazard_nr) continue;
                         cur_hitbox->hazards_str += list[h] + ";";
                     }
                     if(!cur_hitbox->hazards_str.empty()) {
@@ -1112,7 +1112,7 @@ void animation_editor::process_gui_panel_body_part() {
             for(size_t p = 0; p < anims.body_parts.size(); ++p) {
             
                 //Body part selectable.
-                bool is_selected = (p == selected_part);
+                bool is_selected = (p == (size_t) selected_part);
                 ImGui::Selectable(
                     anims.body_parts[p]->name.c_str(), &is_selected
                 );
@@ -1122,7 +1122,7 @@ void animation_editor::process_gui_panel_body_part() {
                     if(!ImGui::IsItemHovered()) {
                         int p2 =
                             p + (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
-                        if(p2 >= 0 && p2 < anims.body_parts.size()) {
+                        if(p2 >= 0 && p2 < (int) anims.body_parts.size()) {
                             body_part* p_ptr = anims.body_parts[p];
                             anims.body_parts[p] = anims.body_parts[p2];
                             anims.body_parts[p2] = p_ptr;

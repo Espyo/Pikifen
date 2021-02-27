@@ -191,7 +191,7 @@ void animation_editor::draw_canvas() {
                 hitbox* h_ptr = &s->hitboxes[h];
                 ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
                 float hitbox_outline_thickness =
-                    cur_hitbox_nr == h ?
+                    cur_hitbox_nr == (size_t) h ?
                     3.0f / game.cam.zoom :
                     2 / game.cam.zoom;
                     
@@ -211,7 +211,7 @@ void animation_editor::draw_canvas() {
                 }
                 }
                 
-                if(cur_hitbox_nr == h) {
+                if(cur_hitbox_nr == (size_t) h) {
                     hitbox_outline_color =
                         change_alpha(hitbox_color, hitbox_outline_alpha);
                 }

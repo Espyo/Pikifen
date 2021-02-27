@@ -37,13 +37,14 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     pik_type(type),
     carrying_mob(NULL),
     missed_attack_ptr(nullptr),
+    was_last_hit_dud(false),
+    consecutive_dud_hits(0),
     maturity(2),
     is_seed_or_sprout(false),
     pluck_reserved(false),
     leader_to_return_to(nullptr),
     latched(false),
     is_tool_primed_for_whistle(false),
-    consecutive_dud_hits(0),
     temp_i(0) {
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);

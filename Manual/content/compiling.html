@@ -22,7 +22,9 @@
     
     <p>To begin, make sure you have downloaded the engine's source code, and you have a C++ compiler.</p>
     
-    <h2 id="vs2019">Windows - Visual Studio 2019</h2>
+    <h2 id="windows">Windows</h2>
+    
+    <h3 id="windows-vs-2019">Visual Studio 2019</h3>
     
     <ol>
       <li>Open the VS2019 .sln file with Visual Studio 2019.</li>
@@ -58,36 +60,37 @@
       </li>
     </ol>
     
-    <h2 id="vs-other">Windows - other version of Visual Studio</h2>
+    <h3 id="windows-vs-other">Other version of Visual Studio</h3>
     
     <p>Follow the instructions for <a href="#vs2019">Visual Studio 2019</a>, but go to the project properties, General, Platform Toolset, and set it to whatever you have.</p>
     
-    <h2 id="linux-g++">Linux - g++ or Clang</h2>
+    <h2 id="linux">Linux</h2>
     
-    <ol>
-      <li>
-        Install Allegro 5.2 on your system using the instructions <a href="https://github.com/liballeg/allegro_wiki/wiki/Quickstart">here</a>.
-        <ul>
-          <li>If you are on Ubuntu, I recommend <a href="https://wiki.allegro.cc/index.php?title=Install_Allegro_from_Ubuntu_PPAs&oldid=6853">this link</a> (but use 5.2 instead of 5.1 in the steps, of course).</li>
-        </ul>
-      </li>
-      <li>On a terminal, go to the engine's <code>Source/gnu_makefile</code> folder and write <code>make</code>.</li>
-      <li>Move the <code>pikifen</code> binary onto the project's root folder.</li>
-    </ol>
-    
-    <ul>
-      <li>If you get linker errors, edit the <code>makefile</code> file and follow the instructions. Write <code>make clean</code> and then <code>make</code> once more.</li>
-      <li>If you prefer to use Clang, edit the <code>makefile</code> file and follow the instructions. Write <code>make clean</code> and then <code>make</code> once more.</li>
-      <li>If you prefer to compile with Allegro 5.0.10 instead, edit the <code>makefile</code> file and add a <code>.0</code> after every <code>5</code> in the <code>LDFLAGS</code> line.
-    </ul>
-    
-    <h2 id="mac-g++">Mac - g++ or Clang</h2>
+    <h3 id="linux-g++">g++ or Clang</h3>
     
     <ol>
       <li>Install Allegro 5.2 on your system using the instructions <a href="https://github.com/liballeg/allegro_wiki/wiki/Quickstart">here</a>.</li>
-      <li>On a terminal, go to the engine's <code>Source/gnu_makefile</code> folder and write <code>make</code>.</li>
-      <li>Move the <code>pikifen</code> binary onto the project's root folder.</li>
+      <li>On a terminal, go to the engine's root folder and write <code>make -f Source/gnu_make/makefile</code>.</li>
     </ol>
+    
+    <ul>
+      <li>If you get linker errors, edit the <code>makefile</code> file and follow the instructions. Write <code>make clean -f Source/gnu_make/makefile</code> and then build it once more.</li>
+      <li>If you prefer to use Clang, edit the <code>makefile</code> file and follow the instructions. Write <code>make clean -f Source/gnu_make/makefile</code> and then build it once more.</li>
+      <li>If you prefer to compile with Allegro 5.0.10 instead, edit the <code>makefile</code> file and add a <code>.0</code> after every <code>5</code> in the <code>LDFLAGS</code> line.
+    </ul>
+    
+    <h3 id="linux-ide">IDE</h3>
+    
+    <ul>
+      <li>If you want to use Codelite, use the project in the <code>Source/codelite</code> folder.</li>
+      <li>If you want to use Visual Studio Code, copy the <code>Source/vs_code</code> folder onto the engine's root folder, and rename it to <code>.vscode</code>.</li>
+    </ul>
+    
+    <h2 id="mac">Mac OS</h3>
+    
+    <h3 id="mac-g++">g++ or Clang</h3>
+    
+    <p>Follow the instructions for <a href="#linux-g++">Linux</a>.</p>
     
     <h2 id="notes">Notes</h2>
     
