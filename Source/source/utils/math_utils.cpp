@@ -150,5 +150,5 @@ int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
  */
 float wrap_float(const float nr, const float minimum, const float maximum) {
     const float diff = maximum - minimum;
-    return minimum + std::fmod(diff + std::fmod(nr - minimum, diff), diff);
+    return minimum + fmod(diff + fmod(nr - minimum, diff), diff);
 }
