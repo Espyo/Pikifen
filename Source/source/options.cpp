@@ -33,6 +33,8 @@ const unsigned char options_struct::DEF_AREA_EDITOR_VIEW_MODE =
 const bool options_struct::DEF_DRAW_CURSOR_TRAIL = true;
 const bool options_struct::DEF_EDITOR_MMB_PAN = false;
 const float options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
+const float options_struct::DEF_EDITOR_PRIMARY_COLOR[3]{ 0.05f, 0.05f, 0.05f};
+const float options_struct::DEF_EDITOR_SECONDARY_COLOR[3]{ 0.19f, 0.47f, 0.78f};
 const bool options_struct::DEF_EDITOR_SHOW_TOOLTIPS = true;
 const float options_struct::DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 const float options_struct::DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
@@ -84,6 +86,14 @@ options_struct::options_struct() :
     mouse_moves_cursor[1] = DEF_MOUSE_MOVES_CURSOR[1];
     mouse_moves_cursor[2] = DEF_MOUSE_MOVES_CURSOR[2];
     mouse_moves_cursor[3] = DEF_MOUSE_MOVES_CURSOR[3];
+
+    editor_primary_color[0] = DEF_EDITOR_PRIMARY_COLOR[0];
+    editor_primary_color[1] = DEF_EDITOR_PRIMARY_COLOR[1];
+    editor_primary_color[2] = DEF_EDITOR_PRIMARY_COLOR[2];
+
+    editor_secondary_color[0] = DEF_EDITOR_SECONDARY_COLOR[0];
+    editor_secondary_color[1] = DEF_EDITOR_SECONDARY_COLOR[1];
+    editor_secondary_color[2] = DEF_EDITOR_SECONDARY_COLOR[2];
 }
 
 
@@ -147,7 +157,11 @@ void options_struct::load(data_node* file) {
     
     //Other options.
     string resolution_str;
+    string primary_color_str;
+    string secondary_color_str;
     
+    rs.set("editor_primary_color", primary_color_str);
+    rs.set("editor_secondary_color", secondary_color_str);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
     rs.set("area_editor_selection_transformation", area_editor_sel_trans);
@@ -185,6 +199,19 @@ void options_struct::load(data_node* file) {
     joystick_min_deadzone = clamp(joystick_min_deadzone, 0.0f, 1.0f);
     joystick_max_deadzone = clamp(joystick_max_deadzone, 0.0f, 1.0f);
     
+    vector<string> color_parts = split(primary_color_str);
+    if (color_parts.size() >= 3) {
+        editor_primary_color[0] = (float)s2i(color_parts[0]) / 255;
+        editor_primary_color[1] = (float)s2i(color_parts[1]) / 255;
+        editor_primary_color[2] = (float)s2i(color_parts[2]) / 255;
+    }
+    color_parts = split(secondary_color_str);
+    if (color_parts.size() >= 3) {
+        editor_secondary_color[0] = (float)s2i(color_parts[0]) / 255;
+        editor_secondary_color[1] = (float)s2i(color_parts[1]) / 255;
+        editor_secondary_color[2] = (float)s2i(color_parts[2]) / 255;
+    }
+
     vector<string> resolution_parts = split(resolution_str);
     if(resolution_parts.size() >= 2) {
         intended_win_w = std::max(1, s2i(resolution_parts[0]));
@@ -286,6 +313,22 @@ void options_struct::save(data_node* file) const {
     file->add(new data_node("editor_open_nodes", open_nodes_str));
     
     //Other options.
+    file->add(
+        new data_node(
+            "editor_primary_color",
+            i2s(editor_primary_color[0] * 255) + " " +
+            i2s(editor_primary_color[1] * 255) + " " +
+            i2s(editor_primary_color[2] * 255)
+        )
+    );
+    file->add(
+        new data_node(
+            "editor_secondary_color",
+            i2s(editor_secondary_color[0] * 255) + " " +
+            i2s(editor_secondary_color[1] * 255) + " " +
+            i2s(editor_secondary_color[2] * 255)
+        )
+    );
     file->add(
         new data_node(
             "area_editor_backup_interval",

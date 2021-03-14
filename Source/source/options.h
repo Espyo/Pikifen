@@ -39,6 +39,8 @@ struct options_struct {
     static const bool DEF_DRAW_CURSOR_TRAIL;
     static const bool DEF_EDITOR_MMB_PAN;
     static const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD;
+    static const float DEF_EDITOR_PRIMARY_COLOR[3];
+    static const float DEF_EDITOR_SECONDARY_COLOR[3];
     static const bool DEF_EDITOR_SHOW_TOOLTIPS;
     static const float DEF_JOYSTICK_MIN_DEADZONE;
     static const float DEF_JOYSTICK_MAX_DEADZONE;
@@ -82,6 +84,10 @@ struct options_struct {
     float editor_mouse_drag_threshold;
     //List of which editor node widgets the user wants open.
     map<string, bool> editor_open_nodes;
+    //Editor's main reference color.
+    float editor_primary_color[3];
+    //Editor's accent reference color.
+    float editor_secondary_color[3];
     //In editors, show widget tooltips when the mouse is over them.
     bool editor_show_tooltips;
     //Player's intended option for fullscreen, before restarting the game.
