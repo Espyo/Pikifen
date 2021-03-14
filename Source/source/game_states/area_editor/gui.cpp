@@ -619,6 +619,21 @@ void area_editor::process_gui_options_dialog() {
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
+
+    //Style node.
+    if (saveable_tree_node("options", "Style")) {
+        if (ImGui::ColorEdit3("Primary Color", game.options.editor_primary_color)) {
+            update_style(game.options.editor_primary_color, game.options.editor_secondary_color);
+        }
+        if (ImGui::ColorEdit3("Secondary Color", game.options.editor_secondary_color)) {
+            update_style(game.options.editor_primary_color, game.options.editor_secondary_color);
+        }
+
+        ImGui::TreePop();
+    }
+
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Misc. node.
     if(saveable_tree_node("options", "Misc.")) {

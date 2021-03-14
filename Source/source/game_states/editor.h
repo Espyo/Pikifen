@@ -36,6 +36,7 @@ public:
     virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
+    virtual void update_style(float primary[3], float secondary[3]);
     virtual void update_transformations();
     virtual string get_name() const = 0;
     
