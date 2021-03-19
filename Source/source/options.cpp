@@ -35,6 +35,7 @@ const bool options_struct::DEF_EDITOR_MMB_PAN = false;
 const float options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
 const float options_struct::DEF_EDITOR_PRIMARY_COLOR[3]{ 0.05f, 0.05f, 0.05f};
 const float options_struct::DEF_EDITOR_SECONDARY_COLOR[3]{ 0.19f, 0.47f, 0.78f};
+const float options_struct::DEF_EDITOR_TEXT_COLOR[3]{ 1, 1, 1 };
 const bool options_struct::DEF_EDITOR_SHOW_TOOLTIPS = true;
 const float options_struct::DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 const float options_struct::DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
@@ -94,6 +95,10 @@ options_struct::options_struct() :
     editor_secondary_color[0] = DEF_EDITOR_SECONDARY_COLOR[0];
     editor_secondary_color[1] = DEF_EDITOR_SECONDARY_COLOR[1];
     editor_secondary_color[2] = DEF_EDITOR_SECONDARY_COLOR[2];
+
+    editor_text_color[0] = DEF_EDITOR_TEXT_COLOR[0];
+    editor_text_color[1] = DEF_EDITOR_TEXT_COLOR[1];
+    editor_text_color[2] = DEF_EDITOR_TEXT_COLOR[2];
 }
 
 
@@ -159,9 +164,11 @@ void options_struct::load(data_node* file) {
     string resolution_str;
     string primary_color_str;
     string secondary_color_str;
+    string text_color_str;
     
     rs.set("editor_primary_color", primary_color_str);
     rs.set("editor_secondary_color", secondary_color_str);
+    rs.set("editor_text_color", text_color_str);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
     rs.set("area_editor_selection_transformation", area_editor_sel_trans);
@@ -210,6 +217,12 @@ void options_struct::load(data_node* file) {
         editor_secondary_color[0] = (float)s2i(color_parts[0]) / 255;
         editor_secondary_color[1] = (float)s2i(color_parts[1]) / 255;
         editor_secondary_color[2] = (float)s2i(color_parts[2]) / 255;
+    }
+    color_parts = split(text_color_str);
+    if (color_parts.size() >= 3) {
+        editor_text_color[0] = (float)s2i(color_parts[0]) / 255;
+        editor_text_color[1] = (float)s2i(color_parts[1]) / 255;
+        editor_text_color[2] = (float)s2i(color_parts[2]) / 255;
     }
 
     vector<string> resolution_parts = split(resolution_str);
@@ -327,6 +340,14 @@ void options_struct::save(data_node* file) const {
             i2s(editor_secondary_color[0] * 255) + " " +
             i2s(editor_secondary_color[1] * 255) + " " +
             i2s(editor_secondary_color[2] * 255)
+        )
+    );
+    file->add(
+        new data_node(
+            "editor_text_color",
+            i2s(editor_text_color[0] * 255) + " " +
+            i2s(editor_text_color[1] * 255) + " " +
+            i2s(editor_text_color[2] * 255)
         )
     );
     file->add(
