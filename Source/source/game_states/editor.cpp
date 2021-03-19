@@ -857,7 +857,7 @@ void editor::load() {
     //Load the user's editor style and preferred tree node open states.
     load_options();
     //Set the editor style
-    update_style(game.options.editor_primary_color, game.options.editor_secondary_color);
+    update_style(game.options.editor_primary_color, game.options.editor_secondary_color, game.options.editor_text_color);
     ImGui::Reset();
 }
 
@@ -1239,12 +1239,12 @@ void editor::unload() {
 /* ----------------------------------------------------------------------------
  * Updates the Imgui style with the current colors
  */
-void editor::update_style(float primary[3], float secondary[3]) {
+void editor::update_style(float primary[3], float secondary[3], float text[3]) {
     ImGuiStyle* style = &ImGui::GetStyle();
     ImVec4* colors = style->Colors;
 
-    colors[ImGuiCol_Text]                   = ImVec4(secondary[0] * 2, secondary[1] * 2, secondary[2] * 2, 1.00f);
-    colors[ImGuiCol_TextDisabled]           = ImVec4(secondary[0] * 1.4f, secondary[1] * 1.4f, secondary[2] * 1.4f, 1.00f);
+    colors[ImGuiCol_Text]                   = ImVec4(text[0], text[1], text[2], 1.00f);
+    colors[ImGuiCol_TextDisabled]           = ImVec4(text[0] * 0.5f, text[1] * 0.5f, text[2] * 0.5f, 1.00f);
     colors[ImGuiCol_WindowBg]               = ImVec4(primary[0], primary[1], primary[2], 0.94f);
     colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     colors[ImGuiCol_PopupBg]                = ImVec4(primary[0] * 1.3f, primary[1] * 1.3f, primary[2] * 1.3f, 0.94f);
