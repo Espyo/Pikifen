@@ -1431,7 +1431,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                 float ul;
                 float shadow_length_mid =
                     (shadow_length + neighbor_shadow_length[v]) / 2.0f;
-                lines_intersect(
+                line_segments_intersect(
                     point(
                         av[0].x + e_cos_front * shadow_length_mid,
                         av[0].y + e_sin_front * shadow_length_mid
@@ -1657,8 +1657,6 @@ void draw_sector_texture(
             );
         }
         
-        al_hold_bitmap_drawing(true);
-        
         for(size_t v = 0; v < n_vertexes; ++v) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
@@ -1713,8 +1711,6 @@ void draw_sector_texture(
                     opacity
                 );
         }
-        
-        al_hold_bitmap_drawing(false);
         
         for(size_t v = 0; v < n_vertexes; ++v) {
             av[v].x *= scale;

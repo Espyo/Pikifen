@@ -38,18 +38,23 @@ void gameplay_state::do_game_drawing(
       ***  \/                             \/  ***
         ***************************************/
     
-    ALLEGRO_TRANSFORM world_to_screen_drawing_transform;
-    
+    ALLEGRO_TRANSFORM old_world_to_screen_transform;
+    int blend_old_op, blend_old_src, blend_old_dst,
+        blend_old_aop, blend_old_asrc, blend_old_adst;
+        
     if(bmp_output) {
-        world_to_screen_drawing_transform = *bmp_transform;
+        old_world_to_screen_transform = game.world_to_screen_transform;
+        game.world_to_screen_transform = *bmp_transform;
         al_set_target_bitmap(bmp_output);
+        al_get_separate_blender(
+            &blend_old_op, &blend_old_src, &blend_old_dst,
+            &blend_old_aop, &blend_old_asrc, &blend_old_adst
+        );
         al_set_separate_blender(
             ALLEGRO_ADD, ALLEGRO_ALPHA,
             ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD,
             ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
         );
-    } else {
-        world_to_screen_drawing_transform = game.world_to_screen_transform;
     }
     
     al_clear_to_color(game.cur_area_data.bg_color);
@@ -67,7 +72,7 @@ void gameplay_state::do_game_drawing(
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Drawing -- World");
     }
-    al_use_transform(&world_to_screen_drawing_transform);
+    al_use_transform(&game.world_to_screen_transform);
     draw_world_components(bmp_output);
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
@@ -108,6 +113,11 @@ void gameplay_state::do_game_drawing(
     
     //Finish dumping to a bitmap image here.
     if(bmp_output) {
+        al_set_separate_blender(
+            blend_old_op, blend_old_src, blend_old_dst,
+            blend_old_aop, blend_old_asrc, blend_old_adst
+        );
+        game.world_to_screen_transform = old_world_to_screen_transform;
         al_set_target_backbuffer(game.display);
         return;
     }
@@ -122,9 +132,10 @@ void gameplay_state::do_game_drawing(
     }
     
     //Layer 7 -- Leader cursor.
-    draw_leader_cursor(world_to_screen_drawing_transform);
+    al_use_transform(&game.world_to_screen_transform);
+    draw_leader_cursor();
     
-    //Layer 8 -- HUD
+    //Layer 8 -- HUD.
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Drawing -- HUD");
     }
@@ -498,16 +509,10 @@ void gameplay_state::draw_ingame_text() {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the leader's cursor.
- * world_to_screen_drawing_transform:
- *   Use this transformation to get the cursor coordinates.
+ * Draws the leader's cursor and associated effects.
  */
-void gameplay_state::draw_leader_cursor(
-    ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
-) {
+void gameplay_state::draw_leader_cursor() {
 
-    al_use_transform(&world_to_screen_drawing_transform);
-    
     size_t n_arrows = swarm_arrows.size();
     for(size_t a = 0; a < n_arrows; ++a) {
         point pos(
@@ -621,7 +626,6 @@ void gameplay_state::draw_leader_cursor(
     }
     
     //Leader cursor.
-    al_use_transform(&world_to_screen_drawing_transform);
     draw_bitmap(
         game.sys_assets.bmp_cursor,
         leader_cursor_w,
@@ -1072,6 +1076,25 @@ void gameplay_state::draw_tree_shadows() {
  *   If not NULL, draw the area onto this.
  */
 void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
+    ALLEGRO_BITMAP* custom_wall_shadow_buffer = NULL;
+    if(!bmp_output) {
+        update_wall_shadow_buffer(
+            game.cam.box[0], game.cam.box[1],
+            game.wall_shadow_buffer
+        );
+        
+    } else {
+        custom_wall_shadow_buffer =
+            al_create_bitmap(
+                al_get_bitmap_width(bmp_output),
+                al_get_bitmap_height(bmp_output)
+            );
+        update_wall_shadow_buffer(
+            point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            custom_wall_shadow_buffer
+        );
+    }
+    
     vector<world_component> components;
     //Let's reserve some space. We might need more or less,
     //but this is a nice estimate.
@@ -1227,7 +1250,12 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                 }
             }
             
-            draw_sector_shadows(c_ptr->sector_ptr, point(), 1.0f);
+            draw_sector_wall_shadows(
+                c_ptr->sector_ptr,
+                bmp_output ?
+                custom_wall_shadow_buffer :
+                game.wall_shadow_buffer
+            );
             
         } else if(c_ptr->mob_shadow_ptr) {
         
@@ -1261,5 +1289,9 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             c_ptr->particle_ptr->draw();
             
         }
+    }
+    
+    if(bmp_output) {
+        al_destroy_bitmap(custom_wall_shadow_buffer);
     }
 }

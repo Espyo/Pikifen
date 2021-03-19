@@ -1566,9 +1566,9 @@ void polygon::cut(vector<polygon>* inners) {
         polygon* inner_p = &(inners->at(i));
         vertex* closest_edge_v1 = NULL;
         vertex* closest_edge_v2 = NULL;
-        float closest_edge_ur = FLT_MAX;
+        float closest_edge_r = FLT_MAX;
         vertex* closest_vertex = NULL;
-        float closest_vertex_ur = FLT_MAX;
+        float closest_vertex_r = FLT_MAX;
         vertex* best_vertex = NULL;
         
         //Find the rightmost vertex on this inner.
@@ -1598,27 +1598,27 @@ void polygon::cut(vector<polygon>* inners) {
                 (v1->x <= rightmost->x ||
                  v2->x <= rightmost->x)
             ) {
-                float ur;
+                float r;
                 if(
-                    lines_intersect(
+                    line_segments_intersect(
                         point(v1->x, v1->y), point(v2->x, v2->y),
                         point(start->x, start->y),
                         point(rightmost->x, start->y),
-                        &ur, NULL
+                        NULL, &r
                     )
                 ) {
-                    if(!closest_edge_v1 || ur < closest_edge_ur) {
+                    if(!closest_edge_v1 || r < closest_edge_r) {
                         closest_edge_v1 = v1;
                         closest_edge_v2 = v2;
-                        closest_edge_ur = ur;
+                        closest_edge_r = r;
                     }
                 }
                 
                 if(v1->y == start->y && v1->x >= start->x) {
-                    ur = (v1->x - start->x) / ray_width;
-                    if(!closest_vertex || ur < closest_vertex_ur) {
+                    r = (v1->x - start->x) / ray_width;
+                    if(!closest_vertex || r < closest_vertex_r) {
                         closest_vertex = v1;
-                        closest_vertex_ur = ur;
+                        closest_vertex_r = r;
                     }
                 }
                 
@@ -1631,7 +1631,7 @@ void polygon::cut(vector<polygon>* inners) {
         }
         
         //Which is closest, a vertex or an edge?
-        if(closest_vertex_ur <= closest_edge_ur) {
+        if(closest_vertex_r <= closest_edge_r) {
             //If it's a vertex, done.
             best_vertex = closest_vertex;
         } else {
@@ -1655,7 +1655,7 @@ void polygon::cut(vector<polygon>* inners) {
                     is_point_in_triangle(
                         point(v_ptr->x, v_ptr->y),
                         point(start->x, start->y),
-                        point(start->x + closest_edge_ur * ray_width, start->y),
+                        point(start->x + closest_edge_r * ray_width, start->y),
                         point(vertex_to_compare->x, vertex_to_compare->y),
                         true) &&
                     v_ptr != vertex_to_compare

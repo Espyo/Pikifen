@@ -931,6 +931,107 @@ bool lines_are_collinear(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether two lines (not line segments) intersect, and returns
+ * information about where it happens.
+ * l1p1:
+ *   Starting point of the first line segment.
+ * l1p2:
+ *   Ending point of the first line segment.
+ * l2p1:
+ *   Starting point of the second line segment.
+ * l2p2:
+ *   Ending point of the second line segment.
+ * final_l1r:
+ *   If not NULL and they intersect, returns the distance from
+ *   the start of line 1 in which the intersection happens.
+ *   This is a ratio, so 0 is the start, 1 is the end of the line.
+ * final_l2r:
+ *   Same as final_l1r, but for line 2.
+ */
+bool lines_intersect(
+    const point &l1p1, const point &l1p2,
+    const point &l2p1, const point &l2p2,
+    float* final_l1r, float* final_l2r
+) {
+    float div =
+        (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) -
+        (l2p2.x - l2p1.x) * (l1p2.y - l1p1.y);
+        
+    if(div != 0.0f) {
+        //They intersect.
+        
+        if(final_l1r) {
+            //Calculate the intersection distance from the start of line 1.
+            *final_l1r =
+                (
+                    (l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) -
+                    (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)
+                ) / div;
+        }
+        
+        if(final_l2r) {
+            //Calculate the intersection distance from the start of line 2.
+            *final_l2r =
+                (
+                    (l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) -
+                    (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)
+                ) / div;
+        }
+        
+        return true;
+        
+    } else {
+        //They don't intersect.
+        
+        if(final_l1r) *final_l1r = 0.0f;
+        if(final_l2r) *final_l2r = 0.0f;
+        
+        return false;
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether two lines (not line segments) intersect, and returns
+ * information about where it happens.
+ * l1p1:
+ *   Starting point of the first line segment.
+ * l1p2:
+ *   Ending point of the first line segment.
+ * l2p1:
+ *   Starting point of the second line segment.
+ * l2p2:
+ *   Ending point of the second line segment.
+ * final_point:
+ *   If not NULL and they intersect,
+ *   returns the coordinates of where it happens.
+ */
+bool lines_intersect(
+    const point &l1p1, const point &l1p2,
+    const point &l2p1, const point &l2p2,
+    point* final_point
+) {
+    if(final_point) {
+        final_point->x = 0.0f;
+        final_point->y = 0.0f;
+    }
+    
+    float r = 0.0f;
+    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &r, NULL)) {
+        return false;
+    }
+    
+    if(final_point) {
+        final_point->x = l1p1.x + (l1p2.x - l1p1.x) * r;
+        final_point->y = l1p1.y + (l1p2.y - l1p1.y) * r;
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether the two line segments intersect.
  * l1p1:
  *   Starting point of the first line segment.
@@ -940,50 +1041,30 @@ bool lines_are_collinear(
  *   Starting point of the second line segment.
  * l2p2:
  *   Ending point of the second line segment.
- * ur:
- *   Returns the distance from the start of line 2 in which
- *   the intersection happens.
+ * final_l1r:
+ *   If not NULL and they intersect, returns the distance from
+ *   the start of line 1 in which the intersection happens.
  *   This is a ratio, so 0 is the start, 1 is the end of the line.
- *   Oh, and the r stands for ray.
- * ul:
- *   Same as ur, but for line 1.
+ * final_l2r:
+ *   Same as final_l1r, but for line 2.
  */
-bool lines_intersect(
+bool line_segments_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    float* ur, float* ul
+    float* final_l1r, float* final_l2r
 ) {
-
-    float div =
-        (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) -
-        (l2p2.x - l2p1.x) * (l1p2.y - l1p1.y);
-        
-    if(div != 0) {
+    float l1r = 0.0f;
+    float l2r = 0.0f;
+    bool result = lines_intersect(l1p1, l1p2, l2p1, l2p2, &l1r, &l2r);
     
-        float local_ul, local_ur;
-        
-        //Calculate the intersection distance from the line.
-        local_ul =
-            (
-                (l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) -
-                (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)
-            ) / div;
-        if(ul) *ul = local_ul;
-        
-        //Calculate the intersection distance from the ray.
-        local_ur =
-            (
-                (l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) -
-                (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)
-            ) / div;
-        if(ur) *ur = local_ur;
-        
-        //Return whether they intersect.
+    if(final_l1r) *final_l1r = l1r;
+    if(final_l2r) *final_l2r = l2r;
+    
+    if(result) {
+        //Return whether they intersect at the segments.
         return
-            (local_ur >= 0) && (local_ur <= 1) &&
-            (local_ul >= 0) && (local_ul <= 1);
-            
+            l1r >= 0 && l1r <= 1 &&
+            l2r >= 0 && l2r <= 1;
     } else {
-        //No intersection.
         return false;
     }
 }
@@ -1002,19 +1083,19 @@ bool lines_intersect(
  * intersection:
  *   Return the intersection point here, if not NULL.
  */
-bool lines_intersect(
+bool line_segments_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     point* intersection
 ) {
-    float ur;
+    float r;
     if(intersection) {
         intersection->x = 0.0f;
         intersection->y = 0.0f;
     }
-    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &ur, NULL)) return false;
+    if(!line_segments_intersect(l1p1, l1p2, l2p1, l2p2, &r, NULL)) return false;
     if(intersection) {
-        intersection->x = l2p1.x + (l2p2.x - l2p1.x) * ur;
-        intersection->y = l2p1.y + (l2p2.y - l2p1.y) * ur;
+        intersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
+        intersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
     }
     return true;
 }
@@ -1106,7 +1187,7 @@ bool rectangle_intersects_line(
 ) {
     //Line crosses left side?
     if(
-        lines_intersect(
+        line_segments_intersect(
             l1, l2, point(r1.x, r1.y), point(r1.x, r2.y), NULL, NULL
         )
     ) {
@@ -1114,7 +1195,7 @@ bool rectangle_intersects_line(
     }
     //Line crosses right side?
     if(
-        lines_intersect(
+        line_segments_intersect(
             l1, l2, point(r2.x, r1.y), point(r2.x, r2.y), NULL, NULL
         )
     ) {
@@ -1122,7 +1203,7 @@ bool rectangle_intersects_line(
     }
     //Line crosses top side?
     if(
-        lines_intersect(
+        line_segments_intersect(
             l1, l2, point(r1.x, r1.y), point(r2.x, r1.y), NULL, NULL
         )
     ) {
@@ -1130,7 +1211,7 @@ bool rectangle_intersects_line(
     }
     //Line crosses bottom side?
     if(
-        lines_intersect(
+        line_segments_intersect(
             l1, l2, point(r1.x, r2.y), point(r2.x, r2.y), NULL, NULL
         )
     ) {

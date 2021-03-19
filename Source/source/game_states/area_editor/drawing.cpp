@@ -152,6 +152,12 @@ void area_editor::draw_canvas() {
         (selection_max_opacity - selection_min_opacity) / 2.0;
         
     //Sectors.
+    if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
+        update_wall_shadow_buffer(
+            game.cam.box[0], game.cam.box[1],
+            game.wall_shadow_buffer
+        );
+    }
     size_t n_sectors = game.cur_area_data.sectors.size();
     for(size_t s = 0; s < n_sectors; ++s) {
         sector* s_ptr;
@@ -177,7 +183,7 @@ void area_editor::draw_canvas() {
             draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
             
             if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
-                draw_sector_shadows(s_ptr, point(), 1.0);
+                draw_sector_wall_shadows(s_ptr, game.wall_shadow_buffer);
             }
             
         } else if(game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
@@ -1134,24 +1140,24 @@ void area_editor::draw_canvas() {
             get_sector(cross_section_checkpoints[1], NULL, false);
         struct split_info {
             sector* sector_ptrs[2];
-            float ur;
-            float ul;
+            float l1r;
+            float l2r;
             split_info(
-                sector* s1, sector* s2, const float ur, const float ul
+                sector* s1, sector* s2, const float l1r, const float l2r
             ) {
                 sector_ptrs[0] = s1;
                 sector_ptrs[1] = s2;
-                this->ur = ur;
-                this->ul = ul;
+                this->l1r = l1r;
+                this->l2r = l2r;
             }
         };
         vector<split_info> splits;
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
             edge* e_ptr = game.cur_area_data.edges[e];
-            float ur = 0;
-            float ul = 0;
+            float l1r = 0;
+            float l2r = 0;
             if(
-                lines_intersect(
+                line_segments_intersect(
                     point(
                         e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
                     ),
@@ -1166,11 +1172,11 @@ void area_editor::draw_canvas() {
                         cross_section_checkpoints[1].x,
                         cross_section_checkpoints[1].y
                     ),
-                    &ur, &ul
+                    &l1r, &l2r
                 )
             ) {
                 splits.push_back(
-                    split_info(e_ptr->sectors[0], e_ptr->sectors[1], ur, ul)
+                    split_info(e_ptr->sectors[0], e_ptr->sectors[1], l1r, l2r)
                 );
             }
         }
@@ -1179,7 +1185,7 @@ void area_editor::draw_canvas() {
             sort(
                 splits.begin(), splits.end(),
             [] (split_info i1, split_info i2) -> bool {
-                return i1.ur < i2.ur;
+                return i1.l2r < i2.l2r;
             }
             );
             
@@ -1227,14 +1233,14 @@ void area_editor::draw_canvas() {
             for(size_t s = 1; s < splits.size(); ++s) {
                 if(!splits[s].sector_ptrs[0]) continue;
                 draw_cross_section_sector(
-                    splits[s - 1].ur, splits[s].ur, proportion,
+                    splits[s - 1].l2r, splits[s].l2r, proportion,
                     lowest_z, splits[s].sector_ptrs[0]
                 );
             }
             
             sector* central_sector = NULL;
             for(size_t s = 1; s < splits.size(); ++s) {
-                if(splits[s].ur > 0.5) {
+                if(splits[s].l2r > 0.5) {
                     central_sector = splits[s].sector_ptrs[0];
                     break;
                 }

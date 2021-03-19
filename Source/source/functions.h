@@ -78,6 +78,7 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
 void clear_area_textures();
 void crash(const string &reason, const string &info, const int exit_status);
+void draw_wall_shadow_on_buffer(edge* e_ptr);
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
@@ -89,9 +90,32 @@ ALLEGRO_COLOR get_fog_color();
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
 );
+void get_next_edge(
+    vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
+    edge** final_edge, float* final_angle, float* final_diff
+);
+void get_next_wall_shadow_edge(
+    vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
+    edge** final_edge, float* final_angle, float* final_diff,
+    signed char* final_casting_sector_idx, float* final_base_shadow_angle,
+    bool* final_shadow_cw
+);
 float get_sun_strength();
 map<string, string> get_var_map(const string &vars_string);
+void get_wall_shadow_edge_info(
+    edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
+    const float edge_process_angle,
+    sector* casting_sector, sector* shaded_sector,
+    float* final_angle, float* final_length,
+    float* final_elbow_angle, float* final_elbow_length
+);
 float get_wall_shadow_length(const float height_difference);
+void get_wall_shadows_intersection(
+    edge* e1, edge* e2, vertex* common_vertex,
+    const float base_shadow_angle1, const float base_shadow_angle2,
+    const float shadow_length, const unsigned char end_idx,
+    float* final_angle, float* final_length
+);
 vector<std::pair<size_t, string> > get_weather_table(data_node* node);
 ALLEGRO_COLOR interpolate_color(
     const float n, const float n1, const float n2,
@@ -136,6 +160,10 @@ void spew_pikmin_seed(
 string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string unescape_string(const string &s);
+void update_wall_shadow_buffer(
+    const point &cam_tl, const point &cam_br,
+    ALLEGRO_BITMAP* buffer
+);
 string vector_tail_to_string(const vector<string> &v, const size_t pos);
 
 

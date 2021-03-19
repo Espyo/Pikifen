@@ -203,7 +203,7 @@ void area_editor::check_drawing_line(const point &pos) {
         }
         
         if(
-            lines_intersect(
+            line_segments_intersect(
                 prev_node->snapped_spot, pos,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
@@ -222,7 +222,7 @@ void area_editor::check_drawing_line(const point &pos) {
             layout_drawing_node* n2_ptr = &drawing_nodes[n + 1];
             point intersection;
             if(
-                lines_intersect(
+                line_segments_intersect(
                     prev_node->snapped_spot, pos,
                     n1_ptr->snapped_spot, n2_ptr->snapped_spot,
                     &intersection
@@ -435,14 +435,14 @@ void area_editor::find_problems() {
     //Check intersecting edges.
     vector<edge_intersection> intersections = get_intersecting_edges();
     if(!intersections.empty()) {
-        float u;
+        float r;
         edge_intersection* ei_ptr = &(*intersections.begin());
-        lines_intersect(
+        line_segments_intersect(
             point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
             point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y),
             point(ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y),
             point(ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y),
-            NULL, &u
+            &r, NULL
         );
         
         float a =
@@ -461,10 +461,10 @@ void area_editor::find_problems() {
         problem_description =
             "They cross at (" +
             f2s(
-                floor(ei_ptr->e1->vertexes[0]->x + cos(a) * u *
+                floor(ei_ptr->e1->vertexes[0]->x + cos(a) * r *
                       d.to_float())
             ) + "," + f2s(
-                floor(ei_ptr->e1->vertexes[0]->y + sin(a) * u *
+                floor(ei_ptr->e1->vertexes[0]->y + sin(a) * r *
                       d.to_float())
             ) + "). Edges should never cross each other.";
         return;
@@ -1212,7 +1212,7 @@ vector<edge_intersection> area_editor::get_intersecting_edges() const {
             edge* e2_ptr = game.cur_area_data.edges[e2];
             if(e1_ptr->has_neighbor(e2_ptr)) continue;
             if(
-                lines_intersect(
+                line_segments_intersect(
                     point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
                     point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
                     point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),

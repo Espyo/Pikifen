@@ -6,19 +6,35 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
+    Resize everything operation isn't updating triangulation? I tried resizing by -1 twice (with a run in between) and the tris were wrong
+    Start with an area editor default square, try to draw an edge from a corner to the exact center -- it'll say it's crossing edges
+    Kman's got a way to crash with the p->carriable_mob = null assert; check pinned messages
+    The Armored Cannon Beetle can shoot boulders through the wall in its arena to the lake area
+    If you enable a maker tool and restart the area, it will still be on but won't trip the stage end warning
+    Trying to move an edge from an internal sector to an external one, but the external sector has some moot vertexes (both edges at 180 degrees), the merge attempt breaks
     
     --- v0.20.0 ---
     Sector edge features
         Shadows
             A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
+            An option for its presence/length. If 0, it never appears. If LARGE_FLOAT, it's automatic. If another value, it uses that. If it's not automatic, then it will always have that length and be visible even if it's a staircase step
             Check if it'd make sense to mark not-tall, always-casts-shadow sectors cast a shadow that's just a line, instead of a rectangle with a gradient
             Maybe small edges, ones that Pikmin can be thrown to in general, should be marked with a less opaque color, but higher ones should be more opaque
             A "never casts shadows" option for sectors (thanks Neo)
         Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (thanks Tenacious)
+        The limits of water sectors should also have some foam or something
+    Add Kman's editor style commit
+    If you enable the area preview in the area editor, the problem searching stuff shouldn't move
+    It should be possible to retrieve the hazard that triggered on_touch_hazard and on_left_hazard
+    Add a way for a GUI element's drawing routine to receive alpha as a parameter
+    Dear ImGui slider widgets should have in their tooltip a gray line explaining how they work. Possibly other widgets too
+    See if the HUD element for the standby type's maturity can be optimized -- it's making use of standby_bmp for no reason I think
+    Remember to update the Pikmin Fanon wiki page link in the PNG files
+    
+    --- v0.21.0 ---
     Object physics improvements
         Objects should move with acceleration
         A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
-    Improve the way ceramic bridge textures work
     Cursor improvements
         The cursor should change to the standby color, and show the number of Pikmin of that type next to it
         When holding a Pikmin (or maybe just always?), a trajectory predictor line should appear
@@ -31,44 +47,58 @@ Next tasks (roughly sorted most important first)
             Whistling: can be on cursor or distance-limited?
             Throwing: can be on cursor or distance-limited?
         An option to control the cursor's movement speed, when not using the mouse (thanks MonkeyUhOh)
-    Rock Pikmin
-        Should be unable to latch
-        Should lunge on their own when attacking
-    Dear ImGui slider widgets should have in their tooltip a gray line explaining how they work. Possibly other widgets too
-    Remember to update the Pikmin Fanon wiki page link in the PNG files
-    
-    --- v0.21.0 ---
-    Details
-        Make bridges open sectors gradually
-            If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
-        Make White Pikmin inflict enemies with a "poisoned" status effect that saps away health over time
-        "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" (thanks Kman)
+    Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
+        Same for whistling and other controls you may need to mash/hold
+    Minor editor improvements
+        When placing your mouse over the timeline in the animation editor, the status bar should show the seconds at the cursor position.
+        Make the sprite picker in the animation editor show the sprites in the buttons
+        The area editor should let you resize everything, but one dimension at a time
+        Double-click the area editor in mob mode to add a mob, or in path mode to add a node, etc.
+    Misc. details
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time
             Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
             The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
+        Whistling lying Pikmin should make them get up and go to you
+            Change the animations to just be the Pikmin lying down, looping on that frame, and make the time to get up be controlled by a timer
+            When whistled, set that leader as the focused mob, and when it gets up, check if the focused mob is a leader (watch out for teams!). If so, add to group
+    Purple Pikmin
+        Give them a proper pound attack
+        Maybe stun?
+    Rock Pikmin
+        Should be unable to latch
+        Should lunge on their own when attacking
+        An enemy for them, like Skutterchucks
+    Winged Pikmin
+        Just the basics
+        An enemy for them
+    Bulbmin
+    
+    --- v0.22.0 ---
+    Details
+        Bridge improvements
+            Improve the way ceramic bridge textures work
+            Make bridges open sectors gradually
+                If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
+            Maybe make them objects entirely? Should work fine for forward-facing bridges, but ramped ones might be tougher
+        Make White Pikmin inflict a "poisoned" status effect upon enemies that saps away health over time
+        "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" (thanks Kman)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Should the Beady Long Legs's feet be damageable? It can give some life to the fight, but newbies might think that's the only way to cause damage
-        The pillars of gates cannot be collided with; figure out if they should be a part of the object or not
+        Gates should have one object for the gate proper, then two children objects for the pillars that hold them
         Decorative objects shouldn't cast light in blackout mode
         Improve the look of the ship's ring
         On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
-        Sounds really need a makeover...
-        Make the sprite picker in the animation editor show the sprites in the buttons
         A leader can whistle another from a gate and grab them
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
             Add a transparent solid circle over the area being whistled
-        Whistling lying Pikmin should make them get up and go to you
-            Change the animations to just be the Pikmin lying down, looping on that frame, and make the time to get up be controlled by a timer
-            When whistled, set that leader as the focused mob, and when it gets up, check if the focused mob is a leader (watch out for teams!). If so, add to group
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
-        Minor
-            When placing your mouse over the timeline in the animation editor, the status bar should show the seconds at the cursor position.
+    Allow any animation to interpolate the transformations (rotation, scale, etc.)
     Missing animations and animation improvements
         Pikmin
             Sighing
@@ -91,9 +121,6 @@ Next tasks (roughly sorted most important first)
             Thrown (add to the logic of bouncers too)
             Climbing (add the track logic too)
             Sliding (add the track logic too)
-    Allow any animation to interpolate the transformations (rotation, scale, etc.)
-    Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
-        Same for whistling and other controls you may need to mash/hold
     Graphics overhaul
         Gates should have a different appearance depending on how damaged they are
         Sprouts should have their tops sway in the wind, and the animation should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Kman's made some)
@@ -110,6 +137,7 @@ Next tasks (roughly sorted most important first)
         If something is under construction, like a menu or something, add a small "WIP" blurb
         Maybe add an F1 screen with quick-start help?
         Add a ball of yarn treasure
+        Sounds really need a makeover...
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
@@ -122,9 +150,8 @@ Next tasks (roughly sorted most important first)
             Some signs should talk about dismissing, and group moving
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Kman's Adventure area (see #content-sharing)
-    Try to compile on Mac
     
-    --- v0.22.0 ---
+    --- v0.23.0 ---
     Missing menus
         Radar
             Radar page
@@ -162,7 +189,7 @@ Next tasks (roughly sorted most important first)
             And different sub-goals: without getting spotted, until time runs out
             Each stage should have different scoring criteria. While there is only one goal, the final score should depend on any combination of the following, with varying weights: Pikmin born, Pikmin deaths, time taken, Pokos gathered, enemies killed. It could also have no scoring, just a boolean completion; this is useful for puzzle levels.
     
-    --- v0.23.0 ---
+    --- v0.24.0 ---
     Music
         Day + fight
         Sunset + fight
@@ -246,7 +273,6 @@ Next tasks (roughly sorted most important first)
             One of these layers has to take care about not letting a LMB1-down event come after another LMB1-down event without an LMB1-up event...
             Idea: the action manager has a list of all actions and their states (float from 0 to 1), as well as the state the previous frame, so the engine can check if a whistle was released, for example (1 last frame, 0 now) -- probably have different systems in place for the global game input and the gameplay game input? Like, have a different system for checking inputs outside of menus, so that if B is held during the menu it is considered as pressed the very first frame the menu is gone
             Instead of letting the game layer have to worry about normalizing joysticks, let the hardware layer do so
-    Purple Pikmin's pound attack + stun
     Petrified enemies shaking before getting out, and breaking open when defeated while petrified
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
@@ -527,7 +553,7 @@ Misc things (so I don't forget)
             A completely original enemy
         Pikmin 3 leaders
             When adding this, change the President's style to be yellow instead
-        Bulbmin, Cyan and Green Pikmin
+        Cyan Pikmin and Green Pikmin?
     Carrying path revamping
         Patrolling enemies need to follow a path -- they can't reuse the carrying path (e.g. Nectarous Dandelflies). Maybe make it so you can create multiple paths on the area editor?
         Paths that only Pikmin exclusive to a certain hazard can take (paths on the water for Blue Pikmin)
@@ -562,7 +588,6 @@ Misc things (so I don't forget)
 Tasks for later on (I might never implement these)
     Known problems
         On my other laptop, screenshots come out with alpha
-        It's possible to select two options at once in the editors's pickers - there might not be a need to fix it if I just use ImGui
         Kman found a crash on the area editor -- area with invalid shadow, restart engine, area editor, find problems, go to problem -> crash -- I can't reproduce, but it must have something to do with pointers not being cleared
         >trying to fight a bublorb >wait no >i killed it and was carrying it back >and a dwarf bublorb came along >and tried eating one of the guys carrying the big bublorb (found by Ambrosiu㎂ and some others, currently unreplicated)
     ...An AI opponent in 2-player mode? It would help me test...

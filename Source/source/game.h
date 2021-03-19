@@ -145,6 +145,8 @@ public:
     bmp_manager textures;
     //How much time has passed since the program booted.
     float time_passed;
+    //Buffer with the wall shadows.
+    ALLEGRO_BITMAP* wall_shadow_buffer;
     //List of weather conditions.
     map<string, weather> weather_conditions;
     //Current fullscreen state.

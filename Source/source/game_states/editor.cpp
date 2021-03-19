@@ -160,6 +160,7 @@ void editor::do_logic_pre() {
     }
     
     game.cam.tick(game.delta_t);
+    game.cam.update_box();
     
     unsaved_changes_warning_timer.tick(game.delta_t);
     

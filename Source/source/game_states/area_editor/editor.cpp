@@ -2506,7 +2506,7 @@ void area_editor::set_new_circle_sector_points() {
             edge* e_ptr = game.cur_area_data.edges[e];
             
             if(
-                lines_intersect(
+                line_segments_intersect(
                     point(
                         e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
                     ),

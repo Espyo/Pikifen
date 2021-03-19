@@ -135,10 +135,20 @@ bool lines_are_collinear(
     const point &a, const point &b, const point &c, const point &d
 );
 bool lines_intersect(
+    const point &l1p1, const point &l1p2,
+    const point &l2p1, const point &l2p2,
+    float* final_l1r, float* final_l2r
+);
+bool lines_intersect(
+    const point &l1p1, const point &l1p2,
+    const point &l2p1, const point &l2p2,
+    point* final_point
+);
+bool line_segments_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     float* ur, float* ul
 );
-bool lines_intersect(
+bool line_segments_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     point* intersection
 );

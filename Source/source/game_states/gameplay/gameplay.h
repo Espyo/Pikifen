@@ -302,9 +302,7 @@ private:
     void do_gameplay_logic();
     void do_menu_logic();
     void draw_background(ALLEGRO_BITMAP* bmp_output);
-    void draw_leader_cursor(
-        ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
-    );
+    void draw_leader_cursor();
     void draw_mouse_cursor(const ALLEGRO_COLOR &color);
     void draw_ingame_text();
     void draw_lighting_filter();

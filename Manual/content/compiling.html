@@ -83,14 +83,33 @@
     
     <ul>
       <li>If you want to use Codelite, use the project in the <code>Source/codelite</code> folder.</li>
-      <li>If you want to use Visual Studio Code, copy the <code>Source/vs_code</code> folder onto the engine's root folder, and rename it to <code>.vscode</code>.</li>
+      <li>
+        If you want to use Visual Studio Code:
+        <ol>
+          <li>
+            Create a <code>.vscode</code> folder in the engine's root folder.
+            <ul>
+              <li>Note that you may need to enable an option on your file explorer to allow you to see hidden files and folders, since <code>.vscode</code> is likely to end up being a hidden folder.</li>
+              <li>If you can create the folder easily through your file explorer, or command line, do so.</li>
+              <li>If you can't create it easily, open Visual Studio Code, go to File > Open Folder..., pick the engine's root folder, go to File > Preferences > Settings, and change any of the default options. The folder should now be created.</li>
+            </ul>
+          </li>
+          <li>Go to <code>Source/vs_code</code>, copy everything there, and paste it in your <code>.vscode</code> folder.</li>
+        </ol>
+      </li>
     </ul>
     
-    <h2 id="mac">Mac OS</h3>
+    <h2 id="mac">Mac OS</h2>
     
     <h3 id="mac-g++">g++ or Clang</h3>
     
     <p>Follow the instructions for <a href="#linux-g++">Linux</a>.</p>
+    
+    <h3 id="mac-ide">IDE</h3>
+    
+    <ul>
+      <li>If you want to use Visual Studio Code, follow the instructions for <a href="linux-ide">Linux</a>.</li>
+    </ul>
     
     <h2 id="notes">Notes</h2>
     
