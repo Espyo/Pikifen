@@ -1091,7 +1091,7 @@ void gameplay_state::load() {
     area_time_passed = 0.0f;
     after_hours = false;
     paused = false;
-    game.maker_tools.used_helping_tools = false;
+    game.maker_tools.reset_for_gameplay();
     
     map<string, string> spray_strs =
         get_var_map(game.cur_area_data.spray_amounts);

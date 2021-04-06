@@ -153,7 +153,7 @@ void area_editor::check_drawing_line(const point &pos) {
         return;
     }
     
-    //Check of edge collisions in collinear lines.
+    //Check for edge collisions in collinear lines.
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
         //We don't need to watch out for the edge of the current point
         //or the previous one, since this collinearity check doesn't
@@ -162,7 +162,7 @@ void area_editor::check_drawing_line(const point &pos) {
         point ep1(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y);
         point ep2(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
         
-        if(lines_are_collinear(prev_node->snapped_spot, pos, ep1, ep2)) {
+        if(line_segments_are_collinear(prev_node->snapped_spot, pos, ep1, ep2)) {
             if(
                 collinear_lines_intersect(
                     prev_node->snapped_spot, pos, ep1, ep2
@@ -1670,6 +1670,7 @@ void area_editor::resize_everything(const float mult) {
         s_ptr->texture_info.translation *= mult;
         s_ptr->triangles.clear();
         triangulate(s_ptr, NULL, false, false);
+        s_ptr->calculate_bounding_box();
     }
     
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {

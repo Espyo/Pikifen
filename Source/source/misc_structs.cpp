@@ -602,6 +602,20 @@ maker_tools_info::maker_tools_info() :
 
 
 /* ----------------------------------------------------------------------------
+ * Resets the states of the tools so that players can play without any
+ * tool affecting the experience.
+ */
+void maker_tools_info::reset_for_gameplay() {
+    change_speed = false;
+    geometry_info = false;
+    hitboxes = false;
+    info_lock = NULL;
+    last_pikmin_type = NULL;
+    used_helping_tools = false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes a movement struct with all movements set to 0.
  */
 movement_struct::movement_struct() :

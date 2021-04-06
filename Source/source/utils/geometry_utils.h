@@ -131,7 +131,7 @@ bool is_point_in_triangle(
     bool loq
 );
 float linear_dist_to_angular(const float linear_dist, const float radius);
-bool lines_are_collinear(
+bool line_segments_are_collinear(
     const point &a, const point &b, const point &c, const point &d
 );
 bool lines_intersect(
@@ -158,6 +158,9 @@ void move_point(
     float* angle, bool* reached, const float delta_t
 );
 float normalize_angle(float a);
+bool points_are_collinear(
+    const point &a, const point &b, const point &c
+);
 float rad_to_deg(const float deg);
 bool rectangle_intersects_line(
     const point &r1, const point &r2,

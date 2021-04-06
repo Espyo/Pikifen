@@ -78,6 +78,18 @@
       <dd>If you contact me, I can help you with your problem, as well as change things to make them easier to understand in the future.</dd>
     </dl>
 
+    <h2 id="known_issues">Known issues</h2>
+
+    <p>This is a list of glitches with the engine that are known to exist, but can't be solved right now, either because they are too difficult to fix, or because they are not a priority. When possible, a solution or workaround is presented too.</p>
+
+    <dl>
+      <dt><b>In the area editor, when you have a square sector with another square sector inside, if you try to move an edge from the internal sector into the equivalent external sector's edge, but the external sector's edge has some moot vertexes (vertexes where both edges at 180 degrees), the area's geometry will break.</b></dt>
+      <dd>If this happens to you, just undo and make sure there are no moot vertexes in the destination edge.</dd>
+
+      <dt><b>In the area editor, if a vertex has two edges at opposite angles, but said angles are not axis-aligned, then you start drawing a new sector by starting on one edge, and clicking the other, then that will break the geometry.</b></dt>
+      <dd>Please do not do that.</dd>
+    </dl>
+
   </div>
 </body>
 

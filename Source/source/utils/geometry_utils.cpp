@@ -899,34 +899,12 @@ float linear_dist_to_angular(const float linear_dist, const float radius) {
  * d:
  *   Ending point of the second line segment.
  */
-bool lines_are_collinear(
+bool line_segments_are_collinear(
     const point &a, const point &b, const point &c, const point &d
 ) {
-    //Special case: vertical lines. This is because we can't divide by zero.
-    if(a.x == b.x) {
-        return (a.x == c.x && a.x == d.x);
-    }
-    
-    //Check the slopes of AB, AC, AD, BC, BD, and CD.
-    //If one of them differs, they are not collinear.
-    float slope = fabs(a.y - b.y) / fabs(a.x - b.x);
-    
-    if(a.x != c.x) {
-        if(fabs(a.y - c.y) / fabs(a.x - c.x) != slope) return false;
-    }
-    if(a.x != d.x) {
-        if(fabs(a.y - d.y) / fabs(a.x - d.x) != slope) return false;
-    }
-    if(b.x != c.x) {
-        if(fabs(b.y - c.y) / fabs(b.x - c.x) != slope) return false;
-    }
-    if(b.x != d.x) {
-        if(fabs(b.y - d.y) / fabs(b.x - d.x) != slope) return false;
-    }
-    if(c.x != d.x) {
-        if(fabs(c.y - d.y) / fabs(c.x - d.x) != slope) return false;
-    }
-    return true;
+    return
+        points_are_collinear(a, b, c) &&
+        points_are_collinear(a, b, d);
 }
 
 
@@ -1156,6 +1134,25 @@ float normalize_angle(float a) {
     a = fmod(a, (float) TAU);
     if(a < 0) a += TAU;
     return a;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether three given points are collinear or not.
+ * a:
+ *   First point.
+ * b:
+ *   Second point.
+ * c:
+ *   Third point.
+ */
+bool points_are_collinear(
+    const point &a, const point &b, const point &c
+) {
+    //https://math.stackexchange.com/a/405981
+    return
+        (b.y - a.y) * (c.x - b.x) ==
+        (c.y - b.y) * (b.x - a.x);
 }
 
 

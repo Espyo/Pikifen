@@ -255,6 +255,7 @@
     <File Name="../source/load.cpp"/>
     <File Name="../source/replay.h"/>
     <File Name="../source/replay.cpp"/>
+    <File Name="../source/edge_offset.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="mobs">
     <File Name="../source/mobs/mob_physics.cpp"/>

@@ -168,6 +168,7 @@ struct maker_tools_info {
     bool used_helping_tools;
     
     maker_tools_info();
+    void reset_for_gameplay();
 };
 
 

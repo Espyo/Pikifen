@@ -6,12 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- Known problems ---
-    Resize everything operation isn't updating triangulation? I tried resizing by -1 twice (with a run in between) and the tris were wrong
-    Start with an area editor default square, try to draw an edge from a corner to the exact center -- it'll say it's crossing edges
     Kman's got a way to crash with the p->carriable_mob = null assert; check pinned messages
-    The Armored Cannon Beetle can shoot boulders through the wall in its arena to the lake area
-    If you enable a maker tool and restart the area, it will still be on but won't trip the stage end warning
-    Trying to move an edge from an internal sector to an external one, but the external sector has some moot vertexes (both edges at 180 degrees), the merge attempt breaks
+        Pikmin's going to a carriable object, gets hit by an attack, forgets the carriable object first, and then does the logic to get knocked back. but that logic decides the attack is a miss so the Pikmin blissfully continues
     
     --- v0.20.0 ---
     Sector edge features
@@ -24,6 +20,7 @@ Next tasks (roughly sorted most important first)
         Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (thanks Tenacious)
         The limits of water sectors should also have some foam or something
     Add Kman's editor style commit
+    https://cdn.discordapp.com/attachments/459094367877988373/823289742036697098/Pikifen_alpha_2021-03-21_16-19-09.mp4 Maybe there should be a way to disable that no-damage ring (thanks Kman)
     If you enable the area preview in the area editor, the problem searching stuff shouldn't move
     It should be possible to retrieve the hazard that triggered on_touch_hazard and on_left_hazard
     Add a way for a GUI element's drawing routine to receive alpha as a parameter
@@ -515,6 +512,7 @@ Misc things (so I don't forget)
     Option to pause the game if the window is not focused
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     on_carrying_lift and on_carrying_drop events?
+    Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
     A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Kman)
     A way to represent how many berries of a spray you have
     If you write an event name wrong (or other things), give suggestions ("did you mean X?")

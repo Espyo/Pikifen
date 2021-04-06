@@ -23,7 +23,7 @@ spawns {
     boulder {
         object = Rolling boulder
         relative = true
-        coordinates = 180 0 0
+        coordinates = 140 0 0
         angle = 0
     }
 }
