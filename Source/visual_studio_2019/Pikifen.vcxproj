@@ -294,6 +294,7 @@
     <ClCompile Include="..\source\animation.cpp" />
     <ClCompile Include="..\source\controls.cpp" />
     <ClCompile Include="..\source\drawing.cpp" />
+    <ClCompile Include="..\source\edge_offset.cpp" />
     <ClCompile Include="..\source\functions.cpp" />
     <ClCompile Include="..\source\game.cpp" />
     <ClCompile Include="..\source\game_config.cpp" />

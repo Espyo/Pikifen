@@ -2,88 +2,61 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Header Files\mob_categories">
-      <UniqueIdentifier>{906d8334-4470-472f-a044-8aa67f3b7549}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\mob_fsms">
-      <UniqueIdentifier>{d4af4dfe-ca5b-4c62-a66e-c6a5c775cbc2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\mobs">
-      <UniqueIdentifier>{9d51682c-cb8a-4425-84f3-fc24c5f77c90}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\mob_types">
-      <UniqueIdentifier>{f3c1b54b-731a-411e-b1c5-a843b0f3ea58}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\utils">
-      <UniqueIdentifier>{1fde66a3-a8a7-4701-a151-af661b9d18ca}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\editors">
-      <UniqueIdentifier>{50162837-2d1a-4d43-9720-c1091abfa5c4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\mob_categories">
-      <UniqueIdentifier>{c7e82f34-e7ac-4b97-a7f8-2fdc0e7ccbf5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\mob_fsms">
-      <UniqueIdentifier>{005cd81a-c74c-439a-b6ca-51ad09d7a8e9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\mobs">
-      <UniqueIdentifier>{c5491cbb-670e-4d92-be07-9f349cee79ad}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\mob_types">
-      <UniqueIdentifier>{69639323-68bc-4d2d-bf23-062e844e526d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\utils">
-      <UniqueIdentifier>{4f6a75e4-d7b2-4167-b6d3-3364d424a4e1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\imgui">
-      <UniqueIdentifier>{52b2f606-563c-49ac-9a02-659db7bb88a8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\imgui">
-      <UniqueIdentifier>{1b0037dc-6d06-49d9-be94-65c326ca8fca}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\game_states">
-      <UniqueIdentifier>{ef0e25fc-7219-4bbe-bc2a-53613613ac2f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\game_states\animation_editor">
-      <UniqueIdentifier>{0c8bb57f-b61f-416f-9dfa-f06e026e09d0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\game_states\area_editor">
-      <UniqueIdentifier>{bc32e712-39c3-427c-882a-8ea49fde1b86}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\game_states\gameplay">
-      <UniqueIdentifier>{286ceb60-6a2b-4eab-92ef-1c399c0f8e7a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\game_states">
-      <UniqueIdentifier>{6b4ac33c-7304-4a44-ace5-ff7e4644f91b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\editors">
-      <UniqueIdentifier>{8aa2f22b-e9f4-4ba2-9219-0534e3397224}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\editors\animation_editor">
-      <UniqueIdentifier>{1197949b-2406-48d8-b5fc-7445adeed86a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\editors\area_editor">
-      <UniqueIdentifier>{474be91e-8a30-415d-8c50-66d7d5ffd30c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\game_states\animation_editor">
-      <UniqueIdentifier>{f1eb4a33-9b0d-428c-a7cf-032819a008e3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\game_states\area_editor">
-      <UniqueIdentifier>{fd315140-4010-4748-a1ce-16e0008b8473}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\game_states\gameplay">
-      <UniqueIdentifier>{1e382ce0-3845-4593-8caa-a2fddf432c60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -871,6 +844,9 @@
     </ClCompile>
     <ClCompile Include="..\source\game_states\results.cpp">
       <Filter>Source Files\game_states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\edge_offset.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

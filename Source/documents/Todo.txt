@@ -5,9 +5,7 @@ Current tasks (tasks being worked on, but not yet committed)
     
     
 Next tasks (roughly sorted most important first)
-    --- Known problems ---
-    Kman's got a way to crash with the p->carriable_mob = null assert; check pinned messages
-        Pikmin's going to a carriable object, gets hit by an attack, forgets the carriable object first, and then does the logic to get knocked back. but that logic decides the attack is a miss so the Pikmin blissfully continues
+    --- To fix ---
     
     --- v0.20.0 ---
     Sector edge features

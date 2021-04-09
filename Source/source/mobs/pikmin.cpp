@@ -41,6 +41,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     consecutive_dud_hits(0),
     maturity(2),
     is_seed_or_sprout(false),
+    is_grabbed_by_enemy(false),
     pluck_reserved(false),
     leader_to_return_to(nullptr),
     latched(false),
@@ -285,7 +286,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
     }
     
     //Is it dead?
-    if(health <= 0) {
+    if(health <= 0 && !is_grabbed_by_enemy) {
         to_delete = true;
         
         pikmin_fsm::notify_leader_release(this, NULL, NULL);

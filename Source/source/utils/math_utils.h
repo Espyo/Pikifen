@@ -14,13 +14,12 @@
 
 #define _USE_MATH_DEFINES
 
-constexpr float TAU = (float) M_PI * 2.0f;
-
 #include <cstddef>
 #include <math.h>
 #include <string>
 #include <stdint.h>
 
+constexpr float TAU = (float)M_PI * 2.0f;
 
 //Returns a string with a number, adding a leading zero if it's less than 10.
 #define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))

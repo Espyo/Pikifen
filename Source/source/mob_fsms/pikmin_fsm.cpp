@@ -105,7 +105,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("going_to_dismiss_spot");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -153,7 +157,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("going_to_dismiss_spot");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -198,7 +206,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("going_to_dismiss_spot");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -266,7 +278,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("going_to_dismiss_spot");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -307,7 +323,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::notify_leader_release);
@@ -396,7 +416,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_group_task);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -457,7 +481,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -498,7 +526,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -538,8 +570,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::forget_carriable_object);
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::forget_carriable_object);
@@ -576,8 +612,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::forget_tool);
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::forget_tool);
@@ -618,8 +658,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::forget_group_task);
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::forget_group_task);
@@ -654,7 +698,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -690,7 +738,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -722,7 +774,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -770,10 +826,14 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
-            efc.run(pikmin_fsm::check_attack);
+            efc.run(pikmin_fsm::check_outgoing_attack);
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -804,7 +864,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -841,10 +905,14 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
-            efc.run(pikmin_fsm::check_attack);
+            efc.run(pikmin_fsm::check_outgoing_attack);
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -876,10 +944,14 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
-            efc.run(pikmin_fsm::check_attack);
+            efc.run(pikmin_fsm::check_outgoing_attack);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -1003,7 +1075,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -1052,7 +1128,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("going_to_dismiss_spot_h");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::try_held_item_hotswap);
@@ -1099,7 +1179,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("going_to_dismiss_spot_h");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::try_held_item_hotswap);
@@ -1153,7 +1237,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("going_to_dismiss_spot_h");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::try_held_item_hotswap);
@@ -1207,7 +1295,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("going_to_dismiss_spot_h");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::try_held_item_hotswap);
@@ -1240,7 +1332,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing_h");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::notify_leader_release);
@@ -1322,7 +1418,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling_h");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::try_held_item_hotswap);
@@ -1363,7 +1463,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing_h");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::try_held_item_hotswap);
@@ -1422,20 +1526,12 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     hitbox_interaction* info = (hitbox_interaction*) info1;
     pikmin* p_ptr = (pikmin*) m;
     
-    if(p_ptr->invuln_period.time_left > 0) return;
-    
-    if(!p_ptr->process_attack_miss(info)) {
-        //It has been decided that this attack missed.
-        return;
-    }
-    
+    //Damage.
     float damage = 0;
-    if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
-        return;
-    }
-    
+    info->mob2->calculate_damage(m, info->h2, info->h1, &damage);
     m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
     
+    //Knockback.
     float knockback = 0;
     float knockback_angle = 0;
     info->mob2->calculate_knockback(
@@ -1451,6 +1547,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
         }
     }
     
+    //Finish up.
     m->leave_group();
     
     m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
@@ -1458,7 +1555,6 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     pikmin_fsm::be_released(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
     pikmin_fsm::release_tool(m, info1, info2);
-    m->fsm.set_state(PIKMIN_STATE_KNOCKED_BACK);
 }
 
 
@@ -1507,6 +1603,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     game.sys_assets.sfx_pikmin_caught.play(0.2, 0);
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
     pik_ptr->leave_group();
+    pik_ptr->is_grabbed_by_enemy = true;
     
 }
 
@@ -1536,7 +1633,7 @@ void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
-
+    ((pikmin*) m)->is_grabbed_by_enemy = false;
 }
 
 
@@ -1687,33 +1784,6 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin should check the attack it is about to unleash.
- * If it realizes it's doing no damage, it should start considering
- * sighing and giving up.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the opponent.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::check_attack(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
-    
-    hitbox_interaction* info = (hitbox_interaction*) info1;
-    pikmin* p_ptr = (pikmin*) m;
-    
-    float damage = 0;
-    bool attack_success =
-        p_ptr->calculate_damage(info->mob2, info->h1, info->h2, &damage);
-    if(damage == 0 || !attack_success) {
-    
-        p_ptr->was_last_hit_dud = true;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a Pikmin touches an enemy's eat hitbox, but first has
  * to check if it is edible, since it's in the special "disabled" state.
  * m:
@@ -1729,6 +1799,71 @@ void pikmin_fsm::check_disabled_edible(mob* m, void* info1, void* info2) {
     if(m->disabled_state_flags & DISABLED_STATE_FLAG_INEDIBLE) return;
     pikmin_fsm::be_grabbed_by_enemy(m, info1, info2);
     m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY, info1, info2);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin should check the attack it has just received.
+ * If the attack is successful, another event is triggered. Otherwise
+ * nothing happens.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the hitbox touch information structure.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::check_incoming_attack(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    hitbox_interaction* info = (hitbox_interaction*) info1;
+    pikmin* p_ptr = (pikmin*) m;
+    
+    if(p_ptr->invuln_period.time_left > 0) {
+        //The Pikmin cannot be attacked right now.
+        return;
+    }
+    
+    if(!p_ptr->process_attack_miss(info)) {
+        //It has been decided that this attack missed.
+        return;
+    }
+    
+    float damage = 0;
+    if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
+        //This attack doesn't cause damage.
+        return;
+    }
+    
+    //If we got to this point, then greenlight for the attack.
+    m->fsm.run_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED, info1, info2);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin should check the attack it is about to unleash.
+ * If it realizes it's doing no damage, it should start considering
+ * sighing and giving up.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the opponent.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    hitbox_interaction* info = (hitbox_interaction*) info1;
+    pikmin* p_ptr = (pikmin*) m;
+    
+    float damage = 0;
+    bool attack_success =
+        p_ptr->calculate_damage(info->mob2, info->h1, info->h2, &damage);
+    if(damage == 0 || !attack_success) {
+    
+        p_ptr->was_last_hit_dud = true;
+    }
 }
 
 
@@ -3185,6 +3320,10 @@ void pikmin_fsm::touched_eat_hitbox(mob* m, void* info1, void* info2) {
     engine_assert(info2 != NULL, m->print_state_history());
     
     if(m->invuln_period.time_left > 0) return;
+    if(m->health <= 0) {
+        return;
+    }
+    
     
     m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY, info1, info2);
 }

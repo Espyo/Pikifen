@@ -42,6 +42,8 @@ public:
     unsigned char maturity;
     //Is this Pikmin currently a seed or a sprout?
     bool is_seed_or_sprout;
+    //Is this Pikmin currently grabbed by an enemy?
+    bool is_grabbed_by_enemy;
     //If true, someone's already coming to pluck this Pikmin.
     //This is to let other leaders know that they should pick a different one.
     bool pluck_reserved;
