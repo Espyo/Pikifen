@@ -65,8 +65,14 @@
           <li>Added a new action: <code>get_focus_info</code>. It works like <code>get_info</code>, but when applicable, gets info from the focused mob instead. (Thanks Kman)</li>
         </ul>
       </li>
+      <li>
+        Edges now have aesthetic properties.
+        <ul>
+          <li>You can go to the area editor, select edges, and edit their properties. (Thanks Scruffy, Neo)</li>
+          <li>Wall shadows have been revamped to work better in general.</li>
+        </ul>
+      </li>
       <li>Pikmin now push each other slightly.</li>
-      <li>Wall shadows work better in general.</li>
       <li>Health wheels now transition smoothly to their target value, and also fade away when they are empty. (Thanks Kman)</li>
       <li>Added new system assets: <code>bubble_box</code>, used to draw box-like bubbles in the HUD and menus, <code>focus_box</code>, used to show which GUI item is focused, and <code>more</code>, used for menus to indicate there's more content beyond.</li>
       <li>Holding Shift when the snapping mode is "nothing" will now snap to the grid in the area editor. The snapping mode is now also saved to the options. Finally, Shift+Plus and Shift+Minus change the grid spacing. (Thanks Nutty171, Neo)</li>
@@ -82,6 +88,7 @@
       <li>The pre-packaged Pellet Posy graphics files are now split per-type, as opposed to per-size. This makes more sense for adding new types of Pikmin/pellet. (Thanks Kman)</li>
       <li>The counter font now also includes a dot and a colon. If you changed this font, please update it accordingly.</li>
       <li>The gameplay HUD information is now stored in <code>Game_data/GUI/Gameplay.txt</code>, and the title screen logo information now goes in <code>Game_data/GUI/Main_menu.txt</code>.</li>
+      <li>The sector property "always casts shadow" has been removed, and wall shadows should be slightly less dark than before in general. If you have walls that you need to look the same as before, you'll want to go to the edge properties and tweak their shadow's length and color.</li>
     </ul>
     
     <h2 id="0.19.0">0.19.0</h2>

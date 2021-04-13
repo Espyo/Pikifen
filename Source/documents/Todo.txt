@@ -2,20 +2,13 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Update Play and the manual
-    A utils file for Allegro stuff (there's a color comparison at least in the area saving, so replace that)
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.20.0 ---
     Sector edge features
-        Shadows
-            A way to specify their color and opacity (would help with ambiance, thanks Scruffy)
-            An option for its presence/length. If 0, it never appears. If LARGE_FLOAT, it's automatic. If another value, it uses that. If it's not automatic, then it will always have that length and be visible even if it's a staircase step
-            Check if it'd make sense to mark not-tall, always-casts-shadow sectors cast a shadow that's just a line, instead of a rectangle with a gradient
-            Maybe small edges, ones that Pikmin can be thrown to in general, should be marked with a less opaque color, but higher ones should be more opaque
-            A "never casts shadows" option for sectors (thanks Neo)
         Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (thanks Tenacious)
         The limits of water sectors should also have some foam or something
     Add Kman's editor style commit
@@ -147,6 +140,7 @@ Next tasks (roughly sorted most important first)
             Some signs should talk about dismissing, and group moving
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Kman's Adventure area (see #content-sharing)
+    Update the manual's area editor screenshots
     
     --- v0.23.0 ---
     Missing menus

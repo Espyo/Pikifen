@@ -279,6 +279,7 @@
     <ClInclude Include="..\source\sector.h" />
     <ClInclude Include="..\source\spray_type.h" />
     <ClInclude Include="..\source\status.h" />
+    <ClInclude Include="..\source\utils\allegro_utils.h" />
     <ClInclude Include="..\source\utils\backtrace.h" />
     <ClInclude Include="..\source\utils\code_debug.h" />
     <ClInclude Include="..\source\utils\data_file.h" />
@@ -419,6 +420,7 @@
     <ClCompile Include="..\source\sector.cpp" />
     <ClCompile Include="..\source\spray_type.cpp" />
     <ClCompile Include="..\source\status.cpp" />
+    <ClCompile Include="..\source\utils\allegro_utils.cpp" />
     <ClCompile Include="..\source\utils\code_debug.cpp" />
     <ClCompile Include="..\source\utils\data_file.cpp" />
     <ClCompile Include="..\source\utils\geometry_utils.cpp" />

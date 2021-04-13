@@ -429,9 +429,9 @@
 
     <p>In the advanced sector appearance settings, you can also tint the texture with any given color. This is a great way to darken the texture without actually tampering with the sector's brightness.</p>
 
-    <h3 id="persistent-shadow">Persistent shadow casting</h3>
+    <h3 id="wall-shadows">Wall shadow tricks</h3>
     
-    <p>If you want to make it so that a sector will always cast a shadow against its neighboring sectors, regardless of how much higher it is, there is a checkbox for that in the advanced sector appearance's panel. This is useful for when you have a tiny step up in the terrain (which doesn't normally cast a shadow), but it looks ugly against the other terrain, so you want it to cast a shadow. For example, a tree's root protruding slightly through the ground.</p>
+    <p>If you want to make it so that a wall will always cast a shadow, regardless of how tall it is, or if you want its shadow to look a different color or opacity, you can select that edge, go in the layout panel, enter the "Edges" tab, and change its properties there. Note that the lengths and colors of wall shadows will attempt to transition smoothly with each other, so don't be surprised if your wall isn't the color you expect, because it's likely taking in the color of its neighbors into account. You may want to split that edge into multiple ones, since there'll be no transition between two wall shadows that have the same look.</p>
 
     <h3 id="script-vars">Script variables</h3>
     

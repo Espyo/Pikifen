@@ -16,6 +16,7 @@
 #include "../../game.h"
 #include "../../imgui/imgui_impl_allegro5.h"
 #include "../../load.h"
+#include "../../utils/allegro_utils.h"
 #include "../../utils/string_utils.h"
 
 
@@ -2052,12 +2053,7 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         
-        if(
-            e_ptr->wall_shadow_color.r != edge::SHADOW_DEF_COLOR.r ||
-            e_ptr->wall_shadow_color.g != edge::SHADOW_DEF_COLOR.g ||
-            e_ptr->wall_shadow_color.b != edge::SHADOW_DEF_COLOR.b ||
-            e_ptr->wall_shadow_color.a != edge::SHADOW_DEF_COLOR.a
-        ) {
+        if(e_ptr->wall_shadow_color != edge::SHADOW_DEF_COLOR) {
             edge_node->add(
                 new data_node("shadow_color", c2s(e_ptr->wall_shadow_color))
             );

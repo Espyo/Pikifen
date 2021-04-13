@@ -189,6 +189,8 @@
     <File Name="../source/mob_categories/mob_category.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="utils">
+    <File Name="../source/utils/allegro_utils.cpp"/>
+    <File Name="../source/utils/allegro_utils.h"/>
     <File Name="../source/utils/imgui_utils.cpp"/>
     <File Name="../source/utils/imgui_utils.h"/>
     <File Name="../source/utils/code_debug.h"/>
