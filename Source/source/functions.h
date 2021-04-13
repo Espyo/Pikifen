@@ -106,7 +106,7 @@ void get_wall_shadow_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
     const float edge_process_angle,
     sector* casting_sector, sector* shaded_sector,
-    float* final_angle, float* final_length,
+    float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
     float* final_elbow_angle, float* final_elbow_length
 );
 float get_wall_shadow_length(edge* e_ptr);

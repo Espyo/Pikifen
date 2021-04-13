@@ -908,6 +908,7 @@ void area_editor::process_gui_panel_edge() {
             if(!auto_length) {
                 register_change("edge shadow length change");
                 e_ptr->wall_shadow_length = LARGE_FLOAT;
+                quick_preview_timer.start();
             }
             auto_length = true;
         }
@@ -924,6 +925,7 @@ void area_editor::process_gui_panel_edge() {
             if(!no_length) {
                 register_change("edge shadow length change");
                 e_ptr->wall_shadow_length = 0.0f;
+                quick_preview_timer.start();
             }
             no_length = true;
         }
@@ -937,6 +939,7 @@ void area_editor::process_gui_panel_edge() {
             if(!fixed_length) {
                 register_change("edge shadow length change");
                 e_ptr->wall_shadow_length = 30.0f;
+                quick_preview_timer.start();
             }
             fixed_length = true;
         }
@@ -956,6 +959,7 @@ void area_editor::process_gui_panel_edge() {
             ) {
                 register_change("edge shadow length change");
                 e_ptr->wall_shadow_length = length;
+                quick_preview_timer.start();
             }
             set_tooltip(
                 "Length of the shadow."
@@ -975,6 +979,7 @@ void area_editor::process_gui_panel_edge() {
         ) {
             register_change("edge shadow color change");
             e_ptr->wall_shadow_color = color;
+            quick_preview_timer.start();
         }
         set_tooltip(
             "Color of the shadow, opacity included. "
@@ -1002,6 +1007,7 @@ void area_editor::process_gui_panel_edge() {
         ) {
             register_change("edge ledge smoothing length change");
             e_ptr->ledge_smoothing_length = length;
+            quick_preview_timer.start();
         }
         set_tooltip(
             "Length of the ledge smoothing effect.\n"
@@ -1022,6 +1028,7 @@ void area_editor::process_gui_panel_edge() {
         ) {
             register_change("edge ledge smoothing color change");
             e_ptr->ledge_smoothing_color = color;
+            quick_preview_timer.start();
         }
         set_tooltip(
             "Color of the ledge smoothing effect, opacity included. "
@@ -2111,47 +2118,43 @@ void area_editor::process_gui_panel_review() {
     //Problem search node.
     if(saveable_tree_node("review", "Problem search")) {
     
-        if(sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW) {
-        
-            //Problem search button.
-            if(ImGui::Button("Search for problems")) {
+        //Problem search button.
+        if(ImGui::Button("Search for problems")) {
+            if(sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW) {
                 find_problems();
-            }
-            set_tooltip(
-                "Search for problems with the area."
-            );
-            
-            //Problem texts.
-            ImGui::Text("Problem found:");
-            
-            ImGui::Indent();
-            if(problem_type == EPT_NONE_YET) {
-                ImGui::TextDisabled("Haven't searched yet.");
             } else {
-                ImGui::TextWrapped("%s", problem_title.c_str());
+                status_text =
+                    "Can't search for problems while in area preview mode.";
             }
+        }
+        set_tooltip(
+            "Search for problems with the area."
+        );
+        
+        //Problem texts.
+        ImGui::Text("Problem found:");
+        
+        ImGui::Indent();
+        if(problem_type == EPT_NONE_YET) {
+            ImGui::TextDisabled("Haven't searched yet.");
+        } else {
+            ImGui::TextWrapped("%s", problem_title.c_str());
+        }
+        ImGui::Unindent();
+        
+        if(!problem_description.empty()) {
+        
+            ImGui::Indent();
+            ImGui::TextWrapped("%s", problem_description.c_str());
             ImGui::Unindent();
             
-            if(!problem_description.empty()) {
-            
-                ImGui::Indent();
-                ImGui::TextWrapped("%s", problem_description.c_str());
-                ImGui::Unindent();
-                
-                //Go to problem button.
-                if(ImGui::Button("Go to problem")) {
-                    goto_problem();
-                }
-                set_tooltip(
-                    "Focus the camera on the problem found, if applicable."
-                );
-                
+            //Go to problem button.
+            if(ImGui::Button("Go to problem")) {
+                goto_problem();
             }
-            
-        } else {
-        
-            //Area preview mode unavailability warning.
-            ImGui::TextWrapped("Not available during area preview mode.");
+            set_tooltip(
+                "Focus the camera on the problem found, if applicable."
+            );
             
         }
         
@@ -2663,17 +2666,6 @@ void area_editor::process_gui_panel_sector() {
                 "How bright the sector is. Affects not just the sector's "
                 "appearance, but everything inside it.\n"
                 "0 is fully dark, 255 is fully lit."
-            );
-            
-            //Sector always casts shadow checkbox.
-            bool sector_cast_shadow = s_ptr->always_cast_shadow;
-            if(ImGui::Checkbox("Always cast shadow", &sector_cast_shadow)) {
-                register_change("sector cast shadow option change");
-                s_ptr->always_cast_shadow = sector_cast_shadow;
-            }
-            set_tooltip(
-                "Always cast a shadow onto lower sectors, "
-                "even if they're just a step below."
             );
             
             //Spacer dummy widget.

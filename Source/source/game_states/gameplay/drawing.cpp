@@ -1254,7 +1254,8 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                 c_ptr->sector_ptr,
                 bmp_output ?
                 custom_wall_shadow_buffer :
-                game.wall_shadow_buffer
+                game.wall_shadow_buffer,
+                1.0f
             );
             
         } else if(c_ptr->mob_shadow_ptr) {

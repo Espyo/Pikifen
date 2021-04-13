@@ -977,6 +977,7 @@ edges{
 	e{
 		s=55 57
 		v=170 167
+		shadow_length=30.0000
 	}
 	e{
 		s=0 57
@@ -985,6 +986,7 @@ edges{
 	e{
 		s=52 58
 		v=169 168
+		shadow_length=30.0000
 	}
 	e{
 		s=0 52
@@ -997,6 +999,7 @@ edges{
 	e{
 		s=53 59
 		v=172 171
+		shadow_length=30.0000
 	}
 	e{
 		s=0 53
@@ -1037,6 +1040,7 @@ edges{
 	e{
 		s=55 56
 		v=177 178
+		shadow_length=30.0000
 	}
 	e{
 		s=0 52
@@ -1049,6 +1053,7 @@ edges{
 	e{
 		s=52 57
 		v=179 180
+		shadow_length=30.0000
 	}
 	e{
 		s=0 53
@@ -1061,6 +1066,7 @@ edges{
 	e{
 		s=53 58
 		v=181 182
+		shadow_length=30.0000
 	}
 	e{
 		s=0 54
@@ -1073,6 +1079,7 @@ edges{
 	e{
 		s=54 59
 		v=183 184
+		shadow_length=30.0000
 	}
 	e{
 		s=61 60
@@ -1414,49 +1421,41 @@ sectors{
 	}
 	s{
 		z=211.0000
-		always_cast_shadow=true
 		texture=Test.png
 		texture_tint=255 128 255
 	}
 	s{
 		z=261.0000
-		always_cast_shadow=true
 		texture=Test.png
 		texture_tint=255 128 128
 	}
 	s{
 		z=331.0000
-		always_cast_shadow=true
 		texture=Test.png
 		texture_tint=225 225 128
 	}
 	s{
 		z=131.0000
-		always_cast_shadow=true
 		texture=Test.png
 		texture_tint=128 255 255
 	}
 	s{
 		z=130.0000
-		always_cast_shadow=true
 		texture=Test.png
 		texture_tint=96 224 224
 	}
 	s{
 		z=210.0000
-		always_cast_shadow=true
 		texture=Test.png
 		texture_tint=224 96 224
 	}
 	s{
 		z=260.0000
-		always_cast_shadow=true
 		texture=Test.png
 		texture_tint=224 96 96
 	}
 	s{
 		z=330.0000
-		always_cast_shadow=true
 		texture=Test.png
 		texture_tint=224 224 96
 	}

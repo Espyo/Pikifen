@@ -1117,18 +1117,26 @@ edges{
 	e{
 		s=27 1
 		v=197 163
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=199 164
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=198 165
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=163 166
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=52 51
@@ -1137,14 +1145,20 @@ edges{
 	e{
 		s=27 1
 		v=200 168
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=196 169
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=169 170
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=52 51
@@ -1265,22 +1279,32 @@ edges{
 	e{
 		s=27 1
 		v=168 196
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=167 197
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=166 198
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=165 199
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=27 1
 		v=164 200
+		shadow_length=15.0000
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=30 29
@@ -1557,6 +1581,7 @@ edges{
 	e{
 		s=27 52
 		v=170 167
+		shadow_color=0 0 0 208
 	}
 	e{
 		s=0 53
@@ -2354,7 +2379,6 @@ sectors{
 	}
 	s{
 		z=16.0000
-		always_cast_shadow=true
 		texture=Bark.jpg
 	}
 	s{

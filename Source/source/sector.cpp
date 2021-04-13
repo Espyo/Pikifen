@@ -1842,7 +1842,6 @@ sector::sector() :
     z(0),
     brightness(DEF_SECTOR_BRIGHTNESS),
     fade(false),
-    always_cast_shadow(false),
     hazard_floor(true),
     liquid_drain_left(0),
     draining_liquid(false) {
@@ -1932,7 +1931,6 @@ void sector::clone(sector* new_sector) {
     new_sector->texture_info.translation = texture_info.translation;
     new_sector->texture_info.rot = texture_info.rot;
     new_sector->texture_info.tint = texture_info.tint;
-    new_sector->always_cast_shadow = always_cast_shadow;
     new_sector->fade = fade;
 }
 

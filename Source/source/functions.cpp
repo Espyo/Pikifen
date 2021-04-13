@@ -76,9 +76,6 @@ bool casts_shadow(edge* e_ptr, sector* s1, sector* s2) {
     if(s1->is_bottomless_pit) return false;
     if(s2->is_bottomless_pit) return false;
     
-    //TODO remove.
-    if(s1->z > s2->z && s1->always_cast_shadow) return true;
-    
     if(
         e_ptr->wall_shadow_length != LARGE_FLOAT
     ) {

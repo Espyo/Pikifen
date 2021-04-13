@@ -74,6 +74,7 @@ void area_editor::draw_canvas() {
     float selection_min_opacity = 0.25f;
     float selection_max_opacity = 0.75f;
     float textures_opacity = 0.4f;
+    float wall_shadows_opacity = 0.0f;
     float edges_opacity = 0.25f;
     float grid_opacity = 1.0f;
     float mob_opacity = 0.15f;
@@ -101,6 +102,7 @@ void area_editor::draw_canvas() {
     
     if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
         textures_opacity = 1.0f;
+        wall_shadows_opacity = 1.0f;
         edges_opacity = 0.0f;
         grid_opacity = 0.0f;
         mob_opacity = 0.0f;
@@ -129,6 +131,11 @@ void area_editor::draw_canvas() {
                 t, 0.0f, quick_preview_timer.duration / 2.0f,
                 textures_opacity, 1.0f
             );
+        wall_shadows_opacity =
+            interpolate_number(
+                t, 0.0f, quick_preview_timer.duration / 2.0f,
+                wall_shadows_opacity, 1.0f
+            );
         edges_opacity =
             interpolate_number(
                 t, 0.0f, quick_preview_timer.duration / 2.0f,
@@ -152,7 +159,7 @@ void area_editor::draw_canvas() {
         (selection_max_opacity - selection_min_opacity) / 2.0;
         
     //Sectors.
-    if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
+    if(wall_shadows_opacity > 0.0f) {
         update_wall_shadow_buffer(
             game.cam.box[0], game.cam.box[1],
             game.wall_shadow_buffer
@@ -182,8 +189,10 @@ void area_editor::draw_canvas() {
         ) {
             draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
             
-            if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
-                draw_sector_wall_shadows(s_ptr, game.wall_shadow_buffer);
+            if(wall_shadows_opacity > 0.0f) {
+                draw_sector_wall_shadows(
+                    s_ptr, game.wall_shadow_buffer, wall_shadows_opacity
+                );
             }
             
         } else if(game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {

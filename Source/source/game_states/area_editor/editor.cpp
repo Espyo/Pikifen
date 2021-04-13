@@ -2095,14 +2095,6 @@ bool area_editor::save_area(const bool to_backup) {
         if(s_ptr->fade) {
             sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
         }
-        if(s_ptr->always_cast_shadow) {
-            sector_node->add(
-                new data_node(
-                    "always_cast_shadow",
-                    b2s(s_ptr->always_cast_shadow)
-                )
-            );
-        }
         if(!s_ptr->hazards_str.empty()) {
             sector_node->add(new data_node("hazards", s_ptr->hazards_str));
             sector_node->add(

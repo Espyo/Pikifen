@@ -228,7 +228,6 @@ struct sector {
     
     sector_texture_info texture_info;
     bool fade;
-    bool always_cast_shadow;
     
     string hazards_str; //For the editor.
     vector<hazard*> hazards; //For gameplay.

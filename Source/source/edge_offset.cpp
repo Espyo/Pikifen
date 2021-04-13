@@ -25,9 +25,11 @@
  *   Sector to draw the shadows of.
  * buffer:
  *   Buffer to draw from.
+ * opacity:
+ *   Draw the textures at this opacity, 0 - 1.
  */
 void draw_sector_wall_shadows(
-    sector* s_ptr, ALLEGRO_BITMAP* buffer
+    sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
 ) {
     if(s_ptr->is_bottomless_pit) return;
     
@@ -48,7 +50,10 @@ void draw_sector_wall_shadows(
         av[v].u = vx;
         av[v].v = vy;
         av[v].z = 0;
-        av[v].color = al_map_rgb(255, 255, 255);
+        av[v].color.r = 1.0f;
+        av[v].color.g = 1.0f;
+        av[v].color.b = 1.0f;
+        av[v].color.a = opacity;
     }
     
     al_draw_prim(
@@ -67,9 +72,6 @@ void draw_sector_wall_shadows(
  *   Wall edge whose shadow to draw.
  */
 void draw_wall_shadow_on_buffer(edge* e_ptr) {
-    ALLEGRO_COLOR shadow_end_color = e_ptr->wall_shadow_color;
-    shadow_end_color.a = 0.0f;
-    
     sector* casting_sector = NULL;
     sector* shaded_sector = NULL;
     
@@ -105,6 +107,7 @@ void draw_wall_shadow_on_buffer(edge* e_ptr) {
     point end_rel_coords[2];
     unsigned char n_elbow_tris[2] = {0, 0};
     point elbow_rel_coords[2][2];
+    ALLEGRO_COLOR end_colors[2];
     
     for(unsigned char e = 0; e < 2; ++e) {
         //For each end of the shadow...
@@ -126,7 +129,8 @@ void draw_wall_shadow_on_buffer(edge* e_ptr) {
             e_ptr, ends_to_process[e], e,
             e == 0 ? edge_process_angle : edge_process_angle + TAU / 2.0f,
             casting_sector, shaded_sector,
-            &angle, &length, &elbow_angle, &elbow_length
+            &angle, &length, &end_colors[e],
+            &elbow_angle, &elbow_length
         );
         
         //This end of the shadow starts at the vertex and spreads to this point.
@@ -173,17 +177,19 @@ void draw_wall_shadow_on_buffer(edge* e_ptr) {
     for(size_t e = 0; e < 2; ++e) {
         av[e].x = ends_to_process[e]->x;
         av[e].y = ends_to_process[e]->y;
-        av[e].color = e_ptr->wall_shadow_color;
+        av[e].color = end_colors[e];
         av[e].z = 0;
     }
     
     av[2].x = end_rel_coords[1].x + av[1].x;
     av[2].y = end_rel_coords[1].y + av[1].y;
-    av[2].color = shadow_end_color;
+    av[2].color = end_colors[1];
+    av[2].color.a = 0.0f;
     av[2].z = 0;
     av[3].x = end_rel_coords[0].x + av[0].x;
     av[3].y = end_rel_coords[0].y + av[0].y;
-    av[3].color = shadow_end_color;
+    av[3].color = end_colors[0];
+    av[3].color.a = 0.0f;
     av[3].z = 0;
     
     //Let's transform the "rectangle" coordinates for the buffer.
@@ -219,7 +225,8 @@ void draw_wall_shadow_on_buffer(edge* e_ptr) {
             elbow_av[e][v + 2].y =
                 ends_to_process[e]->y + elbow_rel_coords[e][v].y;
             elbow_av[e][v + 2].z = 0.0f;
-            elbow_av[e][v + 2].color = shadow_end_color;
+            elbow_av[e][v + 2].color = end_colors[e];
+            elbow_av[e][v + 2].color.a = 0.0f;
             al_transform_coordinates(
                 &game.world_to_screen_transform,
                 &elbow_av[e][v + 2].x, &elbow_av[e][v + 2].y
@@ -409,6 +416,8 @@ void get_next_wall_shadow_edge(
  *   The angle of the tip of this end of the shadow's "rectangle".
  * final_length:
  *   The length of the tip of this end of the shadow's "rectangle".
+ * final_color:
+ *   The color at this end of the shadow's "rectangle".
  * final_elbow_angle:
  *   The angle that the elbow must finish at. 0 if no elbow is needed.
  * final_elbow_length:
@@ -418,11 +427,12 @@ void get_wall_shadow_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
     const float edge_process_angle,
     sector* casting_sector, sector* shaded_sector,
-    float* final_angle, float* final_length,
+    float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
     float* final_elbow_angle, float* final_elbow_length
 ) {
     *final_elbow_angle = 0.0f;
     *final_elbow_length = 0.0f;
+    *final_color = e_ptr->wall_shadow_color;
     
     float base_shadow_length =
         get_wall_shadow_length(e_ptr);
@@ -484,6 +494,13 @@ void get_wall_shadow_edge_info(
             final_angle, final_length
         );
         
+        *final_color =
+            interpolate_color(
+                0.5, 0, 1,
+                *final_color,
+                next_casting_edge->wall_shadow_color
+            );
+            
     } else if(
         next_casting_edge && next_casting_edge_shadow_cw == edge_shadow_cw &&
         next_casting_edge_diff < TAU / 4.0f
@@ -526,10 +543,16 @@ void get_wall_shadow_edge_info(
                 end_idx == 0 ?
                 next_casting_edge_angle + get_angle_cw_dif(next_casting_edge_angle, edge_process_angle) / 2.0f :
                 edge_process_angle + get_angle_cw_dif(edge_process_angle, next_casting_edge_angle) / 2.0f;
+            *final_color =
+                interpolate_color(
+                    0.5, 0, 1,
+                    *final_color,
+                    next_casting_edge->wall_shadow_color
+                );
                 
         } else if(next_casting_edge && next_casting_edge_shadow_cw == edge_shadow_cw) {
             //There is a neighboring edge that casts a shadow, but in
-            //the opposite direction from ours. As such, our shadow will have
+            //the same direction as ours. As such, our shadow will have
             //to connect to that shadow's edge so there's a snug fit.
             //But because that neighboring shadow is so far away in terms of
             //angle, we'll need to implement an elbow between them so they

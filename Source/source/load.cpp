@@ -242,11 +242,7 @@ void load_area(
         new_sector->tag = sector_data->get_child_by_name("tag")->value;
         new_sector->z = s2f(sector_data->get_child_by_name("z")->value);
         new_sector->fade = s2b(sector_data->get_child_by_name("fade")->value);
-        new_sector->always_cast_shadow =
-            s2b(
-                sector_data->get_child_by_name("always_cast_shadow")->value
-            );
-            
+        
         new_sector->texture_info.file_name =
             sector_data->get_child_by_name("texture")->value;
         new_sector->texture_info.rot =

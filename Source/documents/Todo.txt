@@ -2,10 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Didn't I at one point change the review panel to not resize when you turn previewing on/off?
-    Remove always_casts_shadow
-    Interpolate the shadow colors
-    As you edit edge stuff in the editor, do the quick-preview thing
     Update Play and the manual
     A utils file for Allegro stuff (there's a color comparison at least in the area saving, so replace that)
     

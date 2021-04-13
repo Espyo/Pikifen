@@ -113,7 +113,7 @@ void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity
 );
 void draw_sector_wall_shadows(
-    sector* s_ptr, ALLEGRO_BITMAP* buffer
+    sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
 );
 void draw_mob_shadow(
     const point &where, const float size,
