@@ -2,7 +2,12 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Didn't I at one point change the review panel to not resize when you turn previewing on/off?
+    Remove always_casts_shadow
+    Interpolate the shadow colors
+    As you edit edge stuff in the editor, do the quick-preview thing
+    Update Play and the manual
+    A utils file for Allegro stuff (there's a color comparison at least in the area saving, so replace that)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -49,6 +54,7 @@ Next tasks (roughly sorted most important first)
         Make the sprite picker in the animation editor show the sprites in the buttons
         The area editor should let you resize everything, but one dimension at a time
         Double-click the area editor in mob mode to add a mob, or in path mode to add a node, etc.
+        Should the area editor detect path stops that are sitting on top of a path link without being connected to it? It would help find paths that seem connected but aren't, but there might be cases where the player wants this?
     Misc. details
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time

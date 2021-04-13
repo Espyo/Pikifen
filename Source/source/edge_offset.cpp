@@ -62,22 +62,21 @@ void draw_sector_wall_shadows(
 
 /* ----------------------------------------------------------------------------
  * Draws the shadow of a given wall onto the wall shadow buffer.
+ * The buffer is the current target bitmap.
  * e_ptr:
  *   Wall edge whose shadow to draw.
  */
 void draw_wall_shadow_on_buffer(edge* e_ptr) {
-    ALLEGRO_COLOR shadow_start_color =
-        al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
-    ALLEGRO_COLOR shadow_end_color =
-        al_map_rgba(0, 0, 0, 0);
-        
+    ALLEGRO_COLOR shadow_end_color = e_ptr->wall_shadow_color;
+    shadow_end_color.a = 0.0f;
+    
     sector* casting_sector = NULL;
     sector* shaded_sector = NULL;
     
-    if(casts_shadow(e_ptr->sectors[0], e_ptr->sectors[1])) {
+    if(casts_shadow(e_ptr, e_ptr->sectors[0], e_ptr->sectors[1])) {
         casting_sector = e_ptr->sectors[0];
         shaded_sector = e_ptr->sectors[1];
-    } else if(casts_shadow(e_ptr->sectors[1], e_ptr->sectors[0])) {
+    } else if(casts_shadow(e_ptr, e_ptr->sectors[1], e_ptr->sectors[0])) {
         casting_sector = e_ptr->sectors[1];
         shaded_sector = e_ptr->sectors[0];
     } else {
@@ -174,7 +173,7 @@ void draw_wall_shadow_on_buffer(edge* e_ptr) {
     for(size_t e = 0; e < 2; ++e) {
         av[e].x = ends_to_process[e]->x;
         av[e].y = ends_to_process[e]->y;
-        av[e].color = shadow_start_color;
+        av[e].color = e_ptr->wall_shadow_color;
         av[e].z = 0;
     }
     
@@ -340,9 +339,9 @@ void get_next_wall_shadow_edge(
         if(e_ptr == ignore) continue;
         
         signed char casting_sector_idx = -1;
-        if(casts_shadow(e_ptr->sectors[0], e_ptr->sectors[1])) {
+        if(casts_shadow(e_ptr, e_ptr->sectors[0], e_ptr->sectors[1])) {
             casting_sector_idx = 0;
-        } else if(casts_shadow(e_ptr->sectors[1], e_ptr->sectors[0])) {
+        } else if(casts_shadow(e_ptr, e_ptr->sectors[1], e_ptr->sectors[0])) {
             casting_sector_idx = 1;
         } else {
             //Doesn't cast a shadow. No need to process.
@@ -426,7 +425,7 @@ void get_wall_shadow_edge_info(
     *final_elbow_length = 0.0f;
     
     float base_shadow_length =
-        get_wall_shadow_length(casting_sector->z - shaded_sector->z);
+        get_wall_shadow_length(e_ptr);
     float base_shadow_angle =
         end_idx == 0 ?
         edge_process_angle - TAU / 4.0f :
@@ -475,10 +474,7 @@ void get_wall_shadow_edge_info(
         //is because floating point imperfections may make 180-degree edges
         //attempt to be merged, and then the intersection algorithm fails.
         float next_edge_base_shadow_length =
-            get_wall_shadow_length(
-                next_casting_edge->sectors[next_casting_edge_sector_idx]->z -
-                next_casting_edge->sectors[next_casting_edge_sector_idx == 0 ? 1 : 0]->z
-            );
+            get_wall_shadow_length(next_casting_edge);
         float mid_shadow_length = (base_shadow_length + next_edge_base_shadow_length) / 2.0f;
         
         get_wall_shadows_intersection(
@@ -520,10 +516,7 @@ void get_wall_shadow_edge_info(
             //so they can be connected. This edge will draw half of the elbow,
             //and the other will draw its half when it's its turn.
             float next_edge_base_shadow_length =
-                get_wall_shadow_length(
-                    next_casting_edge->sectors[next_casting_edge_sector_idx]->z -
-                    next_casting_edge->sectors[next_casting_edge_sector_idx == 0 ? 1 : 0]->z
-                );
+                get_wall_shadow_length(next_casting_edge);
             float mid_shadow_length =
                 (base_shadow_length + next_edge_base_shadow_length) / 2.0f;
                 
@@ -691,8 +684,8 @@ void update_wall_shadow_buffer(
     //Set the new operation modes.
     al_set_target_bitmap(buffer);
     al_set_separate_blender(
-        ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA,
-        ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
+        ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ZERO,
+        ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA
     );
     al_hold_bitmap_drawing(true);
     

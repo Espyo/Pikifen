@@ -891,6 +891,154 @@ void area_editor::process_gui_panel_details() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui edge control panel for this frame.
+ */
+void area_editor::process_gui_panel_edge() {
+    edge* e_ptr = *selected_edges.begin();
+    
+    //Wall shadow node.
+    if(saveable_tree_node("layout", "Wall shadow")) {
+    
+        //Length/presence text.
+        ImGui::Text("Length and presence:");
+        
+        //Automatic length radio button.
+        bool auto_length = (e_ptr->wall_shadow_length == LARGE_FLOAT);
+        if(ImGui::RadioButton("Automatic length", auto_length)) {
+            if(!auto_length) {
+                register_change("edge shadow length change");
+                e_ptr->wall_shadow_length = LARGE_FLOAT;
+            }
+            auto_length = true;
+        }
+        set_tooltip(
+            "The wall shadow's length will depend "
+            "on the height of the wall.\n"
+            "If it's too short, the wall shadow will also "
+            "automatically disappear."
+        );
+        
+        //Never show radio button.
+        bool no_length = (e_ptr->wall_shadow_length == 0.0f);
+        if(ImGui::RadioButton("Never show", no_length)) {
+            if(!no_length) {
+                register_change("edge shadow length change");
+                e_ptr->wall_shadow_length = 0.0f;
+            }
+            no_length = true;
+        }
+        set_tooltip(
+            "The wall shadow will never appear, no matter what."
+        );
+        
+        //Fixed length radio button.
+        bool fixed_length = (!no_length && !auto_length);
+        if(ImGui::RadioButton("Fixed length", fixed_length)) {
+            if(!fixed_length) {
+                register_change("edge shadow length change");
+                e_ptr->wall_shadow_length = 30.0f;
+            }
+            fixed_length = true;
+        }
+        set_tooltip(
+            "The wall shadow will always appear, and will "
+            "have a fixed length regardless of the wall's height."
+        );
+        
+        //Length value.
+        if(fixed_length) {
+            float length = e_ptr->wall_shadow_length;
+            if(
+                ImGui::DragFloat(
+                    "Length", &length, 0.2f,
+                    edge::SHADOW_MIN_LENGTH, edge::SHADOW_MAX_LENGTH
+                )
+            ) {
+                register_change("edge shadow length change");
+                e_ptr->wall_shadow_length = length;
+            }
+            set_tooltip(
+                "Length of the shadow."
+            );
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Shadow color.
+        ALLEGRO_COLOR color = e_ptr->wall_shadow_color;
+        if(
+            ImGui::ColorEdit4(
+                "Color", (float*) &color,
+                ImGuiColorEditFlags_NoInputs
+            )
+        ) {
+            register_change("edge shadow color change");
+            e_ptr->wall_shadow_color = color;
+        }
+        set_tooltip(
+            "Color of the shadow, opacity included. "
+            "This is the color\n"
+            "closest to the wall, since it becomes more "
+            "transparent as it goes out."
+        );
+        
+        ImGui::TreePop();
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Ledge smoothing node.
+    if(saveable_tree_node("layout", "Ledge smoothing")) {
+    
+        //Length value.
+        float length = e_ptr->ledge_smoothing_length;
+        if(
+            ImGui::DragFloat(
+                "Length", &length, 0.2f,
+                0.0f, edge::SMOOTHING_MAX_LENGTH
+            )
+        ) {
+            register_change("edge ledge smoothing length change");
+            e_ptr->ledge_smoothing_length = length;
+        }
+        set_tooltip(
+            "Length of the ledge smoothing effect.\n"
+            "Use this to make a ledge leading into a wall look more rounded.\n"
+            "0 means there will be no effect."
+        );
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Smoothing color.
+        ALLEGRO_COLOR color = e_ptr->ledge_smoothing_color;
+        if(
+            ImGui::ColorEdit4(
+                "Color", (float*) &color,
+                ImGuiColorEditFlags_NoInputs
+            )
+        ) {
+            register_change("edge ledge smoothing color change");
+            e_ptr->ledge_smoothing_color = color;
+        }
+        set_tooltip(
+            "Color of the ledge smoothing effect, opacity included. "
+            "This is the color\n"
+            "closest to the edge, since it becomes more "
+            "transparent as it goes out."
+        );
+        
+        ImGui::TreePop();
+    }
+    
+    homogenize_selected_edges();
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui area info control panel for this frame.
  */
 void area_editor::process_gui_panel_info() {
@@ -1268,28 +1416,83 @@ void area_editor::process_gui_panel_layout() {
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
-        if(selected_sectors.size() == 1 || selection_homogenized) {
-            process_gui_panel_sector();
-            
-        } else if(selected_sectors.empty()) {
+        //Sectors/edges tabs.
+        if(ImGui::BeginTabBar("tabTabs")) {
         
-            //"No sector selected" text.
-            ImGui::TextDisabled("(No sector selected)");
+            //Sectors tab.
+            if(ImGui::BeginTabItem("Sectors")) {
             
-        } else {
-        
-            //Non-homogenized sectors warning.
-            ImGui::TextWrapped(
-                "Multiple different sectors selected. To make all their "
-                "properties the same and edit them all together, click here:"
-            );
-            
-            //Homogenize sectors button.
-            if(ImGui::Button("Edit all together")) {
-                register_change("sector combining");
-                selection_homogenized = true;
-                homogenize_selected_sectors();
+                if(layout_mode == LAYOUT_MODE_EDGES) {
+                    //If the user homogenized the edges, then
+                    //selection_homogenized is true. But the sectors aren't
+                    //homogenized, so reset the variable back to false.
+                    selection_homogenized = false;
+                }
+                
+                layout_mode = LAYOUT_MODE_SECTORS;
+                
+                if(selected_sectors.size() == 1 || selection_homogenized) {
+                    process_gui_panel_sector();
+                    
+                } else if(selected_sectors.empty()) {
+                
+                    //"No sector selected" text.
+                    ImGui::TextDisabled("(No sector selected)");
+                    
+                } else {
+                
+                    //Non-homogenized sectors warning.
+                    ImGui::TextWrapped(
+                        "Multiple different sectors selected. "
+                        "To make all their properties the same "
+                        "and edit them all together, click here:"
+                    );
+                    
+                    //Homogenize sectors button.
+                    if(ImGui::Button("Edit all together")) {
+                        register_change("sector combining");
+                        selection_homogenized = true;
+                        homogenize_selected_sectors();
+                    }
+                }
+                
+                ImGui::EndTabItem();
             }
+            
+            //Edges tab.
+            if(ImGui::BeginTabItem("Edges", NULL)) {
+            
+                layout_mode = LAYOUT_MODE_EDGES;
+                
+                if(selected_edges.size() == 1 || selection_homogenized) {
+                    process_gui_panel_edge();
+                    
+                } else if(selected_edges.empty()) {
+                
+                    //"No edge selected" text.
+                    ImGui::TextDisabled("(No edge selected)");
+                    
+                } else {
+                
+                    //Non-homogenized edges warning.
+                    ImGui::TextWrapped(
+                        "Multiple different edges selected. "
+                        "To make all their properties the same "
+                        "and edit them all together, click here:"
+                    );
+                    
+                    //Homogenize edges button.
+                    if(ImGui::Button("Edit all together")) {
+                        register_change("edge combining");
+                        selection_homogenized = true;
+                        homogenize_selected_edges();
+                    }
+                }
+                
+                ImGui::EndTabItem();
+            }
+            
+            ImGui::EndTabBar();
         }
     }
     

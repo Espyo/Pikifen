@@ -113,7 +113,18 @@ struct edge {
     sector* sectors[2];
     size_t sector_nrs[2];
     
+    //Length of the wall shadow. 0 = none. LARGE_FLOAT = auto.
+    float wall_shadow_length;
+    //Color of the wall shadow, opacity included.
+    ALLEGRO_COLOR wall_shadow_color;
+    
+    //Length of the ledge smoothing effect. 0 = none.
+    float ledge_smoothing_length;
+    //Color of the ledge smoothing effect, opacity included.
+    ALLEGRO_COLOR ledge_smoothing_color;
+    
     edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
+    void clone(edge* new_edge) const;
     sector* get_other_sector(const sector* v_ptr) const;
     vertex* get_other_vertex(const vertex* v_ptr) const;
     size_t get_side_with_sector(sector* s_ptr) const;
@@ -125,6 +136,15 @@ struct edge {
     void transfer_sector(
         sector* from, sector* to, const size_t to_nr, const size_t edge_nr
     );
+    
+    static const float SHADOW_AUTO_LENGTH_MULT;
+    static const ALLEGRO_COLOR SHADOW_DEF_COLOR;
+    static const float SHADOW_MAX_AUTO_LENGTH;
+    static const float SHADOW_MAX_LENGTH;
+    static const float SHADOW_MIN_AUTO_LENGTH;
+    static const float SHADOW_MIN_LENGTH;
+    static const ALLEGRO_COLOR SMOOTHING_DEF_COLOR;
+    static const float SMOOTHING_MAX_LENGTH;
 };
 
 

@@ -60,18 +60,34 @@ string c2s(const ALLEGRO_COLOR &c) {
 
 /* ----------------------------------------------------------------------------
  * Does sector s1 cast a shadow onto sector s2?
+ * e_ptr:
+ *   Edge between the two sectors.
  * s1:
  *   Sector that would cast a shadow.
  * s2:
  *   Sector that would have the shadow cast onto it.
  */
-bool casts_shadow(sector* s1, sector* s2) {
+bool casts_shadow(edge* e_ptr, sector* s1, sector* s2) {
+    //Never-cast walls don't cast.
+    if(e_ptr->wall_shadow_length == 0.0f) return false;
+    
+    //Invalid sectors don't cast.
     if(!s1 || !s2) return false;
     if(s1->is_bottomless_pit) return false;
     if(s2->is_bottomless_pit) return false;
+    
+    //TODO remove.
     if(s1->z > s2->z && s1->always_cast_shadow) return true;
-    if(s1->z <= s2->z + SECTOR_STEP) return false;
-    return true;
+    
+    if(
+        e_ptr->wall_shadow_length != LARGE_FLOAT
+    ) {
+        //Fixed shadow length.
+        return s1->z > s2->z;
+    } else {
+        //Auto shadow length.
+        return s1->z > s2->z + SECTOR_STEP;
+    }
 }
 
 
@@ -557,25 +573,23 @@ map<string, string> get_var_map(const string &vars_string) {
 }
 
 
-//Maximum length a wall shadow can be.
-const float MAX_WALL_SHADOW_LENGTH = 50.0f;
-//Minimum length a wall shadow can be.
-const float MIN_WALL_SHADOW_LENGTH = 8.0f;
-//Wall shadow lengths are the sector height difference multiplied by this.
-const float WALL_SHADOW_LENGTH_MULT = 0.2f;
-
 /* ----------------------------------------------------------------------------
  * Returns the length a wall's shadow should be.
- * height_difference:
- *   Difference in height between the sector casting the shadow
- *   and the one the shadow is being cast on.
+ * edge:
+ *   Edge with the wall.
  */
-float get_wall_shadow_length(const float height_difference) {
+float get_wall_shadow_length(edge* e_ptr) {
+    if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
+        return e_ptr->wall_shadow_length;
+    }
+    
+    float height_difference =
+        fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z);
     return
         clamp(
-            height_difference * WALL_SHADOW_LENGTH_MULT,
-            MIN_WALL_SHADOW_LENGTH,
-            MAX_WALL_SHADOW_LENGTH
+            height_difference * edge::SHADOW_AUTO_LENGTH_MULT,
+            edge::SHADOW_MIN_AUTO_LENGTH,
+            edge::SHADOW_MAX_AUTO_LENGTH
         );
 }
 

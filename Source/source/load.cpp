@@ -185,6 +185,20 @@ void load_area(
         new_edge->vertex_nrs[0] = s2i(v_nrs[0]);
         new_edge->vertex_nrs[1] = s2i(v_nrs[1]);
         
+        data_node* shadow_length =
+            edge_data->get_child_by_name("shadow_length");
+        if(!shadow_length->value.empty()) {
+            new_edge->wall_shadow_length =
+                s2f(shadow_length->value);
+        }
+        
+        data_node* shadow_color =
+            edge_data->get_child_by_name("shadow_color");
+        if(!shadow_color->value.empty()) {
+            new_edge->wall_shadow_color =
+                s2c(shadow_color->value);
+        }
+        
         game.cur_area_data.edges.push_back(new_edge);
     }
     

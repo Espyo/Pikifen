@@ -172,6 +172,11 @@ private:
         N_SELECTION_FILTERS,
     };
     
+    enum LAYOUT_MODES {
+        LAYOUT_MODE_SECTORS,
+        LAYOUT_MODE_EDGES,
+    };
+    
     static const float         COMFY_DIST;
     static const float         CROSS_SECTION_POINT_RADIUS;
     static const float         CURSOR_SNAP_DISTANCE;
@@ -246,6 +251,8 @@ private:
     mob_category* last_mob_category;
     //Mob type of the last mob placed.
     mob_type* last_mob_type;
+    //Are we editing sectors or edges?
+    LAYOUT_MODES layout_mode;
     //Closest mob to the mouse when moving.
     mob_gen* move_closest_mob;
     //Closest mob was here when the move started (world coords).
@@ -503,6 +510,7 @@ private:
     vertex* get_vertex_under_point(const point &p) const;
     void goto_problem();
     void handle_line_error();
+    void homogenize_selected_edges();
     void homogenize_selected_mobs();
     void homogenize_selected_sectors();
     void load_area(const bool from_backup);
@@ -548,6 +556,7 @@ private:
     void process_gui_menu_bar();
     void process_gui_mob_script_vars(mob_gen* gen);
     void process_gui_panel_details();
+    void process_gui_panel_edge();
     void process_gui_panel_info();
     void process_gui_panel_layout();
     void process_gui_panel_main();

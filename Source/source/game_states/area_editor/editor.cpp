@@ -2045,6 +2045,23 @@ bool area_editor::save_area(const bool to_backup) {
                 i2s(e_ptr->vertex_nrs[0]) + " " + i2s(e_ptr->vertex_nrs[1])
             )
         );
+        
+        if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
+            edge_node->add(
+                new data_node("shadow_length", f2s(e_ptr->wall_shadow_length))
+            );
+        }
+        
+        if(
+            e_ptr->wall_shadow_color.r != edge::SHADOW_DEF_COLOR.r ||
+            e_ptr->wall_shadow_color.g != edge::SHADOW_DEF_COLOR.g ||
+            e_ptr->wall_shadow_color.b != edge::SHADOW_DEF_COLOR.b ||
+            e_ptr->wall_shadow_color.a != edge::SHADOW_DEF_COLOR.a
+        ) {
+            edge_node->add(
+                new data_node("shadow_color", c2s(e_ptr->wall_shadow_color))
+            );
+        }
     }
     
     //Sectors.

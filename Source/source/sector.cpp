@@ -28,6 +28,24 @@ using std::unordered_set;
 using std::set;
 
 
+//Auto wall shadow lengths are the sector height difference multiplied by this.
+const float edge::SHADOW_AUTO_LENGTH_MULT = 0.2f;
+//Default color of wall shadows. This is the color at the edge.
+const ALLEGRO_COLOR edge::SHADOW_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.90f};
+//Maximum length a wall shadow can be when the length is automatic.
+const float edge::SHADOW_MAX_AUTO_LENGTH = 50.0f;
+//Maximum length a wall shadow can be.
+const float edge::SHADOW_MAX_LENGTH = 100.0f;
+//Minimum length a wall shadow can be when the length is automatic.
+const float edge::SHADOW_MIN_AUTO_LENGTH = 8.0f;
+//Minimum length a wall shadow can be.
+const float edge::SHADOW_MIN_LENGTH = 1.0f;
+//Default color of the smoothing effect.
+const ALLEGRO_COLOR edge::SMOOTHING_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.40f};
+//Maximum length the smoothing effect can be.
+const float edge::SMOOTHING_MAX_LENGTH = 100.0f;
+
+
 /* ----------------------------------------------------------------------------
  * Creates info on an area.
  */
@@ -222,6 +240,7 @@ void area_data::clone(area_data &other) {
         }
         oe_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
         oe_ptr->sector_nrs[1] = e_ptr->sector_nrs[1];
+        e_ptr->clone(oe_ptr);
     }
     
     for(size_t s = 0; s < sectors.size(); ++s) {
@@ -1048,12 +1067,31 @@ point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
  * v2:
  *   Its second vertex.
  */
-edge::edge(size_t v1, size_t v2) {
+edge::edge(size_t v1, size_t v2) :
+    wall_shadow_length(LARGE_FLOAT),
+    wall_shadow_color(SHADOW_DEF_COLOR),
+    ledge_smoothing_length(0),
+    ledge_smoothing_color(SMOOTHING_DEF_COLOR) {
+    
     vertexes[0] = vertexes[1] = NULL;
     sectors[0] = sectors[1] = NULL;
     sector_nrs[0] = sector_nrs[1] = INVALID;
     
     vertex_nrs[0] = v1; vertex_nrs[1] = v2;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clones an edge's properties onto another,
+ * not counting the sectors or vertexes.
+ * new_edge:
+ *   Edge to clone the data into.
+ */
+void edge::clone(edge* new_edge) const {
+    new_edge->wall_shadow_length = wall_shadow_length;
+    new_edge->wall_shadow_color = wall_shadow_color;
+    new_edge->ledge_smoothing_length = ledge_smoothing_length;
+    new_edge->ledge_smoothing_color = ledge_smoothing_color;
 }
 
 

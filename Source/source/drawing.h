@@ -26,8 +26,6 @@ const float LIQUID_WOBBLE_DELTA_X = 3.0f;
 const float NOTIFICATION_PADDING = 8.0f;
 const float NOTIFICATION_CONTROL_SIZE = 24.0f;
 const unsigned char NOTIFICATION_ALPHA = 160;
-//The shadows of walls start with this opacity and fade to 0.
-const float WALL_SHADOW_OPACITY = 208;
 //A water wave ring lasts this long.
 const float WAVE_RING_DURATION = 1.0f;
 
@@ -110,9 +108,6 @@ void draw_rounded_rectangle(
 void draw_rotated_rectangle(
     const point &center, const point &dimensions,
     const float angle, const ALLEGRO_COLOR &color, const float thickness
-);
-void draw_sector_shadows(
-    sector* s_ptr, const point &where, const float scale
 );
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity

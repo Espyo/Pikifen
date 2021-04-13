@@ -72,7 +72,7 @@ enum FILE_DIALOG_RESULTS {
 
 
 
-bool casts_shadow(sector* s1, sector* s2);
+bool casts_shadow(edge* e_ptr, sector* s1, sector* s2);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
@@ -109,7 +109,7 @@ void get_wall_shadow_edge_info(
     float* final_angle, float* final_length,
     float* final_elbow_angle, float* final_elbow_length
 );
-float get_wall_shadow_length(const float height_difference);
+float get_wall_shadow_length(edge* e_ptr);
 void get_wall_shadows_intersection(
     edge* e1, edge* e2, vertex* common_vertex,
     const float base_shadow_angle1, const float base_shadow_angle2,

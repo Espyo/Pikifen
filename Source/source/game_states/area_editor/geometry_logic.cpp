@@ -1406,6 +1406,23 @@ vertex* area_editor::get_vertex_under_point(const point &p) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Homogenizes all selected edges,
+ * based on the one at the head of the selection.
+ */
+void area_editor::homogenize_selected_edges() {
+    if(selected_edges.size() < 2) return;
+    
+    edge* base = *selected_edges.begin();
+    for(auto e = selected_edges.begin(); e != selected_edges.end(); ++e) {
+        if(e == selected_edges.begin()) continue;
+        base->clone(*e);
+    }
+    status_text =
+        "Homogenized " + amount_str(selected_edges.size(), "edge") + ".";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Homogenizes all selected mobs,
  * based on the one at the head of the selection.
  */
@@ -1876,6 +1893,7 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
     new_v_ptr->x = new_v_pos.x;
     new_v_ptr->y = new_v_pos.y;
     edge* new_e_ptr = game.cur_area_data.new_edge();
+    e_ptr->clone(new_e_ptr);
     
     //Connect the vertexes and edges.
     game.cur_area_data.connect_edge_to_vertex(new_e_ptr, new_v_ptr, 0);
