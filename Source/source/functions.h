@@ -71,6 +71,13 @@ enum FILE_DIALOG_RESULTS {
      game.config.swarm_task_range : game.config.idle_task_range)
 
 
+//Function that checks if an edge should use a given edge offset effect.
+typedef bool (*offset_effect_checker_ptr)(edge*, sector**, sector**);
+//Function that returns an edge's edge offset effect color.
+typedef ALLEGRO_COLOR (*offset_effect_color_getter_ptr)(edge*);
+//Function that returns an edge's edge offset effect length.
+typedef float (*offset_effect_length_getter_ptr)(edge*);
+
 
 bool casts_shadow(edge* e_ptr, sector* s1, sector* s2);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
@@ -78,7 +85,12 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
 void clear_area_textures();
 void crash(const string &reason, const string &info, const int exit_status);
-void draw_wall_shadow_on_buffer(edge* e_ptr);
+void draw_edge_offset_on_buffer(
+    edge* e_ptr,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter
+);
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
@@ -94,23 +106,28 @@ void get_next_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
     edge** final_edge, float* final_angle, float* final_diff
 );
-void get_next_wall_shadow_edge(
+void get_next_offset_effect_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
+    offset_effect_checker_ptr edge_checker,
     edge** final_edge, float* final_angle, float* final_diff,
-    signed char* final_casting_sector_idx, float* final_base_shadow_angle,
+    float* final_base_shadow_angle,
     bool* final_shadow_cw
 );
 float get_sun_strength();
 map<string, string> get_var_map(const string &vars_string);
-void get_wall_shadow_edge_info(
+void get_edge_offset_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
     const float edge_process_angle,
-    sector* casting_sector, sector* shaded_sector,
+    sector* affected_sector, sector* unaffected_sector,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter,
     float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
     float* final_elbow_angle, float* final_elbow_length
 );
+ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr);
 float get_wall_shadow_length(edge* e_ptr);
-void get_wall_shadows_intersection(
+void get_edge_offset_intersection(
     edge* e1, edge* e2, vertex* common_vertex,
     const float base_shadow_angle1, const float base_shadow_angle2,
     const float shadow_length, const unsigned char end_idx,
@@ -160,11 +177,17 @@ void spew_pikmin_seed(
 string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string unescape_string(const string &s);
-void update_wall_shadow_buffer(
+void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
-    ALLEGRO_BITMAP* buffer
+    ALLEGRO_BITMAP* buffer,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter
 );
 string vector_tail_to_string(const vector<string> &v, const size_t pos);
+bool does_edge_have_wall_shadow(
+    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+);
 
 
 void al_fwrite(ALLEGRO_FILE* f, string s);

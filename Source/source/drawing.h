@@ -112,7 +112,7 @@ void draw_rotated_rectangle(
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity
 );
-void draw_sector_wall_shadows(
+void draw_sector_edge_offsets(
     sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
 );
 void draw_mob_shadow(

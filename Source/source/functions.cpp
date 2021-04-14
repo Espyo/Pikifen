@@ -255,6 +255,36 @@ void crash(const string &reason, const string &info, const int exit_status) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks whether a given edge should get a wall shadow edge offset effect
+ * or not.
+ * e_ptr:
+ *   Edge to check.
+ * affected_sector:
+ *   If there should be an effect, this is the affected sector,
+ *   i.e. the one getting shaded.
+ * unaffected_sector:
+ *   If there should be an effect, this is the unaffected sector,
+ *   i.e. the one casting the shadow.
+ */
+bool does_edge_have_wall_shadow(
+    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+) {
+    if(casts_shadow(e_ptr, e_ptr->sectors[0], e_ptr->sectors[1])) {
+        *unaffected_sector = e_ptr->sectors[0];
+        *affected_sector = e_ptr->sectors[1];
+        return true;
+    } else if(casts_shadow(e_ptr, e_ptr->sectors[1], e_ptr->sectors[0])) {
+        *unaffected_sector = e_ptr->sectors[1];
+        *affected_sector = e_ptr->sectors[0];
+        return true;
+    } else {
+        //No shadows are cast anywhere.
+        return false;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Stores the names of all files in a folder into a vector.
  * folder_name:
  *   Name of the folder.
@@ -567,6 +597,16 @@ map<string, string> get_var_map(const string &vars_string) {
         final_map[trim_spaces(raw_parts[0])] = trim_spaces(raw_parts[1]);
     }
     return final_map;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the color a wall's shadow should be.
+ * edge:
+ *   Edge with the wall.
+ */
+ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr) {
+    return e_ptr->wall_shadow_color;
 }
 
 

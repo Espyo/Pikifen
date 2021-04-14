@@ -7,6 +7,10 @@
  * === FILE DESCRIPTION ===
  * Functions related to offseting edges, for the purposes of creating
  * wall shadow, ledge smoothing, or water foam effects.
+ * These effects are obtained by drawing some geometry that follows
+ * neighboring edges around, but is offset forward (or backward).
+ * Some calculations and trickery are needed when neighboring edges meet at
+ * acute or obtuse angles.
  */
 
 #include <allegro5/allegro_image.h>
@@ -18,17 +22,16 @@
 
 
 /* ----------------------------------------------------------------------------
- * Draws wall shadows onto the given sector.
- * This requires that the shadows have been drawn onto a buffer,
- * from which this algorithm samples.
+ * Draws edge offset effects onto the given sector. This requires that
+ * the effects have been drawn onto a buffer, from which this algorithm samples.
  * s_ptr:
- *   Sector to draw the shadows of.
+ *   Sector to draw the effects of.
  * buffer:
  *   Buffer to draw from.
  * opacity:
- *   Draw the textures at this opacity, 0 - 1.
+ *   Draw at this opacity, 0 - 1.
  */
-void draw_sector_wall_shadows(
+void draw_sector_edge_offsets(
     sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
 ) {
     if(s_ptr->is_bottomless_pit) return;
@@ -66,32 +69,40 @@ void draw_sector_wall_shadows(
 
 
 /* ----------------------------------------------------------------------------
- * Draws the shadow of a given wall onto the wall shadow buffer.
- * The buffer is the current target bitmap.
+ * Draws an edge offset effect of a given edge onto the current target bitmap,
+ * which acts as a buffer.
  * e_ptr:
- *   Wall edge whose shadow to draw.
+ *   Edge whose effects to draw.
+ * checker:
+ *   Pointer to a function that checks if the edge should have the
+ *   intended effect or not. It also returns what sector of the edge
+ *   will be affected by the effect, and which won't.
+ * length_getter:
+ *   Pointer to a function that returns the length of a given edge's effect.
+ * color_getter:
+ *   Pointer to a function that returns the color of a given edge's effect.
  */
-void draw_wall_shadow_on_buffer(edge* e_ptr) {
-    sector* casting_sector = NULL;
-    sector* shaded_sector = NULL;
+void draw_edge_offset_on_buffer(
+    edge* e_ptr,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter
+) {
+
+    sector* unaffected_sector = NULL;
+    sector* affected_sector = NULL;
     
-    if(casts_shadow(e_ptr, e_ptr->sectors[0], e_ptr->sectors[1])) {
-        casting_sector = e_ptr->sectors[0];
-        shaded_sector = e_ptr->sectors[1];
-    } else if(casts_shadow(e_ptr, e_ptr->sectors[1], e_ptr->sectors[0])) {
-        casting_sector = e_ptr->sectors[1];
-        shaded_sector = e_ptr->sectors[0];
-    } else {
-        //No shadows are cast anywhere.
+    if(!checker(e_ptr, &affected_sector, &unaffected_sector)) {
+        //This edge doesn't get the effect.
         return;
     }
     
     //We need to process the two vertexes of the edge in a specific
     //order, such that if you stand on the first one being processed,
-    //and you face the second one, the shaded sector is to the left.
+    //and you face the second one, the affected sector is to the left.
     
     vertex* ends_to_process[2];
-    if(e_ptr->sectors[0] == shaded_sector) {
+    if(e_ptr->sectors[0] == affected_sector) {
         ends_to_process[0] = e_ptr->vertexes[0];
         ends_to_process[1] = e_ptr->vertexes[1];
     } else {
@@ -110,36 +121,37 @@ void draw_wall_shadow_on_buffer(edge* e_ptr) {
     ALLEGRO_COLOR end_colors[2];
     
     for(unsigned char e = 0; e < 2; ++e) {
-        //For each end of the shadow...
+        //For each end of the effect...
         
         float length = 0.0f;
         float angle = 0.0f;
         float elbow_length = 0.0f;
         float elbow_angle = 0.0f;
         
-        //The edge's shadow is simply a rectangle, although one or both
+        //The edge's effect is simply a rectangle, although one or both
         //of its ends could be angled inward, either to merge with a
-        //neighboring shadow or to fit snugly against a different shadow's edge.
+        //neighboring effect or to fit snugly against a different effect's edge.
         //In addition, we may also need to draw an "elbow" shape to connect to
         //a different edge.
-        //Start by getting information on how this shadow should behave.
+        //Start by getting information on how this effect should behave.
         //We don't need to worry about why it's drawn the way it is, since
-        //get_wall_shadow_edge_info is in charge of that.
-        get_wall_shadow_edge_info(
+        //get_edge_offset_edge_info is in charge of that.
+        get_edge_offset_edge_info(
             e_ptr, ends_to_process[e], e,
             e == 0 ? edge_process_angle : edge_process_angle + TAU / 2.0f,
-            casting_sector, shaded_sector,
+            affected_sector, unaffected_sector,
+            checker, length_getter, color_getter,
             &angle, &length, &end_colors[e],
             &elbow_angle, &elbow_length
         );
         
-        //This end of the shadow starts at the vertex and spreads to this point.
+        //This end of the effect starts at the vertex and spreads to this point.
         end_rel_coords[e] = rotate_point(point(length, 0), angle);
         
         if(elbow_length > 0.0f) {
             //We need to also draw an elbow connecting this end of the
-            //shadow to something else. Usually another shadow's elbow, but
-            //it could just be another shadow's edge.
+            //effect to something else. Usually another effect's elbow, but
+            //it could just be another effect's edge.
             //The elbow is either one triangle or two triangles, depending
             //on how much it needs to bend.
             
@@ -305,8 +317,9 @@ void get_next_edge(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the next edge that casts a shadow in a vertex's list of edges.
- * It checks in a given direction, starting from some pivot angle.
+ * Returns the next edge that needs the given edge offset event,
+ * in a vertex's list of edges. It checks in a given direction,
+ * starting from some pivot angle.
  * v_ptr:
  *   Vertex to work on.
  * pivot_angle:
@@ -315,52 +328,51 @@ void get_next_edge(
  *   True to check in a clockwise direction, false for counter-clockwise.
  * ignore:
  *   Edge to ignore while checking, if any.
+ * edge_checker:
+ *   Function that returns whether or not a given edge should use the effect.
  * final_edge:
  *   The found edge is returned here, or NULL.
  * final_angle:
  *   Angle of the found edge.
  * final_diff:
  *   Difference in angle between the two.
- * final_casting_sector_idx:
- *   Index of the sector that casts a shadow of the found edge.
- * final_base_shadow_angle:
- *   The base shadow angle of the found edge.
- * final_shadow_cw:
- *   Is the shadow cast clockwise?
+ * final_base_effect_angle:
+ *   The base effect angle of the found edge.
+ * final_effect_cw:
+ *   Is the effect cast clockwise?
  */
-void get_next_wall_shadow_edge(
+void get_next_offset_effect_edge(
     vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
+    offset_effect_checker_ptr edge_checker,
     edge** final_edge, float* final_angle, float* final_diff,
-    signed char* final_casting_sector_idx, float* final_base_shadow_angle,
-    bool* final_shadow_cw
+    float* final_base_effect_angle,
+    bool* final_effect_cw
 ) {
     edge* best_edge = NULL;
     float best_edge_diff = 0;
     float best_edge_angle = 0;
-    signed char best_edge_casting_sector_idx = -1;
-    bool best_edge_shadow_cw = false;
+    bool best_edge_effect_cw = false;
     
     for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
         edge* e_ptr = v_ptr->edges[e];
         
         if(e_ptr == ignore) continue;
         
-        signed char casting_sector_idx = -1;
-        if(casts_shadow(e_ptr, e_ptr->sectors[0], e_ptr->sectors[1])) {
-            casting_sector_idx = 0;
-        } else if(casts_shadow(e_ptr, e_ptr->sectors[1], e_ptr->sectors[0])) {
-            casting_sector_idx = 1;
-        } else {
-            //Doesn't cast a shadow. No need to process.
+        sector* affected_sector;
+        sector* unaffected_sector;
+        if(!edge_checker(e_ptr, &affected_sector, &unaffected_sector)) {
+            //This edge does not use the effect.
             continue;
         }
-        
+        unsigned char unaffected_sector_idx =
+            e_ptr->sectors[0] == unaffected_sector ? 0 : 1;
+            
         unsigned char other_vertex_idx = e_ptr->vertexes[0] == v_ptr ? 1 : 0;
         vertex* other_vertex = e_ptr->vertexes[other_vertex_idx];
         
         //Standing on the common vertex, facing the edge,
-        //to what side does its shadow go?
-        bool shadow_is_cw = other_vertex_idx != casting_sector_idx;
+        //to what side does the effect go?
+        bool effect_is_cw = other_vertex_idx != unaffected_sector_idx;
         
         float angle =
             get_angle(
@@ -377,120 +389,125 @@ void get_next_wall_shadow_edge(
             best_edge = e_ptr;
             best_edge_diff = diff;
             best_edge_angle = angle;
-            best_edge_casting_sector_idx = casting_sector_idx;
-            best_edge_shadow_cw = shadow_is_cw;
+            best_edge_effect_cw = effect_is_cw;
         }
     }
     
     *final_edge = best_edge;
     *final_diff = best_edge_diff;
     *final_angle = best_edge_angle;
-    *final_casting_sector_idx = best_edge_casting_sector_idx;
-    *final_shadow_cw = best_edge_shadow_cw;
-    if(best_edge_shadow_cw) {
-        *final_base_shadow_angle =
+    *final_effect_cw = best_edge_effect_cw;
+    if(best_edge_effect_cw) {
+        *final_base_effect_angle =
             normalize_angle(best_edge_angle + TAU / 4.0f);
     } else {
-        *final_base_shadow_angle =
+        *final_base_effect_angle =
             normalize_angle(best_edge_angle - TAU / 4.0f);
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns information about one of the ends of a wall shadow.
+ * Returns information about one of the ends of an edge offset effect.
  * e_ptr:
- *   Edge with the wall shadow.
+ *   Edge with the effect.
  * end_vertex:
  *   Vertex of the end being processed.
  * end_idx:
  *   Index of the end being processed. 0 is the end of the edge where the
- *   shaded sector is to the left, if you face from end 0 to end 1.
+ *   sector receiving the effect is to the left, if you face
+ *   from end 0 to end 1.
  * edge_process_angle:
  *   Angle that the edge makes from the current end to the opposite one.
- * casting_sector:
- *   Sector that is casting a shadow.
- * shaded_sector:
- *   Sector that gets shaded by the sector.
+ * affected_sector:
+ *   Sector that gets affected by the effect.
+ * unaffected_sector:
+ *   Sector that is unaffected by the effect.
+ * length_getter:
+ *   Function that returns the length of the effect.
+ * color_getter:
+ *   Function that returns the color of the effect.
  * final_angle:
- *   The angle of the tip of this end of the shadow's "rectangle".
+ *   The angle of the tip of this end of the effect's "rectangle".
  * final_length:
- *   The length of the tip of this end of the shadow's "rectangle".
+ *   The length of the tip of this end of the effect's "rectangle".
  * final_color:
- *   The color at this end of the shadow's "rectangle".
+ *   The color at this end of the effect's "rectangle".
  * final_elbow_angle:
  *   The angle that the elbow must finish at. 0 if no elbow is needed.
  * final_elbow_length:
  *   The length of the line at the end of the elbow. 0 if no elbow is needed.
  */
-void get_wall_shadow_edge_info(
+void get_edge_offset_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
     const float edge_process_angle,
-    sector* casting_sector, sector* shaded_sector,
+    sector* affected_sector, sector* unaffected_sector,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter,
     float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
     float* final_elbow_angle, float* final_elbow_length
 ) {
     *final_elbow_angle = 0.0f;
     *final_elbow_length = 0.0f;
-    *final_color = e_ptr->wall_shadow_color;
+    *final_color = color_getter(e_ptr);
     
-    float base_shadow_length =
-        get_wall_shadow_length(e_ptr);
-    float base_shadow_angle =
+    float base_effect_length = length_getter(e_ptr);
+    float base_effect_angle =
         end_idx == 0 ?
         edge_process_angle - TAU / 4.0f :
         edge_process_angle + TAU / 4.0f;
-    base_shadow_angle = normalize_angle(base_shadow_angle);
-    bool edge_shadow_cw = end_idx == 1;
+    base_effect_angle = normalize_angle(base_effect_angle);
+    bool edge_effect_cw = end_idx == 1;
     
     edge* next_edge = NULL;
     float next_edge_angle = 0.0f;
     float next_edge_diff = 0.0f;
-    edge* next_casting_edge = NULL;
-    float next_casting_edge_angle = 0.0f;
-    float next_casting_edge_diff = 0.0f;
-    signed char next_casting_edge_sector_idx = 0;
-    bool next_casting_edge_shadow_cw = false;
-    float next_casting_edge_base_shadow_angle = 0.0f;
+    edge* next_eff_edge = NULL;
+    float next_eff_edge_angle = 0.0f;
+    float next_eff_edge_diff = 0.0f;
+    bool next_eff_edge_effect_cw = false;
+    float next_eff_edge_base_effect_angle = 0.0f;
     
     //Start by getting some information about the edges
     //that comes after this one.
     get_next_edge(
-        end_vertex, edge_process_angle, edge_shadow_cw, e_ptr,
+        end_vertex, edge_process_angle, edge_effect_cw, e_ptr,
         &next_edge, &next_edge_angle, &next_edge_diff
     );
     
-    get_next_wall_shadow_edge(
-        end_vertex, edge_process_angle, edge_shadow_cw, e_ptr,
-        &next_casting_edge, &next_casting_edge_angle, &next_casting_edge_diff,
-        &next_casting_edge_sector_idx, &next_casting_edge_base_shadow_angle,
-        &next_casting_edge_shadow_cw
+    get_next_offset_effect_edge(
+        end_vertex, edge_process_angle, edge_effect_cw, e_ptr,
+        checker,
+        &next_eff_edge, &next_eff_edge_angle, &next_eff_edge_diff,
+        &next_eff_edge_base_effect_angle,
+        &next_eff_edge_effect_cw
     );
     
-    //Now either this end of the shadow is drawn forward,
-    //or it's slanted inward to merge with another shadow.
+    //Now either this end of the effect is drawn forward,
+    //or it's slanted inward to merge with another effect.
     //In addition, we may need an elbow attached to this end or not.
-    bool shadows_need_merge =
-        next_casting_edge && next_casting_edge_shadow_cw != edge_shadow_cw;
+    bool effects_need_merge =
+        next_eff_edge && next_eff_edge_effect_cw != edge_effect_cw;
     if(
-        shadows_need_merge &&
-        next_casting_edge_diff < (TAU / 2.0f - 0.0001f)
+        effects_need_merge &&
+        next_eff_edge_diff < (TAU / 2.0f - 0.0001f)
     ) {
-        //Next edge that casts a shadow faces ours.
-        //Merge our shadow with its shadow.
-        //The shadow's final point should be where they both intersect.
-        //The other shadow's edge will do the same when it's its turn.
+        //Next edge that casts an effect faces ours.
+        //Merge our effect with its effect.
+        //The effect's final point should be where they both intersect.
+        //The other effect's edge will do the same when it's its turn.
         //The reason we're docking some values away from exactly 180 degrees
         //is because floating point imperfections may make 180-degree edges
         //attempt to be merged, and then the intersection algorithm fails.
-        float next_edge_base_shadow_length =
-            get_wall_shadow_length(next_casting_edge);
-        float mid_shadow_length = (base_shadow_length + next_edge_base_shadow_length) / 2.0f;
-        
-        get_wall_shadows_intersection(
-            e_ptr, next_casting_edge, end_vertex,
-            base_shadow_angle, next_casting_edge_base_shadow_angle,
-            mid_shadow_length, end_idx,
+        float next_edge_base_effect_length = length_getter(next_eff_edge);
+        float mid_effect_length =
+            (base_effect_length + next_edge_base_effect_length) / 2.0f;
+            
+        get_edge_offset_intersection(
+            e_ptr, next_eff_edge, end_vertex,
+            base_effect_angle, next_eff_edge_base_effect_angle,
+            mid_effect_length, end_idx,
             final_angle, final_length
         );
         
@@ -498,68 +515,68 @@ void get_wall_shadow_edge_info(
             interpolate_color(
                 0.5, 0, 1,
                 *final_color,
-                next_casting_edge->wall_shadow_color
+                color_getter(next_eff_edge)
             );
             
     } else if(
-        next_casting_edge && next_casting_edge_shadow_cw == edge_shadow_cw &&
-        next_casting_edge_diff < TAU / 4.0f
+        next_eff_edge && next_eff_edge_effect_cw == edge_effect_cw &&
+        next_eff_edge_diff < TAU / 4.0f
     ) {
-        //Next edge has a shadow that goes in the same direction,
-        //and that edge imposes over our shadow.
-        //As such, skew our shadow inwards to align with that edge.
-        *final_angle = next_casting_edge_angle;
-        *final_length = base_shadow_length / sin(next_casting_edge_diff);
+        //Next edge has an effect that goes in the same direction,
+        //and that edge imposes over our effect.
+        //As such, skew our effect inwards to align with that edge.
+        *final_angle = next_eff_edge_angle;
+        *final_length = base_effect_length / sin(next_eff_edge_diff);
         
     } else if(
-        !next_casting_edge
+        !next_eff_edge
     ) {
         //There's nothing to connect to in any way, so we might as well shrink
-        //this end. Shrinking it to 0 will make shadows of edges where there's
+        //this end. Shrinking it to 0 will make effects of edges where there's
         //nothing on both sides disappear, which may mislead the user. So
         //instead just make it a fraction of the usual size.
-        *final_angle = base_shadow_angle;
-        *final_length = base_shadow_length / 5.0f;
+        *final_angle = base_effect_angle;
+        *final_length = base_effect_length / 5.0f;
         
     } else {
-        //We can draw our end of the shadow forward without a care.
-        *final_angle = base_shadow_angle;
-        *final_length = base_shadow_length;
+        //We can draw our end of the effect forward without a care.
+        *final_angle = base_effect_angle;
+        *final_length = base_effect_length;
         
-        if(next_casting_edge && next_casting_edge_shadow_cw != edge_shadow_cw) {
-            //On this end there is a neighboring shadow we'll want to connect
-            //to. But because that neighboring shadow is so far away in
+        if(next_eff_edge && next_eff_edge_effect_cw != edge_effect_cw) {
+            //On this end there is a neighboring effect we'll want to connect
+            //to. But because that neighboring effect is so far away in
             //terms of angle, we'll need to implement an elbow between them
             //so they can be connected. This edge will draw half of the elbow,
             //and the other will draw its half when it's its turn.
-            float next_edge_base_shadow_length =
-                get_wall_shadow_length(next_casting_edge);
-            float mid_shadow_length =
-                (base_shadow_length + next_edge_base_shadow_length) / 2.0f;
+            float next_edge_base_effect_length =
+                length_getter(next_eff_edge);
+            float mid_effect_length =
+                (base_effect_length + next_edge_base_effect_length) / 2.0f;
                 
-            *final_length = mid_shadow_length;
-            *final_elbow_length = mid_shadow_length;
+            *final_length = mid_effect_length;
+            *final_elbow_length = mid_effect_length;
             *final_elbow_angle =
                 end_idx == 0 ?
-                next_casting_edge_angle + get_angle_cw_dif(next_casting_edge_angle, edge_process_angle) / 2.0f :
-                edge_process_angle + get_angle_cw_dif(edge_process_angle, next_casting_edge_angle) / 2.0f;
+                next_eff_edge_angle + get_angle_cw_dif(next_eff_edge_angle, edge_process_angle) / 2.0f :
+                edge_process_angle + get_angle_cw_dif(edge_process_angle, next_eff_edge_angle) / 2.0f;
             *final_color =
                 interpolate_color(
                     0.5, 0, 1,
                     *final_color,
-                    next_casting_edge->wall_shadow_color
+                    color_getter(next_eff_edge)
                 );
                 
-        } else if(next_casting_edge && next_casting_edge_shadow_cw == edge_shadow_cw) {
-            //There is a neighboring edge that casts a shadow, but in
-            //the same direction as ours. As such, our shadow will have
-            //to connect to that shadow's edge so there's a snug fit.
-            //But because that neighboring shadow is so far away in terms of
+        } else if(next_eff_edge && next_eff_edge_effect_cw == edge_effect_cw) {
+            //There is a neighboring edge that has the effect, but in
+            //the same direction as ours. As such, our effect will have
+            //to connect to that effect's edge so there's a snug fit.
+            //But because that neighboring effect is so far away in terms of
             //angle, we'll need to implement an elbow between them so they
             //can be connected. This edge will be in charge of drawing the full
             //elbow.
-            *final_elbow_angle = next_casting_edge_angle;
-            *final_elbow_length = base_shadow_length;
+            *final_elbow_angle = next_eff_edge_angle;
+            *final_elbow_length = base_effect_length;
         }
         
     }
@@ -568,86 +585,86 @@ void get_wall_shadow_edge_info(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the point in which the far end of two wall shadows intersect.
- * This calculation is only for the base "rectangle" shape of the shadow,
+ * Returns the point in which the far end of two edge offset effects intersect.
+ * This calculation is only for the base "rectangle" shape of the effect,
  * and doesn't take into account any inward slants given on the ends, nor
  * does it care about elbows.
  * Normally, this would be the intersection point between the line segments
- * that make up both shadows's rectangle ends, but there may be cases, explained
+ * that make up both effects's rectangle ends, but there may be cases, explained
  * below, where that doesn't result in a real collision. In order for the
  * algorithm to always return something that at least can be worked with,
- * the intersection is calculated as if both shadow ends were infinitely long
+ * the intersection is calculated as if both effect ends were infinitely long
  * lines.
  * e1:
- *   First shadow-casting edge. This is the main edge being processed.
+ *   First effect-casting edge. This is the main edge being processed.
  * e2:
- *   Second shadow-casting edge.
+ *   Second effect-casting edge.
  * common_vertex:
  *   The vertex shared between these two edges.
- * base_shadow_angle1:
- *   The base angle at which edge 1's shadow is projected.
- * base_shadow_angle2:
- *   Same as base_shadow_angle1, but for edge 2.
- * shadow_length:
- *   Length of either shadow.
+ * base_effect_angle1:
+ *   The base angle at which edge 1's effect is projected.
+ * base_effect_angle2:
+ *   Same as base_effect_angle1, but for edge 2.
+ * effect_length:
+ *   Length of either effect.
  * end_idx:
- *   Index of the end being processed. 0 means that the shaded sector is to
- *   the left, if you stand on end 0 and face end 1.
+ *   Index of the end being processed. 0 means that the sector that receives
+ *   the effect is to the left, if you stand on end 0 and face end 1.
  * final_angle:
  *   The angle from the common vertex to the intersection point.
  * final_length:
  *   The length from the common vertex to the intersection point.
  */
-void get_wall_shadows_intersection(
+void get_edge_offset_intersection(
     edge* e1, edge* e2, vertex* common_vertex,
-    const float base_shadow_angle1, const float base_shadow_angle2,
-    const float shadow_length, const unsigned char end_idx,
+    const float base_effect_angle1, const float base_effect_angle2,
+    const float effect_length, const unsigned char end_idx,
     float* final_angle, float* final_length
 ) {
     vertex* other_vertex1 = e1->get_other_vertex(common_vertex);
-    float base_cos1 = cos(base_shadow_angle1);
-    float base_sin1 = sin(base_shadow_angle1);
-    point shadow1_p0(
-        common_vertex->x + base_cos1 * shadow_length,
-        common_vertex->y + base_sin1 * shadow_length
+    float base_cos1 = cos(base_effect_angle1);
+    float base_sin1 = sin(base_effect_angle1);
+    point effect1_p0(
+        common_vertex->x + base_cos1 * effect_length,
+        common_vertex->y + base_sin1 * effect_length
     );
-    point shadow1_p1(
-        other_vertex1->x + base_cos1 * shadow_length,
-        other_vertex1->y + base_sin1 * shadow_length
+    point effect1_p1(
+        other_vertex1->x + base_cos1 * effect_length,
+        other_vertex1->y + base_sin1 * effect_length
     );
     
     vertex* other_vertex2 = e2->get_other_vertex(common_vertex);
-    float base_cos2 = cos(base_shadow_angle2);
-    float base_sin2 = sin(base_shadow_angle2);
-    point shadow2_p0(
-        common_vertex->x + base_cos2 * shadow_length,
-        common_vertex->y + base_sin2 * shadow_length
+    float base_cos2 = cos(base_effect_angle2);
+    float base_sin2 = sin(base_effect_angle2);
+    point effect2_p0(
+        common_vertex->x + base_cos2 * effect_length,
+        common_vertex->y + base_sin2 * effect_length
     );
-    point shadow2_p1(
-        other_vertex2->x + base_cos2 * shadow_length,
-        other_vertex2->y + base_sin2 * shadow_length
+    point effect2_p1(
+        other_vertex2->x + base_cos2 * effect_length,
+        other_vertex2->y + base_sin2 * effect_length
     );
     
     //Let's get where the lines intersect. We're checking the lines and
     //not line segments, since there could be cases where an edge is so short
-    //that its base shadow line starts and begins inside the other edge's
-    //base shadow rectangle. This may cause some visual artifacts like
+    //that its base effect line starts and begins inside the other edge's
+    //base effect rectangle. This may cause some visual artifacts like
     //triangles being drawn where they shouldn't, but for such a broken
     //scenario, it's an acceptable solution.
     float r;
     if(
         lines_intersect(
-            shadow1_p0, shadow1_p1,
-            shadow2_p0, shadow2_p1,
+            effect1_p0, effect1_p1,
+            effect2_p0, effect2_p1,
             &r, NULL
         )
     ) {
-        //Clamp r to prevent long, close walls from
-        //creating jagged shadows outside the wall.
+        //Clamp r to prevent long, close edges from
+        //creating jagged effects outside the edge.
         r = clamp(r, 0.0f, 1.0f);
         point p(
-            shadow1_p0.x + (shadow1_p1.x - shadow1_p0.x) * r,
-            shadow1_p0.y + (shadow1_p1.y - shadow1_p0.y) * r
+            effect1_p0.x + (effect1_p1.x - effect1_p0.x) * r,
+            effect1_p0.y + (effect1_p1.y - effect1_p0.y) * r
         );
         coordinates_to_angle(
             p - point(common_vertex->x, common_vertex->y),
@@ -663,19 +680,22 @@ void get_wall_shadows_intersection(
 
 
 /* ----------------------------------------------------------------------------
- * Draws shadows for all walls on-screen onto a buffer, so that sectors
- * may then sample from it to draw shadows.
+ * Draws edge offset effects for all edges on-screen onto a buffer,
+ * so that sectors may then sample from it to draw what effects they need.
  * cam_tl:
  *   Top-left corner of the camera boundaries. The edges of any sector that is
- *   beyond these boundaries will not be drawn.
+ *   beyond these boundaries will be ignored.
  * cam_br:
  *   Same as cam_tl, but for the bottom-right boundaries.
  * buffer:
  *   Buffer to draw to.
  */
-void update_wall_shadow_buffer(
+void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
-    ALLEGRO_BITMAP* buffer
+    ALLEGRO_BITMAP* buffer,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter
 ) {
     unordered_set<edge*> edges;
     
@@ -716,7 +736,9 @@ void update_wall_shadow_buffer(
     al_clear_to_color(al_map_rgba(0, 0, 0, 0));
     
     for(edge* e_ptr : edges) {
-        draw_wall_shadow_on_buffer(e_ptr);
+        draw_edge_offset_on_buffer(
+            e_ptr, checker, length_getter, color_getter
+        );
     }
     
     //Return to the old state of things.

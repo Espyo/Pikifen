@@ -160,9 +160,12 @@ void area_editor::draw_canvas() {
         
     //Sectors.
     if(wall_shadows_opacity > 0.0f) {
-        update_wall_shadow_buffer(
+        update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],
-            game.wall_shadow_buffer
+            game.wall_shadow_buffer,
+            does_edge_have_wall_shadow,
+            get_wall_shadow_length,
+            get_wall_shadow_color
         );
     }
     size_t n_sectors = game.cur_area_data.sectors.size();
@@ -190,7 +193,7 @@ void area_editor::draw_canvas() {
             draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
             
             if(wall_shadows_opacity > 0.0f) {
-                draw_sector_wall_shadows(
+                draw_sector_edge_offsets(
                     s_ptr, game.wall_shadow_buffer, wall_shadows_opacity
                 );
             }
