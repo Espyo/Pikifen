@@ -162,7 +162,16 @@ void area_editor::draw_canvas() {
     if(wall_shadows_opacity > 0.0f) {
         update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],
-            game.wall_shadow_buffer,
+            game.wall_offset_effect_buffer,
+            true,
+            does_edge_have_ledge_smoothing,
+            get_ledge_smoothing_length,
+            get_ledge_smoothing_color
+        );
+        update_offset_effect_buffer(
+            game.cam.box[0], game.cam.box[1],
+            game.wall_offset_effect_buffer,
+            false,
             does_edge_have_wall_shadow,
             get_wall_shadow_length,
             get_wall_shadow_color
@@ -194,7 +203,7 @@ void area_editor::draw_canvas() {
             
             if(wall_shadows_opacity > 0.0f) {
                 draw_sector_edge_offsets(
-                    s_ptr, game.wall_shadow_buffer, wall_shadows_opacity
+                    s_ptr, game.wall_offset_effect_buffer, wall_shadows_opacity
                 );
             }
             

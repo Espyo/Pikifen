@@ -689,10 +689,19 @@ void get_edge_offset_intersection(
  *   Same as cam_tl, but for the bottom-right boundaries.
  * buffer:
  *   Buffer to draw to.
+ * clear_first:
+ *   If true, the bitmap is cleared before any drawing is done.
+ * checker:
+ *   Pointer to a function that checks whether an edge uses the specified
+ *   edge offset effect.
+ * length_getter:
+ *   Pointer to a function that returns the length of the edge offset effect.
+ * color_getter:
+ *   Pointer to a function that returns the color of the edge offset effect.
  */
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
-    ALLEGRO_BITMAP* buffer,
+    ALLEGRO_BITMAP* buffer, const bool clear_first,
     offset_effect_checker_ptr checker,
     offset_effect_length_getter_ptr length_getter,
     offset_effect_color_getter_ptr color_getter
@@ -733,7 +742,9 @@ void update_offset_effect_buffer(
     al_hold_bitmap_drawing(true);
     
     //Draw!
-    al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+    if(clear_first) {
+        al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+    }
     
     for(edge* e_ptr : edges) {
         draw_edge_offset_on_buffer(

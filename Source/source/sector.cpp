@@ -41,7 +41,7 @@ const float edge::SHADOW_MIN_AUTO_LENGTH = 8.0f;
 //Minimum length a wall shadow can be.
 const float edge::SHADOW_MIN_LENGTH = 1.0f;
 //Default color of the smoothing effect.
-const ALLEGRO_COLOR edge::SMOOTHING_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.40f};
+const ALLEGRO_COLOR edge::SMOOTHING_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.70f};
 //Maximum length the smoothing effect can be.
 const float edge::SMOOTHING_MAX_LENGTH = 100.0f;
 

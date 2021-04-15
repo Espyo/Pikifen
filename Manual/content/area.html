@@ -429,9 +429,11 @@
 
     <p>In the advanced sector appearance settings, you can also tint the texture with any given color. This is a great way to darken the texture without actually tampering with the sector's brightness.</p>
 
-    <h3 id="wall-shadows">Wall shadow tricks</h3>
+    <h3 id="wall-shadows">Wall appearance tricks</h3>
     
     <p>If you want to make it so that a wall will always cast a shadow, regardless of how tall it is, or if you want its shadow to look a different color or opacity, you can select that edge, go in the layout panel, enter the "Edges" tab, and change its properties there. Note that the lengths and colors of wall shadows will attempt to transition smoothly with each other, so don't be surprised if your wall isn't the color you expect, because it's likely taking in the color of its neighbors into account. You may want to split that edge into multiple ones, since there'll be no transition between two wall shadows that have the same look.</p>
+
+    <p>Normally, when you have a wall, you have a higher floor that suddenly stops and dips down directly downwards to the lower floor. You can make the ledge here look smoother by editing the edge's properties and applying a "ledge smoothing" effect. Be careful though: because wall shadows and ledge smoothings look so similar, you may confuse the player. It can be hard to distinguish which of the sectors is below and shaded, and which is above and smoothened. Try to use this sparingly and only in places that make sense, like rocks (rocks are usually rounded, and protrude above the floor). Also, try to keep the opacity of the ledge smoothing effect lower than the opacity of the wall shadow.</p>
 
     <h3 id="script-vars">Script variables</h3>
     

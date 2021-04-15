@@ -59,36 +59,6 @@ string c2s(const ALLEGRO_COLOR &c) {
 
 
 /* ----------------------------------------------------------------------------
- * Does sector s1 cast a shadow onto sector s2?
- * e_ptr:
- *   Edge between the two sectors.
- * s1:
- *   Sector that would cast a shadow.
- * s2:
- *   Sector that would have the shadow cast onto it.
- */
-bool casts_shadow(edge* e_ptr, sector* s1, sector* s2) {
-    //Never-cast walls don't cast.
-    if(e_ptr->wall_shadow_length == 0.0f) return false;
-    
-    //Invalid sectors don't cast.
-    if(!s1 || !s2) return false;
-    if(s1->is_bottomless_pit) return false;
-    if(s2->is_bottomless_pit) return false;
-    
-    if(
-        e_ptr->wall_shadow_length != LARGE_FLOAT
-    ) {
-        //Fixed shadow length.
-        return s1->z > s2->z;
-    } else {
-        //Auto shadow length.
-        return s1->z > s2->z + SECTOR_STEP;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the color that was provided, but with the alpha changed.
  * c:
  *   The color to change the alpha on.
@@ -255,6 +225,60 @@ void crash(const string &reason, const string &info, const int exit_status) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks whether a given edge should get a ledge smoothing edge offset effect
+ * or not.
+ * e_ptr:
+ *   Edge to check.
+ * affected_sector:
+ *   If there should be an effect, this is the affected sector,
+ *   i.e. the one getting the smoothing.
+ * unaffected_sector:
+ *   If there should be an effect, this is the unaffected sector,
+ *   i.e. the lower one.
+ */
+bool does_edge_have_ledge_smoothing(
+    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+) {
+    //Never-smooth walls don't have the effect.
+    if(e_ptr->ledge_smoothing_length <= 0.0f) return false;
+    
+    if(
+        (e_ptr->sectors[0] && !e_ptr->sectors[1]) ||
+        e_ptr->sectors[1]->is_bottomless_pit
+    ) {
+        //If 1 exists but 0 doesn't.
+        *affected_sector = e_ptr->sectors[0];
+        *unaffected_sector = e_ptr->sectors[1];
+        return true;
+        
+    } else if(
+        (!e_ptr->sectors[0] && e_ptr->sectors[1]) ||
+        e_ptr->sectors[0]->is_bottomless_pit
+    ) {
+        //If 1 exists but 0 doesn't.
+        *affected_sector = e_ptr->sectors[1];
+        *unaffected_sector = e_ptr->sectors[0];
+        return true;
+        
+    } else {
+        //Return whichever one is the tallest.
+        if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
+            *affected_sector = e_ptr->sectors[0];
+            *unaffected_sector = e_ptr->sectors[1];
+            return true;
+        } else if(e_ptr->sectors[1]->z > e_ptr->sectors[0]->z) {
+            *affected_sector = e_ptr->sectors[1];
+            *unaffected_sector = e_ptr->sectors[0];
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks whether a given edge should get a wall shadow edge offset effect
  * or not.
  * e_ptr:
@@ -269,17 +293,32 @@ void crash(const string &reason, const string &info, const int exit_status) {
 bool does_edge_have_wall_shadow(
     edge* e_ptr, sector** affected_sector, sector** unaffected_sector
 ) {
-    if(casts_shadow(e_ptr, e_ptr->sectors[0], e_ptr->sectors[1])) {
+    //Never-cast walls don't cast.
+    if(e_ptr->wall_shadow_length <= 0.0f) return false;
+    
+    //Invalid sectors don't cast.
+    if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) return false;
+    if(e_ptr->sectors[0]->is_bottomless_pit) return false;
+    if(e_ptr->sectors[1]->is_bottomless_pit) return false;
+    
+    //Same-height sectors can't cast.
+    if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) return false;
+    
+    //We can already save which one is highest.
+    if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
         *unaffected_sector = e_ptr->sectors[0];
         *affected_sector = e_ptr->sectors[1];
-        return true;
-    } else if(casts_shadow(e_ptr, e_ptr->sectors[1], e_ptr->sectors[0])) {
+    } else {
         *unaffected_sector = e_ptr->sectors[1];
         *affected_sector = e_ptr->sectors[0];
+    }
+    
+    if(e_ptr->wall_shadow_length != LARGE_FLOAT) {
+        //Fixed shadow length.
         return true;
     } else {
-        //No shadows are cast anywhere.
-        return false;
+        //Auto shadow length.
+        return (*unaffected_sector)->z > (*affected_sector)->z + SECTOR_STEP;
     }
 }
 
@@ -501,6 +540,26 @@ ALLEGRO_COLOR get_fog_color() {
     
     //If anything goes wrong, return a failsafe.
     return al_map_rgba(255, 255, 255, 0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the color a ledge's smoothing should be.
+ * edge:
+ *   Edge with the ledge.
+ */
+ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr) {
+    return e_ptr->ledge_smoothing_color;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the length a ledge's smoothing should be.
+ * edge:
+ *   Edge with the ledge.
+ */
+float get_ledge_smoothing_length(edge* e_ptr) {
+    return e_ptr->ledge_smoothing_length;
 }
 
 

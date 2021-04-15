@@ -428,7 +428,7 @@ void init_misc() {
     game.maker_tools.keys[16] = MAKER_TOOL_GEOMETRY_INFO;
     game.maker_tools.keys[17] = MAKER_TOOL_HITBOXES;
     
-    game.wall_shadow_buffer = al_create_bitmap(game.win_w, game.win_h);
+    game.wall_offset_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
 }
 
 

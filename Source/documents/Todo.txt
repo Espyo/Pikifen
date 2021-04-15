@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.20.0 ---
     Sector edge features
-        Walls should have a transparent-to-black gradient from the higher sector to the wall, making them look smoother https://cdn.discordapp.com/attachments/459094367877988373/677252580996546560/slope.png (thanks Tenacious)
         The limits of water sectors should also have some foam or something
     Add Kman's editor style commit
     https://cdn.discordapp.com/attachments/459094367877988373/823289742036697098/Pikifen_alpha_2021-03-21_16-19-09.mp4 Maybe there should be a way to disable that no-damage ring (thanks Kman)

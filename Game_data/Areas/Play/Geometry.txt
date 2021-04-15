@@ -401,10 +401,12 @@ edges{
 	e{
 		s=5 13
 		v=22 7
+		smoothing_length=10.0000
 	}
 	e{
 		s=1 3
 		v=33 8
+		smoothing_length=10.0000
 	}
 	e{
 		s=26 23
@@ -413,18 +415,22 @@ edges{
 	e{
 		s=1 13
 		v=142 10
+		smoothing_length=10.0000
 	}
 	e{
 		s=5 13
 		v=4 11
+		smoothing_length=10.0000
 	}
 	e{
 		s=1 4
 		v=8 12
+		smoothing_length=10.0000
 	}
 	e{
 		s=5 13
 		v=48 4
+		smoothing_length=10.0000
 	}
 	e{
 		s=2 -1
@@ -469,6 +475,7 @@ edges{
 	e{
 		s=5 13
 		v=49 23
+		smoothing_length=10.0000
 	}
 	e{
 		s=1 69
@@ -509,6 +516,7 @@ edges{
 	e{
 		s=1 3
 		v=43 33
+		smoothing_length=10.0000
 	}
 	e{
 		s=1 23
@@ -549,14 +557,17 @@ edges{
 	e{
 		s=1 24
 		v=34 41
+		smoothing_length=10.0000
 	}
 	e{
 		s=1 3
 		v=41 5
+		smoothing_length=10.0000
 	}
 	e{
 		s=1 3
 		v=5 43
+		smoothing_length=10.0000
 	}
 	e{
 		s=4 69
@@ -577,14 +588,17 @@ edges{
 	e{
 		s=1 13
 		v=144 47
+		smoothing_length=10.0000
 	}
 	e{
 		s=5 13
 		v=7 48
+		smoothing_length=10.0000
 	}
 	e{
 		s=5 13
 		v=11 49
+		smoothing_length=10.0000
 	}
 	e{
 		s=6 1
@@ -881,6 +895,7 @@ edges{
 	e{
 		s=1 18
 		v=145 120
+		smoothing_length=10.0000
 	}
 	e{
 		s=18 0
@@ -981,6 +996,7 @@ edges{
 	e{
 		s=6 13
 		v=47 22
+		smoothing_length=10.0000
 	}
 	e{
 		s=6 1
@@ -989,6 +1005,7 @@ edges{
 	e{
 		s=21 13
 		v=23 142
+		smoothing_length=10.0000
 	}
 	e{
 		s=13 14
@@ -997,10 +1014,12 @@ edges{
 	e{
 		s=1 14
 		v=122 144
+		smoothing_length=10.0000
 	}
 	e{
 		s=1 13
 		v=10 145
+		smoothing_length=10.0000
 	}
 	e{
 		s=13 14
@@ -1117,57 +1136,69 @@ edges{
 	e{
 		s=27 1
 		v=197 163
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=199 164
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=198 165
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=163 166
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=52 51
 		v=171 167
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=200 168
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=196 169
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=169 170
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=52 51
 		v=195 171
+		smoothing_length=10.0000
 	}
 	e{
 		s=52 51
 		v=174 172
+		smoothing_length=10.0000
 	}
 	e{
 		s=52 1
 		v=170 173
+		smoothing_length=10.0000
 	}
 	e{
 		s=52 1
 		v=173 175
+		smoothing_length=10.0000
 	}
 	e{
 		s=52 29
@@ -1212,6 +1243,7 @@ edges{
 	e{
 		s=29 51
 		v=184 174
+		smoothing_length=10.0000
 	}
 	e{
 		s=29 69
@@ -1220,6 +1252,7 @@ edges{
 	e{
 		s=29 1
 		v=175 185
+		smoothing_length=10.0000
 	}
 	e{
 		s=30 69
@@ -1228,14 +1261,17 @@ edges{
 	e{
 		s=30 29
 		v=186 187
+		smoothing_length=10.0000
 	}
 	e{
 		s=29 1
 		v=202 189
+		smoothing_length=10.0000
 	}
 	e{
 		s=31 54
 		v=193 250
+		smoothing_length=10.0000
 	}
 	e{
 		s=53 0
@@ -1244,6 +1280,7 @@ edges{
 	e{
 		s=31 30
 		v=191 188
+		smoothing_length=10.0000
 	}
 	e{
 		s=31 0
@@ -1252,6 +1289,7 @@ edges{
 	e{
 		s=30 31
 		v=203 188
+		smoothing_length=10.0000
 	}
 	e{
 		s=32 1
@@ -1268,39 +1306,47 @@ edges{
 	e{
 		s=52 51
 		v=172 195
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=168 196
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=167 197
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=166 198
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=165 199
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=27 1
 		v=164 200
-		shadow_length=15.0000
+		shadow_length=5.0000
+		smoothing_length=10.0000
 	}
 	e{
 		s=30 29
 		v=187 201
+		smoothing_length=10.0000
 	}
 	e{
 		s=29 1
 		v=185 202
+		smoothing_length=10.0000
 	}
 	e{
 		s=32 31
@@ -1569,6 +1615,7 @@ edges{
 	e{
 		s=27 52
 		v=170 167
+		shadow_length=0.0000
 	}
 	e{
 		s=0 53
@@ -1577,6 +1624,7 @@ edges{
 	e{
 		s=31 53
 		v=250 190
+		smoothing_length=10.0000
 	}
 	e{
 		s=53 54
@@ -1649,6 +1697,7 @@ edges{
 	e{
 		s=64 56
 		v=266 369
+		smoothing_length=30.0000
 	}
 	e{
 		s=56 0
@@ -1769,6 +1818,7 @@ edges{
 	e{
 		s=31 30
 		v=290 191
+		smoothing_length=10.0000
 	}
 	e{
 		s=30 63
@@ -1789,10 +1839,12 @@ edges{
 	e{
 		s=64 56
 		v=267 292
+		smoothing_length=30.0000
 	}
 	e{
 		s=64 56
 		v=292 295
+		smoothing_length=30.0000
 	}
 	e{
 		s=0 56
@@ -1801,10 +1853,12 @@ edges{
 	e{
 		s=64 56
 		v=295 296
+		smoothing_length=30.0000
 	}
 	e{
 		s=64 56
 		v=296 300
+		smoothing_length=30.0000
 	}
 	e{
 		s=0 56
@@ -1825,6 +1879,7 @@ edges{
 	e{
 		s=56 86
 		v=303 300
+		smoothing_length=30.0000
 	}
 	e{
 		s=64 86
@@ -1833,6 +1888,7 @@ edges{
 	e{
 		s=56 64
 		v=266 373
+		smoothing_length=30.0000
 	}
 	e{
 		s=56 69
@@ -2193,6 +2249,7 @@ edges{
 	e{
 		s=64 56
 		v=369 267
+		smoothing_length=30.0000
 	}
 	e{
 		s=69 87
@@ -2213,10 +2270,12 @@ edges{
 	e{
 		s=56 64
 		v=373 374
+		smoothing_length=30.0000
 	}
 	e{
 		s=56 87
 		v=374 371
+		smoothing_length=30.0000
 	}
 	e{
 		s=56 0
@@ -2389,6 +2448,7 @@ sectors{
 	s{
 		z=16.0000
 		texture=Bark.jpg
+		texture_tint=162 162 162
 	}
 	s{
 		z=0.0000

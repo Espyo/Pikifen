@@ -79,12 +79,17 @@ typedef ALLEGRO_COLOR (*offset_effect_color_getter_ptr)(edge*);
 typedef float (*offset_effect_length_getter_ptr)(edge*);
 
 
-bool casts_shadow(edge* e_ptr, sector* s1, sector* s2);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
 void clear_area_textures();
 void crash(const string &reason, const string &info, const int exit_status);
+bool does_edge_have_ledge_smoothing(
+    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+);
+bool does_edge_have_wall_shadow(
+    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+);
 void draw_edge_offset_on_buffer(
     edge* e_ptr,
     offset_effect_checker_ptr checker,
@@ -99,6 +104,8 @@ string get_current_time(const bool filename_friendly);
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
 ALLEGRO_COLOR get_fog_color();
+ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
+float get_ledge_smoothing_length(edge* e_ptr);
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
 );
@@ -179,16 +186,12 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string unescape_string(const string &s);
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
-    ALLEGRO_BITMAP* buffer,
+    ALLEGRO_BITMAP* buffer, const bool clear_first,
     offset_effect_checker_ptr checker,
     offset_effect_length_getter_ptr length_getter,
     offset_effect_color_getter_ptr color_getter
 );
 string vector_tail_to_string(const vector<string> &v, const size_t pos);
-bool does_edge_have_wall_shadow(
-    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
-);
-
 
 void al_fwrite(ALLEGRO_FILE* f, string s);
 string c2s(const ALLEGRO_COLOR &c);

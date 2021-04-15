@@ -199,6 +199,20 @@ void load_area(
                 s2c(shadow_color->value);
         }
         
+        data_node* smoothing_length =
+            edge_data->get_child_by_name("smoothing_length");
+        if(!smoothing_length->value.empty()) {
+            new_edge->ledge_smoothing_length =
+                s2f(smoothing_length->value);
+        }
+        
+        data_node* smoothing_color =
+            edge_data->get_child_by_name("smoothing_color");
+        if(!smoothing_color->value.empty()) {
+            new_edge->ledge_smoothing_color =
+                s2c(smoothing_color->value);
+        }
+        
         game.cur_area_data.edges.push_back(new_edge);
     }
     

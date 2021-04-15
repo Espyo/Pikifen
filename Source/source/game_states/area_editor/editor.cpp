@@ -2058,6 +2058,24 @@ bool area_editor::save_area(const bool to_backup) {
                 new data_node("shadow_color", c2s(e_ptr->wall_shadow_color))
             );
         }
+        
+        if(e_ptr->ledge_smoothing_length != 0.0f) {
+            edge_node->add(
+                new data_node(
+                    "smoothing_length",
+                    f2s(e_ptr->ledge_smoothing_length)
+                )
+            );
+        }
+        
+        if(e_ptr->ledge_smoothing_color != edge::SMOOTHING_DEF_COLOR) {
+            edge_node->add(
+                new data_node(
+                    "smoothing_color",
+                    c2s(e_ptr->ledge_smoothing_color)
+                )
+            );
+        }
     }
     
     //Sectors.
