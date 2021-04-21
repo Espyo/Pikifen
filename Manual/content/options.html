@@ -27,12 +27,6 @@
         <th>Option</th><th>Description</th><th>Default</th><th>Performance impact?</th>
       </tr>
       <tr>
-        <th><code>draw_cursor_trail</code></th>
-        <td>If false, the faint trail that follows the cursor will be removed, which could help with performance.</td>
-        <td><code>true</code></td>
-        <td><b>Yes</b></td>
-      </tr>
-      <tr>
         <th><code>area_editor_backup_interval</code></th>
         <td>How often the area editor creates a backup of the current area, in seconds.</td>
         <td><code>120</code></td>
@@ -45,8 +39,8 @@
         <td>No</td>
       </tr>
       <tr>
-        <th><code>area_editor_mmb_pan</code></th>
-        <td>Should the middle mouse button pan (<code>true</code>) or reset the camera/zoom (<code>false</code>)? The right mouse button will do the other function.</td>
+        <th><code>area_editor_selection_transformation</code></th>
+        <td>If <code>true</code>, a transformation widget will appear around the selection.</td>
         <td><code>false</code></td>
         <td>No</td>
       </tr>
@@ -54,6 +48,24 @@
         <th><code>area_editor_show_edge_length</code></th>
         <td>If <code>true</code>, the length of nearby edges will be shown, when dragging them or drawing them.</td>
         <td><code>true</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>area_editor_show_territory</code></th>
+        <td>If <code>true</code>, the territory radius of an object will appear around it, when selected.</td>
+        <td><code>true</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>area_editor_snap_mode</code></th>
+        <td>Current snap mode used.</td>
+        <td><code>0</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>area_editor_snap_threshold</code></th>
+        <td>The cursor only snaps when it is within these many pixels of something that can be snapped to.</td>
+        <td><code>80</code></td>
         <td>No</td>
       </tr>
       <tr>
@@ -67,6 +79,60 @@
         <td>View mode to use. 0 for standard, 1 for wireframe, 2 for height map, 3 for brightness map.</td>
         <td><code>0</code></td>
         <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>draw_cursor_trail</code></th>
+        <td>If false, the faint trail that follows the cursor will be removed, which could help with performance.</td>
+        <td><code>true</code></td>
+        <td><b>Yes</b></td>
+      </tr>
+      <tr>
+        <th><code>editor_mmb_pan</code></th>
+        <td>In editors, should the middle mouse button pan (<code>true</code>) or reset the camera/zoom (<code>false</code>)? The right mouse button will do the other function.</td>
+        <td><code>false</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>editor_mouse_drag_threshold</code></th>
+        <td>In editors, the mouse will only be considered dragged if it's moved at least these many pixels.</td>
+        <td><code>4</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>editor_open_nodes</code></th>
+        <td>In editors, these nodes have been opened by the player. Next time they visit the editor, that node will already be opened. The nodes are named after the editor and the node itself, and are separated by semicolon.</td>
+        <td></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>editor_primary_color</code></th>
+        <td>In editors, if the player is using a custom style, this is the primary color to use for the widgets.</td>
+        <td><code>12 12 12</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>editor_secondary_color</code></th>
+        <td>In editors, if the player is using a custom style, this is the secondary color to use for the widgets.</td>
+        <td><code>48 119 198</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>editor_show_tooltips</code></th>
+        <td>In editors, should widget tooltips appear when the player places the mouse cursor over them?</td>
+        <td><code>true</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>editor_text_color</code></th>
+        <td>In editors, if the player is using a custom style, this is the text color to use for the widgets.</td>
+        <td><code>255 255 255</code></td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <th><code>editor_use_custom_style</code></th>
+        <td>In editors, should a custom color style be used for the widgets?</td>
+        <td><code>false</code></td>
+        <td>No</td>
       </tr>
       <tr>
         <th><code>fps</code></th>

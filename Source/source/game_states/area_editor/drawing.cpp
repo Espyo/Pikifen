@@ -1144,7 +1144,7 @@ void area_editor::draw_canvas() {
         al_draw_filled_rectangle(
             cross_section_window_start.x, cross_section_window_start.y,
             cross_section_window_end.x, cross_section_window_end.y,
-            al_map_rgb(game.options.editor_primary_color[0] * 255 * 0.7f, game.options.editor_primary_color[1] * 255 * 0.7f, game.options.editor_primary_color[2] * 255 * 0.7f)
+            change_color_lighting(game.options.editor_primary_color, -0.3f)
         );
         
         if(show_cross_section_grid) {
@@ -1414,7 +1414,7 @@ void area_editor::draw_cross_section_sector(
     al_draw_filled_rectangle(
         rectangle_x1, rectangle_y,
         rectangle_x2 + 1, cross_section_window_end.y + 1,
-        al_map_rgb(game.options.editor_secondary_color[0] * 255 * 0.8f, game.options.editor_secondary_color[1] * 255 * 0.8f, game.options.editor_secondary_color[2] * 255 * 0.8f)
+        change_color_lighting(game.options.editor_secondary_color, -0.2f)
     );
     al_draw_line(
         rectangle_x1 + 0.5, rectangle_y,

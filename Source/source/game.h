@@ -95,6 +95,8 @@ public:
     map<string, hazard> hazards;
     //Identity matrix transformation. Cache for convenience.
     ALLEGRO_TRANSFORM identity_transform;
+    //Default Dear ImGui style.
+    ImVec4 imgui_default_style[ImGuiCol_COUNT];
     //Set to false to stop program execution next frame.
     bool is_game_running;
     //What Allegro joystick maps to what number.

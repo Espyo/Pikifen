@@ -33,9 +33,12 @@ const unsigned char options_struct::DEF_AREA_EDITOR_VIEW_MODE =
 const bool options_struct::DEF_DRAW_CURSOR_TRAIL = true;
 const bool options_struct::DEF_EDITOR_MMB_PAN = false;
 const float options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
-const float options_struct::DEF_EDITOR_PRIMARY_COLOR[3]{ 0.05f, 0.05f, 0.05f};
-const float options_struct::DEF_EDITOR_SECONDARY_COLOR[3]{ 0.19f, 0.47f, 0.78f};
-const float options_struct::DEF_EDITOR_TEXT_COLOR[3]{ 1, 1, 1 };
+const float options_struct::DEF_EDITOR_PRIMARY_COLOR[3] =
+{0.05f, 0.05f, 0.05f};
+const float options_struct::DEF_EDITOR_SECONDARY_COLOR[3] =
+{0.19f, 0.47f, 0.78f};
+const float options_struct::DEF_EDITOR_TEXT_COLOR[3] =
+{1.0f, 1.0f, 1.0f};
 const bool options_struct::DEF_EDITOR_SHOW_TOOLTIPS = true;
 const float options_struct::DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 const float options_struct::DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
@@ -70,6 +73,7 @@ options_struct::options_struct() :
     editor_mmb_pan(DEF_EDITOR_MMB_PAN),
     editor_mouse_drag_threshold(DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
     editor_show_tooltips(DEF_EDITOR_SHOW_TOOLTIPS),
+    editor_use_custom_style(false),
     intended_win_fullscreen(DEF_WIN_FULLSCREEN),
     intended_win_h(DEF_WIN_H),
     intended_win_w(DEF_WIN_W),
@@ -87,18 +91,18 @@ options_struct::options_struct() :
     mouse_moves_cursor[1] = DEF_MOUSE_MOVES_CURSOR[1];
     mouse_moves_cursor[2] = DEF_MOUSE_MOVES_CURSOR[2];
     mouse_moves_cursor[3] = DEF_MOUSE_MOVES_CURSOR[3];
-
-    editor_primary_color[0] = DEF_EDITOR_PRIMARY_COLOR[0];
-    editor_primary_color[1] = DEF_EDITOR_PRIMARY_COLOR[1];
-    editor_primary_color[2] = DEF_EDITOR_PRIMARY_COLOR[2];
-
-    editor_secondary_color[0] = DEF_EDITOR_SECONDARY_COLOR[0];
-    editor_secondary_color[1] = DEF_EDITOR_SECONDARY_COLOR[1];
-    editor_secondary_color[2] = DEF_EDITOR_SECONDARY_COLOR[2];
-
-    editor_text_color[0] = DEF_EDITOR_TEXT_COLOR[0];
-    editor_text_color[1] = DEF_EDITOR_TEXT_COLOR[1];
-    editor_text_color[2] = DEF_EDITOR_TEXT_COLOR[2];
+    
+    editor_primary_color.r = DEF_EDITOR_PRIMARY_COLOR[0];
+    editor_primary_color.g = DEF_EDITOR_PRIMARY_COLOR[1];
+    editor_primary_color.b = DEF_EDITOR_PRIMARY_COLOR[2];
+    
+    editor_secondary_color.r = DEF_EDITOR_SECONDARY_COLOR[0];
+    editor_secondary_color.g = DEF_EDITOR_SECONDARY_COLOR[1];
+    editor_secondary_color.b = DEF_EDITOR_SECONDARY_COLOR[2];
+    
+    editor_text_color.r = DEF_EDITOR_TEXT_COLOR[0];
+    editor_text_color.g = DEF_EDITOR_TEXT_COLOR[1];
+    editor_text_color.b = DEF_EDITOR_TEXT_COLOR[2];
 }
 
 
@@ -162,13 +166,7 @@ void options_struct::load(data_node* file) {
     
     //Other options.
     string resolution_str;
-    string primary_color_str;
-    string secondary_color_str;
-    string text_color_str;
     
-    rs.set("editor_primary_color", primary_color_str);
-    rs.set("editor_secondary_color", secondary_color_str);
-    rs.set("editor_text_color", text_color_str);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
     rs.set("area_editor_selection_transformation", area_editor_sel_trans);
@@ -181,7 +179,11 @@ void options_struct::load(data_node* file) {
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_mmb_pan", editor_mmb_pan);
     rs.set("editor_mouse_drag_threshold", editor_mouse_drag_threshold);
+    rs.set("editor_primary_color", editor_primary_color);
+    rs.set("editor_secondary_color", editor_secondary_color);
     rs.set("editor_show_tooltips", editor_show_tooltips);
+    rs.set("editor_text_color", editor_text_color);
+    rs.set("editor_use_custom_style", editor_use_custom_style);
     rs.set("fps", target_fps);
     rs.set("fullscreen", intended_win_fullscreen);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
@@ -206,25 +208,6 @@ void options_struct::load(data_node* file) {
     joystick_min_deadzone = clamp(joystick_min_deadzone, 0.0f, 1.0f);
     joystick_max_deadzone = clamp(joystick_max_deadzone, 0.0f, 1.0f);
     
-    vector<string> color_parts = split(primary_color_str);
-    if (color_parts.size() >= 3) {
-        editor_primary_color[0] = (float)s2i(color_parts[0]) / 255;
-        editor_primary_color[1] = (float)s2i(color_parts[1]) / 255;
-        editor_primary_color[2] = (float)s2i(color_parts[2]) / 255;
-    }
-    color_parts = split(secondary_color_str);
-    if (color_parts.size() >= 3) {
-        editor_secondary_color[0] = (float)s2i(color_parts[0]) / 255;
-        editor_secondary_color[1] = (float)s2i(color_parts[1]) / 255;
-        editor_secondary_color[2] = (float)s2i(color_parts[2]) / 255;
-    }
-    color_parts = split(text_color_str);
-    if (color_parts.size() >= 3) {
-        editor_text_color[0] = (float)s2i(color_parts[0]) / 255;
-        editor_text_color[1] = (float)s2i(color_parts[1]) / 255;
-        editor_text_color[2] = (float)s2i(color_parts[2]) / 255;
-    }
-
     vector<string> resolution_parts = split(resolution_str);
     if(resolution_parts.size() >= 2) {
         intended_win_w = std::max(1, s2i(resolution_parts[0]));
@@ -315,7 +298,7 @@ void options_struct::save(data_node* file) const {
         );
     }
     
-    //Save the editor tree node preferences.
+    //Figure out the value for the editor tree node preferences.
     string open_nodes_str;
     for(auto n : editor_open_nodes) {
         if(n.second) {
@@ -323,33 +306,8 @@ void options_struct::save(data_node* file) const {
         }
     }
     if(!open_nodes_str.empty()) open_nodes_str.pop_back();
-    file->add(new data_node("editor_open_nodes", open_nodes_str));
     
     //Other options.
-    file->add(
-        new data_node(
-            "editor_primary_color",
-            i2s(editor_primary_color[0] * 255) + " " +
-            i2s(editor_primary_color[1] * 255) + " " +
-            i2s(editor_primary_color[2] * 255)
-        )
-    );
-    file->add(
-        new data_node(
-            "editor_secondary_color",
-            i2s(editor_secondary_color[0] * 255) + " " +
-            i2s(editor_secondary_color[1] * 255) + " " +
-            i2s(editor_secondary_color[2] * 255)
-        )
-    );
-    file->add(
-        new data_node(
-            "editor_text_color",
-            i2s(editor_text_color[0] * 255) + " " +
-            i2s(editor_text_color[1] * 255) + " " +
-            i2s(editor_text_color[2] * 255)
-        )
-    );
     file->add(
         new data_node(
             "area_editor_backup_interval",
@@ -424,8 +382,38 @@ void options_struct::save(data_node* file) const {
     );
     file->add(
         new data_node(
+            "editor_open_nodes",
+            open_nodes_str
+        )
+    );
+    file->add(
+        new data_node(
+            "editor_primary_color",
+            c2s(editor_primary_color)
+        )
+    );
+    file->add(
+        new data_node(
+            "editor_secondary_color",
+            c2s(editor_secondary_color)
+        )
+    );
+    file->add(
+        new data_node(
             "editor_show_tooltips",
             b2s(editor_show_tooltips)
+        )
+    );
+    file->add(
+        new data_node(
+            "editor_text_color",
+            c2s(editor_text_color)
+        )
+    );
+    file->add(
+        new data_node(
+            "editor_use_custom_style",
+            b2s(editor_use_custom_style)
         )
     );
     file->add(
@@ -442,14 +430,14 @@ void options_struct::save(data_node* file) const {
     );
     file->add(
         new data_node(
-            "joystick_min_deadzone",
-            f2s(joystick_min_deadzone)
+            "joystick_max_deadzone",
+            f2s(joystick_max_deadzone)
         )
     );
     file->add(
         new data_node(
-            "joystick_max_deadzone",
-            f2s(joystick_max_deadzone)
+            "joystick_min_deadzone",
+            f2s(joystick_min_deadzone)
         )
     );
     file->add(

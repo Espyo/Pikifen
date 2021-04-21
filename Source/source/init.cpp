@@ -282,6 +282,11 @@ void init_dear_imgui() {
     ImGui::CreateContext();
     ImGui_ImplAllegro5_Init(game.display);
     ImGui::GetIO().IniFilename = "";
+    memcpy(
+        game.imgui_default_style,
+        &(ImGui::GetStyle().Colors),
+        sizeof(ImVec4) * ImGuiCol_COUNT
+    );
 }
 
 

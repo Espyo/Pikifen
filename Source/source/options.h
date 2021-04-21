@@ -85,14 +85,16 @@ struct options_struct {
     float editor_mouse_drag_threshold;
     //List of which editor node widgets the user wants open.
     map<string, bool> editor_open_nodes;
-    //Editor's main reference color.
-    float editor_primary_color[3];
-    //Editor's accent reference color.
-    float editor_secondary_color[3];
-    //Editor's text color.
-    float editor_text_color[3];
+    //Editor's custom style main reference color.
+    ALLEGRO_COLOR editor_primary_color;
+    //Editor's custom style accent reference color.
+    ALLEGRO_COLOR editor_secondary_color;
     //In editors, show widget tooltips when the mouse is over them.
     bool editor_show_tooltips;
+    //Editor's custom style text color.
+    ALLEGRO_COLOR editor_text_color;
+    //Should the editors use a custom style, or the default?
+    bool editor_use_custom_style;
     //Player's intended option for fullscreen, before restarting the game.
     bool intended_win_fullscreen;
     //Player's intended option for window height, before restarting the game.

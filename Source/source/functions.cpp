@@ -78,7 +78,7 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
  * c:
  *   The color to change the lighting on.
  * l:
- *   Lighting amount, positive or negative.
+ *   Lighting amount, positive or negative, from 0 to 1.
  */
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
     ALLEGRO_COLOR c2;

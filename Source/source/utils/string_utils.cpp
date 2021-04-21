@@ -218,7 +218,7 @@ vector<string> split(
     
     do {
         pos = text.find(del);
-        if (pos != string::npos) {  //If it DID find the delimiter.
+        if(pos != string::npos) {  //If it DID find the delimiter.
             //Get the text between the start and the delimiter.
             string sub = text.substr(0, pos);
             
@@ -241,7 +241,7 @@ vector<string> split(
     
     //If it's a blank string,
     //only add it if we want empty strings.
-    if (text != "" || inc_empty) {
+    if(text != "" || inc_empty) {
         v.push_back(text);
     }
     

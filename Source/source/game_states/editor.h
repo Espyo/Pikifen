@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "game_state.h"
+#include "../imgui/imgui.h"
 
 
 using std::map;
@@ -36,7 +37,7 @@ public:
     virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
-    virtual void update_style(float primary[3], float secondary[3], float text[3]);
+    virtual void update_style();
     virtual void update_transformations();
     virtual string get_name() const = 0;
     
@@ -296,6 +297,7 @@ protected:
         const string &filter = ""
     );
     void process_dialogs();
+    void process_gui_editor_style();
     void process_mob_type_widgets(
         mob_category** cat, mob_type** typ,
         const bool only_show_area_editor_types,

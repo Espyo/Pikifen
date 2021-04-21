@@ -857,8 +857,10 @@ void editor::load() {
     
     //Load the user's editor style and preferred tree node open states.
     load_options();
-    //Set the editor style
-    update_style(game.options.editor_primary_color, game.options.editor_secondary_color, game.options.editor_text_color);
+    
+    //Set the editor style.
+    update_style();
+    
     ImGui::Reset();
 }
 
@@ -975,6 +977,70 @@ void editor::process_dialogs() {
     //Process the latest one.
     if(!dialogs.empty()) {
         dialogs.back()->process();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the widgets that allow the player to set a custom editor style.
+ */
+void editor::process_gui_editor_style() {
+    //Style node.
+    if(saveable_tree_node("options", "Style")) {
+    
+        //Use custom style checkbox.
+        if(
+            ImGui::Checkbox(
+                "Use custom style", &game.options.editor_use_custom_style
+            )
+        ) {
+            update_style();
+        }
+        set_tooltip(
+            "If this is true, a custom color scheme will be\n"
+            "used for the editors, instead of the default."
+        );
+        
+        //Primary color.
+        if(
+            ImGui::ColorEdit3(
+                "Custom primary color",
+                (float*) &game.options.editor_primary_color
+            )
+        ) {
+            update_style();
+        }
+        set_tooltip(
+            "Primary color for the custom style."
+        );
+        
+        //Secondary color.
+        if(
+            ImGui::ColorEdit3(
+                "Custom secondary color",
+                (float*) &game.options.editor_secondary_color
+            )
+        ) {
+            update_style();
+        }
+        set_tooltip(
+            "Secondary color for the custom style."
+        );
+        
+        //Text color.
+        if(
+            ImGui::ColorEdit3(
+                "Text color",
+                (float*) &game.options.editor_text_color
+            )
+        ) {
+            update_style();
+        }
+        set_tooltip(
+            "Color of text in the custom style."
+        );
+        
+        ImGui::TreePop();
     }
 }
 
@@ -1238,61 +1304,143 @@ void editor::unload() {
 }
 
 /* ----------------------------------------------------------------------------
- * Updates the Imgui style with the current colors
+ * Updates the Dear ImGui style based on the player's options.
  */
-void editor::update_style(float primary[3], float secondary[3], float text[3]) {
-    ImGuiStyle* style = &ImGui::GetStyle();
-    ImVec4* colors = style->Colors;
+void editor::update_style() {
 
-    colors[ImGuiCol_Text]                   = ImVec4(text[0], text[1], text[2], 1.00f);
-    colors[ImGuiCol_TextDisabled]           = ImVec4(text[0] * 0.5f, text[1] * 0.5f, text[2] * 0.5f, 1.00f);
-    colors[ImGuiCol_WindowBg]               = ImVec4(primary[0], primary[1], primary[2], 0.94f);
-    colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-    colors[ImGuiCol_PopupBg]                = ImVec4(primary[0] * 1.3f, primary[1] * 1.3f, primary[2] * 1.3f, 0.94f);
-    colors[ImGuiCol_Border]                 = ImVec4(secondary[0], secondary[1], secondary[2], 0.50f);
-    colors[ImGuiCol_BorderShadow]           = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-    colors[ImGuiCol_FrameBg]                = ImVec4(primary[0] * 0.4f, primary[1] * 0.4f, primary[2] * 0.4f, 0.54f);
-    colors[ImGuiCol_FrameBgHovered]         = ImVec4(primary[0] * 1.4f, primary[1] * 1.4f, primary[2] * 1.4f, 0.40f);
-    colors[ImGuiCol_FrameBgActive]          = ImVec4(secondary[0] * 1.3f, secondary[1] * 1.3f, secondary[2] * 1.3f, 0.67f);
-    colors[ImGuiCol_TitleBg]                = ImVec4(primary[0] * 0.7f, primary[1] * 0.7f, primary[2] * 0.7f, 1.00f);
-    colors[ImGuiCol_TitleBgActive]          = ImVec4(secondary[0] * 0.9f, secondary[1] * 0.9f, secondary[2] * 0.9f, 1.00f);
-    colors[ImGuiCol_TitleBgCollapsed]       = ImVec4(primary[0] * 0.2f, primary[1] * 0.2f, primary[2] * 0.2f, 0.51f);
-    colors[ImGuiCol_MenuBarBg]              = ImVec4(primary[0] * 0.7f, primary[1] * 0.7f, primary[2] * 0.7f, 1.00f);
-    colors[ImGuiCol_ScrollbarBg]            = ImVec4(primary[0] * 0.7f, primary[1] * 0.7f, primary[2] * 0.7f, 0.53f);
-    colors[ImGuiCol_ScrollbarGrab]          = ImVec4(secondary[0], secondary[1], secondary[2], 1.00f);
-    colors[ImGuiCol_ScrollbarGrabHovered]   = ImVec4(secondary[0] * 1.1f, secondary[1] * 1.1f, secondary[2] * 1.1f, 1.00f);
-    colors[ImGuiCol_ScrollbarGrabActive]    = ImVec4(secondary[0] * 1.3f, secondary[1] * 1.3f, secondary[2] * 1.3f, 1.00f);
-    colors[ImGuiCol_CheckMark]              = ImVec4(secondary[0] * 1.1f, secondary[1] * 1.1f, secondary[2] * 1.1f, 1.00f);
-    colors[ImGuiCol_SliderGrab]             = ImVec4(secondary[0] * 1.1f, secondary[1] * 1.1f, secondary[2] * 1.1f, 1.00f);
-    colors[ImGuiCol_SliderGrabActive]       = ImVec4(secondary[0] * 1.3f, secondary[1] * 1.3f, secondary[2] * 1.3f, 1.00f);
-    colors[ImGuiCol_Button]                 = ImVec4(secondary[0], secondary[1], secondary[2], 0.40f);
-    colors[ImGuiCol_ButtonHovered]          = ImVec4(secondary[0] * 1.1f, secondary[1] * 1.1f, secondary[2] * 1.1f, 1.00f);
-    colors[ImGuiCol_ButtonActive]           = ImVec4(secondary[0] * 1.3f, secondary[1] * 1.3f, secondary[2] * 1.3f, 1.00f);
-    colors[ImGuiCol_Header]                 = ImVec4(secondary[0], secondary[1], secondary[2], 0.31f);
-    colors[ImGuiCol_HeaderHovered]          = ImVec4(secondary[0] * 1.1f, secondary[1] * 1.1f, secondary[2] * 1.1f, 0.80f);
-    colors[ImGuiCol_HeaderActive]           = ImVec4(secondary[0] * 1.3f, secondary[1] * 1.3f, secondary[2] * 1.3f, 1.00f);
-    colors[ImGuiCol_Separator]              = colors[ImGuiCol_Border];
-    colors[ImGuiCol_SeparatorHovered]       = ImVec4(secondary[0] * 1.1f, secondary[1] * 1.1f, secondary[2] * 1.1f, 0.78f);
-    colors[ImGuiCol_SeparatorActive]        = ImVec4(secondary[0] * 1.2f, secondary[1] * 1.2f, secondary[2] * 1.2f, 1.00f);
-    colors[ImGuiCol_ResizeGrip]             = ImVec4(secondary[0], secondary[1], secondary[2], 0.25f);
-    colors[ImGuiCol_ResizeGripHovered]      = ImVec4(secondary[0] * 1.1f, secondary[1] * 1.1f, secondary[2] * 1.1f, 0.67f);
-    colors[ImGuiCol_ResizeGripActive]       = ImVec4(secondary[0] * 1.3f, secondary[1] * 1.3f, secondary[2] * 1.3f, 0.95f);
-    colors[ImGuiCol_Tab]                    = ImLerp(colors[ImGuiCol_Header], colors[ImGuiCol_TitleBgActive], 0.80f);
-    colors[ImGuiCol_TabHovered]             = colors[ImGuiCol_HeaderHovered];
-    colors[ImGuiCol_TabActive]              = ImLerp(colors[ImGuiCol_HeaderActive], colors[ImGuiCol_TitleBgActive], 0.60f);
-    colors[ImGuiCol_TabUnfocused]           = ImLerp(colors[ImGuiCol_Tab], colors[ImGuiCol_TitleBg], 0.80f);
-    colors[ImGuiCol_TabUnfocusedActive]     = ImLerp(colors[ImGuiCol_TabActive], colors[ImGuiCol_TitleBg], 0.40f);
-    colors[ImGuiCol_PlotLines]              = ImVec4(primary[0] * 2, primary[1] * 2, primary[2] * 2, 1.00f);
-    colors[ImGuiCol_PlotLinesHovered]       = ImVec4(secondary[0] * 2, secondary[1] * 2, secondary[2] * 2, 1.00f);
-    colors[ImGuiCol_PlotHistogram]          = ImVec4(secondary[0], secondary[1], secondary[2], 1.00f);
-    colors[ImGuiCol_PlotHistogramHovered]   = ImVec4(secondary[0] * 1.1f, secondary[1] * 1.1f, secondary[2] * 1.1f, 1.00f);
-    colors[ImGuiCol_TextSelectedBg]         = ImVec4(secondary[0], secondary[1], secondary[2], 0.35f);
-    colors[ImGuiCol_DragDropTarget]         = ImVec4(secondary[0] * 1.3f, secondary[1] * 1.3f, secondary[2] * 1.3f, 0.90f);
-    colors[ImGuiCol_NavHighlight]           = ImVec4(secondary[0], secondary[1], secondary[2], 1.00f);
-    colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(primary[0], primary[1], primary[2], 0.70f);
-    colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(primary[0] * 0.8f, primary[1] * 0.8f, primary[2] * 0.8f, 0.20f);
-    colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(primary[0] * 0.8f, primary[1] * 0.8f, primary[2] * 0.8f, 0.35f);
+    if(!game.options.editor_use_custom_style) {
+        //Use the default style.
+        memcpy(
+            &(ImGui::GetStyle().Colors),
+            game.imgui_default_style,
+            sizeof(ImVec4) * ImGuiCol_COUNT
+        );
+        
+    } else {
+        //Use the custom style.
+        
+        ALLEGRO_COLOR pri = game.options.editor_primary_color;
+        ALLEGRO_COLOR sec = game.options.editor_secondary_color;
+        ALLEGRO_COLOR txt = game.options.editor_text_color;
+        
+        ImGuiStyle* style = &ImGui::GetStyle();
+        ImVec4* colors = style->Colors;
+        
+        colors[ImGuiCol_Text] =
+            ImVec4(txt.r, txt.g, txt.b, 1.0f);
+        colors[ImGuiCol_TextDisabled] =
+            ImVec4(txt.r * 0.5f, txt.g * 0.5f, txt.b * 0.5f, 1.0f);
+        colors[ImGuiCol_WindowBg] =
+            ImVec4(pri.r, pri.g, pri.b, 0.94f);
+        colors[ImGuiCol_ChildBg] =
+            ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+        colors[ImGuiCol_PopupBg] =
+            ImVec4(pri.r * 1.3f, pri.g * 1.3f, pri.b * 1.3f, 0.94f);
+        colors[ImGuiCol_Border] =
+            ImVec4(sec.r, sec.g, sec.b, 0.50f);
+        colors[ImGuiCol_BorderShadow] =
+            ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+        colors[ImGuiCol_FrameBg] =
+            ImVec4(pri.r * 0.4f, pri.g * 0.4f, pri.b * 0.4f, 0.54f);
+        colors[ImGuiCol_FrameBgHovered] =
+            ImVec4(pri.r * 1.4f, pri.g * 1.4f, pri.b * 1.4f, 0.40f);
+        colors[ImGuiCol_FrameBgActive] =
+            ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 0.67f);
+        colors[ImGuiCol_TitleBg] =
+            ImVec4(pri.r * 0.7f, pri.g * 0.7f, pri.b * 0.7f, 1.0f);
+        colors[ImGuiCol_TitleBgActive] =
+            ImVec4(sec.r * 0.9f, sec.g * 0.9f, sec.b * 0.9f, 1.0f);
+        colors[ImGuiCol_TitleBgCollapsed] =
+            ImVec4(pri.r * 0.2f, pri.g * 0.2f, pri.b * 0.2f, 0.51f);
+        colors[ImGuiCol_MenuBarBg] =
+            ImVec4(pri.r * 0.7f, pri.g * 0.7f, pri.b * 0.7f, 1.0f);
+        colors[ImGuiCol_ScrollbarBg] =
+            ImVec4(pri.r * 0.7f, pri.g * 0.7f, pri.b * 0.7f, 0.53f);
+        colors[ImGuiCol_ScrollbarGrab] =
+            ImVec4(sec.r, sec.g, sec.b, 1.0f);
+        colors[ImGuiCol_ScrollbarGrabHovered] =
+            ImVec4(sec.r * 1.1f, sec.g * 1.1f, sec.b * 1.1f, 1.0f);
+        colors[ImGuiCol_ScrollbarGrabActive] =
+            ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 1.0f);
+        colors[ImGuiCol_CheckMark] =
+            ImVec4(sec.r * 1.1f, sec.g * 1.1f, sec.b * 1.1f, 1.0f);
+        colors[ImGuiCol_SliderGrab] =
+            ImVec4(sec.r * 1.1f, sec.g * 1.1f, sec.b * 1.1f, 1.0f);
+        colors[ImGuiCol_SliderGrabActive] =
+            ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 1.0f);
+        colors[ImGuiCol_Button] =
+            ImVec4(sec.r, sec.g, sec.b, 0.40f);
+        colors[ImGuiCol_ButtonHovered] =
+            ImVec4(sec.r * 1.1f, sec.g * 1.1f, sec.b * 1.1f, 1.0f);
+        colors[ImGuiCol_ButtonActive] =
+            ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 1.0f);
+        colors[ImGuiCol_Header] =
+            ImVec4(sec.r, sec.g, sec.b, 0.31f);
+        colors[ImGuiCol_HeaderHovered] =
+            ImVec4(sec.r * 1.1f, sec.g * 1.1f, sec.b * 1.1f, 0.80f);
+        colors[ImGuiCol_HeaderActive] =
+            ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 1.0f);
+        colors[ImGuiCol_Separator] =
+            colors[ImGuiCol_Border];
+        colors[ImGuiCol_SeparatorHovered] =
+            ImVec4(sec.r * 1.1f, sec.g * 1.1f, sec.b * 1.1f, 0.78f);
+        colors[ImGuiCol_SeparatorActive] =
+            ImVec4(sec.r * 1.2f, sec.g * 1.2f, sec.b * 1.2f, 1.0f);
+        colors[ImGuiCol_ResizeGrip] =
+            ImVec4(sec.r, sec.g, sec.b, 0.25f);
+        colors[ImGuiCol_ResizeGripHovered] =
+            ImVec4(sec.r * 1.1f, sec.g * 1.1f, sec.b * 1.1f, 0.67f);
+        colors[ImGuiCol_ResizeGripActive] =
+            ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 0.95f);
+        colors[ImGuiCol_Tab] =
+            ImLerp(
+                colors[ImGuiCol_Header],
+                colors[ImGuiCol_TitleBgActive],
+                0.80f
+            );
+        colors[ImGuiCol_TabHovered] =
+            colors[ImGuiCol_HeaderHovered];
+        colors[ImGuiCol_TabActive] =
+            ImLerp(
+                colors[ImGuiCol_HeaderActive],
+                colors[ImGuiCol_TitleBgActive],
+                0.60f
+            );
+        colors[ImGuiCol_TabUnfocused] =
+            ImLerp(
+                colors[ImGuiCol_Tab],
+                colors[ImGuiCol_TitleBg],
+                0.80f
+            );
+        colors[ImGuiCol_TabUnfocusedActive] =
+            ImLerp(
+                colors[ImGuiCol_TabActive],
+                colors[ImGuiCol_TitleBg],
+                0.40f
+            );
+        colors[ImGuiCol_PlotLines] =
+            ImVec4(pri.r * 2, pri.g * 2, pri.b * 2, 1.0f);
+        colors[ImGuiCol_PlotLinesHovered] =
+            ImVec4(sec.r * 2, sec.g * 2, sec.b * 2, 1.0f);
+        colors[ImGuiCol_PlotHistogram] =
+            ImVec4(sec.r, sec.g, sec.b, 1.0f);
+        colors[ImGuiCol_PlotHistogramHovered] =
+            ImVec4(sec.r * 1.1f, sec.g * 1.1f, sec.b * 1.1f, 1.0f);
+        colors[ImGuiCol_TextSelectedBg] =
+            ImVec4(sec.r, sec.g, sec.b, 0.35f);
+        colors[ImGuiCol_DragDropTarget] =
+            ImVec4(sec.r * 1.3f, sec.g * 1.3f, sec.b * 1.3f, 0.90f);
+        colors[ImGuiCol_NavHighlight] =
+            ImVec4(sec.r, sec.g, sec.b, 1.0f);
+        colors[ImGuiCol_NavWindowingHighlight] =
+            ImVec4(pri.r, pri.g, pri.b, 0.70f);
+        colors[ImGuiCol_NavWindowingDimBg] =
+            ImVec4(pri.r * 0.8f, pri.g * 0.8f, pri.b * 0.8f, 0.20f);
+        colors[ImGuiCol_ModalWindowDimBg] =
+            ImVec4(pri.r * 0.8f, pri.g * 0.8f, pri.b * 0.8f, 0.35f);
+    }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Updates the transformations, with the current camera coordinates, zoom, etc.

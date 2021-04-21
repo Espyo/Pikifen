@@ -1768,7 +1768,7 @@ bool assert_actions(
  */
 void get_info_runner(mob_action_run_data &data, mob* target_mob) {
 
-    if (target_mob == NULL) {
+    if(target_mob == NULL) {
         return;
     }
     

@@ -481,7 +481,7 @@ bool circle_intersects_line(
     float b = 2 * ((vx * xdiff) + (vy * ydiff));
     float c = xdiff * xdiff + ydiff * ydiff - radius * radius;
     float quad = b * b - (4 * a * c);
-    if (quad >= 0) {
+    if(quad >= 0) {
         //An infinite collision is happening, but let's not stop here
         float quadsqrt = sqrt(quad);
         for (int i = -1; i <= 1; i += 2) {
@@ -490,7 +490,7 @@ bool circle_intersects_line(
             float x = line_p1.x + (i * vx * t);
             float y = line_p1.y + (i * vy * t);
             //If one of them is in the boundaries of the segment, it collides
-            if (
+            if(
                 x >= std::min(line_p1.x, line_p2.x) &&
                 x <= std::max(line_p1.x, line_p2.x) &&
                 y >= std::min(line_p1.y, line_p2.y) &&
