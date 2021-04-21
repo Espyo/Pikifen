@@ -88,7 +88,8 @@ void draw_edge_offset_on_buffer(
     offset_effect_length_getter_ptr length_getter,
     offset_effect_color_getter_ptr color_getter
 ) {
-
+    const float END_OPACITY = 0.0f;
+    
     sector* unaffected_sector = NULL;
     sector* affected_sector = NULL;
     
@@ -196,12 +197,12 @@ void draw_edge_offset_on_buffer(
     av[2].x = end_rel_coords[1].x + av[1].x;
     av[2].y = end_rel_coords[1].y + av[1].y;
     av[2].color = end_colors[1];
-    av[2].color.a = 0.0f;
+    av[2].color.a = END_OPACITY;
     av[2].z = 0;
     av[3].x = end_rel_coords[0].x + av[0].x;
     av[3].y = end_rel_coords[0].y + av[0].y;
     av[3].color = end_colors[0];
-    av[3].color.a = 0.0f;
+    av[3].color.a = END_OPACITY;
     av[3].z = 0;
     
     //Let's transform the "rectangle" coordinates for the buffer.
@@ -238,7 +239,7 @@ void draw_edge_offset_on_buffer(
                 ends_to_process[e]->y + elbow_rel_coords[e][v].y;
             elbow_av[e][v + 2].z = 0.0f;
             elbow_av[e][v + 2].color = end_colors[e];
-            elbow_av[e][v + 2].color.a = 0.0f;
+            elbow_av[e][v + 2].color.a = END_OPACITY;
             al_transform_coordinates(
                 &game.world_to_screen_transform,
                 &elbow_av[e][v + 2].x, &elbow_av[e][v + 2].y

@@ -8,11 +8,8 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.20.0 ---
-    Sector edge features
-        The limits of water sectors should also have some foam or something
     Add Kman's editor style commit
     https://cdn.discordapp.com/attachments/459094367877988373/823289742036697098/Pikifen_alpha_2021-03-21_16-19-09.mp4 Maybe there should be a way to disable that no-damage ring (thanks Kman)
-    If you enable the area preview in the area editor, the problem searching stuff shouldn't move
     It should be possible to retrieve the hazard that triggered on_touch_hazard and on_left_hazard
     Add a way for a GUI element's drawing routine to receive alpha as a parameter
     Dear ImGui slider widgets should have in their tooltip a gray line explaining how they work. Possibly other widgets too

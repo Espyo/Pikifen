@@ -279,6 +279,49 @@ bool does_edge_have_ledge_smoothing(
 
 
 /* ----------------------------------------------------------------------------
+ * Checks whether a given edge should get a liquid limit edge offset effect
+ * or not.
+ * e_ptr:
+ *   Edge to check.
+ * affected_sector:
+ *   If there should be an effect, this is the affected sector,
+ *   i.e. the one with the liquid.
+ * unaffected_sector:
+ *   If there should be an effect, this is the unaffected sector,
+ *   i.e. the one without the liquid.
+ */
+bool does_edge_have_liquid_limit(
+    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+) {
+    //Check if the sectors exist.
+    if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) return false;
+    
+    //Check which ones have liquid.
+    bool has_liquid[2] = {false, false};
+    for(unsigned char s = 0; s < 2; ++s) {
+        for(size_t h = 0; h < e_ptr->sectors[s]->hazards.size(); ++h) {
+            if(e_ptr->sectors[s]->hazards[h]->associated_liquid) {
+                has_liquid[s] = true;
+            }
+        }
+    }
+    
+    //Return edges with liquid on one side only.
+    if(has_liquid[0] && !has_liquid[1]) {
+        *affected_sector = e_ptr->sectors[0];
+        *unaffected_sector = e_ptr->sectors[1];
+        return true;
+    } else if(has_liquid[1] && !has_liquid[0]) {
+        *affected_sector = e_ptr->sectors[1];
+        *unaffected_sector = e_ptr->sectors[0];
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks whether a given edge should get a wall shadow edge offset effect
  * or not.
  * e_ptr:
@@ -560,6 +603,36 @@ ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr) {
  */
 float get_ledge_smoothing_length(edge* e_ptr) {
     return e_ptr->ledge_smoothing_length;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the color a liquid limit's effect should be.
+ * edge:
+ *   Edge with the liquid limit.
+ */
+ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr) {
+    return {1.0f, 1.0f, 1.0f, 0.75f};
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the length a liquid's limit effect.
+ * edge:
+ *   Edge with the liquid limit.
+ */
+float get_liquid_limit_length(edge* e_ptr) {
+    //Let's vary the length randomly by the topleftmost edge coordinates.
+    //It's better to use this than using just the first edge, for instance,
+    //because that would result in many cases of edges that share a first
+    //vertex. So it wouldn't look as random.
+    //It is much more rare for two edges to share a topleftmost vertex.
+    float min_x = std::min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x);
+    float min_y = std::min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y);
+    float r = (hash_nr2(min_x, min_y) / (float) UINT32_MAX) * 5.0f;
+    return
+        15.0f +
+        12.0f * sin((game.states.gameplay->area_time_passed * 2.0f) + r);
 }
 
 

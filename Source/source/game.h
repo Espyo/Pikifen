@@ -99,6 +99,8 @@ public:
     bool is_game_running;
     //What Allegro joystick maps to what number.
     map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
+    //Buffer with the liquid limit effect.
+    ALLEGRO_BITMAP* liquid_limit_effect_buffer;
     //List of liquids.
     map<string, liquid*> liquids;
     //Loading screen subtext buffer.

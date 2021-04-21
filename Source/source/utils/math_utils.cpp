@@ -59,7 +59,7 @@ uint32_t hash_nr(const unsigned int input) {
 uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
     uint32_t n1 = hash_nr(input1);
     
-    //Same algorithm has in hash_nr() with one argument,
+    //Same algorithm as in hash_nr() with one argument,
     //but I changed the magic numbers to other random stuff.
     uint32_t n2 = (input2 + 0x5D795E0E) + (input2 << 12);
     n2 = (n2 ^ 0xC07C34BD) ^ (n2 >> 19);

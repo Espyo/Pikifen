@@ -87,6 +87,9 @@ void crash(const string &reason, const string &info, const int exit_status);
 bool does_edge_have_ledge_smoothing(
     edge* e_ptr, sector** affected_sector, sector** unaffected_sector
 );
+bool does_edge_have_liquid_limit(
+    edge* e_ptr, sector** affected_sector, sector** unaffected_sector
+);
 bool does_edge_have_wall_shadow(
     edge* e_ptr, sector** affected_sector, sector** unaffected_sector
 );
@@ -105,7 +108,9 @@ mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
 ALLEGRO_COLOR get_fog_color();
 ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
+ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr);
 float get_ledge_smoothing_length(edge* e_ptr);
+float get_liquid_limit_length(edge* e_ptr);
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
 );
