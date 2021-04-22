@@ -1269,21 +1269,51 @@ bool editor::saveable_tree_node(const string &category, const string &label) {
  *   Text explaining the widget.
  * shortcut:
  *   If the widget has a shortcut key, specify its name here.
+ * widget_explanation:
+ *   If the way the widget works needs to be explained, specify
+ *   the explanation type here.
  */
-void editor::set_tooltip(const string &explanation, const string &shortcut) {
+void editor::set_tooltip(
+    const string &explanation, const string &shortcut,
+    const WIDGET_EXPLANATIONS widget_explanation
+) {
     if(!game.options.editor_show_tooltips) {
         return;
     }
     
     if(ImGui::IsItemHovered()) {
         ImGui::BeginTooltip();
+        
         ImGui::Text("%s", explanation.c_str());
+        
+        string widget_explanation_text;
+        switch(widget_explanation) {
+        case WIDGET_EXPLANATION_NONE: {
+            break;
+        }
+        case WIDGET_EXPLANATION_DRAG: {
+            widget_explanation_text =
+                "Click and drag left or right to change.\n"
+                "Hold Alt or Shift to change speed.\n"
+                "Double-click or Ctrl + click to write a value.";
+            break;
+        }
+        }
+        
+        if(!widget_explanation_text.empty()) {
+            ImGui::TextColored(
+                ImVec4(0.50f, 0.50f, 0.50f, 1.0f),
+                "%s", widget_explanation_text.c_str()
+            );
+        }
+        
         if(!shortcut.empty()) {
             ImGui::TextColored(
-                ImVec4(0.66f, 0.66f, 0.66f, 1.0f),
+                ImVec4(0.70f, 0.70f, 0.70f, 1.0f),
                 "Shortcut key: %s", shortcut.c_str()
             );
         }
+        
         ImGui::EndTooltip();
     }
 }

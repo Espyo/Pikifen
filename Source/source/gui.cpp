@@ -6,6 +6,8 @@
  *
  * === FILE DESCRIPTION ===
  * General GUI manager and GUI item classes.
+ * These are used during gameplay and menus, and are not related to Dear ImGui,
+ * which is the GUI library used for the editors.
  */
 
 #include <algorithm>

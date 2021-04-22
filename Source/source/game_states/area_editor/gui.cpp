@@ -530,7 +530,8 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Cursor must be these many pixels close to a vertex/edge in order "
-            "to snap there."
+            "to snap there.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_snap_threshold = snap_threshold;
         
@@ -549,7 +550,8 @@ void area_editor::process_gui_options_dialog() {
             0.1f, 0, INT_MAX
         );
         set_tooltip(
-            "Cursor must move these many pixels to be considered a drag."
+            "Cursor must move these many pixels to be considered a drag.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         game.options.editor_mouse_drag_threshold = drag_threshold;
         
@@ -669,7 +671,8 @@ void area_editor::process_gui_options_dialog() {
             "Auto-backup interval", &backup_interval, 1, 0, INT_MAX
         );
         set_tooltip(
-            "Interval between auto-backup saves, in seconds. 0 = off."
+            "Interval between auto-backup saves, in seconds. 0 = off.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_backup_interval = backup_interval;
         
@@ -681,7 +684,8 @@ void area_editor::process_gui_options_dialog() {
             "Undo limit", &undo_limit, 0.1, 0, INT_MAX
         );
         set_tooltip(
-            "Maximum number of operations that can be undone. 0 = off."
+            "Maximum number of operations that can be undone. 0 = off.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_undo_limit = undo_limit;
         
@@ -835,6 +839,10 @@ void area_editor::process_gui_panel_details() {
                     register_change("tree shadow center change");
                     selected_shadow->center = shadow_center;
                 }
+                set_tooltip(
+                    "Center coordinates of the tree shadow.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
                 
                 //Tree shadow size value.
                 process_size_widgets(
@@ -875,7 +883,8 @@ void area_editor::process_gui_panel_details() {
                 }
                 set_tooltip(
                     "Multiply the amount of swaying by this much. 0 means "
-                    "no swaying in that direction."
+                    "no swaying in that direction.",
+                    "", WIDGET_EXPLANATION_DRAG
                 );
                 
             } else {
@@ -967,7 +976,8 @@ void area_editor::process_gui_panel_edge() {
                 quick_preview_timer.start();
             }
             set_tooltip(
-                "Length of the shadow."
+                "Length of the shadow.",
+                "", WIDGET_EXPLANATION_DRAG
             );
         }
         
@@ -1017,7 +1027,8 @@ void area_editor::process_gui_panel_edge() {
         set_tooltip(
             "Length of the ledge smoothing effect.\n"
             "Use this to make a ledge leading into a wall look more rounded.\n"
-            "0 means there will be no effect."
+            "0 means there will be no effect.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         
         //Spacer dummy widget.
@@ -1188,7 +1199,8 @@ void area_editor::process_gui_panel_info() {
         }
         set_tooltip(
             "How far away the background image is. Affects paralax scrolling.\n"
-            "2 is a good value."
+            "2 is a good value.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         
         //Background zoom value.
@@ -1198,7 +1210,8 @@ void area_editor::process_gui_panel_info() {
             game.cur_area_data.bg_bmp_zoom = bg_bmp_zoom;
         }
         set_tooltip(
-            "Scale the texture by this amount."
+            "Scale the texture by this amount.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         
         ImGui::TreePop();
@@ -2279,7 +2292,8 @@ void area_editor::process_gui_panel_sector() {
             s_ptr->z = sector_z;
         }
         set_tooltip(
-            "Height of the floor. Positive numbers are higher."
+            "Height of the floor. Positive numbers are higher.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         
         //Spacer dummy widget.
@@ -2439,7 +2453,8 @@ void area_editor::process_gui_panel_sector() {
                 }
                 set_tooltip(
                     "When the bridge opens, "
-                    "set the sector's height to this."
+                    "set the sector's height to this.",
+                    "", WIDGET_EXPLANATION_DRAG
                 );
                 
             }
@@ -2547,7 +2562,8 @@ void area_editor::process_gui_panel_sector() {
             }
             set_tooltip(
                 "Offset the texture horizontally or vertically "
-                "by this much."
+                "by this much.",
+                "", WIDGET_EXPLANATION_DRAG
             );
             
             //Sector texture scale value.
@@ -2561,7 +2577,8 @@ void area_editor::process_gui_panel_sector() {
                 "Scale the texture horizontally or vertically "
                 "by this much.\n"
                 "The scale's anchor point is at the origin "
-                "of the area, at coordinates 0,0."
+                "of the area, at coordinates 0,0.",
+                "", WIDGET_EXPLANATION_DRAG
             );
             
             //Sector texture rotation value.
@@ -2742,6 +2759,10 @@ void area_editor::process_gui_panel_tools() {
         
         //Reference center value.
         ImGui::DragFloat2("Center", (float*) &reference_center);
+        set_tooltip(
+            "Center coordinates.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
         
         //Reference size value.
         process_size_widgets(
@@ -2790,6 +2811,10 @@ void area_editor::process_gui_panel_tools() {
         static float resize_mult = 1.0f;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragFloat("##resizeMult", &resize_mult, 0.01);
+        set_tooltip(
+            "Resize multiplier.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
         
         //Resize everything button.
         ImGui::SameLine();

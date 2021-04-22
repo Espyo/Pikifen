@@ -101,6 +101,12 @@ protected:
         N_EDITOR_ICONS
     };
     
+    //Types of explanations for widgets that need them.
+    enum WIDGET_EXPLANATIONS {
+        WIDGET_EXPLANATION_NONE,
+        WIDGET_EXPLANATION_DRAG,
+    };
+    
     
     /*
      * A widget that's drawn on-screen, and with handles that the user
@@ -311,7 +317,10 @@ protected:
     );
     void panel_title(const char* title, const float width);
     bool saveable_tree_node(const string &category, const string &label);
-    void set_tooltip(const string &explanation, const string &shortcut = "");
+    void set_tooltip(
+        const string &explanation, const string &shortcut = "",
+        const WIDGET_EXPLANATIONS widget_explanation = WIDGET_EXPLANATION_NONE
+    );
     void zoom_with_cursor(const float new_zoom);
     
     

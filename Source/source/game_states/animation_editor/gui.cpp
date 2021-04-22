@@ -510,7 +510,8 @@ void animation_editor::process_gui_options_dialog() {
             0.1f, 0, INT_MAX
         );
         set_tooltip(
-            "Cursor must move these many pixels to be considered a drag."
+            "Cursor must move these many pixels to be considered a drag.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         game.options.editor_mouse_drag_threshold = drag_threshold;
         
@@ -736,7 +737,8 @@ void animation_editor::process_gui_panel_animation() {
             }
             set_tooltip(
                 "The animation loops back to this frame when it "
-                "reaches the last one."
+                "reaches the last one.",
+                "", WIDGET_EXPLANATION_DRAG
             );
             loop_frame =
                 clamp(
@@ -941,7 +943,8 @@ void animation_editor::process_gui_panel_animation() {
                     made_new_changes = true;
                 }
                 set_tooltip(
-                    "How long this frame lasts for, in seconds."
+                    "How long this frame lasts for, in seconds.",
+                    "", WIDGET_EXPLANATION_DRAG
                 );
                 
                 //Signal checkbox.
@@ -965,6 +968,10 @@ void animation_editor::process_gui_panel_animation() {
                         made_new_changes = true;
                         frame_ptr->signal = f_signal;
                     }
+                    set_tooltip(
+                        "Number of the signal.",
+                        "", WIDGET_EXPLANATION_DRAG
+                    );
                 }
                 
                 //Spacer dummy widget.
@@ -1667,6 +1674,10 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         );
         made_new_changes = true;
     }
+    set_tooltip(
+        "Top-left coordinates.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
     
     //Sprite size value.
     int size[2] =
@@ -1682,6 +1693,10 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         );
         made_new_changes = true;
     }
+    set_tooltip(
+        "Width and height.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
@@ -1842,6 +1857,10 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         if(ImGui::DragFloat2("Center", (float*) &cur_hitbox->pos, 0.05f)) {
             made_new_changes = true;
         }
+        set_tooltip(
+            "X and Y coordinates of the center.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
         
         //Hitbox radius value.
         if(
@@ -1851,6 +1870,10 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         ) {
             made_new_changes = true;
         }
+        set_tooltip(
+            "Radius of the hitbox.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
         cur_hitbox->radius = std::max(HITBOX_MIN_RADIUS, cur_hitbox->radius);
         
         //Hitbox Z value.
@@ -1858,7 +1881,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             made_new_changes = true;
         }
         set_tooltip(
-            "Altitude of the hitbox's bottom."
+            "Altitude of the hitbox's bottom.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         
         if(
@@ -1867,7 +1891,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             made_new_changes = true;
         }
         set_tooltip(
-            "Hitbox's height. 0 = spans infinitely vertically."
+            "Hitbox's height. 0 = spans infinitely vertically.",
+            "", WIDGET_EXPLANATION_DRAG
         );
         cur_hitbox->height = std::max(0.0f, cur_hitbox->height);
         
@@ -1918,7 +1943,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             set_tooltip(
                 "Opponent attacks will have their damage divided "
                 "by this amount.\n"
-                "0 = invulnerable."
+                "0 = invulnerable.",
+                "", WIDGET_EXPLANATION_DRAG
             );
             
             //Pikmin latch checkbox.
@@ -1950,7 +1976,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 made_new_changes = true;
             }
             set_tooltip(
-                "Attack power, in hit points."
+                "Attack power, in hit points.",
+                "", WIDGET_EXPLANATION_DRAG
             );
             
             //Outward knockback checkbox.
@@ -1990,7 +2017,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 made_new_changes = true;
             }
             set_tooltip(
-                "How strong the knockback is. 3 is a good value."
+                "How strong the knockback is. 3 is a good value.",
+                "", WIDGET_EXPLANATION_DRAG
             );
             
             //Wither chance value.
@@ -2089,6 +2117,10 @@ void animation_editor::process_gui_panel_sprite_top() {
         ) {
             made_new_changes = true;
         }
+        set_tooltip(
+            "Center coordinates.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
         
         //Top size value.
         if(
@@ -2190,6 +2222,10 @@ void animation_editor::process_gui_panel_sprite_transform() {
     ) {
         made_new_changes = true;
     }
+    set_tooltip(
+        "X and Y offset.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
     
     //Sprite scale value.
     if(
@@ -2316,6 +2352,10 @@ void animation_editor::process_gui_panel_tools() {
     static float resize_mult = 1.0f;
     ImGui::SetNextItemWidth(96.0f);
     ImGui::DragFloat("##resizeMult", &resize_mult, 0.01);
+    set_tooltip(
+        "Resize multiplier.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
     
     //Resize everything button.
     ImGui::SameLine();
@@ -2332,6 +2372,10 @@ void animation_editor::process_gui_panel_tools() {
     static float scales_value = 1.0f;
     ImGui::SetNextItemWidth(96.0f);
     ImGui::DragFloat("##scalesValue", &scales_value, 0.01);
+    set_tooltip(
+        "Scales value.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
     
     //Set sprite scales button.
     ImGui::SameLine();

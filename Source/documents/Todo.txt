@@ -10,9 +10,6 @@ Next tasks (roughly sorted most important first)
     --- v0.20.0 ---
     https://cdn.discordapp.com/attachments/459094367877988373/823289742036697098/Pikifen_alpha_2021-03-21_16-19-09.mp4 Maybe there should be a way to disable that no-damage ring (thanks Kman)
         The gas pipe is meant to "attack" enemies, since enemies need to receive the hazard events, but it causes 0 damage. Maybe make it so that if an attack hitbox has 0 power, to not process the effects?
-    Add a way for a GUI element's drawing routine to receive alpha as a parameter
-    See if the HUD element for the standby type's maturity can be optimized -- it's making use of standby_bmp for no reason I think
-    Dear ImGui slider widgets should have in their tooltip a gray line explaining how they work. Possibly other widgets too
     Remember to update the Pikmin Fanon wiki page link in the PNG files
     
     --- v0.21.0 ---
@@ -459,6 +456,7 @@ Misc things (so I don't forget)
         Camera should mostly center on the leader, but offset slightly towards where the group is, offsetting more the more the group is farther away, maybe also pointing a bit to where the leader is headed, etc.
         Make the mob sprite scale when hurt, like an elastic
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
+        Add a way for a GUI element's drawing routine to receive alpha as a parameter? And then each element should be responsible for drawing with that alpha. Could be useful for fade ins and fade outs
     The makefile should have a "clean" rule, a "debug" rule a "release" rule, (with -Wall) etc.
     An option for the cursor to snap to the nearest object in-game, with an adjustable radius
     "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Kman)

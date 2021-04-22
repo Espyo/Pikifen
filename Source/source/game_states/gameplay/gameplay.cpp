@@ -514,7 +514,6 @@ void gameplay_state::init_hud() {
     standby_maturity->on_draw =
     [this] (const point & center, const point & size) {
         //Standby group member preparations.
-        ALLEGRO_BITMAP* standby_bmp = NULL;
         ALLEGRO_BITMAP* standby_mat_bmp = NULL;
         if(
             cur_leader_ptr && closest_group_member &&
@@ -524,26 +523,18 @@ void gameplay_state::init_hud() {
                 cur_leader_ptr->group->cur_standby_type->get_category();
                 
             switch(c) {
-            case SUBGROUP_TYPE_CATEGORY_LEADER: {
-                leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
-                standby_bmp = l_ptr->lea_type->bmp_icon;
-                break;
-                
-            } case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
+            case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
                 pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
-                standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
                 standby_mat_bmp =
                     p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
                 break;
                 
             } default: {
-                standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
                 break;
                 
             }
             }
         }
-        if(!standby_bmp) standby_bmp = bmp_no_pikmin_bubble;
         
         if(standby_mat_bmp) {
             draw_bitmap_in_box(standby_mat_bmp, center, size * 0.8);
