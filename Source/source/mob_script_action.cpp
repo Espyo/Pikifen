@@ -317,6 +317,8 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_FOCUS_DISTANCE);
     } else if(call.args[1] == "frame_signal") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
+    } else if(call.args[1] == "hazard") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_HAZARD);
     } else if(call.args[1] == "health") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
     } else if(call.args[1] == "latched_pikmin") {
@@ -1762,9 +1764,9 @@ bool assert_actions(
 /* ----------------------------------------------------------------------------
  * A general function for get_info actions.
  * data:
- *  The action's data
+ *   The action's data.
  * target_mob:
- *  The mob to get the info from
+ *   The mob to get the info from, if applicable.
  */
 void get_info_runner(mob_action_run_data &data, mob* target_mob) {
 
@@ -1776,7 +1778,30 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
     size_t t = s2i(data.args[1]);
     
     switch(t) {
-    case MOB_ACTION_GET_INFO_CHOMPED_PIKMIN: {
+    case MOB_ACTION_GET_INFO_BODY_PART: {
+        if(
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_DAMAGE
+        ) {
+            *var =
+                (
+                    (hitbox_interaction*)(data.custom_data_1)
+                )->h1->body_part_name;
+        } else if(
+            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
+            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
+            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
+        ) {
+            *var =
+                target_mob->get_closest_hitbox(
+                    ((mob*)(data.custom_data_1))->pos,
+                    INVALID, NULL
+                )->body_part_name;
+        }
+        break;
+        
+    } case MOB_ACTION_GET_INFO_CHOMPED_PIKMIN: {
         *var = i2s(target_mob->chomping_mobs.size());
         break;
         
@@ -1799,6 +1824,15 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
     } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {
         if(data.call->parent_event == MOB_EV_FRAME_SIGNAL) {
             *var = i2s(*((size_t*)(data.custom_data_1)));
+        }
+        break;
+        
+    } case MOB_ACTION_GET_INFO_HAZARD: {
+        if(
+            data.call->parent_event == MOB_EV_TOUCHED_HAZARD ||
+            data.call->parent_event == MOB_EV_LEFT_HAZARD
+        ) {
+            *var = ((hazard*) data.custom_data_1)->name;
         }
         break;
         
@@ -1846,29 +1880,6 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
             data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
         ) {
             *var = ((mob*)(data.custom_data_1))->type->name;
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_BODY_PART: {
-        if(
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
-            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
-            data.call->parent_event == MOB_EV_DAMAGE
-        ) {
-            *var =
-                (
-                    (hitbox_interaction*)(data.custom_data_1)
-                )->h1->body_part_name;
-        } else if(
-            data.call->parent_event == MOB_EV_TOUCHED_OBJECT ||
-            data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
-        ) {
-            *var =
-                target_mob->get_closest_hitbox(
-                    ((mob*)(data.custom_data_1))->pos,
-                    INVALID, NULL
-                )->body_part_name;
         }
         break;
         

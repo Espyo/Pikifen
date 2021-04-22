@@ -8,12 +8,11 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.20.0 ---
-    Add Kman's editor style commit
     https://cdn.discordapp.com/attachments/459094367877988373/823289742036697098/Pikifen_alpha_2021-03-21_16-19-09.mp4 Maybe there should be a way to disable that no-damage ring (thanks Kman)
-    It should be possible to retrieve the hazard that triggered on_touch_hazard and on_left_hazard
+        The gas pipe is meant to "attack" enemies, since enemies need to receive the hazard events, but it causes 0 damage. Maybe make it so that if an attack hitbox has 0 power, to not process the effects?
     Add a way for a GUI element's drawing routine to receive alpha as a parameter
-    Dear ImGui slider widgets should have in their tooltip a gray line explaining how they work. Possibly other widgets too
     See if the HUD element for the standby type's maturity can be optimized -- it's making use of standby_bmp for no reason I think
+    Dear ImGui slider widgets should have in their tooltip a gray line explaining how they work. Possibly other widgets too
     Remember to update the Pikmin Fanon wiki page link in the PNG files
     
     --- v0.21.0 ---

@@ -640,6 +640,10 @@ reaches {
         <td>Triggered every frame the object is touching the floor.</td>
       </tr>
       <tr>
+        <th style="text-align: left;"><code>on_leave_hazard</code></th>
+        <td>Triggered when the object was on a hazardous sector, but no longer is.</td>
+      </tr>
+      <tr>
         <th style="text-align: left;"><code>on_object_in_reach</code></th>
         <td>Triggered when an object has entered within its "near reach". Will trigger every frame for the same object, too.</td>
       </tr>
@@ -791,6 +795,7 @@ reaches {
               <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
               <li><code><b>focus_distance</b></code>: Distance between the object and the focused object.</li>
               <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code>on_frame_signal</code> event.</li>
+              <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
               <li><code><b>health</b></code>: The object's current health.</li>
               <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
               <li><code><b>latched_pikmin_weight</b></code>: Total weight of the Pikmin that are currently latched on to it.</li>
