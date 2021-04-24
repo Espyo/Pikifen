@@ -1115,6 +1115,16 @@ void mob::do_attack_effects(
     mob* attacker, hitbox* attack_h, hitbox* victim_h,
     const float damage, const float knockback
 ) {
+    if(attack_h->value == 0.0f) {
+        //Attack hitboxes that cause 0 damage don't need to smack or ding.
+        //This way, objects can "attack" other objects at 0 damage for the
+        //purposes of triggering events (like hazard touching), without
+        //having to constantly display the dings.
+        //The ding effect should only be used when an attack that really WANTED
+        //to cause damage failed to do so, thus highlighting the uselessness.
+        return;
+    }
+    
     //Calculate the particle's final position.
     point attack_h_pos = attack_h->get_cur_pos(attacker->pos, attacker->angle);
     point victim_h_pos = victim_h->get_cur_pos(pos, angle);

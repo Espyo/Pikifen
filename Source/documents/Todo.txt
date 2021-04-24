@@ -8,8 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.20.0 ---
-    https://cdn.discordapp.com/attachments/459094367877988373/823289742036697098/Pikifen_alpha_2021-03-21_16-19-09.mp4 Maybe there should be a way to disable that no-damage ring (thanks Kman)
-        The gas pipe is meant to "attack" enemies, since enemies need to receive the hazard events, but it causes 0 damage. Maybe make it so that if an attack hitbox has 0 power, to not process the effects?
     Remember to update the Pikmin Fanon wiki page link in the PNG files
     
     --- v0.21.0 ---
@@ -28,6 +26,7 @@ Next tasks (roughly sorted most important first)
             Whistling: can be on cursor or distance-limited?
             Throwing: can be on cursor or distance-limited?
         An option to control the cursor's movement speed, when not using the mouse (thanks MonkeyUhOh)
+        Show the number of Pikmin of the current type next to the cursor
     Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
         Same for whistling and other controls you may need to mash/hold
     Minor editor improvements
@@ -423,7 +422,6 @@ Next tasks (roughly sorted most important first)
 Small tasks (for when I'm feeling lazy)
     Style
         Document the code with comments
-        Make all functions separated by two blank lines
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
     
@@ -439,11 +437,10 @@ Misc things (so I don't forget)
             HUD should come in/out of frame when pause is used
             Find more ideas from the canon games
         When a spray is about to run out, make the mobs flash
-        Health wheel should gradually turn from the current angle to the actual health
         Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the cursor goes over them
         Earthquake effect
-            See [[Rumble]]
+            See https://www.pikminwiki.com/Rumble
             If the earthquake emitter is at the center of the screen, full intensity. The farther it is, the weaker the intensity. I think 2x offscreen or more should be 0 intensity.
             https://www.reddit.com/r/justgamedevthings/comments/7g3qty/what_do_you_mean_dont_overdo_it_with_the/
             https://www.youtube.com/watch?v=tu-Qe66AvtY
@@ -457,7 +454,6 @@ Misc things (so I don't forget)
         Make the mob sprite scale when hurt, like an elastic
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         Add a way for a GUI element's drawing routine to receive alpha as a parameter? And then each element should be responsible for drawing with that alpha. Could be useful for fade ins and fade outs
-    The makefile should have a "clean" rule, a "debug" rule a "release" rule, (with -Wall) etc.
     An option for the cursor to snap to the nearest object in-game, with an adjustable radius
     "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Kman)
     A Pikmin that's on fire and runs to the water should probably drown instead of continuing to be on fire
@@ -475,17 +471,16 @@ Misc things (so I don't forget)
         Pikmin with small items should take specific paths, usually envolving shortcuts (thanks Nutty171)
     For intervals, use the code on the "misc info" text file
     Water depth (thanks ThyCheshireCat)
+        Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
     A way to add random variation to the knockback angle of a hitbox
     "I think carry weight should be displayed when you hover over an enemy corpse/pellet" (thanks Tenacious)
     The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be addedd to the script (thanks Kman)
     Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
     Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
-    Show the number of Pikmin of the current type next to the cursor
     Add an option for statuses to disable a leader until the player presses right-click or something (thanks Neo)
     Objects falling from the sky
         When a leader approaches, when a Pikmin approaches, when carrying, etc.
-    The toggle reference button in the area editor should be grayed out if there is no reference set up
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
         Make the water ripples be via shader
@@ -518,14 +513,14 @@ Misc things (so I don't forget)
         Add background viewing/editing to the area editor
         Foreground
     Global script variables
-    Would it make sense to add a foam texture on top of the water texture, where the water reaches the shore, and/or hits a wall?
-    Consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
     If there are no Onions, Pikmin should bring corpses to the Ship
     If your Pikmin are far away and you dismiss them, they should just create groups where they are, not next to where you ordered the dismiss...right?
+    If a Pikmin is too far away, it should sigh and lose the party
+    "Oh, yeah, quick suggestion, make all of the pikmin that a leader has get disbanded and maybe panic around for a bit when the leader dies" (thanks Neo)
     Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     New actions
-        Logic for an arachnorb to turn to/chase the focused mob?
-    Make it so enemies can understand what hazard they entered or left (needed for the Fiery Bulblax)
+        Logic for an arachnorb to turn to/chase the focused mob? (thanks Neo)
+        Logic for arachnorbs to move freely, instead of only forward? (thanks Neo)
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this helps audibly impaired players who can't hear the Pikmin squeals
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end
         Apply fog, blackout, sector darkness, etc. on this
@@ -544,9 +539,7 @@ Misc things (so I don't forget)
         Paths that only Pikmin exclusive to a certain hazard can take (paths on the water for Blue Pikmin)
         The logic that figures out the first and last path stop needs to be reworked -- when calculating a path from X to Y, with Y not being in a stop but being perfectly reachable, but also with Y being closest to an unreachable stop (locked behind a one-way link, for instance), the engine will be unable to find a path to that perfectly reachable location
         Maybe make it so some paths can only be crossed if what is being carried is less than X width?
-    If a Pikmin is too far away, it should sigh and lose the party
-    The ability for objects to be not-circular, but ellipses
-        Used for placing carrier Pikmin around irregular-shaped objects
+    The ability for objects to be not-circular, but ellipses -- used for placing carrier Pikmin around irregular-shaped objects
     Particle improvements
         https://www.youtube.com/watch?v=bIjrSvGddDQ
         Particles should have a secondary way of dying - shrinking instead of exclusively fading to transparent
@@ -556,7 +549,6 @@ Misc things (so I don't forget)
         Additive blending and normal blending
         Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
     HUD element for a digital clock?
-    >Oh, yeah, quick suggestion, make all of the pikmin that a leader has get disbanded and maybe panic around for a bit when the leader dies (thanks Neo)
     A load creator tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
     Creator tools should be bound to buttons in the same way the regular controls are, instead of being stuck in the number and F keys
     Some console on the editors, so you can have extra tools that don't require an elaborate GUI?
@@ -567,18 +559,18 @@ Misc things (so I don't forget)
     Game config parameters:
         Nectars: Work like in the engine, or like in the classics?
     Should I auto-fade textures on stepping height?
-    Some treasures should weigh as much as the current army, after a boss battle
+    Story mode
+        Some treasures should weigh as much as the current army, after a boss battle
     
     
 Tasks for later on (I might never implement these)
     Known problems
         On my other laptop, screenshots come out with alpha
         Kman found a crash on the area editor -- area with invalid shadow, restart engine, area editor, find problems, go to problem -> crash -- I can't reproduce, but it must have something to do with pointers not being cleared
-        >trying to fight a bublorb >wait no >i killed it and was carrying it back >and a dwarf bublorb came along >and tried eating one of the guys carrying the big bublorb (found by Ambrosiu㎂ and some others, currently unreplicated)
     ...An AI opponent in 2-player mode? It would help me test...
-    Colors should be able to also be in hexadecimal
+    Colors should be able to also be in hexadecimal?
     The ability for enemies to eat other enemies
-    If I need performance gains, resize textures to smaller sizes when they're loaded (thanks Kman)
+    If I need GPU performance gains, resize textures to smaller sizes when they're loaded (thanks Kman)
     A way for spike damage to apply a status effect
     A way to write out how much memory is being taken up by images, sounds, scripts, etc. so game creators can help make sure a level's not too bloated?
     Nighttime (what enemies can spawn at night, their changes, etc.)
@@ -594,16 +586,15 @@ Tasks for later on (I might never implement these)
         And just systemic gameplay in general, like lit Pikmin lighting nearby Pikmin on fire http://www.youtube.com/watch?v=SnpAAX9CkIc
             Red Pikmin can carry flaming coals, which can set enemies on fire
     Enemies don't care about bottomless pits and will gladly walk off when roaming -- is there any way to remedy this?
-    Logic for arachnorbs to move freely, instead of only forward, and to chase a target (thanks Neo)
     Hiding
     Warp point, like in Pikmin 3
         Carrying paths should be able to specify a "portal" link, which internally is considered to be 0-distance. This helps calculate the destinations without considering two warp points as being insanely far apart
-    A colorblind-helping mode?
+    A colorblind-friendly mode?
     Editors
         Area editor
             Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
             A tool that checks every point in the map (more like every 2 units) and checks if the closest carrying point is on the other side of a wall or something
-            When choosing textures, list all of the existing ones, if plausible
+            When choosing textures, list all of the existing ones in the folder, if plausible
             The area editor could have a button to start testing from where the cursor is, a la Mario Maker. Also, to spawn some Pikmin with, maybe
             When deleting a mob link, flash the link red when you mouse-over. Similarly, flash a potential linkable object yellow when you mouse-over it. Think of doing the same for other similar operations
             Double-click in object mode -> create new object on cursor. There are a lot of corner cases though, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc. This can result in the player accidentally adding a new mob while trying to do something else
@@ -615,10 +606,9 @@ Tasks for later on (I might never implement these)
             The problem searcher could detect when an enemy's spoils is set to an object that doesn't exist (thanks Nutty171)
             If it detects an auto-backup that's younger than the saved area, it should ask the user if they want to continue from the backup
         Animation editor
-            Version 3.0
-                "Sprite" -> "Pose"?
-                You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.
-                    Or you just draw a line or something above all sprites you want, and it auto-creates some sprites (thanks Tenacious)
+            "Sprite" -> "Pose"?
+            You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.
+                Or you just draw a line or something above all sprites you want, and it auto-creates some sprites (thanks Tenacious)
             Add a section to find errors
                 It could check what kind of animation this is, like a Pikmin type, and determine that there are some needed animations that are not included
                 Enemy has attack hitboxes that don't hit below it?
@@ -639,19 +629,19 @@ Tasks for later on (I might never implement these)
         Resizing the window should stretch the resolution instead of showing more of the world (GitHub issue #7)
     Aesthetic details
         Different "switched to Pikmin" sound for when you switch to a held leader instead of a Pikmin
-        When writing a message on the bottom of the screen, make the letters have some effect, to pop in and move out
+        When writing a character dialog message on the bottom of the screen, make the letters have some effect, to pop in and move out
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
         Make the main menu's highlighter move from one place to another gradually, based on how far it is (like the camera moves in-game)
         The music should change to swing for Louie
-        Splash particles for going in water
-        Particles should have a "emits light?" property
-        Particles floating in the wind
+        Particles
+            Splash particles for going in water
+            Particles should have a "emits light?" property
+            Particles floating in the wind
+            A background detail: those little floaty white things you see in forests
         Beams of light shining between the leaves; they should spin with the sun, and sometimes fade out to non-existence
         Shadows of leaves should shift along the day, and become less opaque at the start and end
         Clovers, Margarets, etc. rustling should also maybe move up and down a bit, so that it's a bit of a circular motion (ellipse, really)
-        A background detail: those little floaty white things you see in forests
         Cloud shadows? When a cloud is casting a shadow, tree shadows shouldn't exist
-        Custom font for the editors
         Water should reflect clouds and the sun... and maybe other things like an aurora borealis?
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
