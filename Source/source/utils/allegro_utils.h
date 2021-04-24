@@ -14,6 +14,7 @@
 
 #include <allegro5/allegro.h>
 
+
 bool operator==(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2);
 bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2);
 

@@ -509,28 +509,6 @@ bool hud_item_manager::get_draw_data(
 
 
 /* ----------------------------------------------------------------------------
- * Sets a HUD item's data.
- * id:
- *   ID of the HUD item.
- * x:
- *   Horizontal coordinate, in screen width percentage (0 to 100, normally).
- * y:
- *   Vertical coordinate, in screen height percentage (0 to 100, normally).
- * w:
- *   Total width, in screen width percentage (0 to 100, normally).
- * h:
- *   Total height, in screen height percentage (0 to 100, normally).
- */
-void hud_item_manager::set_item(
-    const size_t id,
-    const float x, const float y, const float w, const float h
-) {
-    items[id] =
-        hud_item(point(x / 100.0f, y / 100.0f), point(w / 100.0f, h / 100.0f));
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns whether the mouse cursor is inside the specified item or not.
  * id:
  *   ID of the item to check.
@@ -562,6 +540,28 @@ bool hud_item_manager::is_mouse_in(const size_t id) {
         return false;
     }
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a HUD item's data.
+ * id:
+ *   ID of the HUD item.
+ * x:
+ *   Horizontal coordinate, in screen width percentage (0 to 100, normally).
+ * y:
+ *   Vertical coordinate, in screen height percentage (0 to 100, normally).
+ * w:
+ *   Total width, in screen width percentage (0 to 100, normally).
+ * h:
+ *   Total height, in screen height percentage (0 to 100, normally).
+ */
+void hud_item_manager::set_item(
+    const size_t id,
+    const float x, const float y, const float w, const float h
+) {
+    items[id] =
+        hud_item(point(x / 100.0f, y / 100.0f), point(w / 100.0f, h / 100.0f));
 }
 
 

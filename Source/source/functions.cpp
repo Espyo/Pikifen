@@ -588,7 +588,7 @@ ALLEGRO_COLOR get_fog_color() {
 
 /* ----------------------------------------------------------------------------
  * Returns the color a ledge's smoothing should be.
- * edge:
+ * e_ptr:
  *   Edge with the ledge.
  */
 ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr) {
@@ -598,7 +598,7 @@ ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Returns the length a ledge's smoothing should be.
- * edge:
+ * e_ptr:
  *   Edge with the ledge.
  */
 float get_ledge_smoothing_length(edge* e_ptr) {
@@ -608,7 +608,7 @@ float get_ledge_smoothing_length(edge* e_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Returns the color a liquid limit's effect should be.
- * edge:
+ * e_ptr:
  *   Edge with the liquid limit.
  */
 ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr) {
@@ -618,7 +618,7 @@ ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Returns the length a liquid's limit effect.
- * edge:
+ * e_ptr:
  *   Edge with the liquid limit.
  */
 float get_liquid_limit_length(edge* e_ptr) {
@@ -734,7 +734,7 @@ map<string, string> get_var_map(const string &vars_string) {
 
 /* ----------------------------------------------------------------------------
  * Returns the color a wall's shadow should be.
- * edge:
+ * e_ptr:
  *   Edge with the wall.
  */
 ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr) {
@@ -744,7 +744,7 @@ ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Returns the length a wall's shadow should be.
- * edge:
+ * e_ptr:
  *   Edge with the wall.
  */
 float get_wall_shadow_length(edge* e_ptr) {

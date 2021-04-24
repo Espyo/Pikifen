@@ -22,53 +22,6 @@
 
 
 /* ----------------------------------------------------------------------------
- * Draws edge offset effects onto the given sector. This requires that
- * the effects have been drawn onto a buffer, from which this algorithm samples.
- * s_ptr:
- *   Sector to draw the effects of.
- * buffer:
- *   Buffer to draw from.
- * opacity:
- *   Draw at this opacity, 0 - 1.
- */
-void draw_sector_edge_offsets(
-    sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
-) {
-    if(s_ptr->is_bottomless_pit) return;
-    
-    size_t n_vertexes = s_ptr->triangles.size() * 3;
-    ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
-    
-    for(size_t v = 0; v < n_vertexes; ++v) {
-        const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-        vertex* v_ptr = t_ptr->points[v % 3];
-        float vx = v_ptr->x;
-        float vy = v_ptr->y;
-        
-        av[v].x = vx;
-        av[v].y = vy;
-        al_transform_coordinates(
-            &game.world_to_screen_transform, &vx, &vy
-        );
-        av[v].u = vx;
-        av[v].v = vy;
-        av[v].z = 0;
-        av[v].color.r = 1.0f;
-        av[v].color.g = 1.0f;
-        av[v].color.b = 1.0f;
-        av[v].color.a = opacity;
-    }
-    
-    al_draw_prim(
-        av, NULL, buffer,
-        0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
-    );
-    
-    delete[] av;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws an edge offset effect of a given edge onto the current target bitmap,
  * which acts as a buffer.
  * e_ptr:
@@ -260,6 +213,335 @@ void draw_edge_offset_on_buffer(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws edge offset effects onto the given sector. This requires that
+ * the effects have been drawn onto a buffer, from which this algorithm samples.
+ * s_ptr:
+ *   Sector to draw the effects of.
+ * buffer:
+ *   Buffer to draw from.
+ * opacity:
+ *   Draw at this opacity, 0 - 1.
+ */
+void draw_sector_edge_offsets(
+    sector* s_ptr, ALLEGRO_BITMAP* buffer, const float opacity
+) {
+    if(s_ptr->is_bottomless_pit) return;
+    
+    size_t n_vertexes = s_ptr->triangles.size() * 3;
+    ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
+    
+    for(size_t v = 0; v < n_vertexes; ++v) {
+        const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
+        vertex* v_ptr = t_ptr->points[v % 3];
+        float vx = v_ptr->x;
+        float vy = v_ptr->y;
+        
+        av[v].x = vx;
+        av[v].y = vy;
+        al_transform_coordinates(
+            &game.world_to_screen_transform, &vx, &vy
+        );
+        av[v].u = vx;
+        av[v].v = vy;
+        av[v].z = 0;
+        av[v].color.r = 1.0f;
+        av[v].color.g = 1.0f;
+        av[v].color.b = 1.0f;
+        av[v].color.a = opacity;
+    }
+    
+    al_draw_prim(
+        av, NULL, buffer,
+        0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+    );
+    
+    delete[] av;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns information about one of the ends of an edge offset effect.
+ * e_ptr:
+ *   Edge with the effect.
+ * end_vertex:
+ *   Vertex of the end being processed.
+ * end_idx:
+ *   Index of the end being processed. 0 is the end of the edge where the
+ *   sector receiving the effect is to the left, if you face
+ *   from end 0 to end 1.
+ * edge_process_angle:
+ *   Angle that the edge makes from the current end to the opposite one.
+ * affected_sector:
+ *   Sector that gets affected by the effect.
+ * unaffected_sector:
+ *   Sector that is unaffected by the effect.
+ * checker:
+ *   Pointer to a function that checks if the edge should have the
+ *   intended effect or not. It also returns what sector of the edge
+ *   will be affected by the effect, and which won't.
+ * length_getter:
+ *   Function that returns the length of the effect.
+ * color_getter:
+ *   Function that returns the color of the effect.
+ * final_angle:
+ *   The angle of the tip of this end of the effect's "rectangle".
+ * final_length:
+ *   The length of the tip of this end of the effect's "rectangle".
+ * final_color:
+ *   The color at this end of the effect's "rectangle".
+ * final_elbow_angle:
+ *   The angle that the elbow must finish at. 0 if no elbow is needed.
+ * final_elbow_length:
+ *   The length of the line at the end of the elbow. 0 if no elbow is needed.
+ */
+void get_edge_offset_edge_info(
+    edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
+    const float edge_process_angle,
+    sector* affected_sector, sector* unaffected_sector,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter,
+    float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
+    float* final_elbow_angle, float* final_elbow_length
+) {
+    *final_elbow_angle = 0.0f;
+    *final_elbow_length = 0.0f;
+    *final_color = color_getter(e_ptr);
+    
+    float base_effect_length = length_getter(e_ptr);
+    float base_effect_angle =
+        end_idx == 0 ?
+        edge_process_angle - TAU / 4.0f :
+        edge_process_angle + TAU / 4.0f;
+    base_effect_angle = normalize_angle(base_effect_angle);
+    bool edge_effect_cw = end_idx == 1;
+    
+    edge* next_edge = NULL;
+    float next_edge_angle = 0.0f;
+    float next_edge_diff = 0.0f;
+    edge* next_eff_edge = NULL;
+    float next_eff_edge_angle = 0.0f;
+    float next_eff_edge_diff = 0.0f;
+    bool next_eff_edge_effect_cw = false;
+    float next_eff_edge_base_effect_angle = 0.0f;
+    
+    //Start by getting some information about the edges
+    //that comes after this one.
+    get_next_edge(
+        end_vertex, edge_process_angle, edge_effect_cw, e_ptr,
+        &next_edge, &next_edge_angle, &next_edge_diff
+    );
+    
+    get_next_offset_effect_edge(
+        end_vertex, edge_process_angle, edge_effect_cw, e_ptr,
+        checker,
+        &next_eff_edge, &next_eff_edge_angle, &next_eff_edge_diff,
+        &next_eff_edge_base_effect_angle,
+        &next_eff_edge_effect_cw
+    );
+    
+    //Now either this end of the effect is drawn forward,
+    //or it's slanted inward to merge with another effect.
+    //In addition, we may need an elbow attached to this end or not.
+    bool effects_need_merge =
+        next_eff_edge && next_eff_edge_effect_cw != edge_effect_cw;
+    if(
+        effects_need_merge &&
+        next_eff_edge_diff < (TAU / 2.0f - 0.0001f)
+    ) {
+        //Next edge that casts an effect faces ours.
+        //Merge our effect with its effect.
+        //The effect's final point should be where they both intersect.
+        //The other effect's edge will do the same when it's its turn.
+        //The reason we're docking some values away from exactly 180 degrees
+        //is because floating point imperfections may make 180-degree edges
+        //attempt to be merged, and then the intersection algorithm fails.
+        float next_edge_base_effect_length = length_getter(next_eff_edge);
+        float mid_effect_length =
+            (base_effect_length + next_edge_base_effect_length) / 2.0f;
+            
+        get_edge_offset_intersection(
+            e_ptr, next_eff_edge, end_vertex,
+            base_effect_angle, next_eff_edge_base_effect_angle,
+            mid_effect_length, end_idx,
+            final_angle, final_length
+        );
+        
+        *final_color =
+            interpolate_color(
+                0.5, 0, 1,
+                *final_color,
+                color_getter(next_eff_edge)
+            );
+            
+    } else if(
+        next_eff_edge && next_eff_edge_effect_cw == edge_effect_cw &&
+        next_eff_edge_diff < TAU / 4.0f
+    ) {
+        //Next edge has an effect that goes in the same direction,
+        //and that edge imposes over our effect.
+        //As such, skew our effect inwards to align with that edge.
+        *final_angle = next_eff_edge_angle;
+        *final_length = base_effect_length / sin(next_eff_edge_diff);
+        
+    } else if(
+        !next_eff_edge
+    ) {
+        //There's nothing to connect to in any way, so we might as well shrink
+        //this end. Shrinking it to 0 will make effects of edges where there's
+        //nothing on both sides disappear, which may mislead the user. So
+        //instead just make it a fraction of the usual size.
+        *final_angle = base_effect_angle;
+        *final_length = base_effect_length / 5.0f;
+        
+    } else {
+        //We can draw our end of the effect forward without a care.
+        *final_angle = base_effect_angle;
+        *final_length = base_effect_length;
+        
+        if(next_eff_edge && next_eff_edge_effect_cw != edge_effect_cw) {
+            //On this end there is a neighboring effect we'll want to connect
+            //to. But because that neighboring effect is so far away in
+            //terms of angle, we'll need to implement an elbow between them
+            //so they can be connected. This edge will draw half of the elbow,
+            //and the other will draw its half when it's its turn.
+            float next_edge_base_effect_length =
+                length_getter(next_eff_edge);
+            float mid_effect_length =
+                (base_effect_length + next_edge_base_effect_length) / 2.0f;
+                
+            *final_length = mid_effect_length;
+            *final_elbow_length = mid_effect_length;
+            *final_elbow_angle =
+                end_idx == 0 ?
+                next_eff_edge_angle +
+                get_angle_cw_dif(
+                    next_eff_edge_angle, edge_process_angle
+                ) / 2.0f :
+                edge_process_angle +
+                get_angle_cw_dif(
+                    edge_process_angle, next_eff_edge_angle
+                ) / 2.0f;
+            *final_color =
+                interpolate_color(
+                    0.5, 0, 1,
+                    *final_color,
+                    color_getter(next_eff_edge)
+                );
+                
+        } else if(next_eff_edge && next_eff_edge_effect_cw == edge_effect_cw) {
+            //There is a neighboring edge that has the effect, but in
+            //the same direction as ours. As such, our effect will have
+            //to connect to that effect's edge so there's a snug fit.
+            //But because that neighboring effect is so far away in terms of
+            //angle, we'll need to implement an elbow between them so they
+            //can be connected. This edge will be in charge of drawing the full
+            //elbow.
+            *final_elbow_angle = next_eff_edge_angle;
+            *final_elbow_length = base_effect_length;
+        }
+        
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the point in which the far end of two edge offset effects intersect.
+ * This calculation is only for the base "rectangle" shape of the effect,
+ * and doesn't take into account any inward slants given on the ends, nor
+ * does it care about elbows.
+ * Normally, this would be the intersection point between the line segments
+ * that make up both effects's rectangle ends, but there may be cases, explained
+ * below, where that doesn't result in a real collision. In order for the
+ * algorithm to always return something that at least can be worked with,
+ * the intersection is calculated as if both effect ends were infinitely long
+ * lines.
+ * e1:
+ *   First effect-casting edge. This is the main edge being processed.
+ * e2:
+ *   Second effect-casting edge.
+ * common_vertex:
+ *   The vertex shared between these two edges.
+ * base_effect_angle1:
+ *   The base angle at which edge 1's effect is projected.
+ * base_effect_angle2:
+ *   Same as base_effect_angle1, but for edge 2.
+ * effect_length:
+ *   Length of either effect.
+ * end_idx:
+ *   Index of the end being processed. 0 means that the sector that receives
+ *   the effect is to the left, if you stand on end 0 and face end 1.
+ * final_angle:
+ *   The angle from the common vertex to the intersection point.
+ * final_length:
+ *   The length from the common vertex to the intersection point.
+ */
+void get_edge_offset_intersection(
+    edge* e1, edge* e2, vertex* common_vertex,
+    const float base_effect_angle1, const float base_effect_angle2,
+    const float effect_length, const unsigned char end_idx,
+    float* final_angle, float* final_length
+) {
+    vertex* other_vertex1 = e1->get_other_vertex(common_vertex);
+    float base_cos1 = cos(base_effect_angle1);
+    float base_sin1 = sin(base_effect_angle1);
+    point effect1_p0(
+        common_vertex->x + base_cos1 * effect_length,
+        common_vertex->y + base_sin1 * effect_length
+    );
+    point effect1_p1(
+        other_vertex1->x + base_cos1 * effect_length,
+        other_vertex1->y + base_sin1 * effect_length
+    );
+    
+    vertex* other_vertex2 = e2->get_other_vertex(common_vertex);
+    float base_cos2 = cos(base_effect_angle2);
+    float base_sin2 = sin(base_effect_angle2);
+    point effect2_p0(
+        common_vertex->x + base_cos2 * effect_length,
+        common_vertex->y + base_sin2 * effect_length
+    );
+    point effect2_p1(
+        other_vertex2->x + base_cos2 * effect_length,
+        other_vertex2->y + base_sin2 * effect_length
+    );
+    
+    //Let's get where the lines intersect. We're checking the lines and
+    //not line segments, since there could be cases where an edge is so short
+    //that its base effect line starts and begins inside the other edge's
+    //base effect rectangle. This may cause some visual artifacts like
+    //triangles being drawn where they shouldn't, but for such a broken
+    //scenario, it's an acceptable solution.
+    float r;
+    if(
+        lines_intersect(
+            effect1_p0, effect1_p1,
+            effect2_p0, effect2_p1,
+            &r, NULL
+        )
+    ) {
+        //Clamp r to prevent long, close edges from
+        //creating jagged effects outside the edge.
+        r = clamp(r, 0.0f, 1.0f);
+        point p(
+            effect1_p0.x + (effect1_p1.x - effect1_p0.x) * r,
+            effect1_p0.y + (effect1_p1.y - effect1_p0.y) * r
+        );
+        coordinates_to_angle(
+            p - point(common_vertex->x, common_vertex->y),
+            final_angle, final_length
+        );
+    } else {
+        //Okay, they don't really intersect. This should never happen... Maybe
+        //a floating point imperfection? Oh well, let's go for a failsafe.
+        *final_angle = 0.0f;
+        *final_length = 0.0f;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the next edge in a vertex's list of edges.
  * It checks in a given direction, starting from some pivot angle.
  * v_ptr:
@@ -404,278 +686,6 @@ void get_next_offset_effect_edge(
     } else {
         *final_base_effect_angle =
             normalize_angle(best_edge_angle - TAU / 4.0f);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns information about one of the ends of an edge offset effect.
- * e_ptr:
- *   Edge with the effect.
- * end_vertex:
- *   Vertex of the end being processed.
- * end_idx:
- *   Index of the end being processed. 0 is the end of the edge where the
- *   sector receiving the effect is to the left, if you face
- *   from end 0 to end 1.
- * edge_process_angle:
- *   Angle that the edge makes from the current end to the opposite one.
- * affected_sector:
- *   Sector that gets affected by the effect.
- * unaffected_sector:
- *   Sector that is unaffected by the effect.
- * length_getter:
- *   Function that returns the length of the effect.
- * color_getter:
- *   Function that returns the color of the effect.
- * final_angle:
- *   The angle of the tip of this end of the effect's "rectangle".
- * final_length:
- *   The length of the tip of this end of the effect's "rectangle".
- * final_color:
- *   The color at this end of the effect's "rectangle".
- * final_elbow_angle:
- *   The angle that the elbow must finish at. 0 if no elbow is needed.
- * final_elbow_length:
- *   The length of the line at the end of the elbow. 0 if no elbow is needed.
- */
-void get_edge_offset_edge_info(
-    edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
-    const float edge_process_angle,
-    sector* affected_sector, sector* unaffected_sector,
-    offset_effect_checker_ptr checker,
-    offset_effect_length_getter_ptr length_getter,
-    offset_effect_color_getter_ptr color_getter,
-    float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
-    float* final_elbow_angle, float* final_elbow_length
-) {
-    *final_elbow_angle = 0.0f;
-    *final_elbow_length = 0.0f;
-    *final_color = color_getter(e_ptr);
-    
-    float base_effect_length = length_getter(e_ptr);
-    float base_effect_angle =
-        end_idx == 0 ?
-        edge_process_angle - TAU / 4.0f :
-        edge_process_angle + TAU / 4.0f;
-    base_effect_angle = normalize_angle(base_effect_angle);
-    bool edge_effect_cw = end_idx == 1;
-    
-    edge* next_edge = NULL;
-    float next_edge_angle = 0.0f;
-    float next_edge_diff = 0.0f;
-    edge* next_eff_edge = NULL;
-    float next_eff_edge_angle = 0.0f;
-    float next_eff_edge_diff = 0.0f;
-    bool next_eff_edge_effect_cw = false;
-    float next_eff_edge_base_effect_angle = 0.0f;
-    
-    //Start by getting some information about the edges
-    //that comes after this one.
-    get_next_edge(
-        end_vertex, edge_process_angle, edge_effect_cw, e_ptr,
-        &next_edge, &next_edge_angle, &next_edge_diff
-    );
-    
-    get_next_offset_effect_edge(
-        end_vertex, edge_process_angle, edge_effect_cw, e_ptr,
-        checker,
-        &next_eff_edge, &next_eff_edge_angle, &next_eff_edge_diff,
-        &next_eff_edge_base_effect_angle,
-        &next_eff_edge_effect_cw
-    );
-    
-    //Now either this end of the effect is drawn forward,
-    //or it's slanted inward to merge with another effect.
-    //In addition, we may need an elbow attached to this end or not.
-    bool effects_need_merge =
-        next_eff_edge && next_eff_edge_effect_cw != edge_effect_cw;
-    if(
-        effects_need_merge &&
-        next_eff_edge_diff < (TAU / 2.0f - 0.0001f)
-    ) {
-        //Next edge that casts an effect faces ours.
-        //Merge our effect with its effect.
-        //The effect's final point should be where they both intersect.
-        //The other effect's edge will do the same when it's its turn.
-        //The reason we're docking some values away from exactly 180 degrees
-        //is because floating point imperfections may make 180-degree edges
-        //attempt to be merged, and then the intersection algorithm fails.
-        float next_edge_base_effect_length = length_getter(next_eff_edge);
-        float mid_effect_length =
-            (base_effect_length + next_edge_base_effect_length) / 2.0f;
-            
-        get_edge_offset_intersection(
-            e_ptr, next_eff_edge, end_vertex,
-            base_effect_angle, next_eff_edge_base_effect_angle,
-            mid_effect_length, end_idx,
-            final_angle, final_length
-        );
-        
-        *final_color =
-            interpolate_color(
-                0.5, 0, 1,
-                *final_color,
-                color_getter(next_eff_edge)
-            );
-            
-    } else if(
-        next_eff_edge && next_eff_edge_effect_cw == edge_effect_cw &&
-        next_eff_edge_diff < TAU / 4.0f
-    ) {
-        //Next edge has an effect that goes in the same direction,
-        //and that edge imposes over our effect.
-        //As such, skew our effect inwards to align with that edge.
-        *final_angle = next_eff_edge_angle;
-        *final_length = base_effect_length / sin(next_eff_edge_diff);
-        
-    } else if(
-        !next_eff_edge
-    ) {
-        //There's nothing to connect to in any way, so we might as well shrink
-        //this end. Shrinking it to 0 will make effects of edges where there's
-        //nothing on both sides disappear, which may mislead the user. So
-        //instead just make it a fraction of the usual size.
-        *final_angle = base_effect_angle;
-        *final_length = base_effect_length / 5.0f;
-        
-    } else {
-        //We can draw our end of the effect forward without a care.
-        *final_angle = base_effect_angle;
-        *final_length = base_effect_length;
-        
-        if(next_eff_edge && next_eff_edge_effect_cw != edge_effect_cw) {
-            //On this end there is a neighboring effect we'll want to connect
-            //to. But because that neighboring effect is so far away in
-            //terms of angle, we'll need to implement an elbow between them
-            //so they can be connected. This edge will draw half of the elbow,
-            //and the other will draw its half when it's its turn.
-            float next_edge_base_effect_length =
-                length_getter(next_eff_edge);
-            float mid_effect_length =
-                (base_effect_length + next_edge_base_effect_length) / 2.0f;
-                
-            *final_length = mid_effect_length;
-            *final_elbow_length = mid_effect_length;
-            *final_elbow_angle =
-                end_idx == 0 ?
-                next_eff_edge_angle + get_angle_cw_dif(next_eff_edge_angle, edge_process_angle) / 2.0f :
-                edge_process_angle + get_angle_cw_dif(edge_process_angle, next_eff_edge_angle) / 2.0f;
-            *final_color =
-                interpolate_color(
-                    0.5, 0, 1,
-                    *final_color,
-                    color_getter(next_eff_edge)
-                );
-                
-        } else if(next_eff_edge && next_eff_edge_effect_cw == edge_effect_cw) {
-            //There is a neighboring edge that has the effect, but in
-            //the same direction as ours. As such, our effect will have
-            //to connect to that effect's edge so there's a snug fit.
-            //But because that neighboring effect is so far away in terms of
-            //angle, we'll need to implement an elbow between them so they
-            //can be connected. This edge will be in charge of drawing the full
-            //elbow.
-            *final_elbow_angle = next_eff_edge_angle;
-            *final_elbow_length = base_effect_length;
-        }
-        
-    }
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the point in which the far end of two edge offset effects intersect.
- * This calculation is only for the base "rectangle" shape of the effect,
- * and doesn't take into account any inward slants given on the ends, nor
- * does it care about elbows.
- * Normally, this would be the intersection point between the line segments
- * that make up both effects's rectangle ends, but there may be cases, explained
- * below, where that doesn't result in a real collision. In order for the
- * algorithm to always return something that at least can be worked with,
- * the intersection is calculated as if both effect ends were infinitely long
- * lines.
- * e1:
- *   First effect-casting edge. This is the main edge being processed.
- * e2:
- *   Second effect-casting edge.
- * common_vertex:
- *   The vertex shared between these two edges.
- * base_effect_angle1:
- *   The base angle at which edge 1's effect is projected.
- * base_effect_angle2:
- *   Same as base_effect_angle1, but for edge 2.
- * effect_length:
- *   Length of either effect.
- * end_idx:
- *   Index of the end being processed. 0 means that the sector that receives
- *   the effect is to the left, if you stand on end 0 and face end 1.
- * final_angle:
- *   The angle from the common vertex to the intersection point.
- * final_length:
- *   The length from the common vertex to the intersection point.
- */
-void get_edge_offset_intersection(
-    edge* e1, edge* e2, vertex* common_vertex,
-    const float base_effect_angle1, const float base_effect_angle2,
-    const float effect_length, const unsigned char end_idx,
-    float* final_angle, float* final_length
-) {
-    vertex* other_vertex1 = e1->get_other_vertex(common_vertex);
-    float base_cos1 = cos(base_effect_angle1);
-    float base_sin1 = sin(base_effect_angle1);
-    point effect1_p0(
-        common_vertex->x + base_cos1 * effect_length,
-        common_vertex->y + base_sin1 * effect_length
-    );
-    point effect1_p1(
-        other_vertex1->x + base_cos1 * effect_length,
-        other_vertex1->y + base_sin1 * effect_length
-    );
-    
-    vertex* other_vertex2 = e2->get_other_vertex(common_vertex);
-    float base_cos2 = cos(base_effect_angle2);
-    float base_sin2 = sin(base_effect_angle2);
-    point effect2_p0(
-        common_vertex->x + base_cos2 * effect_length,
-        common_vertex->y + base_sin2 * effect_length
-    );
-    point effect2_p1(
-        other_vertex2->x + base_cos2 * effect_length,
-        other_vertex2->y + base_sin2 * effect_length
-    );
-    
-    //Let's get where the lines intersect. We're checking the lines and
-    //not line segments, since there could be cases where an edge is so short
-    //that its base effect line starts and begins inside the other edge's
-    //base effect rectangle. This may cause some visual artifacts like
-    //triangles being drawn where they shouldn't, but for such a broken
-    //scenario, it's an acceptable solution.
-    float r;
-    if(
-        lines_intersect(
-            effect1_p0, effect1_p1,
-            effect2_p0, effect2_p1,
-            &r, NULL
-        )
-    ) {
-        //Clamp r to prevent long, close edges from
-        //creating jagged effects outside the edge.
-        r = clamp(r, 0.0f, 1.0f);
-        point p(
-            effect1_p0.x + (effect1_p1.x - effect1_p0.x) * r,
-            effect1_p0.y + (effect1_p1.y - effect1_p0.y) * r
-        );
-        coordinates_to_angle(
-            p - point(common_vertex->x, common_vertex->y),
-            final_angle, final_length
-        );
-    } else {
-        //Okay, they don't really intersect. This should never happen... Maybe
-        //a floating point imperfection? Oh well, let's go for a failsafe.
-        *final_angle = 0.0f;
-        *final_length = 0.0f;
     }
 }
 

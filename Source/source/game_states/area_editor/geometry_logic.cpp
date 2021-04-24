@@ -162,7 +162,9 @@ void area_editor::check_drawing_line(const point &pos) {
         point ep1(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y);
         point ep2(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
         
-        if(line_segments_are_collinear(prev_node->snapped_spot, pos, ep1, ep2)) {
+        if(
+            line_segments_are_collinear(prev_node->snapped_spot, pos, ep1, ep2)
+        ) {
             if(
                 collinear_lines_intersect(
                     prev_node->snapped_spot, pos, ep1, ep2

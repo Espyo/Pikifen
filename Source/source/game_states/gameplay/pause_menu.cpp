@@ -89,7 +89,7 @@ gameplay_state::pause_menu_struct::~pause_menu_struct() {
 
 /* ----------------------------------------------------------------------------
  * Ticks the pause menu by one frame.
- * time:
+ * delta_t:
  *   How many seconds to tick by.
  */
 void gameplay_state::pause_menu_struct::tick(const float delta_t) {

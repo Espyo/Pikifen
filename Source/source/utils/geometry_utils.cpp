@@ -10,8 +10,8 @@
  */
 
 #include <algorithm>
-#include <math.h>
 #include <cmath>
+#include <math.h>
 
 #include "geometry_utils.h"
 #include "math_utils.h"
@@ -877,18 +877,6 @@ bool is_point_in_triangle(
 
 
 /* ----------------------------------------------------------------------------
- * Converts linear distance to angular distance.
- * linear_dist:
- *   Linear distance.
- * radius:
- *   Radius of the circle.
- */
-float linear_dist_to_angular(const float linear_dist, const float radius) {
-    return 2 * atan(linear_dist / (2 * radius));
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns whether the two line segments are collinear.
  * a:
  *   Starting point of the first line segment.
@@ -905,6 +893,88 @@ bool line_segments_are_collinear(
     return
         points_are_collinear(a, b, c) &&
         points_are_collinear(a, b, d);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the two line segments intersect.
+ * l1p1:
+ *   Starting point of the first line segment.
+ * l1p2:
+ *   Ending point of the first line segment.
+ * l2p1:
+ *   Starting point of the second line segment.
+ * l2p2:
+ *   Ending point of the second line segment.
+ * final_l1r:
+ *   If not NULL and they intersect, returns the distance from
+ *   the start of line 1 in which the intersection happens.
+ *   This is a ratio, so 0 is the start, 1 is the end of the line.
+ * final_l2r:
+ *   Same as final_l1r, but for line 2.
+ */
+bool line_segments_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    float* final_l1r, float* final_l2r
+) {
+    float l1r = 0.0f;
+    float l2r = 0.0f;
+    bool result = lines_intersect(l1p1, l1p2, l2p1, l2p2, &l1r, &l2r);
+    
+    if(final_l1r) *final_l1r = l1r;
+    if(final_l2r) *final_l2r = l2r;
+    
+    if(result) {
+        //Return whether they intersect at the segments.
+        return
+            l1r >= 0 && l1r <= 1 &&
+            l2r >= 0 && l2r <= 1;
+    } else {
+        return false;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the two line segments intersect.
+ * l1p1:
+ *   Starting point of the first line segment.
+ * l1p2:
+ *   Ending point of the first line segment.
+ * l2p1:
+ *   Starting point of the second line segment.
+ * l2p2:
+ *   Ending point of the second line segment.
+ * intersection:
+ *   Return the intersection point here, if not NULL.
+ */
+bool line_segments_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    point* intersection
+) {
+    float r;
+    if(intersection) {
+        intersection->x = 0.0f;
+        intersection->y = 0.0f;
+    }
+    if(!line_segments_intersect(l1p1, l1p2, l2p1, l2p2, &r, NULL)) return false;
+    if(intersection) {
+        intersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
+        intersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts linear distance to angular distance.
+ * linear_dist:
+ *   Linear distance.
+ * radius:
+ *   Radius of the circle.
+ */
+float linear_dist_to_angular(const float linear_dist, const float radius) {
+    return 2 * atan(linear_dist / (2 * radius));
 }
 
 
@@ -1005,76 +1075,6 @@ bool lines_intersect(
         final_point->y = l1p1.y + (l1p2.y - l1p1.y) * r;
     }
     
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether the two line segments intersect.
- * l1p1:
- *   Starting point of the first line segment.
- * l1p2:
- *   Ending point of the first line segment.
- * l2p1:
- *   Starting point of the second line segment.
- * l2p2:
- *   Ending point of the second line segment.
- * final_l1r:
- *   If not NULL and they intersect, returns the distance from
- *   the start of line 1 in which the intersection happens.
- *   This is a ratio, so 0 is the start, 1 is the end of the line.
- * final_l2r:
- *   Same as final_l1r, but for line 2.
- */
-bool line_segments_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    float* final_l1r, float* final_l2r
-) {
-    float l1r = 0.0f;
-    float l2r = 0.0f;
-    bool result = lines_intersect(l1p1, l1p2, l2p1, l2p2, &l1r, &l2r);
-    
-    if(final_l1r) *final_l1r = l1r;
-    if(final_l2r) *final_l2r = l2r;
-    
-    if(result) {
-        //Return whether they intersect at the segments.
-        return
-            l1r >= 0 && l1r <= 1 &&
-            l2r >= 0 && l2r <= 1;
-    } else {
-        return false;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether the two line segments intersect.
- * l1p1:
- *   Starting point of the first line segment.
- * l1p2:
- *   Ending point of the first line segment.
- * l2p1:
- *   Starting point of the second line segment.
- * l2p2:
- *   Ending point of the second line segment.
- * intersection:
- *   Return the intersection point here, if not NULL.
- */
-bool line_segments_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    point* intersection
-) {
-    float r;
-    if(intersection) {
-        intersection->x = 0.0f;
-        intersection->y = 0.0f;
-    }
-    if(!line_segments_intersect(l1p1, l1p2, l2p1, l2p2, &r, NULL)) return false;
-    if(intersection) {
-        intersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
-        intersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
-    }
     return true;
 }
 

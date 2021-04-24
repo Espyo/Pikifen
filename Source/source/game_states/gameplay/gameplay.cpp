@@ -19,8 +19,8 @@
 #include "../../functions.h"
 #include "../../game.h"
 #include "../../load.h"
-#include "../../mobs/pile.h"
 #include "../../misc_structs.h"
+#include "../../mobs/pile.h"
 #include "../../utils/data_file.h"
 #include "../../utils/string_utils.h"
 
@@ -491,7 +491,8 @@ void gameplay_state::init_hud() {
                 break;
                 
             } default: {
-                standby_bmp = cur_leader_ptr->group->cur_standby_type->get_icon();
+                standby_bmp =
+                    cur_leader_ptr->group->cur_standby_type->get_icon();
                 break;
                 
             }

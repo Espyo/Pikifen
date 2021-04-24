@@ -34,6 +34,12 @@ const float gui_manager::AUTO_REPEAT_RAMP_TIME = 0.9f;
 
 /* ----------------------------------------------------------------------------
  * Creates a new button GUI item.
+ * text:
+ *   Text to display on the button.
+ * font:
+ *   Font for the button's text.
+ * color:
+ *   Color of the button's text.
  */
 button_gui_item::button_gui_item(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
@@ -54,6 +60,14 @@ button_gui_item::button_gui_item(
 
 /* ----------------------------------------------------------------------------
  * Creates a new checkbox GUI item.
+ * value:
+ *   Pointer to the boolean that stores the current checkmark value.
+ * text:
+ *   Text to display on the checkbox.
+ * font:
+ *   Font for the checkbox's text.
+ * color:
+ *   Color of the checkbox's text.
  */
 check_gui_item::check_gui_item(
     bool* value, const string &text, ALLEGRO_FONT* font,
@@ -109,6 +123,8 @@ check_gui_item::check_gui_item(
 
 /* ----------------------------------------------------------------------------
  * Creates a new GUI item.
+ * selectable:
+ *   Can the item be selected by the player?
  */
 gui_item::gui_item(const bool selectable) :
     visible(true),
@@ -131,6 +147,8 @@ gui_item::gui_item(const bool selectable) :
 
 /* ----------------------------------------------------------------------------
  * Adds a child item.
+ * item:
+ *   Item to add as a child item.
  */
 void gui_item::add_child(gui_item* item) {
     children.push_back(item);
@@ -205,6 +223,8 @@ point gui_item::get_real_size() {
 
 /* ----------------------------------------------------------------------------
  * Returns whether the mouse cursor is on top of it.
+ * cursor_pos:
+ *   Position of the mouse cursor, in screen coordinates.
  */
 bool gui_item::is_mouse_on(const point &cursor_pos) {
     if(parent && !parent->is_mouse_on(cursor_pos)) {
@@ -225,6 +245,8 @@ bool gui_item::is_mouse_on(const point &cursor_pos) {
 
 /* ----------------------------------------------------------------------------
  * Removes an item from the list of children.
+ * item:
+ *   Child item to remove.
  */
 void gui_item::remove_child(gui_item* item) {
     for(size_t c = 0; c < children.size(); ++c) {
@@ -696,6 +718,10 @@ void gui_manager::set_selected_item(gui_item* item) {
 
 /* ----------------------------------------------------------------------------
  * Starts an animation that affects all items.
+ * type:
+ *   Type of aniimation to start.
+ * duration:
+ *   Total duration of the animation.
  */
 void gui_manager::start_animation(
     const GUI_MANAGER_ANIMS type, const float duration
@@ -707,6 +733,8 @@ void gui_manager::start_animation(
 
 /* ----------------------------------------------------------------------------
  * Ticks all items on-screen by one frame of logic.
+ * delta_t:
+ *   Amount of time to tick by.
  */
 void gui_manager::tick(const float delta_t) {
     //Tick the animation.
@@ -808,6 +836,10 @@ list_gui_item::list_gui_item() :
 
 /* ----------------------------------------------------------------------------
  * Creates a new picker GUI item.
+ * base_text:
+ *   Text to display before the current option's name.
+ * option:
+ *   Text that matches the current option.
  */
 picker_gui_item::picker_gui_item(
     const string &base_text, const string &option
@@ -948,6 +980,14 @@ scroll_gui_item::scroll_gui_item() :
 
 /* ----------------------------------------------------------------------------
  * Creates a new text GUI item.
+ * text:
+ *   Text to display.
+ * font:
+ *   Font to use for the text.
+ * color:
+ *   Color to use for the text.
+ * flags:
+ *   Allegro text flags to use.
  */
 text_gui_item::text_gui_item(
     const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color,

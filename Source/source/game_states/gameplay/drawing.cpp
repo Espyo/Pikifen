@@ -13,8 +13,8 @@
 #include "gameplay.h"
 
 #include "../../drawing.h"
-#include "../../game.h"
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../mobs/group_task.h"
 #include "../../mobs/pile.h"
 #include "../../mobs/scale.h"
@@ -820,7 +820,8 @@ void gameplay_state::draw_message_box() {
             msg_box->speaker_icon,
             point(
                 40,
-                game.win_h - al_get_font_line_height(game.fonts.standard) * 4 - 16
+                game.win_h -
+                al_get_font_line_height(game.fonts.standard) * 4 - 16
             ),
             point(48, 48)
         );
@@ -828,7 +829,8 @@ void gameplay_state::draw_message_box() {
             bmp_bubble,
             point(
                 40,
-                game.win_h - al_get_font_line_height(game.fonts.standard) * 4 - 16
+                game.win_h -
+                al_get_font_line_height(game.fonts.standard) * 4 - 16
             ),
             point(64, 64)
         );
@@ -1056,10 +1058,10 @@ void gameplay_state::draw_tree_shadows() {
         draw_bitmap(
             s_ptr->bitmap,
             point(
-                s_ptr->center.x + TREE_SHADOW_SWAY_AMOUNT *
+                s_ptr->center.x + TREE_SHADOW_SWAY_AMOUNT*
                 sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
                 s_ptr->sway.x,
-                s_ptr->center.y + TREE_SHADOW_SWAY_AMOUNT *
+                s_ptr->center.y + TREE_SHADOW_SWAY_AMOUNT*
                 sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
                 s_ptr->sway.y
             ),

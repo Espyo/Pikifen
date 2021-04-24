@@ -224,6 +224,8 @@ void group_info_struct::change_standby_type_if_needed() {
 
 /* ----------------------------------------------------------------------------
  * Returns how many members of the given type exist in the group.
+ * type:
+ *   Type to check.
  */
 size_t group_info_struct::get_amount_by_type(mob_type* type) const {
     size_t amount = 0;
@@ -797,6 +799,8 @@ bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
 
 /* ----------------------------------------------------------------------------
  * Returns how many Pikmin of the given type exist inside.
+ * type:
+ *   Type to check.
  */
 size_t pikmin_nest_struct::get_amount_by_type(pikmin_type* type) {
     size_t amount = 0;
@@ -858,6 +862,8 @@ void pikmin_nest_struct::request_pikmin(
 /* ----------------------------------------------------------------------------
  * Stores the given Pikmin inside the nest. This basically deletes the
  * Pikmin and updates the amount inside the nest.
+ * p_ptr:
+ *   Pikmin to store.
  */
 void pikmin_nest_struct::store_pikmin(pikmin* p_ptr) {
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {

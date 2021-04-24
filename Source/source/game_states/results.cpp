@@ -11,8 +11,8 @@
 #include "results.h"
 
 #include "../drawing.h"
-#include "../game.h"
 #include "../functions.h"
+#include "../game.h"
 #include "../utils/string_utils.h"
 
 
@@ -283,7 +283,8 @@ void results_state::load() {
     //Points label text.
     text_gui_item* points_label_text =
         new text_gui_item(
-        "Treasure points:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
+        "Treasure points:", game.fonts.standard,
+        map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(points_label_text, "points_label");
     

@@ -26,6 +26,7 @@ using std::string;
 using std::unordered_set;
 using std::vector;
 
+
 //Radius to use when drawing a cross-section point.
 const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
 //A comfortable distance, useful for many scenarios.

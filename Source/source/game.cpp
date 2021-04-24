@@ -299,6 +299,8 @@ int game_class::start() {
  * Unloads a loaded state that never got to be unloaded. This should only
  * be the case if change_state was called with instructions to not
  * unload the previous one.
+ * loaded_state:
+ *   Loaded state to unload.
  */
 void game_class::unload_loaded_state(game_state* loaded_state) {
     loaded_state->unload();

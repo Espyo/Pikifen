@@ -16,8 +16,8 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../imgui/imgui_impl_allegro5.h"
-#include "../imgui/imgui_stdlib.h"
 #include "../imgui/imgui_internal.h"
+#include "../imgui/imgui_stdlib.h"
 #include "../load.h"
 #include "../mob_categories/mob_category.h"
 #include "../mob_types/mob_type.h"
@@ -1332,6 +1332,7 @@ void editor::unload() {
         bmp_editor_icons = NULL;
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Updates the Dear ImGui style based on the player's options.

@@ -867,6 +867,16 @@ void mob_action_runners::get_chomped(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the info obtaining mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_focus_info(mob_action_run_data &data) {
+    get_info_runner(data, data.m->focused_mob);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the focused mob var getting script action.
  * data:
  *   Data about the action call.
@@ -885,16 +895,6 @@ void mob_action_runners::get_focus_var(mob_action_run_data &data) {
  */
 void mob_action_runners::get_info(mob_action_run_data &data) {
     get_info_runner(data, data.m);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code for the info obtaining mob script action.
- * data:
- *   Data about the action call.
- */
-void mob_action_runners::get_focus_info(mob_action_run_data &data) {
-    get_info_runner(data, data.m->focused_mob);
 }
 
 

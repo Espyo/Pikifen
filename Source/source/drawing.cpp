@@ -13,11 +13,11 @@
 
 #include "drawing.h"
 
-#include "game_states/gameplay/gameplay.h"
 #include "animation.h"
 #include "const.h"
 #include "functions.h"
 #include "game.h"
+#include "game_states/gameplay/gameplay.h"
 #include "mobs/group_task.h"
 #include "mobs/pile.h"
 #include "mobs/scale.h"
@@ -1024,7 +1024,8 @@ void draw_loading_screen(
     //Draw the game's logo to the left of the "Loading..." text.
     if(opacity == 1.0f) {
         point icon_pos(
-            game.win_w - 8 - al_get_text_width(game.fonts.standard, "Loading...") -
+            game.win_w - 8 -
+            al_get_text_width(game.fonts.standard, "Loading...") -
             8 - al_get_font_line_height(game.fonts.standard) * 0.5,
             game.win_h - 8 - al_get_font_line_height(game.fonts.standard) * 0.5
         );
@@ -1172,35 +1173,6 @@ void draw_notification(
 
 
 /* ----------------------------------------------------------------------------
- * Draws a rounded rectangle.
- * This is basically Allegro's function, but safer and simpler.
- * center:
- *   Center.
- * size:
- *   Width and height.
- * radii:
- *   Radii of the corners. Will be smaller if the rectangle is too small.
- * color:
- *   Color the diamond with this color.
- * thickness:
- *   Line thickness.
- */
-void draw_rounded_rectangle(
-    const point &center, const point &size, const float radii,
-    const ALLEGRO_COLOR &color, const float thickness
-) {
-    float final_radii = std::min(radii, size.x / 2.0f);
-    final_radii = std::min(radii, size.y / 2.0f);
-    al_draw_rounded_rectangle(
-        center.x - size.x / 2.0f, center.y - size.y / 2.0f,
-        center.x + size.x / 2.0f, center.y + size.y / 2.0f,
-        final_radii, final_radii,
-        color, thickness
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws a rotated rectangle.
  * center:
  *   Center of the rectangle.
@@ -1231,6 +1203,35 @@ void draw_rotated_rectangle(
             color, thickness
         );
     }; al_use_transform(&old_transform);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a rounded rectangle.
+ * This is basically Allegro's function, but safer and simpler.
+ * center:
+ *   Center.
+ * size:
+ *   Width and height.
+ * radii:
+ *   Radii of the corners. Will be smaller if the rectangle is too small.
+ * color:
+ *   Color the diamond with this color.
+ * thickness:
+ *   Line thickness.
+ */
+void draw_rounded_rectangle(
+    const point &center, const point &size, const float radii,
+    const ALLEGRO_COLOR &color, const float thickness
+) {
+    float final_radii = std::min(radii, size.x / 2.0f);
+    final_radii = std::min(radii, size.y / 2.0f);
+    al_draw_rounded_rectangle(
+        center.x - size.x / 2.0f, center.y - size.y / 2.0f,
+        center.x + size.x / 2.0f, center.y + size.y / 2.0f,
+        final_radii, final_radii,
+        color, thickness
+    );
 }
 
 

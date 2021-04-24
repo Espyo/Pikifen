@@ -14,7 +14,7 @@ class Function:
     def is_const_or_dest(self):
         if self.namespace.split('::')[-1] == self.name:
             return True
-        if '~' + self.namespace == self.name:
+        if self.name.find('~') != -1:
             return True
         if re.match(r'.+ : .+', self.name) is not None:
             return True

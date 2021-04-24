@@ -10,9 +10,9 @@
 
 #include <algorithm>
 
-#include "../../game.h"
 #include "../../drawing.h"
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../utils/string_utils.h"
 #include "gameplay.h"
 
@@ -28,7 +28,7 @@ const float gameplay_state::onion_menu_struct::RED_TEXT_DURATION = 1.0f;
  * Creates an Onion menu struct.
  * n_ptr:
  *   Pointer to the nest information struct.
- * leader_ptr:
+ * l_ptr:
  *   Leader responsible.
  */
 gameplay_state::onion_menu_struct::onion_menu_struct(
@@ -560,7 +560,7 @@ void gameplay_state::onion_menu_struct::make_gui_item_red(gui_item* item) {
 
 /* ----------------------------------------------------------------------------
  * Ticks the Onion menu by one frame.
- * time:
+ * delta_t:
  *   How many seconds to tick by.
  */
 void gameplay_state::onion_menu_struct::tick(const float delta_t) {
@@ -752,8 +752,12 @@ void gameplay_state::onion_menu_struct::update() {
 
 
 /* ----------------------------------------------------------------------------
-* Creates an Onion menu Pikmin type struct.
-*/
+ * Creates an Onion menu Pikmin type struct.
+ * idx:
+ *   Index of the Pikmin type in the nest object.
+ * pik_type:
+ *   The Pikmin type.
+ */
 gameplay_state::onion_menu_type_struct::onion_menu_type_struct(
     const size_t idx, pikmin_type* pik_type
 ) :

@@ -22,6 +22,7 @@ using std::map;
 using std::string;
 using std::vector;
 
+
 /*
  * A generic class for an editor.
  * It comes with some common stuff, mostly GUI stuff.
