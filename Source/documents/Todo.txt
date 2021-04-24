@@ -7,9 +7,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
-    --- v0.20.0 ---
-    Remember to update the Pikmin Fanon wiki page link in the PNG files
-    
     --- v0.21.0 ---
     Object physics improvements
         Objects should move with acceleration
@@ -132,6 +129,7 @@ Next tasks (roughly sorted most important first)
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Kman's Adventure area (see #content-sharing)
     Update the manual's area editor screenshots
+    Remember to update the Pikmin Fanon wiki page link in the PNG files
     
     --- v0.23.0 ---
     Missing menus

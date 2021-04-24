@@ -230,10 +230,11 @@ Procedure for every version release
         Change version number in the code
             Use the helper tool, or edit const.h and Pikifen.rc
         Change version number of all areas
-        Pass all files through AStyle
-        Compile with -Wall and correct all problems
-        Use cppcheck on the code and correct the problems
-        Confirm that there are no superfluous #includes (how?)
+        Pass all code files through AStyle
+        If this is a big release:
+            Compile with -Wall and correct all problems
+            Use cppcheck on the code and correct the problems
+            Confirm that there are no superfluous #includes (how?)
         Confirm that no line goes over 80 characters
             Use the helper tool, or run:
                 grep -Enr --include="*.cpp" ^.\{81,\}$
@@ -244,6 +245,7 @@ Procedure for every version release
         Confirm that all functions have documentation, and that it has no missing/extra parameters
             Use the helper tool
         Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
+            Use the helper tool
         Fix up all changed images since the last release
             Use the helper tool to get the list, or run:
                 git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'
