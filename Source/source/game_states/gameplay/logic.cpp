@@ -574,6 +574,7 @@ void gameplay_state::do_menu_logic() {
             delete onion_menu;
             onion_menu = NULL;
             paused = false;
+            leader_movement.reset(); //TODO replace with a better solution.
         }
     } else if(pause_menu) {
         if(!pause_menu->to_delete) {
@@ -582,6 +583,7 @@ void gameplay_state::do_menu_logic() {
             delete pause_menu;
             pause_menu = NULL;
             paused = false;
+            leader_movement.reset(); //TODO replace with a better solution.
         }
     }
     
@@ -1456,6 +1458,7 @@ void gameplay_state::process_mob_touches(
                     hitbox_touch_haz_ev &&
                     !reported_haz_ev &&
                     !disable_attack_status &&
+                    h2_ptr->type == HITBOX_TYPE_NORMAL &&
                     h2_ptr->type == HITBOX_TYPE_ATTACK &&
                     !h2_ptr->hazards.empty()
                 ) {

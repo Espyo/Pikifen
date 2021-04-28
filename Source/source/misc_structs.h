@@ -326,9 +326,10 @@ struct movement_struct {
     float left;
     float down;
     
+    movement_struct();
     void get_raw_info(point* coords, float* angle, float* magnitude) const;
     void get_clean_info(point* coords, float* angle, float* magnitude) const;
-    movement_struct();
+    void reset();
 };
 
 

@@ -650,6 +650,7 @@ Tasks for later on (I might never implement these)
         Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
     Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/
+        Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
     Possible cleanup
         Timers
             Have a timer manager, so I don't have to remember to do a .tick() to every single one

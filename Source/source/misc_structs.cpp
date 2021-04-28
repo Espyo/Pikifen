@@ -681,6 +681,18 @@ void movement_struct::get_raw_info(
 
 
 /* ----------------------------------------------------------------------------
+ * Resets the information.
+ */
+void movement_struct::reset() {
+    right = 0.0f;
+    up = 0.0f;
+    left = 0.0f;
+    down = 0.0f;
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Creates a message box information struct.
  * text:
  *   Text to display.
