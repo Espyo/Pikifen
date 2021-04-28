@@ -132,8 +132,10 @@ struct chase_info_struct {
     bool free_move;
     //Distance from the target in which the mob is considered as being there.
     float target_dist;
-    //Speed to move towards the target at.
+    //Current speed to move towards the target at.
     float speed;
+    //Maximum speed.
+    float max_speed;
     //If true, the mob successfully reached its intended destination.
     bool reached_destination;
     

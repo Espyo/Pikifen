@@ -256,6 +256,9 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
             //Make it go to the direction it wants.
             float d = dist(pos, final_target_pos).to_float();
             
+            chase_info.speed += type->acceleration * delta_t;
+            chase_info.speed = std::min(chase_info.speed, chase_info.max_speed);
+            
             float move_amount =
                 std::min(
                     (double) (d / delta_t),
@@ -273,6 +276,9 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
             move_speed->x = cos(movement_angle) * move_amount;
             move_speed->y = sin(movement_angle) * move_amount;
         }
+        
+    } else {
+        chase_info.speed = 0.0f;
         
     }
     

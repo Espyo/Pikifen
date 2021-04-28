@@ -8,9 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.21.0 ---
-    Object physics improvements
-        Objects should move with acceleration
-        A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
     Cursor improvements
         The cursor should change to the standby color, and show the number of Pikmin of that type next to it
         When holding a Pikmin (or maybe just always?), a trajectory predictor line should appear
@@ -666,6 +663,8 @@ Tasks for later on (I might never implement these)
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard
     Suggestions that aren't really justifiable yet, but may be one day
         An action with which to change a mob's home
+        A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
+            You can just give the mob a status effect that changes its speed
     Questions to be answered later
         Change the logic of Pikmin chasing after opponents (pikmin_fsm::go_to_opponent, pikmin_fsm::rechase_opponent) to better suit rectangular objects?
         If P1's leader throws a mine at P2's leader, and it sticks on them, that leader will be *holding* the mine. This will probably break a lot of logic that assumes holding just refers to the pre-throw Pikmin hold

@@ -254,7 +254,7 @@ void group_task::tick_class_specifics(const float delta_t) {
     ) {
         //Being moved and movements can go through speed bonuses?
         //Let's update the speed.
-        chase_info.speed =
+        chase_info.max_speed =
             type->move_speed +
             (power - tas_type->power_goal) * tas_type->speed_bonus;
     }

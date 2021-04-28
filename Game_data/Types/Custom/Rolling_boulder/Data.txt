@@ -1,5 +1,6 @@
 name = Rolling boulder
 
+acceleration = 800
 appears_in_area_editor = false
 height = 64
 max_health = 100

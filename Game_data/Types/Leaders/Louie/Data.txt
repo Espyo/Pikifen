@@ -1,5 +1,6 @@
 name = Louie
 
+acceleration = 800
 dismiss_sfx = Louie_dismiss.ogg
 height = 46
 main_color = 64 192 255

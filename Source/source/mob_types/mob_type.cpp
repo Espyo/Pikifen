@@ -42,6 +42,7 @@ mob_type::mob_type(size_t category_id) :
     radius(0),
     height(0),
     move_speed(0),
+    acceleration(400),
     rotation_speed(DEF_ROTATION_SPEED),
     can_free_move(false),
     pushes(false),
@@ -285,6 +286,7 @@ void load_mob_type_from_file(
     data_node* hurtable_targets_node = NULL;
     data_node* team_node = NULL;
     
+    rs.set("acceleration", mt->acceleration);
     rs.set("area_editor_tips", mt->area_editor_tips, &area_editor_tips_node);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
     rs.set("blocks_carrier_pikmin", mt->blocks_carrier_pikmin);

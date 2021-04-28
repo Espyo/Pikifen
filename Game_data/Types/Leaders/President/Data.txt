@@ -1,5 +1,6 @@
 name = President
 
+acceleration = 800
 dismiss_sfx = President_dismiss.ogg
 height = 46
 main_color = 64 32 192

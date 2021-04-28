@@ -996,7 +996,7 @@ void mob::chase(
     this->chase_info.teleport_z = teleport_z;
     this->chase_info.free_move = free_move || type->can_free_move;
     this->chase_info.target_dist = target_distance;
-    this->chase_info.speed = (speed == -1 ? get_base_speed() : speed);
+    this->chase_info.max_speed = (speed == -1 ? get_base_speed() : speed);
     
     chase_info.is_chasing = true;
     chase_info.reached_destination = false;
@@ -2428,7 +2428,7 @@ void mob::tick_brain(const float delta_t) {
                         //All good. Head to the next stop.
                         chase(
                             path_info->path[path_info->cur_path_stop_nr]->pos,
-                            NULL, false, NULL, true, 3.0f, chase_info.speed
+                            NULL, false, NULL, true, 3.0f, chase_info.max_speed
                         );
                     }
                     
@@ -2440,7 +2440,7 @@ void mob::tick_brain(const float delta_t) {
                     chase(
                         path_info->target_point,
                         NULL, false, NULL, true,
-                        path_info->final_target_distance, chase_info.speed
+                        path_info->final_target_distance, chase_info.max_speed
                     );
                     
                 } else if(
@@ -2458,6 +2458,7 @@ void mob::tick_brain(const float delta_t) {
             if(chase_info.reached_destination) {
                 //Reached the final destination. Think about stopping.
                 chase_info.speed = 0;
+                chase_info.max_speed = 0;
                 fsm.run_event(MOB_EV_REACHED_DESTINATION);
             }
         }

@@ -1,5 +1,6 @@
 name = Whiptongue Bulborb
 
+acceleration = 150
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
 drops_corpse = true

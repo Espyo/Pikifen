@@ -159,7 +159,8 @@ chase_info_struct::chase_info_struct() :
     teleport(false),
     free_move(false),
     target_dist(0),
-    speed(-1),
+    speed(0),
+    max_speed(-1),
     reached_destination(false) {
     
 }

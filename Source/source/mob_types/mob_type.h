@@ -188,6 +188,8 @@ public:
     float height;
     //Moves these many units per second.
     float move_speed;
+    //Acceleration. This is in units per second per second.
+    float acceleration;
     //Rotates these many radians per second.
     float rotation_speed;
     //True if it can move in any direction, as opposed to just forward.

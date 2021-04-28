@@ -1,5 +1,6 @@
 name = Olimar
 
+acceleration = 800
 dismiss_sfx = Olimar_dismiss.ogg
 height = 46
 main_color = 255 64 64
