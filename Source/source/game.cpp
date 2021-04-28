@@ -176,6 +176,10 @@ void game_class::main_loop() {
             }
             break;
             
+        }  case ALLEGRO_EVENT_DISPLAY_SWITCH_IN: {
+            al_resize_display(game.display, game.win_w, game.win_h);
+            break;
+
         }
         }
     }
