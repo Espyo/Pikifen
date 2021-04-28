@@ -101,14 +101,6 @@ void area_menu_state::load() {
     //Areas.
     areas_to_pick = folder_to_vector(AREAS_FOLDER_PATH, true);
     
-    //If there's only one area, go there right away.
-    if(areas_to_pick.size() == 1) {
-        game.states.gameplay->area_to_load =
-            areas_to_pick[0];
-        game.change_state(game.states.gameplay);
-        return;
-    }
-    
     for(size_t a = 0; a < areas_to_pick.size(); ++a) {
         string actual_name = areas_to_pick[a];
         data_node data(AREAS_FOLDER_PATH + "/" + actual_name + "/Data.txt");
