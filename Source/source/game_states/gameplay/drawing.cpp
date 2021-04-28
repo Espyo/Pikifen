@@ -133,7 +133,15 @@ void gameplay_state::do_game_drawing(
     
     //Layer 7 -- Leader cursor.
     al_use_transform(&game.world_to_screen_transform);
-    draw_leader_cursor();
+    ALLEGRO_COLOR cursor_color;
+    if(closest_group_member) {
+        cursor_color = closest_group_member->type->main_color;
+    } else {
+        cursor_color = game.config.no_pikmin_color;
+    }
+    cursor_color =
+        change_color_lighting(cursor_color, cursor_height_diff_light);
+    draw_leader_cursor(cursor_color);
     
     //Layer 8 -- HUD.
     if(game.perf_mon) {
@@ -147,12 +155,7 @@ void gameplay_state::do_game_drawing(
     } else if(pause_menu) {
         draw_pause_menu();
     } else {
-        draw_mouse_cursor(
-            change_color_lighting(
-                cur_leader_ptr->lea_type->main_color,
-                cursor_height_diff_light
-            )
-        );
+        draw_mouse_cursor(cursor_color);
         hud.draw();
     }
     if(game.perf_mon) {
@@ -510,8 +513,10 @@ void gameplay_state::draw_ingame_text() {
 
 /* ----------------------------------------------------------------------------
  * Draws the leader's cursor and associated effects.
+ * color:
+ *   Color to tint it by.
  */
-void gameplay_state::draw_leader_cursor() {
+void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
 
     size_t n_arrows = swarm_arrows.size();
     for(size_t a = 0; a < n_arrows; ++a) {
@@ -635,7 +640,7 @@ void gameplay_state::draw_leader_cursor() {
         ),
         cursor_angle,
         change_color_lighting(
-            cur_leader_ptr->lea_type->main_color,
+            color,
             cursor_height_diff_light
         )
     );
@@ -653,7 +658,7 @@ void gameplay_state::draw_leader_cursor() {
                 al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
             ),
             0,
-            change_alpha(cur_leader_ptr->lea_type->main_color, alpha)
+            change_alpha(color, alpha)
         );
     }
 }

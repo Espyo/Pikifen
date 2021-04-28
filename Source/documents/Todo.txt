@@ -2,12 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
-    
-Next tasks (roughly sorted most important first)
-    --- To fix ---
-    
-    --- v0.21.0 ---
     Cursor improvements
         The cursor should change to the standby color, and show the number of Pikmin of that type next to it
         When holding a Pikmin (or maybe just always?), a trajectory predictor line should appear
@@ -21,6 +15,12 @@ Next tasks (roughly sorted most important first)
             Throwing: can be on cursor or distance-limited?
         An option to control the cursor's movement speed, when not using the mouse (thanks MonkeyUhOh)
         Show the number of Pikmin of the current type next to the cursor
+    Add the leader-movement-stop workaround when the window focus is lost
+    
+Next tasks (roughly sorted most important first)
+    --- To fix ---
+    
+    --- v0.21.0 ---
     Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
         Same for whistling and other controls you may need to mash/hold
     Minor editor improvements

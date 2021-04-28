@@ -28,8 +28,8 @@ using std::vector;
 struct game_config {
 
     static const bool DEF_CAN_THROW_LEADERS;
-    static const unsigned char DEF_CARRYING_COLOR_MOVE[3];
-    static const unsigned char DEF_CARRYING_COLOR_STOP[3];
+    static const ALLEGRO_COLOR DEF_CARRYING_COLOR_MOVE;
+    static const ALLEGRO_COLOR DEF_CARRYING_COLOR_STOP;
     static const float DEF_CARRYING_SPEED_BASE_MULT;
     static const float DEF_CARRYING_SPEED_MAX_MULT;
     static const float DEF_CARRYING_SPEED_WEIGHT_MULT;
@@ -45,6 +45,7 @@ struct game_config {
     static const size_t DEF_MAX_PIKMIN_IN_FIELD;
     static const float DEF_MESSAGE_CHAR_INTERVAL;
     static const float DEF_NEXT_PLUCK_RANGE;
+    static const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR;
     static const float DEF_ONION_OPEN_RANGE;
     static const float DEF_PIKMIN_CHASE_RANGE;
     static const float DEF_PLUCK_RANGE;
@@ -97,6 +98,8 @@ struct game_config {
     string name;
     //How far a leader can go to auto-pluck the next Pikmin.
     float next_pluck_range;
+    //Color that represents the absence of Pikmin.
+    ALLEGRO_COLOR no_pikmin_color;
     //Onions can be opened if the leader is within this distance.
     float onion_open_range;
     //Pikmin will only chase enemies in this range.

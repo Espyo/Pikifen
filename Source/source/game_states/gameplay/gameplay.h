@@ -302,11 +302,11 @@ private:
     void do_gameplay_logic();
     void do_menu_logic();
     void draw_background(ALLEGRO_BITMAP* bmp_output);
-    void draw_leader_cursor();
-    void draw_mouse_cursor(const ALLEGRO_COLOR &color);
+    void draw_leader_cursor(const ALLEGRO_COLOR &color);
     void draw_ingame_text();
     void draw_lighting_filter();
     void draw_message_box();
+    void draw_mouse_cursor(const ALLEGRO_COLOR &color);
     void draw_onion_menu();
     void draw_pause_menu();
     void draw_precipitation();

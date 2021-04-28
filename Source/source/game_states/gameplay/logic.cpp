@@ -96,9 +96,9 @@ void gameplay_state::do_aesthetic_logic() {
         
     if(leader_cursor_sector) {
         cursor_height_diff_light =
-            (leader_cursor_sector->z - cur_leader_ptr->z) * 0.0033;
+            (leader_cursor_sector->z - cur_leader_ptr->z) * 0.001;
         cursor_height_diff_light =
-            clamp(cursor_height_diff_light, -0.33f, 0.33f);
+            clamp(cursor_height_diff_light, -0.1f, 0.1f);
     }
     
     //Whether the held Pikmin can reach the cursor.
