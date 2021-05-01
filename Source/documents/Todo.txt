@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Cursor improvements
-        The cursor should change to the standby color, and show the number of Pikmin of that type next to it
         When holding a Pikmin (or maybe just always?), a trajectory predictor line should appear
             It should in reality be two quadrilaterals: one funnel-shaped growing away from the leader, till halfway across the throw distance, then another that shrinks till the landing spot; this gives a pseudo height effect
             If a Pikmin/leader cannot reach on top of a ledge, the predictor should cut off at the wall; this is more intuitive than the cursor getting a cross that blinks

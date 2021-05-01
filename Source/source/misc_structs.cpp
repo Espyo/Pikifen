@@ -29,9 +29,10 @@ asset_file_names_struct::asset_file_names_struct() :
     area_name_font("Area_name_font.png"),
     bubble_box("Bubble_box.png"),
     checkbox_check("Checkbox_check.png"),
-    cursor("Cursor.png"),
-    cursor_invalid("Cursor_invalid.png"),
     counter_font("Counter_font.png"),
+    cursor("Cursor.png"),
+    cursor_counter_font("Cursor_counter_font.png"),
+    cursor_invalid("Cursor_invalid.png"),
     editor_icons("Editor_icons.png"),
     enemy_spirit("Enemy_spirit.png"),
     focus_box("Focus_box.png"),
@@ -74,9 +75,10 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("area_name_font", area_name_font);
     rs.set("bubble_box", bubble_box);
     rs.set("checkbox_check", checkbox_check);
-    rs.set("cursor", cursor);
-    rs.set("cursor_invalid", cursor_invalid);
     rs.set("counter_font", counter_font);
+    rs.set("cursor", cursor);
+    rs.set("cursor_counter_font", cursor_counter_font);
+    rs.set("cursor_invalid", cursor_invalid);
     rs.set("editor_icons", editor_icons);
     rs.set("enemy_spirit", enemy_spirit);
     rs.set("focus_box", focus_box);
@@ -444,6 +446,7 @@ font_list::font_list() :
     area_name(nullptr),
     builtin(nullptr),
     counter(nullptr),
+    cursor_counter(nullptr),
     standard(nullptr),
     value(nullptr) {
     

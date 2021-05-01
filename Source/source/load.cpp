@@ -747,6 +747,11 @@ void load_fonts() {
         0x0078, 0x0078, //Lowercase x
     };
     
+    const int JUST_NUMBERS_FONT_RANGES_SIZE = 2;
+    int just_numbers_font_ranges[JUST_NUMBERS_FONT_RANGES_SIZE] = {
+        0x0030, 0x0039, //0 to 9
+    };
+    
     const int VALUE_FONT_RANGES_SIZE = 6;
     int value_font_ranges[VALUE_FONT_RANGES_SIZE] = {
         0x0024, 0x0024, //Dollar sign
@@ -786,6 +791,17 @@ void load_fonts() {
             al_grab_font_from_bitmap(
                 temp_font_bmp,
                 COUNTER_FONT_RANGES_SIZE / 2, counter_font_ranges
+            );
+    }
+    al_destroy_bitmap(temp_font_bmp);
+    
+    //Cursor counter font.
+    temp_font_bmp = load_bmp(game.asset_file_names.cursor_counter_font);
+    if(temp_font_bmp) {
+        game.fonts.cursor_counter =
+            al_grab_font_from_bitmap(
+                temp_font_bmp,
+                JUST_NUMBERS_FONT_RANGES_SIZE / 2, just_numbers_font_ranges
             );
     }
     al_destroy_bitmap(temp_font_bmp);

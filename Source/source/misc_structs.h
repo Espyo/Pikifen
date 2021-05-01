@@ -42,9 +42,10 @@ struct asset_file_names_struct {
     string area_name_font;
     string bubble_box;
     string checkbox_check;
-    string cursor;
-    string cursor_invalid;
     string counter_font;
+    string cursor;
+    string cursor_counter_font;
+    string cursor_invalid;
     string editor_icons;
     string enemy_spirit;
     string focus_box;
@@ -261,6 +262,8 @@ struct font_list {
     ALLEGRO_FONT* builtin;
     //Font for HUD counters.
     ALLEGRO_FONT* counter;
+    //Counter displayed next to the cursor.
+    ALLEGRO_FONT* cursor_counter;
     //Font for standard text.
     ALLEGRO_FONT* standard;
     //Font for the carrying / money values.

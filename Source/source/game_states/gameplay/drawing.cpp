@@ -631,13 +631,13 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     }
     
     //Leader cursor.
+    int bmp_cursor_w = al_get_bitmap_width(game.sys_assets.bmp_cursor);
+    int bmp_cursor_h = al_get_bitmap_height(game.sys_assets.bmp_cursor);
+    
     draw_bitmap(
         game.sys_assets.bmp_cursor,
         leader_cursor_w,
-        point(
-            al_get_bitmap_width(game.sys_assets.bmp_cursor) * 0.5,
-            al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
-        ),
+        point(bmp_cursor_w * 0.5, bmp_cursor_h * 0.5),
         cursor_angle,
         change_color_lighting(
             color,
@@ -653,14 +653,48 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         draw_bitmap(
             game.sys_assets.bmp_cursor_invalid,
             leader_cursor_w,
-            point(
-                al_get_bitmap_width(game.sys_assets.bmp_cursor) * 0.5,
-                al_get_bitmap_height(game.sys_assets.bmp_cursor) * 0.5
-            ),
+            point(bmp_cursor_w * 0.5, bmp_cursor_h * 0.5),
             0,
             change_alpha(color, alpha)
         );
     }
+    
+    //Standby type count.
+    size_t n_standby_pikmin = 0;
+    if(cur_leader_ptr->group->cur_standby_type) {
+        for(
+            size_t m = 0; m < cur_leader_ptr->group->members.size();
+            ++m
+        ) {
+            mob* m_ptr = cur_leader_ptr->group->members[m];
+            if(
+                m_ptr->subgroup_type_ptr ==
+                cur_leader_ptr->group->cur_standby_type
+            ) {
+                n_standby_pikmin++;
+            }
+        }
+    }
+    
+    al_use_transform(&game.identity_transform);
+    
+    float count_offset =
+        std::max(bmp_cursor_w, bmp_cursor_h) * 0.18f * game.cam.zoom;
+        
+    if(n_standby_pikmin > 0) {
+        draw_scaled_text(
+            game.fonts.cursor_counter,
+            color,
+            leader_cursor_s +
+            point(count_offset, count_offset),
+            point(1.0f, 1.0f),
+            ALLEGRO_ALIGN_LEFT,
+            0,
+            i2s(n_standby_pikmin)
+        );
+    }
+    
+    al_use_transform(&game.world_to_screen_transform);
 }
 
 
