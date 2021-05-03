@@ -279,6 +279,10 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         process_system_key_press(ev.keyboard.keycode);
     }
+
+    if (ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
+        leader_movement.reset(); //TODO replace with a better solution.
+    }
     
     //Decode any inputs that result in gameplay actions.
     vector<action_from_event> actions = get_actions_from_event(ev);
