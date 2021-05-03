@@ -93,6 +93,12 @@ bool bbox_check(
     const point &tl1, const point &br1,
     const point &center2, const float r
 );
+void calculate_throw(
+    const point &start_xy, const float start_z,
+    const point &target_xy, const float target_z,
+    const float max_h, const float gravity,
+    point* req_speed_xy, float* req_speed_z, float* final_h_angle
+);
 bool circle_intersects_line(
     const point &circle, const float cr,
     const point &line_p1, const point &line_p2,

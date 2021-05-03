@@ -592,13 +592,13 @@ void gameplay_state::do_menu_logic() {
     //Process and print framerate and system info.
     if(game.show_system_info) {
     
-        //Make sure that speed changes don't affect the fps calculation
-        double corrected_delta = game.delta_t;
+        //Make sure that speed changes don't affect the FPS calculation.
+        double real_delta_t = game.delta_t;
         if (game.maker_tools.change_speed) {
-            corrected_delta /= game.maker_tools.change_speed_mult;
+            real_delta_t /= game.maker_tools.change_speed_mult;
         }
 
-        game.framerate_history.push_back(1.0f / corrected_delta);
+        game.framerate_history.push_back(1.0f / real_delta_t);
         if(game.framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
             game.framerate_history.erase(game.framerate_history.begin());
         }
@@ -647,7 +647,7 @@ void gameplay_state::do_menu_logic() {
         
         string fps_str =
             box_string(f2s(sample_avg), 12, " avg, ") +
-            box_string(f2s(1.0f / corrected_delta), 12, " now, ") +
+            box_string(f2s(1.0f / real_delta_t), 12, " now, ") +
             i2s(game.options.target_fps) + " intended";
         string n_mobs_str =
             box_string(i2s(mobs.all.size()), 7);

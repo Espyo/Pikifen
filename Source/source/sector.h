@@ -96,6 +96,9 @@ struct blockmap {
     blockmap();
     size_t get_col(const float x) const;
     size_t get_row(const float y) const;
+    bool get_edges_in_region(
+        const point &tl, const point &br, set<edge*> &edges
+    ) const;
     point get_top_left_corner(const size_t col, const size_t row) const;
     void clear();
 };

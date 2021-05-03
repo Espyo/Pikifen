@@ -113,10 +113,12 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     //is below the bouncer), and scales up with how much higher the thrown
     //mob needs to go, to make for a nice smooth arc.
     float max_h = std::max(128.0f, (target_mob->z - toucher->z) * 1.5f);
-    toucher->calculate_throw(
+    calculate_throw(
+        toucher->pos,
+        toucher->z,
         target_mob->pos,
         target_mob->z + target_mob->height,
-        max_h,
+        max_h, GRAVITY_ADDER,
         &toucher->speed,
         &toucher->speed_z,
         &angle

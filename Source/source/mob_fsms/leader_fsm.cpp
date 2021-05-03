@@ -1362,54 +1362,14 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->pos = leader_ptr->pos;
     holding_ptr->z = leader_ptr->z;
     
-    float angle;
-    float target_z;
-    if(game.states.gameplay->leader_cursor_mob) {
-        target_z =
-            game.states.gameplay->leader_cursor_mob->z +
-            game.states.gameplay->leader_cursor_mob->height;
-    } else if(game.states.gameplay->leader_cursor_sector) {
-        target_z = game.states.gameplay->leader_cursor_sector->z;
-    } else {
-        target_z = m->z;
-    }
+    holding_ptr->z_cap = leader_ptr->throwee_max_z;
     
-    float max_height;
-    switch (holding_ptr->type->category->id) {
-    case MOB_CATEGORY_PIKMIN: {
-        max_height = ((pikmin*) holding_ptr)->pik_type->max_throw_height;
-        break;
-    } case MOB_CATEGORY_LEADERS: {
-        max_height = ((leader*) holding_ptr)->lea_type->max_throw_height;
-        break;
-    } default: {
-        max_height = (target_z - leader_ptr->z) * 1.2f;
-        break;
-    }
-    }
-    
-    if(max_height < target_z) {
-        //Can't reach! Just do a convincing throw that is sure to fail.
-        //Limiting the "target" Z makes it so the horizontal velocity isn't
-        //so wild.
-        target_z = max_height * 0.75;
-    }
-    
-    holding_ptr->calculate_throw(
-        game.states.gameplay->leader_cursor_w,
-        target_z,
-        max_height,
-        &holding_ptr->speed,
-        &holding_ptr->speed_z,
-        &angle
-    );
-    
-    holding_ptr->z_cap = m->z + max_height;
-    
-    holding_ptr->angle = angle;
-    holding_ptr->angle_cos = cos(angle);
-    holding_ptr->angle_sin = sin(angle);
-    holding_ptr->face(angle, NULL);
+    holding_ptr->angle = leader_ptr->throwee_angle;
+    holding_ptr->angle_cos = cos(leader_ptr->throwee_angle);
+    holding_ptr->angle_sin = sin(leader_ptr->throwee_angle);
+    holding_ptr->face(leader_ptr->throwee_angle, NULL);
+    holding_ptr->speed = leader_ptr->throwee_speed;
+    holding_ptr->speed_z = leader_ptr->throwee_speed_z;
     
     holding_ptr->was_thrown = true;
     holding_ptr->leave_group();

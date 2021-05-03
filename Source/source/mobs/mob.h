@@ -232,7 +232,7 @@ public:
     float health_wheel_smoothed_ratio;
     //Current health wheel alpha. Moves to 0 when health <= 0.
     float health_wheel_alpha;
-
+    
     //Other properties.
     //Incremental ID. Used for minor things.
     size_t id;
@@ -306,10 +306,6 @@ public:
     void calculate_knockback(
         mob* victim, hitbox* attack_h,
         hitbox* victim_h, float* knockback, float* angle
-    ) const;
-    void calculate_throw(
-        const point &target_xy, const float target_z, const float max_h,
-        point* req_speed_xy, float* req_speed_z, float* final_h_angle
     ) const;
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void chomp(mob* m, hitbox* hitbox_info);

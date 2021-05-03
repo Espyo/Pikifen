@@ -34,7 +34,11 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     auto_plucking(false),
     pluck_target(nullptr),
     queued_pluck_cancel(false),
-    is_in_walking_anim(false) {
+    is_in_walking_anim(false),
+    throwee(nullptr),
+    throwee_angle(0.0f),
+    throwee_max_z(0.0f),
+    throwee_speed_z(0.0f) {
     
     team = MOB_TEAM_PLAYER_1;
     invuln_period = timer(LEADER_INVULN_PERIOD);
@@ -689,6 +693,77 @@ void leader::tick_class_specifics(const float delta_t) {
             group->members[0]->leave_group();
         }
     }
+    
+    //Update throw physics things.
+    update_throw_variables();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates variables related to how the leader's throw would go.
+ */
+void leader::update_throw_variables() {
+    throwee = NULL;
+    if(!holding.empty()) {
+        throwee = holding[0];
+    } else if(game.states.gameplay->cur_leader_ptr == this) {
+        throwee = game.states.gameplay->closest_group_member;
+    }
+    
+    if(!throwee) {
+        throwee_angle = 0.0f;
+        throwee_max_z = 0.0f;
+        throwee_speed.x = 0.0f;
+        throwee_speed.y = 0.0f;
+        throwee_speed_z = 0.0f;
+        return;
+    }
+    
+    float target_z;
+    if(game.states.gameplay->leader_cursor_mob) {
+        target_z =
+            game.states.gameplay->leader_cursor_mob->z +
+            game.states.gameplay->leader_cursor_mob->height;
+    } else if(game.states.gameplay->leader_cursor_sector) {
+        target_z = game.states.gameplay->leader_cursor_sector->z;
+    } else {
+        target_z = z;
+    }
+    
+    float max_height;
+    switch (throwee->type->category->id) {
+    case MOB_CATEGORY_PIKMIN: {
+        max_height = ((pikmin*) throwee)->pik_type->max_throw_height;
+        break;
+    } case MOB_CATEGORY_LEADERS: {
+        max_height = ((leader*) throwee)->lea_type->max_throw_height;
+        break;
+    } default: {
+        max_height = std::max(128.0f, (target_z - z) * 1.2f);
+        break;
+    }
+    }
+    
+    if(max_height < (target_z - z)) {
+        //Can't reach! Just do a convincing throw that is sure to fail.
+        //Limiting the "target" Z makes it so the horizontal velocity isn't
+        //so wild.
+        target_z = z + max_height * 0.75;
+    }
+    
+    throwee_max_z = z + max_height;
+    
+    calculate_throw(
+        pos,
+        z,
+        game.states.gameplay->leader_cursor_w,
+        target_z,
+        max_height,
+        GRAVITY_ADDER,
+        &throwee_speed,
+        &throwee_speed_z,
+        &throwee_angle
+    );
 }
 
 

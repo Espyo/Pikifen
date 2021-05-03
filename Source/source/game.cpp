@@ -177,9 +177,11 @@ void game_class::main_loop() {
             break;
             
         }  case ALLEGRO_EVENT_DISPLAY_SWITCH_IN: {
+            //On Windows, when you tab out then back in, sometimes you'd see
+            //weird artifacts. This workaround fixes it.
             al_resize_display(game.display, game.win_w, game.win_h);
             break;
-
+            
         }
         }
     }

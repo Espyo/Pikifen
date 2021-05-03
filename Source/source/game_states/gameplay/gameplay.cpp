@@ -279,7 +279,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         process_system_key_press(ev.keyboard.keycode);
     }
-
+    
     if (ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
         leader_movement.reset(); //TODO replace with a better solution.
     }
@@ -1082,6 +1082,7 @@ void gameplay_state::load() {
     cursor_save_timer.start();
     
     cur_leader_ptr->stop_whistling();
+    update_closest_group_member();
     
     day_minutes = game.config.day_minutes_start;
     area_time_passed = 0.0f;
@@ -1376,6 +1377,11 @@ void gameplay_state::update_closest_group_member() {
             }
         }
         
+    }
+    
+    if(!game.states.gameplay->closest_group_member) {
+        game.states.gameplay->closest_group_member_distant = false;
+        return;
     }
     
     if(

@@ -1017,6 +1017,49 @@ void blockmap::clear() {
 
 
 /* ----------------------------------------------------------------------------
+ * Obtains a list of edges that are within the specified rectangular region.
+ * Returns true on success, false on error.
+ * tl:
+ *   Top-left coordinates of the region.
+ * br:
+ *   Bottom-right coordinates of the region.
+ * edges:
+ *   Set to fill the edges into.
+ */
+bool blockmap::get_edges_in_region(
+    const point &tl, const point &br, set<edge*> &edges
+) const {
+
+    size_t bx1 = game.cur_area_data.bmap.get_col(tl.x);
+    size_t bx2 = game.cur_area_data.bmap.get_col(br.x);
+    size_t by1 = game.cur_area_data.bmap.get_row(tl.y);
+    size_t by2 = game.cur_area_data.bmap.get_row(br.y);
+    
+    if(
+        bx1 == INVALID || bx2 == INVALID ||
+        by1 == INVALID || by2 == INVALID
+    ) {
+        //Out of bounds.
+        return false;
+    }
+    
+    for(size_t bx = bx1; bx <= bx2; ++bx) {
+        for(size_t by = by1; by <= by2; ++by) {
+        
+            vector<edge*> &block_edges =
+                game.cur_area_data.bmap.edges[bx][by];
+                
+            for(size_t e = 0; e < block_edges.size(); ++e) {
+                edges.insert(block_edges[e]);
+            }
+        }
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the block column in which an X coordinate is contained.
  * Returns INVALID on error.
  * x:

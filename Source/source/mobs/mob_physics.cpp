@@ -99,31 +99,17 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
     //the edges in the same blocks the mob is on.
     //This way, we won't check for edges that are really far away.
     //Use the bounding box to know which blockmap blocks the mob will be on.
-    size_t bx1 = game.cur_area_data.bmap.get_col(new_pos.x - type->radius);
-    size_t bx2 = game.cur_area_data.bmap.get_col(new_pos.x + type->radius);
-    size_t by1 = game.cur_area_data.bmap.get_row(new_pos.y - type->radius);
-    size_t by2 = game.cur_area_data.bmap.get_row(new_pos.y + type->radius);
+    set<edge*> candidate_edges;
     
     if(
-        bx1 == INVALID || bx2 == INVALID ||
-        by1 == INVALID || by2 == INVALID
+        !game.cur_area_data.bmap.get_edges_in_region(
+            new_pos - type->radius,
+            new_pos + type->radius,
+            candidate_edges
+        )
     ) {
         //Somehow out of bounds. No movement.
         return H_MOVE_FAIL;
-    }
-    
-    set<edge*> candidate_edges;
-    
-    //Go through the blocks, and get a list of all edges to check against.
-    for(size_t bx = bx1; bx <= bx2; ++bx) {
-        for(size_t by = by1; by <= by2; ++by) {
-        
-            vector<edge*>* edges = &game.cur_area_data.bmap.edges[bx][by];
-            
-            for(size_t e = 0; e < edges->size(); ++e) {
-                candidate_edges.insert(edges->operator[](e));
-            }
-        }
     }
     
     //Go through each edge, and figure out if it is a valid wall for our mob.

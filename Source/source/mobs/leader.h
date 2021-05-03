@@ -41,6 +41,16 @@ public:
     bool queued_pluck_cancel;
     //Is the leader currently in the walking animation?
     bool is_in_walking_anim;
+    //Provided there's a throw, this is the mob to throw.
+    mob* throwee;
+    //Provided there's a throw, this is the angle.
+    float throwee_angle;
+    //Provided there's a throw, this is the max Z.
+    float throwee_max_z;
+    //Provided there's a throw, this is the horizontal speed.
+    point throwee_speed;
+    //Provided there's a throw, this is the vertical speed.
+    float throwee_speed_z;
     
     //Dismiss current group.
     void dismiss();
@@ -76,6 +86,8 @@ protected:
 private:
     //Returns how many rows are needed for all members' dismissal.
     size_t get_dismiss_rows(const size_t n_members) const;
+    //Update variables related to how the leader's throw would go.
+    void update_throw_variables();
 };
 
 
