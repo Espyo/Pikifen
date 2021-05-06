@@ -291,8 +291,6 @@ private:
     bool swarm_cursor;
     //Reach of player 1's swarm.
     movement_struct swarm_movement;
-    //Is it possible for the currently held Pikmin to reach the cursor?
-    bool throw_can_reach_cursor;
     
     void do_aesthetic_logic();
     void do_game_drawing(
@@ -340,7 +338,6 @@ private:
     
     static const float AREA_INTRO_HUD_MOVE_TIME;
     static const float AREA_TITLE_FADE_DURATION;
-    static const float CURSOR_INVALID_EFFECT_SPEED;
     static const float CURSOR_SAVE_INTERVAL;
     static const string HUD_FILE_NAME;
     static const size_t ONION_MENU_TYPES_PER_PAGE;

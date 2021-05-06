@@ -101,39 +101,6 @@ void gameplay_state::do_aesthetic_logic() {
             clamp(cursor_height_diff_light, -0.1f, 0.1f);
     }
     
-    //Whether the held Pikmin can reach the cursor.
-    throw_can_reach_cursor = true;
-    if(!cur_leader_ptr->holding.empty()) {
-        mob* held_mob = cur_leader_ptr->holding[0];
-        
-        if(
-            !leader_cursor_sector ||
-            leader_cursor_sector->type == SECTOR_TYPE_BLOCKING
-        ) {
-            throw_can_reach_cursor = false;
-            
-        } else {
-            float max_throw_z = 0;
-            size_t cat = held_mob->type->category->id;
-            switch(cat) {
-            case MOB_CATEGORY_PIKMIN: {
-                max_throw_z =
-                    ((pikmin*) held_mob)->pik_type->max_throw_height;
-                break;
-            } case MOB_CATEGORY_LEADERS: {
-                max_throw_z =
-                    ((leader*) held_mob)->lea_type->max_throw_height;
-                break;
-            }
-            }
-            
-            if(max_throw_z > 0) {
-                throw_can_reach_cursor =
-                    leader_cursor_sector->z <= cur_leader_ptr->z + max_throw_z;
-            }
-        }
-    }
-    
     
     //Specific animations.
     game.sys_assets.spark_animation.instance.tick(game.delta_t);
@@ -597,7 +564,7 @@ void gameplay_state::do_menu_logic() {
         if (game.maker_tools.change_speed) {
             real_delta_t /= game.maker_tools.change_speed_mult;
         }
-
+        
         game.framerate_history.push_back(1.0f / real_delta_t);
         if(game.framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
             game.framerate_history.erase(game.framerate_history.begin());

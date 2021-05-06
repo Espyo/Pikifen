@@ -146,7 +146,9 @@ unsigned char get_throw_preview_vertexes(
     ALLEGRO_VERTEX* vertexes,
     const float start, const float end,
     const point &leader_pos, const point &cursor_pos,
-    const ALLEGRO_COLOR &color
+    const ALLEGRO_COLOR &color,
+    const float u_offset, const float u_scale,
+    const bool vary_thickness
 );
 map<string, string> get_var_map(const string &vars_string);
 ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr);

@@ -14,11 +14,34 @@
    id="svg5505"
    version="1.1"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="HUD.svg">
+   sodipodi:docname="HUD.svg"
+   inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Source/documents/Vectorial graphics/HUD.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <title
      id="title1148">HUD spritesheet</title>
   <defs
      id="defs5507">
+    <linearGradient
+       inkscape:collect="always"
+       id="throw_preview">
+      <stop
+         style="stop-color:#cccccc;stop-opacity:0.80000001"
+         offset="0"
+         id="stop1694" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0.03125"
+         id="stop1704" />
+      <stop
+         style="stop-color:#cccccc;stop-opacity:0.80000001"
+         offset="0.0625"
+         id="stop1702" />
+      <stop
+         style="stop-color:#cccccc;stop-opacity:0.80000001"
+         offset="1"
+         id="stop1696" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient4665">
@@ -1299,6 +1322,29 @@
          stdDeviation="0.95512412"
          inkscape:collect="always" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1606"
+       x="-0.040451484"
+       width="1.080903"
+       y="-0.040450798"
+       height="1.0809016">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.53934119"
+         id="feGaussianBlur1608" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#throw_preview"
+       id="linearGradient1700"
+       x1="150"
+       y1="1040"
+       x2="166"
+       y2="1040"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2,0,0,2,-150,-1064)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1307,9 +1353,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="74.137781"
-     inkscape:cy="1178.7054"
+     inkscape:zoom="22.627417"
+     inkscape:cx="160.22614"
+     inkscape:cy="1017.3355"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -1378,7 +1424,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Grid"
-     style="display:none">
+     style="display:inline">
     <rect
        style="fill:#000000;fill-opacity:1;stroke:none"
        id="rect4269"
@@ -1447,6 +1493,16 @@
        width="128"
        id="rect1195"
        style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.99296;stroke-miterlimit:10;paint-order:markers stroke fill;stop-color:#000000" />
+    <rect
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.999997;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       id="rect1614"
+       width="16"
+       height="16"
+       x="150"
+       y="1050"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cursor_dashed_line.png"
+       inkscape:export-xdpi="96.004028"
+       inkscape:export-ydpi="96.004028" />
   </g>
   <g
      inkscape:label="Sprites"
@@ -3030,24 +3086,6 @@
        id="path5745-2"
        sodipodi:nodetypes="cccccccccccccccccccccccccsccccccccccccccccsccccccccccccccccc" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff9999;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 102.52525,1014.8369 35,35"
-       id="path4855"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/Cursor_invalid.png"
-       inkscape:export-xdpi="192"
-       inkscape:export-ydpi="192" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff9999;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 137.52525,1014.8369 -35,35"
-       id="path4855-7"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/Cursor_invalid.png"
-       inkscape:export-xdpi="192"
-       inkscape:export-ydpi="192" />
-    <path
        style="opacity:1;fill:url(#linearGradient4210-3);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 1.5,881.36218 h 4 l 5.5,-12 -5.5,-12 h -4 l 5.5,12 z"
        id="path5645-5"
@@ -3259,5 +3297,38 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        sodipodi:nodetypes="sssccczssssss" />
+    <g
+       id="g1612"
+       transform="matrix(0.92513319,0,0,0.92511872,8.6838635,76.078946)"
+       style="stroke-width:1.08094"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Cursor_invalid.png"
+       inkscape:export-xdpi="96.004028"
+       inkscape:export-ydpi="96.004028">
+      <path
+         id="path4855"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.08094;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1606);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+         d="m 102.46875,1000 a 2.5,2.5 0 0 0 -1.73633,0.7324 2.5,2.5 0 0 0 0,3.5352 l 11.73242,11.7324 -11.73242,11.7324 a 2.5,2.5 0 0 0 0,3.5352 2.5,2.5 0 0 0 3.53516,0 L 116,1019.5352 l 11.73242,11.7324 a 2.5,2.5 0 0 0 3.53516,0 2.5,2.5 0 0 0 0,-3.5352 L 119.53516,1016 l 11.73242,-11.7324 a 2.5,2.5 0 0 0 0,-3.5352 2.5,2.5 0 0 0 -1.79883,-0.7324 2.5,2.5 0 0 0 -1.73633,0.7324 L 116,1012.4648 104.26758,1000.7324 A 2.5,2.5 0 0 0 102.46875,1000 Z" />
+      <path
+         id="path1222"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#e5e5e5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.08094;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+         d="m 102.44141,1001 a 1.499995,1.499995 0 0 0 -1.00196,0.4395 1.499995,1.499995 0 0 0 0,2.121 l 12.43946,12.4395 -12.43946,12.4395 a 1.499995,1.499995 0 0 0 0,2.121 1.499995,1.499995 0 0 0 2.1211,0 L 116,1018.1211 l 12.43945,12.4394 a 1.499995,1.499995 0 0 0 2.1211,0 1.499995,1.499995 0 0 0 0,-2.121 L 118.12109,1016 l 12.43946,-12.4395 a 1.499995,1.499995 0 0 0 0,-2.121 1.499995,1.499995 0 0 0 -1.01563,-0.4395 1.499995,1.499995 0 0 0 -1.10547,0.4395 L 116,1013.8789 103.56055,1001.4395 a 1.499995,1.499995 0 0 0 -1.01563,-0.4395 1.499995,1.499995 0 0 0 -0.10351,0 z" />
+    </g>
+    <rect
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.999997;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       id="rect1644"
+       width="8"
+       height="16"
+       x="150"
+       y="1050" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#linearGradient1700);fill-opacity:1;stroke:none;stroke-width:0.999997;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect1614-7"
+       width="32"
+       height="32"
+       x="150"
+       y="1000"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Throw_preview.png"
+       inkscape:export-xdpi="96.004028"
+       inkscape:export-ydpi="96.004028" />
   </g>
 </svg>

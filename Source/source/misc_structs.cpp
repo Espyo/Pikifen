@@ -32,7 +32,6 @@ asset_file_names_struct::asset_file_names_struct() :
     counter_font("Counter_font.png"),
     cursor("Cursor.png"),
     cursor_counter_font("Cursor_counter_font.png"),
-    cursor_invalid("Cursor_invalid.png"),
     editor_icons("Editor_icons.png"),
     enemy_spirit("Enemy_spirit.png"),
     focus_box("Focus_box.png"),
@@ -54,6 +53,9 @@ asset_file_names_struct::asset_file_names_struct() :
     sparkle("Sparkle.png"),
     spotlight("Spotlight.png"),
     swarm_arrow("Swarm_arrow.png"),
+    throw_invalid("Throw_invalid.png"),
+    throw_preview("Throw_preview.png"),
+    throw_preview_dashed("Throw_preview_dashed.png"),
     value_font("Value_font.png"),
     wave_ring("Wave_ring.png") {
     
@@ -78,7 +80,6 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("counter_font", counter_font);
     rs.set("cursor", cursor);
     rs.set("cursor_counter_font", cursor_counter_font);
-    rs.set("cursor_invalid", cursor_invalid);
     rs.set("editor_icons", editor_icons);
     rs.set("enemy_spirit", enemy_spirit);
     rs.set("focus_box", focus_box);
@@ -99,6 +100,9 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("sparkle", sparkle);
     rs.set("spotlight", spotlight);
     rs.set("swarm_arrow", swarm_arrow);
+    rs.set("throw_invalid", throw_invalid);
+    rs.set("throw_preview", throw_preview);
+    rs.set("throw_preview_dashed", throw_preview_dashed);
     rs.set("value_font", value_font);
     rs.set("wave_ring", wave_ring);
     
@@ -1712,7 +1716,6 @@ system_asset_list::system_asset_list():
     bmp_bubble_box(nullptr),
     bmp_checkbox_check(nullptr),
     bmp_cursor(nullptr),
-    bmp_cursor_invalid(nullptr),
     bmp_enemy_spirit(nullptr),
     bmp_focus_box(nullptr),
     bmp_icon(nullptr),
@@ -1731,6 +1734,9 @@ system_asset_list::system_asset_list():
     bmp_sparkle(nullptr),
     bmp_spotlight(nullptr),
     bmp_swarm_arrow(nullptr),
+    bmp_throw_invalid(nullptr),
+    bmp_throw_preview(nullptr),
+    bmp_throw_preview_dashed(nullptr),
     bmp_wave_ring(nullptr) {
     
     bmp_mouse_button_icon[0] = NULL;

@@ -1020,8 +1020,6 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.checkbox_check);
     game.sys_assets.bmp_cursor =
         game.bitmaps.get(game.asset_file_names.cursor);
-    game.sys_assets.bmp_cursor_invalid =
-        game.bitmaps.get(game.asset_file_names.cursor_invalid);
     game.sys_assets.bmp_enemy_spirit =
         game.bitmaps.get(game.asset_file_names.enemy_spirit);
     game.sys_assets.bmp_focus_box =
@@ -1056,6 +1054,12 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.spotlight);
     game.sys_assets.bmp_swarm_arrow =
         game.bitmaps.get(game.asset_file_names.swarm_arrow);
+    game.sys_assets.bmp_throw_invalid =
+        game.bitmaps.get(game.asset_file_names.throw_invalid);
+    game.sys_assets.bmp_throw_preview =
+        game.bitmaps.get(game.asset_file_names.throw_preview);
+    game.sys_assets.bmp_throw_preview_dashed =
+        game.bitmaps.get(game.asset_file_names.throw_preview_dashed);
     game.sys_assets.bmp_wave_ring =
         game.bitmaps.get(game.asset_file_names.wave_ring);
     for(unsigned char i = 0; i < 3; ++i) {
@@ -1614,7 +1618,6 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_bubble_box);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_check);
     game.bitmaps.detach(game.sys_assets.bmp_cursor);
-    game.bitmaps.detach(game.sys_assets.bmp_cursor_invalid);
     game.bitmaps.detach(game.sys_assets.bmp_enemy_spirit);
     game.bitmaps.detach(game.sys_assets.bmp_focus_box);
     game.bitmaps.detach(game.sys_assets.bmp_icon);
@@ -1633,6 +1636,9 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_sparkle);
     game.bitmaps.detach(game.sys_assets.bmp_spotlight);
     game.bitmaps.detach(game.sys_assets.bmp_swarm_arrow);
+    game.bitmaps.detach(game.sys_assets.bmp_throw_invalid);
+    game.bitmaps.detach(game.sys_assets.bmp_throw_preview);
+    game.bitmaps.detach(game.sys_assets.bmp_throw_preview_dashed);
     game.bitmaps.detach(game.sys_assets.bmp_wave_ring);
     for(unsigned char i = 0; i < 3; ++i) {
         game.bitmaps.detach(game.sys_assets.bmp_mouse_button_icon[i]);

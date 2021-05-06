@@ -29,8 +29,6 @@
 const float gameplay_state::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
 const float gameplay_state::AREA_TITLE_FADE_DURATION = 3.0f;
-//How fast the "invalid cursor" effect goes, per second.
-const float gameplay_state::CURSOR_INVALID_EFFECT_SPEED = TAU * 2;
 //Every X seconds, the cursor's position is saved, to create the trail effect.
 const float gameplay_state::CURSOR_SAVE_INTERVAL = 0.03f;
 //Path to the GUI information file.
@@ -93,8 +91,7 @@ gameplay_state::gameplay_state() :
     ready_for_input(false),
     selected_spray(0),
     swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
-    swarm_cursor(false),
-    throw_can_reach_cursor(true) {
+    swarm_cursor(false) {
     
     swarm_next_arrow_timer.on_end = [this] () {
         swarm_next_arrow_timer.start();

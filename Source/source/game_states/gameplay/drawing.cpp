@@ -645,20 +645,6 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         )
     );
     
-    if(!throw_can_reach_cursor) {
-        unsigned char alpha =
-            0 +
-            (sin(area_time_passed * CURSOR_INVALID_EFFECT_SPEED) + 1) * 127.0;
-            
-        draw_bitmap(
-            game.sys_assets.bmp_cursor_invalid,
-            leader_cursor_w,
-            point(bmp_cursor_w * 0.5, bmp_cursor_h * 0.5),
-            0,
-            change_alpha(color, alpha)
-        );
-    }
-    
     //Throw preview.
     draw_throw_preview();
     
@@ -1091,49 +1077,73 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
  * Draws a leader's throw preview.
  */
 void gameplay_state::draw_throw_preview() {
-    const unsigned char PREVIEW_OPACITY = 128;
+    const unsigned char PREVIEW_OPACITY = 160;
+    const unsigned char COLLISION_OPACITY = 192;
+    const float PREVIEW_TEXTURE_TIME_MULT = 20.0f;
+    const float PREVIEW_TEXTURE_SCALE = 20.0f;
     
-    if(!cur_leader_ptr->throwee) return;
+    ALLEGRO_VERTEX vertexes[16];
+    
+    if(!cur_leader_ptr->throwee) {
+        //Just draw a simple line and leave.
+        unsigned char n_vertexes =
+            get_throw_preview_vertexes(
+                vertexes, 0.0f, 1.0f,
+                cur_leader_ptr->pos, leader_cursor_w,
+                change_alpha(
+                    game.config.no_pikmin_color,
+                    PREVIEW_OPACITY / 2.0f
+                ),
+                0.0f, 1.0f, false
+            );
+            
+        for(unsigned char v = 0; v < n_vertexes; v += 4) {
+            al_draw_prim(
+                vertexes, NULL, NULL,
+                v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
+            );
+        }
+        
+        return;
+    }
     
     //Check which edges exist near the throw.
     set<edge*> candidate_edges;
     
-    if(
-        !game.cur_area_data.bmap.get_edges_in_region(
-            point(
-                std::min(cur_leader_ptr->pos.x, leader_cursor_w.x),
-                std::min(cur_leader_ptr->pos.y, leader_cursor_w.y)
-            ),
-            point(
-                std::max(cur_leader_ptr->pos.x, leader_cursor_w.x),
-                std::max(cur_leader_ptr->pos.y, leader_cursor_w.y)
-            ),
-            candidate_edges
-        )
-    ) {
-        //Out of bounds. Never mind.
-        return;
-    }
+    game.cur_area_data.bmap.get_edges_in_region(
+        point(
+            std::min(cur_leader_ptr->pos.x, leader_cursor_w.x),
+            std::min(cur_leader_ptr->pos.y, leader_cursor_w.y)
+        ),
+        point(
+            std::max(cur_leader_ptr->pos.x, leader_cursor_w.x),
+            std::max(cur_leader_ptr->pos.y, leader_cursor_w.y)
+        ),
+        candidate_edges
+    );
     
     float wall_collision_r = 2.0f;
     dist leader_to_cursor_dist(
         cur_leader_ptr->pos, leader_cursor_w
     );
-    float throw_angle;
-    float throw_speed;
-    
-    if(!candidate_edges.empty()) {
-        float throw_h_speed = 0.0f;
-        float dummy = 0.0f;
-        coordinates_to_angle(
-            cur_leader_ptr->throwee_speed, &dummy, &throw_h_speed
+    float throw_h_angle = 0.0f;
+    float throw_v_angle = 0.0f;
+    float throw_speed = 0.0f;
+    float throw_h_speed = 0.0f;
+    coordinates_to_angle(
+        cur_leader_ptr->throwee_speed, &throw_h_angle, &throw_h_speed
+    );
+    coordinates_to_angle(
+        point(throw_h_speed, cur_leader_ptr->throwee_speed_z),
+        &throw_v_angle, &throw_speed
+    );
+    float texture_offset =
+        fmod(
+            area_time_passed * PREVIEW_TEXTURE_TIME_MULT,
+            al_get_bitmap_width(game.sys_assets.bmp_throw_preview) *
+            PREVIEW_TEXTURE_SCALE
         );
-        coordinates_to_angle(
-            point(throw_h_speed, cur_leader_ptr->throwee_speed_z),
-            &throw_angle, &throw_speed
-        );
-    }
-    
+        
     //For each edge, check if it crosses the throw line.
     for(edge* e : candidate_edges) {
         if(!e->sectors[0] || !e->sectors[1]) {
@@ -1164,12 +1174,12 @@ void gameplay_state::draw_throw_preview() {
         float x_at_edge =
             leader_to_cursor_dist.to_float() * r;
         float y_at_edge =
-            tan(throw_angle) * x_at_edge -
+            tan(throw_v_angle) * x_at_edge -
             (
                 -GRAVITY_ADDER /
                 (
                     2 * throw_speed * throw_speed *
-                    cos(throw_angle) * cos(throw_angle)
+                    cos(throw_v_angle) * cos(throw_v_angle)
                 )
             ) * x_at_edge * x_at_edge;
             
@@ -1190,8 +1200,6 @@ void gameplay_state::draw_throw_preview() {
      *   collision, its trajectory is unpredictable.
      */
     
-    ALLEGRO_VERTEX vertexes[16];
-    
     if(wall_collision_r > 1.0f) {
         //No collision. Free throw.
         
@@ -1202,12 +1210,13 @@ void gameplay_state::draw_throw_preview() {
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,
                     PREVIEW_OPACITY
-                )
+                ),
+                texture_offset, PREVIEW_TEXTURE_SCALE, true
             );
             
         for(unsigned char v = 0; v < n_vertexes; v += 4) {
             al_draw_prim(
-                vertexes, NULL, NULL,
+                vertexes, NULL, game.sys_assets.bmp_throw_preview,
                 v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
             );
         }
@@ -1234,15 +1243,25 @@ void gameplay_state::draw_throw_preview() {
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
                         PREVIEW_OPACITY
-                    )
+                    ),
+                    texture_offset, PREVIEW_TEXTURE_SCALE, true
                 );
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, NULL, NULL,
+                    vertexes, NULL, game.sys_assets.bmp_throw_preview,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
+            
+            draw_bitmap(
+                game.sys_assets.bmp_throw_invalid,
+                collision_point, point(32, 32), throw_h_angle,
+                change_alpha(
+                    cur_leader_ptr->throwee->type->main_color,
+                    PREVIEW_OPACITY
+                )
+            );
             
         } else {
             //Trajectory is unknown after collision. Can theoretically reach.
@@ -1253,13 +1272,14 @@ void gameplay_state::draw_throw_preview() {
                     cur_leader_ptr->pos, leader_cursor_w,
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
-                        PREVIEW_OPACITY
-                    )
+                        COLLISION_OPACITY
+                    ),
+                    texture_offset, PREVIEW_TEXTURE_SCALE, true
                 );
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, NULL, NULL,
+                    vertexes, NULL, game.sys_assets.bmp_throw_preview,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
@@ -1270,16 +1290,26 @@ void gameplay_state::draw_throw_preview() {
                     cur_leader_ptr->pos, leader_cursor_w,
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
-                        PREVIEW_OPACITY / 2.0f
-                    )
+                        PREVIEW_OPACITY
+                    ),
+                    0.0f, 1.0f, true
                 );
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
                 al_draw_prim(
-                    vertexes, NULL, NULL,
+                    vertexes, NULL, game.sys_assets.bmp_throw_preview_dashed,
                     v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
+            
+            draw_bitmap(
+                game.sys_assets.bmp_throw_invalid,
+                collision_point, point(16, 16), throw_h_angle,
+                change_alpha(
+                    cur_leader_ptr->throwee->type->main_color,
+                    PREVIEW_OPACITY
+                )
+            );
             
         }
     }

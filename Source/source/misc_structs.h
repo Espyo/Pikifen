@@ -45,7 +45,6 @@ struct asset_file_names_struct {
     string counter_font;
     string cursor;
     string cursor_counter_font;
-    string cursor_invalid;
     string editor_icons;
     string enemy_spirit;
     string focus_box;
@@ -68,6 +67,9 @@ struct asset_file_names_struct {
     string sparkle;
     string spotlight;
     string swarm_arrow;
+    string throw_invalid;
+    string throw_preview;
+    string throw_preview_dashed;
     string value_font;
     string wave_ring;
     
@@ -468,7 +470,6 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_bubble_box;
     ALLEGRO_BITMAP* bmp_checkbox_check;
     ALLEGRO_BITMAP* bmp_cursor;
-    ALLEGRO_BITMAP* bmp_cursor_invalid;
     ALLEGRO_BITMAP* bmp_enemy_spirit;
     ALLEGRO_BITMAP* bmp_focus_box;
     ALLEGRO_BITMAP* bmp_icon;
@@ -488,6 +489,9 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_sparkle;
     ALLEGRO_BITMAP* bmp_spotlight;
     ALLEGRO_BITMAP* bmp_swarm_arrow;
+    ALLEGRO_BITMAP* bmp_throw_invalid;
+    ALLEGRO_BITMAP* bmp_throw_preview;
+    ALLEGRO_BITMAP* bmp_throw_preview_dashed;
     ALLEGRO_BITMAP* bmp_wave_ring;
     
     //Sound effects.

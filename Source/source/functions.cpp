@@ -729,33 +729,44 @@ float get_sun_strength() {
  *   Position of the cursor.
  * color:
  *   Color of the line.
+ * u_offset:
+ *   Offset the texture u by this much.
+ * u_scale:
+ *   Scale the texture u by this much.
+ * vary_thickness:
+ *   If true, thickness varies as the line goes forward. False makes it use the
+ *   same thickness (the minimal one) throughout.
  */
 unsigned char get_throw_preview_vertexes(
     ALLEGRO_VERTEX* vertexes,
     const float start, const float end,
     const point &leader_pos, const point &cursor_pos,
-    const ALLEGRO_COLOR &color
+    const ALLEGRO_COLOR &color,
+    const float u_offset, const float u_scale,
+    const bool vary_thickness
 ) {
     const float FADE_IN_RATIO = 0.30f;
     const float FADE_OUT_RATIO = 1.0f - FADE_IN_RATIO;
     const float MIN_THICKNESS = 2.0f;
-    const float MAX_THICKNESS = 8.0f;
+    const float DEF_MAX_THICKNESS = 8.0f;
     const float segment_points[] = {
         0.0f, FADE_IN_RATIO, 0.5f, FADE_OUT_RATIO, 1.0f
     };
+    
+    float max_thickness = vary_thickness ? DEF_MAX_THICKNESS : MIN_THICKNESS;
     
     float leader_to_cursor_dist = dist(leader_pos, cursor_pos).to_float();
     unsigned char cur_v = 0;
     
     auto get_thickness =
-        [MIN_THICKNESS, MAX_THICKNESS]
+        [MIN_THICKNESS, max_thickness]
     (float n) -> float {
         if(n >= 0.5f) {
             n = 1 - n;
         }
         return
         interpolate_number(
-            n, 0.0f, 0.5f, MIN_THICKNESS, MAX_THICKNESS
+            n, 0.0f, 0.5f, MIN_THICKNESS, max_thickness
         );
     };
     auto get_color =
@@ -807,19 +818,23 @@ unsigned char get_throw_preview_vertexes(
         cur_v++;
     }
     
-    //Rotate and move all points. For the sake of simplicity, up until now,
-    //they were assuming the throw is perfectly to the right (0 degrees),
-    //and that it starts on the world origin.
-    for(unsigned char v = 0; v < 16; ++v) {
+    //Final setup on all points.
+    for(unsigned char v = 0; v < cur_v; ++v) {
         point p(vertexes[v].x, vertexes[v].y);
+        
+        //Apply the texture UVs.
+        vertexes[v].u = vertexes[v].x / u_scale - u_offset;
+        vertexes[v].v = vertexes[v].y;
+        
+        //Rotate and move all points. For the sake of simplicity, up until now,
+        //they were assuming the throw is perfectly to the right (0 degrees),
+        //and that it starts on the world origin.
         p = rotate_point(p, get_angle(leader_pos, cursor_pos));
         p += leader_pos;
         vertexes[v].x = p.x;
         vertexes[v].y = p.y;
-    }
-    
-    //Final cleanup.
-    for(unsigned char v = 0; v < cur_v; ++v) {
+        
+        //Give Z a value.
         vertexes[v].z = 0.0f;
     }
     

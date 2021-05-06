@@ -4,17 +4,15 @@
 Current tasks (tasks being worked on, but not yet committed)
     Cursor improvements
         When holding a Pikmin (or maybe just always?), a trajectory predictor line should appear
-            It should in reality be two quadrilaterals: one funnel-shaped growing away from the leader, till halfway across the throw distance, then another that shrinks till the landing spot; this gives a pseudo height effect
-            If a Pikmin/leader cannot reach on top of a ledge, the predictor should cut off at the wall; this is more intuitive than the cursor getting a cross that blinks
-            The indicator should have a texture that's like a zebra-crossing, and the texture should animate by moving forward in the direction of the throw
             Make it detect collisions against other mobs, too
+                If the hitbox the cursor is on can be attacked, maybe mark it as a target. Otherwise, maybe ignore the mob?
+            Make it detect collisions against blocking sectors
         Maybe make it so that terrain too high for the current standby Pikmin type to reach receive a semi-opaque dark overlay?
         Game configurations for the cursor
             Leader cursor: unlimited or distance-limited?
             Whistling: can be on cursor or distance-limited?
             Throwing: can be on cursor or distance-limited?
         An option to control the cursor's movement speed, when not using the mouse (thanks MonkeyUhOh)
-        Show the number of Pikmin of the current type next to the cursor
     
     
 Next tasks (roughly sorted most important first)
