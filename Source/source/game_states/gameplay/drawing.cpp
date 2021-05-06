@@ -659,6 +659,9 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         );
     }
     
+    //Throw preview.
+    draw_throw_preview();
+    
     //Standby type count.
     size_t n_standby_pikmin = 0;
     if(cur_leader_ptr->group->cur_standby_type) {
@@ -1081,6 +1084,167 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     do_game_drawing(bmp, &t);
     
     return bmp;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a leader's throw preview.
+ */
+void gameplay_state::draw_throw_preview() {
+    if(!cur_leader_ptr->throwee) return;
+    
+    //Check which edges exist near the throw.
+    set<edge*> candidate_edges;
+    
+    if(
+        !game.cur_area_data.bmap.get_edges_in_region(
+            point(
+                std::min(cur_leader_ptr->pos.x, leader_cursor_w.x),
+                std::min(cur_leader_ptr->pos.y, leader_cursor_w.y)
+            ),
+            point(
+                std::max(cur_leader_ptr->pos.x, leader_cursor_w.x),
+                std::max(cur_leader_ptr->pos.y, leader_cursor_w.y)
+            ),
+            candidate_edges
+        )
+    ) {
+        //Out of bounds. Never mind.
+        return;
+    }
+    
+    float wall_collision_r = 2.0f;
+    dist leader_to_cursor_dist;
+    float throw_angle;
+    float throw_speed;
+    
+    if(!candidate_edges.empty()) {
+        leader_to_cursor_dist =
+            dist(
+                cur_leader_ptr->pos, leader_cursor_w
+            );
+        float throw_h_speed = 0.0f;
+        float dummy = 0.0f;
+        coordinates_to_angle(
+            cur_leader_ptr->throwee_speed, &dummy, &throw_h_speed
+        );
+        coordinates_to_angle(
+            point(throw_h_speed, cur_leader_ptr->throwee_speed_z),
+            &throw_angle, &throw_speed
+        );
+    }
+    
+    //For each edge, check if it crosses the throw line.
+    for(edge* e : candidate_edges) {
+        if(!e->sectors[0] || !e->sectors[1]) {
+            continue;
+        }
+        
+        if(e->sectors[0]->z == e->sectors[1]->z) {
+            //Edges where both sectors have the same height have no wall.
+            continue;
+        }
+        
+        float r = 0.0f;
+        if(
+            !line_segments_intersect(
+                cur_leader_ptr->pos,
+                leader_cursor_w,
+                point(e->vertexes[0]->x, e->vertexes[0]->y),
+                point(e->vertexes[1]->x, e->vertexes[1]->y),
+                &r, NULL
+            )
+        ) {
+            //No collision.
+            continue;
+        }
+        
+        //Calculate the throwee's vertical position at that point.
+        float edge_z = std::max(e->sectors[0]->z, e->sectors[1]->z);
+        float x_at_edge =
+            leader_to_cursor_dist.to_float() * r;
+        float y_at_edge =
+            tan(throw_angle) * x_at_edge -
+            (
+                -GRAVITY_ADDER /
+                (
+                    2 * throw_speed * throw_speed *
+                    cos(throw_angle) * cos(throw_angle)
+                )
+            ) * x_at_edge * x_at_edge;
+            
+        //If the throwee would hit the wall at these coordinates, collision.
+        if(edge_z >= y_at_edge && r < wall_collision_r) {
+            wall_collision_r = r;
+        }
+    }
+    
+    /*
+     * Time to draw. There are three possible scenarios.
+     * 1. Nothing interrupts the throw, so we can draw directly from
+     *   the leader to the cursor.
+     * 2. The throwee could never reach because it's too high, so draw the
+     *   line colliding against the edge.
+     * 3. The throwee will collide against a wall, but can theoretically reach
+     *   the target, since it's within the height limit. After the wall
+     *   collision, its trajectory is unpredictable.
+     */
+    
+    if(wall_collision_r > 1.0f) {
+        //No collision. Free throw.
+        al_draw_line(
+            cur_leader_ptr->pos.x,
+            cur_leader_ptr->pos.y,
+            leader_cursor_w.x,
+            leader_cursor_w.y,
+            change_alpha(cur_leader_ptr->throwee->type->main_color, 160),
+            2.0f
+        );
+        
+    } else {
+        //Wall collision.
+        point collision_point(
+            cur_leader_ptr->pos.x +
+            (leader_cursor_w.x - cur_leader_ptr->pos.x) *
+            wall_collision_r,
+            cur_leader_ptr->pos.y +
+            (leader_cursor_w.y - cur_leader_ptr->pos.y) *
+            wall_collision_r
+        );
+        
+        if(!cur_leader_ptr->throwee_can_reach) {
+            //It's impossible to reach.
+            al_draw_line(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y,
+                collision_point.x,
+                collision_point.y,
+                change_alpha(cur_leader_ptr->throwee->type->main_color, 160),
+                2.0f
+            );
+            
+        } else {
+            //Trajectory is unknown after collision. Can theoretically reach.
+            al_draw_line(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y,
+                collision_point.x,
+                collision_point.y,
+                change_alpha(cur_leader_ptr->throwee->type->main_color, 160),
+                2.0f
+            );
+            al_draw_line(
+                collision_point.x,
+                collision_point.y,
+                leader_cursor_w.x,
+                leader_cursor_w.y,
+                change_alpha(cur_leader_ptr->throwee->type->main_color, 40),
+                2.0f
+            );
+            
+        }
+    }
+    
 }
 
 

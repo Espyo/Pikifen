@@ -19,6 +19,7 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     If you pause while whistling, it keeps going
+    Go near an Onion, quit, and enter a different area where you don't start near an Onion = crash
     
     --- v0.21.0 ---
     Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
@@ -125,6 +126,9 @@ Next tasks (roughly sorted most important first)
             Some signs should talk about dismissing, and group moving
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Kman's Adventure area (see #content-sharing)
+    Performance
+        Wall shadow rendering is a bit heavy. Mostly in figuring out what edges to draw or not to draw
+            Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
     Update the manual's area editor screenshots
     Remember to update the Pikmin Fanon wiki page link in the PNG files
     

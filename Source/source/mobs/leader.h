@@ -51,6 +51,8 @@ public:
     point throwee_speed;
     //Provided there's a throw, this is the vertical speed.
     float throwee_speed_z;
+    //Provided there's a throw, this indicates whether it's low enough to reach.
+    bool throwee_can_reach;
     
     //Dismiss current group.
     void dismiss();

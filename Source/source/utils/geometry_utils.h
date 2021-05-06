@@ -152,7 +152,7 @@ bool lines_intersect(
 );
 bool line_segments_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    float* ur, float* ul
+    float* final_l1r, float* final_l2r
 );
 bool line_segments_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,

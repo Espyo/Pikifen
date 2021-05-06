@@ -38,7 +38,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     throwee(nullptr),
     throwee_angle(0.0f),
     throwee_max_z(0.0f),
-    throwee_speed_z(0.0f) {
+    throwee_speed_z(0.0f),
+    throwee_can_reach(false) {
     
     team = MOB_TEAM_PLAYER_1;
     invuln_period = timer(LEADER_INVULN_PERIOD);
@@ -711,11 +712,6 @@ void leader::update_throw_variables() {
     }
     
     if(!throwee) {
-        throwee_angle = 0.0f;
-        throwee_max_z = 0.0f;
-        throwee_speed.x = 0.0f;
-        throwee_speed.y = 0.0f;
-        throwee_speed_z = 0.0f;
         return;
     }
     
@@ -744,11 +740,15 @@ void leader::update_throw_variables() {
     }
     }
     
-    if(max_height < (target_z - z)) {
+    if(max_height >= (target_z - z)) {
+        //Can reach.
+        throwee_can_reach = true;
+    } else {
         //Can't reach! Just do a convincing throw that is sure to fail.
         //Limiting the "target" Z makes it so the horizontal velocity isn't
         //so wild.
         target_z = z + max_height * 0.75;
+        throwee_can_reach = false;
     }
     
     throwee_max_z = z + max_height;
