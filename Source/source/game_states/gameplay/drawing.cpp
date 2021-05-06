@@ -1091,6 +1091,8 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
  * Draws a leader's throw preview.
  */
 void gameplay_state::draw_throw_preview() {
+    const unsigned char PREVIEW_OPACITY = 128;
+    
     if(!cur_leader_ptr->throwee) return;
     
     //Check which edges exist near the throw.
@@ -1114,15 +1116,13 @@ void gameplay_state::draw_throw_preview() {
     }
     
     float wall_collision_r = 2.0f;
-    dist leader_to_cursor_dist;
+    dist leader_to_cursor_dist(
+        cur_leader_ptr->pos, leader_cursor_w
+    );
     float throw_angle;
     float throw_speed;
     
     if(!candidate_edges.empty()) {
-        leader_to_cursor_dist =
-            dist(
-                cur_leader_ptr->pos, leader_cursor_w
-            );
         float throw_h_speed = 0.0f;
         float dummy = 0.0f;
         coordinates_to_angle(
@@ -1190,19 +1190,31 @@ void gameplay_state::draw_throw_preview() {
      *   collision, its trajectory is unpredictable.
      */
     
+    ALLEGRO_VERTEX vertexes[16];
+    
     if(wall_collision_r > 1.0f) {
         //No collision. Free throw.
-        al_draw_line(
-            cur_leader_ptr->pos.x,
-            cur_leader_ptr->pos.y,
-            leader_cursor_w.x,
-            leader_cursor_w.y,
-            change_alpha(cur_leader_ptr->throwee->type->main_color, 160),
-            2.0f
-        );
+        
+        unsigned char n_vertexes =
+            get_throw_preview_vertexes(
+                vertexes, 0.0f, 1.0f,
+                cur_leader_ptr->pos, leader_cursor_w,
+                change_alpha(
+                    cur_leader_ptr->throwee->type->main_color,
+                    PREVIEW_OPACITY
+                )
+            );
+            
+        for(unsigned char v = 0; v < n_vertexes; v += 4) {
+            al_draw_prim(
+                vertexes, NULL, NULL,
+                v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
+            );
+        }
         
     } else {
         //Wall collision.
+        
         point collision_point(
             cur_leader_ptr->pos.x +
             (leader_cursor_w.x - cur_leader_ptr->pos.x) *
@@ -1214,33 +1226,60 @@ void gameplay_state::draw_throw_preview() {
         
         if(!cur_leader_ptr->throwee_can_reach) {
             //It's impossible to reach.
-            al_draw_line(
-                cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y,
-                collision_point.x,
-                collision_point.y,
-                change_alpha(cur_leader_ptr->throwee->type->main_color, 160),
-                2.0f
-            );
+            
+            unsigned char n_vertexes =
+                get_throw_preview_vertexes(
+                    vertexes, 0.0f, wall_collision_r,
+                    cur_leader_ptr->pos, leader_cursor_w,
+                    change_alpha(
+                        cur_leader_ptr->throwee->type->main_color,
+                        PREVIEW_OPACITY
+                    )
+                );
+                
+            for(unsigned char v = 0; v < n_vertexes; v += 4) {
+                al_draw_prim(
+                    vertexes, NULL, NULL,
+                    v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
+                );
+            }
             
         } else {
             //Trajectory is unknown after collision. Can theoretically reach.
-            al_draw_line(
-                cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y,
-                collision_point.x,
-                collision_point.y,
-                change_alpha(cur_leader_ptr->throwee->type->main_color, 160),
-                2.0f
-            );
-            al_draw_line(
-                collision_point.x,
-                collision_point.y,
-                leader_cursor_w.x,
-                leader_cursor_w.y,
-                change_alpha(cur_leader_ptr->throwee->type->main_color, 40),
-                2.0f
-            );
+            
+            unsigned char n_vertexes =
+                get_throw_preview_vertexes(
+                    vertexes, 0.0f, wall_collision_r,
+                    cur_leader_ptr->pos, leader_cursor_w,
+                    change_alpha(
+                        cur_leader_ptr->throwee->type->main_color,
+                        PREVIEW_OPACITY
+                    )
+                );
+                
+            for(unsigned char v = 0; v < n_vertexes; v += 4) {
+                al_draw_prim(
+                    vertexes, NULL, NULL,
+                    v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
+                );
+            }
+            
+            n_vertexes =
+                get_throw_preview_vertexes(
+                    vertexes, wall_collision_r, 1.0f,
+                    cur_leader_ptr->pos, leader_cursor_w,
+                    change_alpha(
+                        cur_leader_ptr->throwee->type->main_color,
+                        PREVIEW_OPACITY / 2.0f
+                    )
+                );
+                
+            for(unsigned char v = 0; v < n_vertexes; v += 4) {
+                al_draw_prim(
+                    vertexes, NULL, NULL,
+                    v, v + 4, ALLEGRO_PRIM_TRIANGLE_FAN
+                );
+            }
             
         }
     }

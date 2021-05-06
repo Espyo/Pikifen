@@ -711,6 +711,123 @@ float get_sun_strength() {
 
 
 /* ----------------------------------------------------------------------------
+ * Calculates the vertex info necessary to draw the throw preview line,
+ * from a given start point to a given end point.
+ * The vertexes returned always come in groups of four, and each group
+ * must be drawn individually with the ALLEGRO_PRIM_TRIANGLE_FAN type.
+ * Returns the amount of vertexes needed.
+ * vertexes:
+ *   The array of vertexes to fill. Must have room for at least 16.
+ * start:
+ *   Start the line at this point. This is a ratio from the leader (0) to
+ *   the cursor (1).
+ * end:
+ *   Same as start, but for the end point.
+ * leader_pos:
+ *   Position of the leader.
+ * cursor_pos:
+ *   Position of the cursor.
+ * color:
+ *   Color of the line.
+ */
+unsigned char get_throw_preview_vertexes(
+    ALLEGRO_VERTEX* vertexes,
+    const float start, const float end,
+    const point &leader_pos, const point &cursor_pos,
+    const ALLEGRO_COLOR &color
+) {
+    const float FADE_IN_RATIO = 0.30f;
+    const float FADE_OUT_RATIO = 1.0f - FADE_IN_RATIO;
+    const float MIN_THICKNESS = 2.0f;
+    const float MAX_THICKNESS = 8.0f;
+    const float segment_points[] = {
+        0.0f, FADE_IN_RATIO, 0.5f, FADE_OUT_RATIO, 1.0f
+    };
+    
+    float leader_to_cursor_dist = dist(leader_pos, cursor_pos).to_float();
+    unsigned char cur_v = 0;
+    
+    auto get_thickness =
+        [MIN_THICKNESS, MAX_THICKNESS]
+    (float n) -> float {
+        if(n >= 0.5f) {
+            n = 1 - n;
+        }
+        return
+        interpolate_number(
+            n, 0.0f, 0.5f, MIN_THICKNESS, MAX_THICKNESS
+        );
+    };
+    auto get_color =
+        [&color, FADE_IN_RATIO]
+    (float n) -> ALLEGRO_COLOR {
+        if(n >= 0.5f) {
+            n = 1 - n;
+        }
+        if(n < FADE_IN_RATIO) {
+            return
+            interpolate_color(
+                n, 0.0f, FADE_IN_RATIO,
+                change_alpha(color, 0),
+                color
+            );
+        } else {
+            return color;
+        }
+    };
+    
+    //Get the vertexes of each necessary segment.
+    for(unsigned char segment = 0; segment < 4; ++segment) {
+        float segment_start = std::max(segment_points[segment], start);
+        float segment_end = std::min(segment_points[segment + 1], end);
+        
+        if(
+            segment_start > segment_points[segment + 1] ||
+            segment_end < segment_points[segment]
+        ) {
+            continue;
+        }
+        
+        vertexes[cur_v].x = leader_to_cursor_dist * segment_start;
+        vertexes[cur_v].y = -get_thickness(segment_start) / 2.0f;
+        vertexes[cur_v].color = get_color(segment_start);
+        cur_v++;
+        
+        vertexes[cur_v] = vertexes[cur_v - 1];
+        vertexes[cur_v].y = -vertexes[cur_v].y;
+        cur_v++;
+        
+        vertexes[cur_v].x = leader_to_cursor_dist * segment_end;
+        vertexes[cur_v].y = get_thickness(segment_end) / 2.0f;
+        vertexes[cur_v].color = get_color(segment_end);
+        cur_v++;
+        
+        vertexes[cur_v] = vertexes[cur_v - 1];
+        vertexes[cur_v].y = -vertexes[cur_v].y;
+        cur_v++;
+    }
+    
+    //Rotate and move all points. For the sake of simplicity, up until now,
+    //they were assuming the throw is perfectly to the right (0 degrees),
+    //and that it starts on the world origin.
+    for(unsigned char v = 0; v < 16; ++v) {
+        point p(vertexes[v].x, vertexes[v].y);
+        p = rotate_point(p, get_angle(leader_pos, cursor_pos));
+        p += leader_pos;
+        vertexes[v].x = p.x;
+        vertexes[v].y = p.y;
+    }
+    
+    //Final cleanup.
+    for(unsigned char v = 0; v < cur_v; ++v) {
+        vertexes[v].z = 0.0f;
+    }
+    
+    return cur_v;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Given a string representation of mob script variables,
  * returns a map, where every key is a variable, and every value is the
  * variable's value.

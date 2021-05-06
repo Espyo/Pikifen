@@ -106,6 +106,22 @@ unsigned char get_blackout_strength();
 string get_current_time(const bool filename_friendly);
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
+void get_edge_offset_edge_info(
+    edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
+    const float edge_process_angle,
+    sector* affected_sector, sector* unaffected_sector,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter,
+    float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
+    float* final_elbow_angle, float* final_elbow_length
+);
+void get_edge_offset_intersection(
+    edge* e1, edge* e2, vertex* common_vertex,
+    const float base_shadow_angle1, const float base_shadow_angle2,
+    const float shadow_length, const unsigned char end_idx,
+    float* final_angle, float* final_length
+);
 ALLEGRO_COLOR get_fog_color();
 ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
 ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr);
@@ -126,25 +142,15 @@ void get_next_offset_effect_edge(
     bool* final_shadow_cw
 );
 float get_sun_strength();
-map<string, string> get_var_map(const string &vars_string);
-void get_edge_offset_edge_info(
-    edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
-    const float edge_process_angle,
-    sector* affected_sector, sector* unaffected_sector,
-    offset_effect_checker_ptr checker,
-    offset_effect_length_getter_ptr length_getter,
-    offset_effect_color_getter_ptr color_getter,
-    float* final_angle, float* final_length, ALLEGRO_COLOR* final_color,
-    float* final_elbow_angle, float* final_elbow_length
+unsigned char get_throw_preview_vertexes(
+    ALLEGRO_VERTEX* vertexes,
+    const float start, const float end,
+    const point &leader_pos, const point &cursor_pos,
+    const ALLEGRO_COLOR &color
 );
+map<string, string> get_var_map(const string &vars_string);
 ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr);
 float get_wall_shadow_length(edge* e_ptr);
-void get_edge_offset_intersection(
-    edge* e1, edge* e2, vertex* common_vertex,
-    const float base_shadow_angle1, const float base_shadow_angle2,
-    const float shadow_length, const unsigned char end_idx,
-    float* final_angle, float* final_length
-);
 vector<std::pair<size_t, string> > get_weather_table(data_node* node);
 ALLEGRO_COLOR interpolate_color(
     const float n, const float n1, const float n2,
