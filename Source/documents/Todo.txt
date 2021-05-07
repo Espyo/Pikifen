@@ -2,8 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Cursor improvements
-        An option to control the cursor's movement speed, when not using the mouse (thanks MonkeyUhOh)
     
     
 Next tasks (roughly sorted most important first)
@@ -15,6 +13,7 @@ Next tasks (roughly sorted most important first)
     --- v0.21.0 ---
     Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
         Same for whistling and other controls you may need to mash/hold
+    Throw spam should be capped
     Minor editor improvements
         When placing your mouse over the timeline in the animation editor, the status bar should show the seconds at the cursor position.
         Make the sprite picker in the animation editor show the sprites in the buttons

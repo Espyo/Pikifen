@@ -60,9 +60,6 @@ const float GROUP_SPOT_INTERVAL = 2.0f;
 const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 //Maximum number of players that can play the game.
 const size_t MAX_PLAYERS = 4;
-//How many pixels the mouse cursor moves, per second,
-//when using an analog stick.
-const float MOUSE_CURSOR_MOVE_SPEED = 500.0f;
 //Multiply the stretch of the shadow by this much.
 const float MOB_SHADOW_STRETCH_MULT = 0.5f;
 //For every unit above the ground that the mob is on,

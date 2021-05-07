@@ -406,7 +406,7 @@ void gameplay_state::do_gameplay_logic() {
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
-            mouse_cursor_speed * game.delta_t* MOUSE_CURSOR_MOVE_SPEED;
+            mouse_cursor_speed * game.delta_t* game.options.cursor_speed;
             
         game.mouse_cursor_s += mouse_cursor_speed;
         

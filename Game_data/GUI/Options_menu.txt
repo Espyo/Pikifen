@@ -2,6 +2,7 @@ positions {
     back =            15 10 20  6
     fullscreen =      24 20 45  8
     resolution =      24 30 45  8
-    controls =        24 40 45  8
+    cursor_speed =    24 45 45  8
+    controls =        24 55 45  8
     restart_warning = 50 95 95 10
 }

@@ -20,6 +20,14 @@
 #include "../utils/string_utils.h"
 
 
+//Cursor speed preset values.
+const float options_menu_state::CURSOR_SPEED_PRESETS[] =
+{250.0f, 350.0f, 500.0f, 700.0f, 1000.0f};
+//Cursor speed preset names.
+const string options_menu_state::CURSOR_SPEED_PRESET_NAMES[] =
+{"Very slow", "Slow", "Medium", "Fast", "Very fast"};
+//Cursor speed preset amount.
+const unsigned char options_menu_state::N_CURSOR_SPEED_PRESETS = 5;
 //Path to the GUI information file.
 const string options_menu_state::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Options_menu.txt";
@@ -76,32 +84,61 @@ options_menu_state::options_menu_state() :
 
 
 /* ----------------------------------------------------------------------------
+ * Changes to the next cursor speed preset in the list.
+ * step:
+ *   How much to move forward in the list.
+ */
+void options_menu_state::change_cursor_speed(const signed int step) {
+    size_t cur_cursor_speed_idx = INVALID;
+    
+    for(size_t s = 0; s < N_CURSOR_SPEED_PRESETS; ++s) {
+        if(game.options.cursor_speed == CURSOR_SPEED_PRESETS[s]) {
+            cur_cursor_speed_idx = s;
+            break;
+        }
+    }
+    
+    if(cur_cursor_speed_idx == INVALID) {
+        cur_cursor_speed_idx = 0;
+    } else {
+        cur_cursor_speed_idx =
+            sum_and_wrap(cur_cursor_speed_idx, step, N_CURSOR_SPEED_PRESETS);
+    }
+    
+    game.options.cursor_speed = CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
+    
+    cursor_speed_picker->start_juicy_grow();
+    update();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Changes to the next resolution preset in the list.
  * step:
  *   How much to move forward in the list.
  */
 void options_menu_state::change_resolution(const signed int step) {
-    size_t current_r_index = INVALID;
+    size_t cur_resolution_idx = INVALID;
     
     for(size_t r = 0; r < resolution_presets.size(); ++r) {
         if(
             game.options.intended_win_w == resolution_presets[r].first &&
             game.options.intended_win_h == resolution_presets[r].second
         ) {
-            current_r_index = r;
+            cur_resolution_idx = r;
             break;
         }
     }
     
-    if(current_r_index == INVALID) {
-        current_r_index = 0;
+    if(cur_resolution_idx == INVALID) {
+        cur_resolution_idx = 0;
     } else {
-        current_r_index =
-            sum_and_wrap(current_r_index, step, resolution_presets.size());
+        cur_resolution_idx =
+            sum_and_wrap(cur_resolution_idx, step, resolution_presets.size());
     }
     
-    game.options.intended_win_w = resolution_presets[current_r_index].first;
-    game.options.intended_win_h = resolution_presets[current_r_index].second;
+    game.options.intended_win_w = resolution_presets[cur_resolution_idx].first;
+    game.options.intended_win_h = resolution_presets[cur_resolution_idx].second;
     
     trigger_restart_warning();
     resolution_picker->start_juicy_grow();
@@ -190,7 +227,8 @@ void options_menu_state::load() {
     gui.register_coords("back",            15, 10, 20,  6);
     gui.register_coords("fullscreen",      24, 20, 45,  8);
     gui.register_coords("resolution",      24, 30, 45,  8);
-    gui.register_coords("controls",        24, 40, 45,  8);
+    gui.register_coords("cursor_speed",    24, 45, 45,  8);
+    gui.register_coords("controls",        24, 55, 45,  8);
     gui.register_coords("restart_warning", 50, 95, 95, 10);
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
@@ -231,6 +269,19 @@ void options_menu_state::load() {
         change_resolution(1);
     };
     gui.add_item(resolution_picker, "resolution");
+    
+    //Cursor speed.
+    cursor_speed_picker =
+        new picker_gui_item("Cursor speed: ", "");
+    cursor_speed_picker->on_previous =
+    [this] () {
+        change_cursor_speed(-1);
+    };
+    cursor_speed_picker->on_next =
+    [this] () {
+        change_cursor_speed(1);
+    };
+    gui.add_item(cursor_speed_picker, "cursor_speed");
     
     //Controls button.
     button_gui_item* controls_button =
@@ -286,14 +337,15 @@ void options_menu_state::unload() {
  * Updates the contents of the options menu.
  */
 void options_menu_state::update() {
-    size_t current_r_index = INVALID;
+    //Resolution.
+    size_t cur_resolution_idx = INVALID;
     
     for(size_t r = 0; r < resolution_presets.size(); ++r) {
         if(
             game.options.intended_win_w == resolution_presets[r].first &&
             game.options.intended_win_h == resolution_presets[r].second
         ) {
-            current_r_index = r;
+            cur_resolution_idx = r;
             break;
         }
     }
@@ -301,5 +353,20 @@ void options_menu_state::update() {
     resolution_picker->option =
         i2s(game.options.intended_win_w) + "x" +
         i2s(game.options.intended_win_h) +
-        (current_r_index == INVALID ? "(Custom)" : "");
+        (cur_resolution_idx == INVALID ? " (custom)" : "");
+        
+    //Cursor speed.
+    size_t cur_cursor_speed_idx = INVALID;
+    
+    for(size_t s = 0; s < N_CURSOR_SPEED_PRESETS; ++s) {
+        if(game.options.cursor_speed == CURSOR_SPEED_PRESETS[s]) {
+            cur_cursor_speed_idx = s;
+            break;
+        }
+    }
+    
+    cursor_speed_picker->option =
+        cur_cursor_speed_idx == INVALID ?
+        i2s(game.options.cursor_speed) + " (custom)" :
+        CURSOR_SPEED_PRESET_NAMES[cur_cursor_speed_idx];
 }

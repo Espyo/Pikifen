@@ -36,6 +36,7 @@ struct options_struct {
     static const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
     static const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
     static const unsigned char DEF_AREA_EDITOR_VIEW_MODE;
+    static const float DEF_CURSOR_SPEED;
     static const bool DEF_DRAW_CURSOR_TRAIL;
     static const bool DEF_EDITOR_MMB_PAN;
     static const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD;
@@ -77,6 +78,8 @@ struct options_struct {
     unsigned char area_editor_view_mode;
     //List of controls for each player.
     vector<vector<control_info> > controls;
+    //Cursor speed, in pixels per second. N/A when using the mouse.
+    float cursor_speed;
     //Draw a trail behind the mouse cursor?
     bool draw_cursor_trail;
     //If true, the middle mouse button pans in editors.

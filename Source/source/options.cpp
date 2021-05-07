@@ -30,6 +30,7 @@ const size_t options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
 const size_t options_struct::DEF_AREA_EDITOR_UNDO_LIMIT = 20;
 const unsigned char options_struct::DEF_AREA_EDITOR_VIEW_MODE =
     area_editor::VIEW_MODE_TEXTURES;
+const float options_struct::DEF_CURSOR_SPEED = 500.0f;
 const bool options_struct::DEF_DRAW_CURSOR_TRAIL = true;
 const bool options_struct::DEF_EDITOR_MMB_PAN = false;
 const float options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
@@ -69,6 +70,7 @@ options_struct::options_struct() :
     area_editor_snap_threshold(DEF_AREA_EDITOR_SNAP_THRESHOLD),
     area_editor_undo_limit(DEF_AREA_EDITOR_UNDO_LIMIT),
     area_editor_view_mode(DEF_AREA_EDITOR_VIEW_MODE),
+    cursor_speed(DEF_CURSOR_SPEED),
     draw_cursor_trail(DEF_DRAW_CURSOR_TRAIL),
     editor_mmb_pan(DEF_EDITOR_MMB_PAN),
     editor_mouse_drag_threshold(DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
@@ -176,6 +178,7 @@ void options_struct::load(data_node* file) {
     rs.set("area_editor_snap_threshold", area_editor_snap_threshold);
     rs.set("area_editor_undo_limit", area_editor_undo_limit);
     rs.set("area_editor_view_mode", area_editor_view_mode);
+    rs.set("cursor_speed", cursor_speed);
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_mmb_pan", editor_mmb_pan);
     rs.set("editor_mouse_drag_threshold", editor_mouse_drag_threshold);
@@ -360,6 +363,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "area_editor_view_mode",
             i2s(area_editor_view_mode)
+        )
+    );
+    file->add(
+        new data_node(
+            "cursor_speed",
+            f2s(cursor_speed)
         )
     );
     file->add(
