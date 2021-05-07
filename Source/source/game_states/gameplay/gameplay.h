@@ -51,8 +51,6 @@ public:
     replay day_replay;
     //Manager for the gameplay HUD.
     gui_manager hud;
-    //Mob that player 1's leader cursor is on top of, if any.
-    mob* leader_cursor_mob;
     //Player 1's leader cursor, in screen coordinates.
     point leader_cursor_s;
     //Sector that player 1's leader cursor is on, if any.
@@ -79,6 +77,12 @@ public:
     float swarm_angle;
     //General intensity of player 1's swarm in the specified angle.
     float swarm_magnitude;
+    //Destination of player 1's throw.
+    point throw_dest;
+    //Mob that player 1's throw will land on, if any.
+    mob* throw_dest_mob;
+    //Sector that player 1's throw will land on, if any.
+    sector* throw_dest_sector;
     //Have we went to the results screen yet?
     bool went_to_results;
     //Information about player 1's whistle.

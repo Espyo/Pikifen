@@ -716,12 +716,12 @@ void leader::update_throw_variables() {
     }
     
     float target_z;
-    if(game.states.gameplay->leader_cursor_mob) {
+    if(game.states.gameplay->throw_dest_mob) {
         target_z =
-            game.states.gameplay->leader_cursor_mob->z +
-            game.states.gameplay->leader_cursor_mob->height;
-    } else if(game.states.gameplay->leader_cursor_sector) {
-        target_z = game.states.gameplay->leader_cursor_sector->z;
+            game.states.gameplay->throw_dest_mob->z +
+            game.states.gameplay->throw_dest_mob->height;
+    } else if(game.states.gameplay->throw_dest_sector) {
+        target_z = game.states.gameplay->throw_dest_sector->z;
     } else {
         target_z = z;
     }
@@ -756,7 +756,7 @@ void leader::update_throw_variables() {
     calculate_throw(
         pos,
         z,
-        game.states.gameplay->leader_cursor_w,
+        game.states.gameplay->throw_dest,
         target_z,
         max_height,
         GRAVITY_ADDER,

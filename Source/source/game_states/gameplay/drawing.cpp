@@ -572,9 +572,9 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                         WHISTLE_DOT_SPIN_SPEED * area_time_passed;
                         
                     point dot_pos(
-                        leader_cursor_w.x +
+                        whistle.center.x +
                         cos(angle) * whistle.dot_radius[d],
-                        leader_cursor_w.y +
+                        whistle.center.y +
                         sin(angle) * whistle.dot_radius[d]
                     );
                     
@@ -624,7 +624,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 radius = whistle.radius;
             }
             al_draw_circle(
-                leader_cursor_w.x, leader_cursor_w.y, radius,
+                whistle.center.x, whistle.center.y, radius,
                 al_map_rgba(192, 192, 0, alpha), 2
             );
         }
@@ -1089,7 +1089,7 @@ void gameplay_state::draw_throw_preview() {
         unsigned char n_vertexes =
             get_throw_preview_vertexes(
                 vertexes, 0.0f, 1.0f,
-                cur_leader_ptr->pos, leader_cursor_w,
+                cur_leader_ptr->pos, throw_dest,
                 change_alpha(
                     game.config.no_pikmin_color,
                     PREVIEW_OPACITY / 2.0f
@@ -1112,19 +1112,20 @@ void gameplay_state::draw_throw_preview() {
     
     game.cur_area_data.bmap.get_edges_in_region(
         point(
-            std::min(cur_leader_ptr->pos.x, leader_cursor_w.x),
-            std::min(cur_leader_ptr->pos.y, leader_cursor_w.y)
+            std::min(cur_leader_ptr->pos.x, throw_dest.x),
+            std::min(cur_leader_ptr->pos.y, throw_dest.y)
         ),
         point(
-            std::max(cur_leader_ptr->pos.x, leader_cursor_w.x),
-            std::max(cur_leader_ptr->pos.y, leader_cursor_w.y)
+            std::max(cur_leader_ptr->pos.x, throw_dest.x),
+            std::max(cur_leader_ptr->pos.y, throw_dest.y)
         ),
         candidate_edges
     );
     
     float wall_collision_r = 2.0f;
-    dist leader_to_cursor_dist(
-        cur_leader_ptr->pos, leader_cursor_w
+    bool wall_is_blocking_sector = false;
+    dist leader_to_dest_dist(
+        cur_leader_ptr->pos, throw_dest
     );
     float throw_h_angle = 0.0f;
     float throw_v_angle = 0.0f;
@@ -1150,16 +1151,11 @@ void gameplay_state::draw_throw_preview() {
             continue;
         }
         
-        if(e->sectors[0]->z == e->sectors[1]->z) {
-            //Edges where both sectors have the same height have no wall.
-            continue;
-        }
-        
         float r = 0.0f;
         if(
             !line_segments_intersect(
                 cur_leader_ptr->pos,
-                leader_cursor_w,
+                throw_dest,
                 point(e->vertexes[0]->x, e->vertexes[0]->y),
                 point(e->vertexes[1]->x, e->vertexes[1]->y),
                 &r, NULL
@@ -1169,10 +1165,30 @@ void gameplay_state::draw_throw_preview() {
             continue;
         }
         
+        //If this is a blocking sector then yeah, collision.
+        if(
+            (
+                e->sectors[0]->type == SECTOR_TYPE_BLOCKING ||
+                e->sectors[1]->type == SECTOR_TYPE_BLOCKING
+            ) &&
+            r < wall_collision_r
+        ) {
+            wall_collision_r = r;
+            wall_is_blocking_sector = true;
+            continue;
+        }
+        
+        //Otherwise, let's check for walls.
+        
+        if(e->sectors[0]->z == e->sectors[1]->z) {
+            //Edges where both sectors have the same height have no wall.
+            continue;
+        }
+        
         //Calculate the throwee's vertical position at that point.
         float edge_z = std::max(e->sectors[0]->z, e->sectors[1]->z);
         float x_at_edge =
-            leader_to_cursor_dist.to_float() * r;
+            leader_to_dest_dist.to_float() * r;
         float y_at_edge =
             tan(throw_v_angle) * x_at_edge -
             (
@@ -1186,13 +1202,14 @@ void gameplay_state::draw_throw_preview() {
         //If the throwee would hit the wall at these coordinates, collision.
         if(edge_z >= y_at_edge && r < wall_collision_r) {
             wall_collision_r = r;
+            wall_is_blocking_sector = false;
         }
     }
     
     /*
      * Time to draw. There are three possible scenarios.
      * 1. Nothing interrupts the throw, so we can draw directly from
-     *   the leader to the cursor.
+     *   the leader to the throw destination.
      * 2. The throwee could never reach because it's too high, so draw the
      *   line colliding against the edge.
      * 3. The throwee will collide against a wall, but can theoretically reach
@@ -1206,7 +1223,7 @@ void gameplay_state::draw_throw_preview() {
         unsigned char n_vertexes =
             get_throw_preview_vertexes(
                 vertexes, 0.0f, 1.0f,
-                cur_leader_ptr->pos, leader_cursor_w,
+                cur_leader_ptr->pos, throw_dest,
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,
                     PREVIEW_OPACITY
@@ -1226,20 +1243,20 @@ void gameplay_state::draw_throw_preview() {
         
         point collision_point(
             cur_leader_ptr->pos.x +
-            (leader_cursor_w.x - cur_leader_ptr->pos.x) *
+            (throw_dest.x - cur_leader_ptr->pos.x) *
             wall_collision_r,
             cur_leader_ptr->pos.y +
-            (leader_cursor_w.y - cur_leader_ptr->pos.y) *
+            (throw_dest.y - cur_leader_ptr->pos.y) *
             wall_collision_r
         );
         
-        if(!cur_leader_ptr->throwee_can_reach) {
+        if(!cur_leader_ptr->throwee_can_reach || wall_is_blocking_sector) {
             //It's impossible to reach.
             
             unsigned char n_vertexes =
                 get_throw_preview_vertexes(
                     vertexes, 0.0f, wall_collision_r,
-                    cur_leader_ptr->pos, leader_cursor_w,
+                    cur_leader_ptr->pos, throw_dest,
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
                         PREVIEW_OPACITY
@@ -1269,7 +1286,7 @@ void gameplay_state::draw_throw_preview() {
             unsigned char n_vertexes =
                 get_throw_preview_vertexes(
                     vertexes, 0.0f, wall_collision_r,
-                    cur_leader_ptr->pos, leader_cursor_w,
+                    cur_leader_ptr->pos, throw_dest,
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
                         COLLISION_OPACITY
@@ -1287,7 +1304,7 @@ void gameplay_state::draw_throw_preview() {
             n_vertexes =
                 get_throw_preview_vertexes(
                     vertexes, wall_collision_r, 1.0f,
-                    cur_leader_ptr->pos, leader_cursor_w,
+                    cur_leader_ptr->pos, throw_dest,
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
                         PREVIEW_OPACITY

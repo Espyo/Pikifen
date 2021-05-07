@@ -52,7 +52,9 @@ struct game_config {
     static const float DEF_STANDARD_PIKMIN_HEIGHT;
     static const float DEF_STANDARD_PIKMIN_RADIUS;
     static const float DEF_SWARM_TASK_RANGE;
+    static const float DEF_THROW_MAX_DIST;
     static const float DEF_WHISTLE_GROWTH_SPEED;
+    static const float DEF_WHISTLE_MAX_DIST;
     static const float DEF_ZOOM_MAX_LEVEL;
     static const float DEF_ZOOM_MIN_LEVEL;
     
@@ -68,7 +70,7 @@ struct game_config {
     float carrying_speed_max_mult;
     //Decreases carry speed by this much per unit of weight.
     float carrying_speed_weight_mult;
-    //Maximum distance away from the leader the cursor can go.
+    //Maximum distance from the leader the cursor can go.
     float cursor_max_dist;
     //How much the cursor spins per second.
     float cursor_spin_speed;
@@ -118,10 +120,14 @@ struct game_config {
     float standard_pikmin_radius;
     //Pikmin that are swarming can go for tasks within this range.
     float swarm_task_range;
+    //Maximum distance from the leader that a throw can be aimed to.
+    float throw_max_dist;
     //Version of the game.
     string version;
     //Speed at which the whistle grows.
     float whistle_growth_speed;
+    //Maximum distance from the leader that the whistle can start from.
+    float whistle_max_dist;
     //The closest zoom level the player can get.
     float zoom_max_level;
     //The farthest zoom level the player can get.

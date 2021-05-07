@@ -2570,7 +2570,7 @@ void mob::tick_script(const float delta_t) {
     mob_event* whistled_ev = q_get_event(this, MOB_EV_WHISTLED);
     if(game.states.gameplay->whistle.whistling && whistled_ev) {
         if(
-            dist(pos, game.states.gameplay->leader_cursor_w) <=
+            dist(pos, game.states.gameplay->whistle.center) <=
             game.states.gameplay->whistle.radius
         ) {
             whistled_ev->run(this);

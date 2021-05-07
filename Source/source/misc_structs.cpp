@@ -1828,11 +1828,11 @@ void timer::tick(const float amount) {
  * Creates a whistle struct.
  */
 whistle_struct::whistle_struct() :
+    radius(0.0f),
     fade_radius(0.0f),
     fade_timer(WHISTLE_FADE_TIME),
     next_dot_timer(WHISTLE_DOT_INTERVAL),
     next_ring_timer(WHISTLE_RINGS_INTERVAL),
-    radius(0.0f),
     ring_prev_color(0),
     whistling(false) {
     
@@ -1901,9 +1901,11 @@ void whistle_struct::stop_whistling() {
  *   Distance between the leader and the cursor.
  */
 void whistle_struct::tick(
-    const float delta_t,
-    const float whistle_range, const dist &leader_to_cursor_dist
+    const float delta_t, const point &center,
+    const float whistle_range, const float leader_to_cursor_dist
 ) {
+    this->center = center;
+    
     fade_timer.tick(delta_t);
     
     if(whistling) {

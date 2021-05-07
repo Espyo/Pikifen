@@ -41,7 +41,9 @@ const float game_config::DEF_PLUCK_RANGE = 30.0f;
 const float game_config::DEF_STANDARD_PIKMIN_HEIGHT = 24.0f;
 const float game_config::DEF_STANDARD_PIKMIN_RADIUS = 5.0f;
 const float game_config::DEF_SWARM_TASK_RANGE = 0.0f;
+const float game_config::DEF_THROW_MAX_DIST = DEF_CURSOR_MAX_DIST;
 const float game_config::DEF_WHISTLE_GROWTH_SPEED = 180.0f;
+const float game_config::DEF_WHISTLE_MAX_DIST = DEF_CURSOR_MAX_DIST;
 const float game_config::DEF_ZOOM_MAX_LEVEL = 3.0f;
 const float game_config::DEF_ZOOM_MIN_LEVEL = 0.66f;
 
@@ -75,7 +77,9 @@ game_config::game_config() :
     standard_pikmin_height(DEF_STANDARD_PIKMIN_HEIGHT),
     standard_pikmin_radius(DEF_STANDARD_PIKMIN_RADIUS),
     swarm_task_range(DEF_SWARM_TASK_RANGE),
+    throw_max_dist(DEF_THROW_MAX_DIST),
     whistle_growth_speed(DEF_WHISTLE_GROWTH_SPEED),
+    whistle_max_dist(DEF_WHISTLE_MAX_DIST),
     zoom_max_level(DEF_ZOOM_MAX_LEVEL),
     zoom_min_level(DEF_ZOOM_MIN_LEVEL) {
     
@@ -128,7 +132,9 @@ void game_config::load(data_node* file) {
     rs.set("onion_open_range", onion_open_range);
     rs.set("group_member_grab_range", group_member_grab_range);
     rs.set("pluck_range", pluck_range);
+    rs.set("throw_max_dist", throw_max_dist);
     rs.set("whistle_growth_speed", whistle_growth_speed);
+    rs.set("whistle_max_dist", whistle_max_dist);
     
     rs.set("message_char_interval", message_char_interval);
     rs.set("zoom_max_level", zoom_max_level);

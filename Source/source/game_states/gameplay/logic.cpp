@@ -55,9 +55,24 @@ void gameplay_state::do_aesthetic_logic() {
         }
     }
     
+    //Whistle.
+    float whistle_dist;
+    point whistle_pos;
+    
+    if(leader_to_cursor_dist > game.config.whistle_max_dist) {
+        whistle_dist = game.config.whistle_max_dist;
+        float whistle_angle =
+            get_angle(cur_leader_ptr->pos, leader_cursor_w);
+        whistle_pos = angle_to_coordinates(whistle_angle, whistle_dist);
+        whistle_pos += cur_leader_ptr->pos;
+    } else {
+        whistle_dist = leader_to_cursor_dist.to_float();
+        whistle_pos = leader_cursor_w;
+    }
+    
     whistle.tick(
-        game.delta_t,
-        cur_leader_ptr->lea_type->whistle_range, leader_to_cursor_dist
+        game.delta_t, whistle_pos,
+        cur_leader_ptr->lea_type->whistle_range, whistle_dist
     );
     
     //Cursor trail.
@@ -68,31 +83,44 @@ void gameplay_state::do_aesthetic_logic() {
     //Where the cursor is.
     cursor_height_diff_light = 0;
     
-    leader_cursor_mob = NULL;
+    if(leader_to_cursor_dist > game.config.throw_max_dist) {
+        float throw_angle =
+            get_angle(cur_leader_ptr->pos, leader_cursor_w);
+        throw_dest =
+            angle_to_coordinates(throw_angle, game.config.throw_max_dist);
+        throw_dest += cur_leader_ptr->pos;
+    } else {
+        throw_dest = leader_cursor_w;
+    }
+    
+    throw_dest_mob = NULL;
     for(size_t m = 0; m < mobs.all.size(); ++m) {
         mob* m_ptr = mobs.all[m];
-        if(!bbox_check(leader_cursor_w, m_ptr->pos, m_ptr->type->max_span)) {
+        if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->type->max_span)) {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
         if(
-            leader_cursor_mob &&
+            throw_dest_mob &&
             m_ptr->z + m_ptr->height <
-            leader_cursor_mob->z + leader_cursor_mob->height
+            throw_dest_mob->z + throw_dest_mob->height
         ) {
             //If this mob is lower than the previous known "under cursor" mob,
             //then forget it.
             continue;
         }
-        if(dist(leader_cursor_w, m_ptr->pos) > m_ptr->type->radius) {
+        if(dist(throw_dest, m_ptr->pos) > m_ptr->type->radius) {
             //The cursor is not really on top of this mob.
             continue;
         }
-        leader_cursor_mob = m_ptr;
+        throw_dest_mob = m_ptr;
     }
     
     leader_cursor_sector =
         get_sector(leader_cursor_w, NULL, true);
+        
+    throw_dest_sector =
+        get_sector(throw_dest, NULL, true);
         
     if(leader_cursor_sector) {
         cursor_height_diff_light =

@@ -3,15 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Cursor improvements
-        When holding a Pikmin (or maybe just always?), a trajectory predictor line should appear
-            Make it detect collisions against other mobs, too
-                If the hitbox the cursor is on can be attacked, maybe mark it as a target. Otherwise, maybe ignore the mob?
-            Make it detect collisions against blocking sectors
-        Maybe make it so that terrain too high for the current standby Pikmin type to reach receive a semi-opaque dark overlay?
-        Game configurations for the cursor
-            Leader cursor: unlimited or distance-limited?
-            Whistling: can be on cursor or distance-limited?
-            Throwing: can be on cursor or distance-limited?
         An option to control the cursor's movement speed, when not using the mouse (thanks MonkeyUhOh)
     
     
@@ -19,6 +10,7 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     If you pause while whistling, it keeps going
     Go near an Onion, quit, and enter a different area where you don't start near an Onion = crash
+    The Beady Long Legs is just knocking Pikmin back instead of killing them
     
     --- v0.21.0 ---
     Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
@@ -37,6 +29,7 @@ Next tasks (roughly sorted most important first)
         Whistling lying Pikmin should make them get up and go to you
             Change the animations to just be the Pikmin lying down, looping on that frame, and make the time to get up be controlled by a timer
             When whistled, set that leader as the focused mob, and when it gets up, check if the focused mob is a leader (watch out for teams!). If so, add to group
+            Pikmin in the state where they're flying from knockback shouldn't listen to the damage events, but Pikmin lying on the ground should
     Purple Pikmin
         Give them a proper pound attack
         Maybe stun?
@@ -48,6 +41,7 @@ Next tasks (roughly sorted most important first)
         Just the basics
         An enemy for them
     Bulbmin
+    Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     
     --- v0.22.0 ---
     Details
@@ -661,13 +655,15 @@ Tasks for later on (I might never implement these)
                 Actually, the only advantage of this is the auto-ticking... But it might introduce a performance penalty, having to add and remove hundreds of timers in a vector
         https://www.gamasutra.com/blogs/ScottLembcke/20180404/316046/Improved_Lerp_Smoothing.php
         https://gamasutra.com/blogs/JiriHolba/20200511/362690/Should_STL_containers_be_used_in_game_engines.php
+    Stuff that isn't really justifiable yet, but may be one day
+        Should the leader's throw preview indicate collisions against mobs? It's not really necessary, and there are all sorts of weird cases, like decorative vs. combat mobs, untouchable hitboxes, etc.
+        Suggestions
+            An action with which to change a mob's home
+            A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
+                You can just give the mob a status effect that changes its speed
     Specific requested features
         An enemy that can heal, for instance, 20HP for each Pikmin eaten
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard
-    Suggestions that aren't really justifiable yet, but may be one day
-        An action with which to change a mob's home
-        A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
-            You can just give the mob a status effect that changes its speed
     Questions to be answered later
         Change the logic of Pikmin chasing after opponents (pikmin_fsm::go_to_opponent, pikmin_fsm::rechase_opponent) to better suit rectangular objects?
         If P1's leader throws a mine at P2's leader, and it sticks on them, that leader will be *holding* the mine. This will probably break a lot of logic that assumes holding just refers to the pre-throw Pikmin hold

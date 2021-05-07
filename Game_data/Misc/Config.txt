@@ -34,7 +34,9 @@ no_pikmin_color = 168 190 230
 onion_open_range = 24
 group_member_grab_range = 128
 pluck_range = 32
+throw_max_dist = 200
 whistle_growth_speed = 180
+whistle_max_dist = 200
 
 message_char_interval = 0.02
 zoom_max_level = 3.0
