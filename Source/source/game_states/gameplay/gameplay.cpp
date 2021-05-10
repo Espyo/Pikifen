@@ -1017,7 +1017,13 @@ void gameplay_state::load() {
             "in order to play.",
             NULL, ALLEGRO_MESSAGEBOX_WARN
         );
-        leave(LEAVE_TO_AREA_SELECT);
+        //Taken from leave(). We can't run the fade logic leave() needs 
+        //or else the game will crash.
+        if (game.states.area_ed->quick_play_area.empty()) {
+            game.change_state(game.states.area_menu);
+        } else {
+            game.change_state(game.states.area_ed);
+        }
         return;
     }
     
@@ -1236,6 +1242,11 @@ void gameplay_state::unload() {
     path_mgr.clear();
     
     cur_leader_ptr = NULL;
+
+    close_to_interactable_to_use = NULL;
+    close_to_nest_to_open = NULL;
+    close_to_pikmin_to_pluck = NULL;
+    close_to_ship_to_heal = NULL;
     
     game.cam.set_pos(point());
     game.cam.set_zoom(1.0f);
