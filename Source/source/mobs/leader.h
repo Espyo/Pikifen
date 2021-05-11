@@ -41,6 +41,10 @@ public:
     bool queued_pluck_cancel;
     //Is the leader currently in the walking animation?
     bool is_in_walking_anim;
+    //Time left before the leader can throw again.
+    float throw_cooldown;
+    //Whether or not a throw has been queued to be pulled off.
+    bool throw_queued;
     //Provided there's a throw, this is the mob to throw.
     mob* throwee;
     //Provided there's a throw, this is the angle.
@@ -54,12 +58,16 @@ public:
     //Provided there's a throw, this indicates whether it's low enough to reach.
     bool throwee_can_reach;
     
+    //Returns whether or not a leader can throw.
+    bool check_throw_ok() const;
     //Dismiss current group.
     void dismiss();
     //Order some Pikmin to get in the Onion.
     bool order_pikmin_to_onion(
         pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
     );
+    //Queues up a throw.
+    void queue_throw();
     //Signal to every group member that swarm mode started.
     void signal_swarm_start() const;
     //Signal to every group member that swarm mode ended.
@@ -80,6 +88,8 @@ public:
     virtual bool can_receive_status(status_type* s) const;
     //Mob drawing routine.
     virtual void draw_mob();
+    
+    static const float THROW_COOLDOWN_DURATION;
     
 protected:
     //Tick class-specific logic.

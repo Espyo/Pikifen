@@ -18,6 +18,9 @@
 #include "../game.h"
 
 
+const float leader::THROW_COOLDOWN_DURATION = 0.15f;
+
+
 /* ----------------------------------------------------------------------------
  * Creates a leader mob.
  * pos:
@@ -35,6 +38,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     pluck_target(nullptr),
     queued_pluck_cancel(false),
     is_in_walking_anim(false),
+    throw_cooldown(0.0f),
+    throw_queued(false),
     throwee(nullptr),
     throwee_angle(0.0f),
     throwee_max_z(0.0f),
@@ -59,6 +64,24 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
  */
 bool leader::can_receive_status(status_type* s) const {
     return s->affects & STATUS_AFFECTS_LEADERS;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not a leader can throw.
+ */
+bool leader::check_throw_ok() const {
+    if(holding.empty()) {
+        return false;
+    }
+    
+    mob_event* ev = fsm.get_event(LEADER_EV_THROW);
+    
+    if(!ev) {
+        return false;
+    }
+    
+    return true;
 }
 
 
@@ -590,6 +613,29 @@ void leader::swap_held_pikmin(mob* new_pik) {
  *   How many seconds to tick by.
  */
 void leader::tick_class_specifics(const float delta_t) {
+    //Throw-related things.
+    update_throw_variables();
+    
+    if(throw_cooldown > 0.0f) {
+        throw_cooldown -= delta_t;
+    }
+    
+    if(
+        throw_queued &&
+        throw_cooldown <= 0.0f &&
+        check_throw_ok()
+    ) {
+        fsm.run_event(LEADER_EV_THROW);
+        update_throw_variables();
+        throw_cooldown = THROW_COOLDOWN_DURATION;
+        throw_queued = false;
+    }
+    
+    if(throw_cooldown <= 0.0f) {
+        throw_queued = false;
+    }
+    
+    
     if(group && group->members.size()) {
     
         bool must_reassign_spots = false;
@@ -694,9 +740,19 @@ void leader::tick_class_specifics(const float delta_t) {
             group->members[0]->leave_group();
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Queues up a throw. This will cause the throw to go through whenever
+ * the throw cooldown ends.
+ */
+void leader::queue_throw() {
+    if(!check_throw_ok()) {
+        return;
+    }
     
-    //Update throw physics things.
-    update_throw_variables();
+    throw_queued = true;
 }
 
 

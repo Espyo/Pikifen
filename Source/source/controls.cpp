@@ -312,9 +312,7 @@ void gameplay_state::handle_button(
                 }
                 
             } else { //Button release.
-                if(!cur_leader_ptr->holding.empty()) {
-                    cur_leader_ptr->fsm.run_event(LEADER_EV_THROW);
-                }
+                cur_leader_ptr->queue_throw();
             }
             
             break;

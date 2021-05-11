@@ -9,11 +9,12 @@ Next tasks (roughly sorted most important first)
     If you pause while whistling, it keeps going
     Go near an Onion, quit, and enter a different area where you don't start near an Onion = crash
     The Beady Long Legs is just knocking Pikmin back instead of killing them
+        Actually, hazards just don't work. This is because of h2_ptr->type == HITBOX_TYPE_NORMAL (thanks Kman)
+    The mob type manual page should have a link to the script page's section that explains reaches
     
     --- v0.21.0 ---
     Add throw options to the controls: no special effect, hold button to spam throws, press to toggle spam-throw on or off
         Same for whistling and other controls you may need to mash/hold
-    Throw spam should be capped
     Minor editor improvements
         When placing your mouse over the timeline in the animation editor, the status bar should show the seconds at the cursor position.
         Make the sprite picker in the animation editor show the sprites in the buttons
