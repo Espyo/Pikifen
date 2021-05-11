@@ -253,13 +253,22 @@ void gameplay_state::handle_button(
             
                 bool done = false;
                 
-                //First check if the leader should heal themselves on the ship.
-                if(close_to_ship_to_heal) {
+                //Check if the player wants to cancel auto-throw.
+                if(
+                    game.options.auto_throw_mode == AUTO_THROW_TOGGLE &&
+                    cur_leader_ptr->auto_throwing
+                ) {
+                    cur_leader_ptr->stop_auto_throwing();
+                    done = true;
+                }
+                
+                //Check if the leader should heal themselves on the ship.
+                if(!done && close_to_ship_to_heal) {
                     close_to_ship_to_heal->heal_leader(cur_leader_ptr);
                     done = true;
                 }
                 
-                //Now check if the leader should pluck a Pikmin.
+                //Check if the leader should pluck a Pikmin.
                 if(!done) {
                     if(close_to_pikmin_to_pluck) {
                         cur_leader_ptr->fsm.run_event(
@@ -301,7 +310,20 @@ void gameplay_state::handle_button(
                         !closest_group_member_distant
                     ) {
                     
-                        done = grab_closest_group_member();
+                        switch (game.options.auto_throw_mode) {
+                        case AUTO_THROW_OFF: {
+                            done = grab_closest_group_member();
+                            break;
+                        } case AUTO_THROW_HOLD:
+                        case AUTO_THROW_TOGGLE: {
+                            cur_leader_ptr->start_auto_throwing();
+                            done = true;
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                        }
                     }
                 }
                 
@@ -312,7 +334,19 @@ void gameplay_state::handle_button(
                 }
                 
             } else { //Button release.
-                cur_leader_ptr->queue_throw();
+                switch (game.options.auto_throw_mode) {
+                case AUTO_THROW_OFF: {
+                    cur_leader_ptr->queue_throw();
+                    break;
+                } case AUTO_THROW_HOLD: {
+                    cur_leader_ptr->stop_auto_throwing();
+                    break;
+                } case AUTO_THROW_TOGGLE: {
+                    break;
+                } default: {
+                    break;
+                }
+                }
             }
             
             break;

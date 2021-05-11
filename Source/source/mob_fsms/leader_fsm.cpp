@@ -1250,7 +1250,9 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
-    ((leader*) m)->active = false;
+    leader* l_ptr = (leader*) m;
+    l_ptr->active = false;
+    l_ptr->stop_auto_throwing();
 }
 
 

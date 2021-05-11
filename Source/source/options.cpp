@@ -30,6 +30,7 @@ const size_t options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
 const size_t options_struct::DEF_AREA_EDITOR_UNDO_LIMIT = 20;
 const unsigned char options_struct::DEF_AREA_EDITOR_VIEW_MODE =
     area_editor::VIEW_MODE_TEXTURES;
+const AUTO_THROW_MODES options_struct::DEF_AUTO_THROW_MODE = AUTO_THROW_OFF;
 const float options_struct::DEF_CURSOR_SPEED = 500.0f;
 const bool options_struct::DEF_DRAW_CURSOR_TRAIL = true;
 const bool options_struct::DEF_EDITOR_MMB_PAN = false;
@@ -70,6 +71,7 @@ options_struct::options_struct() :
     area_editor_snap_threshold(DEF_AREA_EDITOR_SNAP_THRESHOLD),
     area_editor_undo_limit(DEF_AREA_EDITOR_UNDO_LIMIT),
     area_editor_view_mode(DEF_AREA_EDITOR_VIEW_MODE),
+    auto_throw_mode(DEF_AUTO_THROW_MODE),
     cursor_speed(DEF_CURSOR_SPEED),
     draw_cursor_trail(DEF_DRAW_CURSOR_TRAIL),
     editor_mmb_pan(DEF_EDITOR_MMB_PAN),
@@ -168,6 +170,7 @@ void options_struct::load(data_node* file) {
     
     //Other options.
     string resolution_str;
+    unsigned char auto_throw_mode_c;
     
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
@@ -178,6 +181,7 @@ void options_struct::load(data_node* file) {
     rs.set("area_editor_snap_threshold", area_editor_snap_threshold);
     rs.set("area_editor_undo_limit", area_editor_undo_limit);
     rs.set("area_editor_view_mode", area_editor_view_mode);
+    rs.set("auto_throw_mode", auto_throw_mode_c);
     rs.set("cursor_speed", cursor_speed);
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_mmb_pan", editor_mmb_pan);
@@ -199,6 +203,12 @@ void options_struct::load(data_node* file) {
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("window_position_hack", window_position_hack);
     
+    auto_throw_mode =
+        (AUTO_THROW_MODES)
+        std::min(
+            auto_throw_mode_c,
+            (unsigned char) (N_AUTO_THROW_MODES - 1)
+        );
     target_fps = std::max(1, target_fps);
     
     if(joystick_min_deadzone > joystick_max_deadzone) {
@@ -363,6 +373,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "area_editor_view_mode",
             i2s(area_editor_view_mode)
+        )
+    );
+    file->add(
+        new data_node(
+            "auto_throw_mode",
+            i2s(auto_throw_mode)
         )
     );
     file->add(

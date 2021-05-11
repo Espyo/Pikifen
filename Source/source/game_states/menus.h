@@ -17,6 +17,7 @@
 
 #include "game_state.h"
 #include "../gui.h"
+#include "../options.h"
 
 
 using std::map;
@@ -81,10 +82,12 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     gui_manager gui;
     
+    picker_gui_item* auto_throw_picker;
     picker_gui_item* resolution_picker;
     picker_gui_item* cursor_speed_picker;
     text_gui_item* warning_text;
     
+    void change_auto_throw(const signed int step);
     void change_cursor_speed(const signed int step);
     void change_resolution(const signed int step);
     void go_to_controls();
@@ -92,9 +95,12 @@ private:
     void leave();
     void trigger_restart_warning();
     
+    static const AUTO_THROW_MODES AUTO_THROW_PRESETS[];
+    static const string AUTO_THROW_PRESET_NAMES[];
     static const float CURSOR_SPEED_PRESETS[];
     static const string CURSOR_SPEED_PRESET_NAMES[];
     static const string GUI_FILE_PATH;
+    static const unsigned char N_AUTO_THROW_PRESETS;
     static const unsigned char N_CURSOR_SPEED_PRESETS;
     
 };

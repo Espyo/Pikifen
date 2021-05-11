@@ -45,6 +45,12 @@ public:
     float throw_cooldown;
     //Whether or not a throw has been queued to be pulled off.
     bool throw_queued;
+    //Is auto-throw mode on?
+    bool auto_throwing;
+    //Time left before the next auto-throw.
+    float auto_throw_cooldown;
+    //When the auto-throw cooldown restarts, set it to this value.
+    float auto_throw_cooldown_duration;
     //Provided there's a throw, this is the mob to throw.
     mob* throwee;
     //Provided there's a throw, this is the angle.
@@ -72,10 +78,14 @@ public:
     void signal_swarm_start() const;
     //Signal to every group member that swarm mode ended.
     void signal_swarm_end() const;
+    //Starts auto-throw mode.
+    void start_auto_throwing();
     //Starts the trail behind a thrown leader.
     void start_throw_trail();
     //Start whistling.
     void start_whistling();
+    //Stops the auto-throw mode.
+    void stop_auto_throwing();
     //Stop whistling.
     void stop_whistling();
     //Change the current held Pikmin for another.
@@ -89,6 +99,9 @@ public:
     //Mob drawing routine.
     virtual void draw_mob();
     
+    static const float AUTO_THROW_COOLDOWN_MAX_DURATION;
+    static const float AUTO_THROW_COOLDOWN_MIN_DURATION;
+    static const float AUTO_THROW_COOLDOWN_SPEED;
     static const float THROW_COOLDOWN_DURATION;
     
 protected:

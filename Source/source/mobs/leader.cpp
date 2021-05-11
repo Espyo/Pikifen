@@ -19,6 +19,10 @@
 
 
 const float leader::THROW_COOLDOWN_DURATION = 0.15f;
+const float leader::AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
+const float leader::AUTO_THROW_COOLDOWN_MIN_DURATION =
+    THROW_COOLDOWN_DURATION * 1.2f;
+const float leader::AUTO_THROW_COOLDOWN_SPEED = 0.3f;
 
 
 /* ----------------------------------------------------------------------------
@@ -40,6 +44,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     is_in_walking_anim(false),
     throw_cooldown(0.0f),
     throw_queued(false),
+    auto_throwing(false),
+    auto_throw_cooldown(0.0f),
     throwee(nullptr),
     throwee_angle(0.0f),
     throwee_max_z(0.0f),
@@ -543,6 +549,16 @@ void leader::signal_swarm_start() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Starts the auto-throw mode.
+ */
+void leader::start_auto_throwing() {
+    auto_throwing = true;
+    auto_throw_cooldown = 0.0f;
+    auto_throw_cooldown_duration = AUTO_THROW_COOLDOWN_MAX_DURATION;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Starts the particle generator that leaves a trail behind a thrown Pikmin.
  */
 void leader::start_throw_trail() {
@@ -567,6 +583,14 @@ void leader::start_whistling() {
     lea_type->sfx_whistle.play(0, false);
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stops the auto-throw mode.
+ */
+void leader::stop_auto_throwing() {
+    auto_throwing = false;
 }
 
 
@@ -616,8 +640,19 @@ void leader::tick_class_specifics(const float delta_t) {
     //Throw-related things.
     update_throw_variables();
     
+    if(auto_throw_cooldown > 0.0f) {
+        auto_throw_cooldown -= delta_t;
+    }
     if(throw_cooldown > 0.0f) {
         throw_cooldown -= delta_t;
+    }
+    
+    if(auto_throwing && auto_throw_cooldown <= 0.0f) {
+        bool grabbed = grab_closest_group_member();
+        if(grabbed) {
+            queue_throw();
+        }
+        auto_throw_cooldown = auto_throw_cooldown_duration;
     }
     
     if(
@@ -635,7 +670,17 @@ void leader::tick_class_specifics(const float delta_t) {
         throw_queued = false;
     }
     
+    auto_throw_cooldown_duration =
+        std::max(
+            auto_throw_cooldown_duration - AUTO_THROW_COOLDOWN_SPEED * delta_t,
+            AUTO_THROW_COOLDOWN_MIN_DURATION
+        );
+        
+    if(group && group->members.empty()) {
+        stop_auto_throwing();
+    }
     
+    //Group stuff.
     if(group && group->members.size()) {
     
         bool must_reassign_spots = false;

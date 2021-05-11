@@ -424,6 +424,32 @@ void gameplay_state::draw_ingame_text() {
         done = true;
     }
     
+    //Auto-throw stop notification.
+    if(
+        !done &&
+        cur_leader_ptr->auto_throwing &&
+        game.options.auto_throw_mode == AUTO_THROW_TOGGLE
+    ) {
+        size_t throw_control_id = INVALID;
+        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+            if(game.options.controls[0][c].action == BUTTON_THROW) {
+                throw_control_id = c;
+                break;
+            }
+        }
+        if(throw_control_id != INVALID) {
+            draw_notification(
+                point(
+                    cur_leader_ptr->pos.x,
+                    cur_leader_ptr->pos.y -
+                    cur_leader_ptr->type->radius
+                ),
+                "Stop throwing", &game.options.controls[0][throw_control_id]
+            );
+            done = true;
+        }
+    }
+    
     //Pluck stop notification.
     if(
         !done &&

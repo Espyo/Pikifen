@@ -25,6 +25,14 @@ using std::size_t;
 using std::vector;
 
 
+enum AUTO_THROW_MODES {
+    AUTO_THROW_OFF,
+    AUTO_THROW_HOLD,
+    AUTO_THROW_TOGGLE,
+    N_AUTO_THROW_MODES,
+};
+
+
 struct options_struct {
 
     static const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
@@ -36,6 +44,7 @@ struct options_struct {
     static const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
     static const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
     static const unsigned char DEF_AREA_EDITOR_VIEW_MODE;
+    static const AUTO_THROW_MODES DEF_AUTO_THROW_MODE;
     static const float DEF_CURSOR_SPEED;
     static const bool DEF_DRAW_CURSOR_TRAIL;
     static const bool DEF_EDITOR_MMB_PAN;
@@ -76,6 +85,8 @@ struct options_struct {
     size_t area_editor_undo_limit;
     //View mode to use.
     unsigned char area_editor_view_mode;
+    //Auto-throw mode.
+    AUTO_THROW_MODES auto_throw_mode;
     //List of controls for each player.
     vector<vector<control_info> > controls;
     //Cursor speed, in pixels per second. N/A when using the mouse.
