@@ -1459,7 +1459,7 @@ void gameplay_state::process_mob_touches(
                     hitbox_touch_haz_ev &&
                     !reported_haz_ev &&
                     !disable_attack_status &&
-                    h2_ptr->type == HITBOX_TYPE_NORMAL &&
+                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
                     h2_ptr->type == HITBOX_TYPE_ATTACK &&
                     !h2_ptr->hazards.empty()
                 ) {
