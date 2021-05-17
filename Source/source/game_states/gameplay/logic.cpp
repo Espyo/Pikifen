@@ -174,7 +174,7 @@ void gameplay_state::do_gameplay_logic() {
             if(!after_hours) {
                 after_hours = true;
                 game.states.results->out_of_time = true;
-                leave(LEAVE_TO_FINISH);
+                start_leaving(LEAVE_TO_FINISH);
             }
         }
         

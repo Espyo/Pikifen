@@ -96,6 +96,7 @@ public:
     
     void enter();
     void leave(const LEAVE_TARGET target);
+    void start_leaving(const LEAVE_TARGET target);
     void update_closest_group_member();
     
     virtual void load();

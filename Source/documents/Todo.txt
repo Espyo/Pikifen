@@ -6,11 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If you pause while whistling, it keeps going
-    Go near an Onion, quit, and enter a different area where you don't start near an Onion = crash
-    The Beady Long Legs is just knocking Pikmin back instead of killing them
-        Actually, hazards just don't work. This is because of h2_ptr->type == HITBOX_TYPE_NORMAL (thanks Kman)
-    The mob type manual page should have a link to the script page's section that explains reaches
     
     --- v0.21.0 ---
     Minor editor improvements
@@ -638,6 +633,8 @@ Tasks for later on (I might never implement these)
         Water should be shown in the area editor's review mode
         Maybe decorative objects should have a script variable that determines whether or not they rotate; useful if you want to place some decorative objects with manual rotation for level design purposes (thanks Nutty171)
     A competitive mode where each team's marble is out in the open, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
+    Story mode
+        A way to choose what landing site of the area you want to start the day in
     Barely important format changes
         Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
     Online play?

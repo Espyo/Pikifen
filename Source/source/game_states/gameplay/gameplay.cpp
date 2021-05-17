@@ -349,14 +349,14 @@ void gameplay_state::init_hud() {
     
     //Leader health and icons.
     for(size_t l = 0; l < 3; ++l) {
-        if(mobs.leaders.size() < l + 1) continue;
-        size_t l_nr =
-            (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leaders.size());
-            
         //Icon.
         gui_item* leader_icon = new gui_item();
         leader_icon->on_draw =
-        [this, l_nr] (const point & center, const point & size) {
+        [this, l] (const point & center, const point & size) {
+            if(l >= mobs.leaders.size()) return;
+            size_t l_nr =
+                (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leaders.size());
+                
             al_draw_filled_circle(
                 center.x, center.y,
                 std::min(size.x, size.y) / 2.0f,
@@ -373,7 +373,11 @@ void gameplay_state::init_hud() {
         //Health wheel.
         gui_item* leader_health = new gui_item();
         leader_health->on_draw =
-        [this, l_nr] (const point & center, const point & size) {
+        [this, l] (const point & center, const point & size) {
+            if(l >= mobs.leaders.size()) return;
+            size_t l_nr =
+                (size_t) sum_and_wrap(cur_leader_nr, l, mobs.leaders.size());
+                
             draw_health(
                 center,
                 mobs.leaders[l_nr]->health_wheel_smoothed_ratio, 1.0f,
@@ -911,45 +915,39 @@ void gameplay_state::init_hud() {
 
 
 /* ----------------------------------------------------------------------------
- * Leaves the gameplay state, returning to the main menu, or wherever else.
+ * Leaves the gameplay state and enters the main menu,
+ * or area selection, or etc.
  * target:
  *   Where to leave to.
  */
 void gameplay_state::leave(const LEAVE_TARGET target) {
-    game.fade_mgr.start_fade(
-        false,
-    [this, target] () {
-    
-        if(game.perf_mon) {
-            //Don't register the final frame, since it won't draw anything.
-            game.perf_mon->set_paused(true);
-        }
-        
-        al_show_mouse_cursor(game.display);
-        
-        switch(target) {
-        case LEAVE_TO_RETRY: {
-            game.change_state(game.states.gameplay);
-            break;
-        } case LEAVE_TO_FINISH: {
-            game.states.results->time_taken = area_time_passed;
-            went_to_results = true;
-            //Change state, but don't unload this one, since the player
-            //may pick the "keep playing" option in the results screen.
-            game.change_state(game.states.results, false);
-            break;
-        } case LEAVE_TO_AREA_SELECT: {
-            if(game.states.area_ed->quick_play_area.empty()) {
-                game.change_state(game.states.area_menu);
-            } else {
-                game.change_state(game.states.area_ed);
-            }
-            break;
-        }
-        }
-        
+    if(game.perf_mon) {
+        //Don't register the final frame, since it won't draw anything.
+        game.perf_mon->set_paused(true);
     }
-    );
+    
+    al_show_mouse_cursor(game.display);
+    
+    switch(target) {
+    case LEAVE_TO_RETRY: {
+        game.change_state(game.states.gameplay);
+        break;
+    } case LEAVE_TO_FINISH: {
+        game.states.results->time_taken = area_time_passed;
+        went_to_results = true;
+        //Change state, but don't unload this one, since the player
+        //may pick the "keep playing" option in the results screen.
+        game.change_state(game.states.results, false);
+        break;
+    } case LEAVE_TO_AREA_SELECT: {
+        if(game.states.area_ed->quick_play_area.empty()) {
+            game.change_state(game.states.area_menu);
+        } else {
+            game.change_state(game.states.area_ed);
+        }
+        break;
+    }
+    }
 }
 
 
@@ -1017,13 +1015,8 @@ void gameplay_state::load() {
             "in order to play.",
             NULL, ALLEGRO_MESSAGEBOX_WARN
         );
-        //Taken from leave(). We can't run the fade logic leave() needs 
-        //or else the game will crash.
-        if (game.states.area_ed->quick_play_area.empty()) {
-            game.change_state(game.states.area_menu);
-        } else {
-            game.change_state(game.states.area_ed);
-        }
+        
+        leave(LEAVE_TO_AREA_SELECT);
         return;
     }
     
@@ -1233,6 +1226,16 @@ void gameplay_state::load_game_content() {
 
 
 /* ----------------------------------------------------------------------------
+ * Starts the fade out to leave the gameplay state.
+ * target:
+ *   Where to leave to.
+ */
+void gameplay_state::start_leaving(const LEAVE_TARGET target) {
+    game.fade_mgr.start_fade( false, [this, target] () { leave(target); });
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads the "gameplay" state from memory.
  */
 void gameplay_state::unload() {
@@ -1242,7 +1245,7 @@ void gameplay_state::unload() {
     path_mgr.clear();
     
     cur_leader_ptr = NULL;
-
+    
     close_to_interactable_to_use = NULL;
     close_to_nest_to_open = NULL;
     close_to_pikmin_to_pluck = NULL;

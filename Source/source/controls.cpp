@@ -287,6 +287,10 @@ void gameplay_state::handle_button(
                             cur_leader_ptr
                         );
                         paused = true;
+                        
+                        //TODO replace with a better solution.
+                        cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+                        
                         done = true;
                     }
                 }
@@ -414,6 +418,9 @@ void gameplay_state::handle_button(
             
             pause_menu = new pause_menu_struct();
             paused = true;
+            
+            //TODO replace with a better solution.
+            cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
             
             break;
             

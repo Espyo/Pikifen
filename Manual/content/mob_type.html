@@ -228,6 +228,10 @@
     <p>If there's a type of object you know is popular in the <i>Pikmin</i> series, but you can't find the category for it, then either an appropriate category does not yet exist in the engine, or it can be created as a custom object.</p>
 
     <h2 id="extra">Extra features</h2>
+
+    <h3 id="reaches">Reaches</h3>
+
+    <p>An object can detect whether another object is "within reach" or not. Also, if it was within reach, and became "out of reach". It can also use different definitions of "reach" for different moments. This is all explained in detail in the <a href="script.html#reach">script page</a>.</p>
     
     <h3 id="spawning">Spawning other objects</h3>
     
@@ -251,7 +255,7 @@
       <li><b><code>link_object_to_spawn</code></b>: If <code>true</code>, a link will be created from your object to the spawned object.</li>
     </ul>
 
-    <h3 id="parent">Parent/Child objects</h3>
+    <h3 id="parent">Parent/child objects</h3>
     
     <p>Your object can be a <b>parent</b> object, meaning it is actually composed of several different <b>child</b> objects. This feature is especially useful when you need several independently-moving parts. For instance, in a <a href="https://www.pikminwiki.com/Beady_Long_Legs">Beady Long Legs</a>, the head is the parent object, meaning it is the enemy proper, and each leg is a child object.</p>
 

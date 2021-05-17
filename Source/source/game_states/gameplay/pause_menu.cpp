@@ -47,7 +47,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
         new button_gui_item("Retry day", game.fonts.standard);
     retry_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->leave(LEAVE_TO_RETRY);
+        game.states.gameplay->start_leaving(LEAVE_TO_RETRY);
     };
     gui.add_item(retry_button, "retry");
     
@@ -56,7 +56,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
         new button_gui_item("Finish day", game.fonts.standard);
     finish_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->leave(LEAVE_TO_FINISH);
+        game.states.gameplay->start_leaving(LEAVE_TO_FINISH);
     };
     gui.add_item(finish_button, "finish");
     
@@ -70,7 +70,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     );
     quit_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->leave(LEAVE_TO_AREA_SELECT);
+        game.states.gameplay->start_leaving(LEAVE_TO_AREA_SELECT);
     };
     gui.add_item(quit_button, "quit");
     
