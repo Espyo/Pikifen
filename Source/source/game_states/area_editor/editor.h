@@ -439,6 +439,7 @@ private:
     void close_options_dialog();
     void create_area();
     void create_drawing_vertexes();
+    void create_mob_under_cursor();
     void create_new_from_picker(const size_t picker_id, const string &name);
     sector* create_sector_for_layout_drawing(sector* copy_from);
     void delete_edge(edge* e_ptr);
@@ -574,7 +575,7 @@ private:
         const string &operation_name, area_data* pre_prepared_change = NULL
     );
     bool remove_isolated_sector(sector* s_ptr);
-    void resize_everything(const float mult);
+    void resize_everything(const float mults[2]);
     void rollback_to_prepared_state(area_data* prepared_state);
     void rotate_mob_gens_to_point(const point &pos);
     bool save_area(const bool to_backup);

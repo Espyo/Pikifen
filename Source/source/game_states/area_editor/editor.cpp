@@ -456,6 +456,34 @@ void area_editor::create_drawing_vertexes() {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new mob where the cursor is.
+ */
+void area_editor::create_mob_under_cursor() {
+    register_change("object creation");
+    sub_state = EDITOR_SUB_STATE_NONE;
+    point hotspot = snap_point(game.mouse_cursor_w);
+    
+    mob_category* category_to_use = last_mob_category;
+    mob_type* type_to_use = last_mob_type;
+    if(!category_to_use || category_to_use->id == MOB_CATEGORY_NONE) {
+        category_to_use = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
+        type_to_use = game.config.pikmin_order[0];
+    }
+    
+    game.cur_area_data.mob_generators.push_back(
+        new mob_gen(category_to_use, hotspot, type_to_use)
+    );
+    
+    last_mob_category = category_to_use;
+    last_mob_type = type_to_use;
+    
+    selected_mobs.insert(game.cur_area_data.mob_generators.back());
+    
+    status_text = "Created object.";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the logic part of the main loop of the area editor.
  */
 void area_editor::do_logic() {

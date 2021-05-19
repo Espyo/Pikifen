@@ -1422,7 +1422,11 @@ void area_editor::process_gui_panel_layout() {
         );
         
         //Clear selection button.
-        if(!selected_sectors.empty()) {
+        if(
+            !selected_sectors.empty() ||
+            !selected_edges.empty() ||
+            !selected_vertexes.empty()
+        ) {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
@@ -2808,28 +2812,30 @@ void area_editor::process_gui_panel_tools() {
         );
         
         //Resize everything multiplier value.
-        static float resize_mult = 1.0f;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragFloat("##resizeMult", &resize_mult, 0.01);
+        static float resize_mults[2] = { 1.0f, 1.0f };
+        ImGui::SetNextItemWidth(128.0f);
+        ImGui::DragFloat2("##resizeMult", resize_mults, 0.01);
         set_tooltip(
-            "Resize multiplier.",
+            "Resize multipliers, vertically and horizontally.",
             "", WIDGET_EXPLANATION_DRAG
         );
         
         //Resize everything button.
         ImGui::SameLine();
         if(ImGui::Button("Resize everything")) {
-            if(resize_mult == 0.0f) {
+            if(resize_mults[0] == 0.0f || resize_mults[1] == 0.0f) {
                 status_text = "Can't resize everything to size 0!";
-            } else if(resize_mult == 1.0f) {
+            } else if(resize_mults[0] == 1.0f && resize_mults[1] == 1.0f) {
                 status_text =
                     "Resizing everything by 1 wouldn't make a difference!";
             } else {
                 register_change("global resize");
-                resize_everything(resize_mult);
+                resize_everything(resize_mults);
                 status_text =
-                    "Resized everything by " + f2s(resize_mult) + ".";
-                resize_mult = 1.0f;
+                    "Resized everything by " + f2s(resize_mults[0]) + ", " +
+                    f2s(resize_mults[1]) + ".";
+                resize_mults[0] = 1.0f;
+                resize_mults[1] = 1.0f;
             }
         }
         set_tooltip(

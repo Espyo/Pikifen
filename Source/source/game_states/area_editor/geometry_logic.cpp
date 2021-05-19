@@ -1673,20 +1673,20 @@ void area_editor::merge_vertex(
 
 /* ----------------------------------------------------------------------------
  * Resizes all X and Y coordinates by the specified multiplier.
- * mult:
- *   Multiply the coordinates by this value.
+ * mults:
+ *   Multiply the coordinates horizontally and vertically by these values.
  */
-void area_editor::resize_everything(const float mult) {
+void area_editor::resize_everything(const float mults[2]) {
     for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = game.cur_area_data.vertexes[v];
-        v_ptr->x *= mult;
-        v_ptr->y *= mult;
+        v_ptr->x *= mults[0];
+        v_ptr->y *= mults[1];
     }
     
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = game.cur_area_data.sectors[s];
-        s_ptr->texture_info.scale *= mult;
-        s_ptr->texture_info.translation *= mult;
+        s_ptr->texture_info.scale.x *= mults[0];
+        s_ptr->texture_info.scale.y *= mults[1];
         s_ptr->triangles.clear();
         triangulate(s_ptr, NULL, false, false);
         s_ptr->calculate_bounding_box();
@@ -1694,12 +1694,14 @@ void area_editor::resize_everything(const float mult) {
     
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
-        m_ptr->pos *= mult;
+        m_ptr->pos.x *= mults[0];
+        m_ptr->pos.y *= mults[1];
     }
     
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        s_ptr->pos *= mult;
+        s_ptr->pos.x *= mults[0];
+        s_ptr->pos.y *= mults[1];
     }
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         game.cur_area_data.path_stops[s]->calculate_dists();
@@ -1707,9 +1709,12 @@ void area_editor::resize_everything(const float mult) {
     
     for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
         tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
-        s_ptr->center *= mult;
-        s_ptr->size   *= mult;
-        s_ptr->sway   *= mult;
+        s_ptr->center.x *= mults[0];
+        s_ptr->center.y *= mults[1];
+        s_ptr->size.x   *= mults[0];
+        s_ptr->size.y   *= mults[1];
+        s_ptr->sway.x   *= mults[0];
+        s_ptr->sway.y   *= mults[1];
     }
 }
 

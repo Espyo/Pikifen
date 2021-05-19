@@ -421,46 +421,74 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
         return;
     }
     
-    if(sub_state == EDITOR_SUB_STATE_NONE && state == EDITOR_STATE_LAYOUT) {
-        vertex* clicked_vertex = get_vertex_under_point(game.mouse_cursor_w);
-        if(!clicked_vertex) {
-            edge* clicked_edge = get_edge_under_point(game.mouse_cursor_w);
-            if(clicked_edge) {
-                register_change("edge split");
-                vertex* new_vertex =
-                    split_edge(clicked_edge, game.mouse_cursor_w);
-                clear_selection();
-                selected_vertexes.insert(new_vertex);
-                update_vertex_selection();
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        if(sub_state == EDITOR_SUB_STATE_NONE) {
+            vertex* clicked_vertex =
+                get_vertex_under_point(game.mouse_cursor_w);
+            if(!clicked_vertex) {
+                edge* clicked_edge =
+                    get_edge_under_point(game.mouse_cursor_w);
+                if(clicked_edge) {
+                    register_change("edge split");
+                    vertex* new_vertex =
+                        split_edge(clicked_edge, game.mouse_cursor_w);
+                    clear_selection();
+                    selected_vertexes.insert(new_vertex);
+                    update_vertex_selection();
+                }
             }
         }
+        break;
         
-    } else if(
-        sub_state == EDITOR_SUB_STATE_NONE &&
-        state == EDITOR_STATE_PATHS
-    ) {
-        bool clicked_stop =
-            get_path_stop_under_point(game.mouse_cursor_w);
-        if(!clicked_stop) {
-            std::pair<path_stop*, path_stop*> clicked_link_data_1;
-            std::pair<path_stop*, path_stop*> clicked_link_data_2;
-            bool clicked_link =
-                get_path_link_under_point(
-                    game.mouse_cursor_w,
-                    &clicked_link_data_1, &clicked_link_data_2
-                );
-            if(clicked_link) {
-                register_change("path link split");
-                path_stop* new_stop =
-                    split_path_link(
-                        clicked_link_data_1,
-                        clicked_link_data_2,
-                        game.mouse_cursor_w
-                    );
-                clear_selection();
-                selected_path_stops.insert(new_stop);
+    }
+    case EDITOR_STATE_MOBS: {
+        if(sub_state == EDITOR_SUB_STATE_NONE) {
+            mob_gen* clicked_mob =
+                get_mob_under_point(game.mouse_cursor_w);
+            if(!clicked_mob) {
+                create_mob_under_cursor();
+                //Quit now, otherwise the code after this will simulate a
+                //regular click, and if the mob is on the grid and the cursor
+                //isn't, this will deselect the mob.
+                return;
             }
         }
+        break;
+        
+    }
+    case EDITOR_STATE_PATHS: {
+        if(sub_state == EDITOR_SUB_STATE_NONE) {
+            bool clicked_stop =
+                get_path_stop_under_point(game.mouse_cursor_w);
+            if(!clicked_stop) {
+                std::pair<path_stop*, path_stop*> clicked_link_data_1;
+                std::pair<path_stop*, path_stop*> clicked_link_data_2;
+                bool clicked_link =
+                    get_path_link_under_point(
+                        game.mouse_cursor_w,
+                        &clicked_link_data_1, &clicked_link_data_2
+                    );
+                if(clicked_link) {
+                    register_change("path link split");
+                    path_stop* new_stop =
+                        split_path_link(
+                            clicked_link_data_1,
+                            clicked_link_data_2,
+                            game.mouse_cursor_w
+                        );
+                    clear_selection();
+                    selected_path_stops.insert(new_stop);
+                }
+            }
+        }
+        break;
+        
+    }
+    default: {
+        break;
+        
+    }
     }
     
     handle_lmb_down(ev);
@@ -686,27 +714,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         case EDITOR_SUB_STATE_NEW_MOB: {
     
             //Create a mob where the cursor is.
-            register_change("object creation");
-            sub_state = EDITOR_SUB_STATE_NONE;
-            point hotspot = snap_point(game.mouse_cursor_w);
-            
-            mob_category* category_to_use = last_mob_category;
-            mob_type* type_to_use = last_mob_type;
-            if(!category_to_use || category_to_use->id == MOB_CATEGORY_NONE) {
-                category_to_use = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
-                type_to_use = game.config.pikmin_order[0];
-            }
-            
-            game.cur_area_data.mob_generators.push_back(
-                new mob_gen(category_to_use, hotspot, type_to_use)
-            );
-            
-            last_mob_category = category_to_use;
-            last_mob_type = type_to_use;
-            
-            selected_mobs.insert(game.cur_area_data.mob_generators.back());
-            
-            status_text = "Created object.";
+            create_mob_under_cursor();
             
             break;
             

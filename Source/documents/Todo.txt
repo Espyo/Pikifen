@@ -9,8 +9,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.21.0 ---
     Minor editor improvements
-        The area editor should let you resize everything, but one dimension at a time
-        Double-click the area editor in mob mode to add a mob, or in path mode to add a node, etc.
         Should the area editor detect path stops that are sitting on top of a path link without being connected to it? It would help find paths that seem connected but aren't, but there might be cases where the player wants this?
     Misc. details
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
