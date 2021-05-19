@@ -586,7 +586,19 @@ void animation_editor::process_gui_panel_animation() {
     if(ImGui::Button(anim_button_name.c_str(), anim_button_size)) {
         vector<picker_item> anim_names;
         for(size_t a = 0; a < anims.animations.size(); ++a) {
-            anim_names.push_back(picker_item(anims.animations[a]->name));
+            ALLEGRO_BITMAP* anim_frame_1 = NULL;
+            if(!anims.animations[a]->frames.empty()) {
+                size_t s_pos =
+                    anims.find_sprite(
+                        anims.animations[a]->frames[0].sprite_name
+                    );
+                if(s_pos != INVALID) {
+                    anim_frame_1 = anims.sprites[s_pos]->bitmap;
+                }
+            }
+            anim_names.push_back(
+                picker_item(anims.animations[a]->name, "", anim_frame_1)
+            );
         }
         open_picker(
             "Pick an animation, or create a new one",
@@ -1339,7 +1351,13 @@ void animation_editor::process_gui_panel_sprite() {
     if(ImGui::Button(sprite_button_name.c_str(), sprite_button_size)) {
         vector<picker_item> sprite_names;
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
-            sprite_names.push_back(picker_item(anims.sprites[s]->name));
+            sprite_names.push_back(
+                picker_item(
+                    anims.sprites[s]->name,
+                    "",
+                    anims.sprites[s]->bitmap
+                )
+            );
         }
         open_picker(
             "Pick a sprite, or create a new one",

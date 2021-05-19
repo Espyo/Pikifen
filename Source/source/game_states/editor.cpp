@@ -1592,6 +1592,9 @@ editor::picker_info::picker_info(editor* editor_ptr) :
  * Processes the picker dialog for this frame.
  */
 void editor::picker_info::process() {
+    const float IMG_BUTTON_MIN_SIZE = 32.0f;
+    const float IMG_BUTTON_MAX_SIZE = 160.0f;
+    
     vector<string> category_names;
     vector<vector<picker_item> > final_items;
     string filter_lower = str_to_lower(filter);
@@ -1698,7 +1701,31 @@ void editor::picker_info::process() {
                 if(i_ptr->bitmap) {
                 
                     ImGui::BeginGroup();
-                    button_size = ImVec2(160.0f, 160.0f);
+                    
+                    point bmp_size(
+                        al_get_bitmap_width(i_ptr->bitmap),
+                        al_get_bitmap_height(i_ptr->bitmap)
+                    );
+                    if(bmp_size.x > 0.0f && bmp_size.x > bmp_size.y) {
+                        float ratio = bmp_size.y / bmp_size.x;
+                        button_size =
+                            ImVec2(
+                                IMG_BUTTON_MAX_SIZE,
+                                IMG_BUTTON_MAX_SIZE * ratio
+                            );
+                    } else if(bmp_size.y > 0.0f) {
+                        float ratio = bmp_size.x / bmp_size.y;
+                        button_size =
+                            ImVec2(
+                                IMG_BUTTON_MAX_SIZE * ratio,
+                                IMG_BUTTON_MAX_SIZE
+                            );
+                    }
+                    button_size.x =
+                        std::max(button_size.x, IMG_BUTTON_MIN_SIZE);
+                    button_size.y =
+                        std::max(button_size.y, IMG_BUTTON_MIN_SIZE);
+                        
                     if(
                         ImGui::ImageButton(
                             (void*) i_ptr->bitmap,
