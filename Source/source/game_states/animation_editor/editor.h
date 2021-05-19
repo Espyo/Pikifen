@@ -168,13 +168,15 @@ private:
     void draw_top_down_view_sprite(sprite* s);
     void enter_side_view();
     void exit_side_view();
+    float get_cursor_timeline_time();
     string get_path_short_name(const string &p) const;
-    void handle_mouse_in_timeline();
+    void handle_lmb_drag_in_timeline();
     void import_animation_data(const string &name);
     void import_sprite_file_data(const string &name);
     void import_sprite_hitbox_data(const string &name);
     void import_sprite_top_data(const string &name);
     void import_sprite_transformation_data(const string &name);
+    bool is_cursor_in_timeline();
     void load_animation_database(const bool should_update_history);
     void open_load_dialog();
     void open_options_dialog();

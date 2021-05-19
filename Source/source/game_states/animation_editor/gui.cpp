@@ -2406,12 +2406,18 @@ void animation_editor::process_gui_status_bar() {
         MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
+    bool showing_coords = false;
+    bool showing_time = false;
+    float cur_time = 0.0f;
+    
     //Mouse coordinates text.
     if(
         (!is_mouse_in_gui || is_m1_pressed) &&
+        !is_cursor_in_timeline() && !anim_playing &&
         state != EDITOR_STATE_SPRITE_BITMAP &&
         (state != EDITOR_STATE_HITBOXES || !side_view)
     ) {
+        showing_coords = true;
         ImGui::SameLine();
         ImGui::Text(
             "%s, %s",
@@ -2419,6 +2425,27 @@ void animation_editor::process_gui_status_bar() {
             box_string(f2s(game.mouse_cursor_w.y), 7).c_str()
         );
     }
+    
+    if(!showing_coords && state == EDITOR_STATE_ANIMATION) {
+        if(is_cursor_in_timeline()) {
+            cur_time = get_cursor_timeline_time();
+        } else {
+            cur_time = cur_anim->get_time(cur_frame_nr, cur_frame_time);
+        }
+        
+        showing_time = true;
+    }
+    
+    //Animation time text.
+    if(showing_time) {
+        ImGui::SameLine();
+        ImGui::Text(
+            "%s",
+            box_string(f2s(cur_time), 7).c_str()
+        );
+    }
+    
+    
 }
 
 

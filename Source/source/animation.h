@@ -157,6 +157,12 @@ public:
     );
     animation(const animation &a2);
     animation &operator=(const animation &a2);
+    
+    float get_duration();
+    void get_frame_and_time(
+        const float t, size_t* frame_nr, float* frame_time
+    );
+    float get_time(const size_t frame_nr, const float frame_time);
 };
 
 

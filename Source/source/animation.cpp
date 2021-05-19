@@ -78,6 +78,77 @@ animation &animation::operator=(const animation &a2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the total duration of the animation.
+ */
+float animation::get_duration() {
+    float duration = 0.0f;
+    for(size_t f = 0; f < frames.size(); ++f) {
+        duration += frames[f].duration;
+    }
+    return duration;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the frame number, and time within that frame, that matches the
+ * specified time.
+ * t:
+ *   Time to check.
+ * frame_nr:
+ *   The frame number is returned here.
+ * frame_time:
+ *   The time within the frame is returned here.
+ */
+void animation::get_frame_and_time(
+    const float t, size_t* frame_nr, float* frame_time
+) {
+    *frame_nr = 0;
+    *frame_time = 0.0f;
+    
+    if(frames.empty() || t <= 0.0f) {
+        return;
+    }
+    
+    float duration_so_far = 0.0f;
+    float prev_duration_so_far = 0.0f;
+    size_t f = 0;
+    for(f = 0; f < frames.size(); ++f) {
+        prev_duration_so_far = duration_so_far;
+        duration_so_far += frames[f].duration;
+        
+        if(duration_so_far > t) {
+            break;
+        }
+    }
+    
+    *frame_nr = clamp(f, 0, frames.size() - 1);
+    *frame_time = t - prev_duration_so_far;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the total time since the animation start, when given a frame
+ * and the current time in the current frame.
+ * frame_nr:
+ *   Current frame number.
+ * frame_time:
+ *   Time in the current frame.
+ */
+float animation::get_time(const size_t frame_nr, const float frame_time) {
+    if(frame_nr >= frames.size()) {
+        return get_duration();
+    }
+    
+    float cur_time = 0.0f;
+    for(size_t f = 0; f < frame_nr; ++f) {
+        cur_time += frames[f].duration;
+    }
+    cur_time += frame_time;
+    return cur_time;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an animation database.
  * a:
  *   List of animations.

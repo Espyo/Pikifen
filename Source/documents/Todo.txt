@@ -3,13 +3,12 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     
-    
+
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.21.0 ---
     Minor editor improvements
-        When placing your mouse over the timeline in the animation editor, the status bar should show the seconds at the cursor position.
         Make the sprite picker in the animation editor show the sprites in the buttons
         The area editor should let you resize everything, but one dimension at a time
         Double-click the area editor in mob mode to add a mob, or in path mode to add a node, etc.
