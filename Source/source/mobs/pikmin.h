@@ -54,7 +54,7 @@ public:
     //Is the Pikmin holding a tool and ready to drop it on whistle?
     bool is_tool_primed_for_whistle;
     
-    //State-dependant temporary variable.
+    //Temporary variable. Hacky, but effective. Only use within the same state!
     size_t temp_i;
     
     //Forces the Pikmin to carry a mob.

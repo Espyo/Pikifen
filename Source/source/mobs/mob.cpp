@@ -2573,7 +2573,9 @@ void mob::tick_script(const float delta_t) {
             dist(pos, game.states.gameplay->whistle.center) <=
             game.states.gameplay->whistle.radius
         ) {
-            whistled_ev->run(this);
+            whistled_ev->run(
+                this, (void*) game.states.gameplay->cur_leader_ptr
+            );
         }
     }
     

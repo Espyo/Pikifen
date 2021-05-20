@@ -102,19 +102,21 @@ pikmin_type::pikmin_type() :
  */
 anim_conversion_vector pikmin_type::get_anim_conversions() const {
     anim_conversion_vector v;
-    v.push_back(std::make_pair(PIKMIN_ANIM_IDLING,     "idling"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_WALKING,    "walking"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_THROWN,     "thrown"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_ATTACKING,  "attacking"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_GRABBING,   "grabbing"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_SIGHING,    "sighing"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_CARRYING,   "carrying"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_SPROUT,     "sprout"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_PLUCKING,   "plucking"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_LYING,      "lying"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_DRINKING,   "drinking"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_PICKING_UP, "picking_up"));
-    v.push_back(std::make_pair(PIKMIN_ANIM_SLIDING,    "sliding"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_IDLING,       "idling"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_WALKING,      "walking"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_THROWN,       "thrown"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_ATTACKING,    "attacking"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_GRABBING,     "grabbing"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_SIGHING,      "sighing"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_CARRYING,     "carrying"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_SPROUT,       "sprout"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_PLUCKING,     "plucking"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_KNOCKED_BACK, "knocked_back"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_LYING,        "lying"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_GETTING_UP,   "getting_up"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_DRINKING,     "drinking"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_PICKING_UP,   "picking_up"));
+    v.push_back(std::make_pair(PIKMIN_ANIM_SLIDING,      "sliding"));
     return v;
 }
 

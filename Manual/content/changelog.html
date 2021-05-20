@@ -40,6 +40,7 @@
           <li>Added an option to set the cursor's speed, used when controlling it without a mouse. (Thanks MonkeyUhOh)</li>
         </ul>
       </li>
+      <li>If a Pikmin is lying down, a leader can now whistle it to make it get up faster, and return to the leader once it does.</li>
       <li>Added an option to allow the leader to auto-throw. If you have trouble mashing the throw button, consider turning this on.</li>
       <li>If a new leader shows up from a defeated enemy, their HUD information will now display properly. (Thanks pikminjosh)</li>
       <li>
@@ -49,6 +50,19 @@
           <li>Double-clicking in the area editor while in object editing mode now creates a new object where you clicked.</li>
           <li>In the area editor, you can now specify a different horizontal and vertical scale, when resizing everything.</li>
           <li>Revamped the area editor's problem finder.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><b>Compatibility warnings</b></p>
+    
+    <ul>
+      <li>
+        In order for Pikmin to get up when whistled, their states and animations relating to knockback had to be changed. This results in the following animation changes:
+        <ul>
+          <li><code>lying</code> is now just the Pikmin lying down forever.</li>
+          <li><code>knocked_back</code> is a new animation for the Pikmin getting knocked back forever.</li>
+          <li><code>getting_up</code> is a new animation for the Pikmin getting up from lying down.</li>
         </ul>
       </li>
     </ul>

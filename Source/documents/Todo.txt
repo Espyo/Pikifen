@@ -6,16 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Throw a leader at a Pikmin sprout, whistle it while plucking, and swap to it. Then whistle the original leader. The leader will be in its own group
     
     --- v0.21.0 ---
-    Misc. details
-        Whistling lying Pikmin should make them get up and go to you
-            Change the animations to just be the Pikmin lying down, looping on that frame, and make the time to get up be controlled by a timer
-            When whistled, set that leader as the focused mob, and when it gets up, check if the focused mob is a leader (watch out for teams!). If so, add to group
-            Pikmin in the state where they're flying from knockback shouldn't listen to the damage events, but Pikmin lying on the ground should
-    Purple Pikmin
-        Give them a proper pound attack
-        Maybe stun?
     Rock Pikmin
         Should be unable to latch
         Should lunge on their own when attacking
@@ -25,6 +18,9 @@ Next tasks (roughly sorted most important first)
         An enemy for them
     Bulbmin
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
+    Purple Pikmin
+        Give them a proper pound attack
+        Maybe stun?
     
     --- v0.22.0 ---
     Details
@@ -84,6 +80,7 @@ Next tasks (roughly sorted most important first)
         Animate the Hocotate ship -- use Kman's zip
         Explosions https://www.patreon.com/posts/explosions-part-7719254
         Add the Inkscape noise filter to more sprites? Or even a different filter
+        I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
     Demo content
         Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
         If something is under construction, like a menu or something, add a small "WIP" blurb
@@ -271,6 +268,7 @@ Next tasks (roughly sorted most important first)
             Add HUD support for all the different layouts
         Make sure that:
             Leaders can't steal each other's group members
+                This includes Pikmin that are knocked down and get whistled
             Logic like culling isn't relying on just the first player
             Make sure Pikmin can't carry something the opposing team is already carrying
             Candypop Buds can't accept Pikmin from another team

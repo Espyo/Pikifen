@@ -984,11 +984,74 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::get_knocked_back);
         }
-        efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.run(pikmin_fsm::get_up);
-        }
         efc.new_event(MOB_EV_LANDED); {
+            efc.change_state("knocked_down");
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("knocked_down", PIKMIN_STATE_KNOCKED_DOWN); {
+        efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::stand_still);
+            efc.run(pikmin_fsm::get_knocked_down);
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.change_state("getting_up");
+        }
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(pikmin_fsm::called_while_knocked_down);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("getting_up", PIKMIN_STATE_GETTING_UP); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::start_getting_up);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(pikmin_fsm::finish_getting_up);
+        }
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(pikmin_fsm::called_while_knocked_down);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
@@ -1761,12 +1824,13 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
  * m:
  *   The mob.
  * info1:
- *   Unused.
+ *   Pointer to the leader that called.
  * info2:
  *   Unused.
  */
 void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
+    leader* caller = (leader*) info1;
     
     for(size_t s = 0; s < m->statuses.size(); ++s) {
         if(m->statuses[s].type->removable_with_whistle) {
@@ -1778,8 +1842,41 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pik->was_last_hit_dud = false;
     pik->consecutive_dud_hits = 0;
     
-    game.states.gameplay->cur_leader_ptr->add_to_group(pik);
+    caller->add_to_group(pik);
     game.sys_assets.sfx_pikmin_called.play(0.03, false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin that is knocked down is called over by a leader,
+ * either by being whistled, or touched when idling.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the leader that called.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
+    pikmin* pik = (pikmin*) m;
+    leader* caller = (leader*) info1;
+    
+    //Let's use the "temp" variable to specify whether or not a leader
+    //already whistled it.
+    if(pik->temp_i == 1) return;
+    
+    for(size_t s = 0; s < m->statuses.size(); ++s) {
+        if(m->statuses[s].type->removable_with_whistle) {
+            m->statuses[s].to_delete = true;
+        }
+    }
+    m->delete_old_status_effects();
+    
+    pik->focus_on_mob(caller);
+    
+    pik->script_timer.time_left -= PIKMIN_KNOCKED_DOWN_WHISTLE_BONUS;
+    
+    pik->temp_i = 1;
 }
 
 
@@ -2058,7 +2155,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When the Pikmin must move towards the whistle.
+ * When a Pikmin finishes getting up from being knocked down.
  * m:
  *   The mob.
  * info1:
@@ -2066,9 +2163,42 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
  * info2:
  *   Unused.
  */
+void pikmin_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
+    mob* prev_focused_mob = m->focused_mob;
+    
+    m->fsm.set_state(PIKMIN_STATE_IDLING);
+    
+    if(
+        prev_focused_mob->type->category->id == MOB_CATEGORY_LEADERS &&
+        !m->can_hunt(prev_focused_mob)
+    ) {
+        m->fsm.run_event(MOB_EV_WHISTLED, (void*) prev_focused_mob);
+        
+    } else if(
+        prev_focused_mob &&
+        m->can_hunt(prev_focused_mob)
+    ) {
+        m->fsm.run_event(
+            MOB_EV_OPPONENT_IN_REACH, (void*) prev_focused_mob, NULL
+        );
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the Pikmin must move towards the whistle.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the leader that called.
+ * info2:
+ *   Unused.
+ */
 void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
+    leader* caller = (leader*) info1;
     m->chase(
-        game.states.gameplay->cur_leader_ptr->pos, NULL, false, NULL, true
+        caller->pos, NULL, false, NULL, true
     );
 }
 
@@ -2146,12 +2276,12 @@ void pikmin_fsm::forget_tool(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
-    m->set_animation(PIKMIN_ANIM_LYING);
+    m->set_animation(PIKMIN_ANIM_KNOCKED_BACK);
 }
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin gets up from being knocked down.
+ * When a Pikmin gets knocked back and lands on the floor.
  * m:
  *   The mob.
  * info1:
@@ -2159,17 +2289,15 @@ void pikmin_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
  * info2:
  *   Unused.
  */
-void pikmin_fsm::get_up(mob* m, void* info1, void* info2) {
-    mob* prev_focused_mob = m->focused_mob;
-    m->fsm.set_state(PIKMIN_STATE_IDLING);
-    if(
-        prev_focused_mob &&
-        m->can_hunt(prev_focused_mob)
-    ) {
-        m->fsm.run_event(
-            MOB_EV_OPPONENT_IN_REACH, (void*) prev_focused_mob, NULL
-        );
-    }
+void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
+    
+    //Let's use the "temp" variable to specify whether or not a leader
+    //already whistled it.
+    p_ptr->temp_i = 0;
+    
+    m->set_animation(PIKMIN_ANIM_LYING);
+    m->set_timer(PIKMIN_KNOCKED_DOWN_DURATION);
 }
 
 
@@ -3067,6 +3195,20 @@ void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin starts getting up from being knocked down.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::start_getting_up(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_GETTING_UP);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin starts picking some object up to hold it.
  * m:
  *   The mob.
@@ -3575,7 +3717,7 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
  * m:
  *   The mob.
  * info1:
- *   Unused.
+ *   Pointer to the leader that called.
  * info2:
  *   Unused.
  */
@@ -3586,7 +3728,7 @@ void pikmin_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
     
     if(tra_ptr->tra_type->cancellable_with_whistle) {
         m->stop_track_ride();
-        pikmin_fsm::called(m, NULL, NULL);
+        pikmin_fsm::called(m, info1, NULL);
         m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
     }
 }

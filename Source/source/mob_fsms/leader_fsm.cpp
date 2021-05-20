@@ -1570,18 +1570,19 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
  * m:
  *   The mob.
  * info1:
- *   Unused.
+ *   Pointer to the leader that called.
  * info2:
  *   Unused.
  */
 void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
+    leader* caller = (leader*) info1;
     
-    game.states.gameplay->cur_leader_ptr->add_to_group(l_ptr);
+    caller->add_to_group(l_ptr);
     while(!l_ptr->group->members.empty()) {
         mob* member = l_ptr->group->members[0];
         member->leave_group();
-        game.states.gameplay->cur_leader_ptr->add_to_group(member);
+        caller->add_to_group(member);
     }
 }
 
@@ -2219,7 +2220,7 @@ void leader_fsm::whistle(mob* m, void* info1, void* info2) {
  * m:
  *   The mob.
  * info1:
- *   Unused.
+ *   Pointer to the leader that called.
  * info2:
  *   Unused.
  */
@@ -2233,6 +2234,6 @@ void leader_fsm::whistled_while_riding(mob* m, void* info1, void* info2) {
     }
     
     m->stop_track_ride();
-    leader_fsm::join_group(m, NULL, NULL);
+    leader_fsm::join_group(m, info1, NULL);
     m->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
 }

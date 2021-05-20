@@ -73,6 +73,10 @@ const size_t N_MATURITIES = 3;
 const string NONE_OPTION = "(None)";
 //When an opponent is hit, it takes this long to be possible to hit it again.
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
+//How long a Pikmin that got knocked down stays on the floor for, if left alone.
+const float PIKMIN_KNOCKED_DOWN_DURATION = 2.0f;
+//A whistled Pikmin that got knocked down loses this much in lie-down time.
+const float PIKMIN_KNOCKED_DOWN_WHISTLE_BONUS = 1.3f;
 //How frequently should a replay state be saved.
 const float REPLAY_SAVE_FREQUENCY = 1.0f;
 //Duration of the "smack" particle.

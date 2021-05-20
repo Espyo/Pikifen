@@ -32,6 +32,13 @@ animations{
 			}
 		}
 	}
+	getting_up{
+		frames{
+			half_lying{
+				duration=0.2000
+			}
+		}
+	}
 	grabbing{
 		frames{
 			grabbing{
@@ -46,16 +53,17 @@ animations{
 			}
 		}
 	}
-	lying{
+	knocked_back{
 		frames{
 			half_lying{
-				duration=0.1000
+				duration=0.0000
 			}
+		}
+	}
+	lying{
+		frames{
 			lying{
-				duration=2.0000
-			}
-			half_lying{
-				duration=0.1000
+				duration=0.0000
 			}
 		}
 	}
