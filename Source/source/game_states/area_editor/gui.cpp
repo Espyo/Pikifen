@@ -2013,7 +2013,7 @@ void area_editor::process_gui_panel_paths() {
         ImGui::Dummy(ImVec2(0, 16));
         
         //Drawing stop button.
-        if(ImGui::Button("Stop", ImVec2(-1.0f, 32.0f))) {
+        if(ImGui::Button("Done", ImVec2(-1.0f, 32.0f))) {
             status_text.clear();
             sub_state = EDITOR_SUB_STATE_NONE;
         }

@@ -1057,6 +1057,9 @@ void area_editor::goto_problem() {
                 max_coords.y, problem_edge_intersection.e2->vertexes[1]->y
             );
             
+        change_state(EDITOR_STATE_LAYOUT);
+        select_edge(problem_edge_intersection.e1);
+        select_edge(problem_edge_intersection.e2);
         center_camera(min_coords, max_coords);
         
         break;
@@ -1069,7 +1072,9 @@ void area_editor::goto_problem() {
             return;
         }
         
+        change_state(EDITOR_STATE_LAYOUT);
         sector* s_ptr = game.cur_area_data.problems.non_simples.begin()->first;
+        select_sector(s_ptr);
         center_camera(s_ptr->bbox[0], s_ptr->bbox[1]);
         
         break;
@@ -1098,6 +1103,8 @@ void area_editor::goto_problem() {
         max_coords.y = std::max(max_coords.y, e_ptr->vertexes[0]->y);
         max_coords.y = std::max(max_coords.y, e_ptr->vertexes[1]->y);
         
+        change_state(EDITOR_STATE_LAYOUT);
+        select_edge(e_ptr);
         center_camera(min_coords, max_coords);
         
         break;
@@ -1110,6 +1117,8 @@ void area_editor::goto_problem() {
             return;
         }
         
+        change_state(EDITOR_STATE_LAYOUT);
+        select_vertex(problem_vertex_ptr);
         center_camera(
             point(
                 problem_vertex_ptr->x - 64,
@@ -1131,6 +1140,8 @@ void area_editor::goto_problem() {
             return;
         }
         
+        change_state(EDITOR_STATE_LAYOUT);
+        select_sector(problem_sector_ptr);
         center_camera(problem_sector_ptr->bbox[0], problem_sector_ptr->bbox[1]);
         
         break;
@@ -1147,12 +1158,15 @@ void area_editor::goto_problem() {
             return;
         }
         
+        change_state(EDITOR_STATE_MOBS);
+        selected_mobs.insert(problem_mob_ptr);
         center_camera(problem_mob_ptr->pos - 64, problem_mob_ptr->pos + 64);
         
         break;
         
     } case EPT_LONE_PATH_STOP:
     case EPT_PATH_STOPS_TOGETHER:
+    case EPT_PATH_STOP_ON_LINK:
     case EPT_PATH_STOP_OOB: {
 
         if(!problem_path_stop_ptr) {
@@ -1161,10 +1175,53 @@ void area_editor::goto_problem() {
             return;
         }
         
+        change_state(EDITOR_STATE_PATHS);
+        selected_path_stops.insert(problem_path_stop_ptr);
         center_camera(
             problem_path_stop_ptr->pos - 64,
             problem_path_stop_ptr->pos + 64
         );
+        
+        break;
+        
+    } case EPT_PATHS_UNCONNECTED: {
+
+        unordered_set<path_stop*> visited;
+        depth_first_search(
+            game.cur_area_data.path_stops,
+            visited,
+            game.cur_area_data.path_stops[0]
+        );
+        
+        if(
+            visited.empty() ||
+            visited.size() == game.cur_area_data.path_stops.size()
+        ) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        change_state(EDITOR_STATE_PATHS);
+        
+        point cam_tl = (*visited.begin())->pos;
+        point cam_br = (*visited.begin())->pos;
+        
+        for(path_stop* s : visited) {
+            cam_tl.x = std::min(cam_tl.x, s->pos.x);
+            cam_tl.y = std::min(cam_tl.y, s->pos.y);
+            cam_br.x = std::max(cam_br.x, s->pos.x);
+            cam_br.y = std::max(cam_br.y, s->pos.y);
+            
+            selected_path_stops.insert(s);
+            for(size_t l = 0; l < s->links.size(); ++l) {
+                selected_path_links.insert(
+                    std::make_pair(s, s->links[l].end_ptr)
+                );
+            }
+        }
+        
+        center_camera(cam_tl - 64.0f, cam_br + 64.0f);
         
         break;
         
@@ -1175,6 +1232,9 @@ void area_editor::goto_problem() {
             problem_shadow_ptr->center, problem_shadow_ptr->size,
             problem_shadow_ptr->angle, &min_coords, &max_coords
         );
+        
+        change_state(EDITOR_STATE_DETAILS);
+        select_tree_shadow(problem_shadow_ptr);
         center_camera(min_coords, max_coords);
         
         break;

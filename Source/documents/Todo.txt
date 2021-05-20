@@ -8,13 +8,7 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.21.0 ---
-    Minor editor improvements
-        Should the area editor detect path stops that are sitting on top of a path link without being connected to it? It would help find paths that seem connected but aren't, but there might be cases where the player wants this?
     Misc. details
-        There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
-            There should only be one on-screen at a time
-            Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
-            The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
         Whistling lying Pikmin should make them get up and go to you
             Change the animations to just be the Pikmin lying down, looping on that frame, and make the time to get up be controlled by a timer
             When whistled, set that leader as the focused mob, and when it gets up, check if the focused mob is a leader (watch out for teams!). If so, add to group
@@ -236,6 +230,10 @@ Next tasks (roughly sorted most important first)
             One of these layers has to take care about not letting a LMB1-down event come after another LMB1-down event without an LMB1-up event...
             Idea: the action manager has a list of all actions and their states (float from 0 to 1), as well as the state the previous frame, so the engine can check if a whistle was released, for example (1 last frame, 0 now) -- probably have different systems in place for the global game input and the gameplay game input? Like, have a different system for checking inputs outside of menus, so that if B is held during the menu it is considered as pressed the very first frame the menu is gone
             Instead of letting the game layer have to worry about normalizing joysticks, let the hardware layer do so
+    There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
+        There should only be one on-screen at a time
+        Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
+        The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
     Petrified enemies shaking before getting out, and breaking open when defeated while petrified
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival

@@ -129,6 +129,7 @@ private:
         EPT_LONE_PATH_STOP,       //A path stop is all by itself.
         EPT_PATH_STOP_OOB,        //A path stop is out of bounds.
         EPT_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
+        EPT_PATH_STOP_ON_LINK,    //A path stop is on top of an unrelated link.
         EPT_PATHS_UNCONNECTED,    //The path graph is unconnected.
         EPT_PILE_BRIDGE_PATH,     //Bridge blocks the path from pile to it.
         EPT_UNKNOWN_SHADOW,       //Unknown tree shadow image.

@@ -771,6 +771,37 @@ void area_editor::find_problems() {
         }
     }
     
+    //A stops intersects with an unrelated link.
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); ++s2) {
+            path_stop* link_start_ptr = game.cur_area_data.path_stops[s2];
+            if(link_start_ptr == s_ptr) continue;
+            
+            for(size_t l = 0; l < link_start_ptr->links.size(); ++l) {
+                path_stop* link_end_ptr = link_start_ptr->links[l].end_ptr;
+                if(link_end_ptr == s_ptr) continue;
+                
+                if(
+                    circle_intersects_line(
+                        s_ptr->pos, PATH_STOP_RADIUS,
+                        link_start_ptr->pos, link_end_ptr->pos
+                    )
+                ) {
+                    problem_path_stop_ptr = s_ptr;
+                    problem_type = EPT_PATH_STOP_ON_LINK;
+                    problem_title = "Path stop on unrelated link!";
+                    problem_description =
+                        "This path stop is on top of a link that has nothing "
+                        "to do with it. If you meant to connect the two, do "
+                        "so now. Otherwise, move the path stop a bit away from "
+                        "the link so that they're not so deceptively close.";
+                    return;
+                }
+            }
+        }
+    }
+    
     //Path graph is not connected.
     if(!game.cur_area_data.path_stops.empty()) {
         unordered_set<path_stop*> visited;
