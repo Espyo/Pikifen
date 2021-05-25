@@ -35,12 +35,12 @@ const float options_struct::DEF_CURSOR_SPEED = 500.0f;
 const bool options_struct::DEF_DRAW_CURSOR_TRAIL = true;
 const bool options_struct::DEF_EDITOR_MMB_PAN = false;
 const float options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
-const float options_struct::DEF_EDITOR_PRIMARY_COLOR[3] =
-{0.05f, 0.05f, 0.05f};
-const float options_struct::DEF_EDITOR_SECONDARY_COLOR[3] =
-{0.19f, 0.47f, 0.78f};
-const float options_struct::DEF_EDITOR_TEXT_COLOR[3] =
-{1.0f, 1.0f, 1.0f};
+const float options_struct::DEF_EDITOR_PRIMARY_COLOR[4] =
+{0.05f, 0.05f, 0.05f, 1.0f};
+const float options_struct::DEF_EDITOR_SECONDARY_COLOR[4] =
+{0.19f, 0.47f, 0.78f, 1.0f};
+const float options_struct::DEF_EDITOR_TEXT_COLOR[4] =
+{1.0f, 1.0f, 1.0f, 1.0f};
 const bool options_struct::DEF_EDITOR_SHOW_TOOLTIPS = true;
 const float options_struct::DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 const float options_struct::DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
@@ -99,14 +99,17 @@ options_struct::options_struct() :
     editor_primary_color.r = DEF_EDITOR_PRIMARY_COLOR[0];
     editor_primary_color.g = DEF_EDITOR_PRIMARY_COLOR[1];
     editor_primary_color.b = DEF_EDITOR_PRIMARY_COLOR[2];
+    editor_primary_color.a = DEF_EDITOR_PRIMARY_COLOR[3];
     
     editor_secondary_color.r = DEF_EDITOR_SECONDARY_COLOR[0];
     editor_secondary_color.g = DEF_EDITOR_SECONDARY_COLOR[1];
     editor_secondary_color.b = DEF_EDITOR_SECONDARY_COLOR[2];
+    editor_secondary_color.a = DEF_EDITOR_SECONDARY_COLOR[3];
     
     editor_text_color.r = DEF_EDITOR_TEXT_COLOR[0];
     editor_text_color.g = DEF_EDITOR_TEXT_COLOR[1];
     editor_text_color.b = DEF_EDITOR_TEXT_COLOR[2];
+    editor_text_color.a = DEF_EDITOR_TEXT_COLOR[3];
 }
 
 

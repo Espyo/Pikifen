@@ -874,6 +874,10 @@ void animation_editor::process_gui_panel_animation() {
                     ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                 )
             ) {
+                if(cur_frame_nr < cur_anim->loop_frame) {
+                    //Let the loop frame stay the same.
+                    cur_anim->loop_frame++;
+                }
                 anim_playing = false;
                 if(cur_frame_nr != INVALID) {
                     cur_frame_nr++;
@@ -904,6 +908,17 @@ void animation_editor::process_gui_panel_animation() {
                         ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
                     )
                 ) {
+                    if(cur_frame_nr < cur_anim->loop_frame) {
+                        //Let the loop frame stay the same.
+                        cur_anim->loop_frame--;
+                    }
+                    if(
+                        cur_frame_nr == cur_anim->loop_frame &&
+                        cur_anim->loop_frame == cur_anim->frames.size() - 1
+                    ) {
+                        //Stop the loop frame from going out of bounds.
+                        cur_anim->loop_frame--;
+                    }
                     anim_playing = false;
                     size_t deleted_frame_nr = cur_frame_nr;
                     if(cur_frame_nr != INVALID) {

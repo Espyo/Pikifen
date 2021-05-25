@@ -6,19 +6,13 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Cross-section is supposedly broken
-        The alpha of the custom colors is always 0!
-        The editor shouldn't use the custom colors if custom style is off
     
     --- v0.21.0 ---
-    When adding a frame before the loop frame, or removing one, the loop frame should move by 1 (Kman)
     Rock Pikmin
         Should be unable to latch
         Should lunge on their own when attacking
-        An enemy for them, like Skutterchucks
     Winged Pikmin
         Just the basics
-        An enemy for them
     Bulbmin
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     Purple Pikmin

@@ -1140,11 +1140,16 @@ void area_editor::draw_canvas() {
         float proportion =
             (cross_section_window_end.x - cross_section_window_start.x) /
             cross_section_world_length.to_float();
+
+        ALLEGRO_COLOR bg_color =
+            game.options.editor_use_custom_style ?
+            change_color_lighting(game.options.editor_primary_color, -0.3f) :
+            al_map_rgb(0, 0, 64);
             
         al_draw_filled_rectangle(
             cross_section_window_start.x, cross_section_window_start.y,
             cross_section_window_end.x, cross_section_window_end.y,
-            change_color_lighting(game.options.editor_primary_color, -0.3f)
+            bg_color
         );
         
         if(show_cross_section_grid) {
@@ -1410,11 +1415,16 @@ void area_editor::draw_cross_section_sector(
     float rectangle_y =
         cross_section_window_end.y - 8 -
         ((sector_ptr->z - lowest_z) * proportion);
+    
+    ALLEGRO_COLOR color =
+        game.options.editor_use_custom_style ?
+        change_color_lighting(game.options.editor_secondary_color, -0.2f) :
+        al_map_rgb(0, 64, 0);
         
     al_draw_filled_rectangle(
         rectangle_x1, rectangle_y,
         rectangle_x2 + 1, cross_section_window_end.y + 1,
-        change_color_lighting(game.options.editor_secondary_color, -0.2f)
+        color
     );
     al_draw_line(
         rectangle_x1 + 0.5, rectangle_y,
