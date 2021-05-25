@@ -159,6 +159,33 @@ float pikmin::get_base_speed() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns its group spot information.
+ * Basically, when it's in a leader's group, what point it should be following,
+ * and within what distance.
+ * final_spot:
+ *   The final coordinates are returned here.
+ * final_dist:
+ *   The final distance to those coordinates is returned here.
+ */
+void pikmin::get_group_spot_info(
+    point* final_spot, float* final_dist
+) const {
+    final_spot->x = 0.0f;
+    final_spot->y = 0.0f;
+    *final_dist = 0.0f;
+    
+    if(!following_group || !following_group->group) {
+        return;
+    }
+    
+    *final_spot =
+        following_group->group->anchor +
+        following_group->group->get_spot_offset(group_spot_index);
+    *final_dist = 5.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handler for when there is no longer any status effect-induced panic.
  */
 void pikmin::handle_panic_loss() {

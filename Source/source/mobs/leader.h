@@ -96,6 +96,10 @@ public:
     
     //Can the mob currently receive the specified status effect?
     virtual bool can_receive_status(status_type* s) const;
+    //Return the coords and distance of its spot in the group.
+    virtual void get_group_spot_info(
+        point* final_spot, float* final_dist
+    ) const;
     //Mob drawing routine.
     virtual void draw_mob();
     

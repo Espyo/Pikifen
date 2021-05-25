@@ -423,7 +423,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("in_group_chasing", LEADER_STATE_IN_GROUP_CHASING); {
         efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(leader_fsm::chase_leader);
+            efc.run(leader_fsm::start_chasing_leader);
         }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.change_state("in_group_stopped");
@@ -431,6 +431,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_DISMISSED); {
             efc.run(leader_fsm::be_dismissed);
             efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_SPOT_IS_FAR); {
+            efc.run(leader_fsm::update_in_group_chasing);
         }
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
             efc.run(leader_fsm::be_grabbed_by_friend);
@@ -1302,44 +1305,6 @@ void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a leader must chase another.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
-    group_info_struct* leader_group_ptr = m->following_group->group;
-    engine_assert(leader_group_ptr != NULL, m->print_state_history());
-    
-    float distance =
-        m->following_group->type->radius +
-        m->type->radius + game.config.standard_pikmin_radius;
-        
-    for(size_t me = 0; me < leader_group_ptr->members.size(); ++me) {
-        mob* member_ptr = leader_group_ptr->members[me];
-        if(member_ptr == m) {
-            break;
-        } else if(member_ptr->subgroup_type_ptr == m->subgroup_type_ptr) {
-            //If this member is also a leader,
-            //then that means the current leader should stick behind.
-            distance +=
-                member_ptr->type->radius * 2 + GROUP_SPOT_INTERVAL;
-        }
-    }
-    
-    m->chase(
-        point(), &m->following_group->pos, false, NULL,
-        true, distance
-    );
-    m->set_animation(LEADER_ANIM_WALKING);
-    m->focus_on_mob(m->following_group);
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a leader must decide what to do next after plucking.
  * m:
  *   The mob.
@@ -2009,6 +1974,22 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a leader must start chasing another.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
+    m->set_animation(LEADER_ANIM_WALKING);
+    m->focus_on_mob(m->following_group);
+    leader_fsm::update_in_group_chasing(m, NULL, NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a leader starts drinking the drop it touched.
  * m:
  *   The mob.
@@ -2286,6 +2267,27 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
     for(size_t e = 0; e < s->effects.size(); ++e) {
         l->apply_status_effect(s->effects[e], false, false);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the leader should update its destination when chasing another leader.
+ * m:
+ *   The mob.
+ * info1:
+ *   Points to the position struct with the final destination.
+ *   If NULL, the final destination is calculated in this function.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    point target_pos;
+    float target_dist;
+    
+    l_ptr->get_group_spot_info(&target_pos, &target_dist);
+    
+    m->chase(target_pos, NULL, false, NULL, false, target_dist);
 }
 
 

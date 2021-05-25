@@ -122,8 +122,6 @@ enum MOB_EV_TYPES {
     MOB_EV_RELEASE_ORDER,
     //When it is whistled by a leader.
     MOB_EV_WHISTLED,
-    //When its spot on the group is now near, and the mob is in the group.
-    MOB_EV_SPOT_IS_NEAR,
     //When its spot on the group is now far, and the mob is in the group.
     MOB_EV_SPOT_IS_FAR,
     //When the group the mob is on started swarming.

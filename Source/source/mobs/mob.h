@@ -379,6 +379,9 @@ public:
     void remove_particle_generator(const size_t id);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale) const;
     virtual bool can_receive_status(status_type* s) const;
+    virtual void get_group_spot_info(
+        point* final_spot, float* final_dist
+    ) const;
     virtual void handle_status_effect(status_type* s);
     virtual void handle_panic_loss();
     virtual void read_script_vars(const script_var_reader &svr);

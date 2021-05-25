@@ -454,6 +454,49 @@ size_t leader::get_dismiss_rows(const size_t n_members) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns its group spot information.
+ * Basically, when it's in a leader's group, what point it should be following,
+ * and within what distance.
+ * final_spot:
+ *   The final coordinates are returned here.
+ * final_dist:
+ *   The final distance to those coordinates is returned here.
+ */
+void leader::get_group_spot_info(
+    point* final_spot, float* final_dist
+) const {
+    final_spot->x = 0.0f;
+    final_spot->y = 0.0f;
+    *final_dist = 0.0f;
+    
+    if(!following_group || !following_group->group) {
+        return;
+    }
+    
+    group_info_struct* leader_group_ptr = following_group->group;
+    
+    float distance =
+        following_group->type->radius +
+        type->radius + game.config.standard_pikmin_radius;
+        
+    for(size_t me = 0; me < leader_group_ptr->members.size(); ++me) {
+        mob* member_ptr = leader_group_ptr->members[me];
+        if(member_ptr == this) {
+            break;
+        } else if(member_ptr->subgroup_type_ptr == subgroup_type_ptr) {
+            //If this member is also a leader,
+            //then that means the current leader should stick behind.
+            distance +=
+                member_ptr->type->radius * 2 + GROUP_SPOT_INTERVAL;
+        }
+    }
+    
+    *final_spot = following_group->pos;
+    *final_dist = distance;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Orders Pikmin from the group to leave the group, and head for the specified
  * nest, with the goal of being stored inside. This function prioritizes
  * less matured Pikmin, and ones closest to the nest.

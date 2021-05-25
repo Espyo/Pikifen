@@ -75,6 +75,10 @@ public:
     virtual void draw_mob();
     //Get the base movement speed.
     virtual float get_base_speed() const;
+    //Return the coords and distance of its spot in the group.
+    virtual void get_group_spot_info(
+        point* final_spot, float* final_dist
+    ) const;
     //Handler for when there is no longer any status effect-induced panic.
     virtual void handle_panic_loss();
     //Handler for a status effect.

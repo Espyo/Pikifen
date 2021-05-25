@@ -1358,6 +1358,24 @@ hitbox* mob::get_closest_hitbox(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns its group spot information.
+ * Basically, when it's in a leader's group, what point it should be following,
+ * and within what distance.
+ * final_spot:
+ *   The final coordinates are returned here.
+ * final_dist:
+ *   The final distance to those coordinates is returned here.
+ */
+void mob::get_group_spot_info(
+    point* final_spot, float* final_dist
+) const {
+    final_spot->x = 0.0f;
+    final_spot->y = 0.0f;
+    *final_dist = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns how vulnerable the mob is to that specific hazard,
  * or the mob type's default if there is no vulnerability data for that hazard.
  * h_ptr:
@@ -2581,20 +2599,17 @@ void mob::tick_script(const float delta_t) {
     
     //Following a leader.
     if(following_group) {
-        mob_event* spot_near_ev = q_get_event(this, MOB_EV_SPOT_IS_NEAR);
         mob_event* spot_far_ev =  q_get_event(this, MOB_EV_SPOT_IS_FAR);
         
-        if(spot_near_ev || spot_far_ev) {
-            point final_pos =
-                following_group->group->anchor +
-                following_group->group->get_spot_offset(
-                    group_spot_index
-                );
-            dist d(pos, final_pos);
-            if(spot_far_ev && d >= 5) {
-                spot_far_ev->run(this, (void*) &final_pos);
-            } else if(spot_near_ev && d < 5) {
-                spot_near_ev->run(this);
+        if(spot_far_ev) {
+            point target_pos;
+            float target_dist;
+            
+            get_group_spot_info(&target_pos, &target_dist);
+            
+            dist d(pos, target_pos);
+            if(spot_far_ev && d > target_dist) {
+                spot_far_ev->run(this, (void*) &target_pos);
             }
         }
     }

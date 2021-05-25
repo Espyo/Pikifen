@@ -3673,17 +3673,17 @@ void pikmin_fsm::unlatch(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
-    point pos;
+    pikmin* p_ptr = (pikmin*) m;
+    point target_pos;
+    float target_dist; //Unused dummy value.
     
     if(!info1) {
-        pos =
-            m->following_group->group->anchor +
-            m->following_group->group->get_spot_offset(m->group_spot_index);
+        p_ptr->get_group_spot_info(&target_pos, &target_dist);
     } else {
-        pos = *((point*) info1);
+        target_pos = *((point*) info1);
     }
     
-    m->chase(pos, NULL, false);
+    m->chase(target_pos, NULL, false);
     
 }
 
