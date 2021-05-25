@@ -6,9 +6,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Throw a leader at a Pikmin sprout, whistle it while plucking, and swap to it. Then whistle the original leader. The leader will be in its own group
+    Cross-section is supposedly broken
     
     --- v0.21.0 ---
+    When adding a frame before the loop frame, or removing one, the loop frame should move by 1 (Kman)
     Rock Pikmin
         Should be unable to latch
         Should lunge on their own when attacking
@@ -87,6 +88,7 @@ Next tasks (roughly sorted most important first)
         Maybe add an F1 screen with quick-start help?
         Add a ball of yarn treasure
         Sounds really need a makeover...
+        Mobs for decorative pebbles, stones, and sticks
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series

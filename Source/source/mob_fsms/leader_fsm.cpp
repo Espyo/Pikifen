@@ -558,8 +558,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("plucking", LEADER_STATE_PLUCKING); {
         efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.run(leader_fsm::finish_current_pluck);
-            efc.run(leader_fsm::search_seed);
+            efc.run(leader_fsm::finish_pluck);
+            efc.change_state("pluck_deciding");
         }
         efc.new_event(LEADER_EV_CANCEL); {
             efc.run(leader_fsm::queue_stop_auto_pluck);
@@ -568,6 +568,20 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EV_INACTIVATED); {
             efc.run(leader_fsm::become_inactive);
             efc.change_state("inactive_plucking");
+        }
+    }
+    
+    efc.new_state("pluck_deciding", LEADER_STATE_PLUCK_DECIDING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::decide_pluck_action);
+        }
+        efc.new_event(LEADER_EV_GO_PLUCK); {
+            efc.run(leader_fsm::go_pluck);
+            efc.change_state("going_to_pluck");
+        }
+        efc.new_event(LEADER_EV_CANCEL); {
+            efc.run(leader_fsm::stop_auto_pluck);
+            efc.change_state("active");
         }
     }
     
@@ -616,8 +630,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("inactive_plucking", LEADER_STATE_INACTIVE_PLUCKING); {
         efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.run(leader_fsm::finish_current_pluck);
-            efc.run(leader_fsm::search_seed);
+            efc.run(leader_fsm::finish_pluck);
+            efc.change_state("inactive_pluck_deciding");
         }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(leader_fsm::join_group);
@@ -629,6 +643,23 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EV_ACTIVATED); {
             efc.run(leader_fsm::become_active);
             efc.change_state("plucking");
+        }
+    }
+    
+    efc.new_state(
+        "inactive_pluck_deciding",
+        LEADER_STATE_INACTIVE_PLUCK_DECIDING
+    ); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(leader_fsm::decide_pluck_action);
+        }
+        efc.new_event(LEADER_EV_GO_PLUCK); {
+            efc.run(leader_fsm::go_pluck);
+            efc.change_state("inactive_going_to_pluck");
+        }
+        efc.new_event(LEADER_EV_CANCEL); {
+            efc.run(leader_fsm::stop_auto_pluck);
+            efc.run(leader_fsm::idle_or_rejoin);
         }
     }
     
@@ -1224,6 +1255,20 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
         LEADER_EV_INACTIVATED
     );
     
+    //Normally the player can't swap to leaders that are following another,
+    //but some complex cases may allow that (e.g. an inactive leader got
+    //whistled by another and then swapped to mid-pluck).
+    //Let's swap the group members over.
+    if(
+        l_ptr->following_group &&
+        l_ptr->following_group->type->category->id == MOB_CATEGORY_LEADERS
+    ) {
+        mob* old_leader = l_ptr->following_group;
+        l_ptr->leave_group();
+        old_leader->fsm.run_event(MOB_EV_WHISTLED, (void*) l_ptr);
+    }
+    
+    //Update pointers and such.
     size_t new_leader_nr = game.states.gameplay->cur_leader_nr;
     for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
         if(game.states.gameplay->mobs.leaders[l] == l_ptr) {
@@ -1291,6 +1336,43 @@ void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
     );
     m->set_animation(LEADER_ANIM_WALKING);
     m->focus_on_mob(m->following_group);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader must decide what to do next after plucking.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::decide_pluck_action(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    
+    dist d;
+    pikmin* new_pikmin = NULL;
+    
+    if(!l_ptr->queued_pluck_cancel) {
+        new_pikmin =
+            get_closest_sprout(l_ptr->pos, &d, false);
+    }
+    
+    if(l_ptr->queued_pluck_cancel) {
+        //It should only signal to stop if it wanted to stop.
+        //If there are no more sprouts in range, that doesn't mean the leaders
+        //following it can't continue with the sprouts in their range.
+        leader_fsm::signal_stop_auto_pluck(m, info1, info2);
+    }
+    
+    l_ptr->queued_pluck_cancel = false;
+    
+    if(new_pikmin && d <= game.config.next_pluck_range) {
+        l_ptr->fsm.run_event(LEADER_EV_GO_PLUCK, (void*) new_pikmin);
+    } else {
+        l_ptr->fsm.run_event(LEADER_EV_CANCEL);
+    }
 }
 
 
@@ -1457,7 +1539,7 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
  * info2:
  *   Unused.
  */
-void leader_fsm::finish_current_pluck(mob* m, void* info1, void* info2) {
+void leader_fsm::finish_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     l_ptr->stop_chasing();
     l_ptr->set_animation(LEADER_ANIM_IDLING);
@@ -1562,6 +1644,27 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
         false, true
     );
     l_ptr->group->sort(grabbed_mob->subgroup_type_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader must either return to idling, or return to rejoining
+ * its leader.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::idle_or_rejoin(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    
+    if(l_ptr->following_group) {
+        l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
+    } else {
+        l_ptr->fsm.set_state(LEADER_STATE_IDLING);
+    }
 }
 
 
@@ -1749,25 +1852,10 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     if(!l_ptr->queued_pluck_cancel) {
         new_pikmin =
             get_closest_sprout(l_ptr->pos, &d, false);
-    } else {
-        leader_fsm::stop_auto_pluck(m, NULL, NULL);
-    }
-    
-    if(l_ptr->active) {
-        l_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
-    } else {
-        if(l_ptr->following_group) {
-            l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
-        } else {
-            l_ptr->fsm.set_state(LEADER_STATE_IDLING);
-        }
     }
     
     if(new_pikmin && d <= game.config.next_pluck_range) {
         l_ptr->fsm.run_event(LEADER_EV_GO_PLUCK, (void*) new_pikmin);
-        l_ptr->queued_pluck_cancel = false;
-    } else {
-        leader_fsm::stop_auto_pluck(m, NULL, NULL);
     }
 }
 

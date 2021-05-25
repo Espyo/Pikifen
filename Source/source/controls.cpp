@@ -365,9 +365,17 @@ void gameplay_state::handle_button(
             
             if(is_down) {
                 //Button pressed.
-                //Cancel auto-pluck, lying down, etc.
-                cur_leader_ptr->fsm.run_event(LEADER_EV_CANCEL);
-                cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
+                
+                mob_event* cancel_ev =
+                    cur_leader_ptr->fsm.get_event(LEADER_EV_CANCEL);
+                    
+                if(cancel_ev) {
+                    //Cancel auto-pluck, lying down, etc.
+                    cancel_ev->run(cur_leader_ptr);
+                } else {
+                    //Start whistling.
+                    cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
+                }
                 
             } else {
                 //Button released.
