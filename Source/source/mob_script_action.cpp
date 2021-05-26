@@ -1782,6 +1782,7 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         if(
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
             data.call->parent_event == MOB_EV_DAMAGE
         ) {
             *var =
@@ -1887,6 +1888,7 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         if(
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
+            data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_N ||
             data.call->parent_event == MOB_EV_DAMAGE
         ) {
             *var =

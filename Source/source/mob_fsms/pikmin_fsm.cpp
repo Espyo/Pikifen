@@ -361,6 +361,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
             efc.run(pikmin_fsm::land_on_mob);
         }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_N); {
+            efc.run(pikmin_fsm::land_on_mob);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
         }
@@ -1437,6 +1440,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
             efc.run(pikmin_fsm::land_on_mob_while_holding);
         }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_N); {
+            efc.run(pikmin_fsm::land_on_mob_while_holding);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::try_held_item_hotswap);
         }
@@ -1874,8 +1880,12 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
     
     pik->focus_on_mob(caller);
     
-    pik->script_timer.time_left -= PIKMIN_KNOCKED_DOWN_WHISTLE_BONUS;
-    
+    pik->script_timer.time_left =
+        std::max(
+            0.01f,
+            pik->script_timer.time_left - PIKMIN_KNOCKED_DOWN_WHISTLE_BONUS
+        );
+        
     pik->temp_i = 1;
 }
 

@@ -1291,6 +1291,8 @@ void gameplay_state::process_mob_touches(
         q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_A_N);
     mob_event* hitbox_touch_na_ev =
         q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_A);
+    mob_event* hitbox_touch_nn_ev =
+        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_N);
     mob_event* hitbox_touch_eat_ev =
         q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_EAT);
     mob_event* hitbox_touch_haz_ev =
@@ -1300,13 +1302,17 @@ void gameplay_state::process_mob_touches(
     sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
     
     if(
-        (hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) &&
+        (
+            hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_nn_ev ||
+            hitbox_touch_eat_ev
+        ) &&
         s1_ptr && s2_ptr &&
         !s1_ptr->hitboxes.empty() && !s2_ptr->hitboxes.empty()
     ) {
     
         bool reported_an_ev = false;
         bool reported_na_ev = false;
+        bool reported_nn_ev = false;
         bool reported_eat_ev = false;
         bool reported_haz_ev = false;
         
@@ -1370,15 +1376,17 @@ void gameplay_state::process_mob_touches(
                 if(!collided) continue;
                 
                 //Collision confirmed!
+                
                 if(
-                    hitbox_touch_an_ev &&
-                    !reported_an_ev &&
+                    hitbox_touch_an_ev && !reported_an_ev &&
+                    h1_ptr->type == HITBOX_TYPE_ATTACK &&
                     h2_ptr->type == HITBOX_TYPE_NORMAL
                 ) {
                     hitbox_interaction ev_info =
                         hitbox_interaction(
                             m2_ptr, h1_ptr, h2_ptr
                         );
+                        
                     hitbox_touch_an_ev->run(
                         m_ptr, (void*) &ev_info
                     );
@@ -1392,6 +1400,35 @@ void gameplay_state::process_mob_touches(
                         q_get_event(m_ptr, MOB_EV_TOUCHED_HAZARD);
                     hitbox_touch_na_ev =
                         q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_A);
+                    hitbox_touch_nn_ev =
+                        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_N);
+                }
+                
+                if(
+                    hitbox_touch_nn_ev && !reported_nn_ev &&
+                    h1_ptr->type == HITBOX_TYPE_NORMAL &&
+                    h2_ptr->type == HITBOX_TYPE_NORMAL
+                ) {
+                    hitbox_interaction ev_info =
+                        hitbox_interaction(
+                            m2_ptr, h1_ptr, h2_ptr
+                        );
+                        
+                    hitbox_touch_nn_ev->run(
+                        m_ptr, (void*) &ev_info
+                    );
+                    reported_nn_ev = true;
+                    
+                    //Re-fetch the other events, since this event
+                    //could have triggered a state change.
+                    hitbox_touch_eat_ev =
+                        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_EAT);
+                    hitbox_touch_haz_ev =
+                        q_get_event(m_ptr, MOB_EV_TOUCHED_HAZARD);
+                    hitbox_touch_na_ev =
+                        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_N_A);
+                    hitbox_touch_an_ev =
+                        q_get_event(m_ptr, MOB_EV_HITBOX_TOUCH_A_N);
                 }
                 
                 if(

@@ -43,6 +43,7 @@
       <li>If a Pikmin is lying down, a leader can now whistle it to make it get up faster, and return to the leader once it does.</li>
       <li>Added an option to allow the leader to auto-throw. If you have trouble mashing the throw button, consider turning this on.</li>
       <li>If a new leader shows up from a defeated enemy, their HUD information will now display properly. (Thanks pikminjosh)</li>
+      <li>The <code>on_hitbox_touch_a_n</code> event used to trigger regardless of the first hitbox's type. This has now been fixed, and <code>on_hitbox_touch_n_n</code> was created for when the both hitboxes are of the normal type.</li>
       <li>
         Minor editor tweaks.
         <ul>
@@ -65,6 +66,7 @@
           <li><code>getting_up</code> is a new animation for the Pikmin getting up from lying down.</li>
         </ul>
       </li>
+      <li>The <code>on_hitbox_touch_a_n</code> event was corrected, so if you relied on the incorrect behavior, use <code>on_hitbox_touch_n_n</code> instead.</li>
     </ul>
     
     <h2 id="0.20.0">0.20.0</h2>

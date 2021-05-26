@@ -142,6 +142,8 @@ enum MOB_EV_TYPES {
     MOB_EV_HITBOX_TOUCH_A_N,
     //When one of its normal hitboxes touches another mob's attack hitbox.
     MOB_EV_HITBOX_TOUCH_N_A,
+    //When one of its normal hitboxes touches another mob's normal hitbox.
+    MOB_EV_HITBOX_TOUCH_N_N,
     //When a Pikmin is confirmed to have to take damage from an attack.
     MOB_EV_PIKMIN_DAMAGE_CONFIRMED,
     //When a Pikmin was added to the list of Pikmin carrying this mob.
