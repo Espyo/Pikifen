@@ -894,9 +894,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::prepare_to_attack);
         }
-        efc.new_event(MOB_EV_ON_TICK); {
-            efc.run(pikmin_fsm::tick_attacking_grounded);
-        }
         efc.new_event(MOB_EV_FOCUS_OFF_REACH); {
             efc.change_state("idling");
         }
@@ -2179,6 +2176,7 @@ void pikmin_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
     m->fsm.set_state(PIKMIN_STATE_IDLING);
     
     if(
+        prev_focused_mob &&
         prev_focused_mob->type->category->id == MOB_CATEGORY_LEADERS &&
         !m->can_hunt(prev_focused_mob)
     ) {
@@ -3365,24 +3363,6 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(PIKMIN_ANIM_IDLING);
     m->face(0, &m->following_group->pos);
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a frame has passed while a Pikmin is attacking on the ground.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) m;
-    
-    if(!pik_ptr->focused_mob || pik_ptr->focused_mob->health <= 0) {
-        return;
-    }
 }
 
 

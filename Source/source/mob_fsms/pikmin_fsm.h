@@ -92,7 +92,6 @@ void stop_being_idle(          mob* m, void* info1, void* info2);
 void stop_being_thrown(        mob* m, void* info1, void* info2);
 void stop_carrying(            mob* m, void* info1, void* info2);
 void stop_in_group(            mob* m, void* info1, void* info2);
-void tick_attacking_grounded(  mob* m, void* info1, void* info2);
 void tick_entering_onion(      mob* m, void* info1, void* info2);
 void tick_group_task_work(     mob* m, void* info1, void* info2);
 void tick_track_ride(          mob* m, void* info1, void* info2);
