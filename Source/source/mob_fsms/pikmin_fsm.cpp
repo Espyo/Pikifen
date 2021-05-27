@@ -359,6 +359,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
+            efc.run(pikmin_fsm::check_outgoing_attack);
             efc.run(pikmin_fsm::land_on_mob);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_N); {
@@ -516,7 +517,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("going_to_opponent", PIKMIN_STATE_GOING_TO_OPPONENT); {
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
-            efc.run(pikmin_fsm::try_latching);
+            efc.run(pikmin_fsm::attack_reached_opponent);
         }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::called);
@@ -1070,6 +1071,64 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("impact_bounce", PIKMIN_STATE_IMPACT_BOUNCE); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::setup_impact_bounce);
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.run(pikmin_fsm::do_impact_bounce);
+        }
+        efc.new_event(MOB_EV_LANDED); {
+            efc.run(pikmin_fsm::land_after_impact_bounce);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("impact_lunge", PIKMIN_STATE_IMPACT_LUNGE); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::start_impact_lunge);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(pikmin_fsm::stand_still);
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
+            efc.run(pikmin_fsm::stand_still);
+            efc.run(pikmin_fsm::check_outgoing_attack);
+            efc.run(pikmin_fsm::land_on_mob);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_N); {
+            efc.run(pikmin_fsm::stand_still);
+            efc.run(pikmin_fsm::land_on_mob);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
     efc.new_state("disabled", PIKMIN_STATE_DISABLED); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::become_disabled);
@@ -1578,6 +1637,75 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
+ * When the Pikmin reaches an opponent that it was chasing after,
+ * and should now attack it. If it's a Pikmin that can latch, it will try so,
+ * and if it fails, it just tries a grounded attack.
+ * If it's a Pikmin that attacks via impact, it lunges.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::attack_reached_opponent(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    if(m->invuln_period.time_left > 0) {
+        //Don't let the Pikmin attack while invulnerable. Otherwise, this can
+        //be exploited to let Pikmin vulnerable to a hazard attack the obstacle
+        //emitting said hazard.
+        return;
+    }
+    
+    pikmin* p_ptr = (pikmin*) m;
+    
+    p_ptr->stop_chasing();
+    
+    switch(p_ptr->pik_type->attack_method) {
+    case PIKMIN_ATTACK_LATCH: {
+        dist d;
+        hitbox* closest_h =
+            p_ptr->focused_mob->get_closest_hitbox(
+                p_ptr->pos, HITBOX_TYPE_NORMAL, &d
+            );
+        float h_z = 0;
+        
+        if(closest_h) {
+            h_z = closest_h->z + p_ptr->focused_mob->z;
+        }
+        
+        if(
+            !closest_h || !closest_h->can_pikmin_latch ||
+            h_z > p_ptr->z + p_ptr->height ||
+            h_z + closest_h->height < p_ptr->z ||
+            d >= closest_h->radius + p_ptr->type->radius
+        ) {
+            //Can't latch. Let's just do a grounded attack instead.
+            p_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_GROUNDED);
+            
+        } else {
+            //Go for a latch instead.
+            hitbox_interaction hti(p_ptr->focused_mob, NULL, closest_h);
+            pikmin_fsm::land_on_mob(m, &hti, NULL);
+            
+        }
+        
+        break;
+        
+    }
+    case PIKMIN_ATTACK_IMPACT: {
+
+        p_ptr->fsm.set_state(PIKMIN_STATE_IMPACT_LUNGE);
+        
+        break;
+        
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin is hit by an attack and gets knocked back.
  * m:
  *   The mob.
@@ -2019,6 +2147,31 @@ void pikmin_fsm::check_remove_flailing(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::clear_timer(mob* m, void* info1, void* info2) {
     m->set_timer(0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin has to bounce back from an impact attack.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    float impact_angle = get_angle(p_ptr->focused_mob->pos, p_ptr->pos);
+    float impact_speed = 200.0f;
+    p_ptr->speed =
+        angle_to_coordinates(
+            impact_angle, impact_speed
+        );
+    p_ptr->speed_z = 500.0f;
+    
+    p_ptr->set_animation(PIKMIN_ANIM_KNOCKED_BACK);
 }
 
 
@@ -2566,6 +2719,25 @@ void pikmin_fsm::land(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin being bounced back from an impact attack lands on the ground.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the hitbox touch information structure.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::land_after_impact_bounce(mob* m, void* info1, void* info2) {
+    if(m->script_timer.time_left > 0.0f) {
+        //We haven't actually landed yet. Never mind.
+        return;
+    }
+    
+    m->fsm.set_state(PIKMIN_STATE_KNOCKED_DOWN);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a thrown Pikmin lands on a mob, to latch on to it.
  * m:
  *   The mob.
@@ -2585,32 +2757,49 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     
     hitbox* h_ptr = info->h2;
     
-    if(!h_ptr || !h_ptr->can_pikmin_latch) {
-        //No good for latching on. Make it bounce back.
+    if(
+        !h_ptr ||
+        (
+            pik_ptr->pik_type->attack_method == PIKMIN_ATTACK_LATCH &&
+            !h_ptr->can_pikmin_latch
+        )
+    ) {
+        //No good. Make it bounce back.
         m->speed.x *= -0.3;
         m->speed.y *= -0.3;
         return;
     }
     
-    pik_ptr->speed.x = pik_ptr->speed.y = pik_ptr->speed_z = 0;
     pik_ptr->stop_height_effect();
-    
     pik_ptr->focused_mob = mob_ptr;
-    
-    float h_offset_dist;
-    float h_offset_angle;
-    mob_ptr->get_hitbox_hold_point(
-        pik_ptr, h_ptr, &h_offset_dist, &h_offset_angle
-    );
-    mob_ptr->hold(
-        pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle,
-        true, true
-    );
-    
     pik_ptr->was_thrown = false;
-    pik_ptr->latched = true;
     
-    pik_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_LATCHED);
+    switch(pik_ptr->pik_type->attack_method) {
+    case PIKMIN_ATTACK_LATCH: {
+        pik_ptr->speed.x = pik_ptr->speed.y = pik_ptr->speed_z = 0;
+        
+        float h_offset_dist;
+        float h_offset_angle;
+        mob_ptr->get_hitbox_hold_point(
+            pik_ptr, h_ptr, &h_offset_dist, &h_offset_angle
+        );
+        mob_ptr->hold(
+            pik_ptr, h_ptr->body_part_index, h_offset_dist, h_offset_angle,
+            true, true
+        );
+        
+        pik_ptr->latched = true;
+        
+        pik_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_LATCHED);
+        break;
+        
+    }
+    case PIKMIN_ATTACK_IMPACT: {
+        pik_ptr->fsm.set_state(PIKMIN_STATE_IMPACT_BOUNCE);
+        break;
+        
+    }
+    }
     
 }
 
@@ -3016,6 +3205,26 @@ void pikmin_fsm::set_swarm_reach(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin has to setup the timer in order to start the impact bounce
+ * process later.
+ * The reason we can't start the process right as the state is entered is
+ * because the Pikmin changes animation and position too quickly for the mob
+ * it impacted against to register the attack hitbox collision.
+ * We have to delay that for one frame, and setting a timer with a tiny time
+ * will do the trick.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::setup_impact_bounce(mob* m, void* info1, void* info2) {
+    m->set_timer(0.000001f);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin is meant to sigh.
  * m:
  *   The mob.
@@ -3182,6 +3391,23 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //before coming to a stop. Otherwise the Pikmin would stop nearly
     //on the edge of the water, and that just looks bad.
     m->set_timer(1.0f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin starts lunging forward for an impact attack.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::start_impact_lunge(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    m->chase(point(), &m->focused_mob->pos, false);
+    m->set_animation(PIKMIN_ANIM_ATTACKING);
 }
 
 
@@ -3579,59 +3805,6 @@ void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
     pikmin_fsm::be_released(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
     m->fsm.set_state(PIKMIN_STATE_KNOCKED_BACK);
-}
-
-
-/* ----------------------------------------------------------------------------
- * When the Pikmin should try to latch on whilst grounded.
- * If it fails, it just tries a grounded attack.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != NULL, m->print_state_history());
-    
-    if(m->invuln_period.time_left > 0) {
-        //Don't let the Pikmin attack while invulnerable. Otherwise, this can
-        //be exploited to let Pikmin vulnerable to a hazard attack the obstacle
-        //emitting said hazard.
-        return;
-    }
-    
-    pikmin* p_ptr = (pikmin*) m;
-    
-    p_ptr->stop_chasing();
-    
-    dist d;
-    hitbox* closest_h =
-        p_ptr->focused_mob->get_closest_hitbox(
-            p_ptr->pos, HITBOX_TYPE_NORMAL, &d
-        );
-    float h_z = 0;
-    
-    if(closest_h) {
-        h_z = closest_h->z + p_ptr->focused_mob->z;
-    }
-    
-    if(
-        !closest_h || !closest_h->can_pikmin_latch ||
-        h_z > p_ptr->z + p_ptr->height ||
-        h_z + closest_h->height < p_ptr->z ||
-        d >= closest_h->radius + p_ptr->type->radius
-    ) {
-        //Can't latch. Let's just do a grounded attack instead.
-        p_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_GROUNDED);
-        
-    } else {
-        //Go for a latch.
-        hitbox_interaction hti(p_ptr->focused_mob, NULL, closest_h);
-        pikmin_fsm::land_on_mob(m, &hti, NULL);
-        
-    }
 }
 
 

@@ -37,6 +37,8 @@ enum PIKMIN_STATES {
     PIKMIN_STATE_KNOCKED_BACK,
     PIKMIN_STATE_KNOCKED_DOWN,
     PIKMIN_STATE_GETTING_UP,
+    PIKMIN_STATE_IMPACT_BOUNCE,
+    PIKMIN_STATE_IMPACT_LUNGE,
     PIKMIN_STATE_THROWN,
     PIKMIN_STATE_GOING_TO_DISMISS_SPOT,
     PIKMIN_STATE_PICKING_UP,
@@ -89,6 +91,12 @@ enum PIKMIN_ANIMATIONS {
 };
 
 
+enum PIKMIN_ATTACK_METHODS {
+    PIKMIN_ATTACK_LATCH,
+    PIKMIN_ATTACK_IMPACT,
+};
+
+
 const float PIKMIN_GOTO_TIMEOUT = 5.0f;
 const float PIKMIN_INVULN_PERIOD = 0.7f;
 const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
@@ -105,6 +113,7 @@ public:
     float carry_strength;
     float push_strength;
     float max_throw_height;
+    PIKMIN_ATTACK_METHODS attack_method;
     bool can_carry_tools;
     float sprout_evolution_time[N_MATURITIES];
     //Top (leaf/bud/flower) bitmap for each maturity.

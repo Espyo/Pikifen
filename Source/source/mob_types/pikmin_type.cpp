@@ -30,6 +30,7 @@ pikmin_type::pikmin_type() :
     carry_strength(1),
     push_strength(1),
     max_throw_height(260),
+    attack_method(PIKMIN_ATTACK_LATCH),
     can_carry_tools(true),
     bmp_icon(nullptr),
     bmp_onion_icon(nullptr) {
@@ -128,7 +129,10 @@ anim_conversion_vector pikmin_type::get_anim_conversions() const {
  */
 void pikmin_type::load_properties(data_node* file) {
     reader_setter rs(file);
+    string attack_method_str;
+    data_node* attack_method_node = NULL;
     
+    rs.set("attack_method", attack_method_str, &attack_method_node);
     rs.set("can_carry_tools", can_carry_tools);
     rs.set("carry_strength", carry_strength);
     rs.set("max_throw_height", max_throw_height);
@@ -136,6 +140,19 @@ void pikmin_type::load_properties(data_node* file) {
     rs.set("sprout_evolution_time_1", sprout_evolution_time[0]);
     rs.set("sprout_evolution_time_2", sprout_evolution_time[1]);
     rs.set("sprout_evolution_time_3", sprout_evolution_time[2]);
+    
+    if(attack_method_node) {
+        if(attack_method_str == "latch") {
+            attack_method = PIKMIN_ATTACK_LATCH;
+        } else if(attack_method_str == "impact") {
+            attack_method = PIKMIN_ATTACK_IMPACT;
+        } else {
+            log_error(
+                "Unknown Pikmin attack type \"" + attack_method_str + "\"!",
+                attack_method_node
+            );
+        }
+    }
 }
 
 

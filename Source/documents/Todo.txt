@@ -2,21 +2,19 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Rock Pikmin
+        Should resist being crushed, by simply being temporarily buried
+        Should resist being stabbed
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Some objects with hitboxes that are just as tall as the object itself can let Pikmin latch on top (Red Bulborb), but others can't (Kingcap)
     
     --- v0.21.0 ---
-    Rock Pikmin
-        Should be unable to latch
-            Should bounce back after attacking, and then lie down, similarly to getting knocked back -- maybe even the same states?
-        Should lunge on their own when attacking
-        Should resist being crushed, by simply being temporarily buried
-        Should resist being stabbed
     Winged Pikmin
         Just the basics
     Bulbmin
+    Add pellet, Pellet Posy, and Onion support for Rock Pikmin and Winged Pikmin
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     Add some obstacles relevant to the Rock Pikmin and Winged Pikmin
     Purple Pikmin

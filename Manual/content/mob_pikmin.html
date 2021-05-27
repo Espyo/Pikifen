@@ -54,6 +54,12 @@
     <h3 id="optional">Optional</h3>
     
     <ul>
+      <li><b><code>attack_method</code></b>: Determines how the Pikmin attacks other objects. Defaults to <code>latch</code>. Possible values are:
+        <ul>
+          <li><code>latch</code> to make the Pikmin latch on when thrown or when grounded next to the object.</li>
+          <li><code>impact</code> to make the Pikmin cause impact damage, bounce back when thrown, lie down for a while after hitting, and also lunge on their own when grounded next to the object.</li>
+        </ul>
+      </li>
       <li><b><code>can_carry_tools</code></b>: <code>true</code> if the Pikmin can carry tools. Defaults to <code>true</code>.</li>
       <li><b><code>carry_strength</code></b>: The Pikmin is worth this much for carrying strength. Defaults to 1.</li>
       <li><b><code>push_strength</code></b>: The Pikmin is worth this much for pushing strength. Used for certain <a href="mob_group_task.html">group tasks</a>. Defaults to 1.</li>
@@ -68,7 +74,7 @@
     <p>A Pikmin type needs to have the following animations:</p>
 
     <ul>
-      <li><b><code>attacking</code></b>: Reeling back its head and smacking with it.</li>
+      <li><b><code>attacking</code></b>: If its attack method is "latch", this is the Pikmin reeling back its head and smacking with it. If it's "impact", this is the Pikmin lunging forward, and eventually getting up.</li>
       <li><b><code>carrying</code></b>: Carrying an object.</li>
       <li><b><code>drinking</code></b>: Bending down to drink a drop.</li>
       <li><b><code>getting_up</code></b>: Getting up from lying down.</li>
