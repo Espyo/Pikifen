@@ -19,42 +19,49 @@
     <h1>Welcome!</h1>
     
     <p>Welcome to <i>Pikifen</i>'s user manual!</p>
-    <p>This manual will teach you how to play and how to make your own content.</p>
+    <p>This manual will teach you how to play and how to make your own content. If you haven't already, please read the included <code>README.txt</code> file first.</p>
     
     <h2 id="how-to-play">How to play</h2>
-    
-    <p>To play, just choose the "Play" option from the main menu and pick an area, really.</p>
-    
-    <p>More technically, in order to play a game on the engine, there must be data for that game in the engine's <code>Game_data</code> folder. Luckily, the engine currently comes with some demo content that can be played right off the bat, although you can also download or create any fan-made content and place it in the game data folder. Because the engine is still in development, the concept of a "game" isn't much more than "a collection of areas, enemies, and Pikmin". Upon running the engine, it will read the information in the game data folder and instantly boot up the game. Currently, the main menu will be the same all the time, regardless of game, and choosing the "Play" option will prompt you on which available area you wish to play (if there is only one area, it will be loaded automatically). To note is that some downloaded content might depend on other content. For instance, if an area has an enemy called "Green_Bulborb", but you do not have any "Green_Bulborb" enemy in you game data, the area will not load properly.</p>
 
-    <p>In-game, you are allowed to control the leaders and play around like in the canon games. At the moment, there is no concept of an "end", so nothing will trigger the "end" of the level, though losing all leaders will take you back to the main menu. Depending on the mechanics that are implemented or missing, some behaviors might work, some might not, and some might be working incorrectly.</p>
-
-    <p>The minimum requirements to run the engine aren't that high; old machines should run it just fine without many performance problems. But it does depend on what is going on: a simple area with just a leader will run much better than a complex area with 100 Pikmin on the field. Some <a href="options.html">options</a> in the options file can be set to help with performance, at the cost of appearance, while others just tweak the experience based on your preferences.</p>
+    <h3 id="how-to-play-basics">Basics</h3>
     
+    <p>To play, just choose the "Play" option from the main menu and pick an area, really. More details can be found in the next section.</p>
+    <p>In-game, you are allowed to control the leaders and play around like in the canon games. At the moment, the concept of an "end" is nothing more than the Sun Meter reaching the end, or you losing all leaders, so it's more of a sandbox. Depending on the mechanics that are implemented or missing, some things might work, some might not, and some might be working incorrectly.</p>
+    <p>The minimum requirements to run the engine aren't that high; old machines should run it just fine without many performance problems. But it does depend on what is going on: a simple area with just a leader will run much better than a complex area with 100 Pikmin on the field. Some options can be set to help with performance, at the cost of appearance, while others just tweak the experience based on your preferences.</p>
     <p>The following pages that go more in-depth about specific topics:</p>
+
     <ul>
       <li><a href="controls.html">Controls</a></li>
       <li><a href="options.html">Options</a></li>
       <li><a href="tips.html">Tips</a></li>
     </ul>
     
+    <h3 id="game-content">Game content</h3>
+
+    <p>In order to play a game on the engine, there must be data for that game in the engine's <code>Game_data</code> folder. Luckily, the engine comes with some demo content that can be played right off the bat, although you can also download or create any fan-made content and place it in the game data folder.</p>
+    <p>Upon running the engine, it will read the information in the game data folder and instantly boot up the game. Because the engine is still in development, the concept of a "game" isn't much more than "a collection of areas, enemies, and Pikmin". The main menu will be the same all the time, regardless of game, and choosing the "Play" option will prompt you on which available area you wish to play.</p>
+    <p>To note is that some downloaded content might depend on other content. For instance, if an area has an enemy called "Green_Bulborb", but you do not have any "Green_Bulborb" enemy in you game data, the area will not load properly.</p>
+    
     <h2 id="how-to-make">How to make</h2>
     
-    <p>You can make any content to be run in the engine, and the ways to do so vary, but are in general made to be easy and intuitive. Enemies, Pikmin types, and other such creations can be freely made, but new game mechanics and logic cannot. This also includes enemies, areas, etc. that make use of any new mechanic. The following pages lead to tutorials on how to make different content for the engine:</p>
+    <p>You can make any content to be run in the engine, and the ways to do so vary, but are in general made to be easy and intuitive. Enemies, Pikmin types, and other such creations can be freely made, but new game mechanics and logic cannot. This also includes enemies, areas, etc. that make use of any new mechanic.</p>
+    <p>You can also freely edit the graphics and audio files. Although some of them need to have specific names for the engine to find them, others can use any name at all, so long as the scripts, areas, etc. that use them call them by the right name.</p>
+    <p>As you develop, keep in midn that most user-made mistakes will be caught by the engine and reported in the file <code>/User_data/Error_log.txt</code>. The following pages lead to tutorials on how to make different content for the engine:</p>
+    
     <ul>
       <li><a href="quick_start.html">Quick start guide</a> – for users who need help understanding the basics, but believe they can figure out the rest on their own.</li>
+      <li><a href="text_file.html">Text file</a> – text files on the engine use a specific format. This simple page explains how it works, and should be read before using any other tutorial.</li>
       <li>In-depth guides:</li>
       <ul>
-        <li><a href="text_file.html">Text file</a> – text files on the engine use a specific format. This simple page explains how it works, and should be read before using any other tutorial.</li>
         <li><a href="area.html">Making areas</a></li>
-        <li><a href="mob_type.html">Making new object types</a></li>
+        <li><a href="mob_type.html">Making object types</a></li>
         <li><a href="animation.html">Making animations</a></li>
         <li><a href="script.html">Object scripting</a></li>
         <li><a href="hazard.html">Making hazards</a></li>
         <li><a href="spray.html">Making spray types</a></li>
         <li><a href="status.html">Making status effects</a></li>
         <li><a href="particle.html">Making particle generators</a></li>
-        <li><a href="weather.html">Making new weather</a></li>
+        <li><a href="weather.html">Making weather</a></li>
         <li><a href="gui.html">GUI configuration</a></li>
         <li><a href="misc_config.html">Misc. configurations</a></li>
         <li><a href="misc_features.html">Misc. features</a></li>
@@ -62,29 +69,22 @@
       <li><a href="maker_toolkit.html">Maker toolkit</a> – tools to use to help you make and debug content.</li>
       <li><a href="mob_type.html#mob-categories">Object category pages</a> – information on the requirements and such for objects of every category.</li>
     </ul>
-    <p>Graphics and audio can also be edited freely. Although some images and sounds need to have specific names for the engine to find them, others can use any name at all, so long as the scripts, areas, etc. that use them call them by the right name.</p>
-    <p>Most user-made mistakes will be caught by the engine and reported in the file <code>/User_data/Error_log.txt</code>.</p>
     
-    <h2 id="other">Other pages</h2>
+    <h2 id="more">More info and troubleshooting</h2>
     
     <ul>
-      <li>
-        Useful info for playing and making:
-        <ul>
-          <li><a href="troubleshooting.html">Troubleshooting</a></li>
-          <li><a href="glossary.html">Glossary</a></li>
-        </ul>
-      </li>
-      <li>
-        Information about the engine:
-        <ul>
-          <li><a href="compiling.html">Compiling</a></li>
-          <li><a href="faq.html">Frequently asked questions</a></li>
-          <li><a href="changelog.html">Changelog</a></li>
-          <li><a href="history.html">History and roadmap</a></li>
-          <li><a href="credits.html">Credits</a></li>
-        </ul>
-      </li>
+      <li><a href="faq.html">Frequently asked questions</a></li>
+      <li><a href="troubleshooting.html">Troubleshooting</a></li>
+      <li><a href="glossary.html">Glossary of terms</a></li>
+    </ul>
+
+    <h2 id="development">Engine development</h2>
+    
+    <ul>
+      <li><a href="changelog.html">Changelog</a></li>
+      <li><a href="history.html">History and roadmap</a></li>
+      <li><a href="compiling.html">Compiling the source code</a></li>
+      <li><a href="credits.html">Credits</a></li>
     </ul>
     
   </div>

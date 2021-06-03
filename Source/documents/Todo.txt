@@ -20,6 +20,9 @@ Next tasks (roughly sorted most important first)
     Purple Pikmin
         Give them a proper pound attack
         Maybe stun?
+    Add a way to delete areas from within the area editor, probably in the File menu
+    Menus need tooltips
+    In the manual, rename "text file" to "data file"
     
     --- v0.22.0 ---
     Details
@@ -445,13 +448,18 @@ Misc things (so I don't forget)
         Make it so you can line the Pikmin in a non-circular fashion -- Neo suggested a parameter to stretch the circle vertically or horizontally
         When deciding a new random Onion to go to, pick cyclically -- first go with Red (if applicable), then if the player does it again, go Yellow (if applicable), etc. (GitHub issue #8)
         Stops could probably have a radius, to reduce the number of stops needed in a room, for instance
-        Pikmin with small items should take specific paths, usually envolving shortcuts (thanks Nutty171)
+        Pikmin with small items should take specific paths, usually involving shortcuts (thanks Nutty171)
+    More powerful scripting
+        Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
+        A way to run actions on other mobs
+            You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
+        Global script variables
     For intervals, use the code on the "misc info" text file
     Water depth (thanks ThyCheshireCat)
         Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
     A way to add random variation to the knockback angle of a hitbox
     "I think carry weight should be displayed when you hover over an enemy corpse/pellet" (thanks Tenacious)
-    The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be addedd to the script (thanks Kman)
+    The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Kman)
     Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
     Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
@@ -471,7 +479,6 @@ Misc things (so I don't forget)
     Option to pause the game if the window is not focused
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     on_carrying_lift and on_carrying_drop events?
-    Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
     A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Kman)
     A way to represent how many berries of a spray you have
     If you write an event name wrong (or other things), give suggestions ("did you mean X?")
@@ -489,7 +496,6 @@ Misc things (so I don't forget)
         Support for backgrounds that don't tile -- what if you want a background that's a tree trunk, because you're on branches? It shouldn't tile, nor should it have thousands of pixels of blank space for padding
         Add background viewing/editing to the area editor
         Foreground
-    Global script variables
     If there are no Onions, Pikmin should bring corpses to the Ship
     If your Pikmin are far away and you dismiss them, they should just create groups where they are, not next to where you ordered the dismiss...right?
     If a Pikmin is too far away, it should sigh and lose the party
@@ -538,6 +544,19 @@ Misc things (so I don't forget)
     Should I auto-fade textures on stepping height?
     Story mode
         Some treasures should weigh as much as the current army, after a boss battle
+    Final menu tree
+        Play
+            Story Mode
+            Mission Mode
+            Multiplayer Battle
+            Freeplay (pick an area, regardless of game mode, and just mess around in a sandbox with no rules)
+        Make
+            Areas
+            Animations
+            ...
+        Options
+            ...
+        Quit
     
     
 Tasks for later on (I might never implement these)

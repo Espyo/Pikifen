@@ -80,7 +80,7 @@
     
     <h3 id="picking-file">Picking the animation file</h3>
     
-    <p>For the sake of this tutorial, we'll be creating the animations for a Red Bulborb, using the prepackaged Red Bulborb spritesheet. For that, you should probably create a new Red Bulborb enemy, as you don't want to work on top of the existing enemy's animations; we're doing things from scratch.</p>
+    <p>For the sake of this tutorial, we'll be creating the animations for a Red Bulborb, using the prepackaged Red Bulborb spritesheet. For that, you should probably <a href="mob_type.html">create a new Red Bulborb enemy</a>, as you don't want to work on top of the existing enemy's animations; we're doing things from scratch.</p>
     
     <dl>
       <dt><b>Open the animation editor.</b></dt>
@@ -149,7 +149,7 @@
     <h3 id="hitbox-gameplay">Hitboxes in gameplay</h3>
     
     <dl>
-      <dt><b>Normal hitboxes (green) can be attacked by other objects, and attack hitboxes (red) harm other objects.</b></dt>
+      <dt><b>Normal hitboxes (green) can be attacked by another object's attack hitboxes (red).</b></dt>
       <dd>Now that the "back" hitbox's positioning is all set up, let's change how it works for combat. There are three radio buttons labeled as the "Hitbox type". Bulborbs can't attack with their backsides when idling, and their backs are definitely present on the "idle" pose, so it's neither an attack nor a disabled hitbox. So, the hitbox type to pick here is "Normal".</dd>
       <dt><b>Specific hitboxes can take more or less damage than usual, with the "defense multiplier", or be latched on by Pikmin.</b></dt>
       <dd>Remember how we want the backside to suffer extra damage from Pikmin attacks? We can set that in the defense multiplier. "1" means that hitbox has a defense of 100%, so it takes full damage, while "0.5" means the hitbox only has 50% defense, i.e. it suffers twice as much damage. "0.8" seems like a good value for this hitbox; remember to experiment when creating your own enemies. Before we move on to the next hitbox, check the "Pikmin can latch" checkbox because Pikmin are indeed meant to latch on to a Bulborb's back.</dd>
@@ -170,7 +170,7 @@
       <dd>The frame list is a list of the frames that this animation is composed of; each one of these makes use of a sprite we created earlier. Add the first frame by pressing the "+" button in the frame list section. In the "Sprite" option, choose our "idle" sprite, making this the first frame of our walking animation.</dd>
       <dt><b>Different frames of animation last for different durations before the next frame shows up.</b></dt>
       <dd>Next, we specify how long this frame exists for until it is replaced by the next one on the list. To make fluid-looking animations, you'll want values like 0.1 or 0.2.</dd>
-      <dt><b>The "+" button to add a new frame will conveniently copy data from the previous frame.</b></dt>
+      <dt><b>The "+" button that adds a new frame will conveniently copy data from the previous frame.</b></dt>
       <dd>Let's make the rest of the Bulborb's walking animation. Press "+" once again to add a new frame. Because it's using the same data as the first frame, the duration is already the same, so you don't need to worry. Just pick <code>walkr1</code> as the sprite. Afterwards, create frames with <code>walkr2</code>, then <code>walkr1</code> again, <code>idle</code>, <code>walkl1</code>, <code>walkl2</code>, and finally <code>walkl1</code>.</dd>
       <dt><b>When the last frame finishes, the animation returns to a previous frame (set in the panel) and loops from there.</b></dt>
       <dd>It would make sense for the animation to loop back to the first "idle" frame so it repeats the same "right foot, left foot" cycle. This is where the "Loop frame" box in the "Animation data" section is used. Luckily, it is already set at 1, which is the first frame, so you don't need to change it this time, but if you wanted the animation to repeat from a specific frame, this is where you'd write the frame's number.</dd>
@@ -195,7 +195,7 @@
 
     <h2 id="necessary">Necessary animations</h2>
 
-    <p>To create enemies, you can make whatever animations you wish, and you can call them whatever. As long as you use the correct names in the script, all is good. But for Pikmin, gates, and most other objects, the engine is the one that decides what animations to switch to, and it expects to find them with specific names on the object's animation data. To know what animations your object needs, check the corresponding article in the <a href="mob_type.html#mob-categories">list of object categories</a>.</p>
+    <p>To create enemies, you can make whatever animations you wish, and you can call them whatever. As long as you use the correct names in the script, all is good. But for Pikmin, leaders, and most other objects, the engine is the one that decides what animations to switch to, and it expects to find them with specific names on the object's animation data. To know what animations your object needs, check the corresponding article in the <a href="mob_type.html#mob-categories">list of object categories</a>.</p>
 
     <h2 id="special">Special animations</h2>
 

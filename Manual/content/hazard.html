@@ -18,7 +18,7 @@
     
     <h1>Hazards</h1>
     
-    <p>This page will guide you on how to make hazards for <i>Pikifen</i>. For clarity, know that a hazard is just an abstract danger, not a physical object. Poison, fire, water, electricity, are all hazards. Gas pipes and fire geysers are obstacles, bodies of water are a type of sector, and electrical attacks from enemies are a property given to an attack; all of these use a hazard, but are not hazards.</p>
+    <p>This page will guide you on how to make hazards for <i>Pikifen</i>. For clarity, know that a hazard is just an abstract danger, not a physical object. Poison, fire, water, electricity, are all hazards. Gas pipes and fire geysers are obstacles, bodies of water are a type of sector, and electrical attacks from enemies are a property given to an attack; all of these <i>use</i> a hazard, but are not hazards.</p>
 
     <h2 id="intro">Introduction</h2>
     
@@ -39,7 +39,7 @@
 
     <h2 id="liquid">Water and other liquids</h2>
     
-    <p>As stated at the start of the page, a hazard is an abstract danger. This means that a body of water is not a hazard, but the concept of "water" is. The thing is, hazards like water and other liquids, like acid or lava, are meant to be used in sectors and have a liquid appearance, with an animated water surface. Simply stating that a water hazard applies the "drowning" effect to non-Blue Pikmin, and having a sector use the "water" hazard is not enough. How can the engine know what color the water is, how opaque it is, and what its surface animation is? For this, we'll need a different file.</p>
+    <p>As stated at the start of the page, a hazard is an abstract danger. This means that a body of water is not a hazard, but the concept of "water" is. The thing is, hazards like water and other liquids (e.g. acid or lava) are meant to be used in sectors and have a liquid appearance, with an animated water surface. Simply stating that a water hazard applies the "drowning" effect to non-Blue Pikmin, and having a sector use the "water" hazard is not enough. How can the engine know what color the water is, how opaque it is, and what its surface animation is? For this, we'll need a different file.</p>
 
     <p>Open the <code>Game_data/Liquids</code> folder. This contains data about all liquids. Liquids will bridge the gap between a water body sector and the water hazard, for instance. Much like the files in <code>Game_data/Hazards</code>, this folder contains <a href="text_file.html">text files</a>, one for each liquid defined. Again, its file name can be whatever you want.</p>
 

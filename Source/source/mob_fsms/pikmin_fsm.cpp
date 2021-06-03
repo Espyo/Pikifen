@@ -1108,10 +1108,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_outgoing_attack);
             efc.run(pikmin_fsm::land_on_mob);
         }
-        efc.new_event(MOB_EV_HITBOX_TOUCH_N_N); {
-            efc.run(pikmin_fsm::stand_still);
-            efc.run(pikmin_fsm::land_on_mob);
-        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
         }
@@ -1961,7 +1957,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
-
+    
     pikmin* pik = (pikmin*) m;
     leader* caller = (leader*) info1;
     
@@ -1992,7 +1988,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
-
+    
     pikmin* pik = (pikmin*) m;
     leader* caller = (leader*) info1;
     
@@ -2332,21 +2328,21 @@ void pikmin_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
     
     m->fsm.set_state(PIKMIN_STATE_IDLING);
     
-    if(
-        prev_focused_mob &&
-        prev_focused_mob->type->category->id == MOB_CATEGORY_LEADERS &&
-        !m->can_hunt(prev_focused_mob)
-    ) {
-        m->fsm.run_event(MOB_EV_WHISTLED, (void*) prev_focused_mob);
-        
-    } else if(
-        prev_focused_mob &&
-        m->can_hunt(prev_focused_mob)
-    ) {
-        m->fsm.run_event(
-            MOB_EV_OPPONENT_IN_REACH, (void*) prev_focused_mob, NULL
-        );
-        
+    if(prev_focused_mob) {
+        if(
+            prev_focused_mob->type->category->id == MOB_CATEGORY_LEADERS &&
+            !m->can_hunt(prev_focused_mob)
+        ) {
+            m->fsm.run_event(MOB_EV_WHISTLED, (void*) prev_focused_mob);
+            
+        } else if(
+            m->can_hunt(prev_focused_mob)
+        ) {
+            m->fsm.run_event(
+                MOB_EV_OPPONENT_IN_REACH, (void*) prev_focused_mob, NULL
+            );
+            
+        }
     }
 }
 
