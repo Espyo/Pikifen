@@ -2757,6 +2757,16 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     
     hitbox* h_ptr = info->h2;
     
+    mob_event* pik_land_ev =
+        q_get_event(mob_ptr, MOB_EV_THROWN_PIKMIN_LANDED);
+    //Given this event was triggered, we know that the mobs are touching. Don't check again!
+    if(
+        pik_land_ev &&
+        m->was_thrown
+        ) {
+        pik_land_ev->run(mob_ptr, (void*)m);
+    }
+
     if(
         !h_ptr ||
         (

@@ -1208,11 +1208,9 @@ void gameplay_state::process_mob_touches(
         q_get_event(m_ptr, MOB_EV_TOUCHED_ACTIVE_LEADER);
     mob_event* touch_ob_ev =
         q_get_event(m_ptr, MOB_EV_TOUCHED_OBJECT);
-    mob_event* pik_land_ev =
-        q_get_event(m_ptr, MOB_EV_THROWN_PIKMIN_LANDED);
     if(
         touch_op_ev || touch_le_ev ||
-        touch_ob_ev || pik_land_ev
+        touch_ob_ev
     ) {
     
         bool z_touch;
@@ -1265,13 +1263,6 @@ void gameplay_state::process_mob_touches(
             }
             if(touch_op_ev && m_ptr->can_hunt(m2_ptr)) {
                 touch_op_ev->run(m_ptr, (void*) m2_ptr);
-            }
-            if(
-                pik_land_ev &&
-                m2_ptr->was_thrown &&
-                m2_ptr->type->category->id == MOB_CATEGORY_PIKMIN
-            ) {
-                pik_land_ev->run(m_ptr, (void*) m2_ptr);
             }
             if(
                 touch_le_ev && m2_ptr == cur_leader_ptr &&
