@@ -2830,9 +2830,20 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     hitbox_interaction* info = (hitbox_interaction*) info1;
     tool* too_ptr = (tool*) (*m->holding.begin());
+    mob* mob_ptr = info->mob2;
+
+    if(!m->can_hurt(mob_ptr)) return;
     
-    if(!m->can_hurt(info->mob2)) return;
-    
+    mob_event* pik_land_ev =
+        q_get_event(mob_ptr, MOB_EV_THROWN_PIKMIN_LANDED);
+    //Given this event was triggered, we know that the mobs are touching. Don't check again!
+    if (
+        pik_land_ev &&
+        m->was_thrown
+        ) {
+        pik_land_ev->run(mob_ptr, (void*)m);
+    }
+
     pik_ptr->was_thrown = false;
     
     if(too_ptr->too_type->dropped_when_pikmin_lands_on_opponent) {
@@ -2843,14 +2854,14 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
             too_ptr->speed.x = too_ptr->speed.y = too_ptr->speed_z = 0;
             too_ptr->stop_height_effect();
             
-            too_ptr->focused_mob = info->mob2;
+            too_ptr->focused_mob = mob_ptr;
             
             float h_offset_dist;
             float h_offset_angle;
-            info->mob2->get_hitbox_hold_point(
+            mob_ptr->get_hitbox_hold_point(
                 too_ptr, info->h2, &h_offset_dist, &h_offset_angle
             );
-            info->mob2->hold(
+            mob_ptr->hold(
                 too_ptr, info->h2->body_part_index,
                 h_offset_dist, h_offset_angle, true, true
             );
