@@ -91,7 +91,7 @@
       <li><b><code>rectangular_dimensions</code></b>: If this object is meant to have rectangular collision, specify the rectangle's dimensions here, in the format <code>&lt;width&gt; &lt;height&gt;</code>. This is useful for objects like gates, but shouldn't be used by objects that can move (among other things, the engine is not ready to handle rectangular object vs rectangular object collisions). Defaults to no rectangular dimensions.</li>
       <li><b><code>show_health</code></b>: If set to <code>false</code>, the object's health wheel will not appear on top of it. Defaults to true.</li>
       <li><b><code>spike_damage</code></b>: If this object is meant to cause <a href="misc_features.html">spike damage</a>, specify the spike damage type's name here. Defaults to none.</li>
-      <li><b><code>spike_damage_vulnerabilities</code></b>: Normally, objects hit by a spike damage attack will receive the damage specified. If you want this mob type to take more or less damage (or even heal!), you can specify it here. This is a block, where every property inside has the spike damage type's name as a name, and the percentage as a value. Example: <code>poison = 50</code> will make this enemy take half the intended damage when ingesting a White Pikmin. Defaults to not set.</li>
+      <li><b><code>spike_damage_vulnerabilities</code></b>: Normally, objects hit by a spike damage attack will receive the damage specified by the attack's type. If you want this mob type to take more or less damage instead, or even receive a status effect, you can specify it here. This property is a block, and the format is the same as the <a href="#vulnerabilities">regular damage vulnerabilities property</a>. Defaults to not set.</li>
       <li><b><code>territory_radius</code></b>: How far away from the spawn point must the enemy be before being considered "far from home". For reference, a Red Bulborb has this set to 500. Defaults to 0.</li>
       <li><b><code>walkable</code></b>: If <code>true</code>, this object can be walked on top of by other objects. Other objects will be able to mount it if they fall on it from above, or if they are on a floor that's within 50 units of height from the top of this object (much like how climbing up <a href="area.html#ramps">stairs</a> work). Defaults to false.</li>
       <li><b><code>weight</code></b>: How much Pikmin strength does it take to carry the object. Defaults to 0.</li>
@@ -306,7 +306,12 @@
     
     <p>You can make it so that an object is completely invulnerable to a hazard, more vulnerable to another, etc.</p>
 
-    <p>In <code>Data.txt</code>, add a block titled <code>vulnerabilities</code>. Inside, each line will indicate a hazard, and a multiplier, in the format <code>hazard = multiplier</code>. The hazard is the name of the hazard you want to receive special treatment, and the multiplier is how much the damage will be multiplied by. So for instance, if you want an object to be invulnerable to fire attacks, write a line with <code>fire = 0</code>, and if you want the object to take double damage to water attacks, write <code>water = 2</code>.</p>
+    <p>In <code>Data.txt</code>, add a block titled <code>vulnerabilities</code>. Inside, each property has the hazard's name as its name, and the vulnerability data as its value, e.g. <code>fire = 50 sweating true</code>. The vulnerability data consists of one to three words:</p>
+    <ol>
+      <li>The first word is the damage percentage. When the object is hurt by an attack with this hazard, its damage will be changed by the specified percentage, so 50 would make it take half damage. You can make this negative to get the object to heal instead! If this value is 0, the object will completely ignore this hazard in its entirety, even if it's not an attack.</li>
+      <li>The second word, optional, is the name of a status effect. When the object interacts with this hazard, it will receive this status effect.</li>
+      <li>The third word, also optional, controls whether the status effect overrides others. If true, then the object will <i>only</i> receive the status effect from the previous word, and will not receive the status effect the hazard usually gives. If false or not specified, then the object will <i>also</i> receive this status effect on top of any others the hazard gives.</li>
+    </ol>
 
     <p>You can use this in conjunction with the <code>default_vulnerability</code> <a href="optional-props">property</a> to make an object that is invulnerable to anything except explosions, for instance.</p>
     

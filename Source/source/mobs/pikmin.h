@@ -79,6 +79,8 @@ public:
     virtual void get_group_spot_info(
         point* final_spot, float* final_dist
     ) const;
+    //Handler for when there is no longer any status effect-induced disable.
+    virtual void handle_disable_loss();
     //Handler for when there is no longer any status effect-induced panic.
     virtual void handle_panic_loss();
     //Handler for a status effect.

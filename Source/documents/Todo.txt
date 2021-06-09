@@ -4,7 +4,16 @@
 Current tasks (tasks being worked on, but not yet committed)
     Rock Pikmin
         Should resist being crushed, by simply being temporarily buried
-        Should resist being stabbed
+            Refactor status effects
+                Is fsm.get_event even needed, when q_get_event exists?
+                When a status is removed, it should an event, instead of using some weird polymorphed function
+                    Maybe it's not a good idea to use the "cancel" event, since the mob may since move on from that state, go elsewhere, and then receive the event when the timer hits?
+                Rename the "disabled" state to "helpless"
+            A way for the status effect to apply an animation, so they can look pressed
+            A way for the status effect to make the object invisible to opponents
+        Should resist being stabbed, and instead bounce back
+        They aren't triggering on_pikmin_land (i.e. Dwarf Bulborb crushing), and can't get sucked by the Armored Cannon Beetle's inhale
+        "oh a quick suggestion, make the amount a pikmin with impact gets knocked back by editable" --Kman
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -14,6 +23,7 @@ Next tasks (roughly sorted most important first)
     Winged Pikmin
         Just the basics
     Bulbmin
+    Purple flowers and buds
     Add pellet, Pellet Posy, and Onion support for Rock Pikmin and Winged Pikmin
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     Add some obstacles relevant to the Rock Pikmin and Winged Pikmin
@@ -21,8 +31,11 @@ Next tasks (roughly sorted most important first)
         Give them a proper pound attack
         Maybe stun?
     Add a way to delete areas from within the area editor, probably in the File menu
+    When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
     Menus need tooltips
-    In the manual, rename "text file" to "data file"
+    In the manual
+        Rename "text file" to "data file"
+        Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
     
     --- v0.22.0 ---
     Details
@@ -64,6 +77,7 @@ Next tasks (roughly sorted most important first)
             Sliding (add the track logic too)
             Pushing (add the group task logic too)
             Arms outstretched (add the group task logic too)
+            In the throwing animation, Pikmin hands are below the head in the pose where the butt is facing the camera
         Leader
             Idling (bobbing a bit so they aren't static)
             Bored

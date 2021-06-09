@@ -186,12 +186,25 @@ void pikmin::get_group_spot_info(
 
 
 /* ----------------------------------------------------------------------------
+ * Handler for when there is no longer any status effect-induced disable.
+ */
+void pikmin::handle_disable_loss() {
+    if(fsm.cur_state->id == PIKMIN_STATE_DISABLED) {
+        fsm.set_state(PIKMIN_STATE_IDLING);
+        pikmin_fsm::stand_still(this, NULL, NULL);
+        invuln_period.start();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handler for when there is no longer any status effect-induced panic.
  */
 void pikmin::handle_panic_loss() {
     if(fsm.cur_state->id == PIKMIN_STATE_PANICKING) {
         fsm.set_state(PIKMIN_STATE_IDLING);
         pikmin_fsm::stand_still(this, NULL, NULL);
+        invuln_period.start();
     }
 }
 

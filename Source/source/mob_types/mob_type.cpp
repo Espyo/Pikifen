@@ -330,16 +330,46 @@ void load_mob_type_from_file(
     
     data_node* vulnerabilities_node = file.get_child_by_name("vulnerabilities");
     for(size_t h = 0; h < vulnerabilities_node->get_nr_of_children(); ++h) {
-        data_node* vulnerability_node = vulnerabilities_node->get_child(h);
-        auto hazard_it = game.hazards.find(vulnerability_node->name);
+    
+        data_node* vuln_node = vulnerabilities_node->get_child(h);
+        auto hazard_it = game.hazards.find(vuln_node->name);
+        vector<string> words = split(vuln_node->value);
+        float percentage = mt->default_vulnerability;
+        string status_name;
+        bool status_overrides;
+        if(!words.empty()) {
+            percentage = s2f(words[0]);
+        }
+        if(words.size() >= 2) {
+            status_name = words[1];
+        }
+        if(words.size() >= 3) {
+            status_overrides = s2b(words[2]);
+        }
+        auto status_it = game.status_types.find(status_name);
+        
         if(hazard_it == game.hazards.end()) {
             log_error(
-                "Unknown hazard \"" + vulnerability_node->name + "\"!",
-                vulnerability_node
+                "Unknown hazard \"" + vuln_node->name + "\"!",
+                vuln_node
             );
+            
+        } else if(
+            !status_name.empty() && status_it == game.status_types.end()
+        ) {
+            log_error(
+                "Unknown status type \"" + status_name + "\"!",
+                vuln_node
+            );
+            
         } else {
-            mt->hazard_vulnerabilities[&(hazard_it->second)] =
-                s2f(vulnerability_node->value) / 100;
+            mob_type::vulnerability_struct &vuln =
+                mt->hazard_vulnerabilities[&(hazard_it->second)];
+            vuln.damage_mult = percentage / 100.0f;
+            if(!status_name.empty()) {
+                vuln.status_to_apply = status_it->second;
+            }
+            vuln.status_overrides = status_overrides;
         }
     }
     
@@ -373,18 +403,39 @@ void load_mob_type_from_file(
         spike_damage_vuln_node->get_nr_of_children();
     for(size_t v = 0; v < n_sd_vuln; ++v) {
     
-        data_node* vul_node =
-            spike_damage_vuln_node->get_child(v);
-            
+        data_node* vul_node = spike_damage_vuln_node->get_child(v);
         auto sdv_it = game.spike_damage_types.find(vul_node->name);
+        vector<string> words = split(vulnerabilities_node->value);
+        float percentage = mt->default_vulnerability;
+        string status_name;
+        if(!words.empty()) {
+            percentage = s2f(words[0]);
+        }
+        if(words.size() >= 2) {
+            status_name = words[1];
+        }
+        auto status_it = game.status_types.find(status_name);
+        
         if(sdv_it == game.spike_damage_types.end()) {
             log_error(
                 "Unknown spike damage type \"" + vul_node->name + "\"!",
                 vul_node
             );
+            
+        } else if(
+            !status_name.empty() && status_it == game.status_types.end()
+        ) {
+            log_error(
+                "Unknown status type \"" + status_name + "\"!",
+                vul_node
+            );
+            
         } else {
-            mt->spike_damage_vulnerabilities[&(sdv_it->second)] =
-                s2f(vul_node->value) / 100;
+            mt->spike_damage_vulnerabilities[&(sdv_it->second)].damage_mult =
+                percentage / 100.0f;
+            mt->spike_damage_vulnerabilities[&(sdv_it->second)].status_to_apply =
+                status_it->second;
+                
         }
     }
     
@@ -905,4 +956,15 @@ void unload_mob_types(mob_category* category, bool unload_resources) {
     }
     
     category->clear_types();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new vulnerability structure.
+ */
+mob_type::vulnerability_struct::vulnerability_struct() :
+    damage_mult(1.0f),
+    status_to_apply(nullptr),
+    status_overrides(true) {
+    
 }

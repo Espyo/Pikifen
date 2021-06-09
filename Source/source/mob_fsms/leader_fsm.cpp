@@ -2216,9 +2216,15 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     leader* l = (leader*) m;
     hazard* h = (hazard*) info1;
+    mob_type::vulnerability_struct vuln = m->get_hazard_vulnerability(h);
     
-    for(size_t e = 0; e < h->effects.size(); ++e) {
-        l->apply_status_effect(h->effects[e], false, false);
+    if(!vuln.status_to_apply || !vuln.status_overrides) {
+        for(size_t e = 0; e < h->effects.size(); ++e) {
+            l->apply_status_effect(h->effects[e], false, false);
+        }
+    }
+    if(vuln.status_to_apply) {
+        l->apply_status_effect(vuln.status_to_apply, true, false);
     }
     
     if(h->associated_liquid) {

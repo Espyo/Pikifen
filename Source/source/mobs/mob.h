@@ -330,7 +330,9 @@ public:
     void release(mob* m);
     bool can_hurt(mob* m) const;
     bool can_hunt(mob* m) const;
-    float get_hazard_vulnerability(hazard* h_ptr) const;
+    mob_type::vulnerability_struct get_hazard_vulnerability(
+        hazard* h_ptr
+    ) const;
     bool is_resistant_to_hazards(vector<hazard*> &hazards) const;
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();
@@ -383,6 +385,7 @@ public:
         point* final_spot, float* final_dist
     ) const;
     virtual void handle_status_effect(status_type* s);
+    virtual void handle_disable_loss();
     virtual void handle_panic_loss();
     virtual void read_script_vars(const script_var_reader &svr);
     virtual void start_dying_class_specifics();

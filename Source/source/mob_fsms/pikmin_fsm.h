@@ -74,8 +74,6 @@ void reach_carriable_object(   mob* m, void* info1, void* info2);
 void reach_dismiss_spot(       mob* m, void* info1, void* info2);
 void rechase_opponent(         mob* m, void* info1, void* info2);
 void release_tool(             mob* m, void* info1, void* info2);
-void remove_disabled(          mob* m, void* info1, void* info2);
-void remove_panic(             mob* m, void* info1, void* info2);
 void seed_landed(              mob* m, void* info1, void* info2);
 void set_idle_task_reach(      mob* m, void* info1, void* info2);
 void set_swarm_reach(          mob* m, void* info1, void* info2);
@@ -106,7 +104,9 @@ void touched_spray(            mob* m, void* info1, void* info2);
 void try_held_item_hotswap(    mob* m, void* info1, void* info2);
 void unlatch(                  mob* m, void* info1, void* info2);
 void update_in_group_chasing(  mob* m, void* info1, void* info2);
+void whistled_while_disabled(  mob* m, void* info1, void* info2);
 void whistled_while_holding(   mob* m, void* info1, void* info2);
+void whistled_while_panicking( mob* m, void* info1, void* info2);
 void whistled_while_riding(    mob* m, void* info1, void* info2);
 void work_on_group_task(       mob* m, void* info1, void* info2);
 }

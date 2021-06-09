@@ -708,11 +708,10 @@ bool mob::calculate_damage(
         if(!attack_h->hazards.empty()) {
             float max_vulnerability = 0.0f;
             for(size_t h = 0; h < attack_h->hazards.size(); ++h) {
+                mob_type::vulnerability_struct vuln =
+                    victim->get_hazard_vulnerability(attack_h->hazards[h]);
                 max_vulnerability =
-                    std::max(
-                        victim->get_hazard_vulnerability(attack_h->hazards[h]),
-                        max_vulnerability
-                    );
+                    std::max(vuln.damage_mult, max_vulnerability);
             }
             
             if(max_vulnerability == 0.0f) {
@@ -874,7 +873,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
     auto v =
         victim->type->spike_damage_vulnerabilities.find(type->spike_damage);
     if(v != victim->type->spike_damage_vulnerabilities.end()) {
-        damage *= v->second;
+        damage *= v->second.damage_mult;
     }
     
     victim->set_health(true, false, -damage);
@@ -886,6 +885,13 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
         pg.base_particle.z =
             victim->z + type->spike_damage->particle_offset_z;
         pg.emit(game.states.gameplay->particles);
+    }
+    
+    if(
+        v != victim->type->spike_damage_vulnerabilities.end() &&
+        v->second.status_to_apply
+    ) {
+        victim->apply_status_effect(v->second.status_to_apply, true, false);
     }
 }
 
@@ -1003,6 +1009,9 @@ void mob::delete_old_status_effects() {
         if(statuses[s].to_delete) {
             if(statuses[s].type->causes_panic) {
                 handle_panic_loss();
+            }
+            if(statuses[s].type->causes_disable) {
+                handle_disable_loss();
             }
             if(statuses[s].type->generates_particles) {
                 remove_particle_generator(statuses[s].type->particle_gen->id);
@@ -1381,14 +1390,18 @@ void mob::get_group_spot_info(
  * h_ptr:
  *   The hazard to check.
  */
-float mob::get_hazard_vulnerability(hazard* h_ptr) const {
-    float vulnerability_value = type->default_vulnerability;
-    auto vul = type->hazard_vulnerabilities.find(h_ptr);
-    if(vul != type->hazard_vulnerabilities.end()) {
-        vulnerability_value = vul->second;
+mob_type::vulnerability_struct mob::get_hazard_vulnerability(
+    hazard* h_ptr
+) const {
+    mob_type::vulnerability_struct vuln;
+    vuln.damage_mult = type->default_vulnerability;
+    
+    auto v = type->hazard_vulnerabilities.find(h_ptr);
+    if(v != type->hazard_vulnerabilities.end()) {
+        vuln = v->second;
     }
     
-    return vulnerability_value;
+    return vuln;
 }
 
 
@@ -1647,6 +1660,13 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Handler for when there is no longer any status effect-induced disable.
+ */
+void mob::handle_disable_loss() {
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handler for when there is no longer any status effect-induced panic.
  */
 void mob::handle_panic_loss() {
@@ -1728,7 +1748,9 @@ bool mob::is_off_camera() const {
  */
 bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) const {
     for(size_t h = 0; h < hazards.size(); ++h) {
-        if(get_hazard_vulnerability(hazards[h]) != 0.0f) return false;
+        if(get_hazard_vulnerability(hazards[h]).damage_mult != 0.0f) {
+            return false;
+        }
     }
     return true;
 }

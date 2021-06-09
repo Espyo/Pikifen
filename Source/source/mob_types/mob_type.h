@@ -20,6 +20,7 @@
 #include "../misc_structs.h"
 #include "../mob_categories/mob_category.h"
 #include "../mob_script.h"
+#include "../status.h"
 #include "../utils/data_file.h"
 
 
@@ -162,6 +163,14 @@ public:
         area_editor_prop_struct();
     };
     
+    //Info on how vulnerable the object is to a certain hazard.
+    struct vulnerability_struct {
+        float damage_mult;
+        status_type* status_to_apply;
+        bool status_overrides;
+        vulnerability_struct();
+    };
+    
     
     //Technical things.
     //Its full name.
@@ -263,11 +272,11 @@ public:
     //All damage received is multiplied by this much.
     float default_vulnerability;
     //For every hazard, multiply damage taken by this much.
-    map<hazard*, float> hazard_vulnerabilities;
+    map<hazard*, vulnerability_struct> hazard_vulnerabilities;
     //What sort of spike damage it causes, if any.
     spike_damage_type* spike_damage;
     //For every type of spike damage, multiply damage taken by this much.
-    map<spike_damage_type*, float> spike_damage_vulnerabilities;
+    map<spike_damage_type*, vulnerability_struct> spike_damage_vulnerabilities;
     
     //Caches and such.
     //How far its hitboxes or radius can reach from the center.

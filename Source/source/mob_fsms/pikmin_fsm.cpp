@@ -1130,9 +1130,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::become_disabled);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::remove_disabled);
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.run(pikmin_fsm::whistled_while_disabled);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::check_disabled_edible);
@@ -1173,9 +1171,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::panic_new_chase);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::remove_panic);
-            efc.run(pikmin_fsm::called);
-            efc.change_state("in_group_chasing");
+            efc.run(pikmin_fsm::whistled_while_panicking);
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
@@ -3140,34 +3136,6 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin is meant to stop being disabled.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::remove_disabled(mob* m, void* info1, void* info2) {
-    m->invuln_period.start();
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin is meant to stop panicking.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::remove_panic(mob* m, void* info1, void* info2) {
-    m->invuln_period.start();
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a Pikmin seed lands on the ground.
  * m:
  *   The mob.
@@ -3758,11 +3726,17 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         }
     }
     
-    if(p->get_hazard_vulnerability(h) == 0.0f) return;
     if(p->invuln_period.time_left > 0) return;
+    mob_type::vulnerability_struct vuln = p->get_hazard_vulnerability(h);
+    if(vuln.damage_mult == 0.0f) return;
     
-    for(size_t e = 0; e < h->effects.size(); ++e) {
-        p->apply_status_effect(h->effects[e], false, false);
+    if(!vuln.status_to_apply || !vuln.status_overrides) {
+        for(size_t e = 0; e < h->effects.size(); ++e) {
+            p->apply_status_effect(h->effects[e], false, false);
+        }
+    }
+    if(vuln.status_to_apply) {
+        p->apply_status_effect(vuln.status_to_apply, true, false);
     }
 }
 
@@ -3873,11 +3847,41 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin is whistled over by a leader while disabled.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the leader that called.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::whistled_while_disabled(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    
+    for(size_t s = 0; s < pik_ptr->statuses.size(); ++s) {
+        if(
+            pik_ptr->statuses[s].type->causes_disable &&
+            !pik_ptr->statuses[s].type->removable_with_whistle
+        ) {
+            //Even if other disabling statuses can be removed by the whistle,
+            //this one can't, so let's stay disabled and outside the group.
+            return;
+        }
+    }
+    
+    //The status effect gets removed elsewhere, but we can at least
+    //bring the Pikmin to the leader's side here.
+    pikmin_fsm::called(m, info1, info2);
+    m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin is whistled over by a leader while holding a tool.
  * m:
  *   The mob.
  * info1:
- *   Unused.
+ *   Pointer to the leader that called.
  * info2:
  *   Unused.
  */
@@ -3893,6 +3897,36 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->is_tool_primed_for_whistle = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is whistled over by a leader while panicking.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the leader that called.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::whistled_while_panicking(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    
+    for(size_t s = 0; s < pik_ptr->statuses.size(); ++s) {
+        if(
+            pik_ptr->statuses[s].type->causes_panic &&
+            !pik_ptr->statuses[s].type->removable_with_whistle
+        ) {
+            //Even if other panicking statuses can be removed by the whistle,
+            //this one can't, so let's stay in panic and outside the group.
+            return;
+        }
+    }
+    
+    //The status effect gets removed elsewhere, but we can at least
+    //bring the Pikmin to the leader's side here.
+    pikmin_fsm::called(m, info1, info2);
+    m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
 }
 
 
