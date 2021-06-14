@@ -42,9 +42,9 @@ const float MOB_KNOCKBACK_H_POWER = 64.0f;
 const float MOB_KNOCKBACK_V_POWER = 800.0f;
 const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 
-enum DISABLED_STATE_FLAGS {
+enum HELPLESS_STATE_FLAGS {
     //The Pikmin cannot be eaten by enemies.
-    DISABLED_STATE_FLAG_INEDIBLE = 1,
+    HELPLESS_STATE_FLAG_INEDIBLE = 1,
 };
 
 
@@ -264,8 +264,8 @@ public:
     vector<mob*> chomping_mobs;
     //Max number of mobs it can chomp in the current attack.
     size_t chomp_max;
-    //If the mob is currently "disabled", these flags specify behavior.
-    unsigned char disabled_state_flags;
+    //If the mob is currently "helpless", these flags specify behavior.
+    unsigned char helpless_state_flags;
     //If this mob is a sub-mob, this points to the parent mob.
     parent_info_struct* parent;
     //How long it's been alive for.
@@ -385,7 +385,7 @@ public:
         point* final_spot, float* final_dist
     ) const;
     virtual void handle_status_effect(status_type* s);
-    virtual void handle_disable_loss();
+    virtual void handle_helplessness_loss();
     virtual void handle_panic_loss();
     virtual void read_script_vars(const script_var_reader &svr);
     virtual void start_dying_class_specifics();

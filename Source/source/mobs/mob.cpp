@@ -86,7 +86,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     height_effect_pivot(LARGE_FLOAT),
     on_hazard(nullptr),
     chomp_max(0),
-    disabled_state_flags(0),
+    helpless_state_flags(0),
     parent(nullptr),
     time_alive(0.0f) {
     
@@ -1010,8 +1010,8 @@ void mob::delete_old_status_effects() {
             if(statuses[s].type->causes_panic) {
                 handle_panic_loss();
             }
-            if(statuses[s].type->causes_disable) {
-                handle_disable_loss();
+            if(statuses[s].type->causes_helplessness) {
+                handle_helplessness_loss();
             }
             if(statuses[s].type->generates_particles) {
                 remove_particle_generator(statuses[s].type->particle_gen->id);
@@ -1660,9 +1660,9 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
 
 
 /* ----------------------------------------------------------------------------
- * Handler for when there is no longer any status effect-induced disable.
+ * Handler for when there is no longer any status effect-induced helplessness.
  */
-void mob::handle_disable_loss() {
+void mob::handle_helplessness_loss() {
 }
 
 

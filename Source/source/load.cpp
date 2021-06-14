@@ -1387,10 +1387,10 @@ void load_status_types(const bool load_resources) {
         rs.set("removable_with_whistle",  new_t->removable_with_whistle);
         rs.set("auto_remove_time",        new_t->auto_remove_time);
         rs.set("health_change_ratio",     new_t->health_change_ratio);
-        rs.set("causes_disable",          new_t->causes_disable);
         rs.set("causes_flailing",         new_t->causes_flailing);
+        rs.set("causes_helplessness",     new_t->causes_helplessness);
         rs.set("causes_panic",            new_t->causes_panic);
-        rs.set("disabled_state_inedible", new_t->disabled_state_inedible);
+        rs.set("helpless_state_inedible", new_t->helpless_state_inedible);
         rs.set("speed_multiplier",        new_t->speed_multiplier);
         rs.set("attack_multiplier",       new_t->attack_multiplier);
         rs.set("defense_multiplier",      new_t->defense_multiplier);

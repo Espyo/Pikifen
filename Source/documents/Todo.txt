@@ -7,7 +7,7 @@ Current tasks (tasks being worked on, but not yet committed)
             Refactor status effects
                 When a status is removed, it should issue an event, instead of using some weird polymorphed function
                     Maybe it's not a good idea to use the "cancel" event, since the mob may since move on from that state, go elsewhere, and then receive the event when the timer hits?
-                Rename the "disabled" state to "helpless"
+                The property that stops a Pikmin from being eaten shouldn't be confined to the helpless state
             A way for the status effect to apply an animation, so they can look pressed
             A way for the status effect to make the object invisible to opponents
         Should resist being stabbed, and instead bounce back
@@ -476,7 +476,7 @@ Misc things (so I don't forget)
     Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
     Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
-    Add an option for statuses to disable a leader until the player presses right-click or something (thanks Neo)
+    Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
     Objects falling from the sky
         When a leader approaches, when a Pikmin approaches, when carrying, etc.
     Add shaders

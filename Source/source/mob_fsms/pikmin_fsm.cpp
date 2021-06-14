@@ -1125,15 +1125,15 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("disabled", PIKMIN_STATE_DISABLED); {
+    efc.new_state("helpless", PIKMIN_STATE_HELPLESS); {
         efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(pikmin_fsm::become_disabled);
+            efc.run(pikmin_fsm::become_helpless);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::whistled_while_disabled);
+            efc.run(pikmin_fsm::whistled_while_helpless);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::check_disabled_edible);
+            efc.run(pikmin_fsm::check_helpless_edible);
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
@@ -1860,7 +1860,7 @@ void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin becomes "disabled".
+ * When a Pikmin becomes "helpless".
  * m:
  *   The mob.
  * info1:
@@ -1868,7 +1868,7 @@ void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
  * info2:
  *   Unused.
  */
-void pikmin_fsm::become_disabled(mob* m, void* info1, void* info2) {
+void pikmin_fsm::become_helpless(mob* m, void* info1, void* info2) {
     pikmin_fsm::release_tool(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
     m->set_animation(PIKMIN_ANIM_IDLING);
@@ -2013,7 +2013,7 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a Pikmin touches an enemy's eat hitbox, but first has
- * to check if it is edible, since it's in the special "disabled" state.
+ * to check if it is edible, since it's in the special "helpless" state.
  * m:
  *   The mob.
  * info1:
@@ -2021,10 +2021,10 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
  * info2:
  *   Unused.
  */
-void pikmin_fsm::check_disabled_edible(mob* m, void* info1, void* info2) {
+void pikmin_fsm::check_helpless_edible(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
-    if(m->disabled_state_flags & DISABLED_STATE_FLAG_INEDIBLE) return;
+    if(m->helpless_state_flags & HELPLESS_STATE_FLAG_INEDIBLE) return;
     pikmin_fsm::be_grabbed_by_enemy(m, info1, info2);
     m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY, info1, info2);
 }
@@ -3841,7 +3841,7 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin is whistled over by a leader while disabled.
+ * When a Pikmin is whistled over by a leader while helpless.
  * m:
  *   The mob.
  * info1:
@@ -3849,16 +3849,16 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
  * info2:
  *   Unused.
  */
-void pikmin_fsm::whistled_while_disabled(mob* m, void* info1, void* info2) {
+void pikmin_fsm::whistled_while_helpless(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     for(size_t s = 0; s < pik_ptr->statuses.size(); ++s) {
         if(
-            pik_ptr->statuses[s].type->causes_disable &&
+            pik_ptr->statuses[s].type->causes_helplessness &&
             !pik_ptr->statuses[s].type->removable_with_whistle
         ) {
             //Even if other disabling statuses can be removed by the whistle,
-            //this one can't, so let's stay disabled and outside the group.
+            //this one can't, so let's stay helpless and outside the group.
             return;
         }
     }

@@ -1,7 +1,7 @@
 name = crushed
 affects_pikmin = true
-causes_disable = true
-disabled_state_inedible = true
+causes_helplessness = true
+helpless_state_inedible = true
 color = 0 0 0
 health_change_ratio = -1.5
 speed_multiplier = 0

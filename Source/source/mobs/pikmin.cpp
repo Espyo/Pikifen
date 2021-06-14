@@ -186,10 +186,10 @@ void pikmin::get_group_spot_info(
 
 
 /* ----------------------------------------------------------------------------
- * Handler for when there is no longer any status effect-induced disable.
+ * Handler for when there is no longer any status effect-induced helplessness.
  */
-void pikmin::handle_disable_loss() {
-    if(fsm.cur_state->id == PIKMIN_STATE_DISABLED) {
+void pikmin::handle_helplessness_loss() {
+    if(fsm.cur_state->id == PIKMIN_STATE_HELPLESS) {
         fsm.set_state(PIKMIN_STATE_IDLING);
         pikmin_fsm::stand_still(this, NULL, NULL);
         invuln_period.start();
@@ -215,10 +215,10 @@ void pikmin::handle_panic_loss() {
  *   Status effect to handle.
  */
 void pikmin::handle_status_effect(status_type* s) {
-    if(s->causes_disable) {
-        disabled_state_flags =
-            s->disabled_state_inedible ? DISABLED_STATE_FLAG_INEDIBLE : 0;
-        fsm.set_state(PIKMIN_STATE_DISABLED);
+    if(s->causes_helplessness) {
+        helpless_state_flags =
+            s->helpless_state_inedible ? HELPLESS_STATE_FLAG_INEDIBLE : 0;
+        fsm.set_state(PIKMIN_STATE_HELPLESS);
     } else if(s->causes_panic) {
         fsm.set_state(PIKMIN_STATE_PANICKING);
     } else if(s->causes_flailing) {
