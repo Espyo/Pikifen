@@ -5,8 +5,7 @@ Current tasks (tasks being worked on, but not yet committed)
     Rock Pikmin
         Should resist being crushed, by simply being temporarily buried
             Refactor status effects
-                Is fsm.get_event even needed, when q_get_event exists?
-                When a status is removed, it should an event, instead of using some weird polymorphed function
+                When a status is removed, it should issue an event, instead of using some weird polymorphed function
                     Maybe it's not a good idea to use the "cancel" event, since the mob may since move on from that state, go elsewhere, and then receive the event when the timer hits?
                 Rename the "disabled" state to "helpless"
             A way for the status effect to apply an animation, so they can look pressed

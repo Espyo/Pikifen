@@ -1898,7 +1898,7 @@ void mob::respawn() {
  *   The message.
  */
 void mob::send_message(mob* receiver, string &msg) const {
-    mob_event* ev = q_get_event(receiver, MOB_EV_RECEIVE_MESSAGE);
+    mob_event* ev = receiver->fsm.get_event(MOB_EV_RECEIVE_MESSAGE);
     if(!ev) return;
     ev->run(receiver, (void*) &msg, (void*) this);
 }
@@ -2519,7 +2519,7 @@ void mob::tick_script(const float delta_t) {
     if(!fsm.cur_state) return;
     
     //Timer events.
-    mob_event* timer_ev = q_get_event(this, MOB_EV_TIMER);
+    mob_event* timer_ev = fsm.get_event(MOB_EV_TIMER);
     if(script_timer.duration > 0) {
         if(script_timer.time_left > 0) {
             script_timer.tick(delta_t);
@@ -2530,7 +2530,7 @@ void mob::tick_script(const float delta_t) {
     }
     
     //Has it reached its home?
-    mob_event* reach_dest_ev = q_get_event(this, MOB_EV_REACHED_DESTINATION);
+    mob_event* reach_dest_ev = fsm.get_event(MOB_EV_REACHED_DESTINATION);
     if(reach_dest_ev && chase_info.reached_destination) {
         reach_dest_ev->run(this);
     }
@@ -2553,10 +2553,8 @@ void mob::tick_script(const float delta_t) {
         if(focused_mob) {
         
             mob* focus = focused_mob;
+            mob_event* for_ev = fsm.get_event(MOB_EV_FOCUS_OFF_REACH);
             
-            mob_event* for_ev =
-                q_get_event(this, MOB_EV_FOCUS_OFF_REACH);
-                
             if(far_reach != INVALID && for_ev) {
                 dist d(pos, focus->pos);
                 float face_diff =
@@ -2590,7 +2588,7 @@ void mob::tick_script(const float delta_t) {
     //Itch event.
     if(type->itch_damage > 0 || type->itch_time > 0) {
         itch_time += delta_t;
-        mob_event* itch_ev = q_get_event(this, MOB_EV_ITCH);
+        mob_event* itch_ev = fsm.get_event(MOB_EV_ITCH);
         if(
             itch_ev &&
             itch_damage > type->itch_damage && itch_time > type->itch_time
@@ -2607,7 +2605,7 @@ void mob::tick_script(const float delta_t) {
     }
     
     //Check if it got whistled.
-    mob_event* whistled_ev = q_get_event(this, MOB_EV_WHISTLED);
+    mob_event* whistled_ev = fsm.get_event(MOB_EV_WHISTLED);
     if(game.states.gameplay->whistle.whistling && whistled_ev) {
         if(
             dist(pos, game.states.gameplay->whistle.center) <=
@@ -2621,7 +2619,7 @@ void mob::tick_script(const float delta_t) {
     
     //Following a leader.
     if(following_group) {
-        mob_event* spot_far_ev =  q_get_event(this, MOB_EV_SPOT_IS_FAR);
+        mob_event* spot_far_ev =  fsm.get_event(MOB_EV_SPOT_IS_FAR);
         
         if(spot_far_ev) {
             point target_pos;
@@ -2637,7 +2635,7 @@ void mob::tick_script(const float delta_t) {
     }
     
     //Far away from home.
-    mob_event* far_from_home_ev = q_get_event(this, MOB_EV_FAR_FROM_HOME);
+    mob_event* far_from_home_ev = fsm.get_event(MOB_EV_FAR_FROM_HOME);
     if(far_from_home_ev) {
         dist d(pos, home);
         if(d >= type->territory_radius) {

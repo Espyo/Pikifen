@@ -61,10 +61,6 @@ enum FILE_DIALOG_RESULTS {
 //it's fully opaque.
 #define map_gray(g) al_map_rgb((g), (g), (g))
 
-//Because we get events so many times per frame, it's faster
-//to access them directly than to call a function.
-#define q_get_event(m_ptr, ev_type) ((m_ptr)->fsm.cur_state->events[(ev_type)])
-
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
 #define task_range(p) \
     (((p)->following_group == cur_leader_ptr && swarm_magnitude) ? \

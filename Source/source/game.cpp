@@ -297,6 +297,8 @@ int game_class::start() {
         game.change_state(game.states.main_menu);
     }
     
+    dummy_mob_state = new mob_state("dummy");
+    
     return 0;
 }
 

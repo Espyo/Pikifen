@@ -328,7 +328,6 @@ mob_fsm::mob_fsm(mob* m) :
  *   The event's type.
  */
 mob_event* mob_fsm::get_event(const size_t type) const {
-    if(!cur_state) return NULL;
     return cur_state->events[type];
 }
 
@@ -373,7 +372,7 @@ void mob_fsm::run_event(
  * info2:
  *   Same as info1, but a second variable.
  */
-void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
+bool mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
     //Run the code to leave the current state.
     if(cur_state) {
@@ -396,7 +395,11 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
         
         //Run the code to enter the new state.
         run_event(MOB_EV_ON_ENTER, info1, info2);
+        
+        return true;
     }
+    
+    return false;
     
 }
 

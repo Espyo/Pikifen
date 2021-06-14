@@ -1048,11 +1048,16 @@ mob* create_mob(
         }
     }
     
-    m_ptr->fsm.set_state(
-        m_ptr->fsm.first_state_override != INVALID ?
-        m_ptr->fsm.first_state_override :
-        type->first_state_nr
-    );
+    if(
+        !m_ptr->fsm.set_state(
+            m_ptr->fsm.first_state_override != INVALID ?
+            m_ptr->fsm.first_state_override :
+            type->first_state_nr
+        )
+    ) {
+        //If something went wrong, give it some dummy state.
+        m_ptr->fsm.cur_state = game.dummy_mob_state;
+    };
     
     for(size_t c = 0; c < type->children.size(); ++c) {
         mob_type::child_struct* child_info = &type->children[c];

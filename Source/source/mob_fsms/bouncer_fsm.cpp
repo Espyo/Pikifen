@@ -89,7 +89,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     ) {
     
         //Pikmin is about to be bounced.
-        ev = q_get_event(toucher, MOB_EV_TOUCHED_BOUNCER);
+        ev = toucher->fsm.get_event(MOB_EV_TOUCHED_BOUNCER);
         
     } else if(
         bou_ptr->bou_type->riders & BOUNCER_RIDER_LEADERS &&
@@ -97,7 +97,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     ) {
     
         //Leader is about to be bounced.
-        ev = q_get_event(toucher, MOB_EV_TOUCHED_BOUNCER);
+        ev = toucher->fsm.get_event(MOB_EV_TOUCHED_BOUNCER);
         
     }
     

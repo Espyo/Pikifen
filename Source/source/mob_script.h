@@ -252,7 +252,7 @@ public:
         const size_t type,
         void* custom_data_1 = NULL, void* custom_data_2 = NULL
     );
-    void set_state(
+    bool set_state(
         const size_t new_state, void* info1 = NULL, void* info2 = NULL
     );
     mob_fsm(mob* m = NULL);
