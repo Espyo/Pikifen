@@ -333,6 +333,22 @@ mob_event* mob_fsm::get_event(const size_t type) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the number of the specified state, if it exists. Otherwise,
+ * returns INVALID.
+ * name:
+ *   The state's name.
+ */
+size_t mob_fsm::get_state_nr(const string &name) const {
+    for(size_t s = 0; s < m->type->states.size(); ++s) {
+        if(m->type->states[s]->name == name) {
+            return s;
+        }
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Runs an event in the current state, if it exists.
  * type:
  *   The event's type.

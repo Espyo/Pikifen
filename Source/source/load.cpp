@@ -1426,6 +1426,8 @@ void load_status_types(const bool load_resources) {
                 new_t->state_change_type = STATUS_STATE_CHANGE_HELPLESS;
             } else if(sc_type_str == "panic") {
                 new_t->state_change_type = STATUS_STATE_CHANGE_PANIC;
+            } else if(sc_type_str == "custom") {
+                new_t->state_change_type = STATUS_STATE_CHANGE_CUSTOM;
             } else {
                 log_error(
                     "Unknown state change type \"" +

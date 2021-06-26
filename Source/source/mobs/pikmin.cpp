@@ -191,6 +191,8 @@ void pikmin::get_group_spot_info(
  *   Status effect to handle.
  */
 void pikmin::handle_status_effect_gain(status_type* sta_type) {
+    mob::handle_status_effect_gain(sta_type);
+    
     switch(sta_type->state_change_type) {
     case STATUS_STATE_CHANGE_FLAILING: {
         fsm.set_state(PIKMIN_STATE_FLAILING);

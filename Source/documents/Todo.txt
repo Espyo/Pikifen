@@ -4,9 +4,6 @@
 Current tasks (tasks being worked on, but not yet committed)
     Rock Pikmin
         Should resist being crushed, by simply being temporarily buried
-            Refactor status effects
-                Find more ideas in this file
-                Try to see if there's any groundwork that can be done to improve bitter sprays
             A way for the status effect to apply an animation, so they can look pressed
             A way for the status effect to make the object invisible to opponents
         Should resist being stabbed, and instead bounce back
@@ -33,6 +30,11 @@ Next tasks (roughly sorted most important first)
             Maybe three status effects? One for the start, one for petrification, one for shaking
         Petrified enemies should break open when defeated
         Petrified enemies shouldn't change animation. They should still change states, otherwise the FSM may go all wonky
+    Status improvements
+        Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
+        A way for status effects to add to the time left, instead of resetting it or leaving it as is
+            Spicy spray should reset the time if it is re-applied
+        Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
     Add a way to delete areas from within the area editor, probably in the File menu
     When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
     Menus need tooltips
@@ -481,7 +483,6 @@ Misc things (so I don't forget)
     Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
     Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
-    Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
     Objects falling from the sky
         When a leader approaches, when a Pikmin approaches, when carrying, etc.
     Add shaders
@@ -491,8 +492,6 @@ Misc things (so I don't forget)
         Add some effect to the borders of water bodies?
     Maybe water should have random sparkle particles?
     A way for Pikmin to resist being shaken off
-    A way for status effects to add to the time left, instead of resetting it or leaving it as is
-        Spicy spray to reset the time if it is re-applied
     Add the feature that makes dead flower Pikmin sometimes drop a sprout, before the story mode is done? It could spawn a sprout for use later in the day
     Option to pause the game if the window is not focused
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
@@ -502,8 +501,6 @@ Misc things (so I don't forget)
     If you write an event name wrong (or other things), give suggestions ("did you mean X?")
     If a Pikmin type has black as the color, the idle glow needs to... not be black
     Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
-    The ability for status effects to add/remove HP in absolute amounts, not relative
-    Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
     Area sections
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections
@@ -681,6 +678,7 @@ Tasks for later on (I might never implement these)
         https://gamasutra.com/blogs/JiriHolba/20200511/362690/Should_STL_containers_be_used_in_game_engines.php
     Stuff that isn't really justifiable yet, but may be one day
         Should the leader's throw preview indicate collisions against mobs? It's not really necessary, and there are all sorts of weird cases, like decorative vs. combat mobs, untouchable hitboxes, etc.
+        The ability for status effects to add/remove HP in absolute amounts, not relative
         Suggestions
             An action with which to change a mob's home
             A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed

@@ -248,6 +248,7 @@ public:
     size_t first_state_override;
     
     mob_event* get_event(const size_t type) const;
+    size_t get_state_nr(const string &name) const;
     void run_event(
         const size_t type,
         void* custom_data_1 = NULL, void* custom_data_2 = NULL

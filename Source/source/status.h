@@ -35,6 +35,7 @@ enum STATUS_STATE_CHANGES {
     STATUS_STATE_CHANGE_FLAILING,
     STATUS_STATE_CHANGE_HELPLESS,
     STATUS_STATE_CHANGE_PANIC,
+    STATUS_STATE_CHANGE_CUSTOM,
 };
 
 /* ----------------------------------------------------------------------------
