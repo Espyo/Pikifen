@@ -255,7 +255,7 @@ void mob::apply_status_effect(
     
     //This status is not already inflicted. Let's do so.
     this->statuses.push_back(status(s));
-    handle_status_effect(s);
+    handle_status_effect_gain(s);
     
     if(s->turns_invisible) {
         has_invisibility_status = true;
@@ -1007,16 +1007,13 @@ void mob::circle_around(
 void mob::delete_old_status_effects() {
     for(size_t s = 0; s < statuses.size(); ) {
         if(statuses[s].to_delete) {
-            if(statuses[s].type->causes_panic) {
-                handle_panic_loss();
-            }
-            if(statuses[s].type->causes_helplessness) {
-                handle_helplessness_loss();
-            }
+            handle_status_effect_loss(statuses[s].type);
+            
+            statuses.erase(statuses.begin() + s);
+            
             if(statuses[s].type->generates_particles) {
                 remove_particle_generator(statuses[s].type->particle_gen->id);
             }
-            statuses.erase(statuses.begin() + s);
         } else {
             ++s;
         }
@@ -1660,25 +1657,20 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
 
 
 /* ----------------------------------------------------------------------------
- * Handler for when there is no longer any status effect-induced helplessness.
- */
-void mob::handle_helplessness_loss() {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handler for when there is no longer any status effect-induced panic.
- */
-void mob::handle_panic_loss() {
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles a status effect being applied.
  * s:
  *   Status type to check.
  */
-void mob::handle_status_effect(status_type* s) {
+void mob::handle_status_effect_gain(status_type* sta_type) {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a status effect being removed.
+ * s:
+ *   Status type to check.
+ */
+void mob::handle_status_effect_loss(status_type* sta_type) {
 }
 
 
@@ -2605,16 +2597,21 @@ void mob::tick_script(const float delta_t) {
     }
     
     //Check if it got whistled.
-    mob_event* whistled_ev = fsm.get_event(MOB_EV_WHISTLED);
-    if(game.states.gameplay->whistle.whistling && whistled_ev) {
-        if(
-            dist(pos, game.states.gameplay->whistle.center) <=
-            game.states.gameplay->whistle.radius
-        ) {
-            whistled_ev->run(
-                this, (void*) game.states.gameplay->cur_leader_ptr
-            );
+    if(
+        game.states.gameplay->whistle.whistling &&
+        dist(pos, game.states.gameplay->whistle.center) <=
+        game.states.gameplay->whistle.radius
+    ) {
+        fsm.run_event(
+            MOB_EV_WHISTLED, (void*) game.states.gameplay->cur_leader_ptr
+        );
+        
+        for(size_t s = 0; s < statuses.size(); ++s) {
+            if(statuses[s].type->removable_with_whistle) {
+                statuses[s].to_delete = true;
+            }
         }
+        delete_old_status_effects();
     }
     
     //Following a leader.

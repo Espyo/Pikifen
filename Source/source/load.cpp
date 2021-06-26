@@ -1372,8 +1372,10 @@ void load_status_types(const bool load_resources) {
         bool affects_leaders_bool = false;
         bool affects_enemies_bool = false;
         bool affects_others_bool = false;
+        string sc_type_str;
         string particle_offset_str;
         string particle_gen_str;
+        data_node* sc_type_node;
         data_node* particle_gen_node = NULL;
         
         rs.set("name",                    new_t->name);
@@ -1385,17 +1387,17 @@ void load_status_types(const bool load_resources) {
         rs.set("affects_enemies",         affects_enemies_bool);
         rs.set("affects_others",          affects_others_bool);
         rs.set("removable_with_whistle",  new_t->removable_with_whistle);
+        rs.set("remove_on_hazard_leave",  new_t->remove_on_hazard_leave);
         rs.set("auto_remove_time",        new_t->auto_remove_time);
         rs.set("health_change_ratio",     new_t->health_change_ratio);
-        rs.set("causes_flailing",         new_t->causes_flailing);
-        rs.set("causes_helplessness",     new_t->causes_helplessness);
-        rs.set("causes_panic",            new_t->causes_panic);
-        rs.set("helpless_state_inedible", new_t->helpless_state_inedible);
+        rs.set("state_change_type",       sc_type_str, &sc_type_node);
+        rs.set("state_change_name",       new_t->state_change_name);
         rs.set("speed_multiplier",        new_t->speed_multiplier);
         rs.set("attack_multiplier",       new_t->attack_multiplier);
         rs.set("defense_multiplier",      new_t->defense_multiplier);
         rs.set("maturity_change_amount",  new_t->maturity_change_amount);
         rs.set("disables_attack",         new_t->disables_attack);
+        rs.set("turns_inedible",          new_t->turns_inedible);
         rs.set("turns_invisible",         new_t->turns_invisible);
         rs.set("anim_speed_multiplier",   new_t->anim_speed_multiplier);
         rs.set("animation",               new_t->animation_name);
@@ -1415,6 +1417,21 @@ void load_status_types(const bool load_resources) {
         }
         if(affects_others_bool) {
             new_t->affects |= STATUS_AFFECTS_OTHERS;
+        }
+        
+        if(sc_type_node) {
+            if(sc_type_str == "flailing") {
+                new_t->state_change_type = STATUS_STATE_CHANGE_FLAILING;
+            } else if(sc_type_str == "helpless") {
+                new_t->state_change_type = STATUS_STATE_CHANGE_HELPLESS;
+            } else if(sc_type_str == "panic") {
+                new_t->state_change_type = STATUS_STATE_CHANGE_PANIC;
+            } else {
+                log_error(
+                    "Unknown state change type \"" +
+                    sc_type_str + "\"!", sc_type_node
+                );
+            }
         }
         
         if(particle_gen_node) {

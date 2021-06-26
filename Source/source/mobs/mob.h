@@ -42,12 +42,6 @@ const float MOB_KNOCKBACK_H_POWER = 64.0f;
 const float MOB_KNOCKBACK_V_POWER = 800.0f;
 const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 
-enum HELPLESS_STATE_FLAGS {
-    //The Pikmin cannot be eaten by enemies.
-    HELPLESS_STATE_FLAG_INEDIBLE = 1,
-};
-
-
 enum MOB_PARTICLE_GENERATOR_IDS {
     MOB_PARTICLE_GENERATOR_NONE,
     //Custom particle generator issued by the script.
@@ -384,9 +378,8 @@ public:
     virtual void get_group_spot_info(
         point* final_spot, float* final_dist
     ) const;
-    virtual void handle_status_effect(status_type* s);
-    virtual void handle_helplessness_loss();
-    virtual void handle_panic_loss();
+    virtual void handle_status_effect_gain(status_type* sta_type);
+    virtual void handle_status_effect_loss(status_type* sta_type);
     virtual void read_script_vars(const script_var_reader &svr);
     virtual void start_dying_class_specifics();
     virtual void finish_dying_class_specifics();

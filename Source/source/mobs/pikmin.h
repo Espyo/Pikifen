@@ -79,12 +79,10 @@ public:
     virtual void get_group_spot_info(
         point* final_spot, float* final_dist
     ) const;
-    //Handler for when there's no longer any status effect-induced helplessness.
-    virtual void handle_helplessness_loss();
-    //Handler for when there is no longer any status effect-induced panic.
-    virtual void handle_panic_loss();
-    //Handler for a status effect.
-    virtual void handle_status_effect(status_type* s);
+    //Handler for a status effect being applied.
+    virtual void handle_status_effect_gain(status_type* s);
+    //Handler for a status effect being removed.
+    virtual void handle_status_effect_loss(status_type* s);
     //Read script variables from the area data.
     virtual void read_script_vars(const script_var_reader &svr);
     

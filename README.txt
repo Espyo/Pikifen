@@ -2,7 +2,7 @@
 
 A fan-made Pikmin engine that allows users to make and play their own Pikmin content.
 
-To learn more about how to use the engine, please check the included manual, accessible by opening Manual.html.
+To learn more about how to use the engine, please check the included manual, accessible by opening Manual.html. It includes, amongst other things, tutorials, list of controls, the changelog, troubleshooting information, compilation instructions, an FAQ, and credits.
 
 GitHub page: https://github.com/Espyo/Pikifen
 Pikmin Fanon page: https://www.pikminfanon.com/wiki/Pikifen
@@ -61,6 +61,7 @@ Discord server: https://discord.gg/qbhz4u3
 ===============
     To play, just pick an area and start playing!
     To make content for the engine, just edit the image, sound, or text files in the "Game_data" folder. Some things can also be edited using the built-in editors.
+    Alternatively, you can download some content made by other players (check the Discord server!)
     This project is still under construction, so expect some things to be incomplete!
     For more detailed information, including tutorials, please check the included manual.
 

@@ -36,12 +36,16 @@
       <li><b><code>tint</code></b>: When an object is under this status effect, they are tinted by this color, in the format <code>r g b</code> or <code>r g b a</code>. Default is <code>255 255 255</code> (white, which means no tint).</li>
       <li><b><code>glow</code></b>: When an object is under this status effect, they are lit up by this color, in the format <code>r g b</code> or <code>r g b a</code>. Default is <code>0 0 0 0</code> (no color).</li>
       <li><b><code>removable_with_whistle</code></b>: If true, the status effect can be removed if the object is whistled by a leader.</li>
+      <li><b><code>remove_on_hazard_leave</code></b>: If true, the status effect is removed if the object leaves the hazard that was emitting the status.</li>
       <li><b><code>auto_remove_time</code></b>: The status effect is automatically removed after these many seconds have passed. 0 means it does not auto-remove with time.</li>
       <li><b><code>health_change_ratio</code></b>: Every second that passes, its health increases by this much. This represents the ratio of max health, meaning that if a object has 1000 max health, and this value is -0.5, it will lose 500 points of health after one second.</li>
-      <li><b><code>causes_helplessness</code></b>: If true, Pikmin affected by this will enter a "helpless" state. During this state, they can't do much, and can't interact with much. Useful for stunning them.</li>
-      <li><b><code>causes_flailing</code></b>: If true, Pikmin affected by this will enter a "flailing" state, where they change to a flailing animation and are only able to move. They come towards the leader when whistled. Useful for drowning Pikmin.</li>
-      <li><b><code>causes_panic</code></b>: If true, Pikmin affected by this will enter a "panic" state, where they won't interact with many things, but will run around randomly in a panic.</li>
-      <li><b><code>helpless_state_inedible</code></b>: If true, Pikmin in the "helpless" state caused by this status effect will not be able to be eaten. If false, they can be eaten even in this state.</li>
+      <li><b><code>state_change_type</code></b>: If not <code>none</code>, the engine will somehow change this object's state when it receives this status effect. Defaults to <code>none</code>. Possible values are:
+        <ul>
+          <li><code>flailing</code>: Pikmin affected by this will enter a "flailing" state, where they change to a flailing animation and are only able to move. They come towards the leader when whistled. Useful for drowning Pikmin.</li>
+          <li><code>helpless</code>: Pikmin affected by this will enter a "helpless" state. During this state, they can't do much, and can't interact with much. Useful for stunning them.</li>
+          <li><code>panic</code>: Pikmin affected by this will enter a "panic" state, where they won't interact with many things, but will run around randomly in a panic.</li>
+        </ul>
+      </li>
       <li><b><code>disables_attack</code></b>: If true, attack hitboxes are ignored. Useful for petrifying mobs and making them harmless, for instance.</li>
       <li><b><code>speed_multiplier</code></b>: Multiply the object's movement speed by this much.</li>
       <li><b><code>attack_multiplier</code></b>: Multiply the object's attack power by this much.</li>
@@ -55,6 +59,7 @@
       <li><b><code>particle_generator</code></b>: If you want objects under this status effect to generate particles, specify the particle generator here. Read the <a href="particle.html">particle generator guide</a> to learn how to make some.</li>
       <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="script.html#rel-coords">relative coordinates</a>.</li>
       <li><b><code>maturity_change_amount</code></b>: If a Pikmin is affected by this status effect, its maturity will instantly increase by the specified amount. You can also write negative numbers to decrease the maturity. You don't need to worry about the maturity number going over, so a change amount of "+4" on Pikmin won't make it go beyond a flower.</li>
+      <li><b><code>turns_inedible</code></b>: If true, Pikmin under this status effect cannot be eaten.</li>
       <li><b><code>turns_invisible</code></b>: If true, objects under this status effect will be considered invisible for other objects. They will still show up on the screen (unless you tinted them with transparency), but other objects will not be able to receive "in reach" <a href="script.html">events</a>.</li>
     </ul>
     

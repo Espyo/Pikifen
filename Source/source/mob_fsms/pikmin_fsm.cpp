@@ -1127,55 +1127,75 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("helpless", PIKMIN_STATE_HELPLESS); {
         efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::notify_leader_release);
+            efc.run(pikmin_fsm::be_released);
+            efc.run(pikmin_fsm::release_tool);
+            efc.run(pikmin_fsm::stand_still);
             efc.run(pikmin_fsm::become_helpless);
         }
-        efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::whistled_while_helpless);
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
-            efc.run(pikmin_fsm::check_helpless_edible);
+            efc.run(pikmin_fsm::touched_eat_hitbox);
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        
+        //The logic to lose helplessness is in
+        //pikmin::handle_status_effect_loss();
     }
     
     efc.new_state("flailing", PIKMIN_STATE_FLAILING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::notify_leader_release);
             efc.run(pikmin_fsm::be_released);
+            efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::start_flailing);
         }
         efc.new_event(MOB_EV_TIMER); {
             efc.run(pikmin_fsm::stand_still);
         }
-        efc.new_event(MOB_EV_LEFT_HAZARD); {
-            efc.run(pikmin_fsm::left_hazard);
-            efc.run(pikmin_fsm::check_remove_flailing);
-        }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::flail_to_whistle);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        
+        //The logic to stop flailing is in
+        //pikmin::handle_status_effect_loss();
     }
     
     efc.new_state("panicking", PIKMIN_STATE_PANICKING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::notify_leader_release);
             efc.run(pikmin_fsm::be_released);
+            efc.run(pikmin_fsm::release_tool);
             efc.run(pikmin_fsm::start_panicking);
         }
         efc.new_event(MOB_EV_TIMER); {
             efc.run(pikmin_fsm::panic_new_chase);
         }
-        efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::whistled_while_panicking);
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(pikmin_fsm::fall_down_pit);
         }
+        
+        //The logic to stop panicking
+        //is in pikmin::handle_status_effect_loss();
     }
     
     efc.new_state("drinking", PIKMIN_STATE_DRINKING); {
@@ -1869,10 +1889,7 @@ void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::become_helpless(mob* m, void* info1, void* info2) {
-    pikmin_fsm::release_tool(m, info1, info2);
-    pikmin_fsm::notify_leader_release(m, info1, info2);
     m->set_animation(PIKMIN_ANIM_IDLING);
-    pikmin_fsm::stand_still(m, NULL, NULL);
     m->leave_group();
 }
 
@@ -1957,13 +1974,6 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
     leader* caller = (leader*) info1;
     
-    for(size_t s = 0; s < m->statuses.size(); ++s) {
-        if(m->statuses[s].type->removable_with_whistle) {
-            m->statuses[s].to_delete = true;
-        }
-    }
-    m->delete_old_status_effects();
-    
     pik->was_last_hit_dud = false;
     pik->consecutive_dud_hits = 0;
     
@@ -1992,13 +2002,6 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
     //already whistled it.
     if(pik->temp_i == 1) return;
     
-    for(size_t s = 0; s < m->statuses.size(); ++s) {
-        if(m->statuses[s].type->removable_with_whistle) {
-            m->statuses[s].to_delete = true;
-        }
-    }
-    m->delete_old_status_effects();
-    
     pik->focus_on_mob(caller);
     
     pik->script_timer.time_left =
@@ -2008,25 +2011,6 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
         );
         
     pik->temp_i = 1;
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin touches an enemy's eat hitbox, but first has
- * to check if it is edible, since it's in the special "helpless" state.
- * m:
- *   The mob.
- * info1:
- *   Points to the hitbox.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::check_helpless_edible(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
-    
-    if(m->helpless_state_flags & HELPLESS_STATE_FLAG_INEDIBLE) return;
-    pikmin_fsm::be_grabbed_by_enemy(m, info1, info2);
-    m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY, info1, info2);
 }
 
 
@@ -2092,43 +2076,6 @@ void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
     
         p_ptr->was_last_hit_dud = true;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin checks if it's no longer meant to be flailing.
- * m:
- *   The mob.
- * info1:
- *   Points to the hazard that the Pikmin left.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::check_remove_flailing(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
-    
-    hazard* h_ptr = (hazard*) info1;
-    
-    for(size_t s = 0; s < m->statuses.size(); ++s) {
-        for(size_t e = 0; e < h_ptr->effects.size(); ++e) {
-            if(
-                m->statuses[s].type == h_ptr->effects[e] &&
-                h_ptr->effects[e]->causes_flailing
-            ) {
-            
-                m->statuses[s].to_delete = true;
-                m->fsm.set_state(PIKMIN_STATE_IDLING);
-                pikmin_fsm::stand_still(m, NULL, NULL);
-                
-            }
-        }
-    }
-    
-    //Let's piggyback this check to also remove liquid wave ring particles.
-    if(h_ptr->associated_liquid) {
-        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_WAVE_RING);
-    }
-    
 }
 
 
@@ -3404,7 +3351,6 @@ void pikmin_fsm::start_impact_lunge(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
-    pikmin_fsm::release_tool(m, info1, info2);
     m->set_animation(PIKMIN_ANIM_WALKING);
     m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
@@ -3665,6 +3611,11 @@ void pikmin_fsm::touched_eat_hitbox(mob* m, void* info1, void* info2) {
         return;
     }
     
+    for(size_t s = 0; s < m->statuses.size(); ++s) {
+        if(m->statuses[s].type->turns_inedible) {
+            return;
+        }
+    }
     
     m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY, info1, info2);
 }
@@ -3841,36 +3792,6 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin is whistled over by a leader while helpless.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the leader that called.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::whistled_while_helpless(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) m;
-    
-    for(size_t s = 0; s < pik_ptr->statuses.size(); ++s) {
-        if(
-            pik_ptr->statuses[s].type->causes_helplessness &&
-            !pik_ptr->statuses[s].type->removable_with_whistle
-        ) {
-            //Even if other disabling statuses can be removed by the whistle,
-            //this one can't, so let's stay helpless and outside the group.
-            return;
-        }
-    }
-    
-    //The status effect gets removed elsewhere, but we can at least
-    //bring the Pikmin to the leader's side here.
-    pikmin_fsm::called(m, info1, info2);
-    m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a Pikmin is whistled over by a leader while holding a tool.
  * m:
  *   The mob.
@@ -3891,36 +3812,6 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->is_tool_primed_for_whistle = false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin is whistled over by a leader while panicking.
- * m:
- *   The mob.
- * info1:
- *   Pointer to the leader that called.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::whistled_while_panicking(mob* m, void* info1, void* info2) {
-    pikmin* pik_ptr = (pikmin*) m;
-    
-    for(size_t s = 0; s < pik_ptr->statuses.size(); ++s) {
-        if(
-            pik_ptr->statuses[s].type->causes_panic &&
-            !pik_ptr->statuses[s].type->removable_with_whistle
-        ) {
-            //Even if other panicking statuses can be removed by the whistle,
-            //this one can't, so let's stay in panic and outside the group.
-            return;
-        }
-    }
-    
-    //The status effect gets removed elsewhere, but we can at least
-    //bring the Pikmin to the leader's side here.
-    pikmin_fsm::called(m, info1, info2);
-    m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
 }
 
 

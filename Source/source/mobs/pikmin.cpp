@@ -186,46 +186,93 @@ void pikmin::get_group_spot_info(
 
 
 /* ----------------------------------------------------------------------------
- * Handler for when there is no longer any status effect-induced helplessness.
- */
-void pikmin::handle_helplessness_loss() {
-    if(fsm.cur_state->id == PIKMIN_STATE_HELPLESS) {
-        fsm.set_state(PIKMIN_STATE_IDLING);
-        pikmin_fsm::stand_still(this, NULL, NULL);
-        invuln_period.start();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handler for when there is no longer any status effect-induced panic.
- */
-void pikmin::handle_panic_loss() {
-    if(fsm.cur_state->id == PIKMIN_STATE_PANICKING) {
-        fsm.set_state(PIKMIN_STATE_IDLING);
-        pikmin_fsm::stand_still(this, NULL, NULL);
-        invuln_period.start();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles a status effect being applied.
  * s:
  *   Status effect to handle.
  */
-void pikmin::handle_status_effect(status_type* s) {
-    if(s->causes_helplessness) {
-        helpless_state_flags =
-            s->helpless_state_inedible ? HELPLESS_STATE_FLAG_INEDIBLE : 0;
-        fsm.set_state(PIKMIN_STATE_HELPLESS);
-    } else if(s->causes_panic) {
-        fsm.set_state(PIKMIN_STATE_PANICKING);
-    } else if(s->causes_flailing) {
+void pikmin::handle_status_effect_gain(status_type* sta_type) {
+    switch(sta_type->state_change_type) {
+    case STATUS_STATE_CHANGE_FLAILING: {
         fsm.set_state(PIKMIN_STATE_FLAILING);
+        break;
+    }
+    case STATUS_STATE_CHANGE_HELPLESS: {
+        fsm.set_state(PIKMIN_STATE_HELPLESS);
+        break;
+    }
+    case STATUS_STATE_CHANGE_PANIC: {
+        fsm.set_state(PIKMIN_STATE_PANICKING);
+        break;
+    }
+    default: {
+        break;
+    }
     }
     
-    increase_maturity(s->maturity_change_amount);
+    increase_maturity(sta_type->maturity_change_amount);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a status effect being removed.
+ * s:
+ *   Status effect to handle.
+ */
+void pikmin::handle_status_effect_loss(status_type* sta_type) {
+    bool still_has_flailing = false;
+    bool still_has_helplessness = false;
+    bool still_has_panic = false;
+    for(size_t s = 0; s < statuses.size(); ++s) {
+        if(statuses[s].type == sta_type) continue;
+        
+        switch(statuses[s].type->state_change_type) {
+        case STATUS_STATE_CHANGE_FLAILING: {
+            still_has_flailing = true;
+            break;
+        }
+        case STATUS_STATE_CHANGE_HELPLESS: {
+            still_has_helplessness = true;
+            break;
+        }
+        case STATUS_STATE_CHANGE_PANIC: {
+            still_has_panic = true;
+            break;
+        }
+        default: {
+            break;
+        }
+        }
+    }
+    
+    if(
+        sta_type->state_change_type == STATUS_STATE_CHANGE_FLAILING &&
+        !still_has_flailing &&
+        fsm.cur_state->id == PIKMIN_STATE_FLAILING
+    ) {
+        fsm.set_state(PIKMIN_STATE_IDLING);
+        pikmin_fsm::stand_still(this, NULL, NULL);
+        invuln_period.start();
+    }
+    
+    if(
+        sta_type->state_change_type == STATUS_STATE_CHANGE_HELPLESS &&
+        !still_has_helplessness &&
+        fsm.cur_state->id == PIKMIN_STATE_HELPLESS
+    ) {
+        fsm.set_state(PIKMIN_STATE_IDLING);
+        pikmin_fsm::stand_still(this, NULL, NULL);
+        invuln_period.start();
+        
+    } else if(
+        sta_type->state_change_type == STATUS_STATE_CHANGE_PANIC &&
+        !still_has_panic &&
+        fsm.cur_state->id == PIKMIN_STATE_PANICKING
+    ) {
+        fsm.set_state(PIKMIN_STATE_IDLING);
+        pikmin_fsm::stand_still(this, NULL, NULL);
+        invuln_period.start();
+        
+    }
 }
 
 

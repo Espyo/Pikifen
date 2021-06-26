@@ -785,6 +785,13 @@ void mob::tick_vertical_movement_physics(
             MOB_EV_LEFT_HAZARD,
             (void*) on_hazard
         );
+        
+        for(size_t s = 0; s < statuses.size(); ++s) {
+            if(statuses[s].type->remove_on_hazard_leave) {
+                statuses[s].to_delete = true;
+            }
+        }
+        delete_old_status_effects();
     }
     on_hazard = new_on_hazard;
     

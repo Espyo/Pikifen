@@ -52,6 +52,13 @@
       <li>If a Pikmin is lying down, a leader can now whistle it to make it get up faster, and return to the leader once it does.</li>
       <li>Added an option to allow the leader to auto-throw. If you have trouble mashing the throw button, consider turning this on.</li>
       <li>If a new leader shows up from a defeated enemy, their HUD information will now display properly. (Thanks pikminjosh)</li>
+      <li>
+        Revamped the status system.
+        <ul>
+          <li>Added the <code>remove_on_hazard_leave</code> property. This is now used for statuses like drowning, where the status effect is removed once the object leaves the hazard that was applying the status effect.</li>
+          <li>Plus other changes noted below in the compatibility warnings.</li>
+        </ul>
+      </li>
       <li>The <code>on_hitbox_touch_a_n</code> event used to trigger regardless of the first hitbox's type. This has now been fixed, and <code>on_hitbox_touch_n_n</code> was created for when the both hitboxes are of the normal type.</li>
       <li>
         Minor editor tweaks.
@@ -75,7 +82,8 @@
           <li><code>getting_up</code> is a new animation for the Pikmin getting up from lying down.</li>
         </ul>
       </li>
-      <li>Renamed things related to the Pikmin's "disabled" state to be "helpless" instead, since it's more apt. This affects the <code>causes_disable</code> and <code>disabled_state_inedible</code> status effect type properties.</li>
+      <li>Turned the <code>disabled_state_inedible</code> status effect type property to <code>turns_inedible</code> instead. This way, any status can make a Pikmin inedible while under its effects.</li>
+      <li>The <code>causes_*</code> status effect type properties were removed in favor of the <code>state_change_type</code> property. Anything related to the Pikmin's "disabled" state has now also been renamed to the more apt term "helpless".</li>
       <li>The <code>on_hitbox_touch_a_n</code> event was corrected, so if you relied on the incorrect behavior, use <code>on_hitbox_touch_n_n</code> instead.</li>
     </ul>
     

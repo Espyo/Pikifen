@@ -23,6 +23,20 @@
 using std::string;
 
 
+enum STATUS_AFFECTS_FLAGS {
+    STATUS_AFFECTS_PIKMIN = 1,
+    STATUS_AFFECTS_ENEMIES = 2,
+    STATUS_AFFECTS_LEADERS = 4,
+    STATUS_AFFECTS_OTHERS = 8,
+};
+
+enum STATUS_STATE_CHANGES {
+    STATUS_STATE_CHANGE_NONE,
+    STATUS_STATE_CHANGE_FLAILING,
+    STATUS_STATE_CHANGE_HELPLESS,
+    STATUS_STATE_CHANGE_PANIC,
+};
+
 /* ----------------------------------------------------------------------------
  * A status effect type, like "burning", "spicy", "petrified", etc.
  * Any mob under the influence of a status effect will suffer or
@@ -39,22 +53,23 @@ struct status_type {
     ALLEGRO_COLOR glow;
     
     bool removable_with_whistle;
+    bool remove_on_hazard_leave;
     float auto_remove_time;
     
     //Health addition/subtraction percentage per second.
     float health_change_ratio;
     //Increase/decrease in maturity when the status is gained.
     int maturity_change_amount;
-    bool causes_flailing;
-    bool causes_helplessness;
-    bool causes_panic;
-    bool helpless_state_inedible;
+    
+    STATUS_STATE_CHANGES state_change_type;
+    string state_change_name;
     
     float speed_multiplier;
     float attack_multiplier;
     float defense_multiplier;
     float anim_speed_multiplier;
     bool disables_attack;
+    bool turns_inedible;
     bool turns_invisible;
     
     //We need to know this in order to remove the particle generator later.
@@ -85,14 +100,6 @@ struct status {
     status(status_type* type);
 };
 
-
-
-enum STATUS_AFFECTS_FLAGS {
-    STATUS_AFFECTS_PIKMIN = 1,
-    STATUS_AFFECTS_ENEMIES = 2,
-    STATUS_AFFECTS_LEADERS = 4,
-    STATUS_AFFECTS_OTHERS = 8,
-};
 
 
 #endif //ifndef STATUS_INCLUDED

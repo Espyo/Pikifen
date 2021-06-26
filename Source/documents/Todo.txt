@@ -5,9 +5,8 @@ Current tasks (tasks being worked on, but not yet committed)
     Rock Pikmin
         Should resist being crushed, by simply being temporarily buried
             Refactor status effects
-                When a status is removed, it should issue an event, instead of using some weird polymorphed function
-                    Maybe it's not a good idea to use the "cancel" event, since the mob may since move on from that state, go elsewhere, and then receive the event when the timer hits?
-                The property that stops a Pikmin from being eaten shouldn't be confined to the helpless state
+                Find more ideas in this file
+                Try to see if there's any groundwork that can be done to improve bitter sprays
             A way for the status effect to apply an animation, so they can look pressed
             A way for the status effect to make the object invisible to opponents
         Should resist being stabbed, and instead bounce back
@@ -29,6 +28,11 @@ Next tasks (roughly sorted most important first)
     Purple Pikmin
         Give them a proper pound attack
         Maybe stun?
+    Ultra-bitter spray improvements
+        Petrified enemies shaking before getting out
+            Maybe three status effects? One for the start, one for petrification, one for shaking
+        Petrified enemies should break open when defeated
+        Petrified enemies shouldn't change animation. They should still change states, otherwise the FSM may go all wonky
     Add a way to delete areas from within the area editor, probably in the File menu
     When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
     Menus need tooltips
@@ -56,6 +60,7 @@ Next tasks (roughly sorted most important first)
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
             Add a transparent solid circle over the area being whistled
+            Smoother trail behind the mouse cursor
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
@@ -144,8 +149,8 @@ Next tasks (roughly sorted most important first)
             Check Openbox's source code, focus_cycle.c, focus_find_directional()
                 Basically, compare the box centers, check which one has the lowest distance+offset, and select that, for the given direction
         The ability to load TTF fonts
-        Main menu shouldn't have those ugly rounded rectangles; it should use the button graphics the Onion uses instead
         Ways to customize the menu elements, like you can customize the HUD
+        Should the secondary menus from the main menu also contain Pikmin formations in the background?
     Level end
         Pikmin extinction
             Check Onions, ships, and converters that have Pikmin in the buffer
@@ -247,7 +252,6 @@ Next tasks (roughly sorted most important first)
         There should only be one on-screen at a time
         Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
         The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
-    Petrified enemies shaking before getting out, and breaking open when defeated while petrified
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
@@ -467,6 +471,7 @@ Misc things (so I don't forget)
         A way to run actions on other mobs
             You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
         Global script variables
+        More ideas of actions from Game Builder Garage's Nodon
     For intervals, use the code on the "misc info" text file
     Water depth (thanks ThyCheshireCat)
         Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
