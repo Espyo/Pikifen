@@ -64,6 +64,7 @@ struct status_type {
     
     STATUS_STATE_CHANGES state_change_type;
     string state_change_name;
+    string animation_change;
     
     float speed_multiplier;
     float attack_multiplier;
@@ -78,10 +79,10 @@ struct status_type {
     particle_generator* particle_gen;
     point particle_offset_pos;
     float particle_offset_z;
-    string animation_name;
-    float animation_mob_scale;
-    animation_database anim_db;
-    animation_instance anim_instance;
+    string overlay_animation;
+    float overlay_anim_mob_scale;
+    animation_database overlay_anim_db;
+    animation_instance overlay_anim_instance;
     
     status_type();
 };

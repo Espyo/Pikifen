@@ -1,7 +1,7 @@
 name = burned
 affects_pikmin = true
-animation = Fire.txt
-animation_mob_scale = 0.75
+overlay_animation = Fire.txt
+overlay_anim_mob_scale = 0.75
 color = 255 0 0
 health_change_ratio = -0.3
 particle_generator = smoke

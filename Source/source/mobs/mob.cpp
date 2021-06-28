@@ -257,6 +257,10 @@ void mob::apply_status_effect(
     this->statuses.push_back(status(s));
     handle_status_effect_gain(s);
     
+    if(!s->animation_change.empty()) {
+        set_animation(s->animation_change);
+    }
+    
     if(s->turns_invisible) {
         has_invisibility_status = true;
     }
@@ -1646,10 +1650,10 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
     *bmp_scale = 0.0f;
     for(size_t st = 0; st < this->statuses.size(); ++st) {
         status_type* t = this->statuses[st].type;
-        if(t->animation_name.empty()) continue;
-        sprite* sp = t->anim_instance.get_cur_sprite();
+        if(t->overlay_animation.empty()) continue;
+        sprite* sp = t->overlay_anim_instance.get_cur_sprite();
         if(!sp) return NULL;
-        *bmp_scale = t->animation_mob_scale;
+        *bmp_scale = t->overlay_anim_mob_scale;
         return sp->bitmap;
     }
     return NULL;
@@ -1946,6 +1950,22 @@ void mob::set_animation(
         if(auto_start || anim.cur_frame_index >= anim.cur_anim->frames.size()) {
             anim.start();
         }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the mob's animation, given its name. If there is no animation with
+ * that name, nothing happens.
+ * name:
+ *   Name of the animation.
+ * auto_start:
+ *   After the change, start the new animation from time 0.
+ */
+void mob::set_animation(const string &name, const bool auto_start) {
+    size_t idx = anim.anim_db->find_animation(name);
+    if(idx != INVALID) {
+        set_animation(idx, false, auto_start);
     }
 }
 

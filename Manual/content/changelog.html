@@ -57,6 +57,7 @@
         <ul>
           <li>Added the <code>remove_on_hazard_leave</code> property. This is now used for statuses like drowning, where the status effect is removed once the object leaves the hazard that was applying the status effect.</li>
           <li>Status effects can now change the object's state when applied. For this, the <code>state_change_type</code> and <code>state_change_name</code> properties have been created.</li>
+          <li>They can now also change the object's animation when applied, with the <code>animation_change</code> property.</li>
           <li>Plus other changes noted below in the compatibility warnings.</li>
         </ul>
       </li>
@@ -83,9 +84,15 @@
           <li><code>getting_up</code> is a new animation for the Pikmin getting up from lying down.</li>
         </ul>
       </li>
-      <li>Turned the <code>disabled_state_inedible</code> status effect type property to <code>turns_inedible</code> instead. This way, any status can make a Pikmin inedible while under its effects.</li>
-      <li>The <code>causes_*</code> status effect type properties were removed in favor of the <code>state_change_type</code> property. Anything related to the Pikmin's "disabled" state has now also been renamed to the more apt term "helpless".</li>
-      <li>The <code>on_hitbox_touch_a_n</code> event was corrected, so if you relied on the incorrect behavior, use <code>on_hitbox_touch_n_n</code> instead.</li>
+      <li>
+        Status effect changes:
+        <ul>
+          <li>Turned the <code>disabled_state_inedible</code> status effect type property to <code>turns_inedible</code> instead. This way, any status can make a Pikmin inedible while under its effects.</li>
+          <li>The <code>causes_*</code> status effect type properties were removed in favor of the <code>state_change_type</code> property. Anything related to the Pikmin's "disabled" state has now also been renamed to the more apt term "helpless".</li>
+          <li>The <code>on_hitbox_touch_a_n</code> event was corrected, so if you relied on the incorrect behavior, use <code>on_hitbox_touch_n_n</code> instead.</li>
+          <li>The <code>animation</code> and <code>animation_mob_scale</code> properties have been renamed to <code>overlay_animation</code> and <code>overlay_anim_mob_scale</code>, respectively.</li>
+        </ul>
+      </li>
     </ul>
     
     <h2 id="0.20.0">0.20.0</h2>

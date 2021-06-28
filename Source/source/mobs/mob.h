@@ -278,6 +278,7 @@ public:
         const size_t nr,
         const bool pre_named = true, const bool auto_start = true
     );
+    void set_animation(const string &name, const bool auto_start = true);
     void set_health(const bool add, const bool ratio, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);

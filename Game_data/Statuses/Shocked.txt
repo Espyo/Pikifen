@@ -1,7 +1,7 @@
 name = shocked
 affects_pikmin = true
-animation = Sparks.txt
-animation_mob_scale = 1.5
+overlay_animation = Sparks.txt
+overlay_anim_mob_scale = 1.5
 color = 255 255 128
 removable_with_whistle = true
 speed_multiplier = 0

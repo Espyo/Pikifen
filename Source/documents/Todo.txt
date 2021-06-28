@@ -3,9 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Rock Pikmin
-        Should resist being crushed, by simply being temporarily buried
-            A way for the status effect to apply an animation, so they can look pressed
-            A way for the status effect to make the object invisible to opponents
         Should resist being stabbed, and instead bounce back
         They aren't triggering on_pikmin_land (i.e. Dwarf Bulborb crushing), and can't get sucked by the Armored Cannon Beetle's inhale
         "oh a quick suggestion, make the amount a pikmin with impact gets knocked back by editable" --Kman

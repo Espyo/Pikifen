@@ -65,6 +65,6 @@ status_type::status_type() :
     generates_particles(false),
     particle_gen(nullptr),
     particle_offset_z(0.0f),
-    animation_mob_scale(1.0f) {
+    overlay_anim_mob_scale(1.0f) {
     
 }

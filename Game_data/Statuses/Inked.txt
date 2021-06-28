@@ -1,7 +1,7 @@
 name = inked
 affects_pikmin = true
-animation = Ink.txt
-animation_mob_scale = 1.5
+overlay_animation = Ink.txt
+overlay_anim_mob_scale = 1.5
 auto_remove_time = 5
 color = 64 64 64
 removable_with_whistle = true

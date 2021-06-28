@@ -1392,6 +1392,7 @@ void load_status_types(const bool load_resources) {
         rs.set("health_change_ratio",     new_t->health_change_ratio);
         rs.set("state_change_type",       sc_type_str, &sc_type_node);
         rs.set("state_change_name",       new_t->state_change_name);
+        rs.set("animation_change",        new_t->animation_change);
         rs.set("speed_multiplier",        new_t->speed_multiplier);
         rs.set("attack_multiplier",       new_t->attack_multiplier);
         rs.set("defense_multiplier",      new_t->defense_multiplier);
@@ -1400,8 +1401,8 @@ void load_status_types(const bool load_resources) {
         rs.set("turns_inedible",          new_t->turns_inedible);
         rs.set("turns_invisible",         new_t->turns_invisible);
         rs.set("anim_speed_multiplier",   new_t->anim_speed_multiplier);
-        rs.set("animation",               new_t->animation_name);
-        rs.set("animation_mob_scale",     new_t->animation_mob_scale);
+        rs.set("overlay_animation",       new_t->overlay_animation);
+        rs.set("overlay_anim_mob_scale",  new_t->overlay_anim_mob_scale);
         rs.set("particle_generator",      particle_gen_str, &particle_gen_node);
         rs.set("particle_offset",         particle_offset_str);
         
@@ -1456,18 +1457,18 @@ void load_status_types(const bool load_resources) {
         }
         
         if(load_resources) {
-            if(!new_t->animation_name.empty()) {
+            if(!new_t->overlay_animation.empty()) {
                 data_node anim_file =
                     load_data_file(
-                        ANIMATIONS_FOLDER_PATH + "/" + new_t->animation_name
+                        ANIMATIONS_FOLDER_PATH + "/" + new_t->overlay_animation
                     );
-                new_t->anim_db = load_animation_database_from_file(&anim_file);
-                if(!new_t->anim_db.animations.empty()) {
-                    new_t->anim_instance =
-                        animation_instance(&new_t->anim_db);
-                    new_t->anim_instance.cur_anim =
-                        new_t->anim_db.animations[0];
-                    new_t->anim_instance.start();
+                new_t->overlay_anim_db = load_animation_database_from_file(&anim_file);
+                if(!new_t->overlay_anim_db.animations.empty()) {
+                    new_t->overlay_anim_instance =
+                        animation_instance(&new_t->overlay_anim_db);
+                    new_t->overlay_anim_instance.cur_anim =
+                        new_t->overlay_anim_db.animations[0];
+                    new_t->overlay_anim_instance.start();
                 }
             }
         }
@@ -1708,7 +1709,7 @@ void unload_status_types(const bool unload_resources) {
 
     for(auto &s : game.status_types) {
         if(unload_resources) {
-            s.second->anim_db.destroy();
+            s.second->overlay_anim_db.destroy();
         }
         delete s.second;
     }

@@ -1,7 +1,7 @@
 name = electrocuted
 affects_pikmin = true
-animation = Electrocution.txt
-animation_mob_scale = 2.0
+overlay_animation = Electrocution.txt
+overlay_anim_mob_scale = 2.0
 turns_inedible = true
 turns_invisible = true
 color = 255 255 128
