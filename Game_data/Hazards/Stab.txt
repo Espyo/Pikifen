@@ -1,0 +1,2 @@
+name = stab
+color = 0 0 0

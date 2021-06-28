@@ -2,10 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Rock Pikmin
-        Should resist being stabbed, and instead bounce back
-        They aren't triggering on_pikmin_land (i.e. Dwarf Bulborb crushing), and can't get sucked by the Armored Cannon Beetle's inhale
-        "oh a quick suggestion, make the amount a pikmin with impact gets knocked back by editable" --Kman
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---

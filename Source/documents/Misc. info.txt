@@ -267,7 +267,7 @@ Procedure for every version release
                 Description: Spritesheet for the <object name> pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
         Update the Allegro version number on the Compiling page of the manual, if it changed
         Check any changes made on Windows in order to compile, and port them over
-        Update the version release date in the changelog
+        Update the version release date in the changelog, and move the oldest version to the older changelog document
     Final build
         Compile it once more on Linux just to be sure (full build)
         Delete Error_log.txt

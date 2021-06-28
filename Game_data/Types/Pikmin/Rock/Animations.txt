@@ -1,0 +1,641 @@
+animations{
+	attacking{
+		frames{
+			lunge{
+				duration=0.1000
+			}
+			lunge_hit{
+				duration=0.5000
+			}
+			crouching{
+				duration=0.1000
+			}
+			idling{
+				duration=0.3000
+			}
+		}
+	}
+	carrying{
+		frames{
+			grabbing{
+				duration=0.0000
+			}
+		}
+	}
+	drinking{
+		frames{
+			crouching{
+				duration=1.0000
+			}
+		}
+	}
+	getting_up{
+		frames{
+			half_lying{
+				duration=0.2000
+			}
+		}
+	}
+	grabbing{
+		frames{
+			grabbing{
+				duration=0.0000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+	knocked_back{
+		frames{
+			half_lying{
+				duration=0.0000
+			}
+		}
+	}
+	lying{
+		frames{
+			lying{
+				duration=0.0000
+			}
+		}
+	}
+	picking_up{
+		frames{
+			crouching{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	plucking{
+		frames{
+			sprout1{
+				duration=0.2000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	pressed{
+		frames{
+			pressed{
+				duration=0.1000
+			}
+		}
+	}
+	sighing{
+		frames{
+			crouching{
+				duration=1.5000
+			}
+			idling{
+				duration=1.0000
+			}
+		}
+	}
+	sliding{
+		frames{
+			sliding{
+				duration=1.0000
+			}
+		}
+	}
+	sprout{
+		frames{
+			sprout1{
+				duration=0.2000
+			}
+			sprout2{
+				duration=0.2000
+			}
+			sprout1{
+				duration=0.2000
+			}
+			sprout3{
+				duration=0.2000
+			}
+		}
+	}
+	thrown{
+		frames{
+			thrown1{
+				duration=0.0800
+			}
+			thrown2{
+				duration=0.0800
+			}
+			thrown3{
+				duration=0.0800
+			}
+			thrown4{
+				duration=0.0800
+			}
+		}
+	}
+	walking{
+		frames{
+			idling{
+				duration=0.1000
+			}
+			walking2{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+			walking1{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	crouching{
+		file=Rock_Pikmin.png
+		file_pos=13.0000 60.0000
+		file_size=35.0000 26.0000
+		offset=4.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=12.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=12.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=4.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	grabbing{
+		file=Rock_Pikmin.png
+		file_pos=146.0000 53.0000
+		file_size=32.0000 28.0000
+		offset=1.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-6.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-6.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	half_lying{
+		file=Rock_Pikmin.png
+		file_pos=103.0000 0.0000
+		file_size=50.0000 52.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-13.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-13.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.5000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling{
+		file=Rock_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=28.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	lunge{
+		file=Rock_Pikmin.png
+		file_pos=179.0000 53.0000
+		file_size=51.0000 30.0000
+		offset=4.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-1.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-1.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=5.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	lunge_hit{
+		file=Rock_Pikmin.png
+		file_pos=179.0000 53.0000
+		file_size=51.0000 30.0000
+		offset=4.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-1.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-1.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=14.0000 0.0000 0.0000
+				height=24.0000
+				radius=10.0000
+				type=1
+				value=20.0000
+				knockback_outward=true
+				knockback=1.0000
+			}
+		}
+	}
+	lying{
+		file=Rock_Pikmin.png
+		file_pos=154.0000 0.0000
+		file_size=82.0000 52.0000
+		offset=-3.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-23.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-23.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=3.5000 0.0000 0.0000
+				height=24.0000
+				radius=10.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	pressed{
+		file=Rock_Pikmin.png
+		file_pos=49.0000 60.0000
+		file_size=35.0000 30.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=0.0000 0.0000
+		top_size=0.0000 0.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=5.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sliding{
+		file=Rock_Pikmin.png
+		file_pos=103.0000 0.0000
+		file_size=50.0000 52.0000
+		offset=-6.0000 0.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-19.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-19.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	sprout1{
+		file=Rock_Pikmin.png
+		file_pos=0.0000 58.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sprout2{
+		file=Rock_Pikmin.png
+		file_pos=0.0000 58.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	sprout3{
+		file=Rock_Pikmin.png
+		file_pos=0.0000 58.0000
+		file_size=12.0000 12.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-3.5000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-4.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	thrown1{
+		file=Rock_Pikmin.png
+		file_pos=0.0000 29.0000
+		file_size=28.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=7.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1416
+		hitboxes{
+			top{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=1
+				value=20.0000
+			}
+		}
+	}
+	thrown2{
+		file=Rock_Pikmin.png
+		file_pos=29.0000 29.0000
+		file_size=42.0000 30.0000
+		scale=0.5000 0.5000
+		top_visible=false
+		top_pos=9.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+			body{
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=1
+				value=20.0000
+			}
+		}
+	}
+	thrown3{
+		file=Rock_Pikmin.png
+		file_pos=72.0000 29.0000
+		file_size=28.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=false
+		top_pos=-6.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=1
+				value=20.0000
+			}
+		}
+	}
+	thrown4{
+		file=Rock_Pikmin.png
+		file_pos=101.0000 53.0000
+		file_size=44.0000 34.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=7.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=3.1400
+		hitboxes{
+			top{
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=0
+				value=1.0000
+			}
+			body{
+				coords=2.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
+				type=1
+				value=20.0000
+			}
+		}
+	}
+	walking1{
+		file=Rock_Pikmin.png
+		file_pos=29.0000 0.0000
+		file_size=36.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.0000 -1.0000
+		top_size=5.5000 10.0000
+		top_angle=0.3500
+		hitboxes{
+			top{
+				coords=-4.0000 -1.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	walking2{
+		file=Rock_Pikmin.png
+		file_pos=66.0000 0.0000
+		file_size=36.0000 28.0000
+		scale=0.5000 0.5000
+		top_visible=true
+		top_pos=-4.0000 1.0000
+		top_size=5.5000 10.0000
+		top_angle=5.9300
+		hitboxes{
+			top{
+				coords=-4.0000 1.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	top
+	body
+}

@@ -55,7 +55,7 @@ const float GROUNDED_ATTACK_DIST = 5.0f;
 const float GROUP_SHUFFLE_DIST = 40.0f;
 //Pikmin must be at least these many units away from one another;
 //used when calculating group spots.
-const float GROUP_SPOT_INTERVAL = 2.0f;
+const float GROUP_SPOT_INTERVAL = 3.0f;
 //The idle glow spins these many radians per second.
 const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 //Maximum number of players that can play the game.

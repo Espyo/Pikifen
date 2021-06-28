@@ -327,8 +327,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -343,8 +341,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=35.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -361,8 +364,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -377,8 +378,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=35.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -396,8 +402,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -412,8 +416,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=35.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -430,8 +439,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -442,6 +449,15 @@ sprites{
 			}
 			mouth{
 				coords=42.0000 0.0000 -32.0000
+				height=130.0000
+				radius=12.0000
+				type=1
+				value=30.0000
+				hazards=stab
+				knockback=1.0000
+			}
+			mouth_kb{
+				coords=43.0000 0.0000 -32.0000
 				height=130.0000
 				radius=12.0000
 				type=1
@@ -463,8 +479,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-6.0000 0.0000 0.0000
@@ -475,6 +489,15 @@ sprites{
 			}
 			mouth{
 				coords=100.0000 0.0000 -32.0000
+				height=130.0000
+				radius=24.0000
+				type=1
+				value=30.0000
+				hazards=stab
+				knockback=1.0000
+			}
+			mouth_kb{
+				coords=101.0000 0.0000 -32.0000
 				height=130.0000
 				radius=24.0000
 				type=1
@@ -494,8 +517,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -503,8 +524,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -512,8 +531,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -528,8 +552,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -537,8 +559,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.2000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -546,8 +566,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -562,8 +587,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -571,8 +594,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -580,8 +601,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -597,8 +623,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -606,8 +630,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -615,8 +637,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -632,8 +659,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -641,8 +666,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -650,8 +673,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -667,8 +695,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -676,8 +702,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -685,8 +709,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -701,8 +730,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -710,8 +737,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -719,8 +744,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -736,8 +766,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -745,8 +773,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=35.0000 0.0000 0.0000
@@ -754,8 +780,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -771,8 +802,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-8.0000 0.0000 0.0000
@@ -780,8 +809,6 @@ sprites{
 				radius=25.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			mouth{
 				coords=45.0000 0.0000 0.0000
@@ -789,8 +816,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=50.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -822,6 +854,13 @@ sprites{
 				type=2
 				value=0.0000
 			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
 		}
 	}
 	shaking1{
@@ -850,8 +889,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -883,8 +927,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -916,8 +965,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -952,6 +1006,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=0.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -989,6 +1050,13 @@ sprites{
 				type=2
 				value=0.0000
 			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
 		}
 	}
 	shaking6{
@@ -1024,8 +1092,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=0.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1062,6 +1135,13 @@ sprites{
 				type=2
 				value=0.0000
 			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
+			}
 		}
 	}
 	eating1{
@@ -1090,8 +1170,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1122,8 +1207,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=43.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1138,8 +1228,6 @@ sprites{
 				radius=20.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-4.0000 0.0000 0.0000
@@ -1154,8 +1242,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1171,8 +1264,6 @@ sprites{
 				radius=20.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-4.0000 0.0000 0.0000
@@ -1187,8 +1278,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1204,8 +1300,6 @@ sprites{
 				radius=20.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-4.0000 0.0000 0.0000
@@ -1220,8 +1314,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1237,8 +1336,6 @@ sprites{
 				radius=20.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-4.0000 0.0000 0.0000
@@ -1253,8 +1350,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1270,8 +1372,6 @@ sprites{
 				radius=20.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			hide{
 				coords=-4.0000 0.0000 0.0000
@@ -1286,8 +1386,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1318,8 +1423,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1351,8 +1461,13 @@ sprites{
 				radius=6.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			mouth_kb{
+				coords=40.0000 0.0000 0.0000
+				height=64.0000
+				radius=6.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -1361,4 +1476,5 @@ body_parts{
 	face
 	hide
 	mouth
+	mouth_kb
 }

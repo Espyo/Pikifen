@@ -273,6 +273,8 @@ point group_info_struct::get_spot_offset(const size_t spot_index) const {
  *   or left the group, this should point to said mob.
  */
 void group_info_struct::init_spots(mob* affected_mob_ptr) {
+    const float SPOT_MAX_DEVIATION = GROUP_SPOT_INTERVAL * 0.60f;
+    
     if(members.empty()) {
         spots.clear();
         radius = 0;
@@ -344,9 +346,9 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
                 alpha_spot(
                     point(
                         dist_from_center * cos(angle * s) +
-                        randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL),
+                        randomf(-SPOT_MAX_DEVIATION, SPOT_MAX_DEVIATION),
                         dist_from_center * sin(angle * s) +
-                        randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL)
+                        randomf(-SPOT_MAX_DEVIATION, SPOT_MAX_DEVIATION)
                     )
                 )
             );
