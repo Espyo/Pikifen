@@ -153,15 +153,14 @@ void carry_info_struct::rotate_points(const float angle) {
  * Creates an instance of a structure with info about what the mob's chasing.
  */
 chase_info_struct::chase_info_struct() :
-    is_chasing(false),
+    state(CHASE_STATE_STOPPED),
+    flags(0),
+    offset_z(0.0f),
     orig_coords(nullptr),
-    teleport_z(nullptr),
-    teleport(false),
-    free_move(false),
-    target_dist(0),
-    speed(0),
-    max_speed(-1),
-    reached_destination(false) {
+    orig_z(nullptr),
+    target_dist(0.0f),
+    cur_speed(0.0f),
+    max_speed(-1.0f) {
     
 }
 

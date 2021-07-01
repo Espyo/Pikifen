@@ -345,7 +345,7 @@ public:
     
     void chase(
         const point &offset, point* orig_coords,
-        const bool teleport, float* teleport_z = NULL,
+        const bool teleport, float* orig_z = NULL,
         const bool free_move = false, const float target_distance = 3,
         const float speed = -1
     );

@@ -248,7 +248,7 @@ void group_task::tick_class_specifics(const float delta_t) {
     }
     
     if(
-        chase_info.is_chasing &&
+        chase_info.state == CHASE_STATE_CHASING &&
         power >= tas_type->power_goal &&
         tas_type->speed_bonus != 0.0f
     ) {

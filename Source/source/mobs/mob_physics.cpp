@@ -216,10 +216,10 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
     }
     
     //Chasing.
-    if(chase_info.is_chasing) {
+    if(chase_info.state == CHASE_STATE_CHASING) {
         point final_target_pos = get_chase_target();
         
-        if(chase_info.teleport) {
+        if(chase_info.flags & CHASE_FLAG_TELEPORT) {
             sector* sec =
                 get_sector(final_target_pos, NULL, true);
                 
@@ -228,8 +228,8 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
                 return H_MOVE_FAIL;
             }
             
-            if(chase_info.teleport_z) {
-                z = *chase_info.teleport_z;
+            if(chase_info.orig_z) {
+                z = *chase_info.orig_z;
             }
             ground_sector = sec;
             center_sector = sec;
@@ -242,17 +242,18 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
             //Make it go to the direction it wants.
             float d = dist(pos, final_target_pos).to_float();
             
-            chase_info.speed += type->acceleration * delta_t;
-            chase_info.speed = std::min(chase_info.speed, chase_info.max_speed);
+            chase_info.cur_speed += type->acceleration * delta_t;
+            chase_info.cur_speed = std::min(chase_info.cur_speed, chase_info.max_speed);
             
             float move_amount =
                 std::min(
                     (double) (d / delta_t),
-                    (double) chase_info.speed * move_speed_mult
+                    (double) chase_info.cur_speed * move_speed_mult
                 );
                 
             bool can_free_move =
-                chase_info.free_move || d <= FREE_MOVE_THRESHOLD;
+                (chase_info.flags & CHASE_FLAG_ANY_ANGLE) ||
+                d <= FREE_MOVE_THRESHOLD;
                 
             float movement_angle =
                 can_free_move ?
@@ -264,7 +265,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         }
         
     } else {
-        chase_info.speed = 0.0f;
+        chase_info.cur_speed = 0.0f;
         
     }
     

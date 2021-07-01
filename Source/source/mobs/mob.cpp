@@ -911,8 +911,8 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
  *   wherever they go, for instance.
  * teleport:
  *   If true, the mob teleports to that spot, instead of walking to it.
- * teleport_z:
- *   Teleports to this Z coordinate, too.
+ * orig_z:
+ *   Same as orig_coords, but for the Z coordinate.
  * free_move:
  *   If true, the mob can go to a direction they're not facing.
  * target_distance:
@@ -923,20 +923,26 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
  */
 void mob::chase(
     const point &offset, point* orig_coords,
-    const bool teleport, float* teleport_z,
+    const bool teleport, float* orig_z,
     const bool free_move, const float target_distance, const float speed
 ) {
 
     this->chase_info.offset = offset;
     this->chase_info.orig_coords = orig_coords;
-    this->chase_info.teleport = teleport;
-    this->chase_info.teleport_z = teleport_z;
-    this->chase_info.free_move = free_move || type->can_free_move;
+    this->chase_info.orig_z = orig_z;
+    
+    this->chase_info.flags = 0;
+    if(teleport) {
+        this->chase_info.flags |= CHASE_FLAG_TELEPORT;
+    }
+    if(free_move || type->can_free_move) {
+        this->chase_info.flags |= CHASE_FLAG_ANY_ANGLE;
+    }
+    
     this->chase_info.target_dist = target_distance;
     this->chase_info.max_speed = (speed == -1 ? get_base_speed() : speed);
     
-    chase_info.is_chasing = true;
-    chase_info.reached_destination = false;
+    chase_info.state = CHASE_STATE_CHASING;
 }
 
 
@@ -2143,9 +2149,8 @@ void mob::start_height_effect() {
  * Makes a mob not follow any target any more.
  */
 void mob::stop_chasing() {
-    chase_info.is_chasing = false;
-    chase_info.reached_destination = false;
-    chase_info.teleport_z = NULL;
+    chase_info.state = CHASE_STATE_STOPPED;
+    chase_info.orig_z = NULL;
     
     speed.x = speed.y = 0;
 }
@@ -2376,7 +2381,11 @@ void mob::tick_brain(const float delta_t) {
     }
     
     //Chasing a target.
-    if(chase_info.is_chasing && !chase_info.teleport && speed_z == 0) {
+    if(
+        chase_info.state == CHASE_STATE_CHASING &&
+        !(chase_info.flags & CHASE_FLAG_TELEPORT) &&
+        speed_z == 0
+    ) {
     
         //Calculate where the target is.
         point final_target_pos = get_chase_target();
@@ -2432,17 +2441,17 @@ void mob::tick_brain(const float delta_t) {
                     path_info->cur_path_stop_nr == path_info->path.size() + 1
                 ) {
                     //Reached the path's goal.
-                    chase_info.reached_destination = true;
+                    chase_info.state = CHASE_STATE_FINISHED;
                     
                 }
                 
             } else {
-                chase_info.reached_destination = true;
+                chase_info.state = CHASE_STATE_FINISHED;
             }
             
-            if(chase_info.reached_destination) {
+            if(chase_info.state == CHASE_STATE_FINISHED) {
                 //Reached the final destination. Think about stopping.
-                chase_info.speed = 0;
+                chase_info.cur_speed = 0;
                 chase_info.max_speed = 0;
                 fsm.run_event(MOB_EV_REACHED_DESTINATION);
             }
@@ -2549,7 +2558,7 @@ void mob::tick_script(const float delta_t) {
     
     //Has it reached its home?
     mob_event* reach_dest_ev = fsm.get_event(MOB_EV_REACHED_DESTINATION);
-    if(reach_dest_ev && chase_info.reached_destination) {
+    if(reach_dest_ev && chase_info.state == CHASE_STATE_FINISHED) {
         reach_dest_ev->run(this);
     }
     

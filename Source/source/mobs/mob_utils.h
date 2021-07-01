@@ -58,6 +58,25 @@ enum CARRY_DESTINATIONS {
 };
 
 
+enum CHASE_FLAGS {
+    //The mob can move vertically.
+    CHASE_FLAG_MOVE_IN_Z,
+    //The mob instantly teleports to the final destination.
+    CHASE_FLAG_TELEPORT,
+    //The mob can move in any angle instead of just where it's facing.
+    CHASE_FLAG_ANY_ANGLE,
+};
+
+enum CHASE_STATES {
+    //No chasing in progress.
+    CHASE_STATE_STOPPED,
+    //Currently chasing.
+    CHASE_STATE_CHASING,
+    //Reached the destination and no longer chasing.
+    CHASE_STATE_FINISHED,
+};
+
+
 /* ----------------------------------------------------------------------------
  * Information on a carrying spot around a mob's perimeter.
  */
@@ -118,26 +137,26 @@ struct carry_info_struct {
  * Structure with information on what point the mob is chasing after.
  */
 struct chase_info_struct {
-    //If true, the mob is trying to go to a certain spot.
-    bool is_chasing;
+    //Current chasing state.
+    CHASE_STATES state;
+    //Flags that control how to chase. Use CHASE_FLAG_*.
+    unsigned char flags;
+    
     //Chase after these coordinates, relative to the "origin" coordinates.
     point offset;
+    //Same as above, but for the Z coordinate.
+    float offset_z;
     //Pointer to the origin of the coordinates, or NULL for the world origin.
     point* orig_coords;
-    //When chasing something in teleport mode, also change the z accordingly.
-    float* teleport_z;
-    //If true, teleport instantly.
-    bool teleport;
-    //If true, the mob can move in a direction it's not facing.
-    bool free_move;
+    //Same as above, but for the Z coordinate.
+    float* orig_z;
+    
     //Distance from the target in which the mob is considered as being there.
     float target_dist;
     //Current speed to move towards the target at.
-    float speed;
+    float cur_speed;
     //Maximum speed.
     float max_speed;
-    //If true, the mob successfully reached its intended destination.
-    bool reached_destination;
     
     chase_info_struct();
 };
