@@ -255,7 +255,7 @@ size_t data_node::load_node(
 ) {
     children.clear();
     
-    if(start_line > lines.size()) return start_line;
+    if(start_line >= lines.size()) return start_line;
     
     bool returning_from_sub_node = false;
     

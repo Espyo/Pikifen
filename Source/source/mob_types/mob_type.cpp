@@ -336,7 +336,7 @@ void load_mob_type_from_file(
         vector<string> words = split(vuln_node->value);
         float percentage = mt->default_vulnerability;
         string status_name;
-        bool status_overrides;
+        bool status_overrides = false;
         if(!words.empty()) {
             percentage = s2f(words[0]);
         }
