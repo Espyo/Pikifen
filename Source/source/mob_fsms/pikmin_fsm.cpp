@@ -2967,8 +2967,7 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
         &carriable_mob->pos, &carriable_mob->z,
         carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos, 0.0f,
         CHASE_FLAG_TELEPORT |
-        CHASE_FLAG_TELEPORTS_CONSTANTLY |
-        CHASE_FLAG_MOVE_IN_Z
+        CHASE_FLAG_TELEPORTS_CONSTANTLY
     );
     
     pik_ptr->face(get_angle(final_pos, carriable_mob->pos), NULL);
@@ -3553,8 +3552,7 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
     pik_ptr->chase(
         cur_spot_pos, tas_ptr->z,
         CHASE_FLAG_TELEPORT |
-        CHASE_FLAG_TELEPORTS_CONSTANTLY |
-        CHASE_FLAG_MOVE_IN_Z
+        CHASE_FLAG_TELEPORTS_CONSTANTLY
     );
     pik_ptr->angle = tas_ptr->angle + tas_ptr->tas_type->worker_pikmin_angle;
     pik_ptr->intended_turn_angle = pik_ptr->angle;

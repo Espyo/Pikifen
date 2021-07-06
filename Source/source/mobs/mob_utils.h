@@ -59,14 +59,12 @@ enum CARRY_DESTINATIONS {
 
 
 enum CHASE_FLAGS {
-    //The mob can move vertically.
-    CHASE_FLAG_MOVE_IN_Z = 1,
     //The mob instantly teleports to the final destination.
-    CHASE_FLAG_TELEPORT = 2,
+    CHASE_FLAG_TELEPORT = 1,
     //When teleporting, do not consider the chase finished.
-    CHASE_FLAG_TELEPORTS_CONSTANTLY = 4,
+    CHASE_FLAG_TELEPORTS_CONSTANTLY = 2,
     //The mob can move in any angle instead of just where it's facing.
-    CHASE_FLAG_ANY_ANGLE = 8,
+    CHASE_FLAG_ANY_ANGLE = 4,
 };
 
 enum CHASE_STATES {

@@ -152,9 +152,9 @@ public:
     point pos;
     //Z coordinate. This is height; the higher the value, the higher in the sky.
     float z;
-    //Speed at which it's moving in X/Y...
+    //X/Y speed at which external movement is applied (i.e. not walking).
     point speed;
-    //...and Z.
+    //Same as speed, but for the Z coordinate.
     float speed_z;
     //Current facing angle. 0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float angle;
@@ -164,6 +164,8 @@ public:
     point* intended_turn_pos;
     //Current height.
     float height;
+    //Can it currently move vertically on its own?
+    bool can_move_in_midair;
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
     float z_cap;
@@ -258,8 +260,6 @@ public:
     vector<mob*> chomping_mobs;
     //Max number of mobs it can chomp in the current attack.
     size_t chomp_max;
-    //If the mob is currently "helpless", these flags specify behavior.
-    unsigned char helpless_state_flags;
     //If this mob is a sub-mob, this points to the parent mob.
     parent_info_struct* parent;
     //How long it's been alive for.

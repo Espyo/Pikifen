@@ -846,7 +846,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
             if(mouse_sector) {
                 cur_leader_ptr->chase(
                     game.mouse_cursor_w, mouse_sector->z,
-                    CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z
+                    CHASE_FLAG_TELEPORT
                 );
                 game.cam.set_pos(game.mouse_cursor_w);
             }

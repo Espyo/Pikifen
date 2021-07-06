@@ -212,7 +212,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         point final_pos = holder.get_final_pos(&z);
         z += 1.0f; //Added visibility for latched Pikmin.
         speed_z = 0;
-        chase(final_pos, z, CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z);
+        chase(final_pos, z, CHASE_FLAG_TELEPORT);
     }
     
     //Chasing.
@@ -228,7 +228,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
                 return H_MOVE_FAIL;
             }
             
-            if(chase_info.flags & CHASE_FLAG_MOVE_IN_Z) {
+            if(can_move_in_midair) {
                 z = chase_info.offset_z;
                 if(chase_info.orig_z) {
                     z += *chase_info.orig_z;
@@ -271,9 +271,6 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
             move_speed->x = cos(movement_angle) * move_amount;
             move_speed->y = sin(movement_angle) * move_amount;
         }
-        
-    } else {
-        chase_info.cur_speed = 0.0f;
         
     }
     
@@ -723,8 +720,6 @@ void mob::tick_rotation_physics(
 void mob::tick_vertical_movement_physics(
     const float delta_t, const float pre_move_ground_z
 ) {
-    z += delta_t* speed_z;
-    
     if(!standing_on_mob) {
         //If the current ground is one step (or less) below
         //the previous ground, just instantly go down the step.
@@ -736,8 +731,33 @@ void mob::tick_vertical_movement_physics(
         }
     }
     
+    float move_speed_z = speed_z;
+    
+    //Vertical chasing.
+    if(
+        chase_info.state == CHASE_STATE_CHASING &&
+        can_move_in_midair &&
+        (chase_info.flags & CHASE_FLAG_TELEPORT) == 0
+    ) {
+        float target_z = chase_info.offset_z;
+        if(chase_info.orig_z) target_z += *chase_info.orig_z;
+        float diff_z = fabs(target_z - z);
+        float chase_speed_z =
+            std::min((float) (diff_z / delta_t), chase_info.cur_speed);
+        if(target_z < z) {
+            chase_speed_z = -chase_speed_z;
+        }
+        move_speed_z += chase_speed_z;
+    }
+    
     //Gravity.
-    speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
+    if(!can_move_in_midair) {
+        speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
+        move_speed_z += speed_z;
+    }
+    
+    //Apply the change in Z.
+    z += move_speed_z * delta_t;
     
     //Landing.
     hazard* new_on_hazard = NULL;

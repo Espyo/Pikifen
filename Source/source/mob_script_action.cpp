@@ -1574,7 +1574,7 @@ void mob_action_runners::teleport_to_absolute(mob_action_run_data &data) {
     data.m->chase(
         point(s2f(data.args[0]), s2f(data.args[1])),
         s2f(data.args[2]),
-        CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z
+        CHASE_FLAG_TELEPORT
     );
 }
 
@@ -1594,7 +1594,7 @@ void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
     data.m->chase(
         data.m->pos + p,
         data.m->z + s2f(data.args[2]),
-        CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z
+        CHASE_FLAG_TELEPORT
     );
 }
 

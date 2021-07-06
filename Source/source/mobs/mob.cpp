@@ -54,6 +54,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     intended_turn_angle(angle),
     intended_turn_pos(nullptr),
     height(type->height),
+    can_move_in_midair(false),
     z_cap(FLT_MAX),
     home(pos),
     ground_sector(nullptr),
@@ -86,7 +87,6 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     height_effect_pivot(LARGE_FLOAT),
     on_hazard(nullptr),
     chomp_max(0),
-    helpless_state_flags(0),
     parent(nullptr),
     time_alive(0.0f) {
     
@@ -2179,7 +2179,11 @@ void mob::stop_chasing() {
     chase_info.state = CHASE_STATE_STOPPED;
     chase_info.orig_z = NULL;
     
-    speed.x = speed.y = 0;
+    speed.x = 0.0f;
+    speed.y = 0.0f;
+    if(can_move_in_midair) {
+        speed_z = 0.0f;
+    }
 }
 
 
@@ -2411,14 +2415,22 @@ void mob::tick_brain(const float delta_t) {
     if(
         chase_info.state == CHASE_STATE_CHASING &&
         !(chase_info.flags & CHASE_FLAG_TELEPORT) &&
-        speed_z == 0
+        (speed_z == 0 || can_move_in_midair)
     ) {
     
         //Calculate where the target is.
         point final_target_pos = get_chase_target();
+        dist horiz_dist = dist(pos, final_target_pos);
+        float vert_dist = 0.0f;
+        if(can_move_in_midair) {
+            float final_target_z = chase_info.offset_z;
+            if(chase_info.orig_z) final_target_z += *chase_info.orig_z;
+            vert_dist = fabs(z - final_target_z);
+        }
         
         if(
-            dist(pos, final_target_pos) > chase_info.target_dist
+            horiz_dist > chase_info.target_dist ||
+            vert_dist > chase_info.target_dist
         ) {
             //If it still hasn't reached its target
             //(or close enough to the target),
@@ -2767,7 +2779,7 @@ bool mob::tick_track_ride() {
         
     float dest_angle = get_angle(cur_cp_pos, next_cp_pos);
     
-    chase(dest_xy, dest_z, CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z);
+    chase(dest_xy, dest_z, CHASE_FLAG_TELEPORT);
     face(dest_angle, NULL);
     
     return false;
