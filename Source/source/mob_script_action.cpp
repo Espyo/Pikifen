@@ -974,10 +974,7 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
-    data.m->chase(
-        point(s2f(data.args[0]), s2f(data.args[1])), NULL,
-        false
-    );
+    data.m->chase(point(s2f(data.args[0]), s2f(data.args[1])), data.m->z);
 }
 
 
@@ -992,7 +989,7 @@ void mob_action_runners::move_to_relative(mob_action_run_data &data) {
             point(s2f(data.args[0]), s2f(data.args[1])),
             data.m->angle
         );
-    data.m->chase(data.m->pos + p, NULL, false);
+    data.m->chase(data.m->pos + p, data.m->z);
 }
 
 
@@ -1010,7 +1007,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
             float a = get_angle(data.m->pos, data.m->focused_mob->pos);
             point offset = point(2000, 0);
             offset = rotate_point(offset, a + TAU / 2.0);
-            data.m->chase(data.m->pos + offset, NULL, false);
+            data.m->chase(data.m->pos + offset, data.m->z);
         } else {
             data.m->stop_chasing();
         }
@@ -1018,7 +1015,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         
     } case MOB_ACTION_MOVE_FOCUSED_MOB: {
         if(data.m->focused_mob) {
-            data.m->chase(point(), &data.m->focused_mob->pos, false);
+            data.m->chase(&data.m->focused_mob->pos, &data.m->focused_mob->z);
         } else {
             data.m->stop_chasing();
         }
@@ -1026,14 +1023,14 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         
     } case MOB_ACTION_MOVE_FOCUSED_MOB_POS: {
         if(data.m->focused_mob) {
-            data.m->chase(data.m->focused_mob->pos, NULL, false);
+            data.m->chase(data.m->focused_mob->pos, data.m->focused_mob->z);
         } else {
             data.m->stop_chasing();
         }
         break;
         
     } case MOB_ACTION_MOVE_HOME: {
-        data.m->chase(data.m->home, NULL, false);
+        data.m->chase(data.m->home, data.m->z);
         break;
         
     } case MOB_ACTION_MOVE_ARACHNORB_FOOT_LOGIC: {
@@ -1051,7 +1048,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         }
         des = des / data.m->links.size();
         
-        data.m->chase(des, NULL, false);
+        data.m->chase(des, data.m->z);
         break;
         
     }
@@ -1574,8 +1571,11 @@ void mob_action_runners::swallow_all(mob_action_run_data &data) {
  */
 void mob_action_runners::teleport_to_absolute(mob_action_run_data &data) {
     data.m->stop_chasing();
-    data.m->chase(point(s2f(data.args[0]), s2f(data.args[1])), NULL, true);
-    data.m->z = s2f(data.args[2]);
+    data.m->chase(
+        point(s2f(data.args[0]), s2f(data.args[1])),
+        s2f(data.args[2]),
+        CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z
+    );
 }
 
 
@@ -1591,8 +1591,11 @@ void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
             point(s2f(data.args[0]), s2f(data.args[1])),
             data.m->angle
         );
-    data.m->chase(data.m->pos + p, NULL, true);
-    data.m->z += s2f(data.args[2]);
+    data.m->chase(
+        data.m->pos + p,
+        data.m->z + s2f(data.args[2]),
+        CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z
+    );
 }
 
 

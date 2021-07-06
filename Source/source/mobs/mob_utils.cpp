@@ -22,6 +22,10 @@
 using std::size_t;
 
 
+//Default distance at which the mob considers the chase finished.
+const float chase_info_struct::DEF_TARGET_DISTANCE = 3.0f;
+
+
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about a carrying spot.
  * pos:

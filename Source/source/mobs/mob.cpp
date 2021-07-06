@@ -311,7 +311,7 @@ void mob::arachnorb_foot_move_logic() {
     
     final_pos += offset;
     
-    chase(final_pos, NULL, false);
+    chase(final_pos, z);
 }
 
 
@@ -902,47 +902,66 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
 
 /* ----------------------------------------------------------------------------
  * Sets a target for the mob to follow.
- * offset:
- *   Coordinates of the target, relative to either the
- *   world origin, or another point, specified in the next parameters.
  * orig_coords:
  *   Pointer to changing coordinates. If NULL, it is
  *   the world origin. Use this to make the mob follow another mob
  *   wherever they go, for instance.
- * teleport:
- *   If true, the mob teleports to that spot, instead of walking to it.
  * orig_z:
  *   Same as orig_coords, but for the Z coordinate.
- * free_move:
- *   If true, the mob can go to a direction they're not facing.
+ * offset:
+ *   Offset from orig_coords.
+ * offset_z:
+ *   Z offset from orig_z.
+ * flags:
+ *   Flags that control how to chase. Use CHASE_FLAG_*.
  * target_distance:
- *   Distance from the target in which the mob is
- *   considered as being there.
+ *   Distance at which the mob considers the chase finished.
  * speed:
- *   Speed at which to go to the target. -1 uses the mob's speed.
+ *   Speed at which to go to the target. LARGE_FLOAT makes it use
+ *   the mob's speed.
  */
 void mob::chase(
-    const point &offset, point* orig_coords,
-    const bool teleport, float* orig_z,
-    const bool free_move, const float target_distance, const float speed
+    point* orig_coords, float* orig_z,
+    const point &offset, const float offset_z,
+    const unsigned char flags,
+    const float target_distance, const float speed
 ) {
-
-    this->chase_info.offset = offset;
-    this->chase_info.orig_coords = orig_coords;
-    this->chase_info.orig_z = orig_z;
+    chase_info.orig_coords = orig_coords;
+    chase_info.orig_z = orig_z;
+    chase_info.offset = offset;
+    chase_info.offset_z = offset_z;
     
-    this->chase_info.flags = 0;
-    if(teleport) {
-        this->chase_info.flags |= CHASE_FLAG_TELEPORT;
-    }
-    if(free_move || type->can_free_move) {
-        this->chase_info.flags |= CHASE_FLAG_ANY_ANGLE;
-    }
+    chase_info.flags = flags;
+    if(type->can_free_move) chase_info.flags |= CHASE_FLAG_ANY_ANGLE;
     
-    this->chase_info.target_dist = target_distance;
-    this->chase_info.max_speed = (speed == -1 ? get_base_speed() : speed);
-    
+    chase_info.target_dist = target_distance;
+    chase_info.max_speed =
+        (speed == LARGE_FLOAT ? get_base_speed() : speed);
+        
     chase_info.state = CHASE_STATE_CHASING;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a target for the mob to follow.
+ * coords:
+ *   Coordinates of the target.
+ * coords_z:
+ *   Z coordinates of the target.
+ * flags:
+ *   Flags that control how to chase. Use CHASE_FLAG_*.
+ * target_distance:
+ *   Distance at which the mob considers the chase finished.
+ * speed:
+ *   Speed at which to go to the target. LARGE_FLOAT makes it use
+ *   the mob's speed.
+ */
+void mob::chase(
+    const point &coords, const float coords_z,
+    const unsigned char flags,
+    const float target_distance, const float speed
+) {
+    chase(NULL, NULL, coords, coords_z, flags, target_distance, speed);
 }
 
 
@@ -1301,13 +1320,15 @@ bool mob::follow_path(
     
     if(path_info->go_straight) {
         chase(
-            target, NULL, false, NULL, true,
+            target, z,
+            CHASE_FLAG_ANY_ANGLE,
             path_info->final_target_distance, speed
         );
     } else if(!path_info->path.empty()) {
         chase(
-            path_info->path[path_info->cur_path_stop_nr]->pos,
-            NULL, false, NULL, true, 3.0f, speed
+            path_info->path[path_info->cur_path_stop_nr]->pos, z,
+            CHASE_FLAG_ANY_ANGLE,
+            chase_info_struct::DEF_TARGET_DISTANCE, speed
         );
     } else {
         return false;
@@ -1327,10 +1348,16 @@ float mob::get_base_speed() const {
 
 /* ----------------------------------------------------------------------------
  * Returns the actual location of the movement target.
+ * z:
+ *   If not NULL, the Z coordinate is returned here.
  */
-point mob::get_chase_target() const {
+point mob::get_chase_target(float* z) const {
     point p = chase_info.offset;
     if(chase_info.orig_coords) p += (*chase_info.orig_coords);
+    if(z) {
+        *z = chase_info.offset_z;
+        if(chase_info.orig_z) (*z) += (*chase_info.orig_z);
+    }
     return p;
 }
 
@@ -2373,9 +2400,9 @@ void mob::tick_brain(const float delta_t) {
             center + angle_to_coordinates(
                 circling_info->cur_angle, circling_info->radius
             ),
-            NULL, false, NULL,
-            circling_info->can_free_move,
-            3.0f,
+            circling_info->circling_mob->z,
+            (circling_info->can_free_move ? CHASE_FLAG_ANY_ANGLE : 0),
+            chase_info_struct::DEF_TARGET_DISTANCE,
             circling_info->speed
         );
     }
@@ -2422,7 +2449,9 @@ void mob::tick_brain(const float delta_t) {
                         //All good. Head to the next stop.
                         chase(
                             path_info->path[path_info->cur_path_stop_nr]->pos,
-                            NULL, false, NULL, true, 3.0f, chase_info.max_speed
+                            z, CHASE_FLAG_ANY_ANGLE,
+                            chase_info_struct::DEF_TARGET_DISTANCE,
+                            chase_info.max_speed
                         );
                     }
                     
@@ -2432,9 +2461,10 @@ void mob::tick_brain(const float delta_t) {
                     //Reached the final stop of the path, but not the goal.
                     //Let's head there.
                     chase(
-                        path_info->target_point,
-                        NULL, false, NULL, true,
-                        path_info->final_target_distance, chase_info.max_speed
+                        path_info->target_point, z,
+                        CHASE_FLAG_ANY_ANGLE,
+                        path_info->final_target_distance,
+                        chase_info.max_speed
                     );
                     
                 } else if(
@@ -2737,8 +2767,7 @@ bool mob::tick_track_ride() {
         
     float dest_angle = get_angle(cur_cp_pos, next_cp_pos);
     
-    chase(dest_xy, NULL, true);
-    z = dest_z;
+    chase(dest_xy, dest_z, CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z);
     face(dest_angle, NULL);
     
     return false;

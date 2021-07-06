@@ -844,8 +844,10 @@ void gameplay_state::process_system_key_press(const int keycode) {
             sector* mouse_sector =
                 get_sector(game.mouse_cursor_w, NULL, true);
             if(mouse_sector) {
-                cur_leader_ptr->chase(game.mouse_cursor_w, NULL, true);
-                cur_leader_ptr->z = mouse_sector->z;
+                cur_leader_ptr->chase(
+                    game.mouse_cursor_w, mouse_sector->z,
+                    CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z
+                );
                 game.cam.set_pos(game.mouse_cursor_w);
             }
             game.maker_tools.used_helping_tools = true;

@@ -1571,8 +1571,9 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     lea_ptr->auto_plucking = true;
     lea_ptr->pluck_target = pik_ptr;
     lea_ptr->chase(
-        pik_ptr->pos, NULL,
-        false, nullptr, true,
+        &pik_ptr->pos, &pik_ptr->z,
+        point(), 0.0f,
+        CHASE_FLAG_ANY_ANGLE,
         pik_ptr->type->radius + lea_ptr->type->radius
     );
     pik_ptr->pluck_reserved = true;
@@ -1734,7 +1735,7 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
     );
     final_coords *= l_ptr->type->move_speed;
     final_coords += l_ptr->pos;
-    l_ptr->chase(final_coords, NULL, false, NULL, true);
+    l_ptr->chase(final_coords, l_ptr->z, CHASE_FLAG_ANY_ANGLE);
 }
 
 
@@ -2293,7 +2294,10 @@ void leader_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
     
     l_ptr->get_group_spot_info(&target_pos, &target_dist);
     
-    m->chase(target_pos, NULL, false, NULL, false, target_dist);
+    m->chase(
+        target_pos, l_ptr->following_group->z,
+        CHASE_FLAG_ANY_ANGLE, target_dist
+    );
 }
 
 

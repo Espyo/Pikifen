@@ -1,5 +1,6 @@
 name = Beady Long Legs
 
+acceleration = 1000
 area_editor_tips = Make sure there is enough room for it to spawn its feet too!
 allow_ground_attacks = false
 can_free_move = true
@@ -10,7 +11,7 @@ height = 140
 itch_damage = 50
 itch_time = 4
 max_health = 2000
-move_speed = 100
+move_speed = 1000
 radius = 71
 spawns {
     foot_fr {

@@ -2,15 +2,35 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Winged Pikmin
+        Flying
+            They should be able to control their Z at will using the new "can_move_in_midair" mob property
+            Should be disabled when they are thrown, attacking grounded, etc.
+        Behavior
+            Normally, they should want to fly a small height above their current floor
+            If the leader spot/focused mob is above or below, they should want to move up or down
+            Since liquids only really exist at Z = 0 above the floor, they might not need any extra logic to fly above the water surface
+            They can't be thrown if the leader is in a liquid
+        Carrying
+            Path links should have these properties:
+                One-way or normal, as usual
+                Free or restricted
+                    If restricted, it specifies an allow-list of Pikmin type tags (swimmer, flying, etc.)
+                    When an object is being carried, it can only pick this link if all Pikmin envolved are allowed
+                An optional name
+                    If it exists, it can be used by scripts and whatnot to identify sub-paths. Like if you want an iron ball to follow a specific path, you'd write the name of the path in the script, and all links with that name would make up the path
+                Other things to think about:
+                    Paths that large-object (>1 weight) carriers can't take
+                    Path links that use warps (technically count as 0 distance)
+            Winged Pikmin should use up standard carrying spots, for simplicity and readibility's sake
+            They shouldn't be able to carry objects that are underwater
+            Carried objects should take flight too
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Some objects with hitboxes that are just as tall as the object itself can let Pikmin latch on top (Red Bulborb), but others can't (Kingcap)
+    "quick minor suggestion: in the leader's health wheel drawing (line 381 of gameplay.cpp), change the radius from * 0.4fto * 0.47f, so it fills the entire graphic." -Kman
     
     --- v0.21.0 ---
-    Winged Pikmin
-        Just the basics
     Bulbmin
     Purple flowers and buds
     Add pellet, Pellet Posy, and Onion support for Rock Pikmin and Winged Pikmin
@@ -31,10 +51,13 @@ Next tasks (roughly sorted most important first)
         Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
     Add a way to delete areas from within the area editor, probably in the File menu
     When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
+    The cutscene message box should be styled like the menu boxes, instead of being a stretched PNG
     Menus need tooltips
     In the manual
         Rename "text file" to "data file"
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
+    Minor
+        "flail_to_whistle" is really "flail_to_leader"
     
     --- v0.22.0 ---
     Details
@@ -338,6 +361,7 @@ Next tasks (roughly sorted most important first)
         Set the direction of the sun -- indoor lighting likely uses a fixed light direction
         A way to control what parts of the area use what weather -- that way, a cave can use a blackout, or stay out of rain
         You should be able to tint water -- for instance, at sunset, making the water look a bit more pink
+        A way to specify an ambiance sound effect that loops
     Replay
         A vector of "abstract" objects
             A parameter with info if they're an obstacle, Pikmin, leader, enemy, or treasure (reflects how they're drawn)

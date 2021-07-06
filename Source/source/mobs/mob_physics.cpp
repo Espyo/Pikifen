@@ -212,7 +212,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         point final_pos = holder.get_final_pos(&z);
         z += 1.0f; //Added visibility for latched Pikmin.
         speed_z = 0;
-        chase(final_pos, NULL, true);
+        chase(final_pos, z, CHASE_FLAG_TELEPORT | CHASE_FLAG_MOVE_IN_Z);
     }
     
     //Chasing.
@@ -228,13 +228,21 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
                 return H_MOVE_FAIL;
             }
             
-            if(chase_info.orig_z) {
-                z = *chase_info.orig_z;
+            if(chase_info.flags & CHASE_FLAG_MOVE_IN_Z) {
+                z = chase_info.offset_z;
+                if(chase_info.orig_z) {
+                    z += *chase_info.orig_z;
+                }
             }
+            
             ground_sector = sec;
             center_sector = sec;
             speed.x = speed.y = 0;
             pos = final_target_pos;
+            
+            if((chase_info.flags & CHASE_FLAG_TELEPORTS_CONSTANTLY) == 0) {
+                chase_info.state = CHASE_STATE_FINISHED;
+            }
             return H_MOVE_TELEPORTED;
             
         } else {

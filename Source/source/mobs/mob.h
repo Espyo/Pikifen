@@ -344,10 +344,17 @@ public:
     ) const;
     
     void chase(
-        const point &offset, point* orig_coords,
-        const bool teleport, float* orig_z = NULL,
-        const bool free_move = false, const float target_distance = 3,
-        const float speed = -1
+        point* orig_coords, float* orig_z,
+        const point &offset = point(), const float offset_z = 0.0f,
+        const unsigned char flags = 0,
+        const float target_distance = chase_info_struct::DEF_TARGET_DISTANCE,
+        const float speed = LARGE_FLOAT
+    );
+    void chase(
+        const point &coords, const float coords_z,
+        const unsigned char flags = 0,
+        const float target_distance = chase_info_struct::DEF_TARGET_DISTANCE,
+        const float speed = LARGE_FLOAT
     );
     void stop_chasing();
     void stop_turning();
@@ -362,7 +369,7 @@ public:
     );
     void stop_circling();
     void face(const float new_angle, point* new_pos);
-    point get_chase_target() const;
+    point get_chase_target(float* z = NULL) const;
     virtual float get_base_speed() const;
     
     void arachnorb_head_turn_logic();

@@ -1776,11 +1776,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
 void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
-    m->chase(
-        *((point*) info1),
-        NULL,
-        false
-    );
+    m->chase(*((point*) info1), m->z);
     game.sys_assets.sfx_pikmin_idle.play(0, false);
     
     m->set_animation(PIKMIN_ANIM_IDLING);
@@ -2301,9 +2297,7 @@ void pikmin_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
     leader* caller = (leader*) info1;
-    m->chase(
-        caller->pos, NULL, false, NULL, true
-    );
+    m->chase(caller->pos, caller->z);
 }
 
 
@@ -2456,8 +2450,8 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     closest_spot_ptr->pik_ptr = pik_ptr;
     
     pik_ptr->chase(
-        closest_spot_ptr->pos, &carriable_mob->pos,
-        false, nullptr, false
+        &carriable_mob->pos, &carriable_mob->z,
+        closest_spot_ptr->pos, 0.0f
     );
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     
@@ -2493,10 +2487,7 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     
     m->focus_on_mob(tas_ptr);
     
-    m->chase(
-        point(), &(free_spot->absolute_pos),
-        false, nullptr, false
-    );
+    m->chase(&(free_spot->absolute_pos), &tas_ptr->z);
     
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
@@ -2534,7 +2525,7 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
         
     m->focus_on_mob(n_ptr->m_ptr);
     m->stop_chasing();
-    m->chase(coords, NULL, false);
+    m->chase(coords, n_ptr->m_ptr->z);
     m->set_animation(PIKMIN_ANIM_WALKING);
     m->leave_group();
 }
@@ -2564,9 +2555,8 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     m->focus_on_mob(o_ptr);
     m->stop_chasing();
     m->chase(
-        point(),
-        &m->focused_mob->pos,
-        false, nullptr, false,
+        &m->focused_mob->pos, &m->focused_mob->z,
+        point(), 0.0f, 0,
         m->focused_mob->type->radius + m->type->radius + GROUNDED_ATTACK_DIST
     );
     m->set_animation(PIKMIN_ANIM_WALKING);
@@ -2615,8 +2605,8 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
     m->focus_on_mob(too_ptr);
     
     m->chase(
-        point(), &too_ptr->pos,
-        false, nullptr, false,
+        &too_ptr->pos, &too_ptr->z,
+        point(), 0.0f, 0,
         pik_ptr->type->radius + too_ptr->type->radius
     );
     
@@ -2929,7 +2919,7 @@ void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
             m->pos.x + randomf(-1000, 1000),
             m->pos.y + randomf(-1000, 1000)
         ),
-        NULL, false
+        m->z
     );
     m->set_timer(PIKMIN_PANIC_CHASE_INTERVAL);
 }
@@ -2974,9 +2964,11 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
         carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos;
         
     pik_ptr->chase(
-        carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos,
-        &carriable_mob->pos,
-        true, &carriable_mob->z
+        &carriable_mob->pos, &carriable_mob->z,
+        carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos, 0.0f,
+        CHASE_FLAG_TELEPORT |
+        CHASE_FLAG_TELEPORTS_CONSTANTLY |
+        CHASE_FLAG_MOVE_IN_Z
     );
     
     pik_ptr->face(get_angle(final_pos, carriable_mob->pos), NULL);
@@ -3312,8 +3304,9 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //If the Pikmin is following a moveable point, let's change it to
     //a static point. This will make the Pikmin continue to move
     //forward into the water in a straight line.
-    point final_pos = m->get_chase_target();
-    m->chase(final_pos, NULL, false);
+    float final_z = 0.0f;
+    point final_pos = m->get_chase_target(&final_z);
+    m->chase(final_pos, final_z);
     
     m->leave_group();
     
@@ -3336,7 +3329,7 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
 void pikmin_fsm::start_impact_lunge(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
     
-    m->chase(point(), &m->focused_mob->pos, false);
+    m->chase(&m->focused_mob->pos, &m->focused_mob->z);
     m->set_animation(PIKMIN_ANIM_ATTACKING);
 }
 
@@ -3558,10 +3551,10 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
     point cur_spot_pos = tas_ptr->get_spot_pos(pik_ptr);
     
     pik_ptr->chase(
-        cur_spot_pos,
-        NULL,
-        true,
-        &tas_ptr->z
+        cur_spot_pos, tas_ptr->z,
+        CHASE_FLAG_TELEPORT |
+        CHASE_FLAG_TELEPORTS_CONSTANTLY |
+        CHASE_FLAG_MOVE_IN_Z
     );
     pik_ptr->angle = tas_ptr->angle + tas_ptr->tas_type->worker_pikmin_angle;
     pik_ptr->intended_turn_angle = pik_ptr->angle;
@@ -3786,7 +3779,7 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
         target_pos = *((point*) info1);
     }
     
-    m->chase(target_pos, NULL, false);
+    m->chase(target_pos, p_ptr->following_group->z);
     
 }
 
