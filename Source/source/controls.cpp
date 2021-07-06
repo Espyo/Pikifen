@@ -150,98 +150,7 @@ void gameplay_state::handle_button(
     if(!msg_box && !onion_menu && !pause_menu) {
     
         switch(button) {
-        case BUTTON_RIGHT:
-        case BUTTON_UP:
-        case BUTTON_LEFT:
-        case BUTTON_DOWN: {
-    
-            /*******************
-            *               O_ *
-            *   Move   --->/|  *
-            *              V > *
-            *******************/
-            
-            switch(button) {
-            case BUTTON_RIGHT: {
-                leader_movement.right = pos;
-                break;
-            } case BUTTON_LEFT: {
-                leader_movement.left = pos;
-                break;
-            } case BUTTON_UP: {
-                leader_movement.up = pos;
-                break;
-            } case BUTTON_DOWN: {
-                leader_movement.down = pos;
-                break;
-            }
-            }
-            
-            break;
-            
-        } case BUTTON_CURSOR_RIGHT:
-        case BUTTON_CURSOR_UP:
-        case BUTTON_CURSOR_LEFT:
-        case BUTTON_CURSOR_DOWN: {
-            /********************
-            *             .-.   *
-            *   Cursor   ( = )> *
-            *             '-'   *
-            ********************/
-            
-            switch(button) {
-            case BUTTON_CURSOR_RIGHT: {
-                cursor_movement.right = pos;
-                break;
-            } case BUTTON_CURSOR_LEFT: {
-                cursor_movement.left = pos;
-                break;
-            } case BUTTON_CURSOR_UP: {
-                cursor_movement.up = pos;
-                break;
-            } case BUTTON_CURSOR_DOWN: {
-                cursor_movement.down = pos;
-                break;
-            }
-            }
-            
-            break;
-            
-        } case BUTTON_GROUP_RIGHT:
-        case BUTTON_GROUP_UP:
-        case BUTTON_GROUP_LEFT:
-        case BUTTON_GROUP_DOWN: {
-            /******************
-            *            ***  *
-            *   Group   ****O *
-            *            ***  *
-            ******************/
-            
-            switch(button) {
-            case BUTTON_GROUP_RIGHT: {
-                swarm_movement.right = pos;
-                break;
-            } case BUTTON_GROUP_LEFT: {
-                swarm_movement.left = pos;
-                break;
-            } case BUTTON_GROUP_UP: {
-                swarm_movement.up = pos;
-                break;
-            } case BUTTON_GROUP_DOWN: {
-                swarm_movement.down = pos;
-                break;
-            }
-            }
-            
-            break;
-            
-        } case BUTTON_GROUP_CURSOR: {
-    
-            swarm_cursor = is_down;
-            
-            break;
-            
-        } case BUTTON_THROW: {
+        case BUTTON_THROW: {
     
             /*******************
             *             .-.  *
@@ -727,7 +636,101 @@ void gameplay_state::handle_button(
         }
         
     }
+    //Some inputs we don't want to ignore even if we're in a menu. Those go here.
+    switch (button) {
+    case BUTTON_RIGHT:
+    case BUTTON_UP:
+    case BUTTON_LEFT:
+    case BUTTON_DOWN: {
+        /*******************
+        *               O_ *
+        *   Move   --->/|  *
+        *              V > *
+        *******************/
+            
+        switch(button) {
+        case BUTTON_RIGHT: {
+            leader_movement.right = pos;
+            break;
+        } case BUTTON_LEFT: {
+            leader_movement.left = pos;
+            break;
+        } case BUTTON_UP: {
+            leader_movement.up = pos;
+            break;
+        } case BUTTON_DOWN: {
+            leader_movement.down = pos;
+            break;
+        }
+        }
+
+        break;
+            
+    } case BUTTON_CURSOR_RIGHT:
+    case BUTTON_CURSOR_UP:
+    case BUTTON_CURSOR_LEFT:
+    case BUTTON_CURSOR_DOWN: {
+        /********************
+        *             .-.   *
+        *   Cursor   ( = )> *
+        *             '-'   *
+        ********************/
+            
+        switch(button) {
+        case BUTTON_CURSOR_RIGHT: {
+            cursor_movement.right = pos;
+            break;
+        } case BUTTON_CURSOR_LEFT: {
+            cursor_movement.left = pos;
+            break;
+        } case BUTTON_CURSOR_UP: {
+            cursor_movement.up = pos;
+            break;
+        } case BUTTON_CURSOR_DOWN: {
+            cursor_movement.down = pos;
+            break;
+        }
+        }
+            
+        break;
+            
+    } case BUTTON_GROUP_RIGHT:
+    case BUTTON_GROUP_UP:
+    case BUTTON_GROUP_LEFT:
+    case BUTTON_GROUP_DOWN: {
+        /******************
+        *            ***  *
+        *   Group   ****O *
+        *            ***  *
+        ******************/
+            
+        switch(button) {
+        case BUTTON_GROUP_RIGHT: {
+            swarm_movement.right = pos;
+            break;
+        } case BUTTON_GROUP_LEFT: {
+            swarm_movement.left = pos;
+            break;
+        } case BUTTON_GROUP_UP: {
+            swarm_movement.up = pos;
+            break;
+        } case BUTTON_GROUP_DOWN: {
+            swarm_movement.down = pos;
+            break;
+        }
+        }
+            
+        break;
+            
+    } case BUTTON_GROUP_CURSOR: {
     
+        swarm_cursor = is_down;
+            
+        break;
+            
+    } 
+    }
+
 }
 
 

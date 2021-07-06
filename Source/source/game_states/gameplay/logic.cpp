@@ -566,7 +566,6 @@ void gameplay_state::do_menu_logic() {
             delete onion_menu;
             onion_menu = NULL;
             paused = false;
-            leader_movement.reset(); //TODO replace with a better solution.
         }
     } else if(pause_menu) {
         if(!pause_menu->to_delete) {
@@ -575,7 +574,6 @@ void gameplay_state::do_menu_logic() {
             delete pause_menu;
             pause_menu = NULL;
             paused = false;
-            leader_movement.reset(); //TODO replace with a better solution.
         }
     }
     
