@@ -3,9 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Winged Pikmin
-        Flying
-            They should be able to control their Z at will using the new "can_move_in_midair" mob property
-            Should be disabled when they are thrown, attacking grounded, etc.
         Behavior
             Normally, they should want to fly a small height above their current floor
             If the leader spot/focused mob is above or below, they should want to move up or down
@@ -56,6 +53,10 @@ Next tasks (roughly sorted most important first)
     In the manual
         Rename "text file" to "data file"
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
+    Refactor
+        In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
+        Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
+        The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
     Minor
         "flail_to_whistle" is really "flail_to_leader"
     

@@ -1672,6 +1672,10 @@ void pikmin_fsm::attack_reached_opponent(mob* m, void* info1, void* info2) {
     
     pikmin* p_ptr = (pikmin*) m;
     
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
     p_ptr->stop_chasing();
     
     switch(p_ptr->pik_type->attack_method) {
@@ -1774,7 +1778,12 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
     engine_assert(info1 != NULL, m->print_state_history());
+    
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
     
     m->chase(*((point*) info1), m->z);
     game.sys_assets.sfx_pikmin_idle.play(0, false);
@@ -1803,9 +1812,12 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     ene_ptr->chomp(pik_ptr, h_ptr);
     
     game.sys_assets.sfx_pikmin_caught.play(0.2, 0);
-    pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
+    
+    pik_ptr->can_move_in_midair = true;
     pik_ptr->leave_group();
     pik_ptr->is_grabbed_by_enemy = true;
+    
+    pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
     
 }
 
@@ -1822,6 +1834,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     game.sys_assets.sfx_pikmin_held.play(0, false);
     m->set_animation(PIKMIN_ANIM_IDLING);
+    m->can_move_in_midair = false;
 }
 
 
@@ -1853,6 +1866,7 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     game.sys_assets.sfx_pikmin_thrown.stop();
     game.sys_assets.sfx_pikmin_thrown.play(0, false);
     
+    m->can_move_in_midair = false;
     m->set_animation(PIKMIN_ANIM_THROWN);
     
     ((pikmin*) m)->start_throw_trail();
@@ -1885,6 +1899,8 @@ void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::become_helpless(mob* m, void* info1, void* info2) {
+    m->can_move_in_midair = false;
+    
     m->set_animation(PIKMIN_ANIM_IDLING);
     m->leave_group();
 }
@@ -1900,7 +1916,13 @@ void pikmin_fsm::become_helpless(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
+    
     pikmin_fsm::stand_still(m, info1, info2);
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
     m->set_animation(PIKMIN_ANIM_IDLING);
     m->unfocus_from_mob();
 }
@@ -1920,6 +1942,7 @@ void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_SPROUT);
     m->unpushable = true;
     m->is_huntable = false;
+    m->can_move_in_midair = false;
     ((pikmin*) m)->is_seed_or_sprout = true;
 }
 
@@ -2102,6 +2125,8 @@ void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
     pikmin* p_ptr = (pikmin*) m;
     engine_assert(m->focused_mob != NULL, m->print_state_history());
     
+    p_ptr->can_move_in_midair = false;
+    
     float impact_angle = get_angle(p_ptr->focused_mob->pos, p_ptr->pos);
     float impact_speed = 200.0f;
     p_ptr->speed =
@@ -2145,6 +2170,8 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
     
     pikmin* p_ptr = (pikmin*) m;
     onion* o_ptr = (onion*) p_ptr->focused_mob;
+    
+    p_ptr->can_move_in_midair = false;
     
     //Set its data to start climbing.
     p_ptr->set_animation(PIKMIN_ANIM_WALKING); //TODO
@@ -2374,6 +2401,7 @@ void pikmin_fsm::forget_tool(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
+    m->can_move_in_midair = false;
     m->set_animation(PIKMIN_ANIM_KNOCKED_BACK);
 }
 
@@ -2394,6 +2422,10 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     //already whistled it.
     p_ptr->temp_i = 0;
     
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
     m->set_animation(PIKMIN_ANIM_LYING);
     m->set_timer(PIKMIN_KNOCKED_DOWN_DURATION);
 }
@@ -2413,6 +2445,10 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     
     mob* carriable_mob = (mob*) info1;
     pikmin* pik_ptr = (pikmin*) m;
+    
+    if(pik_ptr->pik_type->can_fly) {
+        pik_ptr->can_move_in_midair = true;
+    }
     
     pik_ptr->carrying_mob = carriable_mob;
     pik_ptr->leave_group();
@@ -2482,6 +2518,10 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     
     tas_ptr->reserve_spot(free_spot, pik_ptr);
     
+    if(pik_ptr->pik_type->can_fly) {
+        pik_ptr->can_move_in_midair = true;
+    }
+    
     pik_ptr->leave_group();
     pik_ptr->stop_chasing();
     
@@ -2523,6 +2563,10 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
             leg_foot_bp_idx
         )->get_cur_pos(n_ptr->m_ptr->pos, n_ptr->m_ptr->angle);
         
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
     m->focus_on_mob(n_ptr->m_ptr);
     m->stop_chasing();
     m->chase(coords, n_ptr->m_ptr->z);
@@ -2550,6 +2594,10 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
         enemy* e_ptr = (enemy*) info1;
         if(!e_ptr->ene_type->allow_ground_attacks) return;
         if(e_ptr->z > m->z + m->height) return;
+    }
+    
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
     }
     
     m->focus_on_mob(o_ptr);
@@ -2599,6 +2647,10 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
     
     too_ptr->reserved = pik_ptr;
     
+    if(pik_ptr->pik_type->can_fly) {
+        pik_ptr->can_move_in_midair = true;
+    }
+    
     pik_ptr->leave_group();
     pik_ptr->stop_chasing();
     
@@ -2629,6 +2681,12 @@ const float PIKMIN_DISMISS_TIMEOUT = 4.0f;
  *   Unused.
  */
 void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
+    
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
     m->set_animation(PIKMIN_ANIM_WALKING);
     
     m->set_timer(PIKMIN_DISMISS_TIMEOUT);
@@ -2849,6 +2907,7 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
 void pikmin_fsm::leave_onion(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
+    m->can_move_in_midair = false;
     m->set_animation(PIKMIN_ANIM_SLIDING);
 }
 
@@ -3303,6 +3362,7 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //If the Pikmin is following a moveable point, let's change it to
     //a static point. This will make the Pikmin continue to move
     //forward into the water in a straight line.
+    m->can_move_in_midair = false;
     float final_z = 0.0f;
     point final_pos = m->get_chase_target(&final_z);
     m->chase(final_pos, final_z);
@@ -3343,7 +3403,11 @@ void pikmin_fsm::start_impact_lunge(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
     m->set_animation(PIKMIN_ANIM_WALKING);
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
     m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
 }
@@ -3359,6 +3423,12 @@ void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::start_getting_up(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
+    
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
     m->set_animation(PIKMIN_ANIM_GETTING_UP);
 }
 
@@ -3393,6 +3463,10 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
     pikmin* p_ptr = (pikmin*) m;
     mob* carried_mob = (mob*) info1;
     
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
     if(
         p_ptr->follow_path(
             carried_mob->carry_info->return_point,
@@ -3420,6 +3494,7 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
 void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     track* tra_ptr = (track*) info1;
     
+    m->can_move_in_midair = false;
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(tra_ptr);
@@ -3507,9 +3582,15 @@ void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
+    
     m->stop_chasing();
     m->set_animation(PIKMIN_ANIM_IDLING);
     m->face(0, &m->following_group->pos);
+    
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
 }
 
 
@@ -3771,6 +3852,10 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
     point target_pos;
     float target_dist; //Unused dummy value.
     
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
     if(!info1) {
         p_ptr->get_group_spot_info(&target_pos, &target_dist);
     } else {
@@ -3842,6 +3927,10 @@ void pikmin_fsm::work_on_group_task(mob* m, void* info1, void* info2) {
     
     group_task* tas_ptr = (group_task*) (m->focused_mob);
     pikmin* pik_ptr = (pikmin*) m;
+    
+    if(pik_ptr->pik_type->can_fly) {
+        pik_ptr->can_move_in_midair = true;
+    }
     
     tas_ptr->add_worker(pik_ptr);
     

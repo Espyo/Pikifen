@@ -62,6 +62,10 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
             PIKMIN_MISSED_ATTACK_DURATION,
     [this] () { this->missed_attack_ptr = NULL; }
         );
+        
+    if(pik_type->can_fly) {
+        can_move_in_midair = true;
+    }
 }
 
 

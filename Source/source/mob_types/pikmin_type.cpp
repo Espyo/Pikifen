@@ -31,6 +31,7 @@ pikmin_type::pikmin_type() :
     push_strength(1),
     max_throw_height(260),
     attack_method(PIKMIN_ATTACK_LATCH),
+    can_fly(false),
     can_carry_tools(true),
     bmp_icon(nullptr),
     bmp_onion_icon(nullptr) {
@@ -134,6 +135,7 @@ void pikmin_type::load_properties(data_node* file) {
     
     rs.set("attack_method", attack_method_str, &attack_method_node);
     rs.set("can_carry_tools", can_carry_tools);
+    rs.set("can_fly", can_fly);
     rs.set("carry_strength", carry_strength);
     rs.set("max_throw_height", max_throw_height);
     rs.set("push_strength", push_strength);

@@ -110,11 +110,19 @@ const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
  */
 class pikmin_type : public mob_type {
 public:
+    //How many Pikmin they are worth when carrying.
     float carry_strength;
+    //How many Pikmin they are worth when pushing.
     float push_strength;
+    //Maximum height that the peak of their throw arc can reach.
     float max_throw_height;
+    //What the main method of attack is.
     PIKMIN_ATTACK_METHODS attack_method;
+    //Whether it can fly or not.
+    bool can_fly;
+    //Whether it can carry tool-type objects or not.
     bool can_carry_tools;
+    //How long it takes to evolve in maturity, as a sprout.
     float sprout_evolution_time[N_MATURITIES];
     //Top (leaf/bud/flower) bitmap for each maturity.
     ALLEGRO_BITMAP* bmp_top[N_MATURITIES];
