@@ -29,7 +29,21 @@
     <p><b>Gameplay changes</b></p>
 
     <ul>
-      <li>Added Rock Pikmin.</li>
+      <li>
+        Added Rock Pikmin.
+        <ul>
+          <li>When thrown at an enemy, they cause damage when they collide, and then bounce back.</li>
+          <li>They also lunge forward on their own when they get close to an enemy they are chasing on foot. This impact works just like a throw, bounce back included.</li>
+        </ul>
+      </li>
+      <li>
+        Added Winged Pikmin.
+        <ul>
+          <li>If their target is above or below them, they can move up and down in the air to get to it.</li>
+          <li>When following a leader, they try to stay a bit above the leader, and when idling, they also try to idle some distance above-ground.</li>
+          <li>Because they are flying in the air when following a leader, they can travel over bodies of water. That said, leaders that are underwater can't grab or throw them.</li>
+        </ul>
+      </li>
       <li>Objects now move with acceleration. This should make them a bit smoother when moving.</li>
       <li>
         Revamped the cursor.
@@ -51,15 +65,18 @@
       <li>
         Rock Pikmin-related features:
         <ul>
-          <li>Added a property for Pikmin types, <code>attack_method</code>, that controls how the Pikmin attacks.</li>
-          <li>Pikmin that attack via the "impact" method should have attack hitboxes in the throwing animation on top of the regular ones. When they hit an enemy, they bounce back.</li>
-          <li>Pikmin that do impact attacks also lunge forward on their own when they get close to an enemy they are chasing on foot. This uses the attack animation, which for them, should be a lunge forward with a hitbox. When they cause damage, they act just like when they are thrown at it, so they bounce back.</li>
+          <li>Added a property for Pikmin types, <code>attack_method</code>, that controls how the Pikmin attacks. If set to <code>impact</code>, that Pikmin attacks like a Rock Pikmin, as explained above.</li>
+          <li>These Pikmin should have attack hitboxes in the throwing animation on top of the regular ones.</li>
+          <li>Their on-foot lunges use the attack animation, so it should ideally be in a pose where they lunge forward, and have a hitbox.</li>
         </ul>
       </li>
       <li>
         Winged Pikmin-related features:
         <ul>
-          <li>Added a property for Pikmin types, <code>can_fly</code>, that controls whether a Pikmin can fly about or not.</li>
+          <li>Added a property for Pikmin types, <code>can_fly</code>, that makes a Pikmin fly like a Winged Pikmin, as explained above.</li>
+          <li>These Pikmin can only move vertically if the state they are in allows it (e.g. they can't fly if they're being knocked back).</li>
+          <li>Technically, if a leader is on a floor with a hazard (liquid or otherwise), they will be unable to grab Pikmin that are outside it and are vulnerable to the hazard. If they grab and bring those Pikmin to said floor, the Pikmin will suffer the effects.</li>
+        </ul>
       </li>
       <li>
         Revamped the status system.

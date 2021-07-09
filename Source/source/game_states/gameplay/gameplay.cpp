@@ -1391,24 +1391,33 @@ void gameplay_state::update_closest_group_member() {
         
     }
     
+    game.states.gameplay->closest_group_member_distant = false;
+    
     if(!game.states.gameplay->closest_group_member) {
-        game.states.gameplay->closest_group_member_distant = false;
         return;
     }
     
+    //Figure out if it can be reached, or if it's too distant.
+    
     if(
-        fabs(
-            game.states.gameplay->closest_group_member->z -
-            cur_leader_ptr->z
-        ) >
-        SECTOR_STEP
+        cur_leader_ptr->ground_sector &&
+        !cur_leader_ptr->ground_sector->hazards.empty()
     ) {
-        //If the group member is beyond a step, it's obviously above or below
-        //a wall, compared to the leader. No grabbing allowed.
+        if(
+            !game.states.gameplay->closest_group_member->
+            is_resistant_to_hazards(
+                cur_leader_ptr->ground_sector->hazards
+            )
+        ) {
+            //The leader is on a hazard that the member isn't resistent to.
+            //Don't let the leader grab it.
+            closest_group_member_distant = true;
+        }
+    }
+    
+    if(closest_dist > game.config.group_member_grab_range) {
+        //The group member is physically too far away.
         game.states.gameplay->closest_group_member_distant = true;
-    } else {
-        game.states.gameplay->closest_group_member_distant =
-            closest_dist > game.config.group_member_grab_range;
     }
 }
 

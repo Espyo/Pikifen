@@ -2430,7 +2430,7 @@ void mob::tick_brain(const float delta_t) {
         
         if(
             horiz_dist > chase_info.target_dist ||
-            vert_dist > chase_info.target_dist
+            vert_dist > 1.0f
         ) {
             //If it still hasn't reached its target
             //(or close enough to the target),

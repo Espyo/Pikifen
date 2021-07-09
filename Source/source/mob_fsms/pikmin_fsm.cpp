@@ -1919,8 +1919,13 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
     pikmin* p_ptr = (pikmin*) m;
     
     pikmin_fsm::stand_still(m, info1, info2);
+    
     if(p_ptr->pik_type->can_fly) {
         p_ptr->can_move_in_midair = true;
+        p_ptr->chase(
+            p_ptr->pos,
+            p_ptr->ground_sector->z + pikmin::FLIER_ABOVE_FLOOR_HEIGHT
+        );
     }
     
     m->set_animation(PIKMIN_ANIM_IDLING);
@@ -3862,7 +3867,10 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
         target_pos = *((point*) info1);
     }
     
-    m->chase(target_pos, p_ptr->following_group->z);
+    m->chase(
+        target_pos,
+        p_ptr->following_group->z + pikmin::FLIER_ABOVE_FLOOR_HEIGHT
+    );
     
 }
 

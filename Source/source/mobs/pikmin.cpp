@@ -21,7 +21,8 @@
 #include "mob.h"
 
 
-static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;
+const float pikmin::MISSED_ATTACK_DURATION = 1.5f;
+const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 100.0f;
 
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin mob.
@@ -59,7 +60,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     
     missed_attack_timer =
         timer(
-            PIKMIN_MISSED_ATTACK_DURATION,
+            MISSED_ATTACK_DURATION,
     [this] () { this->missed_attack_ptr = NULL; }
         );
         

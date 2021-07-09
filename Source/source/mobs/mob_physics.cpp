@@ -210,7 +210,6 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
     //Held by another mob.
     if(holder.m) {
         point final_pos = holder.get_final_pos(&z);
-        z += 1.0f; //Added visibility for latched Pikmin.
         speed_z = 0;
         chase(final_pos, z, CHASE_FLAG_TELEPORT);
     }
@@ -751,7 +750,10 @@ void mob::tick_vertical_movement_physics(
     }
     
     //Gravity.
-    if(!can_move_in_midair) {
+    if(
+        !can_move_in_midair &&
+        !holder.m
+    ) {
         speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
         move_speed_z += speed_z;
     }

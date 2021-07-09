@@ -3,11 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Winged Pikmin
-        Behavior
-            Normally, they should want to fly a small height above their current floor
-            If the leader spot/focused mob is above or below, they should want to move up or down
-            Since liquids only really exist at Z = 0 above the floor, they might not need any extra logic to fly above the water surface
-            They can't be thrown if the leader is in a liquid
         Carrying
             Path links should have these properties:
                 One-way or normal, as usual
@@ -28,6 +23,7 @@ Next tasks (roughly sorted most important first)
     "quick minor suggestion: in the leader's health wheel drawing (line 381 of gameplay.cpp), change the radius from * 0.4fto * 0.47f, so it fills the entire graphic." -Kman
     
     --- v0.21.0 ---
+    Allow other mobs to move freely in the air via scripting
     Bulbmin
     Purple flowers and buds
     Add pellet, Pellet Posy, and Onion support for Rock Pikmin and Winged Pikmin
