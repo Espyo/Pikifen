@@ -10,8 +10,10 @@
 
 #define _USE_MATH_DEFINES
 
-//Disable warning about localtime being deprecated.
-#pragma warning(disable : 4996)
+// Visual Studio warnings
+#ifdef _MSC_VER
+#pragma warning(disable : 4996)     // Disable warning about localtime being deprecated
+#endif
 
 #include <algorithm>
 #include <iostream>
