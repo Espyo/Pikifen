@@ -397,7 +397,7 @@ void load_area(
         game.perf_mon->finish_measurement();
     }
     
-    //Path stops.
+    //Paths.
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Area -- Paths");
     }

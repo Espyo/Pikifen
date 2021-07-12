@@ -4,23 +4,31 @@
 Current tasks (tasks being worked on, but not yet committed)
     Winged Pikmin
         Carrying
-            Path links should have these properties:
-                One-way or normal, as usual
-                Free or restricted
-                    If restricted, it specifies an allow-list of Pikmin type tags (swimmer, flying, etc.)
-                    When an object is being carried, it can only pick this link if all Pikmin envolved are allowed
-                An optional name
-                    If it exists, it can be used by scripts and whatnot to identify sub-paths. Like if you want an iron ball to follow a specific path, you'd write the name of the path in the script, and all links with that name would make up the path
+            Pathing
+                Links should have these properties:
+                    One-way or normal, as usual
+                    Free or restricted
+                        If restricted, it specifies an allow-list of Pikmin type tags (swimmer, flying, etc.)
+                        When an object is being carried, it can only pick this link if all Pikmin envolved are allowed
+                    An optional name
+                        If it exists, it can be used by scripts and whatnot to identify sub-paths. Like if you want an iron ball to follow a specific path, you'd write the name of the path in the script, and all links with that name would make up the path
                 Other things to think about:
                     Paths that large-object (>1 weight) carriers can't take
                     Path links that use warps (technically count as 0 distance)
+                Possible approach: (thanks LazyBoii)
+                    A link is not allowed if the Pikmin involved cannot resist the hazards on the start/end stop's sectors
+                        If it's a floor-only hazard, and there are flying Pikmin, then they can resist
+                    A link can be one of four types
+                        Normal
+                        Custom-use only (only useable via scripting, and not by leaders)
+                        Light load only (carried objects weighing more than 1 cannot pass here)
+                        Winged Pikmin only
             Winged Pikmin should use up standard carrying spots, for simplicity and readibility's sake
             They shouldn't be able to carry objects that are underwater
             Carried objects should take flight too
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    "quick minor suggestion: in the leader's health wheel drawing (line 381 of gameplay.cpp), change the radius from * 0.4fto * 0.47f, so it fills the entire graphic." -Kman
     
     --- v0.21.0 ---
     Allow other mobs to move freely in the air via scripting

@@ -1038,11 +1038,11 @@ void mob::delete_old_status_effects() {
         if(statuses[s].to_delete) {
             handle_status_effect_loss(statuses[s].type);
             
-            statuses.erase(statuses.begin() + s);
-            
             if(statuses[s].type->generates_particles) {
                 remove_particle_generator(statuses[s].type->particle_gen->id);
             }
+            
+            statuses.erase(statuses.begin() + s);
         } else {
             ++s;
         }

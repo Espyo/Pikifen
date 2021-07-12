@@ -1194,8 +1194,8 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::fall_down_pit);
         }
         
-        //The logic to stop panicking
-        //is in pikmin::handle_status_effect_loss();
+        //The logic to stop panicking is in
+        //pikmin::handle_status_effect_loss();
     }
     
     efc.new_state("drinking", PIKMIN_STATE_DRINKING); {

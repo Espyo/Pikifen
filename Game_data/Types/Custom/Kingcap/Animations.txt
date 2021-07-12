@@ -40,8 +40,6 @@ sprites{
 				radius=51.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -52,13 +50,11 @@ sprites{
 		hitboxes{
 			hit{
 				coords=0.0000 0.0000 0.0000
-				height=24.0000
+				height=110.0000
 				radius=51.0000
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -69,12 +65,11 @@ sprites{
 		hitboxes{
 			hit{
 				coords=0.0000 0.0000 0.0000
-				height=48.0000
+				height=110.0000
 				radius=51.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				can_pikmin_latch=true
 			}
 		}
 	}
@@ -85,12 +80,11 @@ sprites{
 		hitboxes{
 			hit{
 				coords=0.0000 0.0000 0.0000
-				height=48.0000
+				height=110.0000
 				radius=51.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				can_pikmin_latch=true
 			}
 		}
 	}
