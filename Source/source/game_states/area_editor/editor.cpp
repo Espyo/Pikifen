@@ -1215,9 +1215,7 @@ void area_editor::goto_problem() {
             
             selected_path_stops.insert(s);
             for(size_t l = 0; l < s->links.size(); ++l) {
-                selected_path_links.insert(
-                    std::make_pair(s, s->links[l].end_ptr)
-                );
+                selected_path_links.insert(s->links[l]);
             }
         }
         
@@ -2324,7 +2322,7 @@ bool area_editor::save_area(const bool to_backup) {
         path_stop_node->add(links_node);
         
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            path_link* l_ptr = &s_ptr->links[l];
+            path_link* l_ptr = s_ptr->links[l];
             data_node* link_node = new data_node("nr", i2s(l_ptr->end_nr));
             links_node->add(link_node);
         }
@@ -2679,7 +2677,7 @@ void area_editor::set_selection_status_text() {
             size_t normals_found = 0;
             size_t one_ways_found = 0;
             for(const auto &l : selected_path_links) {
-                if(l.second->get_link(l.first) != INVALID) {
+                if(l->end_ptr->get_link(l->start_ptr)) {
                     //They both link to each other. So it's a two-way.
                     normals_found++;
                 } else {

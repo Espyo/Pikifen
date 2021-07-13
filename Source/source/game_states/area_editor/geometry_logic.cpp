@@ -380,11 +380,9 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
  * which:
  *   Path links to delete.
  */
-void area_editor::delete_path_links(
-    const set<std::pair<path_stop*, path_stop*> > &which
-) {
+void area_editor::delete_path_links(const set<path_link*> &which) {
     for(auto l : which) {
-        l.first->remove_link(l.second);
+        l->start_ptr->remove_link(l);
     }
 }
 
@@ -396,15 +394,10 @@ void area_editor::delete_path_links(
  */
 void area_editor::delete_path_stops(const set<path_stop*> &which) {
     for(auto s : which) {
-        //Check all links to this stop.
+        //Check all links that end at this stop.
         for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); ++s2) {
             path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
-            for(size_t l = 0; l < s2_ptr->links.size(); ++l) {
-                if(s2_ptr->links[l].end_ptr == s) {
-                    s2_ptr->links.erase(s2_ptr->links.begin() + l);
-                    break;
-                }
-            }
+            s2_ptr->remove_link(s);
         }
         
         //Finally, delete the stop.
@@ -753,7 +746,7 @@ void area_editor::find_problems() {
             path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
             if(s2_ptr == s_ptr) continue;
             
-            if(s2_ptr->get_link(s_ptr) != INVALID) {
+            if(s2_ptr->get_link(s_ptr)) {
                 has_link = true;
                 break;
             }
@@ -779,7 +772,7 @@ void area_editor::find_problems() {
             if(link_start_ptr == s_ptr) continue;
             
             for(size_t l = 0; l < link_start_ptr->links.size(); ++l) {
-                path_stop* link_end_ptr = link_start_ptr->links[l].end_ptr;
+                path_stop* link_end_ptr = link_start_ptr->links[l]->end_ptr;
                 if(link_end_ptr == s_ptr) continue;
                 
                 if(
@@ -1338,38 +1331,30 @@ mob_gen* area_editor::get_mob_under_point(const point &p) const {
 
 /* ----------------------------------------------------------------------------
  * Returns true if there are path links currently under the specified point.
- * data1 takes the info of the found link. If there's also a link in
- * the opposite direction, data2 gets that data, otherwise data2 gets filled
- * with NULLs.
+ * link1 takes the info of the found link. If there's also a link in
+ * the opposite direction, link2 gets that data, otherwise link2 receives NULL.
  * p:
  *   The point to check against.
  * data1:
- *   If there is a path link under that point, its data is returned here.
+ *   If there is a path link under that point, its pointer is returned here.
  * data2:
  *   If there is a path link under the point, but going in the opposite
- *   direction, its data is returned here.
+ *   direction, its pointer is returned here.
  */
 bool area_editor::get_path_link_under_point(
-    const point &p,
-    std::pair<path_stop*, path_stop*>* data1,
-    std::pair<path_stop*, path_stop*>* data2
+    const point &p, path_link** link1, path_link** link2
 ) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            path_stop* s2_ptr = s_ptr->links[l].end_ptr;
+            path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
             if(
                 circle_intersects_line(
                     p, 8 / game.cam.zoom, s_ptr->pos, s2_ptr->pos
                 )
             ) {
-                *data1 = std::make_pair(s_ptr, s2_ptr);
-                if(s2_ptr->get_link(s_ptr) != INVALID) {
-                    *data2 = std::make_pair(s2_ptr, s_ptr);
-                } else {
-                    *data2 =
-                        std::make_pair((path_stop*) NULL, (path_stop*) NULL);
-                }
+                *link1 = s_ptr->links[l];
+                *link2 = s2_ptr->get_link(s_ptr);
                 return true;
             }
         }
@@ -1967,14 +1952,12 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
  *   Where to make the split.
  */
 path_stop* area_editor::split_path_link(
-    const std::pair<path_stop*, path_stop*> &l1,
-    const std::pair<path_stop*, path_stop*> &l2,
-    const point &where
+    path_link* l1, path_link* l2, const point &where
 ) {
-    bool normal_link = (l2.first != NULL);
+    bool normal_link = (l2 != NULL);
     point new_s_pos =
         get_closest_point_in_line(
-            l1.first->pos, l1.second->pos,
+            l1->start_ptr->pos, l1->end_ptr->pos,
             where
         );
         
@@ -1983,18 +1966,18 @@ path_stop* area_editor::split_path_link(
     game.cur_area_data.path_stops.push_back(new_s_ptr);
     
     //Delete the old links.
-    l1.first->remove_link(l1.second);
+    l1->start_ptr->remove_link(l1->end_ptr);
     if(normal_link) {
-        l2.first->remove_link(l2.second);
+        l2->start_ptr->remove_link(l2->end_ptr);
     }
     
     //Create the new links.
-    l1.first->add_link(new_s_ptr, normal_link);
-    new_s_ptr->add_link(l1.second, normal_link);
+    l1->start_ptr->add_link(new_s_ptr, normal_link);
+    new_s_ptr->add_link(l1->end_ptr, normal_link);
     
     //Fix the dangling path stop numbers in the links.
-    game.cur_area_data.fix_path_stop_nrs(l1.first);
-    game.cur_area_data.fix_path_stop_nrs(l1.second);
+    game.cur_area_data.fix_path_stop_nrs(l1->start_ptr);
+    game.cur_area_data.fix_path_stop_nrs(l1->end_ptr);
     game.cur_area_data.fix_path_stop_nrs(new_s_ptr);
     
     //Update the distances.

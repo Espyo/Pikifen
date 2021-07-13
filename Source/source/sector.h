@@ -162,14 +162,16 @@ struct edge {
  */
 struct path_stop {
     point pos;
-    vector<path_link> links;
+    vector<path_link*> links;
     
     path_stop(
         const point &pos = point(),
-        const vector<path_link> &links = vector<path_link>()
+        const vector<path_link*> &links = vector<path_link*>()
     );
+    ~path_stop();
     void add_link(path_stop* other_stop, const bool normal);
-    size_t get_link(path_stop* other_stop) const;
+    path_link* get_link(path_stop* other_stop) const;
+    void remove_link(path_link* link_ptr);
     void remove_link(path_stop* other_stop);
     void calculate_dists();
     void calculate_dists_plus_neighbors();
@@ -183,6 +185,8 @@ struct path_stop {
  * and this structure holds information about a connection.
  */
 struct path_link {
+    //Pointer to the path stop at the start.
+    path_stop* start_ptr;
     //Pointer to the path stop at the end.
     path_stop* end_ptr;
     //Index number of the path stop at the end.
@@ -192,7 +196,7 @@ struct path_link {
     //Is the stop currently blocked by an obstacle? Cache for performance.
     bool blocked_by_obstacle;
     
-    path_link(path_stop* end_ptr, size_t end_nr);
+    path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr);
     void calculate_dist(path_stop* start_ptr);
 };
 

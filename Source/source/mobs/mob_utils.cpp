@@ -699,7 +699,7 @@ bool path_info_struct::check_blockage() {
         path_stop* next_stop = path[cur_path_stop_nr];
         
         return
-            cur_stop->links[cur_stop->get_link(next_stop)].blocked_by_obstacle;
+            cur_stop->get_link(next_stop)->blocked_by_obstacle;
     }
     return false;
 }

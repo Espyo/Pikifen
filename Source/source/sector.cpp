@@ -297,13 +297,14 @@ void area_data::clone(area_data &other) {
         os_ptr->pos = s_ptr->pos;
         os_ptr->links.reserve(s_ptr->links.size());
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            os_ptr->links.push_back(
-                path_link(
-                    other.path_stops[s_ptr->links[l].end_nr],
-                    s_ptr->links[l].end_nr
-                )
-            );
-            os_ptr->links.back().distance = s_ptr->links[l].distance;
+            path_link* new_link =
+                new path_link(
+                    os_ptr,
+                    other.path_stops[s_ptr->links[l]->end_nr],
+                    s_ptr->links[l]->end_nr
+                );
+            new_link->distance = s_ptr->links[l]->distance;
+            os_ptr->links.push_back(new_link);
         }
     }
     
@@ -538,7 +539,7 @@ void area_data::fix_edge_pointers(edge* e_ptr) {
  */
 void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-        path_link* l_ptr = &s_ptr->links[l];
+        path_link* l_ptr = s_ptr->links[l];
         l_ptr->end_nr = INVALID;
         
         if(!l_ptr->end_ptr) continue;
@@ -562,7 +563,7 @@ void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
  */
 void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-        path_link* l_ptr = &s_ptr->links[l];
+        path_link* l_ptr = s_ptr->links[l];
         l_ptr->end_ptr = NULL;
         
         if(l_ptr->end_nr == INVALID) continue;
@@ -808,8 +809,8 @@ size_t area_data::get_nr_path_links() {
     for(size_t s = 0; s < path_stops.size(); ++s) {
         path_stop* s_ptr = path_stops[s];
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            path_link* l_ptr = &s_ptr->links[l];
-            if(l_ptr->end_ptr->get_link(s_ptr) != INVALID) {
+            path_link* l_ptr = s_ptr->links[l];
+            if(l_ptr->end_ptr->get_link(s_ptr)) {
                 //The other stop links to this one. So it's a two-way.
                 normals_found++;
             } else {
@@ -1348,12 +1349,15 @@ mob_gen::mob_gen(
 
 /* ----------------------------------------------------------------------------
  * Creates a new stop link.
+ * start_ptr:
+ *   The path stop at the start of this link.
  * end_ptr:
  *   The path stop at the end of this link.
  * end_nr:
  *   Index number of the path stop at the end of this link.
  */
-path_link::path_link(path_stop* end_ptr, size_t end_nr) :
+path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr) :
+    start_ptr(start_ptr),
     end_ptr(end_ptr),
     end_nr(end_nr),
     distance(0),
@@ -1386,7 +1390,7 @@ void path_manager::clear() {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            game.cur_area_data.path_stops[s]->links[l].blocked_by_obstacle =
+            game.cur_area_data.path_stops[s]->links[l]->blocked_by_obstacle =
                 false;
         }
     }
@@ -1403,7 +1407,7 @@ void path_manager::handle_area_load() {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            path_link* l_ptr = &(game.cur_area_data.path_stops[s]->links[l]);
+            path_link* l_ptr = game.cur_area_data.path_stops[s]->links[l];
             
             for(
                 size_t m = 0;
@@ -1475,10 +1479,21 @@ void path_manager::handle_obstacle_clear(mob* m) {
  * links:
  *   List of path links, linking it to other stops.
  */
-path_stop::path_stop(const point &pos, const vector<path_link> &links) :
+path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
     pos(pos),
     links(links) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a path stop.
+ */
+path_stop::~path_stop() {
+    while(!links.empty()) {
+        delete *(links.begin());
+        links.erase(links.begin());
+    }
 }
 
 
@@ -1493,13 +1508,11 @@ path_stop::path_stop(const point &pos, const vector<path_link> &links) :
  */
 void path_stop::add_link(path_stop* other_stop, const bool normal) {
     remove_link(other_stop);
-    if(other_stop->get_link(this) != INVALID) {
-        other_stop->remove_link(this);
-    }
+    other_stop->remove_link(this);
     
-    links.push_back(path_link(other_stop, INVALID));
+    links.push_back(new path_link(this, other_stop, INVALID));
     if(normal) {
-        other_stop->links.push_back(path_link(this, INVALID));
+        other_stop->links.push_back(new path_link(other_stop, this, INVALID));
     }
 }
 
@@ -1509,7 +1522,7 @@ void path_stop::add_link(path_stop* other_stop, const bool normal) {
  */
 void path_stop::calculate_dists() {
     for(size_t l = 0; l < links.size(); ++l) {
-        links[l].calculate_dist(this);
+        links[l]->calculate_dist(this);
     }
 }
 
@@ -1521,44 +1534,63 @@ void path_stop::calculate_dists() {
  */
 void path_stop::calculate_dists_plus_neighbors() {
     for(size_t l = 0; l < links.size(); ++l) {
-        path_link* l_ptr = &links[l];
+        path_link* l_ptr = links[l];
         l_ptr->calculate_dist(this);
     }
     
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        size_t l_nr = s_ptr->get_link(this);
-        if(l_nr != INVALID) {
-            s_ptr->links[l_nr].calculate_dist(s_ptr);
+        path_link* l_ptr = s_ptr->get_link(this);
+        if(l_ptr) {
+            l_ptr->calculate_dist(s_ptr);
         }
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the index of the link between this stop and another.
+ * Returns the pointer of the link between this stop and another.
  * The links in memory are one-way, meaning that if the only link
  * is from the other stop to this one, it will not count.
- * Returns INVALID if it does not link to that stop.
+ * Returns NULL if it does not link to that stop.
  * other_stop:
  *   Path stop to check against.
  */
-size_t path_stop::get_link(path_stop* other_stop) const {
+path_link* path_stop::get_link(path_stop* other_stop) const {
     for(size_t l = 0; l < links.size(); ++l) {
-        if(links[l].end_ptr == other_stop) return l;
+        if(links[l]->end_ptr == other_stop) return links[l];
     }
-    return INVALID;
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes the specified link.
+ * Does nothing if there is no such link.
+ * link_ptr:
+ *   Pointer to the link to remove.
+ */
+void path_stop::remove_link(path_link* link_ptr) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(links[l] == link_ptr) {
+            delete links[l];
+            links.erase(links.begin() + l);
+            return;
+        }
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Removes the link between this stop and the specified one.
+ * Does nothing if there is no such link.
  * other_stop:
  *   Path stop to remove the link from.
  */
 void path_stop::remove_link(path_stop* other_stop) {
     for(size_t l = 0; l < links.size(); ++l) {
-        if(links[l].end_ptr == other_stop) {
+        if(links[l]->end_ptr == other_stop) {
+            delete links[l];
             links.erase(links.begin() + l);
             return;
         }
@@ -2401,14 +2433,14 @@ void depth_first_search(
     unordered_set<path_stop*> links;
     
     for(size_t l = 0; l < start->links.size(); ++l) {
-        links.insert(start->links[l].end_ptr);
+        links.insert(start->links[l]->end_ptr);
     }
     
     for(size_t n = 0; n < nodes.size(); ++n) {
         path_stop* n_ptr = nodes[n];
         if(n_ptr == start) continue;
         if(visited.find(n_ptr) != visited.end()) continue;
-        if(n_ptr->get_link(start) != INVALID) {
+        if(n_ptr->get_link(start)) {
             links.insert(n_ptr);
         }
     }
@@ -2499,7 +2531,7 @@ vector<path_stop*> dijkstra(
         
         //Check the neighbors.
         for(size_t l = 0; l < shortest_node->links.size(); ++l) {
-            path_link* l_ptr = &shortest_node->links[l];
+            path_link* l_ptr = shortest_node->links[l];
             
             //If this neighbor's been visited, forget it.
             if(unvisited.find(l_ptr->end_ptr) == unvisited.end()) continue;

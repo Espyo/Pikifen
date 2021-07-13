@@ -462,19 +462,18 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
             bool clicked_stop =
                 get_path_stop_under_point(game.mouse_cursor_w);
             if(!clicked_stop) {
-                std::pair<path_stop*, path_stop*> clicked_link_data_1;
-                std::pair<path_stop*, path_stop*> clicked_link_data_2;
+                path_link* clicked_link_1;
+                path_link* clicked_link_2;
                 bool clicked_link =
                     get_path_link_under_point(
                         game.mouse_cursor_w,
-                        &clicked_link_data_1, &clicked_link_data_2
+                        &clicked_link_1, &clicked_link_2
                     );
                 if(clicked_link) {
                     register_change("path link split");
                     path_stop* new_stop =
                         split_path_link(
-                            clicked_link_data_1,
-                            clicked_link_data_2,
+                            clicked_link_1, clicked_link_2,
                             game.mouse_cursor_w
                         );
                     clear_selection();
@@ -973,12 +972,12 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             path_stop* clicked_stop =
                 get_path_stop_under_point(game.mouse_cursor_w);
-            std::pair<path_stop*, path_stop*> clicked_link_data_1;
-            std::pair<path_stop*, path_stop*> clicked_link_data_2;
+            path_link* clicked_link_1;
+            path_link* clicked_link_2;
             bool clicked_link =
                 get_path_link_under_point(
                     game.mouse_cursor_w,
-                    &clicked_link_data_1, &clicked_link_data_2
+                    &clicked_link_1, &clicked_link_2
                 );
                 
             if(!is_shift_pressed) {
@@ -1008,15 +1007,15 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     }
                 } else {
                     if(
-                        selected_path_links.find(clicked_link_data_1) ==
+                        selected_path_links.find(clicked_link_1) ==
                         selected_path_links.end()
                     ) {
                         if(!is_ctrl_pressed) {
                             clear_selection();
                         }
-                        selected_path_links.insert(clicked_link_data_1);
-                        if(clicked_link_data_2.first != NULL) {
-                            selected_path_links.insert(clicked_link_data_2);
+                        selected_path_links.insert(clicked_link_1);
+                        if(clicked_link_2 != NULL) {
+                            selected_path_links.insert(clicked_link_2);
                         }
                     }
                 }
@@ -1276,7 +1275,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
                 for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-                    path_stop* s2_ptr = s_ptr->links[l].end_ptr;
+                    path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
                     
                     if(
                         s_ptr->pos.x >= selection_x1 &&
@@ -1288,9 +1287,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         s2_ptr->pos.y >= selection_y1 &&
                         s2_ptr->pos.y <= selection_y2
                     ) {
-                        selected_path_links.insert(
-                            std::make_pair(s_ptr, s2_ptr)
-                        );
+                        selected_path_links.insert(s_ptr->links[l]);
                     }
                 }
             }

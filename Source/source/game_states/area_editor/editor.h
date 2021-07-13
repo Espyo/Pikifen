@@ -355,7 +355,7 @@ private:
     //Currently selected mobs.
     set<mob_gen*> selected_mobs;
     //Currently selected path links.
-    set<std::pair<path_stop*, path_stop*> > selected_path_links;
+    set<path_link*> selected_path_links;
     //Currently selected path stops.
     set<path_stop*> selected_path_stops;
     //Currently selected sectors.
@@ -446,9 +446,7 @@ private:
     void delete_edge(edge* e_ptr);
     bool delete_edges(const set<edge*> &which);
     void delete_mobs(const set<mob_gen*> &which);
-    void delete_path_links(
-        const set<std::pair<path_stop*, path_stop*> > &which
-    );
+    void delete_path_links(const set<path_link*> &which);
     void delete_path_stops(const set<path_stop*> &which);
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
@@ -503,9 +501,7 @@ private:
     ) const;
     mob_gen* get_mob_under_point(const point &p) const;
     bool get_path_link_under_point(
-        const point &p,
-        std::pair<path_stop*, path_stop*>* data1,
-        std::pair<path_stop*, path_stop*>* data2
+        const point &p, path_link** link1, path_link** link2
     ) const;
     path_stop* get_path_stop_under_point(const point &p) const;
     sector* get_sector_under_point(const point &p) const;
@@ -593,8 +589,7 @@ private:
     void split_sector_with_drawing();
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(
-        const std::pair<path_stop*, path_stop*> &l1,
-        const std::pair<path_stop*, path_stop*> &l2,
+        path_link* l1, path_link* l2,
         const point &where
     );
     void start_mob_move();

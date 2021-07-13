@@ -653,11 +653,11 @@ void area_editor::draw_canvas() {
         for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
             for(size_t l = 0; l < s_ptr->links.size(); l++) {
-                path_stop* s2_ptr = s_ptr->links[l].end_ptr;
+                path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
                 bool one_way =
-                    s_ptr->links[l].end_ptr->get_link(s_ptr) == INVALID;
+                    !s_ptr->links[l]->end_ptr->get_link(s_ptr);
                 bool selected =
-                    selected_path_links.find(std::make_pair(s_ptr, s2_ptr)) !=
+                    selected_path_links.find(s_ptr->links[l]) !=
                     selected_path_links.end();
                     
                 al_draw_line(
@@ -677,7 +677,7 @@ void area_editor::draw_canvas() {
                     PATH_LINK_THICKNESS / game.cam.zoom
                 );
                 
-                if(debug_path_nrs && (one_way || s < s_ptr->links[l].end_nr)) {
+                if(debug_path_nrs && (one_way || s < s_ptr->links[l]->end_nr)) {
                     point middle = (s_ptr->pos + s2_ptr->pos) / 2.0f;
                     float angle = get_angle(s_ptr->pos, s2_ptr->pos);
                     draw_debug_text(
@@ -686,7 +686,7 @@ void area_editor::draw_canvas() {
                             middle.x + cos(angle + TAU / 4) * 4,
                             middle.y + sin(angle + TAU / 4) * 4
                         ),
-                        f2s(s_ptr->links[l].distance)
+                        f2s(s_ptr->links[l]->distance)
                     );
                 }
                 

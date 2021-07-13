@@ -422,9 +422,10 @@ void load_area(
         for(size_t l = 0; l < n_links; ++l) {
         
             data_node* link_node = links_node->get_child(l);
-            path_link l_struct(NULL, INVALID);
-            
-            l_struct.end_nr = s2i(link_node->value);
+            path_link* l_struct =
+                new path_link(
+                s_ptr, NULL, s2i(link_node->value)
+            );
             
             s_ptr->links.push_back(l_struct);
             
