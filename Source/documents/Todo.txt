@@ -50,8 +50,11 @@ Next tasks (roughly sorted most important first)
         A way for status effects to add to the time left, instead of resetting it or leaving it as is
             Spicy spray should reset the time if it is re-applied
         Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
-    Add a way to delete areas from within the area editor, probably in the File menu
-    When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
+    Allow mobs to follow paths
+    Editors
+        Add a way to delete areas from within the area editor, probably in the File menu
+        When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
+        A way to select all path links that use a certain label
     The cutscene message box should be styled like the menu boxes, instead of being a stretched PNG
     Menus need tooltips
     In the manual
@@ -183,7 +186,7 @@ Next tasks (roughly sorted most important first)
         The idea is to make it so areas have some sort of goal, other than being a sandbox
         Each area should have a "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
         Each stage can override the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
-        Each stage should say what its difficulty is, like it does with the creator and such
+        Each stage should say what its (subjective) difficulty is, like it does with the creator and such
         Each stage should have a goal -- the three main goals from Pikmin 3, Get the Target Score!, Survive!, Reach the Exit!, Deliver X to Y!, Grow X Pikmin!, Defeat Enemy X! Escort X! (partial thanks, Jimble, Kman)
             And different sub-goals: without getting spotted, until time runs out
             Each stage should have different scoring criteria. While there is only one goal, the final score should depend on any combination of the following, with varying weights: Pikmin born, Pikmin deaths, time taken, Pokos gathered, enemies killed. It could also have no scoring, just a boolean completion; this is useful for puzzle levels.
@@ -624,6 +627,7 @@ Tasks for later on (I might never implement these)
     Warp point, like in Pikmin 3
         Carrying paths should be able to specify a "portal" link, which internally is considered to be 0-distance. This helps calculate the destinations without considering two warp points as being insanely far apart
     A colorblind-friendly mode?
+    A "peaceful" mode where Pikmin and leaders can't die
     Editors
         Area editor
             Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
@@ -686,6 +690,7 @@ Tasks for later on (I might never implement these)
         A way to choose what landing site of the area you want to start the day in
     Barely important format changes
         Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
+        In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
     Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info

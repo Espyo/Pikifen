@@ -58,6 +58,17 @@ enum TRIANGULATION_ERRORS {
     TRIANGULATION_ERROR_NO_EARS,
 };
 
+enum PATH_LINK_TYPES {
+    //Normal.
+    PATH_LINK_TYPE_NORMAL,
+    //Only useable by mob scripts that reference it.
+    PATH_LINK_TYPE_SCRIPT_ONLY,
+    //Only for mobs carrying nothing, or a 1-weight mob.
+    PATH_LINK_TYPE_LIGHT_LOAD_ONLY,
+    //Only for Pikmin that can fly.
+    PATH_LINK_TYPE_FLIERS_ONLY,
+};
+
 
 /* ----------------------------------------------------------------------------
  * Intersection between two edges. Used to mark
@@ -191,6 +202,12 @@ struct path_link {
     path_stop* end_ptr;
     //Index number of the path stop at the end.
     size_t end_nr;
+    
+    //Type. Used for special restrictions and behaviors.
+    PATH_LINK_TYPES type;
+    //Its label, if any.
+    string label;
+    
     //Distance between the two stops.
     float distance;
     //Is the stop currently blocked by an obstacle? Cache for performance.

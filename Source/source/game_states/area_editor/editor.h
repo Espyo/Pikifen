@@ -510,6 +510,7 @@ private:
     void handle_line_error();
     void homogenize_selected_edges();
     void homogenize_selected_mobs();
+    void homogenize_selected_path_links();
     void homogenize_selected_sectors();
     void load_area(const bool from_backup);
     void load_backup();
@@ -561,6 +562,7 @@ private:
     void process_gui_panel_mob();
     void process_gui_panel_mobs();
     void process_gui_panel_options();
+    void process_gui_panel_path_link();
     void process_gui_panel_paths();
     void process_gui_panel_review();
     void process_gui_panel_sector();

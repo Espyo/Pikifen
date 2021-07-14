@@ -1435,8 +1435,6 @@ void area_editor::homogenize_selected_edges() {
         if(e == selected_edges.begin()) continue;
         base->clone(*e);
     }
-    status_text =
-        "Homogenized " + amount_str(selected_edges.size(), "edge") + ".";
 }
 
 
@@ -1458,8 +1456,28 @@ void area_editor::homogenize_selected_mobs() {
         m_ptr->links = base->links;
         m_ptr->link_nrs = base->link_nrs;
     }
-    status_text =
-        "Homogenized " + amount_str(selected_mobs.size(), "object") + ".";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Homogenizes all selected path links,
+ * based on the one at the head of the selection.
+ */
+void area_editor::homogenize_selected_path_links() {
+    if(selected_path_links.size() < 2) return;
+    
+    path_link* base = *selected_path_links.begin();
+    for(
+        auto l = selected_path_links.begin();
+        l != selected_path_links.end();
+        ++l
+    ) {
+        if(l == selected_path_links.begin()) continue;
+        
+        path_link* l_ptr = *l;
+        l_ptr->type = base->type;
+        l_ptr->label = base->label;
+    }
 }
 
 
@@ -1476,8 +1494,6 @@ void area_editor::homogenize_selected_sectors() {
         base->clone(*s);
         update_sector_texture(*s, base->texture_info.file_name);
     }
-    status_text =
-        "Homogenized " + amount_str(selected_sectors.size(), "sector") + ".";
 }
 
 

@@ -1976,6 +1976,43 @@ void area_editor::process_gui_panel_mobs() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui path link control panel for this frame.
+ */
+void area_editor::process_gui_panel_path_link() {
+    path_link* l_ptr = *selected_path_links.begin();
+    
+    //Type combobox.
+    vector<string> link_type_names;
+    link_type_names.push_back("No limit");
+    link_type_names.push_back("Script use only");
+    link_type_names.push_back("Light load only");
+    link_type_names.push_back("Fliers only");
+    
+    int type_i = l_ptr->type;;
+    if(ImGui::Combo("Type", &type_i, link_type_names)) {
+        register_change("path link type change");
+        l_ptr->type = (PATH_LINK_TYPES) type_i;
+    }
+    set_tooltip(
+        "What type of link this is."
+    );
+    
+    //Label text.
+    string label = l_ptr->label;
+    if(ImGui::InputText("Label", &label)) {
+        register_change("path link label change");
+        l_ptr->label = label;
+    }
+    set_tooltip(
+        "If this link is part of a path that you want\n"
+        "to address in a script, write the name here."
+    );
+    
+    homogenize_selected_path_links();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui paths control panel for this frame.
  */
 void area_editor::process_gui_panel_paths() {
@@ -2111,6 +2148,63 @@ void area_editor::process_gui_panel_paths() {
             
             //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
+            
+            ImGui::TreePop();
+            
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Link properties node.
+        if(saveable_tree_node("paths", "Link properties")) {
+        
+            bool ok_to_edit =
+                (selected_path_links.size() == 1) || selection_homogenized;
+            if(!ok_to_edit && selected_path_links.size() == 2) {
+                auto it = selected_path_links.begin();
+                path_link* l1 = *it;
+                it++;
+                path_link* l2 = *it;
+                if(
+                    l1->start_ptr == l2->end_ptr &&
+                    l1->end_ptr == l2->start_ptr
+                ) {
+                    //The only things we have selected are a link,
+                    //and also the opposite link. As far as the user cares,
+                    //this is all just one link that is of the "normal" type.
+                    //And if they edit the properties, we want both links to
+                    //be edited together.
+                    ok_to_edit = true;
+                }
+            }
+            
+            if(ok_to_edit) {
+            
+                process_gui_panel_path_link();
+                
+            } else if(selected_path_links.empty()) {
+            
+                //"No link selected" text.
+                ImGui::TextDisabled("(No path link selected)");
+                
+            } else {
+            
+                //Non-homogenized links warning.
+                ImGui::TextWrapped(
+                    "Multiple different path links selected. "
+                    "To make all their properties the same and "
+                    "edit them all together, click here:"
+                );
+                
+                //Homogenize links button.
+                if(ImGui::Button("Edit all together")) {
+                    register_change("path link combining");
+                    selection_homogenized = true;
+                    homogenize_selected_path_links();
+                }
+            }
+            
             
             ImGui::TreePop();
             

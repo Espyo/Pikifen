@@ -2305,7 +2305,7 @@ bool area_editor::save_area(const bool to_backup) {
         }
     }
     
-    //Path stops.
+    //Paths.
     data_node* path_stops_node = new data_node("path_stops", "");
     geometry_file.add(path_stops_node);
     
@@ -2323,7 +2323,14 @@ bool area_editor::save_area(const bool to_backup) {
         
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = s_ptr->links[l];
-            data_node* link_node = new data_node("nr", i2s(l_ptr->end_nr));
+            string link_data = i2s(l_ptr->end_nr);
+            if(l_ptr->type != PATH_LINK_TYPE_NORMAL || !l_ptr->label.empty()) {
+                link_data += " " + i2s(l_ptr->type);
+            }
+            if(!l_ptr->label.empty()) {
+                link_data += " " + l_ptr->label;
+            }
+            data_node* link_node = new data_node("nr", link_data);
             links_node->add(link_node);
         }
         

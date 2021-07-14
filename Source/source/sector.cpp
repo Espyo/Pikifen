@@ -299,10 +299,10 @@ void area_data::clone(area_data &other) {
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
             path_link* new_link =
                 new path_link(
-                    os_ptr,
-                    other.path_stops[s_ptr->links[l]->end_nr],
-                    s_ptr->links[l]->end_nr
-                );
+                os_ptr,
+                other.path_stops[s_ptr->links[l]->end_nr],
+                s_ptr->links[l]->end_nr
+            );
             new_link->distance = s_ptr->links[l]->distance;
             os_ptr->links.push_back(new_link);
         }
@@ -1360,6 +1360,7 @@ path_link::path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr) :
     start_ptr(start_ptr),
     end_ptr(end_ptr),
     end_nr(end_nr),
+    type(PATH_LINK_TYPE_NORMAL),
     distance(0),
     blocked_by_obstacle(false) {
     
