@@ -1033,6 +1033,12 @@ void gameplay_state::load() {
         }
     }
     
+    //Save each path stop's sector.
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        game.cur_area_data.path_stops[s]->sector_ptr =
+            get_sector(game.cur_area_data.path_stops[s]->pos, NULL, true);
+    }
+    
     //Sort leaders.
     sort(
         mobs.leaders.begin(), mobs.leaders.end(),

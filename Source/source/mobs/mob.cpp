@@ -1292,7 +1292,20 @@ bool mob::follow_path(
         delete path_info;
     }
     
-    path_info = new path_info_struct(this, target);
+    vector<hazard*> invulnerabilities;
+    if(carry_info) {
+        //The object is only as invulnerable as the Pikmin carrying it.
+        invulnerabilities = carry_info->get_carrier_invulnerabilities();
+    } else {
+        //Use the object's standard invulnerabilities.
+        for(auto v : type->hazard_vulnerabilities) {
+            if(v.second.damage_mult == 0.0f) {
+                invulnerabilities.push_back(v.first);
+            }
+        }
+    }
+    
+    path_info = new path_info_struct(this, target, invulnerabilities);
     path_info->final_target_distance = final_target_distance;
     
     if(
@@ -2389,10 +2402,14 @@ void mob::tick_animation(const float delta_t) {
 void mob::tick_brain(const float delta_t) {
     //Circling around something.
     if(circling_info) {
-        point center =
+        point circling_center =
             circling_info->circling_mob ?
             circling_info->circling_mob->pos :
             circling_info->circling_point;
+        float circling_z =
+            circling_info->circling_mob ?
+            circling_info->circling_mob->z :
+            z;
             
         circling_info->cur_angle +=
             linear_dist_to_angular(
@@ -2401,10 +2418,10 @@ void mob::tick_brain(const float delta_t) {
             (circling_info->clockwise ? 1 : -1);
             
         chase(
-            center + angle_to_coordinates(
+            circling_center + angle_to_coordinates(
                 circling_info->cur_angle, circling_info->radius
             ),
-            circling_info->circling_mob->z,
+            circling_z,
             (circling_info->can_free_move ? CHASE_FLAG_ANY_ANGLE : 0),
             chase_info_struct::DEF_TARGET_DISTANCE,
             circling_info->speed

@@ -71,6 +71,7 @@ float area_editor::calculate_preview_path() {
         get_path(
             path_preview_checkpoints[0],
             path_preview_checkpoints[1],
+            vector<hazard*>(),
             NULL, &d
         );
         
@@ -696,7 +697,11 @@ void area_editor::find_problems() {
             }
             
             vector<path_stop*> path =
-                get_path(m_ptr->pos, m_ptr->links[l]->pos, NULL, NULL);
+                get_path(
+                    m_ptr->pos, m_ptr->links[l]->pos,
+                    vector<hazard*>(),
+                    NULL, NULL
+                );
                 
             for(size_t s = 1; s < path.size(); ++s) {
                 if(
@@ -1982,18 +1987,20 @@ path_stop* area_editor::split_path_link(
     game.cur_area_data.path_stops.push_back(new_s_ptr);
     
     //Delete the old links.
+    path_stop* old_start_ptr = l1->start_ptr;
+    path_stop* old_end_ptr = l1->end_ptr;
     l1->start_ptr->remove_link(l1->end_ptr);
     if(normal_link) {
         l2->start_ptr->remove_link(l2->end_ptr);
     }
     
     //Create the new links.
-    l1->start_ptr->add_link(new_s_ptr, normal_link);
-    new_s_ptr->add_link(l1->end_ptr, normal_link);
+    old_start_ptr->add_link(new_s_ptr, normal_link);
+    new_s_ptr->add_link(old_end_ptr, normal_link);
     
     //Fix the dangling path stop numbers in the links.
-    game.cur_area_data.fix_path_stop_nrs(l1->start_ptr);
-    game.cur_area_data.fix_path_stop_nrs(l1->end_ptr);
+    game.cur_area_data.fix_path_stop_nrs(old_start_ptr);
+    game.cur_area_data.fix_path_stop_nrs(old_end_ptr);
     game.cur_area_data.fix_path_stop_nrs(new_s_ptr);
     
     //Update the distances.

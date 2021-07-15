@@ -128,6 +128,7 @@ struct carry_info_struct {
     carry_info_struct(mob* m, const size_t destination);
     bool is_empty() const;
     bool is_full() const;
+    vector<hazard*> get_carrier_invulnerabilities() const;
     float get_speed() const;
     void rotate_points(const float angle);
 };
@@ -384,7 +385,11 @@ struct path_info_struct {
     //Is the way forward currently blocked?
     bool is_blocked;
     
-    path_info_struct(mob* m, const point &target);
+    path_info_struct(
+        mob* m,
+        const point &target,
+        const vector<hazard*> invulnerabilities
+    );
     bool check_blockage();
 };
 

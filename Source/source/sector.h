@@ -172,8 +172,12 @@ struct edge {
  * reach the final stop and go wherever they need.
  */
 struct path_stop {
+    //Coordinates.
     point pos;
+    //Links that go to other stops.
     vector<path_link*> links;
+    //Sector it's on. Only applicable during gameplay. Cache for performance.
+    sector* sector_ptr;
     
     path_stop(
         const point &pos = point(),
@@ -494,7 +498,12 @@ void depth_first_search(
 );
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
-    const bool ignore_obstacles, float* total_dist
+    const bool ignore_obstacles, const vector<hazard*> &invulnerabilities,
+    float* total_dist
+);
+bool dijkstra_check_link(
+    path_link* link_ptr, const bool ignore_obstacles,
+    const vector<hazard*> &invulnerabilities
 );
 void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,
@@ -505,6 +514,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 );
 vector<path_stop*> get_path(
     const point &start, const point &end,
+    const vector<hazard*> invulnerabilities,
     bool* go_straight, float* get_dist
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);

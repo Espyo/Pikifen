@@ -9,6 +9,7 @@
  */
 
 #include <algorithm>
+#include <unordered_set>
 
 #include "mob_utils.h"
 
@@ -19,6 +20,7 @@
 #include "mob.h"
 
 
+using std::unordered_set;
 using std::size_t;
 
 
@@ -65,6 +67,40 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
         );
         spot_info.push_back(carrier_spot_struct(p));
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a list of hazards to which all carrier Pikmin are invulnerable.
+ */
+vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
+    //First, get all types to save on the amount of hazard checks.
+    unordered_set<mob_type*> carrier_types;
+    for(size_t c = 0; c < spot_info.size(); ++c) {
+        mob* carrier_ptr = spot_info[c].pik_ptr;
+        if(!carrier_ptr) continue;
+        carrier_types.insert(carrier_ptr->type);
+    }
+    
+    //Now, count how many types are invulnerable to each detected hazard.
+    map<hazard*, size_t> inv_instances;
+    for(auto t : carrier_types) {
+        for(auto h : t->hazard_vulnerabilities) {
+            if(h.second.damage_mult == 0.0f) {
+                inv_instances[h.first]++;
+            }
+        }
+    }
+    
+    //Finally, only accept those that ALL types are invulnerable to.
+    vector<hazard*> invulnerabilities;
+    for(auto i : inv_instances) {
+        if(i.second == carrier_types.size()) {
+            invulnerabilities.push_back(i.first);
+        }
+    }
+    
+    return invulnerabilities;
 }
 
 
@@ -675,14 +711,18 @@ parent_info_struct::parent_info_struct(mob* m) :
  * target:
  *   Its target destination.
  */
-path_info_struct::path_info_struct(mob* m, const point &target) :
+path_info_struct::path_info_struct(
+    mob* m,
+    const point &target,
+    const vector<hazard*> invulnerabilities
+) :
     m(m),
     target_point(target),
     cur_path_stop_nr(0),
     go_straight(false),
     is_blocked(false) {
     
-    path = get_path(m->pos, target, &go_straight, NULL);
+    path = get_path(m->pos, target, invulnerabilities, &go_straight, NULL);
 }
 
 

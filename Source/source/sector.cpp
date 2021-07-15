@@ -1482,7 +1482,8 @@ void path_manager::handle_obstacle_clear(mob* m) {
  */
 path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
     pos(pos),
-    links(links) {
+    links(links),
+    sector_ptr(nullptr) {
     
 }
 
@@ -2467,7 +2468,8 @@ void depth_first_search(
  */
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
-    const bool ignore_obstacles, float* total_dist
+    const bool ignore_obstacles, const vector<hazard*> &invulnerabilities,
+    float* total_dist
 ) {
     //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
     
@@ -2537,8 +2539,10 @@ vector<path_stop*> dijkstra(
             //If this neighbor's been visited, forget it.
             if(unvisited.find(l_ptr->end_ptr) == unvisited.end()) continue;
             
-            //Is this link unobstructed?
-            if(!ignore_obstacles && l_ptr->blocked_by_obstacle) {
+            //Can this link be traversed?
+            if(
+                !dijkstra_check_link(l_ptr, ignore_obstacles, invulnerabilities)
+            ) {
                 continue;
             }
             
@@ -2556,13 +2560,57 @@ vector<path_stop*> dijkstra(
     //If we got to this point, there means that there is no available path!
     
     if(!ignore_obstacles) {
-        //Let's try again, this time ignoring obstacles.
-        return dijkstra(start_node, end_node, true, total_dist);
+        //Let's try again, this time ignoring everything.
+        return
+            dijkstra(
+                start_node, end_node,
+                true, vector<hazard*>(),
+                total_dist
+            );
     } else {
         //Nothing that can be done. No path.
         if(total_dist) *total_dist = 0;
         return vector<path_stop*>();
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if a link can be traversed in the Dijkstra algorithm.
+ * link_ptr:
+ *   Link to check.
+ * ignore_obstacles:
+ *   If true, obstacles in the link are ignored.
+ * invulnerabilities:
+ *   List of hazards that whoever wants to traverse is invulnerable to.
+ *   The link is not possible to traverse if the end stop's sector
+ *   has any hazard that won't be resisted.
+ */
+bool dijkstra_check_link(
+    path_link* link_ptr, const bool ignore_obstacles,
+    const vector<hazard*> &invulnerabilities
+) {
+    if(!ignore_obstacles && link_ptr->blocked_by_obstacle) {
+        return false;
+    }
+    
+    if(!link_ptr->end_ptr->sector_ptr->hazards.empty()) {
+        sector* end_sector = link_ptr->end_ptr->sector_ptr;
+        for(size_t sh = 0; sh < end_sector->hazards.size(); ++sh) {
+            bool invulnerable = false;
+            for(size_t ih = 0; ih < invulnerabilities.size(); ++ih) {
+                if(invulnerabilities[ih] == end_sector->hazards[sh]) {
+                    invulnerable = true;
+                    break;
+                }
+            }
+            if(!invulnerable) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
 }
 
 
@@ -2639,6 +2687,8 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  *   Start coordinates.
  * end:
  *   End coordinates.
+ * invulnerabilities:
+ *   List of hazards that whoever wants to traverse is invulnerable to.
  * go_straight:
  *   This is set according to whether it's better
  *   to go straight to the end point.
@@ -2647,6 +2697,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  */
 vector<path_stop*> get_path(
     const point &start, const point &end,
+    const vector<hazard*> invulnerabilities,
     bool* go_straight, float* total_dist
 ) {
 
@@ -2712,7 +2763,8 @@ vector<path_stop*> get_path(
     //Calculate the path.
     full_path =
         dijkstra(
-            closest_to_start, closest_to_end, false, total_dist
+            closest_to_start, closest_to_end,
+            false, invulnerabilities, total_dist
         );
         
     if(total_dist && !full_path.empty()) {
