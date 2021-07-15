@@ -246,18 +246,40 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
         &m->carry_info->intended_mob, &m->carry_info->intended_point
     );
     
-    bool can_move = m->carry_info->cur_carrying_strength >= m->type->weight;
+    //Check if we need to update the path.
+    bool must_update = false;
     
-    //If the mob can now start moving, or if it already could and the target
-    //changed, send a move begin event, so that the mob can calculate
-    //a (new) path and start taking it.
+    //Start by checking if the mob can now start moving,
+    //or if it already could and the target changed.
+    bool can_move = m->carry_info->cur_carrying_strength >= m->type->weight;
     if(can_move) {
         if(
             !could_move ||
             (prev_destination != m->carry_info->intended_mob)
         ) {
-            m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
+            must_update = true;
         }
+    }
+    
+    //Now, check if the list of invulnerabilities changed.
+    if(!must_update && m->path_info) {
+        vector<hazard*> new_invulnerabilities =
+            m->carry_info->get_carrier_invulnerabilities();
+            
+        if(
+            !vectors_contain_same(
+                new_invulnerabilities,
+                m->path_info->invulnerabilities
+            )
+        ) {
+            must_update = true;
+        }
+    }
+    
+    if(must_update) {
+        //Send a move begin event, so that the mob can calculate
+        //a (new) path and start taking it.
+        m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
     }
 }
 
@@ -301,11 +323,33 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
         return;
     }
     
-    //If the target changed, send a move begin event,
-    //so that the mob can calculate a (new) path and start taking it.
+    //Check if we need to update the path.
+    bool must_update = false;
+    
+    //Start by checking if the target changed.
     if(can_move && (prev_destination != m->carry_info->intended_mob)) {
+        must_update = true;
+    }
+    
+    //Now, check if the list of invulnerabilities changed.
+    if(!must_update && m->path_info) {
+        vector<hazard*> new_invulnerabilities =
+            m->carry_info->get_carrier_invulnerabilities();
+            
+        if(
+            !vectors_contain_same(
+                new_invulnerabilities,
+                m->path_info->invulnerabilities
+            )
+        ) {
+            must_update = true;
+        }
+    }
+    
+    if(must_update) {
+        //Send a move begin event, so that the mob can calculate
+        //a (new) path and start taking it.
         m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
-        return;
     }
 }
 

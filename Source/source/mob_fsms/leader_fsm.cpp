@@ -778,6 +778,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
         }
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+            efc.run(gen_mob_fsm::carry_get_path);
+            efc.change_state("sleeping_moving");
+        }
         efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.change_state("sleeping_waiting");
@@ -940,6 +945,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
+        }
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+            efc.run(gen_mob_fsm::carry_get_path);
+            efc.change_state("inactive_sleeping_moving");
         }
         efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);

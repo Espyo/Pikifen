@@ -2461,11 +2461,9 @@ void mob::tick_brain(const float delta_t) {
         } else {
             //Reached the chase location.
             
-            if(path_info && !path_info->go_straight) {
+            if(path_info && !path_info->go_straight && !path_info->is_blocked) {
             
-                if(!path_info->is_blocked) {
-                    path_info->cur_path_stop_nr++;
-                }
+                path_info->cur_path_stop_nr++;
                 
                 if(path_info->cur_path_stop_nr < path_info->path.size()) {
                     //Reached a regular stop while traversing the path.

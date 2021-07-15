@@ -720,7 +720,8 @@ path_info_struct::path_info_struct(
     target_point(target),
     cur_path_stop_nr(0),
     go_straight(false),
-    is_blocked(false) {
+    is_blocked(false),
+    invulnerabilities(invulnerabilities) {
     
     path = get_path(m->pos, target, invulnerabilities, &go_straight, NULL);
 }
@@ -739,7 +740,10 @@ bool path_info_struct::check_blockage() {
         path_stop* next_stop = path[cur_path_stop_nr];
         
         return
-            cur_stop->get_link(next_stop)->blocked_by_obstacle;
+            !can_traverse_path_link(
+                cur_stop->get_link(next_stop), false,
+                invulnerabilities
+            );
     }
     return false;
 }

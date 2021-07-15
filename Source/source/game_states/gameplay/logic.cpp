@@ -216,6 +216,7 @@ void gameplay_state::do_gameplay_logic() {
                     for(size_t h = 0; h < s_ptr->hazards.size();) {
                         if(s_ptr->hazards[h]->associated_liquid) {
                             s_ptr->hazards.erase(s_ptr->hazards.begin() + h);
+                            path_mgr.handle_sector_hazard_change(s_ptr);
                         } else {
                             ++h;
                         }

@@ -384,6 +384,8 @@ struct path_info_struct {
     float final_target_distance;
     //Is the way forward currently blocked?
     bool is_blocked;
+    //Invulnerabilities of the mob/carriers.
+    vector<hazard*> invulnerabilities;
     
     path_info_struct(
         mob* m,

@@ -1432,12 +1432,20 @@ void path_manager::handle_area_load() {
             }
         }
     }
+    
+    //Go through all path stops and check if they're on hazardous sectors.
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        if(!s_ptr->sector_ptr) continue;
+        if(s_ptr->sector_ptr->hazards.empty()) continue;
+        hazardous_stops.insert(s_ptr);
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles an obstacle having been cleared. This updates all information
- * about that obstruction.
+ * Handles an obstacle having been cleared. This way, any link with that
+ * obstruction can get updated.
  * m:
  *   Pointer to the obstacle mob that got cleared.
  */
@@ -1458,6 +1466,45 @@ void path_manager::handle_obstacle_clear(mob* m) {
             o = obstructions.erase(o);
         } else {
             ++o;
+        }
+    }
+    
+    if(paths_changed) {
+        //Re-calculate the paths of mobs taking paths.
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+            mob* m_ptr = game.states.gameplay->mobs.all[m];
+            if(!m_ptr->path_info) continue;
+            
+            m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a sector having changed its hazards. This way, any stop on that
+ * sector can be updated.
+ * s:
+ *   Pointer to the sector whose hazards got updated.
+ */
+void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
+    //Remove relevant stops from our list.
+    bool paths_changed = false;
+    
+    for(auto s = hazardous_stops.begin(); s != hazardous_stops.end();) {
+        bool to_delete = false;
+        if((*s)->sector_ptr == sector_ptr) {
+            paths_changed = true;
+            if(sector_ptr->hazards.empty()) {
+                //We only want to delete it if it became hazardless.
+                to_delete = true;
+            }
+        }
+        
+        if(to_delete) {
+            s = hazardous_stops.erase(s);
+        } else {
+            ++s;
         }
     }
     
@@ -2419,6 +2466,48 @@ void vertex::remove_edge(edge* e_ptr) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if a link can be traversed given some contraints.
+ * link_ptr:
+ *   Link to check.
+ * ignore_obstacles:
+ *   If true, obstacles in the link are ignored.
+ * invulnerabilities:
+ *   List of hazards that whoever wants to traverse is invulnerable to.
+ *   The link is not possible to traverse if the end stop's sector
+ *   has any hazard that won't be resisted.
+ */
+bool can_traverse_path_link(
+    path_link* link_ptr, const bool ignore_obstacles,
+    const vector<hazard*> &invulnerabilities
+) {
+    if(!ignore_obstacles && link_ptr->blocked_by_obstacle) {
+        return false;
+    }
+    
+    if(
+        !ignore_obstacles &&
+        !link_ptr->end_ptr->sector_ptr->hazards.empty()
+    ) {
+        sector* end_sector = link_ptr->end_ptr->sector_ptr;
+        for(size_t sh = 0; sh < end_sector->hazards.size(); ++sh) {
+            bool invulnerable = false;
+            for(size_t ih = 0; ih < invulnerabilities.size(); ++ih) {
+                if(invulnerabilities[ih] == end_sector->hazards[sh]) {
+                    invulnerable = true;
+                    break;
+                }
+            }
+            if(!invulnerable) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Traverses a graph using the depth first search algorithm.
  * nodes:
  *   Vector of nodes.
@@ -2541,7 +2630,7 @@ vector<path_stop*> dijkstra(
             
             //Can this link be traversed?
             if(
-                !dijkstra_check_link(l_ptr, ignore_obstacles, invulnerabilities)
+                !can_traverse_path_link(l_ptr, ignore_obstacles, invulnerabilities)
             ) {
                 continue;
             }
@@ -2572,45 +2661,6 @@ vector<path_stop*> dijkstra(
         if(total_dist) *total_dist = 0;
         return vector<path_stop*>();
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Checks if a link can be traversed in the Dijkstra algorithm.
- * link_ptr:
- *   Link to check.
- * ignore_obstacles:
- *   If true, obstacles in the link are ignored.
- * invulnerabilities:
- *   List of hazards that whoever wants to traverse is invulnerable to.
- *   The link is not possible to traverse if the end stop's sector
- *   has any hazard that won't be resisted.
- */
-bool dijkstra_check_link(
-    path_link* link_ptr, const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities
-) {
-    if(!ignore_obstacles && link_ptr->blocked_by_obstacle) {
-        return false;
-    }
-    
-    if(!link_ptr->end_ptr->sector_ptr->hazards.empty()) {
-        sector* end_sector = link_ptr->end_ptr->sector_ptr;
-        for(size_t sh = 0; sh < end_sector->hazards.size(); ++sh) {
-            bool invulnerable = false;
-            for(size_t ih = 0; ih < invulnerabilities.size(); ++ih) {
-                if(invulnerabilities[ih] == end_sector->hazards[sh]) {
-                    invulnerable = true;
-                    break;
-                }
-            }
-            if(!invulnerable) {
-                return false;
-            }
-        }
-    }
-    
-    return true;
 }
 
 

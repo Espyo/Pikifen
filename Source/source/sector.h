@@ -478,20 +478,32 @@ struct area_data {
 
 
 /* ----------------------------------------------------------------------------
- * Manages the paths in the area, particularly whether they are blocked
- * by an obstacle or not.
+ * Manages the paths in the area. Particularly, this keeps an eye out on
+ * what stops and links have any sort of obstacle in them that could deter
+ * mobs. When these problems disappear, the manager is in charge of alerting
+ * all mobs that were following paths, in order to get them recalculate
+ * their paths if needed.
+ * The reason we want them to recalculate regardless of whether the
+ * obstacle affected them or not, is because this obstacle could've freed
+ * a different route.
  */
 struct path_manager {
     map<path_link*, unordered_set<mob*> > obstructions;
+    unordered_set<path_stop*> hazardous_stops;
     
     void handle_area_load();
     void handle_obstacle_clear(mob* m);
+    void handle_sector_hazard_change(sector* sector_ptr);
     void clear();
 };
 
 
 
 
+bool can_traverse_path_link(
+    path_link* link_ptr, const bool ignore_obstacles,
+    const vector<hazard*> &invulnerabilities
+);
 void depth_first_search(
     vector<path_stop*> &nodes,
     unordered_set<path_stop*> &visited, path_stop* start
@@ -500,10 +512,6 @@ vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
     const bool ignore_obstacles, const vector<hazard*> &invulnerabilities,
     float* total_dist
-);
-bool dijkstra_check_link(
-    path_link* link_ptr, const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities
 );
 void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,

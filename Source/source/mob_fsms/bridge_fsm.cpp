@@ -95,6 +95,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
         
         s_ptr->is_bottomless_pit = false;
         s_ptr->hazards.clear();
+        game.states.gameplay->path_mgr.handle_sector_hazard_change(s_ptr);
         
         s_ptr->texture_info.bitmap =
             (s_ptr->type == SECTOR_TYPE_BRIDGE) ?
