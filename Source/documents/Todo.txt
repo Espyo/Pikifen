@@ -37,6 +37,7 @@ Next tasks (roughly sorted most important first)
     Add pellet, Pellet Posy, and Onion support for Rock Pikmin and Winged Pikmin
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     Add some obstacles relevant to the Rock Pikmin and Winged Pikmin
+    Add the new Pikmin to the Pikmin order list
     Purple Pikmin
         Give them a proper pound attack
         Maybe stun?

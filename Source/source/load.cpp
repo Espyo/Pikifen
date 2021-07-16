@@ -1315,7 +1315,8 @@ void load_spray_types(const bool load_resources) {
         temp_types.push_back(new_t);
     }
     
-    //Check the registered order and sort.
+    //Spray type order.
+    vector<string> missing_spray_order_types;
     for(size_t t = 0; t < temp_types.size(); ++t) {
         if(
             find(
@@ -1324,12 +1325,20 @@ void load_spray_types(const bool load_resources) {
                 temp_types[t].name
             ) == game.config.spray_order_strings.end()
         ) {
-            log_error(
-                "Spray type \"" + temp_types[t].name + "\" was not found "
-                "in the spray order list in the config file!"
-            );
-            game.config.spray_order_strings.push_back(temp_types[t].name);
+            //Missing from the list? Add it to the "missing" pile.
+            missing_spray_order_types.push_back(temp_types[t].name);
         }
+    }
+    if(!missing_spray_order_types.empty()) {
+        std::sort(
+            missing_spray_order_types.begin(),
+            missing_spray_order_types.end()
+        );
+        game.config.spray_order_strings.insert(
+            game.config.spray_order_strings.end(),
+            missing_spray_order_types.begin(),
+            missing_spray_order_types.end()
+        );
     }
     for(size_t o = 0; o < game.config.spray_order_strings.size(); ++o) {
         string s = game.config.spray_order_strings[o];

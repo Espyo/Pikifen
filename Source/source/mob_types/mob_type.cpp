@@ -819,6 +819,7 @@ void load_mob_types(bool load_resources) {
     }
     
     //Pikmin type order.
+    vector<string> missing_pikmin_order_types;
     for(auto &p : game.mob_types.pikmin) {
         if(
             find(
@@ -827,9 +828,20 @@ void load_mob_types(bool load_resources) {
                 p.first
             ) == game.config.pikmin_order_strings.end()
         ) {
-            //Missing from the list? Add it to the end.
-            game.config.pikmin_order_strings.push_back(p.first);
+            //Missing from the list? Add it to the "missing" pile.
+            missing_pikmin_order_types.push_back(p.first);
         }
+    }
+    if(!missing_pikmin_order_types.empty()) {
+        std::sort(
+            missing_pikmin_order_types.begin(),
+            missing_pikmin_order_types.end()
+        );
+        game.config.pikmin_order_strings.insert(
+            game.config.pikmin_order_strings.end(),
+            missing_pikmin_order_types.begin(),
+            missing_pikmin_order_types.end()
+        );
     }
     for(size_t o = 0; o < game.config.pikmin_order_strings.size(); ++o) {
         string s = game.config.pikmin_order_strings[o];
@@ -844,6 +856,7 @@ void load_mob_types(bool load_resources) {
     }
     
     //Leader type order.
+    vector<string> missing_leader_order_types;
     for(auto &l : game.mob_types.leader) {
         if(
             find(
@@ -852,9 +865,20 @@ void load_mob_types(bool load_resources) {
                 l.first
             ) == game.config.leader_order_strings.end()
         ) {
-            //Missing from the list? Add it to the end.
-            game.config.leader_order_strings.push_back(l.first);
+            //Missing from the list? Add it to the "missing" pile.
+            missing_leader_order_types.push_back(l.first);
         }
+    }
+    if(!missing_leader_order_types.empty()) {
+        std::sort(
+            missing_leader_order_types.begin(),
+            missing_leader_order_types.end()
+        );
+        game.config.leader_order_strings.insert(
+            game.config.leader_order_strings.end(),
+            missing_leader_order_types.begin(),
+            missing_leader_order_types.end()
+        );
     }
     for(size_t o = 0; o < game.config.leader_order_strings.size(); ++o) {
         string s = game.config.leader_order_strings[o];
