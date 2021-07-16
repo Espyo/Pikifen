@@ -1342,20 +1342,39 @@ bool mob::follow_path(
     }
     
     if(path_info->go_straight) {
+        //The path info is telling us to just go to the destination directly.
         chase(
             target, z,
             CHASE_FLAG_ANY_ANGLE,
             path_info->final_target_distance, speed
         );
+        
     } else if(!path_info->path.empty()) {
+        //Head to the first stop.
+        path_stop* next_stop =
+            path_info->path[path_info->cur_path_stop_nr];
+        float next_stop_z = z;
+        if(
+            path_info->is_airborne &&
+            next_stop->sector_ptr
+        ) {
+            next_stop_z =
+                next_stop->sector_ptr->z +
+                pikmin::FLIER_ABOVE_FLOOR_HEIGHT;
+        }
+        
         chase(
-            path_info->path[path_info->cur_path_stop_nr]->pos, z,
+            next_stop->pos, next_stop_z,
             CHASE_FLAG_ANY_ANGLE,
             chase_info_struct::DEF_TARGET_DISTANCE, speed
         );
+        
     } else {
+        //No valid path.
         return false;
+        
     }
+    
     return true;
 }
 
@@ -2484,9 +2503,21 @@ void mob::tick_brain(const float delta_t) {
                         fsm.run_event(MOB_EV_PATH_BLOCKED);
                     } else {
                         //All good. Head to the next stop.
+                        path_stop* next_stop =
+                            path_info->path[path_info->cur_path_stop_nr];
+                        float next_stop_z = z;
+                        if(
+                            path_info->is_airborne &&
+                            next_stop->sector_ptr
+                        ) {
+                            next_stop_z =
+                                next_stop->sector_ptr->z +
+                                pikmin::FLIER_ABOVE_FLOOR_HEIGHT;
+                        }
+                        
                         chase(
-                            path_info->path[path_info->cur_path_stop_nr]->pos,
-                            z, CHASE_FLAG_ANY_ANGLE,
+                            next_stop->pos, next_stop_z,
+                            CHASE_FLAG_ANY_ANGLE,
                             chase_info_struct::DEF_TARGET_DISTANCE,
                             chase_info.max_speed
                         );
@@ -2498,7 +2529,8 @@ void mob::tick_brain(const float delta_t) {
                     //Reached the final stop of the path, but not the goal.
                     //Let's head there.
                     chase(
-                        path_info->target_point, z,
+                        path_info->target_point,
+                        get_sector(path_info->target_point, NULL, true)->z,
                         CHASE_FLAG_ANY_ANGLE,
                         path_info->final_target_distance,
                         chase_info.max_speed

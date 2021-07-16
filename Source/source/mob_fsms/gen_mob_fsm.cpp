@@ -80,6 +80,8 @@ void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
 void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = true;
     
+    m->can_move_in_midair = m->path_info->is_airborne;
+    
     if(m->carry_info->intended_mob == NULL) {
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);
         return;
@@ -180,6 +182,7 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
     if(!m->path_info) return;
     m->carry_info->is_moving = false;
+    m->can_move_in_midair = false;
     m->stop_following_path();
     m->stop_chasing();
 }
