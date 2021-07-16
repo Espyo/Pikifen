@@ -1305,7 +1305,17 @@ bool mob::follow_path(
         }
     }
     
-    path_info = new path_info_struct(this, target, invulnerabilities);
+    bool is_airborne = false;
+    if(carry_info) {
+        //The object will only be airborne if all its carriers can fly.
+        is_airborne = carry_info->can_fly();
+    } else {
+        //Check if the object can fly directly.
+        is_airborne = can_move_in_midair;
+    }
+    
+    path_info =
+        new path_info_struct(this, target, invulnerabilities, is_airborne);
     path_info->final_target_distance = final_target_distance;
     
     if(

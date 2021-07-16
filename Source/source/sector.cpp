@@ -2475,10 +2475,12 @@ void vertex::remove_edge(edge* e_ptr) {
  *   List of hazards that whoever wants to traverse is invulnerable to.
  *   The link is not possible to traverse if the end stop's sector
  *   has any hazard that won't be resisted.
+ * is_airborne:
+ *   Is this mob going to take the path airborne?
  */
 bool can_traverse_path_link(
     path_link* link_ptr, const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities
+    const vector<hazard*> &invulnerabilities, const bool is_airborne
 ) {
     if(!ignore_obstacles && link_ptr->blocked_by_obstacle) {
         return false;
@@ -2489,16 +2491,19 @@ bool can_traverse_path_link(
         !link_ptr->end_ptr->sector_ptr->hazards.empty()
     ) {
         sector* end_sector = link_ptr->end_ptr->sector_ptr;
-        for(size_t sh = 0; sh < end_sector->hazards.size(); ++sh) {
-            bool invulnerable = false;
-            for(size_t ih = 0; ih < invulnerabilities.size(); ++ih) {
-                if(invulnerabilities[ih] == end_sector->hazards[sh]) {
-                    invulnerable = true;
-                    break;
+        
+        if(!end_sector->hazard_floor || !is_airborne) {
+            for(size_t sh = 0; sh < end_sector->hazards.size(); ++sh) {
+                bool invulnerable = false;
+                for(size_t ih = 0; ih < invulnerabilities.size(); ++ih) {
+                    if(invulnerabilities[ih] == end_sector->hazards[sh]) {
+                        invulnerable = true;
+                        break;
+                    }
                 }
-            }
-            if(!invulnerable) {
-                return false;
+                if(!invulnerable) {
+                    return false;
+                }
             }
         }
     }
@@ -2552,12 +2557,17 @@ void depth_first_search(
  * ignore_obstacles:
  *   If true, obstacles are ignored. If false, links with obstacles will be
  *   unable to be crossed.
+ * invulnerabilities:
+ *   List of hazards that whoever wants to traverse is invulnerable to.
+ * is_airborne:
+ *   Is this mob going to take the path airborne?
  * total_dist:
  *   If not NULL, place the total path distance here.
  */
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
-    const bool ignore_obstacles, const vector<hazard*> &invulnerabilities,
+    const bool ignore_obstacles,
+    const vector<hazard*> &invulnerabilities, const bool is_airborne,
     float* total_dist
 ) {
     //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
@@ -2630,7 +2640,10 @@ vector<path_stop*> dijkstra(
             
             //Can this link be traversed?
             if(
-                !can_traverse_path_link(l_ptr, ignore_obstacles, invulnerabilities)
+                !can_traverse_path_link(
+                    l_ptr, ignore_obstacles,
+                    invulnerabilities, is_airborne
+                )
             ) {
                 continue;
             }
@@ -2653,7 +2666,7 @@ vector<path_stop*> dijkstra(
         return
             dijkstra(
                 start_node, end_node,
-                true, vector<hazard*>(),
+                true, vector<hazard*>(), is_airborne,
                 total_dist
             );
     } else {
@@ -2739,6 +2752,8 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  *   End coordinates.
  * invulnerabilities:
  *   List of hazards that whoever wants to traverse is invulnerable to.
+ * is_airborne:
+ *   Is this mob going to take the path airborne?
  * go_straight:
  *   This is set according to whether it's better
  *   to go straight to the end point.
@@ -2748,6 +2763,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 vector<path_stop*> get_path(
     const point &start, const point &end,
     const vector<hazard*> invulnerabilities,
+    const bool is_airborne,
     bool* go_straight, float* total_dist
 ) {
 
@@ -2814,7 +2830,7 @@ vector<path_stop*> get_path(
     full_path =
         dijkstra(
             closest_to_start, closest_to_end,
-            false, invulnerabilities, total_dist
+            false, invulnerabilities, is_airborne, total_dist
         );
         
     if(total_dist && !full_path.empty()) {

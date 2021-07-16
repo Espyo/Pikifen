@@ -129,6 +129,7 @@ struct carry_info_struct {
     bool is_empty() const;
     bool is_full() const;
     vector<hazard*> get_carrier_invulnerabilities() const;
+    bool can_fly() const;
     float get_speed() const;
     void rotate_points(const float angle);
 };
@@ -386,11 +387,14 @@ struct path_info_struct {
     bool is_blocked;
     //Invulnerabilities of the mob/carriers.
     vector<hazard*> invulnerabilities;
+    //Is the mob/are its carriers airborne?
+    bool is_airborne;
     
     path_info_struct(
         mob* m,
         const point &target,
-        const vector<hazard*> invulnerabilities
+        const vector<hazard*> invulnerabilities,
+        const bool is_airborne
     );
     bool check_blockage();
 };

@@ -261,7 +261,13 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
         }
     }
     
-    //Now, check if the list of invulnerabilities changed.
+    //Now, check if the fact that it can fly or not changed.
+    if(!must_update && m->path_info) {
+        bool new_is_airborne = m->carry_info->can_fly();
+        must_update = (m->path_info->is_airborne != new_is_airborne);
+    }
+    
+    //Check if the list of invulnerabilities changed.
     if(!must_update && m->path_info) {
         vector<hazard*> new_invulnerabilities =
             m->carry_info->get_carrier_invulnerabilities();
@@ -331,7 +337,13 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
         must_update = true;
     }
     
-    //Now, check if the list of invulnerabilities changed.
+    //Now, check if the fact that it can fly or not changed.
+    if(!must_update && m->path_info) {
+        bool new_is_airborne = m->carry_info->can_fly();
+        must_update = (m->path_info->is_airborne != new_is_airborne);
+    }
+    
+    //Check if the list of invulnerabilities changed.
     if(!must_update && m->path_info) {
         vector<hazard*> new_invulnerabilities =
             m->carry_info->get_carrier_invulnerabilities();

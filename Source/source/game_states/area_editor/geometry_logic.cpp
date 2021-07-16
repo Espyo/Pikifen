@@ -71,7 +71,7 @@ float area_editor::calculate_preview_path() {
         get_path(
             path_preview_checkpoints[0],
             path_preview_checkpoints[1],
-            vector<hazard*>(),
+            vector<hazard*>(), true,
             NULL, &d
         );
         
@@ -699,7 +699,7 @@ void area_editor::find_problems() {
             vector<path_stop*> path =
                 get_path(
                     m_ptr->pos, m_ptr->links[l]->pos,
-                    vector<hazard*>(),
+                    vector<hazard*>(), true,
                     NULL, NULL
                 );
                 

@@ -71,6 +71,22 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
 
 
 /* ----------------------------------------------------------------------------
+ * Returns true if the carriers can all fly, and thus, the object can
+ * be carried through the air.
+ */
+bool carry_info_struct::can_fly() const {
+    for(size_t c = 0; c < spot_info.size(); ++c) {
+        mob* carrier_ptr = spot_info[c].pik_ptr;
+        if(!carrier_ptr) continue;
+        if(!spot_info[c].pik_ptr->can_move_in_midair) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a list of hazards to which all carrier Pikmin are invulnerable.
  */
 vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
@@ -710,20 +726,29 @@ parent_info_struct::parent_info_struct(mob* m) :
  *   Mob this path info struct belongs to.
  * target:
  *   Its target destination.
+ * is_airborne:
+ *   Is the mob/are its carriers airborne?
  */
 path_info_struct::path_info_struct(
     mob* m,
     const point &target,
-    const vector<hazard*> invulnerabilities
+    const vector<hazard*> invulnerabilities,
+    const bool is_airborne
 ) :
     m(m),
     target_point(target),
     cur_path_stop_nr(0),
     go_straight(false),
     is_blocked(false),
-    invulnerabilities(invulnerabilities) {
+    invulnerabilities(invulnerabilities),
+    is_airborne(is_airborne) {
     
-    path = get_path(m->pos, target, invulnerabilities, &go_straight, NULL);
+    path =
+        get_path(
+            m->pos, target,
+            invulnerabilities, is_airborne,
+            &go_straight, NULL
+        );
 }
 
 
@@ -742,7 +767,7 @@ bool path_info_struct::check_blockage() {
         return
             !can_traverse_path_link(
                 cur_stop->get_link(next_stop), false,
-                invulnerabilities
+                invulnerabilities, is_airborne
             );
     }
     return false;
