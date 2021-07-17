@@ -726,14 +726,14 @@ parent_info_struct::parent_info_struct(mob* m) :
  *   Mob this path info struct belongs to.
  * target:
  *   Its target destination.
- * is_airborne:
- *   Is the mob/are its carriers airborne?
+ * taker_flags:
+ *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
  */
 path_info_struct::path_info_struct(
     mob* m,
     const point &target,
     const vector<hazard*> invulnerabilities,
-    const bool is_airborne
+    const unsigned char taker_flags
 ) :
     m(m),
     target_point(target),
@@ -741,12 +741,12 @@ path_info_struct::path_info_struct(
     go_straight(false),
     is_blocked(false),
     invulnerabilities(invulnerabilities),
-    is_airborne(is_airborne) {
+    taker_flags(taker_flags) {
     
     path =
         get_path(
             m->pos, target,
-            invulnerabilities, is_airborne,
+            invulnerabilities, taker_flags,
             &go_straight, NULL
         );
 }
@@ -767,7 +767,7 @@ bool path_info_struct::check_blockage() {
         return
             !can_traverse_path_link(
                 cur_stop->get_link(next_stop), false,
-                invulnerabilities, is_airborne
+                invulnerabilities, taker_flags
             );
     }
     return false;

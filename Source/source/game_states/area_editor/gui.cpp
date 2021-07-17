@@ -1986,7 +1986,7 @@ void area_editor::process_gui_panel_path_link() {
     link_type_names.push_back("No limit");
     link_type_names.push_back("Script use only");
     link_type_names.push_back("Light load only");
-    link_type_names.push_back("Fliers only");
+    link_type_names.push_back("Airborne only");
     
     int type_i = l_ptr->type;;
     if(ImGui::Combo("Type", &type_i, link_type_names)) {

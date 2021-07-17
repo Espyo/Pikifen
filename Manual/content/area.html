@@ -462,6 +462,18 @@
     <h3 id="vertex-transform">Vertex transformation</h3>
     
     <p>In the area editor's options (accessible in the menu bar), you can enable selection transformation. This allows you to select several vertexes and transform them all together. This means you can move them all together with the transformation widget's center handle, or you can scale the entire selection, or you can rotate them. When doing this, be careful with the edges connected to these sectors, or you may move them in a way that's not allowed.
+    
+    <h3 id="advanced-pathing">Advanced pathing</h3>
+
+    <p>Objects will always take the shortest available path to their destination. That said, there are some rules that may stop a path stop or path link from being chosen. You can use this to limit certain paths to certain Pikmin types, or until certain conditions are met, or even just for special uses. For normal objects, the rules relate to the object itself, but for an object that's being carried, the rules check every Pikmin that is carrying that object. This way, for instance, a Red Pikmin that's helping to carry a carcass won't take the water path just because the other carriers are Blue Pikmin.</p>
+    <ol>
+      <li>If a path link is blocked by an obstacle, it can't be used until the obstacle is destroyed.</li>
+      <li>Objects won't take a path stop if that stop is on a sector with a hazard that they are vulnerable to. If the object or its carriers can fly, and the hazard is floor-only, then this rule is ignored since the object can naturally fly over the hazard without a care. Objects can take this path again if the sector loses that hazard (e.g. a destroyed clog drains the sector's water).</li>
+      <li>Path links of the "custom" type can only be used by objects if their script tells them to. This means Pikmin won't use this for carrying, for returning to piles, etc.</li>
+      <li>Path links of the "light load" type can only be used by objects that are not carrying anything, or by objects that only have a weight of 1. An object that's simply holding another won't count for this, like a leader holding a Pikmin, a Pikmin holding a tool, or an enemy with Pikmin latched onto it.</li>
+      <li>Path links of the "airborne" type can only be used by objects that can fly.</li>
+    </ol>
+    <p>It's also worth keeping in mind that flying objects that follow a path will still go from one stop to the next in a linear fashion, but they will also go for the spot that's 100 units above the next path stop. This means, for instance, that Winged Pikmin carrying a corpse will aim for the spot 100 units above the path stop closest to the Onion, and then will need to descend to 0 height in order to deliver to the Onion. If you separate your path stops from the destination objects, this descent will happen sooner, but don't separate them so much that your pathing becomes unreliable!</p>
 
     <h2 id="precautions">Precautions</h2>
     

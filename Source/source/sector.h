@@ -65,8 +65,17 @@ enum PATH_LINK_TYPES {
     PATH_LINK_TYPE_SCRIPT_ONLY,
     //Only for mobs carrying nothing, or a 1-weight mob.
     PATH_LINK_TYPE_LIGHT_LOAD_ONLY,
-    //Only for Pikmin that can fly.
-    PATH_LINK_TYPE_FLIERS_ONLY,
+    //Only for objects that can fly.
+    PATH_LINK_TYPE_AIRBORNE_ONLY,
+};
+
+enum PATH_TAKER_FLAGS {
+    //The mob was told to use this path by a script.
+    PATH_TAKER_FLAG_SCRIPT_USE = 1,
+    //The mob has light load.
+    PATH_TAKER_FLAG_LIGHT_LOAD = 2,
+    //The mob can fly.
+    PATH_TAKER_FLAG_AIRBORNE = 4,
 };
 
 
@@ -502,7 +511,7 @@ struct path_manager {
 
 bool can_traverse_path_link(
     path_link* link_ptr, const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities, const bool is_airborne
+    const vector<hazard*> &invulnerabilities, const unsigned char taker_flags
 );
 void depth_first_search(
     vector<path_stop*> &nodes,
@@ -511,7 +520,7 @@ void depth_first_search(
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
     const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities, const bool is_airborne,
+    const vector<hazard*> &invulnerabilities, const unsigned char taker_flags,
     float* total_dist
 );
 void get_cce(
@@ -524,7 +533,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 vector<path_stop*> get_path(
     const point &start, const point &end,
     const vector<hazard*> invulnerabilities,
-    const bool is_airborne,
+    const unsigned char taker_flags,
     bool* go_straight, float* get_dist
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);

@@ -3,29 +3,7 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Winged Pikmin
-        Carrying
-            Pathing
-                Links should have these properties:
-                    One-way or normal, as usual
-                    Free or restricted
-                        If restricted, it specifies an allow-list of Pikmin type tags (swimmer, flying, etc.)
-                        When an object is being carried, it can only pick this link if all Pikmin envolved are allowed
-                    An optional name
-                        If it exists, it can be used by scripts and whatnot to identify sub-paths. Like if you want an iron ball to follow a specific path, you'd write the name of the path in the script, and all links with that name would make up the path
-                Other things to think about:
-                    Paths that large-object (>1 weight) carriers can't take
-                    Path links that use warps (technically count as 0 distance)
-                Possible approach: (thanks LazyBoii)
-                    A link is not allowed if the Pikmin involved cannot resist the hazards on the start/end stop's sectors
-                        If it's a floor-only hazard, and there are flying Pikmin, then they can resist
-                    A link can be one of four types
-                        Normal
-                        Custom-use only (only useable via scripting, and not by leaders)
-                        Light load only (carried objects weighing more than 1 cannot pass here)
-                        Winged Pikmin only
-            Winged Pikmin should use up standard carrying spots, for simplicity and readibility's sake
-            They shouldn't be able to carry objects that are underwater
-            Carried objects should take flight too
+        Make the graphics and such
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -51,7 +29,11 @@ Next tasks (roughly sorted most important first)
         A way for status effects to add to the time left, instead of resetting it or leaving it as is
             Spicy spray should reset the time if it is re-applied
         Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
-    Allow mobs to follow paths
+    More pathing improvements
+        Make it so mobs carrying light load can use bouncers
+        Allow mobs to follow paths
+        Color the different types of link differently in the editor
+        Note as a known problem that Pikmin can start taking a stop but have nowhere to go because the links have limitations. Ideally, these limitations would move to the spot instead, but that makes things more complicated, and would introduce some performance issues, forcing a mob to check all stops for rules AND closest distance.
     Editors
         Add a way to delete areas from within the area editor, probably in the File menu
         When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio

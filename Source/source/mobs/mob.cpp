@@ -1305,17 +1305,21 @@ bool mob::follow_path(
         }
     }
     
-    bool is_airborne = false;
+    unsigned char taker_flags = 0;
     if(carry_info) {
+        //Check if this carriable is considered light load.
+        if(type->weight == 1) taker_flags |= PATH_TAKER_FLAG_LIGHT_LOAD;
         //The object will only be airborne if all its carriers can fly.
-        is_airborne = carry_info->can_fly();
+        if(carry_info->can_fly()) taker_flags |= PATH_TAKER_FLAG_AIRBORNE;
     } else {
+        //Simple mobs are empty-handed, so that's considered light load.
+        taker_flags |= PATH_TAKER_FLAG_LIGHT_LOAD;
         //Check if the object can fly directly.
-        is_airborne = can_move_in_midair;
+        if(can_move_in_midair) taker_flags |= PATH_TAKER_FLAG_AIRBORNE;
     }
     
     path_info =
-        new path_info_struct(this, target, invulnerabilities, is_airborne);
+        new path_info_struct(this, target, invulnerabilities, taker_flags);
     path_info->final_target_distance = final_target_distance;
     
     if(
@@ -1355,7 +1359,7 @@ bool mob::follow_path(
             path_info->path[path_info->cur_path_stop_nr];
         float next_stop_z = z;
         if(
-            path_info->is_airborne &&
+            (path_info->taker_flags & PATH_TAKER_FLAG_AIRBORNE) &&
             next_stop->sector_ptr
         ) {
             next_stop_z =
@@ -2507,7 +2511,10 @@ void mob::tick_brain(const float delta_t) {
                             path_info->path[path_info->cur_path_stop_nr];
                         float next_stop_z = z;
                         if(
-                            path_info->is_airborne &&
+                            (
+                                path_info->taker_flags &
+                                PATH_TAKER_FLAG_AIRBORNE
+                            ) &&
                             next_stop->sector_ptr
                         ) {
                             next_stop_z =

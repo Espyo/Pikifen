@@ -44,7 +44,7 @@
           <li>Because they are flying in the air when following a leader, they can travel over bodies of water. That said, leaders that are underwater can't grab or throw them.</li>
         </ul>
       </li>
-      <li>If a path stop is on top of a sector with hazards, objects will now be unable to traverse it if they are vulnerable to the hazards. In the case of a carried object, this applies to the carrier Pikmin. If there is another path, they will take it, otherwise they will stay stuck in front of that path stop. If the hazard is only on the floor, and the object or carrier Pikmin can fly, then they will still take that path.</li>
+      <li>Pikmin will now only take paths that they can survive. e.g. a carcass with 1 Red Pikmin and 9 Blue Pikmin carrying it will take a path that doesn't go through water, but a carcass carried by 10 Blue Pikmin might take that water path.</li>
       <li>Objects now move with acceleration. This should make them a bit smoother when moving.</li>
       <li>
         Revamped the cursor.
@@ -77,6 +77,13 @@
           <li>Added a property for Pikmin types, <code>can_fly</code>, that makes a Pikmin fly like a Winged Pikmin, as explained above.</li>
           <li>These Pikmin can only move vertically if the state they are in allows it (e.g. they can't fly if they're being knocked back).</li>
           <li>Technically, if a leader is on a floor with a hazard (liquid or otherwise), they will be unable to grab Pikmin that are outside it and are vulnerable to the hazard. If they grab and bring those Pikmin to said floor, the Pikmin will suffer the effects.</li>
+        </ul>
+      </li>
+      <li>
+        Revamped paths.
+        <ul>
+          <li>If a path stop is on top of a sector with hazards, objects will now be unable to traverse it if they are vulnerable to the hazards. In the case of a carried object, this applies to the carrier Pikmin. If there is another path, they will take it, otherwise they will stay stuck in front of that path stop. If the hazard is only on the floor, and the object or carrier Pikmin can fly, then they will still take that path.</li>
+          <li>Path links now have a type. "Normal" works like normal, "custom only" can only be used by objects that need that path for scripting, "light load only" can only be taken by objects carrying a weight of 1 or nothing, and "airborne only" can only be taken by flying objects.</li>
         </ul>
       </li>
       <li>

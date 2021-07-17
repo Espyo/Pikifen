@@ -2475,24 +2475,51 @@ void vertex::remove_edge(edge* e_ptr) {
  *   List of hazards that whoever wants to traverse is invulnerable to.
  *   The link is not possible to traverse if the end stop's sector
  *   has any hazard that won't be resisted.
- * is_airborne:
- *   Is this mob going to take the path airborne?
+ * taker_flags:
+ *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
  */
 bool can_traverse_path_link(
     path_link* link_ptr, const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities, const bool is_airborne
+    const vector<hazard*> &invulnerabilities, const unsigned char taker_flags
 ) {
+    //Check if there's an obstacle in the way.
     if(!ignore_obstacles && link_ptr->blocked_by_obstacle) {
         return false;
     }
     
+    //Check if the link has limitations based on link type.
+    switch(link_ptr->type) {
+    case PATH_LINK_TYPE_NORMAL: {
+        break;
+    } case PATH_LINK_TYPE_SCRIPT_ONLY: {
+        if((taker_flags & PATH_TAKER_FLAG_SCRIPT_USE) == 0) {
+            return false;
+        }
+        break;
+    } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
+        if((taker_flags & PATH_TAKER_FLAG_LIGHT_LOAD) == 0) {
+            return false;
+        }
+        break;
+    } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
+        if((taker_flags & PATH_TAKER_FLAG_AIRBORNE) == 0) {
+            return false;
+        }
+        break;
+    }
+    }
+    
+    //Check if the link's end path stop is hazardous, by checking its sector.
     if(
         !ignore_obstacles &&
         !link_ptr->end_ptr->sector_ptr->hazards.empty()
     ) {
         sector* end_sector = link_ptr->end_ptr->sector_ptr;
         
-        if(!end_sector->hazard_floor || !is_airborne) {
+        if(
+            !end_sector->hazard_floor ||
+            (taker_flags & PATH_TAKER_FLAG_AIRBORNE) == 0
+        ) {
             for(size_t sh = 0; sh < end_sector->hazards.size(); ++sh) {
                 bool invulnerable = false;
                 for(size_t ih = 0; ih < invulnerabilities.size(); ++ih) {
@@ -2559,15 +2586,15 @@ void depth_first_search(
  *   unable to be crossed.
  * invulnerabilities:
  *   List of hazards that whoever wants to traverse is invulnerable to.
- * is_airborne:
- *   Is this mob going to take the path airborne?
+ * taker_flags:
+ *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
  * total_dist:
  *   If not NULL, place the total path distance here.
  */
 vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
     const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities, const bool is_airborne,
+    const vector<hazard*> &invulnerabilities, const unsigned char taker_flags,
     float* total_dist
 ) {
     //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
@@ -2642,7 +2669,7 @@ vector<path_stop*> dijkstra(
             if(
                 !can_traverse_path_link(
                     l_ptr, ignore_obstacles,
-                    invulnerabilities, is_airborne
+                    invulnerabilities, taker_flags
                 )
             ) {
                 continue;
@@ -2666,7 +2693,7 @@ vector<path_stop*> dijkstra(
         return
             dijkstra(
                 start_node, end_node,
-                true, vector<hazard*>(), is_airborne,
+                true, vector<hazard*>(), taker_flags,
                 total_dist
             );
     } else {
@@ -2752,8 +2779,8 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  *   End coordinates.
  * invulnerabilities:
  *   List of hazards that whoever wants to traverse is invulnerable to.
- * is_airborne:
- *   Is this mob going to take the path airborne?
+ * taker_flags:
+ *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
  * go_straight:
  *   This is set according to whether it's better
  *   to go straight to the end point.
@@ -2763,7 +2790,7 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 vector<path_stop*> get_path(
     const point &start, const point &end,
     const vector<hazard*> invulnerabilities,
-    const bool is_airborne,
+    const unsigned char taker_flags,
     bool* go_straight, float* total_dist
 ) {
 
@@ -2830,7 +2857,7 @@ vector<path_stop*> get_path(
     full_path =
         dijkstra(
             closest_to_start, closest_to_end,
-            false, invulnerabilities, is_airborne, total_dist
+            false, invulnerabilities, taker_flags, total_dist
         );
         
     if(total_dist && !full_path.empty()) {
