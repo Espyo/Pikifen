@@ -2,23 +2,28 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Winged Pikmin
-        Make the graphics and such
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    White Spectralids fly much higher than before now
+    When Pikmin finish delivering something to the Onion, they all face east
     
     --- v0.21.0 ---
-    Allow other mobs to move freely in the air via scripting
     Bulbmin
     Purple flowers and buds
-    Add pellet, Pellet Posy, and Onion support for Rock Pikmin and Winged Pikmin
+    Add missing Rock Pikmin and Winged Pikmin graphics
+        Pellets
+        Pellet Posies
+        Candypop Buds
+        Onions
+        Onion icons
+    Add the new Pikmin to the Pikmin order list
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     Add some obstacles relevant to the Rock Pikmin and Winged Pikmin
-    Add the new Pikmin to the Pikmin order list
     Purple Pikmin
         Give them a proper pound attack
-        Maybe stun?
+            Just the impact damage, no stun or earthquake
     Ultra-bitter spray improvements
         Petrified enemies shaking before getting out
             Maybe three status effects? One for the start, one for petrification, one for shaking
@@ -29,6 +34,7 @@ Next tasks (roughly sorted most important first)
         A way for status effects to add to the time left, instead of resetting it or leaving it as is
             Spicy spray should reset the time if it is re-applied
         Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
+    Allow other mobs to move freely in the air via scripting
     More pathing improvements
         Make it so mobs carrying light load can use bouncers
         Allow mobs to follow paths
@@ -43,11 +49,11 @@ Next tasks (roughly sorted most important first)
     In the manual
         Rename "text file" to "data file"
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
+        Add tips about each Pikmin type's strength and weaknesses
     Refactor
         In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
-    Minor
         "flail_to_whistle" is really "flail_to_leader"
     
     --- v0.22.0 ---
@@ -473,10 +479,9 @@ Misc things (so I don't forget)
         When there are multiple Onions or ships that something can be delivered to, choose the closest
         Smoother turns when carrying
         If a Red Pikmin is carrying a 1 pellet, and a Yellow joined, shouldn't the destination be Red, and not randomized?
-        Make it so you can line the Pikmin in a non-circular fashion -- Neo suggested a parameter to stretch the circle vertically or horizontally
         When deciding a new random Onion to go to, pick cyclically -- first go with Red (if applicable), then if the player does it again, go Yellow (if applicable), etc. (GitHub issue #8)
+        Make it so you can line the Pikmin in a non-circular fashion -- Neo suggested a parameter to stretch the circle vertically or horizontally
         Stops could probably have a radius, to reduce the number of stops needed in a room, for instance
-        Pikmin with small items should take specific paths, usually involving shortcuts (thanks Nutty171)
     More powerful scripting
         Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
         A way to run actions on other mobs
@@ -566,6 +571,7 @@ Misc things (so I don't forget)
     Game config parameters:
         Nectars: Work like in the engine, or like in the classics?
     Should I auto-fade textures on stepping height?
+    A redo button in the area editor
     Story mode
         Some treasures should weigh as much as the current army, after a boss battle
     Final menu tree
