@@ -719,6 +719,10 @@ void mob::tick_rotation_physics(
 void mob::tick_vertical_movement_physics(
     const float delta_t, const float pre_move_ground_z
 ) {
+    bool apply_gravity = true;
+    float old_speed_z = speed_z;
+    speed_z = 0.0f;
+    
     if(!standing_on_mob) {
         //If the current ground is one step (or less) below
         //the previous ground, just instantly go down the step.
@@ -730,36 +734,32 @@ void mob::tick_vertical_movement_physics(
         }
     }
     
-    float move_speed_z = speed_z;
-    
     //Vertical chasing.
     if(
         chase_info.state == CHASE_STATE_CHASING &&
         can_move_in_midair &&
         (chase_info.flags & CHASE_FLAG_TELEPORT) == 0
     ) {
+        apply_gravity = false;
+        
         float target_z = chase_info.offset_z;
         if(chase_info.orig_z) target_z += *chase_info.orig_z;
         float diff_z = fabs(target_z - z);
-        float chase_speed_z =
+        
+        speed_z =
             std::min((float) (diff_z / delta_t), chase_info.cur_speed);
         if(target_z < z) {
-            chase_speed_z = -chase_speed_z;
+            speed_z = -speed_z;
         }
-        move_speed_z += chase_speed_z;
     }
     
     //Gravity.
-    if(
-        !can_move_in_midair &&
-        !holder.m
-    ) {
-        speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
-        move_speed_z += speed_z;
+    if(apply_gravity && !can_move_in_midair && !holder.m) {
+        speed_z = old_speed_z + delta_t* gravity_mult * GRAVITY_ADDER;
     }
     
     //Apply the change in Z.
-    z += move_speed_z * delta_t;
+    z += speed_z * delta_t;
     
     //Landing.
     hazard* new_on_hazard = NULL;

@@ -647,7 +647,7 @@ void gameplay_state::handle_button(
         *   Move   --->/|  *
         *              V > *
         *******************/
-            
+        
         switch(button) {
         case BUTTON_RIGHT: {
             leader_movement.right = pos;
@@ -663,9 +663,9 @@ void gameplay_state::handle_button(
             break;
         }
         }
-
+        
         break;
-            
+        
     } case BUTTON_CURSOR_RIGHT:
     case BUTTON_CURSOR_UP:
     case BUTTON_CURSOR_LEFT:
@@ -675,7 +675,7 @@ void gameplay_state::handle_button(
         *   Cursor   ( = )> *
         *             '-'   *
         ********************/
-            
+        
         switch(button) {
         case BUTTON_CURSOR_RIGHT: {
             cursor_movement.right = pos;
@@ -691,9 +691,9 @@ void gameplay_state::handle_button(
             break;
         }
         }
-            
+        
         break;
-            
+        
     } case BUTTON_GROUP_RIGHT:
     case BUTTON_GROUP_UP:
     case BUTTON_GROUP_LEFT:
@@ -703,7 +703,7 @@ void gameplay_state::handle_button(
         *   Group   ****O *
         *            ***  *
         ******************/
-            
+        
         switch(button) {
         case BUTTON_GROUP_RIGHT: {
             swarm_movement.right = pos;
@@ -719,18 +719,18 @@ void gameplay_state::handle_button(
             break;
         }
         }
-            
+        
         break;
-            
+        
     } case BUTTON_GROUP_CURSOR: {
-    
-        swarm_cursor = is_down;
-            
-        break;
-            
-    } 
-    }
 
+        swarm_cursor = is_down;
+        
+        break;
+        
+    }
+    }
+    
 }
 
 

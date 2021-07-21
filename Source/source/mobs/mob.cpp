@@ -2487,7 +2487,7 @@ void mob::tick_brain(const float delta_t) {
             //time to make it think about how to get there.
             
             //Let the mob think about facing the actual target.
-            if(!type->can_free_move) {
+            if(!type->can_free_move && horiz_dist > 0.0f) {
                 face(get_angle(pos, final_target_pos), NULL);
             }
             
