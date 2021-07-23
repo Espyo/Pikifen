@@ -21,6 +21,30 @@
      id="title1827">Pikmin spritesheets</title>
   <defs
      id="defs4">
+    <inkscape:path-effect
+       effect="taper_stroke"
+       id="path-effect5121"
+       is_visible="true"
+       lpeversion="1"
+       stroke_width="1"
+       attach_start="1.3303878"
+       end_offset="1.3303878"
+       smoothing="0.5"
+       jointype="extrapolated"
+       miter_limit="100" />
+    <inkscape:path-effect
+       effect="envelope"
+       id="path-effect4856"
+       is_visible="true"
+       lpeversion="1"
+       yy="true"
+       xx="true"
+       bendpath1="m 7,2095.3615 h 5"
+       bendpath2="m 17.99995,2094.3618 v 33.9997"
+       bendpath3="m 14.00005,2128.3615 h 3.9999"
+       bendpath4="m 7,2095.3615 7.00005,33"
+       bendpath1-nodetypes="cc"
+       bendpath4-nodetypes="cc" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient2347">
@@ -2838,6 +2862,1677 @@
        fx="187"
        fy="1041.4456"
        r="5" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2443-3">
+      <path
+         style="display:inline;fill:#495c73;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 77,1548.3614 1,-2 -2,-11 h -4 l -8,7 1,2 9,5 z"
+         id="use2445-6"
+         sodipodi:nodetypes="cccccccc"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Rock_Pikmin.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2400-0">
+      <path
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#28374d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+         d="m 91,1551.3614 -2,1 -11,-3 -1,-1 9,-11 z"
+         id="use2402-6"
+         sodipodi:nodetypes="cccccc"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Rock_Pikmin.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath2431-2">
+      <path
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#cad3da;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+         d="m 77,1562.3614 4,-1 -15,-2 z"
+         id="use2433-6"
+         sodipodi:nodetypes="cccc"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Rock_Pikmin.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </clipPath>
+    <linearGradient
+       id="Bulbmin_body">
+      <stop
+         id="stop5873"
+         offset="0"
+         style="stop-color:#d0c058;stop-opacity:1;" />
+      <stop
+         style="stop-color:#c8b030;stop-opacity:1;"
+         offset="0.51803291"
+         id="stop5875" />
+      <stop
+         style="stop-color:#c00808;stop-opacity:1;"
+         offset="0.60655749"
+         id="stop5877" />
+      <stop
+         id="stop5879"
+         offset="1"
+         style="stop-color:#c00808;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="Bulbmin_eye_ball">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop5659" />
+      <stop
+         style="stop-color:#e0e0e0;stop-opacity:1;"
+         offset="1"
+         id="stop5661" />
+    </linearGradient>
+    <linearGradient
+       id="Bulbmin_eye_shaft">
+      <stop
+         style="stop-color:#d0c058;stop-opacity:1;"
+         offset="0"
+         id="stop5627" />
+      <stop
+         id="stop5667"
+         offset="0.82539886"
+         style="stop-color:#b89030;stop-opacity:1;" />
+      <stop
+         id="stop5633"
+         offset="0.88889098"
+         style="stop-color:#c0a860;stop-opacity:1;" />
+      <stop
+         style="stop-color:#b89030;stop-opacity:1;"
+         offset="0.95238364"
+         id="stop5635" />
+      <stop
+         id="stop5647"
+         offset="1"
+         style="stop-color:#c0a860;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="Bulbmin_eye_pupil">
+      <stop
+         id="stop4917"
+         offset="0"
+         style="stop-color:#bb91ff;stop-opacity:1;" />
+      <stop
+         style="stop-color:#180040;stop-opacity:1;"
+         offset="0.16328162"
+         id="stop4919" />
+      <stop
+         id="stop4921"
+         offset="1"
+         style="stop-color:#180040;stop-opacity:1;" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient1432"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient1440"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient1448"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1023675e-5,3.333332,-2.2105317,7.3757643e-6,2182.817,776.3555)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient1462"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1023675e-5,3.333332,-2.2105317,7.3757643e-6,2182.817,776.3555)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient5881"
+       cx="156.01361"
+       cy="1001.3138"
+       fx="156.01361"
+       fy="1001.3138"
+       r="76.250023"
+       gradientTransform="matrix(1.7704909,-8.4637985e-7,7.2041709e-7,2.8852416,-106.22143,-751.6706)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient1599"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient1607"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient1615"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1023675e-5,3.333332,-2.2105317,7.3757643e-6,2182.817,776.3555)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient1629"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1023675e-5,3.333332,-2.2105317,7.3757643e-6,2182.817,776.3555)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient5881-2"
+       cx="156.01361"
+       cy="1001.3138"
+       fx="156.01361"
+       fy="1001.3138"
+       r="76.250023"
+       gradientTransform="matrix(0.51338456,-2.3008362e-7,2.0889744e-7,0.78433677,-45.299115,1281.4021)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient3676"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109"
+       gradientTransform="matrix(0.29863668,0,0,0.29863815,2032.0086,-301.00579)" />
+    <linearGradient
+       inkscape:collect="always"
+       id="Bulbmin_spot">
+      <stop
+         style="stop-color:#e5e5e5;stop-opacity:1"
+         offset="0"
+         id="stop5830" />
+      <stop
+         style="stop-color:#e5e5e5;stop-opacity:1"
+         offset="1"
+         id="stop5832" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient3674"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.9967243e-6,0.90614764,-0.60092066,2.0050602e-6,585.75554,1977.3307)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="linearGradient7098"
+       gradientUnits="userSpaceOnUse"
+       x1="153.00006"
+       y1="1076.1127"
+       x2="150.00006"
+       y2="1076.1127"
+       gradientTransform="matrix(0.2718444,0,0,0.2718444,-7.631051,1766.2828)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient1766"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient1774"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient1782"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1023675e-5,3.333332,-2.2105317,7.3757643e-6,2182.817,776.3555)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient1796"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1023675e-5,3.333332,-2.2105317,7.3757643e-6,2182.817,776.3555)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4399"
+       x1="236.375"
+       y1="953.61218"
+       x2="244"
+       y2="956.54968"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="pad"
+       gradientTransform="matrix(0.2698791,0,0,0.2698791,-8.9902948,1799.387)" />
+    <linearGradient
+       id="Bulbmin_feet">
+      <stop
+         style="stop-color:#c8b030;stop-opacity:1;"
+         offset="0"
+         id="stop4395" />
+      <stop
+         id="stop4403"
+         offset="0.5"
+         style="stop-color:#e0e080;stop-opacity:1;" />
+      <stop
+         id="stop4401"
+         offset="1"
+         style="stop-color:#c8b030;stop-opacity:1;" />
+    </linearGradient>
+    <radialGradient
+       r="76.250023"
+       fy="1001.3138"
+       fx="156.01361"
+       cy="1001.3138"
+       cx="156.01361"
+       gradientTransform="matrix(1.8885241,-8.4638018e-7,7.684451e-7,2.8852427,6.3637672,-635.92168)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient6145"
+       xlink:href="#Bulbmin_body"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient5145"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109"
+       gradientTransform="matrix(0.2964778,0,0,0.29647915,-2101.7818,-334.02364)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient5141"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.9750595e-6,-0.89959699,-0.5965763,-1.9905654e-6,616.7148,2156.0644)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="linearGradient6654"
+       x1="307.06628"
+       y1="1136.4562"
+       x2="304.48083"
+       y2="1136.4799"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.2698791,0,0,0.2698791,-13.943271,1768.2835)" />
+    <radialGradient
+       r="13.199109"
+       fy="907.86218"
+       fx="90"
+       cy="907.86218"
+       cx="90"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5232"
+       xlink:href="#Bulbmin_eye_ball"
+       inkscape:collect="always"
+       gradientTransform="matrix(0.2964778,0,0,0.29647915,2033.955,-333.8887)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient5861-84-5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.9750595e-6,0.89959699,-0.5965763,1.9905654e-6,616.57985,1979.6725)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="linearGradient6652"
+       x1="306.53033"
+       y1="1083.3401"
+       x2="304"
+       y2="1083.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.2698791,0,0,0.2698791,-13.943271,1768.2835)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient3360"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.50967319,-2.2842032e-7,2.0738728e-7,0.77866671,-9.9716368,1287.1779)"
+       cx="156.01361"
+       cy="1001.3138"
+       fx="156.01361"
+       fy="1001.3138"
+       r="76.250023" />
+    <linearGradient
+       gradientTransform="matrix(0.25217369,0,0,0.25217369,27.886988,1815.9835)"
+       y2="956.54968"
+       x2="244"
+       y1="953.61218"
+       x1="236.375"
+       spreadMethod="pad"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4651"
+       xlink:href="#Bulbmin_feet"
+       inkscape:collect="always" />
+    <linearGradient
+       gradientTransform="matrix(0.15682395,0.19747866,-0.19747866,0.15682395,240.32446,1861.4592)"
+       y2="956.54968"
+       x2="244"
+       y1="953.61218"
+       x1="236.375"
+       spreadMethod="pad"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4421-2"
+       xlink:href="#Bulbmin_feet"
+       inkscape:collect="always" />
+    <radialGradient
+       r="76.250023"
+       fy="1001.3138"
+       fx="156.01361"
+       cy="1001.3138"
+       cx="156.01361"
+       gradientTransform="matrix(0.47623609,-2.1343481e-7,1.9378164e-7,0.7275823,65.161308,1392.6059)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient6145-3"
+       xlink:href="#Bulbmin_body"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient6258-9"
+       gradientUnits="userSpaceOnUse"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109"
+       gradientTransform="matrix(0.27702737,0,0,0.27702863,2041.0465,-349.59053)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient6262-3"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7798808e-6,0.84057896,-0.55743794,1.8599744e-6,613.73573,1990.325)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="linearGradient6658"
+       x1="460.6629"
+       y1="1106.3678"
+       x2="458"
+       y2="1106.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.25217369,0,0,0.25217369,-14.298299,1786.9835)" />
+    <radialGradient
+       r="13.199109"
+       fy="907.86218"
+       fx="90"
+       cy="907.86218"
+       cx="90"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient4354-7"
+       xlink:href="#Bulbmin_eye_ball"
+       inkscape:collect="always"
+       gradientTransform="matrix(0.27702737,0,0,0.27702863,-2102.6375,-349.64411)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient6262-8-8"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7798808e-6,-0.84057896,-0.55743794,-1.8599744e-6,613.78932,2153.3589)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="linearGradient6656"
+       x1="460.87827"
+       y1="1152.9701"
+       x2="458.38669"
+       y2="1152.9755"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.25217369,0,0,0.25217369,-14.298299,1786.9835)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient3552"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.47623609,-2.1343481e-7,1.9378164e-7,0.7275823,27.978728,1340.2147)"
+       cx="156.01361"
+       cy="1001.3138"
+       fx="156.01361"
+       fy="1001.3138"
+       r="76.250023" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient5881-2-0"
+       cx="156.01361"
+       cy="1001.3138"
+       fx="156.01361"
+       fy="1001.3138"
+       r="76.250023"
+       gradientTransform="matrix(0.51338456,-2.3008362e-7,2.0889744e-7,0.78433677,-45.299115,1281.4021)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient3627"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3008364e-7,0.9180325,-0.78433677,6.1003798e-8,843.9594,1966.6532)"
+       cx="136.93224"
+       cy="1018.6434"
+       fx="136.93224"
+       fy="1018.6434"
+       r="76.250023" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient3635"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.53333335,0,0,0.33333339,2014.628,-335.95412)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient3639"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.46666187,0,0,0.53333334,1995.2066,-804.67036)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient3656"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.4666715,0,0,0.53333334,1873.9828,-1324.6451)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3673">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path5563"
+         id="use3675"
+         transform="rotate(-90)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient3691"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.4666715,0,0,0.53333334,1863.6395,-1358.2162)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3695">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path5563-2"
+         id="use3697"
+         transform="rotate(-112.0232)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient3701"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.53333335,0,0,0.33333339,1959.9488,146.27942)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3707">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path5563-2"
+         id="use3709"
+         transform="rotate(-75.522488)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient3730"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.4666715,0,0,0.53333334,1863.6395,-1358.2162)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3736">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path5563-2-0"
+         id="use3738"
+         transform="rotate(-112.0232,15.380533,14.942395)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3744">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path5563-2-0"
+         id="use3746"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3752">
+      <path
+         id="use3754"
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#radialGradient4122);fill-opacity:1;stroke:none;stroke-width:0.999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+         d="m 30,2058.3615 c 2.5651,0.093 2.999999,1.5739 2.999999,4 0,6 -13,15 -18.3589,15 -3,0 -7.5665001,-1.1263 -10.1571001,-3.4562 -2.4753,-2.2262 -4.4839999521656,-6.5438 -4.4839999521656,-9.5438 0,-5 6.9999999521656,-8 11.0000000521656,-8 4,0 13.769501,1.8105 19.000001,2 z"
+         sodipodi:nodetypes="sssssss" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3764">
+      <path
+         id="use3766"
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#radialGradient4126);fill-opacity:1;stroke:none;stroke-width:0.999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+         d="m 2072.3616,-30 c -0.093,-2.5651 -1.5739,-2.999999 -4,-2.999999 -6,0 -15,13 -15,18.3589 0,3 1.1263,7.5665001 3.4562,10.1571001 2.2262,2.4753 6.5438,4.4839999521656 9.5438,4.4839999521656 5,0 8,-6.9999999521656 8,-11.0000000521656 0,-4 -1.8105,-13.769501 -2,-19.000001 z"
+         sodipodi:nodetypes="sssssss" />
+    </clipPath>
+    <linearGradient
+       id="Bulbmin_nostril">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop5573" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop5575" />
+    </linearGradient>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3752-9">
+      <path
+         id="use3754-1"
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#radialGradient4130);fill-opacity:1;stroke:none;stroke-width:0.999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+         d="m 30,2058.3615 c 2.5651,0.093 2.999999,1.5739 2.999999,4 0,6 -13,15 -18.3589,15 -3,0 -7.5665001,-1.1263 -10.1571001,-3.4562 -2.4753,-2.2262 -4.4839999521656,-6.5438 -4.4839999521656,-9.5438 0,-5 6.9999999521656,-8 11.0000000521656,-8 4,0 13.769501,1.8105 19.000001,2 z"
+         sodipodi:nodetypes="sssssss" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient3885"
+       gradientUnits="userSpaceOnUse"
+       x1="11.484375"
+       y1="2107.0022"
+       x2="13"
+       y2="2108.3616" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient3916"
+       gradientUnits="userSpaceOnUse"
+       x1="12"
+       y1="2108.3616"
+       x2="10.953125"
+       y2="2109.9866" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient3926"
+       gradientUnits="userSpaceOnUse"
+       x1="11.484375"
+       y1="2107.0022"
+       x2="13"
+       y2="2108.3616"
+       gradientTransform="translate(4.353516,-1.35345)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient3970"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3008364e-7,0.9180325,-0.78433677,6.1003798e-8,878.9594,1966.653)"
+       cx="136.93224"
+       cy="1018.6434"
+       fx="136.93224"
+       fy="1018.6434"
+       r="76.250023" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient4122"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3008364e-7,-0.9180325,-0.78433677,-6.1003798e-8,843.9594,2192.0698)"
+       cx="136.93224"
+       cy="1018.6434"
+       fx="136.93224"
+       fy="1018.6434"
+       r="76.250023" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient4126"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.9180325,-2.3008364e-7,6.1003798e-8,0.78433677,1938.6533,-843.9594)"
+       cx="136.93224"
+       cy="1018.6434"
+       fx="136.93224"
+       fy="1018.6434"
+       r="76.250023" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient4130"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3008364e-7,-0.9180325,-0.78433677,-6.1003798e-8,843.9594,2192.0698)"
+       cx="136.93224"
+       cy="1018.6434"
+       fx="136.93224"
+       fy="1018.6434"
+       r="76.250023" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient3881"
+       x1="13"
+       y1="2105.3616"
+       x2="15.195395"
+       y2="2103.7725"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(102.99999,-1.47125e-4)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient3928"
+       gradientUnits="userSpaceOnUse"
+       x1="13"
+       y1="2105.3616"
+       x2="15.195395"
+       y2="2103.7725"
+       gradientTransform="translate(107.35351,-1.3535971)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient3924"
+       gradientUnits="userSpaceOnUse"
+       x1="12"
+       y1="2108.3616"
+       x2="10.953125"
+       y2="2109.9866"
+       gradientTransform="translate(107.35351,-1.3535971)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient3627-6"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.3008364e-7,0.9180325,-0.78433677,6.1003798e-8,946.95939,1966.653)"
+       cx="136.93224"
+       cy="1018.6434"
+       fx="136.93224"
+       fy="1018.6434"
+       r="76.250023" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3752-1">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3568"
+         id="use3754-2"
+         transform="matrix(1,0,0,-1,-102.99999,4158.7228)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3764-9">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path3568"
+         id="use3766-3"
+         transform="rotate(-90,37.500109,65.499889)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient3778"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.27702737,0,0,0.27702863,2060.078,-384.68163)"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient3776"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.7798808e-6,0.84057896,-0.55743794,1.8599744e-6,648.82684,2009.3566)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="linearGradient3774"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.25217369,0,0,-0.25217369,20.73923,2375.732)"
+       x1="460.87827"
+       y1="1152.9701"
+       x2="458.38669"
+       y2="1152.9755" />
+    <radialGradient
+       r="2.25"
+       fy="1399.6122"
+       fx="129.75"
+       cy="1399.6122"
+       cx="129.75"
+       gradientTransform="matrix(0.38507148,0,0,1.0091104,-2202.5619,-2977.3966)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5596-8-7"
+       xlink:href="#Bulbmin_nostril"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient4258"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.4666715,0,0,0.53333334,1976.9828,-1324.6453)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient4260"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.53333335,0,0,0.33333339,2014.628,-335.95412)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4262"
+       gradientUnits="userSpaceOnUse"
+       x1="11.484375"
+       y1="2107.0022"
+       x2="13"
+       y2="2108.3616"
+       gradientTransform="translate(102.99999,-1.47125e-4)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4264"
+       gradientUnits="userSpaceOnUse"
+       x1="12"
+       y1="2108.3616"
+       x2="10.953125"
+       y2="2109.9866"
+       gradientTransform="translate(102.99999,-1.47125e-4)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4266"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(107.35351,-1.3535971)"
+       x1="11.484375"
+       y1="2107.0022"
+       x2="13"
+       y2="2108.3616" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient4316"
+       x1="122"
+       y1="2058.3616"
+       x2="96"
+       y2="2058.3616"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-103.00008,28.99986)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient4340"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.4666715,0,0,0.53333334,1929.6048,-1347.1441)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="linearGradient4342"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.1359222,-0.23542416,0.23542416,-0.1359222,-217.13805,2296.771)"
+       x1="153.00006"
+       y1="1076.1127"
+       x2="150.00006"
+       y2="1076.1127" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient4344"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.78474538,-0.45307642,0.30046207,0.52041155,-331.0585,1677.3592)"
+       cx="90"
+       cy="938.83209"
+       fx="90"
+       fy="938.83209"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient4346"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.53333335,0,0,0.33333339,2014.628,-335.95412)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient4348"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.29863668,0,0,0.29863815,-1070.7068,1571.8563)"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient4350"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.51338456,-2.3008362e-7,2.0889744e-7,0.78433677,-45.299115,1341.4021)"
+       cx="156.01361"
+       cy="1001.3138"
+       fx="156.01361"
+       fy="1001.3138"
+       r="76.250023" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient4385"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.51338456,-2.3008362e-7,-2.0889744e-7,0.78433677,148.29911,1341.4021)"
+       cx="156.01361"
+       cy="1001.3138"
+       fx="156.01361"
+       fy="1001.3138"
+       r="76.250023" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient4457"
+       x1="88"
+       y1="2119.8616"
+       x2="91"
+       y2="2119.8616"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-10)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4507"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.25217369,0,0,0.25217369,159.20593,1879.1813)"
+       x1="236.375"
+       y1="953.61218"
+       x2="244"
+       y2="956.54968"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4515"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0675598,0.24295523,0.24295523,-0.0675598,-150.63271,2130.2382)"
+       x1="236.375"
+       y1="953.61218"
+       x2="244"
+       y2="956.54968"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4526"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.25217369,0,0,0.25217369,159.20593,1879.1813)"
+       x1="238.60561"
+       y1="952.24902"
+       x2="244"
+       y2="956.54968"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4528"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0675598,0.24295523,0.24295523,-0.0675598,-150.63271,2130.2382)"
+       x1="236.375"
+       y1="953.61218"
+       x2="244"
+       y2="956.54968"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient4589"
+       x1="61"
+       y1="2096.3616"
+       x2="67"
+       y2="2096.3616"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-31.000008,30)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient4593"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.53333335,0,0,0.53333342,2074.6276,-590.52658)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient4599"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.53333335,0,0,0.26666671,1803.3734,694.87967)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4615">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path4581"
+         id="use4617"
+         transform="matrix(0.49996991,-0.86602471,-0.86604277,-0.50000121,41.480354,-11.846737)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4668"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.15682395,0.19747866,0.19747866,0.15682395,-53.23154,1924.657)"
+       x1="192.77748"
+       y1="807.49823"
+       x2="198.98833"
+       y2="812.43042"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4809"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0675598,0.24295523,0.24295523,-0.0675598,-150.63271,2130.2382)"
+       x1="87.994743"
+       y1="891.88367"
+       x2="90.119545"
+       y2="899.52478"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4815"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0675598,0.24295523,0.24295523,-0.0675598,-150.63271,2130.2382)"
+       x1="80.68882"
+       y1="894.75134"
+       x2="83.848251"
+       y2="901.71887"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4830"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0675598,0.24295523,0.24295523,-0.0675598,-150.63271,2130.2382)"
+       x1="80.68882"
+       y1="894.75134"
+       x2="83.848251"
+       y2="901.71887"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4832"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0675598,0.24295523,0.24295523,-0.0675598,-150.63271,2130.2382)"
+       x1="87.994743"
+       y1="891.88367"
+       x2="90.119545"
+       y2="899.52478"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4834"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.15682395,0.19747866,0.19747866,0.15682395,-53.23154,1924.657)"
+       x1="192.77748"
+       y1="807.49823"
+       x2="198.98833"
+       y2="812.43042"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient4864"
+       x1="-3"
+       y1="2111.3616"
+       x2="-5.7174724e-20"
+       y2="2111.3616"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(102.99999,-46.000075)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient4924"
+       gradientUnits="userSpaceOnUse"
+       x1="30"
+       y1="2096.3616"
+       x2="33"
+       y2="2096.3616"
+       gradientTransform="translate(-35,30)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient4945"
+       gradientUnits="userSpaceOnUse"
+       x1="30"
+       y1="2096.3616"
+       x2="33"
+       y2="2096.3616"
+       gradientTransform="translate(17.00009,30)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient4969"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-1,0,0,1,155.99991,30)"
+       x1="30"
+       y1="2096.3616"
+       x2="33"
+       y2="2096.3616" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4979"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0675598,0.24295523,0.24295523,-0.0675598,-150.63271,2130.2382)"
+       x1="80.68882"
+       y1="894.75134"
+       x2="83.848251"
+       y2="901.71887"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4981"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0675598,0.24295523,0.24295523,-0.0675598,-150.63271,2130.2382)"
+       x1="87.994743"
+       y1="891.88367"
+       x2="90.119545"
+       y2="899.52478"
+       spreadMethod="pad" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="linearGradient4983"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.15682395,0.19747866,0.19747866,0.15682395,-53.23154,1924.657)"
+       x1="192.77748"
+       y1="807.49823"
+       x2="198.98833"
+       y2="812.43042"
+       spreadMethod="pad" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient4348-4"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.29863668,0,0,0.29863815,-1142.2052,1531.7314)"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="linearGradient5044"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.1359222,-0.23542416,-0.23542416,-0.1359222,296.94534,2298.0943)"
+       x1="156.36826"
+       y1="1073.6927"
+       x2="154.93544"
+       y2="1076.0994" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5051">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#ellipse4322-7"
+         inkscape:transform-center-x="-5.9274902"
+         inkscape:transform-center-y="-4.0253698"
+         id="use5053"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_feet"
+       id="radialGradient5069"
+       cx="138"
+       cy="2120.3616"
+       fx="138"
+       fy="2120.3616"
+       r="1"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       r="2.25"
+       fy="1399.6122"
+       fx="129.75"
+       cy="1399.6122"
+       cx="129.75"
+       gradientTransform="matrix(0.38507148,0,0,1.0091104,463.24858,-3283.3098)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5596-8-7-4"
+       xlink:href="#Bulbmin_nostril"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient5123"
+       cx="-161.875"
+       cy="2127.5044"
+       fx="-161.875"
+       fy="2127.5044"
+       r="12.5"
+       gradientTransform="matrix(-3.4400012,3.7620073e-6,-2.735021e-6,-2.4800196,-678.84437,7402.6144)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient5127"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-1,0,0,1,221,0)"
+       x1="88"
+       y1="2119.8616"
+       x2="91"
+       y2="2119.8616" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient5170"
+       cx="111.86028"
+       cy="2117.7314"
+       fx="111.86028"
+       fy="2117.7314"
+       r="4.7266021"
+       gradientTransform="matrix(0.7942955,-0.01870015,0.01829505,0.77708797,-15.770903,474.16515)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       r="76.250023"
+       fy="1001.3138"
+       fx="149.95598"
+       cy="1001.3138"
+       cx="149.95598"
+       gradientTransform="matrix(0.51752484,-2.3008362e-7,2.1058213e-7,0.78433677,-23.664552,1311.4017)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3851-0"
+       xlink:href="#Bulbmin_body"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient5705"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.29863668,0,0,0.29863815,2061.1389,-303.76142)"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="radialGradient5852"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.2128439,0,0,1.2128864,-50.895482,426.74277)"
+       cx="68.587265"
+       cy="1369.6487"
+       fx="68.587265"
+       fy="1369.6487"
+       r="3.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient1467"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0985574,0,0,1.0985628,1226.2943,-1161.4809)"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient1475"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0985574,0,0,1.0985628,1226.2943,-1161.4809)"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="radialGradient1483"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(4.4615372,0,0,4.4616937,-143.15109,-4785.9546)"
+       cx="68.587265"
+       cy="1369.6487"
+       fx="68.587265"
+       fy="1369.6487"
+       r="3.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="radialGradient1493"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(4.4615372,0,0,4.4616937,-143.15109,-4785.9546)"
+       cx="68.587265"
+       cy="1369.6487"
+       fx="68.587265"
+       fy="1369.6487"
+       r="3.25" />
+    <radialGradient
+       r="2.25"
+       fy="1399.6122"
+       fx="129.75"
+       cy="1399.6122"
+       cx="129.75"
+       gradientTransform="matrix(0.43826898,0,0,1.1485187,-750.19272,-3878.7473)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5596-8-7-4-0"
+       xlink:href="#Bulbmin_nostril"
+       inkscape:collect="always" />
+    <radialGradient
+       r="2.25"
+       fy="1399.6122"
+       fx="129.75"
+       cy="1399.6122"
+       cx="129.75"
+       gradientTransform="matrix(0.43826898,0,0,1.1485187,732.54425,676.77406)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient6379-3"
+       xlink:href="#Bulbmin_nostril"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient2925"
+       x1="8"
+       y1="2155.3616"
+       x2="20"
+       y2="2155.3616"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-8.000111,-59.000216)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient2950"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.4666715,0,0,0.53333334,2059.097,-600.43679)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="radialGradient2954"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.01464393,0.9060293,-1.0855698,0.01754586,1093.138,1990.7363)"
+       cx="90.524879"
+       cy="946.47406"
+       fx="90.524879"
+       fy="946.47406"
+       r="14.25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient2956"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.53333335,0,0,0.33333339,2044.6276,-389.95411)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient2958"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.29863668,0,0,0.29863815,2062.0083,-351.00579)"
+       cx="90"
+       cy="907.86218"
+       fx="90"
+       fy="907.86218"
+       r="13.199109" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient2960"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.51338456,-2.3008362e-7,2.0889744e-7,0.78433677,4.7008853,1311.4018)"
+       cx="162.25439"
+       cy="1000.7939"
+       fx="162.25439"
+       fy="1000.7939"
+       r="76.250023" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient3000"
+       x1="55"
+       y1="2171.3616"
+       x2="64"
+       y2="2171.3616"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-7.6000005e-6,-75.000216)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient3006"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.4666715,0,0,0.13333334,1771.3029,927.89203)"
+       x1="89.5"
+       y1="1007.8622"
+       x2="104.5"
+       y2="1007.8622" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_spot"
+       id="linearGradient3061"
+       x1="335.66281"
+       y1="2067.1914"
+       x2="337.30905"
+       y2="2067.1914"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-1)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_nostril"
+       id="radialGradient3065"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.17013703,0,0,0.4458576,678.09203,-2335.1571)"
+       cx="129.75"
+       cy="1399.6122"
+       fx="129.75"
+       fy="1399.6122"
+       r="2.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_nostril"
+       id="radialGradient3069"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.13438275,0,0,0.44538237,-824.15352,-2966.5399)"
+       cx="129.75"
+       cy="1399.6122"
+       fx="129.75"
+       fy="1399.6122"
+       r="2.25" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient3082"
+       cx="341.86908"
+       cy="2067.5632"
+       fx="341.86908"
+       fy="2067.5632"
+       r="7.0350962"
+       gradientTransform="matrix(1.7329674,-2.233617,1.8931356,1.4688023,-4164.9942,-205.63918)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="linearGradient3092"
+       x1="338"
+       y1="2060.3616"
+       x2="338"
+       y2="2057.3616"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-1)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient3137"
+       cx="338.5"
+       cy="2057.8616"
+       fx="338.5"
+       fy="2057.8616"
+       r="1.5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-1)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_ball"
+       id="radialGradient3141"
+       gradientUnits="userSpaceOnUse"
+       cx="338.5"
+       cy="2057.8616"
+       fx="338.5"
+       fy="2057.8616"
+       r="1.5"
+       gradientTransform="translate(5.265625,-0.51569727)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="radialGradient3151"
+       cx="339.07306"
+       cy="2058.0889"
+       fx="339.07306"
+       fy="2058.0889"
+       r="0.81249988"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.4711543,-5.2132679e-6,5.2277098e-6,3.4807702,-837.99571,-5106.788)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_pupil"
+       id="radialGradient3155"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.8870657,-5.2132679e-6,4.3480469e-6,3.4807702,-634.42946,-5106.5067)"
+       cx="339.07306"
+       cy="2058.0889"
+       fx="339.07306"
+       fy="2058.0889"
+       r="0.81249988" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="linearGradient3165"
+       x1="331"
+       y1="2055.3616"
+       x2="335"
+       y2="2056.3616"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_eye_shaft"
+       id="linearGradient3167"
+       gradientUnits="userSpaceOnUse"
+       x1="338"
+       y1="2060.3616"
+       x2="338"
+       y2="2057.3616"
+       gradientTransform="translate(0,-1)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Icon_mask"
+       id="linearGradient3178"
+       x1="340"
+       y1="2052.3616"
+       x2="340"
+       y2="2068.3616"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.0521655e-6)" />
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask3194">
+      <rect
+         style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:url(#linearGradient3198);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="rect3196"
+         width="16"
+         height="16"
+         x="330"
+         y="2052.3616" />
+    </mask>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Icon_mask"
+       id="linearGradient3198"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.0521656e-6)"
+       x1="340"
+       y1="2052.3616"
+       x2="340"
+       y2="2068.3616" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_body"
+       id="radialGradient3200"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.1682846,-2.1047983,1.6689487,1.7192884,-3850.2639,-767.64701)"
+       cx="341.93054"
+       cy="2067.8223"
+       fx="341.93054"
+       fy="2067.8223"
+       r="7.0350962" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2846,9 +4541,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="359.10796"
-     inkscape:cy="728.34774"
+     inkscape:zoom="1"
+     inkscape:cx="210.24148"
+     inkscape:cy="947.17918"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -2873,7 +4568,7 @@
      inkscape:measure-start="94,312.5"
      inkscape:measure-end="89,312.5"
      inkscape:guide-bbox="true"
-     inkscape:snap-global="false"
+     inkscape:snap-global="true"
      inkscape:document-rotation="0"
      inkscape:snap-midpoints="true"
      inkscape:snap-text-baseline="true"
@@ -4151,6 +5846,138 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Winged_Pikmin_icon.png"
        inkscape:export-xdpi="384"
        inkscape:export-ydpi="384" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999991;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect2312-8"
+       width="34"
+       height="27.999998"
+       x="-1.0999486e-06"
+       y="2052.3613"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+       x="-23.320312"
+       y="2070.7756"
+       id="text2994"><tspan
+         sodipodi:role="line"
+         id="tspan2992"
+         x="-23.320312"
+         y="2070.7756"
+         style="text-align:end;text-anchor:end">Shrink the Bulborb sprite's length to 0.8x (just the outer shape)</tspan></text>
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999991;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect3358"
+       width="34"
+       height="27.999998"
+       x="35"
+       y="2052.3613"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999988;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect3550"
+       width="32"
+       height="28.999928"
+       x="70"
+       y="2052.3616"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect3867"
+       width="34"
+       height="59.000072"
+       x="103"
+       y="2052.3616"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999986;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect4299"
+       width="12"
+       height="12"
+       x="-6.8187714e-05"
+       y="2081.3613"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect4318"
+       width="33"
+       height="28.000172"
+       x="-5.6843415e-14"
+       y="2112.3613"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999992;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect4352"
+       width="33"
+       height="27.999998"
+       x="70"
+       y="2112.3613"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999992;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect4530"
+       width="35"
+       height="28.000172"
+       x="34"
+       y="2112.3613"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999992;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect4947"
+       width="35"
+       height="28.000172"
+       x="-139"
+       y="2112.3613"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="scale(-1,1)" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect2888"
+       width="36"
+       height="28.000172"
+       x="13"
+       y="2082.3616"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.999991;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+       id="rect2927"
+       width="34"
+       height="27.999998"
+       x="50"
+       y="2082.3616"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect3022"
+       width="16"
+       height="16"
+       x="330"
+       y="2052.3616"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin_icon.png"
+       inkscape:export-xdpi="384"
+       inkscape:export-ydpi="384" />
   </g>
   <g
      inkscape:label="Sprites"
@@ -4158,6 +5985,107 @@
      id="layer1"
      style="display:inline;opacity:1"
      transform="translate(1.0521656e-6,-1052.3615)">
+    <path
+       style="display:inline;fill:url(#linearGradient2925);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 22.999889,2094.3613 -8.99989,0.9998 c 0,0 -0.99999,0 -1,1 0,1 1,1 1,1 l 8.99989,1 z"
+       id="path4835-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cczccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g5057"
+       id="use5059"
+       transform="matrix(1,0,0,-1,0,4252.3424)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g5057"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <ellipse
+         style="display:inline;fill:url(#radialGradient4348-4);fill-opacity:1;stroke:none;stroke-width:1.09856"
+         id="ellipse4322-7"
+         transform="matrix(-0.8660254,-0.5,-0.5,0.8660254,0,0)"
+         inkscape:export-filename="/home/andre/Desktop/that_ass_can_fart.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         cx="-1115.328"
+         cy="1802.8535"
+         rx="3.9417381"
+         ry="3.9417574"
+         inkscape:transform-center-x="-5.9274902"
+         inkscape:transform-center-y="-4.0253698" />
+      <path
+         style="display:inline;fill:url(#linearGradient5044);fill-opacity:1;stroke:none;stroke-width:1"
+         d="m 65,2117.3615 c 0,0 -0.993704,-1.4564 -1,-2 -0.0063,-0.5437 0.955618,-1.9988 0.955618,-1.9988 0,0 0.644464,1.302 0.652552,1.9815 0.0079,0.6796 -0.60817,2.0173 -0.60817,2.0173 z"
+         id="path4328-6"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="czczc"
+         inkscape:export-filename="/home/andre/Desktop/that_ass_can_fart.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         inkscape:transform-center-x="-7.694317"
+         inkscape:transform-center-y="-7.0859076"
+         clip-path="url(#clipPath5051)" />
+    </g>
+    <path
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:url(#linearGradient4969);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="M 108.99991,2124.3616 105,2125.3618 c 0,0 -0.99999,0 -0.99999,0.9996 0,0.9999 0.99999,1.0002 0.99999,1.0002 l 3.99991,0.9998 c 0,0 2,1e-4 2,-1.9999 0,-2 -2,-1.9999 -2,-1.9999 z"
+       id="path4967"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cczcczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#linearGradient4864);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       d="m 116.81185,2082.5669 0.18814,-6.2055 c -0.16024,-8.7645 -2.84694,-16.7697 -7.30204,-23.4777 0,0 -0.52804,-0.8491 -1.37725,-0.3211 -0.84922,0.528 -0.32116,1.3772 -0.32116,1.3772 4.74092,6.7892 5.22696,14.9925 5.00045,22.4216 l -0.18804,6.2055 z"
+       id="path3159-8"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="ccczcccc" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g4820"
+       id="use4822"
+       transform="matrix(1,0,0,-1,0,4252.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g4820"
+       transform="translate(-38,30)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient4830);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 74,2085.3615 2,-2 v 2 l -2,5 -1,1 -1,-1 z"
+         id="path4811"
+         sodipodi:nodetypes="ccccccc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient4832);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 74,2090.3615 v 2 l -1,2 -1,-2 v -2 z"
+         id="path4746"
+         sodipodi:nodetypes="cccccc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient4834);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 80,2089.3615 h -7 l -1,1 1,1 h 7 z"
+         id="path4639" />
+    </g>
     <path
        style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:#c96695;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
        d="m 25.00011,1879.3615 7.99991,-1 1.99998,1 -0.99999,-2 0.99999,-1 h -0.99999 l 0.99999,-2 -1.99998,2 -9.99989,1 z"
@@ -14037,7 +15965,7 @@
          inkscape:export-xdpi="949.96997"
          inkscape:export-ydpi="949.96997" />
       <ellipse
-         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#299bb3;fill-opacity:1;stroke:none;stroke-width:0.999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;opacity:1;stop-opacity:1"
+         style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:#299bb3;fill-opacity:1;stroke:none;stroke-width:0.999995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
          id="ellipse3347"
          cx="341.61871"
          cy="1758.6597"
@@ -14075,11 +16003,1116 @@
          inkscape:export-ydpi="96"
          r="1.75" />
       <path
-         style="fill:#b54377;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1;filter:url(#filter3333);opacity:1"
-         d="m 343,1763.3615 h -10 l 0,2 c 3.28446,0.4277 6.59838,0.5975 10,0 z"
+         style="opacity:1;fill:#b54377;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter3333)"
+         d="m 343,1763.3615 h -10 v 2 c 3.28446,0.4277 6.59838,0.5975 10,0 z"
          id="path3275"
          sodipodi:nodetypes="ccccc"
          clip-path="url(#clipPath3339)" />
+    </g>
+    <path
+       style="display:inline;opacity:1;fill:url(#linearGradient4399);fill-opacity:1;stroke:none;stroke-width:0.999998"
+       d="m 53.7566,2059.1085 2.02409,-4.7229 2.02409,-2.0241 v 3.3735 l -2.02409,4.0481 z"
+       id="path4391"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient3360);fill-opacity:1;stroke:none;stroke-width:0.999998"
+       d="m 35,2066.4627 c 0,-5.6225 3.51661,-11.0751 9.17589,-13.4939 0.61096,-0.2612 1.41204,-0.5475 2.15903,-0.4049 7.77252,1.4843 16.62454,6.6121 18.02793,8.2313 0,0 3.23854,4.3144 3.23854,6.747 0,2.4326 -2.91468,4.9928 -2.91468,4.9928 0,0 -10.57927,7.8265 -18.35179,7.8265 -0.75566,0 -1.54851,-0.1439 -2.15903,-0.4049 C 38.51661,2077.5379 35,2072.0852 35,2066.4627 Z"
+       id="path5563-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zcsczcscz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       transform="matrix(0,-1,-1,0,0,0)"
+       id="use5713-8"
+       style="display:inline;opacity:1;fill:url(#radialGradient5145);fill-opacity:1;stroke:none;stroke-width:1.09856"
+       cx="-2075.0991"
+       cy="-64.861465"
+       rx="3.9132426"
+       ry="3.9132605" />
+    <path
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:connector-curvature="0"
+       id="use5715-1"
+       d="m 57.574689,2072.5127 c -0.65016,0.344 -0.55528,1.2674 -0.67469,2.0242 l 3.37349,0.2921 c 1.21464,2.5681 2.02408,4.0482 4.45298,4.1831 0.67471,-2.294 0.67472,-5.5325 2e-5,-7.8265 -1.37067,0.073 -2.74025,0.6678 -3.91325,1.7542 z"
+       style="display:inline;opacity:1;fill:url(#radialGradient5141);fill-opacity:1;stroke:none;stroke-width:0.999998" />
+    <path
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       sodipodi:nodetypes="czczc"
+       inkscape:connector-curvature="0"
+       id="use5717-2"
+       d="m 68.369829,2076.7856 c 0,0 -0.13494,-1.2144 -0.13494,-1.7542 0,-0.5398 0.13494,-1.7542 0.13494,-1.7542 0,0 0.53976,1.0795 0.53976,1.7542 0,0.6747 -0.53976,1.7542 -0.53976,1.7542 z"
+       style="display:inline;opacity:1;fill:url(#linearGradient6654);fill-opacity:1;stroke:none;stroke-width:0.999998" />
+    <ellipse
+       style="display:inline;opacity:1;fill:url(#radialGradient5232);fill-opacity:1;stroke:none;stroke-width:1.09856"
+       id="path5621-0"
+       transform="rotate(90)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="2060.6384"
+       cy="-64.726517"
+       rx="3.9132426"
+       ry="3.9132605" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient5861-84-5);fill-opacity:1;stroke:none;stroke-width:0.999998"
+       d="m 59.328909,2064.4164 c -1.7029,0.4447 -2.13514,-0.1271 -2.42891,-0.8097 l 3.23854,-2.6987 c 1.21466,-2.5681 2.02408,-4.0483 4.45299,-4.1832 0.6747,2.294 0.67472,5.5325 2e-5,7.8265 -1.37066,-0.073 -2.74025,-0.6678 -3.91325,-1.7542 -0.72078,0.267 -1.07952,1.0795 -1.34939,1.6193 z"
+       id="path5617-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#linearGradient6652);fill-opacity:1;stroke:none;stroke-width:0.999998"
+       d="m 68.234899,2058.8839 c 0,0 -0.13493,1.2145 -0.13493,1.7542 0,0.5397 0.13493,1.7541 0.13493,1.7541 0,0 0.53976,-1.0794 0.53976,-1.7541 0,-0.6748 -0.53976,-1.7542 -0.53976,-1.7542 z"
+       id="path5623-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#linearGradient4651);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 86.51738,2058.6659 1.8913,-4.4131 1.8913,-1.8913 v 3.1522 l -1.8913,3.7826 z"
+       id="path4391-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#linearGradient4421-2);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 88.15651,2059.2963 1.10924,-1.6907 2.10631,-0.5745 2.65727,0.3049 -2.46848,1.9603 z"
+       id="path4391-4-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient3552);fill-opacity:1;stroke:none;stroke-width:0.999995"
+       d="m 70,2068.3746 c 0,-5.2537 3.79025,-10.3486 9.07825,-12.6087 0.57088,-0.244 1.30961,-0.5096 2.01739,-0.3783 6.30435,1.1695 15.02955,6.1783 16.34086,7.6913 0,0 3.02608,4.0313 3.02608,6.3044 0,2.273 -2.72347,4.6652 -2.72347,4.6652 0,0 -9.38086,7.313 -16.64347,7.313 -0.70608,0 -1.44691,-0.1344 -2.01739,-0.3782 C 73.79025,2078.7231 70,2073.6282 70,2068.3746 Z"
+       id="path5563-2-0"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zcsczcscz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;opacity:1;fill:url(#radialGradient6258-9);fill-opacity:1;stroke:none;stroke-width:1.09856"
+       id="path5621-0-6"
+       transform="rotate(90)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="2065.979"
+       cy="-98.086708"
+       rx="3.6565144"
+       ry="3.6565313" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient6262-3);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 91.362473,2067.1137 c 0.25606,-0.399 0.35555,-1.2008 1.55465,-1.2609 l 0.8826,0.3783 c 1.13497,-2.3997 1.8913,-3.7826 4.16086,-3.9087 0.63043,2.1435 0.63044,5.1696 1e-5,7.3131 -1.28074,-0.069 -2.56047,-0.624 -3.65652,-1.6392 -0.75652,-0.2522 -2.10059,-0.5043 -2.9416,-0.8826 z"
+       id="path5617-0-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#linearGradient6658);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 101.36493,2064.3398 c 0,0 -0.12608,1.1348 -0.12608,1.6391 0,0.5044 0.12608,1.6391 0.12608,1.6391 0,0 0.50435,-1.0087 0.50435,-1.6391 0,-0.6304 -0.50435,-1.6391 -0.50435,-1.6391 z"
+       id="path5623-5-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;opacity:1;fill:url(#radialGradient4354-7);fill-opacity:1;stroke:none;stroke-width:1.09856"
+       id="path5621-0-0-2"
+       transform="matrix(0,-1,-1,0,0,0)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="-2077.7051"
+       cy="-98.140282"
+       rx="3.6565144"
+       ry="3.6565313" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient6262-8-8);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 93.900603,2073.7963 c -1.33932,-0.8614 -1.85241,-0.2675 -2.53813,0 l 2.36476,3.6565 c 1.13497,2.3997 1.8913,3.7826 4.16086,3.9087 0.63043,-2.1434 0.63044,-5.1695 1e-5,-7.313 -1.28074,0.069 -2.56047,0.624 -3.65652,1.6391 -0.67349,-0.2494 -0.33098,-1.2608 -0.33098,-1.8913 z"
+       id="path5617-0-6-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#linearGradient6656);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 101.41853,2079.3441 c 0,0 -0.12609,-1.1347 -0.12609,-1.6391 0,-0.5043 0.12609,-1.6391 0.12609,-1.6391 0,0 0.50435,1.0087 0.50435,1.6391 0,0.6305 -0.50435,1.6391 -0.50435,1.6391 z"
+       id="path5623-5-1-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient5881-2);fill-opacity:1;stroke:none;stroke-width:0.999996"
+       d="m 0,2066.3616 c 0,-5.6635 3.5422198,-11.1558 9.2427098,-13.5923 0.6154098,-0.263 1.4135902,-0.4078 2.1747502,-0.4078 6.74175,0 18.48542,7.8836 18.48542,7.8836 0,0 3.26214,3.6661 3.26214,6.1165 0,2.4503 -3.26214,6.1165 -3.26214,6.1165 0,0 -11.63493,7.8834 -18.48542,7.8834 -0.76116,0 -1.5597704,-0.1449 -2.1747502,-0.4077 C 3.5422198,2077.5174 0,2072.025 0,2066.3616 Z"
+       id="path5563"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zcsczcscz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;opacity:1;fill:url(#radialGradient3676);fill-opacity:1;stroke:none;stroke-width:1.09856"
+       id="path5621"
+       transform="rotate(90,-5.260828e-7,-5.260828e-7)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="2058.8857"
+       cy="-29.883503"
+       rx="3.9417381"
+       ry="3.9417574" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient3635);fill-opacity:1;stroke:none;stroke-width:0.730296"
+       id="use5604"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90)"
+       cx="2066.3616"
+       cy="-2.0383001e-17"
+       rx="4"
+       ry="2.5"
+       clip-path="url(#clipPath3673)" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient3674);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 24.446599,2062.6917 c -1.7153,0.4479 -2.15069,-0.128 -2.4466,-0.8156 l 3.26213,-2.7184 c 1.2235,-2.5868 2.03883,-4.0777 4.48543,-4.2136 0.67961,2.3107 0.67962,5.5728 10e-6,7.8835 -1.38065,-0.074 -2.76021,-0.6727 -3.94175,-1.767 -0.72603,0.2689 -1.08738,1.0874 -1.35922,1.6311 z"
+       id="path5617"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#linearGradient7098);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 33.417449,2057.1189 c 0,0 -0.13592,1.2233 -0.13592,1.7669 0,0.5437 0.13592,1.767 0.13592,1.767 0,0 0.54369,-1.0873 0.54369,-1.767 0,-0.6796 -0.54369,-1.7669 -0.54369,-1.7669 z"
+       id="path5623"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path5621"
+       id="use5713"
+       transform="matrix(1,0,0,-1,2.378344e-7,4132.7231)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;opacity:1;stroke-width:3.67858" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path5617"
+       id="use5715"
+       transform="matrix(1,0,0,-1,2.378344e-7,4132.7231)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;opacity:1;stroke-width:3.67858" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path5623"
+       id="use5717"
+       transform="matrix(1,0,0,-1,-1.9762166e-5,4132.6551)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       style="display:inline;opacity:1;stroke-width:3.67858" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient3656);fill-opacity:1;stroke:none;stroke-width:1.9619"
+       id="circle3654"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(112.0232)"
+       cx="1919.2499"
+       cy="-787.11853"
+       rx="3.500036"
+       ry="3.9999998" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#circle3654"
+       id="use3677"
+       transform="matrix(1,0,0,-1,0,4132.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#circle3654"
+       id="use3687"
+       transform="matrix(1,0,0,-1,34.000008,4134.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient3691);fill-opacity:1;stroke:none;stroke-width:1.9619"
+       id="ellipse3689"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(112.0232)"
+       cx="1908.9066"
+       cy="-820.68958"
+       rx="3.500036"
+       ry="3.9999998"
+       clip-path="url(#clipPath3695)" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient3701);fill-opacity:1;stroke:none;stroke-width:0.730296"
+       id="ellipse3699"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(75.522488)"
+       cx="2011.6825"
+       cy="482.23355"
+       rx="4"
+       ry="2.5"
+       clip-path="url(#clipPath3707)" />
+    <circle
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       id="path3719"
+       cx="78"
+       cy="2063.3616"
+       r="4"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient3730);fill-opacity:1;stroke:none;stroke-width:1.9619"
+       id="ellipse3728"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(112.0232,15.380533,14.942395)"
+       cx="1908.9066"
+       cy="-820.68958"
+       rx="3.500036"
+       ry="3.9999998"
+       clip-path="url(#clipPath3736)" />
+    <circle
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       id="circle3740"
+       cx="70"
+       cy="2075.3616"
+       r="4"
+       clip-path="url(#clipPath3744)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient3881);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+       d="m 114.70702,2100.6541 -1.41406,1.4141 2.70703,3.2931 2,1 1.00001,-0.9998 z"
+       id="path3869"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient4262);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+       d="m 115.99999,2105.3613 -3,3 2,1 4.00001,-3.9998 z"
+       id="path3883"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#linearGradient4264);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       d="m 113.99999,2107.3613 -2,2 6,2 z"
+       id="path3887"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient3928);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+       d="m 119.06054,2099.3007 -1.41406,1.4141 2.70703,3.2931 2,1 0.64649,-0.6464 z"
+       id="path3918"
+       sodipodi:nodetypes="cccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient4266);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+       d="m 120.35351,2104.0079 -1.35352,4.1464 2.23035,0.1598 1.76966,-3.9526 z"
+       id="path3920"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#linearGradient3924);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       d="m 119.54197,2106.8481 -1.08395,2.6124 6.30891,-0.4445 z"
+       id="path3922"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#linearGradient4258);fill-opacity:1;stroke:none;stroke-width:1.9619;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       d="m 126.99999,2100.3613 h 4 l -2,5 z"
+       id="path3797"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       id="path3568"
+       style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#radialGradient3627-6);fill-opacity:1;stroke:none;stroke-width:0.999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
+       d="m 132.99999,2100.3613 c 2.5651,-0.093 3,-1.5739 3,-4 0,-6 -13,-15 -18.3589,-15 -3,0 -7.5665,1.1263 -10.1571,3.4562 -2.4753,2.2262 -4.484,6.5438 -4.484,9.5438 0,5 7,8 11,8 4,0 13.7695,-1.8105 19,-2 z"
+       sodipodi:nodetypes="sssssss"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#circle3654"
+       id="use3748"
+       transform="matrix(1,0,0,-1,102.99999,4158.7228)"
+       width="100%"
+       height="100%"
+       clip-path="url(#clipPath3752-1)"
+       style="display:inline"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient4260);fill-opacity:1;stroke:none;stroke-width:0.730296"
+       id="ellipse3756"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90,37.500109,65.499889)"
+       cx="2066.3616"
+       cy="-2.0383001e-17"
+       rx="4"
+       ry="2.5"
+       clip-path="url(#clipPath3764-9)" />
+    <ellipse
+       style="display:inline;fill:url(#radialGradient3778);fill-opacity:1;stroke:none;stroke-width:1.09856"
+       id="ellipse3768"
+       transform="rotate(90)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="2085.0105"
+       cy="-133.17781"
+       rx="3.6565144"
+       ry="3.6565313" />
+    <path
+       style="display:inline;fill:url(#radialGradient3776);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 128.93813,2088.9192 c -1.33932,0.8614 -1.85241,0.2675 -2.53813,0 l 2.36476,-3.6565 c 1.13497,-2.3997 1.8913,-3.7826 4.16086,-3.9087 0.63043,2.1434 0.63044,5.1695 1e-5,7.313 -1.28074,-0.069 -2.56047,-0.624 -3.65652,-1.6391 -0.67349,0.2494 -0.33098,1.2608 -0.33098,1.8913 z"
+       id="path3770"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient3774);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 136.45606,2083.3714 c 0,0 -0.12609,1.1347 -0.12609,1.6391 0,0.5043 0.12609,1.6391 0.12609,1.6391 0,0 0.50435,-1.0087 0.50435,-1.6391 0,-0.6305 -0.50435,-1.6391 -0.50435,-1.6391 z"
+       id="path3772"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5596-8-7);fill-opacity:1;stroke:none;stroke-width:0.999998;marker:none;enable-background:accumulate"
+       id="path5569-6-7"
+       transform="matrix(0.63659075,-0.7712018,-0.96072999,-0.27748492,0,0)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="-2152.5991"
+       cy="-1565.0333"
+       rx="0.86641085"
+       ry="2.2704983" />
+    <circle
+       style="display:inline;opacity:1;fill:url(#linearGradient4316);fill-opacity:1;stroke:none;stroke-width:1.5"
+       id="path5128-23-8"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="5.9999318"
+       cy="2087.3613"
+       r="5.9999318" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient4350);fill-opacity:1;stroke:none;stroke-width:0.999996"
+       d="m 0,2126.3616 c 0,-5.6635 3.54222,-11.1558 9.24271,-13.5923 0.61541,-0.263 1.41359,-0.4078 2.17475,-0.4078 6.74175,0 18.48542,7.8836 18.48542,7.8836 0,0 3.09712,3.666 3.09712,6.1164 0,2.4503 -3.09712,6.1166 -3.09712,6.1166 0,0 -11.63493,7.8834 -18.48542,7.8834 -0.76116,0 -1.55977,-0.1449 -2.17475,-0.4077 C 3.54222,2137.5174 0,2132.025 0,2126.3616 Z"
+       id="path4320"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zcsczcscz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;opacity:1;fill:url(#radialGradient4348);fill-opacity:1;stroke:none;stroke-width:1.09856"
+       id="ellipse4322"
+       transform="rotate(-30)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="-1043.8296"
+       cy="1842.9785"
+       rx="3.9417381"
+       ry="3.9417574"
+       inkscape:transform-center-x="5.9274174"
+       inkscape:transform-center-y="-4.0253433" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient4346);fill-opacity:1;stroke:none;stroke-width:0.730296"
+       id="ellipse4324"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90,-29.999982,29.999983)"
+       cx="2066.3616"
+       cy="-2.0383001e-17"
+       rx="4"
+       ry="2.5"
+       clip-path="url(#clipPath3673)" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient4344);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 23.520765,2120.7865 c 1.245543,1.2615 0.964494,1.9265 0.51697,2.5266 l -3.985268,-1.4659 c -2.851985,0.2338 -4.550807,0.2732 -5.8918,-1.7777 1.66132,-1.7439 4.486376,-3.3749 6.827306,-3.9417 0.626239,1.2326 0.79753,2.7267 0.440608,4.2971 0.59589,0.4943 1.485406,0.398 2.092184,0.3616 z"
+       id="path4326"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:transform-center-x="4.1447144"
+       inkscape:transform-center-y="-2.2859077" />
+    <path
+       style="display:inline;opacity:1;fill:url(#linearGradient4342);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 14.209154,2115.8039 c 0,0 1.127369,-0.4939 1.59814,-0.7657 0.470858,-0.2719 1.462307,-1.0012 1.462307,-1.0012 0,0 -1.213474,0.073 -1.802112,0.4126 -0.588551,0.3398 -1.258335,1.3543 -1.258335,1.3543 z"
+       id="path4328"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:transform-center-x="7.6943165"
+       inkscape:transform-center-y="-7.0859076" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#ellipse4322"
+       id="use4330"
+       transform="matrix(1,0,0,-1,9.9999994e-7,4252.7231)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;opacity:1;stroke-width:3.67858" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path4326"
+       id="use4332"
+       transform="matrix(1,0,0,-1,9.9999994e-7,4252.7231)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;opacity:1;stroke-width:3.67858" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path4328"
+       id="use4334"
+       transform="matrix(1,0,0,-1,-1.9e-5,4252.6551)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       style="display:inline;opacity:1;stroke-width:3.67858" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient4340);fill-opacity:1;stroke:none;stroke-width:1.9619"
+       id="ellipse4336"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(112.0232)"
+       cx="1974.8717"
+       cy="-809.61737"
+       rx="3.500036"
+       ry="3.9999998" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#ellipse4336"
+       id="use4338"
+       transform="matrix(1,0,0,-1,0,4252.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient4385);fill-opacity:1;stroke:none;stroke-width:0.999996"
+       d="m 103,2126.3616 c 0,-5.6635 -3.54222,-11.1558 -9.24271,-13.5923 -0.61541,-0.263 -1.41359,-0.4078 -2.17475,-0.4078 -6.74175,0 -18.48542,7.8836 -18.48542,7.8836 0,0 -3.09712,3.666 -3.09712,6.1164 0,2.4503 3.09712,6.1166 3.09712,6.1166 0,0 11.63493,7.8834 18.48542,7.8834 0.76116,0 1.55977,-0.1449 2.17475,-0.4077 C 99.45778,2137.5174 103,2132.025 103,2126.3616 Z"
+       id="path4354"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zcsczcscz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:none;stroke:#69311b;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 83,2117.3615 c 0,0 -11,4.2624 -11,9 0,4.7376 11,9 11,9"
+       id="path4404"
+       sodipodi:nodetypes="czc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient4457);fill-opacity:1;stroke:none;stroke-width:1.9619;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 78,2119.3615 2,2 1,-3 z"
+       id="path4407"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path4407"
+       id="use4459"
+       transform="matrix(1,0,0,-1,0,4252.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g4520"
+       transform="translate(-7,-2)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="display:inline;fill:url(#linearGradient4526);fill-opacity:1;stroke:none;stroke-width:1"
+         d="m 101,2122.3615 -3,-5 -2,-2 v 3 l 3,4 z"
+         id="path4391-8-4"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccc"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+         inkscape:export-xdpi="95.999702"
+         inkscape:export-ydpi="95.999702" />
+      <path
+         style="display:inline;fill:url(#linearGradient4528);fill-opacity:1;stroke:none;stroke-width:1"
+         d="m 99,2122.3615 -2,1 -1,3 2,-1 3,-3 z"
+         id="path4513"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccc"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+         inkscape:export-xdpi="95.999702"
+         inkscape:export-ydpi="95.999702"
+         inkscape:transform-center-x="3.328842"
+         inkscape:transform-center-y="2.59005" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g4520"
+       id="use4524"
+       transform="matrix(1,0,0,-1,0,4252.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       id="path4581"
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient4589);fill-opacity:1;stroke:none;stroke-width:1.9619;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       d="m 63.999992,2126.3616 c 0,1.6291 -0.248446,3.1932 -0.705216,4.6474 -0.392033,1.2481 -1.621193,1.2948 -2.294776,2.3525 -0.581847,0.9137 -0.575604,2.8662 -1.332259,3.5983 -2.190706,2.1197 -5.045549,3.4018 -8.167749,3.4018 -6.903559,0 -12.5,-6.268 -12.5,-14 0,-7.732 5.596441,-14 12.5,-14 3.068768,0 5.879252,1.2385 8.054695,3.2937 0.91283,0.8623 0.78394,2.5875 1.445313,3.7062 0.567489,0.9599 1.962072,1.2837 2.306349,2.3897 0.449393,1.4437 0.693643,2.9951 0.693643,4.6104 z"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       sodipodi:nodetypes="sssssssssss" />
+    <circle
+       style="display:inline;fill:url(#linearGradient4593);fill-opacity:1;stroke:none;stroke-width:0.730296"
+       id="ellipse4591"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90)"
+       cx="2126.3616"
+       cy="-52.999992"
+       clip-path="none"
+       r="4" />
+    <path
+       id="circle4597"
+       clip-path="none"
+       style="display:inline;fill:url(#linearGradient4599);fill-opacity:1;stroke:none;stroke-width:0.730293"
+       transform="matrix(0.50000121,0.86602471,-0.86604277,0.49996991,-31.000008,30)"
+       d="m 1858.9512,964.09355 c -0.5207,0.8021 -2.0657,1.54946 -3.8435,1.54946 -1.6366,0 -3.1173,-0.60613 -3.7367,-1.30999 2.6595,-0.97443 5.2108,-0.82161 7.5802,-0.23947 z"
+       sodipodi:nodetypes="cscc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:url(#linearGradient4924);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 12,2124.3616 14.999829,1.0002 c 0,0 0.999989,0 0.999989,0.9996 0,0.9999 -0.999989,1.0002 -0.999989,1.0002 L 12,2128.3614 c 0,0 -2,1e-4 -2,-1.9999 0,-2 2,-1.9999 2,-1.9999 z"
+       id="path2448-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cczcczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:url(#linearGradient4945);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="M 64.00009,2124.3616 68,2125.3618 c 0,0 0.99999,0 0.99999,0.9996 0,0.9999 -0.99999,1.0002 -0.99999,1.0002 l -3.99991,0.9998 c 0,0 -2,1e-4 -2,-1.9999 0,-2 2,-1.9999 2,-1.9999 z"
+       id="path4943"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cczcczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g4957"
+       id="use4949"
+       transform="matrix(1,0,0,-1,0,4252.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g4957"
+       transform="matrix(-1,0,0,1,211,30)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient4979);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 74,2085.3615 2,-2 v 2 l -2,5 -1,1 -1,-1 z"
+         id="path4951"
+         sodipodi:nodetypes="ccccccc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient4981);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 74,2090.3615 v 3 l -1,2 -1,-2 v -3 z"
+         id="path4953"
+         sodipodi:nodetypes="cccccc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient4983);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 80,2089.3615 h -7 l -1,1 1,1 h 7 z"
+         id="path4955" />
+    </g>
+    <ellipse
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient5123);fill-opacity:1;stroke:none;stroke-width:1.9619;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       id="ellipse4959"
+       ry="14"
+       rx="12.5"
+       cy="2126.3616"
+       cx="-121.50001"
+       transform="scale(-1,1)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5596-8-7-4);fill-opacity:1;stroke:none;stroke-width:0.999998;marker:none;enable-background:accumulate"
+       id="path5569-6-7-3"
+       transform="matrix(-0.7712018,0.63659075,-0.27748492,-0.96072999,0,0)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="513.21136"
+       cy="-1870.9467"
+       rx="0.86641085"
+       ry="2.2704983" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path5569-6-7-3"
+       id="use5100"
+       transform="matrix(1,0,0,-1,1.2893084e-6,4252.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#69311b;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 131.40161,2122.4456 c 0.15762,-0.7299 0.14916,-1.4854 -0.0636,-2.179 -0.22203,-0.6906 -0.5355,-1.3445 -0.7567,-1.7964 l 0,0 c -0.15681,-0.3212 -0.29601,-0.5874 -0.39737,-0.7759 l 0,0 c -0.0548,-0.1019 -0.099,-0.182 -0.13048,-0.2383 0,0 0,0 0,0 -0.0162,-0.029 -0.0288,-0.051 -0.0378,-0.067 0,0 0,0 0,0 -0.0101,-0.018 -0.0155,-0.027 -0.0155,-0.027 0,0 0.002,0.011 0.004,0.031 0,0 0,0 0,0 0.003,0.018 0.006,0.044 0.0113,0.076 0,0 0,0 0,0 0.01,0.063 0.0235,0.1545 0.0416,0.2682 l 0,0 c 0.0342,0.2149 0.0819,0.5028 0.14424,0.8567 l 0,0 c 0.0925,0.5246 0.2307,1.1731 0.33225,1.8627 0.0838,0.5626 0.0159,1.1546 -0.11109,1.7843 -0.26626,1.2717 -0.92283,2.6339 -0.92283,4.1208 0,1.4869 0.65657,2.8491 0.92283,4.1208 0.12703,0.6297 0.19487,1.2217 0.11109,1.7843 -0.10155,0.6896 -0.23975,1.3381 -0.33225,1.8627 l 0,0 c -0.0623,0.3539 -0.11003,0.6418 -0.14424,0.8567 l 0,0 c -0.0181,0.1136 -0.0321,0.2048 -0.0416,0.2682 l 0,0 0,0 c 7.7e-4,0.034 -0.004,0.06 -0.007,0.078 -0.004,0.016 -0.008,0.028 -0.008,0.029 0,0 0,0 0,0 -1.4e-4,5e-4 -1.2e-4,4e-4 -1.2e-4,4e-4 0,0 -2e-5,1e-4 1.3e-4,-4e-4 0,0 0,0 0,0 4.1e-4,-0 0.005,-0.014 0.0115,-0.028 0.007,-0.016 0.0202,-0.039 0.0418,-0.066 l 0,0 0,0 c 0.0315,-0.056 0.0757,-0.1364 0.1305,-0.2384 l 0,0 c 0.10136,-0.1885 0.24056,-0.4547 0.39737,-0.7759 l 0,0 c 0.2212,-0.4519 0.53467,-1.1058 0.7567,-1.7964 0.21279,-0.6936 0.22125,-1.4491 0.0636,-2.179 -0.2845,-1.3588 -0.90161,-2.5794 -0.90161,-3.9159 0,-1.3365 0.61711,-2.5571 0.90161,-3.9159 z"
+       id="path5102"
+       sodipodi:nodetypes="csssc"
+       inkscape:path-effect="#path-effect5121"
+       inkscape:original-d="m 130,2117.3615 c 0,0 0.71934,2.0824 0.93595,3 0.48436,2.0518 -0.93595,3.8918 -0.93595,6 0,2.1082 1.42031,3.9482 0.93595,6 -0.21661,0.9176 -0.93595,3 -0.93595,3"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient5127);fill-opacity:1;stroke:none;stroke-width:1.9619;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 133,2119.3615 -2,2 -1,-3 z"
+       id="path5125"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path5125"
+       id="use5129"
+       transform="matrix(1,0,0,-1,0,4252.723)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#radialGradient5170);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 116.87657,2120.7354 c 1.50339,-0.525 1.35131,-1.295 1.56273,-2 l -2.87861,-0.7478 c -1.13497,-2.3997 -1.97158,-4.2215 -4.16086,-3.9087 -1.75,0.25 -3.28111,2.0327 -3.30581,3.7302 -0.0187,1.2884 1.46469,2.3314 2.90598,2.5524 1.26779,0.1944 2.96029,0.4064 4.05634,-0.6087 0.67349,0.2494 1.32341,0.5944 1.82023,0.9826 z"
+       id="path3770-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccssscc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3770-9"
+       id="use5172"
+       transform="matrix(1,0,0,-1,0,4253.0794)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#circle4597"
+       id="use5183"
+       transform="matrix(1,0,0,-1,0,4252.7422)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient3851-0);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 21.999888,2096.3612 c 0,-5.6634 2.47464,-11.1558 8.2211,-13.5922 0.62038,-0.263 1.42499,-0.4078 2.19229,-0.4078 6.79612,0 13.37299,7.8834 13.37299,7.8834 0,0 3.213732,3.938 3.213732,6.3884 0,2.4504 -3.213732,5.8447 -3.213732,5.8447 0,0 -6.46726,7.8835 -13.37299,7.8835 -0.7673,0 -1.57235,-0.1449 -2.19229,-0.4078 -5.74646,-2.4364 -8.2211,-7.9288 -8.2211,-13.5922 z"
+       id="path5563-21-05"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zcsczcscz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       ry="3.9417574"
+       rx="3.9417381"
+       cy="-32.639103"
+       cx="2088.0164"
+       style="display:inline;opacity:1;fill:url(#radialGradient5705);fill-opacity:1;stroke:none;stroke-width:1"
+       id="path5621-6-7"
+       transform="rotate(90)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient5852);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 32.562008,2084.9807 c 0,0 -1.08738,1.2233 -1.08738,2.9903 0,1.767 1.08738,2.9903 1.08738,2.9903 0,0 1.08737,-1.0874 1.08737,-2.9903 0,-1.9029 -1.08737,-2.9903 -1.08737,-2.9903 z"
+       id="path5623-9-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czczc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="display:inline;opacity:1;stroke-width:3.67858"
+       x="0"
+       y="0"
+       xlink:href="#path5621-6-7"
+       id="use5713-1-3"
+       transform="matrix(1,0,0,-1,-0.201377,4191.6541)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="display:inline;opacity:1;stroke-width:3.67858"
+       x="0"
+       y="0"
+       xlink:href="#path5623-9-3"
+       id="use5717-3-7"
+       transform="matrix(1,0,0,-1,-0.192227,4191.7448)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png" />
+    <ellipse
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:url(#radialGradient5596-8-7-4-0);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       id="path5569-6-7-5"
+       transform="matrix(0.99692582,0.07835118,-0.3244807,-0.94589232,0,0)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="-693.32721"
+       cy="-2271.2666"
+       rx="0.9861052"
+       ry="2.584167" />
+    <ellipse
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:url(#radialGradient6379-3);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       id="path5569-6-7-8-9"
+       transform="matrix(0.99692582,-0.07835118,-0.3244807,0.94589232,0,0)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="789.40979"
+       cy="2284.2546"
+       rx="0.9861052"
+       ry="2.584167" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient2960);fill-opacity:1;stroke:none;stroke-width:0.999996"
+       d="m 50,2096.3613 c 0,-5.6635 4.12476,-11.1558 9.82525,-13.5923 0.61541,-0.263 1.41359,-0.4078 2.17475,-0.4078 6.74175,0 14.183429,7.8836 14.183429,7.8836 0,0 3.26214,3.6661 3.26214,6.1165 0,2.4503 -3.26214,6.1165 -3.26214,6.1165 0,0 -7.332939,7.8834 -14.183429,7.8834 -0.76116,0 -1.55977,-0.1449 -2.17475,-0.4077 C 54.12476,2107.5171 50,2102.0247 50,2096.3613 Z"
+       id="path2929"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zcsczcscz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;opacity:1;fill:url(#radialGradient2958);fill-opacity:1;stroke:none;stroke-width:1.09856"
+       id="ellipse2931"
+       transform="rotate(90)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       cx="2088.886"
+       cy="-79.883499"
+       rx="3.9417381"
+       ry="3.9417574" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient2956);fill-opacity:1;stroke:none;stroke-width:0.730296"
+       id="ellipse2933"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(90)"
+       cx="2096.3616"
+       cy="-53.999992"
+       rx="4"
+       ry="2.5"
+       clip-path="none" />
+    <path
+       style="display:inline;opacity:1;fill:url(#radialGradient2954);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 74.446599,2092.6914 c -1.7153,0.4479 -2.15069,-0.128 -2.4466,-0.8156 l 3.26213,-2.7184 c 1.2235,-2.5868 2.03883,-4.0777 4.48543,-4.2136 0.775815,-0.101 1.342125,0.1408 1.892849,0.4081 1.111038,2.0227 0.764624,6.2054 0.183293,6.9816 -0.568938,0.3123 -1.197507,0.5531 -2.076132,0.4938 -1.38065,-0.074 -2.76021,-0.6727 -3.94175,-1.767 -0.72603,0.2689 -1.08738,1.0874 -1.35922,1.6311 z"
+       id="path2935"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#ellipse2931"
+       id="use2940"
+       transform="matrix(1,0,0,-1,1.0000335e-7,4192.7225)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;opacity:1;stroke-width:3.67858" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2935"
+       id="use2942"
+       transform="matrix(1,0,0,-1,1.0000335e-7,4192.7225)"
+       width="744.09448"
+       height="1052.3622"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;opacity:1;stroke-width:3.67858" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient2950);fill-opacity:1;stroke:none;stroke-width:1.9619"
+       id="ellipse2946"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="rotate(89.997555)"
+       cx="2104.3643"
+       cy="-62.910179"
+       rx="3.500036"
+       ry="3.9999998" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#ellipse2946"
+       id="use2948"
+       transform="matrix(1,0,0,-1,1.0000335e-7,4192.7224)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;fill:url(#linearGradient3000);fill-opacity:1;stroke:none;stroke-width:1"
+       d="m 62.999992,2094.3612 20,1 c 0,0 0.99999,0 0.99999,1 0,1 -0.99999,1 -0.99999,1 l -20,1 z"
+       id="path4835-4-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cczccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient3006);fill-opacity:1;stroke:none;stroke-width:1.9619"
+       id="ellipse3002"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="matrix(0.515043,0.85716434,-0.85708191,0.51518016,0,0)"
+       cx="1816.5703"
+       cy="1062.2737"
+       rx="3.500036"
+       ry="1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#ellipse3002"
+       id="use3004"
+       transform="matrix(1,0,0,-1,3.9610868e-7,4192.7224)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g3192"
+       mask="url(#mask3194)">
+      <path
+         style="fill:url(#linearGradient3165);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 335.95312,2060.6271 c 0.76062,-2.9513 1.03468,-6.0648 1.04688,-9.2656 h 2 c -0.3519,2.9531 -0.27086,5.9639 0,9 z"
+         id="path3157"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="opacity:1;fill:url(#radialGradient3200);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 344,2062.3615 c -0.40034,-1.4271 -1.75419,-2.3404 -3,-3 -1.68155,-0.8902 -3.3996,-0.6179 -5,0 -1.99557,0.7704 -3.64752,1.8852 -4.39461,3.086 -0.5333,0.8571 -1.18994,4.8815 1.49907,5.914 H 339 c 1.46784,-0.9022 3.15864,-1.6441 4,-3 0.5305,-0.8549 1.30871,-1.8995 1,-3 z"
+         id="path3024"
+         sodipodi:nodetypes="ssssccss" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#69311b;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 343,2065.3615 c 0,0 -0.78602,-1.0722 -1.78466,-0.7348 -1.4161,0.4785 -5.5468,1.9116 -6.55784,1.7017 1.19541,-0.3543 4.95513,-2.2664 6.60166,-2.3987 0.76901,-0.062 1.35207,0.3025 2.10074,0.8794 z"
+         id="path3026"
+         sodipodi:nodetypes="cscscc" />
+      <path
+         style="fill:url(#linearGradient3061);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 337.35323,2065.3241 -1.63518,0.7292 0.28727,1.2153 z"
+         id="path3045"
+         sodipodi:nodetypes="cccc" />
+      <ellipse
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient3065);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+         id="ellipse3063"
+         transform="matrix(-0.63323728,0.77395772,-0.4583815,-0.88875554,0,0)"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         cx="700.16724"
+         cy="-1711.1294"
+         rx="0.38280833"
+         ry="1.0031796" />
+      <ellipse
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient3069);fill-opacity:1;stroke:none;stroke-width:1.01898;marker:none;enable-background:accumulate"
+         id="ellipse3067"
+         transform="matrix(-0.95424614,0.29902225,0.18237514,-0.98322902,0,0)"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bulbmin.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         cx="-806.71747"
+         cy="-2343.1775"
+         rx="0.30236119"
+         ry="1.0021102" />
+      <path
+         style="fill:url(#linearGradient3167);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 338,2060.3615 c 0.21218,-0.9807 0.10367,-1.9906 0,-3 h 1 c -0.12492,0.9667 -0.30088,1.9198 0,3 -0.27786,0.3328 -0.57661,0.5403 -1,0 z"
+         id="path3084"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient3092);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 341.14363,2060.0742 c 0.4788,-1.7671 1.3559,-2.5213 1.85637,-2.7127 h 1 c -0.88573,0.7344 -2.03537,0.8727 -1.85637,2.7127 0.0831,0.8542 -1.14437,0.5328 -1,0 z"
+         id="path3094"
+         sodipodi:nodetypes="sccss" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient3137);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path3127"
+         cx="338.5"
+         cy="2056.8616"
+         r="1.5" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient3141);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="circle3139"
+         cx="343.76562"
+         cy="2057.3459"
+         r="1.5" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient3151);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path3143"
+         cx="339.10669"
+         cy="2057.147"
+         r="0.81249988" />
+      <ellipse
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient3155);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="circle3153"
+         cx="344.60278"
+         cy="2057.4282"
+         rx="0.67578113"
+         ry="0.81249988" />
     </g>
   </g>
 </svg>

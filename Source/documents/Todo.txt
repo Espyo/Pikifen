@@ -6,9 +6,11 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Let a Pikmin get bit, then save it by killing the enemy, then let it grab the corpse, then whistle it -- it'll start flying
+    The Pikmin top size widgets don't have a tooltip
+    Slider widgets need a tooltip
     
     --- v0.21.0 ---
-    Bulbmin
     Purple flowers and buds
     Add missing Rock Pikmin and Winged Pikmin graphics
         Pellets
@@ -88,6 +90,7 @@ Next tasks (roughly sorted most important first)
             Be a group, and then have a mask applied on top to fit the grid rectangle
             Be resized to their final resolution of 64x64
             Have a blurred shadow to represent the chin and neck, like Winged Pikmin
+        Adjust the top-left of the spritesheet to be the document's 0,0 coordiantes
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
         Using blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
@@ -102,6 +105,8 @@ Next tasks (roughly sorted most important first)
         Feet are sometimes little nubs, sometimes spiky
         Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Kman's made some)
             If necessary, seeds should have their own animation
+        The "grabbing_near" sprite is unused for all bar Bulbmin
+        More frames, for more fluidity
     Pikmin missing animations
         Sighing
         Idling (bobbing a bit so they aren't static)
