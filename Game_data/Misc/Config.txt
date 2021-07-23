@@ -11,7 +11,7 @@ day_minutes_start = 420
 day_minutes_end = 1140
 day_minutes_per_irl_sec = 0.8
 
-pikmin_order = Red Pikmin;Yellow Pikmin;Blue Pikmin;Purple Pikmin;White Pikmin
+pikmin_order = Red Pikmin;Yellow Pikmin;Blue Pikmin;Purple Pikmin;White Pikmin;Rock Pikmin;Winged Pikmin;Bulbmin
 standard_pikmin_height = 24
 standard_pikmin_radius = 5
 

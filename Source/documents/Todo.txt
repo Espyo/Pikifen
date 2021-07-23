@@ -11,14 +11,12 @@ Next tasks (roughly sorted most important first)
     Slider widgets need a tooltip
     
     --- v0.21.0 ---
-    Purple flowers and buds
     Add missing Rock Pikmin and Winged Pikmin graphics
         Pellets
         Pellet Posies
         Candypop Buds
         Onions
         Onion icons
-    Add the new Pikmin to the Pikmin order list
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     Add some obstacles relevant to the Rock Pikmin and Winged Pikmin
     Purple Pikmin improvements
@@ -139,7 +137,8 @@ Next tasks (roughly sorted most important first)
         Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
         If something is under construction, like a menu or something, add a small "WIP" blurb
         Maybe add an F1 screen with quick-start help?
-        Add a ball of yarn treasure
+        Add more treasures
+            Ball of yarn treasure
         Sounds really need a makeover...
         Mobs for decorative pebbles, stones, and sticks
     Add several pre-packaged areas, since players have nothing to play with right now
