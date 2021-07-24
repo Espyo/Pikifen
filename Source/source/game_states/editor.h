@@ -106,6 +106,7 @@ protected:
     enum WIDGET_EXPLANATIONS {
         WIDGET_EXPLANATION_NONE,
         WIDGET_EXPLANATION_DRAG,
+        WIDGET_EXPLANATION_SLIDER,
     };
     
     

@@ -851,6 +851,10 @@ void area_editor::process_gui_panel_details() {
                     -FLT_MAX,
                 [this] () { register_change("tree shadow size change"); }
                 );
+                set_tooltip(
+                    "Width and height of the tree shadow.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
                 
                 //Tree shadow aspect ratio checkbox.
                 ImGui::Indent();
@@ -867,6 +871,10 @@ void area_editor::process_gui_panel_details() {
                     register_change("tree shadow angle change");
                     selected_shadow->angle = shadow_angle;
                 }
+                set_tooltip(
+                    "Angle of the tree shadow.",
+                    "", WIDGET_EXPLANATION_SLIDER
+                );
                 
                 //Tree shadow opacity value.
                 int shadow_opacity = selected_shadow->alpha;
@@ -874,6 +882,10 @@ void area_editor::process_gui_panel_details() {
                     register_change("tree shadow opacity change");
                     selected_shadow->alpha = shadow_opacity;
                 }
+                set_tooltip(
+                    "How opaque the tree shadow is.",
+                    "", WIDGET_EXPLANATION_SLIDER
+                );
                 
                 //Tree shadow sway value.
                 point shadow_sway = selected_shadow->sway;
@@ -1727,7 +1739,8 @@ void area_editor::process_gui_panel_mob() {
     set_tooltip(
         "Angle that the object is facing.\n"
         "You can also press R in the canvas to "
-        "make it face the cursor."
+        "make it face the cursor.",
+        "", WIDGET_EXPLANATION_SLIDER
     );
     
     //Spacer dummy widget.
@@ -2689,7 +2702,8 @@ void area_editor::process_gui_panel_sector() {
             set_tooltip(
                 "Rotate the texture by these many degrees.\n"
                 "The rotation's center point is at the origin "
-                "of the area, at coordinates 0,0."
+                "of the area, at coordinates 0,0.",
+                "", WIDGET_EXPLANATION_SLIDER
             );
             
             //Sector texture tint value.
@@ -2785,7 +2799,8 @@ void area_editor::process_gui_panel_sector() {
             set_tooltip(
                 "How bright the sector is. Affects not just the sector's "
                 "appearance, but everything inside it.\n"
-                "0 is fully dark, 255 is fully lit."
+                "0 is fully dark, 255 is fully lit.",
+                "", WIDGET_EXPLANATION_SLIDER
             );
             
             //Spacer dummy widget.
@@ -2868,6 +2883,10 @@ void area_editor::process_gui_panel_tools() {
             reference_keep_aspect_ratio,
             REFERENCE_MIN_SIZE
         );
+        set_tooltip(
+            "Width and height.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
         
         //Reference keep aspect ratio checkbox.
         ImGui::Indent();
@@ -2882,6 +2901,10 @@ void area_editor::process_gui_panel_tools() {
         int opacity = reference_alpha;
         ImGui::SliderInt("Opacity", &opacity, 0, 255);
         reference_alpha = opacity;
+        set_tooltip(
+            "How opaque it is.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
         
         ImGui::TreePop();
         
@@ -3094,7 +3117,8 @@ void area_editor::process_gui_toolbar() {
         ImGui::SetNextItemWidth(48.0f);
         ImGui::SliderInt("##refAlpha", &reference_alpha_int, 0, 255, "");
         set_tooltip(
-            "Opacity of the reference image."
+            "Opacity of the reference image.",
+            "", WIDGET_EXPLANATION_SLIDER
         );
         ImGui::EndGroup();
         reference_alpha = reference_alpha_int;

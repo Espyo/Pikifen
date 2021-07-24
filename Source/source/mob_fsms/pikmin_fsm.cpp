@@ -1813,7 +1813,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     
     game.sys_assets.sfx_pikmin_caught.play(0.2, 0);
     
-    pik_ptr->can_move_in_midair = true;
+    pik_ptr->can_move_in_midair = false;
     pik_ptr->leave_group();
     pik_ptr->is_grabbed_by_enemy = true;
     

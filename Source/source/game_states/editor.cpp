@@ -1298,6 +1298,12 @@ void editor::set_tooltip(
                 "Double-click or Ctrl + click to write a value.";
             break;
         }
+        case WIDGET_EXPLANATION_SLIDER: {
+            widget_explanation_text =
+                "Click and/or drag left or right to change.\n"
+                "Ctrl + click to write a value.";
+            break;
+        }
         }
         
         if(!widget_explanation_text.empty()) {

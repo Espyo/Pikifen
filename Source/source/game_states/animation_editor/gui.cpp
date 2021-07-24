@@ -769,7 +769,8 @@ void animation_editor::process_gui_panel_animation() {
                 "If this attack can knock back Pikmin, this indicates "
                 "the chance that it will hit.\n"
                 "0 means it will always miss, 50 means it will hit "
-                "half the time, etc."
+                "half the time, etc.",
+                "", WIDGET_EXPLANATION_SLIDER
             );
             
             ImGui::TreePop();
@@ -2038,6 +2039,10 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 ) {
                     made_new_changes = true;
                 }
+                set_tooltip(
+                    "Angle to knock away towards.",
+                    "", WIDGET_EXPLANATION_SLIDER
+                );
             }
             
             //Knockback strength value.
@@ -2062,7 +2067,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 cur_hitbox->wither_chance = wither_chance_int;
             }
             set_tooltip(
-                "Chance of the attack lowering a Pikmin's maturity by one."
+                "Chance of the attack lowering a Pikmin's maturity by one.",
+                "", WIDGET_EXPLANATION_SLIDER
             );
             
             //Spacer dummy widget.
@@ -2164,12 +2170,17 @@ void animation_editor::process_gui_panel_sprite_top() {
         ) {
             made_new_changes = true;
         }
+        set_tooltip(
+            "Width and height.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
         
         //Keep aspect ratio checkbox.
         ImGui::Indent();
         ImGui::Checkbox("Keep aspect ratio", &top_keep_aspect_ratio);
         ImGui::Unindent();
         set_tooltip("Keep the aspect ratio when resizing the top.");
+        
         
         //Top angle value.
         cur_sprite->top_angle = normalize_angle(cur_sprite->top_angle);
@@ -2180,6 +2191,10 @@ void animation_editor::process_gui_panel_sprite_top() {
         ) {
             made_new_changes = true;
         }
+        set_tooltip(
+            "Angle.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
         
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
@@ -2272,6 +2287,10 @@ void animation_editor::process_gui_panel_sprite_transform() {
     ) {
         made_new_changes = true;
     }
+    set_tooltip(
+        "Horizontal and vertical scale.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
     
     //Sprite flip X button.
     ImGui::Indent();
@@ -2303,6 +2322,10 @@ void animation_editor::process_gui_panel_sprite_transform() {
     ) {
         made_new_changes = true;
     }
+    set_tooltip(
+        "Angle.",
+        "", WIDGET_EXPLANATION_SLIDER
+    );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));

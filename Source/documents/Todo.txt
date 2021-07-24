@@ -6,9 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Let a Pikmin get bit, then save it by killing the enemy, then let it grab the corpse, then whistle it -- it'll start flying
-    The Pikmin top size widgets don't have a tooltip
-    Slider widgets need a tooltip
     
     --- v0.21.0 ---
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
