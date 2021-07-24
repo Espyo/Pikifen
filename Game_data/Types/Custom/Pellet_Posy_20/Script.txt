@@ -5,6 +5,8 @@ init {
     set_var red false
     set_var yellow false
     set_var blue false
+    set_var rock false
+    set_var winged false
     set_var cur_color none
     set_var bloom_time 240
 }
@@ -19,6 +21,12 @@ script {
                 set_state sprout
             end_if
             if $blue = true
+                set_state sprout
+            end_if
+            if $rock = true
+                set_state sprout
+            end_if
+            if $winged = true
                 set_state sprout
             end_if
             
@@ -62,7 +70,7 @@ script {
         }
         on_animation_end {
             set_huntable true
-            set_var cur_color blue
+            set_var cur_color winged
             set_state picking_next_color
         }
     }
@@ -79,7 +87,15 @@ script {
                     set_var cur_color blue
                 else
                     if $cur_color = blue
-                        set_var cur_color red
+                        set_var cur_color rock
+                    else
+                        if $cur_color = rock
+                            set_var cur_color winged
+                        else
+                            if $cur_color = winged
+                                set_var cur_color red
+                            end_if
+                        end_if
                     end_if
                 end_if
             end_if
@@ -96,6 +112,16 @@ script {
             end_if
             if $cur_color = blue
                 if $blue != true
+                    goto try_next
+                end_if
+            end_if
+            if $cur_color = rock
+                if $rock != true
+                    goto try_next
+                end_if
+            end_if
+            if $cur_color = winged
+                if $winged != true
                     goto try_next
                 end_if
             end_if
@@ -116,6 +142,14 @@ script {
             if $cur_color = blue
                 set_animation idling_blue no_restart
             end_if
+            
+            if $cur_color = rock
+                set_animation idling_rock no_restart
+            end_if
+            
+            if $cur_color = winged
+                set_animation idling_winged no_restart
+            end_if
         }
         on_timer {
             set_state picking_next_color
@@ -134,6 +168,12 @@ script {
             end_if
             if $cur_color = blue
                 spawn blue
+            end_if
+            if $cur_color = rock
+                spawn rock
+            end_if
+            if $cur_color = winged
+                spawn winged
             end_if
         }
         on_animation_end {

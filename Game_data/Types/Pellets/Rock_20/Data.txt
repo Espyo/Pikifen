@@ -1,0 +1,12 @@
+name = Rock 20 pellet
+
+height = 64
+match_seeds = 20
+max_carriers = 50
+non_match_seeds = 10
+number = 20
+number_image = Pellet_20.png
+pikmin_type = Rock Pikmin
+pushable = true
+pushes = true
+radius = 64

@@ -1095,11 +1095,15 @@ track_info_struct::track_info_struct(
  * code_after_creation:
  *   Code to run right after the mob is created, if any.
  *   This is run before any scripting takes place.
+ * first_state_override:
+ *   If this is INVALID, use the first state number defined in the mob's
+ *   FSM struct, or the standard first state number. Otherwise, use this.
  */
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars,
-    std::function<void(mob*)> code_after_creation
+    std::function<void(mob*)> code_after_creation,
+    const size_t first_state_override
 ) {
     mob* m_ptr = category->create_mob(pos, type, angle);
     
@@ -1124,6 +1128,8 @@ mob* create_mob(
     
     if(
         !m_ptr->fsm.set_state(
+            first_state_override != INVALID ?
+            first_state_override :
             m_ptr->fsm.first_state_override != INVALID ?
             m_ptr->fsm.first_state_override :
             type->first_state_nr

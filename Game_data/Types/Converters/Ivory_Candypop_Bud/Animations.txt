@@ -120,6 +120,15 @@ sprites{
 		file_pos=0.0000 0.0000
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=0.0000
+			}
+		}
 	}
 	idling2{
 		file=Ivory_Candypop_Bud.png
@@ -127,6 +136,15 @@ sprites{
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
 		scale=1.0100 0.9900
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=0.0000
+			}
+		}
 	}
 	idling3{
 		file=Ivory_Candypop_Bud.png
@@ -134,6 +152,15 @@ sprites{
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
 		scale=0.9900 1.0100
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=0.0000
+			}
+		}
 	}
 	bumping1{
 		file=Ivory_Candypop_Bud.png
@@ -141,6 +168,15 @@ sprites{
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
 		angle=0.0175
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=0.0000
+			}
+		}
 	}
 	bumping2{
 		file=Ivory_Candypop_Bud.png
@@ -148,36 +184,90 @@ sprites{
 		file_size=170.0000 162.0000
 		offset=0.0000 -8.0000
 		angle=0.0524
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=0.0000
+			}
+		}
 	}
 	closing1{
 		file=Ivory_Candypop_Bud.png
 		file_pos=171.0000 0.0000
 		file_size=144.0000 162.0000
 		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	closing2{
 		file=Ivory_Candypop_Bud.png
 		file_pos=316.0000 0.0000
 		file_size=122.0000 162.0000
 		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	closing3{
 		file=Ivory_Candypop_Bud.png
 		file_pos=439.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	closing4{
 		file=Ivory_Candypop_Bud.png
 		file_pos=542.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	closed{
 		file=Ivory_Candypop_Bud.png
 		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	dying1{
 		file=Ivory_Candypop_Bud.png
@@ -185,6 +275,15 @@ sprites{
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
 		angle=0.0175
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	dying2{
 		file=Ivory_Candypop_Bud.png
@@ -192,6 +291,15 @@ sprites{
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
 		angle=6.2657
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	dying3{
 		file=Ivory_Candypop_Bud.png
@@ -199,6 +307,15 @@ sprites{
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
 		scale=0.9000 0.9000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	dying4{
 		file=Ivory_Candypop_Bud.png
@@ -206,6 +323,15 @@ sprites{
 		file_size=102.0000 162.0000
 		offset=0.0000 -6.0000
 		scale=0.7500 0.7500
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	dying5{
 		file=Ivory_Candypop_Bud.png
@@ -213,6 +339,15 @@ sprites{
 		file_size=122.0000 162.0000
 		offset=0.0000 -4.0000
 		scale=0.5000 0.5000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	dying6{
 		file=Ivory_Candypop_Bud.png
@@ -220,6 +355,15 @@ sprites{
 		file_size=144.0000 162.0000
 		offset=0.0000 -2.5000
 		scale=0.3000 0.3000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 	dying7{
 		file=Ivory_Candypop_Bud.png
@@ -227,6 +371,17 @@ sprites{
 		file_size=144.0000 162.0000
 		offset=0.0000 -0.8000
 		scale=0.1000 0.1000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
+			}
+		}
 	}
 }
-body_parts
+body_parts{
+	receptacle
+}

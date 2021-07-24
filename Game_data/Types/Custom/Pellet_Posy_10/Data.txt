@@ -30,6 +30,20 @@ spawns {
         angle = 270
         momentum = 10
     }
+    rock {
+        object = Rock 10 pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
+    winged {
+        object = Winged 10 pellet
+        relative = true
+        coordinates = 100 0 96
+        angle = 270
+        momentum = 10
+    }
 }
 area_editor_properties {
     Bloom time {
@@ -56,5 +70,17 @@ area_editor_properties {
         type = bool
         def_value = false
         tooltip = Does it have a blue pellet?
+    }
+    Rock {
+        var = rock
+        type = bool
+        def_value = false
+        tooltip = Does it have a rock pellet?
+    }
+    Winged {
+        var = winged
+        type = bool
+        def_value = false
+        tooltip = Does it have a winged pellet?
     }
 }

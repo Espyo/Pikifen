@@ -1624,14 +1624,13 @@ void spew_pikmin_seed(
             (pikmin*)
             create_mob(
                 game.mob_categories.get(MOB_CATEGORY_PIKMIN),
-                pos, pik_type, angle, ""
+                pos, pik_type, angle, "", nullptr, PIKMIN_STATE_SEED
             )
         );
     new_pikmin->z = z;
     new_pikmin->speed.x = cos(angle) * horizontal_speed;
     new_pikmin->speed.y = sin(angle) * horizontal_speed;
     new_pikmin->speed_z = vertical_speed;
-    new_pikmin->fsm.set_state(PIKMIN_STATE_SEED);
     new_pikmin->maturity = 0;
 }
 

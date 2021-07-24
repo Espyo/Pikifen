@@ -11,12 +11,6 @@ Next tasks (roughly sorted most important first)
     Slider widgets need a tooltip
     
     --- v0.21.0 ---
-    Add missing Rock Pikmin and Winged Pikmin graphics
-        Pellets
-        Pellet Posies
-        Candypop Buds
-        Onions
-        Onion icons
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     Add some obstacles relevant to the Rock Pikmin and Winged Pikmin
     Purple Pikmin improvements
@@ -685,6 +679,7 @@ Tasks for later on (I might never implement these)
     Barely important format changes
         Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
         In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
+        Bud_icon.png and Flower_icon.png should be White_bud_icon.png and White_flower_icon.png, to fit with the pink and purple buds and flowers
     Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info

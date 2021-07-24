@@ -1,0 +1,448 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.1100
+			}
+			idling2{
+				duration=0.1100
+			}
+			idling3{
+				duration=0.1100
+			}
+			idling4{
+				duration=0.1100
+			}
+			idling5{
+				duration=0.1100
+			}
+			idling6{
+				duration=0.1100
+			}
+			idling7{
+				duration=0.1100
+			}
+			idling8{
+				duration=0.1100
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Rock_Onion.png
+		file_pos=0.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling2{
+		file=Rock_Onion.png
+		file_pos=0.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.1000 0.0000
+		scale=0.5030 0.5030
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling3{
+		file=Rock_Onion.png
+		file_pos=282.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling4{
+		file=Rock_Onion.png
+		file_pos=282.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.1000 0.0000
+		scale=0.5030 0.5030
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling5{
+		file=Rock_Onion.png
+		file_pos=564.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling6{
+		file=Rock_Onion.png
+		file_pos=564.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.1000 0.0000
+		scale=0.5030 0.5030
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling7{
+		file=Rock_Onion.png
+		file_pos=846.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	idling8{
+		file=Rock_Onion.png
+		file_pos=846.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=22.1000 0.0000
+		scale=0.5030 0.5030
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	hole_1
+	foot_1
+	hole_2
+	foot_2
+	hole_3
+	foot_3
+}
