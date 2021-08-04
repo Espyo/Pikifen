@@ -1669,6 +1669,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             cur_sprite->set_bitmap(
                 f[0], cur_sprite->file_pos, cur_sprite->file_size
             );
+            last_spritesheet_used = f[0];
             center_camera_on_sprite_bitmap(true);
             made_new_changes = true;
             status_text = "Picked an image successfully.";
@@ -1685,6 +1686,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         cur_sprite->set_bitmap(
             file_name, cur_sprite->file_pos, cur_sprite->file_size
         );
+        last_spritesheet_used = file_name;
         center_camera_on_sprite_bitmap(true);
         made_new_changes = true;
     }

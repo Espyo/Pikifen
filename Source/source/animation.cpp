@@ -135,6 +135,9 @@ void animation::get_frame_and_time(
  *   Time in the current frame.
  */
 float animation::get_time(const size_t frame_nr, const float frame_time) {
+    if(frame_nr == INVALID) {
+        return 0.0f;
+    }
     if(frame_nr >= frames.size()) {
         return get_duration();
     }

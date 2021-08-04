@@ -70,6 +70,16 @@
           <li><code>fragile</code>: A fragile object that should be harmed by even the gentlest smack. e.g. bomb rock.</li>
         </ul>
       </li>
+      <li>
+        <b><code>team</code></b>: Sets the object's team. Objects in the same team will not hunt or harm each other. Default depends on the object's category. Valid values are:
+        <ul>
+          <li><code>none</code>: Does not belong to a team.</li>
+          <li><code>player_X</code>: Belongs to player 1, 2, 3, or 4's team (replace the X with a number). Usually used for leaders and Pikmin.</li>
+          <li><code>enemy_X</code>: Belongs to the enemy team 1, 2, 3, or 4 (replace the X with a number).</li>
+          <li><code>obstacle</code>: Obstacle team.</li>
+          <li><code>other</code>: Team for whatever else.</li>
+        </ul>
+      </li>
     </ul>
 
     <h3 id="optional-props">Optional properties</h3>

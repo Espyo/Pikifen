@@ -10,6 +10,7 @@ Next tasks (roughly sorted most important first)
     --- v0.21.0 ---
     Add some enemies relevant to the Rock Pikmin and Winged Pikmin
     Add some obstacles relevant to the Rock Pikmin and Winged Pikmin
+    Adult Bulbmin?
     Purple Pikmin improvements
         Give them a proper pound attack
             Just the impact damage, no stun or earthquake
@@ -23,6 +24,7 @@ Next tasks (roughly sorted most important first)
         A way for status effects to add to the time left, instead of resetting it or leaving it as is
             Spicy spray should reset the time if it is re-applied
         Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
+        A way for sprays to affect leaders, like if you want to spray all Pikmin+leaders in the group with a speed-up spray
     Allow other mobs to move freely in the air via scripting
     More pathing improvements
         Make it so mobs carrying light load can use bouncers
@@ -36,12 +38,14 @@ Next tasks (roughly sorted most important first)
         A way to select all path links that use a certain label
         Check some corner cases with double-click to create a new X, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc.
         Tree shadows should have both an horizontal and a vertical sway by default, not just horizontal
+        When creating a new animation, it should try to find a sprite that matches the name of the animation
     The cutscene message box should be styled like the menu boxes, instead of being a stretched PNG
     Menus need tooltips
     In the manual
         Rename "text file" to "data file"
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
         Add tips about each Pikmin type's strength and weaknesses
+        Split the list of actions (maybe events too) by category
     Refactor
         In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
@@ -80,6 +84,7 @@ Next tasks (roughly sorted most important first)
             Be resized to their final resolution of 64x64
             Have a blurred shadow to represent the chin and neck, like Winged Pikmin
         Adjust the top-left of the spritesheet to be the document's 0,0 coordiantes
+        Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
         Using blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
@@ -124,6 +129,7 @@ Next tasks (roughly sorted most important first)
         Candypop Buds should squash when they close
         Animate the Hocotate ship -- use Kman's zip
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
+        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
     Demo content
         Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
         If something is under construction, like a menu or something, add a small "WIP" blurb
