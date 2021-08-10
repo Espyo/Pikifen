@@ -1,0 +1,18 @@
+name = Crystal Nodule
+
+blocks_carrier_pikmin = false
+can_hurt = player; enemy; weak_plain_obstacle; fragile
+default_vulnerability = 0
+height = 40
+max_health = 20
+pushable = true
+pushes = true
+radius = 20
+show_health = false
+target_type = explodable_pikmin_obstacle
+team = none
+
+vulnerabilities {
+    explosion = 100
+    rock = 100
+}

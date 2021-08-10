@@ -53,6 +53,7 @@ Next tasks (roughly sorted most important first)
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
         "flail_to_whistle" is really "flail_to_leader"
+        "blocks_carrier_pikmin" isn't really true, since it can block Go Here!, Pikmin returnin to a pile, etc.
     
     --- v0.22.0 ---
     Details

@@ -315,6 +315,7 @@ sprites{
 				radius=10.0000
 				type=1
 				value=20.0000
+				hazards=rock
 				knockback_outward=true
 				knockback=1.0000
 			}
@@ -501,6 +502,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=20.0000
+				hazards=rock
 			}
 		}
 	}
@@ -527,6 +529,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=20.0000
+				hazards=rock
 			}
 		}
 	}
@@ -553,6 +556,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=20.0000
+				hazards=rock
 			}
 		}
 	}
@@ -579,6 +583,7 @@ sprites{
 				radius=8.0000
 				type=1
 				value=20.0000
+				hazards=rock
 			}
 		}
 	}

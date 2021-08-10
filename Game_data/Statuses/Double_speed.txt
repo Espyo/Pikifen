@@ -1,0 +1,6 @@
+name = double_speed
+affects_enemies = true
+affects_leaders = true
+affects_pikmin = true
+color = 255 64 64
+speed_multiplier = 2

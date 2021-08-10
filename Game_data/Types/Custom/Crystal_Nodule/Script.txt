@@ -1,0 +1,46 @@
+first_state = idling
+death_state = destroying
+
+script {
+    idling {
+        on_enter {
+            set_animation idling
+        }
+        on_receive_message {
+            get_info m message
+            if $m = be_flung
+                set_state flung
+            end_if
+        }
+    }
+
+    flung {
+        on_enter {
+            set_animation flung
+        }
+        on_land {
+            set_state landing
+        }
+    }
+
+    landing {
+        on_enter {
+            stop
+            set_animation landing
+            start_particles dust_explosion
+        }
+        on_animation_end {
+            set_state idling
+        }
+    }
+
+    destroying {
+        on_enter {
+            start_particles small_crystal_explosion 0 0
+            set_animation destroyed
+        }
+        on_animation_end {
+            delete
+        }
+    }
+}
