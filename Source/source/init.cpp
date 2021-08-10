@@ -599,6 +599,14 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_param("body part name", MOB_ACTION_PARAM_ENUM, true, false);
+    reg_action(
+        MOB_ACTION_HOLD_FOCUS,
+        "hold_focused_mob",
+        mob_action_runners::hold_focus,
+        mob_action_loaders::hold_focus
+    );
+    
     reg_param("comparand", MOB_ACTION_PARAM_STRING, false, false);
     reg_param("operation", MOB_ACTION_PARAM_ENUM, true, false);
     reg_param("value", MOB_ACTION_PARAM_STRING, false, true);
@@ -614,6 +622,21 @@ void init_mob_actions() {
         MOB_ACTION_LABEL,
         "label",
         nullptr,
+        nullptr
+    );
+    
+    reg_action(
+        MOB_ACTION_LINK_WITH_FOCUS,
+        "link_with_focused_mob",
+        mob_action_runners::link_with_focus,
+        nullptr
+    );
+    
+    reg_param("slot", MOB_ACTION_PARAM_INT, false, false);
+    reg_action(
+        MOB_ACTION_LOAD_FOCUS_MEMORY,
+        "load_focused_mob_memory",
+        mob_action_runners::load_focus_memory,
         nullptr
     );
     
@@ -686,6 +709,14 @@ void init_mob_actions() {
         "remove_status",
         mob_action_runners::remove_status,
         mob_action_loaders::remove_status
+    );
+    
+    reg_param("slot", MOB_ACTION_PARAM_INT, false, false);
+    reg_action(
+        MOB_ACTION_SAVE_FOCUS_MEMORY,
+        "save_focused_mob_memory",
+        mob_action_runners::save_focus_memory,
+        nullptr
     );
     
     reg_param("message", MOB_ACTION_PARAM_STRING, false, false);
@@ -969,6 +1000,17 @@ void init_mob_actions() {
         MOB_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
         mob_action_runners::teleport_to_relative,
+        nullptr
+    );
+    
+    reg_param("x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("z coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("max height", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_action(
+        MOB_ACTION_THROW_FOCUS,
+        "throw_focused_mob",
+        mob_action_runners::throw_focus,
         nullptr
     );
     

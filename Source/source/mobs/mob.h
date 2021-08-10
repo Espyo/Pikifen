@@ -134,6 +134,8 @@ public:
     map<string, string> vars;
     //The mob it has focus on.
     mob* focused_mob;
+    //Further memory of focused mobs.
+    map<size_t, mob*> focused_mob_memory;
     //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
     vector<std::pair<float, mob*> > hit_opponents;
     //How much damage did it take since the last time the itch event triggered?

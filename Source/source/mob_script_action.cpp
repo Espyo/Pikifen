@@ -352,6 +352,23 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
 
 
 /* ----------------------------------------------------------------------------
+ * Loading code for the hold focused mob mob script action.
+ * call:
+ *   Mob action call that called this.
+ */
+bool mob_action_loaders::hold_focus(mob_action_call &call) {
+    size_t p_nr = call.mt->anims.find_body_part(call.args[0]);
+    if(p_nr == INVALID) {
+        call.custom_error =
+            "Unknown body part \"" + call.args[0] + "\"!";
+        return false;
+    }
+    call.args[0] = i2s(p_nr);
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loading code for the "if" mob script action.
  * call:
  *   Mob action call that called this.
@@ -921,6 +938,22 @@ void mob_action_runners::get_random_int(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the hold focused mob mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::hold_focus(mob_action_run_data &data) {
+    if(data.m->focused_mob) {
+        data.m->hold(
+            data.m->focused_mob,
+            s2i(data.args[0]), 0.0f, 0.0f,
+            true, HOLD_ROTATION_METHOD_COPY_HOLDER
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the "if" mob script action.
  * data:
  *   Data about the action call.
@@ -965,6 +998,41 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
         
     }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the load focused mob memory mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::load_focus_memory(mob_action_run_data &data) {
+    if(data.m->focused_mob_memory.empty()) {
+        return;
+    }
+    
+    data.m->focus_on_mob(data.m->focused_mob_memory[s2i(data.args[0])]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the link with focus mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::link_with_focus(mob_action_run_data &data) {
+    if(!data.m->focused_mob) {
+        return;
+    }
+    
+    for(size_t l = 0; l < data.m->links.size(); ++l) {
+        if(data.m->links[l] == data.m->focused_mob) {
+            //Already linked.
+            return;
+        }
+    }
+    
+    data.m->links.push_back(data.m->focused_mob);
 }
 
 
@@ -1123,6 +1191,20 @@ void mob_action_runners::remove_status(mob_action_run_data &data) {
             data.m->statuses[s].to_delete = true;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the save focused mob memory mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::save_focus_memory(mob_action_run_data &data) {
+    if(!data.m->focused_mob) {
+        return;
+    }
+    
+    data.m->focused_mob_memory[s2i(data.args[0])] = data.m->focused_mob;
 }
 
 
@@ -1595,6 +1677,39 @@ void mob_action_runners::teleport_to_relative(mob_action_run_data &data) {
         data.m->pos + p,
         data.m->z + s2f(data.args[2]),
         CHASE_FLAG_TELEPORT
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the throw focused mob mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::throw_focus(mob_action_run_data &data) {
+    if(!data.m->focused_mob) {
+        return;
+    }
+    
+    if(data.m->focused_mob->holder.m == data.m) {
+        data.m->release(data.m->focused_mob);
+    }
+    
+    float max_height = s2f(data.args[3]);
+    
+    if(max_height == 0.0f) {
+        //We just want to drop it, not throw it.
+        return;
+    }
+    
+    data.m->start_height_effect();
+    calculate_throw(
+        data.m->focused_mob->pos, data.m->focused_mob->z,
+        point(s2f(data.args[0]), s2f(data.args[1])), s2f(data.args[2]),
+        max_height, GRAVITY_ADDER,
+        &data.m->focused_mob->speed,
+        &data.m->focused_mob->speed_z,
+        NULL
     );
 }
 

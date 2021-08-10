@@ -35,8 +35,11 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_GET_RANDOM_DECIMAL,
     MOB_ACTION_GET_RANDOM_INT,
     MOB_ACTION_GOTO,
+    MOB_ACTION_HOLD_FOCUS,
     MOB_ACTION_IF,
     MOB_ACTION_LABEL,
+    MOB_ACTION_LINK_WITH_FOCUS,
+    MOB_ACTION_LOAD_FOCUS_MEMORY,
     MOB_ACTION_MOVE_TO_ABSOLUTE,
     MOB_ACTION_MOVE_TO_RELATIVE,
     MOB_ACTION_MOVE_TO_TARGET,
@@ -46,6 +49,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_RECEIVE_STATUS,
     MOB_ACTION_RELEASE,
     MOB_ACTION_REMOVE_STATUS,
+    MOB_ACTION_SAVE_FOCUS_MEMORY,
     MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
     MOB_ACTION_SEND_MESSAGE_TO_LINKS,
     MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
@@ -81,6 +85,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SWALLOW_ALL,
     MOB_ACTION_TELEPORT_TO_ABSOLUTE,
     MOB_ACTION_TELEPORT_TO_RELATIVE,
+    MOB_ACTION_THROW_FOCUS,
     MOB_ACTION_TURN_TO_ABSOLUTE,
     MOB_ACTION_TURN_TO_RELATIVE,
     MOB_ACTION_TURN_TO_TARGET,
@@ -277,7 +282,10 @@ void get_focus_var(mob_action_run_data &data);
 void get_random_decimal(mob_action_run_data &data);
 void get_random_int(mob_action_run_data &data);
 void goto_function(mob_action_run_data &data);
+void hold_focus(mob_action_run_data &data);
 void if_function(mob_action_run_data &data);
+void link_with_focus(mob_action_run_data &data);
+void load_focus_memory(mob_action_run_data &data);
 void move_to_absolute(mob_action_run_data &data);
 void move_to_relative(mob_action_run_data &data);
 void move_to_target(mob_action_run_data &data);
@@ -287,6 +295,7 @@ void print(mob_action_run_data &data);
 void receive_status(mob_action_run_data &data);
 void release(mob_action_run_data &data);
 void remove_status(mob_action_run_data &data);
+void save_focus_memory(mob_action_run_data &data);
 void send_message_to_focus(mob_action_run_data &data);
 void send_message_to_links(mob_action_run_data &data);
 void send_message_to_nearby(mob_action_run_data &data);
@@ -322,6 +331,7 @@ void swallow(mob_action_run_data &data);
 void swallow_all(mob_action_run_data &data);
 void teleport_to_absolute(mob_action_run_data &data);
 void teleport_to_relative(mob_action_run_data &data);
+void throw_focus(mob_action_run_data &data);
 void turn_to_absolute(mob_action_run_data &data);
 void turn_to_relative(mob_action_run_data &data);
 void turn_to_target(mob_action_run_data &data);
@@ -333,6 +343,7 @@ bool arachnorb_plan_logic(mob_action_call &call);
 bool calculate(mob_action_call &call);
 bool focus(mob_action_call &call);
 bool get_info(mob_action_call &call);
+bool hold_focus(mob_action_call &call);
 bool if_function(mob_action_call &call);
 bool move_to_target(mob_action_call &call);
 bool receive_status(mob_action_call &call);

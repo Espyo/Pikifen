@@ -1251,6 +1251,11 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
                 m2_ptr->parent = NULL;
                 m2_ptr->to_delete = true;
             }
+            for(size_t f = 0; f < m2_ptr->focused_mob_memory.size(); ++f) {
+                if(m2_ptr->focused_mob_memory[f] == m_ptr) {
+                    m2_ptr->focused_mob_memory[f] = NULL;
+                }
+            }
         }
         
         while(!m_ptr->holding.empty()) {

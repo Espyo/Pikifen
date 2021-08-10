@@ -98,6 +98,15 @@
           <li>Plus other changes noted below in the compatibility warnings.</li>
         </ul>
       </li>
+      <li>
+        New mob script actions:
+        <ul>
+          <li><code>hold_focused_mob</code> lets the object hold whatever object it has in focus, much like how a leader holds a Pikmin.</li>
+          <li><code>link_with_focused_mob</code> lets the object be linked to whatever object it has in focus.</li>
+          <li><code>load_focused_mob_memory</code> and <code>save_focused_mob_memory</code> let the currently focused object be saved into a memory, and be recalled later. This allows the object to keep track of more than one object at a time, although it still only focuses on one at a time.</li>
+          <li><code>throw_focused_mob</code> lets the focused object be thrown in an arc towards a destination.</li>
+        </ul>
+      </li>
       <li>Added the <code>no_pikmin_color</code> property to the game configuration, to control the color the cursor shows when no Pikmin are available.</li>
       <li>Added the <code>acceleration</code> property to control an object type's acceleration.</li>
       <li>The maximum distances at which the leader can whistle or throw can now be set in <code>Game_data/Misc/Config.txt</code>.</li>

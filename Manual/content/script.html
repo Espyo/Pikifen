@@ -838,6 +838,13 @@ reaches {
         </dl></td>
       </tr>
       <tr>
+        <th><code>hold_focused_mob</code></th>
+        <td><dl>
+          <dt><code><b>hold_focused_mob</b> &lt;body_part_name&gt;</code></dt>
+          <dd>Makes the mob hold the focused mob in its grasp. The focused mob will follow wherever the specified body part is.</dd>
+        </dl></td>
+      </tr>
+      <tr>
         <th><code>if</code></th>
         <td>
           Only executes the next actions, until an <code>else</code> or <code>end_if</code> action, if the condition you specify is true. If not, it jumps to the matching <code>else</code> or <code>end_if</code> action.
@@ -860,6 +867,17 @@ reaches {
         <td><dl>
           <dt><code><b>label</b> &lt;label_name&gt;</code></dt>
           <dd>Labels this point of the script as &lt;label_name&gt;. You can then use the <code>goto</code> action to force the script to go to this point at will. Each label is only accessible to the event block it belongs to.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>link_with_focused_mob</code></th>
+        <td>Establishes a link between this mob and its focused mob, but not the other way around. If that mob is already a linked mob, nothing happens.</td>
+      </tr>
+      <tr>
+        <th><code>load_focused_mob_memory</code></th>
+        <td><dl>
+          <dt><code><b>load_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
+          <dd>Obtains a saved mob from the "focused mob memory", and focuses on that one instead. Loses mob focus if there is no mob in the specified slot, or if that specified mob has already disappeared. See also: <code>save_focused_mob_memory</code>.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -920,6 +938,13 @@ reaches {
         <td><dl>
           <dt><code><b>remove_status</b> &lt;status name&gt;</code></dt>
           <dd>Removes the specified status effect, if the object is currently afflicted by it.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>save_focused_mob_memory</code></th>
+        <td><dl>
+          <dt><code><b>save_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
+          <dd>Saves the currently focused mob into the "focused mob memory", in the specified slot number. Does nothing if there is no currently focused mob. See also: <code>load_focused_mob_memory</code>.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -1148,6 +1173,13 @@ reaches {
         <td><dl>
           <dt><code><b>teleport_to_relative</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></dt>
           <dd>Instantly teleports the object to the specified coordinates relative to its position and angle. See <a href="rel-coords">here</a> for more info.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>throw_focused_mob</code></th>
+        <td><dl>
+          <dt><code><b>throw_focused_mob</b> &lt;x&gt; &lt;y&gt; &lt;z&gt; &lt;max_height&gt;</code></dt>
+          <dd>Makes the focused mob be thrown in an arc from where it is towards the specified target coordinates. The peak of its jump reaches a height specified by the &lt;max_height&gt; parameter. If this mob was holding the focused mob, then it will stop holding. If the &lt;max_height&gt; is 0, the mob is simply gently released.</dd>
         </dl></td>
       </tr>
       <tr>
