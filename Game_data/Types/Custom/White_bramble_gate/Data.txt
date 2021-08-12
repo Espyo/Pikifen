@@ -4,7 +4,6 @@ blocks_carrier_pikmin = true
 casts_shadow = false
 height = 0
 max_health = 2000
-projectiles_can_damage = false
 pushable = false
 pushes = true
 radius = 32

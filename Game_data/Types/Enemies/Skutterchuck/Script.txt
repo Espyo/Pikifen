@@ -25,7 +25,7 @@ script {
         on_object_in_reach {
             if $ignoring = false
                 get_info t mob_type
-                if $t = Crystal Nodule
+                if $t = Crystal nodule
                     focus trigger
                     save_focused_mob_memory 1
                     set_state chasing_nodule
@@ -83,7 +83,7 @@ script {
         }
         on_object_in_reach {
             get_info t mob_type
-            if $t = Crystal Nodule
+            if $t = Crystal nodule
                 set_state picking_up
             end_if
         }

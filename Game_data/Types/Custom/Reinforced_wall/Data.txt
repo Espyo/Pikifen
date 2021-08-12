@@ -5,7 +5,6 @@ casts_shadow = false
 default_vulnerability = 0
 height = 0
 max_health = 1800
-projectiles_can_damage = false
 pushable = false
 pushes = true
 radius = 32
