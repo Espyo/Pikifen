@@ -2,14 +2,15 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Add crystals, both large and small
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Mobs can go through crystal walls just by squeezing between the wall and pillar
     
     --- v0.21.0 ---
-    Add some enemies relevant to the Rock Pikmin and Winged Pikmin
-    Add some obstacles relevant to the Rock Pikmin and Winged Pikmin
+    Add some enemies relevant to the Winged Pikmin
+    Add some obstacles relevant to the Winged Pikmin
     Adult Bulbmin?
     Purple Pikmin improvements
         Give them a proper pound attack
@@ -62,11 +63,19 @@ Next tasks (roughly sorted most important first)
             Make bridges open sectors gradually
                 If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
             Maybe make them objects entirely? Should work fine for forward-facing bridges, but ramped ones might be tougher
+                Maybe each segment is a sub-object? This way, you could specify how many segments to create, and segments could even go up or down, but think of the performance penalty
+                Maybe a mob with unique behavior that changes width/height as it's built, and builds the texture dynamically? This would work, except for sloped bridges, and we pretty much can't NOT have sloped bridges
+                Maybe a hybrid solution: the bridge is split into segments, created dynamically. For a level bridge, it's just one segment, stretched to whatever length necessary. For sloped bridges, it's divided into equal-length segments, each segment 50 higher/lower than the previous
+            Add an object for bridges to build towards, instead of the user having to specify the length
+        Gate improvements
+            One object for the gate proper, then two children objects for the pillars that hold them
+            Add graphics for different levels of destruction
+            The "destroyed" state's graphic should contain some debris on the floor
+            When damaged, the gate should shake a bit
         Make White Pikmin inflict a "poisoned" status effect upon enemies that saps away health over time
         "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" (thanks Kman)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Should the Beady Long Legs's feet be damageable? It can give some life to the fight, but newbies might think that's the only way to cause damage
-        Gates should have one object for the gate proper, then two children objects for the pillars that hold them
         Decorative objects shouldn't cast light in blackout mode
         On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
@@ -86,12 +95,16 @@ Next tasks (roughly sorted most important first)
             Be a group, and then have a mask applied on top to fit the grid rectangle
             Be resized to their final resolution of 64x64
             Have a blurred shadow to represent the chin and neck, like Winged Pikmin
-        Adjust the top-left of the spritesheet to be the document's 0,0 coordiantes
-        Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
+        Inkscape file adjustments
+            Adjust the top-left of the spritesheet to be the document's 0,0 coordinates
+            Adjust the X and Y scale to be 1.00? This breaks clip masks, though; maybe render everything onto a PNG, adjust, then render again, and use a difference blend to check what's broken
+            Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
+            Add a reference Olimar image in all of them
+            I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
+            Search for "data:image/" for leftover image files in the SVG files
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
         Using blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
-        I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
     Pikmin animation improvements
         Blinking when walking or idling -- these animations should start in random frames (do Pikmin even blink?)
         Throwing animation needs to be reworked

@@ -1,0 +1,88 @@
+first_state = healthy
+death_state = destroyed
+
+script {
+    healthy {
+        on_enter {
+            set_animation healthy
+        }
+        on_damage {
+            get_info t health
+            if $t < 150
+                set_state very_broken_shaking
+            end_if
+            if $t < 350
+                set_state broken_shaking
+            end_if
+            set_state healthy_shaking
+        }
+    }
+    healthy_shaking {
+        on_enter {
+            set_animation healthy_shaking
+        }
+        on_animation_end {
+            set_state healthy
+        }
+        on_damage {
+            get_info t health
+            if $t < 150
+                set_state very_broken_shaking
+            end_if
+            if $t < 350
+                set_state broken_shaking
+            end_if
+        }
+    }
+    broken {
+        on_enter {
+            set_animation broken
+        }
+        on_damage {
+            get_info t health
+            if $t < 150
+                set_state very_broken_shaking
+            end_if
+            set_state broken_shaking
+        }
+    }
+    broken_shaking {
+        on_enter {
+            set_animation broken_shaking
+        }
+        on_animation_end {
+            set_state broken
+        }
+        on_damage {
+            get_info t health
+            if $t < 150
+                set_state very_broken_shaking
+            end_if
+        }
+    }
+    very_broken {
+        on_enter {
+            set_animation very_broken
+        }
+        on_damage {
+            set_state very_broken_shaking
+        }
+    }
+    very_broken_shaking {
+        on_enter {
+            set_animation very_broken_shaking
+        }
+        on_animation_end {
+            set_state very_broken
+        }
+    }
+    destroyed {
+        on_enter {
+            set_animation destroyed
+            start_dying
+            finish_dying
+            start_particles crystal_wall_explosion 0 0 129
+            set_tangible false
+        }
+    }
+}

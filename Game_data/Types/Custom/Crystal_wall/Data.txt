@@ -1,0 +1,44 @@
+name = Crystal wall
+
+blocks_carrier_pikmin = true
+casts_shadow = false
+default_vulnerability = 0
+height = 0
+max_health = 400
+pushable = false
+pushes = true
+radius = 32
+rectangular_dimensions = 16 192
+target_type = explodable_pikmin_obstacle
+team = obstacle
+
+vulnerabilities {
+    explosion = 1000
+    rock = 100
+}
+
+spawns {
+    left_pillar {
+        object = Crystal wall pillar
+        relative = true
+        coordinates = 0 -120
+        angle = 0
+    }
+    right_pillar {
+        object = Crystal wall pillar
+        relative = true
+        coordinates = 0 120
+        angle = 180
+    }
+}
+
+children {
+    left_pillar {
+        spawn = left_pillar
+        parent_holds = false
+    }
+    right_pillar {
+        spawn = right_pillar
+        parent_holds = false
+    }
+}
