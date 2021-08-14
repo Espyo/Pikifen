@@ -557,6 +557,7 @@ PHYSICS
 11. Go on top of a walkable mob from a staircase sector
 12. Be bounced by a bouncer
 13. Be pushed by several mobs at once
+14. Try to squeeze between a crystal wall's crystal and its pillar (aim diagonally)
 
 * Get some Pikmin and:
 1. Hold a Pikmin and move around

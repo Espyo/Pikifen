@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Mobs can go through crystal walls just by squeezing between the wall and pillar
+    
     
     --- v0.21.0 ---
     Add some enemies relevant to the Winged Pikmin

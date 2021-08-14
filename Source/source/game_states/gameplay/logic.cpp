@@ -1189,7 +1189,7 @@ void gameplay_state::process_mob_touches(
         
         //If the mob is inside the other,
         //it needs to be pushed out.
-        if(push_amount > m_ptr->push_amount) {
+        if((push_amount / game.delta_t) > m_ptr->push_amount) {
             m_ptr->push_amount = push_amount / game.delta_t;
             m_ptr->push_angle = push_angle;
         }
