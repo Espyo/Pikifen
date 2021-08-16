@@ -1,0 +1,82 @@
+first_state = grabbing
+death_state = destroying
+
+init {
+    set_var holding false
+}
+
+script {
+    grabbing {
+        on_enter {
+            set_timer 0.1
+        }
+        on_timer {
+            set_state healthy
+        }
+        on_touch_object {
+            if $holding = false
+                focus trigger
+                hold_focused_mob crystal
+                set_var holding true
+            end_if
+        }
+    }
+
+    healthy {
+        on_enter {
+            set_animation healthy
+        }
+        on_damage {
+            get_info t health
+            if $t < 90
+                set_state broken_shaking
+            end_if
+            set_state healthy_shaking
+        }
+    }
+
+    healthy_shaking {
+        on_enter {
+            set_animation healthy_shaking
+        }
+        on_animation_end {
+            set_state healthy
+        }
+        on_damage {
+            get_info t health
+            if $t < 90
+                set_state broken_shaking
+            end_if
+        }
+    }
+
+    broken {
+        on_enter {
+            set_animation broken
+        }
+        on_damage {
+            set_state broken_shaking
+        }
+    }
+
+    broken_shaking {
+        on_enter {
+            set_animation broken_shaking
+        }
+        on_animation_end {
+            set_state broken
+        }
+    }
+
+    destroying {
+        on_enter {
+            start_particles large_crystal_explosion 0 0 200
+            set_animation destroyed
+            set_tangible false
+        }
+        on_animation_end {
+            throw_focused_mob 0 0 0 0
+            delete
+        }
+    }
+}

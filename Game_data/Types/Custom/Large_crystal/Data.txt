@@ -1,0 +1,18 @@
+name = Large crystal
+
+area_editor_tips = To make it trap another object, simply place\nboth objects together such that they are touching.
+blocks_carrier_pikmin = true
+default_vulnerability = 0
+height = 200
+max_health = 160
+pushable = false
+pushes = true
+radius = 50
+show_health = false
+target_type = explodable_pikmin_obstacle
+team = none
+
+vulnerabilities {
+    explosion = 100
+    rock = 100
+}

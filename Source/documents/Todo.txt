@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Add crystals, both large and small
+    Add small crystals
     
 Next tasks (roughly sorted most important first)
     --- To fix ---

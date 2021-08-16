@@ -1,0 +1,150 @@
+animations{
+	broken{
+		frames{
+			broken{
+				duration=0.1000
+			}
+		}
+	}
+	broken_shaking{
+		frames{
+			broken2{
+				duration=0.0600
+			}
+			broken3{
+				duration=0.0600
+			}
+		}
+	}
+	destroyed{
+		frames{
+			destroyed{
+				duration=0.1000
+			}
+		}
+	}
+	healthy{
+		frames{
+			healthy{
+				duration=0.1000
+			}
+		}
+	}
+	healthy_shaking{
+		frames{
+			healthy2{
+				duration=0.0600
+			}
+			healthy3{
+				duration=0.0600
+			}
+		}
+	}
+}
+sprites{
+	broken{
+		file=Crystal.png
+		file_pos=101.0000 0.0000
+		file_size=100.0000 100.0000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=200.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	broken2{
+		file=Crystal.png
+		file_pos=101.0000 0.0000
+		file_size=100.0000 100.0000
+		offset=0.7000 0.0000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=200.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	broken3{
+		file=Crystal.png
+		file_pos=101.0000 0.0000
+		file_size=100.0000 100.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=200.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	destroyed{
+		file=Crystal_nodule.png
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=200.0000
+				radius=50.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	healthy{
+		file=Crystal.png
+		file_pos=0.0000 0.0000
+		file_size=100.0000 100.0000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=200.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	healthy2{
+		file=Crystal.png
+		file_pos=0.0000 0.0000
+		file_size=100.0000 100.0000
+		offset=0.7000 0.0000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=200.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	healthy3{
+		file=Crystal.png
+		file_pos=0.0000 0.0000
+		file_size=100.0000 100.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			crystal{
+				coords=0.0000 0.0000 0.0000
+				height=200.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	crystal
+}
