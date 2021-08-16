@@ -947,7 +947,7 @@ void mob_action_runners::hold_focus(mob_action_run_data &data) {
         data.m->hold(
             data.m->focused_mob,
             s2i(data.args[0]), 0.0f, 0.0f,
-            true, HOLD_ROTATION_METHOD_COPY_HOLDER
+            false, HOLD_ROTATION_METHOD_COPY_HOLDER
         );
     }
 }

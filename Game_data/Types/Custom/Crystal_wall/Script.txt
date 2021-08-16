@@ -81,7 +81,7 @@ script {
             set_animation destroyed
             start_dying
             finish_dying
-            start_particles crystal_wall_explosion 0 0 129
+            start_particles crystal_wall_explosion 0 0 200
             set_tangible false
         }
     }

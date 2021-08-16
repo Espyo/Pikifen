@@ -85,6 +85,7 @@ Next tasks (roughly sorted most important first)
             Suggestion: Make the light rings not be ugly circles, but sprites instead
             Add a transparent solid circle over the area being whistled
         Smoother trail behind the mouse cursor
+        Health wheels should be slightly transparent
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
@@ -192,7 +193,6 @@ Next tasks (roughly sorted most important first)
             Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
             Smoother animations and transitions
         The ability to load TTF fonts
-        Ways to customize the menu elements, like you can customize the HUD
         Should the secondary menus from the main menu also contain Pikmin formations in the background?
     Pikmin extinction
         Check Onions, ships, and converters that have Pikmin in the buffer
