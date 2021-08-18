@@ -2,15 +2,15 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Add small crystals
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
     
     --- v0.21.0 ---
-    Add some enemies relevant to the Winged Pikmin
-    Add some obstacles relevant to the Winged Pikmin
+    Add a Puffy Blowhog
+    Add a bamboo gate
     Adult Bulbmin?
     Purple Pikmin improvements
         Give them a proper pound attack
