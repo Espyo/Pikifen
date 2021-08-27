@@ -554,6 +554,16 @@ void init_mob_actions() {
     );
     
     reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_action(
+        MOB_ACTION_GET_FLOOR_Z,
+        "get_floor_z",
+        mob_action_runners::get_floor_z,
+        nullptr
+    );
+    
+    reg_param("variable name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
         MOB_ACTION_GET_FOCUS_INFO,
@@ -642,6 +652,7 @@ void init_mob_actions() {
     
     reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("z", MOB_ACTION_PARAM_FLOAT, false, true);
     reg_action(
         MOB_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
@@ -651,6 +662,7 @@ void init_mob_actions() {
     
     reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("z", MOB_ACTION_PARAM_FLOAT, false, true);
     reg_action(
         MOB_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
@@ -761,6 +773,14 @@ void init_mob_actions() {
         mob_action_loaders::set_far_reach
     );
     
+    reg_param("flying", MOB_ACTION_PARAM_BOOL, false, false);
+    reg_action(
+        MOB_ACTION_SET_FLYING,
+        "set_flying",
+        mob_action_runners::set_flying,
+        nullptr
+    );
+    
     reg_param("multiplier", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
         MOB_ACTION_SET_GRAVITY,
@@ -831,6 +851,14 @@ void init_mob_actions() {
         MOB_ACTION_SET_SECTOR_SCROLL,
         "set_sector_scroll",
         mob_action_runners::set_sector_scroll,
+        nullptr
+    );
+    
+    reg_param("visible", MOB_ACTION_PARAM_BOOL, false, false);
+    reg_action(
+        MOB_ACTION_SET_SHADOW_VISIBILITY,
+        "set_shadow_visibility",
+        mob_action_runners::set_shadow_visibility,
         nullptr
     );
     
@@ -1014,7 +1042,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param("angle", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
     reg_action(
         MOB_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",

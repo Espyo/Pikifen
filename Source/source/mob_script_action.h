@@ -30,6 +30,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_FOCUS,
     MOB_ACTION_GET_CHOMPED,
     MOB_ACTION_GET_INFO,
+    MOB_ACTION_GET_FLOOR_Z,
     MOB_ACTION_GET_FOCUS_INFO,
     MOB_ACTION_GET_FOCUS_VAR,
     MOB_ACTION_GET_RANDOM_DECIMAL,
@@ -55,6 +56,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
     MOB_ACTION_SET_ANIMATION,
     MOB_ACTION_SET_FAR_REACH,
+    MOB_ACTION_SET_FLYING,
     MOB_ACTION_SET_GRAVITY,
     MOB_ACTION_SET_HEALTH,
     MOB_ACTION_SET_HEIGHT,
@@ -64,6 +66,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SET_LIMB_ANIMATION,
     MOB_ACTION_SET_NEAR_REACH,
     MOB_ACTION_SET_SECTOR_SCROLL,
+    MOB_ACTION_SET_SHADOW_VISIBILITY,
     MOB_ACTION_SET_STATE,
     MOB_ACTION_SET_TANGIBLE,
     MOB_ACTION_SET_TEAM,
@@ -277,6 +280,7 @@ void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
 void get_info(mob_action_run_data &data);
+void get_floor_z(mob_action_run_data &data);
 void get_focus_info(mob_action_run_data &data);
 void get_focus_var(mob_action_run_data &data);
 void get_random_decimal(mob_action_run_data &data);
@@ -301,6 +305,7 @@ void send_message_to_links(mob_action_run_data &data);
 void send_message_to_nearby(mob_action_run_data &data);
 void set_animation(mob_action_run_data &data);
 void set_far_reach(mob_action_run_data &data);
+void set_flying(mob_action_run_data &data);
 void set_gravity(mob_action_run_data &data);
 void set_health(mob_action_run_data &data);
 void set_height(mob_action_run_data &data);
@@ -311,6 +316,7 @@ void set_limb_animation(mob_action_run_data &data);
 void set_near_reach(mob_action_run_data &data);
 void set_state(mob_action_run_data &data);
 void set_sector_scroll(mob_action_run_data &data);
+void set_shadow_visibility(mob_action_run_data &data);
 void set_tangible(mob_action_run_data &data);
 void set_team(mob_action_run_data &data);
 void set_timer(mob_action_run_data &data);

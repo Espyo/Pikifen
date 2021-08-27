@@ -1504,7 +1504,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         if(mob_ptr->hide) continue;
         
         //Shadows.
-        if(mob_ptr->type->casts_shadow) {
+        if(mob_ptr->type->casts_shadow && mob_ptr->show_shadow) {
             world_component c;
             c.mob_shadow_ptr = mob_ptr;
             if(mob_ptr->standing_on_mob) {

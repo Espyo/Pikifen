@@ -240,8 +240,10 @@ public:
     timer invuln_period;
     //Mob's team (who it can damage); use MOB_TEAM_*.
     unsigned char team;
-    //If it should be hidden (no shadow, no health).
+    //If it should be hidden (not drawn, no shadow, no health).
     bool hide;
+    //If its shadow should be visible.
+    bool show_shadow;
     //Is invisible due to a status effect. Cache for performance.
     bool has_invisibility_status;
     //Can this mob be hunted down right now?

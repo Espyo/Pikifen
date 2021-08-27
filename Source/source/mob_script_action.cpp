@@ -884,6 +884,19 @@ void mob_action_runners::get_chomped(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the floor Z obtaining mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_floor_z(mob_action_run_data &data) {
+    float x = s2f(data.args[1]);
+    float y = s2f(data.args[2]);
+    sector* s = get_sector(point(x, y), NULL, true);
+    data.m->vars[data.args[0]] = f2s(s ? s->z : 0);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the info obtaining mob script action.
  * data:
  *   Data about the action call.
@@ -1042,7 +1055,10 @@ void mob_action_runners::link_with_focus(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
-    data.m->chase(point(s2f(data.args[0]), s2f(data.args[1])), data.m->z);
+    float x = s2f(data.args[0]);
+    float y = s2f(data.args[1]);
+    float z = data.args.size() > 2 ? s2f(data.args[2]) : data.m->z;
+    data.m->chase(point(x, y), z);
 }
 
 
@@ -1052,12 +1068,11 @@ void mob_action_runners::move_to_absolute(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::move_to_relative(mob_action_run_data &data) {
-    point p =
-        rotate_point(
-            point(s2f(data.args[0]), s2f(data.args[1])),
-            data.m->angle
-        );
-    data.m->chase(data.m->pos + p, data.m->z);
+    float x = s2f(data.args[0]);
+    float y = s2f(data.args[1]);
+    float z = (data.args.size() > 2 ? s2f(data.args[2]) : 0);
+    point p = rotate_point(point(x, y), data.m->angle);
+    data.m->chase(data.m->pos + p, data.m->z + z);
 }
 
 
@@ -1281,6 +1296,16 @@ void mob_action_runners::set_far_reach(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the flying setting mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::set_flying(mob_action_run_data &data) {
+    data.m->can_move_in_midair = s2b(data.args[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the gravity setting mob script action.
  * data:
  *   Data about the action call.
@@ -1402,6 +1427,16 @@ void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
     
     s_ptr->scroll.x = s2f(data.args[0]);
     s_ptr->scroll.y = s2f(data.args[1]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the shadow visibility setting mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::set_shadow_visibility(mob_action_run_data &data) {
+    data.m->show_shadow = s2b(data.args[0]);
 }
 
 
@@ -1720,7 +1755,15 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
-    data.m->face(deg_to_rad(s2f(data.args[0])), NULL);
+    if(data.args.size() == 1) {
+        //Turn to an absolute angle.
+        data.m->face(deg_to_rad(s2f(data.args[0])), NULL);
+    } else {
+        //Turn to some absolute coordinates.
+        float x = s2f(data.args[0]);
+        float y = s2f(data.args[1]);
+        data.m->face(get_angle(data.m->pos, point(x, y)), NULL);
+    }
 }
 
 
@@ -1730,7 +1773,16 @@ void mob_action_runners::turn_to_absolute(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
-    data.m->face(data.m->angle + deg_to_rad(s2f(data.args[0])), NULL);
+    if(data.args.size() == 1) {
+        //Turn to a relative angle.
+        data.m->face(data.m->angle + deg_to_rad(s2f(data.args[0])), NULL);
+    } else {
+        //Turn to some relative coordinates.
+        float x = s2f(data.args[0]);
+        float y = s2f(data.args[1]);
+        point p = rotate_point(point(x, y), data.m->angle);
+        data.m->face(get_angle(data.m->pos, data.m->pos + p), NULL);
+    }
 }
 
 

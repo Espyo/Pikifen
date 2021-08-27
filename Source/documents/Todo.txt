@@ -2,14 +2,15 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Add a Puffy Blowhog
+    Allow other mobs to move freely in the air via scripting
+        Make the Wollywog and Spectralid use this logic instead of gravity stuff.
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
     
     --- v0.21.0 ---
-    Add a Puffy Blowhog
     Add a bamboo gate
     Adult Bulbmin?
     Purple Pikmin improvements
@@ -26,7 +27,6 @@ Next tasks (roughly sorted most important first)
             Spicy spray should reset the time if it is re-applied
         Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
         A way for sprays to affect leaders, like if you want to spray all Pikmin+leaders in the group with a speed-up spray
-    Allow other mobs to move freely in the air via scripting
     Make it so Dweevils can pick up treasure
     More pathing improvements
         Make it so mobs carrying light load can use bouncers
@@ -42,13 +42,14 @@ Next tasks (roughly sorted most important first)
         Tree shadows should have both an horizontal and a vertical sway by default, not just horizontal
         When creating a new animation, it should try to find a sprite that matches the name of the animation
         Frame duration slider should be less sensitive
+        The scrollable part of lists in pickers shouldn't include the creation/search stuff
     The cutscene message box should be styled like the menu boxes, instead of being a stretched PNG
     Menus need tooltips
     In the manual
         Rename "text file" to "data file"
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
         Add tips about each Pikmin type's strength and weaknesses
-        Split the list of actions (maybe events too) by category
+        Split the list of actions (maybe events too) by category, and move them to their own page, along with the events
     Refactor
         In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
@@ -212,6 +213,7 @@ Next tasks (roughly sorted most important first)
         Sunset + fight
         Boss
         Add to the FAQ why there's only a normal and a fight variant -- Too many system resources
+        Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
     Revamp sound system
         Rename sound files to .oga, instead of .ogg
         There are three types of sounds

@@ -82,6 +82,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     invuln_period(0),
     team(MOB_TEAM_NONE),
     hide(false),
+    show_shadow(true),
     has_invisibility_status(false),
     is_huntable(true),
     height_effect_pivot(LARGE_FLOAT),

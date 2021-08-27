@@ -706,6 +706,8 @@ reaches {
     </table>
     
     <h2 id="action-list">List of actions</h2>
+
+    <p>In this list, any argument surrounded by square brackets is optional.</p>
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
@@ -771,6 +773,13 @@ reaches {
       <tr>
         <th><code>get_chomped</code></th>
         <td>Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code>on_hitbox_touch_eat</code> event.</td>
+      </tr>
+      <tr>
+        <th><code>get_floor_z</code></th>
+        <td><dl>
+          <dt><code><b>get_floor_z</b> &lt;destination_variable&gt; &lt;x&gt; &lt;y&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable&gt; to the Z coordinate of the floor at the specified coordinates. If there is no sector at those coordinates, the variable will receive the value 0.</dd>
+        </dl></td>
       </tr>
       <tr>
         <th><code>get_focus_info</code></th>
@@ -883,15 +892,15 @@ reaches {
       <tr>
         <th><code>move_to_absolute</code></th>
         <td><dl>
-          <dt><code><b>move_to_absolute</b> &lt;x&gt; &lt;y&gt;</code></dt>
-          <dd>Tells the object to begin moving to the specified area coordinates.</dd>
+          <dt><code><b>move_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></dt>
+          <dd>Tells the object to begin moving to the specified area coordinates. The Z coordinate will only be useful if the object can fly (see <code>set_flying</code>).</dd>
         </dl></td>
       </tr>
       <tr>
         <th><code>move_to_relative</code></th>
         <td><dl>
-          <dt><code><b>move_to_relative</b> &lt;x&gt; &lt;y&gt;</code></dt>
-          <dd>Tells the object to begin moving to the specified relative coordinates. See <a href="#rel-coord">here</a> for more info.</dd>
+          <dt><code><b>move_to_relative</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></dt>
+          <dd>Tells the object to begin moving to the specified relative coordinates. See <a href="#rel-coord">here</a> for more info. The Z coordinate will only be useful if the object can fly (see <code>set_flying</code>).</dd>
         </dl></td>
       </tr>
       <tr>
@@ -985,6 +994,13 @@ reaches {
         </dl></td>
       </tr>
       <tr>
+        <th><code>set_flying</code></th>
+        <td><dl>
+          <dt><code><b>set_flying</b> &lt;true/false&gt;</code></dt>
+          <dd>Sets whether or not this object can fly.</dd>
+        </dl></td>
+      </tr>
+      <tr>
         <th><code>set_gravity</code></th>
         <td><dl>
           <dt><code><b>set_gravity</b> &lt;multiplier&gt;</code></dt>
@@ -1009,7 +1025,7 @@ reaches {
         <th><code>set_hiding</code></th>
         <td><dl>
           <dt><code><b>set_hiding</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not the engine should hide this object's shadow and health from here on out. This is useful, for instance, when a Sheargrub digs underground.</dd>
+          <dd>Sets whether or not the engine should hide this object from here on out. This makes the object, as well as its shadow and health to not be drawn. This is useful, for instance, when a Sheargrub digs underground.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -1047,6 +1063,13 @@ reaches {
         <td><dl>
           <dt><code><b>set_sector_scroll</b> &lt;x_speed&gt; &lt;y_speed&gt;</code></dt>
           <dd>Makes the sector this object is on begin scrolling, with the specified speed in the X axis (units per second) and the specified speed in the Y axis. Its floor texture will scroll along, and any objects on this sector will be dragged too. Setting both values to 0 will make it stop scrolling, naturally.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>set_shadow_visibility</code></th>
+        <td><dl>
+          <dt><code><b>set_shadow_visibility</b> &lt;true/false&gt;</code></dt>
+          <dd>Sets whether or not the engine should draw this object's shadow from here on out.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -1187,6 +1210,8 @@ reaches {
         <td><dl>
           <dt><code><b>turn_to_absolute</b> &lt;angle&gt;</code></dt>
           <dd>Turn towards the specified angle. 0 is east, 90 is south, etc.</dd>
+          <dt><code><b>turn_to_absolute</b> &lt;x&gt; &lt;y&gt;</code></dt>
+          <dd>Turn towards the specified area coordinates.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -1194,6 +1219,8 @@ reaches {
         <td><dl>
           <dt><code><b>turn_to_relative</b> &lt;angle&gt;</code></dt>
           <dd>Turn &lt;angle&gt; degrees anti-clockwise.</dd>
+          <dt><code><b>turn_to_relative</b> &lt;x&gt; &lt;y&gt;</code></dt>
+          <dd>Turn towards the specified the specified coordinates relative to its position and angle. See <a href="#rel-coords">here</a> for more info.</dd>
         </dl></td>
       </tr>
       <tr>
