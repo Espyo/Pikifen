@@ -1417,6 +1417,16 @@ void mob_action_runners::set_near_reach(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the radius setting mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::set_radius(mob_action_run_data &data) {
+    data.m->radius = s2f(data.args[0]);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the sector scroll setting mob script action.
  * data:
  *   Data about the action call.

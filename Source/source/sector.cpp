@@ -1422,7 +1422,7 @@ void path_manager::handle_area_load() {
                 if(
                     circle_intersects_line(
                         m_ptr->pos,
-                        m_ptr->type->radius,
+                        m_ptr->radius,
                         s_ptr->pos, l_ptr->end_ptr->pos
                     )
                 ) {
@@ -2891,7 +2891,7 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
             m_ptr->health != 0 &&
             circle_intersects_line(
                 m_ptr->pos,
-                m_ptr->type->radius,
+                m_ptr->radius,
                 s1->pos, s2->pos
             )
         ) {

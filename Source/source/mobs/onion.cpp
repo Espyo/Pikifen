@@ -186,8 +186,8 @@ void onion::tick_class_specifics(const float delta_t) {
         if(
             bbox_check(
                 game.states.gameplay->cur_leader_ptr->pos, o_ptr->pos,
-                game.states.gameplay->cur_leader_ptr->type->radius +
-                o_ptr->type->radius * 3
+                game.states.gameplay->cur_leader_ptr->radius +
+                o_ptr->radius * 3
             )
         ) {
             final_alpha = ONION_SEETHROUGH_ALPHA;
@@ -196,8 +196,8 @@ void onion::tick_class_specifics(const float delta_t) {
         if(
             bbox_check(
                 game.states.gameplay->leader_cursor_w, o_ptr->pos,
-                game.states.gameplay->cur_leader_ptr->type->radius +
-                o_ptr->type->radius * 3
+                game.states.gameplay->cur_leader_ptr->radius +
+                o_ptr->radius * 3
             )
         ) {
             final_alpha = ONION_SEETHROUGH_ALPHA;

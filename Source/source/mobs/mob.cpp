@@ -53,6 +53,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     angle(angle),
     intended_turn_angle(angle),
     intended_turn_pos(nullptr),
+    radius(type->radius),
     height(type->height),
     can_move_in_midair(false),
     z_cap(FLT_MAX),
@@ -89,7 +90,10 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     on_hazard(nullptr),
     chomp_max(0),
     parent(nullptr),
-    time_alive(0.0f) {
+    time_alive(0.0f),
+    angle_cos(0.0f),
+    angle_sin(0.0f),
+    max_span(type->max_span) {
     
     next_mob_id++;
     
@@ -1808,18 +1812,18 @@ void mob::hold(
 bool mob::is_off_camera() const {
     if(parent) return false;
     
-    float m_radius;
+    float radius_to_use;
     if(type->rectangular_dim.x == 0) {
-        m_radius = type->radius;
+        radius_to_use = radius;
     } else {
-        m_radius =
+        radius_to_use =
             std::max(
                 type->rectangular_dim.x / 2.0,
                 type->rectangular_dim.y / 2.0
             );
     }
     
-    return !bbox_check(game.cam.box[0], game.cam.box[1], pos, m_radius);
+    return !bbox_check(game.cam.box[0], game.cam.box[1], pos, radius_to_use);
 }
 
 
@@ -2069,6 +2073,25 @@ void mob::set_health(const bool add, const bool ratio, const float amount) {
     if(add) base_nr = health;
     
     health = clamp(base_nr + change, 0.0f, type->max_health);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the mob's radius to a different value.
+ * radius:
+ *   New radius.
+ */
+void mob::set_radius(const float radius) {
+    this->radius = radius;
+    max_span = radius;
+    max_span = std::max(max_span, type->anims.max_span);
+    if(type->rectangular_dim.x != 0) {
+        max_span =
+            std::max(
+                max_span,
+                dist(point(0, 0), type->rectangular_dim / 2.0).to_float()
+            );
+    }
 }
 
 
@@ -2702,11 +2725,11 @@ void mob::tick_script(const float delta_t) {
                 if(
                     (
                         d > r_ptr->radius_1 +
-                        (type->radius + focus->type->radius) ||
+                        (radius + focus->radius) ||
                         face_diff > r_ptr->angle_1 / 2.0f
                     ) && (
                         d > r_ptr->radius_2 +
-                        (type->radius + focus->type->radius) ||
+                        (radius + focus->radius) ||
                         face_diff > r_ptr->angle_2 / 2.0f
                     )
                     

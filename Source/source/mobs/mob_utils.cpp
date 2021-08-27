@@ -62,8 +62,8 @@ carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
         float angle = TAU / m->type->max_carriers * c;
         point p(
-            cos(angle) * (m->type->radius + game.config.standard_pikmin_radius),
-            sin(angle) * (m->type->radius + game.config.standard_pikmin_radius)
+            cos(angle) * (m->radius + game.config.standard_pikmin_radius),
+            sin(angle) * (m->radius + game.config.standard_pikmin_radius)
         );
         spot_info.push_back(carrier_spot_struct(p));
     }
@@ -196,9 +196,9 @@ void carry_info_struct::rotate_points(const float angle) {
         float s_angle = angle + (TAU / m->type->max_carriers * s);
         point p(
             cos(s_angle) *
-            (m->type->radius + game.config.standard_pikmin_radius),
+            (m->radius + game.config.standard_pikmin_radius),
             sin(s_angle) *
-            (m->type->radius + game.config.standard_pikmin_radius)
+            (m->radius + game.config.standard_pikmin_radius)
         );
         spot_info[s].pos = p;
     }
@@ -687,7 +687,7 @@ point hold_info_struct::get_final_pos(float* final_z) const {
         final_pos +=
             angle_to_coordinates(
                 offset_angle + m->angle,
-                offset_dist * m->type->radius
+                offset_dist * m->radius
             );
         *final_z = m->z;
     }

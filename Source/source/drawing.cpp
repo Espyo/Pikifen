@@ -1436,7 +1436,7 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
     draw_bitmap(
         status_bmp,
         m->pos,
-        point(m->type->radius * 2 * status_bmp_scale, -1)
+        point(m->radius * 2 * status_bmp_scale, -1)
     );
 }
 

@@ -166,8 +166,28 @@ animation_database::animation_database(
 ) :
     animations(a),
     sprites(s),
-    body_parts(b) {
+    body_parts(b),
+    max_span(0.0f) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the maximum distance that any of its hitbox can reach.,
+ * and stores it in the max_span variable.
+ */
+void animation_database::calculate_max_span() {
+    max_span = 0.0f;
+    for(size_t s = 0; s < sprites.size(); ++s) {
+        sprite* s_ptr = sprites[s];
+        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+            hitbox* h_ptr = &s_ptr->hitboxes[h];
+            
+            float d = dist(point(0, 0), h_ptr->pos).to_float();
+            d += h_ptr->radius;
+            max_span = std::max(max_span, d);
+        }
+    }
 }
 
 
@@ -869,5 +889,6 @@ animation_database load_animation_database_from_file(data_node* file_node) {
         );
     }
     
+    adb.calculate_max_span();
     return adb;
 }

@@ -845,6 +845,14 @@ void init_mob_actions() {
         mob_action_loaders::set_near_reach
     );
     
+    reg_param("radius", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_action(
+        MOB_ACTION_SET_RADIUS,
+        "set_radius",
+        mob_action_runners::set_radius,
+        nullptr
+    );
+    
     reg_param("x speed", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y speed", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(

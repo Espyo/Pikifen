@@ -54,8 +54,8 @@ void pellet::draw_mob() {
         delivery_time_ratio_left, delivery_color
     );
     
-    eff.scale.x *= type->radius * 2.0 / al_get_bitmap_width(s_ptr->bitmap);
-    eff.scale.y *= type->radius * 2.0 / al_get_bitmap_height(s_ptr->bitmap);
+    eff.scale.x *= radius * 2.0 / al_get_bitmap_width(s_ptr->bitmap);
+    eff.scale.y *= radius * 2.0 / al_get_bitmap_height(s_ptr->bitmap);
     
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
     draw_bitmap_with_effects(pel_type->bmp_number, eff);

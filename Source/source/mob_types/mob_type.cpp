@@ -768,17 +768,7 @@ void load_mob_type_from_file(
     mt->max_span = mt->radius;
     
     if(load_resources) {
-        //Calculate the max span based on the animations's hitboxes.
-        for(size_t s = 0; s < mt->anims.sprites.size(); ++s) {
-            sprite* s_ptr = mt->anims.sprites[s];
-            for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
-                hitbox* h_ptr = &s_ptr->hitboxes[h];
-                
-                float d = dist(point(0, 0), h_ptr->pos).to_float();
-                d += h_ptr->radius;
-                mt->max_span = std::max(mt->max_span, d);
-            }
-        }
+        mt->max_span = std::max(mt->max_span, mt->anims.max_span);
     }
     
     if(mt->rectangular_dim.x != 0) {

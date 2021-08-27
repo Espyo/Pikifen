@@ -484,6 +484,7 @@ struct track_info_struct {
 };
 
 
+float calculate_mob_max_span(mob_type* type, const float radius);
 mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars,

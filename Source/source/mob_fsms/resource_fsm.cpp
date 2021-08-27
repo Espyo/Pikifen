@@ -227,7 +227,7 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
         r_ptr->carry_info->must_return = true;
         r_ptr->carry_info->return_point = r_ptr->origin_pile->pos;
         r_ptr->carry_info->return_dist =
-            r_ptr->origin_pile->type->radius +
+            r_ptr->origin_pile->radius +
             game.config.standard_pikmin_radius +
             game.config.idle_task_range / 2.0f;
     } else {

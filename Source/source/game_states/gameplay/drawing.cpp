@@ -285,7 +285,7 @@ void gameplay_state::draw_ingame_text() {
                 draw_fraction(
                     point(
                         mob_ptr->pos.x,
-                        mob_ptr->pos.y - mob_ptr->type->radius -
+                        mob_ptr->pos.y - mob_ptr->radius -
                         al_get_font_line_height(game.fonts.standard) * 1.25
                     ),
                     mob_ptr->carry_info->cur_carrying_strength,
@@ -303,7 +303,7 @@ void gameplay_state::draw_ingame_text() {
                     game.config.carrying_color_stop,
                     point(
                         p_ptr->pos.x,
-                        p_ptr->pos.y - p_ptr->type->radius -
+                        p_ptr->pos.y - p_ptr->radius -
                         al_get_font_line_height(game.fonts.standard) * 1.25
                     ),
                     ALLEGRO_ALIGN_CENTER,
@@ -319,7 +319,7 @@ void gameplay_state::draw_ingame_text() {
                 draw_fraction(
                     point(
                         t_ptr->pos.x,
-                        t_ptr->pos.y - t_ptr->type->radius -
+                        t_ptr->pos.y - t_ptr->radius -
                         al_get_font_line_height(game.fonts.standard) * 1.25
                     ),
                     t_ptr->get_power(),
@@ -338,7 +338,7 @@ void gameplay_state::draw_ingame_text() {
                     draw_fraction(
                         point(
                             s_ptr->pos.x,
-                            s_ptr->pos.y - s_ptr->type->radius -
+                            s_ptr->pos.y - s_ptr->radius -
                             al_get_font_line_height(game.fonts.standard) * 1.25
                         ),
                         w,
@@ -351,7 +351,7 @@ void gameplay_state::draw_ingame_text() {
                         game.config.carrying_color_stop,
                         point(
                             s_ptr->pos.x,
-                            s_ptr->pos.y - s_ptr->type->radius -
+                            s_ptr->pos.y - s_ptr->radius -
                             al_get_font_line_height(game.fonts.standard) * 1.25
                         ),
                         ALLEGRO_ALIGN_CENTER,
@@ -371,7 +371,7 @@ void gameplay_state::draw_ingame_text() {
             draw_health(
                 point(
                     mob_ptr->pos.x,
-                    mob_ptr->pos.y - mob_ptr->type->radius -
+                    mob_ptr->pos.y - mob_ptr->radius -
                     DEF_HEALTH_WHEEL_RADIUS - 4
                 ),
                 mob_ptr->health_wheel_smoothed_ratio,
@@ -417,7 +417,7 @@ void gameplay_state::draw_ingame_text() {
             point(
                 cur_leader_ptr->pos.x,
                 cur_leader_ptr->pos.y -
-                cur_leader_ptr->type->radius
+                cur_leader_ptr->radius
             ),
             "Get up", &game.options.controls[0][cancel_control_id]
         );
@@ -442,7 +442,7 @@ void gameplay_state::draw_ingame_text() {
                 point(
                     cur_leader_ptr->pos.x,
                     cur_leader_ptr->pos.y -
-                    cur_leader_ptr->type->radius
+                    cur_leader_ptr->radius
                 ),
                 "Stop throwing", &game.options.controls[0][throw_control_id]
             );
@@ -460,7 +460,7 @@ void gameplay_state::draw_ingame_text() {
             point(
                 cur_leader_ptr->pos.x,
                 cur_leader_ptr->pos.y -
-                cur_leader_ptr->type->radius
+                cur_leader_ptr->radius
             ),
             "Stop", &game.options.controls[0][cancel_control_id]
         );
@@ -492,7 +492,7 @@ void gameplay_state::draw_ingame_text() {
     ) {
         float pivot_y =
             close_to_interactable_to_use->pos.y -
-            close_to_interactable_to_use->type->radius;
+            close_to_interactable_to_use->radius;
         draw_notification(
             point(close_to_interactable_to_use->pos.x, pivot_y),
             close_to_interactable_to_use->int_type->prompt_text,
@@ -511,7 +511,7 @@ void gameplay_state::draw_ingame_text() {
             point(
                 close_to_pikmin_to_pluck->pos.x,
                 close_to_pikmin_to_pluck->pos.y -
-                close_to_pikmin_to_pluck->type->radius
+                close_to_pikmin_to_pluck->radius
             ),
             "Pluck", &game.options.controls[0][main_control_id]
         );
@@ -528,7 +528,7 @@ void gameplay_state::draw_ingame_text() {
             point(
                 close_to_nest_to_open->m_ptr->pos.x,
                 close_to_nest_to_open->m_ptr->pos.y -
-                close_to_nest_to_open->m_ptr->type->radius
+                close_to_nest_to_open->m_ptr->radius
             ),
             "Check", &game.options.controls[0][main_control_id]
         );
@@ -819,7 +819,7 @@ void gameplay_state::draw_lighting_filter() {
                 &game.world_to_screen_transform,
                 &pos.x, &pos.y
             );
-            float radius = mobs.all[m]->type->radius * 4.0 * game.cam.zoom;
+            float radius = mobs.all[m]->radius * 4.0 * game.cam.zoom;
             al_draw_scaled_bitmap(
                 game.sys_assets.bmp_spotlight,
                 0, 0, 64, 64,
@@ -1638,7 +1638,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             }
             draw_mob_shadow(
                 c_ptr->mob_shadow_ptr->pos,
-                c_ptr->mob_shadow_ptr->type->radius * 2,
+                c_ptr->mob_shadow_ptr->radius * 2,
                 delta_z,
                 mob_shadow_stretch
             );

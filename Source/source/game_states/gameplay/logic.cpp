@@ -96,7 +96,7 @@ void gameplay_state::do_aesthetic_logic() {
     throw_dest_mob = NULL;
     for(size_t m = 0; m < mobs.all.size(); ++m) {
         mob* m_ptr = mobs.all[m];
-        if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->type->max_span)) {
+        if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->max_span)) {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
@@ -109,7 +109,7 @@ void gameplay_state::do_aesthetic_logic() {
             //then forget it.
             continue;
         }
-        if(dist(throw_dest, m_ptr->pos) > m_ptr->type->radius) {
+        if(dist(throw_dest, m_ptr->pos) > m_ptr->radius) {
             //The cursor is not really on top of this mob.
             continue;
         }
@@ -813,7 +813,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
             game.perf_mon->start_measurement("Objects -- Touching others");
         }
         
-        if(d <= m_ptr->type->max_span + m2_ptr->type->max_span) {
+        if(d <= m_ptr->max_span + m2_ptr->max_span) {
             //Only check if their radii or hitboxes
             //can (theoretically) reach each other.
             process_mob_touches(m_ptr, m2_ptr, m, m2, d);
@@ -859,10 +859,10 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         return
         (
             e1.d.to_float() -
-            (m_ptr->type->radius + e1.mob_ptr->type->radius)
+            (m_ptr->radius + e1.mob_ptr->radius)
         ) < (
             e2.d.to_float() -
-            (m_ptr->type->radius + e2.mob_ptr->type->radius)
+            (m_ptr->radius + e2.mob_ptr->radius)
         );
     }
     );
@@ -913,7 +913,7 @@ void gameplay_state::process_mob_misc_interactions(
         m2_ptr->carry_info &&
         !m2_ptr->carry_info->is_full() &&
         d <=
-        m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr)
+        m_ptr->radius + m2_ptr->radius + task_range(m_ptr)
     ) {
     
         pending_intermob_events.push_back(
@@ -930,7 +930,7 @@ void gameplay_state::process_mob_misc_interactions(
     if(
         nto_event &&
         d <=
-        m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr) &&
+        m_ptr->radius + m2_ptr->radius + task_range(m_ptr) &&
         typeid(*m2_ptr) == typeid(tool)
     ) {
         tool* too_ptr = (tool*) m2_ptr;
@@ -950,7 +950,7 @@ void gameplay_state::process_mob_misc_interactions(
         ngto_event &&
         m2_ptr->health > 0 &&
         d <=
-        m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr) &&
+        m_ptr->radius + m2_ptr->radius + task_range(m_ptr) &&
         typeid(*m2_ptr) == typeid(group_task)
     ) {
         group_task* tas_ptr = (group_task*) m2_ptr;
@@ -1006,11 +1006,11 @@ void gameplay_state::process_mob_reaches(
     if(
         (
             d <= r_ptr->radius_1 +
-            (m_ptr->type->radius + m2_ptr->type->radius) &&
+            (m_ptr->radius + m2_ptr->radius) &&
             face_diff <= r_ptr->angle_1 / 2.0
         ) || (
             d <= r_ptr->radius_2 +
-            (m_ptr->type->radius + m2_ptr->type->radius) &&
+            (m_ptr->radius + m2_ptr->radius) &&
             face_diff <= r_ptr->angle_2 / 2.0
         )
         
@@ -1119,10 +1119,10 @@ void gameplay_state::process_mob_touches(
                 //need to be re-calculated.
                 
                 dist hd(m_ptr->pos, h_pos);
-                if(hd < m_ptr->type->radius + h_ptr->radius) {
+                if(hd < m_ptr->radius + h_ptr->radius) {
                     float p =
                         fabs(
-                            hd.to_float() - m_ptr->type->radius -
+                            hd.to_float() - m_ptr->radius -
                             h_ptr->radius
                         );
                     if(push_amount == 0 || p > push_amount) {
@@ -1146,7 +1146,7 @@ void gameplay_state::process_mob_touches(
                 //Rectangle vs circle.
                 xy_collision =
                     circle_intersects_rectangle(
-                        m2_ptr->pos, m2_ptr->type->radius,
+                        m2_ptr->pos, m2_ptr->radius,
                         m_ptr->pos, m_ptr->type->rectangular_dim,
                         m_ptr->angle, &temp_push_amount, &temp_push_angle
                     );
@@ -1154,20 +1154,20 @@ void gameplay_state::process_mob_touches(
                 //Circle vs rectangle.
                 xy_collision =
                     circle_intersects_rectangle(
-                        m_ptr->pos, m_ptr->type->radius,
+                        m_ptr->pos, m_ptr->radius,
                         m2_ptr->pos, m2_ptr->type->rectangular_dim,
                         m2_ptr->angle, &temp_push_amount, &temp_push_angle
                     );
             } else {
                 //Circle vs circle.
                 xy_collision =
-                    d <= (m_ptr->type->radius + m2_ptr->type->radius);
+                    d <= (m_ptr->radius + m2_ptr->radius);
                 if(xy_collision) {
                     //Only bother calculating if there's a collision.
                     temp_push_amount =
                         fabs(
-                            d.to_float() - m_ptr->type->radius -
-                            m2_ptr->type->radius
+                            d.to_float() - m_ptr->radius -
+                            m2_ptr->radius
                         );
                     temp_push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
                 }
@@ -1235,7 +1235,7 @@ void gameplay_state::process_mob_touches(
             //Rectangle vs circle.
             xy_collision =
                 circle_intersects_rectangle(
-                    m2_ptr->pos, m2_ptr->type->radius,
+                    m2_ptr->pos, m2_ptr->radius,
                     m_ptr->pos, m_ptr->type->rectangular_dim,
                     m_ptr->angle
                 );
@@ -1243,14 +1243,14 @@ void gameplay_state::process_mob_touches(
             //Circle vs rectangle.
             xy_collision =
                 circle_intersects_rectangle(
-                    m_ptr->pos, m_ptr->type->radius,
+                    m_ptr->pos, m_ptr->radius,
                     m2_ptr->pos, m2_ptr->type->rectangular_dim,
                     m2_ptr->angle
                 );
         } else {
             //Circle vs circle.
             xy_collision =
-                d <= (m_ptr->type->radius + m2_ptr->type->radius);
+                d <= (m_ptr->radius + m2_ptr->radius);
         }
         
         if(z_touch && m2_ptr->tangible && xy_collision) {

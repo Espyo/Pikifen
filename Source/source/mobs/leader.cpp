@@ -476,8 +476,8 @@ void leader::get_group_spot_info(
     group_info_struct* leader_group_ptr = following_group->group;
     
     float distance =
-        following_group->type->radius +
-        type->radius + game.config.standard_pikmin_radius;
+        following_group->radius +
+        radius + game.config.standard_pikmin_radius;
         
     for(size_t me = 0; me < leader_group_ptr->members.size(); ++me) {
         mob* member_ptr = leader_group_ptr->members[me];
@@ -487,7 +487,7 @@ void leader::get_group_spot_info(
             //If this member is also a leader,
             //then that means the current leader should stick behind.
             distance +=
-                member_ptr->type->radius * 2 + GROUP_SPOT_INTERVAL;
+                member_ptr->radius * 2 + GROUP_SPOT_INTERVAL;
         }
     }
     
@@ -607,7 +607,7 @@ void leader::start_auto_throwing() {
 void leader::start_throw_trail() {
     particle throw_p(
         PARTICLE_TYPE_CIRCLE, pos, z,
-        type->radius, 0.6, PARTICLE_PRIORITY_LOW
+        radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(type->main_color, 128);
@@ -736,7 +736,7 @@ void leader::tick_class_specifics(const float delta_t) {
             
         if(
             dist(group->get_average_member_pos(), pos) >
-            GROUP_SHUFFLE_DIST + (group->radius + type->radius)
+            GROUP_SHUFFLE_DIST + (group->radius + radius)
         ) {
             if(!group->follow_mode) {
                 must_reassign_spots = true;
@@ -761,7 +761,7 @@ void leader::tick_class_specifics(const float delta_t) {
                 point move_anchor_offset =
                     rotate_point(
                         point(
-                            -(type->radius + GROUP_SPOT_INTERVAL * 2),
+                            -(radius + GROUP_SPOT_INTERVAL * 2),
                             0
                         ), game.states.gameplay->swarm_angle + TAU / 2
                     );
@@ -792,7 +792,7 @@ void leader::tick_class_specifics(const float delta_t) {
                 point leader_back_offset =
                     rotate_point(
                         point(
-                            -(type->radius + GROUP_SPOT_INTERVAL * 2),
+                            -(radius + GROUP_SPOT_INTERVAL * 2),
                             0
                         ), angle
                     );
@@ -812,7 +812,7 @@ void leader::tick_class_specifics(const float delta_t) {
                 group->anchor - point(group->radius, 0),
                 pos,
                 type->move_speed,
-                group->radius + type->radius + GROUP_SPOT_INTERVAL * 2,
+                group->radius + radius + GROUP_SPOT_INTERVAL * 2,
                 &mov, NULL, NULL, delta_t
             );
             group->anchor += mov * delta_t;

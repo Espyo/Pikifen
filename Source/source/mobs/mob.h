@@ -164,6 +164,8 @@ public:
     float intended_turn_angle;
     //Variable that holds the position the mob wants to be facing.
     point* intended_turn_pos;
+    //Current radius.
+    float radius;
     //Current height.
     float height;
     //Can it currently move vertically on its own?
@@ -272,6 +274,8 @@ public:
     float angle_cos;
     //Cached value of the angle's sine.
     float angle_sin;
+    //Cached value of how far its hitboxes or radius can reach from the center.
+    float max_span;
     
     
     void tick(const float delta_t);
@@ -286,6 +290,7 @@ public:
     void set_health(const bool add, const bool ratio, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
+    void set_radius(const float radius);
     
     void become_carriable(const size_t destination);
     void become_uncarriable();

@@ -177,6 +177,8 @@ public:
     
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
+    //Maximum span of the hitboxes. Cache for performance.
+    float max_span;
     
     animation_database(
         const vector<animation*> &a = vector<animation*>(),
@@ -188,6 +190,7 @@ public:
     size_t find_sprite(   const string &name) const;
     size_t find_body_part(const string &name) const;
     
+    void calculate_max_span();
     void create_conversions(
         vector<std::pair<size_t, string> > conversions, data_node* file
     );

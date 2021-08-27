@@ -65,6 +65,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SET_HUNTABLE,
     MOB_ACTION_SET_LIMB_ANIMATION,
     MOB_ACTION_SET_NEAR_REACH,
+    MOB_ACTION_SET_RADIUS,
     MOB_ACTION_SET_SECTOR_SCROLL,
     MOB_ACTION_SET_SHADOW_VISIBILITY,
     MOB_ACTION_SET_STATE,
@@ -314,6 +315,7 @@ void set_holdable(mob_action_run_data &data);
 void set_huntable(mob_action_run_data &data);
 void set_limb_animation(mob_action_run_data &data);
 void set_near_reach(mob_action_run_data &data);
+void set_radius(mob_action_run_data &data);
 void set_state(mob_action_run_data &data);
 void set_sector_scroll(mob_action_run_data &data);
 void set_shadow_visibility(mob_action_run_data &data);

@@ -49,7 +49,7 @@ mob* mob::get_mob_to_walk_on() const {
             //Rectangle vs circle.
             if(
                 !circle_intersects_rectangle(
-                    m_ptr->pos, m_ptr->type->radius,
+                    m_ptr->pos, m_ptr->radius,
                     pos, type->rectangular_dim,
                     angle
                 )
@@ -60,7 +60,7 @@ mob* mob::get_mob_to_walk_on() const {
             //Circle vs rectangle.
             if(
                 !circle_intersects_rectangle(
-                    pos, type->radius,
+                    pos, radius,
                     m_ptr->pos, m_ptr->type->rectangular_dim,
                     m_ptr->angle
                 )
@@ -71,7 +71,7 @@ mob* mob::get_mob_to_walk_on() const {
             //Circle vs circle.
             if(
                 dist(pos, m_ptr->pos) >
-                (type->radius + m_ptr->type->radius)
+                (radius + m_ptr->radius)
             ) {
                 continue;
             }
@@ -103,8 +103,8 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
     
     if(
         !game.cur_area_data.bmap.get_edges_in_region(
-            new_pos - type->radius,
-            new_pos + type->radius,
+            new_pos - radius,
+            new_pos + radius,
             candidate_edges
         )
     ) {
@@ -119,7 +119,7 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
         
         if(
             !circle_intersects_line(
-                new_pos, type->radius,
+                new_pos, radius,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
                 NULL, NULL
@@ -278,7 +278,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         //Overly-aggressive pushing results in going through walls.
         //Let's place a cap.
         push_amount =
-            std::min(push_amount, (float) (type->radius / delta_t) * 4);
+            std::min(push_amount, (float) (radius / delta_t) * 4);
             
         //If the mob spawned recently, throttle its push. This avoids a bundle
         //of recently-spawned objects from pushing each other with insane force.
