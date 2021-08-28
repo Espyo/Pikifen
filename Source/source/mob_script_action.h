@@ -28,11 +28,14 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_END_IF,
     MOB_ACTION_FINISH_DYING,
     MOB_ACTION_FOCUS,
+    MOB_ACTION_GET_ANGLE,
     MOB_ACTION_GET_CHOMPED,
-    MOB_ACTION_GET_INFO,
+    MOB_ACTION_GET_COORDINATES_FROM_ANGLE,
+    MOB_ACTION_GET_DISTANCE,
     MOB_ACTION_GET_FLOOR_Z,
     MOB_ACTION_GET_FOCUS_INFO,
     MOB_ACTION_GET_FOCUS_VAR,
+    MOB_ACTION_GET_INFO,
     MOB_ACTION_GET_RANDOM_DECIMAL,
     MOB_ACTION_GET_RANDOM_INT,
     MOB_ACTION_GOTO,
@@ -279,7 +282,10 @@ void delete_function(mob_action_run_data &data);
 void drain_liquid(mob_action_run_data &data);
 void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
+void get_angle(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);
+void get_coordinates_from_angle(mob_action_run_data &data);
+void get_distance(mob_action_run_data &data);
 void get_info(mob_action_run_data &data);
 void get_floor_z(mob_action_run_data &data);
 void get_focus_info(mob_action_run_data &data);

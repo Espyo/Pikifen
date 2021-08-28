@@ -735,8 +735,8 @@ reaches {
       <tr>
         <th><code>calculate</code></th>
         <td><dl>
-          <dt><code><b>calculate</b> &lt;variable&gt; &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
-          <dd>Calculates the mathematical operation between the operands and sets the variable to the result. It makes sense to use a variable in at least one of the operands, otherwise you're just punching in a fixed number calculation that any household calculator could tell you about. The operator can be <code>+</code> (add), <code>-</code> (subtract), <code>*</code> (multiply), <code>/</code> (divide), or <code>%</code> (<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a>). For instance, <code>calculate jumps $jumps + 1</code> would increment the number of jumps. Be careful not to get your $ signs confused &ndash; the &lt;variable&gt; field shouldn't use it!</dd>
+          <dt><code><b>calculate</b> &lt;destination_variable_name&gt; &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
+          <dd>Calculates the mathematical operation between the operands and sets the variable to the result. It makes sense to use a variable in at least one of the operands, otherwise you're just punching in a fixed number calculation that any household calculator could tell you about. The operator can be <code>+</code> (add), <code>-</code> (subtract), <code>*</code> (multiply), <code>/</code> (divide), or <code>%</code> (<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a>). For instance, <code>calculate jumps $jumps + 1</code> would increment the number of jumps. Be careful not to get your $ signs confused &ndash; the &lt;destination_variable_name&gt; field shouldn't use it!</dd>
         </dl></td>
       </tr>
       <tr>
@@ -771,36 +771,57 @@ reaches {
         </dl></td>
       </tr>
       <tr>
+        <th><code>get_angle</code></th>
+        <td><dl>
+          <dt><code><b>get_angle</b> &lt;destination_variable_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the angle between the two sets of coordinates. This angle is in degrees, like other angles used in scripts.</dd>
+        </dl></td>
+      </tr>
+      <tr>
         <th><code>get_chomped</code></th>
         <td>Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code>on_hitbox_touch_eat</code> event.</td>
       </tr>
       <tr>
+        <th><code>get_coordinates_from_angle</code></th>
+        <td><dl>
+          <dt><code><b>get_coordinates_from_angle</b> &lt;x_destination_variable_name&gt; &lt;y_destination_variable_name&gt; &lt;angle&gt; &lt;distance&gt;</code></dt>
+          <dd>Sets the destination variables to the X and Y coordinates that represent the specified angle and distance. Basically, imagine an imaginary point at coordinates 0,0. If you go in the specified angle, for the specified distance, you'll end up at the returned coordinates. The angle should be in degrees, like other angles used in scripts.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>get_distance</code></th>
+        <td><dl>
+          <dt><code><b>get_distance</b> &lt;destination_variable_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the distance between the two sets of coordinates.</dd>
+        </dl></td>
+      </tr>
+      <tr>
         <th><code>get_floor_z</code></th>
         <td><dl>
-          <dt><code><b>get_floor_z</b> &lt;destination_variable&gt; &lt;x&gt; &lt;y&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable&gt; to the Z coordinate of the floor at the specified coordinates. If there is no sector at those coordinates, the variable will receive the value 0.</dd>
+          <dt><code><b>get_floor_z</b> &lt;destination_variable_name&gt; &lt;x&gt; &lt;y&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; to the Z coordinate of the floor at the specified coordinates. If there is no sector at those coordinates, the variable will receive the value 0.</dd>
         </dl></td>
       </tr>
       <tr>
         <th><code>get_focus_info</code></th>
         <td><dl>
-          <dt><code><b>get_focus_info</b> &lt;destination_variable&gt; &lt;information_from_focus&gt;</code></dt>
+          <dt><code><b>get_focus_info</b> &lt;destination_variable_name&gt; &lt;information_from_focus&gt;</code></dt>
           <dd>Works like the <code>get_info</code> action, but when applicable, returns information from the focused mob instead, if any.</dd>
         </dl></td>
       </tr>
       <tr>
         <th><code>get_focus_var</code></th>
         <td><dl>
-          <dt><code><b>get_focus_var</b> &lt;destination_variable&gt; &lt;variable_from_focus&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable&gt; of this mob to the same value as the variable &lt;variable_from_focus&gt; of the focused mob, if any.</dd>
+          <dt><code><b>get_focus_var</b> &lt;destination_variable_name&gt; &lt;focused_mob_variable_name&gt;</code></dt>
+          <dd>Sets the variable &lt;destination_variable_name&gt; of this mob to the same value as the variable &lt;focused_mob_variable_name&gt; of the focused mob, if any.</dd>
         </dl></td>
       </tr>
       <tr>
         <th><code>get_info</code></th>
         <td><dl>
-          <dt><code><b>get_info</b> &lt;destination_variable&gt; &lt;information&gt;</code></dt>
+          <dt><code><b>get_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
           <dd>
-            Sets the variable &lt;destination_variable&gt; to some special information. The possible data are:
+            Sets the variable &lt;destination_variable_name&gt; to some special information. The possible data are:
             <ul>
               <li><code><b>body_part</b></code>: For events that deal with hitboxes, this is the name of this mob's body part that's responsible.</li>
               <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
@@ -828,15 +849,15 @@ reaches {
       <tr>
         <th><code>get_random_decimal</code></th>
         <td><dl>
-          <dt><code><b>get_random_decimal</b> &lt;variable&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
-          <dd>Places a random value between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;variable&gt;. This number is a real number, so it can have decimal places.</dd>
+          <dt><code><b>get_random_decimal</b> &lt;destination_variable_name&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
+          <dd>Places a random value between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;. This number is a real number, so it can have decimal places.</dd>
         </dl></td>
       </tr>
       <tr>
         <th><code>get_random_int</code></th>
         <td><dl>
-          <dt><code><b>get_random_int</b> &lt;variable&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
-          <dd>Places a random value between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;variable&gt;. This number is an integer number, so it will not have decimal places.</dd>
+          <dt><code><b>get_random_int</b> &lt;destination_variable_name&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
+          <dd>Places a random value between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;. This number is an integer number, so it will not have decimal places.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -1105,14 +1126,14 @@ reaches {
       <tr>
         <th><code>set_var</code></th>
         <td><dl>
-          <dt><code><b>set_var</b> &lt;variable&gt; &lt;value&gt;</code></dt>
+          <dt><code><b>set_var</b> &lt;destination_variable_name&gt; &lt;value&gt;</code></dt>
           <dd>Sets the value of the specified variable.</dd>
         </dl></td>
       </tr>
       <tr>
         <th><code>show_message_from_var</code></th>
         <td><dl>
-          <dt><code><b>show_message_from_var</b> &lt;variable&gt;</code></dt>
+          <dt><code><b>show_message_from_var</b> &lt;variable_name&gt;</code></dt>
           <dd>Shows a message on-screen using the text inside the specific variable. Any <code>\n</code> in that text represents a line break.</dd>
         </dl></td>
       </tr>

@@ -869,6 +869,37 @@ void mob_action_runners::focus(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the angle obtaining mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_angle(mob_action_run_data &data) {
+    float center_x = s2f(data.args[1]);
+    float center_y = s2f(data.args[2]);
+    float focus_x = s2f(data.args[3]);
+    float focus_y = s2f(data.args[4]);
+    float angle = get_angle(point(center_x, center_y), point(focus_x, focus_y));
+    angle = rad_to_deg(angle);
+    data.m->vars[data.args[0]] = f2s(angle);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the coordinate from angle obtaining mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_coordinates_from_angle(mob_action_run_data &data) {
+    float angle = s2f(data.args[2]);
+    angle = deg_to_rad(angle);
+    float magnitude = s2f(data.args[3]);
+    point p = angle_to_coordinates(angle, magnitude);
+    data.m->vars[data.args[0]] = f2s(p.x);
+    data.m->vars[data.args[1]] = f2s(p.y);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the mob script action for getting chomped.
  * data:
  *   Data about the action call.
@@ -880,6 +911,23 @@ void mob_action_runners::get_chomped(mob_action_run_data &data) {
             (hitbox*) (data.custom_data_2)
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the distance obtaining mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_distance(mob_action_run_data &data) {
+    float center_x = s2f(data.args[1]);
+    float center_y = s2f(data.args[2]);
+    float focus_x = s2f(data.args[3]);
+    float focus_y = s2f(data.args[4]);
+    data.m->vars[data.args[0]] =
+        f2s(
+            dist(point(center_x, center_y), point(focus_x, focus_y)).to_float()
+        );
 }
 
 

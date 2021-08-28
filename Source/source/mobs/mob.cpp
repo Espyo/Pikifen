@@ -786,9 +786,11 @@ void mob::calculate_knockback(
     if(attack_h) {
         *kb_strength = attack_h->knockback;
         if(attack_h->knockback_outward) {
-            *kb_angle = get_angle(pos, victim->pos);
+            *kb_angle =
+                get_angle(attack_h->get_cur_pos(pos, angle), victim->pos);
         } else {
-            *kb_angle = angle + attack_h->knockback_angle;
+            *kb_angle =
+                angle + attack_h->knockback_angle;
         }
     } else {
         *kb_strength = 0;

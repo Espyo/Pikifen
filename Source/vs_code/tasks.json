@@ -68,6 +68,15 @@
 				"echo": true
 			},
 			"detail": "Use make to clean the project."
+		},
+		{
+			"label": "Rebuild Pikifen (Debug)",
+			"dependsOn": ["Clean Pikifen", "Build Pikifen - Debug"],
+			"dependsOrder": "sequence",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"detail": "Use make to clean the project, and then to compile in a debug build."
 		}
 	]
 }
