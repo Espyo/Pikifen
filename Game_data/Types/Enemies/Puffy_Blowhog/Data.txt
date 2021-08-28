@@ -1,0 +1,25 @@
+name = Puffy Blowhog
+
+acceleration = 50
+can_free_move = true
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
+drops_corpse = true
+height = 128
+itch_damage = 70
+itch_time = 5
+max_carriers = 20
+max_health = 2000
+move_speed = 110
+pikmin_seeds = 8
+pushable = true
+pushes = true
+radius = 75
+reaches {
+    search = 400 180 30 360
+    chase = 500 360
+}
+rotation_speed = 70
+target_type = enemy
+territory_radius = 500
+weight = 2

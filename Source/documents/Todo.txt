@@ -2,7 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Add a Puffy Blowhog
     Allow other mobs to move freely in the air via scripting
         Make the Wollywog and Spectralid use this logic instead of gravity stuff.
     

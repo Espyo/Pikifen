@@ -1,0 +1,2 @@
+name = wind
+color = 255 255 255

@@ -1,0 +1,233 @@
+first_state = idling
+death_state = dying
+
+init {
+    start_height_effect
+    set_flying true
+    get_info home_x x
+    get_info home_y y
+    get_floor_z home_z $home_x $home_y
+    calculate z $home_z + 100
+    move_to_absolute $home_x $home_y $z
+}
+
+script {
+    idling {
+        on_enter {
+            stop
+            set_animation idling
+            set_near_reach search
+            get_random_decimal timeout 1 3
+            set_timer $timeout
+        }
+        on_opponent_in_reach {
+            focus trigger
+            set_state chasing
+        }
+        on_itch {
+            set_state shaking
+        }
+        on_timer {
+            set_state exploring
+        }
+    }
+
+    exploring {
+        on_enter {
+            get_random_decimal r -500 500
+            calculate x $home_x + $r
+            get_random_decimal r -500 500
+            calculate y $home_y + $r
+            get_floor_z z $x $y
+            calculate z $z + 100
+            move_to_absolute $x $y $z
+            turn_to_absolute $x $y
+            set_timer 4
+        }
+        on_far_from_home {
+            move_to_absolute $x $y $home_z
+        }
+        on_itch {
+            set_state shaking
+        }
+        on_opponent_in_reach {
+            focus trigger
+            set_state chasing
+        }
+        on_timer {
+            set_state idling
+        }
+        on_reach_destination {
+            set_state idling
+        }
+    }
+
+    chasing {
+        on_enter {
+            set_far_reach chase
+            get_random_decimal timeout 2.5 4
+            set_timer 0.5
+            turn_to_target focused_mob
+
+            get_info x x
+            get_info y y
+            get_focus_info fx x
+            get_focus_info fy y
+            get_angle a $x $y $fx $fy
+        }
+        on_far_from_home {
+            stop
+            turn_to_target focused_mob
+        }
+        on_itch {
+            set_state shaking
+        }
+        on_focus_off_reach {
+            set_state idling
+        }
+        on_timer {
+            get_coordinates_from_angle x y $a 400
+            get_focus_info fx x
+            get_focus_info fy y
+            calculate x $fx - $x
+            calculate y $fy - $y
+
+            get_floor_z z $x $y
+            calculate z $z + 100
+
+            move_to_absolute $x $y $z
+            turn_to_target focused_mob
+            set_timer 0.5
+
+            calculate timeout $timeout - 0.5
+            if $timeout <= 0
+                set_state inhaling
+            end_if
+        }
+    }
+
+    inhaling {
+        on_enter {
+            stop
+
+            //Finish rising to the right Z.
+            get_info x x
+            get_info y y
+            get_floor_z z $x $y
+            calculate z $z + 100
+            move_to_absolute $x $y $z
+
+            set_animation inhaling
+            set_timer 2
+        }
+        on_timer {
+            set_state blowing
+        }
+    }
+
+    blowing {
+        on_enter {
+            set_animation blowing
+            set_timer 2
+        }
+        on_frame_signal {
+            start_particles blowhog_wind 400 0 -80
+        }
+        on_timer {
+            stop_particles
+            set_state blowing_end
+        }
+    }
+
+    blowing_end {
+        on_enter {
+            set_animation blowing_end
+        }
+        on_animation_end {
+            set_state idling
+        }
+    }
+
+    shaking {
+        on_enter {
+            stop
+            get_info t latched_pikmin_weight
+            if $t > 15
+                set_state falling
+            else
+                set_animation shaking
+            end_if
+        }
+        on_animation_end {
+            set_state idling
+        }
+    }
+
+    falling {
+        on_enter {
+            stop
+            set_animation falling
+            set_timer 0.5
+        }
+        on_timer {
+            set_flying false
+        }
+        on_land {
+            start_particles dust_explosion_large
+            set_state grounded
+        }
+    }
+
+    grounded {
+        on_enter {
+            set_animation grounded
+            stop
+            set_timer 5
+        }
+        on_timer {
+            set_state getting_up
+        }
+    }
+
+    getting_up {
+        on_enter {
+            set_flying true
+            set_animation getting_up
+        }
+        on_animation_end {
+            get_info x x
+            get_info y y
+            get_info z z
+
+            //Since the blowhog is already on the floor, we can just
+            //add 100 to get the height that's 100 above the floor.
+            calculate z $z + 100
+
+            move_to_absolute $x $y $z
+            set_state idling
+        }
+    }
+    
+    dying {
+        on_enter {
+            start_dying
+            set_animation dying
+        }
+        on_frame_signal {
+            get_info t frame_signal
+            if $t = 0
+                set_flying false
+                set_shadow_visibility false
+                set_tangible false
+            else
+                set_shadow_visibility true
+                set_tangible true
+                set_radius 16
+            end_if
+        }
+        on_animation_end {
+            finish_dying
+        }
+    }
+    
+}
