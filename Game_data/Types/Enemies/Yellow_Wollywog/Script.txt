@@ -95,36 +95,28 @@ script {
             end_if
         }
         on_animation_end {
-            set_state jumping_up_1
+            set_state jumping_up
         }
     }
     
-    jumping_up_1 {
+    jumping_up {
         on_enter {
             start_height_effect
-            set_gravity -2
-            set_timer 0.2
+            set_timer 1
             set_animation jumping_up
+            set_flying true
             if $has_focus = true
-                move_to_target focused_mob_position
+                get_focus_info x x
+                get_focus_info y y
+                get_focus_info z z
+                calculate z $z + 100
+                move_to_absolute $x $y $z
+            else
+                move_to_relative 0 0 100
             end_if
         }
         on_reach_destination {
-            stop
-        }
-        on_timer {
-            set_state jumping_up_2
-        }
-    }
-    
-    jumping_up_2 {
-        on_enter {
-            stop_vertically
-            set_gravity -0.2
-            set_timer 0.8
-        }
-        on_reach_destination {
-            stop
+            set_state floating
         }
         on_timer {
             set_state floating
@@ -133,8 +125,9 @@ script {
     
     floating {
         on_enter {
-            stop
+            set_flying false
             set_gravity 0
+            stop
             stop_vertically
             set_timer 1
             set_animation floating

@@ -16,7 +16,7 @@ pushable = true
 pushes = true
 radius = 75
 reaches {
-    search = 400 180 30 360
+    search = 400 90 30 360
     chase = 500 360
 }
 rotation_speed = 70

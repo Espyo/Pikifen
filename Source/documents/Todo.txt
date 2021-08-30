@@ -2,8 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Allow other mobs to move freely in the air via scripting
-        Make the Wollywog and Spectralid use this logic instead of gravity stuff.
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -11,6 +10,8 @@ Next tasks (roughly sorted most important first)
     
     --- v0.21.0 ---
     Add a bamboo gate
+    Pikmin 3 leaders
+        Change the President's style to be yellow instead
     Adult Bulbmin?
     Purple Pikmin improvements
         Give them a proper pound attack
@@ -90,6 +91,10 @@ Next tasks (roughly sorted most important first)
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
+    Performance
+        Wall shadow rendering is a bit heavy. Mostly in figuring out what edges to draw or not to draw
+            Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
+    Code cleanup: memory leaks, cppcheck, etc.
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     General graphic file improvements
         Leader and Pikmin portrait images should
@@ -167,9 +172,6 @@ Next tasks (roughly sorted most important first)
             Some signs should talk about dismissing, and group moving
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Kman's Adventure area (see #content-sharing)
-    Performance
-        Wall shadow rendering is a bit heavy. Mostly in figuring out what edges to draw or not to draw
-            Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
     Update the manual's area editor screenshots
     Remember to update the Pikmin Fanon wiki page link in the PNG files
     
@@ -564,11 +566,8 @@ Misc things (so I don't forget)
         This would allow mobs to cast light, which would just lighten up that zone of the lightmap
     Demo game content to add
         Enemies
-            Pikmin 3 exclusive enemy
             Scuttlebug?
             A completely original enemy
-        Pikmin 3 leaders
-            When adding this, change the President's style to be yellow instead
         Cyan Pikmin and Green Pikmin?
     Particle improvements
         https://www.youtube.com/watch?v=bIjrSvGddDQ
