@@ -501,7 +501,8 @@ struct path_manager {
     unordered_set<path_stop*> hazardous_stops;
     
     void handle_area_load();
-    void handle_obstacle_clear(mob* m);
+    void handle_obstacle_add(mob* m);
+    void handle_obstacle_remove(mob* m);
     void handle_sector_hazard_change(sector* sector_ptr);
     void clear();
 };

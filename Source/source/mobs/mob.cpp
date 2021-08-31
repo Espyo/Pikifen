@@ -93,7 +93,8 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     time_alive(0.0f),
     angle_cos(0.0f),
     angle_sin(0.0f),
-    max_span(type->max_span) {
+    max_span(type->max_span),
+    can_block_paths(false) {
     
     next_mob_id++;
     
@@ -107,6 +108,10 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     center_sector = sec;
     
     team = type->starting_team;
+    
+    if(type->can_block_paths) {
+        set_can_block_paths(true);
+    }
 }
 
 
@@ -2057,6 +2062,26 @@ void mob::set_animation(const string &name, const bool auto_start) {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets whether the mob can block paths from here on.
+ * blocks:
+ *   Whether it can block paths or not.
+ */
+void mob::set_can_block_paths(const bool blocks) {
+    if(blocks) {
+        if(!can_block_paths) {
+            game.states.gameplay->path_mgr.handle_obstacle_add(this);
+            can_block_paths = true;
+        }
+    } else {
+        if(can_block_paths) {
+            game.states.gameplay->path_mgr.handle_obstacle_remove(this);
+            can_block_paths = false;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Changes a mob's health, relatively or absolutely.
  * add:
  *   If true, change is relative to the current value
@@ -2638,8 +2663,8 @@ void mob::tick_misc_logic(const float delta_t) {
         }
     }
     
-    if(type->blocks_carrier_pikmin && health <= 0) {
-        game.states.gameplay->path_mgr.handle_obstacle_clear(this);
+    if(can_block_paths && health <= 0) {
+        set_can_block_paths(false);
     }
     
     float ratio = health / type->max_health;

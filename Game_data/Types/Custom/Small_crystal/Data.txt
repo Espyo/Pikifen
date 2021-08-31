@@ -1,7 +1,7 @@
 name = Small crystal
 
 area_editor_tips = To make it trap another object, simply place\nboth objects together such that they are touching.
-blocks_carrier_pikmin = true
+can_block_paths = true
 default_vulnerability = 0
 height = 100
 max_health = 60

@@ -70,7 +70,7 @@ mob_type::mob_type(size_t category_id) :
     first_state_nr(INVALID),
     death_state_nr(INVALID),
     appears_in_area_editor(true),
-    blocks_carrier_pikmin(false),
+    can_block_paths(false),
     default_vulnerability(1.0f),
     spike_damage(nullptr),
     max_span(0.0f) {
@@ -294,7 +294,7 @@ void load_mob_type_from_file(
     rs.set("acceleration", mt->acceleration);
     rs.set("area_editor_tips", mt->area_editor_tips, &area_editor_tips_node);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
-    rs.set("blocks_carrier_pikmin", mt->blocks_carrier_pikmin);
+    rs.set("can_block_paths", mt->can_block_paths);
     rs.set("can_free_move", mt->can_free_move);
     rs.set(
         "can_hunt", huntable_targets_str, &huntable_targets_node

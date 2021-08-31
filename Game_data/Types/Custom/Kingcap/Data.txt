@@ -1,6 +1,6 @@
 name = Kingcap
 
-blocks_carrier_pikmin = true
+can_block_paths = true
 height = 110
 max_health = 750
 pushable = false

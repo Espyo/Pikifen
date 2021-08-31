@@ -1,6 +1,6 @@
 name = Reinforced wall
 
-blocks_carrier_pikmin = true
+can_block_paths = true
 casts_shadow = false
 default_vulnerability = 0
 height = 0

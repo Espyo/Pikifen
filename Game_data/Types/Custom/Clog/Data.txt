@@ -1,7 +1,7 @@
 name = Clog
 
 area_editor_tips = Place a clog object on a sector with water\n(or another liquid), or else it won't do anything!
-blocks_carrier_pikmin = true
+can_block_paths = true
 height = 64
 max_health = 2000
 pushable = false

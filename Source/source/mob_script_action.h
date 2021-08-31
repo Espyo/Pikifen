@@ -58,6 +58,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SEND_MESSAGE_TO_LINKS,
     MOB_ACTION_SEND_MESSAGE_TO_NEARBY,
     MOB_ACTION_SET_ANIMATION,
+    MOB_ACTION_SET_CAN_BLOCK_PATHS,
     MOB_ACTION_SET_FAR_REACH,
     MOB_ACTION_SET_FLYING,
     MOB_ACTION_SET_GRAVITY,
@@ -311,6 +312,7 @@ void send_message_to_focus(mob_action_run_data &data);
 void send_message_to_links(mob_action_run_data &data);
 void send_message_to_nearby(mob_action_run_data &data);
 void set_animation(mob_action_run_data &data);
+void set_can_block_paths(mob_action_run_data &data);
 void set_far_reach(mob_action_run_data &data);
 void set_flying(mob_action_run_data &data);
 void set_gravity(mob_action_run_data &data);

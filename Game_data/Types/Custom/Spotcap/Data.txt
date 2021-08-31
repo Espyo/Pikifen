@@ -1,6 +1,6 @@
 name = Spotcap
 
-blocks_carrier_pikmin = true
+can_block_paths = true
 height = 48
 max_health = 110
 pushable = false

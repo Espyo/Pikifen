@@ -291,6 +291,7 @@ public:
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
     void set_radius(const float radius);
+    void set_can_block_paths(const bool blocks);
     
     void become_carriable(const size_t destination);
     void become_uncarriable();
@@ -421,6 +422,9 @@ public:
     virtual ~mob();
     
 protected:
+    //Is it currently capable of blocking paths?
+    bool can_block_paths;
+    
     //Returns a walkable mob to stand on.
     mob* get_mob_to_walk_on() const;
     //Returns edge intersections at a certain spot.

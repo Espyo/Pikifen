@@ -1334,6 +1334,16 @@ void mob_action_runners::set_animation(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the block paths setting mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::set_can_block_paths(mob_action_run_data &data) {
+    data.m->set_can_block_paths(s2b(data.args[0]));
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the far reach setting mob script action.
  * data:
  *   Data about the action call.

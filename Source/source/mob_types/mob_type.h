@@ -268,7 +268,7 @@ public:
     //Can the player choose to place one of these in the area editor?
     bool appears_in_area_editor;
     //If true, carrier Pikmin will be considered blocked if it's in the way.
-    bool blocks_carrier_pikmin;
+    bool can_block_paths;
     //All damage received is multiplied by this much.
     float default_vulnerability;
     //For every hazard, multiply damage taken by this much.

@@ -800,6 +800,14 @@ void init_mob_actions() {
         mob_action_loaders::set_animation
     );
     
+    reg_param("blocks", MOB_ACTION_PARAM_BOOL, false, false);
+    reg_action(
+        MOB_ACTION_SET_CAN_BLOCK_PATHS,
+        "set_can_block_paths",
+        mob_action_runners::set_can_block_paths,
+        nullptr
+    );
+    
     reg_param("reach name", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_SET_FAR_REACH,

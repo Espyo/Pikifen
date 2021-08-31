@@ -1,6 +1,6 @@
 name = Crystal nodule
 
-blocks_carrier_pikmin = false
+can_block_paths = false
 can_hurt = player; enemy; weak_plain_obstacle; fragile
 default_vulnerability = 0
 height = 40

@@ -1399,40 +1399,10 @@ void path_manager::clear() {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the area having been loaded. It checks all path links and saves
- * any obstacle obstructions found.
+ * Handles the area having been loaded. It checks all path stops and saves
+ * any sector hazards found.
  */
 void path_manager::handle_area_load() {
-    //Go through all path links and check if they have obstacles.
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            path_link* l_ptr = game.cur_area_data.path_stops[s]->links[l];
-            
-            for(
-                size_t m = 0;
-                m < game.states.gameplay->mobs.all.size();
-                ++m
-            ) {
-                mob* m_ptr = game.states.gameplay->mobs.all[m];
-                
-                if(!m_ptr->type->blocks_carrier_pikmin) continue;
-                
-                if(
-                    circle_intersects_line(
-                        m_ptr->pos,
-                        m_ptr->radius,
-                        s_ptr->pos, l_ptr->end_ptr->pos
-                    )
-                ) {
-                    obstructions[l_ptr].insert(m_ptr);
-                    l_ptr->blocked_by_obstacle = true;
-                }
-            }
-        }
-    }
-    
     //Go through all path stops and check if they're on hazardous sectors.
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
@@ -1449,7 +1419,7 @@ void path_manager::handle_area_load() {
  * m:
  *   Pointer to the obstacle mob that got cleared.
  */
-void path_manager::handle_obstacle_clear(mob* m) {
+void path_manager::handle_obstacle_remove(mob* m) {
     //Remove the obstacle from our list, if it's there.
     bool paths_changed = false;
     
@@ -1466,6 +1436,48 @@ void path_manager::handle_obstacle_clear(mob* m) {
             o = obstructions.erase(o);
         } else {
             ++o;
+        }
+    }
+    
+    if(paths_changed) {
+        //Re-calculate the paths of mobs taking paths.
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+            mob* m_ptr = game.states.gameplay->mobs.all[m];
+            if(!m_ptr->path_info) continue;
+            
+            m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles an obstacle having been placed. This way, any link with that
+ * obstruction can get updated.
+ * m:
+ *   Pointer to the obstacle mob that got added.
+ */
+void path_manager::handle_obstacle_add(mob* m) {
+    //Add the obstacle to our list, if needed.
+    bool paths_changed = false;
+    
+    //Go through all path links and check if they have obstacles.
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            path_link* l_ptr = game.cur_area_data.path_stops[s]->links[l];
+            
+            if(
+                circle_intersects_line(
+                    m->pos, m->radius,
+                    s_ptr->pos, l_ptr->end_ptr->pos
+                )
+            ) {
+                obstructions[l_ptr].insert(m);
+                l_ptr->blocked_by_obstacle = true;
+                paths_changed = true;
+            }
         }
     }
     
@@ -2885,7 +2897,7 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
     
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
-        if(!m_ptr->type->blocks_carrier_pikmin) continue;
+        if(!m_ptr->type->can_block_paths) continue;
         
         if(
             m_ptr->health != 0 &&

@@ -1,6 +1,6 @@
 name = Electric gate
 
-blocks_carrier_pikmin = true
+can_block_paths = true
 casts_shadow = false
 height = 0
 max_health = 2000

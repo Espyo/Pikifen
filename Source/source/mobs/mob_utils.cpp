@@ -1262,9 +1262,7 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
             m_ptr->release(m_ptr->holding[0]);
         }
         
-        if(m_ptr->type->blocks_carrier_pikmin) {
-            game.states.gameplay->path_mgr.handle_obstacle_clear(m_ptr);
-        }
+        m_ptr->set_can_block_paths(false);
         
         m_ptr->fsm.set_state(INVALID);
     }
