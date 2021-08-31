@@ -138,35 +138,42 @@ void group_task::finish_task() {
  *   Who had the reservation?
  */
 void group_task::free_up_spot(pikmin* whose) {
+    bool was_contributing = false;
+    
     for(size_t s = 0; s < spots.size(); ++s) {
         if(spots[s].pikmin_here == whose) {
+            if(spots[s].state == 2) {
+                was_contributing = true;
+            }
             spots[s].state = 0;
             spots[s].pikmin_here = NULL;
             break;
         }
     }
     
-    bool had_goal = power >= tas_type->power_goal;
-    
-    switch(tas_type->contribution_method) {
-    case GROUP_TASK_CONTRIBUTION_NORMAL: {
-        power--;
-        break;
-    } case GROUP_TASK_CONTRIBUTION_WEIGHT: {
-        power -= whose->pik_type->weight;
-        break;
-    } case GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH: {
-        power -= whose->pik_type->carry_strength;
-        break;
-    } case GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH: {
-        power -= whose->pik_type->push_strength;
-        break;
-    }
-    }
-    
-    if(had_goal && power < tas_type->power_goal) {
-        string msg = "goal_lost";
-        whose->send_message(this, msg);
+    if(was_contributing) {
+        bool had_goal = power >= tas_type->power_goal;
+        
+        switch(tas_type->contribution_method) {
+        case GROUP_TASK_CONTRIBUTION_NORMAL: {
+            power--;
+            break;
+        } case GROUP_TASK_CONTRIBUTION_WEIGHT: {
+            power -= whose->pik_type->weight;
+            break;
+        } case GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH: {
+            power -= whose->pik_type->carry_strength;
+            break;
+        } case GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH: {
+            power -= whose->pik_type->push_strength;
+            break;
+        }
+        }
+        
+        if(had_goal && power < tas_type->power_goal) {
+            string msg = "goal_lost";
+            whose->send_message(this, msg);
+        }
     }
 }
 

@@ -18,6 +18,7 @@ enum GROUP_TASK_PIKMIN_POSES {
     GROUP_TASK_PIKMIN_POSE_STOPPED,
     GROUP_TASK_PIKMIN_POSE_ARMS_STRETCHED,
     GROUP_TASK_PIKMIN_POSE_PUSHING,
+    GROUP_TASK_PIKMIN_POSE_CARRYING,
 };
 
 
@@ -38,12 +39,14 @@ public:
     size_t max_pikmin;
     point first_row_p1;
     point first_row_p2;
+    float spots_z;
     float interval_between_rows;
     size_t pikmin_per_row;
     float worker_pikmin_angle;
     size_t worker_pikmin_pose;
     unsigned char contribution_method;
     float speed_bonus;
+    bool flying_pikmin_only;
     
     group_task_type();
     

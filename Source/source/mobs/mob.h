@@ -324,6 +324,7 @@ public:
         const float damage, const float knockback
     );
     bool is_off_camera() const;
+    bool is_point_on(const point &p) const;
     void focus_on_mob(mob* m);
     void unfocus_from_mob();
     void leave_group();

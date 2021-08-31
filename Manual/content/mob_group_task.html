@@ -50,15 +50,17 @@
       <li><b><code>power_goal</code></b>: How much combined power is required to meet the quota. Defaults to 10.</li>
       <li><b><code>max_pikmin</code></b>: Maximum number of Pikmin that can contribute to the task. Defaults to 20.</li>
       <li><b><code>worker_pikmin_angle</code></b>: Pikmin that are working will be facing this angle (relative to the group task object). Defaults to 0.</li>
-      <li><b><code>worker_pikmin_pose</code></b>: Pikmin that are working will be doing this pose. Possible values: <code>stopped</code>, <code>arms_stretched</code>, <code>pushing</code>. Defaults to stopped.</li>
+      <li><b><code>worker_pikmin_pose</code></b>: Pikmin that are working will be doing this pose. Possible values: <code>stopped</code>, <code>arms_stretched</code>, <code>pushing</code>, <code>carrying</code>. Defaults to stopped.</li>
     </ul>
 
     <h3 id="optional">Optional</h3>
 
     <ul>
+      <li><b><code>flying_pikmin_only</code></b>: If true, then only Pikmin that can fly will be able to interact with it.</li>
       <li><b><code>interval_between_rows</code></b>: Keep this much distance between each row. Defaults to 10.</li>
       <li><b><code>pikmin_per_row</code></b>: How many Pikmin fit in one row. Defaults to 10.</li>
       <li><b><code>speed_bonus</code></b>: If this object can move, it will speed up by this much for every extra unit of power put on the task beyond the goal. Defaults to 1.</li>
+      <li><b><code>spots_z</code></b>: Offsets the Z coordinate of the contribution spots by this much. Useful if you want spots above ground level, for flying Pikmin.</li>
     </ul>
 
     <h2 id="animations">Animations</h2>

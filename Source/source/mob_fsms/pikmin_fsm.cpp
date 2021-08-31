@@ -2515,6 +2515,11 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     group_task* tas_ptr = (group_task*) info1;
     pikmin* pik_ptr = (pikmin*) m;
     
+    if(!pik_ptr->can_move_in_midair && tas_ptr->tas_type->flying_pikmin_only) {
+        //Only flying Pikmin can use this, and this Pikmin doesn't fly.
+        return;
+    }
+    
     group_task::group_task_spot* free_spot = tas_ptr->get_free_spot();
     if(!free_spot) {
         //There are no free spots available. Forget it.
@@ -2532,7 +2537,10 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     
     m->focus_on_mob(tas_ptr);
     
-    m->chase(&(free_spot->absolute_pos), &tas_ptr->z);
+    m->chase(
+        &(free_spot->absolute_pos), &tas_ptr->z,
+        point(), tas_ptr->tas_type->spots_z
+    );
     
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
@@ -3634,9 +3642,10 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     group_task* tas_ptr = (group_task*) (m->focused_mob);
     point cur_spot_pos = tas_ptr->get_spot_pos(pik_ptr);
+    float cur_spot_z = tas_ptr->z + tas_ptr->tas_type->spots_z;
     
     pik_ptr->chase(
-        cur_spot_pos, tas_ptr->z,
+        cur_spot_pos, cur_spot_z,
         CHASE_FLAG_TELEPORT |
         CHASE_FLAG_TELEPORTS_CONSTANTLY
     );

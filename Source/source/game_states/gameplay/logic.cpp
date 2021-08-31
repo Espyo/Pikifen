@@ -109,10 +109,11 @@ void gameplay_state::do_aesthetic_logic() {
             //then forget it.
             continue;
         }
-        if(dist(throw_dest, m_ptr->pos) > m_ptr->radius) {
+        if(!m_ptr->is_point_on(throw_dest)) {
             //The cursor is not really on top of this mob.
             continue;
         }
+        
         throw_dest_mob = m_ptr;
     }
     

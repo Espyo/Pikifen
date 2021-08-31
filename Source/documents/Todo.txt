@@ -28,6 +28,7 @@ Next tasks (roughly sorted most important first)
         Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
         A way for sprays to affect leaders, like if you want to spray all Pikmin+leaders in the group with a speed-up spray
     Make it so Dweevils can pick up treasure
+    Add logic for Pikmin to detect an object is close by when it's rectangular -- maybe just for obstacles
     More pathing improvements
         Make it so mobs carrying light load can use bouncers
         Allow mobs to follow paths

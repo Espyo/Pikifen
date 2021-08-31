@@ -1154,12 +1154,13 @@ mob* create_mob(
             log_error(
                 "Object \"" + type->name + "\" tried to spawn a child with the "
                 "spawn name \"" + child_info->spawn_name + "\", but that name "
-                "does not exist!"
+                "does not exist in the list of spawn data!"
             );
             continue;
         }
         
         mob* new_mob = m_ptr->spawn(spawn_info);
+        
         if(!new_mob) continue;
         
         parent_info_struct* p_info = new parent_info_struct(m_ptr);

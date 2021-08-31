@@ -51,6 +51,7 @@ void group_task_type::load_properties(data_node* file) {
         "contribution_method", contribution_method_str,
         &contribution_method_node
     );
+    rs.set("flying_pikmin_only", flying_pikmin_only);
     rs.set("first_row_p1", first_row_p1);
     rs.set("first_row_p2", first_row_p2);
     rs.set("interval_between_rows", interval_between_rows);
@@ -58,6 +59,7 @@ void group_task_type::load_properties(data_node* file) {
     rs.set("pikmin_per_row", pikmin_per_row);
     rs.set("power_goal", power_goal);
     rs.set("speed_bonus", speed_bonus);
+    rs.set("spots_z", spots_z);
     rs.set("worker_pikmin_angle", worker_pikmin_angle);
     rs.set(
         "worker_pikmin_pose", worker_pikmin_pose_str, &worker_pikmin_pose_node
@@ -89,6 +91,8 @@ void group_task_type::load_properties(data_node* file) {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_ARMS_STRETCHED;
         } else if(worker_pikmin_pose_str == "pushing") {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_PUSHING;
+        } else if(worker_pikmin_pose_str == "carrying") {
+            worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_CARRYING;
         } else {
             log_error(
                 "Unknown pose \"" + worker_pikmin_pose_str + "\"!",

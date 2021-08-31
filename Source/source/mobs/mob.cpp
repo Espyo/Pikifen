@@ -1835,6 +1835,27 @@ bool mob::is_off_camera() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if the given point is on top of the mob.
+ * p:
+ *   Point to check.
+ */
+bool mob::is_point_on(const point &p) const {
+    if(type->rectangular_dim.x == 0) {
+        return dist(p, pos) <= radius;
+        
+    } else {
+        point p_delta = p - pos;
+        p_delta = rotate_point(p_delta, -angle);
+        p_delta += type->rectangular_dim / 2.0f;
+        
+        return
+            p_delta.x > 0 && p_delta.x < type->rectangular_dim.x &&
+            p_delta.y > 0 && p_delta.y < type->rectangular_dim.y;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks if a mob is resistant to all of the hazards inside a given list.
  * hazards:
  *   List of hazards to check.
@@ -2159,7 +2180,15 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
         type_ptr = game.mob_categories.find_mob_type(info->mob_type_name);
     }
     
-    if(!type_ptr) return NULL;
+    if(!type_ptr) {
+        log_error(
+            "Object \"" + type->name + "\" tried to spawn an object of the "
+            "type \"" + info->mob_type_name + "\", but there is no such "
+            "object type!"
+        );
+        return NULL;
+    }
+    
     if(
         type_ptr->category->id == MOB_CATEGORY_PIKMIN &&
         game.states.gameplay->mobs.pikmin_list.size() >=
