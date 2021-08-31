@@ -1,0 +1,73 @@
+first_state = closed
+
+init {
+    get_info x x
+    get_info y y
+    get_info z_closed z
+    set_var z_open $z_closed
+    calculate z_open $z_open + 150
+    set_flying true
+    start_height_effect
+}
+
+script {
+    closed {
+        on_enter {
+            set_animation closed
+            set_can_block_paths true
+        }
+        on_receive_message {
+            get_info m message
+            if $m = goal_reached
+                set_state opening
+            end_if
+        }
+    }
+
+    opening {
+        on_enter {
+            set_animation rattling
+            set_can_block_paths true
+            move_to_absolute $x $y $z_open
+        }
+        on_receive_message {
+            get_info m message
+            if $m = goal_lost
+                set_state closing
+            end_if
+        }
+        on_reach_destination {
+            set_state open
+        }
+    }
+    
+    open {
+        on_enter {
+            set_animation open
+            set_can_block_paths false
+        }
+        on_receive_message {
+            get_info m message
+            if $m = goal_lost
+                set_state closing
+            end_if
+        }
+    }
+
+    closing {
+        on_enter {
+            set_animation rattling
+            set_can_block_paths true
+            move_to_absolute $x $y $z_closed
+        }
+        on_receive_message {
+            get_info m message
+            if $m = goal_reached
+                set_state opening
+            end_if
+        }
+        on_reach_destination {
+            set_state closed
+        }
+    }
+}

@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.21.0 ---
-    Add a bamboo gate
     Pikmin 3 leaders
         Change the President's style to be yellow instead
     Adult Bulbmin?

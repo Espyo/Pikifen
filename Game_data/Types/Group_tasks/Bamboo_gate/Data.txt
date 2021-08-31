@@ -1,0 +1,49 @@
+name = Bamboo gate
+
+can_block_paths = true
+casts_shadow = false
+contribution_method = normal
+first_row_p1 = 0 -108
+first_row_p2 = 0 108
+interval_between_rows = 8
+max_health = 100
+max_pikmin = 10
+move_speed = 70
+height = 170
+pikmin_goal = 10
+pikmin_per_row = 10
+pushable = false
+pushes = true
+radius = 24
+rectangular_dimensions = 48 240
+show_health = false
+spots_z = 180
+team = obstacle
+walkable = true
+worker_pikmin_pose = grabbing
+
+spawns {
+    left_pillar {
+        object = Bamboo gate pillar
+        relative = true
+        coordinates = 0 -144
+        angle = 0
+    }
+    right_pillar {
+        object = Bamboo gate pillar
+        relative = true
+        coordinates = 0 144
+        angle = 180
+    }
+}
+
+children {
+    left_pillar {
+        spawn = left_pillar
+        parent_holds = false
+    }
+    right_pillar {
+        spawn = right_pillar
+        parent_holds = false
+    }
+}

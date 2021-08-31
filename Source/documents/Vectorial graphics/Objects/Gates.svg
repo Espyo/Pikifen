@@ -8,9 +8,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="667"
-   height="289.00009"
-   viewBox="0 0 667 289.00009"
+   width="897"
+   height="298.00006"
+   viewBox="0 0 897 298.00006"
    id="svg2"
    version="1.1"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
@@ -22,6 +22,170 @@
      id="title1000">Gate spritesheets</title>
   <defs
      id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="bamboo-gate-rope-mask">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop1324" />
+      <stop
+         style="stop-color:#808080;stop-opacity:1"
+         offset="0.02083136"
+         id="stop1332" />
+      <stop
+         style="stop-color:#808080;stop-opacity:1"
+         offset="0.97905689"
+         id="stop1334" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop1326" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1430">
+      <stop
+         style="stop-color:#df337c;stop-opacity:1"
+         offset="0"
+         id="stop1426" />
+      <stop
+         style="stop-color:#e26c8f;stop-opacity:1;"
+         offset="0.33333334"
+         id="stop1434" />
+      <stop
+         style="stop-color:#e26c8f;stop-opacity:1;"
+         offset="0.66666669"
+         id="stop1436" />
+      <stop
+         style="stop-color:#df337c;stop-opacity:1"
+         offset="1"
+         id="stop1428" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bamboo-gate-3">
+      <stop
+         style="stop-color:#e2da8f;stop-opacity:1;"
+         offset="0"
+         id="stop1402" />
+      <stop
+         style="stop-color:#e2da8f;stop-opacity:1;"
+         offset="0.66664648"
+         id="stop1412" />
+      <stop
+         style="stop-color:#acac24;stop-opacity:1"
+         offset="1"
+         id="stop1404" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bamboo-gate-2">
+      <stop
+         style="stop-color:#d1cdad;stop-opacity:1"
+         offset="0"
+         id="stop1389" />
+      <stop
+         style="stop-color:#d1cdad;stop-opacity:1"
+         offset="0.25000092"
+         id="stop1391" />
+      <stop
+         style="stop-color:#c4c28d;stop-opacity:1"
+         offset="0.75000089"
+         id="stop1393" />
+      <stop
+         style="stop-color:#c4c28d;stop-opacity:1"
+         offset="1"
+         id="stop1395" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bamboo-gate-1">
+      <stop
+         style="stop-color:#dddccf;stop-opacity:1"
+         offset="0"
+         id="stop1382" />
+      <stop
+         style="stop-color:#dddccf;stop-opacity:1"
+         offset="0.91666669"
+         id="stop1384" />
+      <stop
+         style="stop-color:#adab87;stop-opacity:1"
+         offset="1"
+         id="stop1386" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bamboo-gate-rope-shading">
+      <stop
+         style="stop-color:#7e4912;stop-opacity:0.80000001"
+         offset="0"
+         id="stop1261" />
+      <stop
+         style="stop-color:#484848;stop-opacity:0"
+         offset="0.375"
+         id="stop1269" />
+      <stop
+         style="stop-color:#484848;stop-opacity:0"
+         offset="0.625"
+         id="stop1271" />
+      <stop
+         style="stop-color:#7e4912;stop-opacity:0.80000001"
+         offset="1"
+         id="stop1263" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bamboo-gate-rope">
+      <stop
+         style="stop-color:#a47633;stop-opacity:1"
+         offset="0"
+         id="stop1249" />
+      <stop
+         style="stop-color:#a47633;stop-opacity:1"
+         offset="0.50000018"
+         id="stop1257" />
+      <stop
+         style="stop-color:#4d3212;stop-opacity:1"
+         offset="1"
+         id="stop1251" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bamboo-pillar-2">
+      <stop
+         style="stop-color:#d1c1ad;stop-opacity:1"
+         offset="0"
+         id="stop1159" />
+      <stop
+         style="stop-color:#d1c1ad;stop-opacity:1"
+         offset="0.25000092"
+         id="stop1169" />
+      <stop
+         style="stop-color:#c4ad8d;stop-opacity:1"
+         offset="0.75000089"
+         id="stop1167" />
+      <stop
+         style="stop-color:#c4ad8d;stop-opacity:1"
+         offset="1"
+         id="stop1161" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="bamboo-pillar-1">
+      <stop
+         style="stop-color:#dfdcd7;stop-opacity:1"
+         offset="0"
+         id="stop1149" />
+      <stop
+         style="stop-color:#dfdcd7;stop-opacity:1"
+         offset="0.91666669"
+         id="stop1157" />
+      <stop
+         style="stop-color:#a9a89b;stop-opacity:1"
+         offset="1"
+         id="stop1151" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="reinforced_wall_shade">
@@ -707,7 +871,7 @@
     <filter
        style="color-interpolation-filters:sRGB"
        id="filter1363"
-       inkscape:label="rust">
+       inkscape:label="noise">
       <feTurbulence
          id="feTurbulence1365"
          type="fractalNoise"
@@ -751,6 +915,267 @@
          id="path2023"
          sodipodi:nodetypes="ccccc" />
     </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-pillar-1"
+       id="radialGradient1155"
+       cx="724"
+       cy="806.36218"
+       fx="724"
+       fy="806.36218"
+       r="24"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(100.00001)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-pillar-2"
+       id="linearGradient1165"
+       x1="703"
+       y1="804.36218"
+       x2="704"
+       y2="802.36218"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="reflect"
+       gradientTransform="translate(100.00001)" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1187">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#ellipse1147"
+         id="use1189"
+         width="100%"
+         height="100%"
+         transform="translate(-100.00001)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1201">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#ellipse1147"
+         id="use1203"
+         transform="translate(-100.00001,-782.36212)"
+         width="100%"
+         height="100%" />
+    </clipPath>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1237"
+       x="-0.034869254"
+       width="1.0697385"
+       y="-0.034869254"
+       height="1.0697385">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.90078902"
+         id="feGaussianBlur1239" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope-shading"
+       id="linearGradient1267"
+       x1="720"
+       y1="39.000061"
+       x2="728"
+       y2="39.000057"
+       gradientUnits="userSpaceOnUse" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1418">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#ellipse1398"
+         id="use1420"
+         width="100%"
+         height="100%"
+         transform="matrix(0.9375,0,0,0.9375,45.25,53.460136)" />
+    </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1430"
+       id="linearGradient1432"
+       x1="721"
+       y1="881.36218"
+       x2="727"
+       y2="881.36218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-26.000005)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope"
+       id="linearGradient1448"
+       gradientUnits="userSpaceOnUse"
+       x1="723"
+       y1="45.000061"
+       x2="725"
+       y2="47.000061"
+       spreadMethod="reflect" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope-shading"
+       id="linearGradient1450"
+       gradientUnits="userSpaceOnUse"
+       x1="720"
+       y1="42.000061"
+       x2="728"
+       y2="42.000061" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope"
+       id="linearGradient1454"
+       gradientUnits="userSpaceOnUse"
+       x1="722"
+       y1="38.000057"
+       x2="724"
+       y2="40.000057"
+       spreadMethod="reflect" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-3"
+       id="radialGradient1524"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1874804,6.2347122e-6,-4.9222223e-6,0.9375,-135.73119,29.080519)"
+       cx="725.68402"
+       cy="881.3623"
+       fx="725.68402"
+       fy="881.3623"
+       r="16" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-2"
+       id="linearGradient1526"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.77272724,0,0,0.77272724,164.54548,232.26415)"
+       x1="702.40002"
+       y1="805.16217"
+       x2="703.59998"
+       y2="802.76221"
+       spreadMethod="reflect" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-1"
+       id="radialGradient1528"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.79166666,0,0,0.79166666,150.83334,216.99212)"
+       cx="724"
+       cy="806.36218"
+       fx="724"
+       fy="806.36218"
+       r="24" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-1"
+       id="radialGradient1290"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.79166666,0,0,0.79166666,150.83334,216.99212)"
+       cx="724"
+       cy="806.36218"
+       fx="724"
+       fy="806.36218"
+       r="24" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-2"
+       id="linearGradient1292"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.77272724,0,0,0.77272724,164.54548,232.26415)"
+       x1="702.40002"
+       y1="805.16217"
+       x2="703.59998"
+       y2="802.76221"
+       spreadMethod="reflect" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-3"
+       id="radialGradient1294"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1874804,6.2347122e-6,-4.9222223e-6,0.9375,-135.73119,29.080519)"
+       cx="725.68402"
+       cy="881.3623"
+       fx="725.68402"
+       fy="881.3623"
+       r="16" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1430"
+       id="linearGradient1296"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-26.000005)"
+       x1="721"
+       y1="881.36218"
+       x2="727"
+       y2="881.36218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope"
+       id="linearGradient1298"
+       gradientUnits="userSpaceOnUse"
+       x1="723"
+       y1="45.000061"
+       x2="725"
+       y2="47.000061"
+       spreadMethod="reflect" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope-shading"
+       id="linearGradient1300"
+       gradientUnits="userSpaceOnUse"
+       x1="720"
+       y1="42.000061"
+       x2="728"
+       y2="42.000061" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope-mask"
+       id="linearGradient1330"
+       x1="872"
+       y1="1071.3617"
+       x2="872"
+       y2="831.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope-mask"
+       id="linearGradient1348"
+       gradientUnits="userSpaceOnUse"
+       x1="872"
+       y1="1071.3617"
+       x2="872"
+       y2="831.36218" />
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask1367">
+      <rect
+         style="display:inline;fill:url(#linearGradient1371);fill-opacity:1;stroke-width:0.999999px;paint-order:markers stroke fill;stop-color:#000000"
+         id="rect1369"
+         width="48"
+         height="240"
+         x="849"
+         y="831.36218" />
+    </mask>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope-mask"
+       id="linearGradient1371"
+       gradientUnits="userSpaceOnUse"
+       x1="872"
+       y1="1071.3617"
+       x2="872"
+       y2="831.36218" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#bamboo-gate-rope-shading"
+       id="linearGradient1379"
+       gradientUnits="userSpaceOnUse"
+       x1="720"
+       y1="42.000061"
+       x2="728"
+       y2="42.000061" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -759,9 +1184,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="373.73693"
-     inkscape:cy="165.42575"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="648.62435"
+     inkscape:cy="164.80412"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -795,7 +1220,7 @@
        type="xygrid"
        id="grid4147"
        originx="0"
-       originy="5.8936468e-05" />
+       originy="5.9454967e-05" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -957,6 +1382,42 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
        style="display:inline;stroke-width:1.77878" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect1055"
+       id="use1125"
+       transform="matrix(1,0,0,0.19791692,400.00007,627.51942)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;stroke-width:2.10732" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect1055"
+       id="use1331"
+       transform="matrix(1.0000002,0,0,0.83333348,399.99998,188.39363)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;stroke-width:1.02698" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect1055"
+       id="use1258"
+       transform="matrix(1.0000002,0,0,0.83333348,448.99998,188.39363)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       style="display:inline;stroke-width:1.02698" />
   </g>
   <g
      inkscape:label="Sprites"
@@ -964,6 +1425,25 @@
      id="layer1"
      style="display:inline"
      transform="translate(0,-782.36212)">
+    <g
+       id="g1446"
+       transform="translate(100.00001,17.999998)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         id="path1442"
+         style="fill:url(#linearGradient1448);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 719.99999,40.000061 V 280.00006 H 728 V 40.000061 Z"
+         transform="translate(0,782.36212)"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         id="path1444"
+         style="fill:url(#linearGradient1450);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 719.99999,40.000061 720,280.00006 h 8 V 40.000061 Z"
+         transform="translate(0,782.36212)"
+         sodipodi:nodetypes="ccccc" />
+    </g>
     <path
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#949494;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.562048;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="m 399.9999,830.36217 1,-3 h 45.99999 l 1,2 -1,12.99999 v 22 l 1,11 -1,12.99999 1,18 v 24.99999 l -2,19 2,19 v 15 l -1,23.99996 v 11 l 1,3 -1,3 H 400.9999 l -1,-3 v -8 l 1,-13 v -17.99996 l -1,-9 2,-7 -2,-22 1,-21 v -12.99999 l -1,-10 v -10 l 1,-7 -1,-8.99999 v -11 l 1,-21 v -7.99999 z"
@@ -2522,7 +3002,7 @@
          sodipodi:nodetypes="ccccccccccc" />
       <path
          style="opacity:0.6;fill:#404040;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="m 634.00001,1069.3622 2,2 h 12 l 2,-2 -10e-6,-18 -1,-1 -1,0 10e-6,18 -1,1 z"
+         d="m 634.00001,1069.3622 2,2 h 12 l 2,-2 -10e-6,-18 -1,-1 h -1 l 10e-6,18 -1,1 z"
          id="path2424"
          sodipodi:nodetypes="cccccccccc"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Crystal_wall.png"
@@ -2592,6 +3072,342 @@
          id="path1223"
          sodipodi:nodetypes="ccccc"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Crystal_wall.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </g>
+    <circle
+       style="display:inline;fill:url(#radialGradient1155);fill-opacity:1;stroke-width:1px;paint-order:markers stroke fill;stop-color:#000000"
+       id="path1127"
+       cx="824"
+       cy="806.36218"
+       r="24"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;fill:url(#linearGradient1165);fill-opacity:1;stroke-width:1px;paint-order:markers stroke fill;stop-color:#000000"
+       id="circle1145"
+       cx="824"
+       cy="806.36218"
+       rx="22"
+       ry="22.000004"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;fill:#3a240b;fill-opacity:1;stroke-width:0.999998px;paint-order:markers stroke fill;stop-color:#000000"
+       id="ellipse1275"
+       cx="824"
+       cy="806.36218"
+       rx="18"
+       ry="18.000004"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       id="ellipse1147"
+       style="display:inline;fill:#e7cf98;fill-opacity:1;stroke-width:0.999996px;paint-order:markers stroke fill;stop-color:#000000"
+       d="m 824.00001,786.36212 c -11.04569,0 -20,8.9543 -20,20 0,11.0457 8.95431,20 20,20 11.04569,0 20,-8.9543 20,-20 0,-11.0457 -8.95431,-20 -20,-20 z m -1,23.00006 c 0.92086,0 2.22023,-1.37072 3,-1 0.76379,0.36312 1.45549,1.36512 2,2 0.9,1.04936 3,2.50914 3,4 0,0.82955 -1.6956,2.28139 -2,3 -0.39619,0.93531 -0.21409,1.37857 -1,2 -1.02229,0.80834 -2.59555,0 -4,0 -0.8436,0 -2.2717,1.31423 -3,1 -1.08721,-0.46908 -1.35843,-2.01938 -2,-3 -0.61684,-0.94282 -1,-0.78922 -1,-2 0,-1.12284 0.46324,-2.10134 1,-3 0.48212,-0.80718 0.20751,-2.49635 1,-3 0.92907,-0.59045 1.81766,0 3,0 z"
+       sodipodi:nodetypes="ssssssssssssssssss"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="display:inline;opacity:0.2;fill:#e7af98;fill-opacity:1;stroke-width:0.999996px;paint-order:markers stroke fill;filter:url(#filter1363);stop-color:#000000"
+       id="ellipse1171"
+       cx="724"
+       cy="806.36224"
+       rx="20"
+       ry="20.000004"
+       clip-path="url(#clipPath1187)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(100.00001)" />
+    <path
+       id="rect1191"
+       style="opacity:0.4;fill:#816319;fill-opacity:1;stroke-width:1px;paint-order:markers stroke fill;filter:url(#filter1237);stop-color:#000000"
+       d="m 693,-7 v 62 h 62 V -7 Z m 31,16.0000589 c 5,0 19,5.4625001 19,14.0000001 0,20 -15,21 -19,21 -4,0 -19,-1 -19,-21 0,-8.5375 14,-14.0000001 19,-14.0000001 z"
+       transform="translate(100.00001,782.36212)"
+       clip-path="url(#clipPath1201)"
+       sodipodi:nodetypes="cccccsszss"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g1440"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(100.00001)">
+      <path
+         id="path1244"
+         style="fill:url(#linearGradient1454);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 723.93945,30.000059 C 721.8789,30 720,32.000118 720,34.060609 l -10e-6,15.93945 c 0,0 0,7 4,7 4,0 4,-7 4,-7 l 10e-6,-16 c 0,-1.999941 -2,-3.999941 -4.06055,-4 z"
+         sodipodi:nodetypes="zcczccz"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         transform="translate(0,782.36212)" />
+      <path
+         id="path1259"
+         style="fill:url(#linearGradient1267);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 723.93945,30.000059 C 721.8789,30 720,32.000118 720,34.060609 l -10e-6,15.93945 c 0,0 0,7 4,7 4,0 4,-7 4,-7 l 10e-6,-16 c 0,-1.999941 -2,-3.999941 -4.06055,-4 z"
+         sodipodi:nodetypes="zcczccz"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         transform="translate(0,782.36212)" />
+    </g>
+    <g
+       id="g1475"
+       transform="translate(100.00001,8.9999995)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="fill:#c0bea3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 729,873.36218 -1,3 -1,-2 -2,1 -1,-1 -1,2 -1,-2 -2,2 -1,-3 z"
+         id="path1456"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <path
+         style="fill:#c0bea3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 719,837.36218 1,-3 1,2 2,-1 1,1 1,-2 1,2 2,-2 1,3 z"
+         id="path1452"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <circle
+         style="display:inline;fill:url(#radialGradient1528);fill-opacity:1;stroke-width:0.999998px;paint-order:markers stroke fill;stop-color:#000000"
+         id="path1127-0"
+         cx="724"
+         cy="855.36218"
+         r="19"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <ellipse
+         style="display:inline;fill:url(#linearGradient1526);fill-opacity:1;stroke-width:0.999997px;paint-order:markers stroke fill;stop-color:#000000"
+         id="circle1145-9"
+         cx="724"
+         cy="855.36218"
+         rx="17"
+         ry="17.000002"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <ellipse
+         style="display:inline;fill:url(#radialGradient1524);fill-opacity:1;stroke-width:1px;paint-order:markers stroke fill;stop-color:#000000"
+         id="ellipse1398"
+         cx="724"
+         cy="855.36218"
+         rx="15"
+         ry="15.000002"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#ellipse1398"
+         id="use1414"
+         style="opacity:0.2;filter:url(#filter1363)"
+         clip-path="url(#clipPath1418)"
+         width="100%"
+         height="100%"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <path
+         style="fill:url(#linearGradient1432);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 722,838.36218 v 2 c 0,0 1,0 1,1 0,1 -1,1 -1,2 0,1 1,1 1,2 0,1 -1,1 -1,1 v 18 c 0,0 1,0 1,1 0,1 -1,1 -1,2 0,1 1,1 1,2 0,1 -1,1 -1,1 v 2 c 1,1 3,1 4,0 v -2 c 0,0 -1,0 -1,-1 0,-1 1,-1 1,-2 0,-1 -1,-1 -1,-2 0,-1 1,-1 1,-1 v -18 c 0,0 -1,0 -1,-1 0,-1 1,-1 1,-2 0,-1 -1,-1 -1,-2 0,-1 1,-1 1,-1 v -2 c -1,-1 -3,-1 -4,0 z"
+         id="path1422"
+         sodipodi:nodetypes="cczzzcczzzcccczzzcczzzccc"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1475"
+       id="use1477"
+       transform="translate(1.0351685e-6,47.999999)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1475"
+       id="use1500"
+       transform="translate(1.0351685e-6,96)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1475"
+       id="use1502"
+       transform="translate(1.0351685e-6,144)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1475"
+       id="use1504"
+       transform="translate(1.0351685e-6,192)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       id="g1365"
+       mask="url(#mask1367)"
+       transform="translate(1.0351685e-6,8.9999995)">
+      <g
+         id="g1264"
+         transform="translate(149.00001,8.9999979)"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
+        <path
+           id="path1260"
+           style="fill:url(#linearGradient1298);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 719.99999,40.000061 v 5 229.999999 5 h 8 v -5 -229.999999 -5 z"
+           transform="translate(0,782.36212)"
+           sodipodi:nodetypes="ccccccccc" />
+        <path
+           id="path1262"
+           style="fill:url(#linearGradient1379);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 719.99999,40.000061 v 5 229.999999 5 h 8 v -5 -229.999999 -5 z"
+           transform="translate(0,782.36212)"
+           sodipodi:nodetypes="ccccccccc" />
+      </g>
+      <g
+         id="g1280"
+         transform="translate(149.00001)">
+        <path
+           style="fill:#c0bea3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 729,873.36218 -1,3 -1,-2 -2,1 -1,-1 -1,2 -1,-2 -2,2 -1,-3 z"
+           id="path1266"
+           inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+        <path
+           style="fill:#c0bea3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 719,837.36218 1,-3 1,2 2,-1 1,1 1,-2 1,2 2,-2 1,3 z"
+           id="path1268"
+           inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+        <circle
+           style="display:inline;fill:url(#radialGradient1290);fill-opacity:1;stroke-width:0.999998px;paint-order:markers stroke fill;stop-color:#000000"
+           id="circle1270"
+           cx="724"
+           cy="855.36218"
+           r="19"
+           inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+        <ellipse
+           style="display:inline;fill:url(#linearGradient1292);fill-opacity:1;stroke-width:0.999997px;paint-order:markers stroke fill;stop-color:#000000"
+           id="ellipse1272"
+           cx="724"
+           cy="855.36218"
+           rx="17"
+           ry="17.000002"
+           inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+        <ellipse
+           style="display:inline;fill:url(#radialGradient1294);fill-opacity:1;stroke-width:1px;paint-order:markers stroke fill;stop-color:#000000"
+           id="ellipse1274"
+           cx="724"
+           cy="855.36218"
+           rx="15"
+           ry="15.000002"
+           inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+        <use
+           x="0"
+           y="0"
+           xlink:href="#ellipse1274"
+           id="use1276"
+           style="opacity:0.2;filter:url(#filter1363)"
+           clip-path="url(#clipPath1418)"
+           width="100%"
+           height="100%"
+           inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+        <path
+           style="fill:url(#linearGradient1296);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 722,838.36218 v 2 c 0,0 1,0 1,1 0,1 -1,1 -1,2 0,1 1,1 1,2 0,1 -1,1 -1,1 v 18 c 0,0 1,0 1,1 0,1 -1,1 -1,2 0,1 1,1 1,2 0,1 -1,1 -1,1 v 2 c 1,1 3,1 4,0 v -2 c 0,0 -1,0 -1,-1 0,-1 1,-1 1,-2 0,-1 -1,-1 -1,-2 0,-1 1,-1 1,-1 v -18 c 0,0 -1,0 -1,-1 0,-1 1,-1 1,-2 0,-1 -1,-1 -1,-2 0,-1 1,-1 1,-1 v -2 c -1,-1 -3,-1 -4,0 z"
+           id="path1278"
+           sodipodi:nodetypes="cczzzcczzzcccczzzcczzzccc"
+           inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+      </g>
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g1280"
+         id="use1282"
+         transform="translate(9.6483157e-7,47.999999)"
+         width="100%"
+         height="100%"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g1280"
+         id="use1284"
+         transform="translate(9.6483157e-7,95.999999)"
+         width="100%"
+         height="100%"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g1280"
+         id="use1286"
+         transform="translate(9.6483157e-7,144)"
+         width="100%"
+         height="100%"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g1280"
+         id="use1288"
+         transform="translate(9.6483157e-7,192)"
+         width="100%"
+         height="100%"
+         inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Bamboo_gate.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96" />
     </g>

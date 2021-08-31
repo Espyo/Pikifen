@@ -1,0 +1,57 @@
+animations{
+	closed{
+		frames{
+			closed{
+				duration=0.1000
+			}
+		}
+	}
+	open{
+		frames{
+			open{
+				duration=0.1000
+			}
+		}
+	}
+	rattling{
+		frames{
+			rattling1{
+				duration=0.0750
+			}
+			closed{
+				duration=0.0750
+			}
+			rattling2{
+				duration=0.0750
+			}
+			closed{
+				duration=0.0750
+			}
+		}
+	}
+}
+sprites{
+	closed{
+		file=Bamboo_gate.png
+		file_pos=0.0000 58.0000
+		file_size=48.0000 240.0000
+	}
+	open{
+		file=Bamboo_gate.png
+		file_pos=49.0000 58.0000
+		file_size=48.0000 240.0000
+	}
+	rattling1{
+		file=Bamboo_gate.png
+		file_pos=0.0000 58.0000
+		file_size=48.0000 240.0000
+		offset=0.0000 1.0000
+	}
+	rattling2{
+		file=Bamboo_gate.png
+		file_pos=0.0000 58.0000
+		file_size=48.0000 240.0000
+		offset=0.0000 -1.0000
+	}
+}
+body_parts
