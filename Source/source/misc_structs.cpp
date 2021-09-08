@@ -1340,8 +1340,8 @@ sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) :
 void sample_struct::destroy() {
     //TODO uncommenting this is causing a crash.
     //al_detach_sample_instance(instance);
-    al_destroy_sample_instance(instance);
-    al_destroy_sample(sample);
+    if(instance) al_destroy_sample_instance(instance);
+    if(sample) al_destroy_sample(sample);
 }
 
 
@@ -1392,6 +1392,7 @@ void sample_struct::play(
  * Stops a playing sample instance.
  */
 void sample_struct::stop() {
+    if(!instance) return;
     al_set_sample_instance_playing(instance, false);
 }
 

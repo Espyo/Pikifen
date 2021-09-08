@@ -20,7 +20,7 @@ show_health = false
 spots_z = 180
 team = obstacle
 walkable = true
-worker_pikmin_pose = grabbing
+worker_pikmin_pose = carrying
 
 spawns {
     left_pillar {
