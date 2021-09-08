@@ -163,10 +163,10 @@ animations{
 }
 sprites{
 	ducking{
-		file=President.png
+		file=Brittany.png
 		file_pos=0.0000 65.0000
-		file_size=54.0000 64.0000
-		offset=2.0000 0.0000
+		file_size=62.0000 64.0000
+		offset=4.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
@@ -177,7 +177,7 @@ sprites{
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=4.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0
@@ -186,10 +186,10 @@ sprites{
 		}
 	}
 	ducking2{
-		file=President.png
-		file_pos=55.0000 65.0000
-		file_size=54.0000 64.0000
-		offset=2.0000 0.0000
+		file=Brittany.png
+		file_pos=63.0000 65.0000
+		file_size=62.0000 64.0000
+		offset=4.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
@@ -200,7 +200,7 @@ sprites{
 				value=1.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=4.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0
@@ -209,32 +209,9 @@ sprites{
 		}
 	}
 	half_limbo{
-		file=President.png
-		file_pos=110.0000 65.0000
-		file_size=86.0000 64.0000
-		offset=-14.0000 0.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			fist{
-				coords=0.0000 10.0000 0.0000
-				height=46.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-			}
-			body{
-				coords=-10.0000 0.0000 0.0000
-				height=46.0000
-				radius=16.0000
-				type=0
-				value=1.0000
-			}
-		}
-	}
-	half_lying{
-		file=President.png
-		file_pos=195.0000 0.0000
-		file_size=92.0000 64.0000
+		file=Brittany.png
+		file_pos=126.0000 65.0000
+		file_size=67.0000 64.0000
 		offset=-10.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
@@ -254,8 +231,31 @@ sprites{
 			}
 		}
 	}
+	half_lying{
+		file=Brittany.png
+		file_pos=195.0000 0.0000
+		file_size=82.0000 64.0000
+		offset=-5.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=0.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-3.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
 	idling{
-		file=President.png
+		file=Brittany.png
 		file_pos=0.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
@@ -277,21 +277,21 @@ sprites{
 		}
 	}
 	limbo{
-		file=President.png
-		file_pos=197.0000 65.0000
-		file_size=106.0000 64.0000
-		offset=-19.0000 0.0000
+		file=Brittany.png
+		file_pos=194.0000 65.0000
+		file_size=100.0000 64.0000
+		offset=-18.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
-				coords=-4.0000 10.0000 0.0000
+				coords=0.0000 10.0000 0.0000
 				height=46.0000
 				radius=8.0000
 				type=2
 				value=1.0000
 			}
 			body{
-				coords=-13.0000 0.0000 0.0000
+				coords=-11.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0
@@ -300,9 +300,9 @@ sprites{
 		}
 	}
 	lying{
-		file=President.png
-		file_pos=288.0000 0.0000
-		file_size=114.0000 64.0000
+		file=Brittany.png
+		file_pos=278.0000 0.0000
+		file_size=108.0000 64.0000
 		offset=-12.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
@@ -314,7 +314,7 @@ sprites{
 				value=1.0000
 			}
 			body{
-				coords=-8.0000 0.0000 0.0000
+				coords=-7.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0
@@ -323,7 +323,7 @@ sprites{
 		}
 	}
 	walking1{
-		file=President.png
+		file=Brittany.png
 		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
@@ -345,7 +345,7 @@ sprites{
 		}
 	}
 	walking2{
-		file=President.png
+		file=Brittany.png
 		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
@@ -367,8 +367,8 @@ sprites{
 		}
 	}
 	punch{
-		file=President.png
-		file_pos=391.0000 65.0000
+		file=Brittany.png
+		file_pos=363.0000 65.0000
 		file_size=82.0000 64.0000
 		offset=10.0000 0.0000
 		scale=0.5000 0.5000
@@ -390,10 +390,10 @@ sprites{
 		}
 	}
 	wind-up{
-		file=President.png
-		file_pos=304.0000 65.0000
-		file_size=86.0000 64.0000
-		offset=-14.0000 0.0000
+		file=Brittany.png
+		file_pos=295.0000 65.0000
+		file_size=67.0000 64.0000
+		offset=-10.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
@@ -404,7 +404,7 @@ sprites{
 				value=1.0000
 			}
 			body{
-				coords=-10.0000 0.0000 0.0000
+				coords=-9.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0

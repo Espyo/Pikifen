@@ -164,9 +164,9 @@ animations{
 sprites{
 	ducking{
 		file=Louie.png
-		file_pos=0.0000 0.0000
+		file_pos=0.0000 65.0000
 		file_size=54.0000 64.0000
-		offset=4.0000 0.0000
+		offset=2.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
@@ -175,8 +175,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -184,16 +182,14 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	ducking2{
 		file=Louie.png
-		file_pos=56.0000 0.0000
+		file_pos=55.0000 65.0000
 		file_size=54.0000 64.0000
-		offset=4.0000 0.0000
+		offset=2.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
@@ -202,8 +198,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -211,16 +205,14 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	half_limbo{
 		file=Louie.png
-		file_pos=112.0000 0.0000
+		file_pos=110.0000 65.0000
 		file_size=66.0000 64.0000
-		offset=-12.0000 0.0000
+		offset=-10.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
@@ -229,8 +221,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=-10.0000 0.0000 0.0000
@@ -238,14 +228,12 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	half_lying{
 		file=Louie.png
-		file_pos=198.0000 66.0000
+		file_pos=195.0000 0.0000
 		file_size=82.0000 64.0000
 		offset=-8.0000 0.0000
 		scale=0.5000 0.5000
@@ -256,8 +244,74 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+			}
+			body{
+				coords=-5.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	idling{
+		file=Louie.png
+		file_pos=0.0000 0.0000
+		file_size=64.0000 64.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=10.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	limbo{
+		file=Louie.png
+		file_pos=177.0000 65.0000
+		file_size=106.0000 64.0000
+		offset=-20.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=-4.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=-14.0000 0.0000 0.0000
+				height=46.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	lying{
+		file=Louie.png
+		file_pos=278.0000 0.0000
+		file_size=114.0000 64.0000
+		offset=-13.0000 0.0000
+		scale=0.5000 0.5000
+		hitboxes{
+			fist{
+				coords=-2.0000 10.0000 0.0000
+				height=46.0000
+				radius=8.0000
+				type=2
+				value=1.0000
 			}
 			body{
 				coords=-8.0000 0.0000 0.0000
@@ -265,94 +319,12 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	idling{
-		file=Louie.png
-		file_pos=0.0000 66.0000
-		file_size=64.0000 64.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			fist{
-				coords=10.0000 10.0000 0.0000
-				height=46.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			body{
-				coords=0.0000 0.0000 0.0000
-				height=46.0000
-				radius=16.0000
-				type=0
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	limbo{
-		file=Louie.png
-		file_pos=180.0000 0.0000
-		file_size=106.0000 64.0000
-		offset=-22.0000 0.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			fist{
-				coords=0.0000 10.0000 0.0000
-				height=46.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			body{
-				coords=-16.0000 0.0000 0.0000
-				height=46.0000
-				radius=16.0000
-				type=0
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-		}
-	}
-	lying{
-		file=Louie.png
-		file_pos=282.0000 66.0000
-		file_size=114.0000 64.0000
-		offset=-16.0000 0.0000
-		scale=0.5000 0.5000
-		hitboxes{
-			fist{
-				coords=0.0000 10.0000 0.0000
-				height=46.0000
-				radius=8.0000
-				type=2
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
-			}
-			body{
-				coords=-12.0000 0.0000 0.0000
-				height=46.0000
-				radius=16.0000
-				type=0
-				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	walking1{
 		file=Louie.png
-		file_pos=132.0000 66.0000
+		file_pos=65.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
 		hitboxes{
@@ -362,8 +334,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -371,14 +341,12 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	walking2{
 		file=Louie.png
-		file_pos=66.0000 66.0000
+		file_pos=130.0000 0.0000
 		file_size=64.0000 64.0000
 		scale=0.5000 0.5000
 		hitboxes{
@@ -388,8 +356,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -397,41 +363,37 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	punch{
 		file=Louie.png
-		file_pos=356.0000 0.0000
-		file_size=78.0000 64.0000
+		file_pos=351.0000 65.0000
+		file_size=82.0000 64.0000
 		offset=10.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
-				coords=18.0000 5.0000 -20.0000
+				coords=25.0000 0.0000 -20.0000
 				height=86.0000
 				radius=10.0000
 				type=1
 				value=8.0000
 			}
 			body{
-				coords=0.0000 0.0000 0.0000
+				coords=4.0000 0.0000 0.0000
 				height=46.0000
 				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	wind-up{
 		file=Louie.png
-		file_pos=288.0000 0.0000
+		file_pos=284.0000 65.0000
 		file_size=66.0000 64.0000
-		offset=-12.0000 0.0000
+		offset=-10.0000 0.0000
 		scale=0.5000 0.5000
 		hitboxes{
 			fist{
@@ -440,8 +402,6 @@ sprites{
 				radius=8.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			body{
 				coords=-10.0000 0.0000 0.0000
@@ -449,8 +409,6 @@ sprites{
 				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}

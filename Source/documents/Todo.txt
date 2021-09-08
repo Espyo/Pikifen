@@ -9,8 +9,8 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.21.0 ---
-    Pikmin 3 leaders
-        Change the President's style to be yellow instead
+    S.S. Drake
+    Flukeweed
     Adult Bulbmin?
     Purple Pikmin improvements
         Give them a proper pound attack
@@ -107,6 +107,7 @@ Next tasks (roughly sorted most important first)
             Add a reference Olimar image in all of them
             I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
             Search for "data:image/" for leftover image files in the SVG files
+            Convince it to export at 96dpi, not 90dpi
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
         Using blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
@@ -136,6 +137,8 @@ Next tasks (roughly sorted most important first)
         Sliding (add the track logic too)
         Pushing (add the group task logic too)
         Arms outstretched (add the group task logic too)
+    Leader animation improvements
+        More frames, for more fluidity
     Leader missing animations
         Idling (bobbing a bit so they aren't static)
         Bored
@@ -171,7 +174,11 @@ Next tasks (roughly sorted most important first)
             Some signs should talk about dismissing, and group moving
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Kman's Adventure area (see #content-sharing)
-    Update the manual's area editor screenshots
+    Manual
+        Update the area editor screenshots
+        Revamp the scripting tutorial
+            Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
+            Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
     Remember to update the Pikmin Fanon wiki page link in the PNG files
     
     --- v0.23.0 ---
@@ -199,13 +206,17 @@ Next tasks (roughly sorted most important first)
         Check Onions, ships, and converters that have Pikmin in the buffer
     Challenge mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
-        Each area should have a "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
-        Each stage can override the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
-        Each stage should say what its (subjective) difficulty is, like it does with the author and such
-        Each stage should have a goal -- the three main goals from Pikmin 3, Get the Target Score!, Survive!, Reach the Exit!, Deliver X to Y!, Grow X Pikmin!, Defeat Enemy X! Escort X! (partial thanks, Jimble, Kman)
-            And different sub-goals: without getting spotted, until time runs out
-            Each stage should have different scoring criteria. While there is only one goal, the final score should depend on any combination of the following, with varying weights: Pikmin born, Pikmin deaths, time taken, Pokos gathered, enemies killed. It could also have no scoring, just a boolean completion; this is useful for puzzle levels.
-        Stages should pick whether or not they finish upon Pikmin extinctions, since some puzzle/gimmick stages could involve no Pikmin
+        Each stage should have the following data:
+            A "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
+            Its (subjective) difficulty
+            A goal
+                The three main goals from Pikmin 3, Get the Target Score!, Survive!, Reach the Exit!, Deliver X to Y!, Grow X Pikmin!, Defeat Enemy X! Escort X! (partial thanks Jimble, Kman)
+            Loss conditions
+                Without getting spotted, before time runs out, Pikmin extinction (some puzzle/gimmick stages could involve no Pikmin), one leader KO (as opposed to total leader KO)
+                Time limit
+                    An optional override for the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
+                    Also, the number of days. For an "adventure" like experience, you could just want it to last forever over many days, or you could want it to start at sunrise and end at sunset like normal
+            Scoring criteria: while there is only one goal, the final score should depend on any combination of the following, with varying weights: Pikmin born, Pikmin deaths, time taken, Pokos gathered, enemies killed. It could also have no scoring, just a boolean completion; this is useful for puzzle levels.
     
     --- v0.24.0 ---
     Music
