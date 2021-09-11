@@ -8,11 +8,11 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="113.24167mm"
-   height="33.866665mm"
+   width="457"
+   height="878.00006"
    id="svg6593"
    version="1.1"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="Ship.svg">
   <title
      id="title866">Ship spritesheets</title>
@@ -20,7 +20,71 @@
      id="defs6595">
     <linearGradient
        inkscape:collect="always"
-       id="glass-2">
+       id="Drake_antenna">
+      <stop
+         style="stop-color:#eeeeee;stop-opacity:1"
+         offset="0"
+         id="stop1384" />
+      <stop
+         style="stop-color:#a4a4a4;stop-opacity:1"
+         offset="1"
+         id="stop1386" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="Drake_window">
+      <stop
+         style="stop-color:#5f8aa9;stop-opacity:1"
+         offset="0"
+         id="stop2260" />
+      <stop
+         style="stop-color:#495c6b;stop-opacity:1"
+         offset="1"
+         id="stop2262" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="Drake">
+      <stop
+         style="stop-color:#dcdde0;stop-opacity:1"
+         offset="0"
+         id="stop2220" />
+      <stop
+         style="stop-color:#dcdde0;stop-opacity:1"
+         offset="0.43272802"
+         id="stop2051" />
+      <stop
+         style="stop-color:#b6b9be;stop-opacity:1"
+         offset="0.6137566"
+         id="stop2053" />
+      <stop
+         style="stop-color:#b6b9be;stop-opacity:1"
+         offset="0.90476191"
+         id="stop2228" />
+      <stop
+         style="stop-color:#93979f;stop-opacity:1"
+         offset="1"
+         id="stop2222" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="Drake_green_light">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop1020" />
+      <stop
+         style="stop-color:#47c531;stop-opacity:1"
+         offset="0.5"
+         id="stop1028" />
+      <stop
+         style="stop-color:#47c531;stop-opacity:0"
+         offset="1"
+         id="stop1022" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="HS-glass-side">
       <stop
          style="stop-color:#c1c99f;stop-opacity:1"
          offset="0"
@@ -32,7 +96,7 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="hood-yellow">
+       id="HS-hood-yellow">
       <stop
          style="stop-color:#fceabd;stop-opacity:1;"
          offset="0"
@@ -44,7 +108,7 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6674"
        x1="507.78226"
        y1="906.2735"
@@ -52,9 +116,9 @@
        y2="897.80579"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="matrix(0.88571441,0,0,0.88571408,-352.25006,-885.44912)" />
+       gradientTransform="matrix(1.7714288,0,0,1.7714282,-704.50012,-1770.8982)" />
     <linearGradient
-       id="rust">
+       id="HS-rust">
       <stop
          style="stop-color:#593b3b;stop-opacity:1;"
          offset="0"
@@ -66,7 +130,7 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6678"
        x1="507.21774"
        y1="885.66864"
@@ -74,10 +138,10 @@
        y2="894.13635"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="matrix(0.88571441,0,0,0.88571408,-351.75006,-771.6992)" />
+       gradientTransform="matrix(1.7714288,0,0,1.7714282,-703.50012,-1543.3984)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6612"
        x1="520"
        y1="927.36218"
@@ -85,10 +149,10 @@
        y2="919.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6815"
        x1="305"
        y1="912.36218"
@@ -96,10 +160,10 @@
        y2="919.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-283,-854.11218)" />
+       gradientTransform="matrix(2,0,0,2,-566,-1708.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6676"
        x1="475.5"
        y1="927.36218"
@@ -107,10 +171,10 @@
        y2="934.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410.5,-877.1122)" />
+       gradientTransform="matrix(2,0,0,2,-821,-1754.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6666"
        x1="410"
        y1="919.86218"
@@ -118,10 +182,10 @@
        y2="927.36218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6726"
        x1="475"
        y1="954.86218"
@@ -129,10 +193,10 @@
        y2="962.36218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6734"
        x1="477.5"
        y1="907.36218"
@@ -140,10 +204,10 @@
        y2="914.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6628"
        x1="525"
        y1="977.36218"
@@ -151,10 +215,10 @@
        y2="969.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6620"
        x1="522.5"
        y1="884.86218"
@@ -162,10 +226,10 @@
        y2="877.36218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6732"
        x1="480"
        y1="927.36218"
@@ -173,10 +237,10 @@
        y2="934.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6730"
        x1="487.5"
        y1="927.36218"
@@ -184,10 +248,10 @@
        y2="934.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6728"
        x1="462.5"
        y1="927.86218"
@@ -195,20 +259,20 @@
        y2="934.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#hood-magenta"
+       xlink:href="#HS-hood-magenta"
        id="radialGradient6600"
        cx="480"
        cy="933.61218"
        fx="480"
        fy="933.61218"
        r="47.5"
-       gradientTransform="matrix(1.0105263,0,0,1.0105263,-415.05262,-885.18969)"
+       gradientTransform="matrix(2.0210526,0,0,2.0210526,-830.10524,-1770.3794)"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       id="hood-magenta">
+       id="HS-hood-magenta">
       <stop
          style="stop-color:#de5677;stop-opacity:1;"
          offset="0"
@@ -220,40 +284,33 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient6742"
        x1="430"
        y1="927.36218"
        x2="435"
        y2="934.86218"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-410,-874.6122)" />
+       gradientTransform="matrix(2,0,0,2,-820,-1749.2244)" />
     <linearGradient
-       id="glass">
+       id="HS-glass-top">
       <stop
          style="stop-color:#ffffff;stop-opacity:1;"
          offset="0"
          id="stop3774-82" />
+      <stop
+         style="stop-color:#19ffff;stop-opacity:0"
+         offset="0.89999998"
+         id="stop1040" />
       <stop
          style="stop-color:#00ffff;stop-opacity:1;"
          offset="1"
          id="stop3776-4" />
     </linearGradient>
     <linearGradient
-       y2="1052.3622"
-       x2="32"
-       y1="1036.3622"
-       x1="16"
-       spreadMethod="reflect"
-       gradientUnits="userSpaceOnUse"
-       id="linearGradient6738"
-       xlink:href="#glass"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       gradientTransform="matrix(1.2666667,0,0,1.2666667,96.23333,-1254.9755)" />
-    <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
-       inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1058"
        x1="560"
        y1="12"
@@ -262,9 +319,9 @@
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1068"
        x1="580"
        y1="15"
@@ -272,9 +329,9 @@
        y2="9"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#hood-magenta"
+       xlink:href="#HS-hood-magenta"
        id="linearGradient1076"
        x1="533"
        y1="89.263069"
@@ -284,19 +341,19 @@
        spreadMethod="reflect" />
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="radialGradient1100"
        cx="580"
        cy="57"
        fx="580"
        fy="57"
        r="1.5"
-       gradientTransform="matrix(-1.068493,0,0,-1.0534979,983.72598,85.860082)"
+       gradientTransform="matrix(-1.068493,0,0,-1.0534979,1483.726,85.86008)"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1108"
        x1="536.62787"
        y1="78.5"
@@ -305,9 +362,9 @@
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#hood-yellow"
+       xlink:href="#HS-hood-yellow"
        id="linearGradient1116"
        x1="532.9848"
        y1="158.53624"
@@ -316,9 +373,9 @@
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1134"
        x1="556"
        y1="53"
@@ -327,9 +384,9 @@
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1142"
        x1="544"
        y1="194.5"
@@ -338,9 +395,9 @@
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1150"
        x1="529"
        y1="196"
@@ -349,9 +406,9 @@
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1158"
        x1="511"
        y1="220.45399"
@@ -360,9 +417,9 @@
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1166"
        x1="515"
        y1="219"
@@ -370,9 +427,9 @@
        y2="228"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1226"
        gradientUnits="userSpaceOnUse"
        x1="580"
@@ -380,9 +437,9 @@
        x2="580"
        y2="66" />
     <linearGradient
-       gradientTransform="matrix(0.53424655,0,0,0.52674897,54.136987,-4.2139918)"
+       gradientTransform="matrix(0.53424655,0,0,0.52674895,554.13699,-4.2139918)"
        inkscape:collect="always"
-       xlink:href="#rust"
+       xlink:href="#HS-rust"
        id="linearGradient1234"
        gradientUnits="userSpaceOnUse"
        x1="575"
@@ -392,31 +449,352 @@
        spreadMethod="reflect" />
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#glass-2"
+       xlink:href="#HS-glass-side"
        id="radialGradient1269"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-1.0684941,0,0,-1.0534979,983.72662,235.98354)"
+       gradientTransform="matrix(-1.0684941,0,0,-1.0534979,1483.7266,235.98354)"
        cx="580"
        cy="159.5"
        fx="580"
        fy="159.5"
        r="11" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake_green_light"
+       id="radialGradient1026"
+       cx="164"
+       cy="305"
+       fx="164"
+       fy="305"
+       r="6"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#HS-glass-top"
+       id="radialGradient1038"
+       cx="233"
+       cy="115.49989"
+       fx="233"
+       fy="115.49989"
+       r="40"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake_green_light"
+       id="radialGradient1054"
+       gradientUnits="userSpaceOnUse"
+       cx="164"
+       cy="305"
+       fx="164"
+       fy="305"
+       r="6" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1085"
+       x="-0.11569723"
+       width="1.2313945"
+       y="-0.087144911"
+       height="1.1742898">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7259486"
+         id="feGaussianBlur1087" />
+    </filter>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1693">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1058"
+         id="use1695"
+         width="100%"
+         height="100%"
+         transform="translate(-25,30.999999)" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1705">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#use1603"
+         id="use1707"
+         width="100%"
+         height="100%"
+         transform="translate(-25,30.999999)" />
+    </clipPath>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient2226"
+       cx="625.0824"
+       cy="393.15137"
+       fx="625.0824"
+       fy="393.15137"
+       r="189"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(-45.000001,575.16209,378.4737)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Drake_window"
+       id="linearGradient2266"
+       x1="165"
+       y1="584"
+       x2="165"
+       y2="542"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(25,-30.999999)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Drake_window"
+       id="linearGradient1198"
+       x1="145"
+       y1="674"
+       x2="137"
+       y2="655"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(25,-30.999999)" />
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter1234"
+       inkscape:label="Drake_smudges">
+      <feTurbulence
+         id="feTurbulence1236"
+         type="fractalNoise"
+         baseFrequency="0.069479823591239956" />
+      <feColorMatrix
+         id="feColorMatrix1238"
+         type="saturate"
+         result="result1"
+         values="0" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1085-7"
+       x="-0.041364506"
+       width="1.082729"
+       y="-0.037455734"
+       height="1.0749115">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7167212"
+         id="feGaussianBlur1087-5" />
+    </filter>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1389">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1190"
+         inkscape:transform-center-x="25.5"
+         inkscape:transform-center-y="-57"
+         id="use1391"
+         width="100%"
+         height="100%"
+         transform="translate(-25,30.999999)" />
+    </clipPath>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1085-7-2"
+       x="-0.030433221"
+       width="1.0608664"
+       y="-0.072468676"
+       height="1.1449374">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7189642"
+         id="feGaussianBlur1087-5-9" />
+    </filter>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1428">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#use1213"
+         inkscape:transform-center-x="56.568542"
+         inkscape:transform-center-y="-26.870058"
+         id="use1430"
+         width="100%"
+         height="100%"
+         transform="rotate(-27.098297,142.54923,643.36414)" />
+    </clipPath>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter1432"
+       inkscape:label="Drake_paint">
+      <feTurbulence
+         id="feTurbulence1434"
+         type="fractalNoise"
+         baseFrequency="0.34569993842557734"
+         numOctaves="1"
+         result="result1" />
+      <feComponentTransfer
+         id="feComponentTransfer1470">
+        <feFuncR
+           id="feFuncR1472"
+           type="table"
+           tableValues="1 1" />
+        <feFuncG
+           id="feFuncG1474"
+           type="table"
+           tableValues="1 1" />
+        <feFuncB
+           id="feFuncB1476"
+           type="table"
+           tableValues="1 1" />
+        <feFuncA
+           id="feFuncA1478"
+           type="table"
+           tableValues="0 0 0 1 1 1 1" />
+      </feComponentTransfer>
+      <feComposite
+         in2="SourceGraphic"
+         id="feComposite1468"
+         operator="destination-in" />
+    </filter>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask2045">
+      <circle
+         style="display:inline;opacity:1;fill:url(#radialGradient2049);fill-opacity:1;stroke-width:84;paint-order:markers stroke fill;stop-color:#000000"
+         id="circle2047"
+         cx="625.0824"
+         cy="393.15137"
+         r="189"
+         inkscape:export-filename="/home/andre/Desktop/Drake.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </mask>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient2049"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(-45.000001,625.0824,393.15137)"
+       cx="625.0824"
+       cy="393.15137"
+       fx="625.0824"
+       fy="393.15137"
+       r="189" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient1267"
+       cx="-788"
+       cy="722"
+       fx="-788"
+       fy="722"
+       r="17.5"
+       gradientTransform="matrix(-2,1.1533381e-7,-1.8437107e-7,-1.7714296,-2363.9999,1998.9723)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient1275"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-1.8857124,-2.1666833e-6,1.9595944e-6,-1.7714296,-2273.9428,1998.9705)"
+       cx="-788"
+       cy="722"
+       fx="-788"
+       fy="722"
+       r="17.5" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient1275-3"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-1.8857124,-2.1666833e-6,1.9595944e-6,-1.7714296,-2273.9428,1998.9705)"
+       cx="-788"
+       cy="722"
+       fx="-788"
+       fy="722"
+       r="17.5" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient1312"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-1.8857124,-2.1666833e-6,1.9595944e-6,-1.7714296,-2273.9428,1998.9705)"
+       cx="-799.66669"
+       cy="722.00006"
+       fx="-799.66669"
+       fy="722.00006"
+       r="17.5" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient1319"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-2.5142859,1.7374978e-6,-2.1345152e-6,-2.9714291,-2776.5891,2865.3734)"
+       cx="-799.66669"
+       cy="722.00006"
+       fx="-799.66669"
+       fy="722.00006"
+       r="17.5" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake_antenna"
+       id="radialGradient1390"
+       cx="-670"
+       cy="718"
+       fx="-670"
+       fy="718"
+       r="4.9999957"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient1416"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-1.8857124,-2.1666833e-6,1.9595944e-6,-1.7714296,-2273.9428,1998.9705)"
+       cx="-788"
+       cy="722"
+       fx="-788"
+       fy="722"
+       r="17.5" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake"
+       id="radialGradient1418"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-2.5142859,1.7374978e-6,-2.1345152e-6,-2.9714291,-2776.5891,2865.3734)"
+       cx="-799.66669"
+       cy="722.00006"
+       fx="-799.66669"
+       fy="722.00006"
+       r="17.5" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#Drake_antenna"
+       id="radialGradient1420"
+       gradientUnits="userSpaceOnUse"
+       cx="-670"
+       cy="718"
+       fx="-670"
+       fy="718"
+       r="4.9999957" />
   </defs>
   <sodipodi:namedview
      fit-margin-bottom="0"
      fit-margin-right="0"
      fit-margin-left="0"
      fit-margin-top="0"
-     units="mm"
+     units="px"
      id="base"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.99999999"
-     inkscape:cx="250.72739"
-     inkscape:cy="190.37791"
+     inkscape:zoom="0.5"
+     inkscape:cx="646.80419"
+     inkscape:cy="521.94576"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -441,7 +819,8 @@
      inkscape:snap-text-baseline="true"
      inkscape:snap-center="true"
      inkscape:snap-object-midpoints="true"
-     inkscape:snap-midpoints="true">
+     inkscape:snap-midpoints="true"
+     inkscape:snap-global="true">
     <inkscape:grid
        originy="0"
        originx="0"
@@ -479,10 +858,10 @@
      inkscape:label="Grid"
      style="display:inline">
     <rect
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.99635px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect873"
-       width="137"
-       height="113"
+       width="273"
+       height="226"
        x="0"
        y="0" />
     <rect
@@ -490,50 +869,146 @@
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Hocotate_ship_icon.png"
        y="0"
-       x="300"
+       x="800"
        height="128"
        width="128"
        id="rect935"
        style="fill:#008000;fill-opacity:1;stroke-width:0.57638px;stop-color:#000000" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.34046px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect1422"
+       width="457"
+       height="378"
+       x="0"
+       y="500"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
   <g
      inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline;opacity:1">
+    <g
+       id="g1046"
+       transform="rotate(45,-27.501048,634.67767)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         id="path973"
+         style="display:inline;opacity:1;fill:#888888;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 153,288 -4.55635,45.32381 h 31.1127 L 175,288 c 0,-2 -3,-2 -11,-2 -8,0 -11,0 -11,2 z"
+         sodipodi:nodetypes="cccczc" />
+      <path
+         style="display:inline;fill:#333333;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 158,288 h 4 v 2 h 4 v -2 h 4 l 1,9 h -4 v -1 h -5 v 1 h -5 z"
+         id="path978"
+         sodipodi:nodetypes="ccccccccccccc" />
+      <circle
+         style="display:inline;opacity:1;fill:url(#radialGradient1054);fill-opacity:1;stroke:none;stroke-width:6;paint-order:markers stroke fill;stop-color:#000000"
+         id="path980"
+         cx="164"
+         cy="305"
+         r="6" />
+      <rect
+         style="display:inline;fill:none;fill-opacity:1;stroke:#000011;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+         id="rect982"
+         width="14"
+         height="7"
+         x="157"
+         y="316"
+         rx="3.5"
+         ry="3.5" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1046"
+       id="use1048"
+       transform="rotate(90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1046"
+       id="use1050"
+       transform="rotate(180,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1046"
+       id="use1052"
+       transform="rotate(-90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="display:inline;opacity:1;fill:url(#radialGradient2226);fill-opacity:1;stroke-width:84;paint-order:markers stroke fill;stop-color:#000000"
+       id="path971"
+       cx="620.83978"
+       cy="353.55341"
+       r="189"
+       transform="rotate(45)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="display:inline;opacity:0.3;fill:#000000;fill-opacity:1;stroke-width:84;paint-order:markers stroke fill;filter:url(#filter1234);stop-color:#000000"
+       id="circle2041"
+       cx="625.0824"
+       cy="393.15137"
+       r="189"
+       transform="rotate(45,49.92031,14.677671)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       mask="url(#mask2045)" />
     <use
        x="0"
        y="0"
        xlink:href="#path1126"
        id="use1168"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <path
        style="fill:url(#linearGradient1134);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 354.38356,20.54321 h -1.60274 l -2.67123,4.213992 h 1.60274 z"
+       d="m 854.38356,20.54321 h -1.60274 l -2.67123,4.213992 h 1.60274 z"
        id="path1126" />
     <path
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#fceabd;fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 336.75342,128 6.41097,-18.43621 -7.47945,-1.58025 -1.60275,14.22222 1.0685,5.26749 z"
+       d="m 836.75342,128 6.41097,-18.43621 -7.47945,-1.58025 -1.60275,14.22222 1.0685,5.26749 z"
        id="path969" />
     <path
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#bb265c;fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 339.9589,90.074074 c -5.21665,2.814994 -9.14662,7.018835 -9.08219,13.695476 0.0741,7.68716 1.36284,14.85977 2.67123,21.59671 0.38337,1.97397 1.0685,2.63374 3.20548,2.63374 -4.0508,-1.97098 0.3871,-15.56497 2.13699,-23.17695 l 4.27398,-7.901239 z"
+       d="m 839.9589,90.074075 c -5.21665,2.814995 -9.14662,7.018835 -9.08219,13.695475 0.0741,7.68716 1.36284,14.85977 2.67123,21.59671 0.38337,1.97397 1.0685,2.63374 3.20548,2.63374 -4.0508,-1.97098 0.3871,-15.56497 2.13699,-23.17695 l 4.27398,-7.90124 z"
        id="path953"
        sodipodi:nodetypes="csscccc" />
     <circle
-       style="fill:none;stroke:url(#linearGradient6738);stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:url(#radialGradient1038);stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path3770-5"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086"
-       cx="116.5"
-       cy="57.749943"
-       r="19" />
+       cx="233"
+       cy="115.49989"
+       r="38" />
     <path
-       style="fill:#c2264d;fill-opacity:1;stroke:none"
-       d="m 23.5,61.750017 c -4.89664,-0.082 -10.999999,-1 -10.999999,-4.50004 0,-3.5 6.022659,-3.86734 10.999999,-4.5 z"
+       style="fill:#c2264d;fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 47,123.50003 c -9.79328,-0.164 -21.999998,-2 -21.999998,-9.00008 0,-7 12.045318,-7.73468 21.999998,-9 z"
        id="path5437-7-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
@@ -541,16 +1016,16 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6742);fill-opacity:1;stroke:none"
-       d="m 20.5,56.749977 h 2.720441 v 2 H 20.5 Z"
+       style="fill:url(#linearGradient6742);fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 41,113.49995 h 5.440882 v 4 H 41 Z"
        id="path6592"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:#c2264d;fill-opacity:1;stroke:none"
-       d="m 84,103.75002 c 1.95164,3.2769 4.5,7.5 8,6 3.5,-1.5 1.81603,-6.471 0.5,-10.000003 z"
+       style="fill:#c2264d;fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 168,207.50004 c 3.90328,6.5538 9,15 16,12 7,-3 3.63206,-12.942 1,-20.00001 z"
        id="path5437"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
@@ -558,8 +1033,8 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:#c2264d;fill-opacity:1;stroke:none"
-       d="m 83.56924,12.749977 c 1.93574,-4.4985196 4.8941,-10.7869296 8.36559,-8.7277696 3.47149,2.05917 1.37048,8.3831496 0.0652,13.2277696 z"
+       style="fill:#c2264d;fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 167.13848,25.499954 c 3.87148,-8.997039 9.7882,-21.5738592 16.73118,-17.4555392 6.94298,4.1183402 2.74096,16.7662992 0.1304,26.4555392 z"
        id="path5437-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
@@ -567,25 +1042,25 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <circle
-       style="fill:url(#radialGradient6600);fill-opacity:1;stroke:none;stroke-width:0.997487"
+       style="fill:url(#radialGradient6600);fill-opacity:1;stroke:none;stroke-width:1.99497"
        id="path5409"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086"
-       cx="70.000008"
-       cy="58.249985"
-       r="48" />
+       cx="140.00002"
+       cy="116.49997"
+       r="96" />
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:none"
-       d="m 70,68.500017 6.5,-10.00004 -6.5,-12.5 -6.5,12.5 z"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2"
+       d="M 140,137.00003 153,116.99995 140,91.999954 127,116.99995 Z"
        id="path5482"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6728);fill-opacity:1;stroke:none"
-       d="m 67.5,60.397297 c -7.20276,5.95712 -17.8635,5.91422 -17,-0.5 1,-10.5 9.86284,-9.61638 17,-4.5 z"
+       style="fill:url(#linearGradient6728);fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 135,120.79459 c -14.40552,11.91424 -35.727,11.82844 -34,-1 2,-20.999996 19.72568,-19.23276 34,-9 z"
        id="path5413-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
@@ -593,8 +1068,8 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:#ff273e;fill-opacity:1;stroke:none"
-       d="M 104.16458,63.750017 H 90.5 c -4.5,-3.50004 -4,-8.50004 0,-11.50004 h 13.66458 z"
+       style="fill:#ff273e;fill-opacity:1;stroke:none;stroke-width:2"
+       d="M 208.32916,127.50003 H 181 c -9,-7.00008 -8,-17.00008 0,-23.00008 h 27.32916 z"
        id="path5435"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -602,8 +1077,8 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6730);fill-opacity:1;stroke:none"
-       d="m 72.5,55.602667 c 7.20276,-5.95708 17.8635,-5.91421 17,0.5 -1,10.50005 -9.86284,9.61635 -17,4.5 z"
+       style="fill:url(#linearGradient6730);fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 145,111.20533 c 14.40552,-11.914156 35.727,-11.828416 34,1 -2,21.0001 -19.72568,19.2327 -34,9 z"
        id="path5413"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
@@ -611,16 +1086,16 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6732);fill-opacity:1;stroke:#837b5c;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 70,10.298017 V 106.22512"
+       style="fill:url(#linearGradient6732);fill-opacity:1;stroke:#837b5c;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 140,20.596034 V 212.45024"
        id="path5486"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6620);fill-opacity:1;stroke:none"
-       d="m 112.5,19.249977 14.5,-6.5 C 125.23905,6.3289174 122.14772,1.1599674 114,0.74997738 L 108,14.749977 Z"
+       style="fill:url(#linearGradient6620);fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 225,38.499954 29,-13 C 250.4781,12.657835 244.29544,2.3199348 228,1.4999548 L 216,29.499954 Z"
        id="path5459"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -628,8 +1103,8 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6628);fill-opacity:1;stroke:none"
-       d="m 112,94.500017 14.5,6.500003 c -1.76095,6.421 -4.85228,11.59 -13,12 l -6,-14.000003 z"
+       style="fill:url(#linearGradient6628);fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 224,189.00003 29,13.00001 c -3.5219,12.842 -9.70456,23.18 -26,24 l -12,-28.00001 z"
        id="path5459-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc"
@@ -637,8 +1112,8 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6734);fill-opacity:1;stroke:none"
-       d="m 60.5,37.749977 c 1.42248,-3.45649 1.5,-8 9.5,-8 8,0 8.21739,4.81267 9.5,8 z"
+       style="fill:url(#linearGradient6734);fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 121,75.499954 c 2.84496,-6.91298 3,-16 19,-16 16,0 16.43478,9.62534 19,16 z"
        id="path5488"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
@@ -646,8 +1121,8 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6726);fill-opacity:1;stroke:none"
-       d="m 60.5,80.750017 c 1.42248,3.4565 1.5,8 9.5,8 8,0 8.21739,-4.8127 9.5,-8 z"
+       style="fill:url(#linearGradient6726);fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 121,161.50003 c 2.84496,6.913 3,16 19,16 16,0 16.43478,-9.6254 19,-16 z"
        id="path5488-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="czcc"
@@ -655,33 +1130,33 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6666);fill-opacity:1;stroke:none"
-       d="M 11.062501,38.090657 C 7.1194305,38.060557 3.51689,39.881837 0,42.153157 v 32.99996 c 7.3234905,4.0205 14.3743,4.6521 21,0 v -32.99996 c -3.59764,-2.88973 -6.870669,-4.03911 -9.937499,-4.0625 z m -2.5625005,3.5625 v 33.49996 L 5,74.153117 v -31.49996 z m 4.5000005,0 3.499999,1 v 31.49996 l -3.499999,1 z"
+       style="fill:url(#linearGradient6666);fill-opacity:1;stroke:none;stroke-width:2"
+       d="M 22.125002,76.181314 C 14.238861,76.121114 7.03378,79.763674 0,84.306314 v 65.999916 c 14.646981,8.041 28.7486,9.3042 42,0 V 84.306314 c -7.19528,-5.77946 -13.741338,-8.07822 -19.874998,-8.125 z m -5.125001,7.125 V 150.30623 L 10,148.30623 V 85.306314 Z m 9.000001,0 6.999998,2 v 62.999916 l -6.999998,2 z"
        id="path5560"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <circle
-       style="fill:url(#linearGradient6676);fill-opacity:1;stroke:none"
+       style="fill:url(#linearGradient6676);fill-opacity:1;stroke:none;stroke-width:2"
        id="path5411"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086"
-       cx="70"
-       cy="57.749985"
-       r="4" />
+       cx="140"
+       cy="115.49997"
+       r="8" />
     <path
-       style="fill:url(#linearGradient6815);fill-opacity:1;stroke:none"
-       d="m 70,10.249977 c -26.50967,0 -48,21.49033 -48,48 0,26.50964 21.49033,48.000043 48,48.000043 26.50967,0 48,-21.490403 48,-48.000043 0,-26.50967 -21.49033,-48 -48,-48 z m 0,5 c 23.74824,0 43,19.25176 43,43 0,23.74824 -19.251759,43.000043 -43,43.000043 -23.748239,0 -43,-19.251803 -43,-43.000043 0,-23.74824 19.251761,-43 43,-43 z"
+       style="fill:url(#linearGradient6815);fill-opacity:1;stroke:none;stroke-width:2"
+       d="m 140,20.499954 c -53.01934,0 -96,42.98066 -96,95.999996 0,53.01928 42.98066,96.00009 96,96.00009 53.01934,0 96,-42.98081 96,-96.00009 0,-53.019336 -42.98066,-95.999996 -96,-95.999996 z m 0,10 c 47.49648,0 86,38.50352 86,85.999996 0,47.49648 -38.50352,86.00009 -86,86.00009 -47.496478,0 -86,-38.50361 -86,-86.00009 0,-47.496476 38.503522,-85.999996 86,-85.999996 z"
        id="path5409-8"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <path
-       style="fill:url(#linearGradient6612);fill-opacity:1;stroke:none"
-       d="m 97.499997,53.999977 20.000003,-9.5 c 7,5.50001 7,22.00004 0,26.50004 0,0 -20.000003,-9 -20.000003,-9.5 0,-0.5 0,-7.50004 0,-7.50004 z"
+       style="fill:url(#linearGradient6612);fill-opacity:1;stroke:none;stroke-width:2"
+       d="M 194.99999,107.99995 235,88.999954 c 14,11.00002 14,44.000076 0,53.000076 0,0 -40.00001,-18 -40.00001,-19 0,-1 0,-15.00008 0,-15.00008 z"
        id="path5433"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccsc"
@@ -689,96 +1164,96 @@
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
     <ellipse
-       style="fill:url(#linearGradient6678);fill-opacity:1;stroke:none;stroke-width:0.885714"
+       style="fill:url(#linearGradient6678);fill-opacity:1;stroke:none;stroke-width:1.77143"
        id="path5457"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086"
-       cx="105.50001"
-       cy="21.999975"
-       rx="7.750001"
-       ry="7.7499981" />
+       cx="211.00002"
+       cy="43.99995"
+       rx="15.500002"
+       ry="15.499996" />
     <ellipse
-       style="fill:url(#linearGradient6674);fill-opacity:1;stroke:none;stroke-width:0.885714"
+       style="fill:url(#linearGradient6674);fill-opacity:1;stroke:none;stroke-width:1.77143"
        id="path5457-4"
        transform="scale(1,-1)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086"
-       cx="105.00001"
-       cy="-91.749939"
-       rx="7.750001"
-       ry="7.7499981" />
+       cx="210.00002"
+       cy="-183.49988"
+       rx="15.500002"
+       ry="15.499996" />
     <path
        id="path900"
        style="fill:url(#linearGradient1076);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 362.39726,4.7407407 C 358.49769,16.285333 350.38821,26.052857 341.0274,35.292181 c -1.03371,4.564802 -2.12608,9.06543 -2.13699,14.748971 8.87162,11.566913 8.42774,35.507269 25.10958,30.024692 16.68186,5.482577 16.23798,-18.457779 25.1096,-30.024692 -0.0108,-5.683541 -1.10328,-10.184169 -2.13699,-14.748971 -9.36081,-9.239324 -17.47029,-19.006848 -21.36986,-30.5514403 z"
+       d="M 862.39726,4.7407407 C 858.49769,16.285333 850.38821,26.052857 841.0274,35.292181 c -1.03371,4.564802 -2.12608,9.06543 -2.13699,14.748969 8.87162,11.566915 8.42774,35.50727 25.10958,30.024695 16.68186,5.482575 16.23798,-18.45778 25.1096,-30.024695 -0.0108,-5.683539 -1.10328,-10.184167 -2.13699,-14.748969 -9.36081,-9.239324 -17.47029,-19.006848 -21.36986,-30.5514403 z"
        sodipodi:nodetypes="cccccccc" />
     <path
        id="path921"
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient1226);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 363.99999,18.436214 a 6.9452054,6.8477366 0 0 0 -6.01443,3.423868 6.9452054,6.8477366 0 0 0 0,6.847737 6.9452054,6.8477366 0 0 0 6.01443,3.423868 6.9452054,6.8477366 0 0 0 6.01445,-3.423868 6.9452054,6.8477366 0 0 0 0,-6.847737 6.9452054,6.8477366 0 0 0 -6.01445,-3.423868 z" />
+       d="m 863.99999,18.436214 a 6.9452055,6.8477365 0 0 0 -6.01443,3.423868 6.9452055,6.8477365 0 0 0 0,6.847737 6.9452055,6.8477365 0 0 0 6.01443,3.423868 6.9452055,6.8477365 0 0 0 6.01445,-3.423868 6.9452055,6.8477365 0 0 0 0,-6.847737 6.9452055,6.8477365 0 0 0 -6.01445,-3.423868 z" />
     <path
        id="path923"
        style="fill:url(#linearGradient1116);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 348.13329,42.179012 c -4.89696,0.08099 -9.46979,5.425585 -9.24288,8.915638 0,3.687243 0,8.427984 0.53424,11.588478 l 5.34247,40.032922 c 1.16291,8.71409 9.61644,13.02506 13.35617,13.69547 1.9589,0.35117 3.88569,1.0535 5.8767,1.0535 1.99103,0 3.91782,-0.70233 5.87672,-1.0535 3.73973,-0.67041 12.19326,-4.98138 13.35617,-13.69547 l 5.34247,-40.032922 c 0.53424,-3.160494 0.53424,-7.901235 0.53424,-11.588478 0.34575,-5.318176 -10.45461,-14.94256 -16.56164,-3.687243 -5.33513,9.832665 -6.21196,21.569844 -8.54796,32.658437 -2.33598,-11.088593 -3.21281,-22.825772 -8.54794,-32.658437 -2.09929,-3.869015 -4.75368,-5.270816 -7.31876,-5.228395 z"
+       d="m 848.13329,42.179012 c -4.89696,0.08099 -9.46979,5.425585 -9.24288,8.915638 0,3.687245 0,8.427985 0.53424,11.58848 l 5.34247,40.03292 c 1.16291,8.71409 9.61644,13.02506 13.35617,13.69547 1.9589,0.35117 3.88569,1.0535 5.8767,1.0535 1.99103,0 3.91782,-0.70233 5.87672,-1.0535 3.73973,-0.67041 12.19326,-4.98138 13.35617,-13.69547 l 5.34247,-40.03292 c 0.53424,-3.160495 0.53424,-7.901235 0.53424,-11.58848 0.34575,-5.318176 -10.45461,-14.94256 -16.56164,-3.687243 -5.33513,9.832663 -6.21196,21.569843 -8.54796,32.658438 -2.33598,-11.088595 -3.21281,-22.825775 -8.54794,-32.658438 -2.09929,-3.869015 -4.75368,-5.270816 -7.31876,-5.228395 z"
        sodipodi:nodetypes="sccsssssccscss" />
     <path
        style="fill:#af7639;fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 347.43836,60.049383 c -1.89024,0.186917 -1.28055,5.387293 -1.0685,7.901234 0.21205,2.513941 1.0685,6.847737 2.13698,6.847737 1.0685,0 1.20626,-4.333796 1.0685,-6.847737 -0.13776,-2.513941 -0.24674,-8.088151 -2.13698,-7.901234 z"
+       d="m 847.43836,60.049385 c -1.89024,0.186915 -1.28055,5.38729 -1.0685,7.90123 0.21205,2.513945 1.0685,6.84774 2.13698,6.84774 1.0685,0 1.20626,-4.333795 1.0685,-6.84774 -0.13776,-2.51394 -0.24674,-8.08815 -2.13698,-7.90123 z"
        id="path925"
        sodipodi:nodetypes="zzzzz" />
     <path
        id="path927"
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#a9273e;fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 363.99999,63.736626 a 12.287671,12.115226 0 0 0 -10.6411,6.057613 12.287671,12.115226 0 0 0 0,12.115226 12.287671,12.115226 0 0 0 10.6411,6.057613 12.287671,12.115226 0 0 0 10.64112,-6.057613 12.287671,12.115226 0 0 0 0,-12.115226 12.287671,12.115226 0 0 0 -10.64112,-6.057613 z" />
+       d="m 863.99999,63.736625 a 12.287671,12.115226 0 0 0 -10.6411,6.057615 12.287671,12.115226 0 0 0 0,12.115225 12.287671,12.115226 0 0 0 10.6411,6.057615 12.287671,12.115226 0 0 0 10.64112,-6.057615 12.287671,12.115226 0 0 0 0,-12.115225 12.287671,12.115226 0 0 0 -10.64112,-6.057615 z" />
     <path
        id="path929"
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient1269);fill-opacity:1;stroke:none;stroke-width:0.50742px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 363.91339,64.263374 a 11.753424,11.588477 0 0 0 -10.09225,5.794239 11.753424,11.588477 0 0 0 0,11.588478 11.753424,11.588477 0 0 0 10.17885,5.794238 11.753424,11.588477 0 0 0 10.17887,-5.794238 11.753424,11.588477 0 0 0 0,-11.588478 11.753424,11.588477 0 0 0 -10.17887,-5.794239 11.753424,11.588477 0 0 0 -0.0866,0 z" />
+       d="m 863.91339,64.263375 a 11.753424,11.588477 0 0 0 -10.09225,5.79424 11.753424,11.588477 0 0 0 0,11.588475 11.753424,11.588477 0 0 0 10.17885,5.79424 11.753424,11.588477 0 0 0 10.17887,-5.79424 11.753424,11.588477 0 0 0 0,-11.588475 11.753424,11.588477 0 0 0 -10.17887,-5.79424 11.753424,11.588477 0 0 0 -0.0866,0 z" />
     <path
        style="fill:url(#linearGradient1142);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 349.04109,95.341564 -4.27397,2.633745 v 3.160491 l 4.80822,-3.160491 z"
+       d="m 849.04109,95.341565 -4.27397,2.633745 v 3.16049 l 4.80822,-3.16049 z"
        id="path935" />
     <path
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient1150);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 336.75342,91.654321 c 0,-2.106996 1.60274,-5.794239 4.27398,-5.794239 2.67123,0 4.20676,3.935547 4.27396,6.320988 l 0.53425,18.96296 c 0.0446,1.57964 -9.08219,2.63375 -9.08219,0 z"
+       d="m 836.75342,91.65432 c 0,-2.106995 1.60274,-5.79424 4.27398,-5.79424 2.67123,0 4.20676,3.93555 4.27396,6.32099 l 0.53425,18.96296 c 0.0446,1.57964 -9.08219,2.63375 -9.08219,0 z"
        id="path937"
        sodipodi:nodetypes="szssss" />
     <path
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient1166);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 327.13699,107.45679 c -1.56454,0.18049 -2.13699,0.52675 -2.13699,2.107 0,1.58024 2.01758,5.25715 3.73973,6.84773 0.96611,0.88681 1.74338,1.38572 2.67123,1.58025 1.35052,-2.32006 1.42466,-4.56516 2.13698,-6.84774 z"
+       d="m 827.13699,107.45679 c -1.56454,0.18049 -2.13699,0.52675 -2.13699,2.107 0,1.58024 2.01758,5.25715 3.73973,6.84773 0.96611,0.88681 1.74338,1.38572 2.67123,1.58025 1.35052,-2.32006 1.42466,-4.56516 2.13698,-6.84774 z"
        id="path987"
        sodipodi:nodetypes="czcccc" />
     <path
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient1158);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 338.35616,105.87654 -5.34247,2.107 -5.8767,-0.52675 c 4.29579,2.8172 5.68648,6.33708 4.27397,10.53498 l 3.20548,-4.74074 3.73972,-3.1605 c 2.60947,-2.20529 1.07416,-4.63762 0,-4.21399 z"
+       d="m 838.35616,105.87654 -5.34247,2.107 -5.8767,-0.52675 c 4.29579,2.8172 5.68648,6.33708 4.27397,10.53498 l 3.20548,-4.74074 3.73972,-3.1605 c 2.60947,-2.20529 1.07416,-4.63762 0,-4.21399 z"
        id="path985"
        sodipodi:nodetypes="sccccss" />
     <path
        id="path1008"
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient1234);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 363.99999,20.54321 c -1.40938,0.183004 -2.15281,0.807105 -2.67123,1.580247 l 1.11128,3.816872 c 0.25148,-0.479355 0.90037,-1.415529 1.55995,-1.709876 0.6596,0.294347 1.30849,1.230521 1.55997,1.709876 l 1.11128,-3.816872 c -0.51842,-0.773142 -1.26185,-1.397243 -2.67125,-1.580247 z" />
+       d="m 863.99999,20.54321 c -1.40938,0.183004 -2.15281,0.807105 -2.67123,1.580247 l 1.11128,3.816872 c 0.25148,-0.479355 0.90037,-1.415529 1.55995,-1.709876 0.6596,0.294347 1.30849,1.230521 1.55997,1.709876 l 1.11128,-3.816872 c -0.51842,-0.773142 -1.26185,-1.397243 -2.67125,-1.580247 z" />
     <path
        id="path1015"
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient1100);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 363.99999,24.230453 c -1.06848,0 -1.60273,0.526749 -1.60273,1.580247 0,1.053498 0.53425,1.580247 1.60273,1.580247 1.0685,0 1.60275,-0.526749 1.60275,-1.580247 0,-1.053498 -0.53425,-1.580247 -1.60275,-1.580247 z" />
+       d="m 863.99999,24.230453 c -1.06848,0 -1.60273,0.526749 -1.60273,1.580247 0,1.053498 0.53425,1.580247 1.60273,1.580247 1.0685,0 1.60275,-0.526749 1.60275,-1.580247 0,-1.053498 -0.53425,-1.580247 -1.60275,-1.580247 z" />
     <path
        id="path1022"
        style="fill:url(#linearGradient1108);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 342.63014,33.711934 -1.60274,1.580247 -0.1993,1.061728 0.1993,0.518519 1.60274,-0.526749 -0.53424,2.106996 2.13698,-1.053498 v 1.580247 l 1.60273,-1.053498 v 1.053498 l 1.60275,-1.580247 v 1.580247 l 2.13698,-0.526749 0.53425,0.526749 1.0685,-0.526749 0.53424,1.053498 2.13698,-1.053498 0.53425,1.053498 1.60274,-0.526749 0.53425,1.053498 1.0685,-0.526749 2.13698,1.053498 1.06849,-1.053498 1.06849,1.053498 0.53425,-1.053498 1.60273,0.526749 1.60275,-0.526749 0.53425,1.053498 1.06849,-1.053498 1.06849,1.053498 2.13698,-1.053498 1.0685,0.526749 0.53425,-1.053498 1.60274,0.526749 0.53425,-1.053498 2.13698,1.053498 0.53424,-1.053498 1.0685,0.526749 0.53425,-0.526749 2.13698,0.526749 v -1.580247 l 1.60275,1.580247 v -1.053498 l 1.60273,1.053498 v -1.580247 l 2.13698,1.053498 -0.53424,-2.106996 1.60274,0.526749 0.1993,-0.518519 -0.1993,-1.061728 -1.60274,-1.580247 -0.53425,1.053498 -0.53424,-0.526749 c 0,0 0.53424,1.580247 0,1.580247 -0.53425,0 -1.60273,-0.526749 -1.60273,-0.526749 l -0.53425,1.053498 -1.0685,-0.526749 -0.53425,1.053498 -0.53425,-2.106996 -1.06848,1.580247 -1.60275,-0.526749 -0.53425,1.053498 h -2.13698 l -1.06849,0.526749 -1.06849,-1.053498 -2.137,1.053498 V 35.81893 l -1.06849,1.053498 -1.06849,-0.526749 -0.53424,1.053498 -1.06849,-1.053498 -1.0685,1.053498 -0.53425,-1.053498 -1.0685,0.526749 -1.06848,-0.526749 -0.53425,1.053498 -1.0685,-1.053498 -1.06849,1.053498 -0.53424,-1.053498 -1.06849,0.526749 -1.06849,-1.053498 v 1.580247 l -2.137,-1.053498 -1.06849,1.053498 -1.06849,-0.526749 h -2.13698 l -0.53425,-1.053498 -1.60275,0.526749 -1.06848,-1.580247 -0.53425,2.106996 -0.53425,-1.053498 -1.0685,0.526749 -0.53425,-1.053498 c 0,0 -1.06848,0.526749 -1.60273,0.526749 -0.53424,0 0,-1.580247 0,-1.580247 l -0.53424,0.526749 z" />
+       d="m 842.63014,33.711934 -1.60274,1.580247 -0.1993,1.061728 0.1993,0.518519 1.60274,-0.526749 -0.53424,2.106996 2.13698,-1.053498 v 1.580247 l 1.60273,-1.053498 v 1.053498 l 1.60275,-1.580247 v 1.580247 l 2.13698,-0.526749 0.53425,0.526749 1.0685,-0.526749 0.53424,1.053498 2.13698,-1.053498 0.53425,1.053498 1.60274,-0.526749 0.53425,1.053498 1.0685,-0.526749 2.13698,1.053498 1.06849,-1.053498 1.06849,1.053498 0.53425,-1.053498 1.60273,0.526749 1.60275,-0.526749 0.53425,1.053498 1.06849,-1.053498 1.06849,1.053498 2.13698,-1.053498 1.0685,0.526749 0.53425,-1.053498 1.60274,0.526749 0.53425,-1.053498 2.13698,1.053498 0.53424,-1.053498 1.0685,0.526749 0.53425,-0.526749 2.13698,0.526749 v -1.580247 l 1.60275,1.580247 v -1.053498 l 1.60273,1.053498 v -1.580247 l 2.13698,1.053498 -0.53424,-2.106996 1.60274,0.526749 0.1993,-0.518519 -0.1993,-1.061728 -1.60274,-1.580247 -0.53425,1.053498 -0.53424,-0.526749 c 0,0 0.53424,1.580247 0,1.580247 -0.53425,0 -1.60273,-0.526749 -1.60273,-0.526749 l -0.53425,1.053498 -1.0685,-0.526749 -0.53425,1.053498 -0.53425,-2.106996 -1.06848,1.580247 -1.60275,-0.526749 -0.53425,1.053498 h -2.13698 l -1.06849,0.526749 -1.06849,-1.053498 -2.137,1.053498 V 35.81893 l -1.06849,1.053498 -1.06849,-0.526749 -0.53424,1.053498 -1.06849,-1.053498 -1.0685,1.053498 -0.53425,-1.053498 -1.0685,0.526749 -1.06848,-0.526749 -0.53425,1.053498 -1.0685,-1.053498 -1.06849,1.053498 -0.53424,-1.053498 -1.06849,0.526749 -1.06849,-1.053498 v 1.580247 l -2.137,-1.053498 -1.06849,1.053498 -1.06849,-0.526749 h -2.13698 l -0.53425,-1.053498 -1.60275,0.526749 -1.06848,-1.580247 -0.53425,2.106996 -0.53425,-1.053498 -1.0685,0.526749 -0.53425,-1.053498 c 0,0 -1.06848,0.526749 -1.60273,0.526749 -0.53424,0 0,-1.580247 0,-1.580247 l -0.53424,0.526749 z" />
     <path
        id="path1024"
        style="fill:#4e311d;fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 341.0274,35.292181 c 5.45227,3.011301 19.23287,3.687243 22.97259,3.687243 3.73974,0 17.52034,-0.675942 22.97261,-3.687243 -6.87731,2.276577 -17.63014,2.633745 -22.97261,2.633745 -5.34245,0 -16.09528,-0.357168 -22.97259,-2.633745 z" />
+       d="m 841.0274,35.292181 c 5.45227,3.011301 19.23287,3.687243 22.97259,3.687243 3.73974,0 17.52034,-0.675942 22.97261,-3.687243 -6.87731,2.276577 -17.63014,2.633745 -22.97261,2.633745 -5.34245,0 -16.09528,-0.357168 -22.97259,-2.633745 z" />
     <path
        id="path1026"
        style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#linearGradient1068);fill-opacity:1;stroke:none;stroke-width:0.530485px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
-       d="m 363.99999,0 c -1.06848,0 -1.60273,0.52674897 -1.60273,1.5802469 v 2.6337449 h 3.20548 V 1.5802469 C 365.60274,0.52674897 365.06849,0 363.99999,0 Z"
+       d="m 863.99999,0 c -1.06848,0 -1.60273,0.52674895 -1.60273,1.5802469 v 2.6337449 h 3.20548 V 1.5802469 C 865.60274,0.52674895 865.06849,0 863.99999,0 Z"
        sodipodi:nodetypes="ssccss" />
     <path
        style="fill:url(#linearGradient1058);fill-opacity:1;stroke:none;stroke-width:0.63552;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 353.31507,2.6337449 h 9.61644 c -2.67124,-1.580247 -6.94521,-1.580247 -9.61644,0 z"
+       d="m 853.31507,2.6337449 h 9.61644 c -2.67124,-1.580247 -6.94521,-1.580247 -9.61644,0 z"
        id="path1042"
        sodipodi:nodetypes="ccc" />
     <use
@@ -786,7 +1261,7 @@
        y="0"
        xlink:href="#path969"
        id="use1170"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <use
@@ -794,7 +1269,7 @@
        y="0"
        xlink:href="#path953"
        id="use1172"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <use
@@ -802,7 +1277,7 @@
        y="0"
        xlink:href="#path925"
        id="use1180"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <use
@@ -810,7 +1285,7 @@
        y="0"
        xlink:href="#path935"
        id="use1190"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <use
@@ -818,7 +1293,7 @@
        y="0"
        xlink:href="#path937"
        id="use1192"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <use
@@ -826,7 +1301,7 @@
        y="0"
        xlink:href="#path987"
        id="use1194"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <use
@@ -834,7 +1309,7 @@
        y="0"
        xlink:href="#path985"
        id="use1196"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <use
@@ -842,7 +1317,7 @@
        y="0"
        xlink:href="#path1042"
        id="use1208"
-       transform="matrix(-1,0,0,1,728,0)"
+       transform="matrix(-1,0,0,1,1728,0)"
        width="100%"
        height="100%" />
     <use
@@ -861,5 +1336,1649 @@
        transform="translate(0,24.757202)"
        width="100%"
        height="100%" />
+    <g
+       id="g1149"
+       style="opacity:0.1"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)">
+      <path
+         id="path1089"
+         style="opacity:1;fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 164,537 c -16,0 -39.38004,8.03644 -39,10 l 6,31 19,11 h 28 l 19,-11 6,-31 c 0.38004,-1.96356 -23,-10 -39,-10 z"
+         sodipodi:nodetypes="zsccccsz" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 202,552 13,-1 3.84375,-11.375"
+         id="path1128"
+         sodipodi:nodetypes="ccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 128,564 -25,8 -7,18 15.85637,29.67407"
+         id="path1151"
+         sodipodi:nodetypes="cccc" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path1153"
+         cx="210"
+         cy="547"
+         r="1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 105,597 5,-8 15,-5 7,19 -21,8 z"
+         id="path1155"
+         sodipodi:nodetypes="cccccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 112,609 1,-2"
+         id="path1157" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 115,606 2,1"
+         id="path1159" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 118,604 2,2"
+         id="path1161" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 121,603 2,2"
+         id="path1163" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 125,602 v 2"
+         id="path1165" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 127,602 h 2"
+         id="path1167" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path1191"
+         cx="109"
+         cy="573"
+         r="1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 209,585 1,3"
+         id="path1351" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 214,587 2,4"
+         id="path1353" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 223,591 -3,2"
+         id="path1355" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 226,596 v -4"
+         id="path1357" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 233,596 -2,1"
+         id="path1359" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 235,600 1,-3"
+         id="path1361" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 242,602 -2,2"
+         id="path1363" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 243,606 2,-1"
+         id="path1365" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 247,609 v -3"
+         id="path1367" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 251,609 -1,2"
+         id="path1369" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 253,613 1,-2"
+         id="path1371" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 258,612 h -2"
+         id="path1373" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 256,615 3,-1"
+         id="path1375" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 258,617 h 2"
+         id="path1377" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 262,617 -2,-4"
+         id="path1379" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path1381"
+         cx="164"
+         cy="720"
+         r="113" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 250,640 5,-4 9,1 11,16 -10,8 z"
+         id="path1383" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 94,637 13,-10 10,10 -17,13 z"
+         id="path1478"
+         inkscape:transform-center-x="58.5"
+         inkscape:transform-center-y="-0.056254354" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 186,625 1,3"
+         id="path1480" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 190,626 v 2"
+         id="path1482" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 192,629 2,-2"
+         id="path1484" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 195,630 1,-2"
+         id="path1486" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 198,629 1,2"
+         id="path1488" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 200,629 2,3"
+         id="path1490" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1478"
+         inkscape:transform-center-x="-58.499998"
+         inkscape:transform-center-y="-0.056254354"
+         id="use1492"
+         transform="matrix(-1,0,0,1,324,-4)"
+         width="100%"
+         height="100%" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path1494"
+         cx="164"
+         cy="720"
+         r="92" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 85,639 15,15"
+         id="path1496" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 229,655 15,-15"
+         id="path1498" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 264,667 31,-16 18,7 7,27"
+         id="path1500" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path1502"
+         cx="302"
+         cy="661"
+         r="1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 82,649 -3,4 4,3 3,-3"
+         id="path1521" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 81,654 2,-2"
+         id="path1523" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 78,656 -4,4 2,2 2,-2 c 3.748118,-2.90378 3.470144,1.15523 2,2 l -2,-2"
+         id="path1525"
+         sodipodi:nodetypes="cccccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 77,659 1,-1"
+         id="path1527" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 69,667 3,-4 4,3 -3,4 -1,-1 1,-1"
+         id="path1529" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 65.153933,676.97927 -2.47816,5.08514 2.542574,1.23908 1.23908,-2.54257 C 69.054683,676.79424 70.114606,680.72222 69,682 l -2.542573,-1.23908"
+         id="path1532"
+         sodipodi:nodetypes="cccccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 65.18614,680.14138 0.61954,-1.27129"
+         id="path1534" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 70,676.5 v -1"
+         id="path1536" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 72,674.5 v -1"
+         id="path1538" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 68,675.5 3,-4"
+         id="path1540" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 67,674.5 c 0,0 -2,-1 0,-3 2,-2 3,-1 3,-1"
+         id="path1542"
+         sodipodi:nodetypes="czc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 67.353553,671.69064 2,2"
+         id="path1544" />
+      <path
+         style="display:inline;fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 59,693 -3,17 13,5 4,-22 z"
+         id="path1546" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1546"
+         id="use1568"
+         transform="matrix(1,0,0,-1,0,1440)"
+         width="100%"
+         height="100%" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1089"
+         id="use1609"
+         transform="rotate(-90,164,720)"
+         width="100%"
+         height="100%" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1089"
+         id="use1611"
+         transform="matrix(0,-1,-1,0,884,884)"
+         width="100%"
+         height="100%" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1089"
+         id="use1613"
+         transform="matrix(1,0,0,-1,0,1440)"
+         width="100%"
+         height="100%" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 333,758 v 13 l 12,3"
+         id="path1615" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -16,665 11,3 1,14"
+         id="path1617" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 8,756 8,25 19,7 29,-15"
+         id="path1619" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path1621"
+         cx="19"
+         cy="777"
+         r="1" />
+      <circle
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+         id="path1621-6"
+         cx="-14"
+         cy="673"
+         r="1" />
+      <circle
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+         id="path1621-2"
+         cx="336"
+         cy="766"
+         r="1" />
+      <circle
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+         id="path1621-61"
+         cx="229"
+         cy="826"
+         r="1" />
+      <circle
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+         id="path1621-8"
+         cx="124"
+         cy="900"
+         r="1" />
+      <circle
+         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000"
+         id="path1621-7"
+         cx="212"
+         cy="896"
+         r="1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 99,785 84,800"
+         id="path1725" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 229,785 15,15"
+         id="path1727" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 211,803 18,-13 6,13 -13,10 z"
+         id="path1729" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 164,833 v 18"
+         id="path1767" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 219,819 7,13 43,-8 28,28"
+         id="path1769" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 92,894 2,-6 16,-3 15.54138,5.03315"
+         id="path1771"
+         sodipodi:nodetypes="cccc" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1771"
+         id="use1773"
+         transform="matrix(-1,0,0,1,328,0)"
+         width="100%"
+         height="100%" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 230,851 2,2"
+         id="path2088" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 233,850 v 2"
+         id="path2090" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 235,849 1,2"
+         id="path2092" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 237,848 1,1"
+         id="path2094" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 239,847 2,1"
+         id="path2096" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 242,846 v 1"
+         id="path2098" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 243,845 1,2"
+         id="path2100" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 245,844 v 1"
+         id="path2102" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 235,868 1,1"
+         id="path2104" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 237,867 1,2"
+         id="path2106" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 239,867 h 1"
+         id="path2108" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 241,866 h 1"
+         id="path2110" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 243,864 1,1"
+         id="path2112" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 278,799 1,1"
+         id="path2114" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 280,797 h 2"
+         id="path2116" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 282,794 h 1"
+         id="path2118" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 283,791 2,1"
+         id="path2120" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 285,789 1,1"
+         id="path2122" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 280,801 h 2"
+         id="path2124" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 282,799 h 1"
+         id="path2126" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 284,797 v 1"
+         id="path2128" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 285,795 v 1"
+         id="path2130" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 286,793 1,1"
+         id="path2132" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 316,683 2,-1"
+         id="path2134" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 316,681 1,-2"
+         id="path2136" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 315,677 1,-1"
+         id="path2138" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 315,674 h 1"
+         id="path2140" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 314,671 1,1"
+         id="path2142" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 312,668 2,1"
+         id="path2144" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 313,666 1,1"
+         id="path2146" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 42,596 h 1"
+         id="path2148" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 44,594 h 1"
+         id="path2150" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 45,592 2,1"
+         id="path2152" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 47,590 1,1"
+         id="path2154" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 49,589 h 2"
+         id="path2156" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 69,694 2,1"
+         id="path2158" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 69,697 h 2"
+         id="path2160" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 69,699 h 1"
+         id="path2162" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 69,702 1,-1"
+         id="path2164" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 69,704 1,-1"
+         id="path2166" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 66,727 2,1"
+         id="path2168" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 66,730 h 2"
+         id="path2170" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 67,732 h 1"
+         id="path2172" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 67,734 2,-1"
+         id="path2174" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 68,736 h 1"
+         id="path2176" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 68,738 2,-1"
+         id="path2178" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 33,755 h 2"
+         id="path2180" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 34,758 2,-1"
+         id="path2182" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 35,760 1,-1"
+         id="path2184" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 35,762 2,-1"
+         id="path2186" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 36,764 1,-1"
+         id="path2188" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 37,766 2,-1"
+         id="path2190" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 77,807 2,-1"
+         id="path2192" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 79,809 1,-1"
+         id="path2194" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 81,810 2,-1"
+         id="path2196" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 83,812 1,-2"
+         id="path2198" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 85,813 2,-1"
+         id="path2200" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 87,813 h 1"
+         id="path2202" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 88,815 2,-1"
+         id="path2204" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 91,817 v -1"
+         id="path2206" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 92,818 1,-1"
+         id="path2208" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 94,820 2,-1"
+         id="path2210" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 96,821 h 2"
+         id="path2212" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 99,823 2,-2"
+         id="path2214" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 101,824 2,-1"
+         id="path2216" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+         d="m 103,825 2,-1"
+         id="path2218" />
+    </g>
+    <g
+       id="g1713"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)">
+      <path
+         id="path1094"
+         style="fill:#535f7e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 156,537 -1,6 h 18 l -1,-6 c 0,0 -4,-1 -8,-1 -4,0 -8,1 -8,1 z"
+         sodipodi:nodetypes="cccczc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#535f7e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 134,556 -7,2 1,7 7,-2 z"
+         id="path1099" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1099"
+         id="use1118"
+         transform="matrix(-1,0,0,1,328,0)"
+         width="100%"
+         height="100%" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#535f7e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 159,583 v 6 h 11 v -6 z"
+         id="path1120" />
+    </g>
+    <path
+       id="path1058"
+       style="fill:url(#linearGradient2266);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 189,511 c -17,0 -33,6 -33,8 0,2 4,26 6,27 2,1 11,7 13,7 2,0 26,0 28,0 2,0 11,-6 13,-7 2,-1 6,-25 6,-27 0,-2 -16,-8 -33,-8 z"
+       sodipodi:nodetypes="zzzzzzzz"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 151.45312,558.26563 149,559.60937 151.60937,566.21875 154,565 Z"
+       id="path1169"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="display:inline;opacity:1;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 88,544 3,-2 10,16 -2,1 z"
+       id="path1193"
+       inkscape:transform-center-x="95"
+       inkscape:transform-center-y="-139"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1193"
+       inkscape:transform-center-x="138.16338"
+       inkscape:transform-center-y="-96.134391"
+       id="use1219"
+       transform="rotate(-20.903445,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1193"
+       inkscape:transform-center-x="138.67628"
+       inkscape:transform-center-y="95.472697"
+       id="use1232"
+       transform="rotate(-90.195779,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1193"
+       inkscape:transform-center-x="95.245739"
+       inkscape:transform-center-y="138.7746"
+       id="use1234"
+       transform="rotate(-111.27191,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1193"
+       inkscape:transform-center-x="-95.676405"
+       inkscape:transform-center-y="138.53604"
+       id="use1236"
+       transform="rotate(179.71971,189.39367,688.92607)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1193"
+       inkscape:transform-center-x="-138.1887"
+       inkscape:transform-center-y="96.097806"
+       id="use1238"
+       transform="rotate(159.08136,189.49817,688.90644)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1193"
+       inkscape:transform-center-x="-138.7719"
+       inkscape:transform-center-y="-95.333414"
+       id="use1240"
+       transform="rotate(89.86196,189.96731,688.81833)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1193"
+       inkscape:transform-center-x="-95.696275"
+       inkscape:transform-center-y="-138.46575"
+       id="use1242"
+       transform="rotate(68.914702,190.22827,688.76932)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       id="path1244"
+       style="display:inline;opacity:1;fill:#c38e22;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1432)"
+       d="m 65,548 -15,15 7,7 15,-15 z m -2.068359,6.94531 0.451171,1.40235 2.671876,-1.36328 -2.652344,2.92382 -0.404297,2.08985 -2.089844,0.40429 -2.923828,2.65235 1.363281,-2.67188 -1.402344,-0.45117 L 60.875,557.875 Z"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#c38e22;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1432)"
+       d="m 48,564 9,9 18,-19 -9,-8 z"
+       id="path1269"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="opacity:1;fill:#777674;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 95,580 17,-14 12,15 -16,14 z"
+       id="path1271"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="opacity:1;fill:#9d6a55;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 97,580 15,-12 10,13 -14,12 z"
+       id="path1273"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <ellipse
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#b5b5b8;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       id="path1277"
+       cx="522.97308"
+       cy="273.74649"
+       rx="5.4813342"
+       ry="6.8684311"
+       transform="rotate(51.658534)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 298,624 -3,-3 -4,4 2,3 z"
+       id="path1385"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       id="path1439"
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#c38e22;fill-opacity:1;stroke:none;stroke-width:0.980024px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;filter:url(#filter1432);stop-color:#000000;stop-opacity:1"
+       d="m 69.421875,619 a 11.602915,15.64476 34.039803 0 0 -12.53125,7.29102 11.602915,15.64476 34.039803 0 0 -0.171875,19.78906 11.602915,15.64476 34.039803 0 0 18.390625,-5.3711 A 11.602915,15.64476 34.039803 0 0 75.28125,620.91992 11.602915,15.64476 34.039803 0 0 69.421875,619 Z M 66,623 c 2.355717,0.0784 5,3 5,5 1.590382,1.42346 5,4 5,4 0,0 -3.610661,0.0209 -5,1 -1.58877,1.11964 -3,3.05635 -3,5 0,1.94365 3,5 3,5 0,0 -3.308599,-0.83252 -5,-1 -3,2 -6.968672,2.20765 -9,0 -2.717826,-2.95373 -0.809065,-8.41693 1,-12 1.597016,-3.16308 4.458581,-7.11792 8,-7 z m -2.988281,4.5 a 0.5,0.5 0 0 0 -0.292969,0.0859 c -1.555178,1.05455 -2.525425,2.46444 -3.007812,4.08594 -0.482389,1.62148 -0.49177,3.4455 -0.205079,5.40039 a 0.5,0.5 0 0 0 0.566407,0.42187 0.5,0.5 0 0 0 0.421875,-0.56641 c -0.27309,-1.86214 -0.248812,-3.54347 0.175781,-4.9707 0.424593,-1.42723 1.234648,-2.60945 2.611328,-3.54297 A 0.5,0.5 0 0 0 63.414062,627.71875 0.5,0.5 0 0 0 63.011719,627.5 Z m 4.349609,0.58398 a 1,1.5 26.185615 0 0 -1.257812,0.97461 1,1.5 26.185615 0 0 0.234375,1.78711 1,1.5 26.185615 0 0 1.558593,-0.90429 1,1.5 26.185615 0 0 -0.234375,-1.78711 1,1.5 26.185615 0 0 -0.300781,-0.0703 z m -2.9375,7.25 a 1,1.5 26.185615 0 0 -1.257812,0.97461 1,1.5 26.185615 0 0 0.234375,1.78711 1,1.5 26.185615 0 0 1.558593,-0.90429 1,1.5 26.185615 0 0 -0.234375,-1.78711 1,1.5 26.185615 0 0 -0.300781,-0.0703 z"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 83,666 3,1 -1,6 h -3 z"
+       id="path1570"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1570"
+       id="use1589"
+       transform="matrix(1,0,0,-1,0,1378)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 123,603 2,2 5,-4 -2,-2 z"
+       id="path1591"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 251.5,599 -2,2 -5,-4 2,-2 z"
+       id="path1599"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1713"
+       id="use1715"
+       transform="rotate(-90,189.25,689.25)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1058"
+       id="use1603"
+       transform="rotate(-90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1713"
+       id="use1717"
+       transform="matrix(0,-1,-1,0,878,878.5)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1058"
+       id="use1605"
+       transform="matrix(0,-1,-1,0,878,878)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1713"
+       id="use1719"
+       transform="matrix(1,0,0,-1,-0.5,1378)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1058"
+       id="use1607"
+       transform="matrix(1,0,0,-1,0,1378)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.8;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1085);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       d="M 190.59376,525.92578 C 150.89899,558.76805 125.4302,596.66162 95.39454,632.9336 l 5.19922,2.99218 C 131.27845,600.27754 155.8377,561.97584 195,530 Z"
+       id="path1689"
+       clip-path="url(#clipPath1693)"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.8;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1085);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       d="M 29.448518,641.70318 C 9.374498,691.59523 -2.6023606,742.38958 -7.8734076,793.93121 l 5.5952421,-2.10323 C 1.9583913,741.03482 15.216335,690.51503 35,640.19299 Z"
+       id="path1063"
+       clip-path="url(#clipPath1705)"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)" />
+    <path
+       style="opacity:1;fill:#c2bc1f;fill-opacity:1;stroke:#575b62;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+       d="m 61,720 13,-5 6,16 -14,5 z"
+       id="path1721"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:#575b62;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 64,719 15,8 1,4 -3,1 -15,-8 -1,-4 z"
+       id="path1723"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#222222;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       d="m 251,779 -2,-2 5,-4 2,2 z"
+       id="path1731"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g1765"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)">
+      <path
+         style="opacity:1;fill:#a4a9b1;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 124,822 14,3 3,-14 -14,-3 z"
+         id="path1755"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         id="path1750"
+         style="opacity:1;fill:#6a7176;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 128,809 -3,12 12,3 3,-12 z"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         id="path1757"
+         style="fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 131,811 -3,2 2,3 -3,2 2,3 3,-2 2,3 3,-2 -2,-3 3,-2 -2,-3 -3,2 z" />
+    </g>
+    <path
+       style="display:inline;opacity:1;fill:#c2bc1f;fill-opacity:1;stroke:#575b62;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+       d="m 287,761 9,-14 13,8 -9,15 z"
+       id="path1721-2"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#3f3f31;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       id="path1806"
+       cx="298"
+       cy="758"
+       r="5"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g1512"
+       style="filter:url(#filter1432)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)">
+      <path
+         style="fill:none;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 66,814 8,7"
+         id="path1808" />
+      <path
+         style="fill:none;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 68.34375,815.75 74,809 l 7,5 -2,2"
+         id="path1810"
+         sodipodi:nodetypes="cccc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 71,813 5,5"
+         id="path1812" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 75,813 1,1"
+         id="path1831" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 85,821 8,6 -4,5 -8,-6 z"
+         id="path1839" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 85,829 6,-8"
+         id="path1847" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 96,836 6,-8 6,5 -5,7 2,2"
+         id="path1878" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 105,836 3,3"
+         id="path1886" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 102,833 1,1"
+         id="path1894" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#c38e22;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 116,835 -2,3 16,7 1,-4 z"
+         id="path1902"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#c38e22;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 116,843 13,5 -3,12 -21,-10 2,-5 16,9 1,-4 -9,-4 z"
+         id="path1910"
+         sodipodi:nodetypes="ccccccccc" />
+    </g>
+    <g
+       id="g1486"
+       style="filter:url(#filter1432)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)">
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 15,675 3,-10 5,3 -2,8 h -3 l 1,-3"
+         id="path1929"
+         sodipodi:nodetypes="cccccc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 24,652 -4,9 5,2 4,-8"
+         id="path1948" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 22.729204,661.73483 3.049825,-6.82885"
+         id="path1956"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 27,651 3,-5"
+         id="path1964" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 26,647 5,3"
+         id="path1972" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 35,644 -5,2 -1,-5"
+         id="path1980" />
+    </g>
+    <g
+       id="g1499"
+       style="filter:url(#filter1432)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)">
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 191,601 15,6"
+         id="path1994" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 194,589 18,6"
+         id="path2002" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 202,592 -3.6875,11.6875"
+         id="path2010"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 194,596 3,1"
+         id="path2018"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 205,600 3,1"
+         id="path2026"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 214,611 11,-5 2,11"
+         id="path2034" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 221,614 7,-14"
+         id="path2042" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 218,602 1,-2"
+         id="path2050" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 231,608 1,-2"
+         id="path2052"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 235,622 8,-12 5,3 -4,15 4,4 9,-12"
+         id="path2066" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#c38e22;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m 239.14905,616.26517 13.23223,9.24869"
+         id="path2074"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g1765"
+       id="use2082"
+       transform="matrix(-1,0,0,1,400,35.5)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#999ea5;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       d="m 237,835 4,12 18,-7 -4,-11 z"
+       id="path2084"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:#868988;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 248,833 -5,7 8,2 -1,-3 5,-2 -1,-3 -5,2 z"
+       id="path2086"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       sodipodi:type="star"
+       style="font-variation-settings:normal;opacity:0.197605;vector-effect:none;fill:none;fill-opacity:1;stroke:#84868e;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+       id="path2242"
+       sodipodi:sides="8"
+       sodipodi:cx="189"
+       sodipodi:cy="689"
+       sodipodi:r1="81"
+       sodipodi:r2="74.834244"
+       sodipodi:arg1="2.9474365e-14"
+       sodipodi:arg2="0.39269908"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 270,689 246.27565,746.27565 189,770 131.72435,746.27565 108,689 131.72435,631.72435 189,608 l 57.27565,23.72435 z"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:#535f7e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 184,609 v 3 l 5,-2 5,2 v -3 l -5,-2 z"
+       id="path2244"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:transform-center-y="-79.5"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2244"
+       inkscape:transform-center-y="-55.507882"
+       id="use2246"
+       transform="rotate(45,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-x="-55.507882"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2244"
+       id="use2248"
+       transform="rotate(90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-x="-79.5"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2244"
+       id="use2250"
+       transform="rotate(135,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-x="-55.507882"
+       inkscape:transform-center-y="55.507882"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2244"
+       id="use2252"
+       transform="rotate(180,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="79.5"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2244"
+       id="use2254"
+       transform="rotate(-135,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-y="55.507882"
+       inkscape:transform-center-x="55.507882"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2244"
+       id="use2256"
+       transform="rotate(-90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-x="79.5"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path2244"
+       id="use2258"
+       transform="rotate(-45,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:transform-center-x="55.507882"
+       inkscape:transform-center-y="-55.507882"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:url(#linearGradient1198);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 181,616 2,22 -24,10 -15,-17 z"
+       id="path1190"
+       inkscape:transform-center-x="25.5"
+       inkscape:transform-center-y="-57"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1190"
+       inkscape:transform-center-x="-26.870058"
+       inkscape:transform-center-y="-56.568542"
+       id="use1200"
+       transform="rotate(45,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1190"
+       inkscape:transform-center-x="-57"
+       inkscape:transform-center-y="-25.5"
+       id="use1202"
+       transform="rotate(90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1190"
+       inkscape:transform-center-x="-56.568542"
+       inkscape:transform-center-y="26.870058"
+       id="use1204"
+       transform="rotate(135,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1190"
+       inkscape:transform-center-x="-25.5"
+       inkscape:transform-center-y="57"
+       id="use1206"
+       transform="rotate(180,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1190"
+       inkscape:transform-center-x="26.870058"
+       inkscape:transform-center-y="56.568542"
+       id="use1209"
+       transform="rotate(-135,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1190"
+       inkscape:transform-center-x="57"
+       inkscape:transform-center-y="25.5"
+       id="use1211"
+       transform="rotate(-90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1190"
+       inkscape:transform-center-x="56.568542"
+       inkscape:transform-center-y="-26.870058"
+       id="use1213"
+       transform="rotate(-45,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:#9fa4ab;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 157,654 4,4 26,-11 v -5 z"
+       id="path1215"
+       inkscape:transform-center-x="15.5"
+       inkscape:transform-center-y="-39.499996"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1215"
+       inkscape:transform-center-x="-18.031223"
+       inkscape:transform-center-y="-38.537316"
+       id="use1217"
+       transform="rotate(45,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1215"
+       inkscape:transform-center-x="-39.5"
+       inkscape:transform-center-y="-15.499996"
+       id="use1220"
+       transform="rotate(90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1215"
+       inkscape:transform-center-x="-38.53732"
+       inkscape:transform-center-y="18.031227"
+       id="use1222"
+       transform="rotate(135,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1215"
+       inkscape:transform-center-x="-15.5"
+       inkscape:transform-center-y="39.500004"
+       id="use1224"
+       transform="rotate(180,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1215"
+       inkscape:transform-center-x="18.031223"
+       inkscape:transform-center-y="38.537324"
+       id="use1226"
+       transform="rotate(-135,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1215"
+       inkscape:transform-center-x="39.5"
+       inkscape:transform-center-y="15.500004"
+       id="use1228"
+       transform="rotate(-90,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1215"
+       inkscape:transform-center-x="38.53732"
+       inkscape:transform-center-y="-18.031219"
+       id="use1230"
+       transform="rotate(-45,189,689)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <circle
+       style="opacity:1;fill:#9fa4ab;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;stop-color:#000000"
+       id="path1232"
+       cx="189"
+       cy="689"
+       r="32"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.6;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1085-7);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+       d="m 183.89649,608 c -39.69477,32.84227 -65.16356,70.73584 -95.199224,107.00782 L 93.896486,718 C 124.58118,682.35176 149.14043,644.05006 188.30273,612.07422 Z"
+       id="path1689-3"
+       clip-path="url(#clipPath1389)"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       transform="translate(25,-30.999999)" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.6;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter1085-7-2);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"
+       d="m 161.5834,595.52921 c -25.63155,44.69131 -36.16929,89.11583 -51.5525,133.626 l 5.9189,0.97555 c 16.20996,-44.15411 25.75276,-88.64132 51.19006,-132.33438 z"
+       id="path1689-3-1"
+       clip-path="url(#clipPath1428)"
+       sodipodi:nodetypes="ccccc"
+       transform="rotate(27.098297,142.54923,643.36414)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g1414"
+       transform="rotate(-15,-187.05307,-3543.9095)"
+       inkscape:transform-center-x="-82.602481"
+       inkscape:transform-center-y="-20.031017"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Drake.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="fill:#3f4247;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -853,726 v -12 h 23 l 3,-2 v 16 l -3,-2 z"
+         id="path1255"
+         sodipodi:nodetypes="ccccccc" />
+      <path
+         id="path1245"
+         style="opacity:1;fill:#5e5c59;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -848,709 -2,3 v 16 l 2,3 h 6 l 2,-3 v -16 l -2,-3 z"
+         sodipodi:nodetypes="ccccccccc" />
+      <path
+         id="path1240"
+         style="opacity:1;fill:#8f949c;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -854,712 v 6 l 2,2 -2,2 v 6 h 18 v -6 l -2,-2 2,-2 v -6 z m 6,5 h 6 v 6 h -6 z" />
+      <path
+         style="fill:#a4a4a4;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -847,718 h 4 v 4 h -4 z"
+         id="path1253" />
+      <path
+         style="fill:#4e5257;fill-opacity:1;stroke:none;stroke-width:1.46348px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -829,711 -1,3 h 1 v 12 h -1 l 1,3 h 8 v -18 z"
+         id="path1257"
+         sodipodi:nodetypes="ccccccccc" />
+      <path
+         id="path1259"
+         style="fill:url(#radialGradient1416);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -788,689 c -20,0 -35,10 -35,31 0,21 15,31 35,31 v -31 z" />
+      <path
+         style="fill:#82817f;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -775,684 50,29 h 9 l -50,-29 z"
+         id="path1366"
+         sodipodi:nodetypes="ccccc" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1366"
+         id="use1368"
+         transform="matrix(1,0,0,-1,0,1440)"
+         width="100%"
+         height="100%" />
+      <path
+         style="fill:#54575c;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -696,719 h 24 v 2 h -24 z"
+         id="path1380" />
+      <path
+         id="path1372"
+         style="fill:#c8cace;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -725,712 c -2,0 -4,2 -4,4 h -2 v 8 h 2 c 0,2 2,4 4,4 h 24 c 2,0 4,-2 4,-4 h 2 v -8 h -2 c 0,-2 -2,-4 -4,-4 z" />
+      <path
+         style="fill:#99999e;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -767,718 h 52 v 4 h -52 z"
+         id="path1370" />
+      <path
+         id="path1278"
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient1418);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m -766,667 c -24,0 -24,31 -24,53 0,22 0,53 24,53 v -53 z" />
+      <path
+         id="path1321"
+         style="fill:#575b62;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -813,712 -2,1 v 14 l 2,1 z"
+         sodipodi:nodetypes="ccccc" />
+      <g
+         id="g1337"
+         style="opacity:0.1">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -789,697 c 5,-7 13,-14 23,-14"
+           id="path1326"
+           sodipodi:nodetypes="cc" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -790,720 h 24"
+           id="path1328"
+           sodipodi:nodetypes="cc" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -789,743 c 5,7 13,14 23,14"
+           id="path1330"
+           sodipodi:nodetypes="cc" />
+      </g>
+      <path
+         style="fill:#575b62;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m -771,696 -5,5 5,4 z"
+         id="path1339" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1339"
+         id="use1341"
+         transform="matrix(1,0,0,-1,0,1440)"
+         width="100%"
+         height="100%" />
+      <path
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#575b62;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+         d="m -771,675 v -4 l -5,4 z"
+         id="path1345" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path1345"
+         id="use1364"
+         transform="matrix(1,0,0,-1,0,1440)"
+         width="100%"
+         height="100%" />
+      <circle
+         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:url(#radialGradient1420);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
+         id="path1382"
+         cx="-668"
+         cy="720"
+         r="4.9999957" />
+    </g>
   </g>
 </svg>
