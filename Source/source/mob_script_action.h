@@ -52,6 +52,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_PRINT,
     MOB_ACTION_RECEIVE_STATUS,
     MOB_ACTION_RELEASE,
+    MOB_ACTION_RELEASE_STORED_MOBS,
     MOB_ACTION_REMOVE_STATUS,
     MOB_ACTION_SAVE_FOCUS_MEMORY,
     MOB_ACTION_SEND_MESSAGE_TO_FOCUS,
@@ -89,6 +90,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_STOP_HEIGHT_EFFECT,
     MOB_ACTION_STOP_PARTICLES,
     MOB_ACTION_STOP_VERTICALLY,
+    MOB_ACTION_STORE_FOCUS_INSIDE,
     MOB_ACTION_SWALLOW,
     MOB_ACTION_SWALLOW_ALL,
     MOB_ACTION_TELEPORT_TO_ABSOLUTE,
@@ -146,6 +148,7 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_FIELD_PIKMIN,
     MOB_ACTION_GET_INFO_FOCUS_DISTANCE,
     MOB_ACTION_GET_INFO_FRAME_SIGNAL,
+    MOB_ACTION_GET_INFO_GROUP_TASK_POWER,
     MOB_ACTION_GET_INFO_HAZARD,
     MOB_ACTION_GET_INFO_HEALTH,
     MOB_ACTION_GET_INFO_LATCHED_PIKMIN,
@@ -306,6 +309,7 @@ void play_sound(mob_action_run_data &data);
 void print(mob_action_run_data &data);
 void receive_status(mob_action_run_data &data);
 void release(mob_action_run_data &data);
+void release_stored_mobs(mob_action_run_data &data);
 void remove_status(mob_action_run_data &data);
 void save_focus_memory(mob_action_run_data &data);
 void send_message_to_focus(mob_action_run_data &data);
@@ -343,6 +347,7 @@ void stop_chomping(mob_action_run_data &data);
 void stop_height_effect(mob_action_run_data &data);
 void stop_particles(mob_action_run_data &data);
 void stop_vertically(mob_action_run_data &data);
+void store_focus_inside(mob_action_run_data &data);
 void swallow(mob_action_run_data &data);
 void swallow_all(mob_action_run_data &data);
 void teleport_to_absolute(mob_action_run_data &data);

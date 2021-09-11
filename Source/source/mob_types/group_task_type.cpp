@@ -27,7 +27,8 @@ group_task_type::group_task_type() :
     worker_pikmin_angle(0),
     worker_pikmin_pose(GROUP_TASK_PIKMIN_POSE_STOPPED),
     contribution_method(GROUP_TASK_CONTRIBUTION_NORMAL),
-    speed_bonus(1.0f) {
+    speed_bonus(1.0f),
+    flying_pikmin_only(false) {
     
     target_type = MOB_TARGET_TYPE_NONE;
     

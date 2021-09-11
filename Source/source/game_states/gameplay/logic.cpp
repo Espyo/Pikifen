@@ -265,7 +265,9 @@ void gameplay_state::do_gameplay_logic() {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
             m_ptr->tick(game.delta_t);
-            process_mob_interactions(m_ptr, m);
+            if(!m_ptr->stored_inside_another) {
+                process_mob_interactions(m_ptr, m);
+            }
         }
         
         for(size_t m = 0; m < n_mobs;) {
@@ -807,6 +809,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         
         mob* m2_ptr = mobs.all[m2];
         if(m2_ptr->to_delete) continue;
+        if(m2_ptr->stored_inside_another) continue;
         
         dist d(m_ptr->pos, m2_ptr->pos);
         

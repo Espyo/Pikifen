@@ -750,6 +750,13 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_action(
+        MOB_ACTION_RELEASE_STORED_MOBS,
+        "release_stored_mobs",
+        mob_action_runners::release_stored_mobs,
+        nullptr
+    );
+    
     reg_param("status name", MOB_ACTION_PARAM_ENUM, true, false);
     reg_action(
         MOB_ACTION_REMOVE_STATUS,
@@ -1044,6 +1051,13 @@ void init_mob_actions() {
         MOB_ACTION_STOP_VERTICALLY,
         "stop_vertically",
         mob_action_runners::stop_vertically,
+        nullptr
+    );
+    
+    reg_action(
+        MOB_ACTION_STORE_FOCUS_INSIDE,
+        "store_focus_inside",
+        mob_action_runners::store_focus_inside,
         nullptr
     );
     

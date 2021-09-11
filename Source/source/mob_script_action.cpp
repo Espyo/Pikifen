@@ -15,6 +15,7 @@
 
 #include "functions.h"
 #include "game.h"
+#include "mobs/group_task.h"
 #include "mobs/scale.h"
 #include "mobs/tool.h"
 #include "utils/string_utils.h"
@@ -317,6 +318,8 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_FOCUS_DISTANCE);
     } else if(call.args[1] == "frame_signal") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_FRAME_SIGNAL);
+    } else if(call.args[1] == "group_task_power") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_GROUP_TASK_POWER);
     } else if(call.args[1] == "hazard") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HAZARD);
     } else if(call.args[1] == "health") {
@@ -1244,6 +1247,22 @@ void mob_action_runners::release(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the release stored mobs mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::release_stored_mobs(mob_action_run_data &data) {
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        mob* m_ptr = game.states.gameplay->mobs.all[m];
+        if(m_ptr->stored_inside_another == data.m) {
+            data.m->release(m_ptr);
+            m_ptr->stored_inside_another = NULL;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the status removal mob script action.
  * data:
  *   Data about the action call.
@@ -1730,6 +1749,24 @@ void mob_action_runners::stop_vertically(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the focus storing mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::store_focus_inside(mob_action_run_data &data) {
+    if(data.m->focused_mob) {
+        if(!data.m->focused_mob->stored_inside_another) {
+            data.m->hold(
+                data.m->focused_mob, INVALID, 0.0f, 0.0f,
+                false, HOLD_ROTATION_METHOD_NEVER
+            );
+            data.m->focused_mob->stored_inside_another = data.m;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the swallow mob script action.
  * data:
  *   Data about the action call.
@@ -2063,6 +2100,12 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
     } case MOB_ACTION_GET_INFO_FRAME_SIGNAL: {
         if(data.call->parent_event == MOB_EV_FRAME_SIGNAL) {
             *var = i2s(*((size_t*)(data.custom_data_1)));
+        }
+        break;
+        
+    } case MOB_ACTION_GET_INFO_GROUP_TASK_POWER: {
+        if(target_mob->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
+            *var = f2s(((group_task*) target_mob)->get_power());
         }
         break;
         

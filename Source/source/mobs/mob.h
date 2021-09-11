@@ -226,6 +226,8 @@ public:
     hold_info_struct holder;
     //List of mobs it is holding.
     vector<mob*> holding;
+    //If it's stored inside another mob, this indicates which mob it is.
+    mob* stored_inside_another;
     
     //Health wheel properties.
     //How much the health wheel is filled. Slowly moves to its target amount.

@@ -829,6 +829,7 @@ reaches {
               <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
               <li><code><b>focus_distance</b></code>: Distance between the object and the focused object.</li>
               <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code>on_frame_signal</code> event.</li>
+              <li><code><b>group_task_power</b></code>: For group task type objects, this is the "Pikmin power" currently being applied.</li>
               <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
               <li><code><b>health</b></code>: The object's current health.</li>
               <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
@@ -962,6 +963,10 @@ reaches {
       <tr>
         <th><code>release</code></th>
         <td>All captured Pikmin are safely freed.</td>
+      </tr>
+      <tr>
+        <th><code>release_stored_mobs</code></th>
+        <td>Releases any objects stored "inside" this one with <code>store_focus_inside</code>.</td>
       </tr>
       <tr>
         <th><code>remove_status</code></th>
@@ -1200,6 +1205,10 @@ reaches {
       <tr>
         <th><code>stop_particles</code></th>
         <td>Removes any currently attached particle generator.</td>
+      </tr>
+      <tr>
+        <th><code>store_focus_inside</code></th>
+        <td>Takes the focused object and stores it "inside" the current one. Once inside, it is not visible and cannot be interacted with. Objects stored inside another can be released with <code>release_stored_mobs</code>.</td>
       </tr>
       <tr>
         <th><code>swallow</code></th>

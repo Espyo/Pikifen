@@ -76,6 +76,8 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     group_spot_index(INVALID),
     carry_info(nullptr),
     delivery_info(nullptr),
+    track_info(nullptr),
+    stored_inside_another(nullptr),
     health_wheel_smoothed_ratio(1.0f),
     health_wheel_alpha(1.0f),
     id(next_mob_id),

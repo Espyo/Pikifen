@@ -106,17 +106,19 @@
         New mob script actions:
         <ul>
           <li><code>hold_focused_mob</code> lets the object hold whatever object it has in focus, much like how a leader holds a Pikmin.</li>
-          <li><code>link_with_focused_mob</code> lets the object be linked to whatever object it has in focus.</li>
           <li><code>load_focused_mob_memory</code> and <code>save_focused_mob_memory</code> let the currently focused object be saved into a memory, and be recalled later. This allows the object to keep track of more than one object at a time, although it still only focuses on one at a time.</li>
-          <li><code>throw_focused_mob</code> lets the focused object be thrown in an arc towards a destination.</li>
+          <li><code>link_with_focused_mob</code> lets the object be linked to whatever object it has in focus.</li>
           <li><code>get_angle</code> lets the script obtain the angle between two sets of coordinates.</li>
-          <li><code>get_distance</code> lets the script obtain the distance between two sets of coordinates.</li>
+          <li><code>set_can_block_paths</code> lets the object block or stop blocking the paths of others.</li>
           <li><code>get_coordinates_from_angle</code> lets the script obtain the X and Y coordinates calculated from a given angle and distance.</li>
+          <li><code>get_distance</code> lets the script obtain the distance between two sets of coordinates.</li>
           <li><code>get_floor_z</code> lets the script obtain the Z coordinate of the floor at the specified coordinates.</li>
+          <li><code>release_stored_mobs</code> lets the object release any other object that is stored inside.</li>
           <li><code>set_flying</code> lets the object move in mid air at will, unaffected by gravity.</li>
           <li><code>set_radius</code> lets the object's radius be changed.</li>
           <li><code>set_shadow_visibility</code> lets the object's shadow be hidden.</li>
-          <li><code>set_can_block_paths</code> lets the object block or stop blocking the paths of others.</li>
+          <li><code>store_focus_inside</code> lets the object store another one inside, to be released later.</li>
+          <li><code>throw_focused_mob</code> lets the focused object be thrown in an arc towards a destination.</li>
         </ul>
       </li>
       <li>
@@ -124,6 +126,7 @@
         <ul>
           <li>The <code>move_to_absolute</code> and <code>move_to_relative</code> actions can now use an optional Z coordinate argument.</li>
           <li>The <code>turn_to_absolute</code> and <code>turn_to_relative</code> actions can now either use an angle argument, or coordinate arguments.</li>
+          <li>Added <code>group_task_power</code> to the <code>get_info</code> action, so a group task object can obtain the current "Pikmin power" applied to it.</li>
         </ul>
       </li>
       <li>
