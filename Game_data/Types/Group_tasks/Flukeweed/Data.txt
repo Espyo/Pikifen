@@ -1,0 +1,19 @@
+name = Flukeweed
+
+casts_shadow = true
+contribution_method = normal
+first_row_p1 = 8 -12
+first_row_p2 = 8 4
+flying_pikmin_only = true
+interval_between_rows = 4
+max_health = 100
+max_pikmin = 5
+height = 32
+power_goal = 3
+pikmin_per_row = 3
+pushable = false
+pushes = false
+radius = 16
+show_health = true
+spots_z = 35
+worker_pikmin_pose = carrying

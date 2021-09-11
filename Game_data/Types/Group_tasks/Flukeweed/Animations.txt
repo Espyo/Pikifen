@@ -1,0 +1,68 @@
+animations{
+	dying{
+		frames{
+			dying{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling{
+				duration=0.2000
+			}
+			idling2{
+				duration=0.2000
+			}
+			idling{
+				duration=0.2000
+			}
+			idling3{
+				duration=0.2000
+			}
+		}
+	}
+	pulled{
+		frames{
+			pulled1{
+				duration=0.0800
+			}
+			pulled2{
+				duration=0.0800
+			}
+		}
+	}
+}
+sprites{
+	dying{
+		file=Flukeweed.png
+		file_pos=0.0000 0.0000
+		file_size=0.0000 0.0000
+	}
+	idling{
+		file=Flukeweed.png
+		file_pos=0.0000 0.0000
+		file_size=32.0000 32.0000
+	}
+	idling2{
+		file=Flukeweed.png
+		file_pos=33.0000 0.0000
+		file_size=32.0000 32.0000
+	}
+	idling3{
+		file=Flukeweed.png
+		file_pos=66.0000 0.0000
+		file_size=32.0000 32.0000
+	}
+	pulled1{
+		file=Flukeweed.png
+		file_pos=99.0000 0.0000
+		file_size=32.0000 32.0000
+	}
+	pulled2{
+		file=Flukeweed.png
+		file_pos=132.0000 0.0000
+		file_size=32.0000 32.0000
+	}
+}
+body_parts

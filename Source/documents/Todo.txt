@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.21.0 ---
-    Flukeweed
     Adult Bulbmin?
     Purple Pikmin improvements
         Give them a proper pound attack

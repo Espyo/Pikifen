@@ -1,0 +1,78 @@
+first_state = grabbing
+death_state = dying
+
+script {
+    grabbing {
+        on_enter {
+            set_timer 0.00001
+        }
+        on_timer {
+            set_state idling
+        }
+        on_touch_object {
+            focus trigger
+            store_focus_inside
+            set_var holding true
+        }
+    }
+
+    idling {
+        on_enter {
+            set_animation idling
+        }
+        on_receive_message {
+            get_info m message
+            if $m = goal_reached
+                set_state pulled
+            end_if
+        }
+    }
+
+    pulled {
+        on_enter {
+            set_animation pulled
+
+            get_info p group_task_power
+            if $p = 3
+                set_timer 1.5
+            else
+                if $p = 4
+                    set_timer 1.25
+                else
+                    set_timer 1
+                end_if
+            end_if
+        }
+        on_timer {
+            add_health -20
+
+            get_info p group_task_power
+            if $p = 3
+                set_timer 1.5
+            else
+                if $p = 4
+                    set_timer 1.25
+                else
+                    set_timer 1
+                end_if
+            end_if
+        }
+        on_receive_message {
+            get_info m message
+            if $m = goal_lost
+                set_state idling
+            end_if
+        }
+    }
+
+    dying {
+        on_enter {
+            set_animation dying
+            release_stored_mobs
+            start_particles dust_explosion
+        }
+        on_animation_end {
+            delete
+        }
+    }
+}
