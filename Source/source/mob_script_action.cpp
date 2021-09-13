@@ -1257,6 +1257,7 @@ void mob_action_runners::release_stored_mobs(mob_action_run_data &data) {
         if(m_ptr->stored_inside_another == data.m) {
             data.m->release(m_ptr);
             m_ptr->stored_inside_another = NULL;
+            m_ptr->time_alive = 0.0f;
         }
     }
 }

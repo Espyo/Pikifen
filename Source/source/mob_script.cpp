@@ -482,15 +482,18 @@ mob_event* mob_state::get_event(const size_t type) const {
 
 /* ----------------------------------------------------------------------------
  * Fixes some things in the list of states.
- * For instance, state-switching actions that use
- * a name instead of a number.
+ * For instance, state-switching actions that use a name instead of a number.
  * Returns the number of the starting state.
  * states:
  *   The vector of states.
  * starting_state:
  *   Name of the starting state for the mob.
+ * mt:
+ *   Mob type these states belong to.
  */
-size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
+size_t fix_states(
+    vector<mob_state*> &states, const string &starting_state, mob_type* mt
+) {
     size_t starting_state_nr = INVALID;
     
     //Fix actions that change the state that are using a string.
@@ -523,8 +526,9 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                         state_nr = INVALID;
                         log_error(
                             "State \"" + state->name +
-                            "\" has an action to switch "
-                            "to an unknown state: \"" + state_name + "\"!",
+                            "\" of the mob type \"" + mt->name + "\" has an "
+                            "action to switch to an unknown state: \"" +
+                            state_name + "\"!",
                             nullptr
                         );
                     }
@@ -698,7 +702,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         
     }
     
-    fix_states(*states, "");
+    fix_states(*states, "", mt);
 }
 
 

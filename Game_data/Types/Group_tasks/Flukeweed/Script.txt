@@ -1,18 +1,24 @@
-first_state = grabbing
+first_state = capturing
 death_state = dying
 
+init {
+    set_var capturing true
+}
+
 script {
-    grabbing {
+    capturing {
         on_enter {
-            set_timer 0.00001
+            set_timer 0.1
         }
         on_timer {
+            set_var capturing false
             set_state idling
         }
         on_touch_object {
-            focus trigger
-            store_focus_inside
-            set_var holding true
+            if $capturing = true
+                focus trigger
+                store_focus_inside
+            end_if
         }
     }
 

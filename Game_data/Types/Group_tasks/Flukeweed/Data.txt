@@ -1,5 +1,6 @@
 name = Flukeweed
 
+area_editor_tips = To make it capture other objects, simply place\nthose objects and this one together\nsuch that they are all touching.
 casts_shadow = true
 contribution_method = normal
 first_row_p1 = 8 -12

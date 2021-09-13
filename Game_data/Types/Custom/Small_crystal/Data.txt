@@ -1,6 +1,6 @@
 name = Small crystal
 
-area_editor_tips = To make it trap another object, simply place\nboth objects together such that they are touching.
+area_editor_tips = To make it capture another object, simply place\nboth objects together such that they are touching.
 can_block_paths = true
 default_vulnerability = 0
 height = 100

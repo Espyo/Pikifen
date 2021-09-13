@@ -1,23 +1,24 @@
-first_state = grabbing
+first_state = capturing
 death_state = destroying
 
 init {
-    set_var holding false
+    set_var capturing true
 }
 
 script {
-    grabbing {
+    capturing {
         on_enter {
             set_timer 0.1
         }
         on_timer {
+            set_var capturing false
             set_state healthy
         }
         on_touch_object {
-            if $holding = false
+            if $capturing = true
                 focus trigger
                 hold_focused_mob crystal
-                set_var holding true
+                set_var capturing false
             end_if
         }
     }
