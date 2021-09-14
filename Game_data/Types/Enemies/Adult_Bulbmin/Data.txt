@@ -1,0 +1,66 @@
+name = Adult Bulbmin
+
+acceleration = 100
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
+drops_corpse = true
+has_group = true
+height = 90
+itch_damage = 30
+itch_time = 5
+max_carriers = 14
+max_health = 300
+move_speed = 60
+pikmin_seeds = 10
+pushable = true
+pushes = true
+radius = 42
+reaches {
+    search = 175 180 20 360
+    chase = 175 2
+    close = 175 360
+    attack = 30 30
+}
+rotation_speed = 114
+target_type = enemy
+territory_radius = 600
+weight = 7
+
+vulnerabilities {
+    fire = 0
+    stunning_electricity = 0
+    fatal_electricity = 0
+    water = 0
+    water_bubble = 0
+    poison = 0
+}
+
+spawns {
+    stem {
+        object = Adult Bulbmin stem
+        relative = true
+        coordinates = 0 0 0
+        angle = 0
+    }
+    young {
+        object = Bulbmin
+        relative = true
+        coordinates = -50 0 0
+        angle = 0
+        link_spawn_to_object = true
+        link_object_to_spawn = true
+        vars = team = enemy_1; maturity = 0; follow_link_as_leader = true
+    }
+}
+
+children {
+    stem {
+        spawn = stem
+        parent_holds = true
+        hold_body_part = stem
+        hold_rotation_method = face_parent
+        handle_damage = false
+        handle_events = false
+        handle_statuses = false
+    }
+}

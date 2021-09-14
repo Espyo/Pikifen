@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -10,16 +8,27 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="870"
+   height="521.00012"
    id="svg4741"
    version="1.1"
-   inkscape:version="0.92.3 (unknown)"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="Bulborb.svg">
   <title
      id="title1326">Red Bulborb spritesheet</title>
   <defs
      id="defs4743">
+    <linearGradient
+       id="Bulbmin_stem">
+      <stop
+         id="stop1381"
+         offset="0"
+         style="stop-color:#d70909;stop-opacity:1" />
+      <stop
+         id="stop1387"
+         offset="1"
+         style="stop-color:#a32405;stop-opacity:1" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="Spot-3">
@@ -236,7 +245,7 @@
        xlink:href="#Body"
        inkscape:collect="always" />
     <linearGradient
-       gradientTransform="matrix(0.62188862,0.78310571,-0.78310571,0.62188862,996.4251,295.33513)"
+       gradientTransform="rotate(51.545817,192.37855,1179.5146)"
        y2="956.54968"
        x2="244"
        y1="953.61218"
@@ -573,7 +582,7 @@
        x2="705.5"
        y1="1102.3622"
        x1="698.5"
-       gradientTransform="matrix(0.9838791,-0.17883488,0.17883488,0.9838791,-531.73741,379.50658)"
+       gradientTransform="rotate(-10.301902,1839.1322,3139.1297)"
        gradientUnits="userSpaceOnUse"
        id="linearGradient6927"
        xlink:href="#Feet"
@@ -583,7 +592,7 @@
        x2="705.5"
        y1="1102.3622"
        x1="698.5"
-       gradientTransform="matrix(0.30437733,-0.95255154,0.95255154,0.30437733,-902.7016,1676.4289)"
+       gradientTransform="rotate(-72.279293,696.45893,1456.2721)"
        gradientUnits="userSpaceOnUse"
        id="linearGradient6964"
        xlink:href="#Feet"
@@ -658,7 +667,7 @@
        y1="953.61218"
        x1="236.375"
        spreadMethod="pad"
-       gradientTransform="matrix(0.75159804,0.6596214,-0.6596214,0.75159804,986.54806,185.18479)"
+       gradientTransform="rotate(41.271005,247.39865,1402.4617)"
        gradientUnits="userSpaceOnUse"
        id="linearGradient4025"
        xlink:href="#Feet"
@@ -691,7 +700,7 @@
        y1="953.61218"
        x1="236.375"
        spreadMethod="pad"
-       gradientTransform="matrix(0.75159804,0.6596214,-0.6596214,0.75159804,1148.5481,185.18479)"
+       gradientTransform="rotate(41.271005,328.39867,1617.554)"
        gradientUnits="userSpaceOnUse"
        id="linearGradient4025-0"
        xlink:href="#Feet"
@@ -1241,7 +1250,7 @@
        id="linearGradient5852"
        x1="666.16022"
        y1="-1331.2366"
-       x2="681.16021"
+       x2="681.16022"
        y2="-1331.2366"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
@@ -1347,7 +1356,7 @@
        inkscape:collect="always"
        xlink:href="#Spot-3"
        id="linearGradient5892"
-       x1="1590.2132"
+       x1="1590.2133"
        y1="608.57324"
        x2="1605.0973"
        y2="608.57324"
@@ -1500,7 +1509,7 @@
        inkscape:collect="always"
        xlink:href="#Spot-3"
        id="linearGradient5956"
-       x1="1582.3471"
+       x1="1582.347"
        y1="503.68735"
        x2="1597.2313"
        y2="503.68735"
@@ -1509,7 +1518,7 @@
        inkscape:collect="always"
        xlink:href="#Spot-3"
        id="linearGradient5958"
-       x1="-1590.1114"
+       x1="-1590.1115"
        y1="-973.41663"
        x2="-1575.2272"
        y2="-973.41663"
@@ -1955,6 +1964,17 @@
        x2="330"
        y2="1357.3622"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Bulbmin_stem"
+       id="linearGradient2925"
+       x1="31.800079"
+       y1="2155.9995"
+       x2="31.800079"
+       y2="2153.428"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(3.3333334,0,0,1.999997,1443.6664,-3253.6301)"
+       spreadMethod="reflect" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1963,11 +1983,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="400.60592"
-     inkscape:cy="-211.57677"
+     inkscape:zoom="11.313708"
+     inkscape:cx="1544.0735"
+     inkscape:cy="22.66211"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
@@ -1984,10 +2004,13 @@
      inkscape:object-nodes="true"
      inkscape:snap-smooth-nodes="true"
      inkscape:snap-midpoints="true"
-     inkscape:snap-intersection-paths="true">
+     inkscape:snap-intersection-paths="true"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
-       id="grid4760" />
+       id="grid4760"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <metadata
      id="metadata4746">
@@ -2018,13 +2041,14 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Grid"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-1052.3621)">
     <rect
        style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect5785"
        width="153"
        height="102.99996"
-       x="1.4484406e-008"
+       x="1.4484406e-08"
        y="1052.3623"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
@@ -2212,14 +2236,25 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
+    <rect
+       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.194045"
+       id="rect1361"
+       width="54"
+       height="12.000039"
+       x="1500"
+       y="1052.3621"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Adult_Bulbmin_stem.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
   <g
      inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(0,-1052.3621)">
     <path
-       style="display:inline;fill:url(#linearGradient4062);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient4062);fill-opacity:1;stroke:none"
        d="m 532.73562,1142.9607 3.26438,7.4015 7.5,3.5 11,1 -8.5,-9.5 z"
        id="path4391-4-8-4-8"
        inkscape:connector-curvature="0"
@@ -2228,7 +2263,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#linearGradient4025);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient4025);fill-opacity:1;stroke:none"
        d="m 532.73562,1064.7637 3.26438,-7.4015 7.5,-3.5 11,-1 -8.5,9.5 z"
        id="path4391-4-8-4"
        inkscape:connector-curvature="0"
@@ -2237,8 +2272,8 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#linearGradient7007);fill-opacity:1.0;stroke:none"
-       d="m 363.10523,1369.2391 -4.34192,5.977 -6,0 -2.84159,-1.2395 -7.15841,-9.2605 10.9149,-0.3383 z"
+       style="display:inline;fill:url(#linearGradient7007);fill-opacity:1;stroke:none"
+       d="m 363.10523,1369.2391 -4.34192,5.977 h -6 l -2.84159,-1.2395 -7.15841,-9.2605 10.9149,-0.3383 z"
        id="path7514-4-7-3"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -2246,7 +2281,7 @@
        inkscape:export-ydpi="90.000015"
        sodipodi:nodetypes="ccccccc" />
     <path
-       style="display:inline;fill:url(#linearGradient6927-8);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient6927-8);fill-opacity:1;stroke:none"
        d="m 358.76331,1375.2161 2,6 -7.2253,5.6777 -11.53801,1.9684 4.82941,-9.7942 5.9339,-3.8519 z"
        id="path7514-4-78"
        inkscape:connector-curvature="0"
@@ -2256,7 +2291,7 @@
        sodipodi:nodetypes="ccccccc" />
     <path
        style="fill:url(#linearGradient4399);fill-opacity:1;stroke:none"
-       d="m 232.5,1077.6123 7.5,-17.5 7.5,-7.5 0,12.5 -7.5,15 z"
+       d="m 232.5,1077.6123 7.5,-17.5 7.5,-7.5 v 12.5 l -7.5,15 z"
        id="path4391"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -2288,7 +2323,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,0.99999961,-1,0,1047.3622,986.36234)"
+       transform="rotate(90,30.499936,1016.8623)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -2407,7 +2442,7 @@
        inkscape:export-ydpi="90.000015"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png" />
     <path
-       style="fill:url(#radialGradient6145);fill-opacity:1.0;stroke:none"
+       style="fill:url(#radialGradient6145);fill-opacity:1;stroke:none"
        d="m 154,1104.8623 c 0,-20.8333 11.2879,-41.0374 37.5,-50 2.8298,-0.9676 6.54014,-2.0286 10,-1.5 36,5.5 81.99996,24.5 88.5,30.5 0,0 15,15.9861 15,25 0,9.0139 -13.49996,18.5001 -13.49996,18.5001 0,0 -54.00004,29 -90.00004,29 -3.49999,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50.0001 z"
        id="path5563-2"
        inkscape:connector-curvature="0"
@@ -2421,7 +2456,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,1200.3622,996.86229)"
+       transform="rotate(90,101.74996,1098.6122)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -2468,8 +2503,8 @@
        cy="1007.8622"
        r="7.5" />
     <path
-       style="fill:url(#linearGradient4651);fill-opacity:1.0;stroke:none"
-       d="m 386.5,1077.3623 7.5,-17.5 7.5,-7.5 0,12.5 -7.5,15 z"
+       style="fill:url(#linearGradient4651);fill-opacity:1;stroke:none"
+       d="m 386.5,1077.3623 7.5,-17.5 7.5,-7.5 v 12.5 l -7.5,15 z"
        id="path4391-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
@@ -2477,7 +2512,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="fill:url(#linearGradient4421-2);fill-opacity:1.0;stroke:none"
+       style="fill:url(#linearGradient4421-2);fill-opacity:1;stroke:none"
        d="m 393,1079.8623 4.39873,-6.7047 8.35263,-2.278 10.53746,1.2091 -9.78882,7.7736 z"
        id="path4391-4-8"
        inkscape:connector-curvature="0"
@@ -2486,7 +2521,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="fill:url(#radialGradient6145-3);fill-opacity:1.0;stroke:none"
+       style="fill:url(#radialGradient6145-3);fill-opacity:1;stroke:none"
        d="m 308,1115.8624 c 0,-20.8335 11.2879,-41.0375 37.5,-50.0001 2.8298,-0.9676 6.62473,-2.4261 10,-1.5 30.40418,8.3417 81.99996,24.5 88.5,30.5 0,0 15,15.9861 15,25.0001 0,9.0138 -13.49996,18.5 -13.49996,18.5 0,0 -54.00004,29 -90.00004,29 -3.49999,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-2-0"
        inkscape:connector-curvature="0"
@@ -2495,7 +2530,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <circle
-       style="fill:url(#radialGradient6258-9);fill-opacity:1.0;stroke:none"
+       style="fill:url(#radialGradient6258-9);fill-opacity:1;stroke:none"
        id="path5621-0-6"
        transform="matrix(0,1.0985578,-1.0985628,0,1443.0087,1007.4921)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -2510,7 +2545,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,1354.3622,1012.8623)"
+       transform="rotate(90,170.74995,1183.6123)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -2547,7 +2582,7 @@
        cy="1007.8622"
        r="7.5" />
     <path
-       style="fill:url(#radialGradient6262-3);fill-opacity:1.0;stroke:none"
+       style="fill:url(#radialGradient6262-3);fill-opacity:1;stroke:none"
        d="m 419,1110.8623 c 1.01542,-1.5822 1.40994,-4.7619 6.16497,-5 l 3.5,1.5 c 4.50072,-9.5159 7.49996,-15 16.49996,-15.5 2.5,8.5 2.50004,20.5 4e-5,29.0001 -5.07881,-0.2734 -10.15361,-2.4745 -14.5,-6.5001 -3,-1 -8.32994,-1.9999 -11.66497,-3.5 z"
        id="path5617-0-9"
        inkscape:connector-curvature="0"
@@ -2575,7 +2610,7 @@
        cy="1007.8622"
        r="7.5" />
     <circle
-       style="fill:url(#radialGradient4354-7);fill-opacity:1.0;stroke:none"
+       style="fill:url(#radialGradient4354-7);fill-opacity:1;stroke:none"
        id="path5621-0-0-2"
        transform="matrix(0,-1.0985578,-1.0985628,0,1443.2212,1251.7326)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -2585,7 +2620,7 @@
        cy="907.86218"
        r="13.199109" />
     <path
-       style="fill:url(#radialGradient6262-8-8);fill-opacity:1.0;stroke:none"
+       style="fill:url(#radialGradient6262-8-8);fill-opacity:1;stroke:none"
        d="m 429.065,1137.3624 c -5.31109,-3.4161 -7.34576,-1.0607 -10.065,0 l 9.37751,14.5 c 4.50072,9.5159 7.49996,15 16.49996,15.5 2.5,-8.5 2.50004,-20.5 4e-5,-29 -5.07881,0.2734 -10.15361,2.4745 -14.5,6.5 -2.67075,-0.989 -1.31251,-5 -1.31251,-7.5 z"
        id="path5617-0-6-8"
        inkscape:connector-curvature="0"
@@ -2618,7 +2653,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        transform="matrix(0,-1.0985578,-1.0985628,0,1289.3437,1235.7326)"
        id="use5713-8"
-       style="display:inline;fill:url(#radialGradient5145);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient5145);fill-opacity:1;stroke:none"
        cx="90"
        cy="907.86218"
        r="13.199109" />
@@ -2630,7 +2665,7 @@
        inkscape:connector-curvature="0"
        id="use5715-1"
        d="m 265,1127.2801 c -2.40912,1.2744 -2.05752,4.696 -2.5,7.5 l 12.5,1.0823 c 4.50072,9.5158 7.49996,15 16.49996,15.5 2.5,-8.5 2.50004,-20.5 4e-5,-29 -5.07881,0.2734 -10.15361,2.4745 -14.5,6.5 z"
-       style="display:inline;fill:url(#radialGradient5141);fill-opacity:1.0;stroke:none" />
+       style="display:inline;fill:url(#radialGradient5141);fill-opacity:1;stroke:none" />
     <path
        inkscape:export-ydpi="90.000015"
        inkscape:export-xdpi="90.000015"
@@ -2641,7 +2676,7 @@
        d="m 304.99991,1143.1124 c 0,0 -0.5,-4.5 -0.5,-6.5 0,-2 0.5,-6.5 0.5,-6.5 0,0 2,4 2,6.5 0,2.5 -2,6.5 -2,6.5 z"
        style="display:inline;fill:url(#linearGradient6654);fill-opacity:1;stroke:none" />
     <circle
-       style="display:inline;fill:url(#radialGradient5232);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient5232);fill-opacity:1;stroke:none"
        id="path5621-0"
        transform="matrix(0,1.0985578,-1.0985628,0,1288.8437,984.40981)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -2651,7 +2686,7 @@
        cy="907.86218"
        r="13.199109" />
     <path
-       style="display:inline;fill:url(#radialGradient5861-84-5);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient5861-84-5);fill-opacity:1;stroke:none"
        d="m 271.5,1097.28 c -6.30987,1.6479 -7.91148,-0.4708 -9,-3 l 12,-10 c 4.50072,-9.5158 7.49996,-15 16.49996,-15.5 2.5,8.5 2.50004,20.5 4e-5,29 -5.07881,-0.2733 -10.15361,-2.4745 -14.5,-6.5 -2.67075,0.9891 -4,4 -5,6 z"
        id="path5617-2"
        inkscape:connector-curvature="0"
@@ -2669,7 +2704,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="fill:url(#radialGradient5934);fill-opacity:1.0;stroke:none"
+       style="fill:url(#radialGradient5934);fill-opacity:1;stroke:none"
        d="M 1.4484406e-8,1219.8624 C 1.4484406e-8,1199.029 11.2879,1178.825 37.5,1169.8624 c 2.8298,-0.9676 6.5,-1.5 10,-1.5 31.00002,0 90,23.5 90,23.5 0,0 22.5,10.9861 22.5,20 0,9.0138 -20,27.5 -20,27.5 0,0 -60.99998,32 -92.5,32 -3.5,0 -7.1722,-0.5331 -10,-1.5 C 11.2879,1260.8998 1.4484406e-8,1240.6957 1.4484406e-8,1219.8624 Z"
        id="path5563-3"
        inkscape:connector-curvature="0"
@@ -2693,7 +2728,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,1052.3622,1104.8623)"
+       transform="rotate(90,-26.25005,1078.6123)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -2812,7 +2847,7 @@
        inkscape:export-ydpi="90.000015"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png" />
     <path
-       style="display:inline;fill:url(#radialGradient6128);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient6128);fill-opacity:1;stroke:none"
        d="m 161,1226.8624 c 0,-20.8334 11.2879,-41.0374 37.5,-50 2.8298,-0.9676 6.5,-1.5 10,-1.5 31.00002,0 101.5,16.5 101.5,16.5 0,0 25,10.9861 25,20 0,9.0138 -30,35 -30,35 0,0 -64.99998,31.5 -96.5,31.5 -3.5,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-3-7"
        inkscape:connector-curvature="0"
@@ -2836,7 +2871,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,1216.8622,1104.8623)"
+       transform="rotate(90,55.99995,1160.8623)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -2937,7 +2972,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        style="display:inline" />
     <path
-       style="fill:url(#radialGradient5881-79);fill-opacity:1.0;stroke:none"
+       style="fill:url(#radialGradient5881-79);fill-opacity:1;stroke:none"
        d="m 336,1219.8624 c 0,-20.8334 11.2879,-41.0374 37.5,-50 2.8298,-0.9676 6.5,-1.5 10,-1.5 31.00002,0 111.5,29 111.5,29 0,0 15,13.4861 15,22.5 0,9.0138 -15,22.5 -15,22.5 0,0 -79.99998,29 -111.5,29 -3.5,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-5"
        inkscape:connector-curvature="0"
@@ -2961,7 +2996,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,1383.3622,1102.3623)"
+       transform="rotate(90,140.49995,1242.8623)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -3080,7 +3115,7 @@
        inkscape:export-ydpi="90.000015"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png" />
     <path
-       style="display:inline;fill:url(#radialGradient6852);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient6852);fill-opacity:1;stroke:none"
        d="m 512,1219.8624 c 0,-20.8334 11.2879,-41.0374 37.5,-50 2.8298,-0.9676 6.5,-1.5 10,-1.5 31.00002,0 84,36.5 84,36.5 0,0 15,13.4861 15,22.5 0,9.0138 -15,22.5 -15,22.5 0,0 -52.49998,21.5 -84,21.5 -3.5,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-6"
        inkscape:connector-curvature="0"
@@ -3104,7 +3139,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,0.99999961,-1,0,1562.8622,1095.3622)"
+       transform="rotate(90,233.75005,1329.1122)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -3198,7 +3233,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="fill:url(#linearGradient7492);fill-opacity:1.0;stroke:none"
+       style="fill:url(#linearGradient7492);fill-opacity:1;stroke:none"
        d="m 752.5,1273.3624 -2.5,5 -17.5,2.5 3,-2.5 12,-2.5 1.5,-2.5 z"
        id="path7484"
        inkscape:connector-curvature="0"
@@ -3250,7 +3285,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#radialGradient7294);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient7294);fill-opacity:1;stroke:none"
        d="m 700.57255,1215.8624 c 2.94091,-19.3658 4.91621,-32.687 29.42745,-42.5 2.8298,-0.9676 31.5,-5 35,-5 31.00002,0 62.5,47.5 62.5,47.5 0,0 20,35.9861 20,45 0,9.0138 -14.23722,19.3604 -25,22.5 -19.46462,5.678 -28.49998,-10 -60,-10 -3.5,0 -22.1722,3.4669 -25,2.5 -27.18147,5.0933 -39.86836,-40.6342 -36.92745,-60 z"
        id="path5563-6-1"
        inkscape:connector-curvature="0"
@@ -3274,7 +3309,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,0.99999961,-1,0,1779.3622,1115.3624)"
+       transform="rotate(90,331.99996,1447.3622)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -3349,7 +3384,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,0.99999961,-1,0,1745.3622,1096.3623)"
+       transform="rotate(90,324.50001,1420.8622)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -3359,7 +3394,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,0.99999961,-1,0,1725.3622,1131.3624)"
+       transform="rotate(90,296.99996,1428.3622)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -3388,7 +3423,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#radialGradient3851);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient3851);fill-opacity:1;stroke:none"
        d="m 0,1355.8623 c 0,-20.8334 11.2879,-41.0374 37.5,-50.0001 2.8298,-0.9675 6.5,-1.5 10,-1.5 31.00002,0 61,28.9998 61,28.9998 0,0 15.5,14.4861 15.5,23.5001 0,9.0138 -15.5,21.5 -15.5,21.5 0,0 -29.49998,29.0002 -61,29.0002 -3.5,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-21"
        inkscape:connector-curvature="0"
@@ -3492,7 +3527,7 @@
        rx="2.25"
        ry="8.25" />
     <ellipse
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5596);fill-opacity:1.0;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5596);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        id="path5569-6"
        transform="matrix(0.59883082,-0.29299719,-0.42617714,-0.87102541,636.28442,2604.9762)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3503,7 +3538,7 @@
        rx="2.25"
        ry="8.25" />
     <ellipse
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5640);fill-opacity:1.0;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5640);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        id="path5569-0"
        transform="matrix(0.59883082,0.29299719,-0.42617714,0.87102541,673.78442,-38.751978)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3514,7 +3549,7 @@
        rx="2.25"
        ry="8.25" />
     <ellipse
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5640-3);fill-opacity:1.0;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5640-3);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        id="path5569-4"
        transform="matrix(0.46082832,-0.4817499,-0.70072614,-0.67029478,1073.6714,2205.492)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3525,7 +3560,7 @@
        rx="2.25"
        ry="8.25" />
     <ellipse
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5640-6);fill-opacity:1.0;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5640-6);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        id="path5569-1"
        transform="matrix(0.52858788,0.40625184,-0.59091095,0.768854,1087.4619,89.553581)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3536,7 +3571,7 @@
        rx="2.25"
        ry="8.25" />
     <ellipse
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5640-7);fill-opacity:1.0;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient5640-7);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        id="path5569-8"
        transform="matrix(0.474205,-0.46858865,-0.68158254,-0.68975174,1220.9232,2231.5465)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3547,7 +3582,7 @@
        rx="2.25"
        ry="8.25" />
     <path
-       style="display:inline;opacity:1;fill:url(#radialGradient6153);fill-opacity:1.0;stroke:none"
+       style="display:inline;opacity:1;fill:url(#radialGradient6153);fill-opacity:1;stroke:none"
        d="m 226,1355.8623 c 0,-20.8334 11.2879,-41.0374 37.5,-50.0001 2.8298,-0.9675 6.50194,-1.6166 10,-1.5 22.51164,11.3791 21.68203,94.1905 0,103.0001 -3.5,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-21-0"
        inkscape:connector-curvature="0"
@@ -3569,7 +3604,7 @@
     <ellipse
        style="display:inline;opacity:1;fill:url(#radialGradient5842);fill-opacity:1;stroke:none"
        id="path5621-6-0"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -3631,7 +3666,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="opacity:1;fill:url(#radialGradient6464);fill-opacity:1.0;stroke:none"
+       style="opacity:1;fill:url(#radialGradient6464);fill-opacity:1;stroke:none"
        d="m 296,1324.8622 c 17.5,0 42.5,10 42.5,32.5 0,22.5 -25,30 -42.5,30 z"
        id="path6440"
        inkscape:connector-curvature="0"
@@ -3649,7 +3684,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <ellipse
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:url(#radialGradient5596-8-7);fill-opacity:1.0;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:url(#radialGradient5596-8-7);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        id="path5569-6-7"
        transform="matrix(0.99692582,0.07835117,-0.3244807,-0.94589232,0,0)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3660,7 +3695,7 @@
        rx="3.6274619"
        ry="9.506052" />
     <ellipse
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:url(#radialGradient6379);fill-opacity:1.0;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:url(#radialGradient6379);fill-opacity:1;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        id="path5569-6-7-8"
        transform="matrix(0.99692582,-0.07835117,-0.3244807,0.94589232,0,0)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3671,8 +3706,8 @@
        rx="3.6274619"
        ry="9.506052" />
     <path
-       style="display:inline;fill:url(#linearGradient6964);fill-opacity:1.0;stroke:none"
-       d="m 363.10523,1344.9853 -4.34192,-5.977 -6,0 -2.84159,1.2395 -7.15841,9.2605 10.9149,0.3383 z"
+       style="display:inline;fill:url(#linearGradient6964);fill-opacity:1;stroke:none"
+       d="m 363.10523,1344.9853 -4.34192,-5.977 h -6 l -2.84159,1.2395 -7.15841,9.2605 10.9149,0.3383 z"
        id="path7514-4-7"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3680,7 +3715,7 @@
        inkscape:export-ydpi="90.000015"
        sodipodi:nodetypes="ccccccc" />
     <path
-       style="display:inline;fill:url(#linearGradient6927);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient6927);fill-opacity:1;stroke:none"
        d="m 358.76331,1339.0083 2,-6 -7.2253,-5.6777 -11.53801,-1.9684 4.82941,9.7942 5.9339,3.8519 z"
        id="path7514-4"
        inkscape:connector-curvature="0"
@@ -3689,7 +3724,7 @@
        inkscape:export-ydpi="90.000015"
        sodipodi:nodetypes="ccccccc" />
     <path
-       style="display:inline;fill:url(#radialGradient6763);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient6763);fill-opacity:1;stroke:none"
        d="m 352.99997,1355.8623 c 0,-20.8334 11.2879,-41.0374 37.5,-50.0001 2.8298,-0.9675 6.5,-1.5 10,-1.5 31.00002,0 81.50004,28.9178 81.50004,28.9178 0,0 15,13.4861 15,22.5001 0,9.0138 -15,22.5 -15,22.5 0,0 -50.00002,29.0822 -81.50004,29.0822 -3.5,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-9"
        inkscape:connector-curvature="0"
@@ -3700,7 +3735,7 @@
     <ellipse
        style="display:inline;fill:url(#radialGradient5844);fill-opacity:1;stroke:none"
        id="path5621-82"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -3714,7 +3749,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        cx="1336.28"
        cy="-407.00006"
        rx="7.4999971"
@@ -3744,7 +3779,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <ellipse
-       transform="matrix(0.25881914,0.9659258,-0.96592585,0.25881896,0,0)"
+       transform="rotate(74.999994)"
        style="display:inline;fill:url(#linearGradient5948);fill-opacity:1;stroke:none"
        id="path5587-3-83"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3757,7 +3792,7 @@
     <ellipse
        id="use5615-9"
        style="display:inline;fill:url(#linearGradient5946);fill-opacity:1;stroke:none"
-       transform="matrix(-0.25881914,0.9659258,-0.96592585,-0.25881896,0,0)"
+       transform="rotate(105.00001)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -3834,7 +3869,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;opacity:1;fill:url(#radialGradient5881-15);fill-opacity:1.0;stroke:none"
+       style="display:inline;opacity:1;fill:url(#radialGradient5881-15);fill-opacity:1;stroke:none"
        d="m 515,1355.8623 c 0,-20.8334 11.2879,-41.0374 37.5,-50.0001 2.8298,-0.9675 6.5,-1.5 10,-1.5 15.50001,0 26.44727,5.0391 43.5,18 14.28411,10.8566 45,20 47.5,22.5 2.5,2.5 10,13.486 10,22.5 0,9.0138 -15,22.5 -15,22.5 -34.25106,12.0803 -64.37633,26.074 -96,16.0001 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-27"
        inkscape:connector-curvature="0"
@@ -3845,7 +3880,7 @@
     <ellipse
        style="display:inline;opacity:1;fill:url(#radialGradient5846);fill-opacity:1;stroke:none"
        id="path5621-7"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -3859,7 +3894,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        cx="1337.3622"
        cy="-573.5"
        rx="7.4999971"
@@ -3889,7 +3924,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <ellipse
-       transform="matrix(0.03784316,0.99928369,-0.9992837,0.03784297,0,0)"
+       transform="rotate(87.831229)"
        style="display:inline;opacity:1;fill:url(#linearGradient5932);fill-opacity:1;stroke:none"
        id="path5587-3-0"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -3902,7 +3937,7 @@
     <ellipse
        id="use5615-37"
        style="display:inline;opacity:1;fill:url(#linearGradient5930);fill-opacity:1;stroke:none"
-       transform="matrix(-0.25881914,0.9659258,-0.96592585,-0.25881896,0,0)"
+       transform="rotate(105.00001)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -3911,7 +3946,7 @@
        rx="2.9999988"
        ry="7.5" />
     <path
-       style="display:inline;opacity:1;fill:url(#radialGradient4024);fill-opacity:1.0;stroke:none"
+       style="display:inline;opacity:1;fill:url(#radialGradient4024);fill-opacity:1;stroke:none"
        d="m 638.5,1357.3622 c -5,-5 -5,-5 -7.5,-7.5 l 11,-3.5 c 4.50072,-9.5158 7.49996,-14.9999 16.49996,-15.4999 2.5,8.5 2.50004,20.4999 4e-5,28.9999 -5.07881,-0.2733 -10.15361,-2.4745 -14.5,-6.5 -2.67075,0.9891 -4.5,2 -5.5,4 z"
        id="path5617-39"
        inkscape:connector-curvature="0"
@@ -3931,7 +3966,7 @@
     <ellipse
        id="use5669-7"
        style="display:inline;opacity:1;fill:url(#linearGradient5928);fill-opacity:1;stroke:none"
-       transform="matrix(-0.65076754,0.75927703,-0.7592772,-0.65076734,0,0)"
+       transform="rotate(130.5995)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -3971,7 +4006,7 @@
        inkscape:connector-curvature="0"
        id="use5715-8"
        d="m 632.31251,1378.4034 c -6.30987,-1.6479 -7.91148,0.4708 -9,3 l 12,10 c 4.50072,9.5158 7.49996,14.9999 16.49996,15.4999 2.5,-8.5 2.50004,-20.4999 4e-5,-28.9999 -5.07881,0.2733 -10.15361,2.4745 -14.5,6.5 -2.67075,-0.9891 -4,-4 -5,-6 z"
-       style="display:inline;opacity:1;fill:url(#radialGradient4030);fill-opacity:1.0;stroke:none" />
+       style="display:inline;opacity:1;fill:url(#radialGradient4030);fill-opacity:1;stroke:none" />
     <use
        style="display:inline;opacity:1"
        x="0"
@@ -3985,7 +4020,7 @@
        inkscape:export-ydpi="90.000015"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png" />
     <path
-       style="display:inline;fill:url(#radialGradient3894);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient3894);fill-opacity:1;stroke:none"
        d="m 462,1103.8622 c 0,-20.8334 11.2879,-41.0374 37.5,-50.0001 2.8298,-0.9675 6.5,-1.5 10,-1.5 31.00002,0 81.50004,28.9178 81.50004,28.9178 0,0 15,13.4861 15,22.5001 0,9.0138 -15,22.5 -15,22.5 0,0 -50.00002,29.0822 -81.50004,29.0822 -3.5,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-9-1"
        inkscape:connector-curvature="0"
@@ -4009,7 +4044,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,0.99999961,-1,0,1523.8623,987.28002)"
+       transform="rotate(90,268.29119,1255.5711)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -4125,7 +4160,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#linearGradient6634);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient6634);fill-opacity:1;stroke:none"
        d="m 621,1071.3622 c 0,0 0.5,4.5 0.5,6.5 0,2 -0.5,6.5 -0.5,6.5 0,0 1.5,-2 1.5,-6.5 0,-4.5 -1.5,-6.5 -1.5,-6.5 z"
        id="path5623-5-7-8"
        inkscape:connector-curvature="0"
@@ -4134,7 +4169,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#linearGradient6632);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient6632);fill-opacity:1;stroke:none"
        d="m 621,1123.8622 c 0,0 0.5,4.5 0.5,6.5 0,2 -0.5,6.5 -0.5,6.5 0,0 1.5,-2 1.5,-6.5 0,-4.5 -1.5,-6.5 -1.5,-6.5 z"
        id="path5623-5-7-8-6"
        inkscape:connector-curvature="0"
@@ -4143,7 +4178,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#linearGradient4062-2);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient4062-2);fill-opacity:1;stroke:none"
        d="m 694.73562,1142.9607 3.26438,7.4015 7.5,3.5 11,1 -8.5,-9.5 z"
        id="path4391-4-8-4-8-7"
        inkscape:connector-curvature="0"
@@ -4152,7 +4187,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#linearGradient4025-0);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient4025-0);fill-opacity:1;stroke:none"
        d="m 694.73562,1064.7637 3.26438,-7.4015 7.5,-3.5 11,-1 -8.5,9.5 z"
        id="path4391-4-8-4-5"
        inkscape:connector-curvature="0"
@@ -4161,7 +4196,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#radialGradient3894-3);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#radialGradient3894-3);fill-opacity:1;stroke:none"
        d="m 624,1103.8622 c 0,-20.8334 11.2879,-41.0374 37.5,-50.0001 2.8298,-0.9675 6.5,-1.5 10,-1.5 31.00002,0 78.5,29 78.5,29 0,0 15,13.4861 15,22.5001 0,9.0138 -15,22.5 -15,22.5 0,0 -46.99998,29 -78.5,29 -3.5,0 -7.1722,-0.5331 -10,-1.5 -26.2121,-8.9626 -37.5,-29.1667 -37.5,-50 z"
        id="path5563-9-1-4"
        inkscape:connector-curvature="0"
@@ -4185,7 +4220,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,0.99999961,-1,0,1685.8623,987.28002)"
+       transform="rotate(90,349.29121,1336.5711)"
        cx="97"
        cy="1007.8622"
        r="7.5" />
@@ -4301,7 +4336,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#linearGradient6630);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient6630);fill-opacity:1;stroke:none"
        d="m 778.99996,1071.4444 c 0,0 0.5,4.5 0.5,6.5 0,2 -0.5,6.5 -0.5,6.5 0,0 1.5,-2 1.5,-6.5 0,-4.5 -1.5,-6.5 -1.5,-6.5 z"
        id="path5623-5-7-8-7"
        inkscape:connector-curvature="0"
@@ -4310,7 +4345,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <path
-       style="display:inline;fill:url(#linearGradient6628);fill-opacity:1.0;stroke:none"
+       style="display:inline;fill:url(#linearGradient6628);fill-opacity:1;stroke:none"
        d="m 778.99996,1123.9444 c 0,0 0.5,4.5 0.5,6.5 0,2 -0.5,6.5 -0.5,6.5 0,0 1.5,-2 1.5,-6.5 0,-4.5 -1.5,-6.5 -1.5,-6.5 z"
        id="path5623-5-7-8-6-7"
        inkscape:connector-curvature="0"
@@ -4334,7 +4369,7 @@
        cx="1325.1644"
        style="display:inline;opacity:1;fill:url(#radialGradient5705);fill-opacity:1;stroke:none"
        id="path5621-6-7"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
@@ -4433,7 +4468,7 @@
        cx="1333.89"
        style="display:inline;fill:url(#radialGradient5554);fill-opacity:1;stroke:none"
        id="path5621-92"
-       transform="matrix(-0.33328224,0.9428271,-0.9428271,-0.33328224,0,0)"
+       transform="rotate(109.46812)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4449,7 +4484,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(-0.33328224,0.9428271,-0.9428271,-0.33328224,0,0)"
+       transform="rotate(109.46812)"
        inkscape:transform-center-x="-7.9966233"
        inkscape:transform-center-y="-18.121061" />
     <use
@@ -4485,7 +4520,7 @@
        rx="2.9999988"
        cy="-163.17276"
        cx="1406.5616"
-       transform="matrix(-0.07790421,0.99696085,-0.99696083,-0.0779044,0,0)"
+       transform="rotate(94.46811)"
        style="display:inline;fill:url(#linearGradient5882);fill-opacity:1;stroke:none"
        id="path5587-3-9"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -4500,7 +4535,7 @@
        cx="1223.4421"
        id="use5615-67"
        style="display:inline;fill:url(#linearGradient5880);fill-opacity:1;stroke:none"
-       transform="matrix(-0.56594762,0.8244412,-0.82444131,-0.56594746,0,0)"
+       transform="rotate(124.46812)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4535,7 +4570,7 @@
        cx="1090.8176"
        id="use5669-06"
        style="display:inline;fill:url(#linearGradient5878);fill-opacity:1;stroke:none"
-       transform="matrix(-0.63564882,0.77197835,-0.77197851,-0.63564862,0,0)"
+       transform="rotate(129.46812)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4615,7 +4650,7 @@
        cx="1220.8528"
        style="display:inline;opacity:1;fill:url(#radialGradient5570);fill-opacity:1;stroke:none"
        id="path5621-92-9"
-       transform="matrix(-0.43307458,0.90135809,-0.90135809,-0.43307458,0,0)"
+       transform="rotate(115.66284)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4631,7 +4666,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(-0.43307458,0.90135809,-0.90135809,-0.43307458,0,0)"
+       transform="rotate(115.66284)"
        inkscape:transform-center-x="-9.9052791"
        inkscape:transform-center-y="-17.152281" />
     <use
@@ -4667,7 +4702,7 @@
        rx="2.9999988"
        cy="-474.61383"
        cx="1350.8647"
-       transform="matrix(-0.18502919,0.98273303,-0.98273299,-0.18502938,0,0)"
+       transform="rotate(100.66283)"
        style="display:inline;opacity:1;fill:url(#linearGradient5868);fill-opacity:1;stroke:none"
        id="path5587-3-9-3"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -4682,7 +4717,7 @@
        cx="1019.4869"
        id="use5615-67-6"
        style="display:inline;opacity:1;fill:url(#linearGradient5866);fill-opacity:1;stroke:none"
-       transform="matrix(-0.65160664,0.75855704,-0.75855716,-0.6516065,0,0)"
+       transform="rotate(130.66285)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4717,7 +4752,7 @@
        cx="866.55823"
        id="use5669-06-3"
        style="display:inline;opacity:1;fill:url(#linearGradient5864);fill-opacity:1;stroke:none"
-       transform="matrix(-0.7152397,0.69887923,-0.69887941,-0.71523952,0,0)"
+       transform="rotate(135.66285)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4793,7 +4828,7 @@
        rx="14.499979"
        style="display:inline;fill:url(#radialGradient5213);fill-opacity:1;stroke:none"
        id="path5621-8-6"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4807,7 +4842,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        cx="1328.3621"
        cy="-718" />
     <use
@@ -4839,7 +4874,7 @@
        rx="2.9999988"
        id="use5615-6-8"
        style="display:inline;fill:url(#linearGradient5854);fill-opacity:1;stroke:none"
-       transform="matrix(-0.25881914,0.9659258,-0.96592585,-0.25881896,0,0)"
+       transform="rotate(105.00001)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4859,7 +4894,7 @@
        rx="7.4999976"
        id="use5669-9-2"
        style="display:inline;fill:url(#linearGradient5852);fill-opacity:1;stroke:none"
-       transform="matrix(-0.58290729,0.81253867,-0.81253881,-0.58290709,0,0)"
+       transform="rotate(125.65529)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4963,7 +4998,7 @@
     <ellipse
        style="display:inline;fill:url(#radialGradient5794);fill-opacity:1;stroke:none"
        id="path5621-82-2"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -4977,7 +5012,7 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
-       transform="matrix(0,1,-1,0,0,0)"
+       transform="rotate(90)"
        cx="1464.3622"
        cy="-347.5"
        rx="7.4999971"
@@ -5007,7 +5042,7 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <ellipse
-       transform="matrix(0.35919125,0.93326397,-0.93326405,0.35919105,0,0)"
+       transform="rotate(68.949464)"
        style="display:inline;fill:url(#linearGradient5842);fill-opacity:1;stroke:none"
        id="path5587-3-83-5"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
@@ -5020,7 +5055,7 @@
     <ellipse
        id="use5615-9-3"
        style="display:inline;fill:url(#linearGradient5840);fill-opacity:1;stroke:none"
-       transform="matrix(-0.32495646,0.94572898,-0.94572904,-0.32495627,0,0)"
+       transform="rotate(108.96294)"
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015"
@@ -5107,7 +5142,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3782"
-         style="display:inline;fill:#c99379;fill-opacity:0.99992071;stroke:none" />
+         style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none" />
       <circle
          r="15"
          cy="1036.3622"
@@ -5116,7 +5151,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          id="path3770"
-         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2.00000048;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <circle
          r="9.5"
          cy="1036.3622"
@@ -5132,7 +5167,7 @@
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:connector-curvature="0"
          id="path3824"
-         d="m -12,1034.8622 0,-6 2,0 0,6 z"
+         d="m -12,1034.8622 v -6 h 2 v 6 z"
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
       <path
          inkscape:export-ydpi="90"
@@ -5140,8 +5175,40 @@
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:connector-curvature="0"
          id="path3824-4"
-         d="m -12,1043.8622 0,-6 2,0 0,6 z"
+         d="m -12,1043.8622 v -6 h 2 v 6 z"
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none" />
+    </g>
+    <path
+       style="display:inline;fill:url(#linearGradient2925);fill-opacity:1;stroke:none;stroke-width:2.58198"
+       d="m 1547,1052.3623 c -3.3333,0 -30,3.9999 -30,3.9999 0,0 -3.3333,0 -3.3333,2 0,1.9999 3.3333,1.9999 3.3333,1.9999 0,0 26.6667,4.0002 30,4.0002 3.3334,0 6.6667,-2.0002 6.6667,-6.0001 0,-4.0002 -3.3333,-5.9999 -6.6667,-5.9999 z"
+       id="path4835-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sczcszs"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Adult_Bulbmin_stem.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       style="display:inline"
+       id="g6632"
+       transform="matrix(0,-1.8225552,1.883514,0,-558.21247,1159.1931)"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Adult_Bulbmin_stem.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <g
+         id="g6636">
+        <path
+           style="fill:#008000;fill-opacity:1;stroke:#004000;stroke-width:0.91468px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 55.299566,1101.3176 c 1.653571,-0.069 3.07644,-1.747 2.818907,-3.4554 -0.124806,-0.8279 -2.180142,-2.7676 -2.818907,-4.3193 -1.6282,1.5491 -2.818906,2.9901 -2.818906,4.3193 0,1.7277 1.165336,3.5245 2.818906,3.4554 z"
+           id="path4912-9"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="zscsz" />
+        <path
+           style="fill:none;stroke:#004000;stroke-width:0.91468px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 55.299566,1101.3176 v -7.4554"
+           id="path4914-0"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc" />
+      </g>
     </g>
   </g>
 </svg>
