@@ -241,6 +241,8 @@ protected:
     bool is_shift_pressed;
     //Number of the mouse button pressed.
     size_t last_mouse_click;
+    //Was the last user input a keyboard press?
+    bool last_input_was_keyboard;
     //Has the user picked any content to load yet?
     bool loaded_content_yet;
     //Has the user made any unsaved changes yet?

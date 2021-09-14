@@ -312,12 +312,7 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
         }
     }
     
-    cur_hitbox_nr = INVALID;
-    cur_hitbox = NULL;
-    if(!cur_sprite->hitboxes.empty()) {
-        cur_hitbox_nr = 0;
-        cur_hitbox = &cur_sprite->hitboxes[0];
-    }
+    update_cur_hitbox();
     
     made_new_changes = true;
 }
@@ -427,7 +422,7 @@ void animation_editor::load_animation_database(
     cur_sprite = NULL;
     cur_frame_nr = INVALID;
     cur_hitbox = NULL;
-    cur_hitbox_nr = INVALID;
+    cur_hitbox_nr = 0;
     
     can_reload = true;
     can_save = true;
@@ -569,8 +564,8 @@ void animation_editor::pick_sprite(
         }
     }
     cur_sprite = anims.sprites[anims.find_sprite(name)];
-    cur_hitbox = NULL;
-    cur_hitbox_nr = INVALID;
+    update_cur_hitbox();
+    
     if(is_new) {
         //New sprite. Suggest file name.
         cur_sprite->set_bitmap(last_spritesheet_used, point(), point());
@@ -1258,6 +1253,23 @@ void animation_editor::unload() {
     unload_spray_types();
     unload_status_types(false);
     unload_custom_particle_generators();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the current hitbox pointer to match the same body part as before,
+ * but on the hitbox of the current sprite.
+ * If not applicable, it chooses a valid hitbox.
+ */
+void animation_editor::update_cur_hitbox() {
+    if(cur_sprite->hitboxes.empty()) {
+        cur_hitbox = NULL;
+        cur_hitbox_nr = INVALID;
+        return;
+    }
+    
+    cur_hitbox_nr = std::min(cur_hitbox_nr, cur_sprite->hitboxes.size() - 1);
+    cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
 }
 
 

@@ -190,11 +190,8 @@ void animation_editor::draw_canvas() {
                 //lower ones makes it all more intuitive and cohesive.
                 hitbox* h_ptr = &s->hitboxes[h];
                 ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
-                float hitbox_outline_thickness =
-                    cur_hitbox_nr == (size_t) h ?
-                    3.0f / game.cam.zoom :
-                    2 / game.cam.zoom;
-                    
+                float hitbox_outline_thickness = 2.0f / game.cam.zoom;
+                
                 switch(h_ptr->type) {
                 case HITBOX_TYPE_NORMAL: {
                     hitbox_color = al_map_rgba(0, 128, 0, 128);
@@ -211,7 +208,12 @@ void animation_editor::draw_canvas() {
                 }
                 }
                 
-                if(cur_hitbox_nr == (size_t) h) {
+                if(
+                    cur_hitbox_nr == (size_t) h &&
+                    state == EDITOR_STATE_HITBOXES
+                ) {
+                    hitbox_outline_thickness =
+                        3.0f / game.cam.zoom;
                     hitbox_outline_color =
                         change_alpha(hitbox_color, hitbox_outline_alpha);
                 }

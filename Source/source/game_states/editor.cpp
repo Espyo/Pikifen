@@ -55,6 +55,7 @@ editor::editor() :
     is_m3_pressed(false),
     is_shift_pressed(false),
     last_mouse_click(INVALID),
+    last_input_was_keyboard(false),
     loaded_content_yet(false),
     made_new_changes(false),
     mouse_drag_confirmed(false),
@@ -363,6 +364,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
+        last_input_was_keyboard = false;
         handle_mouse_update(ev);
     }
     
@@ -484,6 +486,8 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        last_input_was_keyboard = true;
+        
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
             ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
@@ -852,6 +856,8 @@ void editor::load() {
                 );
         }
     }
+    
+    last_input_was_keyboard = false;
     
     game.fade_mgr.start_fade(true, nullptr);
     
@@ -1278,6 +1284,10 @@ void editor::set_tooltip(
     const WIDGET_EXPLANATIONS widget_explanation
 ) {
     if(!game.options.editor_show_tooltips) {
+        return;
+    }
+    
+    if(last_input_was_keyboard) {
         return;
     }
     

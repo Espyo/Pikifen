@@ -1560,8 +1560,7 @@ void animation_editor::process_gui_panel_sprite() {
             //Sprite hitboxes button.
             if(ImGui::Button("Hitboxes", mode_buttons_size)) {
                 if(cur_sprite && !cur_sprite->hitboxes.empty()) {
-                    cur_hitbox = &cur_sprite->hitboxes[0];
-                    cur_hitbox_nr = 0;
+                    update_cur_hitbox();
                     change_state(EDITOR_STATE_HITBOXES);
                 }
             }
@@ -1782,8 +1781,6 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     
     //Back button.
     if(ImGui::Button("Back")) {
-        cur_hitbox = NULL;
-        cur_hitbox_nr = INVALID;
         change_state(EDITOR_STATE_SPRITE);
     }
     

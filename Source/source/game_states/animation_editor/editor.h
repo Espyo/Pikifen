@@ -223,6 +223,7 @@ private:
     void sprite_bmp_flood_fill(
         ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
     );
+    void update_cur_hitbox();
     void update_hitboxes();
     void update_stats();
     

@@ -374,7 +374,10 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             team_value.clear();
         }
     }
-    set_tooltip("What sort of team this object belongs to.");
+    set_tooltip(
+        "What sort of team this object belongs to.\n"
+        "(Variable name: \"team\".)"
+    );
     
     if(!team_value.empty()) new_vars_map["team"] = team_value;
     vars_in_widgets["team"] = true;
@@ -467,9 +470,11 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         }
         }
         
-        if(!p_ptr->tooltip.empty()) {
-            set_tooltip(p_ptr->tooltip);
-        }
+        set_tooltip(
+            p_ptr->tooltip +
+            (p_ptr->tooltip.empty() ? "" : "\n") +
+            "(Variable name: \"" + p_ptr->var + "\".)"
+        );
         
         if(value != p_ptr->def_value) {
             new_vars_map[p_ptr->var] = value;
