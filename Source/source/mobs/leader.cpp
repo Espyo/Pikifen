@@ -55,7 +55,6 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     team = MOB_TEAM_PLAYER_1;
     invuln_period = timer(LEADER_INVULN_PERIOD);
     
-    group = new group_info_struct(this);
     subgroup_type_ptr =
         game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_LEADER
@@ -721,112 +720,6 @@ void leader::tick_class_specifics(const float delta_t) {
         
     if(group && group->members.empty()) {
         stop_auto_throwing();
-    }
-    
-    //Group stuff.
-    if(group && group->members.size()) {
-    
-        bool must_reassign_spots = false;
-        
-        bool is_swarming =
-            (
-                game.states.gameplay->swarm_magnitude &&
-                game.states.gameplay->cur_leader_ptr == this
-            );
-            
-        if(
-            dist(group->get_average_member_pos(), pos) >
-            GROUP_SHUFFLE_DIST + (group->radius + radius)
-        ) {
-            if(!group->follow_mode) {
-                must_reassign_spots = true;
-            }
-            group->follow_mode = true;
-            
-        } else if(is_swarming || !holding.empty()) {
-            group->follow_mode = true;
-            
-        } else {
-            group->follow_mode = false;
-            
-        }
-        
-        group->transform = game.identity_transform;
-        
-        if(group->follow_mode) {
-            //Follow mode. Try to stay on the leader's back.
-            
-            if(is_swarming) {
-            
-                point move_anchor_offset =
-                    rotate_point(
-                        point(
-                            -(radius + GROUP_SPOT_INTERVAL * 2),
-                            0
-                        ), game.states.gameplay->swarm_angle + TAU / 2
-                    );
-                group->anchor = pos + move_anchor_offset;
-                
-                float intensity_dist =
-                    game.config.cursor_max_dist *
-                    game.states.gameplay->swarm_magnitude;
-                al_translate_transform(
-                    &group->transform, -SWARM_MARGIN, 0
-                );
-                al_scale_transform(
-                    &group->transform,
-                    intensity_dist / (group->radius * 2),
-                    1 -
-                    (
-                        SWARM_VERTICAL_SCALE *
-                        game.states.gameplay->swarm_magnitude
-                    )
-                );
-                al_rotate_transform(
-                    &group->transform,
-                    game.states.gameplay->swarm_angle + TAU / 2
-                );
-                
-            } else {
-            
-                point leader_back_offset =
-                    rotate_point(
-                        point(
-                            -(radius + GROUP_SPOT_INTERVAL * 2),
-                            0
-                        ), angle
-                    );
-                group->anchor = pos + leader_back_offset;
-                
-                al_rotate_transform(&group->transform, angle);
-                
-            }
-            
-            if(must_reassign_spots) group->reassign_spots();
-            
-        } else {
-            //Shuffle mode. Keep formation, but shuffle with the leader,
-            //if needed.
-            point mov;
-            move_point(
-                group->anchor - point(group->radius, 0),
-                pos,
-                type->move_speed,
-                group->radius + radius + GROUP_SPOT_INTERVAL * 2,
-                &mov, NULL, NULL, delta_t
-            );
-            group->anchor += mov * delta_t;
-        }
-    }
-    
-    if(health <= 0 && group) {
-        while(!group->members.empty()) {
-            group->members[0]->fsm.run_event(
-                MOB_EV_DISMISSED,
-                (void*) & (group->members[0]->pos)
-            );
-            group->members[0]->leave_group();
-        }
     }
 }
 

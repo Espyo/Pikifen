@@ -53,6 +53,8 @@ public:
     bool latched;
     //Is the Pikmin holding a tool and ready to drop it on whistle?
     bool is_tool_primed_for_whistle;
+    //Does this Pikmin have to follow its linked mob as its leader?
+    bool must_follow_link_as_leader;
     
     //Temporary variable. Hacky, but effective. Only use within the same state!
     size_t temp_i;

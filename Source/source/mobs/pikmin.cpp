@@ -47,6 +47,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     leader_to_return_to(nullptr),
     latched(false),
     is_tool_primed_for_whistle(false),
+    must_follow_link_as_leader(false),
     temp_i(0) {
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
@@ -336,6 +337,7 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
     
     size_t maturity_var;
     bool sprout_var;
+    bool follow_link_var;
     
     if(svr.get("maturity", maturity_var)) {
         maturity = 0;
@@ -344,6 +346,11 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
     if(svr.get("sprout", sprout_var)) {
         if(sprout_var) {
             fsm.first_state_override = PIKMIN_STATE_SPROUT;
+        }
+    }
+    if(svr.get("follow_link_as_leader", follow_link_var)) {
+        if(follow_link_var) {
+            must_follow_link_as_leader = true;
         }
     }
 }
@@ -404,6 +411,17 @@ void pikmin::tick_class_specifics(const float delta_t) {
     
     //Tick the timer for the "missed" attack animation.
     missed_attack_timer.tick(delta_t);
+    
+    //Forcefully follow another mob as a leader.
+    if(must_follow_link_as_leader) {
+        if(!links.empty()) {
+            fsm.run_event(MOB_EV_TOUCHED_ACTIVE_LEADER, (void*) (links[0]));
+        }
+        //Since this leader is likely an enemy, let's keep these Pikmin safe.
+        is_huntable = false;
+        is_hurtable = false;
+        must_follow_link_as_leader = false;
+    }
     
 }
 

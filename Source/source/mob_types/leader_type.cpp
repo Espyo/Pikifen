@@ -31,6 +31,7 @@ leader_type::leader_type() :
     main_color = al_map_rgb(128, 128, 128);
     show_health = false;
     target_type = MOB_TARGET_TYPE_PLAYER;
+    has_group = true;
     huntable_targets =
         MOB_TARGET_TYPE_PLAYER |
         MOB_TARGET_TYPE_ENEMY;

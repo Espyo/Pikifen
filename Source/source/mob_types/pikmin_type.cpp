@@ -95,6 +95,16 @@ pikmin_type::pikmin_type() :
         "false if it spawns as an idle Pikmin.";
     area_editor_props.push_back(aep_sprout);
     
+    area_editor_prop_struct aep_follow_link;
+    aep_sprout.name = "Follow link as leader";
+    aep_sprout.var = "follow_link_as_leader";
+    aep_sprout.type = AEMP_BOOL;
+    aep_sprout.def_value = "false";
+    aep_sprout.tooltip =
+        "True if this Pikmin should follow its linked object, "
+        "as if it were its leader.";
+    area_editor_props.push_back(aep_sprout);
+    
     pikmin_fsm::create_fsm(this);
 }
 

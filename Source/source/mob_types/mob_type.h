@@ -235,6 +235,8 @@ public:
     float itch_damage;
     //Only send an "itch" event after these many seconds have passed.
     float itch_time;
+    //Does this mob have a group of other mobs following it (e.g. leader)?
+    bool has_group;
     //Other mobs decide if they can/want to hurt it by this target type.
     unsigned char target_type;
     //What types of targets this mob can hunt down.

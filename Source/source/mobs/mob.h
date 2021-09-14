@@ -252,6 +252,8 @@ public:
     bool has_invisibility_status;
     //Can this mob be hunted down right now?
     bool is_huntable;
+    //Can this mob be hurt right now?
+    bool is_hurtable;
     //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
     float height_effect_pivot;
     //How much the mob moved this frame, if it's walkable.

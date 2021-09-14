@@ -56,6 +56,7 @@ mob_type::mob_type(size_t category_id) :
     weight(0),
     itch_damage(0),
     itch_time(0),
+    has_group(false),
     target_type(MOB_TARGET_TYPE_NONE),
     huntable_targets(
         MOB_TARGET_TYPE_PLAYER |
@@ -304,6 +305,7 @@ void load_mob_type_from_file(
     );
     rs.set("casts_shadow", mt->casts_shadow);
     rs.set("default_vulnerability", mt->default_vulnerability);
+    rs.set("has_group", mt->has_group);
     rs.set("health_regen", mt->health_regen);
     rs.set("height", mt->height);
     rs.set("itch_damage", mt->itch_damage);

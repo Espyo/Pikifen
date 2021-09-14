@@ -999,6 +999,14 @@ void gameplay_state::load() {
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
+        if(
+            m_ptr->category->id == MOB_CATEGORY_PIKMIN &&
+            game.states.gameplay->mobs.pikmin_list.size() >=
+            game.config.max_pikmin_in_field
+        ) {
+            continue;
+        }
+        
         mobs_per_gen.push_back(
             create_mob(
                 m_ptr->category, m_ptr->pos, m_ptr->type,

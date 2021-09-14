@@ -1947,6 +1947,7 @@ void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_SPROUT);
     m->unpushable = true;
     m->is_huntable = false;
+    m->is_hurtable = false;
     m->can_move_in_midair = false;
     ((pikmin*) m)->is_seed_or_sprout = true;
 }
@@ -1976,6 +1977,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     
     pik->set_animation(PIKMIN_ANIM_PLUCKING);
     m->is_huntable = true;
+    m->is_hurtable = true;
     m->unpushable = false;
     pik->is_seed_or_sprout = false;
     m->set_timer(0);
@@ -1996,7 +1998,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
     pikmin* pik = (pikmin*) m;
-    leader* caller = (leader*) info1;
+    mob* caller = (mob*) info1;
     
     pik->was_last_hit_dud = false;
     pik->consecutive_dud_hits = 0;
@@ -2020,7 +2022,7 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
     pikmin* pik = (pikmin*) m;
-    leader* caller = (leader*) info1;
+    mob* caller = (mob*) info1;
     
     //Let's use the "temp" variable to specify whether or not a leader
     //already whistled it.
@@ -2328,7 +2330,7 @@ void pikmin_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
-    leader* caller = (leader*) info1;
+    mob* caller = (mob*) info1;
     m->chase(caller->pos, caller->z);
 }
 
