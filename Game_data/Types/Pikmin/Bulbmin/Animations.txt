@@ -67,6 +67,16 @@ animations{
 			}
 		}
 	}
+	mob_landing{
+		frames{
+			mob_landing{
+				duration=0.0700
+			}
+			grabbing{
+				duration=0.4000
+			}
+		}
+	}
 	picking_up{
 		frames{
 			grabbing_near{
@@ -343,6 +353,33 @@ sprites{
 		hitboxes{
 			top{
 				coords=-21.0000 5.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=7.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	mob_landing{
+		file=Bulbmin.png
+		file_pos=0.0000 0.0000
+		file_size=34.0000 28.0000
+		offset=2.0000 0.0000
+		scale=0.3500 0.7000
+		top_visible=true
+		top_pos=-3.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-3.0000 0.0000 0.0000
 				height=24.0000
 				radius=4.0000
 				type=2

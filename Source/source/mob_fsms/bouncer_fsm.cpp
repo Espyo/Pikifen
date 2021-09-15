@@ -124,10 +124,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         &angle
     );
     
-    toucher->angle = angle;
-    toucher->angle_cos = cos(angle);
-    toucher->angle_sin = sin(angle);
-    toucher->face(angle, NULL);
+    toucher->face(angle, NULL, true);
     
     ev->run(toucher, (void*) m);
 }

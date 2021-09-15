@@ -385,6 +385,30 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("mob_landing", PIKMIN_STATE_MOB_LANDING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::start_mob_landing);
+        }
+        efc.new_event(MOB_EV_ANIMATION_END); {
+            efc.run(pikmin_fsm::finish_mob_landing);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
+            efc.run(pikmin_fsm::check_outgoing_attack);
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+    }
+    
     efc.new_state(
         "going_to_dismiss_spot", PIKMIN_STATE_GOING_TO_DISMISS_SPOT
     ); {
@@ -1073,9 +1097,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("impact_bounce", PIKMIN_STATE_IMPACT_BOUNCE); {
         efc.new_event(MOB_EV_ON_ENTER); {
-            efc.run(pikmin_fsm::setup_impact_bounce);
-        }
-        efc.new_event(MOB_EV_TIMER); {
             efc.run(pikmin_fsm::do_impact_bounce);
         }
         efc.new_event(MOB_EV_LANDED); {
@@ -2098,8 +2119,8 @@ void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
     float damage = 0;
     bool attack_success =
         p_ptr->calculate_damage(info->mob2, info->h1, info->h2, &damage);
+        
     if(damage == 0 || !attack_success) {
-    
         p_ptr->was_last_hit_dud = true;
     }
 }
@@ -2141,6 +2162,7 @@ void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
             impact_angle, impact_speed
         );
     p_ptr->speed_z = 500.0f;
+    p_ptr->face(impact_angle + TAU / 2.0f, NULL, true);
     
     p_ptr->set_animation(PIKMIN_ANIM_KNOCKED_BACK);
 }
@@ -2316,6 +2338,35 @@ void pikmin_fsm::finish_getting_up(mob* m, void* info1, void* info2) {
             );
             
         }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin finishes its sequence of landing on another mob.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::finish_mob_landing(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) m;
+    
+    switch(pik_ptr->pik_type->attack_method) {
+    case PIKMIN_ATTACK_LATCH: {
+        pik_ptr->latched = true;
+        pik_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_LATCHED);
+        
+        break;
+        
+    }
+    case PIKMIN_ATTACK_IMPACT: {
+        pik_ptr->fsm.set_state(PIKMIN_STATE_IMPACT_BOUNCE);
+        break;
+        
+    }
     }
 }
 
@@ -2801,18 +2852,17 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
             true, true
         );
         
-        pik_ptr->latched = true;
-        
-        pik_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_LATCHED);
         break;
         
     }
     case PIKMIN_ATTACK_IMPACT: {
-        pik_ptr->fsm.set_state(PIKMIN_STATE_IMPACT_BOUNCE);
+        pik_ptr->speed.x = pik_ptr->speed.y = pik_ptr->speed_z = 0;
         break;
         
     }
     }
+    
+    pik_ptr->fsm.set_state(PIKMIN_STATE_MOB_LANDING);
     
 }
 
@@ -3200,26 +3250,6 @@ void pikmin_fsm::set_swarm_reach(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin has to setup the timer in order to start the impact bounce
- * process later.
- * The reason we can't start the process right as the state is entered is
- * because the Pikmin changes animation and position too quickly for the mob
- * it impacted against to register the attack hitbox collision.
- * We have to delay that for one frame, and setting a timer with a tiny time
- * will do the trick.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::setup_impact_bounce(mob* m, void* info1, void* info2) {
-    m->set_timer(0.000001f);
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a Pikmin is meant to sigh.
  * m:
  *   The mob.
@@ -3405,6 +3435,20 @@ void pikmin_fsm::start_impact_lunge(mob* m, void* info1, void* info2) {
     
     m->chase(&m->focused_mob->pos, &m->focused_mob->z);
     m->set_animation(PIKMIN_ANIM_ATTACKING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin lands on a mob and needs to start its landing animation.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::start_mob_landing(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_MOB_LANDING);
 }
 
 
@@ -3651,8 +3695,9 @@ void pikmin_fsm::tick_group_task_work(mob* m, void* info1, void* info2) {
         CHASE_FLAG_TELEPORT |
         CHASE_FLAG_TELEPORTS_CONSTANTLY
     );
-    pik_ptr->angle = tas_ptr->angle + tas_ptr->tas_type->worker_pikmin_angle;
-    pik_ptr->intended_turn_angle = pik_ptr->angle;
+    pik_ptr->face(
+        tas_ptr->angle + tas_ptr->tas_type->worker_pikmin_angle, NULL, true
+    );
     pik_ptr->stop_turning();
 }
 

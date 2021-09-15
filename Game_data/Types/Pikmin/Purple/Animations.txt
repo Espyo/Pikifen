@@ -67,6 +67,16 @@ animations{
 			}
 		}
 	}
+	mob_landing{
+		frames{
+			mob_landing{
+				duration=0.0700
+			}
+			idling{
+				duration=0.4000
+			}
+		}
+	}
 	picking_up{
 		frames{
 			thrown1{
@@ -336,6 +346,32 @@ sprites{
 				radius=10.0000
 				type=0
 				value=1.0000
+			}
+		}
+	}
+	mob_landing{
+		file=Purple_Pikmin.png
+		file_pos=0.0000 0.0000
+		file_size=24.0000 36.0000
+		scale=0.8000 0.8000
+		top_visible=false
+		top_pos=-8.4500 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-6.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=10.0000
+				type=1
+				value=8.0000
 			}
 		}
 	}

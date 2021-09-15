@@ -1423,10 +1423,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     holding_ptr->z_cap = leader_ptr->throwee_max_z;
     
-    holding_ptr->angle = leader_ptr->throwee_angle;
-    holding_ptr->angle_cos = cos(leader_ptr->throwee_angle);
-    holding_ptr->angle_sin = sin(leader_ptr->throwee_angle);
-    holding_ptr->face(leader_ptr->throwee_angle, NULL);
+    holding_ptr->face(leader_ptr->throwee_angle, NULL, true);
     holding_ptr->speed = leader_ptr->throwee_speed;
     holding_ptr->speed_z = leader_ptr->throwee_speed_z;
     

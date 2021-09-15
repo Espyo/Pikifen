@@ -1240,16 +1240,24 @@ void mob::draw_mob() {
 
 
 /* ----------------------------------------------------------------------------
- * Makes a mob intend to face a new angle.
+ * Makes a mob intend to face a new angle, or face there right away.
  * new_angle:
  *   Face this angle.
  * new_pos:
  *   If this is not NULL, turn towards this point every frame, instead.
+ * instantly:
+ *   If true, the mob faces that angle instantly instead of rotating towards
+ *   that direction over time.
  */
-void mob::face(const float new_angle, point* new_pos) {
+void mob::face(const float new_angle, point* new_pos, const bool instantly) {
     if(carry_info) return; //If it's being carried, it shouldn't rotate.
     intended_turn_angle = new_angle;
     intended_turn_pos = new_pos;
+    if(instantly) {
+        angle = new_angle;
+        angle_cos = cos(angle);
+        angle_sin = sin(angle);
+    }
 }
 
 
@@ -2375,8 +2383,7 @@ void mob::stop_track_ride() {
  * Makes a mob stop wanting to turn towards some direciton.
  */
 void mob::stop_turning() {
-    intended_turn_angle = angle;
-    intended_turn_pos = NULL;
+    face(angle, NULL, true);
 }
 
 

@@ -50,6 +50,7 @@
       </li>
       <li>Added Bulbmin, both adults and young. They are invulnerable to all elemental hazards, but the young lack an Onion or ship to go to.</li>
       <li>Added Alph, Brittany, and Charlie, as well as the S.S. Drake. The Hocotatian leaders also got a glow-up. The President's color was changed to yellow, otherwise half of the leaders would be blue.</li>
+      <li>Purple Pikmin now cause a bit of collision damage when they land on an enemy after being thrown.</li>
       <li>Pikmin will now only take paths that they can survive. e.g. a carcass with 1 Red Pikmin and 9 Blue Pikmin carrying it will take a path that doesn't go through water, but a carcass carried by 10 Blue Pikmin might take that water path.</li>
       <li>Objects now move with acceleration. This should make them a bit smoother when moving.</li>
       <li>
@@ -73,7 +74,6 @@
         Rock Pikmin-related features:
         <ul>
           <li>Added a property for Pikmin types, <code>attack_method</code>, that controls how the Pikmin attacks. If set to <code>impact</code>, that Pikmin attacks like a Rock Pikmin, as explained above.</li>
-          <li>These Pikmin should have attack hitboxes in the throwing animation on top of the regular ones.</li>
           <li>Their on-foot lunges use the attack animation, so it should ideally be in a pose where they lunge forward, and have a hitbox.</li>
         </ul>
       </li>
@@ -85,6 +85,7 @@
           <li>Technically, if a leader is on a floor with a hazard (liquid or otherwise), they will be unable to grab Pikmin that are outside it and are vulnerable to the hazard. If they grab and bring those Pikmin to said floor, the Pikmin will suffer the effects.</li>
         </ul>
       </li>
+      <li>Pikmin now have a new state that is entered when they land on a mob, <code>mob_landing</code>. In it, they change to an animation of the same name. It is only after this animation ends that they latch on or bounce back. As such, this animation is a good opportunity to get the Pikmin to cause damage upon collision.</li>
       <li>
         Revamped paths.
         <ul>
@@ -167,11 +168,12 @@
     
     <ul>
       <li>
-        In order for Pikmin to get up when whistled, their states and animations relating to knockback had to be changed. This results in the following animation changes:
+        Animation changes. These are needed in order for Pikmin to get up when whistled, and for Purple Pikmin and Rock Pikmin to cause collision damage:
         <ul>
           <li><code>lying</code> is now just the Pikmin lying down forever.</li>
           <li><code>knocked_back</code> is a new animation for the Pikmin getting knocked back forever.</li>
           <li><code>getting_up</code> is a new animation for the Pikmin getting up from lying down.</li>
+          <li><code>mob_landing</code> is a new animation for the thrown Pikmin landing on a mob and getting ready, and/or causing damage.</li>
         </ul>
       </li>
       <li>

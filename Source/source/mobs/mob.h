@@ -383,7 +383,9 @@ public:
         const float speed, const bool can_free_move
     );
     void stop_circling();
-    void face(const float new_angle, point* new_pos);
+    void face(
+        const float new_angle, point* new_pos, const bool instantly = false
+    );
     point get_chase_target(float* z = NULL) const;
     virtual float get_base_speed() const;
     

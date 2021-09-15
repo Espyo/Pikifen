@@ -1,0 +1,7 @@
+script {
+    mob_landing {
+        on_enter {
+            start_particles purple_pikmin_pound 0 0 300
+        }
+    }
+}

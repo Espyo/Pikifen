@@ -67,6 +67,16 @@ animations{
 			}
 		}
 	}
+	mob_landing{
+		frames{
+			mob_landing{
+				duration=0.0700
+			}
+			grabbing{
+				duration=0.4000
+			}
+		}
+	}
 	picking_up{
 		frames{
 			thrown1{
@@ -334,6 +344,33 @@ sprites{
 				coords=8.0000 0.0000 0.0000
 				height=24.0000
 				radius=10.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	mob_landing{
+		file=White_Pikmin.png
+		file_pos=110.0000 29.0000
+		file_size=22.0000 20.0000
+		offset=1.5000 0.0000
+		scale=0.3500 0.7000
+		top_visible=true
+		top_pos=-3.0000 0.0000
+		top_size=5.5000 10.0000
+		top_angle=0.0000
+		hitboxes{
+			top{
+				coords=-3.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=24.0000
+				radius=8.0000
 				type=0
 				value=1.0000
 			}

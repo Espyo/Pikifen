@@ -9,9 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.21.0 ---
-    Purple Pikmin improvements
-        Give them a proper pound attack
-            Just the impact damage, no stun or earthquake
     Ultra-bitter spray improvements
         Petrified enemies shaking before getting out
             Maybe three status effects? One for the start, one for petrification, one for shaking
@@ -427,6 +424,8 @@ Next tasks (roughly sorted most important first)
             A cutscene queue, in case multiple ones need to start at once
             Scripting for them
                 Among other things, a way to move the camera, both with teleport, and smoothly
+                Maybe it should use the exact same logic as regular mob scripting. Obviously mob actions won't work, but changing states, ticking events, and performing actions onto mobs works
+                    Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
         Sprouts between areas, days, etc.
             Don't forget that sprouts should turn into flowers overnight
         Wild Pikmin and sprouts should be immune to the sunset

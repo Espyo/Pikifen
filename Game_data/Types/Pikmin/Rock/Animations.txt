@@ -64,6 +64,13 @@ animations{
 			}
 		}
 	}
+	mob_landing{
+		frames{
+			lunge_hit{
+				duration=0.1000
+			}
+		}
+	}
 	picking_up{
 		frames{
 			crouching{
@@ -490,19 +497,18 @@ sprites{
 		top_angle=3.1416
 		hitboxes{
 			top{
-				coords=0.0000 0.0000 0.0000
+				coords=7.0000 0.0000 0.0000
 				height=24.0000
-				radius=8.0000
-				type=0
+				radius=4.0000
+				type=2
 				value=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=8.0000
-				type=1
-				value=20.0000
-				hazards=rock
+				type=0
+				value=1.0000
 			}
 		}
 	}
@@ -517,19 +523,18 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=2.0000 0.0000 0.0000
+				coords=10.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=8.0000
 				type=0
 				value=1.0000
-			}
-			body{
-				coords=2.0000 0.0000 0.0000
-				height=24.0000
-				radius=8.0000
-				type=1
-				value=20.0000
-				hazards=rock
 			}
 		}
 	}
@@ -544,19 +549,18 @@ sprites{
 		top_angle=0.0000
 		hitboxes{
 			top{
-				coords=0.0000 0.0000 0.0000
+				coords=-7.0000 0.0000 0.0000
 				height=24.0000
-				radius=8.0000
-				type=0
+				radius=4.0000
+				type=2
 				value=1.0000
 			}
 			body{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=8.0000
-				type=1
-				value=20.0000
-				hazards=rock
+				type=0
+				value=1.0000
 			}
 		}
 	}
@@ -571,19 +575,18 @@ sprites{
 		top_angle=3.1400
 		hitboxes{
 			top{
-				coords=2.0000 0.0000 0.0000
+				coords=7.0000 0.0000 0.0000
+				height=24.0000
+				radius=4.0000
+				type=2
+				value=1.0000
+			}
+			body{
+				coords=0.0000 0.0000 0.0000
 				height=24.0000
 				radius=8.0000
 				type=0
 				value=1.0000
-			}
-			body{
-				coords=2.0000 0.0000 0.0000
-				height=24.0000
-				radius=8.0000
-				type=1
-				value=20.0000
-				hazards=rock
 			}
 		}
 	}
