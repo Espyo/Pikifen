@@ -25,6 +25,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     to_delete(false) {
     
     //Menu items.
+    gui.register_coords("header",   50, 15, 50, 10);
     gui.register_coords("continue", 50, 32, 50, 10);
     gui.register_coords("retry",    50, 44, 50, 10);
     gui.register_coords("finish",   50, 56, 50, 10);
@@ -32,6 +33,14 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
+    
+    //Header.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "PAUSED", game.fonts.area_name,
+        al_map_rgba(255, 255, 255, 128)
+    );
+    gui.add_item(header_text, "header");
     
     //Continue button.
     gui.back_item =

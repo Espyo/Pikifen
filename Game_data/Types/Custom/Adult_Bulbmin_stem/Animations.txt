@@ -11,8 +11,8 @@ sprites{
 	idling{
 		file=Adult_Bulbmin_stem.png
 		file_pos=0.0000 0.0000
-		file_size=54.0000 12.0000
-		offset=-21.0000 0.0000
+		file_size=68.0000 22.0000
+		offset=-28.0000 0.0000
 	}
 }
 body_parts

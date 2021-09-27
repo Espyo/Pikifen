@@ -2,18 +2,21 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
-    
-Next tasks (roughly sorted most important first)
-    --- To fix ---
-    
-    
-    --- v0.21.0 ---
     Ultra-bitter spray improvements
         Petrified enemies shaking before getting out
             Maybe three status effects? One for the start, one for petrification, one for shaking
         Petrified enemies should break open when defeated
-        Petrified enemies shouldn't change animation. They should still change states, otherwise the FSM may go all wonky
+        Things to check:
+            Can you petrify ANY mob or just enemies? Should you be able to petrify any mob?
+            When petrified, are the mob's attack hitboxes still causing damage?
+        Approach:
+            States, events, and actions should all work like normal, otherwise the FSM may break or crash the game
+            The sprite pre-spray must be saved, and the game must be forced to draw that sprite, and consult that sprite for hitbox purposes. Behind the scenes, the current sprite and current animation can change anyway
+    
+Next tasks (roughly sorted most important first)
+    --- To fix ---
+    
+    --- v0.21.0 ---
     Status improvements
         Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
         A way for status effects to add to the time left, instead of resetting it or leaving it as is
@@ -24,7 +27,7 @@ Next tasks (roughly sorted most important first)
     Add logic for Pikmin to detect an object is close by when it's rectangular -- maybe just for obstacles
     More pathing improvements
         Make it so mobs carrying light load can use bouncers
-        Allow mobs to follow paths
+        Allow mobs to follow paths via scripting -- both to get from A to B, and to follow a loop
         Color the different types of link differently in the editor
         Note as a known problem that Pikmin can start taking a stop but have nowhere to go because the links have limitations. Ideally, these limitations would move to the spot instead, but that makes things more complicated, and would introduce some performance issues, forcing a mob to check all stops for rules AND closest distance.
         The logic that figures out the first and last path stop needs to be reworked -- when calculating a path from X to Y, with Y not being in a stop but being perfectly reachable, but also with Y being closest to an unreachable stop (locked behind a one-way link, for instance), the engine will be unable to find a path to that perfectly reachable location
@@ -75,6 +78,7 @@ Next tasks (roughly sorted most important first)
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
         A leader can whistle another from a gate and grab them
         Improve the look of the ship's ring
+        As a day progresses, mob shadows should become invisible long before sunlight ends. During twilight there are no shadows, but there's still visibility
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
             Add a transparent solid circle over the area being whistled
@@ -157,6 +161,7 @@ Next tasks (roughly sorted most important first)
             Ball of yarn treasure
         Sounds really need a makeover...
         Mobs for decorative pebbles, stones, and sticks
+        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
@@ -207,19 +212,63 @@ Next tasks (roughly sorted most important first)
         Should the secondary menus from the main menu also contain Pikmin formations in the background?
     Pikmin extinction
         Check Onions, ships, and converters that have Pikmin in the buffer
+    Each object should have a blurb property, that describes them in a simple way. Example for Red Pikmin: "The most basic type of Pikmin, Red Pikmin are immune to fire, and are slightly stronger than normal."
+        Make the editor show the blurb
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
+        Medals
+            For every stage, the player can have no medal, a bronze, a silver, or a gold
+            When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
+            Three grading modes:
+                Points
+                    The final point count depends on the following fields: Pikmin born, Pikmin deaths, time left, Pokos gathered, enemy kill points
+                    Each field can have varying weights, including 0 or negative
+                    Each field can also be instantly transformed to 0 if the player finished the stage via "loss"
+                    You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
+                    Depending on the points, the player gets no medal, a bronze, a silver, a gold, or a platinum
+                Completion
+                    Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
+                None
+                    No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose
         Each stage should have the following data:
+            A quick blurb describing what the stage is about. Example: "These dark woods hide many dangerous beasts behind the fallen branches. Your goal is to escape without a single enemy seeing you!"
             A "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
             Its (subjective) difficulty
             A goal
-                The three main goals from Pikmin 3, Get the Target Score!, Survive!, Reach the Exit!, Deliver X to Y!, Grow X Pikmin!, Defeat Enemy X! Escort X! (partial thanks Jimble, Kman)
+                One of the following (partial thanks Jimble, Kman):
+                    Collect treasures (specified ones or all)
+                    Defeat enemies (specified ones or all)
+                    Survive for the specified time
+                    Reach the exit (specified leaders or all)
+                    Grow the specified Pikmin amount
+                    No goal
+                Triggering the goal instantly finishes the level as a "victory"
             Loss conditions
-                Without getting spotted, before time runs out, Pikmin extinction (some puzzle/gimmick stages could involve no Pikmin), one leader KO (as opposed to total leader KO)
-                Time limit
-                    An optional override for the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
-                    Also, the number of days. For an "adventure" like experience, you could just want it to last forever over many days, or you could want it to start at sunrise and end at sunset like normal
-            Scoring criteria: while there is only one goal, the final score should depend on any combination of the following, with varying weights: Pikmin born, Pikmin deaths, time taken, Pokos gathered, enemies killed. It could also have no scoring, just a boolean completion; this is useful for puzzle levels. It could even be no record whatsoever, like a sandbox map with no purpose
+                Any combination of the following:
+                    Taking damage
+                    Losing a Pikmin
+                    Pikmin extinction (some puzzle/gimmick stages could involve no Pikmin)
+                    One leader KO (as opposed to total leader KO)
+                    Time limit
+                        An optional override for the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
+                        Also, the number of days. For an "adventure" like experience, you could just want it to last forever over many days, or you could want it to start at sunrise and end at sunset like normal
+                The following also always trigger a loss:
+                    Total leader KO (nothing else to play with)
+                    Quitting via the pause menu
+            Scoring data
+                In the case of points mode, also the score weights and the medal thresholds
+        Area selection menu changes
+            Left side
+                The list of areas, with their names and a medal icon next to each
+            Right side
+                Details about the highlighted mission, in order:
+                    Area name
+                    Blurb
+                    Goal
+                    High scores + their medals (only present if the stage's grading mode is points)
+                    Difficulty
+                    More info
+                        Opens up a page with the tags, time limit, loss conditions, scoring data, maker and version, extra area notes
         Save the high scores/completion of every map
     
     --- v0.24.0 ---
@@ -428,7 +477,6 @@ Next tasks (roughly sorted most important first)
                     Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
         Sprouts between areas, days, etc.
             Don't forget that sprouts should turn into flowers overnight
-        Wild Pikmin and sprouts should be immune to the sunset
         Enemies respawning after some days
         Area unlocking
         Pause menu
@@ -443,6 +491,7 @@ Next tasks (roughly sorted most important first)
         Sunset
             On-screen warning
             Draw down the safe radius around all Onions
+            Wild Pikmin and sprouts should be immune to the sunset
         Catalogs
             There can be multiple catalogs -- Piklopedia and Treasure Hoard are two different catalogs
             A file, likely Game_data/Misc/Catalogs.txt is responsible for:

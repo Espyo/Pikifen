@@ -1,4 +1,5 @@
 positions {
+    header =   50 15 50 10
     continue = 50 32 50 10
     retry =    50 44 50 10
     finish =   50 56 50 10

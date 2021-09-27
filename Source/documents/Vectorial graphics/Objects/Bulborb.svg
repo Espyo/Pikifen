@@ -27,7 +27,7 @@
       <stop
          id="stop1387"
          offset="1"
-         style="stop-color:#a32405;stop-opacity:1" />
+         style="stop-color:#b82906;stop-opacity:1" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
@@ -1973,7 +1973,7 @@
        x2="31.800079"
        y2="2153.428"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.3333334,0,0,1.999997,1443.6664,-3253.6301)"
+       gradientTransform="matrix(3.3333334,0,0,1.999997,1457.6664,-3248.6301)"
        spreadMethod="reflect" />
   </defs>
   <sodipodi:namedview
@@ -1983,9 +1983,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.313708"
-     inkscape:cx="1544.0735"
-     inkscape:cy="22.66211"
+     inkscape:zoom="5.6568542"
+     inkscape:cx="1516.9566"
+     inkscape:cy="44.980082"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -2237,10 +2237,10 @@
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
     <rect
-       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.194045"
+       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:0.294836"
        id="rect1361"
-       width="54"
-       height="12.000039"
+       width="68"
+       height="22.00004"
        x="1500"
        y="1052.3621"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Adult_Bulbmin_stem.png"
@@ -5180,7 +5180,7 @@
     </g>
     <path
        style="display:inline;fill:url(#linearGradient2925);fill-opacity:1;stroke:none;stroke-width:2.58198"
-       d="m 1547,1052.3623 c -3.3333,0 -30,3.9999 -30,3.9999 0,0 -3.3333,0 -3.3333,2 0,1.9999 3.3333,1.9999 3.3333,1.9999 0,0 26.6667,4.0002 30,4.0002 3.3334,0 6.6667,-2.0002 6.6667,-6.0001 0,-4.0002 -3.3333,-5.9999 -6.6667,-5.9999 z"
+       d="m 1561,1057.3623 c -3.3333,2e-4 -35.6667,2.9998 -35.6667,2.9998 0,0 -3.3333,0 -3.3333,3 0,2.9999 3.3333,2.9999 3.3333,2.9999 0,0 32.3334,3.0005 35.6667,3.0003 3,-2e-4 7,-2.0003 7,-6.0002 0,-4.0002 -4,-6 -7,-5.9998 z"
        id="path4835-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sczcszs"
@@ -5190,7 +5190,7 @@
     <g
        style="display:inline"
        id="g6632"
-       transform="matrix(0,-1.8225552,1.883514,0,-558.21247,1159.1931)"
+       transform="matrix(0,-3.323452,3.4346111,0,-2253.1753,1247.2156)"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Adult_Bulbmin_stem.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">

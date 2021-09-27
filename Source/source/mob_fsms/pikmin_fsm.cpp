@@ -2820,6 +2820,7 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     if(!m->can_hurt(m2_ptr)) return;
     
     hitbox* h_ptr = info->h2;
+    bool was_thrown = pik_ptr->was_thrown;
     
     if(
         !h_ptr ||
@@ -2862,7 +2863,13 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     }
     }
     
-    pik_ptr->fsm.set_state(PIKMIN_STATE_MOB_LANDING);
+    if(was_thrown) {
+        //We got to this function because the Pikmin really was thrown.
+        pik_ptr->fsm.set_state(PIKMIN_STATE_MOB_LANDING);
+    } else {
+        //We got to this function because the Pikmin ran up and latched on.
+        pikmin_fsm::finish_mob_landing(m, info1, info2);
+    }
     
 }
 
