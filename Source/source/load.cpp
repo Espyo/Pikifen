@@ -1419,6 +1419,7 @@ void load_status_types(const bool load_resources) {
         rs.set("turns_inedible",          new_t->turns_inedible);
         rs.set("turns_invisible",         new_t->turns_invisible);
         rs.set("anim_speed_multiplier",   new_t->anim_speed_multiplier);
+        rs.set("freezes_animation",       new_t->freezes_animation);
         rs.set("overlay_animation",       new_t->overlay_animation);
         rs.set("overlay_anim_mob_scale",  new_t->overlay_anim_mob_scale);
         rs.set("particle_generator",      particle_gen_str, &particle_gen_node);

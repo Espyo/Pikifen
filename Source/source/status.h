@@ -73,6 +73,7 @@ struct status_type {
     bool disables_attack;
     bool turns_inedible;
     bool turns_invisible;
+    bool freezes_animation;
     
     //We need to know this in order to remove the particle generator later.
     bool generates_particles;

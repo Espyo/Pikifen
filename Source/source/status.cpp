@@ -62,6 +62,7 @@ status_type::status_type() :
     disables_attack(false),
     turns_inedible(false),
     turns_invisible(false),
+    freezes_animation(false),
     generates_particles(false),
     particle_gen(nullptr),
     particle_offset_z(0.0f),

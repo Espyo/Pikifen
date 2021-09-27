@@ -37,7 +37,7 @@ pellet::pellet(const point &pos, pellet_type* type, const float angle) :
  * Draws a pellet, with the number and all.
  */
 void pellet::draw_mob() {
-    sprite* s_ptr = anim.get_cur_sprite();
+    sprite* s_ptr = get_cur_sprite();
     if(!s_ptr) return;
     
     bitmap_effect_info eff;

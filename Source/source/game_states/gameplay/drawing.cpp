@@ -381,7 +381,7 @@ void gameplay_state::draw_ingame_text() {
         
         //Maker tool -- draw hitboxes.
         if(game.maker_tools.hitboxes) {
-            sprite* s = mob_ptr->anim.get_cur_sprite();
+            sprite* s = mob_ptr->get_cur_sprite();
             if(s) {
                 for(size_t h = 0; h < s->hitboxes.size(); ++h) {
                     hitbox* h_ptr = &s->hitboxes[h];

@@ -51,7 +51,7 @@ bool enemy::can_receive_status(status_type* s) const {
  * Draws an enemy, tinting it if necessary (for Onion delivery).
  */
 void enemy::draw_mob() {
-    sprite* s_ptr = anim.get_cur_sprite();
+    sprite* s_ptr = get_cur_sprite();
     if(!s_ptr) return;
     
     bitmap_effect_info eff;

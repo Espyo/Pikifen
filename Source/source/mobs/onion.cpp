@@ -94,7 +94,7 @@ onion::~onion() {
  * Draws an Onion.
  */
 void onion::draw_mob() {
-    sprite* s_ptr = anim.get_cur_sprite();
+    sprite* s_ptr = get_cur_sprite();
     
     if(!s_ptr) return;
     

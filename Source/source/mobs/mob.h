@@ -248,6 +248,8 @@ public:
     bool hide;
     //If its shadow should be visible.
     bool show_shadow;
+    //Force the usage of this specific sprite.
+    sprite* forced_sprite;
     //Is invisible due to a status effect. Cache for performance.
     bool has_invisibility_status;
     //Can this mob be hunted down right now?
@@ -318,6 +320,7 @@ public:
     ) const;
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void chomp(mob* m, hitbox* hitbox_info);
+    sprite* get_cur_sprite() const;
     void get_hitbox_hold_point(
         mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
     ) const;

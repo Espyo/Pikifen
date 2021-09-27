@@ -41,7 +41,7 @@ treasure::treasure(const point &pos, treasure_type* type, const float angle) :
  * Draws a treasure.
  */
 void treasure::draw_mob() {
-    sprite* s_ptr = anim.get_cur_sprite();
+    sprite* s_ptr = get_cur_sprite();
     if(!s_ptr) return;
     
     bitmap_effect_info eff;

@@ -86,6 +86,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     team(MOB_TEAM_NONE),
     hide(false),
     show_shadow(true),
+    forced_sprite(nullptr),
     has_invisibility_status(false),
     is_huntable(true),
     is_hurtable(true),
@@ -291,6 +292,10 @@ void mob::apply_status_effect(
         pg.follow_angle = &this->angle;
         pg.reset();
         particle_generators.push_back(pg);
+    }
+    
+    if(s->freezes_animation) {
+        forced_sprite = anim.get_cur_sprite();
     }
 }
 
@@ -1058,11 +1063,16 @@ void mob::circle_around(
  */
 void mob::delete_old_status_effects() {
     for(size_t s = 0; s < statuses.size(); ) {
-        if(statuses[s].to_delete) {
-            handle_status_effect_loss(statuses[s].type);
+        status &s_ptr = statuses[s];
+        if(s_ptr.to_delete) {
+            handle_status_effect_loss(s_ptr.type);
             
-            if(statuses[s].type->generates_particles) {
-                remove_particle_generator(statuses[s].type->particle_gen->id);
+            if(s_ptr.type->generates_particles) {
+                remove_particle_generator(s_ptr.type->particle_gen->id);
+            }
+            
+            if(s_ptr.type->freezes_animation) {
+                forced_sprite = NULL;
             }
             
             statuses.erase(statuses.begin() + s);
@@ -1228,7 +1238,7 @@ void mob::draw_limb() {
  * by child classes.
  */
 void mob::draw_mob() {
-    sprite* s_ptr = anim.get_cur_sprite();
+    sprite* s_ptr = get_cur_sprite();
     
     if(!s_ptr) return;
     
@@ -1452,7 +1462,7 @@ point mob::get_chase_target(float* z) const {
 hitbox* mob::get_closest_hitbox(
     const point &p, const size_t h_type, dist* d
 ) const {
-    sprite* s = anim.get_cur_sprite();
+    sprite* s = get_cur_sprite();
     if(!s) return NULL;
     hitbox* closest_hitbox = NULL;
     float closest_hitbox_dist = 0;
@@ -1522,7 +1532,7 @@ mob_type::vulnerability_struct mob::get_hazard_vulnerability(
  *   The hitbox's number.
  */
 hitbox* mob::get_hitbox(const size_t nr) const {
-    sprite* s = anim.get_cur_sprite();
+    sprite* s = get_cur_sprite();
     if(!s) return NULL;
     if(s->hitboxes.empty()) return NULL;
     return &s->hitboxes[nr];
@@ -1593,6 +1603,17 @@ float mob::get_latched_pikmin_weight() const {
         total += p_ptr->type->weight;
     }
     return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the current sprite of animation.
+ * Normally, this returns the current animation's current sprite,
+ * but it can return a forced sprite (e.g. from a status effect that
+ * freezes animations).
+ */
+sprite* mob::get_cur_sprite() const {
+    return forced_sprite ? forced_sprite : anim.get_cur_sprite();
 }
 
 

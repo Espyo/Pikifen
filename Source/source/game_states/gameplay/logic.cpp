@@ -1102,7 +1102,7 @@ void gameplay_state::process_mob_touches(
         if(m2_ptr->type->pushes_with_hitboxes) {
             //Push with the hitboxes.
             
-            sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
+            sprite* s2_ptr = m2_ptr->get_cur_sprite();
             
             for(size_t h = 0; h < s2_ptr->hitboxes.size(); ++h) {
                 hitbox* h_ptr = &s2_ptr->hitboxes[h];
@@ -1289,8 +1289,8 @@ void gameplay_state::process_mob_touches(
     mob_event* hitbox_touch_haz_ev =
         m_ptr->fsm.get_event(MOB_EV_TOUCHED_HAZARD);
         
-    sprite* s1_ptr = m_ptr->anim.get_cur_sprite();
-    sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
+    sprite* s1_ptr = m_ptr->get_cur_sprite();
+    sprite* s2_ptr = m2_ptr->get_cur_sprite();
     
     if(
         (

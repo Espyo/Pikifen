@@ -36,7 +36,7 @@ resource::resource(const point &pos, resource_type* type, const float angle) :
  * Draws a resource.
  */
 void resource::draw_mob() {
-    sprite* s_ptr = anim.get_cur_sprite();
+    sprite* s_ptr = get_cur_sprite();
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
