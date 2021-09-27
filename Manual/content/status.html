@@ -61,10 +61,12 @@
       <li><b><code>affects_leaders</code></b>: If true, this status effect affects leaders.</li>
       <li><b><code>affects_enemies</code></b>: If true, this status effect affects enemies.</li>
       <li><b><code>particle_generator</code></b>: If you want objects under this status effect to generate particles, specify the particle generator here. Read the <a href="particle.html">particle generator guide</a> to learn how to make some.</li>
-      <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="script.html#rel-coords">relative coordinates</a>.</li>
+      <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="script.html#rel-coord">relative coordinates</a>.</li>
+      <li><b><code>shaking_effect</code></b>: If you want objects under this status effect to shake violently left and right, give this a value that isn't 0. The value indicates how many units it moves away from the neutral position when shaking.</li>
       <li><b><code>maturity_change_amount</code></b>: If a Pikmin is affected by this status effect, its maturity will instantly increase by the specified amount. You can also write negative numbers to decrease the maturity. You don't need to worry about the maturity number going over, so a change amount of "+4" on Pikmin won't make it go beyond a flower.</li>
       <li><b><code>turns_inedible</code></b>: If true, Pikmin under this status effect cannot be eaten.</li>
       <li><b><code>turns_invisible</code></b>: If true, objects under this status effect will be considered invisible for other objects. They will still show up on the screen (unless you tinted them with transparency), but other objects will not be able to receive "in reach" <a href="script.html">events</a>.</li>
+      <li><b><code>replacement_on_timeout</code></b>: If you want this status effect to be replaced by another one when its time reaches 0, specify the replacement's name here. It will not be replaced if the status effect is removed via other means.</li>
     </ul>
     
   </div>

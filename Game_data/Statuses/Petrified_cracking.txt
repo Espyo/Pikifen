@@ -1,11 +1,12 @@
-name = petrified
+name = petrified_cracking
 affects_enemies = true
 anim_speed_multiplier = 0
-auto_remove_time = 8
+auto_remove_time = 2
 color = 128 0 255
 defense_multiplier = 1.2
 disables_attack = true
 freezes_animation = true
-replacement_on_timeout = petrified_cracking
+replacement_on_timeout = petrified_cracked
 speed_multiplier = 0
+shaking_effect = 1.5
 tint = 64 64 64

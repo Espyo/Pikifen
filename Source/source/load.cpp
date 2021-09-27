@@ -1377,7 +1377,9 @@ void load_status_types(const bool load_resources) {
     
     vector<string> type_files =
         folder_to_vector(STATUSES_FOLDER_PATH, false);
-        
+    vector<status_type*> types_with_replacements;
+    vector<string> types_with_replacements_names;
+    
     for(size_t t = 0; t < type_files.size(); ++t) {
         data_node file =
             load_data_file(STATUSES_FOLDER_PATH + "/" + type_files[t]);
@@ -1395,6 +1397,7 @@ void load_status_types(const bool load_resources) {
         string particle_gen_str;
         data_node* sc_type_node;
         data_node* particle_gen_node = NULL;
+        string replacement_str;
         
         rs.set("name",                    new_t->name);
         rs.set("color",                   new_t->color);
@@ -1420,10 +1423,12 @@ void load_status_types(const bool load_resources) {
         rs.set("turns_invisible",         new_t->turns_invisible);
         rs.set("anim_speed_multiplier",   new_t->anim_speed_multiplier);
         rs.set("freezes_animation",       new_t->freezes_animation);
+        rs.set("shaking_effect",          new_t->shaking_effect);
         rs.set("overlay_animation",       new_t->overlay_animation);
         rs.set("overlay_anim_mob_scale",  new_t->overlay_anim_mob_scale);
         rs.set("particle_generator",      particle_gen_str, &particle_gen_node);
         rs.set("particle_offset",         particle_offset_str);
+        rs.set("replacement_on_timeout",  replacement_str);
         
         new_t->affects = 0;
         if(affects_pikmin_bool) {
@@ -1481,7 +1486,8 @@ void load_status_types(const bool load_resources) {
                     load_data_file(
                         ANIMATIONS_FOLDER_PATH + "/" + new_t->overlay_animation
                     );
-                new_t->overlay_anim_db = load_animation_database_from_file(&anim_file);
+                new_t->overlay_anim_db =
+                    load_animation_database_from_file(&anim_file);
                 if(!new_t->overlay_anim_db.animations.empty()) {
                     new_t->overlay_anim_instance =
                         animation_instance(&new_t->overlay_anim_db);
@@ -1492,7 +1498,32 @@ void load_status_types(const bool load_resources) {
             }
         }
         
+        if(!replacement_str.empty()) {
+            types_with_replacements.push_back(new_t);
+            types_with_replacements_names.push_back(replacement_str);
+        }
+        
         game.status_types[new_t->name] = new_t;
+    }
+    
+    for(size_t s = 0; s < types_with_replacements.size(); ++s) {
+        string rn = types_with_replacements_names[s];
+        bool found = false;
+        for(auto s2 : game.status_types) {
+            if(s2.first == rn) {
+                types_with_replacements[s]->replacement_on_timeout =
+                    s2.second;
+                found = true;
+                break;
+            }
+        }
+        if(found) continue;
+        
+        log_error(
+            "The status effect type \"" + types_with_replacements[s]->name +
+            "\" has a replacement effect called \"" + rn + "\", but there is "
+            "no status effect with that name!"
+        );
     }
     
     if(game.perf_mon) {

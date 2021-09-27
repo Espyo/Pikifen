@@ -99,6 +99,8 @@
           <li>Object types, in their hazard vulnerability data and spike damage vulnerability data, can now be told to receive a status effect when interacting with one.</li>
           <li>Added the <code>remove_on_hazard_leave</code> property. This is now used for statuses like drowning, where the status effect is removed once the object leaves the hazard that was applying the status effect.</li>
           <li>Added the <code>freezes_animation</code> property. If true, the object will stay stuck in its current sprite until the status effect is removed.</li>
+          <li>Added the <code>replacement_on_timeout</code> property, which lets a status effect be swapped for another when its time runs out.</li>
+          <li>Added the <code>shaking_effect</code> property, which makes the object shake left and right while under the effects of the status effect.</li>
           <li>Status effects can now change the object's state when applied. For this, the <code>state_change_type</code> and <code>state_change_name</code> properties have been created.</li>
           <li>They can now also change the object's animation when applied, with the <code>animation_change</code> property.</li>
           <li>Plus other changes noted below in the compatibility warnings.</li>

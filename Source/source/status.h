@@ -80,12 +80,15 @@ struct status_type {
     particle_generator* particle_gen;
     point particle_offset_pos;
     float particle_offset_z;
+    float shaking_effect;
     string overlay_animation;
     float overlay_anim_mob_scale;
     animation_database overlay_anim_db;
     animation_instance overlay_anim_instance;
+    status_type* replacement_on_timeout;
     
     status_type();
+    
 };
 
 

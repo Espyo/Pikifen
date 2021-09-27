@@ -295,7 +295,7 @@ void mob::apply_status_effect(
     }
     
     if(s->freezes_animation) {
-        forced_sprite = anim.get_cur_sprite();
+        forced_sprite = get_cur_sprite();
     }
 }
 
@@ -1062,6 +1062,9 @@ void mob::circle_around(
  * Deletes all status effects asking to be deleted.
  */
 void mob::delete_old_status_effects() {
+    vector<status_type*> new_statuses_to_apply;
+    bool removed_forced_sprite = false;
+    
     for(size_t s = 0; s < statuses.size(); ) {
         status &s_ptr = statuses[s];
         if(s_ptr.to_delete) {
@@ -1072,13 +1075,33 @@ void mob::delete_old_status_effects() {
             }
             
             if(s_ptr.type->freezes_animation) {
-                forced_sprite = NULL;
+                removed_forced_sprite = true;
+            }
+            
+            if(s_ptr.type->replacement_on_timeout && s_ptr.time_left <= 0.0f) {
+                new_statuses_to_apply.push_back(
+                    s_ptr.type->replacement_on_timeout
+                );
+                if(s_ptr.type->replacement_on_timeout->freezes_animation) {
+                    //Actually, never mind, let's keep the current forced
+                    //sprite so that the next status effect can use it too.
+                    removed_forced_sprite = false;
+                }
             }
             
             statuses.erase(statuses.begin() + s);
         } else {
             ++s;
         }
+    }
+    
+    //Apply new status effects.
+    for(size_t s = 0; s < new_statuses_to_apply.size(); ++s) {
+        apply_status_effect(new_statuses_to_apply[s], false, false);
+    }
+    
+    if(removed_forced_sprite) {
+        forced_sprite = NULL;
     }
     
     //Update some flags.
@@ -1625,7 +1648,7 @@ sprite* mob::get_cur_sprite() const {
  * info:
  *   Struct to fill the info with.
  * add_status:
- *   If true, add status effect coloring to the result.
+ *   If true, add status effect changes to the result.
  * add_sector_brightness:
  *   If true, add sector brightness coloring to the result.
  * delivery_time_ratio_left:
@@ -1640,6 +1663,9 @@ void mob::get_sprite_bitmap_effects(
     const bool add_status, const bool add_sector_brightness,
     const float delivery_time_ratio_left, const ALLEGRO_COLOR &delivery_color
 ) const {
+
+    const float STATUS_SHAKING_TIME_MULT = 60.0f;
+    
     info->translation =
         point(
             pos.x + angle_cos * s_ptr->offset.x - angle_sin * s_ptr->offset.y,
@@ -1682,6 +1708,14 @@ void mob::get_sprite_bitmap_effects(
                 t->glow.g = glow_color_sum.g / n_glow_colors;
                 t->glow.b = glow_color_sum.b / n_glow_colors;
                 t->glow.a = glow_color_sum.a / n_glow_colors;
+            }
+            
+            if(t->shaking_effect != 0.0f) {
+                info->translation.x +=
+                    sin(
+                        game.states.gameplay->area_time_passed *
+                        STATUS_SHAKING_TIME_MULT
+                    ) * t->shaking_effect;
             }
         }
     }
