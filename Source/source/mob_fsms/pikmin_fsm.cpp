@@ -2272,9 +2272,7 @@ void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
         p_ptr->increase_maturity(d_ptr->dro_type->increase_amount);
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        p_ptr->apply_status_effect(
-            d_ptr->dro_type->status_to_give, true, false
-        );
+        p_ptr->apply_status_effect(d_ptr->dro_type->status_to_give, false);
         break;
     }
     }
@@ -3817,11 +3815,11 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
         for(size_t e = 0; e < h->effects.size(); ++e) {
-            p->apply_status_effect(h->effects[e], false, false);
+            p->apply_status_effect(h->effects[e], false);
         }
     }
     if(vuln.status_to_apply) {
-        p->apply_status_effect(vuln.status_to_apply, true, false);
+        p->apply_status_effect(vuln.status_to_apply, false);
     }
 }
 
@@ -3841,7 +3839,7 @@ void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
     spray_type* s = (spray_type*) info1;
     
     for(size_t e = 0; e < s->effects.size(); ++e) {
-        m->apply_status_effect(s->effects[e], false, false);
+        m->apply_status_effect(s->effects[e], false);
     }
     
     if(s->buries_pikmin) {

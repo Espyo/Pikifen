@@ -9,9 +9,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.21.0 ---
     Status improvements
-        Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
-        A way for status effects to add to the time left, instead of resetting it or leaving it as is
-            Spicy spray should reset the time if it is re-applied
         Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
         A way for sprays to affect leaders, like if you want to spray all Pikmin+leaders in the group with a speed-up spray
     Make it so Dweevils can pick up treasure
@@ -781,6 +778,7 @@ Tasks for later on (I might never implement these)
         Should the leader's throw preview indicate collisions against mobs? It's not really necessary, and there are all sorts of weird cases, like decorative vs. combat mobs, untouchable hitboxes, etc.
         The ability for status effects to add/remove HP in absolute amounts, not relative
         Suggestions
+            Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
             An action with which to change a mob's home
             A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
                 You can just give the mob a status effect that changes its speed

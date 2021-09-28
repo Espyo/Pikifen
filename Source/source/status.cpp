@@ -52,6 +52,7 @@ status_type::status_type() :
     removable_with_whistle(false),
     remove_on_hazard_leave(false),
     auto_remove_time(0.0f),
+    reapply_rule(STATUS_REAPPLY_KEEP_TIME),
     health_change_ratio(0.0f),
     maturity_change_amount(0),
     state_change_type(STATUS_STATE_CHANGE_NONE),

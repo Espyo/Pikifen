@@ -1392,12 +1392,14 @@ void load_status_types(const bool load_resources) {
         bool affects_leaders_bool = false;
         bool affects_enemies_bool = false;
         bool affects_others_bool = false;
+        string reapply_rule_str;
         string sc_type_str;
         string particle_offset_str;
         string particle_gen_str;
-        data_node* sc_type_node;
-        data_node* particle_gen_node = NULL;
         string replacement_str;
+        data_node* reapply_rule_node = NULL;
+        data_node* sc_type_node = NULL;
+        data_node* particle_gen_node = NULL;
         
         rs.set("name",                    new_t->name);
         rs.set("color",                   new_t->color);
@@ -1410,6 +1412,7 @@ void load_status_types(const bool load_resources) {
         rs.set("removable_with_whistle",  new_t->removable_with_whistle);
         rs.set("remove_on_hazard_leave",  new_t->remove_on_hazard_leave);
         rs.set("auto_remove_time",        new_t->auto_remove_time);
+        rs.set("reapply_rule",            reapply_rule_str, &reapply_rule_node);
         rs.set("health_change_ratio",     new_t->health_change_ratio);
         rs.set("state_change_type",       sc_type_str, &sc_type_node);
         rs.set("state_change_name",       new_t->state_change_name);
@@ -1442,6 +1445,21 @@ void load_status_types(const bool load_resources) {
         }
         if(affects_others_bool) {
             new_t->affects |= STATUS_AFFECTS_OTHERS;
+        }
+        
+        if(reapply_rule_node) {
+            if(reapply_rule_str == "keep_time") {
+                new_t->reapply_rule = STATUS_REAPPLY_KEEP_TIME;
+            } else if(reapply_rule_str == "reset_time") {
+                new_t->reapply_rule = STATUS_REAPPLY_RESET_TIME;
+            } else if(reapply_rule_str == "add_time") {
+                new_t->reapply_rule = STATUS_REAPPLY_ADD_TIME;
+            } else {
+                log_error(
+                    "Unknown reapply rule \"" +
+                    reapply_rule_str + "\"!", reapply_rule_node
+                );
+            }
         }
         
         if(sc_type_node) {

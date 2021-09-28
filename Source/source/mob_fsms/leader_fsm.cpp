@@ -1544,9 +1544,7 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
             );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        m->apply_status_effect(
-            d_ptr->dro_type->status_to_give, true, false
-        );
+        m->apply_status_effect(d_ptr->dro_type->status_to_give, false);
         break;
     } default: {
         break;
@@ -2228,11 +2226,11 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
         for(size_t e = 0; e < h->effects.size(); ++e) {
-            l->apply_status_effect(h->effects[e], false, false);
+            l->apply_status_effect(h->effects[e], false);
         }
     }
     if(vuln.status_to_apply) {
-        l->apply_status_effect(vuln.status_to_apply, true, false);
+        l->apply_status_effect(vuln.status_to_apply, false);
     }
     
     if(h->associated_liquid) {
@@ -2279,7 +2277,7 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
     spray_type* s = (spray_type*) info1;
     
     for(size_t e = 0; e < s->effects.size(); ++e) {
-        l->apply_status_effect(s->effects[e], false, false);
+        l->apply_status_effect(s->effects[e], false);
     }
 }
 

@@ -38,6 +38,13 @@
       <li><b><code>removable_with_whistle</code></b>: If true, the status effect can be removed if the object is whistled by a leader.</li>
       <li><b><code>remove_on_hazard_leave</code></b>: If true, the status effect is removed if the object leaves the hazard that was emitting the status.</li>
       <li><b><code>auto_remove_time</code></b>: The status effect is automatically removed after these many seconds have passed. 0 means it does not auto-remove with time.</li>
+      <li><b><code>reapply_rule</code></b>: In case the object receives this status effect while it already has it, what should happen to the auto-remove time remaining? This property has no use for statuses that don't auto-remove with time. Defaults to <code>keep_time</code>. Possible values are:
+        <ul>
+          <li><code>keep_time</code>: Keep the current time as it is.</li>
+          <li><code>reset_time</code>: Reset the current time to the one defined in the <code>auto_remove_time</code> property.</li>
+          <li><code>add_time</code>: Add more seconds to the current time. It adds the amount defined in the <code>auto_remove_time</code> property.</li>
+        </ul>
+      </li>
       <li><b><code>health_change_ratio</code></b>: Every second that passes, its health increases by this much. This represents the ratio of max health, meaning that if a object has 1000 max health, and this value is -0.5, it will lose 500 points of health after one second.</li>
       <li><b><code>state_change_type</code></b>: If not <code>none</code>, the engine will somehow change this object's state when it receives this status effect. Defaults to <code>none</code>. Possible values are:
         <ul>

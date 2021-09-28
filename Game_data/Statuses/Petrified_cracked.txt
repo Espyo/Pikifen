@@ -10,6 +10,7 @@ disables_attack = true
 freezes_animation = true
 particle_generator = petrification_crack
 particle_offset = 0 0 1000
+reapply_rule = keep_time
 speed_multiplier = 0
 shaking_effect = 1.5
 tint = 64 64 64

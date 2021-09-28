@@ -38,6 +38,13 @@ enum STATUS_STATE_CHANGES {
     STATUS_STATE_CHANGE_CUSTOM,
 };
 
+enum STATUS_REAPPLY_RULES {
+    STATUS_REAPPLY_KEEP_TIME,
+    STATUS_REAPPLY_RESET_TIME,
+    STATUS_REAPPLY_ADD_TIME,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A status effect type, like "burning", "spicy", "petrified", etc.
  * Any mob under the influence of a status effect will suffer or
@@ -56,6 +63,7 @@ struct status_type {
     bool removable_with_whistle;
     bool remove_on_hazard_leave;
     float auto_remove_time;
+    STATUS_REAPPLY_RULES reapply_rule;
     
     //Health addition/subtraction percentage per second.
     float health_change_ratio;

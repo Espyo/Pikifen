@@ -8,6 +8,7 @@ color = 128 0 255
 defense_multiplier = 1.2
 disables_attack = true
 freezes_animation = true
+reapply_rule = keep_time
 replacement_on_timeout = petrified_cracking
 speed_multiplier = 0
 tint = 64 64 64

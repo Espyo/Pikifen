@@ -233,17 +233,14 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
  * Applies a status effect's effects.
  * s:
  *   Status effect to use.
- * refill:
- *   If true, then the time left before the status wears off is reset, if the
- *   mob is already under this status effect.
  * given_by_parent:
  *   If true, this status effect was given to the mob by its parent mob.
  */
 void mob::apply_status_effect(
-    status_type* s, const bool refill, const bool given_by_parent
+    status_type* s, const bool given_by_parent
 ) {
     if(parent && parent->relay_statuses && !given_by_parent) {
-        parent->m->apply_status_effect(s, refill, false);
+        parent->m->apply_status_effect(s, false);
         if(!parent->handle_statuses) return;
     }
     
@@ -255,17 +252,27 @@ void mob::apply_status_effect(
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
         mob* m2_ptr = game.states.gameplay->mobs.all[m];
         if(m2_ptr->parent && m2_ptr->parent->m == this) {
-            m2_ptr->apply_status_effect(s, refill, true);
+            m2_ptr->apply_status_effect(s, true);
         }
     }
     
     //Check if the mob is already under this status.
     for(size_t ms = 0; ms < this->statuses.size(); ++ms) {
         if(this->statuses[ms].type == s) {
-            //Already exists. Can we refill its duration?
+            //Already exists. What do we do with the time left?
             
-            if(refill && s->auto_remove_time > 0.0f) {
+            switch(s->reapply_rule) {
+            case STATUS_REAPPLY_KEEP_TIME: {
+                break;
+            }
+            case STATUS_REAPPLY_RESET_TIME: {
                 this->statuses[ms].time_left = s->auto_remove_time;
+                break;
+            }
+            case STATUS_REAPPLY_ADD_TIME: {
+                this->statuses[ms].time_left += s->auto_remove_time;
+                break;
+            }
             }
             
             return;
@@ -923,7 +930,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
         v != victim->type->spike_damage_vulnerabilities.end() &&
         v->second.status_to_apply
     ) {
-        victim->apply_status_effect(v->second.status_to_apply, true, false);
+        victim->apply_status_effect(v->second.status_to_apply, false);
     }
 }
 
@@ -1097,7 +1104,7 @@ void mob::delete_old_status_effects() {
     
     //Apply new status effects.
     for(size_t s = 0; s < new_statuses_to_apply.size(); ++s) {
-        apply_status_effect(new_statuses_to_apply[s], false, false);
+        apply_status_effect(new_statuses_to_apply[s], false);
     }
     
     if(removed_forced_sprite) {
