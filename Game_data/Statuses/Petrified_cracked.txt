@@ -1,4 +1,6 @@
+//Used when a petrified enemy just broke free. It only lasts for a short while, just enough to spawn the particles.
 name = petrified_cracked
+
 affects_enemies = true
 anim_speed_multiplier = 0
 auto_remove_time = 0.001

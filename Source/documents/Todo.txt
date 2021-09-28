@@ -2,16 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Ultra-bitter spray improvements
-        Petrified enemies shaking before getting out
-            Maybe three status effects? One for the start, one for petrification, one for shaking
-        Petrified enemies should break open when defeated
-        Things to check:
-            Can you petrify ANY mob or just enemies? Should you be able to petrify any mob?
-            When petrified, are the mob's attack hitboxes still causing damage?
-        Approach:
-            States, events, and actions should all work like normal, otherwise the FSM may break or crash the game
-            The sprite pre-spray must be saved, and the game must be forced to draw that sprite, and consult that sprite for hitbox purposes. Behind the scenes, the current sprite and current animation can change anyway
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -92,7 +83,9 @@ Next tasks (roughly sorted most important first)
         Wall shadow rendering is a bit heavy. Mostly in figuring out what edges to draw or not to draw
             Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
     Update Dear ImGui
-    Code cleanup: memory leaks, cppcheck, etc.
+    Code cleanup
+        Memory leaks, cppcheck, etc.
+        Document every class member with a comment
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     General graphic file improvements
         Leader and Pikmin portrait images should
@@ -212,8 +205,8 @@ Next tasks (roughly sorted most important first)
         Should the secondary menus from the main menu also contain Pikmin formations in the background?
     Pikmin extinction
         Check Onions, ships, and converters that have Pikmin in the buffer
-    Each object should have a blurb property, that describes them in a simple way. Example for Red Pikmin: "The most basic type of Pikmin, Red Pikmin are immune to fire, and are slightly stronger than normal."
-        Make the editor show the blurb
+    Each object, spray, hazard, etc. should have a description property, that describes them in a simple way. Example for Red Pikmin: "The most basic type of Pikmin, Red Pikmin are immune to fire, and are slightly stronger than normal."
+        Make the editor show the mob's description
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
         Medals
@@ -231,7 +224,7 @@ Next tasks (roughly sorted most important first)
                 None
                     No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose
         Each stage should have the following data:
-            A quick blurb describing what the stage is about. Example: "These dark woods hide many dangerous beasts behind the fallen branches. Your goal is to escape without a single enemy seeing you!"
+            A quick description explaining what the stage is about. Example: "These dark woods hide many dangerous beasts behind the fallen branches. Your goal is to escape without a single enemy seeing you!"
             A "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
             Its (subjective) difficulty
             A goal
@@ -263,12 +256,17 @@ Next tasks (roughly sorted most important first)
             Right side
                 Details about the highlighted mission, in order:
                     Area name
-                    Blurb
+                    Description
                     Goal
-                    High scores + their medals (only present if the stage's grading mode is points)
                     Difficulty
-                    More info
-                        Opens up a page with the tags, time limit, loss conditions, scoring data, maker and version, extra area notes
+                    More info (opens a pop-up with):
+                        Tags
+                        Time limit
+                        Loss conditions
+                        Scoring data
+                        Maker and version
+                        Extra area notes
+                        High scores + their medals (only present if the stage's grading mode is points)
         Save the high scores/completion of every map
     
     --- v0.24.0 ---
@@ -701,6 +699,9 @@ Tasks for later on (I might never implement these)
         Carrying paths should be able to specify a "portal" link, which internally is considered to be 0-distance. This helps calculate the destinations without considering two warp points as being insanely far apart
     A colorblind-friendly mode?
     A "peaceful" mode where Pikmin and leaders can't die
+    Petrified enemies should break open when defeated
+        Maybe define loot tables somewhere, like "standard", "boss", "weakling", etc. Enemy types use the "standard" one by default (which one is the default should be specified somewhere), but can choose a different one
+            Maybe individual enemy instances in an area can also specify their own loot table?
     Editors
         Area editor
             Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
