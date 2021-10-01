@@ -1279,6 +1279,8 @@ void load_spray_types(const bool load_resources) {
         rs.set("effects", effects_str, &effects_node);
         rs.set("icon", icon_str, &icon_node);
         rs.set("group", new_t.group);
+        rs.set("group_pikmin_only", new_t.group_pikmin_only);
+        rs.set("affects_user", new_t.affects_user);
         rs.set("angle", new_t.angle);
         rs.set("distance_range", new_t.distance_range);
         rs.set("angle_range", new_t.angle_range);

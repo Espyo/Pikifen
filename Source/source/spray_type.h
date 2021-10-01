@@ -33,6 +33,10 @@ public:
     vector<status_type*> effects;
     //True: applied to the entire group. False: applied in a specified range.
     bool group;
+    //Does it only apply to Pikmin in the group, or leaders too?
+    bool group_pikmin_only;
+    //Apply the spray to its user as well.
+    bool affects_user;
     //If applied outside of the group, this is the angle of shooting.
     float angle;
     //If applied outside of the group, this is the distance range.

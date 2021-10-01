@@ -74,14 +74,14 @@
       <li>
         Rock Pikmin-related features:
         <ul>
-          <li>Added a property for Pikmin types, <code>attack_method</code>, that controls how the Pikmin attacks. If set to <code>impact</code>, that Pikmin attacks like a Rock Pikmin, as explained above.</li>
+          <li>Added a property for <a href="mob_pikmin.html">Pikmin types</a>, <code>attack_method</code>, that controls how the Pikmin attacks. If set to <code>impact</code>, that Pikmin attacks like a Rock Pikmin, as explained above.</li>
           <li>Their on-foot lunges use the attack animation, so it should ideally be in a pose where they lunge forward, and have a hitbox.</li>
         </ul>
       </li>
       <li>
         Winged Pikmin-related features:
         <ul>
-          <li>Added a property for Pikmin types, <code>can_fly</code>, that makes a Pikmin fly like a Winged Pikmin, as explained above.</li>
+          <li>Added a property for <a href="mob_pikmin.html">Pikmin types</a>, <code>can_fly</code>, that makes a Pikmin fly like a Winged Pikmin, as explained above.</li>
           <li>These Pikmin can only move vertically if the state they are in allows it (e.g. they can't fly if they're being knocked back).</li>
           <li>Technically, if a leader is on a floor with a hazard (liquid or otherwise), they will be unable to grab Pikmin that are outside it and are vulnerable to the hazard. If they grab and bring those Pikmin to said floor, the Pikmin will suffer the effects.</li>
         </ul>
@@ -95,21 +95,21 @@
         </ul>
       </li>
       <li>
-        Revamped the status system.
+        Revamped the <a href="status.html">status</a> system.
         <ul>
-          <li>Object types, in their hazard vulnerability data and spike damage vulnerability data, can now be told to receive a status effect when interacting with one.</li>
-          <li>Added the <code>remove_on_hazard_leave</code> property. This is now used for statuses like drowning, where the status effect is removed once the object leaves the hazard that was applying the status effect.</li>
+          <li>Added the <code>animation_change</code> property, which lets the object's animation be changed when the status is applied.</li>
           <li>Added the <code>freezes_animation</code> property. If true, the object will stay stuck in its current sprite until the status effect is removed.</li>
+          <li>Added the <code>reapply_rule</code> property, which controls what happens to the auto-remove time of a status effect in case it is re-applied.</li>
+          <li>Added the <code>remove_on_hazard_leave</code> property. This is now used for statuses like drowning, where the status effect is removed once the object leaves the hazard that was applying the status effect.</li>
           <li>Added the <code>replacement_on_timeout</code> property, which lets a status effect be swapped for another when its time runs out.</li>
           <li>Added the <code>shaking_effect</code> property, which makes the object shake left and right while under the effects of the status effect.</li>
-          <li>Added the <code>reapply_rule</code> property, which controls what happens to the auto-remove time of a status effect in case it is re-applied.</li>
-          <li>Status effects can now change the object's state when applied. For this, the <code>state_change_type</code> and <code>state_change_name</code> properties have been created.</li>
-          <li>They can now also change the object's animation when applied, with the <code>animation_change</code> property.</li>
+          <li>Added the <code>state_change_type</code> and <code>state_change_name</code> properties, so status effects can change the object's state when applied.</li>
+          <li>Object types, in their hazard vulnerability data and spike damage vulnerability data, can now be told to receive a status effect when interacting with one.</li>
           <li>Plus other changes noted below in the compatibility warnings.</li>
         </ul>
       </li>
       <li>
-        New mob script actions:
+        New <a href="script.html">mob script</a> actions:
         <ul>
           <li><code>hold_focused_mob</code> lets the object hold whatever object it has in focus, much like how a leader holds a Pikmin.</li>
           <li><code>load_focused_mob_memory</code> and <code>save_focused_mob_memory</code> let the currently focused object be saved into a memory, and be recalled later. This allows the object to keep track of more than one object at a time, although it still only focuses on one at a time.</li>
@@ -128,7 +128,7 @@
         </ul>
       </li>
       <li>
-        Other mob script changes:
+        Other <a href="script.html">mob script</a> changes:
         <ul>
           <li>The <code>move_to_absolute</code> and <code>move_to_relative</code> actions can now use an optional Z coordinate argument.</li>
           <li>The <code>turn_to_absolute</code> and <code>turn_to_relative</code> actions can now either use an angle argument, or coordinate arguments.</li>
@@ -137,7 +137,7 @@
         </ul>
       </li>
       <li>
-        Group task object type improvements:
+        <a href="mob_group_task.html">Group task object type</a> improvements:
         <ul>
           <li>Added the <code>flying_pikmin_only</code> property.</li>
           <li>Added the <code>spots_z</code> property to allow control of the vertical position of the contribution spots.</li>
@@ -145,14 +145,14 @@
         </ul>
       </li>
       <li>
-        New object type properties:
+        New <a href="mob_type.html">object type</a> properties:
         <ul>
           <li><code>acceleration</code> controls the object type's acceleration.</li>
           <li><code>has_group</code> lets the object have a group of other objects (usually Pikmin) following it.</li>
         </ul>
       </li>
       <li>
-        New game configuration properties:
+        New <a href="misc_config.html">game configuration</a> properties:
         <ul>
           <li><code>no_pikmin_color</code> controls the color the cursor shows when no Pikmin are available.</li>
           <li><code>throw_max_dist</code> and <code>whistle_max_dist</code> control the maximum distances at which the leader can throw or whistle.</li>
@@ -167,13 +167,14 @@
           <li>Revamped the area editor's problem finder.</li>
         </ul>
       </li>
+      <li>Added the <code>group_pikmin_only</code> and <code>affects_user</code> properties to <a href="spray.html">spray types</a>. One controls whether a spray affects only the Pikmin in the group or leaders as well, and the other controls whether the leader that used the spray gets sprayed too.</li>
     </ul>
 
     <p><b>Custom content compatibility warnings</b></p>
     
     <ul>
       <li>
-        Animation changes. These are needed in order for Pikmin to get up when whistled, and for Purple Pikmin and Rock Pikmin to cause collision damage:
+        Animation changes. These are needed in order for <a href="mob_pikmin.html">Pikmin</a> to get up when whistled, and for Purple Pikmin and Rock Pikmin to cause collision damage:
         <ul>
           <li><code>lying</code> is now just the Pikmin lying down forever.</li>
           <li><code>knocked_back</code> is a new animation for the Pikmin getting knocked back forever.</li>
@@ -182,7 +183,7 @@
         </ul>
       </li>
       <li>
-        Status effect changes:
+        <a href="status.html">Status effect</a> changes:
         <ul>
           <li>Turned the <code>disabled_state_inedible</code> status effect type property to <code>turns_inedible</code> instead. This way, any status can make a Pikmin inedible while under its effects.</li>
           <li>The <code>causes_*</code> status effect type properties were removed in favor of the <code>state_change_type</code> property. Anything related to the Pikmin's "disabled" state has now also been renamed to the more apt term "helpless".</li>
@@ -190,8 +191,8 @@
           <li>The <code>animation</code> and <code>animation_mob_scale</code> properties have been renamed to <code>overlay_animation</code> and <code>overlay_anim_mob_scale</code>, respectively.</li>
         </ul>
       </li>
-      <li>Converters now need hitboxes for the Pikmin to touch when thrown.</li>
-      <li>The <code>blocks_carrier_pikmin</code> object type property has been renamed to <code>can_block_paths</code>.</li>
+      <li><a href="mob_converter.html">Converters</a> now need hitboxes for the Pikmin to touch when thrown.</li>
+      <li>The <code>blocks_carrier_pikmin</code> <a href="mob_type.html">object type</a> property has been renamed to <code>can_block_paths</code>.</li>
     </ul>
     
     <h2 id="0.20.0">0.20.0</h2>

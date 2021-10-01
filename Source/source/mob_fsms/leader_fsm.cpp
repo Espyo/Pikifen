@@ -334,6 +334,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EV_DEATH); {
             efc.change_state("dying");
         }
@@ -1898,6 +1901,7 @@ void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
     size_t spray_nr = *((size_t*) info1);
+    spray_type &spray_type_ref = game.spray_types[spray_nr];
     
     if(game.states.gameplay->spray_stats[spray_nr].nr_sprays == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -1907,17 +1911,25 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     float cursor_angle =
         get_angle(m->pos, game.states.gameplay->leader_cursor_w);
     float shoot_angle =
-        cursor_angle + ((game.spray_types[spray_nr].angle) ? TAU / 2 : 0);
+        cursor_angle + ((spray_type_ref.angle) ? TAU / 2 : 0);
         
     unordered_set<mob*> affected_mobs;
-    if(game.spray_types[spray_nr].group) {
+    
+    if(spray_type_ref.affects_user) {
+        affected_mobs.insert(m);
+    }
+    
+    if(spray_type_ref.group) {
         for(size_t gm = 0; gm < m->group->members.size(); ++gm) {
+            mob* gm_ptr = m->group->members[gm];
             if(
-                m->group->members[gm]->type->category->id ==
-                MOB_CATEGORY_PIKMIN
+                gm_ptr->type->category->id != MOB_CATEGORY_PIKMIN &&
+                spray_type_ref.group_pikmin_only
             ) {
-                affected_mobs.insert(m->group->members[gm]);
+                continue;
             }
+            
+            affected_mobs.insert(gm_ptr);
         }
         //If there is nothing to get sprayed, better not waste it.
         if(affected_mobs.empty())  {
@@ -1934,7 +1946,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
             
             if(
                 dist(m->pos, am_ptr->pos) >
-                game.spray_types[spray_nr].distance_range + am_ptr->radius
+                spray_type_ref.distance_range + am_ptr->radius
             ) {
                 continue;
             }
@@ -1944,7 +1956,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
                     shoot_angle,
                     get_angle(m->pos, am_ptr->pos)
                 );
-            if(angle_dif > game.spray_types[spray_nr].angle_range / 2) continue;
+            if(angle_dif > spray_type_ref.angle_range / 2) continue;
             
             affected_mobs.insert(am_ptr);
         }
@@ -1963,12 +1975,12 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     );
     p.bitmap = game.sys_assets.bmp_smoke;
     p.friction = 1;
-    p.color = game.spray_types[spray_nr].main_color;
+    p.color = spray_type_ref.main_color;
     particle_generator pg(0, p, 32);
     pg.angle = shoot_angle;
-    pg.angle_deviation = game.spray_types[spray_nr].angle_range / 2.0f;
-    pg.total_speed = game.spray_types[spray_nr].distance_range * 0.8;
-    pg.total_speed_deviation = game.spray_types[spray_nr].distance_range * 0.4;
+    pg.angle_deviation = spray_type_ref.angle_range / 2.0f;
+    pg.total_speed = spray_type_ref.distance_range * 0.8;
+    pg.total_speed_deviation = spray_type_ref.distance_range * 0.4;
     pg.size_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
     

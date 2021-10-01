@@ -24,7 +24,7 @@
     
     <p>Whenever a leader uses a spray, they spray a bunch of particles in a given direction, and certain objects, dictated by the rules of the spray, will befall under some status effect. A status effect can make them faster (like an ultra-spicy spray), or make them stop on their tracks (like an ultra-bitter spray), amongst other things. Before creating sprays, you must have some status effect definitions. If you don't, please read the <a href="status.html">status effects guide</a> for information on how to create some.</p>
 
-    <p>Spray definitions can be found in <code>Game_data/Sprays</code> folder. Every <a href="text_file.html">text file</a> here defines a spray, and the file's name is not important.</p>
+    <p>Spray definitions can be found in the <code>Game_data/Sprays</code> folder. Every <a href="text_file.html">text file</a> here defines a spray, and the file's name is not important.</p>
 
     <h2 id="props">Properties</h2>
     
@@ -34,11 +34,13 @@
       <li><b><code>name</code></b>: Name of the spray. You must use this name when referring to this spray in other files.</li>
       <li><b><code>angle</code></b>: Angle to spray it at, relative to the leader's angle, in degrees. In other words, 0 means the leader sprays this forward, while 180 (half a circle) means they will spray it behind them.</li>
       <li><b><code>angle_range</code></b>: How far the spray reaches in angle, in degrees. If a spray is only meant to hit directly in front of the leader, this should be very small, but if it's meant to also hit half a circle in front of the leader, it can be 180.</li>
+      <li><b><code>affects_user</code></b>: If true, the spray will affect the leader that used it too.</li>
       <li><b><code>buries_pikmin</code></b>: If true, any Pikmin that touch this spray will become sprouts.</li>
       <li><b><code>color</code></b>: Color of the spray's particles, in the format <code>r g b</code> or <code>r g b a</code>.</li>
       <li><b><code>distance_range</code></b>: How far the spray reaches in distance, in pixels. This is used to calculate what mobs are affected, and how far the spray particles reach.</li>
       <li><b><code>effects</code></b>: List of status effects inflicted on the targets of the spray. This list is separated by semicolon (;).</li>
       <li><b><code>group</code></b>: If true, the spray affects all Pikmin of the leader's group, regardless of distance. If false, the objects that are affected are those within the given angle and distance reach. For instance, for an ultra-bitter spray, all affected objects are the enemies in front of the leader, within a medium distance.</li>
+      <li><b><code>group_pikmin_only</code></b>: If true, only Pikmin in the group are sprayed. Otherwise, leaders can be sprayed too. This property has no effect when the <code>group</code> property is false.</li>
       <li><b><code>icon</code></b>: Name of the image used for its icon on the HUD. This file must be in <code>Game_data/Graphics</code>, and the property must include the extension (e.g. <code>Ultra-bitter_spray.png</code>).</li>
       <li><b><code>ingredients_needed</code></b>: How many ingredients (berries, in the canon games) does it take to concoct one new spray dosage.</li>
     </ul>

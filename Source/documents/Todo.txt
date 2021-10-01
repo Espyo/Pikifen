@@ -8,9 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.21.0 ---
-    Status improvements
-        Health regeneration should always be a status effect, not a permanent thing. In addition, a status effect with regen should be able to specify if the regeneration only happens after X seconds of no damage, or if it's always active (good to make it so Pikmin only regenerate if they are not constantly under attack)
-        A way for sprays to affect leaders, like if you want to spray all Pikmin+leaders in the group with a speed-up spray
     Make it so Dweevils can pick up treasure
     Add logic for Pikmin to detect an object is close by when it's rectangular -- maybe just for obstacles
     More pathing improvements
@@ -35,6 +32,7 @@ Next tasks (roughly sorted most important first)
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
         Add tips about each Pikmin type's strength and weaknesses
         Split the list of actions (maybe events too) by category, and move them to their own page, along with the events
+        Some pages list properties, but not the defaults
     Refactor
         In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
@@ -601,6 +599,7 @@ Misc things (so I don't forget)
     A way to add random variation to the knockback angle of a hitbox
     If a Pikmin type has black as the color, the idle glow needs to... not be black
     Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
+    The area editor should have a "toolbar" so you can swap from layout to mob to path real quick, instead of having to quit out. Also, shortcut keys for that in F1, F2, etc.
     Area sections
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections
@@ -788,3 +787,4 @@ Tasks for later on (I might never implement these)
     Questions to be answered later
         Change the logic of Pikmin chasing after opponents (pikmin_fsm::go_to_opponent, pikmin_fsm::rechase_opponent) to better suit rectangular objects?
         If P1's leader throws a mine at P2's leader, and it sticks on them, that leader will be *holding* the mine. This will probably break a lot of logic that assumes holding just refers to the pre-throw Pikmin hold
+        Do Pikmin need to have a delay before their health regeneration kicks in?
