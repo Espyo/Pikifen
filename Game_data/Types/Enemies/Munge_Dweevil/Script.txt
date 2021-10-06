@@ -1,5 +1,11 @@
 first_state = relaxing
-death_state = dying
+death_state = dropping_treasure
+states_ignoring_death = dying
+
+init {
+    set_var has_treasure false
+    set_var treasure_hp_check 9999
+}
 
 script {
     relaxing {
@@ -12,6 +18,24 @@ script {
         on_opponent_in_reach {
             focus trigger
             set_state panicking
+        }
+        on_object_in_reach {
+            if $has_treasure = false
+                get_info t mob_category
+                if $t = Treasure
+                    focus trigger
+                    save_focused_mob_memory 1
+                    set_state chasing_treasure
+                end_if
+            end_if
+        }
+        on_damage {
+            if $has_treasure = true
+                get_info t health
+                if $t < $treasure_hp_check
+                    set_state dropping_treasure
+                end_if
+            end_if
         }
         on_itch {
             set_state shaking
@@ -38,8 +62,53 @@ script {
         on_far_from_home {
             set_state going_home
         }
+        on_damage {
+            if $has_treasure = true
+                get_info t health
+                if $t < $treasure_hp_check
+                    set_state dropping_treasure
+                end_if
+            end_if
+        }
         on_itch {
             set_state shaking
+        }
+    }
+
+    chasing_treasure {
+        on_enter {
+            set_animation moving
+            move_to_target focused_mob
+            set_near_reach treasure
+        }
+        on_focus_off_reach {
+            set_state relaxing
+        }
+        on_object_in_reach {
+            get_info t mob_category
+            if $t = Treasure
+                set_state picking_up
+            end_if
+        }
+    }
+
+    picking_up {
+        on_enter {
+            set_animation picking_up
+            stop
+        }
+        on_frame_signal {
+            hold_focused_mob treasure
+            set_var has_treasure true
+            receive_status dweevil_with_treasure
+            get_info treasure_hp_check health
+            calculate treasure_hp_check $treasure_hp_check - 5
+        }
+        on_focus_off_reach {
+            set_state relaxing
+        }
+        on_animation_end {
+            set_state relaxing
         }
     }
     
@@ -50,6 +119,14 @@ script {
         }
         on_reach_destination {
             set_state relaxing
+        }
+        on_damage {
+            if $has_treasure = true
+                get_info t health
+                if $t < $treasure_hp_check
+                    set_state dropping_treasure
+                end_if
+            end_if
         }
         on_itch {
             set_state shaking
@@ -72,6 +149,45 @@ script {
             start_particles gas_explosion 0 0 49
         }
         on_animation_end {
+            set_state relaxing
+        }
+    }
+
+    dropping_treasure {
+        on_enter {
+            stop
+            set_animation releasing
+            if $has_treasure = true
+                remove_status dweevil_with_treasure
+                load_focused_mob_memory 1
+                get_info a angle
+                get_info x x
+                get_info y y
+                get_info z z
+                get_coordinates_from_angle ox oy $a -200
+                calculate x $x + $ox
+                calculate y $y + $oy
+                throw_focused_mob $x $y $z 100
+                set_var has_treasure false
+                start_particles dweevil_treasure_release 0 0 0 200
+            end_if
+        }
+        on_animation_end {
+            get_info t health
+            if $t <= 0
+                set_state dying
+            else
+                set_state stunned
+            end_if
+        }
+    }
+
+    stunned {
+        on_enter {
+            set_animation idling
+            set_timer 1
+        }
+        on_timer {
             set_state relaxing
         }
     }

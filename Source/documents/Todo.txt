@@ -8,7 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.21.0 ---
-    Make it so Dweevils can pick up treasure
     Add logic for Pikmin to detect an object is close by when it's rectangular -- maybe just for obstacles
     More pathing improvements
         Make it so mobs carrying light load can use bouncers
@@ -60,6 +59,7 @@ Next tasks (roughly sorted most important first)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Should the Beady Long Legs's feet be damageable? It can give some life to the fight, but newbies might think that's the only way to cause damage
         Decorative objects shouldn't cast light in blackout mode
+        Maybe each object should have a terrain collision radius, and an inter-mob collision radius. This would stop some of the beefier mobs from visually going inside walls
         On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
         A leader can whistle another from a gate and grab them
@@ -134,6 +134,7 @@ Next tasks (roughly sorted most important first)
         Climbing (add the track logic too)
         Sliding (add the track logic too)
     Misc. graphical improvements
+        Improve and standardize the names of animations, sprites, and body parts
         Smoothen some of the more jerky mob animations, like Red Bulborbs flopping
         Gates should have a different appearance depending on how damaged they are
         Yellow Wollywog should close its eyes when shaking

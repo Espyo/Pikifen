@@ -16,6 +16,7 @@ pushes = false
 radius = 24
 reaches {
     fear = 80 360
+    treasure = 8 360
 }
 rotation_speed = 160
 target_type = enemy

@@ -1,0 +1,24 @@
+name = dweevil_treasure_release
+emission_interval = 0
+number = 30
+number_deviation = 5
+base {
+    bitmap = Smack.png
+    duration = 0.75
+    friction = 1.2
+    gravity = 0
+    size_grow_speed = 20
+    size = 20
+    speed = 0 0
+    color = 255 255 255 255
+}
+duration_deviation = 0.3
+friction_deviation = 0
+gravity_deviation = 0
+size_deviation = 2
+pos_deviation = 32 32
+speed_deviation = 0 0
+angle = 0
+angle_deviation = 360
+total_speed = 150
+total_speed_deviation = 0
