@@ -80,6 +80,9 @@ void resource_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_CARRY_DELIVERED); {
             efc.change_state("being_delivered");
         }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.change_state("idle_thrown");
+        }
     }
     
     efc.new_state("idle_stuck", RESOURCE_STATE_IDLE_STUCK); {
@@ -104,6 +107,14 @@ void resource_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_PATHS_CHANGED); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);
+            efc.run(gen_mob_fsm::carry_get_path);
+            efc.change_state("idle_moving");
+        }
+    }
+    
+    efc.new_state("idle_thrown", RESOURCE_STATE_IDLE_THROWN); {
+        efc.new_event(MOB_EV_LANDED); {
+            efc.run(gen_mob_fsm::lose_momentum);
             efc.run(gen_mob_fsm::carry_get_path);
             efc.change_state("idle_moving");
         }

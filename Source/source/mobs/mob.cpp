@@ -1383,8 +1383,13 @@ bool mob::follow_path(
         //The object will only be airborne if all its carriers can fly.
         if(carry_info->can_fly()) taker_flags |= PATH_TAKER_FLAG_AIRBORNE;
     } else {
-        //Simple mobs are empty-handed, so that's considered light load.
-        taker_flags |= PATH_TAKER_FLAG_LIGHT_LOAD;
+        if(
+            type->category->id == MOB_CATEGORY_PIKMIN ||
+            type->category->id == MOB_CATEGORY_LEADERS
+        ) {
+            //Simple mobs are empty-handed, so that's considered light load.
+            taker_flags |= PATH_TAKER_FLAG_LIGHT_LOAD;
+        }
         //Check if the object can fly directly.
         if(can_move_in_midair) taker_flags |= PATH_TAKER_FLAG_AIRBORNE;
     }

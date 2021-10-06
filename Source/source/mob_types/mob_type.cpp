@@ -145,6 +145,9 @@ void mob_type::add_carrying_states() {
         efc.new_event(MOB_EV_CARRY_DELIVERED); {
             efc.change_state("being_delivered");
         }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.change_state("carriable_thrown");
+        }
     }
     
     efc.new_state("carriable_stuck", ENEMY_EXTRA_STATE_CARRIABLE_STUCK); {
@@ -168,6 +171,14 @@ void mob_type::add_carrying_states() {
         }
         efc.new_event(MOB_EV_PATHS_CHANGED); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);
+            efc.run(gen_mob_fsm::carry_get_path);
+            efc.change_state("carriable_moving");
+        }
+    }
+    
+    efc.new_state("carriable_thrown", ENEMY_EXTRA_STATE_CARRIABLE_THROWN); {
+        efc.new_event(MOB_EV_LANDED); {
+            efc.run(gen_mob_fsm::lose_momentum);
             efc.run(gen_mob_fsm::carry_get_path);
             efc.change_state("carriable_moving");
         }

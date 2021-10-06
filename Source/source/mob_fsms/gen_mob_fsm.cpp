@@ -395,6 +395,20 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a mob has to lose its momentum.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void gen_mob_fsm::lose_momentum(mob* m, void* info1, void* info2) {
+    m->speed.x = m->speed.y = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a mob starts the process of being delivered to an Onion/ship.
  * m:
  *   The mob.

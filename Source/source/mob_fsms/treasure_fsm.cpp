@@ -77,6 +77,9 @@ void treasure_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(treasure_fsm::respawn);
         }
+        efc.new_event(MOB_EV_TOUCHED_BOUNCER); {
+            efc.change_state("idle_thrown");
+        }
     }
     
     efc.new_state("idle_stuck", TREASURE_STATE_IDLE_STUCK); {
@@ -105,6 +108,14 @@ void treasure_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
             efc.run(treasure_fsm::respawn);
+        }
+    }
+    
+    efc.new_state("idle_thrown", TREASURE_STATE_IDLE_THROWN); {
+        efc.new_event(MOB_EV_LANDED); {
+            efc.run(gen_mob_fsm::lose_momentum);
+            efc.run(gen_mob_fsm::carry_get_path);
+            efc.change_state("idle_moving");
         }
     }
     

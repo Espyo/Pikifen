@@ -99,6 +99,14 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         //Leader is about to be bounced.
         ev = toucher->fsm.get_event(MOB_EV_TOUCHED_BOUNCER);
         
+    } else if(
+        bou_ptr->bou_type->riders & BOUNCER_RIDER_PIKMIN &&
+        toucher->path_info &&
+        (toucher->path_info->taker_flags & PATH_TAKER_FLAG_LIGHT_LOAD)
+    ) {
+    
+        //Pikmin carrying light load is about to be bounced.
+        ev = toucher->fsm.get_event(MOB_EV_TOUCHED_BOUNCER);
     }
     
     if(!ev) return;

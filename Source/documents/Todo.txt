@@ -2,19 +2,16 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    More pathing improvements
+        Allow mobs to follow paths via scripting -- both to get from A to B, and to follow a loop
+        Color the different types of link differently in the editor
+        Note as a known problem that Pikmin can start taking a stop but have nowhere to go because the links have limitations. Ideally, these limitations would move to the spot instead, but that makes things more complicated, and would introduce some performance issues, forcing a mob to check all stops for rules AND closest distance.
+        The logic that figures out the first and last path stop needs to be reworked -- when calculating a path from X to Y, with Y not being in a stop but being perfectly reachable, but also with Y being closest to an unreachable stop (locked behind a one-way link, for instance), the engine will be unable to find a path to that perfectly reachable location
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.21.0 ---
-    Add logic for Pikmin to detect an object is close by when it's rectangular -- maybe just for obstacles
-    More pathing improvements
-        Make it so mobs carrying light load can use bouncers
-        Allow mobs to follow paths via scripting -- both to get from A to B, and to follow a loop
-        Color the different types of link differently in the editor
-        Note as a known problem that Pikmin can start taking a stop but have nowhere to go because the links have limitations. Ideally, these limitations would move to the spot instead, but that makes things more complicated, and would introduce some performance issues, forcing a mob to check all stops for rules AND closest distance.
-        The logic that figures out the first and last path stop needs to be reworked -- when calculating a path from X to Y, with Y not being in a stop but being perfectly reachable, but also with Y being closest to an unreachable stop (locked behind a one-way link, for instance), the engine will be unable to find a path to that perfectly reachable location
     Editors
         Add a way to delete areas from within the area editor, probably in the File menu
         When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
@@ -32,11 +29,6 @@ Next tasks (roughly sorted most important first)
         Add tips about each Pikmin type's strength and weaknesses
         Split the list of actions (maybe events too) by category, and move them to their own page, along with the events
         Some pages list properties, but not the defaults
-    Refactor
-        In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
-        Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
-        The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
-        "flail_to_whistle" is really "flail_to_leader"
     
     --- v0.22.0 ---
     Details
@@ -59,6 +51,7 @@ Next tasks (roughly sorted most important first)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Should the Beady Long Legs's feet be damageable? It can give some life to the fight, but newbies might think that's the only way to cause damage
         Decorative objects shouldn't cast light in blackout mode
+        Add logic for Pikmin to detect an object is close by when it's rectangular -- maybe just for obstacles
         Maybe each object should have a terrain collision radius, and an inter-mob collision radius. This would stop some of the beefier mobs from visually going inside walls
         On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
@@ -79,6 +72,10 @@ Next tasks (roughly sorted most important first)
             Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
     Update Dear ImGui
     Code cleanup
+        In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
+        Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
+        The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
+        "flail_to_whistle" is really "flail_to_leader"
         Memory leaks, cppcheck, etc.
         Document every class member with a comment
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
