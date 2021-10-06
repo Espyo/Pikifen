@@ -1804,6 +1804,11 @@ void leader_fsm::queue_stop_auto_pluck(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::release(mob* m, void* info1, void* info2) {
     if(m->holding.empty()) return;
+    //Reset the Pikmin's position to match the leader's,
+    //so that the leader doesn't release the Pikmin inside a wall behind them.
+    m->holding[0]->pos = m->pos;
+    m->holding[0]->z = m->z;
+    m->holding[0]->face(m->angle + TAU / 2.0f, NULL, true);
     m->release(m->holding[0]);
 }
 

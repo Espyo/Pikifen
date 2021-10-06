@@ -306,7 +306,9 @@ bool mob_action_loaders::focus(mob_action_call &call) {
  *   Mob action call that called this.
  */
 bool mob_action_loaders::get_info(mob_action_call &call) {
-    if(call.args[1] == "body_part") {
+    if(call.args[1] == "angle") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_ANGLE);
+    } else if(call.args[1] == "body_part") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_BODY_PART);
     } else if(call.args[1] == "chomped_pikmin") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_CHOMPED_PIKMIN);
@@ -2054,7 +2056,11 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
     size_t t = s2i(data.args[1]);
     
     switch(t) {
-    case MOB_ACTION_GET_INFO_BODY_PART: {
+    case MOB_ACTION_GET_INFO_ANGLE: {
+        *var = f2s(rad_to_deg(target_mob->angle));
+        break;
+        
+    } case MOB_ACTION_GET_INFO_BODY_PART: {
         if(
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_A_N ||
             data.call->parent_event == MOB_EV_HITBOX_TOUCH_N_A ||
