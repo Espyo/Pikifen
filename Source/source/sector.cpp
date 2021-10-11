@@ -1570,12 +1570,31 @@ path_stop::~path_stop() {
  *   Normal link? False means one-way link.
  */
 void path_stop::add_link(path_stop* other_stop, const bool normal) {
-    remove_link(other_stop);
+    PATH_LINK_TYPES link_type = PATH_LINK_TYPE_NORMAL;
+    string link_label;
+    
+    path_link* old_link_data = get_link(other_stop);
+    if(!old_link_data) {
+        old_link_data = other_stop->get_link(this);
+    }
+    if(old_link_data) {
+        link_type = old_link_data->type;
+        link_label = old_link_data->label;
+    }
+    
+    remove_link(old_link_data);
     other_stop->remove_link(this);
     
-    links.push_back(new path_link(this, other_stop, INVALID));
+    path_link* new_link = new path_link(this, other_stop, INVALID);
+    new_link->type = link_type;
+    new_link->label = link_label;
+    links.push_back(new_link);
+    
     if(normal) {
-        other_stop->links.push_back(new path_link(other_stop, this, INVALID));
+        new_link = new path_link(other_stop, this, INVALID);
+        new_link->type = link_type;
+        new_link->label = link_label;
+        other_stop->links.push_back(new_link);
     }
 }
 
