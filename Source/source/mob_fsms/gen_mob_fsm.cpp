@@ -120,7 +120,7 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
     
     m->follow_path(
         m->carry_info->intended_point, true,
-        m->carry_info->get_speed(), target_distance
+        m->carry_info->get_speed(), target_distance, false, ""
     );
     
     m->path_info->target_point = m->carry_info->intended_point;

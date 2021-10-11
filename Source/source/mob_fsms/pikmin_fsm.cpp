@@ -3536,7 +3536,8 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
             carried_mob->carry_info->return_point,
             false,
             p_ptr->get_base_speed(),
-            carried_mob->carry_info->return_dist
+            carried_mob->carry_info->return_dist,
+            false, ""
         )
     ) {
         p_ptr->set_animation(PIKMIN_ANIM_WALKING);

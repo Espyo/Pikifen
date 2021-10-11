@@ -304,6 +304,8 @@ void area_data::clone(area_data &other) {
                 s_ptr->links[l]->end_nr
             );
             new_link->distance = s_ptr->links[l]->distance;
+            new_link->type = s_ptr->links[l]->type;
+            new_link->label = s_ptr->links[l]->label;
             os_ptr->links.push_back(new_link);
         }
     }
@@ -2489,10 +2491,13 @@ void vertex::remove_edge(edge* e_ptr) {
  *   has any hazard that won't be resisted.
  * taker_flags:
  *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
+ * label:
+ *   If not empty, only follow path links with this label.
  */
 bool can_traverse_path_link(
     path_link* link_ptr, const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities, const unsigned char taker_flags
+    const vector<hazard*> &invulnerabilities, const unsigned char taker_flags,
+    const string &label
 ) {
     //Check if there's an obstacle in the way.
     if(!ignore_obstacles && link_ptr->blocked_by_obstacle) {
@@ -2521,9 +2526,15 @@ bool can_traverse_path_link(
     }
     }
     
+    //Check if the travel is limited to links with a certain label.
+    if(!label.empty() && link_ptr->label != label) {
+        return false;
+    }
+    
     //Check if the link's end path stop is hazardous, by checking its sector.
     if(
         !ignore_obstacles &&
+        link_ptr->end_ptr->sector_ptr &&
         !link_ptr->end_ptr->sector_ptr->hazards.empty()
     ) {
         sector* end_sector = link_ptr->end_ptr->sector_ptr;
@@ -2600,6 +2611,8 @@ void depth_first_search(
  *   List of hazards that whoever wants to traverse is invulnerable to.
  * taker_flags:
  *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
+ * label:
+ *   If not empty, only follow path links with this label.
  * total_dist:
  *   If not NULL, place the total path distance here.
  */
@@ -2607,6 +2620,7 @@ vector<path_stop*> dijkstra(
     path_stop* start_node, path_stop* end_node,
     const bool ignore_obstacles,
     const vector<hazard*> &invulnerabilities, const unsigned char taker_flags,
+    const string &label,
     float* total_dist
 ) {
     //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
@@ -2681,7 +2695,7 @@ vector<path_stop*> dijkstra(
             if(
                 !can_traverse_path_link(
                     l_ptr, ignore_obstacles,
-                    invulnerabilities, taker_flags
+                    invulnerabilities, taker_flags, label
                 )
             ) {
                 continue;
@@ -2705,7 +2719,7 @@ vector<path_stop*> dijkstra(
         return
             dijkstra(
                 start_node, end_node,
-                true, vector<hazard*>(), taker_flags,
+                true, vector<hazard*>(), taker_flags, label,
                 total_dist
             );
     } else {
@@ -2793,6 +2807,8 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  *   List of hazards that whoever wants to traverse is invulnerable to.
  * taker_flags:
  *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
+ * label:
+ *   If not empty, only follow path links with this label.
  * go_straight:
  *   This is set according to whether it's better
  *   to go straight to the end point.
@@ -2803,6 +2819,7 @@ vector<path_stop*> get_path(
     const point &start, const point &end,
     const vector<hazard*> invulnerabilities,
     const unsigned char taker_flags,
+    const string &label,
     bool* go_straight, float* total_dist
 ) {
 
@@ -2869,7 +2886,7 @@ vector<path_stop*> get_path(
     full_path =
         dijkstra(
             closest_to_start, closest_to_end,
-            false, invulnerabilities, taker_flags, total_dist
+            false, invulnerabilities, taker_flags, label, total_dist
         );
         
     if(total_dist && !full_path.empty()) {

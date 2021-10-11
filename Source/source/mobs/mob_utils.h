@@ -389,12 +389,15 @@ struct path_info_struct {
     vector<hazard*> invulnerabilities;
     //Flags for the path-taker. Use PATH_TAKER_FLAG_*.
     unsigned char taker_flags;
+    //If not empty, only follow path links with this label.
+    string label;
     
     path_info_struct(
         mob* m,
         const point &target,
         const vector<hazard*> invulnerabilities,
-        const unsigned char taker_flags
+        const unsigned char taker_flags,
+        const string &label
     );
     bool check_blockage();
 };

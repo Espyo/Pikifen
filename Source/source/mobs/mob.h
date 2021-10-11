@@ -377,8 +377,9 @@ public:
     void stop_chasing();
     void stop_turning();
     bool follow_path(
-        const point &target, const bool can_continue = true,
-        const float speed = -1.0f, const float final_target_distance = 3
+        const point &target, const bool can_continue,
+        const float speed, const float final_target_distance,
+        const bool is_script_action, const string &label
     );
     void stop_following_path();
     void circle_around(

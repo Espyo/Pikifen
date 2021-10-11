@@ -1340,14 +1340,19 @@ void mob::focus_on_mob(mob* m2) {
  *   If true, it is possible for the new path to continue
  *   from where the old one left off, if there was an old one.
  * speed:
- *   Speed at which to travel. -1 uses the mob's speed.
+ *   Speed at which to travel.
  * final_target_distance:
  *   For the final chase, from the last path stop to
  *   the destination, use this for the target distance parameter.
+ * is_script_action:
+ *   If true, this path following order was given by a mob script action.
+ * label:
+ *   If not empty, only follow path links with this label.
  */
 bool mob::follow_path(
     const point &target, const bool can_continue,
-    const float speed, const float final_target_distance
+    const float speed, const float final_target_distance,
+    const bool is_script_action, const string &label
 ) {
     bool was_blocked = false;
     path_stop* old_next_stop = NULL;
@@ -1394,9 +1399,14 @@ bool mob::follow_path(
         if(can_move_in_midair) taker_flags |= PATH_TAKER_FLAG_AIRBORNE;
     }
     
+    if(is_script_action) taker_flags |= PATH_TAKER_FLAG_SCRIPT_USE;
+    
     path_info =
-        new path_info_struct(this, target, invulnerabilities, taker_flags);
+        new path_info_struct(
+        this, target, invulnerabilities, taker_flags, label
+    );
     path_info->final_target_distance = final_target_distance;
+    path_info->label = label;
     
     if(
         can_continue &&

@@ -728,12 +728,15 @@ parent_info_struct::parent_info_struct(mob* m) :
  *   Its target destination.
  * taker_flags:
  *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
+ * label:
+ *   If not empty, only follow path links with this label.
  */
 path_info_struct::path_info_struct(
     mob* m,
     const point &target,
     const vector<hazard*> invulnerabilities,
-    const unsigned char taker_flags
+    const unsigned char taker_flags,
+    const string &label
 ) :
     m(m),
     target_point(target),
@@ -746,7 +749,7 @@ path_info_struct::path_info_struct(
     path =
         get_path(
             m->pos, target,
-            invulnerabilities, taker_flags,
+            invulnerabilities, taker_flags, label,
             &go_straight, NULL
         );
 }
@@ -767,7 +770,7 @@ bool path_info_struct::check_blockage() {
         return
             !can_traverse_path_link(
                 cur_stop->get_link(next_stop), false,
-                invulnerabilities, taker_flags
+                invulnerabilities, taker_flags, label
             );
     }
     return false;

@@ -75,6 +75,7 @@ float area_editor::calculate_preview_path() {
             PATH_TAKER_FLAG_SCRIPT_USE &
             PATH_TAKER_FLAG_LIGHT_LOAD &
             PATH_TAKER_FLAG_AIRBORNE,
+            "",
             NULL, &d
         );
         
@@ -706,6 +707,7 @@ void area_editor::find_problems() {
                     PATH_TAKER_FLAG_SCRIPT_USE &
                     PATH_TAKER_FLAG_LIGHT_LOAD &
                     PATH_TAKER_FLAG_AIRBORNE,
+                    "",
                     NULL, NULL
                 );
                 
@@ -1982,37 +1984,50 @@ path_stop* area_editor::split_path_link(
     path_link* l1, path_link* l2, const point &where
 ) {
     bool normal_link = (l2 != NULL);
-    point new_s_pos =
+    point new_stop_pos =
         get_closest_point_in_line(
             l1->start_ptr->pos, l1->end_ptr->pos,
             where
         );
         
     //Create the new stop.
-    path_stop* new_s_ptr = new path_stop(new_s_pos);
-    game.cur_area_data.path_stops.push_back(new_s_ptr);
+    path_stop* new_stop_ptr = new path_stop(new_stop_pos);
+    game.cur_area_data.path_stops.push_back(new_stop_ptr);
     
     //Delete the old links.
     path_stop* old_start_ptr = l1->start_ptr;
     path_stop* old_end_ptr = l1->end_ptr;
+    PATH_LINK_TYPES old_link_type = l1->type;
+    string old_link_label = l1->label;
     l1->start_ptr->remove_link(l1->end_ptr);
     if(normal_link) {
         l2->start_ptr->remove_link(l2->end_ptr);
     }
     
     //Create the new links.
-    old_start_ptr->add_link(new_s_ptr, normal_link);
-    new_s_ptr->add_link(old_end_ptr, normal_link);
+    old_start_ptr->add_link(new_stop_ptr, normal_link);
+    new_stop_ptr->add_link(old_end_ptr, normal_link);
     
-    //Fix the dangling path stop numbers in the links.
+    //Fix the dangling path stop numbers in the links, and other properties.
     game.cur_area_data.fix_path_stop_nrs(old_start_ptr);
     game.cur_area_data.fix_path_stop_nrs(old_end_ptr);
-    game.cur_area_data.fix_path_stop_nrs(new_s_ptr);
+    game.cur_area_data.fix_path_stop_nrs(new_stop_ptr);
+    
+    old_start_ptr->get_link(new_stop_ptr)->type = old_link_type;
+    old_start_ptr->get_link(new_stop_ptr)->label = old_link_label;
+    new_stop_ptr->get_link(old_end_ptr)->type = old_link_type;
+    new_stop_ptr->get_link(old_end_ptr)->label = old_link_label;
+    if(normal_link) {
+        new_stop_ptr->get_link(old_start_ptr)->type = old_link_type;
+        new_stop_ptr->get_link(old_start_ptr)->label = old_link_label;
+        old_end_ptr->get_link(new_stop_ptr)->type = old_link_type;
+        old_end_ptr->get_link(new_stop_ptr)->label = old_link_label;
+    }
     
     //Update the distances.
-    new_s_ptr->calculate_dists_plus_neighbors();
+    new_stop_ptr->calculate_dists_plus_neighbors();
     
-    return new_s_ptr;
+    return new_stop_ptr;
 }
 
 
