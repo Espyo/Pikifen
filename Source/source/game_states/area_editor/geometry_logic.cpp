@@ -808,23 +808,6 @@ void area_editor::find_problems() {
         }
     }
     
-    //Path graph is not connected.
-    if(!game.cur_area_data.path_stops.empty()) {
-        unordered_set<path_stop*> visited;
-        depth_first_search(
-            game.cur_area_data.path_stops,
-            visited,
-            game.cur_area_data.path_stops[0]
-        );
-        if(visited.size() != game.cur_area_data.path_stops.size()) {
-            problem_type = EPT_PATHS_UNCONNECTED;
-            problem_title = "Path split into multiple parts!";
-            problem_description =
-                "The path graph is split into two or more parts. Connect them.";
-            return;
-        }
-    }
-    
     //Check for missing textures.
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
     

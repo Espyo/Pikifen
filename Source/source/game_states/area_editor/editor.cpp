@@ -1184,45 +1184,6 @@ void area_editor::goto_problem() {
         
         break;
         
-    } case EPT_PATHS_UNCONNECTED: {
-
-        unordered_set<path_stop*> visited;
-        depth_first_search(
-            game.cur_area_data.path_stops,
-            visited,
-            game.cur_area_data.path_stops[0]
-        );
-        
-        if(
-            visited.empty() ||
-            visited.size() == game.cur_area_data.path_stops.size()
-        ) {
-            //Uh, old information. Try searching for problems again.
-            find_problems();
-            return;
-        }
-        
-        change_state(EDITOR_STATE_PATHS);
-        
-        point cam_tl = (*visited.begin())->pos;
-        point cam_br = (*visited.begin())->pos;
-        
-        for(path_stop* s : visited) {
-            cam_tl.x = std::min(cam_tl.x, s->pos.x);
-            cam_tl.y = std::min(cam_tl.y, s->pos.y);
-            cam_br.x = std::max(cam_br.x, s->pos.x);
-            cam_br.y = std::max(cam_br.y, s->pos.y);
-            
-            selected_path_stops.insert(s);
-            for(size_t l = 0; l < s->links.size(); ++l) {
-                selected_path_links.insert(s->links[l]);
-            }
-        }
-        
-        center_camera(cam_tl - 64.0f, cam_br + 64.0f);
-        
-        break;
-        
     } case EPT_UNKNOWN_SHADOW: {
 
         point min_coords, max_coords;
