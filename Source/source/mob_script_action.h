@@ -28,6 +28,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_END_IF,
     MOB_ACTION_FINISH_DYING,
     MOB_ACTION_FOCUS,
+    MOB_ACTION_FOLLOW_PATH_RANDOMLY,
     MOB_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
     MOB_ACTION_GET_ANGLE,
     MOB_ACTION_GET_CHOMPED,
@@ -288,6 +289,7 @@ void delete_function(mob_action_run_data &data);
 void drain_liquid(mob_action_run_data &data);
 void finish_dying(mob_action_run_data &data);
 void focus(mob_action_run_data &data);
+void follow_path_randomly(mob_action_run_data &data);
 void follow_path_to_absolute(mob_action_run_data &data);
 void get_angle(mob_action_run_data &data);
 void get_chomped(mob_action_run_data &data);

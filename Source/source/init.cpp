@@ -537,6 +537,14 @@ void init_mob_actions() {
         mob_action_loaders::focus
     );
     
+    reg_param("label", MOB_ACTION_PARAM_STRING, false, true);
+    reg_action(
+        MOB_ACTION_FOLLOW_PATH_RANDOMLY,
+        "follow_path_randomly",
+        mob_action_runners::follow_path_randomly,
+        nullptr
+    );
+    
     reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("label", MOB_ACTION_PARAM_STRING, false, true);

@@ -874,6 +874,71 @@ void mob_action_runners::focus(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the follow path randomly mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
+    string label;
+    if(data.args.size() >= 1) {
+        label = data.args[0];
+    }
+    
+    //We need to decide what the final stop is going to be.
+    //First, get all eligible stops.
+    vector<path_stop*> choices;
+    if(label.empty()) {
+        //If there's no label, then any stop is eligible.
+        choices.insert(
+            choices.end(),
+            game.cur_area_data.path_stops.begin(),
+            game.cur_area_data.path_stops.end()
+        );
+    } else {
+        //If there's a label, it'd be nice to only pick stops that have SOME
+        //connection to the label. Checking the stop's outgoing links is
+        //the best we can do, as to not overengineer or hurt performance.
+        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = game.cur_area_data.path_stops[s];
+            for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+                if(s_ptr->links[l]->label == label) {
+                    choices.push_back(s_ptr);
+                    break;
+                }
+            }
+        }
+    }
+    
+    //Pick a stop from the choices at random, but make sure we don't
+    //pick a stop that the mob is practically on already.
+    path_stop* final_stop = NULL;
+    size_t tries = 0;
+    if(!choices.empty()) {
+        while(!final_stop && tries < 5) {
+            size_t c = randomi(0, choices.size() - 1);
+            if(
+                dist(choices[c]->pos, data.m->pos) >
+                chase_info_struct::DEF_TARGET_DISTANCE
+            ) {
+                final_stop = choices[c];
+                break;
+            }
+            tries++;
+        }
+    }
+    
+    //Go! Though if something went wrong, make it follow a path to nowhere,
+    //so it can emit the MOB_EV_REACHED_DESTINATION event, and hopefully
+    //make it clear that there was an error.
+    data.m->follow_path(
+        final_stop ? final_stop->pos : data.m->pos, true,
+        data.m->get_base_speed(), chase_info_struct::DEF_TARGET_DISTANCE,
+        true, label
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the follow path to absolute mob script action.
  * data:
  *   Data about the action call.
@@ -887,7 +952,8 @@ void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
     }
     
     data.m->follow_path(
-        point(x, y), true, data.m->get_base_speed(), 3.0f, true, label
+        point(x, y), true, data.m->get_base_speed(),
+        chase_info_struct::DEF_TARGET_DISTANCE, true, label
     );
 }
 

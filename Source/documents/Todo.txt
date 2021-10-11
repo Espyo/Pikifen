@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     More pathing improvements
-        Allow mobs to follow paths via scripting -- both to get from A to B, and to follow a loop
         Color the different types of link differently in the editor
         Note as a known problem that Pikmin can start taking a stop but have nowhere to go because the links have limitations. Ideally, these limitations would move to the spot instead, but that makes things more complicated, and would introduce some performance issues, forcing a mob to check all stops for rules AND closest distance.
         The logic that figures out the first and last path stop needs to be reworked -- when calculating a path from X to Y, with Y not being in a stop but being perfectly reachable, but also with Y being closest to an unreachable stop (locked behind a one-way link, for instance), the engine will be unable to find a path to that perfectly reachable location
@@ -243,6 +242,9 @@ Next tasks (roughly sorted most important first)
                     Quitting via the pause menu
             Scoring data
                 In the case of points mode, also the score weights and the medal thresholds
+            Maybe...
+                A win condition for reaching X sprays of type Y
+                A loss condition for killing an enemy
         Area selection menu changes
             Left side
                 The list of areas, with their names and a medal icon next to each

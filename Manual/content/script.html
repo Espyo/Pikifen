@@ -771,6 +771,13 @@ reaches {
         </dl></td>
       </tr>
       <tr>
+        <th><code>follow_path_randomly</code></th>
+        <td><dl>
+          <dt><code><b>follow_path_randomly</b> [&lt;path_label&gt;]</code></dt>
+          <dd>Tells the object to pick a random path stop in the area, and begin heading there, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first stop is not affected by the label, but if you wrote a label, the last path stop has to have an outgoing link with that label. When the mob gets there, or in the case it can't follow a path there, the <code>on_reach_destination</code> event will be triggered.</dd>
+        </dl></td>
+      </tr>
+      <tr>
         <th><code>follow_path_to_absolute</code></th>
         <td><dl>
           <dt><code><b>follow_path_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;path_label&gt;]</code></dt>
