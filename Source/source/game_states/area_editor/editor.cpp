@@ -106,6 +106,7 @@ area_editor::area_editor() :
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     octee_mode(OCTEE_MODE_OFFSET),
     path_drawing_normals(true),
+    path_preview_straight(false),
     pre_move_area_data(nullptr),
     problem_edge_intersection(NULL, NULL),
     quick_preview_timer(QUICK_PREVIEW_DURATION),

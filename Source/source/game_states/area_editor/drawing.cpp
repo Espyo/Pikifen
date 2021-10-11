@@ -789,21 +789,17 @@ void area_editor::draw_canvas() {
         
         if(show_path_preview) {
             //Draw the lines of the path.
-            if(path_preview.empty()) {
-                al_draw_line(
-                    path_preview_checkpoints[0].x,
-                    path_preview_checkpoints[0].y,
-                    path_preview_checkpoints[1].x,
-                    path_preview_checkpoints[1].y,
-                    al_map_rgb(240, 128, 128), 3.0 / game.cam.zoom
-                );
-            } else {
+            ALLEGRO_COLOR lines_color = al_map_rgb(255, 187, 136);
+            ALLEGRO_COLOR invalid_lines_color = al_map_rgb(221, 17, 17);
+            float lines_thickness = 4.0f / game.cam.zoom;
+            
+            if(!path_preview.empty()) {
                 al_draw_line(
                     path_preview_checkpoints[0].x,
                     path_preview_checkpoints[0].y,
                     path_preview[0]->pos.x,
                     path_preview[0]->pos.y,
-                    al_map_rgb(240, 128, 128), 3.0 / game.cam.zoom
+                    lines_color, lines_thickness
                 );
                 for(size_t s = 0; s < path_preview.size() - 1; ++s) {
                     al_draw_line(
@@ -811,17 +807,36 @@ void area_editor::draw_canvas() {
                         path_preview[s]->pos.y,
                         path_preview[s + 1]->pos.x,
                         path_preview[s + 1]->pos.y,
-                        al_map_rgb(240, 128, 128), 3.0 / game.cam.zoom
+                        lines_color, lines_thickness
                     );
                 }
-                
                 al_draw_line(
                     path_preview.back()->pos.x,
                     path_preview.back()->pos.y,
                     path_preview_checkpoints[1].x,
                     path_preview_checkpoints[1].y,
-                    al_map_rgb(240, 128, 128), 3.0 / game.cam.zoom
+                    lines_color, lines_thickness
                 );
+            } else if(path_preview_straight) {
+                al_draw_line(
+                    path_preview_checkpoints[0].x,
+                    path_preview_checkpoints[0].y,
+                    path_preview_checkpoints[1].x,
+                    path_preview_checkpoints[1].y,
+                    lines_color, lines_thickness
+                );
+            } else {
+                for(size_t c = 0; c < 2; ++c) {
+                    if(path_preview_closest[c]) {
+                        al_draw_line(
+                            path_preview_closest[c]->pos.x,
+                            path_preview_closest[c]->pos.y,
+                            path_preview_checkpoints[c].x,
+                            path_preview_checkpoints[c].y,
+                            invalid_lines_color, lines_thickness
+                        );
+                    }
+                }
             }
             
             //Draw the checkpoints.

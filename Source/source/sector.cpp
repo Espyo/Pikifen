@@ -2833,13 +2833,18 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  *   to go straight to the end point.
  * total_dist:
  *   If not NULL, place the total path distance here.
+ * start_stop:
+ *   If not NULL, the closest stop to the start is returned here.
+ * end_stop:
+ *   If not NULL, the closest stop to the end is returned here.
  */
 vector<path_stop*> get_path(
     const point &start, const point &end,
     const vector<hazard*> invulnerabilities,
     const unsigned char taker_flags,
     const string &label,
-    bool* go_straight, float* total_dist
+    bool* go_straight, float* total_dist,
+    path_stop** start_stop, path_stop** end_stop
 ) {
 
     vector<path_stop*> full_path;
@@ -2872,6 +2877,9 @@ vector<path_stop*> get_path(
             closest_to_end = s_ptr;
         }
     }
+    
+    if(start_stop) *start_stop = closest_to_start;
+    if(end_stop) *end_stop = closest_to_end;
     
     //Let's just check something real quick:
     //if the destination is closer than any stop,

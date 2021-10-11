@@ -750,7 +750,7 @@ path_info_struct::path_info_struct(
         get_path(
             m->pos, target,
             invulnerabilities, taker_flags, label,
-            &go_straight, NULL
+            &go_straight, NULL, NULL, NULL
         );
 }
 

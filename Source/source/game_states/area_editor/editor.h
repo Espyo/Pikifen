@@ -301,10 +301,14 @@ private:
     path_stop* path_drawing_stop_1;
     //Path stops that make up the current path preview.
     vector<path_stop*> path_preview;
-    //Total distance of the previewed path.
-    float path_preview_dist;
     //Location of the two path preview checkpoints.
     point path_preview_checkpoints[2];
+    //The closest stop to the path preview start and end.
+    path_stop* path_preview_closest[2];
+    //Total distance of the previewed path.
+    float path_preview_dist;
+    //Is the path preview going straight?
+    bool path_preview_straight;
     //Only calculate the preview path when this time is up.
     timer path_preview_timer;
     //Area data before vertex movement.

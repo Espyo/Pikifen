@@ -537,7 +537,8 @@ vector<path_stop*> get_path(
     const point &start, const point &end,
     const vector<hazard*> invulnerabilities,
     const unsigned char taker_flags, const string &label,
-    bool* go_straight, float* get_dist
+    bool* go_straight, float* get_dist,
+    path_stop** start_stop, path_stop** end_stop
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 TRIANGULATION_ERRORS get_polys(

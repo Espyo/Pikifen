@@ -76,7 +76,8 @@ float area_editor::calculate_preview_path() {
             PATH_TAKER_FLAG_LIGHT_LOAD &
             PATH_TAKER_FLAG_AIRBORNE,
             "",
-            NULL, &d
+            &path_preview_straight, &d,
+            &path_preview_closest[0], &path_preview_closest[1]
         );
         
     if(path_preview.empty() && d == 0) {
@@ -708,7 +709,7 @@ void area_editor::find_problems() {
                     PATH_TAKER_FLAG_LIGHT_LOAD &
                     PATH_TAKER_FLAG_AIRBORNE,
                     "",
-                    NULL, NULL
+                    NULL, NULL, NULL, NULL
                 );
                 
             for(size_t s = 1; s < path.size(); ++s) {

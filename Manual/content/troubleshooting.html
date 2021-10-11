@@ -88,6 +88,9 @@
 
       <dt><b>In the area editor, if a vertex has two edges at opposite angles, but said angles are not axis-aligned, then you start drawing a new sector by starting on one edge, and clicking the other, then that will break the geometry.</b></dt>
       <dd>Please do not do that.</dd>
+
+      <dt><b>Objects blindly pick the start and end path stops in a path by just checking which are closest to the start and end coordinates.</b></dt>
+      <dd>I could make the objects also check if they're not entering a path graph with no return, or a path stop that's in a hazard they are vulnerable to, or a path stop that's meant for airborne travel only (which isn't even a thing, since only path links determine that), or so on. But that would be very difficult, and would lead to bizarre unintuitive behaviors, not to mention performance issues.</dd>
     </dl>
 
   </div>

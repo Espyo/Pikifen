@@ -2161,7 +2161,19 @@ void area_editor::process_gui_panel_paths() {
             
             //Total travel distance text.
             if(show_path_preview) {
-                ImGui::Text("Total travel distance: %f", path_preview_dist);
+                if(path_preview.empty() && !path_preview_straight) {
+                    ImGui::Text("No valid path between A and B.");
+                    ImGui::Text(" ");
+                } else {
+                    ImGui::Text(
+                        "Total travel distance: %f",
+                        path_preview_dist
+                    );
+                    ImGui::Text(
+                        "Total stops visited: %lu",
+                        path_preview.size()
+                    );
+                }
             }
             
             //Spacer dummy widget.
