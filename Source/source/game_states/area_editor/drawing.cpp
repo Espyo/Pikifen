@@ -653,27 +653,48 @@ void area_editor::draw_canvas() {
         for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
             for(size_t l = 0; l < s_ptr->links.size(); l++) {
-                path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
+                path_link* l_ptr = s_ptr->links[l];
+                path_stop* s2_ptr = l_ptr->end_ptr;
                 bool one_way =
-                    !s_ptr->links[l]->end_ptr->get_link(s_ptr);
+                    !l_ptr->end_ptr->get_link(s_ptr);
                 bool selected =
-                    selected_path_links.find(s_ptr->links[l]) !=
+                    selected_path_links.find(l_ptr) !=
                     selected_path_links.end();
-                    
-                al_draw_line(
-                    s_ptr->pos.x, s_ptr->pos.y,
-                    s2_ptr->pos.x, s2_ptr->pos.y,
-                    (
-                        selected ?
+                ALLEGRO_COLOR color;
+                if(selected) {
+                    color =
                         al_map_rgba(
                             SELECTION_COLOR[0],
                             SELECTION_COLOR[1],
                             SELECTION_COLOR[2],
                             selection_opacity * 255
-                        ) :
-                        one_way ? al_map_rgb(192, 128, 224) :
-                        al_map_rgb(0, 80, 224)
-                    ),
+                        );
+                } else {
+                    switch(l_ptr->type) {
+                    case PATH_LINK_TYPE_NORMAL: {
+                        color = al_map_rgba(34, 136, 187, 224);
+                        break;
+                    } case PATH_LINK_TYPE_SCRIPT_ONLY: {
+                        color = al_map_rgba(187, 102, 34, 224);
+                        break;
+                    } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
+                        color = al_map_rgba(102, 170, 34, 224);
+                        break;
+                    } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
+                        color = al_map_rgba(187, 102, 153, 224);
+                        break;
+                    }
+                    }
+                    if(!one_way) {
+                        color = change_color_lighting(color, 0.2f);
+                    }
+                }
+                
+                
+                al_draw_line(
+                    s_ptr->pos.x, s_ptr->pos.y,
+                    s2_ptr->pos.x, s2_ptr->pos.y,
+                    color,
                     PATH_LINK_THICKNESS / game.cam.zoom
                 );
                 
@@ -708,7 +729,7 @@ void area_editor::draw_canvas() {
                         mid_y + sin(angle + TAU / 4) * delta,
                         mid_x + cos(angle - TAU / 4) * delta,
                         mid_y + sin(angle - TAU / 4) * delta,
-                        al_map_rgb(192, 128, 224)
+                        color
                     );
                 }
             }
@@ -1140,7 +1161,7 @@ void area_editor::draw_canvas() {
         float proportion =
             (cross_section_window_end.x - cross_section_window_start.x) /
             cross_section_world_length.to_float();
-
+            
         ALLEGRO_COLOR bg_color =
             game.options.editor_use_custom_style ?
             change_color_lighting(game.options.editor_primary_color, -0.3f) :
@@ -1415,7 +1436,7 @@ void area_editor::draw_cross_section_sector(
     float rectangle_y =
         cross_section_window_end.y - 8 -
         ((sector_ptr->z - lowest_z) * proportion);
-    
+        
     ALLEGRO_COLOR color =
         game.options.editor_use_custom_style ?
         change_color_lighting(game.options.editor_secondary_color, -0.2f) :
