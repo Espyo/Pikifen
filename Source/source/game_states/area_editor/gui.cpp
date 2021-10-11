@@ -2176,6 +2176,21 @@ void area_editor::process_gui_panel_paths() {
                 }
             }
             
+            //Select links with label button.
+            if(ImGui::Button("Select all links with label...")) {
+                ImGui::OpenPopup("selectLinks");
+            }
+            set_tooltip(
+                "Selects all links (and their stops) that have the\n"
+                "specified label. The search is case-sensitive."
+            );
+            
+            //Select links with label popup.
+            string label_name;
+            if(input_popup("selectLinks", "Label:", &label_name)) {
+                select_path_links_with_label(label_name);
+            }
+            
             //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
             

@@ -2,21 +2,20 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
-    
-Next tasks (roughly sorted most important first)
-    --- To fix ---
-    
-    --- v0.21.0 ---
     Editors
         Add a way to delete areas from within the area editor, probably in the File menu
         When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
-        A way to select all path links that use a certain label
         Check some corner cases with double-click to create a new X, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc.
         Tree shadows should have both an horizontal and a vertical sway by default, not just horizontal
         When creating a new animation, it should try to find a sprite that matches the name of the animation
         Frame duration slider should be less sensitive
         The scrollable part of lists in pickers shouldn't include the creation/search stuff
+    
+Next tasks (roughly sorted most important first)
+    --- To fix ---
+    
+    
+    --- v0.21.0 ---
     The cutscene message box should be styled like the menu boxes, instead of being a stretched PNG
     Menus need tooltips
     In the manual

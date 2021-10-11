@@ -2504,6 +2504,28 @@ void area_editor::select_edge(edge* e) {
 
 
 /* ----------------------------------------------------------------------------
+ * Selects all path links with the given label.
+ * label:
+ *   Label to search for.
+ */
+void area_editor::select_path_links_with_label(const string &label) {
+    clear_selection();
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            path_link* l_ptr = s_ptr->links[l];
+            if(l_ptr->label == label) {
+                selected_path_links.insert(l_ptr);
+                selected_path_stops.insert(s_ptr);
+                selected_path_stops.insert(l_ptr->end_ptr);
+            }
+        }
+    }
+    set_selection_status_text();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Selects a sector and its edges and vertexes.
  * s:
  *   Sector to select.
