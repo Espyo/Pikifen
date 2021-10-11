@@ -537,6 +537,16 @@ void init_mob_actions() {
         mob_action_loaders::focus
     );
     
+    reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("label", MOB_ACTION_PARAM_STRING, false, true);
+    reg_action(
+        MOB_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
+        "follow_path_to_absolute",
+        mob_action_runners::follow_path_to_absolute,
+        nullptr
+    );
+    
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("center x", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("center y", MOB_ACTION_PARAM_FLOAT, false, false);

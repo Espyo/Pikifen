@@ -661,7 +661,7 @@ reaches {
       </tr>
       <tr>
         <th style="text-align: left;"><code>on_reach_destination</code></th>
-        <td>Triggered every frame that the object is in its destination, by moving there with any of the "move" actions.</td>
+        <td>Triggered every frame that the object is in its destination, by moving there with any of the "move" actions, or by reaching the final destination with any of the "follow_path" actions.</td>
       </tr>
       <tr>
         <th style="text-align: left;"><code>on_receive_message</code></th>
@@ -768,6 +768,13 @@ reaches {
           <dd>Focuses on the first linked object, if any. You cannot use this when the mob has just spawned, since it doesn't have link information by that point.</dd>
           <dt><code><b>focus</b> parent</code></dt>
           <dd>Focuses on the parent object, if any. You cannot use this when the mob has just spawned, since it doesn't have parent information by that point.</dd>
+        </dl></td>
+      </tr>
+      <tr>
+        <th><code>follow_path_to_absolute</code></th>
+        <td><dl>
+          <dt><code><b>follow_path_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;path_label&gt;]</code></dt>
+          <dd>Tells the object to begin heading towards the specified area coordinates, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first and last path stop are not affected by the label. When the mob gets there, or in the case it can't follow a path there, the <code>on_reach_destination</code> event will be triggered.</dd>
         </dl></td>
       </tr>
       <tr>

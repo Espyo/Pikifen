@@ -874,6 +874,25 @@ void mob_action_runners::focus(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code for the follow path to absolute mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
+    float x = s2f(data.args[0]);
+    float y = s2f(data.args[1]);
+    string label;
+    if(data.args.size() >= 3) {
+        label = data.args[2];
+    }
+    
+    data.m->follow_path(
+        point(x, y), true, data.m->get_base_speed(), 3.0f, true, label
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code for the angle obtaining mob script action.
  * data:
  *   Data about the action call.
