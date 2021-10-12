@@ -1760,3 +1760,86 @@ string vector_tail_to_string(const vector<string> &v, const size_t pos) {
     }
     return result;
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes all "non-important" files inside of a folder.
+ * Then, if the folder ends up empty, also deletes the folder.
+ * folder_path:
+ *   Path to the folder to wipe.
+ * non_important_files:
+ *   List of files that can be deleted.
+ */
+WIPE_FOLDER_RESULTS wipe_folder(
+    const string &folder_path, const vector<string> &non_important_files
+) {
+    ALLEGRO_FS_ENTRY* folder =
+        al_create_fs_entry(folder_path.c_str());
+    if(!folder || !al_open_directory(folder)) {
+        return WIPE_FOLDER_RESULT_NOT_FOUND;
+    }
+    
+    bool has_important_files = false;
+    bool has_folders = false;
+    bool non_important_file_delete_error = false;
+    bool folder_delete_error = false;
+    
+    ALLEGRO_FS_ENTRY* entry = al_read_directory(folder);
+    while(entry) {
+        if((al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR) > 0) {
+            has_folders = true;
+            
+        } else {
+            string entry_name =
+                standardize_path(al_get_fs_entry_name(entry));
+                
+            //Only save what's after the final slash.
+            size_t pos = entry_name.find_last_of("/");
+            if(pos != string::npos) {
+                entry_name =
+                    entry_name.substr(pos + 1, entry_name.size() - pos - 1);
+            }
+            
+            if(
+                std::find(
+                    non_important_files.begin(),
+                    non_important_files.end(),
+                    entry_name
+                ) == non_important_files.end()
+            ) {
+                //Name not found in the non-important file list.
+                has_important_files = true;
+            } else {
+                if(!al_remove_fs_entry(entry)) {
+                    non_important_file_delete_error = true;
+                }
+            }
+            
+        }
+        
+        al_destroy_fs_entry(entry);
+        entry = al_read_directory(folder);
+    }
+    
+    al_close_directory(folder);
+    
+    if(
+        !has_important_files &&
+        !has_folders &&
+        !non_important_file_delete_error
+    ) {
+        if(!al_remove_fs_entry(folder)) {
+            folder_delete_error = true;
+        }
+    }
+    
+    al_destroy_fs_entry(folder);
+    
+    if(non_important_file_delete_error || folder_delete_error) {
+        return WIPE_FOLDER_RESULT_DELETE_ERROR;
+    }
+    if(has_important_files || has_folders) {
+        return WIPE_FOLDER_RESULT_HAS_IMPORTANT;
+    }
+    return WIPE_FOLDER_RESULT_OK;
+}

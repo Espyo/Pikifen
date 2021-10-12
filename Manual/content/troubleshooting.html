@@ -91,6 +91,9 @@
 
       <dt><b>Objects blindly pick the start and end path stops in a path by just checking which are closest to the start and end coordinates.</b></dt>
       <dd>I could make the objects also check if they're not entering a path graph with no return, or a path stop that's in a hazard they are vulnerable to, or a path stop that's meant for airborne travel only (which isn't even a thing, since only path links determine that), or so on. But that would be very difficult, and would lead to bizarre unintuitive behaviors, not to mention performance issues.</dd>
+      
+      <dt><b>Some wall shadows that fade away into a small size look really thin.</b></dt>
+      <dd>Technically the engine is drawing the shapes of the shadows correctly, from a thick size to a small size, but the color interpolation done by the graphics backend sometimes does a bad job when the final two points of the shadow are so thin. There is not much that can be done to fix this.</dd>
     </dl>
 
   </div>

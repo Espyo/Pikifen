@@ -376,7 +376,7 @@ void animation_editor::load() {
     load_mob_types(false);
     
     file_path.clear();
-    can_reload = false;
+    animation_exists_on_disk = false;
     can_save = false;
     loaded_content_yet = false;
     side_view = false;
@@ -424,7 +424,7 @@ void animation_editor::load_animation_database(
     cur_hitbox = NULL;
     cur_hitbox_nr = 0;
     
-    can_reload = true;
+    animation_exists_on_disk = true;
     can_save = true;
     
     game.cam.set_pos(point());
@@ -662,7 +662,7 @@ void animation_editor::press_quit_button() {
  * Code to run when the reload button widget is pressed.
  */
 void animation_editor::press_reload_button() {
-    if(!can_reload) return;
+    if(!animation_exists_on_disk) return;
     if(!check_new_unsaved_changes(reload_widget_pos)) {
         load_animation_database(false);
     }

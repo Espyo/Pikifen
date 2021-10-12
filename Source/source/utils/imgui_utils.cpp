@@ -174,3 +174,14 @@ void ImGui::Reset() {
         io.KeysDown[k] = false;
     }
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Prepares the "cursor X" so that the next widgets will be centered.
+ * upcoming_items_width:
+ *   Width of the items that will belong to this line.
+ */
+void ImGui::SetupCentering(const int upcoming_items_width) {
+    int window_width = ImGui::GetWindowSize().x;
+    ImGui::SetCursorPosX((window_width - upcoming_items_width) * 0.5f);
+}

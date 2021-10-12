@@ -169,6 +169,8 @@ protected:
         string title;
         //Is it open?
         bool is_open;
+        //Custom dialog size.
+        point custom_size;
         
         dialog_info();
         void process();

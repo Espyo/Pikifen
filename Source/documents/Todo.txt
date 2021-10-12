@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Editors
-        Add a way to delete areas from within the area editor, probably in the File menu
         When you create a new sprite, the dimensions for the Pikmin top will be reset to some useless values. At the very least, it should have the right width/height ratio
         Check some corner cases with double-click to create a new X, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc.
         Tree shadows should have both an horizontal and a vertical sway by default, not just horizontal
@@ -24,6 +23,7 @@ Next tasks (roughly sorted most important first)
         Add tips about each Pikmin type's strength and weaknesses
         Split the list of actions (maybe events too) by category, and move them to their own page, along with the events
         Some pages list properties, but not the defaults
+        The homepage should just be an index; this means there should be another page on how to play, another on how to make, etc. Also see if I can move the changelog higher up
     
     --- v0.22.0 ---
     Details
@@ -73,6 +73,27 @@ Next tasks (roughly sorted most important first)
         "flail_to_whistle" is really "flail_to_leader"
         Memory leaks, cppcheck, etc.
         Document every class member with a comment
+    Demo content
+        Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
+        If something is under construction, like a menu or something, add a small "WIP" blurb
+        Maybe add an F1 screen with quick-start help?
+        Add more treasures
+            Ball of yarn treasure
+        Sounds really need a makeover...
+        Mobs for decorative pebbles, stones, and sticks
+        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
+    Add several pre-packaged areas, since players have nothing to play with right now
+        A tutorial area
+            The area should be linear, but more intuitive and representative of the series
+            Linear, starts with an info spot that says welcome, and mentions the movement controls
+            After a bit to the right, there's a Pikmin on a ledge, and a sign telling you to whistle it
+            Farther up, a sign telling you to throw the Pikmin at a Pellet Posy on a ledge
+            You need to gather X Pikmin, to take down a paper bag or something
+            Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
+            Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
+            Some signs should talk about dismissing, and group moving
+        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
+        Kman's Adventure area (see #content-sharing)
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     General graphic file improvements
         Leader and Pikmin portrait images should
@@ -90,6 +111,7 @@ Next tasks (roughly sorted most important first)
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
         Using blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
+        Remember to update the Pikmin Fanon wiki page link in the PNG files
     Pikmin animation improvements
         Blinking when walking or idling -- these animations should start in random frames (do Pikmin even blink?)
         Throwing animation needs to be reworked
@@ -134,33 +156,11 @@ Next tasks (roughly sorted most important first)
         Animate the Hocotate ship -- use Kman's zip
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
-    Demo content
-        Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
-        If something is under construction, like a menu or something, add a small "WIP" blurb
-        Maybe add an F1 screen with quick-start help?
-        Add more treasures
-            Ball of yarn treasure
-        Sounds really need a makeover...
-        Mobs for decorative pebbles, stones, and sticks
-        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
-    Add several pre-packaged areas, since players have nothing to play with right now
-        A tutorial area
-            The area should be linear, but more intuitive and representative of the series
-            Linear, starts with an info spot that says welcome, and mentions the movement controls
-            After a bit to the right, there's a Pikmin on a ledge, and a sign telling you to whistle it
-            Farther up, a sign telling you to throw the Pikmin at a Pellet Posy on a ledge
-            You need to gather X Pikmin, to take down a paper bag or something
-            Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
-            Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
-            Some signs should talk about dismissing, and group moving
-        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
-        Kman's Adventure area (see #content-sharing)
     Manual
         Update the area editor screenshots
         Revamp the scripting tutorial
             Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
             Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
-    Remember to update the Pikmin Fanon wiki page link in the PNG files
     
     --- v0.23.0 ---
     Radar

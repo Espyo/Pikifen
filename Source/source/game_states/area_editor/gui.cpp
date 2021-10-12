@@ -170,6 +170,62 @@ void area_editor::process_gui_control_panel() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui area deletion dialog for this frame.
+ */
+void area_editor::process_gui_delete_area_dialog() {
+    //Explanation text.
+    string explanation_str;
+    if(!area_exists_on_disk) {
+        explanation_str =
+            "You have never saved this area to disk, so if you\n"
+            "delete, you will only lose your unsaved progress.";
+    } else {
+        explanation_str =
+            "If you delete, you will lose all unsaved progress,\n"
+            "and the area's files on the disk will be gone FOREVER!";
+    }
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanation_str.c_str()).x);
+    ImGui::Text("%s", explanation_str.c_str());
+    
+    //Final warning text.
+    string final_warning_str =
+        "Are you sure you want to delete the area \"" +
+        area_folder_name + "\"?";
+    ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
+    ImGui::TextColored(
+        ImVec4(0.8, 0.6, 0.6, 1.0),
+        "%s", final_warning_str.c_str()
+    );
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Cancel button.
+    ImGui::SetupCentering(100 + 100 + 30);
+    if(ImGui::Button("Cancel", ImVec2(100, 40))) {
+        close_top_dialog();
+    }
+    
+    //Delete button.
+    ImGui::SameLine(0.0f, 30);
+    ImGui::PushStyleColor(
+        ImGuiCol_Button, ImVec4(0.3, 0.1, 0.1, 1.0)
+    );
+    ImGui::PushStyleColor(
+        ImGuiCol_ButtonHovered, ImVec4(0.5, 0.1, 0.1, 1.0)
+    );
+    ImGui::PushStyleColor(
+        ImGuiCol_ButtonActive, ImVec4(0.4, 0.1, 0.1, 1.0)
+    );
+    if(ImGui::Button("Delete", ImVec2(100, 40))) {
+        close_top_dialog();
+        delete_current_area();
+    }
+    ImGui::PopStyleColor(3);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui menu bar for this frame.
  */
 void area_editor::process_gui_menu_bar() {
@@ -183,6 +239,11 @@ void area_editor::process_gui_menu_bar() {
                 press_reload_button();
             }
             reload_widget_pos = get_last_widget_pos();
+            
+            //Delete current area item.
+            if(ImGui::MenuItem("Delete current area")) {
+                press_delete_area_button();
+            }
             
             //Options menu item.
             if(ImGui::MenuItem("Options")) {
@@ -1553,7 +1614,10 @@ void area_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
     //Area name text.
-    ImGui::Text("Area: %s", cur_area_name.c_str());
+    ImGui::Text("Area folder: %s", area_folder_name.c_str());
+    set_tooltip(
+        "Full folder path: " + AREAS_FOLDER_PATH + "/" + area_folder_name
+    );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));

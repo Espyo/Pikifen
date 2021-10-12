@@ -68,8 +68,8 @@ private:
     animation_database anims;
     //Is the current animation playing?
     bool anim_playing;
-    //Can the user use the "reload" button?
-    bool can_reload;
+    //Does the animation exist on disk, or RAM only?
+    bool animation_exists_on_disk;
     //Can the user use the "save" button?
     bool can_save;
     //Is the sprite comparison mode on?

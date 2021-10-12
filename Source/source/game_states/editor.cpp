@@ -1574,9 +1574,12 @@ void editor::dialog_info::process() {
         ImVec2(game.win_w / 2.0f, game.win_h / 2.0f),
         ImGuiCond_Always, ImVec2(0.5f, 0.5f)
     );
-    ImGui::SetNextWindowSize(
-        ImVec2(game.win_w * 0.8, game.win_h * 0.8), ImGuiCond_Once
-    );
+    point size = custom_size;
+    if(custom_size.x == 0.0f && custom_size.y == 0.0f) {
+        size.x = game.win_w * 0.8;
+        size.y = game.win_h * 0.8;
+    }
+    ImGui::SetNextWindowSize(ImVec2(size.x, size.y), ImGuiCond_Once);
     ImGui::OpenPopup((title + "##dialog").c_str());
     
     if(

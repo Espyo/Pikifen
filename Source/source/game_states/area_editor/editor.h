@@ -211,8 +211,8 @@ private:
     timer backup_timer;
     //Can the user load the backup?
     bool can_load_backup;
-    //Can the user use the "reload" button?
-    bool can_reload;
+    //Does the area exist on disk, or RAM only?
+    bool area_exists_on_disk;
     //Where the cross-section tool points are.
     point cross_section_checkpoints[2];
     //Cross-section window's start coordinates.
@@ -223,8 +223,8 @@ private:
     point cross_section_z_window_start;
     //Cross-section Z legend window's end coordinates.
     point cross_section_z_window_end;
-    //Name of the area currently loaded.
-    string cur_area_name;
+    //Name of the folder of the currently loaded area.
+    string area_folder_name;
     //When showing a hazard in the list, this is the index of the current one.
     size_t cur_hazard_nr;
     //The current transformation widget.
@@ -446,6 +446,7 @@ private:
     void create_mob_under_cursor();
     void create_new_from_picker(const size_t picker_id, const string &name);
     sector* create_sector_for_layout_drawing(sector* copy_from);
+    void delete_current_area();
     void delete_edge(edge* e_ptr);
     bool delete_edges(const set<edge*> &which);
     void delete_mobs(const set<mob_gen*> &which);
@@ -533,6 +534,7 @@ private:
     );
     area_data* prepare_state();
     void press_circle_sector_button();
+    void press_delete_area_button();
     void press_duplicate_mobs_button();
     void press_load_button();
     void press_grid_interval_decrease_button();
@@ -555,6 +557,7 @@ private:
     void press_undo_button();
     void process_gui();
     void process_gui_control_panel();
+    void process_gui_delete_area_dialog();
     void process_gui_menu_bar();
     void process_gui_mob_script_vars(mob_gen* gen);
     void process_gui_panel_details();

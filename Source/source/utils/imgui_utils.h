@@ -43,6 +43,7 @@ bool ListBox(
     const int height_in_items = -1
 );
 void Reset();
+void SetupCentering(const int upcoming_items_width);
 
 };
 
