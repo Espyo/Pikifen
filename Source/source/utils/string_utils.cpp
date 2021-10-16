@@ -87,6 +87,34 @@ string f2s(const float f) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a substring representing the start of one string, up until it
+ * no longer matches with the other string.
+ * This check is case-sensitive.
+ * Returns an empty string if there's no match.
+ * s1:
+ *   First string.
+ * s2:
+ *   Second string.
+ */
+string get_matching_string_starts(const string &s1, const string &s2) {
+    size_t chars_to_check = std::min(s1.size(), s2.size());
+    size_t nr_matching_chars = 0;
+    
+    for(size_t c = 0; c < chars_to_check; ++c) {
+        if(s1[c] == s2[c]) {
+            nr_matching_chars++;
+        } else {
+            break;
+        }
+    }
+    
+    if(nr_matching_chars == 0) return string();
+    
+    return s1.substr(0, nr_matching_chars);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks if the contents of a string are a number or not.
  * s:
  *   String to check.

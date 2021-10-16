@@ -518,6 +518,7 @@ sprite::sprite(
     parent_bmp(nullptr),
     scale(point(1.0, 1.0)),
     angle(0),
+    top_size(5.5, 10),
     top_angle(0),
     top_visible(true),
     bitmap(b),

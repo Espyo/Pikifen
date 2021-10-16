@@ -220,6 +220,7 @@ private:
     void resize_sprite(sprite* s, const float mult);
     void save_animation_database();
     void set_all_sprite_scales(const float scale);
+    void set_best_frame_sprite();
     void sprite_bmp_flood_fill(
         ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
     );

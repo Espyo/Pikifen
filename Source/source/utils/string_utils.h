@@ -33,6 +33,7 @@ string box_string(
 );
 string b2s(const bool b);
 string f2s(const float f);
+string get_matching_string_starts(const string &s1, const string &s2);
 bool is_number(const string &s);
 string pad_string(const string &s, const size_t size, const char padding);
 string remove_extension(const string &s);

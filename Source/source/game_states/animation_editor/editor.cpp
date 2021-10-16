@@ -1114,6 +1114,71 @@ void animation_editor::set_all_sprite_scales(const float scale) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Sets the current frame to be the most apt sprite it can find, given the
+ * current circumstances.
+ * Basically, it picks a sprite that's called something similar to
+ * the current animation.
+ */
+void animation_editor::set_best_frame_sprite() {
+    if(anims.sprites.empty()) return;
+    
+    //Find the sprites that match the most characters with the animation name.
+    //Let's set the starting best score to 3, as an arbitrary way to
+    //sift out results that technically match, but likely aren't the same
+    //term. Example: If the animation is called "running", and there is no
+    //"runnning" sprite, we probably don't want a match with "rummaging".
+    //Also, set the final sprite index to 0 so that if something goes wrong,
+    //we default to the first sprite on the list.
+    size_t final_sprite_idx = 0;
+    vector<size_t> best_sprite_idxs;
+    size_t best_score = 3;
+    
+    if(anims.sprites.size() > 1) {
+        for(size_t s = 0; s < anims.sprites.size(); ++s) {
+            size_t score =
+                get_matching_string_starts(
+                    str_to_lower(cur_anim->name),
+                    str_to_lower(anims.sprites[s]->name)
+                ).size();
+            if(score < best_score) {
+                continue;
+            }
+            if(score > best_score) {
+                best_score = score;
+                best_sprite_idxs.clear();
+            }
+            best_sprite_idxs.push_back(s);
+        }
+    }
+    
+    if(best_sprite_idxs.size() == 1) {
+        //If there's only one best match, go for it.
+        final_sprite_idx = best_sprite_idxs[0];
+        
+    } else if(best_sprite_idxs.size() > 1) {
+        //Sort them alphabetically and pick the first.
+        std::sort(
+            best_sprite_idxs.begin(),
+            best_sprite_idxs.end(),
+        [this, &best_sprite_idxs] (const size_t s1, const size_t s2) {
+            return
+                str_to_lower(anims.sprites[s1]->name) <
+                str_to_lower(anims.sprites[s2]->name);
+        });
+        final_sprite_idx = best_sprite_idxs[0];
+    }
+    
+    //Finally, set the frame info then.
+    cur_anim->frames[cur_frame_nr].sprite_index =
+        final_sprite_idx;
+    cur_anim->frames[cur_frame_nr].sprite_ptr =
+        anims.sprites[final_sprite_idx];
+    cur_anim->frames[cur_frame_nr].sprite_name =
+        anims.sprites[final_sprite_idx]->name;
+}
+
+
 static const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
 
 /* ----------------------------------------------------------------------------

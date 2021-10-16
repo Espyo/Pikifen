@@ -889,6 +889,7 @@ void animation_editor::process_gui_panel_animation() {
                 } else {
                     cur_anim->frames.push_back(frame());
                     cur_frame_nr = 0;
+                    set_best_frame_sprite();
                 }
                 frame_ptr = &(cur_anim->frames[cur_frame_nr]);
                 made_new_changes = true;
@@ -965,7 +966,7 @@ void animation_editor::process_gui_panel_animation() {
                 //Duration value.
                 if(
                     ImGui::DragFloat(
-                        "Duration", &frame_ptr->duration, 0.005, 0.0f, FLT_MAX
+                        "Duration", &frame_ptr->duration, 0.0005, 0.0f, FLT_MAX
                     )
                 ) {
                     made_new_changes = true;
