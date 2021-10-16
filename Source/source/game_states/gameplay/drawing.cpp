@@ -857,8 +857,7 @@ void gameplay_state::draw_message_box() {
     
     al_use_transform(&game.identity_transform);
     
-    draw_bitmap(
-        bmp_message_box,
+    draw_textured_box(
         point(
             game.win_w / 2,
             game.win_h - al_get_font_line_height(game.fonts.standard) * 2 - 4
@@ -866,7 +865,8 @@ void gameplay_state::draw_message_box() {
         point(
             game.win_w - 16,
             al_get_font_line_height(game.fonts.standard) * 4
-        )
+        ),
+        game.sys_assets.bmp_bubble_box
     );
     
     if(msg_box->speaker_icon) {

@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    The cutscene message box should be styled like the menu boxes, instead of being a stretched PNG
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---

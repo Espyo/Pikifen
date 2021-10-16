@@ -40,7 +40,6 @@ files {
     day_bubble             = HUD/Day_bubble.png
     distant_pikmin_marker  = HUD/Distant_Pikmin_marker.png
     hard_bubble            = HUD/Hard_bubble.png
-    message_box            = HUD/Message_box.png
     mouse_button_1_icon    = HUD/Mouse_button_1_icon.png
     mouse_button_2_icon    = HUD/Mouse_button_2_icon.png
     mouse_button_3_icon    = HUD/Mouse_button_3_icon.png

@@ -72,7 +72,6 @@ gameplay_state::gameplay_state() :
     bmp_distant_pikmin_marker(nullptr),
     bmp_fog(nullptr),
     bmp_hard_bubble(nullptr),
-    bmp_message_box(nullptr),
     bmp_no_pikmin_bubble(nullptr),
     bmp_sun(nullptr),
     cancel_control_id(INVALID),
@@ -905,7 +904,6 @@ void gameplay_state::init_hud() {
     loader(bmp_day_bubble,             "day_bubble");
     loader(bmp_distant_pikmin_marker,  "distant_pikmin_marker");
     loader(bmp_hard_bubble,            "hard_bubble");
-    loader(bmp_message_box,            "message_box");
     loader(bmp_no_pikmin_bubble,       "no_pikmin_bubble");
     loader(bmp_sun,                    "sun");
     
@@ -1292,7 +1290,6 @@ void gameplay_state::unload() {
     game.bitmaps.detach(bmp_day_bubble);
     game.bitmaps.detach(bmp_distant_pikmin_marker);
     game.bitmaps.detach(bmp_hard_bubble);
-    game.bitmaps.detach(bmp_message_box);
     game.bitmaps.detach(bmp_no_pikmin_bubble);
     game.bitmaps.detach(bmp_sun);
     if(bmp_fog) {

@@ -242,7 +242,6 @@ private:
     ALLEGRO_BITMAP* bmp_distant_pikmin_marker;
     ALLEGRO_BITMAP* bmp_fog;
     ALLEGRO_BITMAP* bmp_hard_bubble;
-    ALLEGRO_BITMAP* bmp_message_box;
     ALLEGRO_BITMAP* bmp_no_pikmin_bubble;
     ALLEGRO_BITMAP* bmp_sun;
     
