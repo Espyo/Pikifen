@@ -55,6 +55,7 @@ editor::editor() :
     is_m3_pressed(false),
     is_shift_pressed(false),
     last_mouse_click(INVALID),
+    last_mouse_click_sub_state(INVALID),
     last_input_was_keyboard(false),
     loaded_content_yet(false),
     made_new_changes(false),
@@ -393,7 +394,13 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             is_gui_focused = false;
         }
         
-        if(ev.mouse.button == last_mouse_click && double_click_time > 0) {
+        if(
+            ev.mouse.button == last_mouse_click &&
+            fabs(last_mouse_click_pos.x - ev.mouse.x) < 4.0f &&
+            fabs(last_mouse_click_pos.y - ev.mouse.y) < 4.0f &&
+            sub_state == last_mouse_click_sub_state &&
+            double_click_time > 0
+        ) {
             switch(ev.mouse.button) {
             case 1: {
         
@@ -411,6 +418,8 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             double_click_time = 0;
             
         } else {
+            last_mouse_click_sub_state = sub_state;
+            
             switch(ev.mouse.button) {
             case 1: {
                 handle_lmb_down(ev);
@@ -425,6 +434,8 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             }
             
             last_mouse_click = ev.mouse.button;
+            last_mouse_click_pos.x = ev.mouse.x;
+            last_mouse_click_pos.y = ev.mouse.y;
             double_click_time = DOUBLE_CLICK_TIMEOUT;
         }
         
@@ -1698,6 +1709,8 @@ void editor::picker_info::process() {
         ImGui::Text("%s", list_header.c_str());
     }
     
+    ImGui::BeginChild("list");
+    
     ImGuiStyle &style = ImGui::GetStyle();
     float picker_x2 =
         ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
@@ -1790,6 +1803,8 @@ void editor::picker_info::process() {
             
         }
     }
+    
+    ImGui::EndChild();
 }
 
 

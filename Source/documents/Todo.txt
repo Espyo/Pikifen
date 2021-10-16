@@ -2,16 +2,13 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Editors
-        Check some corner cases with double-click to create a new X, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc.
-        The scrollable part of lists in pickers shouldn't include the creation/search stuff
+    The cutscene message box should be styled like the menu boxes, instead of being a stretched PNG
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
     
     --- v0.21.0 ---
-    The cutscene message box should be styled like the menu boxes, instead of being a stretched PNG
     Menus need tooltips
     In the manual
         Rename "text file" to "data file"
