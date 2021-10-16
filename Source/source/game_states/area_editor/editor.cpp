@@ -89,7 +89,6 @@ const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 area_editor::area_editor() :
     quick_play_cam_z(1.0f),
     backup_timer(game.options.area_editor_backup_interval),
-    can_load_backup(false),
     area_exists_on_disk(false),
     cursor_snap_timer(CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
@@ -1418,7 +1417,10 @@ void area_editor::load_area(const bool from_backup) {
     game.cam.zoom = 1.0f;
     game.cam.pos = point();
     
-    status_text = "Loaded area \"" + area_folder_name + "\" successfully.";
+    status_text =
+        "Loaded area \"" + area_folder_name + "\" " +
+        (from_backup ? "from a backup " : "") +
+        "successfully.";
 }
 
 
@@ -1426,8 +1428,6 @@ void area_editor::load_area(const bool from_backup) {
  * Loads a backup file.
  */
 void area_editor::load_backup() {
-    if(!update_backup_status()) return;
-    
     load_area(true);
     backup_timer.start(game.options.area_editor_backup_interval);
 }
@@ -2531,7 +2531,6 @@ void area_editor::save_backup() {
     if(!folder_exists) return;
     
     save_area(true);
-    update_backup_status();
 }
 
 
@@ -3310,27 +3309,6 @@ void area_editor::unload() {
     unload_liquids();
     unload_spike_damage_types();
     unload_custom_particle_generators();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Reads the area's backup file, and sets the "load backup" button's
- * availability accordingly.
- * Returns true if it exists, false if not.
- */
-bool area_editor::update_backup_status() {
-    can_load_backup = false;
-    
-    if(area_folder_name.empty()) return false;
-    
-    data_node file(
-        USER_AREA_DATA_FOLDER_PATH + "/" +
-        area_folder_name + "/Geometry_backup.txt"
-    );
-    if(!file.file_was_opened) return false;
-    
-    can_load_backup = true;
-    return true;
 }
 
 

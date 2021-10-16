@@ -1374,7 +1374,7 @@ void gameplay_state::draw_tree_shadows() {
             s_ptr->bitmap,
             point(
                 s_ptr->center.x + TREE_SHADOW_SWAY_AMOUNT*
-                sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
+                cos(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
                 s_ptr->sway.x,
                 s_ptr->center.y + TREE_SHADOW_SWAY_AMOUNT*
                 sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *

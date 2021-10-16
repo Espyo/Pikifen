@@ -4008,6 +4008,6 @@ tree_shadows{
 		pos=-128.0000 -832.0000
 		size=2871.2756 4512.0000
 		file=Tree_shadow.png
-		sway=1.0000 0.0000
+		sway=1.0000 1.0000
 	}
 }

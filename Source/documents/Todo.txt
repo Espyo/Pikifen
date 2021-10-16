@@ -3,8 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Editors
-        area_editor::update_backup_status is opening a data file, but it's probably enough to just check if the file exists using Allegro FS entries
-        Tree shadows should have both an horizontal and a vertical sway by default, not just horizontal
         Check some corner cases with double-click to create a new X, like double-clicking a selected mob, double-clicking after a drag, double-clicking while in the add new mob mode, etc.
         The scrollable part of lists in pickers shouldn't include the creation/search stuff
     

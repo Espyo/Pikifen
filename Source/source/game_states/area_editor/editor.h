@@ -209,8 +209,6 @@ private:
     
     //Time left until a backup is generated.
     timer backup_timer;
-    //Can the user load the backup?
-    bool can_load_backup;
     //Does the area exist on disk, or RAM only?
     bool area_exists_on_disk;
     //Where the cross-section tool points are.
@@ -616,7 +614,6 @@ private:
     void update_affected_sectors(
         const unordered_set<sector*> &affected_sectors
     );
-    bool update_backup_status();
     void update_inner_sectors_outer_sector(
         const vector<edge*> &edges_to_check,
         sector* old_outer, sector* new_outer

@@ -1722,7 +1722,6 @@ void area_editor::process_gui_panel_main() {
             "Tools"
         )
     ) {
-        update_backup_status();
         change_state(EDITOR_STATE_TOOLS);
     }
     set_tooltip(
@@ -3014,9 +3013,21 @@ void area_editor::process_gui_panel_tools() {
     
         //Load auto-backup button.
         if(ImGui::Button("Load auto-backup")) {
-            if(can_load_backup) {
-                if(!check_new_unsaved_changes()) {
+            if(!check_new_unsaved_changes()) {
+                bool backup_exists = false;
+                if(!area_folder_name.empty()) {
+                    string file_path =
+                        USER_AREA_DATA_FOLDER_PATH + "/" +
+                        area_folder_name + "/Geometry_backup.txt";
+                    if(al_filename_exists(file_path.c_str())) {
+                        backup_exists = true;
+                    }
+                }
+                
+                if(backup_exists) {
                     load_backup();
+                } else {
+                    status_text = "There is no backup available.";
                 }
             }
         }
