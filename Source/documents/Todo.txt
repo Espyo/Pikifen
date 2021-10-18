@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.21.0 ---
     In the manual
-        Rename "text file" to "data file"
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
         Add tips about each Pikmin type's strength and weaknesses
         Split the list of actions (maybe events too) by category, and move them to their own page, along with the events
@@ -621,7 +620,7 @@ Misc things (so I don't forget)
         Particles should have a secondary way of dying - shrinking instead of exclusively fading to transparent
         Color gradients, or interpolation, or some way to get smoke from red to yellow to grey
         The size, color, etc. parameters should be split into "start", "half", and "end" of life
-        Each generator in its own text file? It'd make it easier to share them
+        Each generator in its own data file? It'd make it easier to share them
         Additive blending and normal blending
         Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
     HUD element for a digital clock?

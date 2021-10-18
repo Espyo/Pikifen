@@ -395,7 +395,7 @@ void animation_editor::process_gui_load_dialog() {
             vector<string> f =
                 prompt_file_dialog(
                     last_file_opened,
-                    "Please choose an animation text file to load or create.",
+                    "Please choose an animation data file to load or create.",
                     "*.txt", 0
                 );
                 

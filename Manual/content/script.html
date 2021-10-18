@@ -47,9 +47,9 @@
     
     <dl>
       <dt><b>Start by creating <code>Script.txt</code> in the object's data folder.</b></dt>
-      <dd>Go to the folder where the object's data is, and create a new <a href="text_file.html">text file</a> called <code>Script.txt</code>.</dd>
+      <dd>Go to the folder where the object's data is, and create a new <a href="data_file.html">data file</a> called <code>Script.txt</code>.</dd>
       <dt><b>Inside, write a block called <code>script</code>.</b></dt>
-      <dd>Inside the text file, write a line with <code>script {</code>. As explained <a href="text_file.html">here</a>, this is the start of a block. The next line should just be <code>}</code>, and now any line between these two is data inside the <code>script</code> block &ndash; the Red Bulborb's script in our case.</dd>
+      <dd>Inside the data file, write a line with <code>script {</code>. As explained <a href="data_file.html">here</a>, this is the start of a block. The next line should just be <code>}</code>, and now any line between these two is data inside the <code>script</code> block &ndash; the Red Bulborb's script in our case.</dd>
     </dl>
 
     <h3 id="state">Making a state</h3>
@@ -581,7 +581,7 @@ reaches {
       <dd>To do so, add a <code>Script.txt</code> file to the object's folder like normal. Now you can write existing states or new ones, and inside, write existing events or new ones. If this is a new state, or a new event in an existing state, the engine will simply run the actions you specify when the time comes. Otherwise, the engine will run your actions first and then run whatever hardcoded actions it is meant to.</dd>
       <dt><b>If the state/event already exists, your actions are run first by default.</b></dt>
       <dd>The reason the engine runs your actions first is because its own logic likely changes the state, and any action that comes after a state change will be ignored. That said, if you want the actions in a given event to take place <i>after</i> the hardcoded actions, write <code>custom_actions_after</code> as the first line in your list of actions.</dd>
-      <dt><b>The hardcoded scripts are written in the engine's code in C++, and have access to things the text file scripts do not.</b></dt>
+      <dt><b>The hardcoded scripts are written in the engine's code in C++, and have access to things the <a href="data_file.html">data file</a> scripts do not.</b></dt>
       <dd>To know what states and events an object in a category uses, your best bet is to open the engine's source code, check the <code>.cpp</code> code files inside the <code>source/mob_fsms</code> folder, and try to make sense of them. Keep in mind some states handle events that cannot be recognized in a <code>Script.txt</code> file, so you will be unable to extend those.</dd>
       <dt><b>The logic behind the hardcoded scripts is really complex, so try not to get too creative!</b></dt>
       <dd>Because the engine expects objects to follow their hardcoded script, which usually involves a lot of complex tasks, tampering with the script is risky. For instance, if an object was meant to change to a specific state, and you make it change to another one instead, the engine could later on try to do something with the state it <i>thinks</i> the object should be at, and crash. As such, if you want to enhance a hardcoded script, try sticking to things like adding particles, setting some script variables, sending messages, etc.</dd>

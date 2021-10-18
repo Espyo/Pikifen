@@ -26,11 +26,11 @@
 
     <p>Particles are static images, but they can move, change size, and change opacity over time, and can also be tinted with a certain color. Each generator can only emit one type of particle, but their properties (size, position, etc.) are randomly decided every time one is created, according to the generator's settings. This decision is based on the deviation properties. For instance, when a particle of size 32 is created, if the size deviation property is set to 3, that means the particle can spawn with 3 fewer pixels in size, 3 more pixels in size, or anything in between. 0, for any deviation property, means no deviation, naturally.</p>
 
-    <p>The folder that has a list of all particle generators is <code>Game_data/Particle_generators</code>. This contains all custom-made particle generators but does not particle generators hardcoded inside the engine's logic itself, for internal use. Each one per <a href="text_file.html">text file</a> in the folder is a generator; its file name does not matter.</p>
+    <p>The folder that has a list of all particle generators is <code>Game_data/Particle_generators</code>. This contains all custom-made particle generators but does not particle generators hardcoded inside the engine's logic itself, for internal use. Each one per <a href="data_file.html">data file</a> in the folder is a generator; its file name does not matter.</p>
 
     <h2 id="base">Base particle</h2>
     
-    <p>As stated before, each generator can only generate one type of particle. The <code>base</code> block inside a generator's data in the text file specifies what the particle looks like. Its size, speed, etc. can all be deviated randomly when it spawns, and that is all controlled by the generator.</p>
+    <p>As stated before, each generator can only generate one type of particle. The <code>base</code> block inside a generator's data in the data file specifies what the particle looks like. Its size, speed, etc. can all be deviated randomly when it spawns, and that is all controlled by the generator.</p>
 
     <p>The base particle has the following properties:</p>
     
@@ -47,7 +47,7 @@
 
     <h2 id="generator">Generator properties</h2>
     
-    <p>In the text file, you must specify the <b><code>name</code></b> property; this is the particle generator's internal name, and the name you will refer to it by in scripts. Afterwards, you can specify the following properties to make it generate particles.</p>
+    <p>In the data file, you must specify the <b><code>name</code></b> property; this is the particle generator's internal name, and the name you will refer to it by in scripts. Afterwards, you can specify the following properties to make it generate particles.</p>
     
     <ul>
       <li><b><code>emission_interval</code></b>: A new bunch of particles is emitted every X seconds. If this is 0, particles are only emitted once.</li>

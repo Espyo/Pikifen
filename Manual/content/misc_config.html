@@ -18,7 +18,7 @@
     
     <h1>Misc. configurations</h1>
     
-    <p>This article explains how miscellaneous configuration files on <i>Pikifen</i> work. These are plain engine <a href="text_file.html">text files</a>.</p>
+    <p>This article explains how miscellaneous configuration files on <i>Pikifen</i> work. These are plain engine <a href="data_file.html">data file</a>.</p>
 
     <h2 id="game">Game configuration</h2>
     
@@ -103,7 +103,7 @@
     
     <p>"Spike damage" is a mechanic where objects that suffered damage can immediately retaliate by damaging their attacker. In the <i>Pikmin</i> games, this is used by a White Pikmin to release poison to the enemy that ate it, in order to cause poison damage. In the engine, the same can be done, but any object can retaliate in any way, whether it is swallowed or damaged normally.</p>
 
-    <p>The folder <code>Game_data/Spike_damage_types</code> controls the types of spike damage that exist in the game. Each <a href="text_file.html">text file</a> represents one type of spike damage, and the properties inside control how it works. The name of the file does not matter.</p>
+    <p>The folder <code>Game_data/Spike_damage_types</code> controls the types of spike damage that exist in the game. Each <a href="data_file.html">data file</a> represents one type of spike damage, and the properties inside control how it works. The name of the file does not matter.</p>
 
     <p>The properties are:</p>
     
@@ -120,7 +120,7 @@
 
     <h2 id="system-asset">System asset file names</h2>
     
-    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This text file has a list of properties, where each property's name is the name of the asset, and the value is the file name, inside the folder <code>Game_data/Graphics</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image. You can find the defaults in the source code, in the function <code>init_asset_file_names</code>, visible <a href="https://github.com/Espyo/Pikifen/blob/ec4c4d034c3fc2dd5b04d46ff64903c60480ba9a/Source/source/init.cpp#L54">here</a>.</p>
+    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="data_file.html">data file</a> has a list of properties, where each property's name is the name of the asset, and the value is the file name, inside the folder <code>Game_data/Graphics</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image. You can find the defaults in the source code, in the function <code>init_asset_file_names</code>, visible <a href="https://github.com/Espyo/Pikifen/blob/ec4c4d034c3fc2dd5b04d46ff64903c60480ba9a/Source/source/init.cpp#L54">here</a>.</p>
     
     <ul>
       <li><b><code>area_name_font</code></b>: Font to use for area names.</li>
