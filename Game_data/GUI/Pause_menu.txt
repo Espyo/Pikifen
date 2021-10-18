@@ -4,4 +4,5 @@ positions {
     retry =    50 44 50 10
     finish =   50 56 50 10
     quit =     50 68 50 10
+    tooltip =  50 95 95  8
 }

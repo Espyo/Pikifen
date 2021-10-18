@@ -1,6 +1,7 @@
 positions {
     back =        15 10 20  6
     new =         80 10 30  7
-    list =        48 55 86 80
-    list_scroll = 94 55  2 80
+    list =        48 53 86 76
+    list_scroll = 94 53  2 76
+    tooltip =     50 95 95  8
 }

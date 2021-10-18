@@ -75,6 +75,8 @@ public:
     std::function<bool(const size_t button_id)> on_menu_dir_button;
     //What to do when one of its children became the selected item.
     std::function<void(const gui_item* child)> on_child_selected;
+    //What to do when its tooltip needs to be retrieved.
+    std::function<string()> on_get_tooltip;
     
     //Adds a child item.
     void add_child(gui_item* item);
@@ -234,6 +236,8 @@ public:
     void draw();
     //Tick one frame of logic.
     void tick(const float delta_t);
+    //Returns the current item's tooltip, if any.
+    string get_current_tooltip();
     //Handle an Allegro event.
     void handle_event(const ALLEGRO_EVENT &ev);
     //Handle a button press or release.

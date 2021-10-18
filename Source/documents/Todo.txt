@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.21.0 ---
-    Menus need tooltips
     In the manual
         Rename "text file" to "data file"
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus

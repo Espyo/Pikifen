@@ -140,7 +140,8 @@ gui_item::gui_item(const bool selectable) :
     on_event(nullptr),
     on_activate(nullptr),
     on_menu_dir_button(nullptr),
-    on_child_selected(nullptr) {
+    on_child_selected(nullptr),
+    on_get_tooltip(nullptr) {
     
 }
 
@@ -411,6 +412,16 @@ void gui_manager::draw() {
             al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the current item's tooltip, if any.
+ */
+string gui_manager::get_current_tooltip() {
+    if(!selected_item) return string();
+    if(!selected_item->on_get_tooltip) return string();
+    return selected_item->on_get_tooltip();
 }
 
 

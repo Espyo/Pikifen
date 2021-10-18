@@ -5,5 +5,6 @@ positions {
     cursor_speed =    24 45 45  8
     auto_throw =      24 55 45  8
     controls =        24 65 45  8
-    restart_warning = 50 95 95 10
+    tooltip =         50 95 95  8
+    restart_warning = 60  5 70  8
 }

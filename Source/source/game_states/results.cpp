@@ -177,9 +177,9 @@ void results_state::leave() {
  */
 void results_state::load() {
     //Menu items.
-    gui.register_coords("retry",                20, 90, 25,  6);
-    gui.register_coords("continue",             50, 90, 25,  6);
-    gui.register_coords("pick_area",            80, 90, 25,  6);
+    gui.register_coords("retry",                20, 88, 25,  6);
+    gui.register_coords("continue",             50, 88, 25,  6);
+    gui.register_coords("pick_area",            80, 88, 25,  6);
     gui.register_coords("area_name",            50, 10, 95, 10);
     gui.register_coords("finish_reason",        50, 17.5, 95, 10);
     gui.register_coords("time_label",           35, 30, 40, 10);
@@ -193,6 +193,7 @@ void results_state::load() {
     gui.register_coords("pikmin_deaths_label",  35, 70, 40, 10);
     gui.register_coords("pikmin_deaths_amount", 70, 70, 50, 10);
     gui.register_coords("used_tools",           50, 80, 95, 10);
+    gui.register_coords("tooltip",              50, 95, 95,  8);
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -204,6 +205,8 @@ void results_state::load() {
     [this] (const point &) {
         retry_area();
     };
+    retry_button->on_get_tooltip =
+    [] () { return "Retry the area from the start."; };
     gui.add_item(retry_button, "retry");
     
     //Keep playing button.
@@ -214,6 +217,8 @@ void results_state::load() {
         [this] (const point &) {
             continue_playing();
         };
+        continue_button->on_get_tooltip =
+        [] () { return "Continue playing anyway, from where you left off."; };
         gui.add_item(continue_button, "continue");
     }
     
@@ -228,6 +233,12 @@ void results_state::load() {
     gui.back_item->on_activate =
     [this] (const point &) {
         leave();
+    };
+    gui.back_item->on_get_tooltip =
+    [] () {
+        return game.states.area_ed->quick_play_area.empty() ?
+               "Return to the area selection menu." :
+               "Return to the area editor.";
     };
     gui.add_item(gui.back_item, "pick_area");
     
@@ -340,6 +351,20 @@ void results_state::load() {
         game.fonts.counter
     );
     gui.add_item(pikmin_deaths_text, "pikmin_deaths_amount");
+    
+    //Tooltip text.
+    text_gui_item* tooltip_text =
+        new text_gui_item("", game.fonts.standard);
+    tooltip_text->on_draw =
+        [this]
+    (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgb(255, 255, 255),
+            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size,
+            gui.get_current_tooltip()
+        );
+    };
+    gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);

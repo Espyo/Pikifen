@@ -82,6 +82,8 @@ void controls_menu_state::add_control_gui_items(
     };
     delete_button->center = point(0.07f, items_y);
     delete_button->size = point(0.08f, 0.07f);
+    delete_button->on_get_tooltip =
+    [] () { return "Delete this button definition."; };
     list_box->add_child(delete_button);
     gui.add_item(delete_button);
     
@@ -94,6 +96,8 @@ void controls_menu_state::add_control_gui_items(
     };
     prev_action_button->center = point(0.16f, items_y);
     prev_action_button->size = point(0.08f, 0.07f);
+    prev_action_button->on_get_tooltip =
+    [] () { return "Set a different action for this button."; };
     list_box->add_child(prev_action_button);
     gui.add_item(prev_action_button);
     
@@ -137,6 +141,8 @@ void controls_menu_state::add_control_gui_items(
     };
     next_action_button->center = point(0.65f, items_y);
     next_action_button->size = point(0.08f, 0.07f);
+    next_action_button->on_get_tooltip =
+    [] () { return "Set a different action for this button."; };
     list_box->add_child(next_action_button);
     gui.add_item(next_action_button);
     
@@ -162,6 +168,8 @@ void controls_menu_state::add_control_gui_items(
     };
     control_button->center = point(0.83f, items_y);
     control_button->size = point(0.26f, 0.07f);
+    control_button->on_get_tooltip =
+    [] () { return "The button used to perform this action."; };
     list_box->add_child(control_button);
     gui.add_item(control_button);
     
@@ -394,8 +402,9 @@ void controls_menu_state::load() {
     //Menu items.
     gui.register_coords("back",        15, 10, 20,  6);
     gui.register_coords("new",         80, 10, 30,  7);
-    gui.register_coords("list",        48, 55, 86, 80);
-    gui.register_coords("list_scroll", 94, 55,  2, 80);
+    gui.register_coords("list",        48, 53, 86, 76);
+    gui.register_coords("list_scroll", 94, 53,  2, 76);
+    gui.register_coords("tooltip",     50, 95, 95,  8);
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -407,6 +416,8 @@ void controls_menu_state::load() {
     [this] (const point &) {
         leave();
     };
+    gui.back_item->on_get_tooltip =
+    [] () { return "Return to the options menu."; };
     gui.add_item(gui.back_item, "back");
     
     //Controls list box.
@@ -427,7 +438,23 @@ void controls_menu_state::load() {
         add_control();
         add_control_gui_items(game.options.controls[0].size() - 1, true);
     };
+    new_button->on_get_tooltip =
+    [] () { return "Add a new button definition."; };
     gui.add_item(new_button, "new");
+    
+    //Tooltip text.
+    text_gui_item* tooltip_text =
+        new text_gui_item("", game.fonts.standard);
+    tooltip_text->on_draw =
+        [this]
+    (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgb(255, 255, 255),
+            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size,
+            gui.get_current_tooltip()
+        );
+    };
+    gui.add_item(tooltip_text, "tooltip");
     
     //Items for the different controls.
     for(size_t c = 0; c < game.options.controls[0].size(); ++c) {

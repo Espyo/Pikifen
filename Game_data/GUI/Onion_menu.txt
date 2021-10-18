@@ -1,9 +1,9 @@
 positions {
     instructions =     50  7 90 20
-    cancel =           16 87 18 11
-    ok =               84 87 18 11
-    field =            50 77 18  4
-    select_all =       50 89 24  6
+    cancel =           16 85 18 11
+    ok =               84 85 18 11
+    field =            50 75 18  4
+    select_all =       50 87 24  6
     onion_1_button =   50 20  9 12
     onion_2_button =   50 20  9 12
     onion_3_button =   50 20  9 12
@@ -32,4 +32,5 @@ positions {
     onion_right_more = 95 20  3  4
     group_left_more =   5 60  3  4
     group_right_more = 95 60  3  4
+    tooltip =          50 95 95  8
 }

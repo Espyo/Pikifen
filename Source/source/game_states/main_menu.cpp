@@ -168,6 +168,7 @@ void main_menu_state::load() {
     gui.register_coords("animation_editor", 50, 71, 50,  6);
     gui.register_coords("area_editor",      50, 79, 50,  6);
     gui.register_coords("exit",             50, 87, 50,  6);
+    gui.register_coords("tooltip",          50, 95, 95,  8);
     gui.read_coords(settings_file.get_child_by_name("positions"));
     
     //Play button.
@@ -179,6 +180,8 @@ void main_menu_state::load() {
             game.change_state(game.states.area_menu);
         });
     };
+    play_button->on_get_tooltip =
+    [] () { return "Pick an area, and start playing!"; };
     gui.add_item(play_button, "play");
     
     //Options button.
@@ -190,6 +193,8 @@ void main_menu_state::load() {
             game.change_state(game.states.options_menu);
         });
     };
+    options_button->on_get_tooltip =
+    [] () { return "Customize your playing experience."; };
     gui.add_item(options_button, "options");
     
     //Animation editor button.
@@ -201,6 +206,8 @@ void main_menu_state::load() {
             game.change_state(game.states.animation_ed);
         });
     };
+    anim_ed_button->on_get_tooltip =
+    [] () { return "Make an animation for any object in the game."; };
     gui.add_item(anim_ed_button, "animation_editor");
     
     //Area editor button.
@@ -212,6 +219,8 @@ void main_menu_state::load() {
             game.change_state(game.states.area_ed);
         });
     };
+    area_ed_button->on_get_tooltip =
+    [] () { return "Make an area to play on."; };
     gui.add_item(area_ed_button, "area_editor");
     
     //Exit button.
@@ -221,7 +230,23 @@ void main_menu_state::load() {
     [] (const point &) {
         game.is_game_running = false;
     };
+    gui.back_item->on_get_tooltip =
+    [] () { return "Quit " + game.config.name + "."; };
     gui.add_item(gui.back_item, "exit");
+    
+    //Tooltip text.
+    text_gui_item* tooltip_text =
+        new text_gui_item("", game.fonts.standard);
+    tooltip_text->on_draw =
+        [this]
+    (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgb(255, 255, 255),
+            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size,
+            gui.get_current_tooltip()
+        );
+    };
+    gui.add_item(tooltip_text, "tooltip");
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);

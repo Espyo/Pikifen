@@ -10,6 +10,7 @@
 
 #include "gameplay.h"
 
+#include "../../drawing.h"
 #include "../../game.h"
 
 
@@ -30,6 +31,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     gui.register_coords("retry",    50, 44, 50, 10);
     gui.register_coords("finish",   50, 56, 50, 10);
     gui.register_coords("quit",     50, 68, 50, 10);
+    gui.register_coords("tooltip",  50, 95, 95,  8);
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -49,6 +51,8 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     [this] (const point &) {
         to_delete = true;
     };
+    gui.back_item->on_get_tooltip =
+    [] () { return "Unpause and continue playing."; };
     gui.add_item(gui.back_item, "continue");
     
     //Retry button.
@@ -58,6 +62,8 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     [this] (const point &) {
         game.states.gameplay->start_leaving(LEAVE_TO_RETRY);
     };
+    retry_button->on_get_tooltip =
+    [] () { return "Retry this day from the start."; };
     gui.add_item(retry_button, "retry");
     
     //Finish button.
@@ -67,6 +73,8 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     [this] (const point &) {
         game.states.gameplay->start_leaving(LEAVE_TO_FINISH);
     };
+    finish_button->on_get_tooltip =
+    [] () { return "Finish playing this day."; };
     gui.add_item(finish_button, "finish");
     
     //Quit button.
@@ -81,7 +89,31 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     [this] (const point &) {
         game.states.gameplay->start_leaving(LEAVE_TO_AREA_SELECT);
     };
+    quit_button->on_get_tooltip =
+    [] () {
+        return
+            "Quit and return to the " +
+            string(
+                game.states.area_ed->quick_play_area.empty() ?
+                "area selection menu" :
+                "area editor"
+            ) + ".";
+    };
     gui.add_item(quit_button, "quit");
+    
+    //Tooltip text.
+    text_gui_item* tooltip_text =
+        new text_gui_item("", game.fonts.standard);
+    tooltip_text->on_draw =
+        [this]
+    (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgb(255, 255, 255),
+            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size,
+            gui.get_current_tooltip()
+        );
+    };
+    gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
     gui.set_selected_item(gui.back_item);

@@ -267,7 +267,8 @@ void options_menu_state::load() {
     gui.register_coords("cursor_speed",    24, 45, 45,  8);
     gui.register_coords("auto_throw",      24, 55, 45,  8);
     gui.register_coords("controls",        24, 65, 45,  8);
-    gui.register_coords("restart_warning", 50, 95, 95, 10);
+    gui.register_coords("tooltip",         50, 95, 95,  8);
+    gui.register_coords("restart_warning", 60,  5, 70,  8);
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -279,6 +280,8 @@ void options_menu_state::load() {
     [this] (const point &) {
         leave();
     };
+    gui.back_item->on_get_tooltip =
+    [] () { return "Return to the main menu."; };
     gui.add_item(gui.back_item, "back");
     
     //Fullscreen checkbox.
@@ -293,6 +296,9 @@ void options_menu_state::load() {
             !game.options.intended_win_fullscreen;
         trigger_restart_warning();
     };
+    fullscreen_check->on_get_tooltip =
+    [] () { return "Show the game in fullscreen, or in a window?"; };
+    
     gui.add_item(fullscreen_check, "fullscreen");
     
     //Resolution picker.
@@ -306,6 +312,8 @@ void options_menu_state::load() {
     [this] () {
         change_resolution(1);
     };
+    resolution_picker->on_get_tooltip =
+    [] () { return "The game's width and height."; };
     gui.add_item(resolution_picker, "resolution");
     
     //Cursor speed.
@@ -319,6 +327,8 @@ void options_menu_state::load() {
     [this] () {
         change_cursor_speed(1);
     };
+    cursor_speed_picker->on_get_tooltip =
+    [] () { return "Cursor speed, when controlling without a mouse."; };
     gui.add_item(cursor_speed_picker, "cursor_speed");
     
     //Auto-throw mode.
@@ -332,6 +342,25 @@ void options_menu_state::load() {
     [this] () {
         change_auto_throw(1);
     };
+    auto_throw_picker->on_get_tooltip =
+    [] () {
+        switch(game.options.auto_throw_mode) {
+        case AUTO_THROW_OFF: {
+            return "Pikmin are only thrown when you release the button.";
+        }
+        case AUTO_THROW_HOLD: {
+            return "Auto-throw Pikmin periodically as long as "
+                   "the button is held.";
+        }
+        case AUTO_THROW_TOGGLE: {
+            return "Press once to auto-throw Pikmin periodically, and again "
+                   "to stop.";
+        }
+        default: {
+            return "";
+        }
+        }
+    };
     gui.add_item(auto_throw_picker, "auto_throw");
     
     //Controls button.
@@ -341,13 +370,29 @@ void options_menu_state::load() {
     [this] (const point &) {
         go_to_controls();
     };
+    controls_button->on_get_tooltip =
+    [] () { return "Choose what buttons do what."; };
     gui.add_item(controls_button, "controls");
+    
+    //Tooltip text.
+    text_gui_item* tooltip_text =
+        new text_gui_item("", game.fonts.standard);
+    tooltip_text->on_draw =
+        [this]
+    (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgb(255, 255, 255),
+            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size,
+            gui.get_current_tooltip()
+        );
+    };
+    gui.add_item(tooltip_text, "tooltip");
     
     //Warning text.
     warning_text =
         new text_gui_item(
         "Please restart for the changes to take effect.",
-        game.fonts.standard
+        game.fonts.standard, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_RIGHT
     );
     warning_text->visible = false;
     gui.add_item(warning_text, "restart_warning");

@@ -4,6 +4,7 @@ positions {
     animation_editor = 50 71 50  6
     area_editor =      50 79 50  6
     exit =             50 87 50  6
+    tooltip =          50 95 95  8
 }
 
 logo {

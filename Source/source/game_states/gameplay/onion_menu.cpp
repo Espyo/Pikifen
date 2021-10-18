@@ -59,10 +59,10 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     nr_pages = ceil(types.size() / (float) ONION_MENU_TYPES_PER_PAGE);
     
     gui.register_coords("instructions",     50,  7, 90, 20);
-    gui.register_coords("cancel",           16, 87, 18, 11);
-    gui.register_coords("ok",               84, 87, 18, 11);
-    gui.register_coords("field",            50, 77, 18,  4);
-    gui.register_coords("select_all",       50, 89, 24,  6);
+    gui.register_coords("cancel",           16, 85, 18, 11);
+    gui.register_coords("ok",               84, 85, 18, 11);
+    gui.register_coords("field",            50, 75, 18,  4);
+    gui.register_coords("select_all",       50, 87, 24,  6);
     gui.register_coords("onion_1_button",   50, 20,  9, 12);
     gui.register_coords("onion_2_button",   50, 20,  9, 12);
     gui.register_coords("onion_3_button",   50, 20,  9, 12);
@@ -91,6 +91,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     gui.register_coords("onion_right_more", 95, 20,  3,  4);
     gui.register_coords("group_left_more",   5, 60,  3,  4);
     gui.register_coords("group_right_more", 95, 60,  3,  4);
+    gui.register_coords("tooltip",          50, 95, 95,  8);
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -111,6 +112,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     [this] (const point &) {
         to_delete = true;
     };
+    gui.back_item->on_get_tooltip =
+    [] () { return "Forget all changes and leave the Onion menu."; };
     gui.add_item(gui.back_item, "cancel");
     
     //Ok button.
@@ -123,6 +126,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         confirm();
         to_delete = true;
     };
+    ok_button->on_get_tooltip =
+    [] () { return "Confirm changes."; };
     gui.add_item(ok_button, "ok");
     
     //Field amount text.
@@ -176,6 +181,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     };
     select_all_check->visible = types.size() > 1;
     select_all_check->selectable = types.size() > 1;
+    select_all_check->on_get_tooltip =
+    [] () { return "Control all Pikmin numbers at once?"; };
     gui.add_item(select_all_check, "select_all");
     
     //Onion icons and buttons.
@@ -202,6 +209,11 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             add_to_onion(on_screen_types[t]->type_idx);
         };
         onion_button->can_auto_repeat = true;
+        onion_button->on_get_tooltip =
+        [this, t] () {
+            onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            return "Store one " + t_ptr->pik_type->name + " inside.";
+        };
         gui.add_item(onion_button, id);
         onion_button_items.push_back(onion_button);
     }
@@ -214,6 +226,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         add_all_to_onion();
     };
     onion_all_button->can_auto_repeat = true;
+    onion_all_button->on_get_tooltip =
+    [] () { return "Store one Pikmin of each type inside."; };
     gui.add_item(onion_all_button, "onion_all");
     
     //Onion amounts.
@@ -280,6 +294,11 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
             add_to_group(on_screen_types[t]->type_idx);
         };
         group_button->can_auto_repeat = true;
+        group_button->on_get_tooltip =
+        [this, t] () {
+            onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            return "Call one " + t_ptr->pik_type->name + " to the group.";
+        };
         gui.add_item(group_button, id);
         group_button_items.push_back(group_button);
     }
@@ -292,6 +311,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         add_all_to_group();
     };
     group_all_button->can_auto_repeat = true;
+    group_all_button->on_get_tooltip =
+    [] () { return "Call one Pikmin of each type to the group."; };
     gui.add_item(group_all_button, "group_all");
     
     //Group amounts.
@@ -407,6 +428,8 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     };
     prev_page_button->visible = nr_pages > 1;
     prev_page_button->selectable = nr_pages > 1;
+    prev_page_button->on_get_tooltip =
+    [] () { return "Go to the previous page of Pikmin types."; };
     gui.add_item(prev_page_button, "prev_page");
     
     //Next page button.
@@ -430,7 +453,23 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     };
     next_page_button->visible = nr_pages > 1;
     next_page_button->selectable = nr_pages > 1;
+    next_page_button->on_get_tooltip =
+    [] () { return "Go to the next page of Pikmin types."; };
     gui.add_item(next_page_button, "next_page");
+    
+    //Tooltip text.
+    text_gui_item* tooltip_text =
+        new text_gui_item("", game.fonts.standard);
+    tooltip_text->on_draw =
+        [this]
+    (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgb(255, 255, 255),
+            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size,
+            gui.get_current_tooltip()
+        );
+    };
+    gui.add_item(tooltip_text, "tooltip");
     
     update();
 }

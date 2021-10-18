@@ -122,6 +122,7 @@ void area_menu_state::load() {
     gui.register_coords("pick_text",   50, 10, 30, 10);
     gui.register_coords("list",        49, 55, 77, 70);
     gui.register_coords("list_scroll", 90, 55,  2, 70);
+    gui.register_coords("tooltip",     50, 95, 95,  8);
     gui.read_coords(
         data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -133,6 +134,8 @@ void area_menu_state::load() {
     [this] (const point &) {
         leave();
     };
+    gui.back_item->on_get_tooltip =
+    [] () { return "Return to the main menu."; };
     gui.add_item(gui.back_item, "back");
     
     //Instructions text.
@@ -168,12 +171,28 @@ void area_menu_state::load() {
                 game.change_state(game.states.gameplay);
             });
         };
+        area_button->on_get_tooltip =
+        [area_name] () { return "Play " + area_name + "."; };
         list_box->add_child(area_button);
         gui.add_item(area_button);
         if(!first_area_button) {
             first_area_button = area_button;
         }
     }
+    
+    //Tooltip text.
+    text_gui_item* tooltip_text =
+        new text_gui_item("", game.fonts.standard);
+    tooltip_text->on_draw =
+        [this]
+    (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgb(255, 255, 255),
+            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size,
+            gui.get_current_tooltip()
+        );
+    };
+    gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
