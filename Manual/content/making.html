@@ -1,0 +1,79 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Making content - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>Making content</h1>
+
+    <h2 id="overview">Overview</h2>
+    
+    <p>You can make Pikmin types, leaders, areas, and so much more, so they can then be used in-game. The ways to make content vary, but are in general made to be easy and intuitive. Content like types of objects, sprays, and so on can be freely made, but new game mechanics and logic cannot. This also includes enemies, areas, etc. that make use of any new mechanic.</p>
+    <p>Content, as well as most customizable things in the engine, are just standard graphics, audio, or text files &ndash; you can use your favorite programs to edit them or create new ones. Some content is a bit too complex for you to edit by hand with a standard program, so instead you will want to use one of the editors inside the engine, which are specialized for the job.</p>
+    <p>A good starting point is to check out the pre-packaged content that can be found in the <code>Game_data</code> folder included with the engine. From there, you can add your own spin to the content that is already there by changing the files. Or you can make new content blindly by yourself. Or copy-paste the content that already exists to serve as a basis for new things. Or check the <a href="quick_start.html">quick start guide</a> to get some pointers so you can figure out the rest for yourself. Or read any of the in-depth tutorials <a href="#tutorials">here</a> to have a more guided experience. Or enter one of the aforementioned editors and feel your way around.</p>
+    <p>As long as the right content is in the right folder, and/or has the name that the other content or engine expects it to, you can just work on it, save, and at any moment start the engine and test it right away. As you make content, keep in mind that most user-made mistakes will be caught by the engine and reported in the file <code>/User_data/Error_log.txt</code>. You should make a point to fix these problems as soon as possible, otherwise the engine might behave erratically or even crash.</p>
+
+    <h2 id="data-file">Data file</h2>
+
+    <p>Data files usually contain information about how some content or engine feature works. They are actually just everyday text files, with the <code>.txt</code> extension, though with a specific format. The engine reads a data file one line at a time. The most basic type of line is a simple property and its value. The property's name comes first, followed by an equals sign, and then the value. Data files may also contain blocks, which in turn can contain properties or blocks. A block starts with its name, followed by an opening curly brace, and ends on a line that contains solely the closing brace.</p>
+    
+    <p>Example:</p>
+    
+<pre>property = value 1
+block {
+    property_inside_block = value_2
+    sub_block {
+        property_inside_sub_block = another value
+    }
+}</pre>
+    
+    <p>It is good practice to <a href="http://en.wikipedia.org/wiki/Indentation_style">indent</a> the lines inside a block. The deeper the block, the deeper the indentation. The engine ignores any spaces or tabs before the first word in the line, so add as many as you want. The engine will also not read empty lines. As a final note, the engine will not read lines that have two slashes before the first word. Meaning that something like <code>//This is a comment.</code> will not be read. You can use these comments to explain or label parts of the file to make it easier to understand.</p>
+    
+    <p><b>Warning</b>: avoid Window's "Notepad" program to edit these data files, since they usually show up broken or all in a single line. Try something like <a href="https://notepad-plus-plus.org">Notepad++</a> instead.</p>
+
+    <h2 id="tutorials">Tutorials</h2>
+    
+    <p>The following guides will show you how to make specific types of content:</p>
+
+    <ul>
+      <li><a href="area.html">Making areas</a></li>
+      <li><a href="mob_type.html">Making object types</a></li>
+      <li><a href="animation.html">Making animations</a></li>
+      <li><a href="script.html">Object scripting</a></li>
+      <li><a href="hazard.html">Making hazards</a></li>
+      <li><a href="spray.html">Making spray types</a></li>
+      <li><a href="status.html">Making status effects</a></li>
+      <li><a href="particle.html">Making particle generators</a></li>
+      <li><a href="weather.html">Making weather</a></li>
+      <li><a href="gui.html">GUI configuration</a></li>
+      <li><a href="misc_config.html">Misc. configurations</a></li>
+      <li><a href="misc_features.html">Misc. features</a></li>
+    </ul>
+
+    <p>In addition, the <a href="maker_toolkit.html">maker toolkit</a> is a collection of tools to help you make and debug content.</p>
+
+    <h2 id="see-also">See also</h2>
+
+    <ul>
+      <li><a href="quick_start.html">Quick start guide</a></li>
+      <li><a href="making.html#data-file">Information about data files</a></li>
+      <li><a href="mob_type.html#mob-categories">List of all categories of objects</a></li>
+      <li><a href="faq">Frequently asked questions</a></li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>

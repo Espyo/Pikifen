@@ -11,10 +11,9 @@ Next tasks (roughly sorted most important first)
     --- v0.21.0 ---
     In the manual
         Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
-        Add tips about each Pikmin type's strength and weaknesses
         Split the list of actions (maybe events too) by category, and move them to their own page, along with the events
         Some pages list properties, but not the defaults
-        The homepage should just be an index; this means there should be another page on how to play, another on how to make, etc. Also see if I can move the changelog higher up
+        The banner at the top should have breadcrumbs, the engine logo, and a jump-to-index button
     
     --- v0.22.0 ---
     Details

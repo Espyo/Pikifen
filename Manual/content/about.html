@@ -1,0 +1,39 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>About - Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+</head>
+
+<body onload="make_toc();">
+  <iframe id="header-frame" src="header.html"></iframe>
+  
+  <div id="content">
+    
+    <h1>About</h1>
+
+    <h2 id="overview">Overview</h2>
+    
+    <p>If you haven't already, you should read the included <code>README.txt</code> file first, as it explains some things about the engine.</p>
+    <p><i>Pikifen</i> is a game engine that allows you to play a <i>Pikmin</i>-like game. You control a leader, and can order Pikmin to follow you, carry objects, fight enemies, take down obstacles, and more. Since the engine was designed with flexibility in mind, you are encouraged to create your own Pikmin types, hazards, leaders, areas, enemies, and so on. Depending on the mechanics that are implemented or missing, some things might work, some might not, and some might be working incorrectly.</p>
+    <p>In order to play a game on the engine, there must be data for that game in the engine's <code>Game_data</code> folder. Luckily, the engine comes with some demo content that can be played right off the bat, although you can also download or create any fan-made content and place it in the game data folder.</p>
+    <p>Upon running the engine, it will read the information in the game data folder and instantly boot up the game. Because the engine is still in development, the concept of a "game" isn't much more than "a collection of areas, enemies, and Pikmin". The main menu will be the same all the time, regardless of game, and choosing the "Play" option will prompt you on which available area you wish to play.</p>
+    <p>To note is that some downloaded content might depend on other content. For instance, if an area has an enemy called "Green_Bulborb", but you do not have any "Green_Bulborb" enemy in your game data, the area will not load properly.</p>
+
+    <h2 id="see-also">See also</h2>
+
+    <ul>
+      <li><a href="gameplay.html">How to play</a></li>
+      <li><a href="making.html">How to make content</a></li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>

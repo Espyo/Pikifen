@@ -1725,7 +1725,7 @@ void area_editor::process_gui_panel_main() {
         change_state(EDITOR_STATE_TOOLS);
     }
     set_tooltip(
-        "Special tools to help you develop the area."
+        "Special tools to help you make the area."
     );
     
     //Spacer dummy widget.
