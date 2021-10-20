@@ -10,9 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.21.0 ---
     In the manual
-        Explain how editor shortcuts only work when the canvas is or isn't in focus, and what it means to be or not be in focus
-        Split the list of actions (maybe events too) by category, and move them to their own page, along with the events
-        Some pages list properties, but not the defaults
         The banner at the top should have breadcrumbs, the engine logo, and a jump-to-index button
     
     --- v0.22.0 ---

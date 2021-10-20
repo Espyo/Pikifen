@@ -32,17 +32,17 @@
     
     <ul>
       <li><b><code>name</code></b>: Name of the spray. You must use this name when referring to this spray in other files.</li>
-      <li><b><code>angle</code></b>: Angle to spray it at, relative to the leader's angle, in degrees. In other words, 0 means the leader sprays this forward, while 180 (half a circle) means they will spray it behind them.</li>
-      <li><b><code>angle_range</code></b>: How far the spray reaches in angle, in degrees. If a spray is only meant to hit directly in front of the leader, this should be very small, but if it's meant to also hit half a circle in front of the leader, it can be 180.</li>
-      <li><b><code>affects_user</code></b>: If true, the spray will affect the leader that used it too.</li>
-      <li><b><code>buries_pikmin</code></b>: If true, any Pikmin that touch this spray will become sprouts.</li>
-      <li><b><code>color</code></b>: Color of the spray's particles, in the format <code>r g b</code> or <code>r g b a</code>.</li>
-      <li><b><code>distance_range</code></b>: How far the spray reaches in distance, in pixels. This is used to calculate what mobs are affected, and how far the spray particles reach.</li>
-      <li><b><code>effects</code></b>: List of status effects inflicted on the targets of the spray. This list is separated by semicolon (;).</li>
-      <li><b><code>group</code></b>: If true, the spray affects all Pikmin of the leader's group, regardless of distance. If false, the objects that are affected are those within the given angle and distance reach. For instance, for an ultra-bitter spray, all affected objects are the enemies in front of the leader, within a medium distance.</li>
-      <li><b><code>group_pikmin_only</code></b>: If true, only Pikmin in the group are sprayed. Otherwise, leaders can be sprayed too. This property has no effect when the <code>group</code> property is false.</li>
-      <li><b><code>icon</code></b>: Name of the image used for its icon on the HUD. This file must be in <code>Game_data/Graphics</code>, and the property must include the extension (e.g. <code>Ultra-bitter_spray.png</code>).</li>
-      <li><b><code>ingredients_needed</code></b>: How many ingredients (berries, in the canon games) does it take to concoct one new spray dosage.</li>
+      <li><b><code>angle</code></b>: Angle to spray it at, relative to the leader's angle, in degrees. In other words, 0 means the leader sprays this forward, while 180 (half a circle) means they will spray it behind them. Defaults to 0.</li>
+      <li><b><code>angle_range</code></b>: How far the spray reaches in angle, in degrees. If a spray is only meant to hit directly in front of the leader, this should be very small, but if it's meant to also hit half a circle in front of the leader, it can be 180. Defaults to 0.</li>
+      <li><b><code>affects_user</code></b>: If true, the spray will affect the leader that used it too. Defaults to false.</li>
+      <li><b><code>buries_pikmin</code></b>: If true, any Pikmin that touch this spray will become sprouts. Defaults to false.</li>
+      <li><b><code>color</code></b>: Color of the spray's particles, in the format <code>r g b</code> or <code>r g b a</code>. Defaults to <code>0 0 0 0</code> (no color).</li>
+      <li><b><code>distance_range</code></b>: How far the spray reaches in distance, in pixels. This is used to calculate what mobs are affected, and how far the spray particles reach. Defaults to 0.</li>
+      <li><b><code>effects</code></b>: List of status effects inflicted on the targets of the spray. This list is separated by semicolon (;). Defaults to empty.</li>
+      <li><b><code>group</code></b>: If true, the spray affects all Pikmin of the leader's group, regardless of distance. If false, the objects that are affected are those within the given angle and distance reach. For instance, for an ultra-bitter spray, all affected objects are the enemies in front of the leader, within a medium distance. Defaults to true.</li>
+      <li><b><code>group_pikmin_only</code></b>: If true, only Pikmin in the group are sprayed. Otherwise, leaders can be sprayed too. This property has no effect when the <code>group</code> property is false. Defaults to true.</li>
+      <li><b><code>icon</code></b>: Name of the image used for its icon on the HUD. This file must be in <code>Game_data/Graphics</code>, and the property must include the extension (e.g. <code>Ultra-bitter_spray.png</code>). Defaults to empty.</li>
+      <li><b><code>ingredients_needed</code></b>: How many ingredients (berries, in the canon games) does it take to concoct one new spray dosage. Defaults to 10.</li>
     </ul>
 
     <h2 id="notes">Notes</h2>

@@ -109,18 +109,18 @@
     
     <ul>
       <li><b><code>name</code></b>: The name of this type of spike damage. You will need to use this name when referring to this type elsewhere.</li>
-      <li><b><code>damage</code></b>: How much damage to cause. What exactly this number means depends on the <code>is_damage_ratio</code> property.</li>
-      <li><b><code>ingestion_only</code></b>: <code>true</code> if the spike damage should only be caused when the object is ingested, <code>false</code> if it's meant to be caused when the object is hurt normally. Ingestion only works for Pikmin.</li>
-      <li><b><code>is_damage_ratio</code></b>: If <code>true</code>, then the number specified in <code>damage</code> is the ratio of total health to sap away. For instance, <code>0.5</code> means one half of the enemy's total health is removed. If <code>false</code>, the number is just a normal amount of damage. Default is <code>false</code>.</li>
+      <li><b><code>damage</code></b>: How much damage to cause. What exactly this number means depends on the <code>is_damage_ratio</code> property. Defaults to 0.</li>
+      <li><b><code>ingestion_only</code></b>: <code>true</code> if the spike damage should only be caused when the object is ingested, <code>false</code> if it's meant to be caused when the object is hurt normally. Ingestion only works for Pikmin. Defaults to false.</li>
+      <li><b><code>is_damage_ratio</code></b>: If <code>true</code>, then the number specified in <code>damage</code> is the ratio of total health to sap away. For instance, <code>0.5</code> means one half of the enemy's total health is removed. If <code>false</code>, the number is just a normal amount of damage. Defaults to <code>false</code>.</li>
       <li><b><code>particle_generator</code></b>: When the damage is applied, some particles can be spawned. This is the name of the particle generator to use, if any. The particles are spawned in the position of the object that receives the damage.</li>
-      <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="script.html#rel-coord">relative coordinates</a>.</li>
+      <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="glossary.html#R">relative coordinates</a>.</li>
     </ul>
 
     <p>Remember to change the object type properties for the objects you want to deal this spike damage, as well as the different spike damage vulnerability modifiers, as explained <a href="mob_type.html">here</a>.</p>
 
     <h2 id="system-asset">System asset file names</h2>
     
-    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has a list of properties, where each property's name is the name of the asset, and the value is the file name, inside the folder <code>Game_data/Graphics</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image. You can find the defaults in the source code, in the function <code>init_asset_file_names</code>, visible <a href="https://github.com/Espyo/Pikifen/blob/ec4c4d034c3fc2dd5b04d46ff64903c60480ba9a/Source/source/init.cpp#L54">here</a>.</p>
+    <p>Some graphics and sounds are used by the engine in several ways, instead of used specifically for a user-made enemy, area, etc. Inside the file <code>Game_data/Misc/System_asset_file_names.txt</code> you can specify the file name (and path) of some or all of these assets. This <a href="making.html#data-file">data file</a> has a list of properties, where each property's name is the name of the asset, and the value is the file name, inside the folder <code>Game_data/Graphics</code>. Example: <code>mouse_cursor = Asterisk.png</code> will make the mouse cursor in-game use the <code>Asterisk.png</code> image. You can find the defaults <a href="https://github.com/Espyo/Pikifen/blob/master/Source/source/misc_structs.cpp">here</a>.</p>
     
     <ul>
       <li><b><code>area_name_font</code></b>: Font to use for area names.</li>

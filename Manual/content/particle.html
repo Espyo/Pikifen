@@ -35,14 +35,14 @@
     <p>The base particle has the following properties:</p>
     
     <ul>
-      <li><b><code>bitmap</code></b>: Image to use, on the </code>Game_data/Graphics</code> folder. This must include the extension (e.g. <code>Smoke.png</code>). If empty, the particle won't use an image, but will use a colored, solid circle instead.</li>
-      <li><b><code>duration</code></b>: How long the particle lives for, in seconds. The closer it is to dying, the more transparent it becomes. This means that it fades with time on its own.</li>
-      <li><b><code>friction</code></b>: When a particle moves, it can slow down over time. The friction controls this. This property specifies the ratio of how much is lost by each second. 0 means no speed loss.</li>
-      <li><b><code>gravity</code></b>: If set to something other than 0, the created particle is pulled downward each time more over time, like the effects of gravity. This isn't "down" in the game world, this is "down" on the screen, meaning the particles are pulled south, really. Negative values can make the particle rise up each time more. Don't use this to simulate actual gravity on particles, since having a subtle pull to a direction looks good, but a harsh pull southwards may make no sense.</li>
-      <li><b><code>size_grow_speed</code></b>: Over time, its size increases by this much. This is measured in pixels per second. 0 means no change, and negative numbers make it shrink.</li>
-      <li><b><code>size</code></b>: Starting size, in pixels. The particle must be square, and this specifies its width or height.</li>
-      <li><b><code>speed</code></b>: Speed at which it moves horizontally and vertically, in pixels per second. Format: <code>speed = &lt;x&gt; &lt;y&gt;</code>. Naturally, 0 means it stays in place.</li>
-      <li><b><code>color</code></b>: Starting color, in the format <code>r g b</code>, or <code>r g b a</code>.</li>
+      <li><b><code>bitmap</code></b>: Image to use, on the </code>Game_data/Graphics</code> folder. This must include the extension (e.g. <code>Smoke.png</code>). If empty, the particle won't use an image, but will use a colored, solid circle instead. Defaults to empty.</li>
+      <li><b><code>duration</code></b>: How long the particle lives for, in seconds. The closer it is to dying, the more transparent it becomes. This means that it fades with time on its own. Defaults to 0.</li>
+      <li><b><code>friction</code></b>: When a particle moves, it can slow down over time. The friction controls this. This property specifies the ratio of how much is lost by each second. 0 means no speed loss. Defaults to 1.</li>
+      <li><b><code>gravity</code></b>: If set to something other than 0, the created particle is pulled downward each time more over time, like the effects of gravity. This isn't "down" in the game world, this is "down" on the screen, meaning the particles are pulled south, really. Negative values can make the particle rise up each time more. Don't use this to simulate actual gravity on particles, since having a subtle pull to a direction looks good, but a harsh pull southwards may make no sense. Defaults to 1.</li>
+      <li><b><code>size_grow_speed</code></b>: Over time, its size increases by this much. This is measured in pixels per second. 0 means no change, and negative numbers make it shrink. Defaults to 0.</li>
+      <li><b><code>size</code></b>: Starting size, in pixels. The particle must be square, and this specifies its width or height. Default is 0.</li>
+      <li><b><code>speed</code></b>: Speed at which it moves horizontally and vertically, in pixels per second. Format: <code>speed = &lt;x&gt; &lt;y&gt;</code>. Naturally, 0 means it stays in place. Defaults to <code>0 0</code></li>
+      <li><b><code>color</code></b>: Starting color, in the format <code>r g b</code>, or <code>r g b a</code>. Defaults to <code>255 255 255</code> (white).</li>
     </ul>
 
     <h2 id="generator">Generator properties</h2>
@@ -50,14 +50,14 @@
     <p>In the data file, you must specify the <b><code>name</code></b> property; this is the particle generator's internal name, and the name you will refer to it by in scripts. Afterwards, you can specify the following properties to make it generate particles.</p>
     
     <ul>
-      <li><b><code>emission_interval</code></b>: A new bunch of particles is emitted every X seconds. If this is 0, particles are only emitted once.</li>
-      <li><b><code>number</code></b>: Number of particles to spawn. Every bunch of particles generated contains X of them.</li>
-      <li><b><code>number_deviation</code></b>: The number of particles to spawn in each bunch is randomly deviated randomly by this amount.</li>
-      <li><b><code>duration_deviation</code></b>: The total duration of any created particle is deviated randomly by this amount.</li>
-      <li><b><code>friction_deviation</code></b>: The friction of any created particle is deviated randomly by this amount.</li>
-      <li><b><code>gravity_deviation</code></b>: The gravity of any created particle is deviated randomly by this amount.</li>
-      <li><b><code>size_deviation</code></b>: The size of any created particle is deviated randomly by this amount.</li>
-      <li><b><code>pos_deviation</code></b>: The X and Y coordinates of any created particle is deviated randomly by this amount. Format: <code>pos_deviation = &lt;x&gt; &lt;y&gt;</code>.</li>
+      <li><b><code>emission_interval</code></b>: A new bunch of particles is emitted every X seconds. If this is 0, particles are only emitted once. Defaults to 0.</li>
+      <li><b><code>number</code></b>: Number of particles to spawn. Every bunch of particles generated contains X of them. Defaults to 1.</li>
+      <li><b><code>number_deviation</code></b>: The number of particles to spawn in each bunch is randomly deviated randomly by this amount. Defaults to 0.</li>
+      <li><b><code>duration_deviation</code></b>: The total duration of any created particle is deviated randomly by this amount. Defaults to 0.</li>
+      <li><b><code>friction_deviation</code></b>: The friction of any created particle is deviated randomly by this amount. Defaults to 0.</li>
+      <li><b><code>gravity_deviation</code></b>: The gravity of any created particle is deviated randomly by this amount. Defaults to 0.</li>
+      <li><b><code>size_deviation</code></b>: The size of any created particle is deviated randomly by this amount. Defaults to 0.</li>
+      <li><b><code>pos_deviation</code></b>: The X and Y coordinates of any created particle is deviated randomly by this amount. Format: <code>pos_deviation = &lt;x&gt; &lt;y&gt;</code>. Defaults to <code>0 0</code>.</li>
     </ul>
 
     <p>On top of this, there are two ways to control the direction a particle goes to when created:</p>
@@ -70,11 +70,11 @@
     <p>To use one of the methods, give the corresponding set of properties a non-zero value, and leave the other set of properties as 0, including deviations. (Alternatively, you can just omit the properties entirely.)</p>
     
     <ul>
-      <li><b><code>speed_deviation</code></b>: The X and Y speed of any created particle is deviated randomly by this amount. Format: <code>speed_deviation = &lt;x&gt; &lt;y&gt;</code>.</li>
-      <li><b><code>angle</code></b>: Angle to launch the particle at. This is in degrees.</li>
-      <li><b><code>angle_deviation</code></b>: The launch angle of any created particle is deviated randomly by this amount.</li>
-      <li><b><code>total_speed</code></b>: Particles launched with a given angle have this much speed.</li>
-      <li><b><code>total_speed_deviation</code></b>: The launch speed of any created particle is deviated randomly by this amount.</li>
+      <li><b><code>speed_deviation</code></b>: The X and Y speed of any created particle is deviated randomly by this amount. Format: <code>speed_deviation = &lt;x&gt; &lt;y&gt;</code>. Defaults to <code>0 0</code>.</li>
+      <li><b><code>angle</code></b>: Angle to launch the particle at. This is in degrees. Defaults to 0.</li>
+      <li><b><code>angle_deviation</code></b>: The launch angle of any created particle is deviated randomly by this amount. Defaults to 0.</li>
+      <li><b><code>total_speed</code></b>: Particles launched with a given angle have this much speed. Defaults to 0.</li>
+      <li><b><code>total_speed_deviation</code></b>: The launch speed of any created particle is deviated randomly by this amount. Defaults to 0.</li>
     </ul>
 
     <h2 id="examples">Examples</h2>

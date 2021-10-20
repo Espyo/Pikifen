@@ -53,7 +53,7 @@
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>If your object is a recolor of an existing one, you can make a copy of the original object's spritesheet and use any painting program to change the colors.</li>
-        <li>You can also edit the <a href="https://github.com/Espyo/Pikifen/tree/master/Documents/Vectorial%20graphics">SVG files</a> used for the prepackaged enemy graphics with a vectorial art editing program to change the color schemes.</li>
+        <li>You can also edit the <a href="https://github.com/Espyo/Pikifen/tree/master/Source/documents/Vectorial%20graphics">SVG files</a> used for the prepackaged enemy graphics with a vectorial art editing program to change the color schemes.</li>
       </ul></dd>
     </dl>
     
@@ -203,14 +203,17 @@
 
     <h2 id="controls">Controls</h2>
 
-    <p>Some widgets have keyboard shortcuts. If you have tooltips on (they can be enabled in the menu bar's "Help" menu), you can keep your cursor over them to learn what they are, if any. Besides that, here are some keyboard controls:</p>
+    <p>Though you can just use your mouse on the canvas and GUI, and use the keybord to type text on some GUI widgets, the animation editor has many other controls and shortcuts you can make use of.</p>
+    <p>Some controls will only work if the canvas is focused (i.e. if beforehand you have clicked inside the canvas with any mouse button), others only when the GUI is focused, and others regardless of focus. As a general rule, if it's a key that usually writes text or messes with textboxes, then you will need to focus on the canvas to get it to do the action, otherwise pressing the key would just interact with the widgets in the GUI.</p>
+    <p>Some menu items have keyboard shortcuts, which show up in the item itself, to the right. Some widgets also have keyboard shortcuts, and if you have tooltips on (they can be enabled in the menu bar's "Help" menu), you can keep your cursor over them to learn what they are. In addition some widgets have special controls in and of themselves, due to the way they were implemented in <a href="https://github.com/ocornut/imgui">Dear ImGui</a>, and these controls also show up in tooltips. Other than that, here are some general keyboard and mouse controls for the animation editor:</p>
     
     <table>
-      <tr><td>Pan camera</td><td>Arrow keys, or right mouse button</td></tr>
-      <tr><td>Zoom in and out</td><td>Plus/Minus, or mouse wheel</td></tr>
-      <tr><td>Reset zoom; press again to reset camera position</td><td>Zero, or middle mouse button</td></tr>
-      <tr><td>Change camera to fit whole scene snugly</td><td>Home</td></tr>
-      <tr><td>Quit out of certain panels</td><td>Escape</td></tr>
+      <tr><th>Action</th><th>Focus</th><th>Control</th></tr>
+      <tr><td>Pan camera</td><td>Canvas</td><td>Arrow keys, or right mouse button</td></tr>
+      <tr><td>Zoom in and out</td><td>Canvas</td><td>Plus/Minus, or mouse wheel</td></tr>
+      <tr><td>Reset zoom; press again to reset camera position</td><td>Canvas</td><td>Zero, or middle mouse button</td></tr>
+      <tr><td>Change camera to fit whole scene snugly</td><td>Canvas</td><td>Home</td></tr>
+      <tr><td>Quit out of certain panels</td><td>GUI</td><td>Escape</td></tr>
     </table>
 
     <h2 id="tips">Tips</h2>
@@ -222,7 +225,6 @@
       <li>If you have an enemy shaking animation, and only want a percentage of the Pikmin to be shaken of, you can lower the shake animation's "hit rate". For instance, if you use <code>70</code>, that means only 70% of the Pikmin that are latched on will get knocked off, on average. This can be used for other attacks too, not just shaking. This feature only affects Pikmin.</li>
       <li>When editing a sprite's hitboxes, if you have a large hitbox selected and you want to select one that's covered up by it, you can just click an area that is overlapped by both hitboxes, and the editor will toggle between the hitboxes in that spot.</li>
       <li>Use the options (in the menu bar) to customize the editor to your liking.</li>
-      <li>Check the <a href="area.html#tips">area article's tips section</a> for a few tips on how Dear ImGui (the GUI framework) works.
     </ul>
 
   </div>

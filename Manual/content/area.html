@@ -519,22 +519,24 @@
 
     <h2 id="controls">Controls</h2>
 
-    <p>Some widgets have keyboard shortcuts. If you have tooltips on (they can be enabled in the menu bar's "Help" menu), you can keep your cursor over them to learn what they are, if they have any. Besides that, here are some keyboard and mouse controls:</p>
+    <p>Though you can just use your mouse on the canvas and GUI, and use the keybord to type text on some GUI widgets, the area editor has many other controls and shortcuts you can make use of.</p>
+    <p>Some controls will only work if the canvas is focused (i.e. if beforehand you have clicked inside the canvas with any mouse button), others only when the GUI is focused, and others regardless of focus. As a general rule, if it's a key that usually writes text or messes with textboxes, then you will need to focus on the canvas to get it to do the action, otherwise pressing the key would just interact with the widgets in the GUI.</p>
+    <p>Some menu items have keyboard shortcuts, which show up in the item itself, to the right. Some widgets also have keyboard shortcuts, and if you have tooltips on (they can be enabled in the menu bar's "Help" menu), you can keep your cursor over them to learn what they are. In addition some widgets have special controls in and of themselves, due to the way they were implemented in <a href="https://github.com/ocornut/imgui">Dear ImGui</a>, and these controls also show up in tooltips. Other than that, here are some general keyboard and mouse controls for the area editor:</p>
 
     <table>
-      <tr><td>Pan camera</td><td>Arrow keys, or right mouse button</td></tr>
-      <tr><td>Zoom in and out</td><td>Plus/Minus, or mouse wheel</td></tr>
-      <tr><td>Reset zoom; press again to reset camera position</td><td>Zero, or middle mouse button</td></tr>
-      <tr><td>Change camera to fit whole scene snugly</td><td>Home</td></tr>
-      <tr><td>Undo latest vertex, when drawing new sector</td><td>Backspace</td></tr>
-      <tr><td>Quit out of certain panels</td><td>Escape</td></tr>
-      <tr><td>Free mouse cursor from snapping</td><td>Shift</td></tr>
-      <tr><td>Force a selection box when dragging the left mouse button</td><td>Shift</td></tr>
-      <tr><td>Add to existing selection, when selecting something</td><td>Ctrl</td></tr>
-      <tr><td>Undo latest move</td><td>Ctrl + Z</td></tr>
-      <tr><td>Select all objects, vertexes, path stops, etc.</td><td>Ctrl + A</td></tr>
-      <tr><td>Make all selected objects face cursor position</td><td>R</td></tr>
-      <tr><td>Toggle debug features (mostly for engine development usage)</td><td>F1 - F4</td></tr>
+      <tr><th>Action</th><th>Focus</th><th>Control</th></tr>
+      <tr><td>Pan camera</td><td>Canvas</td><td>Arrow keys, or right mouse button</td></tr>
+      <tr><td>Zoom in and out</td><td>Canvas</td><td>Plus/Minus, or mouse wheel</td></tr>
+      <tr><td>Reset zoom; press again to reset camera position</td><td>Canvas</td><td>Zero, or middle mouse button</td></tr>
+      <tr><td>Change camera to fit whole scene snugly</td><td>Canvas</td><td>Home</td></tr>
+      <tr><td>Undo latest vertex, when drawing new sector</td><td>Canvas</td><td>Backspace</td></tr>
+      <tr><td>Quit out of certain panels</td><td>GUI</td><td>Escape</td></tr>
+      <tr><td>Free mouse cursor from snapping</td><td>Any</td><td>Shift</td></tr>
+      <tr><td>Force a selection box when dragging the left mouse button</td><td>Any</td><td>Shift</td></tr>
+      <tr><td>Add to existing selection, when selecting something</td><td>Any</td><td>Ctrl</td></tr>
+      <tr><td>Undo latest move</td><td>Any</td><td>Ctrl + Z</td></tr>
+      <tr><td>Select all objects, vertexes, path stops, etc.</td><td>Canvas</td><td>Ctrl + A</td></tr>
+      <tr><td>Make all selected objects face cursor position</td><td>Canvas</td><td>R</td></tr>
     </table>
 
     <h2 id="tips">Tips</h2>
@@ -555,13 +557,6 @@
           <li>Purple Pikmin: 210</li>
           <li>Standard Pikmin: 260</li>
           <li>Yellow Pikmin: 330</li>
-        </ul>
-      </li>
-      <li>
-        The GUI is built using Dear ImGui. Here are some tips on how to use the widgets:
-        <ul>
-          <li>When dragging your mouse on a value drag widget, hold Alt to make the values change more slowly, and Shift to make them change faster.</li>
-          <li>Double-click or Ctrl + click a slider widget or a value drag widget to be able to edit the number inside directly.</li>
         </ul>
       </li>
     </ul>

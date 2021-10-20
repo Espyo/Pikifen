@@ -32,7 +32,7 @@
 
     <ul>
       <li><b><code>name</code></b>: Its internal name; the name you will refer it by in other files.</li>
-      <li><b><code>color</code></b>: A color that represents the hazard, in the format <code>r g b</code> or <code>r g b a</code>.</li>
+      <li><b><code>color</code></b>: A color that represents the hazard, in the format <code>r g b</code> or <code>r g b a</code>. Defaults to black.</li>
       <li><b><code>status</code></b>: Status effects to apply to any Pikmin that is not invulnerable. This list is separated by semicolons (;).</li>
       <li><b><code>liquid</code></b>: If this hazard has an associated liquid (read the next section), specify its name here.</li>
     </ul>
@@ -47,11 +47,11 @@
 
     <ul>
       <li><b><code>name</code></b>: Its internal name; the name you will refer it by in other files.</li>
-      <li><b><code>color</code></b>: Color of the liquid, in the format <code>r g b</code> or <code>r g b a</code>. In-game, the terrain below the liquid's surface will be tinted with this color.</li>
+      <li><b><code>color</code></b>: Color of the liquid, in the format <code>r g b</code> or <code>r g b a</code>. In-game, the terrain below the liquid's surface will be tinted with this color. Defaults to black.</li>
       <li><b><code>animation</code></b>: Name of the animation <a href="making.html#data-file">data file</a> in <code>Game_data/Animations</code>, with extension included (e.g. <code>Water.txt</code>). The water's surface will have this animated texture on it. <b>Note</b>: Since the sprites used for the animation are tiled over and over across the water's surface, you will not be able to have multiple frames of animation in the same image file. When <a href="animation.html">making its animation</a>, make sure to have each frame on its own file.</li>
-      <li><b><code>surface_1_speed</code></b>: Liquids have the surface animation drawn twice, one layer on top of the other. The fact that they scroll at different speeds is what gives the full surface a dynamic look. This property sets the scrolling speed of the top layer, in pixels per second.</li>
-      <li><b><code>surface_2_speed</code></b>: Like <code>surface_1_speed</code>, but for the bottom layer.</li>
-      <li><b><code>surface_alpha</code></b>: Opacity (0 - 255) of the entire surface.</li>
+      <li><b><code>surface_1_speed</code></b>: Liquids have the surface animation drawn twice, one layer on top of the other. The fact that they scroll at different speeds is what gives the full surface a dynamic look. This property sets the scrolling speed of the top layer, in pixels per second. Defaults to 10.</li>
+      <li><b><code>surface_2_speed</code></b>: Like <code>surface_1_speed</code>, but for the bottom layer. Defaults to -13.</li>
+      <li><b><code>surface_alpha</code></b>: Opacity (0 - 255) of the entire surface. Defaults to 255.</li>
     </ul>
     
   </div>
