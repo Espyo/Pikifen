@@ -6,11 +6,11 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Fullscreen + message boxes = weirdness
+    Changing the resolution and entering an editor will break stuff
     
     --- v0.21.0 ---
-    In the manual
-        The banner at the top should have breadcrumbs, the engine logo, and a jump-to-index button
+    
     
     --- v0.22.0 ---
     Details
