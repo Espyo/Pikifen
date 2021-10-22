@@ -61,6 +61,7 @@ struct options_struct {
     static const bool DEF_PRETTY_WHISTLE;
     static const bool DEF_SMOOTH_SCALING;
     static const unsigned int DEF_TARGET_FPS;
+    static const bool DEF_TRUE_FULLSCREEN;
     static const bool DEF_WIN_FULLSCREEN;
     static const unsigned int DEF_WIN_H;
     static const bool DEF_WINDOW_POSITION_HACK;
@@ -131,6 +132,8 @@ struct options_struct {
     bool smooth_scaling;
     //Target framerate.
     int target_fps;
+    //When using fullscreen, is this true fullscreen, or borderless window?
+    bool true_fullscreen;
     //Should we force the window's positioning?
     //(on some machines it appears out-of-bounds by default)
     bool window_position_hack;

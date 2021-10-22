@@ -6,11 +6,10 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Fullscreen + message boxes = weirdness
-    Changing the resolution and entering an editor will break stuff
+    
     
     --- v0.21.0 ---
-    
+
     
     --- v0.22.0 ---
     Details
@@ -764,6 +763,8 @@ Tasks for later on (I might never implement these)
             An action with which to change a mob's home
             A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
                 You can just give the mob a status effect that changes its speed
+    Possible solutions to known issues
+        Remove all native message boxes, and implement my own, or come up with alternative ways to supply the information. If I could remove all of them, there would be no more problems with "true fullscreen" mode
     Specific requested features
         An enemy that can heal, for instance, 20HP for each Pikmin eaten
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard

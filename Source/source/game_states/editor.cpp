@@ -872,9 +872,6 @@ void editor::load() {
     
     game.fade_mgr.start_fade(true, nullptr);
     
-    //Load the user's editor style and preferred tree node open states.
-    load_options();
-    
     //Set the editor style.
     update_style();
     

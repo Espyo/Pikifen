@@ -51,6 +51,7 @@ const bool options_struct::DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] =
 const bool options_struct::DEF_PRETTY_WHISTLE = true;
 const bool options_struct::DEF_SMOOTH_SCALING = true;
 const unsigned int options_struct::DEF_TARGET_FPS = 60;
+const bool options_struct::DEF_TRUE_FULLSCREEN = false;
 const bool options_struct::DEF_WIN_FULLSCREEN = false;
 const unsigned int options_struct::DEF_WIN_H = 768;
 const bool options_struct::DEF_WINDOW_POSITION_HACK = false;
@@ -88,6 +89,7 @@ options_struct::options_struct() :
     pretty_whistle(DEF_PRETTY_WHISTLE),
     smooth_scaling(DEF_SMOOTH_SCALING),
     target_fps(DEF_TARGET_FPS),
+    true_fullscreen(DEF_TRUE_FULLSCREEN),
     window_position_hack(DEF_WINDOW_POSITION_HACK),
     zoom_mid_level(DEF_ZOOM_MID_LEVEL) {
     
@@ -204,6 +206,7 @@ void options_struct::load(data_node* file) {
     rs.set("pretty_whistle", pretty_whistle);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
+    rs.set("true_fullscreen", true_fullscreen);
     rs.set("window_position_hack", window_position_hack);
     
     auto_throw_mode =
@@ -508,6 +511,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "smooth_scaling",
             b2s(smooth_scaling)
+        )
+    );
+    file->add(
+        new data_node(
+            "true_fullscreen",
+            b2s(true_fullscreen)
         )
     );
     file->add(
