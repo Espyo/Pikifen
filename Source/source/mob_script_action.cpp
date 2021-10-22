@@ -1792,6 +1792,7 @@ void mob_action_runners::start_particles(mob_action_run_data &data) {
 void mob_action_runners::stop(mob_action_run_data &data) {
     data.m->stop_chasing();
     data.m->stop_turning();
+    data.m->stop_following_path();
 }
 
 

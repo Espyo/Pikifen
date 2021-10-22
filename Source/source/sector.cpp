@@ -2734,11 +2734,11 @@ vector<path_stop*> dijkstra(
     //If we got to this point, there means that there is no available path!
     
     if(!ignore_obstacles) {
-        //Let's try again, this time ignoring everything.
+        //Let's try again, this time ignoring obstacles.
         return
             dijkstra(
                 start_node, end_node,
-                true, vector<hazard*>(), taker_flags, label,
+                true, invulnerabilities, taker_flags, label,
                 total_dist
             );
     } else {
