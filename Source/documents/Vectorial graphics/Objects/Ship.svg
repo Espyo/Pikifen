@@ -460,16 +460,6 @@
        r="11" />
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#Drake_green_light"
-       id="radialGradient1026"
-       cx="164"
-       cy="305"
-       fx="164"
-       fy="305"
-       r="6"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
        xlink:href="#HS-glass-top"
        id="radialGradient1038"
        cx="233"
@@ -685,71 +675,6 @@
     <radialGradient
        inkscape:collect="always"
        xlink:href="#Drake"
-       id="radialGradient1267"
-       cx="-788"
-       cy="722"
-       fx="-788"
-       fy="722"
-       r="17.5"
-       gradientTransform="matrix(-2,1.1533381e-7,-1.8437107e-7,-1.7714296,-2363.9999,1998.9723)"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Drake"
-       id="radialGradient1275"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-1.8857124,-2.1666833e-6,1.9595944e-6,-1.7714296,-2273.9428,1998.9705)"
-       cx="-788"
-       cy="722"
-       fx="-788"
-       fy="722"
-       r="17.5" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Drake"
-       id="radialGradient1275-3"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-1.8857124,-2.1666833e-6,1.9595944e-6,-1.7714296,-2273.9428,1998.9705)"
-       cx="-788"
-       cy="722"
-       fx="-788"
-       fy="722"
-       r="17.5" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Drake"
-       id="radialGradient1312"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-1.8857124,-2.1666833e-6,1.9595944e-6,-1.7714296,-2273.9428,1998.9705)"
-       cx="-799.66669"
-       cy="722.00006"
-       fx="-799.66669"
-       fy="722.00006"
-       r="17.5" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Drake"
-       id="radialGradient1319"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-2.5142859,1.7374978e-6,-2.1345152e-6,-2.9714291,-2776.5891,2865.3734)"
-       cx="-799.66669"
-       cy="722.00006"
-       fx="-799.66669"
-       fy="722.00006"
-       r="17.5" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Drake_antenna"
-       id="radialGradient1390"
-       cx="-670"
-       cy="718"
-       fx="-670"
-       fy="718"
-       r="4.9999957"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Drake"
        id="radialGradient1416"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(-1.8857124,-2.1666833e-6,1.9595944e-6,-1.7714296,-2273.9428,1998.9705)"
@@ -792,9 +717,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="646.80419"
-     inkscape:cy="521.94576"
+     inkscape:zoom="1"
+     inkscape:cx="534.98709"
+     inkscape:cy="594.13774"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"

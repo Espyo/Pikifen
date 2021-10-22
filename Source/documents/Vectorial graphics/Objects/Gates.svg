@@ -1120,33 +1120,6 @@
        x2="725"
        y2="47.000061"
        spreadMethod="reflect" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-rope-shading"
-       id="linearGradient1300"
-       gradientUnits="userSpaceOnUse"
-       x1="720"
-       y1="42.000061"
-       x2="728"
-       y2="42.000061" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-rope-mask"
-       id="linearGradient1330"
-       x1="872"
-       y1="1071.3617"
-       x2="872"
-       y2="831.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-rope-mask"
-       id="linearGradient1348"
-       gradientUnits="userSpaceOnUse"
-       x1="872"
-       y1="1071.3617"
-       x2="872"
-       y2="831.36218" />
     <mask
        maskUnits="userSpaceOnUse"
        id="mask1367">
@@ -1184,9 +1157,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="648.62435"
-     inkscape:cy="164.80412"
+     inkscape:zoom="1"
+     inkscape:cx="708.47993"
+     inkscape:cy="170.84405"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"

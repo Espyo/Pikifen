@@ -22,7 +22,7 @@
     
     <h2 id="0.21.0">0.21.0</h2>
     
-    <p><i>Date TBD</i></p>
+    <p><i>October 22nd, 2021 &ndash; the "Pikmin 3" update</i></p>
     
     <p><b>Gameplay changes</b></p>
 
@@ -63,7 +63,7 @@
         </ul>
       </li>
       <li>If a Pikmin is lying down, a leader can now whistle it to make it get up faster, and return to the leader once it does.</li>
-      <li>Added an option to allow the leader to auto-throw. If you have trouble mashing the throw button, consider turning this on.</li>
+      <li>Added an option to allow the leader to auto-throw. If you prefer not to mash the throw button, consider turning this on.</li>
       <li>If a new leader shows up from a defeated enemy, their HUD information will now display properly. (Thanks pikminjosh)</li>
       <li>All menus now have a tooltip for the currently selected item.</li>
       <li>The in-game message box now looks like other boxes, instead of a stretched flat image.</li>
@@ -104,8 +104,8 @@
           <li>Added the <code>reapply_rule</code> property, which controls what happens to the auto-remove time of a status effect in case it is re-applied.</li>
           <li>Added the <code>remove_on_hazard_leave</code> property. This is now used for statuses like drowning, where the status effect is removed once the object leaves the hazard that was applying the status effect.</li>
           <li>Added the <code>replacement_on_timeout</code> property, which lets a status effect be swapped for another when its time runs out.</li>
-          <li>Added the <code>shaking_effect</code> property, which makes the object shake left and right while under the effects of the status effect.</li>
           <li>Added the <code>state_change_type</code> and <code>state_change_name</code> properties, so status effects can change the object's state when applied.</li>
+          <li>Added the <code>shaking_effect</code> property, which makes the object shake left and right while under the effects of the status effect.</li>
           <li>Object types, in their hazard vulnerability data and spike damage vulnerability data, can now be told to receive a status effect when interacting with one.</li>
           <li>Plus other changes noted below in the compatibility warnings.</li>
         </ul>
@@ -113,20 +113,20 @@
       <li>
         New <a href="script.html">mob script</a> actions:
         <ul>
-          <li><code>hold_focused_mob</code> lets the object hold whatever object it has in focus, much like how a leader holds a Pikmin.</li>
           <li><code>load_focused_mob_memory</code> and <code>save_focused_mob_memory</code> let the currently focused object be saved into a memory, and be recalled later. This allows the object to keep track of more than one object at a time, although it still only focuses on one at a time.</li>
           <li><code>link_with_focused_mob</code> lets the object be linked to whatever object it has in focus.</li>
+          <li><code>hold_focused_mob</code> lets the object hold whatever object it has in focus, much like how a leader holds a Pikmin.</li>
+          <li><code>throw_focused_mob</code> lets the focused object be thrown in an arc towards a destination.</li>
+          <li><code>store_focus_inside</code> lets the object store another one inside, to be released later.</li>
+          <li><code>release_stored_mobs</code> lets the object release any other object that is stored inside.</li>
           <li><code>get_angle</code> lets the script obtain the angle between two sets of coordinates.</li>
-          <li><code>set_can_block_paths</code> lets the object block or stop blocking the paths of others.</li>
           <li><code>get_coordinates_from_angle</code> lets the script obtain the X and Y coordinates calculated from a given angle and distance.</li>
           <li><code>get_distance</code> lets the script obtain the distance between two sets of coordinates.</li>
           <li><code>get_floor_z</code> lets the script obtain the Z coordinate of the floor at the specified coordinates.</li>
-          <li><code>release_stored_mobs</code> lets the object release any other object that is stored inside.</li>
+          <li><code>set_can_block_paths</code> lets the object block or stop blocking the paths of others.</li>
           <li><code>set_flying</code> lets the object move in mid air at will, unaffected by gravity.</li>
           <li><code>set_radius</code> lets the object's radius be changed.</li>
           <li><code>set_shadow_visibility</code> lets the object's shadow be hidden.</li>
-          <li><code>store_focus_inside</code> lets the object store another one inside, to be released later.</li>
-          <li><code>throw_focused_mob</code> lets the focused object be thrown in an arc towards a destination.</li>
           <li><code>follow_path_to_absolute</code> lets the object follow path stops to get to the specified coordinates.</li>
           <li><code>follow_path_randomly</code> lets the object follow path stops to get to a random stop in the area.</li>
         </ul>
@@ -203,7 +203,7 @@
     
     <h2 id="0.20.0">0.20.0</h2>
     
-    <p><i>April 24th, 2021</i></p>
+    <p><i>April 24th, 2021 &ndash; the "missing menus" update</i></p>
     
     <p><b>Changes</b></p>
     
@@ -277,7 +277,7 @@
     
     <h2 id="0.19.0">0.19.0</h2>
     
-    <p><i>August 15th, 2020</i></p>
+    <p><i>August 15th, 2020 &ndash; the "Dear ImGui" update</i></p>
     
     <p><b>Changes</b></p>
     

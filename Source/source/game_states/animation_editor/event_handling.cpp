@@ -510,6 +510,15 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles the mouse being clicked/dragged in the animation timeline.
+ */
+void animation_editor::handle_lmb_drag_in_timeline() {
+    float cursor_time = get_cursor_timeline_time();
+    cur_anim->get_frame_and_time(cursor_time, &cur_frame_nr, &cur_frame_time);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the left mouse button being released.
  * ev:
  *   Event to handle.
@@ -570,15 +579,6 @@ void animation_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
     if(game.options.editor_mmb_pan) {
         pan_cam(ev);
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Handles the mouse being clicked/dragged in the animation timeline.
- */
-void animation_editor::handle_lmb_drag_in_timeline() {
-    float cursor_time = get_cursor_timeline_time();
-    cur_anim->get_frame_and_time(cursor_time, &cur_frame_nr, &cur_frame_time);
 }
 
 

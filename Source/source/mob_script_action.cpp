@@ -975,21 +975,6 @@ void mob_action_runners::get_angle(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
- * Code for the coordinate from angle obtaining mob script action.
- * data:
- *   Data about the action call.
- */
-void mob_action_runners::get_coordinates_from_angle(mob_action_run_data &data) {
-    float angle = s2f(data.args[2]);
-    angle = deg_to_rad(angle);
-    float magnitude = s2f(data.args[3]);
-    point p = angle_to_coordinates(angle, magnitude);
-    data.m->vars[data.args[0]] = f2s(p.x);
-    data.m->vars[data.args[1]] = f2s(p.y);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Code for the mob script action for getting chomped.
  * data:
  *   Data about the action call.
@@ -1001,6 +986,21 @@ void mob_action_runners::get_chomped(mob_action_run_data &data) {
             (hitbox*) (data.custom_data_2)
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the coordinate from angle obtaining mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::get_coordinates_from_angle(mob_action_run_data &data) {
+    float angle = s2f(data.args[2]);
+    angle = deg_to_rad(angle);
+    float magnitude = s2f(data.args[3]);
+    point p = angle_to_coordinates(angle, magnitude);
+    data.m->vars[data.args[0]] = f2s(p.x);
+    data.m->vars[data.args[1]] = f2s(p.y);
 }
 
 
@@ -1153,20 +1153,6 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
 
 
 /* ----------------------------------------------------------------------------
- * Code for the load focused mob memory mob script action.
- * data:
- *   Data about the action call.
- */
-void mob_action_runners::load_focus_memory(mob_action_run_data &data) {
-    if(data.m->focused_mob_memory.empty()) {
-        return;
-    }
-    
-    data.m->focus_on_mob(data.m->focused_mob_memory[s2i(data.args[0])]);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Code for the link with focus mob script action.
  * data:
  *   Data about the action call.
@@ -1184,6 +1170,20 @@ void mob_action_runners::link_with_focus(mob_action_run_data &data) {
     }
     
     data.m->links.push_back(data.m->focused_mob);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code for the load focused mob memory mob script action.
+ * data:
+ *   Data about the action call.
+ */
+void mob_action_runners::load_focus_memory(mob_action_run_data &data) {
+    if(data.m->focused_mob_memory.empty()) {
+        return;
+    }
+    
+    data.m->focus_on_mob(data.m->focused_mob_memory[s2i(data.args[0])]);
 }
 
 

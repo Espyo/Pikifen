@@ -67,6 +67,7 @@ enum CHASE_FLAGS {
     CHASE_FLAG_ANY_ANGLE = 4,
 };
 
+
 enum CHASE_STATES {
     //No chasing in progress.
     CHASE_STATE_STOPPED,

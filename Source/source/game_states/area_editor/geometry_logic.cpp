@@ -1332,9 +1332,9 @@ mob_gen* area_editor::get_mob_under_point(const point &p) const {
  * the opposite direction, link2 gets that data, otherwise link2 receives NULL.
  * p:
  *   The point to check against.
- * data1:
+ * link1:
  *   If there is a path link under that point, its pointer is returned here.
- * data2:
+ * link2:
  *   If there is a path link under the point, but going in the opposite
  *   direction, its pointer is returned here.
  */

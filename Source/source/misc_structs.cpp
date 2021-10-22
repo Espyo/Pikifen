@@ -1896,6 +1896,8 @@ void whistle_struct::stop_whistling() {
  * Ticks one frame of gameplay.
  * delta_t:
  *   How many seconds to tick by.
+ * center:
+ *   What its center is on this frame.
  * whistle_range:
  *   How far the whistle can reach from the cursor center.
  * leader_to_cursor_dist:

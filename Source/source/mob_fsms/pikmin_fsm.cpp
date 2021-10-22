@@ -8,6 +8,8 @@
  * Pikmin finite state machine logic.
  */
 
+#include <algorithm>
+
 #include "pikmin_fsm.h"
 
 #include "../functions.h"
@@ -2282,32 +2284,6 @@ void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin finishes picking some object up to hold it.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
-    tool* too_ptr = (tool*) (m->focused_mob);
-    
-    if(!(too_ptr->holdability_flags & HOLDABLE_BY_PIKMIN)) {
-        m->fsm.set_state(PIKMIN_STATE_IDLING);
-        return;
-    }
-    
-    m->subgroup_type_ptr =
-        game.states.gameplay->subgroup_types.get_type(
-            SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
-        );
-    m->hold(m->focused_mob, INVALID, 4, 0, true, true);
-    m->unfocus_from_mob();
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a Pikmin finishes getting up from being knocked down.
  * m:
  *   The mob.
@@ -2366,6 +2342,32 @@ void pikmin_fsm::finish_mob_landing(mob* m, void* info1, void* info2) {
         
     }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin finishes picking some object up to hold it.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
+    tool* too_ptr = (tool*) (m->focused_mob);
+    
+    if(!(too_ptr->holdability_flags & HOLDABLE_BY_PIKMIN)) {
+        m->fsm.set_state(PIKMIN_STATE_IDLING);
+        return;
+    }
+    
+    m->subgroup_type_ptr =
+        game.states.gameplay->subgroup_types.get_type(
+            SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
+        );
+    m->hold(m->focused_mob, INVALID, 4, 0, true, true);
+    m->unfocus_from_mob();
 }
 
 
@@ -3427,6 +3429,26 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin starts getting up from being knocked down.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::start_getting_up(mob* m, void* info1, void* info2) {
+    pikmin* p_ptr = (pikmin*) m;
+    
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
+    m->set_animation(PIKMIN_ANIM_GETTING_UP);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin starts lunging forward for an impact attack.
  * m:
  *   The mob.
@@ -3474,26 +3496,6 @@ void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
     }
     m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
-}
-
-
-/* ----------------------------------------------------------------------------
- * When a Pikmin starts getting up from being knocked down.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::start_getting_up(mob* m, void* info1, void* info2) {
-    pikmin* p_ptr = (pikmin*) m;
-    
-    if(p_ptr->pik_type->can_fly) {
-        p_ptr->can_move_in_midair = true;
-    }
-    
-    m->set_animation(PIKMIN_ANIM_GETTING_UP);
 }
 
 

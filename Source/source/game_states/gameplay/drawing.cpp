@@ -1055,51 +1055,6 @@ void gameplay_state::draw_system_stuff() {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the current area and mobs to a bitmap and returns it.
- */
-ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
-    //First, get the full dimensions of the map.
-    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = -FLT_MAX, max_y = -FLT_MAX;
-    
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
-        min_x = std::min(v_ptr->x, min_x);
-        min_y = std::min(v_ptr->y, min_y);
-        max_x = std::max(v_ptr->x, max_x);
-        max_y = std::max(v_ptr->y, max_y);
-    }
-    
-    //Figure out the scale that will fit on the image.
-    float area_w = max_x - min_x;
-    float area_h = max_y - min_y;
-    float scale = 1.0f;
-    float final_bmp_w = game.maker_tools.area_image_size;
-    float final_bmp_h = game.maker_tools.area_image_size;
-    
-    if(area_w > area_h) {
-        scale = game.maker_tools.area_image_size / area_w;
-        final_bmp_h *= area_h / area_w;
-    } else {
-        scale = game.maker_tools.area_image_size / area_h;
-        final_bmp_w *= area_w / area_h;
-    }
-    
-    //Create the bitmap.
-    ALLEGRO_BITMAP* bmp = al_create_bitmap(final_bmp_w, final_bmp_h);
-    
-    ALLEGRO_TRANSFORM t;
-    al_identity_transform(&t);
-    al_translate_transform(&t, -min_x, -min_y);
-    al_scale_transform(&t, scale, scale);
-    
-    //Begin drawing!
-    do_game_drawing(bmp, &t);
-    
-    return bmp;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws a leader's throw preview.
  */
 void gameplay_state::draw_throw_preview() {
@@ -1357,6 +1312,51 @@ void gameplay_state::draw_throw_preview() {
         }
     }
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the current area and mobs to a bitmap and returns it.
+ */
+ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
+    //First, get the full dimensions of the map.
+    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = -FLT_MAX, max_y = -FLT_MAX;
+    
+    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); v++) {
+        vertex* v_ptr = game.cur_area_data.vertexes[v];
+        min_x = std::min(v_ptr->x, min_x);
+        min_y = std::min(v_ptr->y, min_y);
+        max_x = std::max(v_ptr->x, max_x);
+        max_y = std::max(v_ptr->y, max_y);
+    }
+    
+    //Figure out the scale that will fit on the image.
+    float area_w = max_x - min_x;
+    float area_h = max_y - min_y;
+    float scale = 1.0f;
+    float final_bmp_w = game.maker_tools.area_image_size;
+    float final_bmp_h = game.maker_tools.area_image_size;
+    
+    if(area_w > area_h) {
+        scale = game.maker_tools.area_image_size / area_w;
+        final_bmp_h *= area_h / area_w;
+    } else {
+        scale = game.maker_tools.area_image_size / area_h;
+        final_bmp_w *= area_w / area_h;
+    }
+    
+    //Create the bitmap.
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(final_bmp_w, final_bmp_h);
+    
+    ALLEGRO_TRANSFORM t;
+    al_identity_transform(&t);
+    al_translate_transform(&t, -min_x, -min_y);
+    al_scale_transform(&t, scale, scale);
+    
+    //Begin drawing!
+    do_game_drawing(bmp, &t);
+    
+    return bmp;
 }
 
 

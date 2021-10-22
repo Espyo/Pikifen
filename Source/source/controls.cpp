@@ -636,7 +636,8 @@ void gameplay_state::handle_button(
         }
         
     }
-    //Some inputs we don't want to ignore even if we're in a menu. Those go here.
+    //Some inputs we don't want to ignore even if we're in a menu.
+    //Those go here.
     switch (button) {
     case BUTTON_RIGHT:
     case BUTTON_UP:

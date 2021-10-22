@@ -7,7 +7,7 @@ from find_problems.find_long_lines import *
 from find_problems.find_misc import *
 
 def change_version_numbers():
-    new = input("What is the new version? ")
+    new = input("What is the new version (X.Y.Z)? ")
     new_parts = new.split(".")
     system_call("sed -i 's/VERSION_MAJOR = .*;/VERSION_MAJOR = " + new_parts[0] + ";/g' Source/source/const.h")
     system_call("sed -i 's/VERSION_MINOR = .*;/VERSION_MINOR = " + new_parts[1] + ";/g' Source/source/const.h")

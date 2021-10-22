@@ -243,6 +243,18 @@ mob_type::area_editor_prop_struct::area_editor_prop_struct() :
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new vulnerability structure.
+ */
+mob_type::vulnerability_struct::vulnerability_struct() :
+    damage_mult(1.0f),
+    status_to_apply(nullptr),
+    status_overrides(true) {
+    
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Grabs an animation conversion vector, filled with base animations,
  * and outputs one that combines all base animations with their groups.
  * v:
@@ -269,7 +281,6 @@ mob_type_with_anim_groups::get_anim_conversions_with_groups(
     
     return new_v;
 }
-
 
 
 /* ----------------------------------------------------------------------------
@@ -449,11 +460,10 @@ void load_mob_type_from_file(
             );
             
         } else {
-            mt->spike_damage_vulnerabilities[&(sdv_it->second)].damage_mult =
-                percentage / 100.0f;
-            mt->spike_damage_vulnerabilities[&(sdv_it->second)].status_to_apply =
-                status_it->second;
-                
+            auto &s = mt->spike_damage_vulnerabilities[&(sdv_it->second)];
+            s.damage_mult = percentage / 100.0f;
+            s.status_to_apply = status_it->second;
+            
         }
     }
     
@@ -988,15 +998,4 @@ void unload_mob_types(mob_category* category, bool unload_resources) {
     }
     
     category->clear_types();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new vulnerability structure.
- */
-mob_type::vulnerability_struct::vulnerability_struct() :
-    damage_mult(1.0f),
-    status_to_apply(nullptr),
-    status_overrides(true) {
-    
 }

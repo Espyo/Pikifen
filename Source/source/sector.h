@@ -58,6 +58,7 @@ enum TRIANGULATION_ERRORS {
     TRIANGULATION_ERROR_NO_EARS,
 };
 
+
 enum PATH_LINK_TYPES {
     //Normal.
     PATH_LINK_TYPE_NORMAL,
@@ -68,6 +69,7 @@ enum PATH_LINK_TYPES {
     //Only for objects that can fly.
     PATH_LINK_TYPE_AIRBORNE_ONLY,
 };
+
 
 enum PATH_TAKER_FLAGS {
     //The mob was told to use this path by a script.
@@ -513,7 +515,7 @@ struct path_manager {
 bool can_traverse_path_link(
     path_link* link_ptr, const bool ignore_obstacles,
     const vector<hazard*> &invulnerabilities, const unsigned char taker_flags,
-    const string& label
+    const string &label
 );
 void depth_first_search(
     vector<path_stop*> &nodes,

@@ -8,9 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     
-    --- v0.21.0 ---
-
-    
     --- v0.22.0 ---
     Details
         Bridge improvements

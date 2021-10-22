@@ -1020,6 +1020,20 @@ void blockmap::clear() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the block column in which an X coordinate is contained.
+ * Returns INVALID on error.
+ * x:
+ *   X coordinate.
+ */
+size_t blockmap::get_col(const float x) const {
+    if(x < top_left_corner.x) return INVALID;
+    float final_x = (x - top_left_corner.x) / BLOCKMAP_BLOCK_SIZE;
+    if(final_x >= n_cols) return INVALID;
+    return final_x;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Obtains a list of edges that are within the specified rectangular region.
  * Returns true on success, false on error.
  * tl:
@@ -1059,20 +1073,6 @@ bool blockmap::get_edges_in_region(
     }
     
     return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the block column in which an X coordinate is contained.
- * Returns INVALID on error.
- * x:
- *   X coordinate.
- */
-size_t blockmap::get_col(const float x) const {
-    if(x < top_left_corner.x) return INVALID;
-    float final_x = (x - top_left_corner.x) / BLOCKMAP_BLOCK_SIZE;
-    if(final_x >= n_cols) return INVALID;
-    return final_x;
 }
 
 
@@ -1416,44 +1416,6 @@ void path_manager::handle_area_load() {
 
 
 /* ----------------------------------------------------------------------------
- * Handles an obstacle having been cleared. This way, any link with that
- * obstruction can get updated.
- * m:
- *   Pointer to the obstacle mob that got cleared.
- */
-void path_manager::handle_obstacle_remove(mob* m) {
-    //Remove the obstacle from our list, if it's there.
-    bool paths_changed = false;
-    
-    for(auto o = obstructions.begin(); o != obstructions.end();) {
-        bool to_delete = false;
-        if(o->second.erase(m) > 0) {
-            if(o->second.empty()) {
-                o->first->blocked_by_obstacle = false;
-                to_delete = true;
-                paths_changed = true;
-            }
-        }
-        if(to_delete) {
-            o = obstructions.erase(o);
-        } else {
-            ++o;
-        }
-    }
-    
-    if(paths_changed) {
-        //Re-calculate the paths of mobs taking paths.
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
-            mob* m_ptr = game.states.gameplay->mobs.all[m];
-            if(!m_ptr->path_info) continue;
-            
-            m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles an obstacle having been placed. This way, any link with that
  * obstruction can get updated.
  * m:
@@ -1496,9 +1458,47 @@ void path_manager::handle_obstacle_add(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles an obstacle having been cleared. This way, any link with that
+ * obstruction can get updated.
+ * m:
+ *   Pointer to the obstacle mob that got cleared.
+ */
+void path_manager::handle_obstacle_remove(mob* m) {
+    //Remove the obstacle from our list, if it's there.
+    bool paths_changed = false;
+    
+    for(auto o = obstructions.begin(); o != obstructions.end();) {
+        bool to_delete = false;
+        if(o->second.erase(m) > 0) {
+            if(o->second.empty()) {
+                o->first->blocked_by_obstacle = false;
+                to_delete = true;
+                paths_changed = true;
+            }
+        }
+        if(to_delete) {
+            o = obstructions.erase(o);
+        } else {
+            ++o;
+        }
+    }
+    
+    if(paths_changed) {
+        //Re-calculate the paths of mobs taking paths.
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+            mob* m_ptr = game.states.gameplay->mobs.all[m];
+            if(!m_ptr->path_info) continue;
+            
+            m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles a sector having changed its hazards. This way, any stop on that
  * sector can be updated.
- * s:
+ * sector_ptr:
  *   Pointer to the sector whose hazards got updated.
  */
 void path_manager::handle_sector_hazard_change(sector* sector_ptr) {

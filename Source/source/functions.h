@@ -31,6 +31,7 @@ enum FILE_DIALOG_RESULTS {
     FILE_DIALOG_RES_CANCELED,
 };
 
+
 enum WIPE_FOLDER_RESULTS {
     //Wipe successful.
     WIPE_FOLDER_RESULT_OK,

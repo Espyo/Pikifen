@@ -464,6 +464,8 @@ bool bbox_check(
  *   Target destination's Z coordinate.
  * max_h:
  *   Maximum height, using the starting Z as the reference.
+ * gravity:
+ *   Constant for the force of gravity, in units per second squared.
  * req_speed_xy:
  *   The required X and Y speed is returned here.
  * req_speed_z:

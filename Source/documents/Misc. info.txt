@@ -122,8 +122,8 @@ Bag of notes (useful stuff)
             If the user turns a sector inside out, there's not much the engine can do...
             If the user starts stitching by grabbing only one vertex, it'll complain that a sector is cut up
             There should be a clear way to communicate that you can't drag a sector into another...
+                Likewise, dragging a sector entirely outside of its parent sector is allowed, and there isn't a whole lot the engine can do to detect this...
             On the area editor, two triangular sectors, facing one another, sharing the middle vertex (like an hourglass lying down). The right triangle should be then turned into a rhombus, by adding a new vertex slightly above the joining vertex. Finally, drag the left triangle's top-left vertex and drop it in the top line. It will let you do so despite crossing lines. I have no idea how to solve this (January 2018)
-            Dragging a sector entirely outside of its parent sector is allowed, and there isn't a whole lot the engine can do to detect this...
         Conclusions
             Looks like there are only four ways for a new polygon (N) to be related to any existing polygon (E): N is parent of E, N is child of E, N is neighbor of E, or N is not connected to E
             A sector can only have no holes, have 1+ holes, or be the void
@@ -154,14 +154,14 @@ Bag of notes (useful stuff)
             Placing a Fire Flower on a Mushroom does nothing, but the opposite does
             Handheld mode forces you to not use controller mode
             You can't place blocks when in zoomed-out mode
-    Steps I've followed to get the engine on VS 2010
+    Steps I've followed to get the engine to compile on VS 2010
         I used Visual Studio 2010 to compile for XP
         Used the msvc-10.0 library version of Allegro so it works on XP
         Properties > Config. Properties > General > Platform Toolset set to v100
         If it complains about min or max, add an #include <algorithm> to the top
         If it complains about scopes inside lambdas, it probably wants a "this" to be passed into the lambda, or cannot infer a "this" inside the lambda
         If it gives linker errors, check what classes it keeps complaining about, and see if the files where that class is declared/defined are part of the workspace
-    Steps I've followed to get the engine on VS 2019
+    Steps I've followed to get the engine to compile on VS 2019
         Installed Visual Studio
             I've installed Visual Studio Community, but any version should work
             When asked for the features, I enabled the following:
@@ -235,17 +235,18 @@ Procedure for every version release
             Compile with -Wall and correct all problems
             Use cppcheck on the code and correct the problems
             Confirm that there are no superfluous #includes (how?)
-        Confirm that no line goes over 80 characters
-            Use the helper tool, or run:
-                grep -Enr --include="*.cpp" ^.\{81,\}$
-        Confirm that all function definitions are sorted alphabetically, and by namespace
-            Use the helper tool
-        Confirm that all includes are sorted alphabetically
-            Use the helper tool
-        Confirm that all functions have documentation, and that it has no missing/extra parameters
-            Use the helper tool
-        Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
-            Use the helper tool
+        Code cleanup
+            Confirm that no line goes over 80 characters
+                Use the helper tool, or run:
+                    grep -Enr --include="*.cpp" ^.\{81,\}$
+            Confirm that all function definitions are sorted alphabetically, and by namespace
+                Use the helper tool
+            Confirm that all includes are sorted alphabetically
+                Use the helper tool
+            Confirm that all functions have documentation, and that it has no missing/extra parameters
+                Use the helper tool
+            Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
+                Use the helper tool
         Fix up all changed images since the last release
             Use the helper tool to get the list, or run:
                 git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'

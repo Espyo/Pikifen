@@ -6628,28 +6628,6 @@
     <radialGradient
        inkscape:collect="always"
        xlink:href="#Koppai_nose"
-       id="radialGradient7589"
-       cx="702.5"
-       cy="98.538467"
-       fx="702.5"
-       fy="98.538467"
-       r="9"
-       gradientTransform="matrix(1,0,0,0.72222222,0,28.333333)"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Charlie_head"
-       id="radialGradient7601"
-       cx="686"
-       cy="1028.3339"
-       fx="686"
-       fy="1028.3339"
-       r="28.501642"
-       gradientTransform="matrix(1,0,0,0.83120964,0,174.239)"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Koppai_nose"
        id="radialGradient7589-3"
        cx="703.5"
        cy="98.538467"
@@ -6693,48 +6671,6 @@
          stdDeviation="1.7407189"
          id="feGaussianBlur7713" />
     </filter>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#ear_mask"
-       id="linearGradient8105"
-       x1="650"
-       y1="36"
-       x2="661"
-       y2="36"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#ear_mask"
-       id="linearGradient8119"
-       gradientUnits="userSpaceOnUse"
-       x1="658"
-       y1="36"
-       x2="661"
-       y2="36" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#ear_mask"
-       id="radialGradient8127"
-       cx="662.38226"
-       cy="36.20895"
-       fx="662.38226"
-       fy="36.20895"
-       r="6.5"
-       gradientTransform="matrix(-0.61538462,0.15384659,-0.39179071,-1.5671527,1083.8062,-7.1602998)"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="pad" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#ear_mask"
-       id="radialGradient8135"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-0.46153602,-6.7456189e-7,1.3535361e-6,-1.6153846,967.30146,97.006767)"
-       cx="665.82349"
-       cy="35.908669"
-       fx="665.82349"
-       fy="35.908669"
-       r="6.5"
-       spreadMethod="pad" />
     <mask
        maskUnits="userSpaceOnUse"
        id="mask8148">
@@ -6775,24 +6711,6 @@
        y1="236"
        x2="667"
        y2="237" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#ear_mask"
-       id="linearGradient8198"
-       x1="654"
-       y1="429"
-       x2="656"
-       y2="430"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#ear_mask"
-       id="linearGradient8215"
-       gradientUnits="userSpaceOnUse"
-       x1="654"
-       y1="428.78125"
-       x2="656"
-       y2="430" />
     <mask
        maskUnits="userSpaceOnUse"
        id="mask8217">
@@ -6853,151 +6771,6 @@
          x="650"
          y="623" />
     </mask>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#helmet"
-       id="radialGradient8084-3"
-       gradientUnits="userSpaceOnUse"
-       cx="82.000031"
-       cy="632"
-       fx="82.000031"
-       fy="632"
-       r="31"
-       spreadMethod="reflect"
-       gradientTransform="translate(0,200)" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Brittany_head"
-       id="radialGradient8082-3"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2,0,0,2,54.000026,-1239.7244)"
-       cx="13.5"
-       cy="1035.8622"
-       fx="13.5"
-       fy="1035.8622"
-       r="10" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#Brittany_nose"
-       id="linearGradient3684-9"
-       x1="106"
-       y1="832"
-       x2="101"
-       y2="832"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Brittany_hair"
-       id="radialGradient2963-7"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,1.2143016,0,-178.40618)"
-       cx="75"
-       cy="832.50031"
-       fx="75"
-       fy="832.50031"
-       r="21" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath3231-9-1-3">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path2884"
-         id="use3233-7-2-6"
-         width="100%"
-         height="100%" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath2997-2">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path2884"
-         id="use2999-6"
-         transform="translate(-50)"
-         width="100%"
-         height="100%" />
-    </clipPath>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Brittany_light"
-       id="radialGradient8028-0"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.9999988,0,0,4,49.999998,-3313.4488)"
-       cx="3"
-       cy="1036.3622"
-       fx="3"
-       fy="1036.3622"
-       r="2.5" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#helmet"
-       id="radialGradient3235"
-       gradientUnits="userSpaceOnUse"
-       cx="82.000031"
-       cy="632"
-       fx="82.000031"
-       fy="632"
-       r="31"
-       spreadMethod="reflect"
-       gradientTransform="translate(0,200)" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Brittany_head"
-       id="radialGradient3245"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2,0,0,2,54.000026,-1239.7244)"
-       cx="13.5"
-       cy="1035.8622"
-       fx="13.5"
-       fy="1035.8622"
-       r="10" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Brittany_hair"
-       id="radialGradient3263"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,1.2143016,0,-178.40618)"
-       cx="75"
-       cy="832.50031"
-       fx="75"
-       fy="832.50031"
-       r="21" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath3273">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path2884"
-         id="use3271"
-         width="100%"
-         height="100%" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath3281">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path2884"
-         id="use3279"
-         transform="translate(-50)"
-         width="100%"
-         height="100%" />
-    </clipPath>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Brittany_light"
-       id="radialGradient3317"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.9999988,0,0,4,49.999998,-3313.4488)"
-       cx="3"
-       cy="1036.3622"
-       fx="3"
-       fy="1036.3622"
-       r="2.5" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#Louie_shoe"
@@ -7121,9 +6894,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="230.36694"
-     inkscape:cy="128.95707"
+     inkscape:zoom="1"
+     inkscape:cx="340.03692"
+     inkscape:cy="371.94801"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"

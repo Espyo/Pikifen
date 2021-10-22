@@ -193,7 +193,7 @@ void pikmin::get_group_spot_info(
 
 /* ----------------------------------------------------------------------------
  * Handles a status effect being applied.
- * s:
+ * sta_type:
  *   Status effect to handle.
  */
 void pikmin::handle_status_effect_gain(status_type* sta_type) {
@@ -223,7 +223,7 @@ void pikmin::handle_status_effect_gain(status_type* sta_type) {
 
 /* ----------------------------------------------------------------------------
  * Handles a status effect being removed.
- * s:
+ * sta_type:
  *   Status effect to handle.
  */
 void pikmin::handle_status_effect_loss(status_type* sta_type) {

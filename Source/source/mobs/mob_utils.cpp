@@ -726,6 +726,8 @@ parent_info_struct::parent_info_struct(mob* m) :
  *   Mob this path info struct belongs to.
  * target:
  *   Its target destination.
+ * invulnerabilities:
+ *   List of hazards that whoever wants to traverse is invulnerable to.
  * taker_flags:
  *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
  * label:

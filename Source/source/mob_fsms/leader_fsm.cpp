@@ -1506,22 +1506,6 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When the leader finishes the animation of the current pluck.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void leader_fsm::finish_pluck(mob* m, void* info1, void* info2) {
-    leader* l_ptr = (leader*) m;
-    l_ptr->stop_chasing();
-    l_ptr->set_animation(LEADER_ANIM_IDLING);
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a leader finishes drinking the drop it was drinking.
  * m:
  *   The mob.
@@ -1555,6 +1539,22 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     }
     
     m->unfocus_from_mob();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the leader finishes the animation of the current pluck.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::finish_pluck(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    l_ptr->stop_chasing();
+    l_ptr->set_animation(LEADER_ANIM_IDLING);
 }
 
 

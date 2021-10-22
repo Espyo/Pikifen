@@ -1533,6 +1533,17 @@ hitbox* mob::get_closest_hitbox(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the current sprite of animation.
+ * Normally, this returns the current animation's current sprite,
+ * but it can return a forced sprite (e.g. from a status effect that
+ * freezes animations).
+ */
+sprite* mob::get_cur_sprite() const {
+    return forced_sprite ? forced_sprite : anim.get_cur_sprite();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns its group spot information.
  * Basically, when it's in a leader's group, what point it should be following,
  * and within what distance.
@@ -1648,17 +1659,6 @@ float mob::get_latched_pikmin_weight() const {
         total += p_ptr->type->weight;
     }
     return total;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the current sprite of animation.
- * Normally, this returns the current animation's current sprite,
- * but it can return a forced sprite (e.g. from a status effect that
- * freezes animations).
- */
-sprite* mob::get_cur_sprite() const {
-    return forced_sprite ? forced_sprite : anim.get_cur_sprite();
 }
 
 
@@ -1849,7 +1849,7 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) const {
 
 /* ----------------------------------------------------------------------------
  * Handles a status effect being applied.
- * s:
+ * sta_type:
  *   Status type to check.
  */
 void mob::handle_status_effect_gain(status_type* sta_type) {
@@ -1864,7 +1864,7 @@ void mob::handle_status_effect_gain(status_type* sta_type) {
 
 /* ----------------------------------------------------------------------------
  * Handles a status effect being removed.
- * s:
+ * sta_type:
  *   Status type to check.
  */
 void mob::handle_status_effect_loss(status_type* sta_type) {

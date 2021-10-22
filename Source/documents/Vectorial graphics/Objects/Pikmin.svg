@@ -3959,17 +3959,6 @@
        fx="129.75"
        fy="1399.6122"
        r="2.25" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#Bulbmin_body"
-       id="radialGradient3082"
-       cx="341.86908"
-       cy="2067.5632"
-       fx="341.86908"
-       fy="2067.5632"
-       r="7.0350962"
-       gradientTransform="matrix(1.7329674,-2.233617,1.8931356,1.4688023,-4164.9942,-205.63918)"
-       gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#Bulbmin_eye_shaft"
@@ -4043,16 +4032,6 @@
        x2="338"
        y2="2057.3616"
        gradientTransform="translate(0,-1)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#Icon_mask"
-       id="linearGradient3178"
-       x1="340"
-       y1="2052.3616"
-       x2="340"
-       y2="2068.3616"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-1.0521655e-6)" />
     <mask
        maskUnits="userSpaceOnUse"
        id="mask3194">
@@ -4250,8 +4229,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="111.86935"
-     inkscape:cy="132.11346"
+     inkscape:cx="185.48117"
+     inkscape:cy="213.13275"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
