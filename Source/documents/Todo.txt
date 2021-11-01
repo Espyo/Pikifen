@@ -6,7 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    >it occurs if the mob a pikmin is attacking dies while the pikmin is in the mob_landing animation --Sharker, Kman
+    Rock Pikmin don't cause damage by charging
     
     --- v0.22.0 ---
     Details
@@ -138,6 +139,7 @@ Next tasks (roughly sorted most important first)
         Candypop Buds should squash when they close
         Animate the Hocotate ship -- use Kman's zip
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
+        Add a glow to the smack effect particle?
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
     Manual
         Update the area editor screenshots
@@ -178,6 +180,7 @@ Next tasks (roughly sorted most important first)
         Check Onions, ships, and converters that have Pikmin in the buffer
     Each object, spray, hazard, etc. should have a description property, that describes them in a simple way. Example for Red Pikmin: "The most basic type of Pikmin, Red Pikmin are immune to fire, and are slightly stronger than normal."
         Make the editor show the mob's description
+        Also, maker, version, and comments properties
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
         Medals
@@ -560,6 +563,7 @@ Misc things (so I don't forget)
     The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Kman)
     Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
     Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
+    A way for a Pikmin type to control what its resistance to being shaken off is
     I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
     Objects falling from the sky
         When a leader approaches, when a Pikmin approaches, when carrying, etc.

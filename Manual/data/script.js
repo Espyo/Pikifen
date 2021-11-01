@@ -53,7 +53,7 @@ function make_toc () {
 }
 
 
-/* Adjusts the header iframe to include breadcrumbs for the current page.
+/* Creates a header, including breadcrumbs for the current page.
  * title:
  *   Current page title.
  * bc_names:
@@ -62,20 +62,30 @@ function make_toc () {
  * bc_links:
  *   Same as bc_names, but for the links.
  */
-function adjust_header(title, bc_names, bc_links) {
-  var iframe_doc = document.getElementById('header-frame').contentWindow.document;
-  var bc_span = iframe_doc.getElementById('breadcrumbs');
-  var result = '';
+function create_header(title, bc_names, bc_links) {
+  var header_div = document.createElement('div');
+  header_div.innerHTML =
+    '<img src="../images/logo.png" style="width: 24px; height: 24px; margin-right: 8px;">' +
+    '<b><i>Pikifen manual</i></b> ' +
+    '<span style="margin-left: 10px; margin-right: 10px;">&mdash;</span> ' +
+    '<span id="breadcrumbs"></span>';
+  header_div.id = 'header';
+  content_div = document.getElementById('content');
+  content_div.parentNode.insertBefore(header_div, content_div);
+
+  var bc_span = document.getElementById('breadcrumbs');
+  var br_result = '';
+
   if(title != 'Home') {
-    result += '<a href="home.html" target="_parent">Home</a> &gt; ';
+    br_result += '<a href="home.html" target="_parent">Home</a> &gt; ';
   }
   if(bc_names !== undefined || bc_links !== undefined) {
     for(var b = 0; b < bc_names.length; b++) {
-      result += '<a href="' + bc_links[b] + '" target="_parent">' + bc_names[b] + '</a> &gt; ';
+      br_result += '<a href="' + bc_links[b] + '" target="_parent">' + bc_names[b] + '</a> &gt; ';
     }
   }
-  result += title;
-  bc_span.innerHTML = result;
+  br_result += title;
+  bc_span.innerHTML = br_result;
 }
 
 
@@ -107,6 +117,6 @@ function setup(title, bc_names, bc_links, use_toc) {
   if(use_toc === undefined) use_toc = true;
 
   set_title(title);
-  adjust_header(title, bc_names, bc_links);
+  create_header(title, bc_names, bc_links);
   if(use_toc) make_toc();
 }

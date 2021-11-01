@@ -42,17 +42,15 @@ th {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-#header-frame {
+#header {
+  background: #f0f8f0;
   border: none;
-  border-bottom: 2px solid #454;
-  position: sticky;
-  height: 44px;
+  border-bottom: 2px solid #787;
+  overflow: hidden;
+  padding: 8px;
+  position: fixed;
   top: 0px;
   width: 100%;
-}
-
-#header {
-  margin: 8px;
 }
 
 #content {
