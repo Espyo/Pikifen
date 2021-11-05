@@ -32,7 +32,7 @@ using std::string;
  */
 const unsigned char VERSION_MAJOR = 0;
 const unsigned char VERSION_MINOR = 21;
-const unsigned char VERSION_REV   = 0;
+const unsigned char VERSION_REV   = 1;
 
 
 //Cross-platform way of representing an invalid index.
