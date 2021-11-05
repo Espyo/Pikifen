@@ -297,6 +297,30 @@ void pikmin::increase_maturity(const int amount) {
 
 
 /* ----------------------------------------------------------------------------
+ * Latches on to the specified mob.
+ * m:
+ *   Mob to latch on to.
+ * h:
+ *   Hitbox to latch on to.
+ */
+void pikmin::latch(mob* m, hitbox* h) {
+    speed.x = speed.y = speed_z = 0;
+    
+    float h_offset_dist;
+    float h_offset_angle;
+    m->get_hitbox_hold_point(
+        this, h, &h_offset_dist, &h_offset_angle
+    );
+    m->hold(
+        this, h->body_part_index, h_offset_dist, h_offset_angle,
+        true, true
+    );
+    
+    latched = true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks if the attack should miss, and returns the result.
  * If it was already decided that it missed in a previous frame, that's a
  * straight no. If not, it will roll with the hit rate to check.

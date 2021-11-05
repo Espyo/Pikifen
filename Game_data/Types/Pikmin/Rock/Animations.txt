@@ -1,17 +1,8 @@
 animations{
 	attacking{
 		frames{
-			lunge{
-				duration=0.1000
-			}
 			lunge_hit{
-				duration=0.5000
-			}
-			crouching{
 				duration=0.1000
-			}
-			idling{
-				duration=0.3000
 			}
 		}
 	}
