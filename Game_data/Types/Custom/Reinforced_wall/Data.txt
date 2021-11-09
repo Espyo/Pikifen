@@ -8,10 +8,36 @@ max_health = 1800
 pushable = false
 pushes = true
 radius = 32
-rectangular_dimensions = 48 192
+rectangular_dimensions = 40 192
 target_type = explodable_pikmin_obstacle
 team = obstacle
 
 vulnerabilities {
     explosion = 100
+}
+
+spawns {
+    left_pillar {
+        object = Reinforced wall pillar
+        relative = true
+        coordinates = 0 -119
+        angle = 0
+    }
+    right_pillar {
+        object = Reinforced wall pillar
+        relative = true
+        coordinates = 0 119
+        angle = 180
+    }
+}
+
+children {
+    left_pillar {
+        spawn = left_pillar
+        parent_holds = false
+    }
+    right_pillar {
+        spawn = right_pillar
+        parent_holds = false
+    }
 }

@@ -1,10 +1,79 @@
-first_state = idling
+first_state = stage_1_idling
 death_state = destroyed
 
 script {
-    idling {
+    stage_1_idling {
         on_enter {
-            set_animation idling
+            set_animation stage_1_idling
+        }
+        on_damage {
+            get_info t health
+            if $t < 650
+                set_state stage_3_shaking
+            end_if
+            if $t < 1250
+                set_state stage_2_shaking
+            end_if
+            set_state stage_1_shaking
+        }
+    }
+    stage_1_shaking {
+        on_enter {
+            set_animation stage_1_shaking
+        }
+        on_animation_end {
+            set_state stage_1_idling
+        }
+        on_damage {
+            get_info t health
+            if $t < 650
+                set_state stage_3_shaking
+            end_if
+            if $t < 1250
+                set_state stage_2_shaking
+            end_if
+        }
+    }
+    stage_2_idling {
+        on_enter {
+            set_animation stage_2_idling
+        }
+        on_damage {
+            get_info t health
+            if $t < 650
+                set_state stage_3_shaking
+            end_if
+            set_state stage_2_shaking
+        }
+    }
+    stage_2_shaking {
+        on_enter {
+            set_animation stage_2_shaking
+        }
+        on_animation_end {
+            set_state stage_2_idling
+        }
+        on_damage {
+            get_info t health
+            if $t < 650
+                set_state stage_3_shaking
+            end_if
+        }
+    }
+    stage_3_idling {
+        on_enter {
+            set_animation stage_3_idling
+        }
+        on_damage {
+            set_state stage_3_shaking
+        }
+    }
+    stage_3_shaking {
+        on_enter {
+            set_animation stage_3_shaking
+        }
+        on_animation_end {
+            set_state stage_3_idling
         }
     }
     destroyed {

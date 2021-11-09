@@ -19,12 +19,6 @@ Next tasks (roughly sorted most important first)
                 Maybe a mob with unique behavior that changes width/height as it's built, and builds the texture dynamically? This would work, except for sloped bridges, and we pretty much can't NOT have sloped bridges
                 Maybe a hybrid solution: the bridge is split into segments, created dynamically. For a level bridge, it's just one segment, stretched to whatever length necessary. For sloped bridges, it's divided into equal-length segments, each segment 50 higher/lower than the previous
             Add an object for bridges to build towards, instead of the user having to specify the length
-        Gate improvements
-            Gates that need this: electric gate, reinforced wall, white bramble gate
-            One object for the gate proper, then two children objects for the pillars that hold them
-            Add graphics for different levels of destruction
-            The "destroyed" state's graphic should contain some debris on the floor
-            When damaged, the gate should shake a bit
         Make White Pikmin inflict a "poisoned" status effect upon enemies that saps away health over time
         "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" (thanks Kman)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
@@ -45,6 +39,7 @@ Next tasks (roughly sorted most important first)
         Give more juice to the HUD (Kman)
             Every GUI item should just have a "juice timer", not a "juicy grow timer"
             Leader swapping should make the leader health items slide into place
+        The GUI left-right option swapper should tint the left or right arrow blue when the mouse is nearest to it
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements

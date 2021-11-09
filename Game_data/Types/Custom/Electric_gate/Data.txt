@@ -7,7 +7,36 @@ max_health = 2000
 pushable = false
 pushes = true
 radius = 32
-rectangular_dimensions = 48 192
+rectangular_dimensions = 40 192
 target_type = pikmin_obstacle
 can_hurt = player
 team = obstacle
+
+spawns {
+    left_pillar {
+        object = Electric gate pillar
+        relative = true
+        coordinates = 0 -119
+        angle = 0
+        link_object_to_spawn = true
+        vars = is_left = true
+    }
+    right_pillar {
+        object = Electric gate pillar
+        relative = true
+        coordinates = 0 119
+        angle = 180
+        link_object_to_spawn = true
+    }
+}
+
+children {
+    left_pillar {
+        spawn = left_pillar
+        parent_holds = false
+    }
+    right_pillar {
+        spawn = right_pillar
+        parent_holds = false
+    }
+}

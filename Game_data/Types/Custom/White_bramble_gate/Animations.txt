@@ -1,11 +1,4 @@
 animations{
-	idling{
-		frames{
-			idling{
-				duration=0.0000
-			}
-		}
-	}
 	destroyed{
 		frames{
 			destroyed{
@@ -13,11 +6,104 @@ animations{
 			}
 		}
 	}
+	stage_1_idling{
+		frames{
+			stage_1_1{
+				duration=0.0000
+			}
+		}
+	}
+	stage_1_shaking{
+		frames{
+			stage_1_2{
+				duration=0.0600
+			}
+			stage_1_3{
+				duration=0.0600
+			}
+		}
+	}
+	stage_2_idling{
+		frames{
+			stage_2_1{
+				duration=0.0000
+			}
+		}
+	}
+	stage_2_shaking{
+		frames{
+			stage_2_2{
+				duration=0.0600
+			}
+			stage_2_3{
+				duration=0.0600
+			}
+		}
+	}
+	stage_3_idling{
+		frames{
+			stage_3_1{
+				duration=0.0000
+			}
+		}
+	}
+	stage_3_shaking{
+		frames{
+			stage_3_2{
+				duration=0.0600
+			}
+			stage_3_3{
+				duration=0.0600
+			}
+		}
+	}
 }
 sprites{
-	idling{
+	destroyed{
 		file=White_gate.png
-		file_pos=0.0000 0.0000
+		file_pos=0.0000 628.0000
+		file_size=48.0000 192.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=128.0000
+				radius=28.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	stage_1_1{
+		file=White_gate.png
+		file_pos=0.0000 49.0000
 		file_size=48.0000 192.0000
 		hitboxes{
 			center{
@@ -27,8 +113,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
@@ -37,8 +121,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
@@ -47,8 +129,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
@@ -57,8 +137,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
@@ -67,60 +145,388 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
-	destroyed{
+	stage_1_2{
 		file=White_gate.png
-		file_pos=0.0000 0.0000
-		file_size=0.0000 0.0000
+		file_pos=0.0000 49.0000
+		file_size=48.0000 192.0000
+		offset=0.7000 0.0000
 		hitboxes{
 			center{
 				coords=0.0000 0.0000 0.0000
-				height=128.0000
+				height=0.0000
 				radius=28.0000
-				type=2
+				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				can_pikmin_latch=true
 			}
 			far_left{
 				coords=0.0000 -70.0000 0.0000
-				height=128.0000
+				height=0.0000
 				radius=28.0000
-				type=2
+				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				can_pikmin_latch=true
 			}
 			far_right{
 				coords=0.0000 70.0000 0.0000
-				height=128.0000
+				height=0.0000
 				radius=28.0000
-				type=2
+				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				can_pikmin_latch=true
 			}
 			near_left{
 				coords=0.0000 -35.0000 0.0000
-				height=128.0000
+				height=0.0000
 				radius=28.0000
-				type=2
+				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				can_pikmin_latch=true
 			}
 			near_right{
 				coords=0.0000 35.0000 0.0000
-				height=128.0000
+				height=0.0000
 				radius=28.0000
-				type=2
+				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	stage_1_3{
+		file=White_gate.png
+		file_pos=0.0000 49.0000
+		file_size=48.0000 192.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	stage_2_1{
+		file=White_gate.png
+		file_pos=0.0000 242.0000
+		file_size=48.0000 192.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	stage_2_2{
+		file=White_gate.png
+		file_pos=0.0000 242.0000
+		file_size=48.0000 192.0000
+		offset=0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	stage_2_3{
+		file=White_gate.png
+		file_pos=0.0000 242.0000
+		file_size=48.0000 192.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	stage_3_1{
+		file=White_gate.png
+		file_pos=0.0000 435.0000
+		file_size=48.0000 192.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	stage_3_2{
+		file=White_gate.png
+		file_pos=0.0000 435.0000
+		file_size=48.0000 192.0000
+		offset=0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+		}
+	}
+	stage_3_3{
+		file=White_gate.png
+		file_pos=0.0000 435.0000
+		file_size=48.0000 192.0000
+		offset=-0.7000 0.0000
+		hitboxes{
+			center{
+				coords=0.0000 0.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_left{
+				coords=0.0000 -70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			far_right{
+				coords=0.0000 70.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_left{
+				coords=0.0000 -35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
+			}
+			near_right{
+				coords=0.0000 35.0000 0.0000
+				height=0.0000
+				radius=28.0000
+				type=0
+				value=1.0000
+				can_pikmin_latch=true
 			}
 		}
 	}

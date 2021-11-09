@@ -1,0 +1,12 @@
+name = Electric gate pillar
+
+appears_in_area_editor = false
+can_block_paths = false
+casts_shadow = false
+height = 0
+pushable = false
+pushes = true
+radius = 24
+rectangular_dimensions = 48 48
+target_type = none
+team = none

@@ -215,6 +215,19 @@ Bag of notes (useful stuff)
 
 
 Procedure for every version release
+    Before everything
+        Confirm that there are no more tasks in the todo document
+        Confirm that I don't have any staged or unstaged changes on git
+        Make sure the documentation is up-to-date, especially the following:
+            Main tutorials
+            Quick start guide
+            Glossary
+            Options
+            Roadmap
+            FAQ
+            Changelog
+                Particularly the release day, update nickname, and version number
+                Double-check that it's organized, or if it could be sorted differently
     Release candidate
         In Visual Studio
             Add all added source files, and remove removed source files, if needed
