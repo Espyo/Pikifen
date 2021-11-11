@@ -3,8 +3,8 @@ name = Bamboo gate
 can_block_paths = true
 casts_shadow = false
 contribution_method = normal
-first_row_p1 = 0 -108
-first_row_p2 = 0 108
+first_row_p1 = 0 -86
+first_row_p2 = 0 86
 flying_pikmin_only = true
 interval_between_rows = 8
 max_health = 100
@@ -16,7 +16,7 @@ pikmin_per_row = 10
 pushable = false
 pushes = true
 radius = 24
-rectangular_dimensions = 48 240
+rectangular_dimensions = 32 192
 show_health = false
 spots_z = 180
 team = obstacle
@@ -27,13 +27,13 @@ spawns {
     left_pillar {
         object = Bamboo gate pillar
         relative = true
-        coordinates = 0 -144
+        coordinates = 0 -119
         angle = 0
     }
     right_pillar {
         object = Bamboo gate pillar
         relative = true
-        coordinates = 0 144
+        coordinates = 0 119
         angle = 180
     }
 }
