@@ -75,6 +75,23 @@ string box_string(const string &s, const size_t size, const string &finisher) {
 
 
 /* ----------------------------------------------------------------------------
+ * Duplicates a string.
+ * This is necessary because under C++11, with _GLIBCXX_USE_CXX11_ABI=0,
+ * assigning a string to another string (e.g. "str_a = str_b") will cause it
+ * to use the same C-string pointer. This could be undesirable in some cases.
+ * This function creates a copy of a string while ensuring the underlying
+ * C-string pointer is different.
+ * orig_str:
+ *   Original string.
+ * new_str:
+ *   Reference to the new string.
+ */
+void duplicate_string(const string &orig_str, string &new_str) {
+    new_str = string(orig_str.c_str());
+}
+
+
+/* ----------------------------------------------------------------------------
  * Converts a float to a string, with 4 decimal places.
  * f:
  *   Float to convert.

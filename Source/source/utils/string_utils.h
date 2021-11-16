@@ -32,6 +32,7 @@ string box_string(
     const string &s, const size_t size, const string &finisher = ""
 );
 string b2s(const bool b);
+void duplicate_string(const string &orig_str, string &new_str);
 string f2s(const float f);
 string get_matching_string_starts(const string &s1, const string &s2);
 bool is_number(const string &s);

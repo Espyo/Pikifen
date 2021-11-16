@@ -547,6 +547,8 @@ void area_editor::delete_current_area() {
     
     if(go_to_area_select) {
         clear_current_area();
+        area_exists_on_disk = false;
+        area_folder_name.clear();
         open_area_picker();
     }
     

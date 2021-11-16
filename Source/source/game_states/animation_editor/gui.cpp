@@ -722,7 +722,7 @@ void animation_editor::process_gui_panel_animation() {
                 ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
             )
         ) {
-            rename_anim_name = cur_anim->name;
+            duplicate_string(cur_anim->name, rename_anim_name);
             ImGui::OpenPopup("renameAnim");
         }
         set_tooltip(
@@ -1133,7 +1133,9 @@ void animation_editor::process_gui_panel_body_part() {
                 ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
             )
         ) {
-            rename_part_name = anims.body_parts[selected_part]->name;
+            duplicate_string(
+                anims.body_parts[selected_part]->name, rename_part_name
+            );
             ImGui::OpenPopup("renamePart");
         }
         set_tooltip(
@@ -1501,7 +1503,7 @@ void animation_editor::process_gui_panel_sprite() {
                 ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
             )
         ) {
-            rename_sprite_name = cur_sprite->name;
+            duplicate_string(cur_sprite->name, rename_sprite_name);
             ImGui::OpenPopup("renameSprite");
         }
         set_tooltip(

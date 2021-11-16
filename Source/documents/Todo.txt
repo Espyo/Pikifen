@@ -581,6 +581,8 @@ Misc things (so I don't forget)
     If a Pikmin type has black as the color, the idle glow needs to... not be black
     Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
     The area editor should have a "toolbar" so you can swap from layout to mob to path real quick, instead of having to quit out. Also, shortcut keys for that in F1, F2, etc.
+    Pressing Esc on the sprite/whatever rename pop-up should cancel
+        Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
     Area sections
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections
