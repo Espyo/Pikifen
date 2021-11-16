@@ -55,6 +55,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     intended_turn_pos(nullptr),
     radius(type->radius),
     height(type->height),
+    rectangular_dim(type->rectangular_dim),
     can_move_in_midair(false),
     z_cap(FLT_MAX),
     home(pos),
@@ -1916,13 +1917,13 @@ bool mob::is_off_camera() const {
     if(parent) return false;
     
     float radius_to_use;
-    if(type->rectangular_dim.x == 0) {
+    if(rectangular_dim.x == 0) {
         radius_to_use = radius;
     } else {
         radius_to_use =
             std::max(
-                type->rectangular_dim.x / 2.0,
-                type->rectangular_dim.y / 2.0
+                rectangular_dim.x / 2.0,
+                rectangular_dim.y / 2.0
             );
     }
     
@@ -1936,17 +1937,17 @@ bool mob::is_off_camera() const {
  *   Point to check.
  */
 bool mob::is_point_on(const point &p) const {
-    if(type->rectangular_dim.x == 0) {
+    if(rectangular_dim.x == 0) {
         return dist(p, pos) <= radius;
         
     } else {
         point p_delta = p - pos;
         p_delta = rotate_point(p_delta, -angle);
-        p_delta += type->rectangular_dim / 2.0f;
+        p_delta += rectangular_dim / 2.0f;
         
         return
-            p_delta.x > 0 && p_delta.x < type->rectangular_dim.x &&
-            p_delta.y > 0 && p_delta.y < type->rectangular_dim.y;
+            p_delta.x > 0 && p_delta.x < rectangular_dim.x &&
+            p_delta.y > 0 && p_delta.y < rectangular_dim.y;
     }
 }
 
@@ -2229,11 +2230,11 @@ void mob::set_radius(const float radius) {
     this->radius = radius;
     max_span = radius;
     max_span = std::max(max_span, type->anims.max_span);
-    if(type->rectangular_dim.x != 0) {
+    if(rectangular_dim.x != 0) {
         max_span =
             std::max(
                 max_span,
-                dist(point(0, 0), type->rectangular_dim / 2.0).to_float()
+                dist(point(0, 0), rectangular_dim / 2.0).to_float()
             );
     }
 }

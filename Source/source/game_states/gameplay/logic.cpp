@@ -1141,25 +1141,25 @@ void gameplay_state::process_mob_touches(
             float temp_push_amount = 0;
             float temp_push_angle = 0;
             if(
-                m_ptr->type->rectangular_dim.x != 0 &&
-                m2_ptr->type->rectangular_dim.x != 0
+                m_ptr->rectangular_dim.x != 0 &&
+                m2_ptr->rectangular_dim.x != 0
             ) {
                 //Rectangle vs rectangle.
                 //Not supported.
-            } else if(m_ptr->type->rectangular_dim.x != 0) {
+            } else if(m_ptr->rectangular_dim.x != 0) {
                 //Rectangle vs circle.
                 xy_collision =
                     circle_intersects_rectangle(
                         m2_ptr->pos, m2_ptr->radius,
-                        m_ptr->pos, m_ptr->type->rectangular_dim,
+                        m_ptr->pos, m_ptr->rectangular_dim,
                         m_ptr->angle, &temp_push_amount, &temp_push_angle
                     );
-            } else if(m2_ptr->type->rectangular_dim.x != 0) {
+            } else if(m2_ptr->rectangular_dim.x != 0) {
                 //Circle vs rectangle.
                 xy_collision =
                     circle_intersects_rectangle(
                         m_ptr->pos, m_ptr->radius,
-                        m2_ptr->pos, m2_ptr->type->rectangular_dim,
+                        m2_ptr->pos, m2_ptr->rectangular_dim,
                         m2_ptr->angle, &temp_push_amount, &temp_push_angle
                     );
             } else {
@@ -1229,26 +1229,26 @@ void gameplay_state::process_mob_touches(
         
         bool xy_collision = false;
         if(
-            m_ptr->type->rectangular_dim.x != 0 &&
-            m2_ptr->type->rectangular_dim.x != 0
+            m_ptr->rectangular_dim.x != 0 &&
+            m2_ptr->rectangular_dim.x != 0
         ) {
             //Rectangle vs rectangle.
             //Not supported.
             xy_collision = false;
-        } else if(m_ptr->type->rectangular_dim.x != 0) {
+        } else if(m_ptr->rectangular_dim.x != 0) {
             //Rectangle vs circle.
             xy_collision =
                 circle_intersects_rectangle(
                     m2_ptr->pos, m2_ptr->radius,
-                    m_ptr->pos, m_ptr->type->rectangular_dim,
+                    m_ptr->pos, m_ptr->rectangular_dim,
                     m_ptr->angle
                 );
-        } else if(m2_ptr->type->rectangular_dim.x != 0) {
+        } else if(m2_ptr->rectangular_dim.x != 0) {
             //Circle vs rectangle.
             xy_collision =
                 circle_intersects_rectangle(
                     m_ptr->pos, m_ptr->radius,
-                    m2_ptr->pos, m2_ptr->type->rectangular_dim,
+                    m2_ptr->pos, m2_ptr->rectangular_dim,
                     m2_ptr->angle
                 );
         } else {

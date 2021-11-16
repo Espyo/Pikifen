@@ -39,29 +39,29 @@ mob* mob::get_mob_to_walk_on() const {
         
         //Check if they collide on X+Y.
         if(
-            type->rectangular_dim.x != 0 &&
-            m_ptr->type->rectangular_dim.x != 0
+            rectangular_dim.x != 0 &&
+            m_ptr->rectangular_dim.x != 0
         ) {
             //Rectangle vs rectangle.
             //Not supported.
             continue;
-        } else if(type->rectangular_dim.x != 0) {
+        } else if(rectangular_dim.x != 0) {
             //Rectangle vs circle.
             if(
                 !circle_intersects_rectangle(
                     m_ptr->pos, m_ptr->radius,
-                    pos, type->rectangular_dim,
+                    pos, rectangular_dim,
                     angle
                 )
             ) {
                 continue;
             }
-        } else if(m_ptr->type->rectangular_dim.x != 0) {
+        } else if(m_ptr->rectangular_dim.x != 0) {
             //Circle vs rectangle.
             if(
                 !circle_intersects_rectangle(
                     pos, radius,
-                    m_ptr->pos, m_ptr->type->rectangular_dim,
+                    m_ptr->pos, m_ptr->rectangular_dim,
                     m_ptr->angle
                 )
             ) {

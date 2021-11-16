@@ -168,6 +168,8 @@ public:
     float radius;
     //Current height.
     float height;
+    //Current rectangular dimensions.
+    point rectangular_dim;
     //Can it currently move vertically on its own?
     bool can_move_in_midair;
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
