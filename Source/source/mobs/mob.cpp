@@ -2228,15 +2228,28 @@ void mob::set_health(const bool add, const bool ratio, const float amount) {
  */
 void mob::set_radius(const float radius) {
     this->radius = radius;
-    max_span = radius;
-    max_span = std::max(max_span, type->anims.max_span);
-    if(rectangular_dim.x != 0) {
-        max_span =
-            std::max(
-                max_span,
-                dist(point(0, 0), rectangular_dim / 2.0).to_float()
-            );
-    }
+    max_span =
+    calculate_mob_max_span(
+        radius,
+        type->anims.max_span,
+        rectangular_dim
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the mob's rectangular dimensions to a different value.
+ * rectangular_dim:
+ *   New rectangular dimensions.
+ */
+void mob::set_rectangular_dim(const point &rectangular_dim) {
+    this->rectangular_dim = rectangular_dim;
+    max_span =
+    calculate_mob_max_span(
+        radius,
+        type->anims.max_span,
+        rectangular_dim
+    );
 }
 
 

@@ -1085,6 +1085,31 @@ track_info_struct::track_info_struct(
 
 
 /* ----------------------------------------------------------------------------
+ * Calculates the maximum span that a mob can ever reach from its center.
+ * radius:
+ *   The mob's radius.
+ * anim_max_span:
+ *   Maximum span of its animation-related data.
+ * rectangular_dim:
+ *   Rectangular dimensions of the mob, if any.
+ */
+float calculate_mob_max_span(
+    const float radius, const float anim_max_span, const point &rectangular_dim
+) {
+    float max_span = std::max(radius, anim_max_span);
+    
+    if(rectangular_dim.x != 0) {
+        max_span =
+            std::max(
+                max_span, dist(point(0, 0), rectangular_dim / 2.0).to_float()
+            );
+    }
+    
+    return max_span;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a mob, adding it to the corresponding vectors.
  * Returns the new mob.
  * category:

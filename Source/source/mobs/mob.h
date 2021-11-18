@@ -299,6 +299,7 @@ public:
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
     void set_radius(const float radius);
+    void set_rectangular_dim(const point &rectangular_dim);
     void set_can_block_paths(const bool blocks);
     
     void become_carriable(const size_t destination);

@@ -788,19 +788,12 @@ void load_mob_type_from_file(
         mt->anims.create_conversions(mt->get_anim_conversions(), &file);
     }
     
-    mt->max_span = mt->radius;
-    
-    if(load_resources) {
-        mt->max_span = std::max(mt->max_span, mt->anims.max_span);
-    }
-    
-    if(mt->rectangular_dim.x != 0) {
-        mt->max_span =
-            std::max(
-                mt->max_span,
-                dist(point(0, 0), mt->rectangular_dim / 2.0).to_float()
-            );
-    }
+    mt->max_span =
+        calculate_mob_max_span(
+            mt->radius,
+            (load_resources ? mt->anims.max_span : 0),
+            mt->rectangular_dim
+        );
 }
 
 
