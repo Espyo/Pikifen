@@ -30,6 +30,7 @@ void bridge_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(gen_mob_fsm::be_attacked);
+            efc.run(bridge_fsm::check_health);
         }
         efc.new_event(MOB_EV_DEATH); {
             efc.run(bridge_fsm::open);
@@ -50,6 +51,21 @@ void bridge_fsm::create_fsm(mob_type* typ) {
         i2s(typ->states.size()) + " registered, " +
         i2s(N_BRIDGE_STATES) + " in enum."
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the bridge check its health and update its chunks, if needed.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void bridge_fsm::check_health(mob* m, void* info1, void* info2) {
+    bridge* bri_ptr = (bridge*) m;
+    bri_ptr->check_health();
 }
 
 

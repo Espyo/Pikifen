@@ -17,12 +17,20 @@
 
 /* ----------------------------------------------------------------------------
  * A bridge mob. Bridges on the engine are made up of two parts:
- * the mob itself, which Pikmin damage, and the sectors Pikmin can walk on.
- * The sectors initially start as something else (normally ground at a
- * lower level, or some water), and when the bridge opens, they change
- * into walkable wood.
+ * the mob itself, which Pikmin damage, and a series of components.
+ * Each component is a mob that other mobs can walk on top of, serving
+ * either as the floor of the bridge, or one of the railings.
+ * Every time the bridge expands, it is considered that a new chunk has
+ * been added, which may either generate new components, or stretch the
+ * existing ones.
  */
 class bridge : public mob {
+private:
+    //How many chunks are needed to fully build this bridge.
+    size_t total_chunks_needed;
+    //How many chunks have successfully been created so far.
+    size_t chunks;
+    
 public:
     //What type of bridge it is.
     bridge_type* bri_type;
@@ -32,6 +40,11 @@ public:
     
     //Constructor.
     bridge(const point &pos, bridge_type* bri_type, const float angle);
+    
+    //Draws a bridge component.
+    static void draw_component(mob* m);
+    //Checks if any chunks need to be created, and creates them if needed.
+    void check_health();
 };
 
 
