@@ -23,6 +23,7 @@ void create_fsm(mob_type* typ);
 void check_health(mob* m, void* info1, void* info2);
 void open(mob* m, void* info1, void* info2);
 void set_anim(mob* m, void* info1, void* info2);
+void setup(mob* m, void* info1, void* info2);
 }
 
 

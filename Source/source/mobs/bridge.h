@@ -28,6 +28,10 @@ class bridge : public mob {
 private:
     //How many chunks are needed to fully build this bridge.
     size_t total_chunks_needed;
+    //Total length that the bridge should have.
+    float total_length;
+    //Starting position of the bridge.
+    point start_pos;
     //How many chunks have successfully been created so far.
     size_t chunks;
     
@@ -44,7 +48,11 @@ public:
     //Draws a bridge component.
     static void draw_component(mob* m);
     //Checks if any chunks need to be created, and creates them if needed.
-    void check_health();
+    bool check_health();
+    //Reads the provided script variables, if any, and does stuff with them.
+    void read_script_vars(const script_var_reader &svr);
+    //Sets up the bridge using its linked mob.
+    void setup();
 };
 
 

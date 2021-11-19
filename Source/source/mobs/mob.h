@@ -189,7 +189,7 @@ public:
     float push_amount;
     //Angle that another mob is pushing it to.
     float push_angle;
-    //Is it currently in a state where it cannot be pushed?
+    //Can it not be pushed?
     bool unpushable;
     //Can it be touched by other mobs?
     bool tangible;

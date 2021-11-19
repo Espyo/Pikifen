@@ -2771,6 +2771,11 @@ void mob::tick_class_specifics(const float delta_t) {
  *   How many seconds to tick by.
  */
 void mob::tick_misc_logic(const float delta_t) {
+    if(time_alive == 0.0f) {
+        //This is a convenient spot to signal that the mob is ready.
+        //This will only run once, and only after the mob is all set up.
+        fsm.run_event(MOB_EV_ON_READY);
+    }
     time_alive += delta_t;
     
     invuln_period.tick(delta_t);

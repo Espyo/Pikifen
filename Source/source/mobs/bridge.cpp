@@ -28,6 +28,7 @@
 bridge::bridge(const point &pos, bridge_type* type, const float angle) :
     mob(pos, type, angle),
     total_chunks_needed(5),
+    total_length(192.0f),
     chunks(0),
     bri_type(type) {
     
@@ -42,26 +43,30 @@ bridge::bridge(const point &pos, bridge_type* type, const float angle) :
     );
     
     team = MOB_TEAM_OBSTACLE;
+    
+    start_pos = pos;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Checks the bridge's health, and updates the chunks if necessary.
+ * Returns true if new chunks were created.
  */
-void bridge::check_health() {
+bool bridge::check_health() {
     //Figure out how many chunks should exist based on the bridge's completion.
     float completion = 1 - clamp(health / type->max_health, 0.0f, 1.0f);
     size_t expected_chunks = floor(total_chunks_needed * completion);
     
     if(chunks >= expected_chunks) {
         //Nothing to do here.
-        return;
+        return false;
     }
     
     mob_category* custom_category =
         game.mob_categories.get(MOB_CATEGORY_CUSTOM);
     mob_type* bridge_component_type =
         custom_category->get_type("Bridge component");
+    float chunk_width = total_length / total_chunks_needed;
     vector<mob*> new_mobs;
     
     const float BRIDGE_WIDTH = 192.0f;
@@ -69,29 +74,30 @@ void bridge::check_health() {
     
     //Start creating all the necessary chunks.
     while(chunks < expected_chunks) {
+        float x_offset = chunk_width / 2.0 + chunk_width * chunks;
         //First, the floor.
-        point offset(50.0f * chunks, 0.0f);
+        point offset(x_offset, 0.0f);
         offset = rotate_point(offset, angle);
         mob* floor_component =
             create_mob(
                 custom_category,
-                pos + offset,
+                start_pos + offset,
                 bridge_component_type,
                 angle,
                 "railing=false; chunk=" + i2s(chunks)
             );
-        floor_component->rectangular_dim.x = 50.0f;
+        floor_component->rectangular_dim.x = chunk_width;
         floor_component->rectangular_dim.y = BRIDGE_WIDTH;
         new_mobs.push_back(floor_component);
         
         //Then, the left railing.
-        offset.x = 50.0f * chunks;
+        offset.x = x_offset;
         offset.y = -BRIDGE_WIDTH / 2.0f - BRIDGE_RAIL_WIDTH / 2.0f;
         offset = rotate_point(offset, angle);
         mob* left_railing_component =
             create_mob(
                 custom_category,
-                pos + offset,
+                start_pos + offset,
                 bridge_component_type,
                 angle,
                 "railing=true; chunk=" + i2s(chunks)
@@ -102,14 +108,14 @@ void bridge::check_health() {
         left_railing_component->height += SECTOR_STEP + 1.0f;
         new_mobs.push_back(left_railing_component);
         
-        //Finall, the right railing.
-        offset.x = 50.0f * chunks;
+        //Finally, the right railing.
+        offset.x = x_offset;
         offset.y = BRIDGE_WIDTH / 2.0f + BRIDGE_RAIL_WIDTH / 2.0f;
         offset = rotate_point(offset, angle);
         mob* right_railing_component =
             create_mob(
                 custom_category,
-                pos + offset,
+                start_pos + offset,
                 bridge_component_type,
                 angle,
                 "railing=true; chunk=" + i2s(chunks)
@@ -128,6 +134,13 @@ void bridge::check_health() {
         m_ptr->can_move_in_midair = true;
         m_ptr->links.push_back(this);
     }
+    
+    //Move the bridge object proper to the farthest point of the bridge.
+    point offset(chunk_width * chunks, 0);
+    offset = rotate_point(offset, angle);
+    pos = start_pos + offset;
+    
+    return true;
 }
 
 
@@ -186,4 +199,28 @@ void bridge::draw_component(mob* m) {
     }
     
     al_draw_prim(vertexes, NULL, texture, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to use.
+ */
+void bridge::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    svr.get("chunks", total_chunks_needed);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up the bridge with the data surrounding it, like its linked destination
+ * object.
+ */
+void bridge::setup() {
+    if(!links.empty()) {
+        total_length = dist(pos, links[0]->pos).to_float();
+        face(get_angle(pos, links[0]->pos), NULL, true);
+    }
 }

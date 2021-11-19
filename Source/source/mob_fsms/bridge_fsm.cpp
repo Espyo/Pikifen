@@ -28,6 +28,9 @@ void bridge_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(bridge_fsm::set_anim);
         }
+        efc.new_event(MOB_EV_ON_READY); {
+            efc.run(bridge_fsm::setup);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(gen_mob_fsm::be_attacked);
             efc.run(bridge_fsm::check_health);
@@ -35,6 +38,12 @@ void bridge_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_DEATH); {
             efc.run(bridge_fsm::open);
             efc.change_state("destroyed");
+        }
+    }
+    efc.new_state("creating_chunk", BRIDGE_STATE_CREATING_CHUNK); {
+        //Sort of a dummy state for text file script enhancements.
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.change_state("idling");
         }
     }
     efc.new_state("destroyed", BRIDGE_STATE_DESTROYED); {
@@ -65,7 +74,9 @@ void bridge_fsm::create_fsm(mob_type* typ) {
  */
 void bridge_fsm::check_health(mob* m, void* info1, void* info2) {
     bridge* bri_ptr = (bridge*) m;
-    bri_ptr->check_health();
+    if(bri_ptr->check_health()) {
+        m->fsm.set_state(BRIDGE_STATE_CREATING_CHUNK);
+    }
 }
 
 
@@ -142,4 +153,20 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
  */
 void bridge_fsm::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(BRIDGE_ANIM_IDLING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up the bridge with the data surrounding it, like its linked destination
+ * object.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void bridge_fsm::setup(mob* m, void* info1, void* info2) {
+    bridge* bri_ptr = (bridge*) m;
+    bri_ptr->setup();
 }

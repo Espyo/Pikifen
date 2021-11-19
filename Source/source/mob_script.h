@@ -44,6 +44,8 @@ enum MOB_EV_TYPES {
     MOB_EV_ON_LEAVE,
     //When the game ticks a frame.
     MOB_EV_ON_TICK,
+    //When the mob has been created, and has links and such set up and ready.
+    MOB_EV_ON_READY,
     
     //Script file stuff.
     

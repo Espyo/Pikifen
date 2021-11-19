@@ -1,13 +1,9 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
     
-    
+
 Current tasks (tasks being worked on, but not yet committed)
     Bridge improvements
-        The ability to specify the construction end-point
-        Move the bridge object along every chunk as it's created
-        Customize number of chunks
         Optimize chunks by stretching a component
-        Add an object for bridges to build towards, instead of the user having to specify the length
         Improve the way ceramic bridge textures work
         Verticality
             If going vertically, some segments will almost forcefully be inside a wall -- is this ok?
@@ -21,7 +17,6 @@ Current tasks (tasks being worked on, but not yet committed)
                 Maybe a hybrid solution: the bridge is split into segments, created dynamically. For a level bridge, it's just one segment, stretched to whatever length necessary. For sloped bridges, it's divided into equal-length segments, each segment 50 higher/lower than the previous
     
 Next tasks (roughly sorted most important first)
-    
     --- To fix ---
     
     
@@ -64,6 +59,7 @@ Next tasks (roughly sorted most important first)
         Memory leaks, cppcheck, etc.
         Document every class member with a comment
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
+        Don't mark functions as virtual if they don't need to be (e.g. they're already overwriting the parent class's function)
     Demo content
         Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
         If something is under construction, like a menu or something, add a small "WIP" blurb
