@@ -74,7 +74,8 @@ mob_type::mob_type(size_t category_id) :
     can_block_paths(false),
     default_vulnerability(1.0f),
     spike_damage(nullptr),
-    max_span(0.0f) {
+    max_span(0.0f),
+    draw_mob_callback(nullptr) {
     
 }
 

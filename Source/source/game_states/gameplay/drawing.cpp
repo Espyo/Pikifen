@@ -1654,6 +1654,9 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         
             if(!c_ptr->mob_ptr->hide) {
                 c_ptr->mob_ptr->draw_mob();
+                if(c_ptr->mob_ptr->type->draw_mob_callback) {
+                    c_ptr->mob_ptr->type->draw_mob_callback(c_ptr->mob_ptr);
+                }
             }
             
         } else if(c_ptr->particle_ptr) {

@@ -293,6 +293,9 @@ public:
     virtual anim_conversion_vector get_anim_conversions() const;
     virtual void unload_resources();
     void add_carrying_states();
+    
+    //Custom behavior callbacks.
+    void(*draw_mob_callback)(mob* m);
 };
 
 
