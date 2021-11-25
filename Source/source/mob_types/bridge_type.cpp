@@ -44,7 +44,7 @@ bridge_type::bridge_type() :
     aep_chunks.type = AEMP_INT;
     aep_chunks.def_value = "5";
     aep_chunks.min_value = 1;
-    aep_chunks.max_value = 20;
+    aep_chunks.max_value = 50;
     aep_chunks.tooltip =
         "How many chunks it's divided by.\n"
         "If the bridge goes up or down, it may need\n"

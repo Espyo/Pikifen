@@ -38,6 +38,12 @@ private:
     float start_z;
     //How many chunks have successfully been created so far.
     size_t chunks;
+    //Z offset of the previous chunk. Cache for convenience.
+    float prev_chunk_z_offset;
+    //Components of the previous chunk. Cache for convenience.
+    vector<mob*> prev_chunk_components;
+    //How many times did we combine chunks? Cache for convenience.
+    size_t prev_chunk_combo;
     
 public:
     //What type of bridge it is.

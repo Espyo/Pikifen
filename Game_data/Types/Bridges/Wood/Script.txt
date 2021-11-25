@@ -1,7 +1,7 @@
 script {
     creating_chunk {
         on_enter {
-            start_particles bridge_dust_explosion 0 0 64
+            start_particles bridge_dust_explosion 0 0 200
         }
     }
 }

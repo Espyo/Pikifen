@@ -3,7 +3,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Bridge improvements
-        Optimize chunks by stretching a component
         Improve the way ceramic bridge textures work
         If a path stop is above water, Pikmin should still want to take it if a built bridge is there, right?
         Mobs can clip under bridges
