@@ -34,12 +34,23 @@ bridge_type::bridge_type() :
     starting_team = MOB_TEAM_OBSTACLE;
     
     area_editor_tips =
-        "Place this object on a sector of the \"Bridge\" type.\n"
-        "When the bridge object is destroyed, that sector, as well as\n"
-        "all neighboring sectors of the \"Bridge\" and \"Bridge rail\" types\n"
-        "will be converted into bridges. Their heights will also change to\n"
-        "whatever you specify in the sector's \"bridge height\" property.";
+        "Link this object to another object, so that\n"
+        "you can specify where the bridge ends.\n"
+        "A \"Dummy\" object works perfectly for this.";
         
+    area_editor_prop_struct aep_chunks;
+    aep_chunks.name = "Chunks";
+    aep_chunks.var = "chunks";
+    aep_chunks.type = AEMP_INT;
+    aep_chunks.def_value = "5";
+    aep_chunks.min_value = 1;
+    aep_chunks.max_value = 20;
+    aep_chunks.tooltip =
+        "How many chunks it's divided by.\n"
+        "If the bridge goes up or down, it may need\n"
+        "more chunks in order to allow enough steps.";
+    area_editor_props.push_back(aep_chunks);
+    
     bridge_fsm::create_fsm(this);
 }
 

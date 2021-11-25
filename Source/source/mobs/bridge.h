@@ -30,8 +30,12 @@ private:
     size_t total_chunks_needed;
     //Total length that the bridge should have.
     float total_length;
+    //Total vertical offset over the bridge.
+    float delta_z;
     //Starting position of the bridge.
     point start_pos;
+    //Starting vertical position of the bridge.
+    float start_z;
     //How many chunks have successfully been created so far.
     size_t chunks;
     

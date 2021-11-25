@@ -29,6 +29,7 @@ bridge::bridge(const point &pos, bridge_type* type, const float angle) :
     mob(pos, type, angle),
     total_chunks_needed(5),
     total_length(192.0f),
+    start_z(0.0f),
     chunks(0),
     bri_type(type) {
     
@@ -45,6 +46,7 @@ bridge::bridge(const point &pos, bridge_type* type, const float angle) :
     team = MOB_TEAM_OBSTACLE;
     
     start_pos = pos;
+    start_z = z;
 }
 
 
@@ -75,7 +77,19 @@ bool bridge::check_health() {
     //Start creating all the necessary chunks.
     while(chunks < expected_chunks) {
         float x_offset = chunk_width / 2.0 + chunk_width * chunks;
-        //First, the floor.
+        
+        //Find the Z that this chunk should be at.
+        float z_offset;
+        if(chunks == total_chunks_needed - 1) {
+            z_offset = start_z + delta_z;
+        } else {
+            size_t steps_needed = ceil(fabs(delta_z) / SECTOR_STEP) + 1;
+            float cur_completion = chunks / (float) total_chunks_needed;
+            size_t step_idx = cur_completion * steps_needed;
+            z_offset = step_idx * SECTOR_STEP * sign(delta_z);
+        }
+        
+        //First, create the floor component.
         point offset(x_offset, 0.0f);
         offset = rotate_point(offset, angle);
         mob* floor_component =
@@ -86,11 +100,12 @@ bool bridge::check_health() {
                 angle,
                 "railing=false; chunk=" + i2s(chunks)
             );
+        floor_component->z = start_z + z_offset;
         floor_component->rectangular_dim.x = chunk_width;
         floor_component->rectangular_dim.y = BRIDGE_WIDTH;
         new_mobs.push_back(floor_component);
         
-        //Then, the left railing.
+        //Then, the left railing component.
         offset.x = x_offset;
         offset.y = -BRIDGE_WIDTH / 2.0f - BRIDGE_RAIL_WIDTH / 2.0f;
         offset = rotate_point(offset, angle);
@@ -102,13 +117,14 @@ bool bridge::check_health() {
                 angle,
                 "railing=true; chunk=" + i2s(chunks)
             );
+        left_railing_component->z = start_z + z_offset;
         left_railing_component->rectangular_dim.x =
             floor_component->rectangular_dim.x;
         left_railing_component->rectangular_dim.y = BRIDGE_RAIL_WIDTH;
-        left_railing_component->height += SECTOR_STEP + 1.0f;
+        left_railing_component->height += SECTOR_STEP * 2.0 + 1.0f;
         new_mobs.push_back(left_railing_component);
         
-        //Finally, the right railing.
+        //Finally, the right railing component.
         offset.x = x_offset;
         offset.y = BRIDGE_WIDTH / 2.0f + BRIDGE_RAIL_WIDTH / 2.0f;
         offset = rotate_point(offset, angle);
@@ -120,11 +136,12 @@ bool bridge::check_health() {
                 angle,
                 "railing=true; chunk=" + i2s(chunks)
             );
+        right_railing_component->z = start_z + z_offset;
         right_railing_component->rectangular_dim =
             left_railing_component->rectangular_dim;
-        right_railing_component->height += SECTOR_STEP + 1.0f;
+        right_railing_component->height = left_railing_component->height;
         new_mobs.push_back(right_railing_component);
-        
+
         chunks++;
     }
     
@@ -222,5 +239,11 @@ void bridge::setup() {
     if(!links.empty()) {
         total_length = dist(pos, links[0]->pos).to_float();
         face(get_angle(pos, links[0]->pos), NULL, true);
+        delta_z = links[0]->z - z;
+        total_chunks_needed =
+            std::max(
+                total_chunks_needed,
+                (size_t) (ceil(fabs(delta_z) / SECTOR_STEP) + 1)
+            );
     }
 }

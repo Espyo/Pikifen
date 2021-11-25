@@ -5,9 +5,8 @@ Current tasks (tasks being worked on, but not yet committed)
     Bridge improvements
         Optimize chunks by stretching a component
         Improve the way ceramic bridge textures work
-        Verticality
-            If going vertically, some segments will almost forcefully be inside a wall -- is this ok?
         If a path stop is above water, Pikmin should still want to take it if a built bridge is there, right?
+        Mobs can clip under bridges
         Old thoughts
             Make bridges open sectors gradually
                 If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
@@ -55,11 +54,13 @@ Next tasks (roughly sorted most important first)
         In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
-        "flail_to_whistle" is really "flail_to_leader"
-        Memory leaks, cppcheck, etc.
+        Rename
+            "flail_to_whistle" is really "flail_to_leader"
+            SECTOR_STEP to STEP_HEIGHT
         Document every class member with a comment
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Don't mark functions as virtual if they don't need to be (e.g. they're already overwriting the parent class's function)
+        Memory leaks, cppcheck, etc.
     Demo content
         Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
         If something is under construction, like a menu or something, add a small "WIP" blurb

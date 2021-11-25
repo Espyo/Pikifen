@@ -22,6 +22,7 @@ using std::set;
  * Returns NULL if none is found.
  */
 mob* mob::get_mob_to_walk_on() const {
+    mob* best_candidate = NULL;
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         if(!m_ptr->type->walkable) {
@@ -34,6 +35,9 @@ mob* mob::get_mob_to_walk_on() const {
             continue;
         }
         if(z > m_ptr->z + m_ptr->height) {
+            continue;
+        }
+        if(best_candidate && m_ptr->z <= best_candidate->z) {
             continue;
         }
         
@@ -76,9 +80,9 @@ mob* mob::get_mob_to_walk_on() const {
                 continue;
             }
         }
-        return m_ptr;
+        best_candidate = m_ptr;
     }
-    return NULL;
+    return best_candidate;
 }
 
 

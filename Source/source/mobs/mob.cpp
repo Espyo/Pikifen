@@ -2229,11 +2229,11 @@ void mob::set_health(const bool add, const bool ratio, const float amount) {
 void mob::set_radius(const float radius) {
     this->radius = radius;
     max_span =
-    calculate_mob_max_span(
-        radius,
-        type->anims.max_span,
-        rectangular_dim
-    );
+        calculate_mob_max_span(
+            radius,
+            type->anims.max_span,
+            rectangular_dim
+        );
 }
 
 
@@ -2245,11 +2245,11 @@ void mob::set_radius(const float radius) {
 void mob::set_rectangular_dim(const point &rectangular_dim) {
     this->rectangular_dim = rectangular_dim;
     max_span =
-    calculate_mob_max_span(
-        radius,
-        type->anims.max_span,
-        rectangular_dim
-    );
+        calculate_mob_max_span(
+            radius,
+            type->anims.max_span,
+            rectangular_dim
+        );
 }
 
 
