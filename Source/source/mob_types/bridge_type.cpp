@@ -22,7 +22,9 @@
 bridge_type::bridge_type() :
     mob_type(MOB_CATEGORY_BRIDGES),
     bmp_main_texture(nullptr),
-    bmp_rail_texture(nullptr) {
+    bmp_left_rail_texture(nullptr),
+    bmp_right_rail_texture(nullptr),
+    rail_width(16.0f) {
     
     radius = 32;
     max_health = 2000;
@@ -42,7 +44,7 @@ bridge_type::bridge_type() :
     aep_chunks.name = "Chunks";
     aep_chunks.var = "chunks";
     aep_chunks.type = AEMP_INT;
-    aep_chunks.def_value = "5";
+    aep_chunks.def_value = "10";
     aep_chunks.min_value = 1;
     aep_chunks.max_value = 50;
     aep_chunks.tooltip =
@@ -67,6 +69,18 @@ anim_conversion_vector bridge_type::get_anim_conversions() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads properties from a data file.
+ * file:
+ *   File to read from.
+ */
+void bridge_type::load_properties(data_node* file) {
+    reader_setter rs(file);
+    
+    rs.set("rail_width", rail_width);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads resources into memory.
  * file:
  *   File to read from.
@@ -75,13 +89,19 @@ void bridge_type::load_resources(data_node* file) {
     reader_setter rs(file);
     
     rs.set("main_texture", main_texture_file_name);
-    rs.set("rail_texture", rail_texture_file_name);
+    rs.set("left_rail_texture", left_rail_texture_file_name);
+    rs.set("right_rail_texture", right_rail_texture_file_name);
     
     if(!main_texture_file_name.empty()) {
         bmp_main_texture = game.textures.get(main_texture_file_name);
     }
-    if(!rail_texture_file_name.empty()) {
-        bmp_rail_texture = game.textures.get(rail_texture_file_name);
+    if(!left_rail_texture_file_name.empty()) {
+        bmp_left_rail_texture =
+            game.textures.get(left_rail_texture_file_name);
+    }
+    if(!right_rail_texture_file_name.empty()) {
+        bmp_right_rail_texture =
+            game.textures.get(right_rail_texture_file_name);
     }
 }
 
@@ -91,5 +111,6 @@ void bridge_type::load_resources(data_node* file) {
  */
 void bridge_type::unload_resources() {
     game.textures.detach(main_texture_file_name);
-    game.textures.detach(rail_texture_file_name);
+    game.textures.detach(left_rail_texture_file_name);
+    game.textures.detach(right_rail_texture_file_name);
 }

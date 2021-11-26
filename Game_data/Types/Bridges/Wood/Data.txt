@@ -1,7 +1,8 @@
 name = Wood bridge
 
 main_texture = Bridge.png
-rail_texture = Bridge_rail.jpg
+left_rail_texture = Bridge_rail.jpg
+right_rail_texture = Bridge_rail.jpg
 height = 32
 max_health = 2000
 radius = 32

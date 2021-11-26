@@ -19,7 +19,7 @@
  * A bridge mob. Bridges on the engine are made up of two parts:
  * the mob itself, which Pikmin damage, and a series of components.
  * Each component is a mob that other mobs can walk on top of, serving
- * either as the floor of the bridge, or one of the railings.
+ * either as the floor of the bridge, or one of the rails.
  * Every time the bridge expands, it is considered that a new chunk has
  * been added, which may either generate new components, or stretch the
  * existing ones.

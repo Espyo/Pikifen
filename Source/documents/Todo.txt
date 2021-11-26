@@ -3,9 +3,8 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     Bridge improvements
-        Improve the way ceramic bridge textures work
         If a path stop is above water, Pikmin should still want to take it if a built bridge is there, right?
-        Mobs can clip under bridges
+        Mobs can clip under bridges, and squeeze through rails of different components
         Old thoughts
             Make bridges open sectors gradually
                 If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
@@ -353,10 +352,6 @@ Next tasks (roughly sorted most important first)
             If the sector a mob is going into has a FOF, the FOF can be unaccounted for at collision check time, but then the mob may end up inside of it after it enters the sector, and needs to do a step up
         To draw their shadows
             4 pixels of purely black alpha 80%, then 8 pixels of gradient to alpha 0
-        Bridge railings
-            Make the railings be created automatically, based on the height of nearby bridge sectors
-            Make them 1 unit higher than the bridge floor
-            Make it so it's impossible to step if the sector you're on is of the bridge type, and the sector you're stepping into is of the railing type
         Edge cases:
             FOF stairways need to work well
             Can a mob go from sector A's main floor (0), to sector B's main floor (50), to sector A's FOF (100), to sector B's FOF (150)? SHOULD it?

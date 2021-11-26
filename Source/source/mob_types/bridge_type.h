@@ -38,11 +38,15 @@ enum BRIDGE_STATES {
 class bridge_type : public mob_type {
 public:
     ALLEGRO_BITMAP* bmp_main_texture;
-    ALLEGRO_BITMAP* bmp_rail_texture;
+    ALLEGRO_BITMAP* bmp_left_rail_texture;
+    ALLEGRO_BITMAP* bmp_right_rail_texture;
     string main_texture_file_name;
-    string rail_texture_file_name;
+    string left_rail_texture_file_name;
+    string right_rail_texture_file_name;
+    float rail_width;
     
     bridge_type();
+    void load_properties(data_node* file);
     void load_resources(data_node* file);
     anim_conversion_vector get_anim_conversions() const;
     void unload_resources();

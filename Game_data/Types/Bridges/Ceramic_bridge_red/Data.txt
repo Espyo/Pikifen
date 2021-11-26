@@ -1,7 +1,9 @@
 name = Ceramic bridge red
 
 main_texture = Ceramic_bridge_red.png
-rail_texture = Ceramic_bridge_rail_red.png
+left_rail_texture = Ceramic_bridge_rail_red_left.png
+right_rail_texture = Ceramic_bridge_rail_red_right.png
+rail_width = 40
 max_health = 30
 radius = 32
 target_type = none
