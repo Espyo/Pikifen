@@ -58,7 +58,7 @@ bridge::bridge(const point &pos, bridge_type* type, const float angle) :
  */
 bool bridge::check_health() {
     //Figure out how many chunks should exist based on the bridge's completion.
-    float completion = 1 - clamp(health / type->max_health, 0.0f, 1.0f);
+    float completion = 1.0f - clamp(health / type->max_health, 0.0f, 1.0f);
     size_t expected_chunks = floor(total_chunks_needed * completion);
     
     if(chunks >= expected_chunks) {
@@ -108,8 +108,12 @@ bool bridge::check_health() {
             for(size_t m = 0; m < prev_chunk_components.size(); ++m) {
                 prev_chunk_components[m]->pos +=
                     offset;
-                prev_chunk_components[m]->rectangular_dim.x =
-                    new_component_width;
+                prev_chunk_components[m]->set_rectangular_dim(
+                    point(
+                        new_component_width,
+                        prev_chunk_components[m]->rectangular_dim.y
+                    )
+                );
             }
             
         } else {
@@ -123,11 +127,12 @@ bool bridge::check_health() {
                     start_pos + offset,
                     bridge_component_type,
                     angle,
-                    "side=center; offset=" + f2s(x_offset)
+                    "side=center; offset=" + f2s(x_offset - chunk_width / 2.0f)
                 );
             floor_component->z = start_z + z_offset;
-            floor_component->rectangular_dim.x = chunk_width;
-            floor_component->rectangular_dim.y = BRIDGE_WIDTH;
+            floor_component->set_rectangular_dim(
+                point(chunk_width, BRIDGE_WIDTH)
+            );
             new_mobs.push_back(floor_component);
             
             //Then, the left rail component.
@@ -140,12 +145,15 @@ bool bridge::check_health() {
                     start_pos + offset,
                     bridge_component_type,
                     angle,
-                    "side=left; offset=" + f2s(x_offset)
+                    "side=left; offset=" + f2s(x_offset - chunk_width / 2.0f)
                 );
             left_rail_component->z = start_z + z_offset;
-            left_rail_component->rectangular_dim.x =
-                floor_component->rectangular_dim.x;
-            left_rail_component->rectangular_dim.y = bri_type->rail_width;
+            left_rail_component->set_rectangular_dim(
+                point(
+                    floor_component->rectangular_dim.x,
+                    bri_type->rail_width
+                )
+            );
             left_rail_component->height += SECTOR_STEP * 2.0 + 1.0f;
             new_mobs.push_back(left_rail_component);
             
@@ -159,16 +167,20 @@ bool bridge::check_health() {
                     start_pos + offset,
                     bridge_component_type,
                     angle,
-                    "side=right; offset=" + f2s(x_offset)
+                    "side=right; offset=" + f2s(x_offset - chunk_width / 2.0f)
                 );
             right_rail_component->z = start_z + z_offset;
-            right_rail_component->rectangular_dim =
-                left_rail_component->rectangular_dim;
+            right_rail_component->set_rectangular_dim(
+                left_rail_component->rectangular_dim
+            );
             right_rail_component->height = left_rail_component->height;
             new_mobs.push_back(right_rail_component);
             
             prev_chunk_z_offset = z_offset;
-            prev_chunk_components = new_mobs;
+            prev_chunk_components.clear();
+            prev_chunk_components.push_back(floor_component);
+            prev_chunk_components.push_back(left_rail_component);
+            prev_chunk_components.push_back(right_rail_component);
             prev_chunk_combo = 1;
             
         }

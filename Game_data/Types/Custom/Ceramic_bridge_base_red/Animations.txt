@@ -2,14 +2,7 @@ animations{
 	idling{
 		frames{
 			idling{
-				duration=0.0000
-			}
-		}
-	}
-	destroyed{
-		frames{
-			idling{
-				duration=0.0000
+				duration=0.1000
 			}
 		}
 	}
@@ -18,7 +11,8 @@ sprites{
 	idling{
 		file=Ceramic_bridge_red.png
 		file_pos=0.0000 0.0000
-		file_size=0.0000 0.0000
+		file_size=48.0000 192.0000
+		offset=-20.0000 0.0000
 	}
 }
 body_parts

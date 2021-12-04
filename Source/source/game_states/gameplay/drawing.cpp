@@ -1515,6 +1515,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             } else {
                 c.z = mob_ptr->ground_sector->z;
             }
+            c.z += 0.01f;
             components.push_back(c);
         }
         

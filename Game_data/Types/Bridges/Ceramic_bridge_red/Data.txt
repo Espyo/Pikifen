@@ -7,3 +7,19 @@ rail_width = 40
 max_health = 30
 radius = 32
 target_type = none
+
+spawns {
+    base {
+        object = Ceramic bridge base red
+        relative = true
+        coordinates = 0 0
+        angle = 0
+    }
+}
+
+children {
+    base {
+        spawn = base
+        parent_holds = false
+    }
+}

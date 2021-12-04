@@ -1,10 +1,14 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
     
-
+    
 Current tasks (tasks being worked on, but not yet committed)
     Bridge improvements
-        If a path stop is above water, Pikmin should still want to take it if a built bridge is there, right?
-        Mobs can clip under bridges, and squeeze through rails of different components
+        Pikmin will refuse to go on the bridge to build it if it's above water
+            Add a way to let the starting point/ending point of a path be faked
+            This only affects calculations for distance and for checking the path stop's sector for hazards, if applicable
+            Then make the ending point be a fake so the Pikmin reaches the bridge base fine and then makes it to the tip of the bridge
+            And when coming back, make the starting point be a fake
+        Update manual's area editor tutorial
         Old thoughts
             Make bridges open sectors gradually
                 If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
@@ -139,6 +143,7 @@ Next tasks (roughly sorted most important first)
         Gates should have a different appearance depending on how damaged they are
         Yellow Wollywog should close its eyes when shaking
         Candypop Buds should squash when they close
+        Ceramic bridges should be reworked for the new bridge format
         Animate the Hocotate ship -- use Kman's zip
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
         Add a glow to the smack effect particle?
@@ -247,6 +252,7 @@ Next tasks (roughly sorted most important first)
                         Extra area notes
                         High scores + their medals (only present if the stage's grading mode is points)
         Save the high scores/completion of every map
+            Also save when it was achieved, and under what version of the area
     
     --- v0.24.0 ---
     Music
@@ -374,7 +380,7 @@ Next tasks (roughly sorted most important first)
             Make sure Pikmin can't carry something the opposing team is already carrying
             Candypop Buds can't accept Pikmin from another team
         Figure out how the game is meant to work when:
-            A pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
+            A "soft" pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
             A player's leader needs to throw another's
         Change menus to let you pick how many and which players will play
         Rules and game modes
@@ -386,8 +392,12 @@ Next tasks (roughly sorted most important first)
                 One player's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every player has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
         A way for attack hitboxes to cause no knockback, otherwise Pikmin battles will keep knocking the Pikmin down
             Maybe add three types of knockback: none, flinch (makes leaders reel back in pain and Pikmin fall over), and chuck
-        Competitive Mission Mode? Pikmin can't attack each other, and the player with the highest score at the end of the mission wins. Probably requires symmetrical maps, or all players starting in the same spot
-        If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
+        Figure out how multiple players will work with areas not/designed for them
+            Each area should probably specify the minimum and maximum number of players
+            Also maybe if players can play cooperative, competitively, or both
+            Competitive Mission Mode? Pikmin can't attack each other, and the player with the highest score at the end of the mission wins. Probably requires symmetrical maps, or all players starting in the same spot
+        Misc.
+            If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
     Buried treasure
     Breadbugs should carry treasure
     Weather improvements

@@ -90,6 +90,9 @@
       
       <dt><b>Some wall shadows that fade away into a small size look really thin.</b></dt>
       <dd>Technically the engine is drawing the shapes of the shadows correctly, from a thick size to a small size, but the color interpolation done by the graphics backend sometimes does a bad job when the final two points of the shadow are so thin. There is not much that can be done to fix this.</dd>
+
+      <dt><b>Objects can go from underneath a bridge to the top of it.</b></dt>
+      <dd>So long as an object can climb onto one of the (disconnected) boards that make up a slanted bridge, the engine will let them do so. It's very difficult to detect if an object is going from "under" the bridge, since that's not a concept for the engine. The first <i>Pikmin</i> game has a very similar glitch. This shouldn't be a problem in most cases since if you can get underneath the bridge, chances are you can get to its starting point. Still, when designing areas, make sure players can't exploit this to get where they shouldn't.</dd>
     </dl>
 
   </div>

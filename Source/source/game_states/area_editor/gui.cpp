@@ -473,7 +473,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
             int value_i = s2i(value);
             if(
                 ImGui::DragInt(
-                    p_ptr->name.c_str(), &value_i, 0.1f,
+                    p_ptr->name.c_str(), &value_i, 0.02f,
                     p_ptr->min_value, p_ptr->max_value
                 )
             ) {

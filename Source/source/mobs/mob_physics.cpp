@@ -31,10 +31,7 @@ mob* mob::get_mob_to_walk_on() const {
         if(m_ptr == this) {
             continue;
         }
-        if(z < m_ptr->z + m_ptr->height - SECTOR_STEP) {
-            continue;
-        }
-        if(z > m_ptr->z + m_ptr->height) {
+        if(fabs(z - (m_ptr->z + m_ptr->height)) > SECTOR_STEP) {
             continue;
         }
         if(best_candidate && m_ptr->z <= best_candidate->z) {
