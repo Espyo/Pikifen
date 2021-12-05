@@ -24,6 +24,8 @@
 #include "hazard.h"
 #include "mob_categories/mob_category.h"
 #include "mob_types/mob_type.h"
+#include "mobs/mob_utils.h"
+#include "pathing.h"
 #include "weather.h"
 
 
@@ -39,8 +41,6 @@ const float LIQUID_DRAIN_DURATION = 2.0f;
 struct area_data;
 struct blockmap;
 struct edge;
-struct path_stop;
-struct path_link;
 struct sector;
 struct triangle;
 struct vertex;
@@ -59,25 +59,15 @@ enum TRIANGULATION_ERRORS {
 };
 
 
-enum PATH_LINK_TYPES {
-    //Normal.
-    PATH_LINK_TYPE_NORMAL,
-    //Only useable by mob scripts that reference it.
-    PATH_LINK_TYPE_SCRIPT_ONLY,
-    //Only for mobs carrying nothing, or a 1-weight mob.
-    PATH_LINK_TYPE_LIGHT_LOAD_ONLY,
-    //Only for objects that can fly.
-    PATH_LINK_TYPE_AIRBORNE_ONLY,
-};
-
-
-enum PATH_TAKER_FLAGS {
-    //The mob was told to use this path by a script.
-    PATH_TAKER_FLAG_SCRIPT_USE = 1,
-    //The mob has light load.
-    PATH_TAKER_FLAG_LIGHT_LOAD = 2,
-    //The mob can fly.
-    PATH_TAKER_FLAG_AIRBORNE = 4,
+enum SECTOR_TYPES {
+    //Normal sector.
+    SECTOR_TYPE_NORMAL,
+    //Blocks all mob movement.
+    SECTOR_TYPE_BLOCKING,
+    //Bridge floor.
+    SECTOR_TYPE_BRIDGE,
+    //Bridge rail.
+    SECTOR_TYPE_BRIDGE_RAIL,
 };
 
 
@@ -170,66 +160,6 @@ struct edge {
     static const float SHADOW_MIN_LENGTH;
     static const ALLEGRO_COLOR SMOOTHING_DEF_COLOR;
     static const float SMOOTHING_MAX_LENGTH;
-};
-
-
-
-
-/* ----------------------------------------------------------------------------
- * Stops are points that make up a path. In mathematics, this is a node
- * in the graph. In a real-world example, this is a bus stop.
- * Pikmin start carrying by going for the closest stop.
- * Then they move stop by stop, following the connections, until they
- * reach the final stop and go wherever they need.
- */
-struct path_stop {
-    //Coordinates.
-    point pos;
-    //Links that go to other stops.
-    vector<path_link*> links;
-    //Sector it's on. Only applicable during gameplay. Cache for performance.
-    sector* sector_ptr;
-    
-    path_stop(
-        const point &pos = point(),
-        const vector<path_link*> &links = vector<path_link*>()
-    );
-    ~path_stop();
-    void add_link(path_stop* other_stop, const bool normal);
-    path_link* get_link(path_stop* other_stop) const;
-    void remove_link(path_link* link_ptr);
-    void remove_link(path_stop* other_stop);
-    void calculate_dists();
-    void calculate_dists_plus_neighbors();
-};
-
-
-
-
-/* ----------------------------------------------------------------------------
- * Info about a path link. A path stop can link to N other path stops,
- * and this structure holds information about a connection.
- */
-struct path_link {
-    //Pointer to the path stop at the start.
-    path_stop* start_ptr;
-    //Pointer to the path stop at the end.
-    path_stop* end_ptr;
-    //Index number of the path stop at the end.
-    size_t end_nr;
-    
-    //Type. Used for special restrictions and behaviors.
-    PATH_LINK_TYPES type;
-    //Its label, if any.
-    string label;
-    
-    //Distance between the two stops.
-    float distance;
-    //Is the stop currently blocked by an obstacle? Cache for performance.
-    bool blocked_by_obstacle;
-    
-    path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr);
-    void calculate_dist(path_stop* start_ptr);
 };
 
 
@@ -487,47 +417,6 @@ struct area_data {
 
 
 
-
-/* ----------------------------------------------------------------------------
- * Manages the paths in the area. Particularly, this keeps an eye out on
- * what stops and links have any sort of obstacle in them that could deter
- * mobs. When these problems disappear, the manager is in charge of alerting
- * all mobs that were following paths, in order to get them recalculate
- * their paths if needed.
- * The reason we want them to recalculate regardless of whether the
- * obstacle affected them or not, is because this obstacle could've freed
- * a different route.
- */
-struct path_manager {
-    map<path_link*, unordered_set<mob*> > obstructions;
-    unordered_set<path_stop*> hazardous_stops;
-    
-    void handle_area_load();
-    void handle_obstacle_add(mob* m);
-    void handle_obstacle_remove(mob* m);
-    void handle_sector_hazard_change(sector* sector_ptr);
-    void clear();
-};
-
-
-
-
-bool can_traverse_path_link(
-    path_link* link_ptr, const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities, const unsigned char taker_flags,
-    const string &label
-);
-void depth_first_search(
-    vector<path_stop*> &nodes,
-    unordered_set<path_stop*> &visited, path_stop* start
-);
-vector<path_stop*> dijkstra(
-    path_stop* start_node, path_stop* end_node,
-    const bool ignore_obstacles,
-    const vector<hazard*> &invulnerabilities, const unsigned char taker_flags,
-    const string &label,
-    float* total_dist
-);
 void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
@@ -535,14 +424,6 @@ void get_cce(
 vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const point &p, vector<vertex*> &all_vertexes, const float merge_radius
 );
-vector<path_stop*> get_path(
-    const point &start, const point &end,
-    const vector<hazard*> invulnerabilities,
-    const unsigned char taker_flags, const string &label,
-    bool* go_straight, float* get_dist,
-    path_stop** start_stop, path_stop** end_stop
-);
-mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 TRIANGULATION_ERRORS get_polys(
     sector* s, polygon* outer, vector<polygon>* inners,
     set<edge*>* lone_edges, const bool check_vertex_reuse
@@ -561,25 +442,6 @@ TRIANGULATION_ERRORS triangulate(
     sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
     const bool clear_lone_edges
 );
-
-
-enum SECTOR_TYPES {
-    SECTOR_TYPE_NORMAL,
-    SECTOR_TYPE_BLOCKING,
-    SECTOR_TYPE_BRIDGE,
-    SECTOR_TYPE_BRIDGE_RAIL,
-};
-
-
-enum TERRAIN_SOUNDS {
-    TERRAIN_SOUND_NONE,
-    TERRAIN_SOUND_DIRT,
-    TERRAIN_SOUND_GRASS,
-    TERRAIN_SOUND_STONE,
-    TERRAIN_SOUND_WOOD,
-    TERRAIN_SOUND_METAL,
-    TERRAIN_SOUND_WATER,
-};
 
 
 const float BLOCKMAP_BLOCK_SIZE = 128;

@@ -1337,28 +1337,20 @@ void mob::focus_on_mob(mob* m2) {
  * Returns whether or not there is a path available.
  * target:
  *   Target point to reach.
- * can_continue:
- *   If true, it is possible for the new path to continue
- *   from where the old one left off, if there was an old one.
  * speed:
  *   Speed at which to travel.
- * final_target_distance:
- *   For the final chase, from the last path stop to
- *   the destination, use this for the target distance parameter.
- * is_script_action:
- *   If true, this path following order was given by a mob script action.
- * label:
- *   If not empty, only follow path links with this label.
+ * settings:
+ *   Settings about how the path should be followed.
  */
 bool mob::follow_path(
-    const point &target, const bool can_continue,
-    const float speed, const float final_target_distance,
-    const bool is_script_action, const string &label
+    const point &target,
+    const float speed, const path_follow_settings &settings
 ) {
     bool was_blocked = false;
     path_stop* old_next_stop = NULL;
     
-    if(can_continue && path_info) {
+    //Some setup before we begin.
+    if((settings.flags & PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
         was_blocked = path_info->is_blocked;
         if(path_info->cur_path_stop_nr < path_info->path.size()) {
             old_next_stop = path_info->path[path_info->cur_path_stop_nr];
@@ -1382,35 +1374,35 @@ bool mob::follow_path(
         }
     }
     
-    unsigned char taker_flags = 0;
+    //Establish the mob's path-following information.
+    //This also generates the path to take.
+    path_info = new path_info_struct(this, target, settings);
+    
     if(carry_info) {
         //Check if this carriable is considered light load.
-        if(type->weight == 1) taker_flags |= PATH_TAKER_FLAG_LIGHT_LOAD;
+        if(type->weight == 1) {
+            path_info->settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
+        }
         //The object will only be airborne if all its carriers can fly.
-        if(carry_info->can_fly()) taker_flags |= PATH_TAKER_FLAG_AIRBORNE;
+        if(carry_info->can_fly()) {
+            path_info->settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
+        }
     } else {
         if(
             type->category->id == MOB_CATEGORY_PIKMIN ||
             type->category->id == MOB_CATEGORY_LEADERS
         ) {
             //Simple mobs are empty-handed, so that's considered light load.
-            taker_flags |= PATH_TAKER_FLAG_LIGHT_LOAD;
+            path_info->settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
         }
         //Check if the object can fly directly.
-        if(can_move_in_midair) taker_flags |= PATH_TAKER_FLAG_AIRBORNE;
+        if(can_move_in_midair) {
+            path_info->settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
+        }
     }
     
-    if(is_script_action) taker_flags |= PATH_TAKER_FLAG_SCRIPT_USE;
-    
-    path_info =
-        new path_info_struct(
-        this, target, invulnerabilities, taker_flags, label
-    );
-    path_info->final_target_distance = final_target_distance;
-    path_info->label = label;
-    
     if(
-        can_continue &&
+        (path_info->settings.flags & PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
         old_next_stop &&
         !was_blocked &&
         path_info->path.size() >= 2
@@ -1432,12 +1424,13 @@ bool mob::follow_path(
         }
     }
     
+    //Now, let's figure out how the mob should start its journey.
     if(path_info->go_straight) {
         //The path info is telling us to just go to the destination directly.
         chase(
             target, z,
             CHASE_FLAG_ANY_ANGLE,
-            path_info->final_target_distance, speed
+            path_info->settings.final_target_distance, speed
         );
         
     } else if(!path_info->path.empty()) {
@@ -1446,7 +1439,7 @@ bool mob::follow_path(
             path_info->path[path_info->cur_path_stop_nr];
         float next_stop_z = z;
         if(
-            (path_info->taker_flags & PATH_TAKER_FLAG_AIRBORNE) &&
+            (path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE) &&
             next_stop->sector_ptr
         ) {
             next_stop_z =
@@ -2701,8 +2694,8 @@ void mob::tick_brain(const float delta_t) {
                         float next_stop_z = z;
                         if(
                             (
-                                path_info->taker_flags &
-                                PATH_TAKER_FLAG_AIRBORNE
+                                path_info->settings.flags &
+                                PATH_FOLLOW_FLAG_AIRBORNE
                             ) &&
                             next_stop->sector_ptr
                         ) {
@@ -2728,7 +2721,7 @@ void mob::tick_brain(const float delta_t) {
                         path_info->target_point,
                         get_sector(path_info->target_point, NULL, true)->z,
                         CHASE_FLAG_ANY_ANGLE,
-                        path_info->final_target_distance,
+                        path_info->settings.final_target_distance,
                         chase_info.max_speed
                     );
                     

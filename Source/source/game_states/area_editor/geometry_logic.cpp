@@ -67,15 +67,16 @@ float area_editor::calculate_preview_path() {
     if(!show_path_preview) return 0;
     
     float d = 0;
+    path_follow_settings settings;
+    settings.flags =
+        PATH_FOLLOW_FLAG_SCRIPT_USE &
+        PATH_FOLLOW_FLAG_LIGHT_LOAD &
+        PATH_FOLLOW_FLAG_AIRBORNE;
     path_preview =
         get_path(
             path_preview_checkpoints[0],
             path_preview_checkpoints[1],
-            vector<hazard*>(),
-            PATH_TAKER_FLAG_SCRIPT_USE &
-            PATH_TAKER_FLAG_LIGHT_LOAD &
-            PATH_TAKER_FLAG_AIRBORNE,
-            "",
+            settings,
             &path_preview_straight, &d,
             &path_preview_closest[0], &path_preview_closest[1]
         );
@@ -701,14 +702,15 @@ void area_editor::find_problems() {
                 continue;
             }
             
+            path_follow_settings settings;
+            settings.flags =
+                PATH_FOLLOW_FLAG_SCRIPT_USE &
+                PATH_FOLLOW_FLAG_LIGHT_LOAD &
+                PATH_FOLLOW_FLAG_AIRBORNE;
             vector<path_stop*> path =
                 get_path(
                     m_ptr->pos, m_ptr->links[l]->pos,
-                    vector<hazard*>(),
-                    PATH_TAKER_FLAG_SCRIPT_USE &
-                    PATH_TAKER_FLAG_LIGHT_LOAD &
-                    PATH_TAKER_FLAG_AIRBORNE,
-                    "",
+                    settings,
                     NULL, NULL, NULL, NULL
                 );
                 

@@ -726,32 +726,24 @@ parent_info_struct::parent_info_struct(mob* m) :
  *   Mob this path info struct belongs to.
  * target:
  *   Its target destination.
- * invulnerabilities:
- *   List of hazards that whoever wants to traverse is invulnerable to.
- * taker_flags:
- *   Flags for the path-taker. Use PATH_TAKER_FLAG_*.
- * label:
- *   If not empty, only follow path links with this label.
+ * settings:
+ *   Settings about how the path should be followed.
  */
 path_info_struct::path_info_struct(
     mob* m,
     const point &target,
-    const vector<hazard*> invulnerabilities,
-    const unsigned char taker_flags,
-    const string &label
+    const path_follow_settings &settings
 ) :
     m(m),
     target_point(target),
     cur_path_stop_nr(0),
     go_straight(false),
     is_blocked(false),
-    invulnerabilities(invulnerabilities),
-    taker_flags(taker_flags) {
+    settings(settings) {
     
     path =
         get_path(
-            m->pos, target,
-            invulnerabilities, taker_flags, label,
+            m->pos, target, settings,
             &go_straight, NULL, NULL, NULL
         );
 }
@@ -771,8 +763,8 @@ bool path_info_struct::check_blockage() {
         
         return
             !can_traverse_path_link(
-                cur_stop->get_link(next_stop), false,
-                invulnerabilities, taker_flags, label
+                cur_stop->get_link(next_stop),
+                settings
             );
     }
     return false;

@@ -35,6 +35,7 @@
 #include "../mob_types/tool_type.h"
 #include "../mob_types/track_type.h"
 #include "../mob_types/treasure_type.h"
+#include "../pathing.h"
 #include "../sector.h"
 #include "../utils/geometry_utils.h"
 
@@ -367,7 +368,7 @@ struct parent_info_struct {
 
 /* ----------------------------------------------------------------------------
  * Structure with information on how to travel through the path graph that
- * the mob intends to travel.
+ * the mob currently intends to travel.
  */
 struct path_info_struct {
     //Mob that this struct belongs to.
@@ -381,24 +382,15 @@ struct path_info_struct {
     //If true, it's best to go straight to the target point
     //instead of taking a path.
     bool go_straight;
-    //For the chase from the final path stop to the target, use this
-    //value in the target_distance parameter.
-    float final_target_distance;
     //Is the way forward currently blocked?
     bool is_blocked;
-    //Invulnerabilities of the mob/carriers.
-    vector<hazard*> invulnerabilities;
-    //Flags for the path-taker. Use PATH_TAKER_FLAG_*.
-    unsigned char taker_flags;
-    //If not empty, only follow path links with this label.
-    string label;
+    //Settings about how the path should be followed.
+    path_follow_settings settings;
     
     path_info_struct(
         mob* m,
         const point &target,
-        const vector<hazard*> invulnerabilities,
-        const unsigned char taker_flags,
-        const string &label
+        const path_follow_settings &settings
     );
     bool check_blockage();
 };

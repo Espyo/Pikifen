@@ -9,6 +9,7 @@ Current tasks (tasks being worked on, but not yet committed)
             Then make the ending point be a fake so the Pikmin reaches the bridge base fine and then makes it to the tip of the bridge
             And when coming back, make the starting point be a fake
         Update manual's area editor tutorial
+        Remove old sector-based bridge code
         Old thoughts
             Make bridges open sectors gradually
                 If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
@@ -321,11 +322,6 @@ Next tasks (roughly sorted most important first)
         Would it make sense to have a screen stack system, with push&pop?
         Try to make it deterministic enough to support input playback (replays)?
         Should the option name + string representation be in input_manager or outside?
-        Rework the controls menu to be more intuitive
-            Maybe a list of saved control schemes, like the list of saved rulesets in Smash Ultimate? It could come pre-packaged with Keyboard+Mouse, JoyCon, etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which
-            Maybe a "simple" controls menu and an "advanced" one? The advanced is the old one, but the "simple" one lets the player choose a controller, only map the most common controls, and automatically associate an analog stick to all four directions. If I do this, I should add a tip to the readme to tell people to try the advanced controls after they're comfortable with the engine.
-            When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
-            Save the controls in the options file inside a block, and possibly at the end of the options file
         Current leader should move slower if the analog stick is not held all the way
         If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
         There should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
@@ -339,6 +335,15 @@ Next tasks (roughly sorted most important first)
             One of these layers has to take care about not letting a LMB1-down event come after another LMB1-down event without an LMB1-up event...
             Idea: the action manager has a list of all actions and their states (float from 0 to 1), as well as the state the previous frame, so the engine can check if a whistle was released, for example (1 last frame, 0 now) -- probably have different systems in place for the global game input and the gameplay game input? Like, have a different system for checking inputs outside of menus, so that if B is held during the menu it is considered as pressed the very first frame the menu is gone
             Instead of letting the game layer have to worry about normalizing joysticks, let the hardware layer do so
+    Controls cleanup
+        Rework the controls menu to be more intuitive
+            Maybe a list of saved control schemes, like the list of saved rulesets in Smash Ultimate? It could come pre-packaged with Keyboard+Mouse, JoyCon, etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which
+            Maybe a "simple" controls menu and an "advanced" one? The advanced is the old one, but the "simple" one lets the player choose a controller, only map the most common controls, and automatically associate an analog stick to all four directions. If I do this, I should add a tip to the readme to tell people to try the advanced controls after they're comfortable with the engine.
+            When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
+            Save the controls in the options file inside a block, and possibly at the end of the options file
+        Spray management should really be inventory management
+            This way the competitive mode roulette item can go in here, though the player should also be able to specify a button for using it right away
+            Maybe place the sleeping ability here?
     There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
         There should only be one on-screen at a time
         Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.

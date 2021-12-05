@@ -3518,13 +3518,13 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
         p_ptr->can_move_in_midair = true;
     }
     
+    path_follow_settings settings;
+    settings.final_target_distance = carried_mob->carry_info->return_dist;
     if(
         p_ptr->follow_path(
             carried_mob->carry_info->return_point,
-            false,
             p_ptr->get_base_speed(),
-            carried_mob->carry_info->return_dist,
-            false, ""
+            settings
         )
     ) {
         p_ptr->set_animation(PIKMIN_ANIM_WALKING);

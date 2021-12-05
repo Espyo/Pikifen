@@ -81,7 +81,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = true;
     
     m->can_move_in_midair =
-        (m->path_info->taker_flags & PATH_TAKER_FLAG_AIRBORNE);
+        (m->path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE);
         
     if(m->carry_info->intended_mob == NULL) {
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);
@@ -118,9 +118,13 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
         }
     }
     
+    path_follow_settings settings;
+    settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
+    settings.final_target_distance = target_distance;
     m->follow_path(
-        m->carry_info->intended_point, true,
-        m->carry_info->get_speed(), target_distance, false, ""
+        m->carry_info->intended_point,
+        m->carry_info->get_speed(),
+        settings
     );
     
     m->path_info->target_point = m->carry_info->intended_point;
@@ -268,7 +272,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     //Now, check if the fact that it can fly or not changed.
     if(!must_update && m->path_info) {
         bool old_is_airborne =
-            (m->path_info->taker_flags & PATH_TAKER_FLAG_AIRBORNE);
+            (m->path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE);
         bool new_is_airborne = m->carry_info->can_fly();
         must_update = old_is_airborne != new_is_airborne;
     }
@@ -281,7 +285,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
         if(
             !vectors_contain_same(
                 new_invulnerabilities,
-                m->path_info->invulnerabilities
+                m->path_info->settings.invulnerabilities
             )
         ) {
             must_update = true;
@@ -346,7 +350,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     //Now, check if the fact that it can fly or not changed.
     if(!must_update && m->path_info) {
         bool old_is_airborne =
-            (m->path_info->taker_flags & PATH_TAKER_FLAG_AIRBORNE);
+            (m->path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE);
         bool new_is_airborne = m->carry_info->can_fly();
         must_update = old_is_airborne != new_is_airborne;
     }
@@ -359,7 +363,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
         if(
             !vectors_contain_same(
                 new_invulnerabilities,
-                m->path_info->invulnerabilities
+                m->path_info->settings.invulnerabilities
             )
         ) {
             must_update = true;
