@@ -2645,26 +2645,6 @@ void area_editor::process_gui_panel_sector() {
                 "What type of sector this is."
             );
             
-            //Sector bridge height value.
-            if(
-                s_ptr->type == SECTOR_TYPE_BRIDGE ||
-                s_ptr->type == SECTOR_TYPE_BRIDGE_RAIL
-            ) {
-            
-                float bridge_height = s2f(s_ptr->tag);
-                ImGui::SetNextItemWidth(96.0f);
-                if(ImGui::DragFloat("Bridge height", &bridge_height)) {
-                    register_change("sector bridge height change");
-                    s_ptr->tag = f2s(bridge_height);
-                }
-                set_tooltip(
-                    "When the bridge opens, "
-                    "set the sector's height to this.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
             //Sector bottomless pit checkbox.
             bool sector_bottomless_pit = s_ptr->is_bottomless_pit;
             if(ImGui::Checkbox("Bottomless pit", &sector_bottomless_pit)) {

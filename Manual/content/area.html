@@ -16,7 +16,7 @@
     
     <p>This page will explain how areas work in <i>Pikifen</i>, and how you can make your own. If you're in a hurry, feel free to read just the lines in bold, and even skip ahead to the section you need. Otherwise, read every step in the tutorial and follow along! Feel free to save your area after a section, and use the button in the toolbar to check out how it looks in-game.</p>
 
-    <p>Note: The images in this page may be from several different versions of the engine. They can still be followed to understand the idea, however.</p>
+    <p>Note: The images in this page may be from several different versions of the engine or the tutorial. They can still be followed to understand the idea, however.</p>
 
     <h2 id="intro">Introduction</h2>
 
@@ -287,28 +287,21 @@
       </ul></dd>
     </dl>
 
-    <h3 id="bridge">Adding a bridge</h3>
-    
-    <div class="box box-right">
-      <img src="../images/bridge.png" alt="The bridge sectors and the object.">
-      <p>The bridge sectors and the object.</p>
-    </div>
-    
-    <p>Now, let's make it so the Pikmin can build a bridge on the western side of the rock to grant access to the top. Basically, when the Pikmin finish working on a bridge object, some sectors change appearance and height. You will have to define these sectors like normal, but give them special information so they act and look normal when the bridge is closed, and serve as a bridge once it's done.</p>
-    
+    <h3 id="linked-mobs">Linked objects</h3>
+
+    <p>Let's add a bridge to get on top of the rock. Simply place a wooden bridge object on the floor to the rock's west.</p>
+
     <dl>
-      <dt><b>Draw out the sector(s) that make up the built bridge. If it's a ramp, draw them out like a stairway like normal. Don't set any properties yet.</b></dt>
-      <dd>To reach the top of the rock from the ground level, we'll need to draw out three neighboring rectangular sectors.</dd>
-      <dt><b>Also draw out the sector(s) that make up the railing of the bridge. Once again, you can make a ramp, and you shouldn't set properties yet.</b></dt>
-      <dd>These sectors will be thin and long, and run parallel to the ramp sectors. They help make sure Pikmin and leaders don't fall off the sides of the bridge.</dd>
-      <dt><b>Set the sector's appearance to how they should look <i>before</i> the bridge is opened.</b></dt>
-      <dd>You likely don't need to change much, but keep the sectors with the floor-level height (0), and keep the grassy texture.</dd>
-      <dt><b>In the advanced sector behavior settings, set the bridge floor sector's types to "Bridge", and set the railing sectors to "Bridge rail".</b></dt>
-      <dd>When the bridge opens, all bridge and railing sectors will have their texture and height changed to make them look and act like a bridge. The sector types are how the engine knows what sectors to change. The two different types will also influence the texture that appears.</dd>
-      <dt><b>Set the "Bridge height" field of each bridge sector (both floor and railings) to the height the sector should be <i>after</i> the bridge is opened.</b></dt>
-      <dd>When the bridge is built, the sectors will have their height updated to whatever this property says. Naturally, the railing sectors should go higher than the bridge floor. Like the ramp from before, set the "Bridge height" of the ramp closest to the bridge to 50, the one after to 100, etc., and keep all rails around 120 units higher than the bridge floor sector they are meant to be railing.</dd>
-      <dt><b>Place a bridge object inside the first sector of the bridge.</b></dt>
-      <dd>In our case, this is the bottommost (the westernmost) sector. Since the bridge opens to the east, keep the object's angle facing east.</dd>
+      <dt><b>Some objects need to be <a href="misc_features.html#mob-links">linked</a> to other objects to work properly.</b></dt>
+      <dd>The bridge object specifies where the bridge starts, but how do we tell it where it ends? Bridges are built in such a way that you can link them to another object, and the bridge will know that it has to be built such that it ends there.</dd>
+      <dt><b>"Dummy" objects are a great way to tell another object about some spot.</b></dt>
+      <dd>We can link the bridge to any object, but picking something like an enemy might be a bad idea, since it will always be moving about and attacking Pikmin... There's an object in the "Custom" category just called "Dummy". It has no purpose at all, other than being used for cases like this, where we just want to tell a bridge where to stop! In our case, we want the dummy object on top of the rock, a bit near the edge.</dd>
+      <dt><b>Select an object, and in the panel's "Advanced" section, click the "+" button to create a new link.</b></dt>
+      <dd>When you select the bridge, the panel's "Advanced" section will say something like "0 links". This means our selected object has no links right now. Simply click the "+" button and click on the dummy object to link to it. You'll see a line pointing from the bridge to the dummy object.</dd>
+      <dt><b>Links are one-way only.</b></dt>
+      <dd>Although we've linked the bridge to the dummy object, the dummy object is not linked to the bridge. This is not important for a dummy object, since it doesn't do anything anyway, but if you have, for instance, two seesaw-blocks, you must link them to each other individually.</dd>
+      <dt><b>Click the "trash" button to remove a link.</b></dt>
+      <dd>If you no longer want a given link, just select the object that owns the link, click that button, and then click on the object you want to remove the link from. You can also click on the little line that connects the two instead.</dd>
     </dl>
 
     <h3 id="water">Adding water</h3>
@@ -438,12 +431,6 @@
     <p>When an object spawns in the area, it can read some "<a href="script.html#vars">script variables</a>" to change its behavior. These take on the format <code>variable=value</code>, and in the object's internal data, the full list separates each one with a semicolon (;). Example: <code>maturity = 0; sprout = true</code>.</p>
     
     <p>Although you can edit the list manually using the "Full list" textbox in the panel, most variables can be edited with dedicated widgets, also present in the panel's "Script vars" section. That said, if you know the object's script, and want to edit a variable that is not present as a widget, you can edit the "Full list" field instead and set the variable there.</p>
-
-    <h3 id="linked-mobs">Linked objects</h3>
-    
-    <p>If you want an object to <a href="misc_features.html#mob-links">link</a> to another one, first select that object, then at the bottom of the panel, there will be a counter saying something like "0 links". This means the object has no links right now. Simply click the "+" button and click on another object to link to it. Note that links are one-way, so if you want the other object to be linked to this one, you need to do the same process to that one. To remove an object's link, click the "-" button when that object is selected, and then simply click on the object you want to remove the link from. You can also click on the little line that connects the two.</p>
-
-    <p>Some objects need to be linked together in order to work, like two seesaw blocks in a pair.</p>
 
     <h3 id="sideways">Sideways view</h3>
     

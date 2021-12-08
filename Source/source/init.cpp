@@ -1233,8 +1233,6 @@ void init_mob_categories() {
 void init_sector_types() {
     game.sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
     game.sector_types.register_type(SECTOR_TYPE_BLOCKING, "Blocking");
-    game.sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
-    game.sector_types.register_type(SECTOR_TYPE_BRIDGE_RAIL, "Bridge rail");
 }
 
 

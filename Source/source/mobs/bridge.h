@@ -49,9 +49,6 @@ public:
     //What type of bridge it is.
     bridge_type* bri_type;
     
-    //Sectors it will affect when it opens.
-    vector<sector*> secs;
-    
     //Constructor.
     bridge(const point &pos, bridge_type* bri_type, const float angle);
     

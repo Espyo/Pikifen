@@ -35,16 +35,6 @@ bridge::bridge(const point &pos, bridge_type* type, const float angle) :
     prev_chunk_combo(0),
     bri_type(type) {
     
-    //Search neighboring sectors.
-    get_sector(pos, NULL, true)->get_neighbor_sectors_conditionally(
-    [] (sector * s) -> bool {
-        return
-        s->type == SECTOR_TYPE_BRIDGE ||
-        s->type == SECTOR_TYPE_BRIDGE_RAIL;
-    },
-    secs
-    );
-    
     team = MOB_TEAM_OBSTACLE;
     
     start_pos = pos;

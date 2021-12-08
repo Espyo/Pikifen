@@ -673,23 +673,6 @@ void area_editor::find_problems() {
         
     }
     
-    //Bridge mob that is not on a bridge sector.
-    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
-        if(m_ptr->category->id == MOB_CATEGORY_BRIDGES) {
-            sector* s_ptr = get_sector(m_ptr->pos, NULL, false);
-            if(s_ptr->type != SECTOR_TYPE_BRIDGE) {
-                problem_mob_ptr = m_ptr;
-                problem_type = EPT_SECTORLESS_BRIDGE;
-                problem_title = "Bridge mob on wrong sector!";
-                problem_description =
-                    "This bridge object should be on a sector of the "
-                    "\"Bridge\" type.";
-                return;
-            }
-        }
-    }
-    
     //Path from pile to bridge is blocked by said bridge.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];

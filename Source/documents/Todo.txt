@@ -2,20 +2,11 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Bridge improvements
-        Update manual's area editor tutorial
-        Remove old sector-based bridge code
-        Old thoughts
-            Make bridges open sectors gradually
-                If the bridge object has a parameter "halfway", it should only open half the bridge sectors. This makes it possible to have two bridges connect to one another from opposite ends. (thanks Kman)
-            Maybe make them objects entirely? Should work fine for forward-facing bridges, but ramped ones might be tougher
-                Maybe each segment is a sub-object? This way, you could specify how many segments to create, and segments could even go up or down, but think of the performance penalty
-                Maybe a mob with unique behavior that changes width/height as it's built, and builds the texture dynamically? This would work, except for sloped bridges, and we pretty much can't NOT have sloped bridges
-                Maybe a hybrid solution: the bridge is split into segments, created dynamically. For a level bridge, it's just one segment, stretched to whatever length necessary. For sloped bridges, it's divided into equal-length segments, each segment 50 higher/lower than the previous
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    When you're reading a sign, your cursor turns to the leader's color
     
     --- v0.22.0 ---
     Details
@@ -81,6 +72,7 @@ Next tasks (roughly sorted most important first)
             Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
             Some signs should talk about dismissing, and group moving
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
+            Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
         Kman's Adventure area (see #content-sharing)
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     General graphic file improvements
@@ -351,6 +343,7 @@ Next tasks (roughly sorted most important first)
     The ability for Blue Pikmin to rescue drowning Pikmin
     Pause menu should include the options
     Floors-over-floors; mostly for bridges
+        Or not? I mean, bridges now work with objects
         Revamp physics
             The logic is the same as the old logic, except replace sectors with floors
             Can I add slopes?

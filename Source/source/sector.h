@@ -64,10 +64,6 @@ enum SECTOR_TYPES {
     SECTOR_TYPE_NORMAL,
     //Blocks all mob movement.
     SECTOR_TYPE_BLOCKING,
-    //Bridge floor.
-    SECTOR_TYPE_BRIDGE,
-    //Bridge rail.
-    SECTOR_TYPE_BRIDGE_RAIL,
 };
 
 
