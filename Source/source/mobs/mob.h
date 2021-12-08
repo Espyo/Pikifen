@@ -292,9 +292,13 @@ public:
     
     void set_animation(
         const size_t nr,
-        const bool pre_named = true, const bool auto_start = true
+        const bool pre_named = true,
+        const START_ANIMATION_OPTIONS options = START_ANIMATION_NORMAL
     );
-    void set_animation(const string &name, const bool auto_start = true);
+    void set_animation(
+        const string &name,
+        const START_ANIMATION_OPTIONS options = START_ANIMATION_NORMAL
+    );
     void set_health(const bool add, const bool ratio, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);

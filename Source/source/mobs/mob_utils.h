@@ -79,6 +79,19 @@ enum CHASE_STATES {
 };
 
 
+//Options for how to start a new animation.
+enum START_ANIMATION_OPTIONS {
+    //Start the new animation like normal.
+    START_ANIMATION_NORMAL,
+    //Start from whatever frame number the previous animation was at.
+    START_ANIMATION_NO_RESTART,
+    //Start on a random frame.
+    START_ANIMATION_RANDOM_FRAME,
+    //Start on a random frame, but only if the mob just spawned.
+    START_ANIMATION_RANDOM_FRAME_ON_SPAWN,
+};
+
+
 /* ----------------------------------------------------------------------------
  * Information on a carrying spot around a mob's perimeter.
  */

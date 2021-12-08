@@ -489,9 +489,13 @@ bool mob_action_loaders::set_animation(mob_action_call &call) {
     
     for(size_t a = 1; a < call.args.size(); ++a) {
         if(call.args[a] == "no_restart") {
-            call.args[a] = i2s(MOB_ACTION_SET_ANIMATION_NO_RESTART);
+            call.args[a] = i2s(START_ANIMATION_NO_RESTART);
+        } else if(call.args[a] == "random_frame") {
+            call.args[a] = i2s(START_ANIMATION_RANDOM_FRAME);
+        } else if(call.args[a] == "random_frame_on_spawn") {
+            call.args[a] = i2s(START_ANIMATION_RANDOM_FRAME_ON_SPAWN);
         } else {
-            call.args[a] = "0";
+            call.args[a] = i2s(START_ANIMATION_NORMAL);
         }
     }
     
@@ -1429,12 +1433,12 @@ void mob_action_runners::send_message_to_nearby(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_animation(mob_action_run_data &data) {
-    bool must_restart =
-        (
-            data.args.size() > 1 &&
-            s2i(data.args[1]) == MOB_ACTION_SET_ANIMATION_NO_RESTART
-        );
-    data.m->set_animation(s2i(data.args[0]), false, !must_restart);
+    START_ANIMATION_OPTIONS options = START_ANIMATION_NORMAL;
+    if(data.args.size() > 1) {
+        options = (START_ANIMATION_OPTIONS) s2i(data.args[1]);
+    }
+    
+    data.m->set_animation(s2i(data.args[0]), false, options);
 }
 
 

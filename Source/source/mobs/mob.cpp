@@ -2130,11 +2130,11 @@ void mob::send_message(mob* receiver, string &msg) const {
  *   Animation number. It's the animation instance number from the database.
  * pre_named:
  *   If true, the animation has already been named in-engine.
- * auto_start:
- *   After the change, start the new animation from time 0.
+ * options:
+ *   Options to start the new animation with.
  */
 void mob::set_animation(
-    const size_t nr, const bool pre_named, const bool auto_start
+    const size_t nr, const bool pre_named, const START_ANIMATION_OPTIONS options
 ) {
     if(nr >= type->anims.animations.size()) return;
     
@@ -2165,8 +2165,19 @@ void mob::set_animation(
     if(new_anim->frames.empty()) {
         anim.cur_frame_index = INVALID;
     } else {
-        if(auto_start || anim.cur_frame_index >= anim.cur_anim->frames.size()) {
+        if(
+            !(options & START_ANIMATION_NO_RESTART) ||
+            anim.cur_frame_index >= anim.cur_anim->frames.size()
+        ) {
             anim.start();
+        }
+    }
+    
+    if(options == START_ANIMATION_RANDOM_FRAME) {
+        anim.skip_ahead_randomly();
+    } else if(options == START_ANIMATION_RANDOM_FRAME_ON_SPAWN) {
+        if(time_alive == 0.0f) {
+            anim.skip_ahead_randomly();
         }
     }
 }
@@ -2177,13 +2188,15 @@ void mob::set_animation(
  * that name, nothing happens.
  * name:
  *   Name of the animation.
- * auto_start:
- *   After the change, start the new animation from time 0.
+ * options:
+ *   Options to start the new animation with.
  */
-void mob::set_animation(const string &name, const bool auto_start) {
+void mob::set_animation(
+    const string &name, const START_ANIMATION_OPTIONS options
+) {
     size_t idx = anim.anim_db->find_animation(name);
     if(idx != INVALID) {
-        set_animation(idx, false, auto_start);
+        set_animation(idx, false, options);
     }
 }
 

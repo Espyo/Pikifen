@@ -134,7 +134,8 @@ void pile::update() {
         get_animation_nr_from_base_and_group(
             PILE_ANIM_IDLING, N_PILE_ANIMS, anim_amount_nr
         ),
-        true, false
+        true,
+        START_ANIMATION_NO_RESTART
     );
     
     if(pil_type->hide_when_empty) {
