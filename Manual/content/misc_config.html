@@ -110,6 +110,7 @@
       <li><b><code>is_damage_ratio</code></b>: If <code>true</code>, then the number specified in <code>damage</code> is the ratio of total health to sap away. For instance, <code>0.5</code> means one half of the enemy's total health is removed. If <code>false</code>, the number is just a normal amount of damage. Defaults to <code>false</code>.</li>
       <li><b><code>particle_generator</code></b>: When the damage is applied, some particles can be spawned. This is the name of the particle generator to use, if any. The particles are spawned in the position of the object that receives the damage.</li>
       <li><b><code>particle_offset</code></b>: If particles are meant to spawn, you can offset them from the object's center here. The format is <code>x y z</code>, and these are <a href="glossary.html#R">relative coordinates</a>.</li>
+      <li><b><code>status_to_apply</code></b>: A status effect to apply when the spike damage is dealt. Leave empty for none. Default is empty.</li>
     </ul>
 
     <p>Remember to change the object type properties for the objects you want to deal this spike damage, as well as the different spike damage vulnerability modifiers, as explained <a href="mob_type.html">here</a>.</p>

@@ -1197,13 +1197,16 @@ void load_spike_damage_types() {
         reader_setter rs(&file);
         
         string particle_generator_name;
+        string status_name;
         data_node* damage_node = NULL;
         data_node* particle_generator_node = NULL;
+        data_node* status_name_node = NULL;
         
         rs.set("name", new_t.name);
         rs.set("damage", new_t.damage, &damage_node);
         rs.set("ingestion_only", new_t.ingestion_only);
         rs.set("is_damage_ratio", new_t.is_damage_ratio);
+        rs.set("status_to_apply", status_name, &status_name_node);
         rs.set(
             "particle_generator", particle_generator_name,
             &particle_generator_node
@@ -1229,12 +1232,16 @@ void load_spike_damage_types() {
             }
         }
         
-        if(new_t.damage == 0) {
-            log_error(
-                "Spike damage type \"" + new_t.name +
-                "\" needs a damage number!",
-                (damage_node ? damage_node : &file)
-            );
+        if(status_name_node) {
+            auto s = game.status_types.find(status_name);
+            if(s != game.status_types.end()) {
+                new_t.status_to_apply = s->second;
+            } else {
+                log_error(
+                    "Unknown status type \"" + status_name + "\"!",
+                    status_name_node
+                );
+            }
         }
         
         game.spike_damage_types[new_t.name] = new_t;
@@ -1415,6 +1422,7 @@ void load_status_types(const bool load_resources) {
         rs.set("remove_on_hazard_leave",  new_t->remove_on_hazard_leave);
         rs.set("auto_remove_time",        new_t->auto_remove_time);
         rs.set("reapply_rule",            reapply_rule_str, &reapply_rule_node);
+        rs.set("health_change",           new_t->health_change);
         rs.set("health_change_ratio",     new_t->health_change_ratio);
         rs.set("state_change_type",       sc_type_str, &sc_type_node);
         rs.set("state_change_name",       new_t->state_change_name);

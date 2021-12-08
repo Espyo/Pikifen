@@ -1,6 +1,6 @@
-name = poison_ingestion_explosion
-emission_interval = 0
-number = 8
+name = white_pikmin_poison
+emission_interval = 0.3
+number = 4
 number_deviation = 0
 base {
     bitmap = Smoke.png
@@ -16,7 +16,7 @@ duration_deviation = 0.3
 friction_deviation = 0
 gravity_deviation = 0
 size_deviation = 2
-pos_deviation = 0 0
+pos_deviation = 32 32
 speed_deviation = 0 0
 angle = 0
 angle_deviation = 360

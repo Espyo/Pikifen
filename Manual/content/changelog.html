@@ -22,10 +22,21 @@
     
     <p><i>Date TBD</i></p>
 
+    <p><b>Gameplay changes</b></p>
+    
     <ul>
+      <li>White Pikmin poison now applies a status effect that drains health over time. Enemies still end up losing the same amount of health in the end.</li>
       <li>All gates have received graphical improvements.</li>
     </ul>
     
+    <p><b>Content making changes</b></p>
+
+    <ul>
+      <li>Bridges are now made up of objects. This should make the process of placing bridges in an area much simpler, since there's no need to fiddle around with sectors. Areas with bridges need to be updated to use this new bridge format.</li>
+      <li>Status effects now have a <code>health_change</code> property, which controls how much health the object loses per second in an absolute value, instead of it being a ratio of total health.</li>
+      <li>Spike damage types now have a <code>status_to_apply</code> property, which allows the damaged object to receive a status effect.</li>
+    </ul>
+
     <h2 id="0.21.1">0.21.1</h2>
     
     <p><i>November 5th, 2021</i></p>

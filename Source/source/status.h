@@ -67,6 +67,8 @@ struct status_type {
     float auto_remove_time;
     STATUS_REAPPLY_RULES reapply_rule;
     
+    //Health addition/subtraction per second.
+    float health_change;
     //Health addition/subtraction percentage per second.
     float health_change_ratio;
     //Increase/decrease in maturity when the status is gained.

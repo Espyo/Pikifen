@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Add a way for mobs to specify status vulnerabilities
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        Make White Pikmin inflict a "poisoned" status effect upon enemies that saps away health over time
         "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" (thanks Kman)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Should the Beady Long Legs's feet be damageable? It can give some life to the fight, but newbies might think that's the only way to cause damage

@@ -22,6 +22,7 @@
 
 #include "animation.h"
 #include "mob_categories/mob_category.h"
+#include "hazard.h"
 #include "particle.h"
 #include "utils/data_file.h"
 #include "utils/geometry_utils.h"
@@ -562,12 +563,15 @@ struct spike_damage_type {
     point particle_offset_pos;
     //Offset the particles by this much, vertically.
     float particle_offset_z;
+    //Apply this status effect when the spike damage is applied.
+    status_type* status_to_apply;
     
     spike_damage_type() :
         damage(0),
         ingestion_only(false),
         is_damage_ratio(false),
-        particle_gen(nullptr) {
+        particle_gen(nullptr),
+        status_to_apply(nullptr) {
         
     }
 };

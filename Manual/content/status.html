@@ -41,7 +41,8 @@
           <li><code>add_time</code>: Add more seconds to the current time. It adds the amount defined in the <code>auto_remove_time</code> property.</li>
         </ul>
       </li>
-      <li><b><code>health_change_ratio</code></b>: Every second that passes, its health increases by this much. This represents the ratio of max health, meaning that if a object has 1000 max health, and this value is -0.5, it will lose 500 points of health after one second. Defaults to 0.</li>
+      <li><b><code>health_change</code></b>: Every second that passes, its health increases by this much. Defaults to 0.</li>
+      <li><b><code>health_change_ratio</code></b>: Every second that passes, its health increases by this ratio. This represents the ratio of max health, meaning that if a object has 1000 max health, and this value is -0.5, it will lose 500 points of health after one second. Defaults to 0.</li>
       <li><b><code>state_change_type</code></b>: If not <code>none</code>, the engine will somehow change this object's state when it receives this status effect. Defaults to <code>none</code>. Possible values are:
         <ul>
           <li><code>flailing</code>: Pikmin affected by this will enter a "flailing" state, where they change to a flailing animation and are only able to move. They come towards the leader when whistled. Useful for drowning Pikmin.</li>

@@ -916,6 +916,10 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
         damage *= v->second.damage_mult;
     }
     
+    if(type->spike_damage->status_to_apply) {
+        victim->apply_status_effect(type->spike_damage->status_to_apply, false);
+    }
+    
     victim->set_health(true, false, -damage);
     
     if(type->spike_damage->particle_gen) {
@@ -2792,10 +2796,18 @@ void mob::tick_misc_logic(const float delta_t) {
     
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         statuses[s].tick(delta_t);
-        set_health(
-            true, true,
-            statuses[s].type->health_change_ratio * delta_t
-        );
+        if(statuses[s].type->health_change != 0.0f) {
+            set_health(
+                true, false,
+                statuses[s].type->health_change * delta_t
+            );
+        }
+        if(statuses[s].type->health_change_ratio != 0.0f) {
+            set_health(
+                true, true,
+                statuses[s].type->health_change_ratio * delta_t
+            );
+        }
     }
     delete_old_status_effects();
     

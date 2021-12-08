@@ -1,0 +1,8 @@
+name = white_pikmin_poison
+affects_enemies = true
+auto_remove_time = 4
+color = 128 16 112
+health_change = -200
+particle_generator = white_pikmin_poison
+particle_offset = 0 0 300
+reapply_rule = add_time
