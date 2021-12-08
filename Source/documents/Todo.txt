@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Add a way for mobs to specify status vulnerabilities
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---

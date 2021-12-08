@@ -35,6 +35,7 @@
       <li>Bridges are now made up of objects. This should make the process of placing bridges in an area much simpler, since there's no need to fiddle around with sectors. Areas with bridges need to be updated to use this new bridge format.</li>
       <li>Status effects now have a <code>health_change</code> property, which controls how much health the object loses per second in an absolute value, instead of it being a ratio of total health.</li>
       <li>Spike damage types now have a <code>status_to_apply</code> property, which allows the damaged object to receive a status effect.</li>
+      <li>Object types now have a <code>status_vulnerabilities</code> block, which works like the other vulnerability blocks, but controls damage taken from status effects.</li>
     </ul>
 
     <h2 id="0.21.1">0.21.1</h2>

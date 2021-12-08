@@ -458,8 +458,8 @@ void load_mob_type_from_file(
     
         data_node* vul_node = spike_damage_vuln_node->get_child(v);
         auto sdv_it = game.spike_damage_types.find(vul_node->name);
-        vector<string> words = split(vulnerabilities_node->value);
-        float percentage = mt->default_vulnerability;
+        vector<string> words = split(vul_node->value);
+        float percentage = 1.0f;
         string status_name;
         if(!words.empty()) {
             percentage = s2f(words[0]);
@@ -489,6 +489,51 @@ void load_mob_type_from_file(
             s.status_to_apply = status_it->second;
             
         }
+    }
+    
+    data_node* status_vuln_node =
+        file.get_child_by_name("status_vulnerabilities");
+    size_t n_s_vuln =
+        status_vuln_node->get_nr_of_children();
+    for(size_t v = 0; v < n_s_vuln; ++v) {
+    
+        data_node* vul_node = status_vuln_node->get_child(v);
+        auto sv_it = game.status_types.find(vul_node->name);
+        vector<string> words = split(vul_node->value);
+        float percentage = 1.0f;
+        string status_override_name;
+        if(!words.empty()) {
+            percentage = s2f(words[0]);
+        }
+        if(words.size() >= 2) {
+            status_override_name = words[1];
+        }
+        auto status_override_it = game.status_types.find(status_override_name);
+        
+        if(sv_it == game.status_types.end()) {
+            log_error(
+                "Unknown status type \"" + vul_node->name + "\"!",
+                vul_node
+            );
+            
+        } else if(
+            !status_override_name.empty() &&
+            status_override_it == game.status_types.end()
+        ) {
+            log_error(
+                "Unknown status type \"" + status_override_name + "\"!",
+                vul_node
+            );
+            
+        } else {
+            auto &s = mt->status_vulnerabilities[sv_it->second];
+            s.damage_mult = percentage / 100.0f;
+            if(status_override_it != game.status_types.end()) {
+                s.status_to_apply = status_override_it->second;
+            }
+            s.status_overrides = true;
+        }
+        
     }
     
     data_node* reaches_node = file.get_child_by_name("reaches");

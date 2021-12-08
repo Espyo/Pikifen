@@ -164,11 +164,15 @@ public:
         area_editor_prop_struct();
     };
     
-    //Info on how vulnerable the object is to a certain hazard.
+    //Info on how vulnerable the object is to a certain source.
     struct vulnerability_struct {
+        //Multiply damage taken by this.
         float damage_mult;
+        //When affected by the source, receive this status effect.
         status_type* status_to_apply;
+        //If "status_to_apply" overrides any status effect that'd be received.
         bool status_overrides;
+        
         vulnerability_struct();
     };
     
@@ -280,6 +284,8 @@ public:
     spike_damage_type* spike_damage;
     //For every type of spike damage, multiply damage taken by this much.
     map<spike_damage_type*, vulnerability_struct> spike_damage_vulnerabilities;
+    //For every type of status, multiply damage taken by this much.
+    map<status_type*, vulnerability_struct> status_vulnerabilities;
     
     //Caches and such.
     //How far its hitboxes or radius can reach from the center.

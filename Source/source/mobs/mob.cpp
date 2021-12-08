@@ -257,6 +257,18 @@ void mob::apply_status_effect(
         }
     }
     
+    //Get the vulnerabilities to this status.
+    auto vuln_it = type->status_vulnerabilities.find(s);
+    if(vuln_it != type->status_vulnerabilities.end()) {
+        if(vuln_it->second.status_to_apply) {
+            //It must instead receive this status.
+            apply_status_effect(
+                vuln_it->second.status_to_apply, given_by_parent
+            );
+            return;
+        }
+    }
+    
     //Check if the mob is already under this status.
     for(size_t ms = 0; ms < this->statuses.size(); ++ms) {
         if(this->statuses[ms].type == s) {
@@ -2796,16 +2808,23 @@ void mob::tick_misc_logic(const float delta_t) {
     
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         statuses[s].tick(delta_t);
+        
+        float damage_mult = 1.0f;
+        auto vuln_it = type->status_vulnerabilities.find(statuses[s].type);
+        if(vuln_it != type->status_vulnerabilities.end()) {
+            damage_mult = vuln_it->second.damage_mult;
+        }
+        
         if(statuses[s].type->health_change != 0.0f) {
             set_health(
                 true, false,
-                statuses[s].type->health_change * delta_t
+                statuses[s].type->health_change * damage_mult * delta_t
             );
         }
         if(statuses[s].type->health_change_ratio != 0.0f) {
             set_health(
                 true, true,
-                statuses[s].type->health_change_ratio * delta_t
+                statuses[s].type->health_change_ratio * damage_mult * delta_t
             );
         }
     }
