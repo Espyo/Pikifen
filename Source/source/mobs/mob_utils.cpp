@@ -736,6 +736,7 @@ path_info_struct::path_info_struct(
 ) :
     m(m),
     target_point(target),
+    target_mob(nullptr),
     cur_path_stop_nr(0),
     go_straight(false),
     is_blocked(false),

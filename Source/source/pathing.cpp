@@ -582,7 +582,7 @@ vector<path_stop*> dijkstra(
         return
             dijkstra(
                 start_node, end_node,
-                settings,
+                new_settings,
                 total_dist
             );
     } else {
@@ -628,6 +628,16 @@ vector<path_stop*> get_path(
         if(go_straight) *go_straight = false;
     }
     
+    point start_to_use =
+        (settings.flags & PATH_FOLLOW_FLAG_FAKED_START) ?
+        settings.faked_start :
+        start;
+        
+    point end_to_use =
+        (settings.flags & PATH_FOLLOW_FLAG_FAKED_END) ?
+        settings.faked_end :
+        end;
+        
     //Start by finding the closest stops to the start and finish.
     path_stop* closest_to_start = NULL;
     path_stop* closest_to_end = NULL;
@@ -637,8 +647,8 @@ vector<path_stop*> get_path(
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
-        dist dist_to_start(start, s_ptr->pos);
-        dist dist_to_end(end, s_ptr->pos);
+        dist dist_to_start(start_to_use, s_ptr->pos);
+        dist dist_to_end(end_to_use, s_ptr->pos);
         
         if(!closest_to_start || dist_to_start < closest_to_start_dist) {
             closest_to_start_dist = dist_to_start;
@@ -656,7 +666,7 @@ vector<path_stop*> get_path(
     //Let's just check something real quick:
     //if the destination is closer than any stop,
     //just go there right away!
-    dist start_to_end_dist = dist(start, end);
+    dist start_to_end_dist = dist(start_to_use, end_to_use);
     if(start_to_end_dist <= closest_to_start_dist) {
         if(go_straight) *go_straight = true;
         if(total_dist) {
@@ -690,9 +700,9 @@ vector<path_stop*> get_path(
         
     if(total_dist && !full_path.empty()) {
         *total_dist +=
-            dist(start, full_path[0]->pos).to_float();
+            dist(start_to_use, full_path[0]->pos).to_float();
         *total_dist +=
-            dist(full_path[full_path.size() - 1]->pos, end).to_float();
+            dist(full_path[full_path.size() - 1]->pos, end_to_use).to_float();
     }
     
     return full_path;

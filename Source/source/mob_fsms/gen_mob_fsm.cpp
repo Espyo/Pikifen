@@ -14,6 +14,7 @@
 
 #include "../const.h"
 #include "../functions.h"
+#include "../mobs/bridge.h"
 #include "../mobs/enemy.h"
 #include "../mobs/onion.h"
 #include "../mobs/pikmin.h"
@@ -100,8 +101,11 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
-    float target_distance = 3.0f;
+    path_follow_settings settings;
+    settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
+    
     if(m->carry_info->destination == CARRY_DESTINATION_SHIP) {
+        //Special case: ships.
         //Because the ship's beam can be offset, and because
         //the ship is normally in the way, let's consider a
         //"reached destination" event if the treasure is
@@ -109,18 +113,33 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
         //is on the same coordinates as the beam.
         if(m->carry_info->intended_mob) {
             ship* s_ptr = (ship*) m->carry_info->intended_mob;
-            target_distance =
+            settings.final_target_distance =
                 std::max(
                     m->radius -
                     s_ptr->shi_type->beam_radius,
                     3.0f
                 );
         }
+        
+    } else if(m->carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
+        //Special case: bridges.
+        //Pikmin are meant to carry to the current tip of the bridge,
+        //but whereas the start of the bridge is on firm ground, the tip may
+        //be above a chasm or water, so the Pikmin might want to take a
+        //different path, or be unable to take a path at all.
+        //Let's fake the end point to be the start of the bridge,
+        //for the sake of path calculations.
+        if(
+            m->carry_info->intended_mob->type->category->id ==
+            MOB_CATEGORY_BRIDGES
+        ) {
+            bridge* bri_ptr = (bridge*) m->carry_info->intended_mob;
+            settings.flags |= PATH_FOLLOW_FLAG_FAKED_END;
+            settings.flags |= PATH_FOLLOW_FLAG_FOLLOW_MOB;
+            settings.faked_end = bri_ptr->get_start_point();
+        }
     }
     
-    path_follow_settings settings;
-    settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
-    settings.final_target_distance = target_distance;
     m->follow_path(
         m->carry_info->intended_point,
         m->carry_info->get_speed(),
@@ -128,6 +147,7 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
     );
     
     m->path_info->target_point = m->carry_info->intended_point;
+    m->path_info->target_mob = m->carry_info->intended_mob;
     
     if(m->path_info->path.empty() && !m->path_info->go_straight) {
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);

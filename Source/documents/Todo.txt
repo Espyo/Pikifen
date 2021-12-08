@@ -3,11 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Bridge improvements
-        Pikmin will refuse to go on the bridge to build it if it's above water
-            Add a way to let the starting point/ending point of a path be faked
-            This only affects calculations for distance and for checking the path stop's sector for hazards, if applicable
-            Then make the ending point be a fake so the Pikmin reaches the bridge base fine and then makes it to the tip of the bridge
-            And when coming back, make the starting point be a fake
         Update manual's area editor tutorial
         Remove old sector-based bridge code
         Old thoughts
@@ -36,6 +31,7 @@ Next tasks (roughly sorted most important first)
         A leader can whistle another from a gate and grab them
         Improve the look of the ship's ring
         As a day progresses, mob shadows should become invisible long before sunlight ends. During twilight there are no shadows, but there's still visibility
+        Two ways for Pikmin to deliver an object: slurp (and make the mob stay tinted for longer, and slurped faster), and tossed (for fragment bridges)
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
             Add a transparent solid circle over the area being whistled
@@ -61,6 +57,7 @@ Next tasks (roughly sorted most important first)
             "flail_to_whistle" is really "flail_to_leader"
             SECTOR_STEP to STEP_HEIGHT
         Document every class member with a comment
+        Document every enum, and every enum value, with a comment
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Don't mark functions as virtual if they don't need to be (e.g. they're already overwriting the parent class's function)
         Memory leaks, cppcheck, etc.
@@ -380,13 +377,16 @@ Next tasks (roughly sorted most important first)
             Add HUD support for all the different layouts
         Make sure that:
             Leaders can't steal each other's group members
-                This includes Pikmin that are knocked down and get whistled
+                This includes Pikmin that are knocked down and get whistled, and sprouts
+            Leaders can't interact with each others's Onions or ships
             Logic like culling isn't relying on just the first player
             Make sure Pikmin can't carry something the opposing team is already carrying
             Candypop Buds can't accept Pikmin from another team
+            Group tasks can't accept Pikmin from another team
         Figure out how the game is meant to work when:
             A "soft" pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
             A player's leader needs to throw another's
+                Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around. Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
         Change menus to let you pick how many and which players will play
         Rules and game modes
             Point capture

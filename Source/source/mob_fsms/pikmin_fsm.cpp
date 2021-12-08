@@ -15,6 +15,7 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../hazard.h"
+#include "../mobs/bridge.h"
 #include "../mobs/drop.h"
 #include "../mobs/group_task.h"
 #include "../mobs/pikmin.h"
@@ -3520,6 +3521,25 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
     
     path_follow_settings settings;
     settings.final_target_distance = carried_mob->carry_info->return_dist;
+    
+    if(carried_mob->carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
+        //Special case: bridges.
+        //Pikmin are meant to carry to the current tip of the bridge,
+        //but whereas the start of the bridge is on firm ground, the tip may
+        //be above a chasm or water, so the Pikmin might want to take a
+        //different path, or be unable to take a path at all.
+        //Let's fake the start point to be the start of the bridge,
+        //for the sake of path calculations.
+        if(
+            carried_mob->carry_info->intended_mob->type->category->id ==
+            MOB_CATEGORY_BRIDGES
+        ) {
+            bridge* bri_ptr = (bridge*) carried_mob->carry_info->intended_mob;
+            settings.flags |= PATH_FOLLOW_FLAG_FAKED_START;
+            settings.faked_start = bri_ptr->get_start_point();
+        }
+    }
+    
     if(
         p_ptr->follow_path(
             carried_mob->carry_info->return_point,

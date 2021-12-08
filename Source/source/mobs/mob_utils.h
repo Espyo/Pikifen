@@ -375,6 +375,8 @@ struct path_info_struct {
     mob* m;
     //Target location.
     point target_point;
+    //If the target is a mob, this points to it.
+    mob* target_mob;
     //Path to take the mob to while being carried.
     vector<path_stop*> path;
     //Index of the current stop in the projected carrying path.

@@ -197,7 +197,7 @@ bool bridge::check_health() {
     }
     
     //Move the bridge object proper to the farthest point of the bridge.
-    point offset(chunk_width * chunks, 0);
+    point offset(chunk_width * chunks - 32.0f, 0);
     offset = rotate_point(offset, angle);
     pos = start_pos + offset;
     
@@ -262,6 +262,14 @@ void bridge::draw_component(mob* m) {
     }
     
     al_draw_prim(vertexes, NULL, texture, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the starting point of the bridge.
+ */
+point bridge::get_start_point() {
+    return start_pos;
 }
 
 

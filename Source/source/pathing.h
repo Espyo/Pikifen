@@ -44,15 +44,21 @@ enum PATH_LINK_TYPES {
 
 enum PATH_FOLLOW_FLAGS {
     //It's possible to continue from the last path if it wants.
-    PATH_FOLLOW_FLAG_CAN_CONTINUE = 1,
+    PATH_FOLLOW_FLAG_CAN_CONTINUE = 0x0001,
     //Ignore any obstacles in the path links.
-    PATH_FOLLOW_FLAG_IGNORE_OBSTACLES = 2,
+    PATH_FOLLOW_FLAG_IGNORE_OBSTACLES = 0x0002,
+    //At the end, constantly chase after the target mob (if any)'s position.
+    PATH_FOLLOW_FLAG_FOLLOW_MOB = 0x0004,
+    //Use the faked start point instead of the normal one.
+    PATH_FOLLOW_FLAG_FAKED_START = 0x0008,
+    //Use the faked end point instead of the normal one.
+    PATH_FOLLOW_FLAG_FAKED_END = 0x0010,
     //The mob was told to use this path by a script.
-    PATH_FOLLOW_FLAG_SCRIPT_USE = 4,
+    PATH_FOLLOW_FLAG_SCRIPT_USE = 0x0020,
     //The mob has light load.
-    PATH_FOLLOW_FLAG_LIGHT_LOAD = 8,
+    PATH_FOLLOW_FLAG_LIGHT_LOAD = 0x0040,
     //The mob can fly.
-    PATH_FOLLOW_FLAG_AIRBORNE = 16,
+    PATH_FOLLOW_FLAG_AIRBORNE = 0x0080,
 };
 
 
@@ -69,6 +75,10 @@ struct path_follow_settings {
     const vector<hazard*> invulnerabilities;
     //If not empty, only follow path links with this label.
     string label;
+    //Faked start point. Used to fake calculations.
+    point faked_start;
+    //Faked end point. Used to fake calculations.
+    point faked_end;
     
     path_follow_settings();
 };

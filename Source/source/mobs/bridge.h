@@ -59,6 +59,8 @@ public:
     static void draw_component(mob* m);
     //Checks if any chunks need to be created, and creates them if needed.
     bool check_health();
+    //Returns the starting point of the bridge.
+    point get_start_point();
     //Reads the provided script variables, if any, and does stuff with them.
     void read_script_vars(const script_var_reader &svr);
     //Sets up the bridge using its linked mob.

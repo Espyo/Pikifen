@@ -2717,13 +2717,30 @@ void mob::tick_brain(const float delta_t) {
                 ) {
                     //Reached the final stop of the path, but not the goal.
                     //Let's head there.
-                    chase(
-                        path_info->target_point,
-                        get_sector(path_info->target_point, NULL, true)->z,
-                        CHASE_FLAG_ANY_ANGLE,
-                        path_info->settings.final_target_distance,
-                        chase_info.max_speed
-                    );
+                    if(
+                        (
+                            path_info->settings.flags &
+                            PATH_FOLLOW_FLAG_FOLLOW_MOB
+                        ) &&
+                        path_info->target_mob
+                    ) {
+                        chase(
+                            &(path_info->target_mob->pos),
+                            &(path_info->target_mob->z),
+                            point(), 0.0f,
+                            CHASE_FLAG_ANY_ANGLE,
+                            path_info->settings.final_target_distance,
+                            chase_info.max_speed
+                        );
+                    } else {
+                        chase(
+                            path_info->target_point,
+                            get_sector(path_info->target_point, NULL, true)->z,
+                            CHASE_FLAG_ANY_ANGLE,
+                            path_info->settings.final_target_distance,
+                            chase_info.max_speed
+                        );
+                    }
                     
                 } else if(
                     path_info->cur_path_stop_nr == path_info->path.size() + 1
