@@ -2173,9 +2173,9 @@ void mob::set_animation(
         }
     }
     
-    if(options == START_ANIMATION_RANDOM_FRAME) {
+    if(options == START_ANIMATION_RANDOM_TIME) {
         anim.skip_ahead_randomly();
-    } else if(options == START_ANIMATION_RANDOM_FRAME_ON_SPAWN) {
+    } else if(options == START_ANIMATION_RANDOM_TIME_ON_SPAWN) {
         if(time_alive == 0.0f) {
             anim.skip_ahead_randomly();
         }

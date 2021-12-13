@@ -95,6 +95,6 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
  */
 void track_fsm::spawn(mob* m, void* info1, void* info2) {
     m->set_animation(
-        TRACK_ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+        TRACK_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
     );
 }

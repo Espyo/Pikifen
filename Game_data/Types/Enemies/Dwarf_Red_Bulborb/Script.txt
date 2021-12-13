@@ -10,7 +10,7 @@ init {
 script {
     examining {
         on_enter {
-            set_animation looking random_frame_on_spawn
+            set_animation looking random_time_on_spawn
             stop
             set_near_reach search
         }

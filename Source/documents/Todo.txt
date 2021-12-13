@@ -2,13 +2,11 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    "quick suggestion that should take like 10 seconda. put a random timer in the dwarf bulborb, cause all of them moving at the same time is weird / same with every mob that moves like it" (thanks Kman)
-        Also the dwarf's exploration time should be random
-    Shouldn't "random_frame" be "random_time"?
-    
+
+
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    When you're reading a sign, your cursor turns to the leader's color
+    
     
     --- v0.22.0 ---
     Details

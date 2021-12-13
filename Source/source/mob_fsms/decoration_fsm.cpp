@@ -81,7 +81,7 @@ void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
     if(dec_ptr->dec_type->random_animation_delay) {
         m->set_animation(
             DECORATION_ANIM_IDLING, true,
-            START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+            START_ANIMATION_RANDOM_TIME_ON_SPAWN
         );
     } else {
         m->set_animation(DECORATION_ANIM_IDLING);

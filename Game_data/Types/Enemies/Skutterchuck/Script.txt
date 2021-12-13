@@ -11,7 +11,7 @@ script {
         on_enter {
             set_var has_nodule false
             receive_status triple_speed
-            set_animation idling random_frame_on_spawn
+            set_animation idling random_time_on_spawn
             stop
             set_near_reach nodule_search
             set_timer 0.8

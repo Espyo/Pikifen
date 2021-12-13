@@ -848,12 +848,7 @@ void gameplay_state::draw_lighting_filter() {
  * Draws a message box.
  */
 void gameplay_state::draw_message_box() {
-    draw_mouse_cursor(
-        change_color_lighting(
-            cur_leader_ptr->lea_type->main_color,
-            cursor_height_diff_light
-        )
-    );
+    draw_mouse_cursor(al_map_rgb(188, 230, 230));
     
     al_use_transform(&game.identity_transform);
     

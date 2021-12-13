@@ -32,7 +32,7 @@ treasure::treasure(const point &pos, treasure_type* type, const float angle) :
     
     become_carriable(CARRY_DESTINATION_SHIP);
     
-    set_animation(ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN);
+    set_animation(ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN);
     
 }
 

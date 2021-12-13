@@ -9,7 +9,7 @@ script {
     sleeping {
         on_enter {
             set_var ignoring false
-            set_animation sleeping random_frame_on_spawn
+            set_animation sleeping random_time_on_spawn
             set_near_reach wake_up
         }
         on_opponent_in_reach {

@@ -490,10 +490,10 @@ bool mob_action_loaders::set_animation(mob_action_call &call) {
     for(size_t a = 1; a < call.args.size(); ++a) {
         if(call.args[a] == "no_restart") {
             call.args[a] = i2s(START_ANIMATION_NO_RESTART);
-        } else if(call.args[a] == "random_frame") {
-            call.args[a] = i2s(START_ANIMATION_RANDOM_FRAME);
-        } else if(call.args[a] == "random_frame_on_spawn") {
-            call.args[a] = i2s(START_ANIMATION_RANDOM_FRAME_ON_SPAWN);
+        } else if(call.args[a] == "random_time") {
+            call.args[a] = i2s(START_ANIMATION_RANDOM_TIME);
+        } else if(call.args[a] == "random_time_on_spawn") {
+            call.args[a] = i2s(START_ANIMATION_RANDOM_TIME_ON_SPAWN);
         } else {
             call.args[a] = i2s(START_ANIMATION_NORMAL);
         }

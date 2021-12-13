@@ -85,10 +85,10 @@ enum START_ANIMATION_OPTIONS {
     START_ANIMATION_NORMAL,
     //Start from whatever frame number the previous animation was at.
     START_ANIMATION_NO_RESTART,
-    //Start on a random frame.
-    START_ANIMATION_RANDOM_FRAME,
-    //Start on a random frame, but only if the mob just spawned.
-    START_ANIMATION_RANDOM_FRAME_ON_SPAWN,
+    //Start on a random time.
+    START_ANIMATION_RANDOM_TIME,
+    //Start on a random time, but only if the mob just spawned.
+    START_ANIMATION_RANDOM_TIME_ON_SPAWN,
 };
 
 
