@@ -123,5 +123,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(SHIP_ANIM_IDLING);
+    m->set_animation(
+        SHIP_ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
 }

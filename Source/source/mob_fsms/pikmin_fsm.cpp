@@ -1951,7 +1951,9 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
         );
     }
     
-    m->set_animation(PIKMIN_ANIM_IDLING);
+    m->set_animation(
+        PIKMIN_ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
     m->unfocus_from_mob();
 }
 
@@ -1967,7 +1969,9 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->leave_group();
-    m->set_animation(PIKMIN_ANIM_SPROUT);
+    m->set_animation(
+        PIKMIN_ANIM_SPROUT, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
     m->unpushable = true;
     m->is_huntable = false;
     m->is_hurtable = false;

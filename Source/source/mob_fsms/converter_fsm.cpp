@@ -106,7 +106,8 @@ void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
     c_ptr->set_animation(
         c_ptr->get_animation_nr_from_base_and_group(
             CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
-        )
+        ),
+        true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
     );
     c_ptr->cur_base_anim_nr = CONVERTER_ANIM_IDLING;
     c_ptr->type_change_timer.start();

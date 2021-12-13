@@ -8,7 +8,7 @@ init {
 script {
     idling {
         on_enter {
-            set_animation idling
+            set_animation idling random_frame_on_spawn
             set_holdable pikmin enemies
         }
         on_damage {

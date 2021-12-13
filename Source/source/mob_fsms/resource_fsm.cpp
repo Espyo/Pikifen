@@ -245,7 +245,9 @@ void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
         r_ptr->carry_info->must_return = false;
     }
     
-    r_ptr->set_animation(RESOURCE_ANIM_IDLING);
+    r_ptr->set_animation(
+        RESOURCE_ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
 }
 
 

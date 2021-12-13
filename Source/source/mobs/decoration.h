@@ -30,8 +30,6 @@ public:
     float individual_scale;
     //This decoration's random rotation, if any.
     float individual_rotation;
-    //Has it done its first animation yet? Used for random animation offsets.
-    bool has_done_first_animation;
     
     //Constructor.
     decoration(const point &pos, decoration_type* dec_type, const float angle);

@@ -113,7 +113,9 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void bridge_fsm::set_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(BRIDGE_ANIM_IDLING);
+    m->set_animation(
+        BRIDGE_ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
 }
 
 

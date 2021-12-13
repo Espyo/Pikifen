@@ -190,7 +190,10 @@ void drop_fsm::set_bumped_anim(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void drop_fsm::set_falling_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(DROP_ANIM_FALLING);
+    m->set_animation(
+        DROP_ANIM_FALLING,
+        true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
 }
 
 

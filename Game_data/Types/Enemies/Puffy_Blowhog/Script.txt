@@ -14,7 +14,7 @@ script {
     idling {
         on_enter {
             stop
-            set_animation idling
+            set_animation idling random_frame_on_spawn
             set_near_reach search
             get_random_decimal timeout 1 3
             set_timer $timeout

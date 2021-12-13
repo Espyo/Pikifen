@@ -29,7 +29,7 @@ pellet::pellet(const point &pos, pellet_type* type, const float angle) :
     
     become_carriable(CARRY_DESTINATION_ONION);
     
-    set_animation(ANIM_IDLING);
+    set_animation(ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN);
 }
 
 

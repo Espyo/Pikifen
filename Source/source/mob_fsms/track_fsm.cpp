@@ -94,5 +94,7 @@ void track_fsm::on_touched(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void track_fsm::spawn(mob* m, void* info1, void* info2) {
-    m->set_animation(TRACK_ANIM_IDLING);
+    m->set_animation(
+        TRACK_ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
 }

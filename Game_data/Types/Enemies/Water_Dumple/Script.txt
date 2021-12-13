@@ -5,7 +5,7 @@ script {
     idling {
         on_enter {
             set_var ignoring false
-            set_animation idling
+            set_animation idling random_frame_on_spawn
             stop
             set_near_reach search
         }

@@ -1341,9 +1341,9 @@ void area_editor::load() {
     
     //Load necessary game content.
     load_custom_particle_generators(false);
+    load_status_types(false);
     load_spike_damage_types();
     load_liquids(false);
-    load_status_types(false);
     load_spray_types(false);
     load_hazards();
     load_mob_types(false);
@@ -3307,9 +3307,9 @@ void area_editor::unload() {
     unload_mob_types(false);
     unload_hazards();
     unload_spray_types();
-    unload_status_types(false);
     unload_liquids();
     unload_spike_damage_types();
+    unload_status_types(false);
     unload_custom_particle_generators();
 }
 

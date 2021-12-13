@@ -78,7 +78,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
         spew_queue.push_back(0);
     }
     
-    set_animation(ANIM_IDLING);
+    set_animation(ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN);
 }
 
 

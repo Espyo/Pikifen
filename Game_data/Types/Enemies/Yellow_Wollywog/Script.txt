@@ -11,7 +11,7 @@ script {
         on_enter {
             set_var returning false
             set_var has_focus false
-            set_animation idling
+            set_animation idling random_frame_on_spawn
             stop
             set_near_reach search
             get_random_decimal t 2 6

@@ -1451,7 +1451,9 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
     ((leader*) m)->is_in_walking_anim = false;
-    m->set_animation(LEADER_ANIM_IDLING);
+    m->set_animation(
+        LEADER_ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
 }
 
 
@@ -1465,7 +1467,9 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
-    m->set_animation(LEADER_ANIM_IDLING);
+    m->set_animation(
+        LEADER_ANIM_IDLING, true, START_ANIMATION_RANDOM_FRAME_ON_SPAWN
+    );
 }
 
 
