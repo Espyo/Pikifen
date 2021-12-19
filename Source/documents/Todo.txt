@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        Maybe each object should have a terrain collision radius, and an inter-mob collision radius. This would stop some of the beefier mobs from visually going inside walls
         On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
         A leader can whistle another from a gate and grab them

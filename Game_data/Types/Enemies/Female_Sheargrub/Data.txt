@@ -9,11 +9,12 @@ move_speed = 30
 pikmin_seeds = 2
 pushable = true
 pushes = true
-radius = 12
+radius = 14
 reaches {
     chase = 80 360
 }
 rotation_speed = 170
 target_type = enemy
+terrain_radius = 20
 territory_radius = 200
 weight = 1

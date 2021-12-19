@@ -49,6 +49,7 @@ mob_type::mob_type(size_t category_id) :
     pushes(false),
     pushable(false),
     pushes_with_hitboxes(false),
+    terrain_radius(-1),
     walkable(false),
     max_health(100),
     health_regen(0),
@@ -371,6 +372,7 @@ void load_mob_type_from_file(
     rs.set("spike_damage", spike_damage_str, &spike_damage_node);
     rs.set("target_type", target_type_str, &target_type_node);
     rs.set("team", team_str, &team_node);
+    rs.set("terrain_radius", mt->terrain_radius);
     rs.set("territory_radius", mt->territory_radius);
     rs.set("walkable", mt->walkable);
     rs.set("weight", mt->weight);

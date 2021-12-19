@@ -101,11 +101,13 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
     //This way, we won't check for edges that are really far away.
     //Use the bounding box to know which blockmap blocks the mob will be on.
     set<edge*> candidate_edges;
-    
+    float radius_to_use =
+        type->terrain_radius < 0 ? radius : type->terrain_radius;
+        
     if(
         !game.cur_area_data.bmap.get_edges_in_region(
-            new_pos - radius,
-            new_pos + radius,
+            new_pos - radius_to_use,
+            new_pos + radius_to_use,
             candidate_edges
         )
     ) {
@@ -120,7 +122,7 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
         
         if(
             !circle_intersects_line(
-                new_pos, radius,
+                new_pos, radius_to_use,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
                 NULL, NULL

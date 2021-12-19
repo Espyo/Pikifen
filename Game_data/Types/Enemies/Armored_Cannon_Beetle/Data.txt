@@ -29,5 +29,6 @@ spawns {
 }
 rotation_speed = 40
 target_type = enemy
+terrain_radius = 200
 territory_radius = 300
 weight = 30

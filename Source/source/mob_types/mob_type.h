@@ -214,6 +214,8 @@ public:
     bool pushable;
     //If true, the push is via hitbox, as opposed to the mob's radius?
     bool pushes_with_hitboxes;
+    //Radius for terrain collision. Negative = use regular radius property.
+    float terrain_radius;
     //Can you walk on top of this mob?
     bool walkable;
     //Rectangular dimensions, if it's meant to use them instead of a radius.
