@@ -812,14 +812,20 @@ void gameplay_state::draw_lighting_filter() {
         //their lights on the map (as black).
         al_hold_bitmap_drawing(true);
         for(size_t m = 0; m < mobs.all.size(); ++m) {
-            if(mobs.all[m]->hide) continue;
+            mob* m_ptr = mobs.all[m];
+            if(
+                m_ptr->hide ||
+                m_ptr->type->category->id == MOB_CATEGORY_DECORATIONS
+            ) {
+                continue;
+            }
             
-            point pos = mobs.all[m]->pos;
+            point pos = m_ptr->pos;
             al_transform_coordinates(
                 &game.world_to_screen_transform,
                 &pos.x, &pos.y
             );
-            float radius = mobs.all[m]->radius * 4.0 * game.cam.zoom;
+            float radius = m_ptr->radius * 4.0 * game.cam.zoom;
             al_draw_scaled_bitmap(
                 game.sys_assets.bmp_spotlight,
                 0, 0, 64, 64,

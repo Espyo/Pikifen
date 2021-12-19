@@ -996,10 +996,34 @@ void gameplay_state::process_mob_reaches(
     mob_event* opir_ev =
         m_ptr->fsm.get_event(MOB_EV_OPPONENT_IN_REACH);
         
+    if(!obir_ev && !opir_ev) return;
+    
     mob_type::reach_struct* r_ptr =
         &m_ptr->type->reaches[m_ptr->near_reach];
         
-    if(!obir_ev && !opir_ev) return;
+    dist mob_to_hotspot_dist;
+    float dist_padding;
+    
+    if(m2_ptr->rectangular_dim.x != 0.0f) {
+        bool is_inside = false;
+        point hotspot =
+            get_closest_point_in_rotated_rectangle(
+                m_ptr->pos,
+                m2_ptr->pos, m2_ptr->rectangular_dim,
+                m2_ptr->angle,
+                &is_inside
+            );
+        if(is_inside) {
+            mob_to_hotspot_dist = dist(0.0f);
+        } else {
+            mob_to_hotspot_dist = dist(m_ptr->pos, hotspot);
+        }
+        dist_padding = m_ptr->radius;
+        
+    } else {
+        mob_to_hotspot_dist = d;
+        dist_padding = m_ptr->radius + m2_ptr->radius;
+    }
     
     float face_diff =
         get_angle_smallest_dif(
@@ -1007,29 +1031,31 @@ void gameplay_state::process_mob_reaches(
             get_angle(m_ptr->pos, m2_ptr->pos)
         );
         
-    if(
+    bool in_reach =
         (
-            d <= r_ptr->radius_1 +
-            (m_ptr->radius + m2_ptr->radius) &&
+            mob_to_hotspot_dist <= r_ptr->radius_1 + dist_padding &&
             face_diff <= r_ptr->angle_1 / 2.0
-        ) || (
-            d <= r_ptr->radius_2 +
-            (m_ptr->radius + m2_ptr->radius) &&
-            face_diff <= r_ptr->angle_2 / 2.0
-        )
-        
-    ) {
+        );
+    if(!in_reach) {
+        in_reach =
+            (
+                mob_to_hotspot_dist <= r_ptr->radius_2 + dist_padding &&
+                face_diff <= r_ptr->angle_2 / 2.0
+            );
+    }
+    
+    if(in_reach) {
         if(obir_ev) {
             pending_intermob_events.push_back(
                 pending_intermob_event(
-                    d, obir_ev, m2_ptr
+                    mob_to_hotspot_dist, obir_ev, m2_ptr
                 )
             );
         }
         if(opir_ev && m_ptr->can_hunt(m2_ptr)) {
             pending_intermob_events.push_back(
                 pending_intermob_event(
-                    d, opir_ev, m2_ptr
+                    mob_to_hotspot_dist, opir_ev, m2_ptr
                 )
             );
         }

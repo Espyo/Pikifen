@@ -843,6 +843,77 @@ point get_closest_point_in_line(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the closest point in a rotated rectangle's perimeter
+ * to the specified point. This only happens if the point is outside the
+ * rectangle, otherwise the reference point's coordinates are returned instead.
+ * p:
+ *   Reference point.
+ * rect_center:
+ *   Center of the rectangle.
+ * rect_dim:
+ *   Width and height of the rectangle.
+ * rect_angle:
+ *   Angle of the rectangle.
+ * is_inside:
+ *   If true, returns whether or not the reference point is inside
+ *   the rectangle.
+ */
+point get_closest_point_in_rotated_rectangle(
+    const point &p,
+    const point &rect_center, const point &rect_dim, const float rect_angle,
+    bool* is_inside
+) {
+    point closest_point;
+    point perimeter = rect_dim / 2.0f;
+    if(is_inside) *is_inside = false;
+    
+    //First, transform the coordinates so the rectangle is axis-aligned, and
+    //the rectangle's center is at the origin.
+    point delta_p = p - rect_center;
+    delta_p = rotate_point(delta_p, -rect_angle);
+    
+    //Check the closest point.
+    if(delta_p.x <= -perimeter.x) {
+        if(delta_p.y <= -perimeter.y) {
+            //Top-left corner.
+            closest_point = point(-perimeter.x, -perimeter.y);
+        } else if(delta_p.y >= perimeter.y) {
+            //Bottom-left corner.
+            closest_point = point(-perimeter.x, perimeter.y);
+        } else {
+            //Left side.
+            closest_point = point(-perimeter.x, delta_p.y);
+        }
+    } else if(delta_p.x >= perimeter.x) {
+        if(delta_p.y <= -perimeter.y) {
+            //Top-right corner.
+            closest_point = point(perimeter.x, -perimeter.y);
+        } else if(delta_p.y >= perimeter.y) {
+            //Bottom-right corner.
+            closest_point = point(perimeter.x, perimeter.y);
+        } else {
+            //Right side.
+            closest_point = point(perimeter.x, delta_p.y);
+        }
+    } else if(delta_p.y <= -perimeter.y) {
+        //Top side.
+        closest_point = point(delta_p.x, -perimeter.y);
+    } else if(delta_p.y >= perimeter.y) {
+        //Bottom side.
+        closest_point = point(delta_p.x, perimeter.y);
+    } else {
+        //Inside.
+        closest_point = delta_p;
+        if(is_inside) *is_inside = true;
+    }
+    
+    //Now, transform back.
+    closest_point = rotate_point(closest_point, rect_angle);
+    return closest_point + rect_center;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a point's sign on a line segment,
  * used for detecting if it's inside a triangle.
  * p:

@@ -27,16 +27,18 @@
     <ul>
       <li>White Pikmin poison now applies a status effect that drains health over time. Enemies still end up losing the same amount of health in the end.</li>
       <li>All gates have received graphical improvements.</li>
+      <li>Decorative objects no longer cast light in blackout weather.</li>
+      <li>Pikmin are now better at detecting gates and other rectangular objects.</li>
     </ul>
     
     <p><b>Content making changes</b></p>
 
     <ul>
-      <li>Bridges are now made up of objects. This should make the process of placing bridges in an area much simpler, since there's no need to fiddle around with sectors. Areas with bridges need to be updated to use this new bridge format.</li>
-      <li>Status effects now have a <code>health_change</code> property, which controls how much health the object loses per second in an absolute value, instead of it being a ratio of total health.</li>
-      <li>Spike damage types now have a <code>status_to_apply</code> property, which allows the damaged object to receive a status effect.</li>
-      <li>Object types now have a <code>status_vulnerabilities</code> block, which works like the other vulnerability blocks, but controls damage taken from status effects.</li>
-      <li>The <code>set_animation</code> script action now accepts the options <code>random_time</code> and <code>random_time_on_spawn</code>, to let the animation start on a random time, or start on a random time but only if the mob just spawned.</li>
+      <li><a href="mob_bridge.html">Bridges</a> are now made up of objects. This should make the process of placing bridges in an area much simpler, since there's no need to fiddle around with sectors. Areas with bridges need to be updated to use this new bridge format.</li>
+      <li><a href="status.html">Status effects</a> now have a <code>health_change</code> property, which controls how much health the object loses per second in an absolute value, instead of it being a ratio of total health.</li>
+      <li><a href="misc_config.html#spike-damage">Spike damage types</a> now have a <code>status_to_apply</code> property, which allows the damaged object to receive a status effect.</li>
+      <li><a href="mob_type.html">Object types</a> now have a <code>status_vulnerabilities</code> block, which works like the other vulnerability blocks, but controls damage taken from status effects.</li>
+      <li>The <code>set_animation</code> <a href="events_and_actions.html">script action</a> now accepts the options <code>random_time</code> and <code>random_time_on_spawn</code>, to let the animation start on a random time, or start on a random time but only if the mob just spawned.</li>
     </ul>
 
     <h2 id="0.21.1">0.21.1</h2>

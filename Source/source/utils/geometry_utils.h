@@ -125,6 +125,11 @@ point get_closest_point_in_line(
     const point &l1, const point &l2, const point &p,
     float* segment_ratio = NULL
 );
+point get_closest_point_in_rotated_rectangle(
+    const point &p,
+    const point &rect_center, const point &rect_dim, const float rect_angle,
+    bool* is_inside
+);
 float get_point_sign(
     const point &p, const point &lp1, const point &lp2
 );

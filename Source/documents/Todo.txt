@@ -10,8 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        Decorative objects shouldn't cast light in blackout mode
-        Add logic for Pikmin to detect an object is close by when it's rectangular -- maybe just for obstacles
         Maybe each object should have a terrain collision radius, and an inter-mob collision radius. This would stop some of the beefier mobs from visually going inside walls
         On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
@@ -504,6 +502,9 @@ Next tasks (roughly sorted most important first)
         Weather editor
         Particle editor
         Script editor
+            A way to un/fold the contents of states and events
+            A way to view all states, with arrows pointing to which events lead to which states
+            One possible layout is four columns; first one is a list of states, second is a list of events in the chosen state, third is a list of actions in the chosen event, and fourth is parameters and info about the state
     Probably more...?
     
     
@@ -589,6 +590,7 @@ Misc things (so I don't forget)
     If a Pikmin type has black as the color, the idle glow needs to... not be black
     Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
     The area editor should have a "toolbar" so you can swap from layout to mob to path real quick, instead of having to quit out. Also, shortcut keys for that in F1, F2, etc.
+        Or better yet, keyboard shortcuts to swap, only. This way the interface isn't cluttered, but power-users can still swap very easily
     Pressing Esc on the sprite/whatever rename pop-up should cancel
         Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
     Area sections
@@ -672,6 +674,12 @@ Tasks for later on (I might never implement these)
         Door objects
         Button objects (with a certain number of Pikmin needed to keep it depressed)
         Marks on the floor -- Red Pikmin carry things to the red mark, Yellows to the yellow mark, etc.
+    Roguelike mode
+        Randomly generated sublevels; there's an endless amount of them until you die or run out of Pikmin
+        Each sublevel has an item somewhere that when returned, improves something
+            Some give you standard Pikmin 2 improvements like fire-resistance
+            Others speed up your Red Pikmin, make your Purple Pikmin more powerful, give you dosages of sprays, etc.
+        Sublevels have two or three holes; before you go down you're told a preview of what sorts of sublevel and treasure lies beyond that hole, so you can pick your destiny
     If feasible, make it so that every enemy checks if there are Pikmin around it (check one out of every two Pikmin), this check shouldn't be distance based, but dx and dy based. If there is any Pikmin or leader nearby, or it's on-camera, then fully work the mob as normal. Otherwise, don't do anything to the mob.
         Maybe keep a timer that goes back to ~2 seconds every time a Pikmin/leader nearby is detected, and until it reaches 0, do not check for loneliness.
     Random enemy spawning
