@@ -10,16 +10,16 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
         Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
         A leader can whistle another from a gate and grab them
-        Improve the look of the ship's ring
         As a day progresses, mob shadows should become invisible long before sunlight ends. During twilight there are no shadows, but there's still visibility
+        Improve the look of the ship's ring
         Two ways for Pikmin to deliver an object: slurp (and make the mob stay tinted for longer, and slurped faster), and tossed (for fragment bridges)
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
             Add a transparent solid circle over the area being whistled
         Smoother trail behind the mouse cursor
+            https://blog.scottlogic.com/2019/11/18/drawing-lines-with-webgl.html
         Health wheels should be slightly transparent
         Give more juice to the HUD (Kman)
             Every GUI item should just have a "juice timer", not a "juicy grow timer"
@@ -82,6 +82,7 @@ Next tasks (roughly sorted most important first)
             Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
             Add a reference Olimar image in all of them
             I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
+                Check if premultiplied alpha fixes this problem
             Search for "data:image/" for leftover image files in the SVG files
             Convince it to export at 96dpi, not 90dpi
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
@@ -157,6 +158,7 @@ Next tasks (roughly sorted most important first)
             Number of deaths today
             Progress towards concocting sprays
         Open it with Tab, and move leader swapping to middle mouse button
+        There should be a tab, button, whatever that takes you to the pause menu, and vice-versa
     Statistics menu, which keeps track of:
         Engine use
             Engine boot-up count, engine total play time, actual gameplay total play time
@@ -177,6 +179,10 @@ Next tasks (roughly sorted most important first)
         Also, maker, version, and comments properties
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
+		Areas should be one of three types
+			Areas of the simple type don't really have any special rules, they're just endless sandboxes.
+			Areas of the mission type show, in this same panel, all sorts of info about how to play the mission
+			Areas of the arena type are only for competitive multiplayer play
         Medals
             For every stage, the player can have no medal, a bronze, a silver, or a gold
             When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
@@ -190,7 +196,7 @@ Next tasks (roughly sorted most important first)
                 Completion
                     Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                 None
-                    No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose
+                    No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
         Each stage should have the following data:
             A quick description explaining what the stage is about. Example: "These dark woods hide many dangerous beasts behind the fallen branches. Your goal is to escape without a single enemy seeing you!"
             A "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
@@ -221,6 +227,9 @@ Next tasks (roughly sorted most important first)
             Maybe...
                 A win condition for reaching X sprays of type Y
                 A loss condition for killing an enemy
+		Area editor changes
+			A new panel, gameplay, where you control everything gameplay-related, starting with the area type
+            Move the spray counter here, and spruce it up so people don't have to write stuff by hand
         Area selection menu changes
             Left side
                 The list of areas, with their names and a medal icon next to each
@@ -340,25 +349,30 @@ Next tasks (roughly sorted most important first)
     The ability for Blue Pikmin to rescue drowning Pikmin
     Pause menu should include the options
     Floors-over-floors; mostly for bridges
-        Or not? I mean, bridges now work with objects
-        Revamp physics
-            The logic is the same as the old logic, except replace sectors with floors
-            Can I add slopes?
-            To figure out what floors to use:
-                If the mob is touching the FOF, the FOF's Z
-                Else, the normal floor Z
-            If the sector a mob is going into has a FOF, the FOF can be unaccounted for at collision check time, but then the mob may end up inside of it after it enters the sector, and needs to do a step up
-        To draw their shadows
-            4 pixels of purely black alpha 80%, then 8 pixels of gradient to alpha 0
-        Edge cases:
-            FOF stairways need to work well
-            [NEEDS BRAINSTORMING] Can a mob go from sector A's main floor (0), to sector B's main floor (50), to sector A's FOF (100), to sector B's FOF (150)? SHOULD it?
-        Precautions:
-            FOFs in dark sectors should be dark
-            Make sure users can create a FOF that's 0 units above the main floor, for decoration purposes, and that this does not have an impact on collisions and whatnot
-        Misc
-            Does it make sense to create a FOF above a bottomless pit?
-            https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
+        New thoughts
+            Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
+            Plus overhangs can be faked using mobs that can be stood on top of
+            Instead of floors over floors, the maker should be able to place a secondary floor texture above the first one
+                The Z should be customizable; that way you can have, for instance, tall grass
+        Old thoughts
+            Revamp physics
+                The logic is the same as the old logic, except replace sectors with floors
+                Can I add slopes?
+                To figure out what floors to use:
+                    If the mob is touching the FOF, the FOF's Z
+                    Else, the normal floor Z
+                If the sector a mob is going into has a FOF, the FOF can be unaccounted for at collision check time, but then the mob may end up inside of it after it enters the sector, and needs to do a step up
+            To draw their shadows
+                4 pixels of purely black alpha 80%, then 8 pixels of gradient to alpha 0
+            Edge cases:
+                FOF stairways need to work well
+                [NEEDS BRAINSTORMING] Can a mob go from sector A's main floor (0), to sector B's main floor (50), to sector A's FOF (100), to sector B's FOF (150)? SHOULD it?
+            Precautions:
+                FOFs in dark sectors should be dark
+                Make sure users can create a FOF that's 0 units above the main floor, for decoration purposes, and that this does not have an impact on collisions and whatnot
+            Misc
+                Does it make sense to create a FOF above a bottomless pit?
+                https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
     Multiplayer
         1 struct of info for each player, multiplayer controls
         During loading, show how the screen is going to be split, and show which player is in which screen
@@ -373,26 +387,71 @@ Next tasks (roughly sorted most important first)
             Make sure Pikmin can't carry something the opposing team is already carrying
             Candypop Buds can't accept Pikmin from another team
             Group tasks can't accept Pikmin from another team
+            When one player loses all their leaders, their screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
+                The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to cur_leader_ptr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is NULL they just try something peaceful instead of crashing
         [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
             A "soft" pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
             A player's leader needs to throw another's
                 Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around. Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
-        Change menus to let you pick how many and which players will play
-        Rules and game modes
-            Point capture
+        Change area selection menus to have a button that takes you to another menu where you pick how many and which players will play
+            The menu should be split into four columns, each one for a player
+            Each column has buttons to toggle that player on or off
+            Each column should also have a very brief legend of what their leader controls are
+            Each column should also let players pick which teams they belong to, for the multiplayer versus game mode
+            Each column should also let players pick what leader they want to control, for the multiplayer versus game mode
+        Victory rules
+            KO
+                When a player loses all Pikmin or a leader (maybe an option to make it ALL leaders instead?), they lose. Last one standing wins
+                All areas can be played with this rule
+            Collection
+                First player to collect a certain amount of certain treasure wins
+                For the area to be compatible with this mode, it must determine what the treasure is
+                While the area data can determine a default victory amount, the rules can override it
+            Capture the Flag
+                When a player collects the other player's flag they gain a point. First player to reach a certain amount of points wins
+                In the canon games, delivering once is enough, but if the amount of captures is higher than 1, the flag should respawn in its original location after being captured
+                For the area to be compatible with this mode, it must determine what the flag object is
+                While the area data can determine a default victory amount, the rules can override it
+            Bingo
+                Each player has a bingo card. First player to collect enough things to score a line wins
+                For the area to be compatible with this mode, it must determine which objects are elligible to belong in the bingo cell universe
+                If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
+            Point capture?
                 When a Pikmin is on top of a point, it slowly captures for that team, a la TF2. The more Pikmin, the quicker it captures
-            Build a Wonder
+            Build a Wonder?
                 Like in Age of Empires, you can gather materials into a spot, and once you have enough, you can start building a Wonder. If you manage to build it, you win automatically
-            Tag
+            Tag?
                 One player's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every player has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
+        Rulesets
+            In the area selection menu, there should be a button to take you to the player setup, and another to pick a ruleset
+            In the ruleset editor, you can pick...
+                What victory conditions you want on (KO victory is always forcefully on)
+                What rules within those victory conditions (number of capture flags necessary to win, number of collectibles needed to win, etc.)
+                Items are enabled or disabled
+                Starting Pikmin for each player
+                Number of leaders for each team (if this is, for instance, set to 1, but players play 2v2, then each team will forcefully have 2 leaders instead)
+                Pikmin killed by other Pikmin are reborn at the Onion, or lost permanently
         A way for attack hitboxes to cause no knockback, otherwise Pikmin battles will keep knocking the Pikmin down
             Maybe add three types of knockback: none, flinch (makes leaders reel back in pain and Pikmin fall over), and chuck
-        [NEEDS BRAINSTORMING] Figure out how multiple players will work with areas not/designed for them
-            Each area should probably specify the minimum and maximum number of players
-            Also maybe if players can play cooperative, competitively, or both
-            Competitive Mission Mode? Pikmin can't attack each other, and the player with the highest score at the end of the mission wins. Probably requires symmetrical maps, or all players starting in the same spot
-        Misc.
-            If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
+        Onions should be able to auto-eject seeds
+        Area gameplay
+			New area data
+				Areas should let the area maker specify the minimum and maximum number of players/teams that are allowed
+				If you try to play with a number of players/teams not marked as compatbile by the area maker, the game will still let you, but will give you a warning. If needed, it will then copy-paste the existing leaders such that there are enough for everyone to control
+                    It should spawn them in the same coordinates, though maybe slightly offset
+                    It should try to generate leaders that don't exist yet, probably following the standard leader order. e.g. If the area has an Olimar, a Louie, and a Brittany, and a 4th player wants in, they should get the President
+			For simple-type areas and mission-type...
+				All players are under the same team
+                Each leader placed in the area is one player
+                The game just gives the earliest leader in the leader order to player 1, then to player 2, etc. e.g. if there's a Louie mob and an Olimar mob, P1 should get Olimar
+			For arena-type areas...
+                Players can be in teams or not; depends on their choices
+				The area maker must specify where team 1's leader goes, where team 2's leader goes, etc.
+                Alternatively, they must specify what leader mob corresponds to what team's leader, but since players can pick their leaders, this doesn't mean they will get the leader in the area
+                Players in the same team spawn in the same spot, though slightly offset, just like how if the game wants to spawn more leaders than there are available
+                The game should identify which team's Onion and flag is which, automatically, simply by picking the nearest one
+            Only areas that can be played with the victory rules specified in the current ruleset will actually appear in the list
+        Mission high scores need to be saved independently for each player amount
     Buried treasure
     Breadbugs should carry treasure
     Weather improvements
@@ -542,6 +601,7 @@ Misc things (so I don't forget)
         Make the mob sprite scale when hurt, like an elastic
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         Add a way for a GUI element's drawing routine to receive alpha as a parameter? And then each element should be responsible for drawing with that alpha. Could be useful for fade ins and fade outs
+        On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
     An option for the cursor to snap to the nearest object in-game, with an adjustable radius
     "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Kman)
     A Pikmin that's on fire and runs to the water should probably drown instead of continuing to be on fire
@@ -563,6 +623,7 @@ Misc things (so I don't forget)
         Global script variables
         More ideas of actions from Game Builder Garage's Nodon
     For intervals, use the code on the "misc info" text file
+    Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
     Water depth (thanks ThyCheshireCat)
         Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
     "I think carry weight should be displayed when you hover over an enemy corpse/pellet" (thanks Tenacious)

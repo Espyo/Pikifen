@@ -908,3 +908,28 @@ bool grab_closest_group_member() {
     }
     return false;
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if there are leaders alive. If not, then it finishes gameplay.
+ * Returns true if there is a total leader KO.
+ */
+bool process_total_leader_ko() {
+    size_t living_leaders = 0;
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        if(
+            game.states.gameplay->mobs.leaders[l]->health > 0 &&
+            !game.states.gameplay->mobs.leaders[l]->to_delete
+        ) {
+            living_leaders++;
+        }
+    }
+    if(living_leaders == 0) {
+        game.states.results->can_continue = false;
+        game.states.results->leader_ko = true;
+        game.states.gameplay->cur_leader_ptr = NULL;
+        game.states.gameplay->leave(gameplay_state::LEAVE_TO_FINISH);
+        return true;
+    }
+    return false;
+}

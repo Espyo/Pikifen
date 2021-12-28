@@ -270,6 +270,18 @@ void gameplay_state::do_gameplay_logic() {
             }
         }
         
+        if(!cur_leader_ptr) {
+            return;
+        }
+        
+        if(cur_leader_ptr->to_delete) {
+            if(process_total_leader_ko()) {
+                return;
+            } else {
+                change_to_next_leader(true, true);
+            }
+        }
+        
         for(size_t m = 0; m < n_mobs;) {
             //Mob deletion.
             mob* m_ptr = mobs.all[m];

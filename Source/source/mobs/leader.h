@@ -122,6 +122,6 @@ private:
 
 void change_to_next_leader(const bool forward, const bool force_success);
 bool grab_closest_group_member();
-void update_closest_group_member();
+bool process_total_leader_ko();
 
 #endif //ifndef LEADER_INCLUDED

@@ -135,8 +135,10 @@ void gameplay_state::do_logic() {
     if(!paused) {
         do_gameplay_logic();
     }
-    do_menu_logic();
-    do_aesthetic_logic();
+    if(cur_leader_ptr) {
+        do_menu_logic();
+        do_aesthetic_logic();
+    }
 }
 
 

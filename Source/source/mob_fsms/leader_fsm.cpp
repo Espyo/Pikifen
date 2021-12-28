@@ -1364,18 +1364,10 @@ void leader_fsm::decide_pluck_action(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
-    size_t living_leaders = 0;
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
-        if(game.states.gameplay->mobs.leaders[l]->health > 0) {
-            living_leaders++;
+    if(!process_total_leader_ko()) {
+        if(game.states.gameplay->cur_leader_ptr == m) {
+            change_to_next_leader(true, true);
         }
-    }
-    if(living_leaders == 0) {
-        game.states.results->can_continue = false;
-        game.states.results->leader_ko = true;
-        game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_FINISH);
-    } else if(game.states.gameplay->cur_leader_ptr == m) {
-        change_to_next_leader(true, true);
     }
     
     leader_fsm::release(m, info1, info2);
