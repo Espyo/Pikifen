@@ -90,8 +90,10 @@ public:
     //Read script variables from the area data.
     virtual void read_script_vars(const script_var_reader &svr);
     
-    static const float MISSED_ATTACK_DURATION;
+    static const float CIRCLE_OPPONENT_CHANCE_GROUNDED;
+    static const float CIRCLE_OPPONENT_CHANCE_PRE_LATCH;
     static const float FLIER_ABOVE_FLOOR_HEIGHT;
+    static const float MISSED_ATTACK_DURATION;
     
 protected:
     //Tick class-specific logic.

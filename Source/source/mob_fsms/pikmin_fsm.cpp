@@ -544,7 +544,48 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("going_to_opponent", PIKMIN_STATE_GOING_TO_OPPONENT); {
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
-            efc.run(pikmin_fsm::attack_reached_opponent);
+            efc.run(pikmin_fsm::decide_attack);
+        }
+        efc.new_event(MOB_EV_WHISTLED); {
+            efc.run(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EV_FOCUS_OFF_REACH); {
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_FOCUS_DIED); {
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(pikmin_fsm::be_attacked);
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
+            efc.run(pikmin_fsm::touched_eat_hitbox);
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_TOUCHED_SPRAY); {
+            efc.run(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("circling_opponent", PIKMIN_STATE_CIRCLING_OPPONENT); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::circle_opponent);
+        }
+        efc.new_event(MOB_EV_TIMER); {
+            efc.run(pikmin_fsm::decide_attack);
         }
         efc.new_event(MOB_EV_WHISTLED); {
             efc.run(pikmin_fsm::called);
@@ -1671,80 +1712,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
- * When the Pikmin reaches an opponent that it was chasing after,
- * and should now attack it. If it's a Pikmin that can latch, it will try so,
- * and if it fails, it just tries a grounded attack.
- * If it's a Pikmin that attacks via impact, it lunges.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::attack_reached_opponent(mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != NULL, m->print_state_history());
-    
-    if(m->invuln_period.time_left > 0) {
-        //Don't let the Pikmin attack while invulnerable. Otherwise, this can
-        //be exploited to let Pikmin vulnerable to a hazard attack the obstacle
-        //emitting said hazard.
-        return;
-    }
-    
-    pikmin* p_ptr = (pikmin*) m;
-    
-    if(p_ptr->pik_type->can_fly) {
-        p_ptr->can_move_in_midair = true;
-    }
-    
-    p_ptr->stop_chasing();
-    
-    switch(p_ptr->pik_type->attack_method) {
-    case PIKMIN_ATTACK_LATCH: {
-        dist d;
-        hitbox* closest_h =
-            p_ptr->focused_mob->get_closest_hitbox(
-                p_ptr->pos, HITBOX_TYPE_NORMAL, &d
-            );
-        float h_z = 0;
-        
-        if(closest_h) {
-            h_z = closest_h->z + p_ptr->focused_mob->z;
-        }
-        
-        if(
-            !closest_h || !closest_h->can_pikmin_latch ||
-            h_z > p_ptr->z + p_ptr->height ||
-            h_z + closest_h->height < p_ptr->z ||
-            d >= closest_h->radius + p_ptr->radius
-        ) {
-            //Can't latch. Let's just do a grounded attack instead.
-            p_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_GROUNDED);
-            
-        } else {
-            //Latch on.
-            p_ptr->latch(p_ptr->focused_mob, closest_h);
-            p_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_LATCHED);
-            
-        }
-        
-        break;
-        
-    }
-    case PIKMIN_ATTACK_IMPACT: {
-
-        //Lunge forward for an impact.
-        p_ptr->fsm.set_state(PIKMIN_STATE_IMPACT_LUNGE);
-        
-        break;
-        
-    }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a Pikmin is hit by an attack and gets knocked back.
  * m:
  *   The mob.
@@ -2133,6 +2100,37 @@ void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin has to circle around its opponent.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
+    m->stop_chasing();
+    m->stop_circling();
+    m->set_animation(PIKMIN_ANIM_WALKING);
+    
+    float circle_time = randomf(0.0f, 1.0f);
+    //Bias the time so that there's a higher chance of picking a close angle,
+    //and a lower chance of circling to a distant one. The Pikmin came here
+    //to attack, not dance!
+    circle_time *= circle_time;
+    circle_time += 0.5f;
+    printf("%f\n", circle_time);
+    m->set_timer(circle_time);
+    
+    bool go_cw = randomf(0.0f, 1.0f) <= 0.5f;
+    m->circle_around(
+        m->focused_mob, point(), m->focused_mob->radius + m->radius, go_cw,
+        m->get_base_speed(), true
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin has to clear any timer set.
  * m:
  *   The mob.
@@ -2143,6 +2141,112 @@ void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::clear_timer(mob* m, void* info1, void* info2) {
     m->set_timer(0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the Pikmin reaches an opponent that it was chasing after,
+ * and should now decide how to attack it.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
+    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    
+    if(m->invuln_period.time_left > 0) {
+        //Don't let the Pikmin attack while invulnerable. Otherwise, this can
+        //be exploited to let Pikmin vulnerable to a hazard attack the obstacle
+        //emitting said hazard.
+        return;
+    }
+    
+    pikmin* p_ptr = (pikmin*) m;
+    
+    if(p_ptr->pik_type->can_fly) {
+        p_ptr->can_move_in_midair = true;
+    }
+    
+    p_ptr->stop_chasing();
+    p_ptr->stop_circling();
+    
+    switch(p_ptr->pik_type->attack_method) {
+    case PIKMIN_ATTACK_LATCH: {
+        //This Pikmin latches on to things and/or smacks with its top.
+        dist d;
+        hitbox* closest_h =
+            p_ptr->focused_mob->get_closest_hitbox(
+                p_ptr->pos, HITBOX_TYPE_NORMAL, &d
+            );
+        float h_z = 0;
+        
+        if(closest_h) {
+            h_z = closest_h->z + p_ptr->focused_mob->z;
+        }
+        
+        if(
+            !closest_h || !closest_h->can_pikmin_latch ||
+            h_z > p_ptr->z + p_ptr->height ||
+            h_z + closest_h->height < p_ptr->z ||
+            d >= closest_h->radius + p_ptr->radius
+        ) {
+            //Can't latch to the closest hitbox.
+            
+            if(
+                randomf(0.0f, 1.0f) <=
+                pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
+                p_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
+            ) {
+                //Circle around the opponent a bit before smacking.
+                p_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);
+            } else {
+                //Smack.
+                p_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_GROUNDED);
+            }
+            
+        } else {
+            //Can latch to the closest hitbox.
+            
+            if(
+                randomf(0, 1) <=
+                pikmin::CIRCLE_OPPONENT_CHANCE_PRE_LATCH &&
+                p_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
+            ) {
+                //Circle around the opponent a bit before latching.
+                p_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);
+            } else {
+                //Latch on.
+                p_ptr->latch(p_ptr->focused_mob, closest_h);
+                p_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_LATCHED);
+            }
+            
+        }
+        
+        break;
+        
+    }
+    case PIKMIN_ATTACK_IMPACT: {
+        //This Pikmin attacks by lunching forward for an impact.
+        
+        if(
+            randomf(0, 1) <=
+            pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED &&
+            p_ptr->fsm.cur_state->id != PIKMIN_STATE_CIRCLING_OPPONENT
+        ) {
+            //Circle around the opponent a bit before lunging.
+            p_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);
+        } else {
+            //Go for the lunge.
+            p_ptr->fsm.set_state(PIKMIN_STATE_IMPACT_LUNGE);
+        }
+        
+        break;
+        
+    }
+    }
 }
 
 
@@ -3143,19 +3247,26 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
         }
     }
     
-    if(
+    bool can_continue_attacking =
         m->focused_mob &&
         m->focused_mob->health > 0 &&
         dist(m->pos, m->focused_mob->pos) <=
-        (m->radius + m->focused_mob->radius + GROUNDED_ATTACK_DIST)
-    ) {
+        (m->radius + m->focused_mob->radius + GROUNDED_ATTACK_DIST);
+        
+    if(!can_continue_attacking) {
+        //The opponent cannot be chased down. Become idle.
+        m->fsm.set_state(PIKMIN_STATE_IDLING);
+        
+    } else if(randomf(0.0f, 1.0f) <= pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED) {
+        //Circle around it a bit before attacking from a new angle.
+        p_ptr->fsm.set_state(PIKMIN_STATE_CIRCLING_OPPONENT);
+        
+    } else {
         //If the opponent is alive and within reach, let's stay in this state,
         //and attack some more!
         return;
+        
     }
-    
-    //The opponent cannot be chased down. Become idle.
-    m->fsm.set_state(PIKMIN_STATE_IDLING);
 }
 
 

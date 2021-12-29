@@ -21,8 +21,14 @@
 #include "mob.h"
 
 
-const float pikmin::MISSED_ATTACK_DURATION = 1.5f;
+//Height above the floor that a flying Pikmin prefers to stay at.
 const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 100.0f;
+//How long to remember a missed incoming attack for.
+const float pikmin::MISSED_ATTACK_DURATION = 1.5f;
+//Chance of circling the opponent instead of striking, when grounded.
+const float pikmin::CIRCLE_OPPONENT_CHANCE_GROUNDED = 0.2f;
+//Chance of circling the opponent instead of latching, if it can latch.
+const float pikmin::CIRCLE_OPPONENT_CHANCE_PRE_LATCH = 0.5f;
 
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin mob.
@@ -321,7 +327,7 @@ void pikmin::latch(mob* m, hitbox* h) {
 
 
 /* ----------------------------------------------------------------------------
- * Checks if the attack should miss, and returns the result.
+ * Checks if an incoming attack should miss, and returns the result.
  * If it was already decided that it missed in a previous frame, that's a
  * straight no. If not, it will roll with the hit rate to check.
  * If the attack is a miss, it also registers the miss, so that we can keep
