@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    The throw predictor thinks there'll be a collision if you and your Pikmin are on a very high sector, and you aim at the floor below
+    
     
     --- v0.22.0 ---
     Details

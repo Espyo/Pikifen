@@ -1180,7 +1180,8 @@ void gameplay_state::draw_throw_preview() {
                     cos(throw_v_angle) * cos(throw_v_angle)
                 )
             ) * x_at_edge * x_at_edge;
-            
+        y_at_edge += cur_leader_ptr->z;
+        
         //If the throwee would hit the wall at these coordinates, collision.
         if(edge_z >= y_at_edge && r < wall_collision_r) {
             wall_collision_r = r;
