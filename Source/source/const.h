@@ -47,7 +47,9 @@ const float DEF_ROTATION_SPEED = 630.0f;
 //The whistle can't go past this radius, by default.
 const float DEF_WHISTLE_RANGE = 80.0f;
 //How long to suck a mob in for, when being delivered to an Onion/ship.
-const float DELIVERY_SUCK_TIME = 1.5f;
+const float DELIVERY_SUCK_TIME = 2.0f;
+//How long to toss a mob in the air for, when being delivered to another mob.
+const float DELIVERY_TOSS_TIME = 1.0f;
 //If the Pikmin is within this distance of the mob, it can ground attack.
 const float GROUNDED_ATTACK_DIST = 5.0f;
 //If there's less than this much gap between the leader and group,

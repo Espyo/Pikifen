@@ -242,6 +242,8 @@ circling_info_struct::circling_info_struct(mob* m) :
  * Creates a new delivery information struct.
  */
 delivery_info_struct::delivery_info_struct() :
+    anim_type(DELIVERY_ANIM_SUCK),
+    anim_time_ratio_left(1.0f),
     intended_pik_type(nullptr) {
     
     color = game.config.carrying_color_move;

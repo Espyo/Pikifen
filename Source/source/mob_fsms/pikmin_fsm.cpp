@@ -2119,7 +2119,6 @@ void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
     //to attack, not dance!
     circle_time *= circle_time;
     circle_time += 0.5f;
-    printf("%f\n", circle_time);
     m->set_timer(circle_time);
     
     bool go_cw = randomf(0.0f, 1.0f) <= 0.5f;

@@ -55,21 +55,8 @@ void enemy::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    ALLEGRO_COLOR delivery_color = map_gray(0);
-    float delivery_time_ratio_left = LARGE_FLOAT;
-    
-    if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
-        delivery_color = delivery_info->color;
-        delivery_time_ratio_left = script_timer.get_ratio_left();
-    }
-    
-    get_sprite_bitmap_effects(
-        s_ptr, &eff, true, true,
-        delivery_time_ratio_left, delivery_color
-    );
-    
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true);
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
-    
     draw_status_effect_bmp(this, eff);
 }
 

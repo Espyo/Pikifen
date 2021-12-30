@@ -7,12 +7,10 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
-    
+
     --- v0.22.0 ---
     Details
-        As a day progresses, mob shadows should become invisible long before sunlight ends. During twilight there are no shadows, but there's still visibility
-        Two ways for Pikmin to deliver an object: slurp (and make the mob stay tinted for longer, and slurped faster), and tossed (for fragment bridges)
-        Improve the look of the ship's ring
+        Improve the look of the ship's ring, and move it a bit closer to the ship proper
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
             Add a transparent solid circle over the area being whistled
@@ -487,6 +485,7 @@ Next tasks (roughly sorted most important first)
         A way to control what parts of the area use what weather -- that way, a cave can use a blackout, or stay out of rain
         You should be able to tint water -- for instance, at sunset, making the water look a bit more pink
         A way to specify an ambiance sound effect that loops
+        As a day progresses, mob shadows should become invisible long before sunlight ends. IRL, during twilight there are no shadows, but there's still overall visibility. That said, for gameplay purposes there should probably always be a shadow, even if faint
     Replay
         A vector of "abstract" objects
             A parameter with info if they're an obstacle, Pikmin, leader, enemy, or treasure (reflects how they're drawn)

@@ -31,6 +31,7 @@
       <li>Pikmin are now better at detecting gates and other rectangular objects.</li>
       <li>Pikmin can now circle around enemies when in combat.</li>
       <li>Fixed leaders being able to grab group members from the other side of walls or objects with collision, like gates.</li>
+      <li>When Pikmin deliver an object to an Onion, ship, etc., the sucking animation is now more dynamic. Also, added a tossing animation for delivering bridge fragments to bridges.</li>
     </ul>
     
     <p><b>Content making changes</b></p>
@@ -42,6 +43,7 @@
       <li><a href="mob_type.html">Object types</a> now have a <code>status_vulnerabilities</code> block, which works like the other vulnerability blocks, but controls damage taken from status effects.</li>
       <li><a href="mob_type.html">Object types</a> now have a <code>terrain_radius</code> property, which controls their collision against walls.</li>
       <li>The <code>set_animation</code> <a href="events_and_actions.html">script action</a> now accepts the options <code>random_time</code> and <code>random_time_on_spawn</code>, to let the animation start on a random time, or start on a random time but only if the mob just spawned.</li>
+      <li>Added the <code>on_receive_delivery</code> <a href="events_and_actions.html">object script event</a>.</li>
     </ul>
 
     <h2 id="0.21.1">0.21.1</h2>

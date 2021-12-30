@@ -29,14 +29,8 @@ public:
     //Pile it belongs to, if any.
     pile* origin_pile;
     
-    //Disappear.
-    void vanish();
-    
     //Constructor.
     resource(const point &pos, resource_type* type, const float angle);
-    
-    //Mob drawing routine.
-    virtual void draw_mob();
 };
 
 

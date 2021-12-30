@@ -149,6 +149,10 @@
         <td>Triggered when the object takes a certain amount of damage after the last itch, as defined by the <code>itch_damage</code> property. It will also only trigger if it's been a certain amount of time since the last itch, as per <code>itch_time</code>. If the current state cannot handle this event, it will continue being sent until an event shows up that can handle it.</td>
       </tr>
       <tr>
+        <th style="text-align: left;"><code>on_receive_delivery</code></th>
+        <td>Triggered when another object gets delivered to it by carrier Pikmin.</td>
+      </tr>
+      <tr>
         <th style="text-align: left;"><code>on_receive_message</code></th>
         <td>Triggered when another object sent it a message. The contents of the message can be obtained with the <code>get_info</code> action.</td>
       </tr>

@@ -1,0 +1,7 @@
+script {
+    idling {
+        on_receive_delivery {
+            start_particles dust_explosion_small 0 0 200
+        }
+    }
+}

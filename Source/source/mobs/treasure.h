@@ -42,9 +42,6 @@ public:
     
     //Constructor.
     treasure(const point &pos, treasure_type* type, const float angle);
-    
-    //Mob drawing routine.
-    virtual void draw_mob();
 };
 
 

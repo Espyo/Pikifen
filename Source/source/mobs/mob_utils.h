@@ -59,6 +59,12 @@ enum CARRY_DESTINATIONS {
 };
 
 
+enum DELIVERY_ANIMATIONS {
+    DELIVERY_ANIM_SUCK,
+    DELIVERY_ANIM_TOSS,
+};
+
+
 enum CHASE_FLAGS {
     //The mob instantly teleports to the final destination.
     CHASE_FLAG_TELEPORT = 1,
@@ -211,6 +217,8 @@ struct circling_info_struct {
  * Information on a mob that's being delivered to an Onion, ship, etc.
  */
 struct delivery_info_struct {
+    DELIVERY_ANIMATIONS anim_type;
+    float anim_time_ratio_left;
     ALLEGRO_COLOR color;
     pikmin_type* intended_pik_type;
     delivery_info_struct();

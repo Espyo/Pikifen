@@ -85,8 +85,7 @@ void bridge_fsm::check_health(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Opens up the bridge. Updates all relevant sectors,
- * does the particle explosion, etc.
+ * Opens up the bridge.
  * m:
  *   The mob.
  * info1:

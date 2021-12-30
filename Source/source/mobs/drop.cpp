@@ -44,7 +44,7 @@ void drop::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true);
     
     eff.scale *= cur_scale;
     

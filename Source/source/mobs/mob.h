@@ -424,8 +424,7 @@ public:
     void get_sprite_bitmap_effects(
         sprite* s_ptr, bitmap_effect_info* info,
         const bool add_status, const bool add_sector_brightness,
-        const float delivery_time_ratio_left = LARGE_FLOAT,
-        const ALLEGRO_COLOR &delivery_color = al_map_rgb(0, 0, 0)
+        const bool add_delivery
     ) const;
     point get_sprite_center(sprite* s) const;
     point get_sprite_dimensions(sprite* s, point* scale = NULL) const;

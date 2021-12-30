@@ -129,6 +129,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
  */
 mob::~mob() {
     if(carry_info) delete carry_info;
+    if(delivery_info) delete delivery_info;
     if(group) delete group;
     if(parent) delete parent;
 }
@@ -1228,7 +1229,7 @@ void mob::draw_limb() {
     if(!sprite_to_use) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(sprite_to_use, &eff, true, true);
+    get_sprite_bitmap_effects(sprite_to_use, &eff, true, true, true);
     
     point parent_end;
     if(parent->limb_parent_body_part == INVALID) {
@@ -1290,7 +1291,7 @@ void mob::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true);
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true);
     
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }
@@ -1683,20 +1684,21 @@ float mob::get_latched_pikmin_weight() const {
  *   If true, add status effect changes to the result.
  * add_sector_brightness:
  *   If true, add sector brightness coloring to the result.
- * delivery_time_ratio_left:
- *   If not LARGE_FLOAT, this indicates how much time
- *   is left in the delivery, as a ratio, and the delivery's shrinking
- *   and glowing effects will be added to the result.
- * delivery_color:
- *   If applying a delivery effect, this is the color to make it glow in.
+ * add_delivery:
+ *   If true, add Onion/ship/etc. delivery changes to the result.
  */
 void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, bitmap_effect_info* info,
     const bool add_status, const bool add_sector_brightness,
-    const float delivery_time_ratio_left, const ALLEGRO_COLOR &delivery_color
+    const bool add_delivery
 ) const {
 
     const float STATUS_SHAKING_TIME_MULT = 60.0f;
+    const float DELIVERY_SUCK_SHAKING_TIME_MULT = 60.0f;
+    const float DELIVERY_SUCK_SHAKING_MULT = 4.0f;
+    const float DELIVERY_TOSS_WINDUP_MULT = 5.0f;
+    const float DELIVERY_TOSS_MULT = 40.0f;
+    const float DELIVERY_TOSS_X_OFFSET = 20.0f;
     
     info->translation =
         point(
@@ -1758,32 +1760,106 @@ void mob::get_sprite_bitmap_effects(
         info->tint_color.b *= (center_sector->brightness / 255.0);
     }
     
-    if(delivery_time_ratio_left != LARGE_FLOAT) {
-        ALLEGRO_COLOR new_glow;
-        float new_scale;
-        
-        if(delivery_time_ratio_left > 0.5) {
-            new_glow =
-                interpolate_color(
-                    delivery_time_ratio_left, 0.5, 1.0,
-                    delivery_color, map_gray(0)
-                );
-            new_scale = 1.0f;
-        } else {
-            new_glow = delivery_color;
-            new_scale =
-                interpolate_number(
-                    delivery_time_ratio_left, 0.0, 0.5,
-                    0.0f, 1.0f
-                );
+    if(add_delivery && delivery_info) {
+        switch(delivery_info->anim_type) {
+        case DELIVERY_ANIM_SUCK: {
+            ALLEGRO_COLOR new_glow;
+            float new_scale;
+            float new_x_offset =
+                sin(
+                    game.states.gameplay->area_time_passed *
+                    DELIVERY_SUCK_SHAKING_TIME_MULT
+                ) *
+                (1 - delivery_info->anim_time_ratio_left) *
+                DELIVERY_SUCK_SHAKING_MULT;
+                
+            if(delivery_info->anim_time_ratio_left > 0.6) {
+                //Changing color.
+                new_glow =
+                    interpolate_color(
+                        delivery_info->anim_time_ratio_left, 0.6, 1.0,
+                        delivery_info->color, map_gray(0)
+                    );
+                new_scale = 1.0f;
+            } else if(delivery_info->anim_time_ratio_left > 0.4) {
+                //Fixed in color.
+                new_glow = delivery_info->color;
+                new_scale = 1.0f;
+            } else {
+                //Shrinking.
+                new_glow = delivery_info->color;
+                new_scale =
+                    interpolate_number(
+                        delivery_info->anim_time_ratio_left, 0.0, 0.4,
+                        0.0f, 1.0f
+                    );
+                new_scale = ease(EASE_OUT, new_scale);
+            }
+            
+            info->glow_color.r =
+                clamp(info->glow_color.r + new_glow.r, 0.0f, 1.0f);
+            info->glow_color.g =
+                clamp(info->glow_color.g + new_glow.g, 0.0f, 1.0f);
+            info->glow_color.b =
+                clamp(info->glow_color.b + new_glow.b, 0.0f, 1.0f);
+            info->glow_color.a =
+                clamp(info->glow_color.a + new_glow.a, 0.0f, 1.0f);
+                
+            info->scale *= new_scale;
+            
+            info->translation.x += (new_x_offset * new_scale);
+            break;
+        }
+        case DELIVERY_ANIM_TOSS: {
+            point new_offset;
+            float new_scale = 1.0f;
+            
+            if(delivery_info->anim_time_ratio_left > 0.85) {
+                //Wind-up.
+                new_offset.y =
+                    sin(
+                        interpolate_number(
+                            delivery_info->anim_time_ratio_left,
+                            0.85f, 1.0f,
+                            0.0f, TAU / 2.0f
+                        )
+                    );
+                new_offset.y *= DELIVERY_TOSS_WINDUP_MULT;
+            } else {
+                //Toss.
+                new_offset.y =
+                    sin(
+                        interpolate_number(
+                            delivery_info->anim_time_ratio_left,
+                            0.0f, 0.85f,
+                            TAU / 2.0f, TAU
+                        )
+                    );
+                new_offset.y *= DELIVERY_TOSS_MULT;
+                //Randomly deviate left or right, slightly.
+                float deviation_mult = hash_nr(id) / (float) UINT32_MAX;
+                deviation_mult = deviation_mult * 2.0f - 1.0f;
+                deviation_mult *= DELIVERY_TOSS_X_OFFSET;
+                new_offset.x =
+                    interpolate_number(
+                        delivery_info->anim_time_ratio_left,
+                        0.0f, 0.85f,
+                        1.0f, 0.0f
+                    ) * deviation_mult;
+                new_scale =
+                    interpolate_number(
+                        delivery_info->anim_time_ratio_left,
+                        0.0f, 0.85f,
+                        0.1f, 1.0f
+                    );
+            }
+            
+            info->translation += new_offset;
+            info->scale *= new_scale;
+            break;
+        }
         }
         
-        info->glow_color.r = clamp(info->glow_color.r + new_glow.r, 0.0f, 1.0f);
-        info->glow_color.g = clamp(info->glow_color.g + new_glow.g, 0.0f, 1.0f);
-        info->glow_color.b = clamp(info->glow_color.b + new_glow.b, 0.0f, 1.0f);
-        info->glow_color.a = clamp(info->glow_color.a + new_glow.a, 0.0f, 1.0f);
-        
-        info->scale *= new_scale;
     }
 }
 
@@ -3115,6 +3191,14 @@ void mob::tick_misc_logic(const float delta_t) {
             }
             member->leave_group();
         }
+    }
+    
+    //Delivery stuff.
+    if(
+        delivery_info &&
+        fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED
+    ) {
+        delivery_info->anim_time_ratio_left = script_timer.get_ratio_left();
     }
 }
 

@@ -122,6 +122,7 @@ void resource_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("being_delivered", RESOURCE_STATE_BEING_DELIVERED); {
         efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(resource_fsm::start_being_delivered);
             efc.run(gen_mob_fsm::start_being_delivered);
         }
         efc.new_event(MOB_EV_TIMER); {
@@ -218,6 +219,25 @@ void resource_fsm::lose_momentum(mob* m, void* info1, void* info2) {
     m->speed.x = 0;
     m->speed.y = 0;
     m->speed_z = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a resource starts being delivered.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void resource_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
+    if(
+        m->carry_info->intended_mob &&
+        m->carry_info->intended_mob->type->category->id == MOB_CATEGORY_BRIDGES
+    ) {
+        m->delivery_info->anim_type = DELIVERY_ANIM_TOSS;
+    }
 }
 
 
