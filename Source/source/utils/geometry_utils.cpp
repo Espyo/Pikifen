@@ -806,7 +806,7 @@ float get_angle_smallest_dif(const float a1, const float a2) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the closest point in a line to a given point.
+ * Returns the closest point in a line segment to a given point.
  * l1:
  *   Starting point of the line segment.
  * l2:
@@ -1027,6 +1027,88 @@ bool is_point_in_triangle(
     }
     
     return ((b1 == b2) && (b2 == b3));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a line segment intersects with a rotated rectangle or not.
+ * lp1:
+ *   First point of the line segment.
+ * lp2:
+ *   Second point of the line segment.
+ * rect_center:
+ *   Center point of the rectangle.
+ * rect_dim:
+ *   Width and height of the rectangle.
+ * rect_angle:
+ *   Angle of the rectangle.
+ */
+bool line_segment_intersects_rotated_rectangle(
+    const point &lp1, const point &lp2,
+    const point &rect_center, const point &rect_dim, const float rect_angle
+) {
+    //First, transform the coordinates so the rectangle is axis-aligned, and
+    //the rectangle's center is at the origin.
+    point delta_p1 = lp1 - rect_center;
+    delta_p1 = rotate_point(delta_p1, -rect_angle);
+    point delta_p2 = lp2 - rect_center;
+    delta_p2 = rotate_point(delta_p2, -rect_angle);
+    
+    //Now, check if the line intersects the rectangle.
+    point half_dim = rect_dim / 2.0f;
+    //Right side.
+    if(
+        line_segments_intersect(
+            delta_p1,
+            delta_p2,
+            point(half_dim.x, -half_dim.y),
+            point(half_dim.x, half_dim.y),
+            NULL
+        )
+    ) {
+        return true;
+    }
+    
+    //Top side.
+    if(
+        line_segments_intersect(
+            delta_p1,
+            delta_p2,
+            point(-half_dim.x, -half_dim.y),
+            point(half_dim.x, -half_dim.y),
+            NULL
+        )
+    ) {
+        return true;
+    }
+    
+    //Left side.
+    if(
+        line_segments_intersect(
+            delta_p1,
+            delta_p2,
+            point(-half_dim.x, -half_dim.y),
+            point(-half_dim.x, half_dim.y),
+            NULL
+        )
+    ) {
+        return true;
+    }
+    
+    //Bottom side.
+    if(
+        line_segments_intersect(
+            delta_p1,
+            delta_p2,
+            point(-half_dim.x, half_dim.y),
+            point(half_dim.x, half_dim.y),
+            NULL
+        )
+    ) {
+        return true;
+    }
+    
+    return false;
 }
 
 

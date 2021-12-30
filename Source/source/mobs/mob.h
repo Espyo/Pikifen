@@ -367,6 +367,7 @@ public:
     hitbox* get_closest_hitbox(
         const point &p, const size_t h_type = INVALID, dist* d = NULL
     ) const;
+    bool has_clear_line(mob* target_mob) const;
     
     void chase(
         point* orig_coords, float* orig_z,

@@ -145,6 +145,18 @@ float linear_dist_to_angular(const float linear_dist, const float radius);
 bool line_segments_are_collinear(
     const point &a, const point &b, const point &c, const point &d
 );
+bool line_segment_intersects_rotated_rectangle(
+    const point &lp1, const point &lp2,
+    const point &rect_center, const point &rect_dim, const float rect_angle
+);
+bool line_segments_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    float* final_l1r, float* final_l2r
+);
+bool line_segments_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    point* intersection
+);
 bool lines_intersect(
     const point &l1p1, const point &l1p2,
     const point &l2p1, const point &l2p2,
@@ -154,14 +166,6 @@ bool lines_intersect(
     const point &l1p1, const point &l1p2,
     const point &l2p1, const point &l2p2,
     point* final_point
-);
-bool line_segments_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    float* final_l1r, float* final_l2r
-);
-bool line_segments_intersect(
-    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
-    point* intersection
 );
 void move_point(
     const point &start, const point &target,

@@ -6,15 +6,13 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    The throw predictor thinks there'll be a collision if you and your Pikmin are on a very high sector, and you aim at the floor below
     
     --- v0.22.0 ---
     Details
-        Every time a Pikmin is meant to attack without latching, there should be a chance that it circles around the enemy for a random time, before it goes for the attack
-        A leader can whistle another from a gate and grab them
         As a day progresses, mob shadows should become invisible long before sunlight ends. During twilight there are no shadows, but there's still visibility
-        Improve the look of the ship's ring
         Two ways for Pikmin to deliver an object: slurp (and make the mob stay tinted for longer, and slurped faster), and tossed (for fragment bridges)
+        Improve the look of the ship's ring
         Make the whistle look prettier and more like a mix between the classic and the new whistle
             Suggestion: Make the light rings not be ugly circles, but sprites instead
             Add a transparent solid circle over the area being whistled
@@ -40,6 +38,8 @@ Next tasks (roughly sorted most important first)
         Rename
             "flail_to_whistle" is really "flail_to_leader"
             SECTOR_STEP to STEP_HEIGHT
+            Any geometry function involving line segments should say "line_seg", not "line" or "line_segment"
+            Geometry-related functions should be sorted alphabetically, e.g. "circle_intersects_rectangle", not "rectangle_intersects_circle"
         Document every class member with a comment
         Document every enum, and every enum value, with a comment
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them

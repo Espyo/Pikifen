@@ -1882,6 +1882,120 @@ void mob::handle_status_effect_loss(status_type* sta_type) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether or not this mob has a clear line towards another mob.
+ * In other words, if a straight line is drawn between both,
+ * is this line clear, or is it interrupted by a wall or pushing mob?
+ * target_mob:
+ *   The mob to check against.
+ */
+bool mob::has_clear_line(mob* target_mob) const {
+    //First, get a bounding box of the line to check.
+    //This will help with performance later.
+    point bb_tl(
+        std::min(pos.x, target_mob->pos.x),
+        std::min(pos.y, target_mob->pos.y)
+    );
+    point bb_br(
+        std::max(pos.x, target_mob->pos.x),
+        std::max(pos.y, target_mob->pos.y)
+    );
+    
+    //Check against other mobs.
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        mob* m_ptr = game.states.gameplay->mobs.all[m];
+        
+        if(!m_ptr->type->pushes) continue;
+        if(m_ptr == this || m_ptr == target_mob) continue;
+        if(
+            !rectangles_intersect(
+                bb_tl, bb_br,
+                m_ptr->pos - m_ptr->max_span,
+                m_ptr->pos + m_ptr->max_span
+            )
+        ) {
+            continue;
+        }
+        
+        if(m_ptr->rectangular_dim.x != 0.0f) {
+            if(
+                line_segment_intersects_rotated_rectangle(
+                    pos, target_mob->pos,
+                    m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle
+                )
+            ) {
+                return false;
+            }
+        } else {
+            if(
+                circle_intersects_line(
+                    m_ptr->pos, m_ptr->radius,
+                    pos, target_mob->pos,
+                    NULL, NULL
+                )
+            ) {
+                return false;
+            }
+        }
+    }
+    
+    //Check against walls.
+    set<edge*> candidate_edges;
+    if(
+        !game.cur_area_data.bmap.get_edges_in_region(
+            bb_tl, bb_br,
+            candidate_edges
+        )
+    ) {
+        //Somehow out of bounds.
+        return false;
+    }
+    
+    for(auto e_ptr : candidate_edges) {
+        if(
+            !line_segments_intersect(
+                pos, target_mob->pos,
+                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                NULL
+            )
+        ) {
+            continue;
+        }
+        for(size_t s = 0; s < 2; ++s) {
+            if(!e_ptr->sectors[s]) {
+                //No sectors means there's out-of-bounds geometry in the way.
+                return false;
+            }
+            if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
+                //If a blocking sector is in the way, no clear line.
+                return false;
+            }
+        }
+        if(
+            e_ptr->sectors[0]->z < z &&
+            e_ptr->sectors[0]->z < target_mob->z &&
+            e_ptr->sectors[1]->z < z &&
+            e_ptr->sectors[1]->z < target_mob->z
+        ) {
+            //If both mobs are above both sectors, it doesn't count.
+            continue;
+        }
+        if(
+            fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
+            SECTOR_STEP
+        ) {
+            //The walls are more than stepping height in difference.
+            //So it's a genuine wall in the way.
+            return false;
+        }
+    }
+    
+    //Seems good!
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Starts holding the specified mob.
  * m:
  *   Mob to start holding.

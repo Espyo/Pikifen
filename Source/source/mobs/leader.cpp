@@ -885,28 +885,44 @@ void change_to_next_leader(const bool forward, const bool force_success) {
  * Returns true on success, false on failure.
  */
 bool grab_closest_group_member() {
-    if(game.states.gameplay->closest_group_member) {
-        mob_event* grabbed_ev =
-            game.states.gameplay->closest_group_member->fsm.get_event(
-                MOB_EV_GRABBED_BY_FRIEND
-            );
-        mob_event* grabber_ev =
-            game.states.gameplay->cur_leader_ptr->fsm.get_event(
-                LEADER_EV_HOLDING
-            );
-        if(grabber_ev && grabbed_ev) {
-            game.states.gameplay->cur_leader_ptr->fsm.run_event(
-                LEADER_EV_HOLDING,
-                (void*) game.states.gameplay->closest_group_member
-            );
-            grabbed_ev->run(
-                game.states.gameplay->closest_group_member,
-                (void*) game.states.gameplay->closest_group_member
-            );
-            return true;
-        }
+    //Check if there is even a closest group member.
+    if(!game.states.gameplay->closest_group_member) {
+        return false;
     }
-    return false;
+    
+    //Check if the leader can grab, and the group member can be grabbed.
+    mob_event* grabbed_ev =
+        game.states.gameplay->closest_group_member->fsm.get_event(
+            MOB_EV_GRABBED_BY_FRIEND
+        );
+    mob_event* grabber_ev =
+        game.states.gameplay->cur_leader_ptr->fsm.get_event(
+            LEADER_EV_HOLDING
+        );
+    if(!grabber_ev || !grabbed_ev) {
+        return false;
+    }
+    
+    //Check if there's anything in the way.
+    if(
+        !game.states.gameplay->cur_leader_ptr->has_clear_line(
+            game.states.gameplay->closest_group_member
+        )
+    ) {
+        return false;
+    }
+    
+    //Run the grabbing logic then.
+    grabber_ev->run(
+        game.states.gameplay->cur_leader_ptr,
+        (void*) game.states.gameplay->closest_group_member
+    );
+    grabbed_ev->run(
+        game.states.gameplay->closest_group_member,
+        (void*) game.states.gameplay->cur_leader_ptr
+    );
+    
+    return true;
 }
 
 
