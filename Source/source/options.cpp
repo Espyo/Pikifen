@@ -48,7 +48,6 @@ const size_t options_struct::DEF_MAX_PARTICLES = 200;
 const bool options_struct::DEF_MIPMAPS_ENABLED = true;
 const bool options_struct::DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] =
 {true, false, false, false};
-const bool options_struct::DEF_PRETTY_WHISTLE = true;
 const bool options_struct::DEF_SMOOTH_SCALING = true;
 const unsigned int options_struct::DEF_TARGET_FPS = 60;
 const bool options_struct::DEF_TRUE_FULLSCREEN = false;
@@ -86,7 +85,6 @@ options_struct::options_struct() :
     joystick_min_deadzone(DEF_JOYSTICK_MIN_DEADZONE),
     max_particles(DEF_MAX_PARTICLES),
     mipmaps_enabled(DEF_MIPMAPS_ENABLED),
-    pretty_whistle(DEF_PRETTY_WHISTLE),
     smooth_scaling(DEF_SMOOTH_SCALING),
     target_fps(DEF_TARGET_FPS),
     true_fullscreen(DEF_TRUE_FULLSCREEN),
@@ -203,7 +201,6 @@ void options_struct::load(data_node* file) {
     rs.set("max_particles", max_particles);
     rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("mipmaps", mipmaps_enabled);
-    rs.set("pretty_whistle", pretty_whistle);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("true_fullscreen", true_fullscreen);
@@ -232,7 +229,7 @@ void options_struct::load(data_node* file) {
         intended_win_w = std::max(1, s2i(resolution_parts[0]));
         intended_win_h = std::max(1, s2i(resolution_parts[1]));
     }
-
+    
     //Force the editor styles to be opaque, otherwise there can be problems.
     editor_primary_color.a = 1.0f;
     editor_secondary_color.a = 1.0f;
@@ -492,12 +489,6 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "mipmaps",
             b2s(mipmaps_enabled)
-        )
-    );
-    file->add(
-        new data_node(
-            "pretty_whistle",
-            b2s(pretty_whistle)
         )
     );
     file->add(

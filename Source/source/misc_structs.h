@@ -41,6 +41,8 @@ using std::vector;
  */
 struct asset_file_names_struct {
     string area_name_font;
+    string bright_circle;
+    string bright_ring;
     string bubble_box;
     string checkbox_check;
     string counter_font;
@@ -63,7 +65,6 @@ struct asset_file_names_struct {
     string pikmin_spirit;
     string rock;
     string shadow;
-    string ship_beam;
     string smack;
     string smoke;
     string sparkle;
@@ -469,6 +470,8 @@ struct script_var_reader {
  */
 struct system_asset_list {
     //Bitmaps.
+    ALLEGRO_BITMAP* bmp_bright_circle;
+    ALLEGRO_BITMAP* bmp_bright_ring;
     ALLEGRO_BITMAP* bmp_bubble_box;
     ALLEGRO_BITMAP* bmp_checkbox_check;
     ALLEGRO_BITMAP* bmp_cursor;
@@ -486,7 +489,6 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_pikmin_spirit;
     ALLEGRO_BITMAP* bmp_rock;
     ALLEGRO_BITMAP* bmp_shadow;
-    ALLEGRO_BITMAP* bmp_ship_beam;
     ALLEGRO_BITMAP* bmp_smack;
     ALLEGRO_BITMAP* bmp_smoke;
     ALLEGRO_BITMAP* bmp_sparkle;

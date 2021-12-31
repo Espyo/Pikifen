@@ -58,7 +58,6 @@ struct options_struct {
     static const size_t DEF_MAX_PARTICLES;
     static const bool DEF_MIPMAPS_ENABLED;
     static const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
-    static const bool DEF_PRETTY_WHISTLE;
     static const bool DEF_SMOOTH_SCALING;
     static const unsigned int DEF_TARGET_FPS;
     static const bool DEF_TRUE_FULLSCREEN;
@@ -126,8 +125,6 @@ struct options_struct {
     bool mipmaps_enabled;
     //For each player, does the mouse move their leader's cursor?
     bool mouse_moves_cursor[MAX_PLAYERS];
-    //False for a more basic whistle, to save on resources.
-    bool pretty_whistle;
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling;
     //Target framerate.

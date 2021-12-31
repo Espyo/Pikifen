@@ -293,6 +293,15 @@ const unsigned char WHISTLE_RING_COLORS[N_WHISTLE_RING_COLORS][3] = {
     {0,   255, 0  },
     {128, 255, 0  }
 };
+const unsigned char N_WHISTLE_DOT_COLORS = 6;
+const unsigned char WHISTLE_DOT_COLORS[N_WHISTLE_DOT_COLORS][3] = {
+    {214, 25,  25 }, //Red.
+    {242, 134, 48 }, //Orange.
+    {143, 227, 58 }, //Lime.
+    {55,  222, 222}, //Cyan.
+    {30,  30,  219}, //Blue.
+    {133, 28,  237}, //Purple.
+};
 
 
 #endif //ifndef CONST_INCLUDED

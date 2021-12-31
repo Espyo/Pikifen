@@ -104,7 +104,7 @@ void ship::draw_mob() {
         float beam_diameter = shi_type->beam_radius * 2.0f * beam_scale;
         
         draw_bitmap(
-            game.sys_assets.bmp_ship_beam,
+            game.sys_assets.bmp_bright_ring,
             beam_final_pos, point(beam_diameter, beam_diameter),
             0.0f,
             change_alpha(beam_color, beam_alpha)

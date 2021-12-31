@@ -27,6 +27,8 @@
  */
 asset_file_names_struct::asset_file_names_struct() :
     area_name_font("Area_name_font.png"),
+    bright_circle("Bright_circle.png"),
+    bright_ring("Bright_ring.png"),
     bubble_box("Bubble_box.png"),
     checkbox_check("Checkbox_check.png"),
     counter_font("Counter_font.png"),
@@ -48,7 +50,6 @@ asset_file_names_struct::asset_file_names_struct() :
     pikmin_spirit("Pikmin_spirit.png"),
     rock("Rock.png"),
     shadow("Shadow.png"),
-    ship_beam("Ship_beam.png"),
     smack("Smack.png"),
     smoke("Smoke.png"),
     sparkle("Sparkle.png"),
@@ -76,6 +77,8 @@ void asset_file_names_struct::load(data_node* file) {
     reader_setter rs(file);
     
     rs.set("area_name_font", area_name_font);
+    rs.set("bright_circle", bright_circle);
+    rs.set("bright_ring", bright_ring);
     rs.set("bubble_box", bubble_box);
     rs.set("checkbox_check", checkbox_check);
     rs.set("counter_font", counter_font);
@@ -96,7 +99,6 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("pikmin_silhouette", pikmin_silhouette);
     rs.set("pikmin_spirit", pikmin_spirit);
     rs.set("shadow", shadow);
-    rs.set("ship_beam", ship_beam);
     rs.set("smack", smack);
     rs.set("smoke", smoke);
     rs.set("sparkle", sparkle);
@@ -1716,6 +1718,8 @@ void subgroup_type_manager::register_type(
  * Creates a system asset list struct.
  */
 system_asset_list::system_asset_list():
+    bmp_bright_circle(nullptr),
+    bmp_bright_ring(nullptr),
     bmp_bubble_box(nullptr),
     bmp_checkbox_check(nullptr),
     bmp_cursor(nullptr),
@@ -1732,7 +1736,6 @@ system_asset_list::system_asset_list():
     bmp_pikmin_spirit(nullptr),
     bmp_rock(nullptr),
     bmp_shadow(nullptr),
-    bmp_ship_beam(nullptr),
     bmp_smack(nullptr),
     bmp_smoke(nullptr),
     bmp_sparkle(nullptr),
@@ -1917,10 +1920,7 @@ void whistle_struct::tick(
     if(whistling) {
         //Create rings.
         next_ring_timer.tick(delta_t);
-        
-        if(game.options.pretty_whistle) {
-            next_dot_timer.tick(delta_t);
-        }
+        next_dot_timer.tick(delta_t);
         
         for(unsigned char d = 0; d < 6; ++d) {
             if(dot_radius[d] == -1) continue;

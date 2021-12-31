@@ -575,84 +575,60 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             cur_leader_ptr->pos.y + sin(cursor_angle) * whistle.rings[r]
         );
         unsigned char n = whistle.ring_colors[r];
-        al_draw_circle(
-            pos.x, pos.y, 8,
+        draw_bitmap(
+            game.sys_assets.bmp_bright_ring,
+            pos,
+            point(16.0f, 16.0f),
+            0.0f,
             al_map_rgba(
                 WHISTLE_RING_COLORS[n][0],
                 WHISTLE_RING_COLORS[n][1],
                 WHISTLE_RING_COLORS[n][2],
                 192
-            ), 3
+            )
         );
     }
     
     if(whistle.radius > 0 || whistle.fade_timer.time_left > 0.0f) {
-        if(game.options.pretty_whistle) {
-            unsigned char n_dots = 16 * 6;
-            for(unsigned char d = 0; d < 6; ++d) {
-                for(unsigned char d2 = 0; d2 < 16; ++d2) {
-                    unsigned char current_dot = d2 * 6 + d;
-                    float angle =
-                        TAU / n_dots *
-                        current_dot -
-                        WHISTLE_DOT_SPIN_SPEED * area_time_passed;
-                        
-                    point dot_pos(
-                        whistle.center.x +
-                        cos(angle) * whistle.dot_radius[d],
-                        whistle.center.y +
-                        sin(angle) * whistle.dot_radius[d]
+        al_draw_filled_circle(
+            whistle.center.x, whistle.center.y,
+            whistle.radius,
+            al_map_rgba(48, 128, 120, 64)
+        );
+        
+        unsigned char n_dots = 16 * N_WHISTLE_DOT_COLORS;
+        for(unsigned char d = 0; d < N_WHISTLE_DOT_COLORS; ++d) {
+            for(unsigned char d2 = 0; d2 < 16; ++d2) {
+                unsigned char current_dot = d2 * N_WHISTLE_DOT_COLORS + d;
+                float angle =
+                    TAU / n_dots *
+                    current_dot -
+                    WHISTLE_DOT_SPIN_SPEED * area_time_passed;
+                    
+                point dot_pos(
+                    whistle.center.x +
+                    cos(angle) * whistle.dot_radius[d],
+                    whistle.center.y +
+                    sin(angle) * whistle.dot_radius[d]
+                );
+                
+                ALLEGRO_COLOR dot_color =
+                    al_map_rgb(
+                        WHISTLE_DOT_COLORS[d][0],
+                        WHISTLE_DOT_COLORS[d][1],
+                        WHISTLE_DOT_COLORS[d][2]
                     );
-                    
-                    ALLEGRO_COLOR c;
-                    float alpha_mult;
-                    if(whistle.fade_timer.time_left > 0.0f)
-                        alpha_mult = whistle.fade_timer.get_ratio_left();
-                    else
-                        alpha_mult = 1;
-                        
-                    switch(d) {
-                    case 0: {
-                        //Red.
-                        c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
-                        break;
-                    } case 1: {
-                        //Orange.
-                        c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
-                        break;
-                    } case 2: {
-                        //Lime.
-                        c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
-                        break;
-                    } case 3: {
-                        //Cyan.
-                        c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
-                        break;
-                    } case 4: {
-                        //Blue.
-                        c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
-                        break;
-                    } default: {
-                        //Purple.
-                        c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
-                        break;
-                    }
-                    }
-                    
-                    al_draw_filled_circle(dot_pos.x, dot_pos.y, 2, c);
+                unsigned char dot_alpha = 255;
+                if(whistle.fade_timer.time_left > 0.0f) {
+                    dot_alpha = 255 * whistle.fade_timer.get_ratio_left();
                 }
+                
+                draw_bitmap(
+                    game.sys_assets.bmp_bright_circle,
+                    dot_pos, point(5.0f, 5.0f),
+                    0.0f, change_alpha(dot_color, dot_alpha)
+                );
             }
-        } else {
-            unsigned char alpha = whistle.fade_timer.get_ratio_left() * 255;
-            float radius = whistle.fade_radius;
-            if(whistle.radius > 0) {
-                alpha = 255;
-                radius = whistle.radius;
-            }
-            al_draw_circle(
-                whistle.center.x, whistle.center.y, radius,
-                al_map_rgba(192, 192, 0, alpha), 2
-            );
         }
     }
     

@@ -10,9 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        Make the whistle look prettier and more like a mix between the classic and the new whistle
-            Suggestion: Make the light rings not be ugly circles, but sprites instead
-            Add a transparent solid circle over the area being whistled
         Smoother trail behind the mouse cursor
             https://blog.scottlogic.com/2019/11/18/drawing-lines-with-webgl.html
         Health wheels should be slightly transparent

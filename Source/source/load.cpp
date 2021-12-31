@@ -1023,6 +1023,10 @@ void load_misc_graphics() {
     al_set_display_icon(game.display, game.sys_assets.bmp_icon);
     
     //Graphics.
+    game.sys_assets.bmp_bright_circle =
+        game.bitmaps.get(game.asset_file_names.bright_circle);
+    game.sys_assets.bmp_bright_ring =
+        game.bitmaps.get(game.asset_file_names.bright_ring);
     game.sys_assets.bmp_bubble_box =
         game.bitmaps.get(game.asset_file_names.bubble_box);
     game.sys_assets.bmp_checkbox_check =
@@ -1053,8 +1057,6 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.rock);
     game.sys_assets.bmp_shadow =
         game.bitmaps.get(game.asset_file_names.shadow);
-    game.sys_assets.bmp_ship_beam =
-        game.bitmaps.get(game.asset_file_names.ship_beam);
     game.sys_assets.bmp_smack =
         game.bitmaps.get(game.asset_file_names.smack);
     game.sys_assets.bmp_smoke =
@@ -1715,6 +1717,8 @@ void unload_liquids() {
  * Unloads miscellaneous graphics, sounds, and other resources.
  */
 void unload_misc_resources() {
+    game.bitmaps.detach(game.sys_assets.bmp_bright_circle);
+    game.bitmaps.detach(game.sys_assets.bmp_bright_ring);
     game.bitmaps.detach(game.sys_assets.bmp_bubble_box);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_check);
     game.bitmaps.detach(game.sys_assets.bmp_cursor);
@@ -1731,7 +1735,6 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_pikmin_spirit);
     game.bitmaps.detach(game.sys_assets.bmp_rock);
     game.bitmaps.detach(game.sys_assets.bmp_shadow);
-    game.bitmaps.detach(game.sys_assets.bmp_ship_beam);
     game.bitmaps.detach(game.sys_assets.bmp_smack);
     game.bitmaps.detach(game.sys_assets.bmp_smoke);
     game.bitmaps.detach(game.sys_assets.bmp_sparkle);
