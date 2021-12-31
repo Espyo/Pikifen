@@ -48,6 +48,7 @@ asset_file_names_struct::asset_file_names_struct() :
     pikmin_spirit("Pikmin_spirit.png"),
     rock("Rock.png"),
     shadow("Shadow.png"),
+    ship_beam("Ship_beam.png"),
     smack("Smack.png"),
     smoke("Smoke.png"),
     sparkle("Sparkle.png"),
@@ -95,6 +96,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("pikmin_silhouette", pikmin_silhouette);
     rs.set("pikmin_spirit", pikmin_spirit);
     rs.set("shadow", shadow);
+    rs.set("ship_beam", ship_beam);
     rs.set("smack", smack);
     rs.set("smoke", smoke);
     rs.set("sparkle", sparkle);
@@ -1730,6 +1732,7 @@ system_asset_list::system_asset_list():
     bmp_pikmin_spirit(nullptr),
     bmp_rock(nullptr),
     bmp_shadow(nullptr),
+    bmp_ship_beam(nullptr),
     bmp_smack(nullptr),
     bmp_smoke(nullptr),
     bmp_sparkle(nullptr),

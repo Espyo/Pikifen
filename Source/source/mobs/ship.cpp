@@ -8,15 +8,20 @@
  * Ship class and ship-related functions.
  */
 
+#include <allegro5/allegro_color.h>
+
 #include "ship.h"
 
+#include "../functions.h"
 #include "../drawing.h"
 #include "../game.h"
 #include "../utils/geometry_utils.h"
 #include "leader.h"
 
 
-const unsigned int ship::SHIP_BEAM_RING_COLOR_SPEED = 255;
+const float ship::SHIP_BEAM_RING_HUE_SPEED = 200;
+const float ship::SHIP_BEAM_RING_ANIM_DUR = 2.0f;
+
 
 /* ----------------------------------------------------------------------------
  * Creates a ship mob.
@@ -36,12 +41,6 @@ ship::ship(const point &pos, ship_type* type, float angle) :
     nest = new pikmin_nest_struct(this, shi_type->nest);
     
     beam_final_pos += pos;
-    beam_ring_color[0] = 0;
-    beam_ring_color[1] = 0;
-    beam_ring_color[2] = 0;
-    beam_ring_color_up[0] = true;
-    beam_ring_color_up[1] = true;
-    beam_ring_color_up[2] = true;
 }
 
 
@@ -60,25 +59,65 @@ void ship::draw_mob() {
 
     mob::draw_mob();
     
-    al_draw_circle(
-        beam_final_pos.x,
-        beam_final_pos.y,
-        shi_type->beam_radius,
-        al_map_rgb(
-            beam_ring_color[0],
-            beam_ring_color[1],
-            beam_ring_color[2]
-        ),
-        2
-    );
+    float beam_hue =
+        fmod(
+            game.states.gameplay->area_time_passed *
+            SHIP_BEAM_RING_HUE_SPEED,
+            360.0f
+        );
+    ALLEGRO_COLOR beam_color = al_color_hsl(beam_hue, 0.90f, 0.90f);
+    
+    for(unsigned char b = 0; b < 2; ++b) {
+        float beam_anim_ratio =
+            fmod(
+                game.states.gameplay->area_time_passed +
+                SHIP_BEAM_RING_ANIM_DUR * 0.4f * b,
+                SHIP_BEAM_RING_ANIM_DUR
+            );
+        beam_anim_ratio /= SHIP_BEAM_RING_ANIM_DUR;
+        unsigned char beam_alpha = 255;
+        
+        if(beam_anim_ratio <= 0.4f) {
+            //Fading into existence.
+            beam_alpha =
+                interpolate_number(
+                    beam_anim_ratio,
+                    0.0f, 0.4f,
+                    0, 255
+                );
+        } else {
+            //Shrinking down.
+            beam_alpha =
+                interpolate_number(
+                    beam_anim_ratio,
+                    0.4f, 1.0f,
+                    255, 0
+                );
+        }
+        
+        float beam_scale =
+            interpolate_number(
+                ease(EASE_IN, beam_anim_ratio),
+                0.0f, 1.0f,
+                1.0f, 0.3f
+            );
+        float beam_diameter = shi_type->beam_radius * 2.0f * beam_scale;
+        
+        draw_bitmap(
+            game.sys_assets.bmp_ship_beam,
+            beam_final_pos, point(beam_diameter, beam_diameter),
+            0.0f,
+            change_alpha(beam_color, beam_alpha)
+        );
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Heals a leader, causes particle effects, etc.
- * l:
- *   Leader to heal.
- */
+* Heals a leader, causes particle effects, etc.
+* l:
+*   Leader to heal.
+*/
 void ship::heal_leader(leader* l) const {
     l->set_health(false, true, 1.0);
     
@@ -127,25 +166,5 @@ void ship::read_script_vars(const script_var_reader &svr) {
  *   How many seconds to tick by.
  */
 void ship::tick_class_specifics(const float delta_t) {
-    //The way the beam ring works is that the three color components are saved.
-    //Each frame, we increase them or decrease them
-    //(if it reaches 255, set it to decrease, if 0, set it to increase).
-    //Each component increases/decreases at a different speed,
-    //with red being the slowest and blue the fastest.
-    for(unsigned char i = 0; i < 3; ++i) {
-        float dir_mult = (beam_ring_color_up[i]) ? 1.0 : -1.0;
-        signed char addition =
-            dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * delta_t;
-        if(beam_ring_color[i] + addition >= 255) {
-            beam_ring_color[i] = 255;
-            beam_ring_color_up[i] = false;
-        } else if(beam_ring_color[i] + addition <= 0) {
-            beam_ring_color[i] = 0;
-            beam_ring_color_up[i] = true;
-        } else {
-            beam_ring_color[i] += addition;
-        }
-    }
-    
     nest->tick(delta_t);
 }

@@ -1053,6 +1053,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.rock);
     game.sys_assets.bmp_shadow =
         game.bitmaps.get(game.asset_file_names.shadow);
+    game.sys_assets.bmp_ship_beam =
+        game.bitmaps.get(game.asset_file_names.ship_beam);
     game.sys_assets.bmp_smack =
         game.bitmaps.get(game.asset_file_names.smack);
     game.sys_assets.bmp_smoke =
@@ -1729,6 +1731,7 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_pikmin_spirit);
     game.bitmaps.detach(game.sys_assets.bmp_rock);
     game.bitmaps.detach(game.sys_assets.bmp_shadow);
+    game.bitmaps.detach(game.sys_assets.bmp_ship_beam);
     game.bitmaps.detach(game.sys_assets.bmp_smack);
     game.bitmaps.detach(game.sys_assets.bmp_smoke);
     game.bitmaps.detach(game.sys_assets.bmp_sparkle);

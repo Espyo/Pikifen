@@ -22,9 +22,10 @@
  */
 class ship : public mob {
 public:
-    //Red color's index moves these many units per second.
-    //(Green is faster and blue is faster still).
-    static const unsigned int SHIP_BEAM_RING_COLOR_SPEED;
+    //Shift the beam ring's hue by this much per second.
+    static const float SHIP_BEAM_RING_HUE_SPEED;
+    //Animate the beam's ring for this long.
+    static const float SHIP_BEAM_RING_ANIM_DUR;
     
     //What type of ship it is.
     ship_type* shi_type;
@@ -34,10 +35,6 @@ public:
     
     //The beam's absolute coordinates.
     point beam_final_pos;
-    //Current color of the beam ring.
-    unsigned char beam_ring_color[3];
-    //Is the beam ring's color component going up or down?
-    bool beam_ring_color_up[3];
     
     //Heal up a leader.
     void heal_leader(leader* l) const;

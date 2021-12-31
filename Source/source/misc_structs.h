@@ -63,6 +63,7 @@ struct asset_file_names_struct {
     string pikmin_spirit;
     string rock;
     string shadow;
+    string ship_beam;
     string smack;
     string smoke;
     string sparkle;
@@ -485,6 +486,7 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_pikmin_spirit;
     ALLEGRO_BITMAP* bmp_rock;
     ALLEGRO_BITMAP* bmp_shadow;
+    ALLEGRO_BITMAP* bmp_ship_beam;
     ALLEGRO_BITMAP* bmp_smack;
     ALLEGRO_BITMAP* bmp_smoke;
     ALLEGRO_BITMAP* bmp_sparkle;
