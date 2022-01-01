@@ -19,8 +19,8 @@
 #include "leader.h"
 
 
-const float ship::SHIP_BEAM_RING_HUE_SPEED = 200;
-const float ship::SHIP_BEAM_RING_ANIM_DUR = 2.0f;
+const unsigned char ship::SHIP_BEAM_RING_AMOUNT = 4;
+const float ship::SHIP_BEAM_RING_ANIM_DUR = 10.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -59,39 +59,37 @@ void ship::draw_mob() {
 
     mob::draw_mob();
     
-    float beam_hue =
-        fmod(
-            game.states.gameplay->area_time_passed *
-            SHIP_BEAM_RING_HUE_SPEED,
-            360.0f
-        );
-    ALLEGRO_COLOR beam_color = al_color_hsl(beam_hue, 0.90f, 0.90f);
-    
-    for(unsigned char b = 0; b < 2; ++b) {
+    const float percentDifference = 
+        (((float)SHIP_BEAM_RING_AMOUNT + 1) / (float)SHIP_BEAM_RING_AMOUNT);
+
+    for(unsigned char b = 0; b < SHIP_BEAM_RING_AMOUNT; ++b) {
+        float beam_hue = 360 * percentDifference * b;
+        ALLEGRO_COLOR beam_color = al_color_hsl(beam_hue, 1.0f, 0.8f);
+
         float beam_anim_ratio =
             fmod(
                 game.states.gameplay->area_time_passed +
-                SHIP_BEAM_RING_ANIM_DUR * 0.4f * b,
+                SHIP_BEAM_RING_ANIM_DUR * percentDifference * b,
                 SHIP_BEAM_RING_ANIM_DUR
             );
         beam_anim_ratio /= SHIP_BEAM_RING_ANIM_DUR;
-        unsigned char beam_alpha = 255;
+        unsigned char beam_alpha = 120;
         
-        if(beam_anim_ratio <= 0.4f) {
-            //Fading into existence.
+        if(beam_anim_ratio <= 0.3f) {
+            //Fading into existance.
             beam_alpha =
                 interpolate_number(
                     beam_anim_ratio,
-                    0.0f, 0.4f,
-                    0, 255
+                    0.0f, 0.3f,
+                    0, beam_alpha
                 );
-        } else {
+        } else if(beam_anim_ratio >= 0.7f) {
             //Shrinking down.
             beam_alpha =
                 interpolate_number(
                     beam_anim_ratio,
-                    0.4f, 1.0f,
-                    255, 0
+                    0.7f, 1.0f,
+                    beam_alpha, 0
                 );
         }
         

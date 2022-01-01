@@ -22,8 +22,8 @@
  */
 class ship : public mob {
 public:
-    //Shift the beam ring's hue by this much per second.
-    static const float SHIP_BEAM_RING_HUE_SPEED;
+    //The amount of rings the ship's beam has.
+    static const unsigned char SHIP_BEAM_RING_AMOUNT;
     //Animate the beam's ring for this long.
     static const float SHIP_BEAM_RING_ANIM_DUR;
     
