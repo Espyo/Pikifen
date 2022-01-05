@@ -762,6 +762,18 @@ float deg_to_rad(const float deg) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the dot product between two vectors.
+ * v1:
+ *   First vector.
+ * v2:
+ *   Second vector.
+ */
+float dot_product(const point &v1, const point &v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the angle between two points.
  * In other words, this is the angle "center" is facing when it is looking
  * at "focus".
@@ -910,6 +922,50 @@ point get_closest_point_in_rotated_rectangle(
     //Now, transform back.
     closest_point = rotate_point(closest_point, rect_angle);
     return closest_point + rect_center;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the location of the inner point and outer point of a thick line's
+ * miter joint.
+ * a:
+ *   First point of the line.
+ * b:
+ *   Second point of the line. It is on this point that the miter takes place,
+ *   meaning this is the point between a and c.
+ * c:
+ *   Final point of the line.
+ * thickness:
+ *   Line thickness.
+ * miter_point_1:
+ *   The first point is returned here.
+ * miter_point_2:
+ *   The second point is returned here.
+ */
+void get_miter_points(
+    const point &a, const point &b, const point &c, const float thickness,
+    point* miter_point_1, point* miter_point_2
+) {
+    //https://blog.scottlogic.com/2019/11/18/drawing-lines-with-webgl.html
+    
+    //Get the miter point's direction.
+    point vec_ab = b - a;
+    point vec_bc = c - b;
+    point norm_vec_ab = normalize_vector(vec_ab);
+    point norm_vec_bc = normalize_vector(vec_bc);
+    point tangent = norm_vec_ab + norm_vec_bc;
+    point norm_tangent = normalize_vector(tangent);
+    point miter_direction(-norm_tangent.y, norm_tangent.x);
+    
+    //Get the miter point's distance.
+    point normal_a(-vec_ab.y, vec_ab.x);
+    normal_a = normalize_vector(normal_a);
+    float miter_length =
+        (thickness / 2.0f) / dot_product(miter_direction, normal_a);
+        
+    //Return the final point.
+    *miter_point_1 = b + miter_direction * miter_length;
+    *miter_point_2 = b - miter_direction * miter_length;
 }
 
 
@@ -1370,6 +1426,22 @@ float normalize_angle(float a) {
     a = fmod(a, (float) TAU);
     if(a < 0) a += TAU;
     return a;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Normalizes the specified vector so its magnitude is 1.
+ * v:
+ *   Vector to normalize.
+ */
+point normalize_vector(const point &v) {
+    float length = dist(point(), v).to_float();
+    if(length == 0.0f) return v;
+    return
+        point(
+            v.x / length,
+            v.y / length
+        );
 }
 
 

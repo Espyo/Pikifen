@@ -892,26 +892,98 @@ void gameplay_state::draw_message_box() {
  *   Color to tint it with.
  */
 void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
-    //Cursor trail.
+    const float CURSOR_TRAIL_MAX_WIDTH = 30.0f;
+    const unsigned char CURSOR_TRAIL_MAX_ALPHA = 72;
+    const float CURSOR_TRAIL_MIN_SPOT_DIFF = 4.0f;
+    
     al_use_transform(&game.identity_transform);
+    
+    //Cursor trail.
     if(game.options.draw_cursor_trail) {
-        for(size_t p = 1; p < cursor_spots.size(); ++p) {
-            point* p_ptr = &cursor_spots[p];
-            point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
+        size_t anchor = 0;
+        
+        for(size_t s = 1; s < cursor_spots.size(); ++s) {
+            point anchor_diff = cursor_spots[anchor] - cursor_spots[s];
             if(
-                (*p_ptr) != (*pp_ptr) &&
-                dist(*p_ptr, *pp_ptr) > 4
+                fabs(anchor_diff.x) < CURSOR_TRAIL_MIN_SPOT_DIFF &&
+                fabs(anchor_diff.y) < CURSOR_TRAIL_MIN_SPOT_DIFF
             ) {
-                al_draw_line(
-                    p_ptr->x, p_ptr->y,
-                    pp_ptr->x, pp_ptr->y,
-                    change_alpha(
-                        color,
-                        (p / (float) cursor_spots.size()) * 64
-                    ),
-                    p * 3
+                continue;
+            }
+            
+            float start_ratio = anchor / (float) cursor_spots.size();
+            float start_thickness = CURSOR_TRAIL_MAX_WIDTH * start_ratio;
+            unsigned char start_alpha = CURSOR_TRAIL_MAX_ALPHA * start_ratio;
+            ALLEGRO_COLOR start_color = change_alpha(color, start_alpha);
+            point start_p1;
+            point start_p2;
+            
+            float end_ratio = s / (float) CURSOR_TRAIL_SAVE_N_SPOTS;
+            float end_thickness = CURSOR_TRAIL_MAX_WIDTH * end_ratio;
+            unsigned char end_alpha = CURSOR_TRAIL_MAX_ALPHA * end_ratio;
+            ALLEGRO_COLOR end_color = change_alpha(color, end_alpha);
+            point end_p1;
+            point end_p2;
+            
+            if(anchor == 0) {
+                point cur_to_next = cursor_spots[s] - cursor_spots[anchor];
+                point cur_to_next_normal(-cur_to_next.y, cur_to_next.x);
+                cur_to_next_normal = normalize_vector(cur_to_next_normal);
+                point spot_offset = cur_to_next_normal * start_thickness / 2.0f;
+                start_p1 = cursor_spots[anchor] - spot_offset;
+                start_p2 = cursor_spots[anchor] + spot_offset;
+            } else {
+                get_miter_points(
+                    cursor_spots[anchor - 1],
+                    cursor_spots[anchor],
+                    cursor_spots[anchor + 1],
+                    -start_thickness,
+                    &start_p1,
+                    &start_p2
                 );
             }
+            
+            if(s == cursor_spots.size() - 1) {
+                point prev_to_cur = cursor_spots[s] - cursor_spots[anchor];
+                point prev_to_cur_normal(-prev_to_cur.y, prev_to_cur.x);
+                prev_to_cur_normal = normalize_vector(prev_to_cur_normal);
+                point spot_offset = prev_to_cur_normal * start_thickness / 2.0f;
+                end_p1 = cursor_spots[s] - spot_offset;
+                end_p2 = cursor_spots[s] + spot_offset;
+            } else {
+                get_miter_points(
+                    cursor_spots[s - 1],
+                    cursor_spots[s],
+                    cursor_spots[s + 1],
+                    -end_thickness,
+                    &end_p1,
+                    &end_p2
+                );
+            }
+            
+            ALLEGRO_VERTEX vertexes[4];
+            for(unsigned char v = 0; v < 4; ++v) {
+                vertexes[v].z = 0.0f;
+            }
+            
+            vertexes[0].x = start_p1.x;
+            vertexes[0].y = start_p1.y;
+            vertexes[0].color = start_color;
+            vertexes[1].x = start_p2.x;
+            vertexes[1].y = start_p2.y;
+            vertexes[1].color = start_color;
+            vertexes[2].x = end_p1.x;
+            vertexes[2].y = end_p1.y;
+            vertexes[2].color = end_color;
+            vertexes[3].x = end_p2.x;
+            vertexes[3].y = end_p2.y;
+            vertexes[3].color = end_color;
+            
+            al_draw_prim(
+                vertexes, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+            );
+            
+            anchor = s;
         }
     }
     

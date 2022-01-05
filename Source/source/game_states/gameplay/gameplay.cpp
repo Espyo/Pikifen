@@ -30,7 +30,9 @@ const float gameplay_state::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
 const float gameplay_state::AREA_TITLE_FADE_DURATION = 3.0f;
 //Every X seconds, the cursor's position is saved, to create the trail effect.
-const float gameplay_state::CURSOR_SAVE_INTERVAL = 0.03f;
+const float gameplay_state::CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
+//Number of positions of the cursor to keep track of.
+const unsigned char gameplay_state::CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Path to the GUI information file.
 const string gameplay_state::HUD_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
 //The Onion menu can only show, at most, these many Pikmin types per page.
@@ -80,7 +82,7 @@ gameplay_state::gameplay_state() :
     close_to_pikmin_to_pluck(nullptr),
     close_to_ship_to_heal(nullptr),
     cursor_height_diff_light(0.0f),
-    cursor_save_timer(CURSOR_SAVE_INTERVAL),
+    cursor_save_timer(CURSOR_TRAIL_SAVE_INTERVAL),
     day(1),
     is_input_allowed(false),
     lightmap_bmp(nullptr),
@@ -1086,7 +1088,7 @@ void gameplay_state::load() {
     cursor_save_timer.on_end = [this] () {
         cursor_save_timer.start();
         cursor_spots.push_back(game.mouse_cursor_s);
-        if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
+        if(cursor_spots.size() > CURSOR_TRAIL_SAVE_N_SPOTS) {
             cursor_spots.erase(cursor_spots.begin());
         }
     };

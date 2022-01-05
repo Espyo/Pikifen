@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Implement Kman's beam changes
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -10,8 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        Smoother trail behind the mouse cursor
-            https://blog.scottlogic.com/2019/11/18/drawing-lines-with-webgl.html
         Health wheels should be slightly transparent
         Give more juice to the HUD (Kman)
             Every GUI item should just have a "juice timer", not a "juicy grow timer"
@@ -24,6 +22,7 @@ Next tasks (roughly sorted most important first)
     Performance
         Wall shadow rendering is a bit heavy. Mostly in figuring out what edges to draw or not to draw
             Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
+            Refactor it to use vectors, like the cursor trail drawing logic
     Update Dear ImGui
     Code cleanup
         In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three

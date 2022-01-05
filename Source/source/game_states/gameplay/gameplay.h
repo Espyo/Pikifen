@@ -342,7 +342,8 @@ private:
     
     static const float AREA_INTRO_HUD_MOVE_TIME;
     static const float AREA_TITLE_FADE_DURATION;
-    static const float CURSOR_SAVE_INTERVAL;
+    static const float CURSOR_TRAIL_SAVE_INTERVAL;
+    static const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
     static const string HUD_FILE_NAME;
     static const size_t ONION_MENU_TYPES_PER_PAGE;
     static const float SWARM_ARROW_SPEED;

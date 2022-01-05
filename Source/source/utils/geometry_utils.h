@@ -118,6 +118,7 @@ void coordinates_to_angle(
     const point &coordinates, float* angle, float* magnitude
 );
 float deg_to_rad(const float rad);
+float dot_product(const point &v1, const point &v2);
 float get_angle(const point &center, const point &focus);
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(const float a1, const float a2);
@@ -129,6 +130,10 @@ point get_closest_point_in_rotated_rectangle(
     const point &p,
     const point &rect_center, const point &rect_dim, const float rect_angle,
     bool* is_inside
+);
+void get_miter_points(
+    const point &a, const point &b, const point &c, const float thickness,
+    point* miter_point_1, point* miter_point_2
 );
 float get_point_sign(
     const point &p, const point &lp1, const point &lp2
@@ -173,6 +178,7 @@ void move_point(
     float* angle, bool* reached, const float delta_t
 );
 float normalize_angle(float a);
+point normalize_vector(const point &v);
 bool points_are_collinear(
     const point &a, const point &b, const point &c
 );

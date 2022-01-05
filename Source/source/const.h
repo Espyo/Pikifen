@@ -40,8 +40,6 @@ constexpr size_t INVALID = UINT32_MAX;
 //Cross-platform way of representing a float value of "invalid" or similar.
 constexpr float LARGE_FLOAT = 999999.0f;
 
-//Number of positions of the cursor to keep track of.
-const unsigned char CURSOR_SAVE_N_SPOTS = 10;
 //The default rotation speed of a mob type.
 const float DEF_ROTATION_SPEED = 630.0f;
 //The whistle can't go past this radius, by default.
