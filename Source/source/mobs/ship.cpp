@@ -59,24 +59,24 @@ void ship::draw_mob() {
 
     mob::draw_mob();
     
-    const float percentDifference = 
-        (((float)SHIP_BEAM_RING_AMOUNT + 1) / (float)SHIP_BEAM_RING_AMOUNT);
-
     for(unsigned char b = 0; b < SHIP_BEAM_RING_AMOUNT; ++b) {
-        float beam_hue = 360 * percentDifference * b;
+        float beam_idx_ratio = b / (float) SHIP_BEAM_RING_AMOUNT;
+        
+        float beam_hue = 360 * beam_idx_ratio;
         ALLEGRO_COLOR beam_color = al_color_hsl(beam_hue, 1.0f, 0.8f);
-
+        
         float beam_anim_ratio =
             fmod(
                 game.states.gameplay->area_time_passed +
-                SHIP_BEAM_RING_ANIM_DUR * percentDifference * b,
+                SHIP_BEAM_RING_ANIM_DUR * beam_idx_ratio,
                 SHIP_BEAM_RING_ANIM_DUR
             );
         beam_anim_ratio /= SHIP_BEAM_RING_ANIM_DUR;
+        
         unsigned char beam_alpha = 120;
         
         if(beam_anim_ratio <= 0.3f) {
-            //Fading into existance.
+            //Fading into existence.
             beam_alpha =
                 interpolate_number(
                     beam_anim_ratio,

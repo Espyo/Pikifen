@@ -383,7 +383,7 @@ void gameplay_state::init_hud() {
                 
             draw_health(
                 center,
-                mobs.leaders[l_nr]->health_wheel_smoothed_ratio, 1.0f,
+                mobs.leaders[l_nr]->health_wheel_visible_ratio, 1.0f,
                 std::min(size.x, size.y) * 0.47f,
                 true
             );

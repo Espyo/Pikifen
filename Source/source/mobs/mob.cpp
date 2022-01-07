@@ -79,8 +79,8 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     delivery_info(nullptr),
     track_info(nullptr),
     stored_inside_another(nullptr),
-    health_wheel_smoothed_ratio(1.0f),
-    health_wheel_alpha(1.0f),
+    health_wheel_visible_ratio(1.0f),
+    health_wheel_alpha(0.85f),
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
@@ -3054,29 +3054,22 @@ void mob::tick_misc_logic(const float delta_t) {
         set_can_block_paths(false);
     }
     
-    float ratio = health / type->max_health;
-    float ratio_difference = ratio - health_wheel_smoothed_ratio;
-    float ratio_max_change_amount = 1 * delta_t;
+    //Health wheel.
+    //Multiply health wheel speed by this.
+    const float HEALTH_WHEEL_SMOOTHNESS_MULT = 6.0f;
+    //Speed at which the health wheel loses transparency, in alpha per second.
+    const float HEALTH_WHEEL_FADE_SPEED = 2.0f;
     
-    if(ratio_difference < 0) {
-        ratio_difference *= -1;
-    }
-    
-    if(health <= 0) {
-        ratio_max_change_amount *= 4.0f;
-        if(health_wheel_smoothed_ratio <= 0) {
-            health_wheel_alpha -= 3.0f * delta_t;
-        }
-    }
-    
-    if(ratio_difference < ratio_max_change_amount) {
-        health_wheel_smoothed_ratio = ratio;
-    } else {
-        if(ratio > health_wheel_smoothed_ratio) {
-            health_wheel_smoothed_ratio += ratio_max_change_amount;
-        } else {
-            health_wheel_smoothed_ratio -= ratio_max_change_amount;
-        }
+    health_wheel_visible_ratio +=
+        ((health / type->max_health) - health_wheel_visible_ratio) *
+        (HEALTH_WHEEL_SMOOTHNESS_MULT * delta_t);
+        
+    if(
+        health <= 0.0f &&
+        health_wheel_visible_ratio <= 0.01f &&
+        health_wheel_alpha > 0.0f
+    ) {
+        health_wheel_alpha -= HEALTH_WHEEL_FADE_SPEED * delta_t;
     }
     
     //Group stuff.

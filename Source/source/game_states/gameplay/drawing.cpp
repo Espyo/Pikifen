@@ -374,7 +374,7 @@ void gameplay_state::draw_ingame_text() {
                     mob_ptr->pos.y - mob_ptr->radius -
                     DEF_HEALTH_WHEEL_RADIUS - 4
                 ),
-                mob_ptr->health_wheel_smoothed_ratio,
+                mob_ptr->health_wheel_visible_ratio,
                 mob_ptr->health_wheel_alpha
             );
         }

@@ -232,8 +232,8 @@ public:
     mob* stored_inside_another;
     
     //Health wheel properties.
-    //How much the health wheel is filled. Slowly moves to its target amount.
-    float health_wheel_smoothed_ratio;
+    //How much the health wheel is filled. Gradually moves to its target amount.
+    float health_wheel_visible_ratio;
     //Current health wheel alpha. Moves to 0 when health <= 0.
     float health_wheel_alpha;
     
