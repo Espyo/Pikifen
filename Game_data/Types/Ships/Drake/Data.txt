@@ -2,7 +2,7 @@ name = S.S. Drake
 
 beam_offset_x = 180
 beam_offset_y = 0
-beam_radius = 30
+beam_radius = 45
 can_heal = true
 height = 200
 pushable = false
