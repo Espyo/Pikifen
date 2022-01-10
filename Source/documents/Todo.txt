@@ -2,7 +2,14 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Give more juice to the HUD (Kman)
+        Leader swapping should make the leader health items slide into place
+        Pikmin type swapping should make the icons slide into place
+        Pikmin counters should grow when the number changes
+        Spray counters should grow when the number changes
+        Spray swapping should make the icons slide into place
+        HUD should come in/out of frame when pause is used
+        Find more ideas from the canon games
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -10,9 +17,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        Give more juice to the HUD (Kman)
-            Every GUI item should just have a "juice timer", not a "juicy grow timer"
-            Leader swapping should make the leader health items slide into place
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Enemies should squash and stretch every time they are hurt
         Game feel
@@ -572,11 +576,6 @@ Misc things (so I don't forget)
         With the current Pikmin "missed hitbox" register, it's possible that an enemy will want to attack with the same hitbox multiple times in the same animation, but all those times will be ignored for 1.5 seconds (think the Man-at-Legs's shots)
         Maybe make it so that when a mob touches a hitbox, it sets a flag, and if the next frame it also touches a hitbox, ignore the event; repeat until there is a frame where the hitbox hasn't been touched -- this could stop the mob from getting hit multiple times by the same hitbox
     Aesthetic
-        More juice
-            Sun Meter should grow on checkpoints
-            HUD number of Pikmin on the field/army/etc. should grow when they change
-            HUD should come in/out of frame when pause is used
-            Find more ideas from the canon games
         When a spray is about to run out, make the mobs flash
         Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the cursor goes over them

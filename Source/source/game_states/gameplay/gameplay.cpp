@@ -395,7 +395,7 @@ void gameplay_state::init_hud() {
     //Sun Meter.
     gui_item* sun_meter = new gui_item();
     sun_meter->on_draw =
-    [this] (const point & center, const point & size) {
+    [this, sun_meter] (const point & center, const point & size) {
         unsigned char n_hours =
             (game.config.day_minutes_end -
              game.config.day_minutes_start) / 60.0f;
@@ -437,26 +437,52 @@ void gameplay_state::init_hud() {
         }
         al_hold_bitmap_drawing(false);
         
+        point sun_size =
+            point(sun_radius * 1.5, sun_radius * 1.5) *
+            (1.0f + sun_meter->get_juicy_grow_amount() * 5.0f);
         //Static sun.
         draw_bitmap(
             bmp_sun,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
-            point(sun_radius * 1.5, sun_radius * 1.5)
+            sun_size
         );
         //Spinning sun.
         draw_bitmap(
             bmp_sun,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
-            point(sun_radius * 1.5, sun_radius * 1.5),
+            sun_size,
             sun_meter_sun_angle
         );
         //Bubble in front the sun.
         draw_bitmap(
             bmp_hard_bubble,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
-            point(sun_radius * 1.5, sun_radius * 1.5),
-            0, al_map_rgb(255, 192, 128)
+            sun_size,
+            0.0f,
+            al_map_rgb(255, 192, 128)
         );
+    };
+    sun_meter->on_tick =
+    [this, sun_meter] (const float delta_t) {
+        float day_length =
+            game.config.day_minutes_end - game.config.day_minutes_start;
+        float pre_tick_day_minutes =
+            day_minutes -
+            game.config.day_minutes_per_irl_sec * delta_t;
+        float post_tick_day_minutes =
+            day_minutes;
+        float checkpoints[3] = {0.25f, 0.50f, 0.75f};
+        for(unsigned char c = 0; c < 3; ++c) {
+            float checkpoint =
+                game.config.day_minutes_start + day_length * checkpoints[c];
+            if(
+                pre_tick_day_minutes < checkpoint &&
+                post_tick_day_minutes >= checkpoint
+            ) {
+                sun_meter->start_juicy_grow();
+                break;
+            }
+        }
     };
     hud.add_item(sun_meter, "time");
     
