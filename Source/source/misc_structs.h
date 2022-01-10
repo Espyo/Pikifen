@@ -280,39 +280,6 @@ struct font_list {
 
 
 /* ----------------------------------------------------------------------------
- * Represents a HUD item. It contains data about where it should be placed,
- * where it should be drawn, etc.
- */
-struct hud_item {
-    point center; //In screen ratio.
-    point size;   //In screen ratio.
-    hud_item(const point center = point(), const point size = point());
-};
-
-
-
-/* ----------------------------------------------------------------------------
- * Manages HUD items.
- */
-class hud_item_manager {
-public:
-    vector<hud_item> items;
-    
-    virtual void set_item(
-        const size_t id,
-        const float x, const float y, const float w, const float h
-    );
-    virtual bool get_draw_data(
-        const size_t id, point* center, point* size
-    ) const;
-    virtual bool is_mouse_in(const size_t id);
-    virtual void tick(const float time);
-    hud_item_manager(const size_t item_total);
-};
-
-
-
-/* ----------------------------------------------------------------------------
  * This structure holds information about where the player wants a leader
  * (or something else) to go, based on the player's inputs
  * (analog stick tilts, D-pad presses, keyboard key presses, etc.).

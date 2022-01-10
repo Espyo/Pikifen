@@ -139,6 +139,7 @@ gui_item::gui_item(const bool selectable) :
     on_tick(nullptr),
     on_event(nullptr),
     on_activate(nullptr),
+    on_mouse_over(nullptr),
     on_menu_dir_button(nullptr),
     on_child_selected(nullptr),
     on_get_tooltip(nullptr) {
@@ -280,6 +281,7 @@ gui_manager::gui_manager() :
     down_pressed(false),
     ok_pressed(false),
     back_pressed(false),
+    last_input_was_mouse(false),
     auto_repeat_on(false),
     auto_repeat_duration(0.0f),
     auto_repeat_next_activation(0.0f),
@@ -306,6 +308,7 @@ void gui_manager::add_item(gui_item* item, const string &id) {
     }
     
     items.push_back(item);
+    item->manager = this;
 }
 
 
@@ -431,6 +434,9 @@ string gui_manager::get_current_tooltip() {
  *   Event.
  */
 void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
+    bool input_happened = false;
+    bool mouse_involved = false;
+    
     //Mousing over an item and clicking.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
@@ -444,10 +450,14 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
                 i_ptr->selectable
             ) {
                 selection_result = i_ptr;
+                if(i_ptr->on_mouse_over) {
+                    i_ptr->on_mouse_over(point(ev.mouse.x, ev.mouse.y));
+                }
                 break;
             }
         }
         set_selected_item(selection_result);
+        mouse_involved = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
@@ -457,17 +467,23 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             auto_repeat_duration = 0.0f;
             auto_repeat_next_activation = AUTO_REPEAT_MAX_INTERVAL;
         }
+        mouse_involved = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
         auto_repeat_on = false;
+        mouse_involved = true;
     }
     
     vector<action_from_event> actions = get_actions_from_event(ev);
     for(size_t a = 0; a < actions.size(); ++a) {
-        handle_menu_button(
-            actions[a].button, actions[a].pos, actions[a].player
-        );
+        if(
+            handle_menu_button(
+                actions[a].button, actions[a].pos, actions[a].player
+            )
+        ) {
+            input_happened = true;
+        }
     }
     
     for(size_t i = 0; i < items.size(); ++i) {
@@ -475,12 +491,17 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             items[i]->on_event(ev);
         }
     }
+    
+    if(input_happened) {
+        last_input_was_mouse = mouse_involved;
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Handles a button "press" in a GUI. Technically, it could also be
  * a button release.
+ * Returns true if the button was recognized.
  * action:
  *   The button's ID. Use BUTTON_*.
  * pos:
@@ -491,11 +512,12 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
  * player:
  *   Number of the player that pressed.
  */
-void gui_manager::handle_menu_button(
+bool gui_manager::handle_menu_button(
     const size_t action, const float pos, const size_t player
 ) {
 
     bool is_down = (pos >= 0.5);
+    bool button_recognized = true;
     
     switch(action) {
     case BUTTON_MENU_RIGHT:
@@ -534,19 +556,22 @@ void gui_manager::handle_menu_button(
         }
         }
         
-        if(pressed == BUTTON_NONE) return;
+        if(pressed == BUTTON_NONE) break;
         
         if(!selected_item) {
             for(size_t i = 0; i < items.size(); ++i) {
                 if(items[i]->selectable) {
                     set_selected_item(items[i]);
-                    return;
+                    break;
                 }
+            }
+            if(selected_item) {
+                break;
             }
         }
         if(!selected_item) {
             //No item can be selected.
-            return;
+            break;
         }
         
         vector<point> selectables;
@@ -635,8 +660,14 @@ void gui_manager::handle_menu_button(
         }
         break;
         
+    } default: {
+        button_recognized = false;
+        break;
+        
     }
     }
+    
+    return button_recognized;
 }
 
 
@@ -703,6 +734,7 @@ void gui_manager::remove_item(gui_item* item) {
             items.erase(items.begin() + i);
         }
     }
+    item->manager = NULL;
 }
 
 
@@ -739,6 +771,14 @@ void gui_manager::start_animation(
 ) {
     anim_type = type;
     anim_timer.start(duration);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the last input was a mouse input.
+ */
+bool gui_manager::was_last_input_mouse() {
+    return last_input_was_mouse;
 }
 
 
@@ -859,20 +899,48 @@ picker_gui_item::picker_gui_item(
     base_text(base_text),
     option(option),
     on_previous(nullptr),
-    on_next(nullptr) {
+    on_next(nullptr),
+    arrow_highlight(255) {
     
     on_draw =
     [this] (const point & center, const point & size) {
-        draw_text_lines(
-            game.fonts.standard, map_gray(255),
+        unsigned char real_arrow_highlight = 255;
+        if(
+            selected &&
+            manager &&
+            manager->was_last_input_mouse()
+        ) {
+            real_arrow_highlight = arrow_highlight;
+        }
+        ALLEGRO_COLOR arrow_highlight_color = al_map_rgb(87, 200, 208);
+        ALLEGRO_COLOR arrow_regular_color = map_gray(255);
+        point arrow_highlight_size = point(1.4f, 1.4f);
+        point arrow_regular_size = point(1.0f, 1.0f);
+        
+        draw_compressed_scaled_text(
+            game.fonts.standard,
+            real_arrow_highlight == 0 ?
+            arrow_highlight_color :
+            arrow_regular_color,
             point(center.x - size.x * 0.45, center.y),
+            real_arrow_highlight == 0 ?
+            arrow_highlight_size :
+            arrow_regular_size,
             ALLEGRO_ALIGN_CENTER, 1,
+            size,
             "<"
         );
-        draw_text_lines(
-            game.fonts.standard, map_gray(255),
+        draw_compressed_scaled_text(
+            game.fonts.standard,
+            real_arrow_highlight == 1 ?
+            arrow_highlight_color :
+            arrow_regular_color,
             point(center.x + size.x * 0.45, center.y),
+            real_arrow_highlight == 1 ?
+            arrow_highlight_size :
+            arrow_regular_size,
             ALLEGRO_ALIGN_CENTER, 1,
+            size,
             ">"
         );
         
@@ -922,6 +990,12 @@ picker_gui_item::picker_gui_item(
             return true;
         }
         return false;
+    };
+    
+    on_mouse_over =
+    [this] (const point & cursor_pos) {
+        arrow_highlight =
+            cursor_pos.x >= get_real_center().x ? 1 : 0;
     };
 }
 

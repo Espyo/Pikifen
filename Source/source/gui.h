@@ -35,11 +35,16 @@ enum GUI_MANAGER_ANIMS {
 };
 
 
+class gui_manager;
+
+
 /* ----------------------------------------------------------------------------
  * An item in the GUI. This can be a HUD element, a button, some text, etc.
  */
 class gui_item {
 public:
+    //What GUI manager it belongs to, if any.
+    gui_manager* manager;
     //On-screen position, in screen ratio.
     point center;
     //Width and height, in screen ratio.
@@ -71,6 +76,8 @@ public:
     std::function<void(const ALLEGRO_EVENT &ev)> on_event;
     //What to do when the item is activated.
     std::function<void(const point &cursor_pos)> on_activate;
+    //What to do when the mouse cursor is on top of it this frame.
+    std::function<void(const point &cursor_pos)> on_mouse_over;
     //What to do when a directional button's pressed with the item selected.
     std::function<bool(const size_t button_id)> on_menu_dir_button;
     //What to do when one of its children became the selected item.
@@ -175,6 +182,10 @@ public:
     std::function<void()> on_next;
     
     picker_gui_item(const string &base_text, const string &option);
+    
+private:
+    //Highlight one of the arrows due to mouse-over. 255 = none.
+    unsigned char arrow_highlight;
 };
 
 
@@ -241,7 +252,7 @@ public:
     //Handle an Allegro event.
     void handle_event(const ALLEGRO_EVENT &ev);
     //Handle a button press or release.
-    void handle_menu_button(
+    bool handle_menu_button(
         const size_t action, const float pos, const size_t player
     );
     //Reads item coordinates from a data node.
@@ -259,6 +270,8 @@ public:
     void start_animation(
         const GUI_MANAGER_ANIMS type, const float duration
     );
+    //Was the last input a mouse input?
+    bool was_last_input_mouse();
     
     //Destroys all allocated items and information.
     void destroy();
@@ -282,6 +295,8 @@ private:
     bool ok_pressed;
     //Is the back button pressed?
     bool back_pressed;
+    //Was the last input given a mouse movement?
+    bool last_input_was_mouse;
     //Is the current item's activation auto-repeat mode on?
     bool auto_repeat_on;
     //How long the activation button has been held for.

@@ -13,8 +13,8 @@ Next tasks (roughly sorted most important first)
         Give more juice to the HUD (Kman)
             Every GUI item should just have a "juice timer", not a "juicy grow timer"
             Leader swapping should make the leader health items slide into place
-        The GUI left-right option swapper should tint the left or right arrow blue when the mouse is nearest to it
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
+        Enemies should squash and stretch every time they are hurt
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
