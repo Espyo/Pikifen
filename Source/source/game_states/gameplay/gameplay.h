@@ -49,8 +49,6 @@ public:
     float day_minutes;
     //Replay of the current day.
     replay day_replay;
-    //Manager for the gameplay HUD.
-    gui_manager hud;
     //Player 1's leader cursor, in screen coordinates.
     point leader_cursor_s;
     //Sector that player 1's leader cursor is on, if any.
@@ -125,6 +123,13 @@ private:
             mob_ptr(mob_ptr) {
             
         }
+    };
+    
+    struct hud_struct {
+        //GUI manager.
+        gui_manager gui;
+        
+        hud_struct();
     };
     
     //Contains information about a given Pikmin type in an Onion menu.
@@ -273,6 +278,8 @@ private:
     size_t main_control_id;
     //Movement of player 1's leader.
     movement_struct leader_movement;
+    //Information about the in-game HUD.
+    hud_struct* hud;
     //Information about the current Onion menu, if any.
     onion_menu_struct* onion_menu;
     //Information about the current pause menu, if any.

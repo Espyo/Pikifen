@@ -593,7 +593,7 @@ void gameplay_state::do_menu_logic() {
         }
     }
     
-    hud.tick(game.delta_t);
+    hud->gui.tick(game.delta_t);
     
     //Process and print framerate and system info.
     if(game.show_system_info) {

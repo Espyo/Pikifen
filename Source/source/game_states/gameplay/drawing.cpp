@@ -156,7 +156,7 @@ void gameplay_state::do_game_drawing(
         draw_pause_menu();
     } else {
         draw_mouse_cursor(cursor_color);
-        hud.draw();
+        hud->gui.draw();
     }
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
