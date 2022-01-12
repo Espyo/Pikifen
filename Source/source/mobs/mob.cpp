@@ -1694,8 +1694,8 @@ void mob::get_sprite_bitmap_effects(
 ) const {
 
     const float STATUS_SHAKING_TIME_MULT = 60.0f;
-    const float DELIVERY_SUCK_SHAKING_TIME_MULT = 60.0f;
-    const float DELIVERY_SUCK_SHAKING_MULT = 4.0f;
+    const float DELIVERY_SUCK_SHAKING_TIME_MULT = 30.0f;
+    const float DELIVERY_SUCK_SHAKING_MULT = 5.0f;
     const float DELIVERY_TOSS_WINDUP_MULT = 5.0f;
     const float DELIVERY_TOSS_MULT = 40.0f;
     const float DELIVERY_TOSS_X_OFFSET = 20.0f;
@@ -1765,7 +1765,8 @@ void mob::get_sprite_bitmap_effects(
         case DELIVERY_ANIM_SUCK: {
             ALLEGRO_COLOR new_glow;
             float new_scale;
-            float new_x_offset =
+            point new_offset;
+            new_offset.x =
                 sin(
                     game.states.gameplay->area_time_passed *
                     DELIVERY_SUCK_SHAKING_TIME_MULT
@@ -1794,6 +1795,23 @@ void mob::get_sprite_bitmap_effects(
                         0.0f, 1.0f
                     );
                 new_scale = ease(EASE_OUT, new_scale);
+
+                point target_pos = focused_mob->pos;
+
+                if(focused_mob->type->category->id == MOB_CATEGORY_SHIPS){
+                    ship* s_ptr = (ship*)focused_mob;
+                    target_pos = s_ptr->tractor_final_pos;
+                }
+
+                point end_offset = target_pos - pos;
+
+                float i =
+                    interpolate_number(
+                        delivery_info->anim_time_ratio_left, 0.0, 0.4,
+                        1.0f, 0.0f
+                    );
+                i = ease(EASE_IN, i);
+                new_offset += end_offset * i;        
             }
             
             info->glow_color.r =
@@ -1807,7 +1825,7 @@ void mob::get_sprite_bitmap_effects(
                 
             info->scale *= new_scale;
             
-            info->translation.x += (new_x_offset * new_scale);
+            info->translation += new_offset;
             break;
         }
         case DELIVERY_ANIM_TOSS: {
