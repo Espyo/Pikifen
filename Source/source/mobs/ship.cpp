@@ -22,6 +22,8 @@
 const unsigned char ship::SHIP_BEAM_RING_AMOUNT = 4;
 const float ship::SHIP_BEAM_RING_ANIM_DUR = 10.0f;
 
+const float ship::SHIP_TRACTOR_RING_RATE = 0.15f;
+const float ship::SHIP_TRACTOR_RING_ANIM_DUR = 0.8f;
 
 /* ----------------------------------------------------------------------------
  * Creates a ship mob.
@@ -34,13 +36,31 @@ const float ship::SHIP_BEAM_RING_ANIM_DUR = 10.0f;
  */
 ship::ship(const point &pos, ship_type* type, float angle) :
     mob(pos, type, angle),
+    tractor_beam_enabled(false),
+    next_tractor_ring_timer(SHIP_TRACTOR_RING_RATE),
     shi_type(type),
     nest(nullptr),
-    beam_final_pos(rotate_point(type->beam_offset, angle)) {
+    beam_final_pos(rotate_point(type->beam_offset, angle)),
+    tractor_final_pos(rotate_point(type->tractor_offset, angle)),
+    beam_to_tractor_dist(dist(beam_final_pos, tractor_final_pos).to_float()) {
     
+    next_tractor_ring_timer.on_end = [this] () {
+        next_tractor_ring_timer.start();
+        tractor_rings.push_back(0);
+;
+        float hue =
+            fmod(
+                game.states.gameplay->area_time_passed * 360,360
+            );
+
+        tractor_ring_colors.push_back(hue);
+    };
+    next_tractor_ring_timer.start();
+
     nest = new pikmin_nest_struct(this, shi_type->nest);
     
     beam_final_pos += pos;
+    tractor_final_pos += pos;
 }
 
 
@@ -108,6 +128,67 @@ void ship::draw_mob() {
             change_alpha(beam_color, beam_alpha)
         );
     }
+
+    //Go in reverse to ensure the most recent rings are drawn underneath
+    for(size_t r = tractor_rings.size(); r > 0; r) {
+        r--;
+        float tractor_anim_ratio = 
+            tractor_rings[r] / SHIP_TRACTOR_RING_ANIM_DUR;
+
+
+        unsigned char tractor_alpha = 120;
+        if(tractor_anim_ratio <= 0.3f) {
+            //Fading into existence.
+            tractor_alpha =
+                interpolate_number(
+                    tractor_anim_ratio,
+                    0.0f, 0.3f,
+                    0, tractor_alpha
+                );
+        } else if(tractor_anim_ratio >= 0.5f) {
+            //Shrinking down.
+            tractor_alpha =
+                interpolate_number(
+                    tractor_anim_ratio,
+                    0.5f, 1.0f,
+                    tractor_alpha, 0
+                );
+        }
+
+        float tractor_light = 
+            interpolate_number(
+                    tractor_anim_ratio,
+                    0.0f, 1.0f,
+                    0.6f, 0.9f
+                );
+
+        ALLEGRO_COLOR tractor_color = al_color_hsl(tractor_ring_colors[r], 1.0f, tractor_light);
+        tractor_color = change_alpha(tractor_color, tractor_alpha);
+
+        float tractor_scale =
+            interpolate_number(
+                tractor_anim_ratio,
+                0.0f, 1.0f,
+                shi_type->beam_radius * 2.5f, 1.0f
+            );
+
+        float distance = beam_to_tractor_dist * tractor_anim_ratio;
+
+        float angle = get_angle(beam_final_pos, tractor_final_pos);
+        point ring_pos(
+            beam_final_pos.x + cos(angle) * beam_to_tractor_dist * tractor_anim_ratio,
+            beam_final_pos.y + sin(angle) * beam_to_tractor_dist * tractor_anim_ratio
+        );
+
+        unsigned char n = 0;
+        draw_bitmap(
+            game.sys_assets.bmp_bright_ring,
+            ring_pos,
+            point(tractor_scale, tractor_scale),
+            0.0f,
+            tractor_color
+        );
+    }
 }
 
 
@@ -165,4 +246,20 @@ void ship::read_script_vars(const script_var_reader &svr) {
  */
 void ship::tick_class_specifics(const float delta_t) {
     nest->tick(delta_t);
+
+    if(tractor_beam_enabled) {
+        next_tractor_ring_timer.tick(delta_t);
+    }
+    
+    for(size_t r = 0; r < tractor_rings.size(); ) {
+        //Erase rings that have reached the end of their animation.
+        tractor_rings[r] += delta_t;
+        if(tractor_rings[r] > SHIP_TRACTOR_RING_ANIM_DUR) {
+            tractor_rings.erase(tractor_rings.begin() + r);
+            tractor_ring_colors.erase(tractor_ring_colors.begin() + r);
+        } else {
+            r++;
+        }
+    }
+
 }

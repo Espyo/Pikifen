@@ -43,6 +43,8 @@ public:
     bool can_heal;
     //The ship's beam is offset this much from the ship object's center.
     point beam_offset;
+    //The ship's tractor end is offset this much from the ship object's center.
+    point tractor_offset;
     //Ship beam radius.
     float beam_radius;
     

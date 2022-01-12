@@ -22,6 +22,7 @@ void create_fsm(mob_type* typ);
 
 void receive_mob(mob* m, void* info1, void* info2);
 void set_anim(mob* m, void* info1, void* info2);
+void start_delivery(mob* m, void* info1, void* info2);
 }
 
 

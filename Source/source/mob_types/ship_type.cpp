@@ -72,6 +72,8 @@ void ship_type::load_properties(data_node* file) {
     
     rs.set("beam_offset_x", beam_offset.x);
     rs.set("beam_offset_y", beam_offset.y);
+    rs.set("tractor_offset_x", tractor_offset.x);
+    rs.set("tractor_offset_y", tractor_offset.y);
     rs.set("beam_radius", beam_radius);
     rs.set("can_heal", can_heal);
     

@@ -27,6 +27,20 @@ public:
     //Animate the beam's ring for this long.
     static const float SHIP_BEAM_RING_ANIM_DUR;
     
+    //How often the tractor beam generates a ring.
+    static const float SHIP_TRACTOR_RING_RATE;
+    //Animate the tractor's ring for this long.
+    static const float SHIP_TRACTOR_RING_ANIM_DUR;
+
+    //Time left until the next ring is spat out.
+    timer next_tractor_ring_timer;
+    //Color index of each ring.
+    vector<float> tractor_ring_colors;
+    //Duration of each ring.
+    vector<float> tractor_rings;
+    //Is the tractor beam active?
+    bool tractor_beam_enabled;
+
     //What type of ship it is.
     ship_type* shi_type;
     
@@ -35,6 +49,10 @@ public:
     
     //The beam's absolute coordinates.
     point beam_final_pos;
+    //The tractor's absolute coordinates.
+    point tractor_final_pos;
+    //Cached distance between the beam and the end point of the tractor
+    float beam_to_tractor_dist;
     
     //Heal up a leader.
     void heal_leader(leader* l) const;
