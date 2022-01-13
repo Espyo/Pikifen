@@ -1694,8 +1694,8 @@ void mob::get_sprite_bitmap_effects(
 ) const {
 
     const float STATUS_SHAKING_TIME_MULT = 60.0f;
-    const float DELIVERY_SUCK_SHAKING_TIME_MULT = 30.0f;
-    const float DELIVERY_SUCK_SHAKING_MULT = 5.0f;
+    const float DELIVERY_SUCK_SHAKING_TIME_MULT = 60.0f;
+    const float DELIVERY_SUCK_SHAKING_MULT = 4.0f;
     const float DELIVERY_TOSS_WINDUP_MULT = 5.0f;
     const float DELIVERY_TOSS_MULT = 40.0f;
     const float DELIVERY_TOSS_X_OFFSET = 20.0f;
@@ -1766,13 +1766,25 @@ void mob::get_sprite_bitmap_effects(
             ALLEGRO_COLOR new_glow;
             float new_scale;
             point new_offset;
+
+            float shake_scale = 
+                (1 - delivery_info->anim_time_ratio_left) *
+                DELIVERY_SUCK_SHAKING_MULT;
+
+            if(delivery_info->anim_time_ratio_left < 0.4){
+                shake_scale = std::max(
+                    interpolate_number(
+                        delivery_info->anim_time_ratio_left, 0.2, 0.4,
+                        0.0f, shake_scale), 
+                    0.0f);
+            }
+
             new_offset.x =
                 sin(
                     game.states.gameplay->area_time_passed *
                     DELIVERY_SUCK_SHAKING_TIME_MULT
-                ) *
-                (1 - delivery_info->anim_time_ratio_left) *
-                DELIVERY_SUCK_SHAKING_MULT;
+                ) * shake_scale;
+
                 
             if(delivery_info->anim_time_ratio_left > 0.6) {
                 //Changing color.
@@ -1805,13 +1817,13 @@ void mob::get_sprite_bitmap_effects(
 
                 point end_offset = target_pos - pos;
 
-                float i =
+                float absorb_ratio =
                     interpolate_number(
                         delivery_info->anim_time_ratio_left, 0.0, 0.4,
                         1.0f, 0.0f
                     );
-                i = ease(EASE_IN, i);
-                new_offset += end_offset * i;        
+                absorb_ratio = ease(EASE_IN, absorb_ratio);
+                new_offset += end_offset * absorb_ratio;           
             }
             
             info->glow_color.r =

@@ -298,6 +298,7 @@
     <ClInclude Include="..\source\mob_types\treasure_type.h" />
     <ClInclude Include="..\source\options.h" />
     <ClInclude Include="..\source\particle.h" />
+    <ClInclude Include="..\source\pathing.h" />
     <ClInclude Include="..\source\replay.h" />
     <ClInclude Include="..\source\resource.h" />
     <ClInclude Include="..\source\sector.h" />
@@ -440,6 +441,7 @@
     <ClCompile Include="..\source\mob_types\treasure_type.cpp" />
     <ClCompile Include="..\source\options.cpp" />
     <ClCompile Include="..\source\particle.cpp" />
+    <ClCompile Include="..\source\pathing.cpp" />
     <ClCompile Include="..\source\replay.cpp" />
     <ClCompile Include="..\source\sector.cpp" />
     <ClCompile Include="..\source\spray_type.cpp" />

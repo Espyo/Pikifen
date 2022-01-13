@@ -101,7 +101,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     
     s_ptr->tractor_beam_enabled = false;
     particle p(
-        PARTICLE_TYPE_BITMAP, s_ptr->beam_final_pos,
+        PARTICLE_TYPE_BITMAP, s_ptr->tractor_final_pos,
         s_ptr->z + s_ptr->height, 24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;
