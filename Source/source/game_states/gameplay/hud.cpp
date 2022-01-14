@@ -169,8 +169,8 @@ gameplay_state::hud_struct::hud_struct() {
         al_hold_bitmap_drawing(false);
         
         point sun_size =
-            point(sun_radius * 1.5, sun_radius * 1.5) *
-            (1.0f + sun_meter->get_juicy_grow_amount() * 5.0f);
+            point(sun_radius * 1.5, sun_radius * 1.5) +
+            sun_meter->get_juice_value();
         //Static sun.
         draw_bitmap(
             game.states.gameplay->bmp_sun,
@@ -210,7 +210,9 @@ gameplay_state::hud_struct::hud_struct() {
                 pre_tick_day_minutes < checkpoint &&
                 post_tick_day_minutes >= checkpoint
             ) {
-                sun_meter->start_juicy_grow();
+                sun_meter->start_juice_animation(
+                    gui_item::JUICE_TYPE_GROW_ICON
+                );
                 break;
             }
         }

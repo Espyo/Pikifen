@@ -43,6 +43,13 @@ class gui_manager;
  */
 class gui_item {
 public:
+    enum JUICE_TYPES {
+        JUICE_TYPE_NONE,
+        JUICE_TYPE_GROW_TEXT,
+        JUICE_TYPE_GROW_TEXT_BIGGER,
+        JUICE_TYPE_GROW_ICON,
+    };
+    
     //What GUI manager it belongs to, if any.
     gui_manager* manager;
     //On-screen position, in screen ratio.
@@ -65,7 +72,9 @@ public:
     float padding;
     //Can this item's activation be auto-repeated by holding the button down?
     bool can_auto_repeat;
-    //Timer that controls it growing in size. Used for juice.
+    //Type of the current juice animation.
+    JUICE_TYPES juice_type;
+    //Timer that controls the current juice animation.
     float juice_timer;
     
     //What to do when it's time to draw it.
@@ -89,8 +98,8 @@ public:
     void add_child(gui_item* item);
     //Returns the bottommost Y coordinate of the item's children items.
     float get_child_bottom();
-    //Returns the juicy grow amount for the current juicy grow animation.
-    float get_juicy_grow_amount();
+    //Returns the value related to the current juice animation.
+    float get_juice_value();
     //Returns the real center coordinates.
     point get_real_center();
     //Returns the real size coordinates.
@@ -99,13 +108,15 @@ public:
     bool is_mouse_on(const point &cursor_pos);
     //Removes an item from the list of children.
     void remove_child(gui_item* item);
-    //Starts the process of animation a juicy grow effect.
-    void start_juicy_grow();
+    //Starts some juice animation.
+    void start_juice_animation(JUICE_TYPES type);
     
     gui_item(const bool selectable = false);
     
     static const float JUICY_GROW_DURATION;
-    static const float JUICY_GROW_DELTA;
+    static const float JUICY_GROW_ICON_MULT;
+    static const float JUICY_GROW_TEXT_MULT;
+    static const float JUICY_GROW_TEXT_BIGGER_MULT;
 };
 
 

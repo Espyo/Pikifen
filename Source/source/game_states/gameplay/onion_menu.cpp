@@ -419,7 +419,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         draw_button(
             center, size, "", game.fonts.standard, map_gray(255),
             prev_page_button->selected,
-            prev_page_button->get_juicy_grow_amount()
+            prev_page_button->get_juice_value()
         );
     };
     prev_page_button->on_activate =
@@ -444,7 +444,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         draw_button(
             center, size, "", game.fonts.standard, map_gray(255),
             next_page_button->selected,
-            next_page_button->get_juicy_grow_amount()
+            next_page_button->get_juice_value()
         );
     };
     next_page_button->on_activate =

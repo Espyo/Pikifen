@@ -115,7 +115,7 @@ void options_menu_state::change_auto_throw(const signed int step) {
     
     game.options.auto_throw_mode = AUTO_THROW_PRESETS[cur_auto_throw_idx];
     
-    auto_throw_picker->start_juicy_grow();
+    auto_throw_picker->start_juice_animation(gui_item::JUICE_TYPE_GROW_TEXT);
     update();
 }
 
@@ -144,7 +144,7 @@ void options_menu_state::change_cursor_speed(const signed int step) {
     
     game.options.cursor_speed = CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
     
-    cursor_speed_picker->start_juicy_grow();
+    cursor_speed_picker->start_juice_animation(gui_item::JUICE_TYPE_GROW_TEXT);
     update();
 }
 
@@ -178,7 +178,7 @@ void options_menu_state::change_resolution(const signed int step) {
     game.options.intended_win_h = resolution_presets[cur_resolution_idx].second;
     
     trigger_restart_warning();
-    resolution_picker->start_juicy_grow();
+    resolution_picker->start_juice_animation(gui_item::JUICE_TYPE_GROW_TEXT);
     update();
 }
 
@@ -411,7 +411,7 @@ void options_menu_state::load() {
 void options_menu_state::trigger_restart_warning() {
     if(!warning_text->visible) {
         warning_text->visible = true;
-        warning_text->start_juicy_grow();
+        warning_text->start_juice_animation(gui_item::JUICE_TYPE_GROW_TEXT);
     }
 }
 

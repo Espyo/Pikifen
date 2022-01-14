@@ -20,10 +20,14 @@
 #include "utils/string_utils.h"
 
 
-//When an item does a "juicy grow", change the size by this much.
-const float gui_item::JUICY_GROW_DELTA = 0.05f;
 //When an item does a "juicy grow", this is the full effect duration.
 const float gui_item::JUICY_GROW_DURATION = 0.3f;
+//Grow scale multiplier for a juicy icon grow animation.
+const float gui_item::JUICY_GROW_ICON_MULT = 5.0f;
+//Grow scale multiplier for a juicy text grow animation.
+const float gui_item::JUICY_GROW_TEXT_MULT = 0.05f;
+//Grow scale multiplier for a juicy text "bigger" grow animation.
+const float gui_item::JUICY_GROW_TEXT_BIGGER_MULT = 0.10f;
 //Interval between auto-repeat activations, at the slowest speed.
 const float gui_manager::AUTO_REPEAT_MAX_INTERVAL = 0.3f;
 //Interval between auto-repeat activations, at the fastest speed.
@@ -52,7 +56,8 @@ button_gui_item::button_gui_item(
     on_draw =
     [this, text, font, color] (const point & center, const point & size) {
         draw_button(
-            center, size, text, font, color, selected, get_juicy_grow_amount()
+            center, size, text, font, color, selected,
+            get_juice_value()
         );
     };
 }
@@ -134,6 +139,7 @@ gui_item::gui_item(const bool selectable) :
     offset(0.0f),
     padding(0.0f),
     can_auto_repeat(false),
+    juice_type(JUICE_TYPE_NONE),
     juice_timer(0.0f),
     on_draw(nullptr),
     on_tick(nullptr),
@@ -177,16 +183,34 @@ float gui_item::get_child_bottom() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the juicy grow amount for the current juicy grow animation, if any.
+ * Returns the value related to the current juice animation.
+ * Returns 0 if there's no animation.
  */
-float gui_item::get_juicy_grow_amount() {
-    if(juice_timer == 0.0f) {
-        return 0.0f;
+float gui_item::get_juice_value() {
+    switch(juice_type) {
+    case JUICE_TYPE_GROW_TEXT: {
+        return
+            ease(EASE_UP_AND_DOWN, juice_timer / JUICY_GROW_DURATION) *
+            JUICY_GROW_TEXT_MULT;
+        break;
     }
-    
-    return
-        ease(EASE_UP_AND_DOWN, juice_timer / JUICY_GROW_DURATION) *
-        JUICY_GROW_DELTA;
+    case JUICE_TYPE_GROW_TEXT_BIGGER: {
+        return
+            ease(EASE_UP_AND_DOWN, juice_timer / JUICY_GROW_DURATION) *
+            JUICY_GROW_TEXT_BIGGER_MULT;
+        break;
+    }
+    case JUICE_TYPE_GROW_ICON: {
+        return
+            ease(EASE_UP_AND_DOWN, juice_timer / JUICY_GROW_DURATION) *
+            JUICY_GROW_ICON_MULT;
+        break;
+    }
+    default: {
+        return 0.0f;
+        break;
+    }
+    }
 }
 
 
@@ -262,10 +286,23 @@ void gui_item::remove_child(gui_item* item) {
 
 
 /* ----------------------------------------------------------------------------
- * Starts the process of animating a juicy grow effect.
+ * Starts some juice animation.
+ * type:
+ *   Type of juice animation.
  */
-void gui_item::start_juicy_grow() {
-    juice_timer = JUICY_GROW_DURATION;
+void gui_item::start_juice_animation(JUICE_TYPES type) {
+    juice_type = type;
+    switch(type) {
+    case JUICE_TYPE_GROW_TEXT:
+    case JUICE_TYPE_GROW_TEXT_BIGGER:
+    case JUICE_TYPE_GROW_ICON: {
+        juice_timer = JUICY_GROW_DURATION;
+        break;
+    }
+    default: {
+        break;
+    }
+    }
 }
 
 
@@ -800,6 +837,8 @@ void gui_manager::tick(const float delta_t) {
         if(i_ptr->juice_timer > 0) {
             i_ptr->juice_timer =
                 std::max(0.0f, i_ptr->juice_timer - delta_t);
+        } else {
+            i_ptr->juice_type = gui_item::JUICE_TYPE_NONE;
         }
     }
     
@@ -944,7 +983,7 @@ picker_gui_item::picker_gui_item(
             ">"
         );
         
-        float juicy_grow_amount = this->get_juicy_grow_amount();
+        float juicy_grow_amount = this->get_juice_value();
         
         draw_compressed_scaled_text(
             game.fonts.standard, map_gray(255),
@@ -1099,7 +1138,7 @@ text_gui_item::text_gui_item(
         }
         }
         
-        float juicy_grow_amount = get_juicy_grow_amount();
+        float juicy_grow_amount = get_juice_value();
         
         draw_compressed_scaled_text(
             font, color,

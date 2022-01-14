@@ -391,6 +391,8 @@ Next tasks (roughly sorted most important first)
             A "soft" pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
             A player's leader needs to throw another's
                 Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around. Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
+            A player sees an opposing team's Pikmin on their screen
+                I think the player's own Pikmin (and Pikmin belonging to another player that's still on their team) should appear normal, but the opponents should be marked. Maybe a triangle above them?
         Change area selection menus to have a button that takes you to another menu where you pick how many and which players will play
             The menu should be split into four columns, each one for a player
             Each column has buttons to toggle that player on or off

@@ -654,7 +654,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             new_events_custom_actions_after.push_back(false);
         }
         
-        //Inject a spray event.
+        //Inject a spray touch event.
         if(
             !state_ptr->events[MOB_EV_TOUCHED_SPRAY] &&
             find(

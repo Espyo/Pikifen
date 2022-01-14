@@ -110,22 +110,34 @@ void results_state::do_logic() {
     if(old_time_cp < new_time_cp) {
         switch(old_time_cp) {
         case 0: {
-            area_name_text->start_juicy_grow();
+            area_name_text->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT
+                );
             break;
         } case 2: {
-            time_text->start_juicy_grow();
+            time_text->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT
+                );
             break;
         } case 4: {
-            points_text->start_juicy_grow();
+            points_text->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT
+                );
             break;
         } case 6: {
-            enemies_text->start_juicy_grow();
+            enemies_text->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT
+                );
             break;
         } case 8: {
-            pikmin_born_text->start_juicy_grow();
+            pikmin_born_text->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT
+                );
             break;
         } case 10: {
-            pikmin_deaths_text->start_juicy_grow();
+            pikmin_deaths_text->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT
+                );
             break;
         }
         }

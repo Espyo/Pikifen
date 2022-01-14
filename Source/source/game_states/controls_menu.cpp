@@ -117,7 +117,7 @@ void controls_menu_state::add_control_gui_items(
             }
         }
         
-        float juicy_grow_amount = action_name_text->get_juicy_grow_amount();
+        float juicy_grow_amount = action_name_text->get_juice_value();
         
         draw_compressed_scaled_text(
             game.fonts.standard, map_gray(255),
@@ -163,7 +163,7 @@ void controls_menu_state::add_control_gui_items(
         draw_button(
             center, size, "", game.fonts.standard, map_gray(255),
             control_button->selected,
-            control_button->get_juicy_grow_amount()
+            control_button->get_juice_value()
         );
     };
     control_button->center = point(0.83f, items_y);
@@ -175,7 +175,7 @@ void controls_menu_state::add_control_gui_items(
     
     //Focus, if requested.
     if(focus) {
-        action_name_text->start_juicy_grow();
+        action_name_text->start_juice_animation(gui_item::JUICE_TYPE_GROW_TEXT);
         float list_bottom = list_box->get_child_bottom();
         if(list_bottom > 1.0f) {
             list_box->target_offset = list_bottom - 1.0f;
@@ -204,7 +204,9 @@ void controls_menu_state::choose_next_action(const size_t index) {
     control_info* c_ptr = &game.options.controls[0][index];
     c_ptr->action = sum_and_wrap(c_ptr->action, 1, N_BUTTONS);
     gui_item* action_name_text = list_box->children[index * 5 + 2];
-    ((text_gui_item*) action_name_text)->start_juicy_grow();
+    ((text_gui_item*) action_name_text)->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT
+    );
 }
 
 
@@ -217,7 +219,9 @@ void controls_menu_state::choose_prev_action(const size_t index) {
     control_info* c_ptr = &game.options.controls[0][index];
     c_ptr->action = sum_and_wrap(c_ptr->action, -1, N_BUTTONS);
     gui_item* action_name_text = list_box->children[index * 5 + 2];
-    ((text_gui_item*) action_name_text)->start_juicy_grow();
+    ((text_gui_item*) action_name_text)->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT
+    );
 }
 
 
