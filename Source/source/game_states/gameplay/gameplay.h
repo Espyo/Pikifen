@@ -27,6 +27,17 @@
 class gameplay_state : public game_state {
 public:
 
+    struct hud_struct {
+        //GUI manager.
+        gui_manager gui;
+        //Spray 1 amount text. Cache for convenience.
+        gui_item* spray_1_amount;
+        //Spray 2 amount text. Cache for convenience.
+        gui_item* spray_2_amount;
+        
+        hud_struct();
+    };
+    
     gameplay_state();
     
     //Is the player playing after hours?
@@ -49,6 +60,8 @@ public:
     float day_minutes;
     //Replay of the current day.
     replay day_replay;
+    //Information about the in-game HUD.
+    hud_struct* hud;
     //Player 1's leader cursor, in screen coordinates.
     point leader_cursor_s;
     //Sector that player 1's leader cursor is on, if any.
@@ -95,6 +108,7 @@ public:
     void enter();
     void leave(const LEAVE_TARGET target);
     void start_leaving(const LEAVE_TARGET target);
+    void change_spray_count(const size_t type_nr, signed int amount);
     void update_closest_group_member();
     
     virtual void load();
@@ -123,13 +137,6 @@ private:
             mob_ptr(mob_ptr) {
             
         }
-    };
-    
-    struct hud_struct {
-        //GUI manager.
-        gui_manager gui;
-        
-        hud_struct();
     };
     
     //Contains information about a given Pikmin type in an Onion menu.
@@ -278,8 +285,6 @@ private:
     size_t main_control_id;
     //Movement of player 1's leader.
     movement_struct leader_movement;
-    //Information about the in-game HUD.
-    hud_struct* hud;
     //Information about the current Onion menu, if any.
     onion_menu_struct* onion_menu;
     //Information about the current pause menu, if any.

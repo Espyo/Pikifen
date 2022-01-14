@@ -7,7 +7,6 @@ Current tasks (tasks being worked on, but not yet committed)
         Pikmin type swapping should make the icons slide into place
         Pikmin counters should grow when the number changes
             Cursor too?
-        Spray counters should grow when the number changes
         Spray swapping should make the icons slide into place
         HUD should come in/out of frame when pause is used
         Find more ideas from the canon games
@@ -393,6 +392,13 @@ Next tasks (roughly sorted most important first)
                 Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around. Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
             A player sees an opposing team's Pikmin on their screen
                 I think the player's own Pikmin (and Pikmin belonging to another player that's still on their team) should appear normal, but the opponents should be marked. Maybe a triangle above them?
+        Roulette items
+        An "inventory" system
+            With multiplayer, there will likely be players on keyboards and on controllers. Players on a controller can't really afford mapping 6 buttons just to manage sprays and the roulette item
+            Sprays and the roulette item should go in the same inventory
+            [NEEDS BRAINSTORMING] How will this work in terms of interface? Should it re-purpose the current spray system? If so, it should probably always behave the same, whether you have 1, 2, 3, or more sprays/items, as opposed to using a two-button mechanic when you only have two things
+                But if I standardize the spray system/inventory system, it'll look weird when you have two items, since both the back and forth buttons will be showing the previous spray
+            
         Change area selection menus to have a button that takes you to another menu where you pick how many and which players will play
             The menu should be split into four columns, each one for a player
             Each column has buttons to toggle that player on or off

@@ -14,7 +14,10 @@
 #include "../../utils/string_utils.h"
 #include "gameplay.h"
 
-gameplay_state::hud_struct::hud_struct() {
+gameplay_state::hud_struct::hud_struct() :
+    spray_1_amount(nullptr),
+    spray_2_amount(nullptr) {
+    
     data_node hud_file_node(HUD_FILE_NAME);
     
     gui.register_coords("time",                  40, 10, 70, 10);
@@ -491,7 +494,7 @@ gameplay_state::hud_struct::hud_struct() {
     
     
     //Spray 1 amount.
-    gui_item* spray_1_amount = new gui_item();
+    spray_1_amount = new gui_item();
     spray_1_amount->on_draw =
     [this] (const point & center, const point & size) {
         size_t top_spray_idx = INVALID;
@@ -502,9 +505,10 @@ gameplay_state::hud_struct::hud_struct() {
         }
         if(top_spray_idx == INVALID) return;
         
-        draw_compressed_text(
+        draw_compressed_scaled_text(
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(center.x - size.x / 2.0, center.y),
+            point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
             ALLEGRO_ALIGN_LEFT, 1, size,
             "x" +
             i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays)
@@ -566,7 +570,7 @@ gameplay_state::hud_struct::hud_struct() {
     
     
     //Spray 2 amount.
-    gui_item* spray_2_amount = new gui_item();
+    spray_2_amount = new gui_item();
     spray_2_amount->on_draw =
     [this] (const point & center, const point & size) {
         size_t bottom_spray_idx = INVALID;
@@ -575,9 +579,10 @@ gameplay_state::hud_struct::hud_struct() {
         }
         if(bottom_spray_idx == INVALID) return;
         
-        draw_compressed_text(
+        draw_compressed_scaled_text(
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(center.x - size.x / 2.0, center.y),
+            point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
             ALLEGRO_ALIGN_LEFT, 1, size,
             "x" +
             i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays)

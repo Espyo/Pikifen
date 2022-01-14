@@ -1516,15 +1516,10 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     
     switch(d_ptr->dro_type->effect) {
     case DROP_EFFECT_INCREASE_SPRAYS: {
-        spray_stats_struct* stats =
-            &game.states.gameplay->spray_stats[
-        d_ptr->dro_type->spray_type_to_increase
-        ];
-        stats->nr_sprays =
-            std::max(
-                (long long) stats->nr_sprays + d_ptr->dro_type->increase_amount,
-                (long long) 0
-            );
+        game.states.gameplay->change_spray_count(
+            d_ptr->dro_type->spray_type_to_increase,
+            d_ptr->dro_type->increase_amount
+        );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
         m->apply_status_effect(d_ptr->dro_type->status_to_give, false);
@@ -1985,7 +1980,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.size_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
     
-    game.states.gameplay->spray_stats[spray_nr].nr_sprays--;
+    game.states.gameplay->change_spray_count(spray_nr, -1);
     
     m->stop_chasing();
     m->set_animation(LEADER_ANIM_SPRAYING);

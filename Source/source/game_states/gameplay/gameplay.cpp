@@ -56,6 +56,7 @@ gameplay_state::gameplay_state() :
     cur_leader_nr(0),
     cur_leader_ptr(nullptr),
     day_minutes(0.0f),
+    hud(nullptr),
     leader_cursor_sector(nullptr),
     msg_box(nullptr),
     particles(0),
@@ -100,6 +101,43 @@ gameplay_state::gameplay_state() :
         swarm_arrows.push_back(0);
     };
     swarm_next_arrow_timer.start();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Changes the amount of sprays of a certain type the player owns.
+ * It also animates the correct HUD item, if any.
+ * type_nr:
+ *   Number of the spray type.
+ * amount:
+ *   Amount to change by.
+ */
+void gameplay_state::change_spray_count(
+    const size_t type_nr, signed int amount
+) {
+    spray_stats[type_nr].nr_sprays =
+        std::max(
+            (signed int) spray_stats[type_nr].nr_sprays + amount,
+            (signed int) 0
+        );
+        
+    gui_item* spray_hud_item = NULL;
+    if(game.spray_types.size() > 2) {
+        if(selected_spray == type_nr) {
+            spray_hud_item = hud->spray_1_amount;
+        }
+    } else {
+        if(type_nr == 0) {
+            spray_hud_item = hud->spray_1_amount;
+        } else {
+            spray_hud_item = hud->spray_2_amount;
+        }
+    }
+    if(spray_hud_item) {
+        spray_hud_item->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+        );
+    }
 }
 
 
@@ -318,7 +356,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void gameplay_state::init_hud() {
     hud = new hud_struct();
-
+    
     data_node hud_file_node(HUD_FILE_NAME);
     data_node* bitmaps_node = hud_file_node.get_child_by_name("files");
     

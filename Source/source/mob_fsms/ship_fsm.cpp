@@ -88,7 +88,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             ) {
                 game.states.gameplay->spray_stats[type_nr].nr_ingredients -=
                     game.spray_types[type_nr].ingredients_needed;
-                game.states.gameplay->spray_stats[type_nr].nr_sprays++;
+                game.states.gameplay->change_spray_count(type_nr, 1);
             }
         }
         break;
