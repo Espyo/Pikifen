@@ -42,9 +42,9 @@ public:
     //Can a leader heal at this ship?
     bool can_heal;
     //The ship's beam is offset this much from the ship object's center.
-    point beam_offset;
-    //The ship's tractor end is offset this much from the ship object's center.
-    point tractor_offset;
+    point control_point_offset;
+    //The ship's receptacle is offset this much from the ship object's center.
+    point receptacle_offset;
     //Ship beam radius.
     float beam_radius;
     

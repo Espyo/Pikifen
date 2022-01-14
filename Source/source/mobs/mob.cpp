@@ -532,7 +532,7 @@ bool mob::calculate_carrying_destination(
         
         for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
             ship* s_ptr = game.states.gameplay->mobs.ships[s];
-            dist d(pos, s_ptr->beam_final_pos);
+            dist d(pos, s_ptr->control_point_final_pos);
             
             if(!closest_ship || d < closest_ship_dist) {
                 closest_ship = s_ptr;
@@ -542,7 +542,7 @@ bool mob::calculate_carrying_destination(
         
         if(closest_ship) {
             *target_mob = closest_ship;
-            *target_point = closest_ship->beam_final_pos;
+            *target_point = closest_ship->control_point_final_pos;
             return true;
             
         } else {
@@ -1812,7 +1812,7 @@ void mob::get_sprite_bitmap_effects(
 
                 if(focused_mob->type->category->id == MOB_CATEGORY_SHIPS){
                     ship* s_ptr = (ship*)focused_mob;
-                    target_pos = s_ptr->tractor_final_pos;
+                    target_pos = s_ptr->receptacle_final_pos;
                 }
 
                 point end_offset = target_pos - pos;

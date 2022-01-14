@@ -22,22 +22,22 @@
  */
 class ship : public mob {
 public:
-    //The amount of rings the ship's beam has.
-    static const unsigned char SHIP_BEAM_RING_AMOUNT;
-    //Animate the beam's ring for this long.
-    static const float SHIP_BEAM_RING_ANIM_DUR;
+    //The amount of rings the ship's interaction point has.
+    static const unsigned char SHIP_CONTROL_POINT_RING_AMOUNT;
+    //Animate the interaction point's ring for this long.
+    static const float SHIP_CONTROL_POINT_ANIM_DUR;
     
     //How often the tractor beam generates a ring.
-    static const float SHIP_TRACTOR_RING_RATE;
+    static const float SHIP_TRACTOR_BEAM_EMIT_RATE;
     //Animate the tractor's ring for this long.
     static const float SHIP_TRACTOR_RING_ANIM_DUR;
 
     //Time left until the next ring is spat out.
     timer next_tractor_ring_timer;
-    //Color index of each ring.
-    vector<float> tractor_ring_colors;
-    //Duration of each ring.
-    vector<float> tractor_rings;
+    //Hue of each ring.
+    vector<float> tractor_beam_ring_colors;
+    //How long each ring has existed for.
+    vector<float> tractor_beam_rings;
     //Is the tractor beam active?
     bool tractor_beam_enabled;
 
@@ -47,12 +47,12 @@ public:
     //Nest data.
     pikmin_nest_struct* nest;
     
-    //The beam's absolute coordinates.
-    point beam_final_pos;
-    //The tractor's absolute coordinates.
-    point tractor_final_pos;
-    //Cached distance between the beam and the end point of the tractor
-    float beam_to_tractor_dist;
+    //The interaction point's absolute coordinates.
+    point control_point_final_pos;
+    //The receptacle's absolute coordinates.
+    point receptacle_final_pos;
+    //Cached distance between the beam and the receptacle
+    float control_point_to_receptacle_dist;
     
     //Heal up a leader.
     void heal_leader(leader* l) const;

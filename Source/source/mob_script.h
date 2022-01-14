@@ -166,9 +166,9 @@ enum MOB_EV_TYPES {
     //When the focused mob stops being able to be focused.
     MOB_EV_FOCUSED_MOB_UNAVAILABLE,
     //When the mob starts to receive an object that was carried to it.
-    MOB_EV_DELIVERY_STARTED,
+    MOB_EV_RECEIVING_DELIVERY_STARTED,
     //When the mob finishes receiving an object that was carried to it.
-    MOB_EV_DELIVERY_FINISHED,
+    MOB_EV_RECEIVING_DELIVERY_FINISHED,
     //When the mob touches a drop that it can consume.
     MOB_EV_TOUCHED_DROP,
     //When the mob touches a track object.
