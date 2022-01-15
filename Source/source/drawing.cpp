@@ -234,7 +234,7 @@ void draw_button(
         font, color,
         center,
         point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-        ALLEGRO_ALIGN_CENTER, 1, size,
+        ALLEGRO_ALIGN_CENTER, 1, size, true,
         text
     );
     
@@ -272,6 +272,9 @@ void draw_button(
  *   Vertical align: 0 = top, 1 = middle, 2 = bottom.
  * max_size:
  *   The maximum width and height. Use <= 0 to have no limit.
+ * scale_past_max:
+ *   If true, the max size will only be taken into account when the scale is 1.
+ *   If it is any bigger, it will overflow past the max size.
  * text:
  *   Text to draw.
  */
@@ -279,7 +282,7 @@ void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
     const int flags, const unsigned char valign,
-    const point &max_size, const string &text
+    const point &max_size, const bool scale_past_max, const string &text
 ) {
 
     if(max_size.x == 0 && max_size.y == 0) return;
@@ -287,18 +290,27 @@ void draw_compressed_scaled_text(
     int x1, x2, y1, y2;
     al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
     
-    int text_width = (x2 - x1) * scale.x;
-    int text_height = (y2 - y1) * scale.y;
-    point final_scale = scale;
-    float final_text_height = text_height;
+    point normal_text_size(x2 - x1, y2 - y1);
+    point text_size_to_check = normal_text_size;
+    point final_scale(1.0f, 1.0f);
     
-    if(text_width > max_size.x && max_size.x > 0) {
-        final_scale.x = max_size.x / text_width;
+    if(!scale_past_max) {
+        final_scale = scale;
+        text_size_to_check = normal_text_size * scale;
     }
-    if(text_height > max_size.y && max_size.y > 0) {
-        final_scale.y = max_size.y / text_height;
-        final_text_height = max_size.y;
+    
+    if(max_size.x > 0 && text_size_to_check.x > max_size.x) {
+        final_scale.x = max_size.x / normal_text_size.x;
     }
+    if(max_size.y > 0 && text_size_to_check.y > max_size.y) {
+        final_scale.y = max_size.y / normal_text_size.y;
+    }
+    
+    if(scale_past_max) {
+        final_scale = final_scale * scale;
+    }
+    
+    float final_text_height = normal_text_size.y * final_scale.y;
     
     ALLEGRO_TRANSFORM scale_transform, old_transform;
     al_copy_transform(&old_transform, al_get_current_transform());

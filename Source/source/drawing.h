@@ -68,7 +68,7 @@ void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
     const int flags, const unsigned char valign,
-    const point &max_size, const string &text
+    const point &max_size, const bool scale_past_max, const string &text
 );
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,

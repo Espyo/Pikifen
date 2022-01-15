@@ -509,7 +509,7 @@ gameplay_state::hud_struct::hud_struct() :
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, 1, size,
+            ALLEGRO_ALIGN_LEFT, 1, size, true,
             "x" +
             i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays)
         );
@@ -583,7 +583,7 @@ gameplay_state::hud_struct::hud_struct() :
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, 1, size,
+            ALLEGRO_ALIGN_LEFT, 1, size, true,
             "x" +
             i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays)
         );

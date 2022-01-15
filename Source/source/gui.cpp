@@ -967,6 +967,7 @@ picker_gui_item::picker_gui_item(
             arrow_regular_size,
             ALLEGRO_ALIGN_CENTER, 1,
             size,
+            false,
             "<"
         );
         draw_compressed_scaled_text(
@@ -980,6 +981,7 @@ picker_gui_item::picker_gui_item(
             arrow_regular_size,
             ALLEGRO_ALIGN_CENTER, 1,
             size,
+            false,
             ">"
         );
         
@@ -991,6 +993,7 @@ picker_gui_item::picker_gui_item(
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
             ALLEGRO_ALIGN_LEFT, 1,
             point(size.x * 0.80, size.y),
+            true,
             this->base_text + this->option
         );
         
@@ -1144,7 +1147,7 @@ text_gui_item::text_gui_item(
             font, color,
             point(text_x, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            flags, 1, size,
+            flags, 1, size, true,
             text
         );
     };
