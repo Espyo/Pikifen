@@ -1,7 +1,7 @@
 name = S.S. Drake
 
-beam_offset_x = 180
-beam_offset_y = 0
+control_point_offset = 180 0
+receptacle_offset = 80 0
 beam_radius = 45
 can_heal = true
 height = 200

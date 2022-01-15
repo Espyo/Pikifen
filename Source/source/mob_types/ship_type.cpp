@@ -70,8 +70,8 @@ anim_conversion_vector ship_type::get_anim_conversions() const {
 void ship_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
-    rs.set("beam_offset_x", beam_offset.x);
-    rs.set("beam_offset_y", beam_offset.y);
+    rs.set("control_point_offset", control_point_offset);
+    rs.set("receptacle_offset", receptacle_offset);
     rs.set("beam_radius", beam_radius);
     rs.set("can_heal", can_heal);
     

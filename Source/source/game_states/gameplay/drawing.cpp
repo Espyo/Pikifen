@@ -475,8 +475,8 @@ void gameplay_state::draw_ingame_text() {
     ) {
         draw_notification(
             point(
-                close_to_ship_to_heal->beam_final_pos.x,
-                close_to_ship_to_heal->beam_final_pos.y -
+                close_to_ship_to_heal->control_point_final_pos.x,
+                close_to_ship_to_heal->control_point_final_pos.y -
                 close_to_ship_to_heal->shi_type->beam_radius
             ),
             "Repair suit", &game.options.controls[0][main_control_id]

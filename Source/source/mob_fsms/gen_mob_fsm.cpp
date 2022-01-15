@@ -411,7 +411,7 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
     
     m->focused_mob->fsm.run_event(
-        MOB_EV_RECEIVE_DELIVERY, (void*) m
+        MOB_EV_RECEIVING_DELIVERY_FINISHED, (void*) m
     );
     
     m->to_delete = true;
@@ -452,7 +452,9 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->carry_info->intended_mob);
     m->tangible = false;
     m->become_uncarriable();
-    
+
+    m->focused_mob->fsm.run_event(MOB_EV_RECEIVING_DELIVERY_STARTED);
+
     switch(m->delivery_info->anim_type) {
     case DELIVERY_ANIM_SUCK: {
         m->set_timer(DELIVERY_SUCK_TIME);

@@ -1,7 +1,7 @@
 name = Hocotate ship
 
-beam_offset_x = 120
-beam_offset_y = 0
+control_point_offset = 120 0
+receptacle_offset = 40 0
 beam_radius = 45
 can_heal = true
 height = 200

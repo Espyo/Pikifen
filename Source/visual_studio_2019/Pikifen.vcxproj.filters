@@ -441,6 +441,9 @@
     <ClInclude Include="..\source\game_states\results.h">
       <Filter>Header Files\game_states</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\pathing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\mob_categories\bridge_category.cpp">
@@ -852,6 +855,9 @@
       <Filter>Source Files\game_states</Filter>
     </ClCompile>
     <ClCompile Include="..\source\edge_offset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\pathing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

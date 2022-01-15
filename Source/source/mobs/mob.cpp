@@ -532,7 +532,7 @@ bool mob::calculate_carrying_destination(
         
         for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
             ship* s_ptr = game.states.gameplay->mobs.ships[s];
-            dist d(pos, s_ptr->beam_final_pos);
+            dist d(pos, s_ptr->control_point_final_pos);
             
             if(!closest_ship || d < closest_ship_dist) {
                 closest_ship = s_ptr;
@@ -542,7 +542,7 @@ bool mob::calculate_carrying_destination(
         
         if(closest_ship) {
             *target_mob = closest_ship;
-            *target_point = closest_ship->beam_final_pos;
+            *target_point = closest_ship->control_point_final_pos;
             return true;
             
         } else {
@@ -1765,13 +1765,26 @@ void mob::get_sprite_bitmap_effects(
         case DELIVERY_ANIM_SUCK: {
             ALLEGRO_COLOR new_glow;
             float new_scale;
-            float new_x_offset =
+            point new_offset;
+
+            float shake_scale = 
+                (1 - delivery_info->anim_time_ratio_left) *
+                DELIVERY_SUCK_SHAKING_MULT;
+
+            if(delivery_info->anim_time_ratio_left < 0.4){
+                shake_scale = std::max(
+                    interpolate_number(
+                        delivery_info->anim_time_ratio_left, 0.2, 0.4,
+                        0.0f, shake_scale), 
+                    0.0f);
+            }
+
+            new_offset.x =
                 sin(
                     game.states.gameplay->area_time_passed *
                     DELIVERY_SUCK_SHAKING_TIME_MULT
-                ) *
-                (1 - delivery_info->anim_time_ratio_left) *
-                DELIVERY_SUCK_SHAKING_MULT;
+                ) * shake_scale;
+
                 
             if(delivery_info->anim_time_ratio_left > 0.6) {
                 //Changing color.
@@ -1794,6 +1807,23 @@ void mob::get_sprite_bitmap_effects(
                         0.0f, 1.0f
                     );
                 new_scale = ease(EASE_OUT, new_scale);
+
+                point target_pos = focused_mob->pos;
+
+                if(focused_mob->type->category->id == MOB_CATEGORY_SHIPS){
+                    ship* s_ptr = (ship*)focused_mob;
+                    target_pos = s_ptr->receptacle_final_pos;
+                }
+
+                point end_offset = target_pos - pos;
+
+                float absorb_ratio =
+                    interpolate_number(
+                        delivery_info->anim_time_ratio_left, 0.0, 0.4,
+                        1.0f, 0.0f
+                    );
+                absorb_ratio = ease(EASE_IN, absorb_ratio);
+                new_offset += end_offset * absorb_ratio;           
             }
             
             info->glow_color.r =
@@ -1807,7 +1837,7 @@ void mob::get_sprite_bitmap_effects(
                 
             info->scale *= new_scale;
             
-            info->translation.x += (new_x_offset * new_scale);
+            info->translation += new_offset;
             break;
         }
         case DELIVERY_ANIM_TOSS: {
