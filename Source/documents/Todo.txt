@@ -5,8 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Give more juice to the HUD (Kman)
         Leader swapping should make the leader health items slide into place
         Pikmin type swapping should make the icons slide into place
-        Pikmin counters should grow when the number changes
-            Cursor too?
         Spray swapping should make the icons slide into place
         HUD should come in/out of frame when pause is used
         Find more ideas from the canon games

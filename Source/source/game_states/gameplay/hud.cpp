@@ -16,7 +16,15 @@
 
 gameplay_state::hud_struct::hud_struct() :
     spray_1_amount(nullptr),
-    spray_2_amount(nullptr) {
+    spray_2_amount(nullptr),
+    standby_count_nr(0),
+    standby_count(nullptr),
+    group_count_nr(0),
+    group_count(nullptr),
+    field_count_nr(0),
+    field_count(nullptr),
+    total_count_nr(0),
+    total_count(nullptr) {
     
     data_node hud_file_node(HUD_FILE_NAME);
     
@@ -349,9 +357,9 @@ gameplay_state::hud_struct::hud_struct() :
     
     
     //Standby group member count.
-    gui_item* standby_count = new gui_item();
+    standby_count = new gui_item();
     standby_count->on_draw =
-    [this, standby_count] (const point & center, const point & size) {
+    [this] (const point & center, const point & size) {
         size_t n_standby_pikmin = 0;
         leader* l_ptr = game.states.gameplay->cur_leader_ptr;
         if(l_ptr->group->cur_standby_type) {
@@ -363,25 +371,33 @@ gameplay_state::hud_struct::hud_struct() :
             }
         }
         
+        if(n_standby_pikmin != standby_count_nr) {
+            standby_count->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+            );
+            standby_count_nr = n_standby_pikmin;
+        }
+        
         draw_bitmap(
             game.states.gameplay->bmp_counter_bubble_standby,
             center,
             size
         );
-        draw_compressed_text(
+        draw_compressed_scaled_text(
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(center.x + size.x * 0.4, center.y),
-            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, i2s(n_standby_pikmin)
+            point(1.0f, 1.0f) + standby_count->get_juice_value(),
+            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true, i2s(n_standby_pikmin)
         );
     };
     gui.add_item(standby_count, "pikmin_standby_nr");
     
     
     //Group Pikmin count.
-    gui_item* group_count = new gui_item();
+    group_count = new gui_item();
     group_count->on_draw =
     [this] (const point & center, const point & size) {
-        size_t pikmin_in_group =
+        size_t n_group_pikmin =
             game.states.gameplay->cur_leader_ptr->group->members.size();
         for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
             //If this leader is following the current one,
@@ -391,8 +407,15 @@ gameplay_state::hud_struct::hud_struct() :
                 game.states.gameplay->mobs.leaders[l]->following_group ==
                 game.states.gameplay->cur_leader_ptr
             ) {
-                pikmin_in_group--;
+                n_group_pikmin--;
             }
+        }
+        
+        if(n_group_pikmin != group_count_nr) {
+            group_count->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+            );
+            group_count_nr = n_group_pikmin;
         }
         
         draw_bitmap(
@@ -400,39 +423,50 @@ gameplay_state::hud_struct::hud_struct() :
             center,
             size
         );
-        draw_compressed_text(
+        draw_compressed_scaled_text(
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(center.x + size.x * 0.4, center.y),
-            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, i2s(pikmin_in_group)
+            point(1.0f, 1.0f) + group_count->get_juice_value(),
+            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
+            i2s(n_group_pikmin)
         );
     };
     gui.add_item(group_count, "pikmin_group_nr");
     
     
     //Field Pikmin count.
-    gui_item* field_count = new gui_item();
+    field_count = new gui_item();
     field_count->on_draw =
     [this] (const point & center, const point & size) {
+        size_t n_field_pikmin = game.states.gameplay->mobs.pikmin_list.size();
+        if(n_field_pikmin != field_count_nr) {
+            field_count->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+            );
+            field_count_nr = n_field_pikmin;
+        }
+        
         draw_bitmap(
             game.states.gameplay->bmp_counter_bubble_field,
             center,
             size
         );
-        draw_compressed_text(
+        draw_compressed_scaled_text(
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(center.x + size.x * 0.4, center.y),
-            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7,
-            i2s(game.states.gameplay->mobs.pikmin_list.size())
+            point(1.0f, 1.0f) + field_count->get_juice_value(),
+            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
+            i2s(n_field_pikmin)
         );
     };
     gui.add_item(field_count, "pikmin_field_nr");
     
     
     //Total Pikmin count.
-    gui_item* total_count = new gui_item();
+    total_count = new gui_item();
     total_count->on_draw =
     [this] (const point & center, const point & size) {
-        size_t total_pikmin = game.states.gameplay->mobs.pikmin_list.size();
+        size_t n_total_pikmin = game.states.gameplay->mobs.pikmin_list.size();
         for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
             onion* o_ptr = game.states.gameplay->mobs.onions[o];
             for(
@@ -441,9 +475,16 @@ gameplay_state::hud_struct::hud_struct() :
                 ++t
             ) {
                 for(size_t m = 0; m < N_MATURITIES; ++m) {
-                    total_pikmin += o_ptr->nest->pikmin_inside[t][m];
+                    n_total_pikmin += o_ptr->nest->pikmin_inside[t][m];
                 }
             }
+        }
+        
+        if(n_total_pikmin != total_count_nr) {
+            total_count->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+            );
+            total_count_nr = n_total_pikmin;
         }
         
         draw_bitmap(
@@ -451,10 +492,12 @@ gameplay_state::hud_struct::hud_struct() :
             center,
             size
         );
-        draw_compressed_text(
+        draw_compressed_scaled_text(
             game.fonts.counter, al_map_rgb(255, 255, 255),
             point(center.x + size.x * 0.4, center.y),
-            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, i2s(total_pikmin)
+            point(1.0f, 1.0f) + total_count->get_juice_value(),
+            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
+            i2s(n_total_pikmin)
         );
     };
     gui.add_item(total_count, "pikmin_total_nr");

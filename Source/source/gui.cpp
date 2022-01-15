@@ -27,7 +27,7 @@ const float gui_item::JUICY_GROW_ICON_MULT = 5.0f;
 //Grow scale multiplier for a juicy text grow animation.
 const float gui_item::JUICY_GROW_TEXT_MULT = 0.05f;
 //Grow scale multiplier for a juicy text "bigger" grow animation.
-const float gui_item::JUICY_GROW_TEXT_BIGGER_MULT = 0.10f;
+const float gui_item::JUICY_GROW_TEXT_BIGGER_MULT = 0.15f;
 //Interval between auto-repeat activations, at the slowest speed.
 const float gui_manager::AUTO_REPEAT_MAX_INTERVAL = 0.3f;
 //Interval between auto-repeat activations, at the fastest speed.

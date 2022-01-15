@@ -34,6 +34,22 @@ public:
         gui_item* spray_1_amount;
         //Spray 2 amount text. Cache for convenience.
         gui_item* spray_2_amount;
+        //Current standby count.
+        size_t standby_count_nr;
+        //Standby count text. Cache for convenience.
+        gui_item* standby_count;
+        //Current group count.
+        size_t group_count_nr;
+        //Group count text. Cache for convenience.
+        gui_item* group_count;
+        //Current field count.
+        size_t field_count_nr;
+        //Field count text. Cache for convenience.
+        gui_item* field_count;
+        //Current total count.
+        size_t total_count_nr;
+        //Total count text. Cache for convenience.
+        gui_item* total_count;
         
         hud_struct();
     };
