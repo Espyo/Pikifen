@@ -1,10 +1,10 @@
 name = S.S. Drake
 
-control_point_offset = 180 0
-receptacle_offset = 80 0
-beam_radius = 45
 can_heal = true
+control_point_offset = 200 0
+control_point_radius = 45
 height = 200
 pushable = false
 pushes = true
 radius = 90
+receptacle_offset = 131 5

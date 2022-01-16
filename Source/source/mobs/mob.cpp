@@ -1766,25 +1766,26 @@ void mob::get_sprite_bitmap_effects(
             ALLEGRO_COLOR new_glow;
             float new_scale;
             point new_offset;
-
-            float shake_scale = 
+            
+            float shake_scale =
                 (1 - delivery_info->anim_time_ratio_left) *
                 DELIVERY_SUCK_SHAKING_MULT;
-
-            if(delivery_info->anim_time_ratio_left < 0.4){
-                shake_scale = std::max(
-                    interpolate_number(
-                        delivery_info->anim_time_ratio_left, 0.2, 0.4,
-                        0.0f, shake_scale), 
-                    0.0f);
+                
+            if(delivery_info->anim_time_ratio_left < 0.4) {
+                shake_scale =
+                    std::max(
+                        interpolate_number(
+                            delivery_info->anim_time_ratio_left, 0.2, 0.4,
+                            0.0f, shake_scale),
+                        0.0f);
             }
-
+            
             new_offset.x =
                 sin(
                     game.states.gameplay->area_time_passed *
                     DELIVERY_SUCK_SHAKING_TIME_MULT
                 ) * shake_scale;
-
+                
                 
             if(delivery_info->anim_time_ratio_left > 0.6) {
                 //Changing color.
@@ -1807,23 +1808,23 @@ void mob::get_sprite_bitmap_effects(
                         0.0f, 1.0f
                     );
                 new_scale = ease(EASE_OUT, new_scale);
-
+                
                 point target_pos = focused_mob->pos;
-
-                if(focused_mob->type->category->id == MOB_CATEGORY_SHIPS){
-                    ship* s_ptr = (ship*)focused_mob;
+                
+                if(focused_mob->type->category->id == MOB_CATEGORY_SHIPS) {
+                    ship* s_ptr = (ship*) focused_mob;
                     target_pos = s_ptr->receptacle_final_pos;
                 }
-
+                
                 point end_offset = target_pos - pos;
-
+                
                 float absorb_ratio =
                     interpolate_number(
                         delivery_info->anim_time_ratio_left, 0.0, 0.4,
                         1.0f, 0.0f
                     );
                 absorb_ratio = ease(EASE_IN, absorb_ratio);
-                new_offset += end_offset * absorb_ratio;           
+                new_offset += end_offset * absorb_ratio;
             }
             
             info->glow_color.r =
@@ -1836,7 +1837,6 @@ void mob::get_sprite_bitmap_effects(
                 clamp(info->glow_color.a + new_glow.a, 0.0f, 1.0f);
                 
             info->scale *= new_scale;
-            
             info->translation += new_offset;
             break;
         }

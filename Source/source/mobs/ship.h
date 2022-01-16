@@ -22,42 +22,42 @@
  */
 class ship : public mob {
 public:
-    //The amount of rings the ship's interaction point has.
+    //The amount of rings the ship's control point has.
     static const unsigned char SHIP_CONTROL_POINT_RING_AMOUNT;
-    //Animate the interaction point's ring for this long.
+    //Animate the control point's ring for this long.
     static const float SHIP_CONTROL_POINT_ANIM_DUR;
     
     //How often the tractor beam generates a ring.
     static const float SHIP_TRACTOR_BEAM_EMIT_RATE;
-    //Animate the tractor's ring for this long.
-    static const float SHIP_TRACTOR_RING_ANIM_DUR;
-
-    //Time left until the next ring is spat out.
-    timer next_tractor_ring_timer;
-    //Hue of each ring.
-    vector<float> tractor_beam_ring_colors;
-    //How long each ring has existed for.
-    vector<float> tractor_beam_rings;
-    //Is the tractor beam active?
-    bool tractor_beam_enabled;
-
+    //Animate each tractor beam ring for this long.
+    static const float SHIP_TRACTOR_BEAM_RING_ANIM_DUR;
+    
     //What type of ship it is.
     ship_type* shi_type;
     
     //Nest data.
     pikmin_nest_struct* nest;
     
-    //The interaction point's absolute coordinates.
+    //Time left until the next tractor beam ring is spat out.
+    timer next_tractor_beam_ring_timer;
+    //Hue of each tractor beam ring.
+    vector<float> tractor_beam_ring_colors;
+    //How long each tractor beam ring has existed for.
+    vector<float> tractor_beam_rings;
+    //How many objects are currently being beamed?
+    size_t mobs_being_beamed;
+    
+    //The control point's absolute coordinates.
     point control_point_final_pos;
     //The receptacle's absolute coordinates.
     point receptacle_final_pos;
-    //Cached distance between the beam and the receptacle
+    //Distance between control point and receptacle. Cache for convenience.
     float control_point_to_receptacle_dist;
     
     //Heal up a leader.
     void heal_leader(leader* l) const;
-    //Checks if a leader is under the beam.
-    bool is_leader_under_beam(leader* l) const;
+    //Checks if a leader is on the control point.
+    bool is_leader_on_cp(leader* l) const;
     
     //Constructor.
     ship(const point &pos, ship_type* type, float angle);

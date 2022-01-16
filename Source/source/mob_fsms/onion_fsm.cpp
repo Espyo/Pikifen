@@ -27,7 +27,7 @@ void onion_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
     efc.new_state("idling", ONION_STATE_IDLING); {
-        efc.new_event(MOB_EV_RECEIVING_DELIVERY_FINISHED); {
+        efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(onion_fsm::receive_mob);
         }
     }

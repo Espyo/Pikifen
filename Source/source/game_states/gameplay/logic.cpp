@@ -332,7 +332,7 @@ void gameplay_state::do_gameplay_logic() {
             for(size_t s = 0; s < mobs.ships.size(); ++s) {
                 ship* s_ptr = mobs.ships[s];
                 d = dist(cur_leader_ptr->pos, s_ptr->pos);
-                if(!s_ptr->is_leader_under_beam(cur_leader_ptr)) {
+                if(!s_ptr->is_leader_on_cp(cur_leader_ptr)) {
                     continue;
                 }
                 if(cur_leader_ptr->health == cur_leader_ptr->type->max_health) {
@@ -374,7 +374,7 @@ void gameplay_state::do_gameplay_logic() {
                 }
                 for(size_t s = 0; s < mobs.ships.size(); ++s) {
                     d = dist(cur_leader_ptr->pos, mobs.ships[s]->pos);
-                    if(!mobs.ships[s]->is_leader_under_beam(cur_leader_ptr)) {
+                    if(!mobs.ships[s]->is_leader_on_cp(cur_leader_ptr)) {
                         continue;
                     }
                     if(mobs.ships[s]->shi_type->nest->pik_types.empty()) {

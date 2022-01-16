@@ -30,10 +30,10 @@ void ship_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(ship_fsm::set_anim);
         }
-        efc.new_event(MOB_EV_RECEIVING_DELIVERY_STARTED); {
+        efc.new_event(MOB_EV_STARTED_RECEIVING_DELIVERY); {
             efc.run(ship_fsm::start_delivery);
         }
-        efc.new_event(MOB_EV_RECEIVING_DELIVERY_FINISHED); {
+        efc.new_event(MOB_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(ship_fsm::receive_mob);
         }
     }
@@ -99,7 +99,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     }
     }
     
-    s_ptr->tractor_beam_enabled = false;
+    s_ptr->mobs_being_beamed--;
     particle p(
         PARTICLE_TYPE_BITMAP, s_ptr->receptacle_final_pos,
         s_ptr->z + s_ptr->height, 24, 1.5, PARTICLE_PRIORITY_MEDIUM
@@ -144,5 +144,5 @@ void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
  */
 void ship_fsm::start_delivery(mob* m, void* info1, void* info2) {
     ship* s_ptr = (ship*) m;
-    s_ptr->tractor_beam_enabled = true;
+    s_ptr->mobs_being_beamed++;
 }

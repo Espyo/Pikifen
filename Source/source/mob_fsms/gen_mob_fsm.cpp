@@ -106,17 +106,17 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
     
     if(m->carry_info->destination == CARRY_DESTINATION_SHIP) {
         //Special case: ships.
-        //Because the ship's beam can be offset, and because
+        //Because the ship's control point can be offset, and because
         //the ship is normally in the way, let's consider a
         //"reached destination" event if the treasure is
-        //covering the beam, and not necessarily if the treasure
-        //is on the same coordinates as the beam.
+        //covering the control point, and not necessarily if the treasure
+        //is on the same coordinates as the control point.
         if(m->carry_info->intended_mob) {
             ship* s_ptr = (ship*) m->carry_info->intended_mob;
             settings.final_target_distance =
                 std::max(
                     m->radius -
-                    s_ptr->shi_type->beam_radius,
+                    s_ptr->shi_type->control_point_radius,
                     3.0f
                 );
         }
@@ -411,7 +411,7 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
     
     m->focused_mob->fsm.run_event(
-        MOB_EV_RECEIVING_DELIVERY_FINISHED, (void*) m
+        MOB_EV_FINISHED_RECEIVING_DELIVERY, (void*) m
     );
     
     m->to_delete = true;
@@ -452,9 +452,9 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->carry_info->intended_mob);
     m->tangible = false;
     m->become_uncarriable();
-
-    m->focused_mob->fsm.run_event(MOB_EV_RECEIVING_DELIVERY_STARTED);
-
+    
+    m->focused_mob->fsm.run_event(MOB_EV_STARTED_RECEIVING_DELIVERY);
+    
     switch(m->delivery_info->anim_type) {
     case DELIVERY_ANIM_SUCK: {
         m->set_timer(DELIVERY_SUCK_TIME);

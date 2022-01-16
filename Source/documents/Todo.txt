@@ -145,6 +145,8 @@ Next tasks (roughly sorted most important first)
             Icons for treasures, leaders, Onions, ships, Pikmin, and whatever else of importance
             Area name, North indicator
             Go Here!
+                Figure out what to do with sleeping. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
+                    Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
             When it is opened, it should fade in to view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
             Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
             Working Pikmin and idle Pikmin counts

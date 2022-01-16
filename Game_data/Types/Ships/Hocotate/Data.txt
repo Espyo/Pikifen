@@ -1,9 +1,8 @@
 name = Hocotate ship
 
-control_point_offset = 120 0
-receptacle_offset = 40 0
-beam_radius = 45
 can_heal = true
+control_point_offset = 120 0
+control_point_radius = 45
 height = 200
 leg_body_parts = hole_1; foot_1; hole_2; foot_2
 pikmin_enter_speed = 3
@@ -12,3 +11,4 @@ pikmin_types = Purple Pikmin; White Pikmin
 pushable = false
 pushes = true
 radius = 70
+receptacle_offset = 40 0

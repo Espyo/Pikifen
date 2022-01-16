@@ -41,12 +41,12 @@ public:
     
     //Can a leader heal at this ship?
     bool can_heal;
-    //The ship's beam is offset this much from the ship object's center.
+    //The ship's control point is offset this much from the mob's center.
     point control_point_offset;
-    //The ship's receptacle is offset this much from the ship object's center.
+    //The ship's receptacle is offset this much from the mob's center.
     point receptacle_offset;
-    //Ship beam radius.
-    float beam_radius;
+    //Ship control point radius.
+    float control_point_radius;
     
     ship_type();
     ~ship_type();

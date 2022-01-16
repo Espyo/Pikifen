@@ -161,6 +161,7 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_animation_end",               MOB_EV_ANIMATION_END);
     r("on_damage",                      MOB_EV_DAMAGE);
     r("on_far_from_home",               MOB_EV_FAR_FROM_HOME);
+    r("on_finish_receiving_delivery",   MOB_EV_FINISHED_RECEIVING_DELIVERY);
     r("on_focus_off_reach",             MOB_EV_FOCUS_OFF_REACH);
     r("on_frame_signal",                MOB_EV_FRAME_SIGNAL);
     r("on_held",                        MOB_EV_HELD);
@@ -173,11 +174,10 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_object_in_reach",             MOB_EV_OBJECT_IN_REACH);
     r("on_opponent_in_reach",           MOB_EV_OPPONENT_IN_REACH);
     r("on_pikmin_land",                 MOB_EV_THROWN_PIKMIN_LANDED);
-    r("on_start_receiving_delivery",    MOB_EV_RECEIVING_DELIVERY_STARTED);
-    r("on_finish_receiving_delivery",   MOB_EV_RECEIVING_DELIVERY_FINISHED);
     r("on_receive_message",             MOB_EV_RECEIVE_MESSAGE);
     r("on_released",                    MOB_EV_RELEASED);
     r("on_reach_destination",           MOB_EV_REACHED_DESTINATION);
+    r("on_start_receiving_delivery",    MOB_EV_STARTED_RECEIVING_DELIVERY);
     r("on_timer",                       MOB_EV_TIMER);
     r("on_touch_hazard",                MOB_EV_TOUCHED_HAZARD);
     r("on_touch_object",                MOB_EV_TOUCHED_OBJECT);

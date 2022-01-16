@@ -22,7 +22,9 @@
 
     <h2 id="overview">Overview</h2>
 
-    <p>Every ship has a beam next to it; this is where the Pikmin and leader interact with the ship proper. They can also store Pikmin inside, like Onions, though they are incapable of generating Pikmin seeds.</p>
+    <p>Ships have a control point and a receptacle. The control point is on the floor, and is what the leader stands on to interact with the ship. It is also the spot Pikmin deliver objects to. The receptacle is the part of the ship that actually receives the object. When an object is delivered, it gets sucked in via a tractor beam from the control point to the receptacle.</p>
+
+    <p>Ships can also store Pikmin inside, like Onions, though they are incapable of generating Pikmin seeds.</p>
 
     <p>Ship type objects are hardcoded in the engine to sit there and accept delivered items, to heal leaders if possible, and to allow the player to manage the Pikmin inside if possibe.</p>
 
@@ -38,6 +40,9 @@
     
     <ul>
       <li><b><code>can_heal</code></b>: If <code>true</code>, that means that leaders can heal their spacesuits using this ship, like the S.S. Dolphin. Defaults to false.</li>
+      <li><b><code>control_point_radius</code></b>: Radius of the control point.</li>
+      <li><b><code>control_point_offset</code></b>: X and Y position of the control point. This uses <a href="glossary.html#R">relative coordinates</a>.</li>
+      <li><b><code>receptacle_offset</code></b>: X and Y position of the receptacle. This uses <a href="glossary.html#R">relative coordinates</a>.</li>
     </ul>
 
     <h3 id="optional">Optional</h3>
