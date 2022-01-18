@@ -569,22 +569,36 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     
     size_t n_rings = whistle.rings.size();
     float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
+    float cursor_distance = dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
     for(size_t r = 0; r < n_rings; ++r) {
         point pos(
             cur_leader_ptr->pos.x + cos(cursor_angle) * whistle.rings[r],
             cur_leader_ptr->pos.y + sin(cursor_angle) * whistle.rings[r]
         );
+        float ring_to_whistle_distance = cursor_distance - whistle.rings[r];
+        float scale = 
+            interpolate_number(
+                    ring_to_whistle_distance,
+                    0, cursor_distance,
+                    whistle.radius * 2, 0
+                );
+        float alpha = 
+            interpolate_number(
+                    ring_to_whistle_distance,
+                    0, cursor_distance,
+                    0, 100
+                );
         unsigned char n = whistle.ring_colors[r];
         draw_bitmap(
             game.sys_assets.bmp_bright_ring,
             pos,
-            point(16.0f, 16.0f),
+            point(scale, scale),
             0.0f,
             al_map_rgba(
                 WHISTLE_RING_COLORS[n][0],
                 WHISTLE_RING_COLORS[n][1],
                 WHISTLE_RING_COLORS[n][2],
-                192
+                alpha
             )
         );
     }
