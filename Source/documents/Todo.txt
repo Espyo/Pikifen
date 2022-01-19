@@ -11,12 +11,12 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    If you whistle a Pikmin that's circling around an opponent, it won't stop circling
     
     --- v0.22.0 ---
     Details
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
-        Enemies should squash and stretch every time they are hurt
+        Gates and bridges probably don't need a health wheel now that they visually show how close they are to being done
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
@@ -205,8 +205,10 @@ Next tasks (roughly sorted most important first)
                     Survive for the specified time
                     Reach the exit (specified leaders or all)
                     Grow the specified Pikmin amount
+                    Bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
                     No goal
                 Triggering the goal instantly finishes the level as a "victory"
+            Thumbnail (Thumbnail.jpg in the area's folder; the area editor lets you pick a file from your computer to copy there)
             Loss conditions
                 Any combination of the following:
                     Taking damage
@@ -232,6 +234,7 @@ Next tasks (roughly sorted most important first)
                 The list of areas, with their names and a medal icon next to each
             Right side
                 Details about the highlighted mission, in order:
+                    Thumbnail
                     Area name
                     Description
                     Goal
@@ -825,6 +828,7 @@ Tasks for later on (I might never implement these)
         Bud_icon.png and Flower_icon.png should be White_bud_icon.png and White_flower_icon.png, to fit with the pink and purple buds and flowers
     [NEEDS BRAINSTORMING] Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/
+        Good luck with floating point determinism lol
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
     Possible cleanup
         Timers
@@ -845,7 +849,7 @@ Tasks for later on (I might never implement these)
             A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
                 You can just give the mob a status effect that changes its speed
     Possible solutions to known issues
-        Remove all native message boxes, and implement my own, or come up with alternative ways to supply the information. If I could remove all of them, there would be no more problems with "true fullscreen" mode
+        Regarding true fullscreen crashing when a message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features
         An enemy that can heal, for instance, 20HP for each Pikmin eaten
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard

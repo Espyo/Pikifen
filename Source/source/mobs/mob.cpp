@@ -24,6 +24,10 @@
 #include "tool.h"
 #include "track.h"
 
+//Duration of the damage squash-and-stretch animation.
+const float mob::DAMAGE_SQUASH_DURATION = 0.25f;
+//How much to change the scale by during a damage squash-and-stretch animation.
+const float mob::DAMAGE_SQUASH_AMOUNT = 0.04f;
 
 size_t next_mob_id = 0;
 
@@ -81,6 +85,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     stored_inside_another(nullptr),
     health_wheel_visible_ratio(1.0f),
     health_wheel_alpha(0.85f),
+    damage_squash_time(0.0f),
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
@@ -1216,6 +1221,13 @@ void mob::do_attack_effects(
     if(!useless) {
         game.sys_assets.sfx_attack.play(0.06, false, 0.6f);
     }
+    
+    //Damage squash-and-stretch animation.
+    if(!useless) {
+        if(damage_squash_time == 0.0f) {
+            damage_squash_time = DAMAGE_SQUASH_DURATION;
+        }
+    }
 }
 
 
@@ -1229,7 +1241,7 @@ void mob::draw_limb() {
     if(!sprite_to_use) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(sprite_to_use, &eff, true, true, true);
+    get_sprite_bitmap_effects(sprite_to_use, &eff, true, true, true, false);
     
     point parent_end;
     if(parent->limb_parent_body_part == INVALID) {
@@ -1291,7 +1303,7 @@ void mob::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true);
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false);
     
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }
@@ -1686,11 +1698,13 @@ float mob::get_latched_pikmin_weight() const {
  *   If true, add sector brightness coloring to the result.
  * add_delivery:
  *   If true, add Onion/ship/etc. delivery changes to the result.
+ * add_damage_squash:
+ *   If true, add damage squash-and-stretch scaling to the result.
  */
 void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, bitmap_effect_info* info,
     const bool add_status, const bool add_sector_brightness,
-    const bool add_delivery
+    const bool add_delivery, const bool add_damage_squash
 ) const {
 
     const float STATUS_SHAKING_TIME_MULT = 60.0f;
@@ -1890,6 +1904,40 @@ void mob::get_sprite_bitmap_effects(
         }
         }
         
+    }
+    
+    if(add_damage_squash && damage_squash_time > 0.0f) {
+        float damage_squash_time_ratio =
+            damage_squash_time / DAMAGE_SQUASH_DURATION;
+        float damage_scale_y = 1.0f;
+        if(damage_squash_time_ratio > 0.5) {
+            damage_scale_y =
+                interpolate_number(
+                    damage_squash_time_ratio,
+                    0.5f, 1.0f, 0.0f, 1.0f
+                );
+            damage_scale_y =
+                ease(
+                    EASE_UP_AND_DOWN,
+                    damage_scale_y
+                );
+            damage_scale_y *= DAMAGE_SQUASH_AMOUNT;
+        } else {
+            damage_scale_y =
+                interpolate_number(
+                    damage_squash_time_ratio,
+                    0.0f, 0.5f, 1.0f, 0.0f
+                );
+            damage_scale_y =
+                ease(
+                    EASE_UP_AND_DOWN,
+                    damage_scale_y
+                );
+            damage_scale_y *= -DAMAGE_SQUASH_AMOUNT;
+        }
+        damage_scale_y += 1.0f;
+        info->scale.y *= damage_scale_y;
+        info->scale.x *= 1.0f / damage_scale_y;
     }
 }
 
@@ -3214,6 +3262,11 @@ void mob::tick_misc_logic(const float delta_t) {
             }
             member->leave_group();
         }
+    }
+    
+    if(damage_squash_time > 0.0f) {
+        damage_squash_time -= delta_t;
+        damage_squash_time = std::max(0.0f, damage_squash_time);
     }
     
     //Delivery stuff.

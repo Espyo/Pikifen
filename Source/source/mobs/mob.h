@@ -117,6 +117,9 @@ enum H_MOVE_RESULTS {
  */
 class mob {
 public:
+    static const float DAMAGE_SQUASH_DURATION;
+    static const float DAMAGE_SQUASH_AMOUNT;
+    
     //Basic information.
     //What type of (generic) mob it is. (e.g. Olimar, Red Bulborb, etc.)
     mob_type* type;
@@ -231,11 +234,13 @@ public:
     //If it's stored inside another mob, this indicates which mob it is.
     mob* stored_inside_another;
     
-    //Health wheel properties.
+    //Health-related properties.
     //How much the health wheel is filled. Gradually moves to its target amount.
     float health_wheel_visible_ratio;
     //Current health wheel alpha. Moves to 0 when health <= 0.
     float health_wheel_alpha;
+    //Time left in the current damage squash-and-stretch animation.
+    float damage_squash_time;
     
     //Other properties.
     //Incremental ID. Used for minor things.
@@ -424,7 +429,7 @@ public:
     void get_sprite_bitmap_effects(
         sprite* s_ptr, bitmap_effect_info* info,
         const bool add_status, const bool add_sector_brightness,
-        const bool add_delivery
+        const bool add_delivery, const bool add_damage_squash
     ) const;
     point get_sprite_center(sprite* s) const;
     point get_sprite_dimensions(sprite* s, point* scale = NULL) const;

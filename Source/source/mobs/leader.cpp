@@ -413,7 +413,7 @@ void leader::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true);
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false);
     
     if(invuln_period.time_left > 0.0f) {
         sprite* spark_s =
