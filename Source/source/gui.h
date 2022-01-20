@@ -318,6 +318,8 @@ private:
     GUI_MANAGER_ANIMS anim_type;
     //Timer for the current animation.
     timer anim_timer;
+    //Are the items currently visible?
+    bool visible;
     
     static const float AUTO_REPEAT_MAX_INTERVAL;
     static const float AUTO_REPEAT_MIN_INTERVAL;

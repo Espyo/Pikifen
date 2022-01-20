@@ -148,6 +148,7 @@ void gameplay_state::do_game_drawing(
         game.perf_mon->start_measurement("Drawing -- HUD");
     }
     al_use_transform(&game.identity_transform);
+    hud->gui.draw();
     if(msg_box) {
         draw_message_box();
     } else if(onion_menu) {
@@ -156,7 +157,6 @@ void gameplay_state::do_game_drawing(
         draw_pause_menu();
     } else {
         draw_mouse_cursor(cursor_color);
-        hud->gui.draw();
     }
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
@@ -576,18 +576,18 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             cur_leader_ptr->pos.y + sin(cursor_angle) * whistle.rings[r]
         );
         float ring_to_whistle_distance = cursor_distance - whistle.rings[r];
-        float scale = 
+        float scale =
             interpolate_number(
-                    ring_to_whistle_distance,
-                    0, cursor_distance,
-                    whistle.radius * 2, 0
-                );
-        float alpha = 
+                ring_to_whistle_distance,
+                0, cursor_distance,
+                whistle.radius * 2, 0
+            );
+        float alpha =
             interpolate_number(
-                    ring_to_whistle_distance,
-                    0, cursor_distance,
-                    0, 100
-                );
+                ring_to_whistle_distance,
+                0, cursor_distance,
+                0, 100
+            );
         unsigned char n = whistle.ring_colors[r];
         draw_bitmap(
             game.sys_assets.bmp_bright_ring,

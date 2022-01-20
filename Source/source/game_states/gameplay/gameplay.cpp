@@ -35,6 +35,10 @@ const float gameplay_state::CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
 const unsigned char gameplay_state::CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Path to the GUI information file.
 const string gameplay_state::HUD_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
+//How long the HUD moves for when a menu is entered.
+const float gameplay_state::MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
+//How long the HUD moves for when a menu is exited.
+const float gameplay_state::MENU_EXIT_HUD_MOVE_TIME = 0.9f;
 //The Onion menu can only show, at most, these many Pikmin types per page.
 const size_t gameplay_state::ONION_MENU_TYPES_PER_PAGE = 5;
 //Swarming arrows move these many units per second.

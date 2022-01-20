@@ -195,6 +195,10 @@ void gameplay_state::handle_button(
                             close_to_nest_to_open,
                             cur_leader_ptr
                         );
+                        hud->gui.start_animation(
+                            GUI_MANAGER_ANIM_IN_TO_OUT,
+                            MENU_ENTRY_HUD_MOVE_TIME
+                        );
                         paused = true;
                         
                         //TODO replace with a better solution.
@@ -335,6 +339,10 @@ void gameplay_state::handle_button(
             
             pause_menu = new pause_menu_struct();
             paused = true;
+            hud->gui.start_animation(
+                GUI_MANAGER_ANIM_IN_TO_OUT,
+                MENU_ENTRY_HUD_MOVE_TIME
+            );
             
             //TODO replace with a better solution.
             cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);

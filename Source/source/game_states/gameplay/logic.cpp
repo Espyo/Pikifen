@@ -582,6 +582,10 @@ void gameplay_state::do_menu_logic() {
             delete onion_menu;
             onion_menu = NULL;
             paused = false;
+            hud->gui.start_animation(
+                GUI_MANAGER_ANIM_OUT_TO_IN,
+                MENU_EXIT_HUD_MOVE_TIME
+            );
         }
     } else if(pause_menu) {
         if(!pause_menu->to_delete) {
@@ -590,6 +594,10 @@ void gameplay_state::do_menu_logic() {
             delete pause_menu;
             pause_menu = NULL;
             paused = false;
+            hud->gui.start_animation(
+                GUI_MANAGER_ANIM_OUT_TO_IN,
+                MENU_EXIT_HUD_MOVE_TIME
+            );
         }
     }
     

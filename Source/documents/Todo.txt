@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
         Leader swapping should make the leader health items slide into place
         Pikmin type swapping should make the icons slide into place
         Spray swapping should make the icons slide into place
-        HUD should come in/out of frame when pause is used
         Find more ideas from the canon games
     
 Next tasks (roughly sorted most important first)

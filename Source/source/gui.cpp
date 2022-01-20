@@ -322,8 +322,24 @@ gui_manager::gui_manager() :
     auto_repeat_on(false),
     auto_repeat_duration(0.0f),
     auto_repeat_next_activation(0.0f),
-    anim_type(GUI_MANAGER_ANIM_NONE) {
+    anim_type(GUI_MANAGER_ANIM_NONE),
+    visible(true) {
     
+    anim_timer =
+        timer(
+    0.0f, [this] () {
+        switch(anim_type) {
+        case GUI_MANAGER_ANIM_IN_TO_OUT: {
+            visible = false;
+            break;
+        }
+        default: {
+            visible = true;
+            break;
+        }
+        }
+    }
+        );
 }
 
 
@@ -368,6 +384,8 @@ void gui_manager::destroy() {
  * Draws all items on-screen.
  */
 void gui_manager::draw() {
+    if(!visible) return;
+    
     int ocr_x, ocr_y, ocr_w, ocr_h;
     for(size_t i = 0; i < items.size(); ++i) {
         gui_item* i_ptr = items[i];
@@ -808,6 +826,7 @@ void gui_manager::start_animation(
 ) {
     anim_type = type;
     anim_timer.start(duration);
+    visible = true;
 }
 
 

@@ -27,6 +27,17 @@
 class gameplay_state : public game_state {
 public:
 
+    static const float AREA_INTRO_HUD_MOVE_TIME;
+    static const float AREA_TITLE_FADE_DURATION;
+    static const float CURSOR_TRAIL_SAVE_INTERVAL;
+    static const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
+    static const string HUD_FILE_NAME;
+    static const float MENU_ENTRY_HUD_MOVE_TIME;
+    static const float MENU_EXIT_HUD_MOVE_TIME;
+    static const size_t ONION_MENU_TYPES_PER_PAGE;
+    static const float SWARM_ARROW_SPEED;
+    static const float SWARM_ARROWS_INTERVAL;
+    
     struct hud_struct {
         //GUI manager.
         gui_manager gui;
@@ -367,15 +378,6 @@ private:
     );
     void process_system_key_press(const int keycode);
     void unload_game_content();
-    
-    static const float AREA_INTRO_HUD_MOVE_TIME;
-    static const float AREA_TITLE_FADE_DURATION;
-    static const float CURSOR_TRAIL_SAVE_INTERVAL;
-    static const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
-    static const string HUD_FILE_NAME;
-    static const size_t ONION_MENU_TYPES_PER_PAGE;
-    static const float SWARM_ARROW_SPEED;
-    static const float SWARM_ARROWS_INTERVAL;
 };
 
 
