@@ -1996,6 +1996,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     
     pik->was_last_hit_dud = false;
     pik->consecutive_dud_hits = 0;
+    pik->stop_circling();
     
     caller->add_to_group(pik);
     game.sys_assets.sfx_pikmin_called.play(0.03, false);

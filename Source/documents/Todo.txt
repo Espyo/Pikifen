@@ -11,7 +11,6 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If you whistle a Pikmin that's circling around an opponent, it won't stop circling
     
     --- v0.22.0 ---
     Details
