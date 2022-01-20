@@ -6,6 +6,7 @@ right_rail_texture = Ceramic_bridge_rail_red_right.png
 rail_width = 40
 max_health = 30
 radius = 32
+show_health = false
 target_type = none
 
 spawns {

@@ -5,4 +5,5 @@ left_rail_texture = Bridge_rail.jpg
 right_rail_texture = Bridge_rail.jpg
 height = 32
 max_health = 2000
+show_health = false
 radius = 32

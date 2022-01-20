@@ -9,6 +9,7 @@ pushable = false
 pushes = true
 radius = 32
 rectangular_dimensions = 40 192
+show_health = false
 target_type = explodable_pikmin_obstacle
 team = obstacle
 
