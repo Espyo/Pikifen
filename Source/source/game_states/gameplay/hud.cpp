@@ -373,7 +373,7 @@ gameplay_state::hud_struct::hud_struct() :
         
         if(n_standby_pikmin != standby_count_nr) {
             standby_count->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             standby_count_nr = n_standby_pikmin;
         }
@@ -413,7 +413,7 @@ gameplay_state::hud_struct::hud_struct() :
         
         if(n_group_pikmin != group_count_nr) {
             group_count->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             group_count_nr = n_group_pikmin;
         }
@@ -441,7 +441,7 @@ gameplay_state::hud_struct::hud_struct() :
         size_t n_field_pikmin = game.states.gameplay->mobs.pikmin_list.size();
         if(n_field_pikmin != field_count_nr) {
             field_count->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             field_count_nr = n_field_pikmin;
         }
@@ -482,7 +482,7 @@ gameplay_state::hud_struct::hud_struct() :
         
         if(n_total_pikmin != total_count_nr) {
             total_count->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             total_count_nr = n_total_pikmin;
         }

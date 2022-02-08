@@ -175,7 +175,7 @@ void controls_menu_state::add_control_gui_items(
     
     //Focus, if requested.
     if(focus) {
-        action_name_text->start_juice_animation(gui_item::JUICE_TYPE_GROW_TEXT);
+        action_name_text->start_juice_animation(gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH);
         float list_bottom = list_box->get_child_bottom();
         if(list_bottom > 1.0f) {
             list_box->target_offset = list_bottom - 1.0f;
@@ -205,7 +205,7 @@ void controls_menu_state::choose_next_action(const size_t index) {
     c_ptr->action = sum_and_wrap(c_ptr->action, 1, N_BUTTONS);
     gui_item* action_name_text = list_box->children[index * 5 + 2];
     ((text_gui_item*) action_name_text)->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
     );
 }
 
@@ -220,7 +220,7 @@ void controls_menu_state::choose_prev_action(const size_t index) {
     c_ptr->action = sum_and_wrap(c_ptr->action, -1, N_BUTTONS);
     gui_item* action_name_text = list_box->children[index * 5 + 2];
     ((text_gui_item*) action_name_text)->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
     );
 }
 

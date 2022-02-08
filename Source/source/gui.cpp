@@ -20,14 +20,16 @@
 #include "utils/string_utils.h"
 
 
-//When an item does a "juicy grow", this is the full effect duration.
+//When an item does a juicy grow, this is the full effect duration.
 const float gui_item::JUICY_GROW_DURATION = 0.3f;
+//When an item does a juicy elastic grow, this is the full effect duration.
+const float gui_item::JUICY_GROW_ELASTIC_DURATION = 0.4f;
 //Grow scale multiplier for a juicy icon grow animation.
 const float gui_item::JUICY_GROW_ICON_MULT = 5.0f;
-//Grow scale multiplier for a juicy text grow animation.
-const float gui_item::JUICY_GROW_TEXT_MULT = 0.05f;
-//Grow scale multiplier for a juicy text "bigger" grow animation.
-const float gui_item::JUICY_GROW_TEXT_BIGGER_MULT = 0.15f;
+//Grow scale multiplier for a juicy text low grow animation.
+const float gui_item::JUICY_GROW_TEXT_LOW_MULT = 0.05f;
+//Grow scale multiplier for a juicy text high grow animation.
+const float gui_item::JUICY_GROW_TEXT_HIGH_MULT = 0.15f;
 //Interval between auto-repeat activations, at the slowest speed.
 const float gui_manager::AUTO_REPEAT_MAX_INTERVAL = 0.3f;
 //Interval between auto-repeat activations, at the fastest speed.
@@ -188,21 +190,38 @@ float gui_item::get_child_bottom() {
  */
 float gui_item::get_juice_value() {
     switch(juice_type) {
-    case JUICE_TYPE_GROW_TEXT: {
+    case JUICE_TYPE_GROW_TEXT_LOW: {
+        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
         return
-            ease(EASE_UP_AND_DOWN, juice_timer / JUICY_GROW_DURATION) *
-            JUICY_GROW_TEXT_MULT;
+            ease(EASE_UP_AND_DOWN, anim_ratio) *
+            JUICY_GROW_TEXT_LOW_MULT;
         break;
     }
-    case JUICE_TYPE_GROW_TEXT_BIGGER: {
+    case JUICE_TYPE_GROW_TEXT_HIGH: {
+        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
         return
-            ease(EASE_UP_AND_DOWN, juice_timer / JUICY_GROW_DURATION) *
-            JUICY_GROW_TEXT_BIGGER_MULT;
+            ease(EASE_UP_AND_DOWN, anim_ratio) *
+            JUICY_GROW_TEXT_HIGH_MULT;
+        break;
+    }
+    case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW: {
+        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_ELASTIC_DURATION);
+        return
+            ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
+            JUICY_GROW_TEXT_LOW_MULT;
+        break;
+    }
+    case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
+        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_ELASTIC_DURATION);
+        return
+            ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
+            JUICY_GROW_TEXT_HIGH_MULT;
         break;
     }
     case JUICE_TYPE_GROW_ICON: {
+        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
         return
-            ease(EASE_UP_AND_DOWN, juice_timer / JUICY_GROW_DURATION) *
+            ease(EASE_UP_AND_DOWN, anim_ratio) *
             JUICY_GROW_ICON_MULT;
         break;
     }
@@ -293,10 +312,15 @@ void gui_item::remove_child(gui_item* item) {
 void gui_item::start_juice_animation(JUICE_TYPES type) {
     juice_type = type;
     switch(type) {
-    case JUICE_TYPE_GROW_TEXT:
-    case JUICE_TYPE_GROW_TEXT_BIGGER:
+    case JUICE_TYPE_GROW_TEXT_LOW:
+    case JUICE_TYPE_GROW_TEXT_HIGH:
     case JUICE_TYPE_GROW_ICON: {
         juice_timer = JUICY_GROW_DURATION;
+        break;
+    }
+    case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW:
+    case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
+        juice_timer = JUICY_GROW_ELASTIC_DURATION;
         break;
     }
     default: {

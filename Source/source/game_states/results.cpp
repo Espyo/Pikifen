@@ -111,33 +111,33 @@ void results_state::do_logic() {
         switch(old_time_cp) {
         case 0: {
             area_name_text->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT
-                );
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
             break;
         } case 2: {
             time_text->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT
-                );
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
             break;
         } case 4: {
             points_text->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT
-                );
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
             break;
         } case 6: {
             enemies_text->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT
-                );
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
             break;
         } case 8: {
             pikmin_born_text->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT
-                );
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
             break;
         } case 10: {
             pikmin_deaths_text->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT
-                );
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
             break;
         }
         }

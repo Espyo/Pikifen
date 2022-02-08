@@ -12,7 +12,20 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
+        Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
+        Pause menu, Onion menu, and message box should slide into place from off-screen. In addition, the pause menu and Onion menu should have the background solid transparent rectangle fade in and out. Finally, gameplay and input should still be paused while the menu is doing its exit transition
+        Add juice to Onion menu
+        Add juice to the fraction numbers
+            Maybe make them grow into existence, animate the number when it changes, and flash white when the requirement is met
+        The health wheels should probably grow into existence
+        Leader health wheels should glow red when at low health (thanks Kman)
+        Maybe both the fraction numbers and health wheel should be established in a vector and created/destroyed as needed, instead of EVERY mob having data about the numbers/health wheel even if it doesn't need it or can't use it
+        Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
+        Pikmin that are plucked should be thrown backwards. Plus, there should be some dirt particle effects
+        More buttons on the HUD, so players now what to press to swap leaders, Pikmin types, etc.
+            Also, make them smaller
+        Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/
@@ -81,6 +94,7 @@ Next tasks (roughly sorted most important first)
         Add the Inkscape noise filter to more sprites? Or even a different filter
         Remember to update the Pikmin Fanon wiki page link in the PNG files
     Pikmin animation improvements
+        The leaf and bud graphics are pretty ugly -- they use chunky outlines
         Blinking when walking or idling -- these animations should start in random frames (do Pikmin even blink?)
         Throwing animation needs to be reworked
             Pikmin hands are below the head in the pose where the butt is facing the camera
@@ -123,7 +137,7 @@ Next tasks (roughly sorted most important first)
         Candypop Buds should squash when they close
         Ceramic bridges should be reworked for the new bridge format
         Wooden bridges need to be 192px long, to fit the new bridge format
-        Animate the Hocotate ship -- use Kman's zip
+        Animate the Hocotate ship (use Kman's zip) and the S.S. Drake
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
         Add a glow to the smack effect particle?
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
@@ -245,6 +259,8 @@ Next tasks (roughly sorted most important first)
                         High scores + their medals (only present if the stage's grading mode is points)
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area
+        Misc. ideas
+            A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
     
     --- v0.24.0 ---
     Music
@@ -373,8 +389,11 @@ Next tasks (roughly sorted most important first)
         1 struct of info for each player, multiplayer controls
         During loading, show how the screen is going to be split, and show which player is in which screen
         Pauses are full-screen, pause everything, and every player should get their pause menu button, so that if one player is busy mashing, they don't start picking options because somebody else paused
-        Split-screen logic: vertical, horizontal, and four-way
-            Add HUD support for all the different layouts
+        HUD changes
+            Split-screen logic: horizontal, and four-way
+                Maybe vertical as well? Might be a lot of effort for not a lot of payback
+            Add HUD support for all the different split-screen layouts
+            In competitive modes, tint each player's HUD with their team color or something
         Make sure that:
             Leaders can't steal each other's group members
                 This includes Pikmin that are knocked down and get whistled, and sprouts
@@ -383,7 +402,7 @@ Next tasks (roughly sorted most important first)
             Make sure Pikmin can't carry something the opposing team is already carrying
             Candypop Buds can't accept Pikmin from another team
             Group tasks can't accept Pikmin from another team
-            When one player loses all their leaders, their screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
+            When one team loses all their leaders, their player(s)'s screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
                 The current logic just abruptly ends the gameplay state if there are no more leaders. But it should probably be changed such that all calls to cur_leader_ptr (or the equivalent to each player's leader pointer) are protected, so that if the pointer is NULL they just try something peaceful instead of crashing
         [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
             A "soft" pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
@@ -403,22 +422,22 @@ Next tasks (roughly sorted most important first)
             Each column has buttons to toggle that player on or off
             Each column should also have a very brief legend of what their leader controls are
             Each column should also let players pick which teams they belong to, for the multiplayer versus game mode
-            Each column should also let players pick what leader they want to control, for the multiplayer versus game mode
+            Each column should also let players pick what leader they want to control first, for the multiplayer versus game mode. Should probably let you pick from all leaders, not just the ones in the area
         Victory rules
             KO
-                When a player loses all Pikmin or a leader (maybe an option to make it ALL leaders instead?), they lose. Last one standing wins
+                When a team loses all Pikmin or a leader (maybe an option to make it ALL leaders instead?), they lose. Last one standing wins
                 All areas can be played with this rule
             Collection
-                First player to collect a certain amount of certain treasure wins
+                First team to collect a certain amount of certain treasure wins
                 For the area to be compatible with this mode, it must determine what the treasure is
                 While the area data can determine a default victory amount, the rules can override it
             Capture the Flag
-                When a player collects the other player's flag they gain a point. First player to reach a certain amount of points wins
+                When a team collects the other team's flag they gain a point. First team to reach a certain amount of points wins
                 In the canon games, delivering once is enough, but if the amount of captures is higher than 1, the flag should respawn in its original location after being captured
                 For the area to be compatible with this mode, it must determine what the flag object is
                 While the area data can determine a default victory amount, the rules can override it
             Bingo
-                Each player has a bingo card. First player to collect enough things to score a line wins
+                Each team has a bingo card. First team to collect enough things to score a line wins
                 For the area to be compatible with this mode, it must determine which objects are elligible to belong in the bingo cell universe
                 If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
             Point capture?
@@ -426,14 +445,14 @@ Next tasks (roughly sorted most important first)
             Build a Wonder?
                 Like in Age of Empires, you can gather materials into a spot, and once you have enough, you can start building a Wonder. If you manage to build it, you win automatically
             Tag?
-                One player's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every player has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
+                One team's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every team has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
         Rulesets
             In the area selection menu, there should be a button to take you to the player setup, and another to pick a ruleset
             In the ruleset editor, you can pick...
                 What victory conditions you want on (KO victory is always forcefully on)
                 What rules within those victory conditions (number of capture flags necessary to win, number of collectibles needed to win, etc.)
                 Items are enabled or disabled
-                Starting Pikmin for each player
+                Starting Pikmin for each team
                 Number of leaders for each team (if this is, for instance, set to 1, but players play 2v2, then each team will forcefully have 2 leaders instead)
                 Pikmin killed by other Pikmin are reborn at the Onion, or lost permanently
         A way for attack hitboxes to cause no knockback, otherwise Pikmin battles will keep knocking the Pikmin down
@@ -503,8 +522,26 @@ Next tasks (roughly sorted most important first)
         Save into a binary file so it can be shared with other players
         Make replays save whenever there's a crash dump
     Caves
-        Cave units
-        Some randomization algorithm...
+        Area editor changes
+            Allow it to create cave units
+                The maker specifies the type -- dead end, corridor, or room
+                Cave unit sizes are measured in cells. A dead end is 1x1, a corridor is like 1x2, etc. Each cell length should probably be 256px so it fits with the grid nicely. Each door should be 192px (or maybe more, so that the gate pillars can fit?)
+                The maker has to specify at least one spawn point of each type, right? Maybe it should depend on the cave unit type or size...
+                The maker has to specify where doors are. Door centers have to be at the center of a cell's edge.
+            Allow it to create caves
+                Basically the maker just specifies what units it can use, and what objects spawn
+                For object spawning:
+                    The maker should be able to add groups at will
+                    Each group can be of the "fixed" type or the "random filler" type
+                    In the fixed type, every entry inside that group MUST be spawned, with the amount provided
+                    In the filler type, the maker specifies how many objects of this group to spawn, and each entry specifies the odds (the user specifies the weight, but the GUI should show the percentage as well)
+                    Every entry lets you pick the object, fall type (or maybe for a future version), and spawn location
+                        Spawn locations should be easy enemies, hard enemies, special, decoration, cave unit seams, corridors, or dead ends
+                    The editor has to somehow detect if the cave the maker is trying to create will have enough space to accomodate all objects
+        Randomization algorithm
+        Thoughts
+            When the game places units, can it just place the unit's sectors in the void and call it a day? In terms of collision it might work. What about wall shadows? I guess they may not render to the side that's facing the void, but walls leading into the doorway may have their shadows shrink to a small size because the tip of the wall is adjacent to the void...
+            Cave units have spawn points, each with a different type. If all type X spawn points have been used up and the game wants to spawn more type X objects, then it should maybe use some free spots of any other type
     Story mode stuff
         Persistent progress saving
             Write somewhere that the save was successful, and warn about save errors
@@ -624,6 +661,9 @@ Misc things (so I don't forget)
         Global script variables
         More ideas of actions from Game Builder Garage's Nodon
     For intervals, use the code on the "misc info" text file
+    Tweaks for mobs inside mobs
+        In the area editor, you should actually place the internal mob, and then link to it using a new type of link (carried by). In-game, it'd make use of the "store_focus_inside" feature. This way the engine will actually spawn the internal object in the area, which will help for things like the results screen calculation. Basically it's easy to determine what objects actually exist or will exist in the area, instead of having to read a string and in real time try to spawn an object of that type when the mob is defeated
+        A mob whose purpose is to just spawn a random pellet, of a given type. This way we can get rid of the random pellet spoils feature that enemies have
     Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
     Water depth (thanks ThyCheshireCat)
         Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
@@ -667,6 +707,7 @@ Misc things (so I don't forget)
     If there are no Onions, Pikmin should bring corpses to the ship
     If your Pikmin are far away and you dismiss them, they should just create groups where they are, not next to where you ordered the dismiss...right?
     If a Pikmin is too far away, it should sigh and lose the party
+    An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
     "Oh, yeah, quick suggestion, make all of the pikmin that a leader has get disbanded and maybe panic around for a bit when the leader dies" (thanks Neo)
     Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     New actions

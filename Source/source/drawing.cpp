@@ -1659,12 +1659,35 @@ void draw_textured_box(
  */
 float ease(const unsigned char method, const float n) {
     switch(method) {
-    case EASE_IN:
+    case EASE_IN: {
         return pow(n, 3);
-    case EASE_OUT:
+    }
+    case EASE_OUT: {
         return 1 - (pow((1 - n), 3));
-    case EASE_UP_AND_DOWN:
+    }
+    case EASE_UP_AND_DOWN: {
         return sin(n * TAU / 2);
+    }
+    case EASE_UP_AND_DOWN_ELASTIC: {
+        const float cp1 = 0.50f;
+        const float cp2 = 0.80f;
+        const float mag1 = -0.4f;
+        const float mag2 = 0.15f;
+        float aux;
+        if(n < cp1) {
+            aux = n * 1.0f / cp1;
+            return sin(aux * TAU / 2);
+        } else if(n < cp2) {
+            aux = n - cp1;
+            aux *= 1.0f / (cp2 - cp1);
+            return sin(aux * TAU / 2) * mag1;
+        } else {
+            aux = n - cp2;
+            aux *= 1.0f / (1.0f - cp2);
+            return sin(aux * TAU / 2) * mag2;
+        }
+    }
+    
     }
     
     return n;

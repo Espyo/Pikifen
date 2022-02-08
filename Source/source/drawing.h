@@ -33,6 +33,7 @@ enum EASING_METHODS {
     EASE_IN,
     EASE_OUT,
     EASE_UP_AND_DOWN,
+    EASE_UP_AND_DOWN_ELASTIC,
 };
 
 

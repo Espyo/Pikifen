@@ -139,7 +139,7 @@ void gameplay_state::change_spray_count(
     }
     if(spray_hud_item) {
         spray_hud_item->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_BIGGER
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
         );
     }
 }

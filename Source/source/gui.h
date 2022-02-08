@@ -45,8 +45,10 @@ class gui_item {
 public:
     enum JUICE_TYPES {
         JUICE_TYPE_NONE,
-        JUICE_TYPE_GROW_TEXT,
-        JUICE_TYPE_GROW_TEXT_BIGGER,
+        JUICE_TYPE_GROW_TEXT_LOW,
+        JUICE_TYPE_GROW_TEXT_HIGH,
+        JUICE_TYPE_GROW_TEXT_ELASTIC_LOW,
+        JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH,
         JUICE_TYPE_GROW_ICON,
     };
     
@@ -114,9 +116,10 @@ public:
     gui_item(const bool selectable = false);
     
     static const float JUICY_GROW_DURATION;
+    static const float JUICY_GROW_ELASTIC_DURATION;
     static const float JUICY_GROW_ICON_MULT;
-    static const float JUICY_GROW_TEXT_MULT;
-    static const float JUICY_GROW_TEXT_BIGGER_MULT;
+    static const float JUICY_GROW_TEXT_LOW_MULT;
+    static const float JUICY_GROW_TEXT_HIGH_MULT;
 };
 
 
