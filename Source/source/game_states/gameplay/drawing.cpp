@@ -1020,7 +1020,8 @@ void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
  */
 void gameplay_state::draw_onion_menu() {
     al_draw_filled_rectangle(
-        0, 0, game.win_w, game.win_h, al_map_rgba(24, 64, 60, 220)
+        0, 0, game.win_w, game.win_h,
+        al_map_rgba(24, 64, 60, 220 * onion_menu->bg_alpha_mult)
     );
     
     onion_menu->gui.draw();
@@ -1034,7 +1035,8 @@ void gameplay_state::draw_onion_menu() {
  */
 void gameplay_state::draw_pause_menu() {
     al_draw_filled_rectangle(
-        0, 0, game.win_w, game.win_h, al_map_rgba(24, 64, 60, 200)
+        0, 0, game.win_w, game.win_h,
+        al_map_rgba(24, 64, 60, 200 * pause_menu->bg_alpha_mult)
     );
     
     pause_menu->gui.draw();

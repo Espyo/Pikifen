@@ -232,6 +232,8 @@ private:
         gui_item* next_page_button;
         //Field amount text. Cache for convenience.
         gui_item* field_amount_text;
+        //Multiply the background alpha by this much.
+        float bg_alpha_mult;
         //Is the struct meant to be deleted?
         bool to_delete;
         
@@ -261,6 +263,8 @@ private:
     public:
         //GUI manager.
         gui_manager gui;
+        //Multiply the background alpha by this much.
+        float bg_alpha_mult;
         //Is the struct meant to be deleted?
         bool to_delete;
         

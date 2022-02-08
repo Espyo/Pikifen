@@ -353,7 +353,8 @@ gui_manager::gui_manager() :
         timer(
     0.0f, [this] () {
         switch(anim_type) {
-        case GUI_MANAGER_ANIM_IN_TO_OUT: {
+        case GUI_MANAGER_ANIM_IN_TO_OUT:
+        case GUI_MANAGER_ANIM_CENTER_TO_UP: {
             visible = false;
             break;
         }
@@ -478,6 +479,22 @@ void gui_manager::draw() {
                     interpolate_number(
                         ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
                         0.0f, 1.0f, final_center.y, end_center.y
+                    );
+                break;
+                
+            } case GUI_MANAGER_ANIM_UP_TO_CENTER: {
+                final_center.y =
+                    interpolate_number(
+                        ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                        0.0f, 1.0f, final_center.y - game.win_h, final_center.y
+                    );
+                break;
+                
+            } case GUI_MANAGER_ANIM_CENTER_TO_UP: {
+                final_center.y =
+                    interpolate_number(
+                        ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                        0.0f, 1.0f, final_center.y, final_center.y - game.win_h
                     );
                 break;
                 

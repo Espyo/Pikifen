@@ -48,6 +48,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     prev_page_button(nullptr),
     next_page_button(nullptr),
     field_amount_text(nullptr),
+    bg_alpha_mult(0.0f),
     to_delete(false) {
     
     for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
@@ -471,7 +472,11 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     };
     gui.add_item(tooltip_text, "tooltip");
     
+    //Finishing touches.
     update();
+    gui.start_animation(
+        GUI_MANAGER_ANIM_UP_TO_CENTER, MENU_ENTRY_HUD_MOVE_TIME
+    );
 }
 
 
@@ -675,6 +680,11 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
     
     //Tick the GUI.
     gui.tick(delta_t);
+    
+    //Tick the background.
+    const float bg_alpha_mult_speed = 1.0f / MENU_ENTRY_HUD_MOVE_TIME;
+    bg_alpha_mult =
+        clamp(bg_alpha_mult + bg_alpha_mult_speed * delta_t, 0.0f, 1.0f);
 }
 
 

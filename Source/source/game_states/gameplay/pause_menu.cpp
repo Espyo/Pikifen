@@ -23,6 +23,7 @@ const string gameplay_state::pause_menu_struct::GUI_FILE_PATH =
  * Creates a pause menu struct.
  */
 gameplay_state::pause_menu_struct::pause_menu_struct() :
+    bg_alpha_mult(0.0f),
     to_delete(false) {
     
     //Menu items.
@@ -117,6 +118,9 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     
     //Finishing touches.
     gui.set_selected_item(gui.back_item);
+    gui.start_animation(
+        GUI_MANAGER_ANIM_UP_TO_CENTER, MENU_ENTRY_HUD_MOVE_TIME
+    );
 }
 
 
@@ -136,4 +140,9 @@ gameplay_state::pause_menu_struct::~pause_menu_struct() {
 void gameplay_state::pause_menu_struct::tick(const float delta_t) {
     //Tick the GUI.
     gui.tick(delta_t);
+    
+    //Tick the background.
+    const float bg_alpha_mult_speed = 1.0f / MENU_ENTRY_HUD_MOVE_TIME;
+    bg_alpha_mult =
+        clamp(bg_alpha_mult + bg_alpha_mult_speed * delta_t, 0.0f, 1.0f);
 }
