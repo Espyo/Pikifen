@@ -24,7 +24,9 @@ const string gameplay_state::pause_menu_struct::GUI_FILE_PATH =
  */
 gameplay_state::pause_menu_struct::pause_menu_struct() :
     bg_alpha_mult(0.0f),
-    to_delete(false) {
+    closing_timer(0.0f),
+    to_delete(false),
+    closing(false) {
     
     //Menu items.
     gui.register_coords("header",   50, 15, 50, 10);
@@ -50,7 +52,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
         new button_gui_item("Continue", game.fonts.standard);
     gui.back_item->on_activate =
     [this] (const point &) {
-        to_delete = true;
+        start_closing();
     };
     gui.back_item->on_get_tooltip =
     [] () { return "Unpause and continue playing."; };
@@ -133,6 +135,28 @@ gameplay_state::pause_menu_struct::~pause_menu_struct() {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles an Allegro event.
+ */
+void gameplay_state::pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
+    if(!closing) gui.handle_event(ev);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts the closing process.
+ */
+void gameplay_state::pause_menu_struct::start_closing() {
+    closing = true;
+    closing_timer = MENU_EXIT_HUD_MOVE_TIME;
+    gui.start_animation(GUI_MANAGER_ANIM_CENTER_TO_UP, MENU_EXIT_HUD_MOVE_TIME);
+    game.states.gameplay->hud->gui.start_animation(
+        GUI_MANAGER_ANIM_OUT_TO_IN,
+        MENU_EXIT_HUD_MOVE_TIME
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks the pause menu by one frame.
  * delta_t:
  *   How many seconds to tick by.
@@ -143,6 +167,14 @@ void gameplay_state::pause_menu_struct::tick(const float delta_t) {
     
     //Tick the background.
     const float bg_alpha_mult_speed = 1.0f / MENU_ENTRY_HUD_MOVE_TIME;
-    bg_alpha_mult =
-        clamp(bg_alpha_mult + bg_alpha_mult_speed * delta_t, 0.0f, 1.0f);
+    const float diff = closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
+    bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
+    
+    //Tick the menu closing.
+    if(closing) {
+        closing_timer -= delta_t;
+        if(closing_timer <= 0.0f) {
+            to_delete = true;
+        }
+    }
 }

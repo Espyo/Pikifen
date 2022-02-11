@@ -234,6 +234,8 @@ private:
         gui_item* field_amount_text;
         //Multiply the background alpha by this much.
         float bg_alpha_mult;
+        //Time left until the menu finishes closing.
+        float closing_timer;
         //Is the struct meant to be deleted?
         bool to_delete;
         
@@ -245,12 +247,17 @@ private:
         void add_to_onion(const size_t type_idx);
         void confirm();
         void go_to_page(const size_t page);
+        void handle_event(const ALLEGRO_EVENT &ev);
+        void start_closing();
         void tick(const float delta_t);
         void toggle_select_all();
         
         static const float RED_TEXT_DURATION;
         
     private:
+        //Is it currently closing?
+        bool closing;
+        
         void make_gui_item_red(gui_item* item);
         void update();
         
@@ -265,14 +272,21 @@ private:
         gui_manager gui;
         //Multiply the background alpha by this much.
         float bg_alpha_mult;
+        //Time left until the menu finishes closing.
+        float closing_timer;
         //Is the struct meant to be deleted?
         bool to_delete;
         
         pause_menu_struct();
         ~pause_menu_struct();
+        void handle_event(const ALLEGRO_EVENT &ev);
+        void start_closing();
         void tick(const float delta_t);
         
     private:
+        //Is it currently closing?
+        bool closing;
+        
         static const string GUI_FILE_PATH;
     };
     

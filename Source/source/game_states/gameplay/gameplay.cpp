@@ -38,7 +38,7 @@ const string gameplay_state::HUD_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
 //How long the HUD moves for when a menu is entered.
 const float gameplay_state::MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 //How long the HUD moves for when a menu is exited.
-const float gameplay_state::MENU_EXIT_HUD_MOVE_TIME = 0.9f;
+const float gameplay_state::MENU_EXIT_HUD_MOVE_TIME = 0.5f;
 //The Onion menu can only show, at most, these many Pikmin types per page.
 const size_t gameplay_state::ONION_MENU_TYPES_PER_PAGE = 5;
 //Swarming arrows move these many units per second.
@@ -206,7 +206,9 @@ void gameplay_state::enter() {
     leader_cursor_w = game.mouse_cursor_w;
     leader_cursor_s = game.mouse_cursor_s;
     
-    hud->gui.start_animation(GUI_MANAGER_ANIM_OUT_TO_IN, AREA_INTRO_HUD_MOVE_TIME);
+    hud->gui.start_animation(
+        GUI_MANAGER_ANIM_OUT_TO_IN, AREA_INTRO_HUD_MOVE_TIME
+    );
     if(went_to_results) {
         game.fade_mgr.start_fade(true, nullptr);
         if(pause_menu) {
@@ -313,9 +315,9 @@ string gameplay_state::get_name() const {
 void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
     if(onion_menu) {
-        onion_menu->gui.handle_event(ev);
+        onion_menu->handle_event(ev);
     } else if(pause_menu) {
-        pause_menu->gui.handle_event(ev);
+        pause_menu->handle_event(ev);
     }
     
     //Check if there are system key presses.

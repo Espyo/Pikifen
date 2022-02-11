@@ -13,7 +13,6 @@ Next tasks (roughly sorted most important first)
     --- v0.22.0 ---
     Details
         Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
-        Pause menu, Onion menu, and message box should slide into place from off-screen. In addition, the pause menu and Onion menu should have the background solid transparent rectangle fade in and out. Finally, gameplay and input should still be paused while the menu is doing its exit transition
         Add juice to Onion menu
         Add juice to the fraction numbers
             Maybe make them grow into existence, animate the number when it changes, and flash white when the requirement is met

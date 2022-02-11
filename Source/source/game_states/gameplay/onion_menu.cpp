@@ -49,7 +49,9 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     next_page_button(nullptr),
     field_amount_text(nullptr),
     bg_alpha_mult(0.0f),
-    to_delete(false) {
+    closing_timer(0.0f),
+    to_delete(false),
+    closing(false) {
     
     for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
         types.push_back(
@@ -111,7 +113,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     );
     gui.back_item->on_activate =
     [this] (const point &) {
-        to_delete = true;
+        start_closing();
     };
     gui.back_item->on_get_tooltip =
     [] () { return "Forget all changes and leave the Onion menu."; };
@@ -125,7 +127,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
     ok_button->on_activate =
     [this] (const point &) {
         confirm();
-        to_delete = true;
+        start_closing();
     };
     ok_button->on_get_tooltip =
     [] () { return "Confirm changes."; };
@@ -582,6 +584,14 @@ void gameplay_state::onion_menu_struct::confirm() {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles an Allegro event.
+ */
+void gameplay_state::onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
+    if(!closing) gui.handle_event(ev);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Flips to the specified page of Pikmin types.
  * page:
  *   Index of the new page.
@@ -599,6 +609,20 @@ void gameplay_state::onion_menu_struct::go_to_page(const size_t page) {
  */
 void gameplay_state::onion_menu_struct::make_gui_item_red(gui_item* item) {
     red_items[item] = RED_TEXT_DURATION;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts the closing process.
+ */
+void gameplay_state::onion_menu_struct::start_closing() {
+    closing = true;
+    closing_timer = MENU_EXIT_HUD_MOVE_TIME;
+    gui.start_animation(GUI_MANAGER_ANIM_CENTER_TO_UP, MENU_EXIT_HUD_MOVE_TIME);
+    game.states.gameplay->hud->gui.start_animation(
+        GUI_MANAGER_ANIM_OUT_TO_IN,
+        MENU_EXIT_HUD_MOVE_TIME
+    );
 }
 
 
@@ -683,8 +707,16 @@ void gameplay_state::onion_menu_struct::tick(const float delta_t) {
     
     //Tick the background.
     const float bg_alpha_mult_speed = 1.0f / MENU_ENTRY_HUD_MOVE_TIME;
-    bg_alpha_mult =
-        clamp(bg_alpha_mult + bg_alpha_mult_speed * delta_t, 0.0f, 1.0f);
+    const float diff = closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
+    bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
+    
+    //Tick the menu closing.
+    if(closing) {
+        closing_timer -= delta_t;
+        if(closing_timer <= 0.0f) {
+            to_delete = true;
+        }
+    }
 }
 
 
