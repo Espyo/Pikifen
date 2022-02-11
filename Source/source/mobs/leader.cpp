@@ -50,7 +50,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     throwee_angle(0.0f),
     throwee_max_z(0.0f),
     throwee_speed_z(0.0f),
-    throwee_can_reach(false) {
+    throwee_can_reach(false),
+    health_wheel_visible_ratio(1.0f) {
     
     team = MOB_TEAM_PLAYER_1;
     invuln_period = timer(LEADER_INVULN_PERIOD);
@@ -734,6 +735,11 @@ void leader::tick_class_specifics(const float delta_t) {
     if(group && group->members.empty()) {
         stop_auto_throwing();
     }
+    
+    //Health wheel logic.
+    health_wheel_visible_ratio +=
+        ((health / type->max_health) - health_wheel_visible_ratio) *
+        (in_world_health_wheel::SMOOTHNESS_MULT * delta_t);
 }
 
 

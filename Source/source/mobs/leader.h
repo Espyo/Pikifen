@@ -63,6 +63,8 @@ public:
     float throwee_speed_z;
     //Provided there's a throw, this indicates whether it's low enough to reach.
     bool throwee_can_reach;
+    //How much the health wheel is filled. Gradually moves to the target amount.
+    float health_wheel_visible_ratio;
     
     //Returns whether or not a leader can throw.
     bool check_throw_ok() const;

@@ -362,21 +362,8 @@ void gameplay_state::draw_ingame_text() {
             }
         }
         
-        if(
-            mob_ptr->type->show_health &&
-            !mob_ptr->hide &&
-            mob_ptr->health < mob_ptr->type->max_health &&
-            mob_ptr->health_wheel_alpha > 0.0f
-        ) {
-            draw_health(
-                point(
-                    mob_ptr->pos.x,
-                    mob_ptr->pos.y - mob_ptr->radius -
-                    DEF_HEALTH_WHEEL_RADIUS - 4
-                ),
-                mob_ptr->health_wheel_visible_ratio,
-                mob_ptr->health_wheel_alpha
-            );
+        if(mob_ptr->health_wheel) {
+            mob_ptr->health_wheel->draw();
         }
         
         //Maker tool -- draw hitboxes.

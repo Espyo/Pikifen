@@ -614,7 +614,7 @@ void draw_fraction(
  * ratio:
  *   Ratio of health that is filled. 0 is empty, 1 is full.
  * alpha:
- *   Total opacity of the healt wheel.
+ *   Total opacity of the health wheel.
  * radius:
  *   Radius of the wheel (the whole wheel, not just the pieslice).
  * just_chart:

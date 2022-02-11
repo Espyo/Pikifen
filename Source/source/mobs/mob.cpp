@@ -83,9 +83,8 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     delivery_info(nullptr),
     track_info(nullptr),
     stored_inside_another(nullptr),
-    health_wheel_visible_ratio(1.0f),
-    health_wheel_alpha(0.85f),
     damage_squash_time(0.0f),
+    health_wheel(nullptr),
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
@@ -3133,21 +3132,23 @@ void mob::tick_misc_logic(const float delta_t) {
     }
     
     //Health wheel.
-    //Multiply health wheel speed by this.
-    const float HEALTH_WHEEL_SMOOTHNESS_MULT = 6.0f;
-    //Speed at which the health wheel loses transparency, in alpha per second.
-    const float HEALTH_WHEEL_FADE_SPEED = 2.0f;
+    bool should_show_health =
+        type->show_health &&
+        !hide &&
+        health > 0.0f &&
+        health < type->max_health;
+    if(!health_wheel && should_show_health) {
+        health_wheel = new in_world_health_wheel(this);
+    } else if(health_wheel && !should_show_health) {
+        health_wheel->start_fading();
+    }
     
-    health_wheel_visible_ratio +=
-        ((health / type->max_health) - health_wheel_visible_ratio) *
-        (HEALTH_WHEEL_SMOOTHNESS_MULT * delta_t);
-        
-    if(
-        health <= 0.0f &&
-        health_wheel_visible_ratio <= 0.01f &&
-        health_wheel_alpha > 0.0f
-    ) {
-        health_wheel_alpha -= HEALTH_WHEEL_FADE_SPEED * delta_t;
+    if(health_wheel) {
+        health_wheel->tick(delta_t);
+        if(health_wheel->to_delete) {
+            delete health_wheel;
+            health_wheel = NULL;
+        }
     }
     
     //Group stuff.

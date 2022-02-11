@@ -16,7 +16,6 @@ Next tasks (roughly sorted most important first)
         Add juice to Onion menu
         Add juice to the fraction numbers
             Maybe make them grow into existence, animate the number when it changes, and flash white when the requirement is met
-        The health wheels should probably grow into existence
         Leader health wheels should glow red when at low health (thanks Kman)
         Maybe both the fraction numbers and health wheel should be established in a vector and created/destroyed as needed, instead of EVERY mob having data about the numbers/health wheel even if it doesn't need it or can't use it
         Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups

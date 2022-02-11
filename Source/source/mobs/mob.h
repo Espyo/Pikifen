@@ -18,6 +18,7 @@
 #include <allegro5/allegro.h>
 
 #include "../animation.h"
+#include "../game_states/gameplay/in_world_hud.h"
 #include "../misc_structs.h"
 #include "../mob_script.h"
 #include "../mob_types/pikmin_type.h"
@@ -235,12 +236,10 @@ public:
     mob* stored_inside_another;
     
     //Health-related properties.
-    //How much the health wheel is filled. Gradually moves to its target amount.
-    float health_wheel_visible_ratio;
-    //Current health wheel alpha. Moves to 0 when health <= 0.
-    float health_wheel_alpha;
     //Time left in the current damage squash-and-stretch animation.
     float damage_squash_time;
+    //Data about its on-screen health wheel, if any.
+    in_world_health_wheel* health_wheel;
     
     //Other properties.
     //Incremental ID. Used for minor things.
