@@ -22,6 +22,9 @@ using std::set;
  * Returns NULL if none is found.
  */
 mob* mob::get_mob_to_walk_on() const {
+    //Can't walk on anything if it's moving upwards.
+    if(speed_z > 0.0f) return NULL;
+    
     mob* best_candidate = NULL;
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
