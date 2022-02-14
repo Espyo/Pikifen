@@ -84,8 +84,9 @@ void draw_filled_rounded_rectangle(
     const ALLEGRO_COLOR &color
 );
 void draw_fraction(
-    const point &center, const size_t current,
-    const size_t needed, const ALLEGRO_COLOR &color
+    const point &bottom, const size_t value_nr,
+    const size_t requirement_nr, const ALLEGRO_COLOR &color,
+    const float scale = 1.0f
 );
 void draw_health(
     const point &center, const float ratio,

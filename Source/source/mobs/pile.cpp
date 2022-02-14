@@ -55,6 +55,30 @@ void pile::change_amount(const int change) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns information on how to show the fraction numbers.
+ * Returns true if the fraction numbers should be shown, false if not.
+ * This only keeps in mind things specific to this class, so it shouldn't
+ * check for things like carrying, which is global to all mobs.
+ * fraction_value_nr:
+ *   The fraction's value (upper) number gets set here.
+ * fraction_req_nr:
+ *   The fraction's required (lower) number gets set here.
+ * fraction_color:
+ *   The fraction's color gets set here.
+ */
+bool pile::get_fraction_numbers_info(
+    float* fraction_value_nr, float* fraction_req_nr,
+    ALLEGRO_COLOR* fraction_color
+) const {
+    if(amount <= 0 || !pil_type->show_amount) return false;
+    *fraction_value_nr = amount;
+    *fraction_req_nr = 0;
+    *fraction_color = game.config.carrying_color_stop;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Reads the provided script variables, if any, and does stuff with them.
  * svr:
  *   Script var reader to use.

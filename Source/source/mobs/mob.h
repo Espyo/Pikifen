@@ -235,12 +235,6 @@ public:
     //If it's stored inside another mob, this indicates which mob it is.
     mob* stored_inside_another;
     
-    //Health-related properties.
-    //Time left in the current damage squash-and-stretch animation.
-    float damage_squash_time;
-    //Data about its on-screen health wheel, if any.
-    in_world_health_wheel* health_wheel;
-    
     //Other properties.
     //Incremental ID. Used for minor things.
     size_t id;
@@ -282,6 +276,12 @@ public:
     parent_info_struct* parent;
     //How long it's been alive for.
     float time_alive;
+    //Time left in the current damage squash-and-stretch animation.
+    float damage_squash_time;
+    //Data about its on-screen health wheel, if any.
+    in_world_health_wheel* health_wheel;
+    //Data about its on-screen fraction numbers, if any.
+    in_world_fraction* fraction;
     //Cached value of the angle's cosine.
     float angle_cos;
     //Cached value of the angle's sine.
@@ -415,6 +415,10 @@ public:
     virtual bool can_receive_status(status_type* s) const;
     virtual void get_group_spot_info(
         point* final_spot, float* final_dist
+    ) const;
+    virtual bool get_fraction_numbers_info(
+        float* fraction_value_nr, float* fraction_req_nr,
+        ALLEGRO_COLOR* fraction_color
     ) const;
     virtual void handle_status_effect_gain(status_type* sta_type);
     virtual void handle_status_effect_loss(status_type* sta_type);

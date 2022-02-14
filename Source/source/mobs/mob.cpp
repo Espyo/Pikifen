@@ -83,8 +83,6 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     delivery_info(nullptr),
     track_info(nullptr),
     stored_inside_another(nullptr),
-    damage_squash_time(0.0f),
-    health_wheel(nullptr),
     id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
@@ -100,6 +98,9 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     chomp_max(0),
     parent(nullptr),
     time_alive(0.0f),
+    damage_squash_time(0.0f),
+    health_wheel(nullptr),
+    fraction(nullptr),
     angle_cos(0.0f),
     angle_sin(0.0f),
     max_span(type->max_span),
@@ -132,8 +133,13 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
  * Destroys an instance of a mob.
  */
 mob::~mob() {
+    if(path_info) delete path_info;
+    if(circling_info) delete circling_info;
     if(carry_info) delete carry_info;
     if(delivery_info) delete delivery_info;
+    if(track_info) delete track_info;
+    if(health_wheel) delete health_wheel;
+    if(fraction) delete fraction;
     if(group) delete group;
     if(parent) delete parent;
 }
@@ -1562,6 +1568,51 @@ hitbox* mob::get_closest_hitbox(
  */
 sprite* mob::get_cur_sprite() const {
     return forced_sprite ? forced_sprite : anim.get_cur_sprite();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns information on how to show the fraction numbers.
+ * Returns true if the fraction numbers should be shown, false if not.
+ * This only keeps in mind things specific to this class, so it shouldn't
+ * check for things like carrying, which is global to all mobs.
+ * fraction_value_nr:
+ *   The fraction's value (upper) number gets set here.
+ * fraction_req_nr:
+ *   The fraction's required (lower) number gets set here.
+ * fraction_color:
+ *   The fraction's color gets set here.
+ */
+bool mob::get_fraction_numbers_info(
+    float* fraction_value_nr, float* fraction_req_nr,
+    ALLEGRO_COLOR* fraction_color
+) const {
+    if(!carry_info || carry_info->cur_carrying_strength <= 0) return false;
+    bool destination_is_onion =
+        carry_info->intended_mob &&
+        carry_info->intended_mob->type->category->id ==
+        MOB_CATEGORY_ONIONS;
+    if(type->weight <= 1 && !destination_is_onion) return false;
+    
+    *fraction_value_nr = carry_info->cur_carrying_strength;
+    *fraction_req_nr = type->weight;
+    if(carry_info->is_moving) {
+        if(
+            carry_info->destination ==
+            CARRY_DESTINATION_SHIP
+        ) {
+            *fraction_color = game.config.carrying_color_move;
+            
+        } else if(destination_is_onion) {
+            *fraction_color =
+                carry_info->intended_pik_type->main_color;
+        } else {
+            *fraction_color = game.config.carrying_color_move;
+        }
+    } else {
+        *fraction_color = game.config.carrying_color_stop;
+    }
+    return true;
 }
 
 
@@ -3148,6 +3199,36 @@ void mob::tick_misc_logic(const float delta_t) {
         if(health_wheel->to_delete) {
             delete health_wheel;
             health_wheel = NULL;
+        }
+    }
+    
+    //Fraction numbers.
+    float fraction_value_nr = 0.0f;
+    float fraction_req_nr = 0.0f;
+    ALLEGRO_COLOR fraction_color = al_map_rgb(0, 0, 0);
+    bool should_show_fraction =
+        get_fraction_numbers_info(
+            &fraction_value_nr, &fraction_req_nr, &fraction_color
+        );
+        
+    if(!fraction && should_show_fraction) {
+        fraction = new in_world_fraction(this);
+    } else if(fraction && !should_show_fraction) {
+        fraction->start_fading();
+    }
+    
+    if(fraction) {
+        fraction->tick(delta_t);
+        if(should_show_fraction) {
+            //Only update the numbers if we want to show a fraction, i.e.
+            //if we actually KNOW the numbers. Otherwise, keep the old data.
+            fraction->set_color(fraction_color);
+            fraction->set_value_number(fraction_value_nr);
+            fraction->set_requirement_number(fraction_req_nr);
+        }
+        if(fraction->to_delete) {
+            delete fraction;
+            fraction = NULL;
         }
     }
     

@@ -563,46 +563,49 @@ void draw_filled_rounded_rectangle(
 
 
 /* ----------------------------------------------------------------------------
- * Draws a strength/weight fraction, in the style of Pikmin 2.
- * The strength is above the weight.
- * center:
- *   Center of the text.
- * current:
- *   Current strength.
- * needed:
- *   Needed strength to lift the object (weight).
+ * Draws a fraction, so one number above another, divided by a bar.
+ * The top number usually represents the current value of some attribute,
+ * and the bottom number usually represents the required value for some goal.
+ * bottom:
+ *   Bottom center point of the text.
+ * value_nr:
+ *   Number that represents the current value.
+ * requirement:
+ *   Number that represents the requirement.
  * color:
  *   Color of the fraction's text.
+ * scale:
+ *   Scale the fraction by this much.
  */
 void draw_fraction(
-    const point &center, const size_t current,
-    const size_t needed, const ALLEGRO_COLOR &color
+    const point &bottom, const size_t value_nr,
+    const size_t requirement_nr, const ALLEGRO_COLOR &color, const float scale
 ) {
-    float first_y =
-        center.y - (al_get_font_line_height(game.fonts.standard) * 3) / 2;
-    float font_h = al_get_font_line_height(game.fonts.value);
+    float font_h = al_get_font_line_height(game.fonts.value) * scale;
     
+    float value_nr_y = bottom.y - font_h * 3;
+    float value_nr_scale =
+        value_nr >= requirement_nr ? scale * 1.2f : scale * 1.0f;
     draw_scaled_text(
-        game.fonts.value, color, point(center.x, first_y),
-        point(
-            (current >= needed ? 1.2 : 1.0),
-            (current >= needed ? 1.2 : 1.0)
-        ),
-        ALLEGRO_ALIGN_CENTER, 0, (i2s(current).c_str())
+        game.fonts.value, color, point(bottom.x, value_nr_y),
+        point(value_nr_scale, value_nr_scale),
+        ALLEGRO_ALIGN_CENTER, 0, (i2s(value_nr).c_str())
     );
     
-    al_draw_text(
-        game.fonts.value, color, center.x, first_y + font_h * 0.75,
-        ALLEGRO_ALIGN_CENTER, "-"
+    float bar_y = bottom.y - font_h * 2;
+    draw_scaled_text(
+        game.fonts.value, color, point(bottom.x, bar_y),
+        point(scale, scale),
+        ALLEGRO_ALIGN_CENTER, 0, "-"
     );
     
+    float req_nr_y = bottom.y - font_h;
+    float req_nr_scale =
+        requirement_nr > value_nr ? scale * 1.2f : scale * 1.0f;
     draw_scaled_text(
-        game.fonts.value, color, point(center.x, first_y + font_h * 1.5),
-        point(
-            (needed > current ? 1.2 : 1.0),
-            (needed > current ? 1.2 : 1.0)
-        ),
-        ALLEGRO_ALIGN_CENTER, 0, (i2s(needed).c_str())
+        game.fonts.value, color, point(bottom.x, req_nr_y),
+        point(req_nr_scale, req_nr_scale),
+        ALLEGRO_ALIGN_CENTER, 0, (i2s(requirement_nr).c_str())
     );
 }
 

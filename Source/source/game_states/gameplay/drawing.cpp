@@ -248,122 +248,17 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
  * Draws the in-game text.
  */
 void gameplay_state::draw_ingame_text() {
-    //Fractions and health.
+    //Mob things.
     size_t n_mobs = mobs.all.size();
     for(size_t m = 0; m < n_mobs; ++m) {
         mob* mob_ptr = mobs.all[m];
         
-        if(
-            mob_ptr->carry_info &&
-            mob_ptr->carry_info->cur_carrying_strength > 0
-        ) {
-            bool destination_is_onion =
-                mob_ptr->carry_info->intended_mob &&
-                mob_ptr->carry_info->intended_mob->type->category->id ==
-                MOB_CATEGORY_ONIONS;
-                
-            if(mob_ptr->type->weight > 1 || destination_is_onion) {
-                ALLEGRO_COLOR color;
-                if(mob_ptr->carry_info->is_moving) {
-                    if(
-                        mob_ptr->carry_info->destination ==
-                        CARRY_DESTINATION_SHIP
-                    ) {
-                        color = game.config.carrying_color_move;
-                        
-                    } else if(destination_is_onion) {
-                        color =
-                            mob_ptr->carry_info->intended_pik_type->main_color;
-                    } else {
-                        color = game.config.carrying_color_move;
-                    }
-                    
-                } else {
-                    color = game.config.carrying_color_stop;
-                }
-                
-                draw_fraction(
-                    point(
-                        mob_ptr->pos.x,
-                        mob_ptr->pos.y - mob_ptr->radius -
-                        al_get_font_line_height(game.fonts.standard) * 1.25
-                    ),
-                    mob_ptr->carry_info->cur_carrying_strength,
-                    mob_ptr->type->weight,
-                    color
-                );
-            }
-        }
-        
-        for(size_t p = 0; p < mobs.piles.size(); ++p) {
-            pile* p_ptr = mobs.piles[p];
-            if(p_ptr->amount > 0 && p_ptr->pil_type->show_amount) {
-                draw_text_lines(
-                    game.fonts.standard,
-                    game.config.carrying_color_stop,
-                    point(
-                        p_ptr->pos.x,
-                        p_ptr->pos.y - p_ptr->radius -
-                        al_get_font_line_height(game.fonts.standard) * 1.25
-                    ),
-                    ALLEGRO_ALIGN_CENTER,
-                    1,
-                    i2s(p_ptr->amount)
-                );
-            }
-        }
-        
-        for(size_t t = 0; t < mobs.group_tasks.size(); ++t) {
-            group_task* t_ptr = mobs.group_tasks[t];
-            if(t_ptr->get_power() > 0) {
-                draw_fraction(
-                    point(
-                        t_ptr->pos.x,
-                        t_ptr->pos.y - t_ptr->radius -
-                        al_get_font_line_height(game.fonts.standard) * 1.25
-                    ),
-                    t_ptr->get_power(),
-                    t_ptr->tas_type->power_goal,
-                    game.config.carrying_color_stop
-                );
-            }
-        }
-        
-        for(size_t s = 0; s < mobs.scales.size(); ++s) {
-            scale* s_ptr = mobs.scales[s];
-            if(s_ptr->health <= 0) continue;
-            float w = s_ptr->calculate_cur_weight();
-            if(w > 0) {
-                if(s_ptr->sca_type->goal_number > 0) {
-                    draw_fraction(
-                        point(
-                            s_ptr->pos.x,
-                            s_ptr->pos.y - s_ptr->radius -
-                            al_get_font_line_height(game.fonts.standard) * 1.25
-                        ),
-                        w,
-                        s_ptr->sca_type->goal_number,
-                        game.config.carrying_color_stop
-                    );
-                } else {
-                    draw_text_lines(
-                        game.fonts.standard,
-                        game.config.carrying_color_stop,
-                        point(
-                            s_ptr->pos.x,
-                            s_ptr->pos.y - s_ptr->radius -
-                            al_get_font_line_height(game.fonts.standard) * 1.25
-                        ),
-                        ALLEGRO_ALIGN_CENTER,
-                        1,
-                        i2s(w)
-                    );
-                }
-            }
-        }
-        
+        //Fractions and health.
         if(mob_ptr->health_wheel) {
             mob_ptr->health_wheel->draw();
+        }
+        if(mob_ptr->fraction) {
+            mob_ptr->fraction->draw();
         }
         
         //Maker tool -- draw hitboxes.

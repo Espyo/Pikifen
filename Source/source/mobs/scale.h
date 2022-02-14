@@ -27,6 +27,11 @@ public:
     
     //Return the weight currently on top of it.
     float calculate_cur_weight() const;
+    //Returns information on how to show the fraction.
+    bool get_fraction_numbers_info(
+        float* fraction_value_nr, float* fraction_req_nr,
+        ALLEGRO_COLOR* fraction_color
+    ) const;
     
     //Constructor.
     scale(const point &pos, scale_type* type, float angle);
