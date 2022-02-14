@@ -72,7 +72,10 @@ public:
     bool operator ==(const dist &d2) const;
     bool operator !=(const float d2) const;
     bool operator !=(const dist &d2) const;
+    void operator +=(const float d2);
     void operator +=(const dist &d2);
+    void operator -=(const float d2);
+    void operator -=(const dist &d2);
     float to_float();
     
 private:

@@ -186,12 +186,56 @@ bool dist::operator!=(const dist &d2) const {
  * d2:
  *   Amount of distance to add.
  */
+void dist::operator+=(const float d2) {
+    if(!has_normal_distance) {
+        normal_distance = sqrt(distance_squared);
+        has_normal_distance = true;
+    }
+    normal_distance += d2;
+    distance_squared = normal_distance * normal_distance;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds some distance to the current one.
+ * d2:
+ *   Amount of distance to add.
+ */
 void dist::operator+=(const dist &d2) {
     distance_squared += d2.distance_squared;
-    if(has_normal_distance && d2.has_normal_distance) {
-        normal_distance += d2.normal_distance;
-    } else {
-        has_normal_distance = false;
+    if(has_normal_distance) {
+        if(d2.has_normal_distance) {
+            normal_distance += d2.normal_distance;
+        } else {
+            normal_distance = sqrt(distance_squared);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes some distance from the current one.
+ * d2:
+ *   Amount of distance to remove.
+ */
+void dist::operator-=(const float d2) {
+    operator+=(-d2);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes some distance from the current one.
+ * d2:
+ *   Amount of distance to remove.
+ */
+void dist::operator-=(const dist &d2) {
+    distance_squared -= d2.distance_squared;
+    if(has_normal_distance) {
+        if(d2.has_normal_distance) {
+            normal_distance -= d2.normal_distance;
+        } else {
+            normal_distance = sqrt(distance_squared);
+        }
     }
 }
 

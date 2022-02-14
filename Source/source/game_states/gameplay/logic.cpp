@@ -927,17 +927,14 @@ void gameplay_state::process_mob_misc_interactions(
     if(
         nco_event &&
         m2_ptr->carry_info &&
-        !m2_ptr->carry_info->is_full() &&
-        d <=
-        m_ptr->radius + m2_ptr->radius + task_range(m_ptr)
+        !m2_ptr->carry_info->is_full()
     ) {
-    
-        pending_intermob_events.push_back(
-            pending_intermob_event(
-                d, nco_event, m2_ptr
-            )
-        );
-        
+        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
+        if(d_between <= task_range(m_ptr)) {
+            pending_intermob_events.push_back(
+                pending_intermob_event(d_between, nco_event, m2_ptr)
+            );
+        }
     }
     
     //Find a tool mob.
@@ -945,17 +942,18 @@ void gameplay_state::process_mob_misc_interactions(
         m_ptr->fsm.get_event(MOB_EV_NEAR_TOOL);
     if(
         nto_event &&
-        d <=
-        m_ptr->radius + m2_ptr->radius + task_range(m_ptr) &&
         typeid(*m2_ptr) == typeid(tool)
     ) {
-        tool* too_ptr = (tool*) m2_ptr;
-        if(too_ptr->reserved && too_ptr->reserved != m_ptr) {
-            //Another Pikmin is already going for it. Ignore it.
-        } else {
-            pending_intermob_events.push_back(
-                pending_intermob_event(d, nto_event, m2_ptr)
-            );
+        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
+        if(d_between <= task_range(m_ptr)) {
+            tool* too_ptr = (tool*) m2_ptr;
+            if(too_ptr->reserved && too_ptr->reserved != m_ptr) {
+                //Another Pikmin is already going for it. Ignore it.
+            } else {
+                pending_intermob_events.push_back(
+                    pending_intermob_event(d_between, nto_event, m2_ptr)
+                );
+            }
         }
     }
     
@@ -965,19 +963,21 @@ void gameplay_state::process_mob_misc_interactions(
     if(
         ngto_event &&
         m2_ptr->health > 0 &&
-        d <=
-        m_ptr->radius + m2_ptr->radius + task_range(m_ptr) &&
         typeid(*m2_ptr) == typeid(group_task)
     ) {
-        group_task* tas_ptr = (group_task*) m2_ptr;
-        group_task::group_task_spot* free_spot = tas_ptr->get_free_spot();
-        if(!free_spot) {
-            //There are no free spots here. Ignore it.
-        } else {
-            pending_intermob_events.push_back(
-                pending_intermob_event(d, ngto_event, m2_ptr)
-            );
+        dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
+        if(d_between <= task_range(m_ptr)) {
+            group_task* tas_ptr = (group_task*) m2_ptr;
+            group_task::group_task_spot* free_spot = tas_ptr->get_free_spot();
+            if(!free_spot) {
+                //There are no free spots here. Ignore it.
+            } else {
+                pending_intermob_events.push_back(
+                    pending_intermob_event(d_between, ngto_event, m2_ptr)
+                );
+            }
         }
+        
     }
 }
 
@@ -1013,30 +1013,7 @@ void gameplay_state::process_mob_reaches(
     mob_type::reach_struct* r_ptr =
         &m_ptr->type->reaches[m_ptr->near_reach];
         
-    dist mob_to_hotspot_dist;
-    float dist_padding;
-    
-    if(m2_ptr->rectangular_dim.x != 0.0f) {
-        bool is_inside = false;
-        point hotspot =
-            get_closest_point_in_rotated_rectangle(
-                m_ptr->pos,
-                m2_ptr->pos, m2_ptr->rectangular_dim,
-                m2_ptr->angle,
-                &is_inside
-            );
-        if(is_inside) {
-            mob_to_hotspot_dist = dist(0.0f);
-        } else {
-            mob_to_hotspot_dist = dist(m_ptr->pos, hotspot);
-        }
-        dist_padding = m_ptr->radius;
-        
-    } else {
-        mob_to_hotspot_dist = d;
-        dist_padding = m_ptr->radius + m2_ptr->radius;
-    }
-    
+    dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
     float face_diff =
         get_angle_smallest_dif(
             m_ptr->angle,
@@ -1045,13 +1022,13 @@ void gameplay_state::process_mob_reaches(
         
     bool in_reach =
         (
-            mob_to_hotspot_dist <= r_ptr->radius_1 + dist_padding &&
+            d_between <= r_ptr->radius_1 &&
             face_diff <= r_ptr->angle_1 / 2.0
         );
     if(!in_reach) {
         in_reach =
             (
-                mob_to_hotspot_dist <= r_ptr->radius_2 + dist_padding &&
+                d_between <= r_ptr->radius_2 &&
                 face_diff <= r_ptr->angle_2 / 2.0
             );
     }
@@ -1060,14 +1037,14 @@ void gameplay_state::process_mob_reaches(
         if(obir_ev) {
             pending_intermob_events.push_back(
                 pending_intermob_event(
-                    mob_to_hotspot_dist, obir_ev, m2_ptr
+                    d_between, obir_ev, m2_ptr
                 )
             );
         }
         if(opir_ev && m_ptr->can_hunt(m2_ptr)) {
             pending_intermob_events.push_back(
                 pending_intermob_event(
-                    mob_to_hotspot_dist, opir_ev, m2_ptr
+                    d_between, opir_ev, m2_ptr
                 )
             );
         }

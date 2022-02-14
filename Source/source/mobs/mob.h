@@ -367,6 +367,9 @@ public:
     void start_dying();
     void finish_dying();
     void respawn();
+    dist get_distance_between(
+        mob* m2_ptr, dist* regular_distance_cache = NULL
+    ) const;
     hitbox* get_hitbox(const size_t nr) const;
     hitbox* get_closest_hitbox(
         const point &p, const size_t h_type = INVALID, dist* d = NULL

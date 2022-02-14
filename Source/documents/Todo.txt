@@ -9,6 +9,7 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    I got the game to crash by getting a ton of Pikmin to deliver fragments to a bridge
     Winged Pikmin sometimes get stuck trying to deliver a fragment to a bridge
     
     --- v0.22.0 ---

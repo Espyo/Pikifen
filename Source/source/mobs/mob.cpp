@@ -1572,6 +1572,48 @@ sprite* mob::get_cur_sprite() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the distance between the limits of this mob and
+ * the limits of another.
+ * m2_ptr:
+ *   Pointer to the mob to check.
+ * regular_distance_cache:
+ *   If the regular distance had already been calculated, specify it here.
+ *   This should help with performance. Otherwise, use NULL.
+ */
+dist mob::get_distance_between(
+    mob* m2_ptr, dist* regular_distance_cache
+) const {
+    dist mob_to_hotspot_dist;
+    float dist_padding;
+    if(m2_ptr->rectangular_dim.x != 0.0f) {
+        bool is_inside = false;
+        point hotspot =
+            get_closest_point_in_rotated_rectangle(
+                pos,
+                m2_ptr->pos, m2_ptr->rectangular_dim,
+                m2_ptr->angle,
+                &is_inside
+            );
+        if(is_inside) {
+            mob_to_hotspot_dist = dist(0.0f);
+        } else {
+            mob_to_hotspot_dist = dist(pos, hotspot);
+        }
+        dist_padding = radius;
+    } else {
+        if(regular_distance_cache) {
+            mob_to_hotspot_dist = *regular_distance_cache;
+        } else {
+            mob_to_hotspot_dist = dist(pos, m2_ptr->pos);
+        }
+        dist_padding = radius + m2_ptr->radius;
+    }
+    mob_to_hotspot_dist -= dist_padding;
+    return mob_to_hotspot_dist;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns information on how to show the fraction numbers.
  * Returns true if the fraction numbers should be shown, false if not.
  * This only keeps in mind things specific to this class, so it shouldn't
