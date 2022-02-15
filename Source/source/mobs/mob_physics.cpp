@@ -104,8 +104,12 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
     //This way, we won't check for edges that are really far away.
     //Use the bounding box to know which blockmap blocks the mob will be on.
     set<edge*> candidate_edges;
+    //Use the terrain radius if the mob is moving about and alive.
+    //Otherwise if it's a corpse, it can use the regular radius.
     float radius_to_use =
-        type->terrain_radius < 0 ? radius : type->terrain_radius;
+        (type->terrain_radius < 0 || health <= 0) ?
+        radius :
+        type->terrain_radius;
         
     if(
         !game.cur_area_data.bmap.get_edges_in_region(
