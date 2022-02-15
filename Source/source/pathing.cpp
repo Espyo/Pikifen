@@ -405,6 +405,17 @@ bool can_traverse_path_link(
     
     //Check if the link's end path stop is hazardous, by checking its sector.
     sector* end_sector = link_ptr->end_ptr->sector_ptr;
+    if(!end_sector) {
+        //We're probably in the area editor, where things change too often
+        //for us to cache the sector pointer and access said cache.
+        //Let's calculate now real quick.
+        end_sector = get_sector(link_ptr->end_ptr->pos, NULL, false);
+        if(!end_sector) {
+            //It's really the void. Nothing that can be done here then.
+            return false;
+        }
+    }
+    
     bool touching_hazard =
         !end_sector->hazard_floor ||
         (settings.flags & PATH_FOLLOW_FLAG_AIRBORNE) == 0;
