@@ -1369,16 +1369,13 @@ void mob::focus_on_mob(mob* m2) {
  * Makes the mob start following a path. This populates the path_info
  * class member, and calculates a path to take.
  * Returns whether or not there is a path available.
- * target:
- *   Target point to reach.
- * speed:
- *   Speed at which to travel.
  * settings:
  *   Settings about how the path should be followed.
+ * speed:
+ *   Speed at which to travel.
  */
 bool mob::follow_path(
-    const point &target,
-    const float speed, const path_follow_settings &settings
+    const path_follow_settings &settings, const float speed
 ) {
     bool was_blocked = false;
     path_stop* old_next_stop = NULL;
@@ -1410,7 +1407,7 @@ bool mob::follow_path(
     
     //Establish the mob's path-following information.
     //This also generates the path to take.
-    path_info = new path_info_struct(this, target, settings);
+    path_info = new path_info_struct(this, settings);
     
     if(carry_info) {
         //Check if this carriable is considered light load.
@@ -1461,11 +1458,7 @@ bool mob::follow_path(
     //Now, let's figure out how the mob should start its journey.
     if(path_info->go_straight) {
         //The path info is telling us to just go to the destination directly.
-        chase(
-            target, z,
-            CHASE_FLAG_ANY_ANGLE,
-            path_info->settings.final_target_distance, speed
-        );
+        move_to_path_end(speed);
         
     } else if(!path_info->path.empty()) {
         //Head to the first stop.
@@ -2361,6 +2354,40 @@ void mob::leave_group() {
 
 
 /* ----------------------------------------------------------------------------
+ * Makes the mob start going towards the final destination of its path.
+ * speed:
+ *   Speed to move at.
+ */
+void mob::move_to_path_end(const float speed) {
+    if(!path_info) return;
+    if(
+        (
+            path_info->settings.flags &
+            PATH_FOLLOW_FLAG_FOLLOW_MOB
+        ) &&
+        path_info->settings.target_mob
+    ) {
+        chase(
+            &(path_info->settings.target_mob->pos),
+            &(path_info->settings.target_mob->z),
+            point(), 0.0f,
+            CHASE_FLAG_ANY_ANGLE,
+            path_info->settings.final_target_distance,
+            speed
+        );
+    } else {
+        chase(
+            path_info->settings.target_point,
+            get_sector(path_info->settings.target_point, NULL, true)->z,
+            CHASE_FLAG_ANY_ANGLE,
+            path_info->settings.final_target_distance,
+            speed
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a string containing the FSM state history for this mob.
  * This is used for debugging crashes.
  */
@@ -3106,30 +3133,7 @@ void mob::tick_brain(const float delta_t) {
                 ) {
                     //Reached the final stop of the path, but not the goal.
                     //Let's head there.
-                    if(
-                        (
-                            path_info->settings.flags &
-                            PATH_FOLLOW_FLAG_FOLLOW_MOB
-                        ) &&
-                        path_info->target_mob
-                    ) {
-                        chase(
-                            &(path_info->target_mob->pos),
-                            &(path_info->target_mob->z),
-                            point(), 0.0f,
-                            CHASE_FLAG_ANY_ANGLE,
-                            path_info->settings.final_target_distance,
-                            chase_info.max_speed
-                        );
-                    } else {
-                        chase(
-                            path_info->target_point,
-                            get_sector(path_info->target_point, NULL, true)->z,
-                            CHASE_FLAG_ANY_ANGLE,
-                            path_info->settings.final_target_distance,
-                            chase_info.max_speed
-                        );
-                    }
+                    move_to_path_end(chase_info.max_speed);
                     
                 } else if(
                     path_info->cur_path_stop_nr == path_info->path.size() + 1

@@ -929,14 +929,11 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     //so it can emit the MOB_EV_REACHED_DESTINATION event, and hopefully
     //make it clear that there was an error.
     path_follow_settings settings;
+    settings.target_point = final_stop ? final_stop->pos : data.m->pos;
     settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
     settings.flags |= PATH_FOLLOW_FLAG_SCRIPT_USE;
     settings.label = label;
-    data.m->follow_path(
-        final_stop ? final_stop->pos : data.m->pos,
-        data.m->get_base_speed(),
-        settings
-    );
+    data.m->follow_path(settings, data.m->get_base_speed());
 }
 
 
@@ -950,13 +947,14 @@ void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
     float y = s2f(data.args[1]);
     
     path_follow_settings settings;
+    settings.target_point = point(x, y);
     settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
     settings.flags |= PATH_FOLLOW_FLAG_SCRIPT_USE;
     if(data.args.size() >= 3) {
         settings.label = data.args[2];
     }
     
-    data.m->follow_path(point(x, y), data.m->get_base_speed(), settings);
+    data.m->follow_path(settings, data.m->get_base_speed());
 }
 
 

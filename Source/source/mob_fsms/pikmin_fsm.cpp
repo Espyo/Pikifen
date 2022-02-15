@@ -3635,6 +3635,7 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
     }
     
     path_follow_settings settings;
+    settings.target_point = carried_mob->carry_info->return_point;
     settings.final_target_distance = carried_mob->carry_info->return_dist;
     
     if(carried_mob->carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
@@ -3655,13 +3656,7 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
         }
     }
     
-    if(
-        p_ptr->follow_path(
-            carried_mob->carry_info->return_point,
-            p_ptr->get_base_speed(),
-            settings
-        )
-    ) {
+    if(p_ptr->follow_path(settings, p_ptr->get_base_speed())) {
         p_ptr->set_animation(PIKMIN_ANIM_WALKING);
     } else {
         p_ptr->fsm.set_state(PIKMIN_STATE_IDLING);

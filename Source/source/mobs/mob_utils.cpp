@@ -726,19 +726,14 @@ parent_info_struct::parent_info_struct(mob* m) :
  * Creates an instance of a structure with info about the mob's path-following.
  * m:
  *   Mob this path info struct belongs to.
- * target:
- *   Its target destination.
  * settings:
  *   Settings about how the path should be followed.
  */
 path_info_struct::path_info_struct(
     mob* m,
-    const point &target,
     const path_follow_settings &settings
 ) :
     m(m),
-    target_point(target),
-    target_mob(nullptr),
     cur_path_stop_nr(0),
     go_straight(false),
     is_blocked(false),
@@ -746,7 +741,7 @@ path_info_struct::path_info_struct(
     
     path =
         get_path(
-            m->pos, target, settings,
+            m->pos, settings.target_point, settings,
             &go_straight, NULL, NULL, NULL
         );
 }

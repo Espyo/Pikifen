@@ -392,8 +392,7 @@ public:
     void stop_chasing();
     void stop_turning();
     bool follow_path(
-        const point &target,
-        const float speed, const path_follow_settings &settings
+        const path_follow_settings &settings, const float speed
     );
     void stop_following_path();
     void circle_around(
@@ -466,6 +465,8 @@ protected:
         edge* e_ptr, unsigned char wall_sector, const float move_angle,
         float* slide_angle
     ) const;
+    //Goes to the path's final destination.
+    void move_to_path_end(const float speed);
     //Tick its animation logic.
     void tick_animation(const float delta_t);
     //Tick the mob's "thinking" logic.

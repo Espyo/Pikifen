@@ -394,10 +394,6 @@ struct parent_info_struct {
 struct path_info_struct {
     //Mob that this struct belongs to.
     mob* m;
-    //Target location.
-    point target_point;
-    //If the target is a mob, this points to it.
-    mob* target_mob;
     //Path to take the mob to while being carried.
     vector<path_stop*> path;
     //Index of the current stop in the projected carrying path.
@@ -412,7 +408,6 @@ struct path_info_struct {
     
     path_info_struct(
         mob* m,
-        const point &target,
         const path_follow_settings &settings
     );
     bool check_blockage();

@@ -10,7 +10,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     I got the game to crash by getting a ton of Pikmin to deliver fragments to a bridge
-    Winged Pikmin sometimes get stuck trying to deliver a fragment to a bridge
     
     --- v0.22.0 ---
     Details
@@ -24,6 +23,7 @@ Next tasks (roughly sorted most important first)
         More buttons on the HUD, so players now what to press to swap leaders, Pikmin types, etc.
             Also, make them smaller
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
+        Message box text should be juicier
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements

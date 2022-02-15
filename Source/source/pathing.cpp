@@ -23,6 +23,7 @@ using std::vector;
  * Creates an instance of a structure with settings about how to follow a path.
  */
 path_follow_settings::path_follow_settings() :
+    target_mob(nullptr),
     final_target_distance(chase_info_struct::DEF_TARGET_DISTANCE),
     flags(0) {
     

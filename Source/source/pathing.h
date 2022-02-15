@@ -66,6 +66,10 @@ enum PATH_FOLLOW_FLAGS {
  * Structure with settings about how a mob should follow a path.
  */
 struct path_follow_settings {
+    //Target location.
+    point target_point;
+    //If the target is a mob, this points to it.
+    mob* target_mob;
     //For the final chase, from the last path stop to
     //the destination, use this for the target distance parameter.
     float final_target_distance;

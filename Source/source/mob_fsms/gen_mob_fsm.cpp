@@ -130,6 +130,7 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
         //Let's fake the end point to be the start of the bridge,
         //for the sake of path calculations.
         if(
+            m->carry_info->intended_mob &&
             m->carry_info->intended_mob->type->category->id ==
             MOB_CATEGORY_BRIDGES
         ) {
@@ -139,15 +140,11 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
             settings.faked_end = bri_ptr->get_start_point();
         }
     }
+
+    settings.target_point = m->carry_info->intended_point;
+    settings.target_mob = m->carry_info->intended_mob;
     
-    m->follow_path(
-        m->carry_info->intended_point,
-        m->carry_info->get_speed(),
-        settings
-    );
-    
-    m->path_info->target_point = m->carry_info->intended_point;
-    m->path_info->target_mob = m->carry_info->intended_mob;
+    m->follow_path(settings, m->carry_info->get_speed());
     
     if(m->path_info->path.empty() && !m->path_info->go_straight) {
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);
