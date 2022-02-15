@@ -641,10 +641,12 @@ void area_editor::process_gui_options_dialog() {
         
         //Show territory checkbox.
         ImGui::Checkbox(
-            "Show territory", &game.options.area_editor_show_territory
+            "Show territory/terrain radius",
+            &game.options.area_editor_show_territory
         );
         set_tooltip(
-            "Show the territory of selected objects, when applicable."
+            "Show the territory radius and terrain radius\n"
+            "of the selected objects, when applicable."
         );
         
         //View mode text.

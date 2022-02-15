@@ -9,7 +9,7 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    I got the game to crash by getting a ton of Pikmin to deliver fragments to a bridge
+    Let Pikmin be on fire geyser, hold whistle on them, let them get burned -> That "reached home" logic gets triggered
     
     --- v0.22.0 ---
     Details

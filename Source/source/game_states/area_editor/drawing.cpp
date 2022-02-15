@@ -644,6 +644,15 @@ void area_editor::draw_canvas() {
                     al_map_rgb(240, 240, 192), 1.0f / game.cam.zoom
                 );
             }
+            if(
+                game.options.area_editor_show_territory &&
+                m_ptr->type->terrain_radius > 0
+            ) {
+                al_draw_circle(
+                    m_ptr->pos.x, m_ptr->pos.y, m_ptr->type->terrain_radius,
+                    al_map_rgb(240, 192, 192), 1.0f / game.cam.zoom
+                );
+            }
         }
         
     }
