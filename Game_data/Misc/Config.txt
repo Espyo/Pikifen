@@ -19,7 +19,7 @@ leader_order = Olimar;Louie;President;Alph;Brittany;Charlie
 spray_order = Ultra-Bitter Spray;Ultra-Spicy Spray
 
 idle_task_range = 50
-swarm_task_range = 0
+swarm_task_range = 3
 pikmin_chase_range = 200
 max_pikmin_in_field = 100
 maturity_power_mult = 0.1
