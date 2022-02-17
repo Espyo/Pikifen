@@ -267,6 +267,8 @@ int game_class::start() {
     load_maker_tools();
     save_maker_tools();
     
+    dummy_mob_state = new mob_state("dummy");
+    
     if(game.maker_tools.use_perf_mon) {
         game.perf_mon = new performance_monitor_struct();
     }
@@ -296,8 +298,6 @@ int game_class::start() {
     } else {
         game.change_state(game.states.main_menu);
     }
-    
-    dummy_mob_state = new mob_state("dummy");
     
     return 0;
 }

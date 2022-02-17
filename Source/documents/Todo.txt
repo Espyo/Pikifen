@@ -9,7 +9,6 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Let Pikmin be on fire geyser, hold whistle on them, let them get burned -> That "reached home" logic gets triggered
     
     --- v0.22.0 ---
     Details
@@ -25,6 +24,7 @@ Next tasks (roughly sorted most important first)
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
         Message box text should be juicier
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
+        Maybe decrease the leaders's acceleration?
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
             https://www.reddit.com/r/gamedev/comments/b6gh70/common_gamedev_mistakes_part_of_my_job_is_to/

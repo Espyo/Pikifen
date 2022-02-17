@@ -678,7 +678,7 @@ vector<path_stop*> get_path(
     //Let's just check something real quick:
     //if the destination is closer than any stop,
     //just go there right away!
-    dist start_to_end_dist = dist(start_to_use, end_to_use);
+    dist start_to_end_dist(start_to_use, end_to_use);
     if(start_to_end_dist <= closest_to_start_dist) {
         if(go_straight) *go_straight = true;
         if(total_dist) {

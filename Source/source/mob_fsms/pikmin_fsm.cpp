@@ -1212,6 +1212,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("flailing", PIKMIN_STATE_FLAILING); {
         efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::stand_still);
             efc.run(pikmin_fsm::notify_leader_release);
             efc.run(pikmin_fsm::be_released);
             efc.run(pikmin_fsm::release_tool);
@@ -1239,6 +1240,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("panicking", PIKMIN_STATE_PANICKING); {
         efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::stand_still);
             efc.run(pikmin_fsm::notify_leader_release);
             efc.run(pikmin_fsm::be_released);
             efc.run(pikmin_fsm::release_tool);

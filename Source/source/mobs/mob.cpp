@@ -3426,12 +3426,6 @@ void mob::tick_script(const float delta_t) {
         }
     }
     
-    //Has it reached its home?
-    mob_event* reach_dest_ev = fsm.get_event(MOB_EV_REACHED_DESTINATION);
-    if(reach_dest_ev && chase_info.state == CHASE_STATE_FINISHED) {
-        reach_dest_ev->run(this);
-    }
-    
     //Is it dead?
     if(health <= 0 && type->max_health != 0) {
         fsm.run_event(MOB_EV_DEATH, this);

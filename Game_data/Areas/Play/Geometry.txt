@@ -2472,33 +2472,28 @@ sectors{
 		texture=Stone.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		brightness=128
 		tag=0
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		brightness=128
 		tag=50
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=100
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=50
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=200
 		texture=Dirt.jpg
@@ -2512,33 +2507,28 @@ sectors{
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=150
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge rail
 		z=0.0000
 		brightness=128
 		tag=200
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge rail
 		z=0.0000
 		brightness=128
 		tag=200
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge rail
 		z=0.0000
 		tag=200
 		texture=Dirt.jpg
 	}
 	s{
-		type=Bridge rail
 		z=0.0000
 		tag=200
 		texture=Dirt.jpg
@@ -2580,37 +2570,31 @@ sectors{
 		fade=true
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=200
 		texture=Grass_light.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=150
 		texture=Grass_light.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=100
 		texture=Grass_light.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=50
 		texture=Grass_light.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=0
 		texture=Grass_light.jpg
 	}
 	s{
-		type=Bridge rail
 		z=0.0000
 		tag=200
 		texture=Grass_light.jpg
@@ -2715,7 +2699,6 @@ sectors{
 		texture=Grass_dark.jpg
 	}
 	s{
-		type=Bridge
 		z=0.0000
 		tag=0
 		texture=Grass_light.jpg
@@ -2811,6 +2794,7 @@ mobs{
 		type=Wood bridge
 		p=800.0000 608.0000
 		angle=4.7100
+		links=158
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -3115,6 +3099,7 @@ mobs{
 		type=Ceramic bridge red
 		p=896.3279 -1265.7062
 		angle=1.5708
+		links=157
 	}
 	Enemy{
 		type=Crumbug
@@ -3415,6 +3400,14 @@ mobs{
 	Decoration{
 		type=Leaves
 		p=-416.0000 -1792.0000
+	}
+	Custom{
+		type=Dummy
+		p=896.0000 -1056.0000
+	}
+	Custom{
+		type=Dummy
+		p=800.0000 416.0000
 	}
 }
 path_stops{
