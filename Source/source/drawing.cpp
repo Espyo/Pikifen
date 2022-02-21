@@ -1668,6 +1668,18 @@ float ease(const unsigned char method, const float n) {
     case EASE_OUT: {
         return 1 - (pow((1 - n), 3));
     }
+    case EASE_IN_ELASTIC: {
+        const float cp = 0.20f;
+        const float mag = -0.2f;
+        if(n < cp) {
+            float aux = n * 1.0f / cp;
+            return sin(aux * TAU / 2) * mag;
+        } else {
+            float aux = n - cp;
+            aux *= 1.0f / (1.0f - cp);
+            return 1 - (pow((1 - aux), 3));
+        }
+    }
     case EASE_UP_AND_DOWN: {
         return sin(n * TAU / 2);
     }

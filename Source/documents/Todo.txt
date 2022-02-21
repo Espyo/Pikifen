@@ -2,27 +2,32 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Give more juice to the HUD (Kman)
-        Leader swapping should make the leader health items slide into place
-        Pikmin type swapping should make the icons slide into place
-        Spray swapping should make the icons slide into place
+    Leader HUD info improvements
+        Make the leader icons move into place in a circular fashion, like Pikmin 2
+        Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
+        Leader HUD icons should be skipped if the leader is dead (thanks Helodity)
+        Leader health wheels should glow red when at low health (thanks Helodity)
+        
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    If an area has no leaders, it crashes
     
     --- v0.22.0 ---
-    Details
-        Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
+    HUD improvements
+        Standby Pikmin
+            The standby Pikmin type bubble should have bubbles nearby for the previous and next
+            Pikmin type swapping should make the bubble grow
+            Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
+        More button icons on the HUD, so players know what to press to swap leaders, Pikmin types, etc.
+            Also, make the button icons smaller
+        Message box text should be juicier
+        Spray swapping should make the icons slide into place
         Add juice to Onion menu
-        Leader health wheels should glow red when at low health (thanks Kman)
-        Maybe both the fraction numbers and health wheel should be established in a vector and created/destroyed as needed, instead of EVERY mob having data about the numbers/health wheel even if it doesn't need it or can't use it
-        Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
+    Details
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Pikmin that are plucked should be thrown backwards. Plus, there should be some dirt particle effects
-        More buttons on the HUD, so players now what to press to swap leaders, Pikmin types, etc.
-            Also, make them smaller
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
-        Message box text should be juicier
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         Maybe decrease the leaders's acceleration?
         Game feel
@@ -44,8 +49,10 @@ Next tasks (roughly sorted most important first)
             Geometry-related functions should be sorted alphabetically, e.g. "circle_intersects_rectangle", not "rectangle_intersects_circle"
         Document every class member with a comment
         Document every enum, and every enum value, with a comment
+        Standardize the comments of all "tick" functions
         Some consts are documented in the .h, others in the .cpp. In general, just clean up all consts
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
+        Optimize constant colors, like pure whites and blacks -- we don't need to call al_map_rgb every time
         Don't mark functions as virtual if they don't need to be (e.g. they're already overwriting the parent class's function)
         Memory leaks, cppcheck, etc.
     Demo content
@@ -72,7 +79,7 @@ Next tasks (roughly sorted most important first)
             Some signs should talk about dismissing, and group moving
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
             Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
-        Kman's Adventure area (see #content-sharing)
+        Helodity's Adventure area (see #content-sharing)
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     General graphic file improvements
         Leader and Pikmin portrait images should
@@ -101,7 +108,7 @@ Next tasks (roughly sorted most important first)
         Pikmin lying down should be farther back than they are (at least for the Red Pikmin)
         Stems should be visible, at least the starting part
         Feet are sometimes little nubs, sometimes spiky
-        Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Kman's made some)
+        Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
             If necessary, seeds should have their own animation
         The "grabbing_near" sprite is unused for all bar Bulbmin
         More frames, for more fluidity
@@ -136,7 +143,7 @@ Next tasks (roughly sorted most important first)
         Candypop Buds should squash when they close
         Ceramic bridges should be reworked for the new bridge format
         Wooden bridges need to be 192px long, to fit the new bridge format
-        Animate the Hocotate ship (use Kman's zip) and the S.S. Drake
+        Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
         Add a glow to the smack effect particle?
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
@@ -209,7 +216,7 @@ Next tasks (roughly sorted most important first)
             A "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
             Its (subjective) difficulty
             A goal
-                One of the following (partial thanks Jimble, Kman):
+                One of the following (partial thanks Jimble, Helodity):
                     Collect treasures (specified ones or all)
                     Defeat enemies (specified ones or all)
                     Survive for the specified time
@@ -641,7 +648,7 @@ Misc things (so I don't forget)
         Add a way for a GUI element's drawing routine to receive alpha as a parameter? And then each element should be responsible for drawing with that alpha. Could be useful for fade ins and fade outs
         On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
     An option for the cursor to snap to the nearest object in-game, with an adjustable radius
-    "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Kman)
+    "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
     A Pikmin that's on fire and runs to the water should probably drown instead of continuing to be on fire
     Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
     Carrying stuff
@@ -668,7 +675,7 @@ Misc things (so I don't forget)
     Water depth (thanks ThyCheshireCat)
         Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
     "I think carry weight should be displayed when you hover over an enemy corpse/pellet" (thanks Tenacious)
-    The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Kman)
+    The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
     Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     A way for a Pikmin type to control what its resistance to being shaken off is
@@ -686,7 +693,7 @@ Misc things (so I don't forget)
     Option to pause the game if the window is not focused
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     [NEEDS BRAINSTORMING] on_carrying_lift and on_carrying_drop events?
-    A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Kman)
+    A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     A way to add random variation to the knockback angle of a hitbox
     If a Pikmin type has black as the color, the idle glow needs to... not be black
     Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
@@ -763,11 +770,11 @@ Misc things (so I don't forget)
 Tasks for later on (I might never implement these)
     Known problems
         On my other laptop, screenshots come out with alpha
-        Kman found a crash on the area editor -- area with invalid shadow, restart engine, area editor, find problems, go to problem -> crash -- I can't reproduce, but it must have something to do with pointers not being cleared
+        Helodity found a crash on the area editor -- area with invalid shadow, restart engine, area editor, find problems, go to problem -> crash -- I can't reproduce, but it must have something to do with pointers not being cleared
     ...An AI opponent in 2-player mode? It would help me test...
     [NEEDS BRAINSTORMING] Colors should be able to also be in hexadecimal?
     The ability for enemies to eat other enemies
-    If I need GPU performance gains, resize textures to smaller sizes when they're loaded (thanks Kman)
+    If I need GPU performance gains, resize textures to smaller sizes when they're loaded (thanks Helodity)
     A way for spike damage to apply a status effect
     [NEEDS BRAINSTORMING] A way to write out how much memory is being taken up by images, sounds, scripts, etc. so game makers can help make sure a level's not too bloated?
     Nighttime (what enemies can spawn at night, their changes, etc.)
@@ -809,7 +816,7 @@ Tasks for later on (I might never implement these)
                 When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
                 If it detects an auto-backup that's younger than the saved area, it should ask the user if they want to continue from the backup
             The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
-            A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Kman)
+            A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.
             The problem searcher could detect when an enemy's spoils is set to an object that doesn't exist (thanks Nutty171)

@@ -73,23 +73,27 @@ uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the interpolation of the value between two positions.
- * p:
- *   Input point.
- * p1:
- *   Minimum value the input can have.
- * p2:
- *   Maximum value the input can have.
- * v1:
- *   Minimum value the interpolation result can have.
- * v2:
- *   Maximum value the interpolation result can have.
+ * Returns the interpolation between two numbers, given a number in an interval.
+ * input:
+ *   The input number.
+ * input_start:
+ *   Start of the interval the input number falls on, inclusive.
+ *   The closer to input_start, the closer the output is to output_start.
+ * input_end:
+ *   End of the interval the number falls on, inclusive.
+ * output_start:
+ *   Number on the starting tip of the interpolation.
+ * output_end:
+ *   Number on the ending tip of the interpolation.
  */
 float interpolate_number(
-    const float p, const float p1, const float p2,
-    const float v1, const float v2
+    const float input, const float input_start, const float input_end,
+    const float output_start, const float output_end
 ) {
-    return v1 + ((p - p1) / (float) (p2 - p1)) * (v2 - v1);
+    return
+        output_start +
+        ((input - input_start) / (float) (input_end - input_start)) *
+        (output_end - output_start);
 }
 
 

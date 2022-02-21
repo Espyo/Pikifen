@@ -841,6 +841,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     bool searching = true;
     size_t original_leader_nr = game.states.gameplay->cur_leader_nr;
     bool cant_find_new_leader = false;
+    bool success = false;
     
     while(searching) {
         new_leader_nr =
@@ -864,6 +865,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
         //Try a new one.
         if(game.states.gameplay->cur_leader_nr != original_leader_nr) {
             searching = false;
+            success = true;
         }
     }
     
@@ -882,6 +884,11 @@ void change_to_next_leader(const bool forward, const bool force_success) {
         game.states.gameplay->cur_leader_ptr->fsm.set_state(
             LEADER_STATE_ACTIVE
         );
+        success = true;
+    }
+    
+    if(success) {
+        game.states.gameplay->hud->start_leader_swap_juice(original_leader_nr);
     }
 }
 

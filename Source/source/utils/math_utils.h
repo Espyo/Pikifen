@@ -34,8 +34,8 @@ float clamp(const float number, const float minimum, const float maximum);
 uint32_t hash_nr(const unsigned int input);
 uint32_t hash_nr2(const unsigned int input1, const unsigned int input2);
 float interpolate_number(
-    const float p, const float p1, const float p2,
-    const float v1, const float v2
+    const float input, const float input_start, const float input_end,
+    const float output_start, const float output_end
 );
 float randomf(float min, float max);
 int randomi(int min, int max);

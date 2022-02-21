@@ -56,9 +56,9 @@ public:
     
     //What GUI manager it belongs to, if any.
     gui_manager* manager;
-    //On-screen position, in screen ratio.
+    //Its raw on-screen position, in screen ratio (or parent ratio).
     point center;
-    //Width and height, in screen ratio.
+    //Its raw width and height, in screen ratio (or parent ratio).
     point size;
     //Is it currently visible?
     bool visible;
@@ -104,10 +104,10 @@ public:
     float get_child_bottom();
     //Returns the value related to the current juice animation.
     float get_juice_value();
-    //Returns the real center coordinates.
-    point get_real_center();
-    //Returns the real size coordinates.
-    point get_real_size();
+    //Returns the reference center coordinates.
+    point get_reference_center();
+    //Returns the reference size.
+    point get_reference_size();
     //Returns whether the mouse cursor is on top of it.
     bool is_mouse_on(const point &cursor_pos);
     //Removes an item from the list of children.
@@ -265,6 +265,10 @@ public:
     void tick(const float delta_t);
     //Returns the current item's tooltip, if any.
     string get_current_tooltip();
+    //Get an item's draw information.
+    bool get_item_draw_info(
+        gui_item* item, point* draw_center, point* draw_size
+    );
     //Handle an Allegro event.
     void handle_event(const ALLEGRO_EVENT &ev);
     //Handle a button press or release.

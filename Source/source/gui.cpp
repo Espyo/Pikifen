@@ -234,12 +234,12 @@ float gui_item::get_juice_value() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the real center coordinates.
+ * Returns the reference center coordinates, i.e. used when not animating.
  */
-point gui_item::get_real_center() {
+point gui_item::get_reference_center() {
     if(parent) {
-        point parent_s = parent->get_real_size() - (parent->padding * 2.0f);
-        point parent_c = parent->get_real_center();
+        point parent_s = parent->get_reference_size() - (parent->padding * 2.0f);
+        point parent_c = parent->get_reference_center();
         point result = center * parent_s;
         result.x += parent_c.x - parent_s.x / 2.0f;
         result.y += parent_c.y - parent_s.y / 2.0f;
@@ -252,12 +252,12 @@ point gui_item::get_real_center() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the real size coordinates.
+ * Returns the reference width and height, i.e. used when not animating.
  */
-point gui_item::get_real_size() {
+point gui_item::get_reference_size() {
     point mult;
     if(parent) {
-        mult = parent->get_real_size() - (parent->padding * 2.0f);
+        mult = parent->get_reference_size() - (parent->padding * 2.0f);
     } else {
         mult.x = game.win_w;
         mult.y = game.win_h;
@@ -276,8 +276,8 @@ bool gui_item::is_mouse_on(const point &cursor_pos) {
         return false;
     }
     
-    point c = get_real_center();
-    point s = get_real_size();
+    point c = get_reference_center();
+    point s = get_reference_size();
     return
         (
             cursor_pos.x >= c.x - s.x * 0.5 &&
@@ -412,19 +412,19 @@ void gui_manager::draw() {
     if(!visible) return;
     
     int ocr_x, ocr_y, ocr_w, ocr_h;
+    
     for(size_t i = 0; i < items.size(); ++i) {
+    
         gui_item* i_ptr = items[i];
+        point draw_center = i_ptr->get_reference_center();
+        point draw_size = i_ptr->get_reference_size();
         
-        if(!i_ptr->visible) continue;
-        if(i_ptr->size.x == 0.0f) continue;
+        if(!get_item_draw_info(i_ptr, &draw_center, &draw_size)) continue;
         
-        point multipliers;
-        gui_item* parent = i_ptr->parent;
-        
-        if(parent) {
+        if(i_ptr->parent) {
             al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
-            point parent_c = parent->get_real_center();
-            point parent_s = parent->get_real_size();
+            point parent_c = i_ptr->parent->get_reference_center();
+            point parent_s = i_ptr->parent->get_reference_size();
             al_set_clipping_rectangle(
                 parent_c.x - parent_s.x / 2.0f,
                 parent_c.y - parent_s.y / 2.0f,
@@ -433,81 +433,9 @@ void gui_manager::draw() {
             );
         }
         
-        point final_center = i_ptr->get_real_center();
-        point final_size = i_ptr->get_real_size();
+        i_ptr->on_draw(draw_center, draw_size);
         
-        if(anim_timer.time_left > 0.0f) {
-            switch(anim_type) {
-            case GUI_MANAGER_ANIM_OUT_TO_IN: {
-                point start_center;
-                float angle =
-                    get_angle(
-                        point(game.win_w, game.win_h) / 2.0f,
-                        final_center
-                    );
-                start_center.x = final_center.x + cos(angle) * game.win_w;
-                start_center.y = final_center.y + sin(angle) * game.win_h;
-                
-                final_center.x =
-                    interpolate_number(
-                        ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
-                        0.0f, 1.0f, start_center.x, final_center.x
-                    );
-                final_center.y =
-                    interpolate_number(
-                        ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
-                        0.0f, 1.0f, start_center.y, final_center.y
-                    );
-                break;
-                
-            } case GUI_MANAGER_ANIM_IN_TO_OUT: {
-                point end_center;
-                float angle =
-                    get_angle(
-                        point(game.win_w, game.win_h) / 2.0f,
-                        final_center
-                    );
-                end_center.x = final_center.x + cos(angle) * game.win_w;
-                end_center.y = final_center.y + sin(angle) * game.win_h;
-                
-                final_center.x =
-                    interpolate_number(
-                        ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
-                        0.0f, 1.0f, final_center.x, end_center.x
-                    );
-                final_center.y =
-                    interpolate_number(
-                        ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
-                        0.0f, 1.0f, final_center.y, end_center.y
-                    );
-                break;
-                
-            } case GUI_MANAGER_ANIM_UP_TO_CENTER: {
-                final_center.y =
-                    interpolate_number(
-                        ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
-                        0.0f, 1.0f, final_center.y - game.win_h, final_center.y
-                    );
-                break;
-                
-            } case GUI_MANAGER_ANIM_CENTER_TO_UP: {
-                final_center.y =
-                    interpolate_number(
-                        ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
-                        0.0f, 1.0f, final_center.y, final_center.y - game.win_h
-                    );
-                break;
-                
-            } default: {
-                break;
-                
-            }
-            }
-        }
-        
-        i_ptr->on_draw(final_center, final_size);
-        
-        if(parent) {
+        if(i_ptr->parent) {
             al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
         }
     }
@@ -515,12 +443,106 @@ void gui_manager::draw() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the current item's tooltip, if any.
+ * Returns the currently selected item's tooltip, if any.
  */
 string gui_manager::get_current_tooltip() {
     if(!selected_item) return string();
     if(!selected_item->on_get_tooltip) return string();
     return selected_item->on_get_tooltip();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a given item's drawing information.
+ * Returns true if the item exists and is meant to be drawn, false otherwise.
+ * item:
+ *   What item to check.
+ * draw_center:
+ *   The drawing center coordinates to use.
+ * draw_size:
+ *   The drawing width and height to use.
+ */
+bool gui_manager::get_item_draw_info(
+    gui_item* item, point* draw_center, point* draw_size
+) {
+    if(!item->visible) return false;
+    if(item->size.x == 0.0f) return false;
+    
+    point final_center = item->get_reference_center();
+    point final_size = item->get_reference_size();
+    
+    if(anim_timer.time_left > 0.0f) {
+        switch(anim_type) {
+        case GUI_MANAGER_ANIM_OUT_TO_IN: {
+            point start_center;
+            float angle =
+                get_angle(
+                    point(game.win_w, game.win_h) / 2.0f,
+                    final_center
+                );
+            start_center.x = final_center.x + cos(angle) * game.win_w;
+            start_center.y = final_center.y + sin(angle) * game.win_h;
+            
+            final_center.x =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, start_center.x, final_center.x
+                );
+            final_center.y =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, start_center.y, final_center.y
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_IN_TO_OUT: {
+            point end_center;
+            float angle =
+                get_angle(
+                    point(game.win_w, game.win_h) / 2.0f,
+                    final_center
+                );
+            end_center.x = final_center.x + cos(angle) * game.win_w;
+            end_center.y = final_center.y + sin(angle) * game.win_h;
+            
+            final_center.x =
+                interpolate_number(
+                    ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.x, end_center.x
+                );
+            final_center.y =
+                interpolate_number(
+                    ease(EASE_IN, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.y, end_center.y
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_UP_TO_CENTER: {
+            final_center.y =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.y - game.win_h, final_center.y
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_CENTER_TO_UP: {
+            final_center.y =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.y, final_center.y - game.win_h
+                );
+            break;
+            
+        } default: {
+            break;
+            
+        }
+        }
+    }
+    
+    *draw_center = final_center;
+    *draw_size = final_size;
+    return true;
 }
 
 
@@ -704,7 +726,7 @@ bool gui_manager::handle_menu_button(
         for(size_t i = 0; i < items.size(); ++i) {
             gui_item* i_ptr = items[i];
             if(i_ptr->selectable) {
-                point i_center = i_ptr->get_real_center();
+                point i_center = i_ptr->get_reference_center();
                 if(i_ptr == selected_item) {
                     selectable_idx = selectables.size();
                 }
@@ -713,7 +735,7 @@ bool gui_manager::handle_menu_button(
                 max_y = std::max(max_y, i_center.y);
                 
                 selectable_ptrs.push_back(i_ptr);
-                selectables.push_back(i_ptr->get_real_center());
+                selectables.push_back(i_ptr->get_reference_center());
             }
         }
         
@@ -1075,7 +1097,7 @@ picker_gui_item::picker_gui_item(
     
     on_activate =
     [this] (const point & cursor_pos) {
-        if(cursor_pos.x >= get_real_center().x) {
+        if(cursor_pos.x >= get_reference_center().x) {
             on_next();
         } else {
             on_previous();
@@ -1097,7 +1119,7 @@ picker_gui_item::picker_gui_item(
     on_mouse_over =
     [this] (const point & cursor_pos) {
         arrow_highlight =
-            cursor_pos.x >= get_real_center().x ? 1 : 0;
+            cursor_pos.x >= get_reference_center().x ? 1 : 0;
     };
 }
 
@@ -1151,8 +1173,8 @@ scroll_gui_item::scroll_gui_item() :
                 return;
             }
             
-            point c = get_real_center();
-            point s = get_real_size();
+            point c = get_reference_center();
+            point s = get_reference_size();
             float bar_h = (1.0f / list_bottom) * s.y;
             float y1 = (c.y - s.y / 2.0f) + bar_h / 2.0f;
             float y2 = (c.y + s.y / 2.0f) - bar_h / 2.0f;

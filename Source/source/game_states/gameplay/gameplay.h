@@ -22,6 +22,40 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Manages the contents of "bubbles" in the HUD that have the ability to move
+ * around, or fade in/out of existence, depending on what the player swapped,
+ * and how.
+ * I'm calling these "bubbles" because this slide/shrink/grow behavior is
+ * typically used by HUD items that are drawn inside some bubble.
+ */
+struct hud_bubble_manager {
+public:
+    struct bubble_info {
+        gui_item* bubble;
+        size_t content_index;
+        size_t pre_transition_content_index;
+        bubble_info(gui_item* bubble = NULL);
+    };
+    
+    hud_bubble_manager();
+    size_t get_content_index(const size_t number);
+    void get_drawing_info(
+        const size_t number, const float transition_anim_ratio,
+        size_t* content_idx, point* pos, point* scale
+    );
+    size_t get_pre_transition_content_index(const size_t number);
+    void register_bubble(const size_t number, gui_item* bubble);
+    void setup_transition();
+    void update_content_index(const size_t number, const size_t new_index);
+    
+private:
+    map<size_t, bubble_info> bubbles;
+    
+};
+
+
+
+/* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
  */
 class gameplay_state : public game_state {
@@ -39,8 +73,17 @@ public:
     static const float SWARM_ARROWS_INTERVAL;
     
     struct hud_struct {
+    public:
+        static const float LEADER_SWAP_JUICE_DURATION;
+        
         //GUI manager.
         gui_manager gui;
+        //Time left for the leader swap juice animation.
+        float leader_swap_juice_timer;
+        //Bubble manager for leader icon items.
+        hud_bubble_manager leader_icon_mgr;
+        //Bubble manager for leader health items.
+        hud_bubble_manager leader_health_mgr;
         //Spray 1 amount text. Cache for convenience.
         gui_item* spray_1_amount;
         //Spray 2 amount text. Cache for convenience.
@@ -63,6 +106,8 @@ public:
         gui_item* total_count;
         
         hud_struct();
+        void start_leader_swap_juice(const size_t old_leader_nr);
+        void tick(const float delta_t);
     };
     
     gameplay_state();

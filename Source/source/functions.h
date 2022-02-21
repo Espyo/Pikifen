@@ -163,8 +163,8 @@ ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr);
 float get_wall_shadow_length(edge* e_ptr);
 vector<std::pair<size_t, string> > get_weather_table(data_node* node);
 ALLEGRO_COLOR interpolate_color(
-    const float n, const float n1, const float n2,
-    const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2
+    const float input, const float input_start, const float input_end,
+    const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
 );
 void log_error(string s, data_node* d = NULL);
 void print_info(

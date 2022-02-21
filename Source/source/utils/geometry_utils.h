@@ -145,6 +145,10 @@ void get_transformed_rectangle_bounding_box(
     const point &center, const point &dimensions, const float angle,
     point* min_coords, point* max_coords
 );
+point interpolate_point(
+    const float input, const float input_start, const float input_end,
+    const point &output_start, const point &output_end
+);
 bool is_point_in_triangle(
     const point &p, const point &tp1, const point &tp2, const point &tp3,
     bool loq

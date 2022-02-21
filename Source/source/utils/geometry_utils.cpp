@@ -1087,6 +1087,37 @@ void get_transformed_rectangle_bounding_box(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the interpolation between two points, given a number in an interval.
+ * input:
+ *   The input number.
+ * input_start:
+ *   Start of the interval the input number falls on, inclusive.
+ *   The closer to input_start, the closer the output is to output_start.
+ * input_end:
+ *   End of the interval the number falls on, inclusive.
+ * output_start:
+ *   Point on the starting tip of the interpolation.
+ * output_end:
+ *   Point on the ending tip of the interpolation.
+ */
+point interpolate_point(
+    const float input, const float input_start, const float input_end,
+    const point &output_start, const point &output_end
+) {
+    return
+        point(
+            interpolate_number(
+                input, input_start, input_end, output_start.x, output_end.x
+            ),
+            interpolate_number(
+                input, input_start, input_end, output_start.y, output_end.y
+            )
+        );
+        
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether a point is inside a triangle or not.
  * p:
  *   The point to check.

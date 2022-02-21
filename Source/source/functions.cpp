@@ -949,29 +949,30 @@ vector<std::pair<size_t, string> > get_weather_table(data_node* node) {
 
 /* ----------------------------------------------------------------------------
  * Returns the interpolation between two colors, given a number in an interval.
- * n:
- *   The number.
- * n1:
- *   Start of the interval the number falls on, inclusive.
- *   The closer to n1, the closer the final color is to c1.
- * n2:
+ * input:
+ *   The input number.
+ * input_start:
+ *   Start of the interval the input number falls on, inclusive.
+ *   The closer to input_start, the closer the output is to output_start.
+ * input_end:
  *   End of the interval the number falls on, inclusive.
- * c1:
- *   Color on the first end of the interpolation.
- * c2:
- *   Color on the second end of the interpolation.
+ * output_start:
+ *   Color on the starting tip of the interpolation.
+ * output_end:
+ *   Color on the ending tip of the interpolation.
  */
 ALLEGRO_COLOR interpolate_color(
-    const float n, const float n1, const float n2,
-    const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2
+    const float input, const float input_start, const float input_end,
+    const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
 ) {
-    float progress = (float) (n - n1) / (float) (n2 - n1);
+    float progress =
+        (float) (input - input_start) / (float) (input_end - input_start);
     return
         al_map_rgba_f(
-            c1.r + progress * (c2.r - c1.r),
-            c1.g + progress * (c2.g - c1.g),
-            c1.b + progress * (c2.b - c1.b),
-            c1.a + progress * (c2.a - c1.a)
+            output_start.r + progress * (output_end.r - output_start.r),
+            output_start.g + progress * (output_end.g - output_start.g),
+            output_start.b + progress * (output_end.b - output_start.b),
+            output_start.a + progress * (output_end.a - output_start.a)
         );
 }
 
