@@ -400,6 +400,36 @@ void leader::dismiss() {
     
     //Final things.
     lea_type->sfx_dismiss.play(0, false);
+    const size_t N_DISMISS_PARTICLES = N_WHISTLE_DOT_COLORS * 3;
+    const float PARTICLE_ALPHA = 1.0f;
+    const float PARTICLE_MIN_DURATION = 1.0f;
+    const float PARTICLE_MAX_DURATION = 1.4f;
+    const float PARTICLE_FRICTION = 3.2f;
+    const float PARTICLE_MIN_SPEED = 170.0f;
+    const float PARTICLE_MAX_SPEED = 210.0f;
+    const float PARTICLE_SIZE = 8.0f;
+    for(size_t p = 0; p < N_DISMISS_PARTICLES; ++p) {
+        particle par;
+        const unsigned char* color_idx =
+            WHISTLE_DOT_COLORS[p % N_WHISTLE_DOT_COLORS];
+        par.color.r = color_idx[0] / 255.0f;
+        par.color.g = color_idx[1] / 255.0f;
+        par.color.b = color_idx[2] / 255.0f;
+        par.color.a = PARTICLE_ALPHA;
+        par.bitmap = game.sys_assets.bmp_bright_circle;
+        par.duration = randomf(PARTICLE_MIN_DURATION, PARTICLE_MAX_DURATION);
+        par.friction = PARTICLE_FRICTION;
+        par.pos = pos;
+        par.priority = PARTICLE_PRIORITY_MEDIUM;
+        par.size = PARTICLE_SIZE;
+        float par_speed = randomf(PARTICLE_MIN_SPEED, PARTICLE_MAX_SPEED);
+        float par_angle = TAU / N_DISMISS_PARTICLES * p;
+        par.speed = rotate_point(point(par_speed, 0.0f), par_angle);
+        par.time = par.duration;
+        par.type = PARTICLE_TYPE_BITMAP;
+        par.z = z + height / 2.0f;
+        game.states.gameplay->particles.add(par);
+    }
     set_animation(LEADER_ANIM_DISMISSING);
 }
 
