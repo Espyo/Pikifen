@@ -319,7 +319,7 @@ void pikmin::latch(mob* m, hitbox* h) {
     );
     m->hold(
         this, h->body_part_index, h_offset_dist, h_offset_angle,
-        true, true
+        true, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     
     latched = true;

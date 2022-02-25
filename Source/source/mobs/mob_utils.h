@@ -38,6 +38,7 @@
 #include "../pathing.h"
 #include "../sector.h"
 #include "../utils/geometry_utils.h"
+#include "mob_enums.h"
 
 
 using std::size_t;
@@ -45,64 +46,11 @@ using std::vector;
 
 class mob;
 
-enum CARRY_SPOT_STATES {
-    CARRY_SPOT_FREE,
-    CARRY_SPOT_RESERVED,
-    CARRY_SPOT_USED,
-};
-
-
-enum CARRY_DESTINATIONS {
-    CARRY_DESTINATION_SHIP,
-    CARRY_DESTINATION_ONION,
-    CARRY_DESTINATION_LINKED_MOB,
-};
-
-
-enum DELIVERY_ANIMATIONS {
-    DELIVERY_ANIM_SUCK,
-    DELIVERY_ANIM_TOSS,
-};
-
-
-enum CHASE_FLAGS {
-    //The mob instantly teleports to the final destination.
-    CHASE_FLAG_TELEPORT = 1,
-    //When teleporting, do not consider the chase finished.
-    CHASE_FLAG_TELEPORTS_CONSTANTLY = 2,
-    //The mob can move in any angle instead of just where it's facing.
-    CHASE_FLAG_ANY_ANGLE = 4,
-};
-
-
-enum CHASE_STATES {
-    //No chasing in progress.
-    CHASE_STATE_STOPPED,
-    //Currently chasing.
-    CHASE_STATE_CHASING,
-    //Reached the destination and no longer chasing.
-    CHASE_STATE_FINISHED,
-};
-
-
-//Options for how to start a new animation.
-enum START_ANIMATION_OPTIONS {
-    //Start the new animation like normal.
-    START_ANIMATION_NORMAL,
-    //Start from whatever frame number the previous animation was at.
-    START_ANIMATION_NO_RESTART,
-    //Start on a random time.
-    START_ANIMATION_RANDOM_TIME,
-    //Start on a random time, but only if the mob just spawned.
-    START_ANIMATION_RANDOM_TIME_ON_SPAWN,
-};
-
-
 /* ----------------------------------------------------------------------------
  * Information on a carrying spot around a mob's perimeter.
  */
 struct carrier_spot_struct {
-    unsigned char state;
+    CARRY_SPOT_STATES state;
     //Relative coordinates of each spot.
     //They avoid calculating several sines and cosines over and over.
     point pos;
@@ -118,8 +66,8 @@ struct carrier_spot_struct {
 struct carry_info_struct {
     //Mob that this struct belongs to.
     mob* m;
-    //Generic type of delivery destination. Use CARRY_DESTINATION_*.
-    size_t destination;
+    //Generic type of delivery destination.
+    CARRY_DESTINATIONS destination;
     
     vector<carrier_spot_struct> spot_info;
     
@@ -146,7 +94,7 @@ struct carry_info_struct {
     //Distance from the return point to stop at.
     float return_dist;
     
-    carry_info_struct(mob* m, const size_t destination);
+    carry_info_struct(mob* m, const CARRY_DESTINATIONS destination);
     bool is_empty() const;
     bool is_full() const;
     vector<hazard*> get_carrier_invulnerabilities() const;
@@ -276,8 +224,8 @@ struct hold_info_struct {
     float offset_angle;
     //Is the mob drawn above the holder?
     bool above_holder;
-    //How should the held object rotate? Use HOLD_ROTATION_METHOD_*.
-    unsigned char rotation_method;
+    //How should the held object rotate?
+    HOLD_ROTATION_METHODS rotation_method;
     
     hold_info_struct();
     void clear();
@@ -509,8 +457,8 @@ mob* create_mob(
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
 string get_error_message_mob_info(mob* m);
-size_t string_to_mob_target_type(const string &type_str);
-size_t string_to_team_nr(const string &team_str);
+MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str);
+MOB_TEAMS string_to_team_nr(const string &team_str);
 
 
 #endif //ifndef MOB_UTILS_INCLUDED

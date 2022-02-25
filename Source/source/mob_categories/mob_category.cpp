@@ -35,7 +35,7 @@ using std::string;
  *   In the area editor, objects of this category get this color.
  */
 mob_category::mob_category(
-    const size_t id, const string &name, const string &plural_name,
+    const MOB_CATEGORIES id, const string &name, const string &plural_name,
     const string &folder, const ALLEGRO_COLOR editor_color
 ) :
     name(name),
@@ -100,7 +100,7 @@ mob_type* mob_category_manager::find_mob_type_from_folder_name(
  * id:
  *   ID of the category.
  */
-mob_category* mob_category_manager::get(const size_t id) const {
+mob_category* mob_category_manager::get(const MOB_CATEGORIES id) const {
     if(id >= categories.size()) return NULL;
     return categories[id];
 }
@@ -160,7 +160,7 @@ mob_category* mob_category_manager::get_from_pname(const string &pname) const {
  *   Pointer to its data.
  */
 void mob_category_manager::register_category(
-    size_t nr,
+    MOB_CATEGORIES nr,
     mob_category* category
 ) {
     if(nr >= categories.size()) {

@@ -62,7 +62,7 @@ class mob_type;
 class mob_category {
 public:
     string name;
-    size_t id;
+    MOB_CATEGORIES id;
     
     string plural_name;
     string folder;
@@ -79,7 +79,7 @@ public:
     virtual void clear_types() = 0;
     
     mob_category(
-        const size_t id, const string &name, const string &plural_name,
+        const MOB_CATEGORIES id, const string &name, const string &plural_name,
         const string &folder, const ALLEGRO_COLOR editor_color
     );
     virtual ~mob_category() = default;
@@ -95,17 +95,17 @@ public:
  */
 struct mob_category_manager {
 public:
-    void register_category(size_t nr, mob_category* category);
+    void register_category(MOB_CATEGORIES nr, mob_category* category);
     mob_type* find_mob_type(const string &name) const;
     mob_type* find_mob_type_from_folder_name(
         mob_category* cat, const string &name
     ) const;
-    mob_category* get(const size_t id) const;
+    mob_category* get(const MOB_CATEGORIES id) const;
     mob_category* get_from_folder_name(const string &name) const;
     mob_category* get_from_name(const string &name) const;
     mob_category* get_from_pname(const string &pname) const;
     void clear();
-
+    
 private:
     vector<mob_category*> categories;
     

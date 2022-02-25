@@ -679,7 +679,7 @@ void area_editor::process_gui_options_dialog() {
         set_tooltip(
             "Draw sectors as solid grays based on their brightness."
         );
-        game.options.area_editor_view_mode = view_mode;
+        game.options.area_editor_view_mode = (VIEW_MODES) view_mode;
         
         ImGui::Unindent();
         
@@ -1479,6 +1479,8 @@ void area_editor::process_gui_panel_layout() {
         } case SELECTION_FILTER_SECTORS: {
             sel_filter_bmp = editor_icons[ICON_SECTORS];
             sel_filter_description = "sectors + edges + vertexes";
+            break;
+        } case N_SELECTION_FILTERS: {
             break;
         }
         }
@@ -2636,12 +2638,16 @@ void area_editor::process_gui_panel_sector() {
             for(
                 size_t t = 0; t < game.sector_types.get_nr_of_types(); ++t
             ) {
-                types_list.push_back(game.sector_types.get_name(t));
+                types_list.push_back(
+                    game.sector_types.get_name(
+                        (SECTOR_TYPES) t
+                    )
+                );
             }
             int sector_type = s_ptr->type;
             if(ImGui::Combo("Type", &sector_type, types_list)) {
                 register_change("sector type change");
-                s_ptr->type = sector_type;
+                s_ptr->type = (SECTOR_TYPES) sector_type;
             }
             set_tooltip(
                 "What type of sector this is."
@@ -3233,6 +3239,8 @@ void area_editor::process_gui_toolbar() {
     } case SNAP_NOTHING: {
         snap_mode_bmp = editor_icons[ICON_SNAP_NOTHING];
         snap_mode_description = "off. Shift snaps to grid.";
+        break;
+    } case N_SNAP_MODES: {
         break;
     }
     }

@@ -60,7 +60,7 @@ public:
     float height;
     float radius;
     
-    unsigned char type;
+    HITBOX_TYPES type;
     string hazards_str;
     vector<hazard*> hazards;
     //If it's a normal hitbox, this is the defense multiplier.

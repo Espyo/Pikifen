@@ -90,7 +90,7 @@ vector<mob_state*> easy_fsm_creator::finish() {
  * type:
  *   Type of event.
  */
-void easy_fsm_creator::new_event(const unsigned char type) {
+void easy_fsm_creator::new_event(const MOB_EV_TYPES type) {
     commit_event();
     cur_event = new mob_event(type);
     cur_state->events[type] = cur_event;
@@ -203,7 +203,7 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
  * a:
  *   Its actions.
  */
-mob_event::mob_event(const unsigned char t, const vector<mob_action_call*> &a) :
+mob_event::mob_event(const MOB_EV_TYPES t, const vector<mob_action_call*> &a) :
     type(t),
     actions(a) {
     
@@ -329,7 +329,7 @@ mob_fsm::mob_fsm(mob* m) :
  * type:
  *   The event's type.
  */
-mob_event* mob_fsm::get_event(const size_t type) const {
+mob_event* mob_fsm::get_event(const MOB_EV_TYPES type) const {
     return cur_state->events[type];
 }
 
@@ -360,7 +360,7 @@ size_t mob_fsm::get_state_nr(const string &name) const {
  *   Custom argument #2 to pass to the code.
  */
 void mob_fsm::run_event(
-    const size_t type, void* custom_data_1, void* custom_data_2
+    const MOB_EV_TYPES type, void* custom_data_1, void* custom_data_2
 ) {
     mob_event* e = get_event(type);
     if(e) {
@@ -477,7 +477,7 @@ mob_state::mob_state(const string &name, const size_t id) :
  * type:
  *   The event's type.
  */
-mob_event* mob_state::get_event(const size_t type) const {
+mob_event* mob_state::get_event(const MOB_EV_TYPES type) const {
     return events[type];
 }
 
@@ -676,7 +676,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
         
         //Connect all new events to the state.
         for(size_t e = 0; e < new_events.size(); ++e) {
-            size_t ev_type = new_events[e]->type;
+            MOB_EV_TYPES ev_type = new_events[e]->type;
             
             if(state_ptr->events[ev_type]) {
                 //Event already exists. Add the new actions, only.

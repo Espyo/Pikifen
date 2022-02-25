@@ -22,7 +22,7 @@
 /* ----------------------------------------------------------------------------
  * Creates a particle.
  * type:
- *   The type of particle. Use PARTICLE_TYPE_*.
+ *   The type of particle.
  * pos:
  *   Starting coordinates.
  * z:
@@ -35,8 +35,8 @@
  *   Lower priority particles will be removed in favor of higher ones.
  */
 particle::particle(
-    const unsigned char type, const point &pos, const float z,
-    const float size, const float duration, const unsigned char priority
+    const PARTICLE_TYPES type, const point &pos, const float z,
+    const float size, const float duration, const PARTICLE_PRIORITIES priority
 ) :
     type(type),
     duration(duration),
@@ -192,7 +192,7 @@ particle_generator::particle_generator(
     const float emission_interval,
     const particle &base_particle, const size_t number
 ) :
-    id(0),
+    id(MOB_PARTICLE_GENERATOR_NONE),
     base_particle(base_particle),
     number(number),
     emission_interval(emission_interval),

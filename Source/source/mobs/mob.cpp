@@ -417,9 +417,9 @@ void mob::arachnorb_head_turn_logic() {
  * Does the logic that arachnorb heads need to plan out how to move their feet
  * for the next set of steps.
  * goal:
- *   Use MOB_ACTION_ARACHNORB_PLAN_LOGIC_*.
+ *   What its goal is.
  */
-void mob::arachnorb_plan_logic(const unsigned char goal) {
+void mob::arachnorb_plan_logic(const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal) {
     float max_step_distance = s2f(vars["max_step_distance"]);
     float max_turn_angle = deg_to_rad(s2f(vars["max_turn_angle"]));
     float min_turn_angle = deg_to_rad(s2f(vars["min_turn_angle"]));
@@ -482,9 +482,9 @@ void mob::arachnorb_plan_logic(const unsigned char goal) {
 /* ----------------------------------------------------------------------------
  * Sets up data for a mob to become carriable.
  * destination:
- *   Where to carry it. Use CARRY_DESTINATION_*.
+ *   Where to carry it.
  */
-void mob::become_carriable(const size_t destination) {
+void mob::become_carriable(const CARRY_DESTINATIONS destination) {
     carry_info = new carry_info_struct(this, destination);
 }
 
@@ -1051,7 +1051,7 @@ void mob::chomp(mob* m, hitbox* hitbox_info) {
     );
     hold(
         m, hitbox_info->body_part_index, h_offset_dist, h_offset_angle,
-        true, false
+        true, HOLD_ROTATION_METHOD_NEVER
     );
     
     m->focus_on_mob(this);
@@ -2266,12 +2266,12 @@ bool mob::has_clear_line(mob* target_mob) const {
  * above_holder:
  *   Is the mob meant to appear above the holder?
  * rotation_method:
- *   How should the held mob rotate? Use HOLD_ROTATION_METHOD_*.
+ *   How should the held mob rotate?
  */
 void mob::hold(
     mob* m, const size_t hitbox_nr,
     const float offset_dist, const float offset_angle,
-    const bool above_holder, const unsigned char rotation_method
+    const bool above_holder, const HOLD_ROTATION_METHODS rotation_method
 ) {
     holding.push_back(m);
     m->holder.m = this;
@@ -2438,7 +2438,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
     string team_var;
     
     if(svr.get("team", team_var)) {
-        size_t team_nr = string_to_team_nr(team_var);
+        MOB_TEAMS team_nr = string_to_team_nr(team_var);
         if(team_nr == INVALID) {
             log_error(
                 "Unknown team name \"" + team_var + "\", when trying to "
@@ -2493,7 +2493,7 @@ void mob::release_chomped_pikmin() {
  * id:
  *   ID of particle generators to remove.
  */
-void mob::remove_particle_generator(const size_t id) {
+void mob::remove_particle_generator(const MOB_PARTICLE_GENERATOR_IDS id) {
     for(size_t g = 0; g < particle_generators.size();) {
         if(particle_generators[g].id == id) {
             particle_generators.erase(particle_generators.begin() + g);

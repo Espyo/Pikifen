@@ -23,6 +23,14 @@ using std::string;
 using std::vector;
 
 
+enum PRECIPITATION_TYPES {
+    PRECIPITATION_TYPE_NONE,
+    PRECIPITATION_TYPE_RAIN,
+    PRECIPITATION_TYPE_WIND,
+};
+
+
+
 /* ----------------------------------------------------------------------------
  * Weather information.
  * Daylight is mixed in with the weather, as
@@ -48,24 +56,17 @@ public:
     float fog_far;
     //Fog -- color and density at 100% fogginess. Values throughout the day.
     vector<std::pair<size_t, ALLEGRO_COLOR> > fog_color;
-    unsigned char precipitation_type;
+    PRECIPITATION_TYPES precipitation_type;
     
     weather();
     weather(
         const string &n, const vector<std::pair<size_t, ALLEGRO_COLOR> > &dl,
         const vector<std::pair<size_t, unsigned char> > &ss,
         const vector<std::pair<size_t, unsigned char> > &bs,
-        const unsigned char pt
+        const PRECIPITATION_TYPES pt
     );
 };
 
-
-
-enum PRECIPITATION_TYPES {
-    PRECIPITATION_TYPE_NONE,
-    PRECIPITATION_TYPE_RAIN,
-    PRECIPITATION_TYPE_WIND,
-};
 
 
 #endif //ifndef WEATHER_INCLUDED

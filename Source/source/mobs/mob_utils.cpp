@@ -46,9 +46,9 @@ carrier_spot_struct::carrier_spot_struct(const point &pos) :
  * m:
  *   The mob this info belongs to.
  * destination:
- *   Where to deliver the mob. Use CARRY_DESTINATION_*.
+ *   Where to deliver the mob.
  */
-carry_info_struct::carry_info_struct(mob* m, const size_t destination) :
+carry_info_struct::carry_info_struct(mob* m, const CARRY_DESTINATIONS destination) :
     m(m),
     destination(destination),
     cur_carrying_strength(0),
@@ -1324,7 +1324,7 @@ string get_error_message_mob_info(mob* m) {
  * type_str:
  *   Text representation of the target type.
  */
-size_t string_to_mob_target_type(const string &type_str) {
+MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str) {
     if(type_str == "none") {
         return MOB_TARGET_TYPE_NONE;
     } else if(type_str == "player") {
@@ -1344,7 +1344,7 @@ size_t string_to_mob_target_type(const string &type_str) {
     } else if(type_str == "fragile") {
         return MOB_TARGET_TYPE_FRAGILE;
     }
-    return INVALID;
+    return (MOB_TARGET_TYPES) INVALID;
 }
 
 
@@ -1354,11 +1354,11 @@ size_t string_to_mob_target_type(const string &type_str) {
  * team_str:
  *   Text representation of the team.
  */
-size_t string_to_team_nr(const string &team_str) {
+MOB_TEAMS string_to_team_nr(const string &team_str) {
     for(size_t t = 0; t < N_MOB_TEAMS; ++t) {
         if(team_str == game.team_internal_names[t]) {
-            return t;
+            return (MOB_TEAMS) t;
         }
     }
-    return INVALID;
+    return (MOB_TEAMS) INVALID;
 }

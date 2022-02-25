@@ -96,6 +96,8 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         }
         break;
         
+    } default: {
+        break;
     }
     }
     

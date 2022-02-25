@@ -456,6 +456,8 @@ void draw_control(
     } case CONTROL_TYPE_MOUSE_WHEEL_RIGHT: {
         name = "MWR";
         break;
+    } default: {
+        break;
     }
     }
     
@@ -1656,11 +1658,11 @@ void draw_textured_box(
  * Eases a number [0, 1] in accordance to a non-linear interpolation
  * method. Normally used for camera movement and such.
  * method:
- *   The method to use. Use EASE_*.
+ *   The method to use.
  * n:
  *   The number to ease, in the range [0, 1].
  */
-float ease(const unsigned char method, const float n) {
+float ease(const EASING_METHODS method, const float n) {
     switch(method) {
     case EASE_IN: {
         return pow(n, 3);

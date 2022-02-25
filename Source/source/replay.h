@@ -55,11 +55,11 @@ enum REPLAY_EVENT_TYPES {
  */
 struct replay_element {
     //Type of element this represents.
-    unsigned char type;
+    REPLAY_ELEMENT_TYPES type;
     //Its current position.
     point pos;
     
-    replay_element(const unsigned char type, const point &pos);
+    replay_element(const REPLAY_ELEMENT_TYPES type, const point &pos);
 };
 
 
@@ -70,12 +70,12 @@ struct replay_element {
  */
 struct replay_event {
     //Type of event.
-    unsigned char type;
+    REPLAY_EVENT_TYPES type;
     //Informational data about the event.
     size_t data;
     
     replay_event(
-        const unsigned char type, const size_t data
+        const REPLAY_EVENT_TYPES type, const size_t data
     );
 };
 

@@ -33,7 +33,7 @@ enum DROP_CONSUMERS {
 };
 
 
-enum DROP_EFFECT {
+enum DROP_EFFECTS {
     DROP_EFFECT_MATURATE,
     DROP_EFFECT_INCREASE_SPRAYS,
     DROP_EFFECT_GIVE_STATUS,
@@ -55,8 +55,8 @@ enum DROP_STATES {
  */
 class drop_type : public mob_type {
 public:
-    unsigned char consumer;
-    unsigned char effect;
+    DROP_CONSUMERS consumer;
+    DROP_EFFECTS effect;
     size_t total_doses;
     int increase_amount;
     size_t spray_type_to_increase;

@@ -25,47 +25,6 @@ using std::string;
 using std::vector;
 
 
-/* ----------------------------------------------------------------------------
- * This holds information over a user-specified
- * control. It has info over what hardware input
- * is required for this in-game control,
- * and what action it triggers.
- */
-struct control_info {
-    //Action number. Use BUTTON_*.
-    unsigned char action;
-    //Type of control (hardware). Use CONTROL_TYPE_*.
-    unsigned char type;
-    //Device number. i.e. the gamepad number.
-    int device_nr;
-    //Button, whether the gamepad digital button, or the keyboard key.
-    int button;
-    //Stick on the gamepad.
-    int stick;
-    //Axis of the stick.
-    int axis;
-    
-    control_info(unsigned char action, const string &s);
-    string stringify() const;
-};
-
-
-struct action_from_event {
-    size_t button;
-    float pos;
-    size_t player;
-    action_from_event(
-        const size_t button, const float pos, const size_t player
-    ) :
-        button(button),
-        pos(pos),
-        player(player) { }
-};
-
-
-vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev);
-
-
 enum BUTTONS {
     BUTTON_NONE,
     BUTTON_THROW,
@@ -123,6 +82,68 @@ enum CONTROL_TYPES {
     CONTROL_TYPE_JOYSTICK_AXIS_POS,
     CONTROL_TYPE_JOYSTICK_AXIS_NEG,
 };
+
+
+
+/* ----------------------------------------------------------------------------
+ * This holds information over a user-specified
+ * control. It has info over what hardware input
+ * is required for this in-game control,
+ * and what action it triggers.
+ */
+struct control_info {
+    //Action number.
+    BUTTONS action;
+    //Type of control (hardware).
+    CONTROL_TYPES type;
+    //Device number. i.e. the gamepad number.
+    int device_nr;
+    //Button, whether the gamepad digital button, or the keyboard key.
+    int button;
+    //Stick on the gamepad.
+    int stick;
+    //Axis of the stick.
+    int axis;
+    
+    control_info(BUTTONS action, const string &s);
+    string stringify() const;
+};
+
+
+struct action_from_event {
+    BUTTONS button;
+    float pos;
+    size_t player;
+    action_from_event(
+        const BUTTONS button, const float pos, const size_t player
+    ) :
+        button(button),
+        pos(pos),
+        player(player) { }
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Manager for the different gameplay "buttons", associated with the controls.
+ */
+struct button_manager {
+    struct button {
+        BUTTONS id;
+        string name;
+        string option_name;
+        string default_control_str;
+    };
+    
+    vector<button> list;
+    void add(
+        const BUTTONS id, const string &name, const string &option_name,
+        const string &default_control_str
+    );
+};
+
+
+
+vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev);
 
 
 #endif //ifndef CONTROLS_INCLUDED

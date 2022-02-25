@@ -46,7 +46,7 @@ class track_type : public mob_type {
 public:
 
     unsigned char riders;
-    unsigned char riding_pose;
+    TRACK_RIDING_POSES riding_pose;
     float ride_speed;
     bool cancellable_with_whistle;
     

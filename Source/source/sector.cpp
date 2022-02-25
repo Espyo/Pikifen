@@ -1961,6 +1961,59 @@ sector_texture_info::sector_texture_info() :
 }
 
 
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of a sector type, given its number.
+ * Returns an empty string on error.
+ * nr:
+ *   Number of the sector type.
+ */
+string sector_types_manager::get_name(const SECTOR_TYPES nr) const {
+    if(nr < names.size()) return names[nr];
+    return "";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of a sector type, given its name.
+ * Returns 255 on error.
+ * name:
+ *   Name of the sector type.
+ */
+SECTOR_TYPES sector_types_manager::get_nr(const string &name) const {
+    for(unsigned char n = 0; n < names.size(); ++n) {
+        if(names[n] == name) return (SECTOR_TYPES) n;
+    }
+    return (SECTOR_TYPES) 255;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of sector types registered.
+ */
+unsigned char sector_types_manager::get_nr_of_types() const {
+    return names.size();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a new type of sector.
+ * nr:
+ *   Its ID number.
+ * name:
+ *   Its name.
+ */
+void sector_types_manager::register_type(
+    const SECTOR_TYPES nr, const string &name
+) {
+    if(nr >= names.size()) {
+        names.insert(names.end(), (nr + 1) - names.size(), "");
+    }
+    names[nr] = name;
+}
+
+
+
 /* ----------------------------------------------------------------------------
  * Creates a tree shadow.
  * center:

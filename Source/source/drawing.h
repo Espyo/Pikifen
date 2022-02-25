@@ -138,7 +138,7 @@ void draw_textured_box(
     const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
 );
 float ease(
-    const unsigned char method, float y
+    const EASING_METHODS method, float y
 );
 
 

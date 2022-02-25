@@ -20,6 +20,7 @@
 #include <allegro5/allegro_font.h>
 
 #include "const.h"
+#include "controls.h"
 #include "misc_structs.h"
 #include "utils/data_file.h"
 #include "utils/geometry_utils.h"
@@ -273,7 +274,7 @@ public:
     void handle_event(const ALLEGRO_EVENT &ev);
     //Handle a button press or release.
     bool handle_menu_button(
-        const size_t action, const float pos, const size_t player
+        const BUTTONS action, const float pos, const size_t player
     );
     //Reads item coordinates from a data node.
     void read_coords(data_node* node);

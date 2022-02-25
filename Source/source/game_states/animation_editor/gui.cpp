@@ -1962,7 +1962,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         set_tooltip(
             "Disabled hitbox, one that cannot be interacted with."
         );
-        cur_hitbox->type = type_int;
+        cur_hitbox->type = (HITBOX_TYPES) type_int;
         
         ImGui::Indent();
         
@@ -2079,6 +2079,9 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             //Hazards list.
             process_gui_hitbox_hazards();
             
+            break;
+
+        }  case HITBOX_TYPE_DISABLED: {
             break;
         }
         }

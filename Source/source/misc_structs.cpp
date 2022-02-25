@@ -268,31 +268,6 @@ bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
 
 
 /* ----------------------------------------------------------------------------
- * Adds a new button to the list.
- * id:
- *   Its ID.
- * name:
- *   Its name.
- * option_name:
- *   The name of its property in the options file.
- * default_control_str:
- *   A string representing the default controls for this button.
- */
-void button_manager::add(
-    const size_t id, const string &name, const string &option_name,
-    const string &default_control_str
-) {
-    button_manager::button b;
-    b.id = id;
-    b.name = name;
-    b.option_name = option_name;
-    b.default_control_str = default_control_str;
-    
-    list.push_back(b);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a camera info struct.
  */
 camera_info::camera_info() :
@@ -1431,61 +1406,6 @@ bool script_var_reader::get(const string &name, point &dest) const {
     dest = s2p(v->second);
     return true;
 }
-
-
-
-/* ----------------------------------------------------------------------------
- * Returns the name of a sector type, given its number.
- * Returns an empty string on error.
- * nr:
- *   Number of the sector type.
- */
-string sector_types_manager::get_name(const unsigned char nr) const {
-    if(nr < names.size()) return names[nr];
-    return "";
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the number of a sector type, given its name.
- * Returns 255 on error.
- * name:
- *   Name of the sector type.
- */
-unsigned char sector_types_manager::get_nr(const string &name) const {
-    for(unsigned char n = 0; n < names.size(); ++n) {
-        if(names[n] == name) return n;
-    }
-    return 255;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the number of sector types registered.
- */
-unsigned char sector_types_manager::get_nr_of_types() const {
-    return names.size();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a new type of sector.
- * nr:
- *   Its ID number.
- * name:
- *   Its name.
- */
-void sector_types_manager::register_type(
-    const unsigned char nr, const string &name
-) {
-    if(nr >= names.size()) {
-        names.insert(names.end(), (nr + 1) - names.size(), "");
-    }
-    names[nr] = name;
-}
-
-
-
 
 
 

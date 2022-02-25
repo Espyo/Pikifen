@@ -1761,7 +1761,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
  *   vertexes or edges.
  */
 point area_editor::snap_point(const point &p, const bool ignore_selected) {
-    unsigned char mode_to_use = game.options.area_editor_snap_mode;
+    SNAP_MODES mode_to_use = game.options.area_editor_snap_mode;
     
     if(is_shift_pressed) {
         if(game.options.area_editor_snap_mode == SNAP_NOTHING) {
@@ -1886,6 +1886,10 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
         
         break;
         
+    } case SNAP_NOTHING: {
+    } case N_SNAP_MODES: {
+        break;
+
     }
     }
     

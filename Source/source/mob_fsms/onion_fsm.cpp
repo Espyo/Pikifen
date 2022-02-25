@@ -75,6 +75,8 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
             seeds = p_ptr->pel_type->non_match_seeds;
         }
         break;
+    } default: {
+        break;
     }
     }
     

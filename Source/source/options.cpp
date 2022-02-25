@@ -24,11 +24,11 @@ const float options_struct::DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
 const bool options_struct::DEF_AREA_EDITOR_SEL_TRANS = false;
 const bool options_struct::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
 const bool options_struct::DEF_AREA_EDITOR_SHOW_TERRITORY = false;
-const unsigned char options_struct::DEF_AREA_EDITOR_SNAP_MODE =
+const area_editor::SNAP_MODES options_struct::DEF_AREA_EDITOR_SNAP_MODE =
     area_editor::SNAP_GRID;
 const size_t options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
 const size_t options_struct::DEF_AREA_EDITOR_UNDO_LIMIT = 20;
-const unsigned char options_struct::DEF_AREA_EDITOR_VIEW_MODE =
+const area_editor::VIEW_MODES options_struct::DEF_AREA_EDITOR_VIEW_MODE =
     area_editor::VIEW_MODE_TEXTURES;
 const AUTO_THROW_MODES options_struct::DEF_AUTO_THROW_MODE = AUTO_THROW_OFF;
 const float options_struct::DEF_CURSOR_SPEED = 500.0f;
@@ -173,6 +173,8 @@ void options_struct::load(data_node* file) {
     
     //Other options.
     string resolution_str;
+    unsigned char editor_snap_mode_c;
+    unsigned char editor_view_mode_c;
     unsigned char auto_throw_mode_c;
     
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
@@ -180,10 +182,10 @@ void options_struct::load(data_node* file) {
     rs.set("area_editor_selection_transformation", area_editor_sel_trans);
     rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
     rs.set("area_editor_show_territory", area_editor_show_territory);
-    rs.set("area_editor_snap_mode", area_editor_snap_mode);
+    rs.set("area_editor_snap_mode", editor_snap_mode_c);
     rs.set("area_editor_snap_threshold", area_editor_snap_threshold);
     rs.set("area_editor_undo_limit", area_editor_undo_limit);
-    rs.set("area_editor_view_mode", area_editor_view_mode);
+    rs.set("area_editor_view_mode", editor_view_mode_c);
     rs.set("auto_throw_mode", auto_throw_mode_c);
     rs.set("cursor_speed", cursor_speed);
     rs.set("draw_cursor_trail", draw_cursor_trail);
@@ -211,6 +213,18 @@ void options_struct::load(data_node* file) {
         std::min(
             auto_throw_mode_c,
             (unsigned char) (N_AUTO_THROW_MODES - 1)
+        );
+    area_editor_snap_mode =
+        (area_editor::SNAP_MODES)
+        std::min(
+            editor_snap_mode_c,
+            (unsigned char) (area_editor::N_SNAP_MODES - 1)
+        );
+    area_editor_view_mode =
+        (area_editor::VIEW_MODES)
+        std::min(
+            editor_view_mode_c,
+            (unsigned char) (area_editor::N_VIEW_MODES - 1)
         );
     target_fps = std::max(1, target_fps);
     
@@ -251,7 +265,7 @@ void options_struct::load(data_node* file) {
  *   Default value of this control. Only applicable for player 1.
  */
 void options_struct::load_control(
-    const unsigned char action, const unsigned char player,
+    const BUTTONS action, const unsigned char player,
     const string &name, data_node* file, const string &def
 ) {
     data_node* control_node =

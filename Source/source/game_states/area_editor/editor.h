@@ -243,8 +243,8 @@ private:
     bool debug_vertex_nrs;
     //Nodes of the drawing.
     vector<layout_drawing_node> drawing_nodes;
-    //Reason why the current drawing line is invalid. Use DRAWING_LINE_*.
-    unsigned char drawing_line_error;
+    //Reason why the current drawing line is invalid.
+    DRAWING_LINE_ERRORS drawing_line_error;
     //Category of the last mob placed.
     mob_category* last_mob_category;
     //Mob type of the last mob placed.
@@ -328,7 +328,7 @@ private:
     //Pointer to the problematic path stop, if any.
     path_stop* problem_path_stop_ptr;
     //Type of the current problem found in the review panel.
-    unsigned char problem_type;
+    EDITOR_PROBLEM_TYPES problem_type;
     //Pointer to the problematic sector, if any.
     sector* problem_sector_ptr;
     //Pointer to the problematic tree shadow, if any.
@@ -378,7 +378,7 @@ private:
     //Point where the selection is currently at.
     point selection_end;
     //Current selection filter.
-    unsigned char selection_filter;
+    SELECTION_FILTERS selection_filter;
     //Has the user agreed to homogenize the selection?
     bool selection_homogenized;
     //Angle of the selection, before it got transformed.

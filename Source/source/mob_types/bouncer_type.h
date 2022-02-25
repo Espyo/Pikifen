@@ -48,7 +48,7 @@ class bouncer_type : public mob_type {
 public:
 
     unsigned char riders;
-    unsigned char riding_pose;
+    BOUNCER_RIDING_POSES riding_pose;
     
     bouncer_type();
     void load_properties(data_node* file);

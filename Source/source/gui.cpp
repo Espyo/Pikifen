@@ -621,7 +621,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
  * a button release.
  * Returns true if the button was recognized.
  * action:
- *   The button's ID. Use BUTTON_*.
+ *   The button's ID.
  * pos:
  *   The position of the button, i.e., how much it's "held".
  *   0 means it was released. 1 means it was fully pressed.
@@ -631,7 +631,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
  *   Number of the player that pressed.
  */
 bool gui_manager::handle_menu_button(
-    const size_t action, const float pos, const size_t player
+    const BUTTONS action, const float pos, const size_t player
 ) {
 
     bool is_down = (pos >= 0.5);
@@ -670,6 +670,8 @@ bool gui_manager::handle_menu_button(
                 pressed = BUTTON_MENU_DOWN;
             }
             down_pressed = is_down;
+            break;
+        } default: {
             break;
         }
         }

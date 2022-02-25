@@ -712,6 +712,8 @@ void mob::tick_rotation_physics(
             angle = holder.m->angle;
             stop_turning();
             break;
+        } default: {
+            break;
         }
         }
     }

@@ -724,7 +724,9 @@ void mob_action_runners::add_health(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
-    data.m->arachnorb_plan_logic(s2i(data.args[0]));
+    data.m->arachnorb_plan_logic(
+        (MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES) s2i(data.args[0])
+    );
 }
 
 
@@ -735,7 +737,7 @@ void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
  */
 void mob_action_runners::calculate(mob_action_run_data &data) {
     float lhs = s2f(data.args[1]);
-    size_t op = s2i(data.args[2]);
+    MOB_ACTION_SET_VAR_TYPES op = (MOB_ACTION_SET_VAR_TYPES) s2i(data.args[2]);
     float rhs = s2f(data.args[3]);
     float result = 0;
     
@@ -831,7 +833,7 @@ void mob_action_runners::finish_dying(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::focus(mob_action_run_data &data) {
-    size_t t = s2i(data.args[0]);
+    MOB_ACTION_FOCUS_TYPES t = (MOB_ACTION_FOCUS_TYPES) s2i(data.args[0]);
     
     switch(t) {
     case MOB_ACTION_FOCUS_LINK: {
@@ -1111,7 +1113,8 @@ void mob_action_runners::hold_focus(mob_action_run_data &data) {
  */
 void mob_action_runners::if_function(mob_action_run_data &data) {
     string lhs = data.args[0];
-    size_t op = s2i(data.args[1]);
+    MOB_ACTION_IF_OPERATOR_TYPES op =
+        (MOB_ACTION_IF_OPERATOR_TYPES) s2i(data.args[1]);
     string rhs = vector_tail_to_string(data.args, 2);
     
     switch(op) {
@@ -1220,7 +1223,7 @@ void mob_action_runners::move_to_relative(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::move_to_target(mob_action_run_data &data) {
-    size_t t = s2i(data.args[0]);
+    MOB_ACTION_MOVE_TYPES t = (MOB_ACTION_MOVE_TYPES) s2i(data.args[0]);
     
     switch(t) {
     case MOB_ACTION_MOVE_AWAY_FROM_FOCUSED_MOB: {
@@ -1645,7 +1648,7 @@ void mob_action_runners::set_tangible(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_team(mob_action_run_data &data) {
-    data.m->team = s2i(data.args[0]);
+    data.m->team = (MOB_TEAMS) s2i(data.args[0]);
 }
 
 
@@ -1700,7 +1703,8 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
     }
     
     float best_match_z = data.m->links[0]->z;
-    size_t t = s2i(data.args[0]);
+    MOB_ACTION_STABILIZE_Z_TYPES t =
+        (MOB_ACTION_STABILIZE_Z_TYPES) s2i(data.args[0]);
     
     for(size_t l = 1; l < data.m->links.size(); ++l) {
     
@@ -1986,7 +1990,7 @@ void mob_action_runners::turn_to_relative(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::turn_to_target(mob_action_run_data &data) {
-    size_t t = s2i(data.args[0]);
+    MOB_ACTION_TURN_TYPES t = (MOB_ACTION_TURN_TYPES) s2i(data.args[0]);
     
     switch(t) {
     case MOB_ACTION_TURN_ARACHNORB_HEAD_LOGIC: {
@@ -2048,6 +2052,8 @@ bool assert_actions(
                 return false;
             }
             if_level--;
+            break;
+        } default: {
             break;
         }
         }
@@ -2139,7 +2145,7 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
     }
     
     string* var = &(data.m->vars[data.args[0]]);
-    size_t t = s2i(data.args[1]);
+    MOB_ACTION_GET_INFO_TYPES t = (MOB_ACTION_GET_INFO_TYPES) s2i(data.args[1]);
     
     switch(t) {
     case MOB_ACTION_GET_INFO_ANGLE: {

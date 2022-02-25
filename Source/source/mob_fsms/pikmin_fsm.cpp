@@ -2386,6 +2386,8 @@ void pikmin_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     } case DROP_EFFECT_GIVE_STATUS: {
         p_ptr->apply_status_effect(d_ptr->dro_type->status_to_give, false);
         break;
+    } default: {
+        break;
     }
     }
     
@@ -2481,7 +2483,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
         game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
         );
-    m->hold(m->focused_mob, INVALID, 4, 0, true, true);
+    m->hold(m->focused_mob, INVALID, 4, 0, true, HOLD_ROTATION_METHOD_FACE_HOLDER);
     m->unfocus_from_mob();
 }
 
@@ -3016,7 +3018,7 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
             );
             m2_ptr->hold(
                 too_ptr, info->h2->body_part_index,
-                h_offset_dist, h_offset_angle, true, true
+                h_offset_dist, h_offset_angle, true, HOLD_ROTATION_METHOD_FACE_HOLDER
             );
         }
         

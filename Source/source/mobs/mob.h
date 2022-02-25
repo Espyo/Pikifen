@@ -21,7 +21,7 @@
 #include "../game_states/gameplay/in_world_hud.h"
 #include "../misc_structs.h"
 #include "../mob_script.h"
-#include "../mob_types/pikmin_type.h"
+#include "../mob_script_action.h"
 #include "../particle.h"
 #include "../sector.h"
 #include "../status.h"
@@ -34,6 +34,7 @@ using std::string;
 using std::vector;
 
 class mob_type;
+class pikmin_type;
 
 extern size_t next_mob_id;
 
@@ -42,72 +43,6 @@ const float GRAVITY_ADDER = -2600.0f;
 const float MOB_KNOCKBACK_H_POWER = 64.0f;
 const float MOB_KNOCKBACK_V_POWER = 800.0f;
 const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
-
-enum MOB_PARTICLE_GENERATOR_IDS {
-    MOB_PARTICLE_GENERATOR_NONE,
-    //Custom particle generator issued by the script.
-    MOB_PARTICLE_GENERATOR_SCRIPT,
-    //Trail effect left behind by a throw.
-    MOB_PARTICLE_GENERATOR_THROW,
-    //Ring-shaped wave when going in water.
-    MOB_PARTICLE_GENERATOR_WAVE_RING,
-    
-    //Specific status effects are numbered starting on this.
-    //So make sure this is the last on the enum.
-    MOB_PARTICLE_GENERATOR_STATUS,
-};
-
-
-enum MOB_TEAMS {
-    //Has no friends!
-    MOB_TEAM_NONE,
-    //Players -- usually leaders and Pikmin.
-    MOB_TEAM_PLAYER_1,
-    MOB_TEAM_PLAYER_2,
-    MOB_TEAM_PLAYER_3,
-    MOB_TEAM_PLAYER_4,
-    //Enemies -- useful if you want enemy in-fighting.
-    MOB_TEAM_ENEMY_1,
-    MOB_TEAM_ENEMY_2,
-    MOB_TEAM_ENEMY_3,
-    MOB_TEAM_ENEMY_4,
-    //Miscellaneous obstacles.
-    MOB_TEAM_OBSTACLE,
-    //Whatever else.
-    MOB_TEAM_OTHER,
-    //Number of teams.
-    N_MOB_TEAMS,
-};
-
-
-enum MOB_TARGET_TYPES {
-    //Cannot be damaged or hunted down.
-    MOB_TARGET_TYPE_NONE = 0x00,
-    //Leaders and Pikmin. Can be damaged by enemies, mostly.
-    MOB_TARGET_TYPE_PLAYER = 0x01,
-    //Enemies. Can be damaged by Pikmin and leaders, mostly.
-    MOB_TARGET_TYPE_ENEMY = 0x02,
-    //Weaker objects that can be damaged by many things.
-    MOB_TARGET_TYPE_WEAK_PLAIN_OBSTACLE = 0x04,
-    //Stronger objects that can be damaged by less-than-many things.
-    MOB_TARGET_TYPE_STRONG_PLAIN_OBSTACLE = 0x08,
-    //Objects that only Pikmin can damage.
-    MOB_TARGET_TYPE_PIKMIN_OBSTACLE = 0x10,
-    //Objects that can only be taken down with explosive force.
-    MOB_TARGET_TYPE_EXPLODABLE = 0x20,
-    //Objects that Pikmin and explosives can damage.
-    MOB_TARGET_TYPE_EXPLODABLE_PIKMIN_OBSTACLE = 0x40,
-    //Objects that can get hurt by pretty much everything.
-    MOB_TARGET_TYPE_FRAGILE = 0x80,
-};
-
-
-enum H_MOVE_RESULTS {
-    H_MOVE_OK,
-    H_MOVE_TELEPORTED,
-    H_MOVE_FAIL,
-};
-
 
 /* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",
@@ -242,8 +177,8 @@ public:
     float health;
     //During this period, the mob cannot be attacked.
     timer invuln_period;
-    //Mob's team (who it can damage); use MOB_TEAM_*.
-    unsigned char team;
+    //Mob's team (who it can damage).
+    MOB_TEAMS team;
     //If it should be hidden (not drawn, no shadow, no health).
     bool hide;
     //If its shadow should be visible.
@@ -310,7 +245,7 @@ public:
     void set_rectangular_dim(const point &rectangular_dim);
     void set_can_block_paths(const bool blocks);
     
-    void become_carriable(const size_t destination);
+    void become_carriable(const CARRY_DESTINATIONS destination);
     void become_uncarriable();
     
     void apply_attack_damage(
@@ -349,7 +284,7 @@ public:
     void hold(
         mob* m, const size_t hitbox_nr,
         const float offset_dist, const float offset_angle,
-        const bool above_holder, const unsigned char rotation_method
+        const bool above_holder, const HOLD_ROTATION_METHODS rotation_method
     );
     void release(mob* m);
     bool can_hurt(mob* m) const;
@@ -407,12 +342,12 @@ public:
     virtual float get_base_speed() const;
     
     void arachnorb_head_turn_logic();
-    void arachnorb_plan_logic(const unsigned char goal);
+    void arachnorb_plan_logic(const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal);
     void arachnorb_foot_move_logic();
     
     void apply_status_effect(status_type* s, const bool given_by_parent);
     void delete_old_status_effects();
-    void remove_particle_generator(const size_t id);
+    void remove_particle_generator(const MOB_PARTICLE_GENERATOR_IDS id);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale) const;
     virtual bool can_receive_status(status_type* s) const;
     virtual void get_group_spot_info(

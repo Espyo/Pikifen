@@ -163,7 +163,7 @@ struct maker_tools_info {
     //If any maker info is being printed, this represents its time to live.
     timer info_print_timer;
     //For each key (F2 - F11, 0 - 9), what tool is bound to it?
-    unsigned char keys[20];
+    MAKER_TOOL_IDS keys[20];
     //When we last spawned a Pikmin, what was its type?
     pikmin_type* last_pikmin_type;
     //When hurting mobs with the hurting tool, dock this much of its max HP off.
@@ -236,25 +236,6 @@ private:
     
 };
 
-
-
-/* ----------------------------------------------------------------------------
- * Manager for the different gameplay "buttons", associated with the controls.
- */
-struct button_manager {
-    struct button {
-        size_t id;
-        string name;
-        string option_name;
-        string default_control_str;
-    };
-    
-    vector<button> list;
-    void add(
-        const size_t id, const string &name, const string &option_name,
-        const string &default_control_str
-    );
-};
 
 
 /* ----------------------------------------------------------------------------
@@ -388,27 +369,6 @@ struct sample_struct {
     );
     void stop();
     void destroy();
-};
-
-
-
-/* ----------------------------------------------------------------------------
- * Just a list of the different sector types.
- * The SECTOR_TYPE_* constants are meant to be used here.
- * This is a vector instead of a map because hopefully,
- * the numbers are filled in sequence, as they're from
- * an enum, hence, there are no gaps.
- */
-struct sector_types_manager {
-public:
-    void register_type(const unsigned char nr, const string &name);
-    unsigned char get_nr(const string &name) const;
-    string get_name(const unsigned char nr) const;
-    unsigned char get_nr_of_types() const;
-    
-private:
-    vector<string> names;
-    
 };
 
 

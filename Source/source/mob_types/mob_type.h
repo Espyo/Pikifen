@@ -17,42 +17,18 @@
 #include <allegro5/allegro.h>
 
 #include "../animation.h"
+#include "../const.h"
 #include "../misc_structs.h"
 #include "../mob_categories/mob_category.h"
 #include "../mob_script.h"
 #include "../status.h"
 #include "../utils/data_file.h"
+#include "../mobs/mob_enums.h"
 
 
 using std::size_t;
 using std::string;
 using std::vector;
-
-
-enum ENEMY_EXTRA_STATES {
-    ENEMY_EXTRA_STATE_CARRIABLE_WAITING,
-    ENEMY_EXTRA_STATE_CARRIABLE_MOVING,
-    ENEMY_EXTRA_STATE_CARRIABLE_STUCK,
-    ENEMY_EXTRA_STATE_CARRIABLE_THROWN,
-    ENEMY_EXTRA_STATE_BEING_DELIVERED,
-};
-
-
-//Area editor mob property types.
-enum AEMP_TYPES {
-    //Any user text.
-    AEMP_TEXT,
-    //Integer number.
-    AEMP_INT,
-    //Decimal number.
-    AEMP_DECIMAL,
-    //Boolean.
-    AEMP_BOOL,
-    //One of a list of strings.
-    AEMP_LIST,
-    //One of a list of numbers, though each has a name.
-    AEMP_NUMBER_LIST,
-};
 
 
 typedef vector<std::pair<size_t, string> > anim_conversion_vector;
@@ -109,7 +85,7 @@ public:
         string hold_body_part;
         float hold_offset_dist;
         float hold_offset_angle;
-        unsigned char hold_rotation_method;
+        HOLD_ROTATION_METHODS hold_rotation_method;
         
         bool handle_damage;
         bool relay_damage;
@@ -124,7 +100,7 @@ public:
         float limb_parent_offset;
         string limb_child_body_part;
         float limb_child_offset;
-        unsigned char limb_draw_method;
+        LIMB_DRAW_METHODS limb_draw_method;
         
         child_struct() :
             parent_holds(false),
@@ -245,13 +221,13 @@ public:
     //Does this mob have a group of other mobs following it (e.g. leader)?
     bool has_group;
     //Other mobs decide if they can/want to hurt it by this target type.
-    unsigned char target_type;
+    MOB_TARGET_TYPES target_type;
     //What types of targets this mob can hunt down.
     uint16_t huntable_targets;
     //What types of targets this mob can hurt.
     uint16_t hurtable_targets;
     //Its initial team.
-    unsigned char starting_team;
+    MOB_TEAMS starting_team;
     
     //Script things.
     //Actions to run on spawn.
@@ -294,7 +270,7 @@ public:
     float max_span;
     
     //General functions.
-    mob_type(size_t category_id);
+    mob_type(MOB_CATEGORIES category_id);
     virtual ~mob_type();
     virtual void load_properties(data_node* file);
     virtual void load_resources(data_node* file);

@@ -16,7 +16,8 @@
 #include "../misc_structs.h"
 #include "../spray_type.h"
 #include "../utils/data_file.h"
-#include "mob_type.h"
+#include "../mobs/mob_enums.h"
+#include "../mob_types/mob_type.h"
 
 
 enum RESOURCE_ANIMATIONS {
@@ -50,8 +51,8 @@ public:
     bool vanish_on_drop;
     bool return_to_pile_on_vanish;
     float vanish_delay;
-    size_t carrying_destination;
-    size_t delivery_result;
+    CARRY_DESTINATIONS carrying_destination;
+    RESOURCE_DELIVERY_RESULTS delivery_result;
     float damage_mob_amount;
     size_t spray_to_concoct;
     float point_amount;

@@ -215,13 +215,13 @@ enum MOB_EV_TYPES {
 
 class mob_event {
 public:
-    unsigned char type;
+    MOB_EV_TYPES type;
     vector<mob_action_call*> actions;
     
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
     mob_event(data_node* node, const vector<mob_action_call*> &actions);
     mob_event(
-        const unsigned char t,
+        const MOB_EV_TYPES t,
         const vector<mob_action_call*> &a = vector<mob_action_call*>()
     );
 };
@@ -232,7 +232,7 @@ public:
     string name;
     size_t id;
     mob_event* events[N_MOB_EVENTS];
-    mob_event* get_event(const size_t type) const;
+    mob_event* get_event(const MOB_EV_TYPES type) const;
     
     mob_state(const string &name);
     mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
@@ -251,10 +251,10 @@ public:
     //If this is INVALID, use the mob type's first state nr. Else, use this.
     size_t first_state_override;
     
-    mob_event* get_event(const size_t type) const;
+    mob_event* get_event(const MOB_EV_TYPES type) const;
     size_t get_state_nr(const string &name) const;
     void run_event(
-        const size_t type,
+        const MOB_EV_TYPES type,
         void* custom_data_1 = NULL, void* custom_data_2 = NULL
     );
     bool set_state(
@@ -280,7 +280,7 @@ public:
 class easy_fsm_creator {
 public:
     void new_state(const string &name, const size_t id);
-    void new_event(const unsigned char type);
+    void new_event(const MOB_EV_TYPES type);
     void change_state(const string &new_state);
     void run(custom_action_code code);
     vector<mob_state*> finish();

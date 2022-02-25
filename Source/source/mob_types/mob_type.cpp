@@ -35,7 +35,7 @@ using std::string;
  * category_id:
  *   The ID of the category it belongs to.
  */
-mob_type::mob_type(size_t category_id) :
+mob_type::mob_type(MOB_CATEGORIES category_id) :
     category(game.mob_categories.get(category_id)),
     main_color(al_map_rgb(128, 128, 128)),
     show_health(true),
@@ -441,7 +441,7 @@ void load_mob_type_from_file(
     }
     
     if(team_node) {
-        size_t t = string_to_team_nr(team_str);
+        MOB_TEAMS t = string_to_team_nr(team_str);
         if(t != INVALID) {
             mt->starting_team = t;
         } else {
@@ -740,7 +740,7 @@ void load_mob_type_from_file(
     }
     
     if(target_type_node) {
-        size_t target_type_value =
+        MOB_TARGET_TYPES target_type_value =
             string_to_mob_target_type(target_type_str);
         if(target_type_value == INVALID) {
             log_error(
@@ -881,7 +881,7 @@ void load_mob_types(bool load_resources) {
             continue;
         }
         
-        mob_category* category = game.mob_categories.get(c);
+        mob_category* category = game.mob_categories.get((MOB_CATEGORIES) c);
         if(game.perf_mon) {
             game.perf_mon->start_measurement(
                 "Object types -- " + category->name
@@ -1039,7 +1039,7 @@ void unload_mob_types(const bool unload_resources) {
     game.config.pikmin_order.clear();
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        mob_category* category = game.mob_categories.get(c);
+        mob_category* category = game.mob_categories.get((MOB_CATEGORIES) c);
         unload_mob_types(category, unload_resources);
     }
 }

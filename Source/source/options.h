@@ -15,6 +15,7 @@
 #include <map>
 #include <vector>
 
+#include "game_states/area_editor/editor.h"
 #include "const.h"
 #include "controls.h"
 #include "utils/data_file.h"
@@ -40,10 +41,10 @@ struct options_struct {
     static const bool DEF_AREA_EDITOR_SEL_TRANS;
     static const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
     static const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
-    static const unsigned char DEF_AREA_EDITOR_SNAP_MODE;
+    static const area_editor::SNAP_MODES DEF_AREA_EDITOR_SNAP_MODE;
     static const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
     static const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
-    static const unsigned char DEF_AREA_EDITOR_VIEW_MODE;
+    static const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE;
     static const AUTO_THROW_MODES DEF_AUTO_THROW_MODE;
     static const float DEF_CURSOR_SPEED;
     static const bool DEF_DRAW_CURSOR_TRAIL;
@@ -78,13 +79,13 @@ struct options_struct {
     //Show the selected mob(s)'s territory?
     bool area_editor_show_territory;
     //Snap mode to use.
-    unsigned char area_editor_snap_mode;
+    area_editor::SNAP_MODES area_editor_snap_mode;
     //Snap when the cursor is this close to a vertex/edge.
     size_t area_editor_snap_threshold;
     //Maximum number of undo operations.
     size_t area_editor_undo_limit;
     //View mode to use.
-    unsigned char area_editor_view_mode;
+    area_editor::VIEW_MODES area_editor_view_mode;
     //Auto-throw mode.
     AUTO_THROW_MODES auto_throw_mode;
     //List of controls for each player.
@@ -145,7 +146,7 @@ struct options_struct {
 private:
 
     void load_control(
-        const unsigned char action, const unsigned char player,
+        const BUTTONS action, const unsigned char player,
         const string &name, data_node* file, const string &def = ""
     );
     

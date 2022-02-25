@@ -35,7 +35,7 @@ weather::weather(
     const string &n, const vector<std::pair<size_t, ALLEGRO_COLOR> > &dl,
     const vector<std::pair<size_t, unsigned char> > &ss,
     const vector<std::pair<size_t, unsigned char> > &bs,
-    const unsigned char pt
+    const PRECIPITATION_TYPES pt
 ) :
     name(n),
     daylight(dl),

@@ -185,7 +185,7 @@ struct sector_texture_info {
  * is determined by its floors.
  */
 struct sector {
-    unsigned char type;
+    SECTOR_TYPES type;
     bool is_bottomless_pit;
     float z; //Height.
     string tag;
@@ -409,6 +409,27 @@ struct area_data {
     void remove_sector(const size_t s_nr);
     void remove_sector(const sector* s_ptr);
     void clear();
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * Just a list of the different sector types.
+ * The SECTOR_TYPE_* constants are meant to be used here.
+ * This is a vector instead of a map because hopefully,
+ * the numbers are filled in sequence, as they're from
+ * an enum, hence, there are no gaps.
+ */
+struct sector_types_manager {
+public:
+    void register_type(const SECTOR_TYPES nr, const string &name);
+    SECTOR_TYPES get_nr(const string &name) const;
+    string get_name(const SECTOR_TYPES nr) const;
+    unsigned char get_nr_of_types() const;
+    
+private:
+    vector<string> names;
+    
 };
 
 

@@ -246,7 +246,7 @@ typedef bool (mob_action_load_code)(mob_action_call &call);
 
 
 struct mob_action {
-    unsigned char type;
+    MOB_ACTION_TYPES type;
     string name;
     mob_action_code* code;
     mob_action_load_code* extra_load_logic;

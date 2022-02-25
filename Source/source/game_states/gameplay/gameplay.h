@@ -12,6 +12,7 @@
 #ifndef GAMEPLAY_INCLUDED
 #define GAMEPLAY_INCLUDED
 
+#include "../../controls.h"
 #include "../../mobs/interactable.h"
 #include "../../mobs/onion.h"
 #include "../../mobs/pikmin.h"
@@ -418,7 +419,7 @@ private:
         const float near_radius, const float far_radius
     );
     void handle_button(
-        const size_t button, const float pos, const size_t player
+        const BUTTONS button, const float pos, const size_t player
     );
     void init_hud();
     void load_game_content();

@@ -711,8 +711,10 @@ void load_custom_particle_generators(const bool load_resources) {
         new_pg.angle_deviation = deg_to_rad(new_pg.angle_deviation);
         
         new_pg.id =
-            MOB_PARTICLE_GENERATOR_STATUS +
-            game.custom_particle_generators.size();
+            (MOB_PARTICLE_GENERATOR_IDS) (
+                MOB_PARTICLE_GENERATOR_STATUS +
+                game.custom_particle_generators.size()
+            );
             
         game.custom_particle_generators[name_str] = new_pg;
     }
@@ -987,7 +989,7 @@ void load_maker_tools() {
         
         for(size_t t = 0; t < N_MAKER_TOOLS; ++t) {
             if(tool_name == MAKER_TOOL_NAMES[t]) {
-                game.maker_tools.keys[k] = t;
+                game.maker_tools.keys[k] = (MAKER_TOOL_IDS) t;
             }
         }
     }

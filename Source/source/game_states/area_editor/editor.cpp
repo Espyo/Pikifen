@@ -1274,6 +1274,11 @@ void area_editor::goto_problem() {
         center_camera(min_coords, max_coords);
         
         break;
+
+    } default: {
+        //Nowhere to go.
+        break;
+
     }
     }
 }
@@ -1305,6 +1310,8 @@ void area_editor::handle_line_error() {
     } case DRAWING_LINE_CROSSES_EDGES: {
         status_text =
             "That line crosses existing edges!";
+        break;
+    } case DRAWING_LINE_NO_ERROR: {
         break;
     }
     }
@@ -2003,9 +2010,11 @@ void area_editor::press_selection_filter_button() {
     clear_selection();
     if(!is_shift_pressed) {
         selection_filter =
+            (SELECTION_FILTERS)
             sum_and_wrap(selection_filter, 1, N_SELECTION_FILTERS);
     } else {
         selection_filter =
+            (SELECTION_FILTERS)
             sum_and_wrap(selection_filter, -1, N_SELECTION_FILTERS);
     }
     
@@ -2020,6 +2029,8 @@ void area_editor::press_selection_filter_button() {
     } case SELECTION_FILTER_VERTEXES: {
         status_text += "vertexes";
         break;
+    } case N_SELECTION_FILTERS: {
+        break;
     }
     }
     status_text += ".";
@@ -2032,9 +2043,11 @@ void area_editor::press_selection_filter_button() {
 void area_editor::press_snap_mode_button() {
     if(!is_shift_pressed) {
         game.options.area_editor_snap_mode =
+            (area_editor::SNAP_MODES)
             sum_and_wrap(game.options.area_editor_snap_mode, 1, N_SNAP_MODES);
     } else {
         game.options.area_editor_snap_mode =
+            (area_editor::SNAP_MODES)
             sum_and_wrap(game.options.area_editor_snap_mode, -1, N_SNAP_MODES);
     }
     
@@ -2051,6 +2064,8 @@ void area_editor::press_snap_mode_button() {
         break;
     } case SNAP_NOTHING: {
         status_text += "nothing";
+        break;
+    } case N_SNAP_MODES: {
         break;
     }
     }

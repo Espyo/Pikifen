@@ -754,7 +754,7 @@ void leader::swap_held_pikmin(mob* new_pik) {
     release(holding[0]);
     hold(
         new_pik, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
-        false, true
+        false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     
     game.sys_assets.sfx_switch_pikmin.play(0, false);

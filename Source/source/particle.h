@@ -42,6 +42,21 @@ enum PARTICLE_PRIORITIES {
 };
 
 
+enum MOB_PARTICLE_GENERATOR_IDS {
+    MOB_PARTICLE_GENERATOR_NONE,
+    //Custom particle generator issued by the script.
+    MOB_PARTICLE_GENERATOR_SCRIPT,
+    //Trail effect left behind by a throw.
+    MOB_PARTICLE_GENERATOR_THROW,
+    //Ring-shaped wave when going in water.
+    MOB_PARTICLE_GENERATOR_WAVE_RING,
+    
+    //Specific status effects are numbered starting on this.
+    //So make sure this is the last on the enum.
+    MOB_PARTICLE_GENERATOR_STATUS,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A particle is best described with examples:
  * A puff of smoke, a sparkle, a smack.
@@ -50,8 +65,8 @@ enum PARTICLE_PRIORITIES {
  */
 struct particle {
     //Behavior stats.
-    //Type. Use PARTICLE_TYPE_*.
-    unsigned char type;
+    //Type.
+    PARTICLE_TYPES type;
     //How long its lifespan is.
     float duration;
     //Bitmap to use, if any.
@@ -80,13 +95,14 @@ struct particle {
     //Other stuff.
     //Priority. If we reached the particle limit, only spawn
     //this particle if it can replace a lower-priority one.
-    unsigned char priority;
+    PARTICLE_PRIORITIES priority;
     
     particle(
-        const unsigned char type = PARTICLE_TYPE_BITMAP,
+        const PARTICLE_TYPES type = PARTICLE_TYPE_BITMAP,
         const point &pos = point(), const float z = 0.0f,
         const float size = 0.0f,
-        const float duration = 0.0f, const unsigned char priority = 255
+        const float duration = 0.0f, const PARTICLE_PRIORITIES priority =
+            PARTICLE_PRIORITY_HIGH
     );
     void tick(const float delta_t);
     void draw();
@@ -135,7 +151,7 @@ private:
 struct particle_generator {
 public:
     //Optional ID, if you need to identify it later on.
-    size_t id;
+    MOB_PARTICLE_GENERATOR_IDS id;
     //All particles created are based on this one.
     particle base_particle;
     //Number of particles to spawn.

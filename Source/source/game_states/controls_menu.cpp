@@ -42,13 +42,15 @@ controls_menu_state::controls_menu_state() :
  */
 void controls_menu_state::add_control() {
     if(game.options.controls[0].size()) {
-        size_t last_action =
+        BUTTONS last_action =
             game.options.controls[0].back().action;
         game.options.controls[0].push_back(
             control_info(
-                last_action == N_BUTTONS - 1 ?
-                1 : //The "None" action is 0, so go to 1.
-                last_action + 1,
+                (BUTTONS) (
+                    last_action == N_BUTTONS - 1 ?
+                    1 : //The "None" action is 0, so go to 1.
+                    last_action + 1
+                ),
                 ""
             )
         );
@@ -202,7 +204,7 @@ void controls_menu_state::choose_button(const size_t index) {
  */
 void controls_menu_state::choose_next_action(const size_t index) {
     control_info* c_ptr = &game.options.controls[0][index];
-    c_ptr->action = sum_and_wrap(c_ptr->action, 1, N_BUTTONS);
+    c_ptr->action = (BUTTONS) sum_and_wrap((size_t) c_ptr->action, 1, N_BUTTONS);
     gui_item* action_name_text = list_box->children[index * 5 + 2];
     ((text_gui_item*) action_name_text)->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
@@ -217,7 +219,7 @@ void controls_menu_state::choose_next_action(const size_t index) {
  */
 void controls_menu_state::choose_prev_action(const size_t index) {
     control_info* c_ptr = &game.options.controls[0][index];
-    c_ptr->action = sum_and_wrap(c_ptr->action, -1, N_BUTTONS);
+    c_ptr->action = (BUTTONS) sum_and_wrap((size_t) c_ptr->action, -1, N_BUTTONS);
     gui_item* action_name_text = list_box->children[index * 5 + 2];
     ((text_gui_item*) action_name_text)->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH

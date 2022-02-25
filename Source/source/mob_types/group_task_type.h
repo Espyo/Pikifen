@@ -43,8 +43,8 @@ public:
     float interval_between_rows;
     size_t pikmin_per_row;
     float worker_pikmin_angle;
-    size_t worker_pikmin_pose;
-    unsigned char contribution_method;
+    GROUP_TASK_PIKMIN_POSES worker_pikmin_pose;
+    GROUP_TASK_CONTRIBUTION_METHODS contribution_method;
     float speed_bonus;
     bool flying_pikmin_only;
     

@@ -26,13 +26,38 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Adds a new button to the list.
+ * id:
+ *   Its ID.
+ * name:
+ *   Its name.
+ * option_name:
+ *   The name of its property in the options file.
+ * default_control_str:
+ *   A string representing the default controls for this button.
+ */
+void button_manager::add(
+    const BUTTONS id, const string &name, const string &option_name,
+    const string &default_control_str
+) {
+    button_manager::button b;
+    b.id = id;
+    b.name = name;
+    b.option_name = option_name;
+    b.default_control_str = default_control_str;
+    
+    list.push_back(b);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates information about a control.
  * action:
- *   The action this control does in-game. Use BUTTON_*.
+ *   The action this control does in-game.
  * s:
  *   The textual code that represents the hardware inputs.
  */
-control_info::control_info(unsigned char action, const string &s) :
+control_info::control_info(BUTTONS action, const string &s) :
     action(action),
     type(CONTROL_TYPE_NONE),
     device_nr(0),
@@ -120,17 +145,17 @@ string control_info::stringify() const {
         return "jap_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
     } case CONTROL_TYPE_JOYSTICK_AXIS_NEG: {
         return "jan_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
+    } default: {
+        return "";
     }
     }
-    
-    return "";
 }
 
 
 /* ----------------------------------------------------------------------------
  * Handles a button "press". Technically, it could also be a button release.
  * button:
- *   The button's ID. Use BUTTON_*.
+ *   The button's ID.
  * pos:
  *   The position of the button, i.e., how much it's "held".
  *   0 means it was released. 1 means it was fully pressed.
@@ -140,7 +165,7 @@ string control_info::stringify() const {
  *   Number of the player that pressed.
  */
 void gameplay_state::handle_button(
-    const size_t button, const float pos, const size_t player
+    const BUTTONS button, const float pos, const size_t player
 ) {
 
     if(!ready_for_input || !is_input_allowed) return;
@@ -632,6 +657,9 @@ void gameplay_state::handle_button(
             break;
             
         }
+        default: {
+            break;
+        }
         }
         
     } else if(msg_box) {
@@ -670,6 +698,8 @@ void gameplay_state::handle_button(
         } case BUTTON_DOWN: {
             leader_movement.down = pos;
             break;
+        } default: {
+            break;
         }
         }
         
@@ -697,6 +727,8 @@ void gameplay_state::handle_button(
             break;
         } case BUTTON_CURSOR_DOWN: {
             cursor_movement.down = pos;
+            break;
+        } default: {
             break;
         }
         }
@@ -726,6 +758,8 @@ void gameplay_state::handle_button(
         } case BUTTON_GROUP_DOWN: {
             swarm_movement.down = pos;
             break;
+        } default: {
+            break;
         }
         }
         
@@ -737,6 +771,8 @@ void gameplay_state::handle_button(
         
         break;
         
+    } default: {
+        break;
     }
     }
     

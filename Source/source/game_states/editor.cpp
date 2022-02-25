@@ -1098,9 +1098,9 @@ void editor::process_mob_type_widgets(
             if(c == MOB_CATEGORY_NONE) continue;
             
             vector<string> names;
-            mob_category* c_ptr = game.mob_categories.get(c);
+            mob_category* c_ptr = game.mob_categories.get((MOB_CATEGORIES) c);
             c_ptr->get_type_names(names);
-            string cat_name = game.mob_categories.get(c)->name;
+            string cat_name = game.mob_categories.get((MOB_CATEGORIES) c)->name;
             
             for(size_t n = 0; n < names.size(); ++n) {
                 if(
@@ -1138,7 +1138,7 @@ void editor::process_mob_type_widgets(
     
     vector<string> categories;
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        categories.push_back(game.mob_categories.get(c)->name);
+        categories.push_back(game.mob_categories.get((MOB_CATEGORIES) c)->name);
     }
     int selected_category_nr = (*cat)->id;
     
@@ -1146,7 +1146,7 @@ void editor::process_mob_type_widgets(
         if(category_change_callback) {
             category_change_callback();
         }
-        *cat = game.mob_categories.get(selected_category_nr);
+        *cat = game.mob_categories.get((MOB_CATEGORIES) selected_category_nr);
         
         vector<string> type_names;
         (*cat)->get_type_names(type_names);
