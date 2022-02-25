@@ -70,7 +70,6 @@ public:
     static const float MENU_EXIT_HUD_MOVE_TIME;
     static const size_t ONION_MENU_TYPES_PER_PAGE;
     static const float SWARM_ARROW_SPEED;
-    static const float SWARM_ARROWS_INTERVAL;
     
     struct hud_struct {
     public:
@@ -389,10 +388,6 @@ private:
     timer replay_timer;
     //Spray that player 1 has currently selected.
     size_t selected_spray;
-    //Player 1's swarm mode arrows.
-    vector<float> swarm_arrows;
-    //Time until the next arrow in player 1's list of swarm arrows appears.
-    timer swarm_next_arrow_timer;
     //Is player 1 holding the "swarm to cursor" button?
     bool swarm_cursor;
     //Reach of player 1's swarm.

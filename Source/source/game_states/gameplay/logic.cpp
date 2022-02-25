@@ -36,20 +36,20 @@ void gameplay_state::do_aesthetic_logic() {
     
     //Swarming arrows.
     if(swarm_magnitude) {
-        swarm_next_arrow_timer.tick(game.delta_t);
+        cur_leader_ptr->swarm_next_arrow_timer.tick(game.delta_t);
     }
     
     dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
-    for(size_t a = 0; a < swarm_arrows.size(); ) {
-        swarm_arrows[a] += SWARM_ARROW_SPEED * game.delta_t;
+    for(size_t a = 0; a < cur_leader_ptr->swarm_arrows.size(); ) {
+        cur_leader_ptr->swarm_arrows[a] += SWARM_ARROW_SPEED * game.delta_t;
         
         dist max_dist =
             (swarm_magnitude > 0) ?
             game.config.cursor_max_dist * swarm_magnitude :
             leader_to_cursor_dist;
             
-        if(max_dist < swarm_arrows[a]) {
-            swarm_arrows.erase(swarm_arrows.begin() + a);
+        if(max_dist < cur_leader_ptr->swarm_arrows[a]) {
+            cur_leader_ptr->swarm_arrows.erase(cur_leader_ptr->swarm_arrows.begin() + a);
         } else {
             a++;
         }

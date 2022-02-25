@@ -41,6 +41,10 @@ public:
     bool queued_pluck_cancel;
     //Is the leader currently in the walking animation?
     bool is_in_walking_anim;
+    //Time until the next arrow in the list of swarm arrows appears.
+    timer swarm_next_arrow_timer;
+    //List of swarm mode arrows.
+    vector<float> swarm_arrows;
     //Time left before the leader can throw again.
     float throw_cooldown;
     //Whether or not a throw has been queued to be pulled off.
@@ -108,6 +112,7 @@ public:
     static const float AUTO_THROW_COOLDOWN_MAX_DURATION;
     static const float AUTO_THROW_COOLDOWN_MIN_DURATION;
     static const float AUTO_THROW_COOLDOWN_SPEED;
+    static const float SWARM_ARROWS_INTERVAL;
     static const float THROW_COOLDOWN_DURATION;
     
 protected:

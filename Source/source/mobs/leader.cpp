@@ -18,11 +18,13 @@
 #include "../game.h"
 
 
-const float leader::THROW_COOLDOWN_DURATION = 0.15f;
 const float leader::AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
 const float leader::AUTO_THROW_COOLDOWN_MIN_DURATION =
     THROW_COOLDOWN_DURATION * 1.2f;
 const float leader::AUTO_THROW_COOLDOWN_SPEED = 0.3f;
+//Seconds that need to pass before another swarm arrow appears.
+const float leader::SWARM_ARROWS_INTERVAL = 0.1f;
+const float leader::THROW_COOLDOWN_DURATION = 0.15f;
 
 
 /* ----------------------------------------------------------------------------
@@ -42,6 +44,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     pluck_target(nullptr),
     queued_pluck_cancel(false),
     is_in_walking_anim(false),
+    swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
     throw_cooldown(0.0f),
     throw_queued(false),
     auto_throwing(false),
@@ -60,6 +63,47 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
         game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_LEADER
         );
+        
+    swarm_next_arrow_timer.on_end = [this] () {
+        swarm_next_arrow_timer.start();
+        swarm_arrows.push_back(0);
+        
+        const float PARTICLE_ALPHA = 0.8f;
+        const float PARTICLE_MIN_DURATION = 1.0f;
+        const float PARTICLE_MAX_DURATION = 1.5f;
+        const float PARTICLE_FRICTION = 2.0f;
+        const float PARTICLE_SIZE = 6.0f;
+        const float PARTICLE_SPEED_DEVIATION = 10.0f;
+        const float PARTICLE_SPEED_MULT = 500.0f;
+        const float PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
+        particle p;
+        unsigned char color_idx = randomi(0, N_WHISTLE_DOT_COLORS);
+        p.bitmap = game.sys_assets.bmp_bright_circle;
+        p.color.r = WHISTLE_DOT_COLORS[color_idx][0] / 255.0f;
+        p.color.g = WHISTLE_DOT_COLORS[color_idx][1] / 255.0f;
+        p.color.b = WHISTLE_DOT_COLORS[color_idx][2] / 255.0f;
+        p.color.a = PARTICLE_ALPHA;
+        p.duration = randomf(PARTICLE_MIN_DURATION, PARTICLE_MAX_DURATION);
+        p.friction = PARTICLE_FRICTION;
+        p.pos = this->pos;
+        p.pos.x += randomf(-this->radius * 0.5f, this->radius * 0.5f);
+        p.pos.y += randomf(-this->radius * 0.5f, this->radius * 0.5f);
+        p.priority = PARTICLE_PRIORITY_MEDIUM;
+        p.size = PARTICLE_SIZE;
+        float p_speed =
+            game.states.gameplay->swarm_magnitude *
+            PARTICLE_SPEED_MULT +
+            randomf(-PARTICLE_SPEED_DEVIATION, PARTICLE_SPEED_DEVIATION);
+        float p_angle =
+            game.states.gameplay->swarm_angle +
+            randomf(-PARTICLE_ANGLE_DEVIATION, PARTICLE_ANGLE_DEVIATION);
+        p.speed = rotate_point(point(p_speed, 0.0f), p_angle);
+        p.time = p.duration;
+        p.type = PARTICLE_TYPE_BITMAP;
+        p.z = this->z + this->height / 2.0f;
+        game.states.gameplay->particles.add(p);
+    };
+    swarm_next_arrow_timer.start();
 }
 
 
@@ -919,6 +963,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     
     if(success) {
         game.states.gameplay->hud->start_leader_swap_juice(original_leader_nr);
+        game.states.gameplay->cur_leader_ptr->swarm_arrows.clear();
     }
 }
 

@@ -426,24 +426,24 @@ void gameplay_state::draw_ingame_text() {
  */
 void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
 
-    size_t n_arrows = swarm_arrows.size();
+    size_t n_arrows = cur_leader_ptr->swarm_arrows.size();
     for(size_t a = 0; a < n_arrows; ++a) {
         point pos(
-            cos(swarm_angle) * swarm_arrows[a],
-            sin(swarm_angle) * swarm_arrows[a]
+            cos(swarm_angle) * cur_leader_ptr->swarm_arrows[a],
+            sin(swarm_angle) * cur_leader_ptr->swarm_arrows[a]
         );
         float alpha =
             64 + std::min(
                 191,
                 (int) (
                     191 *
-                    (swarm_arrows[a] / (game.config.cursor_max_dist * 0.4))
+                    (cur_leader_ptr->swarm_arrows[a] / (game.config.cursor_max_dist * 0.4))
                 )
             );
         draw_bitmap(
             game.sys_assets.bmp_swarm_arrow,
             cur_leader_ptr->pos + pos,
-            point(16 * (1 + swarm_arrows[a] / game.config.cursor_max_dist), -1),
+            point(16 * (1 + cur_leader_ptr->swarm_arrows[a] / game.config.cursor_max_dist), -1),
             swarm_angle,
             map_alpha(alpha)
         );

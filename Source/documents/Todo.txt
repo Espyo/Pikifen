@@ -2,7 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    A spray of whistle particles for when there's a dismiss, and whistle particle "smoke" when group moving
     Leader HUD info improvements
         Make the leader icons move into place in a circular fashion, like Pikmin 2
         Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?

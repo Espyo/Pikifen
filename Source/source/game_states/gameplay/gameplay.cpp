@@ -43,8 +43,6 @@ const float gameplay_state::MENU_EXIT_HUD_MOVE_TIME = 0.5f;
 const size_t gameplay_state::ONION_MENU_TYPES_PER_PAGE = 5;
 //Swarming arrows move these many units per second.
 const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
-//Seconds that need to pass before another swarm arrow appears.
-const float gameplay_state::SWARM_ARROWS_INTERVAL = 0.1f;
 
 
 /* ----------------------------------------------------------------------------
@@ -97,14 +95,8 @@ gameplay_state::gameplay_state() :
     paused(false),
     ready_for_input(false),
     selected_spray(0),
-    swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
     swarm_cursor(false) {
     
-    swarm_next_arrow_timer.on_end = [this] () {
-        swarm_next_arrow_timer.start();
-        swarm_arrows.push_back(0);
-    };
-    swarm_next_arrow_timer.start();
 }
 
 
