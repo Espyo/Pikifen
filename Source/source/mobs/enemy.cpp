@@ -55,7 +55,7 @@ void enemy::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, true);
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, true, true);
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
     draw_status_effect_bmp(this, eff);
 }

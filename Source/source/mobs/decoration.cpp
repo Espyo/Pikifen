@@ -71,7 +71,7 @@ void decoration::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false);
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false, false);
     
     eff.tint_color.r *= individual_tint.r;
     eff.tint_color.g *= individual_tint.g;

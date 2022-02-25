@@ -96,7 +96,7 @@ void pikmin::draw_mob() {
     
     //The Pikmin itself.
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false);
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false, false);
     
     bool is_idle =
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||

@@ -1246,7 +1246,7 @@ void mob::draw_limb() {
     if(!sprite_to_use) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(sprite_to_use, &eff, true, true, true, false);
+    get_sprite_bitmap_effects(sprite_to_use, &eff, true, true, true, false, false);
     
     point parent_end;
     if(parent->limb_parent_body_part == INVALID) {
@@ -1308,7 +1308,7 @@ void mob::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false);
+    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false, true);
     
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }
@@ -1785,11 +1785,14 @@ float mob::get_latched_pikmin_weight() const {
  *   If true, add Onion/ship/etc. delivery changes to the result.
  * add_damage_squash:
  *   If true, add damage squash-and-stretch scaling to the result.
+ * add_carry_sway:
+ *   If true, add the back-and-forth sway from being carried to the result.
  */
 void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, bitmap_effect_info* info,
     const bool add_status, const bool add_sector_brightness,
-    const bool add_delivery, const bool add_damage_squash
+    const bool add_delivery, const bool add_damage_squash,
+    const bool add_carry_sway
 ) const {
 
     const float STATUS_SHAKING_TIME_MULT = 60.0f;
@@ -2023,6 +2026,22 @@ void mob::get_sprite_bitmap_effects(
         damage_scale_y += 1.0f;
         info->scale.y *= damage_scale_y;
         info->scale.x *= 1.0f / damage_scale_y;
+    }
+    
+    if(add_carry_sway && carry_info) {
+        const float TIME_MULT = 4.5f;
+        const float X_TRANSLATION_AMOUNT = 2.0f;
+        const float Y_TRANSLATION_AMOUNT = X_TRANSLATION_AMOUNT / 2.0f;
+        const float ROTATION_AMOUNT = TAU * 0.01f;
+        if(carry_info->is_moving) {
+            float factor1 =
+                sin(game.states.gameplay->area_time_passed * TIME_MULT);
+            float factor2 =
+                sin(game.states.gameplay->area_time_passed * TIME_MULT * 2.0f);
+            info->translation.x -= factor1 * X_TRANSLATION_AMOUNT;
+            info->translation.y -= factor2 * Y_TRANSLATION_AMOUNT;
+            info->rotation -= factor1 * ROTATION_AMOUNT;
+        }
     }
 }
 
