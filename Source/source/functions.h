@@ -25,13 +25,18 @@
 #include "utils/data_file.h"
 
 
+//Possible results for the player interacting with a file dialog.
 enum FILE_DIALOG_RESULTS {
+    //Successful operation.
     FILE_DIALOG_RES_SUCCESS,
+    //The option picked is not in the expected folder.
     FILE_DIALOG_RES_WRONG_FOLDER,
+    //The player cancelled the dialog.
     FILE_DIALOG_RES_CANCELED,
 };
 
 
+//Possible results for a folder wipe operation.
 enum WIPE_FOLDER_RESULTS {
     //Wipe successful.
     WIPE_FOLDER_RESULT_OK,

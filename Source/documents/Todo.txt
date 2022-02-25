@@ -51,7 +51,6 @@ Next tasks (roughly sorted most important first)
             Any geometry function involving line segments should say "line_seg", not "line" or "line_segment"
             Geometry-related functions should be sorted alphabetically, e.g. "circle_intersects_rectangle", not "rectangle_intersects_circle"
         Document every class member with a comment
-        Document every enum, and every enum value, with a comment
         Standardize the comments of all "tick" functions
         Some consts are documented in the .h, others in the .cpp. In general, just clean up all consts
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them

@@ -26,10 +26,16 @@ using std::size_t;
 using std::vector;
 
 
+//Modes for the auto-throw feature.
 enum AUTO_THROW_MODES {
+    //Off.
     AUTO_THROW_OFF,
+    //Hold button to auto-throw.
     AUTO_THROW_HOLD,
+    //Press button to toggle auto-throw.
     AUTO_THROW_TOGGLE,
+    
+    //Total amount of auto-throw modes.
     N_AUTO_THROW_MODES,
 };
 

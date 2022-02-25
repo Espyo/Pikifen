@@ -37,6 +37,7 @@ const unsigned char STATE_HISTORY_SIZE = 3;
 enum MOB_EV_TYPES {
     //"Special" events.
     
+    //Unknown.
     MOB_EV_UNKNOWN,
     //When the state is entered.
     MOB_EV_ON_ENTER,
@@ -209,6 +210,9 @@ enum MOB_EV_TYPES {
     //When the leader's pluck is canceled.
     LEADER_EV_CANCEL,
     
+    //Total.
+    
+    //Total amount of mob event types.
     N_MOB_EVENTS,
 };
 

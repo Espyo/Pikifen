@@ -30,6 +30,7 @@ struct sector;
 struct path_link;
 
 
+//Types of path link.
 enum PATH_LINK_TYPES {
     //Normal.
     PATH_LINK_TYPE_NORMAL,
@@ -42,6 +43,7 @@ enum PATH_LINK_TYPES {
 };
 
 
+//Flags that control how paths should be followed.
 enum PATH_FOLLOW_FLAGS {
     //It's possible to continue from the last path if it wants.
     PATH_FOLLOW_FLAG_CAN_CONTINUE = 0x0001,

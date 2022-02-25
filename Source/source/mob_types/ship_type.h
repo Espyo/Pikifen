@@ -19,14 +19,19 @@
 #include "mob_type.h"
 
 
+//Ship object animations.
 enum SHIP_ANIMATIONS {
+    //Idling.
     SHIP_ANIM_IDLING,
 };
 
 
+//Ship object states.
 enum SHIP_STATES {
+    //Idling.
     SHIP_STATE_IDLING,
     
+    //Total amount of ship object states.
     N_SHIP_STATES,
 };
 

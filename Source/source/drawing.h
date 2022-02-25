@@ -29,11 +29,18 @@ const unsigned char NOTIFICATION_ALPHA = 160;
 //A water wave ring lasts this long.
 const float WAVE_RING_DURATION = 1.0f;
 
+
+//Methods for easing numbers.
 enum EASING_METHODS {
+    //Eased as it goes in, then gradually goes out normally.
     EASE_IN,
+    //Gradually goes in normally, then eased as it goes out.
     EASE_OUT,
+    //Springs backwards before going in.
     EASE_IN_ELASTIC,
+    //Goes up to 1, then back down to 0, in a sine-wave.
     EASE_UP_AND_DOWN,
+    //Goes up to 1, then down to 0, and wobbles around 0 for a bit.
     EASE_UP_AND_DOWN_ELASTIC,
 };
 

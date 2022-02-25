@@ -19,16 +19,22 @@
 #include "resource_type.h"
 
 
+//Pile object animations.
 enum PILE_ANIMATIONS {
+    //Idling.
     PILE_ANIM_IDLING,
     
+    //Total amount of pile object animations.
     N_PILE_ANIMS,
 };
 
 
+//Pile object states.
 enum PILE_STATES {
+    //Idling.
     PILE_STATE_IDLING,
     
+    //Total amount of pile object states.
     N_PILE_STATES,
 };
 

@@ -171,9 +171,13 @@ public:
     //Information about player 1's whistle.
     whistle_struct whistle;
     
+    //Target to leave towards.
     enum LEAVE_TARGET {
+        //Leave in order to retry the area.
         LEAVE_TO_RETRY,
+        //Leave in order to finish the area.
         LEAVE_TO_FINISH,
+        //Leave in order to go to the area selection.
         LEAVE_TO_AREA_SELECT,
     };
     

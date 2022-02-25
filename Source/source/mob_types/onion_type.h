@@ -17,9 +17,12 @@
 #include "pikmin_type.h"
 
 
+//Onion object states.
 enum ONION_STATES {
+    //Idling.
     ONION_STATE_IDLING,
     
+    //Total amount of Onion object states.
     N_ONION_STATES,
 };
 

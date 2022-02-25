@@ -29,11 +29,17 @@ using std::map;
 using std::vector;
 
 
+//Animations for the GUI manager to animate its items with.
 enum GUI_MANAGER_ANIMS {
+    //None.
     GUI_MANAGER_ANIM_NONE,
+    //Items are outward out of view, and slide inward into view.
     GUI_MANAGER_ANIM_OUT_TO_IN,
+    //Items are in view, and slide outward out of view.
     GUI_MANAGER_ANIM_IN_TO_OUT,
+    //Items are above out of view, and slide downard into view.
     GUI_MANAGER_ANIM_UP_TO_CENTER,
+    //Items are in view, and slide up out of view.
     GUI_MANAGER_ANIM_CENTER_TO_UP
 };
 
@@ -46,12 +52,20 @@ class gui_manager;
  */
 class gui_item {
 public:
+
+    //Juicy animation types for GUI items.
     enum JUICE_TYPES {
+        //None.
         JUICE_TYPE_NONE,
+        //Text grow effect, low impact.
         JUICE_TYPE_GROW_TEXT_LOW,
+        //Text grow effect, high impact.
         JUICE_TYPE_GROW_TEXT_HIGH,
+        //Elastic text grow effect, low impact.
         JUICE_TYPE_GROW_TEXT_ELASTIC_LOW,
+        //Elastic text grow effect, high impact.
         JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH,
+        //Icon grow effect.
         JUICE_TYPE_GROW_ICON,
     };
     

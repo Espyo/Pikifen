@@ -23,26 +23,41 @@
 using std::string;
 
 
+//Flags that control what sorts of mob a status effect affects.
 enum STATUS_AFFECTS_FLAGS {
+    //Affects Pikmin.
     STATUS_AFFECTS_PIKMIN = 1,
+    //Affects enemies.
     STATUS_AFFECTS_ENEMIES = 2,
+    //Affects leaders.
     STATUS_AFFECTS_LEADERS = 4,
+    //Affects other mobs.
     STATUS_AFFECTS_OTHERS = 8,
 };
 
 
+//What mob script state the status effect changes to.
 enum STATUS_STATE_CHANGES {
+    //None.
     STATUS_STATE_CHANGE_NONE,
+    //Pikmin flailing state.
     STATUS_STATE_CHANGE_FLAILING,
+    //Pikmin helpless state.
     STATUS_STATE_CHANGE_HELPLESS,
+    //Pikmin panic state.
     STATUS_STATE_CHANGE_PANIC,
+    //A custom state.
     STATUS_STATE_CHANGE_CUSTOM,
 };
 
 
+//Rule to follow when re-applying a status effect.
 enum STATUS_REAPPLY_RULES {
+    //Keep the same auto-remove time as before.
     STATUS_REAPPLY_KEEP_TIME,
+    //Reset the auto-remove time.
     STATUS_REAPPLY_RESET_TIME,
+    //Add more time to the auto-remove time.
     STATUS_REAPPLY_ADD_TIME,
 };
 

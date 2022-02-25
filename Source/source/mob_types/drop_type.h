@@ -19,33 +19,51 @@
 #include "mob_type.h"
 
 
+//Drop object animations.
 enum DROP_ANIMATIONS {
+    //Idling.
     DROP_ANIM_IDLING,
+    //Falling.
     DROP_ANIM_FALLING,
+    //Landing.
     DROP_ANIM_LANDING,
+    //Bumped against.
     DROP_ANIM_BUMPED,
 };
 
 
+//Possible drop consumers.
 enum DROP_CONSUMERS {
-    DROP_CONSUMER_LEADERS,
+    //Pikmin.
     DROP_CONSUMER_PIKMIN,
+    //Leaders.
+    DROP_CONSUMER_LEADERS,
 };
 
 
+//Possible drop consumption effects.
 enum DROP_EFFECTS {
+    //Maturate a Pikmin.
     DROP_EFFECT_MATURATE,
+    //Increase spray amount.
     DROP_EFFECT_INCREASE_SPRAYS,
+    //Give a status effect.
     DROP_EFFECT_GIVE_STATUS,
 };
 
 
+//Drop object states.
 enum DROP_STATES {
+    //Idling.
     DROP_STATE_IDLING,
+    //Falling.
     DROP_STATE_FALLING,
+    //Landing.
     DROP_STATE_LANDING,
+    //Bumped against.
     DROP_STATE_BUMPED,
     
+    //Total amount of drop object states.
     N_DROP_STATES,
 };
 

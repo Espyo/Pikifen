@@ -15,13 +15,20 @@
 #include "mob_type.h"
 
 
+//Treasure object states.
 enum TREASURE_STATES {
+    //Waiting.
     TREASURE_STATE_IDLE_WAITING,
+    //Moving.
     TREASURE_STATE_IDLE_MOVING,
+    //Stuck.
     TREASURE_STATE_IDLE_STUCK,
+    //Thrown.
     TREASURE_STATE_IDLE_THROWN,
+    //Being delivered.
     TREASURE_STATE_BEING_DELIVERED,
     
+    //Total amount of treasure object states.
     N_TREASURE_STATES,
 };
 

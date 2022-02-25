@@ -1,21 +1,5 @@
 animations{
-	idling{
-		frames{
-			idling{
-				duration=0.2500
-			}
-			idling2{
-				duration=0.2500
-			}
-			idling{
-				duration=0.2500
-			}
-			idling3{
-				duration=0.2500
-			}
-		}
-	}
-	bumping{
+	bumped{
 		frames{
 			bumping1{
 				duration=0.1000
@@ -44,35 +28,6 @@ animations{
 			}
 			closed{
 				duration=0.8000
-			}
-		}
-	}
-	spitting{
-		frames{
-			closing4{
-				duration=0.1000
-			}
-			closed{
-				duration=0.3000
-			}
-		}
-	}
-	opening{
-		frames{
-			closing4{
-				duration=0.1000
-			}
-			closing3{
-				duration=0.1000
-			}
-			closing2{
-				duration=0.1000
-			}
-			closing1{
-				duration=0.1000
-			}
-			idling{
-				duration=0.1000
 			}
 		}
 	}
@@ -113,55 +68,53 @@ animations{
 			}
 		}
 	}
+	idling{
+		frames{
+			idling{
+				duration=0.2500
+			}
+			idling2{
+				duration=0.2500
+			}
+			idling{
+				duration=0.2500
+			}
+			idling3{
+				duration=0.2500
+			}
+		}
+	}
+	opening{
+		frames{
+			closing4{
+				duration=0.1000
+			}
+			closing3{
+				duration=0.1000
+			}
+			closing2{
+				duration=0.1000
+			}
+			closing1{
+				duration=0.1000
+			}
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+	spitting{
+		frames{
+			closing4{
+				duration=0.1000
+			}
+			closed{
+				duration=0.3000
+			}
+		}
+	}
 }
 sprites{
-	idling{
-		file=Lapis_Lazuli_Candypop_Bud.png
-		file_pos=0.0000 0.0000
-		file_size=170.0000 162.0000
-		offset=0.0000 -8.0000
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=24.0000
-				type=0
-				value=0.0000
-			}
-		}
-	}
-	idling2{
-		file=Lapis_Lazuli_Candypop_Bud.png
-		file_pos=0.0000 0.0000
-		file_size=170.0000 162.0000
-		offset=0.0000 -8.0000
-		scale=1.0100 0.9900
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=24.0000
-				type=0
-				value=0.0000
-			}
-		}
-	}
-	idling3{
-		file=Lapis_Lazuli_Candypop_Bud.png
-		file_pos=0.0000 0.0000
-		file_size=170.0000 162.0000
-		offset=0.0000 -8.0000
-		scale=0.9900 1.0100
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=24.0000
-				type=0
-				value=0.0000
-			}
-		}
-	}
 	bumping1{
 		file=Lapis_Lazuli_Candypop_Bud.png
 		file_pos=0.0000 0.0000
@@ -191,6 +144,21 @@ sprites{
 				radius=24.0000
 				type=0
 				value=0.0000
+			}
+		}
+	}
+	closed{
+		file=Lapis_Lazuli_Candypop_Bud.png
+		file_pos=645.0000 0.0000
+		file_size=102.0000 162.0000
+		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=2
+				value=1.0000
 			}
 		}
 	}
@@ -242,21 +210,6 @@ sprites{
 	closing4{
 		file=Lapis_Lazuli_Candypop_Bud.png
 		file_pos=542.0000 0.0000
-		file_size=102.0000 162.0000
-		offset=0.0000 -8.0000
-		hitboxes{
-			receptacle{
-				coords=0.0000 0.0000 0.0000
-				height=48.0000
-				radius=24.0000
-				type=2
-				value=1.0000
-			}
-		}
-	}
-	closed{
-		file=Lapis_Lazuli_Candypop_Bud.png
-		file_pos=645.0000 0.0000
 		file_size=102.0000 162.0000
 		offset=0.0000 -8.0000
 		hitboxes{
@@ -378,6 +331,53 @@ sprites{
 				radius=24.0000
 				type=2
 				value=1.0000
+			}
+		}
+	}
+	idling{
+		file=Lapis_Lazuli_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling2{
+		file=Lapis_Lazuli_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=1.0100 0.9900
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=0.0000
+			}
+		}
+	}
+	idling3{
+		file=Lapis_Lazuli_Candypop_Bud.png
+		file_pos=0.0000 0.0000
+		file_size=170.0000 162.0000
+		offset=0.0000 -8.0000
+		scale=0.9900 1.0100
+		hitboxes{
+			receptacle{
+				coords=0.0000 0.0000 0.0000
+				height=48.0000
+				radius=24.0000
+				type=0
+				value=0.0000
 			}
 		}
 	}

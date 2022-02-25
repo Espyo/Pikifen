@@ -24,25 +24,40 @@ using std::vector;
 
 class mob;
 
+
+//Types of particle. This controls their behavior and appearance.
 enum PARTICLE_TYPES {
+    //A simple square.
     PARTICLE_TYPE_SQUARE,
+    //A simple circle.
     PARTICLE_TYPE_CIRCLE,
+    //A bitmap.
     PARTICLE_TYPE_BITMAP,
+    //A Pikmin spirit that moves up and vanishes.
     PARTICLE_TYPE_PIKMIN_SPIRIT,
+    //An enemy spirit that moves up and wobbles.
     PARTICLE_TYPE_ENEMY_SPIRIT,
+    //A smack that grows and shrinks real quick.
     PARTICLE_TYPE_SMACK,
+    //A ding that grows and shrinks.
     PARTICLE_TYPE_DING,
 };
 
 
+//Particle priorities.
 enum PARTICLE_PRIORITIES {
+    //Low priority. Might be deleted to make way for most others.
     PARTICLE_PRIORITY_LOW,
+    //Medium priority.
     PARTICLE_PRIORITY_MEDIUM,
+    //High priority. Might delete others to make way.
     PARTICLE_PRIORITY_HIGH,
 };
 
 
+//IDs for specific types of particle generators.
 enum MOB_PARTICLE_GENERATOR_IDS {
+    //None.
     MOB_PARTICLE_GENERATOR_NONE,
     //Custom particle generator issued by the script.
     MOB_PARTICLE_GENERATOR_SCRIPT,

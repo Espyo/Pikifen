@@ -44,19 +44,33 @@ public:
     
     area_editor();
     
+    //Ways for the cursor to snap.
     enum SNAP_MODES {
+        //Snap to grid.
         SNAP_GRID,
+        //Snap to vertexes.
         SNAP_VERTEXES,
+        //Snap to edges.
         SNAP_EDGES,
+        //Snap to nothing.
         SNAP_NOTHING,
+        
+        //Total amount of snap modes.
         N_SNAP_MODES,
     };
     
+    //Ways for the area to be viewed in-editor.
     enum VIEW_MODES {
+        //Textures.
         VIEW_MODE_TEXTURES,
+        //Wireframe.
         VIEW_MODE_WIREFRAME,
+        //Heightmap.
         VIEW_MODE_HEIGHTMAP,
+        //Brightness map.
         VIEW_MODE_BRIGHTNESS,
+        
+        //Total amount of view modes.
         N_VIEW_MODES,
     };
     
@@ -104,76 +118,136 @@ private:
     };
     
     
+    //Possible errors after a line drawing operation.
     enum DRAWING_LINE_ERRORS {
+        //No error.
         DRAWING_LINE_NO_ERROR,
+        //Made a loop while trying to split a sector.
         DRAWING_LINE_LOOPS_IN_SPLIT,
+        //Hit an existing edge or vertex when drawing a new sector.
         DRAWING_LINE_HIT_EDGE_OR_VERTEX,
+        //Trying to draw along an existing edge.
         DRAWING_LINE_ALONG_EDGE,
+        //Crosses exsting edges.
         DRAWING_LINE_CROSSES_EDGES,
+        //Crosses previous parts of the drawing.
         DRAWING_LINE_CROSSES_DRAWING,
     };
     
+    //Types of problems in the area.
     enum EDITOR_PROBLEM_TYPES {
+        //None found so far.
         EPT_NONE_YET,
+        //No problems.
         EPT_NONE,
-        EPT_INTERSECTING_EDGES,   //Two edges intersect.
-        EPT_LONE_EDGE,            //An edge is all by itself.
-        EPT_OVERLAPPING_VERTEXES, //Two vertexes in the same spot.
-        EPT_BAD_SECTOR,           //A sector is corrupted.
-        EPT_MISSING_LEADER,       //No leader mob found.
-        EPT_UNKNOWN_TEXTURE,      //A texture is not found in the game files.
-        EPT_TYPELESS_MOB,         //Mob with no type.
-        EPT_MOB_OOB,              //Mob out of bounds.
-        EPT_MOB_IN_WALL,          //Mob stuck in a wall.
-        EPT_SECTORLESS_BRIDGE,    //Bridge mob missing a bridge sector.
-        EPT_LONE_PATH_STOP,       //A path stop is all by itself.
-        EPT_PATH_STOP_OOB,        //A path stop is out of bounds.
-        EPT_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
-        EPT_PATH_STOP_ON_LINK,    //A path stop is on top of an unrelated link.
-        EPT_PILE_BRIDGE_PATH,     //Bridge blocks the path from pile to it.
-        EPT_UNKNOWN_SHADOW,       //Unknown tree shadow image.
+        //Two edges intersect.
+        EPT_INTERSECTING_EDGES,
+        //An edge is all by itself.
+        EPT_LONE_EDGE,
+        //Two vertexes in the same spot.
+        EPT_OVERLAPPING_VERTEXES,
+        //A sector is corrupted.
+        EPT_BAD_SECTOR,
+        //No leader mob found.
+        EPT_MISSING_LEADER,
+        //A texture is not found in the game files.
+        EPT_UNKNOWN_TEXTURE,
+        //Mob with no type.
+        EPT_TYPELESS_MOB,
+        //Mob out of bounds.
+        EPT_MOB_OOB,
+        //Mob stuck in a wall.
+        EPT_MOB_IN_WALL,
+        //Bridge mob missing a bridge sector.
+        EPT_SECTORLESS_BRIDGE,
+        //A path stop is all by itself.
+        EPT_LONE_PATH_STOP,
+        //A path stop is out of bounds.
+        EPT_PATH_STOP_OOB,
+        //Two path stops are in the same place.
+        EPT_PATH_STOPS_TOGETHER,
+        //A path stop is on top of an unrelated link.
+        EPT_PATH_STOP_ON_LINK,
+        //Bridge blocks the path from pile to it.
+        EPT_PILE_BRIDGE_PATH,
+        //Unknown tree shadow image.
+        EPT_UNKNOWN_SHADOW,
     };
     
+    //Editor states.
     enum EDITOR_STATES {
-        EDITOR_STATE_INFO,
+        //Main menu.
         EDITOR_STATE_MAIN,
+        //Area info editing.
+        EDITOR_STATE_INFO,
+        //Layout editing.
         EDITOR_STATE_LAYOUT,
+        //Mob editing.
         EDITOR_STATE_MOBS,
+        //Path editing.
         EDITOR_STATE_PATHS,
+        //Detail editing.
         EDITOR_STATE_DETAILS,
+        //Review.
         EDITOR_STATE_REVIEW,
+        //Tools.
         EDITOR_STATE_TOOLS,
     };
     
+    //Editor sub-states.
     enum EDITOR_SUB_STATES {
+        //None.
         EDITOR_SUB_STATE_NONE,
+        //Drawing a sector.
         EDITOR_SUB_STATE_DRAWING,
+        //Drawing a circular sector.
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
-        EDITOR_SUB_STATE_OCTEE, //On-canvas texture effect editing.
+        //On-canvas texture effect editing.
+        EDITOR_SUB_STATE_OCTEE,
+        //Adding a new mob.
         EDITOR_SUB_STATE_NEW_MOB,
+        //Duplicating a mob.
         EDITOR_SUB_STATE_DUPLICATE_MOB,
+        //Adding a mob link.
         EDITOR_SUB_STATE_ADD_MOB_LINK,
+        //Deleting a mob link.
         EDITOR_SUB_STATE_DEL_MOB_LINK,
+        //Drawing paths.
         EDITOR_SUB_STATE_PATH_DRAWING,
+        //Adding a new tree shadow.
         EDITOR_SUB_STATE_NEW_SHADOW,
+        //In texture-view mode.
         EDITOR_SUB_STATE_TEXTURE_VIEW,
     };
     
+    //On-canvas texture effect editing modes.
     enum OCTEE_MODES {
+        //Editing texture offset.
         OCTEE_MODE_OFFSET,
+        //Editing texture scale.
         OCTEE_MODE_SCALE,
+        //Editing texture angle.
         OCTEE_MODE_ANGLE,
     };
     
+    //Filters for selecting.
     enum SELECTION_FILTERS {
+        //Select sectors, edges, and vertexes.
         SELECTION_FILTER_SECTORS,
+        //Select edges and vertexes.
         SELECTION_FILTER_EDGES,
+        //Select vertexes only.
         SELECTION_FILTER_VERTEXES,
+        
+        //Total amount of selection filters.
         N_SELECTION_FILTERS,
     };
     
+    //Layout editing panel modes.
     enum LAYOUT_MODES {
+        //Sector info.
         LAYOUT_MODE_SECTORS,
+        //Edge info.
         LAYOUT_MODE_EDGES,
     };
     

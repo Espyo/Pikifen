@@ -42,15 +42,25 @@ private:
 
 private:
 
+    //Editor states.
     enum EDITOR_STATES {
+        //Main menu.
         EDITOR_STATE_MAIN,
+        //Animation editing.
         EDITOR_STATE_ANIMATION,
+        //Sprite editing.
         EDITOR_STATE_SPRITE,
+        //Body part editing.
         EDITOR_STATE_BODY_PART,
+        //Hitbox editing.
         EDITOR_STATE_HITBOXES,
+        //Sprite bitmap editing.
         EDITOR_STATE_SPRITE_BITMAP,
+        //Sprite transformations editing.
         EDITOR_STATE_SPRITE_TRANSFORM,
+        //Top editing.
         EDITOR_STATE_TOP,
+        //Tools.
         EDITOR_STATE_TOOLS,
     };
     

@@ -25,61 +25,113 @@ using std::string;
 using std::vector;
 
 
+//List of "logical" buttons players can "press".
 enum BUTTONS {
+    //None.
     BUTTON_NONE,
+    //Throw button.
     BUTTON_THROW,
+    //Whistle button.
     BUTTON_WHISTLE,
+    //Move right button.
     BUTTON_RIGHT,
+    //Move up button.
     BUTTON_UP,
+    //Move left button.
     BUTTON_LEFT,
+    //Move down button.
     BUTTON_DOWN,
+    //Move cursor right button.
     BUTTON_CURSOR_RIGHT,
+    //Move cursor up button.
     BUTTON_CURSOR_UP,
+    //Move cursor left button.
     BUTTON_CURSOR_LEFT,
+    //Move cursor down button.
     BUTTON_CURSOR_DOWN,
+    //Swarm group right button.
     BUTTON_GROUP_RIGHT,
+    //Swarm group up button.
     BUTTON_GROUP_UP,
+    //Swarm group left button.
     BUTTON_GROUP_LEFT,
+    //Swarm group down button.
     BUTTON_GROUP_DOWN,
+    //Swarm group towards cursor button.
     BUTTON_GROUP_CURSOR,
+    //Swap to next leader button.
     BUTTON_NEXT_LEADER,
+    //Swap to previous leader button.
     BUTTON_PREV_LEADER,
+    //Dismiss button.
     BUTTON_DISMISS,
+    //Use spray #1 button.
     BUTTON_USE_SPRAY_1,
+    //Use spray #2 button.
     BUTTON_USE_SPRAY_2,
+    //Use currently selected spray button.
     BUTTON_USE_SPRAY,
+    //Swap to next spray button.
     BUTTON_NEXT_SPRAY,
+    //Swap to previous spray button.
     BUTTON_PREV_SPRAY,
+    //Change zoom level button.
     BUTTON_CHANGE_ZOOM,
+    //Zoom in button.
     BUTTON_ZOOM_IN,
+    //Zoom out button.
     BUTTON_ZOOM_OUT,
+    //Swap to next standby type button.
     BUTTON_NEXT_TYPE,
+    //Swap to previous standby type button.
     BUTTON_PREV_TYPE,
+    //Swap to next standby type maturity button.
     BUTTON_NEXT_MATURITY,
+    //Swap to previous standby type maturity button.
     BUTTON_PREV_MATURITY,
+    //Lie down button.
     BUTTON_LIE_DOWN,
+    //Pause button.
     BUTTON_PAUSE,
+    //Menu navigation right button.
     BUTTON_MENU_RIGHT,
+    //Menu navigation up button.
     BUTTON_MENU_UP,
+    //Menu navigation left button.
     BUTTON_MENU_LEFT,
+    //Menu navigation down button.
     BUTTON_MENU_DOWN,
+    //Menu navigation OK button.
     BUTTON_MENU_OK,
+    //Menu navigation back button.
     BUTTON_MENU_BACK,
     
+    //Total amount of buttons.
     N_BUTTONS,
 };
 
 
+//Types of hardware controls.
 enum CONTROL_TYPES {
+    //None.
     CONTROL_TYPE_NONE,
+    //Keyboard key.
     CONTROL_TYPE_KEYBOARD_KEY,
+    //Mouse button.
     CONTROL_TYPE_MOUSE_BUTTON,
+    //Mouse wheel scrolled up.
     CONTROL_TYPE_MOUSE_WHEEL_UP,
+    //Mouse wheel scrolled down.
     CONTROL_TYPE_MOUSE_WHEEL_DOWN,
+    //Mouse wheel scrolled left.
     CONTROL_TYPE_MOUSE_WHEEL_LEFT,
+    //Mouse wheel scrolled right.
     CONTROL_TYPE_MOUSE_WHEEL_RIGHT,
+    //Joystick button.
     CONTROL_TYPE_JOYSTICK_BUTTON,
+    //Joystick axis tilted in a positive position.
     CONTROL_TYPE_JOYSTICK_AXIS_POS,
+    //Joystick axis tilted in a negative position.
     CONTROL_TYPE_JOYSTICK_AXIS_NEG,
 };
 

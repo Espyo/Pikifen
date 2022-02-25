@@ -162,16 +162,29 @@ const string SYSTEM_ANIMATIONS_FILE_PATH =
 const string SYSTEM_ASSET_FILE_NAMES_FILE_PATH =
     MISC_FOLDER_PATH + "/System_asset_file_names.txt";
 
-enum MAKER_TOOL_IDS {
+
+//List of maker tools.
+enum MAKER_TOOLS {
+    //None.
     MAKER_TOOL_NONE,
+    //Create an image of the whole area.
     MAKER_TOOL_AREA_IMAGE,
+    //Change gameplay speed.
     MAKER_TOOL_CHANGE_SPEED,
+    //Geometry info beneath mouse cursor.
     MAKER_TOOL_GEOMETRY_INFO,
+    //Show hitboxes.
     MAKER_TOOL_HITBOXES,
+    //Hurt mob beneath mouse cursor.
     MAKER_TOOL_HURT_MOB,
+    //Get info on the mob beneath mouse cursor.
     MAKER_TOOL_MOB_INFO,
+    //Create a new Pikmin beneath mouse cursor.
     MAKER_TOOL_NEW_PIKMIN,
+    //Teleport to mouse cursor.
     MAKER_TOOL_TELEPORT,
+    
+    //Total amount of maker tools.
     N_MAKER_TOOLS,
 };
 
@@ -186,23 +199,6 @@ const string MAKER_TOOL_NAMES[N_MAKER_TOOLS] = {
     "mob_info",
     "new_pikmin",
     "teleport"
-};
-
-
-enum LIMB_DRAW_METHODS {
-    LIMB_DRAW_BELOW_BOTH,
-    LIMB_DRAW_BELOW_CHILD,
-    LIMB_DRAW_BELOW_PARENT,
-    LIMB_DRAW_ABOVE_PARENT,
-    LIMB_DRAW_ABOVE_CHILD,
-    LIMB_DRAW_ABOVE_BOTH,
-};
-
-
-enum HOLD_ROTATION_METHODS {
-    HOLD_ROTATION_METHOD_NEVER,
-    HOLD_ROTATION_METHOD_FACE_HOLDER,
-    HOLD_ROTATION_METHOD_COPY_HOLDER,
 };
 
 

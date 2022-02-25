@@ -18,6 +18,7 @@
 #include "pikmin.h"
 
 
+//Flags that control how it can be held.
 enum HOLDABILITY_FLAGS {
     //The mob can be held by Pikmin.
     HOLDABLE_BY_PIKMIN = 1,

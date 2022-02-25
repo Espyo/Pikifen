@@ -15,6 +15,7 @@
 #include <allegro5/allegro.h>
 
 
+//In-world HUD item transitions.
 enum IN_WORLD_HUD_TRANSITIONS {
     //Not transitioning.
     IN_WORLD_HUD_TRANSITION_NONE,

@@ -15,26 +15,39 @@
 #include "mob_type.h"
 
 
+//Flags for what sorts of mob can ride on a track.
 enum TRACK_RIDERS {
+    //Pikmin.
     TRACK_RIDER_PIKMIN = 1,
+    //Leaders.
     TRACK_RIDER_LEADERS = 2,
 };
 
 
+//Poses that a mob riding on a track can take.
 enum TRACK_RIDING_POSES {
+    //Stopped.
     TRACK_RIDING_POSE_STOPPED,
+    //Climbing.
     TRACK_RIDING_POSE_CLIMBING,
+    //Sliding.
     TRACK_RIDING_POSE_SLIDING,
 };
 
 
+//Track object animations.
 enum TRACK_ANIMATIONS {
+    //Idling.
     TRACK_ANIM_IDLING,
 };
 
 
+//Track object states.
 enum TRACK_STATES {
+    //Idling.
     TRACK_STATE_IDLING,
+    
+    //Total amount of track object states.
     N_TRACK_STATES,
 };
 

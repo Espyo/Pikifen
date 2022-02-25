@@ -14,18 +14,28 @@
 #include "mob_type.h"
 
 
+//Poses that Pikmin working on a group task can take.
 enum GROUP_TASK_PIKMIN_POSES {
+    //Stopped.
     GROUP_TASK_PIKMIN_POSE_STOPPED,
+    //Arms stretched sideways.
     GROUP_TASK_PIKMIN_POSE_ARMS_STRETCHED,
+    //Pushing forward.
     GROUP_TASK_PIKMIN_POSE_PUSHING,
+    //Carrying.
     GROUP_TASK_PIKMIN_POSE_CARRYING,
 };
 
 
+//Methods by which a Pikmin can contribute to a group task.
 enum GROUP_TASK_CONTRIBUTION_METHODS {
+    //Each Pikmin contributes by 1.
     GROUP_TASK_CONTRIBUTION_NORMAL,
+    //Each Pikmin contributes with its weight.
     GROUP_TASK_CONTRIBUTION_WEIGHT,
+    //Each Pikmin contributes with its carrying strength.
     GROUP_TASK_CONTRIBUTION_CARRY_STRENGTH,
+    //Each Pikmin contributes with its pushing strength.
     GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH,
 };
 

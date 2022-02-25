@@ -15,27 +15,41 @@
 #include "mob_type.h"
 
 
+//Flags for what sorts of mobs can ride on a bouncer.
 enum BOUNCER_RIDERS {
+    //Pikmin.
     BOUNCER_RIDER_PIKMIN = 1,
+    //Leaders.
     BOUNCER_RIDER_LEADERS = 2,
 };
 
 
+//Poses for riders to take.
 enum BOUNCER_RIDING_POSES {
+    //Stopped. Basically the idling pose.
     BOUNCER_RIDING_POSE_STOPPED,
+    //Somersaulting.
     BOUNCER_RIDING_POSE_SOMERSAULT,
 };
 
 
+//Bouncer object animations.
 enum BOUNCER_ANIMATIONS {
+    //Idling.
     BOUNCER_ANIM_IDLING,
+    //Bouncing something.
     BOUNCER_ANIM_BOUNCING,
 };
 
 
+//Bouncer object states.
 enum BOUNCER_STATES {
+    //Idling.
     BOUNCER_STATE_IDLING,
+    //Bouncing something.
     BOUNCER_STATE_BOUNCING,
+    
+    //Total amount of bouncer object states.
     N_BOUNCER_STATES,
 };
 

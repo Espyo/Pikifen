@@ -40,7 +40,7 @@ anim_conversion_vector converter_type::get_anim_conversions() const {
     anim_conversion_vector v;
     
     v.push_back(std::make_pair(CONVERTER_ANIM_IDLING, "idling"));
-    v.push_back(std::make_pair(CONVERTER_ANIM_BUMPING, "bumping"));
+    v.push_back(std::make_pair(CONVERTER_ANIM_BUMPED, "bumped"));
     v.push_back(std::make_pair(CONVERTER_ANIM_CLOSING, "closing"));
     v.push_back(std::make_pair(CONVERTER_ANIM_SPITTING, "spitting"));
     v.push_back(std::make_pair(CONVERTER_ANIM_OPENING, "opening"));

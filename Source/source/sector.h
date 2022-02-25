@@ -45,6 +45,8 @@ struct sector;
 struct triangle;
 struct vertex;
 
+
+//Possible errors after a triangulation operation.
 enum TRIANGULATION_ERRORS {
     //No error occured.
     TRIANGULATION_NO_ERROR,
@@ -59,6 +61,7 @@ enum TRIANGULATION_ERRORS {
 };
 
 
+//Types of sector.
 enum SECTOR_TYPES {
     //Normal sector.
     SECTOR_TYPE_NORMAL,

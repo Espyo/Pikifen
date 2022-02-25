@@ -18,61 +18,108 @@
 #include "mob_type.h"
 
 
+//Leader object states.
 enum LEADER_STATES {
+    //Idling.
     LEADER_STATE_IDLING,
+    //Active.
     LEADER_STATE_ACTIVE,
+    //Whistling.
     LEADER_STATE_WHISTLING,
+    //Punching.
     LEADER_STATE_PUNCHING,
+    //Holding a Pikmin.
     LEADER_STATE_HOLDING,
+    //Dismissing.
     LEADER_STATE_DISMISSING,
+    //Spraying.
     LEADER_STATE_SPRAYING,
+    //In pain.
     LEADER_STATE_PAIN,
+    //In pain, inactive.
     LEADER_STATE_INACTIVE_PAIN,
+    //Knocked back.
     LEADER_STATE_KNOCKED_BACK,
+    //Knocked back, inactive.
     LEADER_STATE_INACTIVE_KNOCKED_BACK,
+    //Dying.
     LEADER_STATE_DYING,
+    //In group, chasing.
     LEADER_STATE_IN_GROUP_CHASING,
+    //In group, stopped.
     LEADER_STATE_IN_GROUP_STOPPED,
+    //Going to pluck a Pikmin.
     LEADER_STATE_GOING_TO_PLUCK,
+    //Plucking a Pikmin.
     LEADER_STATE_PLUCKING,
+    //Deciding what Pikmin to pluck next.
     LEADER_STATE_PLUCK_DECIDING,
+    //Going to pluck a Pikmin, inactive.
     LEADER_STATE_INACTIVE_GOING_TO_PLUCK,
+    //Plucking a Pikmin, inactive.
     LEADER_STATE_INACTIVE_PLUCKING,
+    //Deciding what Pikmin to pluck next, inactive.
     LEADER_STATE_INACTIVE_PLUCK_DECIDING,
+    //Sleeping, waiting to move.
     LEADER_STATE_SLEEPING_WAITING,
+    //Sleeping, moving.
     LEADER_STATE_SLEEPING_MOVING,
+    //Sleeping, stuck.
     LEADER_STATE_SLEEPING_STUCK,
+    //Sleeping, waiting to move, inactive.
     LEADER_STATE_INACTIVE_SLEEPING_WAITING,
+    //Sleeping, moving, inactive.
     LEADER_STATE_INACTIVE_SLEEPING_MOVING,
+    //Sleeping, stuck, inactive.
     LEADER_STATE_INACTIVE_SLEEPING_STUCK,
-    //Time during which the leader is getting up.
+    //Getting up from lying down.
     LEADER_STATE_WAKING_UP,
-    //Time during which the leader is getting up.
+    //Getting up from lying down, inactive.
     LEADER_STATE_INACTIVE_WAKING_UP,
+    //Held by another leader.
     LEADER_STATE_HELD,
+    //Thrown.
     LEADER_STATE_THROWN,
+    //Drinking a drop.
     LEADER_STATE_DRINKING,
+    //Riding a track.
     LEADER_STATE_RIDING_TRACK,
+    //Riding a track, inactive.
     LEADER_STATE_INACTIVE_RIDING_TRACK,
     
+    //Total amount of leader object states.
     N_LEADER_STATES,
     
 };
 
 
+//Leader object animations.
 enum LEADER_ANIMATIONS {
+    //Idling.
     LEADER_ANIM_IDLING,
+    //Walking.
     LEADER_ANIM_WALKING,
+    //Plucking.
     LEADER_ANIM_PLUCKING,
+    //Getting up.
     LEADER_ANIM_GETTING_UP,
+    //Dismissing.
     LEADER_ANIM_DISMISSING,
+    //Throwing.
     LEADER_ANIM_THROWING,
+    //Whistling.
     LEADER_ANIM_WHISTLING,
+    //Punching.
     LEADER_ANIM_PUNCHING,
+    //Lying down.
     LEADER_ANIM_LYING,
+    //In pain.
     LEADER_ANIM_PAIN,
+    //Knocked down.
     LEADER_ANIM_KNOCKED_DOWN,
+    //Spraying.
     LEADER_ANIM_SPRAYING,
+    //Drinking a drop.
     LEADER_ANIM_DRINKING,
 };
 

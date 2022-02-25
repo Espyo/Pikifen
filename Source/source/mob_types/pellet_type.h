@@ -16,13 +16,20 @@
 #include "pikmin_type.h"
 
 
+//Pellet object states.
 enum PELLET_STATES {
+    //Idle, waiting to move.
     PELLET_STATE_IDLE_WAITING,
+    //Idle, moving.
     PELLET_STATE_IDLE_MOVING,
+    //Idle, stuck.
     PELLET_STATE_IDLE_STUCK,
+    //Idle, being thrown.
     PELLET_STATE_IDLE_THROWN,
+    //Being delivered.
     PELLET_STATE_BEING_DELIVERED,
     
+    //Total amount of pellet object states.
     N_PELLET_STATES,
 };
 

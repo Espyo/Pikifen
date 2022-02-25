@@ -22,6 +22,7 @@
 
 #include "animation.h"
 #include "mob_categories/mob_category.h"
+#include "mobs/mob_enums.h"
 #include "hazard.h"
 #include "particle.h"
 #include "utils/data_file.h"
@@ -163,7 +164,7 @@ struct maker_tools_info {
     //If any maker info is being printed, this represents its time to live.
     timer info_print_timer;
     //For each key (F2 - F11, 0 - 9), what tool is bound to it?
-    MAKER_TOOL_IDS keys[20];
+    MAKER_TOOLS keys[20];
     //When we last spawned a Pikmin, what was its type?
     pikmin_type* last_pikmin_type;
     //When hurting mobs with the hurting tool, dock this much of its max HP off.
@@ -528,9 +529,11 @@ struct bitmap_effect_info {
 };
 
 
-
+//Performance monitor states.
 enum PERF_MON_STATES {
+    //Measuring loading times.
     PERF_MON_STATE_LOADING,
+    //Measuring gameplay frame performance.
     PERF_MON_STATE_FRAME,
 };
 
@@ -591,14 +594,6 @@ private:
     performance_monitor_struct::page frame_fastest_page;
     //Page of information about the slowest frame.
     performance_monitor_struct::page frame_slowest_page;
-};
-
-
-
-enum SUBGROUP_TYPE_CATEGORIES {
-    SUBGROUP_TYPE_CATEGORY_PIKMIN,
-    SUBGROUP_TYPE_CATEGORY_LEADER,
-    SUBGROUP_TYPE_CATEGORY_TOOL,
 };
 
 

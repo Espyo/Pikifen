@@ -17,32 +17,48 @@
 #include "pikmin_type.h"
 
 
+/* Converter object animations.
+ * Because converters can have multiple animations that do the same thing,
+ * due to the different types, there are actually
+ * N_CONVERTER_ANIMS * <number of types> in total.
+ * The first bunch of animations are for the first type, the second bunch
+ * are for the second type, etc.
+ */
 enum CONVERTER_ANIMATIONS {
-    /* Because converters can have multiple animations that do the same thing,
-     * due to the different types, there are actually
-     * N_CONVERTER_ANIMS * <number of types> in total.
-     * The first bunch of animations are for the first type, the second bunch
-     * are for the second type, etc.
-     */
+    //Idling.
     CONVERTER_ANIM_IDLING,
-    CONVERTER_ANIM_BUMPING,
+    //Bumped against.
+    CONVERTER_ANIM_BUMPED,
+    //Closing.
     CONVERTER_ANIM_CLOSING,
+    //Spitting.
     CONVERTER_ANIM_SPITTING,
+    //Opening.
     CONVERTER_ANIM_OPENING,
+    //Dying.
     CONVERTER_ANIM_DYING,
     
+    //Total amount of converter object animations.
     N_CONVERTER_ANIMS,
 };
 
 
+//Converter object states.
 enum CONVERTER_STATES {
+    //Idling.
     CONVERTER_STATE_IDLING,
-    CONVERTER_STATE_BUMPING,
+    //Bumped against.
+    CONVERTER_STATE_BUMPED,
+    //Closing.
     CONVERTER_STATE_CLOSING,
+    //Spitting.
     CONVERTER_STATE_SPITTING,
+    //Opening.
     CONVERTER_STATE_OPENING,
+    //Dying.
     CONVERTER_STATE_DYING,
     
+    //Total amount of converter object states.
     N_CONVERTER_STATES,
 };
 

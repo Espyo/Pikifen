@@ -23,9 +23,13 @@ using std::string;
 using std::vector;
 
 
+//Types of precipitation.
 enum PRECIPITATION_TYPES {
+    //None.
     PRECIPITATION_TYPE_NONE,
+    //Rain.
     PRECIPITATION_TYPE_RAIN,
+    //Wind.
     PRECIPITATION_TYPE_WIND,
 };
 

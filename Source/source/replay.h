@@ -29,16 +29,24 @@ using std::string;
 using std::vector;
 
 
+//Types of elements in a replay.
 enum REPLAY_ELEMENT_TYPES {
+    //A leader.
     REPLAY_ELEMENT_LEADER,
+    //A Pikmin.
     REPLAY_ELEMENT_PIKMIN,
+    //An enemy.
     REPLAY_ELEMENT_ENEMY,
+    //A treasure.
     REPLAY_ELEMENT_TREASURE,
+    //An Onion.
     REPLAY_ELEMENT_ONION,
+    //An obstacle.
     REPLAY_ELEMENT_OBSTACLE,
 };
 
 
+//Types of events that can happen in a replay.
 enum REPLAY_EVENT_TYPES {
     //A replay element was added.
     REPLAY_EVENT_ADDED,

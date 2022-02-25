@@ -21,14 +21,13 @@ using std::string;
 using std::vector;
 
 
-/*
- * You can read more about hitboxes
- * on animation.h.
- */
-
+//Types of hitboxes.
 enum HITBOX_TYPES {
+    //Can be hurt by "attack"-type hitboxes.
     HITBOX_TYPE_NORMAL,
+    //Hurts "normal"-type hitboxes.
     HITBOX_TYPE_ATTACK,
+    //Currently disabled.
     HITBOX_TYPE_DISABLED,
 };
 

@@ -53,59 +53,108 @@ protected:
     static const int   UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
     static const int   UNSAVED_CHANGES_WARNING_WIDTH;
     
+    //Editor icons.
     enum EDITOR_ICONS {
+        //Save.
         ICON_SAVE,
+        //Load.
         ICON_LOAD,
+        //Quit.
         ICON_QUIT,
+        //Toggle hitboxes.
         ICON_HITBOXES,
+        //Toggle reference image.
         ICON_REFERENCE,
+        //Show info.
         ICON_INFO,
+        //Resize.
         ICON_RESIZE,
+        //Play/pause.
         ICON_PLAY_PAUSE,
+        //Next.
         ICON_NEXT,
+        //Previous.
         ICON_PREVIOUS,
+        //Add.
         ICON_ADD,
+        //Remove.
         ICON_REMOVE,
+        //Move to the right.
         ICON_MOVE_RIGHT,
+        //Move to the left.
         ICON_MOVE_LEFT,
+        //Select none.
         ICON_SELECT_NONE,
+        //Duplicate.
         ICON_DUPLICATE,
+        //Add a stop.
         ICON_ADD_STOP,
+        //Add a link.
         ICON_ADD_LINK,
+        //Add a one-way link.
         ICON_ADD_1W_LINK,
+        //Remove a stop.
         ICON_REMOVE_STOP,
+        //Remove a link.
         ICON_REMOVE_LINK,
+        //Add a circular sector.
         ICON_ADD_CIRCLE_SECTOR,
+        //Vertexes.
         ICON_VERTEXES,
+        //Edges.
         ICON_EDGES,
+        //Sectors.
         ICON_SECTORS,
+        //Mobs.
         ICON_MOBS,
+        //Paths.
         ICON_PATHS,
+        //Details.
         ICON_DETAILS,
+        //Review.
         ICON_REVIEW,
+        //Tools.
         ICON_TOOLS,
+        //Options.
         ICON_OPTIONS,
+        //Undo.
         ICON_UNDO,
+        //Grid.
         ICON_GRID,
+        //Mob radius.
         ICON_MOB_RADIUS,
+        //Pikmin silhouette.
         ICON_PIKMIN_SILHOUETTE,
+        //Animations.
         ICON_ANIMATIONS,
+        //Sprites.
         ICON_SPRITES,
+        //Body parts.
         ICON_BODY_PARTS,
+        //Play.
         ICON_PLAY,
+        //Snap to grid.
         ICON_SNAP_GRID,
+        //Snap to vertexes.
         ICON_SNAP_VERTEXES,
+        //Snap to edges.
         ICON_SNAP_EDGES,
+        //Snap to nothing.
         ICON_SNAP_NOTHING,
+        //Search.
         ICON_SEARCH,
         
+        //Total amount of editor icons.
         N_EDITOR_ICONS
     };
     
     //Types of explanations for widgets that need them.
     enum WIDGET_EXPLANATIONS {
+        //None.
         WIDGET_EXPLANATION_NONE,
+        //Drag widget.
         WIDGET_EXPLANATION_DRAG,
+        //Slider widget.
         WIDGET_EXPLANATION_SLIDER,
     };
     

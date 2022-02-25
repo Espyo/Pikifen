@@ -35,7 +35,7 @@ void converter_fsm::create_fsm(mob_type* typ) {
         }
     }
     
-    efc.new_state("bumping", CONVERTER_STATE_BUMPING); {
+    efc.new_state("bumped", CONVERTER_STATE_BUMPED); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(converter_fsm::bumped);
         }
@@ -128,10 +128,10 @@ void converter_fsm::bumped(mob* m, void* info1, void* info2) {
     
     c_ptr->set_animation(
         c_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_BUMPING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+            CONVERTER_ANIM_BUMPED, N_CONVERTER_ANIMS, c_ptr->current_type_nr
         )
     );
-    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_BUMPING;
+    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_BUMPED;
     c_ptr->type_change_timer.stop();
     c_ptr->auto_conversion_timer.stop();
 }
@@ -177,7 +177,7 @@ void converter_fsm::finish_dying(mob* m, void* info1, void* info2) {
 void converter_fsm::handle_object_touch(mob* m, void* info1, void* info2) {
     mob* bumper = (mob*) info1;
     if(bumper->type->category->id == MOB_CATEGORY_LEADERS) {
-        m->fsm.set_state(CONVERTER_STATE_BUMPING);
+        m->fsm.set_state(CONVERTER_STATE_BUMPED);
     }
 }
 

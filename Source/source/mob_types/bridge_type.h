@@ -17,17 +17,25 @@
 #include "mob_type.h"
 
 
+//Bridge object animations.
 enum BRIDGE_ANIMATIONS {
+    //Idling.
     BRIDGE_ANIM_IDLING,
+    //Destroyed.
     BRIDGE_ANIM_DESTROYED,
 };
 
 
+//Bridge object states.
 enum BRIDGE_STATES {
+    //Idling.
     BRIDGE_STATE_IDLING,
+    //Creating a chunk.
     BRIDGE_STATE_CREATING_CHUNK,
+    //Destroyed.
     BRIDGE_STATE_DESTROYED,
     
+    //Total amount of bridge object states.
     N_BRIDGE_STATES,
 };
 

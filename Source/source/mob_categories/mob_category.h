@@ -24,30 +24,52 @@ using std::string;
 using std::vector;
 
 
+//Mob categories. Sorted by what types of mobs to load first.
 enum MOB_CATEGORIES {
-    //Sorted by what types of mobs to load first.
+    //None.
     MOB_CATEGORY_NONE,
+    //Pikmin.
     MOB_CATEGORY_PIKMIN,
+    //Onions.
     MOB_CATEGORY_ONIONS,
+    //Leaders.
     MOB_CATEGORY_LEADERS,
+    //Enemies.
     MOB_CATEGORY_ENEMIES,
+    //Treasures.
     MOB_CATEGORY_TREASURES,
+    //Pellets.
     MOB_CATEGORY_PELLETS,
+    //Converters.
     MOB_CATEGORY_CONVERTERS,
+    //Drops.
     MOB_CATEGORY_DROPS,
+    //Resources.
     MOB_CATEGORY_RESOURCES,
+    //Piles.
     MOB_CATEGORY_PILES,
+    //Tools.
     MOB_CATEGORY_TOOLS,
+    //Ships.
     MOB_CATEGORY_SHIPS,
+    //Bridges.
     MOB_CATEGORY_BRIDGES,
+    //Group tasks.
     MOB_CATEGORY_GROUP_TASKS,
+    //Scales.
     MOB_CATEGORY_SCALES,
+    //Tracks.
     MOB_CATEGORY_TRACKS,
+    //Bouncers.
     MOB_CATEGORY_BOUNCERS,
+    //Decorations.
     MOB_CATEGORY_DECORATIONS,
+    //Interactables.
     MOB_CATEGORY_INTERACTABLES,
+    //Custom.
     MOB_CATEGORY_CUSTOM,
     
+    //Total amount of mob categories.
     N_MOB_CATEGORIES,
 };
 

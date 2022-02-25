@@ -263,15 +263,15 @@ bool mob_action_loaders::arachnorb_plan_logic(mob_action_call &call) {
  */
 bool mob_action_loaders::calculate(mob_action_call &call) {
     if(call.args[2] == "+") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_SUM);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_SUM);
     } else if(call.args[2] == "-") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_SUBTRACT);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_SUBTRACT);
     } else if(call.args[2] == "*") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_MULTIPLY);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_MULTIPLY);
     } else if(call.args[2] == "/") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_DIVIDE);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_DIVIDE);
     } else if(call.args[2] == "%") {
-        call.args[2] = i2s(MOB_ACTION_SET_VAR_MODULO);
+        call.args[2] = i2s(MOB_ACTION_CALCULATE_MODULO);
     } else {
         report_enum_error(call, 2);
         return false;
@@ -737,24 +737,24 @@ void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
  */
 void mob_action_runners::calculate(mob_action_run_data &data) {
     float lhs = s2f(data.args[1]);
-    MOB_ACTION_SET_VAR_TYPES op = (MOB_ACTION_SET_VAR_TYPES) s2i(data.args[2]);
+    MOB_ACTION_CALCULATE_TYPES op = (MOB_ACTION_CALCULATE_TYPES) s2i(data.args[2]);
     float rhs = s2f(data.args[3]);
     float result = 0;
     
     switch(op) {
-    case MOB_ACTION_SET_VAR_SUM: {
+    case MOB_ACTION_CALCULATE_SUM: {
         result = lhs + rhs;
         break;
         
-    } case MOB_ACTION_SET_VAR_SUBTRACT: {
+    } case MOB_ACTION_CALCULATE_SUBTRACT: {
         result = lhs - rhs;
         break;
         
-    } case MOB_ACTION_SET_VAR_MULTIPLY: {
+    } case MOB_ACTION_CALCULATE_MULTIPLY: {
         result = lhs * rhs;
         break;
         
-    } case MOB_ACTION_SET_VAR_DIVIDE: {
+    } case MOB_ACTION_CALCULATE_DIVIDE: {
         if(rhs == 0) {
             result = 0;
         } else {
@@ -762,7 +762,7 @@ void mob_action_runners::calculate(mob_action_run_data &data) {
         }
         break;
         
-    } case MOB_ACTION_SET_VAR_MODULO: {
+    } case MOB_ACTION_CALCULATE_MODULO: {
         if(rhs == 0) {
             result = 0;
         } else {
@@ -1705,7 +1705,7 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
     float best_match_z = data.m->links[0]->z;
     MOB_ACTION_STABILIZE_Z_TYPES t =
         (MOB_ACTION_STABILIZE_Z_TYPES) s2i(data.args[0]);
-    
+        
     for(size_t l = 1; l < data.m->links.size(); ++l) {
     
         switch(t) {

@@ -17,16 +17,22 @@
 #include "mob_type.h"
 
 
+//Decoration object animations.
 enum DECORATION_ANIMATIONS {
+    //Idling.
     DECORATION_ANIM_IDLING,
+    //Bumped against.
     DECORATION_ANIM_BUMPED,
 };
 
-
+//Decoration object states.
 enum DECORATION_STATES {
+    //Idling.
     DECORATION_STATE_IDLING,
+    //Bumped against.
     DECORATION_STATE_BUMPED,
     
+    //Total amount of decoration object states.
     N_DECORATION_STATES,
 };
 
