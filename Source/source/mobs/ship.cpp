@@ -247,9 +247,9 @@ void ship::read_script_vars(const script_var_reader &svr) {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks class-specific logic.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void ship::tick_class_specifics(const float delta_t) {
     nest->tick(delta_t);

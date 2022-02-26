@@ -950,9 +950,9 @@ void pikmin_nest_struct::store_pikmin(pikmin* p_ptr) {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame of logic.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   Time to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void pikmin_nest_struct::tick(const float delta_t) {
     if(calling_leader && calling_leader->to_delete) {

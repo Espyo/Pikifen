@@ -44,8 +44,6 @@ Next tasks (roughly sorted most important first)
     Code cleanup
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
-        Document every class member with a comment
-        Standardize the comments of all "tick" functions
         Some consts are documented in the .h, others in the .cpp. In general, just clean up all consts
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Optimize constant colors, like pure whites and blacks -- we don't need to call al_map_rgb every time

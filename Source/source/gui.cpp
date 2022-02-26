@@ -904,9 +904,9 @@ bool gui_manager::was_last_input_mouse() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks all items on-screen by one frame of logic.
+ * Ticks the time of all items by one frame of logic.
  * delta_t:
- *   Amount of time to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void gui_manager::tick(const float delta_t) {
     //Tick the animation.

@@ -208,7 +208,7 @@ const float FREE_MOVE_THRESHOLD = 10.0f;
  * and Y have been set and movement logic can be skipped, and H_MOVE_FAIL if
  * movement is entirely impossible this frame.
  * delta_t:
- *   How many seconds to tick the logic by.
+ *   How long the frame's tick is, in seconds.
  * move_speed_mult:
  *   Movement speed is multiplied by this.
  * move_speed:
@@ -387,7 +387,7 @@ H_MOVE_RESULTS mob::get_wall_slide_angle(
 /* ----------------------------------------------------------------------------
  * Ticks physics logic regarding the mob's horizontal movement.
  * delta_t:
- *   How many seconds to tick the logic by.
+ *   How long the frame's tick is, in seconds.
  * attempted_move_speed:
  *   Movement speed to calculate with.
  * touched_wall:
@@ -612,7 +612,7 @@ void mob::tick_horizontal_movement_physics(
  * Ticks the mob's actual physics procedures:
  * falling because of gravity, moving forward, etc.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void mob::tick_physics(const float delta_t) {
     if(!ground_sector) {
@@ -674,7 +674,7 @@ void mob::tick_physics(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Ticks physics logic regarding the mob rotating.
  * delta_t:
- *   How many seconds to tick the logic by.
+ *   How long the frame's tick is, in seconds.
  * move_speed_mult:
  *   Movement speed is multiplied by this.
  */
@@ -726,7 +726,7 @@ void mob::tick_rotation_physics(
 /* ----------------------------------------------------------------------------
  * Ticks physics logic regarding the mob's vertical movement.
  * delta_t:
- *   How many seconds to tick the logic by.
+ *   How long the frame's tick is, in seconds.
  * pre_move_ground_z:
  *   Z of the floor before horizontal movement started.
  */
@@ -848,7 +848,7 @@ void mob::tick_vertical_movement_physics(
 /* ----------------------------------------------------------------------------
  * Ticks physics logic regarding landing on top of a walkable mob.
  * delta_t:
- *   How many seconds to tick the logic by.
+ *   How long the frame's tick is, in seconds.
  */
 void mob::tick_walkable_riding_physics(const float delta_t) {
     mob* rider_added_ev_mob = NULL;

@@ -232,7 +232,7 @@ public:
     
     void start();
     void skip_ahead_randomly();
-    bool tick(const float time, vector<size_t>* signals = NULL);
+    bool tick(const float delta_t, vector<size_t>* signals = NULL);
     sprite* get_cur_sprite() const;
 };
 

@@ -157,9 +157,9 @@ void gameplay_state::pause_menu_struct::start_closing() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks the pause menu by one frame.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void gameplay_state::pause_menu_struct::tick(const float delta_t) {
     //Tick the GUI.

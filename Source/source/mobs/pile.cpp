@@ -108,9 +108,9 @@ void pile::recharge() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks some logic specific to piles.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void pile::tick_class_specifics(const float delta_t) {
     recharge_timer.tick(delta_t);

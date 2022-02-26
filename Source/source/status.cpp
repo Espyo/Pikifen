@@ -27,9 +27,10 @@ status::status(status_type* type) :
 
 
 /* ----------------------------------------------------------------------------
- * Ticks a status effect instance's logic, but not its effects.
+ * Ticks a status effect instance's time by one frame of logic, but does not
+ * tick its effects logic.
  * delta_t:
- *   Seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void status::tick(const float delta_t) {
     if(type->auto_remove_time > 0.0f) {

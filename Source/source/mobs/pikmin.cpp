@@ -404,9 +404,9 @@ void pikmin::start_throw_trail() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks some logic specific to Pikmin.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void pikmin::tick_class_specifics(const float delta_t) {
     //Carrying object.

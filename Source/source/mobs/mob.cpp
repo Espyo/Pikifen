@@ -2925,7 +2925,7 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
 
 
 /* ----------------------------------------------------------------------------
- * Makes the mob follow a game tick.
+ * Ticks time by one frame of logic.
  * This basically calls sub-tickers.
  * Think of it this way: when you want to go somewhere,
  * you first think about rotating your body to face that
@@ -2934,7 +2934,7 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
  * send signals to the muscles, and gravity, intertia, etc.
  * take over the rest, to make you move.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void mob::tick(const float delta_t) {
     //Since the mob could be marked for deletion after any little
@@ -3006,9 +3006,9 @@ void mob::tick(const float delta_t) {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one game frame into the mob's animations.
+ * Ticks animation time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void mob::tick_animation(const float delta_t) {
     float mult = 1.0f;
@@ -3047,7 +3047,7 @@ void mob::tick_animation(const float delta_t) {
  * This is related to mob-global things, like
  * thinking about where to move next and such.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void mob::tick_brain(const float delta_t) {
     //Circling around something.
@@ -3181,7 +3181,7 @@ void mob::tick_brain(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Code specific for each class. Meant to be overwritten by the child classes.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void mob::tick_class_specifics(const float delta_t) {
 }
@@ -3190,7 +3190,7 @@ void mob::tick_class_specifics(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Performs some logic code for this game frame.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void mob::tick_misc_logic(const float delta_t) {
     if(time_alive == 0.0f) {
@@ -3429,7 +3429,7 @@ void mob::tick_misc_logic(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Checks general events in the mob's script for this frame.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void mob::tick_script(const float delta_t) {
     if(!fsm.cur_state) return;

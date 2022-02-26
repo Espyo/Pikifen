@@ -302,9 +302,9 @@ void camera_info::set_zoom(const float new_zoom) {
 const float CAMERA_SMOOTHNESS_MULT = 4.5f;
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame of camera movement.
+ * Ticks camera movement by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void camera_info::tick(const float delta_t) {
     pos.x += (target_pos.x - pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
@@ -407,13 +407,13 @@ void fade_manager::start_fade(
 
 
 /* ----------------------------------------------------------------------------
- * Ticks the fade manager by one frame.
- * time:
- *   How many seconds to tick by.
+ * Ticks time by one frame of logic.
+ * delta_t:
+ *   How long the frame's tick is, in seconds.
  */
-void fade_manager::tick(const float time) {
+void fade_manager::tick(const float delta_t) {
     if(time_left == 0) return;
-    time_left -= time;
+    time_left -= delta_t;
     if(time_left <= 0) {
         time_left = 0;
         if(on_end) on_end();
@@ -637,9 +637,9 @@ vector<string> msg_box_info::get_current_lines() const {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame of gameplay.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   Seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void msg_box_info::tick(const float delta_t) {
     if(cur_char < stopping_chars[cur_section + 1]) {
@@ -1553,7 +1553,7 @@ system_asset_list::system_asset_list():
 /* ----------------------------------------------------------------------------
  * Creates a timer.
  * duration:
- *   How long before it ticks, in seconds.
+ *   How long before it reaches the end, in seconds.
  * on_end:
  *   Code to run when time ends.
  */
@@ -1615,13 +1615,13 @@ void timer::stop() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks a timer.
- * amount:
- *   Time to tick.
+ * Ticks time by one frame of logic.
+ * delta_t:
+ *   How long the frame's tick is, in seconds.
  */
-void timer::tick(const float amount) {
+void timer::tick(const float delta_t) {
     if(time_left == 0.0f) return;
-    time_left = std::max(time_left - amount, 0.0f);
+    time_left = std::max(time_left - delta_t, 0.0f);
     if(time_left == 0.0f && on_end) {
         on_end();
     }
@@ -1696,9 +1696,9 @@ void whistle_struct::stop_whistling() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame of gameplay.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  * center:
  *   What its center is on this frame.
  * whistle_range:

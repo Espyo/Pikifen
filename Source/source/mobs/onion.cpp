@@ -158,9 +158,9 @@ void onion::spew() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks some logic specific to Onions.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void onion::tick_class_specifics(const float delta_t) {
     bool needs_to_spew = false;

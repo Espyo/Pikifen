@@ -151,10 +151,10 @@ void particle::draw() {
 
 
 /* ----------------------------------------------------------------------------
- * Makes a particle follow a game tick.
+ * Ticks a particle's time by one frame of logic.
  * Returns false if its lifespan is over and it should be deleted.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void particle::tick(const float delta_t) {
     time -= delta_t;
@@ -312,9 +312,9 @@ void particle_generator::reset() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one game frame of logic.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  * manager:
  *   The manager of all particles.
  */
@@ -520,9 +520,9 @@ void particle_manager::remove(const size_t pos) {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks all particles in the list.
+ * Ticks time of all particles in the list by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void particle_manager::tick_all(const float delta_t) {
     for(size_t c = 0; c < count;) {

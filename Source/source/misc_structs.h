@@ -149,7 +149,7 @@ struct timer {
     //How much time is left until 0.
     float time_left;
     //When the timer starts, its time is set to this.
-    float duration;  
+    float duration;
     //Code to run when the timer ends, if any.
     std::function<void()> on_end;
     
@@ -161,7 +161,7 @@ struct timer {
     void start(const bool can_restart = true);
     void start(const float new_duration);
     void stop();
-    void tick(const float amount);
+    void tick(const float delta_t);
     float get_ratio_left() const;
 };
 
@@ -268,7 +268,7 @@ private:
         ALLEGRO_BITMAP* b;
         //How many calls it has.
         size_t calls;
-
+        
         bmp_info(ALLEGRO_BITMAP* b = NULL);
     };
     //Base directory that this manager works on.
@@ -277,7 +277,7 @@ private:
     map<string, bmp_info> list;
     //Total sum of calls. Useful for debugging.
     long total_calls;
-
+    
     void detach(map<string, bmp_info>::iterator it);
     
 };
@@ -375,7 +375,7 @@ struct msg_box_info {
 struct reader_setter {
     //Node that this reader-setter pertains to.
     data_node* node;
-
+    
     void set(
         const string &child, string &var, data_node** child_node = NULL
     );
@@ -412,9 +412,9 @@ struct reader_setter {
  */
 struct sample_struct {
     //Pointer to the sample.
-    ALLEGRO_SAMPLE* sample;   
+    ALLEGRO_SAMPLE* sample;
     //Pointer to the instance.
-    ALLEGRO_SAMPLE_INSTANCE* instance; 
+    ALLEGRO_SAMPLE_INSTANCE* instance;
     
     sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
     void play(
@@ -434,7 +434,7 @@ struct sample_struct {
 struct script_var_reader {
     //Reference to the list of script variables it pertains to.
     map<string, string> &vars;
-
+    
     bool get(const string &name, string &dest) const;
     bool get(const string &name, size_t &dest) const;
     bool get(const string &name, int &dest) const;
@@ -561,7 +561,7 @@ public:
     bool is_fade_in() const;
     bool is_fading() const;
     float get_perc_left() const;
-    void tick(const float time);
+    void tick(const float delta_t);
     void draw();
     
 private:
@@ -626,7 +626,7 @@ struct bitmap_effect_info {
     ALLEGRO_COLOR tint_color;
     //Re-draws the bitmap on top, in additive blend, with this color.
     ALLEGRO_COLOR glow_color;
-
+    
     bitmap_effect_info();
 };
 
@@ -664,7 +664,7 @@ private:
         double duration;
         //Measurements took, and how long each one took.
         vector<std::pair<string, double> > measurements;
-
+        
         page();
         void write(string &s);
         
@@ -722,7 +722,7 @@ private:
     mob_type* specific_type;
     //Icon used to represent this subgroup type.
     ALLEGRO_BITMAP* icon;
-
+    
     subgroup_type() : specific_type(nullptr), icon(nullptr) { }
 };
 

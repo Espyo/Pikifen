@@ -627,9 +627,9 @@ void gameplay_state::onion_menu_struct::start_closing() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks the Onion menu by one frame.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void gameplay_state::onion_menu_struct::tick(const float delta_t) {
 

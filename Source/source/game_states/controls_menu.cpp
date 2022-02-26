@@ -290,7 +290,7 @@ void controls_menu_state::do_drawing() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame's worth of logic.
+ * Ticks time by one frame of logic.
  */
 void controls_menu_state::do_logic() {
     game.fade_mgr.tick(game.delta_t);

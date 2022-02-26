@@ -264,9 +264,9 @@ void group_task::reserve_spot(group_task::group_task_spot* spot, pikmin* who) {
 
 
 /* ----------------------------------------------------------------------------
- * Runs code specific to this class, once per frame.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void group_task::tick_class_specifics(const float delta_t) {
     if(health <= 0 && !ran_task_finished_code) {

@@ -436,14 +436,14 @@ void animation_instance::start() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks the animation with the given amount of time.
+ * Ticks the animation time by one frame of logic.
  * Returns whether or not the animation ended its final frame.
- * time:
- *   How many seconds to tick.
+ * delta_t:
+ *   How long the frame's tick is, in seconds.
  * signals:
  *   Any frame that sends a signal adds it here.
  */
-bool animation_instance::tick(const float time, vector<size_t>* signals) {
+bool animation_instance::tick(const float delta_t, vector<size_t>* signals) {
     if(!cur_anim) return false;
     size_t n_frames = cur_anim->frames.size();
     if(n_frames == 0) return false;
@@ -452,7 +452,7 @@ bool animation_instance::tick(const float time, vector<size_t>* signals) {
         return true;
     }
     
-    cur_frame_time += time;
+    cur_frame_time += delta_t;
     
     bool reached_end = false;
     

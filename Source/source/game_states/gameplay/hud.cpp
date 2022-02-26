@@ -813,9 +813,9 @@ void gameplay_state::hud_struct::start_leader_swap_juice(
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame worth of time.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How much to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void gameplay_state::hud_struct::tick(const float delta_t) {
     if(leader_swap_juice_timer > 0.0f) {

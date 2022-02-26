@@ -1528,7 +1528,7 @@ bool lines_intersect(
  * reached:
  *   Variable to return whether the point reached the target.
  * delta_t:
- *   Duration of the current tick.
+ *   How long the frame's tick is, in seconds.
  */
 void move_point(
     const point &start, const point &target,

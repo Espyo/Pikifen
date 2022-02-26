@@ -191,9 +191,9 @@ void in_world_fraction::start_fading() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame worth of time.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void in_world_fraction::tick(const float delta_t) {
     in_world_hud_item::tick(delta_t);
@@ -274,9 +274,9 @@ void in_world_health_wheel::start_fading() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame worth of time.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void in_world_health_wheel::tick(const float delta_t) {
     in_world_hud_item::tick(delta_t);
@@ -304,9 +304,9 @@ in_world_hud_item::in_world_hud_item(mob* m) :
 
 
 /* ----------------------------------------------------------------------------
- * Ticks one frame worth of time.
+ * Ticks time by one frame of logic.
  * delta_t:
- *   How many seconds to tick by.
+ *   How long the frame's tick is, in seconds.
  */
 void in_world_hud_item::tick(const float delta_t) {
     switch(transition) {
