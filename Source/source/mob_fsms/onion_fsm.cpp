@@ -57,7 +57,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
     mob* delivery = (mob*) info1;
-    onion* o_ptr = (onion*) m;
+    onion* oni_ptr = (onion*) m;
     size_t seeds = 0;
     
     switch(delivery->type->category->id) {
@@ -65,14 +65,14 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
         seeds = ((enemy*) delivery)->ene_type->pikmin_seeds;
         break;
     } case MOB_CATEGORY_PELLETS: {
-        pellet* p_ptr = (pellet*) delivery;
+        pellet* pel_ptr = (pellet*) delivery;
         if(
-            p_ptr->pel_type->pik_type ==
+            pel_ptr->pel_type->pik_type ==
             delivery->delivery_info->intended_pik_type
         ) {
-            seeds = p_ptr->pel_type->match_seeds;
+            seeds = pel_ptr->pel_type->match_seeds;
         } else {
-            seeds = p_ptr->pel_type->non_match_seeds;
+            seeds = pel_ptr->pel_type->non_match_seeds;
         }
         break;
     } default: {
@@ -81,18 +81,18 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     }
     
     size_t type_idx = 0;
-    for(; type_idx < o_ptr->oni_type->nest->pik_types.size(); ++type_idx) {
+    for(; type_idx < oni_ptr->oni_type->nest->pik_types.size(); ++type_idx) {
         if(
-            o_ptr->oni_type->nest->pik_types[type_idx] ==
+            oni_ptr->oni_type->nest->pik_types[type_idx] ==
             delivery->delivery_info->intended_pik_type
         ) {
             break;
         }
     }
     
-    o_ptr->full_spew_timer.start();
-    o_ptr->next_spew_timer.stop();
-    o_ptr->spew_queue[type_idx] += seeds;
+    oni_ptr->full_spew_timer.start();
+    oni_ptr->next_spew_timer.stop();
+    oni_ptr->spew_queue[type_idx] += seeds;
     
     particle p(
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height - 0.01,

@@ -42,7 +42,6 @@ Next tasks (roughly sorted most important first)
             Refactor it to use vectors, like the cursor trail drawing logic
     Update Dear ImGui
     Code cleanup
-        In mob FSMs, when casting a pointer to a mob and saving it in a variable, its name has three letters at the start (e.g. pik_ptr), sometimes it has one (e.g. p_ptr). It should always be three
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
         Rename

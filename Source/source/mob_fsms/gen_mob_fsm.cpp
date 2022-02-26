@@ -112,11 +112,11 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
         //covering the control point, and not necessarily if the treasure
         //is on the same coordinates as the control point.
         if(m->carry_info->intended_mob) {
-            ship* s_ptr = (ship*) m->carry_info->intended_mob;
+            ship* shi_ptr = (ship*) m->carry_info->intended_mob;
             settings.final_target_distance =
                 std::max(
                     m->radius -
-                    s_ptr->shi_type->control_point_radius,
+                    shi_ptr->shi_type->control_point_radius,
                     3.0f
                 );
         }
@@ -440,9 +440,9 @@ void gen_mob_fsm::lose_momentum(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     for(size_t p = 0; p < m->carry_info->spot_info.size(); ++p) {
-        mob* p_ptr = m->carry_info->spot_info[p].pik_ptr;
-        if(p_ptr) {
-            p_ptr->fsm.run_event(MOB_EV_FINISHED_CARRYING);
+        mob* pik_ptr = m->carry_info->spot_info[p].pik_ptr;
+        if(pik_ptr) {
+            pik_ptr->fsm.run_event(MOB_EV_FINISHED_CARRYING);
         }
     }
     

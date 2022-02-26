@@ -96,24 +96,24 @@ void drop_fsm::land(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
-    drop* d_ptr = (drop*) m;
+    drop* dro_ptr = (drop*) m;
     mob* toucher = (mob*) info1;
     bool will_drink = false;
     
-    if(d_ptr->doses_left == 0) return;
+    if(dro_ptr->doses_left == 0) return;
     
     //Check if a compatible mob touched it.
     if(
-        d_ptr->dro_type->consumer == DROP_CONSUMER_PIKMIN &&
+        dro_ptr->dro_type->consumer == DROP_CONSUMER_PIKMIN &&
         toucher->type->category->id == MOB_CATEGORY_PIKMIN
     ) {
     
         //Pikmin is about to drink it.
-        pikmin* p_ptr = (pikmin*) toucher;
+        pikmin* pik_ptr = (pikmin*) toucher;
         
-        switch(d_ptr->dro_type->effect) {
+        switch(dro_ptr->dro_type->effect) {
         case DROP_EFFECT_MATURATE: {
-            if(p_ptr->maturity < N_MATURITIES - 1) {
+            if(pik_ptr->maturity < N_MATURITIES - 1) {
                 will_drink = true;
             }
             break;
@@ -126,12 +126,12 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
         }
         
     } else if(
-        d_ptr->dro_type->consumer == DROP_CONSUMER_LEADERS &&
+        dro_ptr->dro_type->consumer == DROP_CONSUMER_LEADERS &&
         toucher->type->category->id == MOB_CATEGORY_LEADERS
     ) {
     
         //Leader is about to drink it.
-        switch(d_ptr->dro_type->effect) {
+        switch(dro_ptr->dro_type->effect) {
         case DROP_EFFECT_INCREASE_SPRAYS:
         case DROP_EFFECT_GIVE_STATUS: {
             will_drink = true;
@@ -156,7 +156,7 @@ void drop_fsm::on_touched(mob* m, void* info1, void* info2) {
     
     if(will_drink) {
         ev->run(toucher, (void*) m);
-        d_ptr->doses_left--;
+        dro_ptr->doses_left--;
     } else {
         //This mob won't drink it. Just a bump.
         if(m->fsm.cur_state->id != DROP_STATE_BUMPED) {

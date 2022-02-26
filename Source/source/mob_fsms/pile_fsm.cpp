@@ -67,21 +67,21 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
     gen_mob_fsm::be_attacked(m, info1, info2);
     
     hitbox_interaction* info = (hitbox_interaction*) info1;
-    pile* p_ptr = (pile*) m;
+    pile* pil_ptr = (pile*) m;
     
-    size_t amount_before = p_ptr->amount;
+    size_t amount_before = pil_ptr->amount;
     int intended_amount =
-        ceil(p_ptr->health / p_ptr->pil_type->health_per_resource);
-    int amount_to_spawn = p_ptr->amount - intended_amount;
+        ceil(pil_ptr->health / pil_ptr->pil_type->health_per_resource);
+    int amount_to_spawn = pil_ptr->amount - intended_amount;
     amount_to_spawn = std::max((int) 0, amount_to_spawn);
     
     if(amount_to_spawn == 0) return;
     
-    if(amount_to_spawn > 1 && !p_ptr->pil_type->can_drop_multiple) {
+    if(amount_to_spawn > 1 && !pil_ptr->pil_type->can_drop_multiple) {
         //Can't drop multiple? Let's knock that number down.
         amount_to_spawn = 1;
-        intended_amount = p_ptr->amount - 1;
-        p_ptr->health = p_ptr->pil_type->health_per_resource * intended_amount;
+        intended_amount = pil_ptr->amount - 1;
+        pil_ptr->health = pil_ptr->pil_type->health_per_resource * intended_amount;
     }
     
     resource* resource_to_pick_up = NULL;
@@ -98,17 +98,17 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
             pikmin_to_start_carrying = (pikmin*) (info->mob2);
             //If this was a Pikmin's attack, spawn the first resource nearby
             //so it can pick it up.
-            spawn_angle = get_angle(p_ptr->pos, pikmin_to_start_carrying->pos);
+            spawn_angle = get_angle(pil_ptr->pos, pikmin_to_start_carrying->pos);
             spawn_pos =
                 pikmin_to_start_carrying->pos +
                 angle_to_coordinates(
                     spawn_angle, game.config.standard_pikmin_radius * 1.5
                 );
         } else {
-            spawn_pos = p_ptr->pos;
-            spawn_z = p_ptr->height + 32.0f;
+            spawn_pos = pil_ptr->pos;
+            spawn_z = pil_ptr->height + 32.0f;
             spawn_angle = randomf(0, TAU);
-            spawn_h_speed = p_ptr->radius * 3;
+            spawn_h_speed = pil_ptr->radius * 3;
             spawn_v_speed = 600.0f;
         }
         
@@ -117,9 +117,9 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
                 (resource*)
                 create_mob(
                     game.mob_categories.get(MOB_CATEGORY_RESOURCES),
-                    spawn_pos, p_ptr->pil_type->contents,
+                    spawn_pos, pil_ptr->pil_type->contents,
                     spawn_angle, "",
-        [p_ptr] (mob * m) { ((resource*) m)->origin_pile = p_ptr; }
+        [pil_ptr] (mob * m) { ((resource*) m)->origin_pile = pil_ptr; }
                 )
             );
             
@@ -127,7 +127,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
         new_resource->speed.x = cos(spawn_angle) * spawn_h_speed;
         new_resource->speed.y = sin(spawn_angle) * spawn_h_speed;
         new_resource->speed_z = spawn_v_speed;
-        new_resource->links = p_ptr->links;
+        new_resource->links = pil_ptr->links;
         
         if(r == 0) {
             resource_to_pick_up = new_resource;
@@ -138,12 +138,12 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
         pikmin_to_start_carrying->force_carry(resource_to_pick_up);
     }
     
-    p_ptr->amount = intended_amount;
+    pil_ptr->amount = intended_amount;
     
-    if(amount_before == p_ptr->pil_type->max_amount) {
-        p_ptr->recharge_timer.start();
+    if(amount_before == pil_ptr->pil_type->max_amount) {
+        pil_ptr->recharge_timer.start();
     }
-    p_ptr->update();
+    pil_ptr->update();
 }
 
 
@@ -157,6 +157,6 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pile_fsm::become_idle(mob* m, void* info1, void* info2) {
-    pile* p_ptr = (pile*) m;
-    p_ptr->update();
+    pile* pil_ptr = (pile*) m;
+    pil_ptr->update();
 }

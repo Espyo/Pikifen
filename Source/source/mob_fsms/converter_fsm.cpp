@@ -101,16 +101,16 @@ void converter_fsm::create_fsm(mob_type* typ) {
  *   Unused.
  */
 void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
-    converter* c_ptr = (converter*) m;
+    converter* con_ptr = (converter*) m;
     
-    c_ptr->set_animation(
-        c_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+    con_ptr->set_animation(
+        con_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_IDLING, N_CONVERTER_ANIMS, con_ptr->current_type_nr
         ),
         true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
     );
-    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_IDLING;
-    c_ptr->type_change_timer.start();
+    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_IDLING;
+    con_ptr->type_change_timer.start();
 }
 
 
@@ -124,16 +124,16 @@ void converter_fsm::become_idle(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void converter_fsm::bumped(mob* m, void* info1, void* info2) {
-    converter* c_ptr = (converter*) m;
+    converter* con_ptr = (converter*) m;
     
-    c_ptr->set_animation(
-        c_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_BUMPED, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+    con_ptr->set_animation(
+        con_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_BUMPED, N_CONVERTER_ANIMS, con_ptr->current_type_nr
         )
     );
-    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_BUMPED;
-    c_ptr->type_change_timer.stop();
-    c_ptr->auto_conversion_timer.stop();
+    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_BUMPED;
+    con_ptr->type_change_timer.stop();
+    con_ptr->auto_conversion_timer.stop();
 }
 
 
@@ -192,31 +192,31 @@ void converter_fsm::handle_object_touch(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
-    converter* c_ptr = (converter*) m;
-    pikmin* p_ptr = (pikmin*) info1;
+    converter* con_ptr = (converter*) m;
+    pikmin* pik_ptr = (pikmin*) info1;
     
-    if(c_ptr->amount_in_buffer == c_ptr->con_type->buffer_size) {
+    if(con_ptr->amount_in_buffer == con_ptr->con_type->buffer_size) {
         //A Pikmin tried to sneak in in the middle of a conversion! Denied.
         return;
     }
     
-    c_ptr->amount_in_buffer++;
+    con_ptr->amount_in_buffer++;
     if(
-        c_ptr->con_type->same_type_counts_for_output ||
-        p_ptr->pik_type != c_ptr->current_type
+        con_ptr->con_type->same_type_counts_for_output ||
+        pik_ptr->pik_type != con_ptr->current_type
     ) {
-        c_ptr->input_pikmin_left--;
+        con_ptr->input_pikmin_left--;
     }
-    c_ptr->type_change_timer.stop();
-    c_ptr->auto_conversion_timer.start();
+    con_ptr->type_change_timer.stop();
+    con_ptr->auto_conversion_timer.start();
     
-    p_ptr->to_delete = true;
+    pik_ptr->to_delete = true;
     
     if(
-        c_ptr->input_pikmin_left == 0 ||
-        c_ptr->amount_in_buffer == c_ptr->con_type->buffer_size
+        con_ptr->input_pikmin_left == 0 ||
+        con_ptr->amount_in_buffer == con_ptr->con_type->buffer_size
     ) {
-        c_ptr->close();
+        con_ptr->close();
     }
     
     particle p(
@@ -245,13 +245,13 @@ void converter_fsm::handle_pikmin(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void converter_fsm::open(mob* m, void* info1, void* info2) {
-    converter* c_ptr = (converter*) m;
-    c_ptr->set_animation(
-        c_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+    converter* con_ptr = (converter*) m;
+    con_ptr->set_animation(
+        con_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, con_ptr->current_type_nr
         )
     );
-    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_OPENING;
+    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_OPENING;
 }
 
 
@@ -266,12 +266,12 @@ void converter_fsm::open(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void converter_fsm::open_or_die(mob* m, void* info1, void* info2) {
-    converter* c_ptr = (converter*) m;
+    converter* con_ptr = (converter*) m;
     
-    if(c_ptr->input_pikmin_left == 0) {
-        c_ptr->fsm.set_state(CONVERTER_STATE_DYING);
+    if(con_ptr->input_pikmin_left == 0) {
+        con_ptr->fsm.set_state(CONVERTER_STATE_DYING);
     } else {
-        c_ptr->fsm.set_state(CONVERTER_STATE_OPENING);
+        con_ptr->fsm.set_state(CONVERTER_STATE_OPENING);
     }
 }
 
@@ -287,12 +287,12 @@ void converter_fsm::open_or_die(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void converter_fsm::open_or_spit(mob* m, void* info1, void* info2) {
-    converter* c_ptr = (converter*) m;
+    converter* con_ptr = (converter*) m;
     
-    if(c_ptr->amount_in_buffer == 0) {
-        c_ptr->fsm.set_state(CONVERTER_STATE_OPENING);
+    if(con_ptr->amount_in_buffer == 0) {
+        con_ptr->fsm.set_state(CONVERTER_STATE_OPENING);
     } else {
-        c_ptr->fsm.set_state(CONVERTER_STATE_SPITTING);
+        con_ptr->fsm.set_state(CONVERTER_STATE_SPITTING);
     }
 }
 
@@ -307,15 +307,15 @@ void converter_fsm::open_or_spit(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void converter_fsm::spew(mob* m, void* info1, void* info2) {
-    converter* c_ptr = (converter*) m;
+    converter* con_ptr = (converter*) m;
     
-    c_ptr->set_animation(
-        c_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_SPITTING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+    con_ptr->set_animation(
+        con_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_SPITTING, N_CONVERTER_ANIMS, con_ptr->current_type_nr
         )
     );
-    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_SPITTING;
-    c_ptr->spew();
+    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_SPITTING;
+    con_ptr->spew();
 }
 
 
@@ -329,12 +329,12 @@ void converter_fsm::spew(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void converter_fsm::start_dying(mob* m, void* info1, void* info2) {
-    converter* c_ptr = (converter*) m;
+    converter* con_ptr = (converter*) m;
     
-    c_ptr->set_animation(
-        c_ptr->get_animation_nr_from_base_and_group(
-            CONVERTER_ANIM_DYING, N_CONVERTER_ANIMS, c_ptr->current_type_nr
+    con_ptr->set_animation(
+        con_ptr->get_animation_nr_from_base_and_group(
+            CONVERTER_ANIM_DYING, N_CONVERTER_ANIMS, con_ptr->current_type_nr
         )
     );
-    c_ptr->cur_base_anim_nr = CONVERTER_ANIM_DYING;
+    con_ptr->cur_base_anim_nr = CONVERTER_ANIM_DYING;
 }

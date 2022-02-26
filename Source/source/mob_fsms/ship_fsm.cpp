@@ -63,27 +63,27 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
     mob* delivery = (mob*) info1;
-    ship* s_ptr = (ship*) m;
+    ship* shi_ptr = (ship*) m;
     
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_TREASURES: {
-        treasure* t_ptr = (treasure*) delivery;
-        game.states.results->points_obtained += t_ptr->tre_type->points;
+        treasure* tre_ptr = (treasure*) delivery;
+        game.states.results->points_obtained += tre_ptr->tre_type->points;
         break;
         
     } case MOB_CATEGORY_RESOURCES: {
-        resource* r_ptr = (resource*) delivery;
+        resource* res_ptr = (resource*) delivery;
         if(
-            r_ptr->res_type->delivery_result ==
+            res_ptr->res_type->delivery_result ==
             RESOURCE_DELIVERY_RESULT_ADD_POINTS
         ) {
             game.states.results->points_obtained +=
-                r_ptr->res_type->point_amount;
+                res_ptr->res_type->point_amount;
         } else if(
-            r_ptr->res_type->delivery_result ==
+            res_ptr->res_type->delivery_result ==
             RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS
         ) {
-            size_t type_nr = r_ptr->res_type->spray_to_concoct;
+            size_t type_nr = res_ptr->res_type->spray_to_concoct;
             game.states.gameplay->spray_stats[type_nr].nr_ingredients++;
             if(
                 game.states.gameplay->spray_stats[type_nr].nr_ingredients >=
@@ -101,10 +101,10 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     }
     }
     
-    s_ptr->mobs_being_beamed--;
+    shi_ptr->mobs_being_beamed--;
     particle p(
-        PARTICLE_TYPE_BITMAP, s_ptr->receptacle_final_pos,
-        s_ptr->z + s_ptr->height, 24, 1.5, PARTICLE_PRIORITY_MEDIUM
+        PARTICLE_TYPE_BITMAP, shi_ptr->receptacle_final_pos,
+        shi_ptr->z + shi_ptr->height, 24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = game.sys_assets.bmp_smoke;
     particle_generator pg(0, p, 15);
@@ -145,6 +145,6 @@ void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void ship_fsm::start_delivery(mob* m, void* info1, void* info2) {
-    ship* s_ptr = (ship*) m;
-    s_ptr->mobs_being_beamed++;
+    ship* shi_ptr = (ship*) m;
+    shi_ptr->mobs_being_beamed++;
 }

@@ -94,11 +94,11 @@ void bridge_fsm::check_health(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void bridge_fsm::open(mob* m, void* info1, void* info2) {
-    bridge* b_ptr = (bridge*) m;
-    b_ptr->set_animation(BRIDGE_ANIM_DESTROYED);
-    b_ptr->start_dying();
-    b_ptr->finish_dying();
-    b_ptr->tangible = false;
+    bridge* bri_ptr = (bridge*) m;
+    bri_ptr->set_animation(BRIDGE_ANIM_DESTROYED);
+    bri_ptr->start_dying();
+    bri_ptr->finish_dying();
+    bri_ptr->tangible = false;
 }
 
 
