@@ -44,11 +44,6 @@ Next tasks (roughly sorted most important first)
     Code cleanup
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
-        Rename
-            "flail_to_whistle" is really "flail_to_leader"
-            SECTOR_STEP to STEP_HEIGHT
-            Any geometry function involving line segments should say "line_seg", not "line" or "line_segment"
-            Geometry-related functions should be sorted alphabetically, e.g. "circle_intersects_rectangle", not "rectangle_intersects_circle"
         Document every class member with a comment
         Standardize the comments of all "tick" functions
         Some consts are documented in the .h, others in the .cpp. In general, just clean up all consts

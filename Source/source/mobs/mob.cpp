@@ -2176,7 +2176,7 @@ bool mob::has_clear_line(mob* target_mob) const {
         
         if(m_ptr->rectangular_dim.x != 0.0f) {
             if(
-                line_segment_intersects_rotated_rectangle(
+                line_seg_intersects_rotated_rectangle(
                     pos, target_mob->pos,
                     m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle
                 )
@@ -2185,7 +2185,7 @@ bool mob::has_clear_line(mob* target_mob) const {
             }
         } else {
             if(
-                circle_intersects_line(
+                circle_intersects_line_seg(
                     m_ptr->pos, m_ptr->radius,
                     pos, target_mob->pos,
                     NULL, NULL
@@ -2210,7 +2210,7 @@ bool mob::has_clear_line(mob* target_mob) const {
     
     for(auto e_ptr : candidate_edges) {
         if(
-            !line_segments_intersect(
+            !line_segs_intersect(
                 pos, target_mob->pos,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
@@ -2240,7 +2240,7 @@ bool mob::has_clear_line(mob* target_mob) const {
         }
         if(
             fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
-            SECTOR_STEP
+            STEP_HEIGHT
         ) {
             //The walls are more than stepping height in difference.
             //So it's a genuine wall in the way.

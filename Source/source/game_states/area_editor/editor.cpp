@@ -2712,7 +2712,7 @@ void area_editor::set_new_circle_sector_points() {
             edge* e_ptr = game.cur_area_data.edges[e];
             
             if(
-                line_segments_intersect(
+                line_segs_intersect(
                     point(
                         e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
                     ),
@@ -3498,7 +3498,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
         if(on_edge) {
             on_edge_nr = game.cur_area_data.find_edge_nr(on_edge);
             snapped_spot =
-                get_closest_point_in_line(
+                get_closest_point_in_line_seg(
                     point(on_edge->vertexes[0]->x, on_edge->vertexes[0]->y),
                     point(on_edge->vertexes[1]->x, on_edge->vertexes[1]->y),
                     mouse_click

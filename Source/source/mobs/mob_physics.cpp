@@ -34,7 +34,7 @@ mob* mob::get_mob_to_walk_on() const {
         if(m_ptr == this) {
             continue;
         }
-        if(fabs(z - (m_ptr->z + m_ptr->height)) > SECTOR_STEP) {
+        if(fabs(z - (m_ptr->z + m_ptr->height)) > STEP_HEIGHT) {
             continue;
         }
         if(best_candidate && m_ptr->z <= best_candidate->z) {
@@ -128,7 +128,7 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
         bool is_edge_blocking = false;
         
         if(
-            !circle_intersects_line(
+            !circle_intersects_line_seg(
                 new_pos, radius_to_use,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
@@ -484,7 +484,7 @@ void mob::tick_horizontal_movement_physics(
             //encountered of all edges crossed.
             if(
                 !was_thrown &&
-                tallest_sector->z <= z + SECTOR_STEP &&
+                tallest_sector->z <= z + STEP_HEIGHT &&
                 tallest_sector->z > step_sector->z
             ) {
                 step_sector = tallest_sector;
@@ -741,7 +741,7 @@ void mob::tick_vertical_movement_physics(
         //If the current ground is one step (or less) below
         //the previous ground, just instantly go down the step.
         if(
-            pre_move_ground_z - ground_sector->z <= SECTOR_STEP &&
+            pre_move_ground_z - ground_sector->z <= STEP_HEIGHT &&
             z == pre_move_ground_z
         ) {
             z = ground_sector->z;

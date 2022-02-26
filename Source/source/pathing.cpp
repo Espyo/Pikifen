@@ -257,7 +257,7 @@ void path_manager::handle_obstacle_add(mob* m) {
             path_link* l_ptr = game.cur_area_data.path_stops[s]->links[l];
             
             if(
-                circle_intersects_line(
+                circle_intersects_line_seg(
                     m->pos, m->radius,
                     s_ptr->pos, l_ptr->end_ptr->pos
                 )
@@ -739,7 +739,7 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
         
         if(
             m_ptr->health != 0 &&
-            circle_intersects_line(
+            circle_intersects_line_seg(
                 m_ptr->pos,
                 m_ptr->radius,
                 s1->pos, s2->pos

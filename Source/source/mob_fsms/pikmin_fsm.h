@@ -47,7 +47,7 @@ void finish_drinking(          mob* m, void* info1, void* info2);
 void finish_getting_up(        mob* m, void* info1, void* info2);
 void finish_mob_landing(       mob* m, void* info1, void* info2);
 void finish_picking_up(        mob* m, void* info1, void* info2);
-void flail_to_whistle(         mob* m, void* info1, void* info2);
+void flail_to_leader(         mob* m, void* info1, void* info2);
 void forget_carriable_object(  mob* m, void* info1, void* info2);
 void forget_group_task(        mob* m, void* info1, void* info2);
 void forget_tool(              mob* m, void* info1, void* info2);

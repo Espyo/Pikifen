@@ -364,7 +364,7 @@ bool does_edge_have_wall_shadow(
         return true;
     } else {
         //Auto shadow length.
-        return (*unaffected_sector)->z > (*affected_sector)->z + SECTOR_STEP;
+        return (*unaffected_sector)->z > (*affected_sector)->z + STEP_HEIGHT;
     }
 }
 

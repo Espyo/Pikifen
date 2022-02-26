@@ -102,7 +102,7 @@ void calculate_throw(
     const float max_h, const float gravity,
     point* req_speed_xy, float* req_speed_z, float* final_h_angle
 );
-bool circle_intersects_line(
+bool circle_intersects_line_seg(
     const point &circle, const float cr,
     const point &line_p1, const point &line_p2,
     float* lix = NULL, float* liy = NULL
@@ -113,7 +113,7 @@ bool circle_intersects_rectangle(
     const float rect_angle,
     float* overlap_dist = NULL, float* rectangle_side_angle = NULL
 );
-bool collinear_lines_intersect(
+bool collinear_line_segs_intersect(
     const point &a, const point &b, const point &c, const point &d,
     point* intersection_tl = NULL, point* intersection_br = NULL
 );
@@ -125,7 +125,7 @@ float dot_product(const point &v1, const point &v2);
 float get_angle(const point &center, const point &focus);
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(const float a1, const float a2);
-point get_closest_point_in_line(
+point get_closest_point_in_line_seg(
     const point &l1, const point &l2, const point &p,
     float* segment_ratio = NULL
 );
@@ -154,18 +154,22 @@ bool is_point_in_triangle(
     bool loq
 );
 float linear_dist_to_angular(const float linear_dist, const float radius);
-bool line_segments_are_collinear(
+bool line_segs_are_collinear(
     const point &a, const point &b, const point &c, const point &d
 );
-bool line_segment_intersects_rotated_rectangle(
+bool line_seg_intersects_rectangle(
+    const point &r1, const point &r2,
+    const point &l1, const point &l2
+);
+bool line_seg_intersects_rotated_rectangle(
     const point &lp1, const point &lp2,
     const point &rect_center, const point &rect_dim, const float rect_angle
 );
-bool line_segments_intersect(
+bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     float* final_l1r, float* final_l2r
 );
-bool line_segments_intersect(
+bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     point* intersection
 );
@@ -190,10 +194,6 @@ bool points_are_collinear(
     const point &a, const point &b, const point &c
 );
 float rad_to_deg(const float deg);
-bool rectangle_intersects_line(
-    const point &r1, const point &r2,
-    const point &l1, const point &l2
-);
 bool rectangles_intersect(
     const point &tl1, const point &br1,
     const point &tl2, const point &br2

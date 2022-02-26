@@ -1222,7 +1222,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::stand_still);
         }
         efc.new_event(MOB_EV_WHISTLED); {
-            efc.run(pikmin_fsm::flail_to_whistle);
+            efc.run(pikmin_fsm::flail_to_leader);
         }
         efc.new_event(MOB_EV_LEFT_HAZARD); {
             efc.run(pikmin_fsm::left_hazard);
@@ -2497,7 +2497,7 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
  * info2:
  *   Unused.
  */
-void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
+void pikmin_fsm::flail_to_leader(mob* m, void* info1, void* info2) {
     mob* caller = (mob*) info1;
     m->chase(caller->pos, caller->z);
 }

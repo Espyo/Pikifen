@@ -468,6 +468,6 @@ const float BLOCKMAP_BLOCK_SIZE = 128;
 const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
 //Mobs can walk up sectors that are, at the most,
 //this high from the current one, as if climbing up steps.
-const float SECTOR_STEP = 50;
+const float STEP_HEIGHT = 50;
 
 #endif //ifndef SECTOR_INCLUDED

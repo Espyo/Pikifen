@@ -1081,7 +1081,7 @@ void gameplay_state::draw_throw_preview() {
         
         float r = 0.0f;
         if(
-            !line_segments_intersect(
+            !line_segs_intersect(
                 cur_leader_ptr->pos,
                 throw_dest,
                 point(e->vertexes[0]->x, e->vertexes[0]->y),

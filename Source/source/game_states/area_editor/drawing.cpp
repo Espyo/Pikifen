@@ -1228,7 +1228,7 @@ void area_editor::draw_canvas() {
             float l1r = 0;
             float l2r = 0;
             if(
-                line_segments_intersect(
+                line_segs_intersect(
                     point(
                         e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
                     ),
@@ -1392,7 +1392,7 @@ void area_editor::draw_canvas() {
         }
         
         float cursor_segment_ratio = 0;
-        get_closest_point_in_line(
+        get_closest_point_in_line_seg(
             cross_section_checkpoints[0], cross_section_checkpoints[1],
             point(game.mouse_cursor_w.x, game.mouse_cursor_w.y),
             &cursor_segment_ratio

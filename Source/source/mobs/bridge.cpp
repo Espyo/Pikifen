@@ -74,10 +74,10 @@ bool bridge::check_health() {
         if(chunks == total_chunks_needed - 1) {
             z_offset = delta_z;
         } else {
-            size_t steps_needed = ceil(fabs(delta_z) / SECTOR_STEP) + 1;
+            size_t steps_needed = ceil(fabs(delta_z) / STEP_HEIGHT) + 1;
             float cur_completion = chunks / (float) total_chunks_needed;
             size_t step_idx = cur_completion * steps_needed;
-            z_offset = step_idx * SECTOR_STEP * sign(delta_z);
+            z_offset = step_idx * STEP_HEIGHT * sign(delta_z);
         }
         
         if(z_offset == prev_chunk_z_offset) {
@@ -144,7 +144,7 @@ bool bridge::check_health() {
                     bri_type->rail_width
                 )
             );
-            left_rail_component->height += SECTOR_STEP * 2.0 + 1.0f;
+            left_rail_component->height += STEP_HEIGHT * 2.0 + 1.0f;
             new_mobs.push_back(left_rail_component);
             
             //Finally, the right rail component.
@@ -287,7 +287,7 @@ void bridge::setup() {
         total_chunks_needed =
             std::max(
                 total_chunks_needed,
-                (size_t) (ceil(fabs(delta_z) / SECTOR_STEP) + 1)
+                (size_t) (ceil(fabs(delta_z) / STEP_HEIGHT) + 1)
             );
     }
 }

@@ -493,7 +493,7 @@ bool bbox_check(
 
 
 /* ----------------------------------------------------------------------------
- * Calculates the requires horizontal and vertical speed in order to
+ * Calculates the required horizontal and vertical speed in order to
  * throw something to the specified coordinates, such that it reaches a
  * specific peak height.
  * If the calculation is impossible (like if the peak height is lower than the
@@ -590,7 +590,7 @@ void calculate_throw(
  * liy:
  *   If not NULL, the line intersection's Y coordinate is returned here.
  */
-bool circle_intersects_line(
+bool circle_intersects_line_seg(
     const point &circle, const float radius,
     const point &line_p1, const point &line_p2,
     float* lix, float* liy
@@ -747,7 +747,7 @@ bool circle_intersects_rectangle(
  *   If not NULL, and if there is an intersection, return the bottom-right
  *   corner of the intersection here.
  */
-bool collinear_lines_intersect(
+bool collinear_line_segs_intersect(
     const point &a, const point &b, const point &c, const point &d,
     point* intersection_tl, point* intersection_br
 ) {
@@ -873,7 +873,7 @@ float get_angle_smallest_dif(const float a1, const float a2) {
  *   If not NULL, the ratio from l1 to l2 is returned here.
  *   Between 0 and 1, it belongs to the line segment. If not, it doesn't.
  */
-point get_closest_point_in_line(
+point get_closest_point_in_line_seg(
     const point &l1, const point &l2, const point &p, float* segment_ratio
 ) {
 
@@ -970,15 +970,15 @@ point get_closest_point_in_rotated_rectangle(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the location of the inner point and outer point of a thick line's
- * miter joint.
+ * Given two line segments that share a point, and have some thickness, this
+ * returns the location of the inner point and outer point of their miter joint.
  * a:
- *   First point of the line.
+ *   First point of the first line segment.
  * b:
- *   Second point of the line. It is on this point that the miter takes place,
- *   meaning this is the point between a and c.
+ *   Common point of both line segments. It is on this point that the miter
+ *   takes place, meaning this is the point between a and c.
  * c:
- *   Final point of the line.
+ *   Final point of the second line segment.
  * thickness:
  *   Line thickness.
  * miter_point_1:
@@ -1162,6 +1162,70 @@ bool is_point_in_triangle(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether a line segment intersects with a rectangle.
+ * Also returns true if the line is fully inside the rectangle.
+ * r1:
+ *   Top-left corner of the rectangle.
+ * r2:
+ *   Bottom-right corner of the rectangle.
+ * l1:
+ *   Starting point of the line segment.
+ * l2:
+ *   Ending point of the line segment.
+ */
+bool line_seg_intersects_rectangle(
+    const point &r1, const point &r2,
+    const point &l1, const point &l2
+) {
+    //Line crosses left side?
+    if(
+        line_segs_intersect(
+            l1, l2, point(r1.x, r1.y), point(r1.x, r2.y), NULL, NULL
+        )
+    ) {
+        return true;
+    }
+    //Line crosses right side?
+    if(
+        line_segs_intersect(
+            l1, l2, point(r2.x, r1.y), point(r2.x, r2.y), NULL, NULL
+        )
+    ) {
+        return true;
+    }
+    //Line crosses top side?
+    if(
+        line_segs_intersect(
+            l1, l2, point(r1.x, r1.y), point(r2.x, r1.y), NULL, NULL
+        )
+    ) {
+        return true;
+    }
+    //Line crosses bottom side?
+    if(
+        line_segs_intersect(
+            l1, l2, point(r1.x, r2.y), point(r2.x, r2.y), NULL, NULL
+        )
+    ) {
+        return true;
+    }
+    
+    //Are both points inside the rectangle?
+    if(
+        (l1.x >= r1.x && l2.x >= r1.x) &&
+        (l1.x <= r2.x && l2.x <= r2.x) &&
+        (l1.y >= r1.y && l2.y >= r1.y) &&
+        (l1.y <= r2.y && l2.y <= r2.y)
+    ) {
+        return true;
+    }
+    
+    return false;
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether a line segment intersects with a rotated rectangle or not.
  * lp1:
  *   First point of the line segment.
@@ -1174,7 +1238,7 @@ bool is_point_in_triangle(
  * rect_angle:
  *   Angle of the rectangle.
  */
-bool line_segment_intersects_rotated_rectangle(
+bool line_seg_intersects_rotated_rectangle(
     const point &lp1, const point &lp2,
     const point &rect_center, const point &rect_dim, const float rect_angle
 ) {
@@ -1189,7 +1253,7 @@ bool line_segment_intersects_rotated_rectangle(
     point half_dim = rect_dim / 2.0f;
     //Right side.
     if(
-        line_segments_intersect(
+        line_segs_intersect(
             delta_p1,
             delta_p2,
             point(half_dim.x, -half_dim.y),
@@ -1202,7 +1266,7 @@ bool line_segment_intersects_rotated_rectangle(
     
     //Top side.
     if(
-        line_segments_intersect(
+        line_segs_intersect(
             delta_p1,
             delta_p2,
             point(-half_dim.x, -half_dim.y),
@@ -1215,7 +1279,7 @@ bool line_segment_intersects_rotated_rectangle(
     
     //Left side.
     if(
-        line_segments_intersect(
+        line_segs_intersect(
             delta_p1,
             delta_p2,
             point(-half_dim.x, -half_dim.y),
@@ -1228,7 +1292,7 @@ bool line_segment_intersects_rotated_rectangle(
     
     //Bottom side.
     if(
-        line_segments_intersect(
+        line_segs_intersect(
             delta_p1,
             delta_p2,
             point(-half_dim.x, half_dim.y),
@@ -1254,7 +1318,7 @@ bool line_segment_intersects_rotated_rectangle(
  * d:
  *   Ending point of the second line segment.
  */
-bool line_segments_are_collinear(
+bool line_segs_are_collinear(
     const point &a, const point &b, const point &c, const point &d
 ) {
     return
@@ -1280,7 +1344,7 @@ bool line_segments_are_collinear(
  * final_l2r:
  *   Same as final_l1r, but for line 2.
  */
-bool line_segments_intersect(
+bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     float* final_l1r, float* final_l2r
 ) {
@@ -1315,7 +1379,7 @@ bool line_segments_intersect(
  * intersection:
  *   Return the intersection point here, if not NULL.
  */
-bool line_segments_intersect(
+bool line_segs_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     point* intersection
 ) {
@@ -1324,7 +1388,7 @@ bool line_segments_intersect(
         intersection->x = 0.0f;
         intersection->y = 0.0f;
     }
-    if(!line_segments_intersect(l1p1, l1p2, l2p1, l2p2, &r, NULL)) return false;
+    if(!line_segs_intersect(l1p1, l1p2, l2p1, l2p2, &r, NULL)) return false;
     if(intersection) {
         intersection->x = l1p1.x + (l1p2.x - l1p1.x) * r;
         intersection->y = l1p1.y + (l1p2.y - l1p1.y) * r;
@@ -1349,13 +1413,13 @@ float linear_dist_to_angular(const float linear_dist, const float radius) {
  * Returns whether two lines (not line segments) intersect, and returns
  * information about where it happens.
  * l1p1:
- *   Starting point of the first line segment.
+ *   Point 1 of the first line.
  * l1p2:
- *   Ending point of the first line segment.
+ *   Point 2 of the first line.
  * l2p1:
- *   Starting point of the second line segment.
+ *   Point 1 of the second line.
  * l2p2:
- *   Ending point of the second line segment.
+ *   Point 2 of the second line.
  * final_l1r:
  *   If not NULL and they intersect, returns the distance from
  *   the start of line 1 in which the intersection happens.
@@ -1411,13 +1475,13 @@ bool lines_intersect(
  * Returns whether two lines (not line segments) intersect, and returns
  * information about where it happens.
  * l1p1:
- *   Starting point of the first line segment.
+ *   Point 1 of the first line.
  * l1p2:
- *   Ending point of the first line segment.
+ *   Point 2 of the first line.
  * l2p1:
- *   Starting point of the second line segment.
+ *   Point 1 of the second line.
  * l2p2:
- *   Ending point of the second line segment.
+ *   Point 2 of the second line.
  * final_point:
  *   If not NULL and they intersect,
  *   returns the coordinates of where it happens.
@@ -1546,70 +1610,6 @@ bool points_are_collinear(
  */
 float rad_to_deg(const float rad) {
     return (180.0f / M_PI) * rad;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a rectangle intersects with a line segment.
- * Also returns true if the line is fully inside the rectangle.
- * r1:
- *   Top-left corner of the rectangle.
- * r2:
- *   Bottom-right corner of the rectangle.
- * l1:
- *   Starting point of the line segment.
- * l2:
- *   Ending point of the line segment.
- */
-bool rectangle_intersects_line(
-    const point &r1, const point &r2,
-    const point &l1, const point &l2
-) {
-    //Line crosses left side?
-    if(
-        line_segments_intersect(
-            l1, l2, point(r1.x, r1.y), point(r1.x, r2.y), NULL, NULL
-        )
-    ) {
-        return true;
-    }
-    //Line crosses right side?
-    if(
-        line_segments_intersect(
-            l1, l2, point(r2.x, r1.y), point(r2.x, r2.y), NULL, NULL
-        )
-    ) {
-        return true;
-    }
-    //Line crosses top side?
-    if(
-        line_segments_intersect(
-            l1, l2, point(r1.x, r1.y), point(r2.x, r1.y), NULL, NULL
-        )
-    ) {
-        return true;
-    }
-    //Line crosses bottom side?
-    if(
-        line_segments_intersect(
-            l1, l2, point(r1.x, r2.y), point(r2.x, r2.y), NULL, NULL
-        )
-    ) {
-        return true;
-    }
-    
-    //Are both points inside the rectangle?
-    if(
-        (l1.x >= r1.x && l2.x >= r1.x) &&
-        (l1.x <= r2.x && l2.x <= r2.x) &&
-        (l1.y >= r1.y && l2.y >= r1.y) &&
-        (l1.y <= r2.y && l2.y <= r2.y)
-    ) {
-        return true;
-    }
-    
-    return false;
-    
 }
 
 

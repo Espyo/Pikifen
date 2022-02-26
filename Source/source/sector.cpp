@@ -768,7 +768,7 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
                 
                 //Check if the edge is inside this blockmap.
                 if(
-                    rectangle_intersects_line(
+                    line_seg_intersects_rectangle(
                         corner,
                         corner + BLOCKMAP_BLOCK_SIZE,
                         point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
@@ -1464,7 +1464,7 @@ void polygon::cut(vector<polygon>* inners) {
             ) {
                 float r;
                 if(
-                    line_segments_intersect(
+                    line_segs_intersect(
                         point(v1->x, v1->y), point(v2->x, v2->y),
                         point(start->x, start->y),
                         point(rightmost->x, start->y),

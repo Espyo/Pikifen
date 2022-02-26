@@ -170,10 +170,10 @@ void area_editor::check_drawing_line(const point &pos) {
         point ep2(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
         
         if(
-            line_segments_are_collinear(prev_node->snapped_spot, pos, ep1, ep2)
+            line_segs_are_collinear(prev_node->snapped_spot, pos, ep1, ep2)
         ) {
             if(
-                collinear_lines_intersect(
+                collinear_line_segs_intersect(
                     prev_node->snapped_spot, pos, ep1, ep2
                 )
             ) {
@@ -212,7 +212,7 @@ void area_editor::check_drawing_line(const point &pos) {
         }
         
         if(
-            line_segments_intersect(
+            line_segs_intersect(
                 prev_node->snapped_spot, pos,
                 point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                 point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
@@ -231,7 +231,7 @@ void area_editor::check_drawing_line(const point &pos) {
             layout_drawing_node* n2_ptr = &drawing_nodes[n + 1];
             point intersection;
             if(
-                line_segments_intersect(
+                line_segs_intersect(
                     prev_node->snapped_spot, pos,
                     n1_ptr->snapped_spot, n2_ptr->snapped_spot,
                     &intersection
@@ -249,7 +249,7 @@ void area_editor::check_drawing_line(const point &pos) {
         }
         
         if(
-            circle_intersects_line(
+            circle_intersects_line_seg(
                 pos, 8.0 / game.cam.zoom,
                 prev_node->snapped_spot,
                 drawing_nodes[drawing_nodes.size() - 2].snapped_spot
@@ -439,7 +439,7 @@ void area_editor::find_problems() {
     if(!intersections.empty()) {
         float r;
         edge_intersection* ei_ptr = &(*intersections.begin());
-        line_segments_intersect(
+        line_segs_intersect(
             point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
             point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y),
             point(ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y),
@@ -599,7 +599,7 @@ void area_editor::find_problems() {
             if(!e_ptr->is_valid()) continue;
             
             if(
-                circle_intersects_line(
+                circle_intersects_line_seg(
                     m_ptr->pos,
                     m_ptr->type->radius,
                     point(
@@ -699,7 +699,7 @@ void area_editor::find_problems() {
                 
             for(size_t s = 1; s < path.size(); ++s) {
                 if(
-                    circle_intersects_line(
+                    circle_intersects_line_seg(
                         m_ptr->links[l]->pos,
                         get_mob_gen_radius(m_ptr->links[l]),
                         path[s - 1]->pos,
@@ -775,7 +775,7 @@ void area_editor::find_problems() {
                 if(link_end_ptr == s_ptr) continue;
                 
                 if(
-                    circle_intersects_line(
+                    circle_intersects_line_seg(
                         s_ptr->pos, PATH_STOP_RADIUS,
                         link_start_ptr->pos, link_end_ptr->pos
                     )
@@ -1101,13 +1101,13 @@ edge* area_editor::get_correct_post_split_edge(
 ) const {
     float score1 = 0;
     float score2 = 0;
-    get_closest_point_in_line(
+    get_closest_point_in_line_seg(
         point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
         point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
         point(v_ptr->x, v_ptr->y),
         &score1
     );
-    get_closest_point_in_line(
+    get_closest_point_in_line_seg(
         point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
         point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
         point(v_ptr->x, v_ptr->y),
@@ -1190,7 +1190,7 @@ edge* area_editor::get_edge_under_point(const point &p, edge* after) const {
         if(!e_ptr->is_valid()) continue;
         
         if(
-            circle_intersects_line(
+            circle_intersects_line_seg(
                 p, 8 / game.cam.zoom,
                 point(
                     e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
@@ -1220,7 +1220,7 @@ vector<edge_intersection> area_editor::get_intersecting_edges() const {
             edge* e2_ptr = game.cur_area_data.edges[e2];
             if(e1_ptr->has_neighbor(e2_ptr)) continue;
             if(
-                line_segments_intersect(
+                line_segs_intersect(
                     point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
                     point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
                     point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
@@ -1269,7 +1269,7 @@ bool area_editor::get_mob_link_under_point(
         for(size_t l = 0; l < m_ptr->links.size(); ++l) {
             mob_gen* m2_ptr = m_ptr->links[l];
             if(
-                circle_intersects_line(
+                circle_intersects_line_seg(
                     p, 8 / game.cam.zoom, m_ptr->pos, m2_ptr->pos
                 )
             ) {
@@ -1331,7 +1331,7 @@ bool area_editor::get_path_link_under_point(
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
             path_stop* s2_ptr = s_ptr->links[l]->end_ptr;
             if(
-                circle_intersects_line(
+                circle_intersects_line_seg(
                     p, 8 / game.cam.zoom, s_ptr->pos, s2_ptr->pos
                 )
             ) {
@@ -1857,7 +1857,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
             }
             
             point edge_p =
-                get_closest_point_in_line(
+                get_closest_point_in_line_seg(
                     point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                     point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
                     p, &r
@@ -1907,7 +1907,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
  */
 vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
     point new_v_pos =
-        get_closest_point_in_line(
+        get_closest_point_in_line_seg(
             point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
             point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
             where
@@ -1958,7 +1958,7 @@ path_stop* area_editor::split_path_link(
 ) {
     bool normal_link = (l2 != NULL);
     point new_stop_pos =
-        get_closest_point_in_line(
+        get_closest_point_in_line_seg(
             l1->start_ptr->pos, l1->end_ptr->pos,
             where
         );
