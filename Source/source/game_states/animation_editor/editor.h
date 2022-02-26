@@ -17,6 +17,9 @@
 #include "../../imgui/imgui_impl_allegro5.h"
 
 
+/* ----------------------------------------------------------------------------
+ * Information about the animation editor.
+ */
 class animation_editor : public editor {
 public:
 

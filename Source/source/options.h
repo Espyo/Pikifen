@@ -40,6 +40,9 @@ enum AUTO_THROW_MODES {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Game options.
+ */
 struct options_struct {
 
     static const float DEF_AREA_EDITOR_BACKUP_INTERVAL;

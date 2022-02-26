@@ -345,6 +345,9 @@ enum MOB_ACTION_PARAM_TYPE {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Information about a parameter that a mob action can receive.
+ */
 struct mob_action_param {
     //Name of the parameter.
     string name;
@@ -364,6 +367,9 @@ struct mob_action_param {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Information about how to run a specific instance of a mob action.
+ */
 struct mob_action_run_data {
     mob* m;
     mob_action_call* call;
@@ -379,6 +385,9 @@ typedef void (mob_action_code)(mob_action_run_data &data);
 typedef bool (mob_action_load_code)(mob_action_call &call);
 
 
+/* ----------------------------------------------------------------------------
+ * Information about a mob action.
+ */
 struct mob_action {
     MOB_ACTION_TYPES type;
     string name;
@@ -390,6 +399,10 @@ struct mob_action {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Information about how a specific call to a mob action got declared
+ * in the FSM.
+ */
 struct mob_action_call {
     mob_action* action;
     custom_action_code code;

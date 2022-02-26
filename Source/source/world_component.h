@@ -18,6 +18,7 @@ struct sector;
 class mob;
 struct particle;
 
+
 /* ----------------------------------------------------------------------------
  * Something that makes up the interactable game world and can be drawn.
  * This contains information about how it should be drawn.

@@ -11,7 +11,7 @@
 #ifndef CODE_DEBUG_INCLUDED
 #define CODE_DEBUG_INCLUDED
 
-/*
+/* ----------------------------------------------------------------------------
  * Memory allocation and memory leak debug.
  * To activate:
  *   1. Define CODE_DEBUG_NEW.

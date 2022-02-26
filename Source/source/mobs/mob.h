@@ -44,6 +44,7 @@ const float MOB_KNOCKBACK_H_POWER = 64.0f;
 const float MOB_KNOCKBACK_V_POWER = 800.0f;
 const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 
+
 /* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",
  * or whatever tickles your fancy, is any instance of
@@ -433,7 +434,8 @@ protected:
 };
 
 
-/* See mob_type_with_anim_groups.
+/* ----------------------------------------------------------------------------
+ * See mob_type_with_anim_groups.
  */
 class mob_with_anim_groups {
 public:

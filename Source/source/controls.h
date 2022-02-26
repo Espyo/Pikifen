@@ -162,6 +162,9 @@ struct control_info {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Information about an action obtained from an Allegro event.
+ */
 struct action_from_event {
     BUTTONS button;
     float pos;

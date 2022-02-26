@@ -25,6 +25,9 @@ using std::size_t;
 using std::vector;
 
 
+/* ----------------------------------------------------------------------------
+ * Information about the main menu.
+ */
 class main_menu_state : public game_state {
 public:
     main_menu_state();
@@ -66,6 +69,9 @@ private:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Information about the options menu.
+ */
 class options_menu_state : public game_state {
 public:
     options_menu_state();
@@ -106,6 +112,9 @@ private:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Information about the controls menu.
+ */
 class controls_menu_state : public game_state {
 public:
     controls_menu_state();
@@ -139,6 +148,9 @@ private:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Information about the area selection menu.
+ */
 class area_menu_state : public game_state {
 public:
     area_menu_state();

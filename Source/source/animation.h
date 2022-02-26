@@ -28,6 +28,7 @@ using std::vector;
 
 class animation_database;
 
+
 /* ----------------------------------------------------------------------------
  * Animations work as follows:
  * An animation is a set of frames.

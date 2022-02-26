@@ -283,7 +283,8 @@ public:
 };
 
 
-/* A mob type that has animation groups.
+/* ----------------------------------------------------------------------------
+ * A mob type that has animation groups.
  * These have a series of "base" animations, like idling, dying, etc.,
  * but can also have several looks for these same base animations.
  * So in practice, it can have an idling blue animation, idling yellow,

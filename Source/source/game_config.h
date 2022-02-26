@@ -25,6 +25,9 @@ using std::size_t;
 using std::vector;
 
 
+/* ----------------------------------------------------------------------------
+ * The game's configuration. It controls some rules about the game.
+ */
 struct game_config {
 
     static const bool DEF_CAN_THROW_LEADERS;

@@ -217,6 +217,9 @@ enum MOB_EV_TYPES {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Actions to run on an event, inside a FSM.
+ */
 class mob_event {
 public:
     MOB_EV_TYPES type;
@@ -231,6 +234,10 @@ public:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * A mob's state in its FSM. A mob can only be in one state at any given
+ * time. Multiple mobs can share these states.
+ */
 class mob_state {
 public:
     string name;
@@ -244,6 +251,11 @@ public:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * A mob's instance of a finite state machine. It contains information about
+ * what state it is in, and so on, but does not contain the list of states,
+ * events, and actions.
+ */
 class mob_fsm {
 public:
     mob* m;
@@ -300,6 +312,9 @@ private:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Information about how two hitboxes interacted.
+ */
 struct hitbox_interaction {
     mob* mob2;  //Mob that touched our mob.
     hitbox* h1; //Hitbox of our mob that got touched.

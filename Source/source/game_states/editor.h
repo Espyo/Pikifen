@@ -23,9 +23,9 @@ using std::string;
 using std::vector;
 
 
-/*
- * A generic class for an editor.
- * It comes with some common stuff, mostly GUI stuff.
+/* ----------------------------------------------------------------------------
+ * Information about an editor. This contains data and functions common
+ * to all editors in Pikifen.
  */
 class editor : public game_state {
 public:
@@ -225,6 +225,7 @@ protected:
         void process();
     };
     
+    //An item of a picker dialog.
     struct picker_item {
         //Its name.
         string name;

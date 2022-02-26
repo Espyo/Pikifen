@@ -23,6 +23,9 @@ using std::size_t;
 using std::string;
 
 
+/* ----------------------------------------------------------------------------
+ * Information about the area editor.
+ */
 class area_editor : public editor {
 public:
     //Load this area when the area editor loads.
@@ -83,7 +86,7 @@ private:
         void destroy();
     };
     
-    //This struct represents the selected sectors, mobs, etc.
+    //Represents the selected sectors, mobs, etc.
     struct selection_representation {
         //How many sectors, mobs, etc. are currently selected.
         size_t nr_selections;
@@ -94,6 +97,7 @@ private:
         void* representative;
     };
     
+    //Represents a point in the current layout drawing.
     struct layout_drawing_node {
         //Raw coordinates of the mouse click.
         point raw_spot;

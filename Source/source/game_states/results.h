@@ -15,6 +15,9 @@
 #include "../gui.h"
 
 
+/* ----------------------------------------------------------------------------
+ * Information about the area results menu.
+ */
 class results_state : public game_state {
 public:
     //Can the player choose to continue playing?
