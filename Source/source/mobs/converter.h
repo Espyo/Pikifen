@@ -52,7 +52,7 @@ public:
     
 protected:
     //Tick class-specific logic.
-    virtual void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t);
 };
 
 

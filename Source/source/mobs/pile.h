@@ -46,11 +46,11 @@ public:
         ALLEGRO_COLOR* fraction_color
     ) const;
     //Read script variables from the area data.
-    virtual void read_script_vars(const script_var_reader &svr);
+    void read_script_vars(const script_var_reader &svr);
     
 protected:
     //Tick class-specific logic.
-    virtual void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t);
 };
 
 

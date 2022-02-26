@@ -31,7 +31,7 @@ public:
     pellet(const point &pos, pellet_type* type, const float angle);
     
     //Mob drawing routine.
-    virtual void draw_mob();
+    void draw_mob();
 };
 
 

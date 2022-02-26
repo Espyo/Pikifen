@@ -74,21 +74,21 @@ public:
     pikmin(const point &pos, pikmin_type* type, const float angle);
     
     //Can the mob currently receive the specified status effect?
-    virtual bool can_receive_status(status_type* s) const;
+    bool can_receive_status(status_type* s) const;
     //Mob drawing routine.
-    virtual void draw_mob();
+    void draw_mob();
     //Get the base movement speed.
-    virtual float get_base_speed() const;
+    float get_base_speed() const;
     //Return the coords and distance of its spot in the group.
-    virtual void get_group_spot_info(
+    void get_group_spot_info(
         point* final_spot, float* final_dist
     ) const;
     //Handler for a status effect being applied.
-    virtual void handle_status_effect_gain(status_type* s);
+    void handle_status_effect_gain(status_type* s);
     //Handler for a status effect being removed.
-    virtual void handle_status_effect_loss(status_type* s);
+    void handle_status_effect_loss(status_type* s);
     //Read script variables from the area data.
-    virtual void read_script_vars(const script_var_reader &svr);
+    void read_script_vars(const script_var_reader &svr);
     
     static const float CIRCLE_OPPONENT_CHANCE_GROUNDED;
     static const float CIRCLE_OPPONENT_CHANCE_PRE_LATCH;
@@ -97,7 +97,7 @@ public:
     
 protected:
     //Tick class-specific logic.
-    virtual void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t);
 };
 
 

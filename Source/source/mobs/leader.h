@@ -101,13 +101,13 @@ public:
     leader(const point &pos, leader_type* type, const float angle);
     
     //Can the mob currently receive the specified status effect?
-    virtual bool can_receive_status(status_type* s) const;
+    bool can_receive_status(status_type* s) const;
     //Return the coords and distance of its spot in the group.
-    virtual void get_group_spot_info(
+    void get_group_spot_info(
         point* final_spot, float* final_dist
     ) const;
     //Mob drawing routine.
-    virtual void draw_mob();
+    void draw_mob();
     
     static const float AUTO_THROW_COOLDOWN_MAX_DURATION;
     static const float AUTO_THROW_COOLDOWN_MIN_DURATION;
@@ -117,7 +117,7 @@ public:
     
 protected:
     //Tick class-specific logic.
-    virtual void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t);
     
 private:
     //Returns how many rows are needed for all members' dismissal.

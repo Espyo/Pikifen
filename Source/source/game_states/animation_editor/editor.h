@@ -37,7 +37,7 @@ public:
     void draw_canvas();
     void load();
     void unload();
-    virtual string get_name() const;
+    string get_name() const;
     
     animation_editor();
     

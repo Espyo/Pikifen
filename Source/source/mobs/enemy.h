@@ -32,15 +32,15 @@ public:
     enemy(const point &pos, enemy_type* type, const float angle);
     
     //Can the mob currently receive the specified status effect?
-    virtual bool can_receive_status(status_type* s) const;
+    bool can_receive_status(status_type* s) const;
     //Mob drawing routine.
-    virtual void draw_mob();
+    void draw_mob();
     //Death finish class-specific logic.
-    virtual void finish_dying_class_specifics();
+    void finish_dying_class_specifics();
     //Read script variables from the area data.
-    virtual void read_script_vars(const script_var_reader &svr);
+    void read_script_vars(const script_var_reader &svr);
     //Death start class-specific logic.
-    virtual void start_dying_class_specifics();
+    void start_dying_class_specifics();
 };
 
 

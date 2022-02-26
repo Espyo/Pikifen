@@ -46,7 +46,6 @@ Next tasks (roughly sorted most important first)
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
         Some consts are documented in the .h, others in the .cpp. In general, just clean up all consts
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
-        Don't mark functions as virtual if they don't need to be (e.g. they're already overwriting the parent class's function)
         Memory leaks, cppcheck, etc.
     Demo content
         Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"

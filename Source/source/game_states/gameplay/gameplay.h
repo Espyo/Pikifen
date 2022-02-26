@@ -191,13 +191,13 @@ public:
     void change_spray_count(const size_t type_nr, signed int amount);
     void update_closest_group_member();
     
-    virtual void load();
-    virtual void unload();
-    virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
-    virtual void do_logic();
-    virtual void do_drawing();
-    virtual void update_transformations();
-    virtual string get_name() const;
+    void load();
+    void unload();
+    void handle_allegro_event(ALLEGRO_EVENT &ev);
+    void do_logic();
+    void do_drawing();
+    void update_transformations();
+    string get_name() const;
     
 private:
 

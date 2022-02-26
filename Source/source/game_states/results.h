@@ -44,12 +44,12 @@ public:
     float time_taken;
     
     results_state();
-    virtual void load();
-    virtual void unload();
-    virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
-    virtual void do_logic();
-    virtual void do_drawing();
-    virtual string get_name() const;
+    void load();
+    void unload();
+    void handle_allegro_event(ALLEGRO_EVENT &ev);
+    void do_logic();
+    void do_drawing();
+    string get_name() const;
     void reset();
     
 private:

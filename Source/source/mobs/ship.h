@@ -65,11 +65,11 @@ public:
     ~ship();
     
     //Mob drawing routine.
-    virtual void draw_mob();
+    void draw_mob();
     //Read script variables from the area data.
-    virtual void read_script_vars(const script_var_reader &svr);
+    void read_script_vars(const script_var_reader &svr);
     //Tick class-specific logic.
-    virtual void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t);
 };
 
 
