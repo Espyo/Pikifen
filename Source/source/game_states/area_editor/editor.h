@@ -80,8 +80,11 @@ public:
 private:
 
     struct texture_suggestion {
+        //Bitmap of the texture.
         ALLEGRO_BITMAP* bmp;
+        //File name of the texture.
         string name;
+        
         texture_suggestion(const string &n);
         void destroy();
     };
@@ -489,10 +492,11 @@ private:
     string undo_save_lock_operation;
     //During this timer, don't save state for operations matching the last one.
     timer undo_save_lock_timer;
-    
-    //Position of some important widgets.
+    //Position of the load widget.
     point load_widget_pos;
+    //Position of the reload widget.
     point reload_widget_pos;
+    //Position of the quit widget.
     point quit_widget_pos;
     
     

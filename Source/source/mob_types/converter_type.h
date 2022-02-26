@@ -69,14 +69,21 @@ enum CONVERTER_STATES {
  */
 class converter_type : public mob_type, public mob_type_with_anim_groups {
 public:
+    //List of Pikmin types it can convert to.
     vector<pikmin_type*> available_pikmin_types;
+    //How often it changes the current conversion type.
     float type_change_interval;
+    //How many Pikmin it can input before it dies.
     size_t total_input_pikmin;
+    //How many Pikmin it outputs per input.
     size_t pikmin_per_conversion;
+    //How many Pikmin it can store in the buffer until it's forced to convert.
     size_t buffer_size;
+    //If fed an input type that matches the output, should that count for
+    //the output limit?
     bool same_type_counts_for_output;
+    //Time left until it converts what is in the buffer.
     float auto_conversion_timeout;
-    size_t max_pikmin_spawn_requirement;
     
     converter_type();
     void load_properties(data_node* file);

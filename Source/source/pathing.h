@@ -157,7 +157,9 @@ struct path_link {
  * a different route.
  */
 struct path_manager {
+    //Known obstructions.
     map<path_link*, unordered_set<mob*> > obstructions;
+    //Stops known to have hazards.
     unordered_set<path_stop*> hazardous_stops;
     
     void handle_area_load();

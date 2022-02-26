@@ -43,8 +43,6 @@ public:
     
 private:
 
-private:
-
     //Editor states.
     enum EDITOR_STATES {
         //Main menu.
@@ -150,9 +148,11 @@ private:
     //Keep the aspect ratio when resizing the Pikmin top?
     bool top_keep_aspect_ratio;
     
-    //Position of some important widgets.
+    //Position of the load widget.
     point load_widget_pos;
+    //Position of the reload widget.
     point reload_widget_pos;
+    //Position of the quit widget.
     point quit_widget_pos;
     
     

@@ -64,6 +64,7 @@ class animation_database;
  */
 class sprite {
 public:
+    //Name of the sprite.
     string name;
     //Parent bitmap, normally a spritesheet.
     ALLEGRO_BITMAP* parent_bmp;
@@ -123,11 +124,16 @@ public:
  */
 class frame {
 public:
+    //Name of the sprite to use in this frame.
     string sprite_name;
-    size_t sprite_index;  //Cache for performance.
-    sprite* sprite_ptr;   //Cache for performance.
-    float duration;    //How long this frame lasts for, in seconds.
-    size_t signal;     //Signal to send, if any. INVALID = none.
+    //Index of the sprite. Cache for performance.
+    size_t sprite_index;
+    //Pointer to the sprite. Cache for performance.
+    sprite* sprite_ptr;
+    //How long this frame lasts for, in seconds.
+    float duration;
+    //Signal to send, if any. INVALID = none.
+    size_t signal;
     
     frame(
         const string &sn = "", const size_t si = INVALID,
@@ -141,6 +147,7 @@ public:
  */
 class animation {
 public:
+    //Name of the animation.
     string name;
     //List of frames.
     vector<frame> frames;
@@ -172,10 +179,12 @@ public:
  */
 class animation_database {
 public:
+    //List of known animations.
     vector<animation*> animations;
+    //List of known sprites.
     vector<sprite*> sprites;
+    //List of known body parts.
     vector<body_part*> body_parts;
-    
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
     //Maximum span of the hitboxes. Cache for performance.
@@ -208,9 +217,13 @@ public:
  */
 class animation_instance {
 public:
-    animation* cur_anim;         //The current animation.
-    animation_database* anim_db; //The database this belongs to.
-    float cur_frame_time;        //Time passed on the current frame.
+    //The animation currently running.
+    animation* cur_anim;
+    //The database this belongs to.
+    animation_database* anim_db;
+    //Time passed on the current frame.
+    float cur_frame_time;
+    //Index of the current frame of animation.
     size_t cur_frame_index;
     
     animation_instance(animation_database* anim_db = NULL);
@@ -228,7 +241,9 @@ public:
  * An animation_database and an animation_instance.
  */
 struct single_animation_suite {
+    //Animation database.
     animation_database database;
+    //Animation instance.
     animation_instance instance;
 };
 

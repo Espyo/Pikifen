@@ -61,13 +61,21 @@ enum RESOURCE_STATES {
  */
 class resource_type : public mob_type {
 public:
+    //Should it vanish when the Pikmin carrying it drops it?
     bool vanish_on_drop;
+    //Should it return to the pile it came from when it vanishes?
     bool return_to_pile_on_vanish;
+    //How long before it vanishes, after being dropped.
     float vanish_delay;
+    //Carry destination.
     CARRY_DESTINATIONS carrying_destination;
+    //Result when successfully delivered.
     RESOURCE_DELIVERY_RESULTS delivery_result;
+    //If it damages the mob it was carried to, this is the damage amount.
     float damage_mob_amount;
+    //If it concocts a spray when delivered, this is the spray type index.
     size_t spray_to_concoct;
+    //If it adds points when delivered, this is the amount.
     float point_amount;
     
     resource_type();

@@ -28,6 +28,7 @@ using std::vector;
  */
 class spray_type {
 public:
+    //Name of the spray type.
     string name;
     //What the spray does.
     vector<status_type*> effects;
@@ -43,16 +44,14 @@ public:
     float distance_range;
     //If applied outside of the group, this is the angle range.
     float angle_range;
-    
+    //Main color that represents this spray.
     ALLEGRO_COLOR main_color;
     //Bitmap for the spray count.
     ALLEGRO_BITMAP* bmp_spray;
-    
     //How many ingredients are needed in order to concot a new spray.
     //0 means there are no ingredients for this spray type.
     size_t ingredients_needed;
-    
-    //Extra effects.
+    //Does it bury Pikmin?
     bool buries_pikmin;
     
     spray_type();

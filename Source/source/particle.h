@@ -152,8 +152,11 @@ private:
     //When a particle is added, if the entire list is filled with live ones,
     //delete the one on position 0 (presumably the oldest).
     particle* particles;
+    //How many particles are alive.
     size_t count;
+    //Maximum number that can be stored.
     size_t max_nr;
+
     void remove(const size_t pos);
     
 };
@@ -182,17 +185,27 @@ public:
     //Follow the given angle. e.g. a mob's angle.
     float* follow_angle;
     
-    //Maximum random deviations of...
+    //Maximum random deviation of amount.
     size_t number_deviation;
+    //Maximum random deviation of duration.
     float duration_deviation;
+    //Maximum random deviation of friction.
     float friction_deviation;
+    //Maximum random deviation of gravity.
     float gravity_deviation;
+    //Maximum random deviation of size.
     float size_deviation;
+    //Maximum random deviation of position.
     point pos_deviation;
+    //Maximum random deviation of speed.
     point speed_deviation;
+    //Angle they move at.
     float angle;
+    //Maximum random deviation of angle.
     float angle_deviation;
+    //Total speed they move at.
     float total_speed;
+    //Maximum random deviation of total speed.
     float total_speed_deviation;
     
     particle_generator(
@@ -204,6 +217,7 @@ public:
     void reset();
     
 private:
+    //Time left before the next emission.
     float emission_timer;
     
 };

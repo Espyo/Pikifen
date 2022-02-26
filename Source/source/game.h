@@ -37,13 +37,21 @@ const size_t FRAMERATE_HISTORY_SIZE = 300;
  * List of all game states.
  */
 struct game_state_list {
+    //Animation editor.
     animation_editor* animation_ed;
+    //Area editor.
     area_editor* area_ed;
+    //Area selection menu.
     area_menu_state* area_menu;
+    //Controls menu.
     controls_menu_state* controls_menu;
+    //Gameplay state.
     gameplay_state* gameplay;
+    //Main menu.
     main_menu_state* main_menu;
+    //Options menu.
     options_menu_state* options_menu;
+    //Area results menu.
     results_state* results;
     
     void init();
@@ -58,7 +66,6 @@ struct game_state_list {
  */
 class game_class {
 public:
-
     //List of asset file names.
     asset_file_names_struct asset_file_names;
     //Manager of all main bitmaps (not floor textures).

@@ -140,14 +140,18 @@ const float LEADER_INVULN_PERIOD = 1.5f;
  */
 class leader_type : public mob_type {
 public:
+    //How far its whistle reaches from the center point.
     float whistle_range;
+    //How high it can reach when thrown.
     float max_throw_height;
-    
+    //Sound effect for when it whistles.
     sample_struct sfx_whistle;
+    //Sound effect for when it dismisses.
     sample_struct sfx_dismiss;
+    //Sound effect for when it is swapped to.
     sample_struct sfx_name_call;
-    
-    ALLEGRO_BITMAP* bmp_icon; //Standby icon.
+    //Standby icon.
+    ALLEGRO_BITMAP* bmp_icon;
     
     leader_type();
     void load_properties(data_node* file);

@@ -75,7 +75,11 @@ enum SECTOR_TYPES {
  * edges as red on the editor.
  */
 struct edge_intersection {
-    edge* e1, *e2;
+    //First edge in the intersection.
+    edge* e1;
+    //Second edge in the intersection.
+    edge* e2;
+    
     edge_intersection(edge* e1, edge* e2);
     bool contains(edge* e);
 };
@@ -122,16 +126,18 @@ struct blockmap {
  * In DOOM, these are what's known as linedefs.
  */
 struct edge {
+    //Vertexes that make up the edge.
     vertex* vertexes[2];
+    //Index of the vertexes that make up the edge.
     size_t vertex_nrs[2];
+    //Sectors on each side of the edge.
     sector* sectors[2];
+    //Index of the sectors on each side of the edge.
     size_t sector_nrs[2];
-    
     //Length of the wall shadow. 0 = none. LARGE_FLOAT = auto.
     float wall_shadow_length;
     //Color of the wall shadow, opacity included.
     ALLEGRO_COLOR wall_shadow_color;
-    
     //Length of the ledge smoothing effect. 0 = none.
     float ledge_smoothing_length;
     //Color of the ledge smoothing effect, opacity included.
@@ -168,11 +174,17 @@ struct edge {
  * Information about a sector's texture.
  */
 struct sector_texture_info {
-    point scale; //Texture scale.
-    point translation; //Translation.
-    float rot; //Rotation.
+    //Texture scale.
+    point scale;
+    //Texture translation.
+    point translation;
+    //Texture rotation.
+    float rot;
+    //Texture bitmap.
     ALLEGRO_BITMAP* bitmap;
+    //Texture tint.
     ALLEGRO_COLOR tint;
+    //File name of the texture bitmap.
     string file_name;
     
     sector_texture_info();
@@ -188,26 +200,39 @@ struct sector_texture_info {
  * is determined by its floors.
  */
 struct sector {
+    //Its type.
     SECTOR_TYPES type;
+    //Is it a bottomless pit?
     bool is_bottomless_pit;
-    float z; //Height.
+    //Z coordinate of the floor.
+    float z;
+    //Extra information, if any.
     string tag;
+    //Brightness.
     unsigned char brightness;
-    
+    //Information about its texture.
     sector_texture_info texture_info;
+    //Is this sector meant to fade textures from neighboring sectors?
     bool fade;
-    
-    string hazards_str; //For the editor.
-    vector<hazard*> hazards; //For gameplay.
+    //String representing its hazards. Used for the editor.
+    string hazards_str;
+    //List of hazards.
+    vector<hazard*> hazards;
+    //Is only floor hazardous, or the air as well?
     bool hazard_floor;
+    //Time left to drain the liquid in the sector.
     float liquid_drain_left;
+    //Is it currently draining its liquid?
     bool draining_liquid;
+    //Scrolling speed, if any.
     point scroll;
-    
+    //Index number of the edges that make up this sector.
     vector<size_t> edge_nrs;
+    //Edges that make up this sector.
     vector<edge*> edges;
+    //Triangles it is composed of.
     vector<triangle> triangles;
-    
+    //Bounding box.
     point bbox[2];
     
     sector();
@@ -235,7 +260,9 @@ struct sector {
  * and to draw, seeing as OpenGL cannot draw concave polygons.
  */
 struct triangle {
+    //Points that make up this triangle.
     vertex* points[3];
+    
     triangle(vertex* v1, vertex* v2, vertex* v3);
 };
 
@@ -247,8 +274,13 @@ struct triangle {
  * the end-points of an edge.
  */
 struct vertex {
-    float x, y;
+    //X coordinate.
+    float x;
+    //Y coordinate.
+    float y;
+    //Index number of the edges around it.
     vector<size_t> edge_nrs;
+    //Edges around it.
     vector<edge*> edges;
     
     vertex(float x = 0.0f, float y = 0.0f);
@@ -268,6 +300,7 @@ struct vertex {
  * Represents a series of vertexes that make up a polygon.
  */
 struct polygon {
+    //Ordered list of vertexes that represent the polygon.
     vector<vertex*> vertexes;
     
     void clean();
@@ -288,13 +321,19 @@ struct polygon {
  * position and type data, plus some other tiny things.
  */
 struct mob_gen {
+    //Mob category.
     mob_category* category;
+    //Mob type.
     mob_type* type;
-    
+    //Position.
     point pos;
+    //Angle.
     float angle;
+    //Script vars.
     string vars;
-    vector<mob_gen*> links; //Cache for performance.
+    //Linked objects. Cache for performance.
+    vector<mob_gen*> links;
+    //Index of linked objects.
     vector<size_t> link_nrs;
     
     mob_gen(
@@ -312,14 +351,20 @@ struct mob_gen {
  * whatever the game maker desires).
  */
 struct tree_shadow {
+    //File name of the tree shadow texture.
     string file_name;
+    //Tree shadow texture.
     ALLEGRO_BITMAP* bitmap;
-    
-    point center; //X and Y of the center.
-    point size;   //Width and height.
-    float angle;  //Rotation angle.
-    unsigned char alpha; //Opacity.
-    point sway;   //Swaying is multiplied by this.
+    //Center coordinates.
+    point center;
+    //Width and height.
+    point size;
+    //Angle.
+    float angle;
+    //Opacity.
+    unsigned char alpha;
+    //Swaying is multiplied by this.
+    point sway;
     
     tree_shadow(
         const point &center = point(), const point &size = point(100, 100),
@@ -353,31 +398,47 @@ struct geometry_problems {
  * vertexes, etc.
  */
 struct area_data {
-
+    //Blockmap.
     blockmap bmap;
+    //List of vertexes.
     vector<vertex*> vertexes;
+    //List of edges.
     vector<edge*> edges;
+    //List of sectors.
     vector<sector*> sectors;
+    //List of mob generators.
     vector<mob_gen*> mob_generators;
+    //List of path stops.
     vector<path_stop*> path_stops;
+    //List of tree shadows.
     vector<tree_shadow*> tree_shadows;
-    
+    //Bitmap of the background.
     ALLEGRO_BITMAP* bg_bmp;
+    //File name of the background bitmap.
     string bg_bmp_file_name;
+    //Zoom the background by this much.
     float bg_bmp_zoom;
+    //How far away the background is.
     float bg_dist;
+    //Tint the background with this color.
     ALLEGRO_COLOR bg_color;
+    //Name of the area. This is not the internal name.
     string name;
+    //Area subtitle, if any.
     string subtitle;
-    
+    //Who made this area.
     string maker;
+    //Optional version number.
     string version;
+    //Any notes from the person who made it.
     string notes;
+    //String representing the starting amounts of each spray.
     string spray_amounts;
-    
+    //Weather condition to use.
     weather weather_condition;
+    //Name of the weather condition to use.
     string weather_name;
-    
+    //Known geometry problems.
     geometry_problems problems;
     
     area_data();
@@ -431,6 +492,7 @@ public:
     unsigned char get_nr_of_types() const;
     
 private:
+    //Known sector types.
     vector<string> names;
     
 };

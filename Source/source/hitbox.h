@@ -40,6 +40,7 @@ struct hazard;
  */
 class body_part {
 public:
+    //The body part's name.
     string name;
     
     body_part(const string &name = "");
@@ -51,16 +52,25 @@ public:
  */
 class hitbox {
 public:
+    //The name of the body part to use.
     string body_part_name;
-    size_t body_part_index;   //Cache for performance.
-    body_part* body_part_ptr; //Cache for performance.
-    point pos;  //Center of the hitbox (relative coordinates).
-    float z;     //Bottom of the hitbox (relative coordinates).
+    //Index of the body part. Cache for performance.
+    size_t body_part_index;
+    //Pointer to the body part. Cache for performance.
+    body_part* body_part_ptr;
+    //Center of the hitbox (relative coordinates).
+    point pos;
+    //Bottom of the hitbox (relative coordinates).
+    float z;
+    //Total hitbox height.
     float height;
+    //Hitbox radius.
     float radius;
-    
+    //Type of hitbox.
     HITBOX_TYPES type;
+    //String representing the list of hazards.
     string hazards_str;
+    //List of hazards.
     vector<hazard*> hazards;
     //If it's a normal hitbox, this is the defense multiplier.
     //If it's an attack one, the attack power.

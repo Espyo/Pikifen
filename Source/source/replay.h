@@ -111,6 +111,7 @@ struct replay_state {
  */
 class replay {
 public:
+    //States.
     vector<replay_state> states;
     
     replay();
@@ -130,7 +131,9 @@ public:
     void save_to_file(const string &file_name) const;
     
 private:
+    //List of mobs in the previous state.
     vector<mob*> prev_state_mobs;
+    //Number of the previous leader.
     size_t prev_leader_nr;
     
 };

@@ -33,9 +33,13 @@ struct status_type;
  * not an object that emits said danger.
  */
 struct hazard {
+    //Name of the hazard.
     string name;
+    //Color that best represents this hazard.
     ALLEGRO_COLOR main_color;
+    //Status effects for mobs that interact with this hazard.
     vector<status_type*> effects;
+    //If it's got an associated liquid, this points to it.
     liquid* associated_liquid;
     
     hazard();

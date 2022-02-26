@@ -45,12 +45,19 @@ enum BRIDGE_STATES {
  */
 class bridge_type : public mob_type {
 public:
+    //Texture used for the main bridge floor.
     ALLEGRO_BITMAP* bmp_main_texture;
+    //Texture used for the left rail.
     ALLEGRO_BITMAP* bmp_left_rail_texture;
+    //Texture used for the right rail.
     ALLEGRO_BITMAP* bmp_right_rail_texture;
+    //File name of the main texture.
     string main_texture_file_name;
+    //File name of the left rail texture.
     string left_rail_texture_file_name;
+    //File name of the right rail texture.
     string right_rail_texture_file_name;
+    //Width of each rail.
     float rail_width;
     
     bridge_type();

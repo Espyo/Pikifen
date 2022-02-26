@@ -31,11 +31,17 @@ using std::string;
  * engine has to know if a sector is to be shown as a liquid or not.
  */
 struct liquid {
+    //Name of this liquid.
     string name;
+    //Color that best represents this liquid.
     ALLEGRO_COLOR main_color;
+    //Animation database containing its liquid surface animation.
     animation_database anim_db;
+    //Animation instance for the liquid surface.
     animation_instance anim_instance;
+    //Speed at which to scroll each layer of the surface.
     float surface_speed[2];
+    //Opacity of the surface.
     unsigned char surface_alpha;
     
     liquid();

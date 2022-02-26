@@ -46,10 +46,15 @@ const size_t ANIM_IDLING = 0;
 class mob_type {
 public:
     struct reach_struct {
+        //Name of this reach.
         string name;
+        //Radius of possibility 1.
         float radius_1;
+        //Angle of possibility 1.
         float angle_1;
+        //Radius of possibility 2.
         float radius_2;
+        //Angle of possibility 2.
         float angle_2;
         
         reach_struct() :
@@ -58,15 +63,25 @@ public:
     };
     
     struct spawn_struct {
+        //Name of this spawn information block.
         string name;
+        //Name of the mob type to spawn.
         string mob_type_name;
+        //Spawn in coordinates relative to the spawner?
         bool relative;
+        //Coordenates to spawn on.
         point coords_xy;
+        //Z coordinate to spawn on.
         float coords_z;
+        //Angle of the spawned object. Could be relative or absolute.
         float angle;
+        //Script vars to give the spawned object.
         string vars;
+        //Should the spawner link to the spawned?
         bool link_object_to_spawn;
+        //Should the spawned link to the spawner?
         bool link_spawn_to_object;
+        //Momentum to apply in a random direction upon spawn, if any.
         float momentum;
         
         spawn_struct() :
@@ -79,27 +94,45 @@ public:
     };
     
     struct child_struct {
+        //Name of this child information block.
         string name;
+        //Name of the spawn information block to use.
         string spawn_name;
+        //Does the parent mob hold the child mob?
         bool parent_holds;
+        //If the parent holds, this is the name of the body part that holds.
         string hold_body_part;
+        //If the parent holds, this is how far from the body part center.
         float hold_offset_dist;
+        //If the parent holds, this is in what direction from the body part.
         float hold_offset_angle;
+        //Method by which the parent should hold the child.
         HOLD_ROTATION_METHODS hold_rotation_method;
-        
+        //Should the child handle damage?
         bool handle_damage;
+        //Should the child relay damage to the parent?
         bool relay_damage;
+        //Should the child handle script events?
         bool handle_events;
+        //Should the child relay script events to the parent?
         bool relay_events;
+        //Should the child handle status effects?
         bool handle_statuses;
+        //Should the child relay status effects to the parent?
         bool relay_statuses;
-        
+        //Name of the limb animation between parent and child.
         string limb_anim_name;
+        //Thickness of the limb.
         float limb_thickness;
+        //Body part of the parent to link the limb to.
         string limb_parent_body_part;
+        //Offset from the parent body part to link the limb at.
         float limb_parent_offset;
+        //Body part of the child to link the limb to.
         string limb_child_body_part;
+        //Offset from the child body part to link the limb at.
         float limb_child_offset;
+        //Method by which the limb should be drawn.
         LIMB_DRAW_METHODS limb_draw_method;
         
         child_struct() :
@@ -296,6 +329,7 @@ public:
  */
 class mob_type_with_anim_groups {
 public:
+    //Suffixes used for each animation group.
     vector<string> animation_group_suffixes;
     anim_conversion_vector get_anim_conversions_with_groups(
         const anim_conversion_vector &v, const size_t base_anim_total

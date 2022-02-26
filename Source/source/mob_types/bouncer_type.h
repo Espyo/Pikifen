@@ -60,8 +60,9 @@ enum BOUNCER_STATES {
  */
 class bouncer_type : public mob_type {
 public:
-
+    //Flags representing which mobs can ride on it.
     unsigned char riders;
+    //Pose that riders should take.
     BOUNCER_RIDING_POSES riding_pose;
     
     bouncer_type();

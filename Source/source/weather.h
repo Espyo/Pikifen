@@ -46,6 +46,7 @@ enum PRECIPITATION_TYPES {
  */
 class weather {
 public:
+    //Name of this weather type.
     string name;
     //Vector with the lighting colors for specific times of day, in minutes.
     vector<std::pair<size_t, ALLEGRO_COLOR> > daylight;
@@ -60,6 +61,7 @@ public:
     float fog_far;
     //Fog -- color and density at 100% fogginess. Values throughout the day.
     vector<std::pair<size_t, ALLEGRO_COLOR> > fog_color;
+    //Precipitation type, if any.
     PRECIPITATION_TYPES precipitation_type;
     
     weather();

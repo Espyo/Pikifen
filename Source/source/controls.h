@@ -166,9 +166,13 @@ struct control_info {
  * Information about an action obtained from an Allegro event.
  */
 struct action_from_event {
+    //Button representing this action.
     BUTTONS button;
+    //How far the button has been pressed, from 0 to 1.
     float pos;
+    //Player that pressed this button.
     size_t player;
+
     action_from_event(
         const BUTTONS button, const float pos, const size_t player
     ) :
@@ -183,13 +187,19 @@ struct action_from_event {
  */
 struct button_manager {
     struct button {
+        //ID of the button.
         BUTTONS id;
+        //Name of the button.
         string name;
+        //Its name in the options file.
         string option_name;
+        //String representing the default control to use for this button.
         string default_control_str;
     };
     
+    //List of known buttons.
     vector<button> list;
+    
     void add(
         const BUTTONS id, const string &name, const string &option_name,
         const string &default_control_str

@@ -45,17 +45,29 @@ enum GROUP_TASK_CONTRIBUTION_METHODS {
  */
 class group_task_type : public mob_type {
 public:
+    //Power requirement in order to reach the goal.
     size_t power_goal;
+    //Maximum amount of Pikmin that can work.
     size_t max_pikmin;
+    //First point of the first row of workers.
     point first_row_p1;
+    //Second point of the first row of workers.
     point first_row_p2;
+    //Z coordinate of the contributor spots.
     float spots_z;
+    //Interval between each row of workers.
     float interval_between_rows;
+    //How many Pikmin spots per row of workers.
     size_t pikmin_per_row;
+    //What (relative) angle the Pikmin should face when working.
     float worker_pikmin_angle;
+    //Pose that worker Pikmin should take.
     GROUP_TASK_PIKMIN_POSES worker_pikmin_pose;
+    //How each worker Pikmin contributes to the power.
     GROUP_TASK_CONTRIBUTION_METHODS contribution_method;
+    //How much to increase the mob's speed relative to the current power.
     float speed_bonus;
+    //If true, only flying Pikmin can work on it.
     bool flying_pikmin_only;
     
     group_task_type();

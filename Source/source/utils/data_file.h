@@ -59,9 +59,10 @@ const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
  */
 class data_node {
 public:
-    string name;    //The node's name.
-    string value;   //And its value.
-    
+    //The node's name.
+    string name;
+    //The node's value.
+    string value;
     //True if the node or parent(s) was created from a file
     //that was opened successfuly.
     bool file_was_opened;
@@ -107,12 +108,14 @@ public:
     data_node(const data_node &dn2);
     data_node &operator=(const data_node &dn2);
     ~data_node();
-
-private:
-    vector<data_node*> children;
-    vector<data_node*> dummy_children;
-    data_node* create_dummy();
     
+private:
+    //List of children nodes.
+    vector<data_node*> children;
+    //Dummy children, returned upon error.
+    vector<data_node*> dummy_children;
+    
+    data_node* create_dummy();
     static string trim_spaces(const string &s, const bool left_only = false);
     
 };

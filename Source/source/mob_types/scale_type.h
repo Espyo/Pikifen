@@ -19,6 +19,7 @@
  */
 class scale_type : public mob_type {
 public:
+    //Weight number that must be met to reach a goal. 0 for none.
     size_t goal_number;
     
     scale_type();

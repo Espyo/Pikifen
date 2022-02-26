@@ -83,11 +83,15 @@ class mob_type;
  */
 class mob_category {
 public:
+    //Name of the mob category.
     string name;
+    //ID of the mob category.
     MOB_CATEGORIES id;
-    
+    //Name used when referring to objects of this category in plural.
     string plural_name;
+    //Folder name for this category.
     string folder;
+    //Color used to represent objects of this category in the area editor.
     ALLEGRO_COLOR editor_color;
     
     virtual void get_type_names(vector<string> &list) const = 0;
@@ -129,6 +133,7 @@ public:
     void clear();
     
 private:
+    //List of known mob categories.
     vector<mob_category*> categories;
     
 };

@@ -32,9 +32,13 @@
 struct hud_bubble_manager {
 public:
     struct bubble_info {
+        //GUI item.
         gui_item* bubble;
+        //Index number of whatever content it holds.
         size_t content_index;
+        //Index number of whatever content it held, pre-transition.
         size_t pre_transition_content_index;
+        
         bubble_info(gui_item* bubble = NULL);
     };
     
@@ -202,8 +206,11 @@ private:
     //a viable mob, its distance, and the corresponding event.
     //We can then go through a vector of these pending intermob events in order.
     struct pending_intermob_event {
+        //Distance between both mobs.
         dist d;
+        //Pointer to the relevant event.
         mob_event* event_ptr;
+        //Mob who the event belongs to.
         mob* mob_ptr;
         pending_intermob_event(
             const dist &d, mob_event* event_ptr, mob* mob_ptr

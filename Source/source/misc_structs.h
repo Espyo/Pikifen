@@ -41,40 +41,75 @@ using std::vector;
  * List of file names of system assets.
  */
 struct asset_file_names_struct {
+    //Area name font.
     string area_name_font;
+    //Bright circle.
     string bright_circle;
+    //Bright ring.
     string bright_ring;
+    //Bubble box.
     string bubble_box;
+    //Checkbox checkmark.
     string checkbox_check;
+    //Counter font.
     string counter_font;
+    //Leader cursor.
     string cursor;
+    //Cursor counter font.
     string cursor_counter_font;
+    //Editor icons.
     string editor_icons;
+    //Enemy spirit.
     string enemy_spirit;
+    //GUI focus box.
     string focus_box;
+    //Pikifen icon.
     string icon;
+    //Idle glow.
     string idle_glow;
+    //Main font.
     string main_font;
+    //Main menu background.
     string main_menu;
+    //"More..." icon.
     string more;
+    //The three mouse button icons.
     string mouse_button_icon[3];
+    //Mouse cursor.
     string mouse_cursor;
+    //Mouse wheel down icon.
     string mouse_wd_icon;
+    //Mouse wheel up icon.
     string mouse_wu_icon;
+    //Notification.
     string notification;
+    //Pikmin silhouette.
     string pikmin_silhouette;
+    //Pikmin spirit.
     string pikmin_spirit;
+    //A rock.
     string rock;
+    //Mob shadow.
     string shadow;
+    //Smack effect.
     string smack;
+    //Smoke.
     string smoke;
+    //Sparkle effect.
     string sparkle;
+    //Spotlight for blackout.
     string spotlight;
+    //Swarm arrow.
     string swarm_arrow;
+    //Invalid throw marker.
     string throw_invalid;
+    //Throw preview texture.
     string throw_preview;
+    //Dashed throw preview texture.
     string throw_preview_dashed;
+    //Value font.
     string value_font;
+    //Wave ring.
     string wave_ring;
     
     void load(data_node* file);
@@ -111,8 +146,11 @@ struct camera_info {
  * A timer. You can set it to start at a pre-determined time, to tick, etc.
  */
 struct timer {
-    float time_left; //How much time is left until 0.
-    float duration;  //When the timer starts, its time is set to this.
+    //How much time is left until 0.
+    float time_left;
+    //When the timer starts, its time is set to this.
+    float duration;  
+    //Code to run when the timer ends, if any.
     std::function<void()> on_end;
     
     timer(
@@ -226,13 +264,20 @@ public:
     
 private:
     struct bmp_info {
+        //Bitmap pointer.
         ALLEGRO_BITMAP* b;
+        //How many calls it has.
         size_t calls;
+
         bmp_info(ALLEGRO_BITMAP* b = NULL);
     };
+    //Base directory that this manager works on.
     string base_dir;
+    //List of loaded bitmaps.
     map<string, bmp_info> list;
-    long total_calls; //Useful for debugging.
+    //Total sum of calls. Useful for debugging.
+    long total_calls;
+
     void detach(map<string, bmp_info>::iterator it);
     
 };
@@ -278,9 +323,13 @@ struct font_list {
  * just consider it as 100%.
  */
 struct movement_struct {
+    //Amount to the east.
     float right;
+    //Amount to the north.
     float up;
+    //Amount to the west.
     float left;
+    //Amount to the south.
     float down;
     
     movement_struct();
@@ -324,7 +373,9 @@ struct msg_box_info {
  * If the child is empty, the variable will not be set.
  */
 struct reader_setter {
+    //Node that this reader-setter pertains to.
     data_node* node;
+
     void set(
         const string &child, string &var, data_node** child_node = NULL
     );
@@ -360,8 +411,10 @@ struct reader_setter {
  * the sound playing from the sample.
  */
 struct sample_struct {
-    ALLEGRO_SAMPLE*          sample;   //Pointer to the sample.
-    ALLEGRO_SAMPLE_INSTANCE* instance; //Pointer to the instance.
+    //Pointer to the sample.
+    ALLEGRO_SAMPLE* sample;   
+    //Pointer to the instance.
+    ALLEGRO_SAMPLE_INSTANCE* instance; 
     
     sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
     void play(
@@ -379,7 +432,9 @@ struct sample_struct {
  * ones exist, and what values they have.
  */
 struct script_var_reader {
+    //Reference to the list of script variables it pertains to.
     map<string, string> &vars;
+
     bool get(const string &name, string &dest) const;
     bool get(const string &name, size_t &dest) const;
     bool get(const string &name, int &dest) const;
@@ -397,54 +452,97 @@ struct script_var_reader {
  * List of loaded system assets.
  */
 struct system_asset_list {
-    //Bitmaps.
+    //Bright circle.
     ALLEGRO_BITMAP* bmp_bright_circle;
+    //Bright ring.
     ALLEGRO_BITMAP* bmp_bright_ring;
+    //Bubble box.
     ALLEGRO_BITMAP* bmp_bubble_box;
+    //Checkbox checkmark.
     ALLEGRO_BITMAP* bmp_checkbox_check;
+    //Leader cursor.
     ALLEGRO_BITMAP* bmp_cursor;
+    //Enemy spirit.
     ALLEGRO_BITMAP* bmp_enemy_spirit;
+    //Focus box.
     ALLEGRO_BITMAP* bmp_focus_box;
+    //Pikifen icon.
     ALLEGRO_BITMAP* bmp_icon;
+    //Idle glow.
     ALLEGRO_BITMAP* bmp_idle_glow;
+    //"More..." icon.
     ALLEGRO_BITMAP* bmp_more;
+    //The three mouse button icons.
     ALLEGRO_BITMAP* bmp_mouse_button_icon[3];
+    //Mouse cursor.
     ALLEGRO_BITMAP* bmp_mouse_cursor;
+    //Mouse wheel down icon.
     ALLEGRO_BITMAP* bmp_mouse_wd_icon;
+    //Mouse wheel up icon.
     ALLEGRO_BITMAP* bmp_mouse_wu_icon;
+    //Notification.
     ALLEGRO_BITMAP* bmp_notification;
+    //Pikmin silhouette.
     ALLEGRO_BITMAP* bmp_pikmin_silhouette;
+    //Pikmin spirit.
     ALLEGRO_BITMAP* bmp_pikmin_spirit;
+    //A rock.
     ALLEGRO_BITMAP* bmp_rock;
+    //Mob shadow.
     ALLEGRO_BITMAP* bmp_shadow;
+    //Smack effect.
     ALLEGRO_BITMAP* bmp_smack;
+    //Smoke.
     ALLEGRO_BITMAP* bmp_smoke;
+    //Sparkle effect.
     ALLEGRO_BITMAP* bmp_sparkle;
+    //Spotlight for blackout.
     ALLEGRO_BITMAP* bmp_spotlight;
+    //Swarm arrow.
     ALLEGRO_BITMAP* bmp_swarm_arrow;
+    //Invalid throw marker.
     ALLEGRO_BITMAP* bmp_throw_invalid;
+    //Throw preview texture.
     ALLEGRO_BITMAP* bmp_throw_preview;
+    //Dashed throw preview texture.
     ALLEGRO_BITMAP* bmp_throw_preview_dashed;
+    //Wave ring.
     ALLEGRO_BITMAP* bmp_wave_ring;
     
     //Sound effects.
+    //Attack.
     sample_struct sfx_attack;
+    //Camera zoom level.
     sample_struct sfx_camera;
+    //Pikmin attacking.
     sample_struct sfx_pikmin_attack;
+    //Pikmin called.
     sample_struct sfx_pikmin_called;
+    //Pikmin carrying.
     sample_struct sfx_pikmin_carrying;
+    //Pikmin grabbing on to carry.
     sample_struct sfx_pikmin_carrying_grab;
+    //Pikmin caught.
     sample_struct sfx_pikmin_caught;
+    //Pikmin dying.
     sample_struct sfx_pikmin_dying;
+    //Pikmin held by leader.
     sample_struct sfx_pikmin_held;
+    //Pikmin idling.
     sample_struct sfx_pikmin_idle;
+    //Pluck sound effect.
     sample_struct sfx_pluck;
+    //Pikmin being plucked.
     sample_struct sfx_pikmin_plucked;
+    //Pikmin being thrown.
     sample_struct sfx_pikmin_thrown;
+    //Switching standby Pikmin type.
     sample_struct sfx_switch_pikmin;
+    //Throwing.
     sample_struct sfx_throw;
     
     //Animations.
+    //Leader damage spark.
     single_animation_suite spark_animation;
     
     system_asset_list();
@@ -467,8 +565,11 @@ public:
     void draw();
     
 private:
+    //Time left in the current fade in/out.
     float time_left;
+    //True if fading in, false if fading out.
     bool fade_in;
+    //Code to run when the fade in/out finishes.
     std::function<void()> on_end;
     
 };
@@ -525,6 +626,7 @@ struct bitmap_effect_info {
     ALLEGRO_COLOR tint_color;
     //Re-draws the bitmap on top, in additive blend, with this color.
     ALLEGRO_COLOR glow_color;
+
     bitmap_effect_info();
 };
 
@@ -558,8 +660,11 @@ private:
 
     struct page {
     public:
+        //How long it lasted for in total.
         double duration;
+        //Measurements took, and how long each one took.
         vector<std::pair<string, double> > measurements;
+
         page();
         void write(string &s);
         
@@ -611,9 +716,13 @@ public:
     
 private:
     friend subgroup_type_manager;
+    //Category this subgroup type belongs to.
     SUBGROUP_TYPE_CATEGORIES category;
+    //Specific mob type it refers to.
     mob_type* specific_type;
+    //Icon used to represent this subgroup type.
     ALLEGRO_BITMAP* icon;
+
     subgroup_type() : specific_type(nullptr), icon(nullptr) { }
 };
 
@@ -638,6 +747,7 @@ public:
     void clear();
     
 private:
+    //Known types.
     vector<subgroup_type*> types;
 };
 
@@ -647,8 +757,11 @@ private:
  * for the available spray types.
  */
 struct spray_stats_struct {
+    //Number of sprays of this type owned.
     size_t nr_sprays;
+    //Number of concoction ingredients owned.
     size_t nr_ingredients;
+    
     spray_stats_struct() : nr_sprays(0), nr_ingredients(0) { }
 };
 

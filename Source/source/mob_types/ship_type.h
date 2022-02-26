@@ -43,7 +43,6 @@ class ship_type : public mob_type {
 public:
     //Nest data.
     pikmin_nest_type_struct* nest;
-    
     //Can a leader heal at this ship?
     bool can_heal;
     //The ship's control point is offset this much from the mob's center.

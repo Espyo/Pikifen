@@ -22,7 +22,7 @@
 using std::queue;
 
 
-//How many entries of the history to store, at most.
+//Maximum number of entries to save in the history.
 const size_t animation_editor::HISTORY_SIZE = 6;
 //Amount to pan the camera by when using the keyboard.
 const float animation_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
@@ -1208,7 +1208,9 @@ void animation_editor::sprite_bmp_flood_fill(
     }
     
     struct int_point {
+        //X coordinate.
         int x;
+        //Y coordinate.
         int y;
         int_point(point p) :
             x(p.x),

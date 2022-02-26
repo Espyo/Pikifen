@@ -57,10 +57,13 @@ enum TRACK_STATES {
  */
 class track_type : public mob_type {
 public:
-
+    //Flags representing possible riders.
     unsigned char riders;
+    //Pose that riders must take.
     TRACK_RIDING_POSES riding_pose;
+    //How quickly riders ride the track, in ratio per second.
     float ride_speed;
+    //Can the ride be cancelled if the rider is whistled?
     bool cancellable_with_whistle;
     
     track_type();

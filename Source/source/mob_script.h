@@ -222,7 +222,9 @@ enum MOB_EV_TYPES {
  */
 class mob_event {
 public:
+    //Type of event.
     MOB_EV_TYPES type;
+    //Actions to run.
     vector<mob_action_call*> actions;
     
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
@@ -240,9 +242,13 @@ public:
  */
 class mob_state {
 public:
+    //Name of the state.
     string name;
+    //State ID.
     size_t id;
+    //List of events to handle in this state.
     mob_event* events[N_MOB_EVENTS];
+    
     mob_event* get_event(const MOB_EV_TYPES type) const;
     
     mob_state(const string &name);
@@ -258,7 +264,9 @@ public:
  */
 class mob_fsm {
 public:
+    //Mob that this FSM belongs to.
     mob* m;
+    //Current state the mob is in.
     mob_state* cur_state;
     //Conversion between pre-named states and in-file states.
     vector<size_t> pre_named_conversions;
@@ -303,8 +311,11 @@ public:
     easy_fsm_creator();
     
 private:
+    //List of registered states.
     vector<mob_state*> states;
+    //State currently being staged.
     mob_state* cur_state;
+    //Event currently being staged.
     mob_event* cur_event;
     void commit_state();
     void commit_event();
@@ -316,9 +327,12 @@ private:
  * Information about how two hitboxes interacted.
  */
 struct hitbox_interaction {
-    mob* mob2;  //Mob that touched our mob.
-    hitbox* h1; //Hitbox of our mob that got touched.
-    hitbox* h2; //Hitbox of the other mob.
+    //Mob that touched our mob.
+    mob* mob2;  
+    //Hitbox of our mob that got touched.
+    hitbox* h1; 
+    //Hitbox of the other mob.
+    hitbox* h2; 
     hitbox_interaction(
         mob* mob2 = NULL,
         hitbox* h1 = NULL, hitbox* h2 = NULL

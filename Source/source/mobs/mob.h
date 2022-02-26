@@ -439,7 +439,9 @@ protected:
  */
 class mob_with_anim_groups {
 public:
+    //Index number of its current base animation.
     size_t cur_base_anim_nr;
+    
     size_t get_animation_nr_from_base_and_group(
         const size_t base_anim_nr, const size_t group_nr,
         const size_t base_anim_total

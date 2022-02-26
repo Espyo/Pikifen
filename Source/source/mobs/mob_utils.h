@@ -50,11 +50,13 @@ class mob;
  * Information on a carrying spot around a mob's perimeter.
  */
 struct carrier_spot_struct {
+    //State.
     CARRY_SPOT_STATES state;
-    //Relative coordinates of each spot.
-    //They avoid calculating several sines and cosines over and over.
+    //Relative coordinates of each spot. Cache for performance.
     point pos;
+    //Pikmin that is in this spot.
     mob* pik_ptr;
+    
     carrier_spot_struct(const point &pos);
 };
 
@@ -68,16 +70,11 @@ struct carry_info_struct {
     mob* m;
     //Generic type of delivery destination.
     CARRY_DESTINATIONS destination;
-    
+    //Information about each carrier spot.
     vector<carrier_spot_struct> spot_info;
-    
-    //This is to avoid going through the vector
-    //only to find out the total strength.
+    //Current carrying strength. Cache for performance.
     float cur_carrying_strength;
-    //Likewise, this is to avoid going through the vector
-    //only to find out the number. Note that this is the number
-    //of spaces reserved. A Pikmin could be on its way to its spot,
-    //not necessarily there already.
+    //Number of carriers, including reserves. Cache for performance.
     size_t cur_n_carriers;
     //Is the object moving at the moment?
     bool is_moving;
@@ -165,10 +162,15 @@ struct circling_info_struct {
  * Information on a mob that's being delivered to an Onion, ship, etc.
  */
 struct delivery_info_struct {
+    //Animation type.
     DELIVERY_ANIMATIONS anim_type;
+    //Ratio of time left in the animation.
     float anim_time_ratio_left;
+    //Color to make the mob glow with.
     ALLEGRO_COLOR color;
+    //Intended delivery Pikmin type, in the case of Onions.
     pikmin_type* intended_pik_type;
+    
     delivery_info_struct();
 };
 
@@ -182,18 +184,28 @@ struct delivery_info_struct {
 struct group_info_struct {
 
     struct group_spot {
-        point pos; //Relative to the anchor.
+        //Position relative to the anchor.
+        point pos;
+        //Mob in this spot.
         mob* mob_ptr;
+        
         group_spot(const point &p = point(), mob* m = NULL) :
             pos(p), mob_ptr(m) {}
     };
     
+    //All group members.
     vector<mob*> members;
+    //Information about each spot.
     vector<group_spot> spots;
+    //Radius of the group.
     float radius;
-    point anchor; //Position of element 0 of the group (frontmost member).
+    //Position of element 0 of the group (frontmost member).
+    point anchor;
+    //Transformation to apply to the group, like from swarming.
     ALLEGRO_TRANSFORM transform;
+    //Currently selected standby type.
     subgroup_type* cur_standby_type;
+    //Are the group members in follow mode, or shuffle mode?
     bool follow_mode;
     
     void init_spots(mob* affected_mob_ptr = NULL);
@@ -260,25 +272,45 @@ class ship_type;
  * Lists of all mobs in the area.
  */
 struct mob_lists {
+    //All mobs in the area.
     vector<mob*> all;
+    //Bouncers.
     vector<bouncer*> bouncers;
+    //Bridges.
     vector<bridge*> bridges;
+    //Converters.
     vector<converter*> converters;
+    //Decorations.
     vector<decoration*> decorations;
+    //Drops.
     vector<drop*> drops;
+    //Enemies.
     vector<enemy*> enemies;
+    //Group tasks.
     vector<group_task*> group_tasks;
+    //Interactables.
     vector<interactable*> interactables;
+    //Leaders.
     vector<leader*> leaders;
+    //Onions.
     vector<onion*> onions;
+    //Pellets.
     vector<pellet*> pellets;
+    //Pikmin.
     vector<pikmin*> pikmin_list;
+    //Piles.
     vector<pile*> piles;
+    //Resources.
     vector<resource*> resources;
+    //Scales.
     vector<scale*> scales;
+    //Ships.
     vector<ship*> ships;
+    //Tools.
     vector<tool*> tools;
+    //Tracks.
     vector<track*> tracks;
+    //Treasures.
     vector<treasure*> treasures;
 };
 
@@ -287,25 +319,45 @@ struct mob_lists {
  * Lists of all mob types.
  */
 struct mob_type_lists {
+    //Bouncer types.
     map<string, bouncer_type*> bouncer;
+    //Bridge types.
     map<string, bridge_type*> bridge;
+    //Converter types.
     map<string, converter_type*> converter;
+    //Custom mob types.
     map<string, mob_type*> custom;
+    //Decoration types.
     map<string, decoration_type*> decoration;
+    //Drop types.
     map<string, drop_type*> drop;
+    //Enemy types.
     map<string, enemy_type*> enemy;
+    //Group task types.
     map<string, group_task_type*> group_task;
+    //Interactable types.
     map<string, interactable_type*> interactable;
+    //Leader types.
     map<string, leader_type*> leader;
+    //Onion types.
     map<string, onion_type*> onion;
+    //Pellet types.
     map<string, pellet_type*> pellet;
+    //Pikmin types.
     map<string, pikmin_type*> pikmin;
+    //Pile types.
     map<string, pile_type*> pile;
+    //Resource types.
     map<string, resource_type*> resource;
+    //Scale types.
     map<string, scale_type*> scale;
+    //Ship types.
     map<string, ship_type*> ship;
+    //Tool types.
     map<string, tool_type*> tool;
+    //Track types.
     map<string, track_type*> track;
+    //Treasure types.
     map<string, treasure_type*> treasure;
 };
 
@@ -314,22 +366,34 @@ struct mob_type_lists {
  * Structure with information about this mob's parent, if any.
  */
 struct parent_info_struct {
+    //Mob serving as the parent.
     mob* m;
+    //Should the child handle damage?
     bool handle_damage;
+    //Should the child relay damage to the parent?
     bool relay_damage;
+    //Should the child handle status effects?
     bool handle_statuses;
+    //Should the child relay status effects to the parent?
     bool relay_statuses;
+    //Should the child handle script events?
     bool handle_events;
+    //Should the child relay script events to the parent?
     bool relay_events;
-    
-    //Limbs are visible connective textures between both mobs.
+    //Animation used for the limb connecting child and parent.
     animation_instance limb_anim;
+    //Thickness of the limb.
     float limb_thickness;
+    //Body part of the parent to link the limb to.
     size_t limb_parent_body_part;
+    //Offset from the parent body part to link the limb at.
     float limb_parent_offset;
+    //Body part of the child to link the limb to.
     size_t limb_child_body_part;
+    //Offset from the child body part to link the limb at.
     float limb_child_offset;
-    unsigned char limb_draw_method;
+    //Method by which the limb should be drawn.
+    LIMB_DRAW_METHODS limb_draw_method;
     
     parent_info_struct(mob* m);
 };
@@ -392,7 +456,6 @@ public:
     mob* m_ptr;
     //Pointer to the type of nest.
     pikmin_nest_type_struct* nest_type;
-    
     //How many Pikmin are inside, per type, per maturity.
     vector<vector<size_t> > pikmin_inside;
     //How many Pikmin are queued up to be called out, of each type.

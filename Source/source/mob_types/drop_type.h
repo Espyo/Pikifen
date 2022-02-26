@@ -73,12 +73,19 @@ enum DROP_STATES {
  */
 class drop_type : public mob_type {
 public:
+    //What sorts of mobs can consume this drop.
     DROP_CONSUMERS consumer;
+    //Effects upon consumption.
     DROP_EFFECTS effect;
+    //How many doses does this drop have? i.e. how many mobs can it serve?
     size_t total_doses;
+    //If the consumption effect increases something, this specifies the amount.
     int increase_amount;
+    //If it increases a spray type count, this specifies the spray type index.
     size_t spray_type_to_increase;
+    //If it gives a status effect, this points to the status type.
     status_type* status_to_give;
+    //How quickly it shrinks. Aesthetic only.
     float shrink_speed;
     
     drop_type();

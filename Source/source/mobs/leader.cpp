@@ -186,11 +186,13 @@ void leader::dismiss() {
     
     
     struct subgroup_dismiss_info {
+        //Subgroup type.
         subgroup_type* type;
-        mob_type* m_type;
+        //Radius of the group.
         float radius;
+        //Group members of this subgroup type.
         vector<mob*> members;
-        size_t row;
+        //Center point of the subgroup.
         point center;
     };
     vector<subgroup_dismiss_info> subgroups_info;
@@ -217,7 +219,6 @@ void leader::dismiss() {
                 
                 if(!subgroup_exists) {
                     subgroups_info.push_back(subgroup_dismiss_info());
-                    subgroups_info.back().m_type = m_ptr->type;
                     subgroup_exists = true;
                 }
                 
@@ -259,10 +260,14 @@ void leader::dismiss() {
     //We place the first subgroup, then some padding, then the next group,
     //etc. For every subgroup we place, we must update the thickness.
     struct row_info {
+        //Index of subgroups in this row.
         vector<size_t> subgroups;
+        //Angular distance spread out from the row center.
         float dist_between_center;
+        //How thick this row is.
         float thickness;
-        float angle_occupation; //How much is taken up by Pikmin and padding.
+        //How much is taken up by Pikmin and padding.
+        float angle_occupation;
         
         row_info() {
             dist_between_center = 0;
@@ -323,7 +328,6 @@ void leader::dismiss() {
             cur_row.angle_occupation = new_angle_occupation;
             
             cur_row.subgroups.push_back(cur_subgroup_nr);
-            subgroups_info[cur_subgroup_nr].row = cur_row_nr;
             cur_subgroup_nr++;
         }
         

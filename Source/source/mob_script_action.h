@@ -371,12 +371,19 @@ struct mob_action_param {
  * Information about how to run a specific instance of a mob action.
  */
 struct mob_action_run_data {
+    //Mob that will run the action.
     mob* m;
+    //Action call information.
     mob_action_call* call;
+    //Arguments used.
     vector<string> args;
+    //Event custom data 1.
     void* custom_data_1;
+    //Event custom data 2.
     void* custom_data_2;
+    //Return value, if applicable.
     bool return_value;
+
     mob_action_run_data(mob* m, mob_action_call* call);
 };
 
@@ -389,10 +396,15 @@ typedef bool (mob_action_load_code)(mob_action_call &call);
  * Information about a mob action.
  */
 struct mob_action {
+    //Type of mob action.
     MOB_ACTION_TYPES type;
+    //Name.
     string name;
+    //Code to run.
     mob_action_code* code;
+    //Extra logic to run when this action is loaded from a script file.
     mob_action_load_code* extra_load_logic;
+    //Parameters that it can take.
     vector<mob_action_param> parameters;
     
     mob_action();
@@ -404,14 +416,19 @@ struct mob_action {
  * in the FSM.
  */
 struct mob_action_call {
+    //Action to run, if any.
     mob_action* action;
+    //Custom code to run, if any.
     custom_action_code code;
-    
+    //Arguments to use.
     vector<string> args;
+    //List of which arguments are variable names.
     vector<bool> arg_is_var;
-    
+    //If something went wrong in parsing it, this describes the error.
     string custom_error;
+    //Event the action belongs to.
     MOB_EV_TYPES parent_event;
+    //Mob type that owns these calls.
     mob_type* mt;
     
     bool load_from_data_node(data_node* dn, mob_type* mt);

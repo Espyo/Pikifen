@@ -347,7 +347,9 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
     
     //Now, rebuild the spots. Let's draw wheels from the center, for now.
     struct alpha_spot {
+        //Position of the spot.
         point pos;
+        //How far away it is from the rightmost spot.
         dist distance_to_rightmost;
         alpha_spot(const point &p) :
             pos(p) { }

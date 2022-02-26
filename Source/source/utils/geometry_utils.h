@@ -22,7 +22,10 @@
  * Simple 2D point.
  */
 struct point {
-    float x, y;
+    //X coordinate.
+    float x;
+    //Y coordinate.
+    float y;
     
     point(const float x, const float y);
     point();
@@ -79,8 +82,11 @@ public:
     float to_float();
     
 private:
+    //Distance squared. Most operations are based on this number.
     float distance_squared;
+    //Square root of the distance squared. Only used if necessary.
     float normal_distance;
+    //Do we know the normal distance?
     bool has_normal_distance;
     
 };

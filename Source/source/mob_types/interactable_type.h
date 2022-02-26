@@ -20,7 +20,9 @@
  */
 class interactable_type : public mob_type {
 public:
+    //Text to display above the mob, prompting the player on what to do.
     string prompt_text;
+    //How close the leader must be before the player can interact with it.
     float trigger_range;
     
     interactable_type();

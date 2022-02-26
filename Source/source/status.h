@@ -71,47 +71,71 @@ enum STATUS_REAPPLY_RULES {
  * Pikmin on fire or drowning.
  */
 struct status_type {
+    //Name of the status type.
     string name;
+    //Flags indicating what sorts of mobs it affects.
     unsigned char affects;
+    //Color that best represents this status type.
     ALLEGRO_COLOR color;
+    //Tint affected mobs with this color.
     ALLEGRO_COLOR tint;
+    //Make affected mobs glow with this color.
     ALLEGRO_COLOR glow;
-    
+    //Can the status effect be removed if the affected mob is whistled?
     bool removable_with_whistle;
+    //Remove the status when the affected mob leaves the hazard causing it?
     bool remove_on_hazard_leave;
+    //Remove the status automatically after these many seconds. 0 for never.
     float auto_remove_time;
+    //Rule to follow when re-applying the status effect.
     STATUS_REAPPLY_RULES reapply_rule;
-    
     //Health addition/subtraction per second.
     float health_change;
     //Health addition/subtraction percentage per second.
     float health_change_ratio;
     //Increase/decrease in maturity when the status is gained.
     int maturity_change_amount;
-    
+    //How the affected mob's state changes, if it does at all.
     STATUS_STATE_CHANGES state_change_type;
+    //Name of the mob state to change to, if any.
     string state_change_name;
+    //Name of the mob animation to change to, if any.
     string animation_change;
-    
+    //Multiply the affected mob's speed by this much.
     float speed_multiplier;
+    //Multiply the affected mob's attack power by this much.
     float attack_multiplier;
+    //Multiply the affected mob's defense by this much.
     float defense_multiplier;
+    //Multiply the affected mob's animation speed by this much.
     float anim_speed_multiplier;
+    //Does this status effect disable the affected mob's attacking ability?
     bool disables_attack;
+    //Does this status effect make the mob inedible?
     bool turns_inedible;
+    //Does this status effect make the mob invisible?
     bool turns_invisible;
+    //Does this status effect freeze the mob's animation?
     bool freezes_animation;
-    
-    //We need to know this in order to remove the particle generator later.
+    //Generates particles? We need to know so we can remove the generator later.
     bool generates_particles;
+    //Particle generator, if any.
     particle_generator* particle_gen;
+    //Horizontal offset of the particle generator.
     point particle_offset_pos;
+    //Vertical offset of the particle generator.
     float particle_offset_z;
+    //How much the affected mob should shake by, if at all.
     float shaking_effect;
+    //Name of the animation to overlay on top of affected mobs.
     string overlay_animation;
+    //Scale the overlay animation by this much, related to the mob's size.
     float overlay_anim_mob_scale;
+    //Animation database for the overlay animation.
     animation_database overlay_anim_db;
+    //Animation instance for the overlay animation.
     animation_instance overlay_anim_instance;
+    //Replace with this other status effect, when its time is over.
     status_type* replacement_on_timeout;
     
     status_type();
@@ -123,9 +147,11 @@ struct status_type {
  * Instance of an active status effect on a mob.
  */
 struct status {
+    //Status type.
     status_type* type;
-    
-    float time_left; //If this status effect auto-removes itself.
+    //Time left, if this status effect auto-removes itself.
+    float time_left; 
+    //Should this status be deleted from the mob's statuses?
     bool to_delete;
     
     void tick(const float delta_t);

@@ -42,6 +42,7 @@ enum PELLET_STATES {
  */
 class pellet_type : public mob_type {
 public:
+    //Type of Pikmin this pellet relates to.
     pikmin_type* pik_type;
     //Number on the pellet, and hence, its weight.
     size_t number;
@@ -49,6 +50,7 @@ public:
     size_t match_seeds;
     //Number of seeds given out if the pellet's taken to a non-matching Onion.
     size_t non_match_seeds;
+    //Bitmap to use to represent the number on the pellet.
     ALLEGRO_BITMAP* bmp_number;
     
     pellet_type();
