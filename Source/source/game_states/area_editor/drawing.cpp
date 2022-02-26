@@ -28,7 +28,7 @@ void area_editor::do_drawing() {
     ImGui::Render();
     
     //Actually draw the GUI + canvas on-screen.
-    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_clear_to_color(COLOR_BLACK);
     ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
     
     draw_unsaved_changes_warning();
@@ -52,7 +52,7 @@ void area_editor::draw_canvas() {
         canvas_br.x - canvas_tl.x, canvas_br.y - canvas_tl.y
     );
     
-    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_clear_to_color(COLOR_BLACK);
     
     float lowest_sector_z = 0.0f;
     float highest_sector_z = 0.0f;
@@ -1141,14 +1141,14 @@ void area_editor::draw_canvas() {
             marker.y,
             marker.x + 10 / game.cam.zoom,
             marker.y,
-            al_map_rgb(255, 255, 255), 2.0 / game.cam.zoom
+            COLOR_WHITE, 2.0 / game.cam.zoom
         );
         al_draw_line(
             marker.x,
             marker.y - 10 / game.cam.zoom,
             marker.x,
             marker.y + 10 / game.cam.zoom,
-            al_map_rgb(255, 255, 255), 2.0 / game.cam.zoom
+            COLOR_WHITE, 2.0 / game.cam.zoom
         );
     }
     
@@ -1163,14 +1163,14 @@ void area_editor::draw_canvas() {
             marker.y - 10 / game.cam.zoom,
             marker.x + 10 / game.cam.zoom,
             marker.y + 10 / game.cam.zoom,
-            al_map_rgb(255, 255, 255), 2.0 / game.cam.zoom
+            COLOR_WHITE, 2.0 / game.cam.zoom
         );
         al_draw_line(
             marker.x - 10 / game.cam.zoom,
             marker.y + 10 / game.cam.zoom,
             marker.x + 10 / game.cam.zoom,
             marker.y - 10 / game.cam.zoom,
-            al_map_rgb(255, 255, 255), 2.0 / game.cam.zoom
+            COLOR_WHITE, 2.0 / game.cam.zoom
         );
     }
     
@@ -1201,7 +1201,7 @@ void area_editor::draw_canvas() {
             al_draw_filled_rectangle(
                 cross_section_z_window_start.x, cross_section_z_window_start.y,
                 cross_section_z_window_end.x, cross_section_z_window_end.y,
-                al_map_rgb(0, 0, 0)
+                COLOR_BLACK
             );
         }
         
@@ -1356,11 +1356,11 @@ void area_editor::draw_canvas() {
                     al_draw_line(
                         cross_section_window_start.x, line_y,
                         cross_section_z_window_start.x + 6, line_y,
-                        al_map_rgb(255, 255, 255), 1
+                        COLOR_WHITE, 1
                     );
                     
                     draw_scaled_text(
-                        game.fonts.builtin, al_map_rgb(255, 255, 255),
+                        game.fonts.builtin, COLOR_WHITE,
                         point(
                             (cross_section_z_window_start.x + 8),
                             line_y
@@ -1374,7 +1374,7 @@ void area_editor::draw_canvas() {
         } else {
         
             draw_scaled_text(
-                game.fonts.builtin, al_map_rgb(255, 255, 255),
+                game.fonts.builtin, COLOR_WHITE,
                 point(
                     (
                         cross_section_window_start.x +

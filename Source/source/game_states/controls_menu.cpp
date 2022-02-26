@@ -258,7 +258,7 @@ void controls_menu_state::delete_control_gui_items() {
  * Draws the controls menu.
  */
 void controls_menu_state::do_drawing() {
-    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_clear_to_color(COLOR_BLACK);
     
     draw_bitmap(
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
@@ -275,7 +275,7 @@ void controls_menu_state::do_drawing() {
         
         draw_text_lines(
             game.fonts.standard,
-            al_map_rgb(255, 255, 255),
+            COLOR_WHITE,
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             ALLEGRO_ALIGN_CENTER,
             1,
@@ -455,7 +455,7 @@ void controls_menu_state::load() {
         [this]
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
-            game.fonts.standard, al_map_rgb(255, 255, 255),
+            game.fonts.standard, COLOR_WHITE,
             center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
             gui.get_current_tooltip()
         );

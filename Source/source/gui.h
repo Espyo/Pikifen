@@ -154,7 +154,7 @@ public:
     
     button_gui_item(
         const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255)
+        const ALLEGRO_COLOR &color = COLOR_WHITE
     );
 };
 
@@ -175,7 +175,7 @@ public:
     
     check_gui_item(
         bool* value, const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255)
+        const ALLEGRO_COLOR &color = COLOR_WHITE
     );
 };
 
@@ -248,7 +248,7 @@ public:
     
     text_gui_item(
         const string &text, ALLEGRO_FONT* font,
-        const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
+        const ALLEGRO_COLOR &color = COLOR_WHITE,
         const int flags = ALLEGRO_ALIGN_CENTER
     );
 };

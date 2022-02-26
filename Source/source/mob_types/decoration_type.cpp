@@ -26,7 +26,7 @@ decoration_type::decoration_type() :
     
     target_type = MOB_TARGET_TYPE_NONE;
     
-    tint_random_maximum = al_map_rgba(0, 0, 0, 0);
+    tint_random_maximum = COLOR_EMPTY;
     decoration_fsm::create_fsm(this);
 }
 

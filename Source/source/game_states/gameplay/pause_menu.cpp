@@ -111,7 +111,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
         [this]
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
-            game.fonts.standard, al_map_rgb(255, 255, 255),
+            game.fonts.standard, COLOR_WHITE,
             center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
             gui.get_current_tooltip()
         );

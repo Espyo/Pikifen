@@ -249,7 +249,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
                 al_map_rgba(188, 230, 230, 128)
             );
             
-            ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
+            ALLEGRO_COLOR color = COLOR_WHITE;
             const auto &red_it = this->red_items.find(onion_amount_text);
             if(red_it != this->red_items.end()) {
                 color =
@@ -334,7 +334,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
                 al_map_rgba(188, 230, 230, 128)
             );
             
-            ALLEGRO_COLOR color = al_map_rgb(255, 255, 255);
+            ALLEGRO_COLOR color = COLOR_WHITE;
             const auto &red_it = this->red_items.find(group_amount_text);
             if(red_it != this->red_items.end()) {
                 color =
@@ -467,7 +467,7 @@ gameplay_state::onion_menu_struct::onion_menu_struct(
         [this]
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
-            game.fonts.standard, al_map_rgb(255, 255, 255),
+            game.fonts.standard, COLOR_WHITE,
             center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
             gui.get_current_tooltip()
         );

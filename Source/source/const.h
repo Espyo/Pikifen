@@ -40,6 +40,13 @@ constexpr size_t INVALID = UINT32_MAX;
 //Cross-platform way of representing a float value of "invalid" or similar.
 constexpr float LARGE_FLOAT = 999999.0f;
 
+//Full-white opaque color.
+const ALLEGRO_COLOR COLOR_WHITE = { 1.0f, 1.0f, 1.0f, 1.0f };
+//Full-black opaque color.
+const ALLEGRO_COLOR COLOR_BLACK = { 0.0f, 0.0f, 0.0f, 1.0f };
+//Fully-transparent color, in black.
+const ALLEGRO_COLOR COLOR_EMPTY = { 0.0f, 0.0f, 0.0f, 0.0f };
+
 //The default rotation speed of a mob type.
 const float DEF_ROTATION_SPEED = 630.0f;
 //The whistle can't go past this radius, by default.

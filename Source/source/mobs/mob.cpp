@@ -1812,7 +1812,7 @@ void mob::get_sprite_bitmap_effects(
     
     if(add_status) {
         size_t n_glow_colors = 0;
-        ALLEGRO_COLOR glow_color_sum = al_map_rgba(0, 0, 0, 0);
+        ALLEGRO_COLOR glow_color_sum = COLOR_EMPTY;
         
         for(size_t s = 0; s < statuses.size(); ++s) {
             status_type* t = this->statuses[s].type;
@@ -3270,7 +3270,7 @@ void mob::tick_misc_logic(const float delta_t) {
     //Fraction numbers.
     float fraction_value_nr = 0.0f;
     float fraction_req_nr = 0.0f;
-    ALLEGRO_COLOR fraction_color = al_map_rgb(0, 0, 0);
+    ALLEGRO_COLOR fraction_color = COLOR_BLACK;
     bool should_show_fraction =
         get_fraction_numbers_info(
             &fraction_value_nr, &fraction_req_nr, &fraction_color

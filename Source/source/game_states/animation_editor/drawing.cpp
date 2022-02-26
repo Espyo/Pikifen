@@ -29,7 +29,7 @@ void animation_editor::do_drawing() {
     ImGui::Render();
     
     //Actually draw the GUI + canvas on-screen.
-    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_clear_to_color(COLOR_BLACK);
     ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
     
     draw_unsaved_changes_warning();
@@ -353,7 +353,7 @@ void animation_editor::draw_comparison() {
         if(comparison_tint) {
             tint = al_map_rgb(255, 128, 0);
         } else {
-            tint = al_map_rgb(255, 255, 255);
+            tint = COLOR_WHITE;
         }
         draw_bitmap(
             comparison_sprite->bitmap,
@@ -444,7 +444,7 @@ void animation_editor::draw_side_view_pikmin_silhouette(const float x_offset) {
  */
 void animation_editor::draw_side_view_sprite(sprite* s) {
     point min, max;
-    ALLEGRO_COLOR color = al_map_rgba(0, 0, 0, 0);
+    ALLEGRO_COLOR color = COLOR_EMPTY;
     
     get_transformed_rectangle_bounding_box(
         s->offset, s->file_size * s->scale, s->angle,
@@ -688,7 +688,7 @@ void animation_editor::draw_top_down_view_sprite(sprite* s) {
         ) {
             tint = al_map_rgb(0, 128, 255);
         } else {
-            tint = al_map_rgb(255, 255, 255);
+            tint = COLOR_WHITE;
         }
         draw_bitmap(
             s->bitmap, s->offset,

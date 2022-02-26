@@ -151,7 +151,7 @@ void area_data::clear() {
     spray_amounts.clear();
     weather_name.clear();
     bg_bmp_file_name.clear();
-    bg_color = al_map_rgb(0, 0, 0);
+    bg_color = COLOR_BLACK;
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
     
@@ -1957,7 +1957,7 @@ sector_texture_info::sector_texture_info() :
     scale(1.0, 1.0),
     rot(0),
     bitmap(nullptr),
-    tint(al_map_rgb(255, 255, 255)) {
+    tint(COLOR_WHITE) {
 }
 
 

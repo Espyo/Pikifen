@@ -15,7 +15,7 @@
  * Creates a liquid type.
  */
 liquid::liquid() :
-    main_color(al_map_rgba(0, 0, 0, 0)),
+    main_color(COLOR_EMPTY),
     surface_alpha(255) {
     
     surface_speed[0] = 10;

@@ -48,7 +48,7 @@ particle::particle(
     pos(pos),
     z(z),
     size(size),
-    color(al_map_rgb(255, 255, 255)),
+    color(COLOR_WHITE),
     priority(priority) {
     
 }

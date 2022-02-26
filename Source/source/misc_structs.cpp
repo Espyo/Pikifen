@@ -126,8 +126,8 @@ bitmap_effect_info::bitmap_effect_info() :
     translation(0, 0),
     rotation(0),
     scale(1, 1),
-    tint_color(al_map_rgb(255, 255, 255)),
-    glow_color(al_map_rgb(0, 0, 0)) {
+    tint_color(COLOR_WHITE),
+    glow_color(COLOR_BLACK) {
     
 }
 

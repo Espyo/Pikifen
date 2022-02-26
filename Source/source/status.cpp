@@ -47,9 +47,9 @@ void status::tick(const float delta_t) {
  */
 status_type::status_type() :
     affects(0),
-    color(al_map_rgba(0, 0, 0, 0)),
-    tint(al_map_rgb(255, 255, 255)),
-    glow(al_map_rgba(0, 0, 0, 0)),
+    color(COLOR_EMPTY),
+    tint(COLOR_WHITE),
+    glow(COLOR_EMPTY),
     removable_with_whistle(false),
     remove_on_hazard_leave(false),
     auto_remove_time(0.0f),

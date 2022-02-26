@@ -53,12 +53,12 @@ void draw_background_logos(
 void draw_bitmap(
     ALLEGRO_BITMAP* bmp, const point &center,
     const point &size, const float angle = 0,
-    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
+    const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_bitmap_in_box(
     ALLEGRO_BITMAP* bmp, const point &center,
     const point &box_size, const float angle = 0,
-    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
+    const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_bitmap_with_effects(
     ALLEGRO_BITMAP* bmp, const bitmap_effect_info &effects
@@ -142,7 +142,7 @@ void draw_text_lines(
 );
 void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,
-    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
+    const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 float ease(
     const EASING_METHODS method, float y

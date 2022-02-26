@@ -3397,7 +3397,7 @@ void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
             16, 1, PARTICLE_PRIORITY_LOW
         );
         pa.bitmap = game.sys_assets.bmp_sparkle;
-        pa.color = al_map_rgb(255, 255, 255);
+        pa.color = COLOR_WHITE;
         particle_generator pg(0, pa, 8);
         pg.number_deviation = 1;
         pg.size_deviation = 8;

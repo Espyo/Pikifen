@@ -193,7 +193,7 @@ void options_menu_state::change_resolution(const signed int step) {
  * Draws the options menu.
  */
 void options_menu_state::do_drawing() {
-    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_clear_to_color(COLOR_BLACK);
     
     draw_bitmap(
         bmp_menu_bg, point(game.win_w * 0.5, game.win_h * 0.5),
@@ -387,7 +387,7 @@ void options_menu_state::load() {
         [this]
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
-            game.fonts.standard, al_map_rgb(255, 255, 255),
+            game.fonts.standard, COLOR_WHITE,
             center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
             gui.get_current_tooltip()
         );
@@ -398,7 +398,7 @@ void options_menu_state::load() {
     warning_text =
         new text_gui_item(
         "Please restart for the changes to take effect.",
-        game.fonts.standard, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_RIGHT
+        game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     warning_text->visible = false;
     gui.add_item(warning_text, "restart_warning");

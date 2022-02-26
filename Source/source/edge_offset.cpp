@@ -754,7 +754,7 @@ void update_offset_effect_buffer(
     
     //Draw!
     if(clear_first) {
-        al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+        al_clear_to_color(COLOR_EMPTY);
     }
     
     for(edge* e_ptr : edges) {

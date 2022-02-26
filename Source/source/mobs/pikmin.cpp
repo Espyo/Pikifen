@@ -104,7 +104,7 @@ void pikmin::draw_mob() {
         fsm.cur_state->id == PIKMIN_STATE_SPROUT;
         
     if(is_idle) {
-        eff.glow_color = al_map_rgb(255, 255, 255);
+        eff.glow_color = COLOR_WHITE;
     }
     
     draw_bitmap_with_effects(s_ptr->bitmap, eff);

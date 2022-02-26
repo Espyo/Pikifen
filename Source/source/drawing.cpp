@@ -850,7 +850,7 @@ void draw_loading_screen(
                 
             //Draw the main text on its bitmap.
             al_set_target_bitmap(game.loading_text_bmp); {
-                al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+                al_clear_to_color(COLOR_EMPTY);
                 draw_text_lines(
                     game.fonts.area_name, al_map_rgb(255, 215, 0),
                     point(), ALLEGRO_ALIGN_LEFT, 0,
@@ -879,7 +879,7 @@ void draw_loading_screen(
                 al_create_bitmap(subtext_w, subtext_h);
                 
             al_set_target_bitmap(game.loading_subtext_bmp); {
-                al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+                al_clear_to_color(COLOR_EMPTY);
                 draw_text_lines(
                     game.fonts.area_name, al_map_rgb(224, 224, 224),
                     point(),

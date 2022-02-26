@@ -275,7 +275,7 @@ gameplay_state::hud_struct::hud_struct() :
     day_nr_text->on_draw =
     [this] (const point & center, const point & size) {
         draw_compressed_text(
-            game.fonts.counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, COLOR_WHITE,
             center, ALLEGRO_ALIGN_CENTER, 1,
             size, i2s(game.states.gameplay->day)
         );
@@ -379,7 +379,7 @@ gameplay_state::hud_struct::hud_struct() :
     pikmin_count_x->on_draw =
     [this] (const point & center, const point & size) {
         draw_compressed_text(
-            game.fonts.counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, COLOR_WHITE,
             center, ALLEGRO_ALIGN_CENTER, 1, size, "x"
         );
     };
@@ -414,7 +414,7 @@ gameplay_state::hud_struct::hud_struct() :
             size
         );
         draw_compressed_scaled_text(
-            game.fonts.counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, COLOR_WHITE,
             point(center.x + size.x * 0.4, center.y),
             point(1.0f, 1.0f) + standby_count->get_juice_value(),
             ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true, i2s(n_standby_pikmin)
@@ -454,7 +454,7 @@ gameplay_state::hud_struct::hud_struct() :
             size
         );
         draw_compressed_scaled_text(
-            game.fonts.counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, COLOR_WHITE,
             point(center.x + size.x * 0.4, center.y),
             point(1.0f, 1.0f) + group_count->get_juice_value(),
             ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
@@ -482,7 +482,7 @@ gameplay_state::hud_struct::hud_struct() :
             size
         );
         draw_compressed_scaled_text(
-            game.fonts.counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, COLOR_WHITE,
             point(center.x + size.x * 0.4, center.y),
             point(1.0f, 1.0f) + field_count->get_juice_value(),
             ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
@@ -523,7 +523,7 @@ gameplay_state::hud_struct::hud_struct() :
             size
         );
         draw_compressed_scaled_text(
-            game.fonts.counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, COLOR_WHITE,
             point(center.x + size.x * 0.4, center.y),
             point(1.0f, 1.0f) + total_count->get_juice_value(),
             ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
@@ -539,7 +539,7 @@ gameplay_state::hud_struct::hud_struct() :
         counter_slash->on_draw =
         [this] (const point & center, const point & size) {
             draw_compressed_text(
-                game.fonts.counter, al_map_rgb(255, 255, 255),
+                game.fonts.counter, COLOR_WHITE,
                 center, ALLEGRO_ALIGN_CENTER, 1, size, "/"
             );
         };
@@ -579,7 +579,7 @@ gameplay_state::hud_struct::hud_struct() :
         if(top_spray_idx == INVALID) return;
         
         draw_compressed_scaled_text(
-            game.fonts.counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, COLOR_WHITE,
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
             ALLEGRO_ALIGN_LEFT, 1, size, true,
@@ -653,7 +653,7 @@ gameplay_state::hud_struct::hud_struct() :
         if(bottom_spray_idx == INVALID) return;
         
         draw_compressed_scaled_text(
-            game.fonts.counter, al_map_rgb(255, 255, 255),
+            game.fonts.counter, COLOR_WHITE,
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
             ALLEGRO_ALIGN_LEFT, 1, size, true,

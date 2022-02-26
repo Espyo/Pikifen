@@ -219,7 +219,7 @@ void bridge::draw_component(mob* m) {
     
     ALLEGRO_VERTEX vertexes[4];
     for(size_t v = 0; v < 4; ++v) {
-        vertexes[v].color = al_map_rgb(255, 255, 255);
+        vertexes[v].color = COLOR_WHITE;
         vertexes[v].z = 0.0f;
     }
     

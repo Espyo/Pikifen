@@ -768,7 +768,7 @@ void gameplay_state::draw_message_box() {
     for(size_t l = 0; l < lines.size(); ++l) {
     
         draw_compressed_text(
-            game.fonts.standard, al_map_rgb(255, 255, 255),
+            game.fonts.standard, COLOR_WHITE,
             point(
                 24,
                 game.win_h -
@@ -939,7 +939,7 @@ void gameplay_state::draw_precipitation() {
         for(size_t p = 0; p < n_precipitation_particles; ++p) {
             al_draw_filled_circle(
                 precipitation[p].x, precipitation[p].y,
-                3, al_map_rgb(255, 255, 255)
+                3, COLOR_WHITE
             );
         }
     }

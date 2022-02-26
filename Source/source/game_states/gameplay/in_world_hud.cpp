@@ -45,7 +45,7 @@ in_world_fraction::in_world_fraction(mob* m) :
     in_world_hud_item(m),
     value_number(0),
     requirement_number(0),
-    color(al_map_rgb(0, 0, 0)),
+    color(COLOR_BLACK),
     grow_juice_timer(0.0f),
     req_met_juice_timer(0.0f) {
     
@@ -90,7 +90,7 @@ void in_world_fraction::draw() {
         final_color =
             interpolate_color(
                 req_met_juice_timer, 0.0f, REQ_MET_JUICE_DURATION,
-                color, al_map_rgb(255, 255, 255)
+                color, COLOR_WHITE
             );
             
         float anim_ratio = 1 - (req_met_juice_timer / REQ_MET_JUICE_DURATION);

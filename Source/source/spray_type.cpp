@@ -21,7 +21,7 @@ spray_type::spray_type() :
     angle(0),
     distance_range(0),
     angle_range(0),
-    main_color(al_map_rgba(0, 0, 0, 0)),
+    main_color(COLOR_EMPTY),
     bmp_spray(nullptr),
     ingredients_needed(10),
     buries_pikmin(false) {

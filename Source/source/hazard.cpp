@@ -10,12 +10,14 @@
 
 #include "hazard.h"
 
+#include "const.h"
+
 
 /* ----------------------------------------------------------------------------
  * Creates a hazard.
  */
 hazard::hazard() :
-    main_color(al_map_rgba(0, 0, 0, 0)),
+    main_color(COLOR_EMPTY),
     associated_liquid(nullptr) {
     
 }
