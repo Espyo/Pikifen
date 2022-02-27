@@ -874,6 +874,7 @@ void hud_struct::start_leader_swap_juice(
 void hud_struct::tick(const float delta_t) {
     if(leader_swap_juice_timer > 0.0f) {
         leader_swap_juice_timer -= delta_t;
+        leader_swap_juice_timer = std::max(0.0f, leader_swap_juice_timer);
     }
     
     for(size_t l = 0; l < 3; ++l) {
@@ -986,20 +987,24 @@ void hud_bubble_manager::get_drawing_info(
     }
     
     //Figure out how to animate it, if we even should animate it.
-    if(transition_anim_ratio > 0.5f) {
-    
-        //First half of the animation.
-        *content_idx = it->second.pre_transition_content_index;
-        if(!match_ptr) {
-            //This bubble has no equivalent to go to. Fade out.
-            *size *= ease(EASE_OUT, (transition_anim_ratio - 0.5f) * 2.0f);
-        } else {
-            //This bubble is heading to a new spot. Move to the first half.
+    if(match_ptr) {
+        //This bubble is heading to a new spot.
+        
+        point match_pivot(
+            (pos->x + match_pos.x) / 2.0f,
+            (pos->y + match_pos.y) / 2.0f
+        );
+        float mov_ratio = ease(EASE_IN_ELASTIC, 1.0f - transition_anim_ratio);
+        float pivot_dist = dist(*pos, match_pivot).to_float();
+        
+        if(transition_anim_ratio > 0.5f) {
+            //First half of the animation. Move to the first half.
+            float match_start_angle = get_angle(match_pivot, *pos);
             *pos =
-                interpolate_point(
-                    ease(EASE_IN_ELASTIC, 1.0f - transition_anim_ratio),
-                    0.0f, 1.0f,
-                    *pos, match_pos
+                match_pivot +
+                rotate_point(
+                    point(pivot_dist, 0.0f),
+                    match_start_angle + mov_ratio * TAU / 2.0f
                 );
             *size =
                 interpolate_point(
@@ -1007,22 +1012,15 @@ void hud_bubble_manager::get_drawing_info(
                     0.0f, 1.0f,
                     *size, match_size
                 );
-        }
-        
-    } else {
-    
-        //Second half of the animation.
-        *content_idx = it->second.content_index;
-        if(!match_ptr) {
-            //This bubble has no equivalent to come from. Fade in.
-            *size *= ease(EASE_OUT, 1 - transition_anim_ratio * 2.0f);
+                
         } else {
-            //This bubble is heading to a new spot. Move from the first half.
+            //Second half of the animation. Move from the first half.
+            float match_start_angle = get_angle(match_pivot, match_pos);
             *pos =
-                interpolate_point(
-                    ease(EASE_IN_ELASTIC, 1.0f - transition_anim_ratio),
-                    0.0f, 1.0f,
-                    match_pos, *pos
+                match_pivot +
+                rotate_point(
+                    point(pivot_dist, 0.0f),
+                    match_start_angle + mov_ratio * TAU / 2.0f
                 );
             *size =
                 interpolate_point(
@@ -1030,8 +1028,28 @@ void hud_bubble_manager::get_drawing_info(
                     0.0f, 1.0f,
                     match_size, *size
                 );
+                
         }
         
+    } else {
+        //This bubble has no equivalent to go to.
+        
+        if(transition_anim_ratio > 0.5f) {
+            //First half of the animation. Fade out.
+            *size *= ease(EASE_OUT, (transition_anim_ratio - 0.5f) * 2.0f);
+            
+        } else {
+            //Second half of the animation. Fade in.
+            *size *= ease(EASE_OUT, 1 - transition_anim_ratio * 2.0f);
+            
+        }
+    }
+    
+    //Set the content index.
+    if(transition_anim_ratio > 0.5f) {
+        *content_idx = it->second.pre_transition_content_index;
+    } else {
+        *content_idx = it->second.content_index;
     }
 }
 

@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Leader HUD info improvements
-        Make the leader icons move into place in a circular fashion, like Pikmin 2
         Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
         Leader HUD icons should be skipped if the leader is dead (thanks Helodity)
         Leader health wheels should glow red when at low health (thanks Helodity)
