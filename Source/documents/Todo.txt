@@ -47,8 +47,6 @@ Next tasks (roughly sorted most important first)
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Memory leaks, cppcheck, etc.
     Demo content
-        Find a better name for the demo "game", like "Pikifen demo", instead of "Pikifen alpha"
-            The pre-packaged content doesn't need a name... So just make it so that if the game name and/or game version fields are ommitted, the title screen doesn't say anything about any game
         If something is under construction, like a menu or something, add a small "WIP" blurb
         [NEEDS BRAINSTORMING] Maybe add an F1 screen with quick-start help?
             Actually, it should maybe be an option in the pause menu

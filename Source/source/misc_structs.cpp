@@ -821,9 +821,11 @@ void performance_monitor_struct::save_log() {
         get_current_time(false) +
         "; Pikifen version " +
         i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
-        "." + i2s(VERSION_REV) + ", game version " +
-        game.config.version;
-        
+        "." + i2s(VERSION_REV);
+    if(!game.config.version.empty()) {
+        s += ", game version " + game.config.version;
+    }
+    
     s +=
         "\nData from the latest played area, " + area_name + ", with " +
         i2s(frame_samples) + " gameplay frames sampled.\n";

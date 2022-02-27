@@ -840,7 +840,10 @@ void load_game_config() {
     
     game.config.load(&file);
     
-    al_set_window_title(game.display, game.config.name.c_str());
+    al_set_window_title(
+        game.display,
+        game.config.name.empty() ? "Pikifen" : game.config.name.c_str()
+    );
 }
 
 

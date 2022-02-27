@@ -1001,8 +1001,12 @@ void log_error(string s, data_node* d) {
             get_current_time(false) +
             "; Pikifen version " +
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
-            "." + i2s(VERSION_REV) + ", game version " +
-            game.config.version + "\n" + s;
+            "." + i2s(VERSION_REV);
+        if(!game.config.version.empty()) {
+            s +=
+                ", game version " +
+                game.config.version + "\n" + s;
+        }
     }
     
     string prev_error_log;

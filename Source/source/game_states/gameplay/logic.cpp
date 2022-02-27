@@ -662,15 +662,19 @@ void gameplay_state::do_menu_logic() {
         string resolution_str =
             i2s(game.win_w) + "x" + i2s(game.win_h);
         string area_v_str =
+            game.cur_area_data.version.empty() ?
+            "-" :
             game.cur_area_data.version;
         string area_maker_str =
+            game.cur_area_data.maker.empty() ?
+            "-" :
             game.cur_area_data.maker;
         string engine_v_str =
             i2s(VERSION_MAJOR) + "." +
             i2s(VERSION_MINOR) + "." +
             i2s(VERSION_REV);
         string game_v_str =
-            game.config.version;
+            game.config.version.empty() ? "-" : game.config.version;
             
         print_info(
             "FPS: " + fps_str +

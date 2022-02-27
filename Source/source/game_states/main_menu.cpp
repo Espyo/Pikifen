@@ -71,14 +71,23 @@ void main_menu_state::do_drawing() {
         ALLEGRO_ALIGN_LEFT, 2,
         "Pikmin (c) Nintendo"
     );
+    string version_text;
+    if(!game.config.name.empty()) {
+        version_text = game.config.name;
+        if(!game.config.version.empty()) {
+            version_text += " " + game.config.version;
+        }
+        version_text += ", powered by ";
+    }
+    version_text +=
+        "Pikifen " +
+        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV);
     draw_scaled_text(
         game.fonts.standard, COLOR_WHITE,
         point(game.win_w - 8, game.win_h  - 8),
         point(0.6, 0.6),
         ALLEGRO_ALIGN_RIGHT, 2,
-        game.config.name + " " + game.config.version +
-        ", powered by Pikifen " +
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV)
+        version_text
     );
     
     gui.draw();
@@ -231,7 +240,12 @@ void main_menu_state::load() {
         game.is_game_running = false;
     };
     gui.back_item->on_get_tooltip =
-    [] () { return "Quit " + game.config.name + "."; };
+    [] () {
+        return
+            game.config.name.empty() ?
+            "Quit Pikifen." :
+            "Quit " + game.config.name + ".";
+    };
     gui.add_item(gui.back_item, "exit");
     
     //Tooltip text.
