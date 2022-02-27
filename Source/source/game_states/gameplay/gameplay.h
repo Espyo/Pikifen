@@ -20,44 +20,10 @@
 #include "../../replay.h"
 #include "../game_state.h"
 #include "../../gui.h"
-
-
-/* ----------------------------------------------------------------------------
- * Manages the contents of "bubbles" in the HUD that have the ability to move
- * around, or fade in/out of existence, depending on what the player swapped,
- * and how.
- * I'm calling these "bubbles" because this slide/shrink/grow behavior is
- * typically used by HUD items that are drawn inside some bubble.
- */
-struct hud_bubble_manager {
-public:
-    struct bubble_info {
-        //GUI item.
-        gui_item* bubble;
-        //Index number of whatever content it holds.
-        size_t content_index;
-        //Index number of whatever content it held, pre-transition.
-        size_t pre_transition_content_index;
-        
-        bubble_info(gui_item* bubble = NULL);
-    };
-    
-    hud_bubble_manager();
-    size_t get_content_index(const size_t number);
-    void get_drawing_info(
-        const size_t number, const float transition_anim_ratio,
-        size_t* content_idx, point* pos, point* scale
-    );
-    size_t get_pre_transition_content_index(const size_t number);
-    void register_bubble(const size_t number, gui_item* bubble);
-    void setup_transition();
-    void update_content_index(const size_t number, const size_t new_index);
-    
-private:
-    map<size_t, bubble_info> bubbles;
-    
-};
-
+#include "gameplay_utils.h"
+#include "hud.h"
+#include "onion_menu.h"
+#include "pause_menu.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -70,49 +36,9 @@ public:
     static const float AREA_TITLE_FADE_DURATION;
     static const float CURSOR_TRAIL_SAVE_INTERVAL;
     static const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
-    static const string HUD_FILE_NAME;
     static const float MENU_ENTRY_HUD_MOVE_TIME;
     static const float MENU_EXIT_HUD_MOVE_TIME;
-    static const size_t ONION_MENU_TYPES_PER_PAGE;
     static const float SWARM_ARROW_SPEED;
-    
-    struct hud_struct {
-    public:
-        static const float LEADER_SWAP_JUICE_DURATION;
-        
-        //GUI manager.
-        gui_manager gui;
-        //Time left for the leader swap juice animation.
-        float leader_swap_juice_timer;
-        //Bubble manager for leader icon items.
-        hud_bubble_manager leader_icon_mgr;
-        //Bubble manager for leader health items.
-        hud_bubble_manager leader_health_mgr;
-        //Spray 1 amount text. Cache for convenience.
-        gui_item* spray_1_amount;
-        //Spray 2 amount text. Cache for convenience.
-        gui_item* spray_2_amount;
-        //Current standby count.
-        size_t standby_count_nr;
-        //Standby count text. Cache for convenience.
-        gui_item* standby_count;
-        //Current group count.
-        size_t group_count_nr;
-        //Group count text. Cache for convenience.
-        gui_item* group_count;
-        //Current field count.
-        size_t field_count_nr;
-        //Field count text. Cache for convenience.
-        gui_item* field_count;
-        //Current total count.
-        size_t total_count_nr;
-        //Total count text. Cache for convenience.
-        gui_item* total_count;
-        
-        hud_struct();
-        void start_leader_swap_juice(const size_t old_leader_nr);
-        void tick(const float delta_t);
-    };
     
     gameplay_state();
     
@@ -124,6 +50,8 @@ public:
     timer area_title_fade_timer;
     //Name of the area to be loaded.
     string area_to_load;
+    //Fog effect buffer.
+    ALLEGRO_BITMAP* bmp_fog;
     //Group member closest to player 1's leader.
     mob* closest_group_member;
     //Is the group member closest to player 1's leader distant?
@@ -132,6 +60,8 @@ public:
     size_t cur_leader_nr;
     //Pointer to player 1's leader. Cache for convenience.
     leader* cur_leader_ptr;
+    //What day it is, in-game.
+    size_t day;
     //What time of the day is it in-game? In minutes.
     float day_minutes;
     //Replay of the current day.
@@ -156,6 +86,8 @@ public:
     vector<point> precipitation;
     //Time until the next drop of precipitation.
     timer precipitation_timer;
+    //Spray that player 1 has currently selected.
+    size_t selected_spray;
     //How many of each spray/ingredients player 1 has.
     vector<spray_stats_struct> spray_stats;
     //All types of subgroups.
@@ -201,163 +133,6 @@ public:
     
 private:
 
-    //When processing inter-mob events, we want the mob to follow them from the
-    //closest mob to the one farthest away. As such, this struct saves data on
-    //a viable mob, its distance, and the corresponding event.
-    //We can then go through a vector of these pending intermob events in order.
-    struct pending_intermob_event {
-        //Distance between both mobs.
-        dist d;
-        //Pointer to the relevant event.
-        mob_event* event_ptr;
-        //Mob who the event belongs to.
-        mob* mob_ptr;
-        pending_intermob_event(
-            const dist &d, mob_event* event_ptr, mob* mob_ptr
-        ):
-            d(d),
-            event_ptr(event_ptr),
-            mob_ptr(mob_ptr) {
-            
-        }
-    };
-    
-    //Contains information about a given Pikmin type in an Onion menu.
-    struct onion_menu_type_struct {
-        //The player wants to add/subtract these many from the group.
-        int delta;
-        //Index of this type in the Onion's list. Cache for convenience.
-        size_t type_idx;
-        //Index in the on-screen list, or INVALID. Cache for convenience.
-        size_t on_screen_idx;
-        //Pikmin type associated. Cache for convenience.
-        pikmin_type* pik_type;
-        
-        onion_menu_type_struct(const size_t idx, pikmin_type* pik_type);
-    };
-    
-    //Contains information about the Onion menu currently being presented to
-    //the player.
-    struct onion_menu_struct {
-    public:
-        //Pointer to the struct with nest information.
-        pikmin_nest_struct* n_ptr;
-        //Pointer to the leader responsible.
-        leader* l_ptr;
-        //Information on every type's management.
-        vector<onion_menu_type_struct> types;
-        //GUI manager.
-        gui_manager gui;
-        //Is "select all" currently on?
-        bool select_all;
-        //If it manages more than 5, this is the Pikmin type page index.
-        size_t page;
-        //Which GUI items are in red right now, if any, and how much time left.
-        map<gui_item*, float> red_items;
-        //Total page amount. Cache for convenience.
-        size_t nr_pages;
-        //Pikmin types currently on-screen. Cache for convenience.
-        vector<onion_menu_type_struct*> on_screen_types;
-        //List of GUI items for the Onion icons. Cache for convenience.
-        vector<gui_item*> onion_icon_items;
-        //List of GUI items for the Onion buttons. Cache for convenience.
-        vector<gui_item*> onion_button_items;
-        //List of GUI items for the Onion amounts. Cache for convenience.
-        vector<gui_item*> onion_amount_items;
-        //List of GUI items for the group icons. Cache for convenience.
-        vector<gui_item*> group_icon_items;
-        //List of GUI items for the group buttons. Cache for convenience.
-        vector<gui_item*> group_button_items;
-        //List of GUI items for the group amounts. Cache for convenience.
-        vector<gui_item*> group_amount_items;
-        //The button that controls all Onions. Cache for convenience.
-        gui_item* onion_all_button;
-        //The button that controls all groups. Cache for convenience.
-        gui_item* group_all_button;
-        //Left Onion "more..." icon. Cache for convenience.
-        gui_item* onion_more_l_icon;
-        //Right Onion "more..." icon. Cache for convenience.
-        gui_item* onion_more_r_icon;
-        //Left group "more..." icon. Cache for convenience.
-        gui_item* group_more_l_icon;
-        //Right group "more..." icon. Cache for convenience.
-        gui_item* group_more_r_icon;
-        //Previous page button. Cache for convenience.
-        gui_item* prev_page_button;
-        //Next page button. Cache for convenience.
-        gui_item* next_page_button;
-        //Field amount text. Cache for convenience.
-        gui_item* field_amount_text;
-        //Multiply the background alpha by this much.
-        float bg_alpha_mult;
-        //Time left until the menu finishes closing.
-        float closing_timer;
-        //Is the struct meant to be deleted?
-        bool to_delete;
-        
-        onion_menu_struct(pikmin_nest_struct* n_ptr, leader* l_ptr);
-        ~onion_menu_struct();
-        void add_all_to_group();
-        void add_all_to_onion();
-        void add_to_group(const size_t type_idx);
-        void add_to_onion(const size_t type_idx);
-        void confirm();
-        void go_to_page(const size_t page);
-        void handle_event(const ALLEGRO_EVENT &ev);
-        void start_closing();
-        void tick(const float delta_t);
-        void toggle_select_all();
-        
-        static const float RED_TEXT_DURATION;
-        
-    private:
-        //Is it currently closing?
-        bool closing;
-        
-        void make_gui_item_red(gui_item* item);
-        void update();
-        
-        static const string GUI_FILE_PATH;
-    };
-    
-    //Contains information about the pause menu currently being presented to
-    //the player.
-    struct pause_menu_struct {
-    public:
-        //GUI manager.
-        gui_manager gui;
-        //Multiply the background alpha by this much.
-        float bg_alpha_mult;
-        //Time left until the menu finishes closing.
-        float closing_timer;
-        //Is the struct meant to be deleted?
-        bool to_delete;
-        
-        pause_menu_struct();
-        ~pause_menu_struct();
-        void handle_event(const ALLEGRO_EVENT &ev);
-        void start_closing();
-        void tick(const float delta_t);
-        
-    private:
-        //Is it currently closing?
-        bool closing;
-        
-        static const string GUI_FILE_PATH;
-    };
-    
-    ALLEGRO_BITMAP* bmp_bubble;
-    ALLEGRO_BITMAP* bmp_counter_bubble_group;
-    ALLEGRO_BITMAP* bmp_counter_bubble_field;
-    ALLEGRO_BITMAP* bmp_counter_bubble_standby;
-    ALLEGRO_BITMAP* bmp_counter_bubble_total;
-    ALLEGRO_BITMAP* bmp_day_bubble;
-    ALLEGRO_BITMAP* bmp_distant_pikmin_marker;
-    ALLEGRO_BITMAP* bmp_fog;
-    ALLEGRO_BITMAP* bmp_hard_bubble;
-    ALLEGRO_BITMAP* bmp_no_pikmin_bubble;
-    ALLEGRO_BITMAP* bmp_sun;
-    
     //Control ID for player 1's cancel button. Cache for convenience.
     size_t cancel_control_id;
     //Points to an interactable close enough for player 1 to use, if any.
@@ -376,8 +151,6 @@ private:
     vector<point> cursor_spots;
     //Time left until the position of the cursor is saved on the vector.
     timer cursor_save_timer;
-    //What day it is, in-game.
-    size_t day;
     //Is input enabled, for reasons outside the ready_for_input variable?
     bool is_input_allowed;
     //Bitmap that lights up the area when in blackout mode.
@@ -398,8 +171,6 @@ private:
     bool ready_for_input;
     //Timer for the next replay state save.
     timer replay_timer;
-    //Spray that player 1 has currently selected.
-    size_t selected_spray;
     //Is player 1 holding the "swarm to cursor" button?
     bool swarm_cursor;
     //Reach of player 1's swarm.

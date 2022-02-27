@@ -33,14 +33,10 @@ const float gameplay_state::AREA_TITLE_FADE_DURATION = 3.0f;
 const float gameplay_state::CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
 //Number of positions of the cursor to keep track of.
 const unsigned char gameplay_state::CURSOR_TRAIL_SAVE_N_SPOTS = 16;
-//Path to the GUI information file.
-const string gameplay_state::HUD_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
 //How long the HUD moves for when a menu is entered.
 const float gameplay_state::MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 //How long the HUD moves for when a menu is exited.
 const float gameplay_state::MENU_EXIT_HUD_MOVE_TIME = 0.5f;
-//The Onion menu can only show, at most, these many Pikmin types per page.
-const size_t gameplay_state::ONION_MENU_TYPES_PER_PAGE = 5;
 //Swarming arrows move these many units per second.
 const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
 
@@ -53,32 +49,24 @@ gameplay_state::gameplay_state() :
     after_hours(false),
     area_time_passed(0.0f),
     area_title_fade_timer(AREA_TITLE_FADE_DURATION),
+    bmp_fog(nullptr),
     closest_group_member(nullptr),
     closest_group_member_distant(false),
     cur_leader_nr(0),
     cur_leader_ptr(nullptr),
+    day(1),
     day_minutes(0.0f),
     hud(nullptr),
     leader_cursor_sector(nullptr),
     msg_box(nullptr),
     particles(0),
     precipitation(0),
+    selected_spray(0),
     swarm_angle(0),
     swarm_magnitude(0.0f),
     throw_dest_mob(nullptr),
     throw_dest_sector(nullptr),
     went_to_results(false),
-    bmp_bubble(nullptr),
-    bmp_counter_bubble_group(nullptr),
-    bmp_counter_bubble_field(nullptr),
-    bmp_counter_bubble_standby(nullptr),
-    bmp_counter_bubble_total(nullptr),
-    bmp_day_bubble(nullptr),
-    bmp_distant_pikmin_marker(nullptr),
-    bmp_fog(nullptr),
-    bmp_hard_bubble(nullptr),
-    bmp_no_pikmin_bubble(nullptr),
-    bmp_sun(nullptr),
     cancel_control_id(INVALID),
     close_to_interactable_to_use(nullptr),
     close_to_nest_to_open(nullptr),
@@ -86,7 +74,6 @@ gameplay_state::gameplay_state() :
     close_to_ship_to_heal(nullptr),
     cursor_height_diff_light(0.0f),
     cursor_save_timer(CURSOR_TRAIL_SAVE_INTERVAL),
-    day(1),
     is_input_allowed(false),
     lightmap_bmp(nullptr),
     main_control_id(INVALID),
@@ -94,7 +81,6 @@ gameplay_state::gameplay_state() :
     pause_menu(nullptr),
     paused(false),
     ready_for_input(false),
-    selected_spray(0),
     swarm_cursor(false) {
     
 }
@@ -354,30 +340,6 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void gameplay_state::init_hud() {
     hud = new hud_struct();
-    
-    data_node hud_file_node(HUD_FILE_NAME);
-    data_node* bitmaps_node = hud_file_node.get_child_by_name("files");
-    
-#define loader(var, name) \
-    var = \
-          game.bitmaps.get( \
-                            bitmaps_node->get_child_by_name(name)->value, \
-                            bitmaps_node->get_child_by_name(name) \
-                          );
-    
-    loader(bmp_bubble,                 "bubble");
-    loader(bmp_counter_bubble_field,   "counter_bubble_field");
-    loader(bmp_counter_bubble_group,   "counter_bubble_group");
-    loader(bmp_counter_bubble_standby, "counter_bubble_standby");
-    loader(bmp_counter_bubble_total,   "counter_bubble_total");
-    loader(bmp_day_bubble,             "day_bubble");
-    loader(bmp_distant_pikmin_marker,  "distant_pikmin_marker");
-    loader(bmp_hard_bubble,            "hard_bubble");
-    loader(bmp_no_pikmin_bubble,       "no_pikmin_bubble");
-    loader(bmp_sun,                    "sun");
-    
-#undef loader
-    
 }
 
 
@@ -752,16 +714,6 @@ void gameplay_state::unload() {
     
     unload_game_content();
     
-    game.bitmaps.detach(bmp_bubble);
-    game.bitmaps.detach(bmp_counter_bubble_field);
-    game.bitmaps.detach(bmp_counter_bubble_group);
-    game.bitmaps.detach(bmp_counter_bubble_standby);
-    game.bitmaps.detach(bmp_counter_bubble_total);
-    game.bitmaps.detach(bmp_day_bubble);
-    game.bitmaps.detach(bmp_distant_pikmin_marker);
-    game.bitmaps.detach(bmp_hard_bubble);
-    game.bitmaps.detach(bmp_no_pikmin_bubble);
-    game.bitmaps.detach(bmp_sun);
     if(bmp_fog) {
         al_destroy_bitmap(bmp_fog);
         bmp_fog = NULL;

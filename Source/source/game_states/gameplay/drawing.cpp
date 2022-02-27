@@ -753,7 +753,7 @@ void gameplay_state::draw_message_box() {
             point(48, 48)
         );
         draw_bitmap(
-            bmp_bubble,
+            hud->bmp_bubble,
             point(
                 40,
                 game.win_h -

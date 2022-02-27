@@ -15,14 +15,14 @@
 
 
 //Path to the GUI information file.
-const string gameplay_state::pause_menu_struct::GUI_FILE_PATH =
+const string pause_menu_struct::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_menu.txt";
 
 
 /* ----------------------------------------------------------------------------
  * Creates a pause menu struct.
  */
-gameplay_state::pause_menu_struct::pause_menu_struct() :
+pause_menu_struct::pause_menu_struct() :
     bg_alpha_mult(0.0f),
     closing_timer(0.0f),
     to_delete(false),
@@ -63,7 +63,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
         new button_gui_item("Retry day", game.fonts.standard);
     retry_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->start_leaving(LEAVE_TO_RETRY);
+        game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_RETRY);
     };
     retry_button->on_get_tooltip =
     [] () { return "Retry this day from the start."; };
@@ -74,7 +74,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
         new button_gui_item("Finish day", game.fonts.standard);
     finish_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->start_leaving(LEAVE_TO_FINISH);
+        game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_FINISH);
     };
     finish_button->on_get_tooltip =
     [] () { return "Finish playing this day."; };
@@ -90,7 +90,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     );
     quit_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->start_leaving(LEAVE_TO_AREA_SELECT);
+        game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_AREA_SELECT);
     };
     quit_button->on_get_tooltip =
     [] () {
@@ -121,7 +121,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
     //Finishing touches.
     gui.set_selected_item(gui.back_item);
     gui.start_animation(
-        GUI_MANAGER_ANIM_UP_TO_CENTER, MENU_ENTRY_HUD_MOVE_TIME
+        GUI_MANAGER_ANIM_UP_TO_CENTER, gameplay_state::MENU_ENTRY_HUD_MOVE_TIME
     );
 }
 
@@ -129,7 +129,7 @@ gameplay_state::pause_menu_struct::pause_menu_struct() :
 /* ----------------------------------------------------------------------------
  * Destroys a pause menu struct.
  */
-gameplay_state::pause_menu_struct::~pause_menu_struct() {
+pause_menu_struct::~pause_menu_struct() {
     gui.destroy();
 }
 
@@ -137,7 +137,7 @@ gameplay_state::pause_menu_struct::~pause_menu_struct() {
 /* ----------------------------------------------------------------------------
  * Handles an Allegro event.
  */
-void gameplay_state::pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
+void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     if(!closing) gui.handle_event(ev);
 }
 
@@ -145,13 +145,16 @@ void gameplay_state::pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
 /* ----------------------------------------------------------------------------
  * Starts the closing process.
  */
-void gameplay_state::pause_menu_struct::start_closing() {
+void pause_menu_struct::start_closing() {
     closing = true;
-    closing_timer = MENU_EXIT_HUD_MOVE_TIME;
-    gui.start_animation(GUI_MANAGER_ANIM_CENTER_TO_UP, MENU_EXIT_HUD_MOVE_TIME);
+    closing_timer = gameplay_state::MENU_EXIT_HUD_MOVE_TIME;
+    gui.start_animation(
+        GUI_MANAGER_ANIM_CENTER_TO_UP,
+        gameplay_state::MENU_EXIT_HUD_MOVE_TIME
+    );
     game.states.gameplay->hud->gui.start_animation(
         GUI_MANAGER_ANIM_OUT_TO_IN,
-        MENU_EXIT_HUD_MOVE_TIME
+        gameplay_state::MENU_EXIT_HUD_MOVE_TIME
     );
 }
 
@@ -161,12 +164,12 @@ void gameplay_state::pause_menu_struct::start_closing() {
  * delta_t:
  *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::pause_menu_struct::tick(const float delta_t) {
+void pause_menu_struct::tick(const float delta_t) {
     //Tick the GUI.
     gui.tick(delta_t);
     
     //Tick the background.
-    const float bg_alpha_mult_speed = 1.0f / MENU_ENTRY_HUD_MOVE_TIME;
+    const float bg_alpha_mult_speed = 1.0f / gameplay_state::MENU_ENTRY_HUD_MOVE_TIME;
     const float diff = closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
     bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
     

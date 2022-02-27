@@ -15,14 +15,26 @@
 #include "gameplay.h"
 
 
+//Path to the GUI information file.
+const string hud_struct::HUD_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
 //How long the leader swap juice animation lasts for.
-const float gameplay_state::hud_struct::LEADER_SWAP_JUICE_DURATION = 0.7f;
+const float hud_struct::LEADER_SWAP_JUICE_DURATION = 0.7f;
 
 
 /* ----------------------------------------------------------------------------
  * Creates a new HUD structure instance.
  */
-gameplay_state::hud_struct::hud_struct() :
+hud_struct::hud_struct() :
+    bmp_bubble(nullptr),
+    bmp_counter_bubble_group(nullptr),
+    bmp_counter_bubble_field(nullptr),
+    bmp_counter_bubble_standby(nullptr),
+    bmp_counter_bubble_total(nullptr),
+    bmp_day_bubble(nullptr),
+    bmp_distant_pikmin_marker(nullptr),
+    bmp_hard_bubble(nullptr),
+    bmp_no_pikmin_bubble(nullptr),
+    bmp_sun(nullptr),
     leader_swap_juice_timer(0.0f),
     spray_1_amount(nullptr),
     spray_2_amount(nullptr),
@@ -106,7 +118,7 @@ gameplay_state::hud_struct::hud_struct() :
                 final_center, final_size
             );
             draw_bitmap_in_box(
-                game.states.gameplay->bmp_bubble,
+                bmp_bubble,
                 final_center, final_size
             );
         };
@@ -143,7 +155,7 @@ gameplay_state::hud_struct::hud_struct() :
                 true
             );
             draw_bitmap_in_box(
-                game.states.gameplay->bmp_hard_bubble,
+                bmp_hard_bubble,
                 final_center,
                 final_size
             );
@@ -185,24 +197,24 @@ gameplay_state::hud_struct::hud_struct() :
         //Larger bubbles at the start, middle and end of the meter.
         al_hold_bitmap_drawing(true);
         draw_bitmap(
-            game.states.gameplay->bmp_hard_bubble,
+            bmp_hard_bubble,
             point(first_dot_x + dots_span * 0.0, dots_y),
             point(sun_radius * 0.9, sun_radius * 0.9)
         );
         draw_bitmap(
-            game.states.gameplay->bmp_hard_bubble,
+            bmp_hard_bubble,
             point(first_dot_x + dots_span * 0.5, dots_y),
             point(sun_radius * 0.9, sun_radius * 0.9)
         );
         draw_bitmap(
-            game.states.gameplay->bmp_hard_bubble,
+            bmp_hard_bubble,
             point(first_dot_x + dots_span * 1.0, dots_y),
             point(sun_radius * 0.9, sun_radius * 0.9)
         );
         
         for(unsigned char h = 0; h < n_hours + 1; ++h) {
             draw_bitmap(
-                game.states.gameplay->bmp_hard_bubble,
+                bmp_hard_bubble,
                 point(first_dot_x + h * dot_interval, dots_y),
                 point(sun_radius * 0.6, sun_radius * 0.6)
             );
@@ -214,20 +226,20 @@ gameplay_state::hud_struct::hud_struct() :
             sun_meter->get_juice_value();
         //Static sun.
         draw_bitmap(
-            game.states.gameplay->bmp_sun,
+            bmp_sun,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             sun_size
         );
         //Spinning sun.
         draw_bitmap(
-            game.states.gameplay->bmp_sun,
+            bmp_sun,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             sun_size,
             sun_meter_sun_angle
         );
         //Bubble in front the sun.
         draw_bitmap(
-            game.states.gameplay->bmp_hard_bubble,
+            bmp_hard_bubble,
             point(first_dot_x + day_passed_ratio * dots_span, dots_y),
             sun_size,
             0.0f,
@@ -265,7 +277,7 @@ gameplay_state::hud_struct::hud_struct() :
     gui_item* day_nr_bubble = new gui_item();
     day_nr_bubble->on_draw =
     [this] (const point & center, const point & size) {
-        draw_bitmap_in_box(game.states.gameplay->bmp_day_bubble, center, size);
+        draw_bitmap_in_box(bmp_day_bubble, center, size);
     };
     gui.add_item(day_nr_bubble, "day_bubble");
     
@@ -316,18 +328,18 @@ gameplay_state::hud_struct::hud_struct() :
             }
         }
         if(!standby_bmp) {
-            standby_bmp = game.states.gameplay->bmp_no_pikmin_bubble;
+            standby_bmp = bmp_no_pikmin_bubble;
         }
         
         draw_bitmap_in_box(standby_bmp, center, size * 0.8);
         if(game.states.gameplay->closest_group_member_distant) {
             draw_bitmap_in_box(
-                game.states.gameplay->bmp_distant_pikmin_marker,
+                bmp_distant_pikmin_marker,
                 center,
                 size * 0.8
             );
         }
-        draw_bitmap_in_box(game.states.gameplay->bmp_bubble, center, size);
+        draw_bitmap_in_box(bmp_bubble, center, size);
         
     };
     gui.add_item(standby_icon, "pikmin_standby_icon");
@@ -367,7 +379,7 @@ gameplay_state::hud_struct::hud_struct() :
         
         if(standby_mat_bmp) {
             draw_bitmap_in_box(standby_mat_bmp, center, size * 0.8);
-            draw_bitmap_in_box(game.states.gameplay->bmp_bubble, center, size);
+            draw_bitmap_in_box(bmp_bubble, center, size);
         }
         
     };
@@ -409,7 +421,7 @@ gameplay_state::hud_struct::hud_struct() :
         }
         
         draw_bitmap(
-            game.states.gameplay->bmp_counter_bubble_standby,
+            bmp_counter_bubble_standby,
             center,
             size
         );
@@ -449,7 +461,7 @@ gameplay_state::hud_struct::hud_struct() :
         }
         
         draw_bitmap(
-            game.states.gameplay->bmp_counter_bubble_group,
+            bmp_counter_bubble_group,
             center,
             size
         );
@@ -477,7 +489,7 @@ gameplay_state::hud_struct::hud_struct() :
         }
         
         draw_bitmap(
-            game.states.gameplay->bmp_counter_bubble_field,
+            bmp_counter_bubble_field,
             center,
             size
         );
@@ -518,7 +530,7 @@ gameplay_state::hud_struct::hud_struct() :
         }
         
         draw_bitmap(
-            game.states.gameplay->bmp_counter_bubble_total,
+            bmp_counter_bubble_total,
             center,
             size
         );
@@ -795,6 +807,48 @@ gameplay_state::hud_struct::hud_struct() :
         }
     };
     gui.add_item(next_spray_button, "spray_next_button");
+    
+    
+    data_node* bitmaps_node = hud_file_node.get_child_by_name("files");
+    
+#define loader(var, name) \
+    var = \
+          game.bitmaps.get( \
+                            bitmaps_node->get_child_by_name(name)->value, \
+                            bitmaps_node->get_child_by_name(name) \
+                          );
+    
+    loader(bmp_bubble,                 "bubble");
+    loader(bmp_counter_bubble_field,   "counter_bubble_field");
+    loader(bmp_counter_bubble_group,   "counter_bubble_group");
+    loader(bmp_counter_bubble_standby, "counter_bubble_standby");
+    loader(bmp_counter_bubble_total,   "counter_bubble_total");
+    loader(bmp_day_bubble,             "day_bubble");
+    loader(bmp_distant_pikmin_marker,  "distant_pikmin_marker");
+    loader(bmp_hard_bubble,            "hard_bubble");
+    loader(bmp_no_pikmin_bubble,       "no_pikmin_bubble");
+    loader(bmp_sun,                    "sun");
+    
+#undef loader
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destructor for the HUD struct.
+ */
+hud_struct::~hud_struct() {
+    game.bitmaps.detach(bmp_bubble);
+    game.bitmaps.detach(bmp_counter_bubble_field);
+    game.bitmaps.detach(bmp_counter_bubble_group);
+    game.bitmaps.detach(bmp_counter_bubble_standby);
+    game.bitmaps.detach(bmp_counter_bubble_total);
+    game.bitmaps.detach(bmp_day_bubble);
+    game.bitmaps.detach(bmp_distant_pikmin_marker);
+    game.bitmaps.detach(bmp_hard_bubble);
+    game.bitmaps.detach(bmp_no_pikmin_bubble);
+    game.bitmaps.detach(bmp_sun);
+    
 }
 
 
@@ -803,7 +857,7 @@ gameplay_state::hud_struct::hud_struct() :
  * old_leader_nr:
  *   Player's leader number before the transition.
  */
-void gameplay_state::hud_struct::start_leader_swap_juice(
+void hud_struct::start_leader_swap_juice(
     const size_t old_leader_nr
 ) {
     leader_swap_juice_timer = LEADER_SWAP_JUICE_DURATION;
@@ -817,7 +871,7 @@ void gameplay_state::hud_struct::start_leader_swap_juice(
  * delta_t:
  *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::hud_struct::tick(const float delta_t) {
+void hud_struct::tick(const float delta_t) {
     if(leader_swap_juice_timer > 0.0f) {
         leader_swap_juice_timer -= delta_t;
     }

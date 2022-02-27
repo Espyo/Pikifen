@@ -322,6 +322,8 @@ Next tasks (roughly sorted most important first)
     
     --- Future ---
     Check what Pikmin 3 Deluxe added, and gather ideas of things to implement from there
+        Dismissing should either dismiss everyone, or keep the current standby type
+        When switching to a leader, all nearby idle Pikmin should be called over too
     Input handling needs to be more robust and modular
         Clean up terms -- button, input, action, are all ambiguous and mean different things in different functions
         An Allegro event is turned into a abstract action report and pre-processed (some actions only want 0/1, others want it raw), and only then sent
@@ -768,8 +770,10 @@ Tasks for later on (I might never implement these)
     [NEEDS BRAINSTORMING] Colors should be able to also be in hexadecimal?
     The ability for enemies to eat other enemies
     If I need GPU performance gains, resize textures to smaller sizes when they're loaded (thanks Helodity)
-    A way for spike damage to apply a status effect
     [NEEDS BRAINSTORMING] A way to write out how much memory is being taken up by images, sounds, scripts, etc. so game makers can help make sure a level's not too bloated?
+    The ability for players 2 - 4 to hop in and out of gameplay at will. Probably only for Story Mode?
+    Make it so players can request all Pikmin to come to the landing site by interacting with the ship?
+    Allow the player to pick between classic group movement swarming, full-squad charging, or standby type charging
     Nighttime (what enemies can spawn at night, their changes, etc.)
         Change the HUD icon to a moon
     "Puzzle"-type challenges. You might have a limited number of Pikmin, certain obstacles and paths, and you need to think what Pikmin to put where and when to proceed. Like Portal.
