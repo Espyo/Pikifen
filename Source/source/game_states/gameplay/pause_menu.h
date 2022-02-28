@@ -26,8 +26,10 @@ class pikmin_type;
  */
 struct pause_menu_struct {
 public:
-    //GUI manager.
+    //GUI manager for the main pause menu.
     gui_manager gui;
+    //GUI manager for the help page.
+    gui_manager help_gui;
     //Multiply the background alpha by this much.
     float bg_alpha_mult;
     //Time left until the menu finishes closing.
@@ -37,6 +39,7 @@ public:
     
     pause_menu_struct();
     ~pause_menu_struct();
+    void draw();
     void handle_event(const ALLEGRO_EVENT &ev);
     void start_closing();
     void tick(const float delta_t);
@@ -44,6 +47,11 @@ public:
 private:
     //Is it currently closing?
     bool closing;
+    //Help page category text GUI item.
+    text_gui_item* help_category_text;
+    
+    void init_main_pause_menu();
+    void init_help_page();
     
     static const string GUI_FILE_PATH;
 };

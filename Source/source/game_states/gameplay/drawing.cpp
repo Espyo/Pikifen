@@ -921,7 +921,7 @@ void gameplay_state::draw_pause_menu() {
         al_map_rgba(24, 64, 60, 200 * pause_menu->bg_alpha_mult)
     );
     
-    pause_menu->gui.draw();
+    pause_menu->draw();
     
     draw_mouse_cursor(al_map_rgb(188, 230, 230));
 }

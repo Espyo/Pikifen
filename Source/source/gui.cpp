@@ -336,6 +336,8 @@ void gui_item::start_juice_animation(JUICE_TYPES type) {
 gui_manager::gui_manager() :
     selected_item(nullptr),
     back_item(nullptr),
+    responsive(true),
+    ignore_input_on_animation(true),
     right_pressed(false),
     up_pressed(false),
     left_pressed(false),
@@ -552,6 +554,9 @@ bool gui_manager::get_item_draw_info(
  *   Event.
  */
 void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
+    if(!responsive) return;
+    if(anim_timer.get_ratio_left() > 0.0f && ignore_input_on_animation) return;
+    
     bool input_happened = false;
     bool mouse_involved = false;
     
@@ -633,7 +638,16 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
 bool gui_manager::handle_menu_button(
     const BUTTONS action, const float pos, const size_t player
 ) {
-
+    if(!responsive) {
+        return false;
+    }
+    if(
+        anim_timer.get_ratio_left() > 0.0f &&
+        ignore_input_on_animation
+    ) {
+        return false;
+    }
+    
     bool is_down = (pos >= 0.5);
     bool button_recognized = true;
     
@@ -788,6 +802,14 @@ bool gui_manager::handle_menu_button(
     }
     
     return button_recognized;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Hides all items until an animation shows them again.
+ */
+void gui_manager::hide_items() {
+    visible = false;
 }
 
 
@@ -1211,11 +1233,10 @@ text_gui_item::text_gui_item(
     flags(flags) {
     
     on_draw =
-        [this, text, font, color, flags]
-    (const point & center, const point & size) {
+    [this] (const point & center, const point & size) {
     
         int text_x = center.x;
-        switch(flags) {
+        switch(this->flags) {
         case ALLEGRO_ALIGN_LEFT: {
             text_x = center.x - size.x * 0.5;
             break;
@@ -1228,11 +1249,11 @@ text_gui_item::text_gui_item(
         float juicy_grow_amount = get_juice_value();
         
         draw_compressed_scaled_text(
-            font, color,
+            this->font, this->color,
             point(text_x, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            flags, 1, size, true,
-            text
+            this->flags, 1, size, true,
+            this->text
         );
     };
 }

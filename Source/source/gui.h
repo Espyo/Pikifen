@@ -271,6 +271,10 @@ public:
     gui_item* selected_item;
     //Item to activate when the user chooses to go back.
     gui_item* back_item;
+    //Is it currently responding to input?
+    bool responsive;
+    //Should it ignore input while animating?
+    bool ignore_input_on_animation;
     
     //Add an item to the list.
     void add_item(gui_item* item, const string &id = "");
@@ -290,6 +294,8 @@ public:
     bool handle_menu_button(
         const BUTTONS action, const float pos, const size_t player
     );
+    //Hides items until an animation shows them again.
+    void hide_items();
     //Reads item coordinates from a data node.
     void read_coords(data_node* node);
     //Registers an item's default centers and size.

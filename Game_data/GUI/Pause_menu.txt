@@ -1,8 +1,9 @@
 positions {
-    header =   50 15 50 10
-    continue = 50 32 50 10
-    retry =    50 44 50 10
-    finish =   50 56 50 10
-    quit =     50 68 50 10
+    header =   50 12 50 9
+    continue = 50 28 50 9
+    retry =    50 39 50 9
+    finish =   50 50 50 9
+    help =     50 61 50 9
+    quit =     50 72 50 9
     tooltip =  50 95 95  8
 }
