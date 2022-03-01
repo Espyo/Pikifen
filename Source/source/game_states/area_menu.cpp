@@ -150,7 +150,6 @@ void area_menu_state::load() {
     //Area list scrollbar.
     scroll_gui_item* list_scroll = new scroll_gui_item();
     list_scroll->list_item = list_box;
-    list_box->scroll_item = list_scroll;
     gui.add_item(list_scroll, "list_scroll");
     
     //Items for the various areas.

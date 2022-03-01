@@ -433,7 +433,6 @@ void controls_menu_state::load() {
     //Controls list scrollbar.
     scroll_gui_item* list_scroll = new scroll_gui_item();
     list_scroll->list_item = list_box;
-    list_box->scroll_item = list_scroll;
     gui.add_item(list_scroll, "list_scroll");
     
     //New control button.

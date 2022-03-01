@@ -18,6 +18,9 @@
 //Path to the GUI information file.
 const string pause_menu_struct::GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Pause_menu.txt";
+//Path to the help page GUI information file.
+const string pause_menu_struct::HELP_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Help.txt";
 
 
 /* ----------------------------------------------------------------------------
@@ -65,6 +68,31 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
  * Initializes the help page.
  */
 void pause_menu_struct::init_help_page() {
+    const vector<string> category_node_names {
+        "gameplay", "controls", "", "objects"
+    };
+    data_node gui_file(HELP_GUI_FILE_PATH);
+    
+    //Load the tidbits.
+    data_node* tidbits_node = gui_file.get_child_by_name("tidbits");
+    
+    for(size_t c = 0; c < N_HELP_CATEGORIES; ++c) {
+        if(category_node_names[c].empty()) continue;
+        data_node* category_node =
+            tidbits_node->get_child_by_name(category_node_names[c]);
+        size_t n_tidbits = category_node->get_nr_of_children();
+        vector<string> &category_tidbits = tidbits[(HELP_CATEGORIES) c];
+        category_tidbits.reserve(n_tidbits);
+        for(size_t t = 0; t < n_tidbits; ++t) {
+            category_tidbits.push_back(category_node->get_child(t)->name);
+        }
+    }
+    for(size_t p = 0; p < game.config.pikmin_order.size(); ++p) {
+        tidbits[HELP_CATEGORY_PIKMIN].push_back(
+            game.config.pikmin_order[p]->name
+        );
+    }
+    
     //Menu items.
     help_gui.register_coords("back",        15,  8, 20, 8);
     help_gui.register_coords("gameplay",    22, 25, 35, 10);
@@ -75,6 +103,7 @@ void pause_menu_struct::init_help_page() {
     help_gui.register_coords("list",        69, 50, 50, 60);
     help_gui.register_coords("list_scroll", 96, 50,  2, 60);
     help_gui.register_coords("tooltip",     50, 90, 95, 15);
+    help_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Back button.
     help_gui.back_item =
@@ -103,7 +132,7 @@ void pause_menu_struct::init_help_page() {
         new button_gui_item("Gameplay", game.fonts.standard);
     gameplay_button->on_activate =
     [this] (const point &) {
-        help_category_text->text = "Gameplay";
+        this->populate_help_tidbits(HELP_CATEGORY_GAMEPLAY);
     };
     gameplay_button->on_get_tooltip =
     [] () { return "Show help about gameplay features."; };
@@ -114,7 +143,7 @@ void pause_menu_struct::init_help_page() {
         new button_gui_item("Controls", game.fonts.standard);
     controls_button->on_activate =
     [this] (const point &) {
-        help_category_text->text = "Controls";
+        this->populate_help_tidbits(HELP_CATEGORY_CONTROLS);
     };
     controls_button->on_get_tooltip =
     [] () { return "Show help about game controls."; };
@@ -125,7 +154,7 @@ void pause_menu_struct::init_help_page() {
         new button_gui_item("Pikmin", game.fonts.standard);
     pikmin_button->on_activate =
     [this] (const point &) {
-        help_category_text->text = "Pikmin";
+        this->populate_help_tidbits(HELP_CATEGORY_PIKMIN);
     };
     pikmin_button->on_get_tooltip =
     [] () { return "Show help about the different Pikmin types."; };
@@ -136,7 +165,7 @@ void pause_menu_struct::init_help_page() {
         new button_gui_item("Objects", game.fonts.standard);
     objects_button->on_activate =
     [this] (const point &) {
-        help_category_text->text = "Objects";
+        this->populate_help_tidbits(HELP_CATEGORY_OBJECTS);
     };
     objects_button->on_get_tooltip =
     [] () { return "Show help about some objects you'll find."; };
@@ -147,13 +176,12 @@ void pause_menu_struct::init_help_page() {
     help_gui.add_item(help_category_text, "category");
     
     //Tidbit list box.
-    list_gui_item* list_box = new list_gui_item();
-    help_gui.add_item(list_box, "list");
+    help_tidbit_list_box = new list_gui_item();
+    help_gui.add_item(help_tidbit_list_box, "list");
     
     //Tidbit list scrollbar.
     scroll_gui_item* list_scroll = new scroll_gui_item();
-    list_scroll->list_item = list_box;
-    list_box->scroll_item = list_scroll;
+    list_scroll->list_item = help_tidbit_list_box;
     help_gui.add_item(list_scroll, "list_scroll");
     
     //Tooltip text.
@@ -300,6 +328,57 @@ void pause_menu_struct::init_main_pause_menu() {
     gui.start_animation(
         GUI_MANAGER_ANIM_UP_TO_CENTER, gameplay_state::MENU_ENTRY_HUD_MOVE_TIME
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Populates the help page's list of tidbits.
+ * category:
+ *   Category of tidbits to use.
+ */
+void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
+    vector<string> &tidbit_list = tidbits[category];
+    
+    switch(category) {
+    case HELP_CATEGORY_GAMEPLAY: {
+        help_category_text->text = "Gameplay";
+        break;
+    } case HELP_CATEGORY_CONTROLS: {
+        help_category_text->text = "Controls";
+        break;
+    } case HELP_CATEGORY_PIKMIN: {
+        help_category_text->text = "Pikmin";
+        break;
+    } case HELP_CATEGORY_OBJECTS: {
+        help_category_text->text = "Objects";
+        break;
+    } case N_HELP_CATEGORIES: {
+        break;
+    }
+    }
+    
+    while(!help_tidbit_list_box->children.empty()) {
+        gui_item* i_ptr = help_tidbit_list_box->children[0];
+        help_tidbit_list_box->remove_child(i_ptr);
+        help_gui.remove_item(i_ptr);
+        delete i_ptr;
+    }
+    
+    for(size_t t = 0; t < tidbit_list.size(); ++t) {
+        vector<string> parts = split(tidbit_list[t], ";");
+        bullet_point_gui_item* tidbit_bullet =
+            new bullet_point_gui_item(
+            parts.empty() ? "" : parts[0],
+            game.fonts.standard
+        );
+        tidbit_bullet->center = point(0.50f, 0.045f + t * 0.10f);
+        tidbit_bullet->size = point(1.0f, 0.09f);
+        tidbit_bullet->on_get_tooltip = [this, parts] () {
+            return parts.size() < 2 ? "" : parts[1];
+        };
+        help_tidbit_list_box->add_child(tidbit_bullet);
+        help_gui.add_item(tidbit_bullet);
+    }
 }
 
 

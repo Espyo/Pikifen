@@ -11,6 +11,7 @@
 #ifndef PAUSE_MENU_INCLUDED
 #define PAUSE_MENU_INCLUDED
 
+#include <map>
 
 #include "../../utils/geometry_utils.h"
 #include "../../gui.h"
@@ -26,6 +27,21 @@ class pikmin_type;
  */
 struct pause_menu_struct {
 public:
+    //Categories of help page tidbits.
+    enum HELP_CATEGORIES {
+        //Gameplay tidbits.
+        HELP_CATEGORY_GAMEPLAY,
+        //Control tidbits.
+        HELP_CATEGORY_CONTROLS,
+        //Player type tidbits.
+        HELP_CATEGORY_PIKMIN,
+        //Noteworthy object tidbits.
+        HELP_CATEGORY_OBJECTS,
+        
+        //Total amount of help page tidbit categories.
+        N_HELP_CATEGORIES
+    };
+    
     //GUI manager for the main pause menu.
     gui_manager gui;
     //GUI manager for the help page.
@@ -49,11 +65,17 @@ private:
     bool closing;
     //Help page category text GUI item.
     text_gui_item* help_category_text;
+    //Help page tidbit list.
+    list_gui_item* help_tidbit_list_box;
+    //All tidbits in the help page.
+    map<HELP_CATEGORIES, vector<string> > tidbits;
     
     void init_main_pause_menu();
     void init_help_page();
+    void populate_help_tidbits(const HELP_CATEGORIES category);
     
     static const string GUI_FILE_PATH;
+    static const string HELP_GUI_FILE_PATH;
 };
 
 

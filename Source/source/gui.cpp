@@ -20,6 +20,10 @@
 #include "utils/string_utils.h"
 
 
+//Padding before/after the circle in a bullet point item.
+const float bullet_point_gui_item::BULLET_PADDING = 6.0f;
+//Radius of the circle that represents the bullet in a bullet point item.
+const float bullet_point_gui_item::BULLET_RADIUS = 4.0f;
 //When an item does a juicy grow, this is the full effect duration.
 const float gui_item::JUICY_GROW_DURATION = 0.3f;
 //When an item does a juicy elastic grow, this is the full effect duration.
@@ -36,6 +40,60 @@ const float gui_manager::AUTO_REPEAT_MAX_INTERVAL = 0.3f;
 const float gui_manager::AUTO_REPEAT_MIN_INTERVAL = 0.011f;
 //How long it takes for the auto-repeat activations to reach max speed.
 const float gui_manager::AUTO_REPEAT_RAMP_TIME = 0.9f;
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new bullet point GUI item.
+ * text:
+ *   Text to display on the bullet point.
+ * font:
+ *   Font for the button's text.
+ * color:
+ *   Color of the button's text.
+ */
+bullet_point_gui_item::bullet_point_gui_item(
+    const string &text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color
+) :
+    gui_item(true),
+    text(text),
+    font(font),
+    color(color) {
+    
+    on_draw =
+    [this, text, font, color] (const point & center, const point & size) {
+        float item_x_start = center.x - size.x * 0.5;
+        float text_x_offset =
+            bullet_point_gui_item::BULLET_RADIUS * 2 +
+            bullet_point_gui_item::BULLET_PADDING * 2;
+        point text_space(
+            std::max(1.0f, size.x - text_x_offset),
+            size.y
+        );
+        
+        al_draw_filled_circle(
+            item_x_start +
+            bullet_point_gui_item::BULLET_RADIUS +
+            bullet_point_gui_item::BULLET_PADDING,
+            center.y,
+            bullet_point_gui_item::BULLET_RADIUS,
+            color
+        );
+        draw_compressed_scaled_text(
+            this->font, this->color,
+            point(item_x_start + text_x_offset, center.y),
+            point(1.0, 1.0),
+            ALLEGRO_ALIGN_LEFT, 1, text_space, true,
+            this->text
+        );
+        if(selected) {
+            draw_textured_box(
+                center,
+                size + 10.0 + sin(game.time_passed * TAU) * 2.0f,
+                game.sys_assets.bmp_focus_box
+            );
+        }
+    };
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -980,7 +1038,6 @@ void gui_manager::tick(const float delta_t) {
  */
 list_gui_item::list_gui_item() :
     gui_item(),
-    scroll_item(nullptr),
     target_offset(0.0f) {
     
     padding = 8.0f;
@@ -992,7 +1049,15 @@ list_gui_item::list_gui_item() :
     };
     on_tick =
     [this] (const float delta_t) {
-        offset += (target_offset - offset) * (10.0f * delta_t);
+        float child_bottom = get_child_bottom();
+        if(child_bottom < 1.0f) {
+            target_offset = 0.0f;
+            offset = 0.0f;
+        } else {
+            target_offset = clamp(target_offset, 0.0f, child_bottom - 1.0f);
+            offset += (target_offset - offset) * (10.0f * delta_t);
+            offset = clamp(offset, 0.0f, child_bottom - 1.0f);
+        }
     };
     on_event =
     [this] (const ALLEGRO_EVENT & ev) {

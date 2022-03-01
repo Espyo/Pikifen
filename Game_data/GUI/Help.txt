@@ -1,0 +1,39 @@
+positions {
+    back =        15  8 20  8
+    gameplay =    22 25 35 10
+    controls =    22 37 35 10
+    pikmin =      22 49 35 10
+    objects =     22 61 35 10
+    category =    69 15 50  8
+    list =        69 50 50 60
+    list_scroll = 96 50  2 60
+    tooltip =     50 90 95 15
+}
+
+tidbits {
+    gameplay {
+        Leaders;Take control of a leader, and order your Pikmin to do tasks. Try to make good use of your multitasking skills!
+        Calling;You can call a Pikmin to your group by whistling it or bumping against it.
+        Onions;Pikmin live in nests called Onions. When under an Onion, you can store Pikmin inside or call them out.
+        Throwing;Throw a Pikmin in your group in order to leave it idling where it lands. It will try to find nearby tasks.
+        Growing Pikmin;Pikmin can carry things to the Onion. After delivery, the Onion will create new Pikmin!
+        Carry strength;Some items are too heavy for one Pikmin to carry. Try adding multiple ones.
+        Pikmin attacks;Pikmin can attack wildlife. Throw them, and they will latch and start striking.
+        Obstacles;Some obstacles will require multiple Pikmin to work together to clear them.
+        Pikmin types;Different Pikmin types have different strengths and weaknesses. Always try to use the right Pikmin for the job!
+        Swapping Pikmin types;You will only throw Pikmin of the current standby type. Change the standby type to throw other Pikmin.
+        Leader swapping;You can swap control between leaders. Try leaving different leaders with different groups of Pikmin.
+        Throwing teammates;Other leaders can also join your group, or be thrown like Pikmin.
+        Pikmin deaths;Pikmin can be eaten, burned up, or die in other ways. Their strength lies in their numbers, however!
+        Enemy combat;Learn how each enemy works, and how best to attack them! Try aiming for their weak spots.
+        Saving Pikmin;If your Pikmin are in trouble, whistle them to save them!
+        Sprays;Use sprays to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!
+        Goal;There is no overarching goal yet, but try defeating as many enemies and gather as many goodies as you can!
+    }
+    controls {
+        
+    }
+    objects {
+        
+    }
+}

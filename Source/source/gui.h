@@ -141,6 +141,28 @@ public:
 
 
 /* ----------------------------------------------------------------------------
+ * A GUI item with fields ready to make it behave like a bullet point in a list.
+ */
+class bullet_point_gui_item : public gui_item {
+public:
+    static const float BULLET_PADDING;
+    static const float BULLET_RADIUS;
+    
+    //Text to display on the bullet point.
+    string text;
+    //Font to display the text with.
+    ALLEGRO_FONT* font;
+    //Color to tint the text with.
+    ALLEGRO_COLOR color;
+    
+    bullet_point_gui_item(
+        const string &text, ALLEGRO_FONT* font,
+        const ALLEGRO_COLOR &color = COLOR_WHITE
+    );
+};
+
+
+/* ----------------------------------------------------------------------------
  * A GUI item with fields ready to make it behave like a button.
  */
 class button_gui_item : public gui_item {
@@ -187,8 +209,6 @@ class scroll_gui_item;
  */
 class list_gui_item : public gui_item {
 public:
-    //What scrollbar item controls it, if any.
-    scroll_gui_item* scroll_item;
     //What the offset is supposed to be, after it finishes animating.
     float target_offset;
     
