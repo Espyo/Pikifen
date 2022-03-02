@@ -48,6 +48,7 @@ vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false
 );
+bool str_peek(const string &s, const size_t where, const string &match);
 string str_to_lower(string s);
 string str_to_upper(string s);
 string trim_spaces(const string &s, const bool left_only = false);

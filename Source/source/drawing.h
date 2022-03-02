@@ -20,6 +20,7 @@
 #include "misc_structs.h"
 
 
+const float CONTROL_ICON_PADDING = 2.0f;
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
 const float LIQUID_WOBBLE_DELTA_X = 3.0f;
@@ -28,6 +29,17 @@ const float NOTIFICATION_CONTROL_SIZE = 24.0f;
 const unsigned char NOTIFICATION_ALPHA = 160;
 //A water wave ring lasts this long.
 const float WAVE_RING_DURATION = 1.0f;
+
+
+//Possible shapes for a control icon.
+enum CONTROL_ICON_SHAPES {
+    //Doesn't really have a shape, but instead draws a bitmap.
+    CONTROL_ICON_SHAPE_BITMAP,
+    //Rectangle shape, representing keyboard keys.
+    CONTROL_ICON_SHAPE_RECTANGLE,
+    //Circle/rounded rectangle shape, representing buttons.
+    CONTROL_ICON_SHAPE_ROUNDED,
+};
 
 
 //Methods for easing numbers.
@@ -69,8 +81,12 @@ void draw_button(
     const bool selected,
     const float juicy_grow_amount = 0.0f
 );
-void draw_control(
+void draw_control_icon(
     const ALLEGRO_FONT* const font, const control_info &c,
+    const point &where, const point &max_size
+);
+void draw_control_icon(
+    const ALLEGRO_FONT* const font, const string &name,
     const point &where, const point &max_size
 );
 void draw_compressed_scaled_text(
@@ -146,6 +162,20 @@ void draw_textured_box(
 );
 float ease(
     const EASING_METHODS method, float y
+);
+void get_control_icon_info(
+    const ALLEGRO_FONT* font, const control_info &c,
+    CONTROL_ICON_SHAPES* shape, ALLEGRO_BITMAP** bitmap, string* text
+);
+void get_control_icon_info(
+    const ALLEGRO_FONT* font, const string &name,
+    CONTROL_ICON_SHAPES* shape, ALLEGRO_BITMAP** bitmap, string* text
+);
+float get_control_icon_width(
+    const ALLEGRO_FONT* font, const control_info &c
+);
+float get_control_icon_width(
+    const ALLEGRO_FONT* font, const string &name
 );
 
 

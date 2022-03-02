@@ -56,6 +56,163 @@ void pause_menu_struct::draw() {
 
 
 /* ----------------------------------------------------------------------------
+ * Draws some help page tidbit's text.
+ */
+void pause_menu_struct::draw_tidbit(
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
+    const point &where, const point &scale,
+    const int flags, const unsigned char valign,
+    const point &max_size, const string &text
+) {
+    enum TOKEN_TYPES {
+        TOKEN_WORD,
+        TOKEN_CONTROL
+    };
+    struct token {
+        TOKEN_TYPES type;
+        string content;
+        int width;
+        token() : type(TOKEN_WORD), width(0) {}
+    };
+    vector<token> tokens;
+    token cur_token;
+    bool inside_control = false;
+    
+    //First, figure out which tokens exist.
+    for(size_t t = 0; t < text.size(); ++t) {
+        if(!inside_control && str_peek(text, t, " ")) {
+            if(!cur_token.content.empty()) tokens.push_back(cur_token);
+            cur_token.content.clear();
+            cur_token.type = TOKEN_WORD;
+            
+        } else if(str_peek(text, t, "\\k")) {
+            if(!cur_token.content.empty()) tokens.push_back(cur_token);
+            cur_token.content.clear();
+            if(!inside_control) {
+                inside_control = true;
+                cur_token.type = TOKEN_CONTROL;
+            } else {
+                inside_control = false;
+                cur_token.type = TOKEN_WORD;
+            }
+            t++;
+            
+        } else {
+            cur_token.content.push_back(text[t]);
+            
+        }
+    }
+    if(!cur_token.content.empty()) tokens.push_back(cur_token);
+    
+    //Get their widths.
+    int space_char_width = al_get_text_width(font, " ");
+    for(size_t t = 0; t < tokens.size(); ++t) {
+        switch(tokens[t].type) {
+        case TOKEN_WORD: {
+            tokens[t].width =
+                al_get_text_width(font, tokens[t].content.c_str());
+            break;
+        } case TOKEN_CONTROL: {
+            tokens[t].content = trim_spaces(tokens[t].content);
+            tokens[t].width =
+                get_control_icon_width(font, tokens[t].content);
+        }
+        }
+    }
+    
+    //Figure out how many lines will be needed.
+    vector<int> line_widths;
+    int cur_line_width = 0;
+    for(size_t t = 0; t < tokens.size(); ++t) {
+        if(cur_line_width > 0) {
+            cur_line_width += space_char_width;
+        }
+        cur_line_width += tokens[t].width;
+        if(
+            cur_line_width > 0 &&
+            (cur_line_width >= max_size.x || t == tokens.size() - 1)
+        ) {
+            line_widths.push_back(cur_line_width);
+            cur_line_width = 0;
+        }
+    }
+    
+    if(line_widths.empty()) return;
+    
+    //Figure out scales for each line, and for the whole piece.
+    float y_scale = 1.0f;
+    int line_height = al_get_font_line_height(font);
+    if(line_widths.size() * line_height > max_size.y) {
+        y_scale = max_size.y / line_widths.size() * line_height;
+    }
+    
+    vector<float> line_scales;
+    line_scales.reserve(line_widths.size());
+    for(size_t l = 0; l < line_widths.size(); ++l) {
+        float line_scale = 1.0f;
+        if(line_widths[l] > max_size.x) {
+            line_scale = max_size.x / line_widths[l];
+        }
+        line_scales.push_back(line_scale);
+    }
+    
+    //Draw!
+    int cur_line_idx = 0;
+    for(size_t t = 0; t < tokens.size(); ++t) {
+        if(cur_line_width > 0) {
+            cur_line_width += space_char_width;
+        }
+        
+        float x = where.x + cur_line_width * line_scales[cur_line_idx];
+        if(flags & ALLEGRO_ALIGN_CENTER) {
+            x -= (line_widths[cur_line_idx] * line_scales[cur_line_idx]) / 2.0f;
+        } else if(flags & ALLEGRO_ALIGN_RIGHT) {
+            x -= line_widths[cur_line_idx] * line_scales[cur_line_idx];
+        }
+        float y = where.y + cur_line_idx * line_height * y_scale;
+        if(valign == 1) {
+            y -= (line_widths.size() * line_height * y_scale) / 2.0f;
+        } else if(valign == 2) {
+            y -= line_widths.size() * line_height * y_scale;
+        }
+        
+        switch(tokens[t].type) {
+        case TOKEN_WORD: {
+            draw_scaled_text(
+                font, color,
+                point(x, y),
+                point(line_scales[cur_line_idx], y_scale),
+                ALLEGRO_ALIGN_LEFT, 0, tokens[t].content
+            );
+            break;
+        }
+        case TOKEN_CONTROL: {
+            draw_control_icon(
+                font,
+                tokens[t].content,
+                point(
+                    x + (tokens[t].width * line_scales[cur_line_idx]) / 2.0f,
+                    y + (line_height * y_scale) / 2.0f
+                ),
+                point(
+                    tokens[t].width * line_scales[cur_line_idx],
+                    line_height * y_scale
+                )
+            );
+            break;
+        }
+        }
+        
+        cur_line_width += tokens[t].width;
+        if(cur_line_width >= max_size.x) {
+            cur_line_idx++;
+            cur_line_width = 0;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles an Allegro event.
  */
 void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
@@ -190,10 +347,9 @@ void pause_menu_struct::init_help_page() {
     tooltip_text->on_draw =
         [this]
     (const point & center, const point & size) {
-        draw_compressed_scaled_text(
+        draw_tidbit(
             game.fonts.standard, COLOR_WHITE,
             center, point(1.0f, 1.0f), ALLEGRO_ALIGN_CENTER, 1, size,
-            false,
             help_gui.get_current_tooltip()
         );
     };

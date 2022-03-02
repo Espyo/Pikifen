@@ -295,6 +295,22 @@ vector<string> split(
 
 
 /* ----------------------------------------------------------------------------
+ * Peeks the next characters in a string, and returns whether they match
+ * the specified filter.
+ * s:
+ *   String to parse.
+ * where:
+ *   What character index to start peeking at.
+ * match:
+ *   What string to match with.
+ */
+bool str_peek(const string &s, const size_t where, const string &match) {
+    if(where + match.size() > s.size()) return false;
+    return s.substr(where, match.size()) == match;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Converts an entire string into lowercase.
  * s:
  *   String to convert.

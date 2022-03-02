@@ -137,9 +137,9 @@ void options_struct::load(data_node* file) {
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         controls[p].clear();
         for(size_t b = 0; b < N_BUTTONS; ++b) {
-            string option_name = game.buttons.list[b].option_name;
-            if(option_name.empty()) continue;
-            load_control(game.buttons.list[b].id, p, option_name, file);
+            string internal_name = game.buttons.list[b].internal_name;
+            if(internal_name.empty()) continue;
+            load_control(game.buttons.list[b].id, p, internal_name, file);
         }
     }
     
@@ -293,9 +293,9 @@ void options_struct::save(data_node* file) const {
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
         for(size_t b = 0; b < N_BUTTONS; ++b) {
-            string option_name = game.buttons.list[b].option_name;
-            if(option_name.empty()) continue;
-            grouped_controls[prefix + option_name].clear();
+            string internal_name = game.buttons.list[b].internal_name;
+            if(internal_name.empty()) continue;
+            grouped_controls[prefix + internal_name].clear();
         }
     }
     
@@ -305,9 +305,9 @@ void options_struct::save(data_node* file) const {
             string name = "p" + i2s(p + 1) + "_";
             
             for(size_t b = 0; b < N_BUTTONS; ++b) {
-                if(game.buttons.list[b].option_name.empty()) continue;
+                if(game.buttons.list[b].internal_name.empty()) continue;
                 if(controls[p][c].action == game.buttons.list[b].id) {
-                    name += game.buttons.list[b].option_name;
+                    name += game.buttons.list[b].internal_name;
                     break;
                 }
             }

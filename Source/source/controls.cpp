@@ -31,19 +31,19 @@
  *   Its ID.
  * name:
  *   Its name.
- * option_name:
+ * internal_name:
  *   The name of its property in the options file.
  * default_control_str:
  *   A string representing the default controls for this button.
  */
 void button_manager::add(
-    const BUTTONS id, const string &name, const string &option_name,
+    const BUTTONS id, const string &name, const string &internal_name,
     const string &default_control_str
 ) {
     button_manager::button b;
     b.id = id;
     b.name = name;
-    b.option_name = option_name;
+    b.internal_name = internal_name;
     b.default_control_str = default_control_str;
     
     list.push_back(b);

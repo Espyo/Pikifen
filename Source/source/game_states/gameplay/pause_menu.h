@@ -70,6 +70,12 @@ private:
     //All tidbits in the help page.
     map<HELP_CATEGORIES, vector<string> > tidbits;
     
+    void draw_tidbit(
+        const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
+        const point &where, const point &scale,
+        const int flags, const unsigned char valign,
+        const point &max_size, const string &text
+    );
     void init_main_pause_menu();
     void init_help_page();
     void populate_help_tidbits(const HELP_CATEGORIES category);

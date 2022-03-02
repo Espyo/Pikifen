@@ -626,7 +626,7 @@ hud_struct::hud_struct() :
                     game.spray_types.size() >= 3
                 )
             ) {
-                draw_control(
+                draw_control_icon(
                     game.fonts.standard,
                     game.options.controls[0][c], center, size
                 );
@@ -691,7 +691,7 @@ hud_struct::hud_struct() :
                 game.options.controls[0][c].action ==
                 BUTTON_USE_SPRAY_2
             ) {
-                draw_control(
+                draw_control_icon(
                     game.fonts.standard,
                     game.options.controls[0][c], center, size
                 );
@@ -745,7 +745,7 @@ hud_struct::hud_struct() :
                 game.options.controls[0][c].action ==
                 BUTTON_PREV_SPRAY
             ) {
-                draw_control(
+                draw_control_icon(
                     game.fonts.standard,
                     game.options.controls[0][c], center, size
                 );
@@ -798,7 +798,7 @@ hud_struct::hud_struct() :
                 game.options.controls[0][c].action ==
                 BUTTON_NEXT_SPRAY
             ) {
-                draw_control(
+                draw_control_icon(
                     game.fonts.standard,
                     game.options.controls[0][c], center, size
                 );

@@ -172,7 +172,7 @@ struct action_from_event {
     float pos;
     //Player that pressed this button.
     size_t player;
-
+    
     action_from_event(
         const BUTTONS button, const float pos, const size_t player
     ) :
@@ -192,7 +192,7 @@ struct button_manager {
         //Name of the button.
         string name;
         //Its name in the options file.
-        string option_name;
+        string internal_name;
         //String representing the default control to use for this button.
         string default_control_str;
     };
@@ -201,7 +201,7 @@ struct button_manager {
     vector<button> list;
     
     void add(
-        const BUTTONS id, const string &name, const string &option_name,
+        const BUTTONS id, const string &name, const string &internal_name,
         const string &default_control_str
     );
 };

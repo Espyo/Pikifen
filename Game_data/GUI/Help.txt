@@ -23,7 +23,7 @@ tidbits {
         Pikmin types;Different Pikmin types have different strengths and weaknesses. Always try to use the right Pikmin for the job!
         Swapping Pikmin types;You will only throw Pikmin of the current standby type. Change the standby type to throw other Pikmin.
         Leader swapping;You can swap control between leaders. Try leaving different leaders with different groups of Pikmin.
-        Throwing teammates;Other leaders can also join your group, or be thrown like Pikmin.
+        Throwing teammates;Other leaders can also join your group, or be thrown like Pikmin. Use this to reach new places.
         Pikmin deaths;Pikmin can be eaten, burned up, or die in other ways. Their strength lies in their numbers, however!
         Enemy combat;Learn how each enemy works, and how best to attack them! Try aiming for their weak spots.
         Saving Pikmin;If your Pikmin are in trouble, whistle them to save them!
