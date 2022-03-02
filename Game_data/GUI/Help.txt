@@ -15,9 +15,9 @@ tidbits {
         Leaders;Take control of a leader, and order your Pikmin to do tasks. Try to make good use of your multitasking skills!
         Calling;You can call a Pikmin to your group by whistling it or bumping against it.
         Onions;Pikmin live in nests called Onions. When under an Onion, you can store Pikmin inside or call them out.
-        Throwing;Throw a Pikmin in your group in order to leave it idling where it lands. It will try to find nearby tasks.
+        Throwing;Throw a Pikmin in your group in order to leave it idling where it lands. Idle Pikmin will try to find nearby tasks.
         Growing Pikmin;Pikmin can carry things to the Onion. After delivery, the Onion will create new Pikmin!
-        Carry strength;Some items are too heavy for one Pikmin to carry. Try adding multiple ones.
+        Carry strength;Some items need multiple Pikmin to carry. Inside the Onion, the type of Pikmin receiving the object matches the majority of carriers.
         Pikmin attacks;Pikmin can attack wildlife. Throw them, and they will latch and start striking.
         Obstacles;Some obstacles will require multiple Pikmin to work together to clear them.
         Pikmin types;Different Pikmin types have different strengths and weaknesses. Always try to use the right Pikmin for the job!
@@ -31,9 +31,22 @@ tidbits {
         Goal;There is no overarching goal yet, but try defeating as many enemies and gather as many goodies as you can!
     }
     controls {
-        
+        Move;Move around with \k move_up \k \k move_left \k \k move_down \k \k move_right \k.
+        Whistle;Whistle Pikmin with \k whistle \k. Hold to expand the whistle.
+        Throw;Throw a Pikmin of the currently selected standby type with \k throw \k.
+        Swap Pikmin type;Change the current Pikmin type on standby with \k prev_type \k and \k next_type \k. You can also put a leader in the group on standby this way.
+        Swarm;Swarm your squad of Pikmin towards the cursor with \k swarm_cursor \k, or in a specific direction with \k swarm_up \k \k swarm_left \k \k swarm_down \k \k swarm_right \k. They'll start working on whatever they touch.
+        Swap leader;Change to a different leader in the area with \k next_leader \k.
+        Dismiss;Dismiss your group with \k dismiss \k. If you're swarming, they will be dismissed in that direction.
+        Spray;Use sprays with \k use_spray_1 \k and \k use_spray_2 \k. If you have multiple, \k prev_spray \k and \k next_spray \k change which one is active, and \k use_spray \k uses it.
     }
     objects {
-        
+        Pellet;Pellets are like food for Pikmin, making them good sources for more Pikmin. The number on them specifies their weight. Try matching their color with the receiving Pikmin type!
+        Nectar;Pikmin that drink nectar will go up in maturity. The more mature a Pikmin, the faster it'll move.
+        Egg;Eggs usually have nectar inside, but if you're lucky, they can drop some spray drops.
+        Bomb rock;Bomb rocks can be picked up by any Pikmin. Throw a Pikmin with one to drop it and start its fuse. If a bomb rock Pikmin gets bit by an enemy, it'll snatch the bomb instead!
+        Reinforced wall;Reinforced walls cannot be destroyed by Pikmin directly. Try some explosive force instead.
+        Flukeweed;Flukeweeds look like spiraling plants, and usually hide something underneath their roots. Winged Pikmin can pull these plants out.
+        Bamboo gate;Bamboo gates have handles at the top, and can be lifted into the air by Winged Pikmin.
     }
 }
