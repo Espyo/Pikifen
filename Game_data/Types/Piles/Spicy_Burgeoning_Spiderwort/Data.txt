@@ -1,4 +1,5 @@
 name = Spicy Burgeoning Spiderwort
+description = This Burgeoning Spiderwort grows ultra-spicy berries, which can be harvested.
 
 can_drop_multiple = true
 contents = Spicy berry

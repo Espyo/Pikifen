@@ -1,4 +1,5 @@
 name = Brittany
+description = A professional botanist from Koppai. Loves fruit.
 
 acceleration = 800
 dismiss_sfx = Olimar_dismiss.ogg

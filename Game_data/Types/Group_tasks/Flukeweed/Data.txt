@@ -1,4 +1,5 @@
 name = Flukeweed
+description = This plant's stem can be grabbed and tugged upward in order to unroot it. Only Winged Pikmin can lift the stem up.
 
 area_editor_tips = To make it capture other objects, simply place\nthose objects and this one together\nsuch that they are all touching.
 casts_shadow = true

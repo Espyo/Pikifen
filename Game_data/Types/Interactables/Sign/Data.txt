@@ -1,4 +1,5 @@
 name = Sign
+description = A sign whose contents can be read by a leader.
 
 height = 16
 prompt_text = Read

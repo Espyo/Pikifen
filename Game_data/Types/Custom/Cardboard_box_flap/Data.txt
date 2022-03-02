@@ -1,4 +1,5 @@
 name = Cardboard box flap
+description = The flap of a cardboard box.
 
 appears_in_area_editor = false
 casts_shadow = false

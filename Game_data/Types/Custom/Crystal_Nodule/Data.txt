@@ -1,4 +1,5 @@
 name = Crystal nodule
+description = A small crystal pebble that can be used as ammo by Skutterchucks.
 
 can_block_paths = false
 can_hurt = player; enemy; weak_plain_obstacle; fragile

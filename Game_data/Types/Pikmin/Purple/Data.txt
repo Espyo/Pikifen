@@ -1,4 +1,5 @@
 name = Purple Pikmin
+description = Purple Pikmin resist wind attacks, have the strength of 10 Pikmin, and cause damage when landing on enemies. However, they are slow and can't be thrown high.
 
 can_carry_tools = true
 carry_speed = 1

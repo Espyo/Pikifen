@@ -1,4 +1,5 @@
 name = Rolling boulder
+description = A boulder that rolls forward until it hits a wall, crushing things in its way.
 
 acceleration = 800
 appears_in_area_editor = false

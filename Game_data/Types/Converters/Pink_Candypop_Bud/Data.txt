@@ -1,4 +1,5 @@
 name = Pink Candypop Bud
+description = Converts any Pikmin thrown inside into Winged Pikmin seeds.
 
 available_pikmin_types = Winged Pikmin
 buffer_size = 5

@@ -189,6 +189,8 @@ public:
     //Technical things.
     //Its full name.
     string name;
+    //Blurb-like description. Mostly used for gameplay, not content-making.
+    string description;
     //Name of the folder its data is on.
     string folder_name;
     //Mob category.

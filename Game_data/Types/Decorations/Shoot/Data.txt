@@ -1,4 +1,5 @@
 name = Shoot
+description = A green shoot that splits into three leaves.
 
 height = 160
 radius = 24

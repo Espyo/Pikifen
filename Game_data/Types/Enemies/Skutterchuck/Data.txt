@@ -1,4 +1,5 @@
 name = Skutterchuck
+description = On its own, a Skutterchuck is fairly harmless, if feisty. But it can grab crystal nodules and chuck those that its victims.
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile

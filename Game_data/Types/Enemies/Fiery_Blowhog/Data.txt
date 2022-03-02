@@ -1,4 +1,5 @@
 name = Fiery Blowhog
+description = It can suck in air and spit out a stream of fire from its snout. Its backside is safe, but it likes to buck Pikmin away.
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile

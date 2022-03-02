@@ -1,4 +1,5 @@
 name = Rock 20 pellet
+description = A gray 20 pellet that can be used to grow more Pikmin. Generates more Rock Pikmin than other types.
 
 height = 64
 match_seeds = 20

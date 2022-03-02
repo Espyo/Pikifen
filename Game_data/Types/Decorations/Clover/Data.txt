@@ -1,4 +1,5 @@
 name = Clover
+description = A cluster of small green three-leaved clovers.
 
 height = 120
 radius = 52

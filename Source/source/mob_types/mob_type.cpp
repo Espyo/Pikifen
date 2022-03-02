@@ -352,6 +352,7 @@ void load_mob_type_from_file(
     );
     rs.set("casts_shadow", mt->casts_shadow);
     rs.set("default_vulnerability", mt->default_vulnerability);
+    rs.set("description", mt->description);
     rs.set("has_group", mt->has_group);
     rs.set("health_regen", mt->health_regen);
     rs.set("height", mt->height);

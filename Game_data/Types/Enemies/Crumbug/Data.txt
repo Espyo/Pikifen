@@ -1,4 +1,5 @@
 name = Crumbug
+description = This small creature resembles a loaf of bread. It just meanders about, but can bite Pikmin pretty quickly.
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile

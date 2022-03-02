@@ -1,4 +1,5 @@
 name = White bramble gate pillar
+description = Pillar that holds a white bramble gate in place.
 
 appears_in_area_editor = false
 can_block_paths = false

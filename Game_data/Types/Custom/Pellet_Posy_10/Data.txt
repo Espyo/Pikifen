@@ -1,4 +1,5 @@
 name = 10 Pellet Posy
+description = This plant, when mature, houses a 10 pellet between its petals.
 
 height = 128
 max_health = 300

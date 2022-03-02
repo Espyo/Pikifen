@@ -1,4 +1,5 @@
 name = Winged Pikmin
+description = Winged Pikmin can fly. As such, they can carry objects above water and over walls. They are a bit slow at carrying, and deal less damage than usual, though.
 
 can_carry_tools = true
 can_fly = true

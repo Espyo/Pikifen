@@ -1,4 +1,5 @@
 name = Gray Candypop Bud
+description = Converts any Pikmin thrown inside into Rock Pikmin seeds.
 
 available_pikmin_types = Rock Pikmin
 buffer_size = 5

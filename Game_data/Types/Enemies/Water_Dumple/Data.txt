@@ -1,4 +1,5 @@
 name = Water Dumple
+description = Water Dumples are typically found near or in water. They have a strong appetite, and don't go down without a fight.
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile

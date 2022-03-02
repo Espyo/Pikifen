@@ -1,4 +1,5 @@
 name = Paper bag handle
+description = Handle placed at ground level on the sides of a paper bag.
 
 appears_in_area_editor = false
 casts_shadow = false

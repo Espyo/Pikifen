@@ -1,4 +1,5 @@
 name = Adult Bulbmin
+description = It has the body of a small Red Bulborb, but is actually controlled by a parsitic Pikmin! Despite this, it will stil eat other Pikmin, not counting the juvenile Bulbmin that are usually following around.
 
 acceleration = 100
 can_hunt = player; enemy

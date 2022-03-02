@@ -1,4 +1,5 @@
 name = President
+description = President of Hocotate Freight from Hocotate. Treats his employees harshly, though not always.
 
 acceleration = 800
 dismiss_sfx = President_dismiss.ogg

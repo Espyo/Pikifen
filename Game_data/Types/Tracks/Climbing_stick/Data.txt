@@ -1,4 +1,5 @@
 name = Climbing stick
+description = A stick slanted upwards so that Pikmin can climb on it, and reach higher platforms.
 
 height = 250
 pushable = false

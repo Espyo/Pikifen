@@ -1,4 +1,5 @@
 name = Reinforced wall pillar
+description = Pillar that holds a reinforced wall in place.
 
 appears_in_area_editor = false
 can_block_paths = false

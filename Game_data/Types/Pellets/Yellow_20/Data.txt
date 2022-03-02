@@ -1,4 +1,5 @@
 name = Yellow 20 pellet
+description = A yellow 20 pellet that can be used to grow more Pikmin. Generates more Yellow Pikmin than other types.
 
 height = 64
 match_seeds = 20

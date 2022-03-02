@@ -1,4 +1,5 @@
 name = Blue Pikmin
+description = Blue Pikmin can swim and withstand any water-based attack.
 
 can_carry_tools = true
 carry_speed = 4

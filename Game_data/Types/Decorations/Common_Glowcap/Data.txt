@@ -1,4 +1,5 @@
 name = Common Glowcap
+description = A single glowing cyan mushroom.
 
 height = 120
 radius = 24

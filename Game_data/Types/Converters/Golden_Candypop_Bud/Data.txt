@@ -1,4 +1,5 @@
 name = Golden Candypop Bud
+description = Converts any Pikmin thrown inside into Yellow Pikmin seeds.
 
 available_pikmin_types = Yellow Pikmin
 buffer_size = 5

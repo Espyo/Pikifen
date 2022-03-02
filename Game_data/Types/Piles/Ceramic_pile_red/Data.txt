@@ -1,4 +1,5 @@
 name = Ceramic pile red
+description = A pile of red ceramic fragments, used to build a bridge with.
 
 area_editor_tips = Link this object to a bridge object, so the Pikmin\nknow what bridge to take the ceramic shards to.
 can_drop_multiple = false

@@ -1,4 +1,5 @@
 name = Dwarf Red Bulborb
+description = These beasts wander around in search of food, and can hunt down after Pikmin with their stubbly legs.
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile

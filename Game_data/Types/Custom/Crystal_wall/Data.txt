@@ -1,4 +1,5 @@
 name = Crystal wall
+description = Wall made of crystal. Only Rock Pikmin or explosions can bring it down.
 
 can_block_paths = true
 casts_shadow = false

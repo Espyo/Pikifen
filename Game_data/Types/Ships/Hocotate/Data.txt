@@ -1,4 +1,5 @@
 name = Hocotate ship
+description = An ordinary ship at Hocotate Freight. Has a snarky AI that's good at making sales pitches.
 
 can_heal = true
 control_point_offset = 120 0

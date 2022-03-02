@@ -1,4 +1,5 @@
 name = Yellow Pikmin
+description = Yellow Pikmin are resitant to electricity. They can also be thrown higher than normal.
 
 can_carry_tools = true
 carry_speed = 1

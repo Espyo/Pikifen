@@ -1,4 +1,5 @@
 name = Female Sheargrub
+description = Typically found underground, the Female Sheargrub will emerge if there are Pikmin nearby, despite harmlessly circling around them.
 
 can_hunt = player; enemy
 drops_corpse = true

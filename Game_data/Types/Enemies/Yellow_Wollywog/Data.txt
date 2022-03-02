@@ -1,4 +1,5 @@
 name = Yellow Wollywog
+description = Once it senses prey, a Yellow Wollywog will jump in the air if it can. It will then float for a bit, and land down with force, crushing anything below.
 
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile

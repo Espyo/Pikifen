@@ -1,4 +1,5 @@
 name = Fire geyser
+description = A hole that occasionally spits out a column of fire, like a geyser.
 
 height = 23
 max_health = 150

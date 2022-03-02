@@ -1,4 +1,5 @@
 name = White Pikmin
+description = White Pikmin are resistant to poison. They are also quick, and enemies that eat them will be poisoned for a while.
 
 can_carry_tools = true
 carry_speed = 1.2

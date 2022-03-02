@@ -1,4 +1,5 @@
 name = Red 10 pellet
+description = A red 10 pellet that can be used to grow more Pikmin. Generates more Red Pikmin than other types.
 
 height = 64
 match_seeds = 10

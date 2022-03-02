@@ -1,4 +1,5 @@
 name = Violet Candypop Bud
+description = Converts any Pikmin thrown inside into Purple Pikmin seeds.
 
 available_pikmin_types = Purple Pikmin
 buffer_size = 5

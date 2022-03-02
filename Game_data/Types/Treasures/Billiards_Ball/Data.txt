@@ -1,4 +1,5 @@
 name = Billiards Ball
+description = Some sort of numbered ball with a shiny coating.
 
 height = 100
 max_carriers = 30

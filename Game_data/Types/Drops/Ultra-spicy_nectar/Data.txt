@@ -1,4 +1,5 @@
 name = Ultra-spicy nectar
+description = One instant dosage of ultra-spicy spray.
 
 consumer = leaders
 effect = increase_sprays

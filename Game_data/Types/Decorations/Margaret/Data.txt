@@ -1,4 +1,5 @@
 name = Margaret
+description = A cluster of yellow margarets.
 
 height = 160
 radius = 32

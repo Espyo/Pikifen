@@ -1,4 +1,5 @@
 name = 2 Euro
+description = Some sort of foreign coin, given its colors.
 
 height = 2
 max_carriers = 6

@@ -1,4 +1,5 @@
 name = Rock Onion
+description = Onion that houses Rock Pikmin.
 
 height = 200
 leg_body_parts = hole_1; foot_1; hole_2; foot_2; hole_3; foot_3

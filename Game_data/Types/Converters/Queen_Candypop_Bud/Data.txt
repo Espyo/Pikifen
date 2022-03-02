@@ -1,4 +1,5 @@
 name = Queen Candypop Bud
+description = Converts any Pikmin thrown inside into a bunch of Pikmin of the dots' color.
 
 available_pikmin_types = Red Pikmin;Yellow Pikmin;Blue Pikmin;Rock Pikmin;Winged Pikmin
 buffer_size = 1

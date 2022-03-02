@@ -1,4 +1,5 @@
 name = Cloaking Burrow-nit
+description = Its carapace looks like its face, but it is actually its backside, and it is armored.
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile

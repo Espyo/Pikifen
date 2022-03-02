@@ -1,4 +1,5 @@
 name = Electric gate
+description = A gate with electricity running through it. Only Yellow Pikmin can get near it.
 
 can_block_paths = true
 casts_shadow = false

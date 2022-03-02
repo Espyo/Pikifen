@@ -1,4 +1,5 @@
 name = Paper bag
+description = A large overturned paper bag. It can be squashed down if enough weight is applied on top.
 
 goal_number = 20
 height = 128

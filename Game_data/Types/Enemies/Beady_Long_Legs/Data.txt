@@ -1,4 +1,5 @@
 name = Beady Long Legs
+description = A massive spider-like beast that stomps around. Every time it takes a step, it can crush Pikmin under its foot. Only its bulbous head is vulnerable.
 
 acceleration = 1000
 area_editor_tips = Make sure there is enough room for it to spawn its feet too!

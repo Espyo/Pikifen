@@ -1,4 +1,5 @@
 name = Wood bridge
+description = A bridge made of wood. It starts as a pile of sticks, but Pikmin can work on it to give it shape.
 
 main_texture = Bridge.png
 left_rail_texture = Bridge_rail.jpg

@@ -1,4 +1,5 @@
 name = Alph
+description = A young engineer from Koppai. Has a lot of passion for his job.
 
 acceleration = 800
 dismiss_sfx = Olimar_dismiss.ogg

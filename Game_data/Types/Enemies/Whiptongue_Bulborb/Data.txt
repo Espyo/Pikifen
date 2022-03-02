@@ -1,4 +1,5 @@
 name = Whiptongue Bulborb
+description = This species of Bulborb has a long tongue. It whips it about in order to capture Pikmin, which it then gobbles up.
 
 acceleration = 150
 can_hunt = player; enemy

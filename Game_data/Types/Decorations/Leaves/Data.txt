@@ -1,4 +1,5 @@
 name = Leaves
+description = Three green leaves in a small bundle.
 
 casts_shadow = false
 height = 2

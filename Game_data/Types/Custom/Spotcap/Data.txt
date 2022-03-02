@@ -1,4 +1,5 @@
 name = Spotcap
+description = Small mushrooms that are sometimes found in the way.
 
 can_block_paths = true
 height = 48

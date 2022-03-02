@@ -1,4 +1,5 @@
 name = Red Bulborb
+description = Although often sleeping, they can be dangerous foes when awakened, given their large size and large mouths.
 
 acceleration = 100
 can_hunt = player; enemy

@@ -246,7 +246,8 @@ void pause_menu_struct::init_help_page() {
     }
     for(size_t p = 0; p < game.config.pikmin_order.size(); ++p) {
         tidbits[HELP_CATEGORY_PIKMIN].push_back(
-            game.config.pikmin_order[p]->name
+            game.config.pikmin_order[p]->name + ";" +
+            game.config.pikmin_order[p]->description
         );
     }
     

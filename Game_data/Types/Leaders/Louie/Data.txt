@@ -1,4 +1,5 @@
 name = Louie
+description = A quiet freight worker from Hocotate. Acts in mysterious and sometimes harmful ways.
 
 acceleration = 800
 dismiss_sfx = Louie_dismiss.ogg

@@ -1,4 +1,5 @@
 name = Egg
+description = Contains nectar, though it can also contain a spray drop.
 
 height = 40
 max_health = 50

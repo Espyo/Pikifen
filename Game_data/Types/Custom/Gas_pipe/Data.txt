@@ -1,4 +1,5 @@
 name = Gas pipe
+description = Some exposed pipe leaking out toxic gases.
 
 height = 23
 max_health = 150

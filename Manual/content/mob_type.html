@@ -43,6 +43,7 @@
     <p>The following are properties that you really should have, but the engine can run without them.</p>
 
     <ul>
+      <li><b><code>description</code></b>: A small blurb-like description of this object type. This should be written from a gameplay perspective, not a content-making perspective, so describe the object how it works in-game, not how it should be used in areas or with other objects. This description is useful for whoever reads the data file, but also shows up in the area editor, and in the case of Pikmin types, the help page of the in-game pause menu.</li>
       <li><b><code>can_hunt</code></b>: This object will only want to hunt down objects of this target type. i.e. it will only consider those an "opponent" (provided they're also in an opposing team). See <code>target_type</code> below for more information. Defaults to "player" and "enemy".</li>
       <li><b><code>can_hurt</code></b>: This object can only cause damage to objects of this target type (provided they're also in an opposing team). See <code>target_type</code> below for more information. Defaults to "player", "enemy", and "fragile".</li>
       <li><b><code>height</code></b>: Object's height. This doesn't need to be <i>very</i> specific. For reference, leaders are usually 32, Pikmin are usually 24. Defaults to 0.</li>

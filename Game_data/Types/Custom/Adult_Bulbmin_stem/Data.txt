@@ -1,4 +1,5 @@
 name = Adult Bulbmin stem
+description = The stem and leaf stuck to the top of an adult Bulbmin.
 
 appears_in_area_editor = false
 can_block_paths = false

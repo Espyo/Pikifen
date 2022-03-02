@@ -1,4 +1,5 @@
 name = Beady Long Legs foot
+description = Foot of a Beady Long Legs.
 
 allow_ground_attacks = false
 appears_in_area_editor = false

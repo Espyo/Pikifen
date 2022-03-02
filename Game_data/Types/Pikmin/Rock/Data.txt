@@ -1,4 +1,5 @@
 name = Rock Pikmin
+description = Rock Pikmin are resistant to being crushed and stabbed. They also cause damage by impacting against enemies. Their rocky hide lets them break crystal.
 
 attack_method = impact
 can_carry_tools = true

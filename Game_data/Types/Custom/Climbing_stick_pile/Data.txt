@@ -1,4 +1,5 @@
 name = Climbing stick pile
+description = A pile of twigs that Pikmin can work on in order to make a full climbing stick.
 
 height = 64
 max_health = 4000

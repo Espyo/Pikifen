@@ -1,4 +1,5 @@
 name = Ivory Candypop Bud
+description = Converts any Pikmin thrown inside into White Pikmin seeds.
 
 available_pikmin_types = White Pikmin
 buffer_size = 5

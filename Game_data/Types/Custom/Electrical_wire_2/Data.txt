@@ -1,4 +1,5 @@
 name = Electrical wire 2
+description = An exposed wire. It'll occasionally create an arc of electricity with a nearby wire.
 
 appears_in_area_editor = false
 height = 24

@@ -1,4 +1,5 @@
 name = Bomb rock
+description = If dropped by a Pikmin, or even just attacked, its fuse will start counting down. Once it reaches zero, it'll violently explode.
 
 can_be_hotswapped = true
 can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; explodable; explodable_pikmin_obstacle; fragile

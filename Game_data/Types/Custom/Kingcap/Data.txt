@@ -1,4 +1,5 @@
 name = Kingcap
+description = Hard, giant mushrooms that are usually in the way.
 
 can_block_paths = true
 height = 110

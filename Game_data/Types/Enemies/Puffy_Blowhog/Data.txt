@@ -1,4 +1,5 @@
 name = Puffy Blowhog
+description = Puffy Blowhogs are airborne, and can blow gusts of wind down below to scatter Pikmin about.
 
 acceleration = 50
 can_free_move = true

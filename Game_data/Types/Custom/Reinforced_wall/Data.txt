@@ -1,4 +1,5 @@
 name = Reinforced wall
+description = A wall made of a reinforced material so strong that normal Pikmin attacks can't break it. Explosive force can, however.
 
 can_block_paths = true
 casts_shadow = false

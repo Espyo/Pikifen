@@ -1,4 +1,5 @@
 name = Lapis Lazuli Candypop Bud
+description = Converts any Pikmin thrown inside into Blue Pikmin seeds.
 
 available_pikmin_types = Blue Pikmin
 buffer_size = 5

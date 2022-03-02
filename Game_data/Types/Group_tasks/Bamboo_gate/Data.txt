@@ -1,4 +1,5 @@
 name = Bamboo gate
+description = A gate made of five pieces of bamboo with handles at the top. Winged Pikmin can hold these handles and lift the gate out of the way.
 
 can_block_paths = true
 casts_shadow = false

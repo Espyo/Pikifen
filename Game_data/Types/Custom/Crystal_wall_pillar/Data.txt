@@ -1,4 +1,5 @@
 name = Crystal wall pillar
+description = Pillar that holds a crystal wall in place.
 
 appears_in_area_editor = false
 can_block_paths = false

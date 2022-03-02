@@ -1,4 +1,5 @@
 name = Seesaw block ropes
+description = Ropes attached above a seesaw block.
 
 appears_in_area_editor = false
 casts_shadow = false

@@ -1,4 +1,5 @@
 name = Ceramic bridge base red
+description = A small pile of fragments indicating the start or end of a red ceramic bridge.
 
 can_block_paths = false
 casts_shadow = false

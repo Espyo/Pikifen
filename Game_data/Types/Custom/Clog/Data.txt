@@ -1,4 +1,5 @@
 name = Clog
+description = A large stone that, when broken, drains a body of water.
 
 area_editor_tips = Place a clog object on a sector with water\n(or another liquid), or else it won't do anything!
 can_block_paths = true

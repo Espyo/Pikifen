@@ -1,4 +1,5 @@
 name = Winged 10 pellet
+description = A pink 10 pellet that can be used to grow more Pikmin. Generates more Winged Pikmin than other types.
 
 height = 64
 match_seeds = 10

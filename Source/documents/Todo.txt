@@ -2,6 +2,9 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
+    Each object, spray, hazard, etc. should have a description property, that describes them in a simple way. Example for Red Pikmin: "The most basic type of Pikmin, Red Pikmin are immune to fire, and are slightly stronger than normal."
+        Make the editor show the mob's description
+        Also, maker, version, and comments properties
     Leader HUD info improvements
         Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
         Leader HUD icons should be skipped if the leader is dead (thanks Helodity)
@@ -12,6 +15,7 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     If an area has no leaders, it crashes
     If a leader gets sucked into the Onion, they will keep their delivery_info struct
+    Scrolling to the top of the Gameplay list in the help page, and then moving to/from the main pause menu will show items off the list
     
     --- v0.22.0 ---
     HUD improvements
@@ -48,9 +52,6 @@ Next tasks (roughly sorted most important first)
         Memory leaks, cppcheck, etc.
     Demo content
         If something is under construction, like a menu or something, add a small "WIP" blurb
-        [NEEDS BRAINSTORMING] Maybe add an F1 screen with quick-start help?
-            Actually, it should maybe be an option in the pause menu
-            Use GUI items to let the player pick what info to show -- basic gameplay, controls, Pikmin types
         Add more treasures
             Ball of yarn treasure
         Sounds really need a makeover...
@@ -179,9 +180,6 @@ Next tasks (roughly sorted most important first)
         [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
     Pikmin extinction
         Check Onions, ships, and converters that have Pikmin in the buffer
-    Each object, spray, hazard, etc. should have a description property, that describes them in a simple way. Example for Red Pikmin: "The most basic type of Pikmin, Red Pikmin are immune to fire, and are slightly stronger than normal."
-        Make the editor show the mob's description
-        Also, maker, version, and comments properties
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
 		Areas should be one of three types

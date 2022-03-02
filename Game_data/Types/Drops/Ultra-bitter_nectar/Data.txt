@@ -1,4 +1,5 @@
 name = Ultra-bitter nectar
+description = One instant dosage of ultra-bitter spray.
 
 consumer = leaders
 effect = increase_sprays

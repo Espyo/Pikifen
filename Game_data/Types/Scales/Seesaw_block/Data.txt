@@ -1,4 +1,5 @@
 name = Seesaw block
+description = One in a pair of seesaw blocks. They are connected with a pulley system, so when one lowers, the other raises.
 
 area_editor_tips = Link this object to another seesaw block object, so they\nwork in tandem. Remember to link the other back to this one,\nand remember that one of them should start in a "down" position!\nRaised height: 128. Lowered height: 8.
 casts_shadow = false
