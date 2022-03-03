@@ -124,14 +124,28 @@ void pause_menu_struct::draw_tidbit(
     vector<int> line_widths;
     int cur_line_width = 0;
     for(size_t t = 0; t < tokens.size(); ++t) {
+        int line_width_after_token =
+            cur_line_width + tokens[t].width;
+        if(cur_line_width > 0) {
+            line_width_after_token += space_char_width;
+        }
+        
+        if(cur_line_width > 0 && line_width_after_token >= max_size.x) {
+            //Must go to the next line.
+            line_widths.push_back(cur_line_width);
+            cur_line_width = 0;
+        }
+        
         if(cur_line_width > 0) {
             cur_line_width += space_char_width;
         }
         cur_line_width += tokens[t].width;
+        
         if(
             cur_line_width > 0 &&
             (cur_line_width >= max_size.x || t == tokens.size() - 1)
         ) {
+            //We have to finish the current line.
             line_widths.push_back(cur_line_width);
             cur_line_width = 0;
         }
@@ -158,12 +172,24 @@ void pause_menu_struct::draw_tidbit(
     
     //Draw!
     int cur_line_idx = 0;
+    cur_line_width = 0;
     for(size_t t = 0; t < tokens.size(); ++t) {
+        int line_width_after_token =
+            cur_line_width + tokens[t].width;
         if(cur_line_width > 0) {
-            cur_line_width += space_char_width;
+            line_width_after_token += space_char_width;
+        }
+        
+        if(cur_line_width > 0 && line_width_after_token >= max_size.x) {
+            //Must go to the next line.
+            cur_line_idx++;
+            cur_line_width = 0;
         }
         
         float x = where.x + cur_line_width * line_scales[cur_line_idx];
+        if(cur_line_width > 0) {
+            x += space_char_width * line_scales[cur_line_idx];
+        }
         if(flags & ALLEGRO_ALIGN_CENTER) {
             x -= (line_widths[cur_line_idx] * line_scales[cur_line_idx]) / 2.0f;
         } else if(flags & ALLEGRO_ALIGN_RIGHT) {
@@ -203,8 +229,13 @@ void pause_menu_struct::draw_tidbit(
         }
         }
         
+        if(cur_line_width > 0) {
+            cur_line_width += space_char_width;
+        }
         cur_line_width += tokens[t].width;
+        
         if(cur_line_width >= max_size.x) {
+            //We have to finish the current line.
             cur_line_idx++;
             cur_line_width = 0;
         }
