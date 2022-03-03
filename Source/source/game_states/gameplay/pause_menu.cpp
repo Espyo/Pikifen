@@ -293,7 +293,9 @@ void pause_menu_struct::init_help_page() {
         this->populate_help_tidbits(HELP_CATEGORY_GAMEPLAY);
     };
     gameplay_button->on_get_tooltip =
-    [] () { return "Show help about gameplay features."; };
+    [] () {
+        return "Show help about gameplay features, along with some tips.";
+    };
     help_gui.add_item(gameplay_button, "gameplay");
     
     //Controls button.
@@ -304,18 +306,22 @@ void pause_menu_struct::init_help_page() {
         this->populate_help_tidbits(HELP_CATEGORY_CONTROLS);
     };
     controls_button->on_get_tooltip =
-    [] () { return "Show help about game controls."; };
+    [] () {
+        return "Show game controls and certain actions you can perform.";
+    };
     help_gui.add_item(controls_button, "controls");
     
     //Pikmin button.
     button_gui_item* pikmin_button =
-        new button_gui_item("Pikmin", game.fonts.standard);
+        new button_gui_item("Pikmin types", game.fonts.standard);
     pikmin_button->on_activate =
     [this] (const point &) {
         this->populate_help_tidbits(HELP_CATEGORY_PIKMIN);
     };
     pikmin_button->on_get_tooltip =
-    [] () { return "Show help about the different Pikmin types."; };
+    [] () {
+        return "Show a description of each Pikmin type.";
+    };
     help_gui.add_item(pikmin_button, "pikmin");
     
     //Objects button.
@@ -326,7 +332,9 @@ void pause_menu_struct::init_help_page() {
         this->populate_help_tidbits(HELP_CATEGORY_OBJECTS);
     };
     objects_button->on_get_tooltip =
-    [] () { return "Show help about some objects you'll find."; };
+    [] () {
+        return "Show help about some noteworthy objects you'll find.";
+    };
     help_gui.add_item(objects_button, "objects");
     
     //Category text.
@@ -437,7 +445,7 @@ void pause_menu_struct::init_main_pause_menu() {
         );
     };
     help_button->on_get_tooltip =
-    [] () { return "Some quick help about how gameplay works."; };
+    [] () { return "Some quick help and tips about how to play."; };
     gui.add_item(help_button, "help");
     
     //Quit button.
