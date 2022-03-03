@@ -483,8 +483,9 @@ void gui_manager::draw() {
         
         if(i_ptr->parent) {
             al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
-            point parent_c = i_ptr->parent->get_reference_center();
-            point parent_s = i_ptr->parent->get_reference_size();
+            point parent_c;
+            point parent_s;
+            get_item_draw_info(i_ptr->parent, &parent_c, &parent_s);
             al_set_clipping_rectangle(
                 parent_c.x - parent_s.x / 2.0f,
                 parent_c.y - parent_s.y / 2.0f,

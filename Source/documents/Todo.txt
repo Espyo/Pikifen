@@ -9,13 +9,11 @@ Current tasks (tasks being worked on, but not yet committed)
         Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
         Leader HUD icons should be skipped if the leader is dead (thanks Helodity)
         Leader health wheels should glow red when at low health (thanks Helodity)
-        
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
     If an area has no leaders, it crashes
     If a leader gets sucked into the Onion, they will keep their delivery_info struct
-    Scrolling to the top of the Gameplay list in the help page, and then moving to/from the main pause menu will show items off the list
     
     --- v0.22.0 ---
     HUD improvements
@@ -24,7 +22,10 @@ Next tasks (roughly sorted most important first)
             Pikmin type swapping should make the bubble grow
             Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
         More button icons on the HUD, so players know what to press to swap leaders, Pikmin types, etc.
-            Also, make the button icons smaller
+            Also, make the button icons smaller and use a slimmer font. Maybe also slightly transparent?
+            There should be an option to show or hide these buttons, on by default
+        Hide spray-related and standby-related items when not needed
+        Hide the day counter via coordinates, like how the total Pikmin counter is currently hidden
         Message box text should be juicier
         Spray swapping should make the icons slide into place
         Add juice to Onion menu
@@ -391,6 +392,7 @@ Next tasks (roughly sorted most important first)
                 Maybe vertical as well? Might be a lot of effort for not a lot of payback
             Add HUD support for all the different split-screen layouts
             In competitive modes, tint each player's HUD with their team color or something
+            [NEEDS BRAINSTORMING] Bingo Battle in P3 is organized such that the two players' HUDs are mirrored. This is so the bingo cards can be center screen right next to one another, considering your card is just as important as your opponent's. If Pikifen lets you specify one layout and all players use the same layout, we lose this bit of design, but if Pikifen forces you to specify a different layout for all players, that'll get really annoying really quickly (or not? I mean, you only set up the HUD once...)
         Make sure that:
             Leaders can't steal each other's group members
                 This includes Pikmin that are knocked down and get whistled, and sprouts
@@ -404,7 +406,9 @@ Next tasks (roughly sorted most important first)
         [NEEDS BRAINSTORMING] Figure out how the game is meant to work when:
             A "soft" pause happens -- when an Onion menu is entered, radar is opened, game pause is activated. Show the menu in full-screen or just the player's menu? Pause the game for that player, all, or none?
             A player's leader needs to throw another's
-                Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around. Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
+                Maybe instead of Pikmin 3 Deluxe's organized method, any player can at any moment pick up another player and throw them, a la Mario Maker 2? It's mechanically simpler, and it's always fun to casually throw your friends around
+                    Maybe for this to happen, the next group member feature can have one extra option for the closest human-controlled leader (if they are in-range)
+                    Careful for when two players are near each other, spamming the throw button towards an enemy, and one of them ends up accidentally throwing the other. Maybe throwing should only happen if the throwee has nobody in their group?
             A player sees an opposing team's Pikmin on their screen
                 I think the player's own Pikmin (and Pikmin belonging to another player that's still on their team) should appear normal, but the opponents should be marked. Maybe a triangle above them?
         Roulette items
