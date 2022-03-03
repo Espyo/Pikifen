@@ -2,9 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Each object, spray, hazard, etc. should have a description property, that describes them in a simple way. Example for Red Pikmin: "The most basic type of Pikmin, Red Pikmin are immune to fire, and are slightly stronger than normal."
-        Make the editor show the mob's description
-        Also, maker, version, and comments properties
     Leader HUD info improvements
         Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
         Leader HUD icons should be skipped if the leader is dead (thanks Helodity)
@@ -739,6 +736,7 @@ Misc things (so I don't forget)
     Code cleanup
         Switch angles to vectors?
         If I need intervals, I can use the code on the "misc info" text file
+    Spray types, damage spike types, weather, etc. should all have a version, maker, and comments property, but it doesn't really make sense to add them. Nothing in the engine needs that info, and the pre-packaged content wouldn't really benefit from it (and from it being changed literally every release). Still, it's important to add this info for custom content...
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
     Option to pause the game if the window is not focused

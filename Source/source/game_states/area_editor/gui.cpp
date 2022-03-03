@@ -1793,10 +1793,14 @@ void area_editor::process_gui_panel_mob() {
         last_mob_type = m_ptr->type;
     }
     
-    if(m_ptr->type && !m_ptr->type->area_editor_tips.empty()) {
+    if(m_ptr->type) {
         //Tips text.
-        ImGui::TextDisabled("(%s tips)", m_ptr->type->name.c_str());
-        set_tooltip(m_ptr->type->area_editor_tips);
+        ImGui::TextDisabled("(%s info & tips)", m_ptr->type->name.c_str());
+        string full_str = m_ptr->type->description;
+        if(!m_ptr->type->area_editor_tips.empty()) {
+            full_str += "\n\n" + m_ptr->type->area_editor_tips;
+        }
+        set_tooltip(full_str);
     }
     
     //Spacer dummy widget.
