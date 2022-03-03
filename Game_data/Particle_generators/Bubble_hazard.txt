@@ -1,4 +1,6 @@
 name = bubble_hazard
+description = Small bubbles that come out of Pikmin tops periodically, indicating they are suffocating from a bubble of water.
+
 emission_interval = 0.1
 number = 1
 number_deviation = 0

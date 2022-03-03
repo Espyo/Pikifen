@@ -1,4 +1,6 @@
 name = dweevil_treasure_release
+description = Some sparkles for when a Dweevil releases a treasure.
+
 emission_interval = 0
 number = 30
 number_deviation = 5

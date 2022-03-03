@@ -1,5 +1,6 @@
-//Standard fog effect.
 name = Foggy
+description = Standard fog effect.
+
 lighting {
     0    = 0   0   32  160
     300  = 0   0   32  160

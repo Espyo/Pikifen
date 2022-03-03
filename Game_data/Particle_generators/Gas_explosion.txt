@@ -1,4 +1,6 @@
 name = gas_explosion
+description = A generic explosion of poison gas. Used, for instance, by the Munge Dweevil when attacking.
+
 emission_interval = 0
 number = 12
 number_deviation = 0

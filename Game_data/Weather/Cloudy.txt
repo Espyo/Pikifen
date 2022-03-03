@@ -1,5 +1,6 @@
-//Cloudy day. Lighting is a bit darker.
 name = Cloudy
+description = Cloudy day. Lighting is a bit darker.
+
 lighting {
     0    = 0   0   32  176
     300  = 0   0   32  176

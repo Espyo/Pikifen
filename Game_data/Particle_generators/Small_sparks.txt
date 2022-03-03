@@ -1,4 +1,6 @@
 name = small_sparks
+description = A small explosion of gentle sparkles, signifying a Pellet Posy's growth.
+
 emission_interval = 0
 number = 15
 number_deviation = 2

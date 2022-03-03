@@ -1,4 +1,6 @@
 name = spore_explosion_small
+description = A small explosion of spores, emitted by a destroyed Spotcap.
+
 emission_interval = 0
 number = 12
 number_deviation = 4

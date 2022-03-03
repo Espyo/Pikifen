@@ -1,4 +1,6 @@
 name = egg_shard_explosion
+description = An explosion of shards from a recently-broken egg's shell.
+
 emission_interval = 0
 number = 12
 number_deviation = 1

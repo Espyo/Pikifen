@@ -1,5 +1,6 @@
-//Heavy rain. Lighting is darker.
 name = Rainstorm
+description = Heavy rain. Lighting is darker.
+
 lighting {
     0    = 0   0   32  176
     300  = 0   0   32  176

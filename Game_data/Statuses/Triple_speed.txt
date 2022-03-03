@@ -1,4 +1,6 @@
 name = triple_speed
+description = Makes the affected object move at triple the speed.
+
 affects_enemies = true
 affects_leaders = true
 affects_pikmin = true

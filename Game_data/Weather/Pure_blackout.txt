@@ -1,5 +1,6 @@
-//A blackout effect with maximum darkness, and slightly darker lighting.
 name = Pure blackout
+description = A blackout effect with maximum darkness, and slightly darker lighting.
+
 lighting {
     0    = 0   0   0   64
 }

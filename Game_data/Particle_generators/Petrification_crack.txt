@@ -1,4 +1,6 @@
 name = petrification_crack
+description = A small explosion of rocks from when a petrified enemy manages to break free.
+
 emission_interval = 0
 number = 16
 number_deviation = 1

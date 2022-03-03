@@ -1,5 +1,6 @@
-//A slight blackout effect, and slightly darker lighting.
 name = Slight blackout
+description = A slight blackout effect, and slightly darker lighting.
+
 lighting {
     0    = 0   0   0   64
 }

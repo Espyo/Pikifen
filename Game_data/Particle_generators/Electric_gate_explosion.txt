@@ -1,4 +1,6 @@
 name = electric_gate_explosion
+description = An explosion of triangular shards representing the glass lamps of a destroyed electric gate.
+
 emission_interval = 0
 number = 35
 number_deviation = 0

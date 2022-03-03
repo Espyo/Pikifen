@@ -1,4 +1,6 @@
 name = electrical_wire_sparks
+description = A series of small sparks emitted by an electrical wire that's about to start an arc of electricity.
+
 emission_interval = 0.1
 number = 1
 number_deviation = 0

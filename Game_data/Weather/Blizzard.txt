@@ -1,5 +1,6 @@
-//Heavy snow and wind.
 name = Blizzard
+description = Heavy snow and wind.
+
 lighting {
     0    = 0   16  32  176
     300  = 0   16  32  176

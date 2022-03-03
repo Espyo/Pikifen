@@ -1,4 +1,6 @@
 name = beady_long_legs_crumbling
+description = The flakes dropped by a crumbling Beady Long Legs.
+
 emission_interval = 0.05
 number = 10
 number_deviation = 0

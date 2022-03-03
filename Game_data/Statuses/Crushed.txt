@@ -1,4 +1,6 @@
 name = crushed
+description = Pikmin that are crushed will lie there for a bit before succumbing and dying.
+
 affects_pikmin = true
 turns_inedible = true
 turns_invisible = true

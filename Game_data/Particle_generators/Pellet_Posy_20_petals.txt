@@ -1,4 +1,6 @@
 name = pellet_posy_20_petals
+description = A small burst of petals from a 20 pellet Pellet Posy.
+
 emission_interval = 0
 number = 12
 number_deviation = 0

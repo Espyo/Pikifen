@@ -1,4 +1,6 @@
 name = bomb_rock_explosion
+description = Damage applied to an enemy that eats a bomb rock. It causes a lot of damage.
+
 damage = 1000
 ingestion_only = true
 particle_generator = dark_smoke_explosion

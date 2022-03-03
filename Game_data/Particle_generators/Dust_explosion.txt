@@ -1,4 +1,6 @@
 name = dust_explosion
+description = A generic mid-sized explosion of dust. Used, for instance, when a Beady Long Legs stomps its foot.
+
 emission_interval = 0
 number = 8
 number_deviation = 0

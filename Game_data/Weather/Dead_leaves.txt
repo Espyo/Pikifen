@@ -1,5 +1,6 @@
-//Normal weather but with leaves floating around.
 name = Dead leaves
+description = Normal weather but with leaves floating around.
+
 lighting {
     0    = 0   0   32  160
     300  = 0   0   32  160

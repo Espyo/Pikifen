@@ -1,5 +1,5 @@
-//Used when a petrified enemy just broke free. It only lasts for a short while, just enough to spawn the particles.
 name = petrified_cracked
+description = Makes the affected object emit some particles from having broken through its petrification, and instantly ends right away.
 
 affects_enemies = true
 anim_speed_multiplier = 0

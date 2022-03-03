@@ -1,5 +1,5 @@
-//Used when a petrified enemy starts shaking because it is about to break free.
 name = petrified_cracking
+description = Makes the affected object start shaking, since its petrification is about to crack.
 
 affects_enemies = true
 anim_speed_multiplier = 0

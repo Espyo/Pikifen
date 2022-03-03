@@ -1,5 +1,6 @@
-//Light snow, and a light winter-blue lighting tint.
 name = Snowing
+description = Light snow, and a light winter-blue lighting tint.
+
 lighting {
     0    = 0   16  32  176
     300  = 0   16  32  176

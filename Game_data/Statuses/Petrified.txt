@@ -1,5 +1,5 @@
-//Used when an enemy has been sprayed by an ultra-bitter spray.
 name = petrified
+description = Enemies that are petrified will just stay in place, unable to cause harm. They will be slightly more resistant to damage, however.
 
 affects_enemies = true
 anim_speed_multiplier = 0

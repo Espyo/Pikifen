@@ -1,4 +1,6 @@
 name = reinforced_wall_explosion
+description = Explosion of pebbles launched by a recently-destroyed reinforced wall.
+
 emission_interval = 0
 number = 30
 number_deviation = 0

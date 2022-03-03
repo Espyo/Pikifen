@@ -1,5 +1,6 @@
-//Very dense fog. It also starts quite near.
 name = Very foggy
+description = Very dense fog. It also starts quite near.
+
 lighting {
     0    = 0   0   32  160
     300  = 0   0   32  160

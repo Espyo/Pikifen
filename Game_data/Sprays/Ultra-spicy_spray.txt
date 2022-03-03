@@ -1,4 +1,6 @@
 name = Ultra-Spicy Spray
+description = Spray one of these behind you, and every Pikmin in your group will become faster!
+
 effects = spicy
 group = true
 group_pikmin_only = true

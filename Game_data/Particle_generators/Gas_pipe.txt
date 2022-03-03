@@ -1,4 +1,6 @@
 name = gas_pipe
+description = A continuous stream of poison gas in every direction, emitted by a gas pipe.
+
 emission_interval = 0.3
 number = 3
 number_deviation = 1

@@ -1,4 +1,6 @@
 name = electrocuted
+description = Pikmin that are electrocuted will stay there for a bit, flashing from the powerful electricity, and will shortly after die.
+
 affects_pikmin = true
 overlay_animation = Electrocution.txt
 overlay_anim_mob_scale = 2.0

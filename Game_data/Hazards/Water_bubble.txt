@@ -1,3 +1,5 @@
 name = water_bubble
+description = A bubble of water that can wrap itself around a Pikmin's top and cause it to suffocate. Used, for instance, by a Caustic Dweevil's water splash attack.
+
 color = 0 255 255
 effects = bubbled

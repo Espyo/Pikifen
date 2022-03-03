@@ -1,4 +1,6 @@
 name = bomb_rock_health_drain
+description = Bomb rocks under this status effect will start losing their health periodically. This is a way to represent their fuse running down, so that they can blow up once it hits zero.
+
 affects_others = true
 color = 0 0 0
 health_change_ratio = -0.25

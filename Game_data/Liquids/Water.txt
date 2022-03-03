@@ -1,4 +1,6 @@
 name = water
+description = Everyday body of water.
+
 color = 0 0 64 96
 animation = Water.txt
 surface_1_speed = 10

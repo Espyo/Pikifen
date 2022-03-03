@@ -1,4 +1,6 @@
 name = drowning
+description = Pikmin that are drowning in bodies of water will flail about, but will eventually get tired, drown, and die. It can be saved by being whistled towards the shore.
+
 affects_pikmin = true
 color = 0 0 255
 health_change_ratio = -0.3

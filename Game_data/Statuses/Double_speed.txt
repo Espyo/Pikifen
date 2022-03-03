@@ -1,4 +1,6 @@
 name = double_speed
+description = Makes the affected object move at double the speed.
+
 affects_enemies = true
 affects_leaders = true
 affects_pikmin = true

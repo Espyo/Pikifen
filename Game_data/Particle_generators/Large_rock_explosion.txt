@@ -1,4 +1,6 @@
 name = large_rock_explosion
+description = A large explosion of rock particles, used when a clog is destroyed.
+
 emission_interval = 0
 number = 8
 number_deviation = 1

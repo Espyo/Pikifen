@@ -1,5 +1,6 @@
-//Sand and dust floating about, wind, and a yellow fog.
 name = Sandstorm
+description = Sand and dust floating about, wind, and a yellow fog.
+
 lighting {
     0    = 32  24  8  192
     300  = 32  24  8  192

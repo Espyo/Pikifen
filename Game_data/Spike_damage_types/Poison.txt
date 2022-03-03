@@ -1,3 +1,5 @@
 name = poison
+description = Damage applied to an enemy that eats a White Pikmin. It gives them a poison status effect.
+
 ingestion_only = true
 status_to_apply = white_pikmin_poison

@@ -1,4 +1,6 @@
 name = cardboard_box_dust
+description = The dust spread to the air by a cardboard box that's being dragged.
+
 emission_interval = 0.06
 number = 1
 number_deviation = 0

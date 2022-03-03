@@ -1,5 +1,6 @@
-//Bright sunny day. Lighting is clearer than normal.
 name = Bright
+description = Bright sunny day. Lighting is clearer than normal.
+
 lighting {
     0    = 0   0   32  160
     300  = 0   0   32  160

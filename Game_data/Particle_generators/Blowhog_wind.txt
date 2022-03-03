@@ -1,4 +1,6 @@
 name = blowhog_wind
+description = Wind blown in a circle outwards, caused when a Puffy Blowhog's wind blowing attack hits the floor.
+
 emission_interval = 0.1
 number = 5
 number_deviation = 1

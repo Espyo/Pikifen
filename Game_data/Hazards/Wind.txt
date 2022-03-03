@@ -1,2 +1,4 @@
 name = wind
+description = Any strong gust of wind that can push lighter Pikmin around and knock them off their feet. Used, for instance, by a Puffy Blowhog's wind attack.
+
 color = 255 255 255

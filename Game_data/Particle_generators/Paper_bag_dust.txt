@@ -1,4 +1,6 @@
 name = paper_bag_dust
+description = Random particles of dust thrown to the air by a paper bag that's being crushed down.
+
 emission_interval = 0.08
 number = 1
 number_deviation = 0

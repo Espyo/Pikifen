@@ -1,4 +1,6 @@
 name = bridge_dust_explosion
+description = An explosion of dust from a wood bridge's chunk being created.
+
 emission_interval = 0
 number = 20
 number_deviation = 1

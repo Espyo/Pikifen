@@ -1,4 +1,6 @@
 name = bramble_gate_explosion
+description = A bramble gate blowing in a dust of debris after being completely destroyed.
+
 emission_interval = 0
 number = 30
 number_deviation = 0

@@ -1,3 +1,5 @@
 name = ink
+description = Globs of ink that obscure a Pikmin's top and send it into a temporary panic. Used, for instance, by a Toady Bloyster's ink spray attack.
+
 color = 64 64 64
 effects = inked

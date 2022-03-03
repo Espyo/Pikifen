@@ -1,4 +1,6 @@
 name = rock_explosion
+description = A generic explosion of rock particles. Used, for instance, when a rolling boulder breaks.
+
 emission_interval = 0
 number = 8
 number_deviation = 1

@@ -1,5 +1,6 @@
-//Very light rain. Lighting is a bit darker.
 name = Dripping
+description = Very light rain. Lighting is a bit darker.
+
 lighting {
     0    = 0   0   32  176
     300  = 0   0   32  176

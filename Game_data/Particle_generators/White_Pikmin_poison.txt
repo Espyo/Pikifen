@@ -1,4 +1,6 @@
 name = white_pikmin_poison
+description = A continuous stream of poison particles, signifying an enemy's poison from having ingested a White Pikmin.
+
 emission_interval = 0.3
 number = 4
 number_deviation = 0

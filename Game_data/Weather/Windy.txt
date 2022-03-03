@@ -1,5 +1,6 @@
-//A bit like cloudy weather, but with wind.
 name = Windy
+description = A bit like cloudy weather, but with wind.
+
 lighting {
     0    = 0   0   32  160
     300  = 0   0   32  160

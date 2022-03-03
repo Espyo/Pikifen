@@ -1,5 +1,6 @@
-//Normal weather but with petals floating around.
 name = Petals
+description = Normal weather but with petals floating around.
+
 lighting {
     0    = 0   0   32  160
     300  = 0   0   32  160

@@ -1,5 +1,6 @@
-//Normal, clear day.
 name = Normal
+description = Normal, clear day.
+
 lighting {
     0    = 0   0   32  160
     300  = 0   0   32  160
