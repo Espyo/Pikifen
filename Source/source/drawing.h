@@ -82,11 +82,7 @@ void draw_button(
     const float juicy_grow_amount = 0.0f
 );
 void draw_control_icon(
-    const ALLEGRO_FONT* const font, const control_info &c,
-    const point &where, const point &max_size
-);
-void draw_control_icon(
-    const ALLEGRO_FONT* const font, const string &name,
+    const ALLEGRO_FONT* const font, const control_info* c,
     const point &where, const point &max_size
 );
 void draw_compressed_scaled_text(
@@ -164,18 +160,11 @@ float ease(
     const EASING_METHODS method, float y
 );
 void get_control_icon_info(
-    const ALLEGRO_FONT* font, const control_info &c,
-    CONTROL_ICON_SHAPES* shape, ALLEGRO_BITMAP** bitmap, string* text
-);
-void get_control_icon_info(
-    const ALLEGRO_FONT* font, const string &name,
+    const ALLEGRO_FONT* font, const control_info* c,
     CONTROL_ICON_SHAPES* shape, ALLEGRO_BITMAP** bitmap, string* text
 );
 float get_control_icon_width(
-    const ALLEGRO_FONT* font, const control_info &c
-);
-float get_control_icon_width(
-    const ALLEGRO_FONT* font, const string &name
+    const ALLEGRO_FONT* font, const control_info* c
 );
 
 

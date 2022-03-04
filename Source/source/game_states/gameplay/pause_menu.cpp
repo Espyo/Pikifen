@@ -115,7 +115,7 @@ void pause_menu_struct::draw_tidbit(
         } case TOKEN_CONTROL: {
             tokens[t].content = trim_spaces(tokens[t].content);
             tokens[t].width =
-                get_control_icon_width(font, tokens[t].content);
+                get_control_icon_width(font, find_control(tokens[t].content));
         }
         }
     }
@@ -215,7 +215,7 @@ void pause_menu_struct::draw_tidbit(
         case TOKEN_CONTROL: {
             draw_control_icon(
                 font,
-                tokens[t].content,
+                find_control(tokens[t].content),
                 point(
                     x + (tokens[t].width * line_scales[cur_line_idx]) / 2.0f,
                     y + (line_height * y_scale) / 2.0f

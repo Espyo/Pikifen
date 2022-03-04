@@ -606,33 +606,15 @@ hud_struct::hud_struct() :
     gui_item* spray_1_button = new gui_item();
     spray_1_button->on_draw =
     [this] (const point & center, const point & size) {
-        size_t top_spray_idx = INVALID;
+        control_info* c = NULL;
         if(game.spray_types.size() <= 2) {
-            top_spray_idx = 0;
+            c = find_control(BUTTON_USE_SPRAY_1);
         } else if(game.spray_types.size() > 0) {
-            top_spray_idx = game.states.gameplay->selected_spray;
+            c = find_control(BUTTON_USE_SPRAY);
         }
-        if(top_spray_idx == INVALID) return;
-        
-        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-            if(
-                (
-                    game.options.controls[0][c].action ==
-                    BUTTON_USE_SPRAY_1 &&
-                    game.spray_types.size() <= 2
-                ) || (
-                    game.options.controls[0][c].action ==
-                    BUTTON_USE_SPRAY &&
-                    game.spray_types.size() >= 3
-                )
-            ) {
-                draw_control_icon(
-                    game.fonts.standard,
-                    game.options.controls[0][c], center, size
-                );
-                break;
-            }
-        }
+        if(!c) return;
+
+        draw_control_icon(game.fonts.standard, c, center, size);
     };
     gui.add_item(spray_1_button, "spray_1_button");
     
@@ -680,24 +662,13 @@ hud_struct::hud_struct() :
     gui_item* spray_2_button = new gui_item();
     spray_2_button->on_draw =
     [this] (const point & center, const point & size) {
-        size_t bottom_spray_idx = INVALID;
+        control_info* c = NULL;
         if(game.spray_types.size() == 2) {
-            bottom_spray_idx = 1;
+            c = find_control(BUTTON_USE_SPRAY_2);
         }
-        if(bottom_spray_idx == INVALID) return;
-        
-        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-            if(
-                game.options.controls[0][c].action ==
-                BUTTON_USE_SPRAY_2
-            ) {
-                draw_control_icon(
-                    game.fonts.standard,
-                    game.options.controls[0][c], center, size
-                );
-                break;
-            }
-        }
+        if(!c) return;
+
+        draw_control_icon(game.fonts.standard, c, center, size);
     };
     gui.add_item(spray_2_button, "spray_2_button");
     
@@ -729,29 +700,13 @@ hud_struct::hud_struct() :
     gui_item* prev_spray_button = new gui_item();
     prev_spray_button->on_draw =
     [this] (const point & center, const point & size) {
-        size_t prev_spray_idx = INVALID;
+        control_info* c = NULL;
         if(game.spray_types.size() >= 3) {
-            prev_spray_idx =
-                sum_and_wrap(
-                    game.states.gameplay->selected_spray,
-                    -1,
-                    game.spray_types.size()
-                );
+            c = find_control(BUTTON_PREV_SPRAY);
         }
-        if(prev_spray_idx == INVALID) return;
-        
-        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-            if(
-                game.options.controls[0][c].action ==
-                BUTTON_PREV_SPRAY
-            ) {
-                draw_control_icon(
-                    game.fonts.standard,
-                    game.options.controls[0][c], center, size
-                );
-                break;
-            }
-        }
+        if(!c) return;
+
+        draw_control_icon(game.fonts.standard, c, center, size);
     };
     gui.add_item(prev_spray_button, "spray_prev_button");
     
@@ -782,29 +737,13 @@ hud_struct::hud_struct() :
     gui_item* next_spray_button = new gui_item();
     next_spray_button->on_draw =
     [this] (const point & center, const point & size) {
-        size_t next_spray_idx = INVALID;
+        control_info* c = NULL;
         if(game.spray_types.size() >= 3) {
-            next_spray_idx =
-                sum_and_wrap(
-                    game.states.gameplay->selected_spray,
-                    1,
-                    game.spray_types.size()
-                );
+            c = find_control(BUTTON_NEXT_SPRAY);
         }
-        if(next_spray_idx == INVALID) return;
-        
-        for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-            if(
-                game.options.controls[0][c].action ==
-                BUTTON_NEXT_SPRAY
-            ) {
-                draw_control_icon(
-                    game.fonts.standard,
-                    game.options.controls[0][c], center, size
-                );
-                break;
-            }
-        }
+        if(!c) return;
+
+        draw_control_icon(game.fonts.standard, c, center, size);
     };
     gui.add_item(next_spray_button, "spray_next_button");
     

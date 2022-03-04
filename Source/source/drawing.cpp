@@ -396,14 +396,14 @@ void draw_compressed_text(
  * font:
  *   Font to use for the name, if necessary.
  * c:
- *   Info on the control.
+ *   Info on the control. If NULL, a "NONE" icon will be used.
  * where:
  *   Center of the place to draw at.
  * max_size:
  *   Max width or height. Used to compress it if needed. 0 = unlimited.
  */
 void draw_control_icon(
-    const ALLEGRO_FONT* const font, const control_info &c,
+    const ALLEGRO_FONT* const font, const control_info* c,
     const point &where, const point &max_size
 ) {
     CONTROL_ICON_SHAPES shape;
@@ -467,48 +467,6 @@ void draw_control_icon(
             (max_size.y == 0 ? 0 : max_size.y - 2)
         ),
         text
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws an icon representing some control.
- * font:
- *   Font to use for the name, if necessary.
- * c:
- *   Name of the action.
- * where:
- *   Center of the place to draw at.
- * max_size:
- *   Max width or height. Used to compress it if needed. 0 = unlimited.
- */
-void draw_control_icon(
-    const ALLEGRO_FONT* const font, const string &name,
-    const point &where, const point &max_size
-) {
-    BUTTONS button_id = BUTTON_NONE;
-    for(size_t b = 0; b < game.buttons.list.size(); ++b) {
-        if(game.buttons.list[b].internal_name == name) {
-            button_id = game.buttons.list[b].id;
-            break;
-        }
-    }
-    
-    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-        if(game.options.controls[0][c].action == button_id) {
-            draw_control_icon(
-                game.fonts.standard,
-                game.options.controls[0][c],
-                where, max_size
-            );
-            return;
-        }
-    }
-    
-    draw_control_icon(
-        game.fonts.standard,
-        control_info(BUTTON_NONE, ""),
-        where, max_size
     );
 }
 
@@ -1164,7 +1122,7 @@ void draw_notification(
     if(control) {
         text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
         draw_control_icon(
-            game.fonts.standard, *control,
+            game.fonts.standard, control,
             point(
                 -bmp_w * 0.5 + NOTIFICATION_PADDING +
                 NOTIFICATION_CONTROL_SIZE * 0.5,
@@ -1723,7 +1681,7 @@ float ease(const EASING_METHODS method, const float n) {
  * font:
  *   Font to use for the name, if necessary.
  * c:
- *   Info on the control.
+ *   Info on the control. If NULL, a "NONE" icon will be used.
  * shape:
  *   The shape is returned here.
  * bitmap:
@@ -1734,30 +1692,32 @@ float ease(const EASING_METHODS method, const float n) {
  *   returned if there's nothing to write.
  */
 void get_control_icon_info(
-    const ALLEGRO_FONT* font, const control_info &c,
+    const ALLEGRO_FONT* font, const control_info* c,
     CONTROL_ICON_SHAPES* shape, ALLEGRO_BITMAP** bitmap, string* text
 ) {
     //Defaults. Used if control has nothing mapped to it.
     *shape = CONTROL_ICON_SHAPE_ROUNDED;
     *bitmap = NULL;
     *text = "(NONE)";
+
+    if(!c) return;
     
     //If it's a mouse click, just use the bitmap and be done with it.
-    if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
-        if(c.button >= 1 && c.button <= 3) {
+    if(c->type == CONTROL_TYPE_MOUSE_BUTTON) {
+        if(c->button >= 1 && c->button <= 3) {
             *shape = CONTROL_ICON_SHAPE_BITMAP;
-            *bitmap = game.sys_assets.bmp_mouse_button_icon[c.button - 1];
+            *bitmap = game.sys_assets.bmp_mouse_button_icon[c->button - 1];
             return;
         }
     }
     
     //Likewise, if it's a mouse wheel move, just use the bitmap.
     if(
-        c.type == CONTROL_TYPE_MOUSE_WHEEL_UP ||
-        c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN
+        c->type == CONTROL_TYPE_MOUSE_WHEEL_UP ||
+        c->type == CONTROL_TYPE_MOUSE_WHEEL_DOWN
     ) {
         *shape = CONTROL_ICON_SHAPE_BITMAP;
-        if(c.type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
+        if(c->type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
             *bitmap = game.sys_assets.bmp_mouse_wu_icon;
         } else {
             *bitmap = game.sys_assets.bmp_mouse_wd_icon;
@@ -1766,27 +1726,27 @@ void get_control_icon_info(
     }
     
     //Use an actual shape and some text.
-    switch(c.type) {
+    switch(c->type) {
     case CONTROL_TYPE_KEYBOARD_KEY: {
         *shape = CONTROL_ICON_SHAPE_RECTANGLE;
-        *text = str_to_upper(al_keycode_to_name(c.button));
+        *text = str_to_upper(al_keycode_to_name(c->button));
         break;
         
     } case CONTROL_TYPE_JOYSTICK_AXIS_NEG:
     case CONTROL_TYPE_JOYSTICK_AXIS_POS: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = "AXIS " + i2s(c.stick) + " " + i2s(c.axis);
-        *text += c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
+        *text = "AXIS " + i2s(c->stick) + " " + i2s(c->axis);
+        *text += c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
         break;
         
     } case CONTROL_TYPE_JOYSTICK_BUTTON: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = i2s(c.button + 1);
+        *text = i2s(c->button + 1);
         break;
         
     } case CONTROL_TYPE_MOUSE_BUTTON: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = "M" + i2s(c.button);
+        *text = "M" + i2s(c->button);
         break;
         
     } case CONTROL_TYPE_MOUSE_WHEEL_LEFT: {
@@ -1807,61 +1767,15 @@ void get_control_icon_info(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Returns information about how a control icon should be drawn.
- * font:
- *   Font to use for the name, if necessary.
- * name:
- *   Name of the control.
- * shape:
- *   The shape is returned here.
- * bitmap:
- *   The bitmap that represents the icon is returned here, or NULL is returned
- *   if there's no bitmap.
- * text:
- *   The text to be written inside is returned here, or an empty string is
- *   returned if there's nothing to write.
- */
-void get_control_icon_info(
-    const ALLEGRO_FONT* font, const string &name,
-    CONTROL_ICON_SHAPES* shape, ALLEGRO_BITMAP** bitmap, string* text
-) {
-    BUTTONS button_id = BUTTON_NONE;
-    for(size_t b = 0; b < game.buttons.list.size(); ++b) {
-        if(game.buttons.list[b].internal_name == name) {
-            button_id = game.buttons.list[b].id;
-            break;
-        }
-    }
-    
-    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-        if(game.options.controls[0][c].action == button_id) {
-            get_control_icon_info(
-                game.fonts.standard,
-                game.options.controls[0][c],
-                shape, bitmap, text
-            );
-            return;
-        }
-    }
-    
-    return
-        get_control_icon_info(
-            game.fonts.standard,
-            control_info(BUTTON_NONE, ""),
-            shape, bitmap, text
-        );
-}
-
 
 /* ----------------------------------------------------------------------------
  * Returns the width of a control icon, for drawing purposes.
  * font:
  *   Font to use for the name, if necessary.
  * c:
- *   Info on the control.
+ *   Info on the control. If NULL, a "NONE" icon will be used.
  */
-float get_control_icon_width(const ALLEGRO_FONT* font, const control_info &c) {
+float get_control_icon_width(const ALLEGRO_FONT* font, const control_info* c) {
     CONTROL_ICON_SHAPES shape;
     ALLEGRO_BITMAP* bitmap;
     string text;
@@ -1872,38 +1786,4 @@ float get_control_icon_width(const ALLEGRO_FONT* font, const control_info &c) {
     } else {
         return al_get_text_width(font, text.c_str()) + CONTROL_ICON_PADDING * 2;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the width of a control icon, for drawing purposes.
- * font:
- *   Font to use for the name, if necessary.
- * name:
- *   Name of the control.
- */
-float get_control_icon_width(const ALLEGRO_FONT* font, const string &name) {
-    BUTTONS button_id = BUTTON_NONE;
-    for(size_t b = 0; b < game.buttons.list.size(); ++b) {
-        if(game.buttons.list[b].internal_name == name) {
-            button_id = game.buttons.list[b].id;
-            break;
-        }
-    }
-    
-    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-        if(game.options.controls[0][c].action == button_id) {
-            return
-                get_control_icon_width(
-                    game.fonts.standard,
-                    game.options.controls[0][c]
-                );
-        }
-    }
-    
-    return
-        get_control_icon_width(
-            game.fonts.standard,
-            control_info(BUTTON_NONE, "")
-        );
 }

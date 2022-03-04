@@ -906,6 +906,39 @@ void gameplay_state::process_system_key_press(const int keycode) {
 
 
 /* ----------------------------------------------------------------------------
+ * Finds a registered control for player 1 that matches the requested button.
+ * Returns NULL if none is found.
+ * button_id:
+ *   ID of the button.
+ */
+control_info* find_control(const BUTTONS button) {
+    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+        if(game.options.controls[0][c].action == button) {
+            return &game.options.controls[0][c];
+        }
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finds a registered control for player 1 that matches the requested button.
+ * Returns NULL if none is found.
+ * button_name:
+ *   Name of the button.
+ */
+control_info* find_control(const string &button_name) {
+    for(size_t b = 0; b < game.buttons.list.size(); ++b) {
+        if(game.buttons.list[b].internal_name == button_name) {
+            return find_control(game.buttons.list[b].id);
+            break;
+        }
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Grabs an ALLEGRO_EVENT and checks all available controls.
  * For every control that matches, it adds its input information to a vector,
  * which it then returns.
