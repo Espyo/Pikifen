@@ -49,17 +49,20 @@ hud_struct::hud_struct() :
     
     data_node hud_file_node(HUD_FILE_NAME);
     
-    gui.register_coords("time",                  40, 10, 70, 10);
-    gui.register_coords("day_bubble",            88, 18, 15, 25);
-    gui.register_coords("day_number",            88, 20, 10, 10);
+    gui.register_coords("time",                  50, 10, 70, 10);
+    gui.register_coords("day_bubble",             0,  0,  0,  0);
+    gui.register_coords("day_number",             0,  0,  0,  0);
     gui.register_coords("leader_1_icon",          7, 90,  8, 10);
     gui.register_coords("leader_2_icon",          6, 80,  5,  9);
     gui.register_coords("leader_3_icon",          6, 72,  5,  9);
     gui.register_coords("leader_1_health",       16, 90,  8, 10);
     gui.register_coords("leader_2_health",       12, 80,  5,  9);
     gui.register_coords("leader_3_health",       12, 72,  5,  9);
+    gui.register_coords("next_leader_button",     4, 83,  3,  3);
     gui.register_coords("pikmin_standby_icon",   30, 91,  8, 10);
     gui.register_coords("pikmin_standby_m_icon", 35, 88,  4,  8);
+    gui.register_coords("prev_pikmin_button",    27, 95,  3,  3);
+    gui.register_coords("next_pikmin_button",    33, 95,  3,  3);
     gui.register_coords("pikmin_standby_x",      38, 91,  7,  8);
     gui.register_coords("pikmin_standby_nr",     50, 91, 15, 10);
     gui.register_coords("pikmin_group_nr",       73, 91, 15, 14);
@@ -70,10 +73,10 @@ hud_struct::hud_struct() :
     gui.register_coords("pikmin_slash_3",         0,  0,  0,  0);
     gui.register_coords("spray_1_icon",           6, 36,  4,  7);
     gui.register_coords("spray_1_amount",        13, 37, 10,  5);
-    gui.register_coords("spray_1_button",        10, 42, 10,  5);
+    gui.register_coords("spray_1_button",         4, 39,  3,  3);
     gui.register_coords("spray_2_icon",           6, 52,  4,  7);
     gui.register_coords("spray_2_amount",        13, 53, 10,  5);
-    gui.register_coords("spray_2_button",        10, 47, 10,  5);
+    gui.register_coords("spray_2_button",         4, 55,  3,  3);
     gui.register_coords("spray_prev_icon",        6, 52,  3,  5);
     gui.register_coords("spray_prev_button",      6, 47,  4,  4);
     gui.register_coords("spray_next_icon",       13, 52,  3,  5);
@@ -164,6 +167,19 @@ hud_struct::hud_struct() :
         leader_health_mgr.register_bubble(l, leader_health);
         
     }
+    
+    
+    //Next leader button.
+    gui_item* next_leader_button = new gui_item();
+    next_leader_button->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
+        if(game.states.gameplay->mobs.leaders.size() == 1) return;
+        control_info* c = find_control(BUTTON_NEXT_LEADER);
+        if(!c) return;
+        draw_control_icon(game.fonts.standard, c, center, size);
+    };
+    gui.add_item(next_leader_button, "next_leader_button");
     
     
     //Sun Meter.
@@ -386,6 +402,32 @@ hud_struct::hud_struct() :
     gui.add_item(standby_maturity, "pikmin_standby_m_icon");
     
     
+    //Previous Pikmin button.
+    gui_item* prev_pikmin_button = new gui_item();
+    prev_pikmin_button->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
+        if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
+        control_info* c = find_control(BUTTON_PREV_TYPE);
+        if(!c) return;
+        draw_control_icon(game.fonts.standard, c, center, size);
+    };
+    gui.add_item(prev_pikmin_button, "prev_pikmin_button");
+    
+    
+    //Next Pikmin button.
+    gui_item* next_pikmin_button = new gui_item();
+    next_pikmin_button->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
+        if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
+        control_info* c = find_control(BUTTON_NEXT_TYPE);
+        if(!c) return;
+        draw_control_icon(game.fonts.standard, c, center, size);
+    };
+    gui.add_item(next_pikmin_button, "next_pikmin_button");
+    
+    
     //Pikmin count "x".
     gui_item* pikmin_count_x = new gui_item();
     pikmin_count_x->on_draw =
@@ -606,6 +648,7 @@ hud_struct::hud_struct() :
     gui_item* spray_1_button = new gui_item();
     spray_1_button->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
         control_info* c = NULL;
         if(game.spray_types.size() <= 2) {
             c = find_control(BUTTON_USE_SPRAY_1);
@@ -613,7 +656,7 @@ hud_struct::hud_struct() :
             c = find_control(BUTTON_USE_SPRAY);
         }
         if(!c) return;
-
+        
         draw_control_icon(game.fonts.standard, c, center, size);
     };
     gui.add_item(spray_1_button, "spray_1_button");
@@ -662,12 +705,13 @@ hud_struct::hud_struct() :
     gui_item* spray_2_button = new gui_item();
     spray_2_button->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
         control_info* c = NULL;
         if(game.spray_types.size() == 2) {
             c = find_control(BUTTON_USE_SPRAY_2);
         }
         if(!c) return;
-
+        
         draw_control_icon(game.fonts.standard, c, center, size);
     };
     gui.add_item(spray_2_button, "spray_2_button");
@@ -700,12 +744,13 @@ hud_struct::hud_struct() :
     gui_item* prev_spray_button = new gui_item();
     prev_spray_button->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
         control_info* c = NULL;
         if(game.spray_types.size() >= 3) {
             c = find_control(BUTTON_PREV_SPRAY);
         }
         if(!c) return;
-
+        
         draw_control_icon(game.fonts.standard, c, center, size);
     };
     gui.add_item(prev_spray_button, "spray_prev_button");
@@ -737,12 +782,13 @@ hud_struct::hud_struct() :
     gui_item* next_spray_button = new gui_item();
     next_spray_button->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
         control_info* c = NULL;
         if(game.spray_types.size() >= 3) {
             c = find_control(BUTTON_NEXT_SPRAY);
         }
         if(!c) return;
-
+        
         draw_control_icon(game.fonts.standard, c, center, size);
     };
     gui.add_item(next_spray_button, "spray_next_button");

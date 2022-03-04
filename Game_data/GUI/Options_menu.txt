@@ -1,10 +1,11 @@
 positions {
-    back =            15 10 20  6
-    fullscreen =      24 20 45  8
-    resolution =      24 30 45  8
-    cursor_speed =    24 45 45  8
-    auto_throw =      24 55 45  8
-    controls =        24 65 45  8
-    tooltip =         50 95 95  8
-    restart_warning = 60  5 70  8
+    back =              15 10 20  6
+    fullscreen =        24 20 45  8
+    resolution =        24 30 45  8
+    cursor_speed =      24 45 45  8
+    auto_throw =        24 55 45  8
+    show_hud_controls = 24 65 45  8
+    controls =          24 75 45  8
+    tooltip =           50 95 95  8
+    restart_warning =   60  5 70  8
 }

@@ -49,6 +49,7 @@ const bool options_struct::DEF_MIPMAPS_ENABLED = true;
 const bool options_struct::DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] =
 {true, false, false, false};
 const bool options_struct::DEF_SMOOTH_SCALING = true;
+const bool options_struct::DEF_SHOW_HUD_CONTROLS = true;
 const unsigned int options_struct::DEF_TARGET_FPS = 60;
 const bool options_struct::DEF_TRUE_FULLSCREEN = false;
 const bool options_struct::DEF_WIN_FULLSCREEN = false;
@@ -86,6 +87,7 @@ options_struct::options_struct() :
     max_particles(DEF_MAX_PARTICLES),
     mipmaps_enabled(DEF_MIPMAPS_ENABLED),
     smooth_scaling(DEF_SMOOTH_SCALING),
+    show_hud_controls(DEF_SHOW_HUD_CONTROLS),
     target_fps(DEF_TARGET_FPS),
     true_fullscreen(DEF_TRUE_FULLSCREEN),
     window_position_hack(DEF_WINDOW_POSITION_HACK),
@@ -205,6 +207,7 @@ void options_struct::load(data_node* file) {
     rs.set("mipmaps", mipmaps_enabled);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
+    rs.set("show_hud_controls", show_hud_controls);
     rs.set("true_fullscreen", true_fullscreen);
     rs.set("window_position_hack", window_position_hack);
     
@@ -516,6 +519,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "smooth_scaling",
             b2s(smooth_scaling)
+        )
+    );
+    file->add(
+        new data_node(
+            "show_hud_controls",
+            b2s(show_hud_controls)
         )
     );
     file->add(

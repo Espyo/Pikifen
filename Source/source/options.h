@@ -69,6 +69,7 @@ struct options_struct {
     static const bool DEF_MIPMAPS_ENABLED;
     static const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
     static const bool DEF_SMOOTH_SCALING;
+    static const bool DEF_SHOW_HUD_CONTROLS;
     static const unsigned int DEF_TARGET_FPS;
     static const bool DEF_TRUE_FULLSCREEN;
     static const bool DEF_WIN_FULLSCREEN;
@@ -137,6 +138,8 @@ struct options_struct {
     bool mouse_moves_cursor[MAX_PLAYERS];
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling;
+    //Show control icons on top of HUD elements?
+    bool show_hud_controls;
     //Target framerate.
     int target_fps;
     //When using fullscreen, is this true fullscreen, or borderless window?

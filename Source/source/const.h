@@ -107,7 +107,7 @@ const float WHISTLE_DOT_INTERVAL = 0.03;
 //A whistle dot spins these many radians a second.
 const float WHISTLE_DOT_SPIN_SPEED = TAU / 4;
 //Time the whistle animations take to fade out.
-const float WHISTLE_FADE_TIME = 0.1f;
+const float WHISTLE_FADE_TIME = 0.13f;
 //Whistle rings move these many units per second.
 const float WHISTLE_RING_SPEED = 600.0f;
 //Seconds that need to pass before another whistle ring appears.

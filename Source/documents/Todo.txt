@@ -18,9 +18,7 @@ Next tasks (roughly sorted most important first)
             The standby Pikmin type bubble should have bubbles nearby for the previous and next
             Pikmin type swapping should make the bubble grow
             Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
-        More button icons on the HUD, so players know what to press to swap leaders, Pikmin types, etc.
-            Also, make the button icons smaller and use a slimmer font. Maybe also slightly transparent?
-            There should be an option to show or hide these buttons, on by default
+        Make the button icons smaller and use a slimmer font. Maybe also slightly transparent?
         Hide spray-related and standby-related items when not needed
         Hide the day counter via coordinates, like how the total Pikmin counter is currently hidden
         Message box text should be juicier
