@@ -57,6 +57,17 @@ enum EASING_METHODS {
 };
 
 
+//Ways to vertically align text when rendering it.
+enum TEXT_VALIGN_MODES {
+    //Align to the top.
+    TEXT_VALIGN_TOP,
+    //Align to the center.
+    TEXT_VALIGN_CENTER,
+    //Align to the bottom.
+    TEXT_VALIGN_BOTTOM,
+};
+
+
 void draw_background_logos(
     const float time_spent, const size_t rows, const size_t cols,
     const point &logo_size, const ALLEGRO_COLOR &tint,
@@ -88,12 +99,12 @@ void draw_control_icon(
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const unsigned char valign,
+    const int flags, const TEXT_VALIGN_MODES valign,
     const point &max_size, const bool scale_past_max, const string &text
 );
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const unsigned char valign,
+    const point &where, const int flags, const TEXT_VALIGN_MODES valign,
     const point &max_size, const string &text
 );
 void draw_filled_diamond(
@@ -144,12 +155,12 @@ void draw_mob_shadow(
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const unsigned char valign, const string &text
+    const int flags, const TEXT_VALIGN_MODES valign, const string &text
 );
 void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects);
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const unsigned char valign,
+    const point &where, const int flags, const TEXT_VALIGN_MODES valign,
     const string &text
 );
 void draw_textured_box(

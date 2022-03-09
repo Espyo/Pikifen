@@ -165,7 +165,7 @@ onion_menu_struct::onion_menu_struct(
             game.fonts.standard,
             color,
             center,
-            ALLEGRO_ALIGN_CENTER, 1,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size,
             "Field: " +
             i2s(game.states.gameplay->mobs.pikmin_list.size() + total_delta)
@@ -266,7 +266,7 @@ onion_menu_struct::onion_menu_struct(
                 game.fonts.area_name,
                 color,
                 center,
-                ALLEGRO_ALIGN_CENTER, 1,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 size,
                 i2s(real_onion_amount - t_ptr->delta)
             );
@@ -351,7 +351,7 @@ onion_menu_struct::onion_menu_struct(
                 game.fonts.area_name,
                 color,
                 center,
-                ALLEGRO_ALIGN_CENTER, 1,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 size,
                 i2s(real_group_amount + t_ptr->delta)
             );
@@ -470,7 +470,8 @@ onion_menu_struct::onion_menu_struct(
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
             game.fonts.standard, al_map_rgb(255, 255, 255),
-            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
+            center, point(0.7f, 0.7f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, false,
             gui.get_current_tooltip()
         );
     };

@@ -82,7 +82,7 @@ bullet_point_gui_item::bullet_point_gui_item(
             this->font, this->color,
             point(item_x_start + text_x_offset, center.y),
             point(1.0, 1.0),
-            ALLEGRO_ALIGN_LEFT, 1, text_space, true,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, text_space, true,
             this->text
         );
         if(selected) {
@@ -150,7 +150,7 @@ check_gui_item::check_gui_item(
         draw_compressed_text(
             font, color,
             point(center.x - size.x * 0.45, center.y),
-            ALLEGRO_ALIGN_LEFT, 1,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
             point(size.x * 0.90, size.y),
             text
         );
@@ -1137,7 +1137,7 @@ picker_gui_item::picker_gui_item(
             real_arrow_highlight == 0 ?
             arrow_highlight_size :
             arrow_regular_size,
-            ALLEGRO_ALIGN_CENTER, 1,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size,
             false,
             "<"
@@ -1151,7 +1151,7 @@ picker_gui_item::picker_gui_item(
             real_arrow_highlight == 1 ?
             arrow_highlight_size :
             arrow_regular_size,
-            ALLEGRO_ALIGN_CENTER, 1,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size,
             false,
             ">"
@@ -1163,7 +1163,7 @@ picker_gui_item::picker_gui_item(
             game.fonts.standard, map_gray(255),
             point(center.x - size.x * 0.40, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_LEFT, 1,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
             point(size.x * 0.80, size.y),
             true,
             this->base_text + this->option
@@ -1318,7 +1318,7 @@ text_gui_item::text_gui_item(
             this->font, this->color,
             point(text_x, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            this->flags, 1, size, true,
+            this->flags, TEXT_VALIGN_CENTER, size, true,
             this->text
         );
     };

@@ -576,7 +576,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             point(count_offset, count_offset),
             point(1.0f, 1.0f),
             ALLEGRO_ALIGN_LEFT,
-            0,
+            TEXT_VALIGN_TOP,
             i2s(n_standby_pikmin)
         );
     }
@@ -774,7 +774,7 @@ void gameplay_state::draw_message_box() {
                 game.win_h -
                 al_get_font_line_height(game.fonts.standard) * (4 - l) + 8
             ),
-            ALLEGRO_ALIGN_LEFT, 0, point(game.win_w - 64, 0),
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP, point(game.win_w - 64, 0),
             lines[l]
         );
         
@@ -973,7 +973,7 @@ void gameplay_state::draw_system_stuff() {
         );
         draw_text_lines(
             game.fonts.builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
-            point(8, 8), 0, 0, game.maker_tools.info_print_text
+            point(8, 8), 0, TEXT_VALIGN_TOP, game.maker_tools.info_print_text
         );
     }
     

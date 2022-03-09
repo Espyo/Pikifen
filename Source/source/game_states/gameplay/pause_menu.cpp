@@ -57,11 +57,28 @@ void pause_menu_struct::draw() {
 
 /* ----------------------------------------------------------------------------
  * Draws some help page tidbit's text.
+ * font:
+ *   Font to use.
+ * color:
+ *   Color of the text.
+ * where:
+ *   Coordinates to draw the text on.
+ * scale:
+ *   Scale the text by this much, horizontally and vertically.
+ * flags:
+ *   Allegro flags.
+ * valign:
+ *   Vertical alignment.
+ * max_size:
+ *   Maximum width or height the text can occupy. A value of zero in
+ *   one of these coordinates makes it not have a limit in that dimension.
+ * text:
+ *   Text to draw.
  */
 void pause_menu_struct::draw_tidbit(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const unsigned char valign,
+    const int flags, const TEXT_VALIGN_MODES valign,
     const point &max_size, const string &text
 ) {
     enum TOKEN_TYPES {
@@ -196,9 +213,9 @@ void pause_menu_struct::draw_tidbit(
             x -= line_widths[cur_line_idx] * line_scales[cur_line_idx];
         }
         float y = where.y + cur_line_idx * line_height * y_scale;
-        if(valign == 1) {
+        if(valign == TEXT_VALIGN_CENTER) {
             y -= (line_widths.size() * line_height * y_scale) / 2.0f;
-        } else if(valign == 2) {
+        } else if(valign == TEXT_VALIGN_BOTTOM) {
             y -= line_widths.size() * line_height * y_scale;
         }
         
@@ -208,7 +225,7 @@ void pause_menu_struct::draw_tidbit(
                 font, color,
                 point(x, y),
                 point(line_scales[cur_line_idx], y_scale),
-                ALLEGRO_ALIGN_LEFT, 0, tokens[t].content
+                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP, tokens[t].content
             );
             break;
         }
@@ -389,7 +406,8 @@ void pause_menu_struct::init_help_page() {
     (const point & center, const point & size) {
         draw_tidbit(
             game.fonts.standard, COLOR_WHITE,
-            center, point(1.0f, 1.0f), ALLEGRO_ALIGN_CENTER, 1, size,
+            center, point(1.0f, 1.0f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size,
             help_gui.get_current_tooltip()
         );
     };
@@ -513,7 +531,8 @@ void pause_menu_struct::init_main_pause_menu() {
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
             game.fonts.standard, COLOR_WHITE,
-            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
+            center, point(0.7f, 0.7f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, false,
             gui.get_current_tooltip()
         );
     };

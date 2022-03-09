@@ -3,7 +3,6 @@
     
 Current tasks (tasks being worked on, but not yet committed)
     Button icons should be less verbose, for things like axes, L_CONTROL, etc.
-    Refactor -- draw text should use an enum for valign
     
 Next tasks (roughly sorted most important first)
     --- To fix ---

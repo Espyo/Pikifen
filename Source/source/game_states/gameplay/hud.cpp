@@ -304,7 +304,7 @@ hud_struct::hud_struct() :
     [this] (const point & center, const point & size) {
         draw_compressed_text(
             game.fonts.counter, COLOR_WHITE,
-            center, ALLEGRO_ALIGN_CENTER, 1,
+            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size, i2s(game.states.gameplay->day)
         );
     };
@@ -434,7 +434,7 @@ hud_struct::hud_struct() :
     [this] (const point & center, const point & size) {
         draw_compressed_text(
             game.fonts.counter, COLOR_WHITE,
-            center, ALLEGRO_ALIGN_CENTER, 1, size, "x"
+            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "x"
         );
     };
     gui.add_item(pikmin_count_x, "pikmin_standby_x");
@@ -471,7 +471,8 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             point(center.x + size.x * 0.4, center.y),
             point(1.0f, 1.0f) + standby_count->get_juice_value(),
-            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true, i2s(n_standby_pikmin)
+            ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+            size * 0.7, true, i2s(n_standby_pikmin)
         );
     };
     gui.add_item(standby_count, "pikmin_standby_nr");
@@ -511,7 +512,8 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             point(center.x + size.x * 0.4, center.y),
             point(1.0f, 1.0f) + group_count->get_juice_value(),
-            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
+            ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+            size * 0.7, true,
             i2s(n_group_pikmin)
         );
     };
@@ -539,7 +541,8 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             point(center.x + size.x * 0.4, center.y),
             point(1.0f, 1.0f) + field_count->get_juice_value(),
-            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
+            ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+            size * 0.7, true,
             i2s(n_field_pikmin)
         );
     };
@@ -580,7 +583,8 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             point(center.x + size.x * 0.4, center.y),
             point(1.0f, 1.0f) + total_count->get_juice_value(),
-            ALLEGRO_ALIGN_RIGHT, 1, size * 0.7, true,
+            ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+            size * 0.7, true,
             i2s(n_total_pikmin)
         );
     };
@@ -594,7 +598,7 @@ hud_struct::hud_struct() :
         [this] (const point & center, const point & size) {
             draw_compressed_text(
                 game.fonts.counter, COLOR_WHITE,
-                center, ALLEGRO_ALIGN_CENTER, 1, size, "/"
+                center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "/"
             );
         };
         gui.add_item(counter_slash, "pikmin_slash_" + i2s(s + 1));
@@ -636,7 +640,7 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, 1, size, true,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
             "x" +
             i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays)
         );
@@ -693,7 +697,7 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
-            ALLEGRO_ALIGN_LEFT, 1, size, true,
+            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
             "x" +
             i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays)
         );

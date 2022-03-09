@@ -125,7 +125,7 @@ void controls_menu_state::add_control_gui_items(
             game.fonts.standard, map_gray(255),
             center,
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_CENTER, 1, size, true,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, true,
             action_name
         );
     };
@@ -278,7 +278,7 @@ void controls_menu_state::do_drawing() {
             COLOR_WHITE,
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             ALLEGRO_ALIGN_CENTER,
-            1,
+            TEXT_VALIGN_CENTER,
             "Waiting for any input..."
         );
     }
@@ -455,7 +455,8 @@ void controls_menu_state::load() {
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
             game.fonts.standard, COLOR_WHITE,
-            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
+            center, point(0.7f, 0.7f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, false,
             gui.get_current_tooltip()
         );
     };

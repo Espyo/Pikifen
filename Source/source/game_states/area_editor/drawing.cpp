@@ -870,7 +870,7 @@ void area_editor::draw_canvas() {
                         POINT_LETTER_TEXT_SCALE / game.cam.zoom,
                         POINT_LETTER_TEXT_SCALE / game.cam.zoom
                     ),
-                    ALLEGRO_ALIGN_CENTER, 1,
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                     letter
                 );
             }
@@ -969,7 +969,7 @@ void area_editor::draw_canvas() {
                     POINT_LETTER_TEXT_SCALE / game.cam.zoom,
                     POINT_LETTER_TEXT_SCALE / game.cam.zoom
                 ),
-                ALLEGRO_ALIGN_CENTER, 1,
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 letter
             );
         }
@@ -1366,7 +1366,7 @@ void area_editor::draw_canvas() {
                             line_y
                         ),
                         point(1, 1),
-                        ALLEGRO_ALIGN_LEFT, 1, i2s(z)
+                        ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, i2s(z)
                     );
                 }
             }
@@ -1385,7 +1385,7 @@ void area_editor::draw_canvas() {
                         cross_section_window_end.y
                     ) * 0.5
                 ),
-                point(1, 1), ALLEGRO_ALIGN_CENTER, 1,
+                point(1, 1), ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 "Please cross\nsome edges."
             );
             
@@ -1530,7 +1530,7 @@ void area_editor::draw_debug_text(
             DEBUG_TEXT_SCALE / game.cam.zoom,
             DEBUG_TEXT_SCALE / game.cam.zoom
         ),
-        ALLEGRO_ALIGN_CENTER, 1,
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
         text
     );
     

@@ -331,7 +331,7 @@ void editor::draw_unsaved_changes_warning() {
     );
     draw_text_lines(
         game.fonts.builtin, text_color,
-        box_center, ALLEGRO_ALIGN_CENTER, 1,
+        box_center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
         "You have\nunsaved changes!"
     );
 }

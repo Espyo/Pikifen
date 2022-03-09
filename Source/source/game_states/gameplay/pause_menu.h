@@ -13,10 +13,11 @@
 
 #include <map>
 
-#include "../../utils/geometry_utils.h"
+#include "../../drawing.h"
 #include "../../gui.h"
 #include "../../mob_script.h"
 #include "../../mobs/mob_utils.h"
+#include "../../utils/geometry_utils.h"
 
 class pikmin_type;
 
@@ -73,7 +74,7 @@ private:
     void draw_tidbit(
         const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
         const point &where, const point &scale,
-        const int flags, const unsigned char valign,
+        const int flags, const TEXT_VALIGN_MODES valign,
         const point &max_size, const string &text
     );
     void init_main_pause_menu();

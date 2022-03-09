@@ -68,7 +68,7 @@ void main_menu_state::do_drawing() {
         game.fonts.standard, COLOR_WHITE,
         point(8, game.win_h  - 8),
         point(0.6, 0.6),
-        ALLEGRO_ALIGN_LEFT, 2,
+        ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_BOTTOM,
         "Pikmin (c) Nintendo"
     );
     string version_text;
@@ -86,7 +86,7 @@ void main_menu_state::do_drawing() {
         game.fonts.standard, COLOR_WHITE,
         point(game.win_w - 8, game.win_h  - 8),
         point(0.6, 0.6),
-        ALLEGRO_ALIGN_RIGHT, 2,
+        ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_BOTTOM,
         version_text
     );
     
@@ -256,7 +256,8 @@ void main_menu_state::load() {
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
             game.fonts.standard, COLOR_WHITE,
-            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
+            center, point(0.7f, 0.7f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, false,
             gui.get_current_tooltip()
         );
     };

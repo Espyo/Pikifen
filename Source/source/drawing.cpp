@@ -234,7 +234,7 @@ void draw_button(
         font, color,
         center,
         point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-        ALLEGRO_ALIGN_CENTER, 1, size, true,
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, true,
         text
     );
     
@@ -269,7 +269,7 @@ void draw_button(
  * flags:
  *   Allegro text render function flags.
  * valign:
- *   Vertical align: 0 = top, 1 = middle, 2 = bottom.
+ *   Vertical alignment.
  * max_size:
  *   The maximum width and height. Use <= 0 to have no limit.
  * scale_past_max:
@@ -281,7 +281,7 @@ void draw_button(
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const unsigned char valign,
+    const int flags, const TEXT_VALIGN_MODES valign,
     const point &max_size, const bool scale_past_max, const string &text
 ) {
 
@@ -318,9 +318,9 @@ void draw_compressed_scaled_text(
     
     float final_text_height = normal_text_size.y * final_scale.y;
     float valign_offset =
-        valign == 1 ?
+        valign == TEXT_VALIGN_CENTER ?
         final_text_height / 2.0f :
-        valign == 2 ?
+        valign == TEXT_VALIGN_BOTTOM ?
         final_text_height :
         0.0f;
         
@@ -353,7 +353,7 @@ void draw_compressed_scaled_text(
  * flags:
  *   Allegro text render function flags.
  * valign:
- *   Vertical align: 0 = top, 1 = middle, 2 = bottom.
+ *   Vertical alignment.
  * max_size:
  *   The maximum width and height. Use <= 0 to have no limit.
  * text:
@@ -361,7 +361,7 @@ void draw_compressed_scaled_text(
  */
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const int flags, const unsigned char valign,
+    const point &where, const int flags, const TEXT_VALIGN_MODES valign,
     const point &max_size, const string &text
 ) {
     if(max_size.x == 0 && max_size.y == 0) return;
@@ -386,9 +386,9 @@ void draw_compressed_text(
     }
     
     float valign_offset =
-        valign == 1 ?
+        valign == TEXT_VALIGN_CENTER ?
         final_text_height / 2.0f :
-        valign == 2 ?
+        valign == TEXT_VALIGN_BOTTOM ?
         final_text_height :
         0.0f;
         
@@ -508,7 +508,7 @@ void draw_control_icon(
             where.y
         ),
         ALLEGRO_ALIGN_CENTER,
-        1,
+        TEXT_VALIGN_CENTER,
         point(
             (max_size.x == 0 ? 0 : max_size.x - CONTROL_ICON_PADDING),
             (max_size.y == 0 ? 0 : max_size.y - CONTROL_ICON_PADDING)
@@ -603,14 +603,14 @@ void draw_fraction(
     draw_scaled_text(
         game.fonts.value, color, point(bottom.x, value_nr_y),
         point(value_nr_scale, value_nr_scale),
-        ALLEGRO_ALIGN_CENTER, 0, (i2s(value_nr).c_str())
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_TOP, (i2s(value_nr).c_str())
     );
     
     float bar_y = bottom.y - font_h * 2;
     draw_scaled_text(
         game.fonts.value, color, point(bottom.x, bar_y),
         point(scale, scale),
-        ALLEGRO_ALIGN_CENTER, 0, "-"
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_TOP, "-"
     );
     
     float req_nr_y = bottom.y - font_h;
@@ -619,7 +619,7 @@ void draw_fraction(
     draw_scaled_text(
         game.fonts.value, color, point(bottom.x, req_nr_y),
         point(req_nr_scale, req_nr_scale),
-        ALLEGRO_ALIGN_CENTER, 0, (i2s(requirement_nr).c_str())
+        ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_TOP, (i2s(requirement_nr).c_str())
     );
 }
 
@@ -865,7 +865,7 @@ void draw_loading_screen(
                 al_clear_to_color(COLOR_EMPTY);
                 draw_text_lines(
                     game.fonts.area_name, al_map_rgb(255, 215, 0),
-                    point(), ALLEGRO_ALIGN_LEFT, 0,
+                    point(), ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
                     text
                 );
             } al_set_target_backbuffer(game.display);
@@ -895,7 +895,7 @@ void draw_loading_screen(
                 draw_text_lines(
                     game.fonts.area_name, al_map_rgb(224, 224, 224),
                     point(),
-                    ALLEGRO_ALIGN_LEFT, 0,
+                    ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
                     subtext
                 );
                 
@@ -1189,7 +1189,7 @@ void draw_notification(
             (text_box_y1 + text_box_y2) * 0.5
         ),
         ALLEGRO_ALIGN_CENTER,
-        1,
+        TEXT_VALIGN_CENTER,
         point(
             text_box_x2 - text_box_x1,
             text_box_y2 - text_box_y1
@@ -1277,14 +1277,14 @@ void draw_rounded_rectangle(
  * flags:
  *   Same flags you'd use for al_draw_text.
  * valign:
- *   Vertical align. 0: top, 1: center, 2: bottom.
+ *   Vertical alignment.
  * text:
  *   Text to draw.
  */
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
-    const int flags, const unsigned char valign, const string &text
+    const int flags, const TEXT_VALIGN_MODES valign, const string &text
 ) {
 
     ALLEGRO_TRANSFORM scale_transform, old_transform;
@@ -1483,26 +1483,26 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
  * flags:
  *   Flags, just like the ones you'd pass to al_draw_text.
  * valign:
- *   Vertical align: 0 for top, 1 for center, 2 for bottom.
+ *   Vertical alignment.
  * text:
  *   Text to write, line breaks included ('\n').
  */
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const int flags,
-    const unsigned char valign, const string &text
+    const TEXT_VALIGN_MODES valign, const string &text
 ) {
     vector<string> lines = split(text, "\n", true);
     int fh = al_get_font_line_height(font);
     size_t n_lines = lines.size();
     float top;
     
-    if(valign == 0) {
+    if(valign == TEXT_VALIGN_TOP) {
         top = where.y;
     } else {
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = n_lines * fh + (n_lines - 1);
-        if(valign == 1) {
+        if(valign == TEXT_VALIGN_CENTER) {
             top = where.y - total_height / 2;
         } else {
             top = where.y - total_height;

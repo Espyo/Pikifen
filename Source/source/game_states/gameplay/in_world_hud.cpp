@@ -118,7 +118,7 @@ void in_world_fraction::draw() {
             game.fonts.standard,
             final_color, pos,
             point(size_mult, size_mult),
-            ALLEGRO_ALIGN_CENTER, 1, i2s(value_number)
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, i2s(value_number)
         );
     }
 }

@@ -372,7 +372,8 @@ void results_state::load() {
     (const point & center, const point & size) {
         draw_compressed_scaled_text(
             game.fonts.standard, COLOR_WHITE,
-            center, point(0.7f, 0.7f), ALLEGRO_ALIGN_CENTER, 1, size, false,
+            center, point(0.7f, 0.7f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, false,
             gui.get_current_tooltip()
         );
     };
