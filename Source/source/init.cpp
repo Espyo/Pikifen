@@ -15,6 +15,7 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
@@ -87,6 +88,7 @@ void destroy_misc() {
     al_destroy_font(game.fonts.area_name);
     al_destroy_font(game.fonts.counter);
     al_destroy_font(game.fonts.cursor_counter);
+    al_destroy_font(game.fonts.slim);
     al_destroy_font(game.fonts.standard);
     al_destroy_font(game.fonts.value);
     
@@ -131,6 +133,16 @@ void init_allegro() {
     if(!al_init_acodec_addon()) {
         report_fatal_error(
             "Could not initialize the Allegro audio codec addon!"
+        );
+    }
+    if(!al_init_font_addon()) {
+        report_fatal_error(
+            "Could not initialize the Allegro font addon!"
+        );
+    }
+    if(!al_init_ttf_addon()) {
+        report_fatal_error(
+            "Could not initialize the Allegro TTF font addon!"
         );
     }
     al_install_joystick();

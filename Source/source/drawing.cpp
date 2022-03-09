@@ -287,10 +287,16 @@ void draw_compressed_scaled_text(
 
     if(max_size.x == 0 && max_size.y == 0) return;
     
-    int x1, x2, y1, y2;
-    al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
+    int text_ox;
+    int text_oy;
+    int text_w;
+    int text_h;
+    al_get_text_dimensions(
+        font, text.c_str(),
+        &text_ox, &text_oy, &text_w, &text_h
+    );
     
-    point normal_text_size(x2 - x1, y2 - y1);
+    point normal_text_size(text_w, text_h);
     point text_size_to_check = normal_text_size;
     point final_scale(1.0f, 1.0f);
     
@@ -311,18 +317,21 @@ void draw_compressed_scaled_text(
     }
     
     float final_text_height = normal_text_size.y * final_scale.y;
-    
+    float valign_offset =
+        valign == 1 ?
+        final_text_height / 2.0f :
+        valign == 2 ?
+        final_text_height :
+        0.0f;
+        
     ALLEGRO_TRANSFORM scale_transform, old_transform;
     al_copy_transform(&old_transform, al_get_current_transform());
     al_identity_transform(&scale_transform);
     al_scale_transform(&scale_transform, final_scale.x, final_scale.y);
     al_translate_transform(
-        &scale_transform, where.x,
-        (
-            (valign == 1) ?
-            where.y - final_text_height * 0.5 :
-            ((valign == 2) ? where.y - final_text_height : where.y)
-        )
+        &scale_transform,
+        where.x,
+        where.y - valign_offset
     );
     al_compose_transform(&scale_transform, &old_transform);
     
@@ -357,31 +366,40 @@ void draw_compressed_text(
 ) {
     if(max_size.x == 0 && max_size.y == 0) return;
     
-    int x1, x2, y1, y2;
-    al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
-    int text_width = x2 - x1, text_height = y2 - y1;
+    int text_ox;
+    int text_oy;
+    int text_w;
+    int text_h;
+    al_get_text_dimensions(
+        font, text.c_str(),
+        &text_ox, &text_oy, &text_w, &text_h
+    );
     point scale(1.0, 1.0);
-    float final_text_height = text_height;
+    float final_text_height = text_h;
     
-    if(text_width > max_size.x && max_size.x > 0) {
-        scale.x = max_size.x / text_width;
+    if(text_w > max_size.x && max_size.x > 0) {
+        scale.x = max_size.x / text_w;
     }
-    if(text_height > max_size.y && max_size.y > 0) {
-        scale.y = max_size.y / text_height;
+    if(text_h > max_size.y && max_size.y > 0) {
+        scale.y = max_size.y / text_h;
         final_text_height = max_size.y;
     }
     
+    float valign_offset =
+        valign == 1 ?
+        final_text_height / 2.0f :
+        valign == 2 ?
+        final_text_height :
+        0.0f;
+        
     ALLEGRO_TRANSFORM scale_transform, old_transform;
     al_copy_transform(&old_transform, al_get_current_transform());
     al_identity_transform(&scale_transform);
     al_scale_transform(&scale_transform, scale.x, scale.y);
     al_translate_transform(
-        &scale_transform, where.x,
-        (
-            (valign == 1) ?
-            where.y - final_text_height * 0.5 :
-            ((valign == 2) ? where.y - final_text_height : where.y)
-        )
+        &scale_transform,
+        where.x,
+        where.y - valign_offset - text_oy
     );
     al_compose_transform(&scale_transform, &old_transform);
     
@@ -406,52 +424,73 @@ void draw_control_icon(
     const ALLEGRO_FONT* const font, const control_info* c,
     const point &where, const point &max_size
 ) {
+    const float OPACITY = 0.9f;
+    const ALLEGRO_COLOR RECT_COLOR = {0.45f, 0.45f, 0.45f, OPACITY};
+    const ALLEGRO_COLOR OUTLINE_COLOR = {0.10f, 0.10f, 0.10f, OPACITY};
+    const ALLEGRO_COLOR TEXT_COLOR = {0.95f, 0.95f, 0.95f, OPACITY};
+    const float OUTLINE_THICKNESS = 2.0f;
+    
+    //Start by getting the icon's info for drawing.
     CONTROL_ICON_SHAPES shape;
     ALLEGRO_BITMAP* bitmap;
     string text;
     get_control_icon_info(font, c, &shape, &bitmap, &text);
     
+    //If it's a bitmap, just draw it and be done with it.
     if(bitmap) {
-        draw_bitmap_in_box(bitmap, where, max_size);
+        draw_bitmap_in_box(bitmap, where, max_size, 0.0f, map_alpha(192));
         return;
     }
     
-    int x1, y1, x2, y2;
-    al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
+    //The size of the rectangle will depend on the text within.
+    int text_ox;
+    int text_oy;
+    int text_w;
+    int text_h;
+    al_get_text_dimensions(
+        font, text.c_str(),
+        &text_ox, &text_oy, &text_w, &text_h
+    );
     float total_width =
         std::min(
-            (float) (x2 - x1 + CONTROL_ICON_PADDING * 2),
+            (float) (text_w + CONTROL_ICON_PADDING * 2),
             (max_size.x == 0 ? FLT_MAX : max_size.x)
         );
     float total_height =
         std::min(
-            (float) (y2 - y1 + CONTROL_ICON_PADDING * 2),
+            (float) (text_h + CONTROL_ICON_PADDING * 2),
             (max_size.y == 0 ? FLT_MAX : max_size.y)
         );
+    //Force it to always be a square or horizontal rectangle. Never vertical.
     total_width = std::max(total_width, total_height);
     
+    //Now, draw the rectangle, either sharp or rounded.
     switch(shape) {
     case CONTROL_ICON_SHAPE_RECTANGLE: {
         al_draw_filled_rectangle(
             where.x - total_width * 0.5, where.y - total_height * 0.5,
             where.x + total_width * 0.5, where.y + total_height * 0.5,
-            map_alpha(192)
+            RECT_COLOR
         );
         al_draw_rectangle(
             where.x - total_width * 0.5, where.y - total_height * 0.5,
             where.x + total_width * 0.5, where.y + total_height * 0.5,
-            al_map_rgba(160, 160, 160, 192), 2
+            OUTLINE_COLOR,
+            OUTLINE_THICKNESS
         );
         break;
     }
     case CONTROL_ICON_SHAPE_ROUNDED: {
         draw_filled_rounded_rectangle(
             where, point(total_width, total_height),
-            16.0f, map_alpha(192)
+            16.0f,
+            RECT_COLOR
         );
         draw_rounded_rectangle(
             where, point(total_width, total_height),
-            16.0f, al_map_rgba(160, 160, 160, 192), 2.0f
+            16.0f,
+            OUTLINE_COLOR,
+            OUTLINE_THICKNESS
         );
         break;
     }
@@ -460,11 +499,19 @@ void draw_control_icon(
     }
     }
     
+    //And finally, the text inside.
     draw_compressed_text(
-        font, map_alpha(192), where, ALLEGRO_ALIGN_CENTER, 1,
+        font,
+        TEXT_COLOR,
         point(
-            (max_size.x == 0 ? 0 : max_size.x - 2),
-            (max_size.y == 0 ? 0 : max_size.y - 2)
+            where.x,
+            where.y
+        ),
+        ALLEGRO_ALIGN_CENTER,
+        1,
+        point(
+            (max_size.x == 0 ? 0 : max_size.x - CONTROL_ICON_PADDING),
+            (max_size.y == 0 ? 0 : max_size.y - CONTROL_ICON_PADDING)
         ),
         text
     );
@@ -1699,7 +1746,7 @@ void get_control_icon_info(
     *shape = CONTROL_ICON_SHAPE_ROUNDED;
     *bitmap = NULL;
     *text = "(NONE)";
-
+    
     if(!c) return;
     
     //If it's a mouse click, just use the bitmap and be done with it.

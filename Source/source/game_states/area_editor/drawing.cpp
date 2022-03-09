@@ -1505,11 +1505,13 @@ void area_editor::draw_debug_text(
     const ALLEGRO_COLOR color, const point &where, const string &text,
     const unsigned char dots
 ) {
+    int dox = 0;
+    int doy = 0;
     int dw = 0;
     int dh = 0;
     al_get_text_dimensions(
         game.fonts.builtin, text.c_str(),
-        NULL, NULL, &dw, &dh
+        &dox, &doy, &dw, &dh
     );
     
     float bbox_w = (dw * DEBUG_TEXT_SCALE) / game.cam.zoom;

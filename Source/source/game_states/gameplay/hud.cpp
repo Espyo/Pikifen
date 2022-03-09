@@ -177,7 +177,7 @@ hud_struct::hud_struct() :
         if(game.states.gameplay->mobs.leaders.size() == 1) return;
         control_info* c = find_control(BUTTON_NEXT_LEADER);
         if(!c) return;
-        draw_control_icon(game.fonts.standard, c, center, size);
+        draw_control_icon(game.fonts.slim, c, center, size);
     };
     gui.add_item(next_leader_button, "next_leader_button");
     
@@ -410,7 +410,7 @@ hud_struct::hud_struct() :
         if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
         control_info* c = find_control(BUTTON_PREV_TYPE);
         if(!c) return;
-        draw_control_icon(game.fonts.standard, c, center, size);
+        draw_control_icon(game.fonts.slim, c, center, size);
     };
     gui.add_item(prev_pikmin_button, "prev_pikmin_button");
     
@@ -423,7 +423,7 @@ hud_struct::hud_struct() :
         if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
         control_info* c = find_control(BUTTON_NEXT_TYPE);
         if(!c) return;
-        draw_control_icon(game.fonts.standard, c, center, size);
+        draw_control_icon(game.fonts.slim, c, center, size);
     };
     gui.add_item(next_pikmin_button, "next_pikmin_button");
     
@@ -657,7 +657,7 @@ hud_struct::hud_struct() :
         }
         if(!c) return;
         
-        draw_control_icon(game.fonts.standard, c, center, size);
+        draw_control_icon(game.fonts.slim, c, center, size);
     };
     gui.add_item(spray_1_button, "spray_1_button");
     
@@ -712,7 +712,7 @@ hud_struct::hud_struct() :
         }
         if(!c) return;
         
-        draw_control_icon(game.fonts.standard, c, center, size);
+        draw_control_icon(game.fonts.slim, c, center, size);
     };
     gui.add_item(spray_2_button, "spray_2_button");
     
@@ -751,7 +751,7 @@ hud_struct::hud_struct() :
         }
         if(!c) return;
         
-        draw_control_icon(game.fonts.standard, c, center, size);
+        draw_control_icon(game.fonts.slim, c, center, size);
     };
     gui.add_item(prev_spray_button, "spray_prev_button");
     
@@ -789,7 +789,7 @@ hud_struct::hud_struct() :
         }
         if(!c) return;
         
-        draw_control_icon(game.fonts.standard, c, center, size);
+        draw_control_icon(game.fonts.slim, c, center, size);
     };
     gui.add_item(next_spray_button, "spray_next_button");
     

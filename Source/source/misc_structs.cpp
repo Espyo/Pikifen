@@ -49,6 +49,7 @@ asset_file_names_struct::asset_file_names_struct() :
     pikmin_silhouette("Pikmin_silhouette.png"),
     pikmin_spirit("Pikmin_spirit.png"),
     rock("Rock.png"),
+    slim_font("Slim_font.otf"),
     shadow("Shadow.png"),
     smack("Smack.png"),
     smoke("Smoke.png"),
@@ -430,6 +431,7 @@ font_list::font_list() :
     builtin(nullptr),
     counter(nullptr),
     cursor_counter(nullptr),
+    slim(nullptr),
     standard(nullptr),
     value(nullptr) {
     

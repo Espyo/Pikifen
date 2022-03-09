@@ -2,10 +2,8 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Leader HUD info improvements
-        Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
-        Leader HUD icons should be skipped if the leader is dead (thanks Helodity)
-        Leader health wheels should glow red when at low health (thanks Helodity)
+    Button icons should be less verbose, for things like axes, L_CONTROL, etc.
+    Refactor -- draw text should use an enum for valign
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -14,15 +12,18 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     HUD improvements
+        Leaders
+            Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
+            Leader HUD icons should be skipped if the leader is dead (thanks Helodity)
+            Leader health wheels should glow red when at low health (thanks Helodity)
         Standby Pikmin
             The standby Pikmin type bubble should have bubbles nearby for the previous and next
             Pikmin type swapping should make the bubble grow
             Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
-        Make the button icons smaller and use a slimmer font. Maybe also slightly transparent?
+        Spray swapping should make the icons slide into place
         Hide spray-related and standby-related items when not needed
         Hide the day counter via coordinates, like how the total Pikmin counter is currently hidden
         Message box text should be juicier
-        Spray swapping should make the icons slide into place
         Add juice to Onion menu
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time
@@ -320,18 +321,18 @@ Next tasks (roughly sorted most important first)
         An Allegro event is turned into a abstract action report and pre-processed (some actions only want 0/1, others want it raw), and only then sent
         Each action should be able to specify if it allows button-downs without button-ups (for Pikmin, holding A to whistle, and then pressing B shouldn't restart the whistle, but in Rhtyhm Heaven, holding A to do a hit, and then pressing B should be another hit)
         Be careful with camera zoom in/out!
-        When the window focus is lost, the controls should be "released"
         Make input_manager as atomic as possible
         Allow for button combinations
         [NEEDS BRAINSTORMING] Would it make sense to have a screen stack system, with push&pop?
         [NEEDS BRAINSTORMING] Try to make it deterministic enough to support input playback (replays)?
         Should the option name + string representation be in input_manager or outside?
-        Current leader should move slower if the analog stick is not held all the way
-        If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
-        There should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
-        Button icons should use smaller text, and be less verbose, for things like axes
-        If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
-        When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (thanks Ambrosia)
+        Tweaks
+            Current leader should move slower if the analog stick is not held all the way
+            There should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
+        Things to fix
+            If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
+            If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
+            When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (thanks Ambrosia)
         New approach, thought of long after I've paused this project:
             One layer transforms hardware inputs into clean inputs, like mouse down, joystick axis positive (after joystick sanitization), etc.
             Another layer transforms those inputs into actions, and it knows that some actions only want 0/1, others want the raw value, etc.
@@ -341,13 +342,14 @@ Next tasks (roughly sorted most important first)
             Instead of letting the game layer have to worry about normalizing joysticks, let the hardware layer do so
     Controls cleanup
         Rework the controls menu to be more intuitive
-            Maybe a list of saved control schemes, like the list of saved rulesets in Smash Ultimate? It could come pre-packaged with Keyboard+Mouse, JoyCon, etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which
+            In the controls menu, the player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
+                Then in the multiplayer setup screen, the player only picks what control scheme each player uses
+                It should come pre-packaged with Keyboard+Mouse, JoyCon, etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which, right?
+                The options for cursor speed, cursor controlled by mouse, etc. should be moved into the schemes
             Maybe a "simple" controls menu and an "advanced" one? The advanced is the old one, but the "simple" one lets the player choose a controller, only map the most common controls, and automatically associate an analog stick to all four directions. If I do this, I should add a tip to the readme to tell people to try the advanced controls after they're comfortable with the engine.
             When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
             Save the controls in the options file inside a block, and possibly at the end of the options file
-        Spray management should really be inventory management
-            This way the competitive mode roulette item can go in here, though the player should also be able to specify a button for using it right away
-            [NEEDS BRAINSTORMING] Maybe place the sleeping ability here?
+        Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
@@ -412,11 +414,11 @@ Next tasks (roughly sorted most important first)
             Sprays and the roulette item should go in the same inventory
             [NEEDS BRAINSTORMING] How will this work in terms of interface? Should it re-purpose the current spray system? If so, it should probably always behave the same, whether you have 1, 2, 3, or more sprays/items, as opposed to using a two-button mechanic when you only have two things
                 But if I standardize the spray system/inventory system, it'll look weird when you have two items, since both the back and forth buttons will be showing the previous spray
-            
+            [NEEDS BRAINSTORMING] Maybe place the sleeping ability here?
         Change area selection menus to have a button that takes you to another menu where you pick how many and which players will play
             The menu should be split into four columns, each one for a player
             Each column has buttons to toggle that player on or off
-            Each column should also have a very brief legend of what their leader controls are
+            Each column should also let players pick which control scheme they want to use
             Each column should also let players pick which teams they belong to, for the multiplayer versus game mode
             Each column should also let players pick what leader they want to control first, for the multiplayer versus game mode. Should probably let you pick from all leaders, not just the ones in the area
         Victory rules

@@ -10,6 +10,8 @@
 
 #include <algorithm>
 
+#include <allegro5/allegro_ttf.h>
+
 #include "load.h"
 
 #include "const.h"
@@ -828,6 +830,16 @@ void load_fonts() {
     }
     al_destroy_bitmap(temp_font_bmp);
     
+    //Slim font.
+    game.fonts.slim =
+        al_load_ttf_font(
+            (
+                GRAPHICS_FOLDER_PATH + "/" +
+                game.asset_file_names.slim_font
+            ).c_str(),
+            22, ALLEGRO_TTF_NO_KERNING
+        );
+        
     game.fonts.builtin = al_create_builtin_font();
 }
 

@@ -214,7 +214,7 @@ void pause_menu_struct::draw_tidbit(
         }
         case TOKEN_CONTROL: {
             draw_control_icon(
-                font,
+                game.fonts.slim,
                 find_control(tokens[t].content),
                 point(
                     x + (tokens[t].width * line_scales[cur_line_idx]) / 2.0f,

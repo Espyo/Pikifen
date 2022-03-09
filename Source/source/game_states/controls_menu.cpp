@@ -160,7 +160,7 @@ void controls_menu_state::add_control_gui_items(
     (const point & center, const point & size) {
         control_info* c_ptr = &game.options.controls[0][index];
         
-        draw_control_icon(game.fonts.standard, c_ptr, center, size * 0.8f);
+        draw_control_icon(game.fonts.slim, c_ptr, center, size * 0.8f);
         
         draw_button(
             center, size, "", game.fonts.standard, map_gray(255),

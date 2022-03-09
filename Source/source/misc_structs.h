@@ -89,6 +89,8 @@ struct asset_file_names_struct {
     string pikmin_spirit;
     //A rock.
     string rock;
+    //Slim font.
+    string slim_font;
     //Mob shadow.
     string shadow;
     //Smack effect.
@@ -296,6 +298,8 @@ struct font_list {
     ALLEGRO_FONT* counter;
     //Counter displayed next to the cursor.
     ALLEGRO_FONT* cursor_counter;
+    //Font for slim text.
+    ALLEGRO_FONT* slim;
     //Font for standard text.
     ALLEGRO_FONT* standard;
     //Font for the carrying / money values.
