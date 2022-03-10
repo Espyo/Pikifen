@@ -591,6 +591,119 @@ ALLEGRO_COLOR get_fog_color() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a name for the specified Allegro keyboard keycode.
+ * This basically makes use of al_keycode_to_name, but with some special cases
+ * and with some nice capitalization.
+ * Returns an empty string on error.
+ * keycode:
+ *   Keycode to check.
+ */
+string get_key_name(const int keycode) {
+    switch(keycode) {
+    case ALLEGRO_KEY_ESCAPE: {
+        return "Esc";
+    }
+    case ALLEGRO_KEY_INSERT: {
+        return "Ins";
+    }
+    case ALLEGRO_KEY_DELETE: {
+        return "Del";
+    }
+    case ALLEGRO_KEY_PGUP: {
+        return "PgUp";
+    }
+    case ALLEGRO_KEY_PGDN: {
+        return "PgDn";
+    }
+    case ALLEGRO_KEY_PAD_0: {
+        return "0 KP";
+    }
+    case ALLEGRO_KEY_PAD_1: {
+        return "1 KP";
+    }
+    case ALLEGRO_KEY_PAD_2: {
+        return "2 KP";
+    }
+    case ALLEGRO_KEY_PAD_3: {
+        return "3 KP";
+    }
+    case ALLEGRO_KEY_PAD_4: {
+        return "4 KP";
+    }
+    case ALLEGRO_KEY_PAD_5: {
+        return "5 KP";
+    }
+    case ALLEGRO_KEY_PAD_6: {
+        return "6 KP";
+    }
+    case ALLEGRO_KEY_PAD_7: {
+        return "7 KP";
+    }
+    case ALLEGRO_KEY_PAD_8: {
+        return "8 KP";
+    }
+    case ALLEGRO_KEY_PAD_9: {
+        return "9 KP";
+    }
+    case ALLEGRO_KEY_PAD_ASTERISK: {
+        return "* KP";
+    }
+    case ALLEGRO_KEY_PAD_DELETE: {
+        return "Del KP";
+    }
+    case ALLEGRO_KEY_PAD_ENTER: {
+        return "Enter KP";
+    }
+    case ALLEGRO_KEY_PAD_EQUALS: {
+        return "= KP";
+    }
+    case ALLEGRO_KEY_PAD_MINUS: {
+        return "- KP";
+    }
+    case ALLEGRO_KEY_PAD_PLUS: {
+        return "+ KP";
+    }
+    case ALLEGRO_KEY_PAD_SLASH: {
+        return "/ KP";
+    }
+    case ALLEGRO_KEY_LSHIFT: {
+        return "Shift L";
+    }
+    case ALLEGRO_KEY_RSHIFT: {
+        return "Shift R";
+    }
+    case ALLEGRO_KEY_ALT: {
+        return "Alt";
+    }
+    case ALLEGRO_KEY_ALTGR: {
+        return "AltGr";
+    }
+    case ALLEGRO_KEY_LCTRL: {
+        return "Ctrl L";
+    }
+    case ALLEGRO_KEY_RCTRL: {
+        return "Ctrl R";
+    }
+    case ALLEGRO_KEY_BACKSLASH:
+    case ALLEGRO_KEY_BACKSLASH2: {
+        return "\\";
+    }
+    case ALLEGRO_KEY_BACKSPACE: {
+        return "BkSpc";
+    }
+    case ALLEGRO_KEY_ENTER: {
+        return "Enter";
+    }
+    }
+    string name = str_to_title(al_keycode_to_name(keycode));
+    for(size_t c = 0; c < name.size(); ++c) {
+        if(name[c] == '_') name[c] = ' ';
+    }
+    return name;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the color a ledge's smoothing should be.
  * e_ptr:
  *   Edge with the ledge.

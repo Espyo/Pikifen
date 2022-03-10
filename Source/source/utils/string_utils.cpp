@@ -316,9 +316,33 @@ bool str_peek(const string &s, const size_t where, const string &match) {
  *   String to convert.
  */
 string str_to_lower(string s) {
-    unsigned short n_characters = s.size();
-    for(unsigned short c = 0; c < n_characters; ++c) {
+    size_t n_characters = s.size();
+    for(size_t c = 0; c < n_characters; ++c) {
         s[c] = tolower(s[c]);
+    }
+    return s;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts an entire string into titlecase.
+ * s:
+ *   String to convert.
+ */
+string str_to_title(string s) {
+    size_t letter_streak = 0;
+    size_t n_characters = s.size();
+    for(size_t c = 0; c < n_characters; ++c) {
+        if(isalpha(s[c])) {
+            if(letter_streak == 0) {
+                s[c] = toupper(s[c]);
+            } else {
+                s[c] = tolower(s[c]);
+            }
+            letter_streak++;
+        } else {
+            letter_streak = 0;
+        }
     }
     return s;
 }
@@ -330,8 +354,8 @@ string str_to_lower(string s) {
  *   String to convert.
  */
 string str_to_upper(string s) {
-    unsigned short n_characters = s.size();
-    for(unsigned short c = 0; c < n_characters; ++c) {
+    size_t n_characters = s.size();
+    for(size_t c = 0; c < n_characters; ++c) {
         s[c] = toupper(s[c]);
     }
     return s;

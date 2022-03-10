@@ -136,6 +136,7 @@ void get_edge_offset_intersection(
     float* final_angle, float* final_length
 );
 ALLEGRO_COLOR get_fog_color();
+string get_key_name(const int keycode);
 ALLEGRO_COLOR get_ledge_smoothing_color(edge* e_ptr);
 ALLEGRO_COLOR get_liquid_limit_color(edge* e_ptr);
 float get_ledge_smoothing_length(edge* e_ptr);

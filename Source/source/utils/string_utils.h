@@ -50,6 +50,7 @@ vector<string> split(
 );
 bool str_peek(const string &s, const size_t where, const string &match);
 string str_to_lower(string s);
+string str_to_title(string s);
 string str_to_upper(string s);
 string trim_spaces(const string &s, const bool left_only = false);
 

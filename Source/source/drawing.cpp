@@ -1776,7 +1776,7 @@ void get_control_icon_info(
     switch(c->type) {
     case CONTROL_TYPE_KEYBOARD_KEY: {
         *shape = CONTROL_ICON_SHAPE_RECTANGLE;
-        *text = str_to_upper(al_keycode_to_name(c->button));
+        *text = get_key_name(c->button);
         break;
         
     } case CONTROL_TYPE_JOYSTICK_AXIS_NEG:

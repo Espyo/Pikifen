@@ -2,7 +2,14 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Button icons should be less verbose, for things like axes, L_CONTROL, etc.
+    Use bitmap button icons for
+        Arrow keys
+        Backspace
+        Shift
+        Tab
+        Enter
+        Analog stick tilted in a direction
+    The draw control function should be called with a verbose flag; if true, it also writes WHICH Ctrl/Shift key it is, and which controller it is
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
