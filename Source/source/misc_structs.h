@@ -51,6 +51,8 @@ struct asset_file_names_struct {
     string bubble_box;
     //Checkbox checkmark.
     string checkbox_check;
+    //Misc. control icons.
+    string control_icons;
     //Counter font.
     string counter_font;
     //Leader cursor.
@@ -73,14 +75,8 @@ struct asset_file_names_struct {
     string main_menu;
     //"More..." icon.
     string more;
-    //The three mouse button icons.
-    string mouse_button_icon[3];
     //Mouse cursor.
     string mouse_cursor;
-    //Mouse wheel down icon.
-    string mouse_wd_icon;
-    //Mouse wheel up icon.
-    string mouse_wu_icon;
     //Notification.
     string notification;
     //Pikmin silhouette.
@@ -464,6 +460,8 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_bubble_box;
     //Checkbox checkmark.
     ALLEGRO_BITMAP* bmp_checkbox_check;
+    //Misc. control icons.
+    ALLEGRO_BITMAP* bmp_control_icons;
     //Leader cursor.
     ALLEGRO_BITMAP* bmp_cursor;
     //Enemy spirit.
@@ -476,14 +474,8 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_idle_glow;
     //"More..." icon.
     ALLEGRO_BITMAP* bmp_more;
-    //The three mouse button icons.
-    ALLEGRO_BITMAP* bmp_mouse_button_icon[3];
     //Mouse cursor.
     ALLEGRO_BITMAP* bmp_mouse_cursor;
-    //Mouse wheel down icon.
-    ALLEGRO_BITMAP* bmp_mouse_wd_icon;
-    //Mouse wheel up icon.
-    ALLEGRO_BITMAP* bmp_mouse_wu_icon;
     //Notification.
     ALLEGRO_BITMAP* bmp_notification;
     //Pikmin silhouette.

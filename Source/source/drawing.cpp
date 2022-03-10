@@ -432,13 +432,23 @@ void draw_control_icon(
     
     //Start by getting the icon's info for drawing.
     CONTROL_ICON_SHAPES shape;
-    ALLEGRO_BITMAP* bitmap;
+    CONTROL_ICON_SPRITES bitmap_sprite;
     string text;
-    get_control_icon_info(font, c, &shape, &bitmap, &text);
+    get_control_icon_info(font, c, &shape, &bitmap_sprite, &text);
     
     //If it's a bitmap, just draw it and be done with it.
-    if(bitmap) {
-        draw_bitmap_in_box(bitmap, where, max_size, 0.0f, map_alpha(192));
+    if(shape == CONTROL_ICON_SHAPE_BITMAP) {
+        //All icons are square, and in a row, so the spritesheet height works.
+        int icon_size =
+            al_get_bitmap_height(game.sys_assets.bmp_control_icons);
+        ALLEGRO_BITMAP* bmp =
+            al_create_sub_bitmap(
+                game.sys_assets.bmp_control_icons,
+                (icon_size + 1) * (int) bitmap_sprite, 0,
+                icon_size, icon_size
+            );
+        draw_bitmap_in_box(bmp, where, max_size, 0.0f, map_alpha(192));
+        al_destroy_bitmap(bmp);
         return;
     }
     
@@ -1731,48 +1741,108 @@ float ease(const EASING_METHODS method, const float n) {
  *   Info on the control. If NULL, a "NONE" icon will be used.
  * shape:
  *   The shape is returned here.
- * bitmap:
- *   The bitmap that represents the icon is returned here, or NULL is returned
- *   if there's no bitmap.
+ * bitmap_sprite:
+ *   If it's one of the icons in the control icon spritesheet, the index
+ *   of the sprite is returned here.
  * text:
  *   The text to be written inside is returned here, or an empty string is
  *   returned if there's nothing to write.
  */
 void get_control_icon_info(
     const ALLEGRO_FONT* font, const control_info* c,
-    CONTROL_ICON_SHAPES* shape, ALLEGRO_BITMAP** bitmap, string* text
+    CONTROL_ICON_SHAPES* shape, CONTROL_ICON_SPRITES* bitmap_sprite,
+    string* text
 ) {
     //Defaults. Used if control has nothing mapped to it.
     *shape = CONTROL_ICON_SHAPE_ROUNDED;
-    *bitmap = NULL;
+    *bitmap_sprite = CONTROL_ICON_SPRITE_LMB;
     *text = "(NONE)";
     
     if(!c) return;
     
-    //If it's a mouse click, just use the bitmap and be done with it.
+    //Figure out if it's one of those that has a bitmap icon.
+    //If so, just return that.
     if(c->type == CONTROL_TYPE_MOUSE_BUTTON) {
-        if(c->button >= 1 && c->button <= 3) {
+        if(c->button == 1) {
             *shape = CONTROL_ICON_SHAPE_BITMAP;
-            *bitmap = game.sys_assets.bmp_mouse_button_icon[c->button - 1];
+            *bitmap_sprite = CONTROL_ICON_SPRITE_LMB;
+            return;
+        } else if(c->button == 2) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_RMB;
+            return;
+        } else if(c->button == 3) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_MMB;
+            return;
+        }
+    } else if(c->type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
+        *shape = CONTROL_ICON_SHAPE_BITMAP;
+        *bitmap_sprite = CONTROL_ICON_SPRITE_MWU;
+        return;
+    } else if(c->type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
+        *shape = CONTROL_ICON_SHAPE_BITMAP;
+        *bitmap_sprite = CONTROL_ICON_SPRITE_MWD;
+        return;
+    } else if(c->type == CONTROL_TYPE_KEYBOARD_KEY) {
+        if(c->button == ALLEGRO_KEY_UP) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_UP;
+            return;
+        } else if(c->button == ALLEGRO_KEY_LEFT) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_LEFT;
+            return;
+        } else if(c->button == ALLEGRO_KEY_DOWN) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_DOWN;
+            return;
+        } else if(c->button == ALLEGRO_KEY_RIGHT) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_RIGHT;
+            return;
+        } else if(c->button == ALLEGRO_KEY_BACKSPACE) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_BACKSPACE;
+            return;
+        } else if(
+            c->button == ALLEGRO_KEY_LSHIFT || c->button == ALLEGRO_KEY_RSHIFT
+        ) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_SHIFT;
+            return;
+        } else if(c->button == ALLEGRO_KEY_TAB) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_TAB;
+            return;
+        } else if(c->button == ALLEGRO_KEY_ENTER) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_ENTER;
+            return;
+        }
+    } else if(c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG) {
+        if(c->axis == 0) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_STICK_LEFT;
+            return;
+        } else if(c->axis == 1) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_STICK_UP;
+            return;
+        }
+    } else if(c->type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
+        if(c->axis == 0) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_STICK_RIGHT;
+            return;
+        } else if(c->axis == 1) {
+            *shape = CONTROL_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = CONTROL_ICON_SPRITE_STICK_DOWN;
             return;
         }
     }
     
-    //Likewise, if it's a mouse wheel move, just use the bitmap.
-    if(
-        c->type == CONTROL_TYPE_MOUSE_WHEEL_UP ||
-        c->type == CONTROL_TYPE_MOUSE_WHEEL_DOWN
-    ) {
-        *shape = CONTROL_ICON_SHAPE_BITMAP;
-        if(c->type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
-            *bitmap = game.sys_assets.bmp_mouse_wu_icon;
-        } else {
-            *bitmap = game.sys_assets.bmp_mouse_wd_icon;
-        }
-        return;
-    }
-    
-    //Use an actual shape and some text.
+    //Otherwise, use an actual shape and some text inside.
     switch(c->type) {
     case CONTROL_TYPE_KEYBOARD_KEY: {
         *shape = CONTROL_ICON_SHAPE_RECTANGLE;
@@ -1782,7 +1852,7 @@ void get_control_icon_info(
     } case CONTROL_TYPE_JOYSTICK_AXIS_NEG:
     case CONTROL_TYPE_JOYSTICK_AXIS_POS: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = "AXIS " + i2s(c->stick) + " " + i2s(c->axis);
+        *text = "Stick ";
         *text += c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
         break;
         
@@ -1824,12 +1894,13 @@ void get_control_icon_info(
  */
 float get_control_icon_width(const ALLEGRO_FONT* font, const control_info* c) {
     CONTROL_ICON_SHAPES shape;
-    ALLEGRO_BITMAP* bitmap;
+    CONTROL_ICON_SPRITES bitmap_sprite;
     string text;
-    get_control_icon_info(font, c, &shape, &bitmap, &text);
+    get_control_icon_info(font, c, &shape, &bitmap_sprite, &text);
     
-    if(bitmap) {
-        return al_get_bitmap_width(bitmap);
+    if(shape == CONTROL_ICON_SHAPE_BITMAP) {
+        //All icons are square, and in a row, so the spritesheet height works.
+        return al_get_bitmap_height(game.sys_assets.bmp_control_icons);
     } else {
         return al_get_text_width(font, text.c_str()) + CONTROL_ICON_PADDING * 2;
     }

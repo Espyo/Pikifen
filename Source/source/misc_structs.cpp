@@ -31,6 +31,7 @@ asset_file_names_struct::asset_file_names_struct() :
     bright_ring("Bright_ring.png"),
     bubble_box("Bubble_box.png"),
     checkbox_check("Checkbox_check.png"),
+    control_icons("Control_icons.png"),
     counter_font("Counter_font.png"),
     cursor("Cursor.png"),
     cursor_counter_font("Cursor_counter_font.png"),
@@ -43,8 +44,6 @@ asset_file_names_struct::asset_file_names_struct() :
     main_menu("Main_menu.jpg"),
     more("More.png"),
     mouse_cursor("Mouse_cursor.png"),
-    mouse_wd_icon("Mouse_wheel_down_icon.png"),
-    mouse_wu_icon("Mouse_wheel_up_icon.png"),
     notification("Notification.png"),
     pikmin_silhouette("Pikmin_silhouette.png"),
     pikmin_spirit("Pikmin_spirit.png"),
@@ -62,10 +61,6 @@ asset_file_names_struct::asset_file_names_struct() :
     value_font("Value_font.png"),
     wave_ring("Wave_ring.png") {
     
-    for(unsigned char i = 0; i < 3; ++i) {
-        mouse_button_icon[i] =
-            "Mouse_button_" + i2s(i + 1) + "_icon.png";
-    }
 }
 
 
@@ -82,6 +77,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("bright_ring", bright_ring);
     rs.set("bubble_box", bubble_box);
     rs.set("checkbox_check", checkbox_check);
+    rs.set("control_icons", control_icons);
     rs.set("counter_font", counter_font);
     rs.set("cursor", cursor);
     rs.set("cursor_counter_font", cursor_counter_font);
@@ -94,8 +90,6 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("main_menu", main_menu);
     rs.set("more", more);
     rs.set("mouse_cursor", mouse_cursor);
-    rs.set("mouse_wheel_down_icon", mouse_wd_icon);
-    rs.set("mouse_wheel_up_icon", mouse_wu_icon);
     rs.set("notification", notification);
     rs.set("pikmin_silhouette", pikmin_silhouette);
     rs.set("pikmin_spirit", pikmin_spirit);
@@ -110,13 +104,6 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("throw_preview_dashed", throw_preview_dashed);
     rs.set("value_font", value_font);
     rs.set("wave_ring", wave_ring);
-    
-    for(unsigned char i = 0; i < 3; ++i) {
-        rs.set(
-            "mouse_button_" + i2s(i + 1) + "_icon",
-            mouse_button_icon[i]
-        );
-    }
 }
 
 
@@ -1523,6 +1510,7 @@ system_asset_list::system_asset_list():
     bmp_bright_ring(nullptr),
     bmp_bubble_box(nullptr),
     bmp_checkbox_check(nullptr),
+    bmp_control_icons(nullptr),
     bmp_cursor(nullptr),
     bmp_enemy_spirit(nullptr),
     bmp_focus_box(nullptr),
@@ -1530,8 +1518,6 @@ system_asset_list::system_asset_list():
     bmp_idle_glow(nullptr),
     bmp_more(nullptr),
     bmp_mouse_cursor(nullptr),
-    bmp_mouse_wd_icon(nullptr),
-    bmp_mouse_wu_icon(nullptr),
     bmp_notification(nullptr),
     bmp_pikmin_silhouette(nullptr),
     bmp_pikmin_spirit(nullptr),
@@ -1547,9 +1533,6 @@ system_asset_list::system_asset_list():
     bmp_throw_preview_dashed(nullptr),
     bmp_wave_ring(nullptr) {
     
-    bmp_mouse_button_icon[0] = NULL;
-    bmp_mouse_button_icon[1] = NULL;
-    bmp_mouse_button_icon[2] = NULL;
 }
 
 

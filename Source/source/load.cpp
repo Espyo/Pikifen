@@ -1048,6 +1048,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.bubble_box);
     game.sys_assets.bmp_checkbox_check =
         game.bitmaps.get(game.asset_file_names.checkbox_check);
+    game.sys_assets.bmp_control_icons =
+        game.bitmaps.get(game.asset_file_names.control_icons);
     game.sys_assets.bmp_cursor =
         game.bitmaps.get(game.asset_file_names.cursor);
     game.sys_assets.bmp_enemy_spirit =
@@ -1060,10 +1062,6 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.more);
     game.sys_assets.bmp_mouse_cursor =
         game.bitmaps.get(game.asset_file_names.mouse_cursor);
-    game.sys_assets.bmp_mouse_wd_icon =
-        game.bitmaps.get(game.asset_file_names.mouse_wd_icon);
-    game.sys_assets.bmp_mouse_wu_icon =
-        game.bitmaps.get(game.asset_file_names.mouse_wu_icon);
     game.sys_assets.bmp_notification =
         game.bitmaps.get(game.asset_file_names.notification);
     game.sys_assets.bmp_pikmin_silhouette =
@@ -1092,10 +1090,6 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.throw_preview_dashed);
     game.sys_assets.bmp_wave_ring =
         game.bitmaps.get(game.asset_file_names.wave_ring);
-    for(unsigned char i = 0; i < 3; ++i) {
-        game.sys_assets.bmp_mouse_button_icon[i] =
-            game.bitmaps.get(game.asset_file_names.mouse_button_icon[i]);
-    }
 }
 
 
@@ -1738,6 +1732,7 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_bright_ring);
     game.bitmaps.detach(game.sys_assets.bmp_bubble_box);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_check);
+    game.bitmaps.detach(game.sys_assets.bmp_control_icons);
     game.bitmaps.detach(game.sys_assets.bmp_cursor);
     game.bitmaps.detach(game.sys_assets.bmp_enemy_spirit);
     game.bitmaps.detach(game.sys_assets.bmp_focus_box);
@@ -1745,8 +1740,6 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_idle_glow);
     game.bitmaps.detach(game.sys_assets.bmp_more);
     game.bitmaps.detach(game.sys_assets.bmp_mouse_cursor);
-    game.bitmaps.detach(game.sys_assets.bmp_mouse_wd_icon);
-    game.bitmaps.detach(game.sys_assets.bmp_mouse_wu_icon);
     game.bitmaps.detach(game.sys_assets.bmp_notification);
     game.bitmaps.detach(game.sys_assets.bmp_pikmin_silhouette);
     game.bitmaps.detach(game.sys_assets.bmp_pikmin_spirit);
@@ -1761,9 +1754,6 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_throw_preview);
     game.bitmaps.detach(game.sys_assets.bmp_throw_preview_dashed);
     game.bitmaps.detach(game.sys_assets.bmp_wave_ring);
-    for(unsigned char i = 0; i < 3; ++i) {
-        game.bitmaps.detach(game.sys_assets.bmp_mouse_button_icon[i]);
-    }
     
     game.sys_assets.sfx_attack.destroy();
     game.sys_assets.sfx_pikmin_attack.destroy();

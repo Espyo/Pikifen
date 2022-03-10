@@ -2,13 +2,6 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    Use bitmap button icons for
-        Arrow keys
-        Backspace
-        Shift
-        Tab
-        Enter
-        Analog stick tilted in a direction
     The draw control function should be called with a verbose flag; if true, it also writes WHICH Ctrl/Shift key it is, and which controller it is
     
 Next tasks (roughly sorted most important first)
@@ -84,6 +77,7 @@ Next tasks (roughly sorted most important first)
         Inkscape file adjustments
             Adjust the top-left of the spritesheet to be the document's 0,0 coordinates
             Adjust the X and Y scale to be 1.00? This breaks clip masks, though; maybe render everything onto a PNG, adjust, then render again, and use a difference blend to check what's broken
+            Adjust the grid to start at 0,0 offset, in the document properties
             Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
             Add a reference Olimar image in all of them
             I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites

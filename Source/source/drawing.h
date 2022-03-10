@@ -42,6 +42,45 @@ enum CONTROL_ICON_SHAPES {
 };
 
 
+//Control icon spritesheet sprites. The order matches what's in the spritesheet.
+enum CONTROL_ICON_SPRITES {
+    //Left mouse button.
+    CONTROL_ICON_SPRITE_LMB,
+    //Right mouse button.
+    CONTROL_ICON_SPRITE_RMB,
+    //Middle mouse button.
+    CONTROL_ICON_SPRITE_MMB,
+    //Mouse wheel up.
+    CONTROL_ICON_SPRITE_MWU,
+    //Mouse wheel down.
+    CONTROL_ICON_SPRITE_MWD,
+    //Up key.
+    CONTROL_ICON_SPRITE_UP,
+    //Left key.
+    CONTROL_ICON_SPRITE_LEFT,
+    //Down key.
+    CONTROL_ICON_SPRITE_DOWN,
+    //Right key.
+    CONTROL_ICON_SPRITE_RIGHT,
+    //Backspace key.
+    CONTROL_ICON_SPRITE_BACKSPACE,
+    //Shift key.
+    CONTROL_ICON_SPRITE_SHIFT,
+    //Tab key.
+    CONTROL_ICON_SPRITE_TAB,
+    //Enter key.
+    CONTROL_ICON_SPRITE_ENTER,
+    //Gamepad analog stick up.
+    CONTROL_ICON_SPRITE_STICK_UP,
+    //Gamepad analog stick left.
+    CONTROL_ICON_SPRITE_STICK_LEFT,
+    //Gamepad analog stick down.
+    CONTROL_ICON_SPRITE_STICK_DOWN,
+    //Gamepad analog stick right.
+    CONTROL_ICON_SPRITE_STICK_RIGHT,
+};
+
+
 //Methods for easing numbers.
 enum EASING_METHODS {
     //Eased as it goes in, then gradually goes out normally.
@@ -172,7 +211,8 @@ float ease(
 );
 void get_control_icon_info(
     const ALLEGRO_FONT* font, const control_info* c,
-    CONTROL_ICON_SHAPES* shape, ALLEGRO_BITMAP** bitmap, string* text
+    CONTROL_ICON_SHAPES* shape, CONTROL_ICON_SPRITES* bitmap_sprite,
+    string* text
 );
 float get_control_icon_width(
     const ALLEGRO_FONT* font, const control_info* c
