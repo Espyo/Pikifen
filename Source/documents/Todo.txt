@@ -6,8 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If an area has no leaders, it crashes
-    If a leader gets sucked into the Onion, they will keep their delivery_info struct
+    
     
     --- v0.22.0 ---
     HUD improvements

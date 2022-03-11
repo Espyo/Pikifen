@@ -684,9 +684,11 @@ void gameplay_state::start_leaving(const LEAVE_TARGET target) {
 void gameplay_state::unload() {
     al_show_mouse_cursor(game.display);
     
-    hud->gui.destroy();
-    delete hud;
-    path_mgr.clear();
+    if(hud) {
+        hud->gui.destroy();
+        delete hud;
+        hud = NULL;
+    }
     
     cur_leader_ptr = NULL;
     
@@ -709,6 +711,7 @@ void gameplay_state::unload() {
     
     unload_area();
     
+    path_mgr.clear();
     spray_stats.clear();
     particles.clear();
     
