@@ -2,7 +2,7 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    The draw control function should be called with a verbose flag; if true, it also writes WHICH Ctrl/Shift key it is, and which controller it is
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -764,15 +764,22 @@ Tasks for later on (I might never implement these)
         On my other laptop, screenshots come out with alpha
         Helodity found a crash on the area editor -- area with invalid shadow, restart engine, area editor, find problems, go to problem -> crash -- I can't reproduce, but it must have something to do with pointers not being cleared
     ...An AI opponent in 2-player mode? It would help me test...
-    [NEEDS BRAINSTORMING] Colors should be able to also be in hexadecimal?
-    The ability for enemies to eat other enemies
-    If I need GPU performance gains, resize textures to smaller sizes when they're loaded (thanks Helodity)
-    [NEEDS BRAINSTORMING] A way to write out how much memory is being taken up by images, sounds, scripts, etc. so game makers can help make sure a level's not too bloated?
-    The ability for players 2 - 4 to hop in and out of gameplay at will. Probably only for Story Mode?
-    Make it so players can request all Pikmin to come to the landing site by interacting with the ship?
-    Allow the player to pick between classic group movement swarming, full-squad charging, or standby type charging
-    Nighttime (what enemies can spawn at night, their changes, etc.)
-        Change the HUD icon to a moon
+    Mechanics
+        The ability for enemies to eat other enemies
+        The ability for players 2 - 4 to hop in and out of gameplay at will. Probably only for Story Mode?
+        Make it so players can request all Pikmin to come to the landing site by interacting with the ship?
+        Nighttime (what enemies can spawn at night, their changes, etc.)
+            Change the HUD icon to a moon
+        Random enemy spawning
+        Hiding
+        A setting that lets leaders jump (thanks Remy)
+        [NEEDS BRAINSTORMING] Enemies don't care about bottomless pits and will gladly walk off when roaming -- is there any way to remedy this? Should I?
+        Warp point, like in Pikmin 3
+            Carrying paths should be able to specify a "portal" link, which internally is considered to be 0-distance. This helps calculate the destinations without considering two warp points as being insanely far apart
+    Content-making
+        [NEEDS BRAINSTORMING] Colors should be able to also be in hexadecimal?
+        [NEEDS BRAINSTORMING] A way to write out how much memory is being taken up by images, sounds, scripts, etc. so game makers can help make sure a level's not too bloated?
+        If you write an event name wrong (or other things), give suggestions ("did you mean X?")
     "Puzzle"-type challenges. You might have a limited number of Pikmin, certain obstacles and paths, and you need to think what Pikmin to put where and when to proceed. Like Portal.
         Door objects
         Button objects (with a certain number of Pikmin needed to keep it depressed)
@@ -783,20 +790,14 @@ Tasks for later on (I might never implement these)
             Some give you standard Pikmin 2 improvements like fire-resistance
             Others speed up your Red Pikmin, make your Purple Pikmin more powerful, give you dosages of sprays, etc.
         Sublevels have two or three holes; before you go down you're told a preview of what sorts of sublevel and treasure lies beyond that hole, so you can pick your destiny
-    If feasible, make it so that every enemy checks if there are Pikmin around it (check one out of every two Pikmin), this check shouldn't be distance based, but dx and dy based. If there is any Pikmin or leader nearby, or it's on-camera, then fully work the mob as normal. Otherwise, don't do anything to the mob.
-        Maybe keep a timer that goes back to ~2 seconds every time a Pikmin/leader nearby is detected, and until it reaches 0, do not check for loneliness.
-    Random enemy spawning
     [NEEDS BRAINSTORMING] Breath of the Wild-like physics engine rules? https://venturebeat.com/2017/03/02/the-legend-of-zelda-breath-of-the-wild-makes-chemistry-just-as-important-as-physics/
         And just systemic gameplay in general, like lit Pikmin lighting nearby Pikmin on fire http://www.youtube.com/watch?v=SnpAAX9CkIc
             Red Pikmin can carry flaming coals, which can set enemies on fire
-    [NEEDS BRAINSTORMING] Enemies don't care about bottomless pits and will gladly walk off when roaming -- is there any way to remedy this? Should I?
-    Hiding
-    A setting that lets leaders jump (thanks Remy)
-    If you write an event name wrong (or other things), give suggestions ("did you mean X?")
-    Warp point, like in Pikmin 3
-        Carrying paths should be able to specify a "portal" link, which internally is considered to be 0-distance. This helps calculate the destinations without considering two warp points as being insanely far apart
-    [NEEDS BRAINSTORMING] A colorblind-friendly mode?
-    A "peaceful" mode where Pikmin and leaders can't die
+    Options and modes
+        Allow the player to pick between classic group movement swarming, full-squad charging, or standby type charging
+        A "peaceful" mode where Pikmin and leaders can't die
+        A "Pro HUD" option that hides some HUD elements? The idea is to hide information that a pro player can just "feel". Enemy health and carrying numbers are good contenders, though a problem with hiding carrying numbers is that when the destination Onion is decided not via majority, but via tie-breaker, it's impossible to tell where they're going without the carrying number's color
+        [NEEDS BRAINSTORMING] A colorblind-friendly mode?
     Petrified enemies should break open when defeated
         Maybe define loot tables somewhere, like "standard", "boss", "weakling", etc. Enemy types use the "standard" one by default (which one is the default should be specified somewhere), but can choose a different one
             Maybe individual enemy instances in an area can also specify their own loot table?
@@ -830,14 +831,12 @@ Tasks for later on (I might never implement these)
                 b) Have the icon represent the next mode?
                 c) Only use buttons for one-off actions, and use checkboxes or something else for these mode-changing widgets
     Blood (optional, of course)
-    Some way to let users organize their mob types into sub-folders, and have that reflect in the area editor
-    Enemies should have a cloud of breath in cold areas (GitHub issue #10)
-    Resolution
+    Resolution and window size
         Players should be able to resize the window on-the-fly (GitHub issue #2)
         Resizing the window should stretch the resolution instead of showing more of the world (GitHub issue #7)
     Aesthetic details
+        Enemies should have a cloud of breath in cold areas (GitHub issue #10)
         Different "switched to Pikmin" sound for when you switch to a held leader instead of a Pikmin
-        When writing a character dialog message on the bottom of the screen, make the letters have some effect, to pop in and move out
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
         Make the main menu's highlighter move from one place to another gradually, based on how far it is (like the camera moves in-game)
         The music should change to swing for Louie
@@ -860,15 +859,18 @@ Tasks for later on (I might never implement these)
     A competitive mode where each team's marble is out in the open, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Story mode
         A way to choose what landing site of the area you want to start the day in
-    Barely important format changes
-        Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
-        In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
-        Bud_icon.png and Flower_icon.png should be White_bud_icon.png and White_flower_icon.png, to fit with the pink and purple buds and flowers
     [NEEDS BRAINSTORMING] Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/
         Good luck with floating point determinism lol
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
+    Barely important format changes
+        Some way to let users organize their mob types into sub-folders, and have that reflect in the area editor
+        Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
+        In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
+        Bud_icon.png and Flower_icon.png should be White_bud_icon.png and White_flower_icon.png, to fit with the pink and purple buds and flowers
     Possible cleanup
+        If feasible, make it so that every enemy checks if there are Pikmin around it (check one out of every two Pikmin), this check shouldn't be distance based, but dx and dy based. If there is any Pikmin or leader nearby, or it's on-camera, then fully work the mob as normal. Otherwise, don't do anything to the mob.
+            Maybe keep a timer that goes back to ~2 seconds every time a Pikmin/leader nearby is detected, and until it reaches 0, do not check for loneliness.
         Timers
             Have a timer manager, so I don't have to remember to do a .tick() to every single one
                 Remember that the fade manager can unload the current game state!
@@ -876,6 +878,7 @@ Tasks for later on (I might never implement these)
             A flag that specifies whether it auto-starts on creation, whether it auto-rearms after reaching 0, etc.
             Thoughts:
                 Actually, the only advantage of this is the auto-ticking... But it might introduce a performance penalty, having to add and remove hundreds of timers in a vector
+        If I need GPU performance gains, resize textures to smaller sizes when they're loaded (thanks Helodity)
         https://www.gamasutra.com/blogs/ScottLembcke/20180404/316046/Improved_Lerp_Smoothing.php
         https://gamasutra.com/blogs/JiriHolba/20200511/362690/Should_STL_containers_be_used_in_game_engines.php
     Stuff that isn't really justifiable yet, but may be one day

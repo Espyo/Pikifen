@@ -597,8 +597,11 @@ ALLEGRO_COLOR get_fog_color() {
  * Returns an empty string on error.
  * keycode:
  *   Keycode to check.
+ * condensed:
+ *   If true, only the key name is returned. If false, some extra disambiguation
+ *   is returned too, e.g. whether this is the left or right Ctrl.
  */
-string get_key_name(const int keycode) {
+string get_key_name(const int keycode, const bool condensed) {
     switch(keycode) {
     case ALLEGRO_KEY_ESCAPE: {
         return "Esc";
@@ -667,10 +670,18 @@ string get_key_name(const int keycode) {
         return "/ KP";
     }
     case ALLEGRO_KEY_LSHIFT: {
-        return "Shift L";
+        if(!condensed) {
+            return "Shift (left)";
+        } else {
+            return "Shift";
+        }
     }
     case ALLEGRO_KEY_RSHIFT: {
-        return "Shift R";
+        if(!condensed) {
+            return "Shift (right)";
+        } else {
+            return "Shift";
+        }
     }
     case ALLEGRO_KEY_ALT: {
         return "Alt";
@@ -679,17 +690,29 @@ string get_key_name(const int keycode) {
         return "AltGr";
     }
     case ALLEGRO_KEY_LCTRL: {
-        return "Ctrl L";
+        if(!condensed) {
+            return "Ctrl (left)";
+        } else {
+            return "Ctrl";
+        }
     }
     case ALLEGRO_KEY_RCTRL: {
-        return "Ctrl R";
+        if(!condensed) {
+            return "Ctrl (right)";
+        } else {
+            return "Ctrl";
+        }
     }
     case ALLEGRO_KEY_BACKSLASH:
     case ALLEGRO_KEY_BACKSLASH2: {
         return "\\";
     }
     case ALLEGRO_KEY_BACKSPACE: {
-        return "BkSpc";
+        if(!condensed) {
+            return "Backspace";
+        } else {
+            return "BkSpc";
+        }
     }
     case ALLEGRO_KEY_ENTER: {
         return "Enter";

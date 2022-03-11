@@ -415,13 +415,18 @@ void draw_compressed_text(
  *   Font to use for the name, if necessary.
  * c:
  *   Info on the control. If NULL, a "NONE" icon will be used.
+ * condensed:
+ *   If true, only the icon's fundamental information is presented. If false,
+ *   disambiguation information is included too. For instance, keyboard keys
+ *   that come in pairs specify whether they are the left or right key,
+ *   gamepad controls specify what gamepad number it is, etc.
  * where:
  *   Center of the place to draw at.
  * max_size:
  *   Max width or height. Used to compress it if needed. 0 = unlimited.
  */
 void draw_control_icon(
-    const ALLEGRO_FONT* const font, const control_info* c,
+    const ALLEGRO_FONT* const font, const control_info* c, const bool condensed,
     const point &where, const point &max_size
 ) {
     const float OPACITY = 0.9f;
@@ -434,7 +439,10 @@ void draw_control_icon(
     CONTROL_ICON_SHAPES shape;
     CONTROL_ICON_SPRITES bitmap_sprite;
     string text;
-    get_control_icon_info(font, c, &shape, &bitmap_sprite, &text);
+    get_control_icon_info(
+        font, c, condensed,
+        &shape, &bitmap_sprite, &text
+    );
     
     //If it's a bitmap, just draw it and be done with it.
     if(shape == CONTROL_ICON_SHAPE_BITMAP) {
@@ -1180,6 +1188,7 @@ void draw_notification(
         text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
         draw_control_icon(
             game.fonts.standard, control,
+            true,
             point(
                 -bmp_w * 0.5 + NOTIFICATION_PADDING +
                 NOTIFICATION_CONTROL_SIZE * 0.5,
@@ -1739,6 +1748,11 @@ float ease(const EASING_METHODS method, const float n) {
  *   Font to use for the name, if necessary.
  * c:
  *   Info on the control. If NULL, a "NONE" icon will be used.
+ * condensed:
+ *   If true, only the icon's fundamental information is presented. If false,
+ *   disambiguation information is included too. For instance, keyboard keys
+ *   that come in pairs specify whether they are the left or right key,
+ *   gamepad controls specify what gamepad number it is, etc.
  * shape:
  *   The shape is returned here.
  * bitmap_sprite:
@@ -1749,11 +1763,10 @@ float ease(const EASING_METHODS method, const float n) {
  *   returned if there's nothing to write.
  */
 void get_control_icon_info(
-    const ALLEGRO_FONT* font, const control_info* c,
+    const ALLEGRO_FONT* font, const control_info* c, const bool condensed,
     CONTROL_ICON_SHAPES* shape, CONTROL_ICON_SPRITES* bitmap_sprite,
     string* text
 ) {
-    //Defaults. Used if control has nothing mapped to it.
     *shape = CONTROL_ICON_SHAPE_ROUNDED;
     *bitmap_sprite = CONTROL_ICON_SPRITE_LMB;
     *text = "(NONE)";
@@ -1806,7 +1819,8 @@ void get_control_icon_info(
             *bitmap_sprite = CONTROL_ICON_SPRITE_BACKSPACE;
             return;
         } else if(
-            c->button == ALLEGRO_KEY_LSHIFT || c->button == ALLEGRO_KEY_RSHIFT
+            condensed &&
+            (c->button == ALLEGRO_KEY_LSHIFT || c->button == ALLEGRO_KEY_RSHIFT)
         ) {
             *shape = CONTROL_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_ICON_SPRITE_SHIFT;
@@ -1820,7 +1834,7 @@ void get_control_icon_info(
             *bitmap_sprite = CONTROL_ICON_SPRITE_ENTER;
             return;
         }
-    } else if(c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG) {
+    } else if(c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG && condensed) {
         if(c->axis == 0) {
             *shape = CONTROL_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_ICON_SPRITE_STICK_LEFT;
@@ -1830,7 +1844,7 @@ void get_control_icon_info(
             *bitmap_sprite = CONTROL_ICON_SPRITE_STICK_UP;
             return;
         }
-    } else if(c->type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
+    } else if(c->type == CONTROL_TYPE_JOYSTICK_AXIS_POS && condensed) {
         if(c->axis == 0) {
             *shape = CONTROL_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_ICON_SPRITE_STICK_RIGHT;
@@ -1846,34 +1860,78 @@ void get_control_icon_info(
     switch(c->type) {
     case CONTROL_TYPE_KEYBOARD_KEY: {
         *shape = CONTROL_ICON_SHAPE_RECTANGLE;
-        *text = get_key_name(c->button);
+        *text = get_key_name(c->button, condensed);
         break;
         
     } case CONTROL_TYPE_JOYSTICK_AXIS_NEG:
     case CONTROL_TYPE_JOYSTICK_AXIS_POS: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = "Stick ";
-        *text += c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
+        if(!condensed) {
+            *text =
+                "Pad " + i2s(c->device_nr + 1) +
+                " stick " + i2s(c->stick + 1);
+            if(
+                c->axis == 0 && c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG
+            ) {
+                *text += " left";
+            } else if(
+                c->axis == 0 && c->type == CONTROL_TYPE_JOYSTICK_AXIS_POS
+            ) {
+                *text += " right";
+            } else if(
+                c->axis == 1 && c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG
+            ) {
+                *text += " up";
+            } else if(
+                c->axis == 1 && c->type == CONTROL_TYPE_JOYSTICK_AXIS_POS
+            ) {
+                *text += " down";
+            } else {
+                *text += " axis " + i2s(c->axis) +
+                         (c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+");
+            }
+            
+        } else {
+            *text = "Stick " + i2s(c->stick);
+        }
         break;
         
     } case CONTROL_TYPE_JOYSTICK_BUTTON: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = i2s(c->button + 1);
+        if(!condensed) {
+            *text =
+                "Pad " + i2s(c->device_nr + 1) +
+                "button " + i2s(c->button + 1);
+        } else {
+            *text = i2s(c->button + 1);
+        }
         break;
         
     } case CONTROL_TYPE_MOUSE_BUTTON: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = "M" + i2s(c->button);
+        if(!condensed) {
+            *text = "Mouse button " + i2s(c->button);
+        } else {
+            *text = "M" + i2s(c->button);
+        }
         break;
         
     } case CONTROL_TYPE_MOUSE_WHEEL_LEFT: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = "MWL";
+        if(!condensed) {
+            *text = "Mouse wheel left";
+        } else {
+            *text = "MWL";
+        }
         break;
         
     } case CONTROL_TYPE_MOUSE_WHEEL_RIGHT: {
         *shape = CONTROL_ICON_SHAPE_ROUNDED;
-        *text = "MWR";
+        if(!condensed) {
+            *text = "Mouse wheel right";
+        } else {
+            *text = "MWR";
+        }
         break;
         
     } default: {
@@ -1891,12 +1949,22 @@ void get_control_icon_info(
  *   Font to use for the name, if necessary.
  * c:
  *   Info on the control. If NULL, a "NONE" icon will be used.
+ * condensed:
+ *   If true, only the icon's fundamental information is presented. If false,
+ *   disambiguation information is included too. For instance, keyboard keys
+ *   that come in pairs specify whether they are the left or right key,
+ *   gamepad controls specify what gamepad number it is, etc.
  */
-float get_control_icon_width(const ALLEGRO_FONT* font, const control_info* c) {
+float get_control_icon_width(
+    const ALLEGRO_FONT* font, const control_info* c, const bool condensed
+) {
     CONTROL_ICON_SHAPES shape;
     CONTROL_ICON_SPRITES bitmap_sprite;
     string text;
-    get_control_icon_info(font, c, &shape, &bitmap_sprite, &text);
+    get_control_icon_info(
+        font, c, condensed,
+        &shape, &bitmap_sprite, &text
+    );
     
     if(shape == CONTROL_ICON_SHAPE_BITMAP) {
         //All icons are square, and in a row, so the spritesheet height works.

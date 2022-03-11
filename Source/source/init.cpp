@@ -145,7 +145,11 @@ void init_allegro() {
             "Could not initialize the Allegro TTF font addon!"
         );
     }
-    al_install_joystick();
+    if(!al_install_joystick()) {
+        report_fatal_error(
+            "Could not initialize Allegro joystick support!"
+        );
+    }
 }
 
 
