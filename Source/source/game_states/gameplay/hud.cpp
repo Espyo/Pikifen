@@ -8,6 +8,8 @@
  * In-game HUD classes and functions.
  */
 
+#include <algorithm>
+
 #include "../../drawing.h"
 #include "../../functions.h"
 #include "../../game.h"
@@ -90,34 +92,37 @@ hud_struct::hud_struct() :
         gui_item* leader_icon = new gui_item();
         leader_icon->on_draw =
         [this, l] (const point & center, const point & size) {
-            size_t l_idx;
+            void* l_ptr;
             point final_center;
             point final_size;
             game.states.gameplay->hud->leader_icon_mgr.get_drawing_info(
                 l,
                 game.states.gameplay->hud->leader_swap_juice_timer /
                 LEADER_SWAP_JUICE_DURATION,
-                &l_idx, &final_center, &final_size
+                &l_ptr, &final_center, &final_size
             );
             
             if(
-                l_idx == INVALID ||
-                l_idx >= game.states.gameplay->available_leaders.size()
+                std::find(
+                    game.states.gameplay->available_leaders.begin(),
+                    game.states.gameplay->available_leaders.end(),
+                    l_ptr
+                ) ==
+                game.states.gameplay->available_leaders.end()
             ) {
                 return;
             }
-            leader* l_ptr = game.states.gameplay->available_leaders[l_idx];
             
             al_draw_filled_circle(
                 final_center.x, final_center.y,
                 std::min(final_size.x, final_size.y) / 2.0f,
                 change_alpha(
-                    l_ptr->type->main_color,
+                    ((leader*) l_ptr)->type->main_color,
                     128
                 )
             );
             draw_bitmap_in_box(
-                l_ptr->lea_type->bmp_icon,
+                ((leader*) l_ptr)->lea_type->bmp_icon,
                 final_center, final_size
             );
             draw_bitmap_in_box(
@@ -133,27 +138,31 @@ hud_struct::hud_struct() :
         gui_item* leader_health = new gui_item();
         leader_health->on_draw =
         [this, l] (const point & center, const point & size) {
-            size_t l_idx;
+            void* l_ptr;
             point final_center;
             point final_size;
             game.states.gameplay->hud->leader_health_mgr.get_drawing_info(
                 l,
                 game.states.gameplay->hud->leader_swap_juice_timer /
                 LEADER_SWAP_JUICE_DURATION,
-                &l_idx, &final_center, &final_size
+                &l_ptr, &final_center, &final_size
             );
             
             if(
-                l_idx == INVALID ||
-                l_idx >= game.states.gameplay->available_leaders.size()
+                std::find(
+                    game.states.gameplay->available_leaders.begin(),
+                    game.states.gameplay->available_leaders.end(),
+                    l_ptr
+                ) ==
+                game.states.gameplay->available_leaders.end()
             ) {
                 return;
             }
-            leader* l_ptr = game.states.gameplay->available_leaders[l_idx];
             
             draw_health(
                 final_center,
-                l_ptr->health_wheel_visible_ratio, 1.0f,
+                ((leader*) l_ptr)->health_wheel_visible_ratio,
+                1.0f,
                 std::min(final_size.x, final_size.y) * 0.47f,
                 true
             );
@@ -863,17 +872,18 @@ void hud_struct::tick(const float delta_t) {
     }
     
     for(size_t l = 0; l < 3; ++l) {
-        size_t l_idx = INVALID;
+        leader* l_ptr = NULL;
         if(l < game.states.gameplay->available_leaders.size()) {
-            l_idx =
+            size_t l_idx =
                 (size_t) sum_and_wrap(
                     game.states.gameplay->cur_leader_nr,
                     l,
                     game.states.gameplay->available_leaders.size()
                 );
+            l_ptr = game.states.gameplay->available_leaders[l_idx];
         }
-        leader_icon_mgr.update_content_index(l, l_idx);
-        leader_health_mgr.update_content_index(l, l_idx);
+        leader_icon_mgr.update_content_ptr(l, (void*) l_ptr);
+        leader_health_mgr.update_content_ptr(l, (void*) l_ptr);
     }
     
     gui.tick(game.delta_t);
@@ -889,15 +899,15 @@ hud_bubble_manager::hud_bubble_manager() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the content index associated with a bubble.
- * Returns INVALID if anything goes wrong.
+ * Returns the content pointer associated with a bubble.
+ * Returns NULL if anything goes wrong.
  * number:
  *   Number of the registered bubble.
  */
-size_t hud_bubble_manager::get_content_index(const size_t number) {
+void* hud_bubble_manager::get_content_ptr(const size_t number) {
     auto it = bubbles.find(number);
-    if(it == bubbles.end()) return INVALID;
-    return it->second.content_index;
+    if(it == bubbles.end()) return NULL;
+    return it->second.content_ptr;
 }
 
 
@@ -907,9 +917,9 @@ size_t hud_bubble_manager::get_content_index(const size_t number) {
  *   Number of the registered bubble.
  * transition_anim_ratio:
  *   Ratio of time left in the current transition animation, or 0 for none.
- * content_idx:
- *   The index of the content the bubble should use is returned here.
- *   INVALID is returned on error.
+ * content_ptr:
+ *   The pointer to the content the bubble should use is returned here.
+ *   NULL is returned on error.
  * pos:
  *   The final position it should use is returned here.
  * size:
@@ -917,11 +927,11 @@ size_t hud_bubble_manager::get_content_index(const size_t number) {
  */
 void hud_bubble_manager::get_drawing_info(
     const size_t number, const float transition_anim_ratio,
-    size_t* content_idx, point* pos, point* size
+    void** content_ptr, point* pos, point* size
 ) {
     auto it = bubbles.find(number);
     if(it == bubbles.end()) {
-        *content_idx = INVALID;
+        *content_ptr = NULL;
         return;
     }
     
@@ -931,7 +941,7 @@ void hud_bubble_manager::get_drawing_info(
         );
         
     if(!visible) {
-        *content_idx = INVALID;
+        *content_ptr = NULL;
         return;
     }
     
@@ -944,8 +954,8 @@ void hud_bubble_manager::get_drawing_info(
     for(match_it = bubbles.begin(); match_it != bubbles.end(); ++match_it) {
         if(
             transition_anim_ratio > 0.5f &&
-            match_it->second.content_index ==
-            it->second.pre_transition_content_index
+            match_it->second.content_ptr ==
+            it->second.pre_transition_content_ptr
         ) {
             //In the first half of the animation, we want to search for a
             //bubble that has the content that our bubble had pre-transition.
@@ -953,8 +963,8 @@ void hud_bubble_manager::get_drawing_info(
         }
         if(
             transition_anim_ratio <= 0.5f &&
-            match_it->second.pre_transition_content_index ==
-            it->second.content_index
+            match_it->second.pre_transition_content_ptr ==
+            it->second.content_ptr
         ) {
             //In the second half, the match had the content our bubble has.
             break;
@@ -1032,24 +1042,24 @@ void hud_bubble_manager::get_drawing_info(
     
     //Set the content index.
     if(transition_anim_ratio > 0.5f) {
-        *content_idx = it->second.pre_transition_content_index;
+        *content_ptr = it->second.pre_transition_content_ptr;
     } else {
-        *content_idx = it->second.content_index;
+        *content_ptr = it->second.content_ptr;
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the content index associated with a bubble, before a transition
+ * Returns the content pointer associated with a bubble, before a transition
  * was started.
- * Returns INVALID if anything goes wrong.
+ * Returns NULL if anything goes wrong.
  * number:
  *   Number of the registered bubble.
  */
-size_t hud_bubble_manager::get_pre_transition_content_index(const size_t number) {
+void* hud_bubble_manager::get_pre_transition_content_ptr(const size_t number) {
     auto it = bubbles.find(number);
-    if(it == bubbles.end()) return INVALID;
-    return it->second.pre_transition_content_index;
+    if(it == bubbles.end()) return NULL;
+    return it->second.pre_transition_content_ptr;
 }
 
 
@@ -1073,25 +1083,25 @@ void hud_bubble_manager::register_bubble(
  */
 void hud_bubble_manager::setup_transition() {
     for(auto &b : bubbles) {
-        b.second.pre_transition_content_index = b.second.content_index;
+        b.second.pre_transition_content_ptr = b.second.content_ptr;
     }
 }
 
 
 
 /* ----------------------------------------------------------------------------
- * Updates the content index of a given bubble.
+ * Updates the content pointer of a given bubble.
  * number:
  *   Number of the registered bubble.
- * new_index:
- *   New content index.
+ * new_ptr:
+ *   New content pointer.
  */
-void hud_bubble_manager::update_content_index(
-    const size_t number, const size_t new_index
+void hud_bubble_manager::update_content_ptr(
+    const size_t number, void* new_ptr
 ) {
     auto it = bubbles.find(number);
     if(it == bubbles.end()) return;
-    it->second.content_index = new_index;
+    it->second.content_ptr = new_ptr;
 }
 
 
@@ -1101,6 +1111,6 @@ void hud_bubble_manager::update_content_index(
  */
 hud_bubble_manager::bubble_info::bubble_info(gui_item* bubble) :
     bubble(bubble),
-    content_index(INVALID),
-    pre_transition_content_index(INVALID) {
+    content_ptr(NULL),
+    pre_transition_content_ptr(NULL) {
 }

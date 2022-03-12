@@ -28,24 +28,24 @@ public:
     struct bubble_info {
         //GUI item.
         gui_item* bubble;
-        //Index number of whatever content it holds.
-        size_t content_index;
-        //Index number of whatever content it held, pre-transition.
-        size_t pre_transition_content_index;
+        //Pointer to whatever content it holds.
+        void* content_ptr;
+        //Pointer to whatever content it held, pre-transition.
+        void* pre_transition_content_ptr;
         
         bubble_info(gui_item* bubble = NULL);
     };
     
     hud_bubble_manager();
-    size_t get_content_index(const size_t number);
+    void* get_content_ptr(const size_t number);
     void get_drawing_info(
         const size_t number, const float transition_anim_ratio,
-        size_t* content_idx, point* pos, point* scale
+        void** content_ptr, point* pos, point* scale
     );
-    size_t get_pre_transition_content_index(const size_t number);
+    void* get_pre_transition_content_ptr(const size_t number);
     void register_bubble(const size_t number, gui_item* bubble);
     void setup_transition();
-    void update_content_index(const size_t number, const size_t new_index);
+    void update_content_ptr(const size_t number, void* new_ptr);
     
 private:
     map<size_t, bubble_info> bubbles;
