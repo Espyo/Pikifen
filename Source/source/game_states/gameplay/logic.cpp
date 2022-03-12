@@ -278,7 +278,8 @@ void gameplay_state::do_gameplay_logic() {
             if(process_total_leader_ko()) {
                 return;
             } else {
-                change_to_next_leader(true, true);
+                game.states.gameplay->update_available_leaders();
+                change_to_next_leader(true, true, true);
             }
         }
         

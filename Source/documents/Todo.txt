@@ -6,13 +6,11 @@ Current tasks (tasks being worked on, but not yet committed)
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Entering an area (maybe only through the auto-start maker tool?), quitting, entering another area, and finishing that one will cause the results screen to have both old and new info
     
     --- v0.22.0 ---
     HUD improvements
         Leaders
-            Won't the leader order (when the player presses the next leader button) be wrong if a new leader mob is spawned during gameplay?
-            Leader HUD icons should be skipped if the leader is dead (thanks Helodity)
             Leader health wheels should glow red when at low health (thanks Helodity)
         Standby Pikmin
             The standby Pikmin type bubble should have bubbles nearby for the previous and next

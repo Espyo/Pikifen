@@ -334,7 +334,7 @@ void gameplay_state::handle_button(
             
             if(!is_down) return;
             
-            change_to_next_leader(button == BUTTON_NEXT_LEADER, false);
+            change_to_next_leader(button == BUTTON_NEXT_LEADER, false, false);
             
             break;
             

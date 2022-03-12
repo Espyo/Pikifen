@@ -127,7 +127,9 @@ private:
 };
 
 
-void change_to_next_leader(const bool forward, const bool force_success);
+void change_to_next_leader(
+    const bool forward, const bool force_success, const bool keep_idx
+);
 bool grab_closest_group_member();
 bool process_total_leader_ko();
 

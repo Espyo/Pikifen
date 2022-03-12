@@ -895,9 +895,20 @@ void leader::update_throw_variables() {
  * force_success:
  *   If true, switch to this leader even if they can't currently handle the
  *   leader switch script event.
+ * keep_idx:
+ *   If true, swap to a leader that has the same index in the list of available
+ *   leaders as the current one does. Usually this is used because the
+ *   current leader is no longer available.
  */
-void change_to_next_leader(const bool forward, const bool force_success) {
-    if(game.states.gameplay->mobs.leaders.size() == 1) return;
+void change_to_next_leader(
+    const bool forward, const bool force_success, const bool keep_idx
+) {
+    if(
+        game.states.gameplay->available_leaders.size() == 1 &&
+        !keep_idx
+    ) {
+        return;
+    }
     
     if(
         !game.states.gameplay->cur_leader_ptr->fsm.get_event(
@@ -914,10 +925,13 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     //If we return to the current leader without anything being
     //changed, then stop trying; no leader can be switched to.
     
-    size_t new_leader_nr = game.states.gameplay->cur_leader_nr;
+    int new_leader_nr = game.states.gameplay->cur_leader_nr;
+    if(keep_idx) {
+        forward ? new_leader_nr-- : new_leader_nr++;
+    }
     leader* new_leader_ptr = NULL;
     bool searching = true;
-    size_t original_leader_nr = game.states.gameplay->cur_leader_nr;
+    leader* original_leader_ptr = game.states.gameplay->cur_leader_ptr;
     bool cant_find_new_leader = false;
     bool success = false;
     
@@ -926,11 +940,11 @@ void change_to_next_leader(const bool forward, const bool force_success) {
             sum_and_wrap(
                 new_leader_nr,
                 (forward ? 1 : -1),
-                game.states.gameplay->mobs.leaders.size()
+                game.states.gameplay->available_leaders.size()
             );
-        new_leader_ptr = game.states.gameplay->mobs.leaders[new_leader_nr];
+        new_leader_ptr = game.states.gameplay->available_leaders[new_leader_nr];
         
-        if(new_leader_nr == original_leader_nr) {
+        if(new_leader_ptr == original_leader_ptr) {
             //Back to the original; stop trying.
             cant_find_new_leader = true;
             searching = false;
@@ -941,7 +955,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
         //If after we called the event, the leader is the same,
         //then that means the leader can't be switched to.
         //Try a new one.
-        if(game.states.gameplay->cur_leader_nr != original_leader_nr) {
+        if(game.states.gameplay->cur_leader_ptr != original_leader_ptr) {
             searching = false;
             success = true;
         }
@@ -953,11 +967,11 @@ void change_to_next_leader(const bool forward, const bool force_success) {
             sum_and_wrap(
                 new_leader_nr,
                 (forward ? 1 : -1),
-                game.states.gameplay->mobs.leaders.size()
+                game.states.gameplay->available_leaders.size()
             );
         game.states.gameplay->cur_leader_ptr =
             game.states.gameplay->
-            mobs.leaders[game.states.gameplay->cur_leader_nr];
+            available_leaders[game.states.gameplay->cur_leader_nr];
             
         game.states.gameplay->cur_leader_ptr->fsm.set_state(
             LEADER_STATE_ACTIVE
@@ -966,7 +980,7 @@ void change_to_next_leader(const bool forward, const bool force_success) {
     }
     
     if(success) {
-        game.states.gameplay->hud->start_leader_swap_juice(original_leader_nr);
+        game.states.gameplay->hud->start_leader_swap_juice();
         game.states.gameplay->cur_leader_ptr->swarm_arrows.clear();
     }
 }

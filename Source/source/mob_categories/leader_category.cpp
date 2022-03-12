@@ -14,6 +14,7 @@
 
 #include "../game.h"
 #include "../mobs/leader.h"
+#include "../mob_fsms/leader_fsm.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -53,6 +54,10 @@ mob* leader_category::create_mob(
 ) {
     leader* m = new leader(pos, (leader_type*) type, angle);
     game.states.gameplay->mobs.leaders.push_back(m);
+    game.states.gameplay->update_available_leaders();
+    if(game.states.gameplay->hud) {
+        game.states.gameplay->hud->start_leader_swap_juice();
+    }
     return m;
 }
 
@@ -73,11 +78,12 @@ mob_type* leader_category::create_type() {
 void leader_category::erase_mob(mob* m) {
     game.states.gameplay->mobs.leaders.erase(
         find(
-        game.states.gameplay->mobs.leaders.begin(),
-        game.states.gameplay->mobs.leaders.end(),
-        (leader*) m
+            game.states.gameplay->mobs.leaders.begin(),
+            game.states.gameplay->mobs.leaders.end(),
+            (leader*) m
         )
     );
+    leader_fsm::die((leader*) m, NULL, NULL);
 }
 
 

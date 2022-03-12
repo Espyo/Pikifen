@@ -111,7 +111,7 @@ struct hud_struct {
     
     hud_struct();
     ~hud_struct();
-    void start_leader_swap_juice(const size_t old_leader_nr);
+    void start_leader_swap_juice();
     void tick(const float delta_t);
 };
 

@@ -102,11 +102,11 @@ hud_struct::hud_struct() :
             
             if(
                 l_idx == INVALID ||
-                l_idx >= game.states.gameplay->mobs.leaders.size()
+                l_idx >= game.states.gameplay->available_leaders.size()
             ) {
                 return;
             }
-            leader* l_ptr = game.states.gameplay->mobs.leaders[l_idx];
+            leader* l_ptr = game.states.gameplay->available_leaders[l_idx];
             
             al_draw_filled_circle(
                 final_center.x, final_center.y,
@@ -145,11 +145,11 @@ hud_struct::hud_struct() :
             
             if(
                 l_idx == INVALID ||
-                l_idx >= game.states.gameplay->mobs.leaders.size()
+                l_idx >= game.states.gameplay->available_leaders.size()
             ) {
                 return;
             }
-            leader* l_ptr = game.states.gameplay->mobs.leaders[l_idx];
+            leader* l_ptr = game.states.gameplay->available_leaders[l_idx];
             
             draw_health(
                 final_center,
@@ -174,7 +174,7 @@ hud_struct::hud_struct() :
     next_leader_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
-        if(game.states.gameplay->mobs.leaders.size() == 1) return;
+        if(game.states.gameplay->available_leaders.size() == 1) return;
         control_info* c = find_control(BUTTON_NEXT_LEADER);
         if(!c) return;
         draw_control_icon(game.fonts.slim, c, true, center, size);
@@ -843,12 +843,8 @@ hud_struct::~hud_struct() {
 
 /* ----------------------------------------------------------------------------
  * Starts animating the juice effect for leader icons being swapped.
- * old_leader_nr:
- *   Player's leader number before the transition.
  */
-void hud_struct::start_leader_swap_juice(
-    const size_t old_leader_nr
-) {
+void hud_struct::start_leader_swap_juice() {
     leader_swap_juice_timer = LEADER_SWAP_JUICE_DURATION;
     leader_icon_mgr.setup_transition();
     leader_health_mgr.setup_transition();
@@ -868,12 +864,12 @@ void hud_struct::tick(const float delta_t) {
     
     for(size_t l = 0; l < 3; ++l) {
         size_t l_idx = INVALID;
-        if(l < game.states.gameplay->mobs.leaders.size()) {
+        if(l < game.states.gameplay->available_leaders.size()) {
             l_idx =
                 (size_t) sum_and_wrap(
                     game.states.gameplay->cur_leader_nr,
                     l,
-                    game.states.gameplay->mobs.leaders.size()
+                    game.states.gameplay->available_leaders.size()
                 );
         }
         leader_icon_mgr.update_content_index(l, l_idx);

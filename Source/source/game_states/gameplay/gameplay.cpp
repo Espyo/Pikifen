@@ -505,7 +505,7 @@ void gameplay_state::load() {
     init_hud();
     
     cur_leader_nr = 0;
-    cur_leader_ptr = mobs.leaders[cur_leader_nr];
+    cur_leader_ptr = mobs.leaders[0];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     cur_leader_ptr->active = true;
     
@@ -754,6 +754,51 @@ void gameplay_state::unload_game_content() {
     unload_status_types(true);
     unload_liquids();
     unload_custom_particle_generators();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the list of leaders available to be controlled.
+ */
+void gameplay_state::update_available_leaders() {
+    //Build the list.
+    available_leaders.clear();
+    for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+        if(mobs.leaders[l]->health <= 0.0f) continue;
+        if(mobs.leaders[l]->to_delete) continue;
+        available_leaders.push_back(mobs.leaders[l]);
+    }
+    
+    if(available_leaders.empty()) {
+        return;
+    }
+    
+    //Sort it so that it follows the expected leader order.
+    //If there are multiple leaders of the same type, leaders with a lower
+    //mob ID number come first.
+    std::sort(
+        available_leaders.begin(), available_leaders.end(),
+    [] (leader * l1, leader * l2) -> bool {
+        size_t l1_order_idx = INVALID;
+        size_t l2_order_idx = INVALID;
+        for(size_t t = 0; t < game.config.leader_order.size(); t++) {
+            if(game.config.leader_order[t] == l1->type) l1_order_idx = t;
+            if(game.config.leader_order[t] == l2->type) l2_order_idx = t;
+        }
+        if(l1_order_idx == l2_order_idx) {
+            return l1->id < l2->id;
+        }
+        return l1_order_idx < l2_order_idx;
+    }
+    );
+    
+    //Update the current leader's index, which could've changed.
+    for(size_t l = 0; l < available_leaders.size(); ++l) {
+        if(available_leaders[l] == cur_leader_ptr) {
+            cur_leader_nr = l;
+            break;
+        }
+    }
 }
 
 

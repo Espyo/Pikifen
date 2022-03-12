@@ -1286,8 +1286,8 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     
     //Update pointers and such.
     size_t new_leader_nr = game.states.gameplay->cur_leader_nr;
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
-        if(game.states.gameplay->mobs.leaders[l] == lea_ptr) {
+    for(size_t l = 0; l < game.states.gameplay->available_leaders.size(); ++l) {
+        if(game.states.gameplay->available_leaders[l] == lea_ptr) {
             new_leader_nr = l;
             break;
         }
@@ -1365,8 +1365,13 @@ void leader_fsm::decide_pluck_action(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
     if(!process_total_leader_ko()) {
+        game.states.gameplay->update_available_leaders();
         if(game.states.gameplay->cur_leader_ptr == m) {
-            change_to_next_leader(true, true);
+            change_to_next_leader(true, true, true);
+        } else {
+            if(game.states.gameplay->hud) {
+                game.states.gameplay->hud->start_leader_swap_juice();
+            }
         }
     }
     

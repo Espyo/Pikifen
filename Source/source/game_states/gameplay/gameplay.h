@@ -50,13 +50,15 @@ public:
     timer area_title_fade_timer;
     //Name of the area to be loaded.
     string area_to_load;
+    //Leaders available to control.
+    vector<leader*> available_leaders;
     //Fog effect buffer.
     ALLEGRO_BITMAP* bmp_fog;
     //Group member closest to player 1's leader.
     mob* closest_group_member;
     //Is the group member closest to player 1's leader distant?
     bool closest_group_member_distant;
-    //Index of player 1's current leader, in the array of leaders.
+    //Index of player 1's current leader, in the array of available leaders.
     size_t cur_leader_nr;
     //Pointer to player 1's leader. Cache for convenience.
     leader* cur_leader_ptr;
@@ -121,6 +123,7 @@ public:
     void leave(const LEAVE_TARGET target);
     void start_leaving(const LEAVE_TARGET target);
     void change_spray_count(const size_t type_nr, signed int amount);
+    void update_available_leaders();
     void update_closest_group_member();
     
     void load();
