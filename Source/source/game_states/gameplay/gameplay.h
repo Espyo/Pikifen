@@ -178,6 +178,8 @@ private:
     bool swarm_cursor;
     //Reach of player 1's swarm.
     movement_struct swarm_movement;
+    //Are we currently unloading the gameplay state?
+    bool unloading;
     
     void do_aesthetic_logic();
     void do_game_drawing(

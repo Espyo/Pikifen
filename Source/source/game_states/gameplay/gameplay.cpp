@@ -81,7 +81,8 @@ gameplay_state::gameplay_state() :
     pause_menu(nullptr),
     paused(false),
     ready_for_input(false),
-    swarm_cursor(false) {
+    swarm_cursor(false),
+    unloading(false) {
     
 }
 
@@ -350,6 +351,8 @@ void gameplay_state::init_hud() {
  *   Where to leave to.
  */
 void gameplay_state::leave(const LEAVE_TARGET target) {
+    if(unloading) return;
+    
     if(game.perf_mon) {
         //Don't register the final frame, since it won't draw anything.
         game.perf_mon->set_paused(true);
@@ -682,6 +685,8 @@ void gameplay_state::start_leaving(const LEAVE_TARGET target) {
  * Unloads the "gameplay" state from memory.
  */
 void gameplay_state::unload() {
+    unloading = true;
+    
     al_show_mouse_cursor(game.display);
     
     if(hud) {
@@ -735,6 +740,8 @@ void gameplay_state::unload() {
         pause_menu = NULL;
     }
     game.maker_tools.info_print_text.clear();
+    
+    unloading = false;
 }
 
 
