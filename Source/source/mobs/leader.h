@@ -69,6 +69,8 @@ public:
     bool throwee_can_reach;
     //How much the health wheel is filled. Gradually moves to the target amount.
     float health_wheel_visible_ratio;
+    //Timer for the animation of the health wheel's caution ring.
+    float health_wheel_caution_timer;
     
     //Returns whether or not a leader can throw.
     bool check_throw_ok() const;
@@ -112,6 +114,8 @@ public:
     static const float AUTO_THROW_COOLDOWN_MAX_DURATION;
     static const float AUTO_THROW_COOLDOWN_MIN_DURATION;
     static const float AUTO_THROW_COOLDOWN_SPEED;
+    static const float HEALTH_CAUTION_RATIO;
+    static const float HEALTH_CAUTION_RING_DURATION;
     static const float SWARM_ARROWS_INTERVAL;
     static const float THROW_COOLDOWN_DURATION;
     

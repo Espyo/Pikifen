@@ -22,6 +22,10 @@ const float leader::AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
 const float leader::AUTO_THROW_COOLDOWN_MIN_DURATION =
     THROW_COOLDOWN_DURATION * 1.2f;
 const float leader::AUTO_THROW_COOLDOWN_SPEED = 0.3f;
+//Ratio of health at which a leader's health wheel starts giving a warning.
+const float leader::HEALTH_CAUTION_RATIO = 0.3f;
+//How long the low health caution ring lasts for.
+const float leader::HEALTH_CAUTION_RING_DURATION = 2.5f;
 //Seconds that need to pass before another swarm arrow appears.
 const float leader::SWARM_ARROWS_INTERVAL = 0.1f;
 const float leader::THROW_COOLDOWN_DURATION = 0.15f;
@@ -54,7 +58,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     throwee_max_z(0.0f),
     throwee_speed_z(0.0f),
     throwee_can_reach(false),
-    health_wheel_visible_ratio(1.0f) {
+    health_wheel_visible_ratio(1.0f),
+    health_wheel_caution_timer(0.0f) {
     
     team = MOB_TEAM_PLAYER_1;
     invuln_period = timer(LEADER_INVULN_PERIOD);
@@ -818,6 +823,16 @@ void leader::tick_class_specifics(const float delta_t) {
     health_wheel_visible_ratio +=
         ((health / type->max_health) - health_wheel_visible_ratio) *
         (in_world_health_wheel::SMOOTHNESS_MULT * delta_t);
+        
+    if(
+        health < type->max_health * HEALTH_CAUTION_RATIO ||
+        health_wheel_caution_timer > 0.0f
+    ) {
+        health_wheel_caution_timer += delta_t;
+        if(health_wheel_caution_timer >= HEALTH_CAUTION_RING_DURATION) {
+            health_wheel_caution_timer = 0.0f;
+        }
+    }
 }
 
 

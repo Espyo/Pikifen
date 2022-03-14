@@ -159,6 +159,39 @@ hud_struct::hud_struct() :
                 return;
             }
             
+            if(((leader*) l_ptr)->health_wheel_caution_timer > 0.0f) {
+                float caution_ring_scale =
+                    interpolate_number(
+                        ((leader*) l_ptr)->health_wheel_caution_timer,
+                        0.0f, leader::HEALTH_CAUTION_RING_DURATION,
+                        1.0f, 2.0f
+                    );
+                unsigned char caution_ring_alpha =
+                    ((leader*) l_ptr)->health_wheel_caution_timer <
+                    leader::HEALTH_CAUTION_RING_DURATION / 2.0f ?
+                    interpolate_number(
+                        ((leader*) l_ptr)->health_wheel_caution_timer,
+                        0.0f, leader::HEALTH_CAUTION_RING_DURATION / 2.0f,
+                        0.0f, 192
+                    ) :
+                    interpolate_number(
+                        ((leader*) l_ptr)->health_wheel_caution_timer,
+                        leader::HEALTH_CAUTION_RING_DURATION / 2.0f,
+                        leader::HEALTH_CAUTION_RING_DURATION,
+                        192, 0
+                    );
+                float caution_ring_size =
+                    std::min(final_size.x, final_size.y) * caution_ring_scale;
+                    
+                draw_bitmap(
+                    game.sys_assets.bmp_bright_ring,
+                    final_center,
+                    point(caution_ring_size, caution_ring_size),
+                    0.0f,
+                    al_map_rgba(255, 0, 0, caution_ring_alpha)
+                );
+            }
+            
             draw_health(
                 final_center,
                 ((leader*) l_ptr)->health_wheel_visible_ratio,

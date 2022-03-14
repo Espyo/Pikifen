@@ -9,15 +9,12 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     HUD improvements
-        Leaders
-            Leader health wheels should glow red when at low health (thanks Helodity)
         Standby Pikmin
             The standby Pikmin type bubble should have bubbles nearby for the previous and next
             Pikmin type swapping should make the bubble grow
             Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
         Spray swapping should make the icons slide into place
         Hide spray-related and standby-related items when not needed
-        Hide the day counter via coordinates, like how the total Pikmin counter is currently hidden
         Message box text should be juicier
         Add juice to Onion menu
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
