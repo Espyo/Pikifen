@@ -11,6 +11,7 @@ Next tasks (roughly sorted most important first)
     HUD improvements
         Standby Pikmin
             The standby Pikmin type bubble should have bubbles nearby for the previous and next
+				Move the swapping buttons to the correct spots
             Pikmin type swapping should make the bubble grow
             Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
         Spray swapping should make the icons slide into place
@@ -78,7 +79,7 @@ Next tasks (roughly sorted most important first)
             Search for "data:image/" for leftover image files in the SVG files
             Convince it to export at 96dpi, not 90dpi
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
-        Using blurring and better lighting
+        Use blurring and better lighting
         Add the Inkscape noise filter to more sprites? Or even a different filter
         Remember to update the Pikmin Fanon wiki page link in the PNG files
     Pikmin animation improvements
@@ -173,7 +174,7 @@ Next tasks (roughly sorted most important first)
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
 		Areas should be one of three types
-			Areas of the simple type don't really have any special rules, they're just endless sandboxes.
+			Areas of the simple type don't really have any special rules, they're just endless sandboxes
 			Areas of the mission type show, in this same panel, all sorts of info about how to play the mission
 			Areas of the arena type are only for competitive multiplayer play
         Medals
@@ -181,9 +182,9 @@ Next tasks (roughly sorted most important first)
             When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
             Three grading modes:
                 Points
-                    The final point count depends on the following fields: Pikmin born, Pikmin deaths, time left, Pokos gathered, enemy kill points
+                    The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths, time left, Pokos gathered, enemy kill points
                     Each field can have varying weights, including 0 or negative
-                    Each field can also be instantly transformed to 0 if the player finished the stage via "loss"
+                    Each field's value can also be instantly transformed to 0 if the player finished the stage via "loss"
                     You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
                     Depending on the points, the player gets no medal, a bronze, a silver, a gold, or a platinum
                 Completion
@@ -224,7 +225,7 @@ Next tasks (roughly sorted most important first)
                 A loss condition for killing an enemy
 		Area editor changes
 			A new panel, gameplay, where you control everything gameplay-related, starting with the area type
-            Move the spray counter here, and spruce it up so people don't have to write stuff by hand
+				Move the spray counter here, and spruce it up so people don't have to write stuff by hand
         Area selection menu changes
             Left side
                 The list of areas, with their names and a medal icon next to each
@@ -256,7 +257,7 @@ Next tasks (roughly sorted most important first)
         Day + fight
         Sunset + fight
         Boss
-        Add to the FAQ why there's only a normal and a fight variant -- Too many system resources
+        Add to the FAQ why there's only a normal and a fight variant (too many system resources), or figure out if we can get away with much more
         Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
     Revamp sound system
         Rename sound files to .oga, instead of .ogg
@@ -264,7 +265,7 @@ Next tasks (roughly sorted most important first)
             Sounds that play "globally", like the "task complete jingle"
             Sounds that play from any object that needs them, like there being three waterfalls in the area, and each one having the "waterfall" noise
             Sounds that play connected to only one object at a time, like the Pikmin going "hop hop" when carrying something should only be connected to the closest carriable mob to the camera center
-            Or maybe there are two types of sounds, only
+            Or maybe there are these types of sounds, only
                 The global ones, like the "task complete jingle"
                 Positional global ones, like Pikmin going "hop hop" when carrying
                 Positional atomic ones, like a Fiery Blowhog spitting fire
@@ -276,12 +277,11 @@ Next tasks (roughly sorted most important first)
             If two things are playing the same sound but in different spots of the area, the volume should be an average or so
             If a sound needs to have a sudden shift in volume or pan, it should be a smooth transition
             The ability to handle randomized volumes and pitches (and maybe panning)
-            If a sound needs to stop suddenly, it should fade out (very quickly)
+            If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
         For sounds that are tied to a mob, the farther the mob is from the center of the screen, the quieter; panning should be relative to the mob's position with the camera, too
         Sounds shouldn't assume they're 44100Hz
         A way to fade sounds in/out
         Load system sounds from System_asset_file_names.txt
-        When cutting off a sound (like stopping the whistle), make it do a very quick fade out instead. This stops the sound from crackling.
         Sounds should pause when you pause the game
         Make it so that only 6 or so sounds can play at once?
         Options
@@ -294,6 +294,7 @@ Next tasks (roughly sorted most important first)
         Missing sounds
             Pikmin seed landing
             Pikmin sprout evolving/reverting
+			More...
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
         This might help
@@ -312,7 +313,7 @@ Next tasks (roughly sorted most important first)
     Input handling needs to be more robust and modular
         Clean up terms -- button, input, action, are all ambiguous and mean different things in different functions
         An Allegro event is turned into a abstract action report and pre-processed (some actions only want 0/1, others want it raw), and only then sent
-        Each action should be able to specify if it allows button-downs without button-ups (for Pikmin, holding A to whistle, and then pressing B shouldn't restart the whistle, but in Rhtyhm Heaven, holding A to do a hit, and then pressing B should be another hit)
+        Each action should be able to specify if it allows button-downs without button-ups (for Pikmin, holding A to whistle, and then pressing B shouldn't restart the whistle, but in Rhythm Heaven, holding A to do a hit, and then pressing B should be another hit)
         Be careful with camera zoom in/out!
         Make input_manager as atomic as possible
         Allow for button combinations
@@ -321,7 +322,7 @@ Next tasks (roughly sorted most important first)
         Should the option name + string representation be in input_manager or outside?
         Tweaks
             Current leader should move slower if the analog stick is not held all the way
-            There should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
+            If it's not done already, there should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
         Things to fix
             If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
             If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
@@ -472,7 +473,7 @@ Next tasks (roughly sorted most important first)
     Weather improvements
         [NEEDS BRAINSTORMING] Maybe call it ambiance?
         All parameters (wind, blackout, precipitation, etc.) should be configurable in a single minutes table
-        Make it possible to have a weighted random distribution table for what other weather conditions it can change to as time goes by.
+        Make it possible to have a weighted random distribution table for what other weather conditions it can change to as time goes by
             Example: 80% clear, 20% overcast, set to pick every hour. It could make it so it's clear at 3PM and 4PM, but starts getting overcast between 4 and 5, and uses the overcast weather at 5PM
         Wind
         Precipitation
@@ -538,6 +539,7 @@ Next tasks (roughly sorted most important first)
             Write somewhere that the save was successful, and warn about save errors
             At the start of a new day, open bridges, dead enemies, etc. should go to the final states instantly
             The save file should contain a checksum for the save file proper, and one for the game files/folder
+            Save file management
         Cutscenes http://www.pikminwiki.com/Cutscenes
             Make all cutscenes skippable
             Either make everything freeze during cutscenes, except for the actors that are part of it, or make everything continue, but health values be frozen (this way, leaders and Pikmin won't get hurt while the player can't react)
@@ -686,7 +688,7 @@ Misc things (so I don't forget)
         Make the water ripples be via shader
             https://www.reddit.com/r/gamedev/comments/d1a602/how_scrolling_textures_gave_super_mario_galaxy_2/
         Add some effect to the borders of water bodies?
-        Objects being sucked in to an Onion should be colored after that Onion instead of using a janky glow
+		Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
     Editor improvements
         Area editor
             It should have a "toolbar" so you can swap from layout to mob to path real quick, instead of having to quit out. Also, shortcut keys for that in F1, F2, etc.
@@ -737,20 +739,6 @@ Misc things (so I don't forget)
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     Story mode
         Some treasures should weigh as much as the current army, after a boss battle
-    Loose thoughts
-        Final menu tree
-            Play
-                Story Mode
-                Mission Mode
-                Multiplayer Battle
-                Freeplay (pick an area, regardless of game mode, and just mess around in a sandbox with no rules)
-            Make
-                Areas
-                Animations
-                ...
-            Options
-                ...
-            Quit
     
 Tasks for later on (I might never implement these)
     Known problems
@@ -803,7 +791,7 @@ Tasks for later on (I might never implement these)
             Backups
                 When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
                 If it detects an auto-backup that's younger than the saved area, it should ask the user if they want to continue from the backup
-            The ability to add comments to an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
+            The ability to add comments to specific spots in an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
             A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.
@@ -817,12 +805,12 @@ Tasks for later on (I might never implement these)
                 Maybe report if an enemy has attack hitboxes that don't hit below it?
         Both editors
             Put the canvas in one ImGui window and the panel in another?
-            [NEEDS BRAINSTORMING] A tutorial built into each editor?
+            [NEEDS BRAINSTORMING] A tutorial built into each editor? Pros: no need to go out of the engine just for help. Cons: an HTML page has a lot more powerful content than just some text and some widgets
             Hold Ctrl while dragging to lock to an axis?
             [NEEDS BRAINSTORMING] For buttons that change the state of something (e.g. toggle reference image on/off, change current snapping mode), I need to figure out what to do...
                 a) Have the icon represent the current mode?
                 b) Have the icon represent the next mode?
-                c) Only use buttons for one-off actions, and use checkboxes or something else for these mode-changing widgets
+                c) Only use buttons for one-off actions, and use radio buttons or something else for these mode-changing widgets
     Blood (optional, of course)
     Resolution and window size
         Players should be able to resize the window on-the-fly (GitHub issue #2)

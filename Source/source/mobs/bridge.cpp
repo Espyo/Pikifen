@@ -8,6 +8,8 @@
  * Bridge class and bridge related functions.
  */
 
+#include <algorithm>
+
 #include "bridge.h"
 
 #include "../drawing.h"
