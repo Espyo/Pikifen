@@ -104,6 +104,8 @@ public:
     mob* throw_dest_mob;
     //Sector that player 1's throw will land on, if any.
     sector* throw_dest_sector;
+    //Are we currently unloading the gameplay state?
+    bool unloading;
     //Have we went to the results screen yet?
     bool went_to_results;
     //Information about player 1's whistle.
@@ -178,8 +180,6 @@ private:
     bool swarm_cursor;
     //Reach of player 1's swarm.
     movement_struct swarm_movement;
-    //Are we currently unloading the gameplay state?
-    bool unloading;
     
     void do_aesthetic_logic();
     void do_game_drawing(

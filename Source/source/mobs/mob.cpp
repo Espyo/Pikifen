@@ -495,11 +495,6 @@ void mob::become_carriable(const CARRY_DESTINATIONS destination) {
 void mob::become_uncarriable() {
     if(!carry_info) return;
     
-    if(delivery_info) {
-        delete delivery_info;
-        delivery_info = NULL;
-    }
-    
     for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
         if(carry_info->spot_info[p].state != CARRY_SPOT_FREE) {
             carry_info->spot_info[p].pik_ptr->fsm.run_event(

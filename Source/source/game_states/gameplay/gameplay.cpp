@@ -66,6 +66,7 @@ gameplay_state::gameplay_state() :
     swarm_magnitude(0.0f),
     throw_dest_mob(nullptr),
     throw_dest_sector(nullptr),
+    unloading(false),
     went_to_results(false),
     cancel_control_id(INVALID),
     close_to_interactable_to_use(nullptr),
@@ -81,8 +82,7 @@ gameplay_state::gameplay_state() :
     pause_menu(nullptr),
     paused(false),
     ready_for_input(false),
-    swarm_cursor(false),
-    unloading(false) {
+    swarm_cursor(false) {
     
 }
 

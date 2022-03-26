@@ -1364,6 +1364,10 @@ void leader_fsm::decide_pluck_action(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
+    if(game.states.gameplay->unloading) {
+        return;
+    }
+    
     if(!process_total_leader_ko()) {
         game.states.gameplay->update_available_leaders();
         if(game.states.gameplay->cur_leader_ptr == m) {
@@ -2100,6 +2104,8 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
     m->become_uncarriable();
+    delete m->delivery_info;
+    m->delivery_info = NULL;
     m->set_animation(LEADER_ANIM_GETTING_UP);
 }
 
