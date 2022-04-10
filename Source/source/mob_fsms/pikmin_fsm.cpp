@@ -3298,7 +3298,7 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
         );
     if(m->following_group) {
         m->following_group->group->change_standby_type_if_needed();
-        game.states.gameplay->update_closest_group_member();
+        game.states.gameplay->update_closest_group_members();
     }
 }
 

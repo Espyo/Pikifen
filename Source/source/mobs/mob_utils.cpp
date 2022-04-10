@@ -265,6 +265,18 @@ group_info_struct::group_info_struct(mob* leader_ptr) :
 
 
 /* ----------------------------------------------------------------------------
+ * Sets the standby group member type to the next available one,
+ * or NULL if none.
+ * Returns true on success, false on failure.
+ * move_backwards:
+ *   If true, go through the list backwards.
+ */
+bool group_info_struct::change_standby_type(const bool move_backwards) {
+    return get_next_standby_type(move_backwards, &cur_standby_type);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Changes to a different standby subgroup type in case there are no more
  * Pikmin of the current one. Or to no type.
  */
@@ -276,7 +288,7 @@ void group_info_struct::change_standby_type_if_needed() {
         }
     }
     //No members of the current type? Switch to the next.
-    set_next_cur_standby_type(false);
+    change_standby_type(false);
 }
 
 
@@ -305,6 +317,83 @@ point group_info_struct::get_average_member_pos() const {
         avg += members[m]->pos;
     }
     return avg / members.size();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the next available standby group member type,
+ * or NULL if none.
+ * Returns true on success, false on failure.
+ * move_backwards:
+ *   If true, go through the list backwards.
+ * new_type:
+ *   The new type is returned here.
+ */
+bool group_info_struct::get_next_standby_type(
+    const bool move_backwards, subgroup_type** new_type
+) {
+
+    if(members.empty()) {
+        *new_type = NULL;
+        return true;
+    }
+    
+    bool success = false;
+    subgroup_type* starting_type = cur_standby_type;
+    subgroup_type* final_type = cur_standby_type;
+    if(!starting_type) {
+        starting_type =
+            game.states.gameplay->subgroup_types.get_first_type();
+    }
+    subgroup_type* scanning_type = starting_type;
+    subgroup_type* leader_subgroup_type =
+        game.states.gameplay->subgroup_types.get_type(
+            SUBGROUP_TYPE_CATEGORY_LEADER
+        );
+        
+    if(move_backwards) {
+        scanning_type =
+            game.states.gameplay->subgroup_types.get_prev_type(
+                scanning_type
+            );
+    } else {
+        scanning_type =
+            game.states.gameplay->subgroup_types.get_next_type(
+                scanning_type
+            );
+    }
+    while(scanning_type != starting_type && !success) {
+        //For each type, let's check if there's any group member that matches.
+        if(
+            scanning_type == leader_subgroup_type &&
+            !game.config.can_throw_leaders
+        ) {
+            //If this is a leader, and leaders cannot be thrown, skip.
+        } else {
+            for(size_t m = 0; m < members.size(); ++m) {
+                if(members[m]->subgroup_type_ptr == scanning_type) {
+                    final_type = scanning_type;
+                    success = true;
+                    break;
+                }
+            }
+        }
+        
+        if(move_backwards) {
+            scanning_type =
+                game.states.gameplay->subgroup_types.get_prev_type(
+                    scanning_type
+                );
+        } else {
+            scanning_type =
+                game.states.gameplay->subgroup_types.get_next_type(
+                    scanning_type
+                );
+        }
+    }
+    
+    *new_type = final_type;
+    return success;
 }
 
 
@@ -507,79 +596,6 @@ void group_info_struct::reassign_spots() {
         
         closest_mob->group_spot_index = s;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the standby group member type to the next available one,
- * or NULL if none.
- * Returns true on success, false on failure.
- * move_backwards:
- *   If true, go through the list backwards.
- */
-bool group_info_struct::set_next_cur_standby_type(const bool move_backwards) {
-
-    if(members.empty()) {
-        cur_standby_type = NULL;
-        return true;
-    }
-    
-    bool success = false;
-    subgroup_type* starting_type = cur_standby_type;
-    subgroup_type* final_type = cur_standby_type;
-    if(!starting_type) {
-        starting_type =
-            game.states.gameplay->subgroup_types.get_first_type();
-    }
-    subgroup_type* scanning_type = starting_type;
-    subgroup_type* leader_subgroup_type =
-        game.states.gameplay->subgroup_types.get_type(
-            SUBGROUP_TYPE_CATEGORY_LEADER
-        );
-        
-    if(move_backwards) {
-        scanning_type =
-            game.states.gameplay->subgroup_types.get_prev_type(
-                scanning_type
-            );
-    } else {
-        scanning_type =
-            game.states.gameplay->subgroup_types.get_next_type(
-                scanning_type
-            );
-    }
-    while(scanning_type != starting_type && !success) {
-        //For each type, let's check if there's any group member that matches.
-        if(
-            scanning_type == leader_subgroup_type &&
-            !game.config.can_throw_leaders
-        ) {
-            //If this is a leader, and leaders cannot be thrown, skip.
-        } else {
-            for(size_t m = 0; m < members.size(); ++m) {
-                if(members[m]->subgroup_type_ptr == scanning_type) {
-                    final_type = scanning_type;
-                    success = true;
-                    break;
-                }
-            }
-        }
-        
-        if(move_backwards) {
-            scanning_type =
-                game.states.gameplay->subgroup_types.get_prev_type(
-                    scanning_type
-                );
-        } else {
-            scanning_type =
-                game.states.gameplay->subgroup_types.get_next_type(
-                    scanning_type
-                );
-        }
-    }
-    
-    cur_standby_type = final_type;
-    return success;
 }
 
 

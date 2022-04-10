@@ -469,15 +469,15 @@ void gameplay_state::do_gameplay_logic() {
         ************************************/
         
         size_t n_members = cur_leader_ptr->group->members.size();
-        closest_group_member = NULL;
+        closest_group_member[STANDBY_TYPE_CURRENT] = NULL;
         if(!cur_leader_ptr->holding.empty()) {
-            closest_group_member = cur_leader_ptr->holding[0];
+            closest_group_member[STANDBY_TYPE_CURRENT] = cur_leader_ptr->holding[0];
         }
         closest_group_member_distant = false;
         
-        if(n_members > 0 && !closest_group_member) {
+        if(n_members > 0 && !closest_group_member[STANDBY_TYPE_CURRENT]) {
         
-            update_closest_group_member();
+            update_closest_group_members();
         }
         
         float old_swarm_magnitude = swarm_magnitude;

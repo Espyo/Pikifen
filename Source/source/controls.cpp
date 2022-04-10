@@ -536,7 +536,7 @@ void gameplay_state::handle_button(
             if(cur_leader_ptr->holding.empty()) {
                 //If the leader isn't holding anybody.
                 switch_successful =
-                    cur_leader_ptr->group->set_next_cur_standby_type(
+                    cur_leader_ptr->group->change_standby_type(
                         button == BUTTON_PREV_TYPE
                     );
                     
@@ -550,7 +550,7 @@ void gameplay_state::handle_button(
                 bool finish = false;
                 do {
                     switch_successful =
-                        cur_leader_ptr->group->set_next_cur_standby_type(
+                        cur_leader_ptr->group->change_standby_type(
                             button == BUTTON_PREV_TYPE
                         );
                         
@@ -565,7 +565,7 @@ void gameplay_state::handle_button(
                         
                     } else {
                         //Switched to a new subgroup.
-                        update_closest_group_member();
+                        update_closest_group_members();
                         if(!closest_group_member_distant) {
                             finish = true;
                         }
@@ -575,7 +575,9 @@ void gameplay_state::handle_button(
                 } while(!finish);
                 
                 if(switch_successful) {
-                    cur_leader_ptr->swap_held_pikmin(closest_group_member);
+                    cur_leader_ptr->swap_held_pikmin(
+                        closest_group_member[STANDBY_TYPE_CURRENT]
+                    );
                 }
             }
             

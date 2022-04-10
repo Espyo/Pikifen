@@ -24,6 +24,8 @@ Next tasks (roughly sorted most important first)
             Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
             The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
     Allow an object's max health to be customizable, and for that to be set in the area editor
+		If necessary, explain in the manual and/or area editor tips how this affects bridges, piles (?), reinforced walls, Flukeweeds, bomb rocks
+		Some scripts do things based on the object's health, in absolute values. It needs to be changed to relative values since max healths can be changed now
     Details
         Pikmin that are plucked should be thrown backwards. Plus, there should be some dirt particle effects
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y

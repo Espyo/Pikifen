@@ -59,7 +59,6 @@ gameplay_state::gameplay_state() :
     area_time_passed(0.0f),
     area_title_fade_timer(AREA_TITLE_FADE_DURATION),
     bmp_fog(nullptr),
-    closest_group_member(nullptr),
     closest_group_member_distant(false),
     cur_leader_nr(0),
     cur_leader_ptr(nullptr),
@@ -92,6 +91,10 @@ gameplay_state::gameplay_state() :
     paused(false),
     ready_for_input(false),
     swarm_cursor(false) {
+    
+    closest_group_member[STANDBY_TYPE_PREVIOUS] = NULL;
+    closest_group_member[STANDBY_TYPE_CURRENT] = NULL;
+    closest_group_member[STANDBY_TYPE_NEXT] = NULL;
     
 }
 
@@ -292,6 +295,72 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  */
 string gameplay_state::get_name() const {
     return "gameplay";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the closest group member of a given standby subgroup.
+ * In the case all candidate members are out of reach,
+ * this returns the closest. Otherwise, it returns the closest
+ * and more mature one.
+ * Returns NULL if there is no member of that subgroup available.
+ */
+mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
+    mob* result = NULL;
+    
+    //Closest members so far for each maturity.
+    dist closest_dists[N_MATURITIES];
+    mob* closest_ptrs[N_MATURITIES];
+    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+        closest_ptrs[m] = NULL;
+    }
+    
+    //Fetch the closest, for each maturity.
+    size_t n_members = cur_leader_ptr->group->members.size();
+    for(size_t m = 0; m < n_members; ++m) {
+    
+        mob* member_ptr = cur_leader_ptr->group->members[m];
+        if(member_ptr->subgroup_type_ptr != type) {
+            continue;
+        }
+        
+        unsigned char maturity = 0;
+        if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+            maturity = ((pikmin*) member_ptr)->maturity;
+        }
+        
+        dist d(cur_leader_ptr->pos, member_ptr->pos);
+        
+        if(!closest_ptrs[maturity] || d < closest_dists[maturity]) {
+            closest_dists[maturity] = d;
+            closest_ptrs[maturity] = member_ptr;
+        }
+    }
+    
+    //Now, try to get the one with the highest maturity within reach.
+    dist closest_dist;
+    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+        if(!closest_ptrs[2 - m]) continue;
+        if(closest_dists[2 - m] > game.config.group_member_grab_range) continue;
+        result = closest_ptrs[2 - m];
+        closest_dist = closest_dists[2 - m];
+        break;
+    }
+    
+    if(!result) {
+        //Couldn't find any within reach? Then just set it to the closest one.
+        //Maturity is irrelevant for this case.
+        for(unsigned char m = 0; m < N_MATURITIES; ++m) {
+            if(!closest_ptrs[m]) continue;
+            
+            if(!result || closest_dists[m] < closest_dist) {
+                result = closest_ptrs[m];
+                closest_dist = closest_dists[m];
+            }
+        }
+    }
+    
+    return result;
 }
 
 
@@ -534,7 +603,7 @@ void gameplay_state::load() {
     cursor_save_timer.start();
     
     cur_leader_ptr->stop_whistling();
-    update_closest_group_member();
+    update_closest_group_members();
     
     day_minutes = game.config.day_minutes_start;
     area_time_passed = 0.0f;
@@ -819,89 +888,56 @@ void gameplay_state::update_available_leaders() {
 
 
 /* ----------------------------------------------------------------------------
- * Updates the variable that indicates what the closest
- * group member of the standby subgroup is.
+ * Updates the variables that indicate what the closest
+ * group member of the standby subgroup is, for the current
+ * standby subgroup, the previous, and the next.
  * In the case all candidate members are out of reach,
  * this gets set to the closest. Otherwise, it gets set to the closest
  * and more mature one.
- * NULL if there is no member of that subgroup available.
+ * Sets to NULL if there is no member of that subgroup available.
  */
-void gameplay_state::update_closest_group_member() {
-    //Closest members so far for each maturity.
-    dist closest_dists[N_MATURITIES];
-    mob* closest_ptrs[N_MATURITIES];
-    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
-        closest_ptrs[m] = NULL;
+void gameplay_state::update_closest_group_members() {
+    closest_group_member[STANDBY_TYPE_PREVIOUS] = NULL;
+    closest_group_member[STANDBY_TYPE_CURRENT] = NULL;
+    closest_group_member[STANDBY_TYPE_NEXT] = NULL;
+    closest_group_member_distant = false;
+    
+    if(cur_leader_ptr->group->members.empty()) return;
+    
+    //Get the closest group members for the three relevant subgroup types.
+    subgroup_type* prev_type;
+    cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
+    
+    if(prev_type) {
+        closest_group_member[STANDBY_TYPE_PREVIOUS] =
+            get_closest_group_member(prev_type);
     }
     
-    game.states.gameplay->closest_group_member = NULL;
-    
-    //Fetch the closest, for each maturity.
-    size_t n_members = cur_leader_ptr->group->members.size();
-    for(size_t m = 0; m < n_members; ++m) {
-    
-        mob* member_ptr = cur_leader_ptr->group->members[m];
-        if(
-            member_ptr->subgroup_type_ptr !=
-            cur_leader_ptr->group->cur_standby_type
-        ) {
-            continue;
-        }
-        
-        unsigned char maturity = 0;
-        if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
-            maturity = ((pikmin*) member_ptr)->maturity;
-        }
-        
-        dist d(cur_leader_ptr->pos, member_ptr->pos);
-        
-        if(!closest_ptrs[maturity] || d < closest_dists[maturity]) {
-            closest_dists[maturity] = d;
-            closest_ptrs[maturity] = member_ptr;
-        }
+    if(cur_leader_ptr->group->cur_standby_type) {
+        closest_group_member[STANDBY_TYPE_CURRENT] =
+            get_closest_group_member(cur_leader_ptr->group->cur_standby_type);
     }
     
-    //Now, try to get the one with the highest maturity within reach.
-    dist closest_dist;
-    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
-        if(!closest_ptrs[2 - m]) continue;
-        if(closest_dists[2 - m] > game.config.group_member_grab_range) continue;
-        game.states.gameplay->closest_group_member = closest_ptrs[2 - m];
-        closest_dist = closest_dists[2 - m];
-        break;
+    subgroup_type* next_type;
+    cur_leader_ptr->group->get_next_standby_type(false, &next_type);
+    
+    if(next_type) {
+        closest_group_member[STANDBY_TYPE_NEXT] =
+            get_closest_group_member(next_type);
     }
     
-    if(!game.states.gameplay->closest_group_member) {
-        //Couldn't find any within reach? Then just set it to the closest one.
-        //Maturity is irrelevant for this case.
-        for(unsigned char m = 0; m < N_MATURITIES; ++m) {
-            if(!closest_ptrs[m]) continue;
-            
-            if(
-                !game.states.gameplay->closest_group_member ||
-                closest_dists[m] < closest_dist
-            ) {
-                game.states.gameplay->closest_group_member = closest_ptrs[m];
-                closest_dist = closest_dists[m];
-            }
-        }
-        
-    }
-    
-    game.states.gameplay->closest_group_member_distant = false;
-    
-    if(!game.states.gameplay->closest_group_member) {
+    //Update whether the current subgroup type's closest member is distant.
+    if(!closest_group_member[STANDBY_TYPE_CURRENT]) {
         return;
     }
     
     //Figure out if it can be reached, or if it's too distant.
-    
     if(
         cur_leader_ptr->ground_sector &&
         !cur_leader_ptr->ground_sector->hazards.empty()
     ) {
         if(
-            !game.states.gameplay->closest_group_member->
+            !closest_group_member[STANDBY_TYPE_CURRENT]->
             is_resistant_to_hazards(
                 cur_leader_ptr->ground_sector->hazards
             )
@@ -912,9 +948,15 @@ void gameplay_state::update_closest_group_member() {
         }
     }
     
-    if(closest_dist > game.config.group_member_grab_range) {
+    if(
+        dist(
+            closest_group_member[STANDBY_TYPE_CURRENT]->pos,
+            cur_leader_ptr->pos
+        ) >
+        game.config.group_member_grab_range
+    ) {
         //The group member is physically too far away.
-        game.states.gameplay->closest_group_member_distant = true;
+        closest_group_member_distant = true;
     }
 }
 

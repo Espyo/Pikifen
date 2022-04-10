@@ -369,7 +369,7 @@ hud_struct::hud_struct() :
         if(
             l_ptr &&
             l_ptr->group->cur_standby_type &&
-            game.states.gameplay->closest_group_member
+            game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
         ) {
             SUBGROUP_TYPE_CATEGORIES c =
                 l_ptr->group->cur_standby_type->get_category();
@@ -378,7 +378,7 @@ hud_struct::hud_struct() :
             case SUBGROUP_TYPE_CATEGORY_LEADER: {
                 leader* l_ptr =
                     dynamic_cast<leader*>(
-                        game.states.gameplay->closest_group_member
+                        game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
                     );
                 standby_bmp = l_ptr->lea_type->bmp_icon;
                 break;
@@ -419,7 +419,7 @@ hud_struct::hud_struct() :
         if(
             l_ptr &&
             l_ptr->group->cur_standby_type &&
-            game.states.gameplay->closest_group_member
+            game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
         ) {
             SUBGROUP_TYPE_CATEGORIES c =
                 l_ptr->group->cur_standby_type->get_category();
@@ -428,7 +428,7 @@ hud_struct::hud_struct() :
             case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
                 pikmin* p_ptr =
                     dynamic_cast<pikmin*>(
-                        game.states.gameplay->closest_group_member
+                        game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
                     );
                 standby_mat_bmp =
                     p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];

@@ -31,6 +31,12 @@ extern const float TREE_SHADOW_SWAY_AMOUNT;
 extern const float TREE_SHADOW_SWAY_SPEED;
 }
 
+enum STANDBY_TYPE_RELATIONS {
+    STANDBY_TYPE_PREVIOUS = 0,
+    STANDBY_TYPE_CURRENT = 1,
+    STANDBY_TYPE_NEXT = 2,
+};
+
 
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
@@ -60,8 +66,8 @@ public:
     vector<leader*> available_leaders;
     //Fog effect buffer.
     ALLEGRO_BITMAP* bmp_fog;
-    //Group member closest to player 1's leader.
-    mob* closest_group_member;
+    //Closest to player 1's leader, for the previous, current, next type.
+    mob* closest_group_member[3];
     //Is the group member closest to player 1's leader distant?
     bool closest_group_member_distant;
     //Index of player 1's current leader, in the array of available leaders.
@@ -132,7 +138,7 @@ public:
     void start_leaving(const LEAVE_TARGET target);
     void change_spray_count(const size_t type_nr, signed int amount);
     void update_available_leaders();
-    void update_closest_group_member();
+    void update_closest_group_members();
     
     void load();
     void unload();
@@ -211,6 +217,7 @@ private:
     ALLEGRO_BITMAP* generate_fog_bitmap(
         const float near_radius, const float far_radius
     );
+    mob* get_closest_group_member(subgroup_type* type);
     void handle_button(
         const BUTTONS button, const float pos, const size_t player
     );

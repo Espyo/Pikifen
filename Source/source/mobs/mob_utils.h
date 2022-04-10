@@ -213,9 +213,12 @@ struct group_info_struct {
     void change_standby_type_if_needed();
     size_t get_amount_by_type(mob_type* type) const;
     point get_average_member_pos() const;
+    bool get_next_standby_type(
+        const bool move_backwards, subgroup_type** new_type
+    );
     point get_spot_offset(const size_t spot_index) const;
     void reassign_spots();
-    bool set_next_cur_standby_type(const bool move_backwards);
+    bool change_standby_type(const bool move_backwards);
     group_info_struct(mob* leader_ptr);
 };
 
