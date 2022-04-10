@@ -54,8 +54,8 @@ options_menu_state::options_menu_state() :
     for(int d = 0; d < n_modes; ++d) {
         ALLEGRO_DISPLAY_MODE d_info;
         if(!al_get_display_mode(d, &d_info)) continue;
-        if(d_info.width < SMALLEST_WIN_W) continue;
-        if(d_info.height < SMALLEST_WIN_H) continue;
+        if(d_info.width < SMALLEST_WIN_WIDTH) continue;
+        if(d_info.height < SMALLEST_WIN_HEIGHT) continue;
         resolution_presets.push_back(
             std::make_pair(d_info.width, d_info.height)
         );
@@ -66,7 +66,7 @@ options_menu_state::options_menu_state() :
         std::make_pair(options_struct::DEF_WIN_W, options_struct::DEF_WIN_H)
     );
     resolution_presets.push_back(
-        std::make_pair(SMALLEST_WIN_W, SMALLEST_WIN_H)
+        std::make_pair(SMALLEST_WIN_WIDTH, SMALLEST_WIN_HEIGHT)
     );
     
     //Sort the list.

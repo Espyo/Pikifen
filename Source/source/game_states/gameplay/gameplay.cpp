@@ -25,6 +25,15 @@
 #include "../../utils/string_utils.h"
 
 
+namespace GAMEPLAY {
+//How frequently should a replay state be saved.
+const float REPLAY_SAVE_FREQUENCY = 1.0f;
+//Tree shadows sway this much away from their neutral position.
+const float TREE_SHADOW_SWAY_AMOUNT = 8.0f;
+//Tree shadows sway this much per second (TAU = full back-and-forth cycle).
+const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
+}
+
 //How long the HUD moves for when the area is entered.
 const float gameplay_state::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
@@ -597,7 +606,7 @@ void gameplay_state::load() {
     //TODO Uncomment this when replays are implemented.
     /*
     replay_timer = timer(
-        REPLAY_SAVE_FREQUENCY,
+        GAMEPLAY::REPLAY_SAVE_FREQUENCY,
     [this] () {
         this->replay_timer.start();
         vector<mob*> obstacles; //TODO

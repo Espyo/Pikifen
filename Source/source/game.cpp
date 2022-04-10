@@ -20,7 +20,6 @@
 #include "init.h"
 #include "load.h"
 
-
 /* ----------------------------------------------------------------------------
  * Constructor for the game class.
  */

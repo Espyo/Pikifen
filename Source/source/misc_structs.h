@@ -36,6 +36,49 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+namespace WHISTLE {
+constexpr unsigned char N_RING_COLORS = 8;
+constexpr unsigned char N_DOT_COLORS = 6;
+extern const unsigned char DOT_COLORS[N_DOT_COLORS][3];
+extern const float DOT_INTERVAL;
+extern const float DOT_SPIN_SPEED;
+extern const float FADE_TIME;
+extern const unsigned char RING_COLORS[N_RING_COLORS][3];
+extern const float RING_SPEED;
+extern const float RINGS_INTERVAL;
+}
+
+
+//List of maker tools.
+enum MAKER_TOOL_TYPES {
+    //None.
+    MAKER_TOOL_NONE,
+    //Create an image of the whole area.
+    MAKER_TOOL_AREA_IMAGE,
+    //Change gameplay speed.
+    MAKER_TOOL_CHANGE_SPEED,
+    //Geometry info beneath mouse cursor.
+    MAKER_TOOL_GEOMETRY_INFO,
+    //Show hitboxes.
+    MAKER_TOOL_HITBOXES,
+    //Hurt mob beneath mouse cursor.
+    MAKER_TOOL_HURT_MOB,
+    //Get info on the mob beneath mouse cursor.
+    MAKER_TOOL_MOB_INFO,
+    //Create a new Pikmin beneath mouse cursor.
+    MAKER_TOOL_NEW_PIKMIN,
+    //Teleport to mouse cursor.
+    MAKER_TOOL_TELEPORT,
+    
+    //Total amount of maker tools.
+    N_MAKER_TOOLS,
+};
+
+
+namespace MAKER_TOOLS {
+extern const string NAMES[N_MAKER_TOOLS];
+}
+
 
 /* ----------------------------------------------------------------------------
  * List of file names of system assets.
@@ -200,7 +243,7 @@ struct maker_tools_info {
     //If any maker info is being printed, this represents its time to live.
     timer info_print_timer;
     //For each key (F2 - F11, 0 - 9), what tool is bound to it?
-    MAKER_TOOLS keys[20];
+    MAKER_TOOL_TYPES keys[20];
     //When we last spawned a Pikmin, what was its type?
     pikmin_type* last_pikmin_type;
     //When hurting mobs with the hurting tool, dock this much of its max HP off.

@@ -16,6 +16,11 @@
 #include "../../gui.h"
 
 
+namespace HUD {
+extern const float SUN_METER_SUN_SPIN_SPEED;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Manages the contents of "bubbles" in the HUD that have the ability to move
  * around, or fade in/out of existence, depending on what the player swapped,

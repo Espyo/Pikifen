@@ -44,7 +44,7 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     height(0),
     move_speed(0),
     acceleration(400),
-    rotation_speed(DEF_ROTATION_SPEED),
+    rotation_speed(MOB::DEF_ROTATION_SPEED),
     can_free_move(false),
     pushes(false),
     pushable(false),

@@ -371,7 +371,8 @@ void area_editor::create_area() {
     clear_selection();
     
     //Find a texture to give to this sector.
-    vector<string> textures = folder_to_vector(TEXTURES_FOLDER_PATH, false);
+    vector<string> textures =
+        folder_to_vector(TEXTURES_FOLDER_PATH, false);
     size_t texture_to_use = INVALID;
     //First, if there's any "grass" texture, use that.
     for(size_t t = 0; t < textures.size(); ++t) {

@@ -454,11 +454,11 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     
     switch(m->delivery_info->anim_type) {
     case DELIVERY_ANIM_SUCK: {
-        m->set_timer(DELIVERY_SUCK_TIME);
+        m->set_timer(MOB::DELIVERY_SUCK_TIME);
         break;
     }
     case DELIVERY_ANIM_TOSS: {
-        m->set_timer(DELIVERY_TOSS_TIME);
+        m->set_timer(MOB::DELIVERY_TOSS_TIME);
         break;
     }
     }

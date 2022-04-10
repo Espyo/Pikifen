@@ -103,7 +103,9 @@ void area_menu_state::load() {
     
     for(size_t a = 0; a < areas_to_pick.size(); ++a) {
         string actual_name = areas_to_pick[a];
-        data_node data(AREAS_FOLDER_PATH + "/" + actual_name + "/Data.txt");
+        data_node data(
+            AREAS_FOLDER_PATH + "/" + actual_name + "/Data.txt"
+        );
         if(data.file_was_opened) {
             string s = data.get_child_by_name("name")->value;
             if(!s.empty()) {

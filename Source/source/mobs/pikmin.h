@@ -19,6 +19,14 @@ class leader;
 #include "onion.h"
 
 
+namespace PIKMIN {
+extern const float GROUNDED_ATTACK_DIST;
+extern const float IDLE_GLOW_SPIN_SPEED;
+extern const float KNOCKED_DOWN_DURATION;
+extern const float KNOCKED_DOWN_WHISTLE_BONUS;
+}
+
+
 /* ----------------------------------------------------------------------------
  * The eponymous Pikmin.
  */

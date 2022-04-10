@@ -24,6 +24,40 @@
 #include "tool.h"
 #include "track.h"
 
+namespace MOB {
+//The default rotation speed of a mob type.
+const float DEF_ROTATION_SPEED = 630.0f;
+//How long to suck a mob in for, when being delivered to an Onion/ship.
+const float DELIVERY_SUCK_TIME = 2.0f;
+//How long to toss a mob in the air for, when being delivered to a mob.
+const float DELIVERY_TOSS_TIME = 1.0f;
+//If there's less than this much gap between the leader and group,
+//then the group's Pikmin should shuffle a bit to keep up with the leader.
+const float GROUP_SHUFFLE_DIST = 40.0f;
+//Pikmin must be at least these many units away from one another;
+//used when calculating group spots.
+const float GROUP_SPOT_INTERVAL = 3.0f;
+//When using the height effect, scale the mob by this factor.
+const float HEIGHT_EFFECT_FACTOR = 0.0017;
+//When an opponent is hit, it takes this long to be possible to hit it again.
+const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
+//Multiply the stretch of the shadow by this much.
+const float SHADOW_STRETCH_MULT = 0.5f;
+//For every unit above the ground that the mob is on,
+//the shadow goes these many units to the side.
+const float SHADOW_Y_MULT = 0.2f;
+//Duration of the "smack" particle.
+const float SMACK_PARTICLE_DUR = 0.1f;
+//Put this space between the leader and the "main" member of the group,
+//when using swarming.
+const float SWARM_MARGIN = 8.0f;
+//When swarming, the group can scale this much vertically.
+//Basically, the tube shape's girth can reach this scale.
+const float SWARM_VERTICAL_SCALE = 0.5f;
+//A new "mob thrown" particle is spawned every X seconds.
+const float THROW_PARTICLE_INTERVAL = 0.02f;
+}
+
 //Duration of the damage squash-and-stretch animation.
 const float mob::DAMAGE_SQUASH_DURATION = 0.25f;
 //How much to change the scale by during a damage squash-and-stretch animation.
@@ -196,7 +230,7 @@ void mob::apply_attack_damage(
 ) {
     //Register this hit, so the next frame doesn't hit it too.
     attacker->hit_opponents.push_back(
-        std::make_pair(OPPONENT_HIT_REGISTER_TIMEOUT, this)
+        std::make_pair(MOB::OPPONENT_HIT_REGISTER_TIMEOUT, this)
     );
     
     //Will the parent mob be handling the damage?
@@ -1204,7 +1238,7 @@ void mob::do_attack_effects(
         particle smack_p(
             PARTICLE_TYPE_SMACK, particle_pos,
             std::max(z + height + 1, attacker->z + attacker->height + 1),
-            64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
+            64, MOB::SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
         );
         smack_p.bitmap = game.sys_assets.bmp_smack;
         smack_p.color = al_map_rgb(255, 160, 128);
@@ -1214,7 +1248,7 @@ void mob::do_attack_effects(
         particle ding_p(
             PARTICLE_TYPE_DING, particle_pos,
             std::max(z + height + 1, attacker->z + attacker->height + 1),
-            24, SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
+            24, MOB::SMACK_PARTICLE_DUR * 2, PARTICLE_PRIORITY_MEDIUM
         );
         ding_p.bitmap = game.sys_assets.bmp_wave_ring;
         ding_p.color = al_map_rgb(192, 208, 224);
@@ -2077,7 +2111,7 @@ point mob::get_sprite_dimensions(sprite* s, point* scale) const {
     
     if(height_effect_pivot != LARGE_FLOAT) {
         height_mult +=
-            (z - height_effect_pivot) * MOB_HEIGHT_EFFECT_FACTOR;
+            (z - height_effect_pivot) * MOB::HEIGHT_EFFECT_FACTOR;
     }
     height_mult = std::max(height_mult, 1.0f);
     if(ground_sector->is_bottomless_pit && height_mult == 1.0f) {
@@ -3310,7 +3344,7 @@ void mob::tick_misc_logic(const float delta_t) {
             
         if(
             dist(group->get_average_member_pos(), pos) >
-            GROUP_SHUFFLE_DIST + (group->radius + radius)
+            MOB::GROUP_SHUFFLE_DIST + (group->radius + radius)
         ) {
             if(!group->follow_mode) {
                 must_reassign_spots = true;
@@ -3335,7 +3369,7 @@ void mob::tick_misc_logic(const float delta_t) {
                 point move_anchor_offset =
                     rotate_point(
                         point(
-                            -(radius + GROUP_SPOT_INTERVAL * 2),
+                            -(radius + MOB::GROUP_SPOT_INTERVAL * 2),
                             0
                         ), game.states.gameplay->swarm_angle + TAU / 2
                     );
@@ -3345,14 +3379,14 @@ void mob::tick_misc_logic(const float delta_t) {
                     game.config.cursor_max_dist *
                     game.states.gameplay->swarm_magnitude;
                 al_translate_transform(
-                    &group->transform, -SWARM_MARGIN, 0
+                    &group->transform, -MOB::SWARM_MARGIN, 0
                 );
                 al_scale_transform(
                     &group->transform,
                     intensity_dist / (group->radius * 2),
                     1 -
                     (
-                        SWARM_VERTICAL_SCALE*
+                        MOB::SWARM_VERTICAL_SCALE*
                         game.states.gameplay->swarm_magnitude
                     )
                 );
@@ -3366,7 +3400,7 @@ void mob::tick_misc_logic(const float delta_t) {
                 point leader_back_offset =
                     rotate_point(
                         point(
-                            -(radius + GROUP_SPOT_INTERVAL * 2),
+                            -(radius + MOB::GROUP_SPOT_INTERVAL * 2),
                             0
                         ), angle
                     );
@@ -3386,7 +3420,7 @@ void mob::tick_misc_logic(const float delta_t) {
                 group->anchor - point(group->radius, 0),
                 pos,
                 type->move_speed,
-                group->radius + radius + GROUP_SPOT_INTERVAL * 2,
+                group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2,
                 &mov, NULL, NULL, delta_t
             );
             group->anchor += mov * delta_t;

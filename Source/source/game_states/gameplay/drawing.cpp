@@ -477,9 +477,9 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             point(scale, scale),
             0.0f,
             al_map_rgba(
-                WHISTLE_RING_COLORS[n][0],
-                WHISTLE_RING_COLORS[n][1],
-                WHISTLE_RING_COLORS[n][2],
+                WHISTLE::RING_COLORS[n][0],
+                WHISTLE::RING_COLORS[n][1],
+                WHISTLE::RING_COLORS[n][2],
                 alpha
             )
         );
@@ -492,14 +492,14 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             al_map_rgba(48, 128, 120, 64)
         );
         
-        unsigned char n_dots = 16 * N_WHISTLE_DOT_COLORS;
-        for(unsigned char d = 0; d < N_WHISTLE_DOT_COLORS; ++d) {
+        unsigned char n_dots = 16 * WHISTLE::N_DOT_COLORS;
+        for(unsigned char d = 0; d < WHISTLE::N_DOT_COLORS; ++d) {
             for(unsigned char d2 = 0; d2 < 16; ++d2) {
-                unsigned char current_dot = d2 * N_WHISTLE_DOT_COLORS + d;
+                unsigned char current_dot = d2 * WHISTLE::N_DOT_COLORS + d;
                 float angle =
                     TAU / n_dots *
                     current_dot -
-                    WHISTLE_DOT_SPIN_SPEED * area_time_passed;
+                    WHISTLE::DOT_SPIN_SPEED * area_time_passed;
                     
                 point dot_pos(
                     whistle.center.x +
@@ -510,9 +510,9 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 
                 ALLEGRO_COLOR dot_color =
                     al_map_rgb(
-                        WHISTLE_DOT_COLORS[d][0],
-                        WHISTLE_DOT_COLORS[d][1],
-                        WHISTLE_DOT_COLORS[d][2]
+                        WHISTLE::DOT_COLORS[d][0],
+                        WHISTLE::DOT_COLORS[d][1],
+                        WHISTLE::DOT_COLORS[d][2]
                     );
                 unsigned char dot_alpha = 255;
                 if(whistle.fade_timer.time_left > 0.0f) {
@@ -1321,11 +1321,11 @@ void gameplay_state::draw_tree_shadows() {
         draw_bitmap(
             s_ptr->bitmap,
             point(
-                s_ptr->center.x + TREE_SHADOW_SWAY_AMOUNT*
-                cos(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
+                s_ptr->center.x + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
+                cos(GAMEPLAY::TREE_SHADOW_SWAY_SPEED * area_time_passed) *
                 s_ptr->sway.x,
-                s_ptr->center.y + TREE_SHADOW_SWAY_AMOUNT*
-                sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
+                s_ptr->center.y + GAMEPLAY::TREE_SHADOW_SWAY_AMOUNT*
+                sin(GAMEPLAY::TREE_SHADOW_SWAY_SPEED * area_time_passed) *
                 s_ptr->sway.y
             ),
             s_ptr->size,

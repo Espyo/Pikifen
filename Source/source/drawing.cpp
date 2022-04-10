@@ -1121,16 +1121,16 @@ void draw_mob_shadow(
     
     float shadow_x = 0;
     float shadow_w =
-        diameter + (diameter * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
+        diameter + (diameter * shadow_stretch * MOB::SHADOW_STRETCH_MULT);
         
     if(game.states.gameplay->day_minutes < 60 * 12) {
         //Shadows point to the West.
         shadow_x = -shadow_w + diameter * 0.5;
-        shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
+        shadow_x -= shadow_stretch * delta_z * MOB::SHADOW_Y_MULT;
     } else {
         //Shadows point to the East.
         shadow_x = -(diameter * 0.5);
-        shadow_x += shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
+        shadow_x += shadow_stretch * delta_z * MOB::SHADOW_Y_MULT;
     }
     
     

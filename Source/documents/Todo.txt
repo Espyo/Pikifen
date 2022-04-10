@@ -12,19 +12,22 @@ Next tasks (roughly sorted most important first)
         Standby Pikmin
             The standby Pikmin type bubble should have bubbles nearby for the previous and next
 				Move the swapping buttons to the correct spots
-            Pikmin type swapping should make the bubble grow
+				This means the game needs to keep track of the closest mob of the previous and next standby type
+            Pikmin type swapping should make the bubbles slide into place
             Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
         Spray swapping should make the icons slide into place
-        Hide spray-related and standby-related items when not needed
+        Hide spray-related and standby-related items when not needed, after some seconds
         Message box text should be juicier
         Add juice to Onion menu
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time
             Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
             The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
+    Allow an object's max health to be customizable, and for that to be set in the area editor
     Details
         Pikmin that are plucked should be thrown backwards. Plus, there should be some dirt particle effects
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
+        Center the GUI items in the options menu
         Maybe decrease the leaders's acceleration?
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
@@ -37,11 +40,15 @@ Next tasks (roughly sorted most important first)
     Code cleanup
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
-        Some consts are documented in the .h, others in the .cpp. In general, just clean up all consts
+        Constants cleanup. All consts should:
+            Leave const.h and classes, and go into namespaces. The exception is really global stuff like INVALID. The namespaces should be named after the class/subject, in all caps
+                All those that can't should go into const.h
+            Everything in const.h should be constexpr
+            Be declared in the .h files as extern
+            Be defined and commented in the .cpp files
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Memory leaks, cppcheck, etc.
     Demo content
-        If something is under construction, like a menu or something, add a small "WIP" blurb
         Add more treasures
             Ball of yarn treasure
         Sounds really need a makeover...
@@ -159,11 +166,11 @@ Next tasks (roughly sorted most important first)
         Open it with Tab, and move leader swapping to middle mouse button
     Statistics menu, which keeps track of:
         Engine use
-            Engine boot-up count, engine total play time, actual gameplay total play time, number of times an area was entered
+            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered
         Pikmin life
-            Pikmin birth count, Pikmin death by swallowing count, Pikmin death for other reasons count, Pikmin bloom count (bud or flower; leaf to flower only counts as one), enemy kill count
+            Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count, Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
         Leader control
-            Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe)
+            Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
     Other menu improvements
         Onion menu
             Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
@@ -254,11 +261,11 @@ Next tasks (roughly sorted most important first)
     
     --- v0.24.0 ---
     Music
-        Day + fight
-        Sunset + fight
-        Boss
-        Add to the FAQ why there's only a normal and a fight variant (too many system resources), or figure out if we can get away with much more
+        Planned variant compatibility: Day + fight, sunset + fight, boss
+        Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend. If we can't get away with many variants, explain in the FAQ why that is
+        The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
         Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
+        
     Revamp sound system
         Rename sound files to .oga, instead of .ogg
         There are three types of sounds
@@ -739,6 +746,8 @@ Misc things (so I don't forget)
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     Story mode
         Some treasures should weigh as much as the current army, after a boss battle
+	Loose thoughts
+		If something is under construction, like a menu or something, add a small "WIP" blurb
     
 Tasks for later on (I might never implement these)
     Known problems

@@ -38,6 +38,22 @@ class pikmin_type;
 
 extern size_t next_mob_id;
 
+namespace MOB {
+extern const float DEF_ROTATION_SPEED;
+extern const float DELIVERY_SUCK_TIME;
+extern const float DELIVERY_TOSS_TIME;
+extern const float GROUP_SHUFFLE_DIST;
+extern const float GROUP_SPOT_INTERVAL;
+extern const float HEIGHT_EFFECT_FACTOR;
+extern const float OPPONENT_HIT_REGISTER_TIMEOUT;
+extern const float SHADOW_STRETCH_MULT;
+extern const float SHADOW_Y_MULT;
+extern const float SMACK_PARTICLE_DUR;
+extern const float SWARM_MARGIN;
+extern const float SWARM_VERTICAL_SCALE;
+extern const float THROW_PARTICLE_INTERVAL;
+};
+
 //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 const float GRAVITY_ADDER = -2600.0f;
 const float MOB_KNOCKBACK_H_POWER = 64.0f;

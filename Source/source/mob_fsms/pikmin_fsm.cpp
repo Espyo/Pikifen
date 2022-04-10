@@ -2030,7 +2030,7 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
     pik->script_timer.time_left =
         std::max(
             0.01f,
-            pik->script_timer.time_left - PIKMIN_KNOCKED_DOWN_WHISTLE_BONUS
+            pik->script_timer.time_left - PIKMIN::KNOCKED_DOWN_WHISTLE_BONUS
         );
         
     pik->temp_i = 1;
@@ -2602,7 +2602,7 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     }
     
     m->set_animation(PIKMIN_ANIM_LYING);
-    m->set_timer(PIKMIN_KNOCKED_DOWN_DURATION);
+    m->set_timer(PIKMIN::KNOCKED_DOWN_DURATION);
 }
 
 
@@ -2788,7 +2788,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     m->chase(
         &m->focused_mob->pos, &m->focused_mob->z,
         point(), 0.0f, 0,
-        m->focused_mob->radius + m->radius + GROUNDED_ATTACK_DIST
+        m->focused_mob->radius + m->radius + PIKMIN::GROUNDED_ATTACK_DIST
     );
     m->set_animation(PIKMIN_ANIM_WALKING);
     m->leave_group();
@@ -3255,7 +3255,7 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
         m->focused_mob &&
         m->focused_mob->health > 0 &&
         dist(m->pos, m->focused_mob->pos) <=
-        (m->radius + m->focused_mob->radius + GROUNDED_ATTACK_DIST);
+        (m->radius + m->focused_mob->radius + PIKMIN::GROUNDED_ATTACK_DIST);
         
     if(!can_continue_attacking) {
         //The opponent cannot be chased down. Become idle.

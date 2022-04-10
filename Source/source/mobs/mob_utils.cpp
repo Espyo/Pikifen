@@ -330,7 +330,7 @@ point group_info_struct::get_spot_offset(const size_t spot_index) const {
  *   or left the group, this should point to said mob.
  */
 void group_info_struct::init_spots(mob* affected_mob_ptr) {
-    const float SPOT_MAX_DEVIATION = GROUP_SPOT_INTERVAL * 0.60f;
+    const float SPOT_MAX_DEVIATION = MOB::GROUP_SPOT_INTERVAL * 0.60f;
     
     if(members.empty()) {
         spots.clear();
@@ -368,7 +368,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
         //of these spots are from the central spot.
         float dist_from_center =
             game.config.standard_pikmin_radius * current_wheel + //Spots.
-            GROUP_SPOT_INTERVAL * current_wheel; //Interval between spots.
+            MOB::GROUP_SPOT_INTERVAL * current_wheel; //Interval between spots.
             
         /* Now we need to figure out what's the angular distance
          * between each spot. For that, we need the actual diameter
@@ -381,7 +381,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
          * and we know the distance from one spot to the center.
          */
         float actual_diameter =
-            game.config.standard_pikmin_radius * 2.0 + GROUP_SPOT_INTERVAL;
+            game.config.standard_pikmin_radius * 2.0 + MOB::GROUP_SPOT_INTERVAL;
             
         //Just calculate the remaining side of the triangle, now that we know
         //the hypotenuse and the actual diameter (one side of the triangle).

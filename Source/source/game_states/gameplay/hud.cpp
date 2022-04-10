@@ -17,8 +17,14 @@
 #include "gameplay.h"
 
 
+namespace HUD {
+//The Sun Meter's sun spins these many radians per second.
+const float SUN_METER_SUN_SPIN_SPEED = 0.5f;
+}
+
 //Path to the GUI information file.
-const string hud_struct::HUD_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
+const string hud_struct::HUD_FILE_NAME =
+    GUI_FOLDER_PATH + "/Gameplay.txt";
 //How long the leader swap juice animation lasts for.
 const float hud_struct::LEADER_SWAP_JUICE_DURATION = 0.7f;
 
@@ -250,7 +256,7 @@ hud_struct::hud_struct() :
         float dot_interval = dots_span / (float) n_hours;
         float sun_meter_sun_angle =
             game.states.gameplay->area_time_passed *
-            SUN_METER_SUN_SPIN_SPEED;
+            HUD::SUN_METER_SUN_SPIN_SPEED;
             
         //Larger bubbles at the start, middle and end of the meter.
         al_hold_bitmap_drawing(true);

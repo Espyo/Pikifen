@@ -21,6 +21,10 @@ class pikmin;
 
 using std::size_t;
 
+namespace LEADER {
+extern const float DEF_WHISTLE_RANGE;
+}
+
 
 /* ----------------------------------------------------------------------------
  * A leader controls Pikmin, and

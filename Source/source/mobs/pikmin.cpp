@@ -20,6 +20,17 @@
 #include "../utils/string_utils.h"
 #include "mob.h"
 
+namespace PIKMIN {
+//If the Pikmin is within this distance of the mob, it can ground attack.
+const float GROUNDED_ATTACK_DIST = 5.0f;
+//The idle glow spins these many radians per second.
+const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
+//How long a Pikmin that got knocked down stays on the floor for, if left alone.
+const float KNOCKED_DOWN_DURATION = 2.0f;
+//A whistled Pikmin that got knocked down loses this much in lie-down time.
+const float KNOCKED_DOWN_WHISTLE_BONUS = 1.3f;
+}
+
 
 //Height above the floor that a flying Pikmin prefers to stay at.
 const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 100.0f;
@@ -133,7 +144,8 @@ void pikmin::draw_mob() {
             (game.config.standard_pikmin_radius * 8) /
             al_get_bitmap_height(game.sys_assets.bmp_idle_glow);
         idle_eff.rotation =
-            game.states.gameplay->area_time_passed * IDLE_GLOW_SPIN_SPEED;
+            game.states.gameplay->area_time_passed *
+            PIKMIN::IDLE_GLOW_SPIN_SPEED;
         idle_eff.tint_color = type->main_color;
         idle_eff.glow_color = map_gray(0);
         
@@ -396,7 +408,7 @@ void pikmin::start_throw_trail() {
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(type->main_color, 128);
-    particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
+    particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     particle_generators.push_back(pg);

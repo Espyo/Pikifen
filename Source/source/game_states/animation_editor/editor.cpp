@@ -245,7 +245,7 @@ string animation_editor::get_name() const {
  *   The long path name.
  */
 string animation_editor::get_path_short_name(const string &p) const {
-    if(p.find(TYPES_FOLDER_PATH) != string::npos) {
+    if(p.find(MOB_TYPES_FOLDER_PATH) != string::npos) {
         vector<string> path_parts = split(p, "/");
         if(
             path_parts.size() > 3 &&
@@ -456,7 +456,7 @@ void animation_editor::load_animation_database(
     
     vector<string> file_path_parts = split(file_path, "/");
     
-    if(file_path.find(TYPES_FOLDER_PATH) != string::npos) {
+    if(file_path.find(MOB_TYPES_FOLDER_PATH) != string::npos) {
         vector<string> path_parts = split(file_path, "/");
         if(
             path_parts.size() > 3 &&
@@ -464,7 +464,8 @@ void animation_editor::load_animation_database(
         ) {
             mob_category* cat =
                 game.mob_categories.get_from_folder_name(
-                    TYPES_FOLDER_PATH + "/" + path_parts[path_parts.size() - 3]
+                    MOB_TYPES_FOLDER_PATH + "/" +
+                    path_parts[path_parts.size() - 3]
                 );
             if(cat) {
                 loaded_mob_type =

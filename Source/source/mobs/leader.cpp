@@ -17,6 +17,11 @@
 #include "../functions.h"
 #include "../game.h"
 
+namespace LEADER {
+//The whistle can't go past this radius, by default.
+const float DEF_WHISTLE_RANGE = 80.0f;
+}
+
 
 const float leader::AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
 const float leader::AUTO_THROW_COOLDOWN_MIN_DURATION =
@@ -82,11 +87,11 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
         const float PARTICLE_SPEED_MULT = 500.0f;
         const float PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
         particle p;
-        unsigned char color_idx = randomi(0, N_WHISTLE_DOT_COLORS);
+        unsigned char color_idx = randomi(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sys_assets.bmp_bright_circle;
-        p.color.r = WHISTLE_DOT_COLORS[color_idx][0] / 255.0f;
-        p.color.g = WHISTLE_DOT_COLORS[color_idx][1] / 255.0f;
-        p.color.b = WHISTLE_DOT_COLORS[color_idx][2] / 255.0f;
+        p.color.r = WHISTLE::DOT_COLORS[color_idx][0] / 255.0f;
+        p.color.g = WHISTLE::DOT_COLORS[color_idx][1] / 255.0f;
+        p.color.b = WHISTLE::DOT_COLORS[color_idx][2] / 255.0f;
         p.color.a = PARTICLE_ALPHA;
         p.duration = randomf(PARTICLE_MIN_DURATION, PARTICLE_MAX_DURATION);
         p.friction = PARTICLE_FRICTION;
@@ -453,7 +458,7 @@ void leader::dismiss() {
     
     //Final things.
     lea_type->sfx_dismiss.play(0, false);
-    const size_t N_DISMISS_PARTICLES = N_WHISTLE_DOT_COLORS * 3;
+    const size_t N_DISMISS_PARTICLES = WHISTLE::N_DOT_COLORS * 3;
     const float PARTICLE_ALPHA = 1.0f;
     const float PARTICLE_MIN_DURATION = 1.0f;
     const float PARTICLE_MAX_DURATION = 1.4f;
@@ -464,7 +469,7 @@ void leader::dismiss() {
     for(size_t p = 0; p < N_DISMISS_PARTICLES; ++p) {
         particle par;
         const unsigned char* color_idx =
-            WHISTLE_DOT_COLORS[p % N_WHISTLE_DOT_COLORS];
+            WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
         par.color.r = color_idx[0] / 255.0f;
         par.color.g = color_idx[1] / 255.0f;
         par.color.b = color_idx[2] / 255.0f;
@@ -570,7 +575,7 @@ void leader::get_group_spot_info(
             //If this member is also a leader,
             //then that means the current leader should stick behind.
             distance +=
-                member_ptr->radius * 2 + GROUP_SPOT_INTERVAL;
+                member_ptr->radius * 2 + MOB::GROUP_SPOT_INTERVAL;
         }
     }
     
@@ -707,7 +712,7 @@ void leader::start_throw_trail() {
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(type->main_color, 128);
-    particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
+    particle_generator pg(MOB::THROW_PARTICLE_INTERVAL, throw_p, 1);
     pg.follow_mob = this;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     particle_generators.push_back(pg);

@@ -1147,7 +1147,8 @@ void log_error(string s, data_node* d) {
     
     string prev_error_log;
     string line;
-    ALLEGRO_FILE* file_i = al_fopen(ERROR_LOG_FILE_PATH.c_str(), "r");
+    ALLEGRO_FILE* file_i =
+        al_fopen(ERROR_LOG_FILE_PATH.c_str(), "r");
     if(file_i) {
         while(!al_feof(file_i)) {
             getline(file_i, line);
@@ -1157,7 +1158,8 @@ void log_error(string s, data_node* d) {
         al_fclose(file_i);
     }
     
-    ALLEGRO_FILE* file_o = al_fopen(ERROR_LOG_FILE_PATH.c_str(), "w");
+    ALLEGRO_FILE* file_o =
+        al_fopen(ERROR_LOG_FILE_PATH.c_str(), "w");
     if(file_o) {
         al_fwrite(file_o, prev_error_log + s);
         al_fclose(file_o);
@@ -1435,7 +1437,7 @@ void save_maker_tools() {
             //The second ten indexes are the 0 - 9 keys.
             tool_key = i2s(k - 10);
         }
-        string tool_name = MAKER_TOOL_NAMES[game.maker_tools.keys[k]];
+        string tool_name = MAKER_TOOLS::NAMES[game.maker_tools.keys[k]];
         
         file.add(new data_node(tool_key, tool_name));
     }

@@ -25,6 +25,12 @@
 #include "onion_menu.h"
 #include "pause_menu.h"
 
+namespace GAMEPLAY {
+extern const float REPLAY_SAVE_FREQUENCY;
+extern const float TREE_SHADOW_SWAY_AMOUNT;
+extern const float TREE_SHADOW_SWAY_SPEED;
+}
+
 
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.

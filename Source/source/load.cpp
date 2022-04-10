@@ -1003,8 +1003,8 @@ void load_maker_tools() {
         }
         
         for(size_t t = 0; t < N_MAKER_TOOLS; ++t) {
-            if(tool_name == MAKER_TOOL_NAMES[t]) {
-                game.maker_tools.keys[k] = (MAKER_TOOLS) t;
+            if(tool_name == MAKER_TOOLS::NAMES[t]) {
+                game.maker_tools.keys[k] = (MAKER_TOOL_TYPES) t;
             }
         }
     }

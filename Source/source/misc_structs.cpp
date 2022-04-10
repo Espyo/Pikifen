@@ -21,6 +21,54 @@
 #include "load.h"
 #include "utils/string_utils.h"
 
+namespace WHISTLE {
+//R, G, and B components for each dot color.
+const unsigned char DOT_COLORS[N_DOT_COLORS][3] = {
+    {214, 25,  25 }, //Red.
+    {242, 134, 48 }, //Orange.
+    {143, 227, 58 }, //Lime.
+    {55,  222, 222}, //Cyan.
+    {30,  30,  219}, //Blue.
+    {133, 28,  237}, //Purple.
+};
+//Seconds that need to pass before another dot is added.
+const float DOT_INTERVAL = 0.03;
+//A whistle dot spins these many radians a second.
+const float DOT_SPIN_SPEED = TAU / 4;
+//Time the whistle animations take to fade out.
+const float FADE_TIME = 0.13f;
+//R, G, and B components for each ring color.
+const unsigned char RING_COLORS[N_RING_COLORS][3] = {
+    {255, 255, 0  },
+    {255, 0,   0  },
+    {255, 0,   255},
+    {128, 0,   255},
+    {0,   0,   255},
+    {0,   255, 255},
+    {0,   255, 0  },
+    {128, 255, 0  }
+};
+//Whistle rings move these many units per second.
+const float RING_SPEED = 600.0f;
+//Seconds that need to pass before another whistle ring appears.
+const float RINGS_INTERVAL = 0.1f;
+}
+
+namespace MAKER_TOOLS {
+//Internal names of each maker tool.
+const string NAMES[N_MAKER_TOOLS] = {
+    "",
+    "area_image",
+    "change_speed",
+    "geometry_info",
+    "hitboxes",
+    "hurt_mob",
+    "mob_info",
+    "new_pikmin",
+    "teleport"
+};
+}
+
 
 /* ----------------------------------------------------------------------------
  * Creates a new asset file name list struct.
@@ -833,7 +881,8 @@ void performance_monitor_struct::save_log() {
     
     //Finally, write the string to a file.
     string prev_log;
-    ALLEGRO_FILE* file_i = al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "r");
+    ALLEGRO_FILE* file_i =
+        al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "r");
     if(file_i) {
         string line;
         while(!al_feof(file_i)) {
@@ -844,7 +893,8 @@ void performance_monitor_struct::save_log() {
         al_fclose(file_i);
     }
     
-    ALLEGRO_FILE* file_o = al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "w");
+    ALLEGRO_FILE* file_o =
+        al_fopen(PERFORMANCE_LOG_FILE_PATH.c_str(), "w");
     if(file_o) {
         al_fwrite(file_o, prev_log + s);
         al_fclose(file_o);
@@ -1621,9 +1671,9 @@ void timer::tick(const float delta_t) {
 whistle_struct::whistle_struct() :
     radius(0.0f),
     fade_radius(0.0f),
-    fade_timer(WHISTLE_FADE_TIME),
-    next_dot_timer(WHISTLE_DOT_INTERVAL),
-    next_ring_timer(WHISTLE_RINGS_INTERVAL),
+    fade_timer(WHISTLE::FADE_TIME),
+    next_dot_timer(WHISTLE::DOT_INTERVAL),
+    next_ring_timer(WHISTLE::RINGS_INTERVAL),
     ring_prev_color(0),
     whistling(false) {
     
@@ -1652,7 +1702,7 @@ whistle_struct::whistle_struct() :
         rings.push_back(0);
         ring_colors.push_back(ring_prev_color);
         ring_prev_color =
-            sum_and_wrap(ring_prev_color, 1, N_WHISTLE_RING_COLORS);
+            sum_and_wrap(ring_prev_color, 1, WHISTLE::N_RING_COLORS);
     };
     
 }
@@ -1721,7 +1771,7 @@ void whistle_struct::tick(
     
     for(size_t r = 0; r < rings.size(); ) {
         //Erase rings that go beyond the cursor.
-        rings[r] += WHISTLE_RING_SPEED * delta_t;
+        rings[r] += WHISTLE::RING_SPEED * delta_t;
         if(leader_to_cursor_dist < rings[r]) {
             rings.erase(rings.begin() + r);
             ring_colors.erase(ring_colors.begin() + r);

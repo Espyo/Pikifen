@@ -24,7 +24,7 @@
  */
 leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS),
-    whistle_range(DEF_WHISTLE_RANGE),
+    whistle_range(LEADER::DEF_WHISTLE_RANGE),
     max_throw_height(0),
     bmp_icon(nullptr) {
     

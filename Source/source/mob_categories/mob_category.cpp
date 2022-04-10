@@ -13,6 +13,7 @@
 #include "mob_category.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_types/mob_type.h"
 #include "../mobs/mob.h"
 
@@ -41,7 +42,7 @@ mob_category::mob_category(
     name(name),
     id(id),
     plural_name(plural_name),
-    folder(TYPES_FOLDER_PATH + "/" + folder),
+    folder(MOB_TYPES_FOLDER_PATH + "/" + folder),
     editor_color(editor_color) {
     
 }

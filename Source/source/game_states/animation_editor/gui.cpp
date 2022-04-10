@@ -2080,7 +2080,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             process_gui_hitbox_hazards();
             
             break;
-
+            
         }  case HITBOX_TYPE_DISABLED: {
             break;
         }
