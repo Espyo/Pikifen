@@ -21,6 +21,13 @@ extern const float SUN_METER_SUN_SPIN_SPEED;
 }
 
 
+enum STANDBY_TYPE_RELATIONS {
+    STANDBY_TYPE_PREVIOUS = 0,
+    STANDBY_TYPE_CURRENT = 1,
+    STANDBY_TYPE_NEXT = 2,
+};
+
+
 /* ----------------------------------------------------------------------------
  * Manages the contents of "bubbles" in the HUD that have the ability to move
  * around, or fade in/out of existence, depending on what the player swapped,
@@ -100,24 +107,29 @@ struct hud_struct {
     //Current standby count.
     size_t standby_count_nr;
     //Standby count text. Cache for convenience.
-    gui_item* standby_count;
+    gui_item* standby_amount;
     //Current group count.
     size_t group_count_nr;
     //Group count text. Cache for convenience.
-    gui_item* group_count;
+    gui_item* group_amount;
     //Current field count.
     size_t field_count_nr;
     //Field count text. Cache for convenience.
-    gui_item* field_count;
+    gui_item* field_amount;
     //Current total count.
     size_t total_count_nr;
     //Total count text. Cache for convenience.
-    gui_item* total_count;
+    gui_item* total_amount;
     
     hud_struct();
     ~hud_struct();
     void start_leader_swap_juice();
     void tick(const float delta_t);
+    
+private:
+    void draw_standby_icon(
+        STANDBY_TYPE_RELATIONS which, const point &center, const point &size
+    );
 };
 
 

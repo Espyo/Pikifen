@@ -47,13 +47,13 @@ hud_struct::hud_struct() :
     spray_1_amount(nullptr),
     spray_2_amount(nullptr),
     standby_count_nr(0),
-    standby_count(nullptr),
+    standby_amount(nullptr),
     group_count_nr(0),
-    group_count(nullptr),
+    group_amount(nullptr),
     field_count_nr(0),
-    field_count(nullptr),
+    field_amount(nullptr),
     total_count_nr(0),
-    total_count(nullptr) {
+    total_amount(nullptr) {
     
     data_node hud_file_node(HUD_FILE_NAME);
     
@@ -66,19 +66,23 @@ hud_struct::hud_struct() :
     gui.register_coords("leader_1_health",       16, 90,  8, 10);
     gui.register_coords("leader_2_health",       12, 80,  5,  9);
     gui.register_coords("leader_3_health",       12, 72,  5,  9);
-    gui.register_coords("next_leader_button",     4, 83,  3,  3);
-    gui.register_coords("pikmin_standby_icon",   30, 91,  8, 10);
-    gui.register_coords("pikmin_standby_m_icon", 35, 88,  4,  8);
-    gui.register_coords("prev_pikmin_button",    27, 95,  3,  3);
-    gui.register_coords("next_pikmin_button",    33, 95,  3,  3);
-    gui.register_coords("pikmin_standby_x",      38, 91,  7,  8);
-    gui.register_coords("pikmin_standby_nr",     50, 91, 15, 10);
-    gui.register_coords("pikmin_group_nr",       73, 91, 15, 14);
-    gui.register_coords("pikmin_field_nr",       91, 91, 15, 14);
-    gui.register_coords("pikmin_total_nr",        0,  0,  0,  0);
-    gui.register_coords("pikmin_slash_1",        82, 91,  4,  8);
-    gui.register_coords("pikmin_slash_2",         0,  0,  0,  0);
-    gui.register_coords("pikmin_slash_3",         0,  0,  0,  0);
+    gui.register_coords("leader_next_button",     4, 83,  3,  3);
+    gui.register_coords("standby_icon",          30, 91,  8, 10);
+    gui.register_coords("standby_amount",        56, 91, 15, 10);
+    gui.register_coords("standby_bubble",        50, 91, 15, 10);
+    gui.register_coords("standby_maturity_icon", 35, 88,  4,  8);
+    gui.register_coords("standby_next_button",   27, 95,  3,  3);
+    gui.register_coords("standby_prev_button",   33, 95,  3,  3);
+    gui.register_coords("group_amount",          79, 91, 15, 14);
+    gui.register_coords("group_bubble",          73, 91, 15, 14);
+    gui.register_coords("field_amount",          97, 91, 15, 14);
+    gui.register_coords("field_bubble",          91, 91, 15, 14);
+    gui.register_coords("total_amount",           0,  0,  0,  0);
+    gui.register_coords("total_bubble",           0,  0,  0,  0);
+    gui.register_coords("counters_x",            38, 91,  7,  8);
+    gui.register_coords("counters_slash_1",      82, 91,  4,  8);
+    gui.register_coords("counters_slash_2",       0,  0,  0,  0);
+    gui.register_coords("counters_slash_3",       0,  0,  0,  0);
     gui.register_coords("spray_1_icon",           6, 36,  4,  7);
     gui.register_coords("spray_1_amount",        13, 37, 10,  5);
     gui.register_coords("spray_1_button",         4, 39,  3,  3);
@@ -218,8 +222,8 @@ hud_struct::hud_struct() :
     
     
     //Next leader button.
-    gui_item* next_leader_button = new gui_item();
-    next_leader_button->on_draw =
+    gui_item* leader_next_button = new gui_item();
+    leader_next_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
         if(game.states.gameplay->available_leaders.size() == 1) return;
@@ -227,7 +231,7 @@ hud_struct::hud_struct() :
         if(!c) return;
         draw_control_icon(game.fonts.slim, c, true, center, size);
     };
-    gui.add_item(next_leader_button, "next_leader_button");
+    gui.add_item(leader_next_button, "leader_next_button");
     
     
     //Sun Meter.
@@ -338,17 +342,17 @@ hud_struct::hud_struct() :
     
     
     //Day number bubble.
-    gui_item* day_nr_bubble = new gui_item();
-    day_nr_bubble->on_draw =
+    gui_item* day_bubble = new gui_item();
+    day_bubble->on_draw =
     [this] (const point & center, const point & size) {
         draw_bitmap_in_box(bmp_day_bubble, center, size);
     };
-    gui.add_item(day_nr_bubble, "day_bubble");
+    gui.add_item(day_bubble, "day_bubble");
     
     
     //Day number text.
-    gui_item* day_nr_text = new gui_item();
-    day_nr_text->on_draw =
+    gui_item* day_nr = new gui_item();
+    day_nr->on_draw =
     [this] (const point & center, const point & size) {
         draw_compressed_text(
             game.fonts.counter, COLOR_WHITE,
@@ -356,62 +360,50 @@ hud_struct::hud_struct() :
             size, i2s(game.states.gameplay->day)
         );
     };
-    gui.add_item(day_nr_text, "day_number");
+    gui.add_item(day_nr, "day_number");
     
     
     //Standby group member icon.
     gui_item* standby_icon = new gui_item();
     standby_icon->on_draw =
     [this] (const point & center, const point & size) {
-        //Standby group member preparations.
-        ALLEGRO_BITMAP* standby_bmp = NULL;
-        leader* l_ptr = game.states.gameplay->cur_leader_ptr;
-        if(
-            l_ptr &&
-            l_ptr->group->cur_standby_type &&
-            game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
-        ) {
-            SUBGROUP_TYPE_CATEGORIES c =
-                l_ptr->group->cur_standby_type->get_category();
-                
-            switch(c) {
-            case SUBGROUP_TYPE_CATEGORY_LEADER: {
-                leader* l_ptr =
-                    dynamic_cast<leader*>(
-                        game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
-                    );
-                standby_bmp = l_ptr->lea_type->bmp_icon;
-                break;
-                
-            } default: {
-                standby_bmp =
-                    l_ptr->group->cur_standby_type->get_icon();
-                break;
-                
-            }
-            }
-        }
-        if(!standby_bmp) {
-            standby_bmp = bmp_no_pikmin_bubble;
-        }
-        
-        draw_bitmap_in_box(standby_bmp, center, size * 0.8);
-        if(game.states.gameplay->closest_group_member_distant) {
-            draw_bitmap_in_box(
-                bmp_distant_pikmin_marker,
-                center,
-                size * 0.8
-            );
-        }
-        draw_bitmap_in_box(bmp_bubble, center, size);
-        
+        game.states.gameplay->hud->draw_standby_icon(
+            STANDBY_TYPE_CURRENT, center, size
+        );
     };
-    gui.add_item(standby_icon, "pikmin_standby_icon");
+    gui.add_item(standby_icon, "standby_icon");
+    standby_icon_mgr.register_bubble(STANDBY_TYPE_CURRENT, standby_icon);
+    
+    
+    //Next standby subgroup button.
+    gui_item* standby_next_button = new gui_item();
+    standby_next_button->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
+        if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
+        control_info* c = find_control(BUTTON_NEXT_TYPE);
+        if(!c) return;
+        draw_control_icon(game.fonts.slim, c, true, center, size);
+    };
+    gui.add_item(standby_next_button, "standby_next_button");
+    
+    
+    //Previous standby subgroup button.
+    gui_item* standby_prev_button = new gui_item();
+    standby_prev_button->on_draw =
+    [this] (const point & center, const point & size) {
+        if(!game.options.show_hud_controls) return;
+        if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
+        control_info* c = find_control(BUTTON_PREV_TYPE);
+        if(!c) return;
+        draw_control_icon(game.fonts.slim, c, true, center, size);
+    };
+    gui.add_item(standby_prev_button, "standby_prev_button");
     
     
     //Standby group member maturity.
-    gui_item* standby_maturity = new gui_item();
-    standby_maturity->on_draw =
+    gui_item* standby_maturity_icon = new gui_item();
+    standby_maturity_icon->on_draw =
     [this] (const point & center, const point & size) {
         //Standby group member preparations.
         ALLEGRO_BITMAP* standby_mat_bmp = NULL;
@@ -447,50 +439,25 @@ hud_struct::hud_struct() :
         }
         
     };
-    gui.add_item(standby_maturity, "pikmin_standby_m_icon");
+    gui.add_item(standby_maturity_icon, "standby_maturity_icon");
     
     
-    //Previous Pikmin button.
-    gui_item* prev_pikmin_button = new gui_item();
-    prev_pikmin_button->on_draw =
+    //Standby subgroup member amount bubble.
+    gui_item* standby_bubble = new gui_item();
+    standby_bubble->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
-        if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
-        control_info* c = find_control(BUTTON_PREV_TYPE);
-        if(!c) return;
-        draw_control_icon(game.fonts.slim, c, true, center, size);
-    };
-    gui.add_item(prev_pikmin_button, "prev_pikmin_button");
-    
-    
-    //Next Pikmin button.
-    gui_item* next_pikmin_button = new gui_item();
-    next_pikmin_button->on_draw =
-    [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
-        if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
-        control_info* c = find_control(BUTTON_NEXT_TYPE);
-        if(!c) return;
-        draw_control_icon(game.fonts.slim, c, true, center, size);
-    };
-    gui.add_item(next_pikmin_button, "next_pikmin_button");
-    
-    
-    //Pikmin count "x".
-    gui_item* pikmin_count_x = new gui_item();
-    pikmin_count_x->on_draw =
-    [this] (const point & center, const point & size) {
-        draw_compressed_text(
-            game.fonts.counter, COLOR_WHITE,
-            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "x"
+        draw_bitmap(
+            bmp_counter_bubble_standby,
+            center,
+            size
         );
     };
-    gui.add_item(pikmin_count_x, "pikmin_standby_x");
+    gui.add_item(standby_bubble, "standby_bubble");
     
     
-    //Standby group member count.
-    standby_count = new gui_item();
-    standby_count->on_draw =
+    //Standby subgroup member amount.
+    standby_amount = new gui_item();
+    standby_amount->on_draw =
     [this] (const point & center, const point & size) {
         size_t n_standby_pikmin = 0;
         leader* l_ptr = game.states.gameplay->cur_leader_ptr;
@@ -504,31 +471,39 @@ hud_struct::hud_struct() :
         }
         
         if(n_standby_pikmin != standby_count_nr) {
-            standby_count->start_juice_animation(
+            standby_amount->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             standby_count_nr = n_standby_pikmin;
         }
         
-        draw_bitmap(
-            bmp_counter_bubble_standby,
-            center,
-            size
-        );
         draw_compressed_scaled_text(
             game.fonts.counter, COLOR_WHITE,
-            point(center.x + size.x * 0.4, center.y),
-            point(1.0f, 1.0f) + standby_count->get_juice_value(),
+            center,
+            point(1.0f, 1.0f) + standby_amount->get_juice_value(),
             ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
             size * 0.7, true, i2s(n_standby_pikmin)
         );
     };
-    gui.add_item(standby_count, "pikmin_standby_nr");
+    gui.add_item(standby_amount, "standby_amount");
     
     
-    //Group Pikmin count.
-    group_count = new gui_item();
-    group_count->on_draw =
+    //Group Pikmin amount bubble.
+    gui_item* group_bubble = new gui_item();
+    group_bubble->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_bitmap(
+            bmp_counter_bubble_group,
+            center,
+            size
+        );
+    };
+    gui.add_item(group_bubble, "group_bubble");
+    
+    
+    //Group Pikmin amount.
+    group_amount = new gui_item();
+    group_amount->on_draw =
     [this] (const point & center, const point & size) {
         size_t n_group_pikmin =
             game.states.gameplay->cur_leader_ptr->group->members.size();
@@ -545,61 +520,77 @@ hud_struct::hud_struct() :
         }
         
         if(n_group_pikmin != group_count_nr) {
-            group_count->start_juice_animation(
+            group_amount->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             group_count_nr = n_group_pikmin;
         }
         
-        draw_bitmap(
-            bmp_counter_bubble_group,
-            center,
-            size
-        );
         draw_compressed_scaled_text(
             game.fonts.counter, COLOR_WHITE,
-            point(center.x + size.x * 0.4, center.y),
-            point(1.0f, 1.0f) + group_count->get_juice_value(),
+            center,
+            point(1.0f, 1.0f) + group_amount->get_juice_value(),
             ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
             size * 0.7, true,
             i2s(n_group_pikmin)
         );
     };
-    gui.add_item(group_count, "pikmin_group_nr");
+    gui.add_item(group_amount, "group_amount");
     
     
-    //Field Pikmin count.
-    field_count = new gui_item();
-    field_count->on_draw =
+    //Field Pikmin amount bubble.
+    gui_item* field_bubble = new gui_item();
+    field_bubble->on_draw =
     [this] (const point & center, const point & size) {
-        size_t n_field_pikmin = game.states.gameplay->mobs.pikmin_list.size();
-        if(n_field_pikmin != field_count_nr) {
-            field_count->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-            );
-            field_count_nr = n_field_pikmin;
-        }
-        
         draw_bitmap(
             bmp_counter_bubble_field,
             center,
             size
         );
+    };
+    gui.add_item(field_bubble, "field_bubble");
+    
+    
+    //Field Pikmin amount.
+    field_amount = new gui_item();
+    field_amount->on_draw =
+    [this] (const point & center, const point & size) {
+        size_t n_field_pikmin = game.states.gameplay->mobs.pikmin_list.size();
+        if(n_field_pikmin != field_count_nr) {
+            field_amount->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+            );
+            field_count_nr = n_field_pikmin;
+        }
+        
         draw_compressed_scaled_text(
             game.fonts.counter, COLOR_WHITE,
-            point(center.x + size.x * 0.4, center.y),
-            point(1.0f, 1.0f) + field_count->get_juice_value(),
+            center,
+            point(1.0f, 1.0f) + field_amount->get_juice_value(),
             ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
             size * 0.7, true,
             i2s(n_field_pikmin)
         );
     };
-    gui.add_item(field_count, "pikmin_field_nr");
+    gui.add_item(field_amount, "field_amount");
     
     
-    //Total Pikmin count.
-    total_count = new gui_item();
-    total_count->on_draw =
+    //Total Pikmin amount bubble.
+    gui_item* total_bubble = new gui_item();
+    total_bubble->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_bitmap(
+            bmp_counter_bubble_total,
+            center,
+            size
+        );
+    };
+    gui.add_item(total_bubble, "total_bubble");
+    
+    
+    //Total Pikmin amount.
+    total_amount = new gui_item();
+    total_amount->on_draw =
     [this] (const point & center, const point & size) {
         size_t n_total_pikmin = game.states.gameplay->mobs.pikmin_list.size();
         for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
@@ -616,27 +607,34 @@ hud_struct::hud_struct() :
         }
         
         if(n_total_pikmin != total_count_nr) {
-            total_count->start_juice_animation(
+            total_amount->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             total_count_nr = n_total_pikmin;
         }
         
-        draw_bitmap(
-            bmp_counter_bubble_total,
-            center,
-            size
-        );
         draw_compressed_scaled_text(
             game.fonts.counter, COLOR_WHITE,
-            point(center.x + size.x * 0.4, center.y),
-            point(1.0f, 1.0f) + total_count->get_juice_value(),
+            center,
+            point(1.0f, 1.0f) + total_amount->get_juice_value(),
             ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
             size * 0.7, true,
             i2s(n_total_pikmin)
         );
     };
-    gui.add_item(total_count, "pikmin_total_nr");
+    gui.add_item(total_amount, "total_amount");
+    
+    
+    //Pikmin counter "x".
+    gui_item* counters_x = new gui_item();
+    counters_x->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_compressed_text(
+            game.fonts.counter, COLOR_WHITE,
+            center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "x"
+        );
+    };
+    gui.add_item(counters_x, "counters_x");
     
     
     //Pikmin counter slashes.
@@ -649,7 +647,7 @@ hud_struct::hud_struct() :
                 center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "/"
             );
         };
-        gui.add_item(counter_slash, "pikmin_slash_" + i2s(s + 1));
+        gui.add_item(counter_slash, "counters_slash_" + i2s(s + 1));
     }
     
     
@@ -886,6 +884,90 @@ hud_struct::~hud_struct() {
     game.bitmaps.detach(bmp_no_pikmin_bubble);
     game.bitmaps.detach(bmp_sun);
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to draw a standby icon with.
+ * which:
+ *   Which standby icon to draw -- the previous type's, the current type's,
+ *   or the next type's.
+ * center:
+ *   Center point to draw at.
+ * size:
+ *   Width and height to draw at.
+ */
+void hud_struct::draw_standby_icon(
+    STANDBY_TYPE_RELATIONS which, const point &center, const point &size
+) {
+    ALLEGRO_BITMAP* standby_bmp = NULL;
+    leader* cur_leader_ptr = game.states.gameplay->cur_leader_ptr;
+    mob* member = game.states.gameplay->closest_group_member[which];
+    subgroup_type* type = NULL;
+    
+    switch(which) {
+    case STANDBY_TYPE_PREVIOUS: {
+        subgroup_type* prev_type;
+        cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
+        subgroup_type* next_type;
+        cur_leader_ptr->group->get_next_standby_type(false, &next_type);
+        if(
+            prev_type != cur_leader_ptr->group->cur_standby_type &&
+            prev_type != next_type
+        ) {
+            type = prev_type;
+        }
+        break;
+    }
+    case STANDBY_TYPE_CURRENT: {
+        type = cur_leader_ptr->group->cur_standby_type;
+        break;
+    }
+    case STANDBY_TYPE_NEXT: {
+        subgroup_type* next_type;
+        cur_leader_ptr->group->get_next_standby_type(false, &next_type);
+        if(next_type != cur_leader_ptr->group->cur_standby_type) {
+            type = next_type;
+        }
+        break;
+    }
+    }
+    
+    if(cur_leader_ptr && type && member) {
+        SUBGROUP_TYPE_CATEGORIES cat = type->get_category();
+        
+        switch(cat) {
+        case SUBGROUP_TYPE_CATEGORY_LEADER: {
+            leader* l_ptr = dynamic_cast<leader*>(member);
+            standby_bmp = l_ptr->lea_type->bmp_icon;
+            break;
+        } default: {
+            standby_bmp = type->get_icon();
+            break;
+        }
+        }
+    }
+    
+    if(!standby_bmp && which == STANDBY_TYPE_CURRENT) {
+        standby_bmp = bmp_no_pikmin_bubble;
+    }
+    
+    if(!standby_bmp) return;
+    
+    draw_bitmap_in_box(standby_bmp, center, size * 0.8);
+    
+    if(
+        game.states.gameplay->closest_group_member_distant &&
+        which == STANDBY_TYPE_CURRENT
+    ) {
+        draw_bitmap_in_box(
+            bmp_distant_pikmin_marker,
+            center,
+            size * 0.8
+        );
+    }
+    
+    draw_bitmap_in_box(bmp_bubble, center, size);
 }
 
 

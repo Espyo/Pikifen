@@ -31,13 +31,6 @@ extern const float TREE_SHADOW_SWAY_AMOUNT;
 extern const float TREE_SHADOW_SWAY_SPEED;
 }
 
-enum STANDBY_TYPE_RELATIONS {
-    STANDBY_TYPE_PREVIOUS = 0,
-    STANDBY_TYPE_CURRENT = 1,
-    STANDBY_TYPE_NEXT = 2,
-};
-
-
 /* ----------------------------------------------------------------------------
  * Standard gameplay state. This is where the action happens.
  */

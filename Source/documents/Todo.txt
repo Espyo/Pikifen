@@ -437,10 +437,17 @@ Next tasks (roughly sorted most important first)
                 In the canon games, delivering once is enough, but if the amount of captures is higher than 1, the flag should respawn in its original location after being captured
                 For the area to be compatible with this mode, it must determine what the flag object is
                 While the area data can determine a default victory amount, the rules can override it
-            Bingo
-                Each team has a bingo card. First team to collect enough things to score a line wins
-                For the area to be compatible with this mode, it must determine which objects are elligible to belong in the bingo cell universe
-                If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
+            Objective Hunt
+                Each team has a card with objectives, which can be the same for all teams, or different
+                    Bingo rules:
+                        All teams have different cards
+                        First team to collect enough things to score a line wins
+                        If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
+                    Lockout rules:
+                        All teams have the same card
+                        When an objective is completed, it's claimed by that team and is no longer possible to obtain
+                For the area to be compatible with this mode, it must determine which objects are elligible to belong in the objective cell universe
+                [NEEDS BRAINSTORMING] Maybe more objectives than just "Kill an X"?
             Point capture?
                 When a Pikmin is on top of a point, it slowly captures for that team, a la TF2. The more Pikmin, the quicker it captures
             Build a Wonder?
