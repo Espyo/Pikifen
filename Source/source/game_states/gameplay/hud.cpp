@@ -67,19 +67,21 @@ hud_struct::hud_struct() :
     gui.register_coords("leader_2_health",       12, 80,  5,  9);
     gui.register_coords("leader_3_health",       12, 72,  5,  9);
     gui.register_coords("leader_next_button",     4, 83,  3,  3);
-    gui.register_coords("standby_icon",          30, 91,  8, 10);
-    gui.register_coords("standby_amount",        56, 91, 15, 10);
-    gui.register_coords("standby_bubble",        50, 91, 15, 10);
-    gui.register_coords("standby_maturity_icon", 35, 88,  4,  8);
-    gui.register_coords("standby_next_button",   27, 95,  3,  3);
-    gui.register_coords("standby_prev_button",   33, 95,  3,  3);
-    gui.register_coords("group_amount",          79, 91, 15, 14);
+    gui.register_coords("standby_icon",          50, 91,  8, 10);
+    gui.register_coords("standby_amount",        50, 96, 15,  8);
+    gui.register_coords("standby_bubble",         0,  0,  0,  0);
+    gui.register_coords("standby_maturity_icon", 54, 88,  4,  8);
+    gui.register_coords("standby_next_icon",     58, 93,  6,  8);
+    gui.register_coords("standby_next_button",   60, 96,  3,  3);
+    gui.register_coords("standby_prev_icon",     42, 93,  6,  8);
+    gui.register_coords("standby_prev_button",   40, 96,  3,  3);
+    gui.register_coords("group_amount",          73, 91, 15, 14);
     gui.register_coords("group_bubble",          73, 91, 15, 14);
-    gui.register_coords("field_amount",          97, 91, 15, 14);
+    gui.register_coords("field_amount",          91, 91, 15, 14);
     gui.register_coords("field_bubble",          91, 91, 15, 14);
     gui.register_coords("total_amount",           0,  0,  0,  0);
     gui.register_coords("total_bubble",           0,  0,  0,  0);
-    gui.register_coords("counters_x",            38, 91,  7,  8);
+    gui.register_coords("counters_x",             0,  0,  0,  0);
     gui.register_coords("counters_slash_1",      82, 91,  4,  8);
     gui.register_coords("counters_slash_2",       0,  0,  0,  0);
     gui.register_coords("counters_slash_3",       0,  0,  0,  0);
@@ -375,12 +377,33 @@ hud_struct::hud_struct() :
     standby_icon_mgr.register_bubble(STANDBY_TYPE_CURRENT, standby_icon);
     
     
+    //Next standby subgroup icon.
+    gui_item* standby_next_icon = new gui_item();
+    standby_next_icon->on_draw =
+    [this] (const point & center, const point & size) {
+        game.states.gameplay->hud->draw_standby_icon(
+            STANDBY_TYPE_NEXT, center, size
+        );
+    };
+    gui.add_item(standby_next_icon, "standby_next_icon");
+    standby_icon_mgr.register_bubble(STANDBY_TYPE_NEXT, standby_next_icon);
+    
+    
     //Next standby subgroup button.
     gui_item* standby_next_button = new gui_item();
     standby_next_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
-        if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
+        subgroup_type* next_type;
+        game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
+            false, &next_type
+        );
+        if(
+            next_type ==
+            game.states.gameplay->cur_leader_ptr->group->cur_standby_type
+        ) {
+            return;
+        }
         control_info* c = find_control(BUTTON_NEXT_TYPE);
         if(!c) return;
         draw_control_icon(game.fonts.slim, c, true, center, size);
@@ -388,12 +411,38 @@ hud_struct::hud_struct() :
     gui.add_item(standby_next_button, "standby_next_button");
     
     
+    //Previous standby subgroup icon.
+    gui_item* standby_prev_icon = new gui_item();
+    standby_prev_icon->on_draw =
+    [this] (const point & center, const point & size) {
+        game.states.gameplay->hud->draw_standby_icon(
+            STANDBY_TYPE_PREVIOUS, center, size
+        );
+    };
+    gui.add_item(standby_prev_icon, "standby_prev_icon");
+    standby_icon_mgr.register_bubble(STANDBY_TYPE_PREVIOUS, standby_prev_icon);
+    
+    
     //Previous standby subgroup button.
     gui_item* standby_prev_button = new gui_item();
     standby_prev_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
-        if(game.states.gameplay->cur_leader_ptr->group->members.empty()) return;
+        subgroup_type* prev_type;
+        game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
+            true, &prev_type
+        );
+        subgroup_type* next_type;
+        game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
+            false, &next_type
+        );
+        if(
+            prev_type ==
+            game.states.gameplay->cur_leader_ptr->group->cur_standby_type ||
+            prev_type == next_type
+        ) {
+            return;
+        }
         control_info* c = find_control(BUTTON_PREV_TYPE);
         if(!c) return;
         draw_control_icon(game.fonts.slim, c, true, center, size);
@@ -481,7 +530,7 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + standby_amount->get_juice_value(),
-            ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size * 0.7, true, i2s(n_standby_pikmin)
         );
     };
@@ -530,7 +579,7 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + group_amount->get_juice_value(),
-            ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size * 0.7, true,
             i2s(n_group_pikmin)
         );
@@ -567,7 +616,7 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + field_amount->get_juice_value(),
-            ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size * 0.7, true,
             i2s(n_field_pikmin)
         );
@@ -617,7 +666,7 @@ hud_struct::hud_struct() :
             game.fonts.counter, COLOR_WHITE,
             center,
             point(1.0f, 1.0f) + total_amount->get_juice_value(),
-            ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size * 0.7, true,
             i2s(n_total_pikmin)
         );

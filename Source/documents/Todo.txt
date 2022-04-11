@@ -2,19 +2,15 @@
     
     
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Standby Pikmin
+        Pikmin type swapping should make the bubbles slide into place
+        Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.22.0 ---
     HUD improvements
-        Standby Pikmin
-            The standby Pikmin type bubble should have bubbles nearby for the previous and next
-				Move the swapping buttons to the correct spots
-				This means the game needs to keep track of the closest mob of the previous and next standby type
-            Pikmin type swapping should make the bubbles slide into place
-            Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
         Spray swapping should make the icons slide into place
         Hide spray-related and standby-related items when not needed, after some seconds
         Message box text should be juicier
