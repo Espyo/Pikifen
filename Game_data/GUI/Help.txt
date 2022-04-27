@@ -33,6 +33,8 @@ tidbits {
         Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.
         Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.
         Getting up;If a Pikmin got knocked back, is lying on the floor, and about to be attacked, whistle it to make it get up faster.
+        Pikmin counters;Use the counters at the bottom of the HUD to keep an eye on Pikmin counts. These only count Pikmin, though the amount ready at standby can also refer to leaders if you have any selected.
+        Limited time;There are only so many minutes in a day. Keep your eye on the Sun Meter at the top of the screen to make sure you do everything you need to before the day ends.
         Goal;There is no overarching goal yet, but try defeating as many enemies and gather as many goodies as you can! A results screen will show you how you did after you finish the area via the pause menu.
     }
     controls {

@@ -265,6 +265,9 @@ void gameplay_state::do_gameplay_logic() {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
             m_ptr->tick(game.delta_t);
+            if(!cur_leader_ptr) {
+                return;
+            }
             if(!m_ptr->stored_inside_another) {
                 process_mob_interactions(m_ptr, m);
             }

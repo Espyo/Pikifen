@@ -79,6 +79,7 @@ public:
     
 private:
 
+    //Represents a suggested texture.
     struct texture_suggestion {
         //Bitmap of the texture.
         ALLEGRO_BITMAP* bmp;

@@ -2,18 +2,10 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Standby Pikmin
-        Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
-        Standardize the names in the HUD txt file, and the names of the variables of the GUI items
-    Test what happens if a dweevil picks up a lying leader, and said lying leader wakes up
-    Add tidbits about the HUD items to the in-game help
-		The tidbit about there being no point and merely a time limit should refer to the Sun Meter
-		"Use the counters at the bottom of the HUD to keep an eye on Pikmin counts. These only count Pikmin, though the amount ready at standby can also refer to leaders if you have any selected."
     
+
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Killing all leaders results in a SIGSEGV
-    If the path is segmented, the Pikmin will fail to carry, even if the "Show calculated path" option doesn't?
     
     --- v0.22.0 ---
     HUD improvements
@@ -755,6 +747,7 @@ Misc things (so I don't forget)
         Additive blending and normal blending
         Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
     HUD element for a digital clock?
+    Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
         Maker tools should be bound to buttons in the same way the regular controls are, instead of being stuck in the number and F keys

@@ -39,6 +39,7 @@ enum HUD_BUBBLE_MOVE_METHODS {
 template<typename t>
 struct hud_bubble_manager {
 public:
+    //Represents a bubble GUI item.
     struct bubble_info {
         //GUI item.
         gui_item* bubble;
@@ -64,8 +65,11 @@ public:
         }
     };
     
+    //GUI manager the HUD belongs to.
     gui_manager* hud;
+    //How long a transition lasts for.
     float transition_duration;
+    //How to move the bubbles around during a transition.
     HUD_BUBBLE_MOVE_METHODS move_method;
     
     /* -------------------------------------------------------------------------
@@ -81,27 +85,13 @@ public:
     }
     
     /* -------------------------------------------------------------------------
-    * Returns the content of a bubble.
-    * Returns NULL if anything goes wrong.
-    * number:
-    *   Number of the registered bubble.
-    */
-    t get_content(const size_t number) {
-        t content;
-        content.p = NULL;
-        auto it = bubbles.find(number);
-        if(it != bubbles.end()) content = it->second.content;
-        return content;
-    }
-    
-    /* -------------------------------------------------------------------------
     * Returns the necessary information for the bubble to know how
     * to draw itself.
     * number:
     *   Number of the registered bubble.
     * content:
     *   The content the bubble should use is returned here.
-    *   NULL is returned on error.
+    *   A default-constructed object is returned on error.
     * pos:
     *   The final position it should use is returned here.
     * size:
@@ -134,7 +124,6 @@ public:
         point match_pos;
         point match_size;
         
-        //if(it->second.ref && it->second.pre_transition_ref) {
         //First, check if there's any matching bubble that
         //we can move to/from.
         for(
@@ -164,7 +153,7 @@ public:
                 break;
             }
         }
-        //}
+        
         if(match_it != bubbles.end()) {
             match_ptr = match_it->second.bubble;
             if(
@@ -273,21 +262,6 @@ public:
     
     
     /* -------------------------------------------------------------------------
-    * Returns the content of with a bubble, before a transition
-    * was started.
-    * Returns NULL if anything goes wrong.
-    * number:
-    *   Number of the registered bubble.
-    */
-    t get_pre_transition_content(const size_t number) {
-        t content;
-        content.p = NULL;
-        auto it = bubbles.find(number);
-        if(it != bubbles.end()) content = it->second.pre_transition_content;
-        return content;
-    }
-    
-    /* -------------------------------------------------------------------------
     * Registers a bubble.
     * bubble:
     *   GUI item that represents this bubble.
@@ -337,8 +311,11 @@ public:
     }
     
 private:
+    //List of all registered bubble GUI items.
     map<size_t, bubble_info> bubbles;
+    //Time left in the current transition, or 0 if none.
     float transition_timer;
+    //Have we set each bubble's "pre-transition" class members yet?
     bool transition_is_setup;
     
 };

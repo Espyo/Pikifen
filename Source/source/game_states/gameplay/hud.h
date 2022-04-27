@@ -37,13 +37,28 @@ struct hud_struct {
     static const float LEADER_SWAP_JUICE_DURATION;
     static const float STANDBY_SWAP_JUICE_DURATION;
     
+    //Bitmap and color of a leader's icon.
     struct leader_icon_bubble {
+        //Leader icon bitmap.
         ALLEGRO_BITMAP* bmp;
+        //Leader icon color.
         ALLEGRO_COLOR color;
+        //Constructor.
+        leader_icon_bubble() :
+            bmp(NULL),
+            color(COLOR_EMPTY) {}
     };
+    
+    //Health ratio and caution animation timer of a leader's health.
     struct leader_health_bubble {
+        //Ratio of health left in the health wheel.
         float ratio;
+        //Timer for the low-health caution animation.
         float caution_timer;
+        //Constructor.
+        leader_health_bubble() :
+            ratio(0.0f),
+            caution_timer(0.0f) {}
     };
     
     //GUI manager.
