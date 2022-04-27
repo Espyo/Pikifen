@@ -27,6 +27,8 @@ const string hud_struct::HUD_FILE_NAME =
     GUI_FOLDER_PATH + "/Gameplay.txt";
 //How long the leader swap juice animation lasts for.
 const float hud_struct::LEADER_SWAP_JUICE_DURATION = 0.7f;
+//How long the standby swap juice animation lasts for.
+const float hud_struct::STANDBY_SWAP_JUICE_DURATION = 0.5f;
 
 
 /* ----------------------------------------------------------------------------
@@ -43,7 +45,9 @@ hud_struct::hud_struct() :
     bmp_hard_bubble(nullptr),
     bmp_no_pikmin_bubble(nullptr),
     bmp_sun(nullptr),
-    leader_swap_juice_timer(0.0f),
+    leader_icon_mgr(&gui),
+    leader_health_mgr(&gui),
+    standby_icon_mgr(&gui),
     spray_1_amount(nullptr),
     spray_2_amount(nullptr),
     standby_count_nr(0),
@@ -104,37 +108,25 @@ hud_struct::hud_struct() :
         gui_item* leader_icon = new gui_item();
         leader_icon->on_draw =
         [this, l] (const point & center, const point & size) {
-            void* l_ptr;
+            leader_icon_bubble icon;
             point final_center;
             point final_size;
             game.states.gameplay->hud->leader_icon_mgr.get_drawing_info(
-                l,
-                game.states.gameplay->hud->leader_swap_juice_timer /
-                LEADER_SWAP_JUICE_DURATION,
-                &l_ptr, &final_center, &final_size
+                l, &icon, &final_center, &final_size
             );
             
-            if(
-                std::find(
-                    game.states.gameplay->available_leaders.begin(),
-                    game.states.gameplay->available_leaders.end(),
-                    l_ptr
-                ) ==
-                game.states.gameplay->available_leaders.end()
-            ) {
-                return;
-            }
+            if(!icon.bmp) return;
             
             al_draw_filled_circle(
                 final_center.x, final_center.y,
                 std::min(final_size.x, final_size.y) / 2.0f,
                 change_alpha(
-                    ((leader*) l_ptr)->type->main_color,
+                    icon.color,
                     128
                 )
             );
             draw_bitmap_in_box(
-                ((leader*) l_ptr)->lea_type->bmp_icon,
+                icon.bmp,
                 final_center, final_size
             );
             draw_bitmap_in_box(
@@ -150,44 +142,32 @@ hud_struct::hud_struct() :
         gui_item* leader_health = new gui_item();
         leader_health->on_draw =
         [this, l] (const point & center, const point & size) {
-            void* l_ptr;
+            leader_health_bubble health;
             point final_center;
             point final_size;
             game.states.gameplay->hud->leader_health_mgr.get_drawing_info(
-                l,
-                game.states.gameplay->hud->leader_swap_juice_timer /
-                LEADER_SWAP_JUICE_DURATION,
-                &l_ptr, &final_center, &final_size
+                l, &health, &final_center, &final_size
             );
             
-            if(
-                std::find(
-                    game.states.gameplay->available_leaders.begin(),
-                    game.states.gameplay->available_leaders.end(),
-                    l_ptr
-                ) ==
-                game.states.gameplay->available_leaders.end()
-            ) {
-                return;
-            }
+            if(health.ratio <= 0.0f) return;
             
-            if(((leader*) l_ptr)->health_wheel_caution_timer > 0.0f) {
+            if(health.caution_timer > 0.0f) {
                 float caution_ring_scale =
                     interpolate_number(
-                        ((leader*) l_ptr)->health_wheel_caution_timer,
+                        health.caution_timer,
                         0.0f, leader::HEALTH_CAUTION_RING_DURATION,
                         1.0f, 2.0f
                     );
                 unsigned char caution_ring_alpha =
-                    ((leader*) l_ptr)->health_wheel_caution_timer <
+                    health.caution_timer <
                     leader::HEALTH_CAUTION_RING_DURATION / 2.0f ?
                     interpolate_number(
-                        ((leader*) l_ptr)->health_wheel_caution_timer,
+                        health.caution_timer,
                         0.0f, leader::HEALTH_CAUTION_RING_DURATION / 2.0f,
                         0.0f, 192
                     ) :
                     interpolate_number(
-                        ((leader*) l_ptr)->health_wheel_caution_timer,
+                        health.caution_timer,
                         leader::HEALTH_CAUTION_RING_DURATION / 2.0f,
                         leader::HEALTH_CAUTION_RING_DURATION,
                         192, 0
@@ -206,7 +186,7 @@ hud_struct::hud_struct() :
             
             draw_health(
                 final_center,
-                ((leader*) l_ptr)->health_wheel_visible_ratio,
+                health.ratio,
                 1.0f,
                 std::min(final_size.x, final_size.y) * 0.47f,
                 true
@@ -369,9 +349,7 @@ hud_struct::hud_struct() :
     gui_item* standby_icon = new gui_item();
     standby_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(
-            STANDBY_TYPE_CURRENT, center, size
-        );
+        game.states.gameplay->hud->draw_standby_icon(STANDBY_TYPE_CURRENT);
     };
     gui.add_item(standby_icon, "standby_icon");
     standby_icon_mgr.register_bubble(STANDBY_TYPE_CURRENT, standby_icon);
@@ -381,9 +359,7 @@ hud_struct::hud_struct() :
     gui_item* standby_next_icon = new gui_item();
     standby_next_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(
-            STANDBY_TYPE_NEXT, center, size
-        );
+        game.states.gameplay->hud->draw_standby_icon(STANDBY_TYPE_NEXT);
     };
     gui.add_item(standby_next_icon, "standby_next_icon");
     standby_icon_mgr.register_bubble(STANDBY_TYPE_NEXT, standby_next_icon);
@@ -415,9 +391,7 @@ hud_struct::hud_struct() :
     gui_item* standby_prev_icon = new gui_item();
     standby_prev_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(
-            STANDBY_TYPE_PREVIOUS, center, size
-        );
+        game.states.gameplay->hud->draw_standby_icon(STANDBY_TYPE_PREVIOUS);
     };
     gui.add_item(standby_prev_icon, "standby_prev_icon");
     standby_icon_mgr.register_bubble(STANDBY_TYPE_PREVIOUS, standby_prev_icon);
@@ -915,6 +889,12 @@ hud_struct::hud_struct() :
     
 #undef loader
     
+    leader_icon_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_CIRCLE;
+    leader_icon_mgr.transition_duration = LEADER_SWAP_JUICE_DURATION;
+    leader_health_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_CIRCLE;
+    leader_health_mgr.transition_duration = LEADER_SWAP_JUICE_DURATION;
+    standby_icon_mgr.transition_duration = STANDBY_SWAP_JUICE_DURATION;
+    
 }
 
 
@@ -941,69 +921,18 @@ hud_struct::~hud_struct() {
  * which:
  *   Which standby icon to draw -- the previous type's, the current type's,
  *   or the next type's.
- * center:
- *   Center point to draw at.
- * size:
- *   Width and height to draw at.
  */
-void hud_struct::draw_standby_icon(
-    STANDBY_TYPE_RELATIONS which, const point &center, const point &size
-) {
-    ALLEGRO_BITMAP* standby_bmp = NULL;
-    leader* cur_leader_ptr = game.states.gameplay->cur_leader_ptr;
-    mob* member = game.states.gameplay->closest_group_member[which];
-    subgroup_type* type = NULL;
+void hud_struct::draw_standby_icon(STANDBY_TYPE_RELATIONS which) {
+    point final_center;
+    point final_size;
+    ALLEGRO_BITMAP* icon;
+    game.states.gameplay->hud->standby_icon_mgr.get_drawing_info(
+        which, &icon, &final_center, &final_size
+    );
     
-    switch(which) {
-    case STANDBY_TYPE_PREVIOUS: {
-        subgroup_type* prev_type;
-        cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
-        subgroup_type* next_type;
-        cur_leader_ptr->group->get_next_standby_type(false, &next_type);
-        if(
-            prev_type != cur_leader_ptr->group->cur_standby_type &&
-            prev_type != next_type
-        ) {
-            type = prev_type;
-        }
-        break;
-    }
-    case STANDBY_TYPE_CURRENT: {
-        type = cur_leader_ptr->group->cur_standby_type;
-        break;
-    }
-    case STANDBY_TYPE_NEXT: {
-        subgroup_type* next_type;
-        cur_leader_ptr->group->get_next_standby_type(false, &next_type);
-        if(next_type != cur_leader_ptr->group->cur_standby_type) {
-            type = next_type;
-        }
-        break;
-    }
-    }
+    if(!icon) return;
     
-    if(cur_leader_ptr && type && member) {
-        SUBGROUP_TYPE_CATEGORIES cat = type->get_category();
-        
-        switch(cat) {
-        case SUBGROUP_TYPE_CATEGORY_LEADER: {
-            leader* l_ptr = dynamic_cast<leader*>(member);
-            standby_bmp = l_ptr->lea_type->bmp_icon;
-            break;
-        } default: {
-            standby_bmp = type->get_icon();
-            break;
-        }
-        }
-    }
-    
-    if(!standby_bmp && which == STANDBY_TYPE_CURRENT) {
-        standby_bmp = bmp_no_pikmin_bubble;
-    }
-    
-    if(!standby_bmp) return;
-    
-    draw_bitmap_in_box(standby_bmp, center, size * 0.8);
+    draw_bitmap_in_box(icon, final_center, final_size * 0.8);
     
     if(
         game.states.gameplay->closest_group_member_distant &&
@@ -1011,22 +940,12 @@ void hud_struct::draw_standby_icon(
     ) {
         draw_bitmap_in_box(
             bmp_distant_pikmin_marker,
-            center,
-            size * 0.8
+            final_center,
+            final_size * 0.8
         );
     }
     
-    draw_bitmap_in_box(bmp_bubble, center, size);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Starts animating the juice effect for leader icons being swapped.
- */
-void hud_struct::start_leader_swap_juice() {
-    leader_swap_juice_timer = LEADER_SWAP_JUICE_DURATION;
-    leader_icon_mgr.setup_transition();
-    leader_health_mgr.setup_transition();
+    draw_bitmap_in_box(bmp_bubble, final_center, final_size);
 }
 
 
@@ -1036,11 +955,12 @@ void hud_struct::start_leader_swap_juice() {
  *   How long the frame's tick is, in seconds.
  */
 void hud_struct::tick(const float delta_t) {
-    if(leader_swap_juice_timer > 0.0f) {
-        leader_swap_juice_timer -= delta_t;
-        leader_swap_juice_timer = std::max(0.0f, leader_swap_juice_timer);
-    }
+    //Update bubble managers.
+    leader_icon_mgr.tick(delta_t);
+    leader_health_mgr.tick(delta_t);
+    standby_icon_mgr.tick(delta_t);
     
+    //Update leader bubbles.
     for(size_t l = 0; l < 3; ++l) {
         leader* l_ptr = NULL;
         if(l < game.states.gameplay->available_leaders.size()) {
@@ -1052,235 +972,84 @@ void hud_struct::tick(const float delta_t) {
                 );
             l_ptr = game.states.gameplay->available_leaders[l_idx];
         }
-        leader_icon_mgr.update_content_ptr(l, (void*) l_ptr);
-        leader_health_mgr.update_content_ptr(l, (void*) l_ptr);
+        
+        leader_icon_bubble icon;
+        icon.bmp = NULL;
+        icon.color = COLOR_EMPTY;
+        if(l_ptr) {
+            icon.bmp = l_ptr->lea_type->bmp_icon;
+            icon.color = l_ptr->lea_type->main_color;
+        }
+        
+        leader_icon_mgr.update(l, l_ptr, icon);
+        
+        leader_health_bubble health;
+        health.ratio = 0.0f;
+        health.caution_timer = 0.0f;
+        if(l_ptr) {
+            health.ratio = l_ptr->health_wheel_visible_ratio;
+            health.caution_timer = l_ptr->health_wheel_caution_timer;
+        }
+        leader_health_mgr.update(l, l_ptr, health);
+    }
+    
+    //Update standby bubbles.
+    for(unsigned char s = 0; s < 3; ++s) {
+    
+        ALLEGRO_BITMAP* icon = NULL;
+        leader* cur_leader_ptr = game.states.gameplay->cur_leader_ptr;
+        mob* member = game.states.gameplay->closest_group_member[s];
+        subgroup_type* type = NULL;
+        
+        switch(s) {
+        case STANDBY_TYPE_PREVIOUS: {
+            subgroup_type* prev_type;
+            cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
+            subgroup_type* next_type;
+            cur_leader_ptr->group->get_next_standby_type(false, &next_type);
+            if(
+                prev_type != cur_leader_ptr->group->cur_standby_type &&
+                prev_type != next_type
+            ) {
+                type = prev_type;
+            }
+            break;
+        }
+        case STANDBY_TYPE_CURRENT: {
+            type = cur_leader_ptr->group->cur_standby_type;
+            break;
+        }
+        case STANDBY_TYPE_NEXT: {
+            subgroup_type* next_type;
+            cur_leader_ptr->group->get_next_standby_type(false, &next_type);
+            if(next_type != cur_leader_ptr->group->cur_standby_type) {
+                type = next_type;
+            }
+            break;
+        }
+        }
+        
+        if(cur_leader_ptr && type && member) {
+            SUBGROUP_TYPE_CATEGORIES cat = type->get_category();
+            
+            switch(cat) {
+            case SUBGROUP_TYPE_CATEGORY_LEADER: {
+                leader* l_ptr = dynamic_cast<leader*>(member);
+                icon = l_ptr->lea_type->bmp_icon;
+                break;
+            } default: {
+                icon = type->get_icon();
+                break;
+            }
+            }
+        }
+        
+        if(!icon && s == STANDBY_TYPE_CURRENT) {
+            icon = bmp_no_pikmin_bubble;
+        }
+        
+        standby_icon_mgr.update(s, type, icon);
     }
     
     gui.tick(game.delta_t);
-}
-
-
-
-/* ----------------------------------------------------------------------------
- * Creates a HUD bubble manager instance.
- */
-hud_bubble_manager::hud_bubble_manager() {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the content pointer associated with a bubble.
- * Returns NULL if anything goes wrong.
- * number:
- *   Number of the registered bubble.
- */
-void* hud_bubble_manager::get_content_ptr(const size_t number) {
-    auto it = bubbles.find(number);
-    if(it == bubbles.end()) return NULL;
-    return it->second.content_ptr;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the necessary information for the bubble to know how to draw itself.
- * number:
- *   Number of the registered bubble.
- * transition_anim_ratio:
- *   Ratio of time left in the current transition animation, or 0 for none.
- * content_ptr:
- *   The pointer to the content the bubble should use is returned here.
- *   NULL is returned on error.
- * pos:
- *   The final position it should use is returned here.
- * size:
- *   The final size it should use is returned here.
- */
-void hud_bubble_manager::get_drawing_info(
-    const size_t number, const float transition_anim_ratio,
-    void** content_ptr, point* pos, point* size
-) {
-    auto it = bubbles.find(number);
-    if(it == bubbles.end()) {
-        *content_ptr = NULL;
-        return;
-    }
-    
-    bool visible =
-        game.states.gameplay->hud->gui.get_item_draw_info(
-            it->second.bubble, pos, size
-        );
-        
-    if(!visible) {
-        *content_ptr = NULL;
-        return;
-    }
-    
-    map<size_t, bubble_info>::iterator match_it;
-    gui_item* match_ptr = NULL;
-    point match_pos;
-    point match_size;
-    
-    //First, check if there's any matching bubble that we can move to/from.
-    for(match_it = bubbles.begin(); match_it != bubbles.end(); ++match_it) {
-        if(
-            transition_anim_ratio > 0.5f &&
-            match_it->second.content_ptr ==
-            it->second.pre_transition_content_ptr
-        ) {
-            //In the first half of the animation, we want to search for a
-            //bubble that has the content that our bubble had pre-transition.
-            break;
-        }
-        if(
-            transition_anim_ratio <= 0.5f &&
-            match_it->second.pre_transition_content_ptr ==
-            it->second.content_ptr
-        ) {
-            //In the second half, the match had the content our bubble has.
-            break;
-        }
-    }
-    if(match_it != bubbles.end()) {
-        match_ptr = match_it->second.bubble;
-        if(
-            !game.states.gameplay->hud->gui.get_item_draw_info(
-                match_ptr, &match_pos, &match_size
-            )
-        ) {
-            match_ptr = NULL;
-        }
-    }
-    
-    //Figure out how to animate it, if we even should animate it.
-    if(match_ptr) {
-        //This bubble is heading to a new spot.
-        
-        point match_pivot(
-            (pos->x + match_pos.x) / 2.0f,
-            (pos->y + match_pos.y) / 2.0f
-        );
-        float mov_ratio = ease(EASE_IN_ELASTIC, 1.0f - transition_anim_ratio);
-        float pivot_dist = dist(*pos, match_pivot).to_float();
-        
-        if(transition_anim_ratio > 0.5f) {
-            //First half of the animation. Move to the first half.
-            float match_start_angle = get_angle(match_pivot, *pos);
-            *pos =
-                match_pivot +
-                rotate_point(
-                    point(pivot_dist, 0.0f),
-                    match_start_angle + mov_ratio * TAU / 2.0f
-                );
-            *size =
-                interpolate_point(
-                    ease(EASE_OUT, 1.0f - transition_anim_ratio),
-                    0.0f, 1.0f,
-                    *size, match_size
-                );
-                
-        } else {
-            //Second half of the animation. Move from the first half.
-            float match_start_angle = get_angle(match_pivot, match_pos);
-            *pos =
-                match_pivot +
-                rotate_point(
-                    point(pivot_dist, 0.0f),
-                    match_start_angle + mov_ratio * TAU / 2.0f
-                );
-            *size =
-                interpolate_point(
-                    ease(EASE_OUT, 1.0f - transition_anim_ratio),
-                    0.0f, 1.0f,
-                    match_size, *size
-                );
-                
-        }
-        
-    } else {
-        //This bubble has no equivalent to go to.
-        
-        if(transition_anim_ratio > 0.5f) {
-            //First half of the animation. Fade out.
-            *size *= ease(EASE_OUT, (transition_anim_ratio - 0.5f) * 2.0f);
-            
-        } else {
-            //Second half of the animation. Fade in.
-            *size *= ease(EASE_OUT, 1 - transition_anim_ratio * 2.0f);
-            
-        }
-    }
-    
-    //Set the content index.
-    if(transition_anim_ratio > 0.5f) {
-        *content_ptr = it->second.pre_transition_content_ptr;
-    } else {
-        *content_ptr = it->second.content_ptr;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the content pointer associated with a bubble, before a transition
- * was started.
- * Returns NULL if anything goes wrong.
- * number:
- *   Number of the registered bubble.
- */
-void* hud_bubble_manager::get_pre_transition_content_ptr(const size_t number) {
-    auto it = bubbles.find(number);
-    if(it == bubbles.end()) return NULL;
-    return it->second.pre_transition_content_ptr;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Registers a bubble.
- * bubble:
- *   GUI item that represents this bubble.
- * number:
- *   Number of this item in its "family". For instance, if this is the icon
- *   for the second leader, this value is 2.
- */
-void hud_bubble_manager::register_bubble(
-    const size_t number, gui_item* bubble
-) {
-    bubbles[number] = bubble_info(bubble);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets up the start of an animated transition.
- */
-void hud_bubble_manager::setup_transition() {
-    for(auto &b : bubbles) {
-        b.second.pre_transition_content_ptr = b.second.content_ptr;
-    }
-}
-
-
-
-/* ----------------------------------------------------------------------------
- * Updates the content pointer of a given bubble.
- * number:
- *   Number of the registered bubble.
- * new_ptr:
- *   New content pointer.
- */
-void hud_bubble_manager::update_content_ptr(
-    const size_t number, void* new_ptr
-) {
-    auto it = bubbles.find(number);
-    if(it == bubbles.end()) return;
-    it->second.content_ptr = new_ptr;
-}
-
-
-
-/* ----------------------------------------------------------------------------
- * Creates a HUD bubble manager bubble info instance.
- */
-hud_bubble_manager::bubble_info::bubble_info(gui_item* bubble) :
-    bubble(bubble),
-    content_ptr(NULL),
-    pre_transition_content_ptr(NULL) {
 }

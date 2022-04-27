@@ -55,9 +55,6 @@ mob* leader_category::create_mob(
     leader* m = new leader(pos, (leader_type*) type, angle);
     game.states.gameplay->mobs.leaders.push_back(m);
     game.states.gameplay->update_available_leaders();
-    if(game.states.gameplay->hud) {
-        game.states.gameplay->hud->start_leader_swap_juice();
-    }
     return m;
 }
 

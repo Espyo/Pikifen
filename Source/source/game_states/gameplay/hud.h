@@ -14,6 +14,7 @@
 
 
 #include "../../gui.h"
+#include "hud_bubble_manager.h"
 
 
 namespace HUD {
@@ -29,48 +30,21 @@ enum STANDBY_TYPE_RELATIONS {
 
 
 /* ----------------------------------------------------------------------------
- * Manages the contents of "bubbles" in the HUD that have the ability to move
- * around, or fade in/out of existence, depending on what the player swapped,
- * and how.
- * I'm calling these "bubbles" because this slide/shrink/grow behavior is
- * typically used by HUD items that are drawn inside some bubble.
- */
-struct hud_bubble_manager {
-public:
-    struct bubble_info {
-        //GUI item.
-        gui_item* bubble;
-        //Pointer to whatever content it holds.
-        void* content_ptr;
-        //Pointer to whatever content it held, pre-transition.
-        void* pre_transition_content_ptr;
-        
-        bubble_info(gui_item* bubble = NULL);
-    };
-    
-    hud_bubble_manager();
-    void* get_content_ptr(const size_t number);
-    void get_drawing_info(
-        const size_t number, const float transition_anim_ratio,
-        void** content_ptr, point* pos, point* scale
-    );
-    void* get_pre_transition_content_ptr(const size_t number);
-    void register_bubble(const size_t number, gui_item* bubble);
-    void setup_transition();
-    void update_content_ptr(const size_t number, void* new_ptr);
-    
-private:
-    map<size_t, bubble_info> bubbles;
-    
-};
-
-
-/* ----------------------------------------------------------------------------
  * Holds information about the in-game HUD.
  */
 struct hud_struct {
     static const string HUD_FILE_NAME;
     static const float LEADER_SWAP_JUICE_DURATION;
+    static const float STANDBY_SWAP_JUICE_DURATION;
+    
+    struct leader_icon_bubble {
+        ALLEGRO_BITMAP* bmp;
+        ALLEGRO_COLOR color;
+    };
+    struct leader_health_bubble {
+        float ratio;
+        float caution_timer;
+    };
     
     //GUI manager.
     gui_manager gui;
@@ -94,12 +68,12 @@ struct hud_struct {
     ALLEGRO_BITMAP* bmp_no_pikmin_bubble;
     //Sun icon graphic, used for the HUD.
     ALLEGRO_BITMAP* bmp_sun;
-    //Time left for the leader swap juice animation.
-    float leader_swap_juice_timer;
     //Bubble manager for leader icon items.
-    hud_bubble_manager leader_icon_mgr;
+    hud_bubble_manager<leader_icon_bubble> leader_icon_mgr;
     //Bubble manager for leader health items.
-    hud_bubble_manager leader_health_mgr;
+    hud_bubble_manager<leader_health_bubble> leader_health_mgr;
+    //Bubble manager for the standby type.
+    hud_bubble_manager<ALLEGRO_BITMAP*> standby_icon_mgr;
     //Spray 1 amount text. Cache for convenience.
     gui_item* spray_1_amount;
     //Spray 2 amount text. Cache for convenience.
@@ -123,13 +97,10 @@ struct hud_struct {
     
     hud_struct();
     ~hud_struct();
-    void start_leader_swap_juice();
     void tick(const float delta_t);
     
 private:
-    void draw_standby_icon(
-        STANDBY_TYPE_RELATIONS which, const point &center, const point &size
-    );
+    void draw_standby_icon(STANDBY_TYPE_RELATIONS which);
 };
 
 

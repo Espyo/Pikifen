@@ -1372,10 +1372,6 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
         game.states.gameplay->update_available_leaders();
         if(game.states.gameplay->cur_leader_ptr == m) {
             change_to_next_leader(true, true, true);
-        } else {
-            if(game.states.gameplay->hud) {
-                game.states.gameplay->hud->start_leader_swap_juice();
-            }
         }
     }
     

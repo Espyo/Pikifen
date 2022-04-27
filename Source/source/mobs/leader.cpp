@@ -1000,7 +1000,6 @@ void change_to_next_leader(
     }
     
     if(success) {
-        game.states.gameplay->hud->start_leader_swap_juice();
         game.states.gameplay->cur_leader_ptr->swarm_arrows.clear();
     }
 }

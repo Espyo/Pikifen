@@ -1,13 +1,19 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
     
-    
+
 Current tasks (tasks being worked on, but not yet committed)
     Standby Pikmin
-        Pikmin type swapping should make the bubbles slide into place
         Numbers in Pikmin counter (and perhaps elsewhere?) should have animated run-ups
+        Standardize the names in the HUD txt file, and the names of the variables of the GUI items
+    Test what happens if a dweevil picks up a lying leader, and said lying leader wakes up
+    Add tidbits about the HUD items to the in-game help
+		The tidbit about there being no point and merely a time limit should refer to the Sun Meter
+		"Use the counters at the bottom of the HUD to keep an eye on Pikmin counts. These only count Pikmin, though the amount ready at standby can also refer to leaders if you have any selected."
     
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Killing all leaders results in a SIGSEGV
+    If the path is segmented, the Pikmin will fail to carry, even if the "Show calculated path" option doesn't?
     
     --- v0.22.0 ---
     HUD improvements
@@ -19,12 +25,15 @@ Next tasks (roughly sorted most important first)
             There should only be one on-screen at a time
             Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
             The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
+    Areas and animation files should also contain a field for the engine version they were created in
+        Make it so that every time an area is loaded, it checks the engine version, and if it's outdated, port to a new format, save the file again, and try loading again
     Allow an object's max health to be customizable, and for that to be set in the area editor
 		If necessary, explain in the manual and/or area editor tips how this affects bridges, piles (?), reinforced walls, Flukeweeds, bomb rocks
 		Some scripts do things based on the object's health, in absolute values. It needs to be changed to relative values since max healths can be changed now
     Details
         Pikmin that are plucked should be thrown backwards. Plus, there should be some dirt particle effects
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
+        GUI items should have some way of representing default values
         Center the GUI items in the options menu
         Maybe decrease the leaders's acceleration?
         Game feel
@@ -64,6 +73,7 @@ Next tasks (roughly sorted most important first)
             Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
             Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
             Some signs should talk about dismissing, and group moving
+            Signs should talk about the relevant HUD icons when appropriate
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
             Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
         Helodity's Adventure area (see #content-sharing)
@@ -346,6 +356,7 @@ Next tasks (roughly sorted most important first)
                 It should come pre-packaged with Keyboard+Mouse, JoyCon, etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which, right?
                 The options for cursor speed, cursor controlled by mouse, etc. should be moved into the schemes
             Maybe a "simple" controls menu and an "advanced" one? The advanced is the old one, but the "simple" one lets the player choose a controller, only map the most common controls, and automatically associate an analog stick to all four directions. If I do this, I should add a tip to the readme to tell people to try the advanced controls after they're comfortable with the engine.
+                Even better, the controls menu only contains a list of actions + what button is assigned + advanced settings button. The list of actions is sorted by category (main, Pikmin control, menus, advanced). Pressing the advanced settings button opens a quick new menu with other things you can do to this control, like returning to the default, removing assignment, or adding more buttons to that action (up to 3 total). Also, if it's a controller, the advanced settings sub-menu should say what controller number it's bound to
             When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
             Save the controls in the options file inside a block, and possibly at the end of the options file
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
@@ -394,7 +405,8 @@ Next tasks (roughly sorted most important first)
                 This includes Pikmin that are knocked down and get whistled, and sprouts
             Leaders can't interact with each others's Onions or ships
             Logic like culling isn't relying on just the first player
-            Make sure Pikmin can't carry something the opposing team is already carrying
+            Pikmin can't carry something the opposing team is already carrying
+			Flower Pikmin will overpower bud Pikmin in a 1v1
             Candypop Buds can't accept Pikmin from another team
             Group tasks can't accept Pikmin from another team
             When one team loses all their leaders, their player(s)'s screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
@@ -434,14 +446,19 @@ Next tasks (roughly sorted most important first)
                 For the area to be compatible with this mode, it must determine what the flag object is
                 While the area data can determine a default victory amount, the rules can override it
             Objective Hunt
-                Each team has a card with objectives, which can be the same for all teams, or different
-                    Bingo rules:
-                        All teams have different cards
+                Each team has a card with objectives
+                Card modes:
+                    Single-card:
+                        One card shared by everyone
+                        When an objective is completed, it's claimed by that team and is no longer possible to obtain
+                    Individual cards:
+                        Each team has their own card
+                Victory modes:
+                    Bingo:
                         First team to collect enough things to score a line wins
                         If there is bingo, then there should be an option to allow simultaneous bingo patterns to score multiple points. Like if the final thing you collect scores 3 lines at once, you up 3 points in the overall standing. (thanks Nieton)
-                    Lockout rules:
-                        All teams have the same card
-                        When an objective is completed, it's claimed by that team and is no longer possible to obtain
+                    Majority:
+                        First team to clear X objectives wins, X being the highest number possible where other teams cannot possibly reach
                 For the area to be compatible with this mode, it must determine which objects are elligible to belong in the objective cell universe
                 [NEEDS BRAINSTORMING] Maybe more objectives than just "Kill an X"?
             Point capture?
@@ -706,6 +723,7 @@ Misc things (so I don't forget)
             It should have a "toolbar" so you can swap from layout to mob to path real quick, instead of having to quit out. Also, shortcut keys for that in F1, F2, etc.
                 Or better yet, keyboard shortcuts to swap, only. This way the interface isn't cluttered, but power-users can still swap very easily
             A redo button
+            Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just haave a link to another area's geometry instead. It should allow it to be rotated, too
         Pressing Esc on the sprite/whatever rename pop-up should cancel
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?
