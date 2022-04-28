@@ -29,6 +29,12 @@ const string hud_struct::HUD_FILE_NAME =
 const float hud_struct::LEADER_SWAP_JUICE_DURATION = 0.7f;
 //How long the standby swap juice animation lasts for.
 const float hud_struct::STANDBY_SWAP_JUICE_DURATION = 0.5f;
+//Speed at which previously-unnecessary items fade in, in alpha per second.
+const float hud_struct::UNNECESSARY_ITEMS_FADE_IN_SPEED = 2.5f;
+//Delay before unnecessary items start fading out.
+const float hud_struct::UNNECESSARY_ITEMS_FADE_OUT_DELAY = 2.5f;
+//Speed at which unnecessary items fade out, in alpha per second.
+const float hud_struct::UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
 
 
 /* ----------------------------------------------------------------------------
@@ -48,6 +54,10 @@ hud_struct::hud_struct() :
     leader_icon_mgr(&gui),
     leader_health_mgr(&gui),
     standby_icon_mgr(&gui),
+    standby_items_opacity(0.0f),
+    standby_items_fade_timer(0.0f),
+    spray_items_opacity(0.0f),
+    spray_items_fade_timer(0.0f),
     spray_1_amount(nullptr),
     spray_2_amount(nullptr),
     standby_count_nr(0),
@@ -382,7 +392,10 @@ hud_struct::hud_struct() :
         }
         control_info* c = find_control(BUTTON_NEXT_TYPE);
         if(!c) return;
-        draw_control_icon(game.fonts.slim, c, true, center, size);
+        draw_control_icon(
+            game.fonts.slim, c, true, center, size,
+            game.states.gameplay->hud->standby_items_opacity * 255
+        );
     };
     gui.add_item(standby_next_button, "standby_next_button");
     
@@ -419,7 +432,10 @@ hud_struct::hud_struct() :
         }
         control_info* c = find_control(BUTTON_PREV_TYPE);
         if(!c) return;
-        draw_control_icon(game.fonts.slim, c, true, center, size);
+        draw_control_icon(
+            game.fonts.slim, c, true, center, size,
+            game.states.gameplay->hud->standby_items_opacity * 255
+        );
     };
     gui.add_item(standby_prev_button, "standby_prev_button");
     
@@ -456,9 +472,16 @@ hud_struct::hud_struct() :
             }
         }
         
+        ALLEGRO_COLOR color =
+            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255);
+            
         if(standby_mat_bmp) {
-            draw_bitmap_in_box(standby_mat_bmp, center, size * 0.8);
-            draw_bitmap_in_box(bmp_bubble, center, size);
+            draw_bitmap_in_box(
+                standby_mat_bmp, center, size * 0.8, 0.0f, color
+            );
+            draw_bitmap_in_box(
+                bmp_bubble, center, size, 0.0f, color
+            );
         }
         
     };
@@ -472,7 +495,9 @@ hud_struct::hud_struct() :
         draw_bitmap(
             bmp_counter_bubble_standby,
             center,
-            size
+            size,
+            0.0f,
+            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255)
         );
     };
     gui.add_item(standby_bubble, "standby_bubble");
@@ -501,7 +526,8 @@ hud_struct::hud_struct() :
         }
         
         draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
+            game.fonts.counter,
+            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             center,
             point(1.0f, 1.0f) + standby_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
@@ -653,7 +679,8 @@ hud_struct::hud_struct() :
     counters_x->on_draw =
     [this] (const point & center, const point & size) {
         draw_compressed_text(
-            game.fonts.counter, COLOR_WHITE,
+            game.fonts.counter,
+            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
             center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "x"
         );
     };
@@ -687,7 +714,8 @@ hud_struct::hud_struct() :
         if(top_spray_idx == INVALID) return;
         
         draw_bitmap_in_box(
-            game.spray_types[top_spray_idx].bmp_spray, center, size
+            game.spray_types[top_spray_idx].bmp_spray, center, size, 0.0f,
+            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
         );
     };
     gui.add_item(spray_1_icon, "spray_1_icon");
@@ -706,7 +734,8 @@ hud_struct::hud_struct() :
         if(top_spray_idx == INVALID) return;
         
         draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
+            game.fonts.counter,
+            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
@@ -722,6 +751,18 @@ hud_struct::hud_struct() :
     spray_1_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        
+        size_t top_spray_idx = INVALID;
+        if(game.spray_types.size() <= 2) {
+            top_spray_idx = 0;
+        } else if(game.spray_types.size() > 0) {
+            top_spray_idx = game.states.gameplay->selected_spray;
+        }
+        if(top_spray_idx == INVALID) return;
+        if(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays == 0) {
+            return;
+        }
+        
         control_info* c = NULL;
         if(game.spray_types.size() <= 2) {
             c = find_control(BUTTON_USE_SPRAY_1);
@@ -730,7 +771,10 @@ hud_struct::hud_struct() :
         }
         if(!c) return;
         
-        draw_control_icon(game.fonts.slim, c, true, center, size);
+        draw_control_icon(
+            game.fonts.slim, c, true, center, size,
+            game.states.gameplay->hud->spray_items_opacity * 255
+        );
     };
     gui.add_item(spray_1_button, "spray_1_button");
     
@@ -746,7 +790,8 @@ hud_struct::hud_struct() :
         if(bottom_spray_idx == INVALID) return;
         
         draw_bitmap_in_box(
-            game.spray_types[bottom_spray_idx].bmp_spray, center, size
+            game.spray_types[bottom_spray_idx].bmp_spray, center, size, 0.0f,
+            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
         );
     };
     gui.add_item(spray_2_icon, "spray_2_icon");
@@ -763,7 +808,8 @@ hud_struct::hud_struct() :
         if(bottom_spray_idx == INVALID) return;
         
         draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
+            game.fonts.counter,
+            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
@@ -779,13 +825,26 @@ hud_struct::hud_struct() :
     spray_2_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        
+        size_t bottom_spray_idx = INVALID;
+        if(game.spray_types.size() == 2) {
+            bottom_spray_idx = 1;
+        }
+        if(bottom_spray_idx == INVALID) return;
+        if(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays == 0) {
+            return;
+        }
+        
         control_info* c = NULL;
         if(game.spray_types.size() == 2) {
             c = find_control(BUTTON_USE_SPRAY_2);
         }
         if(!c) return;
         
-        draw_control_icon(game.fonts.slim, c, true, center, size);
+        draw_control_icon(
+            game.fonts.slim, c, true, center, size,
+            game.states.gameplay->hud->spray_items_opacity * 255
+        );
     };
     gui.add_item(spray_2_button, "spray_2_button");
     
@@ -807,7 +866,8 @@ hud_struct::hud_struct() :
         
         draw_bitmap_in_box(
             game.spray_types[prev_spray_idx].bmp_spray,
-            center, size
+            center, size, 0.0f,
+            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
         );
     };
     gui.add_item(prev_spray_icon, "spray_prev_icon");
@@ -818,13 +878,31 @@ hud_struct::hud_struct() :
     prev_spray_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        
+        size_t prev_spray_idx = INVALID;
+        if(game.spray_types.size() >= 3) {
+            prev_spray_idx =
+                sum_and_wrap(
+                    game.states.gameplay->selected_spray,
+                    -1,
+                    game.spray_types.size()
+                );
+        }
+        if(prev_spray_idx == INVALID) return;
+        if(game.states.gameplay->spray_stats[prev_spray_idx].nr_sprays == 0) {
+            return;
+        }
+        
         control_info* c = NULL;
         if(game.spray_types.size() >= 3) {
             c = find_control(BUTTON_PREV_SPRAY);
         }
         if(!c) return;
         
-        draw_control_icon(game.fonts.slim, c, true, center, size);
+        draw_control_icon(
+            game.fonts.slim, c, true, center, size,
+            game.states.gameplay->hud->spray_items_opacity * 255
+        );
     };
     gui.add_item(prev_spray_button, "spray_prev_button");
     
@@ -846,7 +924,8 @@ hud_struct::hud_struct() :
         
         draw_bitmap_in_box(
             game.spray_types[next_spray_idx].bmp_spray,
-            center, size
+            center, size, 0.0f,
+            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
         );
     };
     gui.add_item(next_spray_icon, "spray_next_icon");
@@ -856,13 +935,31 @@ hud_struct::hud_struct() :
     next_spray_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        
+        size_t next_spray_idx = INVALID;
+        if(game.spray_types.size() >= 3) {
+            next_spray_idx =
+                sum_and_wrap(
+                    game.states.gameplay->selected_spray,
+                    1,
+                    game.spray_types.size()
+                );
+        }
+        if(next_spray_idx == INVALID) return;
+        if(game.states.gameplay->spray_stats[next_spray_idx].nr_sprays == 0) {
+            return;
+        }
+        
         control_info* c = NULL;
         if(game.spray_types.size() >= 3) {
             c = find_control(BUTTON_NEXT_SPRAY);
         }
         if(!c) return;
         
-        draw_control_icon(game.fonts.slim, c, true, center, size);
+        draw_control_icon(
+            game.fonts.slim, c, true, center, size,
+            game.states.gameplay->hud->spray_items_opacity * 255
+        );
     };
     gui.add_item(next_spray_button, "spray_next_button");
     
@@ -932,7 +1029,10 @@ void hud_struct::draw_standby_icon(STANDBY_TYPE_RELATIONS which) {
     
     if(!icon) return;
     
-    draw_bitmap_in_box(icon, final_center, final_size * 0.8);
+    ALLEGRO_COLOR color =
+        map_alpha(game.states.gameplay->hud->standby_items_opacity * 255);
+        
+    draw_bitmap_in_box(icon, final_center, final_size * 0.8, 0.0f, color);
     
     if(
         game.states.gameplay->closest_group_member_distant &&
@@ -941,11 +1041,12 @@ void hud_struct::draw_standby_icon(STANDBY_TYPE_RELATIONS which) {
         draw_bitmap_in_box(
             bmp_distant_pikmin_marker,
             final_center,
-            final_size * 0.8
+            final_size * 0.8,
+            0.0f, color
         );
     }
     
-    draw_bitmap_in_box(bmp_bubble, final_center, final_size);
+    draw_bitmap_in_box(bmp_bubble, final_center, final_size, 0.0f, color);
 }
 
 
@@ -1051,5 +1152,37 @@ void hud_struct::tick(const float delta_t) {
         standby_icon_mgr.update(s, type, icon);
     }
     
+    //Update the standby items opacity.
+    if(game.states.gameplay->cur_leader_ptr->group->members.empty()) {
+        if(standby_items_fade_timer > 0.0f) {
+            standby_items_fade_timer -= delta_t;
+        } else {
+            standby_items_opacity -= UNNECESSARY_ITEMS_FADE_OUT_SPEED * delta_t;
+        }
+    } else {
+        standby_items_fade_timer = UNNECESSARY_ITEMS_FADE_OUT_DELAY;
+        standby_items_opacity += UNNECESSARY_ITEMS_FADE_IN_SPEED * delta_t;
+    }
+    standby_items_opacity = clamp(0.0f, standby_items_opacity, 1.0f);
+    
+    //Update the spray items opacity.
+    size_t total_sprays = 0;
+    for(size_t s = 0; s < game.states.gameplay->spray_stats.size(); ++s) {
+        total_sprays +=
+            game.states.gameplay->spray_stats[s].nr_sprays;
+    }
+    if(total_sprays == 0) {
+        if(spray_items_fade_timer > 0.0f) {
+            spray_items_fade_timer -= delta_t;
+        } else {
+            spray_items_opacity -= UNNECESSARY_ITEMS_FADE_OUT_SPEED * delta_t;
+        }
+    } else {
+        spray_items_fade_timer = UNNECESSARY_ITEMS_FADE_OUT_DELAY;
+        spray_items_opacity += UNNECESSARY_ITEMS_FADE_IN_SPEED * delta_t;
+    }
+    spray_items_opacity = clamp(0.0f, spray_items_opacity, 1.0f);
+    
+    //Tick the GUI items proper.
     gui.tick(game.delta_t);
 }

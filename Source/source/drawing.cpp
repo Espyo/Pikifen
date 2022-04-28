@@ -424,15 +424,17 @@ void draw_compressed_text(
  *   Center of the place to draw at.
  * max_size:
  *   Max width or height. Used to compress it if needed. 0 = unlimited.
+ * alpha:
+ *   Opacity.
  */
 void draw_control_icon(
     const ALLEGRO_FONT* const font, const control_info* c, const bool condensed,
-    const point &where, const point &max_size
+    const point &where, const point &max_size, const unsigned char alpha
 ) {
-    const float OPACITY = 0.9f;
-    const ALLEGRO_COLOR RECT_COLOR = {0.45f, 0.45f, 0.45f, OPACITY};
-    const ALLEGRO_COLOR OUTLINE_COLOR = {0.10f, 0.10f, 0.10f, OPACITY};
-    const ALLEGRO_COLOR TEXT_COLOR = {0.95f, 0.95f, 0.95f, OPACITY};
+    if(alpha == 0) return;
+    const ALLEGRO_COLOR RECT_COLOR = {0.45f, 0.45f, 0.45f, alpha / 255.0f};
+    const ALLEGRO_COLOR OUTLINE_COLOR = {0.10f, 0.10f, 0.10f, alpha / 255.0f};
+    const ALLEGRO_COLOR TEXT_COLOR = {0.95f, 0.95f, 0.95f, alpha / 255.0f};
     const float OUTLINE_THICKNESS = 2.0f;
     
     //Start by getting the icon's info for drawing.

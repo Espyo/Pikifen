@@ -133,7 +133,7 @@ void draw_button(
 );
 void draw_control_icon(
     const ALLEGRO_FONT* const font, const control_info* c, const bool condensed,
-    const point &where, const point &max_size
+    const point &where, const point &max_size, const unsigned char alpha = 228
 );
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,

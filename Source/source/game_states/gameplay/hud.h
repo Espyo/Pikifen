@@ -36,6 +36,9 @@ struct hud_struct {
     static const string HUD_FILE_NAME;
     static const float LEADER_SWAP_JUICE_DURATION;
     static const float STANDBY_SWAP_JUICE_DURATION;
+    static const float UNNECESSARY_ITEMS_FADE_IN_SPEED;
+    static const float UNNECESSARY_ITEMS_FADE_OUT_DELAY;
+    static const float UNNECESSARY_ITEMS_FADE_OUT_SPEED;
     
     //Bitmap and color of a leader's icon.
     struct leader_icon_bubble {
@@ -89,6 +92,14 @@ struct hud_struct {
     hud_bubble_manager<leader_health_bubble> leader_health_mgr;
     //Bubble manager for the standby type.
     hud_bubble_manager<ALLEGRO_BITMAP*> standby_icon_mgr;
+    //Opacity of the standby HUD items.
+    float standby_items_opacity;
+    //Time left before the standby items start fading out.
+    float standby_items_fade_timer;
+    //Opacity of the spray HUD items.
+    float spray_items_opacity;
+    //Time left before the spray items start fading out.
+    float spray_items_fade_timer;
     //Spray 1 amount text. Cache for convenience.
     gui_item* spray_1_amount;
     //Spray 2 amount text. Cache for convenience.
