@@ -412,16 +412,16 @@ void gameplay_state::handle_button(
             if(!is_down) return;
             
             if(game.spray_types.size() > 2) {
-                if(button == BUTTON_NEXT_SPRAY) {
-                    selected_spray =
-                        (selected_spray + 1) % game.spray_types.size();
-                } else {
-                    if(selected_spray == 0) {
-                        selected_spray = game.spray_types.size() - 1;
-                    } else {
-                        selected_spray--;
-                    }
-                }
+                selected_spray =
+                    sum_and_wrap(
+                        selected_spray,
+                        button == BUTTON_NEXT_SPRAY ? +1 : -1,
+                        game.spray_types.size()
+                    );
+                game.states.gameplay->hud->
+                spray_1_amount->start_juice_animation(
+                    gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
+                );
             }
             
             break;
@@ -576,7 +576,7 @@ void gameplay_state::handle_button(
                 
                 if(switch_successful) {
                     cur_leader_ptr->swap_held_pikmin(
-                        closest_group_member[STANDBY_TYPE_CURRENT]
+                        closest_group_member[BUBBLE_CURRENT]
                     );
                 }
             }

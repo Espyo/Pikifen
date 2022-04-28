@@ -33,10 +33,10 @@ positions {
     spray_2_icon          =  6 52  4  7
     spray_2_amount        = 13 53 10  5
     spray_2_button        =  4 55  3  3
-    spray_prev_icon       =  6 52  3  5
-    spray_prev_button     =  6 47  4  4
-    spray_next_icon       = 13 52  3  5
-    spray_next_button     = 13 47  4  4
+    spray_prev_icon       =  6 48  3  5
+    spray_prev_button     =  4 51  4  4
+    spray_next_icon       = 12 48  3  5
+    spray_next_button     = 14 51  4  4
 }
 
 files {

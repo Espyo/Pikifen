@@ -134,9 +134,9 @@ void gameplay_state::do_game_drawing(
     //Layer 7 -- Leader cursor.
     al_use_transform(&game.world_to_screen_transform);
     ALLEGRO_COLOR cursor_color;
-    if(closest_group_member[STANDBY_TYPE_CURRENT]) {
+    if(closest_group_member[BUBBLE_CURRENT]) {
         cursor_color =
-            closest_group_member[STANDBY_TYPE_CURRENT]->type->main_color;
+            closest_group_member[BUBBLE_CURRENT]->type->main_color;
     } else {
         cursor_color = game.config.no_pikmin_color;
     }

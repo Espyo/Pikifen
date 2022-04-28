@@ -92,9 +92,9 @@ gameplay_state::gameplay_state() :
     ready_for_input(false),
     swarm_cursor(false) {
     
-    closest_group_member[STANDBY_TYPE_PREVIOUS] = NULL;
-    closest_group_member[STANDBY_TYPE_CURRENT] = NULL;
-    closest_group_member[STANDBY_TYPE_NEXT] = NULL;
+    closest_group_member[BUBBLE_PREVIOUS] = NULL;
+    closest_group_member[BUBBLE_CURRENT] = NULL;
+    closest_group_member[BUBBLE_NEXT] = NULL;
     
 }
 
@@ -897,9 +897,9 @@ void gameplay_state::update_available_leaders() {
  * Sets to NULL if there is no member of that subgroup available.
  */
 void gameplay_state::update_closest_group_members() {
-    closest_group_member[STANDBY_TYPE_PREVIOUS] = NULL;
-    closest_group_member[STANDBY_TYPE_CURRENT] = NULL;
-    closest_group_member[STANDBY_TYPE_NEXT] = NULL;
+    closest_group_member[BUBBLE_PREVIOUS] = NULL;
+    closest_group_member[BUBBLE_CURRENT] = NULL;
+    closest_group_member[BUBBLE_NEXT] = NULL;
     closest_group_member_distant = false;
     
     if(cur_leader_ptr->group->members.empty()) return;
@@ -909,12 +909,12 @@ void gameplay_state::update_closest_group_members() {
     cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
     
     if(prev_type) {
-        closest_group_member[STANDBY_TYPE_PREVIOUS] =
+        closest_group_member[BUBBLE_PREVIOUS] =
             get_closest_group_member(prev_type);
     }
     
     if(cur_leader_ptr->group->cur_standby_type) {
-        closest_group_member[STANDBY_TYPE_CURRENT] =
+        closest_group_member[BUBBLE_CURRENT] =
             get_closest_group_member(cur_leader_ptr->group->cur_standby_type);
     }
     
@@ -922,12 +922,12 @@ void gameplay_state::update_closest_group_members() {
     cur_leader_ptr->group->get_next_standby_type(false, &next_type);
     
     if(next_type) {
-        closest_group_member[STANDBY_TYPE_NEXT] =
+        closest_group_member[BUBBLE_NEXT] =
             get_closest_group_member(next_type);
     }
     
     //Update whether the current subgroup type's closest member is distant.
-    if(!closest_group_member[STANDBY_TYPE_CURRENT]) {
+    if(!closest_group_member[BUBBLE_CURRENT]) {
         return;
     }
     
@@ -937,7 +937,7 @@ void gameplay_state::update_closest_group_members() {
         !cur_leader_ptr->ground_sector->hazards.empty()
     ) {
         if(
-            !closest_group_member[STANDBY_TYPE_CURRENT]->
+            !closest_group_member[BUBBLE_CURRENT]->
             is_resistant_to_hazards(
                 cur_leader_ptr->ground_sector->hazards
             )
@@ -950,7 +950,7 @@ void gameplay_state::update_closest_group_members() {
     
     if(
         dist(
-            closest_group_member[STANDBY_TYPE_CURRENT]->pos,
+            closest_group_member[BUBBLE_CURRENT]->pos,
             cur_leader_ptr->pos
         ) >
         game.config.group_member_grab_range

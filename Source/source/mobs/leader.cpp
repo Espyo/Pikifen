@@ -849,7 +849,7 @@ void leader::update_throw_variables() {
     if(!holding.empty()) {
         throwee = holding[0];
     } else if(game.states.gameplay->cur_leader_ptr == this) {
-        throwee = game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT];
+        throwee = game.states.gameplay->closest_group_member[BUBBLE_CURRENT];
     }
     
     if(!throwee) {
@@ -1011,13 +1011,13 @@ void change_to_next_leader(
  */
 bool grab_closest_group_member() {
     //Check if there is even a closest group member.
-    if(!game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]) {
+    if(!game.states.gameplay->closest_group_member[BUBBLE_CURRENT]) {
         return false;
     }
     
     //Check if the leader can grab, and the group member can be grabbed.
     mob_event* grabbed_ev =
-        game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]->fsm.get_event(
+        game.states.gameplay->closest_group_member[BUBBLE_CURRENT]->fsm.get_event(
             MOB_EV_GRABBED_BY_FRIEND
         );
     mob_event* grabber_ev =
@@ -1031,7 +1031,7 @@ bool grab_closest_group_member() {
     //Check if there's anything in the way.
     if(
         !game.states.gameplay->cur_leader_ptr->has_clear_line(
-            game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
+            game.states.gameplay->closest_group_member[BUBBLE_CURRENT]
         )
     ) {
         return false;
@@ -1040,10 +1040,10 @@ bool grab_closest_group_member() {
     //Run the grabbing logic then.
     grabber_ev->run(
         game.states.gameplay->cur_leader_ptr,
-        (void*) game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
+        (void*) game.states.gameplay->closest_group_member[BUBBLE_CURRENT]
     );
     grabbed_ev->run(
-        game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT],
+        game.states.gameplay->closest_group_member[BUBBLE_CURRENT],
         (void*) game.states.gameplay->cur_leader_ptr
     );
     

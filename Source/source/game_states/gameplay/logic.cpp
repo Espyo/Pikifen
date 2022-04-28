@@ -472,13 +472,13 @@ void gameplay_state::do_gameplay_logic() {
         ************************************/
         
         size_t n_members = cur_leader_ptr->group->members.size();
-        closest_group_member[STANDBY_TYPE_CURRENT] = NULL;
+        closest_group_member[BUBBLE_CURRENT] = NULL;
         if(!cur_leader_ptr->holding.empty()) {
-            closest_group_member[STANDBY_TYPE_CURRENT] = cur_leader_ptr->holding[0];
+            closest_group_member[BUBBLE_CURRENT] = cur_leader_ptr->holding[0];
         }
         closest_group_member_distant = false;
         
-        if(n_members > 0 && !closest_group_member[STANDBY_TYPE_CURRENT]) {
+        if(n_members > 0 && !closest_group_member[BUBBLE_CURRENT]) {
         
             update_closest_group_members();
         }

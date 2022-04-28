@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     HUD improvements
-        Spray swapping should make the icons slide into place
         Message box text should be juicier
         Add juice to Onion menu
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)

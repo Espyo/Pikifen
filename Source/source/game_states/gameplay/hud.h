@@ -22,10 +22,11 @@ extern const float SUN_METER_SUN_SPIN_SPEED;
 }
 
 
-enum STANDBY_TYPE_RELATIONS {
-    STANDBY_TYPE_PREVIOUS = 0,
-    STANDBY_TYPE_CURRENT = 1,
-    STANDBY_TYPE_NEXT = 2,
+//Types of bubble GUI items that refer to a previous, current, and next thing.
+enum BUBBLE_RELATIONS {
+    BUBBLE_PREVIOUS = 0,
+    BUBBLE_CURRENT = 1,
+    BUBBLE_NEXT = 2,
 };
 
 
@@ -35,6 +36,7 @@ enum STANDBY_TYPE_RELATIONS {
 struct hud_struct {
     static const string HUD_FILE_NAME;
     static const float LEADER_SWAP_JUICE_DURATION;
+    static const float SPRAY_SWAP_JUICE_DURATION;
     static const float STANDBY_SWAP_JUICE_DURATION;
     static const float UNNECESSARY_ITEMS_FADE_IN_SPEED;
     static const float UNNECESSARY_ITEMS_FADE_OUT_DELAY;
@@ -92,6 +94,8 @@ struct hud_struct {
     hud_bubble_manager<leader_health_bubble> leader_health_mgr;
     //Bubble manager for the standby type.
     hud_bubble_manager<ALLEGRO_BITMAP*> standby_icon_mgr;
+    //Bubble manager for the spray icons.
+    hud_bubble_manager<ALLEGRO_BITMAP*> spray_icon_mgr;
     //Opacity of the standby HUD items.
     float standby_items_opacity;
     //Time left before the standby items start fading out.
@@ -126,7 +130,8 @@ struct hud_struct {
     void tick(const float delta_t);
     
 private:
-    void draw_standby_icon(STANDBY_TYPE_RELATIONS which);
+    void draw_standby_icon(BUBBLE_RELATIONS which);
+    void draw_spray_icon(BUBBLE_RELATIONS which);
 };
 
 

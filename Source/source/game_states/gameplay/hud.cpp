@@ -27,6 +27,8 @@ const string hud_struct::HUD_FILE_NAME =
     GUI_FOLDER_PATH + "/Gameplay.txt";
 //How long the leader swap juice animation lasts for.
 const float hud_struct::LEADER_SWAP_JUICE_DURATION = 0.7f;
+//How long the spray swap juice animation lasts for.
+const float hud_struct::SPRAY_SWAP_JUICE_DURATION = 0.7f;
 //How long the standby swap juice animation lasts for.
 const float hud_struct::STANDBY_SWAP_JUICE_DURATION = 0.5f;
 //Speed at which previously-unnecessary items fade in, in alpha per second.
@@ -54,6 +56,7 @@ hud_struct::hud_struct() :
     leader_icon_mgr(&gui),
     leader_health_mgr(&gui),
     standby_icon_mgr(&gui),
+    spray_icon_mgr(&gui),
     standby_items_opacity(0.0f),
     standby_items_fade_timer(0.0f),
     spray_items_opacity(0.0f),
@@ -105,10 +108,10 @@ hud_struct::hud_struct() :
     gui.register_coords("spray_2_icon",           6, 52,  4,  7);
     gui.register_coords("spray_2_amount",        13, 53, 10,  5);
     gui.register_coords("spray_2_button",         4, 55,  3,  3);
-    gui.register_coords("spray_prev_icon",        6, 52,  3,  5);
-    gui.register_coords("spray_prev_button",      6, 47,  4,  4);
-    gui.register_coords("spray_next_icon",       13, 52,  3,  5);
-    gui.register_coords("spray_next_button",     13, 47,  4,  4);
+    gui.register_coords("spray_prev_icon",        6, 48,  3,  5);
+    gui.register_coords("spray_prev_button",      4, 51,  4,  4);
+    gui.register_coords("spray_next_icon",       12, 48,  3,  5);
+    gui.register_coords("spray_next_button",     14, 51,  4,  4);
     gui.read_coords(hud_file_node.get_child_by_name("positions"));
     
     //Leader health and icons.
@@ -359,20 +362,20 @@ hud_struct::hud_struct() :
     gui_item* standby_icon = new gui_item();
     standby_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(STANDBY_TYPE_CURRENT);
+        game.states.gameplay->hud->draw_standby_icon(BUBBLE_CURRENT);
     };
     gui.add_item(standby_icon, "standby_icon");
-    standby_icon_mgr.register_bubble(STANDBY_TYPE_CURRENT, standby_icon);
+    standby_icon_mgr.register_bubble(BUBBLE_CURRENT, standby_icon);
     
     
     //Next standby subgroup icon.
     gui_item* standby_next_icon = new gui_item();
     standby_next_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(STANDBY_TYPE_NEXT);
+        game.states.gameplay->hud->draw_standby_icon(BUBBLE_NEXT);
     };
     gui.add_item(standby_next_icon, "standby_next_icon");
-    standby_icon_mgr.register_bubble(STANDBY_TYPE_NEXT, standby_next_icon);
+    standby_icon_mgr.register_bubble(BUBBLE_NEXT, standby_next_icon);
     
     
     //Next standby subgroup button.
@@ -404,10 +407,10 @@ hud_struct::hud_struct() :
     gui_item* standby_prev_icon = new gui_item();
     standby_prev_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(STANDBY_TYPE_PREVIOUS);
+        game.states.gameplay->hud->draw_standby_icon(BUBBLE_PREVIOUS);
     };
     gui.add_item(standby_prev_icon, "standby_prev_icon");
-    standby_icon_mgr.register_bubble(STANDBY_TYPE_PREVIOUS, standby_prev_icon);
+    standby_icon_mgr.register_bubble(BUBBLE_PREVIOUS, standby_prev_icon);
     
     
     //Previous standby subgroup button.
@@ -450,7 +453,7 @@ hud_struct::hud_struct() :
         if(
             l_ptr &&
             l_ptr->group->cur_standby_type &&
-            game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
+            game.states.gameplay->closest_group_member[BUBBLE_CURRENT]
         ) {
             SUBGROUP_TYPE_CATEGORIES c =
                 l_ptr->group->cur_standby_type->get_category();
@@ -459,7 +462,7 @@ hud_struct::hud_struct() :
             case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
                 pikmin* p_ptr =
                     dynamic_cast<pikmin*>(
-                        game.states.gameplay->closest_group_member[STANDBY_TYPE_CURRENT]
+                        game.states.gameplay->closest_group_member[BUBBLE_CURRENT]
                     );
                 standby_mat_bmp =
                     p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
@@ -705,20 +708,10 @@ hud_struct::hud_struct() :
     gui_item* spray_1_icon = new gui_item();
     spray_1_icon->on_draw =
     [this] (const point & center, const point & size) {
-        size_t top_spray_idx = INVALID;
-        if(game.spray_types.size() <= 2) {
-            top_spray_idx = 0;
-        } else if(game.spray_types.size() > 0) {
-            top_spray_idx = game.states.gameplay->selected_spray;
-        }
-        if(top_spray_idx == INVALID) return;
-        
-        draw_bitmap_in_box(
-            game.spray_types[top_spray_idx].bmp_spray, center, size, 0.0f,
-            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
-        );
+        draw_spray_icon(BUBBLE_CURRENT);
     };
     gui.add_item(spray_1_icon, "spray_1_icon");
+    spray_icon_mgr.register_bubble(BUBBLE_CURRENT, spray_1_icon);
     
     
     //Spray 1 amount.
@@ -853,24 +846,10 @@ hud_struct::hud_struct() :
     gui_item* prev_spray_icon = new gui_item();
     prev_spray_icon->on_draw =
     [this] (const point & center, const point & size) {
-        size_t prev_spray_idx = INVALID;
-        if(game.spray_types.size() >= 3) {
-            prev_spray_idx =
-                sum_and_wrap(
-                    game.states.gameplay->selected_spray,
-                    -1,
-                    game.spray_types.size()
-                );
-        }
-        if(prev_spray_idx == INVALID) return;
-        
-        draw_bitmap_in_box(
-            game.spray_types[prev_spray_idx].bmp_spray,
-            center, size, 0.0f,
-            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
-        );
+        draw_spray_icon(BUBBLE_PREVIOUS);
     };
     gui.add_item(prev_spray_icon, "spray_prev_icon");
+    spray_icon_mgr.register_bubble(BUBBLE_PREVIOUS, prev_spray_icon);
     
     
     //Previous spray button.
@@ -889,9 +868,6 @@ hud_struct::hud_struct() :
                 );
         }
         if(prev_spray_idx == INVALID) return;
-        if(game.states.gameplay->spray_stats[prev_spray_idx].nr_sprays == 0) {
-            return;
-        }
         
         control_info* c = NULL;
         if(game.spray_types.size() >= 3) {
@@ -911,24 +887,11 @@ hud_struct::hud_struct() :
     gui_item* next_spray_icon = new gui_item();
     next_spray_icon->on_draw =
     [this] (const point & center, const point & size) {
-        size_t next_spray_idx = INVALID;
-        if(game.spray_types.size() >= 3) {
-            next_spray_idx =
-                sum_and_wrap(
-                    game.states.gameplay->selected_spray,
-                    1,
-                    game.spray_types.size()
-                );
-        }
-        if(next_spray_idx == INVALID) return;
-        
-        draw_bitmap_in_box(
-            game.spray_types[next_spray_idx].bmp_spray,
-            center, size, 0.0f,
-            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
-        );
+        draw_spray_icon(BUBBLE_NEXT);
     };
     gui.add_item(next_spray_icon, "spray_next_icon");
+    spray_icon_mgr.register_bubble(BUBBLE_NEXT, next_spray_icon);
+    
     
     //Next spray button.
     gui_item* next_spray_button = new gui_item();
@@ -946,9 +909,6 @@ hud_struct::hud_struct() :
                 );
         }
         if(next_spray_idx == INVALID) return;
-        if(game.states.gameplay->spray_stats[next_spray_idx].nr_sprays == 0) {
-            return;
-        }
         
         control_info* c = NULL;
         if(game.spray_types.size() >= 3) {
@@ -990,7 +950,10 @@ hud_struct::hud_struct() :
     leader_icon_mgr.transition_duration = LEADER_SWAP_JUICE_DURATION;
     leader_health_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_CIRCLE;
     leader_health_mgr.transition_duration = LEADER_SWAP_JUICE_DURATION;
+    standby_icon_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
     standby_icon_mgr.transition_duration = STANDBY_SWAP_JUICE_DURATION;
+    spray_icon_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
+    spray_icon_mgr.transition_duration = SPRAY_SWAP_JUICE_DURATION;
     
 }
 
@@ -1019,7 +982,7 @@ hud_struct::~hud_struct() {
  *   Which standby icon to draw -- the previous type's, the current type's,
  *   or the next type's.
  */
-void hud_struct::draw_standby_icon(STANDBY_TYPE_RELATIONS which) {
+void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
     point final_center;
     point final_size;
     ALLEGRO_BITMAP* icon;
@@ -1036,7 +999,7 @@ void hud_struct::draw_standby_icon(STANDBY_TYPE_RELATIONS which) {
     
     if(
         game.states.gameplay->closest_group_member_distant &&
-        which == STANDBY_TYPE_CURRENT
+        which == BUBBLE_CURRENT
     ) {
         draw_bitmap_in_box(
             bmp_distant_pikmin_marker,
@@ -1051,16 +1014,33 @@ void hud_struct::draw_standby_icon(STANDBY_TYPE_RELATIONS which) {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to draw a spray icon with. This does not apply to the second spray.
+ * which:
+ *   Which spray icon to draw -- the previous type's, the current type's,
+ *   or the next type's.
+ */
+void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
+    point final_center;
+    point final_size;
+    ALLEGRO_BITMAP* icon;
+    game.states.gameplay->hud->spray_icon_mgr.get_drawing_info(
+        which, &icon, &final_center, &final_size
+    );
+    
+    if(!icon) return;
+    draw_bitmap_in_box(
+        icon, final_center, final_size, 0.0f,
+        map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks time by one frame of logic.
  * delta_t:
  *   How long the frame's tick is, in seconds.
  */
 void hud_struct::tick(const float delta_t) {
-    //Update bubble managers.
-    leader_icon_mgr.tick(delta_t);
-    leader_health_mgr.tick(delta_t);
-    standby_icon_mgr.tick(delta_t);
-    
     //Update leader bubbles.
     for(size_t l = 0; l < 3; ++l) {
         leader* l_ptr = NULL;
@@ -1093,6 +1073,8 @@ void hud_struct::tick(const float delta_t) {
         }
         leader_health_mgr.update(l, l_ptr, health);
     }
+    leader_icon_mgr.tick(delta_t);
+    leader_health_mgr.tick(delta_t);
     
     //Update standby bubbles.
     for(unsigned char s = 0; s < 3; ++s) {
@@ -1103,7 +1085,7 @@ void hud_struct::tick(const float delta_t) {
         subgroup_type* type = NULL;
         
         switch(s) {
-        case STANDBY_TYPE_PREVIOUS: {
+        case BUBBLE_PREVIOUS: {
             subgroup_type* prev_type;
             cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
             subgroup_type* next_type;
@@ -1116,11 +1098,11 @@ void hud_struct::tick(const float delta_t) {
             }
             break;
         }
-        case STANDBY_TYPE_CURRENT: {
+        case BUBBLE_CURRENT: {
             type = cur_leader_ptr->group->cur_standby_type;
             break;
         }
-        case STANDBY_TYPE_NEXT: {
+        case BUBBLE_NEXT: {
             subgroup_type* next_type;
             cur_leader_ptr->group->get_next_standby_type(false, &next_type);
             if(next_type != cur_leader_ptr->group->cur_standby_type) {
@@ -1145,12 +1127,64 @@ void hud_struct::tick(const float delta_t) {
             }
         }
         
-        if(!icon && s == STANDBY_TYPE_CURRENT) {
+        if(!icon && s == BUBBLE_CURRENT) {
             icon = bmp_no_pikmin_bubble;
         }
         
         standby_icon_mgr.update(s, type, icon);
     }
+    standby_icon_mgr.tick(delta_t);
+    
+    //Update spray bubbles.
+    size_t top_spray_idx = INVALID;
+    if(game.spray_types.size() <= 2) {
+        top_spray_idx = 0;
+    } else if(game.spray_types.size() > 0) {
+        top_spray_idx = game.states.gameplay->selected_spray;
+    }
+    spray_icon_mgr.update(
+        BUBBLE_CURRENT,
+        top_spray_idx == INVALID ? NULL :
+        &game.states.gameplay->spray_stats[top_spray_idx],
+        top_spray_idx == INVALID ? NULL :
+        game.spray_types[top_spray_idx].bmp_spray
+    );
+    
+    size_t prev_spray_idx = INVALID;
+    if(game.spray_types.size() >= 3) {
+        prev_spray_idx =
+            sum_and_wrap(
+                game.states.gameplay->selected_spray,
+                -1,
+                game.spray_types.size()
+            );
+    }
+    spray_icon_mgr.update(
+        BUBBLE_PREVIOUS,
+        prev_spray_idx == INVALID ? NULL :
+        &game.states.gameplay->spray_stats[prev_spray_idx],
+        prev_spray_idx == INVALID ? NULL :
+        game.spray_types[prev_spray_idx].bmp_spray
+    );
+    
+    size_t next_spray_idx = INVALID;
+    if(game.spray_types.size() >= 3) {
+        next_spray_idx =
+            sum_and_wrap(
+                game.states.gameplay->selected_spray,
+                1,
+                game.spray_types.size()
+            );
+    }
+    spray_icon_mgr.update(
+        BUBBLE_NEXT,
+        next_spray_idx == INVALID ? NULL :
+        &game.states.gameplay->spray_stats[next_spray_idx],
+        next_spray_idx == INVALID ? NULL :
+        game.spray_types[next_spray_idx].bmp_spray
+    );
+    
+    spray_icon_mgr.tick(delta_t);
     
     //Update the standby items opacity.
     if(game.states.gameplay->cur_leader_ptr->group->members.empty()) {
