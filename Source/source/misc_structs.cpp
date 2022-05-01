@@ -602,7 +602,10 @@ void movement_struct::reset() {
 msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     cur_char(0),
     cur_section(0),
-    speaker_icon(speaker_icon) {
+    speaker_icon(speaker_icon),
+    transition_timer(gameplay_state::MENU_ENTRY_HUD_MOVE_TIME),
+    transition_in(true),
+    to_delete(false) {
     
     message = unescape_string(text);
     if(message.size() && message.back() == '\n') {
@@ -642,21 +645,20 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
 /* ----------------------------------------------------------------------------
  * Handles the user having pressed the button to continue the message,
  * or to skip to showing everything in the current section.
- * Returns true if the message box continues active, false if it's over.
  */
-bool msg_box_info::advance() {
+void msg_box_info::advance() {
     size_t stopping_char =
         stopping_chars[cur_section + 1];
     if(cur_char == stopping_char) {
         if(stopping_char == message.size()) {
-            return false;
+            transition_in = false;
+            transition_timer = gameplay_state::MENU_EXIT_HUD_MOVE_TIME;
         } else {
             cur_section++;
         }
     } else {
         cur_char = stopping_char;
     }
-    return true;
 }
 
 
@@ -679,13 +681,21 @@ vector<string> msg_box_info::get_current_lines() const {
  *   How long the frame's tick is, in seconds.
  */
 void msg_box_info::tick(const float delta_t) {
+    //Animate the text.
     if(cur_char < stopping_chars[cur_section + 1]) {
         if(char_timer.duration == 0.0f) {
             //Display everything right away.
             cur_char = stopping_chars[cur_section + 1];
-        } else {
+        } else if(transition_timer == 0.0f) {
             char_timer.tick(game.delta_t);
         }
+    }
+    
+    //Animate the transition.
+    transition_timer -= delta_t;
+    transition_timer = std::max(0.0f, transition_timer);
+    if(!transition_in && transition_timer == 0.0f) {
+        to_delete = true;
     }
 }
 

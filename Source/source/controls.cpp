@@ -668,9 +668,7 @@ void gameplay_state::handle_button(
     
         //Displaying a message.
         if((button == BUTTON_THROW || button == BUTTON_PAUSE) && is_down) {
-            if(!msg_box->advance()) {
-                start_message("", NULL);
-            }
+            msg_box->advance();
         }
         
     }

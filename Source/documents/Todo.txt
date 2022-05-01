@@ -6,10 +6,14 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    In the animation editor, flip a sprite, then change the number in the now-negative scale box. The other number will freak out. (Thanks Helodity)
     
     --- v0.22.0 ---
     HUD improvements
         Message box text should be juicier
+            Letters should appear one at a time, maybe with the elastic ease?
+			Letters should all swipe away when opening the next page
+			Show the button used to advance text in the corner
         Add juice to Onion menu
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time

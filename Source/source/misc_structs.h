@@ -399,8 +399,14 @@ struct msg_box_info {
     ALLEGRO_BITMAP* speaker_icon;
     //Stops scrolling when it reaches one of these. There's one per section.
     vector<size_t> stopping_chars;
+    //Time left in the current transition.
+    float transition_timer;
+    //Is it transitioning into view, or out of view?
+    bool transition_in;
+    //Is the message box meant to be deleted?
+    bool to_delete;
     
-    bool advance();
+    void advance();
     vector<string> get_current_lines() const;
     void tick(const float delta_t);
     

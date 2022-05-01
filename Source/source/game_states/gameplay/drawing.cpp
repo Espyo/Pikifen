@@ -731,15 +731,27 @@ void gameplay_state::draw_message_box() {
     
     al_use_transform(&game.identity_transform);
     
+    float transition_ratio =
+        msg_box->transition_in ?
+        msg_box->transition_timer / MENU_ENTRY_HUD_MOVE_TIME :
+        (1 - msg_box->transition_timer / MENU_EXIT_HUD_MOVE_TIME);
+    float box_height =
+        al_get_font_line_height(game.fonts.standard) * 4;
+    float offset =
+        box_height * ease(EASE_IN, transition_ratio);
+        
+    al_draw_filled_rectangle(
+        0.0f, 0.0f,
+        game.win_w, game.win_h,
+        al_map_rgba(0, 0, 0, 64 * (1 - transition_ratio))
+    );
+    
     draw_textured_box(
         point(
             game.win_w / 2,
-            game.win_h - al_get_font_line_height(game.fonts.standard) * 2 - 4
+            game.win_h - (box_height / 2.0f) - 4 + offset
         ),
-        point(
-            game.win_w - 16,
-            al_get_font_line_height(game.fonts.standard) * 4
-        ),
+        point(game.win_w - 16, box_height),
         game.sys_assets.bmp_bubble_box
     );
     
@@ -748,8 +760,7 @@ void gameplay_state::draw_message_box() {
             msg_box->speaker_icon,
             point(
                 40,
-                game.win_h -
-                al_get_font_line_height(game.fonts.standard) * 4 - 16
+                game.win_h - box_height - 16 + offset
             ),
             point(48, 48)
         );
@@ -757,8 +768,7 @@ void gameplay_state::draw_message_box() {
             hud->bmp_bubble,
             point(
                 40,
-                game.win_h -
-                al_get_font_line_height(game.fonts.standard) * 4 - 16
+                game.win_h - box_height - 16 + offset
             ),
             point(64, 64)
         );
@@ -773,7 +783,8 @@ void gameplay_state::draw_message_box() {
             point(
                 24,
                 game.win_h -
-                al_get_font_line_height(game.fonts.standard) * (4 - l) + 8
+                al_get_font_line_height(game.fonts.standard) * (4 - l) + 8 +
+                offset
             ),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP, point(game.win_w - 64, 0),
             lines[l]

@@ -563,6 +563,10 @@ void gameplay_state::do_gameplay_logic() {
     } else { //Displaying a message.
     
         msg_box->tick(game.delta_t);
+        if(msg_box->to_delete) {
+            start_message("", NULL);
+        }
+        
     }
     
     replay_timer.tick(game.delta_t);
