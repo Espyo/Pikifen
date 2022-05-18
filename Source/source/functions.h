@@ -199,6 +199,11 @@ size_t select_next_item_directionally(
 vector<string> semicolon_list_to_vector(
     const string &s, const string &sep = ";"
 );
+void set_string_token_widths(
+    vector<string_token> &tokens,
+    const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
+    const float max_control_bitmap_height = 0
+);
 int show_message_box(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
     char const* text, char const* buttons, int flags
@@ -208,8 +213,12 @@ void spew_pikmin_seed(
     const point pos, const float z, pikmin_type* pik_type,
     const float angle, const float horizontal_speed, const float vertical_speed
 );
+vector<vector<string_token> > split_long_string_with_tokens(
+    const vector<string_token> &tokens, const int max_width
+);
 string standardize_path(const string &path);
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
+vector<string_token> tokenize_string(const string &s);
 string unescape_string(const string &s);
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,

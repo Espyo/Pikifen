@@ -197,6 +197,11 @@ void draw_scaled_text(
     const int flags, const TEXT_VALIGN_MODES valign, const string &text
 );
 void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects);
+void draw_string_tokens(
+    vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
+    const ALLEGRO_FONT* const control_font, const point &where,
+    const int flags, const point &max_size
+);
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const int flags, const TEXT_VALIGN_MODES valign,
@@ -215,7 +220,8 @@ void get_control_icon_info(
     string* text
 );
 float get_control_icon_width(
-    const ALLEGRO_FONT* font, const control_info* c, const bool condensed
+    const ALLEGRO_FONT* font, const control_info* c, const bool condensed,
+    const float max_bitmap_height = 0
 );
 
 

@@ -1682,6 +1682,46 @@ vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets the width of all string tokens in a vector of tokens.
+ * tokens:
+ *   Vector of tokens to set the widths of.
+ * text_font:
+ *   Text font.
+ * control_font:
+ *   Font for control icons.
+ * max_control_bitmap_height:
+ *   If bitmap icons need to be condensed vertically to fit a certain space,
+ *   then their width will be affected too. Specify the maximum height here.
+ *   Use 0 to indicate no maximum height.
+ */
+void set_string_token_widths(
+    vector<string_token> &tokens,
+    const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
+    const float max_control_bitmap_height
+) {
+    for(size_t t = 0; t < tokens.size(); ++t) {
+        switch(tokens[t].type) {
+        case STRING_TOKEN_CHAR: {
+            tokens[t].width =
+                al_get_text_width(text_font, tokens[t].content.c_str());
+            break;
+        } case STRING_TOKEN_CONTROL: {
+            tokens[t].content = trim_spaces(tokens[t].content);
+            tokens[t].width =
+                get_control_icon_width(
+                    control_font, find_control(tokens[t].content), false,
+                    max_control_bitmap_height
+                );
+        }
+        default: {
+            break;
+        }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Shows a native message box. It is better to call this rather than
  * al_show_native_message_box() directly because it does not reset the locale
  * after it is done.
@@ -1780,6 +1820,75 @@ void spew_pikmin_seed(
 
 
 /* ----------------------------------------------------------------------------
+ * Splits a long string, composed of string tokens, into different line breaks,
+ * such that no line goes over the limit, unless necessary.
+ * tokens:
+ *   Tokens that make up the string.
+ * max_width:
+ *   Maximum width of each line.
+ */
+vector<vector<string_token> > split_long_string_with_tokens(
+    const vector<string_token> &tokens, const int max_width
+) {
+    vector<vector<string_token> > tokens_per_line;
+    tokens_per_line.push_back(vector<string_token>());
+    size_t cur_line_idx = 0;
+    int caret = 0;
+    vector<string_token> word_buffer;
+    int word_buffer_width = 0;
+    
+    for(size_t t = 0; t < tokens.size() + 1; ++t) {
+    
+        if(
+            t == tokens.size() ||
+            (tokens[t].type == STRING_TOKEN_CHAR && tokens[t].content == " ")
+        ) {
+        
+            int caret_after_word = caret + word_buffer_width;
+            if(caret > 0 && caret_after_word > max_width) {
+                //Break to a new line before comitting the word.
+                tokens_per_line.push_back(vector<string_token>());
+                caret = 0;
+                cur_line_idx++;
+                
+                //Remove the previous line's trailing space, if any.
+                string_token &prev_tail =
+                    tokens_per_line[cur_line_idx - 1].back();
+                if(
+                    prev_tail.type == STRING_TOKEN_CHAR &&
+                    prev_tail.content == " "
+                ) {
+                    tokens_per_line[cur_line_idx - 1].pop_back();
+                }
+            }
+            
+            //Add the word to the current line.
+            if(t < tokens.size()) {
+                word_buffer.push_back(tokens[t]);
+                word_buffer_width += tokens[t].width;
+            }
+            tokens_per_line[cur_line_idx].insert(
+                tokens_per_line[cur_line_idx].end(),
+                word_buffer.begin(), word_buffer.end()
+            );
+            caret += word_buffer_width;
+            word_buffer.clear();
+            word_buffer_width = 0;
+            
+            continue;
+            
+        }
+        
+        //Add the token to the word buffer.
+        word_buffer.push_back(tokens[t]);
+        word_buffer_width += tokens[t].width;
+    }
+    
+    return tokens_per_line;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Standardizes a path, making it use forward slashes instead of backslashes,
  * and removing excess slashes at the end.
  * path:
@@ -1855,6 +1964,43 @@ string strsignal(const int signum) {
 
 
 #endif //if defined(_WIN32)
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the tokens that make up a string. This does not set the tokens's
+ * width.
+ * s:
+ *   String to tokenize.
+ */
+vector<string_token> tokenize_string(const string &s) {
+    vector<string_token> tokens;
+    string_token cur_token;
+    cur_token.type = STRING_TOKEN_CHAR;
+    
+    for(size_t c = 0; c < s.size(); ++c) {
+        if(str_peek(s, c, "\\k")) {
+            if(!cur_token.content.empty()) tokens.push_back(cur_token);
+            cur_token.content.clear();
+            if(cur_token.type != STRING_TOKEN_CONTROL) {
+                cur_token.type = STRING_TOKEN_CONTROL;
+            } else {
+                cur_token.type = STRING_TOKEN_CHAR;
+            }
+            c++;
+            
+        } else {
+            cur_token.content.push_back(s[c]);
+            if(cur_token.type == STRING_TOKEN_CHAR) {
+                if(!cur_token.content.empty()) tokens.push_back(cur_token);
+                cur_token.content.clear();
+            }
+            
+        }
+    }
+    if(!cur_token.content.empty()) tokens.push_back(cur_token);
+    
+    return tokens;
+}
 
 
 /* ----------------------------------------------------------------------------

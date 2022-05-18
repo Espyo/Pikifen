@@ -2,19 +2,25 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Message box text should be juicier
+        Letters should appear one at a time, maybe with the elastic ease?
+            On top of drawing every letter, it should also be able to draw control icons
+        Don't forget to stop the player from closing the message box when it's already transitioning
+        Letters should all swipe away when opening the next page
+        Show the button used to advance text in the corner
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     In the animation editor, flip a sprite, then change the number in the now-negative scale box. The other number will freak out. (Thanks Helodity)
+    Screenshots of the pause menu are being saved with alpha, in my new laptop
     
     --- v0.22.0 ---
     HUD improvements
-        Message box text should be juicier
-            Letters should appear one at a time, maybe with the elastic ease?
-			Letters should all swipe away when opening the next page
-			Show the button used to advance text in the corner
+        Maturity bubble should grow on Pikmin type change
+        Selecting a category in the help page should make the items inside, and the category title on the top-right, juicy grow
         Add juice to Onion menu
+        Check the controller's name, and if it matches the Pro Controller or Joy-Con, the button icons should show the name of the button instead of a number
+		Tooltip widgets should probably juicy-grow if their content changes
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time
             Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
@@ -28,6 +34,7 @@ Next tasks (roughly sorted most important first)
         Pikmin that are plucked should be thrown backwards. Plus, there should be some dirt particle effects
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
         GUI items should have some way of representing default values
+			Simply writing the default in the tooltip, both for options menu options and editor settings, is probably the simplest and most effective solution
         Center the GUI items in the options menu
         Maybe decrease the leaders's acceleration?
         Game feel
@@ -57,20 +64,6 @@ Next tasks (roughly sorted most important first)
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
-    Add several pre-packaged areas, since players have nothing to play with right now
-        A tutorial area
-            The area should be linear, but more intuitive and representative of the series
-            Linear, starts with an info spot that says welcome, and mentions the movement controls
-            After a bit to the right, there's a Pikmin on a ledge, and a sign telling you to whistle it
-            Farther up, a sign telling you to throw the Pikmin at a Pellet Posy on a ledge
-            You need to gather X Pikmin, to take down a paper bag or something
-            Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
-            Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
-            Some signs should talk about dismissing, and group moving
-            Signs should talk about the relevant HUD icons when appropriate
-        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
-            Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
-        Helodity's Adventure area (see #content-sharing)
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     General graphic file improvements
         Leader and Pikmin portrait images should
@@ -147,37 +140,6 @@ Next tasks (roughly sorted most important first)
             Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
     
     --- v0.23.0 ---
-    Radar
-        Radar page
-            https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?
-                Probably minimize the use of colors, because there can be tons of different Pikmin colors, and they should all be minimally visible
-            Icons for treasures, leaders, Onions, ships, Pikmin, and whatever else of importance
-            Area name, North indicator
-            Go Here!
-                Figure out what to do with sleeping. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
-                    Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
-            When it is opened, it should fade in to view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
-            Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
-            Working Pikmin and idle Pikmin counts
-        Stats page
-            Table with the amount of Pikmin of each type that is in the Onion, with you, working, idling
-            Number of deaths today
-            Progress towards concocting sprays
-        Pause menu page
-            It's just the pause menu
-        Open it with Tab, and move leader swapping to middle mouse button
-    Statistics menu, which keeps track of:
-        Engine use
-            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered
-        Pikmin life
-            Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count, Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
-        Leader control
-            Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
-    Other menu improvements
-        Onion menu
-            Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
-        The ability to load TTF fonts
-        [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
     Pikmin extinction
         Check Onions, ships, and converters that have Pikmin in the buffer
     Mission Mode stuff
@@ -260,14 +222,58 @@ Next tasks (roughly sorted most important first)
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
         Misc. ideas
             A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
+    Add several pre-packaged areas, since players have nothing to play with right now
+        A tutorial area
+            The area should be linear, but more intuitive and representative of the series
+            Linear, starts with an info spot that says welcome, and mentions the movement controls
+            After a bit to the right, there's a Pikmin on a ledge, and a sign telling you to whistle it
+            Farther up, a sign telling you to throw the Pikmin at a Pellet Posy on a ledge
+            You need to gather X Pikmin, to take down a paper bag or something
+            Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
+            Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
+            Some signs should talk about dismissing, and group moving
+            Signs should talk about the relevant HUD icons when appropriate
+        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
+            Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
+        Helodity's Adventure area (see #content-sharing)
+    Statistics menu, which keeps track of:
+        Engine use
+            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered
+        Pikmin life
+            Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count, Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
+        Leader control
+            Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
     
-    --- v0.24.0 ---
-    Music
+    --- Future ---
+    Radar
+        Radar page
+            https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?
+                Probably minimize the use of colors, because there can be tons of different Pikmin colors, and they should all be minimally visible
+            Icons for treasures, leaders, Onions, ships, Pikmin, and whatever else of importance
+            Area name, North indicator
+            Go Here!
+                Figure out what to do with sleeping. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
+                    Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
+            When it is opened, it should fade in to view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
+            Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
+            Working Pikmin and idle Pikmin counts
+        Stats page
+            Table with the amount of Pikmin of each type that is in the Onion, with you, working, idling
+            Number of deaths today
+            Progress towards concocting sprays
+        Pause menu page
+            It's just the pause menu
+        Open it with Tab, and move leader swapping to middle mouse button
+    Other menu improvements
+        Onion menu
+            Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
+        The ability to load TTF fonts
+        [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
+	Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend. If we can't get away with many variants, explain in the FAQ why that is
         The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
         Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
-        
     Revamp sound system
         Rename sound files to .oga, instead of .ogg
         There are three types of sounds
@@ -314,8 +320,6 @@ Next tasks (roughly sorted most important first)
             https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
         Fixes
             When you cancel holding a Pikmin, its standby squeal sound should stop
-    
-    --- Future ---
     Check what Pikmin 3 Deluxe added, and gather ideas of things to implement from there
         Dismissing should either dismiss everyone, or keep the current standby type
         When switching to a leader, all nearby idle Pikmin should be called over too
@@ -352,6 +356,7 @@ Next tasks (roughly sorted most important first)
             Maybe a "simple" controls menu and an "advanced" one? The advanced is the old one, but the "simple" one lets the player choose a controller, only map the most common controls, and automatically associate an analog stick to all four directions. If I do this, I should add a tip to the readme to tell people to try the advanced controls after they're comfortable with the engine.
                 Even better, the controls menu only contains a list of actions + what button is assigned + advanced settings button. The list of actions is sorted by category (main, Pikmin control, menus, advanced). Pressing the advanced settings button opens a quick new menu with other things you can do to this control, like returning to the default, removing assignment, or adding more buttons to that action (up to 3 total). Also, if it's a controller, the advanced settings sub-menu should say what controller number it's bound to
             When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
+			For gamepad inputs, write the gamepad's name somewhere on-screen?
             Save the controls in the options file inside a block, and possibly at the end of the options file
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
@@ -445,8 +450,10 @@ Next tasks (roughly sorted most important first)
                     Single-card:
                         One card shared by everyone
                         When an objective is completed, it's claimed by that team and is no longer possible to obtain
-                    Individual cards:
-                        Each team has their own card
+                    Same cards:
+                        Each team has their own card, but they're all the same card
+                    Random cards:
+                        Each team has its own card, random
                 Victory modes:
                     Bingo:
                         First team to collect enough things to score a line wins
@@ -466,7 +473,8 @@ Next tasks (roughly sorted most important first)
             In the ruleset editor, you can pick...
                 What victory conditions you want on (KO victory is always forcefully on)
                 What rules within those victory conditions (number of capture flags necessary to win, number of collectibles needed to win, etc.)
-                Items are enabled or disabled
+                Roulette item frequency: off, normal, common
+				Roulette item bias: purely random, spawn closer to the player behind, spawn two/three/four equally close to each base but random items, same but all the same item
                 Starting Pikmin for each team
                 Number of leaders for each team (if this is, for instance, set to 1, but players play 2v2, then each team will forcefully have 2 leaders instead)
                 Pikmin killed by other Pikmin are reborn at the Onion, or lost permanently
@@ -632,6 +640,9 @@ Small tasks (for when I'm feeling lazy)
     
     
 Misc things (so I don't forget)
+    The main menu should have a "Make" menu
+        This is where all the editors go
+        Include some widget that reads "Need help?", and if you mouse-over, the tooltip tells you that you can read the manual for more info and tutorials
     Attack improvements
         A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
         A way to add random variation to the knockback angle of a hitbox
@@ -718,6 +729,8 @@ Misc things (so I don't forget)
                 Or better yet, keyboard shortcuts to swap, only. This way the interface isn't cluttered, but power-users can still swap very easily
             A redo button
             Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just haave a link to another area's geometry instead. It should allow it to be rotated, too
+		Animation editor
+			Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
         Pressing Esc on the sprite/whatever rename pop-up should cancel
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?

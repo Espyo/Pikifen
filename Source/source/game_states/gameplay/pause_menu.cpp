@@ -11,6 +11,7 @@
 #include "gameplay.h"
 
 #include "../../drawing.h"
+#include "../../functions.h"
 #include "../../game.h"
 #include "../../utils/string_utils.h"
 
@@ -81,184 +82,41 @@ void pause_menu_struct::draw_tidbit(
     const int flags, const TEXT_VALIGN_MODES valign,
     const point &max_size, const string &text
 ) {
-    enum TOKEN_TYPES {
-        TOKEN_WORD,
-        TOKEN_CONTROL
-    };
-    struct token {
-        TOKEN_TYPES type;
-        string content;
-        int width;
-        token() : type(TOKEN_WORD), width(0) {}
-    };
-    vector<token> tokens;
-    token cur_token;
-    bool inside_control = false;
+    //Get the tokens that make up the tidbit.
+    vector<string_token> tokens = tokenize_string(text);
+    if(tokens.empty()) return;
     
-    //First, figure out which tokens exist.
-    for(size_t t = 0; t < text.size(); ++t) {
-        if(!inside_control && str_peek(text, t, " ")) {
-            if(!cur_token.content.empty()) tokens.push_back(cur_token);
-            cur_token.content.clear();
-            cur_token.type = TOKEN_WORD;
-            
-        } else if(str_peek(text, t, "\\k")) {
-            if(!cur_token.content.empty()) tokens.push_back(cur_token);
-            cur_token.content.clear();
-            if(!inside_control) {
-                inside_control = true;
-                cur_token.type = TOKEN_CONTROL;
-            } else {
-                inside_control = false;
-                cur_token.type = TOKEN_WORD;
-            }
-            t++;
-            
-        } else {
-            cur_token.content.push_back(text[t]);
-            
-        }
-    }
-    if(!cur_token.content.empty()) tokens.push_back(cur_token);
-    
-    //Get their widths.
-    int space_char_width = al_get_text_width(font, " ");
-    for(size_t t = 0; t < tokens.size(); ++t) {
-        switch(tokens[t].type) {
-        case TOKEN_WORD: {
-            tokens[t].width =
-                al_get_text_width(font, tokens[t].content.c_str());
-            break;
-        } case TOKEN_CONTROL: {
-            tokens[t].content = trim_spaces(tokens[t].content);
-            tokens[t].width =
-                get_control_icon_width(
-                    font, find_control(tokens[t].content), false
-                );
-        }
-        }
-    }
-    
-    //Figure out how many lines will be needed.
-    vector<int> line_widths;
-    int cur_line_width = 0;
-    for(size_t t = 0; t < tokens.size(); ++t) {
-        int line_width_after_token =
-            cur_line_width + tokens[t].width;
-        if(cur_line_width > 0) {
-            line_width_after_token += space_char_width;
-        }
-        
-        if(cur_line_width > 0 && line_width_after_token >= max_size.x) {
-            //Must go to the next line.
-            line_widths.push_back(cur_line_width);
-            cur_line_width = 0;
-        }
-        
-        if(cur_line_width > 0) {
-            cur_line_width += space_char_width;
-        }
-        cur_line_width += tokens[t].width;
-        
-        if(
-            cur_line_width > 0 &&
-            (cur_line_width >= max_size.x || t == tokens.size() - 1)
-        ) {
-            //We have to finish the current line.
-            line_widths.push_back(cur_line_width);
-            cur_line_width = 0;
-        }
-    }
-    
-    if(line_widths.empty()) return;
-    
-    //Figure out scales for each line, and for the whole piece.
-    float y_scale = 1.0f;
     int line_height = al_get_font_line_height(font);
-    if(line_widths.size() * line_height > max_size.y) {
-        y_scale = max_size.y / line_widths.size() * line_height;
-    }
     
-    vector<float> line_scales;
-    line_scales.reserve(line_widths.size());
-    for(size_t l = 0; l < line_widths.size(); ++l) {
-        float line_scale = 1.0f;
-        if(line_widths[l] > max_size.x) {
-            line_scale = max_size.x / line_widths[l];
-        }
-        line_scales.push_back(line_scale);
+    set_string_token_widths(tokens, font, game.fonts.slim, line_height);
+    
+    //Split long lines.
+    vector<vector<string_token> > tokens_per_line =
+        split_long_string_with_tokens(tokens, max_size.x);
+        
+    if(tokens_per_line.empty()) return;
+    
+    //Figure out if we need to scale things vertically.
+    //Control icons that are bitmaps will have their width unchanged, otherwise
+    //this would turn into a cat-and-mouse game of the Y scale shrinking causing
+    //a token width to shrink, which could cause the Y scale to grow,
+    //ad infinitum.
+    float y_scale = 1.0f;
+    if(tokens_per_line.size() * line_height > max_size.y) {
+        y_scale = max_size.y / (tokens_per_line.size() * line_height);
     }
     
     //Draw!
-    int cur_line_idx = 0;
-    cur_line_width = 0;
-    for(size_t t = 0; t < tokens.size(); ++t) {
-        int line_width_after_token =
-            cur_line_width + tokens[t].width;
-        if(cur_line_width > 0) {
-            line_width_after_token += space_char_width;
-        }
-        
-        if(cur_line_width > 0 && line_width_after_token >= max_size.x) {
-            //Must go to the next line.
-            cur_line_idx++;
-            cur_line_width = 0;
-        }
-        
-        float x = where.x + cur_line_width * line_scales[cur_line_idx];
-        if(cur_line_width > 0) {
-            x += space_char_width * line_scales[cur_line_idx];
-        }
-        if(flags & ALLEGRO_ALIGN_CENTER) {
-            x -= (line_widths[cur_line_idx] * line_scales[cur_line_idx]) / 2.0f;
-        } else if(flags & ALLEGRO_ALIGN_RIGHT) {
-            x -= line_widths[cur_line_idx] * line_scales[cur_line_idx];
-        }
-        float y = where.y + cur_line_idx * line_height * y_scale;
-        if(valign == TEXT_VALIGN_CENTER) {
-            y -= (line_widths.size() * line_height * y_scale) / 2.0f;
-        } else if(valign == TEXT_VALIGN_BOTTOM) {
-            y -= line_widths.size() * line_height * y_scale;
-        }
-        
-        switch(tokens[t].type) {
-        case TOKEN_WORD: {
-            draw_scaled_text(
-                font, color,
-                point(x, y),
-                point(line_scales[cur_line_idx], y_scale),
-                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP, tokens[t].content
-            );
-            break;
-        }
-        case TOKEN_CONTROL: {
-            draw_control_icon(
-                game.fonts.slim,
-                find_control(tokens[t].content),
-                false,
-                point(
-                    x + (tokens[t].width * line_scales[cur_line_idx]) / 2.0f,
-                    y + (line_height * y_scale) / 2.0f
-                ),
-                point(
-                    tokens[t].width * line_scales[cur_line_idx],
-                    line_height * y_scale
-                )
-            );
-            break;
-        }
-        }
-        
-        if(cur_line_width > 0) {
-            cur_line_width += space_char_width;
-        }
-        cur_line_width += tokens[t].width;
-        
-        if(cur_line_width >= max_size.x) {
-            //We have to finish the current line.
-            cur_line_idx++;
-            cur_line_width = 0;
-        }
+    for(size_t l = 0; l < tokens_per_line.size(); ++l) {
+        draw_string_tokens(
+            tokens_per_line[l], game.fonts.standard, game.fonts.slim,
+            point(
+                where.x,
+                where.y + l * line_height * y_scale -
+                (tokens_per_line.size() * line_height * y_scale / 2.0f)
+            ),
+            ALLEGRO_ALIGN_CENTER, point(max_size.x, line_height * y_scale)
+        );
     }
 }
 

@@ -80,6 +80,19 @@ extern const string NAMES[N_MAKER_TOOLS];
 }
 
 
+//Types of string token.
+enum STRING_TOKEN_TYPES {
+    //None.
+    STRING_TOKEN_NONE,
+    //A regular character.
+    STRING_TOKEN_CHAR,
+    //A line break.
+    STRING_TOKEN_NEWLINE,
+    //A control icon.
+    STRING_TOKEN_CONTROL,
+};
+
+
 /* ----------------------------------------------------------------------------
  * List of file names of system assets.
  */
@@ -180,6 +193,21 @@ struct camera_info {
     void update_box();
     
     camera_info();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Contains info about a token in a string.
+ */
+struct string_token {
+    //Type of token.
+    STRING_TOKEN_TYPES type;
+    //Its content.
+    string content;
+    //Width that it takes up, in pixels.
+    int width;
+    //Constructor.
+    string_token() : type(STRING_TOKEN_CHAR), width(0) {}
 };
 
 

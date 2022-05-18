@@ -1492,6 +1492,83 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
 
 
 /* ----------------------------------------------------------------------------
+ * Draws string tokens.
+ * tokens:
+ *   Vector of tokens to draw.
+ * text_font:
+ *   Text font.
+ * control_font:
+ *   Font for control icons.
+ * where:
+ *   Top-left coordinates to draw at.
+ * flags:
+ *   Allegro text flags.
+ * max_size:
+ *   Maximum width and height of the whole thing.
+ */
+void draw_string_tokens(
+    vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
+    const ALLEGRO_FONT* const control_font, const point &where,
+    const int flags, const point &max_size
+) {
+    int total_width = 0;
+    float x_scale = 1.0f;
+    for(size_t t = 0; t < tokens.size(); ++t) {
+        total_width += tokens[t].width;
+    }
+    if(total_width > max_size.x) {
+        x_scale = max_size.x / total_width;
+    }
+    float y_scale = 1.0f;
+    int line_height = al_get_font_line_height(text_font);
+    if(line_height > max_size.y) {
+        y_scale = max_size.y / line_height;
+    }
+    
+    float start_x = where.x;
+    if(flags & ALLEGRO_ALIGN_CENTER) {
+        start_x -= (total_width * x_scale) / 2.0f;
+    } else if(flags & ALLEGRO_ALIGN_RIGHT) {
+        start_x -= total_width * x_scale;
+    }
+    
+    float caret = start_x;
+    for(size_t t = 0; t < tokens.size(); ++t) {
+        float token_final_width = tokens[t].width * x_scale;
+        switch(tokens[t].type) {
+        case STRING_TOKEN_CHAR: {
+            draw_scaled_text(
+                text_font, COLOR_WHITE,
+                point(caret, where.y),
+                point(x_scale, y_scale),
+                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
+                tokens[t].content
+            );
+            break;
+        }
+        case STRING_TOKEN_CONTROL: {
+            draw_control_icon(
+                control_font,
+                find_control(tokens[t].content),
+                false,
+                point(
+                    caret + token_final_width / 2.0f,
+                    where.y + max_size.y / 2.0f
+                ),
+                point(token_final_width, max_size.y)
+            );
+            break;
+        }
+        default: {
+            break;
+        }
+        }
+        caret += token_final_width;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws text, but if there are line breaks,
  * it'll draw every line one under the other.
  * It basically calls Allegro's text drawing functions, but for each line.
@@ -1956,9 +2033,14 @@ void get_control_icon_info(
  *   disambiguation information is included too. For instance, keyboard keys
  *   that come in pairs specify whether they are the left or right key,
  *   gamepad controls specify what gamepad number it is, etc.
+ * max_bitmap_height:
+ *   If bitmap icons need to be condensed vertically to fit a certain space,
+ *   then their width will be affected too. Specify the maximum height here.
+ *   Use 0 to indicate no maximum height.
  */
 float get_control_icon_width(
-    const ALLEGRO_FONT* font, const control_info* c, const bool condensed
+    const ALLEGRO_FONT* font, const control_info* c, const bool condensed,
+    const float max_bitmap_height
 ) {
     CONTROL_ICON_SHAPES shape;
     CONTROL_ICON_SPRITES bitmap_sprite;
@@ -1970,7 +2052,13 @@ float get_control_icon_width(
     
     if(shape == CONTROL_ICON_SHAPE_BITMAP) {
         //All icons are square, and in a row, so the spritesheet height works.
-        return al_get_bitmap_height(game.sys_assets.bmp_control_icons);
+        int bmp_height =
+            al_get_bitmap_height(game.sys_assets.bmp_control_icons);
+        if(max_bitmap_height == 0.0f || bmp_height < max_bitmap_height) {
+            return bmp_height;
+        } else {
+            return max_bitmap_height;
+        }
     } else {
         return al_get_text_width(font, text.c_str()) + CONTROL_ICON_PADDING * 2;
     }
