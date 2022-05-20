@@ -1833,9 +1833,9 @@ vector<vector<string_token> > split_long_string_with_tokens(
     vector<vector<string_token> > tokens_per_line;
     tokens_per_line.push_back(vector<string_token>());
     size_t cur_line_idx = 0;
-    int caret = 0;
+    unsigned int caret = 0;
     vector<string_token> word_buffer;
-    int word_buffer_width = 0;
+    unsigned int word_buffer_width = 0;
     
     for(size_t t = 0; t < tokens.size() + 1; ++t) {
     

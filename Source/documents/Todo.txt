@@ -5,9 +5,11 @@ Current tasks (tasks being worked on, but not yet committed)
     Message box text should be juicier
         Letters should appear one at a time, maybe with the elastic ease?
             On top of drawing every letter, it should also be able to draw control icons
-        Don't forget to stop the player from closing the message box when it's already transitioning
+        Test that the config setting to show message box text instantly is working
+		If the message box finished filling, there should be a cooldown period of like 0.75 seconds where the player can't press the button to go to the next
         Letters should all swipe away when opening the next page
         Show the button used to advance text in the corner
+        Don't forget to stop the player from closing the message box when it's already transitioning
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

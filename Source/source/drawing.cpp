@@ -1511,7 +1511,7 @@ void draw_string_tokens(
     const ALLEGRO_FONT* const control_font, const point &where,
     const int flags, const point &max_size
 ) {
-    int total_width = 0;
+    unsigned int total_width = 0;
     float x_scale = 1.0f;
     for(size_t t = 0; t < tokens.size(); ++t) {
         total_width += tokens[t].width;
@@ -1520,7 +1520,7 @@ void draw_string_tokens(
         x_scale = max_size.x / total_width;
     }
     float y_scale = 1.0f;
-    int line_height = al_get_font_line_height(text_font);
+    unsigned int line_height = al_get_font_line_height(text_font);
     if(line_height > max_size.y) {
         y_scale = max_size.y / line_height;
     }

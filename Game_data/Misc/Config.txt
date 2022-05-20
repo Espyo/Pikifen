@@ -38,6 +38,6 @@ throw_max_dist = 200
 whistle_growth_speed = 180
 whistle_max_dist = 200
 
-message_char_interval = 0.02
+message_char_interval = 0.03
 zoom_max_level = 3.0
 zoom_min_level = 0.66

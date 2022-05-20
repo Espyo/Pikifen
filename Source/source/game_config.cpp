@@ -31,7 +31,7 @@ const float game_config::DEF_IDLE_TASK_RANGE = 50.0f;
 const float game_config::DEF_MATURITY_POWER_MULT = 0.1f;
 const float game_config::DEF_MATURITY_SPEED_MULT = 0.1f;
 const size_t game_config::DEF_MAX_PIKMIN_IN_FIELD = 100;
-const float game_config::DEF_MESSAGE_CHAR_INTERVAL = 0.02f;
+const float game_config::DEF_MESSAGE_CHAR_INTERVAL = 0.03f;
 const float game_config::DEF_NEXT_PLUCK_RANGE = 160.0f;
 const ALLEGRO_COLOR game_config::DEF_NO_PIKMIN_COLOR =
 { 0.75f, 0.90f, 0.90f };

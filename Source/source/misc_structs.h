@@ -36,6 +36,14 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+namespace MSG_BOX {
+extern const float MARGIN;
+extern const float PADDING;
+extern const float TOKEN_ANIM_DURATION;
+extern const float TOKEN_ANIM_X_AMOUNT;
+extern const float TOKEN_ANIM_Y_AMOUNT;
+}
+
 namespace WHISTLE {
 constexpr unsigned char N_RING_COLORS = 8;
 constexpr unsigned char N_DOT_COLORS = 6;
@@ -415,18 +423,20 @@ struct movement_struct {
  * Information about the current on-screen message box, if any.
  */
 struct msg_box_info {
-    //Timer until the next character shows up.
-    timer char_timer;
-    //What character are we in?
-    size_t cur_char;
-    //What section of the message are we in?
-    size_t cur_section;
-    //Full text of the message.
-    string message;
+    //Full list of message tokens, per line.
+    vector<vector<string_token> > tokens_per_line;
     //Icon that represents the speaker, if any.
     ALLEGRO_BITMAP* speaker_icon;
-    //Stops scrolling when it reaches one of these. There's one per section.
-    vector<size_t> stopping_chars;
+    //What section of the message are we in?
+    size_t cur_section;
+    //What token of the section are we in, for the typing animation?
+    size_t cur_token;
+    //From what token did the player perform a typing skip? INVALID = none.
+    size_t skipped_at_token;
+    //How long have we been animating tokens for.
+    float total_token_anim_time;
+    //How long have we been animating the skipped tokens for.
+    float total_skip_anim_time;
     //Time left in the current transition.
     float transition_timer;
     //Is it transitioning into view, or out of view?
@@ -435,7 +445,6 @@ struct msg_box_info {
     bool to_delete;
     
     void advance();
-    vector<string> get_current_lines() const;
     void tick(const float delta_t);
     
     msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon);

@@ -727,25 +727,29 @@ void gameplay_state::draw_lighting_filter() {
  * Draws a message box.
  */
 void gameplay_state::draw_message_box() {
+    //Mouse cursor.
     draw_mouse_cursor(al_map_rgb(188, 230, 230));
     
     al_use_transform(&game.identity_transform);
     
+    //Transition things.
     float transition_ratio =
         msg_box->transition_in ?
         msg_box->transition_timer / MENU_ENTRY_HUD_MOVE_TIME :
         (1 - msg_box->transition_timer / MENU_EXIT_HUD_MOVE_TIME);
-    float box_height =
-        al_get_font_line_height(game.fonts.standard) * 4;
+    int line_height = al_get_font_line_height(game.fonts.standard);
+    float box_height = line_height * 4;
     float offset =
         box_height * ease(EASE_IN, transition_ratio);
         
+    //Draw a rectangle to darken gameplay.
     al_draw_filled_rectangle(
         0.0f, 0.0f,
         game.win_w, game.win_h,
         al_map_rgba(0, 0, 0, 64 * (1 - transition_ratio))
     );
     
+    //Draw the message box proper.
     draw_textured_box(
         point(
             game.win_w / 2,
@@ -755,6 +759,7 @@ void gameplay_state::draw_message_box() {
         game.sys_assets.bmp_bubble_box
     );
     
+    //Draw the speaker's icon, if any.
     if(msg_box->speaker_icon) {
         draw_bitmap(
             msg_box->speaker_icon,
@@ -774,22 +779,95 @@ void gameplay_state::draw_message_box() {
         );
     }
     
-    vector<string> lines = msg_box->get_current_lines();
-    
-    for(size_t l = 0; l < lines.size(); ++l) {
-    
-        draw_compressed_text(
-            game.fonts.standard, COLOR_WHITE,
-            point(
-                24,
-                game.win_h -
-                al_get_font_line_height(game.fonts.standard) * (4 - l) + 8 +
-                offset
-            ),
-            ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP, point(game.win_w - 64, 0),
-            lines[l]
-        );
+    //Draw the message's text.
+    size_t token_idx = 0;
+    for(size_t l = 0; l < 3; ++l) {
+        size_t line_idx = msg_box->cur_section * 3 + l;
+        if(line_idx >= msg_box->tokens_per_line.size()) {
+            break;
+        }
         
+        //Figure out what scaling is necessary, if any.
+        unsigned int total_width = 0;
+        float x_scale = 1.0f;
+        for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); ++t) {
+            total_width += msg_box->tokens_per_line[line_idx][t].width;
+        }
+        const float max_text_width = (MSG_BOX::MARGIN + MSG_BOX::PADDING) * 2;
+        if(total_width > game.win_w - max_text_width) {
+            x_scale = (game.win_w - max_text_width) / total_width;
+        }
+        
+        float caret =
+            MSG_BOX::MARGIN + MSG_BOX::PADDING;
+        float start_y =
+            game.win_h - line_height * 4 + MSG_BOX::PADDING + offset;
+            
+        for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); ++t) {
+            token_idx++;
+            if(token_idx >= msg_box->cur_token) break;
+            string_token &cur_token = msg_box->tokens_per_line[line_idx][t];
+            
+            float x = caret;
+            float y = start_y + line_height * l;
+            unsigned char alpha = 255;
+            float this_token_anim_time;
+            
+            //Change the token's position and alpha, if it needs animating.
+            if(token_idx >= msg_box->skipped_at_token) {
+                this_token_anim_time = msg_box->total_skip_anim_time;
+            } else {
+                this_token_anim_time =
+                    msg_box->total_token_anim_time -
+                    ((token_idx + 1) * game.config.message_char_interval);
+            }
+            if(
+                this_token_anim_time > 0 &&
+                this_token_anim_time < MSG_BOX::TOKEN_ANIM_DURATION
+            ) {
+                float ratio =
+                    this_token_anim_time / MSG_BOX::TOKEN_ANIM_DURATION;
+                x +=
+                    MSG_BOX::TOKEN_ANIM_X_AMOUNT *
+                    ease(EASE_UP_AND_DOWN_ELASTIC, ratio);
+                y +=
+                    MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
+                    ease(EASE_UP_AND_DOWN_ELASTIC, ratio);
+                alpha = ratio * 255;
+            }
+            
+            //Actually draw it now.
+            float token_final_width = cur_token.width * x_scale;
+            switch(cur_token.type) {
+            case STRING_TOKEN_CHAR: {
+                draw_scaled_text(
+                    game.fonts.standard, map_alpha(alpha),
+                    point(x, y),
+                    point(x_scale, 1.0f),
+                    ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
+                    cur_token.content
+                );
+                break;
+            }
+            case STRING_TOKEN_CONTROL: {
+                draw_control_icon(
+                    game.fonts.slim,
+                    find_control(cur_token.content),
+                    false,
+                    point(
+                        x + token_final_width / 2.0f,
+                        y + line_height / 2.0f
+                    ),
+                    point(token_final_width, line_height)
+                );
+                break;
+            }
+            default: {
+                break;
+            }
+            }
+            caret += token_final_width;
+        }
     }
 }
 

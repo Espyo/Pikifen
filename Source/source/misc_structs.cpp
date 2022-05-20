@@ -21,6 +21,19 @@
 #include "load.h"
 #include "utils/string_utils.h"
 
+namespace MSG_BOX {
+//How many pixels of margin between the message box and screen borders.
+const float MARGIN = 16.0f;
+//How many pixels of padding between the message box borders and text.
+const float PADDING = 8.0f;
+//How long each token animates for when being shown.
+const float TOKEN_ANIM_DURATION = 0.5f;
+//How much to move a token in the X direction when animating it.
+const float TOKEN_ANIM_X_AMOUNT = 7.0f;
+//How much to move a token in the Y direction when animating it.
+const float TOKEN_ANIM_Y_AMOUNT = 3.0f;
+}
+
 namespace WHISTLE {
 //R, G, and B components for each dot color.
 const unsigned char DOT_COLORS[N_DOT_COLORS][3] = {
@@ -600,45 +613,38 @@ void movement_struct::reset() {
  *   Bitmap representing who is talking, if not NULL.
  */
 msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
-    cur_char(0),
-    cur_section(0),
     speaker_icon(speaker_icon),
+    cur_section(0),
+    cur_token(0),
+    skipped_at_token(INVALID),
+    total_token_anim_time(0.0f),
+    total_skip_anim_time(0.0f),
     transition_timer(gameplay_state::MENU_ENTRY_HUD_MOVE_TIME),
     transition_in(true),
     to_delete(false) {
     
-    message = unescape_string(text);
+    string message = unescape_string(text);
     if(message.size() && message.back() == '\n') {
         message.pop_back();
     }
+    vector<string_token> tokens = tokenize_string(message);
+    set_string_token_widths(
+        tokens, game.fonts.standard, game.fonts.slim,
+        al_get_font_line_height(game.fonts.standard)
+    );
     
-    char_timer =
-        timer(
-            game.config.message_char_interval,
-    [this] () {
-        char_timer.start();
-        cur_char++;
+    vector<string_token> line;
+    for(size_t t = 0; t < tokens.size(); ++t) {
+        if(tokens[t].type == STRING_TOKEN_CHAR && tokens[t].content == "\n") {
+            tokens_per_line.push_back(line);
+            line.clear();
+        } else {
+            line.push_back(tokens[t]);
+        }
     }
-        );
-    char_timer.start();
-    
-    //Push the first character as a stopping character. Makes life easier.
-    stopping_chars.push_back(0);
-    
-    vector<string> lines = split(text, "\n");
-    size_t char_count = 0;
-    for(size_t l = 0; l < lines.size(); ++l) {
-        //+1 because of the new line character.
-        char_count += lines[l].size() + 1;
-        if((l + 1) % 3 == 0) stopping_chars.push_back(char_count);
+    if(!line.empty()) {
+        tokens_per_line.push_back(line);
     }
-    
-    if(stopping_chars.size() > 1) {
-        //Remove one because the last line doesn't have a new line character.
-        //Even if it does, it's invisible.
-        stopping_chars.back()--;
-    }
-    stopping_chars.push_back(message.size());
 }
 
 
@@ -647,31 +653,32 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
  * or to skip to showing everything in the current section.
  */
 void msg_box_info::advance() {
-    size_t stopping_char =
-        stopping_chars[cur_section + 1];
-    if(cur_char == stopping_char) {
-        if(stopping_char == message.size()) {
+    if(transition_timer > 0.0f) return;
+    
+    size_t last_token = 0;
+    for(size_t l = 0; l < 3; ++l) {
+        size_t line_idx = cur_section * 3 + l;
+        if(line_idx >= tokens_per_line.size()) break;
+        last_token += tokens_per_line[line_idx].size();
+    }
+    
+    if(cur_token >= last_token + 1) {
+        if(cur_section >= ceil(tokens_per_line.size() / 3.0f) - 1) {
+            //End of the message. Start closing the message box.
             transition_in = false;
             transition_timer = gameplay_state::MENU_EXIT_HUD_MOVE_TIME;
         } else {
+            //Go to the next section.
             cur_section++;
+            total_token_anim_time = 0.0f;
+            total_skip_anim_time = 0.0f;
+            skipped_at_token = INVALID;
         }
     } else {
-        cur_char = stopping_char;
+        //Skip the text typing and show everything in this section.
+        skipped_at_token = cur_token;
+        cur_token = last_token + 1;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns what lines of text should be shown right now.
- */
-vector<string> msg_box_info::get_current_lines() const {
-    string text_to_show =
-        message.substr(
-            stopping_chars[cur_section],
-            cur_char - stopping_chars[cur_section]
-        );
-    return split(text_to_show, "\n");
 }
 
 
@@ -681,14 +688,20 @@ vector<string> msg_box_info::get_current_lines() const {
  *   How long the frame's tick is, in seconds.
  */
 void msg_box_info::tick(const float delta_t) {
+    size_t tokens_in_section = 0;
+    for(size_t l = 0; l < 3; ++l) {
+        size_t line_idx = cur_section * 3 + l;
+        if(line_idx >= tokens_per_line.size()) break;
+        tokens_in_section += tokens_per_line[line_idx].size();
+    }
+    
     //Animate the text.
-    if(cur_char < stopping_chars[cur_section + 1]) {
-        if(char_timer.duration == 0.0f) {
-            //Display everything right away.
-            cur_char = stopping_chars[cur_section + 1];
-        } else if(transition_timer == 0.0f) {
-            char_timer.tick(game.delta_t);
-        }
+    total_token_anim_time += delta_t;
+    if(skipped_at_token == INVALID) {
+        cur_token = total_token_anim_time / game.config.message_char_interval;
+        cur_token = std::min(cur_token, tokens_in_section + 1);
+    } else {
+        total_skip_anim_time += delta_t;
     }
     
     //Animate the transition.
