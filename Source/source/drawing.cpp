@@ -457,7 +457,7 @@ void draw_control_icon(
                 (icon_size + 1) * (int) bitmap_sprite, 0,
                 icon_size, icon_size
             );
-        draw_bitmap_in_box(bmp, where, max_size, 0.0f, map_alpha(192));
+        draw_bitmap_in_box(bmp, where, max_size, 0.0f, map_alpha(alpha));
         al_destroy_bitmap(bmp);
         return;
     }

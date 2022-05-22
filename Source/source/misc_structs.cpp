@@ -22,10 +22,14 @@
 #include "utils/string_utils.h"
 
 namespace MSG_BOX {
+//How quickly the advance button icon fades, in alpha (0-1) per second.
+const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;
 //How many pixels of margin between the message box and screen borders.
 const float MARGIN = 16.0f;
 //How many pixels of padding between the message box borders and text.
 const float PADDING = 8.0f;
+//How long to protect the player from misinputs for.
+const float MISINPUT_PROTECTION_DURATION = 0.75f;
 //How long each token animates for when being shown.
 const float TOKEN_ANIM_DURATION = 0.5f;
 //How much to move a token in the X direction when animating it.
@@ -619,6 +623,8 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     skipped_at_token(INVALID),
     total_token_anim_time(0.0f),
     total_skip_anim_time(0.0f),
+    misinput_protection_timer(0.0f),
+    advance_button_alpha(0.0f),
     transition_timer(gameplay_state::MENU_ENTRY_HUD_MOVE_TIME),
     transition_in(true),
     to_delete(false) {
@@ -653,7 +659,7 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
  * or to skip to showing everything in the current section.
  */
 void msg_box_info::advance() {
-    if(transition_timer > 0.0f) return;
+    if(transition_timer > 0.0f || misinput_protection_timer > 0.0f) return;
     
     size_t last_token = 0;
     for(size_t l = 0; l < 3; ++l) {
@@ -695,13 +701,36 @@ void msg_box_info::tick(const float delta_t) {
         tokens_in_section += tokens_per_line[line_idx].size();
     }
     
-    //Animate the text.
-    total_token_anim_time += delta_t;
-    if(skipped_at_token == INVALID) {
-        cur_token = total_token_anim_time / game.config.message_char_interval;
-        cur_token = std::min(cur_token, tokens_in_section + 1);
-    } else {
-        total_skip_anim_time += delta_t;
+    if(!transition_in || transition_timer == 0.0f) {
+    
+        //Animate the text.
+        if(game.config.message_char_interval == 0.0f) {
+            skipped_at_token = 0;
+            cur_token = tokens_in_section + 1;
+        } else {
+            total_token_anim_time += delta_t;
+            if(skipped_at_token == INVALID) {
+                size_t prev_token = cur_token;
+                cur_token =
+                    total_token_anim_time / game.config.message_char_interval;
+                cur_token =
+                    std::min(cur_token, tokens_in_section + 1);
+                if(
+                    cur_token == tokens_in_section + 1 &&
+                    prev_token != cur_token
+                ) {
+                    //We've reached the last token organically.
+                    //Start a misinput protection timer, so the player
+                    //doesn't accidentally go to the next section when they
+                    //were just trying to skip the text.
+                    misinput_protection_timer =
+                        MSG_BOX::MISINPUT_PROTECTION_DURATION;
+                }
+            } else {
+                total_skip_anim_time += delta_t;
+            }
+        }
+        
     }
     
     //Animate the transition.
@@ -709,6 +738,31 @@ void msg_box_info::tick(const float delta_t) {
     transition_timer = std::max(0.0f, transition_timer);
     if(!transition_in && transition_timer == 0.0f) {
         to_delete = true;
+    }
+    
+    //Misinput logic.
+    misinput_protection_timer -= delta_t;
+    misinput_protection_timer = std::max(0.0f, misinput_protection_timer);
+    
+    //Button opacity logic.
+    if(
+        transition_timer == 0.0f &&
+        misinput_protection_timer == 0.0f &&
+        cur_token >= tokens_in_section + 1
+    ) {
+        advance_button_alpha =
+            std::min(
+                advance_button_alpha +
+                MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t,
+                1.0f
+            );
+    } else {
+        advance_button_alpha =
+            std::max(
+                0.0f,
+                advance_button_alpha -
+                MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t
+            );
     }
 }
 

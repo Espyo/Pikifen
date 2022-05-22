@@ -37,8 +37,10 @@ using std::string;
 using std::vector;
 
 namespace MSG_BOX {
+extern const float ADVANCE_BUTTON_FADE_SPEED;
 extern const float MARGIN;
 extern const float PADDING;
+extern const float MISINPUT_PROTECTION_DURATION;
 extern const float TOKEN_ANIM_DURATION;
 extern const float TOKEN_ANIM_X_AMOUNT;
 extern const float TOKEN_ANIM_Y_AMOUNT;
@@ -437,6 +439,10 @@ struct msg_box_info {
     float total_token_anim_time;
     //How long have we been animating the skipped tokens for.
     float total_skip_anim_time;
+    //Timer where the player can't advance. Stops accidental misinputs.
+    float misinput_protection_timer;
+    //Opacity of the advance button icon.
+    float advance_button_alpha;
     //Time left in the current transition.
     float transition_timer;
     //Is it transitioning into view, or out of view?

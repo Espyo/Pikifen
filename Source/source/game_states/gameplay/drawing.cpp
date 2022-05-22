@@ -779,6 +779,20 @@ void gameplay_state::draw_message_box() {
         );
     }
     
+    //Draw the button to advance, if it's time.
+    draw_control_icon(
+        game.fonts.slim,
+        find_control(BUTTON_THROW),
+        true,
+        point(
+            game.win_w - (MSG_BOX::MARGIN + MSG_BOX::PADDING + 8.0f),
+            game.win_h - (MSG_BOX::MARGIN + MSG_BOX::PADDING + 8.0f) +
+            offset
+        ),
+        point(32.0f, 32.0f),
+        msg_box->advance_button_alpha * 255
+    );
+    
     //Draw the message's text.
     size_t token_idx = 0;
     for(size_t l = 0; l < 3; ++l) {
