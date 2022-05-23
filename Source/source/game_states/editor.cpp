@@ -1233,17 +1233,25 @@ bool editor::process_size_widgets(
             size.x == 0.0f || size.y == 0.0f ||
             new_size.x == 0.0f || new_size.y == 0.0f
         ) {
+            //Just change them, and forget about keeping the aspect ratio.
             new_size.x = std::max(min_size, new_size.x);
             new_size.y = std::max(min_size, new_size.y);
         } else {
+            //Keep the aspect ratio.
             float ratio = size.x / size.y;
             if(new_size.x != size.x) {
-                new_size.x = std::max(min_size * ratio, new_size.x);
-                new_size.x = std::max(min_size, new_size.x);
+                //Must adjust Y.
+                if(min_size != -FLT_MAX) {
+                    new_size.x = std::max(min_size * ratio, new_size.x);
+                    new_size.x = std::max(min_size, new_size.x);
+                }
                 new_size.y = new_size.x / ratio;
             } else {
-                new_size.x = std::max(min_size / ratio, new_size.y);
-                new_size.y = std::max(min_size, new_size.y);
+                //Must adjust X.
+                if(min_size != -FLT_MAX) {
+                    new_size.x = std::max(min_size / ratio, new_size.y);
+                    new_size.y = std::max(min_size, new_size.y);
+                }
                 new_size.x = new_size.y * ratio;
             }
         }

@@ -6,8 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    In the animation editor, flip a sprite, then change the number in the now-negative scale box. The other number will freak out. (Thanks Helodity)
-    Screenshots of the pause menu are being saved with alpha, in my new laptop
+    
     
     --- v0.22.0 ---
     HUD improvements
@@ -73,6 +72,7 @@ Next tasks (roughly sorted most important first)
             Add a reference Olimar image in all of them
             I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
                 Check if premultiplied alpha fixes this problem
+                    And check if premultiplied alpha fixes the fact that screenshots come with alpha on my new laptop
             Search for "data:image/" for leftover image files in the SVG files
             Convince it to export at 96dpi, not 90dpi
         Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
