@@ -30,10 +30,12 @@ const float gui_item::JUICY_GROW_DURATION = 0.3f;
 const float gui_item::JUICY_GROW_ELASTIC_DURATION = 0.4f;
 //Grow scale multiplier for a juicy icon grow animation.
 const float gui_item::JUICY_GROW_ICON_MULT = 5.0f;
-//Grow scale multiplier for a juicy text low grow animation.
-const float gui_item::JUICY_GROW_TEXT_LOW_MULT = 0.05f;
 //Grow scale multiplier for a juicy text high grow animation.
 const float gui_item::JUICY_GROW_TEXT_HIGH_MULT = 0.15f;
+//Grow scale multiplier for a juicy text low grow animation.
+const float gui_item::JUICY_GROW_TEXT_LOW_MULT = 0.02f;
+//Grow scale multiplier for a juicy text medium grow animation.
+const float gui_item::JUICY_GROW_TEXT_MEDIUM_MULT = 0.05f;
 //Interval between auto-repeat activations, at the slowest speed.
 const float gui_manager::AUTO_REPEAT_MAX_INTERVAL = 0.3f;
 //Interval between auto-repeat activations, at the fastest speed.
@@ -78,10 +80,11 @@ bullet_point_gui_item::bullet_point_gui_item(
             bullet_point_gui_item::BULLET_RADIUS,
             color
         );
+        float juicy_grow_amount = get_juice_value();
         draw_compressed_scaled_text(
             this->font, this->color,
             point(item_x_start + text_x_offset, center.y),
-            point(1.0, 1.0),
+            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, text_space, true,
             this->text
         );
@@ -255,6 +258,13 @@ float gui_item::get_juice_value() {
             JUICY_GROW_TEXT_LOW_MULT;
         break;
     }
+    case JUICE_TYPE_GROW_TEXT_MEDIUM: {
+        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
+        return
+            ease(EASE_UP_AND_DOWN, anim_ratio) *
+            JUICY_GROW_TEXT_MEDIUM_MULT;
+        break;
+    }
     case JUICE_TYPE_GROW_TEXT_HIGH: {
         float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
         return
@@ -267,6 +277,13 @@ float gui_item::get_juice_value() {
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
             JUICY_GROW_TEXT_LOW_MULT;
+        break;
+    }
+    case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM: {
+        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_ELASTIC_DURATION);
+        return
+            ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
+            JUICY_GROW_TEXT_MEDIUM_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
@@ -371,12 +388,14 @@ void gui_item::start_juice_animation(JUICE_TYPES type) {
     juice_type = type;
     switch(type) {
     case JUICE_TYPE_GROW_TEXT_LOW:
+    case JUICE_TYPE_GROW_TEXT_MEDIUM:
     case JUICE_TYPE_GROW_TEXT_HIGH:
     case JUICE_TYPE_GROW_ICON: {
         juice_timer = JUICY_GROW_DURATION;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW:
+    case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM:
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
         juice_timer = JUICY_GROW_ELASTIC_DURATION;
         break;
@@ -1320,6 +1339,35 @@ text_gui_item::text_gui_item(
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
             this->flags, TEXT_VALIGN_CENTER, size, true,
             this->text
+        );
+    };
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new tooltip GUI item.
+ * gui:
+ *   Pointer to the GUI it belongs to.
+ */
+tooltip_gui_item::tooltip_gui_item(gui_manager* gui) :
+    gui_item(),
+    gui(gui) {
+    
+    on_draw =
+    [this] (const point & center, const point & size) {
+        string cur_text = this->gui->get_current_tooltip();
+        if(cur_text != this->prev_text) {
+            this->start_juice_animation(JUICE_TYPE_GROW_TEXT_LOW);
+            this->prev_text = cur_text;
+        }
+        float juicy_grow_amount = get_juice_value();
+        draw_compressed_scaled_text(
+            game.fonts.standard, COLOR_WHITE,
+            center,
+            point(0.7f + juicy_grow_amount, 0.7f + juicy_grow_amount),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size,
+            false,
+            cur_text
         );
     };
 }

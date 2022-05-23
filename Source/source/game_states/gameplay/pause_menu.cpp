@@ -385,18 +385,8 @@ void pause_menu_struct::init_main_pause_menu() {
     gui.add_item(quit_button, "quit");
     
     //Tooltip text.
-    text_gui_item* tooltip_text =
-        new text_gui_item("", game.fonts.standard);
-    tooltip_text->on_draw =
-        [this]
-    (const point & center, const point & size) {
-        draw_compressed_scaled_text(
-            game.fonts.standard, COLOR_WHITE,
-            center, point(0.7f, 0.7f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, false,
-            gui.get_current_tooltip()
-        );
-    };
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&gui);
     gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
@@ -452,9 +442,16 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
         tidbit_bullet->on_get_tooltip = [this, parts] () {
             return parts.size() < 2 ? "" : parts[1];
         };
+        tidbit_bullet->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+        );
         help_tidbit_list_box->add_child(tidbit_bullet);
         help_gui.add_item(tidbit_bullet);
     }
+    
+    help_category_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+    );
 }
 
 

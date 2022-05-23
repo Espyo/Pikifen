@@ -11,10 +11,8 @@ Next tasks (roughly sorted most important first)
     --- v0.22.0 ---
     HUD improvements
         Maturity bubble should grow on Pikmin type change
-        Selecting a category in the help page should make the items inside, and the category title on the top-right, juicy grow
         Add juice to Onion menu
         Check the controller's name, and if it matches the Pro Controller or Joy-Con, the button icons should show the name of the button instead of a number
-		Tooltip widgets should probably juicy-grow if their content changes
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time
             Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.

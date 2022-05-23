@@ -116,7 +116,7 @@ void options_menu_state::change_auto_throw(const signed int step) {
     game.options.auto_throw_mode = AUTO_THROW_PRESETS[cur_auto_throw_idx];
     
     auto_throw_picker->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
     update();
 }
@@ -147,7 +147,7 @@ void options_menu_state::change_cursor_speed(const signed int step) {
     game.options.cursor_speed = CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
     
     cursor_speed_picker->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
     update();
 }
@@ -183,7 +183,7 @@ void options_menu_state::change_resolution(const signed int step) {
     
     trigger_restart_warning();
     resolution_picker->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
     update();
 }
@@ -391,18 +391,8 @@ void options_menu_state::load() {
     gui.add_item(controls_button, "controls");
     
     //Tooltip text.
-    text_gui_item* tooltip_text =
-        new text_gui_item("", game.fonts.standard);
-    tooltip_text->on_draw =
-        [this]
-    (const point & center, const point & size) {
-        draw_compressed_scaled_text(
-            game.fonts.standard, COLOR_WHITE,
-            center, point(0.7f, 0.7f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, false,
-            gui.get_current_tooltip()
-        );
-    };
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&gui);
     gui.add_item(tooltip_text, "tooltip");
     
     //Warning text.
@@ -429,7 +419,7 @@ void options_menu_state::trigger_restart_warning() {
     if(!warning_text->visible) {
         warning_text->visible = true;
         warning_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
     }
 }

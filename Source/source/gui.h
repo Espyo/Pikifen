@@ -59,10 +59,14 @@ public:
         JUICE_TYPE_NONE,
         //Text grow effect, low impact.
         JUICE_TYPE_GROW_TEXT_LOW,
+        //Text grow effect, medium impact.
+        JUICE_TYPE_GROW_TEXT_MEDIUM,
         //Text grow effect, high impact.
         JUICE_TYPE_GROW_TEXT_HIGH,
         //Elastic text grow effect, low impact.
         JUICE_TYPE_GROW_TEXT_ELASTIC_LOW,
+        //Elastic text grow effect, medium impact.
+        JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM,
         //Elastic text grow effect, high impact.
         JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH,
         //Icon grow effect.
@@ -135,8 +139,9 @@ public:
     static const float JUICY_GROW_DURATION;
     static const float JUICY_GROW_ELASTIC_DURATION;
     static const float JUICY_GROW_ICON_MULT;
-    static const float JUICY_GROW_TEXT_LOW_MULT;
     static const float JUICY_GROW_TEXT_HIGH_MULT;
+    static const float JUICY_GROW_TEXT_LOW_MULT;
+    static const float JUICY_GROW_TEXT_MEDIUM_MULT;
 };
 
 
@@ -271,6 +276,21 @@ public:
         const ALLEGRO_COLOR &color = COLOR_WHITE,
         const int flags = ALLEGRO_ALIGN_CENTER
     );
+};
+
+
+/* ----------------------------------------------------------------------------
+ * A GUI item with fields ready to make it specialize in showing another
+ * item's tooltip.
+ */
+class tooltip_gui_item : public gui_item {
+public:
+    //The GUI it belongs to.
+    gui_manager* gui;
+    
+    tooltip_gui_item(gui_manager* gui);
+private:
+    string prev_text;
 };
 
 

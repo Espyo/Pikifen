@@ -365,18 +365,8 @@ void results_state::load() {
     gui.add_item(pikmin_deaths_text, "pikmin_deaths_amount");
     
     //Tooltip text.
-    text_gui_item* tooltip_text =
-        new text_gui_item("", game.fonts.standard);
-    tooltip_text->on_draw =
-        [this]
-    (const point & center, const point & size) {
-        draw_compressed_scaled_text(
-            game.fonts.standard, COLOR_WHITE,
-            center, point(0.7f, 0.7f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, false,
-            gui.get_current_tooltip()
-        );
-    };
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&gui);
     gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
