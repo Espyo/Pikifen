@@ -36,6 +36,12 @@ const float TOKEN_ANIM_DURATION = 0.5f;
 const float TOKEN_ANIM_X_AMOUNT = 7.0f;
 //How much to move a token in the Y direction when animating it.
 const float TOKEN_ANIM_Y_AMOUNT = 3.0f;
+//How long to swipe the current section's tokens away for.
+const float TOKEN_SWIPE_DURATION = 0.45f;
+//How much to move a token in the X direction when swiping it away.
+const float TOKEN_SWIPE_X_AMOUNT = -2.0f;
+//How much to move a token in the Y direction when swiping it away.
+const float TOKEN_SWIPE_Y_AMOUNT = -15.0f;
 }
 
 namespace WHISTLE {
@@ -625,6 +631,7 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     total_skip_anim_time(0.0f),
     misinput_protection_timer(0.0f),
     advance_button_alpha(0.0f),
+    swipe_timer(0.0f),
     transition_timer(gameplay_state::MENU_ENTRY_HUD_MOVE_TIME),
     transition_in(true),
     to_delete(false) {
@@ -659,7 +666,11 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
  * or to skip to showing everything in the current section.
  */
 void msg_box_info::advance() {
-    if(transition_timer > 0.0f || misinput_protection_timer > 0.0f) return;
+    if(
+        transition_timer > 0.0f ||
+        misinput_protection_timer > 0.0f ||
+        swipe_timer > 0.0f
+    ) return;
     
     size_t last_token = 0;
     for(size_t l = 0; l < 3; ++l) {
@@ -674,11 +685,8 @@ void msg_box_info::advance() {
             transition_in = false;
             transition_timer = gameplay_state::MENU_EXIT_HUD_MOVE_TIME;
         } else {
-            //Go to the next section.
-            cur_section++;
-            total_token_anim_time = 0.0f;
-            total_skip_anim_time = 0.0f;
-            skipped_at_token = INVALID;
+            //Start swiping to go to the next section.
+            swipe_timer = MSG_BOX::TOKEN_SWIPE_DURATION;
         }
     } else {
         //Skip the text typing and show everything in this section.
@@ -699,6 +707,19 @@ void msg_box_info::tick(const float delta_t) {
         size_t line_idx = cur_section * 3 + l;
         if(line_idx >= tokens_per_line.size()) break;
         tokens_in_section += tokens_per_line[line_idx].size();
+    }
+    
+    //Animate the swipe animation.
+    if(swipe_timer > 0.0f) {
+        swipe_timer -= delta_t;
+        if(swipe_timer <= 0.0f) {
+            //Go to the next section.
+            swipe_timer = 0.0f;
+            cur_section++;
+            total_token_anim_time = 0.0f;
+            total_skip_anim_time = 0.0f;
+            skipped_at_token = INVALID;
+        }
     }
     
     if(!transition_in || transition_timer == 0.0f) {
@@ -740,7 +761,7 @@ void msg_box_info::tick(const float delta_t) {
         to_delete = true;
     }
     
-    //Misinput logic.
+    //Misinput protection logic.
     misinput_protection_timer -= delta_t;
     misinput_protection_timer = std::max(0.0f, misinput_protection_timer);
     
@@ -748,6 +769,7 @@ void msg_box_info::tick(const float delta_t) {
     if(
         transition_timer == 0.0f &&
         misinput_protection_timer == 0.0f &&
+        swipe_timer == 0.0f &&
         cur_token >= tokens_in_section + 1
     ) {
         advance_button_alpha =

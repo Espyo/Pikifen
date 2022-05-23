@@ -2,8 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Message box text should be juicier
-        Letters should all swipe away when opening the next page
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

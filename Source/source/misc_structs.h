@@ -44,6 +44,9 @@ extern const float MISINPUT_PROTECTION_DURATION;
 extern const float TOKEN_ANIM_DURATION;
 extern const float TOKEN_ANIM_X_AMOUNT;
 extern const float TOKEN_ANIM_Y_AMOUNT;
+extern const float TOKEN_SWIPE_DURATION;
+extern const float TOKEN_SWIPE_X_AMOUNT;
+extern const float TOKEN_SWIPE_Y_AMOUNT;
 }
 
 namespace WHISTLE {
@@ -443,6 +446,8 @@ struct msg_box_info {
     float misinput_protection_timer;
     //Opacity of the advance button icon.
     float advance_button_alpha;
+    //Time left to swipe the current section away with.
+    float swipe_timer;
     //Time left in the current transition.
     float transition_timer;
     //Is it transitioning into view, or out of view?

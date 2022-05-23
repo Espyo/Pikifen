@@ -828,6 +828,7 @@ void gameplay_state::draw_message_box() {
             float this_token_anim_time;
             
             //Change the token's position and alpha, if it needs animating.
+            //First, check for the typing animation.
             if(token_idx >= msg_box->skipped_at_token) {
                 this_token_anim_time = msg_box->total_skip_anim_time;
             } else {
@@ -848,6 +849,15 @@ void gameplay_state::draw_message_box() {
                     MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
                     ease(EASE_UP_AND_DOWN_ELASTIC, ratio);
                 alpha = ratio * 255;
+            }
+            
+            //Now, for the swiping animation.
+            if(msg_box->swipe_timer > 0.0f) {
+                float ratio =
+                    1 - (msg_box->swipe_timer / MSG_BOX::TOKEN_SWIPE_DURATION);
+                x += MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
+                y += MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
+                alpha = std::max(0, (signed int) (alpha - ratio * 255));
             }
             
             //Actually draw it now.
