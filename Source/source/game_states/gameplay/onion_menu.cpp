@@ -161,12 +161,14 @@ onion_menu_struct::onion_menu_struct(
                 );
         }
         
-        draw_compressed_text(
+        float juicy_grow_amount = field_amount_text->get_juice_value();
+        draw_compressed_scaled_text(
             game.fonts.standard,
             color,
             center,
+            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-            size,
+            size, true,
             "Field: " +
             i2s(game.states.gameplay->mobs.pikmin_list.size() + total_delta)
         );
@@ -262,13 +264,14 @@ onion_menu_struct::onion_menu_struct(
                     );
             }
             
-            draw_compressed_text(
+            float juicy_grow_amount = onion_amount_text->get_juice_value();
+            draw_compressed_scaled_text(
                 game.fonts.area_name,
                 color,
                 center,
+                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-                size,
-                i2s(real_onion_amount - t_ptr->delta)
+                size, true, i2s(real_onion_amount - t_ptr->delta)
             );
         };
         gui.add_item(onion_amount_text, "onion_" + i2s(t + 1) + "_amount");
@@ -347,13 +350,14 @@ onion_menu_struct::onion_menu_struct(
                     );
             }
             
-            draw_compressed_text(
+            float juicy_grow_amount = group_amount_text->get_juice_value();
+            draw_compressed_scaled_text(
                 game.fonts.area_name,
                 color,
                 center,
+                point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-                size,
-                i2s(real_group_amount + t_ptr->delta)
+                size, true, i2s(real_group_amount + t_ptr->delta)
             );
         };
         gui.add_item(group_amount_text, "group_" + i2s(t + 1) + "_amount");
@@ -536,6 +540,20 @@ void onion_menu_struct::add_to_group(const size_t type_idx) {
     }
     
     types[type_idx].delta++;
+    
+    size_t on_screen_idx = types[type_idx].on_screen_idx;
+    if(on_screen_idx != INVALID) {
+        onion_amount_items[on_screen_idx]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+        );
+        group_amount_items[on_screen_idx]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+        );
+    }
+    field_amount_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+    );
+    
 }
 
 
@@ -557,6 +575,19 @@ void onion_menu_struct::add_to_onion(const size_t type_idx) {
     }
     
     types[type_idx].delta--;
+    
+    size_t on_screen_idx = types[type_idx].on_screen_idx;
+    if(on_screen_idx != INVALID) {
+        onion_amount_items[on_screen_idx]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+        );
+        group_amount_items[on_screen_idx]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+        );
+    }
+    field_amount_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+    );
 }
 
 

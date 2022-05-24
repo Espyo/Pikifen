@@ -11,6 +11,7 @@ Next tasks (roughly sorted most important first)
     --- v0.22.0 ---
     HUD improvements
         Add juice to Onion menu
+            Changing the all-types mode, or page, should make the buttons and the checkbox proper grow
         Check the controller's name, and if it matches the Pro Controller or Joy-Con, the button icons should show the name of the button instead of a number
         There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
             There should only be one on-screen at a time
