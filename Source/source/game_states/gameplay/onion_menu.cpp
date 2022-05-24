@@ -182,8 +182,12 @@ onion_menu_struct::onion_menu_struct(
         "Select all", game.fonts.standard, al_map_rgb(188, 230, 230)
     );
     select_all_check->on_activate =
-    [this] (const point &) {
+    [this, select_all_check] (const point &) {
         select_all = !select_all;
+        grow_buttons();
+        select_all_check->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        );
         update();
     };
     select_all_check->visible = types.size() > 1;
@@ -198,11 +202,13 @@ onion_menu_struct::onion_menu_struct(
         
         gui_item* onion_icon = new gui_item(false);
         onion_icon->on_draw =
-        [this, t] (const point & center, const point & size) {
+        [this, t, onion_icon] (const point & center, const point & size) {
             onion_menu_type_struct* t_ptr = this->on_screen_types[t];
             if(t_ptr->pik_type->bmp_onion_icon) {
+                float juicy_grow_amount = onion_icon->get_juice_value();
                 draw_bitmap_in_box(
-                    t_ptr->pik_type->bmp_onion_icon, center, size * 0.8f
+                    t_ptr->pik_type->bmp_onion_icon, center,
+                    (size * 0.8f) + juicy_grow_amount
                 );
             }
         };
@@ -211,6 +217,16 @@ onion_menu_struct::onion_menu_struct(
         
         button_gui_item* onion_button =
             new button_gui_item("", game.fonts.standard);
+        onion_button->on_draw =
+        [this, onion_button] (const point & center, const point & size) {
+            float juicy_grow_amount = onion_button->get_juice_value();
+            draw_button(
+                center,
+                size + juicy_grow_amount,
+                "", game.fonts.standard, COLOR_WHITE,
+                onion_button->selected
+            );
+        };
         onion_button->on_activate =
         [this, t] (const point &) {
             add_to_onion(on_screen_types[t]->type_idx);
@@ -228,6 +244,16 @@ onion_menu_struct::onion_menu_struct(
     //Onion's all button.
     onion_all_button =
         new button_gui_item("", game.fonts.standard);
+    onion_all_button->on_draw =
+    [this] (const point & center, const point & size) {
+        float juicy_grow_amount = onion_all_button->get_juice_value();
+        draw_button(
+            center,
+            size + juicy_grow_amount,
+            "", game.fonts.standard, COLOR_WHITE,
+            onion_all_button->selected
+        );
+    };
     onion_all_button->on_activate =
     [this] (const point &) {
         add_all_to_onion();
@@ -284,11 +310,13 @@ onion_menu_struct::onion_menu_struct(
         
         gui_item* group_icon = new gui_item(false);
         group_icon->on_draw =
-        [this, t] (const point & center, const point & size) {
+        [this, t, group_icon] (const point & center, const point & size) {
             onion_menu_type_struct* t_ptr = this->on_screen_types[t];
+            float juicy_grow_amount = group_icon->get_juice_value();
             if(t_ptr->pik_type->bmp_icon) {
                 draw_bitmap_in_box(
-                    t_ptr->pik_type->bmp_icon, center, size * 0.8f
+                    t_ptr->pik_type->bmp_icon, center,
+                    (size * 0.8f) + juicy_grow_amount
                 );
             }
         };
@@ -297,6 +325,16 @@ onion_menu_struct::onion_menu_struct(
         
         button_gui_item* group_button =
             new button_gui_item("", game.fonts.standard);
+        group_button->on_draw =
+        [this, group_button] (const point & center, const point & size) {
+            float juicy_grow_amount = group_button->get_juice_value();
+            draw_button(
+                center,
+                size + juicy_grow_amount,
+                "", game.fonts.standard, COLOR_WHITE,
+                group_button->selected
+            );
+        };
         group_button->on_activate =
         [this, t] (const point &) {
             add_to_group(on_screen_types[t]->type_idx);
@@ -314,6 +352,16 @@ onion_menu_struct::onion_menu_struct(
     //Group's all button.
     group_all_button =
         new button_gui_item("", game.fonts.standard);
+    group_all_button->on_draw =
+    [this] (const point & center, const point & size) {
+        float juicy_grow_amount = group_all_button->get_juice_value();
+        draw_button(
+            center,
+            size + juicy_grow_amount,
+            "", game.fonts.standard, COLOR_WHITE,
+            group_all_button->selected
+        );
+    };
     group_all_button->on_activate =
     [this] (const point &) {
         add_all_to_group();
@@ -623,7 +671,35 @@ void onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
  */
 void onion_menu_struct::go_to_page(const size_t page) {
     this->page = page;
+    grow_buttons();
     update();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the Onion and group buttons juicy grow.
+ */
+void onion_menu_struct::grow_buttons() {
+    for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
+        onion_icon_items[t]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_ICON
+        );
+        onion_button_items[t]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_ICON
+        );
+        group_icon_items[t]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_ICON
+        );
+        group_button_items[t]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_ICON
+        );
+    }
+    onion_all_button->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_ICON
+    );
+    group_all_button->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_ICON
+    );
 }
 
 

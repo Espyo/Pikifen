@@ -150,12 +150,13 @@ check_gui_item::check_gui_item(
     on_draw =
         [this, text, font, value, color]
     (const point & center, const point & size) {
-        draw_compressed_text(
+        float juicy_grow_amount = get_juice_value();
+        draw_compressed_scaled_text(
             font, color,
             point(center.x - size.x * 0.45, center.y),
+            point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
-            point(size.x * 0.90, size.y),
-            text
+            point(size.x * 0.90, size.y), true, text
         );
         
         draw_bitmap(
@@ -185,6 +186,7 @@ check_gui_item::check_gui_item(
     on_activate =
     [this, value] (const point &) {
         (*value) = !(*value);
+        this->start_juice_animation(JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM);
     };
 }
 
