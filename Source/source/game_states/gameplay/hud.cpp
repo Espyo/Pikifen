@@ -61,6 +61,8 @@ hud_struct::hud_struct() :
     standby_items_fade_timer(0.0f),
     spray_items_opacity(0.0f),
     spray_items_fade_timer(0.0f),
+    prev_standby_type(nullptr),
+    prev_maturity_icon(nullptr),
     spray_1_amount(nullptr),
     spray_2_amount(nullptr),
     standby_count_nr(0),
@@ -446,24 +448,23 @@ hud_struct::hud_struct() :
     //Standby group member maturity.
     gui_item* standby_maturity_icon = new gui_item();
     standby_maturity_icon->on_draw =
-    [this] (const point & center, const point & size) {
+    [this, standby_maturity_icon] (const point & center, const point & size) {
         //Standby group member preparations.
         ALLEGRO_BITMAP* standby_mat_bmp = NULL;
         leader* l_ptr = game.states.gameplay->cur_leader_ptr;
-        if(
-            l_ptr &&
-            l_ptr->group->cur_standby_type &&
-            game.states.gameplay->closest_group_member[BUBBLE_CURRENT]
-        ) {
+        if(!l_ptr || !l_ptr->group) return;
+        
+        mob* closest =
+            game.states.gameplay->closest_group_member[BUBBLE_CURRENT];
+            
+        if(l_ptr->group->cur_standby_type && closest) {
             SUBGROUP_TYPE_CATEGORIES c =
                 l_ptr->group->cur_standby_type->get_category();
                 
             switch(c) {
             case SUBGROUP_TYPE_CATEGORY_PIKMIN: {
                 pikmin* p_ptr =
-                    dynamic_cast<pikmin*>(
-                        game.states.gameplay->closest_group_member[BUBBLE_CURRENT]
-                    );
+                    dynamic_cast<pikmin*>(closest);
                 standby_mat_bmp =
                     p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
                 break;
@@ -480,13 +481,27 @@ hud_struct::hud_struct() :
             
         if(standby_mat_bmp) {
             draw_bitmap_in_box(
-                standby_mat_bmp, center, size * 0.8, 0.0f, color
+                standby_mat_bmp, center,
+                (size * 0.8) + standby_maturity_icon->get_juice_value(),
+                0.0f, color
             );
             draw_bitmap_in_box(
-                bmp_bubble, center, size, 0.0f, color
+                bmp_bubble, center,
+                size + standby_maturity_icon->get_juice_value()
+                , 0.0f, color
             );
         }
         
+        if(
+            l_ptr->group->cur_standby_type != prev_standby_type ||
+            standby_mat_bmp != prev_maturity_icon
+        ) {
+            standby_maturity_icon->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_ICON
+            );
+            prev_standby_type = l_ptr->group->cur_standby_type;
+            prev_maturity_icon = standby_mat_bmp;
+        }
     };
     gui.add_item(standby_maturity_icon, "standby_maturity_icon");
     

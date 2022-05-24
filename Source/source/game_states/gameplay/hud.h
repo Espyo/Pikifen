@@ -104,6 +104,10 @@ struct hud_struct {
     float spray_items_opacity;
     //Time left before the spray items start fading out.
     float spray_items_fade_timer;
+    //Standby type in the previous frame.
+    subgroup_type* prev_standby_type;
+    //Maturity icon in the previous frame.
+    ALLEGRO_BITMAP* prev_maturity_icon;
     //Spray 1 amount text. Cache for convenience.
     gui_item* spray_1_amount;
     //Spray 2 amount text. Cache for convenience.
