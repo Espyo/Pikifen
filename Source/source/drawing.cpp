@@ -1147,82 +1147,6 @@ void draw_mob_shadow(
 
 
 /* ----------------------------------------------------------------------------
- * Draws a notification, like a note saying that the player can press
- * a certain button to pluck.
- * target:
- *   Spot that the notification is pointing at.
- * text:
- *   Text to say.
- * control:
- *   If not NULL, draw the control's button/key/etc. before the text.
- */
-void draw_notification(
-    const point &target, const string &text, control_info* control
-) {
-
-    ALLEGRO_TRANSFORM tra, old;
-    al_identity_transform(&tra);
-    al_translate_transform(
-        &tra, target.x * game.cam.zoom, target.y * game.cam.zoom
-    );
-    al_scale_transform(&tra, 1.0f / game.cam.zoom, 1.0f / game.cam.zoom);
-    al_copy_transform(&old, al_get_current_transform());
-    al_compose_transform(&tra, &old);
-    al_use_transform(&tra);
-    
-    int bmp_w = al_get_bitmap_width(game.sys_assets.bmp_notification);
-    int bmp_h = al_get_bitmap_height(game.sys_assets.bmp_notification);
-    
-    float text_box_x1 = -bmp_w * 0.5 + NOTIFICATION_PADDING;
-    float text_box_x2 = bmp_w * 0.5 - NOTIFICATION_PADDING;
-    float text_box_y1 = -bmp_h - NOTIFICATION_PADDING;
-    float text_box_y2 = NOTIFICATION_PADDING;
-    
-    draw_bitmap(
-        game.sys_assets.bmp_notification,
-        point(0, -bmp_h * 0.5),
-        point(bmp_w, bmp_h),
-        0,
-        map_alpha(NOTIFICATION_ALPHA)
-    );
-    
-    if(control) {
-        text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
-        draw_control_icon(
-            game.fonts.standard, control,
-            true,
-            point(
-                -bmp_w * 0.5 + NOTIFICATION_PADDING +
-                NOTIFICATION_CONTROL_SIZE * 0.5,
-                -bmp_h * 0.5
-            ),
-            point(
-                NOTIFICATION_CONTROL_SIZE,
-                NOTIFICATION_CONTROL_SIZE
-            )
-        );
-    }
-    
-    draw_compressed_text(
-        game.fonts.standard, map_alpha(NOTIFICATION_ALPHA),
-        point(
-            (text_box_x1 + text_box_x2) * 0.5,
-            (text_box_y1 + text_box_y2) * 0.5
-        ),
-        ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_CENTER,
-        point(
-            text_box_x2 - text_box_x1,
-            text_box_y2 - text_box_y1
-        ),
-        text
-    );
-    
-    al_use_transform(&old);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws a rotated rectangle.
  * center:
  *   Center of the rectangle.
@@ -1790,6 +1714,18 @@ float ease(const EASING_METHODS method, const float n) {
             float aux = n - cp;
             aux *= 1.0f / (1.0f - cp);
             return 1 - (pow((1 - aux), 3));
+        }
+    }
+    case EASE_OUT_ELASTIC: {
+        const float cp = 0.80f;
+        const float mag = 0.2f;
+        if(n < cp) {
+            float aux = n * 1.0f / cp;
+            return pow(aux, 3);
+        } else {
+            float aux = n - cp;
+            aux *= 1.0f / (1.0f - cp);
+            return 1.0f + sin(aux * TAU / 2) * mag;
         }
     }
     case EASE_UP_AND_DOWN: {

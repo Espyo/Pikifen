@@ -9,12 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.22.0 ---
-    HUD improvements
-        Check the controller's name, and if it matches the Pro Controller or Joy-Con, the button icons should show the name of the button instead of a number
-        There should be a Notification struct which holds data about the current on-screen notification (e.g. Click to pluck)
-            There should only be one on-screen at a time
-            Every frame, you tell the notification what to show, or nothing at all (multiple messages are also allowed), and then tick it. The struct keeps track of what it was showing. If it was showing nothing, and now it was told to show something, smoothly make the notification grow and show up from alpha 0.
-            The same notification could show "(LMB) Pluck", "(1) Pluck", "[X] Pluck", etc.
     Areas and animation files should also contain a field for the engine version they were created in
         Make it so that every time an area is loaded, it checks the engine version, and if it's outdated, port to a new format, save the file again, and try loading again
     Allow an object's max health to be customizable, and for that to be set in the area editor
@@ -350,6 +344,7 @@ Next tasks (roughly sorted most important first)
 			For gamepad inputs, write the gamepad's name somewhere on-screen?
             Save the controls in the options file inside a block, and possibly at the end of the options file
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
+        Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the button icons should show the name of the button instead of a number
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times

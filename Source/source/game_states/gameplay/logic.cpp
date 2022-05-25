@@ -326,12 +326,68 @@ void gameplay_state::do_gameplay_logic() {
         
         game.cam.target_pos = cur_leader_ptr->pos;
         
-        //Check proximity with certain key things.
+        //Check what to show on the notification, if anything.
+        notification.set_enabled(false);
+        
+        bool notification_done = false;
+        
+        //Lying down stop notification.
+        if(
+            !notification_done &&
+            cur_leader_ptr->carry_info
+        ) {
+            notification.set_enabled(true);
+            notification.set_contents(
+                find_control(BUTTON_WHISTLE),
+                "Get up",
+                point(
+                    cur_leader_ptr->pos.x,
+                    cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                )
+            );
+            notification_done = true;
+        }
+        
+        //Auto-throw stop notification.
+        if(
+            !notification_done &&
+            cur_leader_ptr->auto_throwing &&
+            game.options.auto_throw_mode == AUTO_THROW_TOGGLE
+        ) {
+            notification.set_enabled(true);
+            notification.set_contents(
+                find_control(BUTTON_THROW),
+                "Stop throwing",
+                point(
+                    cur_leader_ptr->pos.x,
+                    cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                )
+            );
+            notification_done = true;
+        }
+        
+        //Pluck stop notification.
+        if(
+            !notification_done &&
+            cur_leader_ptr->auto_plucking
+        ) {
+            notification.set_enabled(true);
+            notification.set_contents(
+                find_control(BUTTON_WHISTLE),
+                "Stop",
+                point(
+                    cur_leader_ptr->pos.x,
+                    cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                )
+            );
+            notification_done = true;
+        }
+        
         if(!cur_leader_ptr->auto_plucking) {
             dist closest_d = 0;
             dist d = 0;
-            bool done = false;
             
+            //Ship healing notification.
             close_to_ship_to_heal = NULL;
             for(size_t s = 0; s < mobs.ships.size(); ++s) {
                 ship* s_ptr = mobs.ships[s];
@@ -348,32 +404,92 @@ void gameplay_state::do_gameplay_logic() {
                 if(d < closest_d || !close_to_ship_to_heal) {
                     close_to_ship_to_heal = s_ptr;
                     closest_d = d;
-                    done = true;
+                    notification.set_enabled(true);
+                    notification.set_contents(
+                        find_control(BUTTON_THROW),
+                        "Repair suit",
+                        point(
+                            close_to_ship_to_heal->pos.x,
+                            close_to_ship_to_heal->pos.y -
+                            close_to_ship_to_heal->radius
+                        )
+                    );
+                    notification_done = true;
                 }
             }
             
+            //Interactable mob notification.
+            closest_d = 0;
+            d = 0;
+            close_to_interactable_to_use = NULL;
+            if(!notification_done) {
+                for(size_t i = 0; i < mobs.interactables.size(); ++i) {
+                    d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
+                    if(d > mobs.interactables[i]->int_type->trigger_range) {
+                        continue;
+                    }
+                    if(d < closest_d || !close_to_interactable_to_use) {
+                        close_to_interactable_to_use = mobs.interactables[i];
+                        closest_d = d;
+                        notification.set_enabled(true);
+                        notification.set_contents(
+                            find_control(BUTTON_THROW),
+                            close_to_interactable_to_use->int_type->prompt_text,
+                            point(
+                                close_to_interactable_to_use->pos.x,
+                                close_to_interactable_to_use->pos.y -
+                                close_to_interactable_to_use->radius
+                            )
+                        );
+                        notification_done = true;
+                    }
+                }
+            }
+            
+            //Pikmin pluck notification.
             closest_d = 0;
             d = 0;
             close_to_pikmin_to_pluck = NULL;
-            if(!done) {
+            if(!notification_done) {
                 pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
                 if(p && d <= game.config.pluck_range) {
                     close_to_pikmin_to_pluck = p;
-                    done = true;
+                    notification.set_enabled(true);
+                    notification.set_contents(
+                        find_control(BUTTON_THROW),
+                        "Pluck",
+                        point(
+                            p->pos.x,
+                            p->pos.y -
+                            p->radius
+                        )
+                    );
+                    notification_done = true;
                 }
             }
             
+            //Nest open notification.
             closest_d = 0;
             d = 0;
             close_to_nest_to_open = NULL;
-            if(!done) {
+            if(!notification_done) {
                 for(size_t o = 0; o < mobs.onions.size(); ++o) {
                     d = dist(cur_leader_ptr->pos, mobs.onions[o]->pos);
                     if(d > game.config.onion_open_range) continue;
                     if(d < closest_d || !close_to_nest_to_open) {
                         close_to_nest_to_open = mobs.onions[o]->nest;
                         closest_d = d;
-                        done = true;
+                        notification.set_enabled(true);
+                        notification.set_contents(
+                            find_control(BUTTON_THROW),
+                            "Check",
+                            point(
+                                close_to_nest_to_open->m_ptr->pos.x,
+                                close_to_nest_to_open->m_ptr->pos.y -
+                                close_to_nest_to_open->m_ptr->radius
+                            )
+                        );
+                        notification_done = true;
                     }
                 }
                 for(size_t s = 0; s < mobs.ships.size(); ++s) {
@@ -387,28 +503,23 @@ void gameplay_state::do_gameplay_logic() {
                     if(d < closest_d || !close_to_nest_to_open) {
                         close_to_nest_to_open = mobs.ships[s]->nest;
                         closest_d = d;
-                        done = true;
-                    }
-                }
-            }
-            
-            closest_d = 0;
-            d = 0;
-            close_to_interactable_to_use = NULL;
-            if(!done) {
-                for(size_t i = 0; i < mobs.interactables.size(); ++i) {
-                    d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
-                    if(d > mobs.interactables[i]->int_type->trigger_range) {
-                        continue;
-                    }
-                    if(d < closest_d || !close_to_interactable_to_use) {
-                        close_to_interactable_to_use = mobs.interactables[i];
-                        closest_d = d;
-                        done = true;
+                        notification.set_enabled(true);
+                        notification.set_contents(
+                            find_control(BUTTON_THROW),
+                            "Check",
+                            point(
+                                close_to_nest_to_open->m_ptr->pos.x,
+                                close_to_nest_to_open->m_ptr->pos.y -
+                                close_to_nest_to_open->m_ptr->radius
+                            )
+                        );
+                        notification_done = true;
                     }
                 }
             }
         }
+        
+        notification.tick(game.delta_t);
         
         
         /********************

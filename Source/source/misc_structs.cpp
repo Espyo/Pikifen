@@ -44,6 +44,11 @@ const float TOKEN_SWIPE_X_AMOUNT = -2.0f;
 const float TOKEN_SWIPE_Y_AMOUNT = -15.0f;
 }
 
+namespace NOTIFICATION {
+//How quickly it fades, in alpha per second.
+const float FADE_SPEED = 4.0f;
+}
+
 namespace WHISTLE {
 //R, G, and B components for each dot color.
 const unsigned char DOT_COLORS[N_DOT_COLORS][3] = {
@@ -786,6 +791,146 @@ void msg_box_info::tick(const float delta_t) {
                 MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * delta_t
             );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a notification struct instance.
+ */
+notification_struct::notification_struct() :
+    control(nullptr),
+    visibility(0.0f) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the notification on-screen.
+ */
+void notification_struct::draw() const {
+    if(visibility == 0.0f) return;
+    
+    float scale = interpolate_number(visibility, 0.0f, 1.0f, 0.2f, 1.0f);
+    scale = ease(EASE_OUT, visibility);
+    
+    ALLEGRO_TRANSFORM tra, old_tra;
+    al_identity_transform(&tra);
+    al_scale_transform(&tra, scale, scale);
+    al_translate_transform(
+        &tra,
+        pos.x * game.cam.zoom,
+        pos.y * game.cam.zoom
+    );
+    al_scale_transform(
+        &tra,
+        1.0f / game.cam.zoom,
+        1.0f / game.cam.zoom
+    );
+    al_copy_transform(&old_tra, al_get_current_transform());
+    al_compose_transform(&tra, &old_tra);
+    al_use_transform(&tra);
+    
+    int bmp_w = al_get_bitmap_width(game.sys_assets.bmp_notification);
+    int bmp_h = al_get_bitmap_height(game.sys_assets.bmp_notification);
+    
+    float text_box_x1 = -bmp_w * 0.5 + NOTIFICATION_PADDING;
+    float text_box_x2 = bmp_w * 0.5 - NOTIFICATION_PADDING;
+    float text_box_y1 = -bmp_h - NOTIFICATION_PADDING;
+    float text_box_y2 = NOTIFICATION_PADDING;
+    
+    draw_bitmap(
+        game.sys_assets.bmp_notification,
+        point(0, -bmp_h * 0.5),
+        point(bmp_w, bmp_h),
+        0,
+        map_alpha(NOTIFICATION_ALPHA * visibility)
+    );
+    
+    if(control) {
+        text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
+        draw_control_icon(
+            game.fonts.standard, control,
+            true,
+            point(
+                -bmp_w * 0.5 + NOTIFICATION_PADDING +
+                NOTIFICATION_CONTROL_SIZE * 0.5,
+                -bmp_h * 0.5
+            ),
+            point(
+                NOTIFICATION_CONTROL_SIZE,
+                NOTIFICATION_CONTROL_SIZE
+            ),
+            visibility * 255
+        );
+    }
+    
+    draw_compressed_text(
+        game.fonts.standard,
+        map_alpha(NOTIFICATION_ALPHA * visibility),
+        point(
+            (text_box_x1 + text_box_x2) * 0.5,
+            (text_box_y1 + text_box_y2) * 0.5
+        ),
+        ALLEGRO_ALIGN_CENTER,
+        TEXT_VALIGN_CENTER,
+        point(
+            text_box_x2 - text_box_x1,
+            text_box_y2 - text_box_y1
+        ),
+        text
+    );
+    
+    al_use_transform(&old_tra);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how "present" the notification is.
+ * 0 means hidden, 1 is fully visible. Mid values are transition.
+ */
+float notification_struct::get_visibility() const {
+    return visibility;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the contents to show.
+ * control:
+ *   Control icon to show.
+ * text:
+ *   Text to show.
+ * pos:
+ *   Where to show it in the game world.
+ */
+void notification_struct::set_contents(
+    control_info* control, const string text, const point pos
+) {
+    this->control = control;
+    this->text = text;
+    this->pos = pos;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets whether the notification is meant to show or not.
+ * enabled:
+ *   Whether it's enabled or not.
+ */
+void notification_struct::set_enabled(const bool enabled) {
+    this->enabled = enabled;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks time by one frame of logic.
+ */
+void notification_struct::tick(const float delta_t) {
+    if(enabled) {
+        visibility += NOTIFICATION::FADE_SPEED * delta_t;
+    } else {
+        visibility -= NOTIFICATION::FADE_SPEED * delta_t;
+    }
+    visibility = clamp(visibility, 0.0f, 1.0f);
 }
 
 

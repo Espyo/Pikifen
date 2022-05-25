@@ -85,6 +85,8 @@ public:
     mob_lists mobs;
     //Information about the message box currently active on player 1, if any.
     msg_box_info* msg_box;
+    //Current notification.
+    notification_struct notification;
     //Manager of all particles.
     particle_manager particles;
     //Path manager.

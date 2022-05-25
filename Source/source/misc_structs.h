@@ -21,6 +21,7 @@
 #include <allegro5/allegro_font.h>
 
 #include "animation.h"
+#include "controls.h"
 #include "mob_categories/mob_category.h"
 #include "mobs/mob_enums.h"
 #include "hazard.h"
@@ -47,6 +48,10 @@ extern const float TOKEN_ANIM_Y_AMOUNT;
 extern const float TOKEN_SWIPE_DURATION;
 extern const float TOKEN_SWIPE_X_AMOUNT;
 extern const float TOKEN_SWIPE_Y_AMOUNT;
+}
+
+namespace NOTIFICATION {
+extern const float FADE_SPEED;
 }
 
 namespace WHISTLE {
@@ -665,6 +670,37 @@ private:
     //Code to run when the fade in/out finishes.
     std::function<void()> on_end;
     
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * Information about the current on-screen notification during gameplay.
+ * This is stuff like a note above the leader telling the player
+ * what button to press to do something, like plucking.
+ */
+struct notification_struct {
+public:
+    notification_struct();
+    void draw() const;
+    float get_visibility() const;
+    void set_contents(
+        control_info* control, const string text, const point pos
+    );
+    void set_enabled(const bool enabled);
+    void tick(const float delta_t);
+    
+private:
+    //Is it meant to exist?
+    bool enabled;
+    //What control icon to show.
+    control_info* control;
+    //What text to write.
+    string text;
+    //Coordinates of the focal point.
+    point pos;
+    //Visibility. 0 is hidden, 1 is fully visible. Mid values for transitioning.
+    float visibility;
 };
 
 

@@ -89,6 +89,8 @@ enum EASING_METHODS {
     EASE_OUT,
     //Springs backwards before going in.
     EASE_IN_ELASTIC,
+    //Near the end, it overshoots and then goes back in.
+    EASE_OUT_ELASTIC,
     //Goes up to 1, then back down to 0, in a sine-wave.
     EASE_UP_AND_DOWN,
     //Goes up to 1, then down to 0, and wobbles around 0 for a bit.
@@ -168,10 +170,6 @@ void draw_liquid(
 );
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity
-);
-void draw_notification(
-    const point &where, const string &text,
-    control_info* control = NULL
 );
 void draw_rounded_rectangle(
     const point &center, const point &size, const float radii,
