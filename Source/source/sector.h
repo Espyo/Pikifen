@@ -432,6 +432,8 @@ struct area_data {
     string version;
     //Any notes from the person who made it.
     string notes;
+    //Version of the engine this area was built in.
+    string engine_version;
     //String representing the starting amounts of each spray.
     string spray_amounts;
     //Weather condition to use.

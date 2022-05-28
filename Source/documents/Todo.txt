@@ -9,8 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.22.0 ---
-    Areas and animation files should also contain a field for the engine version they were created in
-        Make it so that every time an area is loaded, it checks the engine version, and if it's outdated, port to a new format, save the file again, and try loading again
     Allow an object's max health to be customizable, and for that to be set in the area editor
 		If necessary, explain in the manual and/or area editor tips how this affects bridges, piles (?), reinforced walls, Flukeweeds, bomb rocks
 		Some scripts do things based on the object's health, in absolute values. It needs to be changed to relative values since max healths can be changed now
@@ -202,6 +200,7 @@ Next tasks (roughly sorted most important first)
                         High scores + their medals (only present if the stage's grading mode is points)
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area
+            Point down in the manual that the game auto-saves
         Other things
             The pause menu's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
@@ -765,6 +764,7 @@ Misc things (so I don't forget)
         Some treasures should weigh as much as the current army, after a boss battle
 	Loose thoughts
 		If something is under construction, like a menu or something, add a small "WIP" blurb
+        Next time there are file format changes, past version 0.22.0, make it so that every time an area/animation is loaded it checks the engine version, and if it's outdated port to a new format, save the file again, and try loading again
     
 Tasks for later on (I might never implement these)
     Known problems

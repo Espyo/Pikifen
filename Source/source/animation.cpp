@@ -891,6 +891,8 @@ animation_database load_animation_database_from_file(data_node* file_node) {
         );
     }
     
+    adb.engine_version = file_node->get_child_by_name("engine_version")->value;
+    
     adb.calculate_max_span();
     return adb;
 }

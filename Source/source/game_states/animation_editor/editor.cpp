@@ -894,6 +894,9 @@ void animation_editor::resize_sprite(sprite* s, const float mult) {
  * Saves the animation database onto the mob's file.
  */
 void animation_editor::save_animation_database() {
+    anims.engine_version =
+        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
+        
     data_node file_node = data_node("", "");
     
     data_node* animations_node = new data_node("animations", "");
@@ -1072,6 +1075,8 @@ void animation_editor::save_animation_database() {
         body_parts_node->add(body_part_node);
         
     }
+    
+    file_node.add(new data_node("engine_version", anims.engine_version));
     
     if(!file_node.save_file(file_path)) {
         show_message_box(

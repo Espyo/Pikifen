@@ -187,6 +187,8 @@ public:
     vector<body_part*> body_parts;
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
+    //Version of the engine this animation database was built in.
+    string engine_version;
     //Maximum span of the hitboxes. Cache for performance.
     float max_span;
     

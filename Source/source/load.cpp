@@ -70,6 +70,7 @@ void load_area(
     rs.set("subtitle", game.cur_area_data.subtitle);
     rs.set("maker", game.cur_area_data.maker);
     rs.set("version", game.cur_area_data.version);
+    rs.set("engine_version", game.cur_area_data.engine_version);
     rs.set("notes", game.cur_area_data.notes);
     rs.set("spray_amounts", game.cur_area_data.spray_amounts);
     rs.set("weather", game.cur_area_data.weather_name, &weather_node);

@@ -1275,11 +1275,11 @@ void area_editor::goto_problem() {
         center_camera(min_coords, max_coords);
         
         break;
-
+        
     } default: {
         //Nowhere to go.
         break;
-
+        
     }
     }
 }
@@ -2164,7 +2164,9 @@ bool area_editor::save_area(const bool to_backup) {
     if(game.cur_area_data.weather_name == NONE_OPTION) {
         game.cur_area_data.weather_name.clear();
     }
-    
+    game.cur_area_data.engine_version =
+        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
+        
     //First, the geometry file.
     data_node geometry_file("", "");
     
@@ -2465,6 +2467,9 @@ bool area_editor::save_area(const bool to_backup) {
     );
     data_file.add(
         new data_node("version", game.cur_area_data.version)
+    );
+    data_file.add(
+        new data_node("engine_version", game.cur_area_data.engine_version)
     );
     data_file.add(
         new data_node("notes", game.cur_area_data.notes)
