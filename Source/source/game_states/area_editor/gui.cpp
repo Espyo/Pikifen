@@ -443,6 +443,29 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     if(!team_value.empty()) new_vars_map["team"] = team_value;
     vars_in_widgets["team"] = true;
     
+    //Max health property.
+    float max_health = 0.0f;
+    if(vars_map.find("max_health") != vars_map.end()) {
+        max_health = s2f(vars_map["max_health"]);
+    }
+    
+    if(ImGui::DragFloat("Max health", &max_health, 0.25f, 0.0f, FLT_MAX)) {
+        register_change("object script vars change");
+    }
+    set_tooltip(
+        "Maximum health for this specific object,\n"
+        "or 0 to just use the object type's default.\n"
+        "The object type's default is " + f2s(m_ptr->type->max_health) + ".\n"
+        "(Variable name: \"max_health\".)",
+        "",
+        WIDGET_EXPLANATION_DRAG
+    );
+    
+    if(max_health != 0.0f) {
+        new_vars_map["max_health"] = f2s(max_health);
+    }
+    vars_in_widgets["max_health"] = true;
+    
     //Now, dynamically create widgets for all properties this mob type has.
     
     for(size_t p = 0; p < m_ptr->type->area_editor_props.size(); ++p) {
@@ -534,7 +557,11 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         set_tooltip(
             p_ptr->tooltip +
             (p_ptr->tooltip.empty() ? "" : "\n") +
-            "(Variable name: \"" + p_ptr->var + "\".)"
+            "(Variable name: \"" + p_ptr->var + "\".)",
+            "",
+            (p_ptr->type == AEMP_INT || p_ptr->type == AEMP_DECIMAL) ?
+            WIDGET_EXPLANATION_DRAG :
+            WIDGET_EXPLANATION_NONE
         );
         
         if(value != p_ptr->def_value) {

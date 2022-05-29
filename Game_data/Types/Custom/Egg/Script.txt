@@ -11,11 +11,11 @@ script {
             set_animation idling_healthy
         }
         on_damage {
-            get_info t health
-            if $t < 16
+            get_info t health_ratio
+            if $t < 0.33
                 set_state idling_very_broken
             end_if
-            if $t < 32
+            if $t < 0.66
                 set_state idling_broken
             end_if
         }
@@ -25,8 +25,8 @@ script {
             set_animation idling_broken
         }
         on_damage {
-            get_info t health
-            if $t < 16
+            get_info t health_ratio
+            if $t < 0.33
                 set_state idling_very_broken
             end_if
         }

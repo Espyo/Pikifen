@@ -7,11 +7,11 @@ script {
             set_animation stage_1_idling
         }
         on_damage {
-            get_info t health
-            if $t < 650
+            get_info t health_ratio
+            if $t < 0.33
                 set_state stage_3_shaking
             end_if
-            if $t < 1300
+            if $t < 0.66
                 set_state stage_2_shaking
             end_if
             set_state stage_1_shaking
@@ -25,11 +25,11 @@ script {
             set_state stage_1_idling
         }
         on_damage {
-            get_info t health
-            if $t < 650
+            get_info t health_ratio
+            if $t < 0.33
                 set_state stage_3_shaking
             end_if
-            if $t < 1300
+            if $t < 0.66
                 set_state stage_2_shaking
             end_if
         }
@@ -39,8 +39,8 @@ script {
             set_animation stage_2_idling
         }
         on_damage {
-            get_info t health
-            if $t < 650
+            get_info t health_ratio
+            if $t < 0.33
                 set_state stage_3_shaking
             end_if
             set_state stage_2_shaking
@@ -54,8 +54,8 @@ script {
             set_state stage_2_idling
         }
         on_damage {
-            get_info t health
-            if $t < 650
+            get_info t health_ratio
+            if $t < 0.33
                 set_state stage_3_shaking
             end_if
         }

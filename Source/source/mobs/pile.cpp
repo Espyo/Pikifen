@@ -94,6 +94,7 @@ void pile::read_script_vars(const script_var_reader &svr) {
     }
     
     health = pil_type->health_per_resource * amount;
+    max_health = health;
     update();
 }
 

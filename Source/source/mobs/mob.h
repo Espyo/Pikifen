@@ -192,6 +192,8 @@ public:
     size_t id;
     //Current health.
     float health;
+    //Maximum health.
+    float max_health;
     //During this period, the mob cannot be attacked.
     timer invuln_period;
     //Mob's team (who it can damage).

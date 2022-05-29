@@ -326,6 +326,8 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HAZARD);
     } else if(call.args[1] == "health") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
+    } else if(call.args[1] == "health_ratio") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH_RATIO);
     } else if(call.args[1] == "latched_pikmin") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
     } else if(call.args[1] == "latched_pikmin_weight") {
@@ -2219,6 +2221,10 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         
     } case MOB_ACTION_GET_INFO_HEALTH: {
         *var = i2s(target_mob->health);
+        break;
+        
+    } case MOB_ACTION_GET_INFO_HEALTH_RATIO: {
+        *var = f2s(target_mob->health / target_mob->max_health);
         break;
         
     } case MOB_ACTION_GET_INFO_LATCHED_PIKMIN: {

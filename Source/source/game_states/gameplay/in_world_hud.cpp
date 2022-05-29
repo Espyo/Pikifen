@@ -213,8 +213,8 @@ in_world_health_wheel::in_world_health_wheel(mob* m) :
     in_world_hud_item(m),
     visible_ratio(0.0f) {
     
-    if(m->type->max_health > 0.0f) {
-        visible_ratio = m->health / m->type->max_health;
+    if(m->max_health > 0.0f) {
+        visible_ratio = m->health / m->max_health;
     }
     transition_timer = TRANSITION_IN_DURATION;
 }
@@ -281,10 +281,10 @@ void in_world_health_wheel::start_fading() {
 void in_world_health_wheel::tick(const float delta_t) {
     in_world_hud_item::tick(delta_t);
     
-    if(m->type->max_health == 0.0f) return;
+    if(m->max_health == 0.0f) return;
     
     visible_ratio +=
-        ((m->health / m->type->max_health) - visible_ratio) *
+        ((m->health / m->max_health) - visible_ratio) *
         (SMOOTHNESS_MULT * delta_t);
 }
 

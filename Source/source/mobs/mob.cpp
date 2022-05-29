@@ -119,6 +119,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     stored_inside_another(nullptr),
     id(next_mob_id),
     health(type->max_health),
+    max_health(type->max_health),
     invuln_period(0),
     team(MOB_TEAM_NONE),
     hide(false),
@@ -962,7 +963,7 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
     
     float damage;
     if(type->spike_damage->is_damage_ratio) {
-        damage = victim->type->max_health * type->spike_damage->damage;
+        damage = victim->max_health * type->spike_damage->damage;
     } else {
         damage = type->spike_damage->damage;
     }
@@ -2483,6 +2484,11 @@ void mob::read_script_vars(const script_var_reader &svr) {
             team = team_nr;
         }
     }
+
+    if(svr.get("max_health", max_health)) {
+        max_health = std::max(1.0f, max_health);
+        health = max_health;
+    }
 }
 
 
@@ -2675,11 +2681,11 @@ void mob::set_can_block_paths(const bool blocks) {
  */
 void mob::set_health(const bool add, const bool ratio, const float amount) {
     float change = amount;
-    if(ratio) change = type->max_health * amount;
+    if(ratio) change = max_health * amount;
     float base_nr = 0;
     if(add) base_nr = health;
     
-    health = clamp(base_nr + change, 0.0f, type->max_health);
+    health = clamp(base_nr + change, 0.0f, max_health);
 }
 
 
@@ -3286,7 +3292,7 @@ void mob::tick_misc_logic(const float delta_t) {
         type->show_health &&
         !hide &&
         health > 0.0f &&
-        health < type->max_health;
+        health < max_health;
     if(!health_wheel && should_show_health) {
         health_wheel = new in_world_health_wheel(this);
     } else if(health_wheel && !should_show_health) {
@@ -3480,7 +3486,7 @@ void mob::tick_script(const float delta_t) {
     }
     
     //Is it dead?
-    if(health <= 0 && type->max_health != 0) {
+    if(health <= 0 && max_health != 0) {
         fsm.run_event(MOB_EV_DEATH, this);
     }
     

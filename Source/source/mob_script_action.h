@@ -264,6 +264,8 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_HAZARD,
     //Get health.
     MOB_ACTION_GET_INFO_HEALTH,
+    //Get health ratio.
+    MOB_ACTION_GET_INFO_HEALTH_RATIO,
     //Get amount of latched Pikmin.
     MOB_ACTION_GET_INFO_LATCHED_PIKMIN,
     //Get total weight of latched Pikmin.
@@ -383,7 +385,7 @@ struct mob_action_run_data {
     void* custom_data_2;
     //Return value, if applicable.
     bool return_value;
-
+    
     mob_action_run_data(mob* m, mob_action_call* call);
 };
 

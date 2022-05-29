@@ -395,7 +395,7 @@ void gameplay_state::do_gameplay_logic() {
                 if(!s_ptr->is_leader_on_cp(cur_leader_ptr)) {
                     continue;
                 }
-                if(cur_leader_ptr->health == cur_leader_ptr->type->max_health) {
+                if(cur_leader_ptr->health == cur_leader_ptr->max_health) {
                     continue;
                 }
                 if(!s_ptr->shi_type->can_heal) {
@@ -844,7 +844,7 @@ void gameplay_state::do_menu_logic() {
                 box_string(f2s(game.maker_tools.info_lock->health), 6) +
                 " / " +
                 box_string(
-                    f2s(game.maker_tools.info_lock->type->max_health), 6
+                    f2s(game.maker_tools.info_lock->max_health), 6
                 ),
                 23
             );

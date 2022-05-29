@@ -232,7 +232,7 @@ public:
     point rectangular_dim;
     
     //Behavior things.
-    //Maximum health value.
+    //Maximum health. Can be overridden on a per-mob basis.
     float max_health;
     //Regenerates these many health points per second.
     float health_regen;

@@ -9,14 +9,12 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.22.0 ---
-    Allow an object's max health to be customizable, and for that to be set in the area editor
-		If necessary, explain in the manual and/or area editor tips how this affects bridges, piles (?), reinforced walls, Flukeweeds, bomb rocks
-		Some scripts do things based on the object's health, in absolute values. It needs to be changed to relative values since max healths can be changed now
     Details
+        If you press Enter when searching for a mob and there's only one result, it should pick that right away
         Pikmin that are plucked should be thrown backwards. Plus, there should be some dirt particle effects
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
         GUI items should have some way of representing default values
-			Simply writing the default in the tooltip, both for options menu options and editor settings, is probably the simplest and most effective solution
+            Simply writing the default in the tooltip, both for options menu options and editor settings, is probably the simplest and most effective solution
         Center the GUI items in the options menu
         Maybe decrease the leaders's acceleration?
         Game feel
@@ -127,10 +125,10 @@ Next tasks (roughly sorted most important first)
         Check Onions, ships, and converters that have Pikmin in the buffer
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
-		Areas should be one of three types
-			Areas of the simple type don't really have any special rules, they're just endless sandboxes
-			Areas of the mission type show, in this same panel, all sorts of info about how to play the mission
-			Areas of the arena type are only for competitive multiplayer play
+        Areas should be one of three types
+            Areas of the simple type don't really have any special rules, they're just endless sandboxes
+            Areas of the mission type show, in this same panel, all sorts of info about how to play the mission
+            Areas of the arena type are only for competitive multiplayer play
         Medals
             For every stage, the player can have no medal, a bronze, a silver, or a gold
             When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
@@ -177,9 +175,9 @@ Next tasks (roughly sorted most important first)
             Maybe...
                 A win condition for reaching X sprays of type Y
                 A loss condition for killing an enemy
-		Area editor changes
-			A new panel, gameplay, where you control everything gameplay-related, starting with the area type
-				Move the spray counter here, and spruce it up so people don't have to write stuff by hand
+        Area editor changes
+            A new panel, gameplay, where you control everything gameplay-related, starting with the area type
+                Move the spray counter here, and spruce it up so people don't have to write stuff by hand
         Area selection menu changes
             Left side
                 The list of areas, with their names and a medal icon next to each
@@ -253,7 +251,7 @@ Next tasks (roughly sorted most important first)
             Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
         The ability to load TTF fonts
         [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
-	Music
+    Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend. If we can't get away with many variants, explain in the FAQ why that is
         The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
@@ -293,7 +291,7 @@ Next tasks (roughly sorted most important first)
         Missing sounds
             Pikmin seed landing
             Pikmin sprout evolving/reverting
-			More...
+            More...
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
         This might help
@@ -340,7 +338,7 @@ Next tasks (roughly sorted most important first)
             Maybe a "simple" controls menu and an "advanced" one? The advanced is the old one, but the "simple" one lets the player choose a controller, only map the most common controls, and automatically associate an analog stick to all four directions. If I do this, I should add a tip to the readme to tell people to try the advanced controls after they're comfortable with the engine.
                 Even better, the controls menu only contains a list of actions + what button is assigned + advanced settings button. The list of actions is sorted by category (main, Pikmin control, menus, advanced). Pressing the advanced settings button opens a quick new menu with other things you can do to this control, like returning to the default, removing assignment, or adding more buttons to that action (up to 3 total). Also, if it's a controller, the advanced settings sub-menu should say what controller number it's bound to
             When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
-			For gamepad inputs, write the gamepad's name somewhere on-screen?
+            For gamepad inputs, write the gamepad's name somewhere on-screen?
             Save the controls in the options file inside a block, and possibly at the end of the options file
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the button icons should show the name of the button instead of a number
@@ -390,7 +388,7 @@ Next tasks (roughly sorted most important first)
             Leaders can't interact with each others's Onions or ships
             Logic like culling isn't relying on just the first player
             Pikmin can't carry something the opposing team is already carrying
-			Flower Pikmin will overpower bud Pikmin in a 1v1
+            Flower Pikmin will overpower bud Pikmin in a 1v1
             Candypop Buds can't accept Pikmin from another team
             Group tasks can't accept Pikmin from another team
             When one team loses all their leaders, their player(s)'s screen goes black (important because if their leader mob got deleted, the engine won't be able to show anything anyway) and just has "KO" written on it or something
@@ -459,7 +457,7 @@ Next tasks (roughly sorted most important first)
                 What victory conditions you want on (KO victory is always forcefully on)
                 What rules within those victory conditions (number of capture flags necessary to win, number of collectibles needed to win, etc.)
                 Roulette item frequency: off, normal, common
-				Roulette item bias: purely random, spawn closer to the player behind, spawn two/three/four equally close to each base but random items, same but all the same item
+                Roulette item bias: purely random, spawn closer to the player behind, spawn two/three/four equally close to each base but random items, same but all the same item
                 Starting Pikmin for each team
                 Number of leaders for each team (if this is, for instance, set to 1, but players play 2v2, then each team will forcefully have 2 leaders instead)
                 Pikmin killed by other Pikmin are reborn at the Onion, or lost permanently
@@ -467,18 +465,18 @@ Next tasks (roughly sorted most important first)
             Maybe add three types of knockback: none, flinch (makes leaders reel back in pain and Pikmin fall over), and chuck
         Onions should be able to auto-eject seeds
         Area gameplay
-			New area data
-				Areas should let the area maker specify the minimum and maximum number of players/teams that are allowed
-				If you try to play with a number of players/teams not marked as compatbile by the area maker, the game will still let you, but will give you a warning. If needed, it will then copy-paste the existing leaders such that there are enough for everyone to control
+            New area data
+                Areas should let the area maker specify the minimum and maximum number of players/teams that are allowed
+                If you try to play with a number of players/teams not marked as compatbile by the area maker, the game will still let you, but will give you a warning. If needed, it will then copy-paste the existing leaders such that there are enough for everyone to control
                     It should spawn them in the same coordinates, though maybe slightly offset
                     It should try to generate leaders that don't exist yet, probably following the standard leader order. e.g. If the area has an Olimar, a Louie, and a Brittany, and a 4th player wants in, they should get the President
-			For simple-type areas and mission-type...
-				All players are under the same team
+            For simple-type areas and mission-type...
+                All players are under the same team
                 Each leader placed in the area is one player
                 The game just gives the earliest leader in the leader order to player 1, then to player 2, etc. e.g. if there's a Louie mob and an Olimar mob, P1 should get Olimar
-			For arena-type areas...
+            For arena-type areas...
                 Players can be in teams or not; depends on their choices
-				The area maker must specify where team 1's leader goes, where team 2's leader goes, etc.
+                The area maker must specify where team 1's leader goes, where team 2's leader goes, etc.
                 Alternatively, they must specify what leader mob corresponds to what team's leader, but since players can pick their leaders, this doesn't mean they will get the leader in the area
                 Players in the same team spawn in the same spot, though slightly offset, just like how if the game wants to spawn more leaders than there are available
                 The game should identify which team's Onion and flag is which, automatically, simply by picking the nearest one
@@ -707,15 +705,15 @@ Misc things (so I don't forget)
         Make the water ripples be via shader
             https://www.reddit.com/r/gamedev/comments/d1a602/how_scrolling_textures_gave_super_mario_galaxy_2/
         Add some effect to the borders of water bodies?
-		Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
+        Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
     Editor improvements
         Area editor
             It should have a "toolbar" so you can swap from layout to mob to path real quick, instead of having to quit out. Also, shortcut keys for that in F1, F2, etc.
                 Or better yet, keyboard shortcuts to swap, only. This way the interface isn't cluttered, but power-users can still swap very easily
             A redo button
             Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just haave a link to another area's geometry instead. It should allow it to be rotated, too
-		Animation editor
-			Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
+        Animation editor
+            Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
         Pressing Esc on the sprite/whatever rename pop-up should cancel
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?
@@ -762,8 +760,8 @@ Misc things (so I don't forget)
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     Story mode
         Some treasures should weigh as much as the current army, after a boss battle
-	Loose thoughts
-		If something is under construction, like a menu or something, add a small "WIP" blurb
+    Loose thoughts
+        If something is under construction, like a menu or something, add a small "WIP" blurb
         Next time there are file format changes, past version 0.22.0, make it so that every time an area/animation is loaded it checks the engine version, and if it's outdated port to a new format, save the file again, and try loading again
     
 Tasks for later on (I might never implement these)
@@ -797,7 +795,7 @@ Tasks for later on (I might never implement these)
             Some give you standard Pikmin 2 improvements like fire-resistance
             Others speed up your Red Pikmin, make your Purple Pikmin more powerful, give you dosages of sprays, etc.
         Sublevels have two or three holes; before you go down you're told a preview of what sorts of sublevel and treasure lies beyond that hole, so you can pick your destiny
-		Enemies should somehow get random buffs in the form of status effects that increase speed, power, etc.
+        Enemies should somehow get random buffs in the form of status effects that increase speed, power, etc.
     [NEEDS BRAINSTORMING] Breath of the Wild-like physics engine rules? https://venturebeat.com/2017/03/02/the-legend-of-zelda-breath-of-the-wild-makes-chemistry-just-as-important-as-physics/
         And just systemic gameplay in general, like lit Pikmin lighting nearby Pikmin on fire http://www.youtube.com/watch?v=SnpAAX9CkIc
             Red Pikmin can carry flaming coals, which can set enemies on fire

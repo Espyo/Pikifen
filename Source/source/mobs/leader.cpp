@@ -826,11 +826,11 @@ void leader::tick_class_specifics(const float delta_t) {
     
     //Health wheel logic.
     health_wheel_visible_ratio +=
-        ((health / type->max_health) - health_wheel_visible_ratio) *
+        ((health / max_health) - health_wheel_visible_ratio) *
         (in_world_health_wheel::SMOOTHNESS_MULT * delta_t);
         
     if(
-        health < type->max_health * HEALTH_CAUTION_RATIO ||
+        health < max_health * HEALTH_CAUTION_RATIO ||
         health_wheel_caution_timer > 0.0f
     ) {
         health_wheel_caution_timer += delta_t;
