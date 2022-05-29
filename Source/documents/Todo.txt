@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        If you press Enter when searching for a mob and there's only one result, it should pick that right away
         Pikmin that are plucked should be thrown backwards. Plus, there should be some dirt particle effects
         Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
         GUI items should have some way of representing default values

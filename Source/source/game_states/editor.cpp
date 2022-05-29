@@ -1705,8 +1705,23 @@ void editor::picker_info::process() {
             ImGuiInputTextFlags_EnterReturnsTrue
         )
     ) {
+        if(filter.empty()) return;
+        
         if(can_make_new) {
             try_make_new();
+        } else {
+            size_t possible_choices = 0;
+            for(size_t c = 0; c < final_items.size(); ++c) {
+                possible_choices += final_items[c].size();
+            }
+            if(possible_choices == 1) {
+                pick_callback(
+                    final_items[0][0].name,
+                    final_items[0][0].category,
+                    false
+                );
+                is_open = false;
+            }
         }
     }
     
