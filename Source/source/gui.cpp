@@ -1123,19 +1123,46 @@ list_gui_item::list_gui_item() :
  *   Text to display before the current option's name.
  * option:
  *   Text that matches the current option.
+ * nr_options:
+ *   Total amount of options.
+ * cur_option_idx:
+ *   Index of the currently selected option.
  */
 picker_gui_item::picker_gui_item(
-    const string &base_text, const string &option
+    const string &base_text, const string &option,
+    const size_t nr_options, const size_t cur_option_idx
 ) :
     gui_item(true),
     base_text(base_text),
     option(option),
+    nr_options(nr_options),
+    cur_option_idx(cur_option_idx),
     on_previous(nullptr),
     on_next(nullptr),
     arrow_highlight(255) {
     
     on_draw =
     [this] (const point & center, const point & size) {
+        if(this->nr_options != 0 && selected) {
+            point option_boxes_start(
+                center.x - size.x / 2.0f + 20.0f,
+                center.y + size.y / 2.0f - 12.0f
+            );
+            float option_boxes_interval =
+                (size.x - 40.0f) / (this->nr_options - 0.5f);
+            for(size_t o = 0; o < this->nr_options; ++o) {
+                float x1 = option_boxes_start.x + o * option_boxes_interval;
+                float y1 = option_boxes_start.y;
+                al_draw_filled_rectangle(
+                    x1, y1,
+                    x1 + option_boxes_interval * 0.5f, y1 + 4.0f,
+                    this->cur_option_idx == o ?
+                    al_map_rgba(255, 255, 255, 160) :
+                    al_map_rgba(255, 255, 255, 64)
+                );
+            }
+        }
+        
         unsigned char real_arrow_highlight = 255;
         if(
             selected &&

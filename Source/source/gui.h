@@ -231,13 +231,20 @@ public:
     string base_text;
     //The currently selected option.
     string option;
+    //Total amount of options. Optional.
+    size_t nr_options;
+    //Index of the currently selected option. Only used if nr_options > 0.
+    size_t cur_option_idx;
     
     //What to do when the user picks the previous option.
     std::function<void()> on_previous;
     //What to do when the user picks the next option.
     std::function<void()> on_next;
     
-    picker_gui_item(const string &base_text, const string &option);
+    picker_gui_item(
+        const string &base_text, const string &option,
+        const size_t nr_options = 0, const size_t cur_option_idx = INVALID
+    );
     
 private:
     //Highlight one of the arrows due to mouse-over. 255 = none.

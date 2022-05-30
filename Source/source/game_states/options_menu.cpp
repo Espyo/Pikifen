@@ -97,14 +97,7 @@ options_menu_state::options_menu_state() :
  *   How much to move forward in the list.
  */
 void options_menu_state::change_auto_throw(const signed int step) {
-    size_t cur_auto_throw_idx = INVALID;
-    
-    for(size_t m = 0; m < N_AUTO_THROW_PRESETS; ++m) {
-        if(game.options.auto_throw_mode == AUTO_THROW_PRESETS[m]) {
-            cur_auto_throw_idx = m;
-            break;
-        }
-    }
+    size_t cur_auto_throw_idx = get_auto_throw_idx();
     
     if(cur_auto_throw_idx == INVALID) {
         cur_auto_throw_idx = 0;
@@ -115,6 +108,7 @@ void options_menu_state::change_auto_throw(const signed int step) {
     
     game.options.auto_throw_mode = AUTO_THROW_PRESETS[cur_auto_throw_idx];
     
+    auto_throw_picker->cur_option_idx = cur_auto_throw_idx;
     auto_throw_picker->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
@@ -128,14 +122,7 @@ void options_menu_state::change_auto_throw(const signed int step) {
  *   How much to move forward in the list.
  */
 void options_menu_state::change_cursor_speed(const signed int step) {
-    size_t cur_cursor_speed_idx = INVALID;
-    
-    for(size_t s = 0; s < N_CURSOR_SPEED_PRESETS; ++s) {
-        if(game.options.cursor_speed == CURSOR_SPEED_PRESETS[s]) {
-            cur_cursor_speed_idx = s;
-            break;
-        }
-    }
+    size_t cur_cursor_speed_idx = get_cursor_speed_idx();
     
     if(cur_cursor_speed_idx == INVALID) {
         cur_cursor_speed_idx = 0;
@@ -146,6 +133,7 @@ void options_menu_state::change_cursor_speed(const signed int step) {
     
     game.options.cursor_speed = CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
     
+    cursor_speed_picker->cur_option_idx = cur_cursor_speed_idx;
     cursor_speed_picker->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
@@ -159,18 +147,7 @@ void options_menu_state::change_cursor_speed(const signed int step) {
  *   How much to move forward in the list.
  */
 void options_menu_state::change_resolution(const signed int step) {
-    size_t cur_resolution_idx = INVALID;
-    
-    for(size_t r = 0; r < resolution_presets.size(); ++r) {
-        if(
-            game.options.intended_win_w == resolution_presets[r].first &&
-            game.options.intended_win_h == resolution_presets[r].second
-        ) {
-            cur_resolution_idx = r;
-            break;
-        }
-    }
-    
+    size_t cur_resolution_idx = get_resolution_idx();
     if(cur_resolution_idx == INVALID) {
         cur_resolution_idx = 0;
     } else {
@@ -182,6 +159,7 @@ void options_menu_state::change_resolution(const signed int step) {
     game.options.intended_win_h = resolution_presets[cur_resolution_idx].second;
     
     trigger_restart_warning();
+    resolution_picker->cur_option_idx = cur_resolution_idx;
     resolution_picker->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
@@ -219,10 +197,55 @@ void options_menu_state::do_logic() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the current auto-throw option's index, or INVALID if not found.
+ */
+size_t options_menu_state::get_auto_throw_idx() const {
+    for(size_t m = 0; m < N_AUTO_THROW_PRESETS; ++m) {
+        if(game.options.auto_throw_mode == AUTO_THROW_PRESETS[m]) {
+            return m;
+        }
+    }
+    
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the current cursor speed option's index, or INVALID if not found.
+ */
+size_t options_menu_state::get_cursor_speed_idx() const {
+    for(size_t s = 0; s < N_CURSOR_SPEED_PRESETS; ++s) {
+        if(game.options.cursor_speed == CURSOR_SPEED_PRESETS[s]) {
+            return s;
+        }
+    }
+    
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
 string options_menu_state::get_name() const {
     return "options menu";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the current resolution option's index, or INVALID if custom.
+ */
+size_t options_menu_state::get_resolution_idx() const {
+    for(size_t r = 0; r < resolution_presets.size(); ++r) {
+        if(
+            game.options.intended_win_w == resolution_presets[r].first &&
+            game.options.intended_win_h == resolution_presets[r].second
+        ) {
+            return r;
+        }
+    }
+    
+    return INVALID;
 }
 
 
@@ -298,9 +321,12 @@ void options_menu_state::load() {
         "Fullscreen", game.fonts.standard
     );
     fullscreen_check->on_activate =
-    [this] (const point &) {
+    [this, fullscreen_check] (const point &) {
         game.options.intended_win_fullscreen =
             !game.options.intended_win_fullscreen;
+        fullscreen_check->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        );
         trigger_restart_warning();
     };
     fullscreen_check->on_get_tooltip =
@@ -309,7 +335,9 @@ void options_menu_state::load() {
     
     //Resolution picker.
     resolution_picker =
-        new picker_gui_item("Resolution: ", "");
+        new picker_gui_item(
+        "Resolution: ", "", resolution_presets.size(), get_resolution_idx()
+    );
     resolution_picker->on_previous =
     [this] () {
         change_resolution(-1);
@@ -324,7 +352,9 @@ void options_menu_state::load() {
     
     //Cursor speed.
     cursor_speed_picker =
-        new picker_gui_item("Cursor speed: ", "");
+        new picker_gui_item(
+        "Cursor speed: ", "", N_CURSOR_SPEED_PRESETS, get_cursor_speed_idx()
+    );
     cursor_speed_picker->on_previous =
     [this] () {
         change_cursor_speed(-1);
@@ -339,7 +369,9 @@ void options_menu_state::load() {
     
     //Auto-throw mode.
     auto_throw_picker =
-        new picker_gui_item("Auto-throw: ", "");
+        new picker_gui_item(
+        "Auto-throw: ", "", N_AUTO_THROW_PRESETS, get_auto_throw_idx()
+    );
     auto_throw_picker->on_previous =
     [this] () {
         change_auto_throw(-1);

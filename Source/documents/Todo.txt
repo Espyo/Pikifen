@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     Details
-        Left/right picker GUI items should have a tiny bar that shows this is currently option X out of Y
         GUI items should have some way of representing default values
             Simply writing the default in the tooltip, both for options menu options and editor settings, is probably the simplest and most effective solution
         Center the GUI items in the options menu

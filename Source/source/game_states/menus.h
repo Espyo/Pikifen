@@ -121,6 +121,9 @@ private:
     void change_auto_throw(const signed int step);
     void change_cursor_speed(const signed int step);
     void change_resolution(const signed int step);
+    size_t get_auto_throw_idx() const;
+    size_t get_cursor_speed_idx() const;
+    size_t get_resolution_idx() const;
     void go_to_controls();
     void update();
     void leave();
