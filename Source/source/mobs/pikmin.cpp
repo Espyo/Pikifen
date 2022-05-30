@@ -29,6 +29,10 @@ const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 const float KNOCKED_DOWN_DURATION = 2.0f;
 //A whistled Pikmin that got knocked down loses this much in lie-down time.
 const float KNOCKED_DOWN_WHISTLE_BONUS = 1.3f;
+//A plucked Pikmin is thrown behind the leader at this speed, horizontally.
+const float PLUCK_THROW_HOR_SPEED = 80.0f;
+//A plucked Pikmin is thrown behind the leader at this speed, vertically.
+const float PLUCK_THROW_VER_SPEED = 900.0f;
 }
 
 

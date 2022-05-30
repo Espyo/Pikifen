@@ -49,7 +49,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::sprout_schedule_evol);
         }
         efc.new_event(MOB_EV_PLUCKED); {
-            efc.run(pikmin_fsm::begin_pluck);
             efc.change_state("plucking");
         }
         efc.new_event(MOB_EV_TIMER); {
@@ -59,9 +58,30 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("plucking", PIKMIN_STATE_PLUCKING); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::begin_pluck);
+        }
         efc.new_event(MOB_EV_ANIMATION_END); {
-            efc.run(pikmin_fsm::end_pluck);
+            efc.change_state("plucking_thrown");
+        }
+    }
+    
+    efc.new_state("plucking_thrown", PIKMIN_STATE_PLUCKING_THROWN); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::be_thrown_after_pluck);
+        }
+        efc.new_event(MOB_EV_LANDED); {
+            efc.run(pikmin_fsm::land_after_pluck);
             efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EV_LEFT_HAZARD); {
+            efc.run(pikmin_fsm::left_hazard);
+        }
+        efc.new_event(MOB_EV_BOTTOMLESS_PIT); {
+            efc.run(pikmin_fsm::fall_down_pit);
         }
     }
     
@@ -1866,6 +1886,46 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin is thrown after being plucked.
+ * m:
+ *   The mob.
+ * info1:
+ *   Points to the bouncer mob.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_THROWN);
+    
+    float throw_angle = get_angle(m->pos, m->focused_mob->pos);
+    m->speed_z = PIKMIN::PLUCK_THROW_VER_SPEED;
+    m->speed = angle_to_coordinates(throw_angle, PIKMIN::PLUCK_THROW_HOR_SPEED);
+    m->face(throw_angle, NULL, true);
+    
+    ((pikmin*) m)->start_throw_trail();
+    
+    game.sys_assets.sfx_pikmin_plucked.play(0, false);
+    game.sys_assets.sfx_pluck.play(0, false);
+    
+    particle par(
+        PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height + 1.0,
+        12, 0.5, PARTICLE_PRIORITY_MEDIUM
+    );
+    par.bitmap = game.sys_assets.bmp_rock;
+    par.color = al_map_rgb(172, 164, 134);
+    par.gravity = 70.0f;
+    particle_generator pg(0, par, 12);
+    pg.number_deviation = 5;
+    pg.angle = 0;
+    pg.angle_deviation = TAU / 2;
+    pg.total_speed = 70;
+    pg.total_speed_deviation = 10;
+    pg.duration_deviation = 0.3;
+    pg.emit(game.states.gameplay->particles);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a Pikmin is thrown by a bouncer mob.
  * m:
  *   The mob.
@@ -1963,13 +2023,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     
     pikmin* pik = (pikmin*) m;
     mob* lea = (mob*) info1;
-    
-    if(lea->following_group) {
-        //If this leader is following another one,
-        //then the new Pikmin should be in the group of that top leader.
-        lea = lea->following_group;
-    }
-    lea->add_to_group(pik);
+    pik->focus_on_mob(lea);
     
     pik->set_animation(PIKMIN_ANIM_PLUCKING);
     m->is_huntable = true;
@@ -2277,23 +2331,6 @@ void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
     pik_ptr->face(impact_angle + TAU / 2.0f, NULL, true);
     
     pik_ptr->set_animation(PIKMIN_ANIM_KNOCKED_BACK);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Makes a Pikmin finish its plucking process.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::end_pluck(mob* m, void* info1, void* info2) {
-    pikmin* pik = (pikmin*) m;
-    pik->set_animation(PIKMIN_ANIM_IDLING);
-    game.sys_assets.sfx_pikmin_plucked.play(0, false);
-    game.sys_assets.sfx_pluck.play(0, false);
 }
 
 
@@ -2908,6 +2945,30 @@ void pikmin_fsm::land_after_impact_bounce(mob* m, void* info1, void* info2) {
     }
     
     m->fsm.set_state(PIKMIN_STATE_KNOCKED_DOWN);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin being bounced back from an impact attack lands on the ground.
+ * m:
+ *   The mob.
+ * info1:
+ *   Pointer to the hitbox touch information structure.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::land_after_pluck(mob* m, void* info1, void* info2) {
+    pikmin* pik = (pikmin*) m;
+    mob* lea = pik->focused_mob;
+    
+    pik->set_animation(PIKMIN_ANIM_IDLING);
+    
+    if(lea->following_group) {
+        //If this leader is following another one,
+        //then the new Pikmin should be in the group of that top leader.
+        lea = lea->following_group;
+    }
+    lea->add_to_group(pik);
 }
 
 

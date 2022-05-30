@@ -39,6 +39,8 @@ enum PIKMIN_STATES {
     PIKMIN_STATE_SPROUT,
     //Being plucked.
     PIKMIN_STATE_PLUCKING,
+    //Thrown backwards after being plucked.
+    PIKMIN_STATE_PLUCKING_THROWN,
     //Leaving Onion.
     PIKMIN_STATE_LEAVING_ONION,
     //Entering Onion.

@@ -24,6 +24,8 @@ extern const float GROUNDED_ATTACK_DIST;
 extern const float IDLE_GLOW_SPIN_SPEED;
 extern const float KNOCKED_DOWN_DURATION;
 extern const float KNOCKED_DOWN_WHISTLE_BONUS;
+extern const float PLUCK_THROW_HOR_SPEED;
+extern const float PLUCK_THROW_VER_SPEED;
 }
 
 
