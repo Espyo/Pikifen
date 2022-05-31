@@ -41,6 +41,7 @@ const float options_struct::DEF_EDITOR_SECONDARY_COLOR[3] =
 {0.19f, 0.47f, 0.78f};
 const float options_struct::DEF_EDITOR_TEXT_COLOR[3] =
 {1.0f, 1.0f, 1.0f};
+const bool options_struct::DEF_EDITOR_USE_CUSTOM_STYLE = false;
 const bool options_struct::DEF_EDITOR_SHOW_TOOLTIPS = true;
 const float options_struct::DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 const float options_struct::DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
@@ -78,7 +79,7 @@ options_struct::options_struct() :
     editor_mmb_pan(DEF_EDITOR_MMB_PAN),
     editor_mouse_drag_threshold(DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
     editor_show_tooltips(DEF_EDITOR_SHOW_TOOLTIPS),
-    editor_use_custom_style(false),
+    editor_use_custom_style(DEF_EDITOR_USE_CUSTOM_STYLE),
     intended_win_fullscreen(DEF_WIN_FULLSCREEN),
     intended_win_h(DEF_WIN_H),
     intended_win_w(DEF_WIN_W),

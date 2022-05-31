@@ -498,8 +498,10 @@ void animation_editor::process_gui_options_dialog() {
         //Middle mouse button pans checkbox.
         ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
         set_tooltip(
-            "Use the middle mouse button to pan the camera "
-            "(and RMB to reset camera/zoom)."
+            "Use the middle mouse button to pan the camera\n"
+            "(and RMB to reset camera/zoom).\n"
+            "Default: " +
+            b2s(options_struct::DEF_EDITOR_MMB_PAN) + "."
         );
         
         //Drag threshold value.
@@ -510,7 +512,9 @@ void animation_editor::process_gui_options_dialog() {
             0.1f, 0, INT_MAX
         );
         set_tooltip(
-            "Cursor must move these many pixels to be considered a drag.",
+            "Cursor must move these many pixels to be considered a drag.\n"
+            "Default: " + i2s(options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
+            ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.editor_mouse_drag_threshold = drag_threshold;

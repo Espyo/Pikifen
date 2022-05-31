@@ -622,8 +622,10 @@ void area_editor::process_gui_options_dialog() {
             0.1f, 0, INT_MAX
         );
         set_tooltip(
-            "Cursor must be these many pixels close to a vertex/edge in order "
-            "to snap there.",
+            "Cursor must be these many pixels close\n"
+            "to a vertex/edge in order to snap there.\n"
+            "Default: " +
+            i2s(options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD) + ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_snap_threshold = snap_threshold;
@@ -631,8 +633,10 @@ void area_editor::process_gui_options_dialog() {
         //Middle mouse button pans checkbox.
         ImGui::Checkbox("Use MMB to pan", &game.options.editor_mmb_pan);
         set_tooltip(
-            "Use the middle mouse button to pan the camera "
-            "(and RMB to reset camera/zoom)."
+            "Use the middle mouse button to pan the camera\n"
+            "(and RMB to reset camera/zoom).\n"
+            "Default: " +
+            b2s(options_struct::DEF_EDITOR_MMB_PAN) + "."
         );
         
         //Drag threshold value.
@@ -643,7 +647,9 @@ void area_editor::process_gui_options_dialog() {
             0.1f, 0, INT_MAX
         );
         set_tooltip(
-            "Cursor must move these many pixels to be considered a drag.",
+            "Cursor must move these many pixels to be considered a drag.\n"
+            "Default: " + i2s(options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
+            ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.editor_mouse_drag_threshold = drag_threshold;
@@ -663,7 +669,9 @@ void area_editor::process_gui_options_dialog() {
             "Show edge length", &game.options.area_editor_show_edge_length
         );
         set_tooltip(
-            "Show the length of nearby edges when drawing or moving vertexes."
+            "Show the length of nearby edges when drawing or moving vertexes.\n"
+            "Default: " +
+            b2s(options_struct::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH) + "."
         );
         
         //Show territory checkbox.
@@ -673,7 +681,9 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Show the territory radius and terrain radius\n"
-            "of the selected objects, when applicable."
+            "of the selected objects, when applicable.\n"
+            "Default: " + b2s(options_struct::DEF_AREA_EDITOR_SHOW_TERRITORY) +
+            "."
         );
         
         //View mode text.
@@ -685,26 +695,58 @@ void area_editor::process_gui_options_dialog() {
         //Textures view mode radio button.
         ImGui::RadioButton("Textures", &view_mode, VIEW_MODE_TEXTURES);
         set_tooltip(
-            "Draw textures on the sectors."
+            "Draw textures on the sectors." +
+            (string) (
+                (
+                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    VIEW_MODE_TEXTURES
+                ) ?
+                "\nThis is the default." :
+                ""
+            )
         );
         
         //Wireframe view mode radio button.
         ImGui::RadioButton("Wireframe", &view_mode, VIEW_MODE_WIREFRAME);
         set_tooltip(
-            "Do not draw sectors, only edges and vertexes. "
-            "Best for performance."
+            "Do not draw sectors, only edges and vertexes.\n"
+            "Best for performance." +
+            (string) (
+                (
+                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    VIEW_MODE_WIREFRAME
+                ) ?
+                "This is the default." :
+                ""
+            )
         );
         
         //Heightmap view mode radio button.
         ImGui::RadioButton("Heightmap", &view_mode, VIEW_MODE_HEIGHTMAP);
         set_tooltip(
-            "Draw sectors as heightmaps. Lighter means taller."
+            "Draw sectors as heightmaps. Lighter means taller." +
+            (string) (
+                (
+                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    VIEW_MODE_HEIGHTMAP
+                ) ?
+                "This is the default." :
+                ""
+            )
         );
         
         //Brightness view mode radio button.
         ImGui::RadioButton("Brightness", &view_mode, VIEW_MODE_BRIGHTNESS);
         set_tooltip(
-            "Draw sectors as solid grays based on their brightness."
+            "Draw sectors as solid grays based on their brightness." +
+            (string) (
+                (
+                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    VIEW_MODE_BRIGHTNESS
+                ) ?
+                "This is the default." :
+                ""
+            )
         );
         game.options.area_editor_view_mode = (VIEW_MODES) view_mode;
         
@@ -731,7 +773,8 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "If true, when you select two or more vertexes, some handles\n"
-            "will appear, allowing you to scale or rotate them together."
+            "will appear, allowing you to scale or rotate them together.\n"
+            "Default: " + b2s(options_struct::DEF_AREA_EDITOR_SEL_TRANS) + "."
         );
         
         //Grid interval text.
@@ -745,7 +788,9 @@ void area_editor::process_gui_options_dialog() {
             press_grid_interval_increase_button();
         }
         set_tooltip(
-            "Increase the spacing on the grid.",
+            "Increase the spacing on the grid.\n"
+            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_GRID_INTERVAL) +
+            ".",
             "Shift + Plus"
         );
         
@@ -755,7 +800,9 @@ void area_editor::process_gui_options_dialog() {
             press_grid_interval_decrease_button();
         }
         set_tooltip(
-            "Decrease the spacing on the grid.",
+            "Decrease the spacing on the grid.\n"
+            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_GRID_INTERVAL) +
+            ".",
             "Shift + Minus"
         );
         
@@ -766,7 +813,9 @@ void area_editor::process_gui_options_dialog() {
             "Auto-backup interval", &backup_interval, 1, 0, INT_MAX
         );
         set_tooltip(
-            "Interval between auto-backup saves, in seconds. 0 = off.",
+            "Interval between auto-backup saves, in seconds. 0 = off.\n"
+            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_BACKUP_INTERVAL) +
+            ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_backup_interval = backup_interval;
@@ -779,7 +828,8 @@ void area_editor::process_gui_options_dialog() {
             "Undo limit", &undo_limit, 0.1, 0, INT_MAX
         );
         set_tooltip(
-            "Maximum number of operations that can be undone. 0 = off.",
+            "Maximum number of operations that can be undone. 0 = off.\n"
+            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_UNDO_LIMIT) + ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_undo_limit = undo_limit;

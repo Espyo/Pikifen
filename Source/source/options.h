@@ -62,6 +62,7 @@ struct options_struct {
     static const float DEF_EDITOR_PRIMARY_COLOR[3];
     static const float DEF_EDITOR_SECONDARY_COLOR[3];
     static const float DEF_EDITOR_TEXT_COLOR[3];
+    static const bool DEF_EDITOR_USE_CUSTOM_STYLE;
     static const bool DEF_EDITOR_SHOW_TOOLTIPS;
     static const float DEF_JOYSTICK_MIN_DEADZONE;
     static const float DEF_JOYSTICK_MAX_DEADZONE;
