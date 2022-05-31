@@ -291,12 +291,12 @@ void options_menu_state::load() {
     
     //Menu items.
     gui.register_coords("back",              15, 10, 20,  6);
-    gui.register_coords("fullscreen",        24, 20, 45,  8);
-    gui.register_coords("resolution",        24, 30, 45,  8);
-    gui.register_coords("cursor_speed",      24, 45, 45,  8);
-    gui.register_coords("auto_throw",        24, 55, 45,  8);
-    gui.register_coords("show_hud_controls", 24, 65, 45,  8);
-    gui.register_coords("controls",          24, 75, 45,  8);
+    gui.register_coords("fullscreen",        50, 20, 45,  8);
+    gui.register_coords("resolution",        50, 30, 45,  8);
+    gui.register_coords("cursor_speed",      50, 45, 45,  8);
+    gui.register_coords("auto_throw",        50, 55, 45,  8);
+    gui.register_coords("show_hud_controls", 50, 65, 45,  8);
+    gui.register_coords("controls",          50, 75, 45,  8);
     gui.register_coords("tooltip",           50, 95, 95,  8);
     gui.register_coords("restart_warning",   60,  5, 70,  8);
     gui.read_coords(
@@ -330,7 +330,11 @@ void options_menu_state::load() {
         trigger_restart_warning();
     };
     fullscreen_check->on_get_tooltip =
-    [] () { return "Show the game in fullscreen, or in a window?"; };
+    [] () {
+        return
+            "Show the game in fullscreen, or in a window? Default: " +
+            b2s(options_struct::DEF_WIN_FULLSCREEN) + ".";
+    };
     gui.add_item(fullscreen_check, "fullscreen");
     
     //Resolution picker.
@@ -347,7 +351,12 @@ void options_menu_state::load() {
         change_resolution(1);
     };
     resolution_picker->on_get_tooltip =
-    [] () { return "The game's width and height."; };
+    [] () {
+        return
+            "The game's width and height. Default: " +
+            i2s(options_struct::DEF_WIN_W) + "x" +
+            i2s(options_struct::DEF_WIN_H) + ".";
+    };
     gui.add_item(resolution_picker, "resolution");
     
     //Cursor speed.
@@ -364,7 +373,18 @@ void options_menu_state::load() {
         change_cursor_speed(1);
     };
     cursor_speed_picker->on_get_tooltip =
-    [] () { return "Cursor speed, when controlling without a mouse."; };
+    [] () {
+        size_t idx = 0;
+        for(; idx < N_CURSOR_SPEED_PRESETS; ++idx) {
+            if(CURSOR_SPEED_PRESETS[idx] == options_struct::DEF_CURSOR_SPEED) {
+                break;
+            }
+        }
+        
+        return
+            "Cursor speed, when controlling without a mouse. Default: " +
+            CURSOR_SPEED_PRESET_NAMES[idx] + ".";
+    };
     gui.add_item(cursor_speed_picker, "cursor_speed");
     
     //Auto-throw mode.
@@ -381,23 +401,35 @@ void options_menu_state::load() {
         change_auto_throw(1);
     };
     auto_throw_picker->on_get_tooltip =
-    [] () {
+    [] () -> string {
+        size_t idx = 0;
+        for(; idx < N_AUTO_THROW_PRESETS; ++idx) {
+            if(AUTO_THROW_PRESETS[idx] == options_struct::DEF_AUTO_THROW_MODE) {
+                break;
+            }
+        }
+        
+        string s;
         switch(game.options.auto_throw_mode) {
         case AUTO_THROW_OFF: {
-            return "Pikmin are only thrown when you release the button.";
+            s = "Pikmin are only thrown when you release the button.";
+            break;
         }
         case AUTO_THROW_HOLD: {
-            return "Auto-throw Pikmin periodically as long as "
-                   "the button is held.";
+            s = "Auto-throw Pikmin periodically as long as "
+                "the button is held.";
+            break;
         }
         case AUTO_THROW_TOGGLE: {
-            return "Press once to auto-throw Pikmin periodically, and again "
-                   "to stop.";
+            s = "Press once to auto-throw Pikmin periodically, and again "
+                "to stop.";
+            break;
         }
         default: {
             return "";
         }
         }
+        return s + " Default: " + AUTO_THROW_PRESET_NAMES[idx] + ".";
     };
     gui.add_item(auto_throw_picker, "auto_throw");
     
@@ -408,7 +440,11 @@ void options_menu_state::load() {
         "Show controls on HUD", game.fonts.standard
     );
     show_hud_controls_check->on_get_tooltip =
-    [] () { return "Show icons of the controls near relevant HUD items?"; };
+    [] () {
+        return
+            "Show icons of the controls near relevant HUD items? Default: " +
+            b2s(options_struct::DEF_SHOW_HUD_CONTROLS) + ".";
+    };
     gui.add_item(show_hud_controls_check, "show_hud_controls");
     
     //Controls button.

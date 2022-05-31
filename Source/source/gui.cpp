@@ -660,6 +660,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             }
         }
         set_selected_item(selection_result);
+        input_happened = true;
         mouse_involved = true;
     }
     
@@ -670,11 +671,13 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             auto_repeat_duration = 0.0f;
             auto_repeat_next_activation = AUTO_REPEAT_MAX_INTERVAL;
         }
+        input_happened = true;
         mouse_involved = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
         auto_repeat_on = false;
+        input_happened = true;
         mouse_involved = true;
     }
     

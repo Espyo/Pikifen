@@ -12,7 +12,6 @@ Next tasks (roughly sorted most important first)
     Details
         GUI items should have some way of representing default values
             Simply writing the default in the tooltip, both for options menu options and editor settings, is probably the simplest and most effective solution
-        Center the GUI items in the options menu
         Maybe decrease the leaders's acceleration?
         Game feel
             https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
@@ -334,6 +333,7 @@ Next tasks (roughly sorted most important first)
                 The options for cursor speed, cursor controlled by mouse, etc. should be moved into the schemes
             Maybe a "simple" controls menu and an "advanced" one? The advanced is the old one, but the "simple" one lets the player choose a controller, only map the most common controls, and automatically associate an analog stick to all four directions. If I do this, I should add a tip to the readme to tell people to try the advanced controls after they're comfortable with the engine.
                 Even better, the controls menu only contains a list of actions + what button is assigned + advanced settings button. The list of actions is sorted by category (main, Pikmin control, menus, advanced). Pressing the advanced settings button opens a quick new menu with other things you can do to this control, like returning to the default, removing assignment, or adding more buttons to that action (up to 3 total). Also, if it's a controller, the advanced settings sub-menu should say what controller number it's bound to
+            Potential layout: When listing the control for an action that has three buttons, for instance, the cell on the left column spans 3 rows and is just the action name (aligned to top), and the 3 cells on the right are one button each.
             When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
             For gamepad inputs, write the gamepad's name somewhere on-screen?
             Save the controls in the options file inside a block, and possibly at the end of the options file
