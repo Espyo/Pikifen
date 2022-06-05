@@ -1279,7 +1279,7 @@ bool editor::process_size_widgets(
  */
 bool editor::saveable_tree_node(const string &category, const string &label) {
     string node_name = get_name() + "/" + category + "/" + label;
-    ImGui::SetNextTreeNodeOpen(game.options.editor_open_nodes[node_name]);
+    ImGui::SetNextItemOpen(game.options.editor_open_nodes[node_name]);
     bool is_open = ImGui::TreeNode(label.c_str());
     game.options.editor_open_nodes[node_name] = is_open;
     return is_open;
@@ -1740,7 +1740,7 @@ void editor::picker_info::process() {
     
         bool show = true;
         if(!category_names[c].empty()) {
-            ImGui::SetNextTreeNodeOpen(true, ImGuiCond_Once);
+            ImGui::SetNextItemOpen(true, ImGuiCond_Once);
             show = ImGui::TreeNode(category_names[c].c_str());
         }
         

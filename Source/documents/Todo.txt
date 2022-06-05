@@ -6,47 +6,14 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    If the animation editor's history is empty, there's a crash
     
     --- v0.22.0 ---
-    Details
-        Game feel
-            https://www.youtube.com/watch?v=iGDvsbtIAEU&list=WL&index=5 Learn how people play and figure out tweaks and improvements
     Performance
         Wall shadow rendering is a bit heavy. Mostly in figuring out what edges to draw or not to draw
             Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
             Refactor it to use vectors, like the cursor trail drawing logic
-    Update Dear ImGui
-        > (Suggestion: once in a while, add #define IMGUI_DISABLE_OBSOLETE_FUNCTIONS in your imconfig.h file to make sure you are not using to-be-obsoleted symbols.)
-        Notable changes I should look into
-            1.78
-                All drags and sliders use a power parameter that has been changed; I don't use this parameter, right?
-                SetScroll and SetScrollFromPos?
-            1.79
-                > Style: Renamed style.TabMinWidthForUnselectedCloseButton to style.TabMinWidthForCloseButton.
-                > Renamed OpenPopupContextItem() back to OpenPopupOnItemClick(), REVERTED CHANGE FROM 1.77. For variety of reason this is more self-explanatory and less error-prone. Kept inline redirection function (will obsolete).
-                > Removed return value from OpenPopupOnItemClick() - returned true on mouse release on item - because it is inconsistent with other popups API and makes others misleading. It's also and unnecessary: you can use IsWindowAppearing() after BeginPopup() for a similar result.
-            1.80
-                Add imgui_tables.cpp
-                Move backend files?
-            1.81
-                ListBox things?
-            1.82
-                SetScrollHere?
-            1.84
-                Make use of BeginDisabled()/EndDisabled()
-                > Backends: Win32, SDL2, GLFW, OSX, Allegro: now calling io.AddFocusEvent() on focus gain/loss. (#4388) [@thedmd]
-            1.85
-                > SetKeyboardFocusHere() now works on clipped items (finally).
-                > Removed GetWindowContentRegionWidth() function. keep inline redirection helper. Can use GetWindowContentRegionMax().x - GetWindowContentRegionMin().x instead but it's not very useful in practice, and the only use of it in the demo was ill-fit. Using GetContentRegionAvail().x is generally a better choice.
-                > TreePush(): removed unnecessary/inconsistent legacy behavior where passing a NULL value to the TreePush(const char*) and TreePush(const void*) functions would use an hard-coded replacement. The only situation where that change would make a meaningful difference is TreePush((const char*)NULL) (explicitly casting a null pointer to const char*), which is unlikely and will now crash. You may replace it with anything else.
-                > IO: Added io.WantCaptureMouseUnlessPopupClose alternative to io.WantCaptureMouse. (#4480) This allows apps to receive the click on void when that click is used to close popup (by default, clicking on a void when a popup is open will close the popup but not release io.WantCaptureMouse).
-            1.86
-                > Added an assertion for the common user mistake of using "" as an identifier at the root level of a window instead of using "##something". Empty identifiers are valid and useful in a very small amount of cases, but 99.9% of the time if you need an empty label you should use "##something". (#1414, #2562, #2807, #4008, #4158, #4375, #4548, #4657, #4796). READ THE FAQ ABOUT HOW THE ID STACK WORKS > https://dearimgui.org/faq
-            1.87
-                > Renamed ImGuiKey_KeyPadEnter to ImGuiKey_KeypadEnter to align with new symbols. Kept redirection enum. (#2625)
-        Things to test
-            Test if the unsaved changes warning is working right
+        Profile other things too
     Code cleanup
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)

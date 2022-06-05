@@ -1355,7 +1355,8 @@ void area_editor::process_gui_panel_info() {
             game.cur_area_data.bg_dist = bg_dist;
         }
         set_tooltip(
-            "How far away the background image is. Affects paralax scrolling.\n"
+            "How far away the background texture is. "
+            "Affects paralax scrolling.\n"
             "2 is a good value.",
             "", WIDGET_EXPLANATION_DRAG
         );
