@@ -937,7 +937,9 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
     settings.flags |= PATH_FOLLOW_FLAG_SCRIPT_USE;
     settings.label = label;
-    data.m->follow_path(settings, data.m->get_base_speed());
+    data.m->follow_path(
+        settings, data.m->get_base_speed(), data.m->type->acceleration
+    );
 }
 
 
@@ -958,7 +960,9 @@ void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
         settings.label = data.args[2];
     }
     
-    data.m->follow_path(settings, data.m->get_base_speed());
+    data.m->follow_path(
+        settings, data.m->get_base_speed(), data.m->type->acceleration
+    );
 }
 
 

@@ -39,6 +39,8 @@ class pikmin_type;
 extern size_t next_mob_id;
 
 namespace MOB {
+extern const float CARRIED_MOB_ACCELERATION;
+extern const float DEF_ACCELERATION;
 extern const float DEF_ROTATION_SPEED;
 extern const float DELIVERY_SUCK_TIME;
 extern const float DELIVERY_TOSS_TIME;
@@ -335,18 +337,19 @@ public:
         const point &offset = point(), const float offset_z = 0.0f,
         const unsigned char flags = 0,
         const float target_distance = chase_info_struct::DEF_TARGET_DISTANCE,
-        const float speed = LARGE_FLOAT
+        const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
     void chase(
         const point &coords, const float coords_z,
         const unsigned char flags = 0,
         const float target_distance = chase_info_struct::DEF_TARGET_DISTANCE,
-        const float speed = LARGE_FLOAT
+        const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
     void stop_chasing();
     void stop_turning();
     bool follow_path(
-        const path_follow_settings &settings, const float speed
+        const path_follow_settings &settings,
+        const float speed, const float acceleration
     );
     void stop_following_path();
     void circle_around(
@@ -421,7 +424,7 @@ protected:
         float* slide_angle
     ) const;
     //Goes to the path's final destination.
-    void move_to_path_end(const float speed);
+    void move_to_path_end(const float speed, const float acceleration);
     //Tick its animation logic.
     void tick_animation(const float delta_t);
     //Tick the mob's "thinking" logic.

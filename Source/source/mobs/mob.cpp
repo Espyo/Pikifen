@@ -25,6 +25,10 @@
 #include "track.h"
 
 namespace MOB {
+//Acceleration for a mob that's being carried.
+const float CARRIED_MOB_ACCELERATION = 100.0f;
+//The default acceleration of a mob type.
+const float DEF_ACCELERATION = 400.0f;
 //The default rotation speed of a mob type.
 const float DEF_ROTATION_SPEED = 630.0f;
 //How long to suck a mob in for, when being delivered to an Onion/ship.
@@ -1016,13 +1020,16 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
  *   Distance at which the mob considers the chase finished.
  * speed:
  *   Speed at which to go to the target. LARGE_FLOAT makes it use
- *   the mob's speed.
+ *   the mob's standard speed.
+ * acceleration:
+ *   Speed acceleration. LARGE_FLOAT makes it use the mob's
+ *   standard acceleration.
  */
 void mob::chase(
     point* orig_coords, float* orig_z,
     const point &offset, const float offset_z,
     const unsigned char flags,
-    const float target_distance, const float speed
+    const float target_distance, const float speed, const float acceleration
 ) {
     chase_info.orig_coords = orig_coords;
     chase_info.orig_z = orig_z;
@@ -1035,7 +1042,8 @@ void mob::chase(
     chase_info.target_dist = target_distance;
     chase_info.max_speed =
         (speed == LARGE_FLOAT ? get_base_speed() : speed);
-    chase_info.acceleration = type->acceleration;
+    chase_info.acceleration =
+        (acceleration == LARGE_FLOAT ? type->acceleration : acceleration);
         
     chase_info.state = CHASE_STATE_CHASING;
 }
@@ -1053,14 +1061,20 @@ void mob::chase(
  *   Distance at which the mob considers the chase finished.
  * speed:
  *   Speed at which to go to the target. LARGE_FLOAT makes it use
- *   the mob's speed.
+ *   the mob's standard speed.
+ * acceleration:
+ *   Speed acceleration. LARGE_FLOAT makes it use the mob's
+ *   standard acceleration.
  */
 void mob::chase(
     const point &coords, const float coords_z,
     const unsigned char flags,
-    const float target_distance, const float speed
+    const float target_distance, const float speed, const float acceleration
 ) {
-    chase(NULL, NULL, coords, coords_z, flags, target_distance, speed);
+    chase(
+        NULL, NULL, coords, coords_z,
+        flags, target_distance, speed, acceleration
+    );
 }
 
 
@@ -1409,9 +1423,12 @@ void mob::focus_on_mob(mob* m2) {
  *   Settings about how the path should be followed.
  * speed:
  *   Speed at which to travel.
+ * acceleration:
+ *   Speed acceleration.
  */
 bool mob::follow_path(
-    const path_follow_settings &settings, const float speed
+    const path_follow_settings &settings,
+    const float speed, const float acceleration
 ) {
     bool was_blocked = false;
     path_stop* old_next_stop = NULL;
@@ -1494,7 +1511,7 @@ bool mob::follow_path(
     //Now, let's figure out how the mob should start its journey.
     if(path_info->go_straight) {
         //The path info is telling us to just go to the destination directly.
-        move_to_path_end(speed);
+        move_to_path_end(speed, acceleration);
         
     } else if(!path_info->path.empty()) {
         //Head to the first stop.
@@ -1513,7 +1530,8 @@ bool mob::follow_path(
         chase(
             next_stop->pos, next_stop_z,
             CHASE_FLAG_ANY_ANGLE,
-            chase_info_struct::DEF_TARGET_DISTANCE, speed
+            chase_info_struct::DEF_TARGET_DISTANCE,
+            speed, acceleration
         );
         
     } else {
@@ -2412,8 +2430,10 @@ void mob::leave_group() {
  * Makes the mob start going towards the final destination of its path.
  * speed:
  *   Speed to move at.
+ * acceleration:
+ *   Speed acceleration.
  */
-void mob::move_to_path_end(const float speed) {
+void mob::move_to_path_end(const float speed, const float acceleration) {
     if(!path_info) return;
     if(
         (
@@ -2428,7 +2448,7 @@ void mob::move_to_path_end(const float speed) {
             point(), 0.0f,
             CHASE_FLAG_ANY_ANGLE,
             path_info->settings.final_target_distance,
-            speed
+            speed, acceleration
         );
     } else {
         chase(
@@ -2436,7 +2456,7 @@ void mob::move_to_path_end(const float speed) {
             get_sector(path_info->settings.target_point, NULL, true)->z,
             CHASE_FLAG_ANY_ANGLE,
             path_info->settings.final_target_distance,
-            speed
+            speed, acceleration
         );
     }
 }
@@ -2485,7 +2505,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
             team = team_nr;
         }
     }
-
+    
     if(svr.get("max_health", max_health)) {
         max_health = std::max(1.0f, max_health);
         health = max_health;
@@ -3193,7 +3213,9 @@ void mob::tick_brain(const float delta_t) {
                 ) {
                     //Reached the final stop of the path, but not the goal.
                     //Let's head there.
-                    move_to_path_end(chase_info.max_speed);
+                    move_to_path_end(
+                        chase_info.max_speed, chase_info.acceleration
+                    );
                     
                 } else if(
                     path_info->cur_path_stop_nr == path_info->path.size() + 1

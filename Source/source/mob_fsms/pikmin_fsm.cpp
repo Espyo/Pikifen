@@ -3721,7 +3721,11 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
         }
     }
     
-    if(pik_ptr->follow_path(settings, pik_ptr->get_base_speed())) {
+    if(
+        pik_ptr->follow_path(
+            settings, pik_ptr->get_base_speed(), pik_ptr->type->acceleration
+        )
+    ) {
         pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     } else {
         pik_ptr->fsm.set_state(PIKMIN_STATE_IDLING);

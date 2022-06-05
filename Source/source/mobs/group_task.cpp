@@ -288,6 +288,7 @@ void group_task::tick_class_specifics(const float delta_t) {
         chase_info.max_speed =
             type->move_speed +
             (power - tas_type->power_goal) * tas_type->speed_bonus;
+        chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     }
     
     update_spot_absolute_positions();

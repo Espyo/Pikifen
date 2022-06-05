@@ -140,11 +140,13 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
             settings.faked_end = bri_ptr->get_start_point();
         }
     }
-
+    
     settings.target_point = m->carry_info->intended_point;
     settings.target_mob = m->carry_info->intended_mob;
     
-    m->follow_path(settings, m->carry_info->get_speed());
+    m->follow_path(
+        settings, m->carry_info->get_speed(), m->chase_info.acceleration
+    );
     
     if(m->path_info->path.empty() && !m->path_info->go_straight) {
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);
@@ -264,6 +266,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     m->carry_info->cur_n_carriers++;
     
     m->chase_info.max_speed = m->carry_info->get_speed();
+    m->chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
     m->calculate_carrying_destination(
         pik_ptr, NULL,
@@ -340,6 +343,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     m->carry_info->cur_n_carriers--;
     
     m->chase_info.max_speed = m->carry_info->get_speed();
+    m->chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
     m->calculate_carrying_destination(
         NULL, pik_ptr,
