@@ -1,7 +1,7 @@
 name = Olimar
 description = A veteran freight worker from Hocotate. Works hard and has a knack for science.
 
-acceleration = 800
+acceleration = 500
 dismiss_sfx = Olimar_dismiss.ogg
 height = 46
 main_color = 221 17 17

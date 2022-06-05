@@ -121,6 +121,8 @@ struct chase_info_struct {
     
     //Distance from the target in which the mob is considered as being there.
     float target_dist;
+    //Acceleration to apply, in units per second per second.
+    float acceleration;
     //Current speed to move towards the target at.
     float cur_speed;
     //Maximum speed.

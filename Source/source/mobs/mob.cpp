@@ -1035,6 +1035,7 @@ void mob::chase(
     chase_info.target_dist = target_distance;
     chase_info.max_speed =
         (speed == LARGE_FLOAT ? get_base_speed() : speed);
+    chase_info.acceleration = type->acceleration;
         
     chase_info.state = CHASE_STATE_CHASING;
 }
@@ -3207,9 +3208,7 @@ void mob::tick_brain(const float delta_t) {
             }
             
             if(chase_info.state == CHASE_STATE_FINISHED) {
-                //Reached the final destination. Think about stopping.
-                chase_info.cur_speed = 0;
-                chase_info.max_speed = 0;
+                //Reached the final destination.
                 fsm.run_event(MOB_EV_REACHED_DESTINATION);
             }
         }
