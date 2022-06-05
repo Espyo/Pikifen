@@ -166,6 +166,7 @@ void pause_menu_struct::init_help_page() {
     help_gui.register_coords("controls",    22, 37, 35, 10);
     help_gui.register_coords("pikmin",      22, 49, 35, 10);
     help_gui.register_coords("objects",     22, 61, 35, 10);
+    help_gui.register_coords("manual",      22, 73, 35, 10);
     help_gui.register_coords("category",    69, 15, 50,  8);
     help_gui.register_coords("list",        69, 50, 50, 60);
     help_gui.register_coords("list_scroll", 96, 50,  2, 60);
@@ -245,6 +246,16 @@ void pause_menu_struct::init_help_page() {
         return "Show help about some noteworthy objects you'll find.";
     };
     help_gui.add_item(objects_button, "objects");
+    
+    //Manual text.
+    bullet_point_gui_item* manual_bullet =
+        new bullet_point_gui_item("More help...", game.fonts.standard);
+    manual_bullet->on_get_tooltip = [] () {
+        return
+            "For more help on other subjects, check out the "
+            "manual in the game's folder.";
+    };
+    help_gui.add_item(manual_bullet, "manual");
     
     //Category text.
     help_category_text = new text_gui_item("", game.fonts.standard);

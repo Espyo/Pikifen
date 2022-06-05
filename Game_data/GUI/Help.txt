@@ -4,6 +4,7 @@ positions {
     controls =    22 37 35 10
     pikmin =      22 49 35 10
     objects =     22 61 35 10
+    manual =      22 73 35 10
     category =    69 15 50  8
     list =        69 50 50 60
     list_scroll = 96 50  2 60
