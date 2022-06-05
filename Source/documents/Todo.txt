@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If the animation editor's history is empty, there's a crash
+    
     
     --- v0.22.0 ---
     Performance

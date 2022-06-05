@@ -281,7 +281,7 @@ void animation_editor::process_gui_load_dialog() {
     //History node.
     if(saveable_tree_node("load", "History")) {
     
-        if(!history[0].empty()) {
+        if(!history.empty() && !history[0].empty()) {
         
             for(size_t h = 0; h < history.size(); ++h) {
                 string name = history[h];
