@@ -1596,7 +1596,7 @@ size_t select_next_item_directionally(
         //We get the same result whether the Y is positive or negative,
         //so let's simplify things and make it positive.
         float rel_angle =
-            get_angle(point(0, 0), point(i_coords.x, fabs(i_coords.y)));
+            get_angle(point(i_coords.x, fabs(i_coords.y)));
         if(
             rel_angle >= MIN_BLINDSPOT_ANGLE &&
             rel_angle <= MAX_BLINDSPOT_ANGLE

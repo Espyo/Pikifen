@@ -818,6 +818,16 @@ float dot_product(const point &v1, const point &v2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the angle from the origin and the specified point.
+ * focus:
+ *   Point that the origin is focusing on.
+ */
+float get_angle(const point &focus) {
+    return atan2(focus.y, focus.x);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the angle between two points.
  * In other words, this is the angle "center" is facing when it is looking
  * at "focus".

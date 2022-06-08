@@ -1402,8 +1402,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     break;
                 } case OCTEE_MODE_ANGLE: {
                     register_change("sector texture angle change");
-                    float drag_start_a = get_angle(point(), octee_drag_start);
-                    float cursor_a = get_angle(point(), game.mouse_cursor_w);
+                    float drag_start_a = get_angle(octee_drag_start);
+                    float cursor_a = get_angle(game.mouse_cursor_w);
                     s_ptr->texture_info.rot =
                         octee_orig_angle + (cursor_a - drag_start_a);
                     break;

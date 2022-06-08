@@ -14,6 +14,15 @@ Next tasks (roughly sorted most important first)
             Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
             Refactor it to use vectors, like the cursor trail drawing logic
         Profile other things too
+            An area with many mobs roaming around
+            An area with many static decorative mobs
+            An area with many Pikmin
+            An area with many edges at ground level
+            An area with many paths (and Pikmin making use of them)
+            An area with all the above mixed
+            More ideas from the performance monitor
+    Add an "advanced..." bullet point to the options menu that just says "check the manual and the User_data/Options.txt file"
+    Add a note to the manual and/or README saying that if you downloaded a zip, and that zip has a Source code folder inside, then you've downloaded the wrong one
     Code cleanup
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
@@ -23,6 +32,7 @@ Next tasks (roughly sorted most important first)
             Everything in const.h should be constexpr
             Be declared in the .h files as extern
             Be defined and commented in the .cpp files
+        Make some class members protected, when they're meant to be used by sub-classes
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Memory leaks, cppcheck, etc.
     Demo content
@@ -331,9 +341,11 @@ Next tasks (roughly sorted most important first)
             Potential layout: When listing the control for an action that has three buttons, for instance, the cell on the left column spans 3 rows and is just the action name (aligned to top), and the 3 cells on the right are one button each.
             When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
             For gamepad inputs, write the gamepad's name somewhere on-screen?
-            Save the controls in the options file inside a block, and possibly at the end of the options file
+        Add default controls for menu navigation, for the D-pad, analog stick, arrow keys, spacebar, enter, escape, a gamepad button to confirm, and a gamepad button to cancel
+        Save the controls in the options file inside a block, and possibly at the end of the options file
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the button icons should show the name of the button instead of a number
+        If an action has multiple controls, the icon to show should prioritize gamepad inputs if the last player input was a gamepad (for analog sticks only if > 0.5), and keyboard/mouse otherwise
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
@@ -698,6 +710,7 @@ Misc things (so I don't forget)
             https://www.reddit.com/r/gamedev/comments/d1a602/how_scrolling_textures_gave_super_mario_galaxy_2/
         Add some effect to the borders of water bodies?
         Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
+        Enemy spirits?
     Editor improvements
         Area editor
             It should have a "toolbar" so you can swap from layout to mob to path real quick, instead of having to quit out. Also, shortcut keys for that in F1, F2, etc.

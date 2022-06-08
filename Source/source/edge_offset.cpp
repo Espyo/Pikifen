@@ -457,6 +457,8 @@ void get_edge_offset_edge_info(
  * algorithm to always return something that at least can be worked with,
  * the intersection is calculated as if both effect ends were infinitely long
  * lines.
+ * We could use get_miter_points for this, but it's surprisingly not much
+ * faster, and this allows us to tackle some visually glitchy edge-cases.
  * e1:
  *   First effect-casting edge. This is the main edge being processed.
  * e2:
