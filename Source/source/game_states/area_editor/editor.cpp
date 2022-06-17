@@ -1418,6 +1418,8 @@ void area_editor::load_area(const bool from_backup) {
     
     load_reference();
     
+    update_all_edge_offset_caches();
+    
     made_new_changes = false;
     
     clear_undo_history();
@@ -3332,6 +3334,45 @@ void area_editor::unload() {
     unload_spike_damage_types();
     unload_status_types(false);
     unload_custom_particle_generators();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates all edge offset caches relevant to the area editor.
+ */
+void area_editor::update_all_edge_offset_caches() {
+    game.wall_smoothing_effect_caches.clear();
+    game.wall_smoothing_effect_caches.insert(
+        game.wall_smoothing_effect_caches.begin(),
+        game.cur_area_data.edges.size(),
+        edge_offset_cache()
+    );
+    update_offset_effect_caches(
+        game.wall_smoothing_effect_caches,
+        unordered_set<vertex*>(
+            game.cur_area_data.vertexes.begin(),
+            game.cur_area_data.vertexes.end()
+        ),
+        does_edge_have_ledge_smoothing,
+        get_ledge_smoothing_length,
+        get_ledge_smoothing_color
+    );
+    game.wall_shadow_effect_caches.clear();
+    game.wall_shadow_effect_caches.insert(
+        game.wall_shadow_effect_caches.begin(),
+        game.cur_area_data.edges.size(),
+        edge_offset_cache()
+    );
+    update_offset_effect_caches(
+        game.wall_shadow_effect_caches,
+        unordered_set<vertex*>(
+            game.cur_area_data.vertexes.begin(),
+            game.cur_area_data.vertexes.end()
+        ),
+        does_edge_have_wall_shadow,
+        get_wall_shadow_length,
+        get_wall_shadow_color
+    );
 }
 
 

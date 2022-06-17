@@ -1910,6 +1910,20 @@ void timer::tick(const float delta_t) {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a wall effect cache struct.
+ */
+edge_offset_cache::edge_offset_cache() :
+    lengths{0, 0},
+    angles{0, 0},
+    colors{COLOR_EMPTY, COLOR_EMPTY},
+    elbow_lengths{0, 0},
+    elbow_angles{0, 0},
+    first_end_vertex_idx(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a whistle struct.
  */
 whistle_struct::whistle_struct() :

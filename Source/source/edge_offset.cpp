@@ -24,83 +24,50 @@
 /* ----------------------------------------------------------------------------
  * Draws an edge offset effect of a given edge onto the current target bitmap,
  * which acts as a buffer.
- * e_ptr:
- *   Edge whose effects to draw.
- * checker:
- *   Pointer to a function that checks if the edge should have the
- *   intended effect or not. It also returns what sector of the edge
- *   will be affected by the effect, and which won't.
- * length_getter:
- *   Pointer to a function that returns the length of a given edge's effect.
- * color_getter:
- *   Pointer to a function that returns the color of a given edge's effect.
+ * caches:
+ *   List of caches to fetch edge info from.
+ * e_idx:
+ *   Index of the edge whose effects to draw.
  */
 void draw_edge_offset_on_buffer(
-    edge* e_ptr,
-    offset_effect_checker_ptr checker,
-    offset_effect_length_getter_ptr length_getter,
-    offset_effect_color_getter_ptr color_getter
+    vector<edge_offset_cache> &caches, size_t e_idx
 ) {
     const float END_OPACITY = 0.0f;
+    edge* e_ptr = game.cur_area_data.edges[e_idx];
     
-    sector* unaffected_sector = NULL;
-    sector* affected_sector = NULL;
-    
-    if(!checker(e_ptr, &affected_sector, &unaffected_sector)) {
-        //This edge doesn't get the effect.
-        return;
-    }
-    
-    //We need to process the two vertexes of the edge in a specific
-    //order, such that if you stand on the first one being processed,
-    //and you face the second one, the affected sector is to the left.
-    
-    vertex* ends_to_process[2];
-    if(e_ptr->sectors[0] == affected_sector) {
-        ends_to_process[0] = e_ptr->vertexes[0];
-        ends_to_process[1] = e_ptr->vertexes[1];
-    } else {
-        ends_to_process[0] = e_ptr->vertexes[1];
-        ends_to_process[1] = e_ptr->vertexes[0];
-    }
-    float edge_process_angle =
-        get_angle(
-            point(ends_to_process[0]->x, ends_to_process[0]->y),
-            point(ends_to_process[1]->x, ends_to_process[1]->y)
-        );
-        
+    //End vertexes. Like in update_offset_effect_caches, order is important.
+    vertex* end_vertexes[2];
+    //Relative coordinates of the tip of the rectangle, for each end vertex.
     point end_rel_coords[2];
+    //Number of elbow triangles to use, for each end vertex.
     unsigned char n_elbow_tris[2] = {0, 0};
+    //Relative coords of the elbow points, for each end vertex, each tri.
     point elbow_rel_coords[2][2];
+    //Color of the effect, for each end vertex.
     ALLEGRO_COLOR end_colors[2];
     
-    for(unsigned char e = 0; e < 2; ++e) {
+    if(caches[e_idx].first_end_vertex_idx == 0) {
+        end_vertexes[0] = e_ptr->vertexes[0];
+        end_vertexes[1] = e_ptr->vertexes[1];
+    } else {
+        end_vertexes[0] = e_ptr->vertexes[1];
+        end_vertexes[1] = e_ptr->vertexes[0];
+    }
+    
+    for(unsigned char end = 0; end < 2; ++end) {
         //For each end of the effect...
         
-        float length = 0.0f;
-        float angle = 0.0f;
-        float elbow_length = 0.0f;
-        float elbow_angle = 0.0f;
+        float length = caches[e_idx].lengths[end];
+        if(length == 0.0f) continue;
         
-        //The edge's effect is simply a rectangle, although one or both
-        //of its ends could be angled inward, either to merge with a
-        //neighboring effect or to fit snugly against a different effect's edge.
-        //In addition, we may also need to draw an "elbow" shape to connect to
-        //a different edge.
-        //Start by getting information on how this effect should behave.
-        //We don't need to worry about why it's drawn the way it is, since
-        //get_edge_offset_edge_info is in charge of that.
-        get_edge_offset_edge_info(
-            e_ptr, ends_to_process[e], e,
-            e == 0 ? edge_process_angle : edge_process_angle + TAU / 2.0f,
-            affected_sector, unaffected_sector,
-            checker, length_getter, color_getter,
-            &angle, &length, &end_colors[e],
-            &elbow_angle, &elbow_length
-        );
+        float angle = caches[e_idx].angles[end];
+        float elbow_length = caches[e_idx].elbow_lengths[end];
+        float elbow_angle = caches[e_idx].elbow_angles[end];
+        end_colors[end] = caches[e_idx].colors[end];
         
-        //This end of the effect starts at the vertex and spreads to this point.
-        end_rel_coords[e] = rotate_point(point(length, 0), angle);
+        //This end of the effect starts at the vertex,
+        //and spreads to this point.
+        end_rel_coords[end] = rotate_point(point(length, 0), angle);
         
         if(elbow_length > 0.0f) {
             //We need to also draw an elbow connecting this end of the
@@ -110,28 +77,29 @@ void draw_edge_offset_on_buffer(
             //on how much it needs to bend.
             
             float rect_to_elbow_diff =
-                e == 0 ?
+                end == 0 ?
                 get_angle_cw_dif(elbow_angle, angle) :
                 get_angle_cw_dif(angle, elbow_angle);
                 
             if(rect_to_elbow_diff > TAU / 8.00001f) {
                 //We add a small amount to the threshold because of floating
-                //point imperfections. A perfectly square sector (easy to do in
-                //the editor) may result in elbows where one side gets one
-                //triangle, and the other gets two. At least this small bump
-                //in the angle threshold makes it much less likely to happen.
-                n_elbow_tris[e] = 2;
+                //point imperfections. A perfectly square sector
+                //(easy to do in the editor) may result in elbows where
+                //one side gets one triangle, and the other gets two.
+                //At least this small bump in the angle threshold makes it
+                //much less likely to happen.
+                n_elbow_tris[end] = 2;
                 float mid_elbow_angle =
-                    e == 0 ?
+                    end == 0 ?
                     angle - rect_to_elbow_diff / 2.0f :
                     angle + rect_to_elbow_diff / 2.0f;
-                elbow_rel_coords[e][0] =
+                elbow_rel_coords[end][0] =
                     rotate_point(point(elbow_length, 0), mid_elbow_angle);
             } else {
-                n_elbow_tris[e] = 1;
+                n_elbow_tris[end] = 1;
             }
             
-            elbow_rel_coords[e][n_elbow_tris[e] - 1] =
+            elbow_rel_coords[end][n_elbow_tris[end] - 1] =
                 rotate_point(point(elbow_length, 0), elbow_angle);
         }
         
@@ -141,8 +109,8 @@ void draw_edge_offset_on_buffer(
     //take into account the elbow, and are just the standard "rectangle".
     ALLEGRO_VERTEX av[4];
     for(size_t e = 0; e < 2; ++e) {
-        av[e].x = ends_to_process[e]->x;
-        av[e].y = ends_to_process[e]->y;
+        av[e].x = end_vertexes[e]->x;
+        av[e].y = end_vertexes[e]->y;
         av[e].color = end_colors[e];
         av[e].z = 0;
     }
@@ -187,9 +155,9 @@ void draw_edge_offset_on_buffer(
     for(unsigned char e = 0; e < 2; ++e) {
         for(unsigned char v = 0; v < n_elbow_tris[e]; ++v) {
             elbow_av[e][v + 2].x =
-                ends_to_process[e]->x + elbow_rel_coords[e][v].x;
+                end_vertexes[e]->x + elbow_rel_coords[e][v].x;
             elbow_av[e][v + 2].y =
-                ends_to_process[e]->y + elbow_rel_coords[e][v].y;
+                end_vertexes[e]->y + elbow_rel_coords[e][v].y;
             elbow_av[e][v + 2].z = 0.0f;
             elbow_av[e][v + 2].color = end_colors[e];
             elbow_av[e][v + 2].color.a = END_OPACITY;
@@ -693,33 +661,26 @@ void get_next_offset_effect_edge(
 
 
 /* ----------------------------------------------------------------------------
- * Draws edge offset effects for all edges on-screen onto a buffer,
+ * Draws edge offset effects for all edges on-screen onto a buffer image,
  * so that sectors may then sample from it to draw what effects they need.
  * cam_tl:
  *   Top-left corner of the camera boundaries. The edges of any sector that is
  *   beyond these boundaries will be ignored.
  * cam_br:
  *   Same as cam_tl, but for the bottom-right boundaries.
+ * caches:
+ *   List of caches to fetch edge info from.
  * buffer:
  *   Buffer to draw to.
  * clear_first:
  *   If true, the bitmap is cleared before any drawing is done.
- * checker:
- *   Pointer to a function that checks whether an edge uses the specified
- *   edge offset effect.
- * length_getter:
- *   Pointer to a function that returns the length of the edge offset effect.
- * color_getter:
- *   Pointer to a function that returns the color of the edge offset effect.
  */
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
-    ALLEGRO_BITMAP* buffer, const bool clear_first,
-    offset_effect_checker_ptr checker,
-    offset_effect_length_getter_ptr length_getter,
-    offset_effect_color_getter_ptr color_getter
+    vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
+    const bool clear_first
 ) {
-    unordered_set<edge*> edges;
+    unordered_set<size_t> edges;
     
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = game.cur_area_data.sectors[s];
@@ -735,7 +696,7 @@ void update_offset_effect_buffer(
         }
         
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            edges.insert(s_ptr->edges[e]);
+            edges.insert(s_ptr->edge_nrs[e]);
         }
     }
     
@@ -759,10 +720,8 @@ void update_offset_effect_buffer(
         al_clear_to_color(COLOR_EMPTY);
     }
     
-    for(edge* e_ptr : edges) {
-        draw_edge_offset_on_buffer(
-            e_ptr, checker, length_getter, color_getter
-        );
+    for(size_t e_idx : edges) {
+        draw_edge_offset_on_buffer(caches, e_idx);
     }
     
     //Return to the old state of things.
@@ -771,4 +730,101 @@ void update_offset_effect_buffer(
         old_op, old_src, old_dst, old_aop, old_asrc, old_adst
     );
     al_set_target_bitmap(target_bmp);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the cached information about all edge offsets.
+ * caches:
+ *   List of caches to update.
+ * vertexes_to_update:
+ *   List of vertexes whose edges need updating.
+ * checker:
+ *   Pointer to a function that checks if the edge should have the
+ *   intended effect or not. It also returns what sector of the edge
+ *   will be affected by the effect, and which won't.
+ * length_getter:
+ *   Function that returns the length of the effect.
+ * color_getter:
+ *   Function that returns the color of the effect.
+ */
+void update_offset_effect_caches (
+    vector<edge_offset_cache> &caches,
+    unordered_set<vertex*> vertexes_to_update,
+    offset_effect_checker_ptr checker,
+    offset_effect_length_getter_ptr length_getter,
+    offset_effect_color_getter_ptr color_getter
+) {
+    unordered_set<size_t> edges_to_update;
+    for(vertex* v : vertexes_to_update) {
+        edges_to_update.insert(v->edge_nrs.begin(), v->edge_nrs.end());
+    }
+    
+    for(size_t e : edges_to_update) {
+        edge* e_ptr = game.cur_area_data.edges[e];
+        
+        sector* unaffected_sector = NULL;
+        sector* affected_sector = NULL;
+        
+        if(!checker(e_ptr, &affected_sector, &unaffected_sector)) {
+            //This edge doesn't get the effect.
+            caches[e].lengths[0] = 0.0f;
+            caches[e].lengths[1] = 0.0f;
+            continue;
+        }
+        
+        //We need to process the two vertexes of the edge in a specific
+        //order, such that if you stand on the first one being processed,
+        //and you face the second one, the affected sector is to the left.
+        
+        vertex* ends_to_process[2];
+        if(e_ptr->sectors[0] == affected_sector) {
+            ends_to_process[0] = e_ptr->vertexes[0];
+            ends_to_process[1] = e_ptr->vertexes[1];
+            caches[e].first_end_vertex_idx = 0;
+        } else {
+            ends_to_process[0] = e_ptr->vertexes[1];
+            ends_to_process[1] = e_ptr->vertexes[0];
+            caches[e].first_end_vertex_idx = 1;
+        }
+        float edge_process_angle =
+            get_angle(
+                point(ends_to_process[0]->x, ends_to_process[0]->y),
+                point(ends_to_process[1]->x, ends_to_process[1]->y)
+            );
+            
+        for(unsigned char end = 0; end < 2; ++end) {
+            //For each end of the effect...
+            
+            float length = 0.0f;
+            float angle = 0.0f;
+            float elbow_length = 0.0f;
+            float elbow_angle = 0.0f;
+            ALLEGRO_COLOR end_color;
+            
+            //The edge's effect is simply a rectangle, although one or both
+            //of its ends could be angled inward, either to merge with a
+            //neighboring effect or to fit snugly against a different
+            //effect's edge.
+            //In addition, we may also need to draw an "elbow" shape to
+            //connect to a different edge.
+            //Start by getting information on how this effect should behave.
+            //We don't need to worry about why it's drawn the way it is, since
+            //get_edge_offset_edge_info is in charge of that.
+            get_edge_offset_edge_info(
+                e_ptr, ends_to_process[end], end,
+                end == 0 ? edge_process_angle : edge_process_angle + TAU / 2.0f,
+                affected_sector, unaffected_sector,
+                checker, length_getter, color_getter,
+                &angle, &length, &end_color,
+                &elbow_angle, &elbow_length
+            );
+            
+            caches[e].lengths[end] = length;
+            caches[e].angles[end] = normalize_angle(angle);
+            caches[e].colors[end] = end_color;
+            caches[e].elbow_angles[end] = normalize_angle(elbow_angle);
+            caches[e].elbow_lengths[end] = elbow_length;
+        }
+    }
 }

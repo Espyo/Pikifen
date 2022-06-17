@@ -249,7 +249,7 @@ bool does_edge_have_ledge_smoothing(
         (e_ptr->sectors[0] && !e_ptr->sectors[1]) ||
         e_ptr->sectors[1]->is_bottomless_pit
     ) {
-        //If 1 exists but 0 doesn't.
+        //If 0 exists but 1 doesn't.
         *affected_sector = e_ptr->sectors[0];
         *unaffected_sector = e_ptr->sectors[1];
         return true;

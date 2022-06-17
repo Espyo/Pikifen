@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -6,13 +6,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    If a Wollywog dies mid-air, it'll stay in the air
     
     --- v0.22.0 ---
     Performance
-        Wall shadow rendering is a bit heavy. Mostly in figuring out what edges to draw or not to draw
-            Maybe have an array of objects, where each object represents an edge (the edge's ID is the array's index). Each object holds what the angle, length, and color of the effect is at each of the edge's vertexes
-            Refactor it to use vectors, like the cursor trail drawing logic
         Profile other things too
             An area with many mobs roaming around
             An area with many static decorative mobs
@@ -21,8 +18,11 @@ Next tasks (roughly sorted most important first)
             An area with many paths (and Pikmin making use of them)
             An area with all the above mixed
             More ideas from the performance monitor
+    A way to show the current animation file/area has unsaved changes
+    Add a checklist to the end of the area tips manual page, where every item links to a section of the article, and the items are categorized chronologically (planning stage, execution stage, polish stage, etc.). Also, a message saying you can use the checkbox checkmarks, but they'll be gone when you refresh the page.
     Add an "advanced..." bullet point to the options menu that just says "check the manual and the User_data/Options.txt file"
     Add a note to the manual and/or README saying that if you downloaded a zip, and that zip has a Source code folder inside, then you've downloaded the wrong one
+    Update Allegro, and maybe make use of the texture wrap feature?
     Code cleanup
         Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
         The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
@@ -316,6 +316,7 @@ Next tasks (roughly sorted most important first)
         [NEEDS BRAINSTORMING] Would it make sense to have a screen stack system, with push&pop?
         [NEEDS BRAINSTORMING] Try to make it deterministic enough to support input playback (replays)?
         Should the option name + string representation be in input_manager or outside?
+        Every frame, it should read all inputs in the Allegro event queue. If it has multipl controller analog stick inputs for the same orientation (horizontal or vertical), it should discard them all except for the last one. e.g. if the player tilts the stick from X 0 to X 255 in one frame, the code will only process the X 255, instead of any intermediate stick positions events
         Tweaks
             Current leader should move slower if the analog stick is not held all the way
             If it's not done already, there should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
@@ -486,6 +487,7 @@ Next tasks (roughly sorted most important first)
                 The game should identify which team's Onion and flag is which, automatically, simply by picking the nearest one
             Only areas that can be played with the victory rules specified in the current ruleset will actually appear in the list
         Mission high scores need to be saved independently for each player amount
+        Make some areas about multiplayer puzzles? Hopefully ones that can also be completed by a single player so long as they swap leaders
     Buried treasure
     Breadbugs should carry treasure
     Weather improvements
@@ -708,7 +710,7 @@ Misc things (so I don't forget)
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
         Make the water ripples be via shader
             https://www.reddit.com/r/gamedev/comments/d1a602/how_scrolling_textures_gave_super_mario_galaxy_2/
-        Add some effect to the borders of water bodies?
+        Bring back the wobbliness of the liquid limit edge offset effect, lost with the commit on June 17th 2022 -- use a vertex shader for this. You can probably tell which vertexes belong to the edge of the effect (the ones that need the wobble) by checking if their alpha is 0
         Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
         Enemy spirits?
     Editor improvements

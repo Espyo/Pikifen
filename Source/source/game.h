@@ -112,6 +112,8 @@ public:
     map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
     //Buffer with the liquid limit effect.
     ALLEGRO_BITMAP* liquid_limit_effect_buffer;
+    //Info on every edge's liquid limit offset effect. Cache for performance.
+    vector<edge_offset_cache> liquid_limit_effect_caches;
     //List of liquids.
     map<string, liquid*> liquids;
     //Loading screen subtext buffer.
@@ -160,6 +162,10 @@ public:
     float time_passed;
     //Buffer with the wall shadows and ledge smoothings.
     ALLEGRO_BITMAP* wall_offset_effect_buffer;
+    //Info on every edge's wall shadow offset effect. Cache for performance.
+    vector<edge_offset_cache> wall_shadow_effect_caches;
+    //Info on every edge's wall smoothing offset effect. Cache for performance.
+    vector<edge_offset_cache> wall_smoothing_effect_caches;
     //List of weather conditions.
     map<string, weather> weather_conditions;
     //Current fullscreen state.

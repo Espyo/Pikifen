@@ -107,10 +107,7 @@ bool does_edge_have_wall_shadow(
     edge* e_ptr, sector** affected_sector, sector** unaffected_sector
 );
 void draw_edge_offset_on_buffer(
-    edge* e_ptr,
-    offset_effect_checker_ptr checker,
-    offset_effect_length_getter_ptr length_getter,
-    offset_effect_color_getter_ptr color_getter
+    vector<edge_offset_cache> &caches, size_t e_idx
 );
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
@@ -222,7 +219,12 @@ vector<string_token> tokenize_string(const string &s);
 string unescape_string(const string &s);
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
-    ALLEGRO_BITMAP* buffer, const bool clear_first,
+    vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
+    const bool clear_first
+);
+void update_offset_effect_caches (
+    vector<edge_offset_cache> &caches,
+    unordered_set<vertex*> vertexes_to_update,
     offset_effect_checker_ptr checker,
     offset_effect_length_getter_ptr length_getter,
     offset_effect_color_getter_ptr color_getter

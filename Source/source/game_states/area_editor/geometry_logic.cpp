@@ -1889,7 +1889,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
     } case SNAP_NOTHING: {
     } case N_SNAP_MODES: {
         break;
-
+        
     }
     }
     
@@ -2043,6 +2043,8 @@ void area_editor::update_affected_sectors(
     if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
         emit_triangulation_error_status_bar_message(last_triangulation_error);
     }
+    
+    update_all_edge_offset_caches();
 }
 
 

@@ -1214,6 +1214,7 @@ void area_editor::process_gui_panel_edge() {
     }
     
     homogenize_selected_edges();
+    update_all_edge_offset_caches();
     
 }
 
@@ -2582,6 +2583,7 @@ void area_editor::process_gui_panel_sector() {
         if(ImGui::DragFloat("Height", &sector_z)) {
             register_change("sector height change");
             s_ptr->z = sector_z;
+            update_all_edge_offset_caches();
         }
         set_tooltip(
             "Height of the floor. Positive numbers are higher.",

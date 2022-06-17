@@ -697,6 +697,7 @@ private:
     void update_affected_sectors(
         const unordered_set<sector*> &affected_sectors
     );
+    void update_all_edge_offset_caches();
     void update_inner_sectors_outer_sector(
         const vector<edge*> &edges_to_check,
         sector* old_outer, sector* new_outer

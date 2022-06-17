@@ -605,6 +605,55 @@ void gameplay_state::load() {
     cur_leader_ptr->stop_whistling();
     update_closest_group_members();
     
+    game.liquid_limit_effect_caches.clear();
+    game.liquid_limit_effect_caches.insert(
+        game.liquid_limit_effect_caches.begin(),
+        game.cur_area_data.edges.size(),
+        edge_offset_cache()
+    );
+    update_offset_effect_caches(
+        game.liquid_limit_effect_caches,
+        unordered_set<vertex*>(
+            game.cur_area_data.vertexes.begin(),
+            game.cur_area_data.vertexes.end()
+        ),
+        does_edge_have_liquid_limit,
+        get_liquid_limit_length,
+        get_liquid_limit_color
+    );
+    game.wall_smoothing_effect_caches.clear();
+    game.wall_smoothing_effect_caches.insert(
+        game.wall_smoothing_effect_caches.begin(),
+        game.cur_area_data.edges.size(),
+        edge_offset_cache()
+    );
+    update_offset_effect_caches(
+        game.wall_smoothing_effect_caches,
+        unordered_set<vertex*>(
+            game.cur_area_data.vertexes.begin(),
+            game.cur_area_data.vertexes.end()
+        ),
+        does_edge_have_ledge_smoothing,
+        get_ledge_smoothing_length,
+        get_ledge_smoothing_color
+    );
+    game.wall_shadow_effect_caches.clear();
+    game.wall_shadow_effect_caches.insert(
+        game.wall_shadow_effect_caches.begin(),
+        game.cur_area_data.edges.size(),
+        edge_offset_cache()
+    );
+    update_offset_effect_caches(
+        game.wall_shadow_effect_caches,
+        unordered_set<vertex*>(
+            game.cur_area_data.vertexes.begin(),
+            game.cur_area_data.vertexes.end()
+        ),
+        does_edge_have_wall_shadow,
+        get_wall_shadow_length,
+        get_wall_shadow_color
+    );
+    
     day_minutes = game.config.day_minutes_start;
     area_time_passed = 0.0f;
     after_hours = false;

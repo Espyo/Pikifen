@@ -1333,27 +1333,21 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
     if(!bmp_output) {
         update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],
+            game.liquid_limit_effect_caches,
             game.liquid_limit_effect_buffer,
-            true,
-            does_edge_have_liquid_limit,
-            get_liquid_limit_length,
-            get_liquid_limit_color
+            true
         );
         update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],
+            game.wall_smoothing_effect_caches,
             game.wall_offset_effect_buffer,
-            true,
-            does_edge_have_ledge_smoothing,
-            get_ledge_smoothing_length,
-            get_ledge_smoothing_color
+            true
         );
         update_offset_effect_buffer(
             game.cam.box[0], game.cam.box[1],
+            game.wall_shadow_effect_caches,
             game.wall_offset_effect_buffer,
-            false,
-            does_edge_have_wall_shadow,
-            get_wall_shadow_length,
-            get_wall_shadow_color
+            false
         );
         
     } else {
@@ -1369,38 +1363,33 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             );
         update_offset_effect_buffer(
             point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            game.liquid_limit_effect_caches,
             custom_liquid_limit_effect_buffer,
-            true,
-            does_edge_have_liquid_limit,
-            get_liquid_limit_length,
-            get_liquid_limit_color
+            true
         );
         update_offset_effect_buffer(
             point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            game.wall_smoothing_effect_caches,
             custom_wall_offset_effect_buffer,
-            true,
-            does_edge_have_ledge_smoothing,
-            get_ledge_smoothing_length,
-            get_ledge_smoothing_color
+            true
         );
         update_offset_effect_buffer(
             point(-FLT_MAX, -FLT_MAX), point(FLT_MAX, FLT_MAX),
+            game.wall_shadow_effect_caches,
             custom_wall_offset_effect_buffer,
-            false,
-            does_edge_have_wall_shadow,
-            get_wall_shadow_length,
-            get_wall_shadow_color
+            false
         );
+        
     }
     
     vector<world_component> components;
     //Let's reserve some space. We might need more or less,
     //but this is a nice estimate.
     components.reserve(
-        game.cur_area_data.sectors.size() + //Sectors
-        mobs.all.size() + //Mob shadows
-        mobs.all.size() + //Mobs
-        particles.get_count() //Particles
+        game.cur_area_data.sectors.size() + //Sectors.
+        mobs.all.size() + //Mob shadows.
+        mobs.all.size() + //Mobs.
+        particles.get_count() //Particles.
     );
     
     //Sectors.

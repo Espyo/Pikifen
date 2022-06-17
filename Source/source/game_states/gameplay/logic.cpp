@@ -225,6 +225,19 @@ void gameplay_state::do_gameplay_logic() {
                     
                     s_ptr->liquid_drain_left = 0;
                     s_ptr->draining_liquid = false;
+                    
+                    unordered_set<vertex*> sector_vertexes;
+                    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+                        sector_vertexes.insert(s_ptr->edges[e]->vertexes[0]);
+                        sector_vertexes.insert(s_ptr->edges[e]->vertexes[1]);
+                    }
+                    update_offset_effect_caches(
+                        game.liquid_limit_effect_caches,
+                        sector_vertexes,
+                        does_edge_have_liquid_limit,
+                        get_liquid_limit_length,
+                        get_liquid_limit_color
+                    );
                 }
             }
             

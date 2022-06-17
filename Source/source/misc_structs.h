@@ -896,6 +896,27 @@ struct spray_stats_struct {
 
 
 /* ----------------------------------------------------------------------------
+ * Contains cached information about how an edge should draw its offset effects.
+ */
+struct edge_offset_cache {
+    //Length of the effect's "rectangle", per end vertex. 0 for none.
+    float lengths[2];
+    //Angle of the effect's "rectangle", per end vertex.
+    float angles[2];
+    //Color of the effect, per end vertex.
+    ALLEGRO_COLOR colors[2];
+    //Length of the effect's "elbow", per end vertex. 0 for none.
+    float elbow_lengths[2];
+    //Angle of the effect's "elbow", per end vertex.
+    float elbow_angles[2];
+    //Index of the vertex that should be processed first.
+    unsigned char first_end_vertex_idx;
+    
+    edge_offset_cache();
+};
+
+
+/* ----------------------------------------------------------------------------
  * Contains info about the current whistle usage.
  */
 struct whistle_struct {
