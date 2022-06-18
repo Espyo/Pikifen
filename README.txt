@@ -50,7 +50,7 @@ Discord server: https://discord.gg/qbhz4u3
         If you just extract the new version into the same folder as the old one, you risk having files you care about be replaced, or keeping old files that the new version doesn't use and end up wasting space.
     
     Windows
-        The latest version available for download for Windows is shown at the top of the GitHub releases page: https://github.com/Espyo/Pikifen/releases The download is a compressed (zipped) file, which should be simple to extract. Just unzip everything onto a folder, and double-click Pikifen.exe from the folder to start running.
+        The latest version available for download for Windows is shown at the top of the GitHub releases page: https://github.com/Espyo/Pikifen/releases The download is a compressed (zipped) file, which should be simple to extract. Just unzip everything onto a folder, and double-click Pikifen.exe from the folder to start running. If you have downloaded a zip file in hopes of just playing the engine, but can't find any Pikifen.exe file to double-click, then check if there's a "Source" folder. If there is, you've downloaded the wrong zip file. Use the one in the https://github.com/Espyo/Pikifen/releases page.
         Alternatively, you can download the source code for the master branch and compile it to get the most up-to-date features; compilation instructions can be found in the included manual.
         
     Linux and Mac
