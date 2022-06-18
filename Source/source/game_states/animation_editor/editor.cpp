@@ -282,7 +282,7 @@ void animation_editor::import_animation_data(const string &name) {
     cur_anim->hit_rate = a->hit_rate;
     cur_anim->loop_frame = a->loop_frame;
     
-    made_new_changes = true;
+    mark_new_changes();
 }
 
 
@@ -296,7 +296,7 @@ void animation_editor::import_sprite_file_data(const string &name) {
     
     cur_sprite->set_bitmap(s->file, s->file_pos, s->file_size);
     
-    made_new_changes = true;
+    mark_new_changes();
 }
 
 
@@ -314,7 +314,7 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
     
     update_cur_hitbox();
     
-    made_new_changes = true;
+    mark_new_changes();
 }
 
 
@@ -330,7 +330,7 @@ void animation_editor::import_sprite_top_data(const string &name) {
     cur_sprite->top_size = s->top_size;
     cur_sprite->top_angle = s->top_angle;
     
-    made_new_changes = true;
+    mark_new_changes();
 }
 
 
@@ -426,6 +426,8 @@ void animation_editor::load_animation_database(
     
     animation_exists_on_disk = true;
     can_save = true;
+    has_unsaved_changes = false;
+    was_warned_about_unsaved_changes = false;
     
     game.cam.set_pos(point());
     game.cam.set_zoom(1.0f);
@@ -530,7 +532,7 @@ void animation_editor::pick_animation(
     if(is_new) {
         anims.animations.push_back(new animation(name));
         anims.sort_alphabetically();
-        made_new_changes = true;
+        mark_new_changes();
         status_text = "Created animation \"" + name + "\".";
     }
     cur_anim = anims.animations[anims.find_animation(name)];
@@ -560,7 +562,7 @@ void animation_editor::pick_sprite(
                 loaded_mob_type ? loaded_mob_type->radius : 32
             );
             anims.sort_alphabetically();
-            made_new_changes = true;
+            mark_new_changes();
             status_text = "Created sprite \"" + name + "\".";
         }
     }
@@ -719,7 +721,7 @@ void animation_editor::rename_animation(animation* a, const string &new_name) {
     a->name = new_name;
     anims.sort_alphabetically();
     
-    made_new_changes = true;
+    mark_new_changes();
     status_text =
         "Renamed animation \"" + old_name + "\" to \"" + new_name + "\".";
 }
@@ -772,7 +774,7 @@ void animation_editor::rename_body_part(body_part* p, const string &new_name) {
     p->name = new_name;
     update_hitboxes();
     
-    made_new_changes = true;
+    mark_new_changes();
     status_text =
         "Renamed body part \"" + old_name + "\" to \"" + new_name + "\".";
 }
@@ -826,7 +828,7 @@ void animation_editor::rename_sprite(sprite* s, const string &new_name) {
     }
     anims.sort_alphabetically();
     
-    made_new_changes = true;
+    mark_new_changes();
     status_text =
         "Renamed sprite \"" + old_name + "\" to \"" + new_name + "\".";
 }
@@ -851,7 +853,7 @@ void animation_editor::resize_everything(const float mult) {
         resize_sprite(anims.sprites[s], mult);
     }
     
-    made_new_changes = true;
+    mark_new_changes();
     status_text = "Resized everything by " + f2s(mult) + ".";
 }
 
@@ -885,7 +887,7 @@ void animation_editor::resize_sprite(sprite* s, const float mult) {
         h_ptr->pos    *= mult;
     }
     
-    made_new_changes = true;
+    mark_new_changes();
     status_text = "Resized sprite by " + f2s(mult) + ".";
 }
 
@@ -1094,7 +1096,8 @@ void animation_editor::save_animation_database() {
     } else {
         status_text = "Saved file successfully.";
     }
-    made_new_changes = false;
+    has_unsaved_changes = false;
+    was_warned_about_unsaved_changes = false;
 }
 
 
@@ -1115,7 +1118,7 @@ void animation_editor::set_all_sprite_scales(const float scale) {
         s_ptr->scale.y = scale;
     }
     
-    made_new_changes = true;
+    mark_new_changes();
     status_text = "Set all sprite scales to " + f2s(scale) + ".";
 }
 

@@ -233,7 +233,8 @@ void area_editor::clear_current_area() {
     
     game.cur_area_data.clear();
     
-    made_new_changes = false;
+    has_unsaved_changes = false;
+    was_warned_about_unsaved_changes = false;
     backup_timer.start(game.options.area_editor_backup_interval);
     
     sub_state = EDITOR_SUB_STATE_NONE;
@@ -1420,7 +1421,8 @@ void area_editor::load_area(const bool from_backup) {
     
     update_all_edge_offset_caches();
     
-    made_new_changes = false;
+    has_unsaved_changes = false;
+    was_warned_about_unsaved_changes = false;
     
     clear_undo_history();
     update_undo_history();
@@ -2001,7 +2003,8 @@ void area_editor::press_save_button() {
     }
     
     change_state(EDITOR_STATE_MAIN);
-    made_new_changes = false;
+    has_unsaved_changes = false;
+    was_warned_about_unsaved_changes = false;
     status_text = "Saved area successfully.";
 }
 
@@ -2127,7 +2130,7 @@ void area_editor::register_change(
     }
     undo_history.push_front(make_pair(new_state, operation_name));
     
-    made_new_changes = true;
+    mark_new_changes();
     undo_save_lock_operation = operation_name;
     undo_save_lock_timer.start();
     
@@ -3301,7 +3304,7 @@ void area_editor::undo() {
     path_preview.clear(); //Clear so it doesn't reference deleted stops.
     path_preview_timer.start(false);
     
-    made_new_changes = true;
+    mark_new_changes();
     status_text = "Undo successful: " + operation_name + ".";
 }
 

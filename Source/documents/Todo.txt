@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -6,19 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If a Wollywog dies mid-air, it'll stay in the air
+    
     
     --- v0.22.0 ---
-    Performance
-        Profile other things too
-            An area with many mobs roaming around
-            An area with many static decorative mobs
-            An area with many Pikmin
-            An area with many edges at ground level
-            An area with many paths (and Pikmin making use of them)
-            An area with all the above mixed
-            More ideas from the performance monitor
-    A way to show the current animation file/area has unsaved changes
     Add a checklist to the end of the area tips manual page, where every item links to a section of the article, and the items are categorized chronologically (planning stage, execution stage, polish stage, etc.). Also, a message saying you can use the checkbox checkmarks, but they'll be gone when you refresh the page.
     Add an "advanced..." bullet point to the options menu that just says "check the manual and the User_data/Options.txt file"
     Add a note to the manual and/or README saying that if you downloaded a zip, and that zip has a Source code folder inside, then you've downloaded the wrong one

@@ -57,6 +57,8 @@ protected:
     enum EDITOR_ICONS {
         //Save.
         ICON_SAVE,
+        //Save.
+        ICON_SAVE_UNSAVED,
         //Load.
         ICON_LOAD,
         //Quit.
@@ -302,7 +304,7 @@ protected:
     //Has the user picked any content to load yet?
     bool loaded_content_yet;
     //Has the user made any unsaved changes yet?
-    bool made_new_changes;
+    bool has_unsaved_changes;
     //Is this a real mouse drag, or just a shaky click?
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
@@ -317,6 +319,8 @@ protected:
     point unsaved_changes_warning_pos;
     //Time left for the unsaved changes warning to be on-screen.
     timer unsaved_changes_warning_timer;
+    //Has the user been warned about having unsaved changes yet?
+    bool was_warned_about_unsaved_changes;
     //Maximum zoom level allowed.
     float zoom_max_level;
     //Minimum zoom level allowed.
@@ -348,6 +352,7 @@ protected:
         const char* label, const vector<string> &items, string* picked_item
     );
     void leave();
+    void mark_new_changes();
     void open_dialog(
         const string &title,
         const std::function<void()> &process_callback

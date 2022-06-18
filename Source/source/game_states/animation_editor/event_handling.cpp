@@ -321,7 +321,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     cur_hitbox_nr = clicked_hitboxes[cur_hitbox_nr_index];
                     cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
                     
-                    made_new_changes = true;
+                    mark_new_changes();
                 }
             }
         }
@@ -438,7 +438,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             )
         ) {
             cur_sprite->scale = cur_sprite_size / cur_sprite->file_size;
-            made_new_changes = true;
+            mark_new_changes();
         }
         break;
         
@@ -485,7 +485,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             if(tw_handled) {
-                made_new_changes = true;
+                mark_new_changes();
             }
         }
         break;

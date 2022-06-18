@@ -58,11 +58,12 @@ editor::editor() :
     last_mouse_click_sub_state(INVALID),
     last_input_was_keyboard(false),
     loaded_content_yet(false),
-    made_new_changes(false),
+    has_unsaved_changes(false),
     mouse_drag_confirmed(false),
     state(0),
     sub_state(0),
     unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
+    was_warned_about_unsaved_changes(false),
     zoom_max_level(0),
     zoom_min_level(0) {
     
@@ -120,8 +121,7 @@ void editor::center_camera(
 bool editor::check_new_unsaved_changes(const point &pos) {
     unsaved_changes_warning_timer.stop();
     
-    if(!made_new_changes) return false;
-    made_new_changes = false;
+    if(!has_unsaved_changes || was_warned_about_unsaved_changes) return false;
     
     if(pos.x == 0 && pos.y == 0) {
         unsaved_changes_warning_pos = get_last_widget_pos();
@@ -129,6 +129,7 @@ bool editor::check_new_unsaved_changes(const point &pos) {
         unsaved_changes_warning_pos = pos;
     }
     unsaved_changes_warning_timer.start();
+    was_warned_about_unsaved_changes = true;
     
     return true;
 }
@@ -819,6 +820,15 @@ void editor::leave() {
             game.change_state(game.states.gameplay);
         }
     });
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks that the user has made new changes, which have not yet been saved.
+ */
+void editor::mark_new_changes() {
+    has_unsaved_changes = true;
+    was_warned_about_unsaved_changes = false;
 }
 
 

@@ -3215,14 +3215,18 @@ void area_editor::process_gui_toolbar() {
     
     //Save button.
     ImGui::SameLine();
+    ImGui::PushID("butSave");
     if(
         ImGui::ImageButton(
+            has_unsaved_changes ?
+            editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
         press_save_button();
     }
+    ImGui::PopID();
     set_tooltip(
         "Save the area into the files on disk.",
         "Ctrl + S"

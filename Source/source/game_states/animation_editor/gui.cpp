@@ -212,7 +212,7 @@ void animation_editor::process_gui_hitbox_hazards() {
                 }
                 cur_hitbox->hazards_str += picked_hazard;
                 selected_hazard_nr = list.size();
-                made_new_changes = true;
+                mark_new_changes();
                 status_text =
                     "Added hazard \"" + picked_hazard + "\" to the hitbox.";
             }
@@ -247,7 +247,7 @@ void animation_editor::process_gui_hitbox_hazards() {
                         std::min(
                             selected_hazard_nr, (int) list.size() - 2
                         );
-                    made_new_changes = true;
+                    mark_new_changes();
                     status_text =
                         "Removed hazard \"" + hazard_name +
                         "\" from the hitbox.";
@@ -672,7 +672,7 @@ void animation_editor::process_gui_panel_animation() {
                     pick_animation(anims.animations[nr]->name, "", false);
                 }
                 anim_playing = false;
-                made_new_changes = true;
+                mark_new_changes();
                 status_text = "Deleted animation \"" + cur_anim_name + "\".";
             } else {
                 status_text = "You have to select an animation to delete!";
@@ -749,7 +749,7 @@ void animation_editor::process_gui_panel_animation() {
                     cur_anim->frames.empty() ? 1 : cur_anim->frames.size()
                 )
             ) {
-                made_new_changes = true;
+                mark_new_changes();
             }
             set_tooltip(
                 "The animation loops back to this frame when it "
@@ -766,7 +766,7 @@ void animation_editor::process_gui_panel_animation() {
             //Hit rate slider.
             int hit_rate = cur_anim->hit_rate;
             if(ImGui::SliderInt("Hit rate", &hit_rate, 0, 100)) {
-                made_new_changes = true;
+                mark_new_changes();
                 cur_anim->hit_rate = hit_rate;
             }
             set_tooltip(
@@ -896,7 +896,7 @@ void animation_editor::process_gui_panel_animation() {
                     set_best_frame_sprite();
                 }
                 frame_ptr = &(cur_anim->frames[cur_frame_nr]);
-                made_new_changes = true;
+                mark_new_changes();
                 status_text = "Added frame #" + i2s(cur_frame_nr + 1) + ".";
             }
             set_tooltip(
@@ -938,7 +938,7 @@ void animation_editor::process_gui_panel_animation() {
                             cur_frame_nr = cur_anim->frames.size() - 1;
                             frame_ptr = &(cur_anim->frames[cur_frame_nr]);
                         }
-                        made_new_changes = true;
+                        mark_new_changes();
                         status_text =
                             "Deleted frame #" + i2s(deleted_frame_nr + 1) + ".";
                     }
@@ -961,7 +961,7 @@ void animation_editor::process_gui_panel_animation() {
                         "Sprite", &frame_ptr->sprite_name, sprite_names
                     )
                 ) {
-                    made_new_changes = true;
+                    mark_new_changes();
                 }
                 set_tooltip(
                     "The sprite to use for this frame."
@@ -973,7 +973,7 @@ void animation_editor::process_gui_panel_animation() {
                         "Duration", &frame_ptr->duration, 0.0005, 0.0f, FLT_MAX
                     )
                 ) {
-                    made_new_changes = true;
+                    mark_new_changes();
                 }
                 set_tooltip(
                     "How long this frame lasts for, in seconds.",
@@ -988,7 +988,7 @@ void animation_editor::process_gui_panel_animation() {
                     } else {
                         frame_ptr->signal = INVALID;
                     }
-                    made_new_changes = true;
+                    mark_new_changes();
                 }
                 
                 //Signal value.
@@ -998,7 +998,7 @@ void animation_editor::process_gui_panel_animation() {
                     if(
                         ImGui::DragInt("##signal", &f_signal, 0.1, 0, INT_MAX)
                     ) {
-                        made_new_changes = true;
+                        mark_new_changes();
                         frame_ptr->signal = f_signal;
                     }
                     set_tooltip(
@@ -1016,7 +1016,7 @@ void animation_editor::process_gui_panel_animation() {
                     for(size_t i = 0; i < cur_anim->frames.size(); ++i) {
                         cur_anim->frames[i].duration = d;
                     }
-                    made_new_changes = true;
+                    mark_new_changes();
                     status_text =
                         "Applied the duration " + f2s(d) + " to all frames.";
                 }
@@ -1085,7 +1085,7 @@ void animation_editor::process_gui_panel_body_part() {
                     selected_part++;
                 }
                 update_hitboxes();
-                made_new_changes = true;
+                mark_new_changes();
                 status_text = "Created body part \"" + new_part_name + "\".";
                 new_part_name.clear();
             } else {
@@ -1119,7 +1119,7 @@ void animation_editor::process_gui_panel_body_part() {
                     selected_part--;
                 }
                 update_hitboxes();
-                made_new_changes = true;
+                mark_new_changes();
                 status_text =
                     "Deleted body part \"" + deleted_part_name + "\".";
             }
@@ -1175,7 +1175,7 @@ void animation_editor::process_gui_panel_body_part() {
                             anims.body_parts[p2] = p_ptr;
                             ImGui::ResetMouseDragDelta();
                             update_hitboxes();
-                            made_new_changes = true;
+                            mark_new_changes();
                         }
                     }
                 }
@@ -1449,7 +1449,7 @@ void animation_editor::process_gui_panel_sprite() {
                     nr = std::min(nr, anims.sprites.size() - 1);
                     pick_sprite(anims.sprites[nr]->name, "", false);
                 }
-                made_new_changes = true;
+                mark_new_changes();
                 status_text = "Deleted sprite \"" + deleted_sprite_name + "\".";
             } else {
                 status_text = "You have to select a sprite to delete!";
@@ -1677,7 +1677,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             );
             last_spritesheet_used = f[0];
             center_camera_on_sprite_bitmap(true);
-            made_new_changes = true;
+            mark_new_changes();
             status_text = "Picked an image successfully.";
             break;
         }
@@ -1694,7 +1694,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         );
         last_spritesheet_used = file_name;
         center_camera_on_sprite_bitmap(true);
-        made_new_changes = true;
+        mark_new_changes();
     }
     set_tooltip(
         "File name of the bitmap to use as a spritesheet, in the "
@@ -1714,7 +1714,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             cur_sprite->file,
             point(top_left[0], top_left[1]), cur_sprite->file_size
         );
-        made_new_changes = true;
+        mark_new_changes();
     }
     set_tooltip(
         "Top-left coordinates.",
@@ -1733,7 +1733,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             cur_sprite->file,
             cur_sprite->file_pos, point(size[0], size[1])
         );
-        made_new_changes = true;
+        mark_new_changes();
     }
     set_tooltip(
         "Width and height.",
@@ -1771,7 +1771,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             cur_sprite->set_bitmap(
                 cur_sprite->file, cur_sprite->file_pos, cur_sprite->file_size
             );
-            made_new_changes = true;
+            mark_new_changes();
         }
         
     }
@@ -1895,7 +1895,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     if(cur_hitbox) {
         //Hitbox center value.
         if(ImGui::DragFloat2("Center", (float*) &cur_hitbox->pos, 0.05f)) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "X and Y coordinates of the center.",
@@ -1908,7 +1908,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 "Radius", &cur_hitbox->radius, 0.05f, 0.001f, FLT_MAX
             )
         ) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Radius of the hitbox.",
@@ -1918,7 +1918,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         
         //Hitbox Z value.
         if(ImGui::DragFloat("Z", &cur_hitbox->z, 0.1f)) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Altitude of the hitbox's bottom.",
@@ -1928,7 +1928,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         if(
             ImGui::DragFloat("Height", &cur_hitbox->height, 0.1f, 0.0f, FLT_MAX)
         ) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Hitbox's height. 0 = spans infinitely vertically.",
@@ -1945,7 +1945,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         //Normal hitbox radio button.
         int type_int = cur_hitbox->type;
         if(ImGui::RadioButton("Normal", &type_int, HITBOX_TYPE_NORMAL)) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Normal hitbox, one that can be damaged."
@@ -1953,7 +1953,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         
         //Attack hitbox radio button.
         if(ImGui::RadioButton("Attack", &type_int, HITBOX_TYPE_ATTACK)) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Attack hitbox, one that damages opponents."
@@ -1961,7 +1961,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         
         //Disabled hitbox radio button.
         if(ImGui::RadioButton("Disabled", &type_int, HITBOX_TYPE_DISABLED)) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Disabled hitbox, one that cannot be interacted with."
@@ -1978,7 +1978,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             if(
                 ImGui::DragFloat("Defense multiplier", &cur_hitbox->value, 0.01)
             ) {
-                made_new_changes = true;
+                mark_new_changes();
             }
             set_tooltip(
                 "Opponent attacks will have their damage divided "
@@ -1993,7 +1993,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                     "Pikmin can latch", &cur_hitbox->can_pikmin_latch
                 )
             ) {
-                made_new_changes = true;
+                mark_new_changes();
             }
             set_tooltip(
                 "Can the Pikmin latch on to this hitbox?"
@@ -2013,7 +2013,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             if(
                 ImGui::DragFloat("Power", &cur_hitbox->value, 0.01)
             ) {
-                made_new_changes = true;
+                mark_new_changes();
             }
             set_tooltip(
                 "Attack power, in hit points.",
@@ -2026,7 +2026,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                     "Outward knockback", &cur_hitbox->knockback_outward
                 )
             ) {
-                made_new_changes = true;
+                mark_new_changes();
             }
             set_tooltip(
                 "If true, opponents are knocked away from the hitbox's center."
@@ -2043,7 +2043,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                         0.0f, 360.0f, "%.2f"
                     )
                 ) {
-                    made_new_changes = true;
+                    mark_new_changes();
                 }
                 set_tooltip(
                     "Angle to knock away towards.",
@@ -2058,7 +2058,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                     "Knockback value", &cur_hitbox->knockback, 0.01
                 )
             ) {
-                made_new_changes = true;
+                mark_new_changes();
             }
             set_tooltip(
                 "How strong the knockback is. 3 is a good value.",
@@ -2069,7 +2069,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             int wither_chance_int = cur_hitbox->wither_chance;
             ImGui::SetNextItemWidth(128.0f);
             if(ImGui::SliderInt("Wither chance", &wither_chance_int, 0, 100)) {
-                made_new_changes = true;
+                mark_new_changes();
                 cur_hitbox->wither_chance = wither_chance_int;
             }
             set_tooltip(
@@ -2151,7 +2151,7 @@ void animation_editor::process_gui_panel_sprite_top() {
     
     //Visible checkbox.
     if(ImGui::Checkbox("Visible", &cur_sprite->top_visible)) {
-        made_new_changes = true;
+        mark_new_changes();
     }
     set_tooltip(
         "Is the top visible in this sprite?"
@@ -2163,7 +2163,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         if(
             ImGui::DragFloat2("Center", (float*) &cur_sprite->top_pos, 0.05f)
         ) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Center coordinates.",
@@ -2177,7 +2177,7 @@ void animation_editor::process_gui_panel_sprite_top() {
                 top_keep_aspect_ratio, TOP_MIN_SIZE
             )
         ) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Width and height.",
@@ -2198,7 +2198,7 @@ void animation_editor::process_gui_panel_sprite_top() {
                 "Angle", &cur_sprite->top_angle, 0.0f, 360.0f, "%.2f"
             )
         ) {
-            made_new_changes = true;
+            mark_new_changes();
         }
         set_tooltip(
             "Angle.",
@@ -2277,7 +2277,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     if(
         ImGui::DragFloat2("Offset", (float*) &cur_sprite->offset, 0.05f)
     ) {
-        made_new_changes = true;
+        mark_new_changes();
     }
     set_tooltip(
         "X and Y offset.",
@@ -2294,7 +2294,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
             -FLT_MAX
         )
     ) {
-        made_new_changes = true;
+        mark_new_changes();
     }
     set_tooltip(
         "Horizontal and vertical scale.",
@@ -2307,7 +2307,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ImGui::Button("Flip X")
     ) {
         cur_sprite->scale.x *= -1.0f;
-        made_new_changes = true;
+        mark_new_changes();
     }
     
     //Sprite flip Y button.
@@ -2316,7 +2316,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         ImGui::Button("Flip Y")
     ) {
         cur_sprite->scale.y *= -1.0f;
-        made_new_changes = true;
+        mark_new_changes();
     }
     
     //Keep aspect ratio checkbox.
@@ -2329,7 +2329,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     if(
         ImGui::SliderAngle("Angle", &cur_sprite->angle, 0.0f, 360.0f, "%.2f")
     ) {
-        made_new_changes = true;
+        mark_new_changes();
     }
     set_tooltip(
         "Angle.",
@@ -2551,14 +2551,18 @@ void animation_editor::process_gui_toolbar() {
     
     //Save button.
     ImGui::SameLine();
+    ImGui::PushID("butSave");
     if(
         ImGui::ImageButton(
+            has_unsaved_changes ?
+            editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
             ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
         )
     ) {
         press_save_button();
     }
+    ImGui::PopID();
     set_tooltip(
         "Save the animation data into the files on disk.",
         "Ctrl + S"
