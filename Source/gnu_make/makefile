@@ -1,4 +1,4 @@
-# Makefile for Pikifen. This should be run in the project's root folder. Check the included manual for more info.
+# Makefile for Pikifen. This should be run in the project's root folder. Check the manual in the engine's folder for more info.
 
 PROG         := pikifen
 CC           := g++

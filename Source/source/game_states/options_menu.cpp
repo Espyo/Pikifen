@@ -297,6 +297,7 @@ void options_menu_state::load() {
     gui.register_coords("auto_throw",        50, 55, 45,  8);
     gui.register_coords("show_hud_controls", 50, 65, 45,  8);
     gui.register_coords("controls",          50, 75, 45,  8);
+    gui.register_coords("advanced",          85, 85, 20,  8);
     gui.register_coords("tooltip",           50, 95, 95,  8);
     gui.register_coords("restart_warning",   60,  5, 70,  8);
     gui.read_coords(
@@ -457,6 +458,17 @@ void options_menu_state::load() {
     controls_button->on_get_tooltip =
     [] () { return "Choose what buttons do what."; };
     gui.add_item(controls_button, "controls");
+    
+    //Advanced bullet point.
+    bullet_point_gui_item* advanced_bullet =
+        new bullet_point_gui_item("Advanced...", game.fonts.standard);
+    advanced_bullet->on_get_tooltip =
+    [] () {
+        return
+            "For more advanced options, check out the "
+            "manual in the game's folder.";
+    };
+    gui.add_item(advanced_bullet, "advanced");
     
     //Tooltip text.
     tooltip_gui_item* tooltip_text =

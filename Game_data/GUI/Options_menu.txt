@@ -6,6 +6,7 @@ positions {
     auto_throw =        50 55 45  8
     show_hud_controls = 50 65 45  8
     controls =          50 75 45  8
+    advanced =          85 85 20  8
     tooltip =           50 95 95  8
     restart_warning =   60  5 70  8
 }
