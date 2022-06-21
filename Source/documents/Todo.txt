@@ -9,10 +9,7 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.22.0 ---
-    Update Allegro, and maybe make use of the texture wrap feature?
     Code cleanup
-        Some states in the Pikmin FSM don't run code on enter, and instead run that code every time the state is changed
-        The code in the Pikmin FSM's functions should run functional changes first (stop moving, focus on mob, etc.), and aesthetic ones second (change animation, play sound, etc.)
         Constants cleanup. All consts should:
             Leave const.h and classes, and go into namespaces. The exception is really global stuff like INVALID. The namespaces should be named after the class/subject, in all caps
                 All those that can't should go into const.h
@@ -22,93 +19,9 @@ Next tasks (roughly sorted most important first)
         Make some class members protected, when they're meant to be used by sub-classes
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Memory leaks, cppcheck, etc.
-    Demo content
-        Add more treasures
-            Ball of yarn treasure
-        Sounds really need a makeover...
-        Mobs for decorative pebbles, stones, and sticks
-        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
-        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
-        Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
-    Allow any animation to interpolate the transformations (rotation, scale, etc.)
-    General graphic file improvements
-        Leader and Pikmin portrait images should
-            Be a group, and then have a mask applied on top to fit the grid rectangle
-            Be resized to their final resolution of 64x64
-            Have a blurred shadow to represent the chin and neck, like Winged Pikmin
-        Inkscape file adjustments
-            Adjust the top-left of the spritesheet to be the document's 0,0 coordinates
-            Adjust the X and Y scale to be 1.00? This breaks clip masks, though; maybe render everything onto a PNG, adjust, then render again, and use a difference blend to check what's broken
-            Adjust the grid to start at 0,0 offset, in the document properties
-            Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
-            Add a reference Olimar image in all of them
-            I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
-                Check if premultiplied alpha fixes this problem
-                    And check if premultiplied alpha fixes the fact that screenshots come with alpha on my new laptop
-            Search for "data:image/" for leftover image files in the SVG files
-            Convince it to export at 96dpi, not 90dpi
-        Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
-        Use blurring and better lighting
-        Add the Inkscape noise filter to more sprites? Or even a different filter
-        Remember to update the Pikmin Fanon wiki page link in the PNG files
-    Pikmin animation improvements
-        The leaf and bud graphics are pretty ugly -- they use chunky outlines
-        Blinking when walking or idling -- these animations should start in random frames (do Pikmin even blink?)
-        Throwing animation needs to be reworked
-            Pikmin hands are below the head in the pose where the butt is facing the camera
-            It's nearly impossible to tell what body part is in what angle, in a given sprite
-        Pikmin lying down should be farther back than they are (at least for the Red Pikmin)
-        Stems should be visible, at least the starting part
-        Feet are sometimes little nubs, sometimes spiky
-        Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
-            If necessary, seeds should have their own animation
-        The "grabbing_near" sprite is unused for all bar Bulbmin
-        More frames, for more fluidity
-    Pikmin missing animations
-        Sighing
-        Idling (bobbing a bit so they aren't static)
-        Bored (lying down, looking around, etc.)
-        Flailing (also used when caught by an enemy)
-        Shaking after leaving the water
-        Carrying (walking while carrying)
-            Note that there is currently a "grabbing" (unused) and a "carrying" animation
-        Celebrating
-        Crushed
-        Climbing (add the track logic too)
-        Sliding (add the track logic too)
-        Pushing (add the group task logic too)
-        Arms outstretched (add the group task logic too)
-    Leader animation improvements
-        More frames, for more fluidity
-    Leader missing animations
-        Idling (bobbing a bit so they aren't static)
-        Bored
-        Throwing (it exists, but isn't being used)
-        Thrown (add to the logic of bouncers too)
-        Climbing (add the track logic too)
-        Sliding (add the track logic too)
-    Misc. graphical improvements
-        Improve and standardize the names of animations, sprites, and body parts
-        Smoothen some of the more jerky mob animations, like Red Bulborbs flopping
-        Gates should have a different appearance depending on how damaged they are
-        Yellow Wollywog should close its eyes when shaking
-        Candypop Buds should squash when they close
-        Ceramic bridges should be reworked for the new bridge format
-        Wooden bridges need to be 192px long, to fit the new bridge format
-        Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
-        Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
-        Add a glow to the smack effect particle?
-        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
-        Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
-    Manual
-        Update the area editor screenshots
-        Revamp the scripting tutorial
-            Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
-            Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
+    Update Dear ImGui again lol
     
     --- v0.23.0 ---
-    Pikmin extinction
-        Check Onions, ships, and converters that have Pikmin in the buffer
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
         Areas should be one of three types
@@ -143,11 +56,10 @@ Next tasks (roughly sorted most important first)
                     Bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
                     No goal
                 Triggering the goal instantly finishes the level as a "victory"
-            Thumbnail (Thumbnail.jpg in the area's folder; the area editor lets you pick a file from your computer to copy there)
             Loss conditions
                 Any combination of the following:
                     Taking damage
-                    Losing a Pikmin
+                    Losing Pikmin (1 or any number)
                     Pikmin extinction (some puzzle/gimmick stages could involve no Pikmin)
                     One leader KO (as opposed to total leader KO)
                     Time limit
@@ -158,6 +70,7 @@ Next tasks (roughly sorted most important first)
                     Quitting via the pause menu
             Scoring data
                 In the case of points mode, also the score weights and the medal thresholds
+            Thumbnail (Thumbnail.jpg in the area's folder; the area editor lets you pick a file from your computer to copy there)
             Maybe...
                 A win condition for reaching X sprays of type Y
                 A loss condition for killing an enemy
@@ -185,6 +98,8 @@ Next tasks (roughly sorted most important first)
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area
             Point down in the manual that the game auto-saves
+        Pikmin extinction
+            Check Onions, ships, and converters that have Pikmin in the buffer
         Other things
             The pause menu's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
@@ -211,6 +126,11 @@ Next tasks (roughly sorted most important first)
             Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count, Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
         Leader control
             Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
+    Manual
+        Update the area editor screenshots
+        Revamp the scripting tutorial
+            Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
+            Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
     
     --- Future ---
     Radar
@@ -290,6 +210,84 @@ Next tasks (roughly sorted most important first)
             https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
         Fixes
             When you cancel holding a Pikmin, its standby squeal sound should stop
+    Demo content
+        Add more treasures
+            Ball of yarn treasure
+        Sounds really need a makeover...
+        Mobs for decorative pebbles, stones, and sticks
+        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
+        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
+        Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
+    Allow any animation to interpolate the transformations (rotation, scale, etc.)
+    General graphic file improvements
+        Leader and Pikmin portrait images should
+            Be a group, and then have a mask applied on top to fit the grid rectangle
+            Be resized to their final resolution of 64x64
+            Have a blurred shadow to represent the chin and neck, like Winged Pikmin
+        Inkscape file adjustments
+            Adjust the top-left of the spritesheet to be the document's 0,0 coordinates
+            Adjust the X and Y scale to be 1.00? This breaks clip masks, though; maybe render everything onto a PNG, adjust, then render again, and use a difference blend to check what's broken
+            Adjust the grid to start at 0,0 offset, in the document properties
+            Correct the names of gradients, since some of them end in numbers due to an old Inkscape glitch
+            Add a reference Olimar image in all of them
+            I think I may need to export spritesheets with a row an column of dead pixels at the ends, because texture UV wraparound interpolation stuff is making artifacts from the opposite end of the spritesheet show up on the topmost and leftmost sprites
+                Check if premultiplied alpha fixes this problem
+                    And check if premultiplied alpha fixes the fact that screenshots come with alpha on my new laptop
+            Search for "data:image/" for leftover image files in the SVG files
+            Convince it to export at 96dpi, not 90dpi
+        Darker tones should use a proper good darker color, instead of just the normal color with a lower brightness component
+        Use blurring and better lighting
+        Add the Inkscape noise filter to more sprites? Or even a different filter
+        Remember to update the Pikmin Fanon wiki page link in the PNG files
+    Pikmin animation improvements
+        The leaf and bud graphics are pretty ugly -- they use chunky outlines
+        Blinking when walking or idling -- these animations should start in random frames (do Pikmin even blink?)
+        Throwing animation needs to be reworked
+            Pikmin hands are below the head in the pose where the butt is facing the camera
+            It's nearly impossible to tell what body part is in what angle, in a given sprite
+        Pikmin lying down should be farther back than they are (at least for the Red Pikmin)
+        Stems should be visible, at least the starting part
+        Feet are sometimes little nubs, sometimes spiky
+        Sprout animations should start with nothingness, and grow into a sprout proper (as if popping out of the ground) (Helodity's made some)
+            If necessary, seeds should have their own animation
+        The "grabbing_near" sprite is unused for all bar Bulbmin
+        More frames, for more fluidity
+    Pikmin missing animations
+        Sighing
+        Idling (bobbing a bit so they aren't static)
+        Bored (lying down, looking around, etc.)
+        Flailing (also used when caught by an enemy)
+        Shaking after leaving the water
+        Carrying (walking while carrying)
+            Note that there is currently a "grabbing" (unused) and a "carrying" animation
+        Celebrating
+        Crushed
+        Climbing (add the track logic too)
+        Sliding (add the track logic too)
+        Pushing (add the group task logic too)
+        Arms outstretched (add the group task logic too)
+    Leader animation improvements
+        More frames, for more fluidity
+    Leader missing animations
+        Idling (bobbing a bit so they aren't static)
+        Bored
+        Throwing (it exists, but isn't being used)
+        Thrown (add to the logic of bouncers too)
+        Climbing (add the track logic too)
+        Sliding (add the track logic too)
+    Misc. graphical improvements
+        Improve and standardize the names of animations, sprites, and body parts
+        Smoothen some of the more jerky mob animations, like Red Bulborbs flopping
+        Gates should have a different appearance depending on how damaged they are
+        Yellow Wollywog should close its eyes when shaking
+        Candypop Buds should squash when they close
+        Ceramic bridges should be reworked for the new bridge format
+        Wooden bridges need to be 192px long, to fit the new bridge format
+        Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
+        Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
+        Add a glow to the smack effect particle?
+        Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
+        Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots
     Check what Pikmin 3 Deluxe added, and gather ideas of things to implement from there
         Dismissing should either dismiss everyone, or keep the current standby type
         When switching to a leader, all nearby idle Pikmin should be called over too

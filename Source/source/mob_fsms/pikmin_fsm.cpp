@@ -38,13 +38,13 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_LANDED); {
             efc.run(pikmin_fsm::seed_landed);
-            efc.run(pikmin_fsm::stand_still);
             efc.change_state("sprout");
         }
     }
     
     efc.new_state("sprout", PIKMIN_STATE_SPROUT); {
         efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::stand_still);
             efc.run(pikmin_fsm::become_sprout);
             efc.run(pikmin_fsm::sprout_schedule_evol);
         }
@@ -131,7 +131,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -183,7 +182,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -232,7 +230,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -242,7 +239,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EV_NEAR_CARRIABLE_OBJECT); {
-            efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
         efc.new_event(MOB_EV_NEAR_TOOL); {
@@ -304,7 +300,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -314,7 +309,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EV_NEAR_CARRIABLE_OBJECT); {
-            efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
         efc.new_event(MOB_EV_NEAR_TOOL); {
@@ -349,7 +343,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -457,7 +450,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EV_NEAR_CARRIABLE_OBJECT); {
-            efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
         efc.new_event(MOB_EV_NEAR_TOOL); {
@@ -470,7 +462,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -511,7 +502,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EV_NEAR_CARRIABLE_OBJECT); {
-            efc.run(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
         efc.new_event(MOB_EV_NEAR_TOOL); {
@@ -535,7 +525,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -580,7 +569,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -621,7 +609,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -644,6 +631,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     efc.new_state(
         "going_to_carriable_object", PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT
     ); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::go_to_carriable_object);
+        }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
             efc.run(pikmin_fsm::reach_carriable_object);
             efc.change_state("carrying");
@@ -666,7 +656,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::forget_carriable_object);
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -708,7 +697,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::forget_tool);
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -754,7 +742,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
             efc.run(pikmin_fsm::forget_group_task);
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -793,7 +780,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -833,7 +819,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
@@ -869,7 +854,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -921,7 +905,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
@@ -959,7 +942,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -997,7 +979,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
@@ -1036,7 +1017,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
@@ -1071,6 +1051,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("knocked_back", PIKMIN_STATE_KNOCKED_BACK); {
         efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(pikmin_fsm::be_attacked);
             efc.run(pikmin_fsm::get_knocked_back);
         }
         efc.new_event(MOB_EV_LANDED); {
@@ -1105,7 +1086,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1139,7 +1119,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1297,7 +1276,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1350,7 +1328,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1401,7 +1378,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1459,7 +1435,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1517,7 +1492,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1554,7 +1528,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1643,7 +1616,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1688,7 +1660,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::check_incoming_attack);
         }
         efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
-            efc.run(pikmin_fsm::be_attacked);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
@@ -1771,12 +1742,12 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     
     //Finish up.
     m->leave_group();
-    
-    m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
-    
     pikmin_fsm::be_released(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
     pikmin_fsm::release_tool(m, info1, info2);
+    
+    //Effects.
+    m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
 }
 
 
@@ -1798,9 +1769,9 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     }
     
     m->chase(*((point*) info1), m->z);
-    game.sys_assets.sfx_pikmin_idle.play(0, false);
-    
+
     m->set_animation(PIKMIN_ANIM_IDLING);
+    game.sys_assets.sfx_pikmin_idle.play(0, false);
 }
 
 
@@ -1822,14 +1793,12 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     hitbox* hbox_ptr = (hitbox*) info2;
     
     ene_ptr->chomp(pik_ptr, hbox_ptr);
-    
-    game.sys_assets.sfx_pikmin_caught.play(0.2, 0);
-    
+    pik_ptr->is_grabbed_by_enemy = true;
     pik_ptr->can_move_in_midair = false;
     pik_ptr->leave_group();
-    pik_ptr->is_grabbed_by_enemy = true;
     
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
+    game.sys_assets.sfx_pikmin_caught.play(0.2, 0);
     
 }
 
@@ -1844,9 +1813,9 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
-    game.sys_assets.sfx_pikmin_held.play(0, false);
-    m->set_animation(PIKMIN_ANIM_IDLING);
     m->can_move_in_midair = false;
+    m->set_animation(PIKMIN_ANIM_IDLING);
+    game.sys_assets.sfx_pikmin_held.play(0, false);
 }
 
 
@@ -1874,13 +1843,12 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
+    m->can_move_in_midair = false;
+
+    m->set_animation(PIKMIN_ANIM_THROWN);
     game.sys_assets.sfx_pikmin_held.stop();
     game.sys_assets.sfx_pikmin_thrown.stop();
     game.sys_assets.sfx_pikmin_thrown.play(0, false);
-    
-    m->can_move_in_midair = false;
-    m->set_animation(PIKMIN_ANIM_THROWN);
-    
     ((pikmin*) m)->start_throw_trail();
 }
 
@@ -1895,17 +1863,15 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
-    m->set_animation(PIKMIN_ANIM_THROWN);
-    
     float throw_angle = get_angle(m->pos, m->focused_mob->pos);
     m->speed_z = PIKMIN::PLUCK_THROW_VER_SPEED;
     m->speed = angle_to_coordinates(throw_angle, PIKMIN::PLUCK_THROW_HOR_SPEED);
     m->face(throw_angle, NULL, true);
     
-    ((pikmin*) m)->start_throw_trail();
-    
+    m->set_animation(PIKMIN_ANIM_THROWN);
     game.sys_assets.sfx_pikmin_plucked.play(0, false);
     game.sys_assets.sfx_pluck.play(0, false);
+    ((pikmin*) m)->start_throw_trail();
     
     particle par(
         PARTICLE_TYPE_BITMAP, m->pos, m->z + m->height + 1.0,
@@ -1952,9 +1918,9 @@ void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::become_helpless(mob* m, void* info1, void* info2) {
     m->can_move_in_midair = false;
+    m->leave_group();
     
     m->set_animation(PIKMIN_ANIM_IDLING);
-    m->leave_group();
 }
 
 
@@ -1979,11 +1945,12 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
             pik_ptr->ground_sector->z + pikmin::FLIER_ABOVE_FLOOR_HEIGHT
         );
     }
+
+    m->unfocus_from_mob();
     
     m->set_animation(
         PIKMIN_ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
     );
-    m->unfocus_from_mob();
 }
 
 
@@ -1998,14 +1965,14 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->leave_group();
-    m->set_animation(
-        PIKMIN_ANIM_SPROUT, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
-    );
     m->unpushable = true;
     m->is_huntable = false;
     m->is_hurtable = false;
     m->can_move_in_midair = false;
     ((pikmin*) m)->is_seed_or_sprout = true;
+    m->set_animation(
+        PIKMIN_ANIM_SPROUT, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
+    );
 }
 
 
@@ -2023,14 +1990,15 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     
     pikmin* pik = (pikmin*) m;
     mob* lea = (mob*) info1;
+
     pik->focus_on_mob(lea);
-    
-    pik->set_animation(PIKMIN_ANIM_PLUCKING);
     m->is_huntable = true;
     m->is_hurtable = true;
     m->unpushable = false;
     pik->is_seed_or_sprout = false;
     m->set_timer(0);
+
+    pik->set_animation(PIKMIN_ANIM_PLUCKING);
 }
 
 
@@ -2055,6 +2023,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pik->stop_circling();
     
     caller->add_to_group(pik);
+
     game.sys_assets.sfx_pikmin_called.play(0.03, false);
 }
 
@@ -2168,7 +2137,6 @@ void pikmin_fsm::check_outgoing_attack(mob* m, void* info1, void* info2) {
 void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->stop_circling();
-    m->set_animation(PIKMIN_ANIM_WALKING);
     
     float circle_time = randomf(0.0f, 1.0f);
     //Bias the time so that there's a higher chance of picking a close angle,
@@ -2183,6 +2151,8 @@ void pikmin_fsm::circle_opponent(mob* m, void* info1, void* info2) {
         m->focused_mob, point(), m->focused_mob->radius + m->radius, go_cw,
         m->get_base_speed(), true
     );
+
+    m->set_animation(PIKMIN_ANIM_WALKING);
 }
 
 
@@ -2352,8 +2322,6 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
     pik_ptr->can_move_in_midair = false;
     
     //Set its data to start climbing.
-    pik_ptr->set_animation(PIKMIN_ANIM_WALKING); //TODO
-    
     vector<size_t> checkpoints;
     checkpoints.push_back((pik_ptr->temp_i * 2) + 1);
     checkpoints.push_back(pik_ptr->temp_i * 2);
@@ -2361,6 +2329,8 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
     pik_ptr->track_info = new track_info_struct(
         oni_ptr, checkpoints, oni_ptr->oni_type->nest->pikmin_enter_speed
     );
+
+    pik_ptr->set_animation(PIKMIN_ANIM_WALKING); //TODO
 }
 
 
@@ -2638,8 +2608,9 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
         pik_ptr->can_move_in_midair = true;
     }
     
-    m->set_animation(PIKMIN_ANIM_LYING);
     m->set_timer(PIKMIN::KNOCKED_DOWN_DURATION);
+
+    m->set_animation(PIKMIN_ANIM_LYING);
 }
 
 
@@ -2701,9 +2672,10 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         &carriable_mob->pos, &carriable_mob->z,
         closest_spot_ptr->pos, 0.0f
     );
+    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     
-    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
 }
 
 
@@ -2748,9 +2720,10 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
         &(free_spot->absolute_pos), &tas_ptr->z,
         point(), tas_ptr->tas_type->spots_z
     );
+    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
     
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
-    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+    
     pik_ptr->fsm.set_state(PIKMIN_STATE_GOING_TO_GROUP_TASK);
     
 }
@@ -2790,8 +2763,9 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
     m->focus_on_mob(nest_ptr->m_ptr);
     m->stop_chasing();
     m->chase(coords, nest_ptr->m_ptr->z);
-    m->set_animation(PIKMIN_ANIM_WALKING);
     m->leave_group();
+
+    m->set_animation(PIKMIN_ANIM_WALKING);
 }
 
 
@@ -2827,11 +2801,12 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
         point(), 0.0f, 0,
         m->focused_mob->radius + m->radius + PIKMIN::GROUNDED_ATTACK_DIST
     );
-    m->set_animation(PIKMIN_ANIM_WALKING);
     m->leave_group();
     
     pik_ptr->was_last_hit_dud = false;
     pik_ptr->consecutive_dud_hits = 0;
+
+    m->set_animation(PIKMIN_ANIM_WALKING);
     
     m->fsm.set_state(PIKMIN_STATE_GOING_TO_OPPONENT);
 }
@@ -2881,9 +2856,10 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
         point(), 0.0f, 0,
         pik_ptr->radius + too_ptr->radius
     );
-    
-    pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+
+    pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
+
     pik_ptr->fsm.set_state(PIKMIN_STATE_GOING_TO_TOOL);
     
 }
@@ -2906,10 +2882,10 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
     if(pik_ptr->pik_type->can_fly) {
         pik_ptr->can_move_in_midair = true;
     }
+
+    m->set_timer(PIKMIN_DISMISS_TIMEOUT);
     
     m->set_animation(PIKMIN_ANIM_WALKING);
-    
-    m->set_timer(PIKMIN_DISMISS_TIMEOUT);
 }
 
 
@@ -2923,9 +2899,9 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::land(mob* m, void* info1, void* info2) {
-    m->set_animation(PIKMIN_ANIM_IDLING);
-    
     pikmin_fsm::stand_still(m, NULL, NULL);
+    
+    m->set_animation(PIKMIN_ANIM_IDLING);
 }
 
 
@@ -2961,14 +2937,14 @@ void pikmin_fsm::land_after_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
     mob* lea = pik->focused_mob;
     
-    pik->set_animation(PIKMIN_ANIM_IDLING);
-    
     if(lea->following_group) {
         //If this leader is following another one,
         //then the new Pikmin should be in the group of that top leader.
         lea = lea->following_group;
     }
     lea->add_to_group(pik);
+
+    pik->set_animation(PIKMIN_ANIM_IDLING);
 }
 
 
@@ -3106,11 +3082,11 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
     
     tool* too_ptr = (tool*) * (m->holding.begin());
     
-    m->set_animation(PIKMIN_ANIM_IDLING);
-    
     pikmin_fsm::stand_still(m, NULL, NULL);
     
     ((pikmin*) m)->is_tool_primed_for_whistle = true;
+
+    m->set_animation(PIKMIN_ANIM_IDLING);
     
     if(too_ptr->too_type->dropped_when_pikmin_lands) {
         pikmin_fsm::release_tool(m, info1, info2);
@@ -3228,9 +3204,9 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     engine_assert(m->focused_mob != NULL, m->print_state_history());
     
     pikmin* p = (pikmin*) m;
-    p->set_animation(PIKMIN_ANIM_ATTACKING);
-    p->face(0, &p->focused_mob->pos);
     p->was_last_hit_dud = false;
+    p->face(0, &p->focused_mob->pos);
+    p->set_animation(PIKMIN_ANIM_ATTACKING);
 }
 
 
@@ -3247,8 +3223,6 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     mob* carriable_mob = pik_ptr->carrying_mob;
     
-    pik_ptr->set_animation(PIKMIN_ANIM_GRABBING, true);
-    
     point final_pos =
         carriable_mob->pos +
         carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos;
@@ -3261,14 +3235,13 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     );
     
     pik_ptr->face(get_angle(final_pos, carriable_mob->pos), NULL);
-    
-    pik_ptr->set_animation(PIKMIN_ANIM_CARRYING);
-    
+
     //Let the carriable mob know that a new Pikmin has grabbed on.
     pik_ptr->carrying_mob->fsm.run_event(
         MOB_EV_CARRIER_ADDED, (void*) pik_ptr
     );
     
+    pik_ptr->set_animation(PIKMIN_ANIM_CARRYING);
 }
 
 
@@ -3541,8 +3514,8 @@ void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
     m->focus_on_mob(m->following_group);
-    m->set_animation(PIKMIN_ANIM_WALKING);
     pikmin_fsm::update_in_group_chasing(m, NULL, NULL);
+    m->set_animation(PIKMIN_ANIM_WALKING);
 }
 
 
@@ -3560,8 +3533,8 @@ void pikmin_fsm::start_drinking(mob* m, void* info1, void* info2) {
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(drop_ptr);
-    m->set_animation(PIKMIN_ANIM_DRINKING);
     m->face(get_angle(m->pos, drop_ptr->pos), NULL);
+    m->set_animation(PIKMIN_ANIM_DRINKING);
 }
 
 
@@ -3656,12 +3629,12 @@ void pikmin_fsm::start_mob_landing(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
-    m->set_animation(PIKMIN_ANIM_WALKING);
     if(pik_ptr->pik_type->can_fly) {
         pik_ptr->can_move_in_midair = true;
     }
     m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
+    m->set_animation(PIKMIN_ANIM_WALKING);
 }
 
 
@@ -3751,6 +3724,15 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->focus_on_mob(tra_ptr);
     m->start_height_effect();
     
+    vector<size_t> checkpoints;
+    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); ++c) {
+        checkpoints.push_back(c);
+    }
+    m->track_info =
+        new track_info_struct(
+        tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
+    );
+
     switch(tra_ptr->tra_type->riding_pose) {
     case TRACK_RIDING_POSE_STOPPED: {
         m->set_animation(PIKMIN_ANIM_WALKING);
@@ -3763,15 +3745,6 @@ void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         break;
     }
     }
-    
-    vector<size_t> checkpoints;
-    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); ++c) {
-        checkpoints.push_back(c);
-    }
-    m->track_info =
-        new track_info_struct(
-        tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
-    );
 }
 
 
@@ -3836,12 +3809,13 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     m->stop_chasing();
-    m->set_animation(PIKMIN_ANIM_IDLING);
     m->face(0, &m->following_group->pos);
     
     if(pik_ptr->pik_type->can_fly) {
         pik_ptr->can_move_in_midair = true;
     }
+    
+    m->set_animation(PIKMIN_ANIM_IDLING);
 }
 
 
