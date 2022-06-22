@@ -2295,11 +2295,11 @@ void area_editor::process_gui_panel_paths() {
                 ) {
                     //No previous location. Place them on-camera.
                     path_preview_checkpoints[0].x =
-                        game.cam.pos.x - COMFY_DIST;
+                        game.cam.pos.x - AREA_EDITOR::COMFY_DIST;
                     path_preview_checkpoints[0].y =
                         game.cam.pos.y;
                     path_preview_checkpoints[1].x =
-                        game.cam.pos.x + COMFY_DIST;
+                        game.cam.pos.x + AREA_EDITOR::COMFY_DIST;
                     path_preview_checkpoints[1].y =
                         game.cam.pos.y;
                 }
@@ -2536,11 +2536,11 @@ void area_editor::process_gui_panel_review() {
             ) {
                 //No previous location. Place them on-camera.
                 cross_section_checkpoints[0].x =
-                    game.cam.pos.x - COMFY_DIST;
+                    game.cam.pos.x - AREA_EDITOR::COMFY_DIST;
                 cross_section_checkpoints[0].y =
                     game.cam.pos.y;
                 cross_section_checkpoints[1].x =
-                    game.cam.pos.x + COMFY_DIST;
+                    game.cam.pos.x + AREA_EDITOR::COMFY_DIST;
                 cross_section_checkpoints[1].y =
                     game.cam.pos.y;
             }
@@ -3049,7 +3049,7 @@ void area_editor::process_gui_panel_tools() {
         process_size_widgets(
             "Size", reference_size, 1.0f,
             reference_keep_aspect_ratio,
-            REFERENCE_MIN_SIZE
+            AREA_EDITOR::REFERENCE_MIN_SIZE
         );
         set_tooltip(
             "Width and height.",
@@ -3155,8 +3155,6 @@ void area_editor::process_gui_panel_tools() {
  * Processes the ImGui status bar for this frame.
  */
 void area_editor::process_gui_status_bar() {
-    const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
-    
     //Status bar text.
     ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
     
@@ -3164,7 +3162,7 @@ void area_editor::process_gui_status_bar() {
     ImGui::SameLine();
     float size =
         canvas_separator_x - ImGui::GetItemRectSize().x -
-        MOUSE_COORDS_TEXT_WIDTH;
+        AREA_EDITOR::MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.

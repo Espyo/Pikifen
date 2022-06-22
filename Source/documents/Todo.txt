@@ -18,7 +18,9 @@ Next tasks (roughly sorted most important first)
             Be defined and commented in the .cpp files
         Make some class members protected, when they're meant to be used by sub-classes
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
-        Memory leaks, cppcheck, etc.
+        Check for memory leaks
+        Correct warnings given by cppcheck
+        Correct warnings given by compiling with -Wall, both on g++ and Visual Studio
     Update Dear ImGui again lol
     
     --- v0.23.0 ---
@@ -305,6 +307,7 @@ Next tasks (roughly sorted most important first)
         Tweaks
             Current leader should move slower if the analog stick is not held all the way
             If it's not done already, there should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
+            If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Things to fix
             If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
             If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it

@@ -1915,8 +1915,9 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             "Radius of the hitbox.",
             "", WIDGET_EXPLANATION_DRAG
         );
-        cur_hitbox->radius = std::max(HITBOX_MIN_RADIUS, cur_hitbox->radius);
-        
+        cur_hitbox->radius =
+            std::max(ANIM_EDITOR::HITBOX_MIN_RADIUS, cur_hitbox->radius);
+            
         //Hitbox Z value.
         if(ImGui::DragFloat("Z", &cur_hitbox->z, 0.1f)) {
             mark_new_changes();
@@ -2175,7 +2176,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         if(
             process_size_widgets(
                 "Size", cur_sprite->top_size, 0.01f,
-                top_keep_aspect_ratio, TOP_MIN_SIZE
+                top_keep_aspect_ratio, ANIM_EDITOR::TOP_MIN_SIZE
             )
         ) {
             mark_new_changes();
@@ -2460,8 +2461,6 @@ void animation_editor::process_gui_panel_tools() {
  * Processes the ImGui status bar for this frame.
  */
 void animation_editor::process_gui_status_bar() {
-    const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
-    
     //Status bar text.
     ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
     
@@ -2469,7 +2468,7 @@ void animation_editor::process_gui_status_bar() {
     ImGui::SameLine();
     float size =
         canvas_separator_x - ImGui::GetItemRectSize().x -
-        MOUSE_COORDS_TEXT_WIDTH;
+        ANIM_EDITOR::MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
     bool showing_coords = false;
