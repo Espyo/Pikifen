@@ -363,21 +363,17 @@ void camera_info::set_zoom(const float new_zoom) {
 }
 
 
-const float CAMERA_SMOOTHNESS_MULT = 4.5f;
-
 /* ----------------------------------------------------------------------------
  * Ticks camera movement by one frame of logic.
  * delta_t:
  *   How long the frame's tick is, in seconds.
  */
 void camera_info::tick(const float delta_t) {
-    pos.x += (target_pos.x - pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
-    pos.y += (target_pos.y - pos.y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
-    zoom += (target_zoom - zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    pos.x += (target_pos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+    pos.y += (target_pos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+    zoom += (target_zoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
 }
 
-
-const float CAMERA_BOX_MARGIN = 128.0f;
 
 /* ----------------------------------------------------------------------------
  * Updates the camera's visibility box, based on the screen_to_world_transform
@@ -394,14 +390,12 @@ void camera_info::update_box() {
         &game.screen_to_world_transform,
         &box[1].x, &box[1].y
     );
-    box[0].x -= CAMERA_BOX_MARGIN;
-    box[0].y -= CAMERA_BOX_MARGIN;
-    box[1].x += CAMERA_BOX_MARGIN;
-    box[1].y += CAMERA_BOX_MARGIN;
+    box[0].x -= GAMEPLAY::CAMERA_BOX_MARGIN;
+    box[0].y -= GAMEPLAY::CAMERA_BOX_MARGIN;
+    box[1].x += GAMEPLAY::CAMERA_BOX_MARGIN;
+    box[1].y += GAMEPLAY::CAMERA_BOX_MARGIN;
 }
 
-
-const float fade_manager::FADE_DURATION = 0.15f;
 
 /* ----------------------------------------------------------------------------
  * Creates a fade manager.
@@ -434,7 +428,7 @@ void fade_manager::draw() {
  * Returns the percentage of progress left in the current fade.
  */
 float fade_manager::get_perc_left() const {
-    return time_left / FADE_DURATION;
+    return time_left / GAME::FADE_DURATION;
 }
 
 
@@ -464,7 +458,7 @@ bool fade_manager::is_fading() const {
 void fade_manager::start_fade(
     const bool is_fade_in, const std::function<void()> &on_end
 ) {
-    time_left = FADE_DURATION;
+    time_left = GAME::FADE_DURATION;
     fade_in = is_fade_in;
     this->on_end = on_end;
 }
@@ -833,32 +827,32 @@ void notification_struct::draw() const {
     int bmp_w = al_get_bitmap_width(game.sys_assets.bmp_notification);
     int bmp_h = al_get_bitmap_height(game.sys_assets.bmp_notification);
     
-    float text_box_x1 = -bmp_w * 0.5 + NOTIFICATION_PADDING;
-    float text_box_x2 = bmp_w * 0.5 - NOTIFICATION_PADDING;
-    float text_box_y1 = -bmp_h - NOTIFICATION_PADDING;
-    float text_box_y2 = NOTIFICATION_PADDING;
+    float text_box_x1 = -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING;
+    float text_box_x2 = bmp_w * 0.5 - DRAWING::NOTIFICATION_PADDING;
+    float text_box_y1 = -bmp_h - DRAWING::NOTIFICATION_PADDING;
+    float text_box_y2 = DRAWING::NOTIFICATION_PADDING;
     
     draw_bitmap(
         game.sys_assets.bmp_notification,
         point(0, -bmp_h * 0.5),
         point(bmp_w, bmp_h),
         0,
-        map_alpha(NOTIFICATION_ALPHA * visibility)
+        map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
     if(control) {
-        text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
+        text_box_x1 += DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
         draw_control_icon(
             game.fonts.standard, control,
             true,
             point(
-                -bmp_w * 0.5 + NOTIFICATION_PADDING +
-                NOTIFICATION_CONTROL_SIZE * 0.5,
+                -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
+                DRAWING::NOTIFICATION_CONTROL_SIZE * 0.5,
                 -bmp_h * 0.5
             ),
             point(
-                NOTIFICATION_CONTROL_SIZE,
-                NOTIFICATION_CONTROL_SIZE
+                DRAWING::NOTIFICATION_CONTROL_SIZE,
+                DRAWING::NOTIFICATION_CONTROL_SIZE
             ),
             visibility * 255
         );
@@ -866,7 +860,7 @@ void notification_struct::draw() const {
     
     draw_compressed_text(
         game.fonts.standard,
-        map_alpha(NOTIFICATION_ALPHA * visibility),
+        map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility),
         point(
             (text_box_x1 + text_box_x2) * 0.5,
             (text_box_y1 + text_box_y2) * 0.5

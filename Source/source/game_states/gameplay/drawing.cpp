@@ -963,20 +963,20 @@ void gameplay_state::draw_system_stuff() {
     if(game.show_system_info) {
         //Draw the framerate chart.
         al_draw_filled_rectangle(
-            game.win_w - FRAMERATE_HISTORY_SIZE, 0,
+            game.win_w - GAME::FRAMERATE_HISTORY_SIZE, 0,
             game.win_w, 100,
             al_map_rgba(0, 0, 0, 192)
         );
         for(size_t f = 0; f < game.framerate_history.size(); ++f) {
             al_draw_line(
-                game.win_w - FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
-                game.win_w - FRAMERATE_HISTORY_SIZE + f + 0.5,
+                game.win_w - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5, 0,
+                game.win_w - GAME::FRAMERATE_HISTORY_SIZE + f + 0.5,
                 round(game.framerate_history[f]),
                 al_map_rgba(24, 96, 192, 192), 1
             );
         }
         al_draw_line(
-            game.win_w - FRAMERATE_HISTORY_SIZE, game.options.target_fps,
+            game.win_w - GAME::FRAMERATE_HISTORY_SIZE, game.options.target_fps,
             game.win_w, game.options.target_fps,
             al_map_rgba(128, 224, 128, 48), 1
         );

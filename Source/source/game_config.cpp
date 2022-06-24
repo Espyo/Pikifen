@@ -12,76 +12,106 @@
 #include "game_config.h"
 
 
-//Default values for the different options.
-const bool game_config::DEF_CAN_THROW_LEADERS = true;
-const ALLEGRO_COLOR game_config::DEF_CARRYING_COLOR_MOVE =
+namespace GAME_CONFIG {
+//Default values for whether leaders can throw leaders.
+const bool DEF_CAN_THROW_LEADERS = true;
+//Default value for the non-specific carrying movement color.
+const ALLEGRO_COLOR DEF_CARRYING_COLOR_MOVE =
 { 1.00f, 1.00f, 1.00f, 1.00f};
-const ALLEGRO_COLOR game_config::DEF_CARRYING_COLOR_STOP =
+//Default value for the carrying stopped color.
+const ALLEGRO_COLOR DEF_CARRYING_COLOR_STOP =
 { 0.40f, 0.75f, 0.75f, 1.00f };
-const float game_config::DEF_CARRYING_SPEED_BASE_MULT = 0.5f;
-const float game_config::DEF_CARRYING_SPEED_MAX_MULT = 0.8f;
-const float game_config::DEF_CARRYING_SPEED_WEIGHT_MULT = 0.0004f;
-const float game_config::DEF_CURSOR_MAX_DIST = 200.0f;
-const float game_config::DEF_CURSOR_SPIN_SPEED = 180.0f;
-const float game_config::DEF_DAY_MINUTES_END = 60 * 19;
-const float game_config::DEF_DAY_MINUTES_PER_IRL_SEC = 2;
-const float game_config::DEF_DAY_MINUTES_START = 60 * 7;
-const float game_config::DEF_GROUP_MEMBER_GRAB_RANGE = 64.0f;
-const float game_config::DEF_IDLE_TASK_RANGE = 50.0f;
-const float game_config::DEF_MATURITY_POWER_MULT = 0.1f;
-const float game_config::DEF_MATURITY_SPEED_MULT = 0.1f;
-const size_t game_config::DEF_MAX_PIKMIN_IN_FIELD = 100;
-const float game_config::DEF_MESSAGE_CHAR_INTERVAL = 0.03f;
-const float game_config::DEF_NEXT_PLUCK_RANGE = 160.0f;
-const ALLEGRO_COLOR game_config::DEF_NO_PIKMIN_COLOR =
-{ 0.75f, 0.90f, 0.90f };
-const float game_config::DEF_ONION_OPEN_RANGE = 24.0f;
-const float game_config::DEF_PIKMIN_CHASE_RANGE = 200.0f;
-const float game_config::DEF_PLUCK_RANGE = 30.0f;
-const float game_config::DEF_STANDARD_PIKMIN_HEIGHT = 24.0f;
-const float game_config::DEF_STANDARD_PIKMIN_RADIUS = 5.0f;
-const float game_config::DEF_SWARM_TASK_RANGE = 3.0f;
-const float game_config::DEF_THROW_MAX_DIST = DEF_CURSOR_MAX_DIST;
-const float game_config::DEF_WHISTLE_GROWTH_SPEED = 180.0f;
-const float game_config::DEF_WHISTLE_MAX_DIST = DEF_CURSOR_MAX_DIST;
-const float game_config::DEF_ZOOM_MAX_LEVEL = 3.0f;
-const float game_config::DEF_ZOOM_MIN_LEVEL = 0.66f;
+//Default value for the carrying speed base multiplier.
+const float DEF_CARRYING_SPEED_BASE_MULT = 0.5f;
+//Default value for the carrying speed maximum multiplier.
+const float DEF_CARRYING_SPEED_MAX_MULT = 0.8f;
+//Default value for the carrying speed weight multiplier.
+const float DEF_CARRYING_SPEED_WEIGHT_MULT = 0.0004f;
+//Default value for the cursor maximum distance.
+const float DEF_CURSOR_MAX_DIST = 200.0f;
+//Default value for the cursor spin speed.
+const float DEF_CURSOR_SPIN_SPEED = 180.0f;
+//Default value for the day end time.
+const float DEF_DAY_MINUTES_END = 60 * 19;
+//Default value for the day time passing speed.
+const float DEF_DAY_MINUTES_PER_IRL_SEC = 2;
+//Default value for the day start time.
+const float DEF_DAY_MINUTES_START = 60 * 7;
+//Default value for the group member grab range.
+const float DEF_GROUP_MEMBER_GRAB_RANGE = 64.0f;
+//Default value for the idle Pikmin task range.
+const float DEF_IDLE_TASK_RANGE = 50.0f;
+//Default value for the maturity power multiplier.
+const float DEF_MATURITY_POWER_MULT = 0.1f;
+//Default value for the maturity speed multiplier.
+const float DEF_MATURITY_SPEED_MULT = 0.1f;
+//Default value for the maximum number of Pikmin in the field.
+const size_t DEF_MAX_PIKMIN_IN_FIELD = 100;
+//Default value for the message character interval.
+const float DEF_MESSAGE_CHAR_INTERVAL = 0.03f;
+//Default value for the next Pikmin auto-pluck range.
+const float DEF_NEXT_PLUCK_RANGE = 160.0f;
+//Default value for the color that represents no Pikmin.
+const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR = { 0.75f, 0.90f, 0.90f };
+//Default value for the Onion opening range.
+const float DEF_ONION_OPEN_RANGE = 24.0f;
+//Default value for the Pikmin chase range.
+const float DEF_PIKMIN_CHASE_RANGE = 200.0f;
+//Default value for the pluck range.
+const float DEF_PLUCK_RANGE = 30.0f;
+//Default value for the standard Pikmin height.
+const float DEF_STANDARD_PIKMIN_HEIGHT = 24.0f;
+//Default value for the standard Pikmin radius.
+const float DEF_STANDARD_PIKMIN_RADIUS = 5.0f;
+//Default value for the swarming task range.
+const float DEF_SWARM_TASK_RANGE = 3.0f;
+//Default value for the maximum throw distance.
+const float DEF_THROW_MAX_DIST = DEF_CURSOR_MAX_DIST;
+//Default value for the whistle growth speed.
+const float DEF_WHISTLE_GROWTH_SPEED = 180.0f;
+//Default value for the maximum whistle distance.
+const float DEF_WHISTLE_MAX_DIST = DEF_CURSOR_MAX_DIST;
+//Default value for the maximum zoom level.
+const float DEF_ZOOM_MAX_LEVEL = 3.0f;
+//Default value for the minimum zoom level.
+const float DEF_ZOOM_MIN_LEVEL = 0.66f;
+}
 
 
 /* ----------------------------------------------------------------------------
  * Creates a game config struct.
  */
 game_config::game_config() :
-    can_throw_leaders(DEF_CAN_THROW_LEADERS),
-    carrying_color_move(DEF_CARRYING_COLOR_MOVE),
-    carrying_color_stop(DEF_CARRYING_COLOR_STOP),
-    carrying_speed_base_mult(DEF_CARRYING_SPEED_BASE_MULT),
-    carrying_speed_max_mult(DEF_CARRYING_SPEED_MAX_MULT),
-    carrying_speed_weight_mult(DEF_CARRYING_SPEED_WEIGHT_MULT),
-    cursor_max_dist(DEF_CURSOR_MAX_DIST),
-    cursor_spin_speed(DEF_CURSOR_SPIN_SPEED),
-    day_minutes_end(DEF_DAY_MINUTES_END),
-    day_minutes_per_irl_sec(DEF_DAY_MINUTES_PER_IRL_SEC),
-    day_minutes_start(DEF_DAY_MINUTES_START),
-    group_member_grab_range(DEF_GROUP_MEMBER_GRAB_RANGE),
-    idle_task_range(DEF_IDLE_TASK_RANGE),
-    maturity_power_mult(DEF_MATURITY_POWER_MULT),
-    maturity_speed_mult(DEF_MATURITY_SPEED_MULT),
-    max_pikmin_in_field(DEF_MAX_PIKMIN_IN_FIELD),
-    message_char_interval(DEF_MESSAGE_CHAR_INTERVAL),
-    next_pluck_range(DEF_NEXT_PLUCK_RANGE),
-    no_pikmin_color(DEF_NO_PIKMIN_COLOR),
-    onion_open_range(DEF_ONION_OPEN_RANGE),
-    pikmin_chase_range(DEF_PIKMIN_CHASE_RANGE),
-    pluck_range(DEF_PLUCK_RANGE),
-    standard_pikmin_height(DEF_STANDARD_PIKMIN_HEIGHT),
-    standard_pikmin_radius(DEF_STANDARD_PIKMIN_RADIUS),
-    swarm_task_range(DEF_SWARM_TASK_RANGE),
-    throw_max_dist(DEF_THROW_MAX_DIST),
-    whistle_growth_speed(DEF_WHISTLE_GROWTH_SPEED),
-    whistle_max_dist(DEF_WHISTLE_MAX_DIST),
-    zoom_max_level(DEF_ZOOM_MAX_LEVEL),
-    zoom_min_level(DEF_ZOOM_MIN_LEVEL) {
+    can_throw_leaders(GAME_CONFIG::DEF_CAN_THROW_LEADERS),
+    carrying_color_move(GAME_CONFIG::DEF_CARRYING_COLOR_MOVE),
+    carrying_color_stop(GAME_CONFIG::DEF_CARRYING_COLOR_STOP),
+    carrying_speed_base_mult(GAME_CONFIG::DEF_CARRYING_SPEED_BASE_MULT),
+    carrying_speed_max_mult(GAME_CONFIG::DEF_CARRYING_SPEED_MAX_MULT),
+    carrying_speed_weight_mult(GAME_CONFIG::DEF_CARRYING_SPEED_WEIGHT_MULT),
+    cursor_max_dist(GAME_CONFIG::DEF_CURSOR_MAX_DIST),
+    cursor_spin_speed(GAME_CONFIG::DEF_CURSOR_SPIN_SPEED),
+    day_minutes_end(GAME_CONFIG::DEF_DAY_MINUTES_END),
+    day_minutes_per_irl_sec(GAME_CONFIG::DEF_DAY_MINUTES_PER_IRL_SEC),
+    day_minutes_start(GAME_CONFIG::DEF_DAY_MINUTES_START),
+    group_member_grab_range(GAME_CONFIG::DEF_GROUP_MEMBER_GRAB_RANGE),
+    idle_task_range(GAME_CONFIG::DEF_IDLE_TASK_RANGE),
+    maturity_power_mult(GAME_CONFIG::DEF_MATURITY_POWER_MULT),
+    maturity_speed_mult(GAME_CONFIG::DEF_MATURITY_SPEED_MULT),
+    max_pikmin_in_field(GAME_CONFIG::DEF_MAX_PIKMIN_IN_FIELD),
+    message_char_interval(GAME_CONFIG::DEF_MESSAGE_CHAR_INTERVAL),
+    next_pluck_range(GAME_CONFIG::DEF_NEXT_PLUCK_RANGE),
+    no_pikmin_color(GAME_CONFIG::DEF_NO_PIKMIN_COLOR),
+    onion_open_range(GAME_CONFIG::DEF_ONION_OPEN_RANGE),
+    pikmin_chase_range(GAME_CONFIG::DEF_PIKMIN_CHASE_RANGE),
+    pluck_range(GAME_CONFIG::DEF_PLUCK_RANGE),
+    standard_pikmin_height(GAME_CONFIG::DEF_STANDARD_PIKMIN_HEIGHT),
+    standard_pikmin_radius(GAME_CONFIG::DEF_STANDARD_PIKMIN_RADIUS),
+    swarm_task_range(GAME_CONFIG::DEF_SWARM_TASK_RANGE),
+    throw_max_dist(GAME_CONFIG::DEF_THROW_MAX_DIST),
+    whistle_growth_speed(GAME_CONFIG::DEF_WHISTLE_GROWTH_SPEED),
+    whistle_max_dist(GAME_CONFIG::DEF_WHISTLE_MAX_DIST),
+    zoom_max_level(GAME_CONFIG::DEF_ZOOM_MAX_LEVEL),
+    zoom_min_level(GAME_CONFIG::DEF_ZOOM_MIN_LEVEL) {
     
 }
 

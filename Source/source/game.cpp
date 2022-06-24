@@ -20,6 +20,12 @@
 #include "init.h"
 #include "load.h"
 
+namespace GAME {
+extern const float FADE_DURATION;
+extern const size_t FRAMERATE_AVG_SAMPLE_SIZE;
+extern const size_t FRAMERATE_HISTORY_SIZE;
+}
+
 /* ----------------------------------------------------------------------------
  * Constructor for the game class.
  */
@@ -38,9 +44,9 @@ game_class::game_class() :
     show_system_info(false),
     textures(TEXTURES_FOLDER_NAME),
     time_passed(0.0f),
-    win_fullscreen(options_struct::DEF_WIN_FULLSCREEN),
-    win_h(options_struct::DEF_WIN_H),
-    win_w(options_struct::DEF_WIN_W),
+    win_fullscreen(OPTIONS::DEF_WIN_FULLSCREEN),
+    win_h(OPTIONS::DEF_WIN_H),
+    win_w(OPTIONS::DEF_WIN_W),
     voice(nullptr),
     cur_state(nullptr),
     logic_queue(nullptr),

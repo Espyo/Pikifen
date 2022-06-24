@@ -26,6 +26,10 @@
 
 
 namespace GAMEPLAY {
+//Something is only considered off-camera if it's beyond this extra margin.
+const float CAMERA_BOX_MARGIN = 128.0f;
+//Dampen the camera's movements by this much.
+const float CAMERA_SMOOTHNESS_MULT = 4.5f;
 //How long the HUD moves for when the area is entered.
 const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.

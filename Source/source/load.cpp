@@ -254,7 +254,7 @@ void load_area(
             s2f(
                 sector_data->get_child_by_name(
                     "brightness"
-                )->get_value_or_default(i2s(DEF_SECTOR_BRIGHTNESS))
+                )->get_value_or_default(i2s(GEOMETRY::DEF_SECTOR_BRIGHTNESS))
             );
         new_sector->tag = sector_data->get_child_by_name("tag")->value;
         new_sector->z = s2f(sector_data->get_child_by_name("z")->value);

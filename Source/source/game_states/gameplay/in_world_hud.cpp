@@ -249,7 +249,7 @@ void in_world_health_wheel::draw() {
     }
     }
     
-    float radius = DEF_HEALTH_WHEEL_RADIUS * size_mult;
+    float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS * size_mult;
     draw_health(
         point(
             m->pos.x,

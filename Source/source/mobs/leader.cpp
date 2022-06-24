@@ -56,6 +56,14 @@ const float SWARM_PARTICLE_SPEED_DEVIATION = 10.0f;
 const float SWARM_PARTICLE_SPEED_MULT = 500.0f;
 //Throws cannot happen any faster than this interval.
 const float THROW_COOLDOWN_DURATION = 0.15f;
+//The throw preview starts fading in at this ratio.
+const float THROW_PREVIEW_FADE_IN_RATIO = 0.30f;
+//The throw preview starts fading out at this ratio.
+const float THROW_PREVIEW_FADE_OUT_RATIO = 1.0f - THROW_PREVIEW_FADE_IN_RATIO;
+//Throw preview minimum thickness.
+const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
+//Throw preview maximum thickness.
+const float THROW_PREVIEW_DEF_MAX_THICKNESS = 8.0f;
 }
 
 

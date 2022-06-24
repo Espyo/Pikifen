@@ -43,7 +43,7 @@ void gameplay_state::do_aesthetic_logic() {
     for(size_t a = 0; a < cur_leader_ptr->swarm_arrows.size(); ) {
         cur_leader_ptr->swarm_arrows[a] +=
             GAMEPLAY::SWARM_ARROW_SPEED * game.delta_t;
-        
+            
         dist max_dist =
             (swarm_magnitude > 0) ?
             game.config.cursor_max_dist * swarm_magnitude :
@@ -738,7 +738,7 @@ void gameplay_state::do_menu_logic() {
         }
         
         game.framerate_history.push_back(1.0f / real_delta_t);
-        if(game.framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
+        if(game.framerate_history.size() > GAME::FRAMERATE_HISTORY_SIZE) {
             game.framerate_history.erase(game.framerate_history.begin());
         }
         
@@ -746,21 +746,21 @@ void gameplay_state::do_menu_logic() {
         
         float sample_avg;
         
-        if(game.framerate_last_avg_point >= FRAMERATE_AVG_SAMPLE_SIZE) {
+        if(game.framerate_last_avg_point >= GAME::FRAMERATE_AVG_SAMPLE_SIZE) {
             //Let's get an average, using FRAMERATE_AVG_SAMPLE_SIZE frames.
             //If we can fit a sample of this size using the most recent
             //unsampled frames, then use those. Otherwise, keep using the last
             //block, which starts at framerate_last_avg_point.
             //This makes it so the average stays the same for a bit of time,
             //so the player can actually read it.
-            if(game.framerate_last_avg_point > FRAMERATE_AVG_SAMPLE_SIZE * 2) {
-                game.framerate_last_avg_point = FRAMERATE_AVG_SAMPLE_SIZE;
+            if(game.framerate_last_avg_point > GAME::FRAMERATE_AVG_SAMPLE_SIZE * 2) {
+                game.framerate_last_avg_point = GAME::FRAMERATE_AVG_SAMPLE_SIZE;
             }
             float sample_avg_sum = 0;
             size_t sample_avg_point_count = 0;
             size_t sample_size =
                 std::min(
-                    (size_t) FRAMERATE_AVG_SAMPLE_SIZE,
+                    (size_t) GAME::FRAMERATE_AVG_SAMPLE_SIZE,
                     game.framerate_history.size()
                 );
                 

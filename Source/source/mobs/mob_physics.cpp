@@ -34,7 +34,7 @@ mob* mob::get_mob_to_walk_on() const {
         if(m_ptr == this) {
             continue;
         }
-        if(fabs(z - (m_ptr->z + m_ptr->height)) > STEP_HEIGHT) {
+        if(fabs(z - (m_ptr->z + m_ptr->height)) > GEOMETRY::STEP_HEIGHT) {
             continue;
         }
         if(best_candidate && m_ptr->z <= best_candidate->z) {
@@ -484,7 +484,7 @@ void mob::tick_horizontal_movement_physics(
             //encountered of all edges crossed.
             if(
                 !was_thrown &&
-                tallest_sector->z <= z + STEP_HEIGHT &&
+                tallest_sector->z <= z + GEOMETRY::STEP_HEIGHT &&
                 tallest_sector->z > step_sector->z
             ) {
                 step_sector = tallest_sector;
@@ -741,7 +741,7 @@ void mob::tick_vertical_movement_physics(
         //If the current ground is one step (or less) below
         //the previous ground, just instantly go down the step.
         if(
-            pre_move_ground_z - ground_sector->z <= STEP_HEIGHT &&
+            pre_move_ground_z - ground_sector->z <= GEOMETRY::STEP_HEIGHT &&
             z == pre_move_ground_z
         ) {
             z = ground_sector->z;

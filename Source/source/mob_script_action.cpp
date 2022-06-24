@@ -814,7 +814,7 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
     
     for(size_t s = 0; s < sectors_to_drain.size(); ++s) {
         sectors_to_drain[s]->draining_liquid = true;
-        sectors_to_drain[s]->liquid_drain_left = LIQUID_DRAIN_DURATION;
+        sectors_to_drain[s]->liquid_drain_left = GEOMETRY::LIQUID_DRAIN_DURATION;
     }
 }
 

@@ -626,7 +626,7 @@ void area_editor::process_gui_options_dialog() {
             "Cursor must be these many pixels close\n"
             "to a vertex/edge in order to snap there.\n"
             "Default: " +
-            i2s(options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD) + ".",
+            i2s(OPTIONS::DEF_AREA_EDITOR_SNAP_THRESHOLD) + ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_snap_threshold = snap_threshold;
@@ -637,7 +637,7 @@ void area_editor::process_gui_options_dialog() {
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
-            b2s(options_struct::DEF_EDITOR_MMB_PAN) + "."
+            b2s(OPTIONS::DEF_EDITOR_MMB_PAN) + "."
         );
         
         //Drag threshold value.
@@ -649,7 +649,7 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag.\n"
-            "Default: " + i2s(options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
+            "Default: " + i2s(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );
@@ -672,7 +672,7 @@ void area_editor::process_gui_options_dialog() {
         set_tooltip(
             "Show the length of nearby edges when drawing or moving vertexes.\n"
             "Default: " +
-            b2s(options_struct::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH) + "."
+            b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH) + "."
         );
         
         //Show territory checkbox.
@@ -683,7 +683,7 @@ void area_editor::process_gui_options_dialog() {
         set_tooltip(
             "Show the territory radius and terrain radius\n"
             "of the selected objects, when applicable.\n"
-            "Default: " + b2s(options_struct::DEF_AREA_EDITOR_SHOW_TERRITORY) +
+            "Default: " + b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_TERRITORY) +
             "."
         );
         
@@ -699,7 +699,7 @@ void area_editor::process_gui_options_dialog() {
             "Draw textures on the sectors." +
             (string) (
                 (
-                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
                     VIEW_MODE_TEXTURES
                 ) ?
                 "\nThis is the default." :
@@ -714,7 +714,7 @@ void area_editor::process_gui_options_dialog() {
             "Best for performance." +
             (string) (
                 (
-                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
                     VIEW_MODE_WIREFRAME
                 ) ?
                 "This is the default." :
@@ -728,7 +728,7 @@ void area_editor::process_gui_options_dialog() {
             "Draw sectors as heightmaps. Lighter means taller." +
             (string) (
                 (
-                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
                     VIEW_MODE_HEIGHTMAP
                 ) ?
                 "This is the default." :
@@ -742,7 +742,7 @@ void area_editor::process_gui_options_dialog() {
             "Draw sectors as solid grays based on their brightness." +
             (string) (
                 (
-                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
                     VIEW_MODE_BRIGHTNESS
                 ) ?
                 "This is the default." :
@@ -775,7 +775,7 @@ void area_editor::process_gui_options_dialog() {
         set_tooltip(
             "If true, when you select two or more vertexes, some handles\n"
             "will appear, allowing you to scale or rotate them together.\n"
-            "Default: " + b2s(options_struct::DEF_AREA_EDITOR_SEL_TRANS) + "."
+            "Default: " + b2s(OPTIONS::DEF_AREA_EDITOR_SEL_TRANS) + "."
         );
         
         //Grid interval text.
@@ -790,7 +790,7 @@ void area_editor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Increase the spacing on the grid.\n"
-            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL) +
             ".",
             "Shift + Plus"
         );
@@ -802,7 +802,7 @@ void area_editor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL) +
             ".",
             "Shift + Minus"
         );
@@ -815,7 +815,7 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Interval between auto-backup saves, in seconds. 0 = off.\n"
-            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_BACKUP_INTERVAL) +
+            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_BACKUP_INTERVAL) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );
@@ -830,7 +830,7 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Maximum number of operations that can be undone. 0 = off.\n"
-            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_UNDO_LIMIT) + ".",
+            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_UNDO_LIMIT) + ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_undo_limit = undo_limit;
@@ -1126,7 +1126,7 @@ void area_editor::process_gui_panel_edge() {
             if(
                 ImGui::DragFloat(
                     "Length", &length, 0.2f,
-                    edge::SHADOW_MIN_LENGTH, edge::SHADOW_MAX_LENGTH
+                    GEOMETRY::SHADOW_MIN_LENGTH, GEOMETRY::SHADOW_MAX_LENGTH
                 )
             ) {
                 register_change("edge shadow length change");
@@ -1175,7 +1175,7 @@ void area_editor::process_gui_panel_edge() {
         if(
             ImGui::DragFloat(
                 "Length", &length, 0.2f,
-                0.0f, edge::SMOOTHING_MAX_LENGTH
+                0.0f, GEOMETRY::SMOOTHING_MAX_LENGTH
             )
         ) {
             register_change("edge ledge smoothing length change");

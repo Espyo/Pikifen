@@ -20,9 +20,10 @@ using std::string;
 using std::vector;
 
 
-const size_t BACKTRACE_MAX_FRAMES = 30;
-const size_t BACKTRACE_MAX_SYMBOL_LENGTH = 512;
-const size_t BACKTRACE_DEMANGLE_BUFFER_SIZE = 512;
+namespace BACKTRACE {
+const size_t MAX_FRAMES = 30;
+const size_t MAX_SYMBOL_LENGTH = 512;
+}
 
 #if defined(__linux__) || (__APPLE__)
 //Linux and Mac OS.
@@ -96,9 +97,9 @@ string demangle_symbol(const string &symbol) {
 
 vector<string> get_backtrace() {
     vector<string> result;
-    void* stack[BACKTRACE_MAX_FRAMES];
+    void* stack[BACKTRACE::MAX_FRAMES];
     
-    size_t n_symbols = backtrace(stack, BACKTRACE_MAX_FRAMES);
+    size_t n_symbols = backtrace(stack, BACKTRACE::MAX_FRAMES);
     char** symbols = backtrace_symbols(stack, n_symbols);
     
     for(size_t s = 0; s < n_symbols; ++s) {
@@ -124,15 +125,15 @@ vector<string> get_backtrace() {
 #include <WinBase.h>
 vector<string> get_backtrace() {
     vector<string> result;
-    void* stack[BACKTRACE_MAX_FRAMES];
+    void* stack[BACKTRACE::MAX_FRAMES];
     
     HANDLE process = GetCurrentProcess();
     SYMBOL_INFO* symbol =
         (SYMBOL_INFO*) malloc(
             sizeof(SYMBOL_INFO) +
-            (BACKTRACE_MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR)
+            (BACKTRACE::MAX_SYMBOL_LENGTH - 1) * sizeof(TCHAR)
         );
-    symbol->MaxNameLen = BACKTRACE_MAX_SYMBOL_LENGTH;
+    symbol->MaxNameLen = BACKTRACE::MAX_SYMBOL_LENGTH;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
     DWORD dummy_displacement;
     
@@ -141,7 +142,7 @@ vector<string> get_backtrace() {
     
     SymInitialize(process, NULL, TRUE);
     size_t n_symbols =
-        CaptureStackBackTrace(0, BACKTRACE_MAX_FRAMES, stack, NULL);
+        CaptureStackBackTrace(0, BACKTRACE::MAX_FRAMES, stack, NULL);
         
     for(size_t s = 0; s < n_symbols; ++s) {
         SymFromAddr(process, (DWORD64) stack[s], NULL, symbol);

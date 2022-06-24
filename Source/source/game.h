@@ -27,10 +27,14 @@
 #include "options.h"
 
 
+namespace GAME {
+//Duration of full-screen fades.
+const float FADE_DURATION = 0.15f;
 //When getting a framerate average, use a sample of this size.
 const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
 //Only save the latest N FPS samples.
 const size_t FRAMERATE_HISTORY_SIZE = 300;
+}
 
 
 /* ----------------------------------------------------------------------------

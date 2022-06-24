@@ -11,6 +11,12 @@ using std::string;
 using std::vector;
 
 
+namespace DATA_FILE {
+//If a file starts with these bytes, then it's UTF-8.
+const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
+}
+
+
 /* ----------------------------------------------------------------------------
  * Creates an empty data node.
  */
@@ -216,7 +222,7 @@ void data_node::load_file(
                 //Let's just check if it starts with the UTF-8 Magic Number.
                 if(
                     line.size() >= 3 &&
-                    line.substr(0, 3) == UTF8_MAGIC_NUMBER
+                    line.substr(0, 3) == DATA_FILE::UTF8_MAGIC_NUMBER
                 ) {
                     line = line.erase(0, 3);
                 }

@@ -107,6 +107,8 @@ const float SWARM_VERTICAL_SCALE = 0.5f;
 const float STATUS_SHAKING_TIME_MULT = 60.0f;
 //A new "mob thrown" particle is spawned every X seconds.
 const float THROW_PARTICLE_INTERVAL = 0.02f;
+//A water wave ring particle lasts this long.
+const float WAVE_RING_DURATION = 1.0f;
 }
 
 size_t next_mob_id = 0;
@@ -2325,7 +2327,7 @@ bool mob::has_clear_line(mob* target_mob) const {
         }
         if(
             fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
-            STEP_HEIGHT
+            GEOMETRY::STEP_HEIGHT
         ) {
             //The walls are more than stepping height in difference.
             //So it's a genuine wall in the way.

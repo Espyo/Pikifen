@@ -1040,7 +1040,7 @@ void editor::process_gui_editor_style() {
         set_tooltip(
             "Use a custom color scheme for the editor,\n"
             "instead of the default.\n"
-            "Default: " + b2s(options_struct::DEF_EDITOR_USE_CUSTOM_STYLE) + "."
+            "Default: " + b2s(OPTIONS::DEF_EDITOR_USE_CUSTOM_STYLE) + "."
         );
         
         //Primary color.

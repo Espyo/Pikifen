@@ -28,22 +28,33 @@ using std::unordered_set;
 using std::set;
 
 
+namespace GEOMETRY {
+//Area blockmap blocks have this width and height.
+const float BLOCKMAP_BLOCK_SIZE = 128;
+//Default sector brightness.
+const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
+//Mobs can walk up sectors that are, at the most,
+//this high from the current one, as if climbing up steps.
+const float STEP_HEIGHT = 50;
+//Liquids drain for this long.
+const float LIQUID_DRAIN_DURATION = 2.0f;
 //Auto wall shadow lengths are the sector height difference multiplied by this.
-const float edge::SHADOW_AUTO_LENGTH_MULT = 0.2f;
+const float SHADOW_AUTO_LENGTH_MULT = 0.2f;
 //Default color of wall shadows. This is the color at the edge.
-const ALLEGRO_COLOR edge::SHADOW_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.90f};
+const ALLEGRO_COLOR SHADOW_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.90f};
 //Maximum length a wall shadow can be when the length is automatic.
-const float edge::SHADOW_MAX_AUTO_LENGTH = 50.0f;
+const float SHADOW_MAX_AUTO_LENGTH = 50.0f;
 //Maximum length a wall shadow can be.
-const float edge::SHADOW_MAX_LENGTH = 100.0f;
+const float SHADOW_MAX_LENGTH = 100.0f;
 //Minimum length a wall shadow can be when the length is automatic.
-const float edge::SHADOW_MIN_AUTO_LENGTH = 8.0f;
+const float SHADOW_MIN_AUTO_LENGTH = 8.0f;
 //Minimum length a wall shadow can be.
-const float edge::SHADOW_MIN_LENGTH = 1.0f;
+const float SHADOW_MIN_LENGTH = 1.0f;
 //Default color of the smoothing effect.
-const ALLEGRO_COLOR edge::SMOOTHING_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.70f};
+const ALLEGRO_COLOR SMOOTHING_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.70f};
 //Maximum length the smoothing effect can be.
-const float edge::SMOOTHING_MAX_LENGTH = 100.0f;
+const float SMOOTHING_MAX_LENGTH = 100.0f;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -658,8 +669,8 @@ void area_data::generate_blockmap() {
     bmap.top_left_corner = min_coords;
     //Add one more to the cols/rows because, suppose there's an edge at y = 256.
     //The row would be 2. In reality, the row should be 3.
-    bmap.n_cols = ceil((max_coords.x - min_coords.x) / BLOCKMAP_BLOCK_SIZE) + 1;
-    bmap.n_rows = ceil((max_coords.y - min_coords.y) / BLOCKMAP_BLOCK_SIZE) + 1;
+    bmap.n_cols = ceil((max_coords.x - min_coords.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
+    bmap.n_rows = ceil((max_coords.y - min_coords.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
     
     bmap.edges.assign(
         bmap.n_cols, vector<vector<edge*> >(bmap.n_rows, vector<edge*>())
@@ -719,7 +730,7 @@ void area_data::generate_blockmap() {
             }
             
             point corner = bmap.get_top_left_corner(bx, by);
-            corner += BLOCKMAP_BLOCK_SIZE * 0.5;
+            corner += GEOMETRY::BLOCKMAP_BLOCK_SIZE * 0.5;
             bmap.sectors[bx][by].insert(
                 get_sector(corner, NULL, false)
             );
@@ -770,7 +781,7 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
                 if(
                     line_seg_intersects_rectangle(
                         corner,
-                        corner + BLOCKMAP_BLOCK_SIZE,
+                        corner + GEOMETRY::BLOCKMAP_BLOCK_SIZE,
                         point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                         point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
                     )
@@ -1027,7 +1038,7 @@ void blockmap::clear() {
  */
 size_t blockmap::get_col(const float x) const {
     if(x < top_left_corner.x) return INVALID;
-    float final_x = (x - top_left_corner.x) / BLOCKMAP_BLOCK_SIZE;
+    float final_x = (x - top_left_corner.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(final_x >= n_cols) return INVALID;
     return final_x;
 }
@@ -1084,7 +1095,7 @@ bool blockmap::get_edges_in_region(
  */
 size_t blockmap::get_row(const float y) const {
     if(y < top_left_corner.y) return INVALID;
-    float final_y = (y - top_left_corner.y) / BLOCKMAP_BLOCK_SIZE;
+    float final_y = (y - top_left_corner.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
     if(final_y >= n_rows) return INVALID;
     return final_y;
 }
@@ -1100,8 +1111,8 @@ size_t blockmap::get_row(const float y) const {
 point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
     return
         point(
-            col * BLOCKMAP_BLOCK_SIZE + top_left_corner.x,
-            row * BLOCKMAP_BLOCK_SIZE + top_left_corner.y
+            col * GEOMETRY::BLOCKMAP_BLOCK_SIZE + top_left_corner.x,
+            row * GEOMETRY::BLOCKMAP_BLOCK_SIZE + top_left_corner.y
         );
 }
 
@@ -1115,9 +1126,9 @@ point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
  */
 edge::edge(size_t v1, size_t v2) :
     wall_shadow_length(LARGE_FLOAT),
-    wall_shadow_color(SHADOW_DEF_COLOR),
+    wall_shadow_color(GEOMETRY::SHADOW_DEF_COLOR),
     ledge_smoothing_length(0),
-    ledge_smoothing_color(SMOOTHING_DEF_COLOR) {
+    ledge_smoothing_color(GEOMETRY::SMOOTHING_DEF_COLOR) {
     
     vertexes[0] = vertexes[1] = NULL;
     sectors[0] = sectors[1] = NULL;
@@ -1666,7 +1677,7 @@ sector::sector() :
     type(SECTOR_TYPE_NORMAL),
     is_bottomless_pit(false),
     z(0),
-    brightness(DEF_SECTOR_BRIGHTNESS),
+    brightness(GEOMETRY::DEF_SECTOR_BRIGHTNESS),
     fade(false),
     hazard_floor(true),
     liquid_drain_left(0),

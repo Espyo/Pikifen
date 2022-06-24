@@ -32,6 +32,7 @@
 void draw_edge_offset_on_buffer(
     vector<edge_offset_cache> &caches, size_t e_idx
 ) {
+    //Keep the end opacity as a constant. Changing it helps with debugging.
     const float END_OPACITY = 0.0f;
     edge* e_ptr = game.cur_area_data.edges[e_idx];
     

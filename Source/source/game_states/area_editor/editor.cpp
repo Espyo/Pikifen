@@ -2220,7 +2220,7 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         
-        if(e_ptr->wall_shadow_color != edge::SHADOW_DEF_COLOR) {
+        if(e_ptr->wall_shadow_color != GEOMETRY::SHADOW_DEF_COLOR) {
             edge_node->add(
                 new data_node("shadow_color", c2s(e_ptr->wall_shadow_color))
             );
@@ -2235,7 +2235,7 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         
-        if(e_ptr->ledge_smoothing_color != edge::SMOOTHING_DEF_COLOR) {
+        if(e_ptr->ledge_smoothing_color != GEOMETRY::SMOOTHING_DEF_COLOR) {
             edge_node->add(
                 new data_node(
                     "smoothing_color",
@@ -2265,7 +2265,7 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         sector_node->add(new data_node("z", f2s(s_ptr->z)));
-        if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) {
+        if(s_ptr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
             sector_node->add(
                 new data_node("brightness", i2s(s_ptr->brightness))
             );

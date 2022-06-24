@@ -26,6 +26,8 @@
 #include "pause_menu.h"
 
 namespace GAMEPLAY {
+extern const float CAMERA_BOX_MARGIN;
+extern const float CAMERA_SMOOTHNESS_MULT;
 extern const unsigned char COLLISION_OPACITY;
 extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
 extern const float CURSOR_TRAIL_MAX_WIDTH;

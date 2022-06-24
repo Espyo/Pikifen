@@ -25,6 +25,40 @@
 #include "utils/string_utils.h"
 
 
+namespace CONTROL_ICON {
+//Base rectangle outline color.
+const ALLEGRO_COLOR BASE_OUTLINE_COLOR = {0.10f, 0.10f, 0.10f, 1.0f};
+//Base rectangle body color.
+const ALLEGRO_COLOR BASE_RECT_COLOR = {0.45f, 0.45f, 0.45f, 1.0f};
+//Base text color.
+const ALLEGRO_COLOR BASE_TEXT_COLOR = {0.95f, 0.95f, 0.95f, 1.0f};
+//Padding between text and rectangle limit.
+const float PADDING = 2.0f;
+//Rectangle outline thickness.
+const float OUTLINE_THICKNESS = 2.0f;
+}
+
+
+namespace DRAWING {
+//Default healt wheel radius.
+const float DEF_HEALTH_WHEEL_RADIUS = 20;
+//Liquid surfaces wobble by offsetting X by this much, at most.
+const float LIQUID_WOBBLE_DELTA_X = 3.0f;
+//Liquid surfaces wobble using this time scale.
+const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
+//Loading screen subtitle text scale.
+const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
+//Loading screen subtitle text padding.
+const int LOADING_SCREEN_PADDING = 64;
+//Notification opacity.
+const unsigned char NOTIFICATION_ALPHA = 160;
+//Size of a control icon in a notification.
+const float NOTIFICATION_CONTROL_SIZE = 24.0f;
+//Padding between a notification's text and its limit.
+const float NOTIFICATION_PADDING = 8.0f;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Draws a series of logos, to serve as a background.
  * They move along individually, and wrap around when they reach a screen edge.
@@ -432,11 +466,17 @@ void draw_control_icon(
     const point &where, const point &max_size, const unsigned char alpha
 ) {
     if(alpha == 0) return;
-    const ALLEGRO_COLOR RECT_COLOR = {0.45f, 0.45f, 0.45f, alpha / 255.0f};
-    const ALLEGRO_COLOR OUTLINE_COLOR = {0.10f, 0.10f, 0.10f, alpha / 255.0f};
-    const ALLEGRO_COLOR TEXT_COLOR = {0.95f, 0.95f, 0.95f, alpha / 255.0f};
-    const float OUTLINE_THICKNESS = 2.0f;
     
+    //Final rectangle body color.
+    const ALLEGRO_COLOR final_rect_color =
+        change_alpha(CONTROL_ICON::BASE_RECT_COLOR, alpha);
+    //Final rectangle outline color.
+    const ALLEGRO_COLOR final_outline_color =
+        change_alpha(CONTROL_ICON::BASE_OUTLINE_COLOR, alpha);
+    //Final text color.
+    const ALLEGRO_COLOR final_text_color =
+        change_alpha(CONTROL_ICON::BASE_TEXT_COLOR, alpha);
+        
     //Start by getting the icon's info for drawing.
     CONTROL_ICON_SHAPES shape;
     CONTROL_ICON_SPRITES bitmap_sprite;
@@ -473,12 +513,12 @@ void draw_control_icon(
     );
     float total_width =
         std::min(
-            (float) (text_w + CONTROL_ICON_PADDING * 2),
+            (float) (text_w + CONTROL_ICON::PADDING * 2),
             (max_size.x == 0 ? FLT_MAX : max_size.x)
         );
     float total_height =
         std::min(
-            (float) (text_h + CONTROL_ICON_PADDING * 2),
+            (float) (text_h + CONTROL_ICON::PADDING * 2),
             (max_size.y == 0 ? FLT_MAX : max_size.y)
         );
     //Force it to always be a square or horizontal rectangle. Never vertical.
@@ -490,13 +530,13 @@ void draw_control_icon(
         al_draw_filled_rectangle(
             where.x - total_width * 0.5, where.y - total_height * 0.5,
             where.x + total_width * 0.5, where.y + total_height * 0.5,
-            RECT_COLOR
+            final_rect_color
         );
         al_draw_rectangle(
             where.x - total_width * 0.5, where.y - total_height * 0.5,
             where.x + total_width * 0.5, where.y + total_height * 0.5,
-            OUTLINE_COLOR,
-            OUTLINE_THICKNESS
+            final_outline_color,
+            CONTROL_ICON::OUTLINE_THICKNESS
         );
         break;
     }
@@ -504,13 +544,13 @@ void draw_control_icon(
         draw_filled_rounded_rectangle(
             where, point(total_width, total_height),
             16.0f,
-            RECT_COLOR
+            final_rect_color
         );
         draw_rounded_rectangle(
             where, point(total_width, total_height),
             16.0f,
-            OUTLINE_COLOR,
-            OUTLINE_THICKNESS
+            final_outline_color,
+            CONTROL_ICON::OUTLINE_THICKNESS
         );
         break;
     }
@@ -522,7 +562,7 @@ void draw_control_icon(
     //And finally, the text inside.
     draw_compressed_text(
         font,
-        TEXT_COLOR,
+        final_text_color,
         point(
             where.x,
             where.y
@@ -530,8 +570,8 @@ void draw_control_icon(
         ALLEGRO_ALIGN_CENTER,
         TEXT_VALIGN_CENTER,
         point(
-            (max_size.x == 0 ? 0 : max_size.x - CONTROL_ICON_PADDING),
-            (max_size.y == 0 ? 0 : max_size.y - CONTROL_ICON_PADDING)
+            (max_size.x == 0 ? 0 : max_size.x - CONTROL_ICON::PADDING),
+            (max_size.y == 0 ? 0 : max_size.y - CONTROL_ICON::PADDING)
         ),
         text
     );
@@ -710,7 +750,7 @@ void draw_liquid(
     
     float liquid_opacity_mult = 1.0f;
     if(s_ptr->draining_liquid) {
-        liquid_opacity_mult = s_ptr->liquid_drain_left / LIQUID_DRAIN_DURATION;
+        liquid_opacity_mult = s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
     
     //Layer 1 - Transparent wobbling ground texture.
@@ -728,8 +768,8 @@ void draw_liquid(
         float ground_wobble =
             -sin(
                 game.states.gameplay->area_time_passed *
-                LIQUID_WOBBLE_TIME_SCALE
-            ) * LIQUID_WOBBLE_DELTA_X;
+                DRAWING::LIQUID_WOBBLE_TIME_SCALE
+            ) * DRAWING::LIQUID_WOBBLE_DELTA_X;
         float ground_texture_dy =
             al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.5;
             
@@ -853,10 +893,6 @@ void draw_liquid(
 void draw_loading_screen(
     const string &text, const string &subtext, const float opacity
 ) {
-
-    const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
-    const int LOADING_SCREEN_PADDING = 64;
-    
     unsigned char blackness_alpha = 255.0f * std::max(0.0f, opacity * 4 - 3);
     al_draw_filled_rectangle(
         0, 0, game.win_w, game.win_h, al_map_rgba(0, 0, 0, blackness_alpha)
@@ -943,7 +979,7 @@ void draw_loading_screen(
         text_y =
             subtext.empty() ?
             (game.win_h * 0.5 - text_h * 0.5) :
-            (game.win_h * 0.5 - LOADING_SCREEN_PADDING * 0.5 - text_h);
+            (game.win_h * 0.5 - DRAWING::LOADING_SCREEN_PADDING * 0.5 - text_h);
         al_draw_tinted_bitmap(
             game.loading_text_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
             game.win_w * 0.5 - text_w * 0.5, text_y, 0
@@ -952,7 +988,7 @@ void draw_loading_screen(
     }
     
     //Draw the subtext bitmap in its place.
-    float subtext_y = game.win_h * 0.5 + LOADING_SCREEN_PADDING * 0.5;
+    float subtext_y = game.win_h * 0.5 + DRAWING::LOADING_SCREEN_PADDING * 0.5;
     if(!subtext.empty()) {
     
         al_draw_tinted_scaled_bitmap(
@@ -960,10 +996,10 @@ void draw_loading_screen(
             al_map_rgba(255, 255, 255, 255.0 * opacity),
             0, 0, subtext_w, subtext_h,
             game.win_w * 0.5 -
-            (subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5),
+            (subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5),
             subtext_y,
-            subtext_w * LOADING_SCREEN_SUBTITLE_SCALE,
-            subtext_h * LOADING_SCREEN_SUBTITLE_SCALE,
+            subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE,
+            subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE,
             0
         );
         
@@ -976,7 +1012,7 @@ void draw_loading_screen(
     
         ALLEGRO_VERTEX text_vertexes[4];
         float text_reflection_h =
-            std::min((int) (LOADING_SCREEN_PADDING * 0.5), text_h);
+            std::min((int) (DRAWING::LOADING_SCREEN_PADDING * 0.5), text_h);
         //Top-left vertex.
         text_vertexes[0].x = game.win_w * 0.5 - text_w * 0.5;
         text_vertexes[0].y = text_y + text_h;
@@ -1019,14 +1055,14 @@ void draw_loading_screen(
         ALLEGRO_VERTEX subtext_vertexes[4];
         float subtext_reflection_h =
             std::min(
-                (int) (LOADING_SCREEN_PADDING * 0.5),
-                (int) (text_h * LOADING_SCREEN_SUBTITLE_SCALE)
+                (int) (DRAWING::LOADING_SCREEN_PADDING * 0.5),
+                (int) (text_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE)
             );
         //Top-left vertex.
         subtext_vertexes[0].x =
-            game.win_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 - subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[0].y =
-            subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
+            subtext_y + subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE;
         subtext_vertexes[0].z = 0;
         subtext_vertexes[0].u = 0;
         subtext_vertexes[0].v = subtext_h;
@@ -1034,9 +1070,9 @@ void draw_loading_screen(
             al_map_rgba(255, 255, 255, reflection_alpha);
         //Top-right vertex.
         subtext_vertexes[1].x =
-            game.win_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 + subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[1].y =
-            subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
+            subtext_y + subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE;
         subtext_vertexes[1].z = 0;
         subtext_vertexes[1].u = subtext_w;
         subtext_vertexes[1].v = subtext_h;
@@ -1044,9 +1080,9 @@ void draw_loading_screen(
             al_map_rgba(255, 255, 255, reflection_alpha);
         //Bottom-right vertex.
         subtext_vertexes[2].x =
-            game.win_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 + subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[2].y =
-            subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE +
+            subtext_y + subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE +
             subtext_reflection_h;
         subtext_vertexes[2].z = 0;
         subtext_vertexes[2].u = subtext_w;
@@ -1054,9 +1090,9 @@ void draw_loading_screen(
         subtext_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
         subtext_vertexes[3].x =
-            game.win_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 - subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[3].y =
-            subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE +
+            subtext_y + subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE +
             subtext_reflection_h;
         subtext_vertexes[3].z = 0;
         subtext_vertexes[3].u = 0;
@@ -1996,6 +2032,6 @@ float get_control_icon_width(
             return max_bitmap_height;
         }
     } else {
-        return al_get_text_width(font, text.c_str()) + CONTROL_ICON_PADDING * 2;
+        return al_get_text_width(font, text.c_str()) + CONTROL_ICON::PADDING * 2;
     }
 }

@@ -502,7 +502,7 @@ void animation_editor::process_gui_options_dialog() {
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
-            b2s(options_struct::DEF_EDITOR_MMB_PAN) + "."
+            b2s(OPTIONS::DEF_EDITOR_MMB_PAN) + "."
         );
         
         //Drag threshold value.
@@ -514,7 +514,7 @@ void animation_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag.\n"
-            "Default: " + i2s(options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
+            "Default: " + i2s(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );

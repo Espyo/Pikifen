@@ -18,100 +18,130 @@
 #include "utils/string_utils.h"
 
 
-//Default values for the different options.
-const float options_struct::DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
-const float options_struct::DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
-const bool options_struct::DEF_AREA_EDITOR_SEL_TRANS = false;
-const bool options_struct::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
-const bool options_struct::DEF_AREA_EDITOR_SHOW_TERRITORY = false;
-const area_editor::SNAP_MODES options_struct::DEF_AREA_EDITOR_SNAP_MODE =
+namespace OPTIONS {
+//Default value for the area editor backup interval.
+const float DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
+//Default value for the area editor grid interval.
+const float DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
+//Default value for the area editor selection transformation widget.
+const bool DEF_AREA_EDITOR_SEL_TRANS = false;
+//Default value for whether to show an edge's length in the area editor.
+const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
+//Default value for whether to show a mob's territory in the area editor.
+const bool DEF_AREA_EDITOR_SHOW_TERRITORY = false;
+//Default value for the area editor snap mode.
+const area_editor::SNAP_MODES DEF_AREA_EDITOR_SNAP_MODE =
     area_editor::SNAP_GRID;
-const size_t options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
-const size_t options_struct::DEF_AREA_EDITOR_UNDO_LIMIT = 20;
-const area_editor::VIEW_MODES options_struct::DEF_AREA_EDITOR_VIEW_MODE =
+//Default value for the area editor snap threshold.
+const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD = 80;
+//Default value for the area editor undo limit.
+const size_t DEF_AREA_EDITOR_UNDO_LIMIT = 20;
+//Default value for the area editor view mode.
+const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE =
     area_editor::VIEW_MODE_TEXTURES;
-const AUTO_THROW_MODES options_struct::DEF_AUTO_THROW_MODE = AUTO_THROW_OFF;
-const float options_struct::DEF_CURSOR_SPEED = 500.0f;
-const bool options_struct::DEF_DRAW_CURSOR_TRAIL = true;
-const bool options_struct::DEF_EDITOR_MMB_PAN = false;
-const float options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
-const float options_struct::DEF_EDITOR_PRIMARY_COLOR[3] =
-{0.05f, 0.05f, 0.05f};
-const float options_struct::DEF_EDITOR_SECONDARY_COLOR[3] =
-{0.19f, 0.47f, 0.78f};
-const float options_struct::DEF_EDITOR_TEXT_COLOR[3] =
-{1.0f, 1.0f, 1.0f};
-const bool options_struct::DEF_EDITOR_USE_CUSTOM_STYLE = false;
-const bool options_struct::DEF_EDITOR_SHOW_TOOLTIPS = true;
-const float options_struct::DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
-const float options_struct::DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
-const size_t options_struct::DEF_MAX_PARTICLES = 200;
-const bool options_struct::DEF_MIPMAPS_ENABLED = true;
-const bool options_struct::DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] =
-{true, false, false, false};
-const bool options_struct::DEF_SMOOTH_SCALING = true;
-const bool options_struct::DEF_SHOW_HUD_CONTROLS = true;
-const unsigned int options_struct::DEF_TARGET_FPS = 60;
-const bool options_struct::DEF_TRUE_FULLSCREEN = false;
-const bool options_struct::DEF_WIN_FULLSCREEN = false;
-const unsigned int options_struct::DEF_WIN_H = 768;
-const bool options_struct::DEF_WINDOW_POSITION_HACK = false;
-const unsigned int options_struct::DEF_WIN_W = 1024;
-const float options_struct::DEF_ZOOM_MID_LEVEL = 1.4f;
+//Default value for the auto-throw mode.
+const AUTO_THROW_MODES DEF_AUTO_THROW_MODE = AUTO_THROW_OFF;
+//Default value for the cursor speed.
+const float DEF_CURSOR_SPEED = 500.0f;
+//Default value for the cursor trail.
+const bool DEF_DRAW_CURSOR_TRAIL = true;
+//Default value for whether the middle mouse button pans in editors.
+const bool DEF_EDITOR_MMB_PAN = false;
+//Default value for the editor mouse drag threshold.
+const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
+//Default value for the editor primary color.
+const float DEF_EDITOR_PRIMARY_COLOR[3] = {0.05f, 0.05f, 0.05f};
+//Default value for the editor secondary color.
+const float DEF_EDITOR_SECONDARY_COLOR[3] = {0.19f, 0.47f, 0.78f};
+//Default value for the editor text color.
+const float DEF_EDITOR_TEXT_COLOR[3] = {1.0f, 1.0f, 1.0f};
+//Default value for whether to use custom styles in editors.
+const bool DEF_EDITOR_USE_CUSTOM_STYLE = false;
+//Default value for whether to show tooltips in editors.
+const bool DEF_EDITOR_SHOW_TOOLTIPS = true;
+//Default value for the joystick maximum deadzone.
+const float DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
+//Default value for the joystick minimum deadzone.
+const float DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
+//Default value for the maximum amount of particles.
+const size_t DEF_MAX_PARTICLES = 200;
+//Default value for whether mipmaps are enabled.
+const bool DEF_MIPMAPS_ENABLED = true;
+//Default value for whether the mouse moves the cursor, for each player.
+const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
+//Default value for whether to use smooth scaling.
+const bool DEF_SMOOTH_SCALING = true;
+//Default value for whether to show HUD controls.
+const bool DEF_SHOW_HUD_CONTROLS = true;
+//Default value for the default target framerate.
+const unsigned int DEF_TARGET_FPS = 60;
+//Default value for whether to use true fullscreen.
+const bool DEF_TRUE_FULLSCREEN = false;
+//Default value for whether to use fullscreen.
+const bool DEF_WIN_FULLSCREEN = false;
+//Default value for the window height.
+const unsigned int DEF_WIN_H = 768;
+//Default value for whether to use the window position hack.
+const bool DEF_WINDOW_POSITION_HACK = false;
+//Default value for the window width.
+const unsigned int DEF_WIN_W = 1024;
+//Default value for the middle zoom level.
+const float DEF_ZOOM_MID_LEVEL = 1.4f;
+}
 
 
 /* ----------------------------------------------------------------------------
  * Creates an options struct.
  */
 options_struct::options_struct() :
-    area_editor_backup_interval(DEF_AREA_EDITOR_BACKUP_INTERVAL),
-    area_editor_grid_interval(DEF_AREA_EDITOR_GRID_INTERVAL),
-    area_editor_sel_trans(DEF_AREA_EDITOR_SEL_TRANS),
-    area_editor_show_edge_length(DEF_AREA_EDITOR_SHOW_EDGE_LENGTH),
-    area_editor_show_territory(DEF_AREA_EDITOR_SHOW_TERRITORY),
-    area_editor_snap_mode(DEF_AREA_EDITOR_SNAP_MODE),
-    area_editor_snap_threshold(DEF_AREA_EDITOR_SNAP_THRESHOLD),
-    area_editor_undo_limit(DEF_AREA_EDITOR_UNDO_LIMIT),
-    area_editor_view_mode(DEF_AREA_EDITOR_VIEW_MODE),
-    auto_throw_mode(DEF_AUTO_THROW_MODE),
-    cursor_speed(DEF_CURSOR_SPEED),
-    draw_cursor_trail(DEF_DRAW_CURSOR_TRAIL),
-    editor_mmb_pan(DEF_EDITOR_MMB_PAN),
-    editor_mouse_drag_threshold(DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
-    editor_show_tooltips(DEF_EDITOR_SHOW_TOOLTIPS),
-    editor_use_custom_style(DEF_EDITOR_USE_CUSTOM_STYLE),
-    intended_win_fullscreen(DEF_WIN_FULLSCREEN),
-    intended_win_h(DEF_WIN_H),
-    intended_win_w(DEF_WIN_W),
-    joystick_max_deadzone(DEF_JOYSTICK_MAX_DEADZONE),
-    joystick_min_deadzone(DEF_JOYSTICK_MIN_DEADZONE),
-    max_particles(DEF_MAX_PARTICLES),
-    mipmaps_enabled(DEF_MIPMAPS_ENABLED),
-    smooth_scaling(DEF_SMOOTH_SCALING),
-    show_hud_controls(DEF_SHOW_HUD_CONTROLS),
-    target_fps(DEF_TARGET_FPS),
-    true_fullscreen(DEF_TRUE_FULLSCREEN),
-    window_position_hack(DEF_WINDOW_POSITION_HACK),
-    zoom_mid_level(DEF_ZOOM_MID_LEVEL) {
+    area_editor_backup_interval(OPTIONS::DEF_AREA_EDITOR_BACKUP_INTERVAL),
+    area_editor_grid_interval(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL),
+    area_editor_sel_trans(OPTIONS::DEF_AREA_EDITOR_SEL_TRANS),
+    area_editor_show_edge_length(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH),
+    area_editor_show_territory(OPTIONS::DEF_AREA_EDITOR_SHOW_TERRITORY),
+    area_editor_snap_mode(OPTIONS::DEF_AREA_EDITOR_SNAP_MODE),
+    area_editor_snap_threshold(OPTIONS::DEF_AREA_EDITOR_SNAP_THRESHOLD),
+    area_editor_undo_limit(OPTIONS::DEF_AREA_EDITOR_UNDO_LIMIT),
+    area_editor_view_mode(OPTIONS::DEF_AREA_EDITOR_VIEW_MODE),
+    auto_throw_mode(OPTIONS::DEF_AUTO_THROW_MODE),
+    cursor_speed(OPTIONS::DEF_CURSOR_SPEED),
+    draw_cursor_trail(OPTIONS::DEF_DRAW_CURSOR_TRAIL),
+    editor_mmb_pan(OPTIONS::DEF_EDITOR_MMB_PAN),
+    editor_mouse_drag_threshold(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
+    editor_show_tooltips(OPTIONS::DEF_EDITOR_SHOW_TOOLTIPS),
+    editor_use_custom_style(OPTIONS::DEF_EDITOR_USE_CUSTOM_STYLE),
+    intended_win_fullscreen(OPTIONS::DEF_WIN_FULLSCREEN),
+    intended_win_h(OPTIONS::DEF_WIN_H),
+    intended_win_w(OPTIONS::DEF_WIN_W),
+    joystick_max_deadzone(OPTIONS::DEF_JOYSTICK_MAX_DEADZONE),
+    joystick_min_deadzone(OPTIONS::DEF_JOYSTICK_MIN_DEADZONE),
+    max_particles(OPTIONS::DEF_MAX_PARTICLES),
+    mipmaps_enabled(OPTIONS::DEF_MIPMAPS_ENABLED),
+    smooth_scaling(OPTIONS::DEF_SMOOTH_SCALING),
+    show_hud_controls(OPTIONS::DEF_SHOW_HUD_CONTROLS),
+    target_fps(OPTIONS::DEF_TARGET_FPS),
+    true_fullscreen(OPTIONS::DEF_TRUE_FULLSCREEN),
+    window_position_hack(OPTIONS::DEF_WINDOW_POSITION_HACK),
+    zoom_mid_level(OPTIONS::DEF_ZOOM_MID_LEVEL) {
     
-    mouse_moves_cursor[0] = DEF_MOUSE_MOVES_CURSOR[0];
-    mouse_moves_cursor[1] = DEF_MOUSE_MOVES_CURSOR[1];
-    mouse_moves_cursor[2] = DEF_MOUSE_MOVES_CURSOR[2];
-    mouse_moves_cursor[3] = DEF_MOUSE_MOVES_CURSOR[3];
+    mouse_moves_cursor[0] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[0];
+    mouse_moves_cursor[1] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[1];
+    mouse_moves_cursor[2] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[2];
+    mouse_moves_cursor[3] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[3];
     
-    editor_primary_color.r = DEF_EDITOR_PRIMARY_COLOR[0];
-    editor_primary_color.g = DEF_EDITOR_PRIMARY_COLOR[1];
-    editor_primary_color.b = DEF_EDITOR_PRIMARY_COLOR[2];
+    editor_primary_color.r = OPTIONS::DEF_EDITOR_PRIMARY_COLOR[0];
+    editor_primary_color.g = OPTIONS::DEF_EDITOR_PRIMARY_COLOR[1];
+    editor_primary_color.b = OPTIONS::DEF_EDITOR_PRIMARY_COLOR[2];
     editor_primary_color.a = 1.0f;
     
-    editor_secondary_color.r = DEF_EDITOR_SECONDARY_COLOR[0];
-    editor_secondary_color.g = DEF_EDITOR_SECONDARY_COLOR[1];
-    editor_secondary_color.b = DEF_EDITOR_SECONDARY_COLOR[2];
+    editor_secondary_color.r = OPTIONS::DEF_EDITOR_SECONDARY_COLOR[0];
+    editor_secondary_color.g = OPTIONS::DEF_EDITOR_SECONDARY_COLOR[1];
+    editor_secondary_color.b = OPTIONS::DEF_EDITOR_SECONDARY_COLOR[2];
     editor_secondary_color.a = 1.0f;
     
-    editor_text_color.r = DEF_EDITOR_TEXT_COLOR[0];
-    editor_text_color.g = DEF_EDITOR_TEXT_COLOR[1];
-    editor_text_color.b = DEF_EDITOR_TEXT_COLOR[2];
+    editor_text_color.r = OPTIONS::DEF_EDITOR_TEXT_COLOR[0];
+    editor_text_color.g = OPTIONS::DEF_EDITOR_TEXT_COLOR[1];
+    editor_text_color.b = OPTIONS::DEF_EDITOR_TEXT_COLOR[2];
     editor_text_color.a = 1.0f;
 }
 

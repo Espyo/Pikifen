@@ -41,6 +41,10 @@ extern const float SWARM_PARTICLE_SIZE;
 extern const float SWARM_PARTICLE_SPEED_DEVIATION;
 extern const float SWARM_PARTICLE_SPEED_MULT;
 extern const float THROW_COOLDOWN_DURATION;
+extern const float THROW_PREVIEW_FADE_IN_RATIO;
+extern const float THROW_PREVIEW_FADE_OUT_RATIO;
+extern const float THROW_PREVIEW_MIN_THICKNESS;
+extern const float THROW_PREVIEW_DEF_MAX_THICKNESS;
 }
 
 
