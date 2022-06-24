@@ -78,7 +78,7 @@ struct path_follow_settings {
     //Some flags. Use PATH_FOLLOW_FLAG_*.
     unsigned char flags;
     //Invulnerabilities of the mob/carriers.
-    const vector<hazard*> invulnerabilities;
+    vector<hazard*> invulnerabilities;
     //If not empty, only follow path links with this label.
     string label;
     //Faked start point. Used to fake calculations.

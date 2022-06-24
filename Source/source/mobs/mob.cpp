@@ -1488,31 +1488,16 @@ bool mob::follow_path(
         delete path_info;
     }
     
-    vector<hazard*> invulnerabilities;
-    if(carry_info) {
-        //The object is only as invulnerable as the Pikmin carrying it.
-        invulnerabilities = carry_info->get_carrier_invulnerabilities();
-    } else {
-        //Use the object's standard invulnerabilities.
-        for(auto v : type->hazard_vulnerabilities) {
-            if(v.second.damage_mult == 0.0f) {
-                invulnerabilities.push_back(v.first);
-            }
-        }
-    }
-    
-    //Establish the mob's path-following information.
-    //This also generates the path to take.
-    path_info = new path_info_struct(this, settings);
+    path_follow_settings final_settings = settings;
     
     if(carry_info) {
         //Check if this carriable is considered light load.
         if(type->weight == 1) {
-            path_info->settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
+            final_settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
         }
         //The object will only be airborne if all its carriers can fly.
         if(carry_info->can_fly()) {
-            path_info->settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
+            final_settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
         }
     } else {
         if(
@@ -1520,13 +1505,30 @@ bool mob::follow_path(
             type->category->id == MOB_CATEGORY_LEADERS
         ) {
             //Simple mobs are empty-handed, so that's considered light load.
-            path_info->settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
+            final_settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
         }
         //Check if the object can fly directly.
         if(can_move_in_midair) {
-            path_info->settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
+            final_settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
         }
     }
+    
+    if(carry_info) {
+        //The object is only as invulnerable as the Pikmin carrying it.
+        final_settings.invulnerabilities =
+            carry_info->get_carrier_invulnerabilities();
+    } else {
+        //Use the object's standard invulnerabilities.
+        for(auto v : type->hazard_vulnerabilities) {
+            if(v.second.damage_mult == 0.0f) {
+                final_settings.invulnerabilities.push_back(v.first);
+            }
+        }
+    }
+    
+    //Establish the mob's path-following information.
+    //This also generates the path to take.
+    path_info = new path_info_struct(this, final_settings);
     
     if(
         (path_info->settings.flags & PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
