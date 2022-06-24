@@ -827,7 +827,7 @@ void leader::tick_class_specifics(const float delta_t) {
     //Health wheel logic.
     health_wheel_visible_ratio +=
         ((health / max_health) - health_wheel_visible_ratio) *
-        (in_world_health_wheel::SMOOTHNESS_MULT * delta_t);
+        (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * delta_t);
         
     if(
         health < max_health * HEALTH_CAUTION_RATIO ||

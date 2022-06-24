@@ -21,6 +21,12 @@ using std::string;
 
 class pikmin_type;
 
+namespace ONION_MENU {
+extern const string GUI_FILE_PATH;
+extern const size_t TYPES_PER_PAGE;
+extern const float RED_TEXT_DURATION;
+}
+
 
 /* ----------------------------------------------------------------------------
  * Contains information about a given Pikmin type in an Onion menu.
@@ -114,17 +120,12 @@ public:
     void tick(const float delta_t);
     void toggle_select_all();
     
-    static const float RED_TEXT_DURATION;
-    static const size_t ONION_MENU_TYPES_PER_PAGE;
-    
 private:
     //Is it currently closing?
     bool closing;
     
     void make_gui_item_red(gui_item* item);
     void update();
-    
-    static const string GUI_FILE_PATH;
 };
 
 

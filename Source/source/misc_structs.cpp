@@ -637,7 +637,7 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     misinput_protection_timer(0.0f),
     advance_button_alpha(0.0f),
     swipe_timer(0.0f),
-    transition_timer(gameplay_state::MENU_ENTRY_HUD_MOVE_TIME),
+    transition_timer(GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME),
     transition_in(true),
     to_delete(false) {
     
@@ -688,7 +688,7 @@ void msg_box_info::advance() {
         if(cur_section >= ceil(tokens_per_line.size() / 3.0f) - 1) {
             //End of the message. Start closing the message box.
             transition_in = false;
-            transition_timer = gameplay_state::MENU_EXIT_HUD_MOVE_TIME;
+            transition_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
         } else {
             //Start swiping to go to the next section.
             swipe_timer = MSG_BOX::TOKEN_SWIPE_DURATION;

@@ -46,7 +46,7 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         game.cam.target_zoom =
             clamp(
-                game.cam.target_zoom - game.cam.zoom * KEYBOARD_CAM_ZOOM,
+                game.cam.target_zoom - game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
             
@@ -54,7 +54,7 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
         game.cam.target_zoom =
             clamp(
-                game.cam.target_zoom + game.cam.zoom * KEYBOARD_CAM_ZOOM,
+                game.cam.target_zoom + game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
             

@@ -15,13 +15,12 @@
 #include "../../game.h"
 #include "../../utils/string_utils.h"
 
-
+namespace PAUSE_MENU {
 //Path to the GUI information file.
-const string pause_menu_struct::GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Pause_menu.txt";
+const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Pause_menu.txt";
 //Path to the help page GUI information file.
-const string pause_menu_struct::HELP_GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Help.txt";
+const string HELP_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Help.txt";
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -137,7 +136,7 @@ void pause_menu_struct::init_help_page() {
     const vector<string> category_node_names {
         "gameplay", "controls", "", "objects"
     };
-    data_node gui_file(HELP_GUI_FILE_PATH);
+    data_node gui_file(PAUSE_MENU::HELP_GUI_FILE_PATH);
     
     //Load the tidbits.
     data_node* tidbits_node = gui_file.get_child_by_name("tidbits");
@@ -183,12 +182,12 @@ void pause_menu_struct::init_help_page() {
         help_gui.responsive = false;
         help_gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_UP,
-            gameplay_state::MENU_EXIT_HUD_MOVE_TIME
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
         gui.responsive = true;
         gui.start_animation(
             GUI_MANAGER_ANIM_UP_TO_CENTER,
-            gameplay_state::MENU_EXIT_HUD_MOVE_TIME
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
     };
     help_gui.back_item->on_get_tooltip =
@@ -305,7 +304,7 @@ void pause_menu_struct::init_main_pause_menu() {
     gui.register_coords("quit",     50, 72, 50,  9);
     gui.register_coords("tooltip",  50, 95, 95,  8);
     gui.read_coords(
-        data_node(GUI_FILE_PATH).get_child_by_name("positions")
+        data_node(PAUSE_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     //Header.
@@ -357,12 +356,12 @@ void pause_menu_struct::init_main_pause_menu() {
         gui.responsive = false;
         gui.start_animation(
             GUI_MANAGER_ANIM_CENTER_TO_UP,
-            gameplay_state::MENU_EXIT_HUD_MOVE_TIME
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
         help_gui.responsive = true;
         help_gui.start_animation(
             GUI_MANAGER_ANIM_UP_TO_CENTER,
-            gameplay_state::MENU_EXIT_HUD_MOVE_TIME
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
     };
     help_button->on_get_tooltip =
@@ -403,7 +402,7 @@ void pause_menu_struct::init_main_pause_menu() {
     //Finishing touches.
     gui.set_selected_item(gui.back_item);
     gui.start_animation(
-        GUI_MANAGER_ANIM_UP_TO_CENTER, gameplay_state::MENU_ENTRY_HUD_MOVE_TIME
+        GUI_MANAGER_ANIM_UP_TO_CENTER, GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
     );
 }
 
@@ -471,14 +470,14 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
  */
 void pause_menu_struct::start_closing() {
     closing = true;
-    closing_timer = gameplay_state::MENU_EXIT_HUD_MOVE_TIME;
+    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
     gui.start_animation(
         GUI_MANAGER_ANIM_CENTER_TO_UP,
-        gameplay_state::MENU_EXIT_HUD_MOVE_TIME
+        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
     game.states.gameplay->hud->gui.start_animation(
         GUI_MANAGER_ANIM_OUT_TO_IN,
-        gameplay_state::MENU_EXIT_HUD_MOVE_TIME
+        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
 }
 
@@ -494,7 +493,7 @@ void pause_menu_struct::tick(const float delta_t) {
     help_gui.tick(delta_t);
     
     //Tick the background.
-    const float bg_alpha_mult_speed = 1.0f / gameplay_state::MENU_ENTRY_HUD_MOVE_TIME;
+    const float bg_alpha_mult_speed = 1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
     const float diff = closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
     bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
     

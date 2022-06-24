@@ -25,22 +25,36 @@
 #include "../utils/string_utils.h"
 
 
+namespace EDITOR {
 //Every icon in the icon bitmap file is these many pixels from the previous.
-const int editor::EDITOR_ICON_BMP_PADDING = 1;
+const int EDITOR_ICON_BMP_PADDING = 1;
 //Every icon in the icon bitmap file has this size.
-const int editor::EDITOR_ICON_BMP_SIZE = 24;
+const int EDITOR_ICON_BMP_SIZE = 24;
 //Time until the next click is no longer considered a double-click.
-const float editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
+const float DOUBLE_CLICK_TIMEOUT = 0.5f;
 //How much to zoom in/out with the keyboard keys.
-const float editor::KEYBOARD_CAM_ZOOM = 0.25f;
+const float KEYBOARD_CAM_ZOOM = 0.25f;
+//Picker dialog maximum button size.
+const float PICKER_IMG_BUTTON_MAX_SIZE = 160.0f;
+//Picker dialog minimum button size.
+const float PICKER_IMG_BUTTON_MIN_SIZE = 32.0f;
+//Default size of the transformation widget.
+const float TW_DEF_SIZE = 32.0f;
+//Radius of a handle in the transformation widget.
+const float TW_HANDLE_RADIUS = 6.0f;
+//Thickness of the outline in the transformation widget.
+const float TW_OUTLINE_THICKNESS = 2.0f;
+//Thickness of the rotation handle in the transformation widget.
+const float TW_ROTATION_HANDLE_THICKNESS = 8.0f;
 //How long the unsaved changes warning stays on-screen for.
-const float editor::UNSAVED_CHANGES_WARNING_DURATION = 3.0f;
+const float UNSAVED_CHANGES_WARNING_DURATION = 3.0f;
 //Height of the unsaved changes warning, sans spike.
-const int editor::UNSAVED_CHANGES_WARNING_HEIGHT = 30;
+const int UNSAVED_CHANGES_WARNING_HEIGHT = 30;
 //Width and height of the unsaved changes warning's spike.
-const int editor::UNSAVED_CHANGES_WARNING_SPIKE_SIZE = 16;
+const int UNSAVED_CHANGES_WARNING_SPIKE_SIZE = 16;
 //Width of the unsaved changes warning, sans spike.
-const int editor::UNSAVED_CHANGES_WARNING_WIDTH = 150;
+const int UNSAVED_CHANGES_WARNING_WIDTH = 150;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -62,7 +76,7 @@ editor::editor() :
     mouse_drag_confirmed(false),
     state(0),
     sub_state(0),
-    unsaved_changes_warning_timer(UNSAVED_CHANGES_WARNING_DURATION),
+    unsaved_changes_warning_timer(EDITOR::UNSAVED_CHANGES_WARNING_DURATION),
     was_warned_about_unsaved_changes(false),
     zoom_max_level(0),
     zoom_min_level(0) {
@@ -264,32 +278,32 @@ void editor::draw_unsaved_changes_warning() {
     bool spike_up = unsaved_changes_warning_pos.y < game.win_h / 2.0;
     
     point box_center = unsaved_changes_warning_pos;
-    if(unsaved_changes_warning_pos.x < UNSAVED_CHANGES_WARNING_WIDTH / 2.0) {
+    if(unsaved_changes_warning_pos.x < EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0) {
         box_center.x +=
-            UNSAVED_CHANGES_WARNING_WIDTH / 2.0 - unsaved_changes_warning_pos.x;
+            EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0 - unsaved_changes_warning_pos.x;
     } else if(
         unsaved_changes_warning_pos.x >
-        game.win_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0
+        game.win_w - EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0
     ) {
         box_center.x -=
             unsaved_changes_warning_pos.x -
-            (game.win_w - UNSAVED_CHANGES_WARNING_WIDTH / 2.0);
+            (game.win_w - EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0);
     }
     if(spike_up) {
-        box_center.y += UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
-        box_center.y += UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+        box_center.y += EDITOR::UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
+        box_center.y += EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
     } else {
-        box_center.y -= UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
-        box_center.y -= UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+        box_center.y -= EDITOR::UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
+        box_center.y -= EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
     }
     
     point box_tl(
-        box_center.x - UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
-        box_center.y - UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
+        box_center.x - EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
+        box_center.y - EDITOR::UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
     );
     point box_br(
-        box_center.x + UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
-        box_center.y + UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
+        box_center.x + EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
+        box_center.y + EDITOR::UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
     );
     point spike_p1(
         unsaved_changes_warning_pos.x,
@@ -297,15 +311,15 @@ void editor::draw_unsaved_changes_warning() {
     );
     point spike_p2(
         unsaved_changes_warning_pos.x -
-        UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
+        EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
         unsaved_changes_warning_pos.y +
-        UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
+        EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
     );
     point spike_p3(
         unsaved_changes_warning_pos.x +
-        UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
+        EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
         unsaved_changes_warning_pos.y +
-        UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
+        EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
     );
     
     al_draw_filled_rectangle(
@@ -437,7 +451,7 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             last_mouse_click = ev.mouse.button;
             last_mouse_click_pos.x = ev.mouse.x;
             last_mouse_click_pos.y = ev.mouse.y;
-            double_click_time = DOUBLE_CLICK_TIMEOUT;
+            double_click_time = EDITOR::DOUBLE_CLICK_TIMEOUT;
         }
         
         
@@ -872,8 +886,11 @@ void editor::load() {
             editor_icons[i] =
                 al_create_sub_bitmap(
                     bmp_editor_icons,
-                    EDITOR_ICON_BMP_SIZE * i + EDITOR_ICON_BMP_PADDING * i,
-                    0, EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE
+                    EDITOR::EDITOR_ICON_BMP_SIZE * i +
+                    EDITOR::EDITOR_ICON_BMP_PADDING * i,
+                    0,
+                    EDITOR::EDITOR_ICON_BMP_SIZE,
+                    EDITOR::EDITOR_ICON_BMP_SIZE
                 );
         }
     }
@@ -1099,7 +1116,7 @@ void editor::process_mob_type_widgets(
     if(
         ImGui::ImageButton(
             editor_icons[ICON_SEARCH],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
             ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f),
             9.0f
         )
@@ -1638,9 +1655,6 @@ editor::picker_info::picker_info(editor* editor_ptr) :
  * Processes the picker dialog for this frame.
  */
 void editor::picker_info::process() {
-    const float IMG_BUTTON_MIN_SIZE = 32.0f;
-    const float IMG_BUTTON_MAX_SIZE = 160.0f;
-    
     vector<string> category_names;
     vector<vector<picker_item> > final_items;
     string filter_lower = str_to_lower(filter);
@@ -1773,21 +1787,21 @@ void editor::picker_info::process() {
                         float ratio = bmp_size.y / bmp_size.x;
                         button_size =
                             ImVec2(
-                                IMG_BUTTON_MAX_SIZE,
-                                IMG_BUTTON_MAX_SIZE * ratio
+                                EDITOR::PICKER_IMG_BUTTON_MAX_SIZE,
+                                EDITOR::PICKER_IMG_BUTTON_MAX_SIZE * ratio
                             );
                     } else if(bmp_size.y > 0.0f) {
                         float ratio = bmp_size.x / bmp_size.y;
                         button_size =
                             ImVec2(
-                                IMG_BUTTON_MAX_SIZE * ratio,
-                                IMG_BUTTON_MAX_SIZE
+                                EDITOR::PICKER_IMG_BUTTON_MAX_SIZE * ratio,
+                                EDITOR::PICKER_IMG_BUTTON_MAX_SIZE
                             );
                     }
                     button_size.x =
-                        std::max(button_size.x, IMG_BUTTON_MIN_SIZE);
+                        std::max(button_size.x, EDITOR::PICKER_IMG_BUTTON_MIN_SIZE);
                     button_size.y =
-                        std::max(button_size.y, IMG_BUTTON_MIN_SIZE);
+                        std::max(button_size.y, EDITOR::PICKER_IMG_BUTTON_MIN_SIZE);
                         
                     if(
                         ImGui::ImageButton(
@@ -1858,11 +1872,6 @@ editor::picker_item::picker_item(
 }
 
 
-const float editor::transformation_widget::DEF_SIZE = 32.0f;
-const float editor::transformation_widget::HANDLE_RADIUS = 6.0f;
-const float editor::transformation_widget::OUTLINE_THICKNESS = 2.0f;
-const float editor::transformation_widget::ROTATION_HANDLE_THICKNESS = 8.0f;
-
 /* ----------------------------------------------------------------------------
  * Creates a new transformation widget.
  */
@@ -1899,7 +1908,7 @@ void editor::transformation_widget::draw(
     if(angle && radius >= 0.0f) {
         al_draw_circle(
             center->x, center->y, radius,
-            al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS * zoom
+            al_map_rgb(64, 64, 192), EDITOR::TW_ROTATION_HANDLE_THICKNESS * zoom
         );
     }
     
@@ -1915,7 +1924,7 @@ void editor::transformation_widget::draw(
         al_draw_line(
             corners[c].x, corners[c].y,
             corners[c2].x, corners[c2].y,
-            al_map_rgb(32, 32, 160), OUTLINE_THICKNESS * zoom
+            al_map_rgb(32, 32, 160), EDITOR::TW_OUTLINE_THICKNESS * zoom
         );
     }
     
@@ -1924,7 +1933,7 @@ void editor::transformation_widget::draw(
         if(!size && h != 4) continue;
         al_draw_filled_circle(
             handles[h].x, handles[h].y,
-            HANDLE_RADIUS * zoom, al_map_rgb(96, 96, 224)
+            EDITOR::TW_HANDLE_RADIUS * zoom, al_map_rgb(96, 96, 224)
         );
     }
 }
@@ -1952,7 +1961,7 @@ void editor::transformation_widget::get_locations(
     const float* const angle, point* handles, float* radius,
     ALLEGRO_TRANSFORM* transform
 ) const {
-    point size_to_use(DEF_SIZE, DEF_SIZE);
+    point size_to_use(EDITOR::TW_DEF_SIZE, EDITOR::TW_DEF_SIZE);
     if(size) size_to_use = *size;
     
     //First, the Allegro transformation.
@@ -2017,7 +2026,7 @@ bool editor::transformation_widget::handle_mouse_down(
     
     //Check if the user clicked on a translation or scale handle.
     for(unsigned char h = 0; h < 9; ++h) {
-        if(dist(handles[h], mouse_coords) <= HANDLE_RADIUS * zoom) {
+        if(dist(handles[h], mouse_coords) <= EDITOR::TW_HANDLE_RADIUS * zoom) {
             if(h == 4) {
                 moving_handle = h;
                 return true;
@@ -2033,8 +2042,8 @@ bool editor::transformation_widget::handle_mouse_down(
     if(angle) {
         dist d(*center, mouse_coords);
         if(
-            d >= radius - ROTATION_HANDLE_THICKNESS / 2.0f * zoom &&
-            d <= radius + ROTATION_HANDLE_THICKNESS / 2.0f * zoom
+            d >= radius - EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom &&
+            d <= radius + EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom
         ) {
             moving_handle = 9;
             old_angle = *angle;

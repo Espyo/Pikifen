@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -20,6 +20,7 @@ Next tasks (roughly sorted most important first)
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Check for memory leaks
         Correct warnings given by cppcheck
+        Correct warnings given by clang-tidy
         Correct warnings given by compiling with -Wall, both on g++ and Visual Studio
     Update Dear ImGui again lol
     
@@ -35,7 +36,7 @@ Next tasks (roughly sorted most important first)
             When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
             Three grading modes:
                 Points
-                    The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths, time left, Pokos gathered, enemy kill points
+                    The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths (careful not to count Candypop Buds as deaths), time left, Pokos gathered, enemy kill points
                     Each field can have varying weights, including 0 or negative
                     Each field's value can also be instantly transformed to 0 if the player finished the stage via "loss"
                     You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
@@ -125,7 +126,7 @@ Next tasks (roughly sorted most important first)
         Engine use
             Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered
         Pikmin life
-            Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count, Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
+            Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count (careful not to count Candypop Buds as deaths), Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
         Leader control
             Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
     Manual
@@ -149,8 +150,9 @@ Next tasks (roughly sorted most important first)
             Working Pikmin and idle Pikmin counts
         Stats page
             Table with the amount of Pikmin of each type that is in the Onion, with you, working, idling
-            Number of deaths today
+            Number of deaths today (careful not to count Candypop Buds as deaths)
             Progress towards concocting sprays
+            The total play time should be shown somewhere; useful for speedruns
         Pause menu page
             It's just the pause menu
         Open it with Tab, and move leader swapping to middle mouse button
@@ -330,6 +332,8 @@ Next tasks (roughly sorted most important first)
             Potential layout: When listing the control for an action that has three buttons, for instance, the cell on the left column spans 3 rows and is just the action name (aligned to top), and the 3 cells on the right are one button each.
             When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
             For gamepad inputs, write the gamepad's name somewhere on-screen?
+            If the player assigns a button that is already assigned to something else, it should give a warning
+            If the player leaves the menu but some important actions don't have button assignments, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
         Add default controls for menu navigation, for the D-pad, analog stick, arrow keys, spacebar, enter, escape, a gamepad button to confirm, and a gamepad button to cancel
         Save the controls in the options file inside a block, and possibly at the end of the options file
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
@@ -564,8 +568,6 @@ Next tasks (roughly sorted most important first)
             When "end day" is chosen, it should warn about idle Pikmin that will get left behind
             The "quit" option should take you to day selection
         Radar menu stats page
-            The total play time should be shown somewhere; useful for speedruns
-            Pikmin born so far, Pikmin deaths so far
             Total Pokos (or whatever point systems exist) collected
         Pellet Posies, Candypop Buds, etc. should only cycle between the colors available
         The ability for dead flower Pikmin to leave a sprout for the next day. The game settings can specify the change of a dead flower leaving it behind (including 0% to disable the feature)
@@ -591,7 +593,7 @@ Next tasks (roughly sorted most important first)
         Today's Report
             One long page filled with everything, that the player can scroll up and down -- this way there aren't several pages the player has to mash through, and it's scalable with any number of Pikmin types, content, etc.
                 Population chart over the day, with icons for key events
-                Deaths by type, both today and so far
+                Deaths by type, both today and so far (careful not to count Candypop Buds as deaths)
                 Total number of Pikmin left in the Onion
                 What objective items were collected today
                 Total of the objective collected, and total remaining

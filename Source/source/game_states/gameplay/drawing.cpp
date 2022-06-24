@@ -608,8 +608,8 @@ void gameplay_state::draw_message_box() {
     //Transition things.
     float transition_ratio =
         msg_box->transition_in ?
-        msg_box->transition_timer / MENU_ENTRY_HUD_MOVE_TIME :
-        (1 - msg_box->transition_timer / MENU_EXIT_HUD_MOVE_TIME);
+        msg_box->transition_timer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
+        (1 - msg_box->transition_timer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
     int line_height = al_get_font_line_height(game.fonts.standard);
     float box_height = line_height * 4;
     float offset =
@@ -775,10 +775,6 @@ void gameplay_state::draw_message_box() {
  *   Color to tint it with.
  */
 void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
-    const float CURSOR_TRAIL_MAX_WIDTH = 30.0f;
-    const unsigned char CURSOR_TRAIL_MAX_ALPHA = 72;
-    const float CURSOR_TRAIL_MIN_SPOT_DIFF = 4.0f;
-    
     al_use_transform(&game.identity_transform);
     
     //Cursor trail.
@@ -788,22 +784,22 @@ void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
         for(size_t s = 1; s < cursor_spots.size(); ++s) {
             point anchor_diff = cursor_spots[anchor] - cursor_spots[s];
             if(
-                fabs(anchor_diff.x) < CURSOR_TRAIL_MIN_SPOT_DIFF &&
-                fabs(anchor_diff.y) < CURSOR_TRAIL_MIN_SPOT_DIFF
+                fabs(anchor_diff.x) < GAMEPLAY::CURSOR_TRAIL_MIN_SPOT_DIFF &&
+                fabs(anchor_diff.y) < GAMEPLAY::CURSOR_TRAIL_MIN_SPOT_DIFF
             ) {
                 continue;
             }
             
             float start_ratio = anchor / (float) cursor_spots.size();
-            float start_thickness = CURSOR_TRAIL_MAX_WIDTH * start_ratio;
-            unsigned char start_alpha = CURSOR_TRAIL_MAX_ALPHA * start_ratio;
+            float start_thickness = GAMEPLAY::CURSOR_TRAIL_MAX_WIDTH * start_ratio;
+            unsigned char start_alpha = GAMEPLAY::CURSOR_TRAIL_MAX_ALPHA * start_ratio;
             ALLEGRO_COLOR start_color = change_alpha(color, start_alpha);
             point start_p1;
             point start_p2;
             
-            float end_ratio = s / (float) CURSOR_TRAIL_SAVE_N_SPOTS;
-            float end_thickness = CURSOR_TRAIL_MAX_WIDTH * end_ratio;
-            unsigned char end_alpha = CURSOR_TRAIL_MAX_ALPHA * end_ratio;
+            float end_ratio = s / (float) GAMEPLAY::CURSOR_TRAIL_SAVE_N_SPOTS;
+            float end_thickness = GAMEPLAY::CURSOR_TRAIL_MAX_WIDTH * end_ratio;
+            unsigned char end_alpha = GAMEPLAY::CURSOR_TRAIL_MAX_ALPHA * end_ratio;
             ALLEGRO_COLOR end_color = change_alpha(color, end_alpha);
             point end_p1;
             point end_p2;
@@ -992,11 +988,6 @@ void gameplay_state::draw_system_stuff() {
  * Draws a leader's throw preview.
  */
 void gameplay_state::draw_throw_preview() {
-    const unsigned char PREVIEW_OPACITY = 160;
-    const unsigned char COLLISION_OPACITY = 192;
-    const float PREVIEW_TEXTURE_TIME_MULT = 20.0f;
-    const float PREVIEW_TEXTURE_SCALE = 20.0f;
-    
     ALLEGRO_VERTEX vertexes[16];
     
     if(!cur_leader_ptr->throwee) {
@@ -1007,7 +998,7 @@ void gameplay_state::draw_throw_preview() {
                 cur_leader_ptr->pos, throw_dest,
                 change_alpha(
                     game.config.no_pikmin_color,
-                    PREVIEW_OPACITY / 2.0f
+                    GAMEPLAY::PREVIEW_OPACITY / 2.0f
                 ),
                 0.0f, 1.0f, false
             );
@@ -1055,9 +1046,9 @@ void gameplay_state::draw_throw_preview() {
     );
     float texture_offset =
         fmod(
-            area_time_passed * PREVIEW_TEXTURE_TIME_MULT,
+            area_time_passed * GAMEPLAY::PREVIEW_TEXTURE_TIME_MULT,
             al_get_bitmap_width(game.sys_assets.bmp_throw_preview) *
-            PREVIEW_TEXTURE_SCALE
+            GAMEPLAY::PREVIEW_TEXTURE_SCALE
         );
         
     //For each edge, check if it crosses the throw line.
@@ -1142,9 +1133,9 @@ void gameplay_state::draw_throw_preview() {
                 cur_leader_ptr->pos, throw_dest,
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,
-                    PREVIEW_OPACITY
+                    GAMEPLAY::PREVIEW_OPACITY
                 ),
-                texture_offset, PREVIEW_TEXTURE_SCALE, true
+                texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
             );
             
         for(unsigned char v = 0; v < n_vertexes; v += 4) {
@@ -1175,9 +1166,9 @@ void gameplay_state::draw_throw_preview() {
                     cur_leader_ptr->pos, throw_dest,
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
-                        PREVIEW_OPACITY
+                        GAMEPLAY::PREVIEW_OPACITY
                     ),
-                    texture_offset, PREVIEW_TEXTURE_SCALE, true
+                    texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
                 );
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
@@ -1192,7 +1183,7 @@ void gameplay_state::draw_throw_preview() {
                 collision_point, point(32, 32), throw_h_angle,
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,
-                    PREVIEW_OPACITY
+                    GAMEPLAY::PREVIEW_OPACITY
                 )
             );
             
@@ -1205,9 +1196,9 @@ void gameplay_state::draw_throw_preview() {
                     cur_leader_ptr->pos, throw_dest,
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
-                        COLLISION_OPACITY
+                        GAMEPLAY::COLLISION_OPACITY
                     ),
-                    texture_offset, PREVIEW_TEXTURE_SCALE, true
+                    texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
                 );
                 
             for(unsigned char v = 0; v < n_vertexes; v += 4) {
@@ -1223,7 +1214,7 @@ void gameplay_state::draw_throw_preview() {
                     cur_leader_ptr->pos, throw_dest,
                     change_alpha(
                         cur_leader_ptr->throwee->type->main_color,
-                        PREVIEW_OPACITY
+                        GAMEPLAY::PREVIEW_OPACITY
                     ),
                     0.0f, 1.0f, true
                 );
@@ -1240,7 +1231,7 @@ void gameplay_state::draw_throw_preview() {
                 collision_point, point(16, 16), throw_h_angle,
                 change_alpha(
                     cur_leader_ptr->throwee->type->main_color,
-                    PREVIEW_OPACITY
+                    GAMEPLAY::PREVIEW_OPACITY
                 )
             );
             

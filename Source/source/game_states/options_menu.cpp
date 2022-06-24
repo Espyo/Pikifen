@@ -20,25 +20,26 @@
 #include "../utils/string_utils.h"
 
 
-//Auto-throw preset values.
-const AUTO_THROW_MODES options_menu_state::AUTO_THROW_PRESETS[] =
-{AUTO_THROW_OFF, AUTO_THROW_HOLD, AUTO_THROW_TOGGLE};
+namespace OPTIONS_MENU {
 //Auto-throw preset names.
-const string options_menu_state::AUTO_THROW_PRESET_NAMES[] =
+const string AUTO_THROW_PRESET_NAMES[] =
 {"Off", "Hold button", "Button toggles"};
-//Auto-throw preset amount.
-const unsigned char options_menu_state::N_AUTO_THROW_PRESETS = 3;
-//Cursor speed preset values.
-const float options_menu_state::CURSOR_SPEED_PRESETS[] =
-{250.0f, 350.0f, 500.0f, 700.0f, 1000.0f};
+//Auto-throw preset values.
+const AUTO_THROW_MODES AUTO_THROW_PRESETS[] =
+{AUTO_THROW_OFF, AUTO_THROW_HOLD, AUTO_THROW_TOGGLE};
 //Cursor speed preset names.
-const string options_menu_state::CURSOR_SPEED_PRESET_NAMES[] =
+const string CURSOR_SPEED_PRESET_NAMES[] =
 {"Very slow", "Slow", "Medium", "Fast", "Very fast"};
-//Cursor speed preset amount.
-const unsigned char options_menu_state::N_CURSOR_SPEED_PRESETS = 5;
+//Cursor speed preset values.
+const float CURSOR_SPEED_PRESETS[] =
+{250.0f, 350.0f, 500.0f, 700.0f, 1000.0f};
 //Path to the GUI information file.
-const string options_menu_state::GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Options_menu.txt";
+const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Options_menu.txt";
+//Auto-throw preset amount.
+const unsigned char N_AUTO_THROW_PRESETS = 3;
+//Cursor speed preset amount.
+const unsigned char N_CURSOR_SPEED_PRESETS = 5;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -103,10 +104,10 @@ void options_menu_state::change_auto_throw(const signed int step) {
         cur_auto_throw_idx = 0;
     } else {
         cur_auto_throw_idx =
-            sum_and_wrap(cur_auto_throw_idx, step, N_AUTO_THROW_PRESETS);
+            sum_and_wrap(cur_auto_throw_idx, step, OPTIONS_MENU::N_AUTO_THROW_PRESETS);
     }
     
-    game.options.auto_throw_mode = AUTO_THROW_PRESETS[cur_auto_throw_idx];
+    game.options.auto_throw_mode = OPTIONS_MENU::AUTO_THROW_PRESETS[cur_auto_throw_idx];
     
     auto_throw_picker->cur_option_idx = cur_auto_throw_idx;
     auto_throw_picker->start_juice_animation(
@@ -128,10 +129,10 @@ void options_menu_state::change_cursor_speed(const signed int step) {
         cur_cursor_speed_idx = 0;
     } else {
         cur_cursor_speed_idx =
-            sum_and_wrap(cur_cursor_speed_idx, step, N_CURSOR_SPEED_PRESETS);
+            sum_and_wrap(cur_cursor_speed_idx, step, OPTIONS_MENU::N_CURSOR_SPEED_PRESETS);
     }
     
-    game.options.cursor_speed = CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
+    game.options.cursor_speed = OPTIONS_MENU::CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
     
     cursor_speed_picker->cur_option_idx = cur_cursor_speed_idx;
     cursor_speed_picker->start_juice_animation(
@@ -200,8 +201,8 @@ void options_menu_state::do_logic() {
  * Returns the current auto-throw option's index, or INVALID if not found.
  */
 size_t options_menu_state::get_auto_throw_idx() const {
-    for(size_t m = 0; m < N_AUTO_THROW_PRESETS; ++m) {
-        if(game.options.auto_throw_mode == AUTO_THROW_PRESETS[m]) {
+    for(size_t m = 0; m < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++m) {
+        if(game.options.auto_throw_mode == OPTIONS_MENU::AUTO_THROW_PRESETS[m]) {
             return m;
         }
     }
@@ -214,8 +215,8 @@ size_t options_menu_state::get_auto_throw_idx() const {
  * Returns the current cursor speed option's index, or INVALID if not found.
  */
 size_t options_menu_state::get_cursor_speed_idx() const {
-    for(size_t s = 0; s < N_CURSOR_SPEED_PRESETS; ++s) {
-        if(game.options.cursor_speed == CURSOR_SPEED_PRESETS[s]) {
+    for(size_t s = 0; s < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++s) {
+        if(game.options.cursor_speed == OPTIONS_MENU::CURSOR_SPEED_PRESETS[s]) {
             return s;
         }
     }
@@ -301,7 +302,7 @@ void options_menu_state::load() {
     gui.register_coords("tooltip",           50, 95, 95,  8);
     gui.register_coords("restart_warning",   60,  5, 70,  8);
     gui.read_coords(
-        data_node(GUI_FILE_PATH).get_child_by_name("positions")
+        data_node(OPTIONS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     //Back button.
@@ -363,7 +364,7 @@ void options_menu_state::load() {
     //Cursor speed.
     cursor_speed_picker =
         new picker_gui_item(
-        "Cursor speed: ", "", N_CURSOR_SPEED_PRESETS, get_cursor_speed_idx()
+        "Cursor speed: ", "", OPTIONS_MENU::N_CURSOR_SPEED_PRESETS, get_cursor_speed_idx()
     );
     cursor_speed_picker->on_previous =
     [this] () {
@@ -376,22 +377,22 @@ void options_menu_state::load() {
     cursor_speed_picker->on_get_tooltip =
     [] () {
         size_t idx = 0;
-        for(; idx < N_CURSOR_SPEED_PRESETS; ++idx) {
-            if(CURSOR_SPEED_PRESETS[idx] == options_struct::DEF_CURSOR_SPEED) {
+        for(; idx < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++idx) {
+            if(OPTIONS_MENU::CURSOR_SPEED_PRESETS[idx] == options_struct::DEF_CURSOR_SPEED) {
                 break;
             }
         }
         
         return
             "Cursor speed, when controlling without a mouse. Default: " +
-            CURSOR_SPEED_PRESET_NAMES[idx] + ".";
+            OPTIONS_MENU::CURSOR_SPEED_PRESET_NAMES[idx] + ".";
     };
     gui.add_item(cursor_speed_picker, "cursor_speed");
     
     //Auto-throw mode.
     auto_throw_picker =
         new picker_gui_item(
-        "Auto-throw: ", "", N_AUTO_THROW_PRESETS, get_auto_throw_idx()
+        "Auto-throw: ", "", OPTIONS_MENU::N_AUTO_THROW_PRESETS, get_auto_throw_idx()
     );
     auto_throw_picker->on_previous =
     [this] () {
@@ -404,8 +405,8 @@ void options_menu_state::load() {
     auto_throw_picker->on_get_tooltip =
     [] () -> string {
         size_t idx = 0;
-        for(; idx < N_AUTO_THROW_PRESETS; ++idx) {
-            if(AUTO_THROW_PRESETS[idx] == options_struct::DEF_AUTO_THROW_MODE) {
+        for(; idx < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++idx) {
+            if(OPTIONS_MENU::AUTO_THROW_PRESETS[idx] == options_struct::DEF_AUTO_THROW_MODE) {
                 break;
             }
         }
@@ -430,7 +431,7 @@ void options_menu_state::load() {
             return "";
         }
         }
-        return s + " Default: " + AUTO_THROW_PRESET_NAMES[idx] + ".";
+        return s + " Default: " + OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[idx] + ".";
     };
     gui.add_item(auto_throw_picker, "auto_throw");
     
@@ -543,8 +544,8 @@ void options_menu_state::update() {
     //Cursor speed.
     size_t cur_cursor_speed_idx = INVALID;
     
-    for(size_t s = 0; s < N_CURSOR_SPEED_PRESETS; ++s) {
-        if(game.options.cursor_speed == CURSOR_SPEED_PRESETS[s]) {
+    for(size_t s = 0; s < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++s) {
+        if(game.options.cursor_speed == OPTIONS_MENU::CURSOR_SPEED_PRESETS[s]) {
             cur_cursor_speed_idx = s;
             break;
         }
@@ -553,17 +554,17 @@ void options_menu_state::update() {
     cursor_speed_picker->option =
         cur_cursor_speed_idx == INVALID ?
         i2s(game.options.cursor_speed) + " (custom)" :
-        CURSOR_SPEED_PRESET_NAMES[cur_cursor_speed_idx];
+        OPTIONS_MENU::CURSOR_SPEED_PRESET_NAMES[cur_cursor_speed_idx];
         
     //Auto-throw.
     size_t cur_auto_throw_idx = INVALID;
     
-    for(size_t m = 0; m < N_AUTO_THROW_PRESETS; ++m) {
-        if(game.options.auto_throw_mode == AUTO_THROW_PRESETS[m]) {
+    for(size_t m = 0; m < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++m) {
+        if(game.options.auto_throw_mode == OPTIONS_MENU::AUTO_THROW_PRESETS[m]) {
             cur_auto_throw_idx = m;
             break;
         }
     }
     
-    auto_throw_picker->option = AUTO_THROW_PRESET_NAMES[cur_auto_throw_idx];
+    auto_throw_picker->option = OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[cur_auto_throw_idx];
 }

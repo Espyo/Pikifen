@@ -41,7 +41,8 @@ void gameplay_state::do_aesthetic_logic() {
     
     dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
     for(size_t a = 0; a < cur_leader_ptr->swarm_arrows.size(); ) {
-        cur_leader_ptr->swarm_arrows[a] += SWARM_ARROW_SPEED * game.delta_t;
+        cur_leader_ptr->swarm_arrows[a] +=
+            GAMEPLAY::SWARM_ARROW_SPEED * game.delta_t;
         
         dist max_dist =
             (swarm_magnitude > 0) ?

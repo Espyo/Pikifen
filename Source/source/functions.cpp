@@ -1918,14 +1918,14 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
             new msg_box_info(final_text, speaker_bmp);
         game.states.gameplay->hud->gui.start_animation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
-            gameplay_state::MENU_ENTRY_HUD_MOVE_TIME
+            GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
         );
     } else {
         delete game.states.gameplay->msg_box;
         game.states.gameplay->msg_box = NULL;
         game.states.gameplay->hud->gui.start_animation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
-            gameplay_state::MENU_EXIT_HUD_MOVE_TIME
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
     }
 }
