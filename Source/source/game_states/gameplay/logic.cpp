@@ -1334,7 +1334,7 @@ void gameplay_state::process_mob_touches(
                 push_angle = temp_push_angle;
                 if(both_idle_pikmin) {
                     //Lower the push.
-                    //Basically, make MOB_PUSH_EXTRA_AMOUNT do all the work.
+                    //Basically, make PUSH_EXTRA_AMOUNT do all the work.
                     push_amount = 0.1f;
                     //Deviate the angle slightly. This way, if two Pikmin
                     //are in the same spot, they don't drag each other forever.

@@ -15,11 +15,11 @@
 #include "mob.h"
 
 namespace CONVERTER {
-extern const float CONVERTER_NEW_SEED_Z_OFFSET;
-extern const float CONVERTER_SPEW_ANGLE_SHIFT;
-extern const float CONVERTER_SPEW_H_SPEED;
-extern const float CONVERTER_SPEW_H_SPEED_DEVIATION;
-extern const float CONVERTER_SPEW_V_SPEED;
+extern const float NEW_SEED_Z_OFFSET;
+extern const float SPEW_ANGLE_SHIFT;
+extern const float SPEW_H_SPEED;
+extern const float SPEW_H_SPEED_DEVIATION;
+extern const float SPEW_V_SPEED;
 }
 
 

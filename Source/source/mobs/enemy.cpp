@@ -23,11 +23,11 @@
 
 namespace ENEMY {
 //Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
-const float ENEMY_SPIRIT_SIZE_MULT = 0.7;
+const float SPIRIT_SIZE_MULT = 0.7;
 //Maximum diameter an enemy's spirit can be.
-const float ENEMY_SPIRIT_MAX_SIZE = 128;
+const float SPIRIT_MAX_SIZE = 128;
 //Minimum diameter an enemy's spirit can be.
-const float ENEMY_SPIRIT_MIN_SIZE = 16;
+const float SPIRIT_MIN_SIZE = 16;
 }
 
 
@@ -82,8 +82,8 @@ void enemy::finish_dying_class_specifics() {
     particle par(
         PARTICLE_TYPE_ENEMY_SPIRIT, pos, LARGE_FLOAT,
         clamp(
-            radius * 2 * ENEMY::ENEMY_SPIRIT_SIZE_MULT,
-            ENEMY::ENEMY_SPIRIT_MIN_SIZE, ENEMY::ENEMY_SPIRIT_MAX_SIZE
+            radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
+            ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
         ),
         2, PARTICLE_PRIORITY_MEDIUM
     );

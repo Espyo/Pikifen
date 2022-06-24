@@ -6,16 +6,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    A Purple Pikmin thrown at a Wollywog on water will start flailing while latched
     
     --- v0.22.0 ---
     Code cleanup
-        Constants cleanup. All consts should:
-            Leave const.h and classes, and go into namespaces. The exception is really global stuff like INVALID. The namespaces should be named after the class/subject, in all caps
-                All those that can't should go into const.h
-            Everything in const.h should be constexpr
-            Be declared in the .h files as extern
-            Be defined and commented in the .cpp files
         Make some class members protected, when they're meant to be used by sub-classes
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Check for memory leaks

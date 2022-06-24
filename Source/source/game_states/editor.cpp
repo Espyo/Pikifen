@@ -26,12 +26,12 @@
 
 
 namespace EDITOR {
-//Every icon in the icon bitmap file is these many pixels from the previous.
-const int EDITOR_ICON_BMP_PADDING = 1;
-//Every icon in the icon bitmap file has this size.
-const int EDITOR_ICON_BMP_SIZE = 24;
 //Time until the next click is no longer considered a double-click.
 const float DOUBLE_CLICK_TIMEOUT = 0.5f;
+//Every icon in the icon bitmap file is these many pixels from the previous.
+const int ICON_BMP_PADDING = 1;
+//Every icon in the icon bitmap file has this size.
+const int ICON_BMP_SIZE = 24;
 //How much to zoom in/out with the keyboard keys.
 const float KEYBOARD_CAM_ZOOM = 0.25f;
 //Picker dialog maximum button size.
@@ -886,11 +886,11 @@ void editor::load() {
             editor_icons[i] =
                 al_create_sub_bitmap(
                     bmp_editor_icons,
-                    EDITOR::EDITOR_ICON_BMP_SIZE * i +
-                    EDITOR::EDITOR_ICON_BMP_PADDING * i,
+                    EDITOR::ICON_BMP_SIZE * i +
+                    EDITOR::ICON_BMP_PADDING * i,
                     0,
-                    EDITOR::EDITOR_ICON_BMP_SIZE,
-                    EDITOR::EDITOR_ICON_BMP_SIZE
+                    EDITOR::ICON_BMP_SIZE,
+                    EDITOR::ICON_BMP_SIZE
                 );
         }
     }
@@ -1116,7 +1116,7 @@ void editor::process_mob_type_widgets(
     if(
         ImGui::ImageButton(
             editor_icons[ICON_SEARCH],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f),
             9.0f
         )

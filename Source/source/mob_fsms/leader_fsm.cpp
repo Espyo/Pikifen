@@ -1610,7 +1610,7 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     mob* grabbed_mob = (mob*) info1;
     lea_ptr->hold(
-        grabbed_mob, INVALID, LEADER::LEADER_HELD_MOB_DIST, LEADER::LEADER_HELD_MOB_ANGLE,
+        grabbed_mob, INVALID, LEADER::HELD_GROUP_MEMBER_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     lea_ptr->group->sort(grabbed_mob->subgroup_type_ptr);
@@ -2073,7 +2073,7 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         new track_info_struct(
         tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
     );
-
+    
     switch(tra_ptr->tra_type->riding_pose) {
     case TRACK_RIDING_POSE_STOPPED: {
         m->set_animation(LEADER_ANIM_WALKING);

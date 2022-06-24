@@ -36,6 +36,7 @@ namespace MOB_TYPE {
 const size_t ANIM_IDLING = 0;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
  * category_id:

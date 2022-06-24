@@ -20,12 +20,6 @@
 namespace LEADER {
 //The whistle can't go past this radius, by default.
 const float DEF_WHISTLE_RANGE = 80.0f;
-//Angle at which leaders hold their group members.
-const float LEADER_HELD_MOB_ANGLE = TAU / 2;
-//How far away from the leader is a held group member placed.
-const float LEADER_HELD_MOB_DIST = 1.2f;
-//Invulnerability period after getting hit.
-const float LEADER_INVULN_PERIOD = 1.5f;
 //Auto-throw starts at this cooldown.
 const float AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
 //Auto-throw ends at this cooldown.
@@ -36,6 +30,12 @@ const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
 const float HEALTH_CAUTION_RATIO = 0.3f;
 //How long the low health caution ring lasts for.
 const float HEALTH_CAUTION_RING_DURATION = 2.5f;
+//Angle at which leaders hold their group members.
+const float HELD_GROUP_MEMBER_ANGLE = TAU / 2;
+//How far away from the leader is a held group member placed.
+const float HELD_GROUP_MEMBER_DIST = 1.2f;
+//Invulnerability period after getting hit.
+const float INVULN_PERIOD = 1.5f;
 //Seconds that need to pass before another swarm arrow appears.
 const float SWARM_ARROW_INTERVAL = 0.1f;
 //Swarm particle opacity.
@@ -98,7 +98,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     health_wheel_caution_timer(0.0f) {
     
     team = MOB_TEAM_PLAYER_1;
-    invuln_period = timer(LEADER::LEADER_INVULN_PERIOD);
+    invuln_period = timer(LEADER::INVULN_PERIOD);
     
     subgroup_type_ptr =
         game.states.gameplay->subgroup_types.get_type(
@@ -790,7 +790,7 @@ void leader::swap_held_pikmin(mob* new_pik) {
     
     release(holding[0]);
     hold(
-        new_pik, INVALID, LEADER::LEADER_HELD_MOB_DIST, LEADER::LEADER_HELD_MOB_ANGLE,
+        new_pik, INVALID, LEADER::HELD_GROUP_MEMBER_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     

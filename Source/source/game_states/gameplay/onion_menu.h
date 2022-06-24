@@ -23,8 +23,8 @@ class pikmin_type;
 
 namespace ONION_MENU {
 extern const string GUI_FILE_PATH;
-extern const size_t TYPES_PER_PAGE;
 extern const float RED_TEXT_DURATION;
+extern const size_t TYPES_PER_PAGE;
 }
 
 

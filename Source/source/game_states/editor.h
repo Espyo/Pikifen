@@ -23,9 +23,9 @@ using std::string;
 using std::vector;
 
 namespace EDITOR {
-extern const int EDITOR_ICON_BMP_PADDING;
-extern const int EDITOR_ICON_BMP_SIZE;
 extern const float DOUBLE_CLICK_TIMEOUT;
+extern const int ICON_BMP_PADDING;
+extern const int ICON_BMP_SIZE;
 extern const float KEYBOARD_CAM_ZOOM;
 extern const float PICKER_IMG_BUTTON_MAX_SIZE;
 extern const float PICKER_IMG_BUTTON_MIN_SIZE;

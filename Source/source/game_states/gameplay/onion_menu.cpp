@@ -20,10 +20,10 @@
 namespace ONION_MENU {
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Onion_menu.txt";
-//The Onion menu can only show, at most, these many Pikmin types per page.
-const size_t TYPES_PER_PAGE = 5;
 //How long to let text turn red for.
 const float RED_TEXT_DURATION = 1.0f;
+//The Onion menu can only show, at most, these many Pikmin types per page.
+const size_t TYPES_PER_PAGE = 5;
 }
 
 

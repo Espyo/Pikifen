@@ -94,6 +94,8 @@ public:
     mob_lists mobs;
     //Information about the message box currently active on player 1, if any.
     msg_box_info* msg_box;
+    //ID of the next mob to be created.
+    size_t next_mob_id;
     //Current notification.
     notification_struct notification;
     //Manager of all particles.

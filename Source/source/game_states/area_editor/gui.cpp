@@ -889,7 +889,7 @@ void area_editor::process_gui_panel_details() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_ADD],
-                    ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_new_tree_shadow_button();
@@ -906,7 +906,7 @@ void area_editor::process_gui_panel_details() {
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_REMOVE],
-                        ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     press_remove_tree_shadow_button();
@@ -1495,7 +1495,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_new_sector_button();
@@ -1511,7 +1511,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD_CIRCLE_SECTOR],
-                ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_circle_sector_button();
@@ -1529,7 +1529,7 @@ void area_editor::process_gui_panel_layout() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_remove_edge_button();
@@ -1570,7 +1570,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 sel_filter_bmp,
-                ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_selection_filter_button();
@@ -1593,7 +1593,7 @@ void area_editor::process_gui_panel_layout() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_SELECT_NONE],
-                    ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 clear_selection();
@@ -1710,7 +1710,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_INFO],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Info"
         )
@@ -1725,7 +1725,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_SECTORS],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Layout"
         )
@@ -1740,7 +1740,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_MOBS],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Objects"
         )
@@ -1755,7 +1755,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_PATHS],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Paths"
         )
@@ -1770,7 +1770,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_DETAILS],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Details"
         )
@@ -1785,7 +1785,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_REVIEW],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Review"
         )
@@ -1801,7 +1801,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_TOOLS],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Tools"
         )
@@ -1928,7 +1928,7 @@ void area_editor::process_gui_panel_mob() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
@@ -1948,7 +1948,7 @@ void area_editor::process_gui_panel_mob() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 if((*selected_mobs.begin())->links.empty()) {
@@ -2065,7 +2065,7 @@ void area_editor::process_gui_panel_mobs() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_new_mob_button();
@@ -2083,7 +2083,7 @@ void area_editor::process_gui_panel_mobs() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_remove_mob_button();
@@ -2098,7 +2098,7 @@ void area_editor::process_gui_panel_mobs() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_DUPLICATE],
-                    ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_duplicate_mobs_button();
@@ -2242,7 +2242,7 @@ void area_editor::process_gui_panel_paths() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_new_path_button();
@@ -2262,7 +2262,7 @@ void area_editor::process_gui_panel_paths() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_remove_path_button();
@@ -2603,7 +2603,7 @@ void area_editor::process_gui_panel_sector() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_ADD],
-                    ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 ImGui::OpenPopup("addHazard");
@@ -2653,7 +2653,7 @@ void area_editor::process_gui_panel_sector() {
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_REMOVE],
-                        ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     sector* s_ptr = *selected_sectors.begin();
@@ -3185,7 +3185,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_QUIT],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_quit_button();
@@ -3201,7 +3201,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_LOAD],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_load_button();
@@ -3220,7 +3220,7 @@ void area_editor::process_gui_toolbar() {
             has_unsaved_changes ?
             editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_save_button();
@@ -3236,7 +3236,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_PLAY],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_quick_play_button();
@@ -3253,7 +3253,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_UNDO],
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             ImVec2(0.0f, 0.0f),
             ImVec2(1.0f, 1.0f),
             -1,
@@ -3281,7 +3281,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_REFERENCE],
-                ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_reference_button();
@@ -3336,7 +3336,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             snap_mode_bmp,
-            ImVec2(EDITOR::EDITOR_ICON_BMP_SIZE, EDITOR::EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_snap_mode_button();

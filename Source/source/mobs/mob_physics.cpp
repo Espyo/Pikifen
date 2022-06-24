@@ -296,14 +296,14 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         //of recently-spawned objects from pushing each other with insane force.
         //Setting the amount to 0 means it'll use the push provided by
         //MOB_PUSH_EXTRA_AMOUNT exclusively.
-        if(time_alive < MOB::MOB_PUSH_THROTTLE_TIMEOUT) {
+        if(time_alive < MOB::PUSH_THROTTLE_TIMEOUT) {
             push_amount = 0;
         }
         
         move_speed->x +=
-            cos(push_angle) * (push_amount + MOB::MOB_PUSH_EXTRA_AMOUNT);
+            cos(push_angle) * (push_amount + MOB::PUSH_EXTRA_AMOUNT);
         move_speed->y +=
-            sin(push_angle) * (push_amount + MOB::MOB_PUSH_EXTRA_AMOUNT);
+            sin(push_angle) * (push_amount + MOB::PUSH_EXTRA_AMOUNT);
     }
     
     //Scrolling floors.

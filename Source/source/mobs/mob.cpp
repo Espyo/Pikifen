@@ -79,17 +79,17 @@ const float GROUP_SPOT_MAX_DEVIATION = MOB::GROUP_SPOT_INTERVAL * 0.60f;
 //When using the height effect, scale the mob by this factor.
 const float HEIGHT_EFFECT_FACTOR = 0.0017;
 //Base horizontal speed at which mobs move due to attacks with knockback.
-const float MOB_KNOCKBACK_H_POWER = 64.0f;
+const float KNOCKBACK_H_POWER = 64.0f;
 //Base vertical speed at which mobs move due to attacks with knockback.
-const float MOB_KNOCKBACK_V_POWER = 800.0f;
-//A little extra push amount when mobs intersect. Can't be throttled.
-const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
-//Before this much time, a mob can't push others as effectively.
-const float MOB_PUSH_THROTTLE_TIMEOUT = 1.0f;
+const float KNOCKBACK_V_POWER = 800.0f;
 //When an opponent is hit, it takes this long to be possible to hit it again.
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 //Wait these many seconds before allowing another Pikmin to be called out.
 const float PIKMIN_NEST_CALL_INTERVAL = 0.01f;
+//A little extra push amount when mobs intersect. Can't be throttled.
+const float PUSH_EXTRA_AMOUNT = 50.0f;
+//Before this much time, a mob can't push others as effectively.
+const float PUSH_THROTTLE_TIMEOUT = 1.0f;
 //Multiply the stretch of the shadow by this much.
 const float SHADOW_STRETCH_MULT = 0.5f;
 //For every unit above the ground that the mob is on,
@@ -111,7 +111,6 @@ const float THROW_PARTICLE_INTERVAL = 0.02f;
 const float WAVE_RING_DURATION = 1.0f;
 }
 
-size_t next_mob_id = 0;
 
 /* ----------------------------------------------------------------------------
  * Creates a mob of no particular type.
@@ -165,7 +164,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     delivery_info(nullptr),
     track_info(nullptr),
     stored_inside_another(nullptr),
-    id(next_mob_id),
+    id(game.states.gameplay->next_mob_id),
     health(type->max_health),
     max_health(type->max_health),
     invuln_period(0),
@@ -189,7 +188,7 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     max_span(type->max_span),
     can_block_paths(false) {
     
-    next_mob_id++;
+    game.states.gameplay->next_mob_id++;
     
     sector* sec = get_sector(pos, nullptr, true);
     if(sec) {
@@ -315,9 +314,9 @@ void mob::apply_attack_damage(
 void mob::apply_knockback(const float knockback, const float knockback_angle) {
     if(knockback != 0) {
         stop_chasing();
-        speed.x = cos(knockback_angle) * knockback * MOB::MOB_KNOCKBACK_H_POWER;
-        speed.y = sin(knockback_angle) * knockback * MOB::MOB_KNOCKBACK_H_POWER;
-        speed_z = MOB::MOB_KNOCKBACK_V_POWER;
+        speed.x = cos(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
+        speed.y = sin(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
+        speed_z = MOB::KNOCKBACK_V_POWER;
         face(get_angle(speed) + TAU / 2, NULL);
         start_height_effect();
     }

@@ -18,10 +18,10 @@
 
 
 namespace SHIP {
-extern const unsigned char SHIP_CONTROL_POINT_RING_AMOUNT;
-extern const float SHIP_CONTROL_POINT_ANIM_DUR;
-extern const float SHIP_TRACTOR_BEAM_EMIT_RATE;
-extern const float SHIP_TRACTOR_BEAM_RING_ANIM_DUR;
+extern const float CONTROL_POINT_ANIM_DUR;
+extern const unsigned char CONTROL_POINT_RING_AMOUNT;
+extern const float TRACTOR_BEAM_EMIT_RATE;
+extern const float TRACTOR_BEAM_RING_ANIM_DUR;
 }
 
 /* ----------------------------------------------------------------------------

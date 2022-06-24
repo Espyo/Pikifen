@@ -50,15 +50,15 @@ const bool DEF_EDITOR_MMB_PAN = false;
 //Default value for the editor mouse drag threshold.
 const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
 //Default value for the editor primary color.
-const float DEF_EDITOR_PRIMARY_COLOR[3] = {0.05f, 0.05f, 0.05f};
+const ALLEGRO_COLOR DEF_EDITOR_PRIMARY_COLOR = {0.05f, 0.05f, 0.05f, 1.0f};
 //Default value for the editor secondary color.
-const float DEF_EDITOR_SECONDARY_COLOR[3] = {0.19f, 0.47f, 0.78f};
-//Default value for the editor text color.
-const float DEF_EDITOR_TEXT_COLOR[3] = {1.0f, 1.0f, 1.0f};
-//Default value for whether to use custom styles in editors.
-const bool DEF_EDITOR_USE_CUSTOM_STYLE = false;
+const ALLEGRO_COLOR DEF_EDITOR_SECONDARY_COLOR = {0.19f, 0.47f, 0.78f, 1.0f};
 //Default value for whether to show tooltips in editors.
 const bool DEF_EDITOR_SHOW_TOOLTIPS = true;
+//Default value for the editor text color.
+const ALLEGRO_COLOR DEF_EDITOR_TEXT_COLOR = {1.0f, 1.0f, 1.0f, 1.0f};
+//Default value for whether to use custom styles in editors.
+const bool DEF_EDITOR_USE_CUSTOM_STYLE = false;
 //Default value for the joystick maximum deadzone.
 const float DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 //Default value for the joystick minimum deadzone.
@@ -108,7 +108,10 @@ options_struct::options_struct() :
     draw_cursor_trail(OPTIONS::DEF_DRAW_CURSOR_TRAIL),
     editor_mmb_pan(OPTIONS::DEF_EDITOR_MMB_PAN),
     editor_mouse_drag_threshold(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
+    editor_primary_color(OPTIONS::DEF_EDITOR_PRIMARY_COLOR),
+    editor_secondary_color(OPTIONS::DEF_EDITOR_SECONDARY_COLOR),
     editor_show_tooltips(OPTIONS::DEF_EDITOR_SHOW_TOOLTIPS),
+    editor_text_color(OPTIONS::DEF_EDITOR_TEXT_COLOR),
     editor_use_custom_style(OPTIONS::DEF_EDITOR_USE_CUSTOM_STYLE),
     intended_win_fullscreen(OPTIONS::DEF_WIN_FULLSCREEN),
     intended_win_h(OPTIONS::DEF_WIN_H),
@@ -128,21 +131,6 @@ options_struct::options_struct() :
     mouse_moves_cursor[1] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[1];
     mouse_moves_cursor[2] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[2];
     mouse_moves_cursor[3] = OPTIONS::DEF_MOUSE_MOVES_CURSOR[3];
-    
-    editor_primary_color.r = OPTIONS::DEF_EDITOR_PRIMARY_COLOR[0];
-    editor_primary_color.g = OPTIONS::DEF_EDITOR_PRIMARY_COLOR[1];
-    editor_primary_color.b = OPTIONS::DEF_EDITOR_PRIMARY_COLOR[2];
-    editor_primary_color.a = 1.0f;
-    
-    editor_secondary_color.r = OPTIONS::DEF_EDITOR_SECONDARY_COLOR[0];
-    editor_secondary_color.g = OPTIONS::DEF_EDITOR_SECONDARY_COLOR[1];
-    editor_secondary_color.b = OPTIONS::DEF_EDITOR_SECONDARY_COLOR[2];
-    editor_secondary_color.a = 1.0f;
-    
-    editor_text_color.r = OPTIONS::DEF_EDITOR_TEXT_COLOR[0];
-    editor_text_color.g = OPTIONS::DEF_EDITOR_TEXT_COLOR[1];
-    editor_text_color.b = OPTIONS::DEF_EDITOR_TEXT_COLOR[2];
-    editor_text_color.a = 1.0f;
 }
 
 

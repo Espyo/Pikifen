@@ -17,15 +17,15 @@
 
 namespace CONVERTER {
 //A converter-spat seed starts with this Z offset from the converter.
-const float CONVERTER_NEW_SEED_Z_OFFSET = 32.0f;
+const float NEW_SEED_Z_OFFSET = 32.0f;
 //After spitting a seed, the next seed's angle shifts by this much.
-const float CONVERTER_SPEW_ANGLE_SHIFT = TAU * 0.12345;
+const float SPEW_ANGLE_SHIFT = TAU * 0.12345;
 //A converter-spat seed is this quick, horizontally.
-const float CONVERTER_SPEW_H_SPEED = 90.0f;
+const float SPEW_H_SPEED = 90.0f;
 //Deviate the seed's horizontal speed by this much, more or less.
-const float CONVERTER_SPEW_H_SPEED_DEVIATION = 10.0f;
+const float SPEW_H_SPEED_DEVIATION = 10.0f;
 //A converter-spat seed is this quick, vertically.
-const float CONVERTER_SPEW_V_SPEED = 1200.0f;
+const float SPEW_V_SPEED = 1200.0f;
 }
 
 
@@ -112,17 +112,17 @@ void converter::spew() {
         }
         
         float horizontal_strength =
-            CONVERTER::CONVERTER_SPEW_H_SPEED +
+            CONVERTER::SPEW_H_SPEED +
             randomf(
-                -CONVERTER::CONVERTER_SPEW_H_SPEED_DEVIATION,
-                CONVERTER::CONVERTER_SPEW_H_SPEED_DEVIATION
+                -CONVERTER::SPEW_H_SPEED_DEVIATION,
+                CONVERTER::SPEW_H_SPEED_DEVIATION
             );
         spew_pikmin_seed(
-            pos, z + CONVERTER::CONVERTER_NEW_SEED_Z_OFFSET, current_type,
-            next_spew_angle, horizontal_strength, CONVERTER::CONVERTER_SPEW_V_SPEED
+            pos, z + CONVERTER::NEW_SEED_Z_OFFSET, current_type,
+            next_spew_angle, horizontal_strength, CONVERTER::SPEW_V_SPEED
         );
         
-        next_spew_angle += CONVERTER::CONVERTER_SPEW_ANGLE_SHIFT;
+        next_spew_angle += CONVERTER::SPEW_ANGLE_SHIFT;
         next_spew_angle = normalize_angle(next_spew_angle);
     }
     

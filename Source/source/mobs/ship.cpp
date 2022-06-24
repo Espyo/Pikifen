@@ -20,14 +20,14 @@
 
 
 namespace SHIP {
-//The amount of rings the ship's control point has.
-const unsigned char SHIP_CONTROL_POINT_RING_AMOUNT = 4;
 //Animate the control point's ring for this long.
-const float SHIP_CONTROL_POINT_ANIM_DUR = 10.0f;
+const float CONTROL_POINT_ANIM_DUR = 10.0f;
+//The amount of rings the ship's control point has.
+const unsigned char CONTROL_POINT_RING_AMOUNT = 4;
 //How often the tractor beam generates a ring.
-const float SHIP_TRACTOR_BEAM_EMIT_RATE = 0.15f;
+const float TRACTOR_BEAM_EMIT_RATE = 0.15f;
 //Animate each tractor beam ring for this long.
-const float SHIP_TRACTOR_BEAM_RING_ANIM_DUR = 0.8f;
+const float TRACTOR_BEAM_RING_ANIM_DUR = 0.8f;
 }
 
 
@@ -44,7 +44,7 @@ ship::ship(const point &pos, ship_type* type, float angle) :
     mob(pos, type, angle),
     shi_type(type),
     nest(nullptr),
-    next_tractor_beam_ring_timer(SHIP::SHIP_TRACTOR_BEAM_EMIT_RATE),
+    next_tractor_beam_ring_timer(SHIP::TRACTOR_BEAM_EMIT_RATE),
     mobs_being_beamed(0),
     control_point_final_pos(
         rotate_point(type->control_point_offset, angle)
@@ -91,8 +91,8 @@ void ship::draw_mob() {
     mob::draw_mob();
     
     //Draw the rings on the control point.
-    for(unsigned char b = 0; b < SHIP::SHIP_CONTROL_POINT_RING_AMOUNT; ++b) {
-        float ring_idx_ratio = b / (float) SHIP::SHIP_CONTROL_POINT_RING_AMOUNT;
+    for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; ++b) {
+        float ring_idx_ratio = b / (float) SHIP::CONTROL_POINT_RING_AMOUNT;
         
         float ring_hue = 360 * ring_idx_ratio;
         ALLEGRO_COLOR ring_color = al_color_hsl(ring_hue, 1.0f, 0.8f);
@@ -100,10 +100,10 @@ void ship::draw_mob() {
         float ring_anim_ratio =
             fmod(
                 game.states.gameplay->area_time_passed +
-                SHIP::SHIP_CONTROL_POINT_ANIM_DUR * ring_idx_ratio,
-                SHIP::SHIP_CONTROL_POINT_ANIM_DUR
+                SHIP::CONTROL_POINT_ANIM_DUR * ring_idx_ratio,
+                SHIP::CONTROL_POINT_ANIM_DUR
             );
-        ring_anim_ratio /= SHIP::SHIP_CONTROL_POINT_ANIM_DUR;
+        ring_anim_ratio /= SHIP::CONTROL_POINT_ANIM_DUR;
         
         unsigned char ring_alpha = 120;
         
@@ -147,7 +147,7 @@ void ship::draw_mob() {
     for(char r = tractor_beam_rings.size() - 1; r > 0; r--) {
     
         float ring_anim_ratio =
-            tractor_beam_rings[r] / SHIP::SHIP_TRACTOR_BEAM_RING_ANIM_DUR;
+            tractor_beam_rings[r] / SHIP::TRACTOR_BEAM_RING_ANIM_DUR;
             
         unsigned char ring_alpha = 80;
         if(ring_anim_ratio <= 0.3f) {
@@ -268,7 +268,7 @@ void ship::tick_class_specifics(const float delta_t) {
     for(size_t r = 0; r < tractor_beam_rings.size(); ) {
         //Erase rings that have reached the end of their animation.
         tractor_beam_rings[r] += delta_t;
-        if(tractor_beam_rings[r] > SHIP::SHIP_TRACTOR_BEAM_RING_ANIM_DUR) {
+        if(tractor_beam_rings[r] > SHIP::TRACTOR_BEAM_RING_ANIM_DUR) {
             tractor_beam_rings.erase(
                 tractor_beam_rings.begin() + r
             );

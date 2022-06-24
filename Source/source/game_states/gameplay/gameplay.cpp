@@ -86,6 +86,7 @@ gameplay_state::gameplay_state() :
     hud(nullptr),
     leader_cursor_sector(nullptr),
     msg_box(nullptr),
+    next_mob_id(0),
     particles(0),
     precipitation(0),
     selected_spray(0),
@@ -522,6 +523,7 @@ void gameplay_state::load() {
     }
     
     //Generate mobs.
+    next_mob_id = 0;
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Object generation");
     }
