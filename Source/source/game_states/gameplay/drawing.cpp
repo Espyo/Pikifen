@@ -1098,7 +1098,7 @@ void gameplay_state::draw_throw_preview() {
         float y_at_edge =
             tan(throw_v_angle) * x_at_edge -
             (
-                -GRAVITY_ADDER /
+                -MOB::GRAVITY_ADDER /
                 (
                     2 * throw_speed * throw_speed *
                     cos(throw_v_angle) * cos(throw_v_angle)

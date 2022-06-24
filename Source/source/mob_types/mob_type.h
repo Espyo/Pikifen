@@ -32,7 +32,9 @@ using std::vector;
 
 typedef vector<std::pair<size_t, string> > anim_conversion_vector;
 
-const size_t ANIM_IDLING = 0;
+namespace MOB_TYPE {
+extern const size_t ANIM_IDLING;
+}
 
 
 /* ----------------------------------------------------------------------------

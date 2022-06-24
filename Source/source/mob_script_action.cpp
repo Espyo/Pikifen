@@ -920,7 +920,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
             size_t c = randomi(0, choices.size() - 1);
             if(
                 dist(choices[c]->pos, data.m->pos) >
-                chase_info_struct::DEF_TARGET_DISTANCE
+                MOB::DEF_CHASE_TARGET_DISTANCE
             ) {
                 final_stop = choices[c];
                 break;
@@ -1945,7 +1945,7 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
     calculate_throw(
         data.m->focused_mob->pos, data.m->focused_mob->z,
         point(s2f(data.args[0]), s2f(data.args[1])), s2f(data.args[2]),
-        max_height, GRAVITY_ADDER,
+        max_height, MOB::GRAVITY_ADDER,
         &data.m->focused_mob->speed,
         &data.m->focused_mob->speed_z,
         NULL

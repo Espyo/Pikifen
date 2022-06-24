@@ -2672,7 +2672,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         &carriable_mob->pos, &carriable_mob->z,
         closest_spot_ptr->pos, 0.0f
     );
-    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+    pik_ptr->set_timer(PIKMIN::PIKMIN_GOTO_TIMEOUT);
 
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     
@@ -2720,7 +2720,7 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
         &(free_spot->absolute_pos), &tas_ptr->z,
         point(), tas_ptr->tas_type->spots_z
     );
-    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+    pik_ptr->set_timer(PIKMIN::PIKMIN_GOTO_TIMEOUT);
     
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
     
@@ -2856,7 +2856,7 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
         point(), 0.0f, 0,
         pik_ptr->radius + too_ptr->radius
     );
-    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
+    pik_ptr->set_timer(PIKMIN::PIKMIN_GOTO_TIMEOUT);
 
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
 
@@ -2864,8 +2864,6 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
     
 }
 
-
-const float PIKMIN_DISMISS_TIMEOUT = 4.0f;
 
 /* ----------------------------------------------------------------------------
  * When a Pikmin needs to get going to its dismiss spot.
@@ -2883,7 +2881,7 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
         pik_ptr->can_move_in_midair = true;
     }
 
-    m->set_timer(PIKMIN_DISMISS_TIMEOUT);
+    m->set_timer(PIKMIN::DISMISS_TIMEOUT);
     
     m->set_animation(PIKMIN_ANIM_WALKING);
 }
@@ -3187,7 +3185,7 @@ void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
         ),
         m->z
     );
-    m->set_timer(PIKMIN_PANIC_CHASE_INTERVAL);
+    m->set_timer(PIKMIN::PIKMIN_PANIC_CHASE_INTERVAL);
 }
 
 

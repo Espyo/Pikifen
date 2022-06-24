@@ -126,7 +126,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
         toucher->z,
         target_mob->pos,
         target_mob->z + target_mob->height,
-        max_h, GRAVITY_ADDER,
+        max_h, MOB::GRAVITY_ADDER,
         &toucher->speed,
         &toucher->speed_z,
         &angle

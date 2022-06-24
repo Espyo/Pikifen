@@ -40,27 +40,44 @@ extern size_t next_mob_id;
 
 namespace MOB {
 extern const float CARRIED_MOB_ACCELERATION;
+extern const float CARRY_STUCK_CIRCLING_RADIUS;
+extern const float CARRY_STUCK_SPEED_MULTIPLIER;
+extern const float CARRY_SWAY_TIME_MULT;
+extern const float CARRY_SWAY_X_TRANSLATION_AMOUNT;
+extern const float CARRY_SWAY_Y_TRANSLATION_AMOUNT;
+extern const float CARRY_SWAY_ROTATION_AMOUNT;
 extern const float DEF_ACCELERATION;
+extern const float DEF_CHASE_TARGET_DISTANCE;
 extern const float DEF_ROTATION_SPEED;
+extern const float DELIVERY_SUCK_SHAKING_TIME_MULT;
+extern const float DELIVERY_SUCK_SHAKING_MULT;
 extern const float DELIVERY_SUCK_TIME;
+extern const float DELIVERY_TOSS_MULT;
 extern const float DELIVERY_TOSS_TIME;
+extern const float DELIVERY_TOSS_WINDUP_MULT;
+extern const float DELIVERY_TOSS_X_OFFSET;
+extern const float DAMAGE_SQUASH_DURATION;
+extern const float DAMAGE_SQUASH_AMOUNT;
+extern const float FREE_MOVE_THRESHOLD;
+extern const float GRAVITY_ADDER;
 extern const float GROUP_SHUFFLE_DIST;
 extern const float GROUP_SPOT_INTERVAL;
+extern const float GROUP_SPOT_MAX_DEVIATION;
 extern const float HEIGHT_EFFECT_FACTOR;
+extern const float MOB_KNOCKBACK_H_POWER;
+extern const float MOB_KNOCKBACK_V_POWER;
+extern const float MOB_PUSH_EXTRA_AMOUNT;
+extern const float MOB_PUSH_THROTTLE_TIMEOUT;
 extern const float OPPONENT_HIT_REGISTER_TIMEOUT;
+extern const float PIKMIN_NEST_CALL_INTERVAL;
 extern const float SHADOW_STRETCH_MULT;
 extern const float SHADOW_Y_MULT;
 extern const float SMACK_PARTICLE_DUR;
 extern const float SWARM_MARGIN;
 extern const float SWARM_VERTICAL_SCALE;
+extern const float STATUS_SHAKING_TIME_MULT;
 extern const float THROW_PARTICLE_INTERVAL;
 };
-
-//Accelerate the Z speed of mobs affected by gravity by this amount per second.
-const float GRAVITY_ADDER = -2600.0f;
-const float MOB_KNOCKBACK_H_POWER = 64.0f;
-const float MOB_KNOCKBACK_V_POWER = 800.0f;
-const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -72,9 +89,6 @@ const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
  */
 class mob {
 public:
-    static const float DAMAGE_SQUASH_DURATION;
-    static const float DAMAGE_SQUASH_AMOUNT;
-    
     //Basic information.
     //What type of (generic) mob it is. (e.g. Olimar, Red Bulborb, etc.)
     mob_type* type;
@@ -336,13 +350,13 @@ public:
         point* orig_coords, float* orig_z,
         const point &offset = point(), const float offset_z = 0.0f,
         const unsigned char flags = 0,
-        const float target_distance = chase_info_struct::DEF_TARGET_DISTANCE,
+        const float target_distance = MOB::DEF_CHASE_TARGET_DISTANCE,
         const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
     void chase(
         const point &coords, const float coords_z,
         const unsigned char flags = 0,
-        const float target_distance = chase_info_struct::DEF_TARGET_DISTANCE,
+        const float target_distance = MOB::DEF_CHASE_TARGET_DISTANCE,
         const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
     void stop_chasing();

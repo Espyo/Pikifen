@@ -21,6 +21,8 @@
 #include "mob.h"
 
 namespace PIKMIN {
+//Time until moving Pikmin timeout and stay in place, after being dismissed.
+const float DISMISS_TIMEOUT = 4.0f;
 //If the Pikmin is within this distance of the mob, it can ground attack.
 const float GROUNDED_ATTACK_DIST = 5.0f;
 //The idle glow spins these many radians per second.
@@ -29,6 +31,12 @@ const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 const float KNOCKED_DOWN_DURATION = 2.0f;
 //A whistled Pikmin that got knocked down loses this much in lie-down time.
 const float KNOCKED_DOWN_WHISTLE_BONUS = 1.3f;
+//Timeout before a Pikmin gives up, when ordered to go to something.
+const float PIKMIN_GOTO_TIMEOUT = 5.0f;
+//Invulnerability period after getting hit.
+const float PIKMIN_INVULN_PERIOD = 0.7f;
+//Interval for when a Pikmin decides a new chase spot, when panicking.
+const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
 //A plucked Pikmin is thrown behind the leader at this speed, horizontally.
 const float PLUCK_THROW_HOR_SPEED = 80.0f;
 //A plucked Pikmin is thrown behind the leader at this speed, vertically.
@@ -71,7 +79,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     must_follow_link_as_leader(false),
     temp_i(0) {
     
-    invuln_period = timer(PIKMIN_INVULN_PERIOD);
+    invuln_period = timer(PIKMIN::PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1;
     subgroup_type_ptr =
         game.states.gameplay->subgroup_types.get_type(

@@ -196,11 +196,6 @@ H_MOVE_RESULTS mob::get_movement_edge_intersections(
 }
 
 
-//Before this much time, a mob can't push others as effectively.
-const float MOB_PUSH_THROTTLE_TIMEOUT = 1.0f;
-//If a mob is this close to the destination, it can move without tank controls.
-const float FREE_MOVE_THRESHOLD = 10.0f;
-
 /* ----------------------------------------------------------------------------
  * Calculates how much the mob is going to move horizontally, for the purposes
  * of movement physics calculation.
@@ -272,7 +267,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
                 
             bool can_free_move =
                 (chase_info.flags & CHASE_FLAG_ANY_ANGLE) ||
-                d <= FREE_MOVE_THRESHOLD;
+                d <= MOB::FREE_MOVE_THRESHOLD;
                 
             float movement_angle =
                 can_free_move ?
@@ -301,14 +296,14 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         //of recently-spawned objects from pushing each other with insane force.
         //Setting the amount to 0 means it'll use the push provided by
         //MOB_PUSH_EXTRA_AMOUNT exclusively.
-        if(time_alive < MOB_PUSH_THROTTLE_TIMEOUT) {
+        if(time_alive < MOB::MOB_PUSH_THROTTLE_TIMEOUT) {
             push_amount = 0;
         }
         
         move_speed->x +=
-            cos(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
+            cos(push_angle) * (push_amount + MOB::MOB_PUSH_EXTRA_AMOUNT);
         move_speed->y +=
-            sin(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
+            sin(push_angle) * (push_amount + MOB::MOB_PUSH_EXTRA_AMOUNT);
     }
     
     //Scrolling floors.
@@ -774,7 +769,7 @@ void mob::tick_vertical_movement_physics(
     
     //Gravity.
     if(apply_gravity && !can_move_in_midair && !holder.m) {
-        speed_z = old_speed_z + delta_t* gravity_mult * GRAVITY_ADDER;
+        speed_z = old_speed_z + delta_t* gravity_mult * MOB::GRAVITY_ADDER;
     }
     
     //Apply the change in Z.

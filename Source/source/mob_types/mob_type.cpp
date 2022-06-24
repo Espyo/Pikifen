@@ -30,6 +30,12 @@
 
 using std::string;
 
+
+namespace MOB_TYPE {
+//ID of the default, "idling" animation, in an animation database.
+const size_t ANIM_IDLING = 0;
+}
+
 /* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
  * category_id:

@@ -15,6 +15,13 @@
 #include "mob.h"
 
 
+namespace ENEMY {
+extern const float ENEMY_SPIRIT_SIZE_MULT;
+extern const float ENEMY_SPIRIT_MAX_SIZE;
+extern const float ENEMY_SPIRIT_MIN_SIZE;
+}
+
+
 /* ----------------------------------------------------------------------------
  * I don't need to explain what an enemy is.
  */

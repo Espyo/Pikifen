@@ -46,8 +46,6 @@ void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
 }
 
 
-const float CARRY_STUCK_CIRCLING_RADIUS = 8.0f;
-const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
 /* ----------------------------------------------------------------------------
  * When it's time to become stuck and move in circles.
  * m:
@@ -61,8 +59,8 @@ void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
     engine_assert(m->carry_info != NULL, m->print_state_history());
     
     m->circle_around(
-        NULL, m->pos, CARRY_STUCK_CIRCLING_RADIUS, true,
-        m->carry_info->get_speed() * CARRY_STUCK_SPEED_MULTIPLIER,
+        NULL, m->pos, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
+        m->carry_info->get_speed() * MOB::CARRY_STUCK_SPEED_MULTIPLIER,
         true
     );
 }

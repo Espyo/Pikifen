@@ -18,6 +18,12 @@
 #include "../utils/string_utils.h"
 
 
+namespace BRIDGE {
+//Width of the bridge's main floor, i.e., sans rails.
+const float FLOOR_WIDTH = 192.0f;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Creates a bridge mob.
  * pos:
@@ -64,8 +70,6 @@ bool bridge::check_health() {
         custom_category->get_type("Bridge component");
     float chunk_width = total_length / total_chunks_needed;
     vector<mob*> new_mobs;
-    
-    const float BRIDGE_WIDTH = 192.0f;
     
     //Start creating all the necessary chunks.
     while(chunks < expected_chunks) {
@@ -123,13 +127,13 @@ bool bridge::check_health() {
                 );
             floor_component->z = start_z + z_offset;
             floor_component->set_rectangular_dim(
-                point(chunk_width, BRIDGE_WIDTH)
+                point(chunk_width, BRIDGE::FLOOR_WIDTH)
             );
             new_mobs.push_back(floor_component);
             
             //Then, the left rail component.
             offset.x = x_offset;
-            offset.y = -BRIDGE_WIDTH / 2.0f - bri_type->rail_width / 2.0f;
+            offset.y = -BRIDGE::FLOOR_WIDTH / 2.0f - bri_type->rail_width / 2.0f;
             offset = rotate_point(offset, angle);
             mob* left_rail_component =
                 create_mob(
@@ -151,7 +155,7 @@ bool bridge::check_health() {
             
             //Finally, the right rail component.
             offset.x = x_offset;
-            offset.y = BRIDGE_WIDTH / 2.0f + bri_type->rail_width / 2.0f;
+            offset.y = BRIDGE::FLOOR_WIDTH / 2.0f + bri_type->rail_width / 2.0f;
             offset = rotate_point(offset, angle);
             mob* right_rail_component =
                 create_mob(

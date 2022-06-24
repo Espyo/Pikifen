@@ -22,7 +22,25 @@ class pikmin;
 using std::size_t;
 
 namespace LEADER {
+extern const float AUTO_THROW_COOLDOWN_MAX_DURATION;
+extern const float AUTO_THROW_COOLDOWN_MIN_DURATION;
+extern const float AUTO_THROW_COOLDOWN_SPEED;
 extern const float DEF_WHISTLE_RANGE;
+extern const float HEALTH_CAUTION_RATIO;
+extern const float HEALTH_CAUTION_RING_DURATION;
+extern const float LEADER_HELD_MOB_ANGLE;
+extern const float LEADER_HELD_MOB_DIST;
+extern const float LEADER_INVULN_PERIOD;
+extern const float SWARM_ARROW_INTERVAL;
+extern const float SWARM_PARTICLE_ALPHA;
+extern const float SWARM_PARTICLE_ANGLE_DEVIATION;
+extern const float SWARM_PARTICLE_FRICTION;
+extern const float SWARM_PARTICLE_MAX_DURATION;
+extern const float SWARM_PARTICLE_MIN_DURATION;
+extern const float SWARM_PARTICLE_SIZE;
+extern const float SWARM_PARTICLE_SPEED_DEVIATION;
+extern const float SWARM_PARTICLE_SPEED_MULT;
+extern const float THROW_COOLDOWN_DURATION;
 }
 
 
@@ -115,13 +133,6 @@ public:
     //Mob drawing routine.
     void draw_mob();
     
-    static const float AUTO_THROW_COOLDOWN_MAX_DURATION;
-    static const float AUTO_THROW_COOLDOWN_MIN_DURATION;
-    static const float AUTO_THROW_COOLDOWN_SPEED;
-    static const float HEALTH_CAUTION_RATIO;
-    static const float HEALTH_CAUTION_RING_DURATION;
-    static const float SWARM_ARROWS_INTERVAL;
-    static const float THROW_COOLDOWN_DURATION;
     
 protected:
     //Tick class-specific logic.

@@ -17,21 +17,18 @@
 #include "leader.h"
 
 
+namespace SHIP {
+extern const unsigned char SHIP_CONTROL_POINT_RING_AMOUNT;
+extern const float SHIP_CONTROL_POINT_ANIM_DUR;
+extern const float SHIP_TRACTOR_BEAM_EMIT_RATE;
+extern const float SHIP_TRACTOR_BEAM_RING_ANIM_DUR;
+}
+
 /* ----------------------------------------------------------------------------
  * A ship is where "treasure" is delivered to.
  */
 class ship : public mob {
 public:
-    //The amount of rings the ship's control point has.
-    static const unsigned char SHIP_CONTROL_POINT_RING_AMOUNT;
-    //Animate the control point's ring for this long.
-    static const float SHIP_CONTROL_POINT_ANIM_DUR;
-    
-    //How often the tractor beam generates a ring.
-    static const float SHIP_TRACTOR_BEAM_EMIT_RATE;
-    //Animate each tractor beam ring for this long.
-    static const float SHIP_TRACTOR_BEAM_RING_ANIM_DUR;
-    
     //What type of ship it is.
     ship_type* shi_type;
     

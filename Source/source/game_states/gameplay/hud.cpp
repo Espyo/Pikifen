@@ -168,21 +168,21 @@ hud_struct::hud_struct() :
                 float caution_ring_scale =
                     interpolate_number(
                         health.caution_timer,
-                        0.0f, leader::HEALTH_CAUTION_RING_DURATION,
+                        0.0f, LEADER::HEALTH_CAUTION_RING_DURATION,
                         1.0f, 2.0f
                     );
                 unsigned char caution_ring_alpha =
                     health.caution_timer <
-                    leader::HEALTH_CAUTION_RING_DURATION / 2.0f ?
+                    LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f ?
                     interpolate_number(
                         health.caution_timer,
-                        0.0f, leader::HEALTH_CAUTION_RING_DURATION / 2.0f,
+                        0.0f, LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f,
                         0.0f, 192
                     ) :
                     interpolate_number(
                         health.caution_timer,
-                        leader::HEALTH_CAUTION_RING_DURATION / 2.0f,
-                        leader::HEALTH_CAUTION_RING_DURATION,
+                        LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f,
+                        LEADER::HEALTH_CAUTION_RING_DURATION,
                         192, 0
                     );
                 float caution_ring_size =

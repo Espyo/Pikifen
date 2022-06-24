@@ -129,8 +129,6 @@ struct chase_info_struct {
     float max_speed;
     
     chase_info_struct();
-    
-    static const float DEF_TARGET_DISTANCE;
 };
 
 
@@ -484,8 +482,6 @@ public:
     void store_pikmin(pikmin* p_ptr);
     //Ticks one frame of logic.
     void tick(const float delta_t);
-    
-    static const float CALL_INTERVAL;
     
     pikmin_nest_struct(mob* m_ptr, pikmin_nest_type_struct* type);
 };

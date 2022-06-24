@@ -24,7 +24,7 @@ using std::vector;
  */
 path_follow_settings::path_follow_settings() :
     target_mob(nullptr),
-    final_target_distance(chase_info_struct::DEF_TARGET_DISTANCE),
+    final_target_distance(MOB::DEF_CHASE_TARGET_DISTANCE),
     flags(0) {
     
 }

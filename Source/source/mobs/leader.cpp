@@ -20,20 +20,43 @@
 namespace LEADER {
 //The whistle can't go past this radius, by default.
 const float DEF_WHISTLE_RANGE = 80.0f;
-}
-
-
-const float leader::AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
-const float leader::AUTO_THROW_COOLDOWN_MIN_DURATION =
-    THROW_COOLDOWN_DURATION * 1.2f;
-const float leader::AUTO_THROW_COOLDOWN_SPEED = 0.3f;
+//Angle at which leaders hold their group members.
+const float LEADER_HELD_MOB_ANGLE = TAU / 2;
+//How far away from the leader is a held group member placed.
+const float LEADER_HELD_MOB_DIST = 1.2f;
+//Invulnerability period after getting hit.
+const float LEADER_INVULN_PERIOD = 1.5f;
+//Auto-throw starts at this cooldown.
+const float AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
+//Auto-throw ends at this cooldown.
+const float AUTO_THROW_COOLDOWN_MIN_DURATION = THROW_COOLDOWN_DURATION * 1.2f;
+//Auto-throw cooldown lowers at this speed.
+const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
 //Ratio of health at which a leader's health wheel starts giving a warning.
-const float leader::HEALTH_CAUTION_RATIO = 0.3f;
+const float HEALTH_CAUTION_RATIO = 0.3f;
 //How long the low health caution ring lasts for.
-const float leader::HEALTH_CAUTION_RING_DURATION = 2.5f;
+const float HEALTH_CAUTION_RING_DURATION = 2.5f;
 //Seconds that need to pass before another swarm arrow appears.
-const float leader::SWARM_ARROWS_INTERVAL = 0.1f;
-const float leader::THROW_COOLDOWN_DURATION = 0.15f;
+const float SWARM_ARROW_INTERVAL = 0.1f;
+//Swarm particle opacity.
+const float SWARM_PARTICLE_ALPHA = 0.8f;
+//Swarm particle random angle deviation.
+const float SWARM_PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
+//Swarm particle friction.
+const float SWARM_PARTICLE_FRICTION = 2.0f;
+//Swarm particle maximum duration.
+const float SWARM_PARTICLE_MAX_DURATION = 1.5f;
+//Swarm particle minimum duration.
+const float SWARM_PARTICLE_MIN_DURATION = 1.0f;
+//Swarm particle size.
+const float SWARM_PARTICLE_SIZE = 6.0f;
+//Swarm particle random speed deviation.
+const float SWARM_PARTICLE_SPEED_DEVIATION = 10.0f;
+//Swarm particle speed multiplier.
+const float SWARM_PARTICLE_SPEED_MULT = 500.0f;
+//Throws cannot happen any faster than this interval.
+const float THROW_COOLDOWN_DURATION = 0.15f;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -53,7 +76,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     pluck_target(nullptr),
     queued_pluck_cancel(false),
     is_in_walking_anim(false),
-    swarm_next_arrow_timer(SWARM_ARROWS_INTERVAL),
+    swarm_next_arrow_timer(LEADER::SWARM_ARROW_INTERVAL),
     throw_cooldown(0.0f),
     throw_queued(false),
     auto_throwing(false),
@@ -67,7 +90,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     health_wheel_caution_timer(0.0f) {
     
     team = MOB_TEAM_PLAYER_1;
-    invuln_period = timer(LEADER_INVULN_PERIOD);
+    invuln_period = timer(LEADER::LEADER_INVULN_PERIOD);
     
     subgroup_type_ptr =
         game.states.gameplay->subgroup_types.get_type(
@@ -78,35 +101,27 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
         swarm_next_arrow_timer.start();
         swarm_arrows.push_back(0);
         
-        const float PARTICLE_ALPHA = 0.8f;
-        const float PARTICLE_MIN_DURATION = 1.0f;
-        const float PARTICLE_MAX_DURATION = 1.5f;
-        const float PARTICLE_FRICTION = 2.0f;
-        const float PARTICLE_SIZE = 6.0f;
-        const float PARTICLE_SPEED_DEVIATION = 10.0f;
-        const float PARTICLE_SPEED_MULT = 500.0f;
-        const float PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
         particle p;
         unsigned char color_idx = randomi(0, WHISTLE::N_DOT_COLORS);
         p.bitmap = game.sys_assets.bmp_bright_circle;
         p.color.r = WHISTLE::DOT_COLORS[color_idx][0] / 255.0f;
         p.color.g = WHISTLE::DOT_COLORS[color_idx][1] / 255.0f;
         p.color.b = WHISTLE::DOT_COLORS[color_idx][2] / 255.0f;
-        p.color.a = PARTICLE_ALPHA;
-        p.duration = randomf(PARTICLE_MIN_DURATION, PARTICLE_MAX_DURATION);
-        p.friction = PARTICLE_FRICTION;
+        p.color.a = LEADER::SWARM_PARTICLE_ALPHA;
+        p.duration = randomf(LEADER::SWARM_PARTICLE_MIN_DURATION, LEADER::SWARM_PARTICLE_MAX_DURATION);
+        p.friction = LEADER::SWARM_PARTICLE_FRICTION;
         p.pos = this->pos;
         p.pos.x += randomf(-this->radius * 0.5f, this->radius * 0.5f);
         p.pos.y += randomf(-this->radius * 0.5f, this->radius * 0.5f);
         p.priority = PARTICLE_PRIORITY_MEDIUM;
-        p.size = PARTICLE_SIZE;
+        p.size = LEADER::SWARM_PARTICLE_SIZE;
         float p_speed =
             game.states.gameplay->swarm_magnitude *
-            PARTICLE_SPEED_MULT +
-            randomf(-PARTICLE_SPEED_DEVIATION, PARTICLE_SPEED_DEVIATION);
+            LEADER::SWARM_PARTICLE_SPEED_MULT +
+            randomf(-LEADER::SWARM_PARTICLE_SPEED_DEVIATION, LEADER::SWARM_PARTICLE_SPEED_DEVIATION);
         float p_angle =
             game.states.gameplay->swarm_angle +
-            randomf(-PARTICLE_ANGLE_DEVIATION, PARTICLE_ANGLE_DEVIATION);
+            randomf(-LEADER::SWARM_PARTICLE_ANGLE_DEVIATION, LEADER::SWARM_PARTICLE_ANGLE_DEVIATION);
         p.speed = rotate_point(point(p_speed, 0.0f), p_angle);
         p.time = p.duration;
         p.type = PARTICLE_TYPE_BITMAP;
@@ -698,7 +713,7 @@ void leader::signal_swarm_start() const {
 void leader::start_auto_throwing() {
     auto_throwing = true;
     auto_throw_cooldown = 0.0f;
-    auto_throw_cooldown_duration = AUTO_THROW_COOLDOWN_MAX_DURATION;
+    auto_throw_cooldown_duration = LEADER::AUTO_THROW_COOLDOWN_MAX_DURATION;
 }
 
 
@@ -767,7 +782,7 @@ void leader::swap_held_pikmin(mob* new_pik) {
     
     release(holding[0]);
     hold(
-        new_pik, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
+        new_pik, INVALID, LEADER::LEADER_HELD_MOB_DIST, LEADER::LEADER_HELD_MOB_ANGLE,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     
@@ -806,7 +821,7 @@ void leader::tick_class_specifics(const float delta_t) {
     ) {
         fsm.run_event(LEADER_EV_THROW);
         update_throw_variables();
-        throw_cooldown = THROW_COOLDOWN_DURATION;
+        throw_cooldown = LEADER::THROW_COOLDOWN_DURATION;
         throw_queued = false;
     }
     
@@ -816,8 +831,8 @@ void leader::tick_class_specifics(const float delta_t) {
     
     auto_throw_cooldown_duration =
         std::max(
-            auto_throw_cooldown_duration - AUTO_THROW_COOLDOWN_SPEED * delta_t,
-            AUTO_THROW_COOLDOWN_MIN_DURATION
+            auto_throw_cooldown_duration - LEADER::AUTO_THROW_COOLDOWN_SPEED * delta_t,
+            LEADER::AUTO_THROW_COOLDOWN_MIN_DURATION
         );
         
     if(group && group->members.empty()) {
@@ -830,11 +845,11 @@ void leader::tick_class_specifics(const float delta_t) {
         (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * delta_t);
         
     if(
-        health < max_health * HEALTH_CAUTION_RATIO ||
+        health < max_health * LEADER::HEALTH_CAUTION_RATIO ||
         health_wheel_caution_timer > 0.0f
     ) {
         health_wheel_caution_timer += delta_t;
-        if(health_wheel_caution_timer >= HEALTH_CAUTION_RING_DURATION) {
+        if(health_wheel_caution_timer >= LEADER::HEALTH_CAUTION_RING_DURATION) {
             health_wheel_caution_timer = 0.0f;
         }
     }
@@ -900,7 +915,7 @@ void leader::update_throw_variables() {
         game.states.gameplay->throw_dest,
         target_z,
         max_height,
-        GRAVITY_ADDER,
+        MOB::GRAVITY_ADDER,
         &throwee_speed,
         &throwee_speed_z,
         &throwee_angle
