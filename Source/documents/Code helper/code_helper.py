@@ -101,13 +101,14 @@ def get_new_svg():
     input("Done. Press Enter...")
 
 
-def find_problems():
+def find_problems(debug_mode):
     problems = []
     problems = problems + find_long_lines()
-    problems = problems + find_alphabetical_problems()
+    problems = problems + find_alphabetical_problems(debug_mode)
     problems = problems + find_cramped_things()
     problems = problems + find_bad_documentation()
     has_problems = False
+    problem_file = open('problems.txt', 'w')
     
     problems_by_file = {}
     
@@ -122,37 +123,48 @@ def find_problems():
             
         has_problems = True
         print(file)
+        problem_file.write(file + '\n')
         for problem, info in problems_by_file[file]:
-            print('  ' + problem + ': ' + info)
+            problem_str = '  ' + problem + ': ' + info
+            print(problem_str)
+            problem_file.write(problem_str + '\n')
     
     if not has_problems:
         print("No problems found.")
     
-    input("Done. Press Enter...")
+    problem_file.close()
+    input("Done. Problems also written to \"problems.txt\". Press Enter...")
     
-if __name__=="__main__":
-    try:
-        ls = system_call("ls Game_data")
-        if len(ls) == 0:
+if __name__ == "__main__":
+    debug_mode = has_argument("debug")
+    if not debug_mode:
+        try:
+            ls = system_call("ls Game_data")
+            if len(ls) == 0:
+                print("The current directory is not Pikifen's directory!")
+                exit(1)
+        except:
             print("The current directory is not Pikifen's directory!")
             exit(1)
-    except:
-        print("The current directory is not Pikifen's directory!")
-        exit(1)
     
     running = True
     while running:
-        latest = system_call("git describe --abbrev=0 --tags")
-    
-        aux = system_call("grep -oP 'VERSION_MAJOR = .*;' Source/source/const.h")
-        cur_major = aux[16:-1]
-        aux = system_call("grep -oP 'VERSION_MINOR = .*;' Source/source/const.h")
-        cur_minor = aux[16:-1]
-        aux = system_call("grep -oP 'VERSION_REV   = .*;' Source/source/const.h")
-        cur_rev = aux[16:-1]
-        current = cur_major + "." + cur_minor + "." + cur_rev
+
+        if not debug_mode:
+            latest = system_call("git describe --abbrev=0 --tags")
         
-        print("Pikifen code helper   (Pikifen code: " + current + ", last tagged: " + latest + ")")
+            aux = system_call("grep -oP 'VERSION_MAJOR = .*;' Source/source/const.h")
+            cur_major = aux[16:-1]
+            aux = system_call("grep -oP 'VERSION_MINOR = .*;' Source/source/const.h")
+            cur_minor = aux[16:-1]
+            aux = system_call("grep -oP 'VERSION_REV   = .*;' Source/source/const.h")
+            cur_rev = aux[16:-1]
+            current = cur_major + "." + cur_minor + "." + cur_rev
+            
+            print("Pikifen code helper   (Pikifen code: " + current + ", last tagged: " + latest + ")")
+        else:
+            print("Pikifen code helper   (DEBUG MODE)")
+        
         print("1. Change engine version numbers in const.h/resource files")
         print("2. Get new/deleted source files (for Visual Studio)")
         print("3. Get new textures")
@@ -176,7 +188,7 @@ if __name__=="__main__":
         elif option == "5":
             get_new_svg()
         elif option == "6":
-            find_problems()
+            find_problems(debug_mode)
         
         print("")
 

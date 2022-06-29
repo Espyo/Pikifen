@@ -40,7 +40,7 @@ Discord server: https://discord.gg/qbhz4u3
     * Customizable control schemes.
     * Low system requirements, no special permissions to run, no need to install, and less than 30 MB when extracted.
     * Filled with quality-of-life features and details, both for gameplay and for content-making.
-    * Made mostly from scratch, as free and open-source software.
+    * Made almost entirely from scratch, as free and open-source software, for Windows, Linux, and Mac.
 
 ===============
 3) Get the latest version

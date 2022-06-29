@@ -1,14 +1,16 @@
-Point I left on (so I can continue the next day without losing my train of thought)
-    
+﻿Point I left on (so I can continue the next day without losing my train of thought)
+
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    leader.cpp still has constants that need moving
+    Document in the manual's object creation tips how radii for carriable objects should be no bigger than ~192, since that's the minimum width of most "standard" passageways, and is the width of gates
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     A Purple Pikmin thrown at a Wollywog on water will start flailing while latched
     
     --- v0.22.0 ---
+    A way to set an object's starting health. This is good for, for instance, reinforced walls that are nearly destroyed. Update the gates and such to reflect this possibility, and document this in the object types's tips
     Code cleanup
         Make some class members protected, when they're meant to be used by sub-classes
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
@@ -16,6 +18,7 @@ Next tasks (roughly sorted most important first)
         Correct warnings given by cppcheck
         Correct warnings given by clang-tidy
         Correct warnings given by compiling with -Wall, both on g++ and Visual Studio
+        Clean up the code helper tool's code
     Update Dear ImGui again lol
     
     --- v0.23.0 ---
@@ -26,7 +29,8 @@ Next tasks (roughly sorted most important first)
             Areas of the mission type show, in this same panel, all sorts of info about how to play the mission
             Areas of the arena type are only for competitive multiplayer play
         Medals
-            For every stage, the player can have no medal, a bronze, a silver, or a gold
+            For every stage, the player can have no medal, a bronze, a silver, a gold, or a platinum medal
+                The sprites for medals should have the medal proper take up a lot of large space, whereas the ribbon should be small. The three basic medals should have the medal proper be circular and uninteresting, whereas the platinum should be a star to stand out. Since platinum is both a "perfect" completion, as well as a way to indicate triumph on missions that aren't scored with points, it should give a feeling of a checkbox on a checklist, while the other medals should give a feeling of "good, but there's more to be done"
             When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
             Three grading modes:
                 Points
@@ -118,7 +122,7 @@ Next tasks (roughly sorted most important first)
         Helodity's Adventure area (see #content-sharing)
     Statistics menu, which keeps track of:
         Engine use
-            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered
+            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd
         Pikmin life
             Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count (careful not to count Candypop Buds as deaths), Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
         Leader control
@@ -540,6 +544,7 @@ Next tasks (roughly sorted most important first)
         Thoughts
             When the game places units, can it just place the unit's sectors in the void and call it a day? In terms of collision it might work. What about wall shadows? I guess they may not render to the side that's facing the void, but walls leading into the doorway may have their shadows shrink to a small size because the tip of the wall is adjacent to the void...
             Cave units have spawn points, each with a different type. If all type X spawn points have been used up and the game wants to spawn more type X objects, then it should maybe use some free spots of any other type
+            Allow the user to create areas that, instead of using typical free geometry, just use cave units slapped together manually like prefabs?
     Story mode stuff
         Persistent progress saving
             Write somewhere that the save was successful, and warn about save errors
@@ -718,6 +723,7 @@ Misc things (so I don't forget)
         Support for backgrounds that don't tile -- what if you want a background that's a tree trunk, because you're on branches? It shouldn't tile, nor should the maker be forced to use a workaround where they have thousands of pixels of blank space for padding
         Add background viewing/editing to the area editor
         Foreground
+    Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end
         Apply fog, blackout, sector darkness, etc. on this

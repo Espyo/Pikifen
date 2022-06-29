@@ -1,4 +1,6 @@
-import subprocess, re
+import re
+import subprocess
+import sys
 
 class Function:
     def __init__(self):
@@ -28,6 +30,12 @@ class Function:
 class Include:
     def __init__(self):
         self.name = ''
+        self.line = 0
+
+class NamespaceConstant:
+    def __init__(self):
+        self.name = ''
+        self.namespace = ''
         self.line = 0
 
 
@@ -173,6 +181,8 @@ def get_functions(file_path):
             functions.append(f)
             continue
     
+    file.close()
+    
     return functions
 
 
@@ -205,8 +215,53 @@ def get_includes(file_path):
             
             includes.append(i)
     
+    file.close()
+    
     return includes
 
+
+def get_namespace_constants(file_path):
+    file = open(file_path, 'r')
+    lines = file.readlines()
+    
+    constants = []
+    line_nr = 0
+    in_namespace = None
+    
+    for l in lines:
+        line_nr += 1
+
+        r = re.match(r'namespace ([A-Z_]+) {', l)
+        if r is not None:
+            in_namespace = r.group(1).strip()
+            continue
+        
+        r = re.match(r'\}', l)
+        if r is not None:
+            in_namespace = None
+            continue
+        
+        if in_namespace is not None:
+            r = re.match(r'.*const .+ ([A-Z_]+)(;|[^\)]+;)', l)
+
+            if r is not None:
+                c = NamespaceConstant()
+                c.name = r.group(1).strip()
+                c.namespace = in_namespace
+                c.line = line_nr
+                constants.append(c)
+                continue
+    
+    file.close()
+    
+    return constants
+
+
+def has_argument(name):
+    for a in sys.argv:
+        if a == name:
+            return True
+    return False
 
 def pad(s, nr):
     return str(s)[:nr].ljust(nr)
