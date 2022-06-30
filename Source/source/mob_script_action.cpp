@@ -934,8 +934,8 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     //make it clear that there was an error.
     path_follow_settings settings;
     settings.target_point = final_stop ? final_stop->pos : data.m->pos;
-    settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
-    settings.flags |= PATH_FOLLOW_FLAG_SCRIPT_USE;
+    enable_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
+    enable_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
     settings.label = label;
     data.m->follow_path(
         settings, data.m->get_base_speed(), data.m->type->acceleration
@@ -954,8 +954,8 @@ void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
     
     path_follow_settings settings;
     settings.target_point = point(x, y);
-    settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
-    settings.flags |= PATH_FOLLOW_FLAG_SCRIPT_USE;
+    enable_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
+    enable_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
     if(data.args.size() >= 3) {
         settings.label = data.args[2];
     }
@@ -1475,7 +1475,11 @@ void mob_action_runners::set_far_reach(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_flying(mob_action_run_data &data) {
-    data.m->can_move_in_midair = s2b(data.args[0]);
+    if(s2b(data.args[0])) {
+        enable_flag(data.m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+    } else {
+        disable_flag(data.m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+    }
 }
 
 
@@ -1525,7 +1529,11 @@ void mob_action_runners::set_height(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_hiding(mob_action_run_data &data) {
-    data.m->hide = s2b(data.args[0]);
+    if(s2b(data.args[0])) {
+        enable_flag(data.m->flags, MOB_FLAG_HIDDEN);
+    } else {
+        disable_flag(data.m->flags, MOB_FLAG_HIDDEN);
+    }
 }
 
 
@@ -1551,7 +1559,11 @@ void mob_action_runners::set_holdable(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_huntable(mob_action_run_data &data) {
-    data.m->is_huntable = s2b(data.args[0]);
+    if(s2b(data.args[0])) {
+        disable_flag(data.m->flags, MOB_FLAG_NON_HUNTABLE);
+    } else {
+        enable_flag(data.m->flags, MOB_FLAG_NON_HUNTABLE);
+    }
 }
 
 
@@ -1620,7 +1632,11 @@ void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_shadow_visibility(mob_action_run_data &data) {
-    data.m->show_shadow = s2b(data.args[0]);
+    if(s2b(data.args[0])) {
+        disable_flag(data.m->flags, MOB_FLAG_SHADOW_INVISIBLE);
+    } else {
+        enable_flag(data.m->flags, MOB_FLAG_SHADOW_INVISIBLE);
+    }
 }
 
 
@@ -1644,7 +1660,11 @@ void mob_action_runners::set_state(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_tangible(mob_action_run_data &data) {
-    data.m->tangible = s2b(data.args[0]);
+    if(s2b(data.args[0])) {
+        disable_flag(data.m->flags, MOB_FLAG_INTANGIBLE);
+    } else {
+        enable_flag(data.m->flags, MOB_FLAG_INTANGIBLE);
+    }
 }
 
 

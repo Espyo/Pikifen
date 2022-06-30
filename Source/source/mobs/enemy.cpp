@@ -53,7 +53,7 @@ enemy::enemy(const point &pos, enemy_type* type, const float angle) :
  *   Status type to check.
  */
 bool enemy::can_receive_status(status_type* s) const {
-    return s->affects & STATUS_AFFECTS_ENEMIES;
+    return has_flag(s->affects, STATUS_AFFECTS_ENEMIES);
 }
 
 

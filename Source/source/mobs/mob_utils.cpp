@@ -74,7 +74,7 @@ bool carry_info_struct::can_fly() const {
     for(size_t c = 0; c < spot_info.size(); ++c) {
         mob* carrier_ptr = spot_info[c].pik_ptr;
         if(!carrier_ptr) continue;
-        if(!spot_info[c].pik_ptr->can_move_in_midair) {
+        if(!has_flag(spot_info[c].pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
             return false;
         }
     }

@@ -560,7 +560,7 @@ void gameplay_state::draw_lighting_filter() {
         for(size_t m = 0; m < mobs.all.size(); ++m) {
             mob* m_ptr = mobs.all[m];
             if(
-                m_ptr->hide ||
+                has_flag(m_ptr->flags, MOB_FLAG_HIDDEN) ||
                 m_ptr->type->category->id == MOB_CATEGORY_DECORATIONS
             ) {
                 continue;
@@ -1416,11 +1416,14 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             continue;
         }
         
-        if(mob_ptr->hide) continue;
+        if(has_flag(mob_ptr->flags, MOB_FLAG_HIDDEN)) continue;
         if(mob_ptr->stored_inside_another) continue;
         
         //Shadows.
-        if(mob_ptr->type->casts_shadow && mob_ptr->show_shadow) {
+        if(
+            mob_ptr->type->casts_shadow &&
+            !has_flag(mob_ptr->flags, MOB_FLAG_SHADOW_INVISIBLE)
+        ) {
             world_component c;
             c.mob_shadow_ptr = mob_ptr;
             if(mob_ptr->standing_on_mob) {
@@ -1562,13 +1565,13 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             
         } else if(c_ptr->mob_limb_ptr) {
         
-            if(!c_ptr->mob_limb_ptr->hide) {
+            if(!has_flag(c_ptr->mob_limb_ptr->flags, MOB_FLAG_HIDDEN)) {
                 c_ptr->mob_limb_ptr->draw_limb();
             }
             
         } else if(c_ptr->mob_ptr) {
         
-            if(!c_ptr->mob_ptr->hide) {
+            if(!has_flag(c_ptr->mob_ptr->flags, MOB_FLAG_HIDDEN)) {
                 c_ptr->mob_ptr->draw_mob();
                 if(c_ptr->mob_ptr->type->draw_mob_callback) {
                     c_ptr->mob_ptr->type->draw_mob_callback(c_ptr->mob_ptr);

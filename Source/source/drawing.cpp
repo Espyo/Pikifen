@@ -1486,9 +1486,9 @@ void draw_string_tokens(
     }
     
     float start_x = where.x;
-    if(flags & ALLEGRO_ALIGN_CENTER) {
+    if(has_flag(flags, ALLEGRO_ALIGN_CENTER)) {
         start_x -= (total_width * x_scale) / 2.0f;
-    } else if(flags & ALLEGRO_ALIGN_RIGHT) {
+    } else if(has_flag(flags, ALLEGRO_ALIGN_RIGHT)) {
         start_x -= total_width * x_scale;
     }
     

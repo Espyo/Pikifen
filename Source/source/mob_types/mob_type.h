@@ -187,7 +187,8 @@ public:
     };
     
     
-    //Technical things.
+    //---Basic information---
+
     //Its full name.
     string name;
     //Blurb-like description. Mostly used for gameplay, not content-making.
@@ -197,7 +198,8 @@ public:
     //Mob category.
     mob_category* category;
     
-    //Visual things.
+    //---Visuals---
+
     //Database with all its animation data.
     animation_database anims;
     //A color that represents this mob.
@@ -207,11 +209,8 @@ public:
     //Does it cast a shadow?
     bool casts_shadow;
     
-    //Space-related things.
-    //Radius of the space it occupies. Can be overridden on a per-mob basis.
-    float radius;
-    //Height. Can be overridden on a per-mob basis.
-    float height;
+    //---Movement---
+
     //Moves these many units per second.
     float move_speed;
     //Acceleration. This is in units per second per second.
@@ -220,6 +219,19 @@ public:
     float rotation_speed;
     //True if it can move in any direction, as opposed to just forward.
     bool can_free_move;
+
+    //---Physical space---
+
+    //Radius of the space it occupies. Can be overridden on a per-mob basis.
+    float radius;
+    //Height. Can be overridden on a per-mob basis.
+    float height;
+    //Rectangular dimensions, if it's meant to use them instead of a radius.
+    point rectangular_dim;
+    //Pikmin strength needed to carry it.
+    float weight;
+    //How many Pikmin can carry it, at most.
+    size_t max_carriers;
     //Pushes other mobs (only those that can be pushed).
     bool pushes;
     //Can be pushed by other mobs.
@@ -230,10 +242,11 @@ public:
     float terrain_radius;
     //Can you walk on top of this mob?
     bool walkable;
-    //Rectangular dimensions, if it's meant to use them instead of a radius.
-    point rectangular_dim;
+    //If true, carrier Pikmin will be considered blocked if it's in the way.
+    bool can_block_paths;
     
-    //Behavior things.
+    //---General behavior---
+
     //Maximum health. Can be overridden on a per-mob basis.
     float max_health;
     //Regenerates these many health points per second.
@@ -242,20 +255,10 @@ public:
     float territory_radius;
     //Information on all of its "reaches".
     vector<reach_struct> reaches;
-    //Information on everything it can spawn.
-    vector<spawn_struct> spawns;
-    //Information on its children mobs.
-    vector<child_struct> children;
-    //How many Pikmin can carry it, at most.
-    size_t max_carriers;
-    //Pikmin strength needed to carry it.
-    float weight;
     //After it takes this much damage, it sends an "itch" event to the FSM.
     float itch_damage;
     //Only send an "itch" event after these many seconds have passed.
     float itch_time;
-    //Does this mob have a group of other mobs following it (e.g. leader)?
-    bool has_group;
     //Other mobs decide if they can/want to hurt it by this target type.
     MOB_TARGET_TYPES target_type;
     //What types of targets this mob can hunt down.
@@ -265,7 +268,8 @@ public:
     //Its initial team.
     MOB_TEAMS starting_team;
     
-    //Script things.
+    //---Script---
+
     //Actions to run on spawn.
     vector<mob_action_call*> init_actions;
     //The states, events and actions. Basically, the FSM.
@@ -280,16 +284,18 @@ public:
     vector<string> states_ignoring_death;
     //States that ignore the spray event.
     vector<string> states_ignoring_spray;
-    //Widgets to show on the area editor, to help parametrize each mob.
-    vector<area_editor_prop_struct> area_editor_props;
     
-    //Misc.
-    //Tips to show in the area editor about this mob type, if any.
-    string area_editor_tips;
-    //Can the player choose to place one of these in the area editor?
-    bool appears_in_area_editor;
-    //If true, carrier Pikmin will be considered blocked if it's in the way.
-    bool can_block_paths;
+    //---Interactions with other objects---
+
+    //Information on everything it can spawn.
+    vector<spawn_struct> spawns;
+    //Information on its children mobs.
+    vector<child_struct> children;
+    //Does this mob have a group of other mobs following it (e.g. leader)?
+    bool has_group;
+    
+    //---Vulnerabilities---
+
     //All damage received is multiplied by this much.
     float default_vulnerability;
     //For every hazard, multiply damage taken by this much.
@@ -301,7 +307,17 @@ public:
     //For every type of status, multiply damage taken by this much.
     map<status_type*, vulnerability_struct> status_vulnerabilities;
     
-    //Caches and such.
+    //---Editor info---
+    
+    //Tips to show in the area editor about this mob type, if any.
+    string area_editor_tips;
+    //Widgets to show on the area editor, to help parametrize each mob.
+    vector<area_editor_prop_struct> area_editor_props;
+    //Can the player choose to place one of these in the area editor?
+    bool appears_in_area_editor;
+    
+    //---Caches---
+    
     //How far its hitboxes or radius can reach from the center.
     float max_span;
     

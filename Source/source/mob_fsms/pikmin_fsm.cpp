@@ -1765,7 +1765,7 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     m->chase(*((point*) info1), m->z);
@@ -1794,7 +1794,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     
     ene_ptr->chomp(pik_ptr, hbox_ptr);
     pik_ptr->is_grabbed_by_enemy = true;
-    pik_ptr->can_move_in_midair = false;
+    disable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     pik_ptr->leave_group();
     
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
@@ -1813,7 +1813,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
-    m->can_move_in_midair = false;
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->set_animation(PIKMIN_ANIM_IDLING);
     game.sys_assets.sfx_pikmin_held.play(0, false);
 }
@@ -1843,7 +1843,7 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
-    m->can_move_in_midair = false;
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
     m->set_animation(PIKMIN_ANIM_THROWN);
     game.sys_assets.sfx_pikmin_held.stop();
@@ -1917,7 +1917,7 @@ void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::become_helpless(mob* m, void* info1, void* info2) {
-    m->can_move_in_midair = false;
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->leave_group();
     
     m->set_animation(PIKMIN_ANIM_IDLING);
@@ -1939,7 +1939,7 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
     pikmin_fsm::stand_still(m, info1, info2);
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         pik_ptr->chase(
             pik_ptr->pos,
             pik_ptr->ground_sector->z + pikmin::FLIER_ABOVE_FLOOR_HEIGHT
@@ -1965,10 +1965,10 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->leave_group();
-    m->unpushable = true;
-    m->is_huntable = false;
-    m->is_hurtable = false;
-    m->can_move_in_midair = false;
+    enable_flag(m->flags, MOB_FLAG_UNPUSHABLE);
+    enable_flag(m->flags, MOB_FLAG_NON_HUNTABLE);
+    enable_flag(m->flags, MOB_FLAG_NON_HURTABLE);
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     ((pikmin*) m)->is_seed_or_sprout = true;
     m->set_animation(
         PIKMIN_ANIM_SPROUT, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN
@@ -1992,9 +1992,9 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     mob* lea = (mob*) info1;
     
     pik->focus_on_mob(lea);
-    m->is_huntable = true;
-    m->is_hurtable = true;
-    m->unpushable = false;
+    disable_flag(m->flags, MOB_FLAG_NON_HUNTABLE);
+    disable_flag(m->flags, MOB_FLAG_NON_HURTABLE);
+    disable_flag(m->flags, MOB_FLAG_UNPUSHABLE);
     pik->is_seed_or_sprout = false;
     m->set_timer(0);
     
@@ -2193,7 +2193,7 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     pik_ptr->stop_chasing();
@@ -2289,7 +2289,7 @@ void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     engine_assert(m->focused_mob != NULL, m->print_state_history());
     
-    pik_ptr->can_move_in_midair = false;
+    disable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
     float impact_angle = get_angle(pik_ptr->focused_mob->pos, pik_ptr->pos);
     float impact_speed = 200.0f;
@@ -2319,7 +2319,7 @@ void pikmin_fsm::enter_onion(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     onion* oni_ptr = (onion*) pik_ptr->focused_mob;
     
-    pik_ptr->can_move_in_midair = false;
+    disable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
     //Set its data to start climbing.
     vector<size_t> checkpoints;
@@ -2481,7 +2481,7 @@ void pikmin_fsm::finish_mob_landing(mob* m, void* info1, void* info2) {
 void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
     tool* too_ptr = (tool*) (m->focused_mob);
     
-    if(!(too_ptr->holdability_flags & HOLDABLE_BY_PIKMIN)) {
+    if(!has_flag(too_ptr->holdability_flags, HOLDABLE_BY_PIKMIN)) {
         m->fsm.set_state(PIKMIN_STATE_IDLING);
         return;
     }
@@ -2583,7 +2583,7 @@ void pikmin_fsm::forget_tool(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
-    m->can_move_in_midair = false;
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->set_animation(PIKMIN_ANIM_KNOCKED_BACK);
 }
 
@@ -2605,7 +2605,7 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     pik_ptr->temp_i = 0;
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     m->set_timer(PIKMIN::KNOCKED_DOWN_DURATION);
@@ -2630,7 +2630,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     pik_ptr->carrying_mob = carriable_mob;
@@ -2694,7 +2694,7 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     group_task* tas_ptr = (group_task*) info1;
     pikmin* pik_ptr = (pikmin*) m;
     
-    if(!pik_ptr->can_move_in_midair && tas_ptr->tas_type->flying_pikmin_only) {
+    if(!has_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR) && tas_ptr->tas_type->flying_pikmin_only) {
         //Only flying Pikmin can use this, and this Pikmin doesn't fly.
         return;
     }
@@ -2708,7 +2708,7 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     tas_ptr->reserve_spot(free_spot, pik_ptr);
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     pik_ptr->leave_group();
@@ -2757,7 +2757,7 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
         )->get_cur_pos(nest_ptr->m_ptr->pos, nest_ptr->m_ptr->angle);
         
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     m->focus_on_mob(nest_ptr->m_ptr);
@@ -2791,7 +2791,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     }
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     m->focus_on_mob(other_ptr);
@@ -2835,7 +2835,7 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
         //This Pikmin can't carry tools. Forget it.
         return;
     }
-    if(!(too_ptr->holdability_flags & HOLDABLE_BY_PIKMIN)) {
+    if(!has_flag(too_ptr->holdability_flags, HOLDABLE_BY_PIKMIN)) {
         //Can't hold this. Forget it.
         return;
     }
@@ -2843,7 +2843,7 @@ void pikmin_fsm::go_to_tool(mob* m, void* info1, void* info2) {
     too_ptr->reserved = pik_ptr;
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     pik_ptr->leave_group();
@@ -2878,7 +2878,7 @@ void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     m->set_timer(PIKMIN::DISMISS_TIMEOUT);
@@ -2965,7 +2965,7 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     mob_event* m2_pik_land_ev =
         m2_ptr->fsm.get_event(MOB_EV_THROWN_PIKMIN_LANDED);
         
-    if(m2_pik_land_ev && m->was_thrown) {
+    if(m2_pik_land_ev && has_flag(m->flags, MOB_FLAG_WAS_THROWN)) {
         m2_pik_land_ev->run(m2_ptr, (void*)m);
     }
     
@@ -2988,7 +2988,7 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     
     pik_ptr->stop_height_effect();
     pik_ptr->focused_mob = m2_ptr;
-    pik_ptr->was_thrown = false;
+    disable_flag(pik_ptr->flags, MOB_FLAG_WAS_THROWN);
     
     switch(pik_ptr->pik_type->attack_method) {
     case PIKMIN_ATTACK_LATCH: {
@@ -3030,11 +3030,11 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
     mob_event* m2_pik_land_ev =
         m2_ptr->fsm.get_event(MOB_EV_THROWN_PIKMIN_LANDED);
         
-    if (m2_pik_land_ev && m->was_thrown) {
+    if (m2_pik_land_ev && has_flag(m->flags, MOB_FLAG_WAS_THROWN)) {
         m2_pik_land_ev->run(m2_ptr, (void*)m);
     }
     
-    pik_ptr->was_thrown = false;
+    disable_flag(pik_ptr->flags, MOB_FLAG_WAS_THROWN);
     
     if(too_ptr->too_type->dropped_when_pikmin_lands_on_opponent) {
         pikmin_fsm::release_tool(m, info1, info2);
@@ -3112,7 +3112,7 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
 void pikmin_fsm::leave_onion(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
-    m->can_move_in_midair = false;
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->set_animation(PIKMIN_ANIM_SLIDING);
 }
 
@@ -3551,7 +3551,7 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //If the Pikmin is following a moveable point, let's change it to
     //a static point. This will make the Pikmin continue to move
     //forward into the water in a straight line.
-    m->can_move_in_midair = false;
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     float final_z = 0.0f;
     point final_pos = m->get_chase_target(&final_z);
     m->chase(final_pos, final_z);
@@ -3578,7 +3578,7 @@ void pikmin_fsm::start_getting_up(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     m->set_animation(PIKMIN_ANIM_GETTING_UP);
@@ -3628,7 +3628,7 @@ void pikmin_fsm::start_mob_landing(mob* m, void* info1, void* info2) {
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     m->leave_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
@@ -3667,7 +3667,7 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
     mob* carried_mob = (mob*) info1;
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     path_follow_settings settings;
@@ -3687,7 +3687,7 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
             MOB_CATEGORY_BRIDGES
         ) {
             bridge* bri_ptr = (bridge*) carried_mob->carry_info->intended_mob;
-            settings.flags |= PATH_FOLLOW_FLAG_FAKED_START;
+            enable_flag(settings.flags, PATH_FOLLOW_FLAG_FAKED_START);
             settings.faked_start = bri_ptr->get_start_point();
         }
     }
@@ -3716,7 +3716,7 @@ void pikmin_fsm::start_returning(mob* m, void* info1, void* info2) {
 void pikmin_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     track* tra_ptr = (track*) info1;
     
-    m->can_move_in_midair = false;
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(tra_ptr);
@@ -3810,7 +3810,7 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->face(0, &m->following_group->pos);
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     m->set_animation(PIKMIN_ANIM_IDLING);
@@ -4024,7 +4024,7 @@ void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
     tool* too_ptr = (tool*) * (m->holding.begin());
     if(
         !too_ptr->too_type->can_be_hotswapped &&
-        (too_ptr->holdability_flags & HOLDABLE_BY_ENEMIES)
+        has_flag(too_ptr->holdability_flags, HOLDABLE_BY_ENEMIES)
     ) {
         //This tool can't be hotswapped... The Pikmin has to get chomped.
         pikmin_fsm::release_tool(m, info1, info2);
@@ -4078,7 +4078,7 @@ void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
     float target_dist; //Unused dummy value.
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     if(!info1) {
@@ -4157,7 +4157,7 @@ void pikmin_fsm::work_on_group_task(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     
     if(pik_ptr->pik_type->can_fly) {
-        pik_ptr->can_move_in_midair = true;
+        enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     tas_ptr->add_worker(pik_ptr);

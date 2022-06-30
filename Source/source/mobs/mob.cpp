@@ -124,68 +124,60 @@ const float WAVE_RING_DURATION = 1.0f;
 mob::mob(const point &pos, mob_type* type, const float angle) :
     type(type),
     to_delete(false),
-    anim(&type->anims),
-    fsm(this),
-    script_timer(0),
-    focused_mob(nullptr),
-    itch_damage(0),
-    itch_time(0),
-    far_reach(INVALID),
-    near_reach(INVALID),
     pos(pos),
     z(0),
-    speed_z(0),
     angle(angle),
-    intended_turn_angle(angle),
-    intended_turn_pos(nullptr),
-    radius(type->radius),
-    height(type->height),
-    rectangular_dim(type->rectangular_dim),
-    can_move_in_midair(false),
-    z_cap(FLT_MAX),
-    home(pos),
     ground_sector(nullptr),
     center_sector(nullptr),
     standing_on_mob(nullptr),
+    speed_z(0),
+    z_cap(FLT_MAX),
     gravity_mult(1.0f),
     push_amount(0),
     push_angle(0),
-    unpushable(false),
-    tangible(true),
-    was_thrown(false),
-    chase_info(),
     path_info(nullptr),
     circling_info(nullptr),
-    following_group(nullptr),
-    subgroup_type_ptr(nullptr),
-    group(nullptr),
-    group_spot_index(INVALID),
+    track_info(nullptr),
     carry_info(nullptr),
     delivery_info(nullptr),
-    track_info(nullptr),
-    stored_inside_another(nullptr),
+    radius(type->radius),
+    height(type->height),
+    rectangular_dim(type->rectangular_dim),
+    fsm(this),
+    script_timer(0),
+    focused_mob(nullptr),
+    intended_turn_angle(angle),
+    intended_turn_pos(nullptr),
+    home(pos),
+    far_reach(INVALID),
+    near_reach(INVALID),
+    time_alive(0.0f),
     id(game.states.gameplay->next_mob_id),
     health(type->max_health),
     max_health(type->max_health),
     invuln_period(0),
-    team(MOB_TEAM_NONE),
-    hide(false),
-    show_shadow(true),
-    forced_sprite(nullptr),
-    has_invisibility_status(false),
-    is_huntable(true),
-    is_hurtable(true),
-    height_effect_pivot(LARGE_FLOAT),
+    itch_damage(0),
+    itch_time(0),
     on_hazard(nullptr),
-    chomp_max(0),
     parent(nullptr),
-    time_alive(0.0f),
+    flags(0),
+    stored_inside_another(nullptr),
+    chomp_max(0),
+    team(MOB_TEAM_NONE),
+    following_group(nullptr),
+    group_spot_index(INVALID),
+    subgroup_type_ptr(nullptr),
+    group(nullptr),
+    anim(&type->anims),
+    forced_sprite(nullptr),
+    height_effect_pivot(LARGE_FLOAT),
     damage_squash_time(0.0f),
     health_wheel(nullptr),
     fraction(nullptr),
     angle_cos(0.0f),
     angle_sin(0.0f),
     max_span(type->max_span),
+    has_invisibility_status(false),
     can_block_paths(false) {
     
     game.states.gameplay->next_mob_id++;
@@ -947,7 +939,7 @@ bool mob::can_hunt(mob* v) const {
     if(v->has_invisibility_status) return false;
     
     //Mobs that don't want to be hunted right now cannot be hunted down.
-    if(!v->is_huntable) return false;
+    if(has_flag(v->flags, MOB_FLAG_NON_HUNTABLE)) return false;
     
     //Return whether or not this mob wants to hunt v.
     return (type->huntable_targets & v->type->target_type);
@@ -970,7 +962,7 @@ bool mob::can_hurt(mob* v) const {
     if(v->invuln_period.time_left > 0) return false;
     
     //Mobs that don't want to be hurt right now cannot be hurt.
-    if(!v->is_hurtable) return false;
+    if(has_flag(v->flags, MOB_FLAG_NON_HURTABLE)) return false;
     
     //Check if this mob has already hit v recently.
     for(size_t h = 0; h < hit_opponents.size(); ++h) {
@@ -992,7 +984,7 @@ bool mob::can_hurt(mob* v) const {
  *   Status type to check.
  */
 bool mob::can_receive_status(status_type* s) const {
-    return s->affects & STATUS_AFFECTS_OTHERS;
+    return has_flag(s->affects, STATUS_AFFECTS_OTHERS);
 }
 
 
@@ -1080,7 +1072,9 @@ void mob::chase(
     chase_info.offset_z = offset_z;
     
     chase_info.flags = flags;
-    if(type->can_free_move) chase_info.flags |= CHASE_FLAG_ANY_ANGLE;
+    if(type->can_free_move) {
+        enable_flag(chase_info.flags, CHASE_FLAG_ANY_ANGLE);
+    }
     
     chase_info.target_dist = target_distance;
     chase_info.max_speed =
@@ -1131,7 +1125,8 @@ void mob::chase(
  */
 void mob::chomp(mob* m, hitbox* hitbox_info) {
     if(m->type->category->id == MOB_CATEGORY_TOOLS) {
-        if(!(((tool*) m)->holdability_flags & HOLDABLE_BY_ENEMIES)) {
+        tool* too_ptr = (tool*) m;
+        if(!has_flag(too_ptr->holdability_flags, HOLDABLE_BY_ENEMIES)) {
             //Enemies can't chomp this tool right now.
             return;
         }
@@ -1477,7 +1472,7 @@ bool mob::follow_path(
     path_stop* old_next_stop = NULL;
     
     //Some setup before we begin.
-    if((settings.flags & PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
+    if(has_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
         was_blocked = path_info->is_blocked;
         if(path_info->cur_path_stop_nr < path_info->path.size()) {
             old_next_stop = path_info->path[path_info->cur_path_stop_nr];
@@ -1493,11 +1488,11 @@ bool mob::follow_path(
     if(carry_info) {
         //Check if this carriable is considered light load.
         if(type->weight == 1) {
-            final_settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
+            enable_flag(final_settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
         }
         //The object will only be airborne if all its carriers can fly.
         if(carry_info->can_fly()) {
-            final_settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
+            enable_flag(final_settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
         }
     } else {
         if(
@@ -1505,11 +1500,11 @@ bool mob::follow_path(
             type->category->id == MOB_CATEGORY_LEADERS
         ) {
             //Simple mobs are empty-handed, so that's considered light load.
-            final_settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
+            enable_flag(final_settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
         }
         //Check if the object can fly directly.
-        if(can_move_in_midair) {
-            final_settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
+        if(has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
+            enable_flag(final_settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
         }
     }
     
@@ -1531,7 +1526,7 @@ bool mob::follow_path(
     path_info = new path_info_struct(this, final_settings);
     
     if(
-        (path_info->settings.flags & PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
+        has_flag(path_info->settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
         old_next_stop &&
         !was_blocked &&
         path_info->path.size() >= 2
@@ -1564,7 +1559,7 @@ bool mob::follow_path(
             path_info->path[path_info->cur_path_stop_nr];
         float next_stop_z = z;
         if(
-            (path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE) &&
+            has_flag(path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
             next_stop->sector_ptr
         ) {
             next_stop_z =
@@ -2667,7 +2662,7 @@ void mob::set_animation(
         anim.cur_frame_index = INVALID;
     } else {
         if(
-            !(options & START_ANIMATION_NO_RESTART) ||
+            !has_flag(options, START_ANIMATION_NO_RESTART) ||
             anim.cur_frame_index >= anim.cur_anim->frames.size()
         ) {
             anim.start();
@@ -2940,7 +2935,7 @@ void mob::stop_chasing() {
     
     speed.x = 0.0f;
     speed.y = 0.0f;
-    if(can_move_in_midair) {
+    if(has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
         speed_z = 0.0f;
     }
 }
@@ -3176,15 +3171,15 @@ void mob::tick_brain(const float delta_t) {
     //Chasing a target.
     if(
         chase_info.state == CHASE_STATE_CHASING &&
-        !(chase_info.flags & CHASE_FLAG_TELEPORT) &&
-        (speed_z == 0 || can_move_in_midair)
+        !has_flag(chase_info.flags, CHASE_FLAG_TELEPORT) &&
+        (speed_z == 0 || has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR))
     ) {
     
         //Calculate where the target is.
         point final_target_pos = get_chase_target();
         dist horiz_dist = dist(pos, final_target_pos);
         float vert_dist = 0.0f;
-        if(can_move_in_midair) {
+        if(has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
             float final_target_z = chase_info.offset_z;
             if(chase_info.orig_z) final_target_z += *chase_info.orig_z;
             vert_dist = fabs(z - final_target_z);
@@ -3345,7 +3340,7 @@ void mob::tick_misc_logic(const float delta_t) {
     //Health wheel.
     bool should_show_health =
         type->show_health &&
-        !hide &&
+        !has_flag(flags, MOB_FLAG_HIDDEN) &&
         health > 0.0f &&
         health < max_health;
     if(!health_wheel && should_show_health) {
@@ -3498,8 +3493,8 @@ void mob::tick_misc_logic(const float delta_t) {
             if(type->category->id != MOB_CATEGORY_LEADERS) {
                 //The Pikmin were likely following an enemy.
                 //So they were likely invincible. Let's correct that.
-                member->is_huntable = true;
-                member->is_hurtable = true;
+                disable_flag(member->flags, MOB_FLAG_NON_HUNTABLE);
+                disable_flag(member->flags, MOB_FLAG_NON_HURTABLE);
                 member->team = MOB_TEAM_PLAYER_1;
             }
             member->leave_group();

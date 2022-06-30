@@ -1427,7 +1427,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->speed = leader_ptr->throwee_speed;
     holding_ptr->speed_z = leader_ptr->throwee_speed_z;
     
-    holding_ptr->was_thrown = true;
+    enable_flag(holding_ptr->flags, MOB_FLAG_WAS_THROWN);
     holding_ptr->leave_group();
     leader_ptr->release(holding_ptr);
     

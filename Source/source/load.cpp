@@ -1461,16 +1461,16 @@ void load_status_types(const bool load_resources) {
         
         new_t->affects = 0;
         if(affects_pikmin_bool) {
-            new_t->affects |= STATUS_AFFECTS_PIKMIN;
+            enable_flag(new_t->affects, STATUS_AFFECTS_PIKMIN);
         }
         if(affects_leaders_bool) {
-            new_t->affects |= STATUS_AFFECTS_LEADERS;
+            enable_flag(new_t->affects, STATUS_AFFECTS_LEADERS);
         }
         if(affects_enemies_bool) {
-            new_t->affects |= STATUS_AFFECTS_ENEMIES;
+            enable_flag(new_t->affects, STATUS_AFFECTS_ENEMIES);
         }
         if(affects_others_bool) {
-            new_t->affects |= STATUS_AFFECTS_OTHERS;
+            enable_flag(new_t->affects, STATUS_AFFECTS_OTHERS);
         }
         
         if(reapply_rule_node) {

@@ -12,7 +12,6 @@ Next tasks (roughly sorted most important first)
     --- v0.22.0 ---
     A way to set an object's starting health. This is good for, for instance, reinforced walls that are nearly destroyed. Update the gates and such to reflect this possibility, and document this in the object types's tips
     Code cleanup
-        Make some class members protected, when they're meant to be used by sub-classes
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Check for memory leaks
         Correct warnings given by cppcheck

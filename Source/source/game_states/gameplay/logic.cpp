@@ -1218,11 +1218,11 @@ void gameplay_state::process_mob_touches(
             ((pikmin*) m2_ptr)->fsm.cur_state->id == PIKMIN_STATE_IDLING_H
         );
     bool ok_to_push = true;
-    if(!m2_ptr->tangible) {
+    if(has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE)) {
         ok_to_push = false;
     } else if(!m_ptr->type->pushable) {
         ok_to_push = false;
-    } else if(m_ptr->unpushable) {
+    } else if(has_flag(m_ptr->flags, MOB_FLAG_UNPUSHABLE)) {
         ok_to_push = false;
     } else if(m_ptr->standing_on_mob == m2_ptr) {
         ok_to_push = false;
@@ -1409,7 +1409,7 @@ void gameplay_state::process_mob_touches(
                 d <= (m_ptr->radius + m2_ptr->radius);
         }
         
-        if(z_touch && m2_ptr->tangible && xy_collision) {
+        if(z_touch && !has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE) && xy_collision) {
             if(touch_ob_ev) {
                 touch_ob_ev->run(m_ptr, (void*) m2_ptr);
             }

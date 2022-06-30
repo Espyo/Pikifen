@@ -67,9 +67,9 @@ void bouncer_type::load_properties(data_node* file) {
         vector<string> riders_str_words = split(riders_str);
         for(size_t r = 0; r < riders_str_words.size(); ++r) {
             if(riders_str_words[r] == "pikmin") {
-                riders |= BOUNCER_RIDER_PIKMIN;
+                enable_flag(riders, BOUNCER_RIDER_PIKMIN);
             } else if(riders_str_words[r] == "leaders") {
-                riders |= BOUNCER_RIDER_LEADERS;
+                enable_flag(riders, BOUNCER_RIDER_LEADERS);
             } else {
                 log_error(
                     "Unknown type of rider \"" + riders_str_words[r] + "\"!",

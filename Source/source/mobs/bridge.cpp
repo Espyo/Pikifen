@@ -188,7 +188,7 @@ bool bridge::check_health() {
     //Finish setting up the new component mobs.
     for(size_t m = 0; m < new_mobs.size(); ++m) {
         mob* m_ptr = new_mobs[m];
-        m_ptr->can_move_in_midair = true;
+        enable_flag(m_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         m_ptr->links.push_back(this);
     }
     

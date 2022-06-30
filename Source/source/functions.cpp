@@ -403,7 +403,7 @@ vector<string> folder_to_vector(
     while((entry = al_read_directory(folder)) != NULL) {
         if(
             folders ==
-            ((al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR) > 0)
+            (has_flag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR))
         ) {
         
             string entry_name =
@@ -2082,7 +2082,7 @@ WIPE_FOLDER_RESULTS wipe_folder(
     
     ALLEGRO_FS_ENTRY* entry = al_read_directory(folder);
     while(entry) {
-        if((al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR) > 0) {
+        if(has_flag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR)) {
             has_folders = true;
             
         } else {

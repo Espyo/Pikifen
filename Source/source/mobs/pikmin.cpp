@@ -19,6 +19,7 @@
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
 #include "mob.h"
+#include "mob_enums.h"
 
 namespace PIKMIN {
 //Time until moving Pikmin timeout and stay in place, after being dismissed.
@@ -95,7 +96,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
         );
         
     if(pik_type->can_fly) {
-        can_move_in_midair = true;
+        enable_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
 }
 
@@ -106,7 +107,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
  *   Status type to check.
  */
 bool pikmin::can_receive_status(status_type* s) const {
-    return s->affects & STATUS_AFFECTS_PIKMIN;
+    return has_flag(s->affects, STATUS_AFFECTS_PIKMIN);
 }
 
 
@@ -472,8 +473,8 @@ void pikmin::tick_class_specifics(const float delta_t) {
             fsm.run_event(MOB_EV_TOUCHED_ACTIVE_LEADER, (void*) (links[0]));
         }
         //Since this leader is likely an enemy, let's keep these Pikmin safe.
-        is_huntable = false;
-        is_hurtable = false;
+        enable_flag(flags, MOB_FLAG_NON_HUNTABLE);
+        enable_flag(flags, MOB_FLAG_NON_HURTABLE);
         must_follow_link_as_leader = false;
     }
     

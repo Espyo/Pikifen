@@ -146,7 +146,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
  *   Status type to check.
  */
 bool leader::can_receive_status(status_type* s) const {
-    return s->affects & STATUS_AFFECTS_LEADERS;
+    return has_flag(s->affects, STATUS_AFFECTS_LEADERS);
 }
 
 

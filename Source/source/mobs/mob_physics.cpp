@@ -12,6 +12,7 @@
 
 #include "mob.h"
 
+#include "../functions.h"
 #include "../game.h"
 
 
@@ -223,7 +224,8 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
     if(chase_info.state == CHASE_STATE_CHASING) {
         point final_target_pos = get_chase_target();
         
-        if(chase_info.flags & CHASE_FLAG_TELEPORT) {
+        if(has_flag(chase_info.flags, CHASE_FLAG_TELEPORT)) {
+
             sector* sec =
                 get_sector(final_target_pos, NULL, true);
                 
@@ -232,7 +234,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
                 return H_MOVE_FAIL;
             }
             
-            if(can_move_in_midair) {
+            if(has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
                 z = chase_info.offset_z;
                 if(chase_info.orig_z) {
                     z += *chase_info.orig_z;
@@ -244,7 +246,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
             speed.x = speed.y = 0;
             pos = final_target_pos;
             
-            if((chase_info.flags & CHASE_FLAG_TELEPORTS_CONSTANTLY) == 0) {
+            if(!has_flag(chase_info.flags, CHASE_FLAG_TELEPORTS_CONSTANTLY)) {
                 chase_info.state = CHASE_STATE_FINISHED;
             }
             return H_MOVE_TELEPORTED;
@@ -266,7 +268,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
                 );
                 
             bool can_free_move =
-                (chase_info.flags & CHASE_FLAG_ANY_ANGLE) ||
+                has_flag(chase_info.flags, CHASE_FLAG_ANY_ANGLE) ||
                 d <= MOB::FREE_MOVE_THRESHOLD;
                 
             float movement_angle =
@@ -483,7 +485,7 @@ void mob::tick_horizontal_movement_physics(
             //and if this step is larger than any step
             //encountered of all edges crossed.
             if(
-                !was_thrown &&
+                !has_flag(flags, MOB_FLAG_WAS_THROWN) &&
                 tallest_sector->z <= z + GEOMETRY::STEP_HEIGHT &&
                 tallest_sector->z > step_sector->z
             ) {
@@ -751,8 +753,8 @@ void mob::tick_vertical_movement_physics(
     //Vertical chasing.
     if(
         chase_info.state == CHASE_STATE_CHASING &&
-        can_move_in_midair &&
-        (chase_info.flags & CHASE_FLAG_TELEPORT) == 0
+        has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) &&
+        !has_flag(chase_info.flags, CHASE_FLAG_TELEPORT)
     ) {
         apply_gravity = false;
         
@@ -768,7 +770,7 @@ void mob::tick_vertical_movement_physics(
     }
     
     //Gravity.
-    if(apply_gravity && !can_move_in_midair && !holder.m) {
+    if(apply_gravity && !has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) && !holder.m) {
         speed_z = old_speed_z + delta_t* gravity_mult * MOB::GRAVITY_ADDER;
     }
     
@@ -781,14 +783,14 @@ void mob::tick_vertical_movement_physics(
         if(standing_on_mob) {
             z = standing_on_mob->z + standing_on_mob->height;
             speed_z = 0;
-            was_thrown = false;
+            disable_flag(flags, MOB_FLAG_WAS_THROWN);
             fsm.run_event(MOB_EV_LANDED);
             stop_height_effect();
             
         } else if(z <= ground_sector->z) {
             z = ground_sector->z;
             speed_z = 0;
-            was_thrown = false;
+            disable_flag(flags, MOB_FLAG_WAS_THROWN);
             fsm.run_event(MOB_EV_LANDED);
             stop_height_effect();
             
