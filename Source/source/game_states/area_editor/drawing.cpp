@@ -251,9 +251,9 @@ void area_editor::draw_canvas() {
                     } else {
                         av[v].color =
                             al_map_rgba(
-                                AREA_EDITOR::SELECTION_COLOR[0],
-                                AREA_EDITOR::SELECTION_COLOR[1],
-                                AREA_EDITOR::SELECTION_COLOR[2],
+                                SELECTION_COLOR[0],
+                                SELECTION_COLOR[1],
+                                SELECTION_COLOR[2],
                                 selection_opacity * 0.5 * 255
                             );
                     }
@@ -282,14 +282,14 @@ void area_editor::draw_canvas() {
     
     //0,0 marker.
     al_draw_line(
-        -(AREA_EDITOR::COMFY_DIST * 2), 0,
-        AREA_EDITOR::COMFY_DIST * 2, 0,
+        -(COMFY_DIST * 2), 0,
+        COMFY_DIST * 2, 0,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0f / game.cam.zoom
     );
     al_draw_line(
-        0, -(AREA_EDITOR::COMFY_DIST * 2), 0,
-        AREA_EDITOR::COMFY_DIST * 2,
+        0, -(COMFY_DIST * 2), 0,
+        COMFY_DIST * 2,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0f / game.cam.zoom
     );
@@ -360,9 +360,9 @@ void area_editor::draw_canvas() {
             (
                 selected ?
                 al_map_rgba(
-                    AREA_EDITOR::SELECTION_COLOR[0],
-                    AREA_EDITOR::SELECTION_COLOR[1],
-                    AREA_EDITOR::SELECTION_COLOR[2],
+                    SELECTION_COLOR[0],
+                    SELECTION_COLOR[1],
+                    SELECTION_COLOR[2],
                     selection_opacity * 255
                 ) :
                 !valid ?
@@ -488,9 +488,9 @@ void area_editor::draw_canvas() {
                 3.0 / game.cam.zoom,
                 selected ?
                 al_map_rgba(
-                    AREA_EDITOR::SELECTION_COLOR[0],
-                    AREA_EDITOR::SELECTION_COLOR[1],
-                    AREA_EDITOR::SELECTION_COLOR[2],
+                    SELECTION_COLOR[0],
+                    SELECTION_COLOR[1],
+                    SELECTION_COLOR[2],
                     selection_opacity * 255
                 ) :
                 !valid ?
@@ -536,7 +536,7 @@ void area_editor::draw_canvas() {
                     m_ptr->pos.x, m_ptr->pos.y,
                     m2_ptr->pos.x, m2_ptr->pos.y,
                     al_map_rgb(160, 224, 64),
-                    AREA_EDITOR::MOB_LINK_THICKNESS / game.cam.zoom
+                    MOB_LINK_THICKNESS / game.cam.zoom
                 );
                 
                 if(game.cam.zoom >= 0.25) {
@@ -554,7 +554,7 @@ void area_editor::draw_canvas() {
                         start.y + (end.y - start.y) * 0.55
                     );
                     const float delta =
-                        (AREA_EDITOR::MOB_LINK_THICKNESS * 4) / game.cam.zoom;
+                        (MOB_LINK_THICKNESS * 4) / game.cam.zoom;
                         
                     al_draw_filled_triangle(
                         pivot.x + cos(angle) * delta,
@@ -624,9 +624,9 @@ void area_editor::draw_canvas() {
             al_draw_filled_circle(
                 m_ptr->pos.x, m_ptr->pos.y, radius,
                 al_map_rgba(
-                    AREA_EDITOR::SELECTION_COLOR[0],
-                    AREA_EDITOR::SELECTION_COLOR[1],
-                    AREA_EDITOR::SELECTION_COLOR[2],
+                    SELECTION_COLOR[0],
+                    SELECTION_COLOR[1],
+                    SELECTION_COLOR[2],
                     selection_opacity * 255
                 )
             );
@@ -669,9 +669,9 @@ void area_editor::draw_canvas() {
                 if(selected) {
                     color =
                         al_map_rgba(
-                            AREA_EDITOR::SELECTION_COLOR[0],
-                            AREA_EDITOR::SELECTION_COLOR[1],
-                            AREA_EDITOR::SELECTION_COLOR[2],
+                            SELECTION_COLOR[0],
+                            SELECTION_COLOR[1],
+                            SELECTION_COLOR[2],
                             selection_opacity * 255
                         );
                 } else {
@@ -700,7 +700,7 @@ void area_editor::draw_canvas() {
                     s_ptr->pos.x, s_ptr->pos.y,
                     s2_ptr->pos.x, s2_ptr->pos.y,
                     color,
-                    AREA_EDITOR::PATH_LINK_THICKNESS / game.cam.zoom
+                    PATH_LINK_THICKNESS / game.cam.zoom
                 );
                 
                 if(debug_path_nrs && (one_way || s < s_ptr->links[l]->end_nr)) {
@@ -725,7 +725,7 @@ void area_editor::draw_canvas() {
                     float angle =
                         get_angle(s_ptr->pos, s2_ptr->pos);
                     const float delta =
-                        (AREA_EDITOR::PATH_LINK_THICKNESS * 4) / game.cam.zoom;
+                        (PATH_LINK_THICKNESS * 4) / game.cam.zoom;
                         
                     al_draw_filled_triangle(
                         mid_x + cos(angle) * delta,
@@ -744,7 +744,7 @@ void area_editor::draw_canvas() {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
             al_draw_filled_circle(
                 s_ptr->pos.x, s_ptr->pos.y,
-                AREA_EDITOR::PATH_STOP_RADIUS,
+                PATH_STOP_RADIUS,
                 al_map_rgb(80, 192, 192)
             );
             
@@ -753,11 +753,11 @@ void area_editor::draw_canvas() {
                 selected_path_stops.end()
             ) {
                 al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
+                    s_ptr->pos.x, s_ptr->pos.y, PATH_STOP_RADIUS,
                     al_map_rgba(
-                        AREA_EDITOR::SELECTION_COLOR[0],
-                        AREA_EDITOR::SELECTION_COLOR[1],
-                        AREA_EDITOR::SELECTION_COLOR[2],
+                        SELECTION_COLOR[0],
+                        SELECTION_COLOR[1],
+                        SELECTION_COLOR[2],
                         selection_opacity * 255
                     )
                 );
@@ -850,21 +850,21 @@ void area_editor::draw_canvas() {
                 
                 al_draw_filled_rectangle(
                     path_preview_checkpoints[c].x -
-                    (AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
+                    (PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
                     path_preview_checkpoints[c].y -
-                    (AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
+                    (PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
                     path_preview_checkpoints[c].x +
-                    (AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
+                    (PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
                     path_preview_checkpoints[c].y +
-                    (AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
+                    (PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
                     al_map_rgb(240, 224, 160)
                 );
                 draw_scaled_text(
                     game.fonts.builtin, al_map_rgb(0, 64, 64),
                     path_preview_checkpoints[c],
                     point(
-                        AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom,
-                        AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom
+                        POINT_LETTER_TEXT_SCALE / game.cam.zoom,
+                        POINT_LETTER_TEXT_SCALE / game.cam.zoom
                     ),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                     letter
@@ -949,21 +949,21 @@ void area_editor::draw_canvas() {
             
             al_draw_filled_rectangle(
                 cross_section_checkpoints[p].x -
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
+                (CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 cross_section_checkpoints[p].y -
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
+                (CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 cross_section_checkpoints[p].x +
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
+                (CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 cross_section_checkpoints[p].y +
-                (AREA_EDITOR::CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
+                (CROSS_SECTION_POINT_RADIUS / game.cam.zoom),
                 al_map_rgb(255, 255, 32)
             );
             draw_scaled_text(
                 game.fonts.builtin, al_map_rgb(0, 64, 64),
                 cross_section_checkpoints[p],
                 point(
-                    AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom,
-                    AREA_EDITOR::POINT_LETTER_TEXT_SCALE / game.cam.zoom
+                    POINT_LETTER_TEXT_SCALE / game.cam.zoom,
+                    POINT_LETTER_TEXT_SCALE / game.cam.zoom
                 ),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 letter
@@ -1107,9 +1107,9 @@ void area_editor::draw_canvas() {
             selection_end.x,
             selection_end.y,
             al_map_rgb(
-                AREA_EDITOR::SELECTION_COLOR[0],
-                AREA_EDITOR::SELECTION_COLOR[1],
-                AREA_EDITOR::SELECTION_COLOR[2]
+                SELECTION_COLOR[0],
+                SELECTION_COLOR[1],
+                SELECTION_COLOR[2]
             ),
             2.0 / game.cam.zoom
             
@@ -1510,8 +1510,8 @@ void area_editor::draw_debug_text(
         &dox, &doy, &dw, &dh
     );
     
-    float bbox_w = (dw * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.cam.zoom;
-    float bbox_h = (dh * AREA_EDITOR::DEBUG_TEXT_SCALE) / game.cam.zoom;
+    float bbox_w = (dw * DEBUG_TEXT_SCALE) / game.cam.zoom;
+    float bbox_h = (dh * DEBUG_TEXT_SCALE) / game.cam.zoom;
     
     al_draw_filled_rectangle(
         where.x - bbox_w * 0.5, where.y - bbox_h * 0.5,
@@ -1523,8 +1523,8 @@ void area_editor::draw_debug_text(
         game.fonts.builtin, color,
         where,
         point(
-            AREA_EDITOR::DEBUG_TEXT_SCALE / game.cam.zoom,
-            AREA_EDITOR::DEBUG_TEXT_SCALE / game.cam.zoom
+            DEBUG_TEXT_SCALE / game.cam.zoom,
+            DEBUG_TEXT_SCALE / game.cam.zoom
         ),
         ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
         text

@@ -18,14 +18,7 @@
 
 
 namespace HUD {
-extern const string GUI_FILE_NAME;
-extern const float LEADER_SWAP_JUICE_DURATION;
-extern const float SPRAY_SWAP_JUICE_DURATION;
-extern const float STANDBY_SWAP_JUICE_DURATION;
 extern const float SUN_METER_SUN_SPIN_SPEED;
-extern const float UNNECESSARY_ITEMS_FADE_IN_SPEED;
-extern const float UNNECESSARY_ITEMS_FADE_OUT_DELAY;
-extern const float UNNECESSARY_ITEMS_FADE_OUT_SPEED;
 }
 
 
@@ -41,8 +34,14 @@ enum BUBBLE_RELATIONS {
  * Holds information about the in-game HUD.
  */
 struct hud_struct {
-
-
+    static const string HUD_FILE_NAME;
+    static const float LEADER_SWAP_JUICE_DURATION;
+    static const float SPRAY_SWAP_JUICE_DURATION;
+    static const float STANDBY_SWAP_JUICE_DURATION;
+    static const float UNNECESSARY_ITEMS_FADE_IN_SPEED;
+    static const float UNNECESSARY_ITEMS_FADE_OUT_DELAY;
+    static const float UNNECESSARY_ITEMS_FADE_OUT_SPEED;
+    
     //Bitmap and color of a leader's icon.
     struct leader_icon_bubble {
         //Leader icon bitmap.

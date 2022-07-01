@@ -254,7 +254,7 @@ void load_area(
             s2f(
                 sector_data->get_child_by_name(
                     "brightness"
-                )->get_value_or_default(i2s(GEOMETRY::DEF_SECTOR_BRIGHTNESS))
+                )->get_value_or_default(i2s(DEF_SECTOR_BRIGHTNESS))
             );
         new_sector->tag = sector_data->get_child_by_name("tag")->value;
         new_sector->z = s2f(sector_data->get_child_by_name("z")->value);
@@ -1167,7 +1167,7 @@ void load_options() {
     reader_setter rs(&file);
     
     game.states.animation_ed->history.clear();
-    for(size_t h = 0; h < ANIM_EDITOR::HISTORY_SIZE; ++h) {
+    for(size_t h = 0; h < animation_editor::HISTORY_SIZE; ++h) {
         game.states.animation_ed->history.push_back("");
         rs.set(
             "animation_editor_history_" + i2s(h + 1),
@@ -1461,16 +1461,16 @@ void load_status_types(const bool load_resources) {
         
         new_t->affects = 0;
         if(affects_pikmin_bool) {
-            enable_flag(new_t->affects, STATUS_AFFECTS_PIKMIN);
+            new_t->affects |= STATUS_AFFECTS_PIKMIN;
         }
         if(affects_leaders_bool) {
-            enable_flag(new_t->affects, STATUS_AFFECTS_LEADERS);
+            new_t->affects |= STATUS_AFFECTS_LEADERS;
         }
         if(affects_enemies_bool) {
-            enable_flag(new_t->affects, STATUS_AFFECTS_ENEMIES);
+            new_t->affects |= STATUS_AFFECTS_ENEMIES;
         }
         if(affects_others_bool) {
-            enable_flag(new_t->affects, STATUS_AFFECTS_OTHERS);
+            new_t->affects |= STATUS_AFFECTS_OTHERS;
         }
         
         if(reapply_rule_node) {

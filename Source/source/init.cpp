@@ -415,11 +415,10 @@ void init_misc() {
     al_set_window_title(game.display, "Pikifen");
     int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
     if(game.options.smooth_scaling) {
-        enable_flag(new_bitmap_flags, ALLEGRO_MAG_LINEAR);
-        enable_flag(new_bitmap_flags, ALLEGRO_MIN_LINEAR);
+        new_bitmap_flags |= ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR;
     }
     if(game.options.mipmaps_enabled) {
-        enable_flag(new_bitmap_flags, ALLEGRO_MIPMAP);
+        new_bitmap_flags |= ALLEGRO_MIPMAP;
     }
     al_set_new_bitmap_flags(new_bitmap_flags);
     al_reserve_samples(16);

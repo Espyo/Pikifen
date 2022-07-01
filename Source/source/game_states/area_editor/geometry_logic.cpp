@@ -116,7 +116,7 @@ void area_editor::check_drawing_line(const point &pos) {
     if(
         (drawing_nodes[0].on_edge || drawing_nodes[0].on_vertex) &&
         dist(pos, drawing_nodes[0].snapped_spot) <=
-        AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
+        VERTEX_MERGE_RADIUS / game.cam.zoom
     ) {
         drawing_line_error = DRAWING_LINE_LOOPS_IN_SPLIT;
         return;
@@ -241,7 +241,7 @@ void area_editor::check_drawing_line(const point &pos) {
             ) {
                 if(
                     dist(intersection, drawing_nodes.begin()->snapped_spot) >
-                    AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
+                    VERTEX_MERGE_RADIUS / game.cam.zoom
                 ) {
                     //Only a problem if this isn't the user's drawing finish.
                     drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
@@ -778,7 +778,7 @@ void area_editor::find_problems() {
                 
                 if(
                     circle_intersects_line_seg(
-                        s_ptr->pos, AREA_EDITOR::PATH_STOP_RADIUS,
+                        s_ptr->pos, PATH_STOP_RADIUS,
                         link_start_ptr->pos, link_end_ptr->pos
                     )
                 ) {
@@ -1357,7 +1357,7 @@ path_stop* area_editor::get_path_stop_under_point(const point &p) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
-        if(dist(s_ptr->pos, p) <= AREA_EDITOR::PATH_STOP_RADIUS) {
+        if(dist(s_ptr->pos, p) <= PATH_STOP_RADIUS) {
             return s_ptr;
         }
     }

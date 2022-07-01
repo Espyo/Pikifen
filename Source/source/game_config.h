@@ -25,44 +25,42 @@ using std::size_t;
 using std::vector;
 
 
-namespace GAME_CONFIG {
-extern const bool DEF_CAN_THROW_LEADERS;
-extern const ALLEGRO_COLOR DEF_CARRYING_COLOR_MOVE;
-extern const ALLEGRO_COLOR DEF_CARRYING_COLOR_STOP;
-extern const float DEF_CARRYING_SPEED_BASE_MULT;
-extern const float DEF_CARRYING_SPEED_MAX_MULT;
-extern const float DEF_CARRYING_SPEED_WEIGHT_MULT;
-extern const float DEF_CURSOR_MAX_DIST;
-extern const float DEF_CURSOR_SPIN_SPEED;
-extern const float DEF_DAY_MINUTES_END;
-extern const float DEF_DAY_MINUTES_PER_IRL_SEC;
-extern const float DEF_DAY_MINUTES_START;
-extern const float DEF_GROUP_MEMBER_GRAB_RANGE;
-extern const float DEF_IDLE_TASK_RANGE;
-extern const float DEF_MATURITY_POWER_MULT;
-extern const float DEF_MATURITY_SPEED_MULT;
-extern const size_t DEF_MAX_PIKMIN_IN_FIELD;
-extern const float DEF_MESSAGE_CHAR_INTERVAL;
-extern const float DEF_NEXT_PLUCK_RANGE;
-extern const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR;
-extern const float DEF_ONION_OPEN_RANGE;
-extern const float DEF_PIKMIN_CHASE_RANGE;
-extern const float DEF_PLUCK_RANGE;
-extern const float DEF_STANDARD_PIKMIN_HEIGHT;
-extern const float DEF_STANDARD_PIKMIN_RADIUS;
-extern const float DEF_SWARM_TASK_RANGE;
-extern const float DEF_THROW_MAX_DIST;
-extern const float DEF_WHISTLE_GROWTH_SPEED;
-extern const float DEF_WHISTLE_MAX_DIST;
-extern const float DEF_ZOOM_MAX_LEVEL;
-extern const float DEF_ZOOM_MIN_LEVEL;
-}
-
-
 /* ----------------------------------------------------------------------------
  * The game's configuration. It controls some rules about the game.
  */
 struct game_config {
+
+    static const bool DEF_CAN_THROW_LEADERS;
+    static const ALLEGRO_COLOR DEF_CARRYING_COLOR_MOVE;
+    static const ALLEGRO_COLOR DEF_CARRYING_COLOR_STOP;
+    static const float DEF_CARRYING_SPEED_BASE_MULT;
+    static const float DEF_CARRYING_SPEED_MAX_MULT;
+    static const float DEF_CARRYING_SPEED_WEIGHT_MULT;
+    static const float DEF_CURSOR_MAX_DIST;
+    static const float DEF_CURSOR_SPIN_SPEED;
+    static const float DEF_DAY_MINUTES_END;
+    static const float DEF_DAY_MINUTES_PER_IRL_SEC;
+    static const float DEF_DAY_MINUTES_START;
+    static const float DEF_GROUP_MEMBER_GRAB_RANGE;
+    static const float DEF_IDLE_TASK_RANGE;
+    static const float DEF_MATURITY_POWER_MULT;
+    static const float DEF_MATURITY_SPEED_MULT;
+    static const size_t DEF_MAX_PIKMIN_IN_FIELD;
+    static const float DEF_MESSAGE_CHAR_INTERVAL;
+    static const float DEF_NEXT_PLUCK_RANGE;
+    static const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR;
+    static const float DEF_ONION_OPEN_RANGE;
+    static const float DEF_PIKMIN_CHASE_RANGE;
+    static const float DEF_PLUCK_RANGE;
+    static const float DEF_STANDARD_PIKMIN_HEIGHT;
+    static const float DEF_STANDARD_PIKMIN_RADIUS;
+    static const float DEF_SWARM_TASK_RANGE;
+    static const float DEF_THROW_MAX_DIST;
+    static const float DEF_WHISTLE_GROWTH_SPEED;
+    static const float DEF_WHISTLE_MAX_DIST;
+    static const float DEF_ZOOM_MAX_LEVEL;
+    static const float DEF_ZOOM_MIN_LEVEL;
+    
     //Can a leader throw other leaders?
     bool can_throw_leaders;
     //Color that represents a non-Onion carriable object when moving.

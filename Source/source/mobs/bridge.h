@@ -15,11 +15,6 @@
 #include "mob.h"
 
 
-namespace BRIDGE {
-extern const float FLOOR_WIDTH;
-}
-
-
 /* ----------------------------------------------------------------------------
  * A bridge mob. Bridges on the engine are made up of two parts:
  * the mob itself, which Pikmin damage, and a series of components.

@@ -28,25 +28,21 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     }
     
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.cam.target_pos.x -=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-            
+        game.cam.target_pos.x -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.cam.target_pos.x +=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-            
+        game.cam.target_pos.x += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.cam.target_pos.y -=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-            
+        game.cam.target_pos.y -= KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.cam.target_pos.y +=
-            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-            
+        game.cam.target_pos.y += KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         game.cam.target_zoom =
             clamp(
-                game.cam.target_zoom - game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+                game.cam.target_zoom - game.cam.zoom * KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
             
@@ -54,7 +50,7 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
         game.cam.target_zoom =
             clamp(
-                game.cam.target_zoom + game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+                game.cam.target_zoom + game.cam.zoom * KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
             
@@ -461,7 +457,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         NULL,
                         1.0f / game.cam.zoom,
                         true,
-                        ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f
+                        HITBOX_MIN_RADIUS * 2.0f
                     );
                 cur_hitbox->radius = hitbox_size.x / 2.0f;
             } else {
@@ -480,7 +476,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         NULL,
                         1.0f / game.cam.zoom,
                         false,
-                        ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f
+                        HITBOX_MIN_RADIUS * 2.0f
                     );
                 cur_hitbox->pos.x = hitbox_center.x;
                 cur_hitbox->radius = hitbox_size.x / 2.0f;
@@ -503,7 +499,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 &cur_sprite->top_angle,
                 1.0f / game.cam.zoom,
                 top_keep_aspect_ratio,
-                ANIM_EDITOR::TOP_MIN_SIZE
+                TOP_MIN_SIZE
             );
         }
         break;

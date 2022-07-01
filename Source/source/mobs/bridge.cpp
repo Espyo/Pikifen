@@ -18,12 +18,6 @@
 #include "../utils/string_utils.h"
 
 
-namespace BRIDGE {
-//Width of the bridge's main floor, i.e., sans rails.
-const float FLOOR_WIDTH = 192.0f;
-}
-
-
 /* ----------------------------------------------------------------------------
  * Creates a bridge mob.
  * pos:
@@ -71,6 +65,8 @@ bool bridge::check_health() {
     float chunk_width = total_length / total_chunks_needed;
     vector<mob*> new_mobs;
     
+    const float BRIDGE_WIDTH = 192.0f;
+    
     //Start creating all the necessary chunks.
     while(chunks < expected_chunks) {
         float x_offset = chunk_width / 2.0 + chunk_width * chunks;
@@ -80,10 +76,10 @@ bool bridge::check_health() {
         if(chunks == total_chunks_needed - 1) {
             z_offset = delta_z;
         } else {
-            size_t steps_needed = ceil(fabs(delta_z) / GEOMETRY::STEP_HEIGHT) + 1;
+            size_t steps_needed = ceil(fabs(delta_z) / STEP_HEIGHT) + 1;
             float cur_completion = chunks / (float) total_chunks_needed;
             size_t step_idx = cur_completion * steps_needed;
-            z_offset = step_idx * GEOMETRY::STEP_HEIGHT * sign(delta_z);
+            z_offset = step_idx * STEP_HEIGHT * sign(delta_z);
         }
         
         if(z_offset == prev_chunk_z_offset) {
@@ -127,13 +123,13 @@ bool bridge::check_health() {
                 );
             floor_component->z = start_z + z_offset;
             floor_component->set_rectangular_dim(
-                point(chunk_width, BRIDGE::FLOOR_WIDTH)
+                point(chunk_width, BRIDGE_WIDTH)
             );
             new_mobs.push_back(floor_component);
             
             //Then, the left rail component.
             offset.x = x_offset;
-            offset.y = -BRIDGE::FLOOR_WIDTH / 2.0f - bri_type->rail_width / 2.0f;
+            offset.y = -BRIDGE_WIDTH / 2.0f - bri_type->rail_width / 2.0f;
             offset = rotate_point(offset, angle);
             mob* left_rail_component =
                 create_mob(
@@ -150,12 +146,12 @@ bool bridge::check_health() {
                     bri_type->rail_width
                 )
             );
-            left_rail_component->height += GEOMETRY::STEP_HEIGHT * 2.0 + 1.0f;
+            left_rail_component->height += STEP_HEIGHT * 2.0 + 1.0f;
             new_mobs.push_back(left_rail_component);
             
             //Finally, the right rail component.
             offset.x = x_offset;
-            offset.y = BRIDGE::FLOOR_WIDTH / 2.0f + bri_type->rail_width / 2.0f;
+            offset.y = BRIDGE_WIDTH / 2.0f + bri_type->rail_width / 2.0f;
             offset = rotate_point(offset, angle);
             mob* right_rail_component =
                 create_mob(
@@ -188,7 +184,7 @@ bool bridge::check_health() {
     //Finish setting up the new component mobs.
     for(size_t m = 0; m < new_mobs.size(); ++m) {
         mob* m_ptr = new_mobs[m];
-        enable_flag(m_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+        m_ptr->can_move_in_midair = true;
         m_ptr->links.push_back(this);
     }
     
@@ -293,7 +289,7 @@ void bridge::setup() {
         total_chunks_needed =
             std::max(
                 total_chunks_needed,
-                (size_t) (ceil(fabs(delta_z) / GEOMETRY::STEP_HEIGHT) + 1)
+                (size_t) (ceil(fabs(delta_z) / STEP_HEIGHT) + 1)
             );
     }
 }

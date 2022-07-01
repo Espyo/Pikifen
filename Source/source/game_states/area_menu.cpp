@@ -18,10 +18,10 @@
 #include "../load.h"
 #include "../utils/string_utils.h"
 
-namespace AREA_MENU {
+
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu.txt";
-}
+const string area_menu_state::GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Area_menu.txt";
 
 
 /* ----------------------------------------------------------------------------
@@ -126,7 +126,7 @@ void area_menu_state::load() {
     gui.register_coords("list_scroll", 90, 55,  2, 70);
     gui.register_coords("tooltip",     50, 95, 95,  8);
     gui.read_coords(
-        data_node(AREA_MENU::GUI_FILE_PATH).get_child_by_name("positions")
+        data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     //Back button.

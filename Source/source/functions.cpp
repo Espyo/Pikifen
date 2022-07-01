@@ -364,7 +364,7 @@ bool does_edge_have_wall_shadow(
         return true;
     } else {
         //Auto shadow length.
-        return (*unaffected_sector)->z > (*affected_sector)->z + GEOMETRY::STEP_HEIGHT;
+        return (*unaffected_sector)->z > (*affected_sector)->z + STEP_HEIGHT;
     }
 }
 
@@ -403,7 +403,7 @@ vector<string> folder_to_vector(
     while((entry = al_read_directory(folder)) != NULL) {
         if(
             folders ==
-            (has_flag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR))
+            ((al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR) > 0)
         ) {
         
             string entry_name =
@@ -885,39 +885,40 @@ unsigned char get_throw_preview_vertexes(
     const float u_offset, const float u_scale,
     const bool vary_thickness
 ) {
+    const float FADE_IN_RATIO = 0.30f;
+    const float FADE_OUT_RATIO = 1.0f - FADE_IN_RATIO;
+    const float MIN_THICKNESS = 2.0f;
+    const float DEF_MAX_THICKNESS = 8.0f;
     const float segment_points[] = {
-        0.0f, LEADER::THROW_PREVIEW_FADE_IN_RATIO,
-        0.5f, LEADER::THROW_PREVIEW_FADE_OUT_RATIO,
-        1.0f
+        0.0f, FADE_IN_RATIO, 0.5f, FADE_OUT_RATIO, 1.0f
     };
     
-    float max_thickness =
-        vary_thickness ?
-        LEADER::THROW_PREVIEW_DEF_MAX_THICKNESS :
-        LEADER::THROW_PREVIEW_MIN_THICKNESS;
-        
+    float max_thickness = vary_thickness ? DEF_MAX_THICKNESS : MIN_THICKNESS;
+    
     float leader_to_cursor_dist = dist(leader_pos, cursor_pos).to_float();
     unsigned char cur_v = 0;
     
     auto get_thickness =
-    [max_thickness] (float n) -> float {
+        [MIN_THICKNESS, max_thickness]
+    (float n) -> float {
         if(n >= 0.5f) {
             n = 1 - n;
         }
         return
         interpolate_number(
-            n, 0.0f, 0.5f, LEADER::THROW_PREVIEW_MIN_THICKNESS, max_thickness
+            n, 0.0f, 0.5f, MIN_THICKNESS, max_thickness
         );
     };
     auto get_color =
-    [&color] (float n) -> ALLEGRO_COLOR {
+        [&color, FADE_IN_RATIO]
+    (float n) -> ALLEGRO_COLOR {
         if(n >= 0.5f) {
             n = 1 - n;
         }
-        if(n < LEADER::THROW_PREVIEW_FADE_IN_RATIO) {
+        if(n < FADE_IN_RATIO) {
             return
             interpolate_color(
-                n, 0.0f, LEADER::THROW_PREVIEW_FADE_IN_RATIO,
+                n, 0.0f, FADE_IN_RATIO,
                 change_alpha(color, 0),
                 color
             );
@@ -1027,9 +1028,9 @@ float get_wall_shadow_length(edge* e_ptr) {
         fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z);
     return
         clamp(
-            height_difference * GEOMETRY::SHADOW_AUTO_LENGTH_MULT,
-            GEOMETRY::SHADOW_MIN_AUTO_LENGTH,
-            GEOMETRY::SHADOW_MAX_AUTO_LENGTH
+            height_difference * edge::SHADOW_AUTO_LENGTH_MULT,
+            edge::SHADOW_MIN_AUTO_LENGTH,
+            edge::SHADOW_MAX_AUTO_LENGTH
         );
 }
 
@@ -1917,14 +1918,14 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
             new msg_box_info(final_text, speaker_bmp);
         game.states.gameplay->hud->gui.start_animation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
-            GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+            gameplay_state::MENU_ENTRY_HUD_MOVE_TIME
         );
     } else {
         delete game.states.gameplay->msg_box;
         game.states.gameplay->msg_box = NULL;
         game.states.gameplay->hud->gui.start_animation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
-            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            gameplay_state::MENU_EXIT_HUD_MOVE_TIME
         );
     }
 }
@@ -2082,7 +2083,7 @@ WIPE_FOLDER_RESULTS wipe_folder(
     
     ALLEGRO_FS_ENTRY* entry = al_read_directory(folder);
     while(entry) {
-        if(has_flag(al_get_fs_entry_mode(entry), ALLEGRO_FILEMODE_ISDIR)) {
+        if((al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR) > 0) {
             has_folders = true;
             
         } else {

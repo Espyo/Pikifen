@@ -26,26 +26,9 @@
 #include "pause_menu.h"
 
 namespace GAMEPLAY {
-extern const float CAMERA_BOX_MARGIN;
-extern const float CAMERA_SMOOTHNESS_MULT;
-extern const unsigned char COLLISION_OPACITY;
-extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
-extern const float CURSOR_TRAIL_MAX_WIDTH;
-extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
-extern const int FOG_BITMAP_SIZE;
-extern const unsigned char PREVIEW_OPACITY;
-extern const float PREVIEW_TEXTURE_SCALE;
-extern const float PREVIEW_TEXTURE_TIME_MULT;
 extern const float REPLAY_SAVE_FREQUENCY;
 extern const float TREE_SHADOW_SWAY_AMOUNT;
 extern const float TREE_SHADOW_SWAY_SPEED;
-extern const float AREA_INTRO_HUD_MOVE_TIME;
-extern const float AREA_TITLE_FADE_DURATION;
-extern const float CURSOR_TRAIL_SAVE_INTERVAL;
-extern const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
-extern const float MENU_ENTRY_HUD_MOVE_TIME;
-extern const float MENU_EXIT_HUD_MOVE_TIME;
-extern const float SWARM_ARROW_SPEED;
 }
 
 /* ----------------------------------------------------------------------------
@@ -54,6 +37,14 @@ extern const float SWARM_ARROW_SPEED;
 class gameplay_state : public game_state {
 public:
 
+    static const float AREA_INTRO_HUD_MOVE_TIME;
+    static const float AREA_TITLE_FADE_DURATION;
+    static const float CURSOR_TRAIL_SAVE_INTERVAL;
+    static const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
+    static const float MENU_ENTRY_HUD_MOVE_TIME;
+    static const float MENU_EXIT_HUD_MOVE_TIME;
+    static const float SWARM_ARROW_SPEED;
+    
     gameplay_state();
     
     //Is the player playing after hours?
@@ -94,8 +85,6 @@ public:
     mob_lists mobs;
     //Information about the message box currently active on player 1, if any.
     msg_box_info* msg_box;
-    //ID of the next mob to be created.
-    size_t next_mob_id;
     //Current notification.
     notification_struct notification;
     //Manager of all particles.

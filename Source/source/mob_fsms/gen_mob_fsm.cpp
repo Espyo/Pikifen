@@ -46,6 +46,8 @@ void gen_mob_fsm::be_attacked(mob* m, void* info1, void* info2) {
 }
 
 
+const float CARRY_STUCK_CIRCLING_RADIUS = 8.0f;
+const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
 /* ----------------------------------------------------------------------------
  * When it's time to become stuck and move in circles.
  * m:
@@ -59,8 +61,8 @@ void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
     engine_assert(m->carry_info != NULL, m->print_state_history());
     
     m->circle_around(
-        NULL, m->pos, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
-        m->carry_info->get_speed() * MOB::CARRY_STUCK_SPEED_MULTIPLIER,
+        NULL, m->pos, CARRY_STUCK_CIRCLING_RADIUS, true,
+        m->carry_info->get_speed() * CARRY_STUCK_SPEED_MULTIPLIER,
         true
     );
 }
@@ -79,10 +81,9 @@ void gen_mob_fsm::carry_become_stuck(mob* m, void* info1, void* info2) {
 void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     m->carry_info->is_moving = true;
     
-    has_flag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) ?
-    enable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR) :
-    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    
+    m->can_move_in_midair =
+        (m->path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE);
+        
     if(m->carry_info->intended_mob == NULL) {
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);
         return;
@@ -101,7 +102,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
     path_follow_settings settings;
-    enable_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
+    settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
     
     if(m->carry_info->destination == CARRY_DESTINATION_SHIP) {
         //Special case: ships.
@@ -134,8 +135,8 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
             MOB_CATEGORY_BRIDGES
         ) {
             bridge* bri_ptr = (bridge*) m->carry_info->intended_mob;
-            enable_flag(settings.flags, PATH_FOLLOW_FLAG_FAKED_END);
-            enable_flag(settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB);
+            settings.flags |= PATH_FOLLOW_FLAG_FAKED_END;
+            settings.flags |= PATH_FOLLOW_FLAG_FOLLOW_MOB;
             settings.faked_end = bri_ptr->get_start_point();
         }
     }
@@ -205,7 +206,7 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
     if(!m->path_info) return;
     m->carry_info->is_moving = false;
-    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+    m->can_move_in_midair = false;
     m->stop_following_path();
     m->stop_chasing();
 }
@@ -291,7 +292,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     //Now, check if the fact that it can fly or not changed.
     if(!must_update && m->path_info) {
         bool old_is_airborne =
-            has_flag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+            (m->path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE);
         bool new_is_airborne = m->carry_info->can_fly();
         must_update = old_is_airborne != new_is_airborne;
     }
@@ -370,7 +371,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     //Now, check if the fact that it can fly or not changed.
     if(!must_update && m->path_info) {
         bool old_is_airborne =
-            has_flag(m->path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+            (m->path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE);
         bool new_is_airborne = m->carry_info->can_fly();
         must_update = old_is_airborne != new_is_airborne;
     }
@@ -450,7 +451,7 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     }
     
     m->focus_on_mob(m->carry_info->intended_mob);
-    enable_flag(m->flags, MOB_FLAG_INTANGIBLE);
+    m->tangible = false;
     m->become_uncarriable();
     
     m->focused_mob->fsm.run_event(MOB_EV_STARTED_RECEIVING_DELIVERY);

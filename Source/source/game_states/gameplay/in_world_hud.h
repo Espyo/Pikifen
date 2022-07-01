@@ -15,25 +15,6 @@
 #include <allegro5/allegro.h>
 
 
-namespace IN_WORLD_FRACTION {
-extern const float GROW_JUICE_DURATION;
-extern const float GROW_JUICE_AMOUNT;
-extern const float PADDING;
-extern const float REQ_MET_JUICE_DURATION;
-extern const float REQ_MET_GROW_JUICE_AMOUNT;
-extern const float TRANSITION_IN_DURATION;
-extern const float TRANSITION_OUT_DURATION;
-}
-
-namespace IN_WORLD_HEALTH_WHEEL {
-extern const float OPACITY;
-extern const float PADDING;
-extern const float SMOOTHNESS_MULT;
-extern const float TRANSITION_IN_DURATION;
-extern const float TRANSITION_OUT_DURATION;
-}
-
-
 //In-world HUD item transitions.
 enum IN_WORLD_HUD_TRANSITIONS {
     //Not transitioning.
@@ -82,6 +63,13 @@ public:
  */
 class in_world_fraction : public in_world_hud_item {
 public:
+    static const float GROW_JUICE_DURATION;
+    static const float GROW_JUICE_AMOUNT;
+    static const float REQ_MET_JUICE_DURATION;
+    static const float REQ_MET_GROW_JUICE_AMOUNT;
+    static const float TRANSITION_IN_DURATION;
+    static const float TRANSITION_OUT_DURATION;
+    
     //Constructor.
     in_world_fraction(mob* m);
     //Draw the item.
@@ -116,6 +104,10 @@ private:
  */
 class in_world_health_wheel : public in_world_hud_item {
 public:
+    static const float SMOOTHNESS_MULT;
+    static const float TRANSITION_IN_DURATION;
+    static const float TRANSITION_OUT_DURATION;
+    
     //How much the health wheel is filled. Gradually moves to the target amount.
     float visible_ratio;
     

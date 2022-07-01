@@ -36,28 +36,14 @@ using std::unordered_set;
 using std::vector;
 
 
+const float LIQUID_DRAIN_DURATION = 2.0f;
+
 struct area_data;
 struct blockmap;
 struct edge;
 struct sector;
 struct triangle;
 struct vertex;
-
-
-namespace GEOMETRY {
-extern const float BLOCKMAP_BLOCK_SIZE;
-extern const unsigned char DEF_SECTOR_BRIGHTNESS;
-extern const float STEP_HEIGHT;
-extern const float LIQUID_DRAIN_DURATION;
-extern const float SHADOW_AUTO_LENGTH_MULT;
-extern const ALLEGRO_COLOR SHADOW_DEF_COLOR;
-extern const float SHADOW_MAX_AUTO_LENGTH;
-extern const float SHADOW_MAX_LENGTH;
-extern const float SHADOW_MIN_AUTO_LENGTH;
-extern const float SHADOW_MIN_LENGTH;
-extern const ALLEGRO_COLOR SMOOTHING_DEF_COLOR;
-extern const float SMOOTHING_MAX_LENGTH;
-}
 
 
 //Possible errors after a triangulation operation.
@@ -170,6 +156,15 @@ struct edge {
     void transfer_sector(
         sector* from, sector* to, const size_t to_nr, const size_t edge_nr
     );
+    
+    static const float SHADOW_AUTO_LENGTH_MULT;
+    static const ALLEGRO_COLOR SHADOW_DEF_COLOR;
+    static const float SHADOW_MAX_AUTO_LENGTH;
+    static const float SHADOW_MAX_LENGTH;
+    static const float SHADOW_MIN_AUTO_LENGTH;
+    static const float SHADOW_MIN_LENGTH;
+    static const ALLEGRO_COLOR SMOOTHING_DEF_COLOR;
+    static const float SMOOTHING_MAX_LENGTH;
 };
 
 
@@ -531,5 +526,12 @@ TRIANGULATION_ERRORS triangulate(
     sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
     const bool clear_lone_edges
 );
+
+
+const float BLOCKMAP_BLOCK_SIZE = 128;
+const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
+//Mobs can walk up sectors that are, at the most,
+//this high from the current one, as if climbing up steps.
+const float STEP_HEIGHT = 50;
 
 #endif //ifndef SECTOR_INCLUDED

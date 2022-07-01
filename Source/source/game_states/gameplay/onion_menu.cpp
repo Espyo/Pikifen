@@ -17,14 +17,13 @@
 #include "gameplay.h"
 
 
-namespace ONION_MENU {
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Onion_menu.txt";
-//How long to let text turn red for.
-const float RED_TEXT_DURATION = 1.0f;
+const string onion_menu_struct::GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Onion_menu.txt";
 //The Onion menu can only show, at most, these many Pikmin types per page.
-const size_t TYPES_PER_PAGE = 5;
-}
+const size_t onion_menu_struct::ONION_MENU_TYPES_PER_PAGE = 5;
+//How long to let text turn red for.
+const float onion_menu_struct::RED_TEXT_DURATION = 1.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -62,7 +61,7 @@ onion_menu_struct::onion_menu_struct(
         );
     }
     
-    nr_pages = ceil(types.size() / (float) ONION_MENU::TYPES_PER_PAGE);
+    nr_pages = ceil(types.size() / (float) ONION_MENU_TYPES_PER_PAGE);
     
     gui.register_coords("instructions",     50,  7, 90, 20);
     gui.register_coords("cancel",           16, 85, 18, 11);
@@ -99,7 +98,7 @@ onion_menu_struct::onion_menu_struct(
     gui.register_coords("group_right_more", 95, 60,  3,  4);
     gui.register_coords("tooltip",          50, 95, 95,  8);
     gui.read_coords(
-        data_node(ONION_MENU::GUI_FILE_PATH).get_child_by_name("positions")
+        data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     //Instructions text.
@@ -157,7 +156,7 @@ onion_menu_struct::onion_menu_struct(
             color =
                 interpolate_color(
                     red_it->second,
-                    0, ONION_MENU::RED_TEXT_DURATION,
+                    0, this->RED_TEXT_DURATION,
                     color, al_map_rgb(224, 0, 0)
                 );
         }
@@ -198,7 +197,7 @@ onion_menu_struct::onion_menu_struct(
     gui.add_item(select_all_check, "select_all");
     
     //Onion icons and buttons.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
         string id = "onion_" + i2s(t + 1) + "_button";
         
         gui_item* onion_icon = new gui_item(false);
@@ -265,7 +264,7 @@ onion_menu_struct::onion_menu_struct(
     gui.add_item(onion_all_button, "onion_all");
     
     //Onion amounts.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
         gui_item* onion_amount_text = new gui_item(false);
         onion_amount_text->on_draw =
             [this, t, onion_amount_text]
@@ -286,7 +285,7 @@ onion_menu_struct::onion_menu_struct(
                 color =
                     interpolate_color(
                         red_it->second,
-                        0, ONION_MENU::RED_TEXT_DURATION,
+                        0, this->RED_TEXT_DURATION,
                         color, al_map_rgb(224, 0, 0)
                     );
             }
@@ -306,7 +305,7 @@ onion_menu_struct::onion_menu_struct(
     }
     
     //Group icons and buttons.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
         string id = "group_" + i2s(t + 1) + "_button";
         
         gui_item* group_icon = new gui_item(false);
@@ -373,7 +372,7 @@ onion_menu_struct::onion_menu_struct(
     gui.add_item(group_all_button, "group_all");
     
     //Group amounts.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
         gui_item* group_amount_text = new gui_item(false);
         group_amount_text->on_draw =
             [this, t, group_amount_text]
@@ -394,7 +393,7 @@ onion_menu_struct::onion_menu_struct(
                 color =
                     interpolate_color(
                         red_it->second,
-                        0, ONION_MENU::RED_TEXT_DURATION,
+                        0, this->RED_TEXT_DURATION,
                         color, al_map_rgb(224, 0, 0)
                     );
             }
@@ -524,7 +523,7 @@ onion_menu_struct::onion_menu_struct(
     update();
     gui.start_animation(
         GUI_MANAGER_ANIM_UP_TO_CENTER,
-        GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+        gameplay_state::MENU_ENTRY_HUD_MOVE_TIME
     );
 }
 
@@ -681,7 +680,7 @@ void onion_menu_struct::go_to_page(const size_t page) {
  * Makes the Onion and group buttons juicy grow.
  */
 void onion_menu_struct::grow_buttons() {
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
         onion_icon_items[t]->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_ICON
         );
@@ -710,7 +709,7 @@ void onion_menu_struct::grow_buttons() {
  *   The item.
  */
 void onion_menu_struct::make_gui_item_red(gui_item* item) {
-    red_items[item] = ONION_MENU::RED_TEXT_DURATION;
+    red_items[item] = RED_TEXT_DURATION;
 }
 
 
@@ -719,13 +718,11 @@ void onion_menu_struct::make_gui_item_red(gui_item* item) {
  */
 void onion_menu_struct::start_closing() {
     closing = true;
-    closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-    gui.start_animation(
-        GUI_MANAGER_ANIM_CENTER_TO_UP, GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-    );
+    closing_timer = gameplay_state::MENU_EXIT_HUD_MOVE_TIME;
+    gui.start_animation(GUI_MANAGER_ANIM_CENTER_TO_UP, gameplay_state::MENU_EXIT_HUD_MOVE_TIME);
     game.states.gameplay->hud->gui.start_animation(
         GUI_MANAGER_ANIM_OUT_TO_IN,
-        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        gameplay_state::MENU_EXIT_HUD_MOVE_TIME
     );
 }
 
@@ -810,7 +807,7 @@ void onion_menu_struct::tick(const float delta_t) {
     gui.tick(delta_t);
     
     //Tick the background.
-    const float bg_alpha_mult_speed = 1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
+    const float bg_alpha_mult_speed = 1.0f / gameplay_state::MENU_ENTRY_HUD_MOVE_TIME;
     const float diff = closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
     bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
     
@@ -846,7 +843,7 @@ void onion_menu_struct::update() {
     }
     
     //Reset the button and amount states.
-    for(size_t t = 0; t < ONION_MENU::TYPES_PER_PAGE; ++t) {
+    for(size_t t = 0; t < ONION_MENU_TYPES_PER_PAGE; ++t) {
         onion_icon_items[t]->visible = false;
         onion_button_items[t]->visible = false;
         onion_button_items[t]->selectable = false;
@@ -859,8 +856,8 @@ void onion_menu_struct::update() {
     
     //Assign the on-screen types.
     for(
-        size_t t = page * ONION_MENU::TYPES_PER_PAGE;
-        t < (page + 1) * ONION_MENU::TYPES_PER_PAGE &&
+        size_t t = page * ONION_MENU_TYPES_PER_PAGE;
+        t < (page + 1) * ONION_MENU_TYPES_PER_PAGE &&
         t < n_ptr->nest_type->pik_types.size();
         ++t
     ) {

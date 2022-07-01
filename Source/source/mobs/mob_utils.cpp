@@ -24,6 +24,10 @@ using std::unordered_set;
 using std::size_t;
 
 
+//Default distance at which the mob considers the chase finished.
+const float chase_info_struct::DEF_TARGET_DISTANCE = 3.0f;
+
+
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about a carrying spot.
  * pos:
@@ -74,7 +78,7 @@ bool carry_info_struct::can_fly() const {
     for(size_t c = 0; c < spot_info.size(); ++c) {
         mob* carrier_ptr = spot_info[c].pik_ptr;
         if(!carrier_ptr) continue;
-        if(!has_flag(spot_info[c].pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
+        if(!spot_info[c].pik_ptr->can_move_in_midair) {
             return false;
         }
     }
@@ -415,6 +419,8 @@ point group_info_struct::get_spot_offset(const size_t spot_index) const {
  *   or left the group, this should point to said mob.
  */
 void group_info_struct::init_spots(mob* affected_mob_ptr) {
+    const float SPOT_MAX_DEVIATION = MOB::GROUP_SPOT_INTERVAL * 0.60f;
+    
     if(members.empty()) {
         spots.clear();
         radius = 0;
@@ -488,9 +494,9 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
                 alpha_spot(
                     point(
                         dist_from_center * cos(angle * s) +
-                        randomf(-MOB::GROUP_SPOT_MAX_DEVIATION, MOB::GROUP_SPOT_MAX_DEVIATION),
+                        randomf(-SPOT_MAX_DEVIATION, SPOT_MAX_DEVIATION),
                         dist_from_center * sin(angle * s) +
-                        randomf(-MOB::GROUP_SPOT_MAX_DEVIATION, MOB::GROUP_SPOT_MAX_DEVIATION)
+                        randomf(-SPOT_MAX_DEVIATION, SPOT_MAX_DEVIATION)
                     )
                 )
             );
@@ -781,6 +787,9 @@ bool path_info_struct::check_blockage() {
 }
 
 
+//Wait these many seconds before allowing another Pikmin to be called out.
+const float pikmin_nest_struct::CALL_INTERVAL = 0.01f;
+
 /* ----------------------------------------------------------------------------
  * Creates an instance of a class with info about a mob that
  * can nest Pikmin inside.
@@ -933,7 +942,7 @@ void pikmin_nest_struct::request_pikmin(
     const size_t type_idx, const size_t amount, leader* l_ptr
 ) {
     call_queue[type_idx] += amount;
-    next_call_time = MOB::PIKMIN_NEST_CALL_INTERVAL;
+    next_call_time = CALL_INTERVAL;
     calling_leader = l_ptr;
 }
 
@@ -994,7 +1003,7 @@ void pikmin_nest_struct::tick(const float delta_t) {
             }
         }
         
-        next_call_time += MOB::PIKMIN_NEST_CALL_INTERVAL;
+        next_call_time += CALL_INTERVAL;
     }
 }
 

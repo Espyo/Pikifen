@@ -814,7 +814,7 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
     
     for(size_t s = 0; s < sectors_to_drain.size(); ++s) {
         sectors_to_drain[s]->draining_liquid = true;
-        sectors_to_drain[s]->liquid_drain_left = GEOMETRY::LIQUID_DRAIN_DURATION;
+        sectors_to_drain[s]->liquid_drain_left = LIQUID_DRAIN_DURATION;
     }
 }
 
@@ -920,7 +920,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
             size_t c = randomi(0, choices.size() - 1);
             if(
                 dist(choices[c]->pos, data.m->pos) >
-                MOB::DEF_CHASE_TARGET_DISTANCE
+                chase_info_struct::DEF_TARGET_DISTANCE
             ) {
                 final_stop = choices[c];
                 break;
@@ -934,8 +934,8 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     //make it clear that there was an error.
     path_follow_settings settings;
     settings.target_point = final_stop ? final_stop->pos : data.m->pos;
-    enable_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
-    enable_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
+    settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
+    settings.flags |= PATH_FOLLOW_FLAG_SCRIPT_USE;
     settings.label = label;
     data.m->follow_path(
         settings, data.m->get_base_speed(), data.m->type->acceleration
@@ -954,8 +954,8 @@ void mob_action_runners::follow_path_to_absolute(mob_action_run_data &data) {
     
     path_follow_settings settings;
     settings.target_point = point(x, y);
-    enable_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
-    enable_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
+    settings.flags |= PATH_FOLLOW_FLAG_CAN_CONTINUE;
+    settings.flags |= PATH_FOLLOW_FLAG_SCRIPT_USE;
     if(data.args.size() >= 3) {
         settings.label = data.args[2];
     }
@@ -1475,11 +1475,7 @@ void mob_action_runners::set_far_reach(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_flying(mob_action_run_data &data) {
-    if(s2b(data.args[0])) {
-        enable_flag(data.m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    } else {
-        disable_flag(data.m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    }
+    data.m->can_move_in_midair = s2b(data.args[0]);
 }
 
 
@@ -1529,11 +1525,7 @@ void mob_action_runners::set_height(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_hiding(mob_action_run_data &data) {
-    if(s2b(data.args[0])) {
-        enable_flag(data.m->flags, MOB_FLAG_HIDDEN);
-    } else {
-        disable_flag(data.m->flags, MOB_FLAG_HIDDEN);
-    }
+    data.m->hide = s2b(data.args[0]);
 }
 
 
@@ -1559,11 +1551,7 @@ void mob_action_runners::set_holdable(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_huntable(mob_action_run_data &data) {
-    if(s2b(data.args[0])) {
-        disable_flag(data.m->flags, MOB_FLAG_NON_HUNTABLE);
-    } else {
-        enable_flag(data.m->flags, MOB_FLAG_NON_HUNTABLE);
-    }
+    data.m->is_huntable = s2b(data.args[0]);
 }
 
 
@@ -1632,11 +1620,7 @@ void mob_action_runners::set_sector_scroll(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_shadow_visibility(mob_action_run_data &data) {
-    if(s2b(data.args[0])) {
-        disable_flag(data.m->flags, MOB_FLAG_SHADOW_INVISIBLE);
-    } else {
-        enable_flag(data.m->flags, MOB_FLAG_SHADOW_INVISIBLE);
-    }
+    data.m->show_shadow = s2b(data.args[0]);
 }
 
 
@@ -1660,11 +1644,7 @@ void mob_action_runners::set_state(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::set_tangible(mob_action_run_data &data) {
-    if(s2b(data.args[0])) {
-        disable_flag(data.m->flags, MOB_FLAG_INTANGIBLE);
-    } else {
-        enable_flag(data.m->flags, MOB_FLAG_INTANGIBLE);
-    }
+    data.m->tangible = s2b(data.args[0]);
 }
 
 
@@ -1965,7 +1945,7 @@ void mob_action_runners::throw_focus(mob_action_run_data &data) {
     calculate_throw(
         data.m->focused_mob->pos, data.m->focused_mob->z,
         point(s2f(data.args[0]), s2f(data.args[1])), s2f(data.args[2]),
-        max_height, MOB::GRAVITY_ADDER,
+        max_height, GRAVITY_ADDER,
         &data.m->focused_mob->speed,
         &data.m->focused_mob->speed_z,
         NULL

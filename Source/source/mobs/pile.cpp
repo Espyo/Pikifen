@@ -165,11 +165,11 @@ void pile::update() {
     
     if(pil_type->hide_when_empty) {
         if(amount == 0) {
-            enable_flag(flags, MOB_FLAG_HIDDEN);
-            enable_flag(flags, MOB_FLAG_INTANGIBLE);
+            hide = true;
+            tangible = false;
         } else {
-            disable_flag(flags, MOB_FLAG_HIDDEN);
-            disable_flag(flags, MOB_FLAG_INTANGIBLE);
+            hide = false;
+            tangible = true;
         }
     }
 }

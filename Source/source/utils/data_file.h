@@ -50,9 +50,8 @@ using std::string;
 using std::vector;
 
 
-namespace DATA_FILE {
-extern const string UTF8_MAGIC_NUMBER;
-}
+const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
+
 
 
 /* ----------------------------------------------------------------------------

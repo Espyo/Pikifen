@@ -22,12 +22,6 @@
 class pikmin_type;
 
 
-namespace PAUSE_MENU {
-extern const string GUI_FILE_PATH;
-extern const string HELP_GUI_FILE_PATH;
-}
-
-
 /* ----------------------------------------------------------------------------
  * Contains information about the pause menu currently being presented to
  * the player.
@@ -86,6 +80,9 @@ private:
     void init_main_pause_menu();
     void init_help_page();
     void populate_help_tidbits(const HELP_CATEGORIES category);
+    
+    static const string GUI_FILE_PATH;
+    static const string HELP_GUI_FILE_PATH;
 };
 
 

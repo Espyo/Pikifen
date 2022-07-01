@@ -136,27 +136,6 @@ enum LIMB_DRAW_METHODS {
 };
 
 
-//Flags that affect something about a mob.
-enum MOB_FLAGS {
-    //Can it currently move vertically on its own?
-    MOB_FLAG_CAN_MOVE_MIDAIR = 0x01,
-    //Is the mob airborne because it was thrown?
-    MOB_FLAG_WAS_THROWN = 0x02,
-    //Can it not be pushed?
-    MOB_FLAG_UNPUSHABLE = 0x04,
-    //Can it not be touched by other mobs?
-    MOB_FLAG_INTANGIBLE = 0x08,
-    //If it should be hidden (not drawn, no shadow, no health).
-    MOB_FLAG_HIDDEN = 0x10,
-    //If its shadow should be invisible.
-    MOB_FLAG_SHADOW_INVISIBLE = 0x20,
-    //Can this mob not be hunted down right now?
-    MOB_FLAG_NON_HUNTABLE = 0x40,
-    //Can this mob not be hurt right now?
-    MOB_FLAG_NON_HURTABLE = 0x80,
-};
-
-
 //Types of target a mob can be.
 enum MOB_TARGET_TYPES {
     //Cannot be damaged or hunted down.
@@ -204,7 +183,7 @@ enum MOB_TEAMS {
     MOB_TEAM_OBSTACLE,
     //Whatever else.
     MOB_TEAM_OTHER,
-    
+
     //Total amount of mob teams.
     N_MOB_TEAMS,
 };

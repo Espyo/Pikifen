@@ -49,12 +49,6 @@ enum WIPE_FOLDER_RESULTS {
 };
 
 
-//Turns a bit in a bitmask off.
-#define disable_flag(flags, flag) (flags &= ~flag)
-
-//Turns a bit in a bitmask on.
-#define enable_flag(flags, flag) (flags |= flag)
-
 //A custom-made assertion.
 #define engine_assert(expr, message) \
     if(!(expr)) { \
@@ -76,9 +70,6 @@ enum WIPE_FOLDER_RESULTS {
 //Returns the next element in a vector,
 //but if it's the last, it retrieves the first.
 #define get_next_in_vector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
-
-//Returns whether a bit is on or not in a bitmask.
-#define has_flag(flags, flag) ((flags & flag) > 0)
 
 //Returns a white color with the specified alpha.
 #define map_alpha(a) al_map_rgba(255, 255, 255, (a))

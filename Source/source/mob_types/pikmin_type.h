@@ -171,6 +171,11 @@ enum PIKMIN_ATTACK_METHODS {
 };
 
 
+const float PIKMIN_GOTO_TIMEOUT = 5.0f;
+const float PIKMIN_INVULN_PERIOD = 0.7f;
+const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
+
+
 /* ----------------------------------------------------------------------------
  * Pikmin types, almost the basic meat of the fangames.
  * The canon ones (at the time of writing this) are

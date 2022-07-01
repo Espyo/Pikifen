@@ -16,10 +16,9 @@
 #include "../utils/string_utils.h"
 
 
-namespace RESULTS {
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Results_menu.txt";
-}
+const string results_state::GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Results_menu.txt";
 
 
 /* ----------------------------------------------------------------------------
@@ -208,7 +207,7 @@ void results_state::load() {
     gui.register_coords("used_tools",           50, 80, 95, 10);
     gui.register_coords("tooltip",              50, 95, 95,  8);
     gui.read_coords(
-        data_node(RESULTS::GUI_FILE_PATH).get_child_by_name("positions")
+        data_node(GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     //Retry button.

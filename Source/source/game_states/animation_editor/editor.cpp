@@ -21,34 +21,27 @@
 
 using std::queue;
 
-namespace ANIM_EDITOR {
-//Threshold for the flood-fill algorithm when picking sprite bitmap parts.
-const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
-//Grid interval in the animation editor.
-const float GRID_INTERVAL = 16.0f;
+
 //Maximum number of entries to save in the history.
-const size_t HISTORY_SIZE = 6;
-//Minimum radius that a hitbox can have.
-const float HITBOX_MIN_RADIUS = 1.0f;
+const size_t animation_editor::HISTORY_SIZE = 6;
 //Amount to pan the camera by when using the keyboard.
-const float KEYBOARD_PAN_AMOUNT = 32.0f;
-//Width of the text widget that shows the mouse cursor coordinates.
-const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
+const float animation_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
+//Minimum radius that a hitbox can have.
+const float animation_editor::HITBOX_MIN_RADIUS = 1.0f;
 //How tall the animation timeline header is.
-const size_t TIMELINE_HEADER_HEIGHT = 12;
+const size_t animation_editor::TIMELINE_HEADER_HEIGHT = 12;
 //How tall the animation timeline is, in total.
-const size_t TIMELINE_HEIGHT = 48;
+const size_t animation_editor::TIMELINE_HEIGHT = 48;
 //Size of each side of the triangle that marks the loop frame.
-const size_t TIMELINE_LOOP_TRI_SIZE = 8;
+const size_t animation_editor::TIMELINE_LOOP_TRI_SIZE = 8;
 //Pad the left, right, and bottom of the timeline by this much.
-const size_t TIMELINE_PADDING = 6;
+const size_t animation_editor::TIMELINE_PADDING = 6;
 //Minimum width or height a Pikmin top can have.
-const float TOP_MIN_SIZE = 1.0f;
+const float animation_editor::TOP_MIN_SIZE = 1.0f;
 //Maximum zoom level possible in the editor.
-const float ZOOM_MAX_LEVEL_EDITOR = 32.0f;
+const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
-const float ZOOM_MIN_LEVEL_EDITOR = 0.05f;
-}
+const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
 
 /* ----------------------------------------------------------------------------
@@ -95,8 +88,8 @@ animation_editor::animation_editor() :
         );
     comparison_blink_timer.start();
     
-    zoom_min_level = ANIM_EDITOR::ZOOM_MIN_LEVEL_EDITOR;
-    zoom_max_level = ANIM_EDITOR::ZOOM_MAX_LEVEL_EDITOR;
+    zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
+    zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
 }
 
 
@@ -227,8 +220,8 @@ float animation_editor::get_cursor_timeline_time() {
     if(!cur_anim || cur_anim->frames.empty()) {
         return 0.0f;
     }
-    float anim_x1 = canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING;
-    float anim_w = (canvas_br.x - ANIM_EDITOR::TIMELINE_PADDING) - anim_x1;
+    float anim_x1 = canvas_tl.x + TIMELINE_PADDING;
+    float anim_w = (canvas_br.x - TIMELINE_PADDING) - anim_x1;
     float mouse_x = game.mouse_cursor_s.x - anim_x1;
     mouse_x = clamp(mouse_x, 0.0f, anim_w);
     return cur_anim->get_duration() * (mouse_x / anim_w);
@@ -363,7 +356,7 @@ bool animation_editor::is_cursor_in_timeline() {
         state == EDITOR_STATE_ANIMATION &&
         game.mouse_cursor_s.x >= canvas_tl.x &&
         game.mouse_cursor_s.x <= canvas_br.x &&
-        game.mouse_cursor_s.y >= canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT &&
+        game.mouse_cursor_s.y >= canvas_br.y - TIMELINE_HEIGHT &&
         game.mouse_cursor_s.y <= canvas_br.y;
 }
 
@@ -1195,6 +1188,8 @@ void animation_editor::set_best_frame_sprite() {
 }
 
 
+static const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
+
 /* ----------------------------------------------------------------------------
  * Performs a flood fill on the bitmap sprite, to see what parts
  * contain non-alpha pixels, based on a starting position.
@@ -1217,7 +1212,7 @@ void animation_editor::sprite_bmp_flood_fill(
     if(x < 0 || x > bmp_w) return;
     if(y < 0 || y > bmp_h) return;
     if(selection_pixels[y * bmp_w + x]) return;
-    if(al_get_pixel(bmp, x, y).a < ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD) {
+    if(al_get_pixel(bmp, x, y).a < FLOOD_FILL_ALPHA_THRESHOLD) {
         return;
     }
     
@@ -1243,8 +1238,7 @@ void animation_editor::sprite_bmp_flood_fill(
         
         if(
             selection_pixels[(p.y) * bmp_w + p.x] ||
-            al_get_pixel(bmp, p.x, p.y).a <
-            ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD
+            al_get_pixel(bmp, p.x, p.y).a < FLOOD_FILL_ALPHA_THRESHOLD
         ) {
             continue;
         }
@@ -1264,7 +1258,7 @@ void animation_editor::sprite_bmp_flood_fill(
                     add = false;
                 } else if(
                     al_get_pixel(bmp, offset.x, offset.y).a <
-                    ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD
+                    FLOOD_FILL_ALPHA_THRESHOLD
                 ) {
                     add = false;
                 } else {
@@ -1284,7 +1278,7 @@ void animation_editor::sprite_bmp_flood_fill(
                     add = false;
                 } else if(
                     al_get_pixel(bmp, offset.x, offset.y).a <
-                    ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD
+                    FLOOD_FILL_ALPHA_THRESHOLD
                 ) {
                     add = false;
                 } else {
@@ -1303,7 +1297,7 @@ void animation_editor::sprite_bmp_flood_fill(
                 col.y > 0 &&
                 !selection_pixels[(col.y - 1) * bmp_w + col.x] &&
                 al_get_pixel(bmp, col.x, col.y - 1).a >=
-                ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD
+                FLOOD_FILL_ALPHA_THRESHOLD
             ) {
                 pixels_left.push(int_point(col.x, col.y - 1));
             }
@@ -1311,7 +1305,7 @@ void animation_editor::sprite_bmp_flood_fill(
                 col.y < bmp_h - 1 &&
                 !selection_pixels[(col.y + 1) * bmp_w + col.x] &&
                 al_get_pixel(bmp, col.x, col.y + 1).a >=
-                ANIM_EDITOR::FLOOD_FILL_ALPHA_THRESHOLD
+                FLOOD_FILL_ALPHA_THRESHOLD
             ) {
                 pixels_left.push(int_point(col.x, col.y + 1));
             }
@@ -1383,7 +1377,7 @@ void animation_editor::update_history(const string &n) {
         history.insert(history.begin(), n);
     }
     
-    if(history.size() > ANIM_EDITOR::HISTORY_SIZE) {
+    if(history.size() > HISTORY_SIZE) {
         history.erase(history.begin() + history.size() - 1);
     }
 }

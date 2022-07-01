@@ -17,29 +17,14 @@
 #include "../../imgui/imgui_impl_allegro5.h"
 
 
-namespace ANIM_EDITOR {
-extern const float FLOOD_FILL_ALPHA_THRESHOLD;
-extern const float GRID_INTERVAL;
-extern const size_t HISTORY_SIZE;
-extern const float HITBOX_MIN_RADIUS;
-extern const float KEYBOARD_PAN_AMOUNT;
-extern const float MOUSE_COORDS_TEXT_WIDTH;
-extern const size_t TIMELINE_HEADER_HEIGHT;
-extern const size_t TIMELINE_HEIGHT;
-extern const size_t TIMELINE_LOOP_TRI_SIZE;
-extern const size_t TIMELINE_PADDING;
-extern const float TOP_MIN_SIZE;
-extern const float ZOOM_MAX_LEVEL_EDITOR;
-extern const float ZOOM_MIN_LEVEL_EDITOR;
-}
-
-
 /* ----------------------------------------------------------------------------
  * Information about the animation editor.
  */
 class animation_editor : public editor {
 public:
 
+    static const size_t HISTORY_SIZE;
+    
     //Automatically load this animation file upon boot-up of the editor, if any.
     string auto_load_anim;
     //History for the last files that were opened.
@@ -79,6 +64,16 @@ private:
         //Tools.
         EDITOR_STATE_TOOLS,
     };
+    
+    static const float KEYBOARD_PAN_AMOUNT;
+    static const float HITBOX_MIN_RADIUS;
+    static const size_t TIMELINE_HEADER_HEIGHT;
+    static const size_t TIMELINE_HEIGHT;
+    static const size_t TIMELINE_LOOP_TRI_SIZE;
+    static const size_t TIMELINE_PADDING;
+    static const float TOP_MIN_SIZE;
+    static const float ZOOM_MAX_LEVEL_EDITOR;
+    static const float ZOOM_MIN_LEVEL_EDITOR;
     
     //Currently loaded animation database.
     animation_database anims;

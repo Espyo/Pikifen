@@ -41,9 +41,8 @@ void gameplay_state::do_aesthetic_logic() {
     
     dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
     for(size_t a = 0; a < cur_leader_ptr->swarm_arrows.size(); ) {
-        cur_leader_ptr->swarm_arrows[a] +=
-            GAMEPLAY::SWARM_ARROW_SPEED * game.delta_t;
-            
+        cur_leader_ptr->swarm_arrows[a] += SWARM_ARROW_SPEED * game.delta_t;
+        
         dist max_dist =
             (swarm_magnitude > 0) ?
             game.config.cursor_max_dist * swarm_magnitude :
@@ -738,7 +737,7 @@ void gameplay_state::do_menu_logic() {
         }
         
         game.framerate_history.push_back(1.0f / real_delta_t);
-        if(game.framerate_history.size() > GAME::FRAMERATE_HISTORY_SIZE) {
+        if(game.framerate_history.size() > FRAMERATE_HISTORY_SIZE) {
             game.framerate_history.erase(game.framerate_history.begin());
         }
         
@@ -746,21 +745,21 @@ void gameplay_state::do_menu_logic() {
         
         float sample_avg;
         
-        if(game.framerate_last_avg_point >= GAME::FRAMERATE_AVG_SAMPLE_SIZE) {
+        if(game.framerate_last_avg_point >= FRAMERATE_AVG_SAMPLE_SIZE) {
             //Let's get an average, using FRAMERATE_AVG_SAMPLE_SIZE frames.
             //If we can fit a sample of this size using the most recent
             //unsampled frames, then use those. Otherwise, keep using the last
             //block, which starts at framerate_last_avg_point.
             //This makes it so the average stays the same for a bit of time,
             //so the player can actually read it.
-            if(game.framerate_last_avg_point > GAME::FRAMERATE_AVG_SAMPLE_SIZE * 2) {
-                game.framerate_last_avg_point = GAME::FRAMERATE_AVG_SAMPLE_SIZE;
+            if(game.framerate_last_avg_point > FRAMERATE_AVG_SAMPLE_SIZE * 2) {
+                game.framerate_last_avg_point = FRAMERATE_AVG_SAMPLE_SIZE;
             }
             float sample_avg_sum = 0;
             size_t sample_avg_point_count = 0;
             size_t sample_size =
                 std::min(
-                    (size_t) GAME::FRAMERATE_AVG_SAMPLE_SIZE,
+                    (size_t) FRAMERATE_AVG_SAMPLE_SIZE,
                     game.framerate_history.size()
                 );
                 
@@ -1218,11 +1217,11 @@ void gameplay_state::process_mob_touches(
             ((pikmin*) m2_ptr)->fsm.cur_state->id == PIKMIN_STATE_IDLING_H
         );
     bool ok_to_push = true;
-    if(has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE)) {
+    if(!m2_ptr->tangible) {
         ok_to_push = false;
     } else if(!m_ptr->type->pushable) {
         ok_to_push = false;
-    } else if(has_flag(m_ptr->flags, MOB_FLAG_UNPUSHABLE)) {
+    } else if(m_ptr->unpushable) {
         ok_to_push = false;
     } else if(m_ptr->standing_on_mob == m2_ptr) {
         ok_to_push = false;
@@ -1334,7 +1333,7 @@ void gameplay_state::process_mob_touches(
                 push_angle = temp_push_angle;
                 if(both_idle_pikmin) {
                     //Lower the push.
-                    //Basically, make PUSH_EXTRA_AMOUNT do all the work.
+                    //Basically, make MOB_PUSH_EXTRA_AMOUNT do all the work.
                     push_amount = 0.1f;
                     //Deviate the angle slightly. This way, if two Pikmin
                     //are in the same spot, they don't drag each other forever.
@@ -1409,7 +1408,7 @@ void gameplay_state::process_mob_touches(
                 d <= (m_ptr->radius + m2_ptr->radius);
         }
         
-        if(z_touch && !has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE) && xy_collision) {
+        if(z_touch && m2_ptr->tangible && xy_collision) {
             if(touch_ob_ev) {
                 touch_ob_ev->run(m_ptr, (void*) m2_ptr);
             }

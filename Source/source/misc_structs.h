@@ -652,6 +652,8 @@ struct system_asset_list {
  */
 struct fade_manager {
 public:
+    static const float FADE_DURATION;
+    
     fade_manager();
     void start_fade(const bool fade_in, const std::function<void()> &on_end);
     bool is_fade_in() const;

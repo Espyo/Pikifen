@@ -23,18 +23,6 @@ using std::size_t;
 using std::string;
 
 
-namespace ONION {
-//How quickly an Onion fades to and from see-through, in values per second.
-const float FADE_SPEED = 255.0f;
-//Delay before the Onion starts the seed spewing process.
-const float FULL_SPEW_DELAY = 2.5f;
-//Delay between each individual seed being spit.
-const float NEXT_SPEW_DELAY = 0.10f;
-//Onion opacity when it goes see-through.
-const unsigned char SEETHROUGH_ALPHA = 128;
-}
-
-
 //An Onion-spat seed starts with this Z offset from the Onion.
 const float onion::ONION_NEW_SEED_Z_OFFSET = 320.0f;
 //After spitting a seed, the next seed's angle shifts by this much.
@@ -61,8 +49,8 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
     oni_type(type),
     nest(nullptr),
     activated(true),
-    full_spew_timer(ONION::FULL_SPEW_DELAY),
-    next_spew_timer(ONION::NEXT_SPEW_DELAY),
+    full_spew_timer(ONION_FULL_SPEW_DELAY),
+    next_spew_timer(ONION_NEXT_SPEW_DELAY),
     next_spew_angle(0),
     seethrough(255) {
     
@@ -90,7 +78,7 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
         spew_queue.push_back(0);
     }
     
-    set_animation(MOB_TYPE::ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN);
+    set_animation(ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN);
 }
 
 
@@ -202,7 +190,7 @@ void onion::tick_class_specifics(const float delta_t) {
                 o_ptr->radius * 3
             )
         ) {
-            final_alpha = ONION::SEETHROUGH_ALPHA;
+            final_alpha = ONION_SEETHROUGH_ALPHA;
         }
         
         if(
@@ -212,7 +200,7 @@ void onion::tick_class_specifics(const float delta_t) {
                 o_ptr->radius * 3
             )
         ) {
-            final_alpha = ONION::SEETHROUGH_ALPHA;
+            final_alpha = ONION_SEETHROUGH_ALPHA;
         }
         
         if(o_ptr->seethrough != final_alpha) {
@@ -220,13 +208,13 @@ void onion::tick_class_specifics(const float delta_t) {
                 o_ptr->seethrough =
                     std::max(
                         (double) final_alpha,
-                        (double) o_ptr->seethrough - ONION::FADE_SPEED * delta_t
+                        (double) o_ptr->seethrough - ONION_FADE_SPEED * delta_t
                     );
             } else {
                 o_ptr->seethrough =
                     std::min(
                         (double) final_alpha,
-                        (double) o_ptr->seethrough + ONION::FADE_SPEED * delta_t
+                        (double) o_ptr->seethrough + ONION_FADE_SPEED * delta_t
                     );
             }
         }

@@ -40,45 +40,27 @@ extern size_t next_mob_id;
 
 namespace MOB {
 extern const float CARRIED_MOB_ACCELERATION;
-extern const float CARRY_STUCK_CIRCLING_RADIUS;
-extern const float CARRY_STUCK_SPEED_MULTIPLIER;
-extern const float CARRY_SWAY_TIME_MULT;
-extern const float CARRY_SWAY_X_TRANSLATION_AMOUNT;
-extern const float CARRY_SWAY_Y_TRANSLATION_AMOUNT;
-extern const float CARRY_SWAY_ROTATION_AMOUNT;
 extern const float DEF_ACCELERATION;
-extern const float DEF_CHASE_TARGET_DISTANCE;
 extern const float DEF_ROTATION_SPEED;
-extern const float DELIVERY_SUCK_SHAKING_TIME_MULT;
-extern const float DELIVERY_SUCK_SHAKING_MULT;
 extern const float DELIVERY_SUCK_TIME;
-extern const float DELIVERY_TOSS_MULT;
 extern const float DELIVERY_TOSS_TIME;
-extern const float DELIVERY_TOSS_WINDUP_MULT;
-extern const float DELIVERY_TOSS_X_OFFSET;
-extern const float DAMAGE_SQUASH_DURATION;
-extern const float DAMAGE_SQUASH_AMOUNT;
-extern const float FREE_MOVE_THRESHOLD;
-extern const float GRAVITY_ADDER;
 extern const float GROUP_SHUFFLE_DIST;
 extern const float GROUP_SPOT_INTERVAL;
-extern const float GROUP_SPOT_MAX_DEVIATION;
 extern const float HEIGHT_EFFECT_FACTOR;
-extern const float KNOCKBACK_H_POWER;
-extern const float KNOCKBACK_V_POWER;
 extern const float OPPONENT_HIT_REGISTER_TIMEOUT;
-extern const float PIKMIN_NEST_CALL_INTERVAL;
-extern const float PUSH_EXTRA_AMOUNT;
-extern const float PUSH_THROTTLE_TIMEOUT;
 extern const float SHADOW_STRETCH_MULT;
 extern const float SHADOW_Y_MULT;
 extern const float SMACK_PARTICLE_DUR;
 extern const float SWARM_MARGIN;
 extern const float SWARM_VERTICAL_SCALE;
-extern const float STATUS_SHAKING_TIME_MULT;
 extern const float THROW_PARTICLE_INTERVAL;
-extern const float WAVE_RING_DURATION;
 };
+
+//Accelerate the Z speed of mobs affected by gravity by this amount per second.
+const float GRAVITY_ADDER = -2600.0f;
+const float MOB_KNOCKBACK_H_POWER = 64.0f;
+const float MOB_KNOCKBACK_V_POWER = 800.0f;
+const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -90,183 +72,178 @@ extern const float WAVE_RING_DURATION;
  */
 class mob {
 public:
-    //---Basic information---
+    static const float DAMAGE_SQUASH_DURATION;
+    static const float DAMAGE_SQUASH_AMOUNT;
     
+    //Basic information.
     //What type of (generic) mob it is. (e.g. Olimar, Red Bulborb, etc.)
     mob_type* type;
     //Schedule this mob to be deleted from memory at the end of the frame.
     bool to_delete;
     
-    //---Position---
-    
-    //Coordinates.
-    point pos;
-    //Z coordinate. This is height; the higher the value, the higher in the sky.
-    float z;
-    //Current facing angle. 0 = right, PI / 2 = up, etc.
-    float angle;
-    //The highest ground below the entire mob.
-    sector* ground_sector;
-    //Sector that the mob's center is on.
-    sector* center_sector;
-    //Mob this mob is standing on top of, if any.
-    mob* standing_on_mob;
-    
-    //---Basic movement---
-    
-    //X/Y speed at which external movement is applied (i.e. not walking).
-    point speed;
-    //Same as speed, but for the Z coordinate.
-    float speed_z;
-    //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
-    //than intended. z_cap forces a cap. FLT_MAX = no cap.
-    float z_cap;
-    //Multiply the mob's gravity by this.
-    float gravity_mult;
-    //How much it's being pushed by another mob.
-    float push_amount;
-    //Angle that another mob is pushing it to.
-    float push_angle;
-    //How much the mob moved this frame, if it's walkable.
-    point walkable_moved;
-    
-    //---Complex states---
-    
-    //Information about what it is chasing after.
-    chase_info_struct chase_info;
-    //Information about the path it is following, if any.
-    path_info_struct* path_info;
-    //Information about the mob/point it's circling, if any.
-    circling_info_struct* circling_info;
-    //Riding a track. If NULL, the mob is not riding on any track.
-    track_info_struct* track_info;
-    //Info on how this mob should be carried. Uncarriable if NULL.
-    carry_info_struct* carry_info;
-    //Onion delivery info. If NULL, the mob is not being delivered.
-    delivery_info_struct* delivery_info;
-    
-    //---Physical space---
-    
-    //Current radius.
-    float radius;
-    //Current height.
-    float height;
-    //Current rectangular dimensions.
-    point rectangular_dim;
-    
-    //---Scripting---
-    
+    //Script and animation.
+    //Current animation instance.
+    animation_instance anim;
     //Finite-state machine.
     mob_fsm fsm;
     //The script-controlled timer.
     timer script_timer;
     //Variables.
     map<string, string> vars;
-    
-    //---Brain and behavior---
-    
     //The mob it has focus on.
     mob* focused_mob;
     //Further memory of focused mobs.
     map<size_t, mob*> focused_mob_memory;
-    //Angle the mob wants to be facing.
-    float intended_turn_angle;
-    //Variable that holds the position the mob wants to be facing.
-    point* intended_turn_pos;
-    //Starting coordinates; what the mob calls "home".
-    point home;
-    //Index of the reach to use for "X in reach" events.
-    size_t far_reach;
-    //Index or the reach to use for "focused mob out of reach" events.
-    size_t near_reach;
-    //How long it's been alive for.
-    float time_alive;
-    //Incremental ID. Used for minor things.
-    size_t id;
-    
-    //---General state---
-    
-    //Current health.
-    float health;
-    //Maximum health.
-    float max_health;
-    //During this period, the mob cannot be attacked.
-    timer invuln_period;
     //Mobs that it just hit. Used to stop hitboxes from hitting every frame.
     vector<std::pair<float, mob*> > hit_opponents;
     //How much damage did it take since the last time the itch event triggered?
     float itch_damage;
     //How much time has passed the last time the itch event triggered?
     float itch_time;
-    //Status effects currently inflicted on the mob.
-    vector<status> statuses;
-    //Hazard of the sector the mob is currently on.
-    hazard* on_hazard;
-    //If this mob is a sub-mob, this points to the parent mob.
-    parent_info_struct* parent;
-    //Miscellanous flags. Use MOB_FLAG_*.
-    uint16_t flags;
-    
-    //---Interactions with other mobs---
-    
+    //Index of the reach to use for "X in reach" events.
+    size_t far_reach;
+    //Index or the reach to use for "focused mob out of reach" events.
+    size_t near_reach;
     //Mobs it is linked to.
     vector<mob*> links;
+    
+    //Movement and other physics.
+    //Coordinates.
+    point pos;
+    //Z coordinate. This is height; the higher the value, the higher in the sky.
+    float z;
+    //X/Y speed at which external movement is applied (i.e. not walking).
+    point speed;
+    //Same as speed, but for the Z coordinate.
+    float speed_z;
+    //Current facing angle. 0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
+    float angle;
+    //Angle the mob wants to be facing.
+    float intended_turn_angle;
+    //Variable that holds the position the mob wants to be facing.
+    point* intended_turn_pos;
+    //Current radius.
+    float radius;
+    //Current height.
+    float height;
+    //Current rectangular dimensions.
+    point rectangular_dim;
+    //Can it currently move vertically on its own?
+    bool can_move_in_midair;
+    //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
+    //than intended. z_cap forces a cap. FLT_MAX = no cap.
+    float z_cap;
+    //Starting coordinates; what the mob calls "home".
+    point home;
+    //The highest ground below the entire mob.
+    sector* ground_sector;
+    //Sector that the mob's center is on.
+    sector* center_sector;
+    //Mob this mob is standing on top of, if any.
+    mob* standing_on_mob;
+    //Multiply the mob's gravity by this.
+    float gravity_mult;
+    //How much it's being pushed by another mob.
+    float push_amount;
+    //Angle that another mob is pushing it to.
+    float push_angle;
+    //Can it not be pushed?
+    bool unpushable;
+    //Can it be touched by other mobs?
+    bool tangible;
+    //Is the mob airborne because it was thrown?
+    bool was_thrown;
+    
+    //Target things.
+    //Information about what point it is chasing after.
+    chase_info_struct chase_info;
+    //Information about the path it is following, if any.
+    path_info_struct* path_info;
+    //Information about the mob/point it's circling, if any.
+    circling_info_struct* circling_info;
+    
+    //Group things.
+    //The current mob is following this mob's group.
+    mob* following_group;
+    //The current subgroup type.
+    subgroup_type* subgroup_type_ptr;
+    //Info on the group this mob is a leader of.
+    group_info_struct* group;
+    //Index of this mob's spot in the leader's group spots.
+    size_t group_spot_index;
+    
+    //Carrying.
+    //Structure holding information on how this mob should be carried.
+    //If NULL, it cannot be carried.
+    carry_info_struct* carry_info;
+    //Onion delivery info. If NULL, the mob is not being delivered.
+    delivery_info_struct* delivery_info;
+    
+    //Riding a track. If NULL, the mob is not riding on any track.
+    track_info_struct* track_info;
+    
     //If it's being held by another mob, the information is kept here.
     hold_info_struct holder;
     //List of mobs it is holding.
     vector<mob*> holding;
     //If it's stored inside another mob, this indicates which mob it is.
     mob* stored_inside_another;
+    
+    //Other properties.
+    //Incremental ID. Used for minor things.
+    size_t id;
+    //Current health.
+    float health;
+    //Maximum health.
+    float max_health;
+    //During this period, the mob cannot be attacked.
+    timer invuln_period;
+    //Mob's team (who it can damage).
+    MOB_TEAMS team;
+    //If it should be hidden (not drawn, no shadow, no health).
+    bool hide;
+    //If its shadow should be visible.
+    bool show_shadow;
+    //Force the usage of this specific sprite.
+    sprite* forced_sprite;
+    //Is invisible due to a status effect. Cache for performance.
+    bool has_invisibility_status;
+    //Can this mob be hunted down right now?
+    bool is_huntable;
+    //Can this mob be hurt right now?
+    bool is_hurtable;
+    //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
+    float height_effect_pivot;
+    //How much the mob moved this frame, if it's walkable.
+    point walkable_moved;
+    //Particle generators attached to it.
+    vector<particle_generator> particle_generators;
+    //Status effects currently inflicted on the mob.
+    vector<status> statuses;
+    //Hazard of the sector the mob is currently on.
+    hazard* on_hazard;
     //List of body parts that will chomp Pikmin.
     vector<int> chomp_body_parts;
     //List of mobs currently in its mouth, i.e., chomped.
     vector<mob*> chomping_mobs;
     //Max number of mobs it can chomp in the current attack.
     size_t chomp_max;
-    //Mob's team (who it can damage).
-    MOB_TEAMS team;
-    
-    //---Group---
-    
-    //The current mob is following this mob's group.
-    mob* following_group;
-    //Index of this mob's spot in the leader's group spots.
-    size_t group_spot_index;
-    //The current subgroup type.
-    subgroup_type* subgroup_type_ptr;
-    //Info on the group this mob is a leader of, if any.
-    group_info_struct* group;
-    
-    //---Animation---
-    
-    //Current animation instance.
-    animation_instance anim;
-    //Force the usage of this specific sprite.
-    sprite* forced_sprite;
-    
-    //---Aesthetic---
-    
-    //If not LARGE_FLOAT, compare the Z with this to shrink/grow the sprite.
-    float height_effect_pivot;
+    //If this mob is a sub-mob, this points to the parent mob.
+    parent_info_struct* parent;
+    //How long it's been alive for.
+    float time_alive;
     //Time left in the current damage squash-and-stretch animation.
     float damage_squash_time;
-    //Particle generators attached to it.
-    vector<particle_generator> particle_generators;
     //Data about its on-screen health wheel, if any.
     in_world_health_wheel* health_wheel;
     //Data about its on-screen fraction numbers, if any.
     in_world_fraction* fraction;
-    
-    //---Caches---
-    
     //Cached value of the angle's cosine.
     float angle_cos;
     //Cached value of the angle's sine.
     float angle_sin;
     //Cached value of how far its hitboxes or radius can reach from the center.
     float max_span;
-    //It's invisible due to a status effect. Cache for performance.
-    bool has_invisibility_status;
     
     
     void tick(const float delta_t);
@@ -359,13 +336,13 @@ public:
         point* orig_coords, float* orig_z,
         const point &offset = point(), const float offset_z = 0.0f,
         const unsigned char flags = 0,
-        const float target_distance = MOB::DEF_CHASE_TARGET_DISTANCE,
+        const float target_distance = chase_info_struct::DEF_TARGET_DISTANCE,
         const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
     void chase(
         const point &coords, const float coords_z,
         const unsigned char flags = 0,
-        const float target_distance = MOB::DEF_CHASE_TARGET_DISTANCE,
+        const float target_distance = chase_info_struct::DEF_TARGET_DISTANCE,
         const float speed = LARGE_FLOAT, const float acceleration = LARGE_FLOAT
     );
     void stop_chasing();

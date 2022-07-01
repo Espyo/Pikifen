@@ -98,7 +98,7 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
     bri_ptr->set_animation(BRIDGE_ANIM_DESTROYED);
     bri_ptr->start_dying();
     bri_ptr->finish_dying();
-    enable_flag(bri_ptr->flags, MOB_FLAG_INTANGIBLE);
+    bri_ptr->tangible = false;
 }
 
 

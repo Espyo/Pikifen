@@ -19,13 +19,8 @@
 #include "../utils/geometry_utils.h"
 #include "../utils/string_utils.h"
 #include "mob.h"
-#include "mob_enums.h"
 
 namespace PIKMIN {
-//Time until moving Pikmin timeout and stay in place, after being dismissed.
-const float DISMISS_TIMEOUT = 4.0f;
-//Timeout before a Pikmin gives up, when ordered to go to something.
-const float GOTO_TIMEOUT = 5.0f;
 //If the Pikmin is within this distance of the mob, it can ground attack.
 const float GROUNDED_ATTACK_DIST = 5.0f;
 //The idle glow spins these many radians per second.
@@ -34,14 +29,10 @@ const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 const float KNOCKED_DOWN_DURATION = 2.0f;
 //A whistled Pikmin that got knocked down loses this much in lie-down time.
 const float KNOCKED_DOWN_WHISTLE_BONUS = 1.3f;
-//Invulnerability period after getting hit.
-const float INVULN_PERIOD = 0.7f;
-//Interval for when a Pikmin decides a new chase spot, when panicking.
-const float PANIC_CHASE_INTERVAL = 0.2f;
 //A plucked Pikmin is thrown behind the leader at this speed, horizontally.
-const float THROW_HOR_SPEED = 80.0f;
+const float PLUCK_THROW_HOR_SPEED = 80.0f;
 //A plucked Pikmin is thrown behind the leader at this speed, vertically.
-const float THROW_VER_SPEED = 900.0f;
+const float PLUCK_THROW_VER_SPEED = 900.0f;
 }
 
 
@@ -80,7 +71,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     must_follow_link_as_leader(false),
     temp_i(0) {
     
-    invuln_period = timer(PIKMIN::INVULN_PERIOD);
+    invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1;
     subgroup_type_ptr =
         game.states.gameplay->subgroup_types.get_type(
@@ -96,7 +87,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
         );
         
     if(pik_type->can_fly) {
-        enable_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR);
+        can_move_in_midair = true;
     }
 }
 
@@ -107,7 +98,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
  *   Status type to check.
  */
 bool pikmin::can_receive_status(status_type* s) const {
-    return has_flag(s->affects, STATUS_AFFECTS_PIKMIN);
+    return s->affects & STATUS_AFFECTS_PIKMIN;
 }
 
 
@@ -473,8 +464,8 @@ void pikmin::tick_class_specifics(const float delta_t) {
             fsm.run_event(MOB_EV_TOUCHED_ACTIVE_LEADER, (void*) (links[0]));
         }
         //Since this leader is likely an enemy, let's keep these Pikmin safe.
-        enable_flag(flags, MOB_FLAG_NON_HUNTABLE);
-        enable_flag(flags, MOB_FLAG_NON_HURTABLE);
+        is_huntable = false;
+        is_hurtable = false;
         must_follow_link_as_leader = false;
     }
     
