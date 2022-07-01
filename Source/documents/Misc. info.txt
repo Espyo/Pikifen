@@ -243,23 +243,6 @@ Procedure for every version release
         Change version number in the code
             Use the helper tool, or edit const.h and Pikifen.rc
         Change version number of all areas
-        Pass all code files through AStyle
-        If this is a big release:
-            Compile with -Wall and correct all problems
-            Use cppcheck on the code and correct the problems
-            Confirm that there are no superfluous #includes (how?)
-        Code cleanup
-            Confirm that no line goes over 80 characters
-                Use the helper tool, or run:
-                    grep -Enr --include="*.cpp" ^.\{81,\}$
-            Confirm that all function definitions are sorted alphabetically, and by namespace
-                Use the helper tool
-            Confirm that all includes are sorted alphabetically
-                Use the helper tool
-            Confirm that all functions have documentation, and that it has no missing/extra parameters
-                Use the helper tool
-            Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
-                Use the helper tool
         Fix up all changed images since the last release
             Use the helper tool to get the list, or run:
                 git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'
@@ -267,18 +250,6 @@ Procedure for every version release
             PNGCrush the png files
             This might help (make sure filelist.txt has LF linebreaks):
                 cat filelist.txt | while read line; do pngcrush -brute $line $line.new; done;
-        Fix up all changed SVG files
-            Use the helper tool to get the list, or run:
-                git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'
-            Remove large reference images and screenshots
-            Use the cleanup document tool in Inkscape
-            Make sure they have a license
-                https://opensource.org/licenses/MIT
-            Make sure they have metadata
-                Title: <Object name> spritesheet
-                Author: André "Espyo" Silva
-                Keywords: Pikifen spritesheet
-                Description: Spritesheet for the <object name> pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
         Update the Allegro version number on the Compiling page of the manual, if it changed
         Check any changes made on Windows in order to compile, and port them over
         Update the version release date in the changelog, and move the oldest version to the older changelog document
@@ -296,7 +267,39 @@ Procedure for every version release
         Create a zip (see below)
         Push the tag
         Release the new version on GitHub
-        Start the next version by updating Dear ImGui, and defining IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    Starting the next
+        Add to the todo for the start of the next version:
+            Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
+            Pass all code files through AStyle
+            If this is a big release:
+                Compile with -Wall and correct all problems
+                Use cppcheck on the code and correct the problems
+                Confirm that there are no superfluous #includes (how?)
+            Code cleanup
+                Confirm that no line goes over 80 characters
+                    Use the helper tool, or run:
+                        grep -Enr --include="*.cpp" ^.\{81,\}$
+                Confirm that all function definitions are sorted alphabetically, and by namespace
+                    Use the helper tool
+                Confirm that all includes are sorted alphabetically
+                    Use the helper tool
+                Confirm that all functions have documentation, and that it has no missing/extra parameters
+                    Use the helper tool
+                Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
+                    Use the helper tool
+            Fix up all changed SVG files
+                Use the helper tool to get the list, or run:
+                    git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'
+                Remove large reference images and screenshots
+                Use the cleanup document tool in Inkscape
+                Make sure they have a license
+                    https://opensource.org/licenses/MIT
+                Make sure they have metadata
+                    Title: <Object name> spritesheet
+                    Author: André "Espyo" Silva
+                    Keywords: Pikifen spritesheet
+                    Description: Spritesheet for the <object name> pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
+            
     
     When creating a zip
         The folder should be named "Pikifen_X.X" (or "Pikifen_X.X.X" if there are revision changes, or "Pikifen_X.X_RC" if it's a release candidate)

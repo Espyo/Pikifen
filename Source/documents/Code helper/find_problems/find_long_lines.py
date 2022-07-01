@@ -1,8 +1,10 @@
 from .common import *
 
-def find_long_lines():
-    aux = system_call("grep -Enr --include=\"*.cpp\" ^.\{81,\}$")
-    aux = aux + system_call("grep -Enr --include=\"*.h\" ^.\{81,\}$")
+## Returns any long lines in all source files.
+#  @return Long lines as problems.
+def get_all_long_line_problems():
+    aux = system_call('grep -Enr --include="*.cpp" ^.\{81,\}$')
+    aux = aux + system_call('grep -Enr --include="*.h" ^.\{81,\}$')
     problems = []
     
     for output_line in aux.splitlines():

@@ -2,7 +2,7 @@
 
 
 Current tasks (tasks being worked on, but not yet committed)
-    leader.cpp still has constants that need moving
+    Revert the optimization commits so I can add them after the release
     Document in the manual's object creation tips how radii for carriable objects should be no bigger than ~192, since that's the minimum width of most "standard" passageways, and is the width of gates
 
 Next tasks (roughly sorted most important first)
@@ -11,16 +11,16 @@ Next tasks (roughly sorted most important first)
     
     --- v0.22.0 ---
     A way to set an object's starting health. This is good for, for instance, reinforced walls that are nearly destroyed. Update the gates and such to reflect this possibility, and document this in the object types's tips
+    
+    --- v0.23.0 ---
+    leader.cpp still has constants that need moving
     Code cleanup
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Check for memory leaks
         Correct warnings given by cppcheck
         Correct warnings given by clang-tidy
         Correct warnings given by compiling with -Wall, both on g++ and Visual Studio
-        Clean up the code helper tool's code
     Update Dear ImGui again lol
-    
-    --- v0.23.0 ---
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
         Areas should be one of three types

@@ -2,17 +2,45 @@ import re
 import subprocess
 import sys
 
+
+# An include statement that includes a system header file.
+INCLUDE_TYPE_SYSTEM = 0
+# An include statement that includes an Allegro header file.
+INCLUDE_TYPE_ALLEGRO = 1
+# An include statement that includes a local header file.
+INCLUDE_TYPE_LOCAL = 2
+
+
+script_debug_mode = False
+source_dir_to_use = ''
+
+
+## Represents a function in a source file.
 class Function:
+    ## Constructor.
+    #  @param self Self.
     def __init__(self):
+        # Namespace (or class or whatever) the function is in.
         self.namespace = ''
+        # Name of the function.
         self.name = ''
+        # Line in the source file.
         self.line = 0
+        # Parameters it takes.
         self.params = []
+    
+    ## Returns a string representing the full name + namespace.
+    #  @param self Self.
+    #  @return A string representing the full name + namespace.
     def get_full(self):
         if len(self.namespace) == 0:
             return self.name
         else:
             return self.namespace + '::' + self.name
+    
+    ## Returns whether it is a constructor or destructor.
+    #  @param self Self.
+    #  @return Whether it is a constructor or destructor.
     def is_const_or_dest(self):
         if self.namespace.split('::')[-1] == self.name:
             return True
@@ -21,47 +49,188 @@ class Function:
         if re.match(r'.+ : .+', self.name) is not None:
             return True
         return False
+    
+    ## Returns whether this is an exception case for the engine's style.
+    #  @param self Self.
+    #  @param return Whether this is an exception case for the engine's style.
     def is_exception(self):
         if self.name == 'create_fsm':
             return True
         return False
 
 
+## Represents an include statement in a source file.
 class Include:
+    ## Constructor.
+    #  @param self Self.
     def __init__(self):
+        # Include file name.
         self.name = ''
+        # Line in the source file.
         self.line = 0
 
+
+## Represents a constant declaration inside a namespace, in a source file.
 class NamespaceConstant:
+    ## Constructor.
+    #  @param self Self.
     def __init__(self):
+        # Name of the constant.
         self.name = ''
+        # Namespace it is in.
         self.namespace = ''
+        # Line in the source file.
         self.line = 0
 
 
-def remove_inside(s, l, r):
-    c = 0
-    bracket_start = 0
-    level = 0
-    while c < len(s):
-        if s[c] == l:
-            if level == 0:
-                level = 1
-                bracket_start = c
+## Returns a list of functions in a source file.
+#  @param file_path Path to the source file.
+#  @return A list of functions in a source file.
+def get_functions_in_file(file_path):
+    file = open(file_path, 'r')
+    lines = file.readlines()
+    
+    functions = []
+    line_nr = 0
+    
+    for l in lines:
+        line_nr += 1
+        
+        if l[0] == ' ':
+            # Anything indented is not a function definition.
+            continue
+        if l[0] == '#':
+            # Preprocessor.
+            continue
+        if l[0] == '/':
+            # Comment.
+            continue
+        if l.find('=') != -1:
+            # Variable declaration.
+            continue
+        # Simplify calls to std::.
+        l = l.replace('std::', '')
+        
+        # Style #1: function belonging to a namespace.
+        r = re.match(r'(.+)::([^\(]+)\(', l)
+        
+        if r is not None:
+            f = Function()
+            f.line = line_nr
+            
+            f.namespace = r.group(1).strip()
+            last_space_pos = f.namespace.rfind(' ')
+            if last_space_pos != -1:
+                f.namespace = f.namespace[last_space_pos + 1:]
+            
+            f.name = r.group(2).strip()
+
+            f.params = get_params_in_file_lines(lines, line_nr)
+            
+            functions.append(f)
+            continue
+        
+        # Style #2: simple function.
+        r = re.match(r'[^\(]+ ([^\(]+)\(', l)
+        
+        if r is not None:
+            f = Function()
+            f.line = line_nr
+            
+            f.name = r.group(1).strip()
+
+            f.params = get_params_in_file_lines(lines, line_nr)
+            
+            functions.append(f)
+            continue
+    
+    file.close()
+    
+    return functions
+
+
+## Returns a list of include statements in a source file.
+#  @param file_path Path to the source file.
+#  @return A list of include statements in a source file.
+def get_includes_in_file(file_path):
+    file = open(file_path, 'r')
+    
+    includes = []
+    line_nr = 0
+    
+    for l in file:
+        line_nr += 1
+        
+        if l[0] == '/':
+            # Comment.
+            continue
+        
+        r = re.match(r'#include (.+)', l)
+        
+        if r is not None:
+            i = Include()
+            i.line = line_nr
+            i.name = r.group(1).strip()
+            
+            if i.name.find('<allegro') != -1:
+                i.type = INCLUDE_TYPE_ALLEGRO
+            elif i.name.startswith('<'):
+                i.type = INCLUDE_TYPE_SYSTEM
             else:
-                level = level + 1
-        elif s[c] == r:
-            level = level - 1
-            if level <= 0:
-                pre = s[:bracket_start]
-                pos = s[c + 1:]
-                s = pre + pos
-                c = bracket_start
-        c = c + 1
-    return s
+                i.type = INCLUDE_TYPE_LOCAL
+            
+            includes.append(i)
+    
+    file.close()
+    
+    return includes
 
 
-def get_params(lines, line_nr):
+## Returns a list of constants inside namespaces, in a source file.
+#  @param file_path Path to the source file.
+#  @return A list of constants inside namespaces, in a source file.
+def get_namespace_constants_in_file(file_path):
+    file = open(file_path, 'r')
+    lines = file.readlines()
+    
+    constants = []
+    line_nr = 0
+    in_namespace = None
+    
+    for l in lines:
+        line_nr += 1
+
+        r = re.match(r'namespace ([A-Z_]+) {', l)
+        if r is not None:
+            in_namespace = r.group(1).strip()
+            continue
+        
+        r = re.match(r'\}', l)
+        if r is not None:
+            in_namespace = None
+            continue
+        
+        if in_namespace is not None:
+            r = re.match(r'.*const .+ ([A-Z_]+)(;|[^\)]+;)', l)
+
+            if r is not None:
+                c = NamespaceConstant()
+                c.name = r.group(1).strip()
+                c.namespace = in_namespace
+                c.line = line_nr
+                constants.append(c)
+                continue
+    
+    file.close()
+    
+    return constants
+
+
+## Returns a list of function parameters in a source file.
+#  @param lines List of lines composing the source file.
+#  @param line_nr Number of the line to start scanning at.
+#  @return A list of function parameters in a source file.
+def get_params_in_file_lines(lines, line_nr):
     params = []
     sig = ''
     finding_sig = True
@@ -123,161 +292,61 @@ def get_params(lines, line_nr):
     return params
 
 
-def get_functions(file_path):
-    file = open(file_path, 'r')
-    lines = file.readlines()
-    
-    functions = []
-    line_nr = 0
-    
-    for l in lines:
-        line_nr += 1
-        
-        if l[0] == ' ':
-            # Anything indented is not a function definition.
-            continue
-        if l[0] == '#':
-            # Preprocessor.
-            continue
-        if l[0] == '/':
-            # Comment.
-            continue
-        if l.find('=') != -1:
-            # Variable declaration.
-            continue
-        # Simplify calls to std::.
-        l = l.replace('std::', '')
-        
-        # Style #1: function belonging to a namespace.
-        r = re.match(r'(.+)::([^\(]+)\(', l)
-        
-        if r is not None:
-            f = Function()
-            f.line = line_nr
-            
-            f.namespace = r.group(1).strip()
-            last_space_pos = f.namespace.rfind(' ')
-            if last_space_pos != -1:
-                f.namespace = f.namespace[last_space_pos + 1:]
-            
-            f.name = r.group(2).strip()
-
-            f.params = get_params(lines, line_nr)
-            
-            functions.append(f)
-            continue
-        
-        # Style #2: simple function.
-        r = re.match(r'[^\(]+ ([^\(]+)\(', l)
-        
-        if r is not None:
-            f = Function()
-            f.line = line_nr
-            
-            f.name = r.group(1).strip()
-
-            f.params = get_params(lines, line_nr)
-            
-            functions.append(f)
-            continue
-    
-    file.close()
-    
-    return functions
-
-
-def get_includes(file_path):
-    file = open(file_path, 'r')
-    
-    includes = []
-    line_nr = 0
-    
-    for l in file:
-        line_nr += 1
-        
-        if l[0] == '/':
-            # Comment.
-            continue
-        
-        r = re.match(r'#include (.+)', l)
-        
-        if r is not None:
-            i = Include()
-            i.line = line_nr
-            i.name = r.group(1).strip()
-            
-            if i.name.find('<allegro') != -1:
-                i.type = INCLUDE_TYPE_ALLEGRO
-            elif i.name.startswith('<'):
-                i.type = INCLUDE_TYPE_SYSTEM
-            else:
-                i.type = INCLUDE_TYPE_LOCAL
-            
-            includes.append(i)
-    
-    file.close()
-    
-    return includes
-
-
-def get_namespace_constants(file_path):
-    file = open(file_path, 'r')
-    lines = file.readlines()
-    
-    constants = []
-    line_nr = 0
-    in_namespace = None
-    
-    for l in lines:
-        line_nr += 1
-
-        r = re.match(r'namespace ([A-Z_]+) {', l)
-        if r is not None:
-            in_namespace = r.group(1).strip()
-            continue
-        
-        r = re.match(r'\}', l)
-        if r is not None:
-            in_namespace = None
-            continue
-        
-        if in_namespace is not None:
-            r = re.match(r'.*const .+ ([A-Z_]+)(;|[^\)]+;)', l)
-
-            if r is not None:
-                c = NamespaceConstant()
-                c.name = r.group(1).strip()
-                c.namespace = in_namespace
-                c.line = line_nr
-                constants.append(c)
-                continue
-    
-    file.close()
-    
-    return constants
-
-
+## Returns whether the Python script's call has a given argument.
+#  @param name Name of the argument to search for.
+#  @return Whether the Python script's call has a given argument.
 def has_argument(name):
     for a in sys.argv:
         if a == name:
             return True
     return False
 
+
+## Pads a string such that it fits in a certain space.
+#  This will trim the string to fit, or add spaces to the right, if necessary.
+#  @param s The string to pad.
+#  @param nr Number of characters it should take up.
+#  @return The padded string.
 def pad(s, nr):
     return str(s)[:nr].ljust(nr)
 
 
+## Removes anything inside two tokens in the given string, as well as the tokens themselves.
+#  @param s String to process.
+#  @param l Token to the left of the text to remove.
+#  @param r Token to the right of the text to remove.
+#  @return The string without the text inside or the tokens.
+def remove_inside(s, l, r):
+    c = 0
+    bracket_start = 0
+    level = 0
+    while c < len(s):
+        if s[c] == l:
+            if level == 0:
+                level = 1
+                bracket_start = c
+            else:
+                level = level + 1
+        elif s[c] == r:
+            level = level - 1
+            if level <= 0:
+                pre = s[:bracket_start]
+                pos = s[c + 1:]
+                s = pre + pos
+                c = bracket_start
+        c = c + 1
+    return s
+
+
+## Performs a system call.
+#  @param command Command to run.
+#  @return A string with the command output. Returns an empty string if no output.
 def system_call(command):
     try:
         o = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         if len(e.output) == 0:
-            return ""
+            return ''
         else:
             raise e
-    return o.decode("utf-8")[:-1]
-
-
-INCLUDE_TYPE_SYSTEM = 0
-INCLUDE_TYPE_ALLEGRO = 1
-INCLUDE_TYPE_LOCAL = 2
+    return o.decode('utf-8')[:-1]

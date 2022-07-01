@@ -2,11 +2,26 @@ import os, re
 
 from .common import *
 
+## Returns any documentation-related problems found in all source files.
+#  @return Documentation-related problems.
+def get_all_documentation_problems():
+    problems = []
+    for dirpath, dirnames, files in os.walk(source_dir_to_use):
+        for f in files:
+            if f.endswith('cpp'):
+                file_problems = get_documentation_problems_in_file(os.path.join(dirpath, f))
+                if file_problems is not None:
+                    problems = problems + file_problems
+    return problems
 
-def check_bad_documentation_in_file(file_path):
+
+## Returns any documentation-related problems found in a source file.
+#  @param file_path Path to the file.
+#  @return Documentation-related problems.
+def get_documentation_problems_in_file(file_path):
     file = open(file_path)
     lines = file.readlines()
-    functions = get_functions(file_path)
+    functions = get_functions_in_file(file_path)
     problems = []
 
     for f in functions:
@@ -50,15 +65,4 @@ def check_bad_documentation_in_file(file_path):
             if p not in f.params:
                 problems.append((file_path, 'Unknown documented parameter', pad(comment_start, 4) + ' ' + pad(p, 20)))
     
-    return problems
-
-
-def find_bad_documentation():
-    problems = []
-    for dirpath, dirnames, files in os.walk('Source/source'):
-        for f in files:
-            if f.endswith('cpp'):
-                file_problems = check_bad_documentation_in_file(os.path.join(dirpath, f))
-                if file_problems is not None:
-                    problems = problems + file_problems
     return problems

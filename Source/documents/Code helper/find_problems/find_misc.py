@@ -2,11 +2,31 @@ import os
 
 from .common import *
 
+# Cramped thing type -- an include statement.
 CRAMPED_THING_INCLUDE = 0
+# Cramped thing type -- a using statement.
 CRAMPED_THING_USING = 1
+# Cramped thing type -- a closing brace.
 CRAMPED_THING_CLOSE_BRACE = 2
 
-def check_cramped_things_in_file(file_path):
+
+## Returns any cramped things in all source files.
+#  @return Cramped things as problems.
+def get_all_cramped_problems():
+    problems = []
+    for dirpath, dirnames, files in os.walk(source_dir_to_use):
+        for f in files:
+            if f.endswith('cpp') or f.endswith('h'):
+                file_problems = get_cramped_problems_in_file(os.path.join(dirpath, f))
+                if file_problems is not None:
+                    problems = problems + file_problems
+    return problems
+
+
+## Returns any cramped things in a source file.
+#  @param file_path Path to the file.
+#  @return Cramped things as problems.
+def get_cramped_problems_in_file(file_path):
     file = open(file_path)
     line_nr = 0
     problems = []
@@ -53,15 +73,4 @@ def check_cramped_things_in_file(file_path):
                         thing_name = 'close brace'
                     problems.append((file_path, 'Two newlines missing after ' + thing_name, pad(line_nr - empty_lines - 1, 4)))
 
-    return problems
-
-
-def find_cramped_things():
-    problems = []
-    for dirpath, dirnames, files in os.walk('Source/source'):
-        for f in files:
-            if f.endswith('cpp') or f.endswith('h'):
-                file_problems = check_cramped_things_in_file(os.path.join(dirpath, f))
-                if file_problems is not None:
-                    problems = problems + file_problems
     return problems
