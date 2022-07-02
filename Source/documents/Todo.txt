@@ -1,18 +1,17 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-
+    
 
 Current tasks (tasks being worked on, but not yet committed)
-    Revert the optimization commits so I can add them after the release
-    Document in the manual's object creation tips how radii for carriable objects should be no bigger than ~192, since that's the minimum width of most "standard" passageways, and is the width of gates
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     A Purple Pikmin thrown at a Wollywog on water will start flailing while latched
-    
-    --- v0.22.0 ---
-    A way to set an object's starting health. This is good for, for instance, reinforced walls that are nearly destroyed. Update the gates and such to reflect this possibility, and document this in the object types's tips
+    Pikmin thrown at a climbing stick will overshoot it
+    Non-Winged Pikmin don't climb up climbing sticks properly
     
     --- v0.23.0 ---
+    Bring back the reverted refactor-based commits
     leader.cpp still has constants that need moving
     Code cleanup
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
@@ -21,6 +20,7 @@ Next tasks (roughly sorted most important first)
         Correct warnings given by clang-tidy
         Correct warnings given by compiling with -Wall, both on g++ and Visual Studio
     Update Dear ImGui again lol
+    Add a maker tool that makes it so a button saves the current game state + loaded content get saved to the auto-start maker tool
     Mission Mode stuff
         The idea is to make it so areas have some sort of goal, other than being a sandbox
         Areas should be one of three types
@@ -105,6 +105,20 @@ Next tasks (roughly sorted most important first)
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
         Misc. ideas
             A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
+    Statistics menu, which keeps track of:
+        Engine use
+            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd
+        Pikmin life
+            Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count (careful not to count Candypop Buds as deaths), Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
+        Leader control
+            Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
+    Manual
+        Update the area editor screenshots
+        Revamp the scripting tutorial
+            Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
+            Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
+    
+    --- v0.24.0 ---
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
@@ -119,18 +133,6 @@ Next tasks (roughly sorted most important first)
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
             Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
         Helodity's Adventure area (see #content-sharing)
-    Statistics menu, which keeps track of:
-        Engine use
-            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd
-        Pikmin life
-            Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count (careful not to count Candypop Buds as deaths), Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
-        Leader control
-            Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
-    Manual
-        Update the area editor screenshots
-        Revamp the scripting tutorial
-            Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
-            Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
     
     --- Future ---
     Radar

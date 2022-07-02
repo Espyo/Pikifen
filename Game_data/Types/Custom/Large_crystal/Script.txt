@@ -12,6 +12,10 @@ script {
         }
         on_timer {
             set_var capturing false
+            get_info t health_ratio
+            if $t < 0.56
+                set_state broken
+            end_if
             set_state healthy
         }
         on_touch_object {

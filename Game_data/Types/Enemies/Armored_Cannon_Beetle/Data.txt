@@ -15,7 +15,7 @@ move_speed = 80
 pikmin_seeds = 50
 pushable = true
 pushes = true
-radius = 100
+radius = 95
 reaches {
     search = 300 180
     attack = 300 5

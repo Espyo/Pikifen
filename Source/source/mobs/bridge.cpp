@@ -292,4 +292,6 @@ void bridge::setup() {
                 (size_t) (ceil(fabs(delta_z) / STEP_HEIGHT) + 1)
             );
     }
+    
+    check_health();
 }

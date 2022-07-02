@@ -444,25 +444,44 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     if(!team_value.empty()) new_vars_map["team"] = team_value;
     vars_in_widgets["team"] = true;
     
-    //Max health property.
-    float max_health = 0.0f;
+    //Health property.
+    float max_health = m_ptr->type->max_health;
     if(vars_map.find("max_health") != vars_map.end()) {
         max_health = s2f(vars_map["max_health"]);
     }
+    float health = max_health;
+    if(vars_map.find("health") != vars_map.end()) {
+        health = s2f(vars_map["health"]);
+    }
     
+    if(ImGui::DragFloat("Health", &health, 0.25f, 0.0f, max_health)) {
+        register_change("object script vars change");
+    }
+    set_tooltip(
+        "Starting health for this specific object.\n"
+        "(Variable name: \"health\".)",
+        "",
+        WIDGET_EXPLANATION_DRAG
+    );
+    
+    if(health != max_health) {
+        new_vars_map["health"] = f2s(health);
+    }
+    vars_in_widgets["health"] = true;
+    
+    //Max health property.
     if(ImGui::DragFloat("Max health", &max_health, 0.25f, 0.0f, FLT_MAX)) {
         register_change("object script vars change");
     }
     set_tooltip(
-        "Maximum health for this specific object,\n"
-        "or 0 to just use the object type's default.\n"
+        "Maximum health for this specific object.\n"
         "The object type's default is " + f2s(m_ptr->type->max_health) + ".\n"
         "(Variable name: \"max_health\".)",
         "",
         WIDGET_EXPLANATION_DRAG
     );
     
-    if(max_health != 0.0f) {
+    if(max_health != m_ptr->type->max_health) {
         new_vars_map["max_health"] = f2s(max_health);
     }
     vars_in_widgets["max_health"] = true;

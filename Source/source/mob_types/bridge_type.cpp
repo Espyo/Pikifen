@@ -39,7 +39,8 @@ bridge_type::bridge_type() :
         "Link this object to another object, so that\n"
         "you can specify where the bridge ends.\n"
         "A \"Dummy\" object works perfectly for this.\n"
-        "Also, changing its health changes how long Pikmin\n"
+        "Changing the bridge's health changes how much of it is pre-built.\n"
+        "Changing its max health changes how long Pikmin\n"
         "work on it for, or how many fragments are needed.";
         
     area_editor_prop_struct aep_chunks;

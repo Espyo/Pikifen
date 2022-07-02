@@ -1,7 +1,19 @@
-first_state = healthy
+first_state = checking_health
 death_state = destroyed
 
 script {
+    checking_health {
+        on_enter {
+            get_info t health_ratio
+            if $t < 0.40
+                set_state very_broken
+            end_if
+            if $t < 0.85
+                set_state broken
+            end_if
+            set_state healthy
+        }
+    }
     healthy {
         on_enter {
             set_animation healthy

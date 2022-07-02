@@ -2512,6 +2512,10 @@ void mob::read_script_vars(const script_var_reader &svr) {
         max_health = std::max(1.0f, max_health);
         health = max_health;
     }
+    
+    if(svr.get("health", health)) {
+        health = std::min(health, max_health);
+    }
 }
 
 
