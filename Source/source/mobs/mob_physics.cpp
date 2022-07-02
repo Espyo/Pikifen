@@ -237,11 +237,9 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
                 return H_MOVE_FAIL;
             }
             
-            if(can_move_in_midair) {
-                z = chase_info.offset_z;
-                if(chase_info.orig_z) {
-                    z += *chase_info.orig_z;
-                }
+            z = chase_info.offset_z;
+            if(chase_info.orig_z) {
+                z += *chase_info.orig_z;
             }
             
             ground_sector = sec;
@@ -658,7 +656,9 @@ void mob::tick_physics(const float delta_t) {
     }
     
     //Vertical movement.
-    tick_vertical_movement_physics(delta_t, pre_move_ground_z);
+    tick_vertical_movement_physics(
+        delta_t, pre_move_ground_z, h_mov_type == H_MOVE_TELEPORTED
+    );
     
     //Walk on top of another mob, if possible.
     tick_walkable_riding_physics(delta_t);
@@ -734,9 +734,12 @@ void mob::tick_rotation_physics(
  *   How long the frame's tick is, in seconds.
  * pre_move_ground_z:
  *   Z of the floor before horizontal movement started.
+ * was_teleport:
+ *   Did the mob just teleport previously in the movement logic?
  */
 void mob::tick_vertical_movement_physics(
-    const float delta_t, const float pre_move_ground_z
+    const float delta_t, const float pre_move_ground_z,
+    const bool was_teleport
 ) {
     bool apply_gravity = true;
     float old_speed_z = speed_z;
@@ -773,7 +776,7 @@ void mob::tick_vertical_movement_physics(
     }
     
     //Gravity.
-    if(apply_gravity && !can_move_in_midair && !holder.m) {
+    if(apply_gravity && !can_move_in_midair && !holder.m && !was_teleport) {
         speed_z = old_speed_z + delta_t* gravity_mult * GRAVITY_ADDER;
     }
     

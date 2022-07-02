@@ -100,6 +100,11 @@ void gameplay_state::do_aesthetic_logic() {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
+        if(!m_ptr->type->pushable && !m_ptr->type->walkable) {
+            //If it doesn't push and can't be walked on, there's probably
+            //nothing really for the Pikmin to land on top of.
+            continue;
+        }
         if(
             throw_dest_mob &&
             m_ptr->z + m_ptr->height <

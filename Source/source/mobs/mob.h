@@ -446,7 +446,8 @@ protected:
     void tick_script(const float delta_t);
     //Tick its vertical movement physics logic.
     void tick_vertical_movement_physics(
-        const float delta_t, const float pre_move_ground_z
+        const float delta_t, const float pre_move_ground_z,
+        const bool was_teleport = false
     );
     //Tick physics logic for riding atop a walkable mob.
     void tick_walkable_riding_physics(const float delta_t);

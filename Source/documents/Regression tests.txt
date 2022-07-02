@@ -570,6 +570,8 @@ PHYSICS
 8. Have Pikmin drag something that can be pushed, like a cardboard box
 9. Move whilst on top of a moving walkable mob
 10. Move whilst on top of a mob that is changing its height
+11. Get a non-Winged Pikmin to climb a climbing stick, and check their Z. It must go all the way to 250.
+11. Repeat, but with a Winged Pikmin.
 
 
 

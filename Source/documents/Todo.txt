@@ -7,8 +7,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     A Purple Pikmin thrown at a Wollywog on water will start flailing while latched
-    Pikmin thrown at a climbing stick will overshoot it
-    Non-Winged Pikmin don't climb up climbing sticks properly
     
     --- v0.23.0 ---
     Bring back the reverted refactor-based commits
@@ -22,26 +20,35 @@ Next tasks (roughly sorted most important first)
     Update Dear ImGui again lol
     Add a maker tool that makes it so a button saves the current game state + loaded content get saved to the auto-start maker tool
     Mission Mode stuff
-        The idea is to make it so areas have some sort of goal, other than being a sandbox
-        Areas should be one of three types
-            Areas of the simple type don't really have any special rules, they're just endless sandboxes
-            Areas of the mission type show, in this same panel, all sorts of info about how to play the mission
-            Areas of the arena type are only for competitive multiplayer play
-        Medals
-            For every stage, the player can have no medal, a bronze, a silver, a gold, or a platinum medal
-                The sprites for medals should have the medal proper take up a lot of large space, whereas the ribbon should be small. The three basic medals should have the medal proper be circular and uninteresting, whereas the platinum should be a star to stand out. Since platinum is both a "perfect" completion, as well as a way to indicate triumph on missions that aren't scored with points, it should give a feeling of a checkbox on a checklist, while the other medals should give a feeling of "good, but there's more to be done"
-            When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
-            Three grading modes:
-                Points
-                    The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths (careful not to count Candypop Buds as deaths), time left, Pokos gathered, enemy kill points
-                    Each field can have varying weights, including 0 or negative
-                    Each field's value can also be instantly transformed to 0 if the player finished the stage via "loss"
-                    You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
-                    Depending on the points, the player gets no medal, a bronze, a silver, a gold, or a platinum
-                Completion
-                    Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
-                None
-                    No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
+        Info
+            The idea is to make it so areas have some sort of goal, other than being a sandbox
+            Areas should be one of three types
+                Areas of the simple type don't really have any special rules, they're just endless sandboxes
+                Areas of the mission type show, in this same panel, all sorts of info about how to play the mission
+                Areas of the arena type are only for competitive multiplayer play
+            Medals
+                For every stage, the player can have no medal, a bronze, a silver, a gold, or a platinum medal
+                    The sprites for medals should have the medal proper take up a lot of large space, whereas the ribbon should be small. The three basic medals should have the medal proper be circular and uninteresting, whereas the platinum should be a star to stand out. Since platinum is both a "perfect" completion, as well as a way to indicate triumph on missions that aren't scored with points, it should give a feeling of a checkbox on a checklist, while the other medals should give a feeling of "good, but there's more to be done"
+                When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
+                Three grading modes:
+                    Points
+                        The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths (careful not to count Candypop Buds as deaths), time left, Pokos gathered, enemy kill points
+                        Each field can have varying weights, including 0 or negative
+                        Each field's value can also be instantly transformed to 0 if the player finished the stage via "loss"
+                        You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
+                        Depending on the points, the player gets no medal, a bronze, a silver, a gold, or a platinum
+                    Completion
+                        Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
+                    None
+                        No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
+        Areas should go either in Game_data/Areas/Simple or Game_data/Areas/Missions
+        Area editor changes
+            Starting dialog should have
+                A history
+                Tabs for the different area types
+                A picker inside each tab so users can create or load
+            Add a new panel, Gameplay, where you control everything gameplay-related
+                Move the spray counter here, and spruce it up so people don't have to write stuff by hand
         Each stage should have the following data:
             A quick description explaining what the stage is about. Example: "These dark woods hide many dangerous beasts behind the fallen branches. Your goal is to escape without a single enemy seeing you!"
             A "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
@@ -74,14 +81,13 @@ Next tasks (roughly sorted most important first)
             Maybe...
                 A win condition for reaching X sprays of type Y
                 A loss condition for killing an enemy
-        Area editor changes
-            A new panel, gameplay, where you control everything gameplay-related, starting with the area type
-                Move the spray counter here, and spruce it up so people don't have to write stuff by hand
         Area selection menu changes
-            Left side
+            When pressing Play, another menu should show up with a Simple areas button and a Missions button (and a back button)
+            Left side of the area selectio menu proper
                 The list of areas, with their names and a medal icon next to each
-            Right side
-                Details about the highlighted mission, in order:
+            Right side of the area selectio menu proper
+                If it's a simple area, basic details about the area
+                If it's a mission, details about the highlighted mission, in order:
                     Thumbnail
                     Area name
                     Description
@@ -95,6 +101,7 @@ Next tasks (roughly sorted most important first)
                         Maker and version
                         Extra area notes
                         High scores + their medals (only present if the stage's grading mode is points)
+        Implement the actual mission gameplay rules
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area
             Point down in the manual that the game auto-saves
