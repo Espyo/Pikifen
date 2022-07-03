@@ -1105,7 +1105,7 @@ void mob_action_runners::hold_focus(mob_action_run_data &data) {
     if(data.m->focused_mob) {
         data.m->hold(
             data.m->focused_mob,
-            s2i(data.args[0]), 0.0f, 0.0f,
+            s2i(data.args[0]), 0.0f, 0.0f, 0.5f,
             false, HOLD_ROTATION_METHOD_COPY_HOLDER
         );
     }
@@ -1856,7 +1856,7 @@ void mob_action_runners::store_focus_inside(mob_action_run_data &data) {
     if(data.m->focused_mob) {
         if(!data.m->focused_mob->stored_inside_another) {
             data.m->hold(
-                data.m->focused_mob, INVALID, 0.0f, 0.0f,
+                data.m->focused_mob, INVALID, 0.0f, 0.0f, 0.5f,
                 false, HOLD_ROTATION_METHOD_NEVER
             );
             data.m->focused_mob->stored_inside_another = data.m;

@@ -767,7 +767,8 @@ void leader::swap_held_pikmin(mob* new_pik) {
     
     release(holding[0]);
     hold(
-        new_pik, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
+        new_pik, INVALID,
+        LEADER_HELD_MOB_H_DIST, LEADER_HELD_MOB_ANGLE, LEADER_HELD_MOB_V_DIST,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     

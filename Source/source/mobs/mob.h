@@ -289,7 +289,8 @@ public:
     void chomp(mob* m, hitbox* hitbox_info);
     sprite* get_cur_sprite() const;
     void get_hitbox_hold_point(
-        mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
+        mob* mob_to_hold, hitbox* h_ptr,
+        float* offset_dist, float* offset_angle, float* vertical_dist
     ) const;
     size_t get_latched_pikmin_amount() const;
     float get_latched_pikmin_weight() const;
@@ -305,6 +306,7 @@ public:
     void hold(
         mob* m, const size_t hitbox_nr,
         const float offset_dist, const float offset_angle,
+        const float vertical_dist,
         const bool above_holder, const HOLD_ROTATION_METHODS rotation_method
     );
     void release(mob* m);

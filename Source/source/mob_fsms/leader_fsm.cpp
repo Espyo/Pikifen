@@ -1610,7 +1610,8 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     mob* grabbed_mob = (mob*) info1;
     lea_ptr->hold(
-        grabbed_mob, INVALID, LEADER_HELD_MOB_DIST, LEADER_HELD_MOB_ANGLE,
+        grabbed_mob, INVALID,
+        LEADER_HELD_MOB_H_DIST, LEADER_HELD_MOB_ANGLE, LEADER_HELD_MOB_V_DIST,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     lea_ptr->group->sort(grabbed_mob->subgroup_type_ptr);

@@ -1096,11 +1096,13 @@ void mob::chomp(mob* m, hitbox* hitbox_info) {
     
     float h_offset_dist;
     float h_offset_angle;
+    float v_offset_dist;
     get_hitbox_hold_point(
-        m, hitbox_info, &h_offset_dist, &h_offset_angle
+        m, hitbox_info, &h_offset_dist, &h_offset_angle, &v_offset_dist
     );
     hold(
-        m, hitbox_info->body_part_index, h_offset_dist, h_offset_angle,
+        m, hitbox_info->body_part_index,
+        h_offset_dist, h_offset_angle, v_offset_dist,
         true, HOLD_ROTATION_METHOD_NEVER
     );
     
@@ -1771,11 +1773,15 @@ hitbox* mob::get_hitbox(const size_t nr) const {
  *   1 means the full radius.
  * offset_angle:
  *   The angle the mob to hold makes with the hitbox's center is returned here.
+ * vertical_dist:
+ *   Ratio of distance from the hitbox/body's bottom. 1 is the very top.
  */
 void mob::get_hitbox_hold_point(
-    mob* mob_to_hold, hitbox* h_ptr, float* offset_dist, float* offset_angle
+    mob* mob_to_hold, hitbox* h_ptr,
+    float* offset_dist, float* offset_angle, float* vertical_dist
 ) const {
     point actual_h_pos = h_ptr->get_cur_pos(pos, angle_cos, angle_sin);
+    float actual_h_z = z + h_ptr->z;
     
     point pos_dif = mob_to_hold->pos - actual_h_pos;
     coordinates_to_angle(pos_dif, offset_angle, offset_dist);
@@ -1784,6 +1790,9 @@ void mob::get_hitbox_hold_point(
     *offset_angle -= angle;
     //Distance in units to distance in percentage.
     *offset_dist /= h_ptr->radius;
+    
+    *vertical_dist = mob_to_hold->z - actual_h_z;
+    *vertical_dist /= h_ptr->height;
 }
 
 
@@ -2319,6 +2328,8 @@ bool mob::has_clear_line(mob* target_mob) const {
  *   Distance from the hitbox/body center. 1 is full radius.
  * offset_angle:
  *   Hitbox/body angle from which the mob will be held.
+ * vertical_dist:
+ *   Ratio of distance from the hitbox/body's bottom. 1 is the very top.
  * above_holder:
  *   Is the mob meant to appear above the holder?
  * rotation_method:
@@ -2327,6 +2338,7 @@ bool mob::has_clear_line(mob* target_mob) const {
 void mob::hold(
     mob* m, const size_t hitbox_nr,
     const float offset_dist, const float offset_angle,
+    const float vertical_dist,
     const bool above_holder, const HOLD_ROTATION_METHODS rotation_method
 ) {
     holding.push_back(m);
@@ -2334,6 +2346,7 @@ void mob::hold(
     m->holder.hitbox_nr = hitbox_nr;
     m->holder.offset_dist = offset_dist;
     m->holder.offset_angle = offset_angle;
+    m->holder.vertical_dist = vertical_dist;
     m->holder.above_holder = above_holder;
     m->holder.rotation_method = rotation_method;
     m->fsm.run_event(MOB_EV_HELD, (void*) this);

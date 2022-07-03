@@ -658,6 +658,7 @@ hold_info_struct::hold_info_struct() :
     hitbox_nr(INVALID),
     offset_dist(0),
     offset_angle(0),
+    vertical_dist(0),
     above_holder(false) {
     
 }
@@ -671,6 +672,7 @@ void hold_info_struct::clear() {
     hitbox_nr = INVALID;
     offset_dist = 0;
     offset_angle = 0;
+    vertical_dist = 0;
 }
 
 
@@ -699,7 +701,7 @@ point hold_info_struct::get_final_pos(float* final_z) const {
                 offset_angle + m->angle,
                 offset_dist * h_ptr->radius
             );
-        *final_z = m->z + h_ptr->z;
+        *final_z = m->z + h_ptr->z + (h_ptr->height * vertical_dist);
     } else {
         //Body center.
         final_pos = m->pos;
@@ -709,7 +711,7 @@ point hold_info_struct::get_final_pos(float* final_z) const {
                 offset_angle + m->angle,
                 offset_dist * m->radius
             );
-        *final_z = m->z;
+        *final_z = m->z + (m->height * vertical_dist);
     }
     
     return final_pos;
@@ -1249,7 +1251,7 @@ mob* create_mob(
                 new_mob,
                 type->anims.find_body_part(child_info->hold_body_part),
                 child_info->hold_offset_dist,
-                child_info->hold_offset_angle, false,
+                child_info->hold_offset_angle, 0.5f, false,
                 child_info->hold_rotation_method
             );
         }

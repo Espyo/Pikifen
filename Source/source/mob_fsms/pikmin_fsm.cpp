@@ -2520,7 +2520,10 @@ void pikmin_fsm::finish_picking_up(mob* m, void* info1, void* info2) {
         game.states.gameplay->subgroup_types.get_type(
             SUBGROUP_TYPE_CATEGORY_TOOL, m->focused_mob->type
         );
-    m->hold(m->focused_mob, INVALID, 4, 0, true, HOLD_ROTATION_METHOD_FACE_HOLDER);
+    m->hold(
+        m->focused_mob, INVALID, 4, 0, 0.5f,
+        true, HOLD_ROTATION_METHOD_FACE_HOLDER
+    );
     m->unfocus_from_mob();
 }
 
@@ -3074,12 +3077,15 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
             
             float h_offset_dist;
             float h_offset_angle;
+            float v_offset_dist;
             m2_ptr->get_hitbox_hold_point(
-                too_ptr, info->h2, &h_offset_dist, &h_offset_angle
+                too_ptr, info->h2,
+                &h_offset_dist, &h_offset_angle, &v_offset_dist
             );
             m2_ptr->hold(
                 too_ptr, info->h2->body_part_index,
-                h_offset_dist, h_offset_angle, true, HOLD_ROTATION_METHOD_FACE_HOLDER
+                h_offset_dist, h_offset_angle, v_offset_dist,
+                true, HOLD_ROTATION_METHOD_FACE_HOLDER
             );
         }
         
@@ -3591,6 +3597,8 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //before coming to a stop. Otherwise the Pikmin would stop nearly
     //on the edge of the water, and that just looks bad.
     m->set_timer(1.0f);
+    
+    m->set_animation(PIKMIN_ANIM_IDLING);
 }
 
 

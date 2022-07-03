@@ -239,6 +239,8 @@ struct hold_info_struct {
     float offset_dist;
     //Angle the mob makes with the center of the hitbox/body.
     float offset_angle;
+    //Ratio of distance from the hitbox/body's bottom. 1 is the very top.
+    float vertical_dist;
     //Is the mob drawn above the holder?
     bool above_holder;
     //How should the held object rotate?

@@ -330,11 +330,12 @@ void pikmin::latch(mob* m, hitbox* h) {
     
     float h_offset_dist;
     float h_offset_angle;
+    float v_offset_dist;
     m->get_hitbox_hold_point(
-        this, h, &h_offset_dist, &h_offset_angle
+        this, h, &h_offset_dist, &h_offset_angle, &v_offset_dist
     );
     m->hold(
-        this, h->body_part_index, h_offset_dist, h_offset_angle,
+        this, h->body_part_index, h_offset_dist, h_offset_angle, v_offset_dist,
         true, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     
