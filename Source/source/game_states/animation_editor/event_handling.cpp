@@ -320,8 +320,6 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     }
                     cur_hitbox_nr = clicked_hitboxes[cur_hitbox_nr_index];
                     cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
-                    
-                    mark_new_changes();
                 }
             }
         }

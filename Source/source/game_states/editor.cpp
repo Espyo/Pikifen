@@ -879,6 +879,8 @@ void editor::load() {
     }
     
     last_input_was_keyboard = false;
+    has_unsaved_changes = false;
+    was_warned_about_unsaved_changes = false;
     
     game.fade_mgr.start_fade(true, nullptr);
     

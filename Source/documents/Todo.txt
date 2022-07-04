@@ -6,8 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Selecting a hitbox counts as making a change in the animation editor
-    If you quit the animation editor with unsaved changes, the save button will say there are unsaved changes when you next enter it
+    
     
     --- v0.23.0 ---
     Bring back the reverted refactor-based commits
