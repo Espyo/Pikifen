@@ -406,6 +406,9 @@ Next tasks (roughly sorted most important first)
             A player sees an opposing team's Pikmin on their screen
                 I think the player's own Pikmin (and Pikmin belonging to another player that's still on their team) should appear normal, but the opponents should be marked. Maybe a triangle above them?
         Roulette items
+            The P2 and P3 ones
+            Clock
+                Inflicts a status effect on Pikmin (maybe the leader too?) that makes them move at half speed for 10 seconds
         An "inventory" system
             With multiplayer, there will likely be players on keyboards and on controllers. Players on a controller can't really afford mapping 6 buttons just to manage sprays and the roulette item
             Sprays and the roulette item should go in the same inventory
@@ -428,7 +431,7 @@ Next tasks (roughly sorted most important first)
                 While the area data can determine a default victory amount, the rules can override it
             Capture the Flag
                 When a team collects the other team's flag they gain a point. First team to reach a certain amount of points wins
-                In the canon games, delivering once is enough, but if the amount of captures is higher than 1, the flag should respawn in its original location after being captured
+                In the canon games, this is pretty much marble/macaroon capture. Delivering once is enough there, but here, if the amount of captures is higher than 1, the flag should respawn in its original location after being captured
                 For the area to be compatible with this mode, it must determine what the flag object is
                 While the area data can determine a default victory amount, the rules can override it
             Objective Hunt
@@ -455,6 +458,10 @@ Next tasks (roughly sorted most important first)
                 Like in Age of Empires, you can gather materials into a spot, and once you have enough, you can start building a Wonder. If you manage to build it, you win automatically
             Tag?
                 One team's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every team has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
+            Time?
+                When time is up, the player with the most Pikmin wins. Or with the most enemy kills. Or Pokos collected. And so on.
+            Delivery?
+                There are loose, 1-weight objects stranded around the area, and players can send their Pikmin to deliver them to a pick-up point somewhere in the center of the area. The player to reach the highest amount of deliveries wins
         Rulesets
             In the area selection menu, there should be a button to take you to the player setup, and another to pick a ruleset
             In the ruleset editor, you can pick...

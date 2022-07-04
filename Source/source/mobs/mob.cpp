@@ -1791,8 +1791,12 @@ void mob::get_hitbox_hold_point(
     //Distance in units to distance in percentage.
     *offset_dist /= h_ptr->radius;
     
-    *vertical_dist = mob_to_hold->z - actual_h_z;
-    *vertical_dist /= h_ptr->height;
+    if(h_ptr->height <= 0.0f) {
+        *vertical_dist = 0.0f;
+    } else {
+        *vertical_dist = mob_to_hold->z - actual_h_z;
+        *vertical_dist /= h_ptr->height;
+    }
 }
 
 
