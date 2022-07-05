@@ -27,60 +27,64 @@ using std::unordered_set;
 using std::vector;
 
 
+namespace AREA_EDITOR {
 //Radius to use when drawing a cross-section point.
-const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
+const float CROSS_SECTION_POINT_RADIUS = 8.0f;
 //A comfortable distance, useful for many scenarios.
-const float area_editor::COMFY_DIST = 32.0f;
+const float COMFY_DIST = 32.0f;
 //The cursor snap for heavy modes updates these many times a second.
-const float area_editor::CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
+const float CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 //Scale the debug text by this much.
-const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
+const float DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
-const unsigned char area_editor::DEF_REFERENCE_ALPHA = 128;
+const unsigned char DEF_REFERENCE_ALPHA = 128;
 //Amount to pan the camera by when using the keyboard.
-const float area_editor::KEYBOARD_PAN_AMOUNT = 32.0f;
+const float KEYBOARD_PAN_AMOUNT = 32.0f;
 //Maximum number of points that a circle sector can be created with.
-const unsigned char area_editor::MAX_CIRCLE_SECTOR_POINTS = 32;
+const unsigned char MAX_CIRCLE_SECTOR_POINTS = 32;
 //Maximum grid interval.
-const float area_editor::MAX_GRID_INTERVAL = 4096;
+const float MAX_GRID_INTERVAL = 4096;
 //Maximum number of texture suggestions.
-const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
+const size_t MAX_TEXTURE_SUGGESTIONS = 20;
 //Minimum number of points that a circle sector can be created with.
-const unsigned char area_editor::MIN_CIRCLE_SECTOR_POINTS = 3;
+const unsigned char MIN_CIRCLE_SECTOR_POINTS = 3;
 //Minimum grid interval.
-const float area_editor::MIN_GRID_INTERVAL = 2.0;
+const float MIN_GRID_INTERVAL = 2.0;
 //Thickness to use when drawing a mob link line.
-const float area_editor::MOB_LINK_THICKNESS = 2.0f;
+const float MOB_LINK_THICKNESS = 2.0f;
+//Width of the text widget that shows the mouse cursor coordinates.
+const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
 //How long to tint the new sector's line(s) red for.
-const float area_editor::NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
+const float NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
 //Thickness to use when drawing a path link line.
-const float area_editor::PATH_LINK_THICKNESS = 2.0f;
+const float PATH_LINK_THICKNESS = 2.0f;
 //Radius to use when drawing a path preview checkpoint.
-const float area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
+const float PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 //Only fetch the path these many seconds after the player stops the checkpoints.
-const float area_editor::PATH_PREVIEW_TIMER_DUR = 0.1f;
+const float PATH_PREVIEW_TIMER_DUR = 0.1f;
 //Radius to use when drawing a path stop circle.
-const float area_editor::PATH_STOP_RADIUS = 16.0f;
+const float PATH_STOP_RADIUS = 16.0f;
 //Scale the letters on the "points" of various features by this much.
-const float area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
+const float POINT_LETTER_TEXT_SCALE = 1.5f;
 //Quick previewing lasts this long in total, including the fade out.
-const float area_editor::QUICK_PREVIEW_DURATION = 4.0f;
+const float QUICK_PREVIEW_DURATION = 4.0f;
 //Minimum width or height that the reference image can have.
-const float area_editor::REFERENCE_MIN_SIZE = 5.0f;
+const float REFERENCE_MIN_SIZE = 5.0f;
 //Color of a selected element, or the selection box.
-const unsigned char area_editor::SELECTION_COLOR[3] = {255, 255, 0};
+const unsigned char SELECTION_COLOR[3] = {255, 255, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
-const float area_editor::SELECTION_EFFECT_SPEED = TAU * 2;
+const float SELECTION_EFFECT_SPEED = TAU * 2;
 //Padding for the transformation widget when manipulating the selection.
-const float area_editor::SELECTION_TW_PADDING = 8.0f;
+const float SELECTION_TW_PADDING = 8.0f;
 //Wait this long before letting a new repeat undo operation be saved.
-const float area_editor::UNDO_SAVE_LOCK_DURATION = 1.0f;
+const float UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
-const float area_editor::VERTEX_MERGE_RADIUS = 10.0f;
+const float VERTEX_MERGE_RADIUS = 10.0f;
 //Maximum zoom level possible in the editor.
-const float area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
+const float ZOOM_MAX_LEVEL_EDITOR = 8.0f;
 //Minimum zoom level possible in the editor.
-const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
+const float ZOOM_MIN_LEVEL_EDITOR = 0.01f;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -90,7 +94,7 @@ area_editor::area_editor() :
     quick_play_cam_z(1.0f),
     backup_timer(game.options.area_editor_backup_interval),
     area_exists_on_disk(false),
-    cursor_snap_timer(CURSOR_SNAP_UPDATE_INTERVAL),
+    cursor_snap_timer(AREA_EDITOR::CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
     debug_sector_nrs(false),
     debug_path_nrs(false),
@@ -102,13 +106,13 @@ area_editor::area_editor() :
     moving(false),
     moving_path_preview_checkpoint(-1),
     moving_cross_section_point(-1),
-    new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
+    new_sector_error_tint_timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION),
     octee_mode(OCTEE_MODE_OFFSET),
     path_drawing_normals(true),
     path_preview_straight(false),
     pre_move_area_data(nullptr),
     problem_edge_intersection(NULL, NULL),
-    quick_preview_timer(QUICK_PREVIEW_DURATION),
+    quick_preview_timer(AREA_EDITOR::QUICK_PREVIEW_DURATION),
     reference_bitmap(nullptr),
     selected_shadow(nullptr),
     selected_shadow_keep_aspect_ratio(false),
@@ -122,13 +126,13 @@ area_editor::area_editor() :
     show_reference(true) {
     
     path_preview_timer =
-    timer(PATH_PREVIEW_TIMER_DUR, [this] () {
+    timer(AREA_EDITOR::PATH_PREVIEW_TIMER_DUR, [this] () {
         path_preview_dist = calculate_preview_path();
     });
     
     undo_save_lock_timer =
         timer(
-            UNDO_SAVE_LOCK_DURATION,
+            AREA_EDITOR::UNDO_SAVE_LOCK_DURATION,
     [this] () {undo_save_lock_operation.clear();}
         );
         
@@ -140,8 +144,8 @@ area_editor::area_editor() :
             );
     }
     
-    zoom_max_level = ZOOM_MAX_LEVEL_EDITOR;
-    zoom_min_level = ZOOM_MIN_LEVEL_EDITOR;
+    zoom_max_level = AREA_EDITOR::ZOOM_MAX_LEVEL_EDITOR;
+    zoom_min_level = AREA_EDITOR::ZOOM_MIN_LEVEL_EDITOR;
 }
 
 
@@ -348,7 +352,7 @@ void area_editor::create_area() {
     
     //Create a sector for it.
     clear_layout_drawing();
-    float r = COMFY_DIST * 10;
+    float r = AREA_EDITOR::COMFY_DIST * 10;
     
     layout_drawing_node n;
     n.raw_spot = point(-r, -r);
@@ -580,7 +584,7 @@ void area_editor::do_logic() {
         backup_timer.tick(game.delta_t);
     }
     
-    selection_effect += SELECTION_EFFECT_SPEED * game.delta_t;
+    selection_effect += AREA_EDITOR::SELECTION_EFFECT_SPEED * game.delta_t;
     
     editor::do_logic_post();
 }
@@ -668,7 +672,7 @@ void area_editor::finish_layout_moving() {
         vector<std::pair<dist, vertex*> > merge_vertexes =
             get_merge_vertexes(
                 p, game.cur_area_data.vertexes,
-                VERTEX_MERGE_RADIUS / game.cam.zoom
+                AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
             );
             
         for(size_t mv = 0; mv < merge_vertexes.size(); ) {
@@ -1409,7 +1413,8 @@ void area_editor::load_area(const bool from_backup) {
     
     for(
         size_t u = 0;
-        u < texture_uses_vector.size() && u < MAX_TEXTURE_SUGGESTIONS;
+        u < texture_uses_vector.size() && u <
+        AREA_EDITOR::MAX_TEXTURE_SUGGESTIONS;
         ++u
     ) {
         texture_suggestions.push_back(
@@ -1464,7 +1469,7 @@ void area_editor::load_reference() {
             s2i(
                 file.get_child_by_name(
                     "alpha"
-                )->get_value_or_default(i2s(DEF_REFERENCE_ALPHA))
+                )->get_value_or_default(i2s(AREA_EDITOR::DEF_REFERENCE_ALPHA))
             );
             
     } else {
@@ -1668,7 +1673,7 @@ void area_editor::press_grid_interval_decrease_button() {
     game.options.area_editor_grid_interval =
         std::max(
             game.options.area_editor_grid_interval * 0.5f,
-            MIN_GRID_INTERVAL
+            AREA_EDITOR::MIN_GRID_INTERVAL
         );
     status_text =
         "Decreased grid interval to " +
@@ -1683,7 +1688,7 @@ void area_editor::press_grid_interval_increase_button() {
     game.options.area_editor_grid_interval =
         std::min(
             game.options.area_editor_grid_interval * 2.0f,
-            MAX_GRID_INTERVAL
+            AREA_EDITOR::MAX_GRID_INTERVAL
         );
     status_text =
         "Increased grid interval to " +
@@ -2215,7 +2220,7 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         
-        if(e_ptr->wall_shadow_color != edge::SHADOW_DEF_COLOR) {
+        if(e_ptr->wall_shadow_color != GEOMETRY::SHADOW_DEF_COLOR) {
             edge_node->add(
                 new data_node("shadow_color", c2s(e_ptr->wall_shadow_color))
             );
@@ -2230,7 +2235,7 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         
-        if(e_ptr->ledge_smoothing_color != edge::SMOOTHING_DEF_COLOR) {
+        if(e_ptr->ledge_smoothing_color != GEOMETRY::SMOOTHING_DEF_COLOR) {
             edge_node->add(
                 new data_node(
                     "smoothing_color",
@@ -2260,7 +2265,7 @@ bool area_editor::save_area(const bool to_backup) {
             );
         }
         sector_node->add(new data_node("z", f2s(s_ptr->z)));
-        if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) {
+        if(s_ptr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
             sector_node->add(
                 new data_node("brightness", i2s(s_ptr->brightness))
             );
@@ -2694,12 +2699,12 @@ void area_editor::set_new_circle_sector_points() {
     float angle_dif =
         get_angle_smallest_dif(cursor_angle, anchor_angle);
         
-    size_t n_points = MAX_CIRCLE_SECTOR_POINTS;
+    size_t n_points = AREA_EDITOR::MAX_CIRCLE_SECTOR_POINTS;
     if(angle_dif > 0) {
         n_points = round(TAU / angle_dif);
     }
     n_points =
-        clamp(n_points, MIN_CIRCLE_SECTOR_POINTS, MAX_CIRCLE_SECTOR_POINTS);
+        clamp(n_points, AREA_EDITOR::MIN_CIRCLE_SECTOR_POINTS, AREA_EDITOR::MAX_CIRCLE_SECTOR_POINTS);
         
     new_circle_sector_points.clear();
     for(size_t p = 0; p < n_points; ++p) {
@@ -3399,7 +3404,7 @@ void area_editor::update_reference() {
             //Let's assume this is a new reference. Reset sizes and alpha.
             reference_size.x = al_get_bitmap_width(reference_bitmap);
             reference_size.y = al_get_bitmap_height(reference_bitmap);
-            reference_alpha = DEF_REFERENCE_ALPHA;
+            reference_alpha = AREA_EDITOR::DEF_REFERENCE_ALPHA;
         }
     } else {
         reference_center = point();
@@ -3456,7 +3461,7 @@ void area_editor::update_texture_suggestions(const string &n) {
         texture_suggestions.insert(texture_suggestions.begin(), s);
     }
     
-    if(texture_suggestions.size() > MAX_TEXTURE_SUGGESTIONS) {
+    if(texture_suggestions.size() > AREA_EDITOR::MAX_TEXTURE_SUGGESTIONS) {
         texture_suggestions[texture_suggestions.size() - 1].destroy();
         texture_suggestions.erase(
             texture_suggestions.begin() + texture_suggestions.size() - 1
@@ -3489,10 +3494,10 @@ void area_editor::update_vertex_selection() {
         sel_br.x = std::max(sel_br.x, v->x);
         sel_br.y = std::max(sel_br.y, v->y);
     }
-    sel_tl.x -= SELECTION_TW_PADDING;
-    sel_tl.y -= SELECTION_TW_PADDING;
-    sel_br.x += SELECTION_TW_PADDING;
-    sel_br.y += SELECTION_TW_PADDING;
+    sel_tl.x -= AREA_EDITOR::SELECTION_TW_PADDING;
+    sel_tl.y -= AREA_EDITOR::SELECTION_TW_PADDING;
+    sel_br.x += AREA_EDITOR::SELECTION_TW_PADDING;
+    sel_br.y += AREA_EDITOR::SELECTION_TW_PADDING;
     selection_center = (sel_br + sel_tl) / 2.0f;
     selection_size = sel_br - sel_tl;
     selection_angle = 0.0f;
@@ -3525,7 +3530,7 @@ area_editor::layout_drawing_node::layout_drawing_node(
     vector<std::pair<dist, vertex*> > merge_vertexes =
         get_merge_vertexes(
             mouse_click, game.cur_area_data.vertexes,
-            VERTEX_MERGE_RADIUS / game.cam.zoom
+            AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
         );
     if(!merge_vertexes.empty()) {
         sort(

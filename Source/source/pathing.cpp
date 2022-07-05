@@ -11,6 +11,7 @@
 #include "pathing.h"
 
 #include "game.h"
+#include "functions.h"
 #include "mobs/mob_utils.h"
 
 using std::map;
@@ -24,7 +25,7 @@ using std::vector;
  */
 path_follow_settings::path_follow_settings() :
     target_mob(nullptr),
-    final_target_distance(chase_info_struct::DEF_TARGET_DISTANCE),
+    final_target_distance(MOB::DEF_CHASE_TARGET_DISTANCE),
     flags(0) {
     
 }
@@ -370,7 +371,7 @@ bool can_traverse_path_link(
 ) {
     //Check if there's an obstacle in the way.
     if(
-        !(settings.flags & PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
         link_ptr->blocked_by_obstacle
     ) {
         return false;
@@ -381,17 +382,17 @@ bool can_traverse_path_link(
     case PATH_LINK_TYPE_NORMAL: {
         break;
     } case PATH_LINK_TYPE_SCRIPT_ONLY: {
-        if((settings.flags & PATH_FOLLOW_FLAG_SCRIPT_USE) == 0) {
+        if(has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
             return false;
         }
         break;
     } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
-        if((settings.flags & PATH_FOLLOW_FLAG_LIGHT_LOAD) == 0) {
+        if(has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
             return false;
         }
         break;
     } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
-        if((settings.flags & PATH_FOLLOW_FLAG_AIRBORNE) == 0) {
+        if(has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
             return false;
         }
         break;
@@ -418,10 +419,10 @@ bool can_traverse_path_link(
     
     bool touching_hazard =
         !end_sector->hazard_floor ||
-        (settings.flags & PATH_FOLLOW_FLAG_AIRBORNE) == 0;
+        has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
         
     if(
-        !(settings.flags & PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
         link_ptr->end_ptr->sector_ptr &&
         touching_hazard &&
         !end_sector->hazards.empty()
@@ -587,10 +588,10 @@ vector<path_stop*> dijkstra(
     
     //If we got to this point, there means that there is no available path!
     
-    if(!(settings.flags & PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
+    if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
         //Let's try again, this time ignoring obstacles.
         path_follow_settings new_settings = settings;
-        new_settings.flags |= PATH_FOLLOW_FLAG_IGNORE_OBSTACLES;
+        enable_flag(new_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
         return
             dijkstra(
                 start_node, end_node,
@@ -641,12 +642,12 @@ vector<path_stop*> get_path(
     }
     
     point start_to_use =
-        (settings.flags & PATH_FOLLOW_FLAG_FAKED_START) ?
+        has_flag(settings.flags, PATH_FOLLOW_FLAG_FAKED_START) ?
         settings.faked_start :
         start;
         
     point end_to_use =
-        (settings.flags & PATH_FOLLOW_FLAG_FAKED_END) ?
+        has_flag(settings.flags, PATH_FOLLOW_FLAG_FAKED_END) ?
         settings.faked_end :
         end;
         

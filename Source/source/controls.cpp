@@ -222,7 +222,7 @@ void gameplay_state::handle_button(
                         );
                         hud->gui.start_animation(
                             GUI_MANAGER_ANIM_IN_TO_OUT,
-                            MENU_ENTRY_HUD_MOVE_TIME
+                            GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
                         );
                         paused = true;
                         
@@ -366,7 +366,7 @@ void gameplay_state::handle_button(
             paused = true;
             hud->gui.start_animation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
-                MENU_ENTRY_HUD_MOVE_TIME
+                GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
             );
             
             //TODO replace with a better solution.

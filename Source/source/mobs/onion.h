@@ -19,6 +19,13 @@
 #include "../mob_types/pikmin_type.h"
 #include "mob.h"
 
+namespace ONION {
+extern const float FADE_SPEED;
+extern const float FULL_SPEW_DELAY;
+extern const float NEXT_SPEW_DELAY;
+extern const unsigned char SEETHROUGH_ALPHA;
+}
+
 
 /* ----------------------------------------------------------------------------
  * An Onion is where Pikmin are stored.

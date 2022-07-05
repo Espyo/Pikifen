@@ -20,15 +20,24 @@
 #include "misc_structs.h"
 
 
-const float CONTROL_ICON_PADDING = 2.0f;
-const float DEF_HEALTH_WHEEL_RADIUS = 20;
-const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
-const float LIQUID_WOBBLE_DELTA_X = 3.0f;
-const float NOTIFICATION_PADDING = 8.0f;
-const float NOTIFICATION_CONTROL_SIZE = 24.0f;
-const unsigned char NOTIFICATION_ALPHA = 160;
-//A water wave ring lasts this long.
-const float WAVE_RING_DURATION = 1.0f;
+namespace CONTROL_ICON {
+extern const ALLEGRO_COLOR BASE_OUTLINE_COLOR;
+extern const ALLEGRO_COLOR BASE_RECT_COLOR;
+extern const ALLEGRO_COLOR BASE_TEXT_COLOR;
+extern const float CONTROL_ICON_PADDING;
+extern const float OUTLINE_THICKNESS;
+}
+
+namespace DRAWING {
+extern const float DEF_HEALTH_WHEEL_RADIUS;
+extern const float LIQUID_WOBBLE_DELTA_X;
+extern const float LIQUID_WOBBLE_TIME_SCALE;
+extern const float LOADING_SCREEN_SUBTITLE_SCALE;
+extern const int LOADING_SCREEN_PADDING;
+extern const unsigned char NOTIFICATION_ALPHA;
+extern const float NOTIFICATION_CONTROL_SIZE;
+extern const float NOTIFICATION_PADDING;
+}
 
 
 //Possible shapes for a control icon.
@@ -162,7 +171,8 @@ void draw_fraction(
 );
 void draw_health(
     const point &center, const float ratio,
-    const float alpha = 1.0f, const float radius = DEF_HEALTH_WHEEL_RADIUS,
+    const float alpha = 1.0f,
+    const float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS,
     const bool just_chart = false
 );
 void draw_liquid(

@@ -30,6 +30,13 @@
 
 using std::string;
 
+
+namespace MOB_TYPE {
+//ID of the default, "idling" animation, in an animation database.
+const size_t ANIM_IDLING = 0;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
  * category_id:
@@ -40,25 +47,25 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     main_color(al_map_rgb(128, 128, 128)),
     show_health(true),
     casts_shadow(true),
-    radius(0),
-    height(0),
     move_speed(0),
     acceleration(MOB::DEF_ACCELERATION),
     rotation_speed(MOB::DEF_ROTATION_SPEED),
     can_free_move(false),
+    radius(0),
+    height(0),
+    weight(0),
+    max_carriers(0),
     pushes(false),
     pushable(false),
     pushes_with_hitboxes(false),
     terrain_radius(-1),
     walkable(false),
+    can_block_paths(false),
     max_health(100),
     health_regen(0),
     territory_radius(0),
-    max_carriers(0),
-    weight(0),
     itch_damage(0),
     itch_time(0),
-    has_group(false),
     target_type(MOB_TARGET_TYPE_NONE),
     huntable_targets(
         MOB_TARGET_TYPE_PLAYER |
@@ -72,10 +79,10 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     starting_team(MOB_TEAM_NONE),
     first_state_nr(INVALID),
     death_state_nr(INVALID),
-    appears_in_area_editor(true),
-    can_block_paths(false),
+    has_group(false),
     default_vulnerability(1.0f),
     spike_damage(nullptr),
+    appears_in_area_editor(true),
     max_span(0.0f),
     draw_mob_callback(nullptr) {
     

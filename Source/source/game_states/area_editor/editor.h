@@ -22,6 +22,38 @@ using std::deque;
 using std::size_t;
 using std::string;
 
+namespace AREA_EDITOR {
+extern const float COMFY_DIST;
+extern const float CROSS_SECTION_POINT_RADIUS;
+extern const float CURSOR_SNAP_DISTANCE;
+extern const float CURSOR_SNAP_UPDATE_INTERVAL;
+extern const float DEBUG_TEXT_SCALE;
+extern const unsigned char DEF_REFERENCE_ALPHA;
+extern const float KEYBOARD_PAN_AMOUNT;
+extern const unsigned char MAX_CIRCLE_SECTOR_POINTS;
+extern const float MAX_GRID_INTERVAL;
+extern const size_t MAX_TEXTURE_SUGGESTIONS;
+extern const unsigned char MIN_CIRCLE_SECTOR_POINTS;
+extern const float MIN_GRID_INTERVAL;
+extern const float MOB_LINK_THICKNESS;
+extern const float MOUSE_COORDS_TEXT_WIDTH;
+extern const float NEW_SECTOR_ERROR_TINT_DURATION;
+extern const float PATH_LINK_THICKNESS;
+extern const float PATH_PREVIEW_CHECKPOINT_RADIUS;
+extern const float PATH_PREVIEW_TIMER_DUR;
+extern const float PATH_STOP_RADIUS;
+extern const float POINT_LETTER_TEXT_SCALE;
+extern const float REFERENCE_MIN_SIZE;
+extern const float QUICK_PREVIEW_DURATION;
+extern const unsigned char SELECTION_COLOR[3];
+extern const float SELECTION_EFFECT_SPEED;
+extern const float SELECTION_TW_PADDING;
+extern const float UNDO_SAVE_LOCK_DURATION;
+extern const float VERTEX_MERGE_RADIUS;
+extern const float ZOOM_MAX_LEVEL_EDITOR;
+extern const float ZOOM_MIN_LEVEL_EDITOR;
+}
+
 
 /* ----------------------------------------------------------------------------
  * Information about the area editor.
@@ -258,36 +290,6 @@ private:
         //Edge info.
         LAYOUT_MODE_EDGES,
     };
-    
-    static const float         COMFY_DIST;
-    static const float         CROSS_SECTION_POINT_RADIUS;
-    static const float         CURSOR_SNAP_DISTANCE;
-    static const float         CURSOR_SNAP_UPDATE_INTERVAL;
-    static const float         DEBUG_TEXT_SCALE;
-    static const unsigned char DEF_REFERENCE_ALPHA;
-    static const float         KEYBOARD_PAN_AMOUNT;
-    static const unsigned char MAX_CIRCLE_SECTOR_POINTS;
-    static const float         MAX_GRID_INTERVAL;
-    static const size_t        MAX_TEXTURE_SUGGESTIONS;
-    static const unsigned char MIN_CIRCLE_SECTOR_POINTS;
-    static const float         MIN_GRID_INTERVAL;
-    static const float         MOB_LINK_THICKNESS;
-    static const float         NEW_SECTOR_ERROR_TINT_DURATION;
-    static const float         PATH_LINK_THICKNESS;
-    static const float         PATH_PREVIEW_CHECKPOINT_RADIUS;
-    static const float         PATH_PREVIEW_TIMER_DUR;
-    static const float         PATH_STOP_RADIUS;
-    static const float         POINT_LETTER_TEXT_SCALE;
-    static const float         REFERENCE_MIN_SIZE;
-    static const float         QUICK_PREVIEW_DURATION;
-    static const unsigned char SELECTION_COLOR[3];
-    static const float         SELECTION_EFFECT_SPEED;
-    static const float         SELECTION_TW_PADDING;
-    static const float         UNDO_SAVE_LOCK_DURATION;
-    static const float         VERTEX_MERGE_RADIUS;
-    static const float         ZOOM_MAX_LEVEL_EDITOR;
-    static const float         ZOOM_MIN_LEVEL_EDITOR;
-    
     
     //Time left until a backup is generated.
     timer backup_timer;

@@ -27,24 +27,69 @@
 namespace MOB {
 //Acceleration for a mob that's being carried.
 const float CARRIED_MOB_ACCELERATION = 100.0f;
+//Radius around a spot that a stuck carried object should circle.
+const float CARRY_STUCK_CIRCLING_RADIUS = 8.0f;
+//When a carried object is stuck, multiply the carrying speed by this.
+const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
+//When a carried mob sways around, multiply time by this.
+const float CARRY_SWAY_TIME_MULT = 4.5f;
+//When a carried mob sways around, offset X by this much.
+const float CARRY_SWAY_X_TRANSLATION_AMOUNT = 2.0f;
+//When a carried mob sways around, offset Y by this much.
+const float CARRY_SWAY_Y_TRANSLATION_AMOUNT =
+    CARRY_SWAY_X_TRANSLATION_AMOUNT / 2.0f;
+//When a carried mob sways around, rotate it by this much.
+const float CARRY_SWAY_ROTATION_AMOUNT = TAU * 0.01f;
+//Duration of the damage squash-and-stretch animation.
+const float DAMAGE_SQUASH_DURATION = 0.25f;
+//How much to change the scale by during a damage squash-and-stretch animation.
+const float DAMAGE_SQUASH_AMOUNT = 0.04f;
 //The default acceleration of a mob type.
 const float DEF_ACCELERATION = 400.0f;
+//Default distance at which the mob considers the chase finished.
+const float DEF_CHASE_TARGET_DISTANCE = 3.0f;
 //The default rotation speed of a mob type.
 const float DEF_ROTATION_SPEED = 630.0f;
 //How long to suck a mob in for, when being delivered to an Onion/ship.
 const float DELIVERY_SUCK_TIME = 2.0f;
+//When a mob shakes during delivery, this is the shake multiplier.
+const float DELIVERY_SUCK_SHAKING_MULT = 4.0f;
+//When a mob shakes during delivery, multiply time by this.
+const float DELIVERY_SUCK_SHAKING_TIME_MULT = 60.0f;
+//Multiply the offset by this much, when doing a delivery toss.
+const float DELIVERY_TOSS_MULT = 40.0f;
 //How long to toss a mob in the air for, when being delivered to a mob.
 const float DELIVERY_TOSS_TIME = 1.0f;
+//Multiply the offset by this much, when winding up for a delivery toss.
+const float DELIVERY_TOSS_WINDUP_MULT = 5.0f;
+//Randomly vary X by this much, when doing a delivery toss.
+const float DELIVERY_TOSS_X_OFFSET = 20.0f;
+//If a mob is this close to the destination, it can move without tank controls.
+const float FREE_MOVE_THRESHOLD = 10.0f;
+//Accelerate the Z speed of mobs affected by gravity by this amount per second.
+const float GRAVITY_ADDER = -2600.0f;
 //If there's less than this much gap between the leader and group,
 //then the group's Pikmin should shuffle a bit to keep up with the leader.
 const float GROUP_SHUFFLE_DIST = 40.0f;
 //Pikmin must be at least these many units away from one another;
 //used when calculating group spots.
 const float GROUP_SPOT_INTERVAL = 3.0f;
+//Group spots can randomly deviate in X or Y up to this much.
+const float GROUP_SPOT_MAX_DEVIATION = MOB::GROUP_SPOT_INTERVAL * 0.60f;
 //When using the height effect, scale the mob by this factor.
 const float HEIGHT_EFFECT_FACTOR = 0.0017;
+//Base horizontal speed at which mobs move due to attacks with knockback.
+const float KNOCKBACK_H_POWER = 64.0f;
+//Base vertical speed at which mobs move due to attacks with knockback.
+const float KNOCKBACK_V_POWER = 800.0f;
 //When an opponent is hit, it takes this long to be possible to hit it again.
 const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
+//Wait these many seconds before allowing another Pikmin to be called out.
+const float PIKMIN_NEST_CALL_INTERVAL = 0.01f;
+//A little extra push amount when mobs intersect. Can't be throttled.
+const float PUSH_EXTRA_AMOUNT = 50.0f;
+//Before this much time, a mob can't push others as effectively.
+const float PUSH_THROTTLE_TIMEOUT = 1.0f;
 //Multiply the stretch of the shadow by this much.
 const float SHADOW_STRETCH_MULT = 0.5f;
 //For every unit above the ground that the mob is on,
@@ -58,16 +103,14 @@ const float SWARM_MARGIN = 8.0f;
 //When swarming, the group can scale this much vertically.
 //Basically, the tube shape's girth can reach this scale.
 const float SWARM_VERTICAL_SCALE = 0.5f;
+//With a status effect that causes shaking, multiply time by this.
+const float STATUS_SHAKING_TIME_MULT = 60.0f;
 //A new "mob thrown" particle is spawned every X seconds.
 const float THROW_PARTICLE_INTERVAL = 0.02f;
+//A water wave ring particle lasts this long.
+const float WAVE_RING_DURATION = 1.0f;
 }
 
-//Duration of the damage squash-and-stretch animation.
-const float mob::DAMAGE_SQUASH_DURATION = 0.25f;
-//How much to change the scale by during a damage squash-and-stretch animation.
-const float mob::DAMAGE_SQUASH_AMOUNT = 0.04f;
-
-size_t next_mob_id = 0;
 
 /* ----------------------------------------------------------------------------
  * Creates a mob of no particular type.
@@ -81,71 +124,63 @@ size_t next_mob_id = 0;
 mob::mob(const point &pos, mob_type* type, const float angle) :
     type(type),
     to_delete(false),
-    anim(&type->anims),
-    fsm(this),
-    script_timer(0),
-    focused_mob(nullptr),
-    itch_damage(0),
-    itch_time(0),
-    far_reach(INVALID),
-    near_reach(INVALID),
     pos(pos),
     z(0),
-    speed_z(0),
     angle(angle),
-    intended_turn_angle(angle),
-    intended_turn_pos(nullptr),
-    radius(type->radius),
-    height(type->height),
-    rectangular_dim(type->rectangular_dim),
-    can_move_in_midair(false),
-    z_cap(FLT_MAX),
-    home(pos),
     ground_sector(nullptr),
     center_sector(nullptr),
     standing_on_mob(nullptr),
+    speed_z(0),
+    z_cap(FLT_MAX),
     gravity_mult(1.0f),
     push_amount(0),
     push_angle(0),
-    unpushable(false),
-    tangible(true),
-    was_thrown(false),
-    chase_info(),
     path_info(nullptr),
     circling_info(nullptr),
-    following_group(nullptr),
-    subgroup_type_ptr(nullptr),
-    group(nullptr),
-    group_spot_index(INVALID),
+    track_info(nullptr),
     carry_info(nullptr),
     delivery_info(nullptr),
-    track_info(nullptr),
-    stored_inside_another(nullptr),
-    id(next_mob_id),
+    radius(type->radius),
+    height(type->height),
+    rectangular_dim(type->rectangular_dim),
+    fsm(this),
+    script_timer(0),
+    focused_mob(nullptr),
+    intended_turn_angle(angle),
+    intended_turn_pos(nullptr),
+    home(pos),
+    far_reach(INVALID),
+    near_reach(INVALID),
+    time_alive(0.0f),
+    id(game.states.gameplay->next_mob_id),
     health(type->max_health),
     max_health(type->max_health),
     invuln_period(0),
-    team(MOB_TEAM_NONE),
-    hide(false),
-    show_shadow(true),
-    forced_sprite(nullptr),
-    has_invisibility_status(false),
-    is_huntable(true),
-    is_hurtable(true),
-    height_effect_pivot(LARGE_FLOAT),
+    itch_damage(0),
+    itch_time(0),
     on_hazard(nullptr),
-    chomp_max(0),
     parent(nullptr),
-    time_alive(0.0f),
+    flags(0),
+    stored_inside_another(nullptr),
+    chomp_max(0),
+    team(MOB_TEAM_NONE),
+    following_group(nullptr),
+    group_spot_index(INVALID),
+    subgroup_type_ptr(nullptr),
+    group(nullptr),
+    anim(&type->anims),
+    forced_sprite(nullptr),
+    height_effect_pivot(LARGE_FLOAT),
     damage_squash_time(0.0f),
     health_wheel(nullptr),
     fraction(nullptr),
     angle_cos(0.0f),
     angle_sin(0.0f),
     max_span(type->max_span),
+    has_invisibility_status(false),
     can_block_paths(false) {
     
-    next_mob_id++;
+    game.states.gameplay->next_mob_id++;
     
     sector* sec = get_sector(pos, nullptr, true);
     if(sec) {
@@ -271,9 +306,9 @@ void mob::apply_attack_damage(
 void mob::apply_knockback(const float knockback, const float knockback_angle) {
     if(knockback != 0) {
         stop_chasing();
-        speed.x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
-        speed.y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
-        speed_z = MOB_KNOCKBACK_V_POWER;
+        speed.x = cos(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
+        speed.y = sin(knockback_angle) * knockback * MOB::KNOCKBACK_H_POWER;
+        speed_z = MOB::KNOCKBACK_V_POWER;
         face(get_angle(speed) + TAU / 2, NULL);
         start_height_effect();
     }
@@ -904,7 +939,7 @@ bool mob::can_hunt(mob* v) const {
     if(v->has_invisibility_status) return false;
     
     //Mobs that don't want to be hunted right now cannot be hunted down.
-    if(!v->is_huntable) return false;
+    if(has_flag(v->flags, MOB_FLAG_NON_HUNTABLE)) return false;
     
     //Return whether or not this mob wants to hunt v.
     return (type->huntable_targets & v->type->target_type);
@@ -927,7 +962,7 @@ bool mob::can_hurt(mob* v) const {
     if(v->invuln_period.time_left > 0) return false;
     
     //Mobs that don't want to be hurt right now cannot be hurt.
-    if(!v->is_hurtable) return false;
+    if(has_flag(v->flags, MOB_FLAG_NON_HURTABLE)) return false;
     
     //Check if this mob has already hit v recently.
     for(size_t h = 0; h < hit_opponents.size(); ++h) {
@@ -949,7 +984,7 @@ bool mob::can_hurt(mob* v) const {
  *   Status type to check.
  */
 bool mob::can_receive_status(status_type* s) const {
-    return s->affects & STATUS_AFFECTS_OTHERS;
+    return has_flag(s->affects, STATUS_AFFECTS_OTHERS);
 }
 
 
@@ -1037,7 +1072,9 @@ void mob::chase(
     chase_info.offset_z = offset_z;
     
     chase_info.flags = flags;
-    if(type->can_free_move) chase_info.flags |= CHASE_FLAG_ANY_ANGLE;
+    if(type->can_free_move) {
+        enable_flag(chase_info.flags, CHASE_FLAG_ANY_ANGLE);
+    }
     
     chase_info.target_dist = target_distance;
     chase_info.max_speed =
@@ -1088,7 +1125,8 @@ void mob::chase(
  */
 void mob::chomp(mob* m, hitbox* hitbox_info) {
     if(m->type->category->id == MOB_CATEGORY_TOOLS) {
-        if(!(((tool*) m)->holdability_flags & HOLDABLE_BY_ENEMIES)) {
+        tool* too_ptr = (tool*) m;
+        if(!has_flag(too_ptr->holdability_flags, HOLDABLE_BY_ENEMIES)) {
             //Enemies can't chomp this tool right now.
             return;
         }
@@ -1282,7 +1320,7 @@ void mob::do_attack_effects(
     //Damage squash-and-stretch animation.
     if(!useless) {
         if(damage_squash_time == 0.0f) {
-            damage_squash_time = DAMAGE_SQUASH_DURATION;
+            damage_squash_time = MOB::DAMAGE_SQUASH_DURATION;
         }
     }
 }
@@ -1436,7 +1474,7 @@ bool mob::follow_path(
     path_stop* old_next_stop = NULL;
     
     //Some setup before we begin.
-    if((settings.flags & PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
+    if(has_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
         was_blocked = path_info->is_blocked;
         if(path_info->cur_path_stop_nr < path_info->path.size()) {
             old_next_stop = path_info->path[path_info->cur_path_stop_nr];
@@ -1452,11 +1490,11 @@ bool mob::follow_path(
     if(carry_info) {
         //Check if this carriable is considered light load.
         if(type->weight == 1) {
-            final_settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
+            enable_flag(final_settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
         }
         //The object will only be airborne if all its carriers can fly.
         if(carry_info->can_fly()) {
-            final_settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
+            enable_flag(final_settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
         }
     } else {
         if(
@@ -1464,11 +1502,11 @@ bool mob::follow_path(
             type->category->id == MOB_CATEGORY_LEADERS
         ) {
             //Simple mobs are empty-handed, so that's considered light load.
-            final_settings.flags |= PATH_FOLLOW_FLAG_LIGHT_LOAD;
+            enable_flag(final_settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
         }
         //Check if the object can fly directly.
-        if(can_move_in_midair) {
-            final_settings.flags |= PATH_FOLLOW_FLAG_AIRBORNE;
+        if(has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
+            enable_flag(final_settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
         }
     }
     
@@ -1490,7 +1528,7 @@ bool mob::follow_path(
     path_info = new path_info_struct(this, final_settings);
     
     if(
-        (path_info->settings.flags & PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
+        has_flag(path_info->settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) &&
         old_next_stop &&
         !was_blocked &&
         path_info->path.size() >= 2
@@ -1523,7 +1561,7 @@ bool mob::follow_path(
             path_info->path[path_info->cur_path_stop_nr];
         float next_stop_z = z;
         if(
-            (path_info->settings.flags & PATH_FOLLOW_FLAG_AIRBORNE) &&
+            has_flag(path_info->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
             next_stop->sector_ptr
         ) {
             next_stop_z =
@@ -1534,7 +1572,7 @@ bool mob::follow_path(
         chase(
             next_stop->pos, next_stop_z,
             CHASE_FLAG_ANY_ANGLE,
-            chase_info_struct::DEF_TARGET_DISTANCE,
+            MOB::DEF_CHASE_TARGET_DISTANCE,
             speed, acceleration
         );
         
@@ -1864,13 +1902,6 @@ void mob::get_sprite_bitmap_effects(
     const bool add_carry_sway
 ) const {
 
-    const float STATUS_SHAKING_TIME_MULT = 60.0f;
-    const float DELIVERY_SUCK_SHAKING_TIME_MULT = 60.0f;
-    const float DELIVERY_SUCK_SHAKING_MULT = 4.0f;
-    const float DELIVERY_TOSS_WINDUP_MULT = 5.0f;
-    const float DELIVERY_TOSS_MULT = 40.0f;
-    const float DELIVERY_TOSS_X_OFFSET = 20.0f;
-    
     info->translation =
         point(
             pos.x + angle_cos * s_ptr->offset.x - angle_sin * s_ptr->offset.y,
@@ -1919,7 +1950,7 @@ void mob::get_sprite_bitmap_effects(
                 info->translation.x +=
                     sin(
                         game.states.gameplay->area_time_passed *
-                        STATUS_SHAKING_TIME_MULT
+                        MOB::STATUS_SHAKING_TIME_MULT
                     ) * t->shaking_effect;
             }
         }
@@ -1940,7 +1971,7 @@ void mob::get_sprite_bitmap_effects(
             
             float shake_scale =
                 (1 - delivery_info->anim_time_ratio_left) *
-                DELIVERY_SUCK_SHAKING_MULT;
+                MOB::DELIVERY_SUCK_SHAKING_MULT;
                 
             if(delivery_info->anim_time_ratio_left < 0.4) {
                 shake_scale =
@@ -1954,7 +1985,7 @@ void mob::get_sprite_bitmap_effects(
             new_offset.x =
                 sin(
                     game.states.gameplay->area_time_passed *
-                    DELIVERY_SUCK_SHAKING_TIME_MULT
+                    MOB::DELIVERY_SUCK_SHAKING_TIME_MULT
                 ) * shake_scale;
                 
                 
@@ -2025,7 +2056,7 @@ void mob::get_sprite_bitmap_effects(
                             0.0f, TAU / 2.0f
                         )
                     );
-                new_offset.y *= DELIVERY_TOSS_WINDUP_MULT;
+                new_offset.y *= MOB::DELIVERY_TOSS_WINDUP_MULT;
             } else {
                 //Toss.
                 new_offset.y =
@@ -2036,11 +2067,11 @@ void mob::get_sprite_bitmap_effects(
                             TAU / 2.0f, TAU
                         )
                     );
-                new_offset.y *= DELIVERY_TOSS_MULT;
+                new_offset.y *= MOB::DELIVERY_TOSS_MULT;
                 //Randomly deviate left or right, slightly.
                 float deviation_mult = hash_nr(id) / (float) UINT32_MAX;
                 deviation_mult = deviation_mult * 2.0f - 1.0f;
-                deviation_mult *= DELIVERY_TOSS_X_OFFSET;
+                deviation_mult *= MOB::DELIVERY_TOSS_X_OFFSET;
                 new_offset.x =
                     interpolate_number(
                         delivery_info->anim_time_ratio_left,
@@ -2065,7 +2096,7 @@ void mob::get_sprite_bitmap_effects(
     
     if(add_damage_squash && damage_squash_time > 0.0f) {
         float damage_squash_time_ratio =
-            damage_squash_time / DAMAGE_SQUASH_DURATION;
+            damage_squash_time / MOB::DAMAGE_SQUASH_DURATION;
         float damage_scale_y = 1.0f;
         if(damage_squash_time_ratio > 0.5) {
             damage_scale_y =
@@ -2078,7 +2109,7 @@ void mob::get_sprite_bitmap_effects(
                     EASE_UP_AND_DOWN,
                     damage_scale_y
                 );
-            damage_scale_y *= DAMAGE_SQUASH_AMOUNT;
+            damage_scale_y *= MOB::DAMAGE_SQUASH_AMOUNT;
         } else {
             damage_scale_y =
                 interpolate_number(
@@ -2090,7 +2121,7 @@ void mob::get_sprite_bitmap_effects(
                     EASE_UP_AND_DOWN,
                     damage_scale_y
                 );
-            damage_scale_y *= -DAMAGE_SQUASH_AMOUNT;
+            damage_scale_y *= -MOB::DAMAGE_SQUASH_AMOUNT;
         }
         damage_scale_y += 1.0f;
         info->scale.y *= damage_scale_y;
@@ -2098,18 +2129,14 @@ void mob::get_sprite_bitmap_effects(
     }
     
     if(add_carry_sway && carry_info) {
-        const float TIME_MULT = 4.5f;
-        const float X_TRANSLATION_AMOUNT = 2.0f;
-        const float Y_TRANSLATION_AMOUNT = X_TRANSLATION_AMOUNT / 2.0f;
-        const float ROTATION_AMOUNT = TAU * 0.01f;
         if(carry_info->is_moving) {
             float factor1 =
-                sin(game.states.gameplay->area_time_passed * TIME_MULT);
+                sin(game.states.gameplay->area_time_passed * MOB::CARRY_SWAY_TIME_MULT);
             float factor2 =
-                sin(game.states.gameplay->area_time_passed * TIME_MULT * 2.0f);
-            info->translation.x -= factor1 * X_TRANSLATION_AMOUNT;
-            info->translation.y -= factor2 * Y_TRANSLATION_AMOUNT;
-            info->rotation -= factor1 * ROTATION_AMOUNT;
+                sin(game.states.gameplay->area_time_passed * MOB::CARRY_SWAY_TIME_MULT * 2.0f);
+            info->translation.x -= factor1 * MOB::CARRY_SWAY_X_TRANSLATION_AMOUNT;
+            info->translation.y -= factor2 * MOB::CARRY_SWAY_Y_TRANSLATION_AMOUNT;
+            info->rotation -= factor1 * MOB::CARRY_SWAY_ROTATION_AMOUNT;
         }
     }
 }
@@ -2309,7 +2336,7 @@ bool mob::has_clear_line(mob* target_mob) const {
         }
         if(
             fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
-            STEP_HEIGHT
+            GEOMETRY::STEP_HEIGHT
         ) {
             //The walls are more than stepping height in difference.
             //So it's a genuine wall in the way.
@@ -2656,7 +2683,7 @@ void mob::set_animation(
         anim.cur_frame_index = INVALID;
     } else {
         if(
-            !(options & START_ANIMATION_NO_RESTART) ||
+            !has_flag(options, START_ANIMATION_NO_RESTART) ||
             anim.cur_frame_index >= anim.cur_anim->frames.size()
         ) {
             anim.start();
@@ -2929,7 +2956,7 @@ void mob::stop_chasing() {
     
     speed.x = 0.0f;
     speed.y = 0.0f;
-    if(can_move_in_midair) {
+    if(has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
         speed_z = 0.0f;
     }
 }
@@ -3157,7 +3184,7 @@ void mob::tick_brain(const float delta_t) {
             ),
             circling_z,
             (circling_info->can_free_move ? CHASE_FLAG_ANY_ANGLE : 0),
-            chase_info_struct::DEF_TARGET_DISTANCE,
+            MOB::DEF_CHASE_TARGET_DISTANCE,
             circling_info->speed
         );
     }
@@ -3165,15 +3192,15 @@ void mob::tick_brain(const float delta_t) {
     //Chasing a target.
     if(
         chase_info.state == CHASE_STATE_CHASING &&
-        !(chase_info.flags & CHASE_FLAG_TELEPORT) &&
-        (speed_z == 0 || can_move_in_midair)
+        !has_flag(chase_info.flags, CHASE_FLAG_TELEPORT) &&
+        (speed_z == 0 || has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR))
     ) {
     
         //Calculate where the target is.
         point final_target_pos = get_chase_target();
         dist horiz_dist = dist(pos, final_target_pos);
         float vert_dist = 0.0f;
-        if(can_move_in_midair) {
+        if(has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
             float final_target_z = chase_info.offset_z;
             if(chase_info.orig_z) final_target_z += *chase_info.orig_z;
             vert_dist = fabs(z - final_target_z);
@@ -3226,7 +3253,7 @@ void mob::tick_brain(const float delta_t) {
                         chase(
                             next_stop->pos, next_stop_z,
                             CHASE_FLAG_ANY_ANGLE,
-                            chase_info_struct::DEF_TARGET_DISTANCE,
+                            MOB::DEF_CHASE_TARGET_DISTANCE,
                             chase_info.max_speed
                         );
                     }
@@ -3334,7 +3361,7 @@ void mob::tick_misc_logic(const float delta_t) {
     //Health wheel.
     bool should_show_health =
         type->show_health &&
-        !hide &&
+        !has_flag(flags, MOB_FLAG_HIDDEN) &&
         health > 0.0f &&
         health < max_health;
     if(!health_wheel && should_show_health) {
@@ -3487,8 +3514,8 @@ void mob::tick_misc_logic(const float delta_t) {
             if(type->category->id != MOB_CATEGORY_LEADERS) {
                 //The Pikmin were likely following an enemy.
                 //So they were likely invincible. Let's correct that.
-                member->is_huntable = true;
-                member->is_hurtable = true;
+                disable_flag(member->flags, MOB_FLAG_NON_HUNTABLE);
+                disable_flag(member->flags, MOB_FLAG_NON_HURTABLE);
                 member->team = MOB_TEAM_PLAYER_1;
             }
             member->leave_group();

@@ -14,6 +14,14 @@
 #include "../mob_types/converter_type.h"
 #include "mob.h"
 
+namespace CONVERTER {
+extern const float NEW_SEED_Z_OFFSET;
+extern const float SPEW_ANGLE_SHIFT;
+extern const float SPEW_H_SPEED;
+extern const float SPEW_H_SPEED_DEVIATION;
+extern const float SPEW_V_SPEED;
+}
+
 
 /* ----------------------------------------------------------------------------
  * A converter mob. This is like the Candypop Buds in the canon games, in the

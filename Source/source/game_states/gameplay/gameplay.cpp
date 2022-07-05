@@ -26,28 +26,47 @@
 
 
 namespace GAMEPLAY {
+//Something is only considered off-camera if it's beyond this extra margin.
+const float CAMERA_BOX_MARGIN = 128.0f;
+//Dampen the camera's movements by this much.
+const float CAMERA_SMOOTHNESS_MULT = 4.5f;
+//How long the HUD moves for when the area is entered.
+const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
+//How long it takes for the area name to fade away, in-game.
+const float AREA_TITLE_FADE_DURATION = 3.0f;
+//Opacity of the collision bubbles in the maker tool.
+const unsigned char COLLISION_OPACITY = 192;
+//Maximum alpha of the cursor's trail -- the alpha value near the cursor.
+const unsigned char CURSOR_TRAIL_MAX_ALPHA = 72;
+//Maximum width of the cursor's trail -- the width value near the cursor.
+const float CURSOR_TRAIL_MAX_WIDTH = 30.0f;
+//How far the cursor must move from its current spot before the next spot.
+const float CURSOR_TRAIL_MIN_SPOT_DIFF = 4.0f;
+//Every X seconds, the cursor's position is saved, to create the trail effect.
+const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
+//Number of positions of the cursor to keep track of.
+const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
+//Width and height of the fog bitmap.
+const int FOG_BITMAP_SIZE = 128;
+//How long the HUD moves for when a menu is entered.
+const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
+//How long the HUD moves for when a menu is exited.
+const float MENU_EXIT_HUD_MOVE_TIME = 0.5f;
+//Opacity of the throw preview.
+const unsigned char PREVIEW_OPACITY = 160;
+//Scale of the throw preview's effect texture.
+const float PREVIEW_TEXTURE_SCALE = 20.0f;
+//Time multiplier for the throw preview's effect texture animation.
+const float PREVIEW_TEXTURE_TIME_MULT = 20.0f;
 //How frequently should a replay state be saved.
 const float REPLAY_SAVE_FREQUENCY = 1.0f;
+//Swarming arrows move these many units per second.
+const float SWARM_ARROW_SPEED = 400.0f;
 //Tree shadows sway this much away from their neutral position.
 const float TREE_SHADOW_SWAY_AMOUNT = 8.0f;
 //Tree shadows sway this much per second (TAU = full back-and-forth cycle).
 const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
 }
-
-//How long the HUD moves for when the area is entered.
-const float gameplay_state::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
-//How long it takes for the area name to fade away, in-game.
-const float gameplay_state::AREA_TITLE_FADE_DURATION = 3.0f;
-//Every X seconds, the cursor's position is saved, to create the trail effect.
-const float gameplay_state::CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
-//Number of positions of the cursor to keep track of.
-const unsigned char gameplay_state::CURSOR_TRAIL_SAVE_N_SPOTS = 16;
-//How long the HUD moves for when a menu is entered.
-const float gameplay_state::MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
-//How long the HUD moves for when a menu is exited.
-const float gameplay_state::MENU_EXIT_HUD_MOVE_TIME = 0.5f;
-//Swarming arrows move these many units per second.
-const float gameplay_state::SWARM_ARROW_SPEED = 400.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -57,7 +76,7 @@ gameplay_state::gameplay_state() :
     game_state(),
     after_hours(false),
     area_time_passed(0.0f),
-    area_title_fade_timer(AREA_TITLE_FADE_DURATION),
+    area_title_fade_timer(GAMEPLAY::AREA_TITLE_FADE_DURATION),
     bmp_fog(nullptr),
     closest_group_member_distant(false),
     cur_leader_nr(0),
@@ -67,6 +86,7 @@ gameplay_state::gameplay_state() :
     hud(nullptr),
     leader_cursor_sector(nullptr),
     msg_box(nullptr),
+    next_mob_id(0),
     particles(0),
     precipitation(0),
     selected_spray(0),
@@ -82,7 +102,7 @@ gameplay_state::gameplay_state() :
     close_to_pikmin_to_pluck(nullptr),
     close_to_ship_to_heal(nullptr),
     cursor_height_diff_light(0.0f),
-    cursor_save_timer(CURSOR_TRAIL_SAVE_INTERVAL),
+    cursor_save_timer(GAMEPLAY::CURSOR_TRAIL_SAVE_INTERVAL),
     is_input_allowed(false),
     lightmap_bmp(nullptr),
     main_control_id(INVALID),
@@ -198,7 +218,7 @@ void gameplay_state::enter() {
     leader_cursor_s = game.mouse_cursor_s;
     
     hud->gui.start_animation(
-        GUI_MANAGER_ANIM_OUT_TO_IN, AREA_INTRO_HUD_MOVE_TIME
+        GUI_MANAGER_ANIM_OUT_TO_IN, GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
     );
     if(went_to_results) {
         game.fade_mgr.start_fade(true, nullptr);
@@ -210,8 +230,6 @@ void gameplay_state::enter() {
     ready_for_input = false;
 }
 
-
-const int FOG_BITMAP_SIZE = 128;
 
 /* ----------------------------------------------------------------------------
  * Generates the bitmap that'll draw the fog fade effect.
@@ -225,8 +243,9 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
 ) {
     if(far_radius == 0) return NULL;
     
-    ALLEGRO_BITMAP* bmp = al_create_bitmap(FOG_BITMAP_SIZE, FOG_BITMAP_SIZE);
-    
+    ALLEGRO_BITMAP* bmp =
+        al_create_bitmap(GAMEPLAY::FOG_BITMAP_SIZE, GAMEPLAY::FOG_BITMAP_SIZE);
+        
     ALLEGRO_LOCKED_REGION* region =
         al_lock_bitmap(
             bmp, ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_WRITEONLY
@@ -255,15 +274,18 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
     row[(x) * 4 + 2] = 255; \
     row[(x) * 4 + 3] = cur_a; \
     
-    for(int y = 0; y < ceil(FOG_BITMAP_SIZE / 2.0); ++y) {
-        for(int x = 0; x < ceil(FOG_BITMAP_SIZE / 2.0); ++x) {
+    for(int y = 0; y < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); ++y) {
+        for(int x = 0; x < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); ++x) {
             //First, get how far this pixel is from the center.
             //Center = 0, radius or beyond = 1.
             cur_ratio =
                 dist(
                     point(x, y),
-                    point(FOG_BITMAP_SIZE / 2.0, FOG_BITMAP_SIZE / 2.0)
-                ).to_float() / (FOG_BITMAP_SIZE / 2.0);
+                    point(
+                        GAMEPLAY::FOG_BITMAP_SIZE / 2.0,
+                        GAMEPLAY::FOG_BITMAP_SIZE / 2.0
+                    )
+                ).to_float() / (GAMEPLAY::FOG_BITMAP_SIZE / 2.0);
             cur_ratio = std::min(cur_ratio, 1.0f);
             //Then, map that ratio to a different ratio that considers
             //the start of the "near" section as 0.
@@ -273,11 +295,12 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
             cur_ratio = clamp(cur_ratio, 0.0f, 1.0f);
             cur_a = 255 * cur_ratio;
             
-            opposite_row = row + region->pitch * (FOG_BITMAP_SIZE - y - y - 1);
+            opposite_row =
+                row + region->pitch * (GAMEPLAY::FOG_BITMAP_SIZE - y - y - 1);
             fill_pixel(x, row);
-            fill_pixel(FOG_BITMAP_SIZE - x - 1, row);
+            fill_pixel(GAMEPLAY::FOG_BITMAP_SIZE - x - 1, row);
             fill_pixel(x, opposite_row);
-            fill_pixel(FOG_BITMAP_SIZE - x - 1, opposite_row);
+            fill_pixel(GAMEPLAY::FOG_BITMAP_SIZE - x - 1, opposite_row);
         }
         row += region->pitch;
     }
@@ -500,6 +523,7 @@ void gameplay_state::load() {
     }
     
     //Generate mobs.
+    next_mob_id = 0;
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Object generation");
     }
@@ -596,7 +620,7 @@ void gameplay_state::load() {
     cursor_save_timer.on_end = [this] () {
         cursor_save_timer.start();
         cursor_spots.push_back(game.mouse_cursor_s);
-        if(cursor_spots.size() > CURSOR_TRAIL_SAVE_N_SPOTS) {
+        if(cursor_spots.size() > GAMEPLAY::CURSOR_TRAIL_SAVE_N_SPOTS) {
             cursor_spots.erase(cursor_spots.begin());
         }
     };

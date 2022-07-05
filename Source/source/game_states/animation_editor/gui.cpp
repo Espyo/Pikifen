@@ -180,7 +180,7 @@ void animation_editor::process_gui_hitbox_hazards() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("addHazard");
@@ -224,7 +224,7 @@ void animation_editor::process_gui_hitbox_hazards() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 vector<string> list =
@@ -502,7 +502,7 @@ void animation_editor::process_gui_options_dialog() {
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
-            b2s(options_struct::DEF_EDITOR_MMB_PAN) + "."
+            b2s(OPTIONS::DEF_EDITOR_MMB_PAN) + "."
         );
         
         //Drag threshold value.
@@ -514,7 +514,7 @@ void animation_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag.\n"
-            "Default: " + i2s(options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
+            "Default: " + i2s(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );
@@ -560,7 +560,7 @@ void animation_editor::process_gui_panel_animation() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_PREVIOUS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(!anims.animations.empty()) {
@@ -585,7 +585,7 @@ void animation_editor::process_gui_panel_animation() {
     string anim_button_name =
         (cur_anim ? cur_anim->name : NONE_OPTION) + "##anim";
     ImVec2 anim_button_size(
-        -(EDITOR_ICON_BMP_SIZE + 16.0f), EDITOR_ICON_BMP_SIZE + 6.0f
+        -(EDITOR::ICON_BMP_SIZE + 16.0f), EDITOR::ICON_BMP_SIZE + 6.0f
     );
     ImGui::SameLine();
     if(ImGui::Button(anim_button_name.c_str(), anim_button_size)) {
@@ -627,7 +627,7 @@ void animation_editor::process_gui_panel_animation() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_NEXT],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(!anims.animations.empty()) {
@@ -657,7 +657,7 @@ void animation_editor::process_gui_panel_animation() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_REMOVE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             if(cur_anim) {
@@ -694,7 +694,7 @@ void animation_editor::process_gui_panel_animation() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_DUPLICATE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 ImGui::OpenPopup("importAnim");
@@ -724,7 +724,7 @@ void animation_editor::process_gui_panel_animation() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_INFO],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             duplicate_string(cur_anim->name, rename_anim_name);
@@ -809,7 +809,7 @@ void animation_editor::process_gui_panel_animation() {
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_PLAY_PAUSE],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     press_play_animation_button();
@@ -824,7 +824,7 @@ void animation_editor::process_gui_panel_animation() {
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_PREVIOUS],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     anim_playing = false;
@@ -848,7 +848,7 @@ void animation_editor::process_gui_panel_animation() {
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_NEXT],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     anim_playing = false;
@@ -877,7 +877,7 @@ void animation_editor::process_gui_panel_animation() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_ADD],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 if(cur_frame_nr < cur_anim->loop_frame) {
@@ -912,7 +912,7 @@ void animation_editor::process_gui_panel_animation() {
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_REMOVE],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     if(cur_frame_nr < cur_anim->loop_frame) {
@@ -1052,7 +1052,7 @@ void animation_editor::process_gui_panel_body_part() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_ADD],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         new_part_name.clear();
@@ -1104,7 +1104,7 @@ void animation_editor::process_gui_panel_body_part() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_REMOVE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             if(selected_part >= 0 && !anims.body_parts.empty()) {
@@ -1135,7 +1135,7 @@ void animation_editor::process_gui_panel_body_part() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_INFO],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             duplicate_string(
@@ -1224,7 +1224,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_ANIMATIONS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Animations"
         )
@@ -1243,7 +1243,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_SPRITES],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Sprites"
         )
@@ -1261,7 +1261,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_BODY_PARTS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Body parts"
         )
@@ -1276,7 +1276,7 @@ void animation_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_TOOLS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Tools"
         )
@@ -1344,7 +1344,7 @@ void animation_editor::process_gui_panel_sprite() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_PREVIOUS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(!anims.sprites.empty()) {
@@ -1369,7 +1369,7 @@ void animation_editor::process_gui_panel_sprite() {
     string sprite_button_name =
         (cur_sprite ? cur_sprite->name : NONE_OPTION) + "##sprite";
     ImVec2 sprite_button_size(
-        -(EDITOR_ICON_BMP_SIZE + 16.0f), EDITOR_ICON_BMP_SIZE + 6.0f
+        -(EDITOR::ICON_BMP_SIZE + 16.0f), EDITOR::ICON_BMP_SIZE + 6.0f
     );
     ImGui::SameLine();
     if(ImGui::Button(sprite_button_name.c_str(), sprite_button_size)) {
@@ -1405,7 +1405,7 @@ void animation_editor::process_gui_panel_sprite() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_NEXT],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(!anims.sprites.empty()) {
@@ -1434,7 +1434,7 @@ void animation_editor::process_gui_panel_sprite() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_REMOVE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             if(cur_sprite) {
@@ -1470,7 +1470,7 @@ void animation_editor::process_gui_panel_sprite() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_DUPLICATE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 ImGui::OpenPopup("importSprite");
@@ -1505,7 +1505,7 @@ void animation_editor::process_gui_panel_sprite() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_INFO],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             duplicate_string(cur_sprite->name, rename_sprite_name);
@@ -1526,7 +1526,7 @@ void animation_editor::process_gui_panel_sprite() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_RESIZE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             resize_sprite_mult = "1.0";
@@ -1620,7 +1620,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_DUPLICATE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("importSpriteBitmap");
@@ -1805,7 +1805,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_PREVIOUS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(cur_sprite->hitboxes.size()) {
@@ -1830,7 +1830,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_NEXT],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         if(cur_sprite->hitboxes.size()) {
@@ -1855,7 +1855,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_DUPLICATE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("importSpriteHitboxes");
@@ -1915,8 +1915,9 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             "Radius of the hitbox.",
             "", WIDGET_EXPLANATION_DRAG
         );
-        cur_hitbox->radius = std::max(HITBOX_MIN_RADIUS, cur_hitbox->radius);
-        
+        cur_hitbox->radius =
+            std::max(ANIM_EDITOR::HITBOX_MIN_RADIUS, cur_hitbox->radius);
+            
         //Hitbox Z value.
         if(ImGui::DragFloat("Z", &cur_hitbox->z, 0.1f)) {
             mark_new_changes();
@@ -2119,7 +2120,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_DUPLICATE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("importSpriteTop");
@@ -2175,7 +2176,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         if(
             process_size_widgets(
                 "Size", cur_sprite->top_size, 0.01f,
-                top_keep_aspect_ratio, TOP_MIN_SIZE
+                top_keep_aspect_ratio, ANIM_EDITOR::TOP_MIN_SIZE
             )
         ) {
             mark_new_changes();
@@ -2243,7 +2244,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_DUPLICATE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             ImGui::OpenPopup("importSpriteTransform");
@@ -2460,8 +2461,6 @@ void animation_editor::process_gui_panel_tools() {
  * Processes the ImGui status bar for this frame.
  */
 void animation_editor::process_gui_status_bar() {
-    const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
-    
     //Status bar text.
     ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
     
@@ -2469,7 +2468,7 @@ void animation_editor::process_gui_status_bar() {
     ImGui::SameLine();
     float size =
         canvas_separator_x - ImGui::GetItemRectSize().x -
-        MOUSE_COORDS_TEXT_WIDTH;
+        ANIM_EDITOR::MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
     bool showing_coords = false;
@@ -2523,7 +2522,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_QUIT],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_quit_button();
@@ -2539,7 +2538,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_LOAD],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_load_button();
@@ -2558,7 +2557,7 @@ void animation_editor::process_gui_toolbar() {
             has_unsaved_changes ?
             editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_save_button();
@@ -2574,7 +2573,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_GRID],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_grid_button();
@@ -2589,7 +2588,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_HITBOXES],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_hitboxes_button();
@@ -2604,7 +2603,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_MOB_RADIUS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_mob_radius_button();
@@ -2619,7 +2618,7 @@ void animation_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_PIKMIN_SILHOUETTE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_pikmin_silhouette_button();

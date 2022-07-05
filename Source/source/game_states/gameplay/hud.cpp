@@ -18,25 +18,23 @@
 
 
 namespace HUD {
+//Path to the GUI information file.
+const string GUI_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
+//How long the leader swap juice animation lasts for.
+const float LEADER_SWAP_JUICE_DURATION = 0.7f;
+//How long the spray swap juice animation lasts for.
+const float SPRAY_SWAP_JUICE_DURATION = 0.7f;
+//How long the standby swap juice animation lasts for.
+const float STANDBY_SWAP_JUICE_DURATION = 0.5f;
 //The Sun Meter's sun spins these many radians per second.
 const float SUN_METER_SUN_SPIN_SPEED = 0.5f;
-}
-
-//Path to the GUI information file.
-const string hud_struct::HUD_FILE_NAME =
-    GUI_FOLDER_PATH + "/Gameplay.txt";
-//How long the leader swap juice animation lasts for.
-const float hud_struct::LEADER_SWAP_JUICE_DURATION = 0.7f;
-//How long the spray swap juice animation lasts for.
-const float hud_struct::SPRAY_SWAP_JUICE_DURATION = 0.7f;
-//How long the standby swap juice animation lasts for.
-const float hud_struct::STANDBY_SWAP_JUICE_DURATION = 0.5f;
 //Speed at which previously-unnecessary items fade in, in alpha per second.
-const float hud_struct::UNNECESSARY_ITEMS_FADE_IN_SPEED = 2.5f;
+const float UNNECESSARY_ITEMS_FADE_IN_SPEED = 2.5f;
 //Delay before unnecessary items start fading out.
-const float hud_struct::UNNECESSARY_ITEMS_FADE_OUT_DELAY = 2.5f;
+const float UNNECESSARY_ITEMS_FADE_OUT_DELAY = 2.5f;
 //Speed at which unnecessary items fade out, in alpha per second.
-const float hud_struct::UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
+const float UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -74,7 +72,7 @@ hud_struct::hud_struct() :
     total_count_nr(0),
     total_amount(nullptr) {
     
-    data_node hud_file_node(HUD_FILE_NAME);
+    data_node hud_file_node(HUD::GUI_FILE_NAME);
     
     gui.register_coords("time",                  50, 10, 70, 10);
     gui.register_coords("day_bubble",             0,  0,  0,  0);
@@ -170,21 +168,21 @@ hud_struct::hud_struct() :
                 float caution_ring_scale =
                     interpolate_number(
                         health.caution_timer,
-                        0.0f, leader::HEALTH_CAUTION_RING_DURATION,
+                        0.0f, LEADER::HEALTH_CAUTION_RING_DURATION,
                         1.0f, 2.0f
                     );
                 unsigned char caution_ring_alpha =
                     health.caution_timer <
-                    leader::HEALTH_CAUTION_RING_DURATION / 2.0f ?
+                    LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f ?
                     interpolate_number(
                         health.caution_timer,
-                        0.0f, leader::HEALTH_CAUTION_RING_DURATION / 2.0f,
+                        0.0f, LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f,
                         0.0f, 192
                     ) :
                     interpolate_number(
                         health.caution_timer,
-                        leader::HEALTH_CAUTION_RING_DURATION / 2.0f,
-                        leader::HEALTH_CAUTION_RING_DURATION,
+                        LEADER::HEALTH_CAUTION_RING_DURATION / 2.0f,
+                        LEADER::HEALTH_CAUTION_RING_DURATION,
                         192, 0
                     );
                 float caution_ring_size =
@@ -962,13 +960,13 @@ hud_struct::hud_struct() :
 #undef loader
     
     leader_icon_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_CIRCLE;
-    leader_icon_mgr.transition_duration = LEADER_SWAP_JUICE_DURATION;
+    leader_icon_mgr.transition_duration = HUD::LEADER_SWAP_JUICE_DURATION;
     leader_health_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_CIRCLE;
-    leader_health_mgr.transition_duration = LEADER_SWAP_JUICE_DURATION;
+    leader_health_mgr.transition_duration = HUD::LEADER_SWAP_JUICE_DURATION;
     standby_icon_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
-    standby_icon_mgr.transition_duration = STANDBY_SWAP_JUICE_DURATION;
+    standby_icon_mgr.transition_duration = HUD::STANDBY_SWAP_JUICE_DURATION;
     spray_icon_mgr.move_method = HUD_BUBBLE_MOVE_METHOD_STRAIGHT;
-    spray_icon_mgr.transition_duration = SPRAY_SWAP_JUICE_DURATION;
+    spray_icon_mgr.transition_duration = HUD::SPRAY_SWAP_JUICE_DURATION;
     
 }
 
@@ -1206,11 +1204,14 @@ void hud_struct::tick(const float delta_t) {
         if(standby_items_fade_timer > 0.0f) {
             standby_items_fade_timer -= delta_t;
         } else {
-            standby_items_opacity -= UNNECESSARY_ITEMS_FADE_OUT_SPEED * delta_t;
+            standby_items_opacity -=
+                HUD::UNNECESSARY_ITEMS_FADE_OUT_SPEED * delta_t;
         }
     } else {
-        standby_items_fade_timer = UNNECESSARY_ITEMS_FADE_OUT_DELAY;
-        standby_items_opacity += UNNECESSARY_ITEMS_FADE_IN_SPEED * delta_t;
+        standby_items_fade_timer =
+            HUD::UNNECESSARY_ITEMS_FADE_OUT_DELAY;
+        standby_items_opacity +=
+            HUD::UNNECESSARY_ITEMS_FADE_IN_SPEED * delta_t;
     }
     standby_items_opacity = clamp(0.0f, standby_items_opacity, 1.0f);
     
@@ -1224,11 +1225,14 @@ void hud_struct::tick(const float delta_t) {
         if(spray_items_fade_timer > 0.0f) {
             spray_items_fade_timer -= delta_t;
         } else {
-            spray_items_opacity -= UNNECESSARY_ITEMS_FADE_OUT_SPEED * delta_t;
+            spray_items_opacity -=
+                HUD::UNNECESSARY_ITEMS_FADE_OUT_SPEED * delta_t;
         }
     } else {
-        spray_items_fade_timer = UNNECESSARY_ITEMS_FADE_OUT_DELAY;
-        spray_items_opacity += UNNECESSARY_ITEMS_FADE_IN_SPEED * delta_t;
+        spray_items_fade_timer =
+            HUD::UNNECESSARY_ITEMS_FADE_OUT_DELAY;
+        spray_items_opacity +=
+            HUD::UNNECESSARY_ITEMS_FADE_IN_SPEED * delta_t;
     }
     spray_items_opacity = clamp(0.0f, spray_items_opacity, 1.0f);
     

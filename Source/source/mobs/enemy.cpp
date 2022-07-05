@@ -21,6 +21,16 @@
 #include "../utils/string_utils.h"
 
 
+namespace ENEMY {
+//Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
+const float SPIRIT_SIZE_MULT = 0.7;
+//Maximum diameter an enemy's spirit can be.
+const float SPIRIT_MAX_SIZE = 128;
+//Minimum diameter an enemy's spirit can be.
+const float SPIRIT_MIN_SIZE = 16;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Creates an enemy mob.
  * pos:
@@ -43,7 +53,7 @@ enemy::enemy(const point &pos, enemy_type* type, const float angle) :
  *   Status type to check.
  */
 bool enemy::can_receive_status(status_type* s) const {
-    return s->affects & STATUS_AFFECTS_ENEMIES;
+    return has_flag(s->affects, STATUS_AFFECTS_ENEMIES);
 }
 
 
@@ -61,13 +71,6 @@ void enemy::draw_mob() {
 }
 
 
-//Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
-const float ENEMY_SPIRIT_SIZE_MULT = 0.7;
-//Maximum diameter an enemy's spirit can be.
-const float ENEMY_SPIRIT_MAX_SIZE = 128;
-//Minimum diameter an enemy's spirit can be.
-const float ENEMY_SPIRIT_MIN_SIZE = 16;
-
 /* ----------------------------------------------------------------------------
  * Logic specific to enemies for when they finish dying.
  */
@@ -79,8 +82,8 @@ void enemy::finish_dying_class_specifics() {
     particle par(
         PARTICLE_TYPE_ENEMY_SPIRIT, pos, LARGE_FLOAT,
         clamp(
-            radius * 2 * ENEMY_SPIRIT_SIZE_MULT,
-            ENEMY_SPIRIT_MIN_SIZE, ENEMY_SPIRIT_MAX_SIZE
+            radius * 2 * ENEMY::SPIRIT_SIZE_MULT,
+            ENEMY::SPIRIT_MIN_SIZE, ENEMY::SPIRIT_MAX_SIZE
         ),
         2, PARTICLE_PRIORITY_MEDIUM
     );

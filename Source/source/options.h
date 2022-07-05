@@ -40,45 +40,47 @@ enum AUTO_THROW_MODES {
 };
 
 
+namespace OPTIONS {
+extern const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
+extern const float DEF_AREA_EDITOR_GRID_INTERVAL;
+extern const bool DEF_AREA_EDITOR_SEL_TRANS;
+extern const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
+extern const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
+extern const area_editor::SNAP_MODES DEF_AREA_EDITOR_SNAP_MODE;
+extern const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
+extern const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
+extern const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE;
+extern const AUTO_THROW_MODES DEF_AUTO_THROW_MODE;
+extern const float DEF_CURSOR_SPEED;
+extern const bool DEF_DRAW_CURSOR_TRAIL;
+extern const bool DEF_EDITOR_MMB_PAN;
+extern const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD;
+extern const ALLEGRO_COLOR DEF_EDITOR_PRIMARY_COLOR;
+extern const ALLEGRO_COLOR DEF_EDITOR_SECONDARY_COLOR;
+extern const ALLEGRO_COLOR DEF_EDITOR_TEXT_COLOR;
+extern const bool DEF_EDITOR_USE_CUSTOM_STYLE;
+extern const bool DEF_EDITOR_SHOW_TOOLTIPS;
+extern const float DEF_JOYSTICK_MIN_DEADZONE;
+extern const float DEF_JOYSTICK_MAX_DEADZONE;
+extern const size_t DEF_MAX_PARTICLES;
+extern const bool DEF_MIPMAPS_ENABLED;
+extern const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
+extern const bool DEF_SMOOTH_SCALING;
+extern const bool DEF_SHOW_HUD_CONTROLS;
+extern const unsigned int DEF_TARGET_FPS;
+extern const bool DEF_TRUE_FULLSCREEN;
+extern const bool DEF_WIN_FULLSCREEN;
+extern const unsigned int DEF_WIN_H;
+extern const bool DEF_WINDOW_POSITION_HACK;
+extern const unsigned int DEF_WIN_W;
+extern const float DEF_ZOOM_MID_LEVEL;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Game options.
  */
 struct options_struct {
-
-    static const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
-    static const float DEF_AREA_EDITOR_GRID_INTERVAL;
-    static const bool DEF_AREA_EDITOR_SEL_TRANS;
-    static const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
-    static const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
-    static const area_editor::SNAP_MODES DEF_AREA_EDITOR_SNAP_MODE;
-    static const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
-    static const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
-    static const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE;
-    static const AUTO_THROW_MODES DEF_AUTO_THROW_MODE;
-    static const float DEF_CURSOR_SPEED;
-    static const bool DEF_DRAW_CURSOR_TRAIL;
-    static const bool DEF_EDITOR_MMB_PAN;
-    static const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD;
-    static const float DEF_EDITOR_PRIMARY_COLOR[3];
-    static const float DEF_EDITOR_SECONDARY_COLOR[3];
-    static const float DEF_EDITOR_TEXT_COLOR[3];
-    static const bool DEF_EDITOR_USE_CUSTOM_STYLE;
-    static const bool DEF_EDITOR_SHOW_TOOLTIPS;
-    static const float DEF_JOYSTICK_MIN_DEADZONE;
-    static const float DEF_JOYSTICK_MAX_DEADZONE;
-    static const size_t DEF_MAX_PARTICLES;
-    static const bool DEF_MIPMAPS_ENABLED;
-    static const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
-    static const bool DEF_SMOOTH_SCALING;
-    static const bool DEF_SHOW_HUD_CONTROLS;
-    static const unsigned int DEF_TARGET_FPS;
-    static const bool DEF_TRUE_FULLSCREEN;
-    static const bool DEF_WIN_FULLSCREEN;
-    static const unsigned int DEF_WIN_H;
-    static const bool DEF_WINDOW_POSITION_HACK;
-    static const unsigned int DEF_WIN_W;
-    static const float DEF_ZOOM_MID_LEVEL;
-    
     //Backup the area in the area editor every X seconds.
     float area_editor_backup_interval;
     //Grid interval in the area editor, in units.

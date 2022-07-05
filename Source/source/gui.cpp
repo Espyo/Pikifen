@@ -20,28 +20,30 @@
 #include "utils/string_utils.h"
 
 
-//Padding before/after the circle in a bullet point item.
-const float bullet_point_gui_item::BULLET_PADDING = 6.0f;
-//Radius of the circle that represents the bullet in a bullet point item.
-const float bullet_point_gui_item::BULLET_RADIUS = 4.0f;
-//When an item does a juicy grow, this is the full effect duration.
-const float gui_item::JUICY_GROW_DURATION = 0.3f;
-//When an item does a juicy elastic grow, this is the full effect duration.
-const float gui_item::JUICY_GROW_ELASTIC_DURATION = 0.4f;
-//Grow scale multiplier for a juicy icon grow animation.
-const float gui_item::JUICY_GROW_ICON_MULT = 5.0f;
-//Grow scale multiplier for a juicy text high grow animation.
-const float gui_item::JUICY_GROW_TEXT_HIGH_MULT = 0.15f;
-//Grow scale multiplier for a juicy text low grow animation.
-const float gui_item::JUICY_GROW_TEXT_LOW_MULT = 0.02f;
-//Grow scale multiplier for a juicy text medium grow animation.
-const float gui_item::JUICY_GROW_TEXT_MEDIUM_MULT = 0.05f;
+namespace GUI {
 //Interval between auto-repeat activations, at the slowest speed.
-const float gui_manager::AUTO_REPEAT_MAX_INTERVAL = 0.3f;
+const float AUTO_REPEAT_MAX_INTERVAL = 0.3f;
 //Interval between auto-repeat activations, at the fastest speed.
-const float gui_manager::AUTO_REPEAT_MIN_INTERVAL = 0.011f;
+const float AUTO_REPEAT_MIN_INTERVAL = 0.011f;
 //How long it takes for the auto-repeat activations to reach max speed.
-const float gui_manager::AUTO_REPEAT_RAMP_TIME = 0.9f;
+const float AUTO_REPEAT_RAMP_TIME = 0.9f;
+//Padding before/after the circle in a bullet point item.
+const float BULLET_PADDING = 6.0f;
+//Radius of the circle that represents the bullet in a bullet point item.
+const float BULLET_RADIUS = 4.0f;
+//When an item does a juicy grow, this is the full effect duration.
+const float JUICY_GROW_DURATION = 0.3f;
+//When an item does a juicy elastic grow, this is the full effect duration.
+const float JUICY_GROW_ELASTIC_DURATION = 0.4f;
+//Grow scale multiplier for a juicy icon grow animation.
+const float JUICY_GROW_ICON_MULT = 5.0f;
+//Grow scale multiplier for a juicy text high grow animation.
+const float JUICY_GROW_TEXT_HIGH_MULT = 0.15f;
+//Grow scale multiplier for a juicy text low grow animation.
+const float JUICY_GROW_TEXT_LOW_MULT = 0.02f;
+//Grow scale multiplier for a juicy text medium grow animation.
+const float JUICY_GROW_TEXT_MEDIUM_MULT = 0.05f;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -65,8 +67,8 @@ bullet_point_gui_item::bullet_point_gui_item(
     [this, text, font, color] (const point & center, const point & size) {
         float item_x_start = center.x - size.x * 0.5;
         float text_x_offset =
-            bullet_point_gui_item::BULLET_RADIUS * 2 +
-            bullet_point_gui_item::BULLET_PADDING * 2;
+            GUI::BULLET_RADIUS * 2 +
+            GUI::BULLET_PADDING * 2;
         point text_space(
             std::max(1.0f, size.x - text_x_offset),
             size.y
@@ -74,10 +76,10 @@ bullet_point_gui_item::bullet_point_gui_item(
         
         al_draw_filled_circle(
             item_x_start +
-            bullet_point_gui_item::BULLET_RADIUS +
-            bullet_point_gui_item::BULLET_PADDING,
+            GUI::BULLET_RADIUS +
+            GUI::BULLET_PADDING,
             center.y,
-            bullet_point_gui_item::BULLET_RADIUS,
+            GUI::BULLET_RADIUS,
             color
         );
         float juicy_grow_amount = get_juice_value();
@@ -254,52 +256,52 @@ float gui_item::get_child_bottom() {
 float gui_item::get_juice_value() {
     switch(juice_type) {
     case JUICE_TYPE_GROW_TEXT_LOW: {
-        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
+        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
-            JUICY_GROW_TEXT_LOW_MULT;
+            GUI::JUICY_GROW_TEXT_LOW_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_MEDIUM: {
-        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
+        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
-            JUICY_GROW_TEXT_MEDIUM_MULT;
+            GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_HIGH: {
-        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
+        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
-            JUICY_GROW_TEXT_HIGH_MULT;
+            GUI::JUICY_GROW_TEXT_HIGH_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW: {
-        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_ELASTIC_DURATION);
+        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
-            JUICY_GROW_TEXT_LOW_MULT;
+            GUI::JUICY_GROW_TEXT_LOW_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM: {
-        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_ELASTIC_DURATION);
+        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
-            JUICY_GROW_TEXT_MEDIUM_MULT;
+            GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
-        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_ELASTIC_DURATION);
+        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
-            JUICY_GROW_TEXT_HIGH_MULT;
+            GUI::JUICY_GROW_TEXT_HIGH_MULT;
         break;
     }
     case JUICE_TYPE_GROW_ICON: {
-        float anim_ratio = 1.0f - (juice_timer / JUICY_GROW_DURATION);
+        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
-            JUICY_GROW_ICON_MULT;
+            GUI::JUICY_GROW_ICON_MULT;
         break;
     }
     default: {
@@ -393,13 +395,13 @@ void gui_item::start_juice_animation(JUICE_TYPES type) {
     case JUICE_TYPE_GROW_TEXT_MEDIUM:
     case JUICE_TYPE_GROW_TEXT_HIGH:
     case JUICE_TYPE_GROW_ICON: {
-        juice_timer = JUICY_GROW_DURATION;
+        juice_timer = GUI::JUICY_GROW_DURATION;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW:
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM:
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
-        juice_timer = JUICY_GROW_ELASTIC_DURATION;
+        juice_timer = GUI::JUICY_GROW_ELASTIC_DURATION;
         break;
     }
     default: {
@@ -669,7 +671,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             selected_item->on_activate(point(ev.mouse.x, ev.mouse.y));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
-            auto_repeat_next_activation = AUTO_REPEAT_MAX_INTERVAL;
+            auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
         }
         input_happened = true;
         mouse_involved = true;
@@ -865,7 +867,7 @@ bool gui_manager::handle_menu_button(
             selected_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
-            auto_repeat_next_activation = AUTO_REPEAT_MAX_INTERVAL;
+            auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
         } else if(!is_down) {
             auto_repeat_on = false;
         }
@@ -1047,11 +1049,13 @@ void gui_manager::tick(const float delta_t) {
                 clamp(
                     interpolate_number(
                         auto_repeat_duration,
-                        0, AUTO_REPEAT_RAMP_TIME,
-                        AUTO_REPEAT_MAX_INTERVAL, AUTO_REPEAT_MIN_INTERVAL
+                        0,
+                        GUI::AUTO_REPEAT_RAMP_TIME,
+                        GUI::AUTO_REPEAT_MAX_INTERVAL,
+                        GUI::AUTO_REPEAT_MIN_INTERVAL
                     ),
-                    AUTO_REPEAT_MIN_INTERVAL,
-                    AUTO_REPEAT_MAX_INTERVAL
+                    GUI::AUTO_REPEAT_MIN_INTERVAL,
+                    GUI::AUTO_REPEAT_MAX_INTERVAL
                 );
         }
     }

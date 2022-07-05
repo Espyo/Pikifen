@@ -1427,13 +1427,13 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->speed = leader_ptr->throwee_speed;
     holding_ptr->speed_z = leader_ptr->throwee_speed_z;
     
-    holding_ptr->was_thrown = true;
+    enable_flag(holding_ptr->flags, MOB_FLAG_WAS_THROWN);
     holding_ptr->leave_group();
     leader_ptr->release(holding_ptr);
     
+    leader_ptr->set_animation(LEADER_ANIM_THROWING);
     game.sys_assets.sfx_throw.stop();
     game.sys_assets.sfx_throw.play(0, false);
-    leader_ptr->set_animation(LEADER_ANIM_THROWING);
 }
 
 
@@ -1611,7 +1611,8 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
     mob* grabbed_mob = (mob*) info1;
     lea_ptr->hold(
         grabbed_mob, INVALID,
-        LEADER_HELD_MOB_H_DIST, LEADER_HELD_MOB_ANGLE, LEADER_HELD_MOB_V_DIST,
+        LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
+        LEADER::HELD_GROUP_MEMBER_V_DIST,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     lea_ptr->group->sort(grabbed_mob->subgroup_type_ptr);
@@ -1770,8 +1771,8 @@ void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void leader_fsm::punch(mob* m, void* info1, void* info2) {
-    m->set_animation(LEADER_ANIM_PUNCHING);
     m->stop_turning();
+    m->set_animation(LEADER_ANIM_PUNCHING);
 }
 
 
@@ -1848,8 +1849,8 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
 void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     if(lea_ptr->is_in_walking_anim) {
-        lea_ptr->set_animation(LEADER_ANIM_IDLING);
         lea_ptr->is_in_walking_anim = false;
+        lea_ptr->set_animation(LEADER_ANIM_IDLING);
     }
 }
 
@@ -1866,8 +1867,8 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
 void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     if(!lea_ptr->is_in_walking_anim) {
-        lea_ptr->set_animation(LEADER_ANIM_WALKING);
         lea_ptr->is_in_walking_anim = true;
+        lea_ptr->set_animation(LEADER_ANIM_WALKING);
     }
 }
 
@@ -2003,9 +2004,9 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void leader_fsm::start_chasing_leader(mob* m, void* info1, void* info2) {
-    m->set_animation(LEADER_ANIM_WALKING);
     m->focus_on_mob(m->following_group);
     leader_fsm::update_in_group_chasing(m, NULL, NULL);
+    m->set_animation(LEADER_ANIM_WALKING);
 }
 
 
@@ -2023,8 +2024,8 @@ void leader_fsm::start_drinking(mob* m, void* info1, void* info2) {
     m->leave_group();
     m->stop_chasing();
     m->focus_on_mob(drop_ptr);
-    m->set_animation(LEADER_ANIM_DRINKING);
     m->face(get_angle(m->pos, drop_ptr->pos), NULL);
+    m->set_animation(LEADER_ANIM_DRINKING);
 }
 
 
@@ -2066,6 +2067,15 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
     m->focus_on_mob(tra_ptr);
     m->start_height_effect();
     
+    vector<size_t> checkpoints;
+    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); ++c) {
+        checkpoints.push_back(c);
+    }
+    m->track_info =
+        new track_info_struct(
+        tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
+    );
+    
     switch(tra_ptr->tra_type->riding_pose) {
     case TRACK_RIDING_POSE_STOPPED: {
         m->set_animation(LEADER_ANIM_WALKING);
@@ -2078,15 +2088,6 @@ void leader_fsm::start_riding_track(mob* m, void* info1, void* info2) {
         break;
     }
     }
-    
-    vector<size_t> checkpoints;
-    for(size_t c = 0; c < tra_ptr->type->anims.body_parts.size(); ++c) {
-        checkpoints.push_back(c);
-    }
-    m->track_info =
-        new track_info_struct(
-        tra_ptr, checkpoints, tra_ptr->tra_type->ride_speed
-    );
 }
 
 

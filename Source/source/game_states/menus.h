@@ -25,6 +25,29 @@ using std::size_t;
 using std::vector;
 
 
+namespace AREA_MENU {
+extern const string GUI_FILE_PATH;
+}
+
+namespace CONTROLS_MENU {
+extern const string GUI_FILE_PATH;
+}
+
+namespace OPTIONS_MENU {
+extern const string AUTO_THROW_PRESET_NAMES[];
+extern const AUTO_THROW_MODES AUTO_THROW_PRESETS[];
+extern const string CURSOR_SPEED_PRESET_NAMES[];
+extern const float CURSOR_SPEED_PRESETS[];
+extern const string GUI_FILE_PATH;
+extern const unsigned char N_AUTO_THROW_PRESETS;
+extern const unsigned char N_CURSOR_SPEED_PRESETS;
+}
+
+namespace RESULTS {
+extern const string GUI_FILE_PATH;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Information about the main menu.
  */
@@ -128,15 +151,6 @@ private:
     void update();
     void leave();
     void trigger_restart_warning();
-    
-    static const AUTO_THROW_MODES AUTO_THROW_PRESETS[];
-    static const string AUTO_THROW_PRESET_NAMES[];
-    static const float CURSOR_SPEED_PRESETS[];
-    static const string CURSOR_SPEED_PRESET_NAMES[];
-    static const string GUI_FILE_PATH;
-    static const unsigned char N_AUTO_THROW_PRESETS;
-    static const unsigned char N_CURSOR_SPEED_PRESETS;
-    
 };
 
 

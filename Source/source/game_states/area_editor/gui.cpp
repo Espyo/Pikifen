@@ -645,7 +645,7 @@ void area_editor::process_gui_options_dialog() {
             "Cursor must be these many pixels close\n"
             "to a vertex/edge in order to snap there.\n"
             "Default: " +
-            i2s(options_struct::DEF_AREA_EDITOR_SNAP_THRESHOLD) + ".",
+            i2s(OPTIONS::DEF_AREA_EDITOR_SNAP_THRESHOLD) + ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_snap_threshold = snap_threshold;
@@ -656,7 +656,7 @@ void area_editor::process_gui_options_dialog() {
             "Use the middle mouse button to pan the camera\n"
             "(and RMB to reset camera/zoom).\n"
             "Default: " +
-            b2s(options_struct::DEF_EDITOR_MMB_PAN) + "."
+            b2s(OPTIONS::DEF_EDITOR_MMB_PAN) + "."
         );
         
         //Drag threshold value.
@@ -668,7 +668,7 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Cursor must move these many pixels to be considered a drag.\n"
-            "Default: " + i2s(options_struct::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
+            "Default: " + i2s(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );
@@ -691,7 +691,7 @@ void area_editor::process_gui_options_dialog() {
         set_tooltip(
             "Show the length of nearby edges when drawing or moving vertexes.\n"
             "Default: " +
-            b2s(options_struct::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH) + "."
+            b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH) + "."
         );
         
         //Show territory checkbox.
@@ -702,7 +702,7 @@ void area_editor::process_gui_options_dialog() {
         set_tooltip(
             "Show the territory radius and terrain radius\n"
             "of the selected objects, when applicable.\n"
-            "Default: " + b2s(options_struct::DEF_AREA_EDITOR_SHOW_TERRITORY) +
+            "Default: " + b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_TERRITORY) +
             "."
         );
         
@@ -718,7 +718,7 @@ void area_editor::process_gui_options_dialog() {
             "Draw textures on the sectors." +
             (string) (
                 (
-                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
                     VIEW_MODE_TEXTURES
                 ) ?
                 "\nThis is the default." :
@@ -733,7 +733,7 @@ void area_editor::process_gui_options_dialog() {
             "Best for performance." +
             (string) (
                 (
-                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
                     VIEW_MODE_WIREFRAME
                 ) ?
                 "This is the default." :
@@ -747,7 +747,7 @@ void area_editor::process_gui_options_dialog() {
             "Draw sectors as heightmaps. Lighter means taller." +
             (string) (
                 (
-                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
                     VIEW_MODE_HEIGHTMAP
                 ) ?
                 "This is the default." :
@@ -761,7 +761,7 @@ void area_editor::process_gui_options_dialog() {
             "Draw sectors as solid grays based on their brightness." +
             (string) (
                 (
-                    options_struct::DEF_AREA_EDITOR_VIEW_MODE ==
+                    OPTIONS::DEF_AREA_EDITOR_VIEW_MODE ==
                     VIEW_MODE_BRIGHTNESS
                 ) ?
                 "This is the default." :
@@ -794,7 +794,7 @@ void area_editor::process_gui_options_dialog() {
         set_tooltip(
             "If true, when you select two or more vertexes, some handles\n"
             "will appear, allowing you to scale or rotate them together.\n"
-            "Default: " + b2s(options_struct::DEF_AREA_EDITOR_SEL_TRANS) + "."
+            "Default: " + b2s(OPTIONS::DEF_AREA_EDITOR_SEL_TRANS) + "."
         );
         
         //Grid interval text.
@@ -809,7 +809,7 @@ void area_editor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Increase the spacing on the grid.\n"
-            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL) +
             ".",
             "Shift + Plus"
         );
@@ -821,7 +821,7 @@ void area_editor::process_gui_options_dialog() {
         }
         set_tooltip(
             "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_GRID_INTERVAL) +
+            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL) +
             ".",
             "Shift + Minus"
         );
@@ -834,7 +834,7 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Interval between auto-backup saves, in seconds. 0 = off.\n"
-            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_BACKUP_INTERVAL) +
+            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_BACKUP_INTERVAL) +
             ".",
             "", WIDGET_EXPLANATION_DRAG
         );
@@ -849,7 +849,7 @@ void area_editor::process_gui_options_dialog() {
         );
         set_tooltip(
             "Maximum number of operations that can be undone. 0 = off.\n"
-            "Default: " + i2s(options_struct::DEF_AREA_EDITOR_UNDO_LIMIT) + ".",
+            "Default: " + i2s(OPTIONS::DEF_AREA_EDITOR_UNDO_LIMIT) + ".",
             "", WIDGET_EXPLANATION_DRAG
         );
         game.options.area_editor_undo_limit = undo_limit;
@@ -908,7 +908,7 @@ void area_editor::process_gui_panel_details() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_ADD],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_new_tree_shadow_button();
@@ -925,7 +925,7 @@ void area_editor::process_gui_panel_details() {
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_REMOVE],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     press_remove_tree_shadow_button();
@@ -1145,7 +1145,7 @@ void area_editor::process_gui_panel_edge() {
             if(
                 ImGui::DragFloat(
                     "Length", &length, 0.2f,
-                    edge::SHADOW_MIN_LENGTH, edge::SHADOW_MAX_LENGTH
+                    GEOMETRY::SHADOW_MIN_LENGTH, GEOMETRY::SHADOW_MAX_LENGTH
                 )
             ) {
                 register_change("edge shadow length change");
@@ -1194,7 +1194,7 @@ void area_editor::process_gui_panel_edge() {
         if(
             ImGui::DragFloat(
                 "Length", &length, 0.2f,
-                0.0f, edge::SMOOTHING_MAX_LENGTH
+                0.0f, GEOMETRY::SMOOTHING_MAX_LENGTH
             )
         ) {
             register_change("edge ledge smoothing length change");
@@ -1514,7 +1514,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_new_sector_button();
@@ -1530,7 +1530,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD_CIRCLE_SECTOR],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_circle_sector_button();
@@ -1548,7 +1548,7 @@ void area_editor::process_gui_panel_layout() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_remove_edge_button();
@@ -1589,7 +1589,7 @@ void area_editor::process_gui_panel_layout() {
         if(
             ImGui::ImageButton(
                 sel_filter_bmp,
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_selection_filter_button();
@@ -1612,7 +1612,7 @@ void area_editor::process_gui_panel_layout() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_SELECT_NONE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 clear_selection();
@@ -1729,7 +1729,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_INFO],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Info"
         )
@@ -1744,7 +1744,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_SECTORS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Layout"
         )
@@ -1759,7 +1759,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_MOBS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Objects"
         )
@@ -1774,7 +1774,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_PATHS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Paths"
         )
@@ -1789,7 +1789,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_DETAILS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Details"
         )
@@ -1804,7 +1804,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_REVIEW],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Review"
         )
@@ -1820,7 +1820,7 @@ void area_editor::process_gui_panel_main() {
     if(
         ImGui::ImageButtonAndText(
             editor_icons[ICON_TOOLS],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
             "Tools"
         )
@@ -1949,7 +1949,7 @@ void area_editor::process_gui_panel_mob() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
@@ -1969,7 +1969,7 @@ void area_editor::process_gui_panel_mob() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 if((*selected_mobs.begin())->links.empty()) {
@@ -2086,7 +2086,7 @@ void area_editor::process_gui_panel_mobs() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_new_mob_button();
@@ -2104,7 +2104,7 @@ void area_editor::process_gui_panel_mobs() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_remove_mob_button();
@@ -2119,7 +2119,7 @@ void area_editor::process_gui_panel_mobs() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_DUPLICATE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_duplicate_mobs_button();
@@ -2263,7 +2263,7 @@ void area_editor::process_gui_panel_paths() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_ADD],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_new_path_button();
@@ -2283,7 +2283,7 @@ void area_editor::process_gui_panel_paths() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_REMOVE],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 press_remove_path_button();
@@ -2316,11 +2316,11 @@ void area_editor::process_gui_panel_paths() {
                 ) {
                     //No previous location. Place them on-camera.
                     path_preview_checkpoints[0].x =
-                        game.cam.pos.x - COMFY_DIST;
+                        game.cam.pos.x - AREA_EDITOR::COMFY_DIST;
                     path_preview_checkpoints[0].y =
                         game.cam.pos.y;
                     path_preview_checkpoints[1].x =
-                        game.cam.pos.x + COMFY_DIST;
+                        game.cam.pos.x + AREA_EDITOR::COMFY_DIST;
                     path_preview_checkpoints[1].y =
                         game.cam.pos.y;
                 }
@@ -2557,11 +2557,11 @@ void area_editor::process_gui_panel_review() {
             ) {
                 //No previous location. Place them on-camera.
                 cross_section_checkpoints[0].x =
-                    game.cam.pos.x - COMFY_DIST;
+                    game.cam.pos.x - AREA_EDITOR::COMFY_DIST;
                 cross_section_checkpoints[0].y =
                     game.cam.pos.y;
                 cross_section_checkpoints[1].x =
-                    game.cam.pos.x + COMFY_DIST;
+                    game.cam.pos.x + AREA_EDITOR::COMFY_DIST;
                 cross_section_checkpoints[1].y =
                     game.cam.pos.y;
             }
@@ -2624,7 +2624,7 @@ void area_editor::process_gui_panel_sector() {
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_ADD],
-                    ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
                 ImGui::OpenPopup("addHazard");
@@ -2674,7 +2674,7 @@ void area_editor::process_gui_panel_sector() {
                 if(
                     ImGui::ImageButton(
                         editor_icons[ICON_REMOVE],
-                        ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                        ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
                     sector* s_ptr = *selected_sectors.begin();
@@ -3070,7 +3070,7 @@ void area_editor::process_gui_panel_tools() {
         process_size_widgets(
             "Size", reference_size, 1.0f,
             reference_keep_aspect_ratio,
-            REFERENCE_MIN_SIZE
+            AREA_EDITOR::REFERENCE_MIN_SIZE
         );
         set_tooltip(
             "Width and height.",
@@ -3176,8 +3176,6 @@ void area_editor::process_gui_panel_tools() {
  * Processes the ImGui status bar for this frame.
  */
 void area_editor::process_gui_status_bar() {
-    const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
-    
     //Status bar text.
     ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
     
@@ -3185,7 +3183,7 @@ void area_editor::process_gui_status_bar() {
     ImGui::SameLine();
     float size =
         canvas_separator_x - ImGui::GetItemRectSize().x -
-        MOUSE_COORDS_TEXT_WIDTH;
+        AREA_EDITOR::MOUSE_COORDS_TEXT_WIDTH;
     ImGui::Dummy(ImVec2(size, 0));
     
     //Mouse coordinates text.
@@ -3208,7 +3206,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_QUIT],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_quit_button();
@@ -3224,7 +3222,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_LOAD],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_load_button();
@@ -3243,7 +3241,7 @@ void area_editor::process_gui_toolbar() {
             has_unsaved_changes ?
             editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_save_button();
@@ -3259,7 +3257,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_PLAY],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_quick_play_button();
@@ -3276,7 +3274,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             editor_icons[ICON_UNDO],
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE),
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             ImVec2(0.0f, 0.0f),
             ImVec2(1.0f, 1.0f),
             -1,
@@ -3304,7 +3302,7 @@ void area_editor::process_gui_toolbar() {
         if(
             ImGui::ImageButton(
                 editor_icons[ICON_REFERENCE],
-                ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_reference_button();
@@ -3359,7 +3357,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             snap_mode_bmp,
-            ImVec2(EDITOR_ICON_BMP_SIZE, EDITOR_ICON_BMP_SIZE)
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
         press_snap_mode_button();

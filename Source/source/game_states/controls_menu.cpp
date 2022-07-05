@@ -19,9 +19,10 @@
 #include "../utils/string_utils.h"
 
 
+namespace CONTROLS_MENU {
 //Path to the GUI information file.
-const string controls_menu_state::GUI_FILE_PATH =
-    GUI_FOLDER_PATH + "/Controls_menu.txt";
+const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Controls_menu.txt";
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -412,7 +413,7 @@ void controls_menu_state::load() {
     gui.register_coords("list_scroll", 94, 53,  2, 76);
     gui.register_coords("tooltip",     50, 95, 95,  8);
     gui.read_coords(
-        data_node(GUI_FILE_PATH).get_child_by_name("positions")
+        data_node(CONTROLS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     //Back button.

@@ -29,6 +29,21 @@ using std::map;
 using std::vector;
 
 
+namespace GUI {
+extern const float AUTO_REPEAT_MAX_INTERVAL;
+extern const float AUTO_REPEAT_MIN_INTERVAL;
+extern const float AUTO_REPEAT_RAMP_TIME;
+extern const float BULLET_PADDING;
+extern const float BULLET_RADIUS;
+extern const float JUICY_GROW_DURATION;
+extern const float JUICY_GROW_ELASTIC_DURATION;
+extern const float JUICY_GROW_ICON_MULT;
+extern const float JUICY_GROW_TEXT_HIGH_MULT;
+extern const float JUICY_GROW_TEXT_LOW_MULT;
+extern const float JUICY_GROW_TEXT_MEDIUM_MULT;
+}
+
+
 //Animations for the GUI manager to animate its items with.
 enum GUI_MANAGER_ANIMS {
     //None.
@@ -135,13 +150,6 @@ public:
     void start_juice_animation(JUICE_TYPES type);
     
     gui_item(const bool selectable = false);
-    
-    static const float JUICY_GROW_DURATION;
-    static const float JUICY_GROW_ELASTIC_DURATION;
-    static const float JUICY_GROW_ICON_MULT;
-    static const float JUICY_GROW_TEXT_HIGH_MULT;
-    static const float JUICY_GROW_TEXT_LOW_MULT;
-    static const float JUICY_GROW_TEXT_MEDIUM_MULT;
 };
 
 
@@ -150,9 +158,6 @@ public:
  */
 class bullet_point_gui_item : public gui_item {
 public:
-    static const float BULLET_PADDING;
-    static const float BULLET_RADIUS;
-    
     //Text to display on the bullet point.
     string text;
     //Font to display the text with.
@@ -397,10 +402,6 @@ private:
     timer anim_timer;
     //Are the items currently visible?
     bool visible;
-    
-    static const float AUTO_REPEAT_MAX_INTERVAL;
-    static const float AUTO_REPEAT_MIN_INTERVAL;
-    static const float AUTO_REPEAT_RAMP_TIME;
 };
 
 

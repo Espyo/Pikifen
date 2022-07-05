@@ -124,12 +124,6 @@ enum LEADER_ANIMATIONS {
 };
 
 
-const float LEADER_HELD_MOB_ANGLE = TAU / 2;
-const float LEADER_HELD_MOB_H_DIST = 1.2f;
-const float LEADER_HELD_MOB_V_DIST = 0.5f;
-const float LEADER_INVULN_PERIOD = 1.5f;
-
-
 /* ----------------------------------------------------------------------------
  * A type of leader. The "leader" class is a mob, so the walking Olimar,
  * walking Louie, etc. This leader type is actually the definition of

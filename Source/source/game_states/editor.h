@@ -22,6 +22,23 @@ using std::map;
 using std::string;
 using std::vector;
 
+namespace EDITOR {
+extern const float DOUBLE_CLICK_TIMEOUT;
+extern const int ICON_BMP_PADDING;
+extern const int ICON_BMP_SIZE;
+extern const float KEYBOARD_CAM_ZOOM;
+extern const float PICKER_IMG_BUTTON_MAX_SIZE;
+extern const float PICKER_IMG_BUTTON_MIN_SIZE;
+extern const float TW_DEF_SIZE;
+extern const float TW_HANDLE_RADIUS;
+extern const float TW_OUTLINE_THICKNESS;
+extern const float TW_ROTATION_HANDLE_THICKNESS;
+extern const float UNSAVED_CHANGES_WARNING_DURATION;
+extern const int UNSAVED_CHANGES_WARNING_HEIGHT;
+extern const int UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
+extern const int UNSAVED_CHANGES_WARNING_WIDTH;
+}
+
 
 /* ----------------------------------------------------------------------------
  * Information about an editor. This contains data and functions common
@@ -44,15 +61,6 @@ public:
     
 protected:
 
-    static const int   EDITOR_ICON_BMP_PADDING;
-    static const int   EDITOR_ICON_BMP_SIZE;
-    static const float DOUBLE_CLICK_TIMEOUT;
-    static const float KEYBOARD_CAM_ZOOM;
-    static const float UNSAVED_CHANGES_WARNING_DURATION;
-    static const int   UNSAVED_CHANGES_WARNING_HEIGHT;
-    static const int   UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
-    static const int   UNSAVED_CHANGES_WARNING_WIDTH;
-    
     //Editor icons.
     enum EDITOR_ICONS {
         //Save.
@@ -189,11 +197,6 @@ protected:
         
         transformation_widget();
     private:
-        static const float DEF_SIZE;
-        static const float HANDLE_RADIUS;
-        static const float OUTLINE_THICKNESS;
-        static const float ROTATION_HANDLE_THICKNESS;
-        
         //What handle is being moved. -1 for none. 9 for the rotation handle.
         signed char moving_handle;
         //Old size, before the user started dragging handles.
