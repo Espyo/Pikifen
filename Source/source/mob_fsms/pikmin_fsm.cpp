@@ -1777,6 +1777,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     pikmin_fsm::be_released(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
     pikmin_fsm::release_tool(m, info1, info2);
+    m->face(m->angle, NULL);
 }
 
 
