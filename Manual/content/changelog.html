@@ -56,7 +56,9 @@
       <li><a href="misc_config.html#spike-damage">Spike damage types</a> now have a <code>status_to_apply</code> property, which allows the damaged object to receive a status effect.</li>
       <li><a href="mob_type.html">Object types</a> now have a <code>status_vulnerabilities</code> block, which works like the other vulnerability blocks, but controls damage taken from status effects.</li>
       <li><a href="mob_type.html">Object types</a> now have a <code>terrain_radius</code> property, which controls their collision against walls.</li>
-      <li><a href="mob_type.html">Object types</a> now have a <code>description</code> property, which can be used to briefly describe it. This appears in the area editor, and Pikmin types make use of this for the help page of the in-game pause menu.</li>
+      <li><a href="mob_type.html">Object types</a> now have a <code>description</code> property, which can be used to briefly describe it. This 
+        appears in the area editor, and Pikmin types make use of this for the help page of the in-game pause menu.</li>
+      <li>The tooltip of an <a href="mob_type.html">object type</a>'s area editor property now word-wraps automatically. If you relied on line breaks (<code>\n</code>) to do this before, you may want to adjust it.</li>
       <li>The <code>set_animation</code> <a href="events_and_actions.html">script action</a> now accepts the options <code>random_time</code> and <code>random_time_on_spawn</code>, to let the animation start on a random time, or start on a random time but only if the mob just spawned.</li>
       <li>Added the <code>on_receive_delivery</code> <a href="events_and_actions.html">object script event</a>.</li>
       <li>Added the <code>health_ratio</code> option to the <code>get_info</code> <a href="events_and_actions.html">object script action</a>.</li>

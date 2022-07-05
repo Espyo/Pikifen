@@ -233,6 +233,7 @@ string vector_tail_to_string(const vector<string> &v, const size_t pos);
 WIPE_FOLDER_RESULTS wipe_folder(
     const string &folder_path, const vector<string> &non_important_files
 );
+string word_wrap(const string &s, const size_t n_chars_per_line);
 
 void al_fwrite(ALLEGRO_FILE* f, string s);
 string c2s(const ALLEGRO_COLOR &c);

@@ -2140,3 +2140,60 @@ WIPE_FOLDER_RESULTS wipe_folder(
     }
     return WIPE_FOLDER_RESULT_OK;
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Given a string, representing a long line of text, it automatically
+ * adds line breaks along the text in order to break it up into smaller lines,
+ * such that no line exceeds the number of characters in n_chars_per_line
+ * (if possible). Lines are only split at space characters.
+ * This is a naive approach, in that it doesn't care about font size.
+ * s:
+ *   Input string.
+ * n_chars_per_line:
+ *   Number of characters that a line cannot exceed, unless it's impossible
+ *   to split.
+ */
+string word_wrap(const string &s, const size_t n_chars_per_line) {
+    string result;
+    string word_in_queue;
+    size_t cur_line_width = 0;
+    for(size_t c = 0; c < s.size() + 1; ++c) {
+    
+        if(s[c] != ' ' && s[c] != '\n' && c < s.size()) {
+            //Keep building the current word.
+            
+            word_in_queue.push_back(s[c]);
+            
+        } else {
+            //Finished the current word.
+            
+            if(word_in_queue.empty()) {
+                continue;
+            }
+            size_t width_after_word = cur_line_width + 1 + word_in_queue.size();
+            bool broke_due_to_length = false;
+            if(width_after_word > n_chars_per_line && !result.empty()) {
+                //The current word doesn't fit in the current line. Break.
+                result.push_back('\n');
+                cur_line_width = 0;
+                broke_due_to_length = true;
+            }
+            
+            if(cur_line_width > 0) {
+                result.push_back(' ');
+                cur_line_width++;
+            }
+            result += word_in_queue;
+            cur_line_width += word_in_queue.size();
+            word_in_queue.clear();
+            
+            if(s[c] == '\n' && !broke_due_to_length) {
+                //A real line break character. Break.
+                result.push_back('\n');
+                cur_line_width = 0;
+            }
+        }
+    }
+    return result;
+}

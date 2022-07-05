@@ -575,7 +575,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         }
         
         set_tooltip(
-            p_ptr->tooltip +
+            word_wrap(p_ptr->tooltip, 50) +
             (p_ptr->tooltip.empty() ? "" : "\n") +
             "(Variable name: \"" + p_ptr->var + "\".)",
             "",
@@ -1895,9 +1895,11 @@ void area_editor::process_gui_panel_mob() {
     if(m_ptr->type) {
         //Tips text.
         ImGui::TextDisabled("(%s info & tips)", m_ptr->type->name.c_str());
-        string full_str = m_ptr->type->description;
+        string full_str = word_wrap(m_ptr->type->description, 50);
         if(!m_ptr->type->area_editor_tips.empty()) {
-            full_str += "\n\n" + m_ptr->type->area_editor_tips;
+            full_str +=
+                "\n\n" +
+                word_wrap(m_ptr->type->area_editor_tips, 50);
         }
         set_tooltip(full_str);
     }

@@ -36,11 +36,11 @@ bridge_type::bridge_type() :
     starting_team = MOB_TEAM_OBSTACLE;
     
     area_editor_tips =
-        "Link this object to another object, so that\n"
-        "you can specify where the bridge ends.\n"
+        "Link this object to another object, so that "
+        "you can specify where the bridge ends. "
         "A \"Dummy\" object works perfectly for this.\n"
-        "Changing the bridge's health changes how much of it is pre-built.\n"
-        "Changing its max health changes how long Pikmin\n"
+        "Changing the bridge's health changes how much of it is pre-built. "
+        "Changing its max health changes how long Pikmin "
         "work on it for, or how many fragments are needed.";
         
     area_editor_prop_struct aep_chunks;
@@ -51,8 +51,8 @@ bridge_type::bridge_type() :
     aep_chunks.min_value = 1;
     aep_chunks.max_value = 50;
     aep_chunks.tooltip =
-        "How many chunks it's divided by.\n"
-        "If the bridge goes up or down, it may need\n"
+        "How many chunks it's divided by. "
+        "If the bridge goes up or down, it may need "
         "more chunks in order to allow enough steps.";
     area_editor_props.push_back(aep_chunks);
     

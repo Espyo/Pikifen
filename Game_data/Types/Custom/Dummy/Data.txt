@@ -1,4 +1,4 @@
 name = Dummy
 description = Dummy object for area-making purposes.
 
-area_editor_tips = This object doesn't do anything, but you can link other objects\nto this one, if they need a link object with no behavior.
+area_editor_tips = This object doesn't do anything, but you can link other objects to this one, if they need a link object with no behavior.

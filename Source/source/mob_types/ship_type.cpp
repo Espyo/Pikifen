@@ -34,9 +34,9 @@ ship_type::ship_type() :
     aep_pik_inside.type = AEMP_TEXT;
     aep_pik_inside.def_value = "";
     aep_pik_inside.tooltip =
-        "How many Pikmin are inside.\n"
-        "One word per maturity. The first three words are for the first type,\n"
-        "then three more for the second type, and so on.\n"
+        "How many Pikmin are inside. "
+        "One word per maturity. The first three words are for the first type, "
+        "then three more for the second type, and so on. "
         "e.g.: \"8 0 1\" means it has 8 leaf Pikmin inside, and 1 flower.";
     area_editor_props.push_back(aep_pik_inside);
     

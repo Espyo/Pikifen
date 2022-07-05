@@ -27,8 +27,8 @@ bouncer_type::bouncer_type() :
     walkable = true;
     
     area_editor_tips =
-        "Link this object to another object, so that\n"
-        "bounced Pikmin land in that location.\n"
+        "Link this object to another object, so that "
+        "bounced Pikmin land in that location. "
         "A \"Dummy\" object works perfectly for this.";
         
     bouncer_fsm::create_fsm(this);

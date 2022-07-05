@@ -1,7 +1,7 @@
 name = Large crystal
 description = A large block of crystal. It is so large it can fit other things inside, and takes a few Rock Pikmin smacks to break.
 
-area_editor_tips = To make it capture another object, simply place\nboth objects together such that they are touching.
+area_editor_tips = To make it capture another object, simply place both objects together such that they are touching.
 can_block_paths = true
 default_vulnerability = 0
 height = 200

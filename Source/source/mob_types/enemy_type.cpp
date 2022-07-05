@@ -40,7 +40,7 @@ enemy_type::enemy_type() :
     aep_spoils.type = AEMP_TEXT;
     aep_spoils.def_value = "";
     aep_spoils.tooltip =
-        "What objects it drops upon defeat, separated by comma.\n";
+        "What objects it drops upon defeat, separated by comma.";
     area_editor_props.push_back(aep_spoils);
     
     area_editor_prop_struct aep_pellets;
@@ -49,10 +49,9 @@ enemy_type::enemy_type() :
     aep_pellets.type = AEMP_TEXT;
     aep_pellets.def_value = "";
     aep_pellets.tooltip =
-        "What pellets it drops upon defeat, separated by comma.\n"
+        "What pellets it drops upon defeat, separated by comma. "
         "The color of each pellet is random (from the ones available in "
-        "the area),\n"
-        "but the number matches what you type.\n"
+        "the area), but the number matches what you type. "
         "e.g.: \"1,1,5\" would spawn two 1 pellets and one 5 pellet.";
     area_editor_props.push_back(aep_pellets);
     
