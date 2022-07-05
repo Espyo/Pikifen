@@ -226,7 +226,7 @@ Procedure for every version release
             Roadmap
             FAQ
             Changelog
-                Particularly the release day, update nickname, and version number
+                Particularly the update's release day, nickname, and version number
                 Double-check that it's organized, or if it could be sorted differently
     Release candidate
         In Visual Studio
@@ -296,7 +296,7 @@ Procedure for every version release
                     https://opensource.org/licenses/MIT
                 Make sure they have metadata
                     Title: <Object name> spritesheet
-                    Author: André "Espyo" Silva
+                    Author: Andrï¿½ "Espyo" Silva
                     Keywords: Pikifen spritesheet
                     Description: Spritesheet for the <object name> pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
             

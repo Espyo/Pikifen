@@ -20,7 +20,7 @@
     
     <h2 id="0.22.0">0.22.0</h2>
     
-    <p><i>Date TBD</i></p>
+    <p><i>July 5th, 2022 &ndash; the "polish" update</i></p>
 
     <p><b>Gameplay changes</b></p>
     
@@ -337,64 +337,6 @@
       <li>The sector property "always casts shadow" has been removed, and wall shadows should be slightly less dark than before in general. If you have walls that you need to look the same as before, you'll want to go to the edge properties and tweak their shadow's length and color.</li>
     </ul>
     
-    <h2 id="0.19.0">0.19.0</h2>
-    
-    <p><i>August 15th, 2020 &ndash; the "Dear ImGui" update</i></p>
-    
-    <p><b>Changes</b></p>
-    
-    <ul>
-      <li>
-        Revamped editors
-        <ul>
-          <li>The GUI now uses Dear ImGui.</li>
-          <li>More information fits in a single panel now, and the user can open or close parts of the panel at will (this is memorized between sessions).</li>
-          <li>Information on widgets is now shown via (toggleable) tooltips, instead of the status bar.</li>
-          <li>The way some things are done has been changed to be more streamlined. e.g.: picking a texture now shows a dedicated dialog, renaming animations is now done in-place in the animation panel.</li>
-          <li>If you select an object that can change its behavior thanks to certain script vars, the panel will now show widgets that let you tweak those properties yourself, instead of having to write script vars by hand.</li>
-          <li>Objects with certain tricks to them (e.g. they must be linked to another mob) will now show tips in the object panel, when you select them.</li>
-          <li>Edges can now be deleted, which will delete and/or merge sectors. (Thanks Neo)</li>
-          <li>Drawing a sector now only requires drawing the missing edges, instead of all edges. This also means you can now split a sector into two easily.</li>
-          <li>The animation editor now has a grid too, and animations have a simple timeline.</li>
-          <li>Added a way to resize a sprite, resizing hitboxes and all. Useful for creating smaller copies of existing sprites. (Thanks Kman)</li>
-          <li>Added a way to resize and rotate selected vertexes together; enable it in the area editor options.</li>
-          <li>Several other small things have been tweaked.</li>
-        </ul>
-      </li>
-      <li>Added a performance monitor to the maker tools (previous known as "creator tools"). When active, every time you play an area, the loading times and every frame of gameplay get monitored, and a report file gets written when you leave. It can help you figure out what the heaviest parts of your content are.</li>
-      <li>Added a way to add actions, events, and states to object types that have hardcoded scripts.</li>
-      <li>If you're missing a Pikmin type/leader type in the Pikmin order/leader order, in the game's configuration file, an error is no longer issued; the missing types just go to the end. (Thanks Kman)</li>
-      <li>Fixed thrown Pikmin getting stuck in some walls, and the Beady Long Legs floating in the air.</li>
-      <li>Fixed cardboard boxes not blocking the way if they are not in place, but for this to work, you'll need to use a "Dummy obstacle target" object as a target.</li>
-      <li>Fixed a few miscellaneous glitches. (Thanks Kman)</li>
-      <li>Refactored a bunch of code to be more organized and hopefully a bit less buggy. (Thanks Ambrosia)</li>
-    </ul>
-    
-    <p><b>Compatibility warnings</b></p>
-    
-    <ul>
-      <li>The <code>is_obstacle</code> property has been removed. Use the <code>team</code> property instead to change an object type's starting team, and set that to the "obstacle" team if you want.</li>
-      <li>
-        "Group move" has been renamed to "swarm". This affects the following:
-        <ul>
-          <li><code>Group_move_arrow.png</code> in the graphics folder was renamed to <code>Swarm_arrow.png</code>.</li>
-          <li>The property <code>group_move_arrow</code> in the system asset file names file was renamed to <code>swarm_arrow</code>.</li>
-          <li>The config file property <code>group_move_task_range</code> was renamed to <code>swarm_task_range</code>.</li>
-          <li>The controls for group control were renamed to <code>swarm_right</code>, <code>swarm_up</code>, <code>swarm_left</code>, <code>swarm_down</code>, and <code>swarm_cursor</code>. Please re-bind them in the options.</li>
-        </ul>
-      </li>
-      <li><code>pikmin_grab_range</code> in the game configuration file has been renamed to <code>group_member_grab_range</code>.</li>
-      <li>
-        Some definitions have been changed from being all lumped into a single file, to being spread over several files in a folder. This should allow makers to share their content more easily by only including new files, thus avoiding replacing the files players already had.
-        <ul>
-          <li>The following have been affected: hazards, liquids, particle generators, spike damage types, spray types, status effects, weather conditions.</li>
-          <li>In addition, added the <code>spray_order</code> property to the game configuration file; use this to set the standard order of sprays.</li>
-        </ul>
-      </li>
-      <li>Some file name logic was changed to sanitize the file names. This is to make it so you can still save an area called "Secret?", for instance, since otherwise the question mark would be illegal. That said, if one of your areas fails to load, try changing its folder name to something simpler (letters, numbers, spaces, dashes, and underscores allowed).</li>
-      <li>If you made an area and wrote down your creator name in the "Info" section, you'll need to write it again, since the property "creator" got renamed to "maker".</li>
-    </ul>
-
     <h2 id="older">Older</h2>
 
     <p>Older entries can be found <b><a href="changelog_older.html">here</a></b>.</p>
