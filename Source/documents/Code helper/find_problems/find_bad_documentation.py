@@ -6,6 +6,7 @@ from .common import *
 #  @return Documentation-related problems.
 def get_all_documentation_problems():
     problems = []
+    source_dir_to_use = get_source_dir_to_use()
     for dirpath, dirnames, files in os.walk(source_dir_to_use):
         for f in files:
             if f.endswith('cpp'):

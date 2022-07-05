@@ -14,6 +14,7 @@ CRAMPED_THING_CLOSE_BRACE = 2
 #  @return Cramped things as problems.
 def get_all_cramped_problems():
     problems = []
+    source_dir_to_use = get_source_dir_to_use()
     for dirpath, dirnames, files in os.walk(source_dir_to_use):
         for f in files:
             if f.endswith('cpp') or f.endswith('h'):

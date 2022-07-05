@@ -11,10 +11,6 @@ INCLUDE_TYPE_ALLEGRO = 1
 INCLUDE_TYPE_LOCAL = 2
 
 
-script_debug_mode = False
-source_dir_to_use = ''
-
-
 ## Represents a function in a source file.
 class Function:
     ## Constructor.
@@ -81,6 +77,17 @@ class NamespaceConstant:
         self.namespace = ''
         # Line in the source file.
         self.line = 0
+
+
+## Returns the index of a given argument in the Python script's call.
+## Returns -1 if it doesn't exist.
+#  @param name Name of the argument to search for.
+#  @return The argument's index.
+def get_argument_idx(name):
+    for a in range(len(sys.argv)):
+        if sys.argv[a] == name:
+            return a
+    return -1
 
 
 ## Returns a list of functions in a source file.
@@ -291,15 +298,13 @@ def get_params_in_file_lines(lines, line_nr):
 
     return params
 
-
-## Returns whether the Python script's call has a given argument.
-#  @param name Name of the argument to search for.
-#  @return Whether the Python script's call has a given argument.
-def has_argument(name):
-    for a in sys.argv:
-        if a == name:
-            return True
-    return False
+def get_source_dir_to_use():
+    debug_arg_idx = get_argument_idx('debug') != -1
+    script_debug_mode = (debug_arg_idx != -1)
+    if script_debug_mode:
+        return sys.argv[debug_arg_idx + 1]
+    else:
+        return 'Source/source'
 
 
 ## Pads a string such that it fits in a certain space.

@@ -223,8 +223,8 @@ Procedure for every version release
             Quick start guide
             Glossary
             Options
-            Roadmap
             FAQ
+            Roadmap
             Changelog
                 Particularly the update's release day, nickname, and version number
                 Double-check that it's organized, or if it could be sorted differently

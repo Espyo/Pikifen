@@ -58,7 +58,8 @@ def are_namespaces_ordered(n1, n2):
 #  @return All unordered thing problems found.
 def get_all_unordered_problems():
     problems = []
-    for dirpath, dirnames, files in os.walk(source_dir_to_use):
+    source_dir_to_use = get_source_dir_to_use()
+    for dirpath, dirnames, files in os.walk(get_source_dir_to_use()):
         for f in files:
             if f.endswith('cpp'):
                 file_problems = get_unordered_problems_in_file(os.path.join(dirpath, f))

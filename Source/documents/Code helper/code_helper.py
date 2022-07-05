@@ -12,6 +12,7 @@ from find_problems.find_misc import *
 def change_version_numbers():
     new = input('What is the new version (X.Y.Z)? ')
     new_parts = new.split('.')
+    source_dir_to_use = get_source_dir_to_use()
     system_call('sed -i "s/VERSION_MAJOR = .*;/VERSION_MAJOR = ' + new_parts[0] + ';/g" ' + source_dir_to_use + '/const.h')
     system_call('sed -i "s/VERSION_MINOR = .*;/VERSION_MINOR = ' + new_parts[1] + ';/g" ' + source_dir_to_use + '/const.h')
     system_call('sed -i "s/VERSION_REV   = .*;/VERSION_REV   = ' + new_parts[2] + ';/g" ' + source_dir_to_use + '/const.h')
@@ -80,6 +81,7 @@ def write_code_problems():
 
 ## Writes instances of 'cout' or 'iostream' in source files.
 def write_cout_uses():
+    source_dir_to_use = get_source_dir_to_use()
     aux = system_call('grep -rnE -B2 -A2 "(cout|iostream)" --include="*.cpp" ' + source_dir_to_use)
     if len(aux) == 0:
         print('No instances of "cout"/"iostream".')
@@ -109,6 +111,7 @@ def write_new_png_files():
 ## Writes any source files that have been added or removed.
 #  since the last version.
 def write_new_source_files():
+    source_dir_to_use = get_source_dir_to_use()
     aux = system_call('git diff --name-status $(git describe --abbrev=0 --tags) | grep ^\[AD\].' + source_dir_to_use)
 
     if len(aux) == 0:
@@ -151,13 +154,10 @@ def write_new_textures():
 
 ## Main function.
 if __name__ == '__main__':
-    script_debug_mode = has_argument('debug')
-    if script_debug_mode:
-        source_dir_to_use = '.'
-    else:
-        source_dir_to_use = 'Source/source'
+    debug_mode = get_argument_idx('debug') != -1
+    source_dir_to_use = get_source_dir_to_use()
     
-    if not script_debug_mode:
+    if not debug_mode:
         try:
             ls = system_call('ls Game_data')
             if len(ls) == 0:
@@ -167,10 +167,19 @@ if __name__ == '__main__':
             print('The current directory is not Pikifen\'s directory!')
             exit(1)
     
+    try:
+        ls = system_call('ls ' + source_dir_to_use)
+        if len(ls) == 0:
+            print('The source folder ("' + source_dir_to_use + '") does not exist!')
+            exit(1)
+    except:
+        print('The source folder ("' + source_dir_to_use + '") does not exist!')
+        exit(1)
+    
     running = True
     while running:
 
-        if not script_debug_mode:
+        if not debug_mode:
             latest = system_call('git describe --abbrev=0 --tags')
         
             aux = system_call('grep -oP "VERSION_MAJOR = .*;" Source/source/const.h')
