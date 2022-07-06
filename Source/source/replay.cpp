@@ -257,7 +257,9 @@ void replay::save_to_file(const string &file_name) const {
  * pos:
  *   Its coordinates.
  */
-replay_element::replay_element(const REPLAY_ELEMENT_TYPES type, const point &pos) :
+replay_element::replay_element(
+    const REPLAY_ELEMENT_TYPES type, const point &pos
+) :
     type(type),
     pos(pos) {
     

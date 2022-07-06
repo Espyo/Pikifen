@@ -2704,7 +2704,11 @@ void area_editor::set_new_circle_sector_points() {
         n_points = round(TAU / angle_dif);
     }
     n_points =
-        clamp(n_points, AREA_EDITOR::MIN_CIRCLE_SECTOR_POINTS, AREA_EDITOR::MAX_CIRCLE_SECTOR_POINTS);
+        clamp(
+            n_points,
+            AREA_EDITOR::MIN_CIRCLE_SECTOR_POINTS,
+            AREA_EDITOR::MAX_CIRCLE_SECTOR_POINTS
+        );
         
     new_circle_sector_points.clear();
     for(size_t p = 0; p < n_points; ++p) {

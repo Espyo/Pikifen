@@ -95,21 +95,26 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     if(!dialogs.empty() || is_gui_focused) return;
     
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.cam.target_pos.x -= AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.x -=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.cam.target_pos.x += AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.x +=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.cam.target_pos.y -= AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.y -=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.cam.target_pos.y += AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
+        game.cam.target_pos.y +=
+            AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         game.cam.target_zoom =
             clamp(
-                game.cam.target_zoom - game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+                game.cam.target_zoom -
+                game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
             
@@ -117,7 +122,8 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
         game.cam.target_zoom =
             clamp(
-                game.cam.target_zoom + game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+                game.cam.target_zoom +
+                game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
                 zoom_min_level, zoom_max_level
             );
             
@@ -957,7 +963,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                         bbox_check(
                             path_preview_checkpoints[c],
                             game.mouse_cursor_w,
-                            AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom
+                            AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS /
+                            game.cam.zoom
                         )
                     ) {
                         clear_selection();
@@ -1263,10 +1270,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
                 
                 if(
-                    s_ptr->pos.x - AREA_EDITOR::PATH_STOP_RADIUS >= selection_x1 &&
-                    s_ptr->pos.x + AREA_EDITOR::PATH_STOP_RADIUS <= selection_x2 &&
-                    s_ptr->pos.y - AREA_EDITOR::PATH_STOP_RADIUS >= selection_y1 &&
-                    s_ptr->pos.y + AREA_EDITOR::PATH_STOP_RADIUS <= selection_y2
+                    s_ptr->pos.x -
+                    AREA_EDITOR::PATH_STOP_RADIUS >= selection_x1 &&
+                    s_ptr->pos.x +
+                    AREA_EDITOR::PATH_STOP_RADIUS <= selection_x2 &&
+                    s_ptr->pos.y -
+                    AREA_EDITOR::PATH_STOP_RADIUS >= selection_y1 &&
+                    s_ptr->pos.y +
+                    AREA_EDITOR::PATH_STOP_RADIUS <= selection_y2
                 ) {
                     selected_path_stops.insert(s_ptr);
                 }

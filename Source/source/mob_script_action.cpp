@@ -739,7 +739,8 @@ void mob_action_runners::arachnorb_plan_logic(mob_action_run_data &data) {
  */
 void mob_action_runners::calculate(mob_action_run_data &data) {
     float lhs = s2f(data.args[1]);
-    MOB_ACTION_CALCULATE_TYPES op = (MOB_ACTION_CALCULATE_TYPES) s2i(data.args[2]);
+    MOB_ACTION_CALCULATE_TYPES op =
+        (MOB_ACTION_CALCULATE_TYPES) s2i(data.args[2]);
     float rhs = s2f(data.args[3]);
     float result = 0;
     
@@ -814,7 +815,8 @@ void mob_action_runners::drain_liquid(mob_action_run_data &data) {
     
     for(size_t s = 0; s < sectors_to_drain.size(); ++s) {
         sectors_to_drain[s]->draining_liquid = true;
-        sectors_to_drain[s]->liquid_drain_left = GEOMETRY::LIQUID_DRAIN_DURATION;
+        sectors_to_drain[s]->liquid_drain_left =
+            GEOMETRY::LIQUID_DRAIN_DURATION;
     }
 }
 

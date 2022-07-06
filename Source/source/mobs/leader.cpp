@@ -118,7 +118,11 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
         p.color.g = WHISTLE::DOT_COLORS[color_idx][1] / 255.0f;
         p.color.b = WHISTLE::DOT_COLORS[color_idx][2] / 255.0f;
         p.color.a = LEADER::SWARM_PARTICLE_ALPHA;
-        p.duration = randomf(LEADER::SWARM_PARTICLE_MIN_DURATION, LEADER::SWARM_PARTICLE_MAX_DURATION);
+        p.duration =
+            randomf(
+                LEADER::SWARM_PARTICLE_MIN_DURATION,
+                LEADER::SWARM_PARTICLE_MAX_DURATION
+            );
         p.friction = LEADER::SWARM_PARTICLE_FRICTION;
         p.pos = this->pos;
         p.pos.x += randomf(-this->radius * 0.5f, this->radius * 0.5f);
@@ -128,10 +132,16 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
         float p_speed =
             game.states.gameplay->swarm_magnitude *
             LEADER::SWARM_PARTICLE_SPEED_MULT +
-            randomf(-LEADER::SWARM_PARTICLE_SPEED_DEVIATION, LEADER::SWARM_PARTICLE_SPEED_DEVIATION);
+            randomf(
+                -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
+                LEADER::SWARM_PARTICLE_SPEED_DEVIATION
+            );
         float p_angle =
             game.states.gameplay->swarm_angle +
-            randomf(-LEADER::SWARM_PARTICLE_ANGLE_DEVIATION, LEADER::SWARM_PARTICLE_ANGLE_DEVIATION);
+            randomf(
+                -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
+                LEADER::SWARM_PARTICLE_ANGLE_DEVIATION
+            );
         p.speed = rotate_point(point(p_speed, 0.0f), p_angle);
         p.time = p.duration;
         p.type = PARTICLE_TYPE_BITMAP;
@@ -843,7 +853,8 @@ void leader::tick_class_specifics(const float delta_t) {
     
     auto_throw_cooldown_duration =
         std::max(
-            auto_throw_cooldown_duration - LEADER::AUTO_THROW_COOLDOWN_SPEED * delta_t,
+            auto_throw_cooldown_duration -
+            LEADER::AUTO_THROW_COOLDOWN_SPEED * delta_t,
             LEADER::AUTO_THROW_COOLDOWN_MIN_DURATION
         );
         
@@ -1044,7 +1055,8 @@ bool grab_closest_group_member() {
     
     //Check if the leader can grab, and the group member can be grabbed.
     mob_event* grabbed_ev =
-        game.states.gameplay->closest_group_member[BUBBLE_CURRENT]->fsm.get_event(
+        game.states.gameplay->
+        closest_group_member[BUBBLE_CURRENT]->fsm.get_event(
             MOB_EV_GRABBED_BY_FRIEND
         );
     mob_event* grabber_ev =

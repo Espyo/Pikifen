@@ -208,7 +208,7 @@ struct button_manager {
 
 
 
-control_info* find_control(const BUTTONS button_id);
+control_info* find_control(const BUTTONS button);
 control_info* find_control(const string &button_name);
 vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev);
 

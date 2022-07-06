@@ -44,7 +44,9 @@ carrier_spot_struct::carrier_spot_struct(const point &pos) :
  * destination:
  *   Where to deliver the mob.
  */
-carry_info_struct::carry_info_struct(mob* m, const CARRY_DESTINATIONS destination) :
+carry_info_struct::carry_info_struct(
+    mob* m, const CARRY_DESTINATIONS destination
+) :
     m(m),
     destination(destination),
     cur_carrying_strength(0),
@@ -488,9 +490,15 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
                 alpha_spot(
                     point(
                         dist_from_center * cos(angle * s) +
-                        randomf(-MOB::GROUP_SPOT_MAX_DEVIATION, MOB::GROUP_SPOT_MAX_DEVIATION),
+                        randomf(
+                            -MOB::GROUP_SPOT_MAX_DEVIATION,
+                            MOB::GROUP_SPOT_MAX_DEVIATION
+                        ),
                         dist_from_center * sin(angle * s) +
-                        randomf(-MOB::GROUP_SPOT_MAX_DEVIATION, MOB::GROUP_SPOT_MAX_DEVIATION)
+                        randomf(
+                            -MOB::GROUP_SPOT_MAX_DEVIATION,
+                            MOB::GROUP_SPOT_MAX_DEVIATION
+                        )
                     )
                 )
             );

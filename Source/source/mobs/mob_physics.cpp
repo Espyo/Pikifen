@@ -18,6 +18,7 @@
 
 using std::set;
 
+
 /* ----------------------------------------------------------------------------
  * Returns which walkable mob this mob should be considered to be on top of.
  * Returns NULL if none is found.
@@ -773,7 +774,10 @@ void mob::tick_vertical_movement_physics(
     }
     
     //Gravity.
-    if(apply_gravity && !has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) && !holder.m && !was_teleport) {
+    if(
+        apply_gravity && !has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) &&
+        !holder.m && !was_teleport
+    ) {
         speed_z = old_speed_z + delta_t* gravity_mult * MOB::GRAVITY_ADDER;
     }
     

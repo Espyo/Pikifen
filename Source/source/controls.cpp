@@ -908,7 +908,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
 /* ----------------------------------------------------------------------------
  * Finds a registered control for player 1 that matches the requested button.
  * Returns NULL if none is found.
- * button_id:
+ * button:
  *   ID of the button.
  */
 control_info* find_control(const BUTTONS button) {

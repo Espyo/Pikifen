@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -10,16 +10,9 @@ Next tasks (roughly sorted most important first)
     
     --- v0.23.0 ---
     Typical code cleanup
-        Confirm that no line goes over 80 characters
-            Use the helper tool, or run:
-                grep -Enr --include="*.cpp" ^.\{81,\}$
         Confirm that all function definitions are sorted alphabetically, and by namespace
             Use the helper tool
         Confirm that all includes are sorted alphabetically
-            Use the helper tool
-        Confirm that all functions have documentation, and that it has no missing/extra parameters
-            Use the helper tool
-        Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
             Use the helper tool
     Fix up all changed SVG files
         Use the helper tool to get the list, or run:
@@ -34,7 +27,7 @@ Next tasks (roughly sorted most important first)
             Keywords: Pikifen spritesheet
             Description: Spritesheet for the <object name> pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
     Add collisions to rolled up stick bridges?
-    leader.cpp still has constants that need moving
+    leader.cpp still has constants that need moving, as well as particles that could use consts too
     Code cleanup
         Add a getter and/or a setter for class members that shouldn't be freely edited, instead of relying on the programmer to not edit them
         Check for memory leaks

@@ -18,10 +18,12 @@
 
 using std::map;
 
+
 enum HUD_BUBBLE_MOVE_METHODS {
     HUD_BUBBLE_MOVE_METHOD_STRAIGHT,
     HUD_BUBBLE_MOVE_METHOD_CIRCLE,
 };
+
 
 /* ----------------------------------------------------------------------------
  * Manages the contents of "bubbles" in the HUD that have the ability to move
@@ -319,5 +321,6 @@ private:
     bool transition_is_setup;
     
 };
+
 
 #endif //ifndef HUD_BUBBLE_MANAGER_INCLUDED

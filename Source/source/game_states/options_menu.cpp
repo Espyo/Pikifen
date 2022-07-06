@@ -104,10 +104,14 @@ void options_menu_state::change_auto_throw(const signed int step) {
         cur_auto_throw_idx = 0;
     } else {
         cur_auto_throw_idx =
-            sum_and_wrap(cur_auto_throw_idx, step, OPTIONS_MENU::N_AUTO_THROW_PRESETS);
+            sum_and_wrap(
+                cur_auto_throw_idx, step,
+                OPTIONS_MENU::N_AUTO_THROW_PRESETS
+            );
     }
     
-    game.options.auto_throw_mode = OPTIONS_MENU::AUTO_THROW_PRESETS[cur_auto_throw_idx];
+    game.options.auto_throw_mode =
+        OPTIONS_MENU::AUTO_THROW_PRESETS[cur_auto_throw_idx];
     
     auto_throw_picker->cur_option_idx = cur_auto_throw_idx;
     auto_throw_picker->start_juice_animation(
@@ -129,10 +133,14 @@ void options_menu_state::change_cursor_speed(const signed int step) {
         cur_cursor_speed_idx = 0;
     } else {
         cur_cursor_speed_idx =
-            sum_and_wrap(cur_cursor_speed_idx, step, OPTIONS_MENU::N_CURSOR_SPEED_PRESETS);
+            sum_and_wrap(
+                cur_cursor_speed_idx, step,
+                OPTIONS_MENU::N_CURSOR_SPEED_PRESETS
+            );
     }
     
-    game.options.cursor_speed = OPTIONS_MENU::CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
+    game.options.cursor_speed =
+        OPTIONS_MENU::CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
     
     cursor_speed_picker->cur_option_idx = cur_cursor_speed_idx;
     cursor_speed_picker->start_juice_animation(
@@ -202,7 +210,10 @@ void options_menu_state::do_logic() {
  */
 size_t options_menu_state::get_auto_throw_idx() const {
     for(size_t m = 0; m < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++m) {
-        if(game.options.auto_throw_mode == OPTIONS_MENU::AUTO_THROW_PRESETS[m]) {
+        if(
+            game.options.auto_throw_mode ==
+            OPTIONS_MENU::AUTO_THROW_PRESETS[m]
+        ) {
             return m;
         }
     }
@@ -216,7 +227,10 @@ size_t options_menu_state::get_auto_throw_idx() const {
  */
 size_t options_menu_state::get_cursor_speed_idx() const {
     for(size_t s = 0; s < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++s) {
-        if(game.options.cursor_speed == OPTIONS_MENU::CURSOR_SPEED_PRESETS[s]) {
+        if(
+            game.options.cursor_speed ==
+            OPTIONS_MENU::CURSOR_SPEED_PRESETS[s]
+        ) {
             return s;
         }
     }
@@ -364,7 +378,8 @@ void options_menu_state::load() {
     //Cursor speed.
     cursor_speed_picker =
         new picker_gui_item(
-        "Cursor speed: ", "", OPTIONS_MENU::N_CURSOR_SPEED_PRESETS, get_cursor_speed_idx()
+        "Cursor speed: ", "",
+        OPTIONS_MENU::N_CURSOR_SPEED_PRESETS, get_cursor_speed_idx()
     );
     cursor_speed_picker->on_previous =
     [this] () {
@@ -378,7 +393,10 @@ void options_menu_state::load() {
     [] () {
         size_t idx = 0;
         for(; idx < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++idx) {
-            if(OPTIONS_MENU::CURSOR_SPEED_PRESETS[idx] == OPTIONS::DEF_CURSOR_SPEED) {
+            if(
+                OPTIONS_MENU::CURSOR_SPEED_PRESETS[idx] ==
+                OPTIONS::DEF_CURSOR_SPEED
+            ) {
                 break;
             }
         }
@@ -392,7 +410,8 @@ void options_menu_state::load() {
     //Auto-throw mode.
     auto_throw_picker =
         new picker_gui_item(
-        "Auto-throw: ", "", OPTIONS_MENU::N_AUTO_THROW_PRESETS, get_auto_throw_idx()
+        "Auto-throw: ", "",
+        OPTIONS_MENU::N_AUTO_THROW_PRESETS, get_auto_throw_idx()
     );
     auto_throw_picker->on_previous =
     [this] () {
@@ -406,7 +425,10 @@ void options_menu_state::load() {
     [] () -> string {
         size_t idx = 0;
         for(; idx < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++idx) {
-            if(OPTIONS_MENU::AUTO_THROW_PRESETS[idx] == OPTIONS::DEF_AUTO_THROW_MODE) {
+            if(
+                OPTIONS_MENU::AUTO_THROW_PRESETS[idx] ==
+                OPTIONS::DEF_AUTO_THROW_MODE
+            ) {
                 break;
             }
         }
@@ -431,7 +453,9 @@ void options_menu_state::load() {
             return "";
         }
         }
-        return s + " Default: " + OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[idx] + ".";
+        return
+            s + " Default: " +
+            OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[idx] + ".";
     };
     gui.add_item(auto_throw_picker, "auto_throw");
     
@@ -545,7 +569,10 @@ void options_menu_state::update() {
     size_t cur_cursor_speed_idx = INVALID;
     
     for(size_t s = 0; s < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++s) {
-        if(game.options.cursor_speed == OPTIONS_MENU::CURSOR_SPEED_PRESETS[s]) {
+        if(
+            game.options.cursor_speed ==
+            OPTIONS_MENU::CURSOR_SPEED_PRESETS[s]
+        ) {
             cur_cursor_speed_idx = s;
             break;
         }
@@ -560,11 +587,15 @@ void options_menu_state::update() {
     size_t cur_auto_throw_idx = INVALID;
     
     for(size_t m = 0; m < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++m) {
-        if(game.options.auto_throw_mode == OPTIONS_MENU::AUTO_THROW_PRESETS[m]) {
+        if(
+            game.options.auto_throw_mode ==
+            OPTIONS_MENU::AUTO_THROW_PRESETS[m]
+        ) {
             cur_auto_throw_idx = m;
             break;
         }
     }
     
-    auto_throw_picker->option = OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[cur_auto_throw_idx];
+    auto_throw_picker->option =
+        OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[cur_auto_throw_idx];
 }

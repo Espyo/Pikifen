@@ -50,9 +50,11 @@ extern const float TOKEN_SWIPE_X_AMOUNT;
 extern const float TOKEN_SWIPE_Y_AMOUNT;
 }
 
+
 namespace NOTIFICATION {
 extern const float FADE_SPEED;
 }
+
 
 namespace WHISTLE {
 constexpr unsigned char N_RING_COLORS = 8;

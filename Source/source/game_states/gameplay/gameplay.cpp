@@ -30,6 +30,7 @@ namespace GAMEPLAY {
 const float CAMERA_BOX_MARGIN = 128.0f;
 //Dampen the camera's movements by this much.
 const float CAMERA_SMOOTHNESS_MULT = 4.5f;
+
 //How long the HUD moves for when the area is entered.
 const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
@@ -327,6 +328,8 @@ string gameplay_state::get_name() const {
  * this returns the closest. Otherwise, it returns the closest
  * and more mature one.
  * Returns NULL if there is no member of that subgroup available.
+ * type:
+ *   Type to search for.
  */
 mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
     mob* result = NULL;

@@ -22,6 +22,7 @@ using std::map;
 using std::string;
 using std::vector;
 
+
 namespace EDITOR {
 extern const float DOUBLE_CLICK_TIMEOUT;
 extern const int ICON_BMP_PADDING;

@@ -80,10 +80,14 @@ bool bridge::check_health() {
         if(chunks == total_chunks_needed - 1) {
             z_offset = delta_z;
         } else {
-            size_t steps_needed = ceil(fabs(delta_z) / GEOMETRY::STEP_HEIGHT) + 1;
-            float cur_completion = chunks / (float) total_chunks_needed;
-            size_t step_idx = cur_completion * steps_needed;
-            z_offset = step_idx * GEOMETRY::STEP_HEIGHT * sign(delta_z);
+            size_t steps_needed =
+                ceil(fabs(delta_z) / GEOMETRY::STEP_HEIGHT) + 1;
+            float cur_completion =
+                chunks / (float) total_chunks_needed;
+            size_t step_idx =
+                cur_completion * steps_needed;
+            z_offset =
+                step_idx * GEOMETRY::STEP_HEIGHT * sign(delta_z);
         }
         
         if(z_offset == prev_chunk_z_offset) {
@@ -133,7 +137,8 @@ bool bridge::check_health() {
             
             //Then, the left rail component.
             offset.x = x_offset;
-            offset.y = -BRIDGE::FLOOR_WIDTH / 2.0f - bri_type->rail_width / 2.0f;
+            offset.y =
+                -BRIDGE::FLOOR_WIDTH / 2.0f - bri_type->rail_width / 2.0f;
             offset = rotate_point(offset, angle);
             mob* left_rail_component =
                 create_mob(

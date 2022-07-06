@@ -15,6 +15,7 @@
 #include "../../game.h"
 #include "../../utils/string_utils.h"
 
+
 namespace PAUSE_MENU {
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Pause_menu.txt";
@@ -122,6 +123,8 @@ void pause_menu_struct::draw_tidbit(
 
 /* ----------------------------------------------------------------------------
  * Handles an Allegro event.
+ * ev:
+ *   Event to handle.
  */
 void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     gui.handle_event(ev);
@@ -493,8 +496,10 @@ void pause_menu_struct::tick(const float delta_t) {
     help_gui.tick(delta_t);
     
     //Tick the background.
-    const float bg_alpha_mult_speed = 1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
-    const float diff = closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
+    const float bg_alpha_mult_speed =
+        1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
+    const float diff =
+        closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
     bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
     
     //Tick the menu closing.

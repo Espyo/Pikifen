@@ -18,6 +18,7 @@
 #include "../load.h"
 #include "../utils/string_utils.h"
 
+
 namespace AREA_MENU {
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu.txt";

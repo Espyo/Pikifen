@@ -619,7 +619,7 @@ void draw_filled_diamond(
  * radii:
  *   Radii of the corners. Will be smaller if the rectangle is too small.
  * color:
- *   Color the diamond with this color.
+ *   Color the rectangle with this color.
  */
 void draw_filled_rounded_rectangle(
     const point &center, const point &size, const float radii,
@@ -644,7 +644,7 @@ void draw_filled_rounded_rectangle(
  *   Bottom center point of the text.
  * value_nr:
  *   Number that represents the current value.
- * requirement:
+ * requirement_nr:
  *   Number that represents the requirement.
  * color:
  *   Color of the fraction's text.
@@ -750,7 +750,8 @@ void draw_liquid(
     
     float liquid_opacity_mult = 1.0f;
     if(s_ptr->draining_liquid) {
-        liquid_opacity_mult = s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
+        liquid_opacity_mult =
+            s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
     
     //Layer 1 - Transparent wobbling ground texture.
@@ -1060,9 +1061,11 @@ void draw_loading_screen(
             );
         //Top-left vertex.
         subtext_vertexes[0].x =
-            game.win_w * 0.5 - subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 - subtext_w *
+            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[0].y =
-            subtext_y + subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE;
+            subtext_y + subtext_h *
+            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE;
         subtext_vertexes[0].z = 0;
         subtext_vertexes[0].u = 0;
         subtext_vertexes[0].v = subtext_h;
@@ -1070,9 +1073,11 @@ void draw_loading_screen(
             al_map_rgba(255, 255, 255, reflection_alpha);
         //Top-right vertex.
         subtext_vertexes[1].x =
-            game.win_w * 0.5 + subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 + subtext_w *
+            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[1].y =
-            subtext_y + subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE;
+            subtext_y + subtext_h *
+            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE;
         subtext_vertexes[1].z = 0;
         subtext_vertexes[1].u = subtext_w;
         subtext_vertexes[1].v = subtext_h;
@@ -1080,9 +1085,11 @@ void draw_loading_screen(
             al_map_rgba(255, 255, 255, reflection_alpha);
         //Bottom-right vertex.
         subtext_vertexes[2].x =
-            game.win_w * 0.5 + subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 + subtext_w *
+            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[2].y =
-            subtext_y + subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE +
+            subtext_y + subtext_h *
+            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE +
             subtext_reflection_h;
         subtext_vertexes[2].z = 0;
         subtext_vertexes[2].u = subtext_w;
@@ -1090,9 +1097,11 @@ void draw_loading_screen(
         subtext_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
         subtext_vertexes[3].x =
-            game.win_w * 0.5 - subtext_w * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+            game.win_w * 0.5 - subtext_w *
+            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
         subtext_vertexes[3].y =
-            subtext_y + subtext_h * DRAWING::LOADING_SCREEN_SUBTITLE_SCALE +
+            subtext_y + subtext_h *
+            DRAWING::LOADING_SCREEN_SUBTITLE_SCALE +
             subtext_reflection_h;
         subtext_vertexes[3].z = 0;
         subtext_vertexes[3].u = 0;
@@ -1938,7 +1947,8 @@ void get_control_icon_info(
             ) {
                 *text += " down";
             } else {
-                *text += " axis " + i2s(c->axis) +
+                *text +=
+                    " axis " + i2s(c->axis) +
                          (c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+");
             }
             
@@ -2032,6 +2042,8 @@ float get_control_icon_width(
             return max_bitmap_height;
         }
     } else {
-        return al_get_text_width(font, text.c_str()) + CONTROL_ICON::PADDING * 2;
+        return
+            al_get_text_width(font, text.c_str()) +
+            CONTROL_ICON::PADDING * 2;
     }
 }

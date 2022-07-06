@@ -18,6 +18,7 @@
 
 
 namespace HUD {
+
 //Path to the GUI information file.
 const string GUI_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
 //How long the leader swap juice animation lasts for.

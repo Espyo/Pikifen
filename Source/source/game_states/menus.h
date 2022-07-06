@@ -29,9 +29,11 @@ namespace AREA_MENU {
 extern const string GUI_FILE_PATH;
 }
 
+
 namespace CONTROLS_MENU {
 extern const string GUI_FILE_PATH;
 }
+
 
 namespace OPTIONS_MENU {
 extern const string AUTO_THROW_PRESET_NAMES[];
@@ -42,6 +44,7 @@ extern const string GUI_FILE_PATH;
 extern const unsigned char N_AUTO_THROW_PRESETS;
 extern const unsigned char N_CURSOR_SPEED_PRESETS;
 }
+
 
 namespace RESULTS {
 extern const string GUI_FILE_PATH;

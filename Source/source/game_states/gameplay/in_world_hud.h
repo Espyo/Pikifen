@@ -25,6 +25,7 @@ extern const float TRANSITION_IN_DURATION;
 extern const float TRANSITION_OUT_DURATION;
 }
 
+
 namespace IN_WORLD_HEALTH_WHEEL {
 extern const float OPACITY;
 extern const float PADDING;

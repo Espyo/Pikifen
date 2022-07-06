@@ -21,6 +21,7 @@
 #include "load.h"
 #include "utils/string_utils.h"
 
+
 namespace MSG_BOX {
 //How quickly the advance button icon fades, in alpha (0-1) per second.
 const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;
@@ -44,10 +45,12 @@ const float TOKEN_SWIPE_X_AMOUNT = -2.0f;
 const float TOKEN_SWIPE_Y_AMOUNT = -15.0f;
 }
 
+
 namespace NOTIFICATION {
 //How quickly it fades, in alpha per second.
 const float FADE_SPEED = 4.0f;
 }
+
 
 namespace WHISTLE {
 //R, G, and B components for each dot color.
@@ -81,6 +84,7 @@ const float RING_SPEED = 600.0f;
 //Seconds that need to pass before another whistle ring appears.
 const float RINGS_INTERVAL = 0.1f;
 }
+
 
 namespace MAKER_TOOLS {
 //Internal names of each maker tool.
@@ -369,9 +373,12 @@ void camera_info::set_zoom(const float new_zoom) {
  *   How long the frame's tick is, in seconds.
  */
 void camera_info::tick(const float delta_t) {
-    pos.x += (target_pos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
-    pos.y += (target_pos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
-    zoom += (target_zoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+    pos.x +=
+        (target_pos.x - pos.x) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+    pos.y +=
+        (target_pos.y - pos.y) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
+    zoom +=
+        (target_zoom - zoom) * (GAMEPLAY::CAMERA_SMOOTHNESS_MULT * delta_t);
 }
 
 
@@ -841,7 +848,8 @@ void notification_struct::draw() const {
     );
     
     if(control) {
-        text_box_x1 += DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
+        text_box_x1 +=
+            DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
         draw_control_icon(
             game.fonts.standard, control,
             true,
@@ -917,6 +925,8 @@ void notification_struct::set_enabled(const bool enabled) {
 
 /* ----------------------------------------------------------------------------
  * Ticks time by one frame of logic.
+ * delta_t:
+ *   How long the frame's tick is, in seconds.
  */
 void notification_struct::tick(const float delta_t) {
     if(enabled) {

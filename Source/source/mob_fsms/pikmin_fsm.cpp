@@ -2654,7 +2654,8 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     }
     
     for(size_t s = 0; s < carriable_mob->type->max_carriers; ++s) {
-        carrier_spot_struct* spot_ptr = &carriable_mob->carry_info->spot_info[s];
+        carrier_spot_struct* spot_ptr =
+            &carriable_mob->carry_info->spot_info[s];
         if(spot_ptr->state != CARRY_SPOT_FREE) continue;
         
         dist d(
@@ -2698,7 +2699,10 @@ void pikmin_fsm::go_to_group_task(mob* m, void* info1, void* info2) {
     group_task* tas_ptr = (group_task*) info1;
     pikmin* pik_ptr = (pikmin*) m;
     
-    if(!has_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR) && tas_ptr->tas_type->flying_pikmin_only) {
+    if(
+        !has_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR) &&
+        tas_ptr->tas_type->flying_pikmin_only
+    ) {
         //Only flying Pikmin can use this, and this Pikmin doesn't fly.
         return;
     }

@@ -33,6 +33,7 @@ using std::size_t;
 using std::string;
 using std::vector;
 
+
 class mob_type;
 class pikmin_type;
 
@@ -79,6 +80,7 @@ extern const float STATUS_SHAKING_TIME_MULT;
 extern const float THROW_PARTICLE_INTERVAL;
 extern const float WAVE_RING_DURATION;
 };
+
 
 
 /* ----------------------------------------------------------------------------

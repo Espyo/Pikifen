@@ -21,6 +21,7 @@
 #include "mob.h"
 #include "mob_enums.h"
 
+
 namespace PIKMIN {
 //Time until moving Pikmin timeout and stay in place, after being dismissed.
 const float DISMISS_TIMEOUT = 4.0f;

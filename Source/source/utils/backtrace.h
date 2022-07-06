@@ -25,6 +25,7 @@ const size_t MAX_FRAMES = 30;
 const size_t MAX_SYMBOL_LENGTH = 512;
 }
 
+
 #if defined(__linux__) || (__APPLE__)
 //Linux and Mac OS.
 

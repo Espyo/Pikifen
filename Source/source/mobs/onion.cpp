@@ -90,7 +90,10 @@ onion::onion(const point &pos, onion_type* type, const float angle) :
         spew_queue.push_back(0);
     }
     
-    set_animation(MOB_TYPE::ANIM_IDLING, true, START_ANIMATION_RANDOM_TIME_ON_SPAWN);
+    set_animation(
+        MOB_TYPE::ANIM_IDLING, true,
+        START_ANIMATION_RANDOM_TIME_ON_SPAWN
+    );
 }
 
 

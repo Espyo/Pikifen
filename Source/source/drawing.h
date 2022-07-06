@@ -28,6 +28,7 @@ extern const float CONTROL_ICON_PADDING;
 extern const float OUTLINE_THICKNESS;
 }
 
+
 namespace DRAWING {
 extern const float DEF_HEALTH_WHEEL_RADIUS;
 extern const float LIQUID_WOBBLE_DELTA_X;

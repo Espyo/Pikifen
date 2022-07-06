@@ -24,6 +24,7 @@
 #include "tool.h"
 #include "track.h"
 
+
 namespace MOB {
 //Acceleration for a mob that's being carried.
 const float CARRIED_MOB_ACCELERATION = 100.0f;
@@ -110,6 +111,7 @@ const float THROW_PARTICLE_INTERVAL = 0.02f;
 //A water wave ring particle lasts this long.
 const float WAVE_RING_DURATION = 1.0f;
 }
+
 
 
 /* ----------------------------------------------------------------------------
@@ -493,7 +495,9 @@ void mob::arachnorb_head_turn_logic() {
  * goal:
  *   What its goal is.
  */
-void mob::arachnorb_plan_logic(const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal) {
+void mob::arachnorb_plan_logic(
+    const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal
+) {
     float max_step_distance = s2f(vars["max_step_distance"]);
     float max_turn_angle = deg_to_rad(s2f(vars["max_turn_angle"]));
     float min_turn_angle = deg_to_rad(s2f(vars["min_turn_angle"]));
@@ -2131,12 +2135,21 @@ void mob::get_sprite_bitmap_effects(
     if(add_carry_sway && carry_info) {
         if(carry_info->is_moving) {
             float factor1 =
-                sin(game.states.gameplay->area_time_passed * MOB::CARRY_SWAY_TIME_MULT);
+                sin(
+                    game.states.gameplay->area_time_passed *
+                    MOB::CARRY_SWAY_TIME_MULT
+                );
             float factor2 =
-                sin(game.states.gameplay->area_time_passed * MOB::CARRY_SWAY_TIME_MULT * 2.0f);
-            info->translation.x -= factor1 * MOB::CARRY_SWAY_X_TRANSLATION_AMOUNT;
-            info->translation.y -= factor2 * MOB::CARRY_SWAY_Y_TRANSLATION_AMOUNT;
-            info->rotation -= factor1 * MOB::CARRY_SWAY_ROTATION_AMOUNT;
+                sin(
+                    game.states.gameplay->area_time_passed *
+                    MOB::CARRY_SWAY_TIME_MULT * 2.0f
+                );
+            info->translation.x -=
+                factor1 * MOB::CARRY_SWAY_X_TRANSLATION_AMOUNT;
+            info->translation.y -=
+                factor2 * MOB::CARRY_SWAY_Y_TRANSLATION_AMOUNT;
+            info->rotation -=
+                factor1 * MOB::CARRY_SWAY_ROTATION_AMOUNT;
         }
     }
 }

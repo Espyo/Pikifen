@@ -29,6 +29,7 @@ const size_t FRAMERATE_AVG_SAMPLE_SIZE = 30;
 const size_t FRAMERATE_HISTORY_SIZE = 300;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Constructor for the game class.
  */

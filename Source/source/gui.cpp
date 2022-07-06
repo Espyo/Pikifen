@@ -256,49 +256,56 @@ float gui_item::get_child_bottom() {
 float gui_item::get_juice_value() {
     switch(juice_type) {
     case JUICE_TYPE_GROW_TEXT_LOW: {
-        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
+        float anim_ratio =
+            1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_MEDIUM: {
-        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
+        float anim_ratio =
+            1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_HIGH: {
-        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
+        float anim_ratio =
+            1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW: {
-        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
+        float anim_ratio =
+            1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM: {
-        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
+        float anim_ratio =
+            1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
         break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
-        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
+        float anim_ratio =
+            1.0f - (juice_timer / GUI::JUICY_GROW_ELASTIC_DURATION);
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
         break;
     }
     case JUICE_TYPE_GROW_ICON: {
-        float anim_ratio = 1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
+        float anim_ratio =
+            1.0f - (juice_timer / GUI::JUICY_GROW_DURATION);
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_ICON_MULT;
@@ -317,8 +324,10 @@ float gui_item::get_juice_value() {
  */
 point gui_item::get_reference_center() {
     if(parent) {
-        point parent_s = parent->get_reference_size() - (parent->padding * 2.0f);
-        point parent_c = parent->get_reference_center();
+        point parent_s =
+            parent->get_reference_size() - (parent->padding * 2.0f);
+        point parent_c =
+            parent->get_reference_center();
         point result = center * parent_s;
         result.x += parent_c.x - parent_s.x / 2.0f;
         result.y += parent_c.y - parent_s.y / 2.0f;

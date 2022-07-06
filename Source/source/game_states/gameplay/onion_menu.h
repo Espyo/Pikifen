@@ -16,8 +16,10 @@
 #include "../../mobs/mob_utils.h"
 #include "../../gui.h"
 
+
 using std::size_t;
 using std::string;
+
 
 class pikmin_type;
 

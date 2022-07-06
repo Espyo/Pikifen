@@ -311,21 +311,28 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 191,
                 (int) (
                     191 *
-                    (cur_leader_ptr->swarm_arrows[a] / (game.config.cursor_max_dist * 0.4))
+                    (cur_leader_ptr->swarm_arrows[a] /
+                    (game.config.cursor_max_dist * 0.4))
                 )
             );
         draw_bitmap(
             game.sys_assets.bmp_swarm_arrow,
             cur_leader_ptr->pos + pos,
-            point(16 * (1 + cur_leader_ptr->swarm_arrows[a] / game.config.cursor_max_dist), -1),
+            point(
+                16 * (1 + cur_leader_ptr->swarm_arrows[a] /
+                game.config.cursor_max_dist),
+                -1
+            ),
             swarm_angle,
             map_alpha(alpha)
         );
     }
     
     size_t n_rings = whistle.rings.size();
-    float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
-    float cursor_distance = dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
+    float cursor_angle =
+        get_angle(cur_leader_ptr->pos, leader_cursor_w);
+    float cursor_distance =
+        dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
     for(size_t r = 0; r < n_rings; ++r) {
         point pos(
             cur_leader_ptr->pos.x + cos(cursor_angle) * whistle.rings[r],
@@ -791,16 +798,23 @@ void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             }
             
             float start_ratio = anchor / (float) cursor_spots.size();
-            float start_thickness = GAMEPLAY::CURSOR_TRAIL_MAX_WIDTH * start_ratio;
-            unsigned char start_alpha = GAMEPLAY::CURSOR_TRAIL_MAX_ALPHA * start_ratio;
-            ALLEGRO_COLOR start_color = change_alpha(color, start_alpha);
+            float start_thickness =
+                GAMEPLAY::CURSOR_TRAIL_MAX_WIDTH * start_ratio;
+            unsigned char start_alpha =
+                GAMEPLAY::CURSOR_TRAIL_MAX_ALPHA * start_ratio;
+            ALLEGRO_COLOR start_color =
+                change_alpha(color, start_alpha);
             point start_p1;
             point start_p2;
             
-            float end_ratio = s / (float) GAMEPLAY::CURSOR_TRAIL_SAVE_N_SPOTS;
-            float end_thickness = GAMEPLAY::CURSOR_TRAIL_MAX_WIDTH * end_ratio;
-            unsigned char end_alpha = GAMEPLAY::CURSOR_TRAIL_MAX_ALPHA * end_ratio;
-            ALLEGRO_COLOR end_color = change_alpha(color, end_alpha);
+            float end_ratio =
+                s / (float) GAMEPLAY::CURSOR_TRAIL_SAVE_N_SPOTS;
+            float end_thickness =
+                GAMEPLAY::CURSOR_TRAIL_MAX_WIDTH * end_ratio;
+            unsigned char end_alpha =
+                GAMEPLAY::CURSOR_TRAIL_MAX_ALPHA * end_ratio;
+            ALLEGRO_COLOR end_color =
+                change_alpha(color, end_alpha);
             point end_p1;
             point end_p2;
             

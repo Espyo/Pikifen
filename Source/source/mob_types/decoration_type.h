@@ -25,6 +25,7 @@ enum DECORATION_ANIMATIONS {
     DECORATION_ANIM_BUMPED,
 };
 
+
 //Decoration object states.
 enum DECORATION_STATES {
     //Idling.

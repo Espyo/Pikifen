@@ -24,6 +24,7 @@ extern const float TRACTOR_BEAM_EMIT_RATE;
 extern const float TRACTOR_BEAM_RING_ANIM_DUR;
 }
 
+
 /* ----------------------------------------------------------------------------
  * A ship is where "treasure" is delivered to.
  */

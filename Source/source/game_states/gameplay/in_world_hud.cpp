@@ -17,6 +17,7 @@
 #include "../../utils/allegro_utils.h"
 #include "../../utils/string_utils.h"
 
+
 namespace IN_WORLD_FRACTION {
 //How long it takes to animate the numbers growing.
 const float GROW_JUICE_DURATION = 0.3f;
@@ -34,6 +35,7 @@ const float TRANSITION_IN_DURATION = 0.4f;
 const float TRANSITION_OUT_DURATION = 0.5f;
 }
 
+
 namespace IN_WORLD_HEALTH_WHEEL {
 //Standard opacity.
 const float OPACITY = 0.85f;
@@ -50,6 +52,8 @@ const float TRANSITION_OUT_DURATION = 1.5f;
 
 /* ----------------------------------------------------------------------------
  * Creates an in-world fraction.
+ * m:
+ *   Mob it belongs to.
  */
 in_world_fraction::in_world_fraction(mob* m) :
     in_world_hud_item(m),
@@ -72,13 +76,15 @@ void in_world_fraction::draw() {
     
     switch(transition) {
     case IN_WORLD_HUD_TRANSITION_IN: {
-        float timer_ratio = 1 - (transition_timer / IN_WORLD_FRACTION::TRANSITION_IN_DURATION);
+        float timer_ratio =
+            1 - (transition_timer / IN_WORLD_FRACTION::TRANSITION_IN_DURATION);
         alpha_mult = timer_ratio;
         size_mult = ease(EASE_OUT, timer_ratio) * 0.5 + 0.5;
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {
-        alpha_mult = transition_timer / IN_WORLD_FRACTION::TRANSITION_OUT_DURATION;
+        alpha_mult =
+            transition_timer / IN_WORLD_FRACTION::TRANSITION_OUT_DURATION;
         break;
     }
     default: {
@@ -87,7 +93,8 @@ void in_world_fraction::draw() {
     }
     
     if(grow_juice_timer > 0.0f) {
-        float anim_ratio = 1 - (grow_juice_timer / IN_WORLD_FRACTION::GROW_JUICE_DURATION);
+        float anim_ratio =
+            1 - (grow_juice_timer / IN_WORLD_FRACTION::GROW_JUICE_DURATION);
         anim_ratio = ease(EASE_UP_AND_DOWN, anim_ratio);
         size_mult += IN_WORLD_FRACTION::GROW_JUICE_AMOUNT * anim_ratio;
     }
@@ -96,11 +103,14 @@ void in_world_fraction::draw() {
     if(req_met_juice_timer > 0.0f) {
         final_color =
             interpolate_color(
-                req_met_juice_timer, 0.0f, IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION,
+                req_met_juice_timer, 0.0f,
+                IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION,
                 color, COLOR_WHITE
             );
             
-        float anim_ratio = 1 - (req_met_juice_timer / IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION);
+        float anim_ratio =
+            1.0f -
+            (req_met_juice_timer / IN_WORLD_FRACTION::REQ_MET_JUICE_DURATION);
         anim_ratio = ease(EASE_UP_AND_DOWN, anim_ratio);
         size_mult += IN_WORLD_FRACTION::REQ_MET_GROW_JUICE_AMOUNT * anim_ratio;
     } else {
@@ -119,7 +129,8 @@ void in_world_fraction::draw() {
         point pos(
             m->pos.x,
             m->pos.y - m->radius -
-            al_get_font_line_height(game.fonts.standard) - IN_WORLD_FRACTION::PADDING
+            al_get_font_line_height(game.fonts.standard) -
+            IN_WORLD_FRACTION::PADDING
         );
         draw_scaled_text(
             game.fonts.standard,
@@ -133,6 +144,8 @@ void in_world_fraction::draw() {
 
 /* ----------------------------------------------------------------------------
  * Sets the color.
+ * new_color:
+ *   Color to set to.
  */
 void in_world_fraction::set_color(const ALLEGRO_COLOR &new_color) {
     if(color == new_color) return;
@@ -144,6 +157,8 @@ void in_world_fraction::set_color(const ALLEGRO_COLOR &new_color) {
 
 /* ----------------------------------------------------------------------------
  * Sets the requirement number.
+ * new_req_nr:
+ *   Requirement number to set to.
  */
 void in_world_fraction::set_requirement_number(const float new_req_nr) {
     if(requirement_number == new_req_nr) return;
@@ -165,6 +180,8 @@ void in_world_fraction::set_requirement_number(const float new_req_nr) {
 
 /* ----------------------------------------------------------------------------
  * Sets the value number.
+ * new_value_nr:
+ *   Value number to set to.
  */
 void in_world_fraction::set_value_number(const float new_value_nr) {
     if(value_number == new_value_nr) return;
@@ -215,6 +232,8 @@ void in_world_fraction::tick(const float delta_t) {
 
 /* ----------------------------------------------------------------------------
  * Creates an in-world health wheel.
+ * m:
+ *   Mob it belongs to.
  */
 in_world_health_wheel::in_world_health_wheel(mob* m) :
     in_world_hud_item(m),
@@ -235,13 +254,16 @@ void in_world_health_wheel::draw() {
     float size_mult = 1.0f;
     switch(transition) {
     case IN_WORLD_HUD_TRANSITION_IN: {
-        float timer_ratio = 1 - (transition_timer / IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION);
+        float timer_ratio =
+            1.0f -
+            (transition_timer / IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION);
         alpha_mult = timer_ratio;
         size_mult = ease(EASE_OUT, timer_ratio) * 0.5 + 0.5;
         break;
     }
     case IN_WORLD_HUD_TRANSITION_OUT: {
-        alpha_mult = transition_timer / IN_WORLD_HEALTH_WHEEL::TRANSITION_OUT_DURATION;
+        alpha_mult =
+            transition_timer / IN_WORLD_HEALTH_WHEEL::TRANSITION_OUT_DURATION;
         break;
     }
     default: {

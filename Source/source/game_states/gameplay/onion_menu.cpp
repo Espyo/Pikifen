@@ -659,6 +659,8 @@ void onion_menu_struct::confirm() {
 
 /* ----------------------------------------------------------------------------
  * Handles an Allegro event.
+ * ev:
+ *   Event to handle.
  */
 void onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     if(!closing) gui.handle_event(ev);
@@ -810,8 +812,10 @@ void onion_menu_struct::tick(const float delta_t) {
     gui.tick(delta_t);
     
     //Tick the background.
-    const float bg_alpha_mult_speed = 1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
-    const float diff = closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
+    const float bg_alpha_mult_speed =
+        1.0f / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME;
+    const float diff =
+        closing ? -bg_alpha_mult_speed : bg_alpha_mult_speed;
     bg_alpha_mult = clamp(bg_alpha_mult + diff * delta_t, 0.0f, 1.0f);
     
     //Tick the menu closing.

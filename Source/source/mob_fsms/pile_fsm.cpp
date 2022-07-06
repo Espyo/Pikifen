@@ -81,7 +81,8 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
         //Can't drop multiple? Let's knock that number down.
         amount_to_spawn = 1;
         intended_amount = pil_ptr->amount - 1;
-        pil_ptr->health = pil_ptr->pil_type->health_per_resource * intended_amount;
+        pil_ptr->health =
+            pil_ptr->pil_type->health_per_resource * intended_amount;
     }
     
     resource* resource_to_pick_up = NULL;
@@ -98,7 +99,8 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
             pikmin_to_start_carrying = (pikmin*) (info->mob2);
             //If this was a Pikmin's attack, spawn the first resource nearby
             //so it can pick it up.
-            spawn_angle = get_angle(pil_ptr->pos, pikmin_to_start_carrying->pos);
+            spawn_angle =
+                get_angle(pil_ptr->pos, pikmin_to_start_carrying->pos);
             spawn_pos =
                 pikmin_to_start_carrying->pos +
                 angle_to_coordinates(

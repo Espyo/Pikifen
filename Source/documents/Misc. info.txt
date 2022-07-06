@@ -274,6 +274,7 @@ Procedure for every version release
             If this is a big release:
                 Compile with -Wall and correct all problems
                 Use cppcheck on the code and correct the problems
+                    cppcheck . -i imgui --config-exclude=imgui -U_WIN32 -U_MSC_VER -U__APPLE__ -U__linux__ --std=c++14 --enable=all 2>~/Desktop/errors.txt
                 Confirm that there are no superfluous #includes (how?)
             Code cleanup
                 Confirm that no line goes over 80 characters

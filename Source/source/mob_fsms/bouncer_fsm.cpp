@@ -102,7 +102,10 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     } else if(
         has_flag(bou_ptr->bou_type->riders, BOUNCER_RIDER_PIKMIN) &&
         toucher->path_info &&
-        has_flag(toucher->path_info->settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)
+        has_flag(
+            toucher->path_info->settings.flags,
+            PATH_FOLLOW_FLAG_LIGHT_LOAD
+        )
     ) {
     
         //Pikmin carrying light load is about to be bounced.

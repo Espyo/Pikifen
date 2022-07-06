@@ -50,7 +50,9 @@ void gameplay_state::do_aesthetic_logic() {
             leader_to_cursor_dist;
             
         if(max_dist < cur_leader_ptr->swarm_arrows[a]) {
-            cur_leader_ptr->swarm_arrows.erase(cur_leader_ptr->swarm_arrows.begin() + a);
+            cur_leader_ptr->swarm_arrows.erase(
+                cur_leader_ptr->swarm_arrows.begin() + a
+            );
         } else {
             a++;
         }
@@ -758,8 +760,12 @@ void gameplay_state::do_menu_logic() {
             //block, which starts at framerate_last_avg_point.
             //This makes it so the average stays the same for a bit of time,
             //so the player can actually read it.
-            if(game.framerate_last_avg_point > GAME::FRAMERATE_AVG_SAMPLE_SIZE * 2) {
-                game.framerate_last_avg_point = GAME::FRAMERATE_AVG_SAMPLE_SIZE;
+            if(
+                game.framerate_last_avg_point >
+                GAME::FRAMERATE_AVG_SAMPLE_SIZE * 2
+            ) {
+                game.framerate_last_avg_point =
+                    GAME::FRAMERATE_AVG_SAMPLE_SIZE;
             }
             float sample_avg_sum = 0;
             size_t sample_avg_point_count = 0;
@@ -1414,7 +1420,10 @@ void gameplay_state::process_mob_touches(
                 d <= (m_ptr->radius + m2_ptr->radius);
         }
         
-        if(z_touch && !has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE) && xy_collision) {
+        if(
+            z_touch && !has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE) &&
+            xy_collision
+        ) {
             if(touch_ob_ev) {
                 touch_ob_ev->run(m_ptr, (void*) m2_ptr);
             }
