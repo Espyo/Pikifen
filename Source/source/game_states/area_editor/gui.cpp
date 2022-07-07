@@ -2645,7 +2645,6 @@ void area_editor::process_gui_panel_sector() {
                     "addHazard", all_hazards_list, &picked_hazard
                 )
             ) {
-                sector* s_ptr = *selected_sectors.begin();
                 vector<string> list =
                     semicolon_list_to_vector(s_ptr->hazards_str);
                 if(
@@ -2677,13 +2676,9 @@ void area_editor::process_gui_panel_sector() {
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
                 ) {
-                    sector* s_ptr = *selected_sectors.begin();
                     vector<string> list =
                         semicolon_list_to_vector(s_ptr->hazards_str);
-                    if(
-                        selected_hazard_nr >= 0 &&
-                        selected_hazard_nr < (int) list.size()
-                    ) {
+                    if(selected_hazard_nr < (int) list.size()) {
                         register_change("sector hazard removal");
                         string hazard_name = list[selected_hazard_nr];
                         s_ptr->hazards_str.clear();

@@ -95,9 +95,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     }
     
     string name = words[0];
-    if(!words.empty()) {
-        words.erase(words.begin());
-    }
+    words.erase(words.begin());
     
     //Find the corresponding action.
     for(size_t a = 0; a < game.mob_actions.size(); ++a) {
@@ -916,8 +914,8 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     //Pick a stop from the choices at random, but make sure we don't
     //pick a stop that the mob is practically on already.
     path_stop* final_stop = NULL;
-    size_t tries = 0;
     if(!choices.empty()) {
+        size_t tries = 0;
         while(!final_stop && tries < 5) {
             size_t c = randomi(0, choices.size() - 1);
             if(

@@ -121,7 +121,7 @@ public:
             return;
         }
         
-        typename map<size_t, bubble_info>::iterator match_it = bubbles.end();
+        typename map<size_t, bubble_info>::iterator match_it;
         gui_item* match_ptr = NULL;
         point match_pos;
         point match_size;

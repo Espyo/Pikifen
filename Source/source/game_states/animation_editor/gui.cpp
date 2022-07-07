@@ -229,10 +229,7 @@ void animation_editor::process_gui_hitbox_hazards() {
             ) {
                 vector<string> list =
                     semicolon_list_to_vector(cur_hitbox->hazards_str);
-                if(
-                    selected_hazard_nr >= 0 &&
-                    selected_hazard_nr < (int) list.size()
-                ) {
+                if(selected_hazard_nr < (int) list.size()) {
                     string hazard_name = list[selected_hazard_nr];
                     cur_hitbox->hazards_str.clear();
                     for(size_t h = 0; h < list.size(); ++h) {
@@ -868,12 +865,10 @@ void animation_editor::process_gui_panel_animation() {
                     "Next frame."
                 );
                 
+                ImGui::SameLine();
             }
             
             //Add frame button.
-            if(frame_ptr) {
-                ImGui::SameLine();
-            }
             if(
                 ImGui::ImageButton(
                     editor_icons[ICON_ADD],

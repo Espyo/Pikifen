@@ -70,7 +70,7 @@ bool pile::get_fraction_numbers_info(
     float* fraction_value_nr, float* fraction_req_nr,
     ALLEGRO_COLOR* fraction_color
 ) const {
-    if(amount <= 0 || !pil_type->show_amount) return false;
+    if(amount == 0 || !pil_type->show_amount) return false;
     *fraction_value_nr = amount;
     *fraction_req_nr = 0;
     *fraction_color = game.config.carrying_color_stop;

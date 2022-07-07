@@ -1283,7 +1283,7 @@ bool editor::process_size_widgets(
             } else {
                 //Must adjust X.
                 if(min_size != -FLT_MAX) {
-                    new_size.x = std::max(min_size / ratio, new_size.y);
+                    new_size.y = std::max(min_size / ratio, new_size.y);
                     new_size.y = std::max(min_size, new_size.y);
                 }
                 new_size.x = new_size.y * ratio;

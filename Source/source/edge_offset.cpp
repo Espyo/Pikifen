@@ -368,7 +368,7 @@ void get_edge_offset_edge_info(
         *final_angle = base_effect_angle;
         *final_length = base_effect_length;
         
-        if(next_eff_edge && next_eff_edge_effect_cw != edge_effect_cw) {
+        if(next_eff_edge_effect_cw != edge_effect_cw) {
             //On this end there is a neighboring effect we'll want to connect
             //to. But because that neighboring effect is so far away in
             //terms of angle, we'll need to implement an elbow between them
@@ -398,7 +398,7 @@ void get_edge_offset_edge_info(
                     color_getter(next_eff_edge)
                 );
                 
-        } else if(next_eff_edge && next_eff_edge_effect_cw == edge_effect_cw) {
+        } else {
             //There is a neighboring edge that has the effect, but in
             //the same direction as ours. As such, our effect will have
             //to connect to that effect's edge so there's a snug fit.

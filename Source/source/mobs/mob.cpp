@@ -1316,13 +1316,11 @@ void mob::do_attack_effects(
         
     }
     
-    //Play the sound.
     if(!useless) {
+        //Play the sound.
         game.sys_assets.sfx_attack.play(0.06, false, 0.6f);
-    }
-    
-    //Damage squash-and-stretch animation.
-    if(!useless) {
+
+        //Damage squash-and-stretch animation.
         if(damage_squash_time == 0.0f) {
             damage_squash_time = MOB::DAMAGE_SQUASH_DURATION;
         }
@@ -1340,7 +1338,9 @@ void mob::draw_limb() {
     if(!sprite_to_use) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(sprite_to_use, &eff, true, true, true, false, false);
+    get_sprite_bitmap_effects(
+        sprite_to_use, &eff, true, true, true, false, false
+    );
     
     point parent_end;
     if(parent->limb_parent_body_part == INVALID) {
@@ -1637,12 +1637,12 @@ hitbox* mob::get_closest_hitbox(
         hitbox* h_ptr = &s->hitboxes[h];
         if(h_type != INVALID && h_ptr->type != h_type) continue;
         
-        float d =
+        float this_d =
             dist(
                 h_ptr->get_cur_pos(pos, angle_cos, angle_sin), p
             ).to_float() - h_ptr->radius;
-        if(closest_hitbox == NULL || d < closest_hitbox_dist) {
-            closest_hitbox_dist = d;
+        if(closest_hitbox == NULL || this_d < closest_hitbox_dist) {
+            closest_hitbox_dist = this_d;
             closest_hitbox = h_ptr;
         }
     }
@@ -2018,8 +2018,8 @@ void mob::get_sprite_bitmap_effects(
                 point target_pos = focused_mob->pos;
                 
                 if(focused_mob->type->category->id == MOB_CATEGORY_SHIPS) {
-                    ship* s_ptr = (ship*) focused_mob;
-                    target_pos = s_ptr->receptacle_final_pos;
+                    ship* shi_ptr = (ship*) focused_mob;
+                    target_pos = shi_ptr->receptacle_final_pos;
                 }
                 
                 point end_offset = target_pos - pos;
@@ -3667,7 +3667,7 @@ void mob::tick_script(const float delta_t) {
             get_group_spot_info(&target_pos, &target_dist);
             
             dist d(pos, target_pos);
-            if(spot_far_ev && d > target_dist) {
+            if(d > target_dist) {
                 spot_far_ev->run(this, (void*) &target_pos);
             }
         }

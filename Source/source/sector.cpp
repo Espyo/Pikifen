@@ -673,7 +673,7 @@ void area_data::generate_blockmap() {
         ceil((max_coords.x - min_coords.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
     bmap.n_rows =
         ceil((max_coords.y - min_coords.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
-    
+        
     bmap.edges.assign(
         bmap.n_cols, vector<vector<edge*> >(bmap.n_rows, vector<edge*>())
     );
@@ -1843,7 +1843,6 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
     //Check all edges to find which two textures need merging.
     edge* e_ptr = NULL;
     sector* neighbor = NULL;
-    bool valid = true;
     map<sector*, dist> neighbors;
     sector* texture_sector[2] = {NULL, NULL};
     
@@ -1853,7 +1852,7 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) const {
     //but they have lower priority compared to same-heigh sectors.
     for(size_t e = 0; e < edges.size(); ++e) {
         e_ptr = edges[e];
-        valid = true;
+        bool valid = true;
         
         neighbor = e_ptr->get_other_sector(this);
         

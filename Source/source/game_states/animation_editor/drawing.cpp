@@ -90,11 +90,6 @@ void animation_editor::draw_canvas() {
         draw_pikmin_silhouette = false;
         
         if(s && s->parent_bmp) {
-            grid_opacity = 0.0f;
-            draw_hitboxes = false;
-            draw_mob_radius = false;
-            draw_pikmin_silhouette = false;
-            
             int bmp_w = al_get_bitmap_width(s->parent_bmp);
             int bmp_h = al_get_bitmap_height(s->parent_bmp);
             int bmp_x = -bmp_w / 2.0;

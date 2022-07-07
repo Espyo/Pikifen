@@ -1275,7 +1275,7 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     float area_h = max_y - min_y;
     float scale = 1.0f;
     float final_bmp_w = game.maker_tools.area_image_size;
-    float final_bmp_h = game.maker_tools.area_image_size;
+    float final_bmp_h = final_bmp_w;
     
     if(area_w > area_h) {
         scale = game.maker_tools.area_image_size / area_w;

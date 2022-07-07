@@ -127,11 +127,11 @@ void path_manager::handle_obstacle_add(mob* m) {
     
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
-            mob* m_ptr = game.states.gameplay->mobs.all[m];
-            if(!m_ptr->path_info) continue;
+        for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); ++m2) {
+            mob* m2_ptr = game.states.gameplay->mobs.all[m2];
+            if(!m2_ptr->path_info) continue;
             
-            m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
+            m2_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
         }
     }
 }
@@ -165,11 +165,11 @@ void path_manager::handle_obstacle_remove(mob* m) {
     
     if(paths_changed) {
         //Re-calculate the paths of mobs taking paths.
-        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
-            mob* m_ptr = game.states.gameplay->mobs.all[m];
-            if(!m_ptr->path_info) continue;
+        for(size_t m2 = 0; m2 < game.states.gameplay->mobs.all.size(); ++m2) {
+            mob* m2_ptr = game.states.gameplay->mobs.all[m2];
+            if(!m2_ptr->path_info) continue;
             
-            m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
+            m2_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
         }
     }
 }
@@ -506,8 +506,6 @@ vector<path_stop*> dijkstra(
     unordered_set<path_stop*> unvisited;
     //Distance from starting node + previous stop on the best solution.
     map<path_stop*, std::pair<float, path_stop*> > data;
-    //If we found an error, set this to true.
-    bool got_error = false;
     
     //Initialize the algorithm.
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
@@ -519,7 +517,7 @@ vector<path_stop*> dijkstra(
     //The distance between the start node and the start node is 0.
     data[start_node].first = 0;
     
-    while(!unvisited.empty() && !got_error) {
+    while(!unvisited.empty()) {
     
         //Figure out what node to work on.
         path_stop* shortest_node = NULL;
@@ -550,7 +548,6 @@ vector<path_stop*> dijkstra(
             
             if(final_path.size() < 2) {
                 //This can't be right... Something went wrong.
-                got_error = true;
                 break;
             } else {
                 if(total_dist) *total_dist = td;
@@ -576,12 +573,12 @@ vector<path_stop*> dijkstra(
                 continue;
             }
             
-            float total_dist = shortest_node_data.first + l_ptr->distance;
+            float dist_so_far = shortest_node_data.first + l_ptr->distance;
             auto d = &data[l_ptr->end_ptr];
             
-            if(total_dist < d->first) {
+            if(dist_so_far < d->first) {
                 //Found a shorter path to this node.
-                d->first = total_dist;
+                d->first = dist_so_far;
                 d->second = shortest_node;
             }
         }

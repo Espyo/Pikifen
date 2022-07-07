@@ -1496,7 +1496,7 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
     if(!s2) {
         main_sector = s2;
         small_sector = s1;
-    } else if(s1 && s2) {
+    } else if(s1) {
         float s1_area =
             (s1->bbox[1].x - s1->bbox[0].x) *
             (s1->bbox[1].y - s1->bbox[0].y);

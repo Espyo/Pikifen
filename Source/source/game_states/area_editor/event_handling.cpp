@@ -97,19 +97,19 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.cam.target_pos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        
+            
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
         game.cam.target_pos.x +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        
+            
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
         game.cam.target_pos.y -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        
+            
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
         game.cam.target_pos.y +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
-        
+            
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
         game.cam.target_zoom =
             clamp(
@@ -1503,26 +1503,24 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 selected_shadow &&
                 sub_state == EDITOR_SUB_STATE_NONE
             ) {
-                if(selected_shadow) {
-                    //Move tree shadow.
-                    area_data* prepared_state = prepare_state();
-                    if(
-                        !cur_transformation_widget.handle_mouse_move(
-                            snap_point(game.mouse_cursor_w),
-                            &selected_shadow->center,
-                            &selected_shadow->size,
-                            &selected_shadow->angle,
-                            1.0f / game.cam.zoom,
-                            selected_shadow_keep_aspect_ratio,
-                            -FLT_MAX
-                        )
-                    ) {
-                        forget_prepared_state(prepared_state);
-                    } else {
-                        register_change(
-                            "tree shadow transformation", prepared_state
-                        );
-                    }
+                //Move tree shadow.
+                area_data* prepared_state = prepare_state();
+                if(
+                    !cur_transformation_widget.handle_mouse_move(
+                        snap_point(game.mouse_cursor_w),
+                        &selected_shadow->center,
+                        &selected_shadow->size,
+                        &selected_shadow->angle,
+                        1.0f / game.cam.zoom,
+                        selected_shadow_keep_aspect_ratio,
+                        -FLT_MAX
+                    )
+                ) {
+                    forget_prepared_state(prepared_state);
+                } else {
+                    register_change(
+                        "tree shadow transformation", prepared_state
+                    );
                 }
             }
             

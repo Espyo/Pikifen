@@ -690,18 +690,20 @@ void animation_editor::press_save_button() {
 
 /* ----------------------------------------------------------------------------
  * Renames an animation to the given name.
- * a:
+ * anim:
  *   Animation to rename.
  * new_name:
  *   Its new name.
  */
-void animation_editor::rename_animation(animation* a, const string &new_name) {
+void animation_editor::rename_animation(
+    animation* anim, const string &new_name
+) {
     //Check if it's valid.
-    if(!a) {
+    if(!anim) {
         return;
     }
     
-    string old_name = a->name;
+    string old_name = anim->name;
     
     //Check if the name is the same.
     if(new_name == old_name) {
@@ -725,7 +727,7 @@ void animation_editor::rename_animation(animation* a, const string &new_name) {
     }
     
     //Rename!
-    a->name = new_name;
+    anim->name = new_name;
     anims.sort_alphabetically();
     
     mark_new_changes();
@@ -736,18 +738,20 @@ void animation_editor::rename_animation(animation* a, const string &new_name) {
 
 /* ----------------------------------------------------------------------------
  * Renames a body part to the given name.
- * p:
+ * part:
  *   Body part to rename.
  * new_name:
  *   Its new name.
  */
-void animation_editor::rename_body_part(body_part* p, const string &new_name) {
+void animation_editor::rename_body_part(
+    body_part* part, const string &new_name
+) {
     //Check if it's valid.
-    if(!p) {
+    if(!part) {
         return;
     }
     
-    string old_name = p->name;
+    string old_name = part->name;
     
     //Check if the name is the same.
     if(new_name == old_name) {
@@ -778,7 +782,7 @@ void animation_editor::rename_body_part(body_part* p, const string &new_name) {
             }
         }
     }
-    p->name = new_name;
+    part->name = new_name;
     update_hitboxes();
     
     mark_new_changes();
@@ -789,18 +793,20 @@ void animation_editor::rename_body_part(body_part* p, const string &new_name) {
 
 /* ----------------------------------------------------------------------------
  * Renames a sprite to the given name.
- * s:
+ * spr:
  *   Sprite to rename.
  * new_name:
  *   Its new name.
  */
-void animation_editor::rename_sprite(sprite* s, const string &new_name) {
+void animation_editor::rename_sprite(
+    sprite* spr, const string &new_name
+) {
     //Check if it's valid.
-    if(!s) {
+    if(!spr) {
         return;
     }
     
-    string old_name = s->name;
+    string old_name = spr->name;
     
     //Check if the name is the same.
     if(new_name == old_name) {
@@ -824,7 +830,7 @@ void animation_editor::rename_sprite(sprite* s, const string &new_name) {
     }
     
     //Rename!
-    s->name = new_name;
+    spr->name = new_name;
     for(size_t a = 0; a < anims.animations.size(); ++a) {
         animation* a_ptr = anims.animations[a];
         for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
@@ -1148,9 +1154,9 @@ void animation_editor::set_best_frame_sprite() {
     //we default to the first sprite on the list.
     size_t final_sprite_idx = 0;
     vector<size_t> best_sprite_idxs;
-    size_t best_score = 3;
     
     if(anims.sprites.size() > 1) {
+        size_t best_score = 3;
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
             size_t score =
                 get_matching_string_starts(

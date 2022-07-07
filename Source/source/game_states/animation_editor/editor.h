@@ -54,7 +54,7 @@ public:
     string get_name() const override;
     
     void draw_canvas();
-    
+
     animation_editor();
     
 private:
@@ -232,9 +232,9 @@ private:
     void process_gui_menu_bar();
     void process_gui_status_bar();
     void process_gui_toolbar();
-    void rename_animation(animation* a, const string &new_name);
-    void rename_body_part(body_part* p, const string &new_name);
-    void rename_sprite(sprite* s, const string &new_name);
+    void rename_animation(animation* anim, const string &new_name);
+    void rename_body_part(body_part* part, const string &new_name);
+    void rename_sprite(sprite* spr, const string &new_name);
     void resize_everything(const float mult);
     void resize_sprite(sprite* s, const float mult);
     void save_animation_database();

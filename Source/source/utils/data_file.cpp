@@ -518,11 +518,10 @@ void getline(ALLEGRO_FILE* file, string &line) {
     
     size_t bytes_read;
     char* c_ptr = new char;
-    char c;
     
     bytes_read = al_fread(file, c_ptr, 1);
     while(bytes_read > 0) {
-        c = *((char*) c_ptr);
+        char c = *((char*) c_ptr);
         
         if(c == '\r') {
             //Let's check if the next character is a \n. If so, they should

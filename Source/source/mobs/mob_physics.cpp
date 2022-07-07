@@ -408,7 +408,7 @@ void mob::tick_horizontal_movement_physics(
     bool doing_slide = false;
     
     point new_pos = pos;
-    float new_z = z;
+    float new_z;
     sector* new_ground_sector = ground_sector;
     
     point move_speed = attempted_move_speed;

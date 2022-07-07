@@ -137,9 +137,8 @@ string get_matching_string_starts(const string &s1, const string &s2) {
  *   String to check.
  */
 bool is_number(const string &s) {
-    unsigned char ch;
     for(size_t c = 0; c < s.size(); ++c) {
-        ch = s[c];
+        unsigned char ch = s[c];
         if((ch < '0' || ch > '9') && ch != '-' && ch != ',' && ch != '.') {
             return false;
         }

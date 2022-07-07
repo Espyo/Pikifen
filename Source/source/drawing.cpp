@@ -626,7 +626,7 @@ void draw_filled_rounded_rectangle(
     const ALLEGRO_COLOR &color
 ) {
     float final_radii = std::min(radii, size.x / 2.0f);
-    final_radii = std::min(radii, size.y / 2.0f);
+    final_radii = std::min(final_radii, size.y / 2.0f);
     al_draw_filled_rounded_rectangle(
         center.x - size.x / 2.0f, center.y - size.y / 2.0f,
         center.x + size.x / 2.0f, center.y + size.y / 2.0f,
@@ -844,6 +844,8 @@ void draw_liquid(
                     (anim_sprite->file_size.y * 0.5) * anim_sprite->scale.x;
             }
         }
+
+        if(!anim_sprite) continue;
         
         for(size_t v = 0; v < n_vertexes; ++v) {
         
@@ -1244,7 +1246,7 @@ void draw_rounded_rectangle(
     const ALLEGRO_COLOR &color, const float thickness
 ) {
     float final_radii = std::min(radii, size.x / 2.0f);
-    final_radii = std::min(radii, size.y / 2.0f);
+    final_radii = std::min(final_radii, size.y / 2.0f);
     al_draw_rounded_rectangle(
         center.x - size.x / 2.0f, center.y - size.y / 2.0f,
         center.x + size.x / 2.0f, center.y + size.y / 2.0f,
@@ -1949,7 +1951,7 @@ void get_control_icon_info(
             } else {
                 *text +=
                     " axis " + i2s(c->axis) +
-                         (c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+");
+                    (c->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+");
             }
             
         } else {

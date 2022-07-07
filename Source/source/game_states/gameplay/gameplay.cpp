@@ -259,14 +259,8 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
     //we only need to process the pixels on the top-left quadrant and then
     //apply them to the respective pixels on the other quadrants as well.
     
-    //How close to the edge is the current pixel? 0 = center, 1 = edge.
-    float cur_ratio = 0;
-    //Alpha to use for this pixel.
-    unsigned char cur_a = 0;
     //This is where the "near" section of the fog is.
     float near_ratio = near_radius / far_radius;
-    //Memory location of the opposite row's pixels.
-    unsigned char* opposite_row;
     
 #define fill_pixel(x, row) \
     row[(x) * 4 + 0] = 255; \
@@ -278,7 +272,7 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
         for(int x = 0; x < ceil(GAMEPLAY::FOG_BITMAP_SIZE / 2.0); ++x) {
             //First, get how far this pixel is from the center.
             //Center = 0, radius or beyond = 1.
-            cur_ratio =
+            float cur_ratio =
                 dist(
                     point(x, y),
                     point(
@@ -293,9 +287,10 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
                 interpolate_number(cur_ratio, near_ratio, 1.0f, 0.0f, 1.0f);
             //Finally, clamp the value and get the alpha.
             cur_ratio = clamp(cur_ratio, 0.0f, 1.0f);
-            cur_a = 255 * cur_ratio;
+            unsigned char cur_a = 255 * cur_ratio;
             
-            opposite_row =
+            //Save the memory location of the opposite row's pixels.
+            unsigned char* opposite_row =
                 row + region->pitch * (GAMEPLAY::FOG_BITMAP_SIZE - y - y - 1);
             fill_pixel(x, row);
             fill_pixel(GAMEPLAY::FOG_BITMAP_SIZE - x - 1, row);

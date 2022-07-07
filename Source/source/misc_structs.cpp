@@ -825,8 +825,7 @@ notification_struct::notification_struct() :
 void notification_struct::draw() const {
     if(visibility == 0.0f) return;
     
-    float scale = interpolate_number(visibility, 0.0f, 1.0f, 0.2f, 1.0f);
-    scale = ease(EASE_OUT, visibility);
+    float scale = ease(EASE_OUT, visibility);
     
     ALLEGRO_TRANSFORM tra, old_tra;
     al_identity_transform(&tra);
