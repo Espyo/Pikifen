@@ -57,12 +57,12 @@ extern const string GUI_FILE_PATH;
 class main_menu_state : public game_state {
 public:
     main_menu_state();
-    void load();
-    void unload();
-    void handle_allegro_event(ALLEGRO_EVENT &ev);
-    void do_logic();
-    void do_drawing();
-    string get_name() const;
+    void load() override;
+    void unload() override;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void do_logic() override;
+    void do_drawing() override;
+    string get_name() const override;
     
 private:
     struct logo_pik {
@@ -121,12 +121,12 @@ private:
 class options_menu_state : public game_state {
 public:
     options_menu_state();
-    void load();
-    void unload();
-    void handle_allegro_event(ALLEGRO_EVENT &ev);
-    void do_logic();
-    void do_drawing();
-    string get_name() const;
+    void load() override;
+    void unload() override;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void do_logic() override;
+    void do_drawing() override;
+    string get_name() const override;
     
 private:
     //Known good resolution presets.
@@ -163,12 +163,12 @@ private:
 class controls_menu_state : public game_state {
 public:
     controls_menu_state();
-    void load();
-    void unload();
-    void handle_allegro_event(ALLEGRO_EVENT &ev);
-    void do_logic();
-    void do_drawing();
-    string get_name() const;
+    void load() override;
+    void unload() override;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void do_logic() override;
+    void do_drawing() override;
+    string get_name() const override;
     
 private:
     //Bitmap of the menu's background.
@@ -202,12 +202,12 @@ private:
 class area_menu_state : public game_state {
 public:
     area_menu_state();
-    void load();
-    void unload();
-    void handle_allegro_event(ALLEGRO_EVENT &ev);
-    void do_logic();
-    void do_drawing();
-    string get_name() const;
+    void load() override;
+    void unload() override;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void do_logic() override;
+    void do_drawing() override;
+    string get_name() const override;
     
 private:
     //Bitmap of the menu background,

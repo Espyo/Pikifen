@@ -1226,7 +1226,7 @@ void animation_editor::sprite_bmp_flood_fill(
         int x;
         //Y coordinate.
         int y;
-        int_point(point p) :
+        explicit int_point(const point &p) :
             x(p.x),
             y(p.y) { }
         int_point(int x, int y) :

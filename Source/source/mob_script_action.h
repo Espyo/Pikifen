@@ -437,7 +437,7 @@ struct mob_action_call {
     bool run(mob* m, void* custom_data_1, void* custom_data_2);
     
     mob_action_call(MOB_ACTION_TYPES type = MOB_ACTION_UNKNOWN);
-    mob_action_call(custom_action_code code);
+    explicit mob_action_call(custom_action_code code);
 };
 
 

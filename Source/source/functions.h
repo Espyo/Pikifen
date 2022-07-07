@@ -116,7 +116,7 @@ bool does_edge_have_wall_shadow(
     edge* e_ptr, sector** affected_sector, sector** unaffected_sector
 );
 void draw_edge_offset_on_buffer(
-    vector<edge_offset_cache> &caches, size_t e_idx
+    const vector<edge_offset_cache> &caches, size_t e_idx
 );
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
@@ -199,7 +199,7 @@ void save_maker_tools();
 void save_options();
 void save_screenshot();
 size_t select_next_item_directionally(
-    const vector<point> item_coordinates, const size_t selected_item,
+    const vector<point> &item_coordinates, const size_t selected_item,
     const float direction, const point &loop_region
 );
 vector<string> semicolon_list_to_vector(
@@ -228,7 +228,7 @@ vector<string_token> tokenize_string(const string &s);
 string unescape_string(const string &s);
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
-    vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
+    const vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
     const bool clear_first
 );
 void update_offset_effect_caches (

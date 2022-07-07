@@ -313,7 +313,7 @@ struct polygon {
     vertex* get_rightmost_vertex() const;
     
     polygon();
-    polygon(const vector<vertex*> &vertexes);
+    explicit polygon(const vector<vertex*> &vertexes);
 };
 
 
@@ -517,7 +517,7 @@ TRIANGULATION_ERRORS get_polys(
     sector* s, polygon* outer, vector<polygon>* inners,
     set<edge*>* lone_edges, const bool check_vertex_reuse
 );
-vertex* get_rightmost_vertex(map<edge*, bool> &edges);
+vertex* get_rightmost_vertex(const map<edge*, bool> &edges);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(
     const point &p, size_t* sector_nr, const bool use_blockmap

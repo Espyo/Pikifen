@@ -77,7 +77,7 @@ public:
     /* -------------------------------------------------------------------------
     * Creates a HUD bubble manager instance.
     */
-    hud_bubble_manager(gui_manager* hud) :
+    explicit hud_bubble_manager(gui_manager* hud) :
         hud(hud),
         transition_duration(0.0f),
         move_method(HUD_BUBBLE_MOVE_METHOD_STRAIGHT),

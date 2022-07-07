@@ -28,10 +28,10 @@ using std::vector;
 
 
 namespace AREA_EDITOR {
-//Radius to use when drawing a cross-section point.
-const float CROSS_SECTION_POINT_RADIUS = 8.0f;
 //A comfortable distance, useful for many scenarios.
 const float COMFY_DIST = 32.0f;
+//Radius to use when drawing a cross-section point.
+const float CROSS_SECTION_POINT_RADIUS = 8.0f;
 //The cursor snap for heavy modes updates these many times a second.
 const float CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 //Scale the debug text by this much.

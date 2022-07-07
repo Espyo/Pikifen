@@ -60,7 +60,7 @@ public:
     
 protected:
     //Tick class-specific logic.
-    void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t) override;
 };
 
 

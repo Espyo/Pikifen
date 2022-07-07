@@ -30,7 +30,7 @@
  *   Index of the edge whose effects to draw.
  */
 void draw_edge_offset_on_buffer(
-    vector<edge_offset_cache> &caches, size_t e_idx
+    const vector<edge_offset_cache> &caches, size_t e_idx
 ) {
     //Keep the end opacity as a constant. Changing it helps with debugging.
     const float END_OPACITY = 0.0f;
@@ -678,7 +678,7 @@ void get_next_offset_effect_edge(
  */
 void update_offset_effect_buffer(
     const point &cam_tl, const point &cam_br,
-    vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
+    const vector<edge_offset_cache> &caches, ALLEGRO_BITMAP* buffer,
     const bool clear_first
 ) {
     unordered_set<size_t> edges;

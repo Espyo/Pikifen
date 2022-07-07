@@ -51,14 +51,14 @@ public:
     editor();
     virtual ~editor() = default;
     
-    virtual void do_drawing() = 0;
-    virtual void do_logic() = 0;
-    virtual void handle_allegro_event(ALLEGRO_EVENT &ev);
-    virtual void load();
-    virtual void unload();
+    virtual void do_drawing() override = 0;
+    virtual void do_logic() override = 0;
+    virtual void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    virtual void load() override;
+    virtual void unload() override;
     virtual void update_style();
-    virtual void update_transformations();
-    virtual string get_name() const = 0;
+    virtual void update_transformations() override;
+    virtual string get_name() const override = 0;
     
 protected:
 
@@ -240,7 +240,7 @@ protected:
         //Bitmap, if any.
         ALLEGRO_BITMAP* bitmap;
         
-        picker_item(
+        explicit picker_item(
             const string &name,
             const string &category = "", ALLEGRO_BITMAP* bitmap = nullptr
         );
@@ -264,7 +264,7 @@ protected:
         //Only show picker dialog items matching this filter.
         string filter;
         
-        picker_info(editor* editor_ptr);
+        explicit picker_info(editor* editor_ptr);
         void process();
     };
     

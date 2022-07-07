@@ -931,7 +931,6 @@ control_info* find_control(const string &button_name) {
     for(size_t b = 0; b < game.buttons.list.size(); ++b) {
         if(game.buttons.list[b].internal_name == button_name) {
             return find_control(game.buttons.list[b].id);
-            break;
         }
     }
     return NULL;

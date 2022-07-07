@@ -44,12 +44,12 @@ public:
     float time_taken;
     
     results_state();
-    void load();
-    void unload();
-    void handle_allegro_event(ALLEGRO_EVENT &ev);
-    void do_logic();
-    void do_drawing();
-    string get_name() const;
+    void load() override;
+    void unload() override;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void do_logic() override;
+    void do_drawing() override;
+    string get_name() const override;
     void reset();
     
 private:

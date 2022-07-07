@@ -36,7 +36,7 @@ public:
     
     enemy_type();
     
-    void load_properties(data_node* file);
+    void load_properties(data_node* file) override;
 };
 
 

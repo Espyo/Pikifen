@@ -156,7 +156,7 @@ struct status {
     
     void tick(const float delta_t);
     
-    status(status_type* type);
+    explicit status(status_type* type);
 };
 
 

@@ -322,7 +322,7 @@ public:
     float max_span;
     
     //General functions.
-    mob_type(MOB_CATEGORIES category_id);
+    explicit mob_type(MOB_CATEGORIES category_id);
     virtual ~mob_type();
     virtual void load_properties(data_node* file);
     virtual void load_resources(data_node* file);

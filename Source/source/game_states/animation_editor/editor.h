@@ -47,12 +47,13 @@ public:
     
     void update_history(const string &n);
     
-    void do_logic();
-    void do_drawing();
+    void do_logic() override;
+    void do_drawing() override;
+    void load() override;
+    void unload() override;
+    string get_name() const override;
+    
     void draw_canvas();
-    void load();
-    void unload();
-    string get_name() const;
     
     animation_editor();
     
@@ -247,21 +248,21 @@ private:
     void update_stats();
     
     //Input handler functions.
-    void handle_key_char_canvas(const ALLEGRO_EVENT &ev);
-    void handle_key_down_anywhere(const ALLEGRO_EVENT &ev);
-    void handle_key_down_canvas(const ALLEGRO_EVENT &ev);
-    void handle_lmb_double_click(const ALLEGRO_EVENT &ev);
-    void handle_lmb_down(const ALLEGRO_EVENT &ev);
-    void handle_lmb_drag(const ALLEGRO_EVENT &ev);
-    void handle_lmb_up(const ALLEGRO_EVENT &ev);
-    void handle_mmb_double_click(const ALLEGRO_EVENT &ev);
-    void handle_mmb_down(const ALLEGRO_EVENT &ev);
-    void handle_mmb_drag(const ALLEGRO_EVENT &ev);
-    void handle_mouse_update(const ALLEGRO_EVENT &ev);
-    void handle_mouse_wheel(const ALLEGRO_EVENT &ev);
-    void handle_rmb_double_click(const ALLEGRO_EVENT &ev);
-    void handle_rmb_down(const ALLEGRO_EVENT &ev);
-    void handle_rmb_drag(const ALLEGRO_EVENT &ev);
+    void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
+    void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;
+    void handle_key_down_canvas(const ALLEGRO_EVENT &ev) override;
+    void handle_lmb_double_click(const ALLEGRO_EVENT &ev) override;
+    void handle_lmb_down(const ALLEGRO_EVENT &ev) override;
+    void handle_lmb_drag(const ALLEGRO_EVENT &ev) override;
+    void handle_lmb_up(const ALLEGRO_EVENT &ev) override;
+    void handle_mmb_double_click(const ALLEGRO_EVENT &ev) override;
+    void handle_mmb_down(const ALLEGRO_EVENT &ev) override;
+    void handle_mmb_drag(const ALLEGRO_EVENT &ev) override;
+    void handle_mouse_update(const ALLEGRO_EVENT &ev) override;
+    void handle_mouse_wheel(const ALLEGRO_EVENT &ev) override;
+    void handle_rmb_double_click(const ALLEGRO_EVENT &ev) override;
+    void handle_rmb_down(const ALLEGRO_EVENT &ev) override;
+    void handle_rmb_drag(const ALLEGRO_EVENT &ev) override;
     void pan_cam(const ALLEGRO_EVENT &ev);
     void reset_cam_xy();
     void reset_cam_zoom();

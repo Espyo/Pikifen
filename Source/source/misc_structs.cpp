@@ -919,7 +919,7 @@ float notification_struct::get_visibility() const {
  *   Where to show it in the game world.
  */
 void notification_struct::set_contents(
-    control_info* control, const string text, const point pos
+    control_info* control, const string &text, const point &pos
 ) {
     this->control = control;
     this->text = text;

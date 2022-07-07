@@ -60,9 +60,9 @@ public:
     //Destructor.
     ~onion();
     //Mob drawing routine.
-    void draw_mob();
+    void draw_mob() override;
     //Read script variables from the area data.
-    void read_script_vars(const script_var_reader &svr);
+    void read_script_vars(const script_var_reader &svr) override;
     
     static const float ONION_NEW_SEED_Z_OFFSET;
     static const float ONION_SPEW_ANGLE_SHIFT;
@@ -72,7 +72,7 @@ public:
     
 protected:
     //Tick class-specific logic.
-    void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t) override;
 };
 
 

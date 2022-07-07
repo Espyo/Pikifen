@@ -436,7 +436,7 @@ void group_info_struct::init_spots(mob* affected_mob_ptr) {
         point pos;
         //How far away it is from the rightmost spot.
         dist distance_to_rightmost;
-        alpha_spot(const point &p) :
+        explicit alpha_spot(const point &p) :
             pos(p) { }
     };
     
@@ -1082,7 +1082,7 @@ void pikmin_nest_type_struct::load_properties(
  *  Speed to ride at, in ratio per second.
  */
 track_info_struct::track_info_struct(
-    mob* m, const vector<size_t> checkpoints, const float ride_speed
+    mob* m, const vector<size_t> &checkpoints, const float ride_speed
 ) :
     m(m),
     checkpoints(checkpoints),

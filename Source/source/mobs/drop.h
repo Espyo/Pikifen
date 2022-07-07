@@ -34,11 +34,11 @@ public:
     drop(const point &pos, drop_type* dro_type, const float angle);
     
     //Mob drawing routine.
-    void draw_mob();
+    void draw_mob() override;
     
 protected:
     //Tick class-specific logic.
-    void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t) override;
 };
 
 

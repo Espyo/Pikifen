@@ -147,13 +147,13 @@ public:
     void update_available_leaders();
     void update_closest_group_members();
     
-    void load();
-    void unload();
-    void handle_allegro_event(ALLEGRO_EVENT &ev);
-    void do_logic();
-    void do_drawing();
-    void update_transformations();
-    string get_name() const;
+    void load() override;
+    void unload() override;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void do_logic() override;
+    void do_drawing() override;
+    void update_transformations() override;
+    string get_name() const override;
     
 private:
 

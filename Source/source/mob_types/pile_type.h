@@ -64,8 +64,8 @@ public:
     bool delete_when_finished;
     
     pile_type();
-    void load_properties(data_node* file);
-    anim_conversion_vector get_anim_conversions() const;
+    void load_properties(data_node* file) override;
+    anim_conversion_vector get_anim_conversions() const override;
 };
 
 

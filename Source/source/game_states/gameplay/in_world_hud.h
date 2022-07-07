@@ -84,9 +84,9 @@ public:
 class in_world_fraction : public in_world_hud_item {
 public:
     //Constructor.
-    in_world_fraction(mob* m);
+    explicit in_world_fraction(mob* m);
     //Draw the item.
-    void draw();
+    void draw() override;
     //Sets the color.
     void set_color(const ALLEGRO_COLOR &new_color);
     //Sets the requirement number.
@@ -94,9 +94,9 @@ public:
     //Sets the value number.
     void set_value_number(const float new_value_nr);
     //Start fading away.
-    void start_fading();
+    void start_fading() override;
     //Tick.
-    void tick(const float delta_t);
+    void tick(const float delta_t) override;
     
 private:
     //Upper number, the one representing the current value.
@@ -121,13 +121,13 @@ public:
     float visible_ratio;
     
     //Constructor.
-    in_world_health_wheel(mob* m);
+    explicit in_world_health_wheel(mob* m);
     //Draw the item.
-    void draw();
+    void draw() override;
     //Start fading away.
-    void start_fading();
+    void start_fading() override;
     //Tick.
-    void tick(const float delta_t);
+    void tick(const float delta_t) override;
 };
 
 

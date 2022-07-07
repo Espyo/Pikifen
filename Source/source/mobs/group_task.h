@@ -37,7 +37,7 @@ public:
         //What Pikmin is reserving/occupying. NULL if free.
         pikmin* pikmin_here;
         //Constructor.
-        group_task_spot(const point &pos);
+        explicit group_task_spot(const point &pos);
     };
     
     //List of spots for Pikmin to use.
@@ -53,7 +53,7 @@ public:
     bool get_fraction_numbers_info(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
-    ) const;
+    ) const override;
     //Returns a free spot, if any.
     group_task_spot* get_free_spot();
     //Returns the current working power.
@@ -68,7 +68,7 @@ public:
     
 protected:
     //Tick class-specific logic.
-    void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t) override;
     
 private:
     //Combined Pikmin power put into the task right now. Cache for performance.

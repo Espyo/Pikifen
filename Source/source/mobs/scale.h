@@ -31,7 +31,7 @@ public:
     bool get_fraction_numbers_info(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
-    ) const;
+    ) const override;
     
     //Constructor.
     scale(const point &pos, scale_type* type, float angle);

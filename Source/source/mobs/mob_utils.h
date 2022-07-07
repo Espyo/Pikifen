@@ -57,7 +57,7 @@ struct carrier_spot_struct {
     //Pikmin that is in this spot.
     mob* pik_ptr;
     
-    carrier_spot_struct(const point &pos);
+    explicit carrier_spot_struct(const point &pos);
 };
 
 
@@ -154,7 +154,7 @@ struct circling_info_struct {
     //Angle of the circle to go to.
     float cur_angle;
     
-    circling_info_struct(mob* m);
+    explicit circling_info_struct(mob* m);
 };
 
 
@@ -219,7 +219,7 @@ struct group_info_struct {
     point get_spot_offset(const size_t spot_index) const;
     void reassign_spots();
     bool change_standby_type(const bool move_backwards);
-    group_info_struct(mob* leader_ptr);
+    explicit group_info_struct(mob* leader_ptr);
 };
 
 
@@ -400,7 +400,7 @@ struct parent_info_struct {
     //Method by which the limb should be drawn.
     LIMB_DRAW_METHODS limb_draw_method;
     
-    parent_info_struct(mob* m);
+    explicit parent_info_struct(mob* m);
 };
 
 
@@ -507,7 +507,7 @@ struct track_info_struct {
     float ride_speed;
     
     track_info_struct(
-        mob* m, const vector<size_t> checkpoints, const float speed
+        mob* m, const vector<size_t> &checkpoints, const float speed
     );
 };
 

@@ -67,9 +67,9 @@ public:
     bool cancellable_with_whistle;
     
     track_type();
-    void load_properties(data_node* file);
-    void load_resources(data_node* file);
-    anim_conversion_vector get_anim_conversions() const;
+    void load_properties(data_node* file) override;
+    void load_resources(data_node* file) override;
+    anim_conversion_vector get_anim_conversions() const override;
 };
 
 

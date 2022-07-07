@@ -64,7 +64,7 @@ public:
     //Returns the starting point of the bridge.
     point get_start_point();
     //Reads the provided script variables, if any, and does stuff with them.
-    void read_script_vars(const script_var_reader &svr);
+    void read_script_vars(const script_var_reader &svr) override;
     //Sets up the bridge using its linked mob.
     void setup();
 };

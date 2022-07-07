@@ -131,18 +131,18 @@ public:
     leader(const point &pos, leader_type* type, const float angle);
     
     //Can the mob currently receive the specified status effect?
-    bool can_receive_status(status_type* s) const;
+    bool can_receive_status(status_type* s) const override;
     //Return the coords and distance of its spot in the group.
     void get_group_spot_info(
         point* final_spot, float* final_dist
-    ) const;
+    ) const override;
     //Mob drawing routine.
-    void draw_mob();
+    void draw_mob() override;
     
     
 protected:
     //Tick class-specific logic.
-    void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t) override;
     
 private:
     //Returns how many rows are needed for all members' dismissal.

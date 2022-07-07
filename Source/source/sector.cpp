@@ -2491,7 +2491,7 @@ TRIANGULATION_ERRORS get_polys(
  * edges:
  *   Edges to check.
  */
-vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
+vertex* get_rightmost_vertex(const map<edge*, bool> &edges) {
     vertex* rightmost = NULL;
     
     for(auto &e : edges) {

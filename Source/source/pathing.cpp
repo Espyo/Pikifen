@@ -10,8 +10,8 @@
 
 #include "pathing.h"
 
-#include "game.h"
 #include "functions.h"
+#include "game.h"
 #include "mobs/mob_utils.h"
 
 
@@ -29,152 +29,6 @@ path_follow_settings::path_follow_settings() :
     final_target_distance(MOB::DEF_CHASE_TARGET_DISTANCE),
     flags(0) {
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a new path stop.
- * pos:
- *   Its coordinates.
- * links:
- *   List of path links, linking it to other stops.
- */
-path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
-    pos(pos),
-    links(links),
-    sector_ptr(nullptr) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys a path stop.
- */
-path_stop::~path_stop() {
-    while(!links.empty()) {
-        delete *(links.begin());
-        links.erase(links.begin());
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a link between this stop and another, whether it's one-way or not.
- * Also adds the link to the other stop, if applicable.
- * If these two stops already had some link, it gets removed.
- * other_stop:
- *   Pointer to the other stop.
- * normal:
- *   Normal link? False means one-way link.
- */
-void path_stop::add_link(path_stop* other_stop, const bool normal) {
-    PATH_LINK_TYPES link_type = PATH_LINK_TYPE_NORMAL;
-    string link_label;
-    
-    path_link* old_link_data = get_link(other_stop);
-    if(!old_link_data) {
-        old_link_data = other_stop->get_link(this);
-    }
-    if(old_link_data) {
-        link_type = old_link_data->type;
-        link_label = old_link_data->label;
-    }
-    
-    remove_link(old_link_data);
-    other_stop->remove_link(this);
-    
-    path_link* new_link = new path_link(this, other_stop, INVALID);
-    new_link->type = link_type;
-    new_link->label = link_label;
-    links.push_back(new_link);
-    
-    if(normal) {
-        new_link = new path_link(other_stop, this, INVALID);
-        new_link->type = link_type;
-        new_link->label = link_label;
-        other_stop->links.push_back(new_link);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Calculates the distance between it and all neighbors.
- */
-void path_stop::calculate_dists() {
-    for(size_t l = 0; l < links.size(); ++l) {
-        links[l]->calculate_dist(this);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Calculates the distance between it and all neighbors, and then goes through
- * the neighbors and updates their distance back to this stop, if that
- * neighbor links back.
- */
-void path_stop::calculate_dists_plus_neighbors() {
-    for(size_t l = 0; l < links.size(); ++l) {
-        path_link* l_ptr = links[l];
-        l_ptr->calculate_dist(this);
-    }
-    
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        path_link* l_ptr = s_ptr->get_link(this);
-        if(l_ptr) {
-            l_ptr->calculate_dist(s_ptr);
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the pointer of the link between this stop and another.
- * The links in memory are one-way, meaning that if the only link
- * is from the other stop to this one, it will not count.
- * Returns NULL if it does not link to that stop.
- * other_stop:
- *   Path stop to check against.
- */
-path_link* path_stop::get_link(path_stop* other_stop) const {
-    for(size_t l = 0; l < links.size(); ++l) {
-        if(links[l]->end_ptr == other_stop) return links[l];
-    }
-    return NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Removes the specified link.
- * Does nothing if there is no such link.
- * link_ptr:
- *   Pointer to the link to remove.
- */
-void path_stop::remove_link(path_link* link_ptr) {
-    for(size_t l = 0; l < links.size(); ++l) {
-        if(links[l] == link_ptr) {
-            delete links[l];
-            links.erase(links.begin() + l);
-            return;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Removes the link between this stop and the specified one.
- * Does nothing if there is no such link.
- * other_stop:
- *   Path stop to remove the link from.
- */
-void path_stop::remove_link(path_stop* other_stop) {
-    for(size_t l = 0; l < links.size(); ++l) {
-        if(links[l]->end_ptr == other_stop) {
-            delete links[l];
-            links.erase(links.begin() + l);
-            return;
-        }
-    }
 }
 
 
@@ -355,6 +209,152 @@ void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
             if(!m_ptr->path_info) continue;
             
             m_ptr->fsm.run_event(MOB_EV_PATHS_CHANGED);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new path stop.
+ * pos:
+ *   Its coordinates.
+ * links:
+ *   List of path links, linking it to other stops.
+ */
+path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
+    pos(pos),
+    links(links),
+    sector_ptr(nullptr) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a path stop.
+ */
+path_stop::~path_stop() {
+    while(!links.empty()) {
+        delete *(links.begin());
+        links.erase(links.begin());
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a link between this stop and another, whether it's one-way or not.
+ * Also adds the link to the other stop, if applicable.
+ * If these two stops already had some link, it gets removed.
+ * other_stop:
+ *   Pointer to the other stop.
+ * normal:
+ *   Normal link? False means one-way link.
+ */
+void path_stop::add_link(path_stop* other_stop, const bool normal) {
+    PATH_LINK_TYPES link_type = PATH_LINK_TYPE_NORMAL;
+    string link_label;
+    
+    path_link* old_link_data = get_link(other_stop);
+    if(!old_link_data) {
+        old_link_data = other_stop->get_link(this);
+    }
+    if(old_link_data) {
+        link_type = old_link_data->type;
+        link_label = old_link_data->label;
+    }
+    
+    remove_link(old_link_data);
+    other_stop->remove_link(this);
+    
+    path_link* new_link = new path_link(this, other_stop, INVALID);
+    new_link->type = link_type;
+    new_link->label = link_label;
+    links.push_back(new_link);
+    
+    if(normal) {
+        new_link = new path_link(other_stop, this, INVALID);
+        new_link->type = link_type;
+        new_link->label = link_label;
+        other_stop->links.push_back(new_link);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the distance between it and all neighbors.
+ */
+void path_stop::calculate_dists() {
+    for(size_t l = 0; l < links.size(); ++l) {
+        links[l]->calculate_dist(this);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the distance between it and all neighbors, and then goes through
+ * the neighbors and updates their distance back to this stop, if that
+ * neighbor links back.
+ */
+void path_stop::calculate_dists_plus_neighbors() {
+    for(size_t l = 0; l < links.size(); ++l) {
+        path_link* l_ptr = links[l];
+        l_ptr->calculate_dist(this);
+    }
+    
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        path_link* l_ptr = s_ptr->get_link(this);
+        if(l_ptr) {
+            l_ptr->calculate_dist(s_ptr);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the pointer of the link between this stop and another.
+ * The links in memory are one-way, meaning that if the only link
+ * is from the other stop to this one, it will not count.
+ * Returns NULL if it does not link to that stop.
+ * other_stop:
+ *   Path stop to check against.
+ */
+path_link* path_stop::get_link(path_stop* other_stop) const {
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(links[l]->end_ptr == other_stop) return links[l];
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes the specified link.
+ * Does nothing if there is no such link.
+ * link_ptr:
+ *   Pointer to the link to remove.
+ */
+void path_stop::remove_link(path_link* link_ptr) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(links[l] == link_ptr) {
+            delete links[l];
+            links.erase(links.begin() + l);
+            return;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes the link between this stop and the specified one.
+ * Does nothing if there is no such link.
+ * other_stop:
+ *   Path stop to remove the link from.
+ */
+void path_stop::remove_link(path_stop* other_stop) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(links[l]->end_ptr == other_stop) {
+            delete links[l];
+            links.erase(links.begin() + l);
+            return;
         }
     }
 }

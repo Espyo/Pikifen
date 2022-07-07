@@ -261,7 +261,6 @@ float gui_item::get_juice_value() {
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
-        break;
     }
     case JUICE_TYPE_GROW_TEXT_MEDIUM: {
         float anim_ratio =
@@ -269,7 +268,6 @@ float gui_item::get_juice_value() {
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
-        break;
     }
     case JUICE_TYPE_GROW_TEXT_HIGH: {
         float anim_ratio =
@@ -277,7 +275,6 @@ float gui_item::get_juice_value() {
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
-        break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_LOW: {
         float anim_ratio =
@@ -285,7 +282,6 @@ float gui_item::get_juice_value() {
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_LOW_MULT;
-        break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM: {
         float anim_ratio =
@@ -293,7 +289,6 @@ float gui_item::get_juice_value() {
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_MEDIUM_MULT;
-        break;
     }
     case JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH: {
         float anim_ratio =
@@ -301,7 +296,6 @@ float gui_item::get_juice_value() {
         return
             ease(EASE_UP_AND_DOWN_ELASTIC, anim_ratio) *
             GUI::JUICY_GROW_TEXT_HIGH_MULT;
-        break;
     }
     case JUICE_TYPE_GROW_ICON: {
         float anim_ratio =
@@ -309,11 +303,9 @@ float gui_item::get_juice_value() {
         return
             ease(EASE_UP_AND_DOWN, anim_ratio) *
             GUI::JUICY_GROW_ICON_MULT;
-        break;
     }
     default: {
         return 0.0f;
-        break;
     }
     }
 }

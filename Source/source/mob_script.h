@@ -229,7 +229,7 @@ public:
     
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
     mob_event(data_node* node, const vector<mob_action_call*> &actions);
-    mob_event(
+    explicit mob_event(
         const MOB_EV_TYPES t,
         const vector<mob_action_call*> &a = vector<mob_action_call*>()
     );
@@ -251,7 +251,7 @@ public:
     
     mob_event* get_event(const MOB_EV_TYPES type) const;
     
-    mob_state(const string &name);
+    explicit mob_state(const string &name);
     mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
     mob_state(const string &name, const size_t id);
 };

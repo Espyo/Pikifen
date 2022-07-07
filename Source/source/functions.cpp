@@ -426,7 +426,7 @@ vector<string> folder_to_vector(
     al_destroy_fs_entry(folder);
     
     
-    sort(v.begin(), v.end(), [] (string s1, string s2) -> bool {
+    sort(v.begin(), v.end(), [] (const string &s1, const string &s2) -> bool {
         return str_to_lower(s1) < str_to_lower(s2);
     });
     
@@ -1567,7 +1567,7 @@ void save_screenshot() {
  *   Width and height of the loop region.
  */
 size_t select_next_item_directionally(
-    const vector<point> item_coordinates, const size_t selected_item,
+    const vector<point> &item_coordinates, const size_t selected_item,
     const float direction, const point &loop_region
 ) {
     const float MIN_BLINDSPOT_ANGLE = TAU * 0.17;

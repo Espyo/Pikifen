@@ -301,7 +301,7 @@ public:
     //The GUI it belongs to.
     gui_manager* gui;
     
-    tooltip_gui_item(gui_manager* gui);
+    explicit tooltip_gui_item(gui_manager* gui);
 private:
     string prev_text;
 };

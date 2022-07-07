@@ -27,15 +27,15 @@ using std::vector;
  */
 class resource_category : public mob_category {
 public:
-    void get_type_names(vector<string> &list) const;
-    mob_type* get_type(const string &name) const;
-    mob_type* create_type();
-    void register_type(mob_type* type);
+    void get_type_names(vector<string> &list) const override;
+    mob_type* get_type(const string &name) const override;
+    mob_type* create_type() override;
+    void register_type(mob_type* type) override;
     mob* create_mob(
         const point &pos, mob_type* type, const float angle
-    );
-    void erase_mob(mob* m);
-    void clear_types();
+    ) override;
+    void erase_mob(mob* m) override;
+    void clear_types() override;
     
     resource_category();
 };

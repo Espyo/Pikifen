@@ -908,7 +908,7 @@ void area_editor::get_affected_sectors(
  *   The list of affected sectors to fill out.
  */
 void area_editor::get_affected_sectors(
-    set<sector*> &sectors, unordered_set<sector*> &list
+    const set<sector*> &sectors, unordered_set<sector*> &list
 ) const {
     for(auto s : sectors) {
         get_affected_sectors(s, list);
@@ -925,7 +925,7 @@ void area_editor::get_affected_sectors(
  *   The list of affected sectors to fill out.
  */
 void area_editor::get_affected_sectors(
-    set<vertex*> &vertexes, unordered_set<sector*> &list
+    const set<vertex*> &vertexes, unordered_set<sector*> &list
 ) const {
     for(auto v : vertexes) {
         for(size_t e = 0; e < v->edges.size(); ++e) {

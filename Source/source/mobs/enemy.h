@@ -39,15 +39,15 @@ public:
     enemy(const point &pos, enemy_type* type, const float angle);
     
     //Can the mob currently receive the specified status effect?
-    bool can_receive_status(status_type* s) const;
+    bool can_receive_status(status_type* s) const override;
     //Mob drawing routine.
-    void draw_mob();
+    void draw_mob() override;
     //Death finish class-specific logic.
-    void finish_dying_class_specifics();
+    void finish_dying_class_specifics() override;
     //Read script variables from the area data.
-    void read_script_vars(const script_var_reader &svr);
+    void read_script_vars(const script_var_reader &svr) override;
     //Death start class-specific logic.
-    void start_dying_class_specifics();
+    void start_dying_class_specifics() override;
 };
 
 

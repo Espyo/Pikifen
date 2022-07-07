@@ -339,7 +339,7 @@ struct maker_tools_info {
  */
 struct bmp_manager {
 public:
-    bmp_manager(const string &base_dir);
+    explicit bmp_manager(const string &base_dir);
     ALLEGRO_BITMAP* get(
         const string &name, data_node* node = NULL,
         const bool report_errors = true
@@ -547,7 +547,7 @@ struct script_var_reader {
     bool get(const string &name, float &dest) const;
     bool get(const string &name, ALLEGRO_COLOR &dest) const;
     bool get(const string &name, point &dest) const;
-    script_var_reader(map<string, string> &vars);
+    explicit script_var_reader(map<string, string> &vars);
 };
 
 
@@ -685,7 +685,7 @@ public:
     void draw() const;
     float get_visibility() const;
     void set_contents(
-        control_info* control, const string text, const point pos
+        control_info* control, const string &text, const point &pos
     );
     void set_enabled(const bool enabled);
     void tick(const float delta_t);

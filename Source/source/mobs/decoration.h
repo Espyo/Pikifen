@@ -35,7 +35,7 @@ public:
     decoration(const point &pos, decoration_type* dec_type, const float angle);
     
     //Mob drawing routine.
-    void draw_mob();
+    void draw_mob() override;
 };
 
 

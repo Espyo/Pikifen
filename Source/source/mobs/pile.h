@@ -44,13 +44,13 @@ public:
     bool get_fraction_numbers_info(
         float* fraction_value_nr, float* fraction_req_nr,
         ALLEGRO_COLOR* fraction_color
-    ) const;
+    ) const override;
     //Read script variables from the area data.
-    void read_script_vars(const script_var_reader &svr);
+    void read_script_vars(const script_var_reader &svr) override;
     
 protected:
     //Tick class-specific logic.
-    void tick_class_specifics(const float delta_t);
+    void tick_class_specifics(const float delta_t) override;
 };
 
 

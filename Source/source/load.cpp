@@ -748,26 +748,26 @@ data_node load_data_file(const string &file_name) {
  */
 void load_fonts() {
     const int STANDARD_FONT_RANGES_SIZE = 2;
-    int standard_font_ranges[STANDARD_FONT_RANGES_SIZE] = {
+    const int standard_font_ranges[STANDARD_FONT_RANGES_SIZE] = {
         0x0020, 0x007E, //ASCII
         /*0x00A0, 0x00A1, //Non-breaking space and inverted !
         0x00BF, 0x00FF, //Inverted ? and European vowels and such*/
     };
     
     const int COUNTER_FONT_RANGES_SIZE = 6;
-    int counter_font_ranges[COUNTER_FONT_RANGES_SIZE] = {
+    const int counter_font_ranges[COUNTER_FONT_RANGES_SIZE] = {
         0x002D, 0x0039, //Dash, dot, slash, numbers
         0x003A, 0x003A, //Colon
         0x0078, 0x0078, //Lowercase x
     };
     
     const int JUST_NUMBERS_FONT_RANGES_SIZE = 2;
-    int just_numbers_font_ranges[JUST_NUMBERS_FONT_RANGES_SIZE] = {
+    const int just_numbers_font_ranges[JUST_NUMBERS_FONT_RANGES_SIZE] = {
         0x0030, 0x0039, //0 to 9
     };
     
     const int VALUE_FONT_RANGES_SIZE = 6;
-    int value_font_ranges[VALUE_FONT_RANGES_SIZE] = {
+    const int value_font_ranges[VALUE_FONT_RANGES_SIZE] = {
         0x0024, 0x0024, //Dollar sign
         0x002D, 0x002D, //Dash
         0x0030, 0x0039, //Numbers
