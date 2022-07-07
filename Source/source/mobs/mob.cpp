@@ -32,6 +32,8 @@ const float CARRIED_MOB_ACCELERATION = 100.0f;
 const float CARRY_STUCK_CIRCLING_RADIUS = 8.0f;
 //When a carried object is stuck, multiply the carrying speed by this.
 const float CARRY_STUCK_SPEED_MULTIPLIER = 0.4f;
+//When a carried mob sways around, rotate it by this much.
+const float CARRY_SWAY_ROTATION_AMOUNT = TAU * 0.01f;
 //When a carried mob sways around, multiply time by this.
 const float CARRY_SWAY_TIME_MULT = 4.5f;
 //When a carried mob sways around, offset X by this much.
@@ -39,24 +41,22 @@ const float CARRY_SWAY_X_TRANSLATION_AMOUNT = 2.0f;
 //When a carried mob sways around, offset Y by this much.
 const float CARRY_SWAY_Y_TRANSLATION_AMOUNT =
     CARRY_SWAY_X_TRANSLATION_AMOUNT / 2.0f;
-//When a carried mob sways around, rotate it by this much.
-const float CARRY_SWAY_ROTATION_AMOUNT = TAU * 0.01f;
-//Duration of the damage squash-and-stretch animation.
-const float DAMAGE_SQUASH_DURATION = 0.25f;
 //How much to change the scale by during a damage squash-and-stretch animation.
 const float DAMAGE_SQUASH_AMOUNT = 0.04f;
+//Duration of the damage squash-and-stretch animation.
+const float DAMAGE_SQUASH_DURATION = 0.25f;
 //The default acceleration of a mob type.
 const float DEF_ACCELERATION = 400.0f;
 //Default distance at which the mob considers the chase finished.
 const float DEF_CHASE_TARGET_DISTANCE = 3.0f;
 //The default rotation speed of a mob type.
 const float DEF_ROTATION_SPEED = 630.0f;
-//How long to suck a mob in for, when being delivered to an Onion/ship.
-const float DELIVERY_SUCK_TIME = 2.0f;
 //When a mob shakes during delivery, this is the shake multiplier.
 const float DELIVERY_SUCK_SHAKING_MULT = 4.0f;
 //When a mob shakes during delivery, multiply time by this.
 const float DELIVERY_SUCK_SHAKING_TIME_MULT = 60.0f;
+//How long to suck a mob in for, when being delivered to an Onion/ship.
+const float DELIVERY_SUCK_TIME = 2.0f;
 //Multiply the offset by this much, when doing a delivery toss.
 const float DELIVERY_TOSS_MULT = 40.0f;
 //How long to toss a mob in the air for, when being delivered to a mob.
@@ -98,14 +98,14 @@ const float SHADOW_STRETCH_MULT = 0.5f;
 const float SHADOW_Y_MULT = 0.2f;
 //Duration of the "smack" particle.
 const float SMACK_PARTICLE_DUR = 0.1f;
+//With a status effect that causes shaking, multiply time by this.
+const float STATUS_SHAKING_TIME_MULT = 60.0f;
 //Put this space between the leader and the "main" member of the group,
 //when using swarming.
 const float SWARM_MARGIN = 8.0f;
 //When swarming, the group can scale this much vertically.
 //Basically, the tube shape's girth can reach this scale.
 const float SWARM_VERTICAL_SCALE = 0.5f;
-//With a status effect that causes shaking, multiply time by this.
-const float STATUS_SHAKING_TIME_MULT = 60.0f;
 //A new "mob thrown" particle is spawned every X seconds.
 const float THROW_PARTICLE_INTERVAL = 0.02f;
 //A water wave ring particle lasts this long.

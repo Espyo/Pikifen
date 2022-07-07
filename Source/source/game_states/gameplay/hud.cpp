@@ -991,6 +991,28 @@ hud_struct::~hud_struct() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to draw a spray icon with. This does not apply to the second spray.
+ * which:
+ *   Which spray icon to draw -- the previous type's, the current type's,
+ *   or the next type's.
+ */
+void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
+    point final_center;
+    point final_size;
+    ALLEGRO_BITMAP* icon;
+    game.states.gameplay->hud->spray_icon_mgr.get_drawing_info(
+        which, &icon, &final_center, &final_size
+    );
+    
+    if(!icon) return;
+    draw_bitmap_in_box(
+        icon, final_center, final_size, 0.0f,
+        map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to draw a standby icon with.
  * which:
  *   Which standby icon to draw -- the previous type's, the current type's,
@@ -1024,28 +1046,6 @@ void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
     }
     
     draw_bitmap_in_box(bmp_bubble, final_center, final_size, 0.0f, color);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to draw a spray icon with. This does not apply to the second spray.
- * which:
- *   Which spray icon to draw -- the previous type's, the current type's,
- *   or the next type's.
- */
-void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
-    point final_center;
-    point final_size;
-    ALLEGRO_BITMAP* icon;
-    game.states.gameplay->hud->spray_icon_mgr.get_drawing_info(
-        which, &icon, &final_center, &final_size
-    );
-    
-    if(!icon) return;
-    draw_bitmap_in_box(
-        icon, final_center, final_size, 0.0f,
-        map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
-    );
 }
 
 

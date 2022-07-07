@@ -69,20 +69,20 @@ const size_t DEF_MAX_PARTICLES = 200;
 const bool DEF_MIPMAPS_ENABLED = true;
 //Default value for whether the mouse moves the cursor, for each player.
 const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
-//Default value for whether to use smooth scaling.
-const bool DEF_SMOOTH_SCALING = true;
 //Default value for whether to show HUD controls.
 const bool DEF_SHOW_HUD_CONTROLS = true;
+//Default value for whether to use smooth scaling.
+const bool DEF_SMOOTH_SCALING = true;
 //Default value for the default target framerate.
 const unsigned int DEF_TARGET_FPS = 60;
 //Default value for whether to use true fullscreen.
 const bool DEF_TRUE_FULLSCREEN = false;
+//Default value for whether to use the window position hack.
+const bool DEF_WINDOW_POSITION_HACK = false;
 //Default value for whether to use fullscreen.
 const bool DEF_WIN_FULLSCREEN = false;
 //Default value for the window height.
 const unsigned int DEF_WIN_H = 768;
-//Default value for whether to use the window position hack.
-const bool DEF_WINDOW_POSITION_HACK = false;
 //Default value for the window width.
 const unsigned int DEF_WIN_W = 1024;
 //Default value for the middle zoom level.

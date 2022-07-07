@@ -22,12 +22,12 @@
 
 
 namespace ENEMY {
-//Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
-const float SPIRIT_SIZE_MULT = 0.7;
 //Maximum diameter an enemy's spirit can be.
 const float SPIRIT_MAX_SIZE = 128;
 //Minimum diameter an enemy's spirit can be.
 const float SPIRIT_MIN_SIZE = 16;
+//Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
+const float SPIRIT_SIZE_MULT = 0.7;
 }
 
 

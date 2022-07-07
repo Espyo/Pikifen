@@ -278,9 +278,13 @@ void editor::draw_unsaved_changes_warning() {
     bool spike_up = unsaved_changes_warning_pos.y < game.win_h / 2.0;
     
     point box_center = unsaved_changes_warning_pos;
-    if(unsaved_changes_warning_pos.x < EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0) {
+    if(
+        unsaved_changes_warning_pos.x <
+        EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0
+    ) {
         box_center.x +=
-            EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0 - unsaved_changes_warning_pos.x;
+            EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0 -
+            unsaved_changes_warning_pos.x;
     } else if(
         unsaved_changes_warning_pos.x >
         game.win_w - EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0
@@ -838,15 +842,6 @@ void editor::leave() {
 
 
 /* ----------------------------------------------------------------------------
- * Marks that the user has made new changes, which have not yet been saved.
- */
-void editor::mark_new_changes() {
-    has_unsaved_changes = true;
-    was_warned_about_unsaved_changes = false;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Displays a popup, if applicable, and fills it with selectable items
  * from a list. Returns true if one of the items was clicked on,
  * false otherwise.
@@ -905,6 +900,15 @@ void editor::load() {
     update_style();
     
     ImGui::Reset();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks that the user has made new changes, which have not yet been saved.
+ */
+void editor::mark_new_changes() {
+    has_unsaved_changes = true;
+    was_warned_about_unsaved_changes = false;
 }
 
 
@@ -1801,9 +1805,15 @@ void editor::picker_info::process() {
                             );
                     }
                     button_size.x =
-                        std::max(button_size.x, EDITOR::PICKER_IMG_BUTTON_MIN_SIZE);
+                        std::max(
+                            button_size.x,
+                            EDITOR::PICKER_IMG_BUTTON_MIN_SIZE
+                        );
                     button_size.y =
-                        std::max(button_size.y, EDITOR::PICKER_IMG_BUTTON_MIN_SIZE);
+                        std::max(
+                            button_size.y,
+                            EDITOR::PICKER_IMG_BUTTON_MIN_SIZE
+                        );
                         
                     if(
                         ImGui::ImageButton(

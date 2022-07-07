@@ -33,9 +33,6 @@ namespace GEOMETRY {
 const float BLOCKMAP_BLOCK_SIZE = 128;
 //Default sector brightness.
 const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
-//Mobs can walk up sectors that are, at the most,
-//this high from the current one, as if climbing up steps.
-const float STEP_HEIGHT = 50;
 //Liquids drain for this long.
 const float LIQUID_DRAIN_DURATION = 2.0f;
 //Auto wall shadow lengths are the sector height difference multiplied by this.
@@ -54,6 +51,9 @@ const float SHADOW_MIN_LENGTH = 1.0f;
 const ALLEGRO_COLOR SMOOTHING_DEF_COLOR = {0.0f, 0.0f, 0.0f, 0.70f};
 //Maximum length the smoothing effect can be.
 const float SMOOTHING_MAX_LENGTH = 100.0f;
+//Mobs can walk up sectors that are, at the most,
+//this high from the current one, as if climbing up steps.
+const float STEP_HEIGHT = 50;
 }
 
 
@@ -669,8 +669,10 @@ void area_data::generate_blockmap() {
     bmap.top_left_corner = min_coords;
     //Add one more to the cols/rows because, suppose there's an edge at y = 256.
     //The row would be 2. In reality, the row should be 3.
-    bmap.n_cols = ceil((max_coords.x - min_coords.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
-    bmap.n_rows = ceil((max_coords.y - min_coords.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
+    bmap.n_cols =
+        ceil((max_coords.x - min_coords.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
+    bmap.n_rows =
+        ceil((max_coords.y - min_coords.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
     
     bmap.edges.assign(
         bmap.n_cols, vector<vector<edge*> >(bmap.n_rows, vector<edge*>())

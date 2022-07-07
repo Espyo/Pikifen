@@ -12,8 +12,8 @@
 
 #include "ship.h"
 
-#include "../functions.h"
 #include "../drawing.h"
+#include "../functions.h"
 #include "../game.h"
 #include "../utils/geometry_utils.h"
 #include "leader.h"

@@ -848,15 +848,13 @@ void area_editor::draw_canvas() {
             for(unsigned char c = 0; c < 2; ++c) {
                 string letter = (c == 0 ? "A" : "B");
                 
+                const float factor =
+                    AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom;
                 al_draw_filled_rectangle(
-                    path_preview_checkpoints[c].x -
-                    (AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
-                    path_preview_checkpoints[c].y -
-                    (AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
-                    path_preview_checkpoints[c].x +
-                    (AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
-                    path_preview_checkpoints[c].y +
-                    (AREA_EDITOR::PATH_PREVIEW_CHECKPOINT_RADIUS / game.cam.zoom),
+                    path_preview_checkpoints[c].x - factor,
+                    path_preview_checkpoints[c].y - factor,
+                    path_preview_checkpoints[c].x + factor,
+                    path_preview_checkpoints[c].y + factor,
                     al_map_rgb(240, 224, 160)
                 );
                 draw_scaled_text(

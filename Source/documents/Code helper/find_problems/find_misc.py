@@ -64,7 +64,7 @@ def get_cramped_problems_in_file(file_path):
                 if thing == CRAMPED_THING_USING and l.startswith('using'):
                     ignore = True
 
-                if empty_lines < 2 and not ignore:
+                if empty_lines == 1 and not ignore:
                     thing_name = ''
                     if thing == CRAMPED_THING_INCLUDE:
                         thing_name = 'include'

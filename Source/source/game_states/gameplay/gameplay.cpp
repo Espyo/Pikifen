@@ -26,15 +26,14 @@
 
 
 namespace GAMEPLAY {
-//Something is only considered off-camera if it's beyond this extra margin.
-const float CAMERA_BOX_MARGIN = 128.0f;
-//Dampen the camera's movements by this much.
-const float CAMERA_SMOOTHNESS_MULT = 4.5f;
-
 //How long the HUD moves for when the area is entered.
 const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 3.0f;
+//Something is only considered off-camera if it's beyond this extra margin.
+const float CAMERA_BOX_MARGIN = 128.0f;
+//Dampen the camera's movements by this much.
+const float CAMERA_SMOOTHNESS_MULT = 4.5f;
 //Opacity of the collision bubbles in the maker tool.
 const unsigned char COLLISION_OPACITY = 192;
 //Maximum alpha of the cursor's trail -- the alpha value near the cursor.
@@ -315,14 +314,6 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the name of this state.
- */
-string gameplay_state::get_name() const {
-    return "gameplay";
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the closest group member of a given standby subgroup.
  * In the case all candidate members are out of reach,
  * this returns the closest. Otherwise, it returns the closest
@@ -387,6 +378,14 @@ mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
     }
     
     return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string gameplay_state::get_name() const {
+    return "gameplay";
 }
 
 

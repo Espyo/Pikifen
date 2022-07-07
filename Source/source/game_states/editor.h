@@ -287,14 +287,14 @@ protected:
     bool is_ctrl_pressed;
     //Is the GUI currently in focus? False if it's the canvas.
     bool is_gui_focused;
-    //Is the mouse currently hovering the gui? False if it's the canvas.
-    bool is_mouse_in_gui;
     //Is the left mouse button currently pressed down?
     bool is_m1_pressed;
     //Is the right mouse button currently pressed down?
     bool is_m2_pressed;
     //Is the middle mouse button currently pressed down?
     bool is_m3_pressed;
+    //Is the mouse currently hovering the gui? False if it's the canvas.
+    bool is_mouse_in_gui;
     //Is the Shift key currently pressed down?
     bool is_shift_pressed;
     //Number of the mouse button pressed.

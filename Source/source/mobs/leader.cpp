@@ -18,14 +18,14 @@
 #include "../game.h"
 
 namespace LEADER {
-//The whistle can't go past this radius, by default.
-const float DEF_WHISTLE_RANGE = 80.0f;
 //Auto-throw starts at this cooldown.
 const float AUTO_THROW_COOLDOWN_MAX_DURATION = 0.7f;
 //Auto-throw ends at this cooldown.
 const float AUTO_THROW_COOLDOWN_MIN_DURATION = THROW_COOLDOWN_DURATION * 1.2f;
 //Auto-throw cooldown lowers at this speed.
 const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
+//The whistle can't go past this radius, by default.
+const float DEF_WHISTLE_RANGE = 80.0f;
 //Ratio of health at which a leader's health wheel starts giving a warning.
 const float HEALTH_CAUTION_RATIO = 0.3f;
 //How long the low health caution ring lasts for.
@@ -58,14 +58,14 @@ const float SWARM_PARTICLE_SPEED_DEVIATION = 10.0f;
 const float SWARM_PARTICLE_SPEED_MULT = 500.0f;
 //Throws cannot happen any faster than this interval.
 const float THROW_COOLDOWN_DURATION = 0.15f;
+//Throw preview maximum thickness.
+const float THROW_PREVIEW_DEF_MAX_THICKNESS = 8.0f;
 //The throw preview starts fading in at this ratio.
 const float THROW_PREVIEW_FADE_IN_RATIO = 0.30f;
 //The throw preview starts fading out at this ratio.
 const float THROW_PREVIEW_FADE_OUT_RATIO = 1.0f - THROW_PREVIEW_FADE_IN_RATIO;
 //Throw preview minimum thickness.
 const float THROW_PREVIEW_MIN_THICKNESS = 2.0f;
-//Throw preview maximum thickness.
-const float THROW_PREVIEW_DEF_MAX_THICKNESS = 8.0f;
 }
 
 

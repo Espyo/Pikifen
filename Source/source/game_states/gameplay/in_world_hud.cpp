@@ -19,16 +19,16 @@
 
 
 namespace IN_WORLD_FRACTION {
-//How long it takes to animate the numbers growing.
-const float GROW_JUICE_DURATION = 0.3f;
 //How much to grow when performing a juicy grow animation.
 const float GROW_JUICE_AMOUNT = 0.06f;
+//How long it takes to animate the numbers growing.
+const float GROW_JUICE_DURATION = 0.3f;
 //Padding between mob and fraction.
 const float PADDING = 8.0f;
-//How long it takes to animate the numbers flashing.
-const float REQ_MET_JUICE_DURATION = 0.5f;
 //How much to grow when performing a requirement met juicy grow animation.
 const float REQ_MET_GROW_JUICE_AMOUNT = 0.12f;
+//How long it takes to animate the numbers flashing.
+const float REQ_MET_JUICE_DURATION = 0.5f;
 //How long it takes to fade in.
 const float TRANSITION_IN_DURATION = 0.4f;
 //How long it takes to fade out.

@@ -18,8 +18,8 @@
 #include "../load.h"
 #include "../mob_fsms/gen_mob_fsm.h"
 #include "../mob_script_action.h"
-#include "../utils/string_utils.h"
 #include "../mobs/bridge.h"
+#include "../utils/string_utils.h"
 #include "enemy_type.h"
 #include "leader_type.h"
 #include "onion_type.h"
@@ -263,29 +263,6 @@ mob_type::vulnerability_struct::vulnerability_struct() :
 }
 
 
-
-/* ----------------------------------------------------------------------------
- * Creates special mob types, needed by the engine, that are beyond the ones
- * loaded from the game data folder.
- */
-void create_special_mob_types() {
-    mob_category* custom_category =
-        game.mob_categories.get(MOB_CATEGORY_CUSTOM);
-        
-    mob_type* bridge_component_type = custom_category->create_type();
-    bridge_component_type->name = "Bridge component";
-    bridge_component_type->appears_in_area_editor = false;
-    bridge_component_type->casts_shadow = false;
-    bridge_component_type->height = 8.0f;
-    bridge_component_type->max_span = 8.0f;
-    bridge_component_type->radius = 8.0f;
-    bridge_component_type->walkable = true;
-    bridge_component_type->draw_mob_callback = bridge::draw_component;
-    bridge_component_type->pushes = true;
-    custom_category->register_type(bridge_component_type);
-}
-
-
 /* ----------------------------------------------------------------------------
  * Grabs an animation conversion vector, filled with base animations,
  * and outputs one that combines all base animations with their groups.
@@ -312,6 +289,28 @@ mob_type_with_anim_groups::get_anim_conversions_with_groups(
     }
     
     return new_v;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates special mob types, needed by the engine, that are beyond the ones
+ * loaded from the game data folder.
+ */
+void create_special_mob_types() {
+    mob_category* custom_category =
+        game.mob_categories.get(MOB_CATEGORY_CUSTOM);
+        
+    mob_type* bridge_component_type = custom_category->create_type();
+    bridge_component_type->name = "Bridge component";
+    bridge_component_type->appears_in_area_editor = false;
+    bridge_component_type->casts_shadow = false;
+    bridge_component_type->height = 8.0f;
+    bridge_component_type->max_span = 8.0f;
+    bridge_component_type->radius = 8.0f;
+    bridge_component_type->walkable = true;
+    bridge_component_type->draw_mob_callback = bridge::draw_component;
+    bridge_component_type->pushes = true;
+    custom_category->register_type(bridge_component_type);
 }
 
 

@@ -207,7 +207,7 @@ def get_namespace_constants_in_file(file_path):
     for l in lines:
         line_nr += 1
 
-        r = re.match(r'namespace ([A-Z_]+) {', l)
+        r = re.match(r'namespace ([A-Z_]+) ?{', l)
         if r is not None:
             in_namespace = r.group(1).strip()
             continue
@@ -218,11 +218,13 @@ def get_namespace_constants_in_file(file_path):
             continue
         
         if in_namespace is not None:
-            r = re.match(r'.*const .+ ([A-Z_]+)(;|[^\)]+;)', l)
-
+            r = re.match(r'.*const [^=]+ ([A-Z_]+)(;|[^\)]+;)', l)
+            
             if r is not None:
+                name = r.group(1).strip()
+                name = name.split('::')[0]
                 c = NamespaceConstant()
-                c.name = r.group(1).strip()
+                c.name = name
                 c.namespace = in_namespace
                 c.line = line_nr
                 constants.append(c)

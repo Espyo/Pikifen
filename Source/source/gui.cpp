@@ -1012,14 +1012,6 @@ void gui_manager::start_animation(
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether the last input was a mouse input.
- */
-bool gui_manager::was_last_input_mouse() {
-    return last_input_was_mouse;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Ticks the time of all items by one frame of logic.
  * delta_t:
  *   How long the frame's tick is, in seconds.
@@ -1068,6 +1060,14 @@ void gui_manager::tick(const float delta_t) {
                 );
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the last input was a mouse input.
+ */
+bool gui_manager::was_last_input_mouse() {
+    return last_input_was_mouse;
 }
 
 

@@ -27,10 +27,10 @@ namespace MSG_BOX {
 const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;
 //How many pixels of margin between the message box and screen borders.
 const float MARGIN = 16.0f;
-//How many pixels of padding between the message box borders and text.
-const float PADDING = 8.0f;
 //How long to protect the player from misinputs for.
 const float MISINPUT_PROTECTION_DURATION = 0.75f;
+//How many pixels of padding between the message box borders and text.
+const float PADDING = 8.0f;
 //How long each token animates for when being shown.
 const float TOKEN_ANIM_DURATION = 0.5f;
 //How much to move a token in the X direction when animating it.
@@ -401,6 +401,20 @@ void camera_info::update_box() {
     box[0].y -= GAMEPLAY::CAMERA_BOX_MARGIN;
     box[1].x += GAMEPLAY::CAMERA_BOX_MARGIN;
     box[1].y += GAMEPLAY::CAMERA_BOX_MARGIN;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a wall effect cache struct.
+ */
+edge_offset_cache::edge_offset_cache() :
+    lengths{0, 0},
+    angles{0, 0},
+    colors{COLOR_EMPTY, COLOR_EMPTY},
+    elbow_lengths{0, 0},
+    elbow_angles{0, 0},
+    first_end_vertex_idx(0) {
+    
 }
 
 
@@ -1910,20 +1924,6 @@ void timer::tick(const float delta_t) {
     if(time_left == 0.0f && on_end) {
         on_end();
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a wall effect cache struct.
- */
-edge_offset_cache::edge_offset_cache() :
-    lengths{0, 0},
-    angles{0, 0},
-    colors{COLOR_EMPTY, COLOR_EMPTY},
-    elbow_lengths{0, 0},
-    elbow_angles{0, 0},
-    first_end_vertex_idx(0) {
-    
 }
 
 

@@ -32,10 +32,10 @@ const ALLEGRO_COLOR BASE_OUTLINE_COLOR = {0.10f, 0.10f, 0.10f, 1.0f};
 const ALLEGRO_COLOR BASE_RECT_COLOR = {0.45f, 0.45f, 0.45f, 1.0f};
 //Base text color.
 const ALLEGRO_COLOR BASE_TEXT_COLOR = {0.95f, 0.95f, 0.95f, 1.0f};
-//Padding between text and rectangle limit.
-const float PADDING = 2.0f;
 //Rectangle outline thickness.
 const float OUTLINE_THICKNESS = 2.0f;
+//Padding between text and rectangle limit.
+const float PADDING = 2.0f;
 }
 
 
@@ -46,10 +46,10 @@ const float DEF_HEALTH_WHEEL_RADIUS = 20;
 const float LIQUID_WOBBLE_DELTA_X = 3.0f;
 //Liquid surfaces wobble using this time scale.
 const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
-//Loading screen subtitle text scale.
-const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
 //Loading screen subtitle text padding.
 const int LOADING_SCREEN_PADDING = 64;
+//Loading screen subtitle text scale.
+const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
 //Notification opacity.
 const unsigned char NOTIFICATION_ALPHA = 160;
 //Size of a control icon in a notification.

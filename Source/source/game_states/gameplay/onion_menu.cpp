@@ -658,16 +658,6 @@ void onion_menu_struct::confirm() {
 
 
 /* ----------------------------------------------------------------------------
- * Handles an Allegro event.
- * ev:
- *   Event to handle.
- */
-void onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
-    if(!closing) gui.handle_event(ev);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Flips to the specified page of Pikmin types.
  * page:
  *   Index of the new page.
@@ -703,6 +693,16 @@ void onion_menu_struct::grow_buttons() {
     group_all_button->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_ICON
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles an Allegro event.
+ * ev:
+ *   Event to handle.
+ */
+void onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
+    if(!closing) gui.handle_event(ev);
 }
 
 
