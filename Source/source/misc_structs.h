@@ -729,10 +729,11 @@ struct spike_damage_type {
     status_type* status_to_apply;
     
     spike_damage_type() :
-        damage(0),
+        damage(0.0f),
         ingestion_only(false),
         is_damage_ratio(false),
         particle_gen(nullptr),
+        particle_offset_z(0.0f),
         status_to_apply(nullptr) {
         
     }
@@ -852,7 +853,11 @@ private:
     //Icon used to represent this subgroup type.
     ALLEGRO_BITMAP* icon;
     
-    subgroup_type() : specific_type(nullptr), icon(nullptr) { }
+    subgroup_type() :
+    category(SUBGROUP_TYPE_CATEGORY_LEADER),
+    specific_type(nullptr),
+    icon(nullptr) {
+    }
 };
 
 

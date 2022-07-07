@@ -60,10 +60,9 @@ public:
         bubble_info(gui_item* bubble = NULL) :
             bubble(bubble),
             ref(NULL),
-            pre_transition_ref(NULL) {
-            
-            content = t();
-            pre_transition_content = t();
+            content(),
+            pre_transition_ref(NULL),
+            pre_transition_content() {
         }
     };
     

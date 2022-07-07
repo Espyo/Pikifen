@@ -37,6 +37,7 @@ results_state::results_state() :
     points_obtained(0),
     points_total(0),
     time_taken(0.0f),
+    time_spent(0.0f),
     area_name_text(nullptr),
     enemies_text(nullptr),
     pikmin_born_text(nullptr),

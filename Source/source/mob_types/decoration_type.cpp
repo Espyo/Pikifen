@@ -20,13 +20,12 @@
  */
 decoration_type::decoration_type() :
     mob_type(MOB_CATEGORY_DECORATIONS),
+    tint_random_maximum(COLOR_EMPTY),
     scale_random_variation(0.0f),
     rotation_random_variation(0.0f),
     random_animation_delay(false) {
     
     target_type = MOB_TARGET_TYPE_NONE;
-    
-    tint_random_maximum = COLOR_EMPTY;
     decoration_fsm::create_fsm(this);
 }
 

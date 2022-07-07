@@ -813,6 +813,7 @@ void msg_box_info::tick(const float delta_t) {
  * Creates a notification struct instance.
  */
 notification_struct::notification_struct() :
+    enabled(true),
     control(nullptr),
     visibility(0.0f) {
     

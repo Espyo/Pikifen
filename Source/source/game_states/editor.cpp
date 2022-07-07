@@ -61,12 +61,15 @@ const int UNSAVED_CHANGES_WARNING_WIDTH = 150;
  * Initializes editor class stuff.
  */
 editor::editor() :
+    bmp_editor_icons(nullptr),
     canvas_separator_x(-1),
     double_click_time(0),
     is_ctrl_pressed(false),
+    is_gui_focused(false),
     is_m1_pressed(false),
     is_m2_pressed(false),
     is_m3_pressed(false),
+    is_mouse_in_gui(false),
     is_shift_pressed(false),
     last_mouse_click(INVALID),
     last_mouse_click_sub_state(INVALID),

@@ -22,6 +22,7 @@ group_task_type::group_task_type() :
     mob_type(MOB_CATEGORY_GROUP_TASKS),
     power_goal(10),
     max_pikmin(20),
+    spots_z(0.0f),
     interval_between_rows(10.0f),
     pikmin_per_row(10),
     worker_pikmin_angle(0),

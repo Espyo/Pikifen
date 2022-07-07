@@ -199,6 +199,7 @@ check_gui_item::check_gui_item(
  *   Can the item be selected by the player?
  */
 gui_item::gui_item(const bool selectable) :
+    manager(nullptr),
     visible(true),
     selectable(selectable),
     selected(false),

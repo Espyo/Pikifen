@@ -37,6 +37,8 @@ bridge::bridge(const point &pos, bridge_type* type, const float angle) :
     mob(pos, type, angle),
     total_chunks_needed(10),
     total_length(192.0f),
+    delta_z(0.0f),
+    start_pos(pos),
     start_z(0.0f),
     chunks(0),
     prev_chunk_z_offset(LARGE_FLOAT),
@@ -45,7 +47,6 @@ bridge::bridge(const point &pos, bridge_type* type, const float angle) :
     
     team = MOB_TEAM_OBSTACLE;
     
-    start_pos = pos;
     start_z = z;
 }
 

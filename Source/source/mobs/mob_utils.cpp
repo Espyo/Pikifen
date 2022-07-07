@@ -213,6 +213,7 @@ chase_info_struct::chase_info_struct() :
     orig_coords(nullptr),
     orig_z(nullptr),
     target_dist(0.0f),
+    acceleration(0.0f),
     cur_speed(0.0f),
     max_speed(-1.0f) {
     
@@ -242,9 +243,8 @@ circling_info_struct::circling_info_struct(mob* m) :
 delivery_info_struct::delivery_info_struct() :
     anim_type(DELIVERY_ANIM_SUCK),
     anim_time_ratio_left(1.0f),
+    color(game.config.carrying_color_move),
     intended_pik_type(nullptr) {
-    
-    color = game.config.carrying_color_move;
 }
 
 
@@ -661,7 +661,8 @@ hold_info_struct::hold_info_struct() :
     offset_dist(0),
     offset_angle(0),
     vertical_dist(0),
-    above_holder(false) {
+    above_holder(false),
+    rotation_method(HOLD_ROTATION_METHOD_NEVER) {
     
 }
 

@@ -952,6 +952,7 @@ onion_menu_type_struct::onion_menu_type_struct(
 ) :
     delta(0),
     type_idx(idx),
+    on_screen_idx(INVALID),
     pik_type(pik_type) {
     
 }

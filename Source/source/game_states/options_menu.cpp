@@ -46,7 +46,12 @@ const unsigned char N_CURSOR_SPEED_PRESETS = 5;
  * Creates an "options menu" state.
  */
 options_menu_state::options_menu_state() :
-    game_state() {
+    game_state(),
+    bmp_menu_bg(nullptr),
+    auto_throw_picker(nullptr),
+    resolution_picker(nullptr),
+    cursor_speed_picker(nullptr),
+    warning_text(nullptr) {
     
     //Let's fill in the list of preset resolutions. For that, we'll get
     //the display modes fetched by Allegro. These are usually nice round

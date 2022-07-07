@@ -149,7 +149,8 @@ public:
             relay_statuses(false),
             limb_thickness(32.0f),
             limb_parent_offset(0),
-            limb_child_offset(0) {}
+            limb_child_offset(0),
+            limb_draw_method(LIMB_DRAW_ABOVE_BOTH) {}
     };
     
     //Info on a widget to present in the area editor,

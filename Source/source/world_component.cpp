@@ -18,5 +18,8 @@ world_component::world_component() :
     sector_ptr(nullptr),
     mob_shadow_ptr(nullptr),
     mob_limb_ptr(nullptr),
-    mob_ptr(nullptr) {
+    mob_ptr(nullptr),
+    particle_ptr(nullptr),
+    z(0.0f),
+    nr(0) {
 }
