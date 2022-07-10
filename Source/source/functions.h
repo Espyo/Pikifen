@@ -128,7 +128,6 @@ ALLEGRO_COLOR get_daylight_color();
 void get_edge_offset_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
     const float edge_process_angle,
-    sector* affected_sector, sector* unaffected_sector,
     offset_effect_checker_ptr checker,
     offset_effect_length_getter_ptr length_getter,
     offset_effect_color_getter_ptr color_getter,
@@ -138,7 +137,7 @@ void get_edge_offset_edge_info(
 void get_edge_offset_intersection(
     edge* e1, edge* e2, vertex* common_vertex,
     const float base_shadow_angle1, const float base_shadow_angle2,
-    const float shadow_length, const unsigned char end_idx,
+    const float shadow_length,
     float* final_angle, float* final_length
 );
 ALLEGRO_COLOR get_fog_color();

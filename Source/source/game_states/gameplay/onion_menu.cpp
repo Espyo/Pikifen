@@ -567,7 +567,7 @@ void onion_menu_struct::add_to_group(const size_t type_idx) {
         n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
     //First, check if there are enough in the Onion to take out.
-    if(real_onion_amount - types[type_idx].delta <= 0) {
+    if((signed int) (real_onion_amount - types[type_idx].delta) <= 0) {
         size_t screen_idx = types[type_idx].on_screen_idx;
         if(screen_idx != INVALID) {
             make_gui_item_red(onion_amount_items[screen_idx]);
@@ -615,7 +615,7 @@ void onion_menu_struct::add_to_onion(const size_t type_idx) {
     size_t real_group_amount =
         l_ptr->group->get_amount_by_type(n_ptr->nest_type->pik_types[type_idx]);
         
-    if(real_group_amount + types[type_idx].delta <= 0) {
+    if((signed int) (real_group_amount + types[type_idx].delta) <= 0) {
         size_t screen_idx = types[type_idx].on_screen_idx;
         if(screen_idx != INVALID) {
             make_gui_item_red(group_amount_items[screen_idx]);

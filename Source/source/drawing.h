@@ -224,7 +224,7 @@ float ease(
     const EASING_METHODS method, float y
 );
 void get_control_icon_info(
-    const ALLEGRO_FONT* font, const control_info* c, const bool condensed,
+    const control_info* c, const bool condensed,
     CONTROL_ICON_SHAPES* shape, CONTROL_ICON_SPRITES* bitmap_sprite,
     string* text
 );

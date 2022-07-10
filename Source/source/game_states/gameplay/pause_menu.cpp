@@ -60,16 +60,8 @@ void pause_menu_struct::draw() {
  * Draws some help page tidbit's text.
  * font:
  *   Font to use.
- * color:
- *   Color of the text.
  * where:
  *   Coordinates to draw the text on.
- * scale:
- *   Scale the text by this much, horizontally and vertically.
- * flags:
- *   Allegro flags.
- * valign:
- *   Vertical alignment.
  * max_size:
  *   Maximum width or height the text can occupy. A value of zero in
  *   one of these coordinates makes it not have a limit in that dimension.
@@ -77,9 +69,7 @@ void pause_menu_struct::draw() {
  *   Text to draw.
  */
 void pause_menu_struct::draw_tidbit(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const point &scale,
-    const int flags, const TEXT_VALIGN_MODES valign,
+    const ALLEGRO_FONT* const font, const point &where,
     const point &max_size, const string &text
 ) {
     //Get the tokens that make up the tidbit.
@@ -279,9 +269,7 @@ void pause_menu_struct::init_help_page() {
         [this]
     (const point & center, const point & size) {
         draw_tidbit(
-            game.fonts.standard, COLOR_WHITE,
-            center, point(1.0f, 1.0f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size,
+            game.fonts.standard, center, size,
             help_gui.get_current_tooltip()
         );
     };

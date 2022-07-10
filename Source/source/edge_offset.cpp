@@ -240,10 +240,6 @@ void draw_sector_edge_offsets(
  *   from end 0 to end 1.
  * edge_process_angle:
  *   Angle that the edge makes from the current end to the opposite one.
- * affected_sector:
- *   Sector that gets affected by the effect.
- * unaffected_sector:
- *   Sector that is unaffected by the effect.
  * checker:
  *   Pointer to a function that checks if the edge should have the
  *   intended effect or not. It also returns what sector of the edge
@@ -266,7 +262,6 @@ void draw_sector_edge_offsets(
 void get_edge_offset_edge_info(
     edge* e_ptr, vertex* end_vertex, const unsigned char end_idx,
     const float edge_process_angle,
-    sector* affected_sector, sector* unaffected_sector,
     offset_effect_checker_ptr checker,
     offset_effect_length_getter_ptr length_getter,
     offset_effect_color_getter_ptr color_getter,
@@ -332,7 +327,7 @@ void get_edge_offset_edge_info(
         get_edge_offset_intersection(
             e_ptr, next_eff_edge, end_vertex,
             base_effect_angle, next_eff_edge_base_effect_angle,
-            mid_effect_length, end_idx,
+            mid_effect_length,
             final_angle, final_length
         );
         
@@ -440,9 +435,6 @@ void get_edge_offset_edge_info(
  *   Same as base_effect_angle1, but for edge 2.
  * effect_length:
  *   Length of either effect.
- * end_idx:
- *   Index of the end being processed. 0 means that the sector that receives
- *   the effect is to the left, if you stand on end 0 and face end 1.
  * final_angle:
  *   The angle from the common vertex to the intersection point.
  * final_length:
@@ -451,7 +443,7 @@ void get_edge_offset_edge_info(
 void get_edge_offset_intersection(
     edge* e1, edge* e2, vertex* common_vertex,
     const float base_effect_angle1, const float base_effect_angle2,
-    const float effect_length, const unsigned char end_idx,
+    const float effect_length,
     float* final_angle, float* final_length
 ) {
     vertex* other_vertex1 = e1->get_other_vertex(common_vertex);
@@ -815,7 +807,6 @@ void update_offset_effect_caches (
             get_edge_offset_edge_info(
                 e_ptr, ends_to_process[end], end,
                 end == 0 ? edge_process_angle : edge_process_angle + TAU / 2.0f,
-                affected_sector, unaffected_sector,
                 checker, length_getter, color_getter,
                 &angle, &length, &end_color,
                 &elbow_angle, &elbow_length

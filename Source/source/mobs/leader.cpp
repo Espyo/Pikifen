@@ -26,6 +26,28 @@ const float AUTO_THROW_COOLDOWN_MIN_DURATION = THROW_COOLDOWN_DURATION * 1.2f;
 const float AUTO_THROW_COOLDOWN_SPEED = 0.3f;
 //The whistle can't go past this radius, by default.
 const float DEF_WHISTLE_RANGE = 80.0f;
+//Members cannot go past this range from the angle of dismissal.
+const float DISMISS_ANGLE_RANGE = TAU / 2;
+//Multiply the space members take up by this. Lower = more compact subgroups.
+const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
+//Amount of dismiss particles to spawn.
+const size_t DISMISS_PARTICLE_AMOUNT = WHISTLE::N_DOT_COLORS * 3;
+//Opacity of the dismiss particles.
+const float DISMISS_PARTICLE_ALPHA = 1.0f;
+//Dismiss particle minimum duration.
+const float DISMISS_PARTICLE_MIN_DURATION = 1.0f;
+//Dismiss particle maximum duration.
+const float DISMISS_PARTICLE_MAX_DURATION = 1.4f;
+//Dismiss particle friction.
+const float DISMISS_PARTICLE_FRICTION = 3.2f;
+//Dismiss particle minimum speed.
+const float DISMISS_PARTICLE_MIN_SPEED = 170.0f;
+//Dismiss particle maximum speed.
+const float DISMISS_PARTICLE_MAX_SPEED = 210.0f;
+//Dismiss particle size.
+const float DISMISS_PARTICLE_SIZE = 8.0f;
+//Dismissed groups must have this much distance between them/the leader.
+const float DISMISS_SUBGROUP_DISTANCE = 48.0f;
 //Ratio of health at which a leader's health wheel starts giving a warning.
 const float HEALTH_CAUTION_RATIO = 0.3f;
 //How long the low health caution ring lasts for.
@@ -91,6 +113,7 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     throw_queued(false),
     auto_throwing(false),
     auto_throw_cooldown(0.0f),
+    auto_throw_cooldown_duration(0.0f),
     throwee(nullptr),
     throwee_angle(0.0f),
     throwee_max_z(0.0f),
@@ -179,13 +202,6 @@ bool leader::check_throw_ok() const {
     return true;
 }
 
-
-//Members cannot go past this range from the angle of dismissal.
-const float DISMISS_ANGLE_RANGE = TAU / 2;
-//Multiply the space members take up by this. Lower = more compact subgroups.
-const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
-//Dismissed groups must have this much distance between them/the leader.
-const float DISMISS_SUBGROUP_DISTANCE = 48.0f;
 
 /* ----------------------------------------------------------------------------
  * Makes a leader dismiss their group.
@@ -293,7 +309,7 @@ void leader::dismiss() {
         subgroups_info[s].radius =
             game.config.standard_pikmin_radius +
             game.config.standard_pikmin_radius * 2 *
-            DISMISS_MEMBER_SIZE_MULTIPLIER * (n_rows - 1);
+            LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER * (n_rows - 1);
     }
     
     //We'll need to place the subgroups inside arched rows.
@@ -324,7 +340,7 @@ void leader::dismiss() {
     bool done = false;
     vector<row_info> rows;
     row_info cur_row;
-    cur_row.dist_between_center = DISMISS_SUBGROUP_DISTANCE;
+    cur_row.dist_between_center = LEADER::DISMISS_SUBGROUP_DISTANCE;
     size_t cur_row_nr = 0;
     size_t cur_subgroup_nr = 0;
     
@@ -345,7 +361,7 @@ void leader::dismiss() {
             if(s < cur_row.subgroups.size() - 1) {
                 new_angle_occupation +=
                     linear_dist_to_angular(
-                        DISMISS_SUBGROUP_DISTANCE,
+                        LEADER::DISMISS_SUBGROUP_DISTANCE,
                         cur_row.dist_between_center +
                         cur_row.thickness / 2.0f
                     );
@@ -354,7 +370,7 @@ void leader::dismiss() {
         if(!cur_row.subgroups.empty()) {
             new_angle_occupation +=
                 linear_dist_to_angular(
-                    DISMISS_SUBGROUP_DISTANCE,
+                    LEADER::DISMISS_SUBGROUP_DISTANCE,
                     cur_row.dist_between_center +
                     new_thickness / 2.0f
                 );
@@ -367,7 +383,7 @@ void leader::dismiss() {
             );
             
         //Will this group fit?
-        if(new_angle_occupation <= DISMISS_ANGLE_RANGE) {
+        if(new_angle_occupation <= LEADER::DISMISS_ANGLE_RANGE) {
             //This subgroup still fits. Next!
             cur_row.thickness = new_thickness;
             cur_row.angle_occupation = new_angle_occupation;
@@ -377,7 +393,7 @@ void leader::dismiss() {
         }
         
         if(
-            new_angle_occupation > DISMISS_ANGLE_RANGE ||
+            new_angle_occupation > LEADER::DISMISS_ANGLE_RANGE ||
             cur_subgroup_nr == subgroups_info.size()
         ) {
             //This subgroup doesn't fit. It'll have to be put in the next row.
@@ -386,7 +402,7 @@ void leader::dismiss() {
             rows.push_back(cur_row);
             cur_row_nr++;
             cur_row.dist_between_center +=
-                cur_row.thickness + DISMISS_SUBGROUP_DISTANCE;
+                cur_row.thickness + LEADER::DISMISS_SUBGROUP_DISTANCE;
             cur_row.subgroups.clear();
             cur_row.thickness = 0;
             cur_row.angle_occupation = 0;
@@ -413,7 +429,7 @@ void leader::dismiss() {
             if(s < rows[r].subgroups.size() - 1) {
                 cur_angle +=
                     linear_dist_to_angular(
-                        DISMISS_SUBGROUP_DISTANCE,
+                        LEADER::DISMISS_SUBGROUP_DISTANCE,
                         rows[r].dist_between_center + rows[r].thickness / 2.0
                     );
             }
@@ -454,7 +470,7 @@ void leader::dismiss() {
                     angle_to_coordinates(
                         member_angle,
                         cur_row_nr * game.config.standard_pikmin_radius * 2 *
-                        DISMISS_MEMBER_SIZE_MULTIPLIER
+                        LEADER::DISMISS_MEMBER_SIZE_MULTIPLIER
                     );
             }
             
@@ -493,30 +509,30 @@ void leader::dismiss() {
     
     //Final things.
     lea_type->sfx_dismiss.play(0, false);
-    const size_t N_DISMISS_PARTICLES = WHISTLE::N_DOT_COLORS * 3;
-    const float PARTICLE_ALPHA = 1.0f;
-    const float PARTICLE_MIN_DURATION = 1.0f;
-    const float PARTICLE_MAX_DURATION = 1.4f;
-    const float PARTICLE_FRICTION = 3.2f;
-    const float PARTICLE_MIN_SPEED = 170.0f;
-    const float PARTICLE_MAX_SPEED = 210.0f;
-    const float PARTICLE_SIZE = 8.0f;
-    for(size_t p = 0; p < N_DISMISS_PARTICLES; ++p) {
+    for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; ++p) {
         particle par;
         const unsigned char* color_idx =
             WHISTLE::DOT_COLORS[p % WHISTLE::N_DOT_COLORS];
         par.color.r = color_idx[0] / 255.0f;
         par.color.g = color_idx[1] / 255.0f;
         par.color.b = color_idx[2] / 255.0f;
-        par.color.a = PARTICLE_ALPHA;
+        par.color.a = LEADER::DISMISS_PARTICLE_ALPHA;
         par.bitmap = game.sys_assets.bmp_bright_circle;
-        par.duration = randomf(PARTICLE_MIN_DURATION, PARTICLE_MAX_DURATION);
-        par.friction = PARTICLE_FRICTION;
+        par.duration =
+            randomf(
+                LEADER::DISMISS_PARTICLE_MIN_DURATION,
+                LEADER::DISMISS_PARTICLE_MAX_DURATION
+            );
+        par.friction = LEADER::DISMISS_PARTICLE_FRICTION;
         par.pos = pos;
         par.priority = PARTICLE_PRIORITY_MEDIUM;
-        par.size = PARTICLE_SIZE;
-        float par_speed = randomf(PARTICLE_MIN_SPEED, PARTICLE_MAX_SPEED);
-        float par_angle = TAU / N_DISMISS_PARTICLES * p;
+        par.size = LEADER::DISMISS_PARTICLE_SIZE;
+        float par_speed =
+            randomf(
+                LEADER::DISMISS_PARTICLE_MIN_SPEED,
+                LEADER::DISMISS_PARTICLE_MAX_SPEED
+            );
+        float par_angle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
         par.speed = rotate_point(point(par_speed, 0.0f), par_angle);
         par.time = par.duration;
         par.type = PARTICLE_TYPE_BITMAP;

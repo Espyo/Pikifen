@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="997.00037"
    height="820.00006"
    viewBox="0 0 997.00037 820.00006"
    id="svg2"
    version="1.1"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   inkscape:version="1.1.2 (0a00cf5, 2022-02-04)"
    sodipodi:docname="Gates.svg"
    inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electric_gate.png"
    inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:export-ydpi="90"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
      id="title1000">Gate spritesheets</title>
   <defs
@@ -313,10 +313,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter4830"
-       x="-0.47999999"
-       width="1.96"
-       y="-0.053333335"
-       height="1.1066667">
+       x="-0.37319264"
+       width="1.7463853"
+       y="-0.053333505"
+       height="1.106667">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="4"
@@ -326,10 +326,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter4834"
-       x="-0.39359999"
-       width="1.7872"
-       y="-0.054666668"
-       height="1.1093333">
+       x="-0.29029108"
+       width="1.5805822"
+       y="-0.054666842"
+       height="1.1093337">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="4.1"
@@ -339,10 +339,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter4838"
-       x="-0.39359999"
-       width="1.7872"
-       y="-0.054666668"
-       height="1.1093333">
+       x="-0.3046531"
+       width="1.6093062"
+       y="-0.054666842"
+       height="1.1093337">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="4.1"
@@ -370,16 +370,6 @@
        x2="124"
        y2="914.58435"
        spreadMethod="reflect" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1138">
-      <circle
-         r="4.6875"
-         cy="802.04968"
-         cx="399.375"
-         id="use1140"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#6b4d3c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.585466;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-    </clipPath>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#reinforced_wall_shade"
@@ -416,9 +406,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1351"
-       x="-0.029134158"
+       x="-0.029134157"
        width="1.0582683"
-       y="-0.033910248"
+       y="-0.033910249"
        height="1.0678205">
       <feGaussianBlur
          inkscape:collect="always"
@@ -428,7 +418,11 @@
     <filter
        style="color-interpolation-filters:sRGB"
        id="filter1363"
-       inkscape:label="noise">
+       inkscape:label="noise"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          id="feTurbulence1365"
          type="fractalNoise"
@@ -455,9 +449,9 @@
        style="color-interpolation-filters:sRGB"
        id="filter1717"
        x="-0.17666666"
-       width="1.3533334"
-       y="-0.1079629"
-       height="1.2159258">
+       width="1.3533333"
+       y="-0.027961619"
+       height="1.0559232">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.6194444"
@@ -522,9 +516,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1237"
-       x="-0.034869254"
+       x="-0.034869252"
        width="1.0697385"
-       y="-0.034869254"
+       y="-0.034869252"
        height="1.0697385">
       <feGaussianBlur
          inkscape:collect="always"
@@ -554,35 +548,6 @@
     </clipPath>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient1430"
-       id="linearGradient1432"
-       x1="721"
-       y1="881.36218"
-       x2="727"
-       y2="881.36218"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.84210528,0,0,0.84210528,114.31545,110.16243)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-rope"
-       id="linearGradient1448"
-       gradientUnits="userSpaceOnUse"
-       x1="723"
-       y1="45.000061"
-       x2="725"
-       y2="47.000061"
-       spreadMethod="reflect" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-rope-shading"
-       id="linearGradient1450"
-       gradientUnits="userSpaceOnUse"
-       x1="720"
-       y1="42.000061"
-       x2="728"
-       y2="42.000061" />
-    <linearGradient
-       inkscape:collect="always"
        xlink:href="#bamboo-gate-rope"
        id="linearGradient1454"
        gradientUnits="userSpaceOnUse"
@@ -591,49 +556,6 @@
        x2="724"
        y2="40.000057"
        spreadMethod="reflect" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-3"
-       id="radialGradient1524"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.99998352,5.2502841e-6,-4.1450294e-6,0.7894737,0.01549403,156.54602)"
-       cx="725.68402"
-       cy="881.3623"
-       fx="725.68402"
-       fy="881.3623"
-       r="16" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-2"
-       id="linearGradient1526"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.65071769,0,0,0.65071769,252.88006,327.64803)"
-       x1="702.48529"
-       y1="804.82544"
-       x2="704.02203"
-       y2="801.75189"
-       spreadMethod="reflect" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-1"
-       id="radialGradient1528"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.66666668,0,0,0.66666668,241.333,314.78738)"
-       cx="724"
-       cy="806.36218"
-       fx="724"
-       fy="806.36218"
-       r="24" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-rope-mask"
-       id="linearGradient1371"
-       gradientUnits="userSpaceOnUse"
-       x1="872"
-       y1="1071.3617"
-       x2="872"
-       y2="831.36218"
-       gradientTransform="matrix(0.66666669,0,0,0.79999996,383.00001,175.27246)" />
     <filter
        style="color-interpolation-filters:sRGB"
        id="filter1778"
@@ -703,63 +625,6 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#bramble"
-       id="linearGradient1302"
-       x1="-80"
-       y1="95.000061"
-       x2="-100"
-       y2="80.000061"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1310"
-       x1="-60"
-       y1="877.36218"
-       x2="-75"
-       y2="907.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1339"
-       gradientUnits="userSpaceOnUse"
-       x1="-60"
-       y1="982.36218"
-       x2="-105"
-       y2="947.36218"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1349"
-       x1="-107"
-       y1="850.36218"
-       x2="-97"
-       y2="850.36218"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1355"
-       gradientUnits="userSpaceOnUse"
-       x1="-80"
-       y1="95.000061"
-       x2="-120"
-       y2="65.000061"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1357"
-       gradientUnits="userSpaceOnUse"
-       x1="-50"
-       y1="852.36218"
-       x2="-80"
-       y2="972.36218" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
        id="linearGradient1359"
        gradientUnits="userSpaceOnUse"
        x1="-70"
@@ -767,55 +632,6 @@
        x2="-110"
        y2="867.36218"
        spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1388"
-       gradientUnits="userSpaceOnUse"
-       x1="-115"
-       y1="902.36218"
-       x2="-105"
-       y2="902.36218"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1420"
-       gradientUnits="userSpaceOnUse"
-       x1="-85"
-       y1="982.36218"
-       x2="-50"
-       y2="937.36218"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1435"
-       gradientUnits="userSpaceOnUse"
-       x1="-105"
-       y1="917.36218"
-       x2="-45"
-       y2="1052.3622"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1449"
-       gradientUnits="userSpaceOnUse"
-       x1="-120"
-       y1="1012.3622"
-       x2="-110"
-       y2="1012.3622"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1459"
-       x1="-99"
-       y1="999.36218"
-       x2="-96"
-       y2="966.36218"
-       gradientUnits="userSpaceOnUse" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath1537">
@@ -832,10 +648,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1581"
-       x="-0.056890398"
-       width="1.1137809"
-       y="-0.029681947"
-       height="1.0593638">
+       x="-0.1137808"
+       width="1.2275616"
+       y="-0.056890402"
+       height="1.1137808">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.42226"
@@ -853,26 +669,14 @@
          width="100%"
          height="100%" />
     </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1537-6">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1255"
-         id="use1539-2"
-         transform="translate(0,-782.36212)"
-         width="100%"
-         height="100%" />
-    </clipPath>
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1653"
-       x="-0.065380797"
+       x="-0.065380795"
        width="1.1307616"
-       y="-0.060537774"
-       height="1.1210756">
+       y="-0.060537773"
+       height="1.1210755">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.3620999"
@@ -977,10 +781,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1811"
-       x="-0.26033938"
-       width="1.2912163"
-       y="-0.032430053"
-       height="1.0502845">
+       x="-0.17179014"
+       width="1.3435803"
+       y="-0.035286619"
+       height="1.0705732">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="2.7200105"
@@ -997,82 +801,19 @@
          x="-96"
          y="831.36218" />
     </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1817-0">
-      <rect
-         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#3661bd;fill-opacity:1;stroke:none;stroke-width:7.40656px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;stop-color:#000000;stop-opacity:1"
-         id="rect1819-3"
-         width="48"
-         height="192"
-         x="-100"
-         y="831.36218" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1600-4">
-      <path
-         style="display:inline;fill:url(#linearGradient4413);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="m -59,59.00006 -13,14 -17,1 -8,33 14,-27 h 15 l 14,-17 z"
-         id="use1602-7"
-         sodipodi:nodetypes="cccccccc" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1714-1">
-      <path
-         style="fill:url(#linearGradient4433);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         d="m -92,203.00006 -8,-6 v -10 l 8,-10 -5,-9 1,-8 20,-13 -9,15 -5,6 5,11 -9,10 -1,5 9,7 3,7 z"
-         id="use1716-7" />
-    </clipPath>
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1581-5"
-       x="-0.056890398"
-       width="1.1137809"
-       y="-0.029681947"
-       height="1.0593638">
+       x="-0.056890402"
+       width="1.1137808"
+       y="-0.12642284"
+       height="1.2528457">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="1.42226"
          id="feGaussianBlur1583-9" />
     </filter>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1759-6">
-      <path
-         style="font-variation-settings:normal;vector-effect:none;fill:url(#linearGradient4429);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
-         d="m -90,236.00008 10,-8 3,-17.00002 14,-14 10,-5 -1,10 -8,2 -9,12 -1,13.00002 -10,10 z"
-         id="use1761-2" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1669-1">
-      <path
-         id="use1671-7"
-         style="font-variation-settings:normal;vector-effect:none;fill:url(#linearGradient4417);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
-         d="m -61,102 -6,4 2,17 -23,-18 -4,17 -8,-13 v 12 l 4,20 19,15 21,-6 4,-27 v -13 z m -24,25 21,8.00006 8,-19 -4,18.99994 -3,8 -13,1 -13,-11 z"
-         sodipodi:nodetypes="ccccccccccccccccccccc" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1729-8">
-      <path
-         style="font-variation-settings:normal;vector-effect:none;fill:url(#linearGradient4425);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
-         d="m -70,239.00008 6,-1 4,-8 -3,-16.00002 -19,-37 -12,-2 -6,3 6,4 h 8 l 12,21 -16,16.00002 18,-9.00002 5,15.00002 z"
-         id="use1731-5"
-         sodipodi:nodetypes="cccccccccccccc" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1684-7">
-      <path
-         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#linearGradient4409);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
-         d="m -59,67.00006 7,9 v 17 l -11,16 5,24 -6.985447,23.05198 L -54,159.00006 -66.52255,161.12448 -68,166.00006 -77.5,202.5 l 8.5,-63.49994 -26,-16 6,-7 20,11 -4,-22 13,-14 v -11 l -9,-20 z"
-         id="use1686-4"
-         sodipodi:nodetypes="ccccccccccccccccccc" />
-    </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath1744-1">
@@ -1084,25 +825,6 @@
          transform="translate(0,-782.36212)"
          width="100%"
          height="100%" />
-    </clipPath>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient1359-5"
-       gradientUnits="userSpaceOnUse"
-       x1="-70"
-       y1="957.36218"
-       x2="-110"
-       y2="867.36218"
-       spreadMethod="pad" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1699-9">
-      <path
-         style="font-variation-settings:normal;display:inline;vector-effect:none;fill:url(#linearGradient4421);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
-         d="m -89,126.00006 -6,-3 -5,15 v 14 l 9,13 27,8 7,20 -2,32.00002 7,-22.00002 v -18 l -7,-16 -28,-10 -9,-14 z"
-         id="use1701-7"
-         sodipodi:nodetypes="cccccccccccccc" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
@@ -1119,83 +841,6 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#bramble"
-       id="linearGradient4319"
-       gradientUnits="userSpaceOnUse"
-       x1="-107"
-       y1="850.36218"
-       x2="-97"
-       y2="850.36218" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4321"
-       gradientUnits="userSpaceOnUse"
-       x1="-99"
-       y1="999.36218"
-       x2="-96"
-       y2="966.36218" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4323"
-       gradientUnits="userSpaceOnUse"
-       x1="-120"
-       y1="1012.3622"
-       x2="-110"
-       y2="1012.3622"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4325"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(0,-782.36212)"
-       x1="-115"
-       y1="902.36218"
-       x2="-105"
-       y2="902.36218" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4327"
-       gradientUnits="userSpaceOnUse"
-       x1="-105"
-       y1="917.36218"
-       x2="-45"
-       y2="1052.3622"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4329"
-       gradientUnits="userSpaceOnUse"
-       x1="-50"
-       y1="852.36218"
-       x2="-80"
-       y2="972.36218" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4331"
-       gradientUnits="userSpaceOnUse"
-       x1="-85"
-       y1="982.36218"
-       x2="-50"
-       y2="937.36218"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4333"
-       gradientUnits="userSpaceOnUse"
-       x1="-80"
-       y1="95.000061"
-       x2="-120"
-       y2="65.000061"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
        id="linearGradient4403"
        gradientUnits="userSpaceOnUse"
        x1="-80"
@@ -1204,163 +849,6 @@
        y2="65.000061"
        spreadMethod="pad"
        gradientTransform="translate(0,193)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4409"
-       gradientUnits="userSpaceOnUse"
-       x1="-50"
-       y1="852.36218"
-       x2="-80"
-       y2="972.36218"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4413"
-       gradientUnits="userSpaceOnUse"
-       x1="-107"
-       y1="850.36218"
-       x2="-97"
-       y2="850.36218"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4417"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(0,-782.36212)"
-       x1="-115"
-       y1="902.36218"
-       x2="-105"
-       y2="902.36218" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4421"
-       gradientUnits="userSpaceOnUse"
-       x1="-70"
-       y1="957.36218"
-       x2="-110"
-       y2="867.36218"
-       spreadMethod="pad"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4425"
-       gradientUnits="userSpaceOnUse"
-       x1="-105"
-       y1="917.36218"
-       x2="-45"
-       y2="1052.3622"
-       spreadMethod="pad"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4429"
-       gradientUnits="userSpaceOnUse"
-       x1="-120"
-       y1="1012.3622"
-       x2="-110"
-       y2="1012.3622"
-       spreadMethod="pad"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4433"
-       gradientUnits="userSpaceOnUse"
-       x1="-99"
-       y1="999.36218"
-       x2="-96"
-       y2="966.36218"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4547"
-       x1="-65"
-       y1="1107.3622"
-       x2="-65"
-       y2="1137.3622"
-       gradientUnits="userSpaceOnUse" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1537-5-5">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path1255-2"
-         id="use1539-3-4"
-         transform="translate(0,-782.36212)"
-         width="100%"
-         height="100%" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath4610">
-      <path
-         style="font-variation-settings:normal;vector-effect:none;fill:url(#linearGradient4821);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
-         d="m -70,317.00008 6,10 1,16 -7,10 3,-14 -1,-10 z"
-         id="use4612" />
-    </clipPath>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4646"
-       gradientUnits="userSpaceOnUse"
-       x1="-100"
-       y1="1133.3622"
-       x2="-81"
-       y2="1136.3622" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath4610-6">
-      <path
-         style="font-variation-settings:normal;vector-effect:none;fill:url(#linearGradient4825);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
-         d="m -70,317.00008 6,10 1,16 -7,10 3,-14 -1,-10 z"
-         id="use4612-8" />
-    </clipPath>
-    <mask
-       maskUnits="userSpaceOnUse"
-       id="mask4690">
-      <path
-         style="font-variation-settings:normal;vector-effect:none;fill:url(#linearGradient4829);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
-         d="m -73,345.00008 -9,-7 -10,6 -2,14 9,9 14,-7 -13,2 -6,-6 2,-10 z"
-         id="use4692" />
-    </mask>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4821"
-       gradientUnits="userSpaceOnUse"
-       x1="-65"
-       y1="1107.3622"
-       x2="-65"
-       y2="1137.3622"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4825"
-       gradientUnits="userSpaceOnUse"
-       x1="-65"
-       y1="1107.3622"
-       x2="-65"
-       y2="1137.3622"
-       gradientTransform="translate(0,-782.36212)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
-       id="linearGradient4829"
-       gradientUnits="userSpaceOnUse"
-       x1="-100"
-       y1="1133.3622"
-       x2="-81"
-       y2="1136.3622"
-       gradientTransform="translate(0,-782.36212)" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath4610-1">
@@ -1377,9 +865,9 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter4601"
-       x="-0.086197913"
+       x="-0.086197911"
        width="1.1723958"
-       y="-0.050594427"
+       y="-0.050594426"
        height="1.1011889">
       <feGaussianBlur
          inkscape:collect="always"
@@ -1402,39 +890,15 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter4681"
-       x="-0.065919846"
-       width="1.1318398"
+       x="-0.065919845"
+       width="1.1318397"
        y="-0.060715646"
-       height="1.1214314">
+       height="1.1214313">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.96133106"
          id="feGaussianBlur4683" />
     </filter>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath4778">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path4435"
-         id="use4776"
-         transform="translate(0,-782.36212)"
-         width="100%"
-         height="100%" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath4794">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path4435"
-         id="use4792"
-         transform="translate(0,-782.36212)"
-         width="100%"
-         height="100%" />
-    </clipPath>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#bramble"
@@ -1534,16 +998,6 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#bramble"
-       id="linearGradient4942"
-       gradientUnits="userSpaceOnUse"
-       x1="-80"
-       y1="95.000061"
-       x2="-120"
-       y2="65.000061"
-       spreadMethod="pad" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bramble"
        id="linearGradient4944"
        gradientUnits="userSpaceOnUse"
        x1="-85"
@@ -1594,16 +1048,6 @@
          x="198"
          y="782.36212" />
     </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1138-2">
-      <circle
-         r="4.6875"
-         cy="802.04968"
-         cx="399.375"
-         id="use1140-7"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#6b4d3c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.585466;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-    </clipPath>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#rebar_shade"
@@ -1651,7 +1095,11 @@
     <filter
        style="color-interpolation-filters:sRGB"
        id="filter2793"
-       inkscape:label="reinforced_noise">
+       inkscape:label="reinforced_noise"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          id="feTurbulence2789"
          type="fractalNoise"
@@ -1700,16 +1148,6 @@
            id="path1574" />
       </g>
     </clipPath>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#bamboo-gate-rope-mask"
-       id="linearGradient2362"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.66666669,0,0,0.79999996,383.00001,175.27246)"
-       x1="871.49994"
-       y1="1071.3622"
-       x2="871.49994"
-       y2="831.36218" />
     <mask
        maskUnits="userSpaceOnUse"
        id="mask2364">
@@ -1801,9 +1239,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="881.06637"
-     inkscape:cy="139.18732"
+     inkscape:zoom="0.58598281"
+     inkscape:cx="442.84576"
+     inkscape:cy="389.94318"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -1819,7 +1257,7 @@
      inkscape:snap-midpoints="true"
      inkscape:snap-nodes="true"
      inkscape:window-width="1872"
-     inkscape:window-height="1055"
+     inkscape:window-height="1051"
      inkscape:window-x="48"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -1832,7 +1270,8 @@
      inkscape:snap-object-midpoints="true"
      inkscape:snap-center="true"
      inkscape:snap-text-baseline="true"
-     inkscape:snap-page="true">
+     inkscape:snap-page="true"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        type="xygrid"
        id="grid4147"

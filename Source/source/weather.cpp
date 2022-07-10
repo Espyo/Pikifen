@@ -14,7 +14,10 @@
 /* ----------------------------------------------------------------------------
  * Creates a weather type.
  */
-weather::weather() {
+weather::weather() :
+    fog_near(0.0f),
+    fog_far(0.0f),
+    precipitation_type(PRECIPITATION_TYPE_NONE) {
 }
 
 

@@ -301,7 +301,7 @@ def get_params_in_file_lines(lines, line_nr):
     return params
 
 def get_source_dir_to_use():
-    debug_arg_idx = get_argument_idx('debug') != -1
+    debug_arg_idx = get_argument_idx('debug')
     script_debug_mode = (debug_arg_idx != -1)
     if script_debug_mode:
         return sys.argv[debug_arg_idx + 1]

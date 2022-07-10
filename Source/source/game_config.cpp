@@ -52,7 +52,7 @@ const float DEF_MESSAGE_CHAR_INTERVAL = 0.03f;
 //Default value for the next Pikmin auto-pluck range.
 const float DEF_NEXT_PLUCK_RANGE = 160.0f;
 //Default value for the color that represents no Pikmin.
-const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR = { 0.75f, 0.90f, 0.90f };
+const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR = { 0.75f, 0.90f, 0.90f, 1.0f };
 //Default value for the Onion opening range.
 const float DEF_ONION_OPEN_RANGE = 24.0f;
 //Default value for the Pikmin chase range.

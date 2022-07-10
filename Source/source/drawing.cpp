@@ -482,7 +482,7 @@ void draw_control_icon(
     CONTROL_ICON_SPRITES bitmap_sprite;
     string text;
     get_control_icon_info(
-        font, c, condensed,
+        c, condensed,
         &shape, &bitmap_sprite, &text
     );
     
@@ -1806,8 +1806,6 @@ float ease(const EASING_METHODS method, const float n) {
 
 /* ----------------------------------------------------------------------------
  * Returns information about how a control icon should be drawn.
- * font:
- *   Font to use for the name, if necessary.
  * c:
  *   Info on the control. If NULL, a "NONE" icon will be used.
  * condensed:
@@ -1825,7 +1823,7 @@ float ease(const EASING_METHODS method, const float n) {
  *   returned if there's nothing to write.
  */
 void get_control_icon_info(
-    const ALLEGRO_FONT* font, const control_info* c, const bool condensed,
+    const control_info* c, const bool condensed,
     CONTROL_ICON_SHAPES* shape, CONTROL_ICON_SPRITES* bitmap_sprite,
     string* text
 ) {
@@ -2030,7 +2028,7 @@ float get_control_icon_width(
     CONTROL_ICON_SPRITES bitmap_sprite;
     string text;
     get_control_icon_info(
-        font, c, condensed,
+        c, condensed,
         &shape, &bitmap_sprite, &text
     );
     
