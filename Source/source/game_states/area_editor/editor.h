@@ -77,7 +77,8 @@ public:
     string get_name() const override;
     
     void draw_canvas();
-
+    string get_opened_folder_name() const;
+    
     area_editor();
     
     //Ways for the cursor to snap.

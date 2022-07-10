@@ -45,6 +45,7 @@ public:
     //History for the last files that were opened.
     vector<string> history;
     
+    string get_opened_file_name() const;
     void update_history(const string &n);
     
     void do_logic() override;
@@ -54,7 +55,7 @@ public:
     string get_name() const override;
     
     void draw_canvas();
-
+    
     animation_editor();
     
 private:

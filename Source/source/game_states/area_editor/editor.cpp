@@ -1051,6 +1051,14 @@ string area_editor::get_name() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the name of the currently opened folder, or an empty string if none.
+ */
+string area_editor::get_opened_folder_name() const {
+    return area_folder_name;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Focuses the camera on the problem found, if any.
  */
 void area_editor::goto_problem() {

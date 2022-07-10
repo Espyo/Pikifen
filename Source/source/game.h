@@ -207,6 +207,8 @@ private:
     //Is delta_t meant to be reset for the next frame?
     bool reset_delta_t;
     
+    void check_system_key_press(const ALLEGRO_EVENT &ev);
+    
 };
 
 

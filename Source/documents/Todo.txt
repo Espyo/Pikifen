@@ -11,8 +11,6 @@ Next tasks (roughly sorted most important first)
     --- v0.23.0 ---
     Code cleanup
         Correct warnings given by compiling with -Wall, both on g++ and Visual Studio
-    Add collisions to rolled up stick bridges?
-    Add a maker tool that makes it so a button saves the current game state + loaded content get saved to the auto-start maker tool
     Mission Mode stuff
         Info
             The idea is to make it so areas have some sort of goal, other than being a sandbox
@@ -287,6 +285,7 @@ Next tasks (roughly sorted most important first)
         Candypop Buds should squash when they close
         Ceramic bridges should be reworked for the new bridge format
         Wooden bridges need to be 192px long, to fit the new bridge format
+            Add collisions to rolled up stick bridges?
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
         Add a glow to the smack effect particle?
@@ -334,6 +333,7 @@ Next tasks (roughly sorted most important first)
             For gamepad inputs, write the gamepad's name somewhere on-screen?
             If the player assigns a button that is already assigned to something else, it should give a warning
             If the player leaves the menu but some important actions don't have button assignments, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
+        Maker tools should be like controls, in that they should be able to be bound to any button, and use the same general system
         Add default controls for menu navigation, for the D-pad, analog stick, arrow keys, spacebar, enter, escape, a gamepad button to confirm, and a gamepad button to cancel
         Save the controls in the options file inside a block, and possibly at the end of the options file
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info

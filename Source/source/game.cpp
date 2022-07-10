@@ -119,6 +119,43 @@ void game_class::change_state(
 
 
 /* ----------------------------------------------------------------------------
+ * Checks whether the player has pressed some system-related key combination,
+ * and acts accordingly.
+ * ev:
+ *   The Allegro event behind the key press.
+ */
+void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
+    switch(ev.keyboard.keycode) {
+    case ALLEGRO_KEY_F12: {
+        if(has_flag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+            string cur_state = get_cur_state_name();
+            if(cur_state == states.animation_ed->get_name()) {
+                maker_tools.auto_start_mode = "animation_editor";
+                maker_tools.auto_start_option =
+                    states.animation_ed->get_opened_file_name();
+            } else if(cur_state == states.area_ed->get_name()) {
+                maker_tools.auto_start_mode = "area_editor";
+                maker_tools.auto_start_option =
+                    states.area_ed->get_opened_folder_name();
+            } else if(cur_state == states.gameplay->get_name()) {
+                maker_tools.auto_start_mode = "play";
+                maker_tools.auto_start_option =
+                    states.gameplay->area_to_load;
+            } else {
+                maker_tools.auto_start_mode.clear();
+                maker_tools.auto_start_option.clear();
+            }
+            save_maker_tools();
+        } else {
+            save_screenshot();
+        }
+        break;
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the name of the current state.
  */
 string game_class::get_cur_state_name() const {
@@ -183,9 +220,7 @@ void game_class::main_loop() {
             break;
             
         } case ALLEGRO_EVENT_KEY_DOWN: {
-            if(ev.keyboard.keycode == ALLEGRO_KEY_F12) {
-                save_screenshot();
-            }
+            check_system_key_press(ev);
             break;
             
         }  case ALLEGRO_EVENT_DISPLAY_SWITCH_IN: {

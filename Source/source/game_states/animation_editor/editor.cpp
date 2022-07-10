@@ -244,6 +244,14 @@ string animation_editor::get_name() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the name of the currently opened file, or an empty string if none.
+ */
+string animation_editor::get_opened_file_name() const {
+    return file_path;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a file path, but shortened in such a way that only the text file's
  * name and brief context about its folder remain. If that's not possible, it
  * is returned as is, though its beginning may be cropped off with ellipsis
