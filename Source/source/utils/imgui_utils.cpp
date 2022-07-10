@@ -170,9 +170,12 @@ void ImGui::Reset() {
     io.KeyShift = false;
     io.KeyAlt = false;
     io.KeySuper = false;
-    for(size_t k = 0; k < IM_ARRAYSIZE(io.KeysDown); ++k) {
-        io.KeysDown[k] = false;
-    }
+    
+    io.AddKeyEvent(ImGuiKey_Escape, false);
+    io.AddKeyEvent(ImGuiKey_ModCtrl, false);
+    io.AddKeyEvent(ImGuiKey_ModShift, false);
+    io.AddKeyEvent(ImGuiKey_ModAlt, false);
+    io.AddKeyEvent(ImGuiKey_ModSuper, false);
 }
 
 

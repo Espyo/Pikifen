@@ -11,7 +11,6 @@ Next tasks (roughly sorted most important first)
     --- v0.23.0 ---
     Code cleanup
         Correct warnings given by compiling with -Wall, both on g++ and Visual Studio
-    Update Dear ImGui again lol; try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
     Add collisions to rolled up stick bridges?
     Add a maker tool that makes it so a button saves the current game state + loaded content get saved to the auto-start maker tool
     Mission Mode stuff
