@@ -15,6 +15,7 @@
 
 #include "game_states/game_state.h"
 
+#include "area.h"
 #include "game_config.h"
 #include "game_states/animation_editor/editor.h"
 #include "game_states/area_editor/editor.h"
