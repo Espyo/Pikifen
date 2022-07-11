@@ -854,9 +854,9 @@ private:
     ALLEGRO_BITMAP* icon;
     
     subgroup_type() :
-    category(SUBGROUP_TYPE_CATEGORY_LEADER),
-    specific_type(nullptr),
-    icon(nullptr) {
+        category(SUBGROUP_TYPE_CATEGORY_LEADER),
+        specific_type(nullptr),
+        icon(nullptr) {
     }
 };
 

@@ -177,7 +177,7 @@ void animation_editor::draw_canvas() {
                 63 + 192 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
             size_t n_hitboxes = s->hitboxes.size();
             
-            for(int h = n_hitboxes - 1; h >= 0; --h) {
+            for(int h = (int) n_hitboxes - 1; h >= 0; --h) {
                 //Iterate the hitboxes in reverse order, since this is
                 //the order of priority the engine has when checking for
                 //collisions. Making higher priority hitboxes appear above

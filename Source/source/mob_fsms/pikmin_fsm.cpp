@@ -2754,7 +2754,9 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
     
     //Pick a leg at random.
     pik_ptr->temp_i =
-        randomi(0, (nest_ptr->nest_type->leg_body_parts.size() / 2) - 1);
+        randomi(
+            0, (int) (nest_ptr->nest_type->leg_body_parts.size() / 2) - 1
+        );
     size_t leg_foot_bp_idx =
         nest_ptr->m_ptr->anim.anim_db->find_body_part(
             nest_ptr->nest_type->leg_body_parts[pik_ptr->temp_i * 2 + 1]

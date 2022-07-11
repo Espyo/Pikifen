@@ -762,7 +762,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             status_text =
                 "Duplicated " +
-                amount_str(selected_mobs.size(), "object") + ".";
+                amount_str((int) selected_mobs.size(), "object") + ".";
                 
             break;
             

@@ -421,7 +421,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         } else {
             //0 is reserved in this widget for "default".
             //Increase it by one to get the widget's team index number.
-            team_nr = team_nr_st + 1;
+            team_nr = (int) team_nr_st + 1;
         }
     }
     
@@ -842,7 +842,7 @@ void area_editor::process_gui_options_dialog() {
         
         //Undo limit value.
         size_t old_undo_limit = game.options.area_editor_undo_limit;
-        int undo_limit = game.options.area_editor_undo_limit;
+        int undo_limit = (int) game.options.area_editor_undo_limit;
         ImGui::SetNextItemWidth(64.0f);
         ImGui::DragInt(
             "Undo limit", &undo_limit, 0.1, 0, INT_MAX
@@ -2657,7 +2657,7 @@ void area_editor::process_gui_panel_sector() {
                         s_ptr->hazards_str += ";";
                     }
                     s_ptr->hazards_str += picked_hazard;
-                    selected_hazard_nr = list.size();
+                    selected_hazard_nr = (int) list.size();
                     status_text =
                         "Added hazard \"" + picked_hazard +
                         "\" to the sector.";

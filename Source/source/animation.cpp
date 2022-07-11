@@ -653,56 +653,57 @@ sprite &sprite::operator=(const sprite &s2) {
  * This automatically manages bitmap un/loading and such.
  * If the file name string is empty, sets to a NULL bitmap
  * (and still unloads the old bitmap).
- * file_name:
+ * new_file_name:
  *   File name of the bitmap.
- * file_pos:
+ * new_file_pos:
  *   Top-left coordinates of the sub-bitmap inside the bitmap.
- * file_size:
+ * new_file_size:
  *   Dimensions of the sub-bitmap.
  * node:
  *   If not NULL, this will be used to report an error with, in case
  *   something happens.
  */
 void sprite::set_bitmap(
-    const string &file_name, const point &file_pos, const point &file_size,
+    const string &new_file_name,
+    const point &new_file_pos, const point &new_file_size,
     data_node* node
 ) {
     if(bitmap) {
         al_destroy_bitmap(bitmap);
         bitmap = NULL;
     }
-    if(file_name != file && parent_bmp) {
+    if(new_file_name != file && parent_bmp) {
         game.bitmaps.detach(file);
         parent_bmp = NULL;
     }
     
-    if(file_name.empty()) {
+    if(new_file_name.empty()) {
         file.clear();
-        this->file_size = point();
-        this->file_pos = point();
+        file_size = point();
+        file_pos = point();
         return;
     }
     
-    if(file_name != file || !parent_bmp) {
-        parent_bmp = game.bitmaps.get(file_name, node, node != NULL);
+    if(new_file_name != file || !parent_bmp) {
+        parent_bmp = game.bitmaps.get(new_file_name, node, node != NULL);
     }
     
     int parent_w = al_get_bitmap_width(parent_bmp);
     int parent_h = al_get_bitmap_height(parent_bmp);
     
-    file = file_name;
-    this->file_pos = file_pos;
-    this->file_size = file_size;
-    this->file_pos.x = clamp(file_pos.x, 0, parent_w - 1);
-    this->file_pos.y = clamp(file_pos.y, 0, parent_h - 1);
-    this->file_size.x = clamp(file_size.x, 0, parent_w - this->file_pos.x);
-    this->file_size.y = clamp(file_size.y, 0, parent_h - this->file_pos.y);
+    file = new_file_name;
+    file_pos = new_file_pos;
+    file_size = new_file_size;
+    file_pos.x = clamp(new_file_pos.x, 0, parent_w - 1);
+    file_pos.y = clamp(new_file_pos.y, 0, parent_h - 1);
+    file_size.x = clamp(new_file_size.x, 0, parent_w - file_pos.x);
+    file_size.y = clamp(new_file_size.y, 0, parent_h - file_pos.y);
     
     if(parent_bmp) {
         bitmap =
             al_create_sub_bitmap(
-                parent_bmp, this->file_pos.x, this->file_pos.y,
-                this->file_size.x, this->file_size.y
+                parent_bmp, file_pos.x, file_pos.y,
+                file_size.x, file_size.y
             );
     }
 }

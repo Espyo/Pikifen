@@ -211,7 +211,7 @@ void animation_editor::process_gui_hitbox_hazards() {
                     cur_hitbox->hazards_str += ";";
                 }
                 cur_hitbox->hazards_str += picked_hazard;
-                selected_hazard_nr = list.size();
+                selected_hazard_nr = (int) list.size();
                 mark_new_changes();
                 status_text =
                     "Added hazard \"" + picked_hazard + "\" to the hitbox.";
@@ -566,9 +566,9 @@ void animation_editor::process_gui_panel_animation() {
             } else {
                 size_t new_nr =
                     sum_and_wrap(
-                        anims.find_animation(cur_anim->name),
+                        (int) anims.find_animation(cur_anim->name),
                         -1,
-                        anims.animations.size()
+                        (int) anims.animations.size()
                     );
                 pick_animation(anims.animations[new_nr]->name, "", false);
             }
@@ -633,9 +633,9 @@ void animation_editor::process_gui_panel_animation() {
             } else {
                 size_t new_nr =
                     sum_and_wrap(
-                        anims.find_animation(cur_anim->name),
+                        (int) anims.find_animation(cur_anim->name),
                         1,
-                        anims.animations.size()
+                        (int) anims.animations.size()
                     );
                 pick_animation(anims.animations[new_nr]->name, "", false);
             }
@@ -740,11 +740,11 @@ void animation_editor::process_gui_panel_animation() {
         if(saveable_tree_node("animation", "Animation data")) {
         
             //Loop frame value.
-            int loop_frame = cur_anim->loop_frame + 1;
+            int loop_frame = (int) cur_anim->loop_frame + 1;
             if(
                 ImGui::DragInt(
                     "Loop frame", &loop_frame, 0.1f, 1,
-                    cur_anim->frames.empty() ? 1 : cur_anim->frames.size()
+                    cur_anim->frames.empty() ? 1 : (int) cur_anim->frames.size()
                 )
             ) {
                 mark_new_changes();
@@ -990,7 +990,7 @@ void animation_editor::process_gui_panel_animation() {
                 //Signal value.
                 if(use_signal) {
                     ImGui::SameLine();
-                    int f_signal = frame_ptr->signal;
+                    int f_signal = (int) frame_ptr->signal;
                     if(
                         ImGui::DragInt("##signal", &f_signal, 0.1, 0, INT_MAX)
                     ) {
@@ -1064,7 +1064,7 @@ void animation_editor::process_gui_panel_body_part() {
             bool already_exists = false;
             for(size_t b = 0; b < anims.body_parts.size(); ++b) {
                 if(anims.body_parts[b]->name == new_part_name) {
-                    selected_part = b;
+                    selected_part = (int) b;
                     already_exists = true;
                 }
             }
@@ -1161,10 +1161,11 @@ void animation_editor::process_gui_panel_body_part() {
                 );
                 
                 if(ImGui::IsItemActive()) {
-                    selected_part = p;
+                    selected_part = (int) p;
                     if(!ImGui::IsItemHovered()) {
                         int p2 =
-                            p + (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
+                            (int) p +
+                            (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
                         if(p2 >= 0 && p2 < (int) anims.body_parts.size()) {
                             body_part* p_ptr = anims.body_parts[p];
                             anims.body_parts[p] = anims.body_parts[p2];
@@ -1348,9 +1349,9 @@ void animation_editor::process_gui_panel_sprite() {
             } else {
                 size_t new_nr =
                     sum_and_wrap(
-                        anims.find_sprite(cur_sprite->name),
+                        (int) anims.find_sprite(cur_sprite->name),
                         -1,
-                        anims.sprites.size()
+                        (int) anims.sprites.size()
                     );
                 pick_sprite(anims.sprites[new_nr]->name, "", false);
             }
@@ -1409,9 +1410,9 @@ void animation_editor::process_gui_panel_sprite() {
             } else {
                 size_t new_nr =
                     sum_and_wrap(
-                        anims.find_sprite(cur_sprite->name),
+                        (int) anims.find_sprite(cur_sprite->name),
                         1,
-                        anims.sprites.size()
+                        (int) anims.sprites.size()
                     );
                 pick_sprite(anims.sprites[new_nr]->name, "", false);
             }
@@ -1810,7 +1811,8 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             } else {
                 cur_hitbox_nr =
                     sum_and_wrap(
-                        cur_hitbox_nr, -1, cur_sprite->hitboxes.size()
+                        (int) cur_hitbox_nr, -1,
+                        (int) cur_sprite->hitboxes.size()
                     );
                 cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
             }
@@ -1834,7 +1836,10 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
                 cur_hitbox_nr = 0;
             } else {
                 cur_hitbox_nr =
-                    sum_and_wrap(cur_hitbox_nr, 1, cur_sprite->hitboxes.size());
+                    sum_and_wrap(
+                        (int) cur_hitbox_nr, 1,
+                        (int) cur_sprite->hitboxes.size()
+                    );
                 cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
             }
         }

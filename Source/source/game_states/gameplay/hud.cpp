@@ -917,9 +917,9 @@ hud_struct::hud_struct() :
         if(game.spray_types.size() >= 3) {
             next_spray_idx =
                 sum_and_wrap(
-                    game.states.gameplay->selected_spray,
+                    (int) game.states.gameplay->selected_spray,
                     1,
-                    game.spray_types.size()
+                    (int) game.spray_types.size()
                 );
         }
         if(next_spray_idx == INVALID) return;
@@ -1061,9 +1061,9 @@ void hud_struct::tick(const float delta_t) {
         if(l < game.states.gameplay->available_leaders.size()) {
             size_t l_idx =
                 (size_t) sum_and_wrap(
-                    game.states.gameplay->cur_leader_nr,
+                    (int) game.states.gameplay->cur_leader_nr,
                     l,
-                    game.states.gameplay->available_leaders.size()
+                    (int) game.states.gameplay->available_leaders.size()
                 );
             l_ptr = game.states.gameplay->available_leaders[l_idx];
         }
@@ -1168,9 +1168,9 @@ void hud_struct::tick(const float delta_t) {
     if(game.spray_types.size() >= 3) {
         prev_spray_idx =
             sum_and_wrap(
-                game.states.gameplay->selected_spray,
+                (int) game.states.gameplay->selected_spray,
                 -1,
-                game.spray_types.size()
+                (int) game.spray_types.size()
             );
     }
     spray_icon_mgr.update(

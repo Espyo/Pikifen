@@ -321,7 +321,8 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     } else {
                         cur_hitbox_nr_index =
                             sum_and_wrap(
-                                cur_hitbox_nr_index, 1, clicked_hitboxes.size()
+                                (int) cur_hitbox_nr_index, 1,
+                                (int) clicked_hitboxes.size()
                             );
                     }
                     cur_hitbox_nr = clicked_hitboxes[cur_hitbox_nr_index];

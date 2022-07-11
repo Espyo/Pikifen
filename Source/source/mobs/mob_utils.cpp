@@ -844,7 +844,7 @@ bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
         
         //Decide a leg to come out of.
         size_t leg_idx =
-            randomi(0, (nest_type->leg_body_parts.size() / 2) - 1);
+            randomi(0, (int) (nest_type->leg_body_parts.size() / 2) - 1);
         size_t leg_hole_bp_idx =
             m_ptr->anim.anim_db->find_body_part(
                 nest_type->leg_body_parts[leg_idx * 2]

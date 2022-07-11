@@ -145,7 +145,7 @@ void onion::spew() {
         
         game.states.results->pikmin_born++;
         
-        unsigned total_after =
+        size_t total_after =
             game.states.gameplay->mobs.pikmin_list.size() + 1;
             
         if(total_after > game.config.max_pikmin_in_field) {

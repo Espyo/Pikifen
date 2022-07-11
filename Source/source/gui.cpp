@@ -496,7 +496,10 @@ void gui_manager::destroy() {
 void gui_manager::draw() {
     if(!visible) return;
     
-    int ocr_x, ocr_y, ocr_w, ocr_h;
+    int ocr_x = 0;
+    int ocr_y = 0;
+    int ocr_w = 0;
+    int ocr_h = 0;
     
     for(size_t i = 0; i < items.size(); ++i) {
     

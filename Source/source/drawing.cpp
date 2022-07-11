@@ -797,7 +797,7 @@ void draw_liquid(
         
         al_draw_prim(
             av, NULL, s_ptr->texture_info.bitmap,
-            0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+            0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
     }
     
@@ -823,7 +823,7 @@ void draw_liquid(
     
     al_draw_prim(
         av, NULL, NULL,
-        0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+        0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
     
     //Layers 3 and 4 - Water surface texture.
@@ -875,7 +875,7 @@ void draw_liquid(
         
         al_draw_prim(
             av, NULL, anim_sprite->bitmap,
-            0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+            0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
     }
     
@@ -1433,7 +1433,7 @@ void draw_sector_texture(
             
         al_draw_prim(
             av, NULL, tex,
-            0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+            0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
         
         delete[] av;
@@ -1570,7 +1570,7 @@ void draw_text_lines(
         top = where.y;
     } else {
         //We add n_lines - 1 because there is a 1px gap between each line.
-        int total_height = n_lines * fh + (n_lines - 1);
+        int total_height = (int) n_lines * fh + (int) (n_lines - 1);
         if(valign == TEXT_VALIGN_CENTER) {
             top = where.y - total_height / 2;
         } else {
@@ -1646,8 +1646,8 @@ void draw_textured_box(
         //For every row.
         
         //Figure out the start and end Y drawing coordinates.
-        float y1;
-        float y2;
+        float y1 = 0.0f;
+        float y2 = 0.0f;
         switch(r) {
         case 0: {
             y1 = tl.y;
@@ -1672,8 +1672,8 @@ void draw_textured_box(
             //For every column.
             
             //Figure out the start and end X drawing coordinates.
-            float x1;
-            float x2;
+            float x1 = 0.0f;
+            float x2 = 0.0f;
             switch(c) {
             case 0: {
                 x1 = tl.x;

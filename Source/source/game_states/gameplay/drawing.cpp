@@ -279,7 +279,9 @@ void gameplay_state::draw_ingame_text() {
                     } case HITBOX_TYPE_DISABLED: {
                         hc = al_map_rgba(128, 128, 0, 192); //Yellow.
                         break;
-                    }
+                    } default:
+                        hc = COLOR_BLACK;
+                        break;
                     }
                     point p =
                         mob_ptr->pos + rotate_point(h_ptr->pos, mob_ptr->angle);
@@ -962,7 +964,7 @@ void gameplay_state::draw_system_stuff() {
             split(game.maker_tools.info_print_text, "\n", true).size();
         int fh = al_get_font_line_height(game.fonts.builtin);
         //We add n_lines - 1 because there is a 1px gap between each line.
-        int total_height = n_lines * fh + (n_lines - 1);
+        int total_height = (int) n_lines * fh + (int) (n_lines - 1);
         
         al_draw_filled_rectangle(
             0, 0, game.win_w, total_height + 16,

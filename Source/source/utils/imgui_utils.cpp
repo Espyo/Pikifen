@@ -65,7 +65,7 @@ bool ImGui::Combo(
     for(size_t i = 0; i < items.size(); ++i) {
         items_str += items[i] + '\0';
         if(*current_item == items[i]) {
-            item_nr = i;
+            item_nr = (int) i;
         }
     }
     
@@ -148,7 +148,7 @@ bool ImGui::ListBox(
     
     return
         ImGui::ListBox(
-            label.c_str(), current_item, array, items.size(), height_in_items
+            label.c_str(), current_item, array, (int) items.size(), height_in_items
         );
 }
 

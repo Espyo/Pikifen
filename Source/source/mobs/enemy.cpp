@@ -194,7 +194,9 @@ void enemy::start_dying_class_specifics() {
             //And now, pick a random one out of the possible pellets.
             if(!possible_pellets.empty()) {
                 spoils_to_spawn.push_back(
-                    possible_pellets[randomi(0, possible_pellets.size() - 1)]
+                    possible_pellets[
+                        randomi(0, (int) possible_pellets.size() - 1)
+                    ]
                 );
             }
         }

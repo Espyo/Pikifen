@@ -917,7 +917,7 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
     if(!choices.empty()) {
         size_t tries = 0;
         while(!final_stop && tries < 5) {
-            size_t c = randomi(0, choices.size() - 1);
+            size_t c = randomi(0, (int) choices.size() - 1);
             if(
                 dist(choices[c]->pos, data.m->pos) >
                 MOB::DEF_CHASE_TARGET_DISTANCE
@@ -1544,7 +1544,7 @@ void mob_action_runners::set_hiding(mob_action_run_data &data) {
  */
 void mob_action_runners::set_holdable(mob_action_run_data &data) {
     if(typeid(*(data.m)) == typeid(tool)) {
-        size_t flags = 0;
+        unsigned char flags = 0;
         for(size_t i = 0; i < data.args.size(); ++i) {
             flags |= s2i(data.args[i]);
         }

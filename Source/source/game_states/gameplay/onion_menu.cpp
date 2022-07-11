@@ -482,7 +482,7 @@ onion_menu_struct::onion_menu_struct(
     };
     prev_page_button->on_activate =
     [this] (const point &) {
-        go_to_page(sum_and_wrap(page, -1, nr_pages));
+        go_to_page(sum_and_wrap((int) page, -1, (int) nr_pages));
     };
     prev_page_button->visible = nr_pages > 1;
     prev_page_button->selectable = nr_pages > 1;
@@ -507,7 +507,7 @@ onion_menu_struct::onion_menu_struct(
     };
     next_page_button->on_activate =
     [this] (const point &) {
-        go_to_page(sum_and_wrap(page, 1, nr_pages));
+        go_to_page(sum_and_wrap((int) page, 1, (int) nr_pages));
     };
     next_page_button->visible = nr_pages > 1;
     next_page_button->selectable = nr_pages > 1;
@@ -745,7 +745,7 @@ void onion_menu_struct::tick(const float delta_t) {
     for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
         //Get how many the player really has with them.
         int real_group_amount =
-            l_ptr->group->get_amount_by_type(
+            (int) l_ptr->group->get_amount_by_type(
                 n_ptr->nest_type->pik_types[t]
             );
             
@@ -754,7 +754,7 @@ void onion_menu_struct::tick(const float delta_t) {
         
         //Get how many are really in the Onion.
         int real_onion_amount =
-            n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[t]);
+            (int) n_ptr->get_amount_by_type(n_ptr->nest_type->pik_types[t]);
             
         //Make sure the player can't request to call more than the Onion has.
         types[t].delta = std::min(real_onion_amount, (int) types[t].delta);
@@ -765,15 +765,16 @@ void onion_menu_struct::tick(const float delta_t) {
     
     //Make sure the player can't request to have more than the field limit.
     int delta_over_limit =
-        game.states.gameplay->mobs.pikmin_list.size() + total_delta -
-        game.config.max_pikmin_in_field;
+        (int) game.states.gameplay->mobs.pikmin_list.size() +
+        total_delta -
+        (int) game.config.max_pikmin_in_field;
         
     while(delta_over_limit > 0) {
         vector<size_t> candidate_types;
         
         for(size_t t = 0; t < n_ptr->nest_type->pik_types.size(); ++t) {
             int real_group_amount =
-                l_ptr->group->get_amount_by_type(
+                (int) l_ptr->group->get_amount_by_type(
                     n_ptr->nest_type->pik_types[t]
                 );
                 

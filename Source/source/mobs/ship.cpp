@@ -144,7 +144,7 @@ void ship::draw_mob() {
     
     //Drawing the tractor beam rings.
     //Go in reverse to ensure the most recent rings are drawn underneath.
-    for(char r = tractor_beam_rings.size() - 1; r > 0; r--) {
+    for(char r = (char) tractor_beam_rings.size() - 1; r > 0; r--) {
     
         float ring_anim_ratio =
             tractor_beam_rings[r] / SHIP::TRACTOR_BEAM_RING_ANIM_DUR;

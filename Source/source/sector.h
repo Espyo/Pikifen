@@ -496,7 +496,7 @@ public:
     void register_type(const SECTOR_TYPES nr, const string &name);
     SECTOR_TYPES get_nr(const string &name) const;
     string get_name(const SECTOR_TYPES nr) const;
-    unsigned char get_nr_of_types() const;
+    size_t get_nr_of_types() const;
     
 private:
     //Known sector types.

@@ -110,7 +110,7 @@ void options_menu_state::change_auto_throw(const signed int step) {
     } else {
         cur_auto_throw_idx =
             sum_and_wrap(
-                cur_auto_throw_idx, step,
+                (int) cur_auto_throw_idx, step,
                 OPTIONS_MENU::N_AUTO_THROW_PRESETS
             );
     }
@@ -139,7 +139,7 @@ void options_menu_state::change_cursor_speed(const signed int step) {
     } else {
         cur_cursor_speed_idx =
             sum_and_wrap(
-                cur_cursor_speed_idx, step,
+                (int) cur_cursor_speed_idx, step,
                 OPTIONS_MENU::N_CURSOR_SPEED_PRESETS
             );
     }
@@ -166,7 +166,10 @@ void options_menu_state::change_resolution(const signed int step) {
         cur_resolution_idx = 0;
     } else {
         cur_resolution_idx =
-            sum_and_wrap(cur_resolution_idx, step, resolution_presets.size());
+            sum_and_wrap(
+                (int) cur_resolution_idx, step,
+                resolution_presets.size()
+            );
     }
     
     game.options.intended_win_w = resolution_presets[cur_resolution_idx].first;

@@ -999,7 +999,7 @@ void change_to_next_leader(
     //If we return to the current leader without anything being
     //changed, then stop trying; no leader can be switched to.
     
-    int new_leader_nr = game.states.gameplay->cur_leader_nr;
+    int new_leader_nr = (int) game.states.gameplay->cur_leader_nr;
     if(keep_idx) {
         forward ? new_leader_nr-- : new_leader_nr++;
     }
@@ -1041,7 +1041,7 @@ void change_to_next_leader(
             sum_and_wrap(
                 new_leader_nr,
                 (forward ? 1 : -1),
-                game.states.gameplay->available_leaders.size()
+                (int) game.states.gameplay->available_leaders.size()
             );
         game.states.gameplay->cur_leader_ptr =
             game.states.gameplay->

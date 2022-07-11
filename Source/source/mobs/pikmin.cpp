@@ -392,7 +392,7 @@ bool pikmin::process_attack_miss(hitbox_interaction* info) {
 void pikmin::read_script_vars(const script_var_reader &svr) {
     mob::read_script_vars(svr);
     
-    size_t maturity_var;
+    int maturity_var;
     bool sprout_var;
     bool follow_link_var;
     

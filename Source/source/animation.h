@@ -109,7 +109,8 @@ public:
         const float height = 0, const float radius = 0
     );
     void set_bitmap(
-        const string &file_name, const point &file_pos, const point &file_size,
+        const string &new_file_name,
+        const point &new_file_pos, const point &new_file_size,
         data_node* node = NULL
     );
     

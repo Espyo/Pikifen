@@ -2003,7 +2003,7 @@ SECTOR_TYPES sector_types_manager::get_nr(const string &name) const {
 /* ----------------------------------------------------------------------------
  * Returns the number of sector types registered.
  */
-unsigned char sector_types_manager::get_nr_of_types() const {
+size_t sector_types_manager::get_nr_of_types() const {
     return names.size();
 }
 

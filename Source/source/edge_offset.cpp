@@ -221,7 +221,7 @@ void draw_sector_edge_offsets(
     
     al_draw_prim(
         av, NULL, buffer,
-        0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+        0, (int) n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
     );
     
     delete[] av;

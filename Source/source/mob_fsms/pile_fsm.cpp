@@ -72,7 +72,7 @@ void pile_fsm::be_attacked(mob* m, void* info1, void* info2) {
     size_t amount_before = pil_ptr->amount;
     int intended_amount =
         ceil(pil_ptr->health / pil_ptr->pil_type->health_per_resource);
-    int amount_to_spawn = pil_ptr->amount - intended_amount;
+    int amount_to_spawn = (int) pil_ptr->amount - intended_amount;
     amount_to_spawn = std::max((int) 0, amount_to_spawn);
     
     if(amount_to_spawn == 0) return;

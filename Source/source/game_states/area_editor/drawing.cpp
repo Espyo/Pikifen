@@ -665,7 +665,7 @@ void area_editor::draw_canvas() {
                 bool selected =
                     selected_path_links.find(l_ptr) !=
                     selected_path_links.end();
-                ALLEGRO_COLOR color;
+                ALLEGRO_COLOR color = COLOR_WHITE;
                 if(selected) {
                     color =
                         al_map_rgba(

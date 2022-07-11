@@ -414,9 +414,9 @@ void gameplay_state::handle_button(
             if(game.spray_types.size() > 2) {
                 selected_spray =
                     sum_and_wrap(
-                        selected_spray,
+                        (int) selected_spray,
                         button == BUTTON_NEXT_SPRAY ? +1 : -1,
-                        game.spray_types.size()
+                        (int) game.spray_types.size()
                     );
                 game.states.gameplay->hud->
                 spray_1_amount->start_juice_animation(

@@ -317,7 +317,7 @@ bool str_peek(const string &s, const size_t where, const string &match) {
 string str_to_lower(string s) {
     size_t n_characters = s.size();
     for(size_t c = 0; c < n_characters; ++c) {
-        s[c] = tolower(s[c]);
+        s[c] = (char) tolower(s[c]);
     }
     return s;
 }
@@ -334,9 +334,9 @@ string str_to_title(string s) {
     for(size_t c = 0; c < n_characters; ++c) {
         if(isalpha(s[c])) {
             if(letter_streak == 0) {
-                s[c] = toupper(s[c]);
+                s[c] = (char) toupper(s[c]);
             } else {
-                s[c] = tolower(s[c]);
+                s[c] = (char) tolower(s[c]);
             }
             letter_streak++;
         } else {
@@ -355,7 +355,7 @@ string str_to_title(string s) {
 string str_to_upper(string s) {
     size_t n_characters = s.size();
     for(size_t c = 0; c < n_characters; ++c) {
-        s[c] = toupper(s[c]);
+        s[c] = (char) toupper(s[c]);
     }
     return s;
 }

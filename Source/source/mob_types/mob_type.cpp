@@ -221,18 +221,14 @@ anim_conversion_vector mob_type::get_anim_conversions() const {
 
 /* ----------------------------------------------------------------------------
  * Loads properties from a data file, if any.
- * file:
- *   File to read from.
  */
-void mob_type::load_properties(data_node* file) { }
+void mob_type::load_properties(data_node*) { }
 
 
 /* ----------------------------------------------------------------------------
  * Loads any resources into memory, if any.
- * file:
- *   File to read from.
  */
-void mob_type::load_resources(data_node* file) { }
+void mob_type::load_resources(data_node*) { }
 
 
 /* ----------------------------------------------------------------------------

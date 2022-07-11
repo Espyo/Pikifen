@@ -228,21 +228,21 @@ void replay::load_from_file(const string &file_name) {
 void replay::save_to_file(const string &file_name) const {
     ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "wb");
     
-    al_fwrite32be(file, states.size());
+    al_fwrite32be(file, (int32_t) states.size());
     for(size_t s = 0; s < states.size(); ++s) {
         const replay_state* s_ptr = &states[s];
         
-        al_fwrite32be(file, s_ptr->elements.size());
+        al_fwrite32be(file, (int32_t) s_ptr->elements.size());
         for(size_t e = 0; e < s_ptr->elements.size(); ++e) {
             al_fputc(file, s_ptr->elements[e].type);
             al_fwrite32be(file, floor(s_ptr->elements[e].pos.x));
             al_fwrite32be(file, floor(s_ptr->elements[e].pos.y));
         }
         
-        al_fwrite32be(file, s_ptr->events.size());
+        al_fwrite32be(file, (int32_t) s_ptr->events.size());
         for(size_t e = 0; e < s_ptr->events.size(); ++e) {
             al_fputc(file, s_ptr->events[e].type);
-            al_fwrite32be(file, s_ptr->events[e].data);
+            al_fwrite32be(file, (int32_t) s_ptr->events[e].data);
         }
     }
     

@@ -929,7 +929,9 @@ void area_editor::finish_new_sector_drawing() {
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         layout_drawing_node* prev_node =
-            &drawing_nodes[sum_and_wrap(n, -1, drawing_nodes.size())];
+            &drawing_nodes[
+                sum_and_wrap((int) n, -1, (int) drawing_nodes.size())
+            ];
             
         drawing_vertexes.push_back(n_ptr->on_vertex);
         
@@ -995,8 +997,8 @@ void area_editor::finish_new_sector_drawing() {
     
     status_text =
         "Created sector with " +
-        amount_str(new_sector->edges.size(), "edge") + ", " +
-        amount_str(drawing_vertexes.size(), "vertex", "vertexes") + ".";
+        amount_str((int) new_sector->edges.size(), "edge") + ", " +
+        amount_str((int) drawing_vertexes.size(), "vertex", "vertexes") + ".";
 }
 
 
@@ -1886,7 +1888,10 @@ void area_editor::press_remove_edge_button() {
     if(success) {
         status_text =
             "Deleted " +
-            amount_str(n_before - game.cur_area_data.edges.size(), "edge") +
+            amount_str(
+                (int) n_before - game.cur_area_data.edges.size(),
+                "edge"
+            ) +
             " (" + i2s(n_selected) + " were selected).";
     }
 }
@@ -1921,7 +1926,8 @@ void area_editor::press_remove_mob_button() {
     status_text =
         "Deleted " +
         amount_str(
-            n_before - game.cur_area_data.mob_generators.size(), "object"
+            (int) n_before - game.cur_area_data.mob_generators.size(),
+            "object"
         ) +
         ".";
 }
@@ -1960,12 +1966,12 @@ void area_editor::press_remove_path_button() {
     status_text =
         "Deleted " +
         amount_str(
-            n_stops_before - game.cur_area_data.path_stops.size(),
+            (int) n_stops_before - game.cur_area_data.path_stops.size(),
             "path stop"
         ) +
         ", " +
         amount_str(
-            n_links_before - game.cur_area_data.get_nr_path_links(),
+            (int) n_links_before - game.cur_area_data.get_nr_path_links(),
             "path link"
         ) +
         "."
@@ -2778,11 +2784,17 @@ void area_editor::set_selection_status_text() {
         if(!selected_vertexes.empty()) {
             status_text =
                 "Selected " +
-                amount_str(selected_sectors.size(), "sector") +
+                amount_str(
+                    (int) selected_sectors.size(), "sector"
+                ) +
                 ", " +
-                amount_str(selected_edges.size(), "edge") +
+                amount_str(
+                    (int) selected_edges.size(), "edge"
+                ) +
                 ", " +
-                amount_str(selected_vertexes.size(), "vertex", "vertexes") +
+                amount_str(
+                    (int) selected_vertexes.size(), "vertex", "vertexes"
+                ) +
                 ".";
         }
         break;
@@ -2791,7 +2803,7 @@ void area_editor::set_selection_status_text() {
         if(!selected_mobs.empty()) {
             status_text =
                 "Selected " +
-                amount_str(selected_mobs.size(), "object") +
+                amount_str((int) selected_mobs.size(), "object") +
                 ".";
         }
         break;
@@ -2810,10 +2822,10 @@ void area_editor::set_selection_status_text() {
             }
             status_text =
                 "Selected " +
-                amount_str(selected_path_stops.size(), "path stop") +
+                amount_str((int) selected_path_stops.size(), "path stop") +
                 ", " +
                 amount_str(
-                    (normals_found / 2.0f) + one_ways_found, "path link"
+                    (int) (normals_found / 2.0f) + one_ways_found, "path link"
                 ) +
                 ".";
         }
@@ -3089,12 +3101,12 @@ void area_editor::split_sector_with_drawing() {
     if(!working_sector) {
         status_text =
             "Created sector with " +
-            amount_str(new_sector->edges.size(), "edge") + ".";
+            amount_str((int) new_sector->edges.size(), "edge") + ".";
     } else {
         status_text =
             "Split sector, creating one with " +
-            amount_str(new_sector->edges.size(), "edge") + ", one with " +
-            amount_str(working_sector->edges.size(), "edge") + ".";
+            amount_str((int) new_sector->edges.size(), "edge") + ", one with " +
+            amount_str((int) working_sector->edges.size(), "edge") + ".";
     }
 }
 

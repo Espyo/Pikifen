@@ -65,8 +65,8 @@ converter::converter(
 void converter::change_type() {
     current_type_nr =
         sum_and_wrap(
-            current_type_nr, 1,
-            con_type->available_pikmin_types.size()
+            (int) current_type_nr, 1,
+            (int) con_type->available_pikmin_types.size()
         );
     current_type = con_type->available_pikmin_types[current_type_nr];
     

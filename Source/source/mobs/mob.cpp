@@ -772,7 +772,9 @@ bool mob::calculate_carrying_destination(
         //Go with the Onion that had been decided before.
         if(new_tie || !decided_type) {
             decided_type =
-                majority_types[randomi(0, majority_types.size() - 1)];
+                majority_types[
+                    randomi(0, (int) majority_types.size() - 1)
+                ];
         }
     }
     
@@ -2073,7 +2075,8 @@ void mob::get_sprite_bitmap_effects(
                     );
                 new_offset.y *= MOB::DELIVERY_TOSS_MULT;
                 //Randomly deviate left or right, slightly.
-                float deviation_mult = hash_nr(id) / (float) UINT32_MAX;
+                float deviation_mult =
+                    hash_nr((unsigned int) id) / (float) UINT32_MAX;
                 deviation_mult = deviation_mult * 2.0f - 1.0f;
                 deviation_mult *= MOB::DELIVERY_TOSS_X_OFFSET;
                 new_offset.x =
