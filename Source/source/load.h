@@ -15,6 +15,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "area.h"
 #include "misc_structs.h"
 #include "utils/data_file.h"
 
@@ -23,7 +24,8 @@ using std::string;
 
 
 void load_area(
-    const string &name, const bool load_for_editor, const bool from_backup
+    const AREA_TYPES type, const string &name,
+    const bool load_for_editor, const bool from_backup
 );
 void load_asset_file_names();
 ALLEGRO_BITMAP* load_bmp(

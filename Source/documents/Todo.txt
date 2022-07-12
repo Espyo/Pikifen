@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -31,12 +31,11 @@ Next tasks (roughly sorted most important first)
                         Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
-        Areas should go either in Game_data/Areas/Simple or Game_data/Areas/Missions
         Area editor changes
             Starting dialog should have
                 A history
-                Tabs for the different area types
-                A picker inside each tab so users can create or load
+                The standard "picker" content, with the different area types in different categories
+                Trying to create a new area should ask what type of area it is before proceeding
             Add a new panel, Gameplay, where you control everything gameplay-related
                 Move the spray counter here, and spruce it up so people don't have to write stuff by hand
         Each stage should have the following data:
@@ -110,6 +109,7 @@ Next tasks (roughly sorted most important first)
         Other things
             The pause menu's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
+            The auto-start tool should have the full path to the area, and the game should infer its area type from there
     Statistics menu, which keeps track of:
         Engine use
             Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd

@@ -26,7 +26,10 @@
 void area_editor::open_area_picker() {
     vector<picker_item> areas;
     vector<string> folders =
-        folder_to_vector(AREAS_FOLDER_PATH, true);
+        folder_to_vector(
+            get_base_area_folder_path(AREA_TYPE_SIMPLE, true),
+            true
+        );
         
     for(size_t f = 0; f < folders.size(); ++f) {
         areas.push_back(picker_item(folders[f]));
@@ -1719,7 +1722,8 @@ void area_editor::process_gui_panel_main() {
     //Area name text.
     ImGui::Text("Area folder: %s", area_folder_name.c_str());
     set_tooltip(
-        "Full folder path: " + AREAS_FOLDER_PATH + "/" + area_folder_name
+        "Full folder path: " + area_folder_path + "\n"
+        "Full user data folder path: " + user_data_folder_path + "\n"
     );
     
     //Spacer dummy widget.
@@ -3106,8 +3110,7 @@ void area_editor::process_gui_panel_tools() {
                 bool backup_exists = false;
                 if(!area_folder_name.empty()) {
                     string file_path =
-                        USER_AREA_DATA_FOLDER_PATH + "/" +
-                        area_folder_name + "/Geometry_backup.txt";
+                        user_data_folder_path + "/Geometry_backup.txt";
                     if(al_filename_exists(file_path.c_str())) {
                         backup_exists = true;
                     }

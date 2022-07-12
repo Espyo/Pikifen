@@ -94,6 +94,8 @@ area_editor::area_editor() :
     quick_play_cam_z(1.0f),
     backup_timer(game.options.area_editor_backup_interval),
     area_exists_on_disk(false),
+    area_type(AREA_TYPE_SIMPLE),
+    cur_hazard_nr(INVALID),
     cursor_snap_timer(AREA_EDITOR::CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
     debug_sector_nrs(false),
@@ -346,8 +348,10 @@ void area_editor::close_options_dialog() {
 
 /* ----------------------------------------------------------------------------
  * Creates a new area to work on.
+ * type:
+ *   Type of area.
  */
-void area_editor::create_area() {
+void area_editor::create_area(const AREA_TYPES type) {
     clear_current_area();
     
     //Create a sector for it.
@@ -419,11 +423,13 @@ void area_editor::create_area() {
     
     //Set its name.
     game.cur_area_data.name = area_folder_name;
+    game.cur_area_data.type = type;
     
     //Finish up.
     clear_undo_history();
     update_undo_history();
     area_exists_on_disk = false;
+    area_type = type;
 }
 
 
@@ -504,22 +510,18 @@ void area_editor::delete_current_area() {
         
     } else {
         //Start by deleting the user data folder.
-        string folder_path =
-            USER_AREA_DATA_FOLDER_PATH + "/" + area_folder_name;
         vector<string> non_important_files;
         non_important_files.push_back("Data_backup.txt");
         non_important_files.push_back("Geometry_backup.txt");
         non_important_files.push_back("Reference.txt");
-        wipe_folder(folder_path, non_important_files);
+        wipe_folder(user_data_folder_path, non_important_files);
         
         //And now, the actual area data.
-        folder_path =
-            AREAS_FOLDER_PATH + "/" + area_folder_name;
         non_important_files.clear();
         non_important_files.push_back("Data.txt");
         non_important_files.push_back("Geometry.txt");
         WIPE_FOLDER_RESULTS result =
-            wipe_folder(folder_path, non_important_files);
+            wipe_folder(area_folder_path, non_important_files);
             
         //Let's the inform the user of what happened.
         switch(result) {
@@ -530,19 +532,19 @@ void area_editor::delete_current_area() {
             break;
         } case WIPE_FOLDER_RESULT_NOT_FOUND: {
             final_status_text =
-                "Area \"" + folder_path + "\" deletion failed; "
+                "Area \"" + area_folder_path + "\" deletion failed; "
                 "folder not found!";
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_HAS_IMPORTANT: {
             final_status_text =
-                "Deleted area \"" + folder_path + "\", but folder "
+                "Deleted area \"" + area_folder_path + "\", but folder "
                 "still has user files!";
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_DELETE_ERROR: {
             final_status_text =
-                "Area \"" + folder_path + "\" deletion failed; "
+                "Area \"" + area_folder_path + "\" deletion failed; "
                 "error while deleting something! (Permissions?)";
             go_to_area_select = false;
             break;
@@ -928,11 +930,10 @@ void area_editor::finish_new_sector_drawing() {
     vector<edge*> drawing_edges;
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
-        layout_drawing_node* prev_node =
-            &drawing_nodes[
-                sum_and_wrap((int) n, -1, (int) drawing_nodes.size())
-            ];
-            
+        size_t prev_node_idx =
+            sum_and_wrap((int) n, -1, (int) drawing_nodes.size());
+        layout_drawing_node* prev_node = &drawing_nodes[prev_node_idx];
+        
         drawing_vertexes.push_back(n_ptr->on_vertex);
         
         edge* prev_node_edge =
@@ -1377,13 +1378,13 @@ void area_editor::load() {
     if(!quick_play_area.empty()) {
         area_folder_name = quick_play_area;
         quick_play_area.clear();
-        load_area(false);
+        load_area(AREA_TYPE_SIMPLE, false); //TODO some way to choose simple or mission.
         game.cam.set_pos(quick_play_cam_pos);
         game.cam.set_zoom(quick_play_cam_z);
         
     } else if(!auto_load_area.empty()) {
         area_folder_name = auto_load_area;
-        load_area(false);
+        load_area(AREA_TYPE_SIMPLE, false); //TODO some way to choose simple or mission.
         
     } else {
         open_area_picker();
@@ -1394,14 +1395,21 @@ void area_editor::load() {
 
 /* ----------------------------------------------------------------------------
  * Load the area from the disk.
+ * type:
+ *   Type of area.
  * from_backup:
  *   If false, load it normally. If true, load from a backup, if any.
  */
-void area_editor::load_area(const bool from_backup) {
+void area_editor::load_area(const AREA_TYPES type, const bool from_backup) {
     clear_current_area();
+    area_type = type;
     
-    ::load_area(area_folder_name, true, from_backup);
-    
+    ::load_area(type, area_folder_name, true, from_backup);
+    area_folder_path =
+        get_base_area_folder_path(type, true) + "/" + area_folder_name;
+    user_data_folder_path =
+        get_base_area_folder_path(type, false) + "/" + area_folder_name;
+        
     //Calculate texture suggestions.
     map<string, size_t> texture_uses_map;
     vector<std::pair<string, size_t> > texture_uses_vector;
@@ -1457,7 +1465,7 @@ void area_editor::load_area(const bool from_backup) {
  * Loads a backup file.
  */
 void area_editor::load_backup() {
-    load_area(true);
+    load_area(area_type, true);
     backup_timer.start(game.options.area_editor_backup_interval);
 }
 
@@ -1466,10 +1474,7 @@ void area_editor::load_backup() {
  * Loads the reference image data from the reference configuration file.
  */
 void area_editor::load_reference() {
-    data_node file(
-        USER_AREA_DATA_FOLDER_PATH + "/" + area_folder_name +
-        "/Reference.txt"
-    );
+    data_node file(user_data_folder_path + "/Reference.txt");
     
     if(file.file_was_opened) {
         reference_file_name = file.get_child_by_name("file")->value;
@@ -1509,17 +1514,21 @@ void area_editor::pick_area(
     
     if(is_new) {
         area_folder_name = sanitize_file_name(name);
-        string new_area_path =
-            AREAS_FOLDER_PATH + "/" + area_folder_name;
+        area_folder_path =
+            get_base_area_folder_path(AREA_TYPE_SIMPLE, true) + "/" +
+            area_folder_name;
+        user_data_folder_path =
+            get_base_area_folder_path(AREA_TYPE_SIMPLE, false) + "/" +
+            area_folder_name;
         ALLEGRO_FS_ENTRY* new_area_folder_entry =
-            al_create_fs_entry(new_area_path.c_str());
+            al_create_fs_entry(area_folder_path.c_str());
             
         if(al_fs_entry_exists(new_area_folder_entry)) {
             //Already exists, just load it.
-            area_editor::load_area(false);
+            area_editor::load_area(AREA_TYPE_SIMPLE, false);
         } else {
             //Create a new area.
-            create_area();
+            create_area(AREA_TYPE_SIMPLE);
         }
         
         al_destroy_fs_entry(new_area_folder_entry);
@@ -1527,7 +1536,7 @@ void area_editor::pick_area(
         status_text = "Created area \"" + area_folder_name + "\" successfully.";
         
     } else {
-        area_editor::load_area(false);
+        area_editor::load_area(area_type, false);
         
     }
     
@@ -1853,7 +1862,7 @@ void area_editor::press_reload_button() {
         return;
     }
     if(!check_new_unsaved_changes(reload_widget_pos)) {
-        load_area(false);
+        load_area(area_type, false);
     }
 }
 
@@ -2508,18 +2517,14 @@ bool area_editor::save_area(const bool to_backup) {
     string data_file_name;
     if(to_backup) {
         geometry_file_name =
-            USER_AREA_DATA_FOLDER_PATH + "/" + area_folder_name +
-            "/Geometry_backup.txt";
+            user_data_folder_path + "/Geometry_backup.txt";
         data_file_name =
-            USER_AREA_DATA_FOLDER_PATH + "/" + area_folder_name +
-            "/Data_backup.txt";
+            user_data_folder_path + "/Data_backup.txt";
     } else {
         geometry_file_name =
-            AREAS_FOLDER_PATH + "/" + area_folder_name +
-            "/Geometry.txt";
+            area_folder_path + "/Geometry.txt";
         data_file_name =
-            AREAS_FOLDER_PATH + "/" + area_folder_name +
-            "/Data.txt";
+            area_folder_path + "/Data.txt";
     }
     bool geo_save_ok = geometry_file.save_file(geometry_file_name);
     bool data_save_ok = data_file.save_file(data_file_name);
@@ -2530,7 +2535,7 @@ bool area_editor::save_area(const bool to_backup) {
             "Could not save the area!",
             (
                 "An error occured while saving the area to the folder \"" +
-                AREAS_FOLDER_PATH + "/" + area_folder_name + "\". "
+                area_folder_path + "\". "
                 "Make sure that the folder exists and it is not read-only, "
                 "and try again."
             ).c_str(),
@@ -2569,7 +2574,7 @@ void area_editor::save_backup() {
     
     ALLEGRO_FS_ENTRY* folder_fs_entry =
         al_create_fs_entry(
-            (AREAS_FOLDER_PATH + "/" + area_folder_name).c_str()
+            (area_folder_path).c_str()
         );
     bool folder_exists = al_open_directory(folder_fs_entry);
     al_close_directory(folder_fs_entry);
@@ -2585,10 +2590,8 @@ void area_editor::save_backup() {
  * Saves the reference data to disk, in the area's reference config file.
  */
 void area_editor::save_reference() {
-    string file_name =
-        USER_AREA_DATA_FOLDER_PATH + "/" + area_folder_name +
-        "/Reference.txt";
-        
+    string file_name = user_data_folder_path + "/Reference.txt";
+    
     if(!reference_bitmap) {
         //The user doesn't want a reference more.
         //Delete its config file.

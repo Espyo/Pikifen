@@ -13,6 +13,7 @@
 
 #include <deque>
 
+#include "../../area.h"
 #include "../editor.h"
 
 #include "../../imgui/imgui_impl_allegro5.h"
@@ -297,6 +298,12 @@ private:
     timer backup_timer;
     //Does the area exist on disk, or RAM only?
     bool area_exists_on_disk;
+    //Name of the folder of the currently loaded area.
+    string area_folder_name;
+    //Path to the folder of the currently loaded area.
+    string area_folder_path;
+    //Type of the currently loaded area.
+    AREA_TYPES area_type;
     //Where the cross-section tool points are.
     point cross_section_checkpoints[2];
     //Cross-section window's start coordinates.
@@ -307,8 +314,6 @@ private:
     point cross_section_z_window_start;
     //Cross-section Z legend window's end coordinates.
     point cross_section_z_window_end;
-    //Name of the folder of the currently loaded area.
-    string area_folder_name;
     //When showing a hazard in the list, this is the index of the current one.
     size_t cur_hazard_nr;
     //The current transformation widget.
@@ -497,6 +502,8 @@ private:
     string undo_save_lock_operation;
     //During this timer, don't save state for operations matching the last one.
     timer undo_save_lock_timer;
+    //Path to the folder of the user's data for the currently loaded area.
+    string user_data_folder_path;
     //Position of the load widget.
     point load_widget_pos;
     //Position of the reload widget.
@@ -526,7 +533,7 @@ private:
     void clear_undo_history();
     void close_area_picker();
     void close_options_dialog();
-    void create_area();
+    void create_area(const AREA_TYPES type);
     void create_drawing_vertexes();
     void create_mob_under_cursor();
     void create_new_from_picker(const size_t picker_id, const string &name);
@@ -601,7 +608,7 @@ private:
     void homogenize_selected_mobs();
     void homogenize_selected_path_links();
     void homogenize_selected_sectors();
-    void load_area(const bool from_backup);
+    void load_area(const AREA_TYPES type, const bool from_backup);
     void load_backup();
     void load_reference();
     bool merge_sectors(sector* s1, sector* s2);

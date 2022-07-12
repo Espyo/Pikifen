@@ -65,12 +65,14 @@ const string GAME_DATA_FOLDER_PATH = "Game_data";
 //Relative path to the folder with the user data.
 const string USER_DATA_FOLDER_PATH = "User_data";
 
+//Name of the folder with mission areas, be it in the game data or user data.
+const string MISSION_AREA_FOLDER_NAME = "Areas/Simple";
+//Name of the folder with simple areas, be it in the game data or user data.
+const string SIMPLE_AREA_FOLDER_NAME = "Areas/Simple";
+
 //Relative path to the folder with the global animations.
 const string ANIMATIONS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Animations";
-//Relative path to the folder with the areas.
-const string AREAS_FOLDER_PATH =
-    GAME_DATA_FOLDER_PATH + "/Areas";
 //Relative path to the folder with the audio files.
 const string AUDIO_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Audio";
@@ -124,9 +126,6 @@ const string SYSTEM_ANIMATIONS_FILE_PATH =
 const string SYSTEM_ASSET_FILE_NAMES_FILE_PATH =
     MISC_FOLDER_PATH + "/System_asset_file_names.txt";
 
-//Relative path to the folder with the user's area data.
-const string USER_AREA_DATA_FOLDER_PATH =
-    USER_DATA_FOLDER_PATH + "/Areas";
 //Relative path to the file with the error log.
 const string ERROR_LOG_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Error_log.txt";

@@ -506,7 +506,7 @@ void gameplay_state::load() {
         spray_stats.push_back(spray_stats_struct());
     }
     
-    load_area(area_to_load, false, false);
+    load_area(AREA_TYPE_SIMPLE, area_to_load, false, false);
     
     if(!game.cur_area_data.weather_condition.blackout_strength.empty()) {
         lightmap_bmp = al_create_bitmap(game.win_w, game.win_h);

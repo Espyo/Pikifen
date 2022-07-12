@@ -27,6 +27,8 @@ using std::set;
 
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
+ * type:
+ *   Type of area this is. What folder it loads from depends on this value.
  * name:
  *   Name of the area's folder.
  * load_for_editor:
@@ -35,7 +37,8 @@ using std::set;
  *   If true, load from a backup, if any.
  */
 void load_area(
-    const string &name, const bool load_for_editor, const bool from_backup
+    const AREA_TYPES type, const string &name,
+    const bool load_for_editor, const bool from_backup
 ) {
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Area -- Data");
@@ -46,21 +49,28 @@ void load_area(
     string geometry_file_name;
     string data_file_name;
     string sanitized_area_name = sanitize_file_name(name);
+    string area_type_folder =
+        get_base_area_folder_path(type, true);
+    string user_data_area_type_folder =
+        get_base_area_folder_path(type, false);
+
     if(from_backup) {
         geometry_file_name =
-            USER_AREA_DATA_FOLDER_PATH + "/" + sanitized_area_name +
+            user_data_area_type_folder + "/" + sanitized_area_name +
             "/Geometry_backup.txt";
         data_file_name =
-            USER_AREA_DATA_FOLDER_PATH + "/" + sanitized_area_name +
+            user_data_area_type_folder + "/" + sanitized_area_name +
             "/Data_backup.txt";
     } else {
         geometry_file_name =
-            AREAS_FOLDER_PATH + "/" + sanitized_area_name + "/Geometry.txt";
+            area_type_folder + "/" + sanitized_area_name + "/Geometry.txt";
         data_file_name =
-            AREAS_FOLDER_PATH + "/" + sanitized_area_name + "/Data.txt";
+            area_type_folder + "/" + sanitized_area_name + "/Data.txt";
     }
     
     //First, load the area's configuration data.
+    game.cur_area_data.type = type;
+    
     data_node data_file(data_file_name);
     reader_setter rs(&data_file);
     

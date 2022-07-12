@@ -100,12 +100,17 @@ void area_menu_state::load() {
     bmp_menu_bg = NULL;
     
     //Areas.
-    areas_to_pick = folder_to_vector(AREAS_FOLDER_PATH, true);
+    areas_to_pick =
+        folder_to_vector(
+            get_base_area_folder_path(AREA_TYPE_MISSION, true),
+            true
+        );
     
     for(size_t a = 0; a < areas_to_pick.size(); ++a) {
         string actual_name = areas_to_pick[a];
         data_node data(
-            AREAS_FOLDER_PATH + "/" + actual_name + "/Data.txt"
+            get_base_area_folder_path(AREA_TYPE_MISSION, true) +
+            "/" + actual_name + "/Data.txt"
         );
         if(data.file_was_opened) {
             string s = data.get_child_by_name("name")->value;

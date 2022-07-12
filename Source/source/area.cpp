@@ -20,6 +20,7 @@
  * Creates info on an area.
  */
 area_data::area_data() :
+    type(AREA_TYPE_SIMPLE),
     bg_bmp(nullptr),
     bg_bmp_zoom(1),
     bg_dist(2),
@@ -966,4 +967,34 @@ void area_data::remove_vertex(const vertex* v_ptr) {
             return;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the folder path where certain area folders are stored,
+ * based on the type of area and whether it's to load from the game data folder
+ * or the user data folder.
+ * type:
+ *   Type of area.
+ * from_game_data:
+ *   If true, get the folder in the game data folder.
+ */
+string get_base_area_folder_path(
+    const AREA_TYPES type, const bool from_game_data
+) {
+    string result =
+        from_game_data ?
+        GAME_DATA_FOLDER_PATH :
+        USER_DATA_FOLDER_PATH;
+    result += "/";
+
+    switch(type) {
+    case AREA_TYPE_SIMPLE: {
+        return result + SIMPLE_AREA_FOLDER_NAME;
+    }
+    case AREA_TYPE_MISSION: {
+        return result + MISSION_AREA_FOLDER_NAME;
+    }
+    }
+    return result;
 }

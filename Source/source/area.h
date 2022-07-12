@@ -14,6 +14,15 @@
 #include "sector.h"
 
 
+//Types of areas that can be played.
+enum AREA_TYPES {
+    //A simple area with no goal.
+    AREA_TYPE_SIMPLE,
+    //An area that likely has a goal, constraints, and/or scoring.
+    AREA_TYPE_MISSION,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A structure that holds all of the
  * info about the current area, so that
@@ -22,6 +31,8 @@
  * vertexes, etc.
  */
 struct area_data {
+    //Type of area.
+    AREA_TYPES type;
     //Blockmap.
     blockmap bmap;
     //List of vertexes.
@@ -100,5 +111,9 @@ struct area_data {
     void remove_sector(const sector* s_ptr);
     void clear();
 };
+
+string get_base_area_folder_path(
+    const AREA_TYPES type, const bool from_game_data
+);
 
 #endif //ifndef AREA_INCLUDED
