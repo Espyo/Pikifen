@@ -105,6 +105,7 @@ area_editor::area_editor() :
     drawing_line_error(DRAWING_LINE_NO_ERROR),
     last_mob_category(nullptr),
     last_mob_type(nullptr),
+    load_dialog_picker(this),
     moving(false),
     moving_path_preview_checkpoint(-1),
     moving_cross_section_point(-1),
@@ -329,7 +330,7 @@ void area_editor::clear_undo_history() {
 /* ----------------------------------------------------------------------------
  * Code to run when the area picker is closed.
  */
-void area_editor::close_area_picker() {
+void area_editor::close_load_dialog() {
     if(!loaded_content_yet && area_folder_name.empty()) {
         //The user cancelled the area selection picker
         //presented when you enter the area editor. Quit out.
@@ -557,7 +558,7 @@ void area_editor::delete_current_area() {
         clear_current_area();
         area_exists_on_disk = false;
         area_folder_name.clear();
-        open_area_picker();
+        open_load_dialog();
     }
     
     status_text = final_status_text;
@@ -1387,7 +1388,7 @@ void area_editor::load() {
         load_area(AREA_TYPE_SIMPLE, false); //TODO some way to choose simple or mission.
         
     } else {
-        open_area_picker();
+        open_load_dialog();
         
     }
 }
@@ -1541,6 +1542,8 @@ void area_editor::pick_area(
     }
     
     state = EDITOR_STATE_MAIN;
+    
+    close_top_dialog();
 }
 
 
@@ -1724,7 +1727,7 @@ void area_editor::press_load_button() {
     }
     
     if(!check_new_unsaved_changes(load_widget_pos)) {
-        open_area_picker();
+        open_load_dialog();
     }
 }
 

@@ -21,9 +21,9 @@
 
 
 /* ----------------------------------------------------------------------------
- * Shows the area picker.
+ * Shows the "load" dialog.
  */
-void area_editor::open_area_picker() {
+void area_editor::open_load_dialog() {
     vector<picker_item> areas;
     vector<string> folders =
         folder_to_vector(
@@ -34,19 +34,24 @@ void area_editor::open_area_picker() {
     for(size_t f = 0; f < folders.size(); ++f) {
         areas.push_back(picker_item(folders[f]));
     }
-    open_picker(
-        "Pick an area, or create a new one",
-        areas,
+    
+    load_dialog_picker = picker_info(this);
+    load_dialog_picker.can_make_new = true;
+    load_dialog_picker.items = areas;
+    load_dialog_picker.pick_callback =
         std::bind(
             &area_editor::pick_area, this,
             std::placeholders::_1,
             std::placeholders::_2,
             std::placeholders::_3
-        ),
-        "", true
+        );
+        
+    open_dialog(
+        "Load a file or create a new one",
+        std::bind(&area_editor::process_gui_load_dialog, this)
     );
     dialogs.back()->close_callback =
-        std::bind(&area_editor::close_area_picker, this);
+        std::bind(&area_editor::close_load_dialog, this);
 }
 
 
@@ -225,6 +230,19 @@ void area_editor::process_gui_delete_area_dialog() {
         delete_current_area();
     }
     ImGui::PopStyleColor(3);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui "load" dialog for this frame.
+ */
+void area_editor::process_gui_load_dialog() {
+    //Open or create node.
+    if(saveable_tree_node("load", "Open or create")) {
+        load_dialog_picker.process();
+        
+        ImGui::TreePop();
+    }
 }
 
 
@@ -2822,7 +2840,7 @@ void area_editor::process_gui_panel_sector() {
                         )
                     );
                 }
-                open_picker(
+                open_picker_dialog(
                     "Pick a texture",
                     picker_buttons,
                     std::bind(

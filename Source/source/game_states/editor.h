@@ -246,7 +246,7 @@ protected:
         );
     };
     
-    class picker_info : public dialog_info {
+    class picker_info {
     private:
         //Pointer to the editor that's using it.
         editor* editor_ptr;
@@ -263,6 +263,8 @@ protected:
         bool can_make_new;
         //Only show picker dialog items matching this filter.
         string filter;
+        //If there's an associated dialog meant to auto-close, specify it here.
+        dialog_info* dialog_ptr;
         
         explicit picker_info(editor* editor_ptr);
         void process();
@@ -361,7 +363,7 @@ protected:
         const string &title,
         const std::function<void()> &process_callback
     );
-    void open_picker(
+    void open_picker_dialog(
         const string &title,
         const vector<picker_item> &items,
         const std::function<void(

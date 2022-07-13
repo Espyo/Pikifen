@@ -2,7 +2,14 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Mission Mode stuff
+        Area editor changes
+            Starting dialog should have
+                A history
+                The standard "picker" content, with the different area types in different categories
+                Trying to create a new area should ask what type of area it is before proceeding
+            Add a new panel, Gameplay, where you control everything gameplay-related
+                Move the spray counter here, and spruce it up so people don't have to write stuff by hand
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -31,13 +38,6 @@ Next tasks (roughly sorted most important first)
                         Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
-        Area editor changes
-            Starting dialog should have
-                A history
-                The standard "picker" content, with the different area types in different categories
-                Trying to create a new area should ask what type of area it is before proceeding
-            Add a new panel, Gameplay, where you control everything gameplay-related
-                Move the spray counter here, and spruce it up so people don't have to write stuff by hand
         Each stage should have the following data:
             All areas:
                 A quick description explaining what the stage is about. Example: "These dark woods hide many dangerous beasts behind the fallen branches. Your goal is to escape without a single enemy seeing you!"

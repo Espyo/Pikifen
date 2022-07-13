@@ -342,6 +342,8 @@ private:
     mob_type* last_mob_type;
     //Are we editing sectors or edges?
     LAYOUT_MODES layout_mode;
+    //Picker info for the picker in the "load" dialog.
+    picker_info load_dialog_picker;
     //Closest mob to the mouse when moving.
     mob_gen* move_closest_mob;
     //Closest mob was here when the move started (world coords).
@@ -531,7 +533,7 @@ private:
     void clear_selection();
     void clear_texture_suggestions();
     void clear_undo_history();
-    void close_area_picker();
+    void close_load_dialog();
     void close_options_dialog();
     void create_area(const AREA_TYPES type);
     void create_drawing_vertexes();
@@ -615,7 +617,7 @@ private:
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
-    void open_area_picker();
+    void open_load_dialog();
     void open_options_dialog();
     void populate_texture_suggestions();
     void pick_area(
@@ -650,6 +652,7 @@ private:
     void process_gui();
     void process_gui_control_panel();
     void process_gui_delete_area_dialog();
+    void process_gui_load_dialog();
     void process_gui_menu_bar();
     void process_gui_mob_script_vars(mob_gen* gen);
     void process_gui_panel_details();

@@ -938,7 +938,7 @@ void editor::open_dialog(
 
 
 /* ----------------------------------------------------------------------------
- * Opens a picker dialog with the given content.
+ * Opens a dialog with "picker" widgets inside, with the given content.
  * title:
  *   Title of the picker's dialog window. This is normally
  *   a request to the user, like "Pick an area.".
@@ -957,7 +957,7 @@ void editor::open_dialog(
  * filter:
  *   Filter of names. Only items that match this will appear.
  */
-void editor::open_picker(
+void editor::open_picker_dialog(
     const string &title,
     const vector<picker_item> &items,
     const std::function <void(
@@ -969,17 +969,19 @@ void editor::open_picker(
 ) {
     picker_info* new_picker = new picker_info(this);
     
-    new_picker->title = title;
-    new_picker->process_callback =
-        std::bind(&editor::picker_info::process, new_picker);
-        
     new_picker->items = items;
     new_picker->list_header = list_header;
     new_picker->pick_callback = pick_callback;
     new_picker->can_make_new = can_make_new;
     new_picker->filter = filter;
     
-    dialogs.push_back(new_picker);
+    dialog_info* new_dialog = new dialog_info();
+    dialogs.push_back(new_dialog);
+    
+    new_dialog->title = title;
+    new_dialog->process_callback =
+        std::bind(&editor::picker_info::process, new_picker);
+    new_picker->dialog_ptr = new_dialog;
 }
 
 
@@ -1149,7 +1151,7 @@ void editor::process_mob_type_widgets(
                 items.push_back(picker_item(names[n], cat_name));
             }
         }
-        open_picker(
+        open_picker_dialog(
             "Pick an object type", items,
             [cat, typ, category_change_callback, type_change_callback]
         (const string & n, const string & c, const bool) {
@@ -1656,7 +1658,8 @@ void editor::dialog_info::process() {
 editor::picker_info::picker_info(editor* editor_ptr) :
     editor_ptr(editor_ptr),
     pick_callback(nullptr),
-    can_make_new(false) {
+    can_make_new(false),
+    dialog_ptr(nullptr) {
 }
 
 
@@ -1705,7 +1708,9 @@ void editor::picker_info::process() {
         }
         
         pick_callback(filter, "", is_really_new);
-        is_open = false;
+        if(dialog_ptr) {
+            dialog_ptr->is_open = false;
+        }
     };
     
     if(can_make_new) {
@@ -1754,7 +1759,9 @@ void editor::picker_info::process() {
                     final_items[0][0].category,
                     false
                 );
-                is_open = false;
+                if(dialog_ptr) {
+                    dialog_ptr->is_open = false;
+                }
             }
         }
     }
@@ -1830,7 +1837,9 @@ void editor::picker_info::process() {
                         pick_callback(
                             i_ptr->name, i_ptr->category, false
                         );
-                        is_open = false;
+                        if(dialog_ptr) {
+                            dialog_ptr->is_open = false;
+                        }
                     }
                     ImGui::SetNextItemWidth(20.0f);
                     ImGui::TextWrapped("%s", i_ptr->name.c_str());
@@ -1844,7 +1853,9 @@ void editor::picker_info::process() {
                         pick_callback(
                             i_ptr->name, i_ptr->category, false
                         );
-                        is_open = false;
+                        if(dialog_ptr) {
+                            dialog_ptr->is_open = false;
+                        }
                     }
                     
                 }

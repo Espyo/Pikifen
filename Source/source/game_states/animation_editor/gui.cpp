@@ -602,7 +602,7 @@ void animation_editor::process_gui_panel_animation() {
                 picker_item(anims.animations[a]->name, "", anim_frame_1)
             );
         }
-        open_picker(
+        open_picker_dialog(
             "Pick an animation, or create a new one",
             anim_names,
             std::bind(
@@ -1379,7 +1379,7 @@ void animation_editor::process_gui_panel_sprite() {
                 )
             );
         }
-        open_picker(
+        open_picker_dialog(
             "Pick a sprite, or create a new one",
             sprite_names,
             std::bind(
