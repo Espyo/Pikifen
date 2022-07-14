@@ -115,6 +115,8 @@ void area_data::clear() {
     }
     
     name.clear();
+    folder_name.clear();
+    type = AREA_TYPE_SIMPLE;
     subtitle.clear();
     maker.clear();
     version.clear();
@@ -971,6 +973,36 @@ void area_data::remove_vertex(const vertex* v_ptr) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the folder name and area type of an area on disk, given its path.
+ * requested_area_path:
+ *   Relative path to the requested area.
+ * final_area_folder_name:
+ *   The area's folder name is returned here, if not NULL.
+ * final_area_type:
+ *   The area's type is returned here, if not NULL.
+ */
+void get_area_info_from_path(
+    const string &requested_area_path,
+    string* final_area_folder_name,
+    AREA_TYPES* final_area_type
+) {
+    if(final_area_folder_name) *final_area_folder_name = requested_area_path;
+    if(final_area_type) *final_area_type = AREA_TYPE_SIMPLE;
+    
+    vector<string> parts = split(requested_area_path, "/");
+    
+    if(parts.size() <= 1) return;
+    
+    if(final_area_folder_name) *final_area_folder_name = parts.back();
+    if(final_area_type) {
+        if(parts[parts.size() - 2] == MISSION_AREA_FOLDER_NAME) {
+            *final_area_type = AREA_TYPE_MISSION;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the folder path where certain area folders are stored,
  * based on the type of area and whether it's to load from the game data folder
  * or the user data folder.
@@ -987,7 +1019,7 @@ string get_base_area_folder_path(
         GAME_DATA_FOLDER_PATH :
         USER_DATA_FOLDER_PATH;
     result += "/";
-
+    
     switch(type) {
     case AREA_TYPE_SIMPLE: {
         return result + SIMPLE_AREA_FOLDER_NAME;

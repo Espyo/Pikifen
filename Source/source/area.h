@@ -33,6 +33,8 @@ enum AREA_TYPES {
 struct area_data {
     //Type of area.
     AREA_TYPES type;
+    //Name of the folder with this area's data.
+    string folder_name;
     //Blockmap.
     blockmap bmap;
     //List of vertexes.
@@ -112,6 +114,11 @@ struct area_data {
     void clear();
 };
 
+void get_area_info_from_path(
+    const string &requested_area_path,
+    string* final_area_folder_name,
+    AREA_TYPES* final_area_type
+);
 string get_base_area_folder_path(
     const AREA_TYPES type, const bool from_game_data
 );

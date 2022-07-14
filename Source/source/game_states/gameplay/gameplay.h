@@ -63,8 +63,6 @@ public:
     float area_time_passed;
     //Timer used to fade out the area's title when the area is entered.
     timer area_title_fade_timer;
-    //Name of the area to be loaded.
-    string area_to_load;
     //Leaders available to control.
     vector<leader*> available_leaders;
     //Fog effect buffer.
@@ -103,6 +101,8 @@ public:
     particle_manager particles;
     //Path manager.
     path_manager path_mgr;
+    //Path of the folder of the area to be loaded.
+    string path_of_area_to_load;
     //All droplets of precipitation.
     vector<point> precipitation;
     //Time until the next drop of precipitation.

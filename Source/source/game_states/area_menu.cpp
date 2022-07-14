@@ -105,7 +105,7 @@ void area_menu_state::load() {
             get_base_area_folder_path(AREA_TYPE_MISSION, true),
             true
         );
-    
+        
     for(size_t a = 0; a < areas_to_pick.size(); ++a) {
         string actual_name = areas_to_pick[a];
         data_node data(
@@ -173,7 +173,9 @@ void area_menu_state::load() {
         area_button->size = point(1.0f, 0.09f);
         area_button->on_activate =
         [this, area_folder] (const point &) {
-            game.states.gameplay->area_to_load = area_folder;
+            game.states.gameplay->path_of_area_to_load =
+                get_base_area_folder_path(AREA_TYPE_SIMPLE, true) + "/" +
+                area_folder;
             game.fade_mgr.start_fade(false, [] () {
                 game.change_state(game.states.gameplay);
             });

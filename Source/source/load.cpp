@@ -37,7 +37,8 @@ using std::set;
  *   If true, load from a backup, if any.
  */
 void load_area(
-    const AREA_TYPES type, const string &name,
+    string requested_area_folder_name,
+    const AREA_TYPES requested_area_type,
     const bool load_for_editor, const bool from_backup
 ) {
     if(game.perf_mon) {
@@ -48,28 +49,24 @@ void load_area(
     
     string geometry_file_name;
     string data_file_name;
-    string sanitized_area_name = sanitize_file_name(name);
-    string area_type_folder =
-        get_base_area_folder_path(type, true);
-    string user_data_area_type_folder =
-        get_base_area_folder_path(type, false);
-
+    
     if(from_backup) {
-        geometry_file_name =
-            user_data_area_type_folder + "/" + sanitized_area_name +
-            "/Geometry_backup.txt";
-        data_file_name =
-            user_data_area_type_folder + "/" + sanitized_area_name +
-            "/Data_backup.txt";
+        string base_folder =
+            get_base_area_folder_path(requested_area_type, false) +
+            "/" + requested_area_folder_name;
+        geometry_file_name = base_folder + "/Geometry_backup.txt";
+        data_file_name = base_folder + "/Data_backup.txt";
     } else {
-        geometry_file_name =
-            area_type_folder + "/" + sanitized_area_name + "/Geometry.txt";
-        data_file_name =
-            area_type_folder + "/" + sanitized_area_name + "/Data.txt";
+        string base_folder =
+            get_base_area_folder_path(requested_area_type, true) +
+            "/" + requested_area_folder_name;
+        geometry_file_name = base_folder + "/Geometry.txt";
+        data_file_name = base_folder + "/Data.txt";
     }
     
     //First, load the area's configuration data.
-    game.cur_area_data.type = type;
+    game.cur_area_data.folder_name = requested_area_folder_name;
+    game.cur_area_data.type = requested_area_type;
     
     data_node data_file(data_file_name);
     reader_setter rs(&data_file);
@@ -117,7 +114,7 @@ void load_area(
             game.weather_conditions.end()
         ) {
             log_error(
-                "Area " + name +
+                "Area " + requested_area_folder_name +
                 " refers to an unknown weather condition, \"" +
                 game.cur_area_data.weather_name + "\"!",
                 weather_node

@@ -470,7 +470,7 @@ void gameplay_state::leave(const LEAVE_TARGET target) {
         game.change_state(game.states.results, false);
         break;
     } case LEAVE_TO_AREA_SELECT: {
-        if(game.states.area_ed->quick_play_area.empty()) {
+        if(game.states.area_ed->quick_play_area_path.empty()) {
             game.change_state(game.states.area_menu);
         } else {
             game.change_state(game.states.area_ed);
@@ -506,7 +506,12 @@ void gameplay_state::load() {
         spray_stats.push_back(spray_stats_struct());
     }
     
-    load_area(AREA_TYPE_SIMPLE, area_to_load, false, false);
+    string area_folder_name;
+    AREA_TYPES area_type;
+    get_area_info_from_path(
+        path_of_area_to_load, &area_folder_name, &area_type
+    );
+    load_area(area_folder_name, area_type, false, false);
     
     if(!game.cur_area_data.weather_condition.blackout_strength.empty()) {
         lightmap_bmp = al_create_bitmap(game.win_w, game.win_h);

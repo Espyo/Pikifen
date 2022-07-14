@@ -198,7 +198,7 @@ void area_editor::process_gui_delete_area_dialog() {
     //Final warning text.
     string final_warning_str =
         "Are you sure you want to delete the area \"" +
-        area_folder_name + "\"?";
+        game.cur_area_data.folder_name + "\"?";
     ImGui::SetupCentering(ImGui::CalcTextSize(final_warning_str.c_str()).x);
     ImGui::TextColored(
         ImVec4(0.8, 0.6, 0.6, 1.0),
@@ -1738,10 +1738,14 @@ void area_editor::process_gui_panel_main() {
     ImGui::BeginChild("main");
     
     //Area name text.
-    ImGui::Text("Area folder: %s", area_folder_name.c_str());
+    ImGui::Text("Area folder: %s", game.cur_area_data.folder_name.c_str());
     set_tooltip(
-        "Full folder path: " + area_folder_path + "\n"
-        "Full user data folder path: " + user_data_folder_path + "\n"
+        "Full folder path: " +
+        get_base_area_folder_path(game.cur_area_data.type, true) + "/" +
+        game.cur_area_data.folder_name + "\n"
+        "Full user data folder path: " +
+        get_base_area_folder_path(game.cur_area_data.type, false) + "/" +
+        game.cur_area_data.folder_name + "\n"
     );
     
     //Spacer dummy widget.
@@ -3126,9 +3130,12 @@ void area_editor::process_gui_panel_tools() {
         if(ImGui::Button("Load auto-backup")) {
             if(!check_new_unsaved_changes()) {
                 bool backup_exists = false;
-                if(!area_folder_name.empty()) {
+                if(!game.cur_area_data.folder_name.empty()) {
                     string file_path =
-                        user_data_folder_path + "/Geometry_backup.txt";
+                        get_base_area_folder_path(
+                            game.cur_area_data.type, false
+                        ) + "/" + game.cur_area_data.folder_name +
+                        "/Geometry_backup.txt";
                     if(al_filename_exists(file_path.c_str())) {
                         backup_exists = true;
                     }

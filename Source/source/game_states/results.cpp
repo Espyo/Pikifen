@@ -177,7 +177,7 @@ void results_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 void results_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
         game.unload_loaded_state(game.states.gameplay);
-        if(game.states.area_ed->quick_play_area.empty()) {
+        if(game.states.area_ed->quick_play_area_path.empty()) {
             game.change_state(game.states.area_menu);
         } else {
             game.change_state(game.states.area_ed);
@@ -239,7 +239,7 @@ void results_state::load() {
     //Pick an area button.
     gui.back_item =
         new button_gui_item(
-        game.states.area_ed->quick_play_area.empty() ?
+        game.states.area_ed->quick_play_area_path.empty() ?
         "Pick an area" :
         "Back to editor",
         game.fonts.standard
@@ -250,7 +250,7 @@ void results_state::load() {
     };
     gui.back_item->on_get_tooltip =
     [] () {
-        return game.states.area_ed->quick_play_area.empty() ?
+        return game.states.area_ed->quick_play_area_path.empty() ?
                "Return to the area selection menu." :
                "Return to the area editor.";
     };

@@ -833,11 +833,11 @@ void editor::leave() {
     save_options();
     
     game.fade_mgr.start_fade(false, [] () {
-        if(game.states.area_ed->quick_play_area.empty()) {
+        if(game.states.area_ed->quick_play_area_path.empty()) {
             game.change_state(game.states.main_menu);
         } else {
-            game.states.gameplay->area_to_load =
-                game.states.area_ed->quick_play_area;
+            game.states.gameplay->path_of_area_to_load =
+                game.states.area_ed->quick_play_area_path;
             game.change_state(game.states.gameplay);
         }
     });

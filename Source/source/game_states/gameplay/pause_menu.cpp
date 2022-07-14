@@ -362,7 +362,7 @@ void pause_menu_struct::init_main_pause_menu() {
     //Quit button.
     button_gui_item* quit_button =
         new button_gui_item(
-        game.states.area_ed->quick_play_area.empty() ?
+        game.states.area_ed->quick_play_area_path.empty() ?
         "Quit" :
         "Back to editor",
         game.fonts.standard
@@ -378,7 +378,7 @@ void pause_menu_struct::init_main_pause_menu() {
         return
             "Quit and return to the " +
             string(
-                game.states.area_ed->quick_play_area.empty() ?
+                game.states.area_ed->quick_play_area_path.empty() ?
                 "area selection menu" :
                 "area editor"
             ) + ".";

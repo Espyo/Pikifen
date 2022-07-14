@@ -136,11 +136,11 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
             } else if(cur_state == states.area_ed->get_name()) {
                 maker_tools.auto_start_mode = "area_editor";
                 maker_tools.auto_start_option =
-                    states.area_ed->get_opened_folder_name();
+                    states.area_ed->get_opened_folder_path();
             } else if(cur_state == states.gameplay->get_name()) {
                 maker_tools.auto_start_mode = "play";
                 maker_tools.auto_start_option =
-                    states.gameplay->area_to_load;
+                    states.gameplay->path_of_area_to_load;
             } else {
                 maker_tools.auto_start_mode.clear();
                 maker_tools.auto_start_option.clear();
@@ -325,7 +325,7 @@ int game_class::start() {
         game.maker_tools.auto_start_mode == "play" &&
         !game.maker_tools.auto_start_option.empty()
     ) {
-        game.states.gameplay->area_to_load =
+        game.states.gameplay->path_of_area_to_load =
             game.maker_tools.auto_start_option;
         game.change_state(game.states.gameplay);
     } else if(
