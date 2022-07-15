@@ -54,14 +54,14 @@ void load_area(
         string base_folder =
             get_base_area_folder_path(requested_area_type, false) +
             "/" + requested_area_folder_name;
-        geometry_file_name = base_folder + "/Geometry_backup.txt";
-        data_file_name = base_folder + "/Data_backup.txt";
+        geometry_file_name = base_folder + "/" + AREA_GEOMETRY_BACKUP_FILE_NAME;
+        data_file_name = base_folder + "/" + AREA_DATA_BACKUP_FILE_NAME;
     } else {
         string base_folder =
             get_base_area_folder_path(requested_area_type, true) +
             "/" + requested_area_folder_name;
-        geometry_file_name = base_folder + "/Geometry.txt";
-        data_file_name = base_folder + "/Data.txt";
+        geometry_file_name = base_folder + "/" + AREA_GEOMETRY_FILE_NAME;
+        data_file_name = base_folder + "/" + AREA_DATA_FILE_NAME;
     }
     
     //First, load the area's configuration data.
@@ -1170,7 +1170,7 @@ void load_options() {
     game.win_w = game.options.intended_win_w;
     game.win_h = game.options.intended_win_h;
     
-    //Set up the animation editor history.
+    //Set up the editor histories.
     reader_setter rs(&file);
     
     game.states.animation_ed->history.clear();
@@ -1179,6 +1179,14 @@ void load_options() {
         rs.set(
             "animation_editor_history_" + i2s(h + 1),
             game.states.animation_ed->history[h]
+        );
+    }
+    game.states.area_ed->history.clear();
+    for(size_t h = 0; h < AREA_EDITOR::HISTORY_SIZE; ++h) {
+        game.states.area_ed->history.push_back("");
+        rs.set(
+            "area_editor_history_" + i2s(h + 1),
+            game.states.area_ed->history[h]
         );
     }
 }

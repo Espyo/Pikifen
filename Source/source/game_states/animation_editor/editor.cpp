@@ -522,7 +522,7 @@ void animation_editor::load_animation_database(
     
     if(should_update_history) {
         update_history(file_path);
-        save_options(); //Save the history on the options.
+        save_options(); //Save the history in the options.
     }
     
     change_state(EDITOR_STATE_MAIN);

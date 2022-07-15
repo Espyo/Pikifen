@@ -30,6 +30,7 @@ extern const float CURSOR_SNAP_DISTANCE;
 extern const float CURSOR_SNAP_UPDATE_INTERVAL;
 extern const float DEBUG_TEXT_SCALE;
 extern const unsigned char DEF_REFERENCE_ALPHA;
+extern const size_t HISTORY_SIZE;
 extern const float KEYBOARD_PAN_AMOUNT;
 extern const unsigned char MAX_CIRCLE_SECTOR_POINTS;
 extern const float MAX_GRID_INTERVAL;
@@ -63,6 +64,8 @@ class area_editor : public editor {
 public:
     //Load this area when the area editor loads.
     string auto_load_area;
+    //History for the last files that were opened.
+    vector<string> history;
     //Area being edited when using the quick-play button.
     string quick_play_area_path;
     //Position the camera was it in the editor before quick-play.
@@ -79,6 +82,7 @@ public:
     
     void draw_canvas();
     string get_opened_folder_path() const;
+    void update_history(const string &n);
     
     area_editor();
     
@@ -612,7 +616,7 @@ private:
     void load_area(
         string requested_area_folder_name,
         const AREA_TYPES requested_area_type,
-        const bool from_backup
+        const bool from_backup, const bool should_update_history
     );
     void load_backup();
     void load_reference();

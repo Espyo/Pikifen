@@ -73,6 +73,18 @@ const string SIMPLE_AREA_FOLDER_NAME = "Areas/Simple";
 //Relative path to the folder with the global animations.
 const string ANIMATIONS_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Animations";
+//Name of the file with an area's data.
+const string AREA_DATA_FILE_NAME =
+    "Data.txt";
+//Name of the file with a backup of an area's data.
+const string AREA_DATA_BACKUP_FILE_NAME =
+    "Data_backup.txt";
+//Name of the file with an area's geometry.
+const string AREA_GEOMETRY_FILE_NAME =
+    "Geometry.txt";
+//Name of the file with a backup of an area's geometry.
+const string AREA_GEOMETRY_BACKUP_FILE_NAME =
+    "Geometry_backup.txt";
 //Relative path to the folder with the audio files.
 const string AUDIO_FOLDER_PATH =
     GAME_DATA_FOLDER_PATH + "/Audio";

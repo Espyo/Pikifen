@@ -426,7 +426,7 @@ vector<string> folder_to_vector(
     al_destroy_fs_entry(folder);
     
     
-    sort(v.begin(), v.end(), [] (const string &s1, const string &s2) -> bool {
+    sort(v.begin(), v.end(), [] (const string & s1, const string & s2) -> bool {
         return str_to_lower(s1) < str_to_lower(s2);
     });
     
@@ -1499,7 +1499,7 @@ void save_options() {
     //Save the standard options.
     game.options.save(&file);
     
-    //Also add the animation editor history.
+    //Also add the editor histories.
     for(
         size_t h = 0; h < game.states.animation_ed->history.size(); ++h
     ) {
@@ -1507,6 +1507,18 @@ void save_options() {
             new data_node(
                 "animation_editor_history_" + i2s(h + 1),
                 game.states.animation_ed->history[h]
+            )
+        );
+    }
+    
+    //Also add the editor histories.
+    for(
+        size_t h = 0; h < game.states.area_ed->history.size(); ++h
+    ) {
+        file.add(
+            new data_node(
+                "area_editor_history_" + i2s(h + 1),
+                game.states.area_ed->history[h]
             )
         );
     }

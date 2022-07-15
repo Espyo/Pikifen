@@ -110,7 +110,7 @@ void area_menu_state::load() {
         string actual_name = areas_to_pick[a];
         data_node data(
             get_base_area_folder_path(AREA_TYPE_MISSION, true) +
-            "/" + actual_name + "/Data.txt"
+            "/" + actual_name + "/" + AREA_DATA_FILE_NAME
         );
         if(data.file_was_opened) {
             string s = data.get_child_by_name("name")->value;

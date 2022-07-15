@@ -237,6 +237,49 @@ void area_editor::process_gui_delete_area_dialog() {
  * Processes the ImGui "load" dialog for this frame.
  */
 void area_editor::process_gui_load_dialog() {
+    //History node.
+    if(saveable_tree_node("load", "History")) {
+    
+        if(!history.empty() && !history[0].empty()) {
+        
+            for(size_t h = 0; h < history.size(); ++h) {
+                string name = history[h];
+                if(name.empty()) continue;
+                
+                string button_text = name;
+                
+                //History number text.
+                ImGui::Text("%i.", (int) (h + 1));
+                
+                //History entry button.
+                ImGui::SameLine();
+                if(ImGui::Button((button_text + "##" + i2s(h)).c_str())) {
+                    string folder_name;
+                    AREA_TYPES type;
+                    get_area_info_from_path(
+                        name,
+                        &folder_name,
+                        &type
+                    );
+                    create_or_load_area(folder_name, type);
+                    close_top_dialog();
+                }
+            }
+            
+        } else {
+        
+            //No history text.
+            ImGui::TextDisabled("(Empty)");
+            
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
     //Open or create node.
     if(saveable_tree_node("load", "Open or create")) {
         load_dialog_picker.process();
@@ -3134,8 +3177,8 @@ void area_editor::process_gui_panel_tools() {
                     string file_path =
                         get_base_area_folder_path(
                             game.cur_area_data.type, false
-                        ) + "/" + game.cur_area_data.folder_name +
-                        "/Geometry_backup.txt";
+                        ) + "/" + game.cur_area_data.folder_name + "/" +
+                        AREA_GEOMETRY_BACKUP_FILE_NAME;
                     if(al_filename_exists(file_path.c_str())) {
                         backup_exists = true;
                     }

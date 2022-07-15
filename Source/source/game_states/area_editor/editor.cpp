@@ -38,6 +38,8 @@ const float CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 const float DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
 const unsigned char DEF_REFERENCE_ALPHA = 128;
+//Maximum number of entries to save in the history.
+const size_t HISTORY_SIZE = 6;
 //Amount to pan the camera by when using the keyboard.
 const float KEYBOARD_PAN_AMOUNT = 32.0f;
 //Maximum number of points that a circle sector can be created with.
@@ -360,10 +362,12 @@ void area_editor::create_or_load_area(
 ) {
     string file_to_check =
         get_base_area_folder_path(requested_area_type, true) +
-        "/" + requested_area_folder_name + "/Geometry.txt";
+        "/" + requested_area_folder_name + "/" + AREA_GEOMETRY_FILE_NAME;
     if(al_filename_exists(file_to_check.c_str())) {
         //Area exists, load it.
-        load_area(requested_area_folder_name, requested_area_type, false);
+        load_area(
+            requested_area_folder_name, requested_area_type, false, true
+        );
     } else {
         //Area doesn't exist, create it.
         create_area(requested_area_folder_name, requested_area_type);
@@ -462,6 +466,11 @@ void area_editor::create_area(
     clear_undo_history();
     update_undo_history();
     area_exists_on_disk = false;
+    update_history(
+        get_base_area_folder_path(requested_area_type, true) + "/" +
+        requested_area_folder_name
+    );
+    save_options(); //Save the history in the options.
     
     status_text =
         "Created area \"" + requested_area_folder_name + "\" successfully.";
@@ -548,8 +557,8 @@ void area_editor::delete_current_area() {
     } else {
         //Start by deleting the user data folder.
         vector<string> non_important_files;
-        non_important_files.push_back("Data_backup.txt");
-        non_important_files.push_back("Geometry_backup.txt");
+        non_important_files.push_back(AREA_DATA_BACKUP_FILE_NAME);
+        non_important_files.push_back(AREA_GEOMETRY_BACKUP_FILE_NAME);
         non_important_files.push_back("Reference.txt");
         wipe_folder(
             get_base_area_folder_path(game.cur_area_data.type, false) +
@@ -559,8 +568,8 @@ void area_editor::delete_current_area() {
         
         //And now, the actual area data.
         non_important_files.clear();
-        non_important_files.push_back("Data.txt");
-        non_important_files.push_back("Geometry.txt");
+        non_important_files.push_back(AREA_DATA_FILE_NAME);
+        non_important_files.push_back(AREA_GEOMETRY_FILE_NAME);
         WIPE_FOLDER_RESULTS result =
             wipe_folder(
                 get_base_area_folder_path(game.cur_area_data.type, true) +
@@ -1465,11 +1474,13 @@ void area_editor::load() {
  *   Type of the requested area.
  * from_backup:
  *   If false, load it normally. If true, load from a backup, if any.
+ * should_update_history:
+ *   If true, this loading process should update the user's folder open history.
  */
 void area_editor::load_area(
     string requested_area_folder_name,
     const AREA_TYPES requested_area_type,
-    const bool from_backup
+    const bool from_backup, const bool should_update_history
 ) {
     clear_current_area();
     
@@ -1521,6 +1532,14 @@ void area_editor::load_area(
     game.cam.zoom = 1.0f;
     game.cam.pos = point();
     
+    if(should_update_history) {
+        update_history(
+            get_base_area_folder_path(requested_area_type, true) + "/" +
+            requested_area_folder_name
+        );
+        save_options(); //Save the history in the options.
+    }
+    
     status_text =
         "Loaded area \"" + requested_area_folder_name + "\" " +
         (from_backup ? "from a backup " : "") +
@@ -1532,7 +1551,9 @@ void area_editor::load_area(
  * Loads a backup file.
  */
 void area_editor::load_backup() {
-    load_area(game.cur_area_data.folder_name, game.cur_area_data.type, true);
+    load_area(
+        game.cur_area_data.folder_name, game.cur_area_data.type, true, false
+    );
     backup_timer.start(game.options.area_editor_backup_interval);
 }
 
@@ -1906,7 +1927,8 @@ void area_editor::press_reload_button() {
     }
     if(!check_new_unsaved_changes(reload_widget_pos)) {
         load_area(
-            game.cur_area_data.folder_name, game.cur_area_data.type, false
+            game.cur_area_data.folder_name, game.cur_area_data.type,
+            false, false
         );
     }
 }
@@ -2564,14 +2586,14 @@ bool area_editor::save_area(const bool to_backup) {
         string base_folder =
             get_base_area_folder_path(game.cur_area_data.type, false) +
             "/" + game.cur_area_data.folder_name;
-        geometry_file_name = base_folder + "/Geometry_backup.txt";
-        data_file_name = base_folder + "/Data_backup.txt";
+        geometry_file_name = base_folder + "/" + AREA_GEOMETRY_BACKUP_FILE_NAME;
+        data_file_name = base_folder + "/" + AREA_DATA_BACKUP_FILE_NAME;
     } else {
         string base_folder =
             get_base_area_folder_path(game.cur_area_data.type, true) +
             "/" + game.cur_area_data.folder_name;
-        geometry_file_name = base_folder + "/Geometry.txt";
-        data_file_name = base_folder + "/Data.txt";
+        geometry_file_name = base_folder + "/" + AREA_GEOMETRY_FILE_NAME;
+        data_file_name = base_folder + "/" + AREA_DATA_FILE_NAME;
     }
     bool geo_save_ok = geometry_file.save_file(geometry_file_name);
     bool data_save_ok = data_file.save_file(data_file_name);
@@ -3460,6 +3482,40 @@ void area_editor::update_all_edge_offset_caches() {
         get_wall_shadow_length,
         get_wall_shadow_color
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the history list, by adding a new entry or bumping it up.
+ * n:
+ *   Name of the entry.
+ */
+void area_editor::update_history(const string &n) {
+    //First, check if it exists.
+    size_t pos = INVALID;
+    
+    for(size_t h = 0; h < history.size(); ++h) {
+        if(history[h] == n) {
+            pos = h;
+            break;
+        }
+    }
+    
+    if(pos == 0) {
+        //Already #1? Never mind.
+        return;
+    } else if(pos == INVALID) {
+        //If it doesn't exist, create it and add it to the top.
+        history.insert(history.begin(), n);
+    } else {
+        //Otherwise, remove it from its spot and bump it to the top.
+        history.erase(history.begin() + pos);
+        history.insert(history.begin(), n);
+    }
+    
+    if(history.size() > AREA_EDITOR::HISTORY_SIZE) {
+        history.erase(history.begin() + history.size() - 1);
+    }
 }
 
 
