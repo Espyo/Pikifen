@@ -14,7 +14,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     Hitting a bomb rock with a thrown Rock Pikmin crashes? (thanks Tari)
     Loading from a backup should mark the area as unsaved
-    Area editor, area with no leaders, quick play, return from the dialog box -> crash with ImGui?
     
     --- v0.23.0 ---
     Mission Mode stuff

@@ -164,7 +164,7 @@ void editor::close_top_dialog() {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the area editor. This is meant to
+ * Handles the logic part of the main loop of the editor. This is meant to
  * be run after the editor's own logic code.
  */
 void editor::do_logic_post() {
@@ -173,7 +173,7 @@ void editor::do_logic_post() {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the area editor. This is meant to
+ * Handles the logic part of the main loop of the editor. This is meant to
  * be run before the editor's own logic code.
  */
 void editor::do_logic_pre() {

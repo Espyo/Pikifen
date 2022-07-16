@@ -92,6 +92,7 @@ const float ZOOM_MIN_LEVEL_EDITOR = 0.01f;
  */
 area_editor::area_editor() :
     quick_play_cam_z(1.0f),
+    hack_skip_drawing(false),
     backup_timer(game.options.area_editor_backup_interval),
     area_exists_on_disk(false),
     cur_hazard_nr(INVALID),

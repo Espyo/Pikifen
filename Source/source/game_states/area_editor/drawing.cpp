@@ -23,6 +23,15 @@
  * Handles the drawing part of the main loop of the area editor.
  */
 void area_editor::do_drawing() {
+    if(hack_skip_drawing) {
+        //Skip drawing for one frame.
+        //This hack fixes a weird glitch where if you quick-play an area
+        //with no leaders and get booted back into the area editor, the
+        //engine would crash.
+        hack_skip_drawing = false;
+        return;
+    }
+    
     //Render what is needed for the GUI.
     //This will also render the canvas in due time.
     ImGui::Render();

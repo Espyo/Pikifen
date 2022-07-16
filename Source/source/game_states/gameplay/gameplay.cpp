@@ -559,7 +559,7 @@ void gameplay_state::load() {
             "in order to play.",
             NULL, ALLEGRO_MESSAGEBOX_WARN
         );
-        
+        game.states.area_ed->hack_skip_drawing = true;
         leave(LEAVE_TO_AREA_SELECT);
         return;
     }

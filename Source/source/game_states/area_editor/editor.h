@@ -69,6 +69,8 @@ public:
     point quick_play_cam_pos;
     //Editor camera zoom before quick-play.
     float quick_play_cam_z;
+    //This hack fixes a glitch by skipping drawing for one frame.
+    bool hack_skip_drawing;
     
     //Standard functions.
     void do_logic() override;
