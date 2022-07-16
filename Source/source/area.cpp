@@ -995,7 +995,7 @@ void get_area_info_from_path(
     
     if(final_area_folder_name) *final_area_folder_name = parts.back();
     if(final_area_type) {
-        if(parts[parts.size() - 2] == MISSION_AREA_FOLDER_NAME) {
+        if(parts[parts.size() - 2] == "Mission") {
             *final_area_type = AREA_TYPE_MISSION;
         }
     }

@@ -69,7 +69,6 @@ Next tasks (roughly sorted most important first)
                     A win condition for reaching X sprays of type Y
                     A loss condition for killing an enemy
         Area selection menu changes
-            When pressing Play, another menu should show up with a Simple areas button and a Missions button (and a back button)
             Left side of the area selection menu proper
                 The list of areas, with their names and a medal icon next to each
             Right side of the area selection menu proper

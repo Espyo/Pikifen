@@ -1,7 +1,8 @@
 positions {
-    back =        15 10 20  6
-    pick_text =   50 10 30 10
-    list =        49 55 77 70
-    list_scroll = 90 55  2 70
-    tooltip =     50 95 95  8
+    back =          15 10 20  6
+    pick_text =     50 10 30 10
+    list =          49 55 77 70
+    list_scroll =   90 55  2 70
+    tooltip =       50 95 95  8
+    no_areas_text = 50 50 95  8
 }

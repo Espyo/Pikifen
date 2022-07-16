@@ -172,26 +172,46 @@ void main_menu_state::load() {
     data_node settings_file(GUI_FILE_PATH);
     
     //Menu items.
-    gui.register_coords("play",             50, 55, 50,  6);
-    gui.register_coords("options",          50, 63, 50,  6);
-    gui.register_coords("animation_editor", 50, 71, 50,  6);
-    gui.register_coords("area_editor",      50, 79, 50,  6);
-    gui.register_coords("exit",             50, 87, 50,  6);
+    gui.register_coords("play_simple",      50, 55, 50,  6);
+    gui.register_coords("play_mission",     50, 62, 50,  6);
+    gui.register_coords("options",          50, 69, 50,  6);
+    gui.register_coords("animation_editor", 50, 76, 50,  6);
+    gui.register_coords("area_editor",      50, 83, 50,  6);
+    gui.register_coords("exit",             91, 91, 15,  6);
     gui.register_coords("tooltip",          50, 95, 95,  8);
     gui.read_coords(settings_file.get_child_by_name("positions"));
     
-    //Play button.
-    button_gui_item* play_button =
-        new button_gui_item("Play", game.fonts.area_name);
-    play_button->on_activate =
+    //Play a simple area button.
+    button_gui_item* play_simple_button =
+        new button_gui_item("Play a simple area", game.fonts.area_name);
+    play_simple_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
+            game.states.area_menu->area_type = AREA_TYPE_SIMPLE;
             game.change_state(game.states.area_menu);
         });
     };
-    play_button->on_get_tooltip =
-    [] () { return "Pick an area, and start playing!"; };
-    gui.add_item(play_button, "play");
+    play_simple_button->on_get_tooltip =
+    [] () { return "Pick a simple area with no goal, and start playing!"; };
+    gui.add_item(play_simple_button, "play_simple");
+    
+    //Play a simple area button.
+    button_gui_item* play_mission_button =
+        new button_gui_item("Play a mission", game.fonts.area_name);
+    play_mission_button->on_activate =
+    [] (const point &) {
+        game.fade_mgr.start_fade(false, [] () {
+            game.states.area_menu->area_type = AREA_TYPE_MISSION;
+            game.change_state(game.states.area_menu);
+        });
+    };
+    play_mission_button->on_get_tooltip =
+    [] () {
+        return
+            "Pick a mission area with goals and limitations, "
+            "and start playing!";
+    };
+    gui.add_item(play_mission_button, "play_mission");
     
     //Options button.
     button_gui_item* options_button =
@@ -358,7 +378,7 @@ void main_menu_state::load() {
     }
     
     //Finishing touches.
-    gui.set_selected_item(play_button);
+    gui.set_selected_item(play_simple_button);
     game.fade_mgr.start_fade(true, nullptr);
     
 }

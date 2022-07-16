@@ -30,6 +30,7 @@ const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu.txt";
  */
 area_menu_state::area_menu_state() :
     game_state(),
+    area_type(AREA_TYPE_SIMPLE),
     bmp_menu_bg(NULL) {
     
 }
@@ -102,14 +103,14 @@ void area_menu_state::load() {
     //Areas.
     areas_to_pick =
         folder_to_vector(
-            get_base_area_folder_path(AREA_TYPE_MISSION, true),
+            get_base_area_folder_path(area_type, true),
             true
         );
         
     for(size_t a = 0; a < areas_to_pick.size(); ++a) {
         string actual_name = areas_to_pick[a];
         data_node data(
-            get_base_area_folder_path(AREA_TYPE_MISSION, true) +
+            get_base_area_folder_path(area_type, true) +
             "/" + actual_name + "/" + AREA_DATA_FILE_NAME
         );
         if(data.file_was_opened) {
@@ -126,11 +127,12 @@ void area_menu_state::load() {
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu items.
-    gui.register_coords("back",        15, 10, 20,  6);
-    gui.register_coords("pick_text",   50, 10, 30, 10);
-    gui.register_coords("list",        49, 55, 77, 70);
-    gui.register_coords("list_scroll", 90, 55,  2, 70);
-    gui.register_coords("tooltip",     50, 95, 95,  8);
+    gui.register_coords("back",          15, 10, 20,  6);
+    gui.register_coords("pick_text",     50, 10, 30, 10);
+    gui.register_coords("list",          49, 55, 77, 70);
+    gui.register_coords("list_scroll",   90, 55,  2, 70);
+    gui.register_coords("tooltip",       50, 95, 95,  8);
+    gui.register_coords("no_areas_text", 50, 50, 95,  8);
     gui.read_coords(
         data_node(AREA_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -148,45 +150,65 @@ void area_menu_state::load() {
     
     //Instructions text.
     text_gui_item* pick_text =
-        new text_gui_item("Pick an area:", game.fonts.standard);
+        new text_gui_item(
+        area_type == AREA_TYPE_SIMPLE ?
+        "Pick a simple area:" :
+        "Pick a mission:",
+        game.fonts.standard
+    );
     gui.add_item(pick_text, "pick_text");
     
-    //Area list box.
-    list_gui_item* list_box = new list_gui_item();
-    gui.add_item(list_box, "list");
-    
-    //Area list scrollbar.
-    scroll_gui_item* list_scroll = new scroll_gui_item();
-    list_scroll->list_item = list_box;
-    gui.add_item(list_scroll, "list_scroll");
-    
-    //Items for the various areas.
     button_gui_item* first_area_button = NULL;
-    for(size_t a = 0; a < areas_to_pick.size(); ++a) {
-        string area_name = area_names[a];
-        string area_folder = areas_to_pick[a];
+    
+    if(!areas_to_pick.empty()) {
+    
+        //Area list box.
+        list_gui_item* list_box = new list_gui_item();
+        gui.add_item(list_box, "list");
         
-        //Area button.
-        button_gui_item* area_button =
-            new button_gui_item(area_name, game.fonts.area_name);
-        area_button->center = point(0.50f, 0.045f + a * 0.10f);
-        area_button->size = point(1.0f, 0.09f);
-        area_button->on_activate =
-        [this, area_folder] (const point &) {
-            game.states.gameplay->path_of_area_to_load =
-                get_base_area_folder_path(AREA_TYPE_SIMPLE, true) + "/" +
-                area_folder;
-            game.fade_mgr.start_fade(false, [] () {
-                game.change_state(game.states.gameplay);
-            });
-        };
-        area_button->on_get_tooltip =
-        [area_name] () { return "Play " + area_name + "."; };
-        list_box->add_child(area_button);
-        gui.add_item(area_button);
-        if(!first_area_button) {
-            first_area_button = area_button;
+        //Area list scrollbar.
+        scroll_gui_item* list_scroll = new scroll_gui_item();
+        list_scroll->list_item = list_box;
+        gui.add_item(list_scroll, "list_scroll");
+        
+        //Items for the various areas.
+        for(size_t a = 0; a < areas_to_pick.size(); ++a) {
+            string area_name = area_names[a];
+            string area_folder = areas_to_pick[a];
+            
+            //Area button.
+            button_gui_item* area_button =
+                new button_gui_item(area_name, game.fonts.area_name);
+            area_button->center = point(0.50f, 0.045f + a * 0.10f);
+            area_button->size = point(1.0f, 0.09f);
+            area_button->on_activate =
+            [this, area_folder] (const point &) {
+                game.states.gameplay->path_of_area_to_load =
+                    get_base_area_folder_path(area_type, true) + "/" +
+                    area_folder;
+                game.fade_mgr.start_fade(false, [] () {
+                    game.change_state(game.states.gameplay);
+                });
+            };
+            area_button->on_get_tooltip =
+            [area_name] () { return "Play " + area_name + "."; };
+            list_box->add_child(area_button);
+            gui.add_item(area_button);
+            if(!first_area_button) {
+                first_area_button = area_button;
+            }
         }
+        
+    } else {
+    
+        //No areas found text.
+        text_gui_item* no_areas_text =
+            new text_gui_item(
+            "No areas found! Try making your own in the area editor!",
+            game.fonts.standard
+        );
+        gui.add_item(no_areas_text, "no_areas_text");
+        
     }
     
     //Tooltip text.

@@ -201,6 +201,9 @@ private:
  */
 class area_menu_state : public game_state {
 public:
+    //Type of area that the menu is dealing with.
+    AREA_TYPES area_type;
+    
     area_menu_state();
     void load() override;
     void unload() override;
