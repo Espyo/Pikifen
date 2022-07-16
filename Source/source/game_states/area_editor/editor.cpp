@@ -1580,6 +1580,7 @@ void area_editor::load_backup() {
         game.cur_area_data.folder_name, game.cur_area_data.type, true, false
     );
     backup_timer.start(game.options.area_editor_backup_interval);
+    mark_new_changes();
 }
 
 
@@ -1626,7 +1627,11 @@ void area_editor::load_reference() {
 void area_editor::pick_area(
     const string &name, const string &category, const bool is_new
 ) {
-    create_or_load_area(sanitize_file_name(name), AREA_TYPE_SIMPLE);
+    AREA_TYPES type = AREA_TYPE_SIMPLE;
+    if(category == "Mission") {
+        type = AREA_TYPE_MISSION;
+    }
+    create_or_load_area(sanitize_file_name(name), type);
     close_top_dialog();
 }
 

@@ -25,6 +25,8 @@
  */
 void area_editor::open_load_dialog() {
     vector<picker_item> areas;
+    
+    //Process the simple areas first.
     vector<string> folders =
         folder_to_vector(
             get_base_area_folder_path(AREA_TYPE_SIMPLE, true),
@@ -32,9 +34,21 @@ void area_editor::open_load_dialog() {
         );
         
     for(size_t f = 0; f < folders.size(); ++f) {
-        areas.push_back(picker_item(folders[f]));
+        areas.push_back(picker_item(folders[f], "Simple"));
     }
     
+    //Now, the mission ones.
+    folders =
+        folder_to_vector(
+            get_base_area_folder_path(AREA_TYPE_MISSION, true),
+            true
+        );
+        
+    for(size_t f = 0; f < folders.size(); ++f) {
+        areas.push_back(picker_item(folders[f], "Mission"));
+    }
+    
+    //Set up the picker's behavior and data.
     load_dialog_picker = picker_info(this);
     load_dialog_picker.can_make_new = true;
     load_dialog_picker.items = areas;
@@ -46,6 +60,7 @@ void area_editor::open_load_dialog() {
             std::placeholders::_3
         );
         
+    //Open the dialog that will contain the picker and history.
     open_dialog(
         "Load a file or create a new one",
         std::bind(&area_editor::process_gui_load_dialog, this)

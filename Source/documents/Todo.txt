@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Mission Mode stuff
         Area editor changes
             Starting dialog should have
-                The standard "picker" content, with the different area types in different categories
                 Trying to create a new area should ask what type of area it is before proceeding
             Add a new panel, Gameplay, where you control everything gameplay-related
                 Move the spray counter here, and spruce it up so people don't have to write stuff by hand
@@ -13,7 +12,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Hitting a bomb rock with a thrown Rock Pikmin crashes? (thanks Tari)
-    Loading from a backup should mark the area as unsaved
     
     --- v0.23.0 ---
     Mission Mode stuff
