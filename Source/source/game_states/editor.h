@@ -83,8 +83,10 @@ protected:
         ICON_HITBOXES,
         //Toggle reference image.
         ICON_REFERENCE,
-        //Show info.
+        //Info.
         ICON_INFO,
+        //Gameplay.
+        ICON_GAMEPLAY,
         //Resize.
         ICON_RESIZE,
         //Play/pause.

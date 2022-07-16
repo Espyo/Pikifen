@@ -226,6 +226,8 @@ private:
         EDITOR_STATE_MAIN,
         //Area info editing.
         EDITOR_STATE_INFO,
+        //Area gameplay settings editing.
+        EDITOR_STATE_GAMEPLAY,
         //Layout editing.
         EDITOR_STATE_LAYOUT,
         //Mob editing.
@@ -664,6 +666,7 @@ private:
     void process_gui_mob_script_vars(mob_gen* gen);
     void process_gui_panel_details();
     void process_gui_panel_edge();
+    void process_gui_panel_gameplay();
     void process_gui_panel_info();
     void process_gui_panel_layout();
     void process_gui_panel_main();

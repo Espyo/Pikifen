@@ -170,6 +170,9 @@ void area_editor::process_gui_control_panel() {
     } case EDITOR_STATE_INFO: {
         process_gui_panel_info();
         break;
+    } case EDITOR_STATE_GAMEPLAY: {
+        process_gui_panel_gameplay();
+        break;
     } case EDITOR_STATE_LAYOUT: {
         process_gui_panel_layout();
         break;
@@ -1300,6 +1303,43 @@ void area_editor::process_gui_panel_edge() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui area gameplay settings control panel for this frame.
+ */
+void area_editor::process_gui_panel_gameplay() {
+    ImGui::BeginChild("gameplay");
+    
+    //Back button.
+    if(ImGui::Button("Back")) {
+        change_state(EDITOR_STATE_MAIN);
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Sprays node.
+    if(saveable_tree_node("info", "Sprays")) {
+    
+        string spray_amounts = game.cur_area_data.spray_amounts;
+        if(ImGui::InputText("Sprays", &spray_amounts)) {
+            register_change("area spray amounts change");
+            game.cur_area_data.spray_amounts = spray_amounts;
+        }
+        set_tooltip(
+            "Starting amount of each spray type to give the player. e.g.:\n"
+            "\"Ultra-Bitter Spray=2; Ultra-Spicy Spray=1\"."
+        );
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        ImGui::TreePop();
+    }
+    
+    ImGui::EndChild();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui area info control panel for this frame.
  */
 void area_editor::process_gui_panel_info() {
@@ -1488,28 +1528,6 @@ void area_editor::process_gui_panel_info() {
             game.cur_area_data.notes = notes;
         }
         set_tooltip("Extra notes or comments about the area, if any.");
-        
-        ImGui::TreePop();
-    }
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
-    //Gameplay node.
-    if(saveable_tree_node("info", "Gameplay")) {
-    
-        string spray_amounts = game.cur_area_data.spray_amounts;
-        if(ImGui::InputText("Sprays", &spray_amounts)) {
-            register_change("area spray amounts change");
-            game.cur_area_data.spray_amounts = spray_amounts;
-        }
-        set_tooltip(
-            "Starting amount of each spray type to give the player. e.g.:\n"
-            "\"Ultra-Bitter Spray=2; Ultra-Spicy Spray=1\"."
-        );
-        
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
         
         ImGui::TreePop();
     }
@@ -1803,6 +1821,21 @@ void area_editor::process_gui_panel_main() {
     }
     set_tooltip(
         "Set the area's name, weather, and other basic information here."
+    );
+    
+    //Area gameplay settings button.
+    if(
+        ImGui::ImageButtonAndText(
+            editor_icons[ICON_GAMEPLAY],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
+            16.0f,
+            "Gameplay settings"
+        )
+    ) {
+        change_state(EDITOR_STATE_GAMEPLAY);
+    }
+    set_tooltip(
+        "Specify how the player's gameplay experience in this area will be."
     );
     
     //Layout button.
