@@ -629,6 +629,7 @@ void gameplay_state::do_gameplay_logic() {
         
         if(swarm_cursor) {
             swarm_angle = cursor_angle;
+            leader_to_cursor_dist = dist(cur_leader_ptr->pos, leader_cursor_w);
             swarm_magnitude =
                 leader_to_cursor_dist.to_float() / game.config.cursor_max_dist;
         }
