@@ -20,7 +20,6 @@
 namespace ANIM_EDITOR {
 extern const float FLOOD_FILL_ALPHA_THRESHOLD;
 extern const float GRID_INTERVAL;
-extern const size_t HISTORY_SIZE;
 extern const float HITBOX_MIN_RADIUS;
 extern const float KEYBOARD_PAN_AMOUNT;
 extern const float MOUSE_COORDS_TEXT_WIDTH;
@@ -42,11 +41,6 @@ public:
 
     //Automatically load this animation file upon boot-up of the editor, if any.
     string auto_load_anim;
-    //History for the last files that were opened.
-    vector<string> history;
-    
-    string get_opened_file_name() const;
-    void update_history(const string &n);
     
     void do_logic() override;
     void do_drawing() override;
@@ -55,6 +49,8 @@ public:
     string get_name() const override;
     
     void draw_canvas();
+    string get_history_option_prefix() const override;
+    string get_opened_file_name() const;
     
     animation_editor();
     

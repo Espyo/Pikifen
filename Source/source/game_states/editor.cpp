@@ -26,6 +26,8 @@
 
 
 namespace EDITOR {
+//Default history maximum size.
+const size_t DEF_MAX_HISTORY_SIZE = 6;
 //Time until the next click is no longer considered a double-click.
 const float DOUBLE_CLICK_TIMEOUT = 0.5f;
 //Every icon in the icon bitmap file is these many pixels from the previous.
@@ -356,6 +358,14 @@ void editor::draw_unsaved_changes_warning() {
         box_center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
         "You have\nunsaved changes!"
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the maximum number of history entries for this editor.
+ */
+size_t editor::get_history_size() const {
+    return EDITOR::DEF_MAX_HISTORY_SIZE;
 }
 
 
@@ -1099,6 +1109,46 @@ void editor::process_gui_editor_style() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the widgets that show the editor's history.
+ */
+void editor::process_gui_history(
+    const std::function<string(const string &)> &name_display_callback,
+    const std::function<void(const string &)> &pick_callback
+) {
+    if(saveable_tree_node("load", "History")) {
+    
+        if(!history.empty() && !history[0].empty()) {
+        
+            for(size_t h = 0; h < history.size(); ++h) {
+                string name = history[h];
+                if(name.empty()) continue;
+                
+                string button_text = name_display_callback(name);
+                
+                //History number text.
+                ImGui::Text("%i.", (int) (h + 1));
+                
+                //History entry button.
+                ImGui::SameLine();
+                if(ImGui::Button((button_text + "##" + i2s(h)).c_str())) {
+                    pick_callback(name);
+                }
+            }
+            
+        } else {
+        
+            //No history text.
+            ImGui::TextDisabled("(Empty)");
+            
+        }
+        
+        ImGui::TreePop();
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the category and type widgets that allow a user to select a mob
  * type.
  * cat:
@@ -1113,7 +1163,7 @@ void editor::process_gui_editor_style() {
  * type_change_callback:
  *   If not NULL, this is called as soon as the type combobox is changed.
  */
-void editor::process_mob_type_widgets(
+void editor::process_gui_mob_type_widgets(
     mob_category** cat, mob_type** typ,
     const bool only_show_area_editor_types,
     const std::function<void()> &category_change_callback,
@@ -1252,7 +1302,7 @@ void editor::process_mob_type_widgets(
  *   Callback to call when the width or height is changed, before it actually
  *   changes.
  */
-bool editor::process_size_widgets(
+bool editor::process_gui_size_widgets(
     const char* label, point &size, const float v_speed,
     const bool keep_aspect_ratio,
     const float min_size,
@@ -1401,6 +1451,40 @@ void editor::unload() {
         }
         al_destroy_bitmap(bmp_editor_icons);
         bmp_editor_icons = NULL;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the history list, by adding a new entry or bumping it up.
+ * n:
+ *   Name of the entry.
+ */
+void editor::update_history(const string &n) {
+    //First, check if it exists.
+    size_t pos = INVALID;
+    
+    for(size_t h = 0; h < history.size(); ++h) {
+        if(history[h] == n) {
+            pos = h;
+            break;
+        }
+    }
+    
+    if(pos == 0) {
+        //Already #1? Never mind.
+        return;
+    } else if(pos == INVALID) {
+        //If it doesn't exist, create it and add it to the top.
+        history.insert(history.begin(), n);
+    } else {
+        //Otherwise, remove it from its spot and bump it to the top.
+        history.erase(history.begin() + pos);
+        history.insert(history.begin(), n);
+    }
+    
+    if(history.size() > get_history_size()) {
+        history.erase(history.begin() + history.size() - 1);
     }
 }
 

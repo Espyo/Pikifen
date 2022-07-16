@@ -108,10 +108,16 @@ Next tasks (roughly sorted most important first)
             It should also save if the stage has never been played
         Pikmin extinction
             Check Onions, ships, and converters that have Pikmin in the buffer
+        Pause menu adjustments
+            The continue button should be a tiny thing on the bottom-left, and the quit option a tiny thing on the bottom-right. (Thanks Neo)
+            The retry and quit buttons should show a confirmation dialog, but it can be disabled in the options. The option for it should have the values "show never", "show always", or "show after 1 minute"
+            The finish button should show an informative and confirmation dialog. This dialog should explain that finishing now will make the following fields of the score become 0, or how the score won't be affected if none
         Other things
-            The pause menu's stats screen should show the score requirements for the current mission, as well as the high score
+            The radar's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
-            The auto-start tool should have the full path to the area, and the game should infer its area type from there
+            The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that
+            Simple areas shouldn't have a time limit
+            When playing a mission through the area editor's quick play, high scores shouldn't be saved
     Statistics menu, which keeps track of:
         Engine use
             Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd

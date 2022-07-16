@@ -65,6 +65,8 @@ const string GAME_DATA_FOLDER_PATH = "Game_data";
 //Relative path to the folder with the user data.
 const string USER_DATA_FOLDER_PATH = "User_data";
 
+//Name of the folder with area type folders inside.
+const string AREA_TYPES_FOLDER_NAME = "Areas";
 //Name of the folder with mission areas, be it in the game data or user data.
 const string MISSION_AREA_FOLDER_NAME = "Areas/Simple";
 //Name of the folder with simple areas, be it in the game data or user data.

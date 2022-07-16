@@ -38,8 +38,6 @@ const float CURSOR_SNAP_UPDATE_INTERVAL = 0.05f;
 const float DEBUG_TEXT_SCALE = 1.3f;
 //Default reference image opacity.
 const unsigned char DEF_REFERENCE_ALPHA = 128;
-//Maximum number of entries to save in the history.
-const size_t HISTORY_SIZE = 6;
 //Amount to pan the camera by when using the keyboard.
 const float KEYBOARD_PAN_AMOUNT = 32.0f;
 //Maximum number of points that a circle sector can be created with.
@@ -1101,6 +1099,15 @@ void area_editor::get_clicked_layout_element(
 
 
 /* ----------------------------------------------------------------------------
+ * In the options data file, options pertaining to an editor's history
+ * have a prefix. This function returns that prefix.
+ */
+string area_editor::get_history_option_prefix() const {
+    return "area_editor_history_";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
 string area_editor::get_name() const {
@@ -1119,6 +1126,23 @@ string area_editor::get_opened_folder_path() const {
     } else {
         return "";
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a file path, but shortened in such a way that only the text file's
+ * name and brief context about its folder remain.
+ * p:
+ *   The long path name.
+ */
+string area_editor::get_path_short_name(const string &p) const {
+    string match = GAME_DATA_FOLDER_PATH + "/" + AREA_TYPES_FOLDER_NAME;
+    size_t start = p.find(match);
+    if(start == string::npos) {
+        return p;
+    }
+    
+    return p.substr(start + match.size() + 1);
 }
 
 
@@ -3482,40 +3506,6 @@ void area_editor::update_all_edge_offset_caches() {
         get_wall_shadow_length,
         get_wall_shadow_color
     );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the history list, by adding a new entry or bumping it up.
- * n:
- *   Name of the entry.
- */
-void area_editor::update_history(const string &n) {
-    //First, check if it exists.
-    size_t pos = INVALID;
-    
-    for(size_t h = 0; h < history.size(); ++h) {
-        if(history[h] == n) {
-            pos = h;
-            break;
-        }
-    }
-    
-    if(pos == 0) {
-        //Already #1? Never mind.
-        return;
-    } else if(pos == INVALID) {
-        //If it doesn't exist, create it and add it to the top.
-        history.insert(history.begin(), n);
-    } else {
-        //Otherwise, remove it from its spot and bump it to the top.
-        history.erase(history.begin() + pos);
-        history.insert(history.begin(), n);
-    }
-    
-    if(history.size() > AREA_EDITOR::HISTORY_SIZE) {
-        history.erase(history.begin() + history.size() - 1);
-    }
 }
 
 

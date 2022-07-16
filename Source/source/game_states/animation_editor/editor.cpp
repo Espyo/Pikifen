@@ -26,8 +26,6 @@ namespace ANIM_EDITOR {
 const float FLOOD_FILL_ALPHA_THRESHOLD = 0.008;
 //Grid interval in the animation editor.
 const float GRID_INTERVAL = 16.0f;
-//Maximum number of entries to save in the history.
-const size_t HISTORY_SIZE = 6;
 //Minimum radius that a hitbox can have.
 const float HITBOX_MIN_RADIUS = 1.0f;
 //Amount to pan the camera by when using the keyboard.
@@ -232,6 +230,15 @@ float animation_editor::get_cursor_timeline_time() {
     float mouse_x = game.mouse_cursor_s.x - anim_x1;
     mouse_x = clamp(mouse_x, 0.0f, anim_w);
     return cur_anim->get_duration() * (mouse_x / anim_w);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * In the options data file, options pertaining to an editor's history
+ * have a prefix. This function returns that prefix.
+ */
+string animation_editor::get_history_option_prefix() const {
+    return "animation_editor_history_";
 }
 
 
@@ -1366,40 +1373,6 @@ void animation_editor::update_cur_hitbox() {
     
     cur_hitbox_nr = std::min(cur_hitbox_nr, cur_sprite->hitboxes.size() - 1);
     cur_hitbox = &cur_sprite->hitboxes[cur_hitbox_nr];
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the history list, by adding a new entry or bumping it up.
- * n:
- *   Name of the entry.
- */
-void animation_editor::update_history(const string &n) {
-    //First, check if it exists.
-    size_t pos = INVALID;
-    
-    for(size_t h = 0; h < history.size(); ++h) {
-        if(history[h] == n) {
-            pos = h;
-            break;
-        }
-    }
-    
-    if(pos == 0) {
-        //Already #1? Never mind.
-        return;
-    } else if(pos == INVALID) {
-        //If it doesn't exist, create it and add it to the top.
-        history.insert(history.begin(), n);
-    } else {
-        //Otherwise, remove it from its spot and bump it to the top.
-        history.erase(history.begin() + pos);
-        history.insert(history.begin(), n);
-    }
-    
-    if(history.size() > ANIM_EDITOR::HISTORY_SIZE) {
-        history.erase(history.begin() + history.size() - 1);
-    }
 }
 
 

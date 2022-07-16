@@ -238,44 +238,22 @@ void area_editor::process_gui_delete_area_dialog() {
  */
 void area_editor::process_gui_load_dialog() {
     //History node.
-    if(saveable_tree_node("load", "History")) {
-    
-        if(!history.empty() && !history[0].empty()) {
-        
-            for(size_t h = 0; h < history.size(); ++h) {
-                string name = history[h];
-                if(name.empty()) continue;
-                
-                string button_text = name;
-                
-                //History number text.
-                ImGui::Text("%i.", (int) (h + 1));
-                
-                //History entry button.
-                ImGui::SameLine();
-                if(ImGui::Button((button_text + "##" + i2s(h)).c_str())) {
-                    string folder_name;
-                    AREA_TYPES type;
-                    get_area_info_from_path(
-                        name,
-                        &folder_name,
-                        &type
-                    );
-                    create_or_load_area(folder_name, type);
-                    close_top_dialog();
-                }
-            }
-            
-        } else {
-        
-            //No history text.
-            ImGui::TextDisabled("(Empty)");
-            
-        }
-        
-        ImGui::TreePop();
-        
+    process_gui_history(
+    [this](const string & name) -> string {
+        return get_path_short_name(name);
+    },
+    [this](const string & name) {
+        string folder_name;
+        AREA_TYPES type;
+        get_area_info_from_path(
+            name,
+            &folder_name,
+            &type
+        );
+        create_or_load_area(folder_name, type);
+        close_top_dialog();
     }
+    );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
@@ -1074,7 +1052,7 @@ void area_editor::process_gui_panel_details() {
                 );
                 
                 //Tree shadow size value.
-                process_size_widgets(
+                process_gui_size_widgets(
                     "Size", selected_shadow->size,
                     1.0f, selected_shadow_keep_aspect_ratio,
                     -FLT_MAX,
@@ -1948,7 +1926,7 @@ void area_editor::process_gui_panel_mob() {
     mob_category* category_before = m_ptr->category;
     mob_type* type_before = m_ptr->type;
     
-    process_mob_type_widgets(
+    process_gui_mob_type_widgets(
         &m_ptr->category, &m_ptr->type, true,
     [this] () { register_change("object category change"); },
     [this] () { register_change("object type change"); }
@@ -3131,7 +3109,7 @@ void area_editor::process_gui_panel_tools() {
         );
         
         //Reference size value.
-        process_size_widgets(
+        process_gui_size_widgets(
             "Size", reference_size, 1.0f,
             reference_keep_aspect_ratio,
             AREA_EDITOR::REFERENCE_MIN_SIZE

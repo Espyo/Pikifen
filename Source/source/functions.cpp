@@ -1505,19 +1505,20 @@ void save_options() {
     ) {
         file.add(
             new data_node(
-                "animation_editor_history_" + i2s(h + 1),
+                game.states.animation_ed->get_history_option_prefix() +
+                i2s(h + 1),
                 game.states.animation_ed->history[h]
             )
         );
     }
     
-    //Also add the editor histories.
     for(
         size_t h = 0; h < game.states.area_ed->history.size(); ++h
     ) {
         file.add(
             new data_node(
-                "area_editor_history_" + i2s(h + 1),
+                game.states.area_ed->get_history_option_prefix() +
+                i2s(h + 1),
                 game.states.area_ed->history[h]
             )
         );

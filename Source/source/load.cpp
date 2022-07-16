@@ -1174,18 +1174,20 @@ void load_options() {
     reader_setter rs(&file);
     
     game.states.animation_ed->history.clear();
-    for(size_t h = 0; h < ANIM_EDITOR::HISTORY_SIZE; ++h) {
+    for(size_t h = 0; h < game.states.animation_ed->get_history_size(); ++h) {
         game.states.animation_ed->history.push_back("");
         rs.set(
-            "animation_editor_history_" + i2s(h + 1),
+            game.states.animation_ed->get_history_option_prefix() +
+            i2s(h + 1),
             game.states.animation_ed->history[h]
         );
     }
     game.states.area_ed->history.clear();
-    for(size_t h = 0; h < AREA_EDITOR::HISTORY_SIZE; ++h) {
+    for(size_t h = 0; h < game.states.area_ed->get_history_size(); ++h) {
         game.states.area_ed->history.push_back("");
         rs.set(
-            "area_editor_history_" + i2s(h + 1),
+            game.states.area_ed->get_history_option_prefix() +
+            i2s(h + 1),
             game.states.area_ed->history[h]
         );
     }

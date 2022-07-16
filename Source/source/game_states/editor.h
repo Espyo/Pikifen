@@ -24,6 +24,7 @@ using std::vector;
 
 
 namespace EDITOR {
+extern const size_t DEF_MAX_HISTORY_SIZE;
 extern const float DOUBLE_CLICK_TIMEOUT;
 extern const int ICON_BMP_PADDING;
 extern const int ICON_BMP_SIZE;
@@ -48,6 +49,9 @@ extern const int UNSAVED_CHANGES_WARNING_WIDTH;
 class editor : public game_state {
 public:
 
+    //History for the last content entries that were opened.
+    vector<string> history;
+    
     editor();
     virtual ~editor() = default;
     
@@ -59,6 +63,9 @@ public:
     virtual void update_style();
     virtual void update_transformations() override;
     virtual string get_name() const override = 0;
+    
+    virtual string get_history_option_prefix() const = 0;
+    virtual size_t get_history_size() const;
     
 protected:
 
@@ -375,13 +382,17 @@ protected:
     );
     void process_dialogs();
     void process_gui_editor_style();
-    void process_mob_type_widgets(
+    void process_gui_history(
+        const std::function<string(const string&)> &name_display_callback,
+        const std::function<void(const string &)> &pick_callback
+    );
+    void process_gui_mob_type_widgets(
         mob_category** cat, mob_type** typ,
         const bool only_show_area_editor_types,
         const std::function<void()> &category_change_callback = nullptr,
         const std::function<void()> &type_change_callback = nullptr
     );
-    bool process_size_widgets(
+    bool process_gui_size_widgets(
         const char* label, point &size, const float v_speed,
         const bool keep_aspect_ratio, const float min_size,
         const std::function<void()> &pre_change_callback = nullptr
@@ -392,6 +403,7 @@ protected:
         const string &explanation, const string &shortcut = "",
         const WIDGET_EXPLANATIONS widget_explanation = WIDGET_EXPLANATION_NONE
     );
+    void update_history(const string &n);
     void zoom_with_cursor(const float new_zoom);
     
     

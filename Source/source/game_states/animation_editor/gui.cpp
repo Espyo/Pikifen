@@ -276,39 +276,17 @@ void animation_editor::process_gui_hitbox_hazards() {
  */
 void animation_editor::process_gui_load_dialog() {
     //History node.
-    if(saveable_tree_node("load", "History")) {
-    
-        if(!history.empty() && !history[0].empty()) {
-        
-            for(size_t h = 0; h < history.size(); ++h) {
-                string name = history[h];
-                if(name.empty()) continue;
-                
-                string button_text = get_path_short_name(name);
-                
-                //History number text.
-                ImGui::Text("%i.", (int) (h + 1));
-                
-                //History entry button.
-                ImGui::SameLine();
-                if(ImGui::Button((button_text + "##" + i2s(h)).c_str())) {
-                    file_path = name;
-                    loaded_mob_type = NULL;
-                    load_animation_database(true);
-                    close_top_dialog();
-                }
-            }
-            
-        } else {
-        
-            //No history text.
-            ImGui::TextDisabled("(Empty)");
-            
-        }
-        
-        ImGui::TreePop();
-        
+    process_gui_history(
+    [this](const string & name) -> string {
+        return get_path_short_name(name);
+    },
+    [this](const string & name) {
+        file_path = name;
+        loaded_mob_type = NULL;
+        load_animation_database(true);
+        close_top_dialog();
     }
+    );
     
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
@@ -325,7 +303,7 @@ void animation_editor::process_gui_load_dialog() {
         }
         
         //Category and type comboboxes.
-        process_mob_type_widgets(&cat, &typ, false);
+        process_gui_mob_type_widgets(&cat, &typ, false);
         
         //Load button.
         if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
@@ -2174,7 +2152,7 @@ void animation_editor::process_gui_panel_sprite_top() {
         
         //Top size value.
         if(
-            process_size_widgets(
+            process_gui_size_widgets(
                 "Size", cur_sprite->top_size, 0.01f,
                 top_keep_aspect_ratio, ANIM_EDITOR::TOP_MIN_SIZE
             )
@@ -2288,7 +2266,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     
     //Sprite scale value.
     if(
-        process_size_widgets(
+        process_gui_size_widgets(
             "Scale",
             cur_sprite->scale,
             0.005f,
