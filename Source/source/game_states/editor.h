@@ -257,6 +257,10 @@ protected:
     private:
         //Pointer to the editor that's using it.
         editor* editor_ptr;
+        //Category the user picked for the new item, if applicable.
+        string new_item_category;
+        //Do we need to focus on the filter text box?
+        bool needs_filter_box_focus;
     public:
         //List of picker dialog items to choose from.
         vector<picker_item> items;
@@ -268,6 +272,8 @@ protected:
         string list_header;
         //Can the user make a new item in the picker dialog?
         bool can_make_new;
+        //When making a new item, the user must pick between these, if any.
+        vector<string> new_item_category_choices;
         //Only show picker dialog items matching this filter.
         string filter;
         //If there's an associated dialog meant to auto-close, specify it here.
@@ -383,7 +389,7 @@ protected:
     void process_dialogs();
     void process_gui_editor_style();
     void process_gui_history(
-        const std::function<string(const string&)> &name_display_callback,
+        const std::function<string(const string &)> &name_display_callback,
         const std::function<void(const string &)> &pick_callback
     );
     void process_gui_mob_type_widgets(

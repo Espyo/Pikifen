@@ -52,6 +52,9 @@ void area_editor::open_load_dialog() {
     load_dialog_picker = picker_info(this);
     load_dialog_picker.can_make_new = true;
     load_dialog_picker.items = areas;
+    load_dialog_picker.new_item_category_choices = {
+        "Simple", "Mission"
+    };
     load_dialog_picker.pick_callback =
         std::bind(
             &area_editor::pick_area, this,

@@ -1741,6 +1741,7 @@ void editor::dialog_info::process() {
  */
 editor::picker_info::picker_info(editor* editor_ptr) :
     editor_ptr(editor_ptr),
+    needs_filter_box_focus(true),
     pick_callback(nullptr),
     can_make_new(false),
     dialog_ptr(nullptr) {
@@ -1748,7 +1749,7 @@ editor::picker_info::picker_info(editor* editor_ptr) :
 
 
 /* ----------------------------------------------------------------------------
- * Processes the picker dialog for this frame.
+ * Processes the picker for this frame.
  */
 void editor::picker_info::process() {
     vector<string> category_names;
@@ -1783,15 +1784,28 @@ void editor::picker_info::process() {
     auto try_make_new = [this] () {
         if(filter.empty()) return;
         
+        if(
+            !new_item_category_choices.empty() &&
+            new_item_category.empty()
+        ) {
+            //The user has to pick a category, but hasn't picked yet.
+            //Let's show the pop-up and leave.
+            ImGui::OpenPopup("newItemCategory");
+            return;
+        }
+        
         bool is_really_new = true;
         for(size_t i = 0; i < items.size(); ++i) {
-            if(filter == items[i].name) {
+            if(
+                filter == items[i].name &&
+                new_item_category == items[i].category
+            ) {
                 is_really_new = false;
                 break;
             }
         }
         
-        pick_callback(filter, "", is_really_new);
+        pick_callback(filter, new_item_category, is_really_new);
         if(dialog_ptr) {
             dialog_ptr->is_open = false;
         }
@@ -1819,8 +1833,9 @@ void editor::picker_info::process() {
         "Search filter or new item name" :
         "Search filter";
         
-    if(!ImGui::IsAnyItemActive()) {
+    if(!ImGui::IsAnyItemActive() && needs_filter_box_focus) {
         ImGui::SetKeyboardFocusHere();
+        needs_filter_box_focus = false;
     }
     if(
         ImGui::InputTextWithHint(
@@ -1848,6 +1863,24 @@ void editor::picker_info::process() {
                 }
             }
         }
+    }
+    
+    if(ImGui::BeginPopup("newItemCategory")) {
+        ImGui::Text("%s", "What is the category of the new item?");
+        static string chosen_category = *new_item_category_choices.begin();
+        ImGui::Combo(
+            "Category", &chosen_category, new_item_category_choices
+        );
+        if(ImGui::Button("Ok")) {
+            new_item_category = chosen_category;
+            ImGui::CloseCurrentPopup();
+            try_make_new();
+        }
+        ImGui::SameLine();
+        if(ImGui::Button("Cancel")) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
     }
     
     if(!list_header.empty()) {
