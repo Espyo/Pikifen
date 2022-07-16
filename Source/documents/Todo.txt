@@ -2,10 +2,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Mission Mode stuff
-        Area editor changes
-            Add a new panel, Gameplay, where you control everything gameplay-related
-                Move the spray counter here, and spruce it up so people don't have to write stuff by hand
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

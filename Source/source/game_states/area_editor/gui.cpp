@@ -1317,17 +1317,33 @@ void area_editor::process_gui_panel_gameplay() {
     ImGui::Dummy(ImVec2(0, 16));
     
     //Sprays node.
-    if(saveable_tree_node("info", "Sprays")) {
+    if(saveable_tree_node("info", "Starting sprays")) {
     
-        string spray_amounts = game.cur_area_data.spray_amounts;
-        if(ImGui::InputText("Sprays", &spray_amounts)) {
-            register_change("area spray amounts change");
-            game.cur_area_data.spray_amounts = spray_amounts;
+        map<string, string> spray_strs =
+            get_var_map(game.cur_area_data.spray_amounts);
+        for(size_t s = 0; s < game.spray_types.size(); ++s) {
+            int amount = s2i(spray_strs[game.spray_types[s].name]);
+            ImGui::SetNextItemWidth(50);
+            if(
+                ImGui::DragInt(
+                    game.spray_types[s].name.c_str(), &amount,
+                    0.1, 0, INT_MAX
+                )
+            ) {
+                register_change("area spray amounts change");
+                spray_strs[game.spray_types[s].name] = i2s(amount);
+                game.cur_area_data.spray_amounts.clear();
+                for(auto v : spray_strs) {
+                    game.cur_area_data.spray_amounts +=
+                        v.first + "=" + v.second + ";";
+                }
+            }
+            set_tooltip(
+                "Starting amount of spray dosages to give the player.", "",
+                WIDGET_EXPLANATION_DRAG
+            );
+            
         }
-        set_tooltip(
-            "Starting amount of each spray type to give the player. e.g.:\n"
-            "\"Ultra-Bitter Spray=2; Ultra-Spicy Spray=1\"."
-        );
         
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
