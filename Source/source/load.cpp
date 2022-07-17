@@ -77,6 +77,7 @@ void load_area(
     rs.set("subtitle", game.cur_area_data.subtitle);
     rs.set("description", game.cur_area_data.description);
     rs.set("tags", game.cur_area_data.tags);
+    rs.set("mission_difficulty", game.cur_area_data.mission_difficulty);
     rs.set("maker", game.cur_area_data.maker);
     rs.set("version", game.cur_area_data.version);
     rs.set("engine_version", game.cur_area_data.engine_version);

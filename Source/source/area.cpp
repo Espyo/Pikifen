@@ -25,6 +25,7 @@ area_data::area_data() :
     bg_bmp_zoom(1),
     bg_dist(2),
     bg_color(map_gray(0)),
+    mission_difficulty(3),
     thumbnail(nullptr) {
     
 }

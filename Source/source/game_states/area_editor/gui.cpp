@@ -1431,6 +1431,28 @@ void area_editor::process_gui_panel_info() {
             "The weather condition to use."
         );
         
+        //Mission difficulty value.
+        if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+            int mission_difficulty = game.cur_area_data.mission_difficulty;
+            ImGui::SetNextItemWidth(50);
+            if(
+                ImGui::DragInt(
+                    "Mission difficulty", &mission_difficulty, 0.1, 1, 5
+                )
+            ) {
+                register_change("mission difficulty change");
+                game.cur_area_data.mission_difficulty = mission_difficulty;
+            }
+            set_tooltip(
+                "How hard this mission is. This is very subjective, and only\n"
+                "serves as a way to tell players if this mission is something\n"
+                "relaxed and easy (1), or if it's a mission that only the\n"
+                "most experienced Pikmin veterans can succeed at (5).\n"
+                "Or anything in between.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+        }
+        
         ImGui::TreePop();
     }
     

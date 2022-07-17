@@ -2,7 +2,18 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Each stage should have the following data:
+        Mission areas:
+            A goal
+                One of the following (partial thanks Jimble, Helodity):
+                    Collect treasures (specified ones or all)
+                    Defeat enemies (specified ones or all)
+                    Survive for the specified time
+                    Reach the exit (specified leaders or all)
+                    Grow the specified Pikmin amount
+                    Bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
+                    No goal
+                Triggering the goal instantly finishes the level as a "victory"
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -33,17 +44,6 @@ Next tasks (roughly sorted most important first)
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
         Each stage should have the following data:
             Mission areas:
-                Its (subjective) difficulty
-                A goal
-                    One of the following (partial thanks Jimble, Helodity):
-                        Collect treasures (specified ones or all)
-                        Defeat enemies (specified ones or all)
-                        Survive for the specified time
-                        Reach the exit (specified leaders or all)
-                        Grow the specified Pikmin amount
-                        Bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
-                        No goal
-                    Triggering the goal instantly finishes the level as a "victory"
                 Loss conditions
                     Any combination of the following:
                         Taking damage

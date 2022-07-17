@@ -2606,6 +2606,12 @@ bool area_editor::save_area(const bool to_backup) {
         new data_node("tags", game.cur_area_data.tags)
     );
     data_file.add(
+        new data_node(
+            "mission_difficulty",
+            i2s(game.cur_area_data.mission_difficulty)
+        )
+    );
+    data_file.add(
         new data_node("bg_bmp", game.cur_area_data.bg_bmp_file_name)
     );
     data_file.add(
