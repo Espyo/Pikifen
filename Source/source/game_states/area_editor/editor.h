@@ -685,6 +685,7 @@ private:
         const string &operation_name, area_data* pre_prepared_change = NULL
     );
     bool remove_isolated_sector(sector* s_ptr);
+    void remove_thumbnail();
     void resize_everything(const float mults[2]);
     void rollback_to_prepared_state(area_data* prepared_state);
     void rotate_mob_gens_to_point(const point &pos);

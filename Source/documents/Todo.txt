@@ -32,10 +32,6 @@ Next tasks (roughly sorted most important first)
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
         Each stage should have the following data:
-            All areas:
-                A quick description explaining what the stage is about. Example: "These dark woods hide many dangerous beasts behind the fallen branches. Your goal is to escape without a single enemy seeing you!"
-                A "tags" field, where you write tags like "Beach", "Gimmick", "Short and sweet", etc. Could be useful later on for filtering, or to match with other tagged things, like songs, if need be
-                Thumbnail (Thumbnail.jpg in the area's folder; the area editor lets you pick a file from your computer to copy there)
             Mission areas:
                 Its (subjective) difficulty
                 A goal

@@ -63,11 +63,17 @@ struct area_data {
     string name;
     //Area subtitle, if any.
     string subtitle;
+    //Area description, if any.
+    string description;
+    //Area tags, separated by semicolon, if any.
+    ALLEGRO_BITMAP* thumbnail;
+    //Thumbnail, if any.
+    string tags;
     //Who made this area.
     string maker;
     //Optional version number.
     string version;
-    //Any notes from the person who made it.
+    //Any notes from the person who made it, for other makers to see.
     string notes;
     //Version of the engine this area was built in.
     string engine_version;
@@ -102,6 +108,7 @@ struct area_data {
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
     size_t get_nr_path_links();
+    void load_thumbnail();
     edge* new_edge();
     sector* new_sector();
     vertex* new_vertex();

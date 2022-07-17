@@ -24,7 +24,8 @@ area_data::area_data() :
     bg_bmp(nullptr),
     bg_bmp_zoom(1),
     bg_dist(2),
-    bg_color(map_gray(0)) {
+    bg_color(map_gray(0)),
+    thumbnail(nullptr) {
     
 }
 
@@ -112,6 +113,10 @@ void area_data::clear() {
     if(bg_bmp) {
         game.bitmaps.detach(bg_bmp);
         bg_bmp = NULL;
+    }
+    if(thumbnail) {
+        al_destroy_bitmap(thumbnail);
+        thumbnail = NULL;
     }
     
     name.clear();
@@ -796,6 +801,26 @@ size_t area_data::get_nr_path_links() {
         }
     }
     return (normals_found / 2.0f) + one_ways_found;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the thumbnail image from the disk and updates the
+ * thumbnail class member.
+ */
+void area_data::load_thumbnail() {
+    if(thumbnail) {
+        al_destroy_bitmap(thumbnail);
+        thumbnail = NULL;
+    }
+    
+    string thumbnail_path =
+        get_base_area_folder_path(type, true) +
+        "/" + folder_name + "/Thumbnail.png";
+        
+    if(al_filename_exists(thumbnail_path.c_str())) {
+        game.cur_area_data.thumbnail = al_load_bitmap(thumbnail_path.c_str());
+    }
 }
 
 

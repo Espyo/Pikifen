@@ -75,6 +75,8 @@ void load_area(
     
     rs.set("name", game.cur_area_data.name);
     rs.set("subtitle", game.cur_area_data.subtitle);
+    rs.set("description", game.cur_area_data.description);
+    rs.set("tags", game.cur_area_data.tags);
     rs.set("maker", game.cur_area_data.maker);
     rs.set("version", game.cur_area_data.version);
     rs.set("engine_version", game.cur_area_data.engine_version);
@@ -508,6 +510,9 @@ void load_area(
         game.cur_area_data.tree_shadows.push_back(s_ptr);
         
     }
+    
+    //Thumbnail image.
+    game.cur_area_data.load_thumbnail();
     
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();

@@ -205,6 +205,10 @@ bool rectangles_intersect(
     const point &tl1, const point &br1,
     const point &tl2, const point &br2
 );
+point resize_to_box_keeping_aspect_ratio(
+    const point &original_size,
+    const point &box_size
+);
 point rotate_point(const point &coords, const float angle);
 
 #endif //ifndef GEOMETRY_UTILS_INCLUDED

@@ -2264,6 +2264,28 @@ void area_editor::register_change(
 
 
 /* ----------------------------------------------------------------------------
+ * Removes the current area thumbnail, if any.
+ */
+void area_editor::remove_thumbnail() {
+    if(game.cur_area_data.thumbnail) {
+        al_destroy_bitmap(
+            game.cur_area_data.thumbnail
+        );
+        game.cur_area_data.thumbnail = NULL;
+        al_remove_filename(
+            (
+                get_base_area_folder_path(
+                    game.cur_area_data.type, true
+                ) +
+                "/" + game.cur_area_data.folder_name +
+                "/Thumbnail.png"
+            ).c_str()
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns to a previously prepared area state.
  * prepared_state:
  *   Prepared state to return to.
@@ -2576,6 +2598,12 @@ bool area_editor::save_area(const bool to_backup) {
     );
     data_file.add(
         new data_node("subtitle", game.cur_area_data.subtitle)
+    );
+    data_file.add(
+        new data_node("description", game.cur_area_data.description)
+    );
+    data_file.add(
+        new data_node("tags", game.cur_area_data.tags)
     );
     data_file.add(
         new data_node("bg_bmp", game.cur_area_data.bg_bmp_file_name)

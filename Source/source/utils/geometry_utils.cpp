@@ -1647,6 +1647,38 @@ bool rectangles_intersect(
 
 
 /* ----------------------------------------------------------------------------
+ * Resizes a pair of size-related coordinates such that they fit the
+ * specified "box" size as snuggly as possible, whilst keeping their original
+ * aspect ratio.
+ * original_size:
+ *   The original size coordinates.
+ * box_size:
+ *   Width and height of the box to fit into.
+ */
+point resize_to_box_keeping_aspect_ratio(
+    const point &original_size,
+    const point &box_size
+) {
+    if(original_size.y == 0.0f || box_size.y == 0.0f) return point();
+    float original_aspect_ratio = original_size.x / original_size.y;
+    float box_aspect_ratio = box_size.x / box_size.y;
+    if(box_aspect_ratio > original_aspect_ratio) {
+        return
+            point(
+                original_size.x * box_size.y / original_size.y,
+                box_size.y
+            );
+    } else {
+        return
+            point(
+                box_size.x,
+                original_size.y * box_size.x / original_size.x
+            );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Rotates a point by an angle.
  * The x and y are meant to represent the difference
  * between the point and the center of the rotation.

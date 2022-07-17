@@ -1392,6 +1392,27 @@ void area_editor::process_gui_panel_info() {
             "Subtitle, if any. Appears on the loading screen."
         );
         
+        //Area description input.
+        string description = game.cur_area_data.description;
+        if(ImGui::InputText("Description", &description)) {
+            register_change("area description change");
+            game.cur_area_data.description = description;
+        }
+        set_tooltip(
+            "A general description about the area, like how it works."
+        );
+        
+        //Area tags input.
+        string tags = game.cur_area_data.tags;
+        if(ImGui::InputText("Tags", &tags)) {
+            register_change("area tags change");
+            game.cur_area_data.tags = tags;
+        }
+        set_tooltip(
+            "Short keywords that describe the area, separated by semicolon.\n"
+            "Example: \"Beach; Gimmick; Short and sweet\""
+        );
+        
         //Area weather combobox.
         vector<string> weather_conditions;
         weather_conditions.push_back(NONE_OPTION);
@@ -1409,6 +1430,89 @@ void area_editor::process_gui_panel_info() {
         set_tooltip(
             "The weather condition to use."
         );
+        
+        ImGui::TreePop();
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Thumbnail node.
+    if(saveable_tree_node("info", "Thumbnail")) {
+    
+        //Thumbnail browse button.
+        if(ImGui::Button("Browse...")) {
+            vector<string> f =
+                prompt_file_dialog(
+                    "",
+                    "Please choose an image to copy over and "
+                    "use as the thumbnail.",
+                    "*.jpg;*.png",
+                    ALLEGRO_FILECHOOSER_FILE_MUST_EXIST |
+                    ALLEGRO_FILECHOOSER_PICTURES
+                );
+                
+            if(!f.empty() && !f[0].empty()) {
+                remove_thumbnail();
+                ALLEGRO_BITMAP* tmp = al_load_bitmap(f[0].c_str());
+                if(tmp) {
+                    al_save_bitmap(
+                        (
+                            get_base_area_folder_path(
+                                game.cur_area_data.type, true
+                            ) +
+                            "/" + game.cur_area_data.folder_name +
+                            "/Thumbnail.png"
+                        ).c_str(),
+                        tmp
+                    );
+                    al_destroy_bitmap(tmp);
+                    game.cur_area_data.load_thumbnail();
+                }
+            }
+            
+        }
+        set_tooltip(
+            "An area's thumbnail is located in the area's folder, and is\n"
+            "named Thumbnail.png. Press the Browse button to copy whatever\n"
+            "file you select into that location, while keeping the original\n"
+            "file in your disk intact.\n"
+            "This will instantly replace your thumbnail with no way of undoing."
+        );
+        
+        //Thumbnail remove button.
+        if(ImGui::Button("Remove thumbnail")) {
+            remove_thumbnail();
+        }
+        set_tooltip(
+            "Removes the current thumbnail, if any.\n"
+            "This will instantly remove your thumbnail with no way of undoing."
+        );
+        
+        //Current thumbnail text.
+        //This needs to come after everything else, because the previous buttons
+        //could delete the bitmap after we already told Dear ImGui that it
+        //would be drawing it.
+        ImGui::Text("Current thumbnail:");
+        
+        if(!game.cur_area_data.thumbnail) {
+            //No thumbnail text.
+            ImGui::Text("None");
+        } else {
+            //Thumbnail image.
+            point size =
+                resize_to_box_keeping_aspect_ratio(
+                    point(
+                        al_get_bitmap_width(game.cur_area_data.thumbnail),
+                        al_get_bitmap_height(game.cur_area_data.thumbnail)
+                    ),
+                    point(200, 200)
+                );
+            ImGui::Image(
+                (void*) game.cur_area_data.thumbnail,
+                ImVec2(size.x, size.y)
+            );
+        }
         
         ImGui::TreePop();
     }
@@ -1539,11 +1643,13 @@ void area_editor::process_gui_panel_info() {
         
         //Notes input.
         string notes = game.cur_area_data.notes;
-        if(ImGui::InputText("Notes", &notes)) {
+        if(ImGui::InputText("Maker notes", &notes)) {
             register_change("area notes change");
             game.cur_area_data.notes = notes;
         }
-        set_tooltip("Extra notes or comments about the area, if any.");
+        set_tooltip(
+            "Extra notes or comments about the area for other makers to see."
+        );
         
         ImGui::TreePop();
     }
