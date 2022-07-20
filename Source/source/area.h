@@ -69,8 +69,8 @@ struct area_data {
     ALLEGRO_BITMAP* thumbnail;
     //Thumbnail, if any.
     string tags;
-    //Mission description, if applicable. Goes from 1 to 5.
-    unsigned char mission_difficulty;
+    //Stage difficulty, if applicable. Goes from 1 to 5.
+    unsigned char difficulty;
     //Who made this area.
     string maker;
     //Optional version number.

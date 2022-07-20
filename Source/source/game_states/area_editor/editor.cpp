@@ -2607,8 +2607,8 @@ bool area_editor::save_area(const bool to_backup) {
     );
     data_file.add(
         new data_node(
-            "mission_difficulty",
-            i2s(game.cur_area_data.mission_difficulty)
+            "difficulty",
+            i2s(game.cur_area_data.difficulty)
         )
     );
     data_file.add(

@@ -25,8 +25,7 @@ area_data::area_data() :
     bg_bmp_zoom(1),
     bg_dist(2),
     bg_color(map_gray(0)),
-    mission_difficulty(3),
-    thumbnail(nullptr) {
+    difficulty(3),
     
 }
 
@@ -303,6 +302,7 @@ void area_data::clone(area_data &other) {
     
     other.name = name;
     other.subtitle = subtitle;
+    other.difficulty = difficulty;
     other.maker = maker;
     other.version = version;
     other.notes = notes;
