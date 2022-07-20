@@ -206,6 +206,9 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             ) {
                 sub_state = EDITOR_SUB_STATE_NONE;
                 status_text.clear();
+            } else if(sub_state == EDITOR_SUB_STATE_MISSION_TREASURES) {
+                change_state(EDITOR_STATE_GAMEPLAY);
+                sub_state = EDITOR_SUB_STATE_NONE;
             } else if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
                 selecting = false;
@@ -292,9 +295,25 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
                     game.cur_area_data.path_stops.end()
                 );
             }
+            
+            update_vertex_selection();
+            set_selection_status_text();
+            
+        } else if(
+            sub_state == EDITOR_SUB_STATE_MISSION_TREASURES
+        ) {
+            register_change("mission object requirements change");
+            for(
+                size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m
+            ) {
+                if(
+                    game.cur_area_data.mob_generators[m]->category->id ==
+                    MOB_CATEGORY_TREASURES
+                ) {
+                    game.cur_area_data.mission_required_mob_idxs.insert(m);
+                }
+            }
         }
-        update_vertex_selection();
-        set_selection_status_text();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C)) {
         if(!moving && !selecting) {
@@ -858,6 +877,32 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             sub_state = EDITOR_SUB_STATE_NONE;
             status_text = "Deleted object link.";
+            
+            break;
+            
+        } case EDITOR_SUB_STATE_MISSION_TREASURES: {
+    
+            size_t clicked_mob_idx;
+            mob_gen* clicked_mob =
+                get_mob_under_point(game.mouse_cursor_w, &clicked_mob_idx);
+                
+            if(
+                clicked_mob_idx != INVALID &&
+                clicked_mob->category->id == MOB_CATEGORY_TREASURES
+            ) {
+                register_change("mission object requirements change");
+                auto it =
+                    game.cur_area_data.mission_required_mob_idxs.find(
+                        clicked_mob_idx
+                    );
+                if(it == game.cur_area_data.mission_required_mob_idxs.end()) {
+                    game.cur_area_data.mission_required_mob_idxs.insert(
+                        clicked_mob_idx
+                    );
+                } else {
+                    game.cur_area_data.mission_required_mob_idxs.erase(it);
+                }
+            }
             
             break;
             

@@ -1317,7 +1317,7 @@ void area_editor::process_gui_panel_gameplay() {
     ImGui::Dummy(ImVec2(0, 16));
     
     //Sprays node.
-    if(saveable_tree_node("info", "Starting sprays")) {
+    if(saveable_tree_node("gameplay", "Starting sprays")) {
     
         map<string, string> spray_strs =
             get_var_map(game.cur_area_data.spray_amounts);
@@ -1345,11 +1345,170 @@ void area_editor::process_gui_panel_gameplay() {
             
         }
         
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
+        ImGui::TreePop();
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Mission goal node.
+    if(saveable_tree_node("gameplay", "Mission goal")) {
+    
+        //Goal combobox.
+        vector<string> goal_strs = {
+            "No goal",
+            "Collect treasures",
+            "Battle enemies",
+            "Survive for a certain time",
+            "Get to the exit",
+            "Reach a certain Pikmin amount"
+        };
+        int cur_goal_idx = game.cur_area_data.mission_goal;
+        if(ImGui::Combo("Goal", &cur_goal_idx, goal_strs)) {
+            register_change("mission requirements change");
+            game.cur_area_data.mission_goal = (MISSION_GOALS) cur_goal_idx;
+        }
+        
+        switch(game.cur_area_data.mission_goal) {
+        case MISSION_GOAL_NONE: {
+    
+            //Explanation text.
+            ImGui::TextWrapped(
+                "The player has no goal. They just play until they have had "
+                "enough, at which point they must finish from the pause menu."
+            );
+            
+            break;
+            
+        }
+        case MISSION_GOAL_COLLECT_TREASURE: {
+    
+            //Explanation text.
+            ImGui::TextWrapped(
+                "The player must collect certain treasures, or all of them."
+            );
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            //Treasure requirements text.
+            ImGui::Text("Treasure requirements:");
+            
+            int requires_all_option =
+                game.cur_area_data.mission_goal_requires_all ? 0 : 1;
+                
+            //All treasures requirement radio button.
+            if(ImGui::RadioButton("All", &requires_all_option, 0)) {
+                register_change("mission requirements change");
+                game.cur_area_data.mission_goal_requires_all =
+                    requires_all_option == 0;
+            }
+            set_tooltip(
+                "Require the player to collect all treasures "
+                "in order to reach the goal."
+            );
+            
+            ImGui::SameLine();
+            
+            //Specific treasures requirement radio button.
+            if(ImGui::RadioButton("Specific ones", &requires_all_option, 1)) {
+                register_change("mission requirements change");
+                game.cur_area_data.mission_goal_requires_all =
+                    requires_all_option == 0;
+            }
+            set_tooltip(
+                "Require the player to collect specific treasures "
+                "in order to reach the goal.\n"
+                "You must specify which treasures these are."
+            );
+            
+            size_t total_required = 0;
+            if(game.cur_area_data.mission_goal_requires_all) {
+            
+                for(
+                    size_t m = 0;
+                    m < game.cur_area_data.mob_generators.size();
+                    ++m
+                ) {
+                    mob_gen* g = game.cur_area_data.mob_generators[m];
+                    if(g->category->id == MOB_CATEGORY_TREASURES) {
+                        total_required++;
+                    }
+                }
+                
+            } else {
+            
+                total_required =
+                    game.cur_area_data.mission_required_mob_idxs.size();
+                    
+                //Start mob selector mode button.
+                if(ImGui::Button("Pick treasures...")) {
+                    change_state(EDITOR_STATE_MOBS);
+                    sub_state = EDITOR_SUB_STATE_MISSION_TREASURES;
+                }
+                set_tooltip(
+                    "Click here to start picking which treasures do and\n"
+                    "do not belong to the required treasure list."
+                );
+                
+            }
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            //Total treasures required text.
+            ImGui::Text("Total treasures required: %lu", total_required);
+            
+            break;
+            
+        }
+        case MISSION_GOAL_BATTLE_ENEMIES: {
+    
+            //Explanation text.
+            ImGui::TextWrapped(
+                "The player must defeat certain enemies, or all of them."
+            );
+            
+            break;
+            
+        }
+        case MISSION_GOAL_TIMED_SURVIVAL: {
+    
+            //Explanation text.
+            ImGui::TextWrapped(
+                "The player must survive for a certain amount of time."
+            );
+            
+            break;
+            
+        }
+        case MISSION_GOAL_GET_TO_EXIT: {
+    
+            //Explanation text.
+            ImGui::TextWrapped(
+                "The player must get a leader or all of them to the exit point."
+            );
+            
+            break;
+            
+        }
+        case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+    
+            //Explanation text.
+            ImGui::TextWrapped(
+                "The player must reach a certain number of total Pikmin."
+            );
+            
+            break;
+            
+        }
+        }
         
         ImGui::TreePop();
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     ImGui::EndChild();
 }
@@ -2113,6 +2272,7 @@ void area_editor::process_gui_panel_main() {
  * Processes the ImGui mob control panel for this frame.
  */
 void area_editor::process_gui_panel_mob() {
+
     mob_gen* m_ptr = *selected_mobs.begin();
     
     //Category and type comboboxes.
@@ -2232,6 +2392,7 @@ void area_editor::process_gui_panel_mob() {
     }
     
     homogenize_selected_mobs();
+    
 }
 
 
@@ -2311,6 +2472,28 @@ void area_editor::process_gui_panel_mobs() {
             "Cancel the link removal.",
             "Escape"
         );
+        
+    } else if(sub_state == EDITOR_SUB_STATE_MISSION_TREASURES) {
+    
+        //Instructions text.
+        ImGui::TextWrapped(
+            "Click a treasure object to mark or unmark it as a required "
+            "object for the mission. Objects flashing yellow are considered "
+            "required. Click the finish button when you are done."
+        );
+        
+        //Total treasures required text.
+        ImGui::Text(
+            "Total treasures required: %lu",
+            game.cur_area_data.mission_required_mob_idxs.size()
+        );
+        
+        //Finish button.
+        if(ImGui::Button("Finish")) {
+            change_state(EDITOR_STATE_GAMEPLAY);
+            sub_state = EDITOR_SUB_STATE_NONE;
+        }
+        set_tooltip("Click here to finish.");
         
     } else {
     

@@ -629,7 +629,15 @@ void area_editor::draw_canvas() {
             al_map_rgba(0, 0, 0, mob_opacity * 255)
         );
         
-        if(selected_mobs.find(m_ptr) != selected_mobs.end()) {
+        if(
+            (
+                selected_mobs.find(m_ptr) != selected_mobs.end()
+            ) || (
+                sub_state == EDITOR_SUB_STATE_MISSION_TREASURES &&
+                game.cur_area_data.mission_required_mob_idxs.find(m) !=
+                game.cur_area_data.mission_required_mob_idxs.end()
+            )
+        ) {
             al_draw_filled_circle(
                 m_ptr->pos.x, m_ptr->pos.y, radius,
                 al_map_rgba(

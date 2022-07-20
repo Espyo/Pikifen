@@ -23,6 +23,23 @@ enum AREA_TYPES {
 };
 
 
+//Possible goals in a mission.
+enum MISSION_GOALS {
+    //No goal. The player plays until they leave from the pause menu.
+    MISSION_GOAL_NONE,
+    //The player must collect certain treasures, or all of them.
+    MISSION_GOAL_COLLECT_TREASURE,
+    //The player must defeat certain enemies, or all of them.
+    MISSION_GOAL_BATTLE_ENEMIES,
+    //The player must survive for a certain amount of time.
+    MISSION_GOAL_TIMED_SURVIVAL,
+    //The player must get a leader or all of them to the exit point.
+    MISSION_GOAL_GET_TO_EXIT,
+    //The player must reach a certain number of total Pikmin.
+    MISSION_GOAL_REACH_PIKMIN_AMOUNT,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A structure that holds all of the
  * info about the current area, so that
@@ -87,6 +104,12 @@ struct area_data {
     string weather_name;
     //Known geometry problems.
     geometry_problems problems;
+    //Mission goal.
+    MISSION_GOALS mission_goal;
+    //Does the mission goal require all relevant items, or just specific ones?
+    bool mission_goal_requires_all;
+    //If the mission goal requires specific items, their mob indexes go here.
+    unordered_set<size_t> mission_required_mob_idxs;
     
     area_data();
     void check_stability();

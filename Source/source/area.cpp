@@ -26,6 +26,9 @@ area_data::area_data() :
     bg_dist(2),
     bg_color(map_gray(0)),
     difficulty(3),
+    thumbnail(nullptr),
+    mission_goal(MISSION_GOAL_NONE),
+    mission_goal_requires_all(true) {
     
 }
 
@@ -302,6 +305,8 @@ void area_data::clone(area_data &other) {
     
     other.name = name;
     other.subtitle = subtitle;
+    other.description = description;
+    other.tags = tags;
     other.difficulty = difficulty;
     other.maker = maker;
     other.version = version;
@@ -309,6 +314,10 @@ void area_data::clone(area_data &other) {
     other.spray_amounts = spray_amounts;
     other.weather_name = weather_name;
     other.weather_condition = weather_condition;
+    
+    other.mission_goal = mission_goal;
+    other.mission_goal_requires_all = mission_goal_requires_all;
+    other.mission_required_mob_idxs = mission_required_mob_idxs;
     
     other.problems.non_simples.clear();
     other.problems.lone_edges.clear();

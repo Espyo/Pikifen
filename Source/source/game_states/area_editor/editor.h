@@ -260,6 +260,8 @@ private:
         EDITOR_SUB_STATE_ADD_MOB_LINK,
         //Deleting a mob link.
         EDITOR_SUB_STATE_DEL_MOB_LINK,
+        //Picking required treasures for the mission.
+        EDITOR_SUB_STATE_MISSION_TREASURES,
         //Drawing paths.
         EDITOR_SUB_STATE_PATH_DRAWING,
         //Adding a new tree shadow.
@@ -601,7 +603,7 @@ private:
         std::pair<mob_gen*, mob_gen*>* data1,
         std::pair<mob_gen*, mob_gen*>* data2
     ) const;
-    mob_gen* get_mob_under_point(const point &p) const;
+    mob_gen* get_mob_under_point(const point &p, size_t* idx = NULL) const;
     bool get_path_link_under_point(
         const point &p, path_link** link1, path_link** link2
     ) const;

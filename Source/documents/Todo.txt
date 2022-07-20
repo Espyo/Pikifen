@@ -17,7 +17,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Hitting a bomb rock with a thrown Rock Pikmin crashes? (thanks Tari)
+    
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -48,7 +48,8 @@ Next tasks (roughly sorted most important first)
                     Any combination of the following:
                         Taking damage
                         Losing Pikmin (1 or any number)
-                        Pikmin extinction (some puzzle/gimmick stages could involve no Pikmin)
+                        Pikmin count reaches a certain number
+                        Total Pikmin extinction (some puzzle/gimmick stages could involve no Pikmin)
                         One leader KO (as opposed to total leader KO)
                         Time limit
                             An optional override for the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
@@ -83,7 +84,10 @@ Next tasks (roughly sorted most important first)
                         Maker and version
                         Extra area notes
                         High scores + their medals (only present if the stage's grading mode is points)
+            The background tint should be like a dark blue instead of just black? (thanks Neo)
         Implement the actual mission gameplay rules
+            Pikmin extinction
+                Check Onions, ships, and converters that have Pikmin in the buffer
         Update the results screen
             For simple areas, explain somehow how there is no grading, but here are some stats anyway
             For mission areas, show the area name and mission goal, mission grading type, all possible stats and how you did on them (or some cross or something representing how that stat is not applicable), and a spot at the end for the final result and medal icon
@@ -92,12 +96,10 @@ Next tasks (roughly sorted most important first)
             Also save when it was achieved, and under what version of the area
             Point down in the manual that the game auto-saves
             It should also save if the stage has never been played
-        Pikmin extinction
-            Check Onions, ships, and converters that have Pikmin in the buffer
         Pause menu adjustments
             The continue button should be a tiny thing on the bottom-left, and the quit option a tiny thing on the bottom-right. (Thanks Neo)
-            The retry and quit buttons should show a confirmation dialog, but it can be disabled in the options. The option for it should have the values "show never", "show always", or "show after 1 minute"
-            The finish button should show an informative and confirmation dialog. This dialog should explain that finishing now will make the following fields of the score become 0, or how the score won't be affected if none
+            The retry and quit buttons should show a confirmation dialog, but it can be disabled in the options. The option for it should have the values "show never", "show always", or "show after 1 minute" (thanks Neo)
+            The finish button should show an informative and confirmation dialog. This dialog should explain that finishing now will make the following fields of the score become 0, or how the score won't be affected if none (thanks Neo)
         Other things
             The radar's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
@@ -472,6 +474,7 @@ Next tasks (roughly sorted most important first)
         Area gameplay
             New area data
                 Areas should let the area maker specify the minimum and maximum number of players/teams that are allowed
+                Area makers can specify where cherries can spawn. If they don't, no cherries spawn
                 If you try to play with a number of players/teams not marked as compatbile by the area maker, the game will still let you, but will give you a warning. If needed, it will then copy-paste the existing leaders such that there are enough for everyone to control
                     It should spawn them in the same coordinates, though maybe slightly offset
                     It should try to generate leaders that don't exist yet, probably following the standard leader order. e.g. If the area has an Olimar, a Louie, and a Brittany, and a 4th player wants in, they should get the President
@@ -711,6 +714,7 @@ Misc things (so I don't forget)
             https://www.reddit.com/r/gamedev/comments/d1a602/how_scrolling_textures_gave_super_mario_galaxy_2/
         Bring back the wobbliness of the liquid limit edge offset effect, lost with the commit on June 17th 2022 -- use a vertex shader for this. You can probably tell which vertexes belong to the edge of the effect (the ones that need the wobble) by checking if their alpha is 0
         Actually have things glow by being colored after the glow's color, instead of a janky tint and addition blend operation
+        Blur the background of the Onion menu, pause menu, etc.
         Enemy spirits?
     Editor improvements
         Area editor

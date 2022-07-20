@@ -353,6 +353,7 @@ bool area_editor::delete_edges(const set<edge*> &which) {
  */
 void area_editor::delete_mobs(const set<mob_gen*> &which) {
     for(auto sm : which) {
+        //Get its index.
         size_t m_i = 0;
         for(; m_i < game.cur_area_data.mob_generators.size(); ++m_i) {
             if(game.cur_area_data.mob_generators[m_i] == sm) break;
@@ -376,6 +377,19 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
             }
         }
         
+        //Check the list of mission requirement objects.
+        unordered_set<size_t> new_mrmi;
+        new_mrmi.reserve(game.cur_area_data.mission_required_mob_idxs.size());
+        for(size_t m2 : game.cur_area_data.mission_required_mob_idxs) {
+            if(m2 > m_i) {
+                new_mrmi.insert(m2 - 1);
+            } else if (m2 != m_i) {
+                new_mrmi.insert(m2);
+            }
+        }
+        game.cur_area_data.mission_required_mob_idxs = new_mrmi;
+        
+        //Finally, delete it.
         game.cur_area_data.mob_generators.erase(
             game.cur_area_data.mob_generators.begin() + m_i
         );
@@ -1297,18 +1311,25 @@ bool area_editor::get_mob_link_under_point(
  * Returns the mob currently under the specified point, or NULL if none.
  * p:
  *   The point to check against.
+ * idx:
+ *   If not NULL, the mob index is returned here. If no mob matches, INVALID
+ *   is returned instead.
  */
-mob_gen* area_editor::get_mob_under_point(const point &p) const {
+mob_gen* area_editor::get_mob_under_point(
+    const point &p, size_t* idx
+) const {
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
         if(
             dist(m_ptr->pos, p) <= get_mob_gen_radius(m_ptr)
         ) {
+            if(idx) *idx = m;
             return m_ptr;
         }
     }
     
+    if(idx) *idx = INVALID;
     return NULL;
 }
 
