@@ -126,7 +126,9 @@ area_editor::area_editor() :
     selection_orig_angle(0.0f),
     show_closest_stop(false),
     show_path_preview(false),
-    show_reference(true) {
+    show_reference(true),
+    thumbnail_needs_saving(false),
+    thumbnail_backup_needs_saving(false) {
     
     path_preview_timer =
     timer(AREA_EDITOR::PATH_PREVIEW_TIMER_DUR, [this] () {
@@ -243,6 +245,9 @@ void area_editor::clear_current_area() {
     has_unsaved_changes = false;
     was_warned_about_unsaved_changes = false;
     backup_timer.start(game.options.area_editor_backup_interval);
+    
+    thumbnail_needs_saving = false;
+    thumbnail_backup_needs_saving = false;
     
     sub_state = EDITOR_SUB_STATE_NONE;
     state = EDITOR_STATE_MAIN;
@@ -1547,9 +1552,6 @@ void area_editor::load_area(
     
     update_all_edge_offset_caches();
     
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
-    
     clear_undo_history();
     update_undo_history();
     area_exists_on_disk = true;
@@ -1581,6 +1583,12 @@ void area_editor::load_backup() {
     );
     backup_timer.start(game.options.area_editor_backup_interval);
     mark_new_changes();
+    
+    //We don't know if the backup's thumbnail is different from the standard
+    //copy's thumbnail. To be safe, just mark it as needing a save. Loading a
+    //backup is such a rare operation that it's worth the effort of re-saving
+    //the bitmap.
+    thumbnail_needs_saving = true;
 }
 
 
@@ -2267,21 +2275,7 @@ void area_editor::register_change(
  * Removes the current area thumbnail, if any.
  */
 void area_editor::remove_thumbnail() {
-    if(game.cur_area_data.thumbnail) {
-        al_destroy_bitmap(
-            game.cur_area_data.thumbnail
-        );
-        game.cur_area_data.thumbnail = NULL;
-        al_remove_filename(
-            (
-                get_base_area_folder_path(
-                    game.cur_area_data.type, true
-                ) +
-                "/" + game.cur_area_data.folder_name +
-                "/Thumbnail.png"
-            ).c_str()
-        );
-    }
+    game.cur_area_data.thumbnail = NULL;
 }
 
 
@@ -2642,6 +2636,28 @@ bool area_editor::save_area(const bool to_backup) {
         new data_node("spray_amounts", game.cur_area_data.spray_amounts)
     );
     
+    //Save the thumbnail, or delete it if none.
+    //al_save_bitmap is slow, so let's only write the thumbnail file
+    //if there have been changes.
+    if(
+        (thumbnail_needs_saving && !to_backup) ||
+        (thumbnail_backup_needs_saving && to_backup)
+    ) {
+        string thumb_path =
+            get_base_area_folder_path(game.cur_area_data.type, !to_backup) +
+            "/" + game.cur_area_data.folder_name +
+            (to_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
+        if(game.cur_area_data.thumbnail) {
+            al_save_bitmap(
+                thumb_path.c_str(), game.cur_area_data.thumbnail.get()
+            );
+        } else {
+            al_remove_filename(thumb_path.c_str());
+        }
+        (to_backup ? thumbnail_backup_needs_saving : thumbnail_needs_saving) =
+            false;
+    }
+    
     
     //Finally, save.
     string geometry_file_name;
@@ -2686,8 +2702,15 @@ bool area_editor::save_area(const bool to_backup) {
     
     save_reference();
     
-    return geo_save_ok && data_save_ok;
+    bool save_successful = geo_save_ok && data_save_ok;
     
+    if(save_successful && !to_backup) {
+        //If this was a normal save, save the backup too, so that the
+        //maker doesn't have an outdated backup.
+        save_backup();
+    }
+    
+    return save_successful;
 }
 
 
@@ -2696,6 +2719,7 @@ bool area_editor::save_area(const bool to_backup) {
  */
 void area_editor::save_backup() {
 
+    //Restart the timer.
     backup_timer.start(game.options.area_editor_backup_interval);
     
     //First, check if the folder even exists.
@@ -3496,6 +3520,8 @@ void area_editor::undo_layout_drawing_node() {
  */
 void area_editor::unload() {
     editor::unload();
+    
+    clear_undo_history();
     
     clear_current_area();
     

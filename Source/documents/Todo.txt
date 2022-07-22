@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -17,7 +17,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    > throwing non red pikmin on an acb while it's on fire kinda just traps them for eternity until the ACB is delivered to an onion (thanks Helodity)
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -143,12 +143,29 @@ Next tasks (roughly sorted most important first)
                 Probably minimize the use of colors, because there can be tons of different Pikmin colors, and they should all be minimally visible
             Icons for treasures, leaders, Onions, ships, Pikmin, and whatever else of importance
             Area name, North indicator
+            Working Pikmin and idle Pikmin counts
+            Controls instructions on the bottom
+            Buttons to swap to the stats page
             Go Here!
+                Controls
+                    Moving the left mouse button:
+                        If you're not on a leader's icon, but still inside the radar, try showing a Go Here! path from the leader to that spot
+                    Releasing the left mouse button:
+                        If you panned the camera with this click, do nothing
+                        If you clicked on a leader's icon, choose that leader for giving Go Here! instructions
+                        Otherwise, start Go Here! to that destination
+                    Moving the left analog stick:
+                        Pan the radar's camera
+                        If the camera center-point is not on a leader's icon, try showing a Go Here! path from the leader to that spot
+                    Releasing the "menu confirm" button:
+                        If the camera center-point is on a leader's icon, choose that leader for giving Go Here! instructions
+                        Otherwise, start Go Here! to the camera center-point
+                If a leader is currently going somewhere, the radar should show their path, whether they are the active leader or not
                 Figure out what to do with sleeping. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
                     Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
-            When it is opened, it should fade in to view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
+            When it is opened, it should fade into view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
             Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
-            Working Pikmin and idle Pikmin counts
+                Also, only pan if the mouse moved a certain amount of pixels
         Stats page
             Table with the amount of Pikmin of each type that is in the Onion, with you, working, idling
             Number of deaths today (careful not to count Candypop Buds as deaths)

@@ -11,6 +11,8 @@
 #ifndef AREA_INCLUDED
 #define AREA_INCLUDED
 
+#include <memory>
+
 #include "sector.h"
 
 
@@ -83,7 +85,7 @@ struct area_data {
     //Area description, if any.
     string description;
     //Area tags, separated by semicolon, if any.
-    ALLEGRO_BITMAP* thumbnail;
+    std::shared_ptr<ALLEGRO_BITMAP> thumbnail;
     //Thumbnail, if any.
     string tags;
     //Stage difficulty, if applicable. Goes from 1 to 5.
@@ -133,7 +135,7 @@ struct area_data {
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
     size_t get_nr_path_links();
-    void load_thumbnail();
+    void load_thumbnail(const string &thumbnail_path);
     edge* new_edge();
     sector* new_sector();
     vertex* new_vertex();

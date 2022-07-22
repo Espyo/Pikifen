@@ -513,7 +513,11 @@ void load_area(
     }
     
     //Thumbnail image.
-    game.cur_area_data.load_thumbnail();
+    string thumbnail_path =
+        get_base_area_folder_path(requested_area_type, !from_backup) +
+        "/" + requested_area_folder_name +
+        (from_backup ? "/Thumbnail_backup.png" : "/Thumbnail.png");
+    game.cur_area_data.load_thumbnail(thumbnail_path);
     
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();

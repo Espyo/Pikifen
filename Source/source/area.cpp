@@ -25,8 +25,8 @@ area_data::area_data() :
     bg_bmp_zoom(1),
     bg_dist(2),
     bg_color(map_gray(0)),
-    difficulty(3),
     thumbnail(nullptr),
+    difficulty(3),
     mission_goal(MISSION_GOAL_NONE),
     mission_goal_requires_all(true) {
     
@@ -118,7 +118,6 @@ void area_data::clear() {
         bg_bmp = NULL;
     }
     if(thumbnail) {
-        al_destroy_bitmap(thumbnail);
         thumbnail = NULL;
     }
     
@@ -303,6 +302,8 @@ void area_data::clone(area_data &other) {
         ot_ptr->bitmap = game.textures.get(t_ptr->file_name, NULL, false);
     }
     
+    other.type = type;
+    other.folder_name = folder_name;
     other.name = name;
     other.subtitle = subtitle;
     other.description = description;
@@ -314,6 +315,8 @@ void area_data::clone(area_data &other) {
     other.spray_amounts = spray_amounts;
     other.weather_name = weather_name;
     other.weather_condition = weather_condition;
+    
+    other.thumbnail = thumbnail;
     
     other.mission_goal = mission_goal;
     other.mission_goal_requires_all = mission_goal_requires_all;
@@ -817,19 +820,22 @@ size_t area_data::get_nr_path_links() {
 /* ----------------------------------------------------------------------------
  * Loads the thumbnail image from the disk and updates the
  * thumbnail class member.
+ * thumbnail_path:
+ *   Path to the bitmap.
  */
-void area_data::load_thumbnail() {
+void area_data::load_thumbnail(const string &thumbnail_path) {
     if(thumbnail) {
-        al_destroy_bitmap(thumbnail);
         thumbnail = NULL;
     }
     
-    string thumbnail_path =
-        get_base_area_folder_path(type, true) +
-        "/" + folder_name + "/Thumbnail.png";
-        
     if(al_filename_exists(thumbnail_path.c_str())) {
-        game.cur_area_data.thumbnail = al_load_bitmap(thumbnail_path.c_str());
+        thumbnail =
+            std::shared_ptr<ALLEGRO_BITMAP>(
+                al_load_bitmap(thumbnail_path.c_str()),
+        [](ALLEGRO_BITMAP * b) {
+            al_destroy_bitmap(b);
+        }
+            );
     }
 }
 

@@ -511,6 +511,10 @@ private:
     point reload_widget_pos;
     //Position of the quit widget.
     point quit_widget_pos;
+    //Was the area's thumbnail changed in any way since the last save?
+    bool thumbnail_needs_saving;
+    //Was the area's thumbnail changed in any way since the last backup save?
+    bool thumbnail_backup_needs_saving;
     
     
     //General functions.

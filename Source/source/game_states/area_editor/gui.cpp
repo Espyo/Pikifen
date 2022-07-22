@@ -1632,40 +1632,29 @@ void area_editor::process_gui_panel_info() {
                 );
                 
             if(!f.empty() && !f[0].empty()) {
+                register_change("area thumbnail change");
                 remove_thumbnail();
-                ALLEGRO_BITMAP* tmp = al_load_bitmap(f[0].c_str());
-                if(tmp) {
-                    al_save_bitmap(
-                        (
-                            get_base_area_folder_path(
-                                game.cur_area_data.type, true
-                            ) +
-                            "/" + game.cur_area_data.folder_name +
-                            "/Thumbnail.png"
-                        ).c_str(),
-                        tmp
-                    );
-                    al_destroy_bitmap(tmp);
-                    game.cur_area_data.load_thumbnail();
-                }
+                game.cur_area_data.load_thumbnail(f[0]);
+                thumbnail_needs_saving = true;
+                thumbnail_backup_needs_saving = true;
             }
             
         }
         set_tooltip(
-            "An area's thumbnail is located in the area's folder, and is\n"
-            "named Thumbnail.png. Press the Browse button to copy whatever\n"
-            "file you select into that location, while keeping the original\n"
-            "file in your disk intact.\n"
-            "This will instantly replace your thumbnail with no way of undoing."
+            "Press the Browse button to set the area's thumbnail. When you\n"
+            "save the area, the thumbnail gets saved into Thumbnail.png in\n"
+            "the area's folder, but the original file you selected with the\n"
+            "Browse button will be left untouched."
         );
         
         //Thumbnail remove button.
         if(ImGui::Button("Remove thumbnail")) {
             remove_thumbnail();
+            thumbnail_needs_saving = true;
+            thumbnail_backup_needs_saving = true;
         }
         set_tooltip(
-            "Removes the current thumbnail, if any.\n"
-            "This will instantly remove your thumbnail with no way of undoing."
+            "Removes the current thumbnail, if any."
         );
         
         //Current thumbnail text.
@@ -1682,13 +1671,13 @@ void area_editor::process_gui_panel_info() {
             point size =
                 resize_to_box_keeping_aspect_ratio(
                     point(
-                        al_get_bitmap_width(game.cur_area_data.thumbnail),
-                        al_get_bitmap_height(game.cur_area_data.thumbnail)
+                        al_get_bitmap_width(game.cur_area_data.thumbnail.get()),
+                        al_get_bitmap_height(game.cur_area_data.thumbnail.get())
                     ),
                     point(200, 200)
                 );
             ImGui::Image(
-                (void*) game.cur_area_data.thumbnail,
+                (void*) game.cur_area_data.thumbnail.get(),
                 ImVec2(size.x, size.y)
             );
         }
