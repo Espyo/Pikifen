@@ -109,9 +109,17 @@ struct area_data {
     //Mission goal.
     MISSION_GOALS mission_goal;
     //Does the mission goal require all relevant items, or just specific ones?
-    bool mission_goal_requires_all;
+    bool mission_requires_all_mobs;
     //If the mission goal requires specific items, their mob indexes go here.
     unordered_set<size_t> mission_required_mob_idxs;
+    //Total amount of something required for the current mission goal.
+    size_t mission_amount;
+    //Mission exit region center coordinates.
+    point mission_exit_center;
+    //Mission exit region dimensions.
+    point mission_exit_size;
+    //How many leaders need to reach the mission's exit region. 0 = all.
+    size_t mission_exit_leaders_required;
     
     area_data();
     void check_stability();

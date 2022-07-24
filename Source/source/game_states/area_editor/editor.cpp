@@ -50,6 +50,8 @@ const size_t MAX_TEXTURE_SUGGESTIONS = 20;
 const unsigned char MIN_CIRCLE_SECTOR_POINTS = 3;
 //Minimum grid interval.
 const float MIN_GRID_INTERVAL = 2.0;
+//Mission exit region minimum size.
+const float MISSION_EXIT_MIN_SIZE = 32.0f;
 //Thickness to use when drawing a mob link line.
 const float MOB_LINK_THICKNESS = 2.0f;
 //Width of the text widget that shows the mouse cursor coordinates.

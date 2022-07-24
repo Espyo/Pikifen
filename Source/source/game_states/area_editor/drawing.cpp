@@ -629,15 +629,14 @@ void area_editor::draw_canvas() {
             al_map_rgba(0, 0, 0, mob_opacity * 255)
         );
         
-        if(
-            (
-                selected_mobs.find(m_ptr) != selected_mobs.end()
-            ) || (
-                sub_state == EDITOR_SUB_STATE_MISSION_TREASURES &&
-                game.cur_area_data.mission_required_mob_idxs.find(m) !=
-                game.cur_area_data.mission_required_mob_idxs.end()
-            )
-        ) {
+        bool is_selected =
+            selected_mobs.find(m_ptr) != selected_mobs.end();
+        bool is_mission_requirement =
+            sub_state == EDITOR_SUB_STATE_MISSION_MOBS &&
+            game.cur_area_data.mission_required_mob_idxs.find(m) !=
+            game.cur_area_data.mission_required_mob_idxs.end();
+            
+        if(is_selected || is_mission_requirement) {
             al_draw_filled_circle(
                 m_ptr->pos.x, m_ptr->pos.y, radius,
                 al_map_rgba(
@@ -650,7 +649,8 @@ void area_editor::draw_canvas() {
             
             if(
                 game.options.area_editor_show_territory &&
-                m_ptr->type->territory_radius > 0
+                m_ptr->type->territory_radius > 0 &&
+                is_selected
             ) {
                 al_draw_circle(
                     m_ptr->pos.x, m_ptr->pos.y, m_ptr->type->territory_radius,
@@ -659,7 +659,8 @@ void area_editor::draw_canvas() {
             }
             if(
                 game.options.area_editor_show_territory &&
-                m_ptr->type->terrain_radius > 0
+                m_ptr->type->terrain_radius > 0 &&
+                is_selected
             ) {
                 al_draw_circle(
                     m_ptr->pos.x, m_ptr->pos.y, m_ptr->type->terrain_radius,
@@ -955,6 +956,17 @@ void area_editor::draw_canvas() {
                 1.0f / game.cam.zoom
             );
         }
+    }
+    
+    //Mission exit region transformation widget.
+    if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
+        float angle = 0;
+        cur_transformation_widget.draw(
+            &game.cur_area_data.mission_exit_center,
+            &game.cur_area_data.mission_exit_size,
+            NULL,
+            1.0f / game.cam.zoom
+        );
     }
     
     //Cross-section points and line.

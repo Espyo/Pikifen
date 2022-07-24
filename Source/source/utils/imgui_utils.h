@@ -34,6 +34,9 @@ bool Combo(
     const string &label, string* current_item, const vector<string> &items,
     const int popup_max_height_in_items = -1
 );
+bool DragTime2(
+    const string &label, int* total_seconds
+);
 bool ImageButtonAndText(
     ALLEGRO_BITMAP* icon, const ImVec2 &icon_size, const float button_padding,
     const string &text

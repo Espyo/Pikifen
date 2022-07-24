@@ -206,7 +206,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             ) {
                 sub_state = EDITOR_SUB_STATE_NONE;
                 status_text.clear();
-            } else if(sub_state == EDITOR_SUB_STATE_MISSION_TREASURES) {
+            } else if(sub_state == EDITOR_SUB_STATE_MISSION_MOBS) {
                 change_state(EDITOR_STATE_GAMEPLAY);
                 sub_state = EDITOR_SUB_STATE_NONE;
             } else if(sub_state == EDITOR_SUB_STATE_NONE) {
@@ -300,15 +300,23 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             set_selection_status_text();
             
         } else if(
-            sub_state == EDITOR_SUB_STATE_MISSION_TREASURES
+            sub_state == EDITOR_SUB_STATE_MISSION_MOBS
         ) {
             register_change("mission object requirements change");
             for(
                 size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m
             ) {
+                size_t category_id =
+                    game.cur_area_data.mission_goal ==
+                    MISSION_GOAL_COLLECT_TREASURE ?
+                    MOB_CATEGORY_TREASURES :
+                    game.cur_area_data.mission_goal ==
+                    MISSION_GOAL_BATTLE_ENEMIES ?
+                    MOB_CATEGORY_ENEMIES :
+                    MOB_CATEGORY_LEADERS;
                 if(
                     game.cur_area_data.mob_generators[m]->category->id ==
-                    MOB_CATEGORY_TREASURES
+                    category_id
                 ) {
                     game.cur_area_data.mission_required_mob_idxs.insert(m);
                 }
@@ -536,6 +544,20 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     }
     
     switch(state) {
+    case EDITOR_STATE_GAMEPLAY: {
+
+        if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
+            cur_transformation_widget.handle_mouse_down(
+                game.mouse_cursor_w,
+                &game.cur_area_data.mission_exit_center,
+                &game.cur_area_data.mission_exit_size,
+                NULL,
+                1.0f / game.cam.zoom
+            );
+        }
+        break;
+        
+    }
     case EDITOR_STATE_LAYOUT: {
 
         switch(sub_state) {
@@ -880,15 +902,24 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             break;
             
-        } case EDITOR_SUB_STATE_MISSION_TREASURES: {
+        } case EDITOR_SUB_STATE_MISSION_MOBS: {
     
             size_t clicked_mob_idx;
             mob_gen* clicked_mob =
                 get_mob_under_point(game.mouse_cursor_w, &clicked_mob_idx);
                 
+            size_t category_id =
+                game.cur_area_data.mission_goal ==
+                MISSION_GOAL_COLLECT_TREASURE ?
+                MOB_CATEGORY_TREASURES :
+                game.cur_area_data.mission_goal ==
+                MISSION_GOAL_BATTLE_ENEMIES ?
+                MOB_CATEGORY_ENEMIES :
+                MOB_CATEGORY_LEADERS;
+                
             if(
                 clicked_mob_idx != INVALID &&
-                clicked_mob->category->id == MOB_CATEGORY_TREASURES
+                clicked_mob->category->id == category_id
             ) {
                 register_change("mission object requirements change");
                 auto it =
@@ -1358,6 +1389,22 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     } else {
     
         switch(state) {
+        case EDITOR_STATE_GAMEPLAY: {
+    
+            if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
+                cur_transformation_widget.handle_mouse_move(
+                    game.mouse_cursor_w,
+                    &game.cur_area_data.mission_exit_center,
+                    &game.cur_area_data.mission_exit_size,
+                    NULL,
+                    1.0f / game.cam.zoom,
+                    false,
+                    AREA_EDITOR::MISSION_EXIT_MIN_SIZE
+                );
+            }
+            break;
+            
+        }
         case EDITOR_STATE_LAYOUT: {
     
             bool tw_handled = false;

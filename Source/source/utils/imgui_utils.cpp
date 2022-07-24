@@ -9,6 +9,8 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
+#include <cmath>
+
 #include "imgui_utils.h"
 
 #include "../imgui/imgui_impl_allegro5.h"
@@ -80,6 +82,51 @@ bool ImGui::Combo(
     } else {
         *current_item = "";
     }
+    
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates two ImGui drag ints, one that sets the number of minutes, one that
+ * sets the number of seconds.
+ * Returns true if either value was changed.
+ * label:
+ *   Widget label.
+ * total_seconds:
+ *   Time in the total amount of seconds.
+ */
+bool ImGui::DragTime2(
+    const string &label, int* total_seconds
+) {
+    int min = std::floor(*total_seconds / 60.0f);
+    int sec = *total_seconds % 60;
+    
+    ImGui::BeginGroup();
+    ImGui::PushID(label.c_str());
+    
+    //Minutes value.
+    ImGui::SetNextItemWidth(80);
+    ImGui::PushID(1);
+    bool result =
+        ImGui::DragInt("", &min, 0.1f, 0, INT_MAX, "%dm");
+    min = std::max(0, min);
+    ImGui::PopID();
+    
+    //Seconds value.
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(80);
+    ImGui::PushID(2);
+    result |=
+        ImGui::DragInt(label.c_str(), &sec, 0.1f, 0, 59, "%ds");
+    sec = std::max(0, sec);
+    sec = std::min(sec, 59);
+    ImGui::PopID();
+    
+    ImGui::PopID();
+    ImGui::EndGroup();
+    
+    *total_seconds = min * 60 + sec;
     
     return result;
 }

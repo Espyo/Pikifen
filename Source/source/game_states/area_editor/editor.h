@@ -36,6 +36,7 @@ extern const float MAX_GRID_INTERVAL;
 extern const size_t MAX_TEXTURE_SUGGESTIONS;
 extern const unsigned char MIN_CIRCLE_SECTOR_POINTS;
 extern const float MIN_GRID_INTERVAL;
+extern const float MISSION_EXIT_MIN_SIZE;
 extern const float MOB_LINK_THICKNESS;
 extern const float MOUSE_COORDS_TEXT_WIDTH;
 extern const float NEW_SECTOR_ERROR_TINT_DURATION;
@@ -246,6 +247,8 @@ private:
     enum EDITOR_SUB_STATES {
         //None.
         EDITOR_SUB_STATE_NONE,
+        //Picking a mission exit region.
+        EDITOR_SUB_STATE_MISSION_EXIT,
         //Drawing a sector.
         EDITOR_SUB_STATE_DRAWING,
         //Drawing a circular sector.
@@ -260,8 +263,8 @@ private:
         EDITOR_SUB_STATE_ADD_MOB_LINK,
         //Deleting a mob link.
         EDITOR_SUB_STATE_DEL_MOB_LINK,
-        //Picking required treasures for the mission.
-        EDITOR_SUB_STATE_MISSION_TREASURES,
+        //Picking required mobs for the mission.
+        EDITOR_SUB_STATE_MISSION_MOBS,
         //Drawing paths.
         EDITOR_SUB_STATE_PATH_DRAWING,
         //Adding a new tree shadow.
