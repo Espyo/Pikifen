@@ -2500,7 +2500,183 @@ void area_editor::process_gui_panel_mission() {
         }
         
         ImGui::TreePop();
+        
     }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Mission loss conditions node.
+    if(saveable_tree_node("gameplay", "Mission loss conditions")) {
+    
+        //Total leader KO checkbox.
+        bool dummy_true = true;
+        ImGui::BeginDisabled();
+        ImGui::Checkbox("Get a total leader KO", &dummy_true);
+        ImGui::EndDisabled();
+        set_tooltip(
+            "A total leader KO always has to end the mission in a loss,\n"
+            "since if that happens, the player won't have any leaders to\n"
+            "keep playing with!"
+        );
+        
+        //Pause menu finish checkbox.
+        ImGui::BeginDisabled();
+        ImGui::Checkbox("Finish from pause menu", &dummy_true);
+        ImGui::EndDisabled();
+        set_tooltip(
+            "Since reaching the mission goal automatically finishes the\n"
+            "mission as a success, if the player can go to the pause menu\n"
+            "and finish there, then naturally they haven't reached the\n"
+            "goal yet. So this method of finishing has to always be a loss."
+        );
+        
+        unsigned int loss_flags =
+            (unsigned int) game.cur_area_data.mission_loss_conditions;
+        bool loss_flags_changed = false;
+        //Reaching a certain Pikmin amount checkbox.
+        loss_flags_changed |=
+            ImGui::CheckboxFlags(
+                "Reach a certain Pikmin amount",
+                &loss_flags, MISSION_LOSS_COND_PIKMIN_AMOUNT
+            );
+        set_tooltip(
+            "The mission ends as a loss if the total Pikmin count reaches\n"
+            "a certain amount. 0 means this only happens with a total\n"
+            "Pikmin extinction. This loss condition isn't forced because the\n"
+            "player might still be able to reach the mission goal using\n"
+            "leaders. Or because you may want to make a mission with\n"
+            "no Pikmin in the first place (like a puzzle stage)."
+        );
+        
+        if(has_flag(loss_flags, MISSION_LOSS_COND_PIKMIN_AMOUNT)) {
+            //Pikmin amount value.
+            int amount =
+                (int) game.cur_area_data.mission_loss_pik_amount;
+            ImGui::Indent();
+            ImGui::SetNextItemWidth(50);
+            if(ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)) {
+                register_change("mission loss conditions change");
+                game.cur_area_data.mission_loss_pik_amount =
+                    (size_t) amount;
+            }
+            set_tooltip(
+                "Pikmin amount that, when reached, ends the mission as a loss.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+        }
+        
+        //Losing Pikmin checkbox.
+        loss_flags_changed |=
+            ImGui::CheckboxFlags(
+                "Lose Pikmin",
+                &loss_flags, MISSION_LOSS_COND_LOSE_PIKMIN
+            );
+        set_tooltip(
+            "The mission ends as a loss if a certain amount of Pikmin die."
+        );
+        
+        if(has_flag(loss_flags, MISSION_LOSS_COND_LOSE_PIKMIN)) {
+            //Pikmin deaths value.
+            int amount =
+                (int) game.cur_area_data.mission_loss_pik_killed;
+            ImGui::Indent();
+            ImGui::SetNextItemWidth(50);
+            if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
+                register_change("mission loss conditions change");
+                game.cur_area_data.mission_loss_pik_killed =
+                    (size_t) amount;
+            }
+            set_tooltip(
+                "Pikmin death amount that, when reached, ends the mission\n"
+                "as a loss.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+        }
+        
+        //Taking damage checkbox.
+        loss_flags_changed |=
+            ImGui::CheckboxFlags(
+                "Take damage",
+                &loss_flags, MISSION_LOSS_COND_TAKE_DAMAGE
+            );
+        set_tooltip(
+            "The mission ends as a loss if any leader loses any health."
+        );
+        
+        //Lose leaders checkbox.
+        loss_flags_changed |=
+            ImGui::CheckboxFlags(
+                "Lose leaders",
+                &loss_flags, MISSION_LOSS_COND_LOSE_LEADERS
+            );
+        set_tooltip(
+            "The mission ends as a loss if a certain amount of leaders get\n"
+            "KO'd. As explained above, losing all leaders is also\n"
+            "a loss no matter what."
+        );
+        
+        if(has_flag(loss_flags, MISSION_LOSS_COND_LOSE_LEADERS)) {
+            //Leader KOs value.
+            int amount =
+                (int) game.cur_area_data.mission_loss_leaders_kod;
+            ImGui::Indent();
+            ImGui::SetNextItemWidth(50);
+            if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
+                register_change("mission loss conditions change");
+                game.cur_area_data.mission_loss_leaders_kod =
+                    (size_t) amount;
+            }
+            set_tooltip(
+                "Leader KO amount that, when reached, ends the mission\n"
+                "as a loss.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+        }
+        
+        //Time limit checkbox.
+        loss_flags_changed |=
+            ImGui::CheckboxFlags(
+                "Reach the time limit",
+                &loss_flags, MISSION_LOSS_COND_TIME_LIMIT
+            );
+        set_tooltip(
+            "The mission ends as a loss if the player spends a certain\n"
+            "amount of time in the mission."
+        );
+        
+        if(has_flag(loss_flags, MISSION_LOSS_COND_TIME_LIMIT)) {
+            //Time limit values.
+            int seconds =
+                (int) game.cur_area_data.mission_loss_time_limit;
+            ImGui::Indent();
+            if(ImGui::DragTime2("Time limit", &seconds)) {
+                register_change("mission loss conditions change");
+                seconds = std::max(seconds, 1);
+                game.cur_area_data.mission_loss_time_limit =
+                    (size_t) seconds;
+            }
+            set_tooltip(
+                "Time limit that, when reached, ends the mission\n"
+                "as a loss.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+        }
+        
+        if(loss_flags_changed) {
+            register_change("mission loss conditions change");
+            game.cur_area_data.mission_loss_conditions =
+                (uint8_t) loss_flags;
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
 }
 
 

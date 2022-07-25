@@ -32,7 +32,12 @@ area_data::area_data() :
     mission_amount(0),
     mission_exit_size(
         AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
-    ) {
+    ),
+    mission_loss_conditions(0),
+    mission_loss_pik_amount(0),
+    mission_loss_pik_killed(1),
+    mission_loss_leaders_kod(1),
+    mission_loss_time_limit(1) {
     
 }
 
@@ -148,6 +153,11 @@ void area_data::clear() {
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE
         );
+    mission_loss_conditions = 0;
+    mission_loss_pik_amount = 0;
+    mission_loss_pik_killed = 1;
+    mission_loss_leaders_kod = 1;
+    mission_loss_time_limit = 1;
     
     problems.non_simples.clear();
     problems.lone_edges.clear();
@@ -338,6 +348,11 @@ void area_data::clone(area_data &other) {
     other.mission_amount = mission_amount;
     other.mission_exit_center = mission_exit_center;
     other.mission_exit_size = mission_exit_size;
+    other.mission_loss_conditions = mission_loss_conditions;
+    other.mission_loss_pik_amount = mission_loss_pik_amount;
+    other.mission_loss_pik_killed = mission_loss_pik_killed;
+    other.mission_loss_leaders_kod = mission_loss_leaders_kod;
+    other.mission_loss_time_limit = mission_loss_time_limit;
     
     other.problems.non_simples.clear();
     other.problems.lone_edges.clear();

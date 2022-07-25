@@ -109,7 +109,7 @@ bool ImGui::DragTime2(
     ImGui::SetNextItemWidth(80);
     ImGui::PushID(1);
     bool result =
-        ImGui::DragInt("", &min, 0.1f, 0, INT_MAX, "%dm");
+        ImGui::DragInt("", &min, 0.1f, 0, INT_MAX, "%02dm");
     min = std::max(0, min);
     ImGui::PopID();
     
@@ -118,7 +118,7 @@ bool ImGui::DragTime2(
     ImGui::SetNextItemWidth(80);
     ImGui::PushID(2);
     result |=
-        ImGui::DragInt(label.c_str(), &sec, 0.1f, 0, 59, "%ds");
+        ImGui::DragInt(label.c_str(), &sec, 0.1f, 0, 59, "%02ds");
     sec = std::max(0, sec);
     sec = std::min(sec, 59);
     ImGui::PopID();

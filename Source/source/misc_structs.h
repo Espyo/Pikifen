@@ -221,9 +221,9 @@ struct camera_info {
  */
 struct enum_name_database {
 public:
-    void register_item(const int enum_idx, const string &name);
-    int get_idx(const string &name) const;
-    string get_name(const int idx) const;
+    void register_item(const size_t enum_idx, const string &name);
+    size_t get_idx(const string &name) const;
+    string get_name(const size_t idx) const;
     size_t get_nr_of_items() const;
     
 private:

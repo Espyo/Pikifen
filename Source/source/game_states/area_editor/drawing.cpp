@@ -960,7 +960,6 @@ void area_editor::draw_canvas() {
     
     //Mission exit region transformation widget.
     if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
-        float angle = 0;
         cur_transformation_widget.draw(
             &game.cur_area_data.mission_exit_center,
             &game.cur_area_data.mission_exit_size,

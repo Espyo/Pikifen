@@ -41,6 +41,20 @@ enum MISSION_GOALS {
     MISSION_GOAL_REACH_PIKMIN_AMOUNT,
 };
 
+//Possible ways to lose a mission. This should be a bitmask.
+enum MISSION_LOSS_CONDITIONS {
+    //Reaching a certain Pikmin amount. 0 = total extinction.
+    MISSION_LOSS_COND_PIKMIN_AMOUNT = 0x01,
+    //Losing a certain amount of Pikmin.
+    MISSION_LOSS_COND_LOSE_PIKMIN = 0x02,
+    //A leader takes damage.
+    MISSION_LOSS_COND_TAKE_DAMAGE = 0x04,
+    //Losing a certain amount of leaders.
+    MISSION_LOSS_COND_LOSE_LEADERS = 0x08,
+    //Reaching the time limit.
+    MISSION_LOSS_COND_TIME_LIMIT = 0x10,
+};
+
 
 /* ----------------------------------------------------------------------------
  * A structure that holds all of the
@@ -118,6 +132,16 @@ struct area_data {
     point mission_exit_center;
     //Mission exit region dimensions.
     point mission_exit_size;
+    //Mission loss conditions bitmask.
+    uint8_t mission_loss_conditions;
+    //Amount for the "reach Pikmin amount" mission loss condition.
+    size_t mission_loss_pik_amount;
+    //Amount for the "lose Pikmin" mission loss condition.
+    size_t mission_loss_pik_killed;
+    //Amount for the "lose leaders" mission loss condition.
+    size_t mission_loss_leaders_kod;
+    //Seconds amount for the "time limit" mission loss condition.
+    size_t mission_loss_time_limit;
     
     area_data();
     void check_stability();

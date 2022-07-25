@@ -1396,7 +1396,7 @@ void editor::set_tooltip(
         return;
     }
     
-    if(ImGui::IsItemHovered()) {
+    if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
         ImGui::BeginTooltip();
         
         ImGui::Text("%s", explanation.c_str());

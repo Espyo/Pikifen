@@ -424,7 +424,7 @@ edge_offset_cache::edge_offset_cache() :
  * idx:
  *   Index number of the item.
  */
-string enum_name_database::get_name(const int nr) const {
+string enum_name_database::get_name(const size_t nr) const {
     if(nr < names.size()) return names[nr];
     return "";
 }
@@ -436,8 +436,8 @@ string enum_name_database::get_name(const int nr) const {
  * name:
  *   Name of the item.
  */
-int enum_name_database::get_idx(const string &name) const {
-    for(int n = 0; n < names.size(); ++n) {
+size_t enum_name_database::get_idx(const string &name) const {
+    for(size_t n = 0; n < names.size(); ++n) {
         if(names[n] == name) return n;
     }
     return INVALID;
@@ -460,7 +460,7 @@ size_t enum_name_database::get_nr_of_items() const {
  *   Its name.
  */
 void enum_name_database::register_item(
-    const int idx, const string &name
+    const size_t idx, const string &name
 ) {
     if(idx >= names.size()) {
         names.insert(names.end(), (idx + 1) - names.size(), "");
