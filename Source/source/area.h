@@ -118,8 +118,6 @@ struct area_data {
     point mission_exit_center;
     //Mission exit region dimensions.
     point mission_exit_size;
-    //How many leaders need to reach the mission's exit region. 0 = all.
-    size_t mission_exit_leaders_required;
     
     area_data();
     void check_stability();

@@ -679,6 +679,7 @@ private:
     void process_gui_panel_info();
     void process_gui_panel_layout();
     void process_gui_panel_main();
+    void process_gui_panel_mission();
     void process_gui_panel_mob();
     void process_gui_panel_mobs();
     void process_gui_panel_options();

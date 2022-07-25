@@ -71,6 +71,8 @@ void load_area(
     data_node data_file(data_file_name);
     reader_setter rs(&data_file);
     
+    string mission_goal_str;
+    string mission_required_mobs_str;
     data_node* weather_node = NULL;
     
     rs.set("name", game.cur_area_data.name);
@@ -88,6 +90,28 @@ void load_area(
     rs.set("bg_color", game.cur_area_data.bg_color);
     rs.set("bg_dist", game.cur_area_data.bg_dist);
     rs.set("bg_zoom", game.cur_area_data.bg_bmp_zoom);
+    rs.set("mission_goal", mission_goal_str);
+    rs.set("mission_amount", game.cur_area_data.mission_amount);
+    rs.set(
+        "mission_requires_all_mobs",
+        game.cur_area_data.mission_requires_all_mobs
+    );
+    rs.set("mission_required_mobs", mission_required_mobs_str);
+    rs.set("mission_exit_center", game.cur_area_data.mission_exit_center);
+    rs.set("mission_exit_size", game.cur_area_data.mission_exit_size);
+    
+    game.cur_area_data.mission_goal =
+        (MISSION_GOALS) game.mission_goals.get_idx(mission_goal_str);
+    vector<string> mission_required_mobs_strs =
+        split(mission_required_mobs_str, ";");
+    game.cur_area_data.mission_required_mob_idxs.reserve(
+        mission_required_mobs_strs.size()
+    );
+    for(size_t m = 0; m < mission_required_mobs_strs.size(); ++m) {
+        game.cur_area_data.mission_required_mob_idxs.insert(
+            s2i(mission_required_mobs_strs[m])
+        );
+    }
     
     if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
     if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
@@ -250,7 +274,8 @@ void load_area(
         sector* new_sector = new sector();
         
         new_sector->type =
-            game.sector_types.get_nr(
+            (SECTOR_TYPES)
+            game.sector_types.get_idx(
                 sector_data->get_child_by_name("type")->value
             );
         if(new_sector->type == 255) new_sector->type = SECTOR_TYPE_NORMAL;

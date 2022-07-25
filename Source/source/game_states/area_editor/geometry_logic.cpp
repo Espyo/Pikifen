@@ -1753,6 +1753,11 @@ void area_editor::resize_everything(const float mults[2]) {
         s_ptr->sway.x   *= mults[0];
         s_ptr->sway.y   *= mults[1];
     }
+    
+    game.cur_area_data.mission_exit_center.x *= mults[0];
+    game.cur_area_data.mission_exit_center.y *= mults[1];
+    game.cur_area_data.mission_exit_size.x *= mults[0];
+    game.cur_area_data.mission_exit_size.y *= mults[1];
 }
 
 

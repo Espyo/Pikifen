@@ -2638,6 +2638,65 @@ bool area_editor::save_area(const bool to_backup) {
         new data_node("spray_amounts", game.cur_area_data.spray_amounts)
     );
     
+    if(game.cur_area_data.mission_goal != MISSION_GOAL_NONE) {
+        data_file.add(
+            new data_node(
+                "mission_goal",
+                game.mission_goals.get_name(game.cur_area_data.mission_goal)
+            )
+        );
+    }
+    if(
+        game.cur_area_data.mission_goal == MISSION_GOAL_TIMED_SURVIVAL ||
+        game.cur_area_data.mission_goal == MISSION_GOAL_REACH_PIKMIN_AMOUNT
+    ) {
+        data_file.add(
+            new data_node(
+                "mission_amount",
+                i2s(game.cur_area_data.mission_amount)
+            )
+        );
+    }
+    if(
+        game.cur_area_data.mission_goal == MISSION_GOAL_COLLECT_TREASURE ||
+        game.cur_area_data.mission_goal == MISSION_GOAL_BATTLE_ENEMIES ||
+        game.cur_area_data.mission_goal == MISSION_GOAL_GET_TO_EXIT
+    ) {
+        data_file.add(
+            new data_node(
+                "mission_requires_all_mobs",
+                b2s(game.cur_area_data.mission_requires_all_mobs)
+            )
+        );
+        string mission_mob_idxs;
+        for(size_t i : game.cur_area_data.mission_required_mob_idxs) {
+            if(!mission_mob_idxs.empty()) mission_mob_idxs += ";";
+            mission_mob_idxs += i2s(i);
+        }
+        if(!mission_mob_idxs.empty()) {
+            data_file.add(
+                new data_node(
+                    "mission_required_mobs",
+                    mission_mob_idxs
+                )
+            );
+        }
+    }
+    if(game.cur_area_data.mission_goal == MISSION_GOAL_GET_TO_EXIT) {
+        data_file.add(
+            new data_node(
+                "mission_exit_center",
+                p2s(game.cur_area_data.mission_exit_center)
+            )
+        );
+        data_file.add(
+            new data_node(
+                "mission_exit_size",
+                p2s(game.cur_area_data.mission_exit_size)
+            )
+        );
+    }
+    
     //Save the thumbnail, or delete it if none.
     //al_save_bitmap is slow, so let's only write the thumbnail file
     //if there have been changes.

@@ -419,6 +419,58 @@ edge_offset_cache::edge_offset_cache() :
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the name of an item, given its index number.
+ * Returns an empty string on error.
+ * idx:
+ *   Index number of the item.
+ */
+string enum_name_database::get_name(const int nr) const {
+    if(nr < names.size()) return names[nr];
+    return "";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the index number of an item, given its name.
+ * Returns INVALID on error.
+ * name:
+ *   Name of the item.
+ */
+int enum_name_database::get_idx(const string &name) const {
+    for(int n = 0; n < names.size(); ++n) {
+        if(names[n] == name) return n;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of items registered.
+ */
+size_t enum_name_database::get_nr_of_items() const {
+    return names.size();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a new item.
+ * idx:
+ *   Its index number.
+ * name:
+ *   Its name.
+ */
+void enum_name_database::register_item(
+    const int idx, const string &name
+) {
+    if(idx >= names.size()) {
+        names.insert(names.end(), (idx + 1) - names.size(), "");
+    }
+    names[idx] = name;
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Creates a fade manager.
  */
 fade_manager::fade_manager() :

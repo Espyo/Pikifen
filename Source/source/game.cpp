@@ -309,7 +309,7 @@ int game_class::start() {
     //Init and load some engine things.
     init_mob_actions();
     init_mob_categories();
-    init_sector_types();
+    init_enum_name_databases();
     load_game_config();
     load_maker_tools();
     save_maker_tools();

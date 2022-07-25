@@ -30,7 +30,6 @@ area_data::area_data() :
     mission_goal(MISSION_GOAL_NONE),
     mission_requires_all_mobs(true),
     mission_amount(0),
-    mission_exit_leaders_required(0),
     mission_exit_size(
         AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
     ) {
@@ -149,7 +148,6 @@ void area_data::clear() {
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE
         );
-    mission_exit_leaders_required = 0;
     
     problems.non_simples.clear();
     problems.lone_edges.clear();
@@ -340,7 +338,6 @@ void area_data::clone(area_data &other) {
     other.mission_amount = mission_amount;
     other.mission_exit_center = mission_exit_center;
     other.mission_exit_size = mission_exit_size;
-    other.mission_exit_leaders_required = mission_exit_leaders_required;
     
     other.problems.non_simples.clear();
     other.problems.lone_edges.clear();

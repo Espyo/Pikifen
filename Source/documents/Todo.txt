@@ -2,18 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Each stage should have the following data:
-        Mission areas:
-            A goal
-                One of the following (partial thanks Jimble, Helodity):
-                    Collect treasures (specified ones or all)
-                    Defeat enemies (specified ones or all)
-                    Survive for the specified time
-                    Reach the exit (specified leaders or all)
-                    Grow the specified Pikmin amount
-                    Bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
-                    No goal
-                Triggering the goal instantly finishes the level as a "victory"
+
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -60,7 +49,8 @@ Next tasks (roughly sorted most important first)
                 Scoring data
                     In the case of points mode, also the score weights and the medal thresholds
                 Maybe...
-                    A win condition for reaching X sprays of type Y
+                    A goal where you reach X sprays of type Y
+                    A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
                     A loss condition for killing an enemy
         Area selection menu changes
             Left side of the area selection menu proper
@@ -88,6 +78,7 @@ Next tasks (roughly sorted most important first)
         Implement the actual mission gameplay rules
             Pikmin extinction
                 Check Onions, ships, and converters that have Pikmin in the buffer
+            Reaching the mission's goal instantly finishes the mission as a "victory"
         Update the results screen
             For simple areas, explain somehow how there is no grading, but here are some stats anyway
             For mission areas, show the area name and mission goal, mission grading type, all possible stats and how you did on them (or some cross or something representing how that stat is not applicable), and a spot at the end for the final result and medal icon
@@ -485,6 +476,8 @@ Next tasks (roughly sorted most important first)
                 Starting Pikmin for each team
                 Number of leaders for each team (if this is, for instance, set to 1, but players play 2v2, then each team will forcefully have 2 leaders instead)
                 Pikmin killed by other Pikmin are reborn at the Onion, or lost permanently
+            A special "random" ruleset, included with the engine, and that cannot be deleted. Picking this will pick a ruleset at random after every match
+                Maybe add a way for this feature to exclude certain rulesets? Some people can make meme rulesets to use once or twice, and don't want them to be picked during a chill everyday "random ruleset" session
         A way for attack hitboxes to cause no knockback, otherwise Pikmin battles will keep knocking the Pikmin down
             Maybe add three types of knockback: none, flinch (makes leaders reel back in pain and Pikmin fall over), and chuck
         Onions should be able to auto-eject seeds

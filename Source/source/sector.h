@@ -395,27 +395,6 @@ struct geometry_problems {
 
 
 
-/* ----------------------------------------------------------------------------
- * Just a list of the different sector types.
- * The SECTOR_TYPE_* constants are meant to be used here.
- * This is a vector instead of a map because hopefully,
- * the numbers are filled in sequence, as they're from
- * an enum, hence, there are no gaps.
- */
-struct sector_types_manager {
-public:
-    void register_type(const SECTOR_TYPES nr, const string &name);
-    SECTOR_TYPES get_nr(const string &name) const;
-    string get_name(const SECTOR_TYPES nr) const;
-    size_t get_nr_of_types() const;
-    
-private:
-    //Known sector types.
-    vector<string> names;
-    
-};
-
-
 void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes

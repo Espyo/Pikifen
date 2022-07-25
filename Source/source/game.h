@@ -132,14 +132,16 @@ public:
     point mouse_cursor_s;
     //OS mouse cursor position, in world coordinates.
     point mouse_cursor_w;
+    //Database of all mission goals and their names.
+    enum_name_database mission_goals;
     //Global audio mixer.
     ALLEGRO_MIXER* mixer;
     //User options.
     options_struct options;
     //Performance monitor.
     performance_monitor_struct* perf_mon;
-    //Manager of all sector types.
-    sector_types_manager sector_types;
+    //Database of all sector types and their names.
+    enum_name_database sector_types;
     //Screen to world coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM screen_to_world_transform;
     //Should we be showing system info? (Framerate, version, etc.)

@@ -306,6 +306,38 @@ void init_dear_imgui() {
 
 
 /* ----------------------------------------------------------------------------
+ * Initializes the list of sector types, mission goals, etc.
+ */
+void init_enum_name_databases() {
+    game.sector_types.register_item(
+        SECTOR_TYPE_NORMAL, "Normal"
+    );
+    game.sector_types.register_item(
+        SECTOR_TYPE_BLOCKING, "Blocking"
+    );
+    
+    game.mission_goals.register_item(
+        MISSION_GOAL_NONE, "None"
+    );
+    game.mission_goals.register_item(
+        MISSION_GOAL_COLLECT_TREASURE, "Collect treasures"
+    );
+    game.mission_goals.register_item(
+        MISSION_GOAL_BATTLE_ENEMIES, "Battle enemies"
+    );
+    game.mission_goals.register_item(
+        MISSION_GOAL_TIMED_SURVIVAL, "Survive for a certain time"
+    );
+    game.mission_goals.register_item(
+        MISSION_GOAL_GET_TO_EXIT, "Get to the exit"
+    );
+    game.mission_goals.register_item(
+        MISSION_GOAL_REACH_PIKMIN_AMOUNT, "Reach a certain Pikmin amount"
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes the error bitmap.
  */
 void init_error_bitmap() {
@@ -1239,15 +1271,6 @@ void init_mob_categories() {
     game.mob_categories.register_category(
         MOB_CATEGORY_CUSTOM, new custom_category()
     );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Initializes the list of sector types.
- */
-void init_sector_types() {
-    game.sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
-    game.sector_types.register_type(SECTOR_TYPE_BLOCKING, "Blocking");
 }
 
 

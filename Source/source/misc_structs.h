@@ -217,6 +217,23 @@ struct camera_info {
 
 
 /* ----------------------------------------------------------------------------
+ * Just a list of different elements in an enum and what their names are.
+ */
+struct enum_name_database {
+public:
+    void register_item(const int enum_idx, const string &name);
+    int get_idx(const string &name) const;
+    string get_name(const int idx) const;
+    size_t get_nr_of_items() const;
+    
+private:
+    //Known items.
+    vector<string> names;
+    
+};
+
+
+/* ----------------------------------------------------------------------------
  * Contains info about a token in a string.
  */
 struct string_token {
