@@ -16,6 +16,18 @@
 #include "utils/string_utils.h"
 
 
+namespace AREA {
+//Default difficulty.
+const unsigned char DEF_DIFFICULTY = 3;
+//Default day time at the start of the area, in minutes.
+const size_t DEF_DAY_TIME_START = 7 * 60;
+//Default day time speed, in game-minutes per real-minutes.
+const float DEF_DAY_TIME_SPEED = 120;
+//Default mission time limit duration, in seconds.
+const size_t DEF_MISSION_TIME_LIMIT = 60;
+};
+
+
 /* ----------------------------------------------------------------------------
  * Creates info on an area.
  */
@@ -26,7 +38,9 @@ area_data::area_data() :
     bg_dist(2),
     bg_color(map_gray(0)),
     thumbnail(nullptr),
-    difficulty(3),
+    difficulty(AREA::DEF_DIFFICULTY),
+    day_time_start(AREA::DEF_DAY_TIME_START),
+    day_time_speed(AREA::DEF_DAY_TIME_SPEED),
     mission_goal(MISSION_GOAL_NONE),
     mission_requires_all_mobs(true),
     mission_amount(0),
@@ -37,7 +51,7 @@ area_data::area_data() :
     mission_loss_pik_amount(0),
     mission_loss_pik_killed(1),
     mission_loss_leaders_kod(1),
-    mission_loss_time_limit(1) {
+    mission_loss_time_limit(AREA::DEF_MISSION_TIME_LIMIT) {
     
 }
 
@@ -134,11 +148,17 @@ void area_data::clear() {
     folder_name.clear();
     type = AREA_TYPE_SIMPLE;
     subtitle.clear();
+    description.clear();
+    tags.clear();
+    difficulty = AREA::DEF_DIFFICULTY;
     maker.clear();
     version.clear();
     notes.clear();
+    engine_version.clear();
     spray_amounts.clear();
     weather_name.clear();
+    day_time_start = AREA::DEF_DAY_TIME_START;
+    day_time_speed = AREA::DEF_DAY_TIME_SPEED;
     bg_bmp_file_name.clear();
     bg_color = COLOR_BLACK;
     bg_dist = 2.0f;
@@ -157,7 +177,7 @@ void area_data::clear() {
     mission_loss_pik_amount = 0;
     mission_loss_pik_killed = 1;
     mission_loss_leaders_kod = 1;
-    mission_loss_time_limit = 1;
+    mission_loss_time_limit = AREA::DEF_MISSION_TIME_LIMIT;
     
     problems.non_simples.clear();
     problems.lone_edges.clear();
@@ -339,6 +359,8 @@ void area_data::clone(area_data &other) {
     other.spray_amounts = spray_amounts;
     other.weather_name = weather_name;
     other.weather_condition = weather_condition;
+    other.day_time_start = day_time_start;
+    other.day_time_speed = day_time_speed;
     
     other.thumbnail = thumbnail;
     

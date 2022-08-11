@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -48,10 +48,6 @@ Next tasks (roughly sorted most important first)
                         Quitting via the pause menu
                 Scoring data
                     In the case of points mode, also the score weights and the medal thresholds
-                Maybe...
-                    A goal where you reach X sprays of type Y
-                    A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
-                    A loss condition for killing an enemy
         Area selection menu changes
             Left side of the area selection menu proper
                 The list of areas, with their names and a medal icon next to each
@@ -78,11 +74,13 @@ Next tasks (roughly sorted most important first)
         Implement the actual mission gameplay rules
             Pikmin extinction
                 Check Onions, ships, and converters that have Pikmin in the buffer
+            The total Pikmin count rule should only count plucked Pikmin; be careful not to count Candypop Bud plucks or Snitchbug plucks
             Reaching the mission's goal instantly finishes the mission as a "victory"
         Update the results screen
             For simple areas, explain somehow how there is no grading, but here are some stats anyway
             For mission areas, show the area name and mission goal, mission grading type, all possible stats and how you did on them (or some cross or something representing how that stat is not applicable), and a spot at the end for the final result and medal icon
         Create states for a "ready? go!" transition and a "mission over!" transition
+        [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area
             Point down in the manual that the game auto-saves
@@ -91,12 +89,15 @@ Next tasks (roughly sorted most important first)
             The continue button should be a tiny thing on the bottom-left, and the quit option a tiny thing on the bottom-right. (Thanks Neo)
             The retry and quit buttons should show a confirmation dialog, but it can be disabled in the options. The option for it should have the values "show never", "show always", or "show after 1 minute" (thanks Neo)
             The finish button should show an informative and confirmation dialog. This dialog should explain that finishing now will make the following fields of the score become 0, or how the score won't be affected if none (thanks Neo)
+            If you finish through the pause menu, you shouldn't be allowed to continue...you specifically said you didn't want to play any more
+                Also, don't let the player continue if they finished the mission via victory
         Other things
             The radar's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
             The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that
             Simple areas shouldn't have a time limit
             When playing a mission through the area editor's quick play, high scores shouldn't be saved
+            The results screen should have a "New record!" blurb when you get a new record
     Statistics menu, which keeps track of:
         Engine use
             Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd
@@ -767,6 +768,12 @@ Misc things (so I don't forget)
         Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
     HUD element for a digital clock?
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
+    Ideas for mission mode
+        A goal where you reach X sprays of type Y
+        A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
+        A loss condition for killing an enemy
+        A loss condition for an enemy/enemy type dying (thanks Neo)
+        A loss condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
         Maker tools should be bound to buttons in the same way the regular controls are, instead of being stuck in the number and F keys

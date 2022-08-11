@@ -41,6 +41,7 @@ enum MISSION_GOALS {
     MISSION_GOAL_REACH_PIKMIN_AMOUNT,
 };
 
+
 //Possible ways to lose a mission. This should be a bitmask.
 enum MISSION_LOSS_CONDITIONS {
     //Reaching a certain Pikmin amount. 0 = total extinction.
@@ -53,6 +54,14 @@ enum MISSION_LOSS_CONDITIONS {
     MISSION_LOSS_COND_LOSE_LEADERS = 0x08,
     //Reaching the time limit.
     MISSION_LOSS_COND_TIME_LIMIT = 0x10,
+};
+
+
+namespace AREA {
+extern const unsigned char DEF_DIFFICULTY;
+extern const size_t DEF_DAY_TIME_START;
+extern const float DEF_DAY_TIME_SPEED;
+extern const float DEF_MISSION_TIME_LIMIT;
 };
 
 
@@ -118,6 +127,10 @@ struct area_data {
     weather weather_condition;
     //Name of the weather condition to use.
     string weather_name;
+    //Area day time at the start of the area. This is in minutes.
+    size_t day_time_start;
+    //Area day time speed, in game-minutes per real-minutes.
+    float day_time_speed;
     //Known geometry problems.
     geometry_problems problems;
     //Mission goal.

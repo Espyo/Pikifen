@@ -157,6 +157,29 @@ area_editor::area_editor() :
 
 
 /* ----------------------------------------------------------------------------
+ * Calculates what the day speed should be taking into account the specified
+ * start day time, end day time, and mission duration.
+ * day_start_min:
+ *   Day start time, in minutes.
+ * day_end_min:
+ *   Day end time, in minutes.
+ * mission_min:
+ *   Mission duration, in minutes.
+ */
+float area_editor::calculate_day_speed(
+    const size_t day_start_min, const size_t day_end_min,
+    const float mission_min
+) {
+    if(mission_min == 0.0f) return 0.0f;
+    size_t aux_day_end_min = day_end_min;
+    if(day_end_min < day_start_min) {
+        aux_day_end_min += 24 * 60;
+    }
+    return (aux_day_end_min - day_start_min) / mission_min;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Cancels the circular sector creation operation and returns to normal.
  */
 void area_editor::cancel_circle_sector() {

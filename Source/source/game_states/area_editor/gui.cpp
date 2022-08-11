@@ -1455,24 +1455,6 @@ void area_editor::process_gui_panel_info() {
             "Example: \"Beach; Gimmick; Short and sweet\""
         );
         
-        //Area weather combobox.
-        vector<string> weather_conditions;
-        weather_conditions.push_back(NONE_OPTION);
-        for(auto w : game.weather_conditions) {
-            weather_conditions.push_back(w.first);
-        }
-        if(game.cur_area_data.weather_name.empty()) {
-            game.cur_area_data.weather_name = NONE_OPTION;
-        }
-        string weather_name = game.cur_area_data.weather_name;
-        if(ImGui::Combo("Weather", &weather_name, weather_conditions)) {
-            register_change("area weather change");
-            game.cur_area_data.weather_name = weather_name;
-        }
-        set_tooltip(
-            "The weather condition to use."
-        );
-        
         //Difficulty value.
         int difficulty = game.cur_area_data.difficulty;
         ImGui::SetNextItemWidth(50);
@@ -1492,6 +1474,111 @@ void area_editor::process_gui_panel_info() {
             "Or anything in between.",
             "", WIDGET_EXPLANATION_DRAG
         );
+        
+        ImGui::TreePop();
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Ambiance node.
+    if(saveable_tree_node("info", "Ambiance")) {
+        //Area weather combobox.
+        vector<string> weather_conditions;
+        weather_conditions.push_back(NONE_OPTION);
+        for(auto w : game.weather_conditions) {
+            weather_conditions.push_back(w.first);
+        }
+        if(game.cur_area_data.weather_name.empty()) {
+            game.cur_area_data.weather_name = NONE_OPTION;
+        }
+        string weather_name = game.cur_area_data.weather_name;
+        if(ImGui::Combo("Weather", &weather_name, weather_conditions)) {
+            register_change("area weather change");
+            game.cur_area_data.weather_name = weather_name;
+        }
+        set_tooltip(
+            "The weather condition to use."
+        );
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        bool has_time_limit =
+            game.cur_area_data.type == AREA_TYPE_MISSION &&
+            has_flag(
+                game.cur_area_data.mission_loss_conditions,
+                MISSION_LOSS_COND_TIME_LIMIT
+            );
+        float mission_min = game.cur_area_data.mission_loss_time_limit / 60.0f;
+        int day_start_min = game.cur_area_data.day_time_start;
+        day_start_min = wrap_float(day_start_min, 0, 60 * 24);
+        float day_speed = game.cur_area_data.day_time_speed;
+        int day_end_min = day_start_min + mission_min * day_speed;
+        day_end_min = wrap_float(day_end_min, 0, 60 * 24);
+        
+        //Area day time at start value.
+        if(
+            ImGui::DragTime2(
+                "Start day time", &day_start_min, "h", "m", 23, 59
+            )
+        ) {
+            register_change("day time change");
+            game.cur_area_data.day_time_start = day_start_min;
+            if(has_time_limit) {
+                day_speed =
+                    calculate_day_speed(
+                        day_start_min, day_end_min, mission_min
+                    );
+                game.cur_area_data.day_time_speed = day_speed;
+            }
+        }
+        set_tooltip(
+            "Point of the (game world) day at which this area starts.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        if(has_time_limit) {
+            //Area day time at end value.
+            if(
+                ImGui::DragTime2(
+                    "End day time", &day_end_min, "h", "m", 23, 59
+                )
+            ) {
+                register_change("day time change");
+                day_speed =
+                    calculate_day_speed(
+                        day_start_min, day_end_min, mission_min
+                    );
+                game.cur_area_data.day_time_speed = day_speed;
+            }
+            set_tooltip(
+                "Point of the (game world) day at which this area ends.\n"
+                "Only applicable in missions with time limits.\n"
+                "Set this to the same as the area start time to make\n"
+                "the day time frozen.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+        } else {
+        
+            //Area day time speed value.
+            ImGui::SetNextItemWidth(165);
+            if(
+                ImGui::DragFloat(
+                    "Day time speed", &day_speed, 0.1f, 0.0f, FLT_MAX
+                )
+            ) {
+                register_change("day time change");
+                game.cur_area_data.day_time_speed = day_speed;
+            }
+            set_tooltip(
+                "Speed at which the (game world) day passes.\n"
+                "60 means 1 game-world-hour goes by in 1 real-world-minute.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+        }
         
         ImGui::TreePop();
     }
@@ -2655,9 +2742,25 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Indent();
             if(ImGui::DragTime2("Time limit", &seconds)) {
                 register_change("mission loss conditions change");
+                float old_mission_min =
+                    game.cur_area_data.mission_loss_time_limit / 60.0f;
+                int day_start_min = game.cur_area_data.day_time_start;
+                day_start_min = wrap_float(day_start_min, 0, 60 * 24);
+                float day_speed = game.cur_area_data.day_time_speed;
+                int old_day_end_min =
+                    day_start_min + old_mission_min * day_speed;
+                old_day_end_min = wrap_float(old_day_end_min, 0, 60 * 24);
                 seconds = std::max(seconds, 1);
+                float new_mission_min = seconds / 60.0f;
                 game.cur_area_data.mission_loss_time_limit =
                     (size_t) seconds;
+                    
+                game.cur_area_data.day_time_speed =
+                    calculate_day_speed(
+                        day_start_min, old_day_end_min, new_mission_min
+                    );
+                    
+                    
             }
             set_tooltip(
                 "Time limit that, when reached, ends the mission\n"

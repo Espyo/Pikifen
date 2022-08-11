@@ -89,44 +89,59 @@ bool ImGui::Combo(
 
 /* ----------------------------------------------------------------------------
  * Creates two ImGui drag ints, one that sets the number of minutes, one that
- * sets the number of seconds.
+ * sets the number of seconds. Though with some arguments, this can be changed
+ * to hours and minutes.
  * Returns true if either value was changed.
  * label:
  *   Widget label.
- * total_seconds:
- *   Time in the total amount of seconds.
+ * total_amount:
+ *   Time in the total amount of seconds. Or minutes, or whatever the lowest
+ *   unit represent is.
+ * format1:
+ *   String to write in front of the first component's value.
+ * format2:
+ *   String to write in front of the second component's value.
+ * limit1:
+ *   Maximum value for the first component.
+ * limit2:
+ *   Maximum value for the second component.
  */
 bool ImGui::DragTime2(
-    const string &label, int* total_seconds
+    const string &label, int* total_amount,
+    const string format1, const string format2,
+    const int limit1, const int limit2
 ) {
-    int min = std::floor(*total_seconds / 60.0f);
-    int sec = *total_seconds % 60;
+    int part1 = std::floor(*total_amount / 60.0f);
+    int part2 = *total_amount % 60;
     
     ImGui::BeginGroup();
     ImGui::PushID(label.c_str());
     
-    //Minutes value.
+    //Part 1 (hours or minutes) value.
     ImGui::SetNextItemWidth(80);
     ImGui::PushID(1);
+    string format = "%02d" + format1;
     bool result =
-        ImGui::DragInt("", &min, 0.1f, 0, INT_MAX, "%02dm");
-    min = std::max(0, min);
+        ImGui::DragInt("", &part1, 0.1f, 0, limit1, format.c_str());
+    part1 = std::max(0, part1);
+    part1 = std::min(part1, limit1);
     ImGui::PopID();
     
-    //Seconds value.
+    //Part 2 (seconds or minutes) value.
     ImGui::SameLine();
     ImGui::SetNextItemWidth(80);
     ImGui::PushID(2);
+    format = "%02d" + format2;
     result |=
-        ImGui::DragInt(label.c_str(), &sec, 0.1f, 0, 59, "%02ds");
-    sec = std::max(0, sec);
-    sec = std::min(sec, 59);
+        ImGui::DragInt(label.c_str(), &part2, 0.1f, 0, limit2, format.c_str());
+    part2 = std::max(0, part2);
+    part2 = std::min(part2, limit2);
     ImGui::PopID();
     
     ImGui::PopID();
     ImGui::EndGroup();
     
-    *total_seconds = min * 60 + sec;
+    *total_amount = part1 * 60 + part2;
     
     return result;
 }
