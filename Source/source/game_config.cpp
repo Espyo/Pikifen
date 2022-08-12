@@ -91,7 +91,6 @@ game_config::game_config() :
     cursor_max_dist(GAME_CONFIG::DEF_CURSOR_MAX_DIST),
     cursor_spin_speed(GAME_CONFIG::DEF_CURSOR_SPIN_SPEED),
     day_minutes_end(GAME_CONFIG::DEF_DAY_MINUTES_END),
-    day_minutes_per_irl_sec(GAME_CONFIG::DEF_DAY_MINUTES_PER_IRL_SEC),
     day_minutes_start(GAME_CONFIG::DEF_DAY_MINUTES_START),
     group_member_grab_range(GAME_CONFIG::DEF_GROUP_MEMBER_GRAB_RANGE),
     idle_task_range(GAME_CONFIG::DEF_IDLE_TASK_RANGE),
@@ -138,7 +137,6 @@ void game_config::load(data_node* file) {
     
     rs.set("day_minutes_start", day_minutes_start);
     rs.set("day_minutes_end", day_minutes_end);
-    rs.set("day_minutes_per_irl_sec", day_minutes_per_irl_sec);
     
     rs.set("pikmin_order", pikmin_order_str);
     rs.set("standard_pikmin_height", standard_pikmin_height);

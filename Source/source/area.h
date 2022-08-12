@@ -61,7 +61,7 @@ namespace AREA {
 extern const unsigned char DEF_DIFFICULTY;
 extern const size_t DEF_DAY_TIME_START;
 extern const float DEF_DAY_TIME_SPEED;
-extern const float DEF_MISSION_TIME_LIMIT;
+extern const size_t DEF_MISSION_TIME_LIMIT;
 };
 
 

@@ -86,6 +86,8 @@ void load_area(
     rs.set("notes", game.cur_area_data.notes);
     rs.set("spray_amounts", game.cur_area_data.spray_amounts);
     rs.set("weather", game.cur_area_data.weather_name, &weather_node);
+    rs.set("day_time_start", game.cur_area_data.day_time_start);
+    rs.set("day_time_speed", game.cur_area_data.day_time_speed);
     rs.set("bg_bmp", game.cur_area_data.bg_bmp_file_name);
     rs.set("bg_color", game.cur_area_data.bg_color);
     rs.set("bg_dist", game.cur_area_data.bg_dist);
@@ -99,6 +101,21 @@ void load_area(
     rs.set("mission_required_mobs", mission_required_mobs_str);
     rs.set("mission_exit_center", game.cur_area_data.mission_exit_center);
     rs.set("mission_exit_size", game.cur_area_data.mission_exit_size);
+    rs.set(
+        "mission_loss_conditions", game.cur_area_data.mission_loss_conditions
+    );
+    rs.set(
+        "mission_loss_pik_amount", game.cur_area_data.mission_loss_pik_amount
+    );
+    rs.set(
+        "mission_loss_pik_killed", game.cur_area_data.mission_loss_pik_killed
+    );
+    rs.set(
+        "mission_loss_leaders_kod", game.cur_area_data.mission_loss_leaders_kod
+    );
+    rs.set(
+        "mission_loss_time_limit", game.cur_area_data.mission_loss_time_limit
+    );
     
     game.cur_area_data.mission_goal =
         (MISSION_GOALS) game.mission_goals.get_idx(mission_goal_str);

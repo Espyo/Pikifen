@@ -172,13 +172,16 @@ void gameplay_state::do_gameplay_logic() {
         *                              `-´  *
         *************************************/
         
-        day_minutes += (game.config.day_minutes_per_irl_sec * game.delta_t);
+        day_minutes +=
+            (game.cur_area_data.day_time_speed * game.delta_t / 60.0f);
         if(day_minutes > 60 * 24) {
             day_minutes -= 60 * 24;
         }
         
         area_time_passed += game.delta_t;
         
+        //TODO replace with mission time limit
+        /*
         if(day_minutes >= game.config.day_minutes_end) {
             if(!after_hours) {
                 after_hours = true;
@@ -186,6 +189,7 @@ void gameplay_state::do_gameplay_logic() {
                 start_leaving(LEAVE_TO_FINISH);
             }
         }
+        */
         
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Logic -- Particles");

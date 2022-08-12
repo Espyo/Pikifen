@@ -316,7 +316,7 @@ hud_struct::hud_struct() :
             game.config.day_minutes_end - game.config.day_minutes_start;
         float pre_tick_day_minutes =
             game.states.gameplay->day_minutes -
-            game.config.day_minutes_per_irl_sec * delta_t;
+            game.cur_area_data.day_time_speed * delta_t / 60.0f;
         float post_tick_day_minutes =
             game.states.gameplay->day_minutes;
         float checkpoints[3] = {0.25f, 0.50f, 0.75f};

@@ -2646,6 +2646,12 @@ bool area_editor::save_area(const bool to_backup) {
         new data_node("weather", game.cur_area_data.weather_name)
     );
     data_file.add(
+        new data_node("day_time_start", i2s(game.cur_area_data.day_time_start))
+    );
+    data_file.add(
+        new data_node("day_time_speed", i2s(game.cur_area_data.day_time_speed))
+    );
+    data_file.add(
         new data_node("maker", game.cur_area_data.maker)
     );
     data_file.add(
@@ -2716,6 +2722,46 @@ bool area_editor::save_area(const bool to_backup) {
             new data_node(
                 "mission_exit_size",
                 p2s(game.cur_area_data.mission_exit_size)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_loss_conditions > 0) {
+        data_file.add(
+            new data_node(
+                "mission_loss_conditions",
+                i2s(game.cur_area_data.mission_loss_conditions)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_loss_pik_amount > 0) {
+        data_file.add(
+            new data_node(
+                "mission_loss_pik_amount",
+                i2s(game.cur_area_data.mission_loss_pik_amount)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_loss_pik_killed > 0) {
+        data_file.add(
+            new data_node(
+                "mission_loss_pik_killed",
+                i2s(game.cur_area_data.mission_loss_pik_killed)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_loss_leaders_kod > 0) {
+        data_file.add(
+            new data_node(
+                "mission_loss_leaders_kod",
+                i2s(game.cur_area_data.mission_loss_leaders_kod)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_loss_time_limit > 0) {
+        data_file.add(
+            new data_node(
+                "mission_loss_time_limit",
+                i2s(game.cur_area_data.mission_loss_time_limit)
             )
         );
     }

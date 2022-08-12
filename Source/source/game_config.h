@@ -35,7 +35,6 @@ extern const float DEF_CARRYING_SPEED_WEIGHT_MULT;
 extern const float DEF_CURSOR_MAX_DIST;
 extern const float DEF_CURSOR_SPIN_SPEED;
 extern const float DEF_DAY_MINUTES_END;
-extern const float DEF_DAY_MINUTES_PER_IRL_SEC;
 extern const float DEF_DAY_MINUTES_START;
 extern const float DEF_GROUP_MEMBER_GRAB_RANGE;
 extern const float DEF_IDLE_TASK_RANGE;
@@ -81,8 +80,6 @@ struct game_config {
     float cursor_spin_speed;
     //The day ends when the in-game minutes reach this value.
     float day_minutes_end;
-    //Every real-life second, these many in-game minutes pass.
-    float day_minutes_per_irl_sec;
     //The in-game minutes start with this value every day.
     float day_minutes_start;
     //A leader can grab a group member only within this range.

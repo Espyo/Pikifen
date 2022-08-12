@@ -680,7 +680,7 @@ void gameplay_state::load() {
         get_wall_shadow_color
     );
     
-    day_minutes = game.config.day_minutes_start;
+    day_minutes = game.cur_area_data.day_time_start;
     area_time_passed = 0.0f;
     after_hours = false;
     paused = false;
