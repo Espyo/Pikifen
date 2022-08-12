@@ -52,8 +52,10 @@ enum MISSION_LOSS_CONDITIONS {
     MISSION_LOSS_COND_TAKE_DAMAGE = 0x04,
     //Losing a certain amount of leaders.
     MISSION_LOSS_COND_LOSE_LEADERS = 0x08,
+    //Killing a certain amount of enemies.
+    MISSION_LOSS_COND_KILL_ENEMIESS = 0x10,
     //Reaching the time limit.
-    MISSION_LOSS_COND_TIME_LIMIT = 0x10,
+    MISSION_LOSS_COND_TIME_LIMIT = 0x20,
 };
 
 
@@ -153,6 +155,8 @@ struct area_data {
     size_t mission_loss_pik_killed;
     //Amount for the "lose leaders" mission loss condition.
     size_t mission_loss_leaders_kod;
+    //Amount for the "kill enemies" mission loss condition.
+    size_t mission_loss_enemies_killed;
     //Seconds amount for the "time limit" mission loss condition.
     size_t mission_loss_time_limit;
     

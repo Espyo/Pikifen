@@ -2724,6 +2724,36 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Unindent();
         }
         
+        //Kill enemies checkbox.
+        loss_flags_changed |=
+            ImGui::CheckboxFlags(
+                "Kill enemies",
+                &loss_flags, MISSION_LOSS_COND_KILL_ENEMIESS
+            );
+        set_tooltip(
+            "The mission ends as a loss if a certain amount of\n"
+            "enemies get killed."
+        );
+        
+        if(has_flag(loss_flags, MISSION_LOSS_COND_KILL_ENEMIESS)) {
+            //Enemy kills value.
+            int amount =
+                (int) game.cur_area_data.mission_loss_enemies_killed;
+            ImGui::Indent();
+            ImGui::SetNextItemWidth(50);
+            if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
+                register_change("mission loss conditions change");
+                game.cur_area_data.mission_loss_enemies_killed =
+                    (size_t) amount;
+            }
+            set_tooltip(
+                "Enemy kill amount that, when reached, ends the mission\n"
+                "as a loss.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+        }
+        
         //Time limit checkbox.
         loss_flags_changed |=
             ImGui::CheckboxFlags(

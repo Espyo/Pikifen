@@ -114,6 +114,10 @@ void load_area(
         "mission_loss_leaders_kod", game.cur_area_data.mission_loss_leaders_kod
     );
     rs.set(
+        "mission_loss_enemies_killed",
+        game.cur_area_data.mission_loss_enemies_killed
+    );
+    rs.set(
         "mission_loss_time_limit", game.cur_area_data.mission_loss_time_limit
     );
     

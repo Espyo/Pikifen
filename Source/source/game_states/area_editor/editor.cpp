@@ -2757,6 +2757,14 @@ bool area_editor::save_area(const bool to_backup) {
             )
         );
     }
+    if(game.cur_area_data.mission_loss_enemies_killed > 0) {
+        data_file.add(
+            new data_node(
+                "mission_loss_enemies_killed",
+                i2s(game.cur_area_data.mission_loss_enemies_killed)
+            )
+        );
+    }
     if(game.cur_area_data.mission_loss_time_limit > 0) {
         data_file.add(
             new data_node(
