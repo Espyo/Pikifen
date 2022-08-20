@@ -42,6 +42,17 @@ enum MISSION_GOALS {
 };
 
 
+//Possible ways of grading the player for a mission.
+enum MISSION_GRADING_MODES {
+    //Based on points in different criteria.
+    MISSION_GRADING_POINTS,
+    //Based on whether the player reached the goal or not.
+    MISSION_GRADING_GOAL,
+    //Based on whether the player played or not.
+    MISSION_GRADING_PARTICIPATION,
+};
+
+
 //Possible ways to lose a mission. This should be a bitmask.
 enum MISSION_LOSS_CONDITIONS {
     //Reaching a certain Pikmin amount. 0 = total extinction.
@@ -59,10 +70,31 @@ enum MISSION_LOSS_CONDITIONS {
 };
 
 
+//Possible criteria for a mission's point scoring. This should be a bitmask.
+enum MISSION_POINT_CRITERIA {
+    //Points per Pikmin born.
+    MISSION_POINT_CRITERIA_PIKMIN_BORN = 0x01,
+    //Points per Pikmin death.
+    MISSION_POINT_CRITERIA_PIKMIN_DEATH = 0x02,
+    //Points per second left. Only for missions with a time limit.
+    MISSION_POINT_CRITERIA_SEC_LEFT = 0x04,
+    //Points per second passed.
+    MISSION_POINT_CRITERIA_SEC_PASSED = 0x08,
+    //Points per treasure Poko.
+    MISSION_POINT_CRITERIA_POKOS = 0x10,
+    //Points per enemy kill point.
+    MISSION_POINT_CRITERIA_ENEMY_POINTS = 0x20,
+};
+
+
 namespace AREA {
 extern const unsigned char DEF_DIFFICULTY;
 extern const size_t DEF_DAY_TIME_START;
 extern const float DEF_DAY_TIME_SPEED;
+extern const int DEF_MISSION_MEDAL_BRONZE_REQ;
+extern const int DEF_MISSION_MEDAL_SILVER_REQ;
+extern const int DEF_MISSION_MEDAL_GOLD_REQ;
+extern const int DEF_MISSION_MEDAL_PLATINUM_REQ;
 extern const size_t DEF_MISSION_TIME_LIMIT;
 };
 
@@ -147,7 +179,7 @@ struct area_data {
     point mission_exit_center;
     //Mission exit region dimensions.
     point mission_exit_size;
-    //Mission loss conditions bitmask.
+    //Mission loss conditions bitmask. Use MISSION_LOSS_CONDITIONS.
     uint8_t mission_loss_conditions;
     //Amount for the "reach Pikmin amount" mission loss condition.
     size_t mission_loss_pik_amount;
@@ -159,6 +191,32 @@ struct area_data {
     size_t mission_loss_enemies_killed;
     //Seconds amount for the "time limit" mission loss condition.
     size_t mission_loss_time_limit;
+    //Mission grading mode.
+    MISSION_GRADING_MODES mission_grading_mode;
+    //Mission point multiplier for each Pikmin born.
+    int mission_points_per_pikmin_born;
+    //Mission point multiplier for each Pikmin lost.
+    int mission_points_per_pikmin_death;
+    //Mission point multiplier for each second left (only if time limit is on).
+    int mission_points_per_sec_left;
+    //Mission point multiplier for each second passed.
+    int mission_points_per_sec_passed;
+    //Mission point multiplier for each Poko of treasure obtained.
+    int mission_points_per_poko;
+    //Mission point multiplier for each enemy point obtained.
+    int mission_points_per_enemy_point;
+    //Bitmask for mission loss point loss criteria. Use MISSION_POINT_CRITERIA.
+    uint8_t mission_point_loss_data;
+    //Starting number of points.
+    int mission_starting_points;
+    //Bronze medal point requirement.
+    int mission_bronze_req;
+    //Silver medal point requirement.
+    int mission_silver_req;
+    //Gold medal point requirement.
+    int mission_gold_req;
+    //Platinum medal point requirement.
+    int mission_platinum_req;
     
     area_data();
     void check_stability();

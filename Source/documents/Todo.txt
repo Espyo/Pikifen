@@ -2,11 +2,14 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Save and load the grading mode data
 
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     > throwing non red pikmin on an acb while it's on fire kinda just traps them for eternity until the ACB is delivered to an onion (thanks Helodity)
+    Building a bridge where the dummy destination mob is in the void causes a crash?
+        The new chunks are created out of bounds and destroyed right away, which causes a crash when the bridge object thinks they exist
     
     --- v0.23.0 ---
     Mission Mode stuff

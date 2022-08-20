@@ -2576,8 +2576,9 @@ void area_editor::process_gui_panel_mission() {
                     (size_t) amount;
             }
             set_tooltip(
-                "The total Pikmin amount requirement. 0 means the player\n"
-                "has to reach a Pikmin extinction.",
+                "The total Pikmin amount requirement.\n"
+                "Only Pikmin that are plucked count.\n"
+                "0 means the player has to reach a Pikmin extinction.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             
@@ -2648,7 +2649,8 @@ void area_editor::process_gui_panel_mission() {
                     (size_t) amount;
             }
             set_tooltip(
-                "Pikmin amount that, when reached, ends the mission as a loss.",
+                "Pikmin amount that, when reached, ends the mission\n"
+                "as a loss. Only Pikmin that are plucked count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
@@ -2804,6 +2806,346 @@ void area_editor::process_gui_panel_mission() {
             register_change("mission loss conditions change");
             game.cur_area_data.mission_loss_conditions =
                 (uint8_t) loss_flags;
+        }
+        
+        ImGui::TreePop();
+        
+    }
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Mission grading node.
+    if(saveable_tree_node("gameplay", "Mission grading")) {
+    
+        //Grading mode text.
+        ImGui::Text("Grading mode:");
+        
+        static int mode = game.cur_area_data.mission_grading_mode;
+        
+        //Points mode radio button.
+        if(ImGui::RadioButton("Points", &mode, 0)) {
+            register_change("mission grading change");
+            game.cur_area_data.mission_grading_mode =
+                (MISSION_GRADING_MODES) mode;
+        }
+        set_tooltip(
+            "The player's final grade depends on how many points they\n"
+            "got in different criteria."
+        );
+        
+        ImGui::SameLine();
+        
+        //Goal mode radio button.
+        if(ImGui::RadioButton("Goal", &mode, 1)) {
+            register_change("mission grading change");
+            game.cur_area_data.mission_grading_mode =
+                (MISSION_GRADING_MODES) mode;
+        }
+        set_tooltip(
+            "The player's final grade depends on whether they have reached\n"
+            "the mission goal (platinum) or not (nothing)."
+        );
+        
+        ImGui::SameLine();
+        
+        //Participation mode radio button.
+        if(ImGui::RadioButton("Participation", &mode, 2)) {
+            register_change("mission grading change");
+            game.cur_area_data.mission_grading_mode =
+                (MISSION_GRADING_MODES) mode;
+        }
+        set_tooltip(
+            "The player's final grade depends on whether they have played\n"
+            "the mission (platinum) or not (nothing)."
+        );
+        
+        if(mode == MISSION_GRADING_POINTS) {
+        
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            //Points per Pikmin born value.
+            ImGui::SetNextItemWidth(80);
+            int pppb = game.cur_area_data.mission_points_per_pikmin_born;
+            if(ImGui::DragInt("Points per Pikmin born", &pppb, 0.1f)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_points_per_pikmin_born = pppb;
+            }
+            set_tooltip(
+                "Amount of points that the player receives for each\n"
+                "Pikmin born. Only Pikmin that are plucked count.\n"
+                "Negative numbers means the player loses\n"
+                "points. 0 means this criteria doesn't count.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            if(game.cur_area_data.mission_points_per_pikmin_born != 0) {
+                //Pikmin born point loss on failure checkbox.
+                ImGui::Indent();
+                int flags = game.cur_area_data.mission_point_loss_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "0 points on failure##zpofpb", &flags,
+                        MISSION_POINT_CRITERIA_PIKMIN_BORN
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission_point_loss_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the player will receive 0 points for\n"
+                    "this criterion if they fail the mission."
+                );
+                ImGui::Unindent();
+            }
+            
+            //Points per Pikmin death value.
+            ImGui::SetNextItemWidth(80);
+            int pppd = game.cur_area_data.mission_points_per_pikmin_death;
+            if(ImGui::DragInt("Points per Pikmin death", &pppd, 0.1f)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_points_per_pikmin_death = pppd;
+            }
+            set_tooltip(
+                "Amount of points that the player receives for each\n"
+                "Pikmin lost. Negative numbers means the player loses\n"
+                "points. 0 means this criteria doesn't count.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            if(game.cur_area_data.mission_points_per_pikmin_death != 0) {
+                //Pikmin death point loss on failure checkbox.
+                ImGui::Indent();
+                int flags = game.cur_area_data.mission_point_loss_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "0 points on failure##zpofpd", &flags,
+                        MISSION_POINT_CRITERIA_PIKMIN_DEATH
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission_point_loss_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the player will receive 0 points for\n"
+                    "this criterion if they fail the mission."
+                );
+                ImGui::Unindent();
+            }
+            
+            if(
+                has_flag(
+                    game.cur_area_data.mission_loss_conditions,
+                    MISSION_LOSS_COND_TIME_LIMIT
+                )
+            ) {
+                //Points per second of time left value.
+                ImGui::SetNextItemWidth(80);
+                int ppsl = game.cur_area_data.mission_points_per_sec_left;
+                if(ImGui::DragInt("Points per second left", &ppsl, 0.1f)) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission_points_per_sec_left = ppsl;
+                }
+                set_tooltip(
+                    "Amount of points that the player receives for each\n"
+                    "second of time left, from the mission's time limit.\n"
+                    "Negative numbers means the player loses\n"
+                    "points. 0 means this criteria doesn't count.",
+                    "", WIDGET_EXPLANATION_DRAG
+                );
+                if(game.cur_area_data.mission_points_per_sec_left != 0) {
+                    //Second left point loss on failure checkbox.
+                    ImGui::Indent();
+                    int flags = game.cur_area_data.mission_point_loss_data;
+                    if(
+                        ImGui::CheckboxFlags(
+                            "0 points on failure##zpofsl", &flags,
+                            MISSION_POINT_CRITERIA_SEC_LEFT
+                        )
+                    ) {
+                        register_change("mission grading change");
+                        game.cur_area_data.mission_point_loss_data = flags;
+                    }
+                    set_tooltip(
+                        "If checked, the player will receive 0 points for\n"
+                        "this criterion if they fail the mission."
+                    );
+                    ImGui::Unindent();
+                }
+            }
+            
+            //Points per second passed value.
+            ImGui::SetNextItemWidth(80);
+            int ppss = game.cur_area_data.mission_points_per_sec_passed;
+            if(ImGui::DragInt("Points per second passed", &ppss, 0.1f)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_points_per_sec_passed = ppss;
+            }
+            set_tooltip(
+                "Amount of points that the player receives for each\n"
+                "second of time that has passed. Negative numbers means the\n"
+                "player loses points. 0 means this criteria doesn't count.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            if(game.cur_area_data.mission_points_per_sec_passed != 0) {
+                //Second passed point loss on failure checkbox.
+                ImGui::Indent();
+                int flags = game.cur_area_data.mission_point_loss_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "0 points on failure##zpofsp", &flags,
+                        MISSION_POINT_CRITERIA_SEC_PASSED
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission_point_loss_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the player will receive 0 points for\n"
+                    "this criterion if they fail the mission."
+                );
+                ImGui::Unindent();
+            }
+            
+            //Points per Poko gathered value.
+            ImGui::SetNextItemWidth(80);
+            int pppg = game.cur_area_data.mission_points_per_poko;
+            if(ImGui::DragInt("Points per Poko gathered", &pppg, 0.1f)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_points_per_poko = pppg;
+            }
+            set_tooltip(
+                "Amount of points that the player receives for each\n"
+                "Poko gathered from treasures. Different treasures are worth\n"
+                "different Pokos. Negative numbers means the\n"
+                "player loses points. 0 means this criteria doesn't count.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            if(game.cur_area_data.mission_points_per_poko != 0) {
+                //Poko point loss on failure checkbox.
+                ImGui::Indent();
+                int flags = game.cur_area_data.mission_point_loss_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "0 points on failure##zpofpg", &flags,
+                        MISSION_POINT_CRITERIA_POKOS
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission_point_loss_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the player will receive 0 points for\n"
+                    "this criterion if they fail the mission."
+                );
+                ImGui::Unindent();
+            }
+            
+            //Points per enemy kill point gathered value.
+            ImGui::SetNextItemWidth(80);
+            int ppep = game.cur_area_data.mission_points_per_enemy_point;
+            if(ImGui::DragInt("Points per enemy kill point", &ppep, 0.1f)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_points_per_enemy_point = ppep;
+            }
+            set_tooltip(
+                "Amount of points that the player receives for each\n"
+                "enemy kill point. Different enemies are worth different\n"
+                "points. Negative numbers means the player loses points.\n"
+                "0 means this criteria doesn't count.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            if(game.cur_area_data.mission_points_per_enemy_point != 0) {
+                //Enemy kill point point loss on failure checkbox.
+                ImGui::Indent();
+                int flags = game.cur_area_data.mission_point_loss_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "0 points on failure##zpofep", &flags,
+                        MISSION_POINT_CRITERIA_ENEMY_POINTS
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission_point_loss_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the player will receive 0 points for\n"
+                    "this criterion if they fail the mission."
+                );
+                ImGui::Unindent();
+            }
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            //Starting score value.
+            int starting_points = game.cur_area_data.mission_starting_points;
+            ImGui::SetNextItemWidth(80);
+            if(ImGui::DragInt("Starting points", &starting_points, 1.0f)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_starting_points = starting_points;
+            }
+            set_tooltip(
+                "Starting amount of points. It can be positive or negative.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            //Medal point requirements text.
+            ImGui::Text("Medal point requirements:");
+            
+            //Bronze point requirement value.
+            int bronze_req = game.cur_area_data.mission_bronze_req;
+            ImGui::SetNextItemWidth(90);
+            if(ImGui::DragInt("Bronze", &bronze_req, 1.0f, 0, INT_MAX)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_bronze_req = bronze_req;
+            }
+            set_tooltip(
+                "To get a bronze medal, the player needs at least these\n"
+                "many points. Fewer than this, and the player gets no medal.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Silver point requirement value.
+            int silver_req = game.cur_area_data.mission_silver_req;
+            ImGui::SetNextItemWidth(90);
+            if(ImGui::DragInt("Silver", &silver_req, 1.0f, 0, INT_MAX)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_silver_req = silver_req;
+            }
+            set_tooltip(
+                "To get a silver medal, the player needs at least these\n"
+                "many points.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Gold point requirement value.
+            int gold_req = game.cur_area_data.mission_gold_req;
+            ImGui::SetNextItemWidth(90);
+            if(ImGui::DragInt("Gold", &gold_req, 1.0f, 0, INT_MAX)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_gold_req = gold_req;
+            }
+            set_tooltip(
+                "To get a gold medal, the player needs at least these\n"
+                "many points.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Platinum point requirement value.
+            int platinum_req = game.cur_area_data.mission_platinum_req;
+            ImGui::SetNextItemWidth(90);
+            if(ImGui::DragInt("Platinum", &platinum_req, 1.0f, 0, INT_MAX)) {
+                register_change("mission grading change");
+                game.cur_area_data.mission_platinum_req = platinum_req;
+            }
+            set_tooltip(
+                "To get a platinum medal, the player needs at least these\n"
+                "many points.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
         }
         
         ImGui::TreePop();
