@@ -73,6 +73,7 @@ void load_area(
     
     string mission_goal_str;
     string mission_required_mobs_str;
+    int mission_grading_mode_int = MISSION_GRADING_GOAL;
     data_node* weather_node = NULL;
     
     rs.set("name", game.cur_area_data.name);
@@ -120,6 +121,57 @@ void load_area(
     rs.set(
         "mission_loss_time_limit", game.cur_area_data.mission_loss_time_limit
     );
+    rs.set(
+        "mission_grading_mode", mission_grading_mode_int
+    );
+    rs.set(
+        "mission_points_per_pikmin_born",
+        game.cur_area_data.mission_points_per_pikmin_born
+    );
+    rs.set(
+        "mission_points_per_pikmin_death",
+        game.cur_area_data.mission_points_per_pikmin_death
+    );
+    rs.set(
+        "mission_points_per_sec_left",
+        game.cur_area_data.mission_points_per_sec_left
+    );
+    rs.set(
+        "mission_points_per_sec_passed",
+        game.cur_area_data.mission_points_per_sec_passed
+    );
+    rs.set(
+        "mission_points_per_poko",
+        game.cur_area_data.mission_points_per_poko
+    );
+    rs.set(
+        "mission_points_per_enemy_point",
+        game.cur_area_data.mission_points_per_enemy_point
+    );
+    rs.set(
+        "mission_point_loss_data",
+        game.cur_area_data.mission_point_loss_data
+    );
+    rs.set(
+        "mission_starting_points",
+        game.cur_area_data.mission_starting_points
+    );
+    rs.set(
+        "mission_bronze_req",
+        game.cur_area_data.mission_bronze_req
+    );
+    rs.set(
+        "mission_silver_req",
+        game.cur_area_data.mission_silver_req
+    );
+    rs.set(
+        "mission_gold_req",
+        game.cur_area_data.mission_gold_req
+    );
+    rs.set(
+        "mission_platinum_req",
+        game.cur_area_data.mission_platinum_req
+    );
     
     game.cur_area_data.mission_goal =
         (MISSION_GOALS) game.mission_goals.get_idx(mission_goal_str);
@@ -133,7 +185,9 @@ void load_area(
             s2i(mission_required_mobs_strs[m])
         );
     }
-    
+    game.cur_area_data.mission_grading_mode =
+        (MISSION_GRADING_MODES) mission_grading_mode_int;
+        
     if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
     if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
     game.loading_text_bmp = NULL;

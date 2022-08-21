@@ -2773,6 +2773,110 @@ bool area_editor::save_area(const bool to_backup) {
             )
         );
     }
+    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        data_file.add(
+            new data_node(
+                "mission_grading_mode",
+                i2s(game.cur_area_data.mission_grading_mode)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_points_per_pikmin_born > 0) {
+        data_file.add(
+            new data_node(
+                "mission_points_per_pikmin_born",
+                i2s(game.cur_area_data.mission_points_per_pikmin_born)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_points_per_pikmin_death > 0) {
+        data_file.add(
+            new data_node(
+                "mission_points_per_pikmin_death",
+                i2s(game.cur_area_data.mission_points_per_pikmin_death)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_points_per_sec_left > 0) {
+        data_file.add(
+            new data_node(
+                "mission_points_per_sec_left",
+                i2s(game.cur_area_data.mission_points_per_sec_left)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_points_per_sec_passed > 0) {
+        data_file.add(
+            new data_node(
+                "mission_points_per_sec_passed",
+                i2s(game.cur_area_data.mission_points_per_sec_passed)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_points_per_poko > 0) {
+        data_file.add(
+            new data_node(
+                "mission_points_per_poko",
+                i2s(game.cur_area_data.mission_points_per_poko)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_points_per_enemy_point > 0) {
+        data_file.add(
+            new data_node(
+                "mission_points_per_enemy_point",
+                i2s(game.cur_area_data.mission_points_per_enemy_point)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_point_loss_data > 0) {
+        data_file.add(
+            new data_node(
+                "mission_point_loss_data",
+                i2s(game.cur_area_data.mission_point_loss_data)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_starting_points > 0) {
+        data_file.add(
+            new data_node(
+                "mission_starting_points",
+                i2s(game.cur_area_data.mission_starting_points)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_bronze_req > 0) {
+        data_file.add(
+            new data_node(
+                "mission_bronze_req",
+                i2s(game.cur_area_data.mission_bronze_req)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_silver_req > 0) {
+        data_file.add(
+            new data_node(
+                "mission_silver_req",
+                i2s(game.cur_area_data.mission_silver_req)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_gold_req > 0) {
+        data_file.add(
+            new data_node(
+                "mission_gold_req",
+                i2s(game.cur_area_data.mission_gold_req)
+            )
+        );
+    }
+    if(game.cur_area_data.mission_platinum_req > 0) {
+        data_file.add(
+            new data_node(
+                "mission_platinum_req",
+                i2s(game.cur_area_data.mission_platinum_req)
+            )
+        );
+    }
     
     //Save the thumbnail, or delete it if none.
     //al_save_bitmap is slow, so let's only write the thumbnail file

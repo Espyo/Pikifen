@@ -1,9 +1,8 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Save and load the grading mode data
-
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -34,23 +33,6 @@ Next tasks (roughly sorted most important first)
                         Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
-        Each stage should have the following data:
-            Mission areas:
-                Loss conditions
-                    Any combination of the following:
-                        Taking damage
-                        Losing Pikmin (1 or any number)
-                        Pikmin count reaches a certain number
-                        Total Pikmin extinction (some puzzle/gimmick stages could involve no Pikmin)
-                        One leader KO (as opposed to total leader KO)
-                        Time limit
-                            An optional override for the global day time settings -- a level could want to start at dusk and end at night, and could want to do it all over 1 real-time hour
-                            Also, the number of days. For an "adventure" like experience, you could just want it to last forever over many days, or you could want it to start at sunrise and end at sunset like normal
-                    The following also always trigger a loss:
-                        Total leader KO (nothing else to play with)
-                        Quitting via the pause menu
-                Scoring data
-                    In the case of points mode, also the score weights and the medal thresholds
         Area selection menu changes
             Left side of the area selection menu proper
                 The list of areas, with their names and a medal icon next to each
@@ -101,6 +83,7 @@ Next tasks (roughly sorted most important first)
             Simple areas shouldn't have a time limit
             When playing a mission through the area editor's quick play, high scores shouldn't be saved
             The results screen should have a "New record!" blurb when you get a new record
+            The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
     Statistics menu, which keeps track of:
         Engine use
             Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd
@@ -161,6 +144,7 @@ Next tasks (roughly sorted most important first)
             When it is opened, it should fade into view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
             Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
                 Also, only pan if the mouse moved a certain amount of pixels
+            Panning should be limited to just slightly beyond the area's bounding box
         Stats page
             Table with the amount of Pikmin of each type that is in the Onion, with you, working, idling
             Number of deaths today (careful not to count Candypop Buds as deaths)
