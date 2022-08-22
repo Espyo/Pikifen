@@ -2681,8 +2681,14 @@ bool area_editor::save_area(const bool to_backup) {
     ) {
         data_file.add(
             new data_node(
-                "mission_amount",
-                i2s(game.cur_area_data.mission_amount)
+                "mission_goal_amount",
+                i2s(game.cur_area_data.mission_goal_amount)
+            )
+        );
+        data_file.add(
+            new data_node(
+                "mission_goal_higher_than",
+                b2s(game.cur_area_data.mission_goal_higher_than)
             )
         );
     }
@@ -2693,12 +2699,12 @@ bool area_editor::save_area(const bool to_backup) {
     ) {
         data_file.add(
             new data_node(
-                "mission_requires_all_mobs",
-                b2s(game.cur_area_data.mission_requires_all_mobs)
+                "mission_goal_all_mobs",
+                b2s(game.cur_area_data.mission_goal_all_mobs)
             )
         );
         string mission_mob_idxs;
-        for(size_t i : game.cur_area_data.mission_required_mob_idxs) {
+        for(size_t i : game.cur_area_data.mission_goal_mob_idxs) {
             if(!mission_mob_idxs.empty()) mission_mob_idxs += ";";
             mission_mob_idxs += i2s(i);
         }
@@ -2714,14 +2720,14 @@ bool area_editor::save_area(const bool to_backup) {
     if(game.cur_area_data.mission_goal == MISSION_GOAL_GET_TO_EXIT) {
         data_file.add(
             new data_node(
-                "mission_exit_center",
-                p2s(game.cur_area_data.mission_exit_center)
+                "mission_goal_exit_center",
+                p2s(game.cur_area_data.mission_goal_exit_center)
             )
         );
         data_file.add(
             new data_node(
-                "mission_exit_size",
-                p2s(game.cur_area_data.mission_exit_size)
+                "mission_goal_exit_size",
+                p2s(game.cur_area_data.mission_goal_exit_size)
             )
         );
     }

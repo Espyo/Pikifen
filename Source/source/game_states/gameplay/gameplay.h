@@ -146,7 +146,7 @@ public:
     void leave(const LEAVE_TARGET target);
     void start_leaving(const LEAVE_TARGET target);
     void change_spray_count(const size_t type_nr, signed int amount);
-    void check_mission_mob_goal_met();
+    size_t get_total_pikmin_amount();
     void update_available_leaders();
     void update_closest_group_members();
     
@@ -224,6 +224,7 @@ private:
     void draw_tree_shadows();
     void draw_world_components(ALLEGRO_BITMAP* bmp_output);
     ALLEGRO_BITMAP* draw_to_bitmap();
+    void finish_mission();
     ALLEGRO_BITMAP* generate_fog_bitmap(
         const float near_radius, const float far_radius
     );

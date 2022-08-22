@@ -633,8 +633,8 @@ void area_editor::draw_canvas() {
             selected_mobs.find(m_ptr) != selected_mobs.end();
         bool is_mission_requirement =
             sub_state == EDITOR_SUB_STATE_MISSION_MOBS &&
-            game.cur_area_data.mission_required_mob_idxs.find(m) !=
-            game.cur_area_data.mission_required_mob_idxs.end();
+            game.cur_area_data.mission_goal_mob_idxs.find(m) !=
+            game.cur_area_data.mission_goal_mob_idxs.end();
             
         if(is_selected || is_mission_requirement) {
             al_draw_filled_circle(
@@ -961,8 +961,8 @@ void area_editor::draw_canvas() {
     //Mission exit region transformation widget.
     if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
         cur_transformation_widget.draw(
-            &game.cur_area_data.mission_exit_center,
-            &game.cur_area_data.mission_exit_size,
+            &game.cur_area_data.mission_goal_exit_center,
+            &game.cur_area_data.mission_goal_exit_size,
             NULL,
             1.0f / game.cam.zoom
         );

@@ -318,7 +318,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
                     game.cur_area_data.mob_generators[m]->category->id ==
                     category_id
                 ) {
-                    game.cur_area_data.mission_required_mob_idxs.insert(m);
+                    game.cur_area_data.mission_goal_mob_idxs.insert(m);
                 }
             }
         }
@@ -549,8 +549,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
             cur_transformation_widget.handle_mouse_down(
                 game.mouse_cursor_w,
-                &game.cur_area_data.mission_exit_center,
-                &game.cur_area_data.mission_exit_size,
+                &game.cur_area_data.mission_goal_exit_center,
+                &game.cur_area_data.mission_goal_exit_size,
                 NULL,
                 1.0f / game.cam.zoom
             );
@@ -923,15 +923,15 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             ) {
                 register_change("mission object requirements change");
                 auto it =
-                    game.cur_area_data.mission_required_mob_idxs.find(
+                    game.cur_area_data.mission_goal_mob_idxs.find(
                         clicked_mob_idx
                     );
-                if(it == game.cur_area_data.mission_required_mob_idxs.end()) {
-                    game.cur_area_data.mission_required_mob_idxs.insert(
+                if(it == game.cur_area_data.mission_goal_mob_idxs.end()) {
+                    game.cur_area_data.mission_goal_mob_idxs.insert(
                         clicked_mob_idx
                     );
                 } else {
-                    game.cur_area_data.mission_required_mob_idxs.erase(it);
+                    game.cur_area_data.mission_goal_mob_idxs.erase(it);
                 }
             }
             
@@ -1393,9 +1393,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     
             if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
                 cur_transformation_widget.handle_mouse_move(
-                    game.mouse_cursor_w,
-                    &game.cur_area_data.mission_exit_center,
-                    &game.cur_area_data.mission_exit_size,
+                    snap_point(game.mouse_cursor_w, true),
+                    &game.cur_area_data.mission_goal_exit_center,
+                    &game.cur_area_data.mission_goal_exit_size,
                     NULL,
                     1.0f / game.cam.zoom,
                     false,

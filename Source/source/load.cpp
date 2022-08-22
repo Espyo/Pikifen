@@ -94,14 +94,18 @@ void load_area(
     rs.set("bg_dist", game.cur_area_data.bg_dist);
     rs.set("bg_zoom", game.cur_area_data.bg_bmp_zoom);
     rs.set("mission_goal", mission_goal_str);
-    rs.set("mission_amount", game.cur_area_data.mission_amount);
+    rs.set("mission_goal_amount", game.cur_area_data.mission_goal_amount);
     rs.set(
-        "mission_requires_all_mobs",
-        game.cur_area_data.mission_requires_all_mobs
+        "mission_goal_higher_than",
+        game.cur_area_data.mission_goal_higher_than
+    );
+    rs.set(
+        "mission_goal_all_mobs",
+        game.cur_area_data.mission_goal_all_mobs
     );
     rs.set("mission_required_mobs", mission_required_mobs_str);
-    rs.set("mission_exit_center", game.cur_area_data.mission_exit_center);
-    rs.set("mission_exit_size", game.cur_area_data.mission_exit_size);
+    rs.set("mission_goal_exit_center", game.cur_area_data.mission_goal_exit_center);
+    rs.set("mission_goal_exit_size", game.cur_area_data.mission_goal_exit_size);
     rs.set(
         "mission_loss_conditions", game.cur_area_data.mission_loss_conditions
     );
@@ -177,11 +181,11 @@ void load_area(
         (MISSION_GOALS) game.mission_goals.get_idx(mission_goal_str);
     vector<string> mission_required_mobs_strs =
         split(mission_required_mobs_str, ";");
-    game.cur_area_data.mission_required_mob_idxs.reserve(
+    game.cur_area_data.mission_goal_mob_idxs.reserve(
         mission_required_mobs_strs.size()
     );
     for(size_t m = 0; m < mission_required_mobs_strs.size(); ++m) {
-        game.cur_area_data.mission_required_mob_idxs.insert(
+        game.cur_area_data.mission_goal_mob_idxs.insert(
             s2i(mission_required_mobs_strs[m])
         );
     }

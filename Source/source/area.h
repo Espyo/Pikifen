@@ -170,15 +170,17 @@ struct area_data {
     //Mission goal.
     MISSION_GOALS mission_goal;
     //Does the mission goal require all relevant items, or just specific ones?
-    bool mission_requires_all_mobs;
+    bool mission_goal_all_mobs;
     //If the mission goal requires specific items, their mob indexes go here.
-    unordered_set<size_t> mission_required_mob_idxs;
+    unordered_set<size_t> mission_goal_mob_idxs;
     //Total amount of something required for the current mission goal.
-    size_t mission_amount;
+    size_t mission_goal_amount;
+    //If the mission goal requires an amount, is it >= or <= ?
+    bool mission_goal_higher_than;
     //Mission exit region center coordinates.
-    point mission_exit_center;
+    point mission_goal_exit_center;
     //Mission exit region dimensions.
-    point mission_exit_size;
+    point mission_goal_exit_size;
     //Mission loss conditions bitmask. Use MISSION_LOSS_CONDITIONS.
     uint8_t mission_loss_conditions;
     //Amount for the "reach Pikmin amount" mission loss condition.

@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Implement the actual mission gameplay rules
         Pikmin extinction
             Check Onions, ships, and converters that have Pikmin in the buffer
-        The total Pikmin count rule should only count plucked Pikmin; be careful not to count Candypop Bud plucks or Snitchbug plucks
         Reaching the mission's goal instantly finishes the mission as a "victory"
     Find new names for "loss" and "victory"; in P3 both are just "completion", simply that one is more positive than the other
         Maybe just "goal reached" and "goal not reached"? Not really sure where to use this anyway
@@ -17,6 +16,7 @@ Next tasks (roughly sorted most important first)
     Building a bridge where the dummy destination mob is in the void causes a crash?
         The new chunks are created out of bounds and destroyed right away, which causes a crash when the bridge object thinks they exist
     Pikmin tops don't scale when they fall down a pit (thanks Helodity)
+    If the leader is moving when the mission ends, they will keep moving in that direction if you choose to retry
     
     --- v0.23.0 ---
     Mission Mode stuff

@@ -196,7 +196,7 @@ void enemy::start_dying_class_specifics() {
                 spoils_to_spawn.push_back(
                     possible_pellets[
                         randomi(0, (int) possible_pellets.size() - 1)
-                    ]
+                ]
                 );
             }
         }
@@ -215,6 +215,5 @@ void enemy::start_dying_class_specifics() {
     
     if(game.cur_area_data.mission_goal == MISSION_GOAL_BATTLE_ENEMIES) {
         game.states.gameplay->mission_required_mob_ids.erase(id);
-        game.states.gameplay->check_mission_mob_goal_met();
     }
 }

@@ -74,7 +74,6 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             game.states.gameplay->mission_required_mob_ids.erase(
                 delivery->id
             );
-            game.states.gameplay->check_mission_mob_goal_met();
         }
         
         break;

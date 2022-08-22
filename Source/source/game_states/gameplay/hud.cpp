@@ -658,19 +658,7 @@ hud_struct::hud_struct() :
     total_amount = new gui_item();
     total_amount->on_draw =
     [this] (const point & center, const point & size) {
-        size_t n_total_pikmin = game.states.gameplay->mobs.pikmin_list.size();
-        for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
-            onion* o_ptr = game.states.gameplay->mobs.onions[o];
-            for(
-                size_t t = 0;
-                t < o_ptr->oni_type->nest->pik_types.size();
-                ++t
-            ) {
-                for(size_t m = 0; m < N_MATURITIES; ++m) {
-                    n_total_pikmin += o_ptr->nest->pikmin_inside[t][m];
-                }
-            }
-        }
+        size_t n_total_pikmin = game.states.gameplay->get_total_pikmin_amount();
         
         if(n_total_pikmin != total_count_nr) {
             total_amount->start_juice_animation(

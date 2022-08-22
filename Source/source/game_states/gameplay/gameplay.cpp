@@ -157,25 +157,6 @@ void gameplay_state::change_spray_count(
 
 
 /* ----------------------------------------------------------------------------
- * Checks if the mission's goal, related to mobs, has been met. If so,
- * finishes the mission.
- */
-void gameplay_state::check_mission_mob_goal_met() {
-    if(game.cur_area_data.type != AREA_TYPE_MISSION) return;
-    if(
-        game.cur_area_data.mission_goal != MISSION_GOAL_COLLECT_TREASURE &&
-        game.cur_area_data.mission_goal != MISSION_GOAL_BATTLE_ENEMIES
-    ) {
-        return;
-    }
-    
-    if(mission_required_mob_ids.empty()) {
-        leave(LEAVE_TO_FINISH);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draw the gameplay.
  */
 void gameplay_state::do_drawing() {
@@ -247,6 +228,14 @@ void gameplay_state::enter() {
     }
     
     ready_for_input = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes the currently ongoing mission.
+ */
+void gameplay_state::finish_mission() {
+    leave(LEAVE_TO_FINISH);
 }
 
 
@@ -400,6 +389,28 @@ mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
  */
 string gameplay_state::get_name() const {
     return "gameplay";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the total amount of Pikmin the player has.
+ * This includes Pikmin in the field as well as the Onions.
+ */
+size_t gameplay_state::get_total_pikmin_amount() {
+    size_t n_total_pikmin = game.states.gameplay->mobs.pikmin_list.size();
+    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
+        onion* o_ptr = game.states.gameplay->mobs.onions[o];
+        for(
+            size_t t = 0;
+            t < o_ptr->oni_type->nest->pik_types.size();
+            ++t
+        ) {
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                n_total_pikmin += o_ptr->nest->pikmin_inside[t][m];
+            }
+        }
+    }
+    return n_total_pikmin;
 }
 
 
@@ -653,7 +664,7 @@ void gameplay_state::load() {
     //Memorize mobs required by the mission.
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
         unordered_set<size_t> mission_required_mob_gen_idxs;
-        if(game.cur_area_data.mission_requires_all_mobs) {
+        if(game.cur_area_data.mission_goal_all_mobs) {
             MOB_CATEGORIES filter_cat = MOB_CATEGORY_NONE;
             switch(game.cur_area_data.mission_goal) {
             case MISSION_GOAL_COLLECT_TREASURE: {
@@ -661,6 +672,9 @@ void gameplay_state::load() {
                 break;
             } case MISSION_GOAL_BATTLE_ENEMIES: {
                 filter_cat = MOB_CATEGORY_ENEMIES;
+                break;
+            } case MISSION_GOAL_GET_TO_EXIT: {
+                filter_cat = MOB_CATEGORY_LEADERS;
                 break;
             } default: {
                 break;
@@ -676,14 +690,13 @@ void gameplay_state::load() {
             }
         } else {
             mission_required_mob_gen_idxs =
-                game.cur_area_data.mission_required_mob_idxs;
+                game.cur_area_data.mission_goal_mob_idxs;
         }
         
         for(size_t i : mission_required_mob_gen_idxs) {
             mission_required_mob_ids.insert(mobs_per_gen[i]->id);
         }
     }
-    
     
     game.liquid_limit_effect_caches.clear();
     game.liquid_limit_effect_caches.insert(

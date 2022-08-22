@@ -50,9 +50,10 @@ area_data::area_data() :
     day_time_start(AREA::DEF_DAY_TIME_START),
     day_time_speed(AREA::DEF_DAY_TIME_SPEED),
     mission_goal(MISSION_GOAL_NONE),
-    mission_requires_all_mobs(true),
-    mission_amount(0),
-    mission_exit_size(
+    mission_goal_all_mobs(true),
+    mission_goal_amount(0),
+    mission_goal_higher_than(true),
+    mission_goal_exit_size(
         AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
     ),
     mission_loss_conditions(0),
@@ -186,11 +187,12 @@ void area_data::clear() {
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
     mission_goal = MISSION_GOAL_NONE;
-    mission_requires_all_mobs = true;
-    mission_required_mob_idxs.clear();
-    mission_amount = 0;
-    mission_exit_center = point();
-    mission_exit_size =
+    mission_goal_all_mobs = true;
+    mission_goal_mob_idxs.clear();
+    mission_goal_amount = 0;
+    mission_goal_higher_than = true;
+    mission_goal_exit_center = point();
+    mission_goal_exit_size =
         point(
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE
@@ -401,11 +403,12 @@ void area_data::clone(area_data &other) {
     other.thumbnail = thumbnail;
     
     other.mission_goal = mission_goal;
-    other.mission_requires_all_mobs = mission_requires_all_mobs;
-    other.mission_required_mob_idxs = mission_required_mob_idxs;
-    other.mission_amount = mission_amount;
-    other.mission_exit_center = mission_exit_center;
-    other.mission_exit_size = mission_exit_size;
+    other.mission_goal_all_mobs = mission_goal_all_mobs;
+    other.mission_goal_mob_idxs = mission_goal_mob_idxs;
+    other.mission_goal_amount = mission_goal_amount;
+    other.mission_goal_higher_than = mission_goal_higher_than;
+    other.mission_goal_exit_center = mission_goal_exit_center;
+    other.mission_goal_exit_size = mission_goal_exit_size;
     other.mission_loss_conditions = mission_loss_conditions;
     other.mission_loss_pik_amount = mission_loss_pik_amount;
     other.mission_loss_pik_killed = mission_loss_pik_killed;

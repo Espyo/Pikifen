@@ -1319,15 +1319,15 @@ void area_editor::process_gui_panel_gameplay() {
         //Region center text.
         ImGui::Text(
             "Exit region center: %s,%s",
-            f2s(game.cur_area_data.mission_exit_center.x).c_str(),
-            f2s(game.cur_area_data.mission_exit_center.y).c_str()
+            f2s(game.cur_area_data.mission_goal_exit_center.x).c_str(),
+            f2s(game.cur_area_data.mission_goal_exit_center.y).c_str()
         );
         
         //Region center text.
         ImGui::Text(
             "Exit region size: %s x %s",
-            f2s(game.cur_area_data.mission_exit_size.x).c_str(),
-            f2s(game.cur_area_data.mission_exit_size.y).c_str()
+            f2s(game.cur_area_data.mission_goal_exit_size.x).c_str(),
+            f2s(game.cur_area_data.mission_goal_exit_size.y).c_str()
         );
         
         //Finish button.
@@ -2247,8 +2247,8 @@ void area_editor::process_gui_panel_mission() {
         int mission_goal = game.cur_area_data.mission_goal;
         if(ImGui::Combo("Goal", &mission_goal, goals_list)) {
             register_change("mission requirements change");
-            game.cur_area_data.mission_required_mob_idxs.clear();
-            game.cur_area_data.mission_amount = 0;
+            game.cur_area_data.mission_goal_mob_idxs.clear();
+            game.cur_area_data.mission_goal_amount = 0;
             game.cur_area_data.mission_goal = (MISSION_GOALS) mission_goal;
         }
         
@@ -2279,12 +2279,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Treasure requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission_requires_all_mobs ? 0 : 1;
+                game.cur_area_data.mission_goal_all_mobs ? 0 : 1;
                 
             //All treasures requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission_requires_all_mobs =
+                game.cur_area_data.mission_goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2299,7 +2299,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission_requires_all_mobs =
+                game.cur_area_data.mission_goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2309,7 +2309,7 @@ void area_editor::process_gui_panel_mission() {
             );
             
             size_t total_required = 0;
-            if(game.cur_area_data.mission_requires_all_mobs) {
+            if(game.cur_area_data.mission_goal_all_mobs) {
             
                 for(
                     size_t m = 0;
@@ -2325,7 +2325,7 @@ void area_editor::process_gui_panel_mission() {
             } else {
             
                 total_required =
-                    game.cur_area_data.mission_required_mob_idxs.size();
+                    game.cur_area_data.mission_goal_mob_idxs.size();
                     
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick treasures...")) {
@@ -2359,12 +2359,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Enemy requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission_requires_all_mobs ? 0 : 1;
+                game.cur_area_data.mission_goal_all_mobs ? 0 : 1;
                 
             //All enemies requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission_requires_all_mobs =
+                game.cur_area_data.mission_goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2379,7 +2379,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission_requires_all_mobs =
+                game.cur_area_data.mission_goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2389,7 +2389,7 @@ void area_editor::process_gui_panel_mission() {
             );
             
             size_t total_required = 0;
-            if(game.cur_area_data.mission_requires_all_mobs) {
+            if(game.cur_area_data.mission_goal_all_mobs) {
             
                 for(
                     size_t m = 0;
@@ -2405,7 +2405,7 @@ void area_editor::process_gui_panel_mission() {
             } else {
             
                 total_required =
-                    game.cur_area_data.mission_required_mob_idxs.size();
+                    game.cur_area_data.mission_goal_mob_idxs.size();
                     
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick enemies...")) {
@@ -2437,10 +2437,10 @@ void area_editor::process_gui_panel_mission() {
             
             //Time values.
             int total_seconds =
-                (int) game.cur_area_data.mission_amount;
+                (int) game.cur_area_data.mission_goal_amount;
             if(ImGui::DragTime2("Time", &total_seconds)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission_amount =
+                game.cur_area_data.mission_goal_amount =
                     (size_t) total_seconds;
             }
             set_tooltip(
@@ -2473,15 +2473,15 @@ void area_editor::process_gui_panel_mission() {
             //Region center text.
             ImGui::Text(
                 "Exit region center: %s,%s",
-                f2s(game.cur_area_data.mission_exit_center.x).c_str(),
-                f2s(game.cur_area_data.mission_exit_center.y).c_str()
+                f2s(game.cur_area_data.mission_goal_exit_center.x).c_str(),
+                f2s(game.cur_area_data.mission_goal_exit_center.y).c_str()
             );
             
             //Region center text.
             ImGui::Text(
                 "Exit region size: %s x %s",
-                f2s(game.cur_area_data.mission_exit_size.x).c_str(),
-                f2s(game.cur_area_data.mission_exit_size.y).c_str()
+                f2s(game.cur_area_data.mission_goal_exit_size.x).c_str(),
+                f2s(game.cur_area_data.mission_goal_exit_size.y).c_str()
             );
             
             //Spacer dummy widget.
@@ -2491,12 +2491,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Leader requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission_requires_all_mobs ? 0 : 1;
+                game.cur_area_data.mission_goal_all_mobs ? 0 : 1;
                 
             //All leaders requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission_requires_all_mobs =
+                game.cur_area_data.mission_goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2511,7 +2511,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission_requires_all_mobs =
+                game.cur_area_data.mission_goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2521,7 +2521,7 @@ void area_editor::process_gui_panel_mission() {
             );
             
             size_t total_required = 0;
-            if(game.cur_area_data.mission_requires_all_mobs) {
+            if(game.cur_area_data.mission_goal_all_mobs) {
             
                 for(
                     size_t m = 0;
@@ -2537,7 +2537,7 @@ void area_editor::process_gui_panel_mission() {
             } else {
             
                 total_required =
-                    game.cur_area_data.mission_required_mob_idxs.size();
+                    game.cur_area_data.mission_goal_mob_idxs.size();
                     
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick leaders...")) {
@@ -2567,17 +2567,32 @@ void area_editor::process_gui_panel_mission() {
             //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
             
-            //Time values.
+            //Higher/lower than combobox.
+            int hl_combo_value = game.cur_area_data.mission_goal_higher_than;
+            vector<string> hl_combo_items = {"<=", ">="};
+            ImGui::SetNextItemWidth(50);
+            if(ImGui::Combo("##hl", &hl_combo_value, hl_combo_items)) {
+                register_change("mission requirements change");
+                game.cur_area_data.mission_goal_higher_than =
+                    (hl_combo_value == 1);
+            }
+            set_tooltip(
+                "Specify whether the player needs these many Pikmin or more,\n"
+                "or if they need these many Pikmin or fewer."
+            );
+            
+            //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission_amount;
+                (int) game.cur_area_data.mission_goal_amount;
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(80);
             if(ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission_amount =
+                game.cur_area_data.mission_goal_amount =
                     (size_t) amount;
             }
             set_tooltip(
                 "The total Pikmin amount requirement.\n"
-                "Only Pikmin that are plucked count.\n"
                 "0 means the player has to reach a Pikmin extinction.",
                 "", WIDGET_EXPLANATION_DRAG
             );
@@ -2650,7 +2665,7 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "Pikmin amount that, when reached, ends the mission\n"
-                "as a loss. Only Pikmin that are plucked count.",
+                "as a loss.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
@@ -2874,9 +2889,8 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
-                "Pikmin born. Only Pikmin that are plucked count.\n"
-                "Negative numbers means the player loses\n"
-                "points. 0 means this criteria doesn't count.",
+                "Pikmin born. Negative numbers means the player loses\n"
+                "points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission_points_per_pikmin_born != 0) {
@@ -2909,7 +2923,7 @@ void area_editor::process_gui_panel_mission() {
             set_tooltip(
                 "Amount of points that the player receives for each\n"
                 "Pikmin lost. Negative numbers means the player loses\n"
-                "points. 0 means this criteria doesn't count.",
+                "points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission_points_per_pikmin_death != 0) {
@@ -2949,7 +2963,7 @@ void area_editor::process_gui_panel_mission() {
                     "Amount of points that the player receives for each\n"
                     "second of time left, from the mission's time limit.\n"
                     "Negative numbers means the player loses\n"
-                    "points. 0 means this criteria doesn't count.",
+                    "points. 0 means this criterion doesn't count.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
                 if(game.cur_area_data.mission_points_per_sec_left != 0) {
@@ -2983,7 +2997,7 @@ void area_editor::process_gui_panel_mission() {
             set_tooltip(
                 "Amount of points that the player receives for each\n"
                 "second of time that has passed. Negative numbers means the\n"
-                "player loses points. 0 means this criteria doesn't count.",
+                "player loses points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission_points_per_sec_passed != 0) {
@@ -3017,7 +3031,7 @@ void area_editor::process_gui_panel_mission() {
                 "Amount of points that the player receives for each\n"
                 "Poko gathered from treasures. Different treasures are worth\n"
                 "different Pokos. Negative numbers means the\n"
-                "player loses points. 0 means this criteria doesn't count.",
+                "player loses points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission_points_per_poko != 0) {
@@ -3051,7 +3065,7 @@ void area_editor::process_gui_panel_mission() {
                 "Amount of points that the player receives for each\n"
                 "enemy kill point. Different enemies are worth different\n"
                 "points. Negative numbers means the player loses points.\n"
-                "0 means this criteria doesn't count.",
+                "0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission_points_per_enemy_point != 0) {
@@ -3382,7 +3396,7 @@ void area_editor::process_gui_panel_mobs() {
         //Total objects required text.
         ImGui::Text(
             "Total objects required: %lu",
-            game.cur_area_data.mission_required_mob_idxs.size()
+            game.cur_area_data.mission_goal_mob_idxs.size()
         );
         
         //Finish button.
