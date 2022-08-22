@@ -129,6 +129,8 @@ public:
     bool went_to_results;
     //Information about player 1's whistle.
     whistle_struct whistle;
+    //IDs of mobs remaining for the current mission goal, if applicable.
+    unordered_set<size_t> mission_required_mob_ids;
     
     //Target to leave towards.
     enum LEAVE_TARGET {
@@ -144,6 +146,7 @@ public:
     void leave(const LEAVE_TARGET target);
     void start_leaving(const LEAVE_TARGET target);
     void change_spray_count(const size_t type_nr, signed int amount);
+    void check_mission_mob_goal_met();
     void update_available_leaders();
     void update_closest_group_members();
     

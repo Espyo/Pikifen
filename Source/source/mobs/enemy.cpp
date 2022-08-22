@@ -212,4 +212,9 @@ void enemy::start_dying_class_specifics() {
     }
     
     game.states.results->enemies_beaten++;
+    
+    if(game.cur_area_data.mission_goal == MISSION_GOAL_BATTLE_ENEMIES) {
+        game.states.gameplay->mission_required_mob_ids.erase(id);
+        game.states.gameplay->check_mission_mob_goal_met();
+    }
 }

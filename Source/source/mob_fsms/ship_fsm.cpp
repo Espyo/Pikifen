@@ -69,6 +69,14 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     case MOB_CATEGORY_TREASURES: {
         treasure* tre_ptr = (treasure*) delivery;
         game.states.results->points_obtained += tre_ptr->tre_type->points;
+        
+        if(game.cur_area_data.mission_goal == MISSION_GOAL_COLLECT_TREASURE) {
+            game.states.gameplay->mission_required_mob_ids.erase(
+                delivery->id
+            );
+            game.states.gameplay->check_mission_mob_goal_met();
+        }
+        
         break;
         
     } case MOB_CATEGORY_RESOURCES: {

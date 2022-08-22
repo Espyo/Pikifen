@@ -157,6 +157,25 @@ void gameplay_state::change_spray_count(
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if the mission's goal, related to mobs, has been met. If so,
+ * finishes the mission.
+ */
+void gameplay_state::check_mission_mob_goal_met() {
+    if(game.cur_area_data.type != AREA_TYPE_MISSION) return;
+    if(
+        game.cur_area_data.mission_goal != MISSION_GOAL_COLLECT_TREASURE &&
+        game.cur_area_data.mission_goal != MISSION_GOAL_BATTLE_ENEMIES
+    ) {
+        return;
+    }
+    
+    if(mission_required_mob_ids.empty()) {
+        leave(LEAVE_TO_FINISH);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draw the gameplay.
  */
 void gameplay_state::do_drawing() {
@@ -631,6 +650,41 @@ void gameplay_state::load() {
     cur_leader_ptr->stop_whistling();
     update_closest_group_members();
     
+    //Memorize mobs required by the mission.
+    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        unordered_set<size_t> mission_required_mob_gen_idxs;
+        if(game.cur_area_data.mission_requires_all_mobs) {
+            MOB_CATEGORIES filter_cat = MOB_CATEGORY_NONE;
+            switch(game.cur_area_data.mission_goal) {
+            case MISSION_GOAL_COLLECT_TREASURE: {
+                filter_cat = MOB_CATEGORY_TREASURES;
+                break;
+            } case MISSION_GOAL_BATTLE_ENEMIES: {
+                filter_cat = MOB_CATEGORY_ENEMIES;
+                break;
+            } default: {
+                break;
+            }
+            }
+            if(filter_cat != MOB_CATEGORY_NONE) {
+                for(size_t m = 0; m < mobs_per_gen.size(); ++m) {
+                    if(mobs_per_gen[m]->type->category->id != filter_cat) {
+                        continue;
+                    }
+                    mission_required_mob_gen_idxs.insert(m);
+                }
+            }
+        } else {
+            mission_required_mob_gen_idxs =
+                game.cur_area_data.mission_required_mob_idxs;
+        }
+        
+        for(size_t i : mission_required_mob_gen_idxs) {
+            mission_required_mob_ids.insert(mobs_per_gen[i]->id);
+        }
+    }
+    
+    
     game.liquid_limit_effect_caches.clear();
     game.liquid_limit_effect_caches.insert(
         game.liquid_limit_effect_caches.begin(),
@@ -868,6 +922,8 @@ void gameplay_state::unload() {
     }
     
     unload_area();
+    
+    mission_required_mob_ids.clear();
     
     path_mgr.clear();
     spray_stats.clear();
