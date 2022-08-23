@@ -185,6 +185,8 @@ struct area_data {
     uint8_t mission_loss_conditions;
     //Amount for the "reach Pikmin amount" mission loss condition.
     size_t mission_loss_pik_amount;
+    //Is the mission "reach Pikmin amount" loss condition >= or <= ?
+    bool mission_loss_pik_higher_than;
     //Amount for the "lose Pikmin" mission loss condition.
     size_t mission_loss_pik_killed;
     //Amount for the "lose leaders" mission loss condition.

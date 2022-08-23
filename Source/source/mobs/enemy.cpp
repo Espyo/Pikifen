@@ -211,6 +211,7 @@ void enemy::start_dying_class_specifics() {
         spawn(&str, spoils_to_spawn[s]);
     }
     
+    game.states.gameplay->enemy_deaths++;
     game.states.results->enemies_beaten++;
     
     if(game.cur_area_data.mission_goal == MISSION_GOAL_BATTLE_ENEMIES) {

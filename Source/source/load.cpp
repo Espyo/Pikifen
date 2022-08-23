@@ -113,6 +113,10 @@ void load_area(
         "mission_loss_pik_amount", game.cur_area_data.mission_loss_pik_amount
     );
     rs.set(
+        "mission_loss_pik_higher_than",
+        game.cur_area_data.mission_loss_pik_higher_than
+    );
+    rs.set(
         "mission_loss_pik_killed", game.cur_area_data.mission_loss_pik_killed
     );
     rs.set(

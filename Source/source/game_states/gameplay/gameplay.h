@@ -59,7 +59,7 @@ public:
     
     //Is the player playing after hours?
     bool after_hours;
-    //How much real time has passed since the area was loaded.
+    //How many seconds since area load. Only counts during actual gameplay.
     float area_time_passed;
     //Timer used to fade out the area's title when the area is entered.
     timer area_title_fade_timer;
@@ -131,6 +131,10 @@ public:
     whistle_struct whistle;
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> mission_required_mob_ids;
+    //How many Pikmin deaths in the current area so far?
+    size_t pikmin_deaths;
+    //How many enemy deaths in the current area so far?
+    size_t enemy_deaths;
     
     //Target to leave towards.
     enum LEAVE_TARGET {
@@ -202,6 +206,8 @@ private:
     bool swarm_cursor;
     //Reach of player 1's swarm.
     movement_struct swarm_movement;
+    //Starting number of leader mobs.
+    size_t starting_nr_of_leaders;
     
     void do_aesthetic_logic();
     void do_game_drawing(
@@ -224,7 +230,7 @@ private:
     void draw_tree_shadows();
     void draw_world_components(ALLEGRO_BITMAP* bmp_output);
     ALLEGRO_BITMAP* draw_to_bitmap();
-    void finish_mission();
+    void finish_mission(const bool success);
     ALLEGRO_BITMAP* generate_fog_bitmap(
         const float near_radius, const float far_radius
     );
@@ -233,6 +239,8 @@ private:
         const BUTTONS button, const float pos, const size_t player
     );
     void init_hud();
+    bool is_mission_goal_met();
+    bool is_mission_loss_met();
     void load_game_content();
     void process_mob_interactions(mob* m_ptr, size_t m);
     void process_mob_misc_interactions(

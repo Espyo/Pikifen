@@ -20,6 +20,7 @@
 #include "../../game.h"
 #include "../../load.h"
 #include "../../misc_structs.h"
+#include "../../mobs/converter.h"
 #include "../../mobs/pile.h"
 #include "../../utils/data_file.h"
 #include "../../utils/string_utils.h"
@@ -96,6 +97,8 @@ gameplay_state::gameplay_state() :
     throw_dest_sector(nullptr),
     unloading(false),
     went_to_results(false),
+    pikmin_deaths(0),
+    enemy_deaths(0),
     cancel_control_id(INVALID),
     close_to_interactable_to_use(nullptr),
     close_to_nest_to_open(nullptr),
@@ -110,7 +113,8 @@ gameplay_state::gameplay_state() :
     pause_menu(nullptr),
     paused(false),
     ready_for_input(false),
-    swarm_cursor(false) {
+    swarm_cursor(false),
+    starting_nr_of_leaders(0) {
     
     closest_group_member[BUBBLE_PREVIOUS] = NULL;
     closest_group_member[BUBBLE_CURRENT] = NULL;
@@ -233,8 +237,10 @@ void gameplay_state::enter() {
 
 /* ----------------------------------------------------------------------------
  * Finishes the currently ongoing mission.
+ * success:
+ *   Did the player reach the goal?
  */
-void gameplay_state::finish_mission() {
+void gameplay_state::finish_mission(const bool success) {
     leave(LEAVE_TO_FINISH);
 }
 
@@ -394,12 +400,16 @@ string gameplay_state::get_name() const {
 
 /* ----------------------------------------------------------------------------
  * Returns the total amount of Pikmin the player has.
- * This includes Pikmin in the field as well as the Onions.
+ * This includes Pikmin in the field as well as the Onions, and also
+ * Pikmin inside converters.
  */
 size_t gameplay_state::get_total_pikmin_amount() {
-    size_t n_total_pikmin = game.states.gameplay->mobs.pikmin_list.size();
-    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
-        onion* o_ptr = game.states.gameplay->mobs.onions[o];
+    //Check Pikmin in the field.
+    size_t n_total_pikmin = mobs.pikmin_list.size();
+
+    //Check Pikmin inside Onions.
+    for(size_t o = 0; o < mobs.onions.size(); ++o) {
+        onion* o_ptr = mobs.onions[o];
         for(
             size_t t = 0;
             t < o_ptr->oni_type->nest->pik_types.size();
@@ -410,6 +420,29 @@ size_t gameplay_state::get_total_pikmin_amount() {
             }
         }
     }
+
+    //Check Pikmin inside ships.
+    for(size_t s = 0; s < mobs.ships.size(); ++s) {
+        ship* s_ptr = mobs.ships[s];
+        if(!s_ptr->nest) continue;
+        for(
+            size_t t = 0;
+            t < s_ptr->shi_type->nest->pik_types.size();
+            ++t
+        ) {
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                n_total_pikmin += s_ptr->nest->pikmin_inside[t][m];
+            }
+        }
+    }
+
+    //Check Pikmin inside converters.
+    for(size_t c = 0; c < mobs.converters.size(); ++c) {
+        converter* c_ptr = mobs.converters[c];
+        n_total_pikmin += c_ptr->amount_in_buffer;
+    }
+
+    //Return the final sum.
     return n_total_pikmin;
 }
 
@@ -660,6 +693,10 @@ void gameplay_state::load() {
     
     cur_leader_ptr->stop_whistling();
     update_closest_group_members();
+
+    pikmin_deaths = 0;
+    enemy_deaths = 0;
+    starting_nr_of_leaders = mobs.leaders.size();
     
     //Memorize mobs required by the mission.
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {

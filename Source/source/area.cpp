@@ -58,6 +58,7 @@ area_data::area_data() :
     ),
     mission_loss_conditions(0),
     mission_loss_pik_amount(0),
+    mission_loss_pik_higher_than(false),
     mission_loss_pik_killed(1),
     mission_loss_leaders_kod(1),
     mission_loss_enemies_killed(1),
@@ -199,6 +200,7 @@ void area_data::clear() {
         );
     mission_loss_conditions = 0;
     mission_loss_pik_amount = 0;
+    mission_loss_pik_higher_than = false;
     mission_loss_pik_killed = 1;
     mission_loss_leaders_kod = 1;
     mission_loss_enemies_killed = 1;
@@ -411,6 +413,7 @@ void area_data::clone(area_data &other) {
     other.mission_goal_exit_size = mission_goal_exit_size;
     other.mission_loss_conditions = mission_loss_conditions;
     other.mission_loss_pik_amount = mission_loss_pik_amount;
+    other.mission_loss_pik_higher_than = mission_loss_pik_higher_than;
     other.mission_loss_pik_killed = mission_loss_pik_killed;
     other.mission_loss_leaders_kod = mission_loss_leaders_kod;
     other.mission_loss_enemies_killed = mission_loss_enemies_killed;

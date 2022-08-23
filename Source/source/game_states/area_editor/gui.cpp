@@ -2653,11 +2653,30 @@ void area_editor::process_gui_panel_mission() {
         );
         
         if(has_flag(loss_flags, MISSION_LOSS_COND_PIKMIN_AMOUNT)) {
+            ImGui::Indent();
+            
+            //Higher/lower than combobox.
+            int hl_combo_value =
+                game.cur_area_data.mission_loss_pik_higher_than;
+            vector<string> hl_combo_items = {"<=", ">="};
+            
+            ImGui::SetNextItemWidth(50);
+            if(ImGui::Combo("##hl", &hl_combo_value, hl_combo_items)) {
+                register_change("mission requirements change");
+                game.cur_area_data.mission_loss_pik_higher_than =
+                    (hl_combo_value == 1);
+            }
+            set_tooltip(
+                "Specify whether the player loses when the Pikmin count\n"
+                "reaches these many Pikmin or fewer,\n"
+                "or if it's when it reaches these many Pikmin or greater."
+            );
+            
             //Pikmin amount value.
             int amount =
                 (int) game.cur_area_data.mission_loss_pik_amount;
-            ImGui::Indent();
             ImGui::SetNextItemWidth(50);
+            ImGui::SameLine();
             if(ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)) {
                 register_change("mission loss conditions change");
                 game.cur_area_data.mission_loss_pik_amount =
@@ -2668,6 +2687,7 @@ void area_editor::process_gui_panel_mission() {
                 "as a loss.",
                 "", WIDGET_EXPLANATION_DRAG
             );
+            
             ImGui::Unindent();
         }
         

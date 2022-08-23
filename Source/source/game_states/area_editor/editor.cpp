@@ -2747,6 +2747,12 @@ bool area_editor::save_area(const bool to_backup) {
             )
         );
     }
+    data_file.add(
+        new data_node(
+            "mission_loss_pik_higher_than",
+            b2s(game.cur_area_data.mission_loss_pik_higher_than)
+        )
+    );
     if(game.cur_area_data.mission_loss_pik_killed > 0) {
         data_file.add(
             new data_node(

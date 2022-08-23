@@ -2,10 +2,6 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Implement the actual mission gameplay rules
-        Pikmin extinction
-            Check Onions, ships, and converters that have Pikmin in the buffer
-        Reaching the mission's goal instantly finishes the mission as a "victory"
     Find new names for "loss" and "victory"; in P3 both are just "completion", simply that one is more positive than the other
         Maybe just "goal reached" and "goal not reached"? Not really sure where to use this anyway
     Move the area's stats into the review panel (thanks Helodity)

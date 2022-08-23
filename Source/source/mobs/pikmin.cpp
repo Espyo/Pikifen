@@ -463,6 +463,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         
         game.sys_assets.sfx_pikmin_dying.play(0.03, false);
         
+        game.states.gameplay->pikmin_deaths++;
         game.states.results->pikmin_deaths++;
     }
     

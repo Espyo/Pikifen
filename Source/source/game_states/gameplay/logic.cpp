@@ -702,78 +702,10 @@ void gameplay_state::do_gameplay_logic() {
         *              O  *
         *******************/
         if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-            switch(game.cur_area_data.mission_goal) {
-            case MISSION_GOAL_NONE: {
-                break;
-                
-            } case MISSION_GOAL_COLLECT_TREASURE:
-            case MISSION_GOAL_BATTLE_ENEMIES: {
-                if(mission_required_mob_ids.empty()) {
-                    finish_mission();
-                }
-                break;
-                
-            } case MISSION_GOAL_TIMED_SURVIVAL: {
-                if(area_time_passed >= game.cur_area_data.mission_goal_amount) {
-                    finish_mission();
-                }
-                break;
-                
-            } case MISSION_GOAL_GET_TO_EXIT: {
-                size_t required_leaders_in_exit = 0;
-                for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-                    mob* l_ptr = mobs.leaders[l];
-                    if(
-                        std::find(
-                            mission_required_mob_ids.begin(),
-                            mission_required_mob_ids.end(),
-                            mobs.leaders[l]->id
-                        ) ==
-                        mission_required_mob_ids.end()
-                    ) {
-                        //Not a required leader.
-                        continue;
-                    }
-                    if(
-                        fabs(
-                            l_ptr->pos.x -
-                            game.cur_area_data.mission_goal_exit_center.x
-                        ) <=
-                        game.cur_area_data.mission_goal_exit_size.x / 2.0f &&
-                        fabs(
-                            l_ptr->pos.y -
-                            game.cur_area_data.mission_goal_exit_center.y
-                        ) <=
-                        game.cur_area_data.mission_goal_exit_size.y / 2.0f
-                    ) {
-                        required_leaders_in_exit++;
-                    }
-                }
-                if(
-                    required_leaders_in_exit ==
-                    mission_required_mob_ids.size()
-                ) {
-                    finish_mission();
-                }
-                break;
-                
-            } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-                if(
-                    game.cur_area_data.mission_goal_higher_than &&
-                    get_total_pikmin_amount() >=
-                    game.cur_area_data.mission_goal_amount
-                ) {
-                    finish_mission();
-                } else if(
-                    !game.cur_area_data.mission_goal_higher_than &&
-                    get_total_pikmin_amount() <=
-                    game.cur_area_data.mission_goal_amount
-                ) {
-                    finish_mission();
-                }
-                break;
-                
-            }
+            if(is_mission_goal_met()) {
+                finish_mission(true);
+            } else if(is_mission_loss_met()) {
+                finish_mission(false);
             }
         }
         
@@ -1033,6 +965,204 @@ void gameplay_state::do_menu_logic() {
     }
     
     game.maker_tools.info_print_timer.tick(game.delta_t);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if the mission goal has been met.
+ */
+bool gameplay_state::is_mission_goal_met() {
+    switch(game.cur_area_data.mission_goal) {
+    case MISSION_GOAL_NONE: {
+
+        //No goal? Obviously not then.
+        return false;
+        
+    } case MISSION_GOAL_COLLECT_TREASURE:
+    case MISSION_GOAL_BATTLE_ENEMIES: {
+
+        //For collect treasures or battle enemies, simply check if there are
+        //any remaining (treasure or enemy) mobs to be dealt with.
+        if(mission_required_mob_ids.empty()) {
+            return true;
+        }
+        break;
+        
+    } case MISSION_GOAL_TIMED_SURVIVAL: {
+
+        //Timed survival.
+        if(area_time_passed >= game.cur_area_data.mission_goal_amount) {
+            return true;
+        }
+        break;
+        
+    } case MISSION_GOAL_GET_TO_EXIT: {
+
+        //Are all of the required leaders inside of the exit region?
+        size_t required_leaders_in_exit = 0;
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            mob* l_ptr = mobs.leaders[l];
+            if(
+                std::find(
+                    mission_required_mob_ids.begin(),
+                    mission_required_mob_ids.end(),
+                    mobs.leaders[l]->id
+                ) ==
+                mission_required_mob_ids.end()
+            ) {
+                //Not a required leader.
+                continue;
+            }
+            if(
+                fabs(
+                    l_ptr->pos.x -
+                    game.cur_area_data.mission_goal_exit_center.x
+                ) <=
+                game.cur_area_data.mission_goal_exit_size.x / 2.0f &&
+                fabs(
+                    l_ptr->pos.y -
+                    game.cur_area_data.mission_goal_exit_center.y
+                ) <=
+                game.cur_area_data.mission_goal_exit_size.y / 2.0f
+            ) {
+                required_leaders_in_exit++;
+            }
+        }
+        if(
+            required_leaders_in_exit ==
+            mission_required_mob_ids.size()
+        ) {
+            return true;
+        }
+        break;
+        
+    } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+
+        //Pikmin amount reached, or surpassed.
+        if(
+            game.cur_area_data.mission_goal_higher_than &&
+            get_total_pikmin_amount() >=
+            game.cur_area_data.mission_goal_amount
+        ) {
+            return true;
+        } else if(
+            !game.cur_area_data.mission_goal_higher_than &&
+            get_total_pikmin_amount() <=
+            game.cur_area_data.mission_goal_amount
+        ) {
+            return true;
+        }
+        break;
+        
+    }
+    }
+    
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if a mission loss condition has been met.
+ */
+bool gameplay_state::is_mission_loss_met() {
+    //Pikmin amount reached or surpassed.
+    if(
+        has_flag(
+            game.cur_area_data.mission_loss_conditions,
+            MISSION_LOSS_COND_PIKMIN_AMOUNT
+        )
+    ) {
+        size_t total_pikmin = get_total_pikmin_amount();
+        if(
+            game.cur_area_data.mission_loss_pik_higher_than &&
+            total_pikmin >= game.cur_area_data.mission_loss_pik_amount
+        ) {
+            return true;
+        } else if(
+            !game.cur_area_data.mission_loss_pik_higher_than &&
+            total_pikmin <= game.cur_area_data.mission_loss_pik_amount
+        ) {
+            return true;
+        }
+    }
+    
+    //Pikmin death count.
+    if(
+        has_flag(
+            game.cur_area_data.mission_loss_conditions,
+            MISSION_LOSS_COND_LOSE_PIKMIN
+        )
+    ) {
+        if(pikmin_deaths >= game.cur_area_data.mission_loss_pik_killed) {
+            return true;
+        }
+    }
+    
+    //Leaders took damage.
+    if(
+        has_flag(
+            game.cur_area_data.mission_loss_conditions,
+            MISSION_LOSS_COND_TAKE_DAMAGE
+        )
+    ) {
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            if(mobs.leaders[l]->health < mobs.leaders[l]->max_health) {
+                return true;
+            }
+        }
+        if(mobs.leaders.size() < starting_nr_of_leaders) {
+            //If one of them vanished, they got forcefully KO'd, which...
+            //really should count as taking damage.
+            return true;
+        }
+    }
+    
+    //Leaders KO count.
+    if(
+        has_flag(
+            game.cur_area_data.mission_loss_conditions,
+            MISSION_LOSS_COND_LOSE_LEADERS
+        )
+    ) {
+        size_t living_leaders = 0;
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            if(mobs.leaders[l]->health > 0.0f) {
+                living_leaders++;
+            }
+        }
+        if(
+            (int) (starting_nr_of_leaders - living_leaders) >=
+            (int) game.cur_area_data.mission_loss_leaders_kod
+        ) {
+            return true;
+        }
+    }
+    
+    //Enemy death count.
+    if(
+        has_flag(
+            game.cur_area_data.mission_loss_conditions,
+            MISSION_LOSS_COND_KILL_ENEMIESS
+        )
+    ) {
+        if(enemy_deaths >= game.cur_area_data.mission_loss_enemies_killed) {
+            return true;
+        }
+    }
+    
+    //Time limit.
+    if(
+        has_flag(
+            game.cur_area_data.mission_loss_conditions,
+            MISSION_LOSS_COND_TIME_LIMIT
+        )
+    ) {
+        if(area_time_passed >= game.cur_area_data.mission_loss_time_limit) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 
