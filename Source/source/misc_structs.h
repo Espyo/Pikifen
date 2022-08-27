@@ -28,6 +28,7 @@
 #include "particle.h"
 #include "utils/data_file.h"
 #include "utils/geometry_utils.h"
+#include "utils/math_utils.h"
 
 
 class pikmin_type;
@@ -775,6 +776,26 @@ struct bitmap_effect_info {
     ALLEGRO_COLOR glow_color;
     
     bitmap_effect_info();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * A struct that makes it simpler to obtain data
+ * for a given simple keyframe animation based on interpolation.
+ */
+struct keyframe_interpolator {
+public:
+    float get(const float t);
+    void add(const float t, const float value, EASING_METHODS ease = EASE_NONE);
+    keyframe_interpolator(const float initial_value);
+
+private:
+    //Keyframe times.
+    vector<float> keyframe_times;
+    //Keyframe values.
+    vector<float> keyframe_values;
+    //Keyframe easing methods.
+    vector<EASING_METHODS> keyframe_eases;
 };
 
 

@@ -33,6 +33,10 @@ extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
 extern const float CURSOR_TRAIL_MAX_WIDTH;
 extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
 extern const int FOG_BITMAP_SIZE;
+extern const float INTERLUDE_MISSION_COMPLETE_DURATION;
+extern const string INTERLUDE_MISSION_COMPLETE_TEXT;
+extern const float INTERLUDE_READY_DURATION;
+extern const string INTERLUDE_READY_TEXT;
 extern const unsigned char PREVIEW_OPACITY;
 extern const float PREVIEW_TEXTURE_SCALE;
 extern const float PREVIEW_TEXTURE_TIME_MULT;
@@ -47,6 +51,17 @@ extern const float MENU_ENTRY_HUD_MOVE_TIME;
 extern const float MENU_EXIT_HUD_MOVE_TIME;
 extern const float SWARM_ARROW_SPEED;
 }
+
+
+//Types of interludes -- stuff before or after gameplay proper in the area.
+enum INTERLUDES {
+    //None.
+    INTERLUDE_NONE,
+    //Ready?
+    INTERLUDE_READY,
+    //Mission complete!
+    INTERLUDE_MISSION_COMPLETE,
+};
 
 
 /* ----------------------------------------------------------------------------
@@ -135,6 +150,10 @@ public:
     size_t pikmin_deaths;
     //How many enemy deaths in the current area so far?
     size_t enemy_deaths;
+    //Current interlude.
+    INTERLUDES cur_interlude;
+    //Time passed in the current interlude.
+    float interlude_time;
     
     //Target to leave towards.
     enum LEAVE_TARGET {
@@ -219,6 +238,7 @@ private:
     void draw_background(ALLEGRO_BITMAP* bmp_output);
     void draw_leader_cursor(const ALLEGRO_COLOR &color);
     void draw_ingame_text();
+    void draw_interlude();
     void draw_lighting_filter();
     void draw_message_box();
     void draw_mouse_cursor(const ALLEGRO_COLOR &color);

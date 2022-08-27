@@ -163,6 +163,8 @@ void gameplay_state::do_game_drawing(
         game.perf_mon->finish_measurement();
     }
     
+    draw_interlude();
+    
     //Layer 9 -- System stuff.
     draw_system_stuff();
     
@@ -314,7 +316,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 (int) (
                     191 *
                     (cur_leader_ptr->swarm_arrows[a] /
-                    (game.config.cursor_max_dist * 0.4))
+                     (game.config.cursor_max_dist * 0.4))
                 )
             );
         draw_bitmap(
@@ -322,7 +324,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
             cur_leader_ptr->pos + pos,
             point(
                 16 * (1 + cur_leader_ptr->swarm_arrows[a] /
-                game.config.cursor_max_dist),
+                      game.config.cursor_max_dist),
                 -1
             ),
             swarm_angle,
@@ -465,6 +467,61 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     }
     
     al_use_transform(&game.world_to_screen_transform);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the current interlude, if any.
+ */
+void gameplay_state::draw_interlude() {
+    switch(cur_interlude) {
+    case INTERLUDE_NONE: {
+        return;
+        
+    } case INTERLUDE_READY:
+    case INTERLUDE_MISSION_COMPLETE: {
+        const float duration =
+            cur_interlude == INTERLUDE_READY ?
+            GAMEPLAY::INTERLUDE_READY_DURATION :
+            GAMEPLAY::INTERLUDE_MISSION_COMPLETE_DURATION;
+        const float t = interlude_time / duration;
+        const string &text =
+            cur_interlude == INTERLUDE_READY ?
+            GAMEPLAY::INTERLUDE_READY_TEXT :
+            GAMEPLAY::INTERLUDE_MISSION_COMPLETE_TEXT;
+        const float start_x = game.win_w * 0.2f;
+        const float char_spacing = game.win_w * (0.8f / text.size());
+        const float TEXT_PAUSE_T = 0.50f;
+        const float TEXT_SHRINK_T = 0.90f;
+        const float TEXT_VARIATION_DUR = 0.08f;
+        
+        keyframe_interpolator ki_y(game.win_h * (-0.2f));
+        ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
+        ki_y.add(TEXT_SHRINK_T, game.win_h / 2.0f);
+        keyframe_interpolator ki_s(2.0f);
+        ki_s.add(TEXT_SHRINK_T, 2.4f);
+        ki_s.add(1.0f, 0.0f, EASE_IN);
+        
+        float scale = ki_s.get(t);
+        
+        for(size_t c = 0; c < text.size(); ++c) {
+            float x_offset = char_spacing * c;
+            float char_ratio = c / (float) text.size();
+            float y = ki_y.get(t + (1 - char_ratio) * TEXT_VARIATION_DUR);
+            draw_scaled_text(
+                game.fonts.area_name,
+                al_map_rgb(255, 215, 0),
+                point(start_x + x_offset, y),
+                point(scale, scale),
+                ALLEGRO_ALIGN_CENTER,
+                TEXT_VALIGN_CENTER,
+                string(1, text[c])
+            );
+        }
+        break;
+        
+    }
+    }
 }
 
 

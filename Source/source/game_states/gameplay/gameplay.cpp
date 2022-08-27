@@ -49,6 +49,14 @@ const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
 const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
+//How long the "Mission complete!" interlude lasts for.
+const float INTERLUDE_MISSION_COMPLETE_DURATION = 3.0f;
+//What text to show in the "Mission complete!" interlude.
+const string INTERLUDE_MISSION_COMPLETE_TEXT = "MISSION COMPLETE!";
+//How long the "Ready?" interlude lasts for.
+const float INTERLUDE_READY_DURATION = 2.5f;
+//What text to show in the "Ready?" interlude.
+const string INTERLUDE_READY_TEXT = "READY?";
 //How long the HUD moves for when a menu is entered.
 const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 //How long the HUD moves for when a menu is exited.
@@ -99,6 +107,8 @@ gameplay_state::gameplay_state() :
     went_to_results(false),
     pikmin_deaths(0),
     enemy_deaths(0),
+    cur_interlude(INTERLUDE_NONE),
+    interlude_time(0.0f),
     cancel_control_id(INVALID),
     close_to_interactable_to_use(nullptr),
     close_to_nest_to_open(nullptr),
@@ -191,7 +201,7 @@ void gameplay_state::do_logic() {
         game.delta_t *= game.maker_tools.change_speed_mult;
     }
     
-    if(!paused) {
+    if(!paused && cur_interlude == INTERLUDE_NONE) {
         do_gameplay_logic();
     }
     if(cur_leader_ptr) {
@@ -406,7 +416,7 @@ string gameplay_state::get_name() const {
 size_t gameplay_state::get_total_pikmin_amount() {
     //Check Pikmin in the field.
     size_t n_total_pikmin = mobs.pikmin_list.size();
-
+    
     //Check Pikmin inside Onions.
     for(size_t o = 0; o < mobs.onions.size(); ++o) {
         onion* o_ptr = mobs.onions[o];
@@ -420,7 +430,7 @@ size_t gameplay_state::get_total_pikmin_amount() {
             }
         }
     }
-
+    
     //Check Pikmin inside ships.
     for(size_t s = 0; s < mobs.ships.size(); ++s) {
         ship* s_ptr = mobs.ships[s];
@@ -435,13 +445,13 @@ size_t gameplay_state::get_total_pikmin_amount() {
             }
         }
     }
-
+    
     //Check Pikmin inside converters.
     for(size_t c = 0; c < mobs.converters.size(); ++c) {
         converter* c_ptr = mobs.converters[c];
         n_total_pikmin += c_ptr->amount_in_buffer;
     }
-
+    
     //Return the final sum.
     return n_total_pikmin;
 }
@@ -693,7 +703,7 @@ void gameplay_state::load() {
     
     cur_leader_ptr->stop_whistling();
     update_closest_group_members();
-
+    
     pikmin_deaths = 0;
     enemy_deaths = 0;
     starting_nr_of_leaders = mobs.leaders.size();
@@ -788,6 +798,8 @@ void gameplay_state::load() {
     area_time_passed = 0.0f;
     after_hours = false;
     paused = false;
+    cur_interlude = INTERLUDE_READY;
+    interlude_time = 0.0f;
     game.maker_tools.reset_for_gameplay();
     
     map<string, string> spray_strs =

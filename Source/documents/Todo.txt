@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -13,6 +13,8 @@ Next tasks (roughly sorted most important first)
         The new chunks are created out of bounds and destroyed right away, which causes a crash when the bridge object thinks they exist
     Pikmin tops don't scale when they fall down a pit (thanks Helodity)
     If the leader is moving when the mission ends, they will keep moving in that direction if you choose to retry
+    Mobs that get deleted should remove links that other mobs have to them (thanks Helodity)
+    Ceramic bridge texture should be 256x256 (thanks isma3)
     
     --- v0.23.0 ---
     Mission Mode stuff

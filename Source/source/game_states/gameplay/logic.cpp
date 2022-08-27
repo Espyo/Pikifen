@@ -965,6 +965,31 @@ void gameplay_state::do_menu_logic() {
     }
     
     game.maker_tools.info_print_timer.tick(game.delta_t);
+
+    switch(cur_interlude) {
+    case INTERLUDE_NONE: {
+        break;
+    } case INTERLUDE_READY: {
+        interlude_time += game.delta_t;
+        if(
+            interlude_time >=
+            GAMEPLAY::INTERLUDE_READY_DURATION
+        ) {
+            cur_interlude = INTERLUDE_NONE;
+        }
+        break;
+    } case INTERLUDE_MISSION_COMPLETE: {
+        interlude_time += game.delta_t;
+        if(
+            interlude_time >=
+            GAMEPLAY::INTERLUDE_MISSION_COMPLETE_DURATION
+        ) {
+            cur_interlude = INTERLUDE_NONE;
+            leave(LEAVE_TO_FINISH);
+        }
+        break;
+    }
+    }
 }
 
 

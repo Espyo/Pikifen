@@ -31,6 +31,90 @@ float clamp(const float number, const float minimum, const float maximum) {
 
 
 /* ----------------------------------------------------------------------------
+ * Eases a number [0, 1] in accordance to a non-linear interpolation method.
+ * method:
+ *   The method to use.
+ * n:
+ *   The number to ease, in the range [0, 1].
+ */
+float ease(const EASING_METHODS method, const float n) {
+    switch(method) {
+    case EASE_NONE: {
+        return n;
+    } case EASE_IN: {
+        return pow(n, 3);
+    }
+    case EASE_OUT: {
+        return 1 - (pow((1 - n), 3));
+    }
+    case EASE_IN_ELASTIC: {
+        const float cp1 = 0.10f;
+        const float cp2 = 0.25f;
+        const float mag1 = -0.2f;
+        const float mag2 = 0.1f;
+        float aux;
+        if(n < cp1) {
+            aux = n * 1.0f / cp1;
+            return sin(aux * TAU / 2) * mag1;
+        } else if(n < cp2) {
+            aux = n - cp1;
+            aux *= 1.0f / (cp2 - cp1);
+            return 1.0f + sin(aux * TAU / 2) * mag2;
+        } else {
+            aux = n - cp2;
+            aux *= 1.0f / (1.0f - cp2);
+            return 1.0f - (pow((1 - aux), 3));
+        }
+    }
+    case EASE_OUT_ELASTIC: {
+        const float cp1 = 0.75f;
+        const float cp2 = 0.90f;
+        const float mag1 = 0.2f;
+        const float mag2 = -0.1f;
+        float aux;
+        if(n < cp1) {
+            aux = n * 1.0f / cp1;
+            return pow(aux, 3);
+        } else if(n < cp2) {
+            aux = n - cp1;
+            aux *= 1.0f / (cp2 - cp1);
+            return 1.0f + sin(aux * TAU / 2) * mag1;
+        } else {
+            aux = n - cp2;
+            aux *= 1.0f / (1.0f - cp2);
+            return 1.0f + sin(aux * TAU / 2) * mag2;
+        }
+    }
+    case EASE_UP_AND_DOWN: {
+        return sin(n * TAU / 2);
+    }
+    case EASE_UP_AND_DOWN_ELASTIC: {
+        const float cp1 = 0.50f;
+        const float cp2 = 0.80f;
+        const float mag1 = -0.4f;
+        const float mag2 = 0.15f;
+        float aux;
+        if(n < cp1) {
+            aux = n * 1.0f / cp1;
+            return sin(aux * TAU / 2);
+        } else if(n < cp2) {
+            aux = n - cp1;
+            aux *= 1.0f / (cp2 - cp1);
+            return sin(aux * TAU / 2) * mag1;
+        } else {
+            aux = n - cp2;
+            aux *= 1.0f / (1.0f - cp2);
+            return sin(aux * TAU / 2) * mag2;
+        }
+    }
+    
+    }
+    
+    return n;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Given an input, it returns a 32-bit unsigned integer hash of that input.
  * input:
  *   The input number.

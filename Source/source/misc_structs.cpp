@@ -570,6 +570,59 @@ font_list::font_list() :
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new keyframe interpolator.
+ * initial_value:
+ *   Initial value of the thing being interpolated. This gets used at t = 0.
+ */
+keyframe_interpolator::keyframe_interpolator(const float initial_value) {
+    keyframe_times.push_back(0.0f);
+    keyframe_values.push_back(initial_value);
+    keyframe_eases.push_back(EASE_NONE);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the value at a given point in time.
+ * t:
+ *   Time.
+ */
+float keyframe_interpolator::get(const float t) {
+    if(t < 0.0f) return keyframe_values[0];
+    
+    for(size_t k = 1; k < keyframe_times.size(); ++k) {
+        if(t <= keyframe_times[k]) {
+            float delta_t = keyframe_times[k] - keyframe_times[k - 1];
+            float relative_t = t - keyframe_times[k - 1];
+            float ratio = relative_t / delta_t;
+            ratio = ease(keyframe_eases[k], ratio);
+            float delta_v = keyframe_values[k] - keyframe_values[k - 1];
+            return delta_v * ratio + keyframe_values[k - 1];
+        }
+    }
+    
+    return keyframe_values.back();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new keyframe.
+ * t:
+ *   Time in which this keyframe takes place. Ranges from 0 to 1.
+ * value:
+ *   Value of the thing to interpolate at the keyframe's moment.
+ * ease:
+ *   Easing method, if any.
+ */
+void keyframe_interpolator::add(
+    const float t, const float value, const EASING_METHODS ease
+) {
+    keyframe_times.push_back(t);
+    keyframe_values.push_back(value);
+    keyframe_eases.push_back(ease);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a maker tool info struct.
  */
 maker_tools_info::maker_tools_info() :

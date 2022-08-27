@@ -21,6 +21,26 @@
 
 constexpr float TAU = (float)M_PI * 2.0f;
 
+
+//Methods for easing numbers.
+enum EASING_METHODS {
+    //No easing. AKA linear interpolation.
+    EASE_NONE,
+    //Eased as it goes in, then gradually goes out normally.
+    EASE_IN,
+    //Gradually goes in normally, then eased as it goes out.
+    EASE_OUT,
+    //Springs backwards before going in.
+    EASE_IN_ELASTIC,
+    //Near the end, it overshoots and then goes back in.
+    EASE_OUT_ELASTIC,
+    //Goes up to 1, then back down to 0, in a sine-wave.
+    EASE_UP_AND_DOWN,
+    //Goes up to 1, then down to 0, and wobbles around 0 for a bit.
+    EASE_UP_AND_DOWN_ELASTIC,
+};
+
+
 //Returns a string with a number, adding a leading zero if it's less than 10.
 #define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
 
@@ -31,6 +51,7 @@ constexpr float TAU = (float)M_PI * 2.0f;
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
 float clamp(const float number, const float minimum, const float maximum);
+float ease(const EASING_METHODS method, float n);
 uint32_t hash_nr(const unsigned int input);
 uint32_t hash_nr2(const unsigned int input1, const unsigned int input2);
 float interpolate_number(

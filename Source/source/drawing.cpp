@@ -844,7 +844,7 @@ void draw_liquid(
                     (anim_sprite->file_size.y * 0.5) * anim_sprite->scale.x;
             }
         }
-
+        
         if(!anim_sprite) continue;
         
         for(size_t v = 0; v < n_vertexes; ++v) {
@@ -1732,75 +1732,6 @@ void draw_textured_box(
     );
     
     al_hold_bitmap_drawing(false);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Eases a number [0, 1] in accordance to a non-linear interpolation
- * method. Normally used for camera movement and such.
- * method:
- *   The method to use.
- * n:
- *   The number to ease, in the range [0, 1].
- */
-float ease(const EASING_METHODS method, const float n) {
-    switch(method) {
-    case EASE_IN: {
-        return pow(n, 3);
-    }
-    case EASE_OUT: {
-        return 1 - (pow((1 - n), 3));
-    }
-    case EASE_IN_ELASTIC: {
-        const float cp = 0.20f;
-        const float mag = -0.2f;
-        if(n < cp) {
-            float aux = n * 1.0f / cp;
-            return sin(aux * TAU / 2) * mag;
-        } else {
-            float aux = n - cp;
-            aux *= 1.0f / (1.0f - cp);
-            return 1 - (pow((1 - aux), 3));
-        }
-    }
-    case EASE_OUT_ELASTIC: {
-        const float cp = 0.80f;
-        const float mag = 0.2f;
-        if(n < cp) {
-            float aux = n * 1.0f / cp;
-            return pow(aux, 3);
-        } else {
-            float aux = n - cp;
-            aux *= 1.0f / (1.0f - cp);
-            return 1.0f + sin(aux * TAU / 2) * mag;
-        }
-    }
-    case EASE_UP_AND_DOWN: {
-        return sin(n * TAU / 2);
-    }
-    case EASE_UP_AND_DOWN_ELASTIC: {
-        const float cp1 = 0.50f;
-        const float cp2 = 0.80f;
-        const float mag1 = -0.4f;
-        const float mag2 = 0.15f;
-        float aux;
-        if(n < cp1) {
-            aux = n * 1.0f / cp1;
-            return sin(aux * TAU / 2);
-        } else if(n < cp2) {
-            aux = n - cp1;
-            aux *= 1.0f / (cp2 - cp1);
-            return sin(aux * TAU / 2) * mag1;
-        } else {
-            aux = n - cp2;
-            aux *= 1.0f / (1.0f - cp2);
-            return sin(aux * TAU / 2) * mag2;
-        }
-    }
-    
-    }
-    
-    return n;
 }
 
 

@@ -91,23 +91,6 @@ enum CONTROL_ICON_SPRITES {
 };
 
 
-//Methods for easing numbers.
-enum EASING_METHODS {
-    //Eased as it goes in, then gradually goes out normally.
-    EASE_IN,
-    //Gradually goes in normally, then eased as it goes out.
-    EASE_OUT,
-    //Springs backwards before going in.
-    EASE_IN_ELASTIC,
-    //Near the end, it overshoots and then goes back in.
-    EASE_OUT_ELASTIC,
-    //Goes up to 1, then back down to 0, in a sine-wave.
-    EASE_UP_AND_DOWN,
-    //Goes up to 1, then down to 0, and wobbles around 0 for a bit.
-    EASE_UP_AND_DOWN_ELASTIC,
-};
-
-
 //Ways to vertically align text when rendering it.
 enum TEXT_VALIGN_MODES {
     //Align to the top.
@@ -219,9 +202,6 @@ void draw_text_lines(
 void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
-);
-float ease(
-    const EASING_METHODS method, float y
 );
 void get_control_icon_info(
     const control_info* c, const bool condensed,
