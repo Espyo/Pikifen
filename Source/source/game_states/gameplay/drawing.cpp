@@ -150,6 +150,9 @@ void gameplay_state::do_game_drawing(
     }
     al_use_transform(&game.identity_transform);
     hud->gui.draw();
+    
+    draw_big_msg();
+    
     if(msg_box) {
         draw_message_box();
     } else if(onion_menu) {
@@ -159,11 +162,10 @@ void gameplay_state::do_game_drawing(
     } else {
         draw_mouse_cursor(cursor_color);
     }
+    
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }
-    
-    draw_interlude();
     
     //Layer 9 -- System stuff.
     draw_system_stuff();
@@ -244,6 +246,90 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
         bg_v, NULL, game.cur_area_data.bg_bmp,
         0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the current big message, if any.
+ */
+void gameplay_state::draw_big_msg() {
+    switch(cur_big_msg) {
+    case BIG_MESSAGE_NONE: {
+        return;
+        
+    } case BIG_MESSAGE_READY:
+    case BIG_MESSAGE_MISSION_COMPLETE: {
+        const float duration =
+            cur_big_msg == BIG_MESSAGE_READY ?
+            GAMEPLAY::BIG_MSG_READY_DURATION :
+            GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DURATION;
+        const string &text =
+            cur_big_msg == BIG_MESSAGE_READY ?
+            GAMEPLAY::BIG_MSG_READY_TEXT :
+            GAMEPLAY::BIG_MSG_MISSION_COMPLETE_TEXT;
+        const float text_w =
+            cur_big_msg == BIG_MESSAGE_READY ?
+            game.win_w * 0.60f :
+            game.win_w * 0.80f;
+        const float TEXT_PAUSE_T = 0.50f;
+        const float TEXT_SHRINK_T = 0.95f;
+        const float TEXT_VARIATION_DUR = 0.08f;
+        const float t = big_msg_time / duration;
+        
+        keyframe_interpolator ki_y(game.win_h * (-0.2f));
+        ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
+        ki_y.add(TEXT_SHRINK_T, game.win_h / 2.0f);
+        keyframe_interpolator ki_s(2.0f);
+        ki_s.add(TEXT_SHRINK_T, 2.4f);
+        ki_s.add(1.0f, 0.0f, EASE_IN);
+        
+        float scale = ki_s.get(t);
+        
+        for(size_t c = 0; c < text.size(); ++c) {
+            float char_ratio = c / ((float) text.size() - 1);
+            char_ratio = 1.0f - char_ratio;
+            float x_offset = (text_w / 2.0f) - (text_w * char_ratio);
+            float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
+            draw_scaled_text(
+                game.fonts.area_name,
+                al_map_rgb(255, 215, 0),
+                point((game.win_w / 2.0f) + x_offset, y),
+                point(scale, scale),
+                ALLEGRO_ALIGN_CENTER,
+                TEXT_VALIGN_CENTER,
+                string(1, text[c])
+            );
+        }
+        break;
+        
+    } case BIG_MESSAGE_GO: {
+
+        const float TEXT_GROW_STOP_T = 0.10f;
+        const float t = big_msg_time / GAMEPLAY::BIG_MSG_GO_DURATION;
+        
+        keyframe_interpolator ki_s(0.0f);
+        ki_s.add(TEXT_GROW_STOP_T, 4.0f, EASE_OUT_ELASTIC);
+        ki_s.add(1.0f, 4.4f);
+        keyframe_interpolator ki_a(1.0f);
+        ki_a.add(TEXT_GROW_STOP_T, 1.0f);
+        ki_a.add(1.0f, 0.0f);
+        
+        float scale = ki_s.get(t);
+        float alpha = ki_a.get(t);
+        
+        draw_scaled_text(
+            game.fonts.area_name,
+            al_map_rgba(255, 215, 0, 255 * alpha),
+            point(game.win_w / 2.0f, game.win_h / 2.0f),
+            point(scale, scale),
+            ALLEGRO_ALIGN_CENTER,
+            TEXT_VALIGN_CENTER,
+            GAMEPLAY::BIG_MSG_GO_TEXT
+        );
+        break;
+        
+    }
+    }
 }
 
 
@@ -467,61 +553,6 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     }
     
     al_use_transform(&game.world_to_screen_transform);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws the current interlude, if any.
- */
-void gameplay_state::draw_interlude() {
-    switch(cur_interlude) {
-    case INTERLUDE_NONE: {
-        return;
-        
-    } case INTERLUDE_READY:
-    case INTERLUDE_MISSION_COMPLETE: {
-        const float duration =
-            cur_interlude == INTERLUDE_READY ?
-            GAMEPLAY::INTERLUDE_READY_DURATION :
-            GAMEPLAY::INTERLUDE_MISSION_COMPLETE_DURATION;
-        const float t = interlude_time / duration;
-        const string &text =
-            cur_interlude == INTERLUDE_READY ?
-            GAMEPLAY::INTERLUDE_READY_TEXT :
-            GAMEPLAY::INTERLUDE_MISSION_COMPLETE_TEXT;
-        const float start_x = game.win_w * 0.2f;
-        const float char_spacing = game.win_w * (0.8f / text.size());
-        const float TEXT_PAUSE_T = 0.50f;
-        const float TEXT_SHRINK_T = 0.90f;
-        const float TEXT_VARIATION_DUR = 0.08f;
-        
-        keyframe_interpolator ki_y(game.win_h * (-0.2f));
-        ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
-        ki_y.add(TEXT_SHRINK_T, game.win_h / 2.0f);
-        keyframe_interpolator ki_s(2.0f);
-        ki_s.add(TEXT_SHRINK_T, 2.4f);
-        ki_s.add(1.0f, 0.0f, EASE_IN);
-        
-        float scale = ki_s.get(t);
-        
-        for(size_t c = 0; c < text.size(); ++c) {
-            float x_offset = char_spacing * c;
-            float char_ratio = c / (float) text.size();
-            float y = ki_y.get(t + (1 - char_ratio) * TEXT_VARIATION_DUR);
-            draw_scaled_text(
-                game.fonts.area_name,
-                al_map_rgb(255, 215, 0),
-                point(start_x + x_offset, y),
-                point(scale, scale),
-                ALLEGRO_ALIGN_CENTER,
-                TEXT_VALIGN_CENTER,
-                string(1, text[c])
-            );
-        }
-        break;
-        
-    }
-    }
 }
 
 

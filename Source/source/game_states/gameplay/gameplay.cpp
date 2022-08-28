@@ -31,6 +31,18 @@ namespace GAMEPLAY {
 const float AREA_INTRO_HUD_MOVE_TIME = 3.0f;
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 3.0f;
+//How long the "Go!" big message lasts for.
+const float BIG_MSG_GO_DURATION = 1.5f;
+//What text to show in the "Go!" big message.
+const string BIG_MSG_GO_TEXT = "GO!";
+//How long the "Mission complete!" big message lasts for.
+const float BIG_MSG_MISSION_COMPLETE_DURATION = 3.0f;
+//What text to show in the "Mission complete!" big message.
+const string BIG_MSG_MISSION_COMPLETE_TEXT = "MISSION COMPLETE!";
+//How long the "Ready?" big message lasts for.
+const float BIG_MSG_READY_DURATION = 2.5f;
+//What text to show in the "Ready?" big message.
+const string BIG_MSG_READY_TEXT = "READY?";
 //Something is only considered off-camera if it's beyond this extra margin.
 const float CAMERA_BOX_MARGIN = 128.0f;
 //Dampen the camera's movements by this much.
@@ -49,14 +61,6 @@ const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
 const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
-//How long the "Mission complete!" interlude lasts for.
-const float INTERLUDE_MISSION_COMPLETE_DURATION = 3.0f;
-//What text to show in the "Mission complete!" interlude.
-const string INTERLUDE_MISSION_COMPLETE_TEXT = "MISSION COMPLETE!";
-//How long the "Ready?" interlude lasts for.
-const float INTERLUDE_READY_DURATION = 2.5f;
-//What text to show in the "Ready?" interlude.
-const string INTERLUDE_READY_TEXT = "READY?";
 //How long the HUD moves for when a menu is entered.
 const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 //How long the HUD moves for when a menu is exited.
@@ -109,6 +113,8 @@ gameplay_state::gameplay_state() :
     enemy_deaths(0),
     cur_interlude(INTERLUDE_NONE),
     interlude_time(0.0f),
+    cur_big_msg(BIG_MESSAGE_NONE),
+    big_msg_time(0.0f),
     cancel_control_id(INVALID),
     close_to_interactable_to_use(nullptr),
     close_to_nest_to_open(nullptr),
@@ -800,6 +806,8 @@ void gameplay_state::load() {
     paused = false;
     cur_interlude = INTERLUDE_READY;
     interlude_time = 0.0f;
+    cur_big_msg = BIG_MESSAGE_READY;
+    big_msg_time = 0.0f;
     game.maker_tools.reset_for_gameplay();
     
     map<string, string> spray_strs =

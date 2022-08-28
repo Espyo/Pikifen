@@ -26,6 +26,14 @@
 #include "pause_menu.h"
 
 namespace GAMEPLAY {
+extern const float AREA_INTRO_HUD_MOVE_TIME;
+extern const float AREA_TITLE_FADE_DURATION;
+extern const float BIG_MSG_GO_DURATION;
+extern const string BIG_MSG_GO_TEXT;
+extern const float BIG_MSG_MISSION_COMPLETE_DURATION;
+extern const string BIG_MSG_MISSION_COMPLETE_TEXT;
+extern const float BIG_MSG_READY_DURATION;
+extern const string BIG_MSG_READY_TEXT;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_MULT;
 extern const unsigned char COLLISION_OPACITY;
@@ -33,18 +41,12 @@ extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
 extern const float CURSOR_TRAIL_MAX_WIDTH;
 extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
 extern const int FOG_BITMAP_SIZE;
-extern const float INTERLUDE_MISSION_COMPLETE_DURATION;
-extern const string INTERLUDE_MISSION_COMPLETE_TEXT;
-extern const float INTERLUDE_READY_DURATION;
-extern const string INTERLUDE_READY_TEXT;
 extern const unsigned char PREVIEW_OPACITY;
 extern const float PREVIEW_TEXTURE_SCALE;
 extern const float PREVIEW_TEXTURE_TIME_MULT;
 extern const float REPLAY_SAVE_FREQUENCY;
 extern const float TREE_SHADOW_SWAY_AMOUNT;
 extern const float TREE_SHADOW_SWAY_SPEED;
-extern const float AREA_INTRO_HUD_MOVE_TIME;
-extern const float AREA_TITLE_FADE_DURATION;
 extern const float CURSOR_TRAIL_SAVE_INTERVAL;
 extern const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
 extern const float MENU_ENTRY_HUD_MOVE_TIME;
@@ -61,6 +63,19 @@ enum INTERLUDES {
     INTERLUDE_READY,
     //Mission complete!
     INTERLUDE_MISSION_COMPLETE,
+};
+
+
+//Types of big messages -- text that appears in large letters on-screen.
+enum BIG_MESSAGES {
+    //None.
+    BIG_MESSAGE_NONE,
+    //Ready?
+    BIG_MESSAGE_READY,
+    //Go!
+    BIG_MESSAGE_GO,
+    //Mission complete!
+    BIG_MESSAGE_MISSION_COMPLETE,
 };
 
 
@@ -150,10 +165,14 @@ public:
     size_t pikmin_deaths;
     //How many enemy deaths in the current area so far?
     size_t enemy_deaths;
-    //Current interlude.
+    //Current interlude, if any.
     INTERLUDES cur_interlude;
     //Time passed in the current interlude.
     float interlude_time;
+    //Current big message, if any.
+    BIG_MESSAGES cur_big_msg;
+    //Time passed in the current big message.
+    float big_msg_time;
     
     //Target to leave towards.
     enum LEAVE_TARGET {
@@ -238,7 +257,7 @@ private:
     void draw_background(ALLEGRO_BITMAP* bmp_output);
     void draw_leader_cursor(const ALLEGRO_COLOR &color);
     void draw_ingame_text();
-    void draw_interlude();
+    void draw_big_msg();
     void draw_lighting_filter();
     void draw_message_box();
     void draw_mouse_cursor(const ALLEGRO_COLOR &color);

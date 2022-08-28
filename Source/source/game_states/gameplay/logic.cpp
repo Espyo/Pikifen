@@ -965,25 +965,46 @@ void gameplay_state::do_menu_logic() {
     }
     
     game.maker_tools.info_print_timer.tick(game.delta_t);
-
+    
+    if(cur_big_msg != BIG_MESSAGE_NONE) {
+        big_msg_time += game.delta_t;
+    }
+    
+    switch(cur_big_msg) {
+    case BIG_MESSAGE_NONE: {
+        break;
+    } case BIG_MESSAGE_READY: {
+        if(big_msg_time >= GAMEPLAY::BIG_MSG_READY_DURATION) {
+            cur_big_msg = BIG_MESSAGE_GO;
+            big_msg_time = 0.0f;
+        }
+        break;
+    } case BIG_MESSAGE_GO: {
+        if(big_msg_time >= GAMEPLAY::BIG_MSG_GO_DURATION) {
+            cur_big_msg = BIG_MESSAGE_NONE;
+        }
+        break;
+    } case BIG_MESSAGE_MISSION_COMPLETE: {
+        if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DURATION) {
+            cur_big_msg = BIG_MESSAGE_NONE;
+        }
+    }
+    }
+    
+    if(cur_interlude != INTERLUDE_NONE) {
+        interlude_time += game.delta_t;
+    }
+    
     switch(cur_interlude) {
     case INTERLUDE_NONE: {
         break;
     } case INTERLUDE_READY: {
-        interlude_time += game.delta_t;
-        if(
-            interlude_time >=
-            GAMEPLAY::INTERLUDE_READY_DURATION
-        ) {
+        if(interlude_time >= GAMEPLAY::BIG_MSG_READY_DURATION) {
             cur_interlude = INTERLUDE_NONE;
         }
         break;
     } case INTERLUDE_MISSION_COMPLETE: {
-        interlude_time += game.delta_t;
-        if(
-            interlude_time >=
-            GAMEPLAY::INTERLUDE_MISSION_COMPLETE_DURATION
-        ) {
+        if(interlude_time >= GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DURATION) {
             cur_interlude = INTERLUDE_NONE;
             leave(LEAVE_TO_FINISH);
         }
