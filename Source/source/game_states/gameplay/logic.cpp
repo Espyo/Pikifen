@@ -974,18 +974,22 @@ void gameplay_state::do_menu_logic() {
     case BIG_MESSAGE_NONE: {
         break;
     } case BIG_MESSAGE_READY: {
-        if(big_msg_time >= GAMEPLAY::BIG_MSG_READY_DURATION) {
+        if(big_msg_time >= GAMEPLAY::BIG_MSG_READY_DUR) {
             cur_big_msg = BIG_MESSAGE_GO;
             big_msg_time = 0.0f;
         }
         break;
     } case BIG_MESSAGE_GO: {
-        if(big_msg_time >= GAMEPLAY::BIG_MSG_GO_DURATION) {
+        if(big_msg_time >= GAMEPLAY::BIG_MSG_GO_DUR) {
             cur_big_msg = BIG_MESSAGE_NONE;
         }
         break;
     } case BIG_MESSAGE_MISSION_COMPLETE: {
-        if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DURATION) {
+        if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DUR) {
+            cur_big_msg = BIG_MESSAGE_NONE;
+        }
+    } case BIG_MESSAGE_MISSION_FAILED: {
+        if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) {
             cur_big_msg = BIG_MESSAGE_NONE;
         }
     }
@@ -999,12 +1003,12 @@ void gameplay_state::do_menu_logic() {
     case INTERLUDE_NONE: {
         break;
     } case INTERLUDE_READY: {
-        if(interlude_time >= GAMEPLAY::BIG_MSG_READY_DURATION) {
+        if(interlude_time >= GAMEPLAY::BIG_MSG_READY_DUR) {
             cur_interlude = INTERLUDE_NONE;
         }
         break;
-    } case INTERLUDE_MISSION_COMPLETE: {
-        if(interlude_time >= GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DURATION) {
+    } case INTERLUDE_MISSION_END: {
+        if(interlude_time >= GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DUR) {
             cur_interlude = INTERLUDE_NONE;
             leave(LEAVE_TO_FINISH);
         }

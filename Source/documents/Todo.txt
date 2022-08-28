@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -65,7 +65,6 @@ Next tasks (roughly sorted most important first)
         Update the results screen
             For simple areas, explain somehow how there is no grading, but here are some stats anyway
             For mission areas, show the area name and mission goal, mission grading type, all possible stats and how you did on them (or some cross or something representing how that stat is not applicable), and a spot at the end for the final result and medal icon
-        Create states for a "ready? go!" transition and a "mission over!" transition
         [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area

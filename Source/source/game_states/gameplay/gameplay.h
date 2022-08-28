@@ -28,11 +28,13 @@
 namespace GAMEPLAY {
 extern const float AREA_INTRO_HUD_MOVE_TIME;
 extern const float AREA_TITLE_FADE_DURATION;
-extern const float BIG_MSG_GO_DURATION;
+extern const float BIG_MSG_GO_DUR;
 extern const string BIG_MSG_GO_TEXT;
-extern const float BIG_MSG_MISSION_COMPLETE_DURATION;
+extern const float BIG_MSG_MISSION_COMPLETE_DUR;
 extern const string BIG_MSG_MISSION_COMPLETE_TEXT;
-extern const float BIG_MSG_READY_DURATION;
+extern const float BIG_MSG_MISSION_FAILED_DUR;
+extern const string BIG_MSG_MISSION_FAILED_TEXT;
+extern const float BIG_MSG_READY_DUR;
 extern const string BIG_MSG_READY_TEXT;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_MULT;
@@ -61,8 +63,8 @@ enum INTERLUDES {
     INTERLUDE_NONE,
     //Ready?
     INTERLUDE_READY,
-    //Mission complete!
-    INTERLUDE_MISSION_COMPLETE,
+    //Mission end, be it because it completed, or because it failed.
+    INTERLUDE_MISSION_END,
 };
 
 
@@ -76,6 +78,8 @@ enum BIG_MESSAGES {
     BIG_MESSAGE_GO,
     //Mission complete!
     BIG_MESSAGE_MISSION_COMPLETE,
+    //Mission failed...
+    BIG_MESSAGE_MISSION_FAILED,
 };
 
 

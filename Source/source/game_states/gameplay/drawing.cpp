@@ -257,38 +257,28 @@ void gameplay_state::draw_big_msg() {
     case BIG_MESSAGE_NONE: {
         return;
         
-    } case BIG_MESSAGE_READY:
-    case BIG_MESSAGE_MISSION_COMPLETE: {
-        const float duration =
-            cur_big_msg == BIG_MESSAGE_READY ?
-            GAMEPLAY::BIG_MSG_READY_DURATION :
-            GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DURATION;
-        const string &text =
-            cur_big_msg == BIG_MESSAGE_READY ?
-            GAMEPLAY::BIG_MSG_READY_TEXT :
-            GAMEPLAY::BIG_MSG_MISSION_COMPLETE_TEXT;
-        const float text_w =
-            cur_big_msg == BIG_MESSAGE_READY ?
-            game.win_w * 0.60f :
-            game.win_w * 0.80f;
+    } case BIG_MESSAGE_READY: {
+        const float TEXT_W = game.win_w * 0.60f;
+        const float TEXT_INITIAL_SCALE = 2.0f;
+        const float TEXT_VARIATION_DUR = 0.08f;
         const float TEXT_PAUSE_T = 0.50f;
         const float TEXT_SHRINK_T = 0.95f;
-        const float TEXT_VARIATION_DUR = 0.08f;
-        const float t = big_msg_time / duration;
+        const float t = big_msg_time / GAMEPLAY::BIG_MSG_READY_DUR;
         
         keyframe_interpolator ki_y(game.win_h * (-0.2f));
         ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
         ki_y.add(TEXT_SHRINK_T, game.win_h / 2.0f);
-        keyframe_interpolator ki_s(2.0f);
-        ki_s.add(TEXT_SHRINK_T, 2.4f);
+        keyframe_interpolator ki_s(TEXT_INITIAL_SCALE);
+        ki_s.add(TEXT_SHRINK_T, TEXT_INITIAL_SCALE * 1.4f);
         ki_s.add(1.0f, 0.0f, EASE_IN);
         
         float scale = ki_s.get(t);
         
-        for(size_t c = 0; c < text.size(); ++c) {
-            float char_ratio = c / ((float) text.size() - 1);
+        for(size_t c = 0; c < GAMEPLAY::BIG_MSG_READY_TEXT.size(); ++c) {
+            float char_ratio =
+                c / ((float) GAMEPLAY::BIG_MSG_READY_TEXT.size() - 1);
             char_ratio = 1.0f - char_ratio;
-            float x_offset = (text_w / 2.0f) - (text_w * char_ratio);
+            float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
             draw_scaled_text(
                 game.fonts.area_name,
@@ -297,7 +287,7 @@ void gameplay_state::draw_big_msg() {
                 point(scale, scale),
                 ALLEGRO_ALIGN_CENTER,
                 TEXT_VALIGN_CENTER,
-                string(1, text[c])
+                string(1, GAMEPLAY::BIG_MSG_READY_TEXT[c])
             );
         }
         break;
@@ -305,7 +295,7 @@ void gameplay_state::draw_big_msg() {
     } case BIG_MESSAGE_GO: {
 
         const float TEXT_GROW_STOP_T = 0.10f;
-        const float t = big_msg_time / GAMEPLAY::BIG_MSG_GO_DURATION;
+        const float t = big_msg_time / GAMEPLAY::BIG_MSG_GO_DUR;
         
         keyframe_interpolator ki_s(0.0f);
         ki_s.add(TEXT_GROW_STOP_T, 4.0f, EASE_OUT_ELASTIC);
@@ -326,6 +316,47 @@ void gameplay_state::draw_big_msg() {
             TEXT_VALIGN_CENTER,
             GAMEPLAY::BIG_MSG_GO_TEXT
         );
+        break;
+        
+    } case BIG_MESSAGE_MISSION_COMPLETE:
+    case BIG_MESSAGE_MISSION_FAILED: {
+        const string TEXT =
+            cur_big_msg == BIG_MESSAGE_MISSION_COMPLETE ?
+            GAMEPLAY::BIG_MSG_MISSION_COMPLETE_TEXT :
+            GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT;
+        const float TEXT_W = game.win_w * 0.80f;
+        const float TEXT_INITIAL_SCALE = 1.1f;
+        const float TEXT_VARIATION_DUR = 0.08f;
+        const float TEXT_PAUSE_T = 0.50f;
+        const float TEXT_FADE_T = 0.90f;
+        const float t = big_msg_time / GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DUR;
+        
+        keyframe_interpolator ki_y(game.win_h * (-0.2f));
+        ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
+        keyframe_interpolator ki_s(TEXT_INITIAL_SCALE);
+        ki_s.add(1.0f, TEXT_INITIAL_SCALE * 1.4f, EASE_IN);
+        keyframe_interpolator ki_a(1.0f);
+        ki_a.add(TEXT_FADE_T, 1.0f);
+        ki_a.add(1.0f, 0.0f);
+        
+        float scale = ki_s.get(t);
+        float alpha = ki_a.get(t);
+        
+        for(size_t c = 0; c < TEXT.size(); ++c) {
+            float char_ratio = c / ((float) TEXT.size() - 1);
+            char_ratio = 1.0f - char_ratio;
+            float x_offset = (TEXT_W / 2.0f) - (TEXT_W * char_ratio);
+            float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
+            draw_scaled_text(
+                game.fonts.area_name,
+                al_map_rgba(255, 215, 0, 255 * alpha),
+                point((game.win_w / 2.0f) + x_offset, y),
+                point(scale, scale),
+                ALLEGRO_ALIGN_CENTER,
+                TEXT_VALIGN_CENTER,
+                string(1, TEXT[c])
+            );
+        }
         break;
         
     }
