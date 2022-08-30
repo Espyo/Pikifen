@@ -350,7 +350,8 @@ protected:
     
     //Standard functions.
     void center_camera(
-        const point &min_coords, const point &max_coords
+        const point &min_coords, const point &max_coords,
+        const bool instantaneous = false
     );
     bool check_new_unsaved_changes(const point &pos = point());
     void close_top_dialog();

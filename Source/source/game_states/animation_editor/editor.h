@@ -28,8 +28,8 @@ extern const size_t TIMELINE_HEIGHT;
 extern const size_t TIMELINE_LOOP_TRI_SIZE;
 extern const size_t TIMELINE_PADDING;
 extern const float TOP_MIN_SIZE;
-extern const float ZOOM_MAX_LEVEL_EDITOR;
-extern const float ZOOM_MIN_LEVEL_EDITOR;
+extern const float ZOOM_MAX_LEVEL;
+extern const float ZOOM_MIN_LEVEL;
 }
 
 

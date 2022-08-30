@@ -160,6 +160,9 @@ bool is_point_in_triangle(
     const point &p, const point &tp1, const point &tp2, const point &tp3,
     bool loq
 );
+bool is_point_in_rectangle(
+    const point &p, const point &rect_center, const point &rect_size
+);
 float linear_dist_to_angular(const float linear_dist, const float radius);
 bool line_segs_are_collinear(
     const point &a, const point &b, const point &c, const point &d

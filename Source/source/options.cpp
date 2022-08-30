@@ -59,6 +59,10 @@ const bool DEF_EDITOR_SHOW_TOOLTIPS = true;
 const ALLEGRO_COLOR DEF_EDITOR_TEXT_COLOR = {1.0f, 1.0f, 1.0f, 1.0f};
 //Default value for whether to use custom styles in editors.
 const bool DEF_EDITOR_USE_CUSTOM_STYLE = false;
+//Default value for the GUI editor grid interval.
+const float DEF_GUI_EDITOR_GRID_INTERVAL = 2.5f;
+//Default value for the GUI editor snap mode.
+const bool DEF_GUI_EDITOR_SNAP = true;
 //Default value for the joystick maximum deadzone.
 const float DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 //Default value for the joystick minimum deadzone.
@@ -113,6 +117,8 @@ options_struct::options_struct() :
     editor_show_tooltips(OPTIONS::DEF_EDITOR_SHOW_TOOLTIPS),
     editor_text_color(OPTIONS::DEF_EDITOR_TEXT_COLOR),
     editor_use_custom_style(OPTIONS::DEF_EDITOR_USE_CUSTOM_STYLE),
+    gui_editor_grid_interval(OPTIONS::DEF_GUI_EDITOR_GRID_INTERVAL),
+    gui_editor_snap(OPTIONS::DEF_GUI_EDITOR_SNAP),
     intended_win_fullscreen(OPTIONS::DEF_WIN_FULLSCREEN),
     intended_win_h(OPTIONS::DEF_WIN_H),
     intended_win_w(OPTIONS::DEF_WIN_W),
@@ -219,6 +225,8 @@ void options_struct::load(data_node* file) {
     rs.set("editor_use_custom_style", editor_use_custom_style);
     rs.set("fps", target_fps);
     rs.set("fullscreen", intended_win_fullscreen);
+    rs.set("gui_editor_grid_interval", gui_editor_grid_interval);
+    rs.set("gui_editor_snap", gui_editor_snap);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
     rs.set("joystick_max_deadzone", joystick_max_deadzone);
     rs.set("max_particles", max_particles);
@@ -495,6 +503,18 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "fullscreen",
             b2s(intended_win_fullscreen)
+        )
+    );
+    file->add(
+        new data_node(
+            "gui_editor_grid_interval",
+            f2s(gui_editor_grid_interval)
+        )
+    );
+    file->add(
+        new data_node(
+            "gui_editor_snap",
+            b2s(gui_editor_snap)
         )
     );
     file->add(

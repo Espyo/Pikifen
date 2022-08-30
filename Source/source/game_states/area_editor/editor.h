@@ -52,8 +52,8 @@ extern const float SELECTION_EFFECT_SPEED;
 extern const float SELECTION_TW_PADDING;
 extern const float UNDO_SAVE_LOCK_DURATION;
 extern const float VERTEX_MERGE_RADIUS;
-extern const float ZOOM_MAX_LEVEL_EDITOR;
-extern const float ZOOM_MIN_LEVEL_EDITOR;
+extern const float ZOOM_MAX_LEVEL;
+extern const float ZOOM_MIN_LEVEL;
 }
 
 

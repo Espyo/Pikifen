@@ -102,9 +102,13 @@ editor::editor() :
  *   Top-left coordinates of the content to focus on.
  * max_coords:
  *   Bottom-right coordinates of the content to focus on.
+ * instantaneous:
+ *   If true, the camera moves there instantaneously. If false, it smoothly
+ *   gets there over time.
  */
 void editor::center_camera(
-    const point &min_coords, const point &max_coords
+    const point &min_coords, const point &max_coords,
+    const bool instantaneous
 ) {
     point min_c = min_coords;
     point max_c = max_coords;
@@ -125,6 +129,12 @@ void editor::center_camera(
     z -= z * 0.1;
     
     game.cam.target_zoom = z;
+    
+    if(instantaneous) {
+        game.cam.pos = game.cam.target_pos;
+        game.cam.zoom = game.cam.target_zoom;
+    }
+    
     update_transformations();
 }
 
@@ -1311,7 +1321,9 @@ bool editor::process_gui_size_widgets(
     bool ret = false;
     point new_size = size;
     if(
-        ImGui::DragFloat2(label, (float*) &new_size, v_speed)
+        ImGui::DragFloat2(
+            label, (float*) &new_size, v_speed, min_size, FLT_MAX
+        )
     ) {
         if(pre_change_callback) {
             pre_change_callback();

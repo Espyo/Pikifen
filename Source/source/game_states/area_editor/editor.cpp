@@ -83,9 +83,9 @@ const float UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
 const float VERTEX_MERGE_RADIUS = 10.0f;
 //Maximum zoom level possible in the editor.
-const float ZOOM_MAX_LEVEL_EDITOR = 8.0f;
+const float ZOOM_MAX_LEVEL = 8.0f;
 //Minimum zoom level possible in the editor.
-const float ZOOM_MIN_LEVEL_EDITOR = 0.01f;
+const float ZOOM_MIN_LEVEL = 0.01f;
 }
 
 
@@ -151,8 +151,8 @@ area_editor::area_editor() :
             );
     }
     
-    zoom_max_level = AREA_EDITOR::ZOOM_MAX_LEVEL_EDITOR;
-    zoom_min_level = AREA_EDITOR::ZOOM_MIN_LEVEL_EDITOR;
+    zoom_max_level = AREA_EDITOR::ZOOM_MAX_LEVEL;
+    zoom_min_level = AREA_EDITOR::ZOOM_MIN_LEVEL;
 }
 
 

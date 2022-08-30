@@ -1172,6 +1172,26 @@ bool is_point_in_triangle(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether a point is inside a triangle or not.
+ * p:
+ *   The point to check.
+ * rect_center:
+ *   Center coordinates of the rectangle.
+ * rect_size:
+ *   Width and height of the rectangle.
+ */
+bool is_point_in_rectangle(
+    const point &p, const point &rect_center, const point &rect_size
+) {
+    if(p.x < rect_center.x - rect_size.x / 2.0f) return false;
+    if(p.x > rect_center.x + rect_size.x / 2.0f) return false;
+    if(p.y < rect_center.y - rect_size.y / 2.0f) return false;
+    if(p.y > rect_center.y + rect_size.y / 2.0f) return false;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether a line segment intersects with a rectangle.
  * Also returns true if the line is fully inside the rectangle.
  * r1:

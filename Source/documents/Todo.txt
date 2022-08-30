@@ -2,6 +2,12 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Add the editor to the main menu
+        Split main menu into "Play" and "Make"
+    Add the GUI editor to the manual
+        Don't forget to add it to the maker toolkit's auto start section
+    Use the GUI editor to make important buttons on some menus bigger
+    All editors' functions in .h files should be separated into groups, commented
     Find new names for "loss" and "victory"; in P3 both are just "completion", simply that one is more positive than the other
         Maybe just "goal reached" and "goal not reached"? Not really sure where to use this anyway
     Move the area's stats into the review panel (thanks Helodity)
@@ -14,7 +20,11 @@ Next tasks (roughly sorted most important first)
     Pikmin tops don't scale when they fall down a pit (thanks Helodity)
     If the leader is moving when the mission ends, they will keep moving in that direction if you choose to retry
     Mobs that get deleted should remove links that other mobs have to them (thanks Helodity)
+        Also, that crash with a Bulborb eating a bomb rock and destroying it at the same time
+        Also, Pikmin getting bit while held by a leader
+        Check Helodity's branch
     Ceramic bridge texture should be 256x256 (thanks isma3)
+    Pressing the quit button on an editor's menu bar will make the unsaved changes warning appear on the toolbar icon instead
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -878,6 +888,7 @@ Tasks for later on (I might never implement these)
     Other details
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     A competitive mode where each team's marble is out in the open, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
+    Missions could have unlock criteria, like a mission only unlocking if another one is finished, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
     Story mode
         A way to choose what landing site of the area you want to start the day in
     [NEEDS BRAINSTORMING] Online play?

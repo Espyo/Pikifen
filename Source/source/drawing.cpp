@@ -627,6 +627,7 @@ void draw_filled_rounded_rectangle(
 ) {
     float final_radii = std::min(radii, size.x / 2.0f);
     final_radii = std::min(final_radii, size.y / 2.0f);
+    final_radii = std::max(0.0f, final_radii);
     al_draw_filled_rounded_rectangle(
         center.x - size.x / 2.0f, center.y - size.y / 2.0f,
         center.x + size.x / 2.0f, center.y + size.y / 2.0f,
@@ -1247,6 +1248,7 @@ void draw_rounded_rectangle(
 ) {
     float final_radii = std::min(radii, size.x / 2.0f);
     final_radii = std::min(final_radii, size.y / 2.0f);
+    final_radii = std::max(0.0f, final_radii);
     al_draw_rounded_rectangle(
         center.x - size.x / 2.0f, center.y - size.y / 2.0f,
         center.x + size.x / 2.0f, center.y + size.y / 2.0f,

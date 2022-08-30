@@ -1524,6 +1524,18 @@ void save_options() {
         );
     }
     
+    for(
+        size_t h = 0; h < game.states.gui_ed->history.size(); ++h
+    ) {
+        file.add(
+            new data_node(
+                game.states.gui_ed->get_history_option_prefix() +
+                i2s(h + 1),
+                game.states.gui_ed->history[h]
+            )
+        );
+    }
+    
     //Finally, save.
     file.save_file(OPTIONS_FILE_PATH, true, true);
 }

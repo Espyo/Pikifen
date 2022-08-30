@@ -60,6 +60,8 @@ extern const ALLEGRO_COLOR DEF_EDITOR_SECONDARY_COLOR;
 extern const ALLEGRO_COLOR DEF_EDITOR_TEXT_COLOR;
 extern const bool DEF_EDITOR_USE_CUSTOM_STYLE;
 extern const bool DEF_EDITOR_SHOW_TOOLTIPS;
+extern const float DEF_GUI_EDITOR_GRID_INTERVAL;
+extern const bool DEF_GUI_EDITOR_SNAP;
 extern const float DEF_JOYSTICK_MIN_DEADZONE;
 extern const float DEF_JOYSTICK_MAX_DEADZONE;
 extern const size_t DEF_MAX_PARTICLES;
@@ -123,6 +125,10 @@ struct options_struct {
     ALLEGRO_COLOR editor_text_color;
     //Should the editors use a custom style, or the default?
     bool editor_use_custom_style;
+    //Grid interval in the GUI editor, in units.
+    float gui_editor_grid_interval;
+    //Snap to grid?
+    bool gui_editor_snap;
     //Player's intended option for fullscreen, before restarting the game.
     bool intended_win_fullscreen;
     //Player's intended option for window height, before restarting the game.

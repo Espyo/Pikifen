@@ -20,6 +20,7 @@
 #include "game_states/animation_editor/editor.h"
 #include "game_states/area_editor/editor.h"
 #include "game_states/gameplay/gameplay.h"
+#include "game_states/gui_editor/editor.h"
 #include "game_states/menus.h"
 #include "game_states/results.h"
 #include "liquid.h"
@@ -49,6 +50,8 @@ struct game_state_list {
     controls_menu_state* controls_menu;
     //Gameplay state.
     gameplay_state* gameplay;
+    //GUI editor state.
+    gui_editor* gui_ed;
     //Main menu.
     main_menu_state* main_menu;
     //Options menu.

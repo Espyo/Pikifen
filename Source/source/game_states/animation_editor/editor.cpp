@@ -43,9 +43,9 @@ const size_t TIMELINE_PADDING = 6;
 //Minimum width or height a Pikmin top can have.
 const float TOP_MIN_SIZE = 1.0f;
 //Maximum zoom level possible in the editor.
-const float ZOOM_MAX_LEVEL_EDITOR = 32.0f;
+const float ZOOM_MAX_LEVEL = 32.0f;
 //Minimum zoom level possible in the editor.
-const float ZOOM_MIN_LEVEL_EDITOR = 0.05f;
+const float ZOOM_MIN_LEVEL = 0.05f;
 }
 
 
@@ -93,8 +93,8 @@ animation_editor::animation_editor() :
         );
     comparison_blink_timer.start();
     
-    zoom_min_level = ANIM_EDITOR::ZOOM_MIN_LEVEL_EDITOR;
-    zoom_max_level = ANIM_EDITOR::ZOOM_MAX_LEVEL_EDITOR;
+    zoom_min_level = ANIM_EDITOR::ZOOM_MIN_LEVEL;
+    zoom_max_level = ANIM_EDITOR::ZOOM_MAX_LEVEL;
 }
 
 

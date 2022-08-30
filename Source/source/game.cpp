@@ -20,6 +20,7 @@
 #include "init.h"
 #include "load.h"
 
+
 namespace GAME {
 //Duration of full-screen fades.
 const float FADE_DURATION = 0.15f;
@@ -137,6 +138,10 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
                 maker_tools.auto_start_mode = "area_editor";
                 maker_tools.auto_start_option =
                     states.area_ed->get_opened_folder_path();
+            } else if(cur_state == states.gui_ed->get_name()) {
+                maker_tools.auto_start_mode = "gui_editor";
+                maker_tools.auto_start_option =
+                    states.gui_ed->get_opened_file_name();
             } else if(cur_state == states.gameplay->get_name()) {
                 maker_tools.auto_start_mode = "play";
                 maker_tools.auto_start_option =
@@ -328,6 +333,7 @@ int game_class::start() {
         game.states.gameplay->path_of_area_to_load =
             game.maker_tools.auto_start_option;
         game.change_state(game.states.gameplay);
+
     } else if(
         game.maker_tools.enabled &&
         game.maker_tools.auto_start_mode == "animation_editor"
@@ -335,6 +341,7 @@ int game_class::start() {
         game.states.animation_ed->auto_load_anim =
             game.maker_tools.auto_start_option;
         game.change_state(game.states.animation_ed);
+
     } else if(
         game.maker_tools.enabled &&
         game.maker_tools.auto_start_mode == "area_editor"
@@ -342,6 +349,15 @@ int game_class::start() {
         game.states.area_ed->auto_load_area =
             game.maker_tools.auto_start_option;
         game.change_state(game.states.area_ed);
+
+    } else if(
+        game.maker_tools.enabled &&
+        game.maker_tools.auto_start_mode == "gui_editor"
+    ) {
+        game.states.gui_ed->auto_load_file =
+            game.maker_tools.auto_start_option;
+        game.change_state(game.states.gui_ed);
+
     } else {
         game.change_state(game.states.main_menu);
     }
@@ -371,6 +387,7 @@ game_state_list::game_state_list() :
     area_menu(nullptr),
     controls_menu(nullptr),
     gameplay(nullptr),
+    gui_ed(nullptr),
     main_menu(nullptr),
     options_menu(nullptr),
     results(nullptr) {
@@ -387,6 +404,7 @@ void game_state_list::destroy() {
     delete area_menu;
     delete controls_menu;
     delete gameplay;
+    delete gui_ed;
     delete main_menu;
     delete options_menu;
     delete results;
@@ -396,6 +414,7 @@ void game_state_list::destroy() {
     area_menu = NULL;
     controls_menu = NULL;
     gameplay = NULL;
+    gui_ed = NULL;
     main_menu = NULL;
     options_menu = NULL;
     results = NULL;
@@ -411,6 +430,7 @@ void game_state_list::init() {
     area_menu = new area_menu_state();
     controls_menu = new controls_menu_state();
     gameplay = new gameplay_state();
+    gui_ed = new gui_editor();
     main_menu = new main_menu_state();
     options_menu = new options_menu_state();
     results = new results_state();

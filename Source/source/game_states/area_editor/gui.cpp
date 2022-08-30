@@ -4683,19 +4683,19 @@ void area_editor::process_gui_toolbar() {
     switch(game.options.area_editor_snap_mode) {
     case SNAP_GRID: {
         snap_mode_bmp = editor_icons[ICON_SNAP_GRID];
-        snap_mode_description = "grid. Shift disables snapping.";
+        snap_mode_description = "grid. Holding Shift disables snapping.";
         break;
     } case SNAP_VERTEXES: {
         snap_mode_bmp = editor_icons[ICON_SNAP_VERTEXES];
-        snap_mode_description = "vertexes. Shift disables snapping.";
+        snap_mode_description = "vertexes. Holding Shift disables snapping.";
         break;
     } case SNAP_EDGES: {
         snap_mode_bmp = editor_icons[ICON_SNAP_EDGES];
-        snap_mode_description = "edges. Shift disables snapping.";
+        snap_mode_description = "edges. Holding Shift disables snapping.";
         break;
     } case SNAP_NOTHING: {
         snap_mode_bmp = editor_icons[ICON_SNAP_NOTHING];
-        snap_mode_description = "off. Shift snaps to grid.";
+        snap_mode_description = "off. Holding Shift snaps to grid.";
         break;
     } case N_SNAP_MODES: {
         break;
