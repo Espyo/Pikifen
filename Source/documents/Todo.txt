@@ -1,9 +1,7 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Add the editor to the main menu
-        Split main menu into "Play" and "Make"
     Add the GUI editor to the manual
         Don't forget to add it to the maker toolkit's auto start section
     Use the GUI editor to make important buttons on some menus bigger

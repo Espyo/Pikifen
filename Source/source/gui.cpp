@@ -439,7 +439,10 @@ gui_manager::gui_manager() :
     0.0f, [this] () {
         switch(anim_type) {
         case GUI_MANAGER_ANIM_IN_TO_OUT:
-        case GUI_MANAGER_ANIM_CENTER_TO_UP: {
+        case GUI_MANAGER_ANIM_CENTER_TO_UP:
+        case GUI_MANAGER_ANIM_CENTER_TO_DOWN:
+        case GUI_MANAGER_ANIM_CENTER_TO_LEFT:
+        case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
             visible = false;
             break;
         }
@@ -619,6 +622,54 @@ bool gui_manager::get_item_draw_info(
                 interpolate_number(
                     ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
                     0.0f, 1.0f, final_center.y, final_center.y - game.win_h
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_DOWN_TO_CENTER: {
+            final_center.y =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.y + game.win_h, final_center.y
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_CENTER_TO_DOWN: {
+            final_center.y =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.y, final_center.y + game.win_h
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_LEFT_TO_CENTER: {
+            final_center.x =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.x - game.win_w, final_center.x
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_CENTER_TO_LEFT: {
+            final_center.x =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.x, final_center.x - game.win_w
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_RIGHT_TO_CENTER: {
+            final_center.x =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.x + game.win_w, final_center.x
+                );
+            break;
+            
+        } case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
+            final_center.x =
+                interpolate_number(
+                    ease(EASE_OUT, 1.0f - anim_timer.get_ratio_left()),
+                    0.0f, 1.0f, final_center.x, final_center.x + game.win_w
                 );
             break;
             
@@ -988,6 +1039,14 @@ void gui_manager::set_selected_item(gui_item* item) {
     if(selected_item) {
         selected_item->selected = true;
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Shows all items, if they were hidden.
+ */
+void gui_manager::show_items() {
+    visible = true;
 }
 
 

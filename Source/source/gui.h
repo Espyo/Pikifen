@@ -53,10 +53,22 @@ enum GUI_MANAGER_ANIMS {
     GUI_MANAGER_ANIM_OUT_TO_IN,
     //Items are in view, and slide outward out of view.
     GUI_MANAGER_ANIM_IN_TO_OUT,
-    //Items are above out of view, and slide downard into view.
+    //Items are above out of view, and slide downward into view.
     GUI_MANAGER_ANIM_UP_TO_CENTER,
     //Items are in view, and slide up out of view.
-    GUI_MANAGER_ANIM_CENTER_TO_UP
+    GUI_MANAGER_ANIM_CENTER_TO_UP,
+    //Items are below out of view, and slide upward into view.
+    GUI_MANAGER_ANIM_DOWN_TO_CENTER,
+    //Items are in view, and slide down out of view.
+    GUI_MANAGER_ANIM_CENTER_TO_DOWN,
+    //Items are to the left out of view, and slide right into view.
+    GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+    //Items are in view, and slide left out of view.
+    GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+    //Items are to the right out of view, and slide left into view.
+    GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+    //Items are in view, and slide right out of view.
+    GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
 };
 
 
@@ -360,6 +372,8 @@ public:
     void remove_item(gui_item* item);
     //Sets the currently selected item.
     void set_selected_item(gui_item* item);
+    //Shows items, if they were hidden.
+    void show_items();
     //Starts an animation tha affects all items.
     void start_animation(
         const GUI_MANAGER_ANIMS type, const float duration

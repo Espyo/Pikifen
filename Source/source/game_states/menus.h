@@ -35,6 +35,14 @@ extern const string GUI_FILE_PATH;
 }
 
 
+namespace MAIN_MENU {
+extern const string GUI_FILE_PATH;
+extern const float HUD_MOVE_TIME;
+extern const string MAKE_GUI_FILE_PATH;
+extern const string PLAY_GUI_FILE_PATH;
+}
+
+
 namespace OPTIONS_MENU {
 extern const string AUTO_THROW_PRESET_NAMES[];
 extern const AUTO_THROW_MODES AUTO_THROW_PRESETS[];
@@ -88,8 +96,12 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     //List of Pikmin that make up the logo.
     vector<logo_pik> logo_pikmin;
-    //GUI.
-    gui_manager gui;
+    //GUI for the main page.
+    gui_manager main_gui;
+    //GUI for the play page.
+    gui_manager play_gui;
+    //GUI for the make page.
+    gui_manager make_gui;
     //Top-left coordinates of the logo, in screen percentage.
     point logo_min_screen_limit;
     //Bottom-right coordinates of the logo, in screen percentage.
@@ -111,7 +123,9 @@ private:
     //Map of what characters represent what Pikmin top bitmaps.
     map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;
     
-    static const string GUI_FILE_PATH;
+    void init_main_page();
+    void init_make_page();
+    void init_play_page();
 };
 
 
@@ -191,8 +205,6 @@ private:
     void delete_control_gui_items();
     void leave();
     
-    static const string GUI_FILE_PATH;
-    
 };
 
 
@@ -223,8 +235,6 @@ private:
     gui_manager gui;
     
     void leave();
-    
-    static const string GUI_FILE_PATH;
     
 };
 

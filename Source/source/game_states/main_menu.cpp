@@ -19,9 +19,19 @@
 #include "../utils/string_utils.h"
 
 
+namespace MAIN_MENU {
 //Path to the GUI information file.
-const string main_menu_state::GUI_FILE_PATH =
+const string GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu.txt";
+//How long the menu items take to move when switching pages.
+const float HUD_MOVE_TIME = 0.5f;
+//Path to the make page GUI information file.
+const string MAKE_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Main_menu_make.txt";
+//Path to the play page GUI information file.
+const string PLAY_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Main_menu_play.txt";
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -90,7 +100,9 @@ void main_menu_state::do_drawing() {
         version_text
     );
     
-    gui.draw();
+    main_gui.draw();
+    play_gui.draw();
+    make_gui.draw();
     
     game.fade_mgr.draw();
     
@@ -132,7 +144,9 @@ void main_menu_state::do_logic() {
         }
     }
     
-    gui.tick(game.delta_t);
+    main_gui.tick(game.delta_t);
+    play_gui.tick(game.delta_t);
+    make_gui.tick(game.delta_t);
     
     //Fade manager needs to come last, because if
     //the fade finishes and the state changes, and
@@ -159,59 +173,66 @@ string main_menu_state::get_name() const {
 void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    gui.handle_event(ev);
+    main_gui.handle_event(ev);
+    play_gui.handle_event(ev);
+    make_gui.handle_event(ev);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Loads the main menu into memory.
+ * Loads the GUI elements for the main menu's main page.
  */
-void main_menu_state::load() {
-    draw_loading_screen("", "", 1.0);
-    al_flip_display();
-    data_node settings_file(GUI_FILE_PATH);
+void main_menu_state::init_main_page() {
+
+    data_node gui_file(MAIN_MENU::GUI_FILE_PATH);
     
     //Menu items.
-    gui.register_coords("play_simple",      50, 55, 50,  6);
-    gui.register_coords("play_mission",     50, 62, 50,  6);
-    gui.register_coords("options",          50, 69, 50,  6);
-    gui.register_coords("animation_editor", 50, 76, 50,  6);
-    gui.register_coords("area_editor",      50, 83, 50,  6);
-    gui.register_coords("exit",             91, 91, 15,  6);
-    gui.register_coords("tooltip",          50, 95, 95,  8);
-    gui.read_coords(settings_file.get_child_by_name("positions"));
+    main_gui.register_coords("play",             50, 59, 60, 12.5);
+    main_gui.register_coords("make",             50, 74, 60, 12.5);
+    main_gui.register_coords("options",          50, 85, 40,  5);
+    main_gui.register_coords("exit",             91, 91, 15,  6);
+    main_gui.register_coords("tooltip",          50, 95, 95,  8);
+    main_gui.read_coords(gui_file.get_child_by_name("positions"));
     
-    //Play a simple area button.
-    button_gui_item* play_simple_button =
-        new button_gui_item("Play a simple area", game.fonts.area_name);
-    play_simple_button->on_activate =
-    [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
-            game.states.area_menu->area_type = AREA_TYPE_SIMPLE;
-            game.change_state(game.states.area_menu);
-        });
+    //Play button.
+    button_gui_item* play_button =
+        new button_gui_item("Play", game.fonts.area_name);
+    play_button->on_activate =
+    [this] (const point &) {
+        main_gui.responsive = false;
+        main_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
+        play_gui.responsive = true;
+        play_gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
     };
-    play_simple_button->on_get_tooltip =
-    [] () { return "Pick a simple area with no goal, and start playing!"; };
-    gui.add_item(play_simple_button, "play_simple");
+    play_button->on_get_tooltip =
+    [] () { return "Choose an area to play in."; };
+    main_gui.add_item(play_button, "play");
     
-    //Play a simple area button.
-    button_gui_item* play_mission_button =
-        new button_gui_item("Play a mission", game.fonts.area_name);
-    play_mission_button->on_activate =
-    [] (const point &) {
-        game.fade_mgr.start_fade(false, [] () {
-            game.states.area_menu->area_type = AREA_TYPE_MISSION;
-            game.change_state(game.states.area_menu);
-        });
+    //Make button.
+    button_gui_item* make_button =
+        new button_gui_item("Make", game.fonts.area_name);
+    make_button->on_activate =
+    [this] (const point &) {
+        main_gui.responsive = false;
+        main_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
+        make_gui.responsive = true;
+        make_gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
     };
-    play_mission_button->on_get_tooltip =
-    [] () {
-        return
-            "Pick a mission area with goals and limitations, "
-            "and start playing!";
-    };
-    gui.add_item(play_mission_button, "play_mission");
+    make_button->on_get_tooltip =
+    [] () { return "Make your own content, like areas or animations."; };
+    main_gui.add_item(make_button, "make");
     
     //Options button.
     button_gui_item* options_button =
@@ -224,7 +245,49 @@ void main_menu_state::load() {
     };
     options_button->on_get_tooltip =
     [] () { return "Customize your playing experience."; };
-    gui.add_item(options_button, "options");
+    main_gui.add_item(options_button, "options");
+    
+    //Exit button.
+    main_gui.back_item =
+        new button_gui_item("Exit", game.fonts.area_name);
+    main_gui.back_item->on_activate =
+    [] (const point &) {
+        game.is_game_running = false;
+    };
+    main_gui.back_item->on_get_tooltip =
+    [] () {
+        return
+            game.config.name.empty() ?
+            "Quit Pikifen." :
+            "Quit " + game.config.name + ".";
+    };
+    main_gui.add_item(main_gui.back_item, "exit");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&main_gui);
+    main_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    main_gui.set_selected_item(play_button);
+    main_gui.responsive = true;
+    main_gui.show_items();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the GUI elements for the main menu's make page.
+ */
+void main_menu_state::init_make_page() {
+    data_node gui_file(MAIN_MENU::MAKE_GUI_FILE_PATH);
+    
+    //Menu items.
+    make_gui.register_coords("animation_editor", 50, 59, 60, 10);
+    make_gui.register_coords("area_editor",      50, 71, 60, 10);
+    make_gui.register_coords("gui_editor",       50, 83, 60, 10);
+    make_gui.register_coords("back",              9, 91, 15,  6);
+    make_gui.register_coords("tooltip",          50, 95, 95,  8);
+    make_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Animation editor button.
     button_gui_item* anim_ed_button =
@@ -237,7 +300,7 @@ void main_menu_state::load() {
     };
     anim_ed_button->on_get_tooltip =
     [] () { return "Make an animation for any object in the game."; };
-    gui.add_item(anim_ed_button, "animation_editor");
+    make_gui.add_item(anim_ed_button, "animation_editor");
     
     //Area editor button.
     button_gui_item* area_ed_button =
@@ -250,28 +313,146 @@ void main_menu_state::load() {
     };
     area_ed_button->on_get_tooltip =
     [] () { return "Make an area to play on."; };
-    gui.add_item(area_ed_button, "area_editor");
+    make_gui.add_item(area_ed_button, "area_editor");
     
-    //Exit button.
-    gui.back_item =
-        new button_gui_item("Exit", game.fonts.area_name);
-    gui.back_item->on_activate =
+    //GUI editor button.
+    button_gui_item* gui_ed_button =
+        new button_gui_item("GUI editor", game.fonts.area_name);
+    gui_ed_button->on_activate =
     [] (const point &) {
-        game.is_game_running = false;
+        game.fade_mgr.start_fade(false, [] () {
+            game.change_state(game.states.gui_ed);
+        });
     };
-    gui.back_item->on_get_tooltip =
+    gui_ed_button->on_get_tooltip =
+    [] () { return "Change the way menus and the gameplay HUD look."; };
+    make_gui.add_item(gui_ed_button, "gui_editor");
+    
+    //Back button.
+    make_gui.back_item =
+        new button_gui_item("Back", game.fonts.area_name);
+    make_gui.back_item->on_activate =
+    [this] (const point &) {
+        make_gui.responsive = false;
+        make_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
+        main_gui.responsive = true;
+        main_gui.start_animation(
+            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
+    };
+    make_gui.back_item->on_get_tooltip =
     [] () {
-        return
-            game.config.name.empty() ?
-            "Quit Pikifen." :
-            "Quit " + game.config.name + ".";
+        return "Return to the main page.";
     };
-    gui.add_item(gui.back_item, "exit");
+    make_gui.add_item(make_gui.back_item, "back");
     
     //Tooltip text.
     tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&gui);
-    gui.add_item(tooltip_text, "tooltip");
+        new tooltip_gui_item(&make_gui);
+    make_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    make_gui.set_selected_item(anim_ed_button);
+    make_gui.responsive = false;
+    make_gui.hide_items();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the GUI elements for the main menu's play page.
+ */
+void main_menu_state::init_play_page() {
+    data_node gui_file(MAIN_MENU::PLAY_GUI_FILE_PATH);
+    
+    //Menu items.
+    play_gui.register_coords("simple",  50, 60, 60, 12.5);
+    play_gui.register_coords("mission", 50, 78, 60, 12.5);
+    play_gui.register_coords("back",     9, 91, 15,  6);
+    play_gui.register_coords("tooltip", 50, 95, 95,  8);
+    play_gui.read_coords(gui_file.get_child_by_name("positions"));
+    
+    //Play a simple area button.
+    button_gui_item* simple_button =
+        new button_gui_item("Simple areas", game.fonts.area_name);
+    simple_button->on_activate =
+    [] (const point &) {
+        game.fade_mgr.start_fade(false, [] () {
+            game.states.area_menu->area_type = AREA_TYPE_SIMPLE;
+            game.change_state(game.states.area_menu);
+        });
+    };
+    simple_button->on_get_tooltip =
+    [] () { return "Pick a simple area with no goal, and start playing!"; };
+    play_gui.add_item(simple_button, "simple");
+    
+    //Play a mission area button.
+    button_gui_item* mission_button =
+        new button_gui_item("Missions", game.fonts.area_name);
+    mission_button->on_activate =
+    [] (const point &) {
+        game.fade_mgr.start_fade(false, [] () {
+            game.states.area_menu->area_type = AREA_TYPE_MISSION;
+            game.change_state(game.states.area_menu);
+        });
+    };
+    mission_button->on_get_tooltip =
+    [] () {
+        return
+            "Pick a mission area with goals and limitations, "
+            "and start playing!";
+    };
+    play_gui.add_item(mission_button, "mission");
+    
+    //Back button.
+    play_gui.back_item =
+        new button_gui_item("Back", game.fonts.area_name);
+    play_gui.back_item->on_activate =
+    [this] (const point &) {
+        play_gui.responsive = false;
+        play_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
+        main_gui.responsive = true;
+        main_gui.start_animation(
+            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
+    };
+    play_gui.back_item->on_get_tooltip =
+    [] () {
+        return "Return to the main page.";
+    };
+    play_gui.add_item(play_gui.back_item, "back");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&play_gui);
+    play_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    play_gui.set_selected_item(simple_button);
+    play_gui.responsive = false;
+    play_gui.hide_items();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the main menu into memory.
+ */
+void main_menu_state::load() {
+    draw_loading_screen("", "", 1.0);
+    al_flip_display();
+    
+    init_main_page();
+    init_play_page();
+    init_make_page();
+    
+    data_node settings_file(MAIN_MENU::GUI_FILE_PATH);
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
@@ -378,9 +559,7 @@ void main_menu_state::load() {
     }
     
     //Finishing touches.
-    gui.set_selected_item(play_simple_button);
     game.fade_mgr.start_fade(true, nullptr);
-    
 }
 
 
@@ -393,7 +572,9 @@ void main_menu_state::unload() {
     al_destroy_bitmap(bmp_menu_bg);
     
     //Menu items.
-    gui.destroy();
+    main_gui.destroy();
+    play_gui.destroy();
+    make_gui.destroy();
     
     //Misc.
     logo_pikmin.clear();

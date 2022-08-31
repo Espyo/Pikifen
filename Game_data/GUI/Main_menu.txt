@@ -1,36 +1,33 @@
-positions {
-    play_simple =      50 55 50  6
-    play_mission =     50 62 50  6
-    options =          50 69 50  6
-    animation_editor = 50 76 50  6
-    area_editor =      50 83 50  6
-    exit =             91 91 15  6
-    tooltip =          50 95 95  8
+positions{
+	play=50.0000 59.0000 60.0000 12.5000
+	make=50.0000 74.0000 60.0000 12.5000
+	options=50.0000 85.0000 40.0000 5.0000
+	exit=91.0000 91.0000 15.0000 6.0000
+	tooltip=50.0000 95.0000 95.0000 8.0000
 }
-
-logo {
-    min_screen_limit = 10 20
-    max_screen_limit = 90 50
-    pikmin_max_speed = 800
-    pikmin_min_speed = 600
-    pikmin_speed_smoothness = 0.08
-    pikmin_sway_amount = 3
-    pikmin_sway_max_speed = 5.5
-    pikmin_sway_min_speed = 2.5
-    pikmin_size = 3.5 3.5
-    pikmin_types {
-        O = Flower_icon.png
-    }
-    map {
-        OOOOO....OOOOOO..OO....OO..OOOOOO..OOOOOO..OOOOOO..OOOO....OO
-        OOOOOO...OOOOOO..OO...OO...OOOOOO..OOOOOO..OOOOOO..OOOO....OO
-        OO...OO....OO....OO..OO......OO....OO......OO......OO.OO...OO
-        OO...OO....OO....OO.OO.......OO....OO......OO......OO.OO...OO
-        OOOOOO.....OO....OOOO........OO....OOOOO...OOOOO...OO..OO..OO
-        OOOOO......OO....OOOO........OO....OOOOO...OOOOO...OO..OO..OO
-        OO.........OO....OO.OO.......OO....OO......OO......OO...OO.OO
-        OO.........OO....OO..OO......OO....OO......OO......OO...OO.OO
-        OO.......OOOOOO..OO...OO...OOOOOO..OO......OOOOOO..OO....OOOO
-        OO.......OOOOOO..OO....OO..OOOOOO..OO......OOOOOO..OO....OOOO
-    }
+logo{
+	min_screen_limit=10 10
+	max_screen_limit=90 40
+	pikmin_max_speed=800
+	pikmin_min_speed=600
+	pikmin_speed_smoothness=0.08
+	pikmin_sway_amount=3
+	pikmin_sway_max_speed=5.5
+	pikmin_sway_min_speed=2.5
+	pikmin_size=3.5 3.5
+	pikmin_types{
+		O=Flower_icon.png
+	}
+	map{
+		OOOOO....OOOOOO..OO....OO..OOOOOO..OOOOOO..OOOOOO..OOOO....OO
+		OOOOOO...OOOOOO..OO...OO...OOOOOO..OOOOOO..OOOOOO..OOOO....OO
+		OO...OO....OO....OO..OO......OO....OO......OO......OO.OO...OO
+		OO...OO....OO....OO.OO.......OO....OO......OO......OO.OO...OO
+		OOOOOO.....OO....OOOO........OO....OOOOO...OOOOO...OO..OO..OO
+		OOOOO......OO....OOOO........OO....OOOOO...OOOOO...OO..OO..OO
+		OO.........OO....OO.OO.......OO....OO......OO......OO...OO.OO
+		OO.........OO....OO..OO......OO....OO......OO......OO...OO.OO
+		OO.......OOOOOO..OO...OO...OOOOOO..OO......OOOOOO..OO....OOOO
+		OO.......OOOOOO..OO....OO..OOOOOO..OO......OOOOOO..OO....OOOO
+	}
 }
