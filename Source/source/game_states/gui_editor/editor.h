@@ -18,8 +18,7 @@
 
 
 namespace GUI_EDITOR {
-extern const float MAX_GRID_INTERVAL;
-extern const float MIN_GRID_INTERVAL;
+extern const vector<float> GRID_INTERVALS;
 extern const float MOUSE_COORDS_TEXT_WIDTH;
 extern const float ZOOM_MAX_LEVEL;
 extern const float ZOOM_MIN_LEVEL;
@@ -82,6 +81,18 @@ private:
     //The current transformation widget.
     transformation_widget cur_transformation_widget;
     
+    //General functions.
+    void close_load_dialog();
+    void close_options_dialog();
+    void load_file(const bool should_update_history);
+    void open_load_dialog();
+    void open_options_dialog();
+    void pick_file(
+        const string &name, const string &category, const bool is_new
+    );
+    bool save_file();
+    point snap_point(const point &p);
+    
     //Drawing functions.
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
@@ -97,8 +108,6 @@ private:
     void process_gui_panel_items();
     void process_gui_status_bar();
     void process_gui_toolbar();
-    
-    //Button pressing functions.
     void press_grid_interval_decrease_button();
     void press_grid_interval_increase_button();
     void press_load_button();
@@ -111,6 +120,7 @@ private:
     void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
     void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;
     void handle_key_down_canvas(const ALLEGRO_EVENT &ev) override;
+    void handle_lmb_double_click(const ALLEGRO_EVENT &ev) override;
     void handle_lmb_down(const ALLEGRO_EVENT &ev) override;
     void handle_lmb_drag(const ALLEGRO_EVENT &ev) override;
     void handle_mmb_down(const ALLEGRO_EVENT &ev) override;
@@ -122,17 +132,6 @@ private:
     void pan_cam(const ALLEGRO_EVENT &ev);
     void reset_cam(const bool instantaneous);
     
-    //Other functions.
-    void close_load_dialog();
-    void close_options_dialog();
-    void load_file(const bool should_update_history);
-    void open_load_dialog();
-    void open_options_dialog();
-    void pick_file(
-        const string &name, const string &category, const bool is_new
-    );
-    bool save_file();
-    point snap_point(const point &p);
 };
 
 

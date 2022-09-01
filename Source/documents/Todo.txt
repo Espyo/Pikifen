@@ -1,11 +1,7 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Add the GUI editor to the manual
-        Don't forget to add it to the maker toolkit's auto start section
-    Use the GUI editor to make important buttons on some menus bigger
-    All editors' functions in .h files should be separated into groups, commented
     Find new names for "loss" and "victory"; in P3 both are just "completion", simply that one is more positive than the other
         Maybe just "goal reached" and "goal not reached"? Not really sure where to use this anyway
     Move the area's stats into the review panel (thanks Helodity)
@@ -23,6 +19,7 @@ Next tasks (roughly sorted most important first)
         Check Helodity's branch
     Ceramic bridge texture should be 256x256 (thanks isma3)
     Pressing the quit button on an editor's menu bar will make the unsaved changes warning appear on the toolbar icon instead
+    Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -38,7 +35,7 @@ Next tasks (roughly sorted most important first)
                 When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
                 Three grading modes:
                     Points
-                        The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths (careful not to count Candypop Buds as deaths), time left, Pokos gathered, enemy kill points
+                        The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths (careful not to count Candypop Buds as deaths), time left, treasure points gathered, enemy kill points gathered
                         Each field can have varying weights, including 0 or negative
                         Each field's value can also be instantly transformed to 0 if the player finished the stage via "loss"
                         You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
@@ -49,12 +46,17 @@ Next tasks (roughly sorted most important first)
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
         Area selection menu changes
             Left side of the area selection menu proper
-                The list of areas, with their names and a medal icon next to each
+                The list of areas, with their names
+                    If it's a mission, a completion stamp and medal icon next to each name
             Right side of the area selection menu proper
                 If it's a simple area, basic details about the area
                     Thumbnail
                     Area name
+                    Subtitle, if any
                     Description
+                    More info (opens a pop-up with):
+                        Tags
+                        Maker and version
                 If it's a mission, details about the highlighted mission, in order:
                     Thumbnail
                     Area name
@@ -67,12 +69,20 @@ Next tasks (roughly sorted most important first)
                         Loss conditions
                         Scoring data
                         Maker and version
-                        Extra area notes
                         High scores + their medals (only present if the stage's grading mode is points)
             The background tint should be like a dark blue instead of just black? (thanks Neo)
         Update the results screen
             For simple areas, explain somehow how there is no grading, but here are some stats anyway
-            For mission areas, show the area name and mission goal, mission grading type, all possible stats and how you did on them (or some cross or something representing how that stat is not applicable), and a spot at the end for the final result and medal icon
+            For mission areas, show:
+                Area name
+                Mission goal
+                A stamp indicating whether you got the goal or not
+                A small note explaining why you got the goal or not
+                All the stats
+                    For a point grading mission, some values after each stat telling you how many points you got from that
+                    For a point grading mission, a strikethrough on any stats that got reduced to 0 due to a loss
+                For a point grading mission, final point score
+                Medal icon
         [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area
@@ -80,6 +90,7 @@ Next tasks (roughly sorted most important first)
             It should also save if the stage has never been played
         Pause menu adjustments
             The continue button should be a tiny thing on the bottom-left, and the quit option a tiny thing on the bottom-right. (Thanks Neo)
+            Rename "quit" to "quit without saving", or like "lose progress and quit"
             The retry and quit buttons should show a confirmation dialog, but it can be disabled in the options. The option for it should have the values "show never", "show always", or "show after 1 minute" (thanks Neo)
             The finish button should show an informative and confirmation dialog. This dialog should explain that finishing now will make the following fields of the score become 0, or how the score won't be affected if none (thanks Neo)
             If you finish through the pause menu, you shouldn't be allowed to continue...you specifically said you didn't want to play any more
@@ -90,6 +101,7 @@ Next tasks (roughly sorted most important first)
             The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that
             Simple areas shouldn't have a time limit
             When playing a mission through the area editor's quick play, high scores shouldn't be saved
+            Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
             The results screen should have a "New record!" blurb when you get a new record
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
     Statistics menu, which keeps track of:
@@ -121,15 +133,16 @@ Next tasks (roughly sorted most important first)
             Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
         Helodity's Adventure area (see #content-sharing)
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
+        A puzzle stage
     
     --- Future ---
     Radar
         Radar page
             https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?
-                Probably minimize the use of colors, because there can be tons of different Pikmin colors, and they should all be minimally visible
+                Probably minimize the use of colors, because there can be tons of different Pikmin colors, and their icons should all be minimally visible
             Icons for treasures, leaders, Onions, ships, Pikmin, and whatever else of importance
             Area name, North indicator
-            Working Pikmin and idle Pikmin counts
+            Working Pikmin, idle Pikmin, and group Pikmin counts
             Controls instructions on the bottom
             Buttons to swap to the stats page
             Go Here!
@@ -160,7 +173,7 @@ Next tasks (roughly sorted most important first)
             The total play time should be shown somewhere; useful for speedruns
         Pause menu page
             It's just the pause menu
-        Open it with Tab, and move leader swapping to middle mouse button
+        Open it with Tab, and move leader swapping to X or middle mouse button or something
     Other menu improvements
         Onion menu
             Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
@@ -173,13 +186,14 @@ Next tasks (roughly sorted most important first)
             What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
         The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
         Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
+        Add some songs
     Revamp sound system
         Rename sound files to .oga, instead of .ogg
         There are three types of sounds
             Sounds that play "globally", like the "task complete jingle"
             Sounds that play from any object that needs them, like there being three waterfalls in the area, and each one having the "waterfall" noise
             Sounds that play connected to only one object at a time, like the Pikmin going "hop hop" when carrying something should only be connected to the closest carriable mob to the camera center
-            Or maybe there are these types of sounds, only
+            Or maybe there are these types of sounds, only:
                 The global ones, like the "task complete jingle"
                 Positional global ones, like Pikmin going "hop hop" when carrying
                 Positional atomic ones, like a Fiery Blowhog spitting fire
@@ -459,7 +473,7 @@ Next tasks (roughly sorted most important first)
             Tag?
                 One team's leader is "it", and hitting another's leader (via Pikmin or punch) causes them to be "it". When a player becomes "it", all Pikmin in the area go under their control, and theirs only. "It" players can leave Pikmin in chokepoints, use pincer maneuvers, juggle between growing more Pikmin, or keeping a low army to make life worse for the next "it". Runaway leaders can't do much other than run and punch each other, or wildlife. Every team has a timer that ticks up when they are "it", and the first to reach 3 minutes or so loses.
             Time?
-                When time is up, the player with the most Pikmin wins. Or with the most enemy kills. Or Pokos collected. And so on.
+                When time is up, the player with the most Pikmin wins. Or with the most enemy kills. Or treasure points collected. And so on.
             Delivery?
                 There are loose, 1-weight objects stranded around the area, and players can send their Pikmin to deliver them to a pick-up point somewhere in the center of the area. The player to reach the highest amount of deliveries wins
         Rulesets
@@ -601,7 +615,7 @@ Next tasks (roughly sorted most important first)
                 What logs each entry contains (Olimar's notes, Louie's notes, Sales pitch, etc.)
                 How each entry is unlocked (touching it, seeing it, killing it, recovering it to an Onion/ship, etc.)
         Collectibles (ship parts, treasures, etc.) and how they impact the story
-            Allow multiple "point systems" -- ship power, juice, fruits, Pokos, etc.
+            Allow multiple "point systems" -- ship power, juice, fruits, Pokos, Sparklium, etc.
         Upgrades (like the Exploration Kit)
         Extinction
             Be careful with Candypop Buds

@@ -80,8 +80,8 @@ enum MISSION_POINT_CRITERIA {
     MISSION_POINT_CRITERIA_SEC_LEFT = 0x04,
     //Points per second passed.
     MISSION_POINT_CRITERIA_SEC_PASSED = 0x08,
-    //Points per treasure Poko.
-    MISSION_POINT_CRITERIA_POKOS = 0x10,
+    //Points per treasure point.
+    MISSION_POINT_CRITERIA_TREASURE_POINTS = 0x10,
     //Points per enemy kill point.
     MISSION_POINT_CRITERIA_ENEMY_POINTS = 0x20,
 };
@@ -205,8 +205,8 @@ struct area_data {
     int mission_points_per_sec_left;
     //Mission point multiplier for each second passed.
     int mission_points_per_sec_passed;
-    //Mission point multiplier for each Poko of treasure obtained.
-    int mission_points_per_poko;
+    //Mission point multiplier for each treasure point obtained.
+    int mission_points_per_treasure_point;
     //Mission point multiplier for each enemy point obtained.
     int mission_points_per_enemy_point;
     //Bitmask for mission loss point loss criteria. Use MISSION_POINT_CRITERIA.

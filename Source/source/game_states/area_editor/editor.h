@@ -519,7 +519,6 @@ private:
     //Was the area's thumbnail changed in any way since the last backup save?
     bool thumbnail_backup_needs_saving;
     
-    
     //General functions.
     bool are_nodes_traversable(
         const layout_drawing_node &n1,
@@ -563,18 +562,6 @@ private:
     void delete_mobs(const set<mob_gen*> &which);
     void delete_path_links(const set<path_link*> &which);
     void delete_path_stops(const set<path_stop*> &which);
-    static void draw_canvas_imgui_callback(
-        const ImDrawList* parent_list, const ImDrawCmd* cmd
-    );
-    void draw_cross_section_sector(
-        const float start_ratio, const float end_ratio, const float proportion,
-        const float lowest_z, sector* sector_ptr
-    );
-    void draw_debug_text(
-        const ALLEGRO_COLOR color, const point &where, const string &text,
-        const unsigned char dots = 0
-    );
-    void draw_line_dist(const point &focus, const point &other);
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
@@ -639,62 +626,8 @@ private:
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
-    void open_load_dialog();
-    void open_options_dialog();
     void populate_texture_suggestions();
-    void pick_area(
-        const string &name, const string &category, const bool is_new
-    );
-    void pick_texture(
-        const string &name, const string &category, const bool is_new
-    );
     area_data* prepare_state();
-    void press_circle_sector_button();
-    void press_delete_area_button();
-    void press_duplicate_mobs_button();
-    void press_load_button();
-    void press_grid_interval_decrease_button();
-    void press_grid_interval_increase_button();
-    void press_new_mob_button();
-    void press_new_path_button();
-    void press_new_sector_button();
-    void press_new_tree_shadow_button();
-    void press_reference_button();
-    void press_reload_button();
-    void press_remove_edge_button();
-    void press_remove_mob_button();
-    void press_remove_path_button();
-    void press_remove_tree_shadow_button();
-    void press_quick_play_button();
-    void press_quit_button();
-    void press_save_button();
-    void press_selection_filter_button();
-    void press_snap_mode_button();
-    void press_undo_button();
-    void process_gui();
-    void process_gui_control_panel();
-    void process_gui_delete_area_dialog();
-    void process_gui_load_dialog();
-    void process_gui_menu_bar();
-    void process_gui_mob_script_vars(mob_gen* gen);
-    void process_gui_panel_details();
-    void process_gui_panel_edge();
-    void process_gui_panel_gameplay();
-    void process_gui_panel_info();
-    void process_gui_panel_layout();
-    void process_gui_panel_main();
-    void process_gui_panel_mission();
-    void process_gui_panel_mob();
-    void process_gui_panel_mobs();
-    void process_gui_panel_options();
-    void process_gui_panel_path_link();
-    void process_gui_panel_paths();
-    void process_gui_panel_review();
-    void process_gui_panel_sector();
-    void process_gui_panel_tools();
-    void process_gui_options_dialog();
-    void process_gui_status_bar();
-    void process_gui_toolbar();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
     );
@@ -746,6 +679,76 @@ private:
     void update_texture_suggestions(const string &n);
     void update_undo_history();
     void update_vertex_selection();
+
+    //Drawing functions.
+    static void draw_canvas_imgui_callback(
+        const ImDrawList* parent_list, const ImDrawCmd* cmd
+    );
+    void draw_cross_section_sector(
+        const float start_ratio, const float end_ratio, const float proportion,
+        const float lowest_z, sector* sector_ptr
+    );
+    void draw_debug_text(
+        const ALLEGRO_COLOR color, const point &where, const string &text,
+        const unsigned char dots = 0
+    );
+    void draw_line_dist(const point &focus, const point &other);
+    
+    //GUI functions.
+    void open_load_dialog();
+    void open_options_dialog();
+    void pick_area(
+        const string &name, const string &category, const bool is_new
+    );
+    void pick_texture(
+        const string &name, const string &category, const bool is_new
+    );
+    void press_circle_sector_button();
+    void press_delete_area_button();
+    void press_duplicate_mobs_button();
+    void press_load_button();
+    void press_grid_interval_decrease_button();
+    void press_grid_interval_increase_button();
+    void press_new_mob_button();
+    void press_new_path_button();
+    void press_new_sector_button();
+    void press_new_tree_shadow_button();
+    void press_reference_button();
+    void press_reload_button();
+    void press_remove_edge_button();
+    void press_remove_mob_button();
+    void press_remove_path_button();
+    void press_remove_tree_shadow_button();
+    void press_quick_play_button();
+    void press_quit_button();
+    void press_save_button();
+    void press_selection_filter_button();
+    void press_snap_mode_button();
+    void press_undo_button();
+    void process_gui();
+    void process_gui_control_panel();
+    void process_gui_delete_area_dialog();
+    void process_gui_load_dialog();
+    void process_gui_menu_bar();
+    void process_gui_mob_script_vars(mob_gen* gen);
+    void process_gui_panel_details();
+    void process_gui_panel_edge();
+    void process_gui_panel_gameplay();
+    void process_gui_panel_info();
+    void process_gui_panel_layout();
+    void process_gui_panel_main();
+    void process_gui_panel_mission();
+    void process_gui_panel_mob();
+    void process_gui_panel_mobs();
+    void process_gui_panel_options();
+    void process_gui_panel_path_link();
+    void process_gui_panel_paths();
+    void process_gui_panel_review();
+    void process_gui_panel_sector();
+    void process_gui_panel_tools();
+    void process_gui_options_dialog();
+    void process_gui_status_bar();
+    void process_gui_toolbar();
     
     //Input handler functions.
     void handle_key_char_anywhere(const ALLEGRO_EVENT &ev) override;

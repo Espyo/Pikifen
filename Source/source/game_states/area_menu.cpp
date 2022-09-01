@@ -89,6 +89,7 @@ void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  */
 void area_menu_state::leave() {
     game.fade_mgr.start_fade(false, [] () {
+        game.states.main_menu->page_to_load = MAIN_MENU_PAGE_PLAY;
         game.change_state(game.states.main_menu);
     });
 }

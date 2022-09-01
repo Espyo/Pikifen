@@ -39,6 +39,7 @@ const string PLAY_GUI_FILE_PATH =
  */
 main_menu_state::main_menu_state() :
     game_state(),
+    page_to_load(MAIN_MENU_PAGE_MAIN),
     bmp_menu_bg(NULL),
     logo_min_screen_limit(10.0f, 10.0f),
     logo_max_screen_limit(90.0f, 50.0f),
@@ -270,8 +271,8 @@ void main_menu_state::init_main_page() {
     
     //Finishing touches.
     main_gui.set_selected_item(play_button);
-    main_gui.responsive = true;
-    main_gui.show_items();
+    main_gui.responsive = false;
+    main_gui.hide_items();
 }
 
 
@@ -451,6 +452,23 @@ void main_menu_state::load() {
     init_main_page();
     init_play_page();
     init_make_page();
+
+    switch(page_to_load) {
+    case MAIN_MENU_PAGE_MAIN: {
+        main_gui.responsive = true;
+        main_gui.show_items();
+        break;
+    } case MAIN_MENU_PAGE_PLAY: {
+        play_gui.responsive = true;
+        play_gui.show_items();
+        break;
+    } case MAIN_MENU_PAGE_MAKE: {
+        make_gui.responsive = true;
+        make_gui.show_items();
+        break;
+    }
+    }
+    page_to_load = MAIN_MENU_PAGE_MAIN;
     
     data_node settings_file(MAIN_MENU::GUI_FILE_PATH);
     

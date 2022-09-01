@@ -2901,7 +2901,7 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Dummy(ImVec2(0, 16));
             
             //Points per Pikmin born value.
-            ImGui::SetNextItemWidth(80);
+            ImGui::SetNextItemWidth(50);
             int pppb = game.cur_area_data.mission_points_per_pikmin_born;
             if(ImGui::DragInt("Points per Pikmin born", &pppb, 0.1f)) {
                 register_change("mission grading change");
@@ -2934,7 +2934,7 @@ void area_editor::process_gui_panel_mission() {
             }
             
             //Points per Pikmin death value.
-            ImGui::SetNextItemWidth(80);
+            ImGui::SetNextItemWidth(50);
             int pppd = game.cur_area_data.mission_points_per_pikmin_death;
             if(ImGui::DragInt("Points per Pikmin death", &pppd, 0.1f)) {
                 register_change("mission grading change");
@@ -2973,7 +2973,7 @@ void area_editor::process_gui_panel_mission() {
                 )
             ) {
                 //Points per second of time left value.
-                ImGui::SetNextItemWidth(80);
+                ImGui::SetNextItemWidth(50);
                 int ppsl = game.cur_area_data.mission_points_per_sec_left;
                 if(ImGui::DragInt("Points per second left", &ppsl, 0.1f)) {
                     register_change("mission grading change");
@@ -3008,7 +3008,7 @@ void area_editor::process_gui_panel_mission() {
             }
             
             //Points per second passed value.
-            ImGui::SetNextItemWidth(80);
+            ImGui::SetNextItemWidth(50);
             int ppss = game.cur_area_data.mission_points_per_sec_passed;
             if(ImGui::DragInt("Points per second passed", &ppss, 0.1f)) {
                 register_change("mission grading change");
@@ -3040,28 +3040,30 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::Unindent();
             }
             
-            //Points per Poko gathered value.
-            ImGui::SetNextItemWidth(80);
-            int pppg = game.cur_area_data.mission_points_per_poko;
-            if(ImGui::DragInt("Points per Poko gathered", &pppg, 0.1f)) {
+            //Points per treasure point gathered value.
+            ImGui::SetNextItemWidth(50);
+            int pptp = game.cur_area_data.mission_points_per_treasure_point;
+            if(
+                ImGui::DragInt("Points per treasure point", &pptp, 0.1f)
+            ) {
                 register_change("mission grading change");
-                game.cur_area_data.mission_points_per_poko = pppg;
+                game.cur_area_data.mission_points_per_treasure_point = pptp;
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
-                "Poko gathered from treasures. Different treasures are worth\n"
-                "different Pokos. Negative numbers means the\n"
+                "point gathered from treasures. Different treasures are worth\n"
+                "different treasure points. Negative numbers means the\n"
                 "player loses points. 0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
             );
-            if(game.cur_area_data.mission_points_per_poko != 0) {
-                //Poko point loss on failure checkbox.
+            if(game.cur_area_data.mission_points_per_treasure_point != 0) {
+                //Treasure point point loss on failure checkbox.
                 ImGui::Indent();
                 int flags = game.cur_area_data.mission_point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
-                        "0 points on failure##zpofpg", &flags,
-                        MISSION_POINT_CRITERIA_POKOS
+                        "0 points on failure##zpoftp", &flags,
+                        MISSION_POINT_CRITERIA_TREASURE_POINTS
                     )
                 ) {
                     register_change("mission grading change");
@@ -3074,16 +3076,16 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::Unindent();
             }
             
-            //Points per enemy kill point gathered value.
-            ImGui::SetNextItemWidth(80);
+            //Points per enemy point gathered value.
+            ImGui::SetNextItemWidth(50);
             int ppep = game.cur_area_data.mission_points_per_enemy_point;
-            if(ImGui::DragInt("Points per enemy kill point", &ppep, 0.1f)) {
+            if(ImGui::DragInt("Points per enemy point", &ppep, 0.1f)) {
                 register_change("mission grading change");
                 game.cur_area_data.mission_points_per_enemy_point = ppep;
             }
             set_tooltip(
                 "Amount of points that the player receives for each\n"
-                "enemy kill point. Different enemies are worth different\n"
+                "enemy point. Different enemies are worth different\n"
                 "points. Negative numbers means the player loses points.\n"
                 "0 means this criterion doesn't count.",
                 "", WIDGET_EXPLANATION_DRAG
@@ -3113,7 +3115,7 @@ void area_editor::process_gui_panel_mission() {
             
             //Starting score value.
             int starting_points = game.cur_area_data.mission_starting_points;
-            ImGui::SetNextItemWidth(80);
+            ImGui::SetNextItemWidth(60);
             if(ImGui::DragInt("Starting points", &starting_points, 1.0f)) {
                 register_change("mission grading change");
                 game.cur_area_data.mission_starting_points = starting_points;

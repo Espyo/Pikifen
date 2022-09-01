@@ -141,7 +141,7 @@
     
     <p>If you find yourself opening the engine, going to the same game mode, menu, or area every time, closing down, and repeating the process over and over, you can use this tool to avoid that. It makes the engine start on something other than the main menu automatically, and also optionally automatically open a specific area or animation.</p>
 
-    <p>The <code>auto_start_mode</code> variable controls what mode to automatically start on. If left empty, the engine boots to the main menu as usual. Valid values are <code>play</code>, <code>animation_editor</code> or <code>area_editor</code>. The <code>auto_start_option</code> variable contains the area or animation to load on the game or editor, optionally. For areas, this is just the area name, but for animations, this has to be the full file name, directories included.</p>
+    <p>The <code>auto_start_mode</code> variable controls what mode to automatically start on. If left empty, the engine boots to the main menu as usual. Valid values are <code>play</code>, <code>animation_editor</code>, <code>area_editor</code>, or <code>gui_editor</code>. The <code>auto_start_option</code> variable contains the area or animation to load on the game or editor, optionally. For areas, this is the path to the area's folder from the engine's folder. For animations it's the same, but the path to the data file. For GUIs, it's just the name of the GUI's data file.</p>
 
     <p>You can also press Ctrl+F12 in the engine to set the auto-start mode and option to the current mode and currently opened content. Pressing that outside of any of the recognized modes will set both values to empty.</p>
     

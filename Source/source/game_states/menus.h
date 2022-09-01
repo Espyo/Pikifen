@@ -59,6 +59,17 @@ extern const string GUI_FILE_PATH;
 }
 
 
+//Pages of the main menu.
+enum MAIN_MENU_PAGES {
+    //Main page.
+    MAIN_MENU_PAGE_MAIN,
+    //Play page.
+    MAIN_MENU_PAGE_PLAY,
+    //Make page.
+    MAIN_MENU_PAGE_MAKE,
+};
+
+
 /* ----------------------------------------------------------------------------
  * Information about the main menu.
  */
@@ -71,6 +82,8 @@ public:
     void do_logic() override;
     void do_drawing() override;
     string get_name() const override;
+
+    MAIN_MENU_PAGES page_to_load;
     
 private:
     struct logo_pik {

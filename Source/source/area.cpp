@@ -68,7 +68,7 @@ area_data::area_data() :
     mission_points_per_pikmin_death(0),
     mission_points_per_sec_left(0),
     mission_points_per_sec_passed(0),
-    mission_points_per_poko(0),
+    mission_points_per_treasure_point(0),
     mission_points_per_enemy_point(0),
     mission_point_loss_data(0),
     mission_starting_points(0),
@@ -210,7 +210,7 @@ void area_data::clear() {
     mission_points_per_pikmin_death = 0;
     mission_points_per_sec_left = 0;
     mission_points_per_sec_passed = 0;
-    mission_points_per_poko = 0;
+    mission_points_per_treasure_point = 0;
     mission_points_per_enemy_point = 0;
     mission_point_loss_data = 0;
     mission_starting_points = 0;
@@ -423,7 +423,7 @@ void area_data::clone(area_data &other) {
     other.mission_points_per_pikmin_death = mission_points_per_pikmin_death;
     other.mission_points_per_sec_left = mission_points_per_sec_left;
     other.mission_points_per_sec_passed = mission_points_per_sec_passed;
-    other.mission_points_per_poko = mission_points_per_poko;
+    other.mission_points_per_treasure_point = mission_points_per_treasure_point;
     other.mission_points_per_enemy_point = mission_points_per_enemy_point;
     other.mission_point_loss_data = mission_point_loss_data;
     other.mission_starting_points = mission_starting_points;

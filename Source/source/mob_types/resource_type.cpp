@@ -26,7 +26,7 @@ resource_type::resource_type() :
     return_to_pile_on_vanish(false),
     vanish_delay(0.0f),
     carrying_destination(CARRY_DESTINATION_SHIP),
-    delivery_result(RESOURCE_DELIVERY_RESULT_ADD_POINTS),
+    delivery_result(RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS),
     damage_mob_amount(1.0f),
     spray_to_concoct(INVALID),
     point_amount(1.0f) {
@@ -90,7 +90,7 @@ void resource_type::load_properties(data_node* file) {
     } else if(delivery_result_str == "increase_ingredients") {
         delivery_result = RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS;
     } else if(delivery_result_str == "add_points") {
-        delivery_result = RESOURCE_DELIVERY_RESULT_ADD_POINTS;
+        delivery_result = RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
     } else {
         log_error(
             "Unknown delivery result \"" + delivery_result_str + "\"!",

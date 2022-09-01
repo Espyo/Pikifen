@@ -33,8 +33,8 @@ enum RESOURCE_DELIVERY_RESULTS {
     RESOURCE_DELIVERY_RESULT_DAMAGE_MOB,
     //Increase a spray type's ingredient count.
     RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS,
-    //Add points to the player's score.
-    RESOURCE_DELIVERY_RESULT_ADD_POINTS,
+    //Add some treasure points.
+    RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS,
 };
 
 

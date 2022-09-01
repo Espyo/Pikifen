@@ -16,10 +16,9 @@
 
 
 namespace GUI_EDITOR {
-//Maximum grid interval.
-const float MAX_GRID_INTERVAL = 20.0f;
-//Minimum grid interval.
-const float MIN_GRID_INTERVAL = 1.25f;
+//Possible grid intervals.
+const vector<float> GRID_INTERVALS =
+{1.0f, 2.0f, 2.5f, 5.0f, 10.0f};
 //Width of the text widget that shows the mouse cursor coordinates.
 const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
 //Maximum zoom level possible in the editor.
@@ -121,6 +120,7 @@ void gui_editor::load() {
     
     file_name.clear();
     loaded_content_yet = false;
+    must_recenter_cam = true;
     
     if(!auto_load_file.empty()) {
         file_name = auto_load_file;
@@ -209,11 +209,17 @@ void gui_editor::pick_file(
  * Code to run when the grid interval decrease button is pressed.
  */
 void gui_editor::press_grid_interval_decrease_button() {
-    game.options.gui_editor_grid_interval =
-        std::max(
-            game.options.gui_editor_grid_interval * 0.5f,
-            GUI_EDITOR::MIN_GRID_INTERVAL
-        );
+    float new_grid_interval = GUI_EDITOR::GRID_INTERVALS[0];
+    for(size_t i = 0; i < GUI_EDITOR::GRID_INTERVALS.size(); ++i) {
+        if(
+            GUI_EDITOR::GRID_INTERVALS[i] >=
+            game.options.gui_editor_grid_interval
+        ) {
+            break;
+        }
+        new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
+    }
+    game.options.gui_editor_grid_interval = new_grid_interval;
     status_text =
         "Decreased grid interval to " +
         f2s(game.options.gui_editor_grid_interval) + ".";
@@ -224,11 +230,17 @@ void gui_editor::press_grid_interval_decrease_button() {
  * Code to run when the grid interval increase button is pressed.
  */
 void gui_editor::press_grid_interval_increase_button() {
-    game.options.gui_editor_grid_interval =
-        std::min(
-            game.options.gui_editor_grid_interval * 2.0f,
-            GUI_EDITOR::MAX_GRID_INTERVAL
-        );
+    float new_grid_interval = GUI_EDITOR::GRID_INTERVALS.back();
+    for(int i = GUI_EDITOR::GRID_INTERVALS.size() - 1; i >= 0; --i) {
+        if(
+            GUI_EDITOR::GRID_INTERVALS[i] <=
+            game.options.gui_editor_grid_interval
+        ) {
+            break;
+        }
+        new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
+    }
+    game.options.gui_editor_grid_interval = new_grid_interval;
     status_text =
         "Increased grid interval to " +
         f2s(game.options.gui_editor_grid_interval) + ".";

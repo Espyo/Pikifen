@@ -113,6 +113,23 @@ void gui_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles the left mouse button being double-clicked.
+ * ev:
+ *   Event to handle.
+ */
+void gui_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
+    if(!dialogs.empty() || is_mouse_in_gui) return;
+    if(ImGui::GetIO().WantCaptureKeyboard) {
+        //A textbox is in use. Clicking could change the state of the area,
+        //so ignore it now, and let Dear ImGui close the box.
+        return;
+    }
+    
+    handle_lmb_down(ev);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the left mouse button being pressed down.
  * ev:
  *   Event to handle.

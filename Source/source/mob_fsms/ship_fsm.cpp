@@ -82,7 +82,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         resource* res_ptr = (resource*) delivery;
         if(
             res_ptr->res_type->delivery_result ==
-            RESOURCE_DELIVERY_RESULT_ADD_POINTS
+            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             game.states.results->points_obtained +=
                 res_ptr->res_type->point_amount;

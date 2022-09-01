@@ -2825,11 +2825,11 @@ bool area_editor::save_area(const bool to_backup) {
             )
         );
     }
-    if(game.cur_area_data.mission_points_per_poko > 0) {
+    if(game.cur_area_data.mission_points_per_treasure_point > 0) {
         data_file.add(
             new data_node(
-                "mission_points_per_poko",
-                i2s(game.cur_area_data.mission_points_per_poko)
+                "mission_points_per_treasure_point",
+                i2s(game.cur_area_data.mission_points_per_treasure_point)
             )
         );
     }

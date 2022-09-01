@@ -164,6 +164,34 @@ private:
     void change_state(const EDITOR_STATES new_state);
     void close_load_dialog();
     void close_options_dialog();
+    void enter_side_view();
+    void exit_side_view();
+    float get_cursor_timeline_time();
+    string get_path_short_name(const string &p) const;
+    void handle_lmb_drag_in_timeline();
+    void import_animation_data(const string &name);
+    void import_sprite_file_data(const string &name);
+    void import_sprite_hitbox_data(const string &name);
+    void import_sprite_top_data(const string &name);
+    void import_sprite_transformation_data(const string &name);
+    bool is_cursor_in_timeline();
+    void load_animation_database(const bool should_update_history);
+    void rename_animation(animation* anim, const string &new_name);
+    void rename_body_part(body_part* part, const string &new_name);
+    void rename_sprite(sprite* spr, const string &new_name);
+    void resize_everything(const float mult);
+    void resize_sprite(sprite* s, const float mult);
+    void save_animation_database();
+    void set_all_sprite_scales(const float scale);
+    void set_best_frame_sprite();
+    void sprite_bmp_flood_fill(
+        ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
+    );
+    void update_cur_hitbox();
+    void update_hitboxes();
+    void update_stats();
+    
+    //Drawing functions.
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );
@@ -182,18 +210,8 @@ private:
     void draw_top_down_view_mob_radius(mob_type* mt);
     void draw_top_down_view_pikmin_silhouette(const float x_offset);
     void draw_top_down_view_sprite(sprite* s);
-    void enter_side_view();
-    void exit_side_view();
-    float get_cursor_timeline_time();
-    string get_path_short_name(const string &p) const;
-    void handle_lmb_drag_in_timeline();
-    void import_animation_data(const string &name);
-    void import_sprite_file_data(const string &name);
-    void import_sprite_hitbox_data(const string &name);
-    void import_sprite_top_data(const string &name);
-    void import_sprite_transformation_data(const string &name);
-    bool is_cursor_in_timeline();
-    void load_animation_database(const bool should_update_history);
+    
+    //GUI functions.
     void open_load_dialog();
     void open_options_dialog();
     void pick_animation(
@@ -229,21 +247,7 @@ private:
     void process_gui_menu_bar();
     void process_gui_status_bar();
     void process_gui_toolbar();
-    void rename_animation(animation* anim, const string &new_name);
-    void rename_body_part(body_part* part, const string &new_name);
-    void rename_sprite(sprite* spr, const string &new_name);
-    void resize_everything(const float mult);
-    void resize_sprite(sprite* s, const float mult);
-    void save_animation_database();
-    void set_all_sprite_scales(const float scale);
-    void set_best_frame_sprite();
-    void sprite_bmp_flood_fill(
-        ALLEGRO_BITMAP* bmp, bool* selection_pixels, const int x, const int y
-    );
-    void update_cur_hitbox();
-    void update_hitboxes();
-    void update_stats();
-    
+
     //Input handler functions.
     void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
     void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;

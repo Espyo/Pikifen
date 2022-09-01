@@ -875,7 +875,10 @@ void gameplay_state::load() {
     for(size_t p = 0; p < mobs.piles.size(); ++p) {
         pile* p_ptr = mobs.piles[p];
         resource_type* res_type = p_ptr->pil_type->contents;
-        if(res_type->delivery_result != RESOURCE_DELIVERY_RESULT_ADD_POINTS) {
+        if(
+            res_type->delivery_result !=
+            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+        ) {
             continue;
         }
         game.states.results->points_total +=

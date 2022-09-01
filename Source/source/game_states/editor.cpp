@@ -854,6 +854,7 @@ void editor::leave() {
     
     game.fade_mgr.start_fade(false, [] () {
         if(game.states.area_ed->quick_play_area_path.empty()) {
+            game.states.main_menu->page_to_load = MAIN_MENU_PAGE_MAKE;
             game.change_state(game.states.main_menu);
         } else {
             game.states.gameplay->path_of_area_to_load =

@@ -149,8 +149,8 @@ void load_area(
         game.cur_area_data.mission_points_per_sec_passed
     );
     rs.set(
-        "mission_points_per_poko",
-        game.cur_area_data.mission_points_per_poko
+        "mission_points_per_treasure_point",
+        game.cur_area_data.mission_points_per_treasure_point
     );
     rs.set(
         "mission_points_per_enemy_point",
