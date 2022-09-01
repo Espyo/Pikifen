@@ -16,6 +16,7 @@
 #include <cstddef>
 #include <math.h>
 #include <string>
+#include <vector>
 
 
 /* ----------------------------------------------------------------------------
@@ -119,6 +120,13 @@ bool circle_intersects_rectangle(
     const float rect_angle,
     float* overlap_dist = NULL, float* rectangle_side_angle = NULL
 );
+bool rectangle_intersects_rectangle(
+    const point& rect1, const point& rect_dim1,
+    const float rect_angle1,
+    const point& rect2, const point& rect_dim2,
+    const float rect_angle2,
+    float* overlap_dist = NULL, float* overlap_angle = NULL
+);
 bool collinear_line_segs_intersect(
     const point &a, const point &b, const point &c, const point &d,
     point* intersection_tl = NULL, point* intersection_br = NULL
@@ -148,6 +156,7 @@ void get_miter_points(
 float get_point_sign(
     const point &p, const point &lp1, const point &lp2
 );
+point get_projected_point_on_line(point p, point l);
 void get_transformed_rectangle_bounding_box(
     const point &center, const point &dimensions, const float angle,
     point* min_coords, point* max_coords
@@ -203,6 +212,7 @@ point normalize_vector(const point &v);
 bool points_are_collinear(
     const point &a, const point &b, const point &c
 );
+void project_vertices(std::vector<point> v, const point axis, float* min, float* max);
 float rad_to_deg(const float deg);
 bool rectangles_intersect(
     const point &tl1, const point &br1,

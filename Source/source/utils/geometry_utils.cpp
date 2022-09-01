@@ -730,6 +730,117 @@ bool circle_intersects_rectangle(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether a rotated rectangle is touching a rotated rectangle or not.
+ * This includes being completely inside the rectangle.
+ * rect1:
+ *   Central coordinates of the first rectangle.
+ * rect_dim1:
+ *   Dimensions of the first rectangle.
+ * rect_angle1:
+ *   Angle the first rectangle is facing.
+ * rect2:
+ *   Central coordinates of the second rectangle.
+ * rect_dim2:
+ *   Dimensions of the second rectangle.
+ * rect_angle2:
+ *   Angle the second rectangle is facing.
+ * overlap_dist:
+ *   If not NULL, the amount of overlap is returned here.
+ * overlap_angle:
+ *   If not NULL, the direction that the rectangles would push each other
+ *   away
+ */
+bool rectangle_intersects_rectangle(
+    const point& rect1, const point& rect_dim1,
+    const float rect_angle1,
+    const point& rect2, const point& rect_dim2,
+    const float rect_angle2,
+    float* overlap_dist, float* overlap_angle
+) {
+    //Start by getting the vertices of the rectangles
+    point tl(-rect_dim1.x / 2, -rect_dim1.y / 2);
+    point br(rect_dim1.x / 2, rect_dim1.y / 2);
+    std::vector<point> rect1_vertices{
+        rotate_point(tl, rect_angle1) + rect1,
+        rotate_point(point(tl.x, br.y), rect_angle1) + rect1,
+        rotate_point(br, rect_angle1) + rect1,
+        rotate_point(point(br.x, tl.y), rect_angle1) + rect1
+    };
+
+    tl = point(-rect_dim2.x / 2, -rect_dim2.y / 2);
+    br = point(rect_dim2.x / 2, rect_dim2.y / 2);
+    std::vector<point> rect2_vertices{
+        rotate_point(tl, rect_angle2) + rect2,
+        rotate_point(point(tl.x, br.y), rect_angle2) + rect2,
+        rotate_point(br, rect_angle2) + rect2,
+        rotate_point(point(br.x, tl.y), rect_angle2) + rect2
+    };
+
+    //Code from
+    //  https://www.youtube.com/watch?v=SUyG3aV and https://www.youtube.com/watch?v=Zgf1DYrmSnk
+    //  Polygon Collision Resolution / Separating Axis Theorem
+    //
+
+    point normal(0, 0);
+    float min_overlap = INFINITY;
+
+    std::vector<point> shape1 = rect1_vertices;
+
+    for (int s = 0; s < 2; s++) {
+        if (s == 1)
+            shape1 = rect2_vertices;
+
+        //We only need to test the first two edges, since the other two are parallel
+        for (int e = 0; e < 2; e++) {
+            point a = shape1[e];
+            point b = shape1[(e + 1) % 4];
+
+            point edge = b - a;
+            point axis(-edge.y, edge.x);
+
+            float min_1 = INFINITY;
+            float max_1 = -INFINITY;
+            float min_2 = INFINITY;
+            float max_2 = -INFINITY;
+
+            //Project each vertex onto the axis
+            project_vertices(rect1_vertices, axis, &min_1, &max_1);
+            project_vertices(rect2_vertices, axis, &min_2, &max_2);
+
+            if (min_1 >= max_2 || min_2 >= max_1)
+                //We found an opening, there can't be a collision.
+                return false;
+
+            float cur_overlap = std::min(max_1 - min_2, max_2 - min_1);
+            if (cur_overlap < min_overlap) {
+                min_overlap = cur_overlap;
+                normal = axis;
+            }
+        }
+    }
+    
+    //The size of the axis results in a much bigger overlap, so we correct it here.
+    min_overlap /= dist(point(0, 0), normal).to_float();
+
+    //Ensure the normal is facing outwards.
+    point dir = rect2 - rect1;
+    if (dot_product(dir, normal) > 0) {
+        normal *= -1;
+    }
+
+    if (overlap_dist) {
+        *overlap_dist = min_overlap;
+    }
+    if (overlap_angle) {
+        *overlap_angle = get_angle(point(0, 0), normal);
+    }
+
+    return true;
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether the two line segments, which are known to be collinear,
  * are intersecting.
  * a:
@@ -1035,6 +1146,23 @@ void get_miter_points(
  */
 float get_point_sign(const point &p, const point &lp1, const point &lp2) {
     return (p.x - lp2.x) * (lp1.y - lp2.y) - (lp1.x - lp2.x) * (p.y - lp2.y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a point's sign on a line segment,
+ * used for detecting if it's inside a triangle.
+ * p:
+ *   The point to project.
+ * l:
+ *   The line to project onto
+ */
+point get_projected_point_on_line(const point p, const point l) {
+
+    point proj;
+    proj.x = ((p.x * l.x + p.y * l.y) / (l.x * l.x + l.y * l.y)) * l.x;
+    proj.y = ((p.x * l.x + p.y * l.y) / (l.x * l.x + l.y * l.y)) * l.y;
+    return proj;
 }
 
 
@@ -1630,6 +1758,22 @@ bool points_are_collinear(
     return
         (b.y - a.y) * (c.x - b.x) ==
         (c.y - b.y) * (b.x - a.x);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts an angle from radians to degrees.
+ * rad:
+ *   Angle, in radians.
+ */
+void project_vertices(std::vector<point> v, const point axis, float* min, float* max) {
+    for (int i = 0; i < v.size(); i++) {
+        point p = v[i];
+        float proj = dot_product(p, axis);
+
+        *min = std::min(*min, proj);
+        *max = std::max(*max, proj);
+    }
 }
 
 

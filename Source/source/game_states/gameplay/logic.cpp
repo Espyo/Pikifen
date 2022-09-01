@@ -1604,7 +1604,13 @@ void gameplay_state::process_mob_touches(
                 m2_ptr->rectangular_dim.x != 0
             ) {
                 //Rectangle vs rectangle.
-                //Not supported.
+                xy_collision =
+                    rectangle_intersects_rectangle(
+                        m_ptr->pos, m_ptr->rectangular_dim,
+                        m_ptr->angle, m2_ptr->pos,
+                        m2_ptr->rectangular_dim, m2_ptr->angle,
+                        &temp_push_amount, &temp_push_angle
+                    );
             } else if(m_ptr->rectangular_dim.x != 0) {
                 //Rectangle vs circle.
                 xy_collision =
@@ -1692,8 +1698,12 @@ void gameplay_state::process_mob_touches(
             m2_ptr->rectangular_dim.x != 0
         ) {
             //Rectangle vs rectangle.
-            //Not supported.
-            xy_collision = false;
+            xy_collision =
+                rectangle_intersects_rectangle(
+                    m_ptr->pos, m_ptr->rectangular_dim,
+                    m_ptr->angle, m2_ptr->pos,
+                    m2_ptr->rectangular_dim, m2_ptr->angle
+                );
         } else if(m_ptr->rectangular_dim.x != 0) {
             //Rectangle vs circle.
             xy_collision =
