@@ -1619,6 +1619,7 @@ void gameplay_state::process_mob_touches(
                         m_ptr->pos, m_ptr->rectangular_dim,
                         m_ptr->angle, &temp_push_amount, &temp_push_angle
                     );
+                temp_push_angle += deg_to_rad(180);
             } else if(m2_ptr->rectangular_dim.x != 0) {
                 //Circle vs rectangle.
                 xy_collision =
