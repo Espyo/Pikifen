@@ -78,6 +78,8 @@ enum MAKER_TOOL_TYPES {
     MAKER_TOOL_AREA_IMAGE,
     //Change gameplay speed.
     MAKER_TOOL_CHANGE_SPEED,
+    //Show collision box.
+    MAKER_TOOL_COLLISION,
     //Geometry info beneath mouse cursor.
     MAKER_TOOL_GEOMETRY_INFO,
     //Show hitboxes.
@@ -308,6 +310,8 @@ struct maker_tools_info {
     bool change_speed;
     //Multiplier to change the game speed by.
     float change_speed_mult;
+    //Are collision boxes visible in-game?
+    bool collision;
     //Is the geometry information tool enabled?
     bool geometry_info;
     //Are hitboxes visible in-game?

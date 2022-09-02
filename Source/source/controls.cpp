@@ -873,6 +873,12 @@ void gameplay_state::process_system_key_press(const int keycode) {
             game.maker_tools.used_helping_tools = true;
             break;
             
+        } case MAKER_TOOL_COLLISION: {
+            game.maker_tools.collision =
+                !game.maker_tools.collision;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
         } case MAKER_TOOL_GEOMETRY_INFO: {
             game.maker_tools.geometry_info =
                 !game.maker_tools.geometry_info;

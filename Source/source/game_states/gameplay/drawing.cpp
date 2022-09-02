@@ -421,6 +421,44 @@ void gameplay_state::draw_ingame_text() {
                 }
             }
         }
+        if(game.maker_tools.collision) {
+            if(mob_ptr->type->pushes_with_hitboxes) {
+                sprite* s = mob_ptr->get_cur_sprite();
+                if(s) {
+                    for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+                        hitbox* h_ptr = &s->hitboxes[h];
+                        point p =
+                            mob_ptr->pos + rotate_point(h_ptr->pos, mob_ptr->angle);
+                        al_draw_circle(p.x, p.y, h_ptr->radius, map_gray(255), 1);
+                    }
+                }
+            }
+            else if(mob_ptr->rectangular_dim.x != 0) {
+                point tl(-mob_ptr->rectangular_dim.x / 2, -mob_ptr->rectangular_dim.y / 2);
+                point br(mob_ptr->rectangular_dim.x / 2, mob_ptr->rectangular_dim.y / 2);
+                std::vector<point> rect_vertices{
+                    rotate_point(tl, mob_ptr->angle) + mob_ptr->pos,
+                    rotate_point(point(tl.x, br.y),  mob_ptr->angle) + mob_ptr->pos,
+                    rotate_point(br,  mob_ptr->angle) + mob_ptr->pos,
+                    rotate_point(point(br.x, tl.y),  mob_ptr->angle) + mob_ptr->pos
+                };
+                float vertices[]{
+                    rect_vertices[0].x,
+                    rect_vertices[0].y,
+                    rect_vertices[1].x,
+                    rect_vertices[1].y,
+                    rect_vertices[2].x,
+                    rect_vertices[2].y,
+                    rect_vertices[3].x,
+                    rect_vertices[3].y
+                };
+
+                al_draw_polygon(vertices, 4, 0, map_gray(255), 1, 10);
+            }
+            else {
+                al_draw_circle(mob_ptr->pos.x, mob_ptr->pos.y, mob_ptr->radius, map_gray(255), 1);
+            }
+        }
     }
     
     notification.draw();
