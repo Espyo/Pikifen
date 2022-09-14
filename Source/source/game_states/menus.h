@@ -82,7 +82,7 @@ public:
     void do_logic() override;
     void do_drawing() override;
     string get_name() const override;
-
+    
     MAIN_MENU_PAGES page_to_load;
     
 private:
@@ -244,8 +244,42 @@ private:
     vector<string> areas_to_pick;
     //Display name of each area available.
     vector<string> area_names;
+    //Subtitle of each area available.
+    vector<string> area_subtitles;
+    //Description of each area available.
+    vector<string> area_descriptions;
+    //Difficulty of each area available.
+    vector<unsigned char> area_difficulties;
+    //Tags of each area available.
+    vector<string> area_tags;
+    //Maker of each area available.
+    vector<string> area_makers;
+    //Version of each area available.
+    vector<string> area_versions;
+    //Thumbnail of each area available.
+    vector<ALLEGRO_BITMAP*> area_thumbs;
     //GUI.
     gui_manager gui;
+    //Selected GUI item on the last frame.
+    gui_item* prev_selected_item;
+    //Area list box item.
+    list_gui_item* list_box;
+    //Name text item.
+    text_gui_item* name_text;
+    //Subtitle text item.
+    text_gui_item* subtitle_text;
+    //Description text item.
+    text_gui_item* description_text;
+    //Difficulty text item.
+    text_gui_item* difficulty_text;
+    //Tags text item.
+    text_gui_item* tags_text;
+    //Maker text item.
+    text_gui_item* maker_text;
+    //Version text item.
+    text_gui_item* version_text;
+    //Thumbnail of the currently selected area.
+    ALLEGRO_BITMAP* cur_thumb;
     
     void leave();
     

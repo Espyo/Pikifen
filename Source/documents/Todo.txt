@@ -5,6 +5,9 @@ Current tasks (tasks being worked on, but not yet committed)
     Find new names for "loss" and "victory"; in P3 both are just "completion", simply that one is more positive than the other
         Maybe just "goal reached" and "goal not reached"? Not really sure where to use this anyway
     Move the area's stats into the review panel (thanks Helodity)
+    Check Helodity's rectangle vs rectangle collision logic
+    Check Helodity's Pikmin rectangular object attack logic
+    Check Helodity's Pikifen rebalanced mod
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -60,8 +63,8 @@ Next tasks (roughly sorted most important first)
                 If it's a mission, details about the highlighted mission, in order:
                     Thumbnail
                     Area name
+                    Subtitle or goal
                     Description
-                    Goal
                     Difficulty
                     More info (opens a pop-up with):
                         Tags
@@ -88,6 +91,9 @@ Next tasks (roughly sorted most important first)
             Also save when it was achieved, and under what version of the area
             Point down in the manual that the game auto-saves
             It should also save if the stage has never been played
+        A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)
+            From the script?
+            As a parameter in every single mob generator?
         Pause menu adjustments
             The continue button should be a tiny thing on the bottom-left, and the quit option a tiny thing on the bottom-right. (Thanks Neo)
             Rename "quit" to "quit without saving", or like "lose progress and quit"
@@ -104,6 +110,10 @@ Next tasks (roughly sorted most important first)
             Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
             The results screen should have a "New record!" blurb when you get a new record
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
+    Add a copy-paste feature to the area editor
+        It should only work when you select one and only one sector
+        It copies the shape of the sector, and then lets you paste that shape somewhere, same as if you were dragging a sector of that shape elsewhere
+    Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geomety and try to move it
     Statistics menu, which keeps track of:
         Engine use
             Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd
@@ -111,6 +121,12 @@ Next tasks (roughly sorted most important first)
             Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count (careful not to count Candypop Buds as deaths), Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
         Leader control
             Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
+    Minor script improvements (thanks Helodity)
+        The ability to apply spawn momentum at a specific angle, when a mob spawns another. Right now that exists, but only for random angles
+        The ability for a mob to spawn another mob at a random angle
+        A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
+        hold_focused_mob should be able to specify the hold rotation method
+        Some way to read a different mob's "focus mob memory"?
     Manual
         Update the area editor screenshots
         Revamp the scripting tutorial
@@ -218,6 +234,7 @@ Next tasks (roughly sorted most important first)
             Mono/stereo
         Footsteps should be tied to the terrain texture
         It should be possible to play sounds both in specific frames of animation and in scripts as actions
+            The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
         Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
         Missing sounds
             Pikmin seed landing

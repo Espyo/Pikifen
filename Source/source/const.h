@@ -43,6 +43,9 @@ constexpr ALLEGRO_COLOR COLOR_BLACK = { 0.0f, 0.0f, 0.0f, 1.0f };
 //Fully-transparent color, in black.
 constexpr ALLEGRO_COLOR COLOR_EMPTY = { 0.0f, 0.0f, 0.0f, 0.0f };
 
+//Golden-like color, usually for area names.
+constexpr ALLEGRO_COLOR COLOR_GOLD = { 1.0f, 0.95f, 0.0f, 1.0f };
+
 //The following constants need to be in this file because C++ sucks.
 //Too many files need these constants, and because of the one-definition rule,
 //translation unit operations, and more nonsense, it's impossible to implement

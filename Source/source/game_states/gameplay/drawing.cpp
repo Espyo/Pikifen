@@ -282,7 +282,7 @@ void gameplay_state::draw_big_msg() {
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
             draw_scaled_text(
                 game.fonts.area_name,
-                al_map_rgb(255, 215, 0),
+                COLOR_GOLD,
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(scale, scale),
                 ALLEGRO_ALIGN_CENTER,
@@ -309,7 +309,7 @@ void gameplay_state::draw_big_msg() {
         
         draw_scaled_text(
             game.fonts.area_name,
-            al_map_rgba(255, 215, 0, 255 * alpha),
+            change_alpha(COLOR_GOLD, 255 * alpha),
             point(game.win_w / 2.0f, game.win_h / 2.0f),
             point(scale, scale),
             ALLEGRO_ALIGN_CENTER,
@@ -349,7 +349,7 @@ void gameplay_state::draw_big_msg() {
             float y = ki_y.get(t + char_ratio * TEXT_VARIATION_DUR);
             draw_scaled_text(
                 game.fonts.area_name,
-                al_map_rgba(255, 215, 0, 255 * alpha),
+                change_alpha(COLOR_GOLD, 255 * alpha),
                 point((game.win_w / 2.0f) + x_offset, y),
                 point(scale, scale),
                 ALLEGRO_ALIGN_CENTER,

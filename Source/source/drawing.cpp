@@ -924,7 +924,7 @@ void draw_loading_screen(
             al_set_target_bitmap(game.loading_text_bmp); {
                 al_clear_to_color(COLOR_EMPTY);
                 draw_text_lines(
-                    game.fonts.area_name, al_map_rgb(255, 215, 0),
+                    game.fonts.area_name, COLOR_GOLD,
                     point(), ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
                     text
                 );
@@ -1478,11 +1478,13 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
  *   Allegro text flags.
  * max_size:
  *   Maximum width and height of the whole thing.
+ * scale:
+ *   Scale each token by this amount.
  */
 void draw_string_tokens(
     vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, const point &where,
-    const int flags, const point &max_size
+    const int flags, const point &max_size, const point &scale
 ) {
     unsigned int total_width = 0;
     float x_scale = 1.0f;
@@ -1513,7 +1515,7 @@ void draw_string_tokens(
             draw_scaled_text(
                 text_font, COLOR_WHITE,
                 point(caret, where.y),
-                point(x_scale, y_scale),
+                point(x_scale * scale.x, y_scale * scale.y),
                 ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_TOP,
                 tokens[t].content
             );
@@ -1528,7 +1530,7 @@ void draw_string_tokens(
                     caret + token_final_width / 2.0f,
                     where.y + max_size.y / 2.0f
                 ),
-                point(token_final_width, max_size.y)
+                point(token_final_width * scale.x, max_size.y * scale.y)
             );
             break;
         }
