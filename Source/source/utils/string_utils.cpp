@@ -168,6 +168,33 @@ string pad_string(const string &s, const size_t size, const char padding) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a string that contains an amount, then a space, then a word in
+ * either singular form or plural form, depending on the amount.
+ * amount:
+ *   The amount to use.
+ * singular_form:
+ *   The string in singular form.
+ * plural_form:
+ *   The string in plural form. If empty, then the function uses the singular
+ *   form, but with an added "s" at the end.
+ */
+string nr_and_plural(
+    const size_t amount, const string &singular_form, const string &plural_form
+) {
+    return
+        i2s(amount) + " " +
+        (
+            amount == 1 ?
+            singular_form :
+            (
+                plural_form.empty() ?
+                (singular_form + "s") :
+                plural_form
+            )
+        );
+}
+
+/* ----------------------------------------------------------------------------
  * Given a file name as a string, it removes the extension.
  * Returns the string as it is if there is no extension.
  * s:
@@ -358,6 +385,31 @@ string str_to_upper(string s) {
         s[c] = (char) toupper(s[c]);
     }
     return s;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Represents units of time in a more human-readable format, by dividing the
+ * units by 60.
+ * units:
+ *   How many units of time in total.
+ * suffix1:
+ *   Suffix for the first portion.
+ * suffix2:
+ *   Suffix for the second portion.
+ */
+string time_to_str(
+    const size_t units, const string &suffix1, const string &suffix2
+) {
+    size_t first = units / 60;
+    size_t second = units % 60;
+    return
+        (first < 10 ? "0" : "") +
+        i2s(first) +
+        suffix1 +
+        (second < 10 ? "0" : "") +
+        i2s(second) +
+        suffix2;
 }
 
 

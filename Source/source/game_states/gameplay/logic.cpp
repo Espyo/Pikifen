@@ -1022,7 +1022,7 @@ void gameplay_state::do_menu_logic() {
  * Checks if the mission goal has been met.
  */
 bool gameplay_state::is_mission_goal_met() {
-    switch(game.cur_area_data.mission_goal) {
+    switch(game.cur_area_data.mission.goal) {
     case MISSION_GOAL_NONE: {
 
         //No goal? Obviously not then.
@@ -1041,7 +1041,7 @@ bool gameplay_state::is_mission_goal_met() {
     } case MISSION_GOAL_TIMED_SURVIVAL: {
 
         //Timed survival.
-        if(area_time_passed >= game.cur_area_data.mission_goal_amount) {
+        if(area_time_passed >= game.cur_area_data.mission.goal_amount) {
             return true;
         }
         break;
@@ -1066,14 +1066,14 @@ bool gameplay_state::is_mission_goal_met() {
             if(
                 fabs(
                     l_ptr->pos.x -
-                    game.cur_area_data.mission_goal_exit_center.x
+                    game.cur_area_data.mission.goal_exit_center.x
                 ) <=
-                game.cur_area_data.mission_goal_exit_size.x / 2.0f &&
+                game.cur_area_data.mission.goal_exit_size.x / 2.0f &&
                 fabs(
                     l_ptr->pos.y -
-                    game.cur_area_data.mission_goal_exit_center.y
+                    game.cur_area_data.mission.goal_exit_center.y
                 ) <=
-                game.cur_area_data.mission_goal_exit_size.y / 2.0f
+                game.cur_area_data.mission.goal_exit_size.y / 2.0f
             ) {
                 required_leaders_in_exit++;
             }
@@ -1090,15 +1090,15 @@ bool gameplay_state::is_mission_goal_met() {
 
         //Pikmin amount reached, or surpassed.
         if(
-            game.cur_area_data.mission_goal_higher_than &&
+            game.cur_area_data.mission.goal_higher_than &&
             get_total_pikmin_amount() >=
-            game.cur_area_data.mission_goal_amount
+            game.cur_area_data.mission.goal_amount
         ) {
             return true;
         } else if(
-            !game.cur_area_data.mission_goal_higher_than &&
+            !game.cur_area_data.mission.goal_higher_than &&
             get_total_pikmin_amount() <=
-            game.cur_area_data.mission_goal_amount
+            game.cur_area_data.mission.goal_amount
         ) {
             return true;
         }
@@ -1118,19 +1118,19 @@ bool gameplay_state::is_mission_loss_met() {
     //Pikmin amount reached or surpassed.
     if(
         has_flag(
-            game.cur_area_data.mission_loss_conditions,
+            game.cur_area_data.mission.loss_conditions,
             MISSION_LOSS_COND_PIKMIN_AMOUNT
         )
     ) {
         size_t total_pikmin = get_total_pikmin_amount();
         if(
-            game.cur_area_data.mission_loss_pik_higher_than &&
-            total_pikmin >= game.cur_area_data.mission_loss_pik_amount
+            game.cur_area_data.mission.loss_pik_higher_than &&
+            total_pikmin >= game.cur_area_data.mission.loss_pik_amount
         ) {
             return true;
         } else if(
-            !game.cur_area_data.mission_loss_pik_higher_than &&
-            total_pikmin <= game.cur_area_data.mission_loss_pik_amount
+            !game.cur_area_data.mission.loss_pik_higher_than &&
+            total_pikmin <= game.cur_area_data.mission.loss_pik_amount
         ) {
             return true;
         }
@@ -1139,11 +1139,11 @@ bool gameplay_state::is_mission_loss_met() {
     //Pikmin death count.
     if(
         has_flag(
-            game.cur_area_data.mission_loss_conditions,
+            game.cur_area_data.mission.loss_conditions,
             MISSION_LOSS_COND_LOSE_PIKMIN
         )
     ) {
-        if(pikmin_deaths >= game.cur_area_data.mission_loss_pik_killed) {
+        if(pikmin_deaths >= game.cur_area_data.mission.loss_pik_killed) {
             return true;
         }
     }
@@ -1151,7 +1151,7 @@ bool gameplay_state::is_mission_loss_met() {
     //Leaders took damage.
     if(
         has_flag(
-            game.cur_area_data.mission_loss_conditions,
+            game.cur_area_data.mission.loss_conditions,
             MISSION_LOSS_COND_TAKE_DAMAGE
         )
     ) {
@@ -1170,7 +1170,7 @@ bool gameplay_state::is_mission_loss_met() {
     //Leaders KO count.
     if(
         has_flag(
-            game.cur_area_data.mission_loss_conditions,
+            game.cur_area_data.mission.loss_conditions,
             MISSION_LOSS_COND_LOSE_LEADERS
         )
     ) {
@@ -1182,7 +1182,7 @@ bool gameplay_state::is_mission_loss_met() {
         }
         if(
             (int) (starting_nr_of_leaders - living_leaders) >=
-            (int) game.cur_area_data.mission_loss_leaders_kod
+            (int) game.cur_area_data.mission.loss_leaders_kod
         ) {
             return true;
         }
@@ -1191,11 +1191,11 @@ bool gameplay_state::is_mission_loss_met() {
     //Enemy death count.
     if(
         has_flag(
-            game.cur_area_data.mission_loss_conditions,
-            MISSION_LOSS_COND_KILL_ENEMIESS
+            game.cur_area_data.mission.loss_conditions,
+            MISSION_LOSS_COND_KILL_ENEMIES
         )
     ) {
-        if(enemy_deaths >= game.cur_area_data.mission_loss_enemies_killed) {
+        if(enemy_deaths >= game.cur_area_data.mission.loss_enemies_killed) {
             return true;
         }
     }
@@ -1203,11 +1203,11 @@ bool gameplay_state::is_mission_loss_met() {
     //Time limit.
     if(
         has_flag(
-            game.cur_area_data.mission_loss_conditions,
+            game.cur_area_data.mission.loss_conditions,
             MISSION_LOSS_COND_TIME_LIMIT
         )
     ) {
-        if(area_time_passed >= game.cur_area_data.mission_loss_time_limit) {
+        if(area_time_passed >= game.cur_area_data.mission.loss_time_limit) {
             return true;
         }
     }

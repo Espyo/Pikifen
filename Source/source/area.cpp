@@ -48,34 +48,7 @@ area_data::area_data() :
     thumbnail(nullptr),
     difficulty(AREA::DEF_DIFFICULTY),
     day_time_start(AREA::DEF_DAY_TIME_START),
-    day_time_speed(AREA::DEF_DAY_TIME_SPEED),
-    mission_goal(MISSION_GOAL_NONE),
-    mission_goal_all_mobs(true),
-    mission_goal_amount(0),
-    mission_goal_higher_than(true),
-    mission_goal_exit_size(
-        AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
-    ),
-    mission_loss_conditions(0),
-    mission_loss_pik_amount(0),
-    mission_loss_pik_higher_than(false),
-    mission_loss_pik_killed(1),
-    mission_loss_leaders_kod(1),
-    mission_loss_enemies_killed(1),
-    mission_loss_time_limit(AREA::DEF_MISSION_TIME_LIMIT),
-    mission_grading_mode(MISSION_GRADING_GOAL),
-    mission_points_per_pikmin_born(0),
-    mission_points_per_pikmin_death(0),
-    mission_points_per_sec_left(0),
-    mission_points_per_sec_passed(0),
-    mission_points_per_treasure_point(0),
-    mission_points_per_enemy_point(0),
-    mission_point_loss_data(0),
-    mission_starting_points(0),
-    mission_bronze_req(AREA::DEF_MISSION_MEDAL_BRONZE_REQ),
-    mission_silver_req(AREA::DEF_MISSION_MEDAL_SILVER_REQ),
-    mission_gold_req(AREA::DEF_MISSION_MEDAL_GOLD_REQ),
-    mission_platinum_req(AREA::DEF_MISSION_MEDAL_PLATINUM_REQ) {
+    day_time_speed(AREA::DEF_DAY_TIME_SPEED) {
     
 }
 
@@ -187,37 +160,37 @@ void area_data::clear() {
     bg_color = COLOR_BLACK;
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
-    mission_goal = MISSION_GOAL_NONE;
-    mission_goal_all_mobs = true;
-    mission_goal_mob_idxs.clear();
-    mission_goal_amount = 0;
-    mission_goal_higher_than = true;
-    mission_goal_exit_center = point();
-    mission_goal_exit_size =
+    mission.goal = MISSION_GOAL_NONE;
+    mission.goal_all_mobs = true;
+    mission.goal_mob_idxs.clear();
+    mission.goal_amount = 0;
+    mission.goal_higher_than = true;
+    mission.goal_exit_center = point();
+    mission.goal_exit_size =
         point(
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE
         );
-    mission_loss_conditions = 0;
-    mission_loss_pik_amount = 0;
-    mission_loss_pik_higher_than = false;
-    mission_loss_pik_killed = 1;
-    mission_loss_leaders_kod = 1;
-    mission_loss_enemies_killed = 1;
-    mission_loss_time_limit = AREA::DEF_MISSION_TIME_LIMIT;
-    mission_grading_mode = MISSION_GRADING_GOAL;
-    mission_points_per_pikmin_born = 0;
-    mission_points_per_pikmin_death = 0;
-    mission_points_per_sec_left = 0;
-    mission_points_per_sec_passed = 0;
-    mission_points_per_treasure_point = 0;
-    mission_points_per_enemy_point = 0;
-    mission_point_loss_data = 0;
-    mission_starting_points = 0;
-    mission_bronze_req = AREA::DEF_MISSION_MEDAL_BRONZE_REQ;
-    mission_silver_req = AREA::DEF_MISSION_MEDAL_SILVER_REQ;
-    mission_gold_req = AREA::DEF_MISSION_MEDAL_GOLD_REQ;
-    mission_platinum_req = AREA::DEF_MISSION_MEDAL_PLATINUM_REQ;
+    mission.loss_conditions = 0;
+    mission.loss_pik_amount = 0;
+    mission.loss_pik_higher_than = false;
+    mission.loss_pik_killed = 1;
+    mission.loss_leaders_kod = 1;
+    mission.loss_enemies_killed = 1;
+    mission.loss_time_limit = AREA::DEF_MISSION_TIME_LIMIT;
+    mission.grading_mode = MISSION_GRADING_GOAL;
+    mission.points_per_pikmin_born = 0;
+    mission.points_per_pikmin_death = 0;
+    mission.points_per_sec_left = 0;
+    mission.points_per_sec_passed = 0;
+    mission.points_per_treasure_point = 0;
+    mission.points_per_enemy_point = 0;
+    mission.point_loss_data = 0;
+    mission.starting_points = 0;
+    mission.bronze_req = AREA::DEF_MISSION_MEDAL_BRONZE_REQ;
+    mission.silver_req = AREA::DEF_MISSION_MEDAL_SILVER_REQ;
+    mission.gold_req = AREA::DEF_MISSION_MEDAL_GOLD_REQ;
+    mission.platinum_req = AREA::DEF_MISSION_MEDAL_PLATINUM_REQ;
     
     problems.non_simples.clear();
     problems.lone_edges.clear();
@@ -404,33 +377,33 @@ void area_data::clone(area_data &other) {
     
     other.thumbnail = thumbnail;
     
-    other.mission_goal = mission_goal;
-    other.mission_goal_all_mobs = mission_goal_all_mobs;
-    other.mission_goal_mob_idxs = mission_goal_mob_idxs;
-    other.mission_goal_amount = mission_goal_amount;
-    other.mission_goal_higher_than = mission_goal_higher_than;
-    other.mission_goal_exit_center = mission_goal_exit_center;
-    other.mission_goal_exit_size = mission_goal_exit_size;
-    other.mission_loss_conditions = mission_loss_conditions;
-    other.mission_loss_pik_amount = mission_loss_pik_amount;
-    other.mission_loss_pik_higher_than = mission_loss_pik_higher_than;
-    other.mission_loss_pik_killed = mission_loss_pik_killed;
-    other.mission_loss_leaders_kod = mission_loss_leaders_kod;
-    other.mission_loss_enemies_killed = mission_loss_enemies_killed;
-    other.mission_loss_time_limit = mission_loss_time_limit;
-    other.mission_grading_mode = mission_grading_mode;
-    other.mission_points_per_pikmin_born = mission_points_per_pikmin_born;
-    other.mission_points_per_pikmin_death = mission_points_per_pikmin_death;
-    other.mission_points_per_sec_left = mission_points_per_sec_left;
-    other.mission_points_per_sec_passed = mission_points_per_sec_passed;
-    other.mission_points_per_treasure_point = mission_points_per_treasure_point;
-    other.mission_points_per_enemy_point = mission_points_per_enemy_point;
-    other.mission_point_loss_data = mission_point_loss_data;
-    other.mission_starting_points = mission_starting_points;
-    other.mission_bronze_req = mission_bronze_req;
-    other.mission_silver_req = mission_silver_req;
-    other.mission_gold_req = mission_gold_req;
-    other.mission_platinum_req = mission_platinum_req;
+    other.mission.goal = mission.goal;
+    other.mission.goal_all_mobs = mission.goal_all_mobs;
+    other.mission.goal_mob_idxs = mission.goal_mob_idxs;
+    other.mission.goal_amount = mission.goal_amount;
+    other.mission.goal_higher_than = mission.goal_higher_than;
+    other.mission.goal_exit_center = mission.goal_exit_center;
+    other.mission.goal_exit_size = mission.goal_exit_size;
+    other.mission.loss_conditions = mission.loss_conditions;
+    other.mission.loss_pik_amount = mission.loss_pik_amount;
+    other.mission.loss_pik_higher_than = mission.loss_pik_higher_than;
+    other.mission.loss_pik_killed = mission.loss_pik_killed;
+    other.mission.loss_leaders_kod = mission.loss_leaders_kod;
+    other.mission.loss_enemies_killed = mission.loss_enemies_killed;
+    other.mission.loss_time_limit = mission.loss_time_limit;
+    other.mission.grading_mode = mission.grading_mode;
+    other.mission.points_per_pikmin_born = mission.points_per_pikmin_born;
+    other.mission.points_per_pikmin_death = mission.points_per_pikmin_death;
+    other.mission.points_per_sec_left = mission.points_per_sec_left;
+    other.mission.points_per_sec_passed = mission.points_per_sec_passed;
+    other.mission.points_per_treasure_point = mission.points_per_treasure_point;
+    other.mission.points_per_enemy_point = mission.points_per_enemy_point;
+    other.mission.point_loss_data = mission.point_loss_data;
+    other.mission.starting_points = mission.starting_points;
+    other.mission.bronze_req = mission.bronze_req;
+    other.mission.silver_req = mission.silver_req;
+    other.mission.gold_req = mission.gold_req;
+    other.mission.platinum_req = mission.platinum_req;
     
     other.problems.non_simples.clear();
     other.problems.lone_edges.clear();
@@ -1120,6 +1093,41 @@ void area_data::remove_vertex(const vertex* v_ptr) {
             return;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes a mission data struct.
+ */
+mission_data::mission_data() :
+    goal(MISSION_GOAL_NONE),
+    goal_all_mobs(true),
+    goal_amount(0),
+    goal_higher_than(true),
+    goal_exit_size(
+        AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
+    ),
+    loss_conditions(0),
+    loss_pik_amount(0),
+    loss_pik_higher_than(false),
+    loss_pik_killed(1),
+    loss_leaders_kod(1),
+    loss_enemies_killed(1),
+    loss_time_limit(AREA::DEF_MISSION_TIME_LIMIT),
+    grading_mode(MISSION_GRADING_GOAL),
+    points_per_pikmin_born(0),
+    points_per_pikmin_death(0),
+    points_per_sec_left(0),
+    points_per_sec_passed(0),
+    points_per_treasure_point(0),
+    points_per_enemy_point(0),
+    point_loss_data(0),
+    starting_points(0),
+    bronze_req(AREA::DEF_MISSION_MEDAL_BRONZE_REQ),
+    silver_req(AREA::DEF_MISSION_MEDAL_SILVER_REQ),
+    gold_req(AREA::DEF_MISSION_MEDAL_GOLD_REQ),
+    platinum_req(AREA::DEF_MISSION_MEDAL_PLATINUM_REQ) {
+    
 }
 
 

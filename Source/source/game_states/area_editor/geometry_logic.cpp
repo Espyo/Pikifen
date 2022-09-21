@@ -379,15 +379,15 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
         
         //Check the list of mission requirement objects.
         unordered_set<size_t> new_mrmi;
-        new_mrmi.reserve(game.cur_area_data.mission_goal_mob_idxs.size());
-        for(size_t m2 : game.cur_area_data.mission_goal_mob_idxs) {
+        new_mrmi.reserve(game.cur_area_data.mission.goal_mob_idxs.size());
+        for(size_t m2 : game.cur_area_data.mission.goal_mob_idxs) {
             if(m2 > m_i) {
                 new_mrmi.insert(m2 - 1);
             } else if (m2 != m_i) {
                 new_mrmi.insert(m2);
             }
         }
-        game.cur_area_data.mission_goal_mob_idxs = new_mrmi;
+        game.cur_area_data.mission.goal_mob_idxs = new_mrmi;
         
         //Finally, delete it.
         game.cur_area_data.mob_generators.erase(
@@ -1754,10 +1754,10 @@ void area_editor::resize_everything(const float mults[2]) {
         s_ptr->sway.y   *= mults[1];
     }
     
-    game.cur_area_data.mission_goal_exit_center.x *= mults[0];
-    game.cur_area_data.mission_goal_exit_center.y *= mults[1];
-    game.cur_area_data.mission_goal_exit_size.x *= mults[0];
-    game.cur_area_data.mission_goal_exit_size.y *= mults[1];
+    game.cur_area_data.mission.goal_exit_center.x *= mults[0];
+    game.cur_area_data.mission.goal_exit_center.y *= mults[1];
+    game.cur_area_data.mission.goal_exit_size.x *= mults[0];
+    game.cur_area_data.mission.goal_exit_size.y *= mults[1];
 }
 
 

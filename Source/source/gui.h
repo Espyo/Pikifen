@@ -295,6 +295,8 @@ public:
     ALLEGRO_COLOR color;
     //Allegro flags.
     int flags;
+    //Wrap long lines.
+    bool line_wrap;
     
     text_gui_item(
         const string &text, ALLEGRO_FONT* font,

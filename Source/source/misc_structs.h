@@ -108,7 +108,7 @@ enum STRING_TOKEN_TYPES {
     //A regular character.
     STRING_TOKEN_CHAR,
     //A line break.
-    STRING_TOKEN_NEWLINE,
+    STRING_TOKEN_LINE_BREAK,
     //A control icon.
     STRING_TOKEN_CONTROL,
 };
@@ -788,7 +788,7 @@ public:
     float get(const float t);
     void add(const float t, const float value, EASING_METHODS ease = EASE_NONE);
     keyframe_interpolator(const float initial_value);
-
+    
 private:
     //Keyframe times.
     vector<float> keyframe_times;

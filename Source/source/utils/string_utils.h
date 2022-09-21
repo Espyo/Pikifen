@@ -36,6 +36,10 @@ void duplicate_string(const string &orig_str, string &new_str);
 string f2s(const float f);
 string get_matching_string_starts(const string &s1, const string &s2);
 bool is_number(const string &s);
+string nr_and_plural(
+    const size_t amount, const string &singular_form,
+    const string &plural_form = ""
+);
 string pad_string(const string &s, const size_t size, const char padding);
 string remove_extension(const string &s);
 string replace_all(
@@ -52,6 +56,7 @@ bool str_peek(const string &s, const size_t where, const string &match);
 string str_to_lower(string s);
 string str_to_title(string s);
 string str_to_upper(string s);
+string time_to_str(size_t units, const string &suffix1, const string &suffix2);
 string trim_spaces(const string &s, const bool left_only = false);
 
 #endif //ifndef STRING_UTILS_INCLUDED

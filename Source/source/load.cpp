@@ -71,9 +71,6 @@ void load_area(
     data_node data_file(data_file_name);
     reader_setter rs(&data_file);
     
-    string mission_goal_str;
-    string mission_required_mobs_str;
-    int mission_grading_mode_int = MISSION_GRADING_GOAL;
     data_node* weather_node = NULL;
     
     rs.set("name", game.cur_area_data.name);
@@ -93,109 +90,9 @@ void load_area(
     rs.set("bg_color", game.cur_area_data.bg_color);
     rs.set("bg_dist", game.cur_area_data.bg_dist);
     rs.set("bg_zoom", game.cur_area_data.bg_bmp_zoom);
-    rs.set("mission_goal", mission_goal_str);
-    rs.set("mission_goal_amount", game.cur_area_data.mission_goal_amount);
-    rs.set(
-        "mission_goal_higher_than",
-        game.cur_area_data.mission_goal_higher_than
-    );
-    rs.set(
-        "mission_goal_all_mobs",
-        game.cur_area_data.mission_goal_all_mobs
-    );
-    rs.set("mission_required_mobs", mission_required_mobs_str);
-    rs.set("mission_goal_exit_center", game.cur_area_data.mission_goal_exit_center);
-    rs.set("mission_goal_exit_size", game.cur_area_data.mission_goal_exit_size);
-    rs.set(
-        "mission_loss_conditions", game.cur_area_data.mission_loss_conditions
-    );
-    rs.set(
-        "mission_loss_pik_amount", game.cur_area_data.mission_loss_pik_amount
-    );
-    rs.set(
-        "mission_loss_pik_higher_than",
-        game.cur_area_data.mission_loss_pik_higher_than
-    );
-    rs.set(
-        "mission_loss_pik_killed", game.cur_area_data.mission_loss_pik_killed
-    );
-    rs.set(
-        "mission_loss_leaders_kod", game.cur_area_data.mission_loss_leaders_kod
-    );
-    rs.set(
-        "mission_loss_enemies_killed",
-        game.cur_area_data.mission_loss_enemies_killed
-    );
-    rs.set(
-        "mission_loss_time_limit", game.cur_area_data.mission_loss_time_limit
-    );
-    rs.set(
-        "mission_grading_mode", mission_grading_mode_int
-    );
-    rs.set(
-        "mission_points_per_pikmin_born",
-        game.cur_area_data.mission_points_per_pikmin_born
-    );
-    rs.set(
-        "mission_points_per_pikmin_death",
-        game.cur_area_data.mission_points_per_pikmin_death
-    );
-    rs.set(
-        "mission_points_per_sec_left",
-        game.cur_area_data.mission_points_per_sec_left
-    );
-    rs.set(
-        "mission_points_per_sec_passed",
-        game.cur_area_data.mission_points_per_sec_passed
-    );
-    rs.set(
-        "mission_points_per_treasure_point",
-        game.cur_area_data.mission_points_per_treasure_point
-    );
-    rs.set(
-        "mission_points_per_enemy_point",
-        game.cur_area_data.mission_points_per_enemy_point
-    );
-    rs.set(
-        "mission_point_loss_data",
-        game.cur_area_data.mission_point_loss_data
-    );
-    rs.set(
-        "mission_starting_points",
-        game.cur_area_data.mission_starting_points
-    );
-    rs.set(
-        "mission_bronze_req",
-        game.cur_area_data.mission_bronze_req
-    );
-    rs.set(
-        "mission_silver_req",
-        game.cur_area_data.mission_silver_req
-    );
-    rs.set(
-        "mission_gold_req",
-        game.cur_area_data.mission_gold_req
-    );
-    rs.set(
-        "mission_platinum_req",
-        game.cur_area_data.mission_platinum_req
-    );
     
-    game.cur_area_data.mission_goal =
-        (MISSION_GOALS) game.mission_goals.get_idx(mission_goal_str);
-    vector<string> mission_required_mobs_strs =
-        split(mission_required_mobs_str, ";");
-    game.cur_area_data.mission_goal_mob_idxs.reserve(
-        mission_required_mobs_strs.size()
-    );
-    for(size_t m = 0; m < mission_required_mobs_strs.size(); ++m) {
-        game.cur_area_data.mission_goal_mob_idxs.insert(
-            s2i(mission_required_mobs_strs[m])
-        );
-    }
-    game.cur_area_data.mission_grading_mode =
-        (MISSION_GRADING_MODES) mission_grading_mode_int;
-        
+    load_area_mission_data(&data_file, game.cur_area_data.mission);
+    
     if(game.loading_text_bmp) al_destroy_bitmap(game.loading_text_bmp);
     if(game.loading_subtext_bmp) al_destroy_bitmap(game.loading_subtext_bmp);
     game.loading_text_bmp = NULL;
@@ -699,6 +596,62 @@ void load_area(
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads an area's mission data.
+ * node:
+ *   Data node to load from.
+ * data:
+ *   Data object to fill.
+ */
+void load_area_mission_data(data_node* node, mission_data &data) {
+    reader_setter rs(node);
+    string goal_str;
+    string required_mobs_str;
+    int mission_grading_mode_int = MISSION_GRADING_GOAL;
+    
+    rs.set("mission_goal", goal_str);
+    rs.set("mission_goal_amount", data.goal_amount);
+    rs.set("mission_goal_higher_than", data.goal_higher_than);
+    rs.set("mission_goal_all_mobs", data.goal_all_mobs);
+    rs.set("mission_required_mobs", required_mobs_str);
+    rs.set("mission_goal_exit_center", data.goal_exit_center);
+    rs.set("mission_goal_exit_size", data.goal_exit_size);
+    rs.set("mission_loss_conditions", data.loss_conditions);
+    rs.set("mission_loss_pik_amount", data.loss_pik_amount);
+    rs.set("mission_loss_pik_higher_than", data.loss_pik_higher_than);
+    rs.set("mission_loss_pik_killed", data.loss_pik_killed);
+    rs.set("mission_loss_leaders_kod", data.loss_leaders_kod);
+    rs.set("mission_loss_enemies_killed", data.loss_enemies_killed);
+    rs.set("mission_loss_time_limit", data.loss_time_limit);
+    rs.set("mission_grading_mode", mission_grading_mode_int);
+    rs.set("mission_points_per_pikmin_born", data.points_per_pikmin_born);
+    rs.set("mission_points_per_pikmin_death", data.points_per_pikmin_death);
+    rs.set("mission_points_per_sec_left", data.points_per_sec_left);
+    rs.set("mission_points_per_sec_passed", data.points_per_sec_passed);
+    rs.set("mission_points_per_treasure_point", data.points_per_treasure_point);
+    rs.set("mission_points_per_enemy_point", data.points_per_enemy_point);
+    rs.set("mission_point_loss_data", data.point_loss_data);
+    rs.set("mission_starting_points", data.starting_points);
+    rs.set("mission_bronze_req", data.bronze_req);
+    rs.set("mission_silver_req", data.silver_req);
+    rs.set("mission_gold_req", data.gold_req);
+    rs.set("mission_platinum_req", data.platinum_req);
+    
+    data.goal = (MISSION_GOALS) game.mission_goals.get_idx(goal_str);
+    vector<string> mission_required_mobs_strs =
+        split(required_mobs_str, ";");
+    data.goal_mob_idxs.reserve(
+        mission_required_mobs_strs.size()
+    );
+    for(size_t m = 0; m < mission_required_mobs_strs.size(); ++m) {
+        data.goal_mob_idxs.insert(
+            s2i(mission_required_mobs_strs[m])
+        );
+    }
+    data.grading_mode = (MISSION_GRADING_MODES) mission_grading_mode_int;
 }
 
 

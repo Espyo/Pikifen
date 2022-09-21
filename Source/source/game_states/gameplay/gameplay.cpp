@@ -728,9 +728,9 @@ void gameplay_state::load() {
     //Memorize mobs required by the mission.
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
         unordered_set<size_t> mission_required_mob_gen_idxs;
-        if(game.cur_area_data.mission_goal_all_mobs) {
+        if(game.cur_area_data.mission.goal_all_mobs) {
             MOB_CATEGORIES filter_cat = MOB_CATEGORY_NONE;
-            switch(game.cur_area_data.mission_goal) {
+            switch(game.cur_area_data.mission.goal) {
             case MISSION_GOAL_COLLECT_TREASURE: {
                 filter_cat = MOB_CATEGORY_TREASURES;
                 break;
@@ -754,7 +754,7 @@ void gameplay_state::load() {
             }
         } else {
             mission_required_mob_gen_idxs =
-                game.cur_area_data.mission_goal_mob_idxs;
+                game.cur_area_data.mission.goal_mob_idxs;
         }
         
         for(size_t i : mission_required_mob_gen_idxs) {

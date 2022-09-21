@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -23,6 +23,7 @@ Next tasks (roughly sorted most important first)
     Ceramic bridge texture should be 256x256 (thanks isma3)
     Pressing the quit button on an editor's menu bar will make the unsaved changes warning appear on the toolbar icon instead
     Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
+    During the "Ready?" interlude, a lot of stuff is rendered wrong
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -110,6 +111,8 @@ Next tasks (roughly sorted most important first)
             Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
             The results screen should have a "New record!" blurb when you get a new record
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
+            If the mission is a timed survival, there should be no time limit -- the day duration and such should use the timed survival limit instead
+            Enemies falling into the void should count as deaths, and for the enemy kill points
     Add a copy-paste feature to the area editor
         It should only work when you select one and only one sector
         It copies the shape of the sector, and then lets you paste that shape somewhere, same as if you were dragging a sector of that shape elsewhere

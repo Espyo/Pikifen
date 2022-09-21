@@ -64,7 +64,7 @@ bullet_point_gui_item::bullet_point_gui_item(
     color(color) {
     
     on_draw =
-    [this, text, font, color] (const point & center, const point & size) {
+    [this] (const point & center, const point & size) {
         float item_x_start = center.x - size.x * 0.5;
         float text_x_offset =
             GUI::BULLET_RADIUS * 2 +
@@ -80,7 +80,7 @@ bullet_point_gui_item::bullet_point_gui_item(
             GUI::BULLET_PADDING,
             center.y,
             GUI::BULLET_RADIUS,
-            color
+            this->color
         );
         float juicy_grow_amount = get_juice_value();
         draw_compressed_scaled_text(
@@ -119,9 +119,9 @@ button_gui_item::button_gui_item(
     color(color) {
     
     on_draw =
-    [this, text, font, color] (const point & center, const point & size) {
+    [this] (const point & center, const point & size) {
         draw_button(
-            center, size, text, font, color, selected,
+            center, size, this->text, this->font, this->color, selected,
             get_juice_value()
         );
     };
@@ -150,15 +150,14 @@ check_gui_item::check_gui_item(
     color(color) {
     
     on_draw =
-        [this, text, font, value, color]
-    (const point & center, const point & size) {
+    [this] (const point & center, const point & size) {
         float juicy_grow_amount = get_juice_value();
         draw_compressed_scaled_text(
-            font, color,
+            this->font, this->color,
             point(center.x - size.x * 0.45, center.y),
             point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
-            point(size.x * 0.90, size.y), true, text
+            point(size.x * 0.90, size.y), true, this->text
         );
         
         draw_bitmap(
@@ -166,7 +165,7 @@ check_gui_item::check_gui_item(
             point((center.x + size.x * 0.5) - 40, center.y),
             point(32, -1),
             0,
-            (*value) ? map_gray(255) : al_map_rgba(32, 32, 32, 80)
+            (*this->value) ? map_gray(255) : al_map_rgba(32, 32, 32, 80)
         );
         
         ALLEGRO_COLOR box_tint =
@@ -186,8 +185,8 @@ check_gui_item::check_gui_item(
     };
     
     on_activate =
-    [this, value] (const point &) {
-        (*value) = !(*value);
+    [this] (const point &) {
+        (*this->value) = !(*this->value);
         this->start_juice_animation(JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM);
     };
 }
@@ -1415,7 +1414,8 @@ text_gui_item::text_gui_item(
     text(text),
     font(font),
     color(color),
-    flags(flags) {
+    flags(flags),
+    line_wrap(false) {
     
     on_draw =
     [this] (const point & center, const point & size) {
@@ -1432,14 +1432,44 @@ text_gui_item::text_gui_item(
         }
         
         float juicy_grow_amount = get_juice_value();
+        int text_y = center.y;
         
-        draw_compressed_scaled_text(
-            this->font, this->color,
-            point(text_x, center.y),
-            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            this->flags, TEXT_VALIGN_CENTER, size, true,
-            this->text
-        );
+        if(line_wrap) {
+        
+            text_y = center.y - size.y / 2.0f;
+            int line_height = al_get_font_line_height(game.fonts.standard);
+            vector<string_token> tokens =
+                tokenize_string(this->text);
+            set_string_token_widths(
+                tokens, game.fonts.standard, game.fonts.slim, line_height
+            );
+            vector<vector<string_token> > tokens_per_line =
+                split_long_string_with_tokens(tokens, size.x);
+                
+            for(size_t l = 0; l < tokens_per_line.size(); ++l) {
+                draw_string_tokens(
+                    tokens_per_line[l], game.fonts.standard, game.fonts.slim,
+                    point(
+                        text_x,
+                        text_y + l * line_height
+                    ),
+                    this->flags,
+                    point(size.x, line_height),
+                    point(1.0f + juicy_grow_amount, 1.0f + juicy_grow_amount)
+                );
+            }
+            
+        } else {
+        
+            draw_compressed_scaled_text(
+                this->font, this->color,
+                point(text_x, text_y),
+                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
+                this->flags, TEXT_VALIGN_CENTER, size, true,
+                this->text
+            );
+            
+        }
     };
 }
 

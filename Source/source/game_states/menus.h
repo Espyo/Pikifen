@@ -26,7 +26,10 @@ using std::vector;
 
 
 namespace AREA_MENU {
+extern const string DATA_GUI_FILE_PATH;
 extern const string GUI_FILE_PATH;
+extern const float PAGE_SWAP_DURATION;
+extern const string SPECS_GUI_FILE_PATH;
 }
 
 
@@ -258,8 +261,14 @@ private:
     vector<string> area_versions;
     //Thumbnail of each area available.
     vector<ALLEGRO_BITMAP*> area_thumbs;
-    //GUI.
+    //Mission data of each area available.
+    vector<mission_data> area_mission_data;
+    //Main GUI.
     gui_manager gui;
+    //Area info GUI.
+    gui_manager info_gui;
+    //Mission specs GUI.
+    gui_manager specs_gui;
     //Selected GUI item on the last frame.
     gui_item* prev_selected_item;
     //Area list box item.
@@ -280,7 +289,26 @@ private:
     text_gui_item* version_text;
     //Thumbnail of the currently selected area.
     ALLEGRO_BITMAP* cur_thumb;
+    //Goal text item.
+    text_gui_item* goal_text;
+    //Time limit text item.
+    text_gui_item* time_limit_text;
+    //Loss conditions text item.
+    text_gui_item* loss_text;
+    //Grading mode text item.
+    text_gui_item* grading_mode_text;
+    //Grading criteria text item.
+    text_gui_item* grading_criteria_text;
+    //Medal scores text item.
+    text_gui_item* medal_scores_text;
+    //Platinum medal text item.
+    text_gui_item* platinum_medal_text;
+    //Show the mission specs?
+    bool show_mission_specs;
     
+    void init_gui_main();
+    void init_gui_info_page();
+    void init_gui_specs_page();
     void leave();
     
 };

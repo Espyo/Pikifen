@@ -1857,6 +1857,8 @@ vector<vector<string_token> > split_long_string_with_tokens(
     const vector<string_token> &tokens, const int max_width
 ) {
     vector<vector<string_token> > tokens_per_line;
+    if(tokens.empty()) return tokens_per_line;
+    
     tokens_per_line.push_back(vector<string_token>());
     size_t cur_line_idx = 0;
     unsigned int caret = 0;
@@ -1865,13 +1867,21 @@ vector<vector<string_token> > split_long_string_with_tokens(
     
     for(size_t t = 0; t < tokens.size() + 1; ++t) {
     
-        if(
-            t == tokens.size() ||
-            (tokens[t].type == STRING_TOKEN_CHAR && tokens[t].content == " ")
-        ) {
-        
+        bool token_is_space =
+            t != tokens.size() &&
+            tokens[t].type == STRING_TOKEN_CHAR && tokens[t].content == " ";
+        bool token_is_line_break =
+            t != tokens.size() &&
+            tokens[t].type == STRING_TOKEN_LINE_BREAK;
+            
+        if(t == tokens.size() || token_is_space || token_is_line_break) {
+            //Found a point where we can end a word.
+            
             int caret_after_word = caret + word_buffer_width;
-            if(caret > 0 && caret_after_word > max_width) {
+            bool line_will_be_too_long =
+                caret > 0 && caret_after_word > max_width;
+                
+            if(line_will_be_too_long) {
                 //Break to a new line before comitting the word.
                 tokens_per_line.push_back(vector<string_token>());
                 caret = 0;
@@ -1900,6 +1910,13 @@ vector<vector<string_token> > split_long_string_with_tokens(
             caret += word_buffer_width;
             word_buffer.clear();
             word_buffer_width = 0;
+            
+            if(token_is_line_break) {
+                //Break the line after comitting the word.
+                tokens_per_line.push_back(vector<string_token>());
+                caret = 0;
+                cur_line_idx++;
+            }
             
             continue;
             
@@ -2012,6 +2029,14 @@ vector<string_token> tokenize_string(const string &s) {
             } else {
                 cur_token.type = STRING_TOKEN_CHAR;
             }
+            c++;
+            
+        } else if(str_peek(s, c, "\\n")) {
+            if(!cur_token.content.empty()) tokens.push_back(cur_token);
+            cur_token.content.clear();
+            cur_token.type = STRING_TOKEN_LINE_BREAK;
+            tokens.push_back(cur_token);
+            cur_token.type = STRING_TOKEN_CHAR;
             c++;
             
         } else {

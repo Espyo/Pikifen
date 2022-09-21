@@ -108,9 +108,29 @@
 
     <p>Each of these sections refers to a menu/HUD, and explains what data file controls it, the internal names of each item, and what properties can be changed in the file. The <code>positions</code> block in a file controls the position and size of each item in that menu/HUD, but as explained before, you're better off using the editor for these.</p>
 
-    <h3 id="area-menu">Area menu</h3>
+    <h3 id="area-menu-info">Area menu &ndash; info page</h3>
 
-    <p>The menu in which players can choose what area to play. The items that make up the list of areas are created on-the-fly, so they aren't included in the data file.</p>
+    <p>The area menu's information page &ndash; the stuff with basic information on an area.</p>
+    
+    <ul>
+      <li><b>File name:</b> <code>Area_menu_info.txt</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>info_box</code>: The box containing all of the area info.</li>
+        <li><code>name</code>: Area name.</li>
+        <li><code>subtitle</code>: Area subtitle.</li>
+        <li><code>thumbnail</code>: Area thumbnail image.</li>
+        <li><code>description</code>: Area description.</li>
+        <li><code>difficulty</code>: Area difficulty rating.</li>
+        <li><code>tags</code>: List of area tags.</li>
+        <li><code>maker</code>: Name or nickname of the area's maker.</li>
+        <li><code>version</code>: Area version.</li>
+      </ul>
+    </ul>
+    
+    <h3 id="area-menu-main">Area menu &ndash; main</h3>
+
+    <p>The menu in which players can choose what area to play. This only includes the main stuff, that's common to all area types and menu pages, like the list of areas and the menu buttons. The items that make up the list of areas are created on-the-fly, so they aren't included in the data file.</p>
     
     <ul>
       <li><b>File name:</b> <code>Area_menu.txt</code></li>
@@ -120,8 +140,31 @@
         <li><code>pick_text</code>: Instructions for the player to pick an area.</li>
         <li><code>list</code>: List of areas.</li>
         <li><code>list_scroll</code>: Scrollbar for the list.</li>
+        <li><code>mission_specs</code>: Button that toggles the mission specs view.</li>
         <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
         <li><code>no_areas_text</code>: Text telling the player no areas were found.</li>
+      </ul>
+    </ul>
+    
+    <h3 id="area-menu-specs">Area menu &ndash; specs page</h3>
+
+    <p>The area menu's specs page &ndash; the stuff with detailed mission information.</p>
+    
+    <ul>
+      <li><b>File name:</b> <code>Area_menu_specs.txt</code></li>
+      <li><b>Items:</b></li>
+      <ul>
+        <li><code>specs_box</code>: The box containing all of the mission specs.</li>
+        <li><code>goal_header</code>: Header text for the goal section.</li>
+        <li><code>goal</code>: Goal explanation.</li>
+        <li><code>loss_header</code>: Header text for the loss conditions section.</li>
+        <li><code>loss</code>: List of loss conditions.</li>
+        <li><code>time_limit</code>: Time limit.</li>
+        <li><code>grading_header</code>: Header text for the grading section.</li>
+        <li><code>grading_mode</code>: Grading mode explanation.</li>
+        <li><code>grading_criteria</code>: List of grading point criteria.</li>
+        <li><code>medal_scores</code>: Medal score requirements.</li>
+        <li><code>platinum_medal</code>: Platinum medal requirements.</li>
       </ul>
     </ul>
     

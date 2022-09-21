@@ -64,7 +64,7 @@ enum MISSION_LOSS_CONDITIONS {
     //Losing a certain amount of leaders.
     MISSION_LOSS_COND_LOSE_LEADERS = 0x08,
     //Killing a certain amount of enemies.
-    MISSION_LOSS_COND_KILL_ENEMIESS = 0x10,
+    MISSION_LOSS_COND_KILL_ENEMIES = 0x10,
     //Reaching the time limit.
     MISSION_LOSS_COND_TIME_LIMIT = 0x20,
 };
@@ -96,6 +96,66 @@ extern const int DEF_MISSION_MEDAL_SILVER_REQ;
 extern const int DEF_MISSION_MEDAL_GOLD_REQ;
 extern const int DEF_MISSION_MEDAL_PLATINUM_REQ;
 extern const size_t DEF_MISSION_TIME_LIMIT;
+};
+
+
+struct mission_data {
+    //Mission goal.
+    MISSION_GOALS goal;
+    //Does the mission goal require all relevant items, or just specific ones?
+    bool goal_all_mobs;
+    //If the mission goal requires specific items, their mob indexes go here.
+    unordered_set<size_t> goal_mob_idxs;
+    //Total amount of something required for the current mission goal.
+    size_t goal_amount;
+    //If the mission goal requires an amount, is it >= or <= ?
+    bool goal_higher_than;
+    //Mission exit region center coordinates.
+    point goal_exit_center;
+    //Mission exit region dimensions.
+    point goal_exit_size;
+    //Mission loss conditions bitmask. Use MISSION_LOSS_CONDITIONS.
+    uint8_t loss_conditions;
+    //Amount for the "reach Pikmin amount" mission loss condition.
+    size_t loss_pik_amount;
+    //Is the mission "reach Pikmin amount" loss condition >= or <= ?
+    bool loss_pik_higher_than;
+    //Amount for the "lose Pikmin" mission loss condition.
+    size_t loss_pik_killed;
+    //Amount for the "lose leaders" mission loss condition.
+    size_t loss_leaders_kod;
+    //Amount for the "kill enemies" mission loss condition.
+    size_t loss_enemies_killed;
+    //Seconds amount for the "time limit" mission loss condition.
+    size_t loss_time_limit;
+    //Mission grading mode.
+    MISSION_GRADING_MODES grading_mode;
+    //Mission point multiplier for each Pikmin born.
+    int points_per_pikmin_born;
+    //Mission point multiplier for each Pikmin lost.
+    int points_per_pikmin_death;
+    //Mission point multiplier for each second left (only if time limit is on).
+    int points_per_sec_left;
+    //Mission point multiplier for each second passed.
+    int points_per_sec_passed;
+    //Mission point multiplier for each treasure point obtained.
+    int points_per_treasure_point;
+    //Mission point multiplier for each enemy point obtained.
+    int points_per_enemy_point;
+    //Bitmask for mission loss point loss criteria. Use MISSION_POINT_CRITERIA.
+    uint8_t point_loss_data;
+    //Starting number of points.
+    int starting_points;
+    //Bronze medal point requirement.
+    int bronze_req;
+    //Silver medal point requirement.
+    int silver_req;
+    //Gold medal point requirement.
+    int gold_req;
+    //Platinum medal point requirement.
+    int platinum_req;
+    
+    mission_data();
 };
 
 
@@ -167,60 +227,8 @@ struct area_data {
     float day_time_speed;
     //Known geometry problems.
     geometry_problems problems;
-    //Mission goal.
-    MISSION_GOALS mission_goal;
-    //Does the mission goal require all relevant items, or just specific ones?
-    bool mission_goal_all_mobs;
-    //If the mission goal requires specific items, their mob indexes go here.
-    unordered_set<size_t> mission_goal_mob_idxs;
-    //Total amount of something required for the current mission goal.
-    size_t mission_goal_amount;
-    //If the mission goal requires an amount, is it >= or <= ?
-    bool mission_goal_higher_than;
-    //Mission exit region center coordinates.
-    point mission_goal_exit_center;
-    //Mission exit region dimensions.
-    point mission_goal_exit_size;
-    //Mission loss conditions bitmask. Use MISSION_LOSS_CONDITIONS.
-    uint8_t mission_loss_conditions;
-    //Amount for the "reach Pikmin amount" mission loss condition.
-    size_t mission_loss_pik_amount;
-    //Is the mission "reach Pikmin amount" loss condition >= or <= ?
-    bool mission_loss_pik_higher_than;
-    //Amount for the "lose Pikmin" mission loss condition.
-    size_t mission_loss_pik_killed;
-    //Amount for the "lose leaders" mission loss condition.
-    size_t mission_loss_leaders_kod;
-    //Amount for the "kill enemies" mission loss condition.
-    size_t mission_loss_enemies_killed;
-    //Seconds amount for the "time limit" mission loss condition.
-    size_t mission_loss_time_limit;
-    //Mission grading mode.
-    MISSION_GRADING_MODES mission_grading_mode;
-    //Mission point multiplier for each Pikmin born.
-    int mission_points_per_pikmin_born;
-    //Mission point multiplier for each Pikmin lost.
-    int mission_points_per_pikmin_death;
-    //Mission point multiplier for each second left (only if time limit is on).
-    int mission_points_per_sec_left;
-    //Mission point multiplier for each second passed.
-    int mission_points_per_sec_passed;
-    //Mission point multiplier for each treasure point obtained.
-    int mission_points_per_treasure_point;
-    //Mission point multiplier for each enemy point obtained.
-    int mission_points_per_enemy_point;
-    //Bitmask for mission loss point loss criteria. Use MISSION_POINT_CRITERIA.
-    uint8_t mission_point_loss_data;
-    //Starting number of points.
-    int mission_starting_points;
-    //Bronze medal point requirement.
-    int mission_bronze_req;
-    //Silver medal point requirement.
-    int mission_silver_req;
-    //Gold medal point requirement.
-    int mission_gold_req;
-    //Platinum medal point requirement.
-    int mission_platinum_req;
+    //Mission data.
+    mission_data mission;
     
     area_data();
     void check_stability();
