@@ -173,7 +173,11 @@ void gameplay_state::do_game_drawing(
     if(area_title_fade_timer.time_left > 0) {
         draw_loading_screen(
             game.cur_area_data.name,
-            game.cur_area_data.subtitle,
+            get_subtitle_or_mission_goal(
+                game.cur_area_data.subtitle,
+                game.cur_area_data.type,
+                game.cur_area_data.mission.goal
+            ),
             area_title_fade_timer.get_ratio_left()
         );
     }
@@ -261,11 +265,15 @@ void gameplay_state::draw_big_msg() {
         const float TEXT_W = game.win_w * 0.60f;
         const float TEXT_INITIAL_SCALE = 2.0f;
         const float TEXT_VARIATION_DUR = 0.08f;
-        const float TEXT_PAUSE_T = 0.50f;
+        const float TEXT_START_T = 0.15f;
+        const float TEXT_MOVE_MID_T = 0.30f;
+        const float TEXT_PAUSE_T = 0.60f;
         const float TEXT_SHRINK_T = 0.95f;
         const float t = big_msg_time / GAMEPLAY::BIG_MSG_READY_DUR;
         
         keyframe_interpolator ki_y(game.win_h * (-0.2f));
+        ki_y.add(TEXT_START_T, game.win_h * (-0.2f));
+        ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_IN);
         ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
         ki_y.add(TEXT_SHRINK_T, game.win_h / 2.0f);
         keyframe_interpolator ki_s(TEXT_INITIAL_SCALE);
@@ -327,11 +335,16 @@ void gameplay_state::draw_big_msg() {
         const float TEXT_W = game.win_w * 0.80f;
         const float TEXT_INITIAL_SCALE = 1.1f;
         const float TEXT_VARIATION_DUR = 0.08f;
+        const float TEXT_MOVE_MID_T = 0.30f;
         const float TEXT_PAUSE_T = 0.50f;
         const float TEXT_FADE_T = 0.90f;
-        const float t = big_msg_time / GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DUR;
-        
+        const float t =
+            cur_big_msg == BIG_MESSAGE_MISSION_COMPLETE ?
+            (big_msg_time / GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DUR) :
+            (big_msg_time / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR);
+            
         keyframe_interpolator ki_y(game.win_h * (-0.2f));
+        ki_y.add(TEXT_MOVE_MID_T, game.win_h * 0.40f, EASE_IN);
         ki_y.add(TEXT_PAUSE_T, game.win_h / 2.0f, EASE_OUT_ELASTIC);
         keyframe_interpolator ki_s(TEXT_INITIAL_SCALE);
         ki_s.add(1.0f, TEXT_INITIAL_SCALE * 1.4f, EASE_IN);

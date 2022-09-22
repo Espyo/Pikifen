@@ -2192,37 +2192,6 @@ void area_editor::process_gui_panel_main() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //Stats node.
-    if(saveable_tree_node("main", "Stats")) {
-    
-        //Sector amount text.
-        ImGui::BulletText(
-            "Sectors: %i", (int) game.cur_area_data.sectors.size()
-        );
-        
-        //Edge amount text.
-        ImGui::BulletText(
-            "Edges: %i", (int) game.cur_area_data.edges.size()
-        );
-        
-        //Vertex amount text.
-        ImGui::BulletText(
-            "Vertexes: %i", (int) game.cur_area_data.vertexes.size()
-        );
-        
-        //Object amount text.
-        ImGui::BulletText(
-            "Objects: %i", (int) game.cur_area_data.mob_generators.size()
-        );
-        
-        //Path stop amount text.
-        ImGui::BulletText(
-            "Path stops: %i", (int) game.cur_area_data.path_stops.size()
-        );
-        
-        ImGui::TreePop();
-    }
-    
     ImGui::EndChild();
 }
 
@@ -3941,6 +3910,37 @@ void area_editor::process_gui_panel_review() {
         
         ImGui::TreePop();
         
+    }
+    
+    //Stats node.
+    if(saveable_tree_node("main", "Stats")) {
+    
+        //Sector amount text.
+        ImGui::BulletText(
+            "Sectors: %i", (int) game.cur_area_data.sectors.size()
+        );
+        
+        //Edge amount text.
+        ImGui::BulletText(
+            "Edges: %i", (int) game.cur_area_data.edges.size()
+        );
+        
+        //Vertex amount text.
+        ImGui::BulletText(
+            "Vertexes: %i", (int) game.cur_area_data.vertexes.size()
+        );
+        
+        //Object amount text.
+        ImGui::BulletText(
+            "Objects: %i", (int) game.cur_area_data.mob_generators.size()
+        );
+        
+        //Path stop amount text.
+        ImGui::BulletText(
+            "Path stops: %i", (int) game.cur_area_data.path_stops.size()
+        );
+        
+        ImGui::TreePop();
     }
     
     ImGui::EndChild();

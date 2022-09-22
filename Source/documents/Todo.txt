@@ -1,10 +1,21 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    Update the results screen
+        For simple areas, explain somehow how there is no grading, but here are some stats anyway
+        For mission areas, show:
+            Area name
+            Mission goal
+            A stamp indicating whether you got the goal or not
+            A small note explaining why you got the goal or not
+            All the stats
+                For a point grading mission, some values after each stat telling you how many points you got from that
+                For a point grading mission, a strikethrough on any stats that got reduced to 0 due to a loss
+            For a point grading mission, final point score
+            Medal icon
     Find new names for "loss" and "victory"; in P3 both are just "completion", simply that one is more positive than the other
         Maybe just "goal reached" and "goal not reached"? Not really sure where to use this anyway
-    Move the area's stats into the review panel (thanks Helodity)
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod
@@ -24,6 +35,7 @@ Next tasks (roughly sorted most important first)
     Pressing the quit button on an editor's menu bar will make the unsaved changes warning appear on the toolbar icon instead
     Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
     During the "Ready?" interlude, a lot of stuff is rendered wrong
+    Entering a mission via the auto-start maker tool, then in the results menu choosing to quit leads you to the simple area selection menu
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -48,45 +60,6 @@ Next tasks (roughly sorted most important first)
                         Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
-        Area selection menu changes
-            Left side of the area selection menu proper
-                The list of areas, with their names
-                    If it's a mission, a completion stamp and medal icon next to each name
-            Right side of the area selection menu proper
-                If it's a simple area, basic details about the area
-                    Thumbnail
-                    Area name
-                    Subtitle, if any
-                    Description
-                    More info (opens a pop-up with):
-                        Tags
-                        Maker and version
-                If it's a mission, details about the highlighted mission, in order:
-                    Thumbnail
-                    Area name
-                    Subtitle or goal
-                    Description
-                    Difficulty
-                    More info (opens a pop-up with):
-                        Tags
-                        Time limit
-                        Loss conditions
-                        Scoring data
-                        Maker and version
-                        High scores + their medals (only present if the stage's grading mode is points)
-            The background tint should be like a dark blue instead of just black? (thanks Neo)
-        Update the results screen
-            For simple areas, explain somehow how there is no grading, but here are some stats anyway
-            For mission areas, show:
-                Area name
-                Mission goal
-                A stamp indicating whether you got the goal or not
-                A small note explaining why you got the goal or not
-                All the stats
-                    For a point grading mission, some values after each stat telling you how many points you got from that
-                    For a point grading mission, a strikethrough on any stats that got reduced to 0 due to a loss
-                For a point grading mission, final point score
-                Medal icon
         [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area

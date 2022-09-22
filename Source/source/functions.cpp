@@ -816,6 +816,27 @@ void get_multiline_text_dimensions(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns an area's subtitle or, if none is specified, the mission's goal.
+ * subtitle:
+ *   Area subtitle.
+ * area_type:
+ *   Type of area.
+ * goal:
+ *   Mission goal.
+ */
+string get_subtitle_or_mission_goal(
+    const string &subtitle, const AREA_TYPES area_type,
+    const MISSION_GOALS goal
+) {
+    if(subtitle.empty() && area_type == AREA_TYPE_MISSION) {
+        return game.mission_goals.get_name(goal);
+    }
+    
+    return subtitle;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the sun strength for the current time and weather.
  */
 float get_sun_strength() {

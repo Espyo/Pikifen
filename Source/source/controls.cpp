@@ -169,6 +169,7 @@ void gameplay_state::handle_button(
 ) {
 
     if(!ready_for_input || !is_input_allowed) return;
+    if(cur_interlude != INTERLUDE_NONE) return;
     
     bool is_down = (pos >= 0.5);
     

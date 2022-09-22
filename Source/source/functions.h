@@ -16,6 +16,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
 
+#include "area.h"
 #include "controls.h"
 #include "mob_script.h"
 #include "mobs/leader.h"
@@ -159,6 +160,10 @@ void get_next_offset_effect_edge(
     edge** final_edge, float* final_angle, float* final_diff,
     float* final_base_shadow_angle,
     bool* final_shadow_cw
+);
+string get_subtitle_or_mission_goal(
+    const string &subtitle, const AREA_TYPES area_type,
+    const MISSION_GOALS goal
 );
 float get_sun_strength();
 unsigned char get_throw_preview_vertexes(

@@ -103,7 +103,13 @@ void load_area(
     }
     
     draw_loading_screen(
-        game.cur_area_data.name, game.cur_area_data.subtitle, 1.0
+        game.cur_area_data.name,
+        get_subtitle_or_mission_goal(
+            game.cur_area_data.subtitle,
+            game.cur_area_data.type,
+            game.cur_area_data.mission.goal
+        ),
+        1.0f
     );
     al_flip_display();
     

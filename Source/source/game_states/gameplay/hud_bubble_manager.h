@@ -175,7 +175,7 @@ public:
                 (pos->y + match_pos.y) / 2.0f
             );
             float mov_ratio =
-                ease(EASE_IN_ELASTIC, 1.0f - transition_anim_ratio);
+                ease(EASE_IN_OUT_BACK, 1.0f - transition_anim_ratio);
             float pivot_dist =
                 dist(*pos, match_pivot).to_float();
                 

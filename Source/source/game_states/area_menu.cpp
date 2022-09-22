@@ -163,7 +163,11 @@ void area_menu_state::do_logic() {
             name_text->text =
                 area_names[area_idx];
             subtitle_text->text =
-                area_subtitles[area_idx];
+                get_subtitle_or_mission_goal(
+                    area_subtitles[area_idx],
+                    area_type,
+                    area_mission_data[area_idx].goal
+                );
             description_text->text =
                 area_descriptions[area_idx];
             difficulty_text->text =

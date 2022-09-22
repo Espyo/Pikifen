@@ -47,43 +47,40 @@ float ease(const EASING_METHODS method, const float n) {
     case EASE_OUT: {
         return 1 - (pow((1 - n), 3));
     }
-    case EASE_IN_ELASTIC: {
-        const float cp1 = 0.10f;
-        const float cp2 = 0.25f;
-        const float mag1 = -0.2f;
-        const float mag2 = 0.1f;
-        float aux;
-        if(n < cp1) {
-            aux = n * 1.0f / cp1;
-            return sin(aux * TAU / 2) * mag1;
-        } else if(n < cp2) {
-            aux = n - cp1;
-            aux *= 1.0f / (cp2 - cp1);
-            return 1.0f + sin(aux * TAU / 2) * mag2;
-        } else {
-            aux = n - cp2;
-            aux *= 1.0f / (1.0f - cp2);
-            return 1.0f - (pow((1 - aux), 3));
-        }
+    case EASE_IN_BACK: {
+        const float mag1 = 1.70158f;
+        const float mag2 = mag1 + 1.0f;
+        return mag2 * n * n * n - mag1 * n * n;
+    }
+    case EASE_OUT_BACK: {
+        const float mag1 = 1.70158f;
+        const float mag2 = mag1 + 1.0f;
+        return 1.0f + mag2 * pow(n - 1.0f, 3) + mag1 * pow(n - 1.0f, 2);
+    }
+    case EASE_IN_OUT_BACK: {
+        const float mag1 = 1.70158f;
+        const float mag2 = mag1 * 1.525f;
+        return
+            n < 0.5 ?
+            (pow(2 * n, 2) * ((mag2 + 1.0f) * 2 * n - mag2)) / 2 :
+            (pow(2 * n - 2, 2) * ((mag2 + 1.0f) * (n * 2 - 2) + mag2) + 2) / 2;
+    } case EASE_IN_ELASTIC: {
+        const float mag = TAU / 3;
+        return
+            n == 0.0f ?
+            0.0f :
+            n == 1.0f ?
+            1.0f :
+            -pow(2.0f, 10.0f * n - 10.0f) * sin((n * 10.0f - 10.75f) * mag);
     }
     case EASE_OUT_ELASTIC: {
-        const float cp1 = 0.75f;
-        const float cp2 = 0.90f;
-        const float mag1 = 0.2f;
-        const float mag2 = -0.1f;
-        float aux;
-        if(n < cp1) {
-            aux = n * 1.0f / cp1;
-            return pow(aux, 3);
-        } else if(n < cp2) {
-            aux = n - cp1;
-            aux *= 1.0f / (cp2 - cp1);
-            return 1.0f + sin(aux * TAU / 2) * mag1;
-        } else {
-            aux = n - cp2;
-            aux *= 1.0f / (1.0f - cp2);
-            return 1.0f + sin(aux * TAU / 2) * mag2;
-        }
+        const float mag = TAU / 3;
+        return
+            n == 0.0f ?
+            0.0f :
+            n == 1.0f ?
+            1.0f :
+            pow(2.0f, -10.0f * n) * sin((n * 10.0f - 0.75f) * mag) + 1.0f;
     }
     case EASE_UP_AND_DOWN: {
         return sin(n * TAU / 2);
