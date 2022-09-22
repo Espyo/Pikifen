@@ -36,6 +36,8 @@ Next tasks (roughly sorted most important first)
     Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
     During the "Ready?" interlude, a lot of stuff is rendered wrong
     Entering a mission via the auto-start maker tool, then in the results menu choosing to quit leads you to the simple area selection menu
+    Leaving the GUI editor should close the current file
+    In the GUI editor, item names can escape into the toolbar or status bar
     
     --- v0.23.0 ---
     Mission Mode stuff

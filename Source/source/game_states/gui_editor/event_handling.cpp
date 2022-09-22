@@ -227,6 +227,18 @@ void gui_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles the left mouse button being released.
+ * ev:
+ *   Event to handle.
+ */
+void gui_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
+    if(!dialogs.empty()) return;
+    
+    cur_transformation_widget.handle_mouse_up();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the middle mouse button being pressed down.
  * ev:
  *   Event to handle.

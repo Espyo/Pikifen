@@ -123,6 +123,7 @@ private:
     void handle_lmb_double_click(const ALLEGRO_EVENT &ev) override;
     void handle_lmb_down(const ALLEGRO_EVENT &ev) override;
     void handle_lmb_drag(const ALLEGRO_EVENT &ev) override;
+    void handle_lmb_up(const ALLEGRO_EVENT &ev) override;
     void handle_mmb_down(const ALLEGRO_EVENT &ev) override;
     void handle_mmb_drag(const ALLEGRO_EVENT &ev) override;
     void handle_mouse_update(const ALLEGRO_EVENT &ev) override;

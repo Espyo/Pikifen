@@ -39,11 +39,14 @@ results_state::results_state() :
     time_taken(0.0f),
     time_spent(0.0f),
     area_name_text(nullptr),
-    enemies_text(nullptr),
-    pikmin_born_text(nullptr),
-    pikmin_deaths_text(nullptr),
-    points_text(nullptr),
-    time_text(nullptr) {
+    area_subtitle_text(nullptr),
+    time_text(nullptr),
+    pikmin_born_point_text(nullptr),
+    pikmin_death_points_text(nullptr),
+    seconds_left_points_text(nullptr),
+    seconds_passed_points_text(nullptr),
+    treasure_points_points_text(nullptr),
+    enemy_points_points_text(nullptr) {
     
 }
 
@@ -76,19 +79,6 @@ void results_state::do_drawing() {
         point(-60.0f, 30.0f), -TAU / 6.0f
     );
     
-    draw_filled_rounded_rectangle(
-        point(game.win_w * 0.50f, game.win_h * 0.50f),
-        point(game.win_w * 0.80f, game.win_h * 0.50f),
-        20.0f,
-        al_map_rgba(57, 54, 98, 48)
-    );
-    draw_filled_rounded_rectangle(
-        point(game.win_w * 0.50f, game.win_h * 0.50f),
-        point(game.win_w * 0.80f, game.win_h * 0.50f) - 16.0f,
-        20.0f,
-        al_map_rgba(112, 106, 193, 48)
-    );
-    
     gui.draw();
     
     game.fade_mgr.draw();
@@ -109,6 +99,8 @@ void results_state::do_logic() {
     size_t new_time_cp =
         (size_t) (time_spent * 10) % 25;
         
+    //TODO add missing ones
+    
     if(old_time_cp < new_time_cp) {
         switch(old_time_cp) {
         case 0: {
@@ -122,22 +114,22 @@ void results_state::do_logic() {
             );
             break;
         } case 4: {
-            points_text->start_juice_animation(
+            treasure_points_points_text->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             break;
         } case 6: {
-            enemies_text->start_juice_animation(
+            enemy_points_points_text->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             break;
         } case 8: {
-            pikmin_born_text->start_juice_animation(
+            pikmin_born_point_text->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             break;
         } case 10: {
-            pikmin_deaths_text->start_juice_animation(
+            pikmin_death_points_text->start_juice_animation(
                 gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
             );
             break;
@@ -191,23 +183,47 @@ void results_state::leave() {
  */
 void results_state::load() {
     //Menu items.
-    gui.register_coords("retry",                20, 88, 25,  6);
-    gui.register_coords("continue",             50, 88, 25,  6);
-    gui.register_coords("pick_area",            80, 88, 25,  6);
-    gui.register_coords("area_name",            50, 10, 95, 10);
-    gui.register_coords("finish_reason",        50, 17.5, 95, 10);
-    gui.register_coords("time_label",           35, 30, 40, 10);
-    gui.register_coords("time_amount",          70, 30, 50, 10);
-    gui.register_coords("points_label",         35, 40, 40, 10);
-    gui.register_coords("points_amount",        70, 40, 50, 10);
-    gui.register_coords("enemies_label",        35, 50, 40, 10);
-    gui.register_coords("enemies_amount",       70, 50, 50, 10);
-    gui.register_coords("pikmin_born_label",    35, 60, 40, 10);
-    gui.register_coords("pikmin_born_amount",   70, 60, 50, 10);
-    gui.register_coords("pikmin_deaths_label",  35, 70, 40, 10);
-    gui.register_coords("pikmin_deaths_amount", 70, 70, 50, 10);
-    gui.register_coords("used_tools",           50, 80, 95, 10);
-    gui.register_coords("tooltip",              50, 95, 95,  8);
+    gui.register_coords("retry",                 20, 87.5, 25,  7);
+    gui.register_coords("continue",              50, 87.5, 25,  7);
+    gui.register_coords("pick_area",             80, 87.5, 25,  7);
+    gui.register_coords("box",                   50,   52, 88, 40);
+    gui.register_coords("area_name",             35,    7, 66, 10);
+    gui.register_coords("area_subtitle",         35,   19, 66, 10);
+    gui.register_coords("goal_stamp",            83,   11, 30, 18);
+    gui.register_coords("finish_reason",         83,   22, 30,  4);
+    gui.register_coords("time_label",            36,   28, 28,  4);
+    gui.register_coords("time_amount",           64,   28, 28,  4);
+    gui.register_coords("pikmin_born_label",     25,   37, 30,  6);
+    gui.register_coords("pikmin_born_amount",    49,   37, 18,  6);
+    gui.register_coords("pikmin_born_mult",      66,   37, 16,  6);
+    gui.register_coords("pikmin_born_points",    81,   37, 14,  6);
+    gui.register_coords("pikmin_deaths_label",   25,   43, 30,  6);
+    gui.register_coords("pikmin_deaths_amount",  49,   43, 18,  6);
+    gui.register_coords("pikmin_deaths_mult",    66,   43, 16,  6);
+    gui.register_coords("pikmin_deaths_points",  81,   43, 14,  6);
+    gui.register_coords("seconds_left_label",    25,   49, 30,  6);
+    gui.register_coords("seconds_left_amount",   49,   49, 18,  6);
+    gui.register_coords("seconds_left_mult",     66,   49, 16,  6);
+    gui.register_coords("seconds_left_points",   81,   49, 14,  6);
+    gui.register_coords("seconds_passed_label",  25,   55, 30,  6);
+    gui.register_coords("seconds_passed_amount", 49,   55, 18,  6);
+    gui.register_coords("seconds_passed_mult",   66,   55, 16,  6);
+    gui.register_coords("seconds_passed_points", 81,   55, 14,  6);
+    gui.register_coords("treasure_label",        25,   61, 30,  6);
+    gui.register_coords("treasure_amount",       49,   61, 18,  6);
+    gui.register_coords("treasure_mult",         66,   61, 16,  6);
+    gui.register_coords("treasure_points",       81,   61, 14,  6);
+    gui.register_coords("treasure_total",        89,   62, 10,  4);
+    gui.register_coords("enemies_label",         25,   67, 30,  6);
+    gui.register_coords("enemies_amount",        49,   67, 18,  6);
+    gui.register_coords("enemies_mult",          66,   67, 16,  6);
+    gui.register_coords("enemies_points",        81,   67, 14,  6);
+    gui.register_coords("enemies_total",         89,   68, 10,  4);
+    gui.register_coords("medal",                 88,   77, 20, 14);
+    gui.register_coords("used_tools",            50,   80, 56,  4);
+    gui.register_coords("final_score_label",     36,   76, 28,  4);
+    gui.register_coords("final_score",           64,   76, 28,  4);
+    gui.register_coords("tooltip",               50,   95, 95,  8);
     gui.read_coords(
         data_node(RESULTS::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -250,17 +266,51 @@ void results_state::load() {
     };
     gui.back_item->on_get_tooltip =
     [] () {
-        return game.states.area_ed->quick_play_area_path.empty() ?
-               "Return to the area selection menu." :
-               "Return to the area editor.";
+        return
+            game.states.area_ed->quick_play_area_path.empty() ?
+            "Return to the area selection menu." :
+            "Return to the area editor.";
     };
     gui.add_item(gui.back_item, "pick_area");
     
+    //Box.
+    gui_item* box_item = new gui_item();
+    box_item->on_draw =
+    [] (const point & center, const point & size) {
+        draw_filled_rounded_rectangle(
+            center,
+            size,
+            20.0f,
+            al_map_rgba(57, 54, 98, 48)
+        );
+        draw_filled_rounded_rectangle(
+            center,
+            size - 16.0f,
+            20.0f,
+            al_map_rgba(112, 106, 193, 48)
+        );
+    };
+    gui.add_item(box_item, "box");
+    
+    //Area name text.
     area_name_text =
         new text_gui_item(area_name, game.fonts.area_name);
     gui.add_item(area_name_text, "area_name");
     
-    //Finish reason, if any.
+    //Area subtitle text.
+    area_subtitle_text =
+        new text_gui_item(
+        get_subtitle_or_mission_goal(
+            game.cur_area_data.subtitle,
+            game.cur_area_data.type,
+            game.cur_area_data.mission.goal
+        ),
+        game.fonts.area_name
+    );
+    gui.add_item(area_subtitle_text, "area_subtitle");
+    
+    //Finish reason text, if any.
+    //TODO add the others
     string finish_reason;
     if(leader_ko) {
         finish_reason = "Total leader KO!";
@@ -276,6 +326,8 @@ void results_state::load() {
         );
         gui.add_item(finish_reason_text, "finish_reason");
     }
+    
+    //TODO stamp
     
     //Maker tools usage disclaimer.
     if(game.maker_tools.used_helping_tools) {
@@ -305,37 +357,6 @@ void results_state::load() {
     );
     gui.add_item(time_text, "time_amount");
     
-    //Points label text.
-    text_gui_item* points_label_text =
-        new text_gui_item(
-        "Treasure points:", game.fonts.standard,
-        map_gray(255), ALLEGRO_ALIGN_LEFT
-    );
-    gui.add_item(points_label_text, "points_label");
-    
-    //Points text.
-    points_text =
-        new text_gui_item(
-        i2s(points_obtained) + " / " + i2s(points_total),
-        game.fonts.counter
-    );
-    gui.add_item(points_text, "points_amount");
-    
-    //Enemies label text.
-    text_gui_item* enemies_label_text =
-        new text_gui_item(
-        "Enemies:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
-    );
-    gui.add_item(enemies_label_text, "enemies_label");
-    
-    //Enemies text.
-    enemies_text =
-        new text_gui_item(
-        i2s(enemies_beaten) + " / " + i2s(enemies_total),
-        game.fonts.counter
-    );
-    gui.add_item(enemies_text, "enemies_amount");
-    
     //Pikmin born label text.
     text_gui_item* pikmin_born_label_text =
         new text_gui_item(
@@ -343,28 +364,222 @@ void results_state::load() {
     );
     gui.add_item(pikmin_born_label_text, "pikmin_born_label");
     
-    //Pikmin born text.
-    pikmin_born_text =
+    //Pikmin born amount text.
+    text_gui_item* pikmin_born_amount_text =
         new text_gui_item(
         i2s(pikmin_born),
         game.fonts.counter
     );
-    gui.add_item(pikmin_born_text, "pikmin_born_amount");
+    gui.add_item(pikmin_born_amount_text, "pikmin_born_amount");
     
-    //Pikmin deaths label text.
+    //Pikmin born multiplier text.
+    text_gui_item* pikmin_born_mult_text =
+        new text_gui_item(
+        "x " + i2s(game.cur_area_data.mission.points_per_pikmin_born) + " =",
+        game.fonts.standard
+    );
+    gui.add_item(pikmin_born_mult_text, "pikmin_born_mult");
+    
+    //Pikmin born point text.
+    pikmin_born_point_text =
+        new text_gui_item(
+        i2s(pikmin_born * game.cur_area_data.mission.points_per_pikmin_born),
+        game.fonts.counter
+    );
+    gui.add_item(pikmin_born_point_text, "pikmin_born_points");
+    
+    //Pikmin death label text.
     text_gui_item* pikmin_deaths_label_text =
         new text_gui_item(
         "Pikmin deaths:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
     );
     gui.add_item(pikmin_deaths_label_text, "pikmin_deaths_label");
     
-    //Pikmin deaths text.
-    pikmin_deaths_text =
+    //Pikmin death amount text.
+    text_gui_item* pikmin_death_amount_text =
         new text_gui_item(
         i2s(pikmin_deaths),
         game.fonts.counter
     );
-    gui.add_item(pikmin_deaths_text, "pikmin_deaths_amount");
+    gui.add_item(pikmin_death_amount_text, "pikmin_deaths_amount");
+    
+    //Pikmin death multiplier text.
+    text_gui_item* pikmin_death_mult_text =
+        new text_gui_item(
+        "x " + i2s(game.cur_area_data.mission.points_per_pikmin_death) + " =",
+        game.fonts.standard
+    );
+    gui.add_item(pikmin_death_mult_text, "pikmin_deaths_mult");
+    
+    //Pikmin death points text.
+    pikmin_death_points_text =
+        new text_gui_item(
+        i2s(pikmin_deaths * game.cur_area_data.mission.points_per_pikmin_death),
+        game.fonts.counter
+    );
+    gui.add_item(pikmin_death_points_text, "pikmin_deaths_points");
+    
+    //Seconds left label text.
+    text_gui_item* seconds_left_label_text =
+        new text_gui_item(
+        "Seconds left:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
+    );
+    gui.add_item(seconds_left_label_text, "seconds_left_label");
+    
+    //Seconds left amount text.
+    text_gui_item* seconds_left_amount_text =
+        new text_gui_item(
+        i2s(pikmin_deaths), //TODO
+        game.fonts.counter
+    );
+    gui.add_item(seconds_left_amount_text, "seconds_left_amount");
+    
+    //Seconds left multiplier text.
+    text_gui_item* seconds_left_mult_text =
+        new text_gui_item(
+        "x " + i2s(game.cur_area_data.mission.points_per_sec_left) + " =",
+        game.fonts.standard
+    );
+    gui.add_item(seconds_left_mult_text, "seconds_left_mult");
+    
+    //Seconds left points text.
+    seconds_left_points_text =
+        new text_gui_item(
+        i2s(pikmin_deaths * game.cur_area_data.mission.points_per_sec_left), //TODO
+        game.fonts.counter
+    );
+    gui.add_item(seconds_left_points_text, "seconds_left_points");
+    
+    //Seconds passed label text.
+    text_gui_item* seconds_passed_label_text =
+        new text_gui_item(
+        "Seconds passed:", game.fonts.standard, map_gray(255), ALLEGRO_ALIGN_LEFT
+    );
+    gui.add_item(seconds_passed_label_text, "seconds_passed_label");
+    
+    //Seconds passed amount text.
+    text_gui_item* seconds_passed_amount_text =
+        new text_gui_item(
+        i2s(pikmin_deaths), //TODO
+        game.fonts.counter
+    );
+    gui.add_item(seconds_passed_amount_text, "seconds_passed_amount");
+    
+    //Seconds passed multiplier text.
+    text_gui_item* seconds_passed_mult_text =
+        new text_gui_item(
+        "x " + i2s(game.cur_area_data.mission.points_per_sec_passed) + " =",
+        game.fonts.standard
+    );
+    gui.add_item(seconds_passed_mult_text, "seconds_passed_mult");
+    
+    //Seconds passed points text.
+    seconds_passed_points_text =
+        new text_gui_item(
+        i2s(pikmin_deaths * game.cur_area_data.mission.points_per_sec_passed), //TODO
+        game.fonts.counter
+    );
+    gui.add_item(seconds_passed_points_text, "seconds_passed_points");
+    
+    //Treasure points label text.
+    text_gui_item* treasure_points_label_text =
+        new text_gui_item(
+        "Treasure points:", game.fonts.standard,
+        map_gray(255), ALLEGRO_ALIGN_LEFT
+    );
+    gui.add_item(treasure_points_label_text, "treasure_label");
+    
+    //Treasure points amount text.
+    text_gui_item* treasure_points_amount_text =
+        new text_gui_item(
+        i2s(points_obtained),
+        game.fonts.counter
+    );
+    gui.add_item(treasure_points_amount_text, "treasure_amount");
+    
+    //Treasure points multiplier text.
+    text_gui_item* treasure_points_mult_text =
+        new text_gui_item(
+        "x " + i2s(game.cur_area_data.mission.points_per_treasure_point) + " =",
+        game.fonts.standard
+    );
+    gui.add_item(treasure_points_mult_text, "treasure_mult");
+    
+    //Treasure points points text.
+    treasure_points_points_text =
+        new text_gui_item(
+        i2s(points_obtained * game.cur_area_data.mission.points_per_treasure_point),
+        game.fonts.counter
+    );
+    gui.add_item(treasure_points_points_text, "treasure_points");
+    
+    //Treasure points total text.
+    text_gui_item* treasure_points_total_text =
+        new text_gui_item(
+        "/ " + i2s(points_total),
+        game.fonts.counter,
+        COLOR_WHITE,
+        ALLEGRO_ALIGN_LEFT
+    );
+    gui.add_item(treasure_points_total_text, "treasure_total");
+    
+    //Enemy points label text.
+    text_gui_item* enemy_points_label_text =
+        new text_gui_item(
+        "Enemy points:", game.fonts.standard,
+        map_gray(255), ALLEGRO_ALIGN_LEFT
+    );
+    gui.add_item(enemy_points_label_text, "enemies_label");
+    
+    //Enemy points amount text.
+    text_gui_item* enemy_points_amount_text =
+        new text_gui_item(
+        i2s(enemies_beaten),
+        game.fonts.counter
+    );
+    gui.add_item(enemy_points_amount_text, "enemies_amount");
+    
+    //Enemy points multiplier text.
+    text_gui_item* enemy_points_mult_text =
+        new text_gui_item(
+        "x " + i2s(game.cur_area_data.mission.points_per_enemy_point) + " =",
+        game.fonts.standard
+    );
+    gui.add_item(enemy_points_mult_text, "enemies_mult");
+    
+    //Enemy points points text.
+    enemy_points_points_text =
+        new text_gui_item(
+        i2s(enemies_beaten * game.cur_area_data.mission.points_per_enemy_point),
+        game.fonts.counter
+    );
+    gui.add_item(enemy_points_points_text, "enemies_points");
+    
+    //Enemy points total text.
+    text_gui_item* enemy_points_total_text =
+        new text_gui_item(
+        "/ " + i2s(enemies_total),
+        game.fonts.counter,
+        COLOR_WHITE,
+        ALLEGRO_ALIGN_LEFT
+    );
+    gui.add_item(enemy_points_total_text, "enemies_total");
+    
+    //Final score label text.
+    text_gui_item* final_score_label_text =
+        new text_gui_item(
+        "Final score:", game.fonts.standard,
+        map_gray(255), ALLEGRO_ALIGN_LEFT
+    );
+    gui.add_item(final_score_label_text, "final_score_label");
+    
+    //Final score amount text.
+    final_score_text =
+        new text_gui_item(
+        "1234", //TODO
+        game.fonts.counter
+    );
+    gui.add_item(final_score_text, "final_score");
     
     //Tooltip text.
     tooltip_gui_item* tooltip_text =

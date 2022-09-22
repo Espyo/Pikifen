@@ -60,16 +60,24 @@ private:
     
     //Area name GUI item.
     text_gui_item* area_name_text;
-    //Enemy count GUI item.
-    text_gui_item* enemies_text;
-    //Pikmin born GUI item.
-    text_gui_item* pikmin_born_text;
-    //Pikmin deaths GUI item.
-    text_gui_item* pikmin_deaths_text;
-    //Treasure point count GUI item.
-    text_gui_item* points_text;
+    //Area subtitle GUI item.
+    text_gui_item* area_subtitle_text;
     //Time taken GUI item.
     text_gui_item* time_text;
+    //Pikmin born point total GUI item.
+    text_gui_item* pikmin_born_point_text;
+    //Pikmin deaths point total GUI item.
+    text_gui_item* pikmin_death_points_text;
+    //Seconds left point total GUI item.
+    text_gui_item* seconds_left_points_text;
+    //Seconds passed point total GUI item.
+    text_gui_item* seconds_passed_points_text;
+    //Treasure point point total GUI item.
+    text_gui_item* treasure_points_points_text;
+    //Enemy point point total GUI item.
+    text_gui_item* enemy_points_points_text;
+    //Final score GUI item.
+    text_gui_item* final_score_text;
     
     void continue_playing();
     void leave();
