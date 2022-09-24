@@ -68,7 +68,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     switch(delivery->type->category->id) {
     case MOB_CATEGORY_TREASURES: {
         treasure* tre_ptr = (treasure*) delivery;
-        game.states.results->points_obtained += tre_ptr->tre_type->points;
+        game.states.results->treasure_points_obtained += tre_ptr->tre_type->points;
         
         if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
             game.states.gameplay->mission_required_mob_ids.erase(
@@ -84,7 +84,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             res_ptr->res_type->delivery_result ==
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
-            game.states.results->points_obtained +=
+            game.states.results->treasure_points_obtained +=
                 res_ptr->res_type->point_amount;
         } else if(
             res_ptr->res_type->delivery_result ==

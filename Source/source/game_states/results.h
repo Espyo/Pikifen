@@ -37,9 +37,9 @@ public:
     //How many Pikmin died.
     size_t pikmin_deaths;
     //How many treasure points were gathered.
-    size_t points_obtained;
+    size_t treasure_points_obtained;
     //How many treasure points there were in total.
-    size_t points_total;
+    size_t treasure_points_total;
     //How much time was taken.
     float time_taken;
     
@@ -62,23 +62,13 @@ private:
     text_gui_item* area_name_text;
     //Area subtitle GUI item.
     text_gui_item* area_subtitle_text;
-    //Time taken GUI item.
-    text_gui_item* time_text;
-    //Pikmin born point total GUI item.
-    text_gui_item* pikmin_born_point_text;
-    //Pikmin deaths point total GUI item.
-    text_gui_item* pikmin_death_points_text;
-    //Seconds left point total GUI item.
-    text_gui_item* seconds_left_points_text;
-    //Seconds passed point total GUI item.
-    text_gui_item* seconds_passed_points_text;
-    //Treasure point point total GUI item.
-    text_gui_item* treasure_points_points_text;
-    //Enemy point point total GUI item.
-    text_gui_item* enemy_points_points_text;
-    //Final score GUI item.
-    text_gui_item* final_score_text;
+    //Stats box GUI item.
+    list_gui_item* stats_box;
     
+    void add_stat(
+        const string &label, const string &value,
+        const ALLEGRO_COLOR &color = COLOR_WHITE
+    );
     void continue_playing();
     void leave();
     void retry_area();

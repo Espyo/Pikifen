@@ -517,10 +517,10 @@ void gui_manager::draw() {
             point parent_s;
             get_item_draw_info(i_ptr->parent, &parent_c, &parent_s);
             al_set_clipping_rectangle(
-                parent_c.x - parent_s.x / 2.0f,
-                parent_c.y - parent_s.y / 2.0f,
-                parent_s.x,
-                parent_s.y
+                (parent_c.x - parent_s.x / 2.0f) + 1,
+                (parent_c.y - parent_s.y / 2.0f) + 1,
+                parent_s.x - 2,
+                parent_s.y - 2
             );
         }
         

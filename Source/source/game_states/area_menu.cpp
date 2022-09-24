@@ -448,7 +448,7 @@ void area_menu_state::init_gui_info_page() {
         info_gui.add_item(info_box, "info_box");
         
         //Name text.
-        name_text = new text_gui_item("", game.fonts.area_name);
+        name_text = new text_gui_item("", game.fonts.area_name, COLOR_GOLD);
         info_gui.add_item(name_text, "name");
         
         //Subtitle text.

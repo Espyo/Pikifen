@@ -860,14 +860,14 @@ void gameplay_state::load() {
     game.states.results->area_name = game.cur_area_data.name;
     game.states.results->enemies_total = mobs.enemies.size();
     for(size_t t = 0; t < mobs.treasures.size(); ++t) {
-        game.states.results->points_total +=
+        game.states.results->treasure_points_total +=
             mobs.treasures[t]->tre_type->points;
     }
     for(size_t e = 0; e < mobs.enemies.size(); ++e) {
         for(size_t s = 0; s < mobs.enemies[e]->specific_spoils.size(); ++s) {
             mob_type* s_type = mobs.enemies[e]->specific_spoils[s];
             if(s_type->category->id == MOB_CATEGORY_TREASURES) {
-                game.states.results->points_total +=
+                game.states.results->treasure_points_total +=
                     ((treasure_type*) s_type)->points;
             }
         }
@@ -881,7 +881,7 @@ void gameplay_state::load() {
         ) {
             continue;
         }
-        game.states.results->points_total +=
+        game.states.results->treasure_points_total +=
             p_ptr->amount * res_type->point_amount;
     }
     
