@@ -21,7 +21,8 @@ enemy_type::enemy_type() :
     mob_type(MOB_CATEGORY_ENEMIES),
     pikmin_seeds(0),
     drops_corpse(true),
-    allow_ground_attacks(true) {
+    allow_ground_attacks(true),
+    points(10) {
     
     target_type = MOB_TARGET_TYPE_ENEMY;
     huntable_targets =
@@ -70,4 +71,5 @@ void enemy_type::load_properties(data_node* file) {
     rs.set("allow_ground_attacks", allow_ground_attacks);
     rs.set("drops_corpse", drops_corpse);
     rs.set("pikmin_seeds", pikmin_seeds);
+    rs.set("points", points);
 }

@@ -66,7 +66,21 @@ enum MISSION_LOSS_CONDITIONS {
     //Killing a certain amount of enemies.
     MISSION_LOSS_COND_KILL_ENEMIES = 0x10,
     //Reaching the time limit.
-    MISSION_LOSS_COND_TIME_LIMIT = 0x20,
+};
+
+
+//Possible types of mission medal.
+enum MISSION_MEDALS {
+    //None.
+    MISSION_MEDAL_NONE,
+    //Bronze.
+    MISSION_MEDAL_BRONZE,
+    //Silver.
+    MISSION_MEDAL_SILVER,
+    //Gold.
+    MISSION_MEDAL_GOLD,
+    //Platinum.
+    MISSION_MEDAL_PLATINUM,
 };
 
 

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -98,7 +98,7 @@
       <dd>If you give an item a large width, but a small height, you may be surprised to find that, in-game, it doesn't look stretched out, and in fact looks pretty tiny. There is no one rule that controls what each item looks like &ndash; every single item in a menu or HUD behaves however it wants. The size properties in the GUI file simply dictate the <i>maximum</i> width or height that the item is allowed to have. Normally, a GUI item will never be larger than the width or height you specified, though it can be smaller.</dd>
 
       <dt><b>GUI items can animate, including moving around.</b></dt>
-      <dd>When a day starts, the HUD moves into view from the edges of the screen. When you pause, the menu slides into view from off-screen. A GUI's data file does not include any information about this, since that's all controlled by the engine. So don't be surprised that a GUI item can be in a position different from the one you specified &ndash; it's just moving into place! Likewise, some counters animate by growing their text whenever their number changes. This can result in them being bigger than the specified size, even if it's only temporary. If you're absolutely worried that this might make it bump into another item, remember to give the item some extra breathing room in the editor.</dd>
+      <dd>When gameplay starts, the HUD moves into view from the edges of the screen. When you pause, the menu slides into view from off-screen. A GUI's data file does not include any information about this, since that's all controlled by the engine. So don't be surprised that a GUI item can be in a position different from the one you specified &ndash; it's just moving into place! Likewise, some counters animate by growing their text whenever their number changes. This can result in them being bigger than the specified size, even if it's only temporary. If you're absolutely worried that this might make it bump into another item, remember to give the item some extra breathing room in the editor.</dd>
 
       <dt><b>If you want an item gone, mark it as invisible instead of placing it off-screen.</b></dt>
       <dd>While a GUI item can be partially off-screen if you want, they shouldn't be entirely off-screen. Because GUI items can animate and move during transitions, an item that is placed off-screen might come into view during these times, which can confuse the player. Plus, having these items off-screen will still make the engine waste resources on processing them, even if they're practically useless in-game. Instead, untick its checkbox in the list of items, in the panel.</dd>
@@ -394,28 +394,24 @@
 
     <h3 id="results-menu">Results menu</h3>
 
-    <p>The menu shown when players finish an area and get some results.</p>
+    <p>The menu shown when players end an exploration/mission and get some results.</p>
     
     <ul>
       <li><b>File name:</b> <code>Results_menu.txt</code></li>
       <li><b>Items:</b></li>
       <ul>
+        <li><code>area_name</code>: Name of the area.</li>
+        <li><code>area_subtitle</code>: Area subtitle or mission goal.</li>
+        <li><code>goal_stamp</code>: A stamp indicating whether or not the player reached the mission goal.</li>
+        <li><code>end_reason</code>: Reason as to why the mission ended, if any.</li>
+        <li><code>medal</code>: Mission medal that the player got, if any.</li>
+        <li><code>medal_reason</code>: Reason for the medal. If applicable, includes the final score.</li>
+        <li><code>stats_label</code>: Label for the stats box.</li>
+        <li><code>stats</code>: Box with several statistics.</li>
+        <li><code>stats_scroll</code>: Scrollbar for the stats box.</li>
         <li><code>retry</code>: Retry button.</li>
         <li><code>continue</code>: Keep playing button.</li>
         <li><code>pick_area</code>: Pick an area button.</li>
-        <li><code>area_name</code>: Name of the area.</li>
-        <li><code>finish_reason</code>: Reason as to why the day ended, if any.</li>
-        <li><code>time_label</code>: Label for the time taken field.</li>
-        <li><code>time_amount</code>: Time taken.</li>
-        <li><code>points_label</code>: Label for the treasure points field.</li>
-        <li><code>points_amount</code>: Treasure points.</li>
-        <li><code>enemies_label</code>: Label for the enemies field.</li>
-        <li><code>enemies_amount</code>: Enemies.</li>
-        <li><code>pikmin_born_label</code>: Label for the Pikmin born field.</li>
-        <li><code>pikmin_born_amount</code>: Pikmin born.</li>
-        <li><code>pikmin_deaths_label</code>: Label for the Pikmin deaths field.</li>
-        <li><code>pikmin_deaths_amoun</code>: Pikmin deaths.</li>
-        <li><code>used_tools</code>: Text indicating that the player used maker tools.</li>
         <li><code>tooltip</code>: Tooltip of the selected menu item.</li>
       </ul>
     </ul>

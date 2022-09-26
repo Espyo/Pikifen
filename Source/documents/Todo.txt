@@ -2,24 +2,10 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Update the results screen
-        For simple areas, explain somehow how there is no grading, but here are some stats anyway
-        For mission areas, show:
-            Area name
-            Mission goal
-            A stamp indicating whether you got the goal or not
-            A small note explaining why you got the goal or not
-            All the stats
-                For a point grading mission, some values after each stat telling you how many points you got from that
-                For a point grading mission, a strikethrough on any stats that got reduced to 0 due to a loss
-            For a point grading mission, final point score
-            Medal icon
-    Find new names for "loss" and "victory"; in P3 both are just "completion", simply that one is more positive than the other
-        Maybe just "goal reached" and "goal not reached"? Not really sure where to use this anyway
-    Check Helodity's rectangle vs rectangle collision logic
-    Check Helodity's Pikmin rectangular object attack logic
-    Check Helodity's Pikifen rebalanced mod
-
+    Give every enemy some points
+    Add the same loss condition/grading list system that I added to the results menu to the area selection menu's specs page
+    Rework the "none" mission goal to be "end from the pause menu"
+    
 Next tasks (roughly sorted most important first)
     --- To fix ---
     > throwing non red pikmin on an acb while it's on fire kinda just traps them for eternity until the ACB is delivered to an onion (thanks Helodity)
@@ -38,6 +24,7 @@ Next tasks (roughly sorted most important first)
     Entering a mission via the auto-start maker tool, then in the results menu choosing to quit leads you to the simple area selection menu
     Leaving the GUI editor should close the current file
     In the GUI editor, item names can escape into the toolbar or status bar
+    The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -50,18 +37,18 @@ Next tasks (roughly sorted most important first)
             Medals
                 For every stage, the player can have no medal, a bronze, a silver, a gold, or a platinum medal
                     The sprites for medals should have the medal proper take up a lot of large space, whereas the ribbon should be small. The three basic medals should have the medal proper be circular and uninteresting, whereas the platinum should be a star to stand out. Since platinum is both a "perfect" completion, as well as a way to indicate triumph on missions that aren't scored with points, it should give a feeling of a checkbox on a checklist, while the other medals should give a feeling of "good, but there's more to be done"
-                When the end of the stage is reached, regardless of it being via "victory" or "loss", the player is graded and maybe awarded a medal
+                When the end of the stage is reached, regardless of it being via clear or failure, the player is graded and maybe awarded a medal
                 Three grading modes:
                     Points
                         The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths (careful not to count Candypop Buds as deaths), time left, treasure points gathered, enemy kill points gathered
                         Each field can have varying weights, including 0 or negative
-                        Each field's value can also be instantly transformed to 0 if the player finished the stage via "loss"
+                        Each field's value can also be instantly transformed to 0 if the player ended the mission via failure
                         You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
                         Depending on the points, the player gets no medal, a bronze, a silver, a gold, or a platinum
                     Completion
                         Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                     None
-                        No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or loss conditions
+                        No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
         [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         Save the high scores/completion of every map
             Also save when it was achieved, and under what version of the area
@@ -74,10 +61,11 @@ Next tasks (roughly sorted most important first)
             The continue button should be a tiny thing on the bottom-left, and the quit option a tiny thing on the bottom-right. (Thanks Neo)
             Rename "quit" to "quit without saving", or like "lose progress and quit"
             The retry and quit buttons should show a confirmation dialog, but it can be disabled in the options. The option for it should have the values "show never", "show always", or "show after 1 minute" (thanks Neo)
-            The finish button should show an informative and confirmation dialog. This dialog should explain that finishing now will make the following fields of the score become 0, or how the score won't be affected if none (thanks Neo)
-            If you finish through the pause menu, you shouldn't be allowed to continue...you specifically said you didn't want to play any more
-                Also, don't let the player continue if they finished the mission via victory
+            The end exploration button should show an informative and confirmation dialog. This dialog should explain that ending now will make the following fields of the score become 0, or how the score won't be affected if none (thanks Neo)
+            If you end through the pause menu, you shouldn't be allowed to continue...you specifically said you didn't want to play any more
+                Also, don't let the player continue if they ended the mission via goal clear
         Other things
+            Losing all leaders shouldn't be a forced failure condition. Pikmin can still do things without a leader, after all, and the engine shouldn't just implode when there are 0 leaders around
             The radar's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
             The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that
@@ -88,6 +76,11 @@ Next tasks (roughly sorted most important first)
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
             If the mission is a timed survival, there should be no time limit -- the day duration and such should use the timed survival limit instead
             Enemies falling into the void should count as deaths, and for the enemy kill points
+            When a mission ends, the camera should move to and zoom-in on the reason for clear/failure
+            Make sure after-hours works
+    Check Helodity's rectangle vs rectangle collision logic
+    Check Helodity's Pikmin rectangular object attack logic
+    Check Helodity's Pikifen rebalanced mod
     Add a copy-paste feature to the area editor
         It should only work when you select one and only one sector
         It copies the shape of the sector, and then lets you paste that shape somewhere, same as if you were dragging a sector of that shape elsewhere
@@ -615,8 +608,8 @@ Next tasks (roughly sorted most important first)
         Extinction
             Be careful with Candypop Buds
             Cave extinction should probably be named something else, since the Pikmin species aren't necessarily extinct...
-        Day limit
-            A "casual mode" option where you can disable the day limit, if the game allows that?
+        Day number limit
+            A "casual mode" option where you can disable the day number limit, if the game allows that?
         Today's Report
             One long page filled with everything, that the player can scroll up and down -- this way there aren't several pages the player has to mash through, and it's scalable with any number of Pikmin types, content, etc.
                 Population chart over the day, with icons for key events
@@ -775,9 +768,9 @@ Misc things (so I don't forget)
     Ideas for mission mode
         A goal where you reach X sprays of type Y
         A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
-        A loss condition for killing an enemy
-        A loss condition for an enemy/enemy type dying (thanks Neo)
-        A loss condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
+        A fail condition for killing an enemy
+        A fail condition for an enemy/enemy type dying (thanks Neo)
+        A fail condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
         Maker tools should be bound to buttons in the same way the regular controls are, instead of being stuck in the number and F keys
@@ -895,7 +888,7 @@ Tasks for later on (I might never implement these)
     Other details
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     A competitive mode where each team's marble is out in the open, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
-    Missions could have unlock criteria, like a mission only unlocking if another one is finished, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
+    Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
     Story mode
         A way to choose what landing site of the area you want to start the day in
     [NEEDS BRAINSTORMING] Online play?

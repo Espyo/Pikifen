@@ -113,8 +113,16 @@ gameplay_state::gameplay_state() :
     throw_dest_sector(nullptr),
     unloading(false),
     went_to_results(false),
+    pikmin_born(0),
     pikmin_deaths(0),
+    treasures_collected(0),
+    treasures_total(0),
+    treasure_points_collected(0),
+    treasure_points_total(0),
     enemy_deaths(0),
+    enemy_total(0),
+    enemy_points_collected(0),
+    enemy_points_total(0),
     cur_interlude(INTERLUDE_NONE),
     interlude_time(0.0f),
     cur_big_msg(BIG_MESSAGE_NONE),
@@ -721,8 +729,17 @@ void gameplay_state::load() {
     cur_leader_ptr->stop_whistling();
     update_closest_group_members();
     
+    pikmin_born = 0;
     pikmin_deaths = 0;
+    treasures_collected = 0;
+    treasures_total = 0;
+    treasure_points_collected = 0;
+    treasure_points_total = 0;
     enemy_deaths = 0;
+    enemy_total = 0;
+    enemy_points_collected = 0;
+    enemy_points_total = 0;
+    mission_fail_reason = 0;
     starting_nr_of_leaders = mobs.leaders.size();
     
     //Memorize mobs required by the mission.
@@ -856,18 +873,18 @@ void gameplay_state::load() {
         }
     }
     
-    game.states.results->reset();
-    game.states.results->area_name = game.cur_area_data.name;
-    game.states.results->enemies_total = mobs.enemies.size();
+    //Figure out the total amount of treasures and their points.
     for(size_t t = 0; t < mobs.treasures.size(); ++t) {
-        game.states.results->treasure_points_total +=
+        treasures_total++;
+        treasure_points_total +=
             mobs.treasures[t]->tre_type->points;
     }
     for(size_t e = 0; e < mobs.enemies.size(); ++e) {
         for(size_t s = 0; s < mobs.enemies[e]->specific_spoils.size(); ++s) {
             mob_type* s_type = mobs.enemies[e]->specific_spoils[s];
             if(s_type->category->id == MOB_CATEGORY_TREASURES) {
-                game.states.results->treasure_points_total +=
+                treasures_total++;
+                treasure_points_total +=
                     ((treasure_type*) s_type)->points;
             }
         }
@@ -881,8 +898,15 @@ void gameplay_state::load() {
         ) {
             continue;
         }
-        game.states.results->treasure_points_total +=
+        treasures_total += p_ptr->amount;
+        treasure_points_total +=
             p_ptr->amount * res_type->point_amount;
+    }
+    
+    //Figure out the total amount of enemies and their points.
+    enemy_total = mobs.enemies.size();
+    for(size_t e = 0; e < mobs.enemies.size(); ++e) {
+        enemy_points_total += mobs.enemies[e]->ene_type->points;
     }
     
     //TODO Uncomment this when replays are implemented.

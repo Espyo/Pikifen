@@ -27,19 +27,7 @@ const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Results_menu.txt";
  */
 results_state::results_state() :
     game_state(),
-    can_continue(true),
-    enemies_beaten(0),
-    enemies_total(0),
-    leader_ko(false),
-    out_of_time(false),
-    pikmin_born(0),
-    pikmin_deaths(0),
-    treasure_points_obtained(0),
-    treasure_points_total(0),
-    time_taken(0.0f),
-    time_spent(0.0f),
-    area_name_text(nullptr),
-    area_subtitle_text(nullptr) {
+    gui_time_spent(0.0f) {
     
 }
 
@@ -70,9 +58,9 @@ void results_state::add_stat(
         label, game.fonts.standard, color
     );
     label_bullet->center =
-        point(0.25f, stat_center_y);
+        point(0.50f, stat_center_y);
     label_bullet->size =
-        point(0.48f, STAT_HEIGHT);
+        point(0.96f, STAT_HEIGHT);
     stats_box->add_child(label_bullet);
     gui.add_item(label_bullet);
     
@@ -86,6 +74,7 @@ void results_state::add_stat(
         point(0.44f, STAT_HEIGHT);
     stats_box->add_child(value_text);
     gui.add_item(value_text);
+    text_to_animate.push_back(value_text);
 }
 
 
@@ -113,7 +102,7 @@ void results_state::do_drawing() {
     logo_height = game.win_w * 0.08f * (logo_width / logo_height);
     logo_width = game.win_w * 0.08f;
     draw_background_logos(
-        time_spent, 6, 6, point(logo_width, logo_height), map_alpha(75),
+        gui_time_spent, 6, 6, point(logo_width, logo_height), map_alpha(75),
         point(-60.0f, 30.0f), -TAU / 6.0f
     );
     
@@ -129,25 +118,25 @@ void results_state::do_drawing() {
  * Ticks one frame's worth of logic.
  */
 void results_state::do_logic() {
-    time_spent += game.delta_t;
+    gui_time_spent += game.delta_t;
     
     //Make the different texts grow every two or so seconds.
-    size_t old_time_cp =
-        (size_t) ((time_spent - game.delta_t) * 10) % 25;
-    size_t new_time_cp =
-        (size_t) (time_spent * 10) % 25;
-        
-    //TODO add missing ones
+    const float TEXT_ANIM_ALL_DURATION = 1.5f;
+    const float TEXT_ANIM_PAUSE_DURATION = 1.0f;
+    const float anim_time =
+        fmod(gui_time_spent, TEXT_ANIM_ALL_DURATION + TEXT_ANIM_PAUSE_DURATION);
+    const float time_per_item = TEXT_ANIM_ALL_DURATION / text_to_animate.size();
+    const int old_time_cp = (anim_time - game.delta_t) / time_per_item;
+    const int new_time_cp = anim_time / time_per_item;
     
-    if(old_time_cp < new_time_cp) {
-        switch(old_time_cp) {
-        case 0: {
-            area_name_text->start_juice_animation(
-                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-            );
-            break;
-        }
-        }
+    if(
+        old_time_cp != new_time_cp &&
+        old_time_cp >= 0 &&
+        old_time_cp <= (int) text_to_animate.size() - 1
+    ) {
+        text_to_animate[old_time_cp]->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        );
     }
     
     gui.tick(game.delta_t);
@@ -195,6 +184,110 @@ void results_state::leave() {
  * Loads the results state into memory.
  */
 void results_state::load() {
+    size_t secs_left =
+        game.cur_area_data.mission.fail_time_limit -
+        game.states.gameplay->area_time_passed;
+        
+    int pikmin_born_score =
+        game.states.gameplay->pikmin_born *
+        game.cur_area_data.mission.points_per_pikmin_born;
+    bool lost_pikmin_born_score = false;
+    if(
+        has_flag(
+            game.cur_area_data.mission.point_loss_data,
+            MISSION_POINT_CRITERIA_PIKMIN_BORN
+        ) &&
+        game.states.gameplay->mission_fail_reason != 0
+    ) {
+        pikmin_born_score = 0;
+        lost_pikmin_born_score = true;
+    }
+    
+    int pikmin_death_score =
+        game.states.gameplay->pikmin_deaths *
+        game.cur_area_data.mission.points_per_pikmin_death;
+    bool lost_pikmin_death_score = false;
+    if(
+        has_flag(
+            game.cur_area_data.mission.point_loss_data,
+            MISSION_POINT_CRITERIA_PIKMIN_DEATH
+        ) &&
+        game.states.gameplay->mission_fail_reason != 0
+    ) {
+        pikmin_death_score = 0;
+        lost_pikmin_death_score = true;
+    }
+    
+    int secs_left_score =
+        secs_left *
+        game.cur_area_data.mission.points_per_sec_left;
+    bool lost_secs_left_score = false;
+    if(
+        has_flag(
+            game.cur_area_data.mission.point_loss_data,
+            MISSION_POINT_CRITERIA_SEC_LEFT
+        ) &&
+        game.states.gameplay->mission_fail_reason != 0
+    ) {
+        secs_left_score = 0;
+        lost_secs_left_score = true;
+    }
+    
+    int secs_passed_score =
+        ((int) game.states.gameplay->area_time_passed) *
+        game.cur_area_data.mission.points_per_sec_passed;
+    bool lost_secs_passed_score = false;
+    if(
+        has_flag(
+            game.cur_area_data.mission.point_loss_data,
+            MISSION_POINT_CRITERIA_SEC_PASSED
+        ) &&
+        game.states.gameplay->mission_fail_reason != 0
+    ) {
+        secs_passed_score = 0;
+        lost_secs_passed_score = true;
+    }
+    
+    int treasure_points_score =
+        game.states.gameplay->treasure_points_collected *
+        game.cur_area_data.mission.points_per_treasure_point;
+    bool lost_treasure_points_score = false;
+    if(
+        has_flag(
+            game.cur_area_data.mission.point_loss_data,
+            MISSION_POINT_CRITERIA_TREASURE_POINTS
+        ) &&
+        game.states.gameplay->mission_fail_reason != 0
+    ) {
+        treasure_points_score = 0;
+        lost_treasure_points_score = true;
+    }
+    
+    int enemy_points_score =
+        game.states.gameplay->enemy_points_collected *
+        game.cur_area_data.mission.points_per_enemy_point;
+    bool lost_enemy_points_score = false;
+    if(
+        has_flag(
+            game.cur_area_data.mission.point_loss_data,
+            MISSION_POINT_CRITERIA_ENEMY_POINTS
+        ) &&
+        game.states.gameplay->mission_fail_reason != 0
+    ) {
+        enemy_points_score = 0;
+        lost_enemy_points_score = true;
+    }
+    
+    final_mission_score =
+        pikmin_born_score +
+        pikmin_death_score +
+        secs_left_score +
+        secs_passed_score +
+        treasure_points_score +
+        enemy_points_score;
+        
+    text_to_animate.clear();
+    
     //Menu items.
     gui.register_coords("area_name",             50,  7, 45, 10);
     gui.register_coords("area_subtitle",         50, 18, 40, 10);
@@ -214,60 +307,250 @@ void results_state::load() {
     );
     
     //Area name text.
-    area_name_text =
+    text_gui_item* area_name_text =
         new text_gui_item(
-        area_name, game.fonts.area_name, COLOR_GOLD
+        game.cur_area_data.name, game.fonts.area_name, COLOR_GOLD
     );
     gui.add_item(area_name_text, "area_name");
+    text_to_animate.push_back(area_name_text);
     
     //Area subtitle text.
-    area_subtitle_text =
-        new text_gui_item(
+    string subtitle =
         get_subtitle_or_mission_goal(
             game.cur_area_data.subtitle,
             game.cur_area_data.type,
             game.cur_area_data.mission.goal
-        ),
-        game.fonts.area_name
-    );
-    gui.add_item(area_subtitle_text, "area_subtitle");
-    
-    //TODO stamp
-    
-    //Finish reason text, if any.
-    //TODO add the others
-    string finish_reason;
-    if(leader_ko) {
-        finish_reason = "Total leader KO...";
-    } else if(out_of_time) {
-        finish_reason = "Out of time...";
-    }
-    
-    if(!finish_reason.empty()) {
-        text_gui_item* finish_reason_text =
-            new text_gui_item(finish_reason, game.fonts.standard);
-        gui.add_item(finish_reason_text, "finish_reason");
+        );
+    if(!subtitle.empty()) {
+        text_gui_item* area_subtitle_text =
+            new text_gui_item(subtitle, game.fonts.area_name);
+        gui.add_item(area_subtitle_text, "area_subtitle");
+        text_to_animate.push_back(area_subtitle_text);
     }
     
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-        //TODO medal
+        //Goal stamp image item.
+        gui_item* goal_stamp_item = new gui_item;
+        goal_stamp_item->on_draw =
+        [] (const point & center, const point & size) {
+            draw_bitmap_in_box(
+                game.states.gameplay->mission_fail_reason == 0 ?
+                game.sys_assets.bmp_mission_clear :
+                game.sys_assets.bmp_mission_fail,
+                center,
+                size
+            );
+        };
+        gui.add_item(goal_stamp_item, "goal_stamp");
         
-        //Medal reason.
+        //End reason text, if any.
+        string end_reason;
+        if(
+            has_flag(
+                game.states.gameplay->mission_fail_reason,
+                MISSION_FAIL_COND_LOSE_ALL_LEADERS
+            )
+        ) {
+            end_reason = "Lost all leaders...";
+        } else if(
+            has_flag(
+                game.states.gameplay->mission_fail_reason,
+                MISSION_FAIL_COND_PAUSE_MENU
+            )
+        ) {
+            end_reason = "Ended from the pause menu...";
+        } else if(
+            has_flag(
+                game.states.gameplay->mission_fail_reason,
+                MISSION_FAIL_COND_PIKMIN_AMOUNT
+            )
+        ) {
+            end_reason =
+                "Reached " +
+                i2s(game.cur_area_data.mission.fail_pik_amount) +
+                " Pikmin...";
+        } else if(
+            has_flag(
+                game.states.gameplay->mission_fail_reason,
+                MISSION_FAIL_COND_LOSE_PIKMIN
+            )
+        ) {
+            end_reason =
+                "Lost " +
+                i2s(game.cur_area_data.mission.fail_pik_killed) +
+                " Pikmin...";
+        } else if(
+            has_flag(
+                game.states.gameplay->mission_fail_reason,
+                MISSION_FAIL_COND_TAKE_DAMAGE
+            )
+        ) {
+            end_reason = "A leader took damage...";
+        } else if(
+            has_flag(
+                game.states.gameplay->mission_fail_reason,
+                MISSION_FAIL_COND_LOSE_LEADERS
+            )
+        ) {
+            end_reason =
+                "Lost " +
+                i2s(game.cur_area_data.mission.fail_leaders_kod) +
+                " leaders...";
+        } else if(
+            has_flag(
+                game.states.gameplay->mission_fail_reason,
+                MISSION_FAIL_COND_KILL_ENEMIES
+            )
+        ) {
+            end_reason =
+                "Killed " +
+                i2s(game.cur_area_data.mission.fail_enemies_killed) +
+                " enemies...";
+        } else if(
+            has_flag(
+                game.states.gameplay->mission_fail_reason,
+                MISSION_FAIL_COND_TIME_LIMIT
+            )
+        ) {
+            end_reason =
+                "Took " +
+                time_to_str(game.cur_area_data.mission.fail_time_limit, "m", "s") +
+                "...";
+        } else if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+            switch(game.cur_area_data.mission.goal) {
+            case MISSION_GOAL_NONE: {
+                break;
+            } case MISSION_GOAL_COLLECT_TREASURE: {
+                if(game.cur_area_data.mission.goal_all_mobs) {
+                    end_reason = "Collected all treasures!";
+                } else {
+                    end_reason =
+                        "Collected the " +
+                        i2s(game.cur_area_data.mission.goal_mob_idxs.size()) +
+                        " treasures!";
+                }
+                break;
+            } case MISSION_GOAL_BATTLE_ENEMIES: {
+                if(game.cur_area_data.mission.goal_all_mobs) {
+                    end_reason = "Defeated all enemies!";
+                } else {
+                    end_reason =
+                        "Defeated the " +
+                        i2s(game.cur_area_data.mission.goal_mob_idxs.size()) +
+                        " enemies!";
+                }
+                break;
+            } case MISSION_GOAL_TIMED_SURVIVAL: {
+                end_reason =
+                    "Survived for " +
+                    time_to_str(game.cur_area_data.mission.goal_amount, "m", "s") +
+                    "!";
+                break;
+            } case MISSION_GOAL_GET_TO_EXIT: {
+                end_reason = "Got to the exit!";
+                break;
+            } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+                end_reason =
+                    "Reached " +
+                    i2s(game.cur_area_data.mission.goal_amount) +
+                    " Pikmin!";
+                break;
+            }
+            }
+        }
+        
+        if(!end_reason.empty()) {
+            text_gui_item* end_reason_text =
+                new text_gui_item(
+                end_reason, game.fonts.standard,
+                change_alpha(COLOR_WHITE, 192)
+            );
+            gui.add_item(end_reason_text, "end_reason");
+        }
+        
         string medal_reason;
+        MISSION_MEDALS medal;
         switch(game.cur_area_data.mission.grading_mode) {
         case MISSION_GRADING_POINTS: {
-            //TODO
+            medal_reason = "Got " + i2s(final_mission_score) + " points";
+            if(
+                final_mission_score >=
+                game.cur_area_data.mission.platinum_req
+            ) {
+                medal = MISSION_MEDAL_PLATINUM;
+                medal_reason += "!";
+            } else if(
+                final_mission_score >=
+                game.cur_area_data.mission.gold_req
+            ) {
+                medal = MISSION_MEDAL_GOLD;
+                medal_reason += "!";
+            } else if(
+                final_mission_score >=
+                game.cur_area_data.mission.silver_req
+            ) {
+                medal = MISSION_MEDAL_SILVER;
+                medal_reason += "!";
+            } else if(
+                final_mission_score >=
+                game.cur_area_data.mission.bronze_req
+            ) {
+                medal = MISSION_MEDAL_BRONZE;
+                medal_reason += "!";
+            } else {
+                medal = MISSION_MEDAL_NONE;
+                medal_reason += "...";
+            }
             break;
         } case MISSION_GRADING_GOAL: {
-            //TODO
+            if(game.states.gameplay->mission_fail_reason == 0) {
+                medal = MISSION_MEDAL_PLATINUM;
+                medal_reason = "Reached the goal!";
+            } else {
+                medal = MISSION_MEDAL_NONE;
+                medal_reason = "Did not reach the goal...";
+            }
             break;
         } case MISSION_GRADING_PARTICIPATION: {
-            //TODO
+            medal = MISSION_MEDAL_PLATINUM;
+            medal_reason = "Played the mission!";
             break;
         }
         }
+        
+        //Medal image item.
+        gui_item* medal_item = new gui_item;
+        medal_item->on_draw =
+        [medal] (const point & center, const point & size) {
+            ALLEGRO_BITMAP* bmp = NULL;
+            switch(medal) {
+            case MISSION_MEDAL_NONE: {
+                bmp = game.sys_assets.bmp_medal_none;
+                break;
+            } case MISSION_MEDAL_BRONZE: {
+                bmp = game.sys_assets.bmp_medal_bronze;
+                break;
+            } case MISSION_MEDAL_SILVER: {
+                bmp = game.sys_assets.bmp_medal_silver;
+                break;
+            } case MISSION_MEDAL_GOLD: {
+                bmp = game.sys_assets.bmp_medal_gold;
+                break;
+            } case MISSION_MEDAL_PLATINUM: {
+                bmp = game.sys_assets.bmp_medal_platinum;
+                break;
+            }
+            }
+            draw_bitmap_in_box(bmp, center, size);
+        };
+        gui.add_item(medal_item, "medal");
+        
+        //Medal reason.
         text_gui_item* medal_reason_text =
-            new text_gui_item(medal_reason, game.fonts.standard);
+            new text_gui_item(
+            medal_reason, game.fonts.standard,
+            change_alpha(COLOR_WHITE, 192)
+        );
         gui.add_item(medal_reason_text, "medal_reason");
     }
     
@@ -282,6 +565,15 @@ void results_state::load() {
     
     //Stats box.
     stats_box = new list_gui_item();
+    stats_box->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_filled_rounded_rectangle(
+            center, size, 8.0f, al_map_rgba(0, 0, 0, 40)
+        );
+        draw_rounded_rectangle(
+            center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+        );
+    };
     gui.add_item(stats_box, "stats");
     
     //Stats list scrollbar.
@@ -290,53 +582,68 @@ void results_state::load() {
     gui.add_item(stats_scroll, "stats_scroll");
     
     //Time taken bullet.
-    unsigned char ms = fmod(time_taken * 100, 100);
-    unsigned char seconds = fmod(time_taken, 60);
-    size_t minutes = time_taken / 60.0f;
+    unsigned char ms = fmod(game.states.gameplay->area_time_passed * 100, 100);
+    unsigned char seconds = fmod(game.states.gameplay->area_time_passed, 60);
+    size_t minutes = game.states.gameplay->area_time_passed / 60.0f;
     add_stat(
         "Time taken:",
         i2s(minutes) + ":" + pad_string(i2s(seconds), 2, '0') + "." + i2s(ms)
     );
     
     //Pikmin born bullet.
-    add_stat("Pikmin born:", i2s(pikmin_born));
+    add_stat("Pikmin born:", i2s(game.states.gameplay->pikmin_born));
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
         game.cur_area_data.mission.points_per_pikmin_born != 0
     ) {
         //Pikmin born points bullet.
-        add_stat(
-            "    x " +
-            i2s(game.cur_area_data.mission.points_per_pikmin_born) +
-            " points = ",
-            i2s(
-                pikmin_born*
-                game.cur_area_data.mission.points_per_pikmin_born
-            )
-        );
+        if(lost_pikmin_born_score) {
+            add_stat(
+                "    x 0 points (mission fail) = ",
+                "0",
+                COLOR_GOLD
+            );
+        } else {
+            add_stat(
+                "    x " +
+                nr_and_plural(
+                    game.cur_area_data.mission.points_per_pikmin_born,
+                    "point"
+                ) +
+                " = ",
+                i2s(pikmin_born_score),
+                COLOR_GOLD
+            );
+        }
     }
     
-    //TODO losing a given row of points on failure.
-    
     //Pikmin deaths bullet.
-    add_stat("Pikmin deaths:", i2s(pikmin_deaths));
+    add_stat("Pikmin deaths:", i2s(game.states.gameplay->pikmin_deaths));
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
         game.cur_area_data.mission.points_per_pikmin_death != 0
     ) {
         //Pikmin death points bullet.
-        add_stat(
-            "    x " +
-            i2s(game.cur_area_data.mission.points_per_pikmin_death) +
-            " points = ",
-            i2s(
-                pikmin_deaths*
-                game.cur_area_data.mission.points_per_pikmin_death
-            ),
-            COLOR_GOLD
-        );
+        if(lost_pikmin_death_score) {
+            add_stat(
+                "    x 0 points (mission fail) = ",
+                "0",
+                COLOR_GOLD
+            );
+        } else {
+            add_stat(
+                "    x " +
+                nr_and_plural(
+                    game.cur_area_data.mission.points_per_pikmin_death,
+                    "point"
+                ) +
+                " = ",
+                i2s(pikmin_death_score),
+                COLOR_GOLD
+            );
+        }
     }
     
     if(
@@ -344,19 +651,27 @@ void results_state::load() {
         game.cur_area_data.mission.points_per_sec_left != 0
     ) {
         //Seconds left bullet.
-        add_stat("Seconds left:", i2s(123)); //TODO
+        add_stat("Seconds left:", i2s(secs_left));
         
         //Seconds left points bullet.
-        add_stat(
-            "    x " +
-            i2s(game.cur_area_data.mission.points_per_sec_left) +
-            " points = ",
-            i2s(
-                123 * //TODO
-                game.cur_area_data.mission.points_per_sec_left
-            ),
-            COLOR_GOLD
-        );
+        if(lost_secs_left_score) {
+            add_stat(
+                "    x 0 points (mission fail) = ",
+                "0",
+                COLOR_GOLD
+            );
+        } else {
+            add_stat(
+                "    x " +
+                nr_and_plural(
+                    game.cur_area_data.mission.points_per_sec_left,
+                    "point"
+                ) +
+                " = ",
+                i2s(secs_left_score),
+                COLOR_GOLD
+            );
+        }
     }
     
     if(
@@ -364,28 +679,44 @@ void results_state::load() {
         game.cur_area_data.mission.points_per_sec_passed != 0
     ) {
         //Seconds passed bullet.
-        add_stat("Seconds passed:", i2s(time_spent));
+        add_stat(
+            "Seconds passed:",
+            i2s(game.states.gameplay->area_time_passed)
+        );
         
         //Seconds passed points bullet.
-        add_stat(
-            "    x " +
-            i2s(game.cur_area_data.mission.points_per_sec_passed) +
-            " points = ",
-            i2s(
-                time_spent*
-                game.cur_area_data.mission.points_per_sec_passed
-            ),
-            COLOR_GOLD
-        );
+        if(lost_secs_passed_score) {
+            add_stat(
+                "    x 0 points (mission fail) = ",
+                "0",
+                COLOR_GOLD
+            );
+        } else {
+            add_stat(
+                "    x " +
+                nr_and_plural(
+                    game.cur_area_data.mission.points_per_sec_passed,
+                    "point"
+                ) +
+                " = ",
+                i2s(secs_passed_score),
+                COLOR_GOLD
+            );
+        }
     }
     
     //Treasures bullet.
-    add_stat("Treasures:", i2s(123) + "/" + i2s(456)); //TODO
+    add_stat(
+        "Treasures:",
+        i2s(game.states.gameplay->treasures_collected) + "/" +
+        i2s(game.states.gameplay->treasures_total)
+    );
     
     //Treasure points bullet.
     add_stat(
         "Treasure points:",
-        i2s(treasure_points_obtained) + "/" + i2s(treasure_points_total)
+        i2s(game.states.gameplay->treasure_points_collected) + "/" +
+        i2s(game.states.gameplay->treasure_points_total)
     );
     
     if(
@@ -393,25 +724,41 @@ void results_state::load() {
         game.cur_area_data.mission.points_per_treasure_point != 0
     ) {
         //Treasure points points bullet.
-        add_stat(
-            "    x " +
-            i2s(game.cur_area_data.mission.points_per_treasure_point) +
-            " points = ",
-            i2s(
-                treasure_points_obtained*
-                game.cur_area_data.mission.points_per_treasure_point
-            ),
-            COLOR_GOLD
-        );
+        int max =
+            game.states.gameplay->treasure_points_total *
+            game.cur_area_data.mission.points_per_treasure_point;
+        if(lost_treasure_points_score) {
+            add_stat(
+                "    x 0 points (mission fail) = ",
+                "0/" + i2s(max),
+                COLOR_GOLD
+            );
+        } else {
+            add_stat(
+                "    x " +
+                nr_and_plural(
+                    game.cur_area_data.mission.points_per_treasure_point,
+                    "point"
+                ) +
+                " = ",
+                i2s(treasure_points_score) + "/" + i2s(max),
+                COLOR_GOLD
+            );
+        }
     }
     
-    //Enemies bullet.
-    add_stat("Enemies:", i2s(enemies_beaten) + "/" + i2s(enemies_total));
+    //Enemy deaths bullet.
+    add_stat(
+        "Enemy deaths:",
+        i2s(game.states.gameplay->enemy_deaths) + "/" +
+        i2s(game.states.gameplay->enemy_total)
+    );
     
     //Enemy points bullet.
     add_stat(
         "Enemy points:",
-        i2s(123) + "/" + i2s(456) //TODO
+        i2s(game.states.gameplay->enemy_points_collected) + "/" +
+        i2s(game.states.gameplay->enemy_points_total)
     );
     
     if(
@@ -419,16 +766,27 @@ void results_state::load() {
         game.cur_area_data.mission.points_per_enemy_point != 0
     ) {
         //Enemy points points bullet.
-        add_stat(
-            "    x " +
-            i2s(game.cur_area_data.mission.points_per_enemy_point) +
-            " points = ",
-            i2s(
-                123 * //TODO
-                game.cur_area_data.mission.points_per_enemy_point
-            ),
-            COLOR_GOLD
-        );
+        int max =
+            game.states.gameplay->enemy_points_total *
+            game.cur_area_data.mission.points_per_enemy_point;
+        if(lost_enemy_points_score) {
+            add_stat(
+                "    x 0 points (mission fail) = ",
+                "0/" + i2s(max),
+                COLOR_GOLD
+            );
+        } else {
+            add_stat(
+                "    x " +
+                nr_and_plural(
+                    game.cur_area_data.mission.points_per_enemy_point,
+                    "point"
+                ) +
+                " = ",
+                i2s(enemy_points_score) + "/" + i2s(max),
+                COLOR_GOLD
+            );
+        }
     }
     
     //Retry button.
@@ -443,7 +801,12 @@ void results_state::load() {
     gui.add_item(retry_button, "retry");
     
     //Keep playing button.
-    if(can_continue) {
+    if(
+        game.states.gameplay->mission_fail_reason !=
+        MISSION_FAIL_COND_LOSE_ALL_LEADERS &&
+        game.states.gameplay->mission_fail_reason !=
+        MISSION_FAIL_COND_PAUSE_MENU
+    ) {
         button_gui_item* continue_button =
             new button_gui_item("Keep playing", game.fonts.standard);
         continue_button->on_activate =
@@ -484,24 +847,7 @@ void results_state::load() {
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
     gui.set_selected_item(gui.back_item);
-    time_spent = 0.0f;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the state of the results screen.
- */
-void results_state::reset() {
-    area_name.clear();
-    enemies_beaten = 0;
-    enemies_total = 0;
-    pikmin_born = 0;
-    pikmin_deaths = 0;
-    treasure_points_obtained = 0;
-    treasure_points_total = 0;
-    time_taken = 0.0f;
-    can_continue = true;
-    leader_ko = false;
+    gui_time_spent = 0.0f;
 }
 
 

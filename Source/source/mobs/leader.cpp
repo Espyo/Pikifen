@@ -1121,10 +1121,10 @@ bool process_total_leader_ko() {
         }
     }
     if(living_leaders == 0) {
-        game.states.results->can_continue = false;
-        game.states.results->leader_ko = true;
         game.states.gameplay->cur_leader_ptr = NULL;
-        game.states.gameplay->leave(gameplay_state::LEAVE_TO_FINISH);
+        game.states.gameplay->mission_fail_reason =
+            MISSION_FAIL_COND_LOSE_ALL_LEADERS;
+        game.states.gameplay->leave(gameplay_state::LEAVE_TO_END);
         return true;
     }
     return false;

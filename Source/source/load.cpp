@@ -1143,6 +1143,20 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.focus_box);
     game.sys_assets.bmp_idle_glow =
         game.bitmaps.get(game.asset_file_names.idle_glow);
+    game.sys_assets.bmp_medal_bronze =
+        game.bitmaps.get(game.asset_file_names.medal_bronze);
+    game.sys_assets.bmp_medal_gold =
+        game.bitmaps.get(game.asset_file_names.medal_gold);
+    game.sys_assets.bmp_medal_none =
+        game.bitmaps.get(game.asset_file_names.medal_none);
+    game.sys_assets.bmp_medal_platinum =
+        game.bitmaps.get(game.asset_file_names.medal_platinum);
+    game.sys_assets.bmp_medal_gold =
+        game.bitmaps.get(game.asset_file_names.medal_gold);
+    game.sys_assets.bmp_mission_clear =
+        game.bitmaps.get(game.asset_file_names.mission_clear);
+    game.sys_assets.bmp_mission_fail =
+        game.bitmaps.get(game.asset_file_names.mission_fail);
     game.sys_assets.bmp_more =
         game.bitmaps.get(game.asset_file_names.more);
     game.sys_assets.bmp_mouse_cursor =
@@ -1842,6 +1856,13 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_focus_box);
     game.bitmaps.detach(game.sys_assets.bmp_icon);
     game.bitmaps.detach(game.sys_assets.bmp_idle_glow);
+    game.bitmaps.detach(game.sys_assets.bmp_medal_bronze);
+    game.bitmaps.detach(game.sys_assets.bmp_medal_gold);
+    game.bitmaps.detach(game.sys_assets.bmp_medal_none);
+    game.bitmaps.detach(game.sys_assets.bmp_medal_platinum);
+    game.bitmaps.detach(game.sys_assets.bmp_medal_silver);
+    game.bitmaps.detach(game.sys_assets.bmp_mission_clear);
+    game.bitmaps.detach(game.sys_assets.bmp_mission_fail);
     game.bitmaps.detach(game.sys_assets.bmp_more);
     game.bitmaps.detach(game.sys_assets.bmp_mouse_cursor);
     game.bitmaps.detach(game.sys_assets.bmp_notification);

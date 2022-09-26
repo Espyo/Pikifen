@@ -33,6 +33,8 @@ public:
     bool drops_corpse;
     //Can Pikmin perform grounded attacks on it?
     bool allow_ground_attacks;
+    //Points worth for missions.
+    size_t points;
     
     enemy_type();
     

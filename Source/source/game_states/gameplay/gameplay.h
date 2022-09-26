@@ -165,10 +165,28 @@ public:
     whistle_struct whistle;
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> mission_required_mob_ids;
-    //How many Pikmin deaths in the current area so far?
+    //How many Pikmin born so far.
+    size_t pikmin_born;
+    //How many Pikmin deaths so far.
     size_t pikmin_deaths;
-    //How many enemy deaths in the current area so far?
+    //How many treasures collected so far.
+    size_t treasures_collected;
+    //How many treasures exist in total.
+    size_t treasures_total;
+    //How many treasure points collected so far.
+    size_t treasure_points_collected;
+    //How many treasure points exist in total.
+    size_t treasure_points_total;
+    //How many enemy deaths so far.
     size_t enemy_deaths;
+    //How many enemies exist in total.
+    size_t enemy_total;
+    //How many enemy points collected so far.
+    size_t enemy_points_collected;
+    //How many enemy points exist in total.
+    size_t enemy_points_total;
+    //Reason for mission failure, if any. Uses MISSION_FAIL_COND_*.
+    uint8_t mission_fail_reason;
     //Current interlude, if any.
     INTERLUDES cur_interlude;
     //Time passed in the current interlude.

@@ -150,6 +150,20 @@ struct asset_file_names_struct {
     string main_font;
     //Main menu background.
     string main_menu;
+    //Bronze medal.
+    string medal_bronze;
+    //Gold medal.
+    string medal_gold;
+    //No medal.
+    string medal_none;
+    //Platinum medal.
+    string medal_platinum;
+    //Silver medal.
+    string medal_silver;
+    //Mission clear stamp.
+    string mission_clear;
+    //Mission fail stamp.
+    string mission_fail;
     //"More..." icon.
     string more;
     //Mouse cursor.
@@ -594,6 +608,20 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_icon;
     //Idle glow.
     ALLEGRO_BITMAP* bmp_idle_glow;
+    //Bronze mission medal.
+    ALLEGRO_BITMAP* bmp_medal_bronze;
+    //Gold mission medal.
+    ALLEGRO_BITMAP* bmp_medal_gold;
+    //No mission medal.
+    ALLEGRO_BITMAP* bmp_medal_none;
+    //Platinum mission medal.
+    ALLEGRO_BITMAP* bmp_medal_platinum;
+    //Silver mission medal.
+    ALLEGRO_BITMAP* bmp_medal_silver;
+    //Mission clear stamp.
+    ALLEGRO_BITMAP* bmp_mission_clear;
+    //Mission fail stamp.
+    ALLEGRO_BITMAP* bmp_mission_fail;
     //"More..." icon.
     ALLEGRO_BITMAP* bmp_more;
     //Mouse cursor.

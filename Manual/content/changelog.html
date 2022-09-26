@@ -27,6 +27,7 @@
     <ul>
       <li>The main menu now has a "play" button and a "make" button, which shows the list of area types that can be played, and the list of editors, respectively.</li>
       <li>The area selection screen now shows info about the area that is currently selected in the list.</li>
+      <li>The results screen was completely revamped to better suit a mission's completion screen.</li>
     </ul>
 
     <p><b>Content making changes</b></p>
@@ -38,6 +39,7 @@
       <li>The <a href="area.html">area editor</a> now has a "Gameplay" panel with the starting spray amounts (with a better interface).</li>
       <li>Areas can now have a description, tags, thumbnail, and difficulty.</li>
       <li>Areas can now specify at what point of the in-game day they start, as well as day time speed or (for missions with time limit) the time of day they end. The <code>day_minutes_per_irl_sec</code> field was removed from the <a href="misc_config.html">config file</a> since it is no longer needed.</li>
+      <li><a href="mob_enemy.html">Enemy types</a> now have a <code>points</code> property.</li>
     </ul>
 
     <p><b>Custom content compatibility warnings</b></p>
@@ -46,6 +48,7 @@
       <li>Old area folders used to be in <code>Game_data/Areas/&lt;folder&gt;</code>, but must now be moved to <code>Game_data/Areas/Simple/&lt;folder&gt;</code>. If you care about auto-backups and reference image data, do the same to the area-related stuff in the <code>User_data</code> folder.</li>
       <li>The main menu's <a href="gui.html"></a>GUI</a> got a complete revamp.</li>
       <li>The area menu's <a href="gui.html"></a>GUI</a> got a complete revamp.</li>
+      <li>The results screen's <a href="gui.html"></a>GUI</a> got a complete revamp.</li>
     </ul>
     
     <h2 id="0.22.0">0.22.0</h2>

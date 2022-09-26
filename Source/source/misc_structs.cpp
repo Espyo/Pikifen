@@ -122,6 +122,13 @@ asset_file_names_struct::asset_file_names_struct() :
     idle_glow("Idle_glow.png"),
     main_font("Font.png"),
     main_menu("Main_menu.jpg"),
+    medal_bronze("Medal_bronze.png"),
+    medal_gold("Medal_gold.png"),
+    medal_none("Medal_none.png"),
+    medal_platinum("Medal_platinum.png"),
+    medal_silver("Medal_silver.png"),
+    mission_clear("Mission_clear.png"),
+    mission_fail("Mission_fail.png"),
     more("More.png"),
     mouse_cursor("Mouse_cursor.png"),
     notification("Notification.png"),
@@ -168,6 +175,13 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("idle_glow", idle_glow);
     rs.set("main_font", main_font);
     rs.set("main_menu", main_menu);
+    rs.set("medal_bronze", medal_bronze);
+    rs.set("medal_gold", medal_gold);
+    rs.set("medal_none", medal_none);
+    rs.set("medal_platinum", medal_platinum);
+    rs.set("medal_silver", medal_silver);
+    rs.set("mission_clear", mission_clear);
+    rs.set("mission_fail", mission_fail);
     rs.set("more", more);
     rs.set("mouse_cursor", mouse_cursor);
     rs.set("notification", notification);
@@ -1933,6 +1947,13 @@ system_asset_list::system_asset_list():
     bmp_focus_box(nullptr),
     bmp_icon(nullptr),
     bmp_idle_glow(nullptr),
+    bmp_medal_bronze(nullptr),
+    bmp_medal_gold(nullptr),
+    bmp_medal_none(nullptr),
+    bmp_medal_platinum(nullptr),
+    bmp_medal_silver(nullptr),
+    bmp_mission_clear(nullptr),
+    bmp_mission_fail(nullptr),
     bmp_more(nullptr),
     bmp_mouse_cursor(nullptr),
     bmp_notification(nullptr),
