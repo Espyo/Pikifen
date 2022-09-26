@@ -977,17 +977,30 @@ void leader::update_throw_variables() {
 void change_to_next_leader(
     const bool forward, const bool force_success, const bool keep_idx
 ) {
+    if(game.states.gameplay->available_leaders.empty()) {
+        //There are no leaders remaining. Set the current leader to none.
+        game.states.gameplay->cur_leader_nr = INVALID;
+        game.states.gameplay->cur_leader_ptr = NULL;
+        game.states.gameplay->update_closest_group_members();
+        return;
+    }
+    
     if(
         game.states.gameplay->available_leaders.size() == 1 &&
+        game.states.gameplay->cur_leader_ptr &&
         !keep_idx
     ) {
         return;
     }
     
     if(
-        !game.states.gameplay->cur_leader_ptr->fsm.get_event(
-            LEADER_EV_INACTIVATED
-        ) && !force_success
+        (
+            game.states.gameplay->cur_leader_ptr &&
+            !game.states.gameplay->cur_leader_ptr->fsm.get_event(
+                LEADER_EV_INACTIVATED
+            )
+        ) &&
+        !force_success
     ) {
         //This leader isn't ready to be switched out of. Forget it.
         return;
@@ -1054,6 +1067,7 @@ void change_to_next_leader(
     }
     
     if(success) {
+        game.states.gameplay->update_closest_group_members();
         game.states.gameplay->cur_leader_ptr->swarm_arrows.clear();
     }
 }
@@ -1064,6 +1078,8 @@ void change_to_next_leader(
  * Returns true on success, false on failure.
  */
 bool grab_closest_group_member() {
+    if(!game.states.gameplay->cur_leader_ptr) return false;
+    
     //Check if there is even a closest group member.
     if(!game.states.gameplay->closest_group_member[BUBBLE_CURRENT]) {
         return false;
@@ -1120,12 +1136,5 @@ bool process_total_leader_ko() {
             living_leaders++;
         }
     }
-    if(living_leaders == 0) {
-        game.states.gameplay->cur_leader_ptr = NULL;
-        game.states.gameplay->mission_fail_reason =
-            MISSION_FAIL_COND_LOSE_ALL_LEADERS;
-        game.states.gameplay->leave(gameplay_state::LEAVE_TO_END);
-        return true;
-    }
-    return false;
+    return living_leaders == 0;
 }

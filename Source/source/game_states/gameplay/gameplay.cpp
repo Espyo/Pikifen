@@ -222,10 +222,8 @@ void gameplay_state::do_logic() {
     if(!paused && cur_interlude == INTERLUDE_NONE) {
         do_gameplay_logic();
     }
-    if(cur_leader_ptr) {
-        do_menu_logic();
-        do_aesthetic_logic();
-    }
+    do_menu_logic();
+    do_aesthetic_logic();
 }
 
 
@@ -367,6 +365,8 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  *   Type to search for.
  */
 mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
+    if(!cur_leader_ptr) return NULL;
+    
     mob* result = NULL;
     
     //Closest members so far for each maturity.
@@ -597,12 +597,40 @@ void gameplay_state::load() {
     //Game content.
     load_game_content();
     
-    //Initializing game things.
+    //Initialize some important things.
     size_t n_spray_types = game.spray_types.size();
     for(size_t s = 0; s < n_spray_types; ++s) {
         spray_stats.push_back(spray_stats_struct());
     }
     
+    day_minutes = game.cur_area_data.day_time_start;
+    area_time_passed = 0.0f;
+    paused = false;
+    cur_interlude = INTERLUDE_READY;
+    interlude_time = 0.0f;
+    cur_big_msg = BIG_MESSAGE_READY;
+    big_msg_time = 0.0f;
+    game.maker_tools.reset_for_gameplay();
+    area_title_fade_timer.start();
+    
+    after_hours = false;
+    pikmin_born = 0;
+    pikmin_deaths = 0;
+    treasures_collected = 0;
+    treasures_total = 0;
+    treasure_points_collected = 0;
+    treasure_points_total = 0;
+    enemy_deaths = 0;
+    enemy_total = 0;
+    enemy_points_collected = 0;
+    enemy_points_total = 0;
+    mission_fail_reason = 0;
+    starting_nr_of_leaders = mobs.leaders.size();
+    
+    game.framerate_last_avg_point = 0;
+    game.framerate_history.clear();
+    
+    //Load the area.
     string area_folder_name;
     AREA_TYPES area_type;
     get_area_info_from_path(
@@ -648,19 +676,6 @@ void gameplay_state::load() {
         );
     }
     
-    //Panic check -- If there are no leaders, abort.
-    if(mobs.leaders.empty()) {
-        show_message_box(
-            game.display, "No leaders!", "No leaders!",
-            "This area has no leaders! You need at least one "
-            "in order to play.",
-            NULL, ALLEGRO_MESSAGEBOX_WARN
-        );
-        game.states.area_ed->hack_skip_drawing = true;
-        leave(LEAVE_TO_AREA_SELECT);
-        return;
-    }
-    
     //Mob links.
     //Because mobs can create other mobs when loaded, mob gen number X
     //does not necessarily correspond to mob number X. Hence, we need
@@ -704,16 +719,18 @@ void gameplay_state::load() {
         game.perf_mon->finish_measurement();
     }
     
-    path_mgr.handle_area_load();
+    cur_leader_nr = INVALID;
+    cur_leader_ptr = NULL;
     
-    init_hud();
+    if(!mobs.leaders.empty()) {
+        change_to_next_leader(true, false, false);
+    }
     
-    cur_leader_nr = 0;
-    cur_leader_ptr = mobs.leaders[0];
-    cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
-    cur_leader_ptr->active = true;
-    
-    game.cam.set_pos(cur_leader_ptr->pos);
+    if(cur_leader_ptr) {
+        game.cam.set_pos(cur_leader_ptr->pos);
+    } else {
+        game.cam.set_pos(point());
+    }
     game.cam.set_zoom(game.options.zoom_mid_level);
     
     cursor_save_timer.on_end = [this] () {
@@ -725,21 +742,11 @@ void gameplay_state::load() {
     };
     cursor_save_timer.start();
     
-    cur_leader_ptr->stop_whistling();
-    update_closest_group_members();
+    if(cur_leader_ptr) {
+        cur_leader_ptr->stop_whistling();
+    }
     
-    pikmin_born = 0;
-    pikmin_deaths = 0;
-    treasures_collected = 0;
-    treasures_total = 0;
-    treasure_points_collected = 0;
-    treasure_points_total = 0;
-    enemy_deaths = 0;
-    enemy_total = 0;
-    enemy_points_collected = 0;
-    enemy_points_total = 0;
-    mission_fail_reason = 0;
-    starting_nr_of_leaders = mobs.leaders.size();
+    update_closest_group_members();
     
     //Memorize mobs required by the mission.
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
@@ -778,6 +785,83 @@ void gameplay_state::load() {
         }
     }
     
+    //Figure out the total amount of treasures and their points.
+    for(size_t t = 0; t < mobs.treasures.size(); ++t) {
+        treasures_total++;
+        treasure_points_total +=
+            mobs.treasures[t]->tre_type->points;
+    }
+    for(size_t e = 0; e < mobs.enemies.size(); ++e) {
+        for(size_t s = 0; s < mobs.enemies[e]->specific_spoils.size(); ++s) {
+            mob_type* s_type = mobs.enemies[e]->specific_spoils[s];
+            if(s_type->category->id == MOB_CATEGORY_TREASURES) {
+                treasures_total++;
+                treasure_points_total +=
+                    ((treasure_type*) s_type)->points;
+            }
+        }
+    }
+    for(size_t p = 0; p < mobs.piles.size(); ++p) {
+        pile* p_ptr = mobs.piles[p];
+        resource_type* res_type = p_ptr->pil_type->contents;
+        if(
+            res_type->delivery_result !=
+            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+        ) {
+            continue;
+        }
+        treasures_total += p_ptr->amount;
+        treasure_points_total +=
+            p_ptr->amount * res_type->point_amount;
+    }
+    
+    //Figure out the total amount of enemies and their points.
+    enemy_total = mobs.enemies.size();
+    for(size_t e = 0; e < mobs.enemies.size(); ++e) {
+        enemy_points_total += mobs.enemies[e]->ene_type->points;
+    }
+    
+    //Initialize some other things.
+    path_mgr.handle_area_load();
+    
+    init_hud();
+    
+    map<string, string> spray_strs =
+        get_var_map(game.cur_area_data.spray_amounts);
+        
+    for(auto &s : spray_strs) {
+        size_t spray_id = 0;
+        for(; spray_id < game.spray_types.size(); ++spray_id) {
+            if(game.spray_types[spray_id].name == s.first) {
+                break;
+            }
+        }
+        if(spray_id == game.spray_types.size()) {
+            log_error(
+                "Unknown spray type \"" + s.first + "\", "
+                "while trying to set the starting number of sprays for "
+                "area \"" + game.cur_area_data.name + "\"!", NULL
+            );
+            continue;
+        }
+        
+        spray_stats[spray_id].nr_sprays = s2i(s.second);
+    }
+    
+    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+        if(game.options.controls[0][c].action == BUTTON_THROW) {
+            main_control_id = c;
+            break;
+        }
+    }
+    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+        if(game.options.controls[0][c].action == BUTTON_WHISTLE) {
+            cancel_control_id = c;
+            break;
+        }
+    }
+    
+    //Effect caches.
     game.liquid_limit_effect_caches.clear();
     game.liquid_limit_effect_caches.insert(
         game.liquid_limit_effect_caches.begin(),
@@ -827,87 +911,6 @@ void gameplay_state::load() {
         get_wall_shadow_color
     );
     
-    day_minutes = game.cur_area_data.day_time_start;
-    area_time_passed = 0.0f;
-    after_hours = false;
-    paused = false;
-    cur_interlude = INTERLUDE_READY;
-    interlude_time = 0.0f;
-    cur_big_msg = BIG_MESSAGE_READY;
-    big_msg_time = 0.0f;
-    game.maker_tools.reset_for_gameplay();
-    
-    map<string, string> spray_strs =
-        get_var_map(game.cur_area_data.spray_amounts);
-        
-    for(auto &s : spray_strs) {
-        size_t spray_id = 0;
-        for(; spray_id < game.spray_types.size(); ++spray_id) {
-            if(game.spray_types[spray_id].name == s.first) {
-                break;
-            }
-        }
-        if(spray_id == game.spray_types.size()) {
-            log_error(
-                "Unknown spray type \"" + s.first + "\", "
-                "while trying to set the starting number of sprays for "
-                "area \"" + game.cur_area_data.name + "\"!", NULL
-            );
-            continue;
-        }
-        
-        spray_stats[spray_id].nr_sprays = s2i(s.second);
-    }
-    
-    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-        if(game.options.controls[0][c].action == BUTTON_THROW) {
-            main_control_id = c;
-            break;
-        }
-    }
-    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-        if(game.options.controls[0][c].action == BUTTON_WHISTLE) {
-            cancel_control_id = c;
-            break;
-        }
-    }
-    
-    //Figure out the total amount of treasures and their points.
-    for(size_t t = 0; t < mobs.treasures.size(); ++t) {
-        treasures_total++;
-        treasure_points_total +=
-            mobs.treasures[t]->tre_type->points;
-    }
-    for(size_t e = 0; e < mobs.enemies.size(); ++e) {
-        for(size_t s = 0; s < mobs.enemies[e]->specific_spoils.size(); ++s) {
-            mob_type* s_type = mobs.enemies[e]->specific_spoils[s];
-            if(s_type->category->id == MOB_CATEGORY_TREASURES) {
-                treasures_total++;
-                treasure_points_total +=
-                    ((treasure_type*) s_type)->points;
-            }
-        }
-    }
-    for(size_t p = 0; p < mobs.piles.size(); ++p) {
-        pile* p_ptr = mobs.piles[p];
-        resource_type* res_type = p_ptr->pil_type->contents;
-        if(
-            res_type->delivery_result !=
-            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
-        ) {
-            continue;
-        }
-        treasures_total += p_ptr->amount;
-        treasure_points_total +=
-            p_ptr->amount * res_type->point_amount;
-    }
-    
-    //Figure out the total amount of enemies and their points.
-    enemy_total = mobs.enemies.size();
-    for(size_t e = 0; e < mobs.enemies.size(); ++e) {
-        enemy_points_total += mobs.enemies[e]->ene_type->points;
-    }
-    
     //TODO Uncomment this when replays are implemented.
     /*
     replay_timer = timer(
@@ -924,8 +927,7 @@ void gameplay_state::load() {
     replay_timer.start();
     gameplay_replay.clear();*/
     
-    area_title_fade_timer.start();
-    
+    //Report any errors with the loading process.
     if(game.errors_reported_so_far > errors_reported_at_start) {
         print_info(
             "\n\n\nERRORS FOUND!\n"
@@ -933,9 +935,6 @@ void gameplay_state::load() {
             20.0f, 3.0f
         );
     }
-    
-    game.framerate_last_avg_point = 0;
-    game.framerate_history.clear();
     
     if(game.perf_mon) {
         game.perf_mon->set_area_name(game.cur_area_data.name);
@@ -1009,6 +1008,7 @@ void gameplay_state::unload() {
         hud = NULL;
     }
     
+    cur_leader_nr = INVALID;
     cur_leader_ptr = NULL;
     
     close_to_interactable_to_use = NULL;
@@ -1140,6 +1140,7 @@ void gameplay_state::update_closest_group_members() {
     closest_group_member[BUBBLE_NEXT] = NULL;
     closest_group_member_distant = false;
     
+    if(!cur_leader_ptr) return;
     if(cur_leader_ptr->group->members.empty()) return;
     
     //Get the closest group members for the three relevant subgroup types.

@@ -3643,6 +3643,7 @@ void mob::tick_script(const float delta_t) {
     
     //Check if it got whistled.
     if(
+        game.states.gameplay->cur_leader_ptr &&
         game.states.gameplay->whistle.whistling &&
         dist(pos, game.states.gameplay->whistle.center) <=
         game.states.gameplay->whistle.radius

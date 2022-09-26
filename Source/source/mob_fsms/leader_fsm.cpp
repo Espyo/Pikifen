@@ -1267,9 +1267,12 @@ void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
-    game.states.gameplay->cur_leader_ptr->fsm.run_event(
-        LEADER_EV_INACTIVATED
-    );
+    
+    if(game.states.gameplay->cur_leader_ptr) {
+        game.states.gameplay->cur_leader_ptr->fsm.run_event(
+            LEADER_EV_INACTIVATED
+        );
+    }
     
     //Normally the player can't swap to leaders that are following another,
     //but some complex cases may allow that (e.g. an inactive leader got
@@ -1297,7 +1300,12 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     game.states.gameplay->cur_leader_nr = new_leader_nr;
     lea_ptr->active = true;
     
-    lea_ptr->lea_type->sfx_name_call.play(0, false);
+    if(game.states.gameplay->cur_interlude == INTERLUDE_NONE) {
+        //If we're in the middle of an interlude, that probably means it's
+        //the first leader at the start of the area.
+        //We should probably be quiet.
+        lea_ptr->lea_type->sfx_name_call.play(0, false);
+    }
 }
 
 
@@ -1368,11 +1376,9 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
         return;
     }
     
-    if(!process_total_leader_ko()) {
-        game.states.gameplay->update_available_leaders();
-        if(game.states.gameplay->cur_leader_ptr == m) {
-            change_to_next_leader(true, true, true);
-        }
+    game.states.gameplay->update_available_leaders();
+    if(m == game.states.gameplay->cur_leader_ptr) {
+        change_to_next_leader(true, true, true);
     }
     
     leader_fsm::release(m, info1, info2);

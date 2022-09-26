@@ -3070,7 +3070,10 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
             );
         }
         
-        if(too_ptr->too_type->pikmin_returns_after_using) {
+        if(
+            too_ptr->too_type->pikmin_returns_after_using &&
+            game.states.gameplay->cur_leader_ptr
+        ) {
             pikmin_fsm::called(m, game.states.gameplay->cur_leader_ptr, NULL);
             m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
         }
@@ -3103,7 +3106,10 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
         pikmin_fsm::release_tool(m, info1, info2);
         m->fsm.set_state(PIKMIN_STATE_IDLING);
         
-        if(too_ptr->too_type->pikmin_returns_after_using) {
+        if(
+            too_ptr->too_type->pikmin_returns_after_using &&
+            game.states.gameplay->cur_leader_ptr
+        ) {
             pikmin_fsm::called(m, game.states.gameplay->cur_leader_ptr, NULL);
             m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
         }

@@ -133,16 +133,16 @@ void gameplay_state::do_game_drawing(
     
     //Layer 7 -- Leader cursor.
     al_use_transform(&game.world_to_screen_transform);
-    ALLEGRO_COLOR cursor_color;
+    ALLEGRO_COLOR cursor_color = game.config.no_pikmin_color;
     if(closest_group_member[BUBBLE_CURRENT]) {
         cursor_color =
             closest_group_member[BUBBLE_CURRENT]->type->main_color;
-    } else {
-        cursor_color = game.config.no_pikmin_color;
     }
-    cursor_color =
-        change_color_lighting(cursor_color, cursor_height_diff_light);
-    draw_leader_cursor(cursor_color);
+    if(cur_leader_ptr) {
+        cursor_color =
+            change_color_lighting(cursor_color, cursor_height_diff_light);
+        draw_leader_cursor(cursor_color);
+    }
     
     //Layer 8 -- HUD.
     if(game.perf_mon) {
@@ -433,7 +433,8 @@ void gameplay_state::draw_ingame_text() {
  *   Color to tint it by.
  */
 void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
-
+    if(!cur_leader_ptr) return;
+    
     size_t n_arrows = cur_leader_ptr->swarm_arrows.size();
     for(size_t a = 0; a < n_arrows; ++a) {
         point pos(
@@ -1136,6 +1137,8 @@ void gameplay_state::draw_system_stuff() {
  * Draws a leader's throw preview.
  */
 void gameplay_state::draw_throw_preview() {
+    if(!cur_leader_ptr) return;
+    
     ALLEGRO_VERTEX vertexes[16];
     
     if(!cur_leader_ptr->throwee) {

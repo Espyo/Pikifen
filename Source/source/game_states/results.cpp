@@ -348,13 +348,6 @@ void results_state::load() {
         if(
             has_flag(
                 game.states.gameplay->mission_fail_reason,
-                MISSION_FAIL_COND_LOSE_ALL_LEADERS
-            )
-        ) {
-            end_reason = "Lost all leaders...";
-        } else if(
-            has_flag(
-                game.states.gameplay->mission_fail_reason,
                 MISSION_FAIL_COND_PAUSE_MENU
             )
         ) {
@@ -802,8 +795,6 @@ void results_state::load() {
     
     //Keep playing button.
     if(
-        game.states.gameplay->mission_fail_reason !=
-        MISSION_FAIL_COND_LOSE_ALL_LEADERS &&
         game.states.gameplay->mission_fail_reason !=
         MISSION_FAIL_COND_PAUSE_MENU
     ) {

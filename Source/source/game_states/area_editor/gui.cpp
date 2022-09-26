@@ -2581,18 +2581,8 @@ void area_editor::process_gui_panel_mission() {
     //Mission fail conditions node.
     if(saveable_tree_node("gameplay", "Mission fail conditions")) {
     
-        //Total leader KO checkbox.
-        bool dummy_true = true;
-        ImGui::BeginDisabled();
-        ImGui::Checkbox("Get a total leader KO", &dummy_true);
-        ImGui::EndDisabled();
-        set_tooltip(
-            "A total leader KO always has to end the mission in a failure,\n"
-            "since if that happens, the player won't have any leaders to\n"
-            "keep playing with!"
-        );
-        
         //Pause menu end checkbox.
+        bool dummy_true;
         ImGui::BeginDisabled();
         ImGui::Checkbox("End from pause menu", &dummy_true);
         ImGui::EndDisabled();
@@ -2707,8 +2697,10 @@ void area_editor::process_gui_panel_mission() {
             );
         set_tooltip(
             "The mission ends as a failure if a certain amount of leaders get\n"
-            "KO'd. As explained above, losing all leaders is also\n"
-            "a failure no matter what."
+            "KO'd. This fail condition isn't forced because the\n"
+            "player might still be able to reach the mission goal with the\n"
+            "Pikmin. Or because you may want to make a really gimmicky\n"
+            "automatic mission with no leaders."
         );
         
         if(has_flag(fail_flags, MISSION_FAIL_COND_LOSE_LEADERS)) {

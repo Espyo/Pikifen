@@ -222,7 +222,7 @@ hud_struct::hud_struct() :
     leader_next_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
-        if(game.states.gameplay->available_leaders.size() == 1) return;
+        if(game.states.gameplay->available_leaders.size() < 2) return;
         control_info* c = find_control(BUTTON_NEXT_LEADER);
         if(!c) return;
         draw_control_icon(game.fonts.slim, c, true, center, size);
@@ -384,6 +384,7 @@ hud_struct::hud_struct() :
     standby_next_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        if(!game.states.gameplay->cur_leader_ptr) return;
         subgroup_type* next_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
             false, &next_type
@@ -419,6 +420,7 @@ hud_struct::hud_struct() :
     standby_prev_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        if(!game.states.gameplay->cur_leader_ptr) return;
         subgroup_type* prev_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
             true, &prev_type
@@ -449,6 +451,8 @@ hud_struct::hud_struct() :
     standby_maturity_icon->on_draw =
     [this, standby_maturity_icon] (const point & center, const point & size) {
         //Standby group member preparations.
+        if(!game.states.gameplay->cur_leader_ptr) return;
+        
         ALLEGRO_BITMAP* standby_mat_bmp = NULL;
         leader* l_ptr = game.states.gameplay->cur_leader_ptr;
         if(!l_ptr || !l_ptr->group) return;
@@ -526,7 +530,8 @@ hud_struct::hud_struct() :
     [this] (const point & center, const point & size) {
         size_t n_standby_pikmin = 0;
         leader* l_ptr = game.states.gameplay->cur_leader_ptr;
-        if(l_ptr->group->cur_standby_type) {
+        
+        if(l_ptr && l_ptr->group->cur_standby_type) {
             for(size_t m = 0; m < l_ptr->group->members.size(); ++m) {
                 mob* m_ptr = l_ptr->group->members[m];
                 if(m_ptr->subgroup_type_ptr == l_ptr->group->cur_standby_type) {
@@ -558,6 +563,7 @@ hud_struct::hud_struct() :
     gui_item* group_bubble = new gui_item();
     group_bubble->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.states.gameplay->cur_leader_ptr) return;
         draw_bitmap(
             bmp_counter_bubble_group,
             center,
@@ -571,9 +577,14 @@ hud_struct::hud_struct() :
     group_amount = new gui_item();
     group_amount->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.states.gameplay->cur_leader_ptr) return;
         size_t n_group_pikmin =
             game.states.gameplay->cur_leader_ptr->group->members.size();
-        for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        for(
+            size_t l = 0;
+            l < game.states.gameplay->mobs.leaders.size();
+            ++l
+        ) {
             //If this leader is following the current one,
             //then they're not a Pikmin.
             //Subtract them from the group count total.
@@ -697,6 +708,7 @@ hud_struct::hud_struct() :
         gui_item* counter_slash = new gui_item();
         counter_slash->on_draw =
         [this] (const point & center, const point & size) {
+            if(!game.states.gameplay->cur_leader_ptr) return;
             draw_compressed_text(
                 game.fonts.counter, COLOR_WHITE,
                 center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "/"
@@ -720,6 +732,8 @@ hud_struct::hud_struct() :
     spray_1_amount = new gui_item();
     spray_1_amount->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.states.gameplay->cur_leader_ptr) return;
+        
         size_t top_spray_idx = INVALID;
         if(game.spray_types.size() <= 2) {
             top_spray_idx = 0;
@@ -746,6 +760,7 @@ hud_struct::hud_struct() :
     spray_1_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
         if(game.spray_types.size() <= 2) {
@@ -778,6 +793,8 @@ hud_struct::hud_struct() :
     gui_item* spray_2_icon = new gui_item();
     spray_2_icon->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.states.gameplay->cur_leader_ptr) return;
+        
         size_t bottom_spray_idx = INVALID;
         if(game.spray_types.size() == 2) {
             bottom_spray_idx = 1;
@@ -796,6 +813,8 @@ hud_struct::hud_struct() :
     spray_2_amount = new gui_item();
     spray_2_amount->on_draw =
     [this] (const point & center, const point & size) {
+        if(!game.states.gameplay->cur_leader_ptr) return;
+        
         size_t bottom_spray_idx = INVALID;
         if(game.spray_types.size() == 2) {
             bottom_spray_idx = 1;
@@ -820,6 +839,7 @@ hud_struct::hud_struct() :
     spray_2_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
         if(game.spray_types.size() == 2) {
@@ -859,6 +879,7 @@ hud_struct::hud_struct() :
     prev_spray_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t prev_spray_idx = INVALID;
         if(game.spray_types.size() >= 3) {
@@ -900,6 +921,7 @@ hud_struct::hud_struct() :
     next_spray_button->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
+        if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t next_spray_idx = INVALID;
         if(game.spray_types.size() >= 3) {
@@ -985,6 +1007,8 @@ hud_struct::~hud_struct() {
  *   or the next type's.
  */
 void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
+    if(!game.states.gameplay->cur_leader_ptr) return;
+    
     point final_center;
     point final_size;
     ALLEGRO_BITMAP* icon;
@@ -1086,32 +1110,34 @@ void hud_struct::tick(const float delta_t) {
         mob* member = game.states.gameplay->closest_group_member[s];
         subgroup_type* type = NULL;
         
-        switch(s) {
-        case BUBBLE_PREVIOUS: {
-            subgroup_type* prev_type;
-            cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
-            subgroup_type* next_type;
-            cur_leader_ptr->group->get_next_standby_type(false, &next_type);
-            if(
-                prev_type != cur_leader_ptr->group->cur_standby_type &&
-                prev_type != next_type
-            ) {
-                type = prev_type;
+        if(cur_leader_ptr) {
+            switch(s) {
+            case BUBBLE_PREVIOUS: {
+                subgroup_type* prev_type;
+                cur_leader_ptr->group->get_next_standby_type(true, &prev_type);
+                subgroup_type* next_type;
+                cur_leader_ptr->group->get_next_standby_type(false, &next_type);
+                if(
+                    prev_type != cur_leader_ptr->group->cur_standby_type &&
+                    prev_type != next_type
+                ) {
+                    type = prev_type;
+                }
+                break;
             }
-            break;
-        }
-        case BUBBLE_CURRENT: {
-            type = cur_leader_ptr->group->cur_standby_type;
-            break;
-        }
-        case BUBBLE_NEXT: {
-            subgroup_type* next_type;
-            cur_leader_ptr->group->get_next_standby_type(false, &next_type);
-            if(next_type != cur_leader_ptr->group->cur_standby_type) {
-                type = next_type;
+            case BUBBLE_CURRENT: {
+                type = cur_leader_ptr->group->cur_standby_type;
+                break;
             }
-            break;
-        }
+            case BUBBLE_NEXT: {
+                subgroup_type* next_type;
+                cur_leader_ptr->group->get_next_standby_type(false, &next_type);
+                if(next_type != cur_leader_ptr->group->cur_standby_type) {
+                    type = next_type;
+                }
+                break;
+            }
+            }
         }
         
         if(cur_leader_ptr && type && member) {
@@ -1189,7 +1215,10 @@ void hud_struct::tick(const float delta_t) {
     spray_icon_mgr.tick(delta_t);
     
     //Update the standby items opacity.
-    if(game.states.gameplay->cur_leader_ptr->group->members.empty()) {
+    if(
+        !game.states.gameplay->cur_leader_ptr ||
+        game.states.gameplay->cur_leader_ptr->group->members.empty()
+    ) {
         if(standby_items_fade_timer > 0.0f) {
             standby_items_fade_timer -= delta_t;
         } else {

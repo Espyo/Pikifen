@@ -190,6 +190,7 @@ void gameplay_state::handle_button(
                 
                 //Check if the player wants to cancel auto-throw.
                 if(
+                    cur_leader_ptr &&
                     game.options.auto_throw_mode == AUTO_THROW_TOGGLE &&
                     cur_leader_ptr->auto_throwing
                 ) {
@@ -198,98 +199,114 @@ void gameplay_state::handle_button(
                 }
                 
                 //Check if the leader should heal themselves on the ship.
-                if(!done && close_to_ship_to_heal) {
+                if(
+                    !done &&
+                    cur_leader_ptr &&
+                    close_to_ship_to_heal
+                ) {
                     close_to_ship_to_heal->heal_leader(cur_leader_ptr);
                     done = true;
                 }
                 
                 //Check if the leader should pluck a Pikmin.
-                if(!done) {
-                    if(close_to_pikmin_to_pluck) {
-                        cur_leader_ptr->fsm.run_event(
-                            LEADER_EV_GO_PLUCK,
-                            (void*) close_to_pikmin_to_pluck
-                        );
-                        done = true;
-                    }
+                if(
+                    !done &&
+                    cur_leader_ptr &&
+                    close_to_pikmin_to_pluck
+                ) {
+                    cur_leader_ptr->fsm.run_event(
+                        LEADER_EV_GO_PLUCK,
+                        (void*) close_to_pikmin_to_pluck
+                    );
+                    done = true;
                 }
                 
                 //Now check if the leader should open an Onion's menu.
-                if(!done) {
-                    if(close_to_nest_to_open) {
-                        onion_menu = new onion_menu_struct(
-                            close_to_nest_to_open,
-                            cur_leader_ptr
-                        );
-                        hud->gui.start_animation(
-                            GUI_MANAGER_ANIM_IN_TO_OUT,
-                            GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
-                        );
-                        paused = true;
-                        
-                        //TODO replace with a better solution.
-                        cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
-                        
-                        done = true;
-                    }
+                if(
+                    !done &&
+                    cur_leader_ptr &&
+                    close_to_nest_to_open
+                ) {
+                    onion_menu = new onion_menu_struct(
+                        close_to_nest_to_open,
+                        cur_leader_ptr
+                    );
+                    hud->gui.start_animation(
+                        GUI_MANAGER_ANIM_IN_TO_OUT,
+                        GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+                    );
+                    paused = true;
+                    
+                    //TODO replace with a better solution.
+                    cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+                    
+                    done = true;
                 }
                 
                 //Now check if the leader should interact with an interactable.
-                if(!done) {
-                    if(close_to_interactable_to_use) {
-                        string msg = "interact";
-                        cur_leader_ptr->send_message(
-                            close_to_interactable_to_use, msg
-                        );
-                        done = true;
-                    }
+                if(
+                    !done &&
+                    cur_leader_ptr &&
+                    close_to_interactable_to_use
+                ) {
+                    string msg = "interact";
+                    cur_leader_ptr->send_message(
+                        close_to_interactable_to_use, msg
+                    );
+                    done = true;
                 }
                 
                 //Now check if the leader should grab a Pikmin.
-                if(!done) {
-                    if(
-                        cur_leader_ptr->holding.empty() &&
-                        cur_leader_ptr->group->cur_standby_type &&
-                        !closest_group_member_distant
-                    ) {
-                    
-                        switch (game.options.auto_throw_mode) {
-                        case AUTO_THROW_OFF: {
-                            done = grab_closest_group_member();
-                            break;
-                        } case AUTO_THROW_HOLD:
-                        case AUTO_THROW_TOGGLE: {
-                            cur_leader_ptr->start_auto_throwing();
-                            done = true;
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
-                        }
+                if(
+                    !done &&
+                    cur_leader_ptr &&
+                    cur_leader_ptr->holding.empty() &&
+                    cur_leader_ptr->group->cur_standby_type &&
+                    !closest_group_member_distant
+                ) {
+                    switch (game.options.auto_throw_mode) {
+                    case AUTO_THROW_OFF: {
+                        done = grab_closest_group_member();
+                        break;
+                    } case AUTO_THROW_HOLD:
+                    case AUTO_THROW_TOGGLE: {
+                        cur_leader_ptr->start_auto_throwing();
+                        done = true;
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                     }
                 }
                 
                 //Now check if the leader should punch.
-                if(!done) {
+                if(
+                    !done &&
+                    cur_leader_ptr
+                ) {
                     cur_leader_ptr->fsm.run_event(LEADER_EV_PUNCH);
                     done = true;
                 }
                 
             } else { //Button release.
-                switch (game.options.auto_throw_mode) {
-                case AUTO_THROW_OFF: {
-                    cur_leader_ptr->queue_throw();
-                    break;
-                } case AUTO_THROW_HOLD: {
-                    cur_leader_ptr->stop_auto_throwing();
-                    break;
-                } case AUTO_THROW_TOGGLE: {
-                    break;
-                } default: {
-                    break;
+            
+                if(cur_leader_ptr) {
+                    switch (game.options.auto_throw_mode) {
+                    case AUTO_THROW_OFF: {
+                        cur_leader_ptr->queue_throw();
+                        break;
+                    } case AUTO_THROW_HOLD: {
+                        cur_leader_ptr->stop_auto_throwing();
+                        break;
+                    } case AUTO_THROW_TOGGLE: {
+                        break;
+                    } default: {
+                        break;
+                    }
+                    }
                 }
-                }
+                
             }
             
             break;
@@ -305,20 +322,25 @@ void gameplay_state::handle_button(
             if(is_down) {
                 //Button pressed.
                 
-                mob_event* cancel_ev =
-                    cur_leader_ptr->fsm.get_event(LEADER_EV_CANCEL);
-                    
-                if(cancel_ev) {
-                    //Cancel auto-pluck, lying down, etc.
-                    cancel_ev->run(cur_leader_ptr);
-                } else {
-                    //Start whistling.
-                    cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
+                if(cur_leader_ptr) {
+                    mob_event* cancel_ev =
+                        cur_leader_ptr->fsm.get_event(LEADER_EV_CANCEL);
+                        
+                    if(cancel_ev) {
+                        //Cancel auto-pluck, lying down, etc.
+                        cancel_ev->run(cur_leader_ptr);
+                    } else {
+                        //Start whistling.
+                        cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
+                    }
                 }
                 
             } else {
                 //Button released.
-                cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+                
+                if(cur_leader_ptr) {
+                    cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+                }
                 
             }
             
@@ -349,7 +371,9 @@ void gameplay_state::handle_button(
             
             if(!is_down) return;
             
-            cur_leader_ptr->fsm.run_event(LEADER_EV_DISMISS);
+            if(cur_leader_ptr) {
+                cur_leader_ptr->fsm.run_event(LEADER_EV_DISMISS);
+            }
             
             break;
             
@@ -371,7 +395,9 @@ void gameplay_state::handle_button(
             );
             
             //TODO replace with a better solution.
-            cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+            if(cur_leader_ptr) {
+                cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
+            }
             
             break;
             
@@ -385,11 +411,16 @@ void gameplay_state::handle_button(
             
             if(!is_down) return;
             
-            if(game.spray_types.size() == 1 || game.spray_types.size() == 2) {
-                size_t spray_nr = 0;
-                cur_leader_ptr->fsm.run_event(
-                    LEADER_EV_SPRAY, (void*) &spray_nr
-                );
+            if(cur_leader_ptr) {
+                if(
+                    game.spray_types.size() == 1 ||
+                    game.spray_types.size() == 2
+                ) {
+                    size_t spray_nr = 0;
+                    cur_leader_ptr->fsm.run_event(
+                        LEADER_EV_SPRAY, (void*) &spray_nr
+                    );
+                }
             }
             
             break;
@@ -398,11 +429,13 @@ void gameplay_state::handle_button(
     
             if(!is_down) return;
             
-            if(game.spray_types.size() == 2) {
-                size_t spray_nr = 1;
-                cur_leader_ptr->fsm.run_event(
-                    LEADER_EV_SPRAY, (void*) &spray_nr
-                );
+            if(cur_leader_ptr) {
+                if(game.spray_types.size() == 2) {
+                    size_t spray_nr = 1;
+                    cur_leader_ptr->fsm.run_event(
+                        LEADER_EV_SPRAY, (void*) &spray_nr
+                    );
+                }
             }
             
             break;
@@ -412,17 +445,19 @@ void gameplay_state::handle_button(
     
             if(!is_down) return;
             
-            if(game.spray_types.size() > 2) {
-                selected_spray =
-                    sum_and_wrap(
-                        (int) selected_spray,
-                        button == BUTTON_NEXT_SPRAY ? +1 : -1,
-                        (int) game.spray_types.size()
+            if(cur_leader_ptr) {
+                if(game.spray_types.size() > 2) {
+                    selected_spray =
+                        sum_and_wrap(
+                            (int) selected_spray,
+                            button == BUTTON_NEXT_SPRAY ? +1 : -1,
+                            (int) game.spray_types.size()
+                        );
+                    game.states.gameplay->hud->
+                    spray_1_amount->start_juice_animation(
+                        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
                     );
-                game.states.gameplay->hud->
-                spray_1_amount->start_juice_animation(
-                    gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-                );
+                }
             }
             
             break;
@@ -431,11 +466,13 @@ void gameplay_state::handle_button(
     
             if(!is_down) return;
             
-            if(game.spray_types.size() > 2) {
-                cur_leader_ptr->fsm.run_event(
-                    LEADER_EV_SPRAY,
-                    (void*) &selected_spray
-                );
+            if(cur_leader_ptr) {
+                if(game.spray_types.size() > 2) {
+                    cur_leader_ptr->fsm.run_event(
+                        LEADER_EV_SPRAY,
+                        (void*) &selected_spray
+                    );
+                }
             }
             
             break;
@@ -512,7 +549,9 @@ void gameplay_state::handle_button(
             
             if(!is_down) return;
             
-            cur_leader_ptr->fsm.run_event(LEADER_EV_LIE_DOWN);
+            if(cur_leader_ptr) {
+                cur_leader_ptr->fsm.run_event(LEADER_EV_LIE_DOWN);
+            }
             
             break;
             
@@ -527,63 +566,65 @@ void gameplay_state::handle_button(
             
             if(!is_down) return;
             
-            if(cur_leader_ptr->group->members.empty()) return;
-            
-            subgroup_type* starting_subgroup_type =
-                cur_leader_ptr->group->cur_standby_type;
+            if(cur_leader_ptr) {
+                if(cur_leader_ptr->group->members.empty()) return;
                 
-            bool switch_successful;
-            
-            if(cur_leader_ptr->holding.empty()) {
-                //If the leader isn't holding anybody.
-                switch_successful =
-                    cur_leader_ptr->group->change_standby_type(
-                        button == BUTTON_PREV_TYPE
-                    );
+                subgroup_type* starting_subgroup_type =
+                    cur_leader_ptr->group->cur_standby_type;
                     
-            } else {
-                //If the leader is holding a Pikmin, we can't let it
-                //swap to a Pikmin that's far away.
-                //So, every time that happens, skip that subgroup and
-                //try the next. Also, make sure to cancel everything if
-                //the loop already went through all types.
+                bool switch_successful;
                 
-                bool finish = false;
-                do {
+                if(cur_leader_ptr->holding.empty()) {
+                    //If the leader isn't holding anybody.
                     switch_successful =
                         cur_leader_ptr->group->change_standby_type(
                             button == BUTTON_PREV_TYPE
                         );
                         
-                    if(
-                        !switch_successful ||
-                        cur_leader_ptr->group->cur_standby_type ==
-                        starting_subgroup_type
-                    ) {
-                        //Reached around back to the first subgroup...
-                        switch_successful = false;
-                        finish = true;
-                        
-                    } else {
-                        //Switched to a new subgroup.
-                        update_closest_group_members();
-                        if(!closest_group_member_distant) {
+                } else {
+                    //If the leader is holding a Pikmin, we can't let it
+                    //swap to a Pikmin that's far away.
+                    //So, every time that happens, skip that subgroup and
+                    //try the next. Also, make sure to cancel everything if
+                    //the loop already went through all types.
+                    
+                    bool finish = false;
+                    do {
+                        switch_successful =
+                            cur_leader_ptr->group->change_standby_type(
+                                button == BUTTON_PREV_TYPE
+                            );
+                            
+                        if(
+                            !switch_successful ||
+                            cur_leader_ptr->group->cur_standby_type ==
+                            starting_subgroup_type
+                        ) {
+                            //Reached around back to the first subgroup...
+                            switch_successful = false;
                             finish = true;
+                            
+                        } else {
+                            //Switched to a new subgroup.
+                            update_closest_group_members();
+                            if(!closest_group_member_distant) {
+                                finish = true;
+                            }
+                            
                         }
                         
-                    }
+                    } while(!finish);
                     
-                } while(!finish);
+                    if(switch_successful) {
+                        cur_leader_ptr->swap_held_pikmin(
+                            closest_group_member[BUBBLE_CURRENT]
+                        );
+                    }
+                }
                 
                 if(switch_successful) {
-                    cur_leader_ptr->swap_held_pikmin(
-                        closest_group_member[BUBBLE_CURRENT]
-                    );
+                    game.sys_assets.sfx_switch_pikmin.play(0, false);
                 }
-            }
-            
-            if(switch_successful) {
-                game.sys_assets.sfx_switch_pikmin.play(0, false);
             }
             
             break;
@@ -599,6 +640,7 @@ void gameplay_state::handle_button(
             
             if(
                 !is_down ||
+                !cur_leader_ptr ||
                 cur_leader_ptr->holding.empty() ||
                 cur_leader_ptr->holding[0]->type->category->id !=
                 MOB_CATEGORY_PIKMIN
@@ -889,7 +931,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
         } case MAKER_TOOL_TELEPORT: {
             sector* mouse_sector =
                 get_sector(game.mouse_cursor_w, NULL, true);
-            if(mouse_sector) {
+            if(mouse_sector && cur_leader_ptr) {
                 cur_leader_ptr->chase(
                     game.mouse_cursor_w, mouse_sector->z,
                     CHASE_FLAG_TELEPORT

@@ -2,6 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    The default difficulty for an area should be 0, i.e. not specified
     Give every enemy some points
     Add the same loss condition/grading list system that I added to the results menu to the area selection menu's specs page
     Rework the "none" mission goal to be "end from the pause menu"
@@ -25,6 +26,7 @@ Next tasks (roughly sorted most important first)
     Leaving the GUI editor should close the current file
     In the GUI editor, item names can escape into the toolbar or status bar
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
+    The area editor saving empty "type" properties for sectors, probably only when the sector type is normal
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -64,8 +66,8 @@ Next tasks (roughly sorted most important first)
             The end exploration button should show an informative and confirmation dialog. This dialog should explain that ending now will make the following fields of the score become 0, or how the score won't be affected if none (thanks Neo)
             If you end through the pause menu, you shouldn't be allowed to continue...you specifically said you didn't want to play any more
                 Also, don't let the player continue if they ended the mission via goal clear
+                Maybe only let the player continue if they ran out of time, and nothing else?
         Other things
-            Losing all leaders shouldn't be a forced failure condition. Pikmin can still do things without a leader, after all, and the engine shouldn't just implode when there are 0 leaders around
             The radar's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
             The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that

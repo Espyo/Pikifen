@@ -23,16 +23,12 @@
 
 
 /* ----------------------------------------------------------------------------
- * Ticks the logic of aesthetic things. If the game is paused, these can
- * be frozen in place without any negative impact.
+ * Ticks the logic of aesthetic things regarding the leader.
+ * If the game is paused, these can be frozen in place without
+ * any negative impact.
  */
-void gameplay_state::do_aesthetic_logic() {
-
-    /*************************************
-    *                               .-.  *
-    *   Timer things - aesthetic   ( L ) *
-    *                               `-´  *
-    **************************************/
+void gameplay_state::do_aesthetic_leader_logic() {
+    if(!cur_leader_ptr) return;
     
     //Swarming arrows.
     if(swarm_magnitude) {
@@ -77,11 +73,6 @@ void gameplay_state::do_aesthetic_logic() {
         game.delta_t, whistle_pos,
         cur_leader_ptr->lea_type->whistle_range, whistle_dist
     );
-    
-    //Cursor trail.
-    if(game.options.draw_cursor_trail) {
-        cursor_save_timer.tick(game.delta_t);
-    }
     
     //Where the cursor is.
     cursor_height_diff_light = 0;
@@ -138,6 +129,21 @@ void gameplay_state::do_aesthetic_logic() {
             clamp(cursor_height_diff_light, -0.1f, 0.1f);
     }
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the logic of aesthetic things. If the game is paused, these can
+ * be frozen in place without any negative impact.
+ */
+void gameplay_state::do_aesthetic_logic() {
+    //Cursor trail.
+    if(game.options.draw_cursor_trail) {
+        cursor_save_timer.tick(game.delta_t);
+    }
+    
+    //Leader stuff.
+    do_aesthetic_leader_logic();
     
     //Specific animations.
     game.sys_assets.spark_animation.instance.tick(game.delta_t);
@@ -153,11 +159,357 @@ void gameplay_state::do_aesthetic_logic() {
 
 
 /* ----------------------------------------------------------------------------
+ * Ticks the logic of leader gameplay-related things.
+ */
+void gameplay_state::do_gameplay_leader_logic() {
+    if(!cur_leader_ptr) return;
+    
+    if(game.perf_mon) {
+        game.perf_mon->start_measurement("Logic -- Current leader");
+    }
+    
+    if(cur_leader_ptr->to_delete) {
+        game.states.gameplay->update_available_leaders();
+        change_to_next_leader(true, true, true);
+    }
+    
+    /********************
+    *              ***  *
+    *   Whistle   * O * *
+    *              ***  *
+    ********************/
+    
+    if(
+        whistle.whistling &&
+        whistle.radius < cur_leader_ptr->lea_type->whistle_range
+    ) {
+        whistle.radius += game.config.whistle_growth_speed * game.delta_t;
+        if(whistle.radius > cur_leader_ptr->lea_type->whistle_range) {
+            whistle.radius = cur_leader_ptr->lea_type->whistle_range;
+        }
+    }
+    
+    //Current leader movement.
+    point dummy_coords;
+    float dummy_angle;
+    float leader_move_magnitude;
+    leader_movement.get_clean_info(
+        &dummy_coords, &dummy_angle, &leader_move_magnitude
+    );
+    if(leader_move_magnitude < 0.75) {
+        cur_leader_ptr->fsm.run_event(
+            LEADER_EV_MOVE_END, (void*) &leader_movement
+        );
+    } else {
+        cur_leader_ptr->fsm.run_event(
+            LEADER_EV_MOVE_START, (void*) &leader_movement
+        );
+    }
+    
+    game.cam.target_pos = cur_leader_ptr->pos;
+    
+    //Check what to show on the notification, if anything.
+    notification.set_enabled(false);
+    
+    bool notification_done = false;
+    
+    //Lying down stop notification.
+    if(
+        !notification_done &&
+        cur_leader_ptr->carry_info
+    ) {
+        notification.set_enabled(true);
+        notification.set_contents(
+            find_control(BUTTON_WHISTLE),
+            "Get up",
+            point(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+            )
+        );
+        notification_done = true;
+    }
+    
+    //Auto-throw stop notification.
+    if(
+        !notification_done &&
+        cur_leader_ptr->auto_throwing &&
+        game.options.auto_throw_mode == AUTO_THROW_TOGGLE
+    ) {
+        notification.set_enabled(true);
+        notification.set_contents(
+            find_control(BUTTON_THROW),
+            "Stop throwing",
+            point(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+            )
+        );
+        notification_done = true;
+    }
+    
+    //Pluck stop notification.
+    if(
+        !notification_done &&
+        cur_leader_ptr->auto_plucking
+    ) {
+        notification.set_enabled(true);
+        notification.set_contents(
+            find_control(BUTTON_WHISTLE),
+            "Stop",
+            point(
+                cur_leader_ptr->pos.x,
+                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+            )
+        );
+        notification_done = true;
+    }
+    
+    if(!cur_leader_ptr->auto_plucking) {
+        dist closest_d = 0;
+        dist d = 0;
+        
+        //Ship healing notification.
+        close_to_ship_to_heal = NULL;
+        for(size_t s = 0; s < mobs.ships.size(); ++s) {
+            ship* s_ptr = mobs.ships[s];
+            d = dist(cur_leader_ptr->pos, s_ptr->pos);
+            if(!s_ptr->is_leader_on_cp(cur_leader_ptr)) {
+                continue;
+            }
+            if(cur_leader_ptr->health == cur_leader_ptr->max_health) {
+                continue;
+            }
+            if(!s_ptr->shi_type->can_heal) {
+                continue;
+            }
+            if(d < closest_d || !close_to_ship_to_heal) {
+                close_to_ship_to_heal = s_ptr;
+                closest_d = d;
+                notification.set_enabled(true);
+                notification.set_contents(
+                    find_control(BUTTON_THROW),
+                    "Repair suit",
+                    point(
+                        close_to_ship_to_heal->pos.x,
+                        close_to_ship_to_heal->pos.y -
+                        close_to_ship_to_heal->radius
+                    )
+                );
+                notification_done = true;
+            }
+        }
+        
+        //Interactable mob notification.
+        closest_d = 0;
+        d = 0;
+        close_to_interactable_to_use = NULL;
+        if(!notification_done) {
+            for(size_t i = 0; i < mobs.interactables.size(); ++i) {
+                d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
+                if(d > mobs.interactables[i]->int_type->trigger_range) {
+                    continue;
+                }
+                if(d < closest_d || !close_to_interactable_to_use) {
+                    close_to_interactable_to_use = mobs.interactables[i];
+                    closest_d = d;
+                    notification.set_enabled(true);
+                    notification.set_contents(
+                        find_control(BUTTON_THROW),
+                        close_to_interactable_to_use->int_type->prompt_text,
+                        point(
+                            close_to_interactable_to_use->pos.x,
+                            close_to_interactable_to_use->pos.y -
+                            close_to_interactable_to_use->radius
+                        )
+                    );
+                    notification_done = true;
+                }
+            }
+        }
+        
+        //Pikmin pluck notification.
+        closest_d = 0;
+        d = 0;
+        close_to_pikmin_to_pluck = NULL;
+        if(!notification_done) {
+            pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
+            if(p && d <= game.config.pluck_range) {
+                close_to_pikmin_to_pluck = p;
+                notification.set_enabled(true);
+                notification.set_contents(
+                    find_control(BUTTON_THROW),
+                    "Pluck",
+                    point(
+                        p->pos.x,
+                        p->pos.y -
+                        p->radius
+                    )
+                );
+                notification_done = true;
+            }
+        }
+        
+        //Nest open notification.
+        closest_d = 0;
+        d = 0;
+        close_to_nest_to_open = NULL;
+        if(!notification_done) {
+            for(size_t o = 0; o < mobs.onions.size(); ++o) {
+                d = dist(cur_leader_ptr->pos, mobs.onions[o]->pos);
+                if(d > game.config.onion_open_range) continue;
+                if(d < closest_d || !close_to_nest_to_open) {
+                    close_to_nest_to_open = mobs.onions[o]->nest;
+                    closest_d = d;
+                    notification.set_enabled(true);
+                    notification.set_contents(
+                        find_control(BUTTON_THROW),
+                        "Check",
+                        point(
+                            close_to_nest_to_open->m_ptr->pos.x,
+                            close_to_nest_to_open->m_ptr->pos.y -
+                            close_to_nest_to_open->m_ptr->radius
+                        )
+                    );
+                    notification_done = true;
+                }
+            }
+            for(size_t s = 0; s < mobs.ships.size(); ++s) {
+                d = dist(cur_leader_ptr->pos, mobs.ships[s]->pos);
+                if(!mobs.ships[s]->is_leader_on_cp(cur_leader_ptr)) {
+                    continue;
+                }
+                if(mobs.ships[s]->shi_type->nest->pik_types.empty()) {
+                    continue;
+                }
+                if(d < closest_d || !close_to_nest_to_open) {
+                    close_to_nest_to_open = mobs.ships[s]->nest;
+                    closest_d = d;
+                    notification.set_enabled(true);
+                    notification.set_contents(
+                        find_control(BUTTON_THROW),
+                        "Check",
+                        point(
+                            close_to_nest_to_open->m_ptr->pos.x,
+                            close_to_nest_to_open->m_ptr->pos.y -
+                            close_to_nest_to_open->m_ptr->radius
+                        )
+                    );
+                    notification_done = true;
+                }
+            }
+        }
+    }
+    
+    notification.tick(game.delta_t);
+    
+    /********************
+    *             .-.   *
+    *   Cursor   ( = )> *
+    *             `-´   *
+    ********************/
+    
+    point mouse_cursor_speed;
+    float dummy_magnitude;
+    cursor_movement.get_clean_info(
+        &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
+    );
+    mouse_cursor_speed =
+        mouse_cursor_speed * game.delta_t* game.options.cursor_speed;
+        
+    leader_cursor_w = game.mouse_cursor_w;
+    
+    float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
+    
+    dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
+    if(leader_to_cursor_dist > game.config.cursor_max_dist) {
+        //Cursor goes beyond the range limit.
+        leader_cursor_w.x =
+            cur_leader_ptr->pos.x +
+            (cos(cursor_angle) * game.config.cursor_max_dist);
+        leader_cursor_w.y =
+            cur_leader_ptr->pos.y +
+            (sin(cursor_angle) * game.config.cursor_max_dist);
+            
+        if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
+            //If we're speeding the mouse cursor (via analog stick),
+            //don't let it go beyond the edges.
+            game.mouse_cursor_w = leader_cursor_w;
+            game.mouse_cursor_s = game.mouse_cursor_w;
+            al_transform_coordinates(
+                &game.world_to_screen_transform,
+                &game.mouse_cursor_s.x, &game.mouse_cursor_s.y
+            );
+        }
+    }
+    
+    leader_cursor_s = leader_cursor_w;
+    al_transform_coordinates(
+        &game.world_to_screen_transform,
+        &leader_cursor_s.x, &leader_cursor_s.y
+    );
+    
+    
+    /***********************************
+    *                             ***  *
+    *   Current leader's group   ****O *
+    *                             ***  *
+    ************************************/
+    
+    update_closest_group_members();
+    if(!cur_leader_ptr->holding.empty()) {
+        closest_group_member[BUBBLE_CURRENT] = cur_leader_ptr->holding[0];
+    }
+    
+    float old_swarm_magnitude = swarm_magnitude;
+    point swarm_coords;
+    float new_swarm_angle;
+    swarm_movement.get_clean_info(
+        &swarm_coords, &new_swarm_angle, &swarm_magnitude
+    );
+    if(swarm_magnitude > 0) {
+        //This stops arrows that were fading away to the left from
+        //turning to angle 0 because the magnitude reached 0.
+        swarm_angle = new_swarm_angle;
+    }
+    
+    if(swarm_cursor) {
+        swarm_angle = cursor_angle;
+        leader_to_cursor_dist = dist(cur_leader_ptr->pos, leader_cursor_w);
+        swarm_magnitude =
+            leader_to_cursor_dist.to_float() / game.config.cursor_max_dist;
+    }
+    
+    if(old_swarm_magnitude != swarm_magnitude) {
+        if(swarm_magnitude != 0) {
+            cur_leader_ptr->signal_swarm_start();
+        } else {
+            cur_leader_ptr->signal_swarm_end();
+        }
+    }
+    
+    if(game.perf_mon) {
+        game.perf_mon->finish_measurement();
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks the logic of gameplay-related things.
  */
 void gameplay_state::do_gameplay_logic() {
 
     //Camera movement.
+    if(!cur_leader_ptr) {
+        //If there's no leader being controlled, might as well move the camera.
+        point coords;
+        float dummy_angle;
+        float dummy_magnitude;
+        leader_movement.get_clean_info(&coords, &dummy_angle, &dummy_magnitude);
+        game.cam.target_pos = game.cam.pos + (coords * 120.0f / game.cam.zoom);
+    }
+    
     game.cam.tick(game.delta_t);
     
     update_transformations();
@@ -172,6 +524,25 @@ void gameplay_state::do_gameplay_logic() {
         *                              `-´  *
         *************************************/
         
+        //Mouse cursor.
+        point mouse_cursor_speed;
+        float dummy_angle;
+        float dummy_magnitude;
+        cursor_movement.get_clean_info(
+            &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
+        );
+        mouse_cursor_speed =
+            mouse_cursor_speed * game.delta_t* game.options.cursor_speed;
+            
+        game.mouse_cursor_s += mouse_cursor_speed;
+        
+        game.mouse_cursor_w = game.mouse_cursor_s;
+        al_transform_coordinates(
+            &game.screen_to_world_transform,
+            &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+        );
+        
+        //Day time logic.
         day_minutes +=
             (game.cur_area_data.day_time_speed * game.delta_t / 60.0f);
         if(day_minutes > 60 * 24) {
@@ -180,22 +551,21 @@ void gameplay_state::do_gameplay_logic() {
         
         area_time_passed += game.delta_t;
         
+        //Tick all particles.
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Logic -- Particles");
         }
         
-        //Tick all particles.
         particles.tick_all(game.delta_t);
         
         if(game.perf_mon) {
             game.perf_mon->finish_measurement();
         }
         
-        //Ticks all status effect animations.
+        //Tick all status effect animations.
         for(auto &s : game.status_types) {
             s.second->overlay_anim_instance.tick(game.delta_t);
         }
-        
         
         /*******************
         *             +--+ *
@@ -252,23 +622,6 @@ void gameplay_state::do_gameplay_logic() {
         }
         
         
-        /********************
-        *              ***  *
-        *   Whistle   * O * *
-        *              ***  *
-        ********************/
-        
-        if(
-            whistle.whistling &&
-            whistle.radius < cur_leader_ptr->lea_type->whistle_range
-        ) {
-            whistle.radius += game.config.whistle_growth_speed * game.delta_t;
-            if(whistle.radius > cur_leader_ptr->lea_type->whistle_range) {
-                whistle.radius = cur_leader_ptr->lea_type->whistle_range;
-            }
-        }
-        
-        
         /*****************
         *                *
         *   Mobs   ()--> *
@@ -279,24 +632,8 @@ void gameplay_state::do_gameplay_logic() {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
             m_ptr->tick(game.delta_t);
-            if(!cur_leader_ptr) {
-                return;
-            }
             if(!m_ptr->stored_inside_another) {
                 process_mob_interactions(m_ptr, m);
-            }
-        }
-        
-        if(!cur_leader_ptr) {
-            return;
-        }
-        
-        if(cur_leader_ptr->to_delete) {
-            if(process_total_leader_ko()) {
-                return;
-            } else {
-                game.states.gameplay->update_available_leaders();
-                change_to_next_leader(true, true, true);
             }
         }
         
@@ -312,332 +649,7 @@ void gameplay_state::do_gameplay_logic() {
         }
         
         
-        /*******************
-        *             .-.  *
-        *   Leader   (*:O) *
-        *             `-´  *
-        *******************/
-        if(game.perf_mon) {
-            game.perf_mon->start_measurement("Logic -- Current leader");
-        }
-        
-        //Current leader movement.
-        point dummy_coords;
-        float dummy_angle;
-        float leader_move_magnitude;
-        leader_movement.get_clean_info(
-            &dummy_coords, &dummy_angle, &leader_move_magnitude
-        );
-        if(leader_move_magnitude < 0.75) {
-            cur_leader_ptr->fsm.run_event(
-                LEADER_EV_MOVE_END, (void*) &leader_movement
-            );
-        } else {
-            cur_leader_ptr->fsm.run_event(
-                LEADER_EV_MOVE_START, (void*) &leader_movement
-            );
-        }
-        
-        game.cam.target_pos = cur_leader_ptr->pos;
-        
-        //Check what to show on the notification, if anything.
-        notification.set_enabled(false);
-        
-        bool notification_done = false;
-        
-        //Lying down stop notification.
-        if(
-            !notification_done &&
-            cur_leader_ptr->carry_info
-        ) {
-            notification.set_enabled(true);
-            notification.set_contents(
-                find_control(BUTTON_WHISTLE),
-                "Get up",
-                point(
-                    cur_leader_ptr->pos.x,
-                    cur_leader_ptr->pos.y - cur_leader_ptr->radius
-                )
-            );
-            notification_done = true;
-        }
-        
-        //Auto-throw stop notification.
-        if(
-            !notification_done &&
-            cur_leader_ptr->auto_throwing &&
-            game.options.auto_throw_mode == AUTO_THROW_TOGGLE
-        ) {
-            notification.set_enabled(true);
-            notification.set_contents(
-                find_control(BUTTON_THROW),
-                "Stop throwing",
-                point(
-                    cur_leader_ptr->pos.x,
-                    cur_leader_ptr->pos.y - cur_leader_ptr->radius
-                )
-            );
-            notification_done = true;
-        }
-        
-        //Pluck stop notification.
-        if(
-            !notification_done &&
-            cur_leader_ptr->auto_plucking
-        ) {
-            notification.set_enabled(true);
-            notification.set_contents(
-                find_control(BUTTON_WHISTLE),
-                "Stop",
-                point(
-                    cur_leader_ptr->pos.x,
-                    cur_leader_ptr->pos.y - cur_leader_ptr->radius
-                )
-            );
-            notification_done = true;
-        }
-        
-        if(!cur_leader_ptr->auto_plucking) {
-            dist closest_d = 0;
-            dist d = 0;
-            
-            //Ship healing notification.
-            close_to_ship_to_heal = NULL;
-            for(size_t s = 0; s < mobs.ships.size(); ++s) {
-                ship* s_ptr = mobs.ships[s];
-                d = dist(cur_leader_ptr->pos, s_ptr->pos);
-                if(!s_ptr->is_leader_on_cp(cur_leader_ptr)) {
-                    continue;
-                }
-                if(cur_leader_ptr->health == cur_leader_ptr->max_health) {
-                    continue;
-                }
-                if(!s_ptr->shi_type->can_heal) {
-                    continue;
-                }
-                if(d < closest_d || !close_to_ship_to_heal) {
-                    close_to_ship_to_heal = s_ptr;
-                    closest_d = d;
-                    notification.set_enabled(true);
-                    notification.set_contents(
-                        find_control(BUTTON_THROW),
-                        "Repair suit",
-                        point(
-                            close_to_ship_to_heal->pos.x,
-                            close_to_ship_to_heal->pos.y -
-                            close_to_ship_to_heal->radius
-                        )
-                    );
-                    notification_done = true;
-                }
-            }
-            
-            //Interactable mob notification.
-            closest_d = 0;
-            d = 0;
-            close_to_interactable_to_use = NULL;
-            if(!notification_done) {
-                for(size_t i = 0; i < mobs.interactables.size(); ++i) {
-                    d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
-                    if(d > mobs.interactables[i]->int_type->trigger_range) {
-                        continue;
-                    }
-                    if(d < closest_d || !close_to_interactable_to_use) {
-                        close_to_interactable_to_use = mobs.interactables[i];
-                        closest_d = d;
-                        notification.set_enabled(true);
-                        notification.set_contents(
-                            find_control(BUTTON_THROW),
-                            close_to_interactable_to_use->int_type->prompt_text,
-                            point(
-                                close_to_interactable_to_use->pos.x,
-                                close_to_interactable_to_use->pos.y -
-                                close_to_interactable_to_use->radius
-                            )
-                        );
-                        notification_done = true;
-                    }
-                }
-            }
-            
-            //Pikmin pluck notification.
-            closest_d = 0;
-            d = 0;
-            close_to_pikmin_to_pluck = NULL;
-            if(!notification_done) {
-                pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
-                if(p && d <= game.config.pluck_range) {
-                    close_to_pikmin_to_pluck = p;
-                    notification.set_enabled(true);
-                    notification.set_contents(
-                        find_control(BUTTON_THROW),
-                        "Pluck",
-                        point(
-                            p->pos.x,
-                            p->pos.y -
-                            p->radius
-                        )
-                    );
-                    notification_done = true;
-                }
-            }
-            
-            //Nest open notification.
-            closest_d = 0;
-            d = 0;
-            close_to_nest_to_open = NULL;
-            if(!notification_done) {
-                for(size_t o = 0; o < mobs.onions.size(); ++o) {
-                    d = dist(cur_leader_ptr->pos, mobs.onions[o]->pos);
-                    if(d > game.config.onion_open_range) continue;
-                    if(d < closest_d || !close_to_nest_to_open) {
-                        close_to_nest_to_open = mobs.onions[o]->nest;
-                        closest_d = d;
-                        notification.set_enabled(true);
-                        notification.set_contents(
-                            find_control(BUTTON_THROW),
-                            "Check",
-                            point(
-                                close_to_nest_to_open->m_ptr->pos.x,
-                                close_to_nest_to_open->m_ptr->pos.y -
-                                close_to_nest_to_open->m_ptr->radius
-                            )
-                        );
-                        notification_done = true;
-                    }
-                }
-                for(size_t s = 0; s < mobs.ships.size(); ++s) {
-                    d = dist(cur_leader_ptr->pos, mobs.ships[s]->pos);
-                    if(!mobs.ships[s]->is_leader_on_cp(cur_leader_ptr)) {
-                        continue;
-                    }
-                    if(mobs.ships[s]->shi_type->nest->pik_types.empty()) {
-                        continue;
-                    }
-                    if(d < closest_d || !close_to_nest_to_open) {
-                        close_to_nest_to_open = mobs.ships[s]->nest;
-                        closest_d = d;
-                        notification.set_enabled(true);
-                        notification.set_contents(
-                            find_control(BUTTON_THROW),
-                            "Check",
-                            point(
-                                close_to_nest_to_open->m_ptr->pos.x,
-                                close_to_nest_to_open->m_ptr->pos.y -
-                                close_to_nest_to_open->m_ptr->radius
-                            )
-                        );
-                        notification_done = true;
-                    }
-                }
-            }
-        }
-        
-        notification.tick(game.delta_t);
-        
-        
-        /********************
-        *             .-.   *
-        *   Cursor   ( = )> *
-        *             `-´   *
-        ********************/
-        
-        point mouse_cursor_speed;
-        float dummy_magnitude;
-        cursor_movement.get_clean_info(
-            &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
-        );
-        mouse_cursor_speed =
-            mouse_cursor_speed * game.delta_t* game.options.cursor_speed;
-            
-        game.mouse_cursor_s += mouse_cursor_speed;
-        
-        game.mouse_cursor_w = game.mouse_cursor_s;
-        al_transform_coordinates(
-            &game.screen_to_world_transform,
-            &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
-        );
-        leader_cursor_w = game.mouse_cursor_w;
-        
-        float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
-        
-        dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
-        if(leader_to_cursor_dist > game.config.cursor_max_dist) {
-            //Cursor goes beyond the range limit.
-            leader_cursor_w.x =
-                cur_leader_ptr->pos.x +
-                (cos(cursor_angle) * game.config.cursor_max_dist);
-            leader_cursor_w.y =
-                cur_leader_ptr->pos.y +
-                (sin(cursor_angle) * game.config.cursor_max_dist);
-                
-            if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
-                //If we're speeding the mouse cursor (via analog stick),
-                //don't let it go beyond the edges.
-                game.mouse_cursor_w = leader_cursor_w;
-                game.mouse_cursor_s = game.mouse_cursor_w;
-                al_transform_coordinates(
-                    &game.world_to_screen_transform,
-                    &game.mouse_cursor_s.x, &game.mouse_cursor_s.y
-                );
-            }
-        }
-        
-        leader_cursor_s = leader_cursor_w;
-        al_transform_coordinates(
-            &game.world_to_screen_transform,
-            &leader_cursor_s.x, &leader_cursor_s.y
-        );
-        
-        
-        /***********************************
-        *                             ***  *
-        *   Current leader's group   ****O *
-        *                             ***  *
-        ************************************/
-        
-        size_t n_members = cur_leader_ptr->group->members.size();
-        closest_group_member[BUBBLE_CURRENT] = NULL;
-        if(!cur_leader_ptr->holding.empty()) {
-            closest_group_member[BUBBLE_CURRENT] = cur_leader_ptr->holding[0];
-        }
-        closest_group_member_distant = false;
-        
-        if(n_members > 0 && !closest_group_member[BUBBLE_CURRENT]) {
-        
-            update_closest_group_members();
-        }
-        
-        float old_swarm_magnitude = swarm_magnitude;
-        point swarm_coords;
-        float new_swarm_angle;
-        swarm_movement.get_clean_info(
-            &swarm_coords, &new_swarm_angle, &swarm_magnitude
-        );
-        if(swarm_magnitude > 0) {
-            //This stops arrows that were fading away to the left from
-            //turning to angle 0 because the magnitude reached 0.
-            swarm_angle = new_swarm_angle;
-        }
-        
-        if(swarm_cursor) {
-            swarm_angle = cursor_angle;
-            leader_to_cursor_dist = dist(cur_leader_ptr->pos, leader_cursor_w);
-            swarm_magnitude =
-                leader_to_cursor_dist.to_float() / game.config.cursor_max_dist;
-        }
-        
-        if(old_swarm_magnitude != swarm_magnitude) {
-            if(swarm_magnitude != 0) {
-                cur_leader_ptr->signal_swarm_start();
-            } else {
-                cur_leader_ptr->signal_swarm_end();
-            }
-        }
-        
-        if(game.perf_mon) {
-            game.perf_mon->finish_measurement();
-        }
+        do_gameplay_leader_logic();
         
         
         /**************************

@@ -55,22 +55,20 @@ enum MISSION_GRADING_MODES {
 
 //Possible ways to fail at a mission. This should be a bitmask.
 enum MISSION_FAIL_CONDITIONS {
-    //Losing all leaders.
-    MISSION_FAIL_COND_LOSE_ALL_LEADERS = 0x01,
     //Ending from the pause menu.
-    MISSION_FAIL_COND_PAUSE_MENU = 0x02,
+    MISSION_FAIL_COND_PAUSE_MENU = 0x01,
     //Reaching a certain Pikmin amount. 0 = total extinction.
-    MISSION_FAIL_COND_PIKMIN_AMOUNT = 0x04,
+    MISSION_FAIL_COND_PIKMIN_AMOUNT = 0x02,
     //Losing a certain amount of Pikmin.
-    MISSION_FAIL_COND_LOSE_PIKMIN = 0x08,
+    MISSION_FAIL_COND_LOSE_PIKMIN = 0x04,
     //A leader takes damage.
-    MISSION_FAIL_COND_TAKE_DAMAGE = 0x10,
+    MISSION_FAIL_COND_TAKE_DAMAGE = 0x08,
     //Losing a certain amount of leaders.
-    MISSION_FAIL_COND_LOSE_LEADERS = 0x20,
+    MISSION_FAIL_COND_LOSE_LEADERS = 0x10,
     //Killing a certain amount of enemies.
-    MISSION_FAIL_COND_KILL_ENEMIES = 0x40,
+    MISSION_FAIL_COND_KILL_ENEMIES = 0x20,
     //Reaching the time limit.
-    MISSION_FAIL_COND_TIME_LIMIT = 0x80,
+    MISSION_FAIL_COND_TIME_LIMIT = 0x40,
 };
 
 

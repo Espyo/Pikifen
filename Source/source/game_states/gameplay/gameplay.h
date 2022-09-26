@@ -269,11 +269,13 @@ private:
     //Starting number of leader mobs.
     size_t starting_nr_of_leaders;
     
+    void do_aesthetic_leader_logic();
     void do_aesthetic_logic();
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = NULL,
         ALLEGRO_TRANSFORM* bmp_transform = NULL
     );
+    void do_gameplay_leader_logic();
     void do_gameplay_logic();
     void do_menu_logic();
     void draw_background(ALLEGRO_BITMAP* bmp_output);

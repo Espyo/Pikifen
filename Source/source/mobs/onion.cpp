@@ -199,6 +199,7 @@ void onion::tick_class_specifics(const float delta_t) {
         unsigned char final_alpha = 255;
         
         if(
+            game.states.gameplay->cur_leader_ptr &&
             bbox_check(
                 game.states.gameplay->cur_leader_ptr->pos, o_ptr->pos,
                 game.states.gameplay->cur_leader_ptr->radius +
@@ -209,6 +210,7 @@ void onion::tick_class_specifics(const float delta_t) {
         }
         
         if(
+            game.states.gameplay->cur_leader_ptr &&
             bbox_check(
                 game.states.gameplay->leader_cursor_w, o_ptr->pos,
                 game.states.gameplay->cur_leader_ptr->radius +

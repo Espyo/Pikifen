@@ -569,7 +569,7 @@ void area_editor::find_problems() {
         problem_type = EPT_MISSING_LEADER;
         problem_title = "No leader!";
         problem_description =
-            "You need at least one leader to play.";
+            "You need at least one leader to actually play.";
         return;
     }
     
