@@ -50,7 +50,7 @@ area_menu_state::area_menu_state() :
     cur_thumb(nullptr),
     goal_text(nullptr),
     time_limit_text(nullptr),
-    loss_text(nullptr),
+    fail_text(nullptr),
     grading_mode_text(nullptr),
     grading_criteria_text(nullptr),
     medal_scores_text(nullptr),
@@ -98,7 +98,7 @@ void area_menu_state::do_logic() {
         cur_thumb = NULL;
         goal_text->text.clear();
         time_limit_text->text.clear();
-        loss_text->text.clear();
+        fail_text->text.clear();
         grading_mode_text->text.clear();
         grading_criteria_text->text.clear();
         medal_scores_text->text.clear();
@@ -131,7 +131,7 @@ void area_menu_state::do_logic() {
         time_limit_text->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
-        loss_text->start_juice_animation(
+        fail_text->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
         grading_mode_text->start_juice_animation(
@@ -255,77 +255,77 @@ void area_menu_state::do_logic() {
             }
             time_limit_text->text =
                 (
-                    mission.loss_time_limit == 0 ||
+                    mission.fail_time_limit == 0 ||
                     !has_flag(
-                        mission.loss_conditions,
-                        MISSION_LOSS_COND_TIME_LIMIT
+                        mission.fail_conditions,
+                        MISSION_FAIL_COND_TIME_LIMIT
                     )
                 ) ?
                 "Time limit: none" :
                 "Time limit: " +
                 time_to_str(
-                    mission.loss_time_limit, "m", "s"
+                    mission.fail_time_limit, "m", "s"
                 );
-            loss_text->text =
+            fail_text->text =
                 "- Lose all leaders\\n"
-                "- Finish from the pause menu\\n";
+                "- End from the pause menu\\n";
             if(
                 has_flag(
-                    mission.loss_conditions, MISSION_LOSS_COND_PIKMIN_AMOUNT
+                    mission.fail_conditions, MISSION_FAIL_COND_PIKMIN_AMOUNT
                 )
             ) {
-                loss_text->text +=
-                    "- Reach " + i2s(mission.loss_pik_amount) + " Pikmin or " +
-                    (mission.loss_pik_higher_than ? "more" : "fewer") + "\\n";
+                fail_text->text +=
+                    "- Reach " + i2s(mission.fail_pik_amount) + " Pikmin or " +
+                    (mission.fail_pik_higher_than ? "more" : "fewer") + "\\n";
             }
             if(
                 has_flag(
-                    mission.loss_conditions, MISSION_LOSS_COND_LOSE_PIKMIN
+                    mission.fail_conditions, MISSION_FAIL_COND_LOSE_PIKMIN
                 )
             ) {
-                loss_text->text +=
-                    "- Lose " + i2s(mission.loss_pik_killed) + " Pikmin\\n";
+                fail_text->text +=
+                    "- Lose " + i2s(mission.fail_pik_killed) + " Pikmin\\n";
             }
             if(
                 has_flag(
-                    mission.loss_conditions, MISSION_LOSS_COND_TAKE_DAMAGE
+                    mission.fail_conditions, MISSION_FAIL_COND_TAKE_DAMAGE
                 )
             ) {
-                loss_text->text +=
+                fail_text->text +=
                     "- A leader takes damage\\n";
             }
             if(
                 has_flag(
-                    mission.loss_conditions, MISSION_LOSS_COND_LOSE_LEADERS
+                    mission.fail_conditions, MISSION_FAIL_COND_LOSE_LEADERS
                 )
             ) {
-                loss_text->text +=
+                fail_text->text +=
                     "- Lose " +
-                    nr_and_plural(mission.loss_leaders_kod, "leader") + "\\n";
+                    nr_and_plural(mission.fail_leaders_kod, "leader") + "\\n";
             }
             if(
                 has_flag(
-                    mission.loss_conditions, MISSION_LOSS_COND_KILL_ENEMIES
+                    mission.fail_conditions, MISSION_FAIL_COND_KILL_ENEMIES
                 )
             ) {
-                loss_text->text +=
+                fail_text->text +=
                     "- Kill " +
                     nr_and_plural(
-                        mission.loss_enemies_killed, "enemy", "enemies"
+                        mission.fail_enemies_killed, "enemy", "enemies"
                     ) + "\\n";
             }
             if(
                 has_flag(
-                    mission.loss_conditions, MISSION_LOSS_COND_TIME_LIMIT
+                    mission.fail_conditions, MISSION_FAIL_COND_TIME_LIMIT
                 )
             ) {
-                loss_text->text +=
+                fail_text->text +=
                     "- Reach the time limit\\n";
             }
-            //Erase the last \n on the loss text.
-            if(!loss_text->text.empty()) {
-                loss_text->text.erase(loss_text->text.size() - 1);
-                loss_text->text.erase(loss_text->text.size() - 1);
+            //Erase the last \n on the fail text.
+            if(!fail_text->text.empty()) {
+                fail_text->text.erase(fail_text->text.size() - 1);
+                fail_text->text.erase(fail_text->text.size() - 1);
             }
             
             grading_criteria_text->text.clear();
@@ -670,8 +670,8 @@ void area_menu_state::init_gui_specs_page() {
     specs_gui.register_coords("specs_box",        67, 51, 58, 78);
     specs_gui.register_coords("goal_header",      67, 16, 54,  4);
     specs_gui.register_coords("goal",             67, 22, 54,  4);
-    specs_gui.register_coords("loss_header",      53, 28, 26,  4);
-    specs_gui.register_coords("loss",             53, 26, 26, 50);
+    specs_gui.register_coords("fail_header",      53, 28, 26,  4);
+    specs_gui.register_coords("fail",             53, 26, 26, 50);
     specs_gui.register_coords("time_limit",       53, 86, 26,  4);
     specs_gui.register_coords("grading_header",   81, 28, 26,  4);
     specs_gui.register_coords("grading_mode",     81, 34, 26,  4);
@@ -698,23 +698,23 @@ void area_menu_state::init_gui_specs_page() {
             new text_gui_item("", game.fonts.standard);
         specs_gui.add_item(goal_text, "goal");
         
-        //Loss conditions header text.
-        text_gui_item* loss_header_text =
-            new text_gui_item("Loss conditions", game.fonts.area_name);
-        specs_gui.add_item(loss_header_text, "loss_header");
+        //Fail conditions header text.
+        text_gui_item* fail_header_text =
+            new text_gui_item("Fail conditions", game.fonts.area_name);
+        specs_gui.add_item(fail_header_text, "fail_header");
         
         //Time limit text.
         time_limit_text =
             new text_gui_item("", game.fonts.standard);
         specs_gui.add_item(time_limit_text, "time_limit");
         
-        //Loss condition explanation text.
-        loss_text =
+        //Fail condition explanation text.
+        fail_text =
             new text_gui_item(
             "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
-        loss_text->line_wrap = true;
-        specs_gui.add_item(loss_text, "loss");
+        fail_text->line_wrap = true;
+        specs_gui.add_item(fail_text, "fail");
         
         //Grading header text.
         text_gui_item* grading_header_text =

@@ -19,7 +19,7 @@
 namespace AREA {
 //Default difficulty.
 const unsigned char DEF_DIFFICULTY = 3;
-//Default day time at the start of the area, in minutes.
+//Default day time at the start of gameplay, in minutes.
 const size_t DEF_DAY_TIME_START = 7 * 60;
 //Default day time speed, in game-minutes per real-minutes.
 const float DEF_DAY_TIME_SPEED = 120;
@@ -171,13 +171,13 @@ void area_data::clear() {
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE
         );
-    mission.loss_conditions = 0;
-    mission.loss_pik_amount = 0;
-    mission.loss_pik_higher_than = false;
-    mission.loss_pik_killed = 1;
-    mission.loss_leaders_kod = 1;
-    mission.loss_enemies_killed = 1;
-    mission.loss_time_limit = AREA::DEF_MISSION_TIME_LIMIT;
+    mission.fail_conditions = 0;
+    mission.fail_pik_amount = 0;
+    mission.fail_pik_higher_than = false;
+    mission.fail_pik_killed = 1;
+    mission.fail_leaders_kod = 1;
+    mission.fail_enemies_killed = 1;
+    mission.fail_time_limit = AREA::DEF_MISSION_TIME_LIMIT;
     mission.grading_mode = MISSION_GRADING_GOAL;
     mission.points_per_pikmin_born = 0;
     mission.points_per_pikmin_death = 0;
@@ -384,13 +384,13 @@ void area_data::clone(area_data &other) {
     other.mission.goal_higher_than = mission.goal_higher_than;
     other.mission.goal_exit_center = mission.goal_exit_center;
     other.mission.goal_exit_size = mission.goal_exit_size;
-    other.mission.loss_conditions = mission.loss_conditions;
-    other.mission.loss_pik_amount = mission.loss_pik_amount;
-    other.mission.loss_pik_higher_than = mission.loss_pik_higher_than;
-    other.mission.loss_pik_killed = mission.loss_pik_killed;
-    other.mission.loss_leaders_kod = mission.loss_leaders_kod;
-    other.mission.loss_enemies_killed = mission.loss_enemies_killed;
-    other.mission.loss_time_limit = mission.loss_time_limit;
+    other.mission.fail_conditions = mission.fail_conditions;
+    other.mission.fail_pik_amount = mission.fail_pik_amount;
+    other.mission.fail_pik_higher_than = mission.fail_pik_higher_than;
+    other.mission.fail_pik_killed = mission.fail_pik_killed;
+    other.mission.fail_leaders_kod = mission.fail_leaders_kod;
+    other.mission.fail_enemies_killed = mission.fail_enemies_killed;
+    other.mission.fail_time_limit = mission.fail_time_limit;
     other.mission.grading_mode = mission.grading_mode;
     other.mission.points_per_pikmin_born = mission.points_per_pikmin_born;
     other.mission.points_per_pikmin_death = mission.points_per_pikmin_death;
@@ -1107,13 +1107,13 @@ mission_data::mission_data() :
     goal_exit_size(
         AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
     ),
-    loss_conditions(0),
-    loss_pik_amount(0),
-    loss_pik_higher_than(false),
-    loss_pik_killed(1),
-    loss_leaders_kod(1),
-    loss_enemies_killed(1),
-    loss_time_limit(AREA::DEF_MISSION_TIME_LIMIT),
+    fail_conditions(0),
+    fail_pik_amount(0),
+    fail_pik_higher_than(false),
+    fail_pik_killed(1),
+    fail_leaders_kod(1),
+    fail_enemies_killed(1),
+    fail_time_limit(AREA::DEF_MISSION_TIME_LIMIT),
     grading_mode(MISSION_GRADING_GOAL),
     points_per_pikmin_born(0),
     points_per_pikmin_death(0),

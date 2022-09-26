@@ -2731,57 +2731,57 @@ bool area_editor::save_area(const bool to_backup) {
             )
         );
     }
-    if(game.cur_area_data.mission.loss_conditions > 0) {
+    if(game.cur_area_data.mission.fail_conditions > 0) {
         data_file.add(
             new data_node(
-                "mission_loss_conditions",
-                i2s(game.cur_area_data.mission.loss_conditions)
+                "mission_fail_conditions",
+                i2s(game.cur_area_data.mission.fail_conditions)
             )
         );
     }
-    if(game.cur_area_data.mission.loss_pik_amount > 0) {
+    if(game.cur_area_data.mission.fail_pik_amount > 0) {
         data_file.add(
             new data_node(
-                "mission_loss_pik_amount",
-                i2s(game.cur_area_data.mission.loss_pik_amount)
+                "mission_fail_pik_amount",
+                i2s(game.cur_area_data.mission.fail_pik_amount)
             )
         );
     }
     data_file.add(
         new data_node(
-            "mission_loss_pik_higher_than",
-            b2s(game.cur_area_data.mission.loss_pik_higher_than)
+            "mission_fail_pik_higher_than",
+            b2s(game.cur_area_data.mission.fail_pik_higher_than)
         )
     );
-    if(game.cur_area_data.mission.loss_pik_killed > 0) {
+    if(game.cur_area_data.mission.fail_pik_killed > 0) {
         data_file.add(
             new data_node(
-                "mission_loss_pik_killed",
-                i2s(game.cur_area_data.mission.loss_pik_killed)
+                "mission_fail_pik_killed",
+                i2s(game.cur_area_data.mission.fail_pik_killed)
             )
         );
     }
-    if(game.cur_area_data.mission.loss_leaders_kod > 0) {
+    if(game.cur_area_data.mission.fail_leaders_kod > 0) {
         data_file.add(
             new data_node(
-                "mission_loss_leaders_kod",
-                i2s(game.cur_area_data.mission.loss_leaders_kod)
+                "mission_fail_leaders_kod",
+                i2s(game.cur_area_data.mission.fail_leaders_kod)
             )
         );
     }
-    if(game.cur_area_data.mission.loss_enemies_killed > 0) {
+    if(game.cur_area_data.mission.fail_enemies_killed > 0) {
         data_file.add(
             new data_node(
-                "mission_loss_enemies_killed",
-                i2s(game.cur_area_data.mission.loss_enemies_killed)
+                "mission_fail_enemies_killed",
+                i2s(game.cur_area_data.mission.fail_enemies_killed)
             )
         );
     }
-    if(game.cur_area_data.mission.loss_time_limit > 0) {
+    if(game.cur_area_data.mission.fail_time_limit > 0) {
         data_file.add(
             new data_node(
-                "mission_loss_time_limit",
-                i2s(game.cur_area_data.mission.loss_time_limit)
+                "mission_fail_time_limit",
+                i2s(game.cur_area_data.mission.fail_time_limit)
             )
         );
     }
@@ -2844,7 +2844,7 @@ bool area_editor::save_area(const bool to_backup) {
     if(game.cur_area_data.mission.point_loss_data > 0) {
         data_file.add(
             new data_node(
-                "mission_point_loss_data",
+                "mission_point_fail_data",
                 i2s(game.cur_area_data.mission.point_loss_data)
             )
         );

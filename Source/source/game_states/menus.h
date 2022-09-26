@@ -293,8 +293,8 @@ private:
     text_gui_item* goal_text;
     //Time limit text item.
     text_gui_item* time_limit_text;
-    //Loss conditions text item.
-    text_gui_item* loss_text;
+    //Fail conditions text item.
+    text_gui_item* fail_text;
     //Grading mode text item.
     text_gui_item* grading_mode_text;
     //Grading criteria text item.

@@ -30,8 +30,8 @@ extern const float AREA_INTRO_HUD_MOVE_TIME;
 extern const float AREA_TITLE_FADE_DURATION;
 extern const float BIG_MSG_GO_DUR;
 extern const string BIG_MSG_GO_TEXT;
-extern const float BIG_MSG_MISSION_COMPLETE_DUR;
-extern const string BIG_MSG_MISSION_COMPLETE_TEXT;
+extern const float BIG_MSG_MISSION_CLEAR_DUR;
+extern const string BIG_MSG_MISSION_CLEAR_TEXT;
 extern const float BIG_MSG_MISSION_FAILED_DUR;
 extern const string BIG_MSG_MISSION_FAILED_TEXT;
 extern const float BIG_MSG_READY_DUR;
@@ -63,7 +63,7 @@ enum INTERLUDES {
     INTERLUDE_NONE,
     //Ready?
     INTERLUDE_READY,
-    //Mission end, be it because it completed, or because it failed.
+    //Mission end, be it due to a clear or a fail.
     INTERLUDE_MISSION_END,
 };
 
@@ -76,8 +76,8 @@ enum BIG_MESSAGES {
     BIG_MESSAGE_READY,
     //Go!
     BIG_MESSAGE_GO,
-    //Mission complete!
-    BIG_MESSAGE_MISSION_COMPLETE,
+    //Mission clear!
+    BIG_MESSAGE_MISSION_CLEAR,
     //Mission failed...
     BIG_MESSAGE_MISSION_FAILED,
 };
@@ -113,8 +113,8 @@ public:
     size_t day;
     //What time of the day is it in-game? In minutes.
     float day_minutes;
-    //Replay of the current day.
-    replay day_replay;
+    //Replay of the gameplay.
+    replay gameplay_replay;
     //Information about the in-game HUD.
     hud_struct* hud;
     //Player 1's leader cursor, in screen coordinates.
@@ -200,8 +200,8 @@ public:
     enum LEAVE_TARGET {
         //Leave in order to retry the area.
         LEAVE_TO_RETRY,
-        //Leave in order to finish the area.
-        LEAVE_TO_FINISH,
+        //Leave in order to end the exploration/mission.
+        LEAVE_TO_END,
         //Leave in order to go to the area selection.
         LEAVE_TO_AREA_SELECT,
     };
@@ -291,7 +291,7 @@ private:
     void draw_tree_shadows();
     void draw_world_components(ALLEGRO_BITMAP* bmp_output);
     ALLEGRO_BITMAP* draw_to_bitmap();
-    void finish_mission(const bool success);
+    void end_mission(const bool cleared);
     ALLEGRO_BITMAP* generate_fog_bitmap(
         const float near_radius, const float far_radius
     );
@@ -300,8 +300,8 @@ private:
         const BUTTONS button, const float pos, const size_t player
     );
     void init_hud();
-    bool is_mission_goal_met();
-    bool is_mission_loss_met();
+    bool is_mission_clear_met();
+    bool is_mission_fail_met(uint8_t* reason);
     void load_game_content();
     void process_mob_interactions(mob* m_ptr, size_t m);
     void process_mob_misc_interactions(

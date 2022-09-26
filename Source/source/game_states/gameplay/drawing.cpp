@@ -326,11 +326,11 @@ void gameplay_state::draw_big_msg() {
         );
         break;
         
-    } case BIG_MESSAGE_MISSION_COMPLETE:
+    } case BIG_MESSAGE_MISSION_CLEAR:
     case BIG_MESSAGE_MISSION_FAILED: {
         const string TEXT =
-            cur_big_msg == BIG_MESSAGE_MISSION_COMPLETE ?
-            GAMEPLAY::BIG_MSG_MISSION_COMPLETE_TEXT :
+            cur_big_msg == BIG_MESSAGE_MISSION_CLEAR ?
+            GAMEPLAY::BIG_MSG_MISSION_CLEAR_TEXT :
             GAMEPLAY::BIG_MSG_MISSION_FAILED_TEXT;
         const float TEXT_W = game.win_w * 0.80f;
         const float TEXT_INITIAL_SCALE = 1.1f;
@@ -339,8 +339,8 @@ void gameplay_state::draw_big_msg() {
         const float TEXT_PAUSE_T = 0.50f;
         const float TEXT_FADE_T = 0.90f;
         const float t =
-            cur_big_msg == BIG_MESSAGE_MISSION_COMPLETE ?
-            (big_msg_time / GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DUR) :
+            cur_big_msg == BIG_MESSAGE_MISSION_CLEAR ?
+            (big_msg_time / GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) :
             (big_msg_time / GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR);
             
         keyframe_interpolator ki_y(game.win_h * (-0.2f));

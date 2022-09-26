@@ -691,10 +691,10 @@ void gameplay_state::do_gameplay_logic() {
         *              O  *
         *******************/
         if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-            if(is_mission_goal_met()) {
-                finish_mission(true);
-            } else if(is_mission_loss_met()) {
-                finish_mission(false);
+            if(is_mission_clear_met()) {
+                end_mission(true);
+            } else if(is_mission_fail_met(&mission_fail_reason)) {
+                end_mission(false);
             }
         }
         
@@ -973,8 +973,8 @@ void gameplay_state::do_menu_logic() {
             cur_big_msg = BIG_MESSAGE_NONE;
         }
         break;
-    } case BIG_MESSAGE_MISSION_COMPLETE: {
-        if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DUR) {
+    } case BIG_MESSAGE_MISSION_CLEAR: {
+        if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
             cur_big_msg = BIG_MESSAGE_NONE;
         }
     } case BIG_MESSAGE_MISSION_FAILED: {
@@ -997,9 +997,9 @@ void gameplay_state::do_menu_logic() {
         }
         break;
     } case INTERLUDE_MISSION_END: {
-        if(interlude_time >= GAMEPLAY::BIG_MSG_MISSION_COMPLETE_DUR) {
+        if(interlude_time >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
             cur_interlude = INTERLUDE_NONE;
-            leave(LEAVE_TO_FINISH);
+            leave(LEAVE_TO_END);
         }
         break;
     }
@@ -1010,7 +1010,7 @@ void gameplay_state::do_menu_logic() {
 /* ----------------------------------------------------------------------------
  * Checks if the mission goal has been met.
  */
-bool gameplay_state::is_mission_goal_met() {
+bool gameplay_state::is_mission_clear_met() {
     switch(game.cur_area_data.mission.goal) {
     case MISSION_GOAL_NONE: {
 
@@ -1101,26 +1101,31 @@ bool gameplay_state::is_mission_goal_met() {
 
 
 /* ----------------------------------------------------------------------------
- * Checks if a mission loss condition has been met.
+ * Checks if a mission fail condition has been met.
+ * reason:
+ *   The reason gets returned here, if any.
+ *   This makes use of MISSION_FAIL_COND_*.
  */
-bool gameplay_state::is_mission_loss_met() {
+bool gameplay_state::is_mission_fail_met(uint8_t* reason) {
     //Pikmin amount reached or surpassed.
     if(
         has_flag(
-            game.cur_area_data.mission.loss_conditions,
-            MISSION_LOSS_COND_PIKMIN_AMOUNT
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_PIKMIN_AMOUNT
         )
     ) {
         size_t total_pikmin = get_total_pikmin_amount();
         if(
-            game.cur_area_data.mission.loss_pik_higher_than &&
-            total_pikmin >= game.cur_area_data.mission.loss_pik_amount
+            game.cur_area_data.mission.fail_pik_higher_than &&
+            total_pikmin >= game.cur_area_data.mission.fail_pik_amount
         ) {
+            *reason = MISSION_FAIL_COND_PIKMIN_AMOUNT;
             return true;
         } else if(
-            !game.cur_area_data.mission.loss_pik_higher_than &&
-            total_pikmin <= game.cur_area_data.mission.loss_pik_amount
+            !game.cur_area_data.mission.fail_pik_higher_than &&
+            total_pikmin <= game.cur_area_data.mission.fail_pik_amount
         ) {
+            *reason = MISSION_FAIL_COND_PIKMIN_AMOUNT;
             return true;
         }
     }
@@ -1128,11 +1133,12 @@ bool gameplay_state::is_mission_loss_met() {
     //Pikmin death count.
     if(
         has_flag(
-            game.cur_area_data.mission.loss_conditions,
-            MISSION_LOSS_COND_LOSE_PIKMIN
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_LOSE_PIKMIN
         )
     ) {
-        if(pikmin_deaths >= game.cur_area_data.mission.loss_pik_killed) {
+        if(pikmin_deaths >= game.cur_area_data.mission.fail_pik_killed) {
+            *reason = MISSION_FAIL_COND_LOSE_PIKMIN;
             return true;
         }
     }
@@ -1140,18 +1146,20 @@ bool gameplay_state::is_mission_loss_met() {
     //Leaders took damage.
     if(
         has_flag(
-            game.cur_area_data.mission.loss_conditions,
-            MISSION_LOSS_COND_TAKE_DAMAGE
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_TAKE_DAMAGE
         )
     ) {
         for(size_t l = 0; l < mobs.leaders.size(); ++l) {
             if(mobs.leaders[l]->health < mobs.leaders[l]->max_health) {
+                *reason = MISSION_FAIL_COND_TAKE_DAMAGE;
                 return true;
             }
         }
         if(mobs.leaders.size() < starting_nr_of_leaders) {
             //If one of them vanished, they got forcefully KO'd, which...
             //really should count as taking damage.
+            *reason = MISSION_FAIL_COND_TAKE_DAMAGE;
             return true;
         }
     }
@@ -1159,8 +1167,8 @@ bool gameplay_state::is_mission_loss_met() {
     //Leaders KO count.
     if(
         has_flag(
-            game.cur_area_data.mission.loss_conditions,
-            MISSION_LOSS_COND_LOSE_LEADERS
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_LOSE_LEADERS
         )
     ) {
         size_t living_leaders = 0;
@@ -1171,8 +1179,9 @@ bool gameplay_state::is_mission_loss_met() {
         }
         if(
             (int) (starting_nr_of_leaders - living_leaders) >=
-            (int) game.cur_area_data.mission.loss_leaders_kod
+            (int) game.cur_area_data.mission.fail_leaders_kod
         ) {
+            *reason = MISSION_FAIL_COND_LOSE_LEADERS;
             return true;
         }
     }
@@ -1180,11 +1189,12 @@ bool gameplay_state::is_mission_loss_met() {
     //Enemy death count.
     if(
         has_flag(
-            game.cur_area_data.mission.loss_conditions,
-            MISSION_LOSS_COND_KILL_ENEMIES
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_KILL_ENEMIES
         )
     ) {
-        if(enemy_deaths >= game.cur_area_data.mission.loss_enemies_killed) {
+        if(enemy_deaths >= game.cur_area_data.mission.fail_enemies_killed) {
+            *reason = MISSION_FAIL_COND_KILL_ENEMIES;
             return true;
         }
     }
@@ -1192,11 +1202,12 @@ bool gameplay_state::is_mission_loss_met() {
     //Time limit.
     if(
         has_flag(
-            game.cur_area_data.mission.loss_conditions,
-            MISSION_LOSS_COND_TIME_LIMIT
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_TIME_LIMIT
         )
     ) {
-        if(area_time_passed >= game.cur_area_data.mission.loss_time_limit) {
+        if(area_time_passed >= game.cur_area_data.mission.fail_time_limit) {
+            *reason = MISSION_FAIL_COND_TIME_LIMIT;
             return true;
         }
     }

@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Day results state class and results state-related functions.
+ * Exploration/mission results state class and results state-related functions.
  */
 
 #include "results.h"
@@ -292,7 +292,7 @@ void results_state::load() {
     gui.register_coords("area_name",             50,  7, 45, 10);
     gui.register_coords("area_subtitle",         50, 18, 40, 10);
     gui.register_coords("goal_stamp",            15, 15, 22, 22);
-    gui.register_coords("finish_reason",         16, 30, 30,  4);
+    gui.register_coords("end_reason",            16, 30, 30,  4);
     gui.register_coords("medal",                 85, 15, 22, 22);
     gui.register_coords("medal_reason",          85, 30, 30,  4);
     gui.register_coords("stats_label",           50, 32, 36,  4);

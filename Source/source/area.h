@@ -53,19 +53,24 @@ enum MISSION_GRADING_MODES {
 };
 
 
-//Possible ways to lose a mission. This should be a bitmask.
-enum MISSION_LOSS_CONDITIONS {
+//Possible ways to fail at a mission. This should be a bitmask.
+enum MISSION_FAIL_CONDITIONS {
+    //Losing all leaders.
+    MISSION_FAIL_COND_LOSE_ALL_LEADERS = 0x01,
+    //Ending from the pause menu.
+    MISSION_FAIL_COND_PAUSE_MENU = 0x02,
     //Reaching a certain Pikmin amount. 0 = total extinction.
-    MISSION_LOSS_COND_PIKMIN_AMOUNT = 0x01,
+    MISSION_FAIL_COND_PIKMIN_AMOUNT = 0x04,
     //Losing a certain amount of Pikmin.
-    MISSION_LOSS_COND_LOSE_PIKMIN = 0x02,
+    MISSION_FAIL_COND_LOSE_PIKMIN = 0x08,
     //A leader takes damage.
-    MISSION_LOSS_COND_TAKE_DAMAGE = 0x04,
+    MISSION_FAIL_COND_TAKE_DAMAGE = 0x10,
     //Losing a certain amount of leaders.
-    MISSION_LOSS_COND_LOSE_LEADERS = 0x08,
+    MISSION_FAIL_COND_LOSE_LEADERS = 0x20,
     //Killing a certain amount of enemies.
-    MISSION_LOSS_COND_KILL_ENEMIES = 0x10,
+    MISSION_FAIL_COND_KILL_ENEMIES = 0x40,
     //Reaching the time limit.
+    MISSION_FAIL_COND_TIME_LIMIT = 0x80,
 };
 
 
@@ -128,20 +133,20 @@ struct mission_data {
     point goal_exit_center;
     //Mission exit region dimensions.
     point goal_exit_size;
-    //Mission loss conditions bitmask. Use MISSION_LOSS_CONDITIONS.
-    uint8_t loss_conditions;
-    //Amount for the "reach Pikmin amount" mission loss condition.
-    size_t loss_pik_amount;
-    //Is the mission "reach Pikmin amount" loss condition >= or <= ?
-    bool loss_pik_higher_than;
-    //Amount for the "lose Pikmin" mission loss condition.
-    size_t loss_pik_killed;
-    //Amount for the "lose leaders" mission loss condition.
-    size_t loss_leaders_kod;
-    //Amount for the "kill enemies" mission loss condition.
-    size_t loss_enemies_killed;
-    //Seconds amount for the "time limit" mission loss condition.
-    size_t loss_time_limit;
+    //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*.
+    uint8_t fail_conditions;
+    //Amount for the "reach Pikmin amount" mission fail condition.
+    size_t fail_pik_amount;
+    //Is the mission "reach Pikmin amount" fail condition >= or <= ?
+    bool fail_pik_higher_than;
+    //Amount for the "lose Pikmin" mission fail condition.
+    size_t fail_pik_killed;
+    //Amount for the "lose leaders" mission fail condition.
+    size_t fail_leaders_kod;
+    //Amount for the "kill enemies" mission fail condition.
+    size_t fail_enemies_killed;
+    //Seconds amount for the "time limit" mission fail condition.
+    size_t fail_time_limit;
     //Mission grading mode.
     MISSION_GRADING_MODES grading_mode;
     //Mission point multiplier for each Pikmin born.
@@ -156,7 +161,7 @@ struct mission_data {
     int points_per_treasure_point;
     //Mission point multiplier for each enemy point obtained.
     int points_per_enemy_point;
-    //Bitmask for mission loss point loss criteria. Use MISSION_POINT_CRITERIA.
+    //Bitmask for mission fail point loss criteria. Use MISSION_POINT_CRITERIA.
     uint8_t point_loss_data;
     //Starting number of points.
     int starting_points;
@@ -235,7 +240,7 @@ struct area_data {
     weather weather_condition;
     //Name of the weather condition to use.
     string weather_name;
-    //Area day time at the start of the area. This is in minutes.
+    //Area day time at the start of gameplay. This is in minutes.
     size_t day_time_start;
     //Area day time speed, in game-minutes per real-minutes.
     float day_time_speed;

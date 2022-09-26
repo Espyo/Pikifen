@@ -35,10 +35,10 @@ const float AREA_TITLE_FADE_DURATION = 3.0f;
 const float BIG_MSG_GO_DUR = 1.5f;
 //What text to show in the "Go!" big message.
 const string BIG_MSG_GO_TEXT = "GO!";
-//How long the "Mission complete!" big message lasts for.
-const float BIG_MSG_MISSION_COMPLETE_DUR = 4.5f;
-//What text to show in the "Mission complete!" big message.
-const string BIG_MSG_MISSION_COMPLETE_TEXT = "MISSION COMPLETE!";
+//How long the "Mission clear!" big message lasts for.
+const float BIG_MSG_MISSION_CLEAR_DUR = 4.5f;
+//What text to show in the "Mission clear!" big message.
+const string BIG_MSG_MISSION_CLEAR_TEXT = "MISSION CLEAR!";
 //How long the "Mission failed..." big message lasts for.
 const float BIG_MSG_MISSION_FAILED_DUR = 4.5f;
 //What text to show in the "Mission failed..." big message.
@@ -230,6 +230,23 @@ void gameplay_state::do_logic() {
 
 
 /* ----------------------------------------------------------------------------
+ * Ends the currently ongoing mission.
+ * cleared:
+ *   Did the player reach the goal?
+ */
+void gameplay_state::end_mission(const bool cleared) {
+    cur_interlude = INTERLUDE_MISSION_END;
+    interlude_time = 0.0f;
+    if(cleared) {
+        cur_big_msg = BIG_MESSAGE_MISSION_CLEAR;
+    } else {
+        cur_big_msg = BIG_MESSAGE_MISSION_FAILED;
+    }
+    big_msg_time = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the state is entered, be it from the area menu, be it
  * from the result menu's "keep playing" option.
  */
@@ -260,23 +277,6 @@ void gameplay_state::enter() {
     }
     
     ready_for_input = false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Finishes the currently ongoing mission.
- * success:
- *   Did the player reach the goal?
- */
-void gameplay_state::finish_mission(const bool success) {
-    cur_interlude = INTERLUDE_MISSION_END;
-    interlude_time = 0.0f;
-    if(success) {
-        cur_big_msg = BIG_MESSAGE_MISSION_COMPLETE;
-    } else {
-        cur_big_msg = BIG_MESSAGE_MISSION_FAILED;
-    }
-    big_msg_time = 0.0f;
 }
 
 
@@ -560,8 +560,7 @@ void gameplay_state::leave(const LEAVE_TARGET target) {
     case LEAVE_TO_RETRY: {
         game.change_state(game.states.gameplay);
         break;
-    } case LEAVE_TO_FINISH: {
-        game.states.results->time_taken = area_time_passed;
+    } case LEAVE_TO_END: {
         went_to_results = true;
         //Change state, but don't unload this one, since the player
         //may pick the "keep playing" option in the results screen.
@@ -916,14 +915,14 @@ void gameplay_state::load() {
     [this] () {
         this->replay_timer.start();
         vector<mob*> obstacles; //TODO
-        session_replay.add_state(
+        gameplay_replay.add_state(
             leaders, pikmin_list, enemies, treasures, onions, obstacles,
             cur_leader_nr
         );
     }
     );
     replay_timer.start();
-    session_replay.clear();*/
+    gameplay_replay.clear();*/
     
     area_title_fade_timer.start();
     

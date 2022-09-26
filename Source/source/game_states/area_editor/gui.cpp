@@ -1507,10 +1507,10 @@ void area_editor::process_gui_panel_info() {
         bool has_time_limit =
             game.cur_area_data.type == AREA_TYPE_MISSION &&
             has_flag(
-                game.cur_area_data.mission.loss_conditions,
-                MISSION_LOSS_COND_TIME_LIMIT
+                game.cur_area_data.mission.fail_conditions,
+                MISSION_FAIL_COND_TIME_LIMIT
             );
-        float mission_min = game.cur_area_data.mission.loss_time_limit / 60.0f;
+        float mission_min = game.cur_area_data.mission.fail_time_limit / 60.0f;
         int day_start_min = game.cur_area_data.day_time_start;
         day_start_min = wrap_float(day_start_min, 0, 60 * 24);
         float day_speed = game.cur_area_data.day_time_speed;
@@ -1534,7 +1534,7 @@ void area_editor::process_gui_panel_info() {
             }
         }
         set_tooltip(
-            "Point of the (game world) day at which this area starts.",
+            "Point of the (game world) day at which gameplay starts.",
             "", WIDGET_EXPLANATION_DRAG
         );
         
@@ -1553,7 +1553,7 @@ void area_editor::process_gui_panel_info() {
                 game.cur_area_data.day_time_speed = day_speed;
             }
             set_tooltip(
-                "Point of the (game world) day at which this area ends.\n"
+                "Point of the (game world) day at which gameplay ends.\n"
                 "Only applicable in missions with time limits.\n"
                 "Set this to the same as the area start time to make\n"
                 "the day time frozen.",
@@ -2227,7 +2227,7 @@ void area_editor::process_gui_panel_mission() {
             //Explanation text.
             ImGui::TextWrapped(
                 "The player has no goal. They just play until they have "
-                "had enough, at which point they must finish "
+                "had enough, at which point they must end "
                 "from the pause menu."
             );
             
@@ -2578,8 +2578,8 @@ void area_editor::process_gui_panel_mission() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //Mission loss conditions node.
-    if(saveable_tree_node("gameplay", "Mission loss conditions")) {
+    //Mission fail conditions node.
+    if(saveable_tree_node("gameplay", "Mission fail conditions")) {
     
         //Total leader KO checkbox.
         bool dummy_true = true;
@@ -2587,52 +2587,52 @@ void area_editor::process_gui_panel_mission() {
         ImGui::Checkbox("Get a total leader KO", &dummy_true);
         ImGui::EndDisabled();
         set_tooltip(
-            "A total leader KO always has to end the mission in a loss,\n"
+            "A total leader KO always has to end the mission in a failure,\n"
             "since if that happens, the player won't have any leaders to\n"
             "keep playing with!"
         );
         
-        //Pause menu finish checkbox.
+        //Pause menu end checkbox.
         ImGui::BeginDisabled();
-        ImGui::Checkbox("Finish from pause menu", &dummy_true);
+        ImGui::Checkbox("End from pause menu", &dummy_true);
         ImGui::EndDisabled();
         set_tooltip(
-            "Since reaching the mission goal automatically finishes the\n"
-            "mission as a success, if the player can go to the pause menu\n"
-            "and finish there, then naturally they haven't reached the\n"
-            "goal yet. So this method of finishing has to always be a loss."
+            "Since reaching the mission goal automatically ends the\n"
+            "mission as a clear, if the player can go to the pause menu\n"
+            "and end there, then naturally they haven't reached the\n"
+            "goal yet. So this method of ending has to always be a failure."
         );
         
-        unsigned int loss_flags =
-            (unsigned int) game.cur_area_data.mission.loss_conditions;
-        bool loss_flags_changed = false;
+        unsigned int fail_flags =
+            (unsigned int) game.cur_area_data.mission.fail_conditions;
+        bool fail_flags_changed = false;
         //Reaching a certain Pikmin amount checkbox.
-        loss_flags_changed |=
+        fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Reach a certain Pikmin amount",
-                &loss_flags, MISSION_LOSS_COND_PIKMIN_AMOUNT
+                &fail_flags, MISSION_FAIL_COND_PIKMIN_AMOUNT
             );
         set_tooltip(
-            "The mission ends as a loss if the total Pikmin count reaches\n"
+            "The mission ends as a failure if the total Pikmin count reaches\n"
             "a certain amount. 0 means this only happens with a total\n"
-            "Pikmin extinction. This loss condition isn't forced because the\n"
+            "Pikmin extinction. This fail condition isn't forced because the\n"
             "player might still be able to reach the mission goal using\n"
             "leaders. Or because you may want to make a mission with\n"
             "no Pikmin in the first place (like a puzzle stage)."
         );
         
-        if(has_flag(loss_flags, MISSION_LOSS_COND_PIKMIN_AMOUNT)) {
+        if(has_flag(fail_flags, MISSION_FAIL_COND_PIKMIN_AMOUNT)) {
             ImGui::Indent();
             
             //Higher/lower than combobox.
             int hl_combo_value =
-                game.cur_area_data.mission.loss_pik_higher_than;
+                game.cur_area_data.mission.fail_pik_higher_than;
             vector<string> hl_combo_items = {"<=", ">="};
             
             ImGui::SetNextItemWidth(50);
             if(ImGui::Combo("##hl", &hl_combo_value, hl_combo_items)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.loss_pik_higher_than =
+                game.cur_area_data.mission.fail_pik_higher_than =
                     (hl_combo_value == 1);
             }
             set_tooltip(
@@ -2643,17 +2643,17 @@ void area_editor::process_gui_panel_mission() {
             
             //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission.loss_pik_amount;
+                (int) game.cur_area_data.mission.fail_pik_amount;
             ImGui::SetNextItemWidth(50);
             ImGui::SameLine();
             if(ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)) {
-                register_change("mission loss conditions change");
-                game.cur_area_data.mission.loss_pik_amount =
+                register_change("mission fail conditions change");
+                game.cur_area_data.mission.fail_pik_amount =
                     (size_t) amount;
             }
             set_tooltip(
                 "Pikmin amount that, when reached, ends the mission\n"
-                "as a loss.",
+                "as a failure.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             
@@ -2661,125 +2661,125 @@ void area_editor::process_gui_panel_mission() {
         }
         
         //Losing Pikmin checkbox.
-        loss_flags_changed |=
+        fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Lose Pikmin",
-                &loss_flags, MISSION_LOSS_COND_LOSE_PIKMIN
+                &fail_flags, MISSION_FAIL_COND_LOSE_PIKMIN
             );
         set_tooltip(
-            "The mission ends as a loss if a certain amount of Pikmin die."
+            "The mission ends as a failure if a certain amount of Pikmin die."
         );
         
-        if(has_flag(loss_flags, MISSION_LOSS_COND_LOSE_PIKMIN)) {
+        if(has_flag(fail_flags, MISSION_FAIL_COND_LOSE_PIKMIN)) {
             //Pikmin deaths value.
             int amount =
-                (int) game.cur_area_data.mission.loss_pik_killed;
+                (int) game.cur_area_data.mission.fail_pik_killed;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
-                register_change("mission loss conditions change");
-                game.cur_area_data.mission.loss_pik_killed =
+                register_change("mission fail conditions change");
+                game.cur_area_data.mission.fail_pik_killed =
                     (size_t) amount;
             }
             set_tooltip(
                 "Pikmin death amount that, when reached, ends the mission\n"
-                "as a loss.",
+                "as a failure.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
         }
         
         //Taking damage checkbox.
-        loss_flags_changed |=
+        fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Take damage",
-                &loss_flags, MISSION_LOSS_COND_TAKE_DAMAGE
+                &fail_flags, MISSION_FAIL_COND_TAKE_DAMAGE
             );
         set_tooltip(
-            "The mission ends as a loss if any leader loses any health."
+            "The mission ends as a failure if any leader loses any health."
         );
         
         //Lose leaders checkbox.
-        loss_flags_changed |=
+        fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Lose leaders",
-                &loss_flags, MISSION_LOSS_COND_LOSE_LEADERS
+                &fail_flags, MISSION_FAIL_COND_LOSE_LEADERS
             );
         set_tooltip(
-            "The mission ends as a loss if a certain amount of leaders get\n"
+            "The mission ends as a failure if a certain amount of leaders get\n"
             "KO'd. As explained above, losing all leaders is also\n"
-            "a loss no matter what."
+            "a failure no matter what."
         );
         
-        if(has_flag(loss_flags, MISSION_LOSS_COND_LOSE_LEADERS)) {
+        if(has_flag(fail_flags, MISSION_FAIL_COND_LOSE_LEADERS)) {
             //Leader KOs value.
             int amount =
-                (int) game.cur_area_data.mission.loss_leaders_kod;
+                (int) game.cur_area_data.mission.fail_leaders_kod;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
-                register_change("mission loss conditions change");
-                game.cur_area_data.mission.loss_leaders_kod =
+                register_change("mission fail conditions change");
+                game.cur_area_data.mission.fail_leaders_kod =
                     (size_t) amount;
             }
             set_tooltip(
                 "Leader KO amount that, when reached, ends the mission\n"
-                "as a loss.",
+                "as a failure.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
         }
         
         //Kill enemies checkbox.
-        loss_flags_changed |=
+        fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Kill enemies",
-                &loss_flags, MISSION_LOSS_COND_KILL_ENEMIES
+                &fail_flags, MISSION_FAIL_COND_KILL_ENEMIES
             );
         set_tooltip(
-            "The mission ends as a loss if a certain amount of\n"
+            "The mission ends as a failure if a certain amount of\n"
             "enemies get killed."
         );
         
-        if(has_flag(loss_flags, MISSION_LOSS_COND_KILL_ENEMIES)) {
+        if(has_flag(fail_flags, MISSION_FAIL_COND_KILL_ENEMIES)) {
             //Enemy kills value.
             int amount =
-                (int) game.cur_area_data.mission.loss_enemies_killed;
+                (int) game.cur_area_data.mission.fail_enemies_killed;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
-                register_change("mission loss conditions change");
-                game.cur_area_data.mission.loss_enemies_killed =
+                register_change("mission fail conditions change");
+                game.cur_area_data.mission.fail_enemies_killed =
                     (size_t) amount;
             }
             set_tooltip(
                 "Enemy kill amount that, when reached, ends the mission\n"
-                "as a loss.",
+                "as a failure.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
         }
         
         //Time limit checkbox.
-        loss_flags_changed |=
+        fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Reach the time limit",
-                &loss_flags, MISSION_LOSS_COND_TIME_LIMIT
+                &fail_flags, MISSION_FAIL_COND_TIME_LIMIT
             );
         set_tooltip(
-            "The mission ends as a loss if the player spends a certain\n"
+            "The mission ends as a failure if the player spends a certain\n"
             "amount of time in the mission."
         );
         
-        if(has_flag(loss_flags, MISSION_LOSS_COND_TIME_LIMIT)) {
+        if(has_flag(fail_flags, MISSION_FAIL_COND_TIME_LIMIT)) {
             //Time limit values.
             int seconds =
-                (int) game.cur_area_data.mission.loss_time_limit;
+                (int) game.cur_area_data.mission.fail_time_limit;
             ImGui::Indent();
             if(ImGui::DragTime2("Time limit", &seconds)) {
-                register_change("mission loss conditions change");
+                register_change("mission fail conditions change");
                 float old_mission_min =
-                    game.cur_area_data.mission.loss_time_limit / 60.0f;
+                    game.cur_area_data.mission.fail_time_limit / 60.0f;
                 int day_start_min = game.cur_area_data.day_time_start;
                 day_start_min = wrap_float(day_start_min, 0, 60 * 24);
                 float day_speed = game.cur_area_data.day_time_speed;
@@ -2788,7 +2788,7 @@ void area_editor::process_gui_panel_mission() {
                 old_day_end_min = wrap_float(old_day_end_min, 0, 60 * 24);
                 seconds = std::max(seconds, 1);
                 float new_mission_min = seconds / 60.0f;
-                game.cur_area_data.mission.loss_time_limit =
+                game.cur_area_data.mission.fail_time_limit =
                     (size_t) seconds;
                     
                 game.cur_area_data.day_time_speed =
@@ -2800,16 +2800,16 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "Time limit that, when reached, ends the mission\n"
-                "as a loss.",
+                "as a failure.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
         }
         
-        if(loss_flags_changed) {
-            register_change("mission loss conditions change");
-            game.cur_area_data.mission.loss_conditions =
-                (uint8_t) loss_flags;
+        if(fail_flags_changed) {
+            register_change("mission fail conditions change");
+            game.cur_area_data.mission.fail_conditions =
+                (uint8_t) fail_flags;
         }
         
         ImGui::TreePop();
@@ -2937,8 +2937,8 @@ void area_editor::process_gui_panel_mission() {
             
             if(
                 has_flag(
-                    game.cur_area_data.mission.loss_conditions,
-                    MISSION_LOSS_COND_TIME_LIMIT
+                    game.cur_area_data.mission.fail_conditions,
+                    MISSION_FAIL_COND_TIME_LIMIT
                 )
             ) {
                 //Points per second of time left value.

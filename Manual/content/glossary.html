@@ -81,12 +81,20 @@
       <dd>Further reading: <a href="mob_type.html#parent">Parent/Child objects</a>.</dd>
     </dl>
     <dl>
+      <dt>Clear</dt>
+      <dd>A mission being cleared means the mission has ended because the player has completed the mission's goal. It has no bearing on the medal the player receives.</dd>
+    </dl>
+    <dl>
       <dt>Coordinates</dt>
       <dd>Numbers representing where in the world the object is. X refers to where it is horizontally on west/east &#8211; a smaller X means more to the west, and a larger one more to the east. Y is north/south, with a lower Y corresponding to higher north. Z is the vertical coordinate, with a higher Z being higher up in the air.</dd>
     </dl>
     
     <h2 id="D">D</h2>
 
+    <dl>
+      <dt>Day</dt>
+      <dd>The in-game 24-hour period.</dd>
+    </dl>
     <dl>
       <dt>Dummy</dt>
       <dd>An object that does absolutely nothing. It serves to guide other objects, like indicating the end point of a pushable cardboard box.</dd>
@@ -98,6 +106,10 @@
       <dt>Edge</dt>
       <dd>In an area's layout, edges are the lines that delimit a <a href="#S">sector</a>. An edge can have sectors on either side, and if they are different heights, that creates a wall.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>End</dt>
+      <dd>An <a href="#E">exploration</a> or a <a href="#M">mission</a> end when the player ends manually from the pause menu, or in the case of a mission, when the the goal is met (a <a href="#C">clear</a>) or a fail condition is met (a <a href="#F">fail</a>).</dd>
     </dl>
     <dl>
       <dt>Enemy</dt>
@@ -112,6 +124,10 @@
       <dd>When something happens to an object, like when it gets hurt, or it reaches its destination, an event is thrown. In the <a href="#S">script</a>, you can specify what <a href="#A">actions</a> to perform whenever a certain event is triggered. Different <a href="#S">states</a> can have different event handling.</dd>
       <dd>Further reading: <a href="script.html">Object script</a>.</dd>
     </dl>
+    <dl>
+      <dt>Exploration</dt>
+      <dd>The portion of gameplay that takes place when the player is just exploring a simple area. Contrast with the term <a href="#M">mission</a>.</dd>
+    </dl>
     
     <h2 id="F">F</h2>
 
@@ -119,6 +135,10 @@
       <dt>Fade</dt>
       <dd>In an area's layout, a "fade" <a href="#S">sector</a> refers to a sector whose only purpose is to fade the <a href="#T">textures</a> of the sectors around it, transitioning smoothly from one neighbor to the other.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Fail</dt>
+      <dd>A mission being cleared means the mission has ended and the player has failed to meet the mission's goal. It has no bearing on the medal the player receives.</dd>
     </dl>
     <dl>
       <dt>Frame</dt>
@@ -224,6 +244,10 @@
       <dt>Message</dt>
       <dd>One of the object <a href="#A">actions</a> involves sending a message to other objects. This message is in plain text, and could be whatever you want. The receivers can either be objects that have an <a href="#O">object link</a>, or all nearby objects, up to a specified distance.</dd>
       <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Mission</dt>
+      <dd>The portion of gameplay that takes place when the player is playing in a mission area. Contrast with the term <a href="#M">exploration</a>.</dd>
     </dl>
     <dl>
       <dt>Mob</dt>

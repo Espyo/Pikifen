@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the day results game state.
+ * Header for the exploration/mission results game state.
  */
 
 #ifndef RESULTS_INCLUDED

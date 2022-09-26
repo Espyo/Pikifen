@@ -290,7 +290,7 @@ void pause_menu_struct::init_main_pause_menu() {
     gui.register_coords("header",   50, 12, 50, 10);
     gui.register_coords("continue", 50, 28, 50,  9);
     gui.register_coords("retry",    50, 39, 50,  9);
-    gui.register_coords("finish",   50, 50, 50,  9);
+    gui.register_coords("end",      50, 50, 50,  9);
     gui.register_coords("help",     50, 61, 50,  9);
     gui.register_coords("quit",     50, 72, 50,  9);
     gui.register_coords("tooltip",  50, 95, 95,  8);
@@ -319,25 +319,47 @@ void pause_menu_struct::init_main_pause_menu() {
     
     //Retry button.
     button_gui_item* retry_button =
-        new button_gui_item("Retry day", game.fonts.standard);
+        new button_gui_item(
+        game.cur_area_data.type == AREA_TYPE_SIMPLE ?
+        "Restart exploration" :
+        "Retry mission",
+        game.fonts.standard
+    );
     retry_button->on_activate =
     [this] (const point &) {
         game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_RETRY);
     };
     retry_button->on_get_tooltip =
-    [] () { return "Retry this day from the start."; };
+    [] () {
+        return
+            game.cur_area_data.type == AREA_TYPE_SIMPLE ?
+            "Restart this area's exploration." :
+            "Retry the mission from the start.";
+    };
     gui.add_item(retry_button, "retry");
     
-    //Finish button.
-    button_gui_item* finish_button =
-        new button_gui_item("Finish day", game.fonts.standard);
-    finish_button->on_activate =
+    //End button.
+    button_gui_item* end_button =
+        new button_gui_item(
+        game.cur_area_data.type == AREA_TYPE_SIMPLE ?
+        "End exploration" :
+        "End mission",
+        game.fonts.standard
+    );
+    end_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_FINISH);
+        game.states.gameplay->mission_fail_reason =
+            MISSION_FAIL_COND_PAUSE_MENU;
+        game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_END);
     };
-    finish_button->on_get_tooltip =
-    [] () { return "Finish playing this day."; };
-    gui.add_item(finish_button, "finish");
+    end_button->on_get_tooltip =
+    [] () {
+        return
+            game.cur_area_data.type == AREA_TYPE_SIMPLE ?
+            "End this area's exploration." :
+            "End this mission as a failure.";
+    };
+    gui.add_item(end_button, "end");
     
     //Help button.
     button_gui_item* help_button =
