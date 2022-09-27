@@ -639,7 +639,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     rs.set("mission_points_per_sec_passed", data.points_per_sec_passed);
     rs.set("mission_points_per_treasure_point", data.points_per_treasure_point);
     rs.set("mission_points_per_enemy_point", data.points_per_enemy_point);
-    rs.set("mission_point_fail_data", data.point_loss_data);
+    rs.set("mission_point_loss_data", data.point_loss_data);
     rs.set("mission_starting_points", data.starting_points);
     rs.set("mission_bronze_req", data.bronze_req);
     rs.set("mission_silver_req", data.silver_req);
@@ -647,6 +647,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     rs.set("mission_platinum_req", data.platinum_req);
     
     data.goal = (MISSION_GOALS) game.mission_goals.get_idx(goal_str);
+    if((size_t) data.goal == INVALID) data.goal = MISSION_GOAL_END_MANUALLY;
     vector<string> mission_required_mobs_strs =
         split(required_mobs_str, ";");
     data.goal_mob_idxs.reserve(

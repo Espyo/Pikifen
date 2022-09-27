@@ -348,8 +348,10 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     end_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->mission_fail_reason =
-            MISSION_FAIL_COND_PAUSE_MENU;
+        if(game.cur_area_data.mission.goal != MISSION_GOAL_END_MANUALLY) {
+            game.states.gameplay->mission_fail_reason =
+                MISSION_FAIL_COND_PAUSE_MENU;
+        }
         game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_END);
     };
     end_button->on_get_tooltip =
@@ -357,6 +359,8 @@ void pause_menu_struct::init_main_pause_menu() {
         return
             game.cur_area_data.type == AREA_TYPE_SIMPLE ?
             "End this area's exploration." :
+            game.cur_area_data.mission.goal == MISSION_GOAL_END_MANUALLY ?
+            "End this mission successfully." :
             "End this mission as a failure.";
     };
     gui.add_item(end_button, "end");

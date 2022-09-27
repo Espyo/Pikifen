@@ -27,8 +27,8 @@ enum AREA_TYPES {
 
 //Possible goals in a mission.
 enum MISSION_GOALS {
-    //No goal. The player plays until they leave from the pause menu.
-    MISSION_GOAL_NONE,
+    //The player plays until they end from the pause menu.
+    MISSION_GOAL_END_MANUALLY,
     //The player must collect certain treasures, or all of them.
     MISSION_GOAL_COLLECT_TREASURE,
     //The player must defeat certain enemies, or all of them.
@@ -222,7 +222,7 @@ struct area_data {
     std::shared_ptr<ALLEGRO_BITMAP> thumbnail;
     //Thumbnail, if any.
     string tags;
-    //Stage difficulty, if applicable. Goes from 1 to 5.
+    //Area difficulty, if applicable. Goes from 1 to 5.
     unsigned char difficulty;
     //Who made this area.
     string maker;

@@ -361,6 +361,11 @@ void results_state::load() {
             end_reason =
                 "Reached " +
                 i2s(game.cur_area_data.mission.fail_pik_amount) +
+                (
+                    game.cur_area_data.mission.fail_pik_higher_than ?
+                    "+" :
+                    "-"
+                ) +
                 " Pikmin...";
         } else if(
             has_flag(
@@ -407,11 +412,14 @@ void results_state::load() {
         ) {
             end_reason =
                 "Took " +
-                time_to_str(game.cur_area_data.mission.fail_time_limit, "m", "s") +
+                time_to_str(
+                    game.cur_area_data.mission.fail_time_limit, "m", "s"
+                ) +
                 "...";
         } else if(game.cur_area_data.type == AREA_TYPE_MISSION) {
             switch(game.cur_area_data.mission.goal) {
-            case MISSION_GOAL_NONE: {
+            case MISSION_GOAL_END_MANUALLY: {
+                end_reason = "Ended successfully!";
                 break;
             } case MISSION_GOAL_COLLECT_TREASURE: {
                 if(game.cur_area_data.mission.goal_all_mobs) {
@@ -419,8 +427,11 @@ void results_state::load() {
                 } else {
                     end_reason =
                         "Collected the " +
-                        i2s(game.cur_area_data.mission.goal_mob_idxs.size()) +
-                        " treasures!";
+                        nr_and_plural(
+                            game.cur_area_data.mission.goal_mob_idxs.size(),
+                            "treasure"
+                        ) +
+                        "!";
                 }
                 break;
             } case MISSION_GOAL_BATTLE_ENEMIES: {
@@ -429,14 +440,20 @@ void results_state::load() {
                 } else {
                     end_reason =
                         "Defeated the " +
-                        i2s(game.cur_area_data.mission.goal_mob_idxs.size()) +
-                        " enemies!";
+                        nr_and_plural(
+                            game.cur_area_data.mission.goal_mob_idxs.size(),
+                            "enemy",
+                            "enemies"
+                        ) +
+                        "!";
                 }
                 break;
             } case MISSION_GOAL_TIMED_SURVIVAL: {
                 end_reason =
                     "Survived for " +
-                    time_to_str(game.cur_area_data.mission.goal_amount, "m", "s") +
+                    time_to_str(
+                        game.cur_area_data.mission.goal_amount, "m", "s"
+                    ) +
                     "!";
                 break;
             } case MISSION_GOAL_GET_TO_EXIT: {
@@ -456,13 +473,16 @@ void results_state::load() {
             text_gui_item* end_reason_text =
                 new text_gui_item(
                 end_reason, game.fonts.standard,
-                change_alpha(COLOR_WHITE, 192)
+                game.states.gameplay->mission_fail_reason == 0 ?
+                al_map_rgba(112, 200, 100, 192) :
+                al_map_rgba(242, 160, 160, 192)
             );
             gui.add_item(end_reason_text, "end_reason");
         }
         
-        string medal_reason;
         MISSION_MEDALS medal;
+        string medal_reason;
+        ALLEGRO_COLOR medal_reason_color;
         switch(game.cur_area_data.mission.grading_mode) {
         case MISSION_GRADING_POINTS: {
             medal_reason = "Got " + i2s(final_mission_score) + " points";
@@ -472,41 +492,49 @@ void results_state::load() {
             ) {
                 medal = MISSION_MEDAL_PLATINUM;
                 medal_reason += "!";
+                medal_reason_color = al_map_rgba(145, 226, 210, 192);
             } else if(
                 final_mission_score >=
                 game.cur_area_data.mission.gold_req
             ) {
                 medal = MISSION_MEDAL_GOLD;
                 medal_reason += "!";
+                medal_reason_color = al_map_rgba(233, 200, 80, 192);
             } else if(
                 final_mission_score >=
                 game.cur_area_data.mission.silver_req
             ) {
                 medal = MISSION_MEDAL_SILVER;
                 medal_reason += "!";
+                medal_reason_color = al_map_rgba(216, 216, 200, 192);
             } else if(
                 final_mission_score >=
                 game.cur_area_data.mission.bronze_req
             ) {
                 medal = MISSION_MEDAL_BRONZE;
                 medal_reason += "!";
+                medal_reason_color = al_map_rgba(200, 132, 74, 192);
             } else {
                 medal = MISSION_MEDAL_NONE;
                 medal_reason += "...";
+                medal_reason_color = al_map_rgba(200, 200, 200, 192);
             }
             break;
         } case MISSION_GRADING_GOAL: {
             if(game.states.gameplay->mission_fail_reason == 0) {
                 medal = MISSION_MEDAL_PLATINUM;
                 medal_reason = "Reached the goal!";
+                medal_reason_color = al_map_rgba(145, 226, 210, 192);
             } else {
                 medal = MISSION_MEDAL_NONE;
                 medal_reason = "Did not reach the goal...";
+                medal_reason_color = al_map_rgba(200, 200, 200, 192);
             }
             break;
         } case MISSION_GRADING_PARTICIPATION: {
             medal = MISSION_MEDAL_PLATINUM;
             medal_reason = "Played the mission!";
+            medal_reason_color = al_map_rgba(145, 226, 210, 192);
             break;
         }
         }
@@ -541,8 +569,7 @@ void results_state::load() {
         //Medal reason.
         text_gui_item* medal_reason_text =
             new text_gui_item(
-            medal_reason, game.fonts.standard,
-            change_alpha(COLOR_WHITE, 192)
+            medal_reason, game.fonts.standard, medal_reason_color
         );
         gui.add_item(medal_reason_text, "medal_reason");
     }

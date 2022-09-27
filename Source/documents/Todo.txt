@@ -2,10 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    The default difficulty for an area should be 0, i.e. not specified
-    Give every enemy some points
     Add the same loss condition/grading list system that I added to the results menu to the area selection menu's specs page
-    Rework the "none" mission goal to be "end from the pause menu"
     
 Next tasks (roughly sorted most important first)
     --- To fix ---

@@ -170,12 +170,30 @@ void area_menu_state::do_logic() {
                 );
             description_text->text =
                 area_descriptions[area_idx];
-            difficulty_text->text =
-                (
-                    area_difficulties[area_idx] == 0 ?
-                    "" :
-                    "Difficulty: " + i2s(area_difficulties[area_idx])
-                );
+            if(area_difficulties[area_idx] == 0) {
+                difficulty_text->text.clear();
+            } else {
+                difficulty_text->text =
+                    "Difficulty: " + i2s(area_difficulties[area_idx]) + "/5 - ";
+                switch(area_difficulties[area_idx]) {
+                case 1: {
+                    difficulty_text->text += "Very easy";
+                    break;
+                } case 2: {
+                    difficulty_text->text += "Easy";
+                    break;
+                } case 3: {
+                    difficulty_text->text += "Medium";
+                    break;
+                } case 4: {
+                    difficulty_text->text += "Hard";
+                    break;
+                } case 5: {
+                    difficulty_text->text += "Very hard";
+                    break;
+                }
+                }
+            }
             tags_text->text =
                 (
                     area_tags[area_idx].empty() ?
@@ -198,8 +216,8 @@ void area_menu_state::do_logic() {
             
             const mission_data &mission = area_mission_data[area_idx];
             switch(mission.goal) {
-            case MISSION_GOAL_NONE: {
-                goal_text->text = "None.";
+            case MISSION_GOAL_END_MANUALLY: {
+                goal_text->text = "End from the pause menu whenever you want.";
                 break;
             } case MISSION_GOAL_COLLECT_TREASURE: {
                 if(mission.goal_all_mobs) {
@@ -261,14 +279,17 @@ void area_menu_state::do_logic() {
                         MISSION_FAIL_COND_TIME_LIMIT
                     )
                 ) ?
-                "Time limit: none" :
+                "Time limit: None" :
                 "Time limit: " +
                 time_to_str(
                     mission.fail_time_limit, "m", "s"
                 );
-            fail_text->text =
-                "- Lose all leaders\\n"
-                "- End from the pause menu\\n";
+            fail_text->text.clear();
+            if(
+                mission.goal != MISSION_GOAL_END_MANUALLY
+            ) {
+                fail_text->text += "- End from the pause menu\\n";
+            }
             if(
                 has_flag(
                     mission.fail_conditions, MISSION_FAIL_COND_PIKMIN_AMOUNT

@@ -1457,17 +1457,20 @@ void area_editor::process_gui_panel_info() {
         
         //Difficulty value.
         int difficulty = game.cur_area_data.difficulty;
-        ImGui::SetNextItemWidth(50);
-        if(
-            ImGui::DragInt(
-                "Difficulty", &difficulty, 0.1, 1, 5
-            )
-        ) {
+        vector<string> difficulty_options = {
+            "Not specified",
+            "1 - Very easy",
+            "2 - Easy",
+            "3 - Medium",
+            "4 - Hard",
+            "5 - Very hard"
+        };
+        if(ImGui::Combo("Difficulty", &difficulty, difficulty_options)) {
             register_change("difficulty change");
             game.cur_area_data.difficulty = difficulty;
         }
         set_tooltip(
-            "How hard this stage is. This is very subjective, and only\n"
+            "How hard this area is. This is very subjective, and only\n"
             "serves as a way to tell players if this area is something\n"
             "relaxed and easy (1), or if it's something that only the\n"
             "most experienced Pikmin veterans can handle (5).\n"
@@ -2222,13 +2225,12 @@ void area_editor::process_gui_panel_mission() {
         }
         
         switch(game.cur_area_data.mission.goal) {
-        case MISSION_GOAL_NONE: {
+        case MISSION_GOAL_END_MANUALLY: {
     
             //Explanation text.
             ImGui::TextWrapped(
-                "The player has no goal. They just play until they have "
-                "had enough, at which point they must end "
-                "from the pause menu."
+                "The player has no real goal. They just play until they have "
+                "had enough, at which point they must end from the pause menu."
             );
             
             break;
@@ -2582,16 +2584,24 @@ void area_editor::process_gui_panel_mission() {
     if(saveable_tree_node("gameplay", "Mission fail conditions")) {
     
         //Pause menu end checkbox.
-        bool dummy_true;
+        bool pause_menu_end_is_fail =
+            game.cur_area_data.mission.goal != MISSION_GOAL_END_MANUALLY;
         ImGui::BeginDisabled();
-        ImGui::Checkbox("End from pause menu", &dummy_true);
+        ImGui::Checkbox("End from pause menu", &pause_menu_end_is_fail);
         ImGui::EndDisabled();
-        set_tooltip(
-            "Since reaching the mission goal automatically ends the\n"
-            "mission as a clear, if the player can go to the pause menu\n"
-            "and end there, then naturally they haven't reached the\n"
-            "goal yet. So this method of ending has to always be a failure."
-        );
+        if(pause_menu_end_is_fail) {
+            set_tooltip(
+                "Since reaching the mission goal automatically ends the\n"
+                "mission as a clear, if the player can go to the pause menu\n"
+                "and end there, then naturally they haven't reached the\n"
+                "goal yet. So this method of ending has to always be a failure."
+            );
+        } else {
+            set_tooltip(
+                "The current mission goal is \"end whenever you want\", so\n"
+                "ending from the pause menu is the goal, not a fail condition."
+            );
+        }
         
         unsigned int fail_flags =
             (unsigned int) game.cur_area_data.mission.fail_conditions;

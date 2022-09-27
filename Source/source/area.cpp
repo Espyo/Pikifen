@@ -160,7 +160,7 @@ void area_data::clear() {
     bg_color = COLOR_BLACK;
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
-    mission.goal = MISSION_GOAL_NONE;
+    mission.goal = MISSION_GOAL_END_MANUALLY;
     mission.goal_all_mobs = true;
     mission.goal_mob_idxs.clear();
     mission.goal_amount = 0;
@@ -1100,7 +1100,7 @@ void area_data::remove_vertex(const vertex* v_ptr) {
  * Initializes a mission data struct.
  */
 mission_data::mission_data() :
-    goal(MISSION_GOAL_NONE),
+    goal(MISSION_GOAL_END_MANUALLY),
     goal_all_mobs(true),
     goal_amount(0),
     goal_higher_than(true),

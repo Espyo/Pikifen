@@ -1024,9 +1024,9 @@ void gameplay_state::do_menu_logic() {
  */
 bool gameplay_state::is_mission_clear_met() {
     switch(game.cur_area_data.mission.goal) {
-    case MISSION_GOAL_NONE: {
+    case MISSION_GOAL_END_MANUALLY: {
 
-        //No goal? Obviously not then.
+        //The pause menu "end mission" logic is responsible for this one.
         return false;
         
     } case MISSION_GOAL_COLLECT_TREASURE:

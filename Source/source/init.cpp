@@ -315,9 +315,9 @@ void init_enum_name_databases() {
     game.sector_types.register_item(
         SECTOR_TYPE_BLOCKING, "Blocking"
     );
-    
+
     game.mission_goals.register_item(
-        MISSION_GOAL_NONE, "None"
+        MISSION_GOAL_END_MANUALLY, "End whenever you want"
     );
     game.mission_goals.register_item(
         MISSION_GOAL_COLLECT_TREASURE, "Collect treasures"
