@@ -13,6 +13,7 @@ itch_damage = 50
 itch_time = 4
 max_health = 2000
 move_speed = 1000
+points = 100
 radius = 71
 spawns {
     foot_fr {

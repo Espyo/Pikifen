@@ -11,6 +11,7 @@ max_carriers = 15
 max_health = 400
 move_speed = 55
 pikmin_seeds = 7
+points = 40
 pushable = true
 pushes = true
 radius = 50
