@@ -200,6 +200,7 @@ check_gui_item::check_gui_item(
 gui_item::gui_item(const bool selectable) :
     manager(nullptr),
     visible(true),
+    responsive(true),
     selectable(selectable),
     selected(false),
     parent(nullptr),
@@ -228,6 +229,19 @@ gui_item::gui_item(const bool selectable) :
 void gui_item::add_child(gui_item* item) {
     children.push_back(item);
     item->parent = this;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes and deletes all children items.
+ */
+void gui_item::delete_all_children() {
+    while(!children.empty()) {
+        gui_item* i_ptr = children[0];
+        remove_child(i_ptr);
+        manager->remove_item(i_ptr);
+        delete i_ptr;
+    }
 }
 
 
@@ -369,7 +383,25 @@ bool gui_item::is_mouse_on(const point &cursor_pos) {
 
 
 /* ----------------------------------------------------------------------------
- * Removes an item from the list of children.
+ * Returns whether or not it is responsive, and also checks the parents.
+ */
+bool gui_item::is_responsive() {
+    if(parent) return parent->is_responsive();
+    return responsive;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not it is visible, and also checks the parents.
+ */
+bool gui_item::is_visible() {
+    if(parent) return parent->is_visible();
+    return visible;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes an item from the list of children, without deleting it.
  * item:
  *   Child item to remove.
  */
@@ -478,7 +510,7 @@ void gui_manager::add_item(gui_item* item, const string &id) {
 
 
 /* ----------------------------------------------------------------------------
- * Destroys all allocated items and information.
+ * Destroys and deletes all items and information.
  */
 void gui_manager::destroy() {
     set_selected_item(NULL);
@@ -506,16 +538,21 @@ void gui_manager::draw() {
     for(size_t i = 0; i < items.size(); ++i) {
     
         gui_item* i_ptr = items[i];
+        
+        if(!i_ptr->on_draw) continue;
+        
         point draw_center = i_ptr->get_reference_center();
         point draw_size = i_ptr->get_reference_size();
         
         if(!get_item_draw_info(i_ptr, &draw_center, &draw_size)) continue;
         
         if(i_ptr->parent) {
-            al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
             point parent_c;
             point parent_s;
-            get_item_draw_info(i_ptr->parent, &parent_c, &parent_s);
+            if(!get_item_draw_info(i_ptr->parent, &parent_c, &parent_s)) {
+                continue;
+            }
+            al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
             al_set_clipping_rectangle(
                 (parent_c.x - parent_s.x / 2.0f) + 1,
                 (parent_c.y - parent_s.y / 2.0f) + 1,
@@ -556,7 +593,7 @@ string gui_manager::get_current_tooltip() {
 bool gui_manager::get_item_draw_info(
     gui_item* item, point* draw_center, point* draw_size
 ) {
-    if(!item->visible) return false;
+    if(!item->is_visible()) return false;
     if(item->size.x == 0.0f) return false;
     
     point final_center = item->get_reference_center();
@@ -707,6 +744,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             gui_item* i_ptr = items[i];
             if(
                 i_ptr->is_mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
+                i_ptr->is_responsive() &&
                 i_ptr->selectable
             ) {
                 selection_result = i_ptr;
@@ -722,7 +760,11 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
-        if(selected_item && selected_item->on_activate) {
+        if(
+            selected_item &&
+            selected_item->is_responsive() &&
+            selected_item->on_activate
+        ) {
             selected_item->on_activate(point(ev.mouse.x, ev.mouse.y));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
@@ -750,7 +792,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
     }
     
     for(size_t i = 0; i < items.size(); ++i) {
-        if(items[i]->on_event) {
+        if(items[i]->is_responsive() && items[i]->on_event) {
             items[i]->on_event(ev);
         }
     }
@@ -834,7 +876,7 @@ bool gui_manager::handle_menu_button(
         
         if(!selected_item) {
             for(size_t i = 0; i < items.size(); ++i) {
-                if(items[i]->selectable) {
+                if(items[i]->is_responsive() && items[i]->selectable) {
                     set_selected_item(items[i]);
                     break;
                 }
@@ -868,7 +910,11 @@ bool gui_manager::handle_menu_button(
         }
         }
         
-        if(selected_item && selected_item->on_menu_dir_button) {
+        if(
+            selected_item &&
+            selected_item->is_responsive() &&
+            selected_item->on_menu_dir_button
+        ) {
             if(selected_item->on_menu_dir_button(pressed)) {
                 //If it returned true, that means the following logic about
                 //changing the current item needs to be skipped.
@@ -881,7 +927,7 @@ bool gui_manager::handle_menu_button(
         
         for(size_t i = 0; i < items.size(); ++i) {
             gui_item* i_ptr = items[i];
-            if(i_ptr->selectable) {
+            if(i_ptr->is_responsive() && i_ptr->selectable) {
                 point i_center = i_ptr->get_reference_center();
                 if(i_ptr == selected_item) {
                     selectable_idx = selectables.size();
@@ -918,7 +964,7 @@ bool gui_manager::handle_menu_button(
         break;
         
     } case BUTTON_MENU_OK: {
-        if(is_down && selected_item) {
+        if(is_down && selected_item && selected_item->is_responsive()) {
             selected_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;
@@ -929,7 +975,7 @@ bool gui_manager::handle_menu_button(
         break;
         
     } case BUTTON_MENU_BACK: {
-        if(is_down && back_item) {
+        if(is_down && back_item && back_item->is_responsive()) {
             back_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
         }
         break;

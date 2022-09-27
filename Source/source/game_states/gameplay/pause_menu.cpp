@@ -254,12 +254,12 @@ void pause_menu_struct::init_help_page() {
     help_gui.add_item(help_category_text, "category");
     
     //Tidbit list box.
-    help_tidbit_list_box = new list_gui_item();
-    help_gui.add_item(help_tidbit_list_box, "list");
+    help_tidbit_list = new list_gui_item();
+    help_gui.add_item(help_tidbit_list, "list");
     
     //Tidbit list scrollbar.
     scroll_gui_item* list_scroll = new scroll_gui_item();
-    list_scroll->list_item = help_tidbit_list_box;
+    list_scroll->list_item = help_tidbit_list;
     help_gui.add_item(list_scroll, "list_scroll");
     
     //Tooltip text.
@@ -450,12 +450,7 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
     }
     }
     
-    while(!help_tidbit_list_box->children.empty()) {
-        gui_item* i_ptr = help_tidbit_list_box->children[0];
-        help_tidbit_list_box->remove_child(i_ptr);
-        help_gui.remove_item(i_ptr);
-        delete i_ptr;
-    }
+    help_tidbit_list->delete_all_children();
     
     for(size_t t = 0; t < tidbit_list.size(); ++t) {
         vector<string> parts = split(tidbit_list[t], ";");
@@ -472,7 +467,7 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
         tidbit_bullet->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
         );
-        help_tidbit_list_box->add_child(tidbit_bullet);
+        help_tidbit_list->add_child(tidbit_bullet);
         help_gui.add_item(tidbit_bullet);
     }
     

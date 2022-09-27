@@ -32,6 +32,80 @@ const string SPECS_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_specs.txt";
 
 
 /* ----------------------------------------------------------------------------
+ * Adds a new bullet point to either the failure condition list, or the
+ * grading explanation list.
+ * list:
+ *   List to add to.
+ * text:
+ *   Text.
+ */
+void area_menu_state::add_bullet(list_gui_item* list, const string &text) {
+    size_t bullet_idx = list->children.size();
+    const float BULLET_HEIGHT = 0.18f;
+    const float BULLET_PADDING = 0.01f;
+    const float BULLETS_OFFSET = 0.01f;
+    const float bullet_center_y =
+        (BULLETS_OFFSET + BULLET_HEIGHT / 2.0f) +
+        ((BULLET_HEIGHT + BULLET_PADDING) * bullet_idx);
+        
+    bullet_point_gui_item* bullet =
+        new bullet_point_gui_item(
+        text, game.fonts.standard, COLOR_WHITE
+    );
+    bullet->center = point(0.50f, bullet_center_y);
+    bullet->size = point(0.96f, BULLET_HEIGHT);
+    list->add_child(bullet);
+    gui.add_item(bullet);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Animates the GUI items inside of the info and specs pages.
+ */
+void area_menu_state::animate_info_and_specs() {
+    info_name_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    subtitle_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    description_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+    );
+    difficulty_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    tags_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    maker_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    version_text->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+    );
+    if(area_type == AREA_TYPE_MISSION) {
+        specs_name_text->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        );
+        goal_text->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        );
+        for(size_t c = 0; c < fail_list->children.size(); ++c) {
+            fail_list->children[c]->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+            );
+        }
+        for(size_t c = 0; c < grading_list->children.size(); ++c) {
+            grading_list->children[c]->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+            );
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an "area menu" state.
  */
 area_menu_state::area_menu_state() :
@@ -40,7 +114,8 @@ area_menu_state::area_menu_state() :
     bmp_menu_bg(nullptr),
     prev_selected_item(nullptr),
     list_box(nullptr),
-    name_text(nullptr),
+    info_name_text(nullptr),
+    specs_name_text(nullptr),
     subtitle_text(nullptr),
     description_text(nullptr),
     difficulty_text(nullptr),
@@ -49,12 +124,8 @@ area_menu_state::area_menu_state() :
     version_text(nullptr),
     cur_thumb(nullptr),
     goal_text(nullptr),
-    time_limit_text(nullptr),
-    fail_text(nullptr),
-    grading_mode_text(nullptr),
-    grading_criteria_text(nullptr),
-    medal_scores_text(nullptr),
-    platinum_medal_text(nullptr),
+    fail_list(nullptr),
+    grading_list(nullptr),
     show_mission_specs(false) {
     
 }
@@ -71,8 +142,6 @@ void area_menu_state::do_drawing() {
     );
     
     gui.draw();
-    info_gui.draw();
-    specs_gui.draw();
     
     game.fade_mgr.draw();
     
@@ -84,73 +153,11 @@ void area_menu_state::do_drawing() {
  * Ticks time by one frame of logic.
  */
 void area_menu_state::do_logic() {
-    if(!areas_to_pick.empty() && prev_selected_item != gui.selected_item) {
+    size_t area_idx = INVALID;
     
-        size_t area_idx = INVALID;
-        
-        name_text->text.clear();
-        subtitle_text->text.clear();
-        description_text->text.clear();
-        difficulty_text->text.clear();
-        tags_text->text.clear();
-        maker_text->text.clear();
-        version_text->text.clear();
-        cur_thumb = NULL;
-        goal_text->text.clear();
-        time_limit_text->text.clear();
-        fail_text->text.clear();
-        grading_mode_text->text.clear();
-        grading_criteria_text->text.clear();
-        medal_scores_text->text.clear();
-        platinum_medal_text->text.clear();
-        
-        name_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        subtitle_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        description_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-        );
-        difficulty_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        tags_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        maker_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        version_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        goal_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        time_limit_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        fail_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-        );
-        grading_mode_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        grading_criteria_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-        );
-        medal_scores_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-        );
-        platinum_medal_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
-        );
-        
+    if(!areas_to_pick.empty() && prev_selected_item != gui.selected_item) {
         if(gui.selected_item && gui.selected_item->parent == list_box) {
-            //One of the area buttons is selected.
-            //Figure out which.
-            
+            //A new area buttons got selected. Figure out which.
             for(size_t c = 0; c < list_box->children.size(); ++c) {
                 if(list_box->children[c] == gui.selected_item) {
                     area_idx = c;
@@ -158,66 +165,88 @@ void area_menu_state::do_logic() {
                 }
             }
         }
+    }
+    
+    if(area_idx < areas_to_pick.size()) {
+    
+        //Start by clearing them all, for sanitization's sake.
+        info_name_text->text.clear();
+        subtitle_text->text.clear();
+        description_text->text.clear();
+        difficulty_text->text.clear();
+        tags_text->text.clear();
+        maker_text->text.clear();
+        version_text->text.clear();
+        cur_thumb = NULL;
+        if(area_type == AREA_TYPE_MISSION) {
+            goal_text->text.clear();
+            specs_name_text->text.clear();
+            fail_list->delete_all_children();
+            grading_list->delete_all_children();
+        }
         
-        if(area_idx < areas_to_pick.size()) {
-            name_text->text =
-                area_names[area_idx];
-            subtitle_text->text =
-                get_subtitle_or_mission_goal(
-                    area_subtitles[area_idx],
-                    area_type,
-                    area_mission_data[area_idx].goal
-                );
-            description_text->text =
-                area_descriptions[area_idx];
-            if(area_difficulties[area_idx] == 0) {
-                difficulty_text->text.clear();
-            } else {
-                difficulty_text->text =
-                    "Difficulty: " + i2s(area_difficulties[area_idx]) + "/5 - ";
-                switch(area_difficulties[area_idx]) {
-                case 1: {
-                    difficulty_text->text += "Very easy";
-                    break;
-                } case 2: {
-                    difficulty_text->text += "Easy";
-                    break;
-                } case 3: {
-                    difficulty_text->text += "Medium";
-                    break;
-                } case 4: {
-                    difficulty_text->text += "Hard";
-                    break;
-                } case 5: {
-                    difficulty_text->text += "Very hard";
-                    break;
-                }
-                }
+        //Fill in the area's info.
+        info_name_text->text = area_names[area_idx];
+        subtitle_text->text =
+            get_subtitle_or_mission_goal(
+                area_subtitles[area_idx],
+                area_type,
+                area_mission_data[area_idx].goal
+            );
+        description_text->text = area_descriptions[area_idx];
+        if(area_difficulties[area_idx] == 0) {
+            difficulty_text->text.clear();
+        } else {
+            difficulty_text->text =
+                "Difficulty: " +
+                i2s(area_difficulties[area_idx]) + "/5 - ";
+            switch(area_difficulties[area_idx]) {
+            case 1: {
+                difficulty_text->text += "Very easy";
+                break;
+            } case 2: {
+                difficulty_text->text += "Easy";
+                break;
+            } case 3: {
+                difficulty_text->text += "Medium";
+                break;
+            } case 4: {
+                difficulty_text->text += "Hard";
+                break;
+            } case 5: {
+                difficulty_text->text += "Very hard";
+                break;
             }
-            tags_text->text =
-                (
-                    area_tags[area_idx].empty() ?
-                    "" :
-                    "Tags: " + area_tags[area_idx]
-                );
-            maker_text->text =
-                (
-                    area_makers[area_idx].empty() ?
-                    "Unknown maker" :
-                    "Maker: " + area_makers[area_idx]
-                );
-            version_text->text =
-                (
-                    area_versions[area_idx].empty() ?
-                    "" :
-                    "Version: " + area_versions[area_idx]
-                );
-            cur_thumb = area_thumbs[area_idx];
-            
+            }
+        }
+        tags_text->text =
+            (
+                area_tags[area_idx].empty() ?
+                "" :
+                "Tags: " + area_tags[area_idx]
+            );
+        maker_text->text =
+            (
+                area_makers[area_idx].empty() ?
+                "Unknown maker" :
+                "Maker: " + area_makers[area_idx]
+            );
+        version_text->text =
+            (
+                area_versions[area_idx].empty() ?
+                "" :
+                "Version: " + area_versions[area_idx]
+            );
+        cur_thumb = area_thumbs[area_idx];
+        
+        //Now fill in the mission specs.
+        if(area_type == AREA_TYPE_MISSION) {
+            specs_name_text->text = area_names[area_idx];
             const mission_data &mission = area_mission_data[area_idx];
             switch(mission.goal) {
             case MISSION_GOAL_END_MANUALLY: {
-                goal_text->text = "End from the pause menu whenever you want.";
+                goal_text->text =
+                    "End from the pause menu whenever you want.";
                 break;
             } case MISSION_GOAL_COLLECT_TREASURE: {
                 if(mission.goal_all_mobs) {
@@ -271,152 +300,183 @@ void area_menu_state::do_logic() {
                 break;
             }
             }
-            time_limit_text->text =
-                (
-                    mission.fail_time_limit == 0 ||
-                    !has_flag(
-                        mission.fail_conditions,
-                        MISSION_FAIL_COND_TIME_LIMIT
-                    )
-                ) ?
-                "Time limit: None" :
-                "Time limit: " +
-                time_to_str(
-                    mission.fail_time_limit, "m", "s"
-                );
-            fail_text->text.clear();
+            
             if(
-                mission.goal != MISSION_GOAL_END_MANUALLY
+                has_flag(
+                    mission.fail_conditions,
+                    MISSION_FAIL_COND_TIME_LIMIT
+                )
             ) {
-                fail_text->text += "- End from the pause menu\\n";
+                add_bullet(
+                    fail_list,
+                    "Run out of time. Time limit: " +
+                    time_to_str(
+                        mission.fail_time_limit, "m", "s"
+                    ) + "."
+                );
             }
             if(
                 has_flag(
                     mission.fail_conditions, MISSION_FAIL_COND_PIKMIN_AMOUNT
                 )
             ) {
-                fail_text->text +=
-                    "- Reach " + i2s(mission.fail_pik_amount) + " Pikmin or " +
-                    (mission.fail_pik_higher_than ? "more" : "fewer") + "\\n";
+                add_bullet(
+                    fail_list,
+                    "Reach " + i2s(mission.fail_pik_amount) + " Pikmin or " +
+                    (mission.fail_pik_higher_than ? "more" : "fewer") + "."
+                );
             }
             if(
                 has_flag(
                     mission.fail_conditions, MISSION_FAIL_COND_LOSE_PIKMIN
                 )
             ) {
-                fail_text->text +=
-                    "- Lose " + i2s(mission.fail_pik_killed) + " Pikmin\\n";
+                add_bullet(
+                    fail_list,
+                    "Lose " + i2s(mission.fail_pik_killed) + " Pikmin."
+                );
             }
             if(
                 has_flag(
                     mission.fail_conditions, MISSION_FAIL_COND_TAKE_DAMAGE
                 )
             ) {
-                fail_text->text +=
-                    "- A leader takes damage\\n";
+                add_bullet(
+                    fail_list,
+                    "A leader takes damage."
+                );
             }
             if(
                 has_flag(
                     mission.fail_conditions, MISSION_FAIL_COND_LOSE_LEADERS
                 )
             ) {
-                fail_text->text +=
-                    "- Lose " +
-                    nr_and_plural(mission.fail_leaders_kod, "leader") + "\\n";
+                add_bullet(
+                    fail_list,
+                    "Lose " +
+                    nr_and_plural(mission.fail_leaders_kod, "leader") + "."
+                );
             }
             if(
                 has_flag(
                     mission.fail_conditions, MISSION_FAIL_COND_KILL_ENEMIES
                 )
             ) {
-                fail_text->text +=
-                    "- Kill " +
+                add_bullet(
+                    fail_list,
+                    "Kill " +
                     nr_and_plural(
                         mission.fail_enemies_killed, "enemy", "enemies"
-                    ) + "\\n";
+                    ) + "."
+                );
             }
             if(
-                has_flag(
-                    mission.fail_conditions, MISSION_FAIL_COND_TIME_LIMIT
-                )
+                mission.goal != MISSION_GOAL_END_MANUALLY
             ) {
-                fail_text->text +=
-                    "- Reach the time limit\\n";
-            }
-            //Erase the last \n on the fail text.
-            if(!fail_text->text.empty()) {
-                fail_text->text.erase(fail_text->text.size() - 1);
-                fail_text->text.erase(fail_text->text.size() - 1);
+                add_bullet(
+                    fail_list,
+                    "End from the pause menu."
+                );
             }
             
-            grading_criteria_text->text.clear();
             switch(mission.grading_mode) {
             case MISSION_GRADING_POINTS: {
-                grading_mode_text->text =
-                    "Based on score:";
+                add_bullet(
+                    grading_list,
+                    "Your medal depends on your score:"
+                );
+                add_bullet(
+                    grading_list,
+                    "    Platinum: " + i2s(mission.platinum_req) + "+ points."
+                );
+                add_bullet(
+                    grading_list,
+                    "    Gold: " + i2s(mission.gold_req) + "+ points."
+                );
+                add_bullet(
+                    grading_list,
+                    "    Silver: " + i2s(mission.silver_req) + "+ points."
+                );
+                add_bullet(
+                    grading_list,
+                    "    Bronze: " + i2s(mission.bronze_req) + "+ points."
+                );
+                add_bullet(
+                    grading_list,
+                    "Your score is calculated like so:"
+                );
                 if(mission.points_per_pikmin_born != 0) {
-                    grading_criteria_text->text +=
-                        "- Pikmin birth x " +
-                        i2s(mission.points_per_pikmin_born) + "\\n";
+                    add_bullet(
+                        grading_list,
+                        "    Pikmin born x " +
+                        i2s(mission.points_per_pikmin_born) + "."
+                    );
                 }
                 if(mission.points_per_pikmin_death != 0) {
-                    grading_criteria_text->text +=
-                        "- Pikmin death x " +
-                        i2s(mission.points_per_pikmin_death) + "\\n";
+                    add_bullet(
+                        grading_list,
+                        "    Pikmin deaths x " +
+                        i2s(mission.points_per_pikmin_death) + "."
+                    );
                 }
                 if(mission.points_per_sec_left != 0) {
-                    grading_criteria_text->text +=
-                        "- Time left x " +
-                        i2s(mission.points_per_sec_left) + "\\n";
+                    add_bullet(
+                        grading_list,
+                        "    Seconds left x " +
+                        i2s(mission.points_per_sec_left) + "."
+                    );
                 }
                 if(mission.points_per_sec_passed != 0) {
-                    grading_criteria_text->text +=
-                        "- Time passed x " +
-                        i2s(mission.points_per_sec_passed) + "\\n";
+                    add_bullet(
+                        grading_list,
+                        "    Seconds passed x " +
+                        i2s(mission.points_per_sec_passed) + "."
+                    );
                 }
                 if(mission.points_per_treasure_point != 0) {
-                    grading_criteria_text->text +=
-                        "- Treasure point x " +
-                        i2s(mission.points_per_treasure_point) + "\\n";
+                    add_bullet(
+                        grading_list,
+                        "    Treasure points x " +
+                        i2s(mission.points_per_treasure_point) + "."
+                    );
                 }
                 if(mission.points_per_enemy_point != 0) {
-                    grading_criteria_text->text +=
-                        "- Enemy point x " +
-                        i2s(mission.points_per_enemy_point) + "\\n";
+                    add_bullet(
+                        grading_list,
+                        "    Enemy points x " +
+                        i2s(mission.points_per_enemy_point) + "."
+                    );
                 }
-                medal_scores_text->text =
-                    "Bronze: " + i2s(mission.bronze_req) + "+ points\\n"
-                    "Silver: " + i2s(mission.silver_req) + "+ points\\n"
-                    "Gold: " + i2s(mission.gold_req) + "+ points\\n";
-                platinum_medal_text->text =
-                    "Platinum: " +
-                    i2s(mission.platinum_req) + "+ points";
                 break;
             }
             case MISSION_GRADING_GOAL: {
-                grading_mode_text->text =
-                    "Based on the goal";
-                platinum_medal_text->text =
-                    "Platinum: Reach the goal";
+                add_bullet(
+                    grading_list,
+                    "You get a platinum medal if you clear the goal."
+                );
+                add_bullet(
+                    grading_list,
+                    "You get no medal if you fail."
+                );
                 break;
             }
             case MISSION_GRADING_PARTICIPATION: {
-                grading_mode_text->text =
-                    "Based on playing";
-                platinum_medal_text->text =
-                    "Platinum: Just play";
+                add_bullet(
+                    grading_list,
+                    "You get a platinum medal just by playing the mission."
+                );
                 break;
             }
             }
         }
+        
+        animate_info_and_specs();
         
         prev_selected_item = gui.selected_item;
         
     }
     
     gui.tick(game.delta_t);
-    info_gui.tick(game.delta_t);
-    specs_gui.tick(game.delta_t);
     
     game.fade_mgr.tick(game.delta_t);
 }
@@ -439,8 +499,6 @@ void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     gui.handle_event(ev);
-    info_gui.handle_event(ev);
-    specs_gui.handle_event(ev);
 }
 
 
@@ -448,34 +506,33 @@ void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * Initializes the area info page GUI items.
  */
 void area_menu_state::init_gui_info_page() {
-    info_gui.register_coords("info_box",      67,   51, 58, 78);
-    info_gui.register_coords("name",          56,   18, 32,  8);
-    info_gui.register_coords("subtitle",      56,   28, 32,  8);
-    info_gui.register_coords("thumbnail",     84,   24, 20, 20);
-    info_gui.register_coords("description",   67,   45, 54, 18);
-    info_gui.register_coords("high_scores",   67,   63, 54, 14);
-    info_gui.register_coords("difficulty",    67,   74, 54,  4);
-    info_gui.register_coords("tags",          67,   80, 54,  4);
-    info_gui.register_coords("maker",         54,   86, 28,  4);
-    info_gui.register_coords("version",       82,   86, 24,  4);
-    info_gui.read_coords(
+    gui.register_coords("info_name",   36,  6, 68,  8);
+    gui.register_coords("subtitle",    36, 16, 68,  8);
+    gui.register_coords("thumbnail",   85, 14, 26, 24);
+    gui.register_coords("description", 50, 42, 96, 28);
+    gui.register_coords("high_scores", 50, 66, 96, 16);
+    gui.register_coords("difficulty",  50, 79, 96,  6);
+    gui.register_coords("tags",        50, 87, 96,  6);
+    gui.register_coords("maker",       28, 95, 52,  6);
+    gui.register_coords("version",     76, 95, 44,  6);
+    gui.read_coords(
         data_node(AREA_MENU::INFO_GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     if(!areas_to_pick.empty()) {
     
-        //Area info box.
-        list_gui_item* info_box = new list_gui_item();
-        info_gui.add_item(info_box, "info_box");
-        
         //Name text.
-        name_text = new text_gui_item("", game.fonts.area_name, COLOR_GOLD);
-        info_gui.add_item(name_text, "name");
+        info_name_text =
+            new text_gui_item("", game.fonts.area_name, COLOR_GOLD);
+        info_box->add_child(info_name_text);
+        gui.add_item(info_name_text, "info_name");
         
         //Subtitle text.
         subtitle_text = new text_gui_item("", game.fonts.area_name);
-        info_gui.add_item(subtitle_text, "subtitle");
+        info_box->add_child(subtitle_text);
+        gui.add_item(subtitle_text, "subtitle");
         
+        //Thumbnail.
         gui_item* thumb_item = new gui_item();
         thumb_item->on_draw =
         [this] (const point & center, const point & size) {
@@ -497,7 +554,8 @@ void area_menu_state::init_gui_info_page() {
                 al_map_rgba(255, 255, 255, 128), 1.0f
             );
         };
-        info_gui.add_item(thumb_item, "thumbnail");
+        info_box->add_child(thumb_item);
+        gui.add_item(thumb_item, "thumbnail");
         
         //Description text.
         description_text =
@@ -505,7 +563,8 @@ void area_menu_state::init_gui_info_page() {
             "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
         description_text->line_wrap = true;
-        info_gui.add_item(description_text, "description");
+        info_box->add_child(description_text);
+        gui.add_item(description_text, "description");
         
         //TODO high scores
         
@@ -514,28 +573,32 @@ void area_menu_state::init_gui_info_page() {
             new text_gui_item(
             "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
-        info_gui.add_item(difficulty_text, "difficulty");
+        info_box->add_child(difficulty_text);
+        gui.add_item(difficulty_text, "difficulty");
         
         //Tags text.
         tags_text =
             new text_gui_item(
             "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
-        info_gui.add_item(tags_text, "tags");
+        info_box->add_child(tags_text);
+        gui.add_item(tags_text, "tags");
         
         //Maker text.
         maker_text =
             new text_gui_item(
             "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
         );
-        info_gui.add_item(maker_text, "maker");
+        info_box->add_child(maker_text);
+        gui.add_item(maker_text, "maker");
         
         //Version text.
         version_text =
             new text_gui_item(
             "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
         );
-        info_gui.add_item(version_text, "version");
+        info_box->add_child(version_text);
+        gui.add_item(version_text, "version");
         
     }
 }
@@ -545,13 +608,15 @@ void area_menu_state::init_gui_info_page() {
  * Initializes the main GUI items.
  */
 void area_menu_state::init_gui_main() {
-    gui.register_coords("back",          14,    7, 20,  6);
-    gui.register_coords("pick_text",     45.5,  7, 39,  6);
-    gui.register_coords("list",          19,   51, 30, 78);
-    gui.register_coords("list_scroll",   36,   51,  2, 78);
-    gui.register_coords("mission_specs", 81,    7, 30,  6);
-    gui.register_coords("tooltip",       50,   95, 95,  8);
-    gui.register_coords("no_areas_text", 50,   50, 96, 10);
+    gui.register_coords("back",          12,  5, 20,  6);
+    gui.register_coords("pick_text",     45,  5, 42,  6);
+    gui.register_coords("list",          20, 51, 36, 82);
+    gui.register_coords("list_scroll",   40, 51,  2, 82);
+    gui.register_coords("view_toggle",   83,  5, 30,  6);
+    gui.register_coords("info_box",      70, 51, 56, 82);
+    gui.register_coords("specs_box",     70, 51, 56, 82);
+    gui.register_coords("tooltip",       50, 96, 95,  4);
+    gui.register_coords("no_areas_text", 50, 50, 96, 10);
     gui.read_coords(
         data_node(AREA_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -618,46 +683,60 @@ void area_menu_state::init_gui_main() {
             }
         }
         
+        //Info box item.
+        info_box = new gui_item();
+        info_box->on_draw =
+        [] (const point & center, const point & size) {
+            draw_rounded_rectangle(
+                center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+            );
+        };
+        gui.add_item(info_box, "info_box");
+        
         if(area_type == AREA_TYPE_MISSION) {
-            //Mission specs button.
-            button_gui_item* specs_button =
+            //View toggle button.
+            button_gui_item* view_toggle_button =
                 new button_gui_item(
                 "Show mission specs",
                 game.fonts.standard
             );
-            specs_button->on_activate =
-            [this, specs_button] (const point &) {
+            view_toggle_button->on_activate =
+            [this, view_toggle_button] (const point &) {
+                gui_item* box_to_show = NULL;
+                gui_item* box_to_hide = NULL;
                 if(show_mission_specs) {
-                    specs_gui.start_animation(
-                        GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-                        AREA_MENU::PAGE_SWAP_DURATION
-                    );
-                    specs_gui.responsive = false;
-                    info_gui.start_animation(
-                        GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-                        AREA_MENU::PAGE_SWAP_DURATION
-                    );
-                    info_gui.responsive = true;
-                    info_gui.show_items();
+                    box_to_show = info_box;
+                    box_to_hide = specs_box;
                     show_mission_specs = false;
-                    specs_button->text = "Show mission specs";
+                    view_toggle_button->text = "Show mission specs";
                 } else {
-                    info_gui.start_animation(
-                        GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
-                        AREA_MENU::PAGE_SWAP_DURATION
-                    );
-                    info_gui.responsive = false;
-                    specs_gui.start_animation(
-                        GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-                        AREA_MENU::PAGE_SWAP_DURATION
-                    );
-                    specs_gui.responsive = true;
-                    specs_gui.show_items();
+                    box_to_show = specs_box;
+                    box_to_hide = info_box;
                     show_mission_specs = true;
-                    specs_button->text = "Show standard info";
+                    view_toggle_button->text = "Show standard info";
                 }
+                box_to_show->visible = true;
+                box_to_show->responsive = true;
+                box_to_hide->visible = false;
+                box_to_hide->responsive = false;
+                animate_info_and_specs();
             };
-            gui.add_item(specs_button, "mission_specs");
+            view_toggle_button->on_get_tooltip =
+            [] () {
+                return "Toggles between basic area info and mission specs.";
+            };
+            gui.add_item(view_toggle_button, "view_toggle");
+            
+            //Specs box item.
+            specs_box = new gui_item();
+            specs_box->on_draw =
+            [] (const point & center, const point & size) {
+                draw_rounded_rectangle(
+                    center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+                );
+            };
+            gui.add_item(specs_box, "specs_box");
+            
         }
         
     } else {
@@ -688,85 +767,72 @@ void area_menu_state::init_gui_main() {
  * Initializes the mission specs page GUI items.
  */
 void area_menu_state::init_gui_specs_page() {
-    specs_gui.register_coords("specs_box",        67, 51, 58, 78);
-    specs_gui.register_coords("goal_header",      67, 16, 54,  4);
-    specs_gui.register_coords("goal",             67, 22, 54,  4);
-    specs_gui.register_coords("fail_header",      53, 28, 26,  4);
-    specs_gui.register_coords("fail",             53, 26, 26, 50);
-    specs_gui.register_coords("time_limit",       53, 86, 26,  4);
-    specs_gui.register_coords("grading_header",   81, 28, 26,  4);
-    specs_gui.register_coords("grading_mode",     81, 34, 26,  4);
-    specs_gui.register_coords("grading_criteria", 81, 55, 26, 34);
-    specs_gui.register_coords("medal_scores",     81, 78, 26,  8);
-    specs_gui.register_coords("platinum_medal",   81, 86, 26,  4);
-    
-    specs_gui.read_coords(
+    gui.register_coords("specs_name",     50,  5, 96,  6);
+    gui.register_coords("goal_header",    50, 13, 96,  6);
+    gui.register_coords("goal",           50, 21, 96,  6);
+    gui.register_coords("fail_header",    50, 29, 96,  6);
+    gui.register_coords("fail_list",      47, 48, 90, 28);
+    gui.register_coords("fail_scroll",    96, 48,  4, 28);
+    gui.register_coords("grading_header", 50, 67, 96,  6);
+    gui.register_coords("grading_list",   47, 85, 90, 26);
+    gui.register_coords("grading_scroll", 96, 85,  4, 26);
+    gui.read_coords(
         data_node(AREA_MENU::SPECS_GUI_FILE_PATH).get_child_by_name("positions")
     );
     
     if(!areas_to_pick.empty()) {
-        //Mission specs box.
-        list_gui_item* specs_box = new list_gui_item();
-        specs_gui.add_item(specs_box, "specs_box");
+    
+        //Name text.
+        specs_name_text =
+            new text_gui_item("", game.fonts.area_name, COLOR_GOLD);
+        specs_box->add_child(specs_name_text);
+        gui.add_item(specs_name_text, "specs_name");
         
         //Goal header text.
         text_gui_item* goal_header_text =
             new text_gui_item("Goal", game.fonts.area_name);
-        specs_gui.add_item(goal_header_text, "goal_header");
+        specs_box->add_child(goal_header_text);
+        gui.add_item(goal_header_text, "goal_header");
         
         //Goal explanation text.
         goal_text =
             new text_gui_item("", game.fonts.standard);
-        specs_gui.add_item(goal_text, "goal");
+        specs_box->add_child(goal_text);
+        gui.add_item(goal_text, "goal");
         
         //Fail conditions header text.
         text_gui_item* fail_header_text =
             new text_gui_item("Fail conditions", game.fonts.area_name);
-        specs_gui.add_item(fail_header_text, "fail_header");
+        specs_box->add_child(fail_header_text);
+        gui.add_item(fail_header_text, "fail_header");
         
-        //Time limit text.
-        time_limit_text =
-            new text_gui_item("", game.fonts.standard);
-        specs_gui.add_item(time_limit_text, "time_limit");
+        //Fail condition explanation list.
+        fail_list = new list_gui_item();
+        specs_box->add_child(fail_list);
+        gui.add_item(fail_list, "fail_list");
         
-        //Fail condition explanation text.
-        fail_text =
-            new text_gui_item(
-            "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
-        );
-        fail_text->line_wrap = true;
-        specs_gui.add_item(fail_text, "fail");
+        //Fail condition explanation scrollbar.
+        scroll_gui_item* fail_scroll = new scroll_gui_item();
+        fail_scroll->list_item = fail_list;
+        specs_box->add_child(fail_scroll);
+        gui.add_item(fail_scroll, "fail_scroll");
         
         //Grading header text.
         text_gui_item* grading_header_text =
             new text_gui_item("Grading", game.fonts.area_name);
-        specs_gui.add_item(grading_header_text, "grading_header");
+        specs_box->add_child(grading_header_text);
+        gui.add_item(grading_header_text, "grading_header");
         
-        //Grading mode text.
-        grading_mode_text =
-            new text_gui_item("", game.fonts.standard);
-        specs_gui.add_item(grading_mode_text, "grading_mode");
+        //Grading explanation list.
+        grading_list = new list_gui_item();
+        specs_box->add_child(grading_list);
+        gui.add_item(grading_list, "grading_list");
         
-        //Grading criteria text.
-        grading_criteria_text =
-            new text_gui_item(
-            "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
-        );
-        grading_criteria_text->line_wrap = true;
-        specs_gui.add_item(grading_criteria_text, "grading_criteria");
-        
-        //Medal scores text.
-        medal_scores_text =
-            new text_gui_item(
-            "", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
-        );
-        medal_scores_text->line_wrap = true;
-        specs_gui.add_item(medal_scores_text, "medal_scores");
-        
-        //Platinum medal text.
-        platinum_medal_text =
-            new text_gui_item("", game.fonts.standard);
-        specs_gui.add_item(platinum_medal_text, "platinum_medal");
+        //Grading explanation scrollbar.
+        scroll_gui_item* grading_scroll = new scroll_gui_item();
+        grading_scroll->list_item = grading_list;
+        specs_box->add_child(grading_scroll);
+        gui.add_item(grading_scroll, "grading_scroll");
     }
 }
 
@@ -847,12 +913,11 @@ void area_menu_state::load() {
     
     init_gui_main();
     init_gui_info_page();
-    init_gui_specs_page();
-    
-    info_gui.show_items();
-    info_gui.responsive = true;
-    specs_gui.hide_items();
-    specs_gui.responsive = false;
+    if(area_type == AREA_TYPE_MISSION) {
+        init_gui_specs_page();
+        specs_box->visible = false;
+        specs_box->responsive = false;
+    }
     
     game.fade_mgr.start_fade(true, nullptr);
     
@@ -869,8 +934,6 @@ void area_menu_state::unload() {
     
     //Menu items.
     gui.destroy();
-    info_gui.destroy();
-    specs_gui.destroy();
     
     //Misc
     areas_to_pick.clear();

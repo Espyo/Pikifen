@@ -73,7 +73,7 @@ private:
     //Help page category text GUI item.
     text_gui_item* help_category_text;
     //Help page tidbit list.
-    list_gui_item* help_tidbit_list_box;
+    list_gui_item* help_tidbit_list;
     //All tidbits in the help page.
     map<HELP_CATEGORIES, vector<string> > tidbits;
     

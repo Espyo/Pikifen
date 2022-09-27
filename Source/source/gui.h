@@ -109,6 +109,8 @@ public:
     point size;
     //Is it currently visible?
     bool visible;
+    //Is it currentl responsive?
+    bool responsive;
     //Can it be selected?
     bool selectable;
     //Is it currently the selected item?
@@ -147,6 +149,8 @@ public:
     
     //Adds a child item.
     void add_child(gui_item* item);
+    //Removes and deletes all children items.
+    void delete_all_children();
     //Returns the bottommost Y coordinate of the item's children items.
     float get_child_bottom();
     //Returns the value related to the current juice animation.
@@ -157,7 +161,11 @@ public:
     point get_reference_size();
     //Returns whether the mouse cursor is on top of it.
     bool is_mouse_on(const point &cursor_pos);
-    //Removes an item from the list of children.
+    //Returns whether it is responsive or not, checking the parents also.
+    bool is_responsive();
+    //Returns whether it is visible or not, checking the parents also.
+    bool is_visible();
+    //Removes an item from the list of children, without deleting it.
     void remove_child(gui_item* item);
     //Starts some juice animation.
     void start_juice_animation(JUICE_TYPES type);

@@ -265,16 +265,18 @@ private:
     vector<mission_data> area_mission_data;
     //Main GUI.
     gui_manager gui;
-    //Area info GUI.
-    gui_manager info_gui;
-    //Mission specs GUI.
-    gui_manager specs_gui;
+    //Area info GUI item.
+    gui_item* info_box;
+    //Mission specs GUI item.
+    gui_item* specs_box;
     //Selected GUI item on the last frame.
     gui_item* prev_selected_item;
     //Area list box item.
     list_gui_item* list_box;
-    //Name text item.
-    text_gui_item* name_text;
+    //Name text item, in the info page.
+    text_gui_item* info_name_text;
+    //Name text item, in the specs page.
+    text_gui_item* specs_name_text;
     //Subtitle text item.
     text_gui_item* subtitle_text;
     //Description text item.
@@ -291,21 +293,15 @@ private:
     ALLEGRO_BITMAP* cur_thumb;
     //Goal text item.
     text_gui_item* goal_text;
-    //Time limit text item.
-    text_gui_item* time_limit_text;
-    //Fail conditions text item.
-    text_gui_item* fail_text;
-    //Grading mode text item.
-    text_gui_item* grading_mode_text;
-    //Grading criteria text item.
-    text_gui_item* grading_criteria_text;
-    //Medal scores text item.
-    text_gui_item* medal_scores_text;
-    //Platinum medal text item.
-    text_gui_item* platinum_medal_text;
+    //Fail explanation list item.
+    list_gui_item* fail_list;
+    //Grading explanation list item.
+    list_gui_item* grading_list;
     //Show the mission specs?
     bool show_mission_specs;
     
+    void add_bullet(list_gui_item* list, const string &text);
+    void animate_info_and_specs();
     void init_gui_main();
     void init_gui_info_page();
     void init_gui_specs_page();

@@ -2,7 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Add the same loss condition/grading list system that I added to the results menu to the area selection menu's specs page
+    
     
 Next tasks (roughly sorted most important first)
     --- To fix ---

@@ -45,7 +45,7 @@ void results_state::add_stat(
     const string &label, const string &value,
     const ALLEGRO_COLOR &color
 ) {
-    size_t stat_idx = stats_box->children.size() / 2.0f;
+    size_t stat_idx = stats_list->children.size() / 2.0f;
     const float STAT_HEIGHT = 0.12f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
@@ -61,7 +61,7 @@ void results_state::add_stat(
         point(0.50f, stat_center_y);
     label_bullet->size =
         point(0.96f, STAT_HEIGHT);
-    stats_box->add_child(label_bullet);
+    stats_list->add_child(label_bullet);
     gui.add_item(label_bullet);
     
     text_gui_item* value_text =
@@ -72,7 +72,7 @@ void results_state::add_stat(
         point(0.75f, stat_center_y);
     value_text->size =
         point(0.44f, STAT_HEIGHT);
-    stats_box->add_child(value_text);
+    stats_list->add_child(value_text);
     gui.add_item(value_text);
     text_to_animate.push_back(value_text);
 }
@@ -584,8 +584,8 @@ void results_state::load() {
     gui.add_item(stats_label_text, "stats_label");
     
     //Stats box.
-    stats_box = new list_gui_item();
-    stats_box->on_draw =
+    stats_list = new list_gui_item();
+    stats_list->on_draw =
     [this] (const point & center, const point & size) {
         draw_filled_rounded_rectangle(
             center, size, 8.0f, al_map_rgba(0, 0, 0, 40)
@@ -594,11 +594,11 @@ void results_state::load() {
             center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
         );
     };
-    gui.add_item(stats_box, "stats");
+    gui.add_item(stats_list, "stats");
     
     //Stats list scrollbar.
     scroll_gui_item* stats_scroll = new scroll_gui_item();
-    stats_scroll->list_item = stats_box;
+    stats_scroll->list_item = stats_list;
     gui.add_item(stats_scroll, "stats_scroll");
     
     //Time taken bullet.

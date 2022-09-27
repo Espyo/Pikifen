@@ -40,7 +40,7 @@ private:
     //GUI items that need to grow during the periodic text animation.
     vector<gui_item*> text_to_animate;
     //Stats box GUI item.
-    list_gui_item* stats_box;
+    list_gui_item* stats_list;
     //Final mission score. Cache for convenience.
     int final_mission_score;
     
