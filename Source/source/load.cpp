@@ -264,7 +264,9 @@ void load_area(
             game.sector_types.get_idx(
                 sector_data->get_child_by_name("type")->value
             );
-        if(new_sector->type == 255) new_sector->type = SECTOR_TYPE_NORMAL;
+        if((size_t) new_sector->type == INVALID) {
+            new_sector->type = SECTOR_TYPE_NORMAL;
+        }
         new_sector->is_bottomless_pit =
             s2b(
                 sector_data->get_child_by_name(

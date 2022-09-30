@@ -70,6 +70,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::be_thrown_after_pluck);
         }
+        efc.new_event(MOB_EV_ON_LEAVE); {
+            efc.run(pikmin_fsm::stop_being_thrown);
+        }
         efc.new_event(MOB_EV_LANDED); {
             efc.run(pikmin_fsm::land_after_pluck);
             efc.change_state("in_group_chasing");

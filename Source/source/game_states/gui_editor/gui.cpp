@@ -199,9 +199,9 @@ void gui_editor::process_gui_menu_bar() {
         
             //Reload current file item.
             if(ImGui::MenuItem("Reload current file")) {
+                reload_widget_pos = get_last_widget_pos();
                 press_reload_button();
             }
-            reload_widget_pos = get_last_widget_pos();
             
             //Options menu item.
             if(ImGui::MenuItem("Options")) {
@@ -210,6 +210,7 @@ void gui_editor::process_gui_menu_bar() {
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
+                quit_widget_pos = get_last_widget_pos();
                 press_quit_button();
             }
             
@@ -497,9 +498,9 @@ void gui_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
+        quit_widget_pos = get_last_widget_pos();
         press_quit_button();
     }
-    quit_widget_pos = get_last_widget_pos();
     set_tooltip(
         "Quit the GUI editor.",
         "Ctrl + Q"
@@ -513,9 +514,9 @@ void gui_editor::process_gui_toolbar() {
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
+        load_widget_pos = get_last_widget_pos();
         press_load_button();
     }
-    load_widget_pos = get_last_widget_pos();
     set_tooltip(
         "Pick a GUI file to load.",
         "Ctrl + L"

@@ -374,4 +374,7 @@ point gui_editor::snap_point(const point &p) {
  */
 void gui_editor::unload() {
     editor::unload();
+    
+    items.clear();
+    cur_item = INVALID;
 }

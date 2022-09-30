@@ -649,6 +649,7 @@ void area_editor::draw_canvas() {
             
             if(
                 game.options.area_editor_show_territory &&
+                m_ptr->type &&
                 m_ptr->type->territory_radius > 0 &&
                 is_selected
             ) {
@@ -659,6 +660,7 @@ void area_editor::draw_canvas() {
             }
             if(
                 game.options.area_editor_show_territory &&
+                m_ptr->type &&
                 m_ptr->type->terrain_radius > 0 &&
                 is_selected
             ) {

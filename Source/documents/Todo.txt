@@ -1,5 +1,5 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    
+    In the simple area menu, it's not calculating which area button is selected properly
 
 Current tasks (tasks being worked on, but not yet committed)
     
@@ -10,20 +10,18 @@ Next tasks (roughly sorted most important first)
     Building a bridge where the dummy destination mob is in the void causes a crash?
         The new chunks are created out of bounds and destroyed right away, which causes a crash when the bridge object thinks they exist
     Pikmin tops don't scale when they fall down a pit (thanks Helodity)
-    If the leader is moving when the mission ends, they will keep moving in that direction if you choose to retry
     Mobs that get deleted should remove links that other mobs have to them (thanks Helodity)
         Also, that crash with a Bulborb eating a bomb rock and destroying it at the same time
         Also, Pikmin getting bit while held by a leader
         Check Helodity's branch
     Ceramic bridge texture should be 256x256 (thanks isma3)
-    Pressing the quit button on an editor's menu bar will make the unsaved changes warning appear on the toolbar icon instead
     Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
     During the "Ready?" interlude, a lot of stuff is rendered wrong
-    Entering a mission via the auto-start maker tool, then in the results menu choosing to quit leads you to the simple area selection menu
-    Leaving the GUI editor should close the current file
-    In the GUI editor, item names can escape into the toolbar or status bar
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
-    The area editor saving empty "type" properties for sectors, probably only when the sector type is normal
+    Shift++, Shift+-, X, and Shift+X aren't changing the grid interval when you're creating a sector or placing an object (thanks Neo)
+        That's because your last click was technically on the GUI, so the GUI has focus...
+    Pressing Escape in an editor's initial window is apparently STILL causing issues with Dear ImGui textboxes (thanks Neo)
+        Needs to be tested if it still happens in the master branch
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -69,6 +67,7 @@ Next tasks (roughly sorted most important first)
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
             The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that
             Simple areas shouldn't have a time limit
+            In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
             When playing a mission through the area editor's quick play, high scores shouldn't be saved
             Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
             The results screen should have a "New record!" blurb when you get a new record
@@ -80,6 +79,11 @@ Next tasks (roughly sorted most important first)
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod
+    Spicy Pikmin should emit some rare sparkle particles (thanks Neo)
+    Check if the throw particles can be customized (thanks Neo)
+    Find a way to make the path drawing process more friendly, since sometimes you want to draw a continuous path with multiple stops, but sometimes you just want to patch up an existing stop/link (thanks Neo)
+        Idea: if when you're drawing, you click on an existing stop, then finish drawing. Otherwise, keep drawing more
+    Show the number of vertexes that you would get when making a circle sector somewhere (thanks Neo)
     Add a copy-paste feature to the area editor
         It should only work when you select one and only one sector
         It copies the shape of the sector, and then lets you paste that shape somewhere, same as if you were dragging a sector of that shape elsewhere
@@ -669,6 +673,7 @@ Misc things (so I don't forget)
         Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
         I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
         Maybe water should have random sparkle particles?
+        Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
     Mechanics
         An option for the cursor to snap to the nearest object in-game, with an adjustable radius
         Water depth (thanks ThyCheshireCat)
@@ -683,6 +688,7 @@ Misc things (so I don't forget)
             Each stop link can hold a capacity number. The maximum value is the length of the link. Whenever a mob is taking this link, the mob's diameter (plus some padding?) is added to the value, and when a mob is no longer taking it, it is removed. When a mob that is carrying something is trying to enter a full link, it will stand in place instead of proceeding.
             Be careful for Pikmin carrying things in opposite directions. Maybe have a tie-breaker in some way?
         When there are multiple Onions or ships that something can be delivered to, choose the closest
+            If there is no path to that one, then choose the second closest, and so on (thanks Neo)
         Smoother turns when carrying
         [NEEDS BRAINSTORMING] If a Red Pikmin is carrying a 1 pellet, and a Yellow joined, shouldn't the destination be Red, and not randomized?
         When deciding a new random Onion to go to, pick cyclically -- first go with Red (if applicable), then if the player does it again, go Yellow (if applicable), etc. (GitHub issue #8)
@@ -715,6 +721,7 @@ Misc things (so I don't forget)
         If your Pikmin are far away and you dismiss them, they should just create groups where they are, not next to where you ordered the dismiss...right?
         If a Pikmin is too far away, it should sigh and lose the party
         "Oh, yeah, quick suggestion, make all of the pikmin that a leader has get disbanded and maybe panic around for a bit when the leader dies" (thanks Neo)
+        Try to find some way for Pikmin to smoothly follow behind when they are faster than the leaders. Right now, they quickly catch up to where they should be in the group, stop, and then slowly accelerate back to continue catching up, over and over
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
         Make the water ripples be via shader
@@ -729,12 +736,16 @@ Misc things (so I don't forget)
                 Or better yet, keyboard shortcuts to swap, only. This way the interface isn't cluttered, but power-users can still swap very easily
             A redo button
             Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just haave a link to another area's geometry instead. It should allow it to be rotated, too
+            Pressing G should let you drag the currently selected things, instead of you being forced to precisely click on the tiny thing (e.g. Pikmin mob gen) before you can drag (thanks Neo)
+            Shift+Ctrl+drag should start a selection box that adds to the current selection (thanks Neo)
+            Allow pointless edges (and remove the "wouldn't split in any useful way" warning). This way, it's easier to create fade sectors, for instance
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
         Pressing Esc on the sprite/whatever rename pop-up should cancel
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?
             For the animation editor: reverse frames
+        Customizable controls overall
     Area sections?
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections
@@ -764,6 +775,7 @@ Misc things (so I don't forget)
         Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
     HUD element for a digital clock?
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
+    The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Ideas for mission mode
         A goal where you reach X sprays of type Y
         A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)

@@ -568,6 +568,7 @@ void gameplay_state::leave(const LEAVE_TARGET target) {
         break;
     } case LEAVE_TO_AREA_SELECT: {
         if(game.states.area_ed->quick_play_area_path.empty()) {
+            game.states.area_menu->area_type = game.cur_area_data.type;
             game.change_state(game.states.area_menu);
         } else {
             game.change_state(game.states.area_ed);
@@ -1035,6 +1036,8 @@ void gameplay_state::unload() {
     path_mgr.clear();
     spray_stats.clear();
     particles.clear();
+    
+    leader_movement.reset(); //TODO replace with a better solution.
     
     unload_game_content();
     
