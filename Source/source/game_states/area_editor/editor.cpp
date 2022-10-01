@@ -1460,7 +1460,6 @@ void area_editor::load() {
     //Reset some variables.
     is_ctrl_pressed = false;
     is_shift_pressed = false;
-    is_gui_focused = false;
     last_mob_category = NULL;
     last_mob_type = NULL;
     loaded_content_yet = false;
@@ -1645,6 +1644,21 @@ void area_editor::load_reference() {
     }
     
     update_reference();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pans the camera around.
+ * ev:
+ *   Event to handle.
+ */
+void area_editor::pan_cam(const ALLEGRO_EVENT &ev) {
+    game.cam.set_pos(
+        point(
+            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
+            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
+        )
+    );
 }
 
 
@@ -2301,6 +2315,22 @@ void area_editor::register_change(
  */
 void area_editor::remove_thumbnail() {
     game.cur_area_data.thumbnail = NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera's X and Y coordinates.
+ */
+void area_editor::reset_cam_xy() {
+    game.cam.target_pos = point();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera's zoom.
+ */
+void area_editor::reset_cam_zoom() {
+    zoom_with_cursor(1.0f);
 }
 
 

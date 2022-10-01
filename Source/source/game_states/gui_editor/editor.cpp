@@ -188,6 +188,21 @@ void gui_editor::load_file(
 
 
 /* ----------------------------------------------------------------------------
+ * Pans the camera around.
+ * ev:
+ *   Event to handle.
+ */
+void gui_editor::pan_cam(const ALLEGRO_EVENT &ev) {
+    game.cam.set_pos(
+        point(
+            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
+            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
+        )
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Callback for when the user picks a file from the picker.
  * name:
  *   Name of the file.
@@ -303,6 +318,16 @@ void gui_editor::press_snap_mode_button() {
         status_text += "grid";
     }
     status_text += ".";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera.
+ * instantaneous:
+ *   Whether the camera moves to its spot instantaneously or not.
+ */
+void gui_editor::reset_cam(const bool instantaneous) {
+    center_camera(point(0.0f, 0.0f), point(100.0f, 100.0f), instantaneous);
 }
 
 

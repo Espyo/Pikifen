@@ -18,15 +18,11 @@
 
 
 /* ----------------------------------------------------------------------------
- * Handles a key being "char"-typed on the canvas exclusively.
+ * Handles a key being "char"-typed in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty()) {
-        return;
-    }
-    
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.cam.target_pos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
@@ -82,10 +78,6 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  *   Event to handle.
  */
 void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty()) {
-        return;
-    }
-    
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_G, true)) {
         press_grid_button();
         
@@ -112,15 +104,11 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles a key being pressed down on the canvas exclusively.
+ * Handles a key being pressed down in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty()) {
-        return;
-    }
-    
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_SPACE)) {
         press_play_animation_button();
         
@@ -182,16 +170,11 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the left mouse button being double-clicked.
+ * Handles the left mouse button being double-clicked in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(ImGui::GetIO().WantCaptureKeyboard) {
-        //A textbox is in use. Clicking could change the state of the animation,
-        //so ignore it now, and let Dear ImGui close the box.
-        return;
-    }
     if(state == EDITOR_STATE_HITBOXES || state == EDITOR_STATE_SPRITE_BITMAP) {
         handle_lmb_down(ev);
     }
@@ -199,21 +182,11 @@ void animation_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the left mouse button being pressed down.
+ * Handles the left mouse button being pressed down in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_mouse_in_gui) {
-        return;
-    }
-    if(ImGui::GetIO().WantCaptureKeyboard) {
-        //A textbox is in use. Clicking could change the state of the animation,
-        //so ignore it now, and let Dear ImGui close the box.
-        is_m1_pressed = false;
-        return;
-    }
-    
     if(is_cursor_in_timeline()) {
         handle_lmb_drag_in_timeline();
         return;
@@ -418,7 +391,7 @@ void animation_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the left mouse button being dragged.
+ * Handles the left mouse button being dragged in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -552,7 +525,8 @@ void animation_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the middle mouse button being double-clicked.
+ * Handles the middle mouse button being double-clicked in the
+ * canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -564,7 +538,7 @@ void animation_editor::handle_mmb_double_click(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the middle mouse button being pressed down.
+ * Handles the middle mouse button being pressed down in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -576,7 +550,7 @@ void animation_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the middle mouse button being dragged.
+ * Handles the middle mouse button being dragged in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -604,19 +578,18 @@ void animation_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the mouse wheel being moved.
+ * Handles the mouse wheel being moved in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void animation_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_mouse_in_gui) return;
-    
     zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles the right mouse button being double-clicked.
+ * Handles the right mouse button being double-clicked in the
+ * canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -628,7 +601,7 @@ void animation_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the right mouse button being dragged.
+ * Handles the right mouse button being pressed down in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -640,7 +613,7 @@ void animation_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the right mouse button being dragged.
+ * Handles the right mouse button being dragged in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -648,35 +621,4 @@ void animation_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
         pan_cam(ev);
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Pans the camera around.
- * ev:
- *   Event to handle.
- */
-void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
-    game.cam.set_pos(
-        point(
-            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
-            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
-        )
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the camera's X and Y coordinates.
- */
-void animation_editor::reset_cam_xy() {
-    game.cam.target_pos = point();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the camera's zoom.
- */
-void animation_editor::reset_cam_zoom() {
-    zoom_with_cursor(1.0f);
 }

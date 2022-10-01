@@ -14,13 +14,11 @@
 
 
 /* ----------------------------------------------------------------------------
- * Handles a key being "char"-typed on the canvas exclusively.
+ * Handles a key being "char"-typed in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void gui_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_gui_focused) return;
-    
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
         game.cam.target_pos.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
@@ -77,8 +75,6 @@ void gui_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
  *   Event to handle.
  */
 void gui_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty()) return;
-    
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, true)) {
         press_load_button();
         
@@ -98,13 +94,11 @@ void gui_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles a key being pressed down on the canvas exclusively.
+ * Handles a key being pressed down in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void gui_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_gui_focused) return;
-    
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
         reset_cam(false);
         
@@ -113,38 +107,21 @@ void gui_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the left mouse button being double-clicked.
+ * Handles the left mouse button being double-clicked in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void gui_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_mouse_in_gui) return;
-    if(ImGui::GetIO().WantCaptureKeyboard) {
-        //A textbox is in use. Clicking could change the state of the area,
-        //so ignore it now, and let Dear ImGui close the box.
-        return;
-    }
-    
     handle_lmb_down(ev);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles the left mouse button being pressed down.
+ * Handles the left mouse button being pressed down in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void gui_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_mouse_in_gui) {
-        return;
-    }
-    if(ImGui::GetIO().WantCaptureKeyboard) {
-        //A textbox is in use. Clicking could change the state of the file,
-        //so ignore it now, and let Dear ImGui close the box.
-        is_m1_pressed = false;
-        return;
-    }
-    
     bool tw_handled = false;
     if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
         tw_handled =
@@ -201,13 +178,11 @@ void gui_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the left mouse button being dragged.
+ * Handles the left mouse button being dragged in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void gui_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty()) return;
-    
     if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
         bool tw_handled =
             cur_transformation_widget.handle_mouse_move(
@@ -232,20 +207,16 @@ void gui_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  *   Event to handle.
  */
 void gui_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty()) return;
-    
     cur_transformation_widget.handle_mouse_up();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles the middle mouse button being pressed down.
+ * Handles the middle mouse button being pressed down in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void gui_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_mouse_in_gui) return;
-    
     if(!game.options.editor_mmb_pan) {
         reset_cam(false);
     }
@@ -253,7 +224,7 @@ void gui_editor::handle_mmb_down(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the middle mouse button being dragged.
+ * Handles the middle mouse button being dragged in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -281,25 +252,21 @@ void gui_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the mouse wheel being moved.
+ * Handles the mouse wheel being moved in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void gui_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_mouse_in_gui) return;
-    
     zoom_with_cursor(game.cam.zoom + (game.cam.zoom * ev.mouse.dz * 0.1));
 }
 
 
 /* ----------------------------------------------------------------------------
- * Handles the right mouse button being dragged.
+ * Handles the right mouse button being pressed down in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
 void gui_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
-    if(!dialogs.empty() || is_mouse_in_gui) return;
-    
     if(game.options.editor_mmb_pan) {
         reset_cam(false);
     }
@@ -307,7 +274,7 @@ void gui_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the right mouse button being dragged.
+ * Handles the right mouse button being dragged in the canvas exclusively.
  * ev:
  *   Event to handle.
  */
@@ -315,29 +282,4 @@ void gui_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
     if(!game.options.editor_mmb_pan) {
         pan_cam(ev);
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Pans the camera around.
- * ev:
- *   Event to handle.
- */
-void gui_editor::pan_cam(const ALLEGRO_EVENT &ev) {
-    game.cam.set_pos(
-        point(
-            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
-            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
-        )
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Resets the camera.
- * instantaneous:
- *   Whether the camera moves to its spot instantaneously or not.
- */
-void gui_editor::reset_cam(const bool instantaneous) {
-    center_camera(point(0.0f, 0.0f), point(100.0f, 100.0f), instantaneous);
 }

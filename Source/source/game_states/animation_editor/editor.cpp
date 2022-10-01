@@ -540,6 +540,21 @@ void animation_editor::load_animation_database(
 
 
 /* ----------------------------------------------------------------------------
+ * Pans the camera around.
+ * ev:
+ *   Event to handle.
+ */
+void animation_editor::pan_cam(const ALLEGRO_EVENT &ev) {
+    game.cam.set_pos(
+        point(
+            game.cam.pos.x - ev.mouse.dx / game.cam.zoom,
+            game.cam.pos.y - ev.mouse.dy / game.cam.zoom
+        )
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Callback for when the user picks an animation from the picker.
  * name:
  *   Name of the animation.
@@ -859,6 +874,22 @@ void animation_editor::rename_sprite(
     mark_new_changes();
     status_text =
         "Renamed sprite \"" + old_name + "\" to \"" + new_name + "\".";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera's X and Y coordinates.
+ */
+void animation_editor::reset_cam_xy() {
+    game.cam.target_pos = point();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the camera's zoom.
+ */
+void animation_editor::reset_cam_zoom() {
+    zoom_with_cursor(1.0f);
 }
 
 

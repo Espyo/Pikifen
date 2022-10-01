@@ -67,7 +67,6 @@ editor::editor() :
     canvas_separator_x(-1),
     double_click_time(0),
     is_ctrl_pressed(false),
-    is_gui_focused(false),
     is_m1_pressed(false),
     is_m2_pressed(false),
     is_m3_pressed(false),
@@ -399,6 +398,15 @@ point editor::get_last_widget_pos() {
 void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
+    bool is_mouse_in_canvas =
+        dialogs.empty() && !is_mouse_in_gui;
+    //WantCaptureKeyboard returns true if LMB is held, and I'm not quite sure
+    //why. If we know LMB is held because of the canvas, then we can
+    //safely assume it's none of Dear ImGui's business, so we can ignore
+    //WantCaptureKeyboard's true.
+    bool does_imgui_need_keyboard =
+        ImGui::GetIO().WantCaptureKeyboard && !is_m1_pressed;
+        
     ImGui_ImplAllegro5_ProcessEvent(&ev);
     
     if(
@@ -407,15 +415,18 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
+        //General mouse handling.
+        
         last_input_was_keyboard = false;
         handle_mouse_update(ev);
     }
     
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        !is_mouse_in_gui
+        is_mouse_in_canvas
     ) {
-    
+        //Mouse button down, inside the canvas.
+        
         switch (ev.mouse.button) {
         case 1: {
             is_m1_pressed = true;
@@ -432,10 +443,6 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         mouse_drag_start = point(ev.mouse.x, ev.mouse.y);
         mouse_drag_confirmed = false;
         
-        if(ev.mouse.button == 1) {
-            is_gui_focused = false;
-        }
-        
         if(
             ev.mouse.button == last_mouse_click &&
             fabs(last_mouse_click_pos.x - ev.mouse.x) < 4.0f &&
@@ -443,36 +450,60 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             sub_state == last_mouse_click_sub_state &&
             double_click_time > 0
         ) {
-            switch(ev.mouse.button) {
-            case 1: {
-        
-                handle_lmb_double_click(ev);
-                break;
-            } case 2: {
-                handle_rmb_double_click(ev);
-                break;
-            } case 3: {
-                handle_mmb_double_click(ev);
-                break;
-            }
+            //Double-click.
+            
+            if(does_imgui_need_keyboard) {
+                //If Dear ImGui needs the keyboard, then a textbox is likely
+                //in use. Clicking could change the state of the editor's data,
+                //so ignore it now, and let Dear ImGui close the box.
+                is_m1_pressed = false;
+                
+            } else {
+            
+                switch(ev.mouse.button) {
+                case 1: {
+            
+                    handle_lmb_double_click(ev);
+                    break;
+                } case 2: {
+                    handle_rmb_double_click(ev);
+                    break;
+                } case 3: {
+                    handle_mmb_double_click(ev);
+                    break;
+                }
+                }
+                
             }
             
             double_click_time = 0;
             
         } else {
+            //Single-click.
+            
             last_mouse_click_sub_state = sub_state;
             
-            switch(ev.mouse.button) {
-            case 1: {
-                handle_lmb_down(ev);
-                break;
-            } case 2: {
-                handle_rmb_down(ev);
-                break;
-            } case 3: {
-                handle_mmb_down(ev);
-                break;
-            }
+            if(does_imgui_need_keyboard) {
+                //If Dear ImGui needs the keyboard, then a textbox is likely
+                //in use. Clicking could change the state of the editor's data,
+                //so ignore it now, and let Dear ImGui close the box.
+                is_m1_pressed = false;
+                
+            } else {
+            
+                switch(ev.mouse.button) {
+                case 1: {
+                    handle_lmb_down(ev);
+                    break;
+                } case 2: {
+                    handle_rmb_down(ev);
+                    break;
+                } case 3: {
+                    handle_mmb_down(ev);
+                    break;
+                }
+                }
+                
             }
             
             last_mouse_click = ev.mouse.button;
@@ -483,14 +514,10 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         
         
     } else if(
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        is_mouse_in_gui
-    ) {
-        is_gui_focused = true;
-        
-    } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
+        //Mouse button up.
+        
         switch(ev.mouse.button) {
         case 1: {
             is_m1_pressed = false;
@@ -511,6 +538,8 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED
     ) {
+        //Mouse movement.
+        
         if(
             fabs(ev.mouse.x - mouse_drag_start.x) >=
             game.options.editor_mouse_drag_threshold ||
@@ -533,12 +562,14 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         }
         if(
             (ev.mouse.dz != 0 || ev.mouse.dw != 0) &&
-            !is_mouse_in_gui
+            is_mouse_in_canvas
         ) {
             handle_mouse_wheel(ev);
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        //Key down.
+        
         last_input_was_keyboard = true;
         
         if(
@@ -556,9 +587,11 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             
         }
         
-        handle_key_down_anywhere(ev);
-        if(!is_gui_focused) {
-            handle_key_down_canvas(ev);
+        if(dialogs.empty()) {
+            handle_key_down_anywhere(ev);
+            if(!does_imgui_need_keyboard) {
+                handle_key_down_canvas(ev);
+            }
         }
         
         if(
@@ -569,6 +602,8 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
+        //Key up.
+        
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
             ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
@@ -584,15 +619,21 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             
         }
         
-        handle_key_up_anywhere(ev);
-        if(!is_gui_focused) {
-            handle_key_up_canvas(ev);
+        if(dialogs.empty()) {
+            handle_key_up_anywhere(ev);
+            if(!does_imgui_need_keyboard) {
+                handle_key_up_canvas(ev);
+            }
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        handle_key_char_anywhere(ev);
-        if(!is_gui_focused) {
-            handle_key_char_canvas(ev);
+        //Key char.
+        
+        if(dialogs.empty()) {
+            handle_key_char_anywhere(ev);
+            if(!does_imgui_need_keyboard) {
+                handle_key_char_canvas(ev);
+            }
         }
         
     }
