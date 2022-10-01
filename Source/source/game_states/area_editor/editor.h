@@ -255,6 +255,8 @@ private:
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
         //On-canvas texture effect editing.
         EDITOR_SUB_STATE_OCTEE,
+        //Quick sector height set.
+        EDITOR_SUB_STATE_QUICK_HEIGHT_SET,
         //Adding a new mob.
         EDITOR_SUB_STATE_NEW_MOB,
         //Duplicating a mob.
@@ -434,6 +436,10 @@ private:
     string problem_title;
     //Pointer to the problematic vertex, if any.
     vertex* problem_vertex_ptr;
+    //Sector height when the quick height set mode was entered.
+    float quick_height_set_start_height;
+    //Mouse coordinates (screen) when the quick height set mode was entered.
+    point quick_height_set_start_pos;
     //Time left in the quick preview mode, including fade out.
     timer quick_preview_timer;
     //Opacity of the reference image.
@@ -544,6 +550,7 @@ private:
     void clear_undo_history();
     void close_load_dialog();
     void close_options_dialog();
+    void copy_sector_texture(const point &cursor);
     void create_or_load_area(
         string requested_area_folder_name,
         const AREA_TYPES requested_area_type
@@ -679,7 +686,7 @@ private:
     void update_texture_suggestions(const string &n);
     void update_undo_history();
     void update_vertex_selection();
-
+    
     //Drawing functions.
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
@@ -755,6 +762,7 @@ private:
     void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
     void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;
     void handle_key_down_canvas(const ALLEGRO_EVENT &ev) override;
+    void handle_key_up_anywhere(const ALLEGRO_EVENT &ev) override;
     void handle_lmb_double_click(const ALLEGRO_EVENT &ev) override;
     void handle_lmb_down(const ALLEGRO_EVENT &ev) override;
     void handle_lmb_drag(const ALLEGRO_EVENT &ev) override;

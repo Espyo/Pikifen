@@ -138,7 +138,14 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R)) {
-        rotate_mob_gens_to_point(game.mouse_cursor_w);
+        if(state == EDITOR_STATE_MOBS && sub_state == EDITOR_SUB_STATE_NONE) {
+            rotate_mob_gens_to_point(game.mouse_cursor_w);
+        }
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_T)) {
+        if(state == EDITOR_STATE_LAYOUT && sub_state == EDITOR_SUB_STATE_NONE) {
+            copy_sector_texture(game.mouse_cursor_w);
+        }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
         press_snap_mode_button();
@@ -332,6 +339,23 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         //Toggles the filter modes backwards.
         press_selection_filter_button();
         
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_H)) {
+        if(state == EDITOR_STATE_LAYOUT && sub_state == EDITOR_SUB_STATE_NONE) {
+            if(selected_sectors.empty()) {
+                status_text =
+                    "To set a sector's height, you must first select a sector!";
+            } else if(selected_sectors.size() > 1) {
+                status_text =
+                    "To set a sector's height, you can only select 1 sector!";
+            } else {
+                sub_state = EDITOR_SUB_STATE_QUICK_HEIGHT_SET;
+                quick_height_set_start_pos = game.mouse_cursor_s;
+                quick_height_set_start_height = (*selected_sectors.begin())->z;
+                status_text =
+                    "Move the cursor up or down to change the sector's height.";
+            }
+        }
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_N)) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
@@ -425,6 +449,24 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
         center_camera(min_coords, max_coords);
         
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a keyboard key being released anywhere.
+ * ev:
+ *   Event to handle.
+ */
+void area_editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {
+    if(ev.keyboard.keycode == ALLEGRO_KEY_H) {
+        if(
+            state == EDITOR_STATE_LAYOUT &&
+            sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET
+        ) {
+            sub_state = EDITOR_SUB_STATE_NONE;
+            status_text.clear();
+        }
     }
 }
 
@@ -1706,6 +1748,13 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         } else {
             set_new_circle_sector_points();
         }
+    }
+    
+    if(sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
+        float offset = quick_height_set_start_pos.y - game.mouse_cursor_s.y;
+        offset = std::floor(offset / 2.0f);
+        register_change("quick sector height set");
+        (*selected_sectors.begin())->z = quick_height_set_start_height + offset;
     }
 }
 

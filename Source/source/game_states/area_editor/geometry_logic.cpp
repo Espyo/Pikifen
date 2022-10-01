@@ -265,6 +265,41 @@ void area_editor::check_drawing_line(const point &pos) {
 
 
 /* ----------------------------------------------------------------------------
+ * Copies the currently selected sector's texture onto the sector underneath
+ * the mouse cursor.
+ * cursor:
+ *   Cursor position.
+ */
+void area_editor::copy_sector_texture(const point &cursor) {
+    if(selected_sectors.empty()) {
+        status_text =
+            "To copy a sector's texture, you must first select a sector!";
+        return;
+    }
+    
+    if(selected_sectors.size() > 1) {
+        status_text =
+            "To copy a sector's texture, you can only select 1 sector!";
+        return;
+    }
+    
+    sector* target_sector = get_sector_under_point(cursor);
+    if(!target_sector) {
+        status_text =
+            "To copy a sector's texture, you must aim your cursor at a sector!";
+        return;
+    }
+    
+    register_change("sector texture copy");
+    
+    target_sector->texture_info = (*selected_sectors.begin())->texture_info;
+    status_text =
+        "Successfully copied a sector's texture.";
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new sector for use in layout drawing operations.
  * This automatically clones it from another sector, if not NULL, or gives it
  * a recommended texture if the other sector NULL.
@@ -1768,7 +1803,11 @@ void area_editor::resize_everything(const float mults[2]) {
  *   Point that the mobs must face.
  */
 void area_editor::rotate_mob_gens_to_point(const point &pos) {
-    if(selected_mobs.empty()) return;
+    if(selected_mobs.empty()) {
+        status_text =
+            "To rotate objects, you must first select some objects!";
+        return;
+    }
     
     register_change("object rotation");
     selection_homogenized = false;

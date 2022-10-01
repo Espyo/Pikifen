@@ -299,6 +299,7 @@ void init_dear_imgui() {
     ImGui::CreateContext();
     ImGui_ImplAllegro5_Init(game.display);
     ImGui::GetIO().IniFilename = "";
+    ImGui::GetIO().ConfigDragClickToInputText = true;
     for(size_t c = 0; c < ImGuiCol_COUNT; ++c) {
         game.imgui_default_style[c] = ImGui::GetStyle().Colors[c];
     }
@@ -315,7 +316,7 @@ void init_enum_name_databases() {
     game.sector_types.register_item(
         SECTOR_TYPE_BLOCKING, "Blocking"
     );
-
+    
     game.mission_goals.register_item(
         MISSION_GOAL_END_MANUALLY, "End whenever you want"
     );

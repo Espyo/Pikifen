@@ -1842,6 +1842,13 @@ void area_editor::process_gui_panel_layout() {
             "Escape"
         );
         
+    } else if(sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
+        //Explanation text.
+        ImGui::TextWrapped(
+            "Move the cursor up or down to change the sector's height. "
+            "Release the key to return to normal."
+        );
+        
     } else {
     
         //Back button.
@@ -3967,7 +3974,9 @@ void area_editor::process_gui_panel_sector() {
             update_all_edge_offset_caches();
         }
         set_tooltip(
-            "Height of the floor. Positive numbers are higher.",
+            "Height of the floor. Positive numbers are higher.\n"
+            "You can also hold H in the canvas to set a sector's height\n"
+            "by moving the cursor up or down.",
             "", WIDGET_EXPLANATION_DRAG
         );
         
@@ -4188,7 +4197,10 @@ void area_editor::process_gui_panel_sector() {
                 );
             }
             set_tooltip(
-                "Pick a texture to use."
+                "Pick a texture to use.\n"
+                "You can also press T in the canvas to copy\n"
+                "the texture of the currently selected sector,\n"
+                "and paste it into whatever sector is under the cursor."
             );
             
             //Sector texture name text.

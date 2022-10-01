@@ -18,8 +18,6 @@ Next tasks (roughly sorted most important first)
     Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
     During the "Ready?" interlude, a lot of stuff is rendered wrong
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
-    Shift++, Shift+-, X, and Shift+X aren't changing the grid interval when you're creating a sector or placing an object (thanks Neo)
-        That's because your last click was technically on the GUI, so the GUI has focus...
     Pressing Escape in an editor's initial window is apparently STILL causing issues with Dear ImGui textboxes (thanks Neo)
         Needs to be tested if it still happens in the master branch
     
@@ -745,7 +743,7 @@ Misc things (so I don't forget)
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?
             For the animation editor: reverse frames
-        Customizable controls overall
+        Customizable controls overall, including double-clicking any of the mouse buttons
     Area sections?
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections

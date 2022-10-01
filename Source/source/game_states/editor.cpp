@@ -1464,7 +1464,7 @@ void editor::set_tooltip(
             widget_explanation_text =
                 "Click and drag left or right to change.\n"
                 "Hold Alt or Shift to change speed.\n"
-                "Double-click or Ctrl + click to write a value.";
+                "Click once or Ctrl + click to write a value.";
             break;
         }
         case WIDGET_EXPLANATION_SLIDER: {

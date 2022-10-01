@@ -117,6 +117,7 @@ area_editor::area_editor() :
     path_preview_straight(false),
     pre_move_area_data(nullptr),
     problem_edge_intersection(NULL, NULL),
+    quick_height_set_start_height(0.0f),
     quick_preview_timer(AREA_EDITOR::QUICK_PREVIEW_DURATION),
     reference_bitmap(nullptr),
     selected_shadow(nullptr),

@@ -1112,6 +1112,20 @@ void area_editor::draw_canvas() {
         }
     }
     
+    //Quick sector height set.
+    if(sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
+        point nr_coords = quick_height_set_start_pos;
+        nr_coords.x += 100.0f;
+        al_transform_coordinates(
+            &game.screen_to_world_transform, &nr_coords.x, &nr_coords.y
+        );
+        draw_debug_text(
+            al_map_rgb(64, 255, 64),
+            nr_coords,
+            "Height: " + f2s((*selected_sectors.begin())->z)
+        );
+    }
+    
     //Path drawing.
     if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
         if(path_drawing_stop_1) {
