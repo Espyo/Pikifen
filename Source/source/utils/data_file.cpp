@@ -12,6 +12,8 @@ using std::vector;
 
 
 namespace DATA_FILE {
+//When encrypting, rotate the character values forward by this amount.
+const unsigned char ENCRYPTION_ROT_AMOUNT = 40;
 //If a file starts with these bytes, then it's UTF-8.
 const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
 }
@@ -200,10 +202,12 @@ string data_node::get_value_or_default(const string &def) const {
  *   If true, any nodes that are not in the root node (i.e. they are children
  *   of some node inside the file) will only have a name and no value; the
  *   entire contents of their line will be their name.
+ * encrypted:
+ *   If true, the file is encrypted, and needs decrypting.
  */
 void data_node::load_file(
     const string &file_name, const bool trim_values,
-    const bool names_only_after_root
+    const bool names_only_after_root, const bool encrypted
 ) {
     vector<string> lines;
     
@@ -216,7 +220,7 @@ void data_node::load_file(
         file_was_opened = true;
         string line;
         while(!al_feof(file)) {
-            getline(file, line);
+            getline(file, line, encrypted);
             
             if(is_first_line) {
                 //Let's just check if it starts with the UTF-8 Magic Number.
@@ -398,11 +402,14 @@ bool data_node::remove(data_node* node_to_remove) {
  *   If true, only save the nodes inside this node.
  * include_empty_values:
  *   If true, even nodes with an empty value will be saved.
+ * encrypted:
+ *   If true, the file must be encrypted.
  */
 bool data_node::save_file(
     string file_name, const bool children_only,
-    const bool include_empty_values
+    const bool include_empty_values, const bool encrypted
 ) const {
+
     if(file_name == "") file_name = this->file_name;
     
     //Create any missing folders.
@@ -420,10 +427,12 @@ bool data_node::save_file(
     if(file) {
         if(children_only) {
             for(size_t c = 0; c < children.size(); ++c) {
-                children[c]->save_node(file, 0, include_empty_values);
+                children[c]->save_node(
+                    file, 0, include_empty_values, encrypted
+                );
             }
         } else {
-            save_node(file, 0, include_empty_values);
+            save_node(file, 0, include_empty_values, encrypted);
         }
         al_fclose(file);
         return true;
@@ -441,29 +450,44 @@ bool data_node::save_file(
  *   Current level of depth.
  * include_empty_values:
  *   If true, even nodes with an empty value will be saved.
+ * encrypted:
+ *   If true, the file must be encrypted.
  */
 void data_node::save_node(
     ALLEGRO_FILE* file, const size_t level,
-    const bool include_empty_values
+    const bool include_empty_values, const bool encrypted
 ) const {
-    string tabs = string(level, '\t');
+
+    string tabs_str(level, '\t');
+    if(encrypted) data_file_encrypt(tabs_str);
+    string name_str = name;
+    if(encrypted) data_file_encrypt(name_str);
+    string block_start_str = "{\n";
+    if(encrypted) data_file_encrypt(block_start_str);
+    string block_end_str = "}";
+    if(encrypted) data_file_encrypt(block_end_str);
+    string value_str = "=" + value;
+    if(encrypted) data_file_encrypt(value_str);
+    string newline_str = "\n";
+    if(encrypted) data_file_encrypt(newline_str);
     
-    al_fwrite(file, tabs.c_str(), tabs.size());
-    al_fwrite(file, name.c_str(), name.size());
+    al_fwrite(file, tabs_str.c_str(), tabs_str.size());
+    al_fwrite(file, name_str.c_str(), name_str.size());
     
     if(!children.empty()) {
-        al_fwrite(file, "{\n", 2);
+        al_fwrite(file, block_start_str.c_str(), block_start_str.size());
         for(size_t c = 0; c < children.size(); ++c) {
-            children[c]->save_node(file, level + 1, include_empty_values);
+            children[c]->save_node(
+                file, level + 1, include_empty_values, encrypted
+            );
         }
-        al_fwrite(file, tabs.c_str(), tabs.size());
-        al_fwrite(file, "}", 1);
+        al_fwrite(file, tabs_str.c_str(), tabs_str.size());
+        al_fwrite(file, block_end_str.c_str(), block_end_str.size());
         
     } else if(!value.empty() || include_empty_values) {
-        al_fwrite(file, "=", 1);
-        al_fwrite(file, value.c_str(), value.size());
+        al_fwrite(file, value_str.c_str(), value_str.size());
     }
-    al_fwrite(file, "\n", 1);
+    al_fwrite(file, newline_str.c_str(), newline_str.size());
     
 }
 
@@ -504,13 +528,28 @@ string data_node::trim_spaces(const string &s, const bool left_only) {
 
 
 /* ----------------------------------------------------------------------------
+ * Encrypts a string for saving in an encrypted data file.
+ * str:
+ *   String to encrypt.
+ */
+void data_file_encrypt(string &str) {
+    for(size_t c = 0; c < str.size(); ++c) {
+        str[c] =
+            (255 + ((int) (str[c] - DATA_FILE::ENCRYPTION_ROT_AMOUNT))) % 255;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Like an std::getline(), but for ALLEGRO_FILE*.
  * file:
  *   Allegro file handle.
  * line:
  *   String to save the line into.
+ * encrypted:
+ *   If true, the document is encrypted and needs decrypting.
  */
-void getline(ALLEGRO_FILE* file, string &line) {
+void getline(ALLEGRO_FILE* file, string &line, const bool encrypted) {
     line.clear();
     if(!file) {
         return;
@@ -521,14 +560,21 @@ void getline(ALLEGRO_FILE* file, string &line) {
     
     bytes_read = al_fread(file, c_ptr, 1);
     while(bytes_read > 0) {
-        char c = *((char*) c_ptr);
+        unsigned char c = *((unsigned char*) c_ptr);
+        
+        if(encrypted) {
+            c = (c + DATA_FILE::ENCRYPTION_ROT_AMOUNT) % 255;
+        }
         
         if(c == '\r') {
             //Let's check if the next character is a \n. If so, they should
             //both be consumed by al_fread().
             bytes_read = al_fread(file, c_ptr, 1);
+            unsigned char peek_c = *((unsigned char*) c_ptr);
+            if(encrypted) peek_c =
+                    (peek_c + DATA_FILE::ENCRYPTION_ROT_AMOUNT) % 255;
             if(bytes_read > 0) {
-                if(*((char*) c_ptr) == '\n') {
+                if(peek_c == '\n') {
                     //Yep. Done.
                     break;
                 } else {

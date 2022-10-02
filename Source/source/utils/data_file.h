@@ -51,6 +51,7 @@ using std::vector;
 
 
 namespace DATA_FILE {
+extern const unsigned char ENCRYPTION_ROT_AMOUNT;
 extern const string UTF8_MAGIC_NUMBER;
 }
 
@@ -87,7 +88,8 @@ public:
     void load_file(
         const string &file_name,
         const bool trim_values = true,
-        const bool names_only_after_root = false
+        const bool names_only_after_root = false,
+        const bool encrypted = false
     );
     size_t load_node(
         const vector<string> &lines, const bool trim_values,
@@ -96,11 +98,13 @@ public:
     );
     bool save_file(
         string file_name = "", const bool children_only = true,
-        const bool include_empty_values = false
+        const bool include_empty_values = false,
+        const bool encrypted = false
     ) const;
     void save_node(
         ALLEGRO_FILE* file, const size_t level = 0,
-        const bool include_empty_values = false
+        const bool include_empty_values = false,
+        const bool encrypted = false
     ) const;
     
     data_node();
@@ -122,7 +126,7 @@ private:
 };
 
 
-
-void getline(ALLEGRO_FILE* file, string &line);
+void data_file_encrypt(string &str);
+void getline(ALLEGRO_FILE* file, string &line, const bool encrypted = false);
 
 #endif //ifndef DATA_FILE_INCLUDED
