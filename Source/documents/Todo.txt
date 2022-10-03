@@ -2,10 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Save the high scores/completion of every map
-        Also save when it was achieved, and under what version of the area
-        Point down in the manual that the game auto-saves
-        It should also save if the stage has never been played
+    Show the high scores in the area selection menu
     Document the rich text format (\k, \n)
 
 Next tasks (roughly sorted most important first)
@@ -24,6 +21,7 @@ Next tasks (roughly sorted most important first)
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
     Pressing Escape in an editor's initial window is apparently STILL causing issues with Dear ImGui textboxes (thanks Neo)
         Needs to be tested if it still happens in the master branch
+    Restarting a mission on a ship's beam will show its prompt
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -66,13 +64,6 @@ Next tasks (roughly sorted most important first)
             The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that
             Simple areas shouldn't have a time limit
             In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
-            A status text in the results screen
-                If it's a simple area, say "Exploration ended. Nothing to report.", or "Area editor test exploration ended.", or "Exploration ended. Maker tools were used."
-                If it's a mission and a new record, it should say "Mission ended. Successfully saved the NEW RECORD!"
-                If it's not a new record, it should say "Mission ended. No new record, so the result won't be saved."
-                If it failed to save, it should say "Mission ended. FAILED to save the new record!"
-                    It should probably also show a regular message box explaining what to do
-                If maker tools were used, or if this was an area editor quick play, or After Hours, "Mission ended. Maker tools were used, so the result won't be saved." or "Mission ended. This was an area editor test run, so the result won't be saved." or "After hours ended. Results during after hours are not saved."
             Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
             The results screen should have a "New record!" blurb when you get a new record
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
@@ -80,6 +71,7 @@ Next tasks (roughly sorted most important first)
             Enemies falling into the void should count as deaths, and for the enemy kill points
             When a mission ends, the camera should move to and zoom-in on the reason for clear/failure
             Make sure after-hours works
+                Do not save the result, and make sure to write in the conclusion that it wasn't saved because of after hours
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod

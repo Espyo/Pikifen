@@ -332,30 +332,55 @@ void results_state::load() {
         }
     }
     
-    if(is_new_best) {
+    bool saved_successfully = true;
+    if(
+        is_new_best &&
+        game.states.area_ed->quick_play_area_path.empty() &&
+        !game.maker_tools.used_helping_tools
+    ) {
         entry_node->value =
             string(goal_was_cleared ? "1" : "0") + ";" +
             i2s(final_mission_score) + ";" +
             get_current_time(false);
-        mission_records.save_file(MISSION_RECORDS_FILE_PATH, true, false, true);
+        saved_successfully =
+            mission_records.save_file(
+                MISSION_RECORDS_FILE_PATH, true, false, true
+            );
+    }
+    
+    if(!saved_successfully) {
+        show_message_box(
+            NULL, "Save failed!",
+            "Could not save this result!",
+            (
+                "An error occured while saving the mission record to the "
+                "file \"" + MISSION_RECORDS_FILE_PATH + "\". Make sure that "
+                "the folder it is saving to exists and it is not read-only, "
+                "and try beating the mission again."
+            ).c_str(),
+            NULL,
+            ALLEGRO_MESSAGEBOX_WARN
+        );
     }
     
     text_to_animate.clear();
     
     //Menu items.
-    gui.register_coords("area_name",             50,  7, 45, 10);
-    gui.register_coords("area_subtitle",         50, 18, 40, 10);
-    gui.register_coords("goal_stamp",            15, 15, 22, 22);
-    gui.register_coords("end_reason",            16, 30, 30,  4);
-    gui.register_coords("medal",                 85, 15, 22, 22);
-    gui.register_coords("medal_reason",          85, 30, 30,  4);
-    gui.register_coords("stats_label",           50, 32, 36,  4);
-    gui.register_coords("stats",                 50, 56, 80, 40);
-    gui.register_coords("stats_scroll",          93, 56,  2, 40);
-    gui.register_coords("retry",                 20, 85, 24, 10);
-    gui.register_coords("continue",              50, 85, 24, 10);
-    gui.register_coords("pick_area",             80, 85, 24, 10);
-    gui.register_coords("tooltip",               50, 95, 96,  7);
+    gui.register_coords("area_name",             50,    7, 45, 10);
+    gui.register_coords("area_subtitle",         50,   18, 40, 10);
+    gui.register_coords("goal_stamp",            15,   15, 22, 22);
+    gui.register_coords("end_reason",            15,   28, 26,  4);
+    gui.register_coords("medal",                 85,   15, 22, 22);
+    gui.register_coords("medal_reason",          85,   28, 26,  4);
+    gui.register_coords("conclusion_label",      50,   32, 36,  4);
+    gui.register_coords("conclusion",            50,   36, 96,  4);
+    gui.register_coords("stats_label",           50,   42, 36,  4);
+    gui.register_coords("stats",                 50,   63, 80, 38);
+    gui.register_coords("stats_scroll",          93,   63,  2, 38);
+    gui.register_coords("retry",                 20,   88, 24,  8);
+    gui.register_coords("continue",              50,   88, 24,  8);
+    gui.register_coords("pick_area",             80,   88, 24,  8);
+    gui.register_coords("tooltip",               50, 96.5, 96,  5);
     gui.read_coords(
         data_node(RESULTS::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -628,13 +653,68 @@ void results_state::load() {
         gui.add_item(medal_reason_text, "medal_reason");
     }
     
-    //Stats label text.
-    string stats_label = "Stats:";
-    if(game.maker_tools.used_helping_tools) {
-        stats_label = "Maker tools were used. " + stats_label;
+    //Conclusion label text.
+    string conclusion_label = "Conclusion:";
+    text_gui_item* conclusion_label_text =
+        new text_gui_item(
+        conclusion_label, game.fonts.standard,
+        al_map_rgba(255, 255, 255, 192)
+    );
+    gui.add_item(conclusion_label_text, "conclusion_label");
+    
+    //Conclusion text.
+    string conclusion;
+    switch(game.cur_area_data.type) {
+    case AREA_TYPE_SIMPLE: {
+        if(!game.states.area_ed->quick_play_area_path.empty()) {
+            conclusion =
+                "Area editor playtest ended.";
+        } else if(game.maker_tools.used_helping_tools) {
+            conclusion =
+                "Nothing to report, other than maker tools being used.";
+        } else {
+            conclusion =
+                "Nothing to report.";
+        }
+        break;
+    } case AREA_TYPE_MISSION: {
+        if(!game.states.area_ed->quick_play_area_path.empty()) {
+            conclusion =
+                "This was an area editor playtest, "
+                "so the result won't be saved.";
+        } else if(game.maker_tools.used_helping_tools) {
+            conclusion =
+                "Maker tools were used, "
+                "so the result won't be saved.";
+        } else if(
+            old_record_clear && !goal_was_cleared &&
+            old_record_score < final_mission_score
+        ) {
+            conclusion =
+                "High score, but the old best was a "
+                "clear, so this result won't be saved.";
+        } else if(!is_new_best) {
+            conclusion =
+                "This result is not a new best, so "
+                "it won't be saved.";
+        } else if(!saved_successfully) {
+            conclusion =
+                "FAILED TO SAVE THIS RESULT AS A NEW BEST!";
+        } else {
+            conclusion =
+                "Saved this result as a NEW BEST!";
+        }
     }
+    }
+    text_gui_item* conclusion_text =
+        new text_gui_item(conclusion, game.fonts.standard);
+    gui.add_item(conclusion_text, "conclusion");
+    
+    //Stats label text.
     text_gui_item* stats_label_text =
-        new text_gui_item(stats_label, game.fonts.standard);
+        new text_gui_item(
+        "Stats:", game.fonts.standard, al_map_rgba(255, 255, 255, 192)
+    );
     gui.add_item(stats_label_text, "stats_label");
     
     //Stats box.
@@ -861,6 +941,23 @@ void results_state::load() {
                 COLOR_GOLD
             );
         }
+    }
+    
+    if(
+        game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS
+    ) {
+        add_stat(
+            "Final score:",
+            i2s(final_mission_score),
+            COLOR_GOLD
+        );
+        
+        add_stat(
+            "Old high score:",
+            i2s(old_record_score),
+            COLOR_WHITE
+        );
     }
     
     //Retry button.
