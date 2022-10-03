@@ -146,6 +146,9 @@ const string SYSTEM_ASSET_FILE_NAMES_FILE_PATH =
 //Relative path to the file with the error log.
 const string ERROR_LOG_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Error_log.txt";
+//Relative path to the file with the mission records.
+const string MISSION_RECORDS_FILE_PATH =
+    USER_DATA_FOLDER_PATH + "/Mission_records.txt";
 //Relative path to the file with the maker tools configuration.
 const string MAKER_TOOLS_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Tools.txt";

@@ -186,6 +186,9 @@ void results_state::leave() {
  * Loads the results state into memory.
  */
 void results_state::load() {
+    //Calculate score things.
+    bool goal_was_cleared = game.states.gameplay->mission_fail_reason == 0;
+    
     size_t secs_left =
         game.cur_area_data.mission.fail_time_limit -
         game.states.gameplay->area_time_passed;
@@ -199,7 +202,7 @@ void results_state::load() {
             game.cur_area_data.mission.point_loss_data,
             MISSION_POINT_CRITERIA_PIKMIN_BORN
         ) &&
-        game.states.gameplay->mission_fail_reason != 0
+        !goal_was_cleared
     ) {
         pikmin_born_score = 0;
         lost_pikmin_born_score = true;
@@ -214,7 +217,7 @@ void results_state::load() {
             game.cur_area_data.mission.point_loss_data,
             MISSION_POINT_CRITERIA_PIKMIN_DEATH
         ) &&
-        game.states.gameplay->mission_fail_reason != 0
+        !goal_was_cleared
     ) {
         pikmin_death_score = 0;
         lost_pikmin_death_score = true;
@@ -229,7 +232,7 @@ void results_state::load() {
             game.cur_area_data.mission.point_loss_data,
             MISSION_POINT_CRITERIA_SEC_LEFT
         ) &&
-        game.states.gameplay->mission_fail_reason != 0
+        !goal_was_cleared
     ) {
         secs_left_score = 0;
         lost_secs_left_score = true;
@@ -244,7 +247,7 @@ void results_state::load() {
             game.cur_area_data.mission.point_loss_data,
             MISSION_POINT_CRITERIA_SEC_PASSED
         ) &&
-        game.states.gameplay->mission_fail_reason != 0
+        !goal_was_cleared
     ) {
         secs_passed_score = 0;
         lost_secs_passed_score = true;
@@ -259,7 +262,7 @@ void results_state::load() {
             game.cur_area_data.mission.point_loss_data,
             MISSION_POINT_CRITERIA_TREASURE_POINTS
         ) &&
-        game.states.gameplay->mission_fail_reason != 0
+        !goal_was_cleared
     ) {
         treasure_points_score = 0;
         lost_treasure_points_score = true;
@@ -274,7 +277,7 @@ void results_state::load() {
             game.cur_area_data.mission.point_loss_data,
             MISSION_POINT_CRITERIA_ENEMY_POINTS
         ) &&
-        game.states.gameplay->mission_fail_reason != 0
+        !goal_was_cleared
     ) {
         enemy_points_score = 0;
         lost_enemy_points_score = true;
@@ -288,6 +291,55 @@ void results_state::load() {
         treasure_points_score +
         enemy_points_score;
         
+    //High score loading and saving logic.
+    bool old_record_clear = false;
+    int old_record_score = 0;
+    string old_record_date = "";
+    
+    data_node mission_records;
+    mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
+    string mission_record_entry_name =
+        game.cur_area_data.name + ";" +
+        game.mission_goals.get_name(game.cur_area_data.mission.goal) + ";" +
+        game.cur_area_data.maker + ";" +
+        game.cur_area_data.version;
+    data_node* entry_node;
+    if(
+        mission_records.get_nr_of_children_by_name(mission_record_entry_name) >
+        0
+    ) {
+        entry_node =
+            mission_records.get_child_by_name(mission_record_entry_name);
+    } else {
+        entry_node = new data_node(mission_record_entry_name, "");
+        mission_records.add(entry_node);
+    }
+    
+    vector<string> old_record_parts = split(entry_node->value, ";", true);
+    
+    if(old_record_parts.size() == 3) {
+        old_record_clear = old_record_parts[0] == "1";
+        old_record_score = s2i(old_record_parts[1]);
+        old_record_date = old_record_parts[2];
+    }
+    
+    bool is_new_best = false;
+    if(!old_record_clear && goal_was_cleared) {
+        is_new_best = true;
+    } else if(old_record_clear == goal_was_cleared) {
+        if(old_record_score < final_mission_score) {
+            is_new_best = true;
+        }
+    }
+    
+    if(is_new_best) {
+        entry_node->value =
+            string(goal_was_cleared ? "1" : "0") + ";" +
+            i2s(final_mission_score) + ";" +
+            get_current_time(false);
+        mission_records.save_file(MISSION_RECORDS_FILE_PATH, true, false, true);
+    }
+    
     text_to_animate.clear();
     
     //Menu items.

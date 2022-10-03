@@ -1,9 +1,13 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    In the simple area menu, it's not calculating which area button is selected properly
+    
 
 Current tasks (tasks being worked on, but not yet committed)
-    
-    
+    Save the high scores/completion of every map
+        Also save when it was achieved, and under what version of the area
+        Point down in the manual that the game auto-saves
+        It should also save if the stage has never been played
+    Document the rich text format (\k, \n)
+
 Next tasks (roughly sorted most important first)
     --- To fix ---
     > throwing non red pikmin on an acb while it's on fire kinda just traps them for eternity until the ACB is delivered to an onion (thanks Helodity)
@@ -45,10 +49,6 @@ Next tasks (roughly sorted most important first)
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
         [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
-        Save the high scores/completion of every map
-            Also save when it was achieved, and under what version of the area
-            Point down in the manual that the game auto-saves
-            It should also save if the stage has never been played
         A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)
             From the script?
             As a parameter in every single mob generator?
@@ -66,7 +66,13 @@ Next tasks (roughly sorted most important first)
             The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that
             Simple areas shouldn't have a time limit
             In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
-            When playing a mission through the area editor's quick play, high scores shouldn't be saved
+            A status text in the results screen
+                If it's a simple area, say "Exploration ended. Nothing to report.", or "Area editor test exploration ended.", or "Exploration ended. Maker tools were used."
+                If it's a mission and a new record, it should say "Mission ended. Successfully saved the NEW RECORD!"
+                If it's not a new record, it should say "Mission ended. No new record, so the result won't be saved."
+                If it failed to save, it should say "Mission ended. FAILED to save the new record!"
+                    It should probably also show a regular message box explaining what to do
+                If maker tools were used, or if this was an area editor quick play, or After Hours, "Mission ended. Maker tools were used, so the result won't be saved." or "Mission ended. This was an area editor test run, so the result won't be saved." or "After hours ended. Results during after hours are not saved."
             Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
             The results screen should have a "New record!" blurb when you get a new record
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
