@@ -245,6 +245,8 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     //Folder name of each area available.
     vector<string> areas_to_pick;
+    //Button for each area available.
+    vector<gui_item*> area_buttons;
     //Display name of each area available.
     vector<string> area_names;
     //Subtitle of each area available.
@@ -263,6 +265,12 @@ private:
     vector<ALLEGRO_BITMAP*> area_thumbs;
     //Mission data of each area available.
     vector<mission_data> area_mission_data;
+    //Record clear of each area available.
+    vector<bool> area_record_clears;
+    //Record scores of each area available.
+    vector<int> area_record_scores;
+    //Record dates of each area available.
+    vector<string> area_record_dates;
     //Main GUI.
     gui_manager gui;
     //Area info GUI item.
@@ -279,6 +287,8 @@ private:
     text_gui_item* specs_name_text;
     //Subtitle text item.
     text_gui_item* subtitle_text;
+    //Thumbnail of the currently selected area.
+    ALLEGRO_BITMAP* cur_thumb;
     //Description text item.
     text_gui_item* description_text;
     //Difficulty text item.
@@ -289,8 +299,14 @@ private:
     text_gui_item* maker_text;
     //Version text item.
     text_gui_item* version_text;
-    //Thumbnail of the currently selected area.
-    ALLEGRO_BITMAP* cur_thumb;
+    //Record info text item.
+    text_gui_item* record_info_text;
+    //Record stamp of the currently selected area.
+    ALLEGRO_BITMAP* cur_stamp;
+    //Record medal of the currently selected area.
+    ALLEGRO_BITMAP* cur_medal;
+    //Record date text item.
+    text_gui_item* record_date_text;
     //Goal text item.
     text_gui_item* goal_text;
     //Fail explanation list item.

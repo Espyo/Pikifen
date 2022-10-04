@@ -291,7 +291,7 @@ void results_state::load() {
         treasure_points_score +
         enemy_points_score;
         
-    //High score loading and saving logic.
+    //Record loading and saving logic.
     bool old_record_clear = false;
     int old_record_score = 0;
     string old_record_date = "";
@@ -300,7 +300,10 @@ void results_state::load() {
     mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
     string mission_record_entry_name =
         game.cur_area_data.name + ";" +
-        game.mission_goals.get_name(game.cur_area_data.mission.goal) + ";" +
+        get_subtitle_or_mission_goal(
+            game.cur_area_data.subtitle, game.cur_area_data.type,
+            game.cur_area_data.mission.goal
+        ) + ";" +
         game.cur_area_data.maker + ";" +
         game.cur_area_data.version;
     data_node* entry_node;
@@ -323,25 +326,29 @@ void results_state::load() {
         old_record_date = old_record_parts[2];
     }
     
-    bool is_new_best = false;
+    bool is_new_record = false;
     if(!old_record_clear && goal_was_cleared) {
-        is_new_best = true;
+        is_new_record = true;
     } else if(old_record_clear == goal_was_cleared) {
-        if(old_record_score < final_mission_score) {
-            is_new_best = true;
+        if(
+            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
+            old_record_score < final_mission_score
+        ) {
+            is_new_record = true;
         }
     }
     
     bool saved_successfully = true;
     if(
-        is_new_best &&
+        is_new_record &&
         game.states.area_ed->quick_play_area_path.empty() &&
         !game.maker_tools.used_helping_tools
     ) {
-        entry_node->value =
-            string(goal_was_cleared ? "1" : "0") + ";" +
-            i2s(final_mission_score) + ";" +
-            get_current_time(false);
+        string clear_str = goal_was_cleared ? "1" : "0";
+        string score_str = i2s(final_mission_score);
+        string date_str = get_current_time(false);
+        
+        entry_node->value = clear_str + ";" + score_str + ";" + date_str;
         saved_successfully =
             mission_records.save_file(
                 MISSION_RECORDS_FILE_PATH, true, false, true
@@ -687,22 +694,24 @@ void results_state::load() {
                 "Maker tools were used, "
                 "so the result won't be saved.";
         } else if(
-            old_record_clear && !goal_was_cleared &&
+            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
+            old_record_clear &&
+            !goal_was_cleared &&
             old_record_score < final_mission_score
         ) {
             conclusion =
-                "High score, but the old best was a "
+                "High score, but the old record was a "
                 "clear, so this result won't be saved.";
-        } else if(!is_new_best) {
+        } else if(!is_new_record) {
             conclusion =
-                "This result is not a new best, so "
+                "This result is not a new record, so "
                 "it won't be saved.";
         } else if(!saved_successfully) {
             conclusion =
-                "FAILED TO SAVE THIS RESULT AS A NEW BEST!";
+                "FAILED TO SAVE THIS RESULT AS A NEW RECORD!";
         } else {
             conclusion =
-                "Saved this result as a NEW BEST!";
+                "Saved this result as a new record!";
         }
     }
     }

@@ -85,6 +85,12 @@ void area_menu_state::animate_info_and_specs() {
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
     );
     if(area_type == AREA_TYPE_MISSION) {
+        record_info_text->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        );
+        record_date_text->start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
+        );
         specs_name_text->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
         );
@@ -117,12 +123,16 @@ area_menu_state::area_menu_state() :
     info_name_text(nullptr),
     specs_name_text(nullptr),
     subtitle_text(nullptr),
+    cur_thumb(nullptr),
     description_text(nullptr),
     difficulty_text(nullptr),
     tags_text(nullptr),
     maker_text(nullptr),
     version_text(nullptr),
-    cur_thumb(nullptr),
+    record_info_text(nullptr),
+    cur_stamp(nullptr),
+    cur_medal(nullptr),
+    record_date_text(nullptr),
     goal_text(nullptr),
     fail_list(nullptr),
     grading_list(nullptr),
@@ -157,10 +167,10 @@ void area_menu_state::do_logic() {
     
     if(!areas_to_pick.empty() && prev_selected_item != gui.selected_item) {
         if(gui.selected_item && gui.selected_item->parent == list_box) {
-            //A new area buttons got selected. Figure out which.
-            for(size_t c = 0; c < list_box->children.size(); ++c) {
-                if(list_box->children[c] == gui.selected_item) {
-                    area_idx = c;
+            //A new area button got selected. Figure out which.
+            for(size_t b = 0; b < area_buttons.size(); ++b) {
+                if(area_buttons[b] == gui.selected_item) {
+                    area_idx = b;
                     break;
                 }
             }
@@ -174,11 +184,15 @@ void area_menu_state::do_logic() {
         subtitle_text->text.clear();
         description_text->text.clear();
         difficulty_text->text.clear();
+        cur_thumb = NULL;
         tags_text->text.clear();
         maker_text->text.clear();
         version_text->text.clear();
-        cur_thumb = NULL;
+        cur_stamp = NULL;
+        cur_medal = NULL;
         if(area_type == AREA_TYPE_MISSION) {
+            record_info_text->text.clear();
+            record_date_text->text.clear();
             goal_text->text.clear();
             specs_name_text->text.clear();
             fail_list->delete_all_children();
@@ -238,6 +252,52 @@ void area_menu_state::do_logic() {
                 "Version: " + area_versions[area_idx]
             );
         cur_thumb = area_thumbs[area_idx];
+        if(area_type == AREA_TYPE_MISSION) {
+            int score = area_record_scores[area_idx];
+            bool record_exists = !area_record_dates[area_idx].empty();
+            record_info_text->text =
+                !record_exists ?
+                "(None)" :
+                area_mission_data[area_idx].grading_mode ==
+                MISSION_GRADING_POINTS ?
+                nr_and_plural(score, "point") :
+                "";
+            cur_stamp =
+                !record_exists ?
+                NULL :
+                area_record_clears[area_idx] ?
+                game.sys_assets.bmp_mission_clear :
+                game.sys_assets.bmp_mission_fail;
+            if(!record_exists) {
+                cur_medal = NULL;
+            } else {
+                switch(area_mission_data[area_idx].grading_mode) {
+                case MISSION_GRADING_POINTS: {
+                    if(score >= area_mission_data[area_idx].platinum_req) {
+                        cur_medal = game.sys_assets.bmp_medal_platinum;
+                    } else if(score >= area_mission_data[area_idx].gold_req) {
+                        cur_medal = game.sys_assets.bmp_medal_gold;
+                    } else if(score >= area_mission_data[area_idx].silver_req) {
+                        cur_medal = game.sys_assets.bmp_medal_silver;
+                    } else if(score >= area_mission_data[area_idx].bronze_req) {
+                        cur_medal = game.sys_assets.bmp_medal_bronze;
+                    } else {
+                        cur_medal = game.sys_assets.bmp_medal_none;
+                    }
+                    break;
+                } case MISSION_GRADING_GOAL: {
+                    if(area_record_clears[area_idx]) {
+                        cur_medal = game.sys_assets.bmp_medal_platinum;
+                    }
+                    break;
+                } case MISSION_GRADING_PARTICIPATION: {
+                    cur_medal = game.sys_assets.bmp_medal_platinum;
+                    break;
+                }
+                }
+            }
+            record_date_text->text = area_record_dates[area_idx];
+        }
         
         //Now fill in the mission specs.
         if(area_type == AREA_TYPE_MISSION) {
@@ -506,15 +566,19 @@ void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * Initializes the area info page GUI items.
  */
 void area_menu_state::init_gui_info_page() {
-    gui.register_coords("info_name",   36,  6, 68,  8);
-    gui.register_coords("subtitle",    36, 16, 68,  8);
-    gui.register_coords("thumbnail",   85, 14, 26, 24);
-    gui.register_coords("description", 50, 42, 96, 28);
-    gui.register_coords("high_scores", 50, 66, 96, 16);
-    gui.register_coords("difficulty",  50, 79, 96,  6);
-    gui.register_coords("tags",        50, 87, 96,  6);
-    gui.register_coords("maker",       28, 95, 52,  6);
-    gui.register_coords("version",     76, 95, 44,  6);
+    gui.register_coords("info_name",     36,  6, 68,  8);
+    gui.register_coords("subtitle",      36, 16, 68,  8);
+    gui.register_coords("thumbnail",     85, 14, 26, 24);
+    gui.register_coords("description",   50, 40, 96, 24);
+    gui.register_coords("record_label",  50, 56, 96,  4);
+    gui.register_coords("record_info",   50, 62, 36,  4);
+    gui.register_coords("record_stamp",  20, 65, 20, 14);
+    gui.register_coords("record_medal",  80, 65, 20, 14);
+    gui.register_coords("record_date",   50, 66, 28,  4);
+    gui.register_coords("difficulty",    50, 79, 96,  6);
+    gui.register_coords("tags",          50, 87, 96,  6);
+    gui.register_coords("maker",         28, 95, 52,  6);
+    gui.register_coords("version",       76, 95, 44,  6);
     gui.read_coords(
         data_node(AREA_MENU::INFO_GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -566,7 +630,53 @@ void area_menu_state::init_gui_info_page() {
         info_box->add_child(description_text);
         gui.add_item(description_text, "description");
         
-        //TODO high scores
+        if(area_type == AREA_TYPE_MISSION) {
+            //Record label.
+            text_gui_item* record_label_text =
+                new text_gui_item("Record:", game.fonts.standard);
+            info_box->add_child(record_label_text);
+            gui.add_item(record_label_text, "record_label");
+            
+            //Record info.
+            record_info_text =
+                new text_gui_item("", game.fonts.standard);
+            info_box->add_child(record_info_text);
+            gui.add_item(record_info_text, "record_info");
+            
+            //Record stamp.
+            gui_item* record_stamp_item = new gui_item();
+            record_stamp_item->on_draw =
+            [this] (const point & center, const point & size) {
+                if(cur_stamp) {
+                    draw_bitmap_in_box(
+                        cur_stamp, center, size
+                    );
+                }
+            };
+            info_box->add_child(record_stamp_item);
+            gui.add_item(record_stamp_item, "record_stamp");
+            
+            //Record medal.
+            gui_item* record_medal_item = new gui_item();
+            record_medal_item->on_draw =
+            [this] (const point & center, const point & size) {
+                if(cur_medal) {
+                    draw_bitmap_in_box(
+                        cur_medal, center, size
+                    );
+                }
+            };
+            info_box->add_child(record_medal_item);
+            gui.add_item(record_medal_item, "record_medal");
+            
+            //Record date.
+            record_date_text =
+                new text_gui_item(
+                "", game.fonts.slim, al_map_rgb(128, 128, 128)
+            );
+            info_box->add_child(record_date_text);
+            gui.add_item(record_date_text, "record_date");
+        }
         
         //Difficulty text.
         difficulty_text =
@@ -659,12 +769,22 @@ void area_menu_state::init_gui_main() {
         for(size_t a = 0; a < areas_to_pick.size(); ++a) {
             string area_name = area_names[a];
             string area_folder = areas_to_pick[a];
+            const float BUTTON_HEIGHT = 0.09f;
+            const float center_y = 0.045f + a * 0.10f;
             
             //Area button.
             button_gui_item* area_button =
                 new button_gui_item(area_name, game.fonts.standard);
-            area_button->center = point(0.50f, 0.045f + a * 0.10f);
-            area_button->size = point(1.0f, 0.09f);
+            area_button->center =
+                point(
+                    area_type == AREA_TYPE_MISSION ? 0.40f : 0.50f,
+                    center_y
+                );
+            area_button->size =
+                point(
+                    area_type == AREA_TYPE_MISSION ? 0.80f : 1.00f,
+                    BUTTON_HEIGHT
+                );
             area_button->on_activate =
             [this, area_folder] (const point &) {
                 game.states.gameplay->path_of_area_to_load =
@@ -678,8 +798,69 @@ void area_menu_state::init_gui_main() {
             [area_name] () { return "Play " + area_name + "."; };
             list_box->add_child(area_button);
             gui.add_item(area_button);
+            area_buttons.push_back(area_button);
             if(!first_area_button) {
                 first_area_button = area_button;
+            }
+            
+            if(area_type == AREA_TYPE_MISSION) {
+                //Stamp item.
+                gui_item* stamp_item = new gui_item();
+                stamp_item->center =
+                    point(0.85f, center_y - (BUTTON_HEIGHT * 0.15f));
+                stamp_item->size =
+                    point(0.12f, BUTTON_HEIGHT * 0.60f);
+                stamp_item->on_draw =
+                [this, a] (const point & center, const point & size) {
+                    if(area_record_clears[a]) {
+                        draw_bitmap_in_box(
+                            game.sys_assets.bmp_mission_clear, center, size
+                        );
+                    }
+                };
+                list_box->add_child(stamp_item);
+                gui.add_item(stamp_item);
+                
+                //Medal item.
+                gui_item* medal_item = new gui_item();
+                medal_item->center =
+                    point(0.95f, center_y + (BUTTON_HEIGHT * 0.15f));
+                medal_item->size =
+                    point(0.12f, BUTTON_HEIGHT * 0.60f);
+                medal_item->on_draw =
+                [this, a] (const point & center, const point & size) {
+                    ALLEGRO_BITMAP* medal_bmp = NULL;
+                    switch(area_mission_data[a].grading_mode) {
+                    case MISSION_GRADING_POINTS: {
+                        int score = area_record_scores[a];
+                        if(score >= area_mission_data[a].platinum_req) {
+                            medal_bmp = game.sys_assets.bmp_medal_platinum;
+                        } else if(score >= area_mission_data[a].gold_req) {
+                            medal_bmp = game.sys_assets.bmp_medal_gold;
+                        } else if(score >= area_mission_data[a].silver_req) {
+                            medal_bmp = game.sys_assets.bmp_medal_silver;
+                        } else if(score >= area_mission_data[a].bronze_req) {
+                            medal_bmp = game.sys_assets.bmp_medal_bronze;
+                        }
+                        break;
+                    } case MISSION_GRADING_GOAL: {
+                        if(area_record_clears[a]) {
+                            medal_bmp = game.sys_assets.bmp_medal_platinum;
+                        }
+                        break;
+                    } case MISSION_GRADING_PARTICIPATION: {
+                        medal_bmp = game.sys_assets.bmp_medal_platinum;
+                    }
+                    }
+                    
+                    if(medal_bmp) {
+                        draw_bitmap_in_box(
+                            game.sys_assets.bmp_medal_platinum, center, size
+                        );
+                    }
+                };
+                list_box->add_child(medal_item);
+                gui.add_item(medal_item);
             }
         }
         
@@ -855,6 +1036,8 @@ void area_menu_state::load() {
     bmp_menu_bg = NULL;
     prev_selected_item = NULL;
     cur_thumb = NULL;
+    cur_stamp = NULL;
+    cur_medal = NULL;
     show_mission_specs = false;
     
     //Areas.
@@ -909,6 +1092,44 @@ void area_menu_state::load() {
         load_area_mission_data(&data, area_mission_data.back());
     }
     
+    //Mission records.
+    if(area_type == AREA_TYPE_MISSION) {
+        data_node mission_records;
+        mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
+        
+        for(size_t a = 0; a < areas_to_pick.size(); ++a) {
+            string mission_record_entry_name =
+                area_names[a] + ";" +
+                get_subtitle_or_mission_goal(
+                    area_subtitles[a], area_type, area_mission_data[a].goal
+                ) + ";" +
+                area_makers[a] + ";" +
+                area_versions[a];
+                
+            bool record_clear = false;
+            int record_score = 0;
+            string record_date;
+            
+            vector<string> record_parts =
+                split(
+                    mission_records.get_child_by_name(
+                        mission_record_entry_name
+                    )->value,
+                    ";"
+                );
+                
+            if(record_parts.size() == 3) {
+                record_clear = record_parts[0] == "1";
+                record_score = s2i(record_parts[1]);
+                record_date = record_parts[2];
+            }
+            
+            area_record_clears.push_back(record_clear);
+            area_record_scores.push_back(record_score);
+            area_record_dates.push_back(record_date);
+        }
+    }
+    
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     init_gui_main();
@@ -937,6 +1158,7 @@ void area_menu_state::unload() {
     
     //Misc
     areas_to_pick.clear();
+    area_buttons.clear();
     area_names.clear();
     area_subtitles.clear();
     area_descriptions.clear();
@@ -945,8 +1167,13 @@ void area_menu_state::unload() {
     area_makers.clear();
     area_versions.clear();
     area_mission_data.clear();
+    area_record_clears.clear();
+    area_record_scores.clear();
+    area_record_dates.clear();
     
     cur_thumb = NULL;
+    cur_stamp = NULL;
+    cur_medal = NULL;
     for(size_t a = 0; a < area_thumbs.size(); ++a) {
         if(area_thumbs[a]) {
             al_destroy_bitmap(area_thumbs[a]);

@@ -2,8 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Show the high scores in the area selection menu
-    Document the rich text format (\k, \n)
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -99,6 +98,7 @@ Next tasks (roughly sorted most important first)
         Some way to read a different mob's "focus mob memory"?
     Manual
         Update the area editor screenshots
+        Document the rich text format (\k, \n)
         Revamp the scripting tutorial
             Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
             Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
