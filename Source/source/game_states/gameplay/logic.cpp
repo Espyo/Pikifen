@@ -204,7 +204,9 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         );
     }
     
-    game.cam.target_pos = cur_leader_ptr->pos;
+    if(cur_interlude == INTERLUDE_NONE) {
+        game.cam.target_pos = cur_leader_ptr->pos;
+    }
     
     //Check what to show on the notification, if anything.
     notification.set_enabled(false);
@@ -702,15 +704,23 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         *   Mission   \ / *
         *              O  *
         *******************/
-        if(
-            game.cur_area_data.type == AREA_TYPE_MISSION &&
-            cur_interlude == INTERLUDE_NONE
-        ) {
-            if(is_mission_clear_met()) {
-                end_mission(true);
-            } else if(is_mission_fail_met(&mission_fail_reason)) {
-                end_mission(false);
+        if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+            if(cur_interlude == INTERLUDE_NONE) {
+                if(is_mission_clear_met()) {
+                    end_mission(true);
+                } else if(is_mission_fail_met(&mission_fail_reason)) {
+                    end_mission(false);
+                }
             }
+            //Reset the positions of the last mission-end-related things,
+            //since if they didn't get used in end_mission, then they
+            //may be stale from here on.
+            last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            
         }
         
     } else { //Displaying a message.

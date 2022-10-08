@@ -69,7 +69,6 @@ Next tasks (roughly sorted most important first)
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
             If the mission is a timed survival, there should be no time limit -- the day duration and such should use the timed survival limit instead
             Enemies falling into the void should count as deaths, and for the enemy kill points
-            When a mission ends, the camera should move to and zoom-in on the reason for clear/failure
             Make sure after-hours works
                 Do not save the result, and make sure to write in the conclusion that it wasn't saved because of after hours
     Check Helodity's rectangle vs rectangle collision logic

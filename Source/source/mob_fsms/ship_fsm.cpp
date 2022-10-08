@@ -70,7 +70,8 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         treasure* tre_ptr = (treasure*) delivery;
         game.states.gameplay->treasures_collected++;
         game.states.gameplay->treasure_points_collected +=
-        tre_ptr->tre_type->points;
+            tre_ptr->tre_type->points;
+        game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
         
         if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
             game.states.gameplay->mission_required_mob_ids.erase(
@@ -89,6 +90,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
             game.states.gameplay->treasures_collected++;
             game.states.gameplay->treasure_points_collected +=
                 res_ptr->res_type->point_amount;
+            game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
         } else if(
             res_ptr->res_type->delivery_result ==
             RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS

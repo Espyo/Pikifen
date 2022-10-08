@@ -1134,7 +1134,7 @@ void area_menu_state::load() {
     
     init_gui_main();
     init_gui_info_page();
-    if(area_type == AREA_TYPE_MISSION) {
+    if(area_type == AREA_TYPE_MISSION && !areas_to_pick.empty()) {
         init_gui_specs_page();
         specs_box->visible = false;
         specs_box->responsive = false;

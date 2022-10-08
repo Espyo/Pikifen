@@ -1182,6 +1182,8 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
         else m->fsm.set_state(LEADER_STATE_INACTIVE_PAIN);
         
     }
+    
+    game.states.gameplay->last_hurt_leader_pos = m->pos;
 }
 
 
@@ -1386,6 +1388,8 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->become_uncarriable();
     m->set_animation(LEADER_ANIM_LYING);
+    
+    game.states.gameplay->last_hurt_leader_pos = m->pos;
 }
 
 

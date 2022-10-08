@@ -240,6 +240,103 @@ void gameplay_state::end_mission(const bool cleared) {
     cur_interlude = INTERLUDE_MISSION_END;
     interlude_time = 0.0f;
     delta_t_mult = 0.5f;
+    leader_movement.reset(); //TODO replace with a better solution.
+    
+    //Zoom in on the reason, if possible.
+    if(cleared) {
+        switch(game.cur_area_data.mission.goal) {
+        case MISSION_GOAL_END_MANUALLY: {
+            break;
+        }
+        case MISSION_GOAL_COLLECT_TREASURE: {
+            if(last_ship_that_got_treasure_pos.x != LARGE_FLOAT) {
+                game.cam.target_pos = last_ship_that_got_treasure_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            }
+            break;
+        }
+        case MISSION_GOAL_BATTLE_ENEMIES: {
+            if(last_enemy_killed_pos.x != LARGE_FLOAT) {
+                game.cam.target_pos = last_enemy_killed_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            }
+            break;
+        }
+        case MISSION_GOAL_TIMED_SURVIVAL: {
+            break;
+        }
+        case MISSION_GOAL_GET_TO_EXIT: {
+            if(!mission_required_mob_ids.empty()) {
+                point avg_pos;
+                for(size_t m : mission_required_mob_ids) {
+                    avg_pos += mobs.all[m]->pos;
+                }
+                avg_pos.x /= mission_required_mob_ids.size();
+                avg_pos.y /= mission_required_mob_ids.size();
+                game.cam.target_pos = avg_pos;
+            }
+            break;
+        }
+        case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+            if(
+                game.cur_area_data.mission.goal_higher_than &&
+                last_pikmin_born_pos.x != LARGE_FLOAT
+            ) {
+                game.cam.target_pos = last_pikmin_born_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            } else if(
+                !game.cur_area_data.mission.goal_higher_than &&
+                last_pikmin_death_pos.x != LARGE_FLOAT
+            ) {
+                game.cam.target_pos = last_pikmin_death_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            }
+            break;
+        }
+        }
+        
+    } else {
+        if(
+            has_flag(mission_fail_reason, MISSION_FAIL_COND_PIKMIN_AMOUNT)
+        ) {
+            if(
+                game.cur_area_data.mission.fail_pik_higher_than &&
+                last_pikmin_born_pos.x != LARGE_FLOAT
+            ) {
+                game.cam.target_pos = last_pikmin_born_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            } else if(
+                !game.cur_area_data.mission.fail_pik_higher_than &&
+                last_pikmin_death_pos.x != LARGE_FLOAT
+            ) {
+                game.cam.target_pos = last_pikmin_death_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            }
+        } else if(
+            has_flag(mission_fail_reason, MISSION_FAIL_COND_LOSE_PIKMIN)
+        ) {
+            if(last_pikmin_death_pos.x != LARGE_FLOAT) {
+                game.cam.target_pos = last_pikmin_death_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            }
+        } else if(
+            has_flag(mission_fail_reason, MISSION_FAIL_COND_TAKE_DAMAGE) ||
+            has_flag(mission_fail_reason, MISSION_FAIL_COND_LOSE_LEADERS)
+        ) {
+            if(last_hurt_leader_pos.x != LARGE_FLOAT) {
+                game.cam.target_pos = last_hurt_leader_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            }
+        } else if(
+            has_flag(mission_fail_reason, MISSION_FAIL_COND_KILL_ENEMIES)
+        ) {
+            if(last_enemy_killed_pos.x != LARGE_FLOAT) {
+                game.cam.target_pos = last_enemy_killed_pos;
+                game.cam.target_zoom = game.config.zoom_max_level;
+            }
+        }
+    }
+    
     if(cleared) {
         cur_big_msg = BIG_MESSAGE_MISSION_CLEAR;
     } else {
@@ -272,6 +369,12 @@ void gameplay_state::enter() {
     );
     leader_cursor_w = game.mouse_cursor_w;
     leader_cursor_s = game.mouse_cursor_s;
+    
+    last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     
     hud->gui.hide_items();
     if(went_to_results) {
@@ -634,7 +737,6 @@ void gameplay_state::load() {
     enemy_points_collected = 0;
     enemy_points_total = 0;
     mission_fail_reason = 0;
-    starting_nr_of_leaders = mobs.leaders.size();
     notification.reset();
     
     game.framerate_last_avg_point = 0;
@@ -731,6 +833,7 @@ void gameplay_state::load() {
     
     cur_leader_nr = INVALID;
     cur_leader_ptr = NULL;
+    starting_nr_of_leaders = mobs.leaders.size();
     
     if(!mobs.leaders.empty()) {
         change_to_next_leader(true, false, false);

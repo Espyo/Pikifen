@@ -119,6 +119,16 @@ public:
     replay gameplay_replay;
     //Information about the in-game HUD.
     hud_struct* hud;
+    //Position of the last enemy killed. LARGE_FLOAT for none.
+    point last_enemy_killed_pos;
+    //Position of the last leader to get hurt. LARGE_FLOAT for none.
+    point last_hurt_leader_pos;
+    //Position of the last Pikmin born. LARGE_FLOAT for none.
+    point last_pikmin_born_pos;
+    //Position of the last Pikmin that died. LARGE_FLOAT for none.
+    point last_pikmin_death_pos;
+    //Position of the last ship that got a treasure. LARGE_FLOAT for none.
+    point last_ship_that_got_treasure_pos;
     //Player 1's leader cursor, in screen coordinates.
     point leader_cursor_s;
     //Sector that player 1's leader cursor is on, if any.

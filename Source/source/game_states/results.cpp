@@ -548,6 +548,11 @@ void results_state::load() {
             } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
                 end_reason =
                     "Reached " +
+                    string(
+                        game.cur_area_data.mission.goal_higher_than ?
+                        ">=" :
+                        "<="
+                    ) +
                     i2s(game.cur_area_data.mission.goal_amount) +
                     " Pikmin!";
                 break;
