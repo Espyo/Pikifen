@@ -113,6 +113,8 @@ public:
     size_t day;
     //What time of the day is it in-game? In minutes.
     float day_minutes;
+    //Multiply the delta_t by this much. Only affects gameplay stuff, not menus.
+    float delta_t_mult;
     //Replay of the gameplay.
     replay gameplay_replay;
     //Information about the in-game HUD.
@@ -269,14 +271,14 @@ private:
     //Starting number of leader mobs.
     size_t starting_nr_of_leaders;
     
-    void do_aesthetic_leader_logic();
-    void do_aesthetic_logic();
+    void do_aesthetic_leader_logic(const float delta_t);
+    void do_aesthetic_logic(const float delta_t);
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = NULL,
         ALLEGRO_TRANSFORM* bmp_transform = NULL
     );
-    void do_gameplay_leader_logic();
-    void do_gameplay_logic();
+    void do_gameplay_leader_logic(const float delta_t);
+    void do_gameplay_logic(const float delta_t);
     void do_menu_logic();
     void draw_background(ALLEGRO_BITMAP* bmp_output);
     void draw_leader_cursor(const ALLEGRO_COLOR &color);

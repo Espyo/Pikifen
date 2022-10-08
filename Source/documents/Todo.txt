@@ -2,7 +2,13 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
+        One HUD element on the top-left that just shows your mission goal progress
+        Another HUD element below that that lists your score at any given moment. Optional
+            Each criteria should be able to specify whether or not it is included in this HUD element (e.g. Collect Treasures! missions shouldn't include the time remaining for this)
+        One HUD element on the top-right that shows one fail condition, at the mission maker's choice. Optional
+        Another HUD element below that, smaller, that shows another fail condition, at the mission maker's choice. Optional
+
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -16,11 +22,9 @@ Next tasks (roughly sorted most important first)
         Check Helodity's branch
     Ceramic bridge texture should be 256x256 (thanks isma3)
     Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
-    During the "Ready?" interlude, a lot of stuff is rendered wrong
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
     Pressing Escape in an editor's initial window is apparently STILL causing issues with Dear ImGui textboxes (thanks Neo)
         Needs to be tested if it still happens in the master branch
-    Restarting a mission on a ship's beam will show its prompt
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -45,7 +49,6 @@ Next tasks (roughly sorted most important first)
                         Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
-        [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)
             From the script?
             As a parameter in every single mob generator?
@@ -60,11 +63,9 @@ Next tasks (roughly sorted most important first)
         Other things
             The radar's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
-            The loading screen's subtitle should show the mission objective, unless the user has written something custom in the subtitle data, in which case it shows that
             Simple areas shouldn't have a time limit
             In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
             Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
-            The results screen should have a "New record!" blurb when you get a new record
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
             If the mission is a timed survival, there should be no time limit -- the day duration and such should use the timed survival limit instead
             Enemies falling into the void should count as deaths, and for the enemy kill points

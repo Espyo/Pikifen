@@ -730,6 +730,7 @@ public:
     notification_struct();
     void draw() const;
     float get_visibility() const;
+    void reset();
     void set_contents(
         control_info* control, const string &text, const point &pos
     );

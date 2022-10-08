@@ -100,6 +100,7 @@ gameplay_state::gameplay_state() :
     cur_leader_ptr(nullptr),
     day(1),
     day_minutes(0.0f),
+    delta_t_mult(1.0f),
     hud(nullptr),
     leader_cursor_sector(nullptr),
     msg_box(nullptr),
@@ -219,11 +220,11 @@ void gameplay_state::do_logic() {
         game.delta_t *= game.maker_tools.change_speed_mult;
     }
     
-    if(!paused && cur_interlude == INTERLUDE_NONE) {
-        do_gameplay_logic();
+    if(!paused) {
+        do_gameplay_logic(game.delta_t* delta_t_mult);
     }
     do_menu_logic();
-    do_aesthetic_logic();
+    do_aesthetic_logic(game.delta_t* delta_t_mult);
 }
 
 
@@ -233,14 +234,22 @@ void gameplay_state::do_logic() {
  *   Did the player reach the goal?
  */
 void gameplay_state::end_mission(const bool cleared) {
+    if(cur_interlude != INTERLUDE_NONE) {
+        return;
+    }
     cur_interlude = INTERLUDE_MISSION_END;
     interlude_time = 0.0f;
+    delta_t_mult = 0.5f;
     if(cleared) {
         cur_big_msg = BIG_MESSAGE_MISSION_CLEAR;
     } else {
         cur_big_msg = BIG_MESSAGE_MISSION_FAILED;
     }
     big_msg_time = 0.0f;
+    hud->gui.start_animation(
+        GUI_MANAGER_ANIM_IN_TO_OUT,
+        GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
+    );
 }
 
 
@@ -264,9 +273,7 @@ void gameplay_state::enter() {
     leader_cursor_w = game.mouse_cursor_w;
     leader_cursor_s = game.mouse_cursor_s;
     
-    hud->gui.start_animation(
-        GUI_MANAGER_ANIM_OUT_TO_IN, GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
-    );
+    hud->gui.hide_items();
     if(went_to_results) {
         game.fade_mgr.start_fade(true, nullptr);
         if(pause_menu) {
@@ -611,6 +618,7 @@ void gameplay_state::load() {
     interlude_time = 0.0f;
     cur_big_msg = BIG_MESSAGE_READY;
     big_msg_time = 0.0f;
+    delta_t_mult = 0.5f;
     game.maker_tools.reset_for_gameplay();
     area_title_fade_timer.start();
     
@@ -627,6 +635,7 @@ void gameplay_state::load() {
     enemy_points_total = 0;
     mission_fail_reason = 0;
     starting_nr_of_leaders = mobs.leaders.size();
+    notification.reset();
     
     game.framerate_last_avg_point = 0;
     game.framerate_history.clear();

@@ -1029,6 +1029,18 @@ float notification_struct::get_visibility() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Resets the whole thing.
+ */
+void notification_struct::reset() {
+    enabled = true;
+    control = NULL;
+    text.clear();
+    pos = point();
+    visibility = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets the contents to show.
  * control:
  *   Control icon to show.

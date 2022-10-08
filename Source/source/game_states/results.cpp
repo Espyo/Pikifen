@@ -446,12 +446,12 @@ void results_state::load() {
         ) {
             end_reason =
                 "Reached " +
-                i2s(game.cur_area_data.mission.fail_pik_amount) +
-                (
+                string(
                     game.cur_area_data.mission.fail_pik_higher_than ?
-                    "+" :
-                    "-"
+                    ">=" :
+                    "<="
                 ) +
+                i2s(game.cur_area_data.mission.fail_pik_amount) +
                 " Pikmin...";
         } else if(
             has_flag(

@@ -26,19 +26,21 @@
  * Ticks the logic of aesthetic things regarding the leader.
  * If the game is paused, these can be frozen in place without
  * any negative impact.
+ * delta_t:
+ *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_aesthetic_leader_logic() {
+void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
     if(!cur_leader_ptr) return;
     
     //Swarming arrows.
     if(swarm_magnitude) {
-        cur_leader_ptr->swarm_next_arrow_timer.tick(game.delta_t);
+        cur_leader_ptr->swarm_next_arrow_timer.tick(delta_t);
     }
     
     dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
     for(size_t a = 0; a < cur_leader_ptr->swarm_arrows.size(); ) {
         cur_leader_ptr->swarm_arrows[a] +=
-            GAMEPLAY::SWARM_ARROW_SPEED * game.delta_t;
+            GAMEPLAY::SWARM_ARROW_SPEED * delta_t;
             
         dist max_dist =
             (swarm_magnitude > 0) ?
@@ -70,7 +72,7 @@ void gameplay_state::do_aesthetic_leader_logic() {
     }
     
     whistle.tick(
-        game.delta_t, whistle_pos,
+        delta_t, whistle_pos,
         cur_leader_ptr->lea_type->whistle_range, whistle_dist
     );
     
@@ -135,33 +137,29 @@ void gameplay_state::do_aesthetic_leader_logic() {
 /* ----------------------------------------------------------------------------
  * Ticks the logic of aesthetic things. If the game is paused, these can
  * be frozen in place without any negative impact.
+ * delta_t:
+ *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_aesthetic_logic() {
+void gameplay_state::do_aesthetic_logic(const float delta_t) {
     //Cursor trail.
     if(game.options.draw_cursor_trail) {
-        cursor_save_timer.tick(game.delta_t);
+        cursor_save_timer.tick(delta_t);
     }
     
     //Leader stuff.
-    do_aesthetic_leader_logic();
+    do_aesthetic_leader_logic(delta_t);
     
     //Specific animations.
-    game.sys_assets.spark_animation.instance.tick(game.delta_t);
-    
-    //Area title fade.
-    area_title_fade_timer.tick(game.delta_t);
-    
-    //Fade.
-    game.fade_mgr.tick(game.delta_t);
-    
-    
+    game.sys_assets.spark_animation.instance.tick(delta_t);
 }
 
 
 /* ----------------------------------------------------------------------------
  * Ticks the logic of leader gameplay-related things.
+ * delta_t:
+ *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_gameplay_leader_logic() {
+void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     if(!cur_leader_ptr) return;
     
     if(game.perf_mon) {
@@ -183,7 +181,7 @@ void gameplay_state::do_gameplay_leader_logic() {
         whistle.whistling &&
         whistle.radius < cur_leader_ptr->lea_type->whistle_range
     ) {
-        whistle.radius += game.config.whistle_growth_speed * game.delta_t;
+        whistle.radius += game.config.whistle_growth_speed * delta_t;
         if(whistle.radius > cur_leader_ptr->lea_type->whistle_range) {
             whistle.radius = cur_leader_ptr->lea_type->whistle_range;
         }
@@ -401,7 +399,7 @@ void gameplay_state::do_gameplay_leader_logic() {
         }
     }
     
-    notification.tick(game.delta_t);
+    notification.tick(delta_t);
     
     /********************
     *             .-.   *
@@ -415,7 +413,7 @@ void gameplay_state::do_gameplay_leader_logic() {
         &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
     );
     mouse_cursor_speed =
-        mouse_cursor_speed * game.delta_t* game.options.cursor_speed;
+        mouse_cursor_speed * delta_t* game.options.cursor_speed;
         
     leader_cursor_w = game.mouse_cursor_w;
     
@@ -497,8 +495,10 @@ void gameplay_state::do_gameplay_leader_logic() {
 
 /* ----------------------------------------------------------------------------
  * Ticks the logic of gameplay-related things.
+ * delta_t:
+ *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_gameplay_logic() {
+void gameplay_state::do_gameplay_logic(const float delta_t) {
 
     //Camera movement.
     if(!cur_leader_ptr) {
@@ -510,7 +510,7 @@ void gameplay_state::do_gameplay_logic() {
         game.cam.target_pos = game.cam.pos + (coords * 120.0f / game.cam.zoom);
     }
     
-    game.cam.tick(game.delta_t);
+    game.cam.tick(delta_t);
     
     update_transformations();
     
@@ -532,7 +532,7 @@ void gameplay_state::do_gameplay_logic() {
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
-            mouse_cursor_speed * game.delta_t* game.options.cursor_speed;
+            mouse_cursor_speed * delta_t* game.options.cursor_speed;
             
         game.mouse_cursor_s += mouse_cursor_speed;
         
@@ -544,19 +544,19 @@ void gameplay_state::do_gameplay_logic() {
         
         //Day time logic.
         day_minutes +=
-            (game.cur_area_data.day_time_speed * game.delta_t / 60.0f);
+            (game.cur_area_data.day_time_speed * delta_t / 60.0f);
         if(day_minutes > 60 * 24) {
             day_minutes -= 60 * 24;
         }
         
-        area_time_passed += game.delta_t;
+        area_time_passed += delta_t;
         
         //Tick all particles.
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Logic -- Particles");
         }
         
-        particles.tick_all(game.delta_t);
+        particles.tick_all(delta_t);
         
         if(game.perf_mon) {
             game.perf_mon->finish_measurement();
@@ -564,7 +564,7 @@ void gameplay_state::do_gameplay_logic() {
         
         //Tick all status effect animations.
         for(auto &s : game.status_types) {
-            s.second->overlay_anim_instance.tick(game.delta_t);
+            s.second->overlay_anim_instance.tick(delta_t);
         }
         
         /*******************
@@ -581,7 +581,7 @@ void gameplay_state::do_gameplay_logic() {
             
             if(s_ptr->draining_liquid) {
             
-                s_ptr->liquid_drain_left -= game.delta_t;
+                s_ptr->liquid_drain_left -= delta_t;
                 
                 if(s_ptr->liquid_drain_left <= 0) {
                 
@@ -613,7 +613,7 @@ void gameplay_state::do_gameplay_logic() {
             }
             
             if(s_ptr->scroll.x != 0 || s_ptr->scroll.y != 0) {
-                s_ptr->texture_info.translation += s_ptr->scroll * game.delta_t;
+                s_ptr->texture_info.translation += s_ptr->scroll * delta_t;
             }
         }
         
@@ -631,7 +631,7 @@ void gameplay_state::do_gameplay_logic() {
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
-            m_ptr->tick(game.delta_t);
+            m_ptr->tick(delta_t);
             if(!m_ptr->stored_inside_another) {
                 process_mob_interactions(m_ptr, m);
             }
@@ -649,7 +649,7 @@ void gameplay_state::do_gameplay_logic() {
         }
         
         
-        do_gameplay_leader_logic();
+        do_gameplay_leader_logic(delta_t);
         
         
         /**************************
@@ -693,7 +693,7 @@ void gameplay_state::do_gameplay_logic() {
         *             ~ ~ ~ *
         ********************/
         for(auto &l : game.liquids) {
-            l.second->anim_instance.tick(game.delta_t);
+            l.second->anim_instance.tick(delta_t);
         }
         
         
@@ -702,7 +702,10 @@ void gameplay_state::do_gameplay_logic() {
         *   Mission   \ / *
         *              O  *
         *******************/
-        if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        if(
+            game.cur_area_data.type == AREA_TYPE_MISSION &&
+            cur_interlude == INTERLUDE_NONE
+        ) {
             if(is_mission_clear_met()) {
                 end_mission(true);
             } else if(is_mission_fail_met(&mission_fail_reason)) {
@@ -712,14 +715,14 @@ void gameplay_state::do_gameplay_logic() {
         
     } else { //Displaying a message.
     
-        msg_box->tick(game.delta_t);
+        msg_box->tick(delta_t);
         if(msg_box->to_delete) {
             start_message("", NULL);
         }
         
     }
     
-    replay_timer.tick(game.delta_t);
+    replay_timer.tick(delta_t);
     
     if(!ready_for_input) {
         ready_for_input = true;
@@ -967,6 +970,7 @@ void gameplay_state::do_menu_logic() {
     
     game.maker_tools.info_print_timer.tick(game.delta_t);
     
+    //Big message.
     if(cur_big_msg != BIG_MESSAGE_NONE) {
         big_msg_time += game.delta_t;
     }
@@ -996,6 +1000,7 @@ void gameplay_state::do_menu_logic() {
     }
     }
     
+    //Interlude.
     if(cur_interlude != INTERLUDE_NONE) {
         interlude_time += game.delta_t;
     }
@@ -1006,16 +1011,28 @@ void gameplay_state::do_menu_logic() {
     } case INTERLUDE_READY: {
         if(interlude_time >= GAMEPLAY::BIG_MSG_READY_DUR) {
             cur_interlude = INTERLUDE_NONE;
+            delta_t_mult = 1.0f;
+            hud->gui.start_animation(
+                GUI_MANAGER_ANIM_OUT_TO_IN,
+                GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
+            );
         }
         break;
     } case INTERLUDE_MISSION_END: {
         if(interlude_time >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
             cur_interlude = INTERLUDE_NONE;
+            delta_t_mult = 1.0f;
             leave(LEAVE_TO_END);
         }
         break;
     }
     }
+    
+    //Area title fade.
+    area_title_fade_timer.tick(game.delta_t);
+    
+    //Fade.
+    game.fade_mgr.tick(game.delta_t);
 }
 
 
