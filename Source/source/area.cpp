@@ -1132,6 +1132,122 @@ mission_data::mission_data() :
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a string describing a fail condition in detail.
+ * id:
+ *   ID of the fail condition. Use MISSION_FAIL_COND_*.
+ */
+string mission_data::get_fail_description(const uint8_t id) const {
+    switch(id) {
+    case MISSION_FAIL_COND_PAUSE_MENU: {
+        return
+            "End from the pause menu.";
+        break;
+    } case MISSION_FAIL_COND_PIKMIN_AMOUNT: {
+        return
+            "Reach " + i2s(fail_pik_amount) + " Pikmin or " +
+            (fail_pik_higher_than ? "more" : "fewer") + ".";
+        break;
+    } case MISSION_FAIL_COND_LOSE_PIKMIN: {
+        return
+            "Lose " + i2s(fail_pik_killed) + " Pikmin or more.";
+        break;
+    } case MISSION_FAIL_COND_TAKE_DAMAGE: {
+        return
+            "A leader takes damage.";
+        break;
+    } case MISSION_FAIL_COND_LOSE_LEADERS: {
+        return
+            "Lose " +
+            nr_and_plural(fail_leaders_kod, "leader") + ".";
+        break;
+    } case MISSION_FAIL_COND_KILL_ENEMIES: {
+        return
+            "Kill " +
+            nr_and_plural(
+                fail_enemies_killed, "enemy", "enemies"
+            ) + ".";
+        break;
+    } case MISSION_FAIL_COND_TIME_LIMIT: {
+        return
+            "Run out of time. Time limit: " +
+            time_to_str(
+                fail_time_limit, "m", "s"
+            ) + ".";
+        break;
+    }
+    }
+    return "";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a string describing the mission goal in detail.
+ */
+string mission_data::get_goal_description() const {
+    switch(goal) {
+    case MISSION_GOAL_END_MANUALLY: {
+        return
+            "End from the pause menu whenever you want.";
+        break;
+    } case MISSION_GOAL_COLLECT_TREASURE: {
+        if(goal_all_mobs) {
+            return
+                "Collect all treasures.";
+        } else {
+            return
+                "Collect the specified treasures (" +
+                i2s(goal_mob_idxs.size()) +
+                ").";
+        }
+        break;
+    } case MISSION_GOAL_BATTLE_ENEMIES: {
+        if(goal_all_mobs) {
+            return
+                "Defeat all enemies.";
+        } else {
+            return
+                "Defeat the specified enemies (" +
+                i2s(goal_mob_idxs.size()) +
+                ").";
+        }
+        break;
+    } case MISSION_GOAL_TIMED_SURVIVAL: {
+        return
+            "Survive for " +
+            time_to_str(
+                goal_amount, "m", "s"
+            ) + ".";
+        break;
+    } case MISSION_GOAL_GET_TO_EXIT: {
+        if(goal_all_mobs) {
+            return
+                "Get all leaders to the exit.";
+        } else {
+            return
+                "Get the specified leaders (" +
+                i2s(goal_mob_idxs.size()) +
+                ") to the exit.";
+        }
+        break;
+    } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+        return
+            "Reach a total of " +
+            i2s(goal_amount) + " " +
+            (
+                goal_higher_than ?
+                "or more" :
+                "or fewer"
+            ) +
+            " Pikmin.";
+        break;
+    }
+    }
+    
+    return "";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the folder name and area type of an area on disk, given its path.
  * requested_area_path:
  *   Relative path to the requested area.

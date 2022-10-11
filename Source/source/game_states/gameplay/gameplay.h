@@ -199,6 +199,12 @@ public:
     size_t enemy_points_total;
     //Reason for mission failure, if any. Uses MISSION_FAIL_COND_*.
     uint8_t mission_fail_reason;
+    //How many leaders are in the mission exit. Cache for convenience.
+    size_t cur_leaders_in_mission_exit;
+    //How many leaders must be in the mission exit. Cache for convenience.
+    size_t leaders_in_mission_exit_goal;
+    //How many leaders have been lost so far. Cache for convenience.
+    size_t leaders_kod;
     //Current interlude, if any.
     INTERLUDES cur_interlude;
     //Time passed in the current interlude.

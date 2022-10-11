@@ -53,6 +53,8 @@ public:
     gui_manager gui;
     //GUI manager for the help page.
     gui_manager help_gui;
+    //GUI manager for the mission page.
+    gui_manager mission_gui;
     //Multiply the background alpha by this much.
     float bg_alpha_mult;
     //Time left until the menu finishes closing.
@@ -77,12 +79,20 @@ private:
     //All tidbits in the help page.
     map<HELP_CATEGORIES, vector<string> > tidbits;
     
+    void add_bullet(
+        list_gui_item* list, const string &text,
+        const ALLEGRO_COLOR &color = COLOR_WHITE
+    );
     void draw_tidbit(
         const ALLEGRO_FONT* const font, const point &where,
         const point &max_size, const string &text
     );
-    void init_main_pause_menu();
+    void fill_mission_fail_list(list_gui_item* list);
+    void fill_mission_grading_list(list_gui_item* list);
+    string get_mission_goal_status();
     void init_help_page();
+    void init_main_pause_menu();
+    void init_mission_page();
     void populate_help_tidbits(const HELP_CATEGORIES category);
 };
 

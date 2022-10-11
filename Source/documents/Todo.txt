@@ -2,6 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
+    If the goal requires beating 1 specific enemy, like a boss, the total enemy point amount will count every enemy, and beating some weakling enemies will add points
     [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         One HUD element on the top-left that just shows your mission goal progress
         Another HUD element below that that lists your score at any given moment. Optional
@@ -53,8 +54,6 @@ Next tasks (roughly sorted most important first)
             From the script?
             As a parameter in every single mob generator?
         Pause menu adjustments
-            The continue button should be a tiny thing on the bottom-left, and the quit option a tiny thing on the bottom-right. (Thanks Neo)
-            Rename "quit" to "quit without saving", or like "lose progress and quit"
             The retry and quit buttons should show a confirmation dialog, but it can be disabled in the options. The option for it should have the values "show never", "show always", or "show after 1 minute" (thanks Neo)
             The end exploration button should show an informative and confirmation dialog. This dialog should explain that ending now will make the following fields of the score become 0, or how the score won't be affected if none (thanks Neo)
             If you end through the pause menu, you shouldn't be allowed to continue...you specifically said you didn't want to play any more
@@ -76,6 +75,7 @@ Next tasks (roughly sorted most important first)
     Check Helodity's Pikifen rebalanced mod
     Spicy Pikmin should emit some rare sparkle particles (thanks Neo)
     Check if the throw particles can be customized (thanks Neo)
+    The Make menu should have a small blurb with like "Need help?" or "Others...", with a tooltip telling you to go to the manual for help and tutorials
     Find a way to make the path drawing process more friendly, since sometimes you want to draw a continuous path with multiple stops, but sometimes you just want to patch up an existing stop/link (thanks Neo)
         Idea: if when you're drawing, you click on an existing stop, then finish drawing. Otherwise, keep drawing more
     Show the number of vertexes that you would get when making a circle sector somewhere (thanks Neo)
@@ -638,9 +638,6 @@ Small tasks (for when I'm feeling lazy)
     
     
 Misc things (so I don't forget)
-    The main menu should have a "Make" menu
-        This is where all the editors go
-        Include some widget that reads "Need help?", and if you mouse-over, the tooltip tells you that you can read the manual for more info and tutorials
     Attack improvements
         A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
         A way to add random variation to the knockback angle of a hitbox

@@ -1077,7 +1077,7 @@ bool gameplay_state::is_mission_clear_met() {
     } case MISSION_GOAL_GET_TO_EXIT: {
 
         //Are all of the required leaders inside of the exit region?
-        size_t required_leaders_in_exit = 0;
+        cur_leaders_in_mission_exit = 0;
         for(size_t l = 0; l < mobs.leaders.size(); ++l) {
             mob* l_ptr = mobs.leaders[l];
             if(
@@ -1103,11 +1103,11 @@ bool gameplay_state::is_mission_clear_met() {
                 ) <=
                 game.cur_area_data.mission.goal_exit_size.y / 2.0f
             ) {
-                required_leaders_in_exit++;
+                cur_leaders_in_mission_exit++;
             }
         }
         if(
-            required_leaders_in_exit ==
+            cur_leaders_in_mission_exit ==
             mission_required_mob_ids.size()
         ) {
             return true;
@@ -1216,10 +1216,8 @@ bool gameplay_state::is_mission_fail_met(uint8_t* reason) {
                 living_leaders++;
             }
         }
-        if(
-            (int) (starting_nr_of_leaders - living_leaders) >=
-            (int) game.cur_area_data.mission.fail_leaders_kod
-        ) {
+        leaders_kod = starting_nr_of_leaders - living_leaders;
+        if(leaders_kod >= game.cur_area_data.mission.fail_leaders_kod) {
             *reason = MISSION_FAIL_COND_LOSE_LEADERS;
             return true;
         }

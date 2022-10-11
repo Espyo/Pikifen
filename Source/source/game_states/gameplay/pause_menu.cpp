@@ -20,7 +20,9 @@ namespace PAUSE_MENU {
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Pause_menu.txt";
 //Path to the help page GUI information file.
-const string HELP_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Help.txt";
+const string HELP_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Pause_help.txt";
+//Path to the mission page GUI information file.
+const string MISSION_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Pause_mission.txt";
 }
 
 
@@ -35,6 +37,7 @@ pause_menu_struct::pause_menu_struct() :
     
     init_main_pause_menu();
     init_help_page();
+    init_mission_page();
 }
 
 
@@ -44,6 +47,40 @@ pause_menu_struct::pause_menu_struct() :
 pause_menu_struct::~pause_menu_struct() {
     gui.destroy();
     help_gui.destroy();
+    mission_gui.destroy();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new bullet point to either the failure condition list, or the
+ * grading explanation list.
+ * list:
+ *   List to add to.
+ * text:
+ *   Text.
+ * color:
+ *   Text color.
+ */
+void pause_menu_struct::add_bullet(
+    list_gui_item* list, const string &text,
+    const ALLEGRO_COLOR &color
+) {
+    size_t bullet_idx = list->children.size();
+    const float BULLET_HEIGHT = 0.18f;
+    const float BULLET_PADDING = 0.01f;
+    const float BULLETS_OFFSET = 0.01f;
+    const float bullet_center_y =
+        (BULLETS_OFFSET + BULLET_HEIGHT / 2.0f) +
+        ((BULLET_HEIGHT + BULLET_PADDING) * bullet_idx);
+        
+    bullet_point_gui_item* bullet =
+        new bullet_point_gui_item(
+        text, game.fonts.standard, color
+    );
+    bullet->center = point(0.50f, bullet_center_y);
+    bullet->size = point(0.96f, BULLET_HEIGHT);
+    list->add_child(bullet);
+    mission_gui.add_item(bullet);
 }
 
 
@@ -53,6 +90,7 @@ pause_menu_struct::~pause_menu_struct() {
 void pause_menu_struct::draw() {
     gui.draw();
     help_gui.draw();
+    mission_gui.draw();
 }
 
 
@@ -112,6 +150,452 @@ void pause_menu_struct::draw_tidbit(
 
 
 /* ----------------------------------------------------------------------------
+ * Fills the list of mission fail conditions.
+ * list:
+ *   List item to fill.
+ */
+void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
+    if(
+        has_flag(
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_TIME_LIMIT
+        )
+    ) {
+        add_bullet(
+            list,
+            game.cur_area_data.mission.get_fail_description(
+                MISSION_FAIL_COND_TIME_LIMIT
+            ),
+            al_map_rgb(255, 200, 200)
+        );
+        float percentage = 0.0f;
+        if(game.cur_area_data.mission.fail_time_limit != 0) {
+            percentage =
+                game.states.gameplay->area_time_passed /
+                (float) game.cur_area_data.mission.fail_time_limit;
+            percentage *= 100.0f;
+        }
+        add_bullet(
+            list,
+            "    " +
+            time_to_str(game.states.gameplay->area_time_passed, "m", "s") +
+            " have passed so far. (" + i2s(percentage) + "%)"
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_PIKMIN_AMOUNT
+        )
+    ) {
+        add_bullet(
+            list,
+            game.cur_area_data.mission.get_fail_description(
+                MISSION_FAIL_COND_PIKMIN_AMOUNT
+            ),
+            al_map_rgb(255, 200, 200)
+        );
+        float current =
+            game.states.gameplay->get_total_pikmin_amount();
+        if(game.cur_area_data.mission.fail_pik_higher_than) {
+            float percentage = 0.0f;
+            if(game.cur_area_data.mission.fail_pik_amount != 0.0f) {
+                percentage =
+                    current /
+                    (float) game.cur_area_data.mission.fail_pik_amount;
+                percentage *= 100;
+            }
+            add_bullet(
+                list,
+                "    You have " +
+                i2s(current) + "/" +
+                i2s(game.cur_area_data.mission.fail_pik_amount) +
+                " Pikmin. (" + i2s(percentage) + "%)"
+            );
+        } else {
+            add_bullet(
+                list,
+                "    You have " + i2s(current) + " Pikmin."
+            );
+        }
+    }
+    if(
+        has_flag(
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_LOSE_PIKMIN
+        )
+    ) {
+        add_bullet(
+            list,
+            game.cur_area_data.mission.get_fail_description(
+                MISSION_FAIL_COND_LOSE_PIKMIN
+            ),
+            al_map_rgb(255, 200, 200)
+        );
+        float percentage = 0.0f;
+        if(game.cur_area_data.mission.fail_pik_killed != 0) {
+            percentage =
+                game.states.gameplay->pikmin_deaths /
+                (float) game.cur_area_data.mission.fail_pik_killed;
+            percentage *= 100.0f;
+        }
+        add_bullet(
+            list,
+            "    You have lost " +
+            i2s(game.states.gameplay->pikmin_deaths) +
+            "/" +
+            i2s(game.cur_area_data.mission.fail_pik_killed) +
+            " Pikmin. (" + i2s(percentage) + "%)"
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_TAKE_DAMAGE
+        )
+    ) {
+        add_bullet(
+            list,
+            game.cur_area_data.mission.get_fail_description(
+                MISSION_FAIL_COND_TAKE_DAMAGE
+            ),
+            al_map_rgb(255, 200, 200)
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_LOSE_LEADERS
+        )
+    ) {
+        add_bullet(
+            list,
+            game.cur_area_data.mission.get_fail_description(
+                MISSION_FAIL_COND_LOSE_LEADERS
+            ),
+            al_map_rgb(255, 200, 200)
+        );
+        float percentage = 0.0f;
+        if(game.cur_area_data.mission.fail_leaders_kod != 0) {
+            percentage =
+                game.states.gameplay->leaders_kod /
+                (float) game.cur_area_data.mission.fail_leaders_kod;
+            percentage *= 100.0f;
+        }
+        add_bullet(
+            list,
+            "    You have lost " +
+            i2s(game.states.gameplay->leaders_kod) +
+            "/" +
+            i2s(game.cur_area_data.mission.fail_leaders_kod) +
+            " leaders. (" + i2s(percentage) + "%)"
+        );
+    }
+    if(
+        has_flag(
+            game.cur_area_data.mission.fail_conditions,
+            MISSION_FAIL_COND_KILL_ENEMIES
+        )
+    ) {
+        add_bullet(
+            list,
+            game.cur_area_data.mission.get_fail_description(
+                MISSION_FAIL_COND_KILL_ENEMIES
+            ),
+            al_map_rgb(255, 200, 200)
+        );
+        float percentage = 0.0f;
+        if(game.cur_area_data.mission.fail_enemies_killed != 0) {
+            percentage =
+                game.states.gameplay->enemy_deaths /
+                (float) game.cur_area_data.mission.fail_enemies_killed;
+            percentage *= 100.0f;
+        }
+        add_bullet(
+            list,
+            "    You have killed " +
+            i2s(game.states.gameplay->enemy_deaths) +
+            "/" +
+            i2s(game.cur_area_data.mission.fail_enemies_killed) +
+            " enemies. (" + i2s(percentage) + "%)"
+        );
+    }
+    if(
+        game.cur_area_data.mission.goal !=
+        MISSION_GOAL_END_MANUALLY
+    ) {
+        add_bullet(
+            list,
+            game.cur_area_data.mission.get_fail_description(
+                MISSION_FAIL_COND_PAUSE_MENU
+            ),
+            al_map_rgb(255, 200, 200)
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fills the list of mission grading information.
+ * list:
+ *   List item to fill.
+ */
+void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
+    switch(game.cur_area_data.mission.grading_mode) {
+    case MISSION_GRADING_POINTS: {
+        add_bullet(
+            list,
+            "Your medal depends on your score:"
+        );
+        add_bullet(
+            list,
+            "    Platinum: " +
+            i2s(game.cur_area_data.mission.platinum_req) + "+ points.",
+            al_map_rgb(255, 255, 200)
+        );
+        add_bullet(
+            list,
+            "    Gold: " +
+            i2s(game.cur_area_data.mission.gold_req) + "+ points.",
+            al_map_rgb(255, 255, 200)
+        );
+        add_bullet(
+            list,
+            "    Silver: " +
+            i2s(game.cur_area_data.mission.silver_req) + "+ points.",
+            al_map_rgb(255, 255, 200)
+        );
+        add_bullet(
+            list,
+            "    Bronze: " +
+            i2s(game.cur_area_data.mission.bronze_req) + "+ points.",
+            al_map_rgb(255, 255, 200)
+        );
+        add_bullet(
+            list,
+            "Your score is calculated like so:"
+        );
+        if(game.cur_area_data.mission.points_per_pikmin_born != 0) {
+            add_bullet(
+                list,
+                "    Pikmin born x " +
+                i2s(game.cur_area_data.mission.points_per_pikmin_born) + "."
+            );
+        }
+        if(game.cur_area_data.mission.points_per_pikmin_death != 0) {
+            add_bullet(
+                list,
+                "    Pikmin deaths x " +
+                i2s(game.cur_area_data.mission.points_per_pikmin_death) + "."
+            );
+        }
+        if(game.cur_area_data.mission.points_per_sec_left != 0) {
+            add_bullet(
+                list,
+                "    Seconds left x " +
+                i2s(game.cur_area_data.mission.points_per_sec_left) + "."
+            );
+        }
+        if(game.cur_area_data.mission.points_per_sec_passed != 0) {
+            add_bullet(
+                list,
+                "    Seconds passed x " +
+                i2s(game.cur_area_data.mission.points_per_sec_passed) + "."
+            );
+        }
+        if(game.cur_area_data.mission.points_per_treasure_point != 0) {
+            add_bullet(
+                list,
+                "    Treasure points x " +
+                i2s(game.cur_area_data.mission.points_per_treasure_point) + "."
+            );
+        }
+        if(game.cur_area_data.mission.points_per_enemy_point != 0) {
+            add_bullet(
+                list,
+                "    Enemy points x " +
+                i2s(game.cur_area_data.mission.points_per_enemy_point) + "."
+            );
+        }
+        vector<string> loss_notes;
+        if(
+            has_flag(
+                game.cur_area_data.mission.point_loss_data,
+                MISSION_POINT_CRITERIA_PIKMIN_BORN
+            )
+        ) {
+            loss_notes.push_back("    Pikmin born");
+        }
+        if(
+            has_flag(
+                game.cur_area_data.mission.point_loss_data,
+                MISSION_POINT_CRITERIA_PIKMIN_DEATH
+            )
+        ) {
+            loss_notes.push_back("    Pikmin deaths");
+        }
+        if(
+            has_flag(
+                game.cur_area_data.mission.point_loss_data,
+                MISSION_POINT_CRITERIA_SEC_LEFT
+            )
+        ) {
+            loss_notes.push_back("    Seconds left");
+        }
+        if(
+            has_flag(
+                game.cur_area_data.mission.point_loss_data,
+                MISSION_POINT_CRITERIA_SEC_PASSED
+            )
+        ) {
+            loss_notes.push_back("    Seconds passed");
+        }
+        if(
+            has_flag(
+                game.cur_area_data.mission.point_loss_data,
+                MISSION_POINT_CRITERIA_TREASURE_POINTS
+            )
+        ) {
+            loss_notes.push_back("    Treasure points");
+        }
+        if(
+            has_flag(
+                game.cur_area_data.mission.point_loss_data,
+                MISSION_POINT_CRITERIA_ENEMY_POINTS
+            )
+        ) {
+            loss_notes.push_back("    Enemy points");
+        }
+        if(!loss_notes.empty()) {
+            add_bullet(
+                list,
+                "If you fail, you'll lose your score for:"
+            );
+            for(size_t l = 0; l < loss_notes.size(); ++l) {
+                add_bullet(list, loss_notes[l]);
+            }
+        }
+        break;
+    } case MISSION_GRADING_GOAL: {
+        add_bullet(
+            list,
+            "You get a platinum medal if you clear the goal."
+        );
+        add_bullet(
+            list,
+            "You get no medal if you fail."
+        );
+        break;
+    } case MISSION_GRADING_PARTICIPATION: {
+        add_bullet(
+            list,
+            "You get a platinum medal just by playing the mission."
+        );
+        break;
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a string representing the player's status towards the mission goal.
+ */
+string pause_menu_struct::get_mission_goal_status() {
+    switch(game.cur_area_data.mission.goal) {
+    case MISSION_GOAL_END_MANUALLY: {
+        return "";
+        break;
+        
+    } case MISSION_GOAL_COLLECT_TREASURE: {
+        float percentage = 0.0f;
+        if(game.states.gameplay->treasure_points_total != 0.0f) {
+            percentage =
+                game.states.gameplay->treasure_points_collected /
+                (float) game.states.gameplay->treasure_points_total;
+            percentage *= 100;
+        }
+        return
+            "You have " +
+            i2s(game.states.gameplay->treasure_points_collected) + "/" +
+            i2s(game.states.gameplay->treasure_points_total) +
+            " treasure points. (" + i2s(percentage) + "%)";
+        break;
+        
+    } case MISSION_GOAL_BATTLE_ENEMIES: {
+        float percentage = 0.0f;
+        if(game.states.gameplay->enemy_points_total != 0.0f) {
+            percentage =
+                game.states.gameplay->enemy_points_collected /
+                (float) game.states.gameplay->enemy_points_total;
+            percentage *= 100;
+        }
+        return
+            "You have " +
+            i2s(game.states.gameplay->enemy_points_collected) + "/" +
+            i2s(game.states.gameplay->enemy_points_total) +
+            " treasure points. (" + i2s(percentage) + "%)";
+        break;
+        
+    } case MISSION_GOAL_TIMED_SURVIVAL: {
+        float percentage = 0.0f;
+        if(game.cur_area_data.mission.goal_amount != 0.0f) {
+            percentage =
+                game.states.gameplay->area_time_passed /
+                (float) game.cur_area_data.mission.goal_amount;
+            percentage *= 100;
+        }
+        return
+            "You have survived for " +
+            time_to_str(game.states.gameplay->area_time_passed, "m", "s") +
+            " so far. (" + i2s(percentage) + "%)";
+        break;
+        
+    } case MISSION_GOAL_GET_TO_EXIT: {
+        float percentage = 0.0f;
+        if(game.states.gameplay->mission_required_mob_ids.size() != 0.0f) {
+            percentage =
+                game.states.gameplay->cur_leaders_in_mission_exit /
+                (float) game.states.gameplay->mission_required_mob_ids.size();
+            percentage *= 100;
+        }
+        return
+            "You have " +
+            i2s(game.states.gameplay->cur_leaders_in_mission_exit) +
+            "/" +
+            i2s(game.states.gameplay->mission_required_mob_ids.size()) +
+            " leaders in the exit. (" + i2s(percentage) + "%)";
+        break;
+        
+    } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+
+        float current =
+            game.states.gameplay->get_total_pikmin_amount();
+        if(game.cur_area_data.mission.goal_higher_than) {
+            float percentage = 0.0f;
+            if(game.cur_area_data.mission.goal_amount != 0.0f) {
+                percentage =
+                    current /
+                    (float) game.cur_area_data.mission.goal_amount;
+                percentage *= 100;
+            }
+            return
+                "You have " +
+                i2s(current) + "/" +
+                i2s(game.cur_area_data.mission.goal_amount) +
+                " Pikmin. (" + i2s(percentage) + "%)";
+        } else {
+            return
+                "You have " + i2s(current) + " Pikmin.";
+        }
+        break;
+        
+    }
+    }
+    return "";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles an Allegro event.
  * ev:
  *   Event to handle.
@@ -119,6 +603,7 @@ void pause_menu_struct::draw_tidbit(
 void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     gui.handle_event(ev);
     help_gui.handle_event(ev);
+    mission_gui.handle_event(ev);
 }
 
 
@@ -287,13 +772,18 @@ void pause_menu_struct::init_help_page() {
  */
 void pause_menu_struct::init_main_pause_menu() {
     //Menu items.
-    gui.register_coords("header",   50, 12, 50, 10);
-    gui.register_coords("continue", 50, 28, 50,  9);
-    gui.register_coords("retry",    50, 39, 50,  9);
-    gui.register_coords("end",      50, 50, 50,  9);
-    gui.register_coords("help",     50, 61, 50,  9);
-    gui.register_coords("quit",     50, 72, 50,  9);
-    gui.register_coords("tooltip",  50, 95, 95,  8);
+    gui.register_coords("header",        50,  5, 52,  6);
+    gui.register_coords("left_page",     12,  5, 20,  6);
+    gui.register_coords("right_page",    88,  5, 20,  6);
+    gui.register_coords("line",          50, 11, 96,  2);
+    gui.register_coords("area_name",     50, 20, 96,  8);
+    gui.register_coords("area_subtitle", 50, 27, 88,  6);
+    gui.register_coords("continue",      13, 88, 22,  8);
+    gui.register_coords("retry",         50, 41, 52, 10);
+    gui.register_coords("end",           50, 53, 52, 10);
+    gui.register_coords("help",          50, 65, 52, 10);
+    gui.register_coords("quit",          87, 88, 22,  8);
+    gui.register_coords("tooltip",       50, 96, 96,  4);
     gui.read_coords(
         data_node(PAUSE_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -306,11 +796,98 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     gui.add_item(header_text, "header");
     
+    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        //Left page button.
+        button_gui_item* left_page_button =
+            new button_gui_item(
+            "< Mission", game.fonts.standard
+        );
+        left_page_button->on_activate =
+        [this] (const point &) {
+            gui.responsive = false;
+            gui.start_animation(
+                GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+            mission_gui.responsive = true;
+            mission_gui.start_animation(
+                GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+        };
+        left_page_button->on_get_tooltip =
+        [] () { return "Go to the pause menu's mission page."; };
+        gui.add_item(left_page_button, "left_page");
+        
+        //Right page button.
+        button_gui_item* right_page_button =
+            new button_gui_item(
+            "Mission >", game.fonts.standard
+        );
+        right_page_button->on_activate =
+        [this] (const point &) {
+            gui.responsive = false;
+            gui.start_animation(
+                GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+            mission_gui.responsive = true;
+            mission_gui.start_animation(
+                GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+                GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+            );
+        };
+        right_page_button->on_get_tooltip =
+        [] () { return "Go to the pause menu's mission page."; };
+        gui.add_item(right_page_button, "right_page");
+    }
+    
+    //Line.
+    gui_item* line = new gui_item();
+    line->on_draw =
+    [] (const point & center, const point & size) {
+        draw_filled_rounded_rectangle(
+            center,
+            point(size.x, 3.0f),
+            2.0f,
+            al_map_rgba(255, 255, 255, 128)
+        );
+    };
+    gui.add_item(line, "line");
+    
+    //Area name.
+    text_gui_item* area_name_text =
+        new text_gui_item(
+        game.cur_area_data.name, game.fonts.area_name,
+        change_alpha(COLOR_GOLD, 192)
+    );
+    gui.add_item(area_name_text, "area_name");
+    
+    //Area name.
+    text_gui_item* area_subtitle_text =
+        new text_gui_item(
+        get_subtitle_or_mission_goal(
+            game.cur_area_data.subtitle, game.cur_area_data.type,
+            game.cur_area_data.mission.goal
+        ),
+        game.fonts.area_name,
+        change_alpha(COLOR_WHITE, 192)
+    );
+    gui.add_item(area_subtitle_text, "area_subtitle");
+    
     //Continue button.
     gui.back_item =
         new button_gui_item("Continue", game.fonts.standard);
     gui.back_item->on_activate =
     [this] (const point &) {
+        gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        game.states.gameplay->hud->gui.start_animation(
+            GUI_MANAGER_ANIM_OUT_TO_IN,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
         start_closing();
     };
     gui.back_item->on_get_tooltip =
@@ -402,7 +979,7 @@ void pause_menu_struct::init_main_pause_menu() {
     quit_button->on_get_tooltip =
     [] () {
         return
-            "Quit and return to the " +
+            "Lose your progress and return to the " +
             string(
                 game.states.area_ed->quick_play_area_path.empty() ?
                 "area selection menu" :
@@ -421,6 +998,178 @@ void pause_menu_struct::init_main_pause_menu() {
     gui.start_animation(
         GUI_MANAGER_ANIM_UP_TO_CENTER, GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the mission page.
+ */
+void pause_menu_struct::init_mission_page() {
+    data_node gui_file(PAUSE_MENU::MISSION_GUI_FILE_PATH);
+    
+    //Menu items.
+    mission_gui.register_coords("header",         50,  5, 52,  6);
+    mission_gui.register_coords("left_page",      12,  5, 20,  6);
+    mission_gui.register_coords("right_page",     88,  5, 20,  6);
+    mission_gui.register_coords("line",           50, 11, 96,  2);
+    mission_gui.register_coords("continue",       10, 16, 16,  4);
+    mission_gui.register_coords("goal_header",    50, 16, 60,  4);
+    mission_gui.register_coords("goal",           50, 22, 96,  4);
+    mission_gui.register_coords("goal_status",    50, 26, 96,  4);
+    mission_gui.register_coords("fail_header",    50, 32, 96,  4);
+    mission_gui.register_coords("fail_list",      48, 48, 92, 24);
+    mission_gui.register_coords("fail_scroll",    97, 48,  2, 24);
+    mission_gui.register_coords("grading_header", 50, 64, 96,  4);
+    mission_gui.register_coords("grading_list",   48, 80, 92, 24);
+    mission_gui.register_coords("grading_scroll", 97, 80,  2, 24);
+    mission_gui.register_coords("tooltip",        50, 96, 96,  4);
+    mission_gui.read_coords(gui_file.get_child_by_name("positions"));
+    
+    //Header.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "MISSION", game.fonts.area_name,
+        al_map_rgba(255, 255, 255, 128)
+    );
+    mission_gui.add_item(header_text, "header");
+    
+    //Left page button.
+    button_gui_item* left_page_button =
+        new button_gui_item(
+        "< System", game.fonts.standard
+    );
+    left_page_button->on_activate =
+    [this] (const point &) {
+        mission_gui.responsive = false;
+        mission_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        gui.responsive = true;
+        gui.start_animation(
+            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+    };
+    left_page_button->on_get_tooltip =
+    [] () { return "Go to the pause menu's system page."; };
+    mission_gui.add_item(left_page_button, "left_page");
+    
+    //Right page button.
+    button_gui_item* right_page_button =
+        new button_gui_item(
+        "System >", game.fonts.standard
+    );
+    right_page_button->on_activate =
+    [this] (const point &) {
+        mission_gui.responsive = false;
+        mission_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        gui.responsive = true;
+        gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+    };
+    right_page_button->on_get_tooltip =
+    [] () { return "Go to the pause menu's system page."; };
+    mission_gui.add_item(right_page_button, "right_page");
+    
+    //Line.
+    gui_item* line = new gui_item();
+    line->on_draw =
+    [] (const point & center, const point & size) {
+        draw_filled_rounded_rectangle(
+            center,
+            point(size.x, 3.0f),
+            2.0f,
+            al_map_rgba(255, 255, 255, 128)
+        );
+    };
+    mission_gui.add_item(line, "line");
+    
+    //Continue button.
+    mission_gui.back_item =
+        new button_gui_item("Continue", game.fonts.standard);
+    mission_gui.back_item->on_activate =
+    [this] (const point &) {
+        mission_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        game.states.gameplay->hud->gui.start_animation(
+            GUI_MANAGER_ANIM_OUT_TO_IN,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        start_closing();
+    };
+    mission_gui.back_item->on_get_tooltip =
+    [] () { return "Unpause and continue playing."; };
+    mission_gui.add_item(mission_gui.back_item, "continue");
+    
+    //Goal header text.
+    text_gui_item* goal_header_text =
+        new text_gui_item("Goal", game.fonts.area_name);
+    mission_gui.add_item(goal_header_text, "goal_header");
+    
+    //Goal explanation text.
+    text_gui_item* goal_text =
+        new text_gui_item(
+        game.cur_area_data.mission.get_goal_description(),
+        game.fonts.standard,
+        al_map_rgb(255, 255, 200)
+    );
+    mission_gui.add_item(goal_text, "goal");
+    
+    //Goal status text.
+    text_gui_item* goal_status_text =
+        new text_gui_item(
+        get_mission_goal_status(),
+        game.fonts.standard
+    );
+    mission_gui.add_item(goal_status_text, "goal_status");
+    
+    //Fail conditions header text.
+    text_gui_item* fail_header_text =
+        new text_gui_item("Fail conditions", game.fonts.area_name);
+    mission_gui.add_item(fail_header_text, "fail_header");
+    
+    //Fail condition explanation list.
+    list_gui_item* mission_fail_list = new list_gui_item();
+    mission_gui.add_item(mission_fail_list, "fail_list");
+    fill_mission_fail_list(mission_fail_list);
+    
+    //Fail condition explanation scrollbar.
+    scroll_gui_item* fail_scroll = new scroll_gui_item();
+    fail_scroll->list_item = mission_fail_list;
+    mission_gui.add_item(fail_scroll, "fail_scroll");
+    
+    //Grading header text.
+    text_gui_item* grading_header_text =
+        new text_gui_item("Grading", game.fonts.area_name);
+    mission_gui.add_item(grading_header_text, "grading_header");
+    
+    //Grading explanation list.
+    list_gui_item* mission_grading_list = new list_gui_item();
+    mission_gui.add_item(mission_grading_list, "grading_list");
+    fill_mission_grading_list(mission_grading_list);
+    
+    //Grading explanation scrollbar.
+    scroll_gui_item* grading_scroll = new scroll_gui_item();
+    grading_scroll->list_item = mission_grading_list;
+    mission_gui.add_item(grading_scroll, "grading_scroll");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&mission_gui);
+    mission_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    //TODO mission_gui.set_selected_item(mission_gui.back_item);
+    mission_gui.responsive = false;
+    mission_gui.hide_items();
 }
 
 
@@ -483,14 +1232,6 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
 void pause_menu_struct::start_closing() {
     closing = true;
     closing_timer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
-    gui.start_animation(
-        GUI_MANAGER_ANIM_CENTER_TO_UP,
-        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-    );
-    game.states.gameplay->hud->gui.start_animation(
-        GUI_MANAGER_ANIM_OUT_TO_IN,
-        GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
-    );
 }
 
 
@@ -503,6 +1244,7 @@ void pause_menu_struct::tick(const float delta_t) {
     //Tick the GUI.
     gui.tick(delta_t);
     help_gui.tick(delta_t);
+    mission_gui.tick(delta_t);
     
     //Tick the background.
     const float bg_alpha_mult_speed =

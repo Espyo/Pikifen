@@ -303,76 +303,18 @@ void area_menu_state::do_logic() {
         if(area_type == AREA_TYPE_MISSION) {
             specs_name_text->text = area_names[area_idx];
             const mission_data &mission = area_mission_data[area_idx];
-            switch(mission.goal) {
-            case MISSION_GOAL_END_MANUALLY: {
-                goal_text->text =
-                    "End from the pause menu whenever you want.";
-                break;
-            } case MISSION_GOAL_COLLECT_TREASURE: {
-                if(mission.goal_all_mobs) {
-                    goal_text->text = "Collect all treasures.";
-                } else {
-                    goal_text->text =
-                        "Collect the specified treasures (" +
-                        i2s(mission.goal_mob_idxs.size()) +
-                        ").";
-                }
-                break;
-            } case MISSION_GOAL_BATTLE_ENEMIES: {
-                if(mission.goal_all_mobs) {
-                    goal_text->text = "Defeat all enemies.";
-                } else {
-                    goal_text->text =
-                        "Defeat the specified enemies (" +
-                        i2s(mission.goal_mob_idxs.size()) +
-                        ").";
-                }
-                break;
-            } case MISSION_GOAL_TIMED_SURVIVAL: {
-                goal_text->text =
-                    "Survive for " +
-                    time_to_str(
-                        mission.goal_amount, "m", "s"
-                    ) + ".";
-                break;
-            } case MISSION_GOAL_GET_TO_EXIT: {
-                if(mission.goal_all_mobs) {
-                    goal_text->text = "Get all leaders to the exit.";
-                } else {
-                    goal_text->text =
-                        "Get the specified leaders (" +
-                        i2s(mission.goal_mob_idxs.size()) +
-                        ") to the exit.";
-                }
-                break;
-            } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-                goal_text->text =
-                    "Reach a total of " +
-                    i2s(mission.goal_amount) + " " +
-                    (
-                        mission.goal_higher_than ?
-                        "or more" :
-                        "or fewer"
-                    ) +
-                    " Pikmin.";
-                break;
-            } default: {
-                break;
-            }
-            }
+            goal_text->text = mission.get_goal_description();
             
             if(
                 has_flag(
-                    mission.fail_conditions,
-                    MISSION_FAIL_COND_TIME_LIMIT
+                    mission.fail_conditions, MISSION_FAIL_COND_TIME_LIMIT
                 )
             ) {
                 add_bullet(
                     fail_list,
-                    "Run out of time. Time limit: " +
-                    time_to_str(
-                        mission.fail_time_limit, "m", "s"
-                    ) + "."
+                    mission.get_fail_description(
+                        MISSION_FAIL_COND_TIME_LIMIT
+                    )
                 );
             }
             if(
@@ -382,8 +324,9 @@ void area_menu_state::do_logic() {
             ) {
                 add_bullet(
                     fail_list,
-                    "Reach " + i2s(mission.fail_pik_amount) + " Pikmin or " +
-                    (mission.fail_pik_higher_than ? "more" : "fewer") + "."
+                    mission.get_fail_description(
+                        MISSION_FAIL_COND_PIKMIN_AMOUNT
+                    )
                 );
             }
             if(
@@ -393,7 +336,9 @@ void area_menu_state::do_logic() {
             ) {
                 add_bullet(
                     fail_list,
-                    "Lose " + i2s(mission.fail_pik_killed) + " Pikmin."
+                    mission.get_fail_description(
+                        MISSION_FAIL_COND_LOSE_PIKMIN
+                    )
                 );
             }
             if(
@@ -403,7 +348,9 @@ void area_menu_state::do_logic() {
             ) {
                 add_bullet(
                     fail_list,
-                    "A leader takes damage."
+                    mission.get_fail_description(
+                        MISSION_FAIL_COND_TAKE_DAMAGE
+                    )
                 );
             }
             if(
@@ -413,8 +360,9 @@ void area_menu_state::do_logic() {
             ) {
                 add_bullet(
                     fail_list,
-                    "Lose " +
-                    nr_and_plural(mission.fail_leaders_kod, "leader") + "."
+                    mission.get_fail_description(
+                        MISSION_FAIL_COND_LOSE_LEADERS
+                    )
                 );
             }
             if(
@@ -424,10 +372,9 @@ void area_menu_state::do_logic() {
             ) {
                 add_bullet(
                     fail_list,
-                    "Kill " +
-                    nr_and_plural(
-                        mission.fail_enemies_killed, "enemy", "enemies"
-                    ) + "."
+                    mission.get_fail_description(
+                        MISSION_FAIL_COND_KILL_ENEMIES
+                    )
                 );
             }
             if(
@@ -435,7 +382,9 @@ void area_menu_state::do_logic() {
             ) {
                 add_bullet(
                     fail_list,
-                    "End from the pause menu."
+                    mission.get_fail_description(
+                        MISSION_FAIL_COND_PAUSE_MENU
+                    )
                 );
             }
             
@@ -506,6 +455,64 @@ void area_menu_state::do_logic() {
                         "    Enemy points x " +
                         i2s(mission.points_per_enemy_point) + "."
                     );
+                }
+                vector<string> loss_notes;
+                if(
+                    has_flag(
+                        mission.point_loss_data,
+                        MISSION_POINT_CRITERIA_PIKMIN_BORN
+                    )
+                ) {
+                    loss_notes.push_back("    Pikmin born");
+                }
+                if(
+                    has_flag(
+                        mission.point_loss_data,
+                        MISSION_POINT_CRITERIA_PIKMIN_DEATH
+                    )
+                ) {
+                    loss_notes.push_back("    Pikmin deaths");
+                }
+                if(
+                    has_flag(
+                        mission.point_loss_data,
+                        MISSION_POINT_CRITERIA_SEC_LEFT
+                    )
+                ) {
+                    loss_notes.push_back("    Seconds left");
+                }
+                if(
+                    has_flag(
+                        mission.point_loss_data,
+                        MISSION_POINT_CRITERIA_SEC_PASSED
+                    )
+                ) {
+                    loss_notes.push_back("    Seconds passed");
+                }
+                if(
+                    has_flag(
+                        mission.point_loss_data,
+                        MISSION_POINT_CRITERIA_TREASURE_POINTS
+                    )
+                ) {
+                    loss_notes.push_back("    Treasure points");
+                }
+                if(
+                    has_flag(
+                        mission.point_loss_data,
+                        MISSION_POINT_CRITERIA_ENEMY_POINTS
+                    )
+                ) {
+                    loss_notes.push_back("    Enemy points");
+                }
+                if(!loss_notes.empty()) {
+                    add_bullet(
+                        grading_list,
+                        "If you fail, you'll lose your score for:"
+                    );
+                    for(size_t l = 0; l < loss_notes.size(); ++l) {
+                        add_bullet(grading_list, loss_notes[l]);
+                    }
                 }
                 break;
             }

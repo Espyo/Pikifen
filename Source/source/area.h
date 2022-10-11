@@ -173,6 +173,8 @@ struct mission_data {
     int platinum_req;
     
     mission_data();
+    string get_fail_description(const uint8_t id) const;
+    string get_goal_description() const;
 };
 
 

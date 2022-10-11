@@ -124,6 +124,9 @@ gameplay_state::gameplay_state() :
     enemy_total(0),
     enemy_points_collected(0),
     enemy_points_total(0),
+    cur_leaders_in_mission_exit(0),
+    leaders_in_mission_exit_goal(0),
+    leaders_kod(0),
     cur_interlude(INTERLUDE_NONE),
     interlude_time(0.0f),
     cur_big_msg(BIG_MESSAGE_NONE),
@@ -736,6 +739,9 @@ void gameplay_state::load() {
     enemy_total = 0;
     enemy_points_collected = 0;
     enemy_points_total = 0;
+    cur_leaders_in_mission_exit = 0;
+    leaders_in_mission_exit_goal = 0;
+    leaders_kod = 0;
     mission_fail_reason = 0;
     notification.reset();
     
