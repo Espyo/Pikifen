@@ -518,6 +518,37 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
     
     game.cam.update_box();
     
+    //Mission things.
+    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        switch(game.cur_area_data.mission.goal) {
+        case MISSION_GOAL_END_MANUALLY: {
+            break;
+        } case MISSION_GOAL_COLLECT_TREASURE: {
+            goal_cur_amount = treasures_collected;
+            break;
+        } case MISSION_GOAL_BATTLE_ENEMIES: {
+            goal_cur_amount = enemy_deaths;
+            break;
+        } case MISSION_GOAL_TIMED_SURVIVAL: {
+            goal_cur_amount = area_time_passed;
+            break;
+        } case MISSION_GOAL_GET_TO_EXIT: {
+            goal_cur_amount = cur_leaders_in_mission_exit;
+            break;
+        } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+            goal_cur_amount = get_total_pikmin_amount();
+            break;
+        }
+        }
+    }
+    float real_goal_ratio = 0.0f;
+    if(goal_req_amount != 0.0f) {
+        real_goal_ratio = goal_cur_amount / (float) goal_req_amount;
+    }
+    goal_indicator_ratio +=
+        (real_goal_ratio - goal_indicator_ratio) *
+        (GAMEPLAY::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
+        
     if(!msg_box) {
     
         /************************************

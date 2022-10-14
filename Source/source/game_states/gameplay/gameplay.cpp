@@ -65,6 +65,8 @@ const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
 const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
+//Dampen the mission goal indicator's movement by this much.
+const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 //How long the HUD moves for when a menu is entered.
 const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 //How long the HUD moves for when a menu is exited.
@@ -114,6 +116,7 @@ gameplay_state::gameplay_state() :
     throw_dest_sector(nullptr),
     unloading(false),
     went_to_results(false),
+    mission_required_mob_amount(0),
     pikmin_born(0),
     pikmin_deaths(0),
     treasures_collected(0),
@@ -125,8 +128,10 @@ gameplay_state::gameplay_state() :
     enemy_points_collected(0),
     enemy_points_total(0),
     cur_leaders_in_mission_exit(0),
-    leaders_in_mission_exit_goal(0),
     leaders_kod(0),
+    goal_cur_amount(0),
+    goal_req_amount(0),
+    goal_indicator_ratio(0.0f),
     cur_interlude(INTERLUDE_NONE),
     interlude_time(0.0f),
     cur_big_msg(BIG_MESSAGE_NONE),
@@ -378,6 +383,8 @@ void gameplay_state::enter() {
     last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    
+    goal_indicator_ratio = 0.0f;
     
     hud->gui.hide_items();
     if(went_to_results) {
@@ -740,7 +747,7 @@ void gameplay_state::load() {
     enemy_points_collected = 0;
     enemy_points_total = 0;
     cur_leaders_in_mission_exit = 0;
-    leaders_in_mission_exit_goal = 0;
+    mission_required_mob_amount = 0;
     leaders_kod = 0;
     mission_fail_reason = 0;
     notification.reset();
@@ -902,6 +909,9 @@ void gameplay_state::load() {
         for(size_t i : mission_required_mob_gen_idxs) {
             mission_required_mob_ids.insert(mobs_per_gen[i]->id);
         }
+        
+        mission_required_mob_amount = mission_required_mob_ids.size();
+        goal_req_amount = mission_required_mob_amount;
     }
     
     //Figure out the total amount of treasures and their points.
@@ -938,6 +948,27 @@ void gameplay_state::load() {
     enemy_total = mobs.enemies.size();
     for(size_t e = 0; e < mobs.enemies.size(); ++e) {
         enemy_points_total += mobs.enemies[e]->ene_type->points;
+    }
+    
+    //Other mission initializations.
+    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        switch(game.cur_area_data.mission.goal) {
+        case MISSION_GOAL_END_MANUALLY: {
+            //Nothing to do.
+            break;
+        } case MISSION_GOAL_COLLECT_TREASURE:
+        case MISSION_GOAL_BATTLE_ENEMIES:
+        case MISSION_GOAL_GET_TO_EXIT: {
+            //Handled above.
+            break;
+        } case MISSION_GOAL_TIMED_SURVIVAL: {
+            goal_req_amount = game.cur_area_data.mission.goal_amount;
+            break;
+        } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+            goal_req_amount = game.cur_area_data.mission.goal_amount;
+            break;
+        }
+        }
     }
     
     //Initialize some other things.

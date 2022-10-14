@@ -501,91 +501,52 @@ void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
  * Returns a string representing the player's status towards the mission goal.
  */
 string pause_menu_struct::get_mission_goal_status() {
+    float percentage = 0.0f;
+    int cur = game.states.gameplay->goal_cur_amount;
+    int req = game.states.gameplay->goal_req_amount;
+    if(req != 0.0f) {
+        percentage = cur / (float) req;
+    }
+    percentage *= 100;
     switch(game.cur_area_data.mission.goal) {
     case MISSION_GOAL_END_MANUALLY: {
         return "";
         break;
         
     } case MISSION_GOAL_COLLECT_TREASURE: {
-        float percentage = 0.0f;
-        if(game.states.gameplay->treasure_points_total != 0.0f) {
-            percentage =
-                game.states.gameplay->treasure_points_collected /
-                (float) game.states.gameplay->treasure_points_total;
-            percentage *= 100;
-        }
         return
-            "You have " +
-            i2s(game.states.gameplay->treasure_points_collected) + "/" +
-            i2s(game.states.gameplay->treasure_points_total) +
-            " treasure points. (" + i2s(percentage) + "%)";
+            "You have collected " + i2s(cur) + "/" + i2s(req) +
+            " treasures. (" + i2s(percentage) + "%)";
         break;
         
     } case MISSION_GOAL_BATTLE_ENEMIES: {
-        float percentage = 0.0f;
-        if(game.states.gameplay->enemy_points_total != 0.0f) {
-            percentage =
-                game.states.gameplay->enemy_points_collected /
-                (float) game.states.gameplay->enemy_points_total;
-            percentage *= 100;
-        }
         return
-            "You have " +
-            i2s(game.states.gameplay->enemy_points_collected) + "/" +
-            i2s(game.states.gameplay->enemy_points_total) +
-            " treasure points. (" + i2s(percentage) + "%)";
+            "You have killed " + i2s(cur) + "/" + i2s(req) +
+            " enemies. (" + i2s(percentage) + "%)";
         break;
         
     } case MISSION_GOAL_TIMED_SURVIVAL: {
-        float percentage = 0.0f;
-        if(game.cur_area_data.mission.goal_amount != 0.0f) {
-            percentage =
-                game.states.gameplay->area_time_passed /
-                (float) game.cur_area_data.mission.goal_amount;
-            percentage *= 100;
-        }
         return
             "You have survived for " +
-            time_to_str(game.states.gameplay->area_time_passed, "m", "s") +
+            time_to_str(cur, "m", "s") +
             " so far. (" + i2s(percentage) + "%)";
         break;
         
     } case MISSION_GOAL_GET_TO_EXIT: {
-        float percentage = 0.0f;
-        if(game.states.gameplay->mission_required_mob_ids.size() != 0.0f) {
-            percentage =
-                game.states.gameplay->cur_leaders_in_mission_exit /
-                (float) game.states.gameplay->mission_required_mob_ids.size();
-            percentage *= 100;
-        }
         return
-            "You have " +
-            i2s(game.states.gameplay->cur_leaders_in_mission_exit) +
-            "/" +
-            i2s(game.states.gameplay->mission_required_mob_ids.size()) +
+            "You have " + i2s(cur) + "/" + i2s(req) +
             " leaders in the exit. (" + i2s(percentage) + "%)";
         break;
         
     } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
 
-        float current =
-            game.states.gameplay->get_total_pikmin_amount();
         if(game.cur_area_data.mission.goal_higher_than) {
-            float percentage = 0.0f;
-            if(game.cur_area_data.mission.goal_amount != 0.0f) {
-                percentage =
-                    current /
-                    (float) game.cur_area_data.mission.goal_amount;
-                percentage *= 100;
-            }
             return
-                "You have " +
-                i2s(current) + "/" +
-                i2s(game.cur_area_data.mission.goal_amount) +
+                "You have " + i2s(cur) + "/" + i2s(req) +
                 " Pikmin. (" + i2s(percentage) + "%)";
         } else {
             return
-                "You have " + i2s(current) + " Pikmin.";
+                "You have " + i2s(cur) + " Pikmin.";
         }
         break;
         

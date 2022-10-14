@@ -14,6 +14,7 @@
 #include "../../functions.h"
 #include "../../game.h"
 #include "../../utils/string_utils.h"
+#include "../../utils/allegro_utils.h"
 #include "gameplay.h"
 
 
@@ -946,6 +947,169 @@ hud_struct::hud_struct() :
         );
     };
     gui.add_item(next_spray_button, "spray_next_button");
+    
+    
+    //Mission goal bubble.
+    gui_item* mission_goal_bubble = new gui_item();
+    mission_goal_bubble->on_draw =
+    [this] (const point & center, const point & size) {
+        int cx = 0;
+        int cy = 0;
+        int cw = 0;
+        int ch = 0;
+        al_get_clipping_rectangle(&cx, &cy, &cw, &ch);
+        set_combined_clipping_rectangles(
+            cx, cy, cw, ch,
+            center.x - size.x / 2.0f,
+            center.y - size.y / 2.0f,
+            size.x * game.states.gameplay->goal_indicator_ratio,
+            size.y
+        );
+        draw_filled_rounded_rectangle(
+            center, size, 20.0f, al_map_rgba(86, 149, 50, 160)
+        );
+        set_combined_clipping_rectangles(
+            cx, cy, cw, ch,
+            center.x - size.x / 2.0f +
+            size.x * game.states.gameplay->goal_indicator_ratio,
+            center.y - size.y / 2.0f,
+            size.x * (1 - game.states.gameplay->goal_indicator_ratio),
+            size.y
+        );
+        draw_filled_rounded_rectangle(
+            center, size, 20.0f, al_map_rgba(34, 102, 102, 80)
+        );
+        al_set_clipping_rectangle(cx, cy, cw, ch);
+        draw_textured_box(
+            center, size, game.sys_assets.bmp_bubble_box
+        );
+    };
+    gui.add_item(mission_goal_bubble, "mission_goal_bubble");
+    
+    
+    //Mission goal current label.
+    gui_item* mission_goal_cur_label = new gui_item();
+    mission_goal_cur_label->on_draw =
+    [this] (const point & center, const point & size) {
+        string text;
+        switch(game.cur_area_data.mission.goal) {
+        case MISSION_GOAL_END_MANUALLY: {
+            break;
+        } case MISSION_GOAL_COLLECT_TREASURE: {
+            text = "Treasures";
+            break;
+        } case MISSION_GOAL_BATTLE_ENEMIES: {
+            text = "Enemies";
+            break;
+        } case MISSION_GOAL_TIMED_SURVIVAL: {
+            text = "Time";
+            break;
+        } case MISSION_GOAL_GET_TO_EXIT: {
+            text = "In exit";
+            break;
+        } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+            text = "Pikmin";
+            break;
+        }
+        }
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+            center, point(1.0f, 1.0f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            size, true,
+            text
+        );
+    };
+    gui.add_item(mission_goal_cur_label, "mission_goal_cur_label");
+    
+    
+    //Mission goal current.
+    gui_item* mission_goal_cur = new gui_item();
+    mission_goal_cur->on_draw =
+    [this] (const point & center, const point & size) {
+        string text;
+        switch(game.cur_area_data.mission.goal) {
+        case MISSION_GOAL_END_MANUALLY: {
+            break;
+        } case MISSION_GOAL_COLLECT_TREASURE:
+        case MISSION_GOAL_BATTLE_ENEMIES:
+        case MISSION_GOAL_GET_TO_EXIT:
+        case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+            text = i2s(game.states.gameplay->goal_cur_amount);
+            break;
+        } case MISSION_GOAL_TIMED_SURVIVAL: {
+            text = time_to_str(game.states.gameplay->goal_cur_amount, ":", "");
+        }
+        }
+        draw_compressed_scaled_text(
+            game.fonts.counter, COLOR_WHITE,
+            center, point(1.0f, 1.0f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            size, true,
+            text
+        );
+    };
+    gui.add_item(mission_goal_cur, "mission_goal_cur");
+    
+    
+    //Mission goal requirement label.
+    gui_item* mission_goal_req_label = new gui_item();
+    mission_goal_req_label->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+            center, point(1.0f, 1.0f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            size, true,
+            "Goal"
+        );
+    };
+    gui.add_item(mission_goal_req_label, "mission_goal_req_label");
+    
+    
+    //Mission goal requirement.
+    gui_item* mission_goal_req = new gui_item();
+    mission_goal_req->on_draw =
+    [this] (const point & center, const point & size) {
+        string text;
+        switch(game.cur_area_data.mission.goal) {
+        case MISSION_GOAL_END_MANUALLY: {
+            break;
+        } case MISSION_GOAL_COLLECT_TREASURE:
+        case MISSION_GOAL_BATTLE_ENEMIES:
+        case MISSION_GOAL_GET_TO_EXIT:
+        case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+            text = i2s(game.states.gameplay->goal_req_amount);
+            break;
+        } case MISSION_GOAL_TIMED_SURVIVAL: {
+            text = time_to_str(game.states.gameplay->goal_req_amount, ":", "");
+            break;
+        }
+        }
+        draw_compressed_scaled_text(
+            game.fonts.counter, COLOR_WHITE,
+            center, point(1.0f, 1.0f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            size, true,
+            text
+        );
+    };
+    gui.add_item(mission_goal_req, "mission_goal_req");
+    
+    
+    //Mission goal slash.
+    gui_item* mission_goal_slash = new gui_item();
+    mission_goal_slash->on_draw =
+    [this] (const point & center, const point & size) {
+        draw_compressed_scaled_text(
+            game.fonts.counter, COLOR_WHITE,
+            center, point(1.0f, 1.0f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            size, true,
+            "/"
+        );
+    };
+    gui.add_item(mission_goal_slash, "mission_goal_slash");
     
     
     data_node* bitmaps_node = hud_file_node.get_child_by_name("files");

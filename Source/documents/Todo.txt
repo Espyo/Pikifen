@@ -2,7 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    If the goal requires beating 1 specific enemy, like a boss, the total enemy point amount will count every enemy, and beating some weakling enemies will add points
+    The pause menu's goal status and the HUD are both counting _all_ treasures collected/total, instead of just the goal ones
     [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         One HUD element on the top-left that just shows your mission goal progress
         Another HUD element below that that lists your score at any given moment. Optional
@@ -796,6 +796,7 @@ Misc things (so I don't forget)
 Tasks for later on (I might never implement these)
     Known problems
         On my other laptop, screenshots come out with alpha
+            I can remove the alpha channel of the finished screenshot before saving
         Helodity found a crash on the area editor -- area with invalid shadow, restart engine, area editor, find problems, go to problem -> crash -- I can't reproduce, but it must have something to do with pointers not being cleared
     ...An AI opponent in 2-player mode? It would help me test...
     Mechanics

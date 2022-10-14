@@ -43,6 +43,7 @@ extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
 extern const float CURSOR_TRAIL_MAX_WIDTH;
 extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
 extern const int FOG_BITMAP_SIZE;
+extern const float GOAL_INDICATOR_SMOOTHNESS_MULT;
 extern const unsigned char PREVIEW_OPACITY;
 extern const float PREVIEW_TEXTURE_SCALE;
 extern const float PREVIEW_TEXTURE_TIME_MULT;
@@ -177,6 +178,8 @@ public:
     whistle_struct whistle;
     //IDs of mobs remaining for the current mission goal, if applicable.
     unordered_set<size_t> mission_required_mob_ids;
+    //How many mobs are required for the mission goal. Cache for convenience.
+    size_t mission_required_mob_amount;
     //How many Pikmin born so far.
     size_t pikmin_born;
     //How many Pikmin deaths so far.
@@ -201,10 +204,14 @@ public:
     uint8_t mission_fail_reason;
     //How many leaders are in the mission exit. Cache for convenience.
     size_t cur_leaders_in_mission_exit;
-    //How many leaders must be in the mission exit. Cache for convenience.
-    size_t leaders_in_mission_exit_goal;
     //How many leaders have been lost so far. Cache for convenience.
     size_t leaders_kod;
+    //Current amount of whatever the mission goal is. Cache for convenience.
+    int goal_cur_amount;
+    //Required amount of whatever the mission goal is. Cache for convenience.
+    int goal_req_amount;
+    //Ratio of the mission goal HUD item's indicator.
+    float goal_indicator_ratio;
     //Current interlude, if any.
     INTERLUDES cur_interlude;
     //Time passed in the current interlude.
