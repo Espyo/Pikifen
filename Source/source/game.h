@@ -135,8 +135,8 @@ public:
     point mouse_cursor_s;
     //OS mouse cursor position, in world coordinates.
     point mouse_cursor_w;
-    //Database of all mission goals and their names.
-    enum_name_database mission_goals;
+    //Database of all mission goals.
+    vector<mission_goal*> mission_goals;
     //Global audio mixer.
     ALLEGRO_MIXER* mixer;
     //User options.

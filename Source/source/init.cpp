@@ -307,38 +307,6 @@ void init_dear_imgui() {
 
 
 /* ----------------------------------------------------------------------------
- * Initializes the list of sector types, mission goals, etc.
- */
-void init_enum_name_databases() {
-    game.sector_types.register_item(
-        SECTOR_TYPE_NORMAL, "Normal"
-    );
-    game.sector_types.register_item(
-        SECTOR_TYPE_BLOCKING, "Blocking"
-    );
-    
-    game.mission_goals.register_item(
-        MISSION_GOAL_END_MANUALLY, "End whenever you want"
-    );
-    game.mission_goals.register_item(
-        MISSION_GOAL_COLLECT_TREASURE, "Collect treasures"
-    );
-    game.mission_goals.register_item(
-        MISSION_GOAL_BATTLE_ENEMIES, "Battle enemies"
-    );
-    game.mission_goals.register_item(
-        MISSION_GOAL_TIMED_SURVIVAL, "Survive for a certain time"
-    );
-    game.mission_goals.register_item(
-        MISSION_GOAL_GET_TO_EXIT, "Get to the exit"
-    );
-    game.mission_goals.register_item(
-        MISSION_GOAL_REACH_PIKMIN_AMOUNT, "Reach a certain Pikmin amount"
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Initializes the error bitmap.
  */
 void init_error_bitmap() {
@@ -484,6 +452,38 @@ void init_misc() {
     
     game.liquid_limit_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
     game.wall_offset_effect_buffer = al_create_bitmap(game.win_w, game.win_h);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the list of sector types, mission goals, etc.
+ */
+void init_misc_databases() {
+    game.sector_types.register_item(
+        SECTOR_TYPE_NORMAL, "Normal"
+    );
+    game.sector_types.register_item(
+        SECTOR_TYPE_BLOCKING, "Blocking"
+    );
+    
+    game.mission_goals.push_back(
+        new mission_goal_end_manually()
+    );
+    game.mission_goals.push_back(
+        new mission_goal_collect_treasures()
+    );
+    game.mission_goals.push_back(
+        new mission_goal_battle_enemies()
+    );
+    game.mission_goals.push_back(
+        new mission_goal_timed_survival()
+    );
+    game.mission_goals.push_back(
+        new mission_goal_get_to_exit()
+    );
+    game.mission_goals.push_back(
+        new mission_goal_reach_pikmin_amount()
+    );
 }
 
 

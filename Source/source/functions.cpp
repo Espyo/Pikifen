@@ -829,7 +829,7 @@ string get_subtitle_or_mission_goal(
     const MISSION_GOALS goal
 ) {
     if(subtitle.empty() && area_type == AREA_TYPE_MISSION) {
-        return game.mission_goals.get_name(goal);
+        return game.mission_goals[goal]->get_name();
     }
     
     return subtitle;

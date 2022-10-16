@@ -2217,12 +2217,8 @@ void area_editor::process_gui_panel_mission() {
     
         //Goal combobox.
         vector<string> goals_list;
-        for(
-            size_t t = 0; t < game.mission_goals.get_nr_of_items(); ++t
-        ) {
-            goals_list.push_back(
-                game.mission_goals.get_name((MISSION_GOALS) t)
-            );
+        for(size_t g = 0; g < game.mission_goals.size(); ++g) {
+            goals_list.push_back(game.mission_goals[g]->get_name());
         }
         int mission_goal = game.cur_area_data.mission.goal;
         if(ImGui::Combo("Goal", &mission_goal, goals_list)) {

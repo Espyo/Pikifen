@@ -13,6 +13,7 @@
 
 #include <memory>
 
+#include "mission.h"
 #include "sector.h"
 
 
@@ -25,85 +26,6 @@ enum AREA_TYPES {
 };
 
 
-//Possible goals in a mission.
-enum MISSION_GOALS {
-    //The player plays until they end from the pause menu.
-    MISSION_GOAL_END_MANUALLY,
-    //The player must collect certain treasures, or all of them.
-    MISSION_GOAL_COLLECT_TREASURE,
-    //The player must defeat certain enemies, or all of them.
-    MISSION_GOAL_BATTLE_ENEMIES,
-    //The player must survive for a certain amount of time.
-    MISSION_GOAL_TIMED_SURVIVAL,
-    //The player must get a leader or all of them to the exit point.
-    MISSION_GOAL_GET_TO_EXIT,
-    //The player must reach a certain number of total Pikmin.
-    MISSION_GOAL_REACH_PIKMIN_AMOUNT,
-};
-
-
-//Possible ways of grading the player for a mission.
-enum MISSION_GRADING_MODES {
-    //Based on points in different criteria.
-    MISSION_GRADING_POINTS,
-    //Based on whether the player reached the goal or not.
-    MISSION_GRADING_GOAL,
-    //Based on whether the player played or not.
-    MISSION_GRADING_PARTICIPATION,
-};
-
-
-//Possible ways to fail at a mission. This should be a bitmask.
-enum MISSION_FAIL_CONDITIONS {
-    //Ending from the pause menu.
-    MISSION_FAIL_COND_PAUSE_MENU = 0x01,
-    //Reaching a certain Pikmin amount. 0 = total extinction.
-    MISSION_FAIL_COND_PIKMIN_AMOUNT = 0x02,
-    //Losing a certain amount of Pikmin.
-    MISSION_FAIL_COND_LOSE_PIKMIN = 0x04,
-    //A leader takes damage.
-    MISSION_FAIL_COND_TAKE_DAMAGE = 0x08,
-    //Losing a certain amount of leaders.
-    MISSION_FAIL_COND_LOSE_LEADERS = 0x10,
-    //Killing a certain amount of enemies.
-    MISSION_FAIL_COND_KILL_ENEMIES = 0x20,
-    //Reaching the time limit.
-    MISSION_FAIL_COND_TIME_LIMIT = 0x40,
-};
-
-
-//Possible types of mission medal.
-enum MISSION_MEDALS {
-    //None.
-    MISSION_MEDAL_NONE,
-    //Bronze.
-    MISSION_MEDAL_BRONZE,
-    //Silver.
-    MISSION_MEDAL_SILVER,
-    //Gold.
-    MISSION_MEDAL_GOLD,
-    //Platinum.
-    MISSION_MEDAL_PLATINUM,
-};
-
-
-//Possible criteria for a mission's point scoring. This should be a bitmask.
-enum MISSION_POINT_CRITERIA {
-    //Points per Pikmin born.
-    MISSION_POINT_CRITERIA_PIKMIN_BORN = 0x01,
-    //Points per Pikmin death.
-    MISSION_POINT_CRITERIA_PIKMIN_DEATH = 0x02,
-    //Points per second left. Only for missions with a time limit.
-    MISSION_POINT_CRITERIA_SEC_LEFT = 0x04,
-    //Points per second passed.
-    MISSION_POINT_CRITERIA_SEC_PASSED = 0x08,
-    //Points per treasure point.
-    MISSION_POINT_CRITERIA_TREASURE_POINTS = 0x10,
-    //Points per enemy kill point.
-    MISSION_POINT_CRITERIA_ENEMY_POINTS = 0x20,
-};
-
-
 namespace AREA {
 extern const unsigned char DEF_DIFFICULTY;
 extern const size_t DEF_DAY_TIME_START;
@@ -113,68 +35,6 @@ extern const int DEF_MISSION_MEDAL_SILVER_REQ;
 extern const int DEF_MISSION_MEDAL_GOLD_REQ;
 extern const int DEF_MISSION_MEDAL_PLATINUM_REQ;
 extern const size_t DEF_MISSION_TIME_LIMIT;
-};
-
-
-struct mission_data {
-    //Mission goal.
-    MISSION_GOALS goal;
-    //Does the mission goal require all relevant items, or just specific ones?
-    bool goal_all_mobs;
-    //If the mission goal requires specific items, their mob indexes go here.
-    unordered_set<size_t> goal_mob_idxs;
-    //Total amount of something required for the current mission goal.
-    size_t goal_amount;
-    //If the mission goal requires an amount, is it >= or <= ?
-    bool goal_higher_than;
-    //Mission exit region center coordinates.
-    point goal_exit_center;
-    //Mission exit region dimensions.
-    point goal_exit_size;
-    //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*.
-    uint8_t fail_conditions;
-    //Amount for the "reach Pikmin amount" mission fail condition.
-    size_t fail_pik_amount;
-    //Is the mission "reach Pikmin amount" fail condition >= or <= ?
-    bool fail_pik_higher_than;
-    //Amount for the "lose Pikmin" mission fail condition.
-    size_t fail_pik_killed;
-    //Amount for the "lose leaders" mission fail condition.
-    size_t fail_leaders_kod;
-    //Amount for the "kill enemies" mission fail condition.
-    size_t fail_enemies_killed;
-    //Seconds amount for the "time limit" mission fail condition.
-    size_t fail_time_limit;
-    //Mission grading mode.
-    MISSION_GRADING_MODES grading_mode;
-    //Mission point multiplier for each Pikmin born.
-    int points_per_pikmin_born;
-    //Mission point multiplier for each Pikmin lost.
-    int points_per_pikmin_death;
-    //Mission point multiplier for each second left (only if time limit is on).
-    int points_per_sec_left;
-    //Mission point multiplier for each second passed.
-    int points_per_sec_passed;
-    //Mission point multiplier for each treasure point obtained.
-    int points_per_treasure_point;
-    //Mission point multiplier for each enemy point obtained.
-    int points_per_enemy_point;
-    //Bitmask for mission fail point loss criteria. Use MISSION_POINT_CRITERIA.
-    uint8_t point_loss_data;
-    //Starting number of points.
-    int starting_points;
-    //Bronze medal point requirement.
-    int bronze_req;
-    //Silver medal point requirement.
-    int silver_req;
-    //Gold medal point requirement.
-    int gold_req;
-    //Platinum medal point requirement.
-    int platinum_req;
-    
-    mission_data();
-    string get_fail_description(const uint8_t id) const;
-    string get_goal_description() const;
 };
 
 

@@ -129,8 +129,6 @@ gameplay_state::gameplay_state() :
     enemy_points_total(0),
     cur_leaders_in_mission_exit(0),
     leaders_kod(0),
-    goal_cur_amount(0),
-    goal_req_amount(0),
     goal_indicator_ratio(0.0f),
     cur_interlude(INTERLUDE_NONE),
     interlude_time(0.0f),
@@ -252,55 +250,16 @@ void gameplay_state::end_mission(const bool cleared) {
     
     //Zoom in on the reason, if possible.
     if(cleared) {
-        switch(game.cur_area_data.mission.goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-            break;
-        }
-        case MISSION_GOAL_COLLECT_TREASURE: {
-            if(last_ship_that_got_treasure_pos.x != LARGE_FLOAT) {
-                game.cam.target_pos = last_ship_that_got_treasure_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            }
-            break;
-        }
-        case MISSION_GOAL_BATTLE_ENEMIES: {
-            if(last_enemy_killed_pos.x != LARGE_FLOAT) {
-                game.cam.target_pos = last_enemy_killed_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            }
-            break;
-        }
-        case MISSION_GOAL_TIMED_SURVIVAL: {
-            break;
-        }
-        case MISSION_GOAL_GET_TO_EXIT: {
-            if(!mission_required_mob_ids.empty()) {
-                point avg_pos;
-                for(size_t m : mission_required_mob_ids) {
-                    avg_pos += mobs.all[m]->pos;
-                }
-                avg_pos.x /= mission_required_mob_ids.size();
-                avg_pos.y /= mission_required_mob_ids.size();
-                game.cam.target_pos = avg_pos;
-            }
-            break;
-        }
-        case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-            if(
-                game.cur_area_data.mission.goal_higher_than &&
-                last_pikmin_born_pos.x != LARGE_FLOAT
-            ) {
-                game.cam.target_pos = last_pikmin_born_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            } else if(
-                !game.cur_area_data.mission.goal_higher_than &&
-                last_pikmin_death_pos.x != LARGE_FLOAT
-            ) {
-                game.cam.target_pos = last_pikmin_death_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            }
-            break;
-        }
+        point new_cam_pos = game.cam.target_pos;
+        float new_cam_zoom = game.cam.target_zoom;
+        if(
+            game.mission_goals[game.cur_area_data.mission.goal]->
+            get_mission_end_zoom_data(
+                this, &new_cam_pos, &new_cam_zoom
+            )
+        ) {
+            game.cam.target_pos = new_cam_pos;
+            game.cam.target_zoom = new_cam_zoom;
         }
         
     } else {
@@ -911,7 +870,6 @@ void gameplay_state::load() {
         }
         
         mission_required_mob_amount = mission_required_mob_ids.size();
-        goal_req_amount = mission_required_mob_amount;
     }
     
     //Figure out the total amount of treasures and their points.
@@ -948,27 +906,6 @@ void gameplay_state::load() {
     enemy_total = mobs.enemies.size();
     for(size_t e = 0; e < mobs.enemies.size(); ++e) {
         enemy_points_total += mobs.enemies[e]->ene_type->points;
-    }
-    
-    //Other mission initializations.
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-        switch(game.cur_area_data.mission.goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-            //Nothing to do.
-            break;
-        } case MISSION_GOAL_COLLECT_TREASURE:
-        case MISSION_GOAL_BATTLE_ENEMIES:
-        case MISSION_GOAL_GET_TO_EXIT: {
-            //Handled above.
-            break;
-        } case MISSION_GOAL_TIMED_SURVIVAL: {
-            goal_req_amount = game.cur_area_data.mission.goal_amount;
-            break;
-        } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-            goal_req_amount = game.cur_area_data.mission.goal_amount;
-            break;
-        }
-        }
     }
     
     //Initialize some other things.

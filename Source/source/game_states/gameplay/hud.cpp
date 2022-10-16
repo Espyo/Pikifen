@@ -991,27 +991,9 @@ hud_struct::hud_struct() :
     gui_item* mission_goal_cur_label = new gui_item();
     mission_goal_cur_label->on_draw =
     [this] (const point & center, const point & size) {
-        string text;
-        switch(game.cur_area_data.mission.goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-            break;
-        } case MISSION_GOAL_COLLECT_TREASURE: {
-            text = "Treasures";
-            break;
-        } case MISSION_GOAL_BATTLE_ENEMIES: {
-            text = "Enemies";
-            break;
-        } case MISSION_GOAL_TIMED_SURVIVAL: {
-            text = "Time";
-            break;
-        } case MISSION_GOAL_GET_TO_EXIT: {
-            text = "In exit";
-            break;
-        } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-            text = "Pikmin";
-            break;
-        }
-        }
+        string text =
+            game.mission_goals[game.cur_area_data.mission.goal]->
+            get_hud_label();
         draw_compressed_scaled_text(
             game.fonts.standard, al_map_rgba(255, 255, 255, 128),
             center, point(1.0f, 1.0f),
@@ -1027,19 +1009,17 @@ hud_struct::hud_struct() :
     gui_item* mission_goal_cur = new gui_item();
     mission_goal_cur->on_draw =
     [this] (const point & center, const point & size) {
+        int value =
+            game.mission_goals[game.cur_area_data.mission.goal]->
+            get_cur_amount(game.states.gameplay);
         string text;
-        switch(game.cur_area_data.mission.goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-            break;
-        } case MISSION_GOAL_COLLECT_TREASURE:
-        case MISSION_GOAL_BATTLE_ENEMIES:
-        case MISSION_GOAL_GET_TO_EXIT:
-        case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-            text = i2s(game.states.gameplay->goal_cur_amount);
-            break;
-        } case MISSION_GOAL_TIMED_SURVIVAL: {
-            text = time_to_str(game.states.gameplay->goal_cur_amount, ":", "");
-        }
+        if(
+            game.cur_area_data.mission.goal ==
+            MISSION_GOAL_TIMED_SURVIVAL
+        ) {
+            text = time_to_str(value, ":", "");
+        } else {
+            text = i2s(value);
         }
         draw_compressed_scaled_text(
             game.fonts.counter, COLOR_WHITE,
@@ -1071,20 +1051,17 @@ hud_struct::hud_struct() :
     gui_item* mission_goal_req = new gui_item();
     mission_goal_req->on_draw =
     [this] (const point & center, const point & size) {
+        int value =
+            game.mission_goals[game.cur_area_data.mission.goal]->
+            get_req_amount(game.states.gameplay);
         string text;
-        switch(game.cur_area_data.mission.goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-            break;
-        } case MISSION_GOAL_COLLECT_TREASURE:
-        case MISSION_GOAL_BATTLE_ENEMIES:
-        case MISSION_GOAL_GET_TO_EXIT:
-        case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-            text = i2s(game.states.gameplay->goal_req_amount);
-            break;
-        } case MISSION_GOAL_TIMED_SURVIVAL: {
-            text = time_to_str(game.states.gameplay->goal_req_amount, ":", "");
-            break;
-        }
+        if(
+            game.cur_area_data.mission.goal ==
+            MISSION_GOAL_TIMED_SURVIVAL
+        ) {
+            text = time_to_str(value, ":", "");
+        } else {
+            text = i2s(value);
         }
         draw_compressed_scaled_text(
             game.fonts.counter, COLOR_WHITE,

@@ -503,61 +503,9 @@ void results_state::load() {
                 ) +
                 "...";
         } else if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-            switch(game.cur_area_data.mission.goal) {
-            case MISSION_GOAL_END_MANUALLY: {
-                end_reason = "Ended successfully!";
-                break;
-            } case MISSION_GOAL_COLLECT_TREASURE: {
-                if(game.cur_area_data.mission.goal_all_mobs) {
-                    end_reason = "Collected all treasures!";
-                } else {
-                    end_reason =
-                        "Collected the " +
-                        nr_and_plural(
-                            game.cur_area_data.mission.goal_mob_idxs.size(),
-                            "treasure"
-                        ) +
-                        "!";
-                }
-                break;
-            } case MISSION_GOAL_BATTLE_ENEMIES: {
-                if(game.cur_area_data.mission.goal_all_mobs) {
-                    end_reason = "Defeated all enemies!";
-                } else {
-                    end_reason =
-                        "Defeated the " +
-                        nr_and_plural(
-                            game.cur_area_data.mission.goal_mob_idxs.size(),
-                            "enemy",
-                            "enemies"
-                        ) +
-                        "!";
-                }
-                break;
-            } case MISSION_GOAL_TIMED_SURVIVAL: {
-                end_reason =
-                    "Survived for " +
-                    time_to_str(
-                        game.cur_area_data.mission.goal_amount, "m", "s"
-                    ) +
-                    "!";
-                break;
-            } case MISSION_GOAL_GET_TO_EXIT: {
-                end_reason = "Got to the exit!";
-                break;
-            } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-                end_reason =
-                    "Reached " +
-                    string(
-                        game.cur_area_data.mission.goal_higher_than ?
-                        ">=" :
-                        "<="
-                    ) +
-                    i2s(game.cur_area_data.mission.goal_amount) +
-                    " Pikmin!";
-                break;
-            }
-            }
+            end_reason =
+                game.mission_goals[game.cur_area_data.mission.goal]->
+                get_congratulation(&game.cur_area_data.mission);
         }
         
         if(!end_reason.empty()) {

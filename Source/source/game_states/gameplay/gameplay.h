@@ -206,10 +206,6 @@ public:
     size_t cur_leaders_in_mission_exit;
     //How many leaders have been lost so far. Cache for convenience.
     size_t leaders_kod;
-    //Current amount of whatever the mission goal is. Cache for convenience.
-    int goal_cur_amount;
-    //Required amount of whatever the mission goal is. Cache for convenience.
-    int goal_req_amount;
     //Ratio of the mission goal HUD item's indicator.
     float goal_indicator_ratio;
     //Current interlude, if any.

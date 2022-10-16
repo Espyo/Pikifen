@@ -314,7 +314,7 @@ int game_class::start() {
     //Init and load some engine things.
     init_mob_actions();
     init_mob_categories();
-    init_enum_name_databases();
+    init_misc_databases();
     load_game_config();
     load_maker_tools();
     save_maker_tools();
@@ -333,7 +333,7 @@ int game_class::start() {
         game.states.gameplay->path_of_area_to_load =
             game.maker_tools.auto_start_option;
         game.change_state(game.states.gameplay);
-
+        
     } else if(
         game.maker_tools.enabled &&
         game.maker_tools.auto_start_mode == "animation_editor"
@@ -341,7 +341,7 @@ int game_class::start() {
         game.states.animation_ed->auto_load_anim =
             game.maker_tools.auto_start_option;
         game.change_state(game.states.animation_ed);
-
+        
     } else if(
         game.maker_tools.enabled &&
         game.maker_tools.auto_start_mode == "area_editor"
@@ -349,7 +349,7 @@ int game_class::start() {
         game.states.area_ed->auto_load_area =
             game.maker_tools.auto_start_option;
         game.change_state(game.states.area_ed);
-
+        
     } else if(
         game.maker_tools.enabled &&
         game.maker_tools.auto_start_mode == "gui_editor"
@@ -357,7 +357,7 @@ int game_class::start() {
         game.states.gui_ed->auto_load_file =
             game.maker_tools.auto_start_option;
         game.change_state(game.states.gui_ed);
-
+        
     } else {
         game.change_state(game.states.main_menu);
     }

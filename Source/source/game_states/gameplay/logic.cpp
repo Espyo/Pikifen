@@ -519,29 +519,50 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
     game.cam.update_box();
     
     //Mission things.
-    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-        switch(game.cur_area_data.mission.goal) {
-        case MISSION_GOAL_END_MANUALLY: {
-            break;
-        } case MISSION_GOAL_COLLECT_TREASURE: {
-            goal_cur_amount = treasures_collected;
-            break;
-        } case MISSION_GOAL_BATTLE_ENEMIES: {
-            goal_cur_amount = enemy_deaths;
-            break;
-        } case MISSION_GOAL_TIMED_SURVIVAL: {
-            goal_cur_amount = area_time_passed;
-            break;
-        } case MISSION_GOAL_GET_TO_EXIT: {
-            goal_cur_amount = cur_leaders_in_mission_exit;
-            break;
-        } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-            goal_cur_amount = get_total_pikmin_amount();
-            break;
-        }
+    if(
+        game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
+    ) {
+        cur_leaders_in_mission_exit = 0;
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            mob* l_ptr = mobs.leaders[l];
+            if(
+                std::find(
+                    mission_required_mob_ids.begin(),
+                    mission_required_mob_ids.end(),
+                    mobs.leaders[l]->id
+                ) ==
+                mission_required_mob_ids.end()
+            ) {
+                //Not a required leader.
+                continue;
+            }
+            if(
+                fabs(
+                    l_ptr->pos.x -
+                    game.cur_area_data.mission.goal_exit_center.x
+                ) <=
+                game.cur_area_data.mission.goal_exit_size.x / 2.0f &&
+                fabs(
+                    l_ptr->pos.y -
+                    game.cur_area_data.mission.goal_exit_center.y
+                ) <=
+                game.cur_area_data.mission.goal_exit_size.y / 2.0f
+            ) {
+                cur_leaders_in_mission_exit++;
+            }
         }
     }
+
     float real_goal_ratio = 0.0f;
+    int goal_cur_amount =
+        game.mission_goals[game.cur_area_data.mission.goal]->get_cur_amount(
+            this
+        );
+    int goal_req_amount =
+        game.mission_goals[game.cur_area_data.mission.goal]->get_req_amount(
+            this
+        );
     if(goal_req_amount != 0.0f) {
         real_goal_ratio = goal_cur_amount / (float) goal_req_amount;
     }
@@ -1081,92 +1102,7 @@ void gameplay_state::do_menu_logic() {
  * Checks if the mission goal has been met.
  */
 bool gameplay_state::is_mission_clear_met() {
-    switch(game.cur_area_data.mission.goal) {
-    case MISSION_GOAL_END_MANUALLY: {
-
-        //The pause menu "end mission" logic is responsible for this one.
-        return false;
-        
-    } case MISSION_GOAL_COLLECT_TREASURE:
-    case MISSION_GOAL_BATTLE_ENEMIES: {
-
-        //For collect treasures or battle enemies, simply check if there are
-        //any remaining (treasure or enemy) mobs to be dealt with.
-        if(mission_required_mob_ids.empty()) {
-            return true;
-        }
-        break;
-        
-    } case MISSION_GOAL_TIMED_SURVIVAL: {
-
-        //Timed survival.
-        if(area_time_passed >= game.cur_area_data.mission.goal_amount) {
-            return true;
-        }
-        break;
-        
-    } case MISSION_GOAL_GET_TO_EXIT: {
-
-        //Are all of the required leaders inside of the exit region?
-        cur_leaders_in_mission_exit = 0;
-        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-            mob* l_ptr = mobs.leaders[l];
-            if(
-                std::find(
-                    mission_required_mob_ids.begin(),
-                    mission_required_mob_ids.end(),
-                    mobs.leaders[l]->id
-                ) ==
-                mission_required_mob_ids.end()
-            ) {
-                //Not a required leader.
-                continue;
-            }
-            if(
-                fabs(
-                    l_ptr->pos.x -
-                    game.cur_area_data.mission.goal_exit_center.x
-                ) <=
-                game.cur_area_data.mission.goal_exit_size.x / 2.0f &&
-                fabs(
-                    l_ptr->pos.y -
-                    game.cur_area_data.mission.goal_exit_center.y
-                ) <=
-                game.cur_area_data.mission.goal_exit_size.y / 2.0f
-            ) {
-                cur_leaders_in_mission_exit++;
-            }
-        }
-        if(
-            cur_leaders_in_mission_exit ==
-            mission_required_mob_ids.size()
-        ) {
-            return true;
-        }
-        break;
-        
-    } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-
-        //Pikmin amount reached, or surpassed.
-        if(
-            game.cur_area_data.mission.goal_higher_than &&
-            get_total_pikmin_amount() >=
-            game.cur_area_data.mission.goal_amount
-        ) {
-            return true;
-        } else if(
-            !game.cur_area_data.mission.goal_higher_than &&
-            get_total_pikmin_amount() <=
-            game.cur_area_data.mission.goal_amount
-        ) {
-            return true;
-        }
-        break;
-        
-    }
-    }
-    
-    return false;
+    return game.mission_goals[game.cur_area_data.mission.goal]->is_met(this);
 }
 
 

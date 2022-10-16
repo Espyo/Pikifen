@@ -18,11 +18,11 @@
 void init_allegro();
 void init_controls();
 void init_dear_imgui();
-void init_enum_name_databases();
 void init_error_bitmap();
 void init_essentials();
 void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void init_misc();
+void init_misc_databases();
 void init_mob_actions();
 void init_mob_categories();
 void init_single_animation(

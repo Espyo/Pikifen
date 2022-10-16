@@ -648,8 +648,13 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     rs.set("mission_gold_req", data.gold_req);
     rs.set("mission_platinum_req", data.platinum_req);
     
-    data.goal = (MISSION_GOALS) game.mission_goals.get_idx(goal_str);
-    if((size_t) data.goal == INVALID) data.goal = MISSION_GOAL_END_MANUALLY;
+    data.goal = MISSION_GOAL_END_MANUALLY;
+    for(size_t g = 0; g < game.mission_goals.size(); ++g) {
+        if(game.mission_goals[g]->get_name() == goal_str) {
+            data.goal = (MISSION_GOALS) g;
+            break;
+        }
+    }
     vector<string> mission_required_mobs_strs =
         split(required_mobs_str, ";");
     data.goal_mob_idxs.reserve(

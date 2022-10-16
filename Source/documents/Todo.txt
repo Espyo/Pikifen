@@ -26,6 +26,7 @@ Next tasks (roughly sorted most important first)
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
     Pressing Escape in an editor's initial window is apparently STILL causing issues with Dear ImGui textboxes (thanks Neo)
         Needs to be tested if it still happens in the master branch
+    "oh yeah espyo set_tangible doesn't work for custom scripts on Pikmin" --Neo
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -867,9 +868,10 @@ Tasks for later on (I might never implement these)
                 b) Have the icon represent the next mode?
                 c) Only use buttons for one-off actions, and use radio buttons or something else for these mode-changing widgets
     Blood (optional, of course)
-    Resolution and window size
+    Resolution, window size, and zoom
         Players should be able to resize the window on-the-fly (GitHub issue #2)
         Resizing the window should stretch the resolution instead of showing more of the world (GitHub issue #7)
+        Possible camera implementation: The camera only has the normal zoom level, but holding the camera button down will make it go to a farther zoom level so you can peek ahead. There is no close zoom level (thanks Neo)
     Aesthetic details
         Enemies should have a cloud of breath in cold areas (GitHub issue #10)
         Different "switched to Pikmin" sound for when you switch to a held leader instead of a Pikmin

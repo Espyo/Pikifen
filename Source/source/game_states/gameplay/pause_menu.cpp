@@ -502,57 +502,19 @@ void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
  */
 string pause_menu_struct::get_mission_goal_status() {
     float percentage = 0.0f;
-    int cur = game.states.gameplay->goal_cur_amount;
-    int req = game.states.gameplay->goal_req_amount;
+    int cur =
+        game.mission_goals[game.cur_area_data.mission.goal]->
+        get_cur_amount(game.states.gameplay);
+    int req =
+        game.mission_goals[game.cur_area_data.mission.goal]->
+        get_req_amount(game.states.gameplay);
     if(req != 0.0f) {
         percentage = cur / (float) req;
     }
     percentage *= 100;
-    switch(game.cur_area_data.mission.goal) {
-    case MISSION_GOAL_END_MANUALLY: {
-        return "";
-        break;
-        
-    } case MISSION_GOAL_COLLECT_TREASURE: {
-        return
-            "You have collected " + i2s(cur) + "/" + i2s(req) +
-            " treasures. (" + i2s(percentage) + "%)";
-        break;
-        
-    } case MISSION_GOAL_BATTLE_ENEMIES: {
-        return
-            "You have killed " + i2s(cur) + "/" + i2s(req) +
-            " enemies. (" + i2s(percentage) + "%)";
-        break;
-        
-    } case MISSION_GOAL_TIMED_SURVIVAL: {
-        return
-            "You have survived for " +
-            time_to_str(cur, "m", "s") +
-            " so far. (" + i2s(percentage) + "%)";
-        break;
-        
-    } case MISSION_GOAL_GET_TO_EXIT: {
-        return
-            "You have " + i2s(cur) + "/" + i2s(req) +
-            " leaders in the exit. (" + i2s(percentage) + "%)";
-        break;
-        
-    } case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
-
-        if(game.cur_area_data.mission.goal_higher_than) {
-            return
-                "You have " + i2s(cur) + "/" + i2s(req) +
-                " Pikmin. (" + i2s(percentage) + "%)";
-        } else {
-            return
-                "You have " + i2s(cur) + " Pikmin.";
-        }
-        break;
-        
-    }
-    }
-    return "";
+    return
+        game.mission_goals[game.cur_area_data.mission.goal]->
+        get_status(cur, req, percentage);
 }
 
 
@@ -1078,7 +1040,8 @@ void pause_menu_struct::init_mission_page() {
     //Goal explanation text.
     text_gui_item* goal_text =
         new text_gui_item(
-        game.cur_area_data.mission.get_goal_description(),
+        game.mission_goals[game.cur_area_data.mission.goal]->
+        get_player_description(&game.cur_area_data.mission),
         game.fonts.standard,
         al_map_rgb(255, 255, 200)
     );

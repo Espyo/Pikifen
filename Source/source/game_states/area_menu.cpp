@@ -302,8 +302,10 @@ void area_menu_state::do_logic() {
         //Now fill in the mission specs.
         if(area_type == AREA_TYPE_MISSION) {
             specs_name_text->text = area_names[area_idx];
-            const mission_data &mission = area_mission_data[area_idx];
-            goal_text->text = mission.get_goal_description();
+            mission_data &mission = area_mission_data[area_idx];
+            goal_text->text =
+                game.mission_goals[mission.goal]->
+                get_player_description(&mission);
             
             if(
                 has_flag(

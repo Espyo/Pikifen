@@ -2703,7 +2703,8 @@ bool area_editor::save_area(const bool to_backup) {
             data_file.add(
                 new data_node(
                     "mission_goal",
-                    game.mission_goals.get_name(game.cur_area_data.mission.goal)
+                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    get_name()
                 )
             );
         }
