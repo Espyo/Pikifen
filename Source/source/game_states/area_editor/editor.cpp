@@ -2710,18 +2710,12 @@ bool area_editor::save_area(const bool to_backup) {
         }
         if(
             game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_REACH_PIKMIN_AMOUNT
+            game.cur_area_data.mission.goal == MISSION_GOAL_GROW_PIKMIN
         ) {
             data_file.add(
                 new data_node(
                     "mission_goal_amount",
                     i2s(game.cur_area_data.mission.goal_amount)
-                )
-            );
-            data_file.add(
-                new data_node(
-                    "mission_goal_higher_than",
-                    b2s(game.cur_area_data.mission.goal_higher_than)
                 )
             );
         }

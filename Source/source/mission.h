@@ -34,8 +34,8 @@ enum MISSION_GOALS {
     MISSION_GOAL_TIMED_SURVIVAL,
     //The player must get a leader or all of them to the exit point.
     MISSION_GOAL_GET_TO_EXIT,
-    //The player must reach a certain number of total Pikmin.
-    MISSION_GOAL_REACH_PIKMIN_AMOUNT,
+    //The player must grow enough Pikmin to reach a certain total.
+    MISSION_GOAL_GROW_PIKMIN,
 };
 
 
@@ -113,8 +113,6 @@ struct mission_data {
     unordered_set<size_t> goal_mob_idxs;
     //Total amount of something required for the current mission goal.
     size_t goal_amount;
-    //If the mission goal requires an amount, is it >= or <= ?
-    bool goal_higher_than;
     //Mission exit region center coordinates.
     point goal_exit_center;
     //Mission exit region dimensions.
@@ -182,8 +180,6 @@ public:
     ) const = 0;
     //Celebrates the player's victory with values fed from the mission data.
     virtual string get_congratulation(mission_data* mission) const = 0;
-    //Relevant mob category, if any.
-    virtual MOB_CATEGORIES get_relevant_mob_cat() const = 0;
     //Returns the player's current amount for whatever is needed.
     virtual int get_cur_amount(gameplay_state* gameplay) const = 0;
     //Returns the player's required amount for whatever is needed.
@@ -210,7 +206,6 @@ public:
         const int cur, const int req, const float percentage
     ) const override;
     string get_congratulation(mission_data* mission) const override;
-    MOB_CATEGORIES get_relevant_mob_cat() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_hud_label() const override;
@@ -233,7 +228,6 @@ public:
         const int cur, const int req, const float percentage
     ) const override;
     string get_congratulation(mission_data* mission) const override;
-    MOB_CATEGORIES get_relevant_mob_cat() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_hud_label() const override;
@@ -256,7 +250,6 @@ public:
         const int cur, const int req, const float percentage
     ) const override;
     string get_congratulation(mission_data* mission) const override;
-    MOB_CATEGORIES get_relevant_mob_cat() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_hud_label() const override;
@@ -279,7 +272,6 @@ public:
         const int cur, const int req, const float percentage
     ) const override;
     string get_congratulation(mission_data* mission) const override;
-    MOB_CATEGORIES get_relevant_mob_cat() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_hud_label() const override;
@@ -293,7 +285,7 @@ public:
 /* ----------------------------------------------------------------------------
  * Class representing the "reach Pikmin amount" mission goal.
  */
-class mission_goal_reach_pikmin_amount : public mission_goal {
+class mission_goal_grow_pikmin : public mission_goal {
 public:
     MISSION_GOALS get_id() const override;
     string get_name() const override;
@@ -302,7 +294,6 @@ public:
         const int cur, const int req, const float percentage
     ) const override;
     string get_congratulation(mission_data* mission) const override;
-    MOB_CATEGORIES get_relevant_mob_cat() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_hud_label() const override;
@@ -325,7 +316,6 @@ public:
         const int cur, const int req, const float percentage
     ) const override;
     string get_congratulation(mission_data* mission) const override;
-    MOB_CATEGORIES get_relevant_mob_cat() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_hud_label() const override;

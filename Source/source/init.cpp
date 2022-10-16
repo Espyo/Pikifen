@@ -482,7 +482,7 @@ void init_misc_databases() {
         new mission_goal_get_to_exit()
     );
     game.mission_goals.push_back(
-        new mission_goal_reach_pikmin_amount()
+        new mission_goal_grow_pikmin()
     );
 }
 

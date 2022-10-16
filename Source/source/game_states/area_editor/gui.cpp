@@ -2532,7 +2532,7 @@ void area_editor::process_gui_panel_mission() {
             break;
             
         }
-        case MISSION_GOAL_REACH_PIKMIN_AMOUNT: {
+        case MISSION_GOAL_GROW_PIKMIN: {
     
             //Explanation text.
             ImGui::TextWrapped(
@@ -2541,20 +2541,6 @@ void area_editor::process_gui_panel_mission() {
             
             //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
-            
-            //Higher/lower than combobox.
-            int hl_combo_value = game.cur_area_data.mission.goal_higher_than;
-            vector<string> hl_combo_items = {"<=", ">="};
-            ImGui::SetNextItemWidth(50);
-            if(ImGui::Combo("##hl", &hl_combo_value, hl_combo_items)) {
-                register_change("mission requirements change");
-                game.cur_area_data.mission.goal_higher_than =
-                    (hl_combo_value == 1);
-            }
-            set_tooltip(
-                "Specify whether the player needs these many Pikmin or more,\n"
-                "or if they need these many Pikmin or fewer."
-            );
             
             //Pikmin amount value.
             int amount =
@@ -2567,8 +2553,7 @@ void area_editor::process_gui_panel_mission() {
                     (size_t) amount;
             }
             set_tooltip(
-                "The total Pikmin amount requirement.\n"
-                "0 means the player has to reach a Pikmin extinction.",
+                "The total Pikmin amount requirement.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             

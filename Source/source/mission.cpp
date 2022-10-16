@@ -22,7 +22,6 @@ mission_data::mission_data() :
     goal(MISSION_GOAL_END_MANUALLY),
     goal_all_mobs(true),
     goal_amount(0),
-    goal_higher_than(true),
     goal_exit_size(
         AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
     ),
@@ -212,14 +211,6 @@ int mission_goal_battle_enemies::get_req_amount(
 
 
 /* ----------------------------------------------------------------------------
- * Relevant mob category, if any.
- */
-MOB_CATEGORIES mission_goal_battle_enemies::get_relevant_mob_cat() const {
-    return MOB_CATEGORY_ENEMIES;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Status for the pause menu.
  * cur:
  *   Current amount.
@@ -361,14 +352,6 @@ int mission_goal_collect_treasures::get_req_amount(
 
 
 /* ----------------------------------------------------------------------------
- * Relevant mob category, if any.
- */
-MOB_CATEGORIES mission_goal_collect_treasures::get_relevant_mob_cat() const {
-    return MOB_CATEGORY_TREASURES;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Status for the pause menu.
  * cur:
  *   Current amount.
@@ -482,14 +465,6 @@ int mission_goal_end_manually::get_req_amount(
     gameplay_state* gameplay
 ) const {
     return 0;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Relevant mob category, if any.
- */
-MOB_CATEGORIES mission_goal_end_manually::get_relevant_mob_cat() const {
-    return MOB_CATEGORY_TREASURES;
 }
 
 
@@ -628,14 +603,6 @@ int mission_goal_get_to_exit::get_req_amount(
 
 
 /* ----------------------------------------------------------------------------
- * Relevant mob category, if any.
- */
-MOB_CATEGORIES mission_goal_get_to_exit::get_relevant_mob_cat() const {
-    return MOB_CATEGORY_LEADERS;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Status for the pause menu.
  * cur:
  *   Current amount.
@@ -671,16 +638,11 @@ bool mission_goal_get_to_exit::is_met(
  * Returns a celebration describing the player's victory,
  * with values fed from the mission data.
  */
-string mission_goal_reach_pikmin_amount::get_congratulation(
+string mission_goal_grow_pikmin::get_congratulation(
     mission_data* mission
 ) const {
     return
         "Reached " +
-        string(
-            mission->goal_higher_than ?
-            ">=" :
-            "<="
-        ) +
         i2s(mission->goal_amount) +
         " Pikmin!";
 }
@@ -691,7 +653,7 @@ string mission_goal_reach_pikmin_amount::get_congratulation(
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
-int mission_goal_reach_pikmin_amount::get_cur_amount(
+int mission_goal_grow_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
     return gameplay->get_total_pikmin_amount();
@@ -701,7 +663,7 @@ int mission_goal_reach_pikmin_amount::get_cur_amount(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_goal_reach_pikmin_amount::get_hud_label() const {
+string mission_goal_grow_pikmin::get_hud_label() const {
     return "Pikmin";
 }
 
@@ -709,8 +671,8 @@ string mission_goal_reach_pikmin_amount::get_hud_label() const {
 /* ----------------------------------------------------------------------------
  * Returns the goal's numeric ID.
  */
-MISSION_GOALS mission_goal_reach_pikmin_amount::get_id() const {
-    return MISSION_GOAL_REACH_PIKMIN_AMOUNT;
+MISSION_GOALS mission_goal_grow_pikmin::get_id() const {
+    return MISSION_GOAL_GROW_PIKMIN;
 }
 
 
@@ -725,21 +687,11 @@ MISSION_GOALS mission_goal_reach_pikmin_amount::get_id() const {
  * final_cam_zoom:
  *   The final camera zoom is returned here.
  */
-bool mission_goal_reach_pikmin_amount::get_mission_end_zoom_data(
+bool mission_goal_grow_pikmin::get_mission_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(
-        game.cur_area_data.mission.goal_higher_than &&
-        gameplay->last_pikmin_born_pos.x != LARGE_FLOAT
-    ) {
+    if(gameplay->last_pikmin_born_pos.x != LARGE_FLOAT) {
         *final_cam_pos = gameplay->last_pikmin_born_pos;
-        *final_cam_zoom = game.config.zoom_max_level;
-        return true;
-    } else if(
-        !game.cur_area_data.mission.goal_higher_than &&
-        gameplay->last_pikmin_death_pos.x != LARGE_FLOAT
-    ) {
-        *final_cam_pos = gameplay->last_pikmin_death_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -750,26 +702,18 @@ bool mission_goal_reach_pikmin_amount::get_mission_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * Returns the goal's name.
  */
-string mission_goal_reach_pikmin_amount::get_name() const {
-    return "Reach a certain Pikmin amount";
+string mission_goal_grow_pikmin::get_name() const {
+    return "Grow Pikmin";
 }
 
 
 /* ----------------------------------------------------------------------------
  * Returns a description for the player, fed from the mission data.
  */
-string mission_goal_reach_pikmin_amount::get_player_description(
+string mission_goal_grow_pikmin::get_player_description(
     mission_data* mission
 ) const {
-    return
-        "Reach a total of " +
-        i2s(mission->goal_amount) + " " +
-        (
-            mission->goal_higher_than ?
-            "or more" :
-            "or fewer"
-        ) +
-        " Pikmin.";
+    return "Reach a total of " + i2s(mission->goal_amount) + " Pikmin.";
 }
 
 
@@ -778,18 +722,10 @@ string mission_goal_reach_pikmin_amount::get_player_description(
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
-int mission_goal_reach_pikmin_amount::get_req_amount(
+int mission_goal_grow_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
     return game.cur_area_data.mission.goal_amount;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Relevant mob category, if any.
- */
-MOB_CATEGORIES mission_goal_reach_pikmin_amount::get_relevant_mob_cat() const {
-    return MOB_CATEGORY_NONE;
 }
 
 
@@ -802,17 +738,12 @@ MOB_CATEGORIES mission_goal_reach_pikmin_amount::get_relevant_mob_cat() const {
  * percentage:
  *   Percentage cleared.
  */
-string mission_goal_reach_pikmin_amount::get_status(
+string mission_goal_grow_pikmin::get_status(
     const int cur, const int req, const float percentage
 ) const {
-    if(game.cur_area_data.mission.goal_higher_than) {
-        return
-            "You have " + i2s(cur) + "/" + i2s(req) +
-            " Pikmin. (" + i2s(percentage) + "%)";
-    } else {
-        return
-            "You have " + i2s(cur) + " Pikmin.";
-    }
+    return
+        "You have " + i2s(cur) + "/" + i2s(req) +
+        " Pikmin. (" + i2s(percentage) + "%)";
 }
 
 
@@ -821,23 +752,12 @@ string mission_goal_reach_pikmin_amount::get_status(
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
-bool mission_goal_reach_pikmin_amount::is_met(
+bool mission_goal_grow_pikmin::is_met(
     gameplay_state* gameplay
 ) const {
-    if(
-        game.cur_area_data.mission.goal_higher_than &&
+    return
         gameplay->get_total_pikmin_amount() >=
-        game.cur_area_data.mission.goal_amount
-    ) {
-        return true;
-    } else if(
-        !game.cur_area_data.mission.goal_higher_than &&
-        gameplay->get_total_pikmin_amount() <=
-        game.cur_area_data.mission.goal_amount
-    ) {
-        return true;
-    }
-    return false;
+        game.cur_area_data.mission.goal_amount;
 }
 
 
@@ -934,14 +854,6 @@ int mission_goal_timed_survival::get_req_amount(
     gameplay_state* gameplay
 ) const {
     return game.cur_area_data.mission.goal_amount;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Relevant mob category, if any.
- */
-MOB_CATEGORIES mission_goal_timed_survival::get_relevant_mob_cat() const {
-    return MOB_CATEGORY_NONE;
 }
 
 

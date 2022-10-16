@@ -164,7 +164,6 @@ void area_data::clear() {
     mission.goal_all_mobs = true;
     mission.goal_mob_idxs.clear();
     mission.goal_amount = 0;
-    mission.goal_higher_than = true;
     mission.goal_exit_center = point();
     mission.goal_exit_size =
         point(
@@ -381,7 +380,6 @@ void area_data::clone(area_data &other) {
     other.mission.goal_all_mobs = mission.goal_all_mobs;
     other.mission.goal_mob_idxs = mission.goal_mob_idxs;
     other.mission.goal_amount = mission.goal_amount;
-    other.mission.goal_higher_than = mission.goal_higher_than;
     other.mission.goal_exit_center = mission.goal_exit_center;
     other.mission.goal_exit_size = mission.goal_exit_size;
     other.mission.fail_conditions = mission.fail_conditions;

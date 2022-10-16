@@ -622,7 +622,6 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     
     rs.set("mission_goal", goal_str);
     rs.set("mission_goal_amount", data.goal_amount);
-    rs.set("mission_goal_higher_than", data.goal_higher_than);
     rs.set("mission_goal_all_mobs", data.goal_all_mobs);
     rs.set("mission_required_mobs", required_mobs_str);
     rs.set("mission_goal_exit_center", data.goal_exit_center);
