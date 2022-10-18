@@ -155,182 +155,33 @@ void pause_menu_struct::draw_tidbit(
  *   List item to fill.
  */
 void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_TIME_LIMIT
-        )
-    ) {
-        add_bullet(
-            list,
-            game.cur_area_data.mission.get_fail_description(
-                MISSION_FAIL_COND_TIME_LIMIT
-            ),
-            al_map_rgb(255, 200, 200)
-        );
-        float percentage = 0.0f;
-        if(game.cur_area_data.mission.fail_time_limit != 0) {
-            percentage =
-                game.states.gameplay->area_time_passed /
-                (float) game.cur_area_data.mission.fail_time_limit;
-            percentage *= 100.0f;
-        }
-        add_bullet(
-            list,
-            "    " +
-            time_to_str(game.states.gameplay->area_time_passed, "m", "s") +
-            " have passed so far. (" + i2s(percentage) + "%)"
-        );
-    }
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_PIKMIN_AMOUNT
-        )
-    ) {
-        add_bullet(
-            list,
-            game.cur_area_data.mission.get_fail_description(
-                MISSION_FAIL_COND_PIKMIN_AMOUNT
-            ),
-            al_map_rgb(255, 200, 200)
-        );
-        float current =
-            game.states.gameplay->get_total_pikmin_amount();
-        if(game.cur_area_data.mission.fail_pik_higher_than) {
+    for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
+        if(
+            has_flag(
+                game.cur_area_data.mission.fail_conditions,
+                get_index_bitmask(f)
+            )
+        ) {
+            mission_fail* cond = game.mission_fail_conds[f];
+            
+            string description =
+                cond->get_player_description(&game.cur_area_data.mission);
+            add_bullet(list, description, al_map_rgb(255, 200, 200));
+            
             float percentage = 0.0f;
-            if(game.cur_area_data.mission.fail_pik_amount != 0.0f) {
-                percentage =
-                    current /
-                    (float) game.cur_area_data.mission.fail_pik_amount;
-                percentage *= 100;
+            int cur =
+                cond->get_cur_amount(game.states.gameplay);
+            int req =
+                cond->get_req_amount(game.states.gameplay);
+            if(req != 0.0f) {
+                percentage = cur / (float) req;
             }
-            add_bullet(
-                list,
-                "    You have " +
-                i2s(current) + "/" +
-                i2s(game.cur_area_data.mission.fail_pik_amount) +
-                " Pikmin. (" + i2s(percentage) + "%)"
-            );
-        } else {
-            add_bullet(
-                list,
-                "    You have " + i2s(current) + " Pikmin."
-            );
+            percentage *= 100;
+            string status = cond->get_status(cur, req, percentage);
+            
+            if(status.empty()) continue;
+            add_bullet(list, "    " + status);
         }
-    }
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_LOSE_PIKMIN
-        )
-    ) {
-        add_bullet(
-            list,
-            game.cur_area_data.mission.get_fail_description(
-                MISSION_FAIL_COND_LOSE_PIKMIN
-            ),
-            al_map_rgb(255, 200, 200)
-        );
-        float percentage = 0.0f;
-        if(game.cur_area_data.mission.fail_pik_killed != 0) {
-            percentage =
-                game.states.gameplay->pikmin_deaths /
-                (float) game.cur_area_data.mission.fail_pik_killed;
-            percentage *= 100.0f;
-        }
-        add_bullet(
-            list,
-            "    You have lost " +
-            i2s(game.states.gameplay->pikmin_deaths) +
-            "/" +
-            i2s(game.cur_area_data.mission.fail_pik_killed) +
-            " Pikmin. (" + i2s(percentage) + "%)"
-        );
-    }
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_TAKE_DAMAGE
-        )
-    ) {
-        add_bullet(
-            list,
-            game.cur_area_data.mission.get_fail_description(
-                MISSION_FAIL_COND_TAKE_DAMAGE
-            ),
-            al_map_rgb(255, 200, 200)
-        );
-    }
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_LOSE_LEADERS
-        )
-    ) {
-        add_bullet(
-            list,
-            game.cur_area_data.mission.get_fail_description(
-                MISSION_FAIL_COND_LOSE_LEADERS
-            ),
-            al_map_rgb(255, 200, 200)
-        );
-        float percentage = 0.0f;
-        if(game.cur_area_data.mission.fail_leaders_kod != 0) {
-            percentage =
-                game.states.gameplay->leaders_kod /
-                (float) game.cur_area_data.mission.fail_leaders_kod;
-            percentage *= 100.0f;
-        }
-        add_bullet(
-            list,
-            "    You have lost " +
-            i2s(game.states.gameplay->leaders_kod) +
-            "/" +
-            i2s(game.cur_area_data.mission.fail_leaders_kod) +
-            " leaders. (" + i2s(percentage) + "%)"
-        );
-    }
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_KILL_ENEMIES
-        )
-    ) {
-        add_bullet(
-            list,
-            game.cur_area_data.mission.get_fail_description(
-                MISSION_FAIL_COND_KILL_ENEMIES
-            ),
-            al_map_rgb(255, 200, 200)
-        );
-        float percentage = 0.0f;
-        if(game.cur_area_data.mission.fail_enemies_killed != 0) {
-            percentage =
-                game.states.gameplay->enemy_deaths /
-                (float) game.cur_area_data.mission.fail_enemies_killed;
-            percentage *= 100.0f;
-        }
-        add_bullet(
-            list,
-            "    You have killed " +
-            i2s(game.states.gameplay->enemy_deaths) +
-            "/" +
-            i2s(game.cur_area_data.mission.fail_enemies_killed) +
-            " enemies. (" + i2s(percentage) + "%)"
-        );
-    }
-    if(
-        game.cur_area_data.mission.goal !=
-        MISSION_GOAL_END_MANUALLY
-    ) {
-        add_bullet(
-            list,
-            game.cur_area_data.mission.get_fail_description(
-                MISSION_FAIL_COND_PAUSE_MENU
-            ),
-            al_map_rgb(255, 200, 200)
-        );
     }
 }
 
@@ -848,7 +699,12 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     end_button->on_activate =
     [this] (const point &) {
-        if(game.cur_area_data.mission.goal != MISSION_GOAL_END_MANUALLY) {
+        if(
+            has_flag(
+                game.cur_area_data.mission.fail_conditions,
+                get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            )
+        ) {
             game.states.gameplay->mission_fail_reason =
                 MISSION_FAIL_COND_PAUSE_MENU;
         }
@@ -856,12 +712,17 @@ void pause_menu_struct::init_main_pause_menu() {
     };
     end_button->on_get_tooltip =
     [] () {
+        bool as_failure =
+            has_flag(
+                game.cur_area_data.mission.fail_conditions,
+                MISSION_FAIL_COND_PAUSE_MENU
+            );
         return
             game.cur_area_data.type == AREA_TYPE_SIMPLE ?
             "End this area's exploration." :
-            game.cur_area_data.mission.goal == MISSION_GOAL_END_MANUALLY ?
-            "End this mission successfully." :
-            "End this mission as a failure.";
+            as_failure ?
+            "End this mission as a failure." :
+            "End this mission successfully.";
     };
     gui.add_item(end_button, "end");
     

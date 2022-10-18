@@ -459,6 +459,7 @@ void init_misc() {
  * Initializes the list of sector types, mission goals, etc.
  */
 void init_misc_databases() {
+    //Sector types.
     game.sector_types.register_item(
         SECTOR_TYPE_NORMAL, "Normal"
     );
@@ -466,6 +467,8 @@ void init_misc_databases() {
         SECTOR_TYPE_BLOCKING, "Blocking"
     );
     
+    //Mission goals.
+    //Order matters, and should match MISSION_GOALS.
     game.mission_goals.push_back(
         new mission_goal_end_manually()
     );
@@ -483,6 +486,30 @@ void init_misc_databases() {
     );
     game.mission_goals.push_back(
         new mission_goal_grow_pikmin()
+    );
+    
+    //Mission fail conditions.
+    //Order matters, and should match MISSION_FAIL_CONDITIONS.
+    game.mission_fail_conds.push_back(
+        new mission_fail_time_limit()
+    );
+    game.mission_fail_conds.push_back(
+        new mission_fail_pikmin_amount()
+    );
+    game.mission_fail_conds.push_back(
+        new mission_fail_lose_pikmin()
+    );
+    game.mission_fail_conds.push_back(
+        new mission_fail_take_damage()
+    );
+    game.mission_fail_conds.push_back(
+        new mission_fail_lose_leaders()
+    );
+    game.mission_fail_conds.push_back(
+        new mission_fail_kill_enemies()
+    );
+    game.mission_fail_conds.push_back(
+        new mission_fail_pause_menu()
     );
 }
 

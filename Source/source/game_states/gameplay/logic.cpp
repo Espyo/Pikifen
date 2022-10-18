@@ -553,7 +553,15 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             }
         }
     }
-
+    
+    size_t living_leaders = 0;
+    for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+        if(mobs.leaders[l]->health > 0.0f) {
+            living_leaders++;
+        }
+    }
+    leaders_kod = starting_nr_of_leaders - living_leaders;
+    
     float real_goal_ratio = 0.0f;
     int goal_cur_amount =
         game.mission_goals[game.cur_area_data.mission.goal]->get_cur_amount(
@@ -1110,112 +1118,21 @@ bool gameplay_state::is_mission_clear_met() {
  * Checks if a mission fail condition has been met.
  * reason:
  *   The reason gets returned here, if any.
- *   This makes use of MISSION_FAIL_COND_*.
  */
-bool gameplay_state::is_mission_fail_met(uint8_t* reason) {
-    //Pikmin amount reached or surpassed.
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_PIKMIN_AMOUNT
-        )
-    ) {
-        size_t total_pikmin = get_total_pikmin_amount();
+bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
+    for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
         if(
-            game.cur_area_data.mission.fail_pik_higher_than &&
-            total_pikmin >= game.cur_area_data.mission.fail_pik_amount
+            has_flag(
+                game.cur_area_data.mission.fail_conditions,
+                get_index_bitmask(f)
+            )
         ) {
-            *reason = MISSION_FAIL_COND_PIKMIN_AMOUNT;
-            return true;
-        } else if(
-            !game.cur_area_data.mission.fail_pik_higher_than &&
-            total_pikmin <= game.cur_area_data.mission.fail_pik_amount
-        ) {
-            *reason = MISSION_FAIL_COND_PIKMIN_AMOUNT;
-            return true;
-        }
-    }
-    
-    //Pikmin death count.
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_LOSE_PIKMIN
-        )
-    ) {
-        if(pikmin_deaths >= game.cur_area_data.mission.fail_pik_killed) {
-            *reason = MISSION_FAIL_COND_LOSE_PIKMIN;
-            return true;
-        }
-    }
-    
-    //Leaders took damage.
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_TAKE_DAMAGE
-        )
-    ) {
-        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-            if(mobs.leaders[l]->health < mobs.leaders[l]->max_health) {
-                *reason = MISSION_FAIL_COND_TAKE_DAMAGE;
+            if(game.mission_fail_conds[f]->is_met(this)) {
+                *reason = (MISSION_FAIL_CONDITIONS) f;
                 return true;
             }
         }
-        if(mobs.leaders.size() < starting_nr_of_leaders) {
-            //If one of them vanished, they got forcefully KO'd, which...
-            //really should count as taking damage.
-            *reason = MISSION_FAIL_COND_TAKE_DAMAGE;
-            return true;
-        }
     }
-    
-    //Leaders KO count.
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_LOSE_LEADERS
-        )
-    ) {
-        size_t living_leaders = 0;
-        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-            if(mobs.leaders[l]->health > 0.0f) {
-                living_leaders++;
-            }
-        }
-        leaders_kod = starting_nr_of_leaders - living_leaders;
-        if(leaders_kod >= game.cur_area_data.mission.fail_leaders_kod) {
-            *reason = MISSION_FAIL_COND_LOSE_LEADERS;
-            return true;
-        }
-    }
-    
-    //Enemy death count.
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_KILL_ENEMIES
-        )
-    ) {
-        if(enemy_deaths >= game.cur_area_data.mission.fail_enemies_killed) {
-            *reason = MISSION_FAIL_COND_KILL_ENEMIES;
-            return true;
-        }
-    }
-    
-    //Time limit.
-    if(
-        has_flag(
-            game.cur_area_data.mission.fail_conditions,
-            MISSION_FAIL_COND_TIME_LIMIT
-        )
-    ) {
-        if(area_time_passed >= game.cur_area_data.mission.fail_time_limit) {
-            *reason = MISSION_FAIL_COND_TIME_LIMIT;
-            return true;
-        }
-    }
-    
     return false;
 }
 

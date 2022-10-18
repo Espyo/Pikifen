@@ -70,6 +70,9 @@ enum WIPE_FOLDER_RESULTS {
         crash("Assert", info, 1); \
     }
 
+//Returns the bitmask corresponding to a certain index. Useful for flags.
+#define get_index_bitmask(i) (1 << i)
+
 //Returns the previous element in a vector,
 //but if it's the first, it retrieves the last.
 #define get_prev_in_vector(v, nr) (v)[((nr) == 0 ? (v).size() - 1 : ((nr) - 1))]

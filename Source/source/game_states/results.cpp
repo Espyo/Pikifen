@@ -187,8 +187,10 @@ void results_state::leave() {
  */
 void results_state::load() {
     //Calculate score things.
-    bool goal_was_cleared = game.states.gameplay->mission_fail_reason == 0;
-    
+    bool goal_was_cleared =
+        game.states.gameplay->mission_fail_reason ==
+        (MISSION_FAIL_CONDITIONS) INVALID;
+        
     size_t secs_left =
         game.cur_area_data.mission.fail_time_limit -
         game.states.gameplay->area_time_passed;
@@ -418,9 +420,9 @@ void results_state::load() {
         //Goal stamp image item.
         gui_item* goal_stamp_item = new gui_item;
         goal_stamp_item->on_draw =
-        [] (const point & center, const point & size) {
+        [goal_was_cleared] (const point & center, const point & size) {
             draw_bitmap_in_box(
-                game.states.gameplay->mission_fail_reason == 0 ?
+                goal_was_cleared ?
                 game.sys_assets.bmp_mission_clear :
                 game.sys_assets.bmp_mission_fail,
                 center,
@@ -431,94 +433,31 @@ void results_state::load() {
         
         //End reason text, if any.
         string end_reason;
-        if(
-            has_flag(
-                game.states.gameplay->mission_fail_reason,
-                MISSION_FAIL_COND_PAUSE_MENU
-            )
-        ) {
-            end_reason = "Ended from the pause menu...";
-        } else if(
-            has_flag(
-                game.states.gameplay->mission_fail_reason,
-                MISSION_FAIL_COND_PIKMIN_AMOUNT
-            )
-        ) {
-            end_reason =
-                "Reached " +
-                string(
-                    game.cur_area_data.mission.fail_pik_higher_than ?
-                    ">=" :
-                    "<="
-                ) +
-                i2s(game.cur_area_data.mission.fail_pik_amount) +
-                " Pikmin...";
-        } else if(
-            has_flag(
-                game.states.gameplay->mission_fail_reason,
-                MISSION_FAIL_COND_LOSE_PIKMIN
-            )
-        ) {
-            end_reason =
-                "Lost " +
-                i2s(game.cur_area_data.mission.fail_pik_killed) +
-                " Pikmin...";
-        } else if(
-            has_flag(
-                game.states.gameplay->mission_fail_reason,
-                MISSION_FAIL_COND_TAKE_DAMAGE
-            )
-        ) {
-            end_reason = "A leader took damage...";
-        } else if(
-            has_flag(
-                game.states.gameplay->mission_fail_reason,
-                MISSION_FAIL_COND_LOSE_LEADERS
-            )
-        ) {
-            end_reason =
-                "Lost " +
-                i2s(game.cur_area_data.mission.fail_leaders_kod) +
-                " leaders...";
-        } else if(
-            has_flag(
-                game.states.gameplay->mission_fail_reason,
-                MISSION_FAIL_COND_KILL_ENEMIES
-            )
-        ) {
-            end_reason =
-                "Killed " +
-                i2s(game.cur_area_data.mission.fail_enemies_killed) +
-                " enemies...";
-        } else if(
-            has_flag(
-                game.states.gameplay->mission_fail_reason,
-                MISSION_FAIL_COND_TIME_LIMIT
-            )
-        ) {
-            end_reason =
-                "Took " +
-                time_to_str(
-                    game.cur_area_data.mission.fail_time_limit, "m", "s"
-                ) +
-                "...";
-        } else if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+        if(goal_was_cleared) {
             end_reason =
                 game.mission_goals[game.cur_area_data.mission.goal]->
-                get_congratulation(&game.cur_area_data.mission);
+                get_end_reason(&game.cur_area_data.mission);
+        } else {
+            end_reason =
+                game.mission_fail_conds[
+            game.states.gameplay->mission_fail_reason
+            ]->get_end_reason(
+                    &game.cur_area_data.mission
+                );
         }
         
         if(!end_reason.empty()) {
             text_gui_item* end_reason_text =
                 new text_gui_item(
                 end_reason, game.fonts.standard,
-                game.states.gameplay->mission_fail_reason == 0 ?
+                goal_was_cleared ?
                 al_map_rgba(112, 200, 100, 192) :
                 al_map_rgba(242, 160, 160, 192)
             );
             gui.add_item(end_reason_text, "end_reason");
         }
         
+        //Medal reason text, if any.
         MISSION_MEDALS medal;
         string medal_reason;
         ALLEGRO_COLOR medal_reason_color;
@@ -560,7 +499,7 @@ void results_state::load() {
             }
             break;
         } case MISSION_GRADING_GOAL: {
-            if(game.states.gameplay->mission_fail_reason == 0) {
+            if(goal_was_cleared) {
                 medal = MISSION_MEDAL_PLATINUM;
                 medal_reason = "Reached the goal!";
                 medal_reason_color = al_map_rgba(145, 226, 210, 192);

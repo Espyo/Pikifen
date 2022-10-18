@@ -129,6 +129,7 @@ gameplay_state::gameplay_state() :
     enemy_points_total(0),
     cur_leaders_in_mission_exit(0),
     leaders_kod(0),
+    starting_nr_of_leaders(0),
     goal_indicator_ratio(0.0f),
     cur_interlude(INTERLUDE_NONE),
     interlude_time(0.0f),
@@ -148,8 +149,7 @@ gameplay_state::gameplay_state() :
     pause_menu(nullptr),
     paused(false),
     ready_for_input(false),
-    swarm_cursor(false),
-    starting_nr_of_leaders(0) {
+    swarm_cursor(false) {
     
     closest_group_member[BUBBLE_PREVIOUS] = NULL;
     closest_group_member[BUBBLE_CURRENT] = NULL;
@@ -249,58 +249,22 @@ void gameplay_state::end_mission(const bool cleared) {
     leader_movement.reset(); //TODO replace with a better solution.
     
     //Zoom in on the reason, if possible.
+    point new_cam_pos = game.cam.target_pos;
+    float new_cam_zoom = game.cam.target_zoom;
     if(cleared) {
-        point new_cam_pos = game.cam.target_pos;
-        float new_cam_zoom = game.cam.target_zoom;
-        if(
-            game.mission_goals[game.cur_area_data.mission.goal]->
-            get_mission_end_zoom_data(
-                this, &new_cam_pos, &new_cam_zoom
-            )
-        ) {
+        mission_goal* goal =
+            game.mission_goals[game.cur_area_data.mission.goal];
+        if(goal->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
             game.cam.target_pos = new_cam_pos;
             game.cam.target_zoom = new_cam_zoom;
         }
         
     } else {
-        if(
-            has_flag(mission_fail_reason, MISSION_FAIL_COND_PIKMIN_AMOUNT)
-        ) {
-            if(
-                game.cur_area_data.mission.fail_pik_higher_than &&
-                last_pikmin_born_pos.x != LARGE_FLOAT
-            ) {
-                game.cam.target_pos = last_pikmin_born_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            } else if(
-                !game.cur_area_data.mission.fail_pik_higher_than &&
-                last_pikmin_death_pos.x != LARGE_FLOAT
-            ) {
-                game.cam.target_pos = last_pikmin_death_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            }
-        } else if(
-            has_flag(mission_fail_reason, MISSION_FAIL_COND_LOSE_PIKMIN)
-        ) {
-            if(last_pikmin_death_pos.x != LARGE_FLOAT) {
-                game.cam.target_pos = last_pikmin_death_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            }
-        } else if(
-            has_flag(mission_fail_reason, MISSION_FAIL_COND_TAKE_DAMAGE) ||
-            has_flag(mission_fail_reason, MISSION_FAIL_COND_LOSE_LEADERS)
-        ) {
-            if(last_hurt_leader_pos.x != LARGE_FLOAT) {
-                game.cam.target_pos = last_hurt_leader_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            }
-        } else if(
-            has_flag(mission_fail_reason, MISSION_FAIL_COND_KILL_ENEMIES)
-        ) {
-            if(last_enemy_killed_pos.x != LARGE_FLOAT) {
-                game.cam.target_pos = last_enemy_killed_pos;
-                game.cam.target_zoom = game.config.zoom_max_level;
-            }
+        mission_fail* cond =
+            game.mission_fail_conds[mission_fail_reason];
+        if(cond->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
+            game.cam.target_pos = new_cam_pos;
+            game.cam.target_zoom = new_cam_zoom;
         }
     }
     
@@ -708,7 +672,7 @@ void gameplay_state::load() {
     cur_leaders_in_mission_exit = 0;
     mission_required_mob_amount = 0;
     leaders_kod = 0;
-    mission_fail_reason = 0;
+    mission_fail_reason = (MISSION_FAIL_CONDITIONS) INVALID;
     notification.reset();
     
     game.framerate_last_avg_point = 0;

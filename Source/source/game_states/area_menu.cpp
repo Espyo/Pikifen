@@ -306,88 +306,15 @@ void area_menu_state::do_logic() {
             goal_text->text =
                 game.mission_goals[mission.goal]->
                 get_player_description(&mission);
-            
-            if(
-                has_flag(
-                    mission.fail_conditions, MISSION_FAIL_COND_TIME_LIMIT
-                )
-            ) {
-                add_bullet(
-                    fail_list,
-                    mission.get_fail_description(
-                        MISSION_FAIL_COND_TIME_LIMIT
-                    )
-                );
-            }
-            if(
-                has_flag(
-                    mission.fail_conditions, MISSION_FAIL_COND_PIKMIN_AMOUNT
-                )
-            ) {
-                add_bullet(
-                    fail_list,
-                    mission.get_fail_description(
-                        MISSION_FAIL_COND_PIKMIN_AMOUNT
-                    )
-                );
-            }
-            if(
-                has_flag(
-                    mission.fail_conditions, MISSION_FAIL_COND_LOSE_PIKMIN
-                )
-            ) {
-                add_bullet(
-                    fail_list,
-                    mission.get_fail_description(
-                        MISSION_FAIL_COND_LOSE_PIKMIN
-                    )
-                );
-            }
-            if(
-                has_flag(
-                    mission.fail_conditions, MISSION_FAIL_COND_TAKE_DAMAGE
-                )
-            ) {
-                add_bullet(
-                    fail_list,
-                    mission.get_fail_description(
-                        MISSION_FAIL_COND_TAKE_DAMAGE
-                    )
-                );
-            }
-            if(
-                has_flag(
-                    mission.fail_conditions, MISSION_FAIL_COND_LOSE_LEADERS
-                )
-            ) {
-                add_bullet(
-                    fail_list,
-                    mission.get_fail_description(
-                        MISSION_FAIL_COND_LOSE_LEADERS
-                    )
-                );
-            }
-            if(
-                has_flag(
-                    mission.fail_conditions, MISSION_FAIL_COND_KILL_ENEMIES
-                )
-            ) {
-                add_bullet(
-                    fail_list,
-                    mission.get_fail_description(
-                        MISSION_FAIL_COND_KILL_ENEMIES
-                    )
-                );
-            }
-            if(
-                mission.goal != MISSION_GOAL_END_MANUALLY
-            ) {
-                add_bullet(
-                    fail_list,
-                    mission.get_fail_description(
-                        MISSION_FAIL_COND_PAUSE_MENU
-                    )
-                );
+                
+            for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
+                if(has_flag(mission.fail_conditions, get_index_bitmask(f))) {
+                    mission_fail* cond = game.mission_fail_conds[f];
+                    add_bullet(
+                        fail_list,
+                        cond->get_player_description(&mission)
+                    );
+                }
             }
             
             switch(mission.grading_mode) {

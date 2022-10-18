@@ -2599,7 +2599,8 @@ void area_editor::process_gui_panel_mission() {
         fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Reach a certain Pikmin amount",
-                &fail_flags, MISSION_FAIL_COND_PIKMIN_AMOUNT
+                &fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_PIKMIN_AMOUNT)
             );
         set_tooltip(
             "The mission ends as a failure if the total Pikmin count reaches\n"
@@ -2610,7 +2611,12 @@ void area_editor::process_gui_panel_mission() {
             "no Pikmin in the first place (like a puzzle stage)."
         );
         
-        if(has_flag(fail_flags, MISSION_FAIL_COND_PIKMIN_AMOUNT)) {
+        if(
+            has_flag(
+                fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_PIKMIN_AMOUNT)
+            )
+        ) {
             ImGui::Indent();
             
             //Higher/lower than combobox.
@@ -2653,13 +2659,19 @@ void area_editor::process_gui_panel_mission() {
         fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Lose Pikmin",
-                &fail_flags, MISSION_FAIL_COND_LOSE_PIKMIN
+                &fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
             );
         set_tooltip(
             "The mission ends as a failure if a certain amount of Pikmin die."
         );
         
-        if(has_flag(fail_flags, MISSION_FAIL_COND_LOSE_PIKMIN)) {
+        if(
+            has_flag(
+                fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
+            )
+        ) {
             //Pikmin deaths value.
             int amount =
                 (int) game.cur_area_data.mission.fail_pik_killed;
@@ -2682,7 +2694,8 @@ void area_editor::process_gui_panel_mission() {
         fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Take damage",
-                &fail_flags, MISSION_FAIL_COND_TAKE_DAMAGE
+                &fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
             );
         set_tooltip(
             "The mission ends as a failure if any leader loses any health."
@@ -2692,7 +2705,8 @@ void area_editor::process_gui_panel_mission() {
         fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Lose leaders",
-                &fail_flags, MISSION_FAIL_COND_LOSE_LEADERS
+                &fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
             );
         set_tooltip(
             "The mission ends as a failure if a certain amount of leaders get\n"
@@ -2702,10 +2716,17 @@ void area_editor::process_gui_panel_mission() {
             "automatic mission with no leaders."
         );
         
-        if(has_flag(fail_flags, MISSION_FAIL_COND_LOSE_LEADERS)) {
-            //Leader KOs value.
-            int amount =
-                (int) game.cur_area_data.mission.fail_leaders_kod;
+        if(
+            has_flag(
+                fail_flags,
+                get_index_bitmask(
+                    MISSION_FAIL_COND_LOSE_LEADERS
+                )
+            )
+        ) {
+        //Leader KOs value.
+        int amount =
+            (int) game.cur_area_data.mission.fail_leaders_kod;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
@@ -2725,17 +2746,23 @@ void area_editor::process_gui_panel_mission() {
         fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Kill enemies",
-                &fail_flags, MISSION_FAIL_COND_KILL_ENEMIES
+                &fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             );
-        set_tooltip(
-            "The mission ends as a failure if a certain amount of\n"
-            "enemies get killed."
-        );
-        
-        if(has_flag(fail_flags, MISSION_FAIL_COND_KILL_ENEMIES)) {
-            //Enemy kills value.
-            int amount =
-                (int) game.cur_area_data.mission.fail_enemies_killed;
+            set_tooltip(
+                "The mission ends as a failure if a certain amount of\n"
+                "enemies get killed."
+            );
+            
+        if(
+            has_flag(
+                fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
+            )
+        ) {
+        //Enemy kills value.
+        int amount =
+            (int) game.cur_area_data.mission.fail_enemies_killed;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
@@ -2755,17 +2782,23 @@ void area_editor::process_gui_panel_mission() {
         fail_flags_changed |=
             ImGui::CheckboxFlags(
                 "Reach the time limit",
-                &fail_flags, MISSION_FAIL_COND_TIME_LIMIT
+                &fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
-        set_tooltip(
-            "The mission ends as a failure if the player spends a certain\n"
-            "amount of time in the mission."
-        );
-        
-        if(has_flag(fail_flags, MISSION_FAIL_COND_TIME_LIMIT)) {
-            //Time limit values.
-            int seconds =
-                (int) game.cur_area_data.mission.fail_time_limit;
+            set_tooltip(
+                "The mission ends as a failure if the player spends a certain\n"
+                "amount of time in the mission."
+            );
+            
+        if(
+            has_flag(
+                fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            )
+        ) {
+        //Time limit values.
+        int seconds =
+            (int) game.cur_area_data.mission.fail_time_limit;
             ImGui::Indent();
             if(ImGui::DragTime2("Time limit", &seconds)) {
                 register_change("mission fail conditions change");
@@ -2798,7 +2831,7 @@ void area_editor::process_gui_panel_mission() {
         }
         
         if(fail_flags_changed) {
-            register_change("mission fail conditions change");
+        register_change("mission fail conditions change");
             game.cur_area_data.mission.fail_conditions =
                 (uint8_t) fail_flags;
         }

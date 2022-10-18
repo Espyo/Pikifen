@@ -17,6 +17,7 @@
 #include "../../mobs/onion.h"
 #include "../../mobs/pikmin.h"
 #include "../../mobs/ship.h"
+#include "../../mission.h"
 #include "../../replay.h"
 #include "../game_state.h"
 #include "../../gui.h"
@@ -200,12 +201,14 @@ public:
     size_t enemy_points_collected;
     //How many enemy points exist in total.
     size_t enemy_points_total;
-    //Reason for mission failure, if any. Uses MISSION_FAIL_COND_*.
-    uint8_t mission_fail_reason;
+    //Reason for mission failure, if any. INVALID for none.
+    MISSION_FAIL_CONDITIONS mission_fail_reason;
     //How many leaders are in the mission exit. Cache for convenience.
     size_t cur_leaders_in_mission_exit;
     //How many leaders have been lost so far. Cache for convenience.
     size_t leaders_kod;
+    //Starting number of leader mobs.
+    size_t starting_nr_of_leaders;
     //Ratio of the mission goal HUD item's indicator.
     float goal_indicator_ratio;
     //Current interlude, if any.
@@ -287,8 +290,6 @@ private:
     bool swarm_cursor;
     //Reach of player 1's swarm.
     movement_struct swarm_movement;
-    //Starting number of leader mobs.
-    size_t starting_nr_of_leaders;
     
     void do_aesthetic_leader_logic(const float delta_t);
     void do_aesthetic_logic(const float delta_t);
@@ -324,7 +325,7 @@ private:
     );
     void init_hud();
     bool is_mission_clear_met();
-    bool is_mission_fail_met(uint8_t* reason);
+    bool is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason);
     void load_game_content();
     void process_mob_interactions(mob* m_ptr, size_t m);
     void process_mob_misc_interactions(

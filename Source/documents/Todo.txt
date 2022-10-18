@@ -27,6 +27,7 @@ Next tasks (roughly sorted most important first)
     Pressing Escape in an editor's initial window is apparently STILL causing issues with Dear ImGui textboxes (thanks Neo)
         Needs to be tested if it still happens in the master branch
     "oh yeah espyo set_tangible doesn't work for custom scripts on Pikmin" --Neo
+    Nataly's glitches
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -74,9 +75,14 @@ Next tasks (roughly sorted most important first)
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod
+    Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, Shift should toggle select-all (thanks Nataly)
+    "one method I think used in pikmin 1 to get pikmin of only a certain type into your squad is to throw one pikmin of the desired color, and then when you dismiss, pikmin will try to group up with nearby pikmin that are already idle, so the pikmin of the desired color will all go to where you threw the first pikmin, and I think that's a neat little quirk that would be nice to have in pikifen, although idk how hard it'd be to implement" --Nataly
+    "rock pikmin I think stay knocked back for too long after attacking, I'm pretty sure they get up quicker in pikmin 3" --Nataly
     Spicy Pikmin should emit some rare sparkle particles (thanks Neo)
+    Make bramble gates weaker to bomb rocks (thanks Nataly)
     Check if the throw particles can be customized (thanks Neo)
     The Make menu should have a small blurb with like "Need help?" or "Others...", with a tooltip telling you to go to the manual for help and tutorials
+    "it would be nice to have a hotkey to quickly navigate the editor menus, like esc in any selection mode to go back to the root menu (the one with info, layout, objects, etc) and perhaps hotkeys to quickly get to selection modes such as L for layout, O for objects, etc" --Nataly
     Find a way to make the path drawing process more friendly, since sometimes you want to draw a continuous path with multiple stops, but sometimes you just want to patch up an existing stop/link (thanks Neo)
         Idea: if when you're drawing, you click on an existing stop, then finish drawing. Otherwise, keep drawing more
     Show the number of vertexes that you would get when making a circle sector somewhere (thanks Neo)
@@ -716,6 +722,7 @@ Misc things (so I don't forget)
         If a Pikmin is too far away, it should sigh and lose the party
         "Oh, yeah, quick suggestion, make all of the pikmin that a leader has get disbanded and maybe panic around for a bit when the leader dies" (thanks Neo)
         Try to find some way for Pikmin to smoothly follow behind when they are faster than the leaders. Right now, they quickly catch up to where they should be in the group, stop, and then slowly accelerate back to continue catching up, over and over
+        When they finish breaking a gate, or delivering something, they should probably return to the closest leader's group, right?
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
         Make the water ripples be via shader

@@ -665,6 +665,19 @@ void load_area_mission_data(data_node* node, mission_data &data) {
         );
     }
     data.grading_mode = (MISSION_GRADING_MODES) mission_grading_mode_int;
+    
+    //Automatically turn the pause menu fail condition on/off for convenience.
+    if(data.goal == MISSION_GOAL_END_MANUALLY) {
+        disable_flag(
+            data.fail_conditions,
+            get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
+    } else {
+        enable_flag(
+            data.fail_conditions,
+            get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
+    }
 }
 
 
