@@ -317,6 +317,10 @@ void area_menu_state::do_logic() {
                 }
             }
             
+            if(mission.fail_conditions == 0) {
+                add_bullet(fail_list, "(None)");
+            }
+            
             switch(mission.grading_mode) {
             case MISSION_GRADING_POINTS: {
                 add_bullet(

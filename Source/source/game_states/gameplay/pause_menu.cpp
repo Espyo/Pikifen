@@ -183,6 +183,10 @@ void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
             add_bullet(list, "    " + status);
         }
     }
+    
+    if(game.cur_area_data.mission.fail_conditions == 0) {
+        add_bullet(list, "(None)");
+    }
 }
 
 
