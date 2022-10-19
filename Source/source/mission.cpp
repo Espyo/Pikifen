@@ -824,7 +824,9 @@ bool mission_fail_time_limit::is_met(
 int mission_goal_battle_enemies::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->enemy_deaths;
+    return
+        gameplay->mission_required_mob_amount -
+        gameplay->mission_remaining_mob_ids.size();
 }
 
 
@@ -950,7 +952,7 @@ string mission_goal_battle_enemies::get_status(
 bool mission_goal_battle_enemies::is_met(
     gameplay_state* gameplay
 ) const {
-    return gameplay->mission_required_mob_ids.empty();
+    return gameplay->mission_remaining_mob_ids.empty();
 }
 
 
@@ -962,7 +964,9 @@ bool mission_goal_battle_enemies::is_met(
 int mission_goal_collect_treasures::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->treasures_collected;
+    return
+        gameplay->mission_required_mob_amount -
+        gameplay->mission_remaining_mob_ids.size();
 }
 
 
@@ -1087,7 +1091,7 @@ string mission_goal_collect_treasures::get_status(
 bool mission_goal_collect_treasures::is_met(
     gameplay_state* gameplay
 ) const {
-    return gameplay->mission_required_mob_ids.empty();
+    return gameplay->mission_remaining_mob_ids.empty();
 }
 
 
@@ -1242,13 +1246,13 @@ string mission_goal_get_to_exit::get_end_reason(
 bool mission_goal_get_to_exit::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(!gameplay->mission_required_mob_ids.empty()) {
+    if(!gameplay->mission_remaining_mob_ids.empty()) {
         point avg_pos;
-        for(size_t m : gameplay->mission_required_mob_ids) {
+        for(size_t m : gameplay->mission_remaining_mob_ids) {
             avg_pos += gameplay->mobs.all[m]->pos;
         }
-        avg_pos.x /= gameplay->mission_required_mob_ids.size();
-        avg_pos.y /= gameplay->mission_required_mob_ids.size();
+        avg_pos.x /= gameplay->mission_remaining_mob_ids.size();
+        avg_pos.y /= gameplay->mission_remaining_mob_ids.size();
         *final_cam_pos = avg_pos;
         return true;
     }

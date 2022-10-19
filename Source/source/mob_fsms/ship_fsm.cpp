@@ -74,7 +74,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
         
         if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
-            game.states.gameplay->mission_required_mob_ids.erase(
+            game.states.gameplay->mission_remaining_mob_ids.erase(
                 delivery->id
             );
         }

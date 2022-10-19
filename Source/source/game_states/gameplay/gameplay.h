@@ -178,7 +178,7 @@ public:
     //Information about player 1's whistle.
     whistle_struct whistle;
     //IDs of mobs remaining for the current mission goal, if applicable.
-    unordered_set<size_t> mission_required_mob_ids;
+    unordered_set<size_t> mission_remaining_mob_ids;
     //How many mobs are required for the mission goal. Cache for convenience.
     size_t mission_required_mob_amount;
     //How many Pikmin born so far.

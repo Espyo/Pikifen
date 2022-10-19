@@ -830,10 +830,10 @@ void gameplay_state::load() {
         }
         
         for(size_t i : mission_required_mob_gen_idxs) {
-            mission_required_mob_ids.insert(mobs_per_gen[i]->id);
+            mission_remaining_mob_ids.insert(mobs_per_gen[i]->id);
         }
         
-        mission_required_mob_amount = mission_required_mob_ids.size();
+        mission_required_mob_amount = mission_remaining_mob_ids.size();
     }
     
     //Figure out the total amount of treasures and their points.
@@ -1081,7 +1081,7 @@ void gameplay_state::unload() {
     
     unload_area();
     
-    mission_required_mob_ids.clear();
+    mission_remaining_mob_ids.clear();
     
     path_mgr.clear();
     spray_stats.clear();

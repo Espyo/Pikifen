@@ -2,7 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    The pause menu's goal status and the HUD are both counting _all_ treasures collected/total, instead of just the goal ones
+    Failure condition list in the pause menu and area selection menu need to be able to say "None"
     [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
         One HUD element on the top-left that just shows your mission goal progress
         Another HUD element below that that lists your score at any given moment. Optional

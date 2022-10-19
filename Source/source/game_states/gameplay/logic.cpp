@@ -528,11 +528,11 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             mob* l_ptr = mobs.leaders[l];
             if(
                 std::find(
-                    mission_required_mob_ids.begin(),
-                    mission_required_mob_ids.end(),
+                    mission_remaining_mob_ids.begin(),
+                    mission_remaining_mob_ids.end(),
                     mobs.leaders[l]->id
                 ) ==
-                mission_required_mob_ids.end()
+                mission_remaining_mob_ids.end()
             ) {
                 //Not a required leader.
                 continue;
