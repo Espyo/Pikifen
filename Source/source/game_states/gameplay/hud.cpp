@@ -76,44 +76,51 @@ hud_struct::hud_struct() :
     
     data_node hud_file_node(HUD::GUI_FILE_NAME);
     
-    gui.register_coords("time",                  50, 10, 70, 10);
-    gui.register_coords("day_bubble",             0,  0,  0,  0);
-    gui.register_coords("day_number",             0,  0,  0,  0);
-    gui.register_coords("leader_1_icon",          7, 90,  8, 10);
-    gui.register_coords("leader_2_icon",          6, 80,  5,  9);
-    gui.register_coords("leader_3_icon",          6, 72,  5,  9);
-    gui.register_coords("leader_1_health",       16, 90,  8, 10);
-    gui.register_coords("leader_2_health",       12, 80,  5,  9);
-    gui.register_coords("leader_3_health",       12, 72,  5,  9);
-    gui.register_coords("leader_next_button",     4, 83,  3,  3);
-    gui.register_coords("standby_icon",          50, 91,  8, 10);
-    gui.register_coords("standby_amount",        50, 96, 15,  8);
-    gui.register_coords("standby_bubble",         0,  0,  0,  0);
-    gui.register_coords("standby_maturity_icon", 54, 88,  4,  8);
-    gui.register_coords("standby_next_icon",     58, 93,  6,  8);
-    gui.register_coords("standby_next_button",   60, 96,  3,  3);
-    gui.register_coords("standby_prev_icon",     42, 93,  6,  8);
-    gui.register_coords("standby_prev_button",   40, 96,  3,  3);
-    gui.register_coords("group_amount",          73, 91, 15, 14);
-    gui.register_coords("group_bubble",          73, 91, 15, 14);
-    gui.register_coords("field_amount",          91, 91, 15, 14);
-    gui.register_coords("field_bubble",          91, 91, 15, 14);
-    gui.register_coords("total_amount",           0,  0,  0,  0);
-    gui.register_coords("total_bubble",           0,  0,  0,  0);
-    gui.register_coords("counters_x",             0,  0,  0,  0);
-    gui.register_coords("counters_slash_1",      82, 91,  4,  8);
-    gui.register_coords("counters_slash_2",       0,  0,  0,  0);
-    gui.register_coords("counters_slash_3",       0,  0,  0,  0);
-    gui.register_coords("spray_1_icon",           6, 36,  4,  7);
-    gui.register_coords("spray_1_amount",        13, 37, 10,  5);
-    gui.register_coords("spray_1_button",         4, 39,  3,  3);
-    gui.register_coords("spray_2_icon",           6, 52,  4,  7);
-    gui.register_coords("spray_2_amount",        13, 53, 10,  5);
-    gui.register_coords("spray_2_button",         4, 55,  3,  3);
-    gui.register_coords("spray_prev_icon",        6, 48,  3,  5);
-    gui.register_coords("spray_prev_button",      4, 51,  4,  4);
-    gui.register_coords("spray_next_icon",       12, 48,  3,  5);
-    gui.register_coords("spray_next_button",     14, 51,  4,  4);
+    gui.register_coords("time",                   50,     10, 70, 10);
+    gui.register_coords("day_bubble",              0,      0,  0,  0);
+    gui.register_coords("day_number",              0,      0,  0,  0);
+    gui.register_coords("leader_1_icon",           7,     90,  8, 10);
+    gui.register_coords("leader_2_icon",           6,     80,  5,  9);
+    gui.register_coords("leader_3_icon",           6,     72,  5,  9);
+    gui.register_coords("leader_1_health",        16,     90,  8, 10);
+    gui.register_coords("leader_2_health",        12,     80,  5,  9);
+    gui.register_coords("leader_3_health",        12,     72,  5,  9);
+    gui.register_coords("leader_next_button",      4,     83,  3,  3);
+    gui.register_coords("standby_icon",           50,     91,  8, 10);
+    gui.register_coords("standby_amount",         50,     96, 15,  8);
+    gui.register_coords("standby_bubble",          0,      0,  0,  0);
+    gui.register_coords("standby_maturity_icon",  54,     88,  4,  8);
+    gui.register_coords("standby_next_icon",      58,     93,  6,  8);
+    gui.register_coords("standby_next_button",    60,     96,  3,  3);
+    gui.register_coords("standby_prev_icon",      42,     93,  6,  8);
+    gui.register_coords("standby_prev_button",    40,     96,  3,  3);
+    gui.register_coords("group_amount",           73,     91, 15, 14);
+    gui.register_coords("group_bubble",           73,     91, 15, 14);
+    gui.register_coords("field_amount",           91,     91, 15, 14);
+    gui.register_coords("field_bubble",           91,     91, 15, 14);
+    gui.register_coords("total_amount",            0,      0,  0,  0);
+    gui.register_coords("total_bubble",            0,      0,  0,  0);
+    gui.register_coords("counters_x",              0,      0,  0,  0);
+    gui.register_coords("counters_slash_1",       82,     91,  4,  8);
+    gui.register_coords("counters_slash_2",        0,      0,  0,  0);
+    gui.register_coords("counters_slash_3",        0,      0,  0,  0);
+    gui.register_coords("spray_1_icon",            6,     36,  4,  7);
+    gui.register_coords("spray_1_amount",         13,     37, 10,  5);
+    gui.register_coords("spray_1_button",          4,     39,  3,  3);
+    gui.register_coords("spray_2_icon",            6,     52,  4,  7);
+    gui.register_coords("spray_2_amount",         13,     53, 10,  5);
+    gui.register_coords("spray_2_button",          4,     55,  3,  3);
+    gui.register_coords("spray_prev_icon",         6,     48,  3,  5);
+    gui.register_coords("spray_prev_button",       4,     51,  4,  4);
+    gui.register_coords("spray_next_icon",        12,     48,  3,  5);
+    gui.register_coords("spray_next_button",      14,     51,  4,  4);
+    gui.register_coords("mission_goal_bubble",    25,      8, 46, 12);
+    gui.register_coords("mission_goal_cur_label", 13.5, 11.5, 19,  3);
+    gui.register_coords("mission_goal_cur",       13.5,  6.5, 19,  7);
+    gui.register_coords("mission_goal_req_label", 36.5, 11.5, 19,  3);
+    gui.register_coords("mission_goal_req",       36.5,  6.5, 19,  7);
+    gui.register_coords("mission_goal_slash",     25,    6.5, 4,   7);
+    gui.register_coords("mission_goal_name",      25,      8, 44, 10);
     gui.read_coords(hud_file_node.get_child_by_name("positions"));
     
     //Leader health and icons.
@@ -988,18 +995,19 @@ hud_struct::hud_struct() :
     
     
     //Mission goal current label.
+    string goal_cur_label_text =
+        game.mission_goals[game.cur_area_data.mission.goal]->
+        get_hud_label();
     gui_item* mission_goal_cur_label = new gui_item();
     mission_goal_cur_label->on_draw =
-    [this] (const point & center, const point & size) {
-        string text =
-            game.mission_goals[game.cur_area_data.mission.goal]->
-            get_hud_label();
+    [this, goal_cur_label_text] (const point & center, const point & size) {
+        if(goal_cur_label_text.empty()) return;
         draw_compressed_scaled_text(
             game.fonts.standard, al_map_rgba(255, 255, 255, 128),
             center, point(1.0f, 1.0f),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
             size, true,
-            text
+            goal_cur_label_text
         );
     };
     gui.add_item(mission_goal_cur_label, "mission_goal_cur_label");
@@ -1008,7 +1016,8 @@ hud_struct::hud_struct() :
     //Mission goal current.
     gui_item* mission_goal_cur = new gui_item();
     mission_goal_cur->on_draw =
-    [this] (const point & center, const point & size) {
+    [this, goal_cur_label_text] (const point & center, const point & size) {
+        if(goal_cur_label_text.empty()) return;
         int value =
             game.mission_goals[game.cur_area_data.mission.goal]->
             get_cur_amount(game.states.gameplay);
@@ -1035,7 +1044,8 @@ hud_struct::hud_struct() :
     //Mission goal requirement label.
     gui_item* mission_goal_req_label = new gui_item();
     mission_goal_req_label->on_draw =
-    [this] (const point & center, const point & size) {
+    [this, goal_cur_label_text] (const point & center, const point & size) {
+        if(goal_cur_label_text.empty()) return;
         draw_compressed_scaled_text(
             game.fonts.standard, al_map_rgba(255, 255, 255, 128),
             center, point(1.0f, 1.0f),
@@ -1050,7 +1060,8 @@ hud_struct::hud_struct() :
     //Mission goal requirement.
     gui_item* mission_goal_req = new gui_item();
     mission_goal_req->on_draw =
-    [this] (const point & center, const point & size) {
+    [this, goal_cur_label_text] (const point & center, const point & size) {
+        if(goal_cur_label_text.empty()) return;
         int value =
             game.mission_goals[game.cur_area_data.mission.goal]->
             get_req_amount(game.states.gameplay);
@@ -1077,7 +1088,8 @@ hud_struct::hud_struct() :
     //Mission goal slash.
     gui_item* mission_goal_slash = new gui_item();
     mission_goal_slash->on_draw =
-    [this] (const point & center, const point & size) {
+    [this, goal_cur_label_text] (const point & center, const point & size) {
+        if(goal_cur_label_text.empty()) return;
         draw_compressed_scaled_text(
             game.fonts.counter, COLOR_WHITE,
             center, point(1.0f, 1.0f),
@@ -1087,6 +1099,22 @@ hud_struct::hud_struct() :
         );
     };
     gui.add_item(mission_goal_slash, "mission_goal_slash");
+    
+    
+    //Mission goal name text.
+    gui_item* mission_goal_name = new gui_item();
+    mission_goal_name->on_draw =
+    [this, goal_cur_label_text] (const point & center, const point & size) {
+        if(!goal_cur_label_text.empty()) return;
+        draw_compressed_scaled_text(
+            game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+            center, point(1.0f, 1.0f),
+            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+            size, true,
+            game.mission_goals[game.cur_area_data.mission.goal]->get_name()
+        );
+    };
+    gui.add_item(mission_goal_name, "mission_goal_name");
     
     
     data_node* bitmaps_node = hud_file_node.get_child_by_name("files");
