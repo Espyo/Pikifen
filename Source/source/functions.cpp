@@ -1591,10 +1591,37 @@ void save_screenshot() {
         
     } while(!valid_name);
     
+    //Before saving, let's set every pixel's alpha to 255.
+    //This is because alpha operations on the backbuffer behave weirdly.
+    //On some machines, when saving to a bitmap, it will use those weird
+    //alpha values, which may be harmless on the backbuffer, but not so much
+    //on a saved PNG file.
+    ALLEGRO_BITMAP* screenshot =
+        al_clone_bitmap(al_get_backbuffer(game.display));
+    ALLEGRO_LOCKED_REGION* region =
+        al_lock_bitmap(
+            screenshot,
+            ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READWRITE
+        );
+        
+    unsigned char* row = (unsigned char*) region->data;
+    int bmp_w = ceil(al_get_bitmap_width(screenshot));
+    int bmp_h = ceil(al_get_bitmap_height(screenshot));
+    for(int y = 0; y < bmp_h; ++y) {
+        for(int x = 0; x < bmp_w; ++x) {
+            row[(x) * 4 + 3] = 255;
+        }
+        row += region->pitch;
+    }
+    
+    al_unlock_bitmap(screenshot);
+    
     al_save_bitmap(
         (USER_DATA_FOLDER_PATH + "/" + final_file_name + ".png").c_str(),
-        al_get_backbuffer(game.display)
+        screenshot
     );
+    
+    al_destroy_bitmap(screenshot);
 }
 
 
