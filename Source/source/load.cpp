@@ -1171,8 +1171,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.medal_none);
     game.sys_assets.bmp_medal_platinum =
         game.bitmaps.get(game.asset_file_names.medal_platinum);
-    game.sys_assets.bmp_medal_gold =
-        game.bitmaps.get(game.asset_file_names.medal_gold);
+    game.sys_assets.bmp_medal_silver =
+        game.bitmaps.get(game.asset_file_names.medal_silver);
     game.sys_assets.bmp_mission_clear =
         game.bitmaps.get(game.asset_file_names.mission_clear);
     game.sys_assets.bmp_mission_fail =

@@ -65,8 +65,6 @@ const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
 const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
-//Dampen the mission goal indicator's movement by this much.
-const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 //How long the HUD moves for when a menu is entered.
 const float MENU_ENTRY_HUD_MOVE_TIME = 0.4f;
 //How long the HUD moves for when a menu is exited.
@@ -127,10 +125,12 @@ gameplay_state::gameplay_state() :
     enemy_total(0),
     enemy_points_collected(0),
     enemy_points_total(0),
+    mission_score(0),
     cur_leaders_in_mission_exit(0),
     leaders_kod(0),
     starting_nr_of_leaders(0),
     goal_indicator_ratio(0.0f),
+    score_indicator(0.0f),
     cur_interlude(INTERLUDE_NONE),
     interlude_time(0.0f),
     cur_big_msg(BIG_MESSAGE_NONE),
@@ -308,6 +308,7 @@ void gameplay_state::enter() {
     last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     
     goal_indicator_ratio = 0.0f;
+    score_indicator = 0.0f;
     
     hud->gui.hide_items();
     if(went_to_results) {
@@ -671,6 +672,7 @@ void gameplay_state::load() {
     enemy_points_total = 0;
     cur_leaders_in_mission_exit = 0;
     mission_required_mob_amount = 0;
+    mission_score = 0;
     leaders_kod = 0;
     mission_fail_reason = (MISSION_FAIL_CONDITIONS) INVALID;
     notification.reset();

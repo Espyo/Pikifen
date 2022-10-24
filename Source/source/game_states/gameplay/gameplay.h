@@ -44,7 +44,6 @@ extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
 extern const float CURSOR_TRAIL_MAX_WIDTH;
 extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
 extern const int FOG_BITMAP_SIZE;
-extern const float GOAL_INDICATOR_SMOOTHNESS_MULT;
 extern const unsigned char PREVIEW_OPACITY;
 extern const float PREVIEW_TEXTURE_SCALE;
 extern const float PREVIEW_TEXTURE_TIME_MULT;
@@ -203,6 +202,8 @@ public:
     size_t enemy_points_total;
     //Reason for mission failure, if any. INVALID for none.
     MISSION_FAIL_CONDITIONS mission_fail_reason;
+    //Current mission score. Cache for convenience.
+    int mission_score;
     //How many leaders are in the mission exit. Cache for convenience.
     size_t cur_leaders_in_mission_exit;
     //How many leaders have been lost so far. Cache for convenience.
@@ -211,6 +212,8 @@ public:
     size_t starting_nr_of_leaders;
     //Ratio of the mission goal HUD item's indicator.
     float goal_indicator_ratio;
+    //Position of the mission score HUD item's indicator.
+    float score_indicator;
     //Current interlude, if any.
     INTERLUDES cur_interlude;
     //Time passed in the current interlude.

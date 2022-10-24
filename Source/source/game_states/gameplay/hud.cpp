@@ -19,11 +19,22 @@
 
 
 namespace HUD {
-
+//Dampen the mission goal indicator's movement by this much.
+const float GOAL_INDICATOR_SMOOTHNESS_MULT = 5.5f;
 //Path to the GUI information file.
 const string GUI_FILE_NAME = GUI_FOLDER_PATH + "/Gameplay.txt";
 //How long the leader swap juice animation lasts for.
 const float LEADER_SWAP_JUICE_DURATION = 0.7f;
+//Standard mission score medal icon scale.
+const float MEDAL_ICON_SCALE = 1.5f;
+//Multiply time by this much to get the right scale animation amount.
+const float MEDAL_ICON_SCALE_MULT = 0.3f;
+//Multiply time by this much to get the right scale animation speed.
+const float MEDAL_ICON_SCALE_TIME_MULT = 4.0f;
+//Dampen the mission score indicator's movement by this much.
+const float SCORE_INDICATOR_SMOOTHNESS_MULT = 5.5f;
+//How many points to show before and after the mission score ruler flapper.
+const int SCORE_RULER_RANGE = 125;
 //How long the spray swap juice animation lasts for.
 const float SPRAY_SWAP_JUICE_DURATION = 0.7f;
 //How long the standby swap juice animation lasts for.
@@ -76,51 +87,56 @@ hud_struct::hud_struct() :
     
     data_node hud_file_node(HUD::GUI_FILE_NAME);
     
-    gui.register_coords("time",                   50,     10, 70, 10);
-    gui.register_coords("day_bubble",              0,      0,  0,  0);
-    gui.register_coords("day_number",              0,      0,  0,  0);
-    gui.register_coords("leader_1_icon",           7,     90,  8, 10);
-    gui.register_coords("leader_2_icon",           6,     80,  5,  9);
-    gui.register_coords("leader_3_icon",           6,     72,  5,  9);
-    gui.register_coords("leader_1_health",        16,     90,  8, 10);
-    gui.register_coords("leader_2_health",        12,     80,  5,  9);
-    gui.register_coords("leader_3_health",        12,     72,  5,  9);
-    gui.register_coords("leader_next_button",      4,     83,  3,  3);
-    gui.register_coords("standby_icon",           50,     91,  8, 10);
-    gui.register_coords("standby_amount",         50,     96, 15,  8);
-    gui.register_coords("standby_bubble",          0,      0,  0,  0);
-    gui.register_coords("standby_maturity_icon",  54,     88,  4,  8);
-    gui.register_coords("standby_next_icon",      58,     93,  6,  8);
-    gui.register_coords("standby_next_button",    60,     96,  3,  3);
-    gui.register_coords("standby_prev_icon",      42,     93,  6,  8);
-    gui.register_coords("standby_prev_button",    40,     96,  3,  3);
-    gui.register_coords("group_amount",           73,     91, 15, 14);
-    gui.register_coords("group_bubble",           73,     91, 15, 14);
-    gui.register_coords("field_amount",           91,     91, 15, 14);
-    gui.register_coords("field_bubble",           91,     91, 15, 14);
-    gui.register_coords("total_amount",            0,      0,  0,  0);
-    gui.register_coords("total_bubble",            0,      0,  0,  0);
-    gui.register_coords("counters_x",              0,      0,  0,  0);
-    gui.register_coords("counters_slash_1",       82,     91,  4,  8);
-    gui.register_coords("counters_slash_2",        0,      0,  0,  0);
-    gui.register_coords("counters_slash_3",        0,      0,  0,  0);
-    gui.register_coords("spray_1_icon",            6,     36,  4,  7);
-    gui.register_coords("spray_1_amount",         13,     37, 10,  5);
-    gui.register_coords("spray_1_button",          4,     39,  3,  3);
-    gui.register_coords("spray_2_icon",            6,     52,  4,  7);
-    gui.register_coords("spray_2_amount",         13,     53, 10,  5);
-    gui.register_coords("spray_2_button",          4,     55,  3,  3);
-    gui.register_coords("spray_prev_icon",         6,     48,  3,  5);
-    gui.register_coords("spray_prev_button",       4,     51,  4,  4);
-    gui.register_coords("spray_next_icon",        12,     48,  3,  5);
-    gui.register_coords("spray_next_button",      14,     51,  4,  4);
-    gui.register_coords("mission_goal_bubble",    25,      8, 46, 12);
-    gui.register_coords("mission_goal_cur_label", 13.5, 11.5, 19,  3);
-    gui.register_coords("mission_goal_cur",       13.5,  6.5, 19,  7);
-    gui.register_coords("mission_goal_req_label", 36.5, 11.5, 19,  3);
-    gui.register_coords("mission_goal_req",       36.5,  6.5, 19,  7);
-    gui.register_coords("mission_goal_slash",     25,    6.5, 4,   7);
-    gui.register_coords("mission_goal_name",      25,      8, 44, 10);
+    gui.register_coords("time",                       50,     10, 70, 10);
+    gui.register_coords("day_bubble",                  0,      0,  0,  0);
+    gui.register_coords("day_number",                  0,      0,  0,  0);
+    gui.register_coords("leader_1_icon",               7,     90,  8, 10);
+    gui.register_coords("leader_2_icon",               6,     80,  5,  9);
+    gui.register_coords("leader_3_icon",               6,     72,  5,  9);
+    gui.register_coords("leader_1_health",            16,     90,  8, 10);
+    gui.register_coords("leader_2_health",            12,     80,  5,  9);
+    gui.register_coords("leader_3_health",            12,     72,  5,  9);
+    gui.register_coords("leader_next_button",          4,     83,  3,  3);
+    gui.register_coords("standby_icon",               50,     91,  8, 10);
+    gui.register_coords("standby_amount",             50,     96, 15,  8);
+    gui.register_coords("standby_bubble",              0,      0,  0,  0);
+    gui.register_coords("standby_maturity_icon",      54,     88,  4,  8);
+    gui.register_coords("standby_next_icon",          58,     93,  6,  8);
+    gui.register_coords("standby_next_button",        60,     96,  3,  3);
+    gui.register_coords("standby_prev_icon",          42,     93,  6,  8);
+    gui.register_coords("standby_prev_button",        40,     96,  3,  3);
+    gui.register_coords("group_amount",               73,     91, 15, 14);
+    gui.register_coords("group_bubble",               73,     91, 15, 14);
+    gui.register_coords("field_amount",               91,     91, 15, 14);
+    gui.register_coords("field_bubble",               91,     91, 15, 14);
+    gui.register_coords("total_amount",                0,      0,  0,  0);
+    gui.register_coords("total_bubble",                0,      0,  0,  0);
+    gui.register_coords("counters_x",                  0,      0,  0,  0);
+    gui.register_coords("counters_slash_1",           82,     91,  4,  8);
+    gui.register_coords("counters_slash_2",            0,      0,  0,  0);
+    gui.register_coords("counters_slash_3",            0,      0,  0,  0);
+    gui.register_coords("spray_1_icon",                6,     36,  4,  7);
+    gui.register_coords("spray_1_amount",             13,     37, 10,  5);
+    gui.register_coords("spray_1_button",              4,     39,  3,  3);
+    gui.register_coords("spray_2_icon",                6,     52,  4,  7);
+    gui.register_coords("spray_2_amount",             13,     53, 10,  5);
+    gui.register_coords("spray_2_button",              4,     55,  3,  3);
+    gui.register_coords("spray_prev_icon",             6,     48,  3,  5);
+    gui.register_coords("spray_prev_button",           4,     51,  4,  4);
+    gui.register_coords("spray_next_icon",            12,     48,  3,  5);
+    gui.register_coords("spray_next_button",          14,     51,  4,  4);
+    gui.register_coords("mission_goal_bubble",        18,      8, 32, 12);
+    gui.register_coords("mission_goal_cur_label",     10.5, 11.5, 13,  3);
+    gui.register_coords("mission_goal_cur",           10.5,  6.5, 13,  7);
+    gui.register_coords("mission_goal_req_label",     26.5, 11.5, 13,  3);
+    gui.register_coords("mission_goal_req",           26.5,  6.5, 13,  7);
+    gui.register_coords("mission_goal_slash",         18.5,  6.5,  3,  7);
+    gui.register_coords("mission_goal_name",          18,      8, 30, 10);
+    gui.register_coords("mission_score_bubble",       18,     20, 32, 10);
+    gui.register_coords("mission_score_score_label",  7.5,  21.5,  9,  5);
+    gui.register_coords("mission_score_points",       18,   21.5, 10,  5);
+    gui.register_coords("mission_score_points_label", 28.5, 21.5,  9,  5);
+    gui.register_coords("mission_score_ruler",        18,     17, 30,  2);
     gui.read_coords(hud_file_node.get_child_by_name("positions"));
     
     //Leader health and icons.
@@ -956,165 +972,424 @@ hud_struct::hud_struct() :
     gui.add_item(next_spray_button, "spray_next_button");
     
     
-    //Mission goal bubble.
-    gui_item* mission_goal_bubble = new gui_item();
-    mission_goal_bubble->on_draw =
-    [this] (const point & center, const point & size) {
-        int cx = 0;
-        int cy = 0;
-        int cw = 0;
-        int ch = 0;
-        al_get_clipping_rectangle(&cx, &cy, &cw, &ch);
-        set_combined_clipping_rectangles(
-            cx, cy, cw, ch,
-            center.x - size.x / 2.0f,
-            center.y - size.y / 2.0f,
-            size.x * game.states.gameplay->goal_indicator_ratio,
-            size.y
-        );
-        draw_filled_rounded_rectangle(
-            center, size, 20.0f, al_map_rgba(86, 149, 50, 160)
-        );
-        set_combined_clipping_rectangles(
-            cx, cy, cw, ch,
-            center.x - size.x / 2.0f +
-            size.x * game.states.gameplay->goal_indicator_ratio,
-            center.y - size.y / 2.0f,
-            size.x * (1 - game.states.gameplay->goal_indicator_ratio),
-            size.y
-        );
-        draw_filled_rounded_rectangle(
-            center, size, 20.0f, al_map_rgba(34, 102, 102, 80)
-        );
-        al_set_clipping_rectangle(cx, cy, cw, ch);
-        draw_textured_box(
-            center, size, game.sys_assets.bmp_bubble_box
-        );
-    };
-    gui.add_item(mission_goal_bubble, "mission_goal_bubble");
+    if(game.cur_area_data.type == AREA_TYPE_MISSION) {
     
-    
-    //Mission goal current label.
-    string goal_cur_label_text =
-        game.mission_goals[game.cur_area_data.mission.goal]->
-        get_hud_label();
-    gui_item* mission_goal_cur_label = new gui_item();
-    mission_goal_cur_label->on_draw =
-    [this, goal_cur_label_text] (const point & center, const point & size) {
-        if(goal_cur_label_text.empty()) return;
-        draw_compressed_scaled_text(
-            game.fonts.standard, al_map_rgba(255, 255, 255, 128),
-            center, point(1.0f, 1.0f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-            size, true,
-            goal_cur_label_text
-        );
-    };
-    gui.add_item(mission_goal_cur_label, "mission_goal_cur_label");
-    
-    
-    //Mission goal current.
-    gui_item* mission_goal_cur = new gui_item();
-    mission_goal_cur->on_draw =
-    [this, goal_cur_label_text] (const point & center, const point & size) {
-        if(goal_cur_label_text.empty()) return;
-        int value =
+        //Mission goal bubble.
+        gui_item* mission_goal_bubble = new gui_item();
+        mission_goal_bubble->on_draw =
+        [this] (const point & center, const point & size) {
+            int cx = 0;
+            int cy = 0;
+            int cw = 0;
+            int ch = 0;
+            al_get_clipping_rectangle(&cx, &cy, &cw, &ch);
+            set_combined_clipping_rectangles(
+                cx, cy, cw, ch,
+                center.x - size.x / 2.0f,
+                center.y - size.y / 2.0f,
+                size.x * game.states.gameplay->goal_indicator_ratio,
+                size.y
+            );
+            draw_filled_rounded_rectangle(
+                center, size, 20.0f, al_map_rgba(86, 149, 50, 160)
+            );
+            set_combined_clipping_rectangles(
+                cx, cy, cw, ch,
+                center.x - size.x / 2.0f +
+                size.x * game.states.gameplay->goal_indicator_ratio,
+                center.y - size.y / 2.0f,
+                size.x * (1 - game.states.gameplay->goal_indicator_ratio),
+                size.y
+            );
+            draw_filled_rounded_rectangle(
+                center, size, 20.0f, al_map_rgba(34, 102, 102, 80)
+            );
+            al_set_clipping_rectangle(cx, cy, cw, ch);
+            draw_textured_box(
+                center, size, game.sys_assets.bmp_bubble_box,
+                al_map_rgba(255, 255, 255, 200)
+            );
+        };
+        gui.add_item(mission_goal_bubble, "mission_goal_bubble");
+        
+        
+        //Mission goal current label.
+        string goal_cur_label_text =
             game.mission_goals[game.cur_area_data.mission.goal]->
-            get_cur_amount(game.states.gameplay);
-        string text;
-        if(
-            game.cur_area_data.mission.goal ==
-            MISSION_GOAL_TIMED_SURVIVAL
-        ) {
-            text = time_to_str(value, ":", "");
-        } else {
-            text = i2s(value);
-        }
-        draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
-            center, point(1.0f, 1.0f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-            size, true,
-            text
-        );
-    };
-    gui.add_item(mission_goal_cur, "mission_goal_cur");
-    
-    
-    //Mission goal requirement label.
-    gui_item* mission_goal_req_label = new gui_item();
-    mission_goal_req_label->on_draw =
-    [this, goal_cur_label_text] (const point & center, const point & size) {
-        if(goal_cur_label_text.empty()) return;
-        draw_compressed_scaled_text(
-            game.fonts.standard, al_map_rgba(255, 255, 255, 128),
-            center, point(1.0f, 1.0f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-            size, true,
-            "Goal"
-        );
-    };
-    gui.add_item(mission_goal_req_label, "mission_goal_req_label");
-    
-    
-    //Mission goal requirement.
-    gui_item* mission_goal_req = new gui_item();
-    mission_goal_req->on_draw =
-    [this, goal_cur_label_text] (const point & center, const point & size) {
-        if(goal_cur_label_text.empty()) return;
-        int value =
-            game.mission_goals[game.cur_area_data.mission.goal]->
-            get_req_amount(game.states.gameplay);
-        string text;
-        if(
-            game.cur_area_data.mission.goal ==
-            MISSION_GOAL_TIMED_SURVIVAL
-        ) {
-            text = time_to_str(value, ":", "");
-        } else {
-            text = i2s(value);
-        }
-        draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
-            center, point(1.0f, 1.0f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-            size, true,
-            text
-        );
-    };
-    gui.add_item(mission_goal_req, "mission_goal_req");
-    
-    
-    //Mission goal slash.
-    gui_item* mission_goal_slash = new gui_item();
-    mission_goal_slash->on_draw =
-    [this, goal_cur_label_text] (const point & center, const point & size) {
-        if(goal_cur_label_text.empty()) return;
-        draw_compressed_scaled_text(
-            game.fonts.counter, COLOR_WHITE,
-            center, point(1.0f, 1.0f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-            size, true,
-            "/"
-        );
-    };
-    gui.add_item(mission_goal_slash, "mission_goal_slash");
-    
-    
-    //Mission goal name text.
-    gui_item* mission_goal_name = new gui_item();
-    mission_goal_name->on_draw =
-    [this, goal_cur_label_text] (const point & center, const point & size) {
-        if(!goal_cur_label_text.empty()) return;
-        draw_compressed_scaled_text(
-            game.fonts.standard, al_map_rgba(255, 255, 255, 128),
-            center, point(1.0f, 1.0f),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-            size, true,
-            game.mission_goals[game.cur_area_data.mission.goal]->get_name()
-        );
-    };
-    gui.add_item(mission_goal_name, "mission_goal_name");
+            get_hud_label();
+        gui_item* mission_goal_cur_label = new gui_item();
+        mission_goal_cur_label->on_draw =
+        [this, goal_cur_label_text] (const point & center, const point & size) {
+            if(goal_cur_label_text.empty()) return;
+            draw_compressed_scaled_text(
+                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                goal_cur_label_text
+            );
+        };
+        gui.add_item(mission_goal_cur_label, "mission_goal_cur_label");
+        
+        
+        //Mission goal current.
+        gui_item* mission_goal_cur = new gui_item();
+        mission_goal_cur->on_draw =
+        [this, goal_cur_label_text] (const point & center, const point & size) {
+            if(goal_cur_label_text.empty()) return;
+            int value =
+                game.mission_goals[game.cur_area_data.mission.goal]->
+                get_cur_amount(game.states.gameplay);
+            string text;
+            if(
+                game.cur_area_data.mission.goal ==
+                MISSION_GOAL_TIMED_SURVIVAL
+            ) {
+                text = time_to_str(value, ":", "");
+            } else {
+                text = i2s(value);
+            }
+            draw_compressed_scaled_text(
+                game.fonts.counter, COLOR_WHITE,
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                text
+            );
+        };
+        gui.add_item(mission_goal_cur, "mission_goal_cur");
+        
+        
+        //Mission goal requirement label.
+        gui_item* mission_goal_req_label = new gui_item();
+        mission_goal_req_label->on_draw =
+        [this, goal_cur_label_text] (const point & center, const point & size) {
+            if(goal_cur_label_text.empty()) return;
+            draw_compressed_scaled_text(
+                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                "Goal"
+            );
+        };
+        gui.add_item(mission_goal_req_label, "mission_goal_req_label");
+        
+        
+        //Mission goal requirement.
+        gui_item* mission_goal_req = new gui_item();
+        mission_goal_req->on_draw =
+        [this, goal_cur_label_text] (const point & center, const point & size) {
+            if(goal_cur_label_text.empty()) return;
+            int value =
+                game.mission_goals[game.cur_area_data.mission.goal]->
+                get_req_amount(game.states.gameplay);
+            string text;
+            if(
+                game.cur_area_data.mission.goal ==
+                MISSION_GOAL_TIMED_SURVIVAL
+            ) {
+                text = time_to_str(value, ":", "");
+            } else {
+                text = i2s(value);
+            }
+            draw_compressed_scaled_text(
+                game.fonts.counter, COLOR_WHITE,
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                text
+            );
+        };
+        gui.add_item(mission_goal_req, "mission_goal_req");
+        
+        
+        //Mission goal slash.
+        gui_item* mission_goal_slash = new gui_item();
+        mission_goal_slash->on_draw =
+        [this, goal_cur_label_text] (const point & center, const point & size) {
+            if(goal_cur_label_text.empty()) return;
+            draw_compressed_scaled_text(
+                game.fonts.counter, COLOR_WHITE,
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                "/"
+            );
+        };
+        gui.add_item(mission_goal_slash, "mission_goal_slash");
+        
+        
+        //Mission goal name text.
+        gui_item* mission_goal_name = new gui_item();
+        mission_goal_name->on_draw =
+        [this, goal_cur_label_text] (const point & center, const point & size) {
+            if(!goal_cur_label_text.empty()) return;
+            draw_compressed_scaled_text(
+                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                game.mission_goals[game.cur_area_data.mission.goal]->get_name()
+            );
+        };
+        gui.add_item(mission_goal_name, "mission_goal_name");
+        
+        
+        //Mission score bubble.
+        gui_item* mission_score_bubble = new gui_item();
+        mission_score_bubble->on_draw =
+        [this] (const point & center, const point & size) {
+            draw_filled_rounded_rectangle(
+                center, size, 20.0f, al_map_rgba(86, 149, 50, 160)
+            );
+            draw_textured_box(
+                center, size, game.sys_assets.bmp_bubble_box,
+                al_map_rgba(255, 255, 255, 200)
+            );
+        };
+        gui.add_item(mission_score_bubble, "mission_score_bubble");
+        
+        
+        //Mission score "score" label.
+        gui_item* mission_score_score_label = new gui_item();
+        mission_score_score_label->on_draw =
+        [this] (const point & center, const point & size) {
+            draw_compressed_scaled_text(
+                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                point(center.x + size.x / 2.0f, center.y), point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_RIGHT, TEXT_VALIGN_CENTER,
+                size, true,
+                "Score:"
+            );
+        };
+        gui.add_item(mission_score_score_label, "mission_score_score_label");
+        
+        
+        //Mission score points.
+        gui_item* mission_score_points = new gui_item();
+        mission_score_points->on_draw =
+        [this] (const point & center, const point & size) {
+            draw_compressed_scaled_text(
+                game.fonts.counter, COLOR_WHITE,
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                i2s(game.states.gameplay->mission_score)
+            );
+        };
+        gui.add_item(mission_score_points, "mission_score_points");
+        
+        
+        //Mission score "points" label.
+        gui_item* mission_score_points_label = new gui_item();
+        mission_score_points_label->on_draw =
+        [this] (const point & center, const point & size) {
+            draw_compressed_scaled_text(
+                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                point(center.x - size.x / 2.0f, center.y), point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
+                size, true,
+                "pts"
+            );
+        };
+        gui.add_item(mission_score_points_label, "mission_score_points_label");
+        
+        
+        //Mission score ruler.
+        gui_item* mission_score_ruler = new gui_item();
+        mission_score_ruler->on_draw =
+        [this] (const point & center, const point & size) {
+            //Setup.
+            const float ruler_start_value =
+                game.states.gameplay->score_indicator -
+                HUD::SCORE_RULER_RANGE / 2.0f;
+            const float ruler_end_value =
+                game.states.gameplay->score_indicator +
+                HUD::SCORE_RULER_RANGE / 2.0f;
+            const float ruler_scale =
+                size.x / (float) HUD::SCORE_RULER_RANGE;
+            const float ruler_start_x = center.x - size.x / 2.0f;
+            const float ruler_end_x = center.x + size.x / 2.0f;
+            
+            const float seg_limits[] = {
+                std::min(ruler_start_value, 0.0f),
+                0,
+                (float) game.cur_area_data.mission.bronze_req,
+                (float) game.cur_area_data.mission.silver_req,
+                (float) game.cur_area_data.mission.gold_req,
+                (float) game.cur_area_data.mission.platinum_req,
+                std::max(
+                    ruler_end_value,
+                    (float) game.cur_area_data.mission.platinum_req
+                )
+            };
+            const ALLEGRO_COLOR seg_colors_top[] = {
+                al_map_rgba(152, 160, 152, 128), //Negatives.
+                al_map_rgb(158, 166, 158),       //No medal.
+                al_map_rgb(203, 117, 37),        //Bronze.
+                al_map_rgb(223, 227, 209),       //Silver.
+                al_map_rgb(235, 209, 59),        //Gold.
+                al_map_rgb(158, 222, 211)        //Platinum.
+            };
+            const ALLEGRO_COLOR seg_colors_bottom[] = {
+                al_map_rgba(152, 160, 152, 128), //Negatives.
+                al_map_rgb(119, 128, 118),       //No medal.
+                al_map_rgb(131, 52, 18),         //Bronze.
+                al_map_rgb(160, 154, 127),       //Silver.
+                al_map_rgb(173, 127, 24),        //Gold.
+                al_map_rgb(79, 172, 153)         //Platinum.
+            };
+            ALLEGRO_BITMAP* seg_icons[] = {
+                NULL,
+                NULL,
+                game.sys_assets.bmp_medal_bronze,
+                game.sys_assets.bmp_medal_silver,
+                game.sys_assets.bmp_medal_gold,
+                game.sys_assets.bmp_medal_platinum
+            };
+            
+            //Draw each segment (no medal, bronze, etc.).
+            for(int s = 0; s < 6; ++s) {
+                float seg_start_value = seg_limits[s];
+                float seg_end_value = seg_limits[s + 1];
+                if(seg_end_value < ruler_start_value) continue;
+                if(seg_start_value > ruler_end_value) continue;
+                float seg_start_x =
+                    center.x -
+                    (game.states.gameplay->score_indicator - seg_start_value) *
+                    ruler_scale;
+                float seg_end_x =
+                    center.x +
+                    (seg_end_value - game.states.gameplay->score_indicator) *
+                    ruler_scale;
+                seg_start_x = std::max(seg_start_x, ruler_start_x);
+                seg_end_x = std::min(ruler_end_x, seg_end_x);
+                
+                ALLEGRO_VERTEX vertexes[4];
+                for(unsigned char v = 0; v < 4; ++v) {
+                    vertexes[v].z = 0.0f;
+                }
+                vertexes[0].x = seg_start_x;
+                vertexes[0].y = center.y - size.y / 2.0f;
+                vertexes[0].color = seg_colors_top[s];
+                vertexes[1].x = seg_start_x;
+                vertexes[1].y = center.y + size.y / 2.0f;
+                vertexes[1].color = seg_colors_bottom[s];
+                vertexes[2].x = seg_end_x;
+                vertexes[2].y = center.y + size.y / 2.0f;
+                vertexes[2].color = seg_colors_bottom[s];
+                vertexes[3].x = seg_end_x;
+                vertexes[3].y = center.y - size.y / 2.0f;
+                vertexes[3].color = seg_colors_top[s];
+                al_draw_prim(
+                    vertexes, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+                );
+            }
+            
+            //Draw the markings.
+            for(
+                float m = floor(ruler_start_value / 25.0f) * 25.0f;
+                m <= ruler_end_value;
+                m += 25.0f
+            ) {
+                if(m < 0.0f || m < ruler_start_value) continue;
+                float marking_x =
+                    center.x -
+                    (game.states.gameplay->score_indicator - m) *
+                    ruler_scale;
+                float marking_length =
+                    fmod(m, 100) == 0 ?
+                    size.y * 0.7f :
+                    fmod(m, 50) == 0 ?
+                    size.y * 0.4f :
+                    size.y * 0.1f;
+                al_draw_filled_triangle(
+                    marking_x,
+                    center.y - size.y / 2.0f + marking_length,
+                    marking_x + 2.0f,
+                    center.y - size.y / 2.0f,
+                    marking_x - 2.0f,
+                    center.y - size.y / 2.0f,
+                    al_map_rgb(100, 110, 180)
+                );
+            }
+            
+            //Draw the medal icons.
+            int cur_seg = 0;
+            int last_passed_seg = 0;
+            float cur_medal_scale =
+                HUD::MEDAL_ICON_SCALE +
+                sin(
+                    game.states.gameplay->area_time_passed *
+                    HUD::MEDAL_ICON_SCALE_TIME_MULT
+                ) *
+                HUD::MEDAL_ICON_SCALE_MULT;
+            for(int s = 0; s < 6; ++s) {
+                float seg_start_value = seg_limits[s];
+                if(seg_start_value <= game.states.gameplay->score_indicator) {
+                    cur_seg = s;
+                }
+                if(seg_start_value <= ruler_start_value) {
+                    last_passed_seg = s;
+                }
+            }
+            for(int s = 0; s < 6; ++s) {
+                if(!seg_icons[s]) continue;
+                float seg_start_value = seg_limits[s];
+                if(seg_start_value < ruler_start_value) continue;
+                float seg_start_x =
+                    center.x -
+                    (game.states.gameplay->score_indicator - seg_start_value) *
+                    ruler_scale;
+                float icon_x = seg_start_x;
+                unsigned char icon_alpha = 255;
+                float icon_scale = HUD::MEDAL_ICON_SCALE;
+                if(cur_seg == s) {
+                    icon_scale = cur_medal_scale;
+                }
+                if(seg_start_value > ruler_end_value) {
+                    icon_x = ruler_end_x;
+                    icon_alpha = 128;
+                }
+                draw_bitmap(
+                    seg_icons[s],
+                    point(icon_x, center.y),
+                    point(-1, size.y * icon_scale),
+                    0,
+                    al_map_rgba(255, 255, 255, icon_alpha)
+                );
+                if(seg_start_value > ruler_end_value) {
+                    //If we found the first icon that goes past the ruler's end,
+                    //then we shouldn't draw the other ones that come after.
+                    break;
+                }
+            }
+            if(seg_icons[last_passed_seg] && last_passed_seg == cur_seg) {
+                draw_bitmap(
+                    seg_icons[last_passed_seg],
+                    point(ruler_start_x, center.y),
+                    point(-1, size.y * cur_medal_scale)
+                );
+            }
+            
+            //Draw the flapper.
+            al_draw_filled_triangle(
+                center.x, center.y + size.y / 2.0f,
+                center.x, center.y,
+                center.x + (size.y * 0.4), center.y + size.y / 2.0f,
+                al_map_rgb(105, 161, 105)
+            );
+            al_draw_filled_triangle(
+                center.x, center.y + size.y / 2.0f,
+                center.x, center.y,
+                center.x - (size.y * 0.4), center.y + size.y / 2.0f,
+                al_map_rgb(124, 191, 124)
+            );
+        };
+        gui.add_item(mission_score_ruler, "mission_score_ruler");
+        
+    }
     
     
     data_node* bitmaps_node = hud_file_node.get_child_by_name("files");

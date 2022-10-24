@@ -37,12 +37,18 @@ positions{
 	spray_prev_button=4.0000 51.0000 4.0000 4.0000
 	spray_next_icon=12.0000 48.0000 3.0000 5.0000
 	spray_next_button=14.0000 51.0000 4.0000 4.0000
-	mission_goal_bubble=25.0000 8.0000 46.0000 12.0000
-	mission_goal_cur_label=13.5000 11.5000 19.0000 3.0000
-	mission_goal_cur=13.5000 6.5000 19.0000 7.0000
-	mission_goal_req_label=36.5000 11.5000 19.0000 3.0000
-	mission_goal_req=36.5000 6.5000 19.0000 7.0000
-	mission_goal_slash=25.0000 6.5000 4.0000 7.0000
+	mission_goal_bubble=18.0000 8.0000 32.0000 12.0000
+	mission_goal_cur_label=10.5000 11.5000 13.0000 3.0000
+	mission_goal_cur=10.5000 6.5000 13.0000 7.0000
+	mission_goal_req_label=26.5000 11.5000 13.0000 3.0000
+	mission_goal_req=26.5000 6.5000 13.0000 7.0000
+	mission_goal_slash=18.5000 6.5000 3.0000 7.0000
+	mission_goal_name=18.0000 8.0000 30.0000 10.0000
+	mission_score_bubble=18.0000 20.0000 32.0000 10.0000
+	mission_score_score_label=7.5000 21.5000 9.0000 5.0000
+	mission_score_points=18.0000 21.5000 10.0000 5.0000
+	mission_score_points_label=28.5000 21.5000 9.0000 5.0000
+	mission_score_ruler=18.0000 17.0000 30.0000 2.0000
 }
 files{
 	bubble=Bubble.png

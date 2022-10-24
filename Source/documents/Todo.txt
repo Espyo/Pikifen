@@ -27,6 +27,8 @@ Next tasks (roughly sorted most important first)
         Needs to be tested if it still happens in the master branch
     "oh yeah espyo set_tangible doesn't work for custom scripts on Pikmin" --Neo
     Nataly's glitches
+    "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
+    Helodity's resource without destination glitch
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -74,6 +76,8 @@ Next tasks (roughly sorted most important first)
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod
+    Try making the camera also follow the cursor and the Pikmin group, if possible
+    A property for pile types that lets the mob radius be changed on every phase (thanks Nataly)
     Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, Shift should toggle select-all (thanks Nataly)
     "one method I think used in pikmin 1 to get pikmin of only a certain type into your squad is to throw one pikmin of the desired color, and then when you dismiss, pikmin will try to group up with nearby pikmin that are already idle, so the pikmin of the desired color will all go to where you threw the first pikmin, and I think that's a neat little quirk that would be nice to have in pikifen, although idk how hard it'd be to implement" --Nataly
     "rock pikmin I think stay knocked back for too long after attacking, I'm pretty sure they get up quicker in pikmin 3" --Nataly
@@ -128,6 +132,13 @@ Next tasks (roughly sorted most important first)
         A puzzle stage
     
     --- Future ---
+    Some tweaks to the HUD
+        Shrink some element sizes -- HUD elements in P1 and P2 used to be chunky because of the televisions back then, but Pikmin 3 lowered their sizes a bit, so maybe I can do the same
+        Prefer populating corners over populating sides/bottom/top
+        Fade some elements (or all?) when the mouse is on them
+            This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?
+        Remove some of the elements?
+            Stuff like a leader's health might not be necessary if it's full
     Radar
         Radar page
             https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?

@@ -519,65 +519,6 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
     game.cam.update_box();
     
     //Mission things.
-    if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
-    ) {
-        cur_leaders_in_mission_exit = 0;
-        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-            mob* l_ptr = mobs.leaders[l];
-            if(
-                std::find(
-                    mission_remaining_mob_ids.begin(),
-                    mission_remaining_mob_ids.end(),
-                    mobs.leaders[l]->id
-                ) ==
-                mission_remaining_mob_ids.end()
-            ) {
-                //Not a required leader.
-                continue;
-            }
-            if(
-                fabs(
-                    l_ptr->pos.x -
-                    game.cur_area_data.mission.goal_exit_center.x
-                ) <=
-                game.cur_area_data.mission.goal_exit_size.x / 2.0f &&
-                fabs(
-                    l_ptr->pos.y -
-                    game.cur_area_data.mission.goal_exit_center.y
-                ) <=
-                game.cur_area_data.mission.goal_exit_size.y / 2.0f
-            ) {
-                cur_leaders_in_mission_exit++;
-            }
-        }
-    }
-    
-    size_t living_leaders = 0;
-    for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-        if(mobs.leaders[l]->health > 0.0f) {
-            living_leaders++;
-        }
-    }
-    leaders_kod = starting_nr_of_leaders - living_leaders;
-    
-    float real_goal_ratio = 0.0f;
-    int goal_cur_amount =
-        game.mission_goals[game.cur_area_data.mission.goal]->get_cur_amount(
-            this
-        );
-    int goal_req_amount =
-        game.mission_goals[game.cur_area_data.mission.goal]->get_req_amount(
-            this
-        );
-    if(goal_req_amount != 0.0f) {
-        real_goal_ratio = goal_cur_amount / (float) goal_req_amount;
-    }
-    goal_indicator_ratio +=
-        (real_goal_ratio - goal_indicator_ratio) *
-        (GAMEPLAY::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
-        
     if(!msg_box) {
     
         /************************************
@@ -764,6 +705,65 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         *   Mission   \ / *
         *              O  *
         *******************/
+        if(
+            game.cur_area_data.type == AREA_TYPE_MISSION &&
+            game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
+        ) {
+            cur_leaders_in_mission_exit = 0;
+            for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+                mob* l_ptr = mobs.leaders[l];
+                if(
+                    std::find(
+                        mission_remaining_mob_ids.begin(),
+                        mission_remaining_mob_ids.end(),
+                        mobs.leaders[l]->id
+                    ) ==
+                    mission_remaining_mob_ids.end()
+                ) {
+                    //Not a required leader.
+                    continue;
+                }
+                if(
+                    fabs(
+                        l_ptr->pos.x -
+                        game.cur_area_data.mission.goal_exit_center.x
+                    ) <=
+                    game.cur_area_data.mission.goal_exit_size.x / 2.0f &&
+                    fabs(
+                        l_ptr->pos.y -
+                        game.cur_area_data.mission.goal_exit_center.y
+                    ) <=
+                    game.cur_area_data.mission.goal_exit_size.y / 2.0f
+                ) {
+                    cur_leaders_in_mission_exit++;
+                }
+            }
+        }
+        
+        size_t living_leaders = 0;
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            if(mobs.leaders[l]->health > 0.0f) {
+                living_leaders++;
+            }
+        }
+        leaders_kod = starting_nr_of_leaders - living_leaders;
+        
+        float real_goal_ratio = 0.0f;
+        int goal_cur_amount =
+            game.mission_goals[game.cur_area_data.mission.goal]->get_cur_amount(
+                this
+            );
+        int goal_req_amount =
+            game.mission_goals[game.cur_area_data.mission.goal]->get_req_amount(
+                this
+            );
+        if(goal_req_amount != 0.0f) {
+            real_goal_ratio = goal_cur_amount / (float) goal_req_amount;
+        }
+        goal_indicator_ratio +=
+            (real_goal_ratio - goal_indicator_ratio) *
+            (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
+            
         if(game.cur_area_data.type == AREA_TYPE_MISSION) {
             if(cur_interlude == INTERLUDE_NONE) {
                 if(is_mission_clear_met()) {
@@ -781,6 +781,39 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             
+            mission_score = 0;
+            mission_score +=
+                pikmin_born *
+                game.cur_area_data.mission.points_per_pikmin_born;
+            mission_score +=
+                pikmin_deaths *
+                game.cur_area_data.mission.points_per_pikmin_death;
+            mission_score +=
+                floor(area_time_passed) *
+                game.cur_area_data.mission.points_per_sec_passed;
+            if(
+                has_flag(
+                    game.cur_area_data.mission.fail_conditions,
+                    get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                )
+            ) {
+                mission_score +=
+                    floor(
+                        game.cur_area_data.mission.fail_time_limit -
+                        area_time_passed
+                    ) *
+                    game.cur_area_data.mission.points_per_sec_left;
+            }
+            mission_score +=
+                treasure_points_collected *
+                game.cur_area_data.mission.points_per_treasure_point;
+            mission_score +=
+                enemy_points_collected *
+                game.cur_area_data.mission.points_per_enemy_point;
+                
+            score_indicator +=
+                (mission_score - score_indicator) *
+                (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * delta_t);
         }
         
     } else { //Displaying a message.

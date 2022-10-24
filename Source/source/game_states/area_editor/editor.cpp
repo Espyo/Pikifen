@@ -2769,7 +2769,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                MISSION_FAIL_COND_PIKMIN_AMOUNT
+                get_index_bitmask(MISSION_FAIL_COND_PIKMIN_AMOUNT)
             )
         ) {
             data_file.add(
@@ -2788,7 +2788,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                MISSION_FAIL_COND_LOSE_PIKMIN
+                get_index_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
             )
         ) {
             data_file.add(
@@ -2801,7 +2801,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                MISSION_FAIL_COND_LOSE_LEADERS
+                get_index_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
             )
         ) {
             data_file.add(
@@ -2814,7 +2814,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                MISSION_FAIL_COND_KILL_ENEMIES
+                get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             )
         ) {
             data_file.add(
@@ -2827,7 +2827,7 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                MISSION_FAIL_COND_TIME_LIMIT
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
             data_file.add(
