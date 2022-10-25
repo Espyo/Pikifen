@@ -40,6 +40,7 @@ mission_data::mission_data() :
     points_per_treasure_point(0),
     points_per_enemy_point(0),
     point_loss_data(0),
+    point_hud_data(255),
     starting_points(0),
     bronze_req(AREA::DEF_MISSION_MEDAL_BRONZE_REQ),
     silver_req(AREA::DEF_MISSION_MEDAL_SILVER_REQ),

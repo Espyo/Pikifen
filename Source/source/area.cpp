@@ -185,6 +185,7 @@ void area_data::clear() {
     mission.points_per_treasure_point = 0;
     mission.points_per_enemy_point = 0;
     mission.point_loss_data = 0;
+    mission.point_hud_data = 255;
     mission.starting_points = 0;
     mission.bronze_req = AREA::DEF_MISSION_MEDAL_BRONZE_REQ;
     mission.silver_req = AREA::DEF_MISSION_MEDAL_SILVER_REQ;
@@ -397,6 +398,7 @@ void area_data::clone(area_data &other) {
     other.mission.points_per_treasure_point = mission.points_per_treasure_point;
     other.mission.points_per_enemy_point = mission.points_per_enemy_point;
     other.mission.point_loss_data = mission.point_loss_data;
+    other.mission.point_hud_data = mission.point_hud_data;
     other.mission.starting_points = mission.starting_points;
     other.mission.bronze_req = mission.bronze_req;
     other.mission.silver_req = mission.silver_req;

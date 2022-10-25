@@ -149,6 +149,8 @@ struct mission_data {
     int points_per_enemy_point;
     //Bitmask for mission fail point loss criteria. Use MISSION_POINT_CRITERIA.
     uint8_t point_loss_data;
+    //Bitmask for score HUD calculation criteria. Use MISSION_POINT_CRITERIA.
+    uint8_t point_hud_data;
     //Starting number of points.
     int starting_points;
     //Bronze medal point requirement.

@@ -2922,6 +2922,17 @@ bool area_editor::save_area(const bool to_backup) {
         }
         if(
             game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
+            game.cur_area_data.mission.point_hud_data != 255
+        ) {
+            data_file.add(
+                new data_node(
+                    "mission_point_hud_data",
+                    i2s(game.cur_area_data.mission.point_hud_data)
+                )
+            );
+        }
+        if(
+            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
             game.cur_area_data.mission.starting_points > 0
         ) {
             data_file.add(

@@ -2724,9 +2724,9 @@ void area_editor::process_gui_panel_mission() {
                 )
             )
         ) {
-        //Leader KOs value.
-        int amount =
-            (int) game.cur_area_data.mission.fail_leaders_kod;
+            //Leader KOs value.
+            int amount =
+                (int) game.cur_area_data.mission.fail_leaders_kod;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
@@ -2749,20 +2749,20 @@ void area_editor::process_gui_panel_mission() {
                 &fail_flags,
                 get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             );
-            set_tooltip(
-                "The mission ends as a failure if a certain amount of\n"
-                "enemies get killed."
-            );
-            
+        set_tooltip(
+            "The mission ends as a failure if a certain amount of\n"
+            "enemies get killed."
+        );
+        
         if(
             has_flag(
                 fail_flags,
                 get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             )
         ) {
-        //Enemy kills value.
-        int amount =
-            (int) game.cur_area_data.mission.fail_enemies_killed;
+            //Enemy kills value.
+            int amount =
+                (int) game.cur_area_data.mission.fail_enemies_killed;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
@@ -2785,20 +2785,20 @@ void area_editor::process_gui_panel_mission() {
                 &fail_flags,
                 get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
-            set_tooltip(
-                "The mission ends as a failure if the player spends a certain\n"
-                "amount of time in the mission."
-            );
-            
+        set_tooltip(
+            "The mission ends as a failure if the player spends a certain\n"
+            "amount of time in the mission."
+        );
+        
         if(
             has_flag(
                 fail_flags,
                 get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
-        //Time limit values.
-        int seconds =
-            (int) game.cur_area_data.mission.fail_time_limit;
+            //Time limit values.
+            int seconds =
+                (int) game.cur_area_data.mission.fail_time_limit;
             ImGui::Indent();
             if(ImGui::DragTime2("Time limit", &seconds)) {
                 register_change("mission fail conditions change");
@@ -2831,7 +2831,7 @@ void area_editor::process_gui_panel_mission() {
         }
         
         if(fail_flags_changed) {
-        register_change("mission fail conditions change");
+            register_change("mission fail conditions change");
             game.cur_area_data.mission.fail_conditions =
                 (uint8_t) fail_flags;
         }
@@ -2907,8 +2907,9 @@ void area_editor::process_gui_panel_mission() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission.points_per_pikmin_born != 0) {
-                //Pikmin born point loss on failure checkbox.
                 ImGui::Indent();
+                
+                //Pikmin born point loss on failure checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
@@ -2923,6 +2924,25 @@ void area_editor::process_gui_panel_mission() {
                     "If checked, the player will receive 0 points for\n"
                     "this criterion if they fail the mission."
                 );
+                
+                //Pikmin born use in HUD checkbox.
+                flags = game.cur_area_data.mission.point_hud_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "Use in HUD counter##uihpb", &flags,
+                        MISSION_POINT_CRITERIA_PIKMIN_BORN
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission.point_hud_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the HUD item for the score counter will\n"
+                    "use this criterion in its calculation. If none of\n"
+                    "the criteria are used for the HUD item, then it\n"
+                    "won't even show up."
+                );
+                
                 ImGui::Unindent();
             }
             
@@ -2940,8 +2960,9 @@ void area_editor::process_gui_panel_mission() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission.points_per_pikmin_death != 0) {
-                //Pikmin death point loss on failure checkbox.
                 ImGui::Indent();
+                
+                //Pikmin death point loss on failure checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
@@ -2956,6 +2977,25 @@ void area_editor::process_gui_panel_mission() {
                     "If checked, the player will receive 0 points for\n"
                     "this criterion if they fail the mission."
                 );
+                
+                //Pikmin death use in HUD checkbox.
+                flags = game.cur_area_data.mission.point_hud_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "Use in HUD counter##uihpd", &flags,
+                        MISSION_POINT_CRITERIA_PIKMIN_DEATH
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission.point_hud_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the HUD item for the score counter will\n"
+                    "use this criterion in its calculation. If none of\n"
+                    "the criteria are used for the HUD item, then it\n"
+                    "won't even show up."
+                );
+                
                 ImGui::Unindent();
             }
             
@@ -2980,8 +3020,9 @@ void area_editor::process_gui_panel_mission() {
                     "", WIDGET_EXPLANATION_DRAG
                 );
                 if(game.cur_area_data.mission.points_per_sec_left != 0) {
-                    //Second left point loss on failure checkbox.
                     ImGui::Indent();
+                    
+                    //Seconds left point loss on failure checkbox.
                     int flags = game.cur_area_data.mission.point_loss_data;
                     if(
                         ImGui::CheckboxFlags(
@@ -2996,6 +3037,25 @@ void area_editor::process_gui_panel_mission() {
                         "If checked, the player will receive 0 points for\n"
                         "this criterion if they fail the mission."
                     );
+                    
+                    //Seconds left use in HUD checkbox.
+                    flags = game.cur_area_data.mission.point_hud_data;
+                    if(
+                        ImGui::CheckboxFlags(
+                            "Use in HUD counter##uihsl", &flags,
+                            MISSION_POINT_CRITERIA_SEC_LEFT
+                        )
+                    ) {
+                        register_change("mission grading change");
+                        game.cur_area_data.mission.point_hud_data = flags;
+                    }
+                    set_tooltip(
+                        "If checked, the HUD item for the score counter will\n"
+                        "use this criterion in its calculation. If none of\n"
+                        "the criteria are used for the HUD item, then it\n"
+                        "won't even show up."
+                    );
+                    
                     ImGui::Unindent();
                 }
             }
@@ -3014,8 +3074,9 @@ void area_editor::process_gui_panel_mission() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission.points_per_sec_passed != 0) {
-                //Second passed point loss on failure checkbox.
                 ImGui::Indent();
+                
+                //Seconds passed point loss on failure checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
@@ -3030,6 +3091,25 @@ void area_editor::process_gui_panel_mission() {
                     "If checked, the player will receive 0 points for\n"
                     "this criterion if they fail the mission."
                 );
+                
+                //Seconds passed use in HUD checkbox.
+                flags = game.cur_area_data.mission.point_hud_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "Use in HUD counter##uihsp", &flags,
+                        MISSION_POINT_CRITERIA_SEC_PASSED
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission.point_hud_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the HUD item for the score counter will\n"
+                    "use this criterion in its calculation. If none of\n"
+                    "the criteria are used for the HUD item, then it\n"
+                    "won't even show up."
+                );
+                
                 ImGui::Unindent();
             }
             
@@ -3050,8 +3130,9 @@ void area_editor::process_gui_panel_mission() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission.points_per_treasure_point != 0) {
-                //Treasure point point loss on failure checkbox.
                 ImGui::Indent();
+                
+                //Treasure point point loss on failure checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
@@ -3066,6 +3147,25 @@ void area_editor::process_gui_panel_mission() {
                     "If checked, the player will receive 0 points for\n"
                     "this criterion if they fail the mission."
                 );
+                
+                //Treasure point use in HUD checkbox.
+                flags = game.cur_area_data.mission.point_hud_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "Use in HUD counter##uihtp", &flags,
+                        MISSION_POINT_CRITERIA_TREASURE_POINTS
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission.point_hud_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the HUD item for the score counter will\n"
+                    "use this criterion in its calculation. If none of\n"
+                    "the criteria are used for the HUD item, then it\n"
+                    "won't even show up."
+                );
+                
                 ImGui::Unindent();
             }
             
@@ -3084,8 +3184,9 @@ void area_editor::process_gui_panel_mission() {
                 "", WIDGET_EXPLANATION_DRAG
             );
             if(game.cur_area_data.mission.points_per_enemy_point != 0) {
-                //Enemy kill point point loss on failure checkbox.
                 ImGui::Indent();
+                
+                //Enemy kill point point loss on failure checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
@@ -3100,6 +3201,25 @@ void area_editor::process_gui_panel_mission() {
                     "If checked, the player will receive 0 points for\n"
                     "this criterion if they fail the mission."
                 );
+                
+                //Enemy kill point use in HUD checkbox.
+                flags = game.cur_area_data.mission.point_hud_data;
+                if(
+                    ImGui::CheckboxFlags(
+                        "Use in HUD counter##uihep", &flags,
+                        MISSION_POINT_CRITERIA_ENEMY_POINTS
+                    )
+                ) {
+                    register_change("mission grading change");
+                    game.cur_area_data.mission.point_hud_data = flags;
+                }
+                set_tooltip(
+                    "If checked, the HUD item for the score counter will\n"
+                    "use this criterion in its calculation. If none of\n"
+                    "the criteria are used for the HUD item, then it\n"
+                    "won't even show up."
+                );
+                
                 ImGui::Unindent();
             }
             

@@ -641,6 +641,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     rs.set("mission_points_per_treasure_point", data.points_per_treasure_point);
     rs.set("mission_points_per_enemy_point", data.points_per_enemy_point);
     rs.set("mission_point_loss_data", data.point_loss_data);
+    rs.set("mission_point_hud_data", data.point_hud_data);
     rs.set("mission_starting_points", data.starting_points);
     rs.set("mission_bronze_req", data.bronze_req);
     rs.set("mission_silver_req", data.silver_req);
