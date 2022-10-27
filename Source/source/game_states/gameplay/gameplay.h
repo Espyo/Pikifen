@@ -202,7 +202,7 @@ public:
     size_t enemy_points_total;
     //Reason for mission failure, if any. INVALID for none.
     MISSION_FAIL_CONDITIONS mission_fail_reason;
-    //Current mission score. Cache for convenience.
+    //Current mission score, for use in the HUD. Cache for convenience.
     int mission_score;
     //How many leaders are in the mission exit. Cache for convenience.
     size_t cur_leaders_in_mission_exit;

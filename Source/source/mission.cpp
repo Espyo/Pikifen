@@ -12,6 +12,7 @@
 
 #include "game.h"
 #include "game_states/area_editor/editor.h"
+#include "functions.h"
 #include "utils/string_utils.h"
 
 
@@ -1582,4 +1583,229 @@ bool mission_goal_timed_survival::is_met(
     gameplay_state* gameplay
 ) const {
     return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's point multiplier.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_enemy_points::get_multiplier(
+    mission_data* mission
+) const {
+    return mission->points_per_enemy_point;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's name.
+ */
+string mission_score_criterion_enemy_points::get_name() const {
+    return "Enemy points";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's score for this criterion.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_enemy_points::get_score(
+    gameplay_state* gameplay, mission_data* mission
+) const {
+    return
+        gameplay->enemy_deaths *
+        get_multiplier(mission);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's point multiplier.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_pikmin_born::get_multiplier(
+    mission_data* mission
+) const {
+    return mission->points_per_pikmin_born;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's name.
+ */
+string mission_score_criterion_pikmin_born::get_name() const {
+    return "Pikmin born";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's score for this criterion.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_pikmin_born::get_score(
+    gameplay_state* gameplay, mission_data* mission
+) const {
+    return
+        gameplay->pikmin_born *
+        get_multiplier(mission);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's point multiplier.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_pikmin_death::get_multiplier(
+    mission_data* mission
+) const {
+    return mission->points_per_pikmin_death;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's name.
+ */
+string mission_score_criterion_pikmin_death::get_name() const {
+    return "Pikmin deaths";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's score for this criterion.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_pikmin_death::get_score(
+    gameplay_state* gameplay, mission_data* mission
+) const {
+    return
+        gameplay->pikmin_deaths *
+        get_multiplier(mission);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's point multiplier.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_sec_left::get_multiplier(
+    mission_data* mission
+) const {
+    if(
+        has_flag(
+            mission->fail_conditions,
+            get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        )
+    ) {
+        return mission->points_per_sec_left;
+    } else {
+        return 0;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's name.
+ */
+string mission_score_criterion_sec_left::get_name() const {
+    return "Seconds left";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's score for this criterion.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_sec_left::get_score(
+    gameplay_state* gameplay, mission_data* mission
+) const {
+    return
+        floor(mission->fail_time_limit - gameplay->area_time_passed) *
+        get_multiplier(mission);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's point multiplier.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_sec_passed::get_multiplier(
+    mission_data* mission
+) const {
+    return mission->points_per_sec_passed;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's name.
+ */
+string mission_score_criterion_sec_passed::get_name() const {
+    return "Seconds passed";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's score for this criterion.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_sec_passed::get_score(
+    gameplay_state* gameplay, mission_data* mission
+) const {
+    return
+        floor(gameplay->area_time_passed) *
+        get_multiplier(mission);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's point multiplier.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_treasure_points::get_multiplier(
+    mission_data* mission
+) const {
+    return mission->points_per_treasure_point;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mission score criterion's name.
+ */
+string mission_score_criterion_treasure_points::get_name() const {
+    return "Treasure points";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's score for this criterion.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * mission:
+ *   Mission data to get info from.
+ */
+int mission_score_criterion_treasure_points::get_score(
+    gameplay_state* gameplay, mission_data* mission
+) const {
+    return
+        gameplay->treasure_points_collected *
+        get_multiplier(mission);
 }

@@ -139,6 +139,8 @@ public:
     vector<mission_fail*> mission_fail_conds;
     //Database of all mission goals.
     vector<mission_goal*> mission_goals;
+    //Database of all mission score criteria.
+    vector<mission_score_criterion*> mission_score_criteria;
     //Global audio mixer.
     ALLEGRO_MIXER* mixer;
     //User options.

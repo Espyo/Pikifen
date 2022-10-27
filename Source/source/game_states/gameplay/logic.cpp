@@ -518,7 +518,6 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
     
     game.cam.update_box();
     
-    //Mission things.
     if(!msg_box) {
     
         /************************************
@@ -782,34 +781,21 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             
             mission_score = 0;
-            mission_score +=
-                pikmin_born *
-                game.cur_area_data.mission.points_per_pikmin_born;
-            mission_score +=
-                pikmin_deaths *
-                game.cur_area_data.mission.points_per_pikmin_death;
-            mission_score +=
-                floor(area_time_passed) *
-                game.cur_area_data.mission.points_per_sec_passed;
-            if(
-                has_flag(
-                    game.cur_area_data.mission.fail_conditions,
-                    get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-                )
-            ) {
-                mission_score +=
-                    floor(
-                        game.cur_area_data.mission.fail_time_limit -
-                        area_time_passed
-                    ) *
-                    game.cur_area_data.mission.points_per_sec_left;
+            for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+                if(
+                    !has_flag(
+                        game.cur_area_data.mission.point_hud_data,
+                        get_index_bitmask(c)
+                    )
+                ) {
+                    continue;
+                }
+                mission_score_criterion* c_ptr =
+                    game.mission_score_criteria[c];
+                int c_score =
+                    c_ptr->get_score(this, &game.cur_area_data.mission);
+                mission_score += c_score;
             }
-            mission_score +=
-                treasure_points_collected *
-                game.cur_area_data.mission.points_per_treasure_point;
-            mission_score +=
-                enemy_points_collected *
-                game.cur_area_data.mission.points_per_enemy_point;
                 
             score_indicator +=
                 (mission_score - score_indicator) *

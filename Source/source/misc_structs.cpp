@@ -652,7 +652,7 @@ maker_tools_info::maker_tools_info() :
     info_print_duration(5.0f),
     info_print_fade_duration(3.0f),
     last_pikmin_type(nullptr),
-    mob_hurting_ratio(0.5),
+    mob_hurting_ratio(0.75),
     use_perf_mon(false),
     used_helping_tools(false) {
     

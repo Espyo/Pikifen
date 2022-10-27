@@ -511,6 +511,27 @@ void init_misc_databases() {
     game.mission_fail_conds.push_back(
         new mission_fail_pause_menu()
     );
+    
+    //Mission score criteria.
+    //Order matters, and should match MISSION_SCORE_CRITERIA.
+    game.mission_score_criteria.push_back(
+        new mission_score_criterion_pikmin_born()
+    );
+    game.mission_score_criteria.push_back(
+        new mission_score_criterion_pikmin_death()
+    );
+    game.mission_score_criteria.push_back(
+        new mission_score_criterion_sec_left()
+    );
+    game.mission_score_criteria.push_back(
+        new mission_score_criterion_sec_passed()
+    );
+    game.mission_score_criteria.push_back(
+        new mission_score_criterion_treasure_points()
+    );
+    game.mission_score_criteria.push_back(
+        new mission_score_criterion_enemy_points()
+    );
 }
 
 

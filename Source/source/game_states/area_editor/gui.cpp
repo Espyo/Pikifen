@@ -2849,7 +2849,7 @@ void area_editor::process_gui_panel_mission() {
         //Grading mode text.
         ImGui::Text("Grading mode:");
         
-        static int mode = game.cur_area_data.mission.grading_mode;
+        int mode = game.cur_area_data.mission.grading_mode;
         
         //Points mode radio button.
         if(ImGui::RadioButton("Points", &mode, 0)) {
@@ -2888,7 +2888,7 @@ void area_editor::process_gui_panel_mission() {
             "the mission (platinum) or not (nothing)."
         );
         
-        if(mode == MISSION_GRADING_POINTS) {
+        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS) {
         
             //Spacer dummy widget.
             ImGui::Dummy(ImVec2(0, 16));
@@ -2914,7 +2914,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on failure##zpofpb", &flags,
-                        MISSION_POINT_CRITERIA_PIKMIN_BORN
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
                     )
                 ) {
                     register_change("mission grading change");
@@ -2930,7 +2930,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihpb", &flags,
-                        MISSION_POINT_CRITERIA_PIKMIN_BORN
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
                     )
                 ) {
                     register_change("mission grading change");
@@ -2967,7 +2967,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on failure##zpofpd", &flags,
-                        MISSION_POINT_CRITERIA_PIKMIN_DEATH
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
                     )
                 ) {
                     register_change("mission grading change");
@@ -2983,7 +2983,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihpd", &flags,
-                        MISSION_POINT_CRITERIA_PIKMIN_DEATH
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3002,7 +3002,7 @@ void area_editor::process_gui_panel_mission() {
             if(
                 has_flag(
                     game.cur_area_data.mission.fail_conditions,
-                    MISSION_FAIL_COND_TIME_LIMIT
+                    get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
                 //Points per second of time left value.
@@ -3027,7 +3027,7 @@ void area_editor::process_gui_panel_mission() {
                     if(
                         ImGui::CheckboxFlags(
                             "0 points on failure##zpofsl", &flags,
-                            MISSION_POINT_CRITERIA_SEC_LEFT
+                            get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
                         )
                     ) {
                         register_change("mission grading change");
@@ -3043,7 +3043,7 @@ void area_editor::process_gui_panel_mission() {
                     if(
                         ImGui::CheckboxFlags(
                             "Use in HUD counter##uihsl", &flags,
-                            MISSION_POINT_CRITERIA_SEC_LEFT
+                            get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
                         )
                     ) {
                         register_change("mission grading change");
@@ -3081,7 +3081,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on failure##zpofsp", &flags,
-                        MISSION_POINT_CRITERIA_SEC_PASSED
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3097,7 +3097,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihsp", &flags,
-                        MISSION_POINT_CRITERIA_SEC_PASSED
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3137,7 +3137,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on failure##zpoftp", &flags,
-                        MISSION_POINT_CRITERIA_TREASURE_POINTS
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_TREASURE_POINTS)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3153,7 +3153,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihtp", &flags,
-                        MISSION_POINT_CRITERIA_TREASURE_POINTS
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_TREASURE_POINTS)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3191,7 +3191,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on failure##zpofep", &flags,
-                        MISSION_POINT_CRITERIA_ENEMY_POINTS
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
                     )
                 ) {
                     register_change("mission grading change");
@@ -3207,7 +3207,7 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihep", &flags,
-                        MISSION_POINT_CRITERIA_ENEMY_POINTS
+                        get_index_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
                     )
                 ) {
                     register_change("mission grading change");

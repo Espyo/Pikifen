@@ -86,20 +86,20 @@ enum MISSION_GRADING_MODES {
 };
 
 
-//Possible criteria for a mission's point scoring. This should be a bitmask.
-enum MISSION_POINT_CRITERIA {
+//Possible criteria for a mission's point scoring.
+enum MISSION_SCORE_CRITERIA {
     //Points per Pikmin born.
-    MISSION_POINT_CRITERIA_PIKMIN_BORN = 0x01,
+    MISSION_SCORE_CRITERIA_PIKMIN_BORN,
     //Points per Pikmin death.
-    MISSION_POINT_CRITERIA_PIKMIN_DEATH = 0x02,
+    MISSION_SCORE_CRITERIA_PIKMIN_DEATH,
     //Points per second left. Only for missions with a time limit.
-    MISSION_POINT_CRITERIA_SEC_LEFT = 0x04,
+    MISSION_SCORE_CRITERIA_SEC_LEFT,
     //Points per second passed.
-    MISSION_POINT_CRITERIA_SEC_PASSED = 0x08,
+    MISSION_SCORE_CRITERIA_SEC_PASSED,
     //Points per treasure point.
-    MISSION_POINT_CRITERIA_TREASURE_POINTS = 0x10,
+    MISSION_SCORE_CRITERIA_TREASURE_POINTS,
     //Points per enemy kill point.
-    MISSION_POINT_CRITERIA_ENEMY_POINTS = 0x20,
+    MISSION_SCORE_CRITERIA_ENEMY_POINTS,
 };
 
 
@@ -147,9 +147,9 @@ struct mission_data {
     int points_per_treasure_point;
     //Mission point multiplier for each enemy point obtained.
     int points_per_enemy_point;
-    //Bitmask for mission fail point loss criteria. Use MISSION_POINT_CRITERIA.
+    //Bitmask for mission fail point loss criteria. Use MISSION_SCORE_CRITERIA.
     uint8_t point_loss_data;
-    //Bitmask for score HUD calculation criteria. Use MISSION_POINT_CRITERIA.
+    //Bitmask for score HUD calculation criteria. Use MISSION_SCORE_CRITERIA.
     uint8_t point_hud_data;
     //Starting number of points.
     int starting_points;
@@ -478,6 +478,100 @@ public:
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class interface for a mission score criterion.
+ */
+class mission_score_criterion {
+public:
+    //The criterion's name.
+    virtual string get_name() const = 0;
+    //The criterion's point multiplier.
+    virtual int get_multiplier(mission_data* mission) const = 0;
+    //Returns the player's score for this criterion.
+    virtual int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const = 0;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "enemy points" mission score criterion.
+ */
+class mission_score_criterion_enemy_points : public mission_score_criterion {
+public:
+    string get_name() const override;
+    int get_multiplier(mission_data* mission) const override;
+    int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "Pikmin born" mission score criterion.
+ */
+class mission_score_criterion_pikmin_born : public mission_score_criterion {
+public:
+    string get_name() const override;
+    int get_multiplier(mission_data* mission) const override;
+    int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "Pikmin death" mission score criterion.
+ */
+class mission_score_criterion_pikmin_death : public mission_score_criterion {
+public:
+    string get_name() const override;
+    int get_multiplier(mission_data* mission) const override;
+    int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "seconds left" mission score criterion.
+ */
+class mission_score_criterion_sec_left : public mission_score_criterion {
+public:
+    string get_name() const override;
+    int get_multiplier(mission_data* mission) const override;
+    int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "seconds passed" mission score criterion.
+ */
+class mission_score_criterion_sec_passed : public mission_score_criterion {
+public:
+    string get_name() const override;
+    int get_multiplier(mission_data* mission) const override;
+    int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "treasure points" mission score criterion.
+ */
+class mission_score_criterion_treasure_points : public mission_score_criterion {
+public:
+    string get_name() const override;
+    int get_multiplier(mission_data* mission) const override;
+    int get_score(
+        gameplay_state* gameplay, mission_data* mission
+    ) const override;
 };
 
 

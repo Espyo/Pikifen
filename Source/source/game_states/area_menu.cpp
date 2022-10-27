@@ -343,100 +343,43 @@ void area_menu_state::do_logic() {
                     grading_list,
                     "    Bronze: " + i2s(mission.bronze_req) + "+ points."
                 );
-                add_bullet(
-                    grading_list,
-                    "Your score is calculated like so:"
-                );
-                if(mission.points_per_pikmin_born != 0) {
-                    add_bullet(
-                        grading_list,
-                        "    Pikmin born x " +
-                        i2s(mission.points_per_pikmin_born) + "."
-                    );
+                vector<string> score_notes;
+                for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+                    mission_score_criterion* c_ptr =
+                        game.mission_score_criteria[c];
+                    int mult = c_ptr->get_multiplier(&mission);
+                    if(mult != 0) {
+                        score_notes.push_back(
+                            "    " + c_ptr->get_name() + " x " + i2s(mult) + "."
+                        );
+                    }
                 }
-                if(mission.points_per_pikmin_death != 0) {
+                if(!score_notes.empty()) {
                     add_bullet(
                         grading_list,
-                        "    Pikmin deaths x " +
-                        i2s(mission.points_per_pikmin_death) + "."
+                        "Your score is calculated like so:"
                     );
-                }
-                if(mission.points_per_sec_left != 0) {
+                    for(size_t s = 0; s < score_notes.size(); ++s) {
+                        add_bullet(grading_list, score_notes[s]);
+                    }
+                } else {
                     add_bullet(
                         grading_list,
-                        "    Seconds left x " +
-                        i2s(mission.points_per_sec_left) + "."
-                    );
-                }
-                if(mission.points_per_sec_passed != 0) {
-                    add_bullet(
-                        grading_list,
-                        "    Seconds passed x " +
-                        i2s(mission.points_per_sec_passed) + "."
-                    );
-                }
-                if(mission.points_per_treasure_point != 0) {
-                    add_bullet(
-                        grading_list,
-                        "    Treasure points x " +
-                        i2s(mission.points_per_treasure_point) + "."
-                    );
-                }
-                if(mission.points_per_enemy_point != 0) {
-                    add_bullet(
-                        grading_list,
-                        "    Enemy points x " +
-                        i2s(mission.points_per_enemy_point) + "."
+                        "In this mission, your score will always be 0."
                     );
                 }
                 vector<string> loss_notes;
-                if(
-                    has_flag(
-                        mission.point_loss_data,
-                        MISSION_POINT_CRITERIA_PIKMIN_BORN
-                    )
-                ) {
-                    loss_notes.push_back("    Pikmin born");
-                }
-                if(
-                    has_flag(
-                        mission.point_loss_data,
-                        MISSION_POINT_CRITERIA_PIKMIN_DEATH
-                    )
-                ) {
-                    loss_notes.push_back("    Pikmin deaths");
-                }
-                if(
-                    has_flag(
-                        mission.point_loss_data,
-                        MISSION_POINT_CRITERIA_SEC_LEFT
-                    )
-                ) {
-                    loss_notes.push_back("    Seconds left");
-                }
-                if(
-                    has_flag(
-                        mission.point_loss_data,
-                        MISSION_POINT_CRITERIA_SEC_PASSED
-                    )
-                ) {
-                    loss_notes.push_back("    Seconds passed");
-                }
-                if(
-                    has_flag(
-                        mission.point_loss_data,
-                        MISSION_POINT_CRITERIA_TREASURE_POINTS
-                    )
-                ) {
-                    loss_notes.push_back("    Treasure points");
-                }
-                if(
-                    has_flag(
-                        mission.point_loss_data,
-                        MISSION_POINT_CRITERIA_ENEMY_POINTS
-                    )
-                ) {
-                    loss_notes.push_back("    Enemy points");
+                for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+                    mission_score_criterion* c_ptr =
+                        game.mission_score_criteria[c];
+                    if(
+                        has_flag(
+                            mission.point_loss_data,
+                            get_index_bitmask(c)
+                        )
+                    ) {
+                        loss_notes.push_back("    " + c_ptr->get_name());
+                    }
                 }
                 if(!loss_notes.empty()) {
                     add_bullet(

@@ -679,6 +679,24 @@ void load_area_mission_data(data_node* node, mission_data &data) {
             get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     }
+    
+    //Automatically turn off the seconds left score criterion for convenience.
+    if(
+        !has_flag(
+            data.fail_conditions,
+            get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+        )
+    ) {
+        data.points_per_sec_left = 0;
+        disable_flag(
+            data.point_hud_data,
+            get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+        );
+        disable_flag(
+            data.point_loss_data,
+            get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
+        );
+    }
 }
 
 

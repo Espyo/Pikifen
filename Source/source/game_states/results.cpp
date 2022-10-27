@@ -33,6 +33,54 @@ results_state::results_state() :
 
 
 /* ----------------------------------------------------------------------------
+ * Adds a new mission score criterion-related stat to the stats list GUI item,
+ * if applicable.
+ * criterion:
+ *   Mission score criterion to use.
+ */
+void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
+    if(
+        game.cur_area_data.type != AREA_TYPE_MISSION ||
+        game.cur_area_data.mission.grading_mode != MISSION_GRADING_POINTS
+    ) {
+        return;
+    }
+    
+    mission_score_criterion* c_ptr = game.mission_score_criteria[criterion];
+    mission_data* mission = &game.cur_area_data.mission;
+    int mult = c_ptr->get_multiplier(mission);
+    
+    if(mult == 0) return;
+    
+    bool goal_was_cleared =
+        game.states.gameplay->mission_fail_reason ==
+        (MISSION_FAIL_CONDITIONS) INVALID;
+    bool lost =
+        has_flag(
+            game.cur_area_data.mission.point_loss_data,
+            get_index_bitmask(criterion)
+        ) &&
+        !goal_was_cleared;
+        
+    if(lost) {
+        add_stat(
+            "    x 0 points (mission fail) = ",
+            "0",
+            COLOR_GOLD
+        );
+    } else {
+        add_stat(
+            "    x " +
+            nr_and_plural(mult, "point") +
+            " = ",
+            i2s(c_ptr->get_score(game.states.gameplay, mission)),
+            COLOR_GOLD
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Adds a new stat to the stats list GUI item.
  * label:
  *   Label text of this stat.
@@ -186,113 +234,30 @@ void results_state::leave() {
  * Loads the results state into memory.
  */
 void results_state::load() {
-    //Calculate score things.
     bool goal_was_cleared =
         game.states.gameplay->mission_fail_reason ==
         (MISSION_FAIL_CONDITIONS) INVALID;
         
-    size_t secs_left =
-        game.cur_area_data.mission.fail_time_limit -
-        game.states.gameplay->area_time_passed;
-        
-    int pikmin_born_score =
-        game.states.gameplay->pikmin_born *
-        game.cur_area_data.mission.points_per_pikmin_born;
-    bool lost_pikmin_born_score = false;
-    if(
-        has_flag(
-            game.cur_area_data.mission.point_loss_data,
-            MISSION_POINT_CRITERIA_PIKMIN_BORN
-        ) &&
-        !goal_was_cleared
-    ) {
-        pikmin_born_score = 0;
-        lost_pikmin_born_score = true;
+    //Calculate score things.
+    final_mission_score = 0;
+    
+    for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+        mission_score_criterion* c_ptr =
+            game.mission_score_criteria[c];
+        int c_score =
+            c_ptr->get_score(game.states.gameplay, &game.cur_area_data.mission);
+        bool lost =
+            has_flag(
+                game.cur_area_data.mission.point_loss_data,
+                get_index_bitmask(c)
+            ) &&
+            !goal_was_cleared;
+            
+        if(!lost) {
+            final_mission_score += c_score;
+        }
     }
     
-    int pikmin_death_score =
-        game.states.gameplay->pikmin_deaths *
-        game.cur_area_data.mission.points_per_pikmin_death;
-    bool lost_pikmin_death_score = false;
-    if(
-        has_flag(
-            game.cur_area_data.mission.point_loss_data,
-            MISSION_POINT_CRITERIA_PIKMIN_DEATH
-        ) &&
-        !goal_was_cleared
-    ) {
-        pikmin_death_score = 0;
-        lost_pikmin_death_score = true;
-    }
-    
-    int secs_left_score =
-        secs_left *
-        game.cur_area_data.mission.points_per_sec_left;
-    bool lost_secs_left_score = false;
-    if(
-        has_flag(
-            game.cur_area_data.mission.point_loss_data,
-            MISSION_POINT_CRITERIA_SEC_LEFT
-        ) &&
-        !goal_was_cleared
-    ) {
-        secs_left_score = 0;
-        lost_secs_left_score = true;
-    }
-    
-    int secs_passed_score =
-        ((int) game.states.gameplay->area_time_passed) *
-        game.cur_area_data.mission.points_per_sec_passed;
-    bool lost_secs_passed_score = false;
-    if(
-        has_flag(
-            game.cur_area_data.mission.point_loss_data,
-            MISSION_POINT_CRITERIA_SEC_PASSED
-        ) &&
-        !goal_was_cleared
-    ) {
-        secs_passed_score = 0;
-        lost_secs_passed_score = true;
-    }
-    
-    int treasure_points_score =
-        game.states.gameplay->treasure_points_collected *
-        game.cur_area_data.mission.points_per_treasure_point;
-    bool lost_treasure_points_score = false;
-    if(
-        has_flag(
-            game.cur_area_data.mission.point_loss_data,
-            MISSION_POINT_CRITERIA_TREASURE_POINTS
-        ) &&
-        !goal_was_cleared
-    ) {
-        treasure_points_score = 0;
-        lost_treasure_points_score = true;
-    }
-    
-    int enemy_points_score =
-        game.states.gameplay->enemy_points_collected *
-        game.cur_area_data.mission.points_per_enemy_point;
-    bool lost_enemy_points_score = false;
-    if(
-        has_flag(
-            game.cur_area_data.mission.point_loss_data,
-            MISSION_POINT_CRITERIA_ENEMY_POINTS
-        ) &&
-        !goal_was_cleared
-    ) {
-        enemy_points_score = 0;
-        lost_enemy_points_score = true;
-    }
-    
-    final_mission_score =
-        pikmin_born_score +
-        pikmin_death_score +
-        secs_left_score +
-        secs_passed_score +
-        treasure_points_score +
-        enemy_points_score;
-        
     //Record loading and saving logic.
     bool old_record_clear = false;
     int old_record_score = 0;
@@ -648,85 +613,32 @@ void results_state::load() {
     //Pikmin born bullet.
     add_stat("Pikmin born:", i2s(game.states.gameplay->pikmin_born));
     
-    if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.points_per_pikmin_born != 0
-    ) {
-        //Pikmin born points bullet.
-        if(lost_pikmin_born_score) {
-            add_stat(
-                "    x 0 points (mission fail) = ",
-                "0",
-                COLOR_GOLD
-            );
-        } else {
-            add_stat(
-                "    x " +
-                nr_and_plural(
-                    game.cur_area_data.mission.points_per_pikmin_born,
-                    "point"
-                ) +
-                " = ",
-                i2s(pikmin_born_score),
-                COLOR_GOLD
-            );
-        }
-    }
+    //Pikmin born points bullet.
+    add_score_stat(MISSION_SCORE_CRITERIA_PIKMIN_BORN);
     
     //Pikmin deaths bullet.
     add_stat("Pikmin deaths:", i2s(game.states.gameplay->pikmin_deaths));
     
-    if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.points_per_pikmin_death != 0
-    ) {
-        //Pikmin death points bullet.
-        if(lost_pikmin_death_score) {
-            add_stat(
-                "    x 0 points (mission fail) = ",
-                "0",
-                COLOR_GOLD
-            );
-        } else {
-            add_stat(
-                "    x " +
-                nr_and_plural(
-                    game.cur_area_data.mission.points_per_pikmin_death,
-                    "point"
-                ) +
-                " = ",
-                i2s(pikmin_death_score),
-                COLOR_GOLD
-            );
-        }
-    }
+    //Pikmin death points bullet.
+    add_score_stat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
         game.cur_area_data.mission.points_per_sec_left != 0
     ) {
         //Seconds left bullet.
-        add_stat("Seconds left:", i2s(secs_left));
+        add_stat(
+            "Seconds left:",
+            i2s(
+                floor(
+                    game.cur_area_data.mission.fail_time_limit -
+                    game.states.gameplay->area_time_passed
+                )
+            )
+        );
         
         //Seconds left points bullet.
-        if(lost_secs_left_score) {
-            add_stat(
-                "    x 0 points (mission fail) = ",
-                "0",
-                COLOR_GOLD
-            );
-        } else {
-            add_stat(
-                "    x " +
-                nr_and_plural(
-                    game.cur_area_data.mission.points_per_sec_left,
-                    "point"
-                ) +
-                " = ",
-                i2s(secs_left_score),
-                COLOR_GOLD
-            );
-        }
+        add_score_stat(MISSION_SCORE_CRITERIA_SEC_LEFT);
     }
     
     if(
@@ -740,24 +652,7 @@ void results_state::load() {
         );
         
         //Seconds passed points bullet.
-        if(lost_secs_passed_score) {
-            add_stat(
-                "    x 0 points (mission fail) = ",
-                "0",
-                COLOR_GOLD
-            );
-        } else {
-            add_stat(
-                "    x " +
-                nr_and_plural(
-                    game.cur_area_data.mission.points_per_sec_passed,
-                    "point"
-                ) +
-                " = ",
-                i2s(secs_passed_score),
-                COLOR_GOLD
-            );
-        }
+        add_score_stat(MISSION_SCORE_CRITERIA_SEC_PASSED);
     }
     
     //Treasures bullet.
@@ -768,39 +663,7 @@ void results_state::load() {
     );
     
     //Treasure points bullet.
-    add_stat(
-        "Treasure points:",
-        i2s(game.states.gameplay->treasure_points_collected) + "/" +
-        i2s(game.states.gameplay->treasure_points_total)
-    );
-    
-    if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.points_per_treasure_point != 0
-    ) {
-        //Treasure points points bullet.
-        int max =
-            game.states.gameplay->treasure_points_total *
-            game.cur_area_data.mission.points_per_treasure_point;
-        if(lost_treasure_points_score) {
-            add_stat(
-                "    x 0 points (mission fail) = ",
-                "0/" + i2s(max),
-                COLOR_GOLD
-            );
-        } else {
-            add_stat(
-                "    x " +
-                nr_and_plural(
-                    game.cur_area_data.mission.points_per_treasure_point,
-                    "point"
-                ) +
-                " = ",
-                i2s(treasure_points_score) + "/" + i2s(max),
-                COLOR_GOLD
-            );
-        }
-    }
+    add_score_stat(MISSION_SCORE_CRITERIA_TREASURE_POINTS);
     
     //Enemy deaths bullet.
     add_stat(
@@ -810,39 +673,7 @@ void results_state::load() {
     );
     
     //Enemy points bullet.
-    add_stat(
-        "Enemy points:",
-        i2s(game.states.gameplay->enemy_points_collected) + "/" +
-        i2s(game.states.gameplay->enemy_points_total)
-    );
-    
-    if(
-        game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.points_per_enemy_point != 0
-    ) {
-        //Enemy points points bullet.
-        int max =
-            game.states.gameplay->enemy_points_total *
-            game.cur_area_data.mission.points_per_enemy_point;
-        if(lost_enemy_points_score) {
-            add_stat(
-                "    x 0 points (mission fail) = ",
-                "0/" + i2s(max),
-                COLOR_GOLD
-            );
-        } else {
-            add_stat(
-                "    x " +
-                nr_and_plural(
-                    game.cur_area_data.mission.points_per_enemy_point,
-                    "point"
-                ) +
-                " = ",
-                i2s(enemy_points_score) + "/" + i2s(max),
-                COLOR_GOLD
-            );
-        }
-    }
+    add_score_stat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&

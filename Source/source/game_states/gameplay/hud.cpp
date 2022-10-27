@@ -1135,7 +1135,13 @@ hud_struct::hud_struct() :
         };
         gui.add_item(mission_goal_name, "mission_goal_name");
         
-        
+    }
+    
+    if(
+        game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data.mission.point_hud_data != 0
+    ) {
+    
         //Mission score bubble.
         gui_item* mission_score_bubble = new gui_item();
         mission_score_bubble->on_draw =

@@ -13,6 +13,7 @@
 
 #include "game_state.h"
 #include "../gui.h"
+#include "../mission.h"
 
 namespace RESULTS {
 extern const string GUI_FILE_PATH;
@@ -44,6 +45,7 @@ private:
     //Final mission score. Cache for convenience.
     int final_mission_score;
     
+    void add_score_stat(const MISSION_SCORE_CRITERIA criterion);
     void add_stat(
         const string &label, const string &value,
         const ALLEGRO_COLOR &color = COLOR_WHITE
