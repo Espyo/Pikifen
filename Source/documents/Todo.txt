@@ -9,7 +9,6 @@ Current tasks (tasks being worked on, but not yet committed)
         One HUD element on the top-right that shows one fail condition, at the mission maker's choice. Optional
         Another HUD element below that, smaller, that shows another fail condition, at the mission maker's choice. Optional
 
-
 Next tasks (roughly sorted most important first)
     --- To fix ---
     > throwing non red pikmin on an acb while it's on fire kinda just traps them for eternity until the ACB is delivered to an onion (thanks Helodity)

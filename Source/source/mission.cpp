@@ -33,6 +33,8 @@ mission_data::mission_data() :
     fail_leaders_kod(1),
     fail_enemies_killed(1),
     fail_time_limit(AREA::DEF_MISSION_TIME_LIMIT),
+    fail_hud_primary_cond((MISSION_FAIL_CONDITIONS) INVALID),
+    fail_hud_secondary_cond((MISSION_FAIL_CONDITIONS) INVALID),
     grading_mode(MISSION_GRADING_GOAL),
     points_per_pikmin_born(0),
     points_per_pikmin_death(0),
@@ -98,6 +100,14 @@ bool mission_fail_kill_enemies::get_end_zoom_data(
         return true;
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_kill_enemies::get_name() const {
+    return "Kill enemies";
 }
 
 
@@ -212,6 +222,14 @@ bool mission_fail_lose_leaders::get_end_zoom_data(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_lose_leaders::get_name() const {
+    return "Lose leaders";
+}
+
+
+/* ----------------------------------------------------------------------------
  * A description for the player, fed from the mission data.
  * mission:
  *   Mission data object to get info from.
@@ -320,6 +338,14 @@ bool mission_fail_lose_pikmin::get_end_zoom_data(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_lose_pikmin::get_name() const {
+    return "Lose Pikmin";
+}
+
+
+/* ----------------------------------------------------------------------------
  * A description for the player, fed from the mission data.
  * mission:
  *   Mission data object to get info from.
@@ -414,6 +440,14 @@ bool mission_fail_pause_menu::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_pause_menu::get_name() const {
+    return "End from pause menu";
 }
 
 
@@ -528,6 +562,14 @@ bool mission_fail_pikmin_amount::get_end_zoom_data(
         return true;
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_pikmin_amount::get_name() const {
+    return "Reach a Pikmin amount";
 }
 
 
@@ -649,6 +691,14 @@ bool mission_fail_take_damage::get_end_zoom_data(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_take_damage::get_name() const {
+    return "Take damage";
+}
+
+
+/* ----------------------------------------------------------------------------
  * A description for the player, fed from the mission data.
  * mission:
  *   Mission data object to get info from.
@@ -757,6 +807,14 @@ bool mission_fail_time_limit::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_time_limit::get_name() const {
+    return "Reach the time limit";
 }
 
 

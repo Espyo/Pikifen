@@ -2545,7 +2545,6 @@ void area_editor::process_gui_panel_mission() {
             //Pikmin amount value.
             int amount =
                 (int) game.cur_area_data.mission.goal_amount;
-            ImGui::SameLine();
             ImGui::SetNextItemWidth(80);
             if(ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)) {
                 register_change("mission requirements change");
@@ -2572,13 +2571,25 @@ void area_editor::process_gui_panel_mission() {
     //Mission fail conditions node.
     if(saveable_tree_node("gameplay", "Mission fail conditions")) {
     
+        unsigned int fail_flags =
+            (unsigned int) game.cur_area_data.mission.fail_conditions;
+        bool fail_flags_changed = false;
+        
         //Pause menu end checkbox.
         bool pause_menu_end_is_fail =
             game.cur_area_data.mission.goal != MISSION_GOAL_END_MANUALLY;
         ImGui::BeginDisabled();
-        ImGui::Checkbox("End from pause menu", &pause_menu_end_is_fail);
+        ImGui::CheckboxFlags(
+            "End from pause menu",
+            &fail_flags,
+            get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        );
         ImGui::EndDisabled();
         if(pause_menu_end_is_fail) {
+            enable_flag(
+                game.cur_area_data.mission.fail_conditions,
+                get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            );
             set_tooltip(
                 "Since reaching the mission goal automatically ends the\n"
                 "mission as a clear, if the player can go to the pause menu\n"
@@ -2586,19 +2597,72 @@ void area_editor::process_gui_panel_mission() {
                 "goal yet. So this method of ending has to always be a failure."
             );
         } else {
+            disable_flag(
+                game.cur_area_data.mission.fail_conditions,
+                get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+            );
             set_tooltip(
                 "The current mission goal is \"end whenever you want\", so\n"
                 "ending from the pause menu is the goal, not a fail condition."
             );
         }
         
-        unsigned int fail_flags =
-            (unsigned int) game.cur_area_data.mission.fail_conditions;
-        bool fail_flags_changed = false;
+        //Time limit checkbox.
+        fail_flags_changed |=
+            ImGui::CheckboxFlags(
+                "Reach the time limit",
+                &fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            );
+        set_tooltip(
+            "The mission ends as a failure if the player spends a certain\n"
+            "amount of time in the mission."
+        );
+        
+        if(
+            has_flag(
+                fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            )
+        ) {
+            //Time limit values.
+            int seconds =
+                (int) game.cur_area_data.mission.fail_time_limit;
+            ImGui::Indent();
+            if(ImGui::DragTime2("Time limit", &seconds)) {
+                register_change("mission fail conditions change");
+                float old_mission_min =
+                    game.cur_area_data.mission.fail_time_limit / 60.0f;
+                int day_start_min = game.cur_area_data.day_time_start;
+                day_start_min = wrap_float(day_start_min, 0, 60 * 24);
+                float day_speed = game.cur_area_data.day_time_speed;
+                int old_day_end_min =
+                    day_start_min + old_mission_min * day_speed;
+                old_day_end_min = wrap_float(old_day_end_min, 0, 60 * 24);
+                seconds = std::max(seconds, 1);
+                float new_mission_min = seconds / 60.0f;
+                game.cur_area_data.mission.fail_time_limit =
+                    (size_t) seconds;
+                    
+                game.cur_area_data.day_time_speed =
+                    calculate_day_speed(
+                        day_start_min, old_day_end_min, new_mission_min
+                    );
+                    
+                    
+            }
+            set_tooltip(
+                "Time limit that, when reached, ends the mission\n"
+                "as a failure.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            ImGui::Unindent();
+        }
+        
         //Reaching a certain Pikmin amount checkbox.
         fail_flags_changed |=
             ImGui::CheckboxFlags(
-                "Reach a certain Pikmin amount",
+                "Reach a Pikmin amount",
                 &fail_flags,
                 get_index_bitmask(MISSION_FAIL_COND_PIKMIN_AMOUNT)
             );
@@ -2778,66 +2842,125 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Unindent();
         }
         
-        //Time limit checkbox.
-        fail_flags_changed |=
-            ImGui::CheckboxFlags(
-                "Reach the time limit",
-                &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            );
-        set_tooltip(
-            "The mission ends as a failure if the player spends a certain\n"
-            "amount of time in the mission."
-        );
-        
-        if(
-            has_flag(
-                fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            )
-        ) {
-            //Time limit values.
-            int seconds =
-                (int) game.cur_area_data.mission.fail_time_limit;
-            ImGui::Indent();
-            if(ImGui::DragTime2("Time limit", &seconds)) {
-                register_change("mission fail conditions change");
-                float old_mission_min =
-                    game.cur_area_data.mission.fail_time_limit / 60.0f;
-                int day_start_min = game.cur_area_data.day_time_start;
-                day_start_min = wrap_float(day_start_min, 0, 60 * 24);
-                float day_speed = game.cur_area_data.day_time_speed;
-                int old_day_end_min =
-                    day_start_min + old_mission_min * day_speed;
-                old_day_end_min = wrap_float(old_day_end_min, 0, 60 * 24);
-                seconds = std::max(seconds, 1);
-                float new_mission_min = seconds / 60.0f;
-                game.cur_area_data.mission.fail_time_limit =
-                    (size_t) seconds;
-                    
-                game.cur_area_data.day_time_speed =
-                    calculate_day_speed(
-                        day_start_min, old_day_end_min, new_mission_min
-                    );
-                    
-                    
-            }
-            set_tooltip(
-                "Time limit that, when reached, ends the mission\n"
-                "as a failure.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            ImGui::Unindent();
-        }
-        
         if(fail_flags_changed) {
             register_change("mission fail conditions change");
             game.cur_area_data.mission.fail_conditions =
                 (uint8_t) fail_flags;
         }
         
-        ImGui::TreePop();
+        vector<MISSION_FAIL_CONDITIONS> active_conditions;
+        for(size_t c = 0; c < game.mission_fail_conds.size(); ++c) {
+            if(
+                has_flag(
+                    game.cur_area_data.mission.fail_conditions,
+                    get_index_bitmask(c)
+                )
+            ) {
+                active_conditions.push_back((MISSION_FAIL_CONDITIONS) c);
+            }
+        }
         
+        if(!active_conditions.empty()) {
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            //Primary HUD condition checkbox.
+            bool show_primary =
+                game.cur_area_data.mission.fail_hud_primary_cond != INVALID;
+            if(ImGui::Checkbox("Show primary HUD element", &show_primary)) {
+                register_change("mission fail conditions change");
+                game.cur_area_data.mission.fail_hud_primary_cond =
+                    show_primary ?
+                    active_conditions[0] :
+                    INVALID;
+            }
+            set_tooltip(
+                "If checked, a large HUD element will appear showing\n"
+                "the most important failure condition's information."
+            );
+            
+            if(show_primary) {
+                //Primary HUD condition combobox.
+                int selected = 0;
+                vector<string> cond_strings;
+                for(size_t c = 0; c < active_conditions.size(); ++c) {
+                    size_t cond_id = active_conditions[c];
+                    cond_strings.push_back(
+                        game.mission_fail_conds[cond_id]->get_name()
+                    );
+                    if(
+                        cond_id ==
+                        game.cur_area_data.mission.fail_hud_primary_cond
+                    ) {
+                        selected = c;
+                    }
+                }
+                ImGui::Indent();
+                if(
+                    ImGui::Combo("Primary condition", &selected, cond_strings)
+                ) {
+                    register_change("mission fail conditions change");
+                    game.cur_area_data.mission.fail_hud_primary_cond =
+                        active_conditions[selected];
+                }
+                set_tooltip(
+                    "Failure condition to show in the primary HUD element."
+                );
+                ImGui::Unindent();
+            }
+            
+            //Secondary HUD condition checkbox.
+            bool show_secondary =
+                game.cur_area_data.mission.fail_hud_secondary_cond != INVALID;
+            if(ImGui::Checkbox("Show secondary HUD element", &show_secondary)) {
+                register_change("mission fail conditions change");
+                game.cur_area_data.mission.fail_hud_secondary_cond =
+                    show_secondary ?
+                    active_conditions[0] :
+                    INVALID;
+            }
+            set_tooltip(
+                "If checked, a smaller HUD element will appear showing\n"
+                "some other failure condition's information."
+            );
+            
+            if(show_secondary) {
+                //Secondary HUD condition combobox.
+                int selected = 0;
+                vector<string> cond_strings;
+                for(size_t c = 0; c < active_conditions.size(); ++c) {
+                    size_t cond_id = active_conditions[c];
+                    cond_strings.push_back(
+                        game.mission_fail_conds[cond_id]->get_name()
+                    );
+                    if(
+                        cond_id ==
+                        game.cur_area_data.mission.fail_hud_secondary_cond
+                    ) {
+                        selected = c;
+                    }
+                }
+                ImGui::Indent();
+                if(
+                    ImGui::Combo("Secondary condition", &selected, cond_strings)
+                ) {
+                    register_change("mission fail conditions change");
+                    game.cur_area_data.mission.fail_hud_secondary_cond =
+                        active_conditions[selected];
+                }
+                set_tooltip(
+                    "Failure condition to show in the secondary HUD element."
+                );
+                ImGui::Unindent();
+            }
+            
+        } else {
+            game.cur_area_data.mission.fail_hud_primary_cond = INVALID;
+            game.cur_area_data.mission.fail_hud_secondary_cond = INVALID;
+            
+        }
+        
+        ImGui::TreePop();
     }
     
     //Spacer dummy widget.

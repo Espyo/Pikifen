@@ -2837,6 +2837,22 @@ bool area_editor::save_area(const bool to_backup) {
                 )
             );
         }
+        if(game.cur_area_data.mission.fail_hud_primary_cond != INVALID) {
+            data_file.add(
+                new data_node(
+                    "mission_fail_hud_primary_cond",
+                    i2s(game.cur_area_data.mission.fail_hud_primary_cond)
+                )
+            );
+        }
+        if(game.cur_area_data.mission.fail_hud_secondary_cond != INVALID) {
+            data_file.add(
+                new data_node(
+                    "mission_fail_hud_secondary_cond",
+                    i2s(game.cur_area_data.mission.fail_hud_secondary_cond)
+                )
+            );
+        }
         data_file.add(
             new data_node(
                 "mission_grading_mode",

@@ -133,6 +133,10 @@ struct mission_data {
     size_t fail_enemies_killed;
     //Seconds amount for the "time limit" mission fail condition.
     size_t fail_time_limit;
+    //Primary HUD element's failure condition. INVALID for none.
+    size_t fail_hud_primary_cond;
+    //Secondary HUD element's failure condition. INVALID for none.
+    size_t fail_hud_secondary_cond;
     //Mission grading mode.
     MISSION_GRADING_MODES grading_mode;
     //Mission point multiplier for each Pikmin born.
@@ -171,6 +175,8 @@ struct mission_data {
  */
 class mission_fail {
 public:
+    //The condition's name.
+    virtual string get_name() const = 0;
     //Returns the player's current amount for whatever the condition needs.
     virtual int get_cur_amount(gameplay_state* gameplay) const = 0;
     //Returns the player's required amount for whatever the condition needs.
@@ -197,6 +203,7 @@ public:
  */
 class mission_fail_kill_enemies : public mission_fail {
 public:
+    string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
@@ -216,6 +223,7 @@ public:
  */
 class mission_fail_lose_leaders : public mission_fail {
 public:
+    string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
@@ -235,6 +243,7 @@ public:
  */
 class mission_fail_lose_pikmin : public mission_fail {
 public:
+    string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
@@ -254,6 +263,7 @@ public:
  */
 class mission_fail_pause_menu : public mission_fail {
 public:
+    string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
@@ -273,6 +283,7 @@ public:
  */
 class mission_fail_pikmin_amount : public mission_fail {
 public:
+    string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
@@ -292,6 +303,7 @@ public:
  */
 class mission_fail_take_damage : public mission_fail {
 public:
+    string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;
@@ -311,6 +323,7 @@ public:
  */
 class mission_fail_time_limit: public mission_fail {
 public:
+    string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;
     int get_req_amount(gameplay_state* gameplay) const override;
     string get_player_description(mission_data* mission) const override;

@@ -633,6 +633,8 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     rs.set("mission_fail_leaders_kod", data.fail_leaders_kod);
     rs.set("mission_fail_enemies_killed", data.fail_enemies_killed);
     rs.set("mission_fail_time_limit", data.fail_time_limit);
+    rs.set("mission_fail_hud_primary_cond", data.fail_hud_primary_cond);
+    rs.set("mission_fail_hud_secondary_cond", data.fail_hud_primary_cond);
     rs.set("mission_grading_mode", mission_grading_mode_int);
     rs.set("mission_points_per_pikmin_born", data.points_per_pikmin_born);
     rs.set("mission_points_per_pikmin_death", data.points_per_pikmin_death);
