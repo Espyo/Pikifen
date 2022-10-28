@@ -135,7 +135,7 @@ public:
     point mouse_cursor_s;
     //OS mouse cursor position, in world coordinates.
     point mouse_cursor_w;
-    //Database of all mission failure conditions.
+    //Database of all mission fail conditions.
     vector<mission_fail*> mission_fail_conds;
     //Database of all mission goals.
     vector<mission_goal*> mission_goals;

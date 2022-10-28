@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -40,12 +40,12 @@ Next tasks (roughly sorted most important first)
             Medals
                 For every stage, the player can have no medal, a bronze, a silver, a gold, or a platinum medal
                     The sprites for medals should have the medal proper take up a lot of large space, whereas the ribbon should be small. The three basic medals should have the medal proper be circular and uninteresting, whereas the platinum should be a star to stand out. Since platinum is both a "perfect" completion, as well as a way to indicate triumph on missions that aren't scored with points, it should give a feeling of a checkbox on a checklist, while the other medals should give a feeling of "good, but there's more to be done"
-                When the end of the stage is reached, regardless of it being via clear or failure, the player is graded and maybe awarded a medal
+                When the end of the stage is reached, regardless of it being via clear or fail, the player is graded and maybe awarded a medal
                 Three grading modes:
                     Points
                         The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths (careful not to count Candypop Buds as deaths), time left, treasure points gathered, enemy kill points gathered
                         Each field can have varying weights, including 0 or negative
-                        Each field's value can also be instantly transformed to 0 if the player ended the mission via failure
+                        Each field's value can also be instantly transformed to 0 if the player ended the mission via fail
                         You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
                         Depending on the points, the player gets no medal, a bronze, a silver, a gold, or a platinum
                     Completion
@@ -72,6 +72,7 @@ Next tasks (roughly sorted most important first)
             Enemies falling into the void should count as deaths, and for the enemy kill points
             Make sure after-hours works
                 Do not save the result, and make sure to write in the conclusion that it wasn't saved because of after hours
+            Update README.txt
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod

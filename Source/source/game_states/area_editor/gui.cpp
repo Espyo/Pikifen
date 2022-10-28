@@ -2594,7 +2594,7 @@ void area_editor::process_gui_panel_mission() {
                 "Since reaching the mission goal automatically ends the\n"
                 "mission as a clear, if the player can go to the pause menu\n"
                 "and end there, then naturally they haven't reached the\n"
-                "goal yet. So this method of ending has to always be a failure."
+                "goal yet. So this method of ending has to always be a fail."
             );
         } else {
             disable_flag(
@@ -2615,7 +2615,7 @@ void area_editor::process_gui_panel_mission() {
                 get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
         set_tooltip(
-            "The mission ends as a failure if the player spends a certain\n"
+            "The mission ends as a fail if the player spends a certain\n"
             "amount of time in the mission."
         );
         
@@ -2653,66 +2653,86 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "Time limit that, when reached, ends the mission\n"
-                "as a failure.",
+                "as a fail.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
         }
         
-        //Reaching a certain Pikmin amount checkbox.
+        //Reaching too few Pikmin checkbox.
         fail_flags_changed |=
             ImGui::CheckboxFlags(
-                "Reach a Pikmin amount",
+                "Reach too few Pikmin",
                 &fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_PIKMIN_AMOUNT)
+                get_index_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
             );
         set_tooltip(
-            "The mission ends as a failure if the total Pikmin count reaches\n"
-            "a certain amount. 0 means this only happens with a total\n"
-            "Pikmin extinction. This fail condition isn't forced because the\n"
-            "player might still be able to reach the mission goal using\n"
-            "leaders. Or because you may want to make a mission with\n"
-            "no Pikmin in the first place (like a puzzle stage)."
+            "The mission ends as a fail if the total Pikmin count reaches\n"
+            "a certain amount or lower. 0 means this only happens with a\n"
+            "total Pikmin extinction. This fail condition isn't forced\n"
+            "because the player might still be able to reach the mission\n"
+            "goal using leaders. Or because you may want to make a mission\n"
+            "with no Pikmin in the first place (like a puzzle stage)."
         );
         
         if(
             has_flag(
                 fail_flags,
-                get_index_bitmask(MISSION_FAIL_COND_PIKMIN_AMOUNT)
+                get_index_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
             )
         ) {
             ImGui::Indent();
             
-            //Higher/lower than combobox.
-            int hl_combo_value =
-                game.cur_area_data.mission.fail_pik_higher_than;
-            vector<string> hl_combo_items = {"<=", ">="};
-            
-            ImGui::SetNextItemWidth(50);
-            if(ImGui::Combo("##hl", &hl_combo_value, hl_combo_items)) {
-                register_change("mission requirements change");
-                game.cur_area_data.mission.fail_pik_higher_than =
-                    (hl_combo_value == 1);
-            }
-            set_tooltip(
-                "Specify whether the player loses when the Pikmin count\n"
-                "reaches these many Pikmin or fewer,\n"
-                "or if it's when it reaches these many Pikmin or greater."
-            );
-            
             //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission.fail_pik_amount;
+                (int) game.cur_area_data.mission.fail_too_few_pik_amount;
             ImGui::SetNextItemWidth(50);
-            ImGui::SameLine();
-            if(ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)) {
+            if(ImGui::DragInt("Amount##fctfpa", &amount, 0.1f, 0, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_pik_amount =
+                game.cur_area_data.mission.fail_too_few_pik_amount =
                     (size_t) amount;
             }
             set_tooltip(
                 "Pikmin amount that, when reached, ends the mission\n"
-                "as a failure.",
+                "as a fail.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            ImGui::Unindent();
+        }
+        
+        //Reaching too many Pikmin checkbox.
+        fail_flags_changed |=
+            ImGui::CheckboxFlags(
+                "Reach too many Pikmin",
+                &fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+            );
+        set_tooltip(
+            "The mission ends as a fail if the total Pikmin count reaches\n"
+            "a certain amount or higher."
+        );
+        
+        if(
+            has_flag(
+                fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+            )
+        ) {
+            ImGui::Indent();
+            
+            //Pikmin amount value.
+            int amount =
+                (int) game.cur_area_data.mission.fail_too_many_pik_amount;
+            ImGui::SetNextItemWidth(50);
+            if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 0, INT_MAX)) {
+                register_change("mission fail conditions change");
+                game.cur_area_data.mission.fail_too_many_pik_amount =
+                    (size_t) amount;
+            }
+            set_tooltip(
+                "Pikmin amount that, when reached, ends the mission\n"
+                "as a fail.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             
@@ -2727,7 +2747,7 @@ void area_editor::process_gui_panel_mission() {
                 get_index_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
             );
         set_tooltip(
-            "The mission ends as a failure if a certain amount of Pikmin die."
+            "The mission ends as a fail if a certain amount of Pikmin die."
         );
         
         if(
@@ -2748,7 +2768,7 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "Pikmin death amount that, when reached, ends the mission\n"
-                "as a failure.",
+                "as a fail.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
@@ -2762,7 +2782,7 @@ void area_editor::process_gui_panel_mission() {
                 get_index_bitmask(MISSION_FAIL_COND_TAKE_DAMAGE)
             );
         set_tooltip(
-            "The mission ends as a failure if any leader loses any health."
+            "The mission ends as a fail if any leader loses any health."
         );
         
         //Lose leaders checkbox.
@@ -2773,7 +2793,7 @@ void area_editor::process_gui_panel_mission() {
                 get_index_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
             );
         set_tooltip(
-            "The mission ends as a failure if a certain amount of leaders get\n"
+            "The mission ends as a fail if a certain amount of leaders get\n"
             "KO'd. This fail condition isn't forced because the\n"
             "player might still be able to reach the mission goal with the\n"
             "Pikmin. Or because you may want to make a really gimmicky\n"
@@ -2800,7 +2820,7 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "Leader KO amount that, when reached, ends the mission\n"
-                "as a failure.",
+                "as a fail.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
@@ -2814,7 +2834,7 @@ void area_editor::process_gui_panel_mission() {
                 get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             );
         set_tooltip(
-            "The mission ends as a failure if a certain amount of\n"
+            "The mission ends as a fail if a certain amount of\n"
             "enemies get killed."
         );
         
@@ -2836,7 +2856,7 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "Enemy kill amount that, when reached, ends the mission\n"
-                "as a failure.",
+                "as a fail.",
                 "", WIDGET_EXPLANATION_DRAG
             );
             ImGui::Unindent();
@@ -2876,7 +2896,7 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "If checked, a large HUD element will appear showing\n"
-                "the most important failure condition's information."
+                "the most important fail condition's information."
             );
             
             if(show_primary) {
@@ -2921,7 +2941,7 @@ void area_editor::process_gui_panel_mission() {
             }
             set_tooltip(
                 "If checked, a smaller HUD element will appear showing\n"
-                "some other failure condition's information."
+                "some other fail condition's information."
             );
             
             if(show_secondary) {
@@ -3032,11 +3052,11 @@ void area_editor::process_gui_panel_mission() {
             if(game.cur_area_data.mission.points_per_pikmin_born != 0) {
                 ImGui::Indent();
                 
-                //Pikmin born point loss on failure checkbox.
+                //Pikmin born point loss on fail checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
-                        "0 points on failure##zpofpb", &flags,
+                        "0 points on fail##zpofpb", &flags,
                         get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_BORN)
                     )
                 ) {
@@ -3085,11 +3105,11 @@ void area_editor::process_gui_panel_mission() {
             if(game.cur_area_data.mission.points_per_pikmin_death != 0) {
                 ImGui::Indent();
                 
-                //Pikmin death point loss on failure checkbox.
+                //Pikmin death point loss on fail checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
-                        "0 points on failure##zpofpd", &flags,
+                        "0 points on fail##zpofpd", &flags,
                         get_index_bitmask(MISSION_SCORE_CRITERIA_PIKMIN_DEATH)
                     )
                 ) {
@@ -3145,11 +3165,11 @@ void area_editor::process_gui_panel_mission() {
                 if(game.cur_area_data.mission.points_per_sec_left != 0) {
                     ImGui::Indent();
                     
-                    //Seconds left point loss on failure checkbox.
+                    //Seconds left point loss on fail checkbox.
                     int flags = game.cur_area_data.mission.point_loss_data;
                     if(
                         ImGui::CheckboxFlags(
-                            "0 points on failure##zpofsl", &flags,
+                            "0 points on fail##zpofsl", &flags,
                             get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_LEFT)
                         )
                     ) {
@@ -3199,11 +3219,11 @@ void area_editor::process_gui_panel_mission() {
             if(game.cur_area_data.mission.points_per_sec_passed != 0) {
                 ImGui::Indent();
                 
-                //Seconds passed point loss on failure checkbox.
+                //Seconds passed point loss on fail checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
-                        "0 points on failure##zpofsp", &flags,
+                        "0 points on fail##zpofsp", &flags,
                         get_index_bitmask(MISSION_SCORE_CRITERIA_SEC_PASSED)
                     )
                 ) {
@@ -3255,11 +3275,11 @@ void area_editor::process_gui_panel_mission() {
             if(game.cur_area_data.mission.points_per_treasure_point != 0) {
                 ImGui::Indent();
                 
-                //Treasure point point loss on failure checkbox.
+                //Treasure point point loss on fail checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
-                        "0 points on failure##zpoftp", &flags,
+                        "0 points on fail##zpoftp", &flags,
                         get_index_bitmask(MISSION_SCORE_CRITERIA_TREASURE_POINTS)
                     )
                 ) {
@@ -3309,11 +3329,11 @@ void area_editor::process_gui_panel_mission() {
             if(game.cur_area_data.mission.points_per_enemy_point != 0) {
                 ImGui::Indent();
                 
-                //Enemy kill point point loss on failure checkbox.
+                //Enemy kill point point loss on fail checkbox.
                 int flags = game.cur_area_data.mission.point_loss_data;
                 if(
                     ImGui::CheckboxFlags(
-                        "0 points on failure##zpofep", &flags,
+                        "0 points on fail##zpofep", &flags,
                         get_index_bitmask(MISSION_SCORE_CRITERIA_ENEMY_POINTS)
                     )
                 ) {

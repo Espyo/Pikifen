@@ -494,7 +494,10 @@ void init_misc_databases() {
         new mission_fail_time_limit()
     );
     game.mission_fail_conds.push_back(
-        new mission_fail_pikmin_amount()
+        new mission_fail_too_few_pikmin()
+    );
+    game.mission_fail_conds.push_back(
+        new mission_fail_too_many_pikmin()
     );
     game.mission_fail_conds.push_back(
         new mission_fail_lose_pikmin()

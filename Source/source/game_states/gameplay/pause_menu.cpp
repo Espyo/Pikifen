@@ -52,7 +52,7 @@ pause_menu_struct::~pause_menu_struct() {
 
 
 /* ----------------------------------------------------------------------------
- * Adds a new bullet point to either the failure condition list, or the
+ * Adds a new bullet point to either the fail condition list, or the
  * grading explanation list.
  * list:
  *   List to add to.
@@ -661,7 +661,7 @@ void pause_menu_struct::init_main_pause_menu() {
     };
     end_button->on_get_tooltip =
     [] () {
-        bool as_failure =
+        bool as_fail =
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
                 MISSION_FAIL_COND_PAUSE_MENU
@@ -669,8 +669,8 @@ void pause_menu_struct::init_main_pause_menu() {
         return
             game.cur_area_data.type == AREA_TYPE_SIMPLE ?
             "End this area's exploration." :
-            as_failure ?
-            "End this mission as a failure." :
+            as_fail ?
+            "End this mission as a fail." :
             "End this mission successfully.";
     };
     gui.add_item(end_button, "end");

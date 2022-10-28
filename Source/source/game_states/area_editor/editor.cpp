@@ -2769,19 +2769,26 @@ bool area_editor::save_area(const bool to_backup) {
         if(
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_PIKMIN_AMOUNT)
+                get_index_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
             )
         ) {
             data_file.add(
                 new data_node(
-                    "mission_fail_pik_amount",
-                    i2s(game.cur_area_data.mission.fail_pik_amount)
+                    "mission_fail_too_few_pik_amount",
+                    i2s(game.cur_area_data.mission.fail_too_few_pik_amount)
                 )
             );
+        }
+        if(
+            has_flag(
+                game.cur_area_data.mission.fail_conditions,
+                get_index_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
+            )
+        ) {
             data_file.add(
                 new data_node(
-                    "mission_fail_pik_higher_than",
-                    b2s(game.cur_area_data.mission.fail_pik_higher_than)
+                    "mission_fail_too_many_pik_amount",
+                    i2s(game.cur_area_data.mission.fail_too_many_pik_amount)
                 )
             );
         }

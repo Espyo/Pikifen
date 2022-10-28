@@ -32,7 +32,7 @@ const string SPECS_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_specs.txt";
 
 
 /* ----------------------------------------------------------------------------
- * Adds a new bullet point to either the failure condition list, or the
+ * Adds a new bullet point to either the fail condition list, or the
  * grading explanation list.
  * list:
  *   List to add to.

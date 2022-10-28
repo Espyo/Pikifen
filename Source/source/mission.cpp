@@ -27,8 +27,8 @@ mission_data::mission_data() :
         AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
     ),
     fail_conditions(0),
-    fail_pik_amount(0),
-    fail_pik_higher_than(false),
+    fail_too_few_pik_amount(0),
+    fail_too_many_pik_amount(0),
     fail_pik_killed(1),
     fail_leaders_kod(1),
     fail_enemies_killed(1),
@@ -160,7 +160,7 @@ string mission_fail_kill_enemies::get_status(
 
 
 /* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a failure.
+ * Checks if its conditions have been met to end the mission as a fail.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
@@ -276,7 +276,7 @@ string mission_fail_lose_leaders::get_status(
 
 
 /* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a failure.
+ * Checks if its conditions have been met to end the mission as a fail.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
@@ -390,7 +390,7 @@ string mission_fail_lose_pikmin::get_status(
 
 
 /* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a failure.
+ * Checks if its conditions have been met to end the mission as a fail.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
@@ -492,7 +492,7 @@ string mission_fail_pause_menu::get_status(
 
 
 /* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a failure.
+ * Checks if its conditions have been met to end the mission as a fail.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
@@ -500,145 +500,6 @@ bool mission_fail_pause_menu::is_met(
     gameplay_state* gameplay
 ) const {
     //The pause menu "end mission" logic is responsible for this one.
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the player's current amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- */
-int mission_fail_pikmin_amount::get_cur_amount(
-    gameplay_state* gameplay
-) const {
-    return gameplay->get_total_pikmin_amount();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Explains why the player lost, with values fed from the mission data.
- * mission:
- *   Mission data object to get info from.
- */
-string mission_fail_pikmin_amount::get_end_reason(
-    mission_data* mission
-) const {
-    return
-        "Reached " +
-        string(mission->fail_pik_higher_than ? ">=" : "<=") +
-        i2s(mission->fail_pik_amount) +
-        " Pikmin...";
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns where the camera should go to to zoom on the mission end reason.
- * Returns true if the camera should zoom somewhere, false if there's
- * nothing to do.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- * final_cam_pos:
- *   The final camera position is returned here.
- * final_cam_zoom:
- *   The final camera zoom is returned here.
- */
-bool mission_fail_pikmin_amount::get_end_zoom_data(
-    gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
-) const {
-    if(
-        game.cur_area_data.mission.fail_pik_higher_than &&
-        gameplay->last_pikmin_born_pos.x != LARGE_FLOAT
-    ) {
-        *final_cam_pos = gameplay->last_pikmin_born_pos;
-        *final_cam_zoom = game.config.zoom_max_level;
-        return true;
-    } else if(
-        !game.cur_area_data.mission.fail_pik_higher_than &&
-        gameplay->last_pikmin_death_pos.x != LARGE_FLOAT
-    ) {
-        *final_cam_pos = gameplay->last_pikmin_death_pos;
-        *final_cam_zoom = game.config.zoom_max_level;
-        return true;
-    }
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the condition's name.
- */
-string mission_fail_pikmin_amount::get_name() const {
-    return "Reach a Pikmin amount";
-}
-
-
-/* ----------------------------------------------------------------------------
- * A description for the player, fed from the mission data.
- * mission:
- *   Mission data object to get info from.
- */
-string mission_fail_pikmin_amount::get_player_description(
-    mission_data* mission
-) const {
-    return
-        "Reach " + i2s(mission->fail_pik_amount) + " Pikmin or " +
-        (mission->fail_pik_higher_than ? "more" : "fewer") + ".";
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the player's required amount for whatever the condition needs.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- */
-int mission_fail_pikmin_amount::get_req_amount(
-    gameplay_state* gameplay
-) const {
-    return game.cur_area_data.mission.fail_pik_amount;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Status for the pause menu.
- * cur:
- *   Current amount.
- * req:
- *   Required amount.
- * percentage:
- *   Percentage cleared.
- */
-string mission_fail_pikmin_amount::get_status(
-    const int cur, const int req, const float percentage
-) const {
-    return
-        "You have " +
-        i2s(cur) + "/" + i2s(req) +
-        " Pikmin. (" + i2s(percentage) + "%)";
-}
-
-
-/* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a failure.
- * gameplay:
- *   Pointer to the gameplay state to get info from.
- */
-bool mission_fail_pikmin_amount::is_met(
-    gameplay_state* gameplay
-) const {
-    size_t total_pikmin = get_cur_amount(gameplay);
-    size_t fail_amount = get_req_amount(gameplay);
-    if(
-        game.cur_area_data.mission.fail_pik_higher_than &&
-        total_pikmin >= fail_amount
-    ) {
-        return true;
-    } else if(
-        !game.cur_area_data.mission.fail_pik_higher_than &&
-        total_pikmin <= fail_amount
-    ) {
-        return true;
-    }
     return false;
 }
 
@@ -739,7 +600,7 @@ string mission_fail_take_damage::get_status(
 
 
 /* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a failure.
+ * Checks if its conditions have been met to end the mission as a fail.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
@@ -865,7 +726,7 @@ string mission_fail_time_limit::get_status(
 
 
 /* ----------------------------------------------------------------------------
- * Checks if its conditions have been met to end the mission as a failure.
+ * Checks if its conditions have been met to end the mission as a fail.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
  */
@@ -873,6 +734,238 @@ bool mission_fail_time_limit::is_met(
     gameplay_state* gameplay
 ) const {
     return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's current amount for whatever the condition needs.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ */
+int mission_fail_too_few_pikmin::get_cur_amount(
+    gameplay_state* gameplay
+) const {
+    return gameplay->get_total_pikmin_amount();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Explains why the player lost, with values fed from the mission data.
+ * mission:
+ *   Mission data object to get info from.
+ */
+string mission_fail_too_few_pikmin::get_end_reason(
+    mission_data* mission
+) const {
+    return
+        "Reached <=" +
+        i2s(mission->fail_too_few_pik_amount) +
+        " Pikmin...";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns where the camera should go to to zoom on the mission end reason.
+ * Returns true if the camera should zoom somewhere, false if there's
+ * nothing to do.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * final_cam_pos:
+ *   The final camera position is returned here.
+ * final_cam_zoom:
+ *   The final camera zoom is returned here.
+ */
+bool mission_fail_too_few_pikmin::get_end_zoom_data(
+    gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+) const {
+    if(gameplay->last_pikmin_death_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->last_pikmin_death_pos;
+        *final_cam_zoom = game.config.zoom_max_level;
+        return true;
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_too_few_pikmin::get_name() const {
+    return "Reach too few Pikmin";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * A description for the player, fed from the mission data.
+ * mission:
+ *   Mission data object to get info from.
+ */
+string mission_fail_too_few_pikmin::get_player_description(
+    mission_data* mission
+) const {
+    return
+        "Reach " + i2s(mission->fail_too_few_pik_amount) + " Pikmin or fewer.";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's required amount for whatever the condition needs.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ */
+int mission_fail_too_few_pikmin::get_req_amount(
+    gameplay_state* gameplay
+) const {
+    return game.cur_area_data.mission.fail_too_few_pik_amount;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Status for the pause menu.
+ * cur:
+ *   Current amount.
+ * req:
+ *   Required amount.
+ * percentage:
+ *   Percentage cleared.
+ */
+string mission_fail_too_few_pikmin::get_status(
+    const int cur, const int req, const float percentage
+) const {
+    return
+        "You have " +
+        i2s(cur) + "/" + i2s(req) +
+        " Pikmin.";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if its conditions have been met to end the mission as a fail.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ */
+bool mission_fail_too_few_pikmin::is_met(
+    gameplay_state* gameplay
+) const {
+    return
+        get_cur_amount(gameplay) <=
+        get_req_amount(gameplay);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's current amount for whatever the condition needs.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ */
+int mission_fail_too_many_pikmin::get_cur_amount(
+    gameplay_state* gameplay
+) const {
+    return gameplay->get_total_pikmin_amount();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Explains why the player lost, with values fed from the mission data.
+ * mission:
+ *   Mission data object to get info from.
+ */
+string mission_fail_too_many_pikmin::get_end_reason(
+    mission_data* mission
+) const {
+    return
+        "Reached >=" +
+        i2s(mission->fail_too_many_pik_amount) +
+        " Pikmin...";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns where the camera should go to to zoom on the mission end reason.
+ * Returns true if the camera should zoom somewhere, false if there's
+ * nothing to do.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ * final_cam_pos:
+ *   The final camera position is returned here.
+ * final_cam_zoom:
+ *   The final camera zoom is returned here.
+ */
+bool mission_fail_too_many_pikmin::get_end_zoom_data(
+    gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+) const {
+    if(gameplay->last_pikmin_born_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->last_pikmin_born_pos;
+        *final_cam_zoom = game.config.zoom_max_level;
+        return true;
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the condition's name.
+ */
+string mission_fail_too_many_pikmin::get_name() const {
+    return "Reach too many Pikmin";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * A description for the player, fed from the mission data.
+ * mission:
+ *   Mission data object to get info from.
+ */
+string mission_fail_too_many_pikmin::get_player_description(
+    mission_data* mission
+) const {
+    return
+        "Reach " + i2s(mission->fail_too_many_pik_amount) + " Pikmin or more.";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the player's required amount for whatever the condition needs.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ */
+int mission_fail_too_many_pikmin::get_req_amount(
+    gameplay_state* gameplay
+) const {
+    return game.cur_area_data.mission.fail_too_many_pik_amount;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Status for the pause menu.
+ * cur:
+ *   Current amount.
+ * req:
+ *   Required amount.
+ * percentage:
+ *   Percentage cleared.
+ */
+string mission_fail_too_many_pikmin::get_status(
+    const int cur, const int req, const float percentage
+) const {
+    return
+        "You have " +
+        i2s(cur) + "/" + i2s(req) +
+        " Pikmin. (" + i2s(percentage) + "%)";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if its conditions have been met to end the mission as a fail.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
+ */
+bool mission_fail_too_many_pikmin::is_met(
+    gameplay_state* gameplay
+) const {
+    return
+        get_cur_amount(gameplay) >=
+        get_req_amount(gameplay);
 }
 
 

@@ -200,7 +200,7 @@ public:
     size_t enemy_points_collected;
     //How many enemy points exist in total.
     size_t enemy_points_total;
-    //Reason for mission failure, if any. INVALID for none.
+    //Reason for mission fail, if any. INVALID for none.
     MISSION_FAIL_CONDITIONS mission_fail_reason;
     //Current mission score, for use in the HUD. Cache for convenience.
     int mission_score;

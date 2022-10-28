@@ -171,8 +171,8 @@ void area_data::clear() {
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE
         );
     mission.fail_conditions = 0;
-    mission.fail_pik_amount = 0;
-    mission.fail_pik_higher_than = false;
+    mission.fail_too_few_pik_amount = 0;
+    mission.fail_too_many_pik_amount = 0;
     mission.fail_pik_killed = 1;
     mission.fail_leaders_kod = 1;
     mission.fail_enemies_killed = 1;
@@ -384,8 +384,8 @@ void area_data::clone(area_data &other) {
     other.mission.goal_exit_center = mission.goal_exit_center;
     other.mission.goal_exit_size = mission.goal_exit_size;
     other.mission.fail_conditions = mission.fail_conditions;
-    other.mission.fail_pik_amount = mission.fail_pik_amount;
-    other.mission.fail_pik_higher_than = mission.fail_pik_higher_than;
+    other.mission.fail_too_few_pik_amount = mission.fail_too_few_pik_amount;
+    other.mission.fail_too_many_pik_amount = mission.fail_too_many_pik_amount;
     other.mission.fail_pik_killed = mission.fail_pik_killed;
     other.mission.fail_leaders_kod = mission.fail_leaders_kod;
     other.mission.fail_enemies_killed = mission.fail_enemies_killed;

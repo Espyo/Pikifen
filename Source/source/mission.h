@@ -45,8 +45,10 @@ enum MISSION_GOALS {
 enum MISSION_FAIL_CONDITIONS {
     //Reaching the time limit.
     MISSION_FAIL_COND_TIME_LIMIT,
-    //Reaching a certain Pikmin amount. 0 = total extinction.
-    MISSION_FAIL_COND_PIKMIN_AMOUNT,
+    //Reaching a certain Pikmin amount or fewer. 0 = total extinction.
+    MISSION_FAIL_COND_TOO_FEW_PIKMIN,
+    //Reaching a certain Pikmin amount or more. 0 = total extinction.
+    MISSION_FAIL_COND_TOO_MANY_PIKMIN,
     //Losing a certain amount of Pikmin.
     MISSION_FAIL_COND_LOSE_PIKMIN,
     //A leader takes damage.
@@ -121,10 +123,10 @@ struct mission_data {
     point goal_exit_size;
     //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*'s indexes.
     uint8_t fail_conditions;
-    //Amount for the "reach Pikmin amount" mission fail condition.
-    size_t fail_pik_amount;
-    //Is the mission "reach Pikmin amount" fail condition >= or <= ?
-    bool fail_pik_higher_than;
+    //Amount for the "reach too few Pikmin" mission fail condition.
+    size_t fail_too_few_pik_amount;
+    //Amount for the "reach too many Pikmin" mission fail condition.
+    size_t fail_too_many_pik_amount;
     //Amount for the "lose Pikmin" mission fail condition.
     size_t fail_pik_killed;
     //Amount for the "lose leaders" mission fail condition.
@@ -133,9 +135,9 @@ struct mission_data {
     size_t fail_enemies_killed;
     //Seconds amount for the "time limit" mission fail condition.
     size_t fail_time_limit;
-    //Primary HUD element's failure condition. INVALID for none.
+    //Primary HUD element's fail condition. INVALID for none.
     size_t fail_hud_primary_cond;
-    //Secondary HUD element's failure condition. INVALID for none.
+    //Secondary HUD element's fail condition. INVALID for none.
     size_t fail_hud_secondary_cond;
     //Mission grading mode.
     MISSION_GRADING_MODES grading_mode;
@@ -171,7 +173,7 @@ struct mission_data {
 
 
 /* ----------------------------------------------------------------------------
- * Class interface for a mission failure condition.
+ * Class interface for a mission fail condition.
  */
 class mission_fail {
 public:
@@ -193,13 +195,13 @@ public:
     virtual bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const = 0;
-    //Checks if its conditions have been met to end the mission as a failure.
+    //Checks if its conditions have been met to end the mission as a fail.
     virtual bool is_met(gameplay_state* gameplay) const = 0;
 };
 
 
 /* ----------------------------------------------------------------------------
- * Class representing the "kill enemies" mission failure condition.
+ * Class representing the "kill enemies" mission fail condition.
  */
 class mission_fail_kill_enemies : public mission_fail {
 public:
@@ -219,7 +221,7 @@ public:
 
 
 /* ----------------------------------------------------------------------------
- * Class representing the "lose leaders" mission failure condition.
+ * Class representing the "lose leaders" mission fail condition.
  */
 class mission_fail_lose_leaders : public mission_fail {
 public:
@@ -239,7 +241,7 @@ public:
 
 
 /* ----------------------------------------------------------------------------
- * Class representing the "lose Pikmin" mission failure condition.
+ * Class representing the "lose Pikmin" mission fail condition.
  */
 class mission_fail_lose_pikmin : public mission_fail {
 public:
@@ -259,7 +261,7 @@ public:
 
 
 /* ----------------------------------------------------------------------------
- * Class representing the "end from pause menu" mission failure condition.
+ * Class representing the "end from pause menu" mission fail condition.
  */
 class mission_fail_pause_menu : public mission_fail {
 public:
@@ -279,27 +281,7 @@ public:
 
 
 /* ----------------------------------------------------------------------------
- * Class representing the "reach Pikmin amount" mission failure condition.
- */
-class mission_fail_pikmin_amount : public mission_fail {
-public:
-    string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
-    string get_status(
-        const int cur, const int req, const float percentage
-    ) const override;
-    string get_end_reason(mission_data* mission) const override;
-    bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
-    ) const override;
-    bool is_met(gameplay_state* gameplay) const override;
-};
-
-
-/* ----------------------------------------------------------------------------
- * Class representing the "take damage" mission failure condition.
+ * Class representing the "take damage" mission fail condition.
  */
 class mission_fail_take_damage : public mission_fail {
 public:
@@ -319,9 +301,49 @@ public:
 
 
 /* ----------------------------------------------------------------------------
- * Class representing the "time limit" mission failure condition.
+ * Class representing the "time limit" mission fail condition.
  */
 class mission_fail_time_limit: public mission_fail {
+public:
+    string get_name() const override;
+    int get_cur_amount(gameplay_state* gameplay) const override;
+    int get_req_amount(gameplay_state* gameplay) const override;
+    string get_player_description(mission_data* mission) const override;
+    string get_status(
+        const int cur, const int req, const float percentage
+    ) const override;
+    string get_end_reason(mission_data* mission) const override;
+    bool get_end_zoom_data(
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+    ) const override;
+    bool is_met(gameplay_state* gameplay) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "reach too few Pikmin" mission fail condition.
+ */
+class mission_fail_too_few_pikmin : public mission_fail {
+public:
+    string get_name() const override;
+    int get_cur_amount(gameplay_state* gameplay) const override;
+    int get_req_amount(gameplay_state* gameplay) const override;
+    string get_player_description(mission_data* mission) const override;
+    string get_status(
+        const int cur, const int req, const float percentage
+    ) const override;
+    string get_end_reason(mission_data* mission) const override;
+    bool get_end_zoom_data(
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+    ) const override;
+    bool is_met(gameplay_state* gameplay) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "reach too many Pikmin" mission fail condition.
+ */
+class mission_fail_too_many_pikmin : public mission_fail {
 public:
     string get_name() const override;
     int get_cur_amount(gameplay_state* gameplay) const override;

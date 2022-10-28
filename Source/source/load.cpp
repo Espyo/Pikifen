@@ -627,8 +627,8 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     rs.set("mission_goal_exit_center", data.goal_exit_center);
     rs.set("mission_goal_exit_size", data.goal_exit_size);
     rs.set("mission_fail_conditions", data.fail_conditions);
-    rs.set("mission_fail_pik_amount", data.fail_pik_amount);
-    rs.set("mission_fail_pik_higher_than", data.fail_pik_higher_than);
+    rs.set("mission_fail_too_few_pik_amount", data.fail_too_few_pik_amount);
+    rs.set("mission_fail_too_many_pik_amount", data.fail_too_many_pik_amount);
     rs.set("mission_fail_pik_killed", data.fail_pik_killed);
     rs.set("mission_fail_leaders_kod", data.fail_leaders_kod);
     rs.set("mission_fail_enemies_killed", data.fail_enemies_killed);
