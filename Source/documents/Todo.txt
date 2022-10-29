@@ -2,12 +2,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    [NEEDS BRAINSTORMING] Some HUD elements will be necessary, like a counter for enemies remaining, a box for time remaining, maybe a slider to how close to the medals you are
-        One HUD element on the top-left that just shows your mission goal progress
-        Another HUD element below that that lists your score at any given moment. Optional
-            Each criteria should be able to specify whether or not it is included in this HUD element (e.g. Collect Treasures! missions shouldn't include the time remaining for this)
-        One HUD element on the top-right that shows one fail condition, at the mission maker's choice. Optional
-        Another HUD element below that, smaller, that shows another fail condition, at the mission maker's choice. Optional
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

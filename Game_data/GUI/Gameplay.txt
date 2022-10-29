@@ -38,17 +38,31 @@ positions{
 	spray_next_icon=12.0000 48.0000 3.0000 5.0000
 	spray_next_button=14.0000 51.0000 4.0000 4.0000
 	mission_goal_bubble=18.0000 8.0000 32.0000 12.0000
-	mission_goal_cur_label=10.5000 11.5000 13.0000 3.0000
-	mission_goal_cur=10.5000 6.5000 13.0000 7.0000
+	mission_goal_cur_label=9.5000 11.5000 13.0000 3.0000
+	mission_goal_cur=9.5000 6.5000 13.0000 7.0000
 	mission_goal_req_label=26.5000 11.5000 13.0000 3.0000
 	mission_goal_req=26.5000 6.5000 13.0000 7.0000
-	mission_goal_slash=18.5000 6.5000 3.0000 7.0000
+	mission_goal_slash=18.0000 6.5000 4.0000 7.0000
 	mission_goal_name=18.0000 8.0000 30.0000 10.0000
 	mission_score_bubble=18.0000 20.0000 32.0000 10.0000
 	mission_score_score_label=7.5000 21.5000 9.0000 5.0000
 	mission_score_points=18.0000 21.5000 10.0000 5.0000
 	mission_score_points_label=28.5000 21.5000 9.0000 5.0000
 	mission_score_ruler=18.0000 17.0000 30.0000 2.0000
+	mission_fail_1_bubble=82.0000 8.0000 32.0000 12.0000
+	mission_fail_1_cur_label=73.5000 11.5000 13.0000 3.0000
+	mission_fail_1_cur=73.5000 6.5000 13.0000 7.0000
+	mission_fail_1_req_label=90.5000 11.5000 13.0000 3.0000
+	mission_fail_1_req=90.5000 6.5000 13.0000 7.0000
+	mission_fail_1_slash=82.0000 6.5000 4.0000 7.0000
+	mission_fail_1_name=82.0000 8.0000 30.0000 10.0000
+	mission_fail_2_bubble=82.0000 20.0000 32.0000 10.0000
+	mission_fail_2_cur_label=73.5000 22.5000 13.0000 3.0000
+	mission_fail_2_cur=73.5000 18.5000 13.0000 5.0000
+	mission_fail_2_req_label=90.5000 22.5000 13.0000 3.0000
+	mission_fail_2_req=90.5000 18.5000 13.0000 5.0000
+	mission_fail_2_slash=82.0000 18.5000 4.0000 5.0000
+	mission_fail_2_name=82.0000 20.0000 30.0000 8.0000
 }
 files{
 	bubble=Bubble.png

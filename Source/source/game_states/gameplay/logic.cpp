@@ -763,6 +763,42 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             (real_goal_ratio - goal_indicator_ratio) *
             (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
             
+        if(game.cur_area_data.mission.fail_hud_primary_cond != INVALID) {
+            float real_fail_ratio = 0.0f;
+            int fail_cur_amount =
+                game.mission_fail_conds[game.cur_area_data.mission.fail_hud_primary_cond]->get_cur_amount(
+                    this
+                );
+            int fail_req_amount =
+                game.mission_fail_conds[game.cur_area_data.mission.fail_hud_primary_cond]->get_req_amount(
+                    this
+                );
+            if(fail_req_amount != 0.0f) {
+                real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
+            }
+            fail_1_indicator_ratio +=
+                (real_fail_ratio - fail_1_indicator_ratio) *
+                (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
+        }
+        
+        if(game.cur_area_data.mission.fail_hud_secondary_cond != INVALID) {
+            float real_fail_ratio = 0.0f;
+            int fail_cur_amount =
+                game.mission_fail_conds[game.cur_area_data.mission.fail_hud_secondary_cond]->get_cur_amount(
+                    this
+                );
+            int fail_req_amount =
+                game.mission_fail_conds[game.cur_area_data.mission.fail_hud_secondary_cond]->get_req_amount(
+                    this
+                );
+            if(fail_req_amount != 0.0f) {
+                real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
+            }
+            fail_2_indicator_ratio +=
+                (real_fail_ratio - fail_2_indicator_ratio) *
+                (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
+        }
+        
         if(game.cur_area_data.type == AREA_TYPE_MISSION) {
             if(cur_interlude == INTERLUDE_NONE) {
                 if(is_mission_clear_met()) {
@@ -796,7 +832,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                     c_ptr->get_score(this, &game.cur_area_data.mission);
                 mission_score += c_score;
             }
-                
+            
             score_indicator +=
                 (mission_score - score_indicator) *
                 (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * delta_t);

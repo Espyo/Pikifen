@@ -130,6 +130,8 @@ gameplay_state::gameplay_state() :
     leaders_kod(0),
     starting_nr_of_leaders(0),
     goal_indicator_ratio(0.0f),
+    fail_1_indicator_ratio(0.0f),
+    fail_2_indicator_ratio(0.0f),
     score_indicator(0.0f),
     cur_interlude(INTERLUDE_NONE),
     interlude_time(0.0f),
@@ -308,6 +310,8 @@ void gameplay_state::enter() {
     last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     
     goal_indicator_ratio = 0.0f;
+    fail_1_indicator_ratio = 0.0f;
+    fail_2_indicator_ratio = 0.0f;
     score_indicator = 0.0f;
     
     hud->gui.hide_items();

@@ -141,6 +141,7 @@ struct hud_struct {
     void tick(const float delta_t);
     
 private:
+    void create_mission_fail_cond_items(const bool primary);
     void draw_standby_icon(BUBBLE_RELATIONS which);
     void draw_spray_icon(BUBBLE_RELATIONS which);
 };

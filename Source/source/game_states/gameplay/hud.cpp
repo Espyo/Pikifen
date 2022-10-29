@@ -126,17 +126,31 @@ hud_struct::hud_struct() :
     gui.register_coords("spray_next_icon",            12,     48,  3,  5);
     gui.register_coords("spray_next_button",          14,     51,  4,  4);
     gui.register_coords("mission_goal_bubble",        18,      8, 32, 12);
-    gui.register_coords("mission_goal_cur_label",     10.5, 11.5, 13,  3);
-    gui.register_coords("mission_goal_cur",           10.5,  6.5, 13,  7);
+    gui.register_coords("mission_goal_cur_label",      9.5, 11.5, 13,  3);
+    gui.register_coords("mission_goal_cur",            9.5,  6.5, 13,  7);
     gui.register_coords("mission_goal_req_label",     26.5, 11.5, 13,  3);
     gui.register_coords("mission_goal_req",           26.5,  6.5, 13,  7);
-    gui.register_coords("mission_goal_slash",         18.5,  6.5,  3,  7);
+    gui.register_coords("mission_goal_slash",           18,  6.5,  4,  7);
     gui.register_coords("mission_goal_name",          18,      8, 30, 10);
     gui.register_coords("mission_score_bubble",       18,     20, 32, 10);
     gui.register_coords("mission_score_score_label",  7.5,  21.5,  9,  5);
     gui.register_coords("mission_score_points",       18,   21.5, 10,  5);
     gui.register_coords("mission_score_points_label", 28.5, 21.5,  9,  5);
     gui.register_coords("mission_score_ruler",        18,     17, 30,  2);
+    gui.register_coords("mission_fail_1_bubble",      82,      8, 32, 12);
+    gui.register_coords("mission_fail_1_cur_label",   73.5, 11.5, 13,  3);
+    gui.register_coords("mission_fail_1_cur",         73.5,  6.5, 13,  7);
+    gui.register_coords("mission_fail_1_req_label",   90.5, 11.5, 13,  3);
+    gui.register_coords("mission_fail_1_req",         90.5,  6.5, 13,  7);
+    gui.register_coords("mission_fail_1_slash",       82,    6.5,  4,  7);
+    gui.register_coords("mission_fail_1_name",        82,      8, 30, 10);
+    gui.register_coords("mission_fail_2_bubble",      82,     20, 32, 10);
+    gui.register_coords("mission_fail_2_cur_label",   73.5, 22.5, 13,  3);
+    gui.register_coords("mission_fail_2_cur",         73.5, 18.5, 13,  5);
+    gui.register_coords("mission_fail_2_req_label",   90.5, 22.5, 13,  3);
+    gui.register_coords("mission_fail_2_req",         90.5, 18.5, 13,  5);
+    gui.register_coords("mission_fail_2_slash",       82,   18.5,  4,  5);
+    gui.register_coords("mission_fail_2_name",        82,     20, 30,  8);
     gui.read_coords(hud_file_node.get_child_by_name("positions"));
     
     //Leader health and icons.
@@ -987,7 +1001,7 @@ hud_struct::hud_struct() :
                 cx, cy, cw, ch,
                 center.x - size.x / 2.0f,
                 center.y - size.y / 2.0f,
-                size.x * game.states.gameplay->goal_indicator_ratio,
+                size.x * game.states.gameplay->goal_indicator_ratio + 1,
                 size.y
             );
             draw_filled_rounded_rectangle(
@@ -1397,6 +1411,19 @@ hud_struct::hud_struct() :
         
     }
     
+    if(
+        game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data.mission.fail_hud_primary_cond != INVALID
+    ) {
+        create_mission_fail_cond_items(true);
+    }
+    if(
+        game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data.mission.fail_hud_secondary_cond != INVALID
+    ) {
+        create_mission_fail_cond_items(false);
+    }
+    
     
     data_node* bitmaps_node = hud_file_node.get_child_by_name("files");
     
@@ -1447,6 +1474,217 @@ hud_struct::~hud_struct() {
     game.bitmaps.detach(bmp_no_pikmin_bubble);
     game.bitmaps.detach(bmp_sun);
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates either the primary or the secondary mission fail condition HUD items.
+ * primary:
+ *   True if it's the primary HUD item, false if it's the secondary.
+ */
+void hud_struct::create_mission_fail_cond_items(const bool primary) {
+    MISSION_FAIL_CONDITIONS cond =
+        primary ?
+        (MISSION_FAIL_CONDITIONS)
+        game.cur_area_data.mission.fail_hud_primary_cond :
+        (MISSION_FAIL_CONDITIONS)
+        game.cur_area_data.mission.fail_hud_secondary_cond;
+        
+    //Mission fail condition bubble.
+    gui_item* mission_fail_bubble = new gui_item();
+    mission_fail_bubble->on_draw =
+    [this, primary] (const point & center, const point & size) {
+        int cx = 0;
+        int cy = 0;
+        int cw = 0;
+        int ch = 0;
+        float ratio =
+            primary ?
+            game.states.gameplay->fail_1_indicator_ratio :
+            game.states.gameplay->fail_2_indicator_ratio;
+        al_get_clipping_rectangle(&cx, &cy, &cw, &ch);
+        set_combined_clipping_rectangles(
+            cx, cy, cw, ch,
+            center.x - size.x / 2.0f,
+            center.y - size.y / 2.0f,
+            size.x * ratio + 1,
+            size.y
+        );
+        draw_filled_rounded_rectangle(
+            center, size, 20.0f, al_map_rgba(149, 80, 50, 160)
+        );
+        set_combined_clipping_rectangles(
+            cx, cy, cw, ch,
+            center.x - size.x / 2.0f +
+            size.x * ratio,
+            center.y - size.y / 2.0f,
+            size.x * (1 - ratio),
+            size.y
+        );
+        draw_filled_rounded_rectangle(
+            center, size, 20.0f, al_map_rgba(149, 130, 50, 160)
+        );
+        al_set_clipping_rectangle(cx, cy, cw, ch);
+        draw_textured_box(
+            center, size, game.sys_assets.bmp_bubble_box,
+            al_map_rgba(255, 255, 255, 200)
+        );
+    };
+    gui.add_item(
+        mission_fail_bubble,
+        primary ?
+        "mission_fail_1_bubble" :
+        "mission_fail_2_bubble"
+    );
+    
+    
+    string mission_fail_cur_label_text =
+        game.mission_fail_conds[cond]->get_hud_label();
+        
+    if(!mission_fail_cur_label_text.empty()) {
+    
+        //Mission fail condition current label.
+        gui_item* mission_fail_cur_label = new gui_item();
+        mission_fail_cur_label->on_draw =
+            [this, mission_fail_cur_label_text]
+        (const point & center, const point & size) {
+            draw_compressed_scaled_text(
+                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                mission_fail_cur_label_text
+            );
+        };
+        gui.add_item(
+            mission_fail_cur_label,
+            primary ?
+            "mission_fail_1_cur_label" :
+            "mission_fail_2_cur_label"
+        );
+        
+        
+        //Mission fail condition current.
+        gui_item* mission_fail_cur = new gui_item();
+        mission_fail_cur->on_draw =
+        [this, cond] (const point & center, const point & size) {
+            int value =
+                game.mission_fail_conds[cond]->
+                get_cur_amount(game.states.gameplay);
+            string text;
+            if(cond == MISSION_FAIL_COND_TIME_LIMIT) {
+                text = time_to_str(value, ":", "");
+            } else {
+                text = i2s(value);
+            }
+            draw_compressed_scaled_text(
+                game.fonts.counter, COLOR_WHITE,
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                text
+            );
+        };
+        gui.add_item(
+            mission_fail_cur,
+            primary ?
+            "mission_fail_1_cur" :
+            "mission_fail_2_cur"
+        );
+        
+        
+        //Mission  fail condition requirement label.
+        gui_item* mission_fail_req_label = new gui_item();
+        mission_fail_req_label->on_draw =
+            [this]
+        (const point & center, const point & size) {
+            draw_compressed_scaled_text(
+                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                "Fail"
+            );
+        };
+        gui.add_item(
+            mission_fail_req_label,
+            primary ?
+            "mission_fail_1_req_label" :
+            "mission_fail_2_req_label"
+        );
+        
+        
+        //Mission fail condition requirement.
+        gui_item* mission_fail_req = new gui_item();
+        mission_fail_req->on_draw =
+        [this, cond] (const point & center, const point & size) {
+            int value =
+                game.mission_fail_conds[cond]->
+                get_req_amount(game.states.gameplay);
+            string text;
+            if(cond == MISSION_FAIL_COND_TIME_LIMIT) {
+                text = time_to_str(value, ":", "");
+            } else {
+                text = i2s(value);
+            }
+            draw_compressed_scaled_text(
+                game.fonts.counter, COLOR_WHITE,
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                text
+            );
+        };
+        gui.add_item(
+            mission_fail_req,
+            primary ?
+            "mission_fail_1_req" :
+            "mission_fail_2_req"
+        );
+        
+        
+        //Mission primary fail condition slash.
+        gui_item* mission_fail_slash = new gui_item();
+        mission_fail_slash->on_draw =
+        [this] (const point & center, const point & size) {
+            draw_compressed_scaled_text(
+                game.fonts.counter, COLOR_WHITE,
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                "/"
+            );
+        };
+        gui.add_item(
+            mission_fail_slash,
+            primary ?
+            "mission_fail_1_slash" :
+            "mission_fail_2_slash"
+        );
+        
+    } else {
+    
+        //Mission fail condition name text.
+        gui_item* mission_fail_name = new gui_item();
+        mission_fail_name->on_draw =
+        [this, cond] (const point & center, const point & size) {
+            draw_compressed_scaled_text(
+                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                center, point(1.0f, 1.0f),
+                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                size, true,
+                "Fail: " +
+                game.mission_fail_conds[cond]->get_name()
+            );
+        };
+        gui.add_item(
+            mission_fail_name,
+            primary ?
+            "mission_fail_1_name" :
+            "mission_fail_2_name"
+        );
+        
+    }
 }
 
 

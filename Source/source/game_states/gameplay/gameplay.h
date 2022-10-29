@@ -212,6 +212,10 @@ public:
     size_t starting_nr_of_leaders;
     //Ratio of the mission goal HUD item's indicator.
     float goal_indicator_ratio;
+    //Ratio of the mission primary fail condition HUD item's indicator.
+    float fail_1_indicator_ratio;
+    //Ratio of the mission secondary fail condition HUD item's indicator.
+    float fail_2_indicator_ratio;
     //Position of the mission score HUD item's indicator.
     float score_indicator;
     //Current interlude, if any.

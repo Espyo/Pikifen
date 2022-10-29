@@ -104,6 +104,14 @@ bool mission_fail_kill_enemies::get_end_zoom_data(
 
 
 /* ----------------------------------------------------------------------------
+ * HUD label for the player's current amount.
+ */
+string mission_fail_kill_enemies::get_hud_label() const {
+    return "Enemies";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the condition's name.
  */
 string mission_fail_kill_enemies::get_name() const {
@@ -218,6 +226,14 @@ bool mission_fail_lose_leaders::get_end_zoom_data(
         return true;
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * HUD label for the player's current amount.
+ */
+string mission_fail_lose_leaders::get_hud_label() const {
+    return "Leaders lost";
 }
 
 
@@ -338,6 +354,14 @@ bool mission_fail_lose_pikmin::get_end_zoom_data(
 
 
 /* ----------------------------------------------------------------------------
+ * HUD label for the player's current amount.
+ */
+string mission_fail_lose_pikmin::get_hud_label() const {
+    return "Pikmin lost";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the condition's name.
  */
 string mission_fail_lose_pikmin::get_name() const {
@@ -440,6 +464,14 @@ bool mission_fail_pause_menu::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * HUD label for the player's current amount.
+ */
+string mission_fail_pause_menu::get_hud_label() const {
+    return "";
 }
 
 
@@ -548,6 +580,14 @@ bool mission_fail_take_damage::get_end_zoom_data(
         return true;
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * HUD label for the player's current amount.
+ */
+string mission_fail_take_damage::get_hud_label() const {
+    return "";
 }
 
 
@@ -672,6 +712,14 @@ bool mission_fail_time_limit::get_end_zoom_data(
 
 
 /* ----------------------------------------------------------------------------
+ * HUD label for the player's current amount.
+ */
+string mission_fail_time_limit::get_hud_label() const {
+    return "Time";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the condition's name.
  */
 string mission_fail_time_limit::get_name() const {
@@ -788,6 +836,14 @@ bool mission_fail_too_few_pikmin::get_end_zoom_data(
 
 
 /* ----------------------------------------------------------------------------
+ * HUD label for the player's current amount.
+ */
+string mission_fail_too_few_pikmin::get_hud_label() const {
+    return "Pikmin";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the condition's name.
  */
 string mission_fail_too_few_pikmin::get_name() const {
@@ -900,6 +956,14 @@ bool mission_fail_too_many_pikmin::get_end_zoom_data(
         return true;
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * HUD label for the player's current amount.
+ */
+string mission_fail_too_many_pikmin::get_hud_label() const {
+    return "Pikmin";
 }
 
 
