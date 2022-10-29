@@ -52,8 +52,11 @@ extern const AUTO_THROW_MODES AUTO_THROW_PRESETS[];
 extern const string CURSOR_SPEED_PRESET_NAMES[];
 extern const float CURSOR_SPEED_PRESETS[];
 extern const string GUI_FILE_PATH;
+extern const string LEAVING_CONFIRMATION_PRESET_NAMES[];
+extern const LEAVING_CONFIRMATION_MODES LEAVING_CONFIRMATION_PRESETS[];
 extern const unsigned char N_AUTO_THROW_PRESETS;
 extern const unsigned char N_CURSOR_SPEED_PRESETS;
+extern const unsigned char N_LEAVING_CONFIRMATION_PRESETS;
 }
 
 
@@ -171,14 +174,18 @@ private:
     picker_gui_item* resolution_picker;
     //Cursor speed picker widget.
     picker_gui_item* cursor_speed_picker;
+    //Leaving confirmation picker widget.
+    picker_gui_item* leaving_confirmation_picker;
     //Restart warning text widget.
     text_gui_item* warning_text;
     
     void change_auto_throw(const signed int step);
     void change_cursor_speed(const signed int step);
+    void change_leaving_confirmation(const signed int step);
     void change_resolution(const signed int step);
     size_t get_auto_throw_idx() const;
     size_t get_cursor_speed_idx() const;
+    size_t get_leaving_confirmation_idx() const;
     size_t get_resolution_idx() const;
     void go_to_controls();
     void update();

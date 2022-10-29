@@ -101,11 +101,24 @@ void pause_menu_struct::add_bullet(
  * based on the player's confirmation question preferences.
  */
 void pause_menu_struct::confirm_or_leave() {
-    bool leave_right_away = false;
+    bool do_confirmation = false;
+    switch(game.options.leaving_confirmation_mode) {
+    case LEAVING_CONFIRMATION_NEVER: {
+        do_confirmation = false;
+        break;
+    } case LEAVING_CONFIRMATION_1_MIN: {
+        do_confirmation =
+            game.states.gameplay->area_time_passed >= 60.0f;
+        break;
+    } case LEAVING_CONFIRMATION_ALWAYS: {
+        do_confirmation = true;
+        break;
+    } case N_LEAVING_CONFIRMATION_MODES: {
+        break;
+    }
+    }
     
-    if(leave_right_away) {
-        start_leaving_gameplay();
-    } else {
+    if(do_confirmation) {
         switch(leave_target) {
         case LEAVE_TO_RETRY: {
             confirmation_explanation_text->text =
@@ -161,6 +174,9 @@ void pause_menu_struct::confirm_or_leave() {
             GUI_MANAGER_ANIM_UP_TO_CENTER,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
+        
+    } else {
+        start_leaving_gameplay();
     }
 }
 

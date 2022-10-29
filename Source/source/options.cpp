@@ -67,6 +67,9 @@ const bool DEF_GUI_EDITOR_SNAP = true;
 const float DEF_JOYSTICK_MAX_DEADZONE = 0.9f;
 //Default value for the joystick minimum deadzone.
 const float DEF_JOYSTICK_MIN_DEADZONE = 0.2f;
+//Default value for the pause menu leaving confirmation mode.
+const LEAVING_CONFIRMATION_MODES DEF_LEAVING_CONFIRMATION_MODE =
+    LEAVING_CONFIRMATION_ALWAYS;
 //Default value for the maximum amount of particles.
 const size_t DEF_MAX_PARTICLES = 200;
 //Default value for whether mipmaps are enabled.
@@ -124,6 +127,7 @@ options_struct::options_struct() :
     intended_win_w(OPTIONS::DEF_WIN_W),
     joystick_max_deadzone(OPTIONS::DEF_JOYSTICK_MAX_DEADZONE),
     joystick_min_deadzone(OPTIONS::DEF_JOYSTICK_MIN_DEADZONE),
+    leaving_confirmation_mode(OPTIONS::DEF_LEAVING_CONFIRMATION_MODE),
     max_particles(OPTIONS::DEF_MAX_PARTICLES),
     mipmaps_enabled(OPTIONS::DEF_MIPMAPS_ENABLED),
     smooth_scaling(OPTIONS::DEF_SMOOTH_SCALING),
@@ -203,6 +207,7 @@ void options_struct::load(data_node* file) {
     unsigned char editor_snap_mode_c;
     unsigned char editor_view_mode_c;
     unsigned char auto_throw_mode_c;
+    unsigned char leaving_confirmation_mode_c;
     
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
@@ -229,6 +234,7 @@ void options_struct::load(data_node* file) {
     rs.set("gui_editor_snap", gui_editor_snap);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
     rs.set("joystick_max_deadzone", joystick_max_deadzone);
+    rs.set("leaving_confirmation_mode", leaving_confirmation_mode_c);
     rs.set("max_particles", max_particles);
     rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("mipmaps", mipmaps_enabled);
@@ -255,6 +261,12 @@ void options_struct::load(data_node* file) {
         std::min(
             editor_view_mode_c,
             (unsigned char) (area_editor::N_VIEW_MODES - 1)
+        );
+    leaving_confirmation_mode =
+        (LEAVING_CONFIRMATION_MODES)
+        std::min(
+            leaving_confirmation_mode_c,
+            (unsigned char) (N_LEAVING_CONFIRMATION_MODES - 1)
         );
     target_fps = std::max(1, target_fps);
     
@@ -527,6 +539,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "joystick_min_deadzone",
             f2s(joystick_min_deadzone)
+        )
+    );
+    file->add(
+        new data_node(
+            "leaving_confirmation_mode",
+            i2s(leaving_confirmation_mode)
         )
     );
     file->add(

@@ -2902,6 +2902,7 @@ void area_editor::process_gui_panel_mission() {
             if(show_primary) {
                 //Primary HUD condition combobox.
                 int selected = 0;
+                bool found = false;
                 vector<string> cond_strings;
                 for(size_t c = 0; c < active_conditions.size(); ++c) {
                     size_t cond_id = active_conditions[c];
@@ -2912,8 +2913,12 @@ void area_editor::process_gui_panel_mission() {
                         cond_id ==
                         game.cur_area_data.mission.fail_hud_primary_cond
                     ) {
+                        found = true;
                         selected = c;
                     }
+                }
+                if(!found) {
+                    game.cur_area_data.mission.fail_hud_secondary_cond = 0;
                 }
                 ImGui::Indent();
                 if(
@@ -2946,6 +2951,7 @@ void area_editor::process_gui_panel_mission() {
             
             if(show_secondary) {
                 //Secondary HUD condition combobox.
+                bool found = false;
                 int selected = 0;
                 vector<string> cond_strings;
                 for(size_t c = 0; c < active_conditions.size(); ++c) {
@@ -2957,8 +2963,12 @@ void area_editor::process_gui_panel_mission() {
                         cond_id ==
                         game.cur_area_data.mission.fail_hud_secondary_cond
                     ) {
+                        found = true;
                         selected = c;
                     }
+                }
+                if(!found) {
+                    game.cur_area_data.mission.fail_hud_secondary_cond = 0;
                 }
                 ImGui::Indent();
                 if(

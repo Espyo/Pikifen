@@ -39,6 +39,19 @@ enum AUTO_THROW_MODES {
     N_AUTO_THROW_MODES,
 };
 
+//Modes for the pause menu leaving confirmation question.
+enum LEAVING_CONFIRMATION_MODES {
+    //Never ask.
+    LEAVING_CONFIRMATION_NEVER,
+    //Ask if it's been over a minute of gameplay.
+    LEAVING_CONFIRMATION_1_MIN,
+    //Always ask.
+    LEAVING_CONFIRMATION_ALWAYS,
+    
+    //Total amount of leaving confirmation modes.
+    N_LEAVING_CONFIRMATION_MODES,
+};
+
 
 namespace OPTIONS {
 extern const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
@@ -64,6 +77,7 @@ extern const float DEF_GUI_EDITOR_GRID_INTERVAL;
 extern const bool DEF_GUI_EDITOR_SNAP;
 extern const float DEF_JOYSTICK_MIN_DEADZONE;
 extern const float DEF_JOYSTICK_MAX_DEADZONE;
+extern const LEAVING_CONFIRMATION_MODES DEF_LEAVING_CONFIRMATION_MODE;
 extern const size_t DEF_MAX_PARTICLES;
 extern const bool DEF_MIPMAPS_ENABLED;
 extern const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
@@ -139,6 +153,8 @@ struct options_struct {
     float joystick_max_deadzone;
     //Minimum deadzone for joysticks.
     float joystick_min_deadzone;
+    //Pause menu leaving confirmation question mode.
+    LEAVING_CONFIRMATION_MODES leaving_confirmation_mode;
     //Maximum number of particles.
     size_t max_particles;
     //Enables or disables mipmaps.

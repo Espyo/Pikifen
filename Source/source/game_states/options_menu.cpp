@@ -35,10 +35,21 @@ const float CURSOR_SPEED_PRESETS[] =
 {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f};
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Options_menu.txt";
+//Leaving conformation preset names.
+const string LEAVING_CONFIRMATION_PRESET_NAMES[] =
+{"Always", "After 1min", "Never"};
+//Leaving conformation preset values.
+const LEAVING_CONFIRMATION_MODES LEAVING_CONFIRMATION_PRESETS[] = {
+    LEAVING_CONFIRMATION_ALWAYS,
+    LEAVING_CONFIRMATION_1_MIN,
+    LEAVING_CONFIRMATION_NEVER
+};
 //Auto-throw preset amount.
 const unsigned char N_AUTO_THROW_PRESETS = 3;
 //Cursor speed preset amount.
 const unsigned char N_CURSOR_SPEED_PRESETS = 5;
+//Leaving confirmation preset amount.
+const unsigned char N_LEAVING_CONFIRMATION_PRESETS = 3;
 }
 
 
@@ -117,7 +128,7 @@ void options_menu_state::change_auto_throw(const signed int step) {
     
     game.options.auto_throw_mode =
         OPTIONS_MENU::AUTO_THROW_PRESETS[cur_auto_throw_idx];
-    
+        
     auto_throw_picker->cur_option_idx = cur_auto_throw_idx;
     auto_throw_picker->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
@@ -146,9 +157,38 @@ void options_menu_state::change_cursor_speed(const signed int step) {
     
     game.options.cursor_speed =
         OPTIONS_MENU::CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
-    
+        
     cursor_speed_picker->cur_option_idx = cur_cursor_speed_idx;
     cursor_speed_picker->start_juice_animation(
+        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+    );
+    update();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Changes to the next leaving confirmation mode preset in the list.
+ * step:
+ *   How much to move forward in the list.
+ */
+void options_menu_state::change_leaving_confirmation(const signed int step) {
+    size_t cur_leaving_conf_idx = get_leaving_confirmation_idx();
+    
+    if(cur_leaving_conf_idx == INVALID) {
+        cur_leaving_conf_idx = 0;
+    } else {
+        cur_leaving_conf_idx =
+            sum_and_wrap(
+                (int) cur_leaving_conf_idx, step,
+                OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS
+            );
+    }
+    
+    game.options.leaving_confirmation_mode =
+        OPTIONS_MENU::LEAVING_CONFIRMATION_PRESETS[cur_leaving_conf_idx];
+        
+    leaving_confirmation_picker->cur_option_idx = cur_leaving_conf_idx;
+    leaving_confirmation_picker->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
     );
     update();
@@ -248,6 +288,24 @@ size_t options_menu_state::get_cursor_speed_idx() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the current leaving confirmation option's index,
+ * or INVALID if not found.
+ */
+size_t options_menu_state::get_leaving_confirmation_idx() const {
+    for(size_t m = 0; m < OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS; ++m) {
+        if(
+            game.options.leaving_confirmation_mode ==
+            OPTIONS_MENU::LEAVING_CONFIRMATION_PRESETS[m]
+        ) {
+            return m;
+        }
+    }
+    
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
 string options_menu_state::get_name() const {
@@ -313,16 +371,17 @@ void options_menu_state::load() {
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu items.
-    gui.register_coords("back",              15, 10, 20,  6);
-    gui.register_coords("fullscreen",        50, 20, 45,  8);
-    gui.register_coords("resolution",        50, 30, 45,  8);
-    gui.register_coords("cursor_speed",      50, 45, 45,  8);
-    gui.register_coords("auto_throw",        50, 55, 45,  8);
-    gui.register_coords("show_hud_controls", 50, 65, 45,  8);
-    gui.register_coords("controls",          50, 75, 45,  8);
-    gui.register_coords("advanced",          85, 85, 20,  8);
-    gui.register_coords("tooltip",           50, 95, 95,  8);
-    gui.register_coords("restart_warning",   60,  5, 70,  8);
+    gui.register_coords("back",                 14,  8, 20, 8);
+    gui.register_coords("fullscreen",           26, 20, 44, 8);
+    gui.register_coords("resolution",           74, 20, 44, 8);
+    gui.register_coords("cursor_speed",         50, 34, 44, 8);
+    gui.register_coords("auto_throw",           50, 44, 44, 8);
+    gui.register_coords("show_hud_controls",    50, 54, 44, 8);
+    gui.register_coords("controls",             50, 74, 44, 8);
+    gui.register_coords("leaving_confirmation", 50, 64, 44, 8);
+    gui.register_coords("advanced",             86, 84, 24, 8);
+    gui.register_coords("tooltip",              50, 95, 96, 7);
+    gui.register_coords("restart_warning",      62,  5, 72, 6);
     gui.read_coords(
         data_node(OPTIONS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -481,6 +540,58 @@ void options_menu_state::load() {
     };
     gui.add_item(show_hud_controls_check, "show_hud_controls");
     
+    //Leaving confirmation mode.
+    leaving_confirmation_picker =
+        new picker_gui_item(
+        "Leaving confirmation: ", "",
+        OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS,
+        get_leaving_confirmation_idx()
+    );
+    leaving_confirmation_picker->on_previous =
+    [this] () {
+        change_leaving_confirmation(-1);
+    };
+    leaving_confirmation_picker->on_next =
+    [this] () {
+        change_leaving_confirmation(1);
+    };
+    leaving_confirmation_picker->on_get_tooltip =
+    [] () -> string {
+        size_t idx = 0;
+        for(; idx < OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS; ++idx) {
+            if(
+                OPTIONS_MENU::LEAVING_CONFIRMATION_PRESETS[idx] ==
+                OPTIONS::DEF_LEAVING_CONFIRMATION_MODE
+            ) {
+                break;
+            }
+        }
+        
+        string s;
+        switch(game.options.leaving_confirmation_mode) {
+        case LEAVING_CONFIRMATION_NEVER: {
+            s = "When leaving from the pause menu, never ask to confirm.";
+            break;
+        }
+        case LEAVING_CONFIRMATION_1_MIN: {
+            s = "When leaving from the pause menu, only ask to confirm "
+                "if one minute has passed.";
+            break;
+        }
+        case LEAVING_CONFIRMATION_ALWAYS: {
+            s = "When leaving from the pause menu, always ask to confirm.";
+            break;
+        }
+        default: {
+            return "";
+        }
+        }
+        return
+            s + " Default: " +
+            OPTIONS_MENU::LEAVING_CONFIRMATION_PRESET_NAMES[idx] + ".";
+    };
+    gui.add_item(leaving_confirmation_picker, "leaving_confirmation");
+    
     //Controls button.
     button_gui_item* controls_button =
         new button_gui_item("Edit controls...", game.fonts.standard);
@@ -606,4 +717,22 @@ void options_menu_state::update() {
     
     auto_throw_picker->option =
         OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[cur_auto_throw_idx];
+        
+    //Leaving confirmation.
+    size_t cur_leaving_conf_idx = INVALID;
+    
+    for(size_t m = 0; m < OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS; ++m) {
+        if(
+            game.options.leaving_confirmation_mode ==
+            OPTIONS_MENU::LEAVING_CONFIRMATION_PRESETS[m]
+        ) {
+            cur_leaving_conf_idx = m;
+            break;
+        }
+    }
+    
+    leaving_confirmation_picker->option =
+        OPTIONS_MENU::LEAVING_CONFIRMATION_PRESET_NAMES[
+         cur_leaving_conf_idx
+     ];
 }
