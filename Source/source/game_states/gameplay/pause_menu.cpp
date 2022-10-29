@@ -17,12 +17,18 @@
 
 
 namespace PAUSE_MENU {
+//Path to the leaving confirmation page GUI information file.
+const string CONFIRMATION_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Pause_confirmation.txt";
 //Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Pause_menu.txt";
+const string GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Pause_menu.txt";
 //Path to the help page GUI information file.
-const string HELP_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Pause_help.txt";
+const string HELP_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Pause_help.txt";
 //Path to the mission page GUI information file.
-const string MISSION_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Pause_mission.txt";
+const string MISSION_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Pause_mission.txt";
 }
 
 
@@ -33,11 +39,16 @@ pause_menu_struct::pause_menu_struct() :
     bg_alpha_mult(0.0f),
     closing_timer(0.0f),
     to_delete(false),
-    closing(false) {
+    closing(false),
+    help_category_text(nullptr),
+    help_tidbit_list(nullptr),
+    confirmation_explanation_text(nullptr),
+    leave_target(LEAVE_TO_AREA_SELECT) {
     
     init_main_pause_menu();
     init_help_page();
     init_mission_page();
+    init_confirmation_page();
 }
 
 
@@ -48,6 +59,7 @@ pause_menu_struct::~pause_menu_struct() {
     gui.destroy();
     help_gui.destroy();
     mission_gui.destroy();
+    confirmation_gui.destroy();
 }
 
 
@@ -85,12 +97,82 @@ void pause_menu_struct::add_bullet(
 
 
 /* ----------------------------------------------------------------------------
+ * Either asks the player to confirm if they wish to leave, or leaves outright,
+ * based on the player's confirmation question preferences.
+ */
+void pause_menu_struct::confirm_or_leave() {
+    bool leave_right_away = false;
+    
+    if(leave_right_away) {
+        start_leaving_gameplay();
+    } else {
+        switch(leave_target) {
+        case LEAVE_TO_RETRY: {
+            confirmation_explanation_text->text =
+                "If you retry, you will LOSE all of your progress "
+                "and start over. Are you sure you want to retry?";
+            break;
+        } case LEAVE_TO_END: {
+            confirmation_explanation_text->text =
+                "If you end now, you will stop playing and will go to the "
+                "results menu.";
+            if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+                if(
+                    game.cur_area_data.mission.goal ==
+                    MISSION_GOAL_END_MANUALLY
+                ) {
+                    confirmation_explanation_text->text +=
+                        " The goal of this mission is to end through here, so "
+                        "make sure you've done everything you need first.";
+                } else {
+                    confirmation_explanation_text->text +=
+                        " This will end the mission as a fail, "
+                        "even though you may still get a medal from it.";
+                    if(
+                        game.cur_area_data.mission.grading_mode ==
+                        MISSION_GRADING_POINTS
+                    ) {
+                        confirmation_explanation_text->text +=
+                            " Note that since you fail the mission, you may "
+                            "lose out on some points. You should check the "
+                            "pause menu's mission page for more information.";
+                    }
+                    
+                }
+            }
+            confirmation_explanation_text->text +=
+                " Are you sure you want to end?";
+            break;
+        } case LEAVE_TO_AREA_SELECT: {
+            confirmation_explanation_text->text =
+                "If you quit, you will LOSE all of your progress and instantly "
+                "stop playing. Are you sure you want to quit?";
+            break;
+        }
+        }
+        
+        gui.responsive = false;
+        gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        confirmation_gui.responsive = true;
+        confirmation_gui.start_animation(
+            GUI_MANAGER_ANIM_UP_TO_CENTER,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the pause menu.
  */
 void pause_menu_struct::draw() {
     gui.draw();
     help_gui.draw();
     mission_gui.draw();
+    confirmation_gui.draw();
 }
 
 
@@ -327,6 +409,96 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
     gui.handle_event(ev);
     help_gui.handle_event(ev);
     mission_gui.handle_event(ev);
+    confirmation_gui.handle_event(ev);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the leaving confirmation page.
+ */
+void pause_menu_struct::init_confirmation_page() {
+    data_node gui_file(PAUSE_MENU::CONFIRMATION_GUI_FILE_PATH);
+    
+    //Menu items.
+    confirmation_gui.register_coords("cancel",           15,  8, 20, 8);
+    confirmation_gui.register_coords("confirm",          22, 25, 35, 10);
+    confirmation_gui.register_coords("header",           22, 37, 35, 10);
+    confirmation_gui.register_coords("explanation",      22, 49, 35, 10);
+    confirmation_gui.register_coords("options_reminder", 22, 61, 35, 10);
+    confirmation_gui.register_coords("tooltip",          50, 90, 95, 15);
+    confirmation_gui.read_coords(gui_file.get_child_by_name("positions"));
+    
+    //Cancel button.
+    confirmation_gui.back_item =
+        new button_gui_item(
+        "Cancel", game.fonts.standard
+    );
+    confirmation_gui.back_item->on_activate =
+    [this] (const point &) {
+        confirmation_gui.responsive = false;
+        confirmation_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_UP,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+        gui.responsive = true;
+        gui.start_animation(
+            GUI_MANAGER_ANIM_UP_TO_CENTER,
+            GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
+        );
+    };
+    confirmation_gui.back_item->on_get_tooltip =
+    [] () { return "Return to the pause menu."; };
+    confirmation_gui.add_item(confirmation_gui.back_item, "cancel");
+    
+    //Confirm button.
+    button_gui_item* confirm_button =
+        new button_gui_item("Confirm", game.fonts.standard);
+    confirm_button->on_activate =
+    [this] (const point &) {
+        start_leaving_gameplay();
+    };
+    confirm_button->on_get_tooltip =
+    [] () {
+        return "Yes, I'm sure.";
+    };
+    confirmation_gui.add_item(confirm_button, "confirm");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item("Are you sure?", game.fonts.area_name);
+    confirmation_gui.add_item(header_text, "header");
+    
+    //Explanation text.
+    confirmation_explanation_text =
+        new text_gui_item("", game.fonts.standard);
+    confirmation_explanation_text->line_wrap = true;
+    confirmation_gui.add_item(confirmation_explanation_text, "explanation");
+    
+    //Options reminder text.
+    text_gui_item* options_reminder_text =
+        new text_gui_item(
+        "You can disable this confirmation question in the options menu.",
+        game.fonts.standard
+    );
+    confirmation_gui.add_item(options_reminder_text, "options_reminder");
+    
+    //Tooltip text.
+    text_gui_item* tooltip_text =
+        new text_gui_item("", game.fonts.standard);
+    tooltip_text->on_draw =
+        [this]
+    (const point & center, const point & size) {
+        draw_tidbit(
+            game.fonts.standard, center, size,
+            confirmation_gui.get_current_tooltip()
+        );
+    };
+    confirmation_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    confirmation_gui.set_selected_item(confirmation_gui.back_item);
+    confirmation_gui.responsive = false;
+    confirmation_gui.hide_items();
 }
 
 
@@ -627,7 +799,8 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     retry_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_RETRY);
+        leave_target = LEAVE_TO_RETRY;
+        confirm_or_leave();
     };
     retry_button->on_get_tooltip =
     [] () {
@@ -648,23 +821,15 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     end_button->on_activate =
     [this] (const point &) {
-        if(
-            has_flag(
-                game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
-            )
-        ) {
-            game.states.gameplay->mission_fail_reason =
-                MISSION_FAIL_COND_PAUSE_MENU;
-        }
-        game.states.gameplay->start_leaving(gameplay_state::LEAVE_TO_END);
+        leave_target = LEAVE_TO_END;
+        confirm_or_leave();
     };
     end_button->on_get_tooltip =
     [] () {
         bool as_fail =
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                MISSION_FAIL_COND_PAUSE_MENU
+                get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
         return
             game.cur_area_data.type == AREA_TYPE_SIMPLE ?
@@ -705,9 +870,8 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     quit_button->on_activate =
     [this] (const point &) {
-        game.states.gameplay->start_leaving(
-            gameplay_state::LEAVE_TO_AREA_SELECT
-        );
+        leave_target = LEAVE_TO_AREA_SELECT;
+        confirm_or_leave();
     };
     quit_button->on_get_tooltip =
     [] () {
@@ -970,6 +1134,24 @@ void pause_menu_struct::start_closing() {
 
 
 /* ----------------------------------------------------------------------------
+ * Starts the process of leaving the gameplay state.
+ */
+void pause_menu_struct::start_leaving_gameplay() {
+    if(
+        leave_target == LEAVE_TO_END &&
+        has_flag(
+            game.cur_area_data.mission.fail_conditions,
+            get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
+        )
+    ) {
+        game.states.gameplay->mission_fail_reason =
+            MISSION_FAIL_COND_PAUSE_MENU;
+    }
+    game.states.gameplay->start_leaving(leave_target);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks time by one frame of logic.
  * delta_t:
  *   How long the frame's tick is, in seconds.
@@ -979,6 +1161,7 @@ void pause_menu_struct::tick(const float delta_t) {
     gui.tick(delta_t);
     help_gui.tick(delta_t);
     mission_gui.tick(delta_t);
+    confirmation_gui.tick(delta_t);
     
     //Tick the background.
     const float bg_alpha_mult_speed =

@@ -23,9 +23,22 @@ class pikmin_type;
 
 
 namespace PAUSE_MENU {
+extern const string CONFIRMATION_GUI_FILE_PATH;
 extern const string GUI_FILE_PATH;
 extern const string HELP_GUI_FILE_PATH;
+extern const string MISSION_GUI_FILE_PATH;
 }
+
+
+//Target to leave towards.
+enum GAMEPLAY_LEAVE_TARGET {
+    //Leave in order to retry the area.
+    LEAVE_TO_RETRY,
+    //Leave in order to end the exploration/mission.
+    LEAVE_TO_END,
+    //Leave in order to go to the area selection.
+    LEAVE_TO_AREA_SELECT,
+};
 
 
 /* ----------------------------------------------------------------------------
@@ -55,6 +68,8 @@ public:
     gui_manager help_gui;
     //GUI manager for the mission page.
     gui_manager mission_gui;
+    //GUI manager for the leaving confirmation page.
+    gui_manager confirmation_gui;
     //Multiply the background alpha by this much.
     float bg_alpha_mult;
     //Time left until the menu finishes closing.
@@ -76,13 +91,18 @@ private:
     text_gui_item* help_category_text;
     //Help page tidbit list.
     list_gui_item* help_tidbit_list;
+    //Confirmation page explanation text.
+    text_gui_item* confirmation_explanation_text;
     //All tidbits in the help page.
     map<HELP_CATEGORIES, vector<string> > tidbits;
+    //Where the player intends to go by leaving.
+    GAMEPLAY_LEAVE_TARGET leave_target;
     
     void add_bullet(
         list_gui_item* list, const string &text,
         const ALLEGRO_COLOR &color = COLOR_WHITE
     );
+    void confirm_or_leave();
     void draw_tidbit(
         const ALLEGRO_FONT* const font, const point &where,
         const point &max_size, const string &text
@@ -93,7 +113,9 @@ private:
     void init_help_page();
     void init_main_pause_menu();
     void init_mission_page();
+    void init_confirmation_page();
     void populate_help_tidbits(const HELP_CATEGORIES category);
+    void start_leaving_gameplay();
 };
 
 

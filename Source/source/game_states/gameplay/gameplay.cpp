@@ -594,7 +594,7 @@ void gameplay_state::init_hud() {
  * target:
  *   Where to leave to.
  */
-void gameplay_state::leave(const LEAVE_TARGET target) {
+void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
     if(unloading) return;
     
     if(game.perf_mon) {
@@ -1046,7 +1046,7 @@ void gameplay_state::load_game_content() {
  * target:
  *   Where to leave to.
  */
-void gameplay_state::start_leaving(const LEAVE_TARGET target) {
+void gameplay_state::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
     game.fade_mgr.start_fade( false, [this, target] () { leave(target); });
 }
 

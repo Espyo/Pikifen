@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -23,6 +23,7 @@ Next tasks (roughly sorted most important first)
     Nataly's glitches
     "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
     Helodity's resource without destination glitch
+    If the Pikmin in standby to be thrown is deleted, the game crashes
     
     --- v0.23.0 ---
     Mission Mode stuff
@@ -646,6 +647,7 @@ Small tasks (for when I'm feeling lazy)
         Document the code with comments
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
+        Try to refactor the mission strategy patterns to also work for the area editor logic
     
     
 Misc things (so I don't forget)

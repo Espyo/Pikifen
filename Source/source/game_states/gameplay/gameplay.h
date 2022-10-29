@@ -227,19 +227,9 @@ public:
     //Time passed in the current big message.
     float big_msg_time;
     
-    //Target to leave towards.
-    enum LEAVE_TARGET {
-        //Leave in order to retry the area.
-        LEAVE_TO_RETRY,
-        //Leave in order to end the exploration/mission.
-        LEAVE_TO_END,
-        //Leave in order to go to the area selection.
-        LEAVE_TO_AREA_SELECT,
-    };
-    
     void enter();
-    void leave(const LEAVE_TARGET target);
-    void start_leaving(const LEAVE_TARGET target);
+    void leave(const GAMEPLAY_LEAVE_TARGET target);
+    void start_leaving(const GAMEPLAY_LEAVE_TARGET target);
     void change_spray_count(const size_t type_nr, signed int amount);
     size_t get_total_pikmin_amount();
     void update_available_leaders();

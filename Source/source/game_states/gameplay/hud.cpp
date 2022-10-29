@@ -1027,127 +1027,128 @@ hud_struct::hud_struct() :
         gui.add_item(mission_goal_bubble, "mission_goal_bubble");
         
         
-        //Mission goal current label.
         string goal_cur_label_text =
             game.mission_goals[game.cur_area_data.mission.goal]->
             get_hud_label();
-        gui_item* mission_goal_cur_label = new gui_item();
-        mission_goal_cur_label->on_draw =
-        [this, goal_cur_label_text] (const point & center, const point & size) {
-            if(goal_cur_label_text.empty()) return;
-            draw_compressed_scaled_text(
-                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-                size, true,
-                goal_cur_label_text
-            );
-        };
-        gui.add_item(mission_goal_cur_label, "mission_goal_cur_label");
+            
+        if(!goal_cur_label_text.empty()) {
+            //Mission goal current label.
+            gui_item* mission_goal_cur_label = new gui_item();
+            mission_goal_cur_label->on_draw =
+                [this, goal_cur_label_text]
+            (const point & center, const point & size) {
+                draw_compressed_scaled_text(
+                    game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                    center, point(1.0f, 1.0f),
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    size, true,
+                    goal_cur_label_text
+                );
+            };
+            gui.add_item(mission_goal_cur_label, "mission_goal_cur_label");
+            
+            
+            //Mission goal current.
+            gui_item* mission_goal_cur = new gui_item();
+            mission_goal_cur->on_draw =
+            [this] (const point & center, const point & size) {
+                int value =
+                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    get_cur_amount(game.states.gameplay);
+                string text;
+                if(
+                    game.cur_area_data.mission.goal ==
+                    MISSION_GOAL_TIMED_SURVIVAL
+                ) {
+                    text = time_to_str(value, ":", "");
+                } else {
+                    text = i2s(value);
+                }
+                draw_compressed_scaled_text(
+                    game.fonts.counter, COLOR_WHITE,
+                    center, point(1.0f, 1.0f),
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    size, true,
+                    text
+                );
+            };
+            gui.add_item(mission_goal_cur, "mission_goal_cur");
+            
+            
+            //Mission goal requirement label.
+            gui_item* mission_goal_req_label = new gui_item();
+            mission_goal_req_label->on_draw =
+            [this] (const point & center, const point & size) {
+                draw_compressed_scaled_text(
+                    game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                    center, point(1.0f, 1.0f),
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    size, true,
+                    "Goal"
+                );
+            };
+            gui.add_item(mission_goal_req_label, "mission_goal_req_label");
+            
+            
+            //Mission goal requirement.
+            gui_item* mission_goal_req = new gui_item();
+            mission_goal_req->on_draw =
+            [this] (const point & center, const point & size) {
+                int value =
+                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    get_req_amount(game.states.gameplay);
+                string text;
+                if(
+                    game.cur_area_data.mission.goal ==
+                    MISSION_GOAL_TIMED_SURVIVAL
+                ) {
+                    text = time_to_str(value, ":", "");
+                } else {
+                    text = i2s(value);
+                }
+                draw_compressed_scaled_text(
+                    game.fonts.counter, COLOR_WHITE,
+                    center, point(1.0f, 1.0f),
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    size, true,
+                    text
+                );
+            };
+            gui.add_item(mission_goal_req, "mission_goal_req");
+            
+            
+            //Mission goal slash.
+            gui_item* mission_goal_slash = new gui_item();
+            mission_goal_slash->on_draw =
+            [this] (const point & center, const point & size) {
+                draw_compressed_scaled_text(
+                    game.fonts.counter, COLOR_WHITE,
+                    center, point(1.0f, 1.0f),
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    size, true,
+                    "/"
+                );
+            };
+            gui.add_item(mission_goal_slash, "mission_goal_slash");
+            
+        } else {
         
-        
-        //Mission goal current.
-        gui_item* mission_goal_cur = new gui_item();
-        mission_goal_cur->on_draw =
-        [this, goal_cur_label_text] (const point & center, const point & size) {
-            if(goal_cur_label_text.empty()) return;
-            int value =
-                game.mission_goals[game.cur_area_data.mission.goal]->
-                get_cur_amount(game.states.gameplay);
-            string text;
-            if(
-                game.cur_area_data.mission.goal ==
-                MISSION_GOAL_TIMED_SURVIVAL
-            ) {
-                text = time_to_str(value, ":", "");
-            } else {
-                text = i2s(value);
-            }
-            draw_compressed_scaled_text(
-                game.fonts.counter, COLOR_WHITE,
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-                size, true,
-                text
-            );
-        };
-        gui.add_item(mission_goal_cur, "mission_goal_cur");
-        
-        
-        //Mission goal requirement label.
-        gui_item* mission_goal_req_label = new gui_item();
-        mission_goal_req_label->on_draw =
-        [this, goal_cur_label_text] (const point & center, const point & size) {
-            if(goal_cur_label_text.empty()) return;
-            draw_compressed_scaled_text(
-                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-                size, true,
-                "Goal"
-            );
-        };
-        gui.add_item(mission_goal_req_label, "mission_goal_req_label");
-        
-        
-        //Mission goal requirement.
-        gui_item* mission_goal_req = new gui_item();
-        mission_goal_req->on_draw =
-        [this, goal_cur_label_text] (const point & center, const point & size) {
-            if(goal_cur_label_text.empty()) return;
-            int value =
-                game.mission_goals[game.cur_area_data.mission.goal]->
-                get_req_amount(game.states.gameplay);
-            string text;
-            if(
-                game.cur_area_data.mission.goal ==
-                MISSION_GOAL_TIMED_SURVIVAL
-            ) {
-                text = time_to_str(value, ":", "");
-            } else {
-                text = i2s(value);
-            }
-            draw_compressed_scaled_text(
-                game.fonts.counter, COLOR_WHITE,
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-                size, true,
-                text
-            );
-        };
-        gui.add_item(mission_goal_req, "mission_goal_req");
-        
-        
-        //Mission goal slash.
-        gui_item* mission_goal_slash = new gui_item();
-        mission_goal_slash->on_draw =
-        [this, goal_cur_label_text] (const point & center, const point & size) {
-            if(goal_cur_label_text.empty()) return;
-            draw_compressed_scaled_text(
-                game.fonts.counter, COLOR_WHITE,
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-                size, true,
-                "/"
-            );
-        };
-        gui.add_item(mission_goal_slash, "mission_goal_slash");
-        
-        
-        //Mission goal name text.
-        gui_item* mission_goal_name = new gui_item();
-        mission_goal_name->on_draw =
-        [this, goal_cur_label_text] (const point & center, const point & size) {
-            if(!goal_cur_label_text.empty()) return;
-            draw_compressed_scaled_text(
-                game.fonts.standard, al_map_rgba(255, 255, 255, 128),
-                center, point(1.0f, 1.0f),
-                ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-                size, true,
-                game.mission_goals[game.cur_area_data.mission.goal]->get_name()
-            );
-        };
-        gui.add_item(mission_goal_name, "mission_goal_name");
+            //Mission goal name text.
+            gui_item* mission_goal_name = new gui_item();
+            mission_goal_name->on_draw =
+            [this] (const point & center, const point & size) {
+                draw_compressed_scaled_text(
+                    game.fonts.standard, al_map_rgba(255, 255, 255, 128),
+                    center, point(1.0f, 1.0f),
+                    ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
+                    size, true,
+                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    get_name()
+                );
+            };
+            gui.add_item(mission_goal_name, "mission_goal_name");
+            
+        }
         
     }
     
