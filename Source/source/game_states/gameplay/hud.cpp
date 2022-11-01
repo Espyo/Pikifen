@@ -1539,22 +1539,19 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
     );
     
     
-    string mission_fail_cur_label_text =
-        game.mission_fail_conds[cond]->get_hud_label();
-        
-    if(!mission_fail_cur_label_text.empty()) {
+    if(game.mission_fail_conds[cond]->has_hud_content()) {
     
         //Mission fail condition current label.
         gui_item* mission_fail_cur_label = new gui_item();
         mission_fail_cur_label->on_draw =
-            [this, mission_fail_cur_label_text]
-        (const point & center, const point & size) {
+            [this, cond] (const point & center, const point & size) {
             draw_compressed_scaled_text(
                 game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 size, true,
-                mission_fail_cur_label_text
+                game.mission_fail_conds[cond]->
+                get_hud_label(game.states.gameplay)
             );
         };
         gui.add_item(

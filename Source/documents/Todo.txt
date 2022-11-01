@@ -48,29 +48,23 @@ Next tasks (roughly sorted most important first)
                         Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
-        A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)
-            From the script?
-            As a parameter in every single mob generator?
-        Pause menu adjustments
-            The end exploration button should show an informative and confirmation dialog. This dialog should explain that ending now will make the following fields of the score become 0, or how the score won't be affected if none (thanks Neo)
-            If you end through the pause menu, you shouldn't be allowed to continue...you specifically said you didn't want to play any more
-                Also, don't let the player continue if they ended the mission via goal clear
-                Maybe only let the player continue if they ran out of time, and nothing else?
         Other things
             The radar's stats screen should show the score requirements for the current mission, as well as the high score
                 Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
             Simple areas shouldn't have a time limit
             In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
             Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
+            When the goal amount, score, or fail amount changes, the number should pop
+            When something contributes to the goal, score, or fail condition, it should fly into the HUD element
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
             If the mission is a timed survival, there should be no time limit -- the day duration and such should use the timed survival limit instead
             Enemies falling into the void should count as deaths, and for the enemy kill points
-            Make sure after-hours works
-                Do not save the result, and make sure to write in the conclusion that it wasn't saved because of after hours
+            Make sure simple areas work
             Update README.txt
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod
+    Pikmin that lose their maturity during combat should go down one stage, otherwise bud stage is pointless
     Try making the camera also follow the cursor and the Pikmin group, if possible
     A property for pile types that lets the mob radius be changed on every phase (thanks Nataly)
     Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, Shift should toggle select-all (thanks Nataly)
@@ -80,6 +74,7 @@ Next tasks (roughly sorted most important first)
     Make bramble gates weaker to bomb rocks (thanks Nataly)
     Check if the throw particles can be customized (thanks Neo)
     The Make menu should have a small blurb with like "Need help?" or "Others...", with a tooltip telling you to go to the manual for help and tutorials
+    The pop-up that appears after you name a new area shouldn't have a dropdown, but instead have all of the option buttons available to click right away
     "it would be nice to have a hotkey to quickly navigate the editor menus, like esc in any selection mode to go back to the root menu (the one with info, layout, objects, etc) and perhaps hotkeys to quickly get to selection modes such as L for layout, O for objects, etc" --Nataly
     Find a way to make the path drawing process more friendly, since sometimes you want to draw a continuous path with multiple stops, but sometimes you just want to patch up an existing stop/link (thanks Neo)
         Idea: if when you're drawing, you click on an existing stop, then finish drawing. Otherwise, keep drawing more
@@ -788,6 +783,10 @@ Misc things (so I don't forget)
         A fail condition for killing an enemy
         A fail condition for an enemy/enemy type dying (thanks Neo)
         A fail condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
+        A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)
+            From the script?
+            As a parameter in every single mob generator?
+        Custom goal clear conditions and custom fail conditions, via scripting somehow
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
         Maker tools should be bound to buttons in the same way the regular controls are, instead of being stuck in the number and F keys

@@ -302,6 +302,12 @@ void gameplay_state::enter() {
     );
     leader_cursor_w = game.mouse_cursor_w;
     leader_cursor_s = game.mouse_cursor_s;
+    notification.reset();
+    
+    if(cur_leader_ptr) {
+        cur_leader_ptr->stop_whistling();
+    }
+    update_closest_group_members();
     
     last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
@@ -309,10 +315,18 @@ void gameplay_state::enter() {
     last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     
+    mission_fail_reason = (MISSION_FAIL_CONDITIONS) INVALID;
     goal_indicator_ratio = 0.0f;
     fail_1_indicator_ratio = 0.0f;
     fail_2_indicator_ratio = 0.0f;
     score_indicator = 0.0f;
+    
+    paused = false;
+    cur_interlude = INTERLUDE_READY;
+    interlude_time = 0.0f;
+    cur_big_msg = BIG_MESSAGE_READY;
+    big_msg_time = 0.0f;
+    delta_t_mult = 0.5f;
     
     hud->gui.hide_items();
     if(went_to_results) {
@@ -654,12 +668,6 @@ void gameplay_state::load() {
     
     day_minutes = game.cur_area_data.day_time_start;
     area_time_passed = 0.0f;
-    paused = false;
-    cur_interlude = INTERLUDE_READY;
-    interlude_time = 0.0f;
-    cur_big_msg = BIG_MESSAGE_READY;
-    big_msg_time = 0.0f;
-    delta_t_mult = 0.5f;
     game.maker_tools.reset_for_gameplay();
     area_title_fade_timer.start();
     
@@ -678,8 +686,6 @@ void gameplay_state::load() {
     mission_required_mob_amount = 0;
     mission_score = 0;
     leaders_kod = 0;
-    mission_fail_reason = (MISSION_FAIL_CONDITIONS) INVALID;
-    notification.reset();
     
     game.framerate_last_avg_point = 0;
     game.framerate_history.clear();
@@ -796,12 +802,6 @@ void gameplay_state::load() {
         }
     };
     cursor_save_timer.start();
-    
-    if(cur_leader_ptr) {
-        cur_leader_ptr->stop_whistling();
-    }
-    
-    update_closest_group_members();
     
     //Memorize mobs required by the mission.
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {

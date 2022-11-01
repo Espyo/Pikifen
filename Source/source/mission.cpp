@@ -33,8 +33,8 @@ mission_data::mission_data() :
     fail_leaders_kod(1),
     fail_enemies_killed(1),
     fail_time_limit(AREA::DEF_MISSION_TIME_LIMIT),
-    fail_hud_primary_cond((MISSION_FAIL_CONDITIONS) INVALID),
-    fail_hud_secondary_cond((MISSION_FAIL_CONDITIONS) INVALID),
+    fail_hud_primary_cond(INVALID),
+    fail_hud_secondary_cond(INVALID),
     grading_mode(MISSION_GRADING_GOAL),
     points_per_pikmin_born(0),
     points_per_pikmin_death(0),
@@ -106,7 +106,9 @@ bool mission_fail_kill_enemies::get_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_fail_kill_enemies::get_hud_label() const {
+string mission_fail_kill_enemies::get_hud_label(
+    gameplay_state* gameplay
+) const {
     return "Enemies";
 }
 
@@ -164,6 +166,14 @@ string mission_fail_kill_enemies::get_status(
         "You have killed " +
         i2s(cur) + "/" + i2s(req) +
         " enemies. (" + i2s(percentage) + "%)";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Whether it has anything to show in the HUD.
+ */
+bool mission_fail_kill_enemies::has_hud_content() const {
+    return true;
 }
 
 
@@ -232,7 +242,9 @@ bool mission_fail_lose_leaders::get_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_fail_lose_leaders::get_hud_label() const {
+string mission_fail_lose_leaders::get_hud_label(
+    gameplay_state* gameplay
+) const {
     return "Leaders lost";
 }
 
@@ -288,6 +300,14 @@ string mission_fail_lose_leaders::get_status(
         "You have lost " +
         i2s(cur) + "/" + i2s(req) +
         " leaders. (" + i2s(percentage) + "%)";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Whether it has anything to show in the HUD.
+ */
+bool mission_fail_lose_leaders::has_hud_content() const {
+    return true;
 }
 
 
@@ -356,7 +376,9 @@ bool mission_fail_lose_pikmin::get_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_fail_lose_pikmin::get_hud_label() const {
+string mission_fail_lose_pikmin::get_hud_label(
+    gameplay_state* gameplay
+) const {
     return "Pikmin lost";
 }
 
@@ -410,6 +432,14 @@ string mission_fail_lose_pikmin::get_status(
         "You have lost " +
         i2s(cur) + "/" + i2s(req) +
         " Pikmin. (" + i2s(percentage) + "%)";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Whether it has anything to show in the HUD.
+ */
+bool mission_fail_lose_pikmin::has_hud_content() const {
+    return true;
 }
 
 
@@ -470,7 +500,9 @@ bool mission_fail_pause_menu::get_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_fail_pause_menu::get_hud_label() const {
+string mission_fail_pause_menu::get_hud_label(
+    gameplay_state* gameplay
+) const {
     return "";
 }
 
@@ -520,6 +552,14 @@ string mission_fail_pause_menu::get_status(
     const int cur, const int req, const float percentage
 ) const {
     return "";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Whether it has anything to show in the HUD.
+ */
+bool mission_fail_pause_menu::has_hud_content() const {
+    return false;
 }
 
 
@@ -586,7 +626,9 @@ bool mission_fail_take_damage::get_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_fail_take_damage::get_hud_label() const {
+string mission_fail_take_damage::get_hud_label(
+    gameplay_state* gameplay
+) const {
     return "";
 }
 
@@ -636,6 +678,14 @@ string mission_fail_take_damage::get_status(
     const int cur, const int req, const float percentage
 ) const {
     return "";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Whether it has anything to show in the HUD.
+ */
+bool mission_fail_take_damage::has_hud_content() const {
+    return false;
 }
 
 
@@ -714,8 +764,13 @@ bool mission_fail_time_limit::get_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_fail_time_limit::get_hud_label() const {
-    return "Time";
+string mission_fail_time_limit::get_hud_label(
+    gameplay_state* gameplay
+) const {
+    return
+        gameplay->after_hours ?
+        "(After hours)" :
+        "Time";
 }
 
 
@@ -774,6 +829,14 @@ string mission_fail_time_limit::get_status(
 
 
 /* ----------------------------------------------------------------------------
+ * Whether it has anything to show in the HUD.
+ */
+bool mission_fail_time_limit::has_hud_content() const {
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks if its conditions have been met to end the mission as a fail.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
@@ -781,6 +844,7 @@ string mission_fail_time_limit::get_status(
 bool mission_fail_time_limit::is_met(
     gameplay_state* gameplay
 ) const {
+    if(gameplay->after_hours) return false;
     return get_cur_amount(gameplay) >= get_req_amount(gameplay);
 }
 
@@ -838,7 +902,9 @@ bool mission_fail_too_few_pikmin::get_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_fail_too_few_pikmin::get_hud_label() const {
+string mission_fail_too_few_pikmin::get_hud_label(
+    gameplay_state* gameplay
+) const {
     return "Pikmin";
 }
 
@@ -892,6 +958,14 @@ string mission_fail_too_few_pikmin::get_status(
         "You have " +
         i2s(cur) + "/" + i2s(req) +
         " Pikmin.";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Whether it has anything to show in the HUD.
+ */
+bool mission_fail_too_few_pikmin::has_hud_content() const {
+    return true;
 }
 
 
@@ -962,7 +1036,9 @@ bool mission_fail_too_many_pikmin::get_end_zoom_data(
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
  */
-string mission_fail_too_many_pikmin::get_hud_label() const {
+string mission_fail_too_many_pikmin::get_hud_label(
+    gameplay_state* gameplay
+) const {
     return "Pikmin";
 }
 
@@ -1016,6 +1092,14 @@ string mission_fail_too_many_pikmin::get_status(
         "You have " +
         i2s(cur) + "/" + i2s(req) +
         " Pikmin. (" + i2s(percentage) + "%)";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Whether it has anything to show in the HUD.
+ */
+bool mission_fail_too_many_pikmin::has_hud_content() const {
+    return true;
 }
 
 

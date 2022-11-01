@@ -132,6 +132,9 @@ void results_state::add_stat(
  */
 void results_state::continue_playing() {
     game.fade_mgr.start_fade(false, [] () {
+        game.states.gameplay->after_hours = true;
+        game.states.gameplay->mission_fail_reason =
+            (MISSION_FAIL_CONDITIONS) INVALID;
         game.change_state(game.states.gameplay, true, false);
         game.states.gameplay->enter();
     });
@@ -309,7 +312,8 @@ void results_state::load() {
     if(
         is_new_record &&
         game.states.area_ed->quick_play_area_path.empty() &&
-        !game.maker_tools.used_helping_tools
+        !game.maker_tools.used_helping_tools &&
+        !game.states.gameplay->after_hours
     ) {
         string clear_str = goal_was_cleared ? "1" : "0";
         string score_str = i2s(final_mission_score);
@@ -542,7 +546,11 @@ void results_state::load() {
         }
         break;
     } case AREA_TYPE_MISSION: {
-        if(!game.states.area_ed->quick_play_area_path.empty()) {
+        if(game.states.gameplay->after_hours) {
+            conclusion =
+                "Played in after hours, so the "
+                "result past that point won't be saved.";
+        } else if(!game.states.area_ed->quick_play_area_path.empty()) {
             conclusion =
                 "This was an area editor playtest, "
                 "so the result won't be saved.";
@@ -705,8 +713,8 @@ void results_state::load() {
     
     //Keep playing button.
     if(
-        game.states.gameplay->mission_fail_reason !=
-        MISSION_FAIL_COND_PAUSE_MENU
+        game.states.gameplay->mission_fail_reason ==
+        MISSION_FAIL_COND_TIME_LIMIT
     ) {
         button_gui_item* continue_button =
             new button_gui_item("Keep playing", game.fonts.standard);
@@ -715,7 +723,11 @@ void results_state::load() {
             continue_playing();
         };
         continue_button->on_get_tooltip =
-        [] () { return "Continue playing anyway, from where you left off."; };
+        [] () {
+            return
+                "Continue playing anyway, from where you left off. "
+                "Your result after this point won't count.";
+        };
         gui.add_item(continue_button, "continue");
     }
     

@@ -196,7 +196,9 @@ public:
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const = 0;
     //HUD label for the player's current amount.
-    virtual string get_hud_label() const = 0;
+    virtual string get_hud_label(gameplay_state* gameplay) const = 0;
+    //Whether it has anything to show in the HUD.
+    virtual bool has_hud_content() const = 0;
     //Checks if its conditions have been met to end the mission as a fail.
     virtual bool is_met(gameplay_state* gameplay) const = 0;
 };
@@ -218,7 +220,8 @@ public:
     bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const override;
-    string get_hud_label() const override;
+    string get_hud_label(gameplay_state* gameplay) const override;
+    bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
 };
 
@@ -239,7 +242,8 @@ public:
     bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const override;
-    string get_hud_label() const override;
+    string get_hud_label(gameplay_state* gameplay) const override;
+    bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
 };
 
@@ -260,7 +264,8 @@ public:
     bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const override;
-    string get_hud_label() const override;
+    string get_hud_label(gameplay_state* gameplay) const override;
+    bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
 };
 
@@ -281,7 +286,8 @@ public:
     bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const override;
-    string get_hud_label() const override;
+    string get_hud_label(gameplay_state* gameplay) const override;
+    bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
 };
 
@@ -302,7 +308,8 @@ public:
     bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const override;
-    string get_hud_label() const override;
+    string get_hud_label(gameplay_state* gameplay) const override;
+    bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
 };
 
@@ -323,7 +330,8 @@ public:
     bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const override;
-    string get_hud_label() const override;
+    string get_hud_label(gameplay_state* gameplay) const override;
+    bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
 };
 
@@ -344,7 +352,8 @@ public:
     bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const override;
-    string get_hud_label() const override;
+    string get_hud_label(gameplay_state* gameplay) const override;
+    bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
 };
 
@@ -365,7 +374,8 @@ public:
     bool get_end_zoom_data(
         gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
     ) const override;
-    string get_hud_label() const override;
+    string get_hud_label(gameplay_state* gameplay) const override;
+    bool has_hud_content() const override;
     bool is_met(gameplay_state* gameplay) const override;
 };
 
