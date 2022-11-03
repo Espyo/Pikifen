@@ -671,6 +671,13 @@ void results_state::load() {
     );
     
     //Treasure points bullet.
+    add_stat(
+        "Treasure points:",
+        i2s(game.states.gameplay->treasure_points_collected) + "/" +
+        i2s(game.states.gameplay->treasure_points_total)
+    );
+    
+    //Treasure points points bullet.
     add_score_stat(MISSION_SCORE_CRITERIA_TREASURE_POINTS);
     
     //Enemy deaths bullet.
@@ -681,6 +688,13 @@ void results_state::load() {
     );
     
     //Enemy points bullet.
+    add_stat(
+        "Enemy kill points:",
+        i2s(game.states.gameplay->enemy_points_collected) + "/" +
+        i2s(game.states.gameplay->enemy_points_total)
+    );
+    
+    //Enemy points points bullet.
     add_score_stat(MISSION_SCORE_CRITERIA_ENEMY_POINTS);
     
     if(

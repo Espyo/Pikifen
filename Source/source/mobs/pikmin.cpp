@@ -179,10 +179,8 @@ void pikmin::draw_mob() {
  *   The mob to carry.
  */
 void pikmin::force_carry(mob* m) {
-    pikmin_fsm::go_to_carriable_object(this, (void*) m, NULL);
-    fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT);
-    pikmin_fsm::reach_carriable_object(this, NULL, NULL);
-    fsm.set_state(PIKMIN_STATE_CARRYING);
+    fsm.set_state(PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT, (void*) m, NULL);
+    fsm.run_event(MOB_EV_REACHED_DESTINATION);
 }
 
 

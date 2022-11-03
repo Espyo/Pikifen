@@ -49,9 +49,6 @@ Next tasks (roughly sorted most important first)
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
         Other things
-            The radar's stats screen should show the score requirements for the current mission, as well as the high score
-                Or maybe that info should be in the HUD indicator itself? It already kinda is in P3's Mission Mode stages, but not in Side Stories
-            Simple areas shouldn't have a time limit
             In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
             Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
             When the goal amount, score, or fail amount changes, the number should pop
