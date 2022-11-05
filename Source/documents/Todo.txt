@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -49,9 +49,6 @@ Next tasks (roughly sorted most important first)
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
         Other things
-            In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
-            When the goal amount, score, or fail amount changes, the number should pop
-            When something contributes to the goal, score, or fail condition, it should fly into the HUD element
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.
             If the mission is a timed survival, there should be no time limit -- the day duration and such should use the timed survival limit instead
             Enemies falling into the void should count as deaths, and for the enemy kill points
@@ -175,6 +172,7 @@ Next tasks (roughly sorted most important first)
             What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
         The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
         Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
+        The area editor should have a music preview button
         Add some songs
     Revamp sound system
         Rename sound files to .oga, instead of .ogg
@@ -773,7 +771,7 @@ Misc things (so I don't forget)
     HUD element for a digital clock?
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
-    Ideas for mission mode
+    Missions
         A goal where you reach X sprays of type Y
         A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
         A fail condition for killing an enemy
@@ -783,6 +781,7 @@ Misc things (so I don't forget)
             From the script?
             As a parameter in every single mob generator?
         Custom goal clear conditions and custom fail conditions, via scripting somehow
+        In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
     Maker tools
         A maker tool that just lists how many particles are active, how many mobs, bitmaps loaded, etc.
         Maker tools should be bound to buttons in the same way the regular controls are, instead of being stuck in the number and F keys
@@ -896,6 +895,7 @@ Tasks for later on (I might never implement these)
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
         Water should be shown in the area editor's review mode
+        When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
         Maybe decorative objects should have a script variable that determines whether or not they rotate; useful if you want to place some decorative objects with manual rotation for level design purposes (thanks Nutty171)
     Other details
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs

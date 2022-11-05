@@ -130,6 +130,14 @@ gameplay_state::gameplay_state() :
     enemy_points_collected(0),
     enemy_points_total(0),
     mission_score(0),
+    old_mission_score(0),
+    mission_score_cur_text(nullptr),
+    old_mission_goal_cur(0),
+    mission_goal_cur_text(nullptr),
+    old_mission_fail_1_cur(0),
+    mission_fail_1_cur_text(nullptr),
+    old_mission_fail_2_cur(0),
+    mission_fail_2_cur_text(nullptr),
     cur_leaders_in_mission_exit(0),
     leaders_kod(0),
     starting_nr_of_leaders(0),
@@ -692,6 +700,10 @@ void gameplay_state::load() {
     cur_leaders_in_mission_exit = 0;
     mission_required_mob_amount = 0;
     mission_score = 0;
+    old_mission_score = 0;
+    old_mission_goal_cur = 0;
+    old_mission_fail_1_cur = 0;
+    old_mission_fail_2_cur = 0;
     leaders_kod = 0;
     
     game.framerate_last_avg_point = 0;

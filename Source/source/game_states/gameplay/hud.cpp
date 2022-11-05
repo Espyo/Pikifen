@@ -1051,7 +1051,8 @@ hud_struct::hud_struct() :
             //Mission goal current.
             gui_item* mission_goal_cur = new gui_item();
             mission_goal_cur->on_draw =
-            [this] (const point & center, const point & size) {
+                [this, mission_goal_cur]
+            (const point & center, const point & size) {
                 int value =
                     game.mission_goals[game.cur_area_data.mission.goal]->
                     get_cur_amount(game.states.gameplay);
@@ -1064,15 +1065,19 @@ hud_struct::hud_struct() :
                 } else {
                     text = i2s(value);
                 }
+                float juicy_grow_amount =
+                    mission_goal_cur->get_juice_value();
                 draw_compressed_scaled_text(
                     game.fonts.counter, COLOR_WHITE,
-                    center, point(1.0f, 1.0f),
+                    center,
+                    point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                     size, true,
                     text
                 );
             };
             gui.add_item(mission_goal_cur, "mission_goal_cur");
+            game.states.gameplay->mission_goal_cur_text = mission_goal_cur;
             
             
             //Mission goal requirement label.
@@ -1190,16 +1195,20 @@ hud_struct::hud_struct() :
         //Mission score points.
         gui_item* mission_score_points = new gui_item();
         mission_score_points->on_draw =
-        [this] (const point & center, const point & size) {
+            [this, mission_score_points]
+        (const point & center, const point & size) {
+            float juicy_grow_amount = mission_score_points->get_juice_value();
             draw_compressed_scaled_text(
                 game.fonts.counter, COLOR_WHITE,
-                center, point(1.0f, 1.0f),
+                center,
+                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 size, true,
                 i2s(game.states.gameplay->mission_score)
             );
         };
         gui.add_item(mission_score_points, "mission_score_points");
+        game.states.gameplay->mission_score_cur_text = mission_score_points;
         
         
         //Mission score "points" label.
@@ -1544,7 +1553,7 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
         //Mission fail condition current label.
         gui_item* mission_fail_cur_label = new gui_item();
         mission_fail_cur_label->on_draw =
-            [this, cond] (const point & center, const point & size) {
+        [this, cond] (const point & center, const point & size) {
             draw_compressed_scaled_text(
                 game.fonts.standard, al_map_rgba(255, 255, 255, 128),
                 center, point(1.0f, 1.0f),
@@ -1565,7 +1574,8 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
         //Mission fail condition current.
         gui_item* mission_fail_cur = new gui_item();
         mission_fail_cur->on_draw =
-        [this, cond] (const point & center, const point & size) {
+            [this, cond, mission_fail_cur]
+        (const point & center, const point & size) {
             int value =
                 game.mission_fail_conds[cond]->
                 get_cur_amount(game.states.gameplay);
@@ -1575,9 +1585,11 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
             } else {
                 text = i2s(value);
             }
+            float juicy_grow_amount = mission_fail_cur->get_juice_value();
             draw_compressed_scaled_text(
                 game.fonts.counter, COLOR_WHITE,
-                center, point(1.0f, 1.0f),
+                center,
+                point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 size, true,
                 text
@@ -1589,9 +1601,14 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
             "mission_fail_1_cur" :
             "mission_fail_2_cur"
         );
+        if(primary) {
+            game.states.gameplay->mission_fail_1_cur_text = mission_fail_cur;
+        } else {
+            game.states.gameplay->mission_fail_2_cur_text = mission_fail_cur;
+        }
         
         
-        //Mission  fail condition requirement label.
+        //Mission fail condition requirement label.
         gui_item* mission_fail_req_label = new gui_item();
         mission_fail_req_label->on_draw =
             [this]

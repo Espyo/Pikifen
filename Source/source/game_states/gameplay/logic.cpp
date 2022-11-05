@@ -832,10 +832,62 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                     c_ptr->get_score(this, &game.cur_area_data.mission);
                 mission_score += c_score;
             }
+            if(mission_score != old_mission_score) {
+                mission_score_cur_text->start_juice_animation(
+                    gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+                );
+                old_mission_score = mission_score;
+            }
             
             score_indicator +=
                 (mission_score - score_indicator) *
                 (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * delta_t);
+                
+            int goal_cur =
+                game.mission_goals[game.cur_area_data.mission.goal]->
+                get_cur_amount(game.states.gameplay);
+            if(goal_cur != old_mission_goal_cur) {
+                mission_goal_cur_text->start_juice_animation(
+                    gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+                );
+                old_mission_goal_cur = goal_cur;
+            }
+            
+            if(
+                game.cur_area_data.mission.fail_hud_primary_cond !=
+                INVALID
+            ) {
+                size_t cond =
+                    game.cur_area_data.mission.fail_hud_primary_cond;
+                int fail_1_cur =
+                    game.mission_fail_conds[cond]->get_cur_amount(
+                        game.states.gameplay
+                    );
+                if(fail_1_cur != old_mission_fail_1_cur) {
+                    mission_fail_1_cur_text->start_juice_animation(
+                        gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+                    );
+                    old_mission_fail_1_cur = fail_1_cur;
+                }
+            }
+            if(
+                game.cur_area_data.mission.fail_hud_secondary_cond !=
+                INVALID
+            ) {
+                size_t cond =
+                    game.cur_area_data.mission.fail_hud_secondary_cond;
+                int fail_2_cur =
+                    game.mission_fail_conds[cond]->get_cur_amount(
+                        game.states.gameplay
+                    );
+                if(fail_2_cur != old_mission_fail_2_cur) {
+                    mission_fail_2_cur_text->start_juice_animation(
+                        gui_item::JUICE_TYPE_GROW_TEXT_HIGH
+                    );
+                    old_mission_fail_2_cur = fail_2_cur;
+                }
+            }
+            
         }
         
     } else { //Displaying a message.

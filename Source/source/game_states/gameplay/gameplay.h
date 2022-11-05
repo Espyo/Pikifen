@@ -208,8 +208,24 @@ public:
     size_t enemy_points_total;
     //Reason for mission fail, if any. INVALID for none.
     MISSION_FAIL_CONDITIONS mission_fail_reason;
-    //Current mission score, for use in the HUD. Cache for convenience.
+    //Current mission score, for use in the HUD.
     int mission_score;
+    //Mission score in the previous frame.
+    int old_mission_score;
+    //GUI item with the mission score's text.
+    gui_item* mission_score_cur_text;
+    //Mission goal current count in the previous frame.
+    int old_mission_goal_cur;
+    //GUI item with the mission goal current count's text.
+    gui_item* mission_goal_cur_text;
+    //Mission goal primary fail condition count in the previous frame.
+    int old_mission_fail_1_cur;
+    //GUI item with the mission primary fail condition current count's text.
+    gui_item* mission_fail_1_cur_text;
+    //Mission goal secondary fail condition count in the previous frame.
+    int old_mission_fail_2_cur;
+    //GUI item with the mission secondary fail condition current count's text.
+    gui_item* mission_fail_2_cur_text;
     //How many leaders are in the mission exit. Cache for convenience.
     size_t cur_leaders_in_mission_exit;
     //How many leaders have been lost so far. Cache for convenience.
