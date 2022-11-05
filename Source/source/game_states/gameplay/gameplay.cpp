@@ -113,6 +113,7 @@ gameplay_state::gameplay_state() :
     swarm_magnitude(0.0f),
     throw_dest_mob(nullptr),
     throw_dest_sector(nullptr),
+    loading(false),
     unloading(false),
     went_to_results(false),
     mission_required_mob_amount(0),
@@ -294,24 +295,6 @@ void gameplay_state::enter() {
     al_hide_mouse_cursor(game.display);
     update_transformations();
     
-    ALLEGRO_MOUSE_STATE mouse_state;
-    al_get_mouse_state(&mouse_state);
-    game.mouse_cursor_s.x = al_get_mouse_state_axis(&mouse_state, 0);
-    game.mouse_cursor_s.y = al_get_mouse_state_axis(&mouse_state, 1);
-    game.mouse_cursor_w = game.mouse_cursor_s;
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
-    );
-    leader_cursor_w = game.mouse_cursor_w;
-    leader_cursor_s = game.mouse_cursor_s;
-    notification.reset();
-    
-    if(cur_leader_ptr) {
-        cur_leader_ptr->stop_whistling();
-    }
-    update_closest_group_members();
-    
     last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
@@ -340,6 +323,24 @@ void gameplay_state::enter() {
     }
     
     ready_for_input = false;
+    
+    ALLEGRO_MOUSE_STATE mouse_state;
+    al_get_mouse_state(&mouse_state);
+    game.mouse_cursor_s.x = al_get_mouse_state_axis(&mouse_state, 0);
+    game.mouse_cursor_s.y = al_get_mouse_state_axis(&mouse_state, 1);
+    game.mouse_cursor_w = game.mouse_cursor_s;
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+    );
+    leader_cursor_w = game.mouse_cursor_w;
+    leader_cursor_s = game.mouse_cursor_s;
+    notification.reset();
+    
+    if(cur_leader_ptr) {
+        cur_leader_ptr->stop_whistling();
+    }
+    update_closest_group_members();
 }
 
 
@@ -654,6 +655,7 @@ void gameplay_state::load() {
         game.perf_mon->set_paused(false);
     }
     
+    loading = true;
     size_t errors_reported_at_start = game.errors_reported_so_far;
     went_to_results = false;
     
@@ -1017,6 +1019,8 @@ void gameplay_state::load() {
     }
     
     enter();
+    
+    loading = false;
 }
 
 

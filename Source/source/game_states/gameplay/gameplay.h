@@ -170,6 +170,8 @@ public:
     mob* throw_dest_mob;
     //Sector that player 1's throw will land on, if any.
     sector* throw_dest_sector;
+    //Are we currently loading the gameplay state?
+    bool loading;
     //Are we currently unloading the gameplay state?
     bool unloading;
     //Have we went to the results screen yet?

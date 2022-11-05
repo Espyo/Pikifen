@@ -1302,9 +1302,12 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     game.states.gameplay->cur_leader_nr = new_leader_nr;
     lea_ptr->active = true;
     
-    if(game.states.gameplay->cur_interlude == INTERLUDE_NONE) {
-        //If we're in the middle of an interlude, that probably means it's
-        //the first leader at the start of the area.
+    if(
+        !game.states.gameplay->loading &&
+        game.states.gameplay->cur_interlude == INTERLUDE_NONE
+    ) {
+        //If we're in the middle of loading or of an interlude, that probably
+        //means it's the first leader at the start of the area.
         //We should probably be quiet.
         lea_ptr->lea_type->sfx_name_call.play(0, false);
     }
