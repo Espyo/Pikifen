@@ -22,6 +22,7 @@
 #include "../../misc_structs.h"
 #include "../../mobs/converter.h"
 #include "../../mobs/pile.h"
+#include "../../mobs/resource.h"
 #include "../../utils/data_file.h"
 #include "../../utils/string_utils.h"
 
@@ -119,6 +120,8 @@ gameplay_state::gameplay_state() :
     pikmin_deaths(0),
     treasures_collected(0),
     treasures_total(0),
+    goal_treasures_collected(0),
+    goal_treasures_total(0),
     treasure_points_collected(0),
     treasure_points_total(0),
     enemy_deaths(0),
@@ -676,6 +679,8 @@ void gameplay_state::load() {
     pikmin_deaths = 0;
     treasures_collected = 0;
     treasures_total = 0;
+    goal_treasures_collected = 0;
+    goal_treasures_total = 0;
     treasure_points_collected = 0;
     treasure_points_total = 0;
     enemy_deaths = 0;
@@ -806,30 +811,17 @@ void gameplay_state::load() {
     //Memorize mobs required by the mission.
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
         unordered_set<size_t> mission_required_mob_gen_idxs;
+        
         if(game.cur_area_data.mission.goal_all_mobs) {
-            MOB_CATEGORIES filter_cat = MOB_CATEGORY_NONE;
-            switch(game.cur_area_data.mission.goal) {
-            case MISSION_GOAL_COLLECT_TREASURE: {
-                filter_cat = MOB_CATEGORY_TREASURES;
-                break;
-            } case MISSION_GOAL_BATTLE_ENEMIES: {
-                filter_cat = MOB_CATEGORY_ENEMIES;
-                break;
-            } case MISSION_GOAL_GET_TO_EXIT: {
-                filter_cat = MOB_CATEGORY_LEADERS;
-                break;
-            } default: {
-                break;
-            }
-            }
-            if(filter_cat != MOB_CATEGORY_NONE) {
-                for(size_t m = 0; m < mobs_per_gen.size(); ++m) {
-                    if(mobs_per_gen[m]->type->category->id != filter_cat) {
-                        continue;
-                    }
+            for(size_t m = 0; m < mobs_per_gen.size(); ++m) {
+                if(
+                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    is_mob_applicable(mobs_per_gen[m]->type)
+                ) {
                     mission_required_mob_gen_idxs.insert(m);
                 }
             }
+            
         } else {
             mission_required_mob_gen_idxs =
                 game.cur_area_data.mission.goal_mob_idxs;
@@ -838,8 +830,23 @@ void gameplay_state::load() {
         for(size_t i : mission_required_mob_gen_idxs) {
             mission_remaining_mob_ids.insert(mobs_per_gen[i]->id);
         }
-        
         mission_required_mob_amount = mission_remaining_mob_ids.size();
+        
+        if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+            //Since the collect treasure goal can accept piles and resources
+            //meant to add treasure points, we'll need some special treatment.
+            for(size_t i : mission_required_mob_gen_idxs) {
+                if(
+                    mobs_per_gen[i]->type->category->id ==
+                    MOB_CATEGORY_PILES
+                ) {
+                    pile* pil_ptr = (pile*) mobs_per_gen[i];
+                    goal_treasures_total += pil_ptr->amount;
+                } else {
+                    goal_treasures_total++;
+                }
+            }
+        }
     }
     
     //Figure out the total amount of treasures and their points.
@@ -870,6 +877,17 @@ void gameplay_state::load() {
         treasures_total += p_ptr->amount;
         treasure_points_total +=
             p_ptr->amount * res_type->point_amount;
+    }
+    for(size_t r = 0; r < mobs.resources.size(); ++r) {
+        resource* r_ptr = mobs.resources[r];
+        if(
+            r_ptr->res_type->delivery_result !=
+            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
+        ) {
+            continue;
+        }
+        treasures_total++;
+        treasure_points_total += r_ptr->res_type->point_amount;
     }
     
     //Figure out the total amount of enemies and their points.

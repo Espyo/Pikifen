@@ -305,17 +305,10 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             for(
                 size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m
             ) {
-                size_t category_id =
-                    game.cur_area_data.mission.goal ==
-                    MISSION_GOAL_COLLECT_TREASURE ?
-                    MOB_CATEGORY_TREASURES :
-                    game.cur_area_data.mission.goal ==
-                    MISSION_GOAL_BATTLE_ENEMIES ?
-                    MOB_CATEGORY_ENEMIES :
-                    MOB_CATEGORY_LEADERS;
+                mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
                 if(
-                    game.cur_area_data.mob_generators[m]->category->id ==
-                    category_id
+                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    is_mob_applicable(m_ptr->type)
                 ) {
                     game.cur_area_data.mission.goal_mob_idxs.insert(m);
                 }
@@ -926,18 +919,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             mob_gen* clicked_mob =
                 get_mob_under_point(game.mouse_cursor_w, &clicked_mob_idx);
                 
-            size_t category_id =
-                game.cur_area_data.mission.goal ==
-                MISSION_GOAL_COLLECT_TREASURE ?
-                MOB_CATEGORY_TREASURES :
-                game.cur_area_data.mission.goal ==
-                MISSION_GOAL_BATTLE_ENEMIES ?
-                MOB_CATEGORY_ENEMIES :
-                MOB_CATEGORY_LEADERS;
-                
             if(
                 clicked_mob_idx != INVALID &&
-                clicked_mob->category->id == category_id
+                game.mission_goals[game.cur_area_data.mission.goal]->
+                is_mob_applicable(clicked_mob->type)
             ) {
                 register_change("mission object requirements change");
                 auto it =

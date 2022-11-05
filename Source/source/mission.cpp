@@ -1258,6 +1258,18 @@ bool mission_goal_battle_enemies::is_met(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether a given mob is applicable to this goal's required mobs.
+ * type:
+ *   Type of the mob.
+ */
+bool mission_goal_battle_enemies::is_mob_applicable(
+    mob_type* type
+) const {
+    return type->category->id == MOB_CATEGORY_ENEMIES;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the player's current amount for whatever the mission needs.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
@@ -1265,9 +1277,7 @@ bool mission_goal_battle_enemies::is_met(
 int mission_goal_collect_treasures::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return
-        gameplay->mission_required_mob_amount -
-        gameplay->mission_remaining_mob_ids.size();
+    return gameplay->goal_treasures_collected;
 }
 
 
@@ -1285,12 +1295,7 @@ string mission_goal_collect_treasures::get_end_reason(
             "Collected all treasures!";
     } else {
         return
-            "Collected the " +
-            nr_and_plural(
-                mission->goal_mob_idxs.size(),
-                "treasure"
-            ) +
-            "!";
+            "Collected the treasures!";
     }
 }
 
@@ -1349,7 +1354,7 @@ string mission_goal_collect_treasures::get_player_description(
         return
             "Collect the specified treasures (" +
             i2s(mission->goal_mob_idxs.size()) +
-            ").";
+            " sources).";
     }
 }
 
@@ -1362,7 +1367,7 @@ string mission_goal_collect_treasures::get_player_description(
 int mission_goal_collect_treasures::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->mission_required_mob_amount;
+    return gameplay->goal_treasures_total;
 }
 
 
@@ -1392,7 +1397,44 @@ string mission_goal_collect_treasures::get_status(
 bool mission_goal_collect_treasures::is_met(
     gameplay_state* gameplay
 ) const {
-    return gameplay->mission_remaining_mob_ids.empty();
+    return
+        gameplay->goal_treasures_collected >=
+        gameplay->goal_treasures_total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a given mob is applicable to this goal's required mobs.
+ * type:
+ *   Type of the mob.
+ */
+bool mission_goal_collect_treasures::is_mob_applicable(
+    mob_type* type
+) const {
+    switch(type->category->id) {
+    case MOB_CATEGORY_TREASURES: {
+        return true;
+        break;
+    }
+    case MOB_CATEGORY_RESOURCES: {
+        resource_type* res_type = (resource_type*) type;
+        return
+            res_type->delivery_result ==
+            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
+        break;
+    }
+    case MOB_CATEGORY_PILES: {
+        pile_type* pil_type = (pile_type*) type;
+        return
+            pil_type->contents->delivery_result ==
+            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
+        break;
+    }
+    default: {
+        return false;
+        break;
+    }
+    }
 }
 
 
@@ -1504,6 +1546,18 @@ bool mission_goal_end_manually::is_met(
     gameplay_state* gameplay
 ) const {
     //The pause menu "end mission" logic is responsible for this one.
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a given mob is applicable to this goal's required mobs.
+ * type:
+ *   Type of the mob.
+ */
+bool mission_goal_end_manually::is_mob_applicable(
+    mob_type* type
+) const {
     return false;
 }
 
@@ -1642,6 +1696,18 @@ bool mission_goal_get_to_exit::is_met(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether a given mob is applicable to this goal's required mobs.
+ * type:
+ *   Type of the mob.
+ */
+bool mission_goal_get_to_exit::is_mob_applicable(
+    mob_type* type
+) const {
+    return type->category->id == MOB_CATEGORY_LEADERS;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the player's current amount for whatever the mission needs.
  * gameplay:
  *   Pointer to the gameplay state to get info from.
@@ -1759,6 +1825,18 @@ bool mission_goal_grow_pikmin::is_met(
     gameplay_state* gameplay
 ) const {
     return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a given mob is applicable to this goal's required mobs.
+ * type:
+ *   Type of the mob.
+ */
+bool mission_goal_grow_pikmin::is_mob_applicable(
+    mob_type* type
+) const {
+    return false;
 }
 
 
@@ -1882,6 +1960,18 @@ bool mission_goal_timed_survival::is_met(
     gameplay_state* gameplay
 ) const {
     return get_cur_amount(gameplay) >= get_req_amount(gameplay);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a given mob is applicable to this goal's required mobs.
+ * type:
+ *   Type of the mob.
+ */
+bool mission_goal_timed_survival::is_mob_applicable(
+    mob_type* type
+) const {
+    return false;
 }
 
 

@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -50,7 +50,6 @@ Next tasks (roughly sorted most important first)
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
         Other things
             In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
-            Resources and piles should be checked to count for a treasure completion -- think of nuggets and nugget piles
             When the goal amount, score, or fail amount changes, the number should pop
             When something contributes to the goal, score, or fail condition, it should fly into the HUD element
             The area editor's problem finder should report when a mission has a treasure goal but no treasures, a points system but no active criterion, etc.

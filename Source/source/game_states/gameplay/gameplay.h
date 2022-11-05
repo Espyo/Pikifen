@@ -188,6 +188,10 @@ public:
     size_t treasures_collected;
     //How many treasures exist in total.
     size_t treasures_total;
+    //How many mission goal treasures were collected so far.
+    size_t goal_treasures_collected;
+    //How many mission goal treasures exist in total.
+    size_t goal_treasures_total;
     //How many treasure points collected so far.
     size_t treasure_points_collected;
     //How many treasure points exist in total.

@@ -2292,7 +2292,10 @@ void area_editor::process_gui_panel_mission() {
                     ++m
                 ) {
                     mob_gen* g = game.cur_area_data.mob_generators[m];
-                    if(g->category->id == MOB_CATEGORY_TREASURES) {
+                    if(
+                        game.mission_goals[game.cur_area_data.mission.goal]->
+                        is_mob_applicable(g->type)
+                    ) {
                         total_required++;
                     }
                 }
@@ -2308,14 +2311,15 @@ void area_editor::process_gui_panel_mission() {
                     sub_state = EDITOR_SUB_STATE_MISSION_MOBS;
                 }
                 set_tooltip(
-                    "Click here to start picking which treasures do and\n"
-                    "do not belong to the required treasure list."
+                    "Click here to start picking which treasures, piles, and\n"
+                    "resources do and do not belong to the required\n"
+                    "treasure list."
                 );
                 
             }
             
-            //Total treasures required text.
-            ImGui::Text("Total treasures required: %lu", total_required);
+            //Total objects required text.
+            ImGui::Text("Total objects required: %lu", total_required);
             
             break;
             
@@ -2372,7 +2376,10 @@ void area_editor::process_gui_panel_mission() {
                     ++m
                 ) {
                     mob_gen* g = game.cur_area_data.mob_generators[m];
-                    if(g->category->id == MOB_CATEGORY_ENEMIES) {
+                    if(
+                        game.mission_goals[game.cur_area_data.mission.goal]->
+                        is_mob_applicable(g->type)
+                    ) {
                         total_required++;
                     }
                 }
@@ -2394,8 +2401,8 @@ void area_editor::process_gui_panel_mission() {
                 
             }
             
-            //Total enemies required text.
-            ImGui::Text("Total enemies required: %lu", total_required);
+            //Total objects required text.
+            ImGui::Text("Total objects required: %lu", total_required);
             
             break;
             
@@ -2504,7 +2511,10 @@ void area_editor::process_gui_panel_mission() {
                     ++m
                 ) {
                     mob_gen* g = game.cur_area_data.mob_generators[m];
-                    if(g->category->id == MOB_CATEGORY_LEADERS) {
+                    if(
+                        game.mission_goals[game.cur_area_data.mission.goal]->
+                        is_mob_applicable(g->type)
+                    ) {
                         total_required++;
                     }
                 }
@@ -2526,8 +2536,8 @@ void area_editor::process_gui_panel_mission() {
                 
             }
             
-            //Total leaders required text.
-            ImGui::Text("Total leaders required: %lu", total_required);
+            //Total objects required text.
+            ImGui::Text("Total objects required: %lu", total_required);
             
             break;
             
@@ -3667,7 +3677,7 @@ void area_editor::process_gui_panel_mobs() {
         string cat_name =
             game.cur_area_data.mission.goal ==
             MISSION_GOAL_COLLECT_TREASURE ?
-            "treasure" :
+            "treasure/pile/resource" :
             game.cur_area_data.mission.goal ==
             MISSION_GOAL_BATTLE_ENEMIES ?
             "enemy" :

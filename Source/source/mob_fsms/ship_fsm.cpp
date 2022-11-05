@@ -74,27 +74,44 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
         
         if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
-            game.states.gameplay->mission_remaining_mob_ids.erase(
-                delivery->id
-            );
+            auto it =
+                game.states.gameplay->mission_remaining_mob_ids.find(
+                    delivery->id
+                );
+            if(it != game.states.gameplay->mission_remaining_mob_ids.end()) {
+                game.states.gameplay->mission_remaining_mob_ids.erase(it);
+                game.states.gameplay->goal_treasures_collected++;
+            }
         }
-        
         break;
         
     } case MOB_CATEGORY_RESOURCES: {
         resource* res_ptr = (resource*) delivery;
-        if(
-            res_ptr->res_type->delivery_result ==
-            RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
-        ) {
+        switch(res_ptr->res_type->delivery_result) {
+        case RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS: {
             game.states.gameplay->treasures_collected++;
             game.states.gameplay->treasure_points_collected +=
                 res_ptr->res_type->point_amount;
             game.states.gameplay->last_ship_that_got_treasure_pos = m->pos;
-        } else if(
-            res_ptr->res_type->delivery_result ==
-            RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS
-        ) {
+            if(
+                game.cur_area_data.mission.goal ==
+                MISSION_GOAL_COLLECT_TREASURE
+            ) {
+                unordered_set<size_t> &goal_mobs =
+                    game.states.gameplay->mission_remaining_mob_ids;
+                auto it = goal_mobs.find(delivery->id);
+                if(it != goal_mobs.end()) {
+                    goal_mobs.erase(it);
+                    game.states.gameplay->goal_treasures_collected++;
+                } else if(res_ptr->origin_pile) {
+                    it = goal_mobs.find(res_ptr->origin_pile->id);
+                    if(it != goal_mobs.end()) {
+                        game.states.gameplay->goal_treasures_collected++;
+                    }
+                }
+            }
+            break;
+        } case RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS: {
             size_t type_nr = res_ptr->res_type->spray_to_concoct;
             game.states.gameplay->spray_stats[type_nr].nr_ingredients++;
             if(
@@ -105,6 +122,10 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
                     game.spray_types[type_nr].ingredients_needed;
                 game.states.gameplay->change_spray_count(type_nr, 1);
             }
+            break;
+        } case RESOURCE_DELIVERY_RESULT_DAMAGE_MOB: {
+            break;
+        }
         }
         break;
         

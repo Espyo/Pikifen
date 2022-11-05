@@ -407,6 +407,8 @@ public:
     virtual string get_hud_label() const = 0;
     //Checks if its conditions have been met to end the mission as a clear.
     virtual bool is_met(gameplay_state* gameplay) const = 0;
+    //Returns whether a given mob is applicable to this goal's required mobs.
+    virtual bool is_mob_applicable(mob_type* type) const = 0;
 };
 
 
@@ -428,6 +430,7 @@ public:
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
+    bool is_mob_applicable(mob_type* type) const override;
 };
 
 
@@ -449,6 +452,7 @@ public:
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
+    bool is_mob_applicable(mob_type* type) const override;
 };
 
 
@@ -470,6 +474,7 @@ public:
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
+    bool is_mob_applicable(mob_type* type) const override;
 };
 
 
@@ -491,6 +496,7 @@ public:
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
+    bool is_mob_applicable(mob_type* type) const override;
 };
 
 
@@ -512,6 +518,7 @@ public:
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
+    bool is_mob_applicable(mob_type* type) const override;
 };
 
 
@@ -533,6 +540,7 @@ public:
     ) const override;
     string get_hud_label() const override;
     bool is_met(gameplay_state* gameplay) const override;
+    bool is_mob_applicable(mob_type* type) const override;
 };
 
 
