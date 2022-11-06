@@ -1512,7 +1512,7 @@ void area_editor::process_gui_panel_info() {
             game.cur_area_data.type == AREA_TYPE_MISSION &&
             has_flag(
                 game.cur_area_data.mission.fail_conditions,
-                MISSION_FAIL_COND_TIME_LIMIT
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
         float mission_min = game.cur_area_data.mission.fail_time_limit / 60.0f;
         int day_start_min = game.cur_area_data.day_time_start;
@@ -2224,7 +2224,7 @@ void area_editor::process_gui_panel_mission() {
         if(ImGui::Combo("Goal", &mission_goal, goals_list)) {
             register_change("mission requirements change");
             game.cur_area_data.mission.goal_mob_idxs.clear();
-            game.cur_area_data.mission.goal_amount = 0;
+            game.cur_area_data.mission.goal_amount = 1;
             game.cur_area_data.mission.goal = (MISSION_GOALS) mission_goal;
         }
         
@@ -2283,28 +2283,8 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which treasures these are."
             );
             
-            size_t total_required = 0;
-            if(game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data.mission.goal_all_mobs) {
             
-                for(
-                    size_t m = 0;
-                    m < game.cur_area_data.mob_generators.size();
-                    ++m
-                ) {
-                    mob_gen* g = game.cur_area_data.mob_generators[m];
-                    if(
-                        game.mission_goals[game.cur_area_data.mission.goal]->
-                        is_mob_applicable(g->type)
-                    ) {
-                        total_required++;
-                    }
-                }
-                
-            } else {
-            
-                total_required =
-                    game.cur_area_data.mission.goal_mob_idxs.size();
-                    
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick treasures...")) {
                     change_state(EDITOR_STATE_MOBS);
@@ -2319,6 +2299,7 @@ void area_editor::process_gui_panel_mission() {
             }
             
             //Total objects required text.
+            size_t total_required = get_mission_required_mob_count();
             ImGui::Text("Total objects required: %lu", total_required);
             
             break;
@@ -2367,28 +2348,8 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which enemies these are."
             );
             
-            size_t total_required = 0;
-            if(game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data.mission.goal_all_mobs) {
             
-                for(
-                    size_t m = 0;
-                    m < game.cur_area_data.mob_generators.size();
-                    ++m
-                ) {
-                    mob_gen* g = game.cur_area_data.mob_generators[m];
-                    if(
-                        game.mission_goals[game.cur_area_data.mission.goal]->
-                        is_mob_applicable(g->type)
-                    ) {
-                        total_required++;
-                    }
-                }
-                
-            } else {
-            
-                total_required =
-                    game.cur_area_data.mission.goal_mob_idxs.size();
-                    
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick enemies...")) {
                     change_state(EDITOR_STATE_MOBS);
@@ -2402,6 +2363,7 @@ void area_editor::process_gui_panel_mission() {
             }
             
             //Total objects required text.
+            size_t total_required = get_mission_required_mob_count();
             ImGui::Text("Total objects required: %lu", total_required);
             
             break;
@@ -2422,6 +2384,7 @@ void area_editor::process_gui_panel_mission() {
                 (int) game.cur_area_data.mission.goal_amount;
             if(ImGui::DragTime2("Time", &total_seconds)) {
                 register_change("mission requirements change");
+                total_seconds = std::max(total_seconds, 1);
                 game.cur_area_data.mission.goal_amount =
                     (size_t) total_seconds;
             }
@@ -2502,28 +2465,8 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which leaders these are."
             );
             
-            size_t total_required = 0;
-            if(game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data.mission.goal_all_mobs) {
             
-                for(
-                    size_t m = 0;
-                    m < game.cur_area_data.mob_generators.size();
-                    ++m
-                ) {
-                    mob_gen* g = game.cur_area_data.mob_generators[m];
-                    if(
-                        game.mission_goals[game.cur_area_data.mission.goal]->
-                        is_mob_applicable(g->type)
-                    ) {
-                        total_required++;
-                    }
-                }
-                
-            } else {
-            
-                total_required =
-                    game.cur_area_data.mission.goal_mob_idxs.size();
-                    
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick leaders...")) {
                     change_state(EDITOR_STATE_MOBS);
@@ -2537,6 +2480,7 @@ void area_editor::process_gui_panel_mission() {
             }
             
             //Total objects required text.
+            size_t total_required = get_mission_required_mob_count();
             ImGui::Text("Total objects required: %lu", total_required);
             
             break;
@@ -2546,7 +2490,8 @@ void area_editor::process_gui_panel_mission() {
     
             //Explanation text.
             ImGui::TextWrapped(
-                "The player must reach a certain number of total Pikmin."
+                "The player must reach or surpass a certain number of "
+                "total Pikmin."
             );
             
             //Spacer dummy widget.
@@ -2556,7 +2501,7 @@ void area_editor::process_gui_panel_mission() {
             int amount =
                 (int) game.cur_area_data.mission.goal_amount;
             ImGui::SetNextItemWidth(80);
-            if(ImGui::DragInt("Amount", &amount, 0.1f, 0, INT_MAX)) {
+            if(ImGui::DragInt("Amount", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission requirements change");
                 game.cur_area_data.mission.goal_amount =
                     (size_t) amount;
@@ -2735,7 +2680,7 @@ void area_editor::process_gui_panel_mission() {
             int amount =
                 (int) game.cur_area_data.mission.fail_too_many_pik_amount;
             ImGui::SetNextItemWidth(50);
-            if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 0, INT_MAX)) {
+            if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
                 game.cur_area_data.mission.fail_too_many_pik_amount =
                     (size_t) amount;
@@ -3300,7 +3245,9 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "0 points on fail##zpoftp", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_TREASURE_POINTS)
+                        get_index_bitmask(
+                            MISSION_SCORE_CRITERIA_TREASURE_POINTS
+                        )
                     )
                 ) {
                     register_change("mission grading change");
@@ -3410,7 +3357,13 @@ void area_editor::process_gui_panel_mission() {
             //Bronze point requirement value.
             int bronze_req = game.cur_area_data.mission.bronze_req;
             ImGui::SetNextItemWidth(90);
-            if(ImGui::DragInt("Bronze", &bronze_req, 1.0f, 0, INT_MAX)) {
+            if(
+                ImGui::DragInt(
+                    "Bronze", &bronze_req, 1.0f,
+                    INT_MIN,
+                    game.cur_area_data.mission.silver_req - 1
+                )
+            ) {
                 register_change("mission grading change");
                 game.cur_area_data.mission.bronze_req = bronze_req;
             }
@@ -3423,7 +3376,13 @@ void area_editor::process_gui_panel_mission() {
             //Silver point requirement value.
             int silver_req = game.cur_area_data.mission.silver_req;
             ImGui::SetNextItemWidth(90);
-            if(ImGui::DragInt("Silver", &silver_req, 1.0f, 0, INT_MAX)) {
+            if(
+                ImGui::DragInt(
+                    "Silver", &silver_req, 1.0f,
+                    game.cur_area_data.mission.bronze_req + 1,
+                    game.cur_area_data.mission.gold_req - 1
+                )
+            ) {
                 register_change("mission grading change");
                 game.cur_area_data.mission.silver_req = silver_req;
             }
@@ -3436,7 +3395,13 @@ void area_editor::process_gui_panel_mission() {
             //Gold point requirement value.
             int gold_req = game.cur_area_data.mission.gold_req;
             ImGui::SetNextItemWidth(90);
-            if(ImGui::DragInt("Gold", &gold_req, 1.0f, 0, INT_MAX)) {
+            if(
+                ImGui::DragInt(
+                    "Gold", &gold_req, 1.0f,
+                    game.cur_area_data.mission.silver_req + 1,
+                    game.cur_area_data.mission.platinum_req - 1
+                )
+            ) {
                 register_change("mission grading change");
                 game.cur_area_data.mission.gold_req = gold_req;
             }
@@ -3449,7 +3414,13 @@ void area_editor::process_gui_panel_mission() {
             //Platinum point requirement value.
             int platinum_req = game.cur_area_data.mission.platinum_req;
             ImGui::SetNextItemWidth(90);
-            if(ImGui::DragInt("Platinum", &platinum_req, 1.0f, 0, INT_MAX)) {
+            if(
+                ImGui::DragInt(
+                    "Platinum", &platinum_req, 1.0f,
+                    game.cur_area_data.mission.gold_req + 1,
+                    INT_MAX
+                )
+            ) {
                 register_change("mission grading change");
                 game.cur_area_data.mission.platinum_req = platinum_req;
             }

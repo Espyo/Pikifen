@@ -163,7 +163,7 @@ void area_data::clear() {
     mission.goal = MISSION_GOAL_END_MANUALLY;
     mission.goal_all_mobs = true;
     mission.goal_mob_idxs.clear();
-    mission.goal_amount = 0;
+    mission.goal_amount = 1;
     mission.goal_exit_center = point();
     mission.goal_exit_size =
         point(
@@ -172,7 +172,7 @@ void area_data::clear() {
         );
     mission.fail_conditions = 0;
     mission.fail_too_few_pik_amount = 0;
-    mission.fail_too_many_pik_amount = 0;
+    mission.fail_too_many_pik_amount = 1;
     mission.fail_pik_killed = 1;
     mission.fail_leaders_kod = 1;
     mission.fail_enemies_killed = 1;

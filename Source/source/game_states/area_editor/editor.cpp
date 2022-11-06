@@ -1140,6 +1140,35 @@ string area_editor::get_history_option_prefix() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the number of required mobs for this mission.
+ */
+size_t area_editor::get_mission_required_mob_count() const {
+    size_t total_required = 0;
+    
+    if(game.cur_area_data.mission.goal_all_mobs) {
+        for(
+            size_t m = 0;
+            m < game.cur_area_data.mob_generators.size();
+            ++m
+        ) {
+            mob_gen* g = game.cur_area_data.mob_generators[m];
+            if(
+                game.mission_goals[game.cur_area_data.mission.goal]->
+                is_mob_applicable(g->type)
+            ) {
+                total_required++;
+            }
+        }
+    } else {
+        total_required =
+            game.cur_area_data.mission.goal_mob_idxs.size();
+    }
+    
+    return total_required;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
 string area_editor::get_name() const {

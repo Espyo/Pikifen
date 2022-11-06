@@ -219,6 +219,10 @@ private:
         EPT_PILE_BRIDGE_PATH,
         //Unknown tree shadow image.
         EPT_UNKNOWN_SHADOW,
+        //No active score criteria for this mission.
+        EPT_NO_SCORE_CRITERIA,
+        //No mission goal mobs.
+        EPT_NO_GOAL_MOBS,
     };
     
     //Editor states.
@@ -602,6 +606,7 @@ private:
     bool get_drawing_outer_sector(sector** result) const;
     edge* get_edge_under_point(const point &p, edge* after = NULL) const;
     vector<edge_intersection> get_intersecting_edges() const;
+    size_t get_mission_required_mob_count() const;
     float get_mob_gen_radius(mob_gen* m) const;
     bool get_mob_link_under_point(
         const point &p,

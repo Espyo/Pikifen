@@ -921,6 +921,51 @@ void area_editor::find_problems() {
         }
     }
     
+    //Mission goal requires some mobs, but there are none.
+    if(
+        game.cur_area_data.type == AREA_TYPE_MISSION &&
+        (
+            game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
+            game.cur_area_data.mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
+            game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
+        )
+    ) {
+        if(get_mission_required_mob_count() == 0) {
+            problem_type = EPT_NO_GOAL_MOBS;
+            problem_title = "No mission goal mobs!";
+            problem_description =
+                "This mission's goal requires some mobs, yet there are none.";
+            return;
+        }
+    }
+    
+    //Mission is graded by points, but with no active criterioa.
+    if(
+        game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS
+    ) {
+        bool has_any_criterion = false;
+        for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+            if(
+                game.mission_score_criteria[c]->get_multiplier(
+                    &game.cur_area_data.mission
+                ) != 0
+            ) {
+                has_any_criterion = true;
+                break;
+            }
+        }
+        if(!has_any_criterion) {
+            problem_type = EPT_NO_SCORE_CRITERIA;
+            problem_title = "No active score criteria!";
+            problem_description =
+                "In this mission, the player is graded according to their "
+                "score. However, none of the score criteria are active, "
+                "so the player's score will always be 0.";
+            return;
+        }
+    }
+    
     //All good!
     problem_type = EPT_NONE;
     problem_title = "None!";

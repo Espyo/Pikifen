@@ -22,13 +22,13 @@
 mission_data::mission_data() :
     goal(MISSION_GOAL_END_MANUALLY),
     goal_all_mobs(true),
-    goal_amount(0),
+    goal_amount(1),
     goal_exit_size(
         AREA_EDITOR::MISSION_EXIT_MIN_SIZE, AREA_EDITOR::MISSION_EXIT_MIN_SIZE
     ),
     fail_conditions(0),
     fail_too_few_pik_amount(0),
-    fail_too_many_pik_amount(0),
+    fail_too_many_pik_amount(1),
     fail_pik_killed(1),
     fail_leaders_kod(1),
     fail_enemies_killed(1),
