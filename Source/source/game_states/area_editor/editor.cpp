@@ -168,11 +168,11 @@ area_editor::area_editor() :
  *   Mission duration, in minutes.
  */
 float area_editor::calculate_day_speed(
-    const size_t day_start_min, const size_t day_end_min,
+    const float day_start_min, const float day_end_min,
     const float mission_min
 ) {
     if(mission_min == 0.0f) return 0.0f;
-    size_t aux_day_end_min = day_end_min;
+    float aux_day_end_min = day_end_min;
     if(day_end_min < day_start_min) {
         aux_day_end_min += 24 * 60;
     }

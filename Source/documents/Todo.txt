@@ -2,7 +2,10 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Other things
+        Enemies falling into the void should count as deaths, and for the enemy kill points
+        Make sure simple areas work
+        Update README.txt
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -48,11 +51,6 @@ Next tasks (roughly sorted most important first)
                         Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
                     None
                         No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
-        Other things
-            If the mission is a timed survival, there should be no time limit -- the day duration and such should use the timed survival limit instead
-            Enemies falling into the void should count as deaths, and for the enemy kill points
-            Make sure simple areas work
-            Update README.txt
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod

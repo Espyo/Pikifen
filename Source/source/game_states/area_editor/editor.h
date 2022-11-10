@@ -535,7 +535,7 @@ private:
         const layout_drawing_node &n2
     ) const;
     float calculate_day_speed(
-        const size_t day_start_min, const size_t day_end_min,
+        const float day_start_min, const float day_end_min,
         const float mission_min
     );
     void cancel_circle_sector();

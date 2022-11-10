@@ -1508,13 +1508,26 @@ void area_editor::process_gui_panel_info() {
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
-        bool has_time_limit =
-            game.cur_area_data.type == AREA_TYPE_MISSION &&
-            has_flag(
-                game.cur_area_data.mission.fail_conditions,
-                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
-            );
-        float mission_min = game.cur_area_data.mission.fail_time_limit / 60.0f;
+        bool has_time_limit = false;
+        float mission_min = 0;
+        if(game.cur_area_data.type == AREA_TYPE_MISSION) {
+            if(
+                game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL
+            ) {
+                has_time_limit = true;
+                mission_min =
+                    game.cur_area_data.mission.goal_amount / 60.0f;
+            } else if(
+                has_flag(
+                    game.cur_area_data.mission.fail_conditions,
+                    get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+                )
+            ) {
+                has_time_limit = true;
+                mission_min =
+                    game.cur_area_data.mission.fail_time_limit / 60.0f;
+            }
+        }
         int day_start_min = game.cur_area_data.day_time_start;
         day_start_min = wrap_float(day_start_min, 0, 60 * 24);
         float day_speed = game.cur_area_data.day_time_speed;
@@ -1558,7 +1571,7 @@ void area_editor::process_gui_panel_info() {
             }
             set_tooltip(
                 "Point of the (game world) day at which gameplay ends.\n"
-                "Only applicable in missions with time limits.\n"
+                "Only applicable in missions with some sort of time limits.\n"
                 "Set this to the same as the area start time to make\n"
                 "the day time frozen.",
                 "", WIDGET_EXPLANATION_DRAG
@@ -2212,6 +2225,12 @@ void area_editor::process_gui_panel_main() {
  */
 void area_editor::process_gui_panel_mission() {
 
+    float old_mission_survival_min =
+        game.cur_area_data.mission.goal_amount / 60.0f;
+    float old_mission_time_limit_min =
+        game.cur_area_data.mission.fail_time_limit / 60.0f;
+    bool day_duration_needs_update = false;
+    
     //Mission goal node.
     if(saveable_tree_node("gameplay", "Mission goal")) {
     
@@ -2226,6 +2245,12 @@ void area_editor::process_gui_panel_mission() {
             game.cur_area_data.mission.goal_mob_idxs.clear();
             game.cur_area_data.mission.goal_amount = 1;
             game.cur_area_data.mission.goal = (MISSION_GOALS) mission_goal;
+            if(
+                game.cur_area_data.mission.goal ==
+                MISSION_GOAL_TIMED_SURVIVAL
+            ) {
+                day_duration_needs_update = true;
+            }
         }
         
         switch(game.cur_area_data.mission.goal) {
@@ -2387,6 +2412,7 @@ void area_editor::process_gui_panel_mission() {
                 total_seconds = std::max(total_seconds, 1);
                 game.cur_area_data.mission.goal_amount =
                     (size_t) total_seconds;
+                day_duration_needs_update = true;
             }
             set_tooltip(
                 "The total survival time.",
@@ -2563,16 +2589,46 @@ void area_editor::process_gui_panel_mission() {
         }
         
         //Time limit checkbox.
-        fail_flags_changed |=
+        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+            disable_flag(
+                fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            );
+            disable_flag(
+                game.cur_area_data.mission.fail_conditions,
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            );
+            ImGui::BeginDisabled();
+        }
+        bool time_limit_changed =
             ImGui::CheckboxFlags(
                 "Reach the time limit",
                 &fail_flags,
                 get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
-        set_tooltip(
-            "The mission ends as a fail if the player spends a certain\n"
-            "amount of time in the mission."
-        );
+        fail_flags_changed |= time_limit_changed;
+        if(
+            time_limit_changed &&
+            has_flag(
+                fail_flags,
+                get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
+            )
+        ) {
+            day_duration_needs_update = true;
+        }
+        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+            ImGui::EndDisabled();
+            set_tooltip(
+                "The mission's goal is to survive for a certain amount of\n"
+                "time, so it doesn't make sense to have a time limit to\n"
+                "fail with."
+            );
+        } else {
+            set_tooltip(
+                "The mission ends as a fail if the player spends a certain\n"
+                "amount of time in the mission."
+            );
+        }
         
         if(
             has_flag(
@@ -2586,25 +2642,9 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Indent();
             if(ImGui::DragTime2("Time limit", &seconds)) {
                 register_change("mission fail conditions change");
-                float old_mission_min =
-                    game.cur_area_data.mission.fail_time_limit / 60.0f;
-                int day_start_min = game.cur_area_data.day_time_start;
-                day_start_min = wrap_float(day_start_min, 0, 60 * 24);
-                float day_speed = game.cur_area_data.day_time_speed;
-                int old_day_end_min =
-                    day_start_min + old_mission_min * day_speed;
-                old_day_end_min = wrap_float(old_day_end_min, 0, 60 * 24);
                 seconds = std::max(seconds, 1);
-                float new_mission_min = seconds / 60.0f;
-                game.cur_area_data.mission.fail_time_limit =
-                    (size_t) seconds;
-                    
-                game.cur_area_data.day_time_speed =
-                    calculate_day_speed(
-                        day_start_min, old_day_end_min, new_mission_min
-                    );
-                    
-                    
+                game.cur_area_data.mission.fail_time_limit = (size_t) seconds;
+                day_duration_needs_update = true;
             }
             set_tooltip(
                 "Time limit that, when reached, ends the mission\n"
@@ -3433,6 +3473,29 @@ void area_editor::process_gui_panel_mission() {
         
         ImGui::TreePop();
         
+    }
+    
+    if(day_duration_needs_update) {
+        float day_start_min = game.cur_area_data.day_time_start;
+        day_start_min = wrap_float(day_start_min, 0, 60 * 24);
+        float day_speed = game.cur_area_data.day_time_speed;
+        float old_mission_min = 0;
+        size_t mission_seconds = 0;
+        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+            old_mission_min = old_mission_survival_min;
+            mission_seconds = game.cur_area_data.mission.goal_amount;
+        } else {
+            old_mission_min = old_mission_time_limit_min;
+            mission_seconds = game.cur_area_data.mission.fail_time_limit;
+        }
+        float old_day_end_min = day_start_min + old_mission_min * day_speed;
+        old_day_end_min = wrap_float(old_day_end_min, 0, 60 * 24);
+        mission_seconds = std::max(mission_seconds, (size_t) 1);
+        float new_mission_min = mission_seconds / 60.0f;
+        game.cur_area_data.day_time_speed =
+            calculate_day_speed(
+                day_start_min, old_day_end_min, new_mission_min
+            );
     }
     
 }
