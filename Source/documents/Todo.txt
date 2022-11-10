@@ -2,10 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Other things
-        Enemies falling into the void should count as deaths, and for the enemy kill points
-        Make sure simple areas work
-        Update README.txt
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -27,30 +24,9 @@ Next tasks (roughly sorted most important first)
     "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
     Helodity's resource without destination glitch
     If the Pikmin in standby to be thrown is deleted, the game crashes
+    If a Pikmin is called from the Onion and the leader dies before they finish sliding down the legs, they'll be following the dead leader
     
     --- v0.23.0 ---
-    Mission Mode stuff
-        Info
-            The idea is to make it so areas have some sort of goal, other than being a sandbox
-            Areas should be one of three types
-                Areas of the simple type don't really have any special rules, they're just endless sandboxes
-                Areas of the mission type show, in the area editor's new gameplay panel, all sorts of info about how to play the mission
-                Areas of the arena type are only for competitive multiplayer play
-            Medals
-                For every stage, the player can have no medal, a bronze, a silver, a gold, or a platinum medal
-                    The sprites for medals should have the medal proper take up a lot of large space, whereas the ribbon should be small. The three basic medals should have the medal proper be circular and uninteresting, whereas the platinum should be a star to stand out. Since platinum is both a "perfect" completion, as well as a way to indicate triumph on missions that aren't scored with points, it should give a feeling of a checkbox on a checklist, while the other medals should give a feeling of "good, but there's more to be done"
-                When the end of the stage is reached, regardless of it being via clear or fail, the player is graded and maybe awarded a medal
-                Three grading modes:
-                    Points
-                        The final point count depends on the value in the following fields: Pikmin born, Pikmin deaths (careful not to count Candypop Buds as deaths), time left, treasure points gathered, enemy kill points gathered
-                        Each field can have varying weights, including 0 or negative
-                        Each field's value can also be instantly transformed to 0 if the player ended the mission via fail
-                        You should be able to specify the starting score value, for cases where the fields only make you lose score (like a survival mission that rates you based on time SPENT, not time left)
-                        Depending on the points, the player gets no medal, a bronze, a silver, a gold, or a platinum
-                    Completion
-                        Platinum medal if the stage's goal has been reached, no medal if not. Example: puzzle stages
-                    None
-                        No scoring whatsoever. The player always has a platinum medal on these stages, even before playing. Example: a sandbox map with no purpose. This is different from "simple"-type areas, since you may still want a sandbox stage with specific limitations or fail conditions
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's Pikifen rebalanced mod

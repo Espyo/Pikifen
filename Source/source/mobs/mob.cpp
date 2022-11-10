@@ -774,7 +774,7 @@ bool mob::calculate_carrying_destination(
             decided_type =
                 majority_types[
                     randomi(0, (int) majority_types.size() - 1)
-                ];
+            ];
         }
     }
     
@@ -1321,7 +1321,7 @@ void mob::do_attack_effects(
     if(!useless) {
         //Play the sound.
         game.sys_assets.sfx_attack.play(0.06, false, 0.6f);
-
+        
         //Damage squash-and-stretch animation.
         if(damage_squash_time == 0.0f) {
             damage_squash_time = MOB::DAMAGE_SQUASH_DURATION;
@@ -2942,6 +2942,24 @@ void mob::start_dying() {
     pg.duration_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
     
+    if(group) {
+        while(!group->members.empty()) {
+            mob* member = group->members[0];
+            member->fsm.run_event(
+                MOB_EV_DISMISSED,
+                (void*) & (member->pos)
+            );
+            if(type->category->id != MOB_CATEGORY_LEADERS) {
+                //The Pikmin were likely following an enemy.
+                //So they were likely invincible. Let's correct that.
+                disable_flag(member->flags, MOB_FLAG_NON_HUNTABLE);
+                disable_flag(member->flags, MOB_FLAG_NON_HURTABLE);
+                member->team = MOB_TEAM_PLAYER_1;
+            }
+            member->leave_group();
+        }
+    }
+    
     start_dying_class_specifics();
 }
 
@@ -3517,24 +3535,6 @@ void mob::tick_misc_logic(const float delta_t) {
                 &mov, NULL, NULL, delta_t
             );
             group->anchor += mov * delta_t;
-        }
-    }
-    
-    if(health <= 0 && group) {
-        while(!group->members.empty()) {
-            mob* member = group->members[0];
-            member->fsm.run_event(
-                MOB_EV_DISMISSED,
-                (void*) & (member->pos)
-            );
-            if(type->category->id != MOB_CATEGORY_LEADERS) {
-                //The Pikmin were likely following an enemy.
-                //So they were likely invincible. Let's correct that.
-                disable_flag(member->flags, MOB_FLAG_NON_HUNTABLE);
-                disable_flag(member->flags, MOB_FLAG_NON_HURTABLE);
-                member->team = MOB_TEAM_PLAYER_1;
-            }
-            member->leave_group();
         }
     }
     

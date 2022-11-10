@@ -237,6 +237,7 @@ void gen_mob_fsm::die(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->set_health(false, false, 0);
+    m->start_dying();
     m->finish_dying();
     m->to_delete = true;
 }
