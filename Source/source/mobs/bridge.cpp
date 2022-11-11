@@ -130,6 +130,11 @@ bool bridge::check_health() {
                     angle,
                     "side=center; offset=" + f2s(x_offset - chunk_width / 2.0f)
                 );
+            if(!floor_component->center_sector) {
+                //Maybe the bridge component was forced to be created over
+                //the void or something? Abort!
+                break;
+            }
             floor_component->z = start_z + z_offset;
             floor_component->set_rectangular_dim(
                 point(chunk_width, BRIDGE::FLOOR_WIDTH)
@@ -149,6 +154,11 @@ bool bridge::check_health() {
                     angle,
                     "side=left; offset=" + f2s(x_offset - chunk_width / 2.0f)
                 );
+            if(!left_rail_component->center_sector) {
+                //Maybe the bridge component was forced to be created over
+                //the void or something? Abort!
+                break;
+            }
             left_rail_component->z = start_z + z_offset;
             left_rail_component->set_rectangular_dim(
                 point(
@@ -171,6 +181,11 @@ bool bridge::check_health() {
                     angle,
                     "side=right; offset=" + f2s(x_offset - chunk_width / 2.0f)
                 );
+            if(!right_rail_component->center_sector) {
+                //Maybe the bridge component was forced to be created over
+                //the void or something? Abort!
+                break;
+            }
             right_rail_component->z = start_z + z_offset;
             right_rail_component->set_rectangular_dim(
                 left_rail_component->rectangular_dim
@@ -213,6 +228,8 @@ bool bridge::check_health() {
  *   Bridge component mob.
  */
 void bridge::draw_component(mob* m) {
+    if(m->links.empty()) return;
+    
     bridge* bri_ptr = (bridge*) m->links[0];
     string side = m->vars["side"];
     ALLEGRO_BITMAP* texture =
