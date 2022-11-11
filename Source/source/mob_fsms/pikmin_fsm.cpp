@@ -414,6 +414,13 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
             efc.run(pikmin_fsm::check_outgoing_attack);
         }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
+            efc.run(pikmin_fsm::check_incoming_attack);
+        }
+        efc.new_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(pikmin_fsm::unlatch);
+            efc.change_state("knocked_back");
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::touched_eat_hitbox);
         }
@@ -1243,6 +1250,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     efc.new_state("panicking", PIKMIN_STATE_PANICKING); {
         efc.new_event(MOB_EV_ON_ENTER); {
             efc.run(pikmin_fsm::stand_still);
+            efc.run(pikmin_fsm::unlatch);
             efc.run(pikmin_fsm::notify_leader_release);
             efc.run(pikmin_fsm::be_released);
             efc.run(pikmin_fsm::release_tool);
@@ -4079,7 +4087,7 @@ void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::unlatch(mob* m, void* info1, void* info2) {
-    engine_assert(m->focused_mob != NULL, m->print_state_history());
+    if(!m->focused_mob) return;
     
     m->focused_mob->release(m);
     ((pikmin*) m)->latched = false;
