@@ -1297,10 +1297,24 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
                     m2_ptr->focused_mob_memory[f] = NULL;
                 }
             }
+            for(size_t c = 0; c < m2_ptr->chomping_mobs.size(); ++c) {
+                if(m2_ptr->chomping_mobs[c] == m_ptr) {
+                    m2_ptr->chomping_mobs[c] = NULL;
+                }
+            }
+            for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
+                if(m2_ptr->links[l] == m_ptr) {
+                    m2_ptr->links[l] = NULL;
+                }
+            }
             if(m2_ptr->stored_inside_another == m_ptr) {
                 m_ptr->release(m2_ptr);
                 m2_ptr->stored_inside_another = NULL;
             }
+        }
+        
+        if(m_ptr->holder.m) {
+            m_ptr->holder.m->release(m_ptr);
         }
         
         while(!m_ptr->holding.empty()) {

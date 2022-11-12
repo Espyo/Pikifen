@@ -1725,30 +1725,39 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
  *   Unused.
  */
 void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
-    engine_assert(info1 != NULL, m->print_state_history());
-    
     hitbox_interaction* info = (hitbox_interaction*) info1;
     pikmin* pik_ptr = (pikmin*) m;
     
-    //Damage.
-    float damage = 0;
-    info->mob2->calculate_damage(m, info->h2, info->h1, &damage);
-    m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
-    
-    //Knockback.
-    float knockback = 0;
-    float knockback_angle = 0;
-    info->mob2->calculate_knockback(
-        m, info->h2, info->h1, &knockback, &knockback_angle
-    );
-    m->apply_knockback(knockback, knockback_angle);
-    
-    //Withering.
-    if(info->h2->wither_chance > 0 && pik_ptr->maturity > 0) {
-        unsigned char wither_roll = randomi(0, 100);
-        if(wither_roll < info->h2->wither_chance) {
-            pik_ptr->increase_maturity(-1);
+    if(info) {
+        //Damage.
+        float damage = 0;
+        info->mob2->calculate_damage(m, info->h2, info->h1, &damage);
+        m->apply_attack_damage(info->mob2, info->h2, info->h1, damage);
+        
+        //Knockback.
+        float knockback = 0;
+        float knockback_angle = 0;
+        info->mob2->calculate_knockback(
+            m, info->h2, info->h1, &knockback, &knockback_angle
+        );
+        m->apply_knockback(knockback, knockback_angle);
+        
+        //Withering.
+        if(info->h2->wither_chance > 0 && pik_ptr->maturity > 0) {
+            unsigned char wither_roll = randomi(0, 100);
+            if(wither_roll < info->h2->wither_chance) {
+                pik_ptr->increase_maturity(-1);
+            }
         }
+        
+        //Effects.
+        m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
+        
+    } else {
+        //This can happen, for example, if the Pikmin got told to get knocked
+        //back from a bomb rock hotswap. There's no real "hit" in this case
+        //so let's just do the basics and let the Pikmin leave the group,
+        //change animation, and little else.
     }
     
     //Finish up.
@@ -1757,9 +1766,6 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     pikmin_fsm::notify_leader_release(m, info1, info2);
     pikmin_fsm::release_tool(m, info1, info2);
     m->face(m->angle, NULL);
-    
-    //Effects.
-    m->do_attack_effects(info->mob2, info->h2, info->h1, damage, knockback);
 }
 
 
@@ -2299,12 +2305,17 @@ void pikmin_fsm::decide_attack(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
-    engine_assert(m->focused_mob != NULL, m->print_state_history());
     
     disable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
-    float impact_angle = get_angle(pik_ptr->focused_mob->pos, pik_ptr->pos);
-    float impact_speed = 200.0f;
+    float impact_angle = 0.0f;
+    float impact_speed = 0.0f;
+    
+    if(pik_ptr->focused_mob) {
+        impact_angle = get_angle(pik_ptr->focused_mob->pos, pik_ptr->pos);
+        impact_speed = 200.0f;
+    }
+    
     pik_ptr->speed =
         angle_to_coordinates(
             impact_angle, impact_speed

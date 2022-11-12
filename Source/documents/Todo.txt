@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -6,10 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Mobs that get deleted should remove links that other mobs have to them (thanks Helodity)
-        Also, that crash with a Bulborb eating a bomb rock and destroying it at the same time
-        Also, Pikmin getting bit while held by a leader
-        Check Helodity's branch
     Ceramic bridge texture should be 256x256 (thanks isma3)
     Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list

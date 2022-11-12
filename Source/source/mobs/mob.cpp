@@ -456,6 +456,10 @@ void mob::arachnorb_head_turn_logic() {
     size_t n_feet = 0;
     
     for(size_t l = 0; l < links.size(); ++l) {
+        if(!links[l]) {
+            continue;
+        }
+        
         if(!links[l]->parent) {
             continue;
         }
@@ -641,7 +645,7 @@ bool mob::calculate_carrying_destination(
     
     //Now, if it's towards a linked mob, just go there.
     if(carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
-        if(!links.empty()) {
+        if(!links.empty() && links[0]) {
             *target_mob = links[0];
             *target_point = (*target_mob)->pos;
             return true;
@@ -2601,6 +2605,7 @@ void mob::release(mob* m) {
  */
 void mob::release_chomped_pikmin() {
     for(size_t p = 0; p < chomping_mobs.size(); ++p) {
+        if(!chomping_mobs[p]) continue;
         release(chomping_mobs[p]);
     }
     chomping_mobs.clear();
@@ -3053,6 +3058,7 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
     size_t total = std::min(nr, chomping_mobs.size());
     
     for(size_t p = 0; p < total; ++p) {
+        if(!chomping_mobs[p]) continue;
         chomping_mobs[p]->set_health(false, false, 0.0f);
         chomping_mobs[p]->cause_spike_damage(this, true);
         release(chomping_mobs[p]);

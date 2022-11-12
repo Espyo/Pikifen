@@ -228,7 +228,7 @@ bool bridge::check_health() {
  *   Bridge component mob.
  */
 void bridge::draw_component(mob* m) {
-    if(m->links.empty()) return;
+    if(m->links.empty() || !m->links[0]) return;
     
     bridge* bri_ptr = (bridge*) m->links[0];
     string side = m->vars["side"];
@@ -309,7 +309,7 @@ void bridge::read_script_vars(const script_var_reader &svr) {
  * object.
  */
 void bridge::setup() {
-    if(!links.empty()) {
+    if(!links.empty() && links[0]) {
         total_length = dist(pos, links[0]->pos).to_float();
         face(get_angle(pos, links[0]->pos), NULL, true);
         delta_z = links[0]->z - z;

@@ -68,17 +68,21 @@ void bouncer_fsm::create_fsm(mob_type* typ) {
  *   Unused.
  */
 void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
+    bouncer* bou_ptr = (bouncer*) m;
+    mob* toucher = (mob*) info1;
+    mob* target_mob = NULL;
+    
     if(m->links.empty()) {
+        target_mob = bou_ptr->links[0];
+    }
+    
+    if(!target_mob) {
         log_error(
             "The bouncer at " + p2s(m->pos) + ", of the type \"" +
             m->type->name + "\" has no linked mob to serve as a target!"
         );
         return;
     }
-    
-    bouncer* bou_ptr = (bouncer*) m;
-    mob* toucher = (mob*) info1;
-    mob* target_mob = bou_ptr->links[0];
     
     mob_event* ev = NULL;
     

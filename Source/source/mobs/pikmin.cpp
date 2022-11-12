@@ -493,7 +493,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
     
     //Forcefully follow another mob as a leader.
     if(must_follow_link_as_leader) {
-        if(!links.empty()) {
+        if(!links.empty() && links[0]) {
             fsm.run_event(MOB_EV_TOUCHED_ACTIVE_LEADER, (void*) (links[0]));
         }
         //Since this leader is likely an enemy, let's keep these Pikmin safe.

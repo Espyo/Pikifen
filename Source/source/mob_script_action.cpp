@@ -839,7 +839,7 @@ void mob_action_runners::focus(mob_action_run_data &data) {
     
     switch(t) {
     case MOB_ACTION_FOCUS_LINK: {
-        if(!data.m->links.empty()) {
+        if(!data.m->links.empty() && data.m->links[0]) {
             data.m->focus_on_mob(data.m->links[0]);
         }
         break;
@@ -1274,6 +1274,7 @@ void mob_action_runners::move_to_target(mob_action_run_data &data) {
         
         point des;
         for(size_t l = 0; l < data.m->links.size(); ++l) {
+            if(!data.m->links[l]) continue;
             des += data.m->links[l]->pos;
         }
         des = des / data.m->links.size();
@@ -1406,6 +1407,7 @@ void mob_action_runners::send_message_to_focus(mob_action_run_data &data) {
 void mob_action_runners::send_message_to_links(mob_action_run_data &data) {
     for(size_t l = 0; l < data.m->links.size(); ++l) {
         if(data.m->links[l] == data.m) continue;
+        if(!data.m->links[l]) continue;
         data.m->send_message(data.m->links[l], data.args[0]);
     }
 }
@@ -1724,7 +1726,7 @@ void mob_action_runners::spawn(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::stabilize_z(mob_action_run_data &data) {
-    if(data.m->links.empty()) {
+    if(data.m->links.empty() || !data.m->links[0]) {
         return;
     }
     
@@ -1734,6 +1736,8 @@ void mob_action_runners::stabilize_z(mob_action_run_data &data) {
         
     for(size_t l = 1; l < data.m->links.size(); ++l) {
     
+        if(!data.m->links[l]) continue;
+        
         switch(t) {
         case MOB_ACTION_STABILIZE_Z_HIGHEST: {
             if(data.m->links[l]->z > best_match_z) {
