@@ -120,8 +120,19 @@ void pikmin::draw_mob() {
     if(!s_ptr) return;
     
     //The Pikmin itself.
-    bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false, false);
+    bitmap_effect_info mob_eff;
+    get_sprite_bitmap_effects(
+        s_ptr, &mob_eff,
+        SPRITE_BITMAP_EFFECT_STATUS |
+        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
+        SPRITE_BITMAP_EFFECT_HEIGHT |
+        SPRITE_BITMAP_EFFECT_DELIVERY
+    );
+    bitmap_effect_info pik_sprite_eff = mob_eff;
+    get_sprite_bitmap_effects(
+        s_ptr, &pik_sprite_eff,
+        SPRITE_BITMAP_EFFECT_STANDARD
+    );
     
     bool is_idle =
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||
@@ -129,27 +140,39 @@ void pikmin::draw_mob() {
         fsm.cur_state->id == PIKMIN_STATE_SPROUT;
         
     if(is_idle) {
-        eff.glow_color = COLOR_WHITE;
+        mob_eff.glow_color = COLOR_WHITE;
     }
     
-    draw_bitmap_with_effects(s_ptr->bitmap, eff);
+    draw_bitmap_with_effects(s_ptr->bitmap, pik_sprite_eff);
     
     //Top.
     if(s_ptr->top_visible) {
-        bitmap_effect_info top_eff = eff;
+        bitmap_effect_info top_eff = mob_eff;
         ALLEGRO_BITMAP* top_bmp = pik_type->bmp_top[maturity];
-        top_eff.translation = pos + rotate_point(s_ptr->top_pos, angle);
-        top_eff.scale.x = s_ptr->top_size.x / al_get_bitmap_width(top_bmp);
-        top_eff.scale.y = s_ptr->top_size.y / al_get_bitmap_height(top_bmp);
-        top_eff.rotation += s_ptr->top_angle;
-        top_eff.glow_color = map_gray(0);
-        
+        //To get the height effect to work, we'll need to scale the translation
+        //too, otherwise the top will detach from the Pikmin visually as
+        //the Pikmin falls into a pit. The "right" scale is a bit of a guess
+        //at this point in the code, but honestly, either X scale or Y scale
+        //will work. In the off-chance they are different, using an average
+        //will be more than enough.
+        float avg_scale = (top_eff.scale.x + top_eff.scale.y) / 2.0f;
+        top_eff.translation +=
+            pos + rotate_point(s_ptr->top_pos, angle) * avg_scale;
+        top_eff.scale.x *=
+            s_ptr->top_size.x / al_get_bitmap_width(top_bmp);
+        top_eff.scale.y *=
+            s_ptr->top_size.y / al_get_bitmap_height(top_bmp);
+        top_eff.rotation +=
+            angle + s_ptr->top_angle;
+        top_eff.glow_color =
+            map_gray(0);
+            
         draw_bitmap_with_effects(top_bmp, top_eff);
     }
     
     //Idle glow.
     if(is_idle) {
-        bitmap_effect_info idle_eff = eff;
+        bitmap_effect_info idle_eff = pik_sprite_eff;
         idle_eff.translation = pos;
         idle_eff.scale.x =
             (game.config.standard_pikmin_radius * 8) /
@@ -166,7 +189,7 @@ void pikmin::draw_mob() {
         draw_bitmap_with_effects(game.sys_assets.bmp_idle_glow, idle_eff);
     }
     
-    draw_status_effect_bmp(this, eff);
+    draw_status_effect_bmp(this, pik_sprite_eff);
 }
 
 

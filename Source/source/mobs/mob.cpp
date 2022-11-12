@@ -1341,7 +1341,12 @@ void mob::draw_limb() {
     
     bitmap_effect_info eff;
     get_sprite_bitmap_effects(
-        sprite_to_use, &eff, true, true, true, false, false
+        sprite_to_use, &eff,
+        SPRITE_BITMAP_EFFECT_STANDARD |
+        SPRITE_BITMAP_EFFECT_STATUS |
+        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
+        SPRITE_BITMAP_EFFECT_HEIGHT |
+        SPRITE_BITMAP_EFFECT_DELIVERY
     );
     
     point parent_end;
@@ -1404,7 +1409,15 @@ void mob::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false, true);
+    get_sprite_bitmap_effects(
+        s_ptr, &eff,
+        SPRITE_BITMAP_EFFECT_STANDARD |
+        SPRITE_BITMAP_EFFECT_STATUS |
+        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
+        SPRITE_BITMAP_EFFECT_HEIGHT |
+        SPRITE_BITMAP_EFFECT_DELIVERY |
+        SPRITE_BITMAP_EFFECT_CARRY
+    );
     
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
 }
@@ -1890,33 +1903,29 @@ float mob::get_latched_pikmin_weight() const {
  *   Sprite to get info about.
  * info:
  *   Struct to fill the info with.
- * add_status:
- *   If true, add status effect changes to the result.
- * add_sector_brightness:
- *   If true, add sector brightness coloring to the result.
- * add_delivery:
- *   If true, add Onion/ship/etc. delivery changes to the result.
- * add_damage_squash:
- *   If true, add damage squash-and-stretch scaling to the result.
- * add_carry_sway:
- *   If true, add the back-and-forth sway from being carried to the result.
+ * effects:
+ *   What effects to use. Use SPRITE_BITMAP_EFFECTS for this.
  */
 void mob::get_sprite_bitmap_effects(
-    sprite* s_ptr, bitmap_effect_info* info,
-    const bool add_status, const bool add_sector_brightness,
-    const bool add_delivery, const bool add_damage_squash,
-    const bool add_carry_sway
+    sprite* s_ptr, bitmap_effect_info* info, uint16_t effects
 ) const {
 
-    info->translation =
-        point(
-            pos.x + angle_cos * s_ptr->offset.x - angle_sin * s_ptr->offset.y,
-            pos.y + angle_sin * s_ptr->offset.x + angle_cos * s_ptr->offset.y
-        );
-    info->rotation = angle + s_ptr->angle;
-    get_sprite_dimensions(s_ptr, &(info->scale));
+    if(has_flag(effects, SPRITE_BITMAP_EFFECT_STANDARD)) {
+        info->translation +=
+            point(
+                pos.x +
+                angle_cos * s_ptr->offset.x -
+                angle_sin * s_ptr->offset.y,
+                pos.y +
+                angle_sin * s_ptr->offset.x +
+                angle_cos * s_ptr->offset.y
+            );
+        info->rotation += angle + s_ptr->angle;
+        info->scale.x *= s_ptr->scale.x;
+        info->scale.y *= s_ptr->scale.y;
+    }
     
-    if(add_status) {
+    if(has_flag(effects, SPRITE_BITMAP_EFFECT_STATUS)) {
         size_t n_glow_colors = 0;
         ALLEGRO_COLOR glow_color_sum = COLOR_EMPTY;
         
@@ -1962,13 +1971,39 @@ void mob::get_sprite_bitmap_effects(
         }
     }
     
-    if(add_sector_brightness) {
+    if(has_flag(effects, SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS)) {
         info->tint_color.r *= (center_sector->brightness / 255.0);
         info->tint_color.g *= (center_sector->brightness / 255.0);
         info->tint_color.b *= (center_sector->brightness / 255.0);
     }
     
-    if(add_delivery && delivery_info && focused_mob) {
+    if(has_flag(effects, SPRITE_BITMAP_EFFECT_HEIGHT)) {
+        float height_effect_scale = 1.0;
+        
+        if(height_effect_pivot != LARGE_FLOAT) {
+            //First, check for the mob being in the air.
+            height_effect_scale =
+                (z - height_effect_pivot) * MOB::HEIGHT_EFFECT_FACTOR;
+            height_effect_scale = std::max(height_effect_scale, 1.0f);
+            if(
+                ground_sector->is_bottomless_pit &&
+                height_effect_scale == 1.0f
+            ) {
+                //When atop a pit, height_effect_pivot holds what height
+                //the mob fell from.
+                height_effect_scale =
+                    (z - ground_sector->z) /
+                    (height_effect_pivot - ground_sector->z);
+            }
+        }
+        info->scale *= height_effect_scale;
+    }
+    
+    if(
+        has_flag(effects, SPRITE_BITMAP_EFFECT_DELIVERY) &&
+        delivery_info &&
+        focused_mob
+    ) {
         switch(delivery_info->anim_type) {
         case DELIVERY_ANIM_SUCK: {
             ALLEGRO_COLOR new_glow;
@@ -2101,7 +2136,10 @@ void mob::get_sprite_bitmap_effects(
         
     }
     
-    if(add_damage_squash && damage_squash_time > 0.0f) {
+    if(
+        has_flag(effects, SPRITE_BITMAP_EFFECT_DAMAGE) &&
+        damage_squash_time > 0.0f
+    ) {
         float damage_squash_time_ratio =
             damage_squash_time / MOB::DAMAGE_SQUASH_DURATION;
         float damage_scale_y = 1.0f;
@@ -2135,7 +2173,10 @@ void mob::get_sprite_bitmap_effects(
         info->scale.x *= 1.0f / damage_scale_y;
     }
     
-    if(add_carry_sway && carry_info) {
+    if(
+        has_flag(effects, SPRITE_BITMAP_EFFECT_STATUS) &&
+        carry_info
+    ) {
         if(carry_info->is_moving) {
             float factor1 =
                 sin(
@@ -2155,55 +2196,6 @@ void mob::get_sprite_bitmap_effects(
                 factor1 * MOB::CARRY_SWAY_ROTATION_AMOUNT;
         }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns where a sprite's center should be, for normal mob drawing routines.
- * s:
- *   Sprite to check.
- */
-point mob::get_sprite_center(sprite* s) const {
-    point p;
-    p.x = pos.x + angle_cos * s->offset.x - angle_sin * s->offset.y;
-    p.y = pos.y + angle_sin * s->offset.x + angle_cos * s->offset.y;
-    return p;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns what a sprite's dimensions should be,
- * for normal mob drawing routines.
- * s:
- *   The sprite.
- * scale:
- *   Variable to return the scale used to. Optional.
- */
-point mob::get_sprite_dimensions(sprite* s, point* scale) const {
-    point dim;
-    dim.x = s->file_size.x;
-    dim.y = s->file_size.y;
-    
-    float sucking_mult = 1.0;
-    float height_mult = 1.0;
-    
-    if(height_effect_pivot != LARGE_FLOAT) {
-        height_mult +=
-            (z - height_effect_pivot) * MOB::HEIGHT_EFFECT_FACTOR;
-    }
-    height_mult = std::max(height_mult, 1.0f);
-    if(ground_sector->is_bottomless_pit && height_mult == 1.0f) {
-        height_mult =
-            (z - ground_sector->z) /
-            (height_effect_pivot - ground_sector->z);
-    }
-    
-    point final_scale = s->scale * sucking_mult * height_mult;
-    if(scale) *scale = final_scale;
-    
-    dim.x *= final_scale.x;
-    dim.y *= final_scale.y;
-    return dim;
 }
 
 

@@ -553,7 +553,15 @@ void leader::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false, true);
+    get_sprite_bitmap_effects(
+        s_ptr, &eff,
+        SPRITE_BITMAP_EFFECT_STANDARD |
+        SPRITE_BITMAP_EFFECT_STATUS |
+        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
+        SPRITE_BITMAP_EFFECT_HEIGHT |
+        SPRITE_BITMAP_EFFECT_DELIVERY |
+        SPRITE_BITMAP_EFFECT_CARRY
+    );
     
     if(invuln_period.time_left > 0.0f) {
         sprite* spark_s =

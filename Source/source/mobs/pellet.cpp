@@ -43,7 +43,15 @@ void pellet::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false, true);
+    get_sprite_bitmap_effects(
+        s_ptr, &eff,
+        SPRITE_BITMAP_EFFECT_STANDARD |
+        SPRITE_BITMAP_EFFECT_STATUS |
+        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
+        SPRITE_BITMAP_EFFECT_HEIGHT |
+        SPRITE_BITMAP_EFFECT_DELIVERY |
+        SPRITE_BITMAP_EFFECT_CARRY
+    );
     
     eff.scale.x *= radius * 2.0 / al_get_bitmap_width(s_ptr->bitmap);
     eff.scale.y *= radius * 2.0 / al_get_bitmap_height(s_ptr->bitmap);

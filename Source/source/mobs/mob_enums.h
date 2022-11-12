@@ -210,6 +210,25 @@ enum MOB_TEAMS {
 };
 
 
+//Options for what sprite bitmap effects to use. This is a bitmask.
+enum SPRITE_BITMAP_EFFECTS {
+    //Animation, position, angle, etc.
+    SPRITE_BITMAP_EFFECT_STANDARD = 0x01,
+    //Effects from status effects.
+    SPRITE_BITMAP_EFFECT_STATUS = 0x02,
+    //Darkening from the sector brightness.
+    SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS = 0x04,
+    //Height effect, both from being in the air and from falling into a pit.
+    SPRITE_BITMAP_EFFECT_HEIGHT = 0x08,
+    //Onion delivery shrinking, and other types of delivery too.
+    SPRITE_BITMAP_EFFECT_DELIVERY = 0x10,
+    //Squash and stretch from being damaged.
+    SPRITE_BITMAP_EFFECT_DAMAGE = 0x20,
+    //Sway from being carried.
+    SPRITE_BITMAP_EFFECT_CARRY = 0x40,
+};
+
+
 //Options for how to start a new animation.
 enum START_ANIMATION_OPTIONS {
     //Start the new animation like normal.

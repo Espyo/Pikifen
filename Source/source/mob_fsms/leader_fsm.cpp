@@ -1515,6 +1515,7 @@ void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
 void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->leave_group();
     m->set_health(true, true, -0.2);
+    m->invuln_period.start();
     m->respawn();
 }
 

@@ -71,7 +71,14 @@ void decoration::draw_mob() {
     if(!s_ptr) return;
     
     bitmap_effect_info eff;
-    get_sprite_bitmap_effects(s_ptr, &eff, true, true, true, false, false);
+    get_sprite_bitmap_effects(
+        s_ptr, &eff,
+        SPRITE_BITMAP_EFFECT_STANDARD |
+        SPRITE_BITMAP_EFFECT_STATUS |
+        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS |
+        SPRITE_BITMAP_EFFECT_HEIGHT |
+        SPRITE_BITMAP_EFFECT_DELIVERY
+    );
     
     eff.tint_color.r *= individual_tint.r;
     eff.tint_color.g *= individual_tint.g;

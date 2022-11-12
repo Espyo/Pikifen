@@ -416,13 +416,8 @@ public:
     
     //Drawing tools.
     void get_sprite_bitmap_effects(
-        sprite* s_ptr, bitmap_effect_info* info,
-        const bool add_status, const bool add_sector_brightness,
-        const bool add_delivery, const bool add_damage_squash,
-        const bool add_carry_sway
+        sprite* s_ptr, bitmap_effect_info* info, uint16_t effects
     ) const;
-    point get_sprite_center(sprite* s) const;
-    point get_sprite_dimensions(sprite* s, point* scale = NULL) const;
     
     string print_state_history() const;
     
