@@ -223,6 +223,9 @@ void area_editor::draw_canvas() {
         bool selected =
             selected_sectors.find(s_ptr) != selected_sectors.end();
         bool valid = true;
+        bool highlighted = s_ptr == highlighted_sector &&
+            selection_filter == SELECTION_FILTER_SECTORS &&
+            state == EDITOR_STATE_LAYOUT;
         
         if(
             game.cur_area_data.problems.non_simples.find(s_ptr) !=
@@ -234,7 +237,7 @@ void area_editor::draw_canvas() {
             valid = false;
         }
         
-        if(selected || !valid || view_heightmap || view_brightness) {
+        if(selected || !valid || view_heightmap || view_brightness || highlighted) {
             for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
             
                 ALLEGRO_VERTEX av[3];
@@ -265,6 +268,9 @@ void area_editor::draw_canvas() {
                                 AREA_EDITOR::SELECTION_COLOR[2],
                                 selection_opacity * 0.5 * 255
                             );
+                    }
+                    if (highlighted && !selected) {
+                        av[v].color = al_map_rgba(255, 255, 255, 16);
                     }
                     av[v].u = 0;
                     av[v].v = 0;
@@ -314,7 +320,10 @@ void area_editor::draw_canvas() {
         bool same_z = false;
         bool valid = true;
         bool selected = false;
-        
+        bool highlighted = e_ptr == highlighted_edge &&
+            selection_filter <= SELECTION_FILTER_EDGES &&
+            state == EDITOR_STATE_LAYOUT;
+
         if(problem_sector_ptr) {
             if(
                 e_ptr->sectors[0] == problem_sector_ptr ||
@@ -376,11 +385,13 @@ void area_editor::draw_canvas() {
                 ) :
                 !valid ?
                 al_map_rgba(192, 32,  32,  edges_opacity * 255) :
+                highlighted ?
+                al_map_rgba(192, 192, 192, edges_opacity * 255) :
                 one_sided ?
-                al_map_rgba(255, 255, 255, edges_opacity * 255) :
+                al_map_rgba(128, 128, 128, edges_opacity * 255) :
                 same_z ?
                 al_map_rgba(128, 128, 128, edges_opacity * 255) :
-                al_map_rgba(192, 192, 192, edges_opacity * 255)
+                al_map_rgba(150, 150, 150, edges_opacity * 255)
             ),
             (selected ? 3.0 : 2.0) / game.cam.zoom
         );
@@ -492,6 +503,8 @@ void area_editor::draw_canvas() {
                 (selected_vertexes.find(v_ptr) != selected_vertexes.end());
             bool valid =
                 v_ptr != problem_vertex_ptr;
+            bool highlighted = highlighted_vertex == v_ptr &&
+                selection_filter <= SELECTION_FILTER_VERTEXES;
             draw_filled_diamond(
                 point(v_ptr->x, v_ptr->y),
                 3.0 / game.cam.zoom,
@@ -504,6 +517,8 @@ void area_editor::draw_canvas() {
                 ) :
                 !valid ?
                 al_map_rgb(192, 32, 32) :
+                highlighted ?
+                al_map_rgba(255, 255, 255, edges_opacity * 255) :
                 al_map_rgba(80, 160, 255, edges_opacity * 255)
             );
             

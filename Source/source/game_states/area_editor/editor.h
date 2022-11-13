@@ -346,6 +346,12 @@ private:
     vector<layout_drawing_node> drawing_nodes;
     //Reason why the current drawing line is invalid.
     DRAWING_LINE_ERRORS drawing_line_error;
+    //Currently highlighted edge, if any.
+    edge* highlighted_edge;
+    //Currently highlighted sector, if any.
+    sector* highlighted_sector;
+    //Currently highlighted vertex, if any.
+    vertex* highlighted_vertex;
     //Category of the last mob placed.
     mob_category* last_mob_category;
     //Mob type of the last mob placed.

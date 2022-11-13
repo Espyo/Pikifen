@@ -1725,7 +1725,10 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &game.screen_to_world_transform,
         &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
     );
-    
+    // Update highlighted element
+    get_clicked_layout_element(
+        &highlighted_vertex, &highlighted_edge, &highlighted_sector
+    );
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
         point hotspot = snap_point(game.mouse_cursor_w, true);
         if(new_circle_sector_step == 1) {
