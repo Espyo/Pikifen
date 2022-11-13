@@ -667,7 +667,11 @@ void area_editor::draw_canvas() {
             sub_state == EDITOR_SUB_STATE_MISSION_MOBS &&
             game.cur_area_data.mission.goal_mob_idxs.find(m) !=
             game.cur_area_data.mission.goal_mob_idxs.end();
-            
+        bool is_highlighted = highlighted_mob == m_ptr &&
+            state == EDITOR_STATE_MOBS;
+
+
+
         if(is_selected || is_mission_requirement) {
             al_draw_filled_circle(
                 m_ptr->pos.x, m_ptr->pos.y, radius,
@@ -702,6 +706,17 @@ void area_editor::draw_canvas() {
                 );
             }
         }
+        else if (is_highlighted) {
+            al_draw_filled_circle(
+                m_ptr->pos.x, m_ptr->pos.y, radius,
+                al_map_rgba(
+                    highlight_color.r * 255,
+                    highlight_color.g * 255,
+                    highlight_color.b * 255,
+                    64
+                )
+            );
+        }
         
     }
     
@@ -717,6 +732,7 @@ void area_editor::draw_canvas() {
                 bool selected =
                     selected_path_links.find(l_ptr) !=
                     selected_path_links.end();
+                bool highlighted = highlighted_path_link == l_ptr;
                 ALLEGRO_COLOR color = COLOR_WHITE;
                 if(selected) {
                     color =
@@ -726,7 +742,17 @@ void area_editor::draw_canvas() {
                             AREA_EDITOR::SELECTION_COLOR[2],
                             selection_opacity * 255
                         );
-                } else {
+                }
+                else if (highlighted) {
+                    color =
+                        al_map_rgba(
+                            highlight_color.r * 255,
+                            highlight_color.g * 255,
+                            highlight_color.b * 255,
+                            255
+                        );
+                }
+                else {
                     switch(l_ptr->type) {
                     case PATH_LINK_TYPE_NORMAL: {
                         color = al_map_rgba(34, 136, 187, 224);
@@ -794,6 +820,7 @@ void area_editor::draw_canvas() {
         
         for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
+            bool highlighted = highlighted_path_stop == s_ptr;
             al_draw_filled_circle(
                 s_ptr->pos.x, s_ptr->pos.y,
                 AREA_EDITOR::PATH_STOP_RADIUS,
@@ -811,6 +838,17 @@ void area_editor::draw_canvas() {
                         AREA_EDITOR::SELECTION_COLOR[1],
                         AREA_EDITOR::SELECTION_COLOR[2],
                         selection_opacity * 255
+                    )
+                );
+            }
+            else if (highlighted) {
+                al_draw_filled_circle(
+                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
+                    al_map_rgba(
+                        highlight_color.r * 255,
+                        highlight_color.g * 255,
+                        highlight_color.b * 255,
+                        128
                     )
                 );
             }

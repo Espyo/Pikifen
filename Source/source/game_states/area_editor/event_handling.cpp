@@ -1065,7 +1065,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     game.mouse_cursor_w,
                     &clicked_link_1, &clicked_link_2
                 );
-                
             if(!is_shift_pressed) {
                 if(clicked_stop || clicked_link) {
                     start_new_selection = false;
@@ -1725,10 +1724,30 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &game.screen_to_world_transform,
         &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
     );
-    // Update highlighted element
+
+    // Update highlighted elements
     get_clicked_layout_element(
         &highlighted_vertex, &highlighted_edge, &highlighted_sector
     );
+    highlighted_mob = get_mob_under_point(game.mouse_cursor_w);
+    path_link* clicked_link_1;
+
+    highlighted_path_stop = get_path_stop_under_point(game.mouse_cursor_w);
+    highlighted_path_link = NULL;
+
+    //Selecting the stop takes priority, so keep the link null if there's a stop.
+    if (highlighted_path_stop == NULL) {
+        get_path_link_under_point(
+            game.mouse_cursor_w,
+            &clicked_link_1, &highlighted_path_link
+        );
+        if (highlighted_path_link == NULL) {
+            highlighted_path_link = clicked_link_1;
+        }
+    }
+
+    highlighted_path_stop = get_path_stop_under_point(game.mouse_cursor_w);
+
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
         point hotspot = snap_point(game.mouse_cursor_w, true);
         if(new_circle_sector_step == 1) {

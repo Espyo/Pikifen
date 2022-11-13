@@ -129,17 +129,6 @@ private:
         void destroy();
     };
     
-    //Represents the selected sectors, mobs, etc.
-    struct selection_representation {
-        //How many sectors, mobs, etc. are currently selected.
-        size_t nr_selections;
-        //Has the user confirmed that all of the selected sectors, mobs, etc.
-        //should use the same properties?
-        bool homogenous;
-        //Sector, mob, etc. that represents the homogenous selection.
-        void* representative;
-    };
-    
     //Represents a point in the current layout drawing.
     struct layout_drawing_node {
         //Raw coordinates of the mouse click.
@@ -348,6 +337,12 @@ private:
     DRAWING_LINE_ERRORS drawing_line_error;
     //Currently highlighted edge, if any.
     edge* highlighted_edge;
+    //Currently highlighted mob, if any.
+    mob_gen* highlighted_mob;
+    //Currently highlighted path link, if any.
+    path_link* highlighted_path_link;
+    //Currently highlighted path stop, if any.
+    path_stop* highlighted_path_stop;
     //Currently highlighted sector, if any.
     sector* highlighted_sector;
     //Currently highlighted vertex, if any.
