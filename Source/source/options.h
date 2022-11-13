@@ -66,6 +66,7 @@ extern const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE;
 extern const AUTO_THROW_MODES DEF_AUTO_THROW_MODE;
 extern const float DEF_CURSOR_SPEED;
 extern const bool DEF_DRAW_CURSOR_TRAIL;
+extern const ALLEGRO_COLOR DEF_EDITOR_HIGHLIGHT_COLOR;
 extern const bool DEF_EDITOR_MMB_PAN;
 extern const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD;
 extern const ALLEGRO_COLOR DEF_EDITOR_PRIMARY_COLOR;
@@ -123,6 +124,8 @@ struct options_struct {
     float cursor_speed;
     //Draw a trail behind the mouse cursor?
     bool draw_cursor_trail;
+    //Editor's custom style highlight color.
+    ALLEGRO_COLOR editor_highlight_color;
     //If true, the middle mouse button pans in editors.
     bool editor_mmb_pan;
     //In editors, only consider a mouse drag if it moves these many pixels.

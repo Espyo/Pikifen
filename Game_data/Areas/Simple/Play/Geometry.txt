@@ -2216,374 +2216,455 @@ edges{
 }
 sectors{
 	s{
+		type
 		z=200.0000
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		texture=Stone.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Stone.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
-		z=0.0000
-		fade=true
-		texture=Grass_light.jpg
-	}
-	s{
-		z=0.0000
-		fade=true
-	}
-	s{
-		z=0.0000
-		texture=Dirt.jpg
-	}
-	s{
+		type
 		z=0.0000
 		fade=true
 		texture=Grass_light.jpg
 	}
 	s{
+		type
+		z=0.0000
+		fade=true
+	}
+	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
+		z=0.0000
+		fade=true
+		texture=Grass_light.jpg
+	}
+	s{
+		type
+		z=0.0000
+		texture=Dirt.jpg
+	}
+	s{
+		type
 		z=200.0000
 		texture=Stone.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=150.0000
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=200.0000
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Stone.jpg
 	}
 	s{
+		type
 		z=50.0000
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=100.0000
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=16.0000
 		texture=Bark.jpg
 	}
 	s{
+		type
 		z=192.0000
 		texture=Stump.jpg
 		texture_scale=0.2400 0.2400
 		texture_trans=200.0000 80.0000
 	}
 	s{
+		type
 		z=96.0000
 		texture=Bark.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=128.0000
 		texture=Bark.jpg
 	}
 	s{
+		type
 		z=16.0000
 		texture=Bark.jpg
 		texture_tint=162 162 162
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 	}
 	s{
+		type
 		z=0.0000
 		brightness=128
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=300.0000
 		texture=Stone.jpg
 	}
 	s{
+		type
 		z=300.0000
 		texture=Stone.jpg
 	}
 	s{
+		type
 		z=0.0000
 		brightness=128
 		tag=0
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		brightness=128
 		tag=50
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		tag=100
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		tag=50
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		tag=200
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		tag=150
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		brightness=128
 		tag=200
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		brightness=128
 		tag=200
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		tag=200
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		tag=200
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=0.0000
 		hazards=water
 		hazards_floor=true
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=60.0000
 		texture=Bark.jpg
 	}
 	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 		texture=Grass_light.jpg
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 	}
 	s{
+		type
 		z=0.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=0.0000
 		fade=true
 	}
 	s{
+		type
 		z=200.0000
 		texture=Stone.jpg
 	}
 	s{
+		type
 		z=50.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=100.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=150.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=200.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=200.0000
 		texture=Grass_dark.jpg
 	}
 	s{
-		z=200.0000
-		fade=true
-		texture=Grass_dark.jpg
-	}
-	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
+		z=200.0000
+		fade=true
+		texture=Grass_dark.jpg
+	}
+	s{
+		type
 		z=70.0000
 		texture=Dirt.jpg
 	}
 	s{
+		type
 		z=200.0000
 		texture=Stone.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg
 	}
 	s{
+		type
 		z=200.0000
 		fade=true
 		texture=Grass_dark.jpg

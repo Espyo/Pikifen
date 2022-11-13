@@ -87,7 +87,9 @@ void area_editor::draw_canvas() {
     float edges_opacity = 0.25f;
     float grid_opacity = 1.0f;
     float mob_opacity = 0.15f;
-    
+    ALLEGRO_COLOR highlight_color = map_gray(255);
+    if (game.options.editor_use_custom_style)
+        highlight_color = game.options.editor_highlight_color;
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
         textures_opacity = 0.5f;
@@ -270,7 +272,12 @@ void area_editor::draw_canvas() {
                             );
                     }
                     if (highlighted && !selected) {
-                        av[v].color = al_map_rgba(255, 255, 255, 16);
+                        av[v].color = al_map_rgba(
+                            highlight_color.r * 255,
+                            highlight_color.g * 255,
+                            highlight_color.b * 255,
+                            16
+                        );
                     }
                     av[v].u = 0;
                     av[v].v = 0;
@@ -386,7 +393,12 @@ void area_editor::draw_canvas() {
                 !valid ?
                 al_map_rgba(192, 32,  32,  edges_opacity * 255) :
                 highlighted ?
-                al_map_rgba(192, 192, 192, edges_opacity * 255) :
+                al_map_rgba(
+                    highlight_color.r * 255,
+                    highlight_color.g * 255,
+                    highlight_color.b * 255,
+                    selection_opacity * 255
+                ) :
                 one_sided ?
                 al_map_rgba(128, 128, 128, edges_opacity * 255) :
                 same_z ?
@@ -518,7 +530,12 @@ void area_editor::draw_canvas() {
                 !valid ?
                 al_map_rgb(192, 32, 32) :
                 highlighted ?
-                al_map_rgba(255, 255, 255, edges_opacity * 255) :
+                al_map_rgba(
+                    highlight_color.r * 255,
+                    highlight_color.g * 255,
+                    highlight_color.b * 255,
+                    edges_opacity * 255
+                ) :
                 al_map_rgba(80, 160, 255, edges_opacity * 255)
             );
             

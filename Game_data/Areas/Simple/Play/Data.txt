@@ -1,10 +1,15 @@
 name=Play
 subtitle=Testing area for Pikifen
+description
+tags
+difficulty=3
 bg_bmp
 bg_color=0 0 0
 bg_dist=2.0000
 bg_zoom=1.0000
 weather=Normal
+day_time_start=420
+day_time_speed=120
 maker=Espyo
 version=0.22
 engine_version=0.22.0

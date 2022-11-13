@@ -47,6 +47,8 @@ const float DEF_CURSOR_SPEED = 500.0f;
 const bool DEF_DRAW_CURSOR_TRAIL = true;
 //Default value for whether the middle mouse button pans in editors.
 const bool DEF_EDITOR_MMB_PAN = false;
+//Default value for the editor highlights.
+const ALLEGRO_COLOR DEF_EDITOR_HIGHLIGHT_COLOR = { 1.0f, 1.0f, 1.0f, 1.0f };
 //Default value for the editor mouse drag threshold.
 const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
 //Default value for the editor primary color.
@@ -113,6 +115,7 @@ options_struct::options_struct() :
     auto_throw_mode(OPTIONS::DEF_AUTO_THROW_MODE),
     cursor_speed(OPTIONS::DEF_CURSOR_SPEED),
     draw_cursor_trail(OPTIONS::DEF_DRAW_CURSOR_TRAIL),
+    editor_highlight_color(OPTIONS::DEF_EDITOR_HIGHLIGHT_COLOR),
     editor_mmb_pan(OPTIONS::DEF_EDITOR_MMB_PAN),
     editor_mouse_drag_threshold(OPTIONS::DEF_EDITOR_MOUSE_DRAG_THRESHOLD),
     editor_primary_color(OPTIONS::DEF_EDITOR_PRIMARY_COLOR),
@@ -221,6 +224,7 @@ void options_struct::load(data_node* file) {
     rs.set("auto_throw_mode", auto_throw_mode_c);
     rs.set("cursor_speed", cursor_speed);
     rs.set("draw_cursor_trail", draw_cursor_trail);
+    rs.set("editor_highlight_color", editor_highlight_color);
     rs.set("editor_mmb_pan", editor_mmb_pan);
     rs.set("editor_mouse_drag_threshold", editor_mouse_drag_threshold);
     rs.set("editor_primary_color", editor_primary_color);
@@ -290,6 +294,7 @@ void options_struct::load(data_node* file) {
     editor_primary_color.a = 1.0f;
     editor_secondary_color.a = 1.0f;
     editor_text_color.a = 1.0f;
+    editor_highlight_color.a = 1.0f;
 }
 
 
@@ -455,6 +460,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "draw_cursor_trail",
             b2s(draw_cursor_trail)
+        )
+    );
+    file->add(
+        new data_node(
+            "editor_highlight_color",
+            c2s(editor_highlight_color)
         )
     );
     file->add(
