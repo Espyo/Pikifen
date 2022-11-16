@@ -349,6 +349,10 @@ void init_essentials() {
 void init_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
 ) {
+    al_set_new_display_flags(
+        al_get_new_display_flags() |
+        ALLEGRO_OPENGL
+    );
     if(game.options.window_position_hack) al_set_new_window_position(64, 64);
     if(game.win_fullscreen) {
         al_set_new_display_flags(

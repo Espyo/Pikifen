@@ -1266,6 +1266,7 @@ void gameplay_state::update_closest_group_members() {
     //Figure out if it can be reached, or if it's too distant.
     if(
         cur_leader_ptr->ground_sector &&
+        !cur_leader_ptr->standing_on_mob &&
         !cur_leader_ptr->ground_sector->hazards.empty()
     ) {
         if(

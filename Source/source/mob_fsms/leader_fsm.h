@@ -40,6 +40,7 @@ void finish_pluck(           mob* m, void* info1, void* info2);
 void finish_drinking(        mob* m, void* info1, void* info2);
 void go_pluck(               mob* m, void* info1, void* info2);
 void grab_mob(               mob* m, void* info1, void* info2);
+void hazard_pikmin_share(    mob* m, void* info1, void* info2);
 void idle_or_rejoin(         mob* m, void* info1, void* info2);
 void join_group(             mob* m, void* info1, void* info2);
 void land(                   mob* m, void* info1, void* info2);

@@ -48,7 +48,6 @@ enum BUBBLE_RELATIONS {
  */
 struct hud_struct {
 
-
     //Bitmap and color of a leader's icon.
     struct leader_icon_bubble {
         //Leader icon bitmap.

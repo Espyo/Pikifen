@@ -270,6 +270,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("dying");
         }
         efc.new_event(MOB_EV_TOUCHED_HAZARD); {
+            efc.run(leader_fsm::hazard_pikmin_share);
             efc.run(leader_fsm::touched_hazard);
         }
         efc.new_event(MOB_EV_LEFT_HAZARD); {
@@ -1630,6 +1631,22 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     lea_ptr->group->sort(grabbed_mob->subgroup_type_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader must share the hazard they have entered with the Pikmin
+ * they are holding.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::hazard_pikmin_share(mob* m, void* info1, void* info2) {
+    if(m->holding.empty() || !m->holding[0]) return;
+    m->holding[0]->fsm.run_event(MOB_EV_TOUCHED_HAZARD, info1, info2);
 }
 
 

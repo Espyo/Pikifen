@@ -2271,6 +2271,7 @@ bool mob::has_clear_line(mob* target_mob) const {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(!m_ptr->type->pushes) continue;
+        if(m_ptr->z < z && m_ptr->z < target_mob->z) continue;
         if(m_ptr == this || m_ptr == target_mob) continue;
         if(
             !rectangles_intersect(
@@ -2354,6 +2355,17 @@ bool mob::has_clear_line(mob* target_mob) const {
             //So it's a genuine wall in the way.
             return false;
         }
+    }
+    
+    //Check for when they're (not) standing on different mobs.
+    //This is a bit rudimentary, but for the sake of performance, it'll do.
+    if(
+        standing_on_mob != target_mob->standing_on_mob &&
+        fabs(z - target_mob->z) > GEOMETRY::STEP_HEIGHT
+    ) {
+        //This is likely a situation where the leader is on a bridge,
+        //and the Pikmin is (far) below it. Let's not let this happen.
+        return false;
     }
     
     //Seems good!
