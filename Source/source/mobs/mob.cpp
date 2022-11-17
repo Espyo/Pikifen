@@ -2936,6 +2936,10 @@ void mob::start_dying() {
     stop_turning();
     gravity_mult = 1.0;
     
+    for(size_t s = 0; s < statuses.size(); ++s) {
+        statuses[s].to_delete = true;
+    }
+    
     particle p(
         PARTICLE_TYPE_BITMAP, pos, z + height + 1,
         64, 1.5, PARTICLE_PRIORITY_LOW

@@ -1522,7 +1522,10 @@ void gameplay_state::process_mob_touches(
             ((pikmin*) m2_ptr)->fsm.cur_state->id == PIKMIN_STATE_IDLING_H
         );
     bool ok_to_push = true;
-    if(has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE)) {
+    if(
+        has_flag(m_ptr->flags, MOB_FLAG_INTANGIBLE) ||
+        has_flag(m2_ptr->flags, MOB_FLAG_INTANGIBLE)
+    ) {
         ok_to_push = false;
     } else if(!m_ptr->type->pushable) {
         ok_to_push = false;

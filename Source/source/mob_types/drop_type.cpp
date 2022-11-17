@@ -29,6 +29,7 @@ drop_type::drop_type() :
     shrink_speed(40.0f) {
     
     target_type = MOB_TARGET_TYPE_NONE;
+    height = 8.0f;
     
     drop_fsm::create_fsm(this);
 }

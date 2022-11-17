@@ -100,6 +100,7 @@ script {
         }
         on_frame_signal {
             hold_focused_mob nodule
+            send_message_to_focus be_carried
             set_var has_nodule true
         }
         on_focus_off_reach {
@@ -241,6 +242,7 @@ script {
         on_enter {
             stop
             set_animation stunned
+            send_message_to_focus be_dropped
             set_var has_nodule false
         }
         on_animation_end {
@@ -257,6 +259,7 @@ script {
             load_focused_mob_memory 1
             finish_dying
             if $has_nodule = true
+                send_message_to_focus be_dropped
                 throw_focused_mob 0 0 0 0
             end_if
         }

@@ -589,6 +589,12 @@ reaches {
       <li>When you want to change states, make sure that the action that switches the state is the last one that will be run on the event's code. This is because when a state change action happens, it skips over all other actions that were written after it.</li>
       <li>When changing a state, make sure that the new state's <code>on_enter</code> event doesn't change to another state in a way that could create an infinite loop. For instance, if changing to state A causes it to change to state B, which causes it to change to state C, which causes it to change to state A again, the engine will crash.</li>
     </ul>
+
+    <h2 id="see-also">See also</h2>
+
+    <ul>
+      <li><a href="events_and_actions.html">List of events and actions</a></li>
+    </ul>
     
   </div>
 </body>

@@ -8,8 +8,17 @@ script {
         }
         on_receive_message {
             get_info m message
-            if $m = be_flung
-                set_state flung
+            if $m = be_carried
+                set_tangible false
+            else
+                if $m = be_flung
+                    set_tangible true
+                    set_state flung
+                else
+                    if $m = be_dropped
+                        set_tangible true
+                    end_if
+                end_if
             end_if
         }
     }

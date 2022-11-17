@@ -22,7 +22,7 @@
  * label:
  *   Combo widget label.
  * current_item:
- *   Index number of the current selected item.
+ *   Index number of the current selected item. -1 means none.
  * items:
  *   List of items.
  * popup_max_height_in_items:
@@ -63,7 +63,7 @@ bool ImGui::Combo(
 ) {
 
     string items_str;
-    int item_nr = 0;
+    int item_nr = -1;
     for(size_t i = 0; i < items.size(); ++i) {
         items_str += items[i] + '\0';
         if(*current_item == items[i]) {
@@ -77,7 +77,7 @@ bool ImGui::Combo(
             popup_max_height_in_items
         );
         
-    if(item_nr < (int) items.size()) {
+    if(item_nr >= 0 && item_nr < (int) items.size()) {
         *current_item = items[item_nr];
     } else {
         *current_item = "";
