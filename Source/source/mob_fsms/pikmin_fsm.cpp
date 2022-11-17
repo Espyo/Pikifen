@@ -2818,7 +2818,10 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     mob* other_ptr = (mob*) info1;
     if(other_ptr->type->category->id == MOB_CATEGORY_ENEMIES) {
         enemy* ene_ptr = (enemy*) info1;
-        if(!ene_ptr->ene_type->allow_ground_attacks) return;
+        if(
+            !ene_ptr->ene_type->allow_ground_attacks &&
+            !pik_ptr->pik_type->can_fly
+        ) return;
         if(ene_ptr->z > m->z + m->height) return;
     }
     

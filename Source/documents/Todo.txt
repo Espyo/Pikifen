@@ -1,8 +1,8 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Swarming Winged Pikmin don't attack the Armored Cannon Beetle or the Munge Dweevil (thanks Helodity)
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -12,7 +12,6 @@ Next tasks (roughly sorted most important first)
     "oh yeah espyo set_tangible doesn't work for custom scripts on Pikmin" --Neo
     Nataly's glitches
     "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
-    Helodity's resource without destination glitch
     If the Pikmin in standby to be thrown is deleted, the game crashes
     If a Pikmin is called from the Onion and the leader dies before they finish sliding down the legs, they'll be following the dead leader
     
@@ -20,19 +19,25 @@ Next tasks (roughly sorted most important first)
     Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's area editor highlights branch
+    Update Dear ImGui
+        "IsItemHovered: added ImGuiHoveredFlags_DelayNormal and ImGuiHoveredFlags_DelayShort for delayed hover test (work on items that have no persistent identifier e.g. Text items)."
+        "InputText: added ImGuiInputTextFlags_EscapeClearsAll and io.ConfigInputTextEnterKeepActive. Added Shift+Click style selection. Improvements for numerical inputs for IME mode sending full-width characters. Other fixes."
+        "IsItemHovered: Added ImGuiHoveredFlags_NoSharedDelay to disable sharing delays between items, so moving from one item to a nearby one will requires delay to elapse again. (#1485)"
+        Check the breaking changes
     Game balance
         Check Helodity's Pikifen rebalanced mod
         Pikmin that lose their maturity during combat should go down one stage, otherwise bud stage is pointless
         "rock pikmin I think stay knocked back for too long after attacking, I'm pretty sure they get up quicker in pikmin 3" --Nataly
         Make bramble gates weaker to bomb rocks (thanks Nataly)
     Try making the camera also follow the cursor and the Pikmin group, if possible
+    Ship tractor beams should be drawn below the ship (thanks Nataly)
     A property for pile types that lets the mob radius be changed on every phase (thanks Nataly)
     Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, Shift should toggle select-all (thanks Nataly)
     "one method I think used in pikmin 1 to get pikmin of only a certain type into your squad is to throw one pikmin of the desired color, and then when you dismiss, pikmin will try to group up with nearby pikmin that are already idle, so the pikmin of the desired color will all go to where you threw the first pikmin, and I think that's a neat little quirk that would be nice to have in pikifen, although idk how hard it'd be to implement" --Nataly
     Spicy Pikmin should emit some rare sparkle particles (thanks Neo)
     Check if the throw particles can be customized (thanks Neo)
     The Make menu should have a small blurb with like "Need help?" or "Others...", with a tooltip telling you to go to the manual for help and tutorials
-    Area editor improvements
+    Editor improvements
         Object categories in both editors should be sorted alphabetically (thanks Nataly)
         Mob types should be able to specify a custom category name for the editors. This way, stuff like a Burgeoning Spiderwort can go under a "category" called "Useful plants" or something, instead of "Piles"
         "suggestion: a setting for path links to show their length like sector edges when moving a node/vertex" --Nataly
@@ -44,6 +49,8 @@ Next tasks (roughly sorted most important first)
         Pressing L should allow you create a new mob link
         "it would be nice to have a hotkey to quickly navigate the editor menus, like esc in any selection mode to go back to the root menu (the one with info, layout, objects, etc) and perhaps hotkeys to quickly get to selection modes such as L for layout, O for objects, etc" --Nataly
         Show the number of vertexes that you would get when making a circle sector somewhere (thanks Neo)
+        The ability to hold Shift or Ctrl or something to have the transformation widget corner handles reflect off the center instead of the opposite corner (thanks Nataly)
+        The little silhouette of a Pikmin lying down is practically useless. A silhouette of a leader standing up, or a Pikmin standing up (maybe with arms outstretched so it's not just basically a circle) would be better (thanks Nataly)
         Add a copy-paste feature to the area editor
             It should only work when you select one and only one sector
             It copies the shape of the sector, and then lets you paste that shape somewhere, same as if you were dragging a sector of that shape elsewhere
@@ -148,15 +155,16 @@ Next tasks (roughly sorted most important first)
         Add some songs
     Revamp sound system
         Rename sound files to .oga, instead of .ogg
-        There are three types of sounds
-            Sounds that play "globally", like the "task complete jingle"
-            Sounds that play from any object that needs them, like there being three waterfalls in the area, and each one having the "waterfall" noise
-            Sounds that play connected to only one object at a time, like the Pikmin going "hop hop" when carrying something should only be connected to the closest carriable mob to the camera center
-            Or maybe there are these types of sounds, only:
-                The global ones, like the "task complete jingle"
-                Positional global ones, like Pikmin going "hop hop" when carrying
-                Positional atomic ones, like a Fiery Blowhog spitting fire
-                You register a source to the sound manager. For instance, you register two "Pikmin carrying" sound sources, and have their position pointers point to the carcass X/Y. The sound manager is then responsible for checking if the camera is close to either source, and if it's close to both, at what volume to play the sound.
+        Info
+            There are three types of sounds
+                Sounds that play "globally", like the "task complete jingle"
+                Sounds that play from any object that needs them, like there being three waterfalls in the area, and each one having the "waterfall" noise
+                Sounds that play connected to only one object at a time, like the Pikmin going "hop hop" when carrying something should only be connected to the closest carriable mob to the camera center
+                Or maybe there are these types of sounds, only:
+                    The global ones, like the "task complete jingle"
+                    Positional global ones, like Pikmin going "hop hop" when carrying
+                    Positional atomic ones, like a Fiery Blowhog spitting fire
+                    You register a source to the sound manager. For instance, you register two "Pikmin carrying" sound sources, and have their position pointers point to the carcass X/Y. The sound manager is then responsible for checking if the camera is close to either source, and if it's close to both, at what volume to play the sound.
         Problems that the system needs to address:
             If there are two things asking to play the same sound, they should/n't cut each other off/overlay for higher volume
             If one thing is asking to stop a sound, make sure another doesn't need the sound (e.g. two carriable objects, one finishes being delivered)
@@ -168,6 +176,7 @@ Next tasks (roughly sorted most important first)
         For sounds that are tied to a mob, the farther the mob is from the center of the screen, the quieter; panning should be relative to the mob's position with the camera, too
         Sounds shouldn't assume they're 44100Hz
         A way to fade sounds in/out
+        Ducking
         Load system sounds from System_asset_file_names.txt
         Sounds should pause when you pause the game
         Make it so that only 6 or so sounds can play at once?

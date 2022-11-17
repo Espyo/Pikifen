@@ -27,7 +27,7 @@ namespace ONION {
 //How quickly an Onion fades to and from see-through, in values per second.
 const float FADE_SPEED = 255.0f;
 //Delay before the Onion starts the seed spewing process.
-const float FULL_SPEW_DELAY = 2.5f;
+const float FULL_SPEW_DELAY = 2.0f;
 //Delay between each individual seed being spit.
 const float NEXT_SPEW_DELAY = 0.10f;
 //Onion opacity when it goes see-through.
