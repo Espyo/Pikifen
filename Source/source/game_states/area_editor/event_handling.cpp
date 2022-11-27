@@ -700,7 +700,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 vertex* clicked_vertex = NULL;
                 edge* clicked_edge = NULL;
                 sector* clicked_sector = NULL;
-                get_clicked_layout_element(
+                get_hovered_layout_element(
                     &clicked_vertex, &clicked_edge, &clicked_sector
                 );
                 
@@ -1724,30 +1724,43 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &game.screen_to_world_transform,
         &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
     );
-
-    // Update highlighted elements
-    get_clicked_layout_element(
-        &highlighted_vertex, &highlighted_edge, &highlighted_sector
-    );
-    highlighted_mob = get_mob_under_point(game.mouse_cursor_w);
-    path_link* clicked_link_1;
-
-    highlighted_path_stop = get_path_stop_under_point(game.mouse_cursor_w);
+    
+    //Update highlighted elements.
+    highlighted_vertex = NULL;
+    highlighted_edge = NULL;
+    highlighted_sector = NULL;
+    highlighted_mob = NULL;
+    highlighted_path_stop = NULL;
     highlighted_path_link = NULL;
-
-    //Selecting the stop takes priority, so keep the link null if there's a stop.
-    if (highlighted_path_stop == NULL) {
-        get_path_link_under_point(
-            game.mouse_cursor_w,
-            &clicked_link_1, &highlighted_path_link
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        get_hovered_layout_element(
+            &highlighted_vertex, &highlighted_edge, &highlighted_sector
         );
-        if (highlighted_path_link == NULL) {
-            highlighted_path_link = clicked_link_1;
+        break;
+    } case EDITOR_STATE_MOBS: {
+        highlighted_mob = get_mob_under_point(game.mouse_cursor_w);
+        break;
+    } case EDITOR_STATE_PATHS: {
+        path_link* hovered_link_1;
+        
+        highlighted_path_stop = get_path_stop_under_point(game.mouse_cursor_w);
+        
+        if (highlighted_path_stop == NULL) {
+            //Selecting the stop takes priority,
+            //so keep the link null if there's a stop.
+            get_path_link_under_point(
+                game.mouse_cursor_w,
+                &hovered_link_1, &highlighted_path_link
+            );
+            if(highlighted_path_link == NULL) {
+                highlighted_path_link = hovered_link_1;
+            }
         }
+        break;
     }
-
-    highlighted_path_stop = get_path_stop_under_point(game.mouse_cursor_w);
-
+    }
+    
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
         point hotspot = snap_point(game.mouse_cursor_w, true);
         if(new_circle_sector_step == 1) {

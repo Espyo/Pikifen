@@ -88,8 +88,9 @@ void area_editor::draw_canvas() {
     float grid_opacity = 1.0f;
     float mob_opacity = 0.15f;
     ALLEGRO_COLOR highlight_color = map_gray(255);
-    if (game.options.editor_use_custom_style)
+    if(game.options.editor_use_custom_style) {
         highlight_color = game.options.editor_highlight_color;
+    }
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
         textures_opacity = 0.5f;
@@ -225,10 +226,11 @@ void area_editor::draw_canvas() {
         bool selected =
             selected_sectors.find(s_ptr) != selected_sectors.end();
         bool valid = true;
-        bool highlighted = s_ptr == highlighted_sector &&
+        bool highlighted =
+            s_ptr == highlighted_sector &&
             selection_filter == SELECTION_FILTER_SECTORS &&
             state == EDITOR_STATE_LAYOUT;
-        
+            
         if(
             game.cur_area_data.problems.non_simples.find(s_ptr) !=
             game.cur_area_data.problems.non_simples.end()
@@ -239,7 +241,10 @@ void area_editor::draw_canvas() {
             valid = false;
         }
         
-        if(selected || !valid || view_heightmap || view_brightness || highlighted) {
+        if(
+            selected || !valid || view_heightmap ||
+            view_brightness || highlighted
+        ) {
             for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
             
                 ALLEGRO_VERTEX av[3];
@@ -271,13 +276,14 @@ void area_editor::draw_canvas() {
                                 selection_opacity * 0.5 * 255
                             );
                     }
-                    if (highlighted && !selected) {
-                        av[v].color = al_map_rgba(
-                            highlight_color.r * 255,
-                            highlight_color.g * 255,
-                            highlight_color.b * 255,
-                            16
-                        );
+                    if(highlighted && !selected) {
+                        av[v].color =
+                            al_map_rgba(
+                                highlight_color.r * 255,
+                                highlight_color.g * 255,
+                                highlight_color.b * 255,
+                                16
+                            );
                     }
                     av[v].u = 0;
                     av[v].v = 0;
@@ -327,10 +333,14 @@ void area_editor::draw_canvas() {
         bool same_z = false;
         bool valid = true;
         bool selected = false;
-        bool highlighted = e_ptr == highlighted_edge &&
-            selection_filter <= SELECTION_FILTER_EDGES &&
+        bool highlighted =
+            e_ptr == highlighted_edge &&
+            (
+                selection_filter == SELECTION_FILTER_SECTORS ||
+                selection_filter == SELECTION_FILTER_EDGES
+            ) &&
             state == EDITOR_STATE_LAYOUT;
-
+            
         if(problem_sector_ptr) {
             if(
                 e_ptr->sectors[0] == problem_sector_ptr ||
@@ -397,7 +407,7 @@ void area_editor::draw_canvas() {
                     highlight_color.r * 255,
                     highlight_color.g * 255,
                     highlight_color.b * 255,
-                    selection_opacity * 255
+                    edges_opacity * 255
                 ) :
                 one_sided ?
                 al_map_rgba(128, 128, 128, edges_opacity * 255) :
@@ -515,8 +525,13 @@ void area_editor::draw_canvas() {
                 (selected_vertexes.find(v_ptr) != selected_vertexes.end());
             bool valid =
                 v_ptr != problem_vertex_ptr;
-            bool highlighted = highlighted_vertex == v_ptr &&
-                selection_filter <= SELECTION_FILTER_VERTEXES;
+            bool highlighted =
+                highlighted_vertex == v_ptr &&
+                (
+                    selection_filter == SELECTION_FILTER_SECTORS ||
+                    selection_filter == SELECTION_FILTER_EDGES ||
+                    selection_filter == SELECTION_FILTER_VERTEXES
+                );
             draw_filled_diamond(
                 point(v_ptr->x, v_ptr->y),
                 3.0 / game.cam.zoom,
@@ -667,11 +682,10 @@ void area_editor::draw_canvas() {
             sub_state == EDITOR_SUB_STATE_MISSION_MOBS &&
             game.cur_area_data.mission.goal_mob_idxs.find(m) !=
             game.cur_area_data.mission.goal_mob_idxs.end();
-        bool is_highlighted = highlighted_mob == m_ptr &&
+        bool is_highlighted =
+            highlighted_mob == m_ptr &&
             state == EDITOR_STATE_MOBS;
-
-
-
+            
         if(is_selected || is_mission_requirement) {
             al_draw_filled_circle(
                 m_ptr->pos.x, m_ptr->pos.y, radius,
@@ -705,8 +719,7 @@ void area_editor::draw_canvas() {
                     al_map_rgb(240, 192, 192), 1.0f / game.cam.zoom
                 );
             }
-        }
-        else if (is_highlighted) {
+        } else if(is_highlighted) {
             al_draw_filled_circle(
                 m_ptr->pos.x, m_ptr->pos.y, radius,
                 al_map_rgba(
@@ -742,8 +755,7 @@ void area_editor::draw_canvas() {
                             AREA_EDITOR::SELECTION_COLOR[2],
                             selection_opacity * 255
                         );
-                }
-                else if (highlighted) {
+                } else if(highlighted) {
                     color =
                         al_map_rgba(
                             highlight_color.r * 255,
@@ -751,8 +763,7 @@ void area_editor::draw_canvas() {
                             highlight_color.b * 255,
                             255
                         );
-                }
-                else {
+                } else {
                     switch(l_ptr->type) {
                     case PATH_LINK_TYPE_NORMAL: {
                         color = al_map_rgba(34, 136, 187, 224);
@@ -840,8 +851,7 @@ void area_editor::draw_canvas() {
                         selection_opacity * 255
                     )
                 );
-            }
-            else if (highlighted) {
+            } else if(highlighted) {
                 al_draw_filled_circle(
                     s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
                     al_map_rgba(

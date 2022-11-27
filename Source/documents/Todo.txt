@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
     
     --- v0.23.0 ---
-    Check Helodity's area editor highlights branch
     Update Dear ImGui
         "IsItemHovered: added ImGuiHoveredFlags_DelayNormal and ImGuiHoveredFlags_DelayShort for delayed hover test (work on items that have no persistent identifier e.g. Text items)."
         "InputText: added ImGuiInputTextFlags_EscapeClearsAll and io.ConfigInputTextEnterKeepActive. Added Shift+Click style selection. Improvements for numerical inputs for IME mode sending full-width characters. Other fixes."

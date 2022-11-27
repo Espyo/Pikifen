@@ -1106,42 +1106,42 @@ void area_editor::forget_prepared_state(area_data* prepared_state) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns which layout element got clicked, if any. It will only return
- * one of them.
- * clicked_vertex:
- *   If a vertex got clicked, it is returned here.
- * clicked_edge:
- *   If an edge got clicked, it is returned here.
- * clicked_sector:
- *   If a sector got clicked, it is returned here.
- */
-void area_editor::get_clicked_layout_element(
-    vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
-) const {
-    *clicked_vertex = get_vertex_under_point(game.mouse_cursor_w);
-    *clicked_edge = NULL;
-    *clicked_sector = NULL;
-    
-    if(*clicked_vertex) return;
-    
-    if(selection_filter != SELECTION_FILTER_VERTEXES) {
-        *clicked_edge = get_edge_under_point(game.mouse_cursor_w);
-    }
-    
-    if(*clicked_edge) return;
-    
-    if(selection_filter == SELECTION_FILTER_SECTORS) {
-        *clicked_sector = get_sector_under_point(game.mouse_cursor_w);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * In the options data file, options pertaining to an editor's history
  * have a prefix. This function returns that prefix.
  */
 string area_editor::get_history_option_prefix() const {
     return "area_editor_history_";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns which layout element the mouse is over, if any. It will only return
+ * one of them.
+ * hovered_vertex:
+ *   If a vertex is hovered, it is returned here.
+ * hovered_edge:
+ *   If an edge is hovered, it is returned here.
+ * hovered_sector:
+ *   If a sector is hovered, it is returned here.
+ */
+void area_editor::get_hovered_layout_element(
+    vertex** hovered_vertex, edge** hovered_edge, sector** hovered_sector
+) const {
+    *hovered_vertex = get_vertex_under_point(game.mouse_cursor_w);
+    *hovered_edge = NULL;
+    *hovered_sector = NULL;
+    
+    if(*hovered_vertex) return;
+    
+    if(selection_filter != SELECTION_FILTER_VERTEXES) {
+        *hovered_edge = get_edge_under_point(game.mouse_cursor_w);
+    }
+    
+    if(*hovered_edge) return;
+    
+    if(selection_filter == SELECTION_FILTER_SECTORS) {
+        *hovered_sector = get_sector_under_point(game.mouse_cursor_w);
+    }
 }
 
 

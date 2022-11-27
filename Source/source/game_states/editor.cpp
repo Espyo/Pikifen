@@ -1154,17 +1154,18 @@ void editor::process_gui_editor_style() {
         set_tooltip(
             "Color of text in the custom style."
         );
+        
         //Highlight color.
-        if (
+        if(
             ImGui::ColorEdit3(
                 "Highlight color",
-                (float*)&game.options.editor_highlight_color
+                (float*) &game.options.editor_highlight_color
             )
-            ) {
+        ) {
             update_style();
         }
         set_tooltip(
-            "Color of highlight in the custom style."
+            "Color of highlights in the custom style."
         );
         ImGui::TreePop();
     }

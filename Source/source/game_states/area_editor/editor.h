@@ -591,7 +591,7 @@ private:
     void get_affected_sectors(
         const set<vertex*> &vertexes, unordered_set<sector*> &list
     ) const;
-    void get_clicked_layout_element(
+    void get_hovered_layout_element(
         vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
     ) const;
     edge* get_closest_edge_to_angle(
