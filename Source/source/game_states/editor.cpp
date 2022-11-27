@@ -842,12 +842,12 @@ bool editor::input_popup(
             ret = true;
             ImGui::CloseCurrentPopup();
         }
-        if(ImGui::Button("Ok")) {
-            ret = true;
+        if(ImGui::Button("Cancel")) {
             ImGui::CloseCurrentPopup();
         }
         ImGui::SameLine();
-        if(ImGui::Button("Cancel")) {
+        if(ImGui::Button("Ok")) {
+            ret = true;
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
@@ -1238,14 +1238,16 @@ void editor::process_gui_mob_type_widgets(
     ImGui::SetColumnWidth(-1, 51.0f);
     
     //Search button.
-    if(
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(9.0f, 9.0f));
+    bool search_button_pressed =
         ImGui::ImageButton(
+            "searchButton",
             editor_icons[ICON_SEARCH],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f),
-            9.0f
-        )
-    ) {
+            ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)
+        );
+    ImGui::PopStyleVar();
+    if(search_button_pressed) {
         vector<picker_item> items;
         for(unsigned char c = 0; c < N_MOB_CATEGORIES; ++c) {
             if(c == MOB_CATEGORY_NONE) continue;
@@ -1462,7 +1464,13 @@ void editor::set_tooltip(
         return;
     }
     
-    if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
+    if(
+        ImGui::IsItemHovered(
+            ImGuiHoveredFlags_AllowWhenDisabled |
+            ImGuiHoveredFlags_DelayNormal |
+            ImGuiHoveredFlags_NoSharedDelay
+        )
+    ) {
         ImGui::BeginTooltip();
         
         ImGui::Text("%s", explanation.c_str());
@@ -1970,7 +1978,8 @@ void editor::picker_info::process() {
         if(show) {
             for(size_t i = 0; i < final_items[c].size(); ++i) {
                 picker_item* i_ptr = &final_items[c][i];
-                ImGui::PushID((i2s(c) + "-" + i2s(i)).c_str());
+                string widgetId = i2s(c) + "-" + i2s(i);
+                ImGui::PushID(widgetId.c_str());
                 
                 ImVec2 button_size;
                 
@@ -2008,15 +2017,20 @@ void editor::picker_info::process() {
                             EDITOR::PICKER_IMG_BUTTON_MIN_SIZE
                         );
                         
-                    if(
+                    ImGui::PushStyleVar(
+                        ImGuiStyleVar_FramePadding, ImVec2(4.0f, 4.0f)
+                    );
+                    bool button_pressed =
                         ImGui::ImageButton(
+                            (widgetId + "Button").c_str(),
                             (void*) i_ptr->bitmap,
                             button_size,
                             ImVec2(0.0f, 0.0f),
-                            ImVec2(1.0f, 1.0f),
-                            4.0f
-                        )
-                    ) {
+                            ImVec2(1.0f, 1.0f)
+                        );
+                    ImGui::PopStyleVar();
+                    
+                    if(button_pressed) {
                         pick_callback(
                             i_ptr->name, i_ptr->category, false
                         );

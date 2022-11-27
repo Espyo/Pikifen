@@ -971,6 +971,7 @@ void area_editor::process_gui_panel_details() {
             //New tree shadow button.
             if(
                 ImGui::ImageButton(
+                    "newShadowButton",
                     editor_icons[ICON_ADD],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
@@ -988,6 +989,7 @@ void area_editor::process_gui_panel_details() {
                 ImGui::SameLine();
                 if(
                     ImGui::ImageButton(
+                        "delShadowButton",
                         editor_icons[ICON_REMOVE],
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
@@ -1875,6 +1877,7 @@ void area_editor::process_gui_panel_layout() {
         //New sector button.
         if(
             ImGui::ImageButton(
+                "newSectorButton",
                 editor_icons[ICON_ADD],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
@@ -1891,6 +1894,7 @@ void area_editor::process_gui_panel_layout() {
         ImGui::SameLine();
         if(
             ImGui::ImageButton(
+                "newCircleButton",
                 editor_icons[ICON_ADD_CIRCLE_SECTOR],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
@@ -1909,6 +1913,7 @@ void area_editor::process_gui_panel_layout() {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
+                    "delEdgesButton",
                     editor_icons[ICON_REMOVE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
@@ -1947,16 +1952,15 @@ void area_editor::process_gui_panel_layout() {
         }
         
         ImGui::SameLine();
-        ImGui::PushID("selFilter");
         if(
             ImGui::ImageButton(
+                "selFilterButton",
                 sel_filter_bmp,
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
             press_selection_filter_button();
         }
-        ImGui::PopID();
         set_tooltip(
             "Current selection filter: " + sel_filter_description + ".\n"
             "When selecting things in the canvas, only these will "
@@ -1973,6 +1977,7 @@ void area_editor::process_gui_panel_layout() {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
+                    "clearSelButton",
                     editor_icons[ICON_SELECT_NONE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
@@ -2095,6 +2100,7 @@ void area_editor::process_gui_panel_main() {
     //Area info button.
     if(
         ImGui::ImageButtonAndText(
+            "infoButton",
             editor_icons[ICON_INFO],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
@@ -2110,6 +2116,7 @@ void area_editor::process_gui_panel_main() {
     //Area gameplay settings button.
     if(
         ImGui::ImageButtonAndText(
+            "gameplayButton",
             editor_icons[ICON_GAMEPLAY],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
@@ -2125,6 +2132,7 @@ void area_editor::process_gui_panel_main() {
     //Layout button.
     if(
         ImGui::ImageButtonAndText(
+            "layoutButton",
             editor_icons[ICON_SECTORS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
@@ -2140,6 +2148,7 @@ void area_editor::process_gui_panel_main() {
     //Objects button.
     if(
         ImGui::ImageButtonAndText(
+            "mobsButton",
             editor_icons[ICON_MOBS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
@@ -2155,6 +2164,7 @@ void area_editor::process_gui_panel_main() {
     //Paths button.
     if(
         ImGui::ImageButtonAndText(
+            "pathsButton",
             editor_icons[ICON_PATHS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
@@ -2170,6 +2180,7 @@ void area_editor::process_gui_panel_main() {
     //Details button.
     if(
         ImGui::ImageButtonAndText(
+            "detailsButton",
             editor_icons[ICON_DETAILS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
@@ -2185,6 +2196,7 @@ void area_editor::process_gui_panel_main() {
     //Review button.
     if(
         ImGui::ImageButtonAndText(
+            "reviewButton",
             editor_icons[ICON_REVIEW],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
@@ -2201,6 +2213,7 @@ void area_editor::process_gui_panel_main() {
     //Tools button.
     if(
         ImGui::ImageButtonAndText(
+            "toolsButton",
             editor_icons[ICON_TOOLS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             16.0f,
@@ -3581,6 +3594,7 @@ void area_editor::process_gui_panel_mob() {
         ImGui::SameLine();
         if(
             ImGui::ImageButton(
+                "newLinkButton",
                 editor_icons[ICON_ADD],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
@@ -3601,6 +3615,7 @@ void area_editor::process_gui_panel_mob() {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
+                    "delLinkButton",
                     editor_icons[ICON_REMOVE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
@@ -3751,6 +3766,7 @@ void area_editor::process_gui_panel_mobs() {
         //New object button.
         if(
             ImGui::ImageButton(
+                "newMobButton",
                 editor_icons[ICON_ADD],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
@@ -3769,6 +3785,7 @@ void area_editor::process_gui_panel_mobs() {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
+                    "delMobButtonn",
                     editor_icons[ICON_REMOVE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
@@ -3784,6 +3801,7 @@ void area_editor::process_gui_panel_mobs() {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
+                    "dupMobButton",
                     editor_icons[ICON_DUPLICATE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
@@ -3928,6 +3946,7 @@ void area_editor::process_gui_panel_paths() {
         //New path button.
         if(
             ImGui::ImageButton(
+                "newPathButton",
                 editor_icons[ICON_ADD],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
@@ -3948,6 +3967,7 @@ void area_editor::process_gui_panel_paths() {
             ImGui::SameLine();
             if(
                 ImGui::ImageButton(
+                    "delPathButton",
                     editor_icons[ICON_REMOVE],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
@@ -4322,6 +4342,7 @@ void area_editor::process_gui_panel_sector() {
             //Sector hazard addition button.
             if(
                 ImGui::ImageButton(
+                    "addHazardButton",
                     editor_icons[ICON_ADD],
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
@@ -4371,6 +4392,7 @@ void area_editor::process_gui_panel_sector() {
                 ImGui::SameLine();
                 if(
                     ImGui::ImageButton(
+                        "remHazardButton",
                         editor_icons[ICON_REMOVE],
                         ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                     )
@@ -4902,6 +4924,7 @@ void area_editor::process_gui_toolbar() {
     //Quit button.
     if(
         ImGui::ImageButton(
+            "quitButton",
             editor_icons[ICON_QUIT],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
@@ -4918,6 +4941,7 @@ void area_editor::process_gui_toolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
+            "loadButton",
             editor_icons[ICON_LOAD],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
@@ -4932,9 +4956,9 @@ void area_editor::process_gui_toolbar() {
     
     //Save button.
     ImGui::SameLine();
-    ImGui::PushID("butSave");
     if(
         ImGui::ImageButton(
+            "saveButton",
             has_unsaved_changes ?
             editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
@@ -4943,7 +4967,6 @@ void area_editor::process_gui_toolbar() {
     ) {
         press_save_button();
     }
-    ImGui::PopID();
     set_tooltip(
         "Save the area into the files on disk.",
         "Ctrl + S"
@@ -4953,6 +4976,7 @@ void area_editor::process_gui_toolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
+            "playButton",
             editor_icons[ICON_PLAY],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
@@ -4970,11 +4994,11 @@ void area_editor::process_gui_toolbar() {
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
+            "undoButton",
             editor_icons[ICON_UNDO],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
             ImVec2(0.0f, 0.0f),
             ImVec2(1.0f, 1.0f),
-            -1,
             ImVec4(0.0f, 0.0f, 0.0f, 0.0f),
             ImVec4(1.0f, 1.0f, 1.0f, undo_opacity)
         )
@@ -4998,6 +5022,7 @@ void area_editor::process_gui_toolbar() {
         ImGui::SameLine();
         if(
             ImGui::ImageButton(
+                "refToggleButton",
                 editor_icons[ICON_REFERENCE],
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
@@ -5053,6 +5078,7 @@ void area_editor::process_gui_toolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
+            "snapButton",
             snap_mode_bmp,
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )

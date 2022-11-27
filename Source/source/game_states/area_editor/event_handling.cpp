@@ -1732,33 +1732,37 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     highlighted_mob = NULL;
     highlighted_path_stop = NULL;
     highlighted_path_link = NULL;
-    switch(state) {
-    case EDITOR_STATE_LAYOUT: {
-        get_hovered_layout_element(
-            &highlighted_vertex, &highlighted_edge, &highlighted_sector
-        );
-        break;
-    } case EDITOR_STATE_MOBS: {
-        highlighted_mob = get_mob_under_point(game.mouse_cursor_w);
-        break;
-    } case EDITOR_STATE_PATHS: {
-        path_link* hovered_link_1;
-        
-        highlighted_path_stop = get_path_stop_under_point(game.mouse_cursor_w);
-        
-        if (highlighted_path_stop == NULL) {
-            //Selecting the stop takes priority,
-            //so keep the link null if there's a stop.
-            get_path_link_under_point(
-                game.mouse_cursor_w,
-                &hovered_link_1, &highlighted_path_link
+    if(!is_mouse_in_gui) {
+        switch(state) {
+        case EDITOR_STATE_LAYOUT: {
+            get_hovered_layout_element(
+                &highlighted_vertex, &highlighted_edge, &highlighted_sector
             );
-            if(highlighted_path_link == NULL) {
-                highlighted_path_link = hovered_link_1;
+            break;
+        } case EDITOR_STATE_MOBS: {
+            highlighted_mob =
+                get_mob_under_point(game.mouse_cursor_w);
+            break;
+        } case EDITOR_STATE_PATHS: {
+            path_link* hovered_link_1;
+            
+            highlighted_path_stop =
+                get_path_stop_under_point(game.mouse_cursor_w);
+                
+            if (highlighted_path_stop == NULL) {
+                //Selecting the stop takes priority,
+                //so keep the link null if there's a stop.
+                get_path_link_under_point(
+                    game.mouse_cursor_w,
+                    &hovered_link_1, &highlighted_path_link
+                );
+                if(highlighted_path_link == NULL) {
+                    highlighted_path_link = hovered_link_1;
+                }
             }
+            break;
         }
-        break;
-    }
+        }
     }
     
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {

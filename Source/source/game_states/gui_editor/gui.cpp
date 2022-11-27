@@ -494,6 +494,7 @@ void gui_editor::process_gui_toolbar() {
     //Quit button.
     if(
         ImGui::ImageButton(
+            "quitButton",
             editor_icons[ICON_QUIT],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
@@ -510,6 +511,7 @@ void gui_editor::process_gui_toolbar() {
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
+            "loadButton",
             editor_icons[ICON_LOAD],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
@@ -524,9 +526,9 @@ void gui_editor::process_gui_toolbar() {
     
     //Save button.
     ImGui::SameLine();
-    ImGui::PushID("butSave");
     if(
         ImGui::ImageButton(
+            "saveButton",
             has_unsaved_changes ?
             editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
@@ -535,7 +537,6 @@ void gui_editor::process_gui_toolbar() {
     ) {
         press_save_button();
     }
-    ImGui::PopID();
     set_tooltip(
         "Save the GUI into the file on disk.",
         "Ctrl + S"
@@ -555,6 +556,7 @@ void gui_editor::process_gui_toolbar() {
     ImGui::SameLine(0, 16);
     if(
         ImGui::ImageButton(
+            "snapButton",
             snap_mode_bmp,
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )

@@ -6,14 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
+    
     
     --- v0.23.0 ---
-    Update Dear ImGui
-        "IsItemHovered: added ImGuiHoveredFlags_DelayNormal and ImGuiHoveredFlags_DelayShort for delayed hover test (work on items that have no persistent identifier e.g. Text items)."
-        "InputText: added ImGuiInputTextFlags_EscapeClearsAll and io.ConfigInputTextEnterKeepActive. Added Shift+Click style selection. Improvements for numerical inputs for IME mode sending full-width characters. Other fixes."
-        "IsItemHovered: Added ImGuiHoveredFlags_NoSharedDelay to disable sharing delays between items, so moving from one item to a nearby one will requires delay to elapse again. (#1485)"
-        Check the breaking changes
     Game balance
         Check Helodity's Pikifen rebalanced mod
         The ability to change the time Pikmin stay knocked down for, as well as the time bonus they get when whistled, on a per-Pikmin type basis (thanks Helodity)

@@ -149,6 +149,8 @@ bool ImGui::DragTime2(
 
 /* ----------------------------------------------------------------------------
  * Helps creating an ImGui ImageButton, followed by a centered Text.
+ * id:
+ *   Button widget ID.
  * icon:
  *   Icon to show on the button.
  * icon_size:
@@ -159,18 +161,22 @@ bool ImGui::DragTime2(
  *   The button's text.
  */
 bool ImGui::ImageButtonAndText(
-    ALLEGRO_BITMAP* icon, const ImVec2 &icon_size, const float button_padding,
-    const string &text
+    const string &id, ALLEGRO_BITMAP* icon, const ImVec2 &icon_size,
+    const float button_padding, const string &text
 ) {
     ImGui::BeginGroup();
     
+    ImGui::PushStyleVar(
+        ImGuiStyleVar_FramePadding, ImVec2(button_padding, button_padding)
+    );
     bool result =
         ImGui::ImageButton(
+            id.c_str(),
             icon, icon_size,
-            ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f),
-            button_padding
+            ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)
         );
-        
+    ImGui::PopStyleVar();
+    
     float offset = (icon_size.y + button_padding * 2 - 16.0f) / 2.0f;
     offset -= 3.0f; //It's 3.0 too far, with the group + dummy approach.
     
@@ -234,10 +240,14 @@ void ImGui::Reset() {
     io.KeySuper = false;
     
     io.AddKeyEvent(ImGuiKey_Escape, false);
-    io.AddKeyEvent(ImGuiKey_ModCtrl, false);
-    io.AddKeyEvent(ImGuiKey_ModShift, false);
-    io.AddKeyEvent(ImGuiKey_ModAlt, false);
-    io.AddKeyEvent(ImGuiKey_ModSuper, false);
+    io.AddKeyEvent(ImGuiKey_LeftCtrl, false);
+    io.AddKeyEvent(ImGuiKey_RightCtrl, false);
+    io.AddKeyEvent(ImGuiKey_LeftShift, false);
+    io.AddKeyEvent(ImGuiKey_RightShift, false);
+    io.AddKeyEvent(ImGuiKey_LeftAlt, false);
+    io.AddKeyEvent(ImGuiKey_RightAlt, false);
+    io.AddKeyEvent(ImGuiKey_LeftSuper, false);
+    io.AddKeyEvent(ImGuiKey_RightSuper, false);
 }
 
 

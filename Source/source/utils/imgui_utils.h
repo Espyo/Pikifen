@@ -40,8 +40,8 @@ bool DragTime2(
     const int limit1 = INT_MAX, const int limit2 = 59
 );
 bool ImageButtonAndText(
-    ALLEGRO_BITMAP* icon, const ImVec2 &icon_size, const float button_padding,
-    const string &text
+    const string &id, ALLEGRO_BITMAP* icon, const ImVec2 &icon_size,
+    const float button_padding, const string &text
 );
 bool ListBox(
     const string &label, int* current_item, const vector<string> &items,
