@@ -3928,7 +3928,11 @@ void pikmin_fsm::tick_track_ride(mob* m, void* info1, void* info2) {
     if(m->tick_track_ride()) {
         //Finished!
         m->fsm.set_state(PIKMIN_STATE_IDLING, NULL, NULL);
-        if(pik_ptr->leader_to_return_to) {
+        if(
+            pik_ptr->leader_to_return_to &&
+            !pik_ptr->leader_to_return_to->to_delete &&
+            pik_ptr->leader_to_return_to->health > 0.0f
+        ) {
             pikmin_fsm::called(m, pik_ptr->leader_to_return_to, NULL);
             m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
         }

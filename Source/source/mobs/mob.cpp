@@ -2178,7 +2178,7 @@ void mob::get_sprite_bitmap_effects(
     }
     
     if(
-        has_flag(effects, SPRITE_BITMAP_EFFECT_STATUS) &&
+        has_flag(effects, SPRITE_BITMAP_EFFECT_CARRY) &&
         carry_info
     ) {
         if(carry_info->is_moving) {
