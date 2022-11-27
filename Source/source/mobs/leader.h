@@ -137,6 +137,8 @@ public:
     void stop_whistling();
     //Change the current held Pikmin for another.
     void swap_held_pikmin(mob* new_pik);
+    //Update variables related to how the leader's throw would go.
+    void update_throw_variables();
     
     //Constructor.
     leader(const point &pos, leader_type* type, const float angle);
@@ -158,8 +160,6 @@ protected:
 private:
     //Returns how many rows are needed for all members' dismissal.
     size_t get_dismiss_rows(const size_t n_members) const;
-    //Update variables related to how the leader's throw would go.
-    void update_throw_variables();
 };
 
 

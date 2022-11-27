@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If the Pikmin in standby to be thrown is deleted, the game crashes
     "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
     If a Pikmin is called from the Onion and the leader dies before they finish sliding down the legs, they'll be following the dead leader
     

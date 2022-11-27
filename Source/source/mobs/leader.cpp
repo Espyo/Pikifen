@@ -843,8 +843,6 @@ void leader::swap_held_pikmin(mob* new_pik) {
  */
 void leader::tick_class_specifics(const float delta_t) {
     //Throw-related things.
-    update_throw_variables();
-    
     if(auto_throw_cooldown > 0.0f) {
         auto_throw_cooldown -= delta_t;
     }

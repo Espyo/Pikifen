@@ -2493,6 +2493,8 @@ void mob::leave_group() {
     group_leader->group->change_standby_type_if_needed();
     
     following_group = NULL;
+    
+    game.states.gameplay->update_closest_group_members();
 }
 
 

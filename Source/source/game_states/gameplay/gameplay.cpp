@@ -1234,7 +1234,10 @@ void gameplay_state::update_closest_group_members() {
     closest_group_member_distant = false;
     
     if(!cur_leader_ptr) return;
-    if(cur_leader_ptr->group->members.empty()) return;
+    if(cur_leader_ptr->group->members.empty()) {
+        cur_leader_ptr->update_throw_variables();
+        return;
+    }
     
     //Get the closest group members for the three relevant subgroup types.
     subgroup_type* prev_type;
@@ -1291,6 +1294,8 @@ void gameplay_state::update_closest_group_members() {
         //The group member is physically too far away.
         closest_group_member_distant = true;
     }
+    
+    cur_leader_ptr->update_throw_variables();
 }
 
 
