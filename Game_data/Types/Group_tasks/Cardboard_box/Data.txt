@@ -37,6 +37,7 @@ children {
         spawn = flap
         parent_holds = true
         hold_offset_distance = 1.47
+        hold_offset_vertical_distance = 0.02
         hold_offset_angle = 0
         hold_faces_parent = false
         hold_rotation_method = copy_parent

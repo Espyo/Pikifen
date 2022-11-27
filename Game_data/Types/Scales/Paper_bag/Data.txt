@@ -20,6 +20,7 @@ children {
         spawn = handle
         parent_holds = true
         hold_offset_distance = 1.5
+        hold_offset_vertical_distance = 0
         hold_offset_angle = 180
         hold_rotation_method = face_parent
     }
@@ -27,6 +28,7 @@ children {
         spawn = handle
         parent_holds = true
         hold_offset_distance = 1.5
+        hold_offset_vertical_distance = 0
         hold_offset_angle = 0
         hold_rotation_method = face_parent
     }

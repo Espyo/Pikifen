@@ -105,6 +105,8 @@ public:
         string hold_body_part;
         //If the parent holds, this is how far from the body part center.
         float hold_offset_dist;
+        //If the parent holds, this is how far from the body part Z.
+        float hold_offset_vert_dist;
         //If the parent holds, this is in what direction from the body part.
         float hold_offset_angle;
         //Method by which the parent should hold the child.
@@ -139,6 +141,7 @@ public:
         child_struct() :
             parent_holds(false),
             hold_offset_dist(0.0f),
+            hold_offset_vert_dist(0.0f),
             hold_offset_angle(0.0f),
             hold_rotation_method(HOLD_ROTATION_METHOD_NEVER),
             handle_damage(false),

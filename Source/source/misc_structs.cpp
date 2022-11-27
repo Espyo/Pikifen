@@ -671,6 +671,7 @@ maker_tools_info::maker_tools_info() :
  */
 void maker_tools_info::reset_for_gameplay() {
     change_speed = false;
+    collision = false;
     geometry_info = false;
     hitboxes = false;
     info_lock = NULL;

@@ -1251,7 +1251,9 @@ mob* create_mob(
                 new_mob,
                 type->anims.find_body_part(child_info->hold_body_part),
                 child_info->hold_offset_dist,
-                child_info->hold_offset_angle, 0.5f, false,
+                child_info->hold_offset_angle,
+                child_info->hold_offset_vert_dist,
+                false,
                 child_info->hold_rotation_method
             );
         }

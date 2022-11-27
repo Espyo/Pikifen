@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
     
     --- v0.23.0 ---
-    Check Helodity's rectangle vs rectangle collision logic
     Check Helodity's Pikmin rectangular object attack logic
     Check Helodity's area editor highlights branch
     Update Dear ImGui

@@ -612,6 +612,9 @@ void load_mob_type_from_file(
         child_rs.set("parent_holds", new_child.parent_holds);
         child_rs.set("hold_body_part", new_child.hold_body_part);
         child_rs.set("hold_offset_distance", new_child.hold_offset_dist);
+        child_rs.set(
+            "hold_offset_vertical_distance", new_child.hold_offset_vert_dist
+        );
         child_rs.set("hold_offset_angle", new_child.hold_offset_angle);
         child_rs.set(
             "hold_rotation_method", hold_rotation_method, &hold_rotation_node
