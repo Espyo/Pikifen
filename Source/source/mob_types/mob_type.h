@@ -189,7 +189,7 @@ public:
     
     
     //---Basic information---
-
+    
     //Its full name.
     string name;
     //Blurb-like description. Mostly used for gameplay, not content-making.
@@ -200,7 +200,7 @@ public:
     mob_category* category;
     
     //---Visuals---
-
+    
     //Database with all its animation data.
     animation_database anims;
     //A color that represents this mob.
@@ -211,7 +211,7 @@ public:
     bool casts_shadow;
     
     //---Movement---
-
+    
     //Moves these many units per second.
     float move_speed;
     //Acceleration. This is in units per second per second.
@@ -220,9 +220,9 @@ public:
     float rotation_speed;
     //True if it can move in any direction, as opposed to just forward.
     bool can_free_move;
-
+    
     //---Physical space---
-
+    
     //Radius of the space it occupies. Can be overridden on a per-mob basis.
     float radius;
     //Height. Can be overridden on a per-mob basis.
@@ -247,7 +247,7 @@ public:
     bool can_block_paths;
     
     //---General behavior---
-
+    
     //Maximum health. Can be overridden on a per-mob basis.
     float max_health;
     //Regenerates these many health points per second.
@@ -270,7 +270,7 @@ public:
     MOB_TEAMS starting_team;
     
     //---Script---
-
+    
     //Actions to run on spawn.
     vector<mob_action_call*> init_actions;
     //The states, events and actions. Basically, the FSM.
@@ -285,9 +285,11 @@ public:
     vector<string> states_ignoring_death;
     //States that ignore the spray event.
     vector<string> states_ignoring_spray;
+    //States that ignore the hazard events.
+    vector<string> states_ignoring_hazard;
     
     //---Interactions with other objects---
-
+    
     //Information on everything it can spawn.
     vector<spawn_struct> spawns;
     //Information on its children mobs.
@@ -296,7 +298,7 @@ public:
     bool has_group;
     
     //---Vulnerabilities---
-
+    
     //All damage received is multiplied by this much.
     float default_vulnerability;
     //For every hazard, multiply damage taken by this much.

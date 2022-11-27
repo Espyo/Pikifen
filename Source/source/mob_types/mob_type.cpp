@@ -812,6 +812,11 @@ void load_mob_type_from_file(
                 script_file.get_child_by_name("states_ignoring_spray")->value
             );
             
+        mt->states_ignoring_hazard =
+            semicolon_list_to_vector(
+                script_file.get_child_by_name("states_ignoring_hazard")->value
+            );
+            
         load_init_actions(
             mt, script_file.get_child_by_name("init"), &mt->init_actions
         );

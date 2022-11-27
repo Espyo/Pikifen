@@ -674,6 +674,25 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
             new_events_custom_actions_after.push_back(false);
         }
         
+        //Inject a hazard event.
+        if(
+            !state_ptr->events[MOB_EV_TOUCHED_HAZARD] &&
+            find(
+                mt->states_ignoring_hazard.begin(),
+                mt->states_ignoring_hazard.end(),
+                state_node->name
+            ) == mt->states_ignoring_hazard.end()
+        ) {
+            vector<mob_action_call*> s_actions;
+            s_actions.push_back(
+                new mob_action_call(gen_mob_fsm::touch_hazard)
+            );
+            new_events.push_back(
+                new mob_event(MOB_EV_TOUCHED_HAZARD, s_actions)
+            );
+            new_events_custom_actions_after.push_back(false);
+        }
+        
         //Connect all new events to the state.
         for(size_t e = 0; e < new_events.size(); ++e) {
             MOB_EV_TYPES ev_type = new_events[e]->type;

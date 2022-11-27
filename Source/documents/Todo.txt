@@ -6,9 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
-    "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
     If the Pikmin in standby to be thrown is deleted, the game crashes
+    "maybe a property to reduce the "carrying shake" or even better change it? it looks off with smaller objects." --Neo
     If a Pikmin is called from the Onion and the leader dies before they finish sliding down the legs, they'll be following the dead leader
     
     --- v0.23.0 ---
@@ -22,8 +21,9 @@ Next tasks (roughly sorted most important first)
         Check the breaking changes
     Game balance
         Check Helodity's Pikifen rebalanced mod
-        Pikmin that lose their maturity during combat should go down one stage, otherwise bud stage is pointless
+        The ability to change the time Pikmin stay knocked down for, as well as the time bonus they get when whistled, on a per-Pikmin type basis (thanks Helodity)
         "rock pikmin I think stay knocked back for too long after attacking, I'm pretty sure they get up quicker in pikmin 3" --Nataly
+        Pikmin that lose their maturity during combat should go down one stage, otherwise bud stage is pointless
         Make bramble gates weaker to bomb rocks (thanks Nataly)
     Try making the camera also follow the cursor and the Pikmin group, if possible
     Ship tractor beams should be drawn below the ship (thanks Nataly)
@@ -324,6 +324,7 @@ Next tasks (roughly sorted most important first)
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the button icons should show the name of the button instead of a number
         If an action has multiple controls, the icon to show should prioritize gamepad inputs if the last player input was a gamepad (for analog sticks only if > 0.5), and keyboard/mouse otherwise
+        The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
