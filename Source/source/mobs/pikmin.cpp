@@ -367,7 +367,8 @@ void pikmin::latch(mob* m, hitbox* h) {
     );
     m->hold(
         this, h->body_part_index, h_offset_dist, h_offset_angle, v_offset_dist,
-        true, HOLD_ROTATION_METHOD_NEVER
+        true,
+        HOLD_ROTATION_METHOD_NEVER //pikmin_fsm::prepare_to_attack handles it.
     );
     
     latched = true;

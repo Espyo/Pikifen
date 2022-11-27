@@ -2831,25 +2831,27 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     
     m->focus_on_mob(other_ptr);
     m->stop_chasing();
-
+    
     point offset = point();
-    float target_distance = m->focused_mob->radius + m->radius + PIKMIN::GROUNDED_ATTACK_DIST;
-
+    float target_distance =
+        m->focused_mob->radius + m->radius + PIKMIN::GROUNDED_ATTACK_DIST;
+        
     if(m->focused_mob->rectangular_dim.x != 0.0f) {
         bool is_inside = false;
         offset =
             get_closest_point_in_rotated_rectangle(
                 m->pos,
-                m->focused_mob->pos, m->focused_mob->rectangular_dim,
+                m->focused_mob->pos,
+                m->focused_mob->rectangular_dim,
                 m->focused_mob->angle,
                 &is_inside
             ) - m->focused_mob->pos;
         target_distance -= m->focused_mob->radius;
     }
-
+    
     m->chase(
         &m->focused_mob->pos, &m->focused_mob->z,
-        point(), 0.0f, 0,
+        offset, 0.0f, 0,
         target_distance
     );
     m->leave_group();
@@ -3263,23 +3265,24 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     
     pikmin* p = (pikmin*) m;
     p->was_last_hit_dud = false;
-
-    if(p->focused_mob->rectangular_dim.x != NULL) {
+    
+    if(p->focused_mob->rectangular_dim.x != 0.0f) {
         bool is_inside = false;
         point target =
             get_closest_point_in_rotated_rectangle(
                 m->pos,
-                m->focused_mob->pos, m->focused_mob->rectangular_dim,
+                m->focused_mob->pos,
+                m->focused_mob->rectangular_dim,
                 m->focused_mob->angle,
                 &is_inside
             );
-
-        p->face(get_angle(m->pos,target), NULL);
-    }
-    else {
+        p->face(get_angle(m->pos, target), NULL);
+        
+    } else {
         p->face(0, &p->focused_mob->pos);
+        
     }
-
+    
     p->set_animation(PIKMIN_ANIM_ATTACKING);
 }
 

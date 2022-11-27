@@ -49,8 +49,14 @@ mob* mob::get_mob_to_walk_on() const {
             m_ptr->rectangular_dim.x != 0
         ) {
             //Rectangle vs rectangle.
-            //Not supported.
-            continue;
+            if(
+                !rectangles_intersect(
+                    pos, rectangular_dim, angle,
+                    m_ptr->pos, m_ptr->rectangular_dim, m_ptr->angle
+                )
+            ) {
+                continue;
+            }
         } else if(rectangular_dim.x != 0) {
             //Rectangle vs circle.
             if(
@@ -226,7 +232,7 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         point final_target_pos = get_chase_target();
         
         if(has_flag(chase_info.flags, CHASE_FLAG_TELEPORT)) {
-
+        
             sector* sec =
                 get_sector(final_target_pos, NULL, true);
                 
