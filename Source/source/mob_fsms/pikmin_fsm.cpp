@@ -2006,17 +2006,17 @@ void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
 void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
-    pikmin* pik = (pikmin*) m;
-    mob* lea = (mob*) info1;
+    pikmin* pik_ptr = (pikmin*) m;
+    mob* lea_ptr = (mob*) info1;
     
-    pik->focus_on_mob(lea);
+    pik_ptr->focus_on_mob(lea_ptr);
     disable_flag(m->flags, MOB_FLAG_NON_HUNTABLE);
     disable_flag(m->flags, MOB_FLAG_NON_HURTABLE);
     disable_flag(m->flags, MOB_FLAG_UNPUSHABLE);
-    pik->is_seed_or_sprout = false;
+    pik_ptr->is_seed_or_sprout = false;
     m->set_timer(0);
     
-    pik->set_animation(PIKMIN_ANIM_PLUCKING);
+    pik_ptr->set_animation(PIKMIN_ANIM_PLUCKING);
 }
 
 
@@ -2033,14 +2033,14 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
 void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
-    pikmin* pik = (pikmin*) m;
+    pikmin* pik_ptr = (pikmin*) m;
     mob* caller = (mob*) info1;
     
-    pik->was_last_hit_dud = false;
-    pik->consecutive_dud_hits = 0;
-    pik->stop_circling();
+    pik_ptr->was_last_hit_dud = false;
+    pik_ptr->consecutive_dud_hits = 0;
+    pik_ptr->stop_circling();
     
-    caller->add_to_group(pik);
+    caller->add_to_group(pik_ptr);
     
     game.sys_assets.sfx_pikmin_called.play(0.03, false);
 }
@@ -2059,22 +2059,23 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
 void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
     
-    pikmin* pik = (pikmin*) m;
+    pikmin* pik_ptr = (pikmin*) m;
     mob* caller = (mob*) info1;
     
     //Let's use the "temp" variable to specify whether or not a leader
     //already whistled it.
-    if(pik->temp_i == 1) return;
+    if(pik_ptr->temp_i == 1) return;
     
-    pik->focus_on_mob(caller);
+    pik_ptr->focus_on_mob(caller);
     
-    pik->script_timer.time_left =
+    pik_ptr->script_timer.time_left =
         std::max(
             0.01f,
-            pik->script_timer.time_left - PIKMIN::KNOCKED_DOWN_WHISTLE_BONUS
+            pik_ptr->script_timer.time_left -
+            pik_ptr->pik_type->knocked_down_whistle_bonus
         );
         
-    pik->temp_i = 1;
+    pik_ptr->temp_i = 1;
 }
 
 
@@ -2634,7 +2635,7 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
         enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    m->set_timer(PIKMIN::KNOCKED_DOWN_DURATION);
+    m->set_timer(pik_ptr->pik_type->knocked_down_duration);
     
     m->set_animation(PIKMIN_ANIM_LYING);
 }
@@ -2985,17 +2986,17 @@ void pikmin_fsm::land_after_impact_bounce(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::land_after_pluck(mob* m, void* info1, void* info2) {
-    pikmin* pik = (pikmin*) m;
-    mob* lea = pik->focused_mob;
+    pikmin* pik_ptr = (pikmin*) m;
+    mob* lea_ptr = pik_ptr->focused_mob;
     
-    if(lea->following_group) {
+    if(lea_ptr->following_group) {
         //If this leader is following another one,
         //then the new Pikmin should be in the group of that top leader.
-        lea = lea->following_group;
+        lea_ptr = lea_ptr->following_group;
     }
-    lea->add_to_group(pik);
+    lea_ptr->add_to_group(pik_ptr);
     
-    pik->set_animation(PIKMIN_ANIM_IDLING);
+    pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
 }
 
 

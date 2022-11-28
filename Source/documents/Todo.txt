@@ -9,12 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.23.0 ---
-    Game balance
-        Check Helodity's Pikifen rebalanced mod
-        The ability to change the time Pikmin stay knocked down for, as well as the time bonus they get when whistled, on a per-Pikmin type basis (thanks Helodity)
-        "rock pikmin I think stay knocked back for too long after attacking, I'm pretty sure they get up quicker in pikmin 3" --Nataly
-        Pikmin that lose their maturity during combat should go down one stage, otherwise bud stage is pointless
-        Make bramble gates weaker to bomb rocks (thanks Nataly)
     Try making the camera also follow the cursor and the Pikmin group, if possible
     Ship tractor beams should be drawn below the ship (thanks Nataly)
     A property for pile types that lets the mob radius be changed on every phase (thanks Nataly)
@@ -26,6 +20,25 @@ Next tasks (roughly sorted most important first)
     Editor improvements
         Object categories in both editors should be sorted alphabetically (thanks Nataly)
         Mob types should be able to specify a custom category name for the editors. This way, stuff like a Burgeoning Spiderwort can go under a "category" called "Useful plants" or something, instead of "Piles"
+            Aux: Adult Bulbmin stem, bamboo gate pillar, cardboard box flap, ceramic bridge base red, crystal wall pillar, electric gate pillar, eletrical wire 2, paper bag handle, reinforced wall pillar, seesaw block ropes, white bramble gate pillar, Beady Long Legs foot
+            Bridge: all bridges, ceramic pile red, ceramic fragment red
+            Candypop Bud: all converters
+            Decoration: all decorations
+            Drop: all drops
+            Enemy, harmless: all harmless enemies
+            Enemy, dangerous: all harmful enemies
+            Gate: crystal wall, electric gate, reinforced wall, white bramble gate, bamboo gate
+            Leader: all leaders
+            Misc: dummy, dummy obstacle target, sign
+            Obstacle, dangerous: eletrical wire, fire geyser, gas pipe, rolling boulder
+            Obstacle, harmless: clog, crystal nodule, kingcap, large crystal, small crystal, spotcap, cardboard box, paper bag, seesaw block
+            Onion: all Onions
+            Pellet Posy: all Pellet Posies in Custom
+            Pellet: all pellets
+            Pikmin: all Pikmin
+            Ship: all ships
+            Treasure: all treasures
+            Useful things: Bouncy Mushroom, climbing stick pile, egg, Flukeweed, bitter Burgeoning Spiderwort, spicy Burgeoning Spiderwort, bitter berry, spicy berry, bomb rock, climbing stick
         "suggestion: a setting for path links to show their length like sector edges when moving a node/vertex" --Nataly
         "please make it possible to draw links as light load only and airborne only instead of needing to draw them first, then select them and apply those properties" --Nataly
         Find a way to make the path drawing process more friendly, since sometimes you want to draw a continuous path with multiple stops, but sometimes you just want to patch up an existing stop/link (thanks Neo)

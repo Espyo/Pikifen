@@ -31,6 +31,8 @@ pikmin_type::pikmin_type() :
     push_strength(1),
     max_throw_height(260),
     attack_method(PIKMIN_ATTACK_LATCH),
+    knocked_down_duration(PIKMIN::DEF_KNOCKED_DOWN_DURATION),
+    knocked_down_whistle_bonus(PIKMIN::DEF_KNOCKED_DOWN_WHISTLE_BONUS),
     can_fly(false),
     can_carry_tools(true),
     bmp_icon(nullptr),
@@ -145,6 +147,8 @@ void pikmin_type::load_properties(data_node* file) {
     data_node* attack_method_node = NULL;
     
     rs.set("attack_method", attack_method_str, &attack_method_node);
+    rs.set("knocked_down_duration", knocked_down_duration);
+    rs.set("knocked_down_whistle_bonus", knocked_down_whistle_bonus);
     rs.set("can_carry_tools", can_carry_tools);
     rs.set("can_fly", can_fly);
     rs.set("carry_strength", carry_strength);

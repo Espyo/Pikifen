@@ -23,6 +23,10 @@
 
 
 namespace PIKMIN {
+//How long a Pikmin that got knocked down stays on the floor for, if left alone.
+const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
+//A whistled Pikmin that got knocked down loses this much in lie-down time.
+const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
 //Time until moving Pikmin timeout and stay in place, after being dismissed.
 const float DISMISS_TIMEOUT = 4.0f;
 //Timeout before a Pikmin gives up, when ordered to go to something.
@@ -33,10 +37,6 @@ const float GROUNDED_ATTACK_DIST = 5.0f;
 const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 //Invulnerability period after getting hit.
 const float INVULN_PERIOD = 0.7f;
-//How long a Pikmin that got knocked down stays on the floor for, if left alone.
-const float KNOCKED_DOWN_DURATION = 2.0f;
-//A whistled Pikmin that got knocked down loses this much in lie-down time.
-const float KNOCKED_DOWN_WHISTLE_BONUS = 1.3f;
 //Interval for when a Pikmin decides a new chase spot, when panicking.
 const float PANIC_CHASE_INTERVAL = 0.2f;
 //A plucked Pikmin is thrown behind the leader at this speed, horizontally.

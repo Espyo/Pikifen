@@ -187,6 +187,10 @@ public:
     float max_throw_height;
     //What the main method of attack is.
     PIKMIN_ATTACK_METHODS attack_method;
+    //How long it stays on the floor for after knocked down, if left alone.
+    float knocked_down_duration;
+    //A whistled Pikmin that got knocked down loses this much in lie-down time.
+    float knocked_down_whistle_bonus;
     //Whether it can fly or not.
     bool can_fly;
     //Whether it can carry tool-type objects or not.
