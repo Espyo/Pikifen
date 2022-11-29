@@ -109,122 +109,6 @@ options_menu_state::options_menu_state() :
 
 
 /* ----------------------------------------------------------------------------
- * Changes to the next auto-throw mode preset in the list.
- * step:
- *   How much to move forward in the list.
- */
-void options_menu_state::change_auto_throw(const signed int step) {
-    size_t cur_auto_throw_idx = get_auto_throw_idx();
-    
-    if(cur_auto_throw_idx == INVALID) {
-        cur_auto_throw_idx = 0;
-    } else {
-        cur_auto_throw_idx =
-            sum_and_wrap(
-                (int) cur_auto_throw_idx, step,
-                OPTIONS_MENU::N_AUTO_THROW_PRESETS
-            );
-    }
-    
-    game.options.auto_throw_mode =
-        OPTIONS_MENU::AUTO_THROW_PRESETS[cur_auto_throw_idx];
-        
-    auto_throw_picker->cur_option_idx = cur_auto_throw_idx;
-    auto_throw_picker->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-    );
-    update();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Changes to the next cursor speed preset in the list.
- * step:
- *   How much to move forward in the list.
- */
-void options_menu_state::change_cursor_speed(const signed int step) {
-    size_t cur_cursor_speed_idx = get_cursor_speed_idx();
-    
-    if(cur_cursor_speed_idx == INVALID) {
-        cur_cursor_speed_idx = 0;
-    } else {
-        cur_cursor_speed_idx =
-            sum_and_wrap(
-                (int) cur_cursor_speed_idx, step,
-                OPTIONS_MENU::N_CURSOR_SPEED_PRESETS
-            );
-    }
-    
-    game.options.cursor_speed =
-        OPTIONS_MENU::CURSOR_SPEED_PRESETS[cur_cursor_speed_idx];
-        
-    cursor_speed_picker->cur_option_idx = cur_cursor_speed_idx;
-    cursor_speed_picker->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-    );
-    update();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Changes to the next leaving confirmation mode preset in the list.
- * step:
- *   How much to move forward in the list.
- */
-void options_menu_state::change_leaving_confirmation(const signed int step) {
-    size_t cur_leaving_conf_idx = get_leaving_confirmation_idx();
-    
-    if(cur_leaving_conf_idx == INVALID) {
-        cur_leaving_conf_idx = 0;
-    } else {
-        cur_leaving_conf_idx =
-            sum_and_wrap(
-                (int) cur_leaving_conf_idx, step,
-                OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS
-            );
-    }
-    
-    game.options.leaving_confirmation_mode =
-        OPTIONS_MENU::LEAVING_CONFIRMATION_PRESETS[cur_leaving_conf_idx];
-        
-    leaving_confirmation_picker->cur_option_idx = cur_leaving_conf_idx;
-    leaving_confirmation_picker->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-    );
-    update();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Changes to the next resolution preset in the list.
- * step:
- *   How much to move forward in the list.
- */
-void options_menu_state::change_resolution(const signed int step) {
-    size_t cur_resolution_idx = get_resolution_idx();
-    if(cur_resolution_idx == INVALID) {
-        cur_resolution_idx = 0;
-    } else {
-        cur_resolution_idx =
-            sum_and_wrap(
-                (int) cur_resolution_idx, step,
-                resolution_presets.size()
-            );
-    }
-    
-    game.options.intended_win_w = resolution_presets[cur_resolution_idx].first;
-    game.options.intended_win_h = resolution_presets[cur_resolution_idx].second;
-    
-    trigger_restart_warning();
-    resolution_picker->cur_option_idx = cur_resolution_idx;
-    resolution_picker->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
-    );
-    update();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws the options menu.
  */
 void options_menu_state::do_drawing() {
@@ -254,79 +138,10 @@ void options_menu_state::do_logic() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the current auto-throw option's index, or INVALID if not found.
- */
-size_t options_menu_state::get_auto_throw_idx() const {
-    for(size_t m = 0; m < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++m) {
-        if(
-            game.options.auto_throw_mode ==
-            OPTIONS_MENU::AUTO_THROW_PRESETS[m]
-        ) {
-            return m;
-        }
-    }
-    
-    return INVALID;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the current cursor speed option's index, or INVALID if not found.
- */
-size_t options_menu_state::get_cursor_speed_idx() const {
-    for(size_t s = 0; s < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++s) {
-        if(
-            game.options.cursor_speed ==
-            OPTIONS_MENU::CURSOR_SPEED_PRESETS[s]
-        ) {
-            return s;
-        }
-    }
-    
-    return INVALID;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the current leaving confirmation option's index,
- * or INVALID if not found.
- */
-size_t options_menu_state::get_leaving_confirmation_idx() const {
-    for(size_t m = 0; m < OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS; ++m) {
-        if(
-            game.options.leaving_confirmation_mode ==
-            OPTIONS_MENU::LEAVING_CONFIRMATION_PRESETS[m]
-        ) {
-            return m;
-        }
-    }
-    
-    return INVALID;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the name of this state.
  */
 string options_menu_state::get_name() const {
     return "options menu";
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the current resolution option's index, or INVALID if custom.
- */
-size_t options_menu_state::get_resolution_idx() const {
-    for(size_t r = 0; r < resolution_presets.size(); ++r) {
-        if(
-            game.options.intended_win_w == resolution_presets[r].first &&
-            game.options.intended_win_h == resolution_presets[r].second
-        ) {
-            return r;
-        }
-    }
-    
-    return INVALID;
 }
 
 
@@ -421,109 +236,66 @@ void options_menu_state::load() {
     gui.add_item(fullscreen_check, "fullscreen");
     
     //Resolution picker.
+    vector<string> resolution_preset_names;
+    for(size_t p = 0; p < resolution_presets.size(); ++p) {
+        resolution_preset_names.push_back(
+            i2s(resolution_presets[p].first) + "x" +
+            i2s(resolution_presets[p].second)
+        );
+    }
+    cur_resolution_option.first = game.options.intended_win_w;
+    cur_resolution_option.second = game.options.intended_win_h;
     resolution_picker =
-        new picker_gui_item(
-        "Resolution: ", "", resolution_presets.size(), get_resolution_idx()
+        new options_menu_picker_gui_item<std::pair<int, int> >(
+        "Resolution: ",
+        &cur_resolution_option,
+        std::make_pair(OPTIONS::DEF_WIN_W, OPTIONS::DEF_WIN_H),
+        resolution_presets,
+        resolution_preset_names,
+        "The game's width and height."
     );
-    resolution_picker->on_previous =
-    [this] () {
-        change_resolution(-1);
+    resolution_picker->after_change = [this] () {
+        game.options.intended_win_w = cur_resolution_option.first;
+        game.options.intended_win_h = cur_resolution_option.second;
+        trigger_restart_warning();
     };
-    resolution_picker->on_next =
-    [this] () {
-        change_resolution(1);
+    resolution_picker->value_to_string = [] (const std::pair<int, int> &v) {
+        return i2s(v.first) + "x" + i2s(v.second);
     };
-    resolution_picker->on_get_tooltip =
-    [] () {
-        return
-            "The game's width and height. Default: " +
-            i2s(OPTIONS::DEF_WIN_W) + "x" +
-            i2s(OPTIONS::DEF_WIN_H) + ".";
-    };
+    resolution_picker->init();
     gui.add_item(resolution_picker, "resolution");
     
     //Cursor speed.
     cursor_speed_picker =
-        new picker_gui_item(
-        "Cursor speed: ", "",
-        OPTIONS_MENU::N_CURSOR_SPEED_PRESETS, get_cursor_speed_idx()
+        new options_menu_picker_gui_item<float>(
+        "Cursor speed: ",
+        &game.options.cursor_speed,
+        OPTIONS::DEF_CURSOR_SPEED,
+    {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f},
+    {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
+    "Cursor speed, when controlling without a mouse."
     );
-    cursor_speed_picker->on_previous =
-    [this] () {
-        change_cursor_speed(-1);
+    cursor_speed_picker->value_to_string = [] (const float v) {
+        return f2s(v);
     };
-    cursor_speed_picker->on_next =
-    [this] () {
-        change_cursor_speed(1);
-    };
-    cursor_speed_picker->on_get_tooltip =
-    [] () {
-        size_t idx = 0;
-        for(; idx < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++idx) {
-            if(
-                OPTIONS_MENU::CURSOR_SPEED_PRESETS[idx] ==
-                OPTIONS::DEF_CURSOR_SPEED
-            ) {
-                break;
-            }
-        }
-        
-        return
-            "Cursor speed, when controlling without a mouse. Default: " +
-            OPTIONS_MENU::CURSOR_SPEED_PRESET_NAMES[idx] + ".";
-    };
+    cursor_speed_picker->init();
     gui.add_item(cursor_speed_picker, "cursor_speed");
     
     //Auto-throw mode.
     auto_throw_picker =
-        new picker_gui_item(
-        "Auto-throw: ", "",
-        OPTIONS_MENU::N_AUTO_THROW_PRESETS, get_auto_throw_idx()
+        new options_menu_picker_gui_item<AUTO_THROW_MODES>(
+        "Auto-throw: ",
+        &game.options.auto_throw_mode,
+        OPTIONS::DEF_AUTO_THROW_MODE,
+    {AUTO_THROW_OFF, AUTO_THROW_HOLD, AUTO_THROW_TOGGLE},
+    {"Off", "Hold button", "Button toggles"}
     );
-    auto_throw_picker->on_previous =
-    [this] () {
-        change_auto_throw(-1);
+    auto_throw_picker->preset_descriptions = {
+        "Pikmin are only thrown when you release the button.",
+        "Auto-throw Pikmin periodically as long as the button is held.",
+        "Press once to auto-throw Pikmin periodically, and again to stop."
     };
-    auto_throw_picker->on_next =
-    [this] () {
-        change_auto_throw(1);
-    };
-    auto_throw_picker->on_get_tooltip =
-    [] () -> string {
-        size_t idx = 0;
-        for(; idx < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++idx) {
-            if(
-                OPTIONS_MENU::AUTO_THROW_PRESETS[idx] ==
-                OPTIONS::DEF_AUTO_THROW_MODE
-            ) {
-                break;
-            }
-        }
-        
-        string s;
-        switch(game.options.auto_throw_mode) {
-        case AUTO_THROW_OFF: {
-            s = "Pikmin are only thrown when you release the button.";
-            break;
-        }
-        case AUTO_THROW_HOLD: {
-            s = "Auto-throw Pikmin periodically as long as "
-                "the button is held.";
-            break;
-        }
-        case AUTO_THROW_TOGGLE: {
-            s = "Press once to auto-throw Pikmin periodically, and again "
-                "to stop.";
-            break;
-        }
-        default: {
-            return "";
-        }
-        }
-        return
-            s + " Default: " +
-            OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[idx] + ".";
-    };
+    auto_throw_picker->init();
     gui.add_item(auto_throw_picker, "auto_throw");
     
     //Show HUD controls checkbox.
@@ -542,54 +314,23 @@ void options_menu_state::load() {
     
     //Leaving confirmation mode.
     leaving_confirmation_picker =
-        new picker_gui_item(
-        "Leaving confirmation: ", "",
-        OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS,
-        get_leaving_confirmation_idx()
+        new options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODES>(
+        "Leave confirm: ",
+        &game.options.leaving_confirmation_mode,
+    OPTIONS::DEF_LEAVING_CONFIRMATION_MODE, {
+        LEAVING_CONFIRMATION_ALWAYS,
+        LEAVING_CONFIRMATION_1_MIN,
+        LEAVING_CONFIRMATION_NEVER
+    },
+    {"Always", "After 1min", "Never"}
     );
-    leaving_confirmation_picker->on_previous =
-    [this] () {
-        change_leaving_confirmation(-1);
+    leaving_confirmation_picker->preset_descriptions = {
+        "When leaving from the pause menu, always ask to confirm.",
+        "When leaving from the pause menu, only ask to confirm "
+        "if one minute has passed.",
+        "When leaving from the pause menu, never ask to confirm."
     };
-    leaving_confirmation_picker->on_next =
-    [this] () {
-        change_leaving_confirmation(1);
-    };
-    leaving_confirmation_picker->on_get_tooltip =
-    [] () -> string {
-        size_t idx = 0;
-        for(; idx < OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS; ++idx) {
-            if(
-                OPTIONS_MENU::LEAVING_CONFIRMATION_PRESETS[idx] ==
-                OPTIONS::DEF_LEAVING_CONFIRMATION_MODE
-            ) {
-                break;
-            }
-        }
-        
-        string s;
-        switch(game.options.leaving_confirmation_mode) {
-        case LEAVING_CONFIRMATION_NEVER: {
-            s = "When leaving from the pause menu, never ask to confirm.";
-            break;
-        }
-        case LEAVING_CONFIRMATION_1_MIN: {
-            s = "When leaving from the pause menu, only ask to confirm "
-                "if one minute has passed.";
-            break;
-        }
-        case LEAVING_CONFIRMATION_ALWAYS: {
-            s = "When leaving from the pause menu, always ask to confirm.";
-            break;
-        }
-        default: {
-            return "";
-        }
-        }
-        return
-            s + " Default: " +
-            OPTIONS_MENU::LEAVING_CONFIRMATION_PRESET_NAMES[idx] + ".";
-    };
+    leaving_confirmation_picker->init();
     gui.add_item(leaving_confirmation_picker, "leaving_confirmation");
     
     //Controls button.
@@ -631,7 +372,6 @@ void options_menu_state::load() {
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
     gui.set_selected_item(gui.back_item);
-    update();
     
 }
 
@@ -659,80 +399,4 @@ void options_menu_state::unload() {
     
     //Menu items.
     gui.destroy();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the contents of the options menu.
- */
-void options_menu_state::update() {
-    //Resolution.
-    size_t cur_resolution_idx = INVALID;
-    
-    for(size_t r = 0; r < resolution_presets.size(); ++r) {
-        if(
-            game.options.intended_win_w == resolution_presets[r].first &&
-            game.options.intended_win_h == resolution_presets[r].second
-        ) {
-            cur_resolution_idx = r;
-            break;
-        }
-    }
-    
-    resolution_picker->option =
-        i2s(game.options.intended_win_w) + "x" +
-        i2s(game.options.intended_win_h) +
-        (cur_resolution_idx == INVALID ? " (custom)" : "");
-        
-    //Cursor speed.
-    size_t cur_cursor_speed_idx = INVALID;
-    
-    for(size_t s = 0; s < OPTIONS_MENU::N_CURSOR_SPEED_PRESETS; ++s) {
-        if(
-            game.options.cursor_speed ==
-            OPTIONS_MENU::CURSOR_SPEED_PRESETS[s]
-        ) {
-            cur_cursor_speed_idx = s;
-            break;
-        }
-    }
-    
-    cursor_speed_picker->option =
-        cur_cursor_speed_idx == INVALID ?
-        i2s(game.options.cursor_speed) + " (custom)" :
-        OPTIONS_MENU::CURSOR_SPEED_PRESET_NAMES[cur_cursor_speed_idx];
-        
-    //Auto-throw.
-    size_t cur_auto_throw_idx = INVALID;
-    
-    for(size_t m = 0; m < OPTIONS_MENU::N_AUTO_THROW_PRESETS; ++m) {
-        if(
-            game.options.auto_throw_mode ==
-            OPTIONS_MENU::AUTO_THROW_PRESETS[m]
-        ) {
-            cur_auto_throw_idx = m;
-            break;
-        }
-    }
-    
-    auto_throw_picker->option =
-        OPTIONS_MENU::AUTO_THROW_PRESET_NAMES[cur_auto_throw_idx];
-        
-    //Leaving confirmation.
-    size_t cur_leaving_conf_idx = INVALID;
-    
-    for(size_t m = 0; m < OPTIONS_MENU::N_LEAVING_CONFIRMATION_PRESETS; ++m) {
-        if(
-            game.options.leaving_confirmation_mode ==
-            OPTIONS_MENU::LEAVING_CONFIRMATION_PRESETS[m]
-        ) {
-            cur_leaving_conf_idx = m;
-            break;
-        }
-    }
-    
-    leaving_confirmation_picker->option =
-        OPTIONS_MENU::LEAVING_CONFIRMATION_PRESET_NAMES[
-         cur_leaving_conf_idx
-     ];
 }

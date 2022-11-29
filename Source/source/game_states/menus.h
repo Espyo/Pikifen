@@ -18,6 +18,7 @@
 #include "game_state.h"
 #include "../gui.h"
 #include "../options.h"
+#include "../misc_structs.h"
 
 
 using std::map;
@@ -149,6 +150,134 @@ private:
 
 
 /* ----------------------------------------------------------------------------
+ * Holds information on how a picker GUI item in the options menu should work.
+ */
+template<typename t>
+class options_menu_picker_gui_item : public picker_gui_item {
+public:
+    //Points to the current value.
+    t* cur_value;
+    //Default value.
+    const t def_value;
+    //Tooltip, sans default. Used if the presets don't have their own tooltips.
+    string tooltip;
+    //Value of each preset.
+    vector<t> preset_values;
+    //Name of each preset.
+    vector<string> preset_names;
+    //Tooltip for each preset. If empty, "tooltip" is used instead.
+    vector<string> preset_descriptions;
+    //Code to run after a value is changed, if any.
+    std::function<void()> after_change;
+    //Converts a value to a string. Used in the tooltip's default, if necessary.
+    std::function<string(t)> value_to_string;
+    
+    
+    /* -------------------------------------------------------------------------
+    * Creates an options menu picker GUI item instance.
+    */
+    options_menu_picker_gui_item(
+        const string &base_text, t* cur_value, const t &def_value,
+        const vector<t> preset_values, const vector<string> preset_names,
+        const string &tooltip = ""
+    ) :
+        picker_gui_item(base_text, ""),
+        cur_value(cur_value),
+        def_value(def_value),
+        tooltip(tooltip),
+        preset_values(preset_values),
+        preset_names(preset_names),
+        after_change(nullptr),
+        value_to_string(nullptr) {
+    }
+    
+    
+    /* -------------------------------------------------------------------------
+    * Initializes the picker. This needs to be called after setting all of
+    * its properties, since it relies on them existing and having their
+    * final values. Without this function, the picker won't behave as
+    * expected.
+    */
+    void init() {
+        cur_option_idx = INVALID;
+        for(size_t p = 0; p < preset_values.size(); ++p) {
+            if(*cur_value == preset_values[p]) {
+                cur_option_idx = p;
+                break;
+            }
+        }
+        option = get_cur_option_name();
+        nr_options = preset_values.size();
+        
+        on_previous = [this] () { change_option(-1); };
+        on_next = [this] () { change_option(1); };
+        on_get_tooltip = [this] () {
+            size_t def_idx = 0;
+            string full_tooltip;
+            for(; def_idx < this->preset_values.size(); ++def_idx) {
+                if(this->preset_values[def_idx] == this->def_value) {
+                    break;
+                }
+            }
+            if(preset_descriptions.empty()) {
+                full_tooltip = this->tooltip;
+            } else {
+                if(cur_option_idx == INVALID) {
+                    full_tooltip = "Using a custom value.";
+                } else {
+                    full_tooltip = preset_descriptions[cur_option_idx];
+                }
+            }
+            full_tooltip += " Default: " + this->preset_names[def_idx] + ".";
+            return full_tooltip;
+        };
+    }
+    
+    
+    /* -------------------------------------------------------------------------
+    * Returns the name of the current option.
+    */
+    string get_cur_option_name() {
+        if(cur_option_idx == INVALID) {
+            if(value_to_string) {
+                return value_to_string(*cur_value) + " (custom)";
+            } else {
+                return "Custom";
+            }
+        } else {
+            return preset_names[cur_option_idx];
+        }
+    }
+    
+    
+    /* -------------------------------------------------------------------------
+    * Changes to the next or to the previous option.
+    * step:
+    *   What direction to change to. +1 is next, -1 is previous.
+    */
+    void change_option(int step) {
+        if(cur_option_idx == INVALID) {
+            cur_option_idx = 0;
+        } else {
+            cur_option_idx =
+                sum_and_wrap(
+                    (int) cur_option_idx, step, (int) preset_values.size()
+                );
+        }
+        
+        *cur_value = preset_values[cur_option_idx];
+        option = get_cur_option_name();
+        cur_option_idx = cur_option_idx;
+        start_juice_animation(
+            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
+        );
+        if(after_change) after_change();
+    }
+    
+};
+
+
+/* ----------------------------------------------------------------------------
  * Information about the options menu.
  */
 class options_menu_state : public game_state {
@@ -164,31 +293,25 @@ public:
 private:
     //Known good resolution presets.
     vector<std::pair<int, int> > resolution_presets;
+    //Currently selected resolution.
+    std::pair<int, int> cur_resolution_option;
     //Bitmap of the menu background.
     ALLEGRO_BITMAP* bmp_menu_bg;
     //GUI.
     gui_manager gui;
     //Auto-throw picker widget.
-    picker_gui_item* auto_throw_picker;
+    options_menu_picker_gui_item<AUTO_THROW_MODES>* auto_throw_picker;
     //Resolution picker widget.
-    picker_gui_item* resolution_picker;
+    options_menu_picker_gui_item<std::pair<int, int> >* resolution_picker;
     //Cursor speed picker widget.
-    picker_gui_item* cursor_speed_picker;
+    options_menu_picker_gui_item<float>* cursor_speed_picker;
     //Leaving confirmation picker widget.
-    picker_gui_item* leaving_confirmation_picker;
+    options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODES>*
+    leaving_confirmation_picker;
     //Restart warning text widget.
     text_gui_item* warning_text;
     
-    void change_auto_throw(const signed int step);
-    void change_cursor_speed(const signed int step);
-    void change_leaving_confirmation(const signed int step);
-    void change_resolution(const signed int step);
-    size_t get_auto_throw_idx() const;
-    size_t get_cursor_speed_idx() const;
-    size_t get_leaving_confirmation_idx() const;
-    size_t get_resolution_idx() const;
     void go_to_controls();
-    void update();
     void leave();
     void trigger_restart_warning();
 };
