@@ -23,5 +23,5 @@ Game_data/Areas/*/*test*
 User_data/*
 /pikifen
 /pikifen_shortcut
-/Pikifen.exe
+/Pikifen*.exe
 .DS_Store
