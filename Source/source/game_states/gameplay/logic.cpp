@@ -205,7 +205,37 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     }
     
     if(cur_interlude == INTERLUDE_NONE) {
-        game.cam.target_pos = cur_leader_ptr->pos;
+        //Adjust the camera position.
+        float leader_weight = 1.0f;
+        float cursor_weight = game.options.cursor_cam_weight;
+        float group_weight = 0.0f;
+        
+        point group_center = cur_leader_ptr->pos;
+        if(!cur_leader_ptr->group->members.empty()) {
+            point tl = cur_leader_ptr->group->members[0]->pos;
+            point br = cur_leader_ptr->group->members[0]->pos;
+            for(size_t m = 1; m < cur_leader_ptr->group->members.size(); ++m) {
+                mob* member = cur_leader_ptr->group->members[m];
+                tl.x = std::min(tl.x, member->pos.x);
+                tl.y = std::min(tl.y, member->pos.y);
+                br.x = std::max(tl.x, member->pos.x);
+                br.y = std::max(tl.y, member->pos.y);
+            }
+            group_center.x = (tl.x + br.x) / 2.0f;
+            group_center.y = (tl.y + br.y) / 2.0f;
+            group_weight = 0.1f;
+        }
+        
+        float weight_sums = leader_weight + cursor_weight + group_weight;
+        if(weight_sums == 0.0f) weight_sums = 0.01f;
+        leader_weight /= weight_sums;
+        cursor_weight /= weight_sums;
+        group_weight /= weight_sums;
+        
+        game.cam.target_pos =
+            cur_leader_ptr->pos * leader_weight +
+            leader_cursor_w * cursor_weight +
+            group_center * group_weight;
     }
     
     //Check what to show on the notification, if anything.

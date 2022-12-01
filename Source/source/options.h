@@ -64,6 +64,7 @@ extern const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
 extern const size_t DEF_AREA_EDITOR_UNDO_LIMIT;
 extern const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE;
 extern const AUTO_THROW_MODES DEF_AUTO_THROW_MODE;
+extern const float DEF_CURSOR_CAM_WEIGHT;
 extern const float DEF_CURSOR_SPEED;
 extern const bool DEF_DRAW_CURSOR_TRAIL;
 extern const ALLEGRO_COLOR DEF_EDITOR_HIGHLIGHT_COLOR;
@@ -120,6 +121,8 @@ struct options_struct {
     AUTO_THROW_MODES auto_throw_mode;
     //List of controls for each player.
     vector<vector<control_info> > controls;
+    //Cursor camera movement weight.
+    float cursor_cam_weight;
     //Cursor speed, in pixels per second. N/A when using the mouse.
     float cursor_speed;
     //Draw a trail behind the mouse cursor?

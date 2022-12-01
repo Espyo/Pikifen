@@ -21,35 +21,8 @@
 
 
 namespace OPTIONS_MENU {
-//Auto-throw preset names.
-const string AUTO_THROW_PRESET_NAMES[] =
-{"Off", "Hold button", "Button toggles"};
-//Auto-throw preset values.
-const AUTO_THROW_MODES AUTO_THROW_PRESETS[] =
-{AUTO_THROW_OFF, AUTO_THROW_HOLD, AUTO_THROW_TOGGLE};
-//Cursor speed preset names.
-const string CURSOR_SPEED_PRESET_NAMES[] =
-{"Very slow", "Slow", "Medium", "Fast", "Very fast"};
-//Cursor speed preset values.
-const float CURSOR_SPEED_PRESETS[] =
-{250.0f, 350.0f, 500.0f, 700.0f, 1000.0f};
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Options_menu.txt";
-//Leaving conformation preset names.
-const string LEAVING_CONFIRMATION_PRESET_NAMES[] =
-{"Always", "After 1min", "Never"};
-//Leaving conformation preset values.
-const LEAVING_CONFIRMATION_MODES LEAVING_CONFIRMATION_PRESETS[] = {
-    LEAVING_CONFIRMATION_ALWAYS,
-    LEAVING_CONFIRMATION_1_MIN,
-    LEAVING_CONFIRMATION_NEVER
-};
-//Auto-throw preset amount.
-const unsigned char N_AUTO_THROW_PRESETS = 3;
-//Cursor speed preset amount.
-const unsigned char N_CURSOR_SPEED_PRESETS = 5;
-//Leaving confirmation preset amount.
-const unsigned char N_LEAVING_CONFIRMATION_PRESETS = 3;
 }
 
 
@@ -62,6 +35,7 @@ options_menu_state::options_menu_state() :
     auto_throw_picker(nullptr),
     resolution_picker(nullptr),
     cursor_speed_picker(nullptr),
+    cursor_cam_weight_picker(nullptr),
     warning_text(nullptr) {
     
     //Let's fill in the list of preset resolutions. For that, we'll get
@@ -186,17 +160,19 @@ void options_menu_state::load() {
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu items.
-    gui.register_coords("back",                 14,  8, 20, 8);
-    gui.register_coords("fullscreen",           26, 20, 44, 8);
-    gui.register_coords("resolution",           74, 20, 44, 8);
-    gui.register_coords("cursor_speed",         50, 34, 44, 8);
-    gui.register_coords("auto_throw",           50, 44, 44, 8);
-    gui.register_coords("show_hud_controls",    50, 54, 44, 8);
-    gui.register_coords("controls",             50, 74, 44, 8);
-    gui.register_coords("leaving_confirmation", 50, 64, 44, 8);
-    gui.register_coords("advanced",             86, 84, 24, 8);
-    gui.register_coords("tooltip",              50, 95, 96, 7);
-    gui.register_coords("restart_warning",      62,  5, 72, 6);
+    
+    gui.register_coords("back",                 15.00,  8.75, 20.0,  7.5);
+    gui.register_coords("fullscreen",           25.00, 18.75, 40.0,  7.5);
+    gui.register_coords("resolution",           75.00, 18.75, 40.0,  7.5);
+    gui.register_coords("cursor_speed",         25.00, 33.75, 40.0,  7.5);
+    gui.register_coords("cursor_cam_weight",    75.00, 33.75, 40.0,  7.5);
+    gui.register_coords("auto_throw",           50.00, 43.75, 45.0,  7.5);
+    gui.register_coords("show_hud_controls",    50.00, 53.75, 45.0,  7.5);
+    gui.register_coords("controls",             50.00, 63.75, 45.0,  7.5);
+    gui.register_coords("leaving_confirmation", 50.00, 73.75, 45.0,  7.5);
+    gui.register_coords("advanced",             86.25, 85.00, 22.5, 10.0);
+    gui.register_coords("tooltip",              50.00, 95.00, 95.0,  5.0);
+    gui.register_coords("restart_warning",      62.50,  5.25, 70.0,  5.5);
     gui.read_coords(
         data_node(OPTIONS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -280,6 +256,22 @@ void options_menu_state::load() {
     };
     cursor_speed_picker->init();
     gui.add_item(cursor_speed_picker, "cursor_speed");
+    
+    //Cursor camera weight.
+    cursor_cam_weight_picker =
+        new options_menu_picker_gui_item<float>(
+        "Cursor cam weight: ",
+        &game.options.cursor_cam_weight,
+        OPTIONS::DEF_CURSOR_CAM_WEIGHT,
+    {0.0f, 0.1f, 0.3f, 0.6f},
+    {"None", "Small", "Medium", "Large"},
+    "When you move the cursor, how much does it affect the camera?"
+    );
+    cursor_cam_weight_picker->value_to_string = [] (const float v) {
+        return f2s(v);
+    };
+    cursor_cam_weight_picker->init();
+    gui.add_item(cursor_cam_weight_picker, "cursor_cam_weight");
     
     //Auto-throw mode.
     auto_throw_picker =

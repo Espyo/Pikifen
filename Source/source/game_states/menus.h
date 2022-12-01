@@ -48,16 +48,7 @@ extern const string PLAY_GUI_FILE_PATH;
 
 
 namespace OPTIONS_MENU {
-extern const string AUTO_THROW_PRESET_NAMES[];
-extern const AUTO_THROW_MODES AUTO_THROW_PRESETS[];
-extern const string CURSOR_SPEED_PRESET_NAMES[];
-extern const float CURSOR_SPEED_PRESETS[];
 extern const string GUI_FILE_PATH;
-extern const string LEAVING_CONFIRMATION_PRESET_NAMES[];
-extern const LEAVING_CONFIRMATION_MODES LEAVING_CONFIRMATION_PRESETS[];
-extern const unsigned char N_AUTO_THROW_PRESETS;
-extern const unsigned char N_CURSOR_SPEED_PRESETS;
-extern const unsigned char N_LEAVING_CONFIRMATION_PRESETS;
 }
 
 
@@ -305,6 +296,8 @@ private:
     options_menu_picker_gui_item<std::pair<int, int> >* resolution_picker;
     //Cursor speed picker widget.
     options_menu_picker_gui_item<float>* cursor_speed_picker;
+    //Cursor camera weight picker widget.
+    options_menu_picker_gui_item<float>* cursor_cam_weight_picker;
     //Leaving confirmation picker widget.
     options_menu_picker_gui_item<LEAVING_CONFIRMATION_MODES>*
     leaving_confirmation_picker;

@@ -41,6 +41,8 @@ const area_editor::VIEW_MODES DEF_AREA_EDITOR_VIEW_MODE =
     area_editor::VIEW_MODE_TEXTURES;
 //Default value for the auto-throw mode.
 const AUTO_THROW_MODES DEF_AUTO_THROW_MODE = AUTO_THROW_OFF;
+//Default value for the cursor camera weight.
+const float DEF_CURSOR_CAM_WEIGHT = 0.0f;
 //Default value for the cursor speed.
 const float DEF_CURSOR_SPEED = 500.0f;
 //Default value for the cursor trail.
@@ -113,6 +115,7 @@ options_struct::options_struct() :
     area_editor_undo_limit(OPTIONS::DEF_AREA_EDITOR_UNDO_LIMIT),
     area_editor_view_mode(OPTIONS::DEF_AREA_EDITOR_VIEW_MODE),
     auto_throw_mode(OPTIONS::DEF_AUTO_THROW_MODE),
+    cursor_cam_weight(OPTIONS::DEF_CURSOR_CAM_WEIGHT),
     cursor_speed(OPTIONS::DEF_CURSOR_SPEED),
     draw_cursor_trail(OPTIONS::DEF_DRAW_CURSOR_TRAIL),
     editor_highlight_color(OPTIONS::DEF_EDITOR_HIGHLIGHT_COLOR),
@@ -222,6 +225,7 @@ void options_struct::load(data_node* file) {
     rs.set("area_editor_undo_limit", area_editor_undo_limit);
     rs.set("area_editor_view_mode", editor_view_mode_c);
     rs.set("auto_throw_mode", auto_throw_mode_c);
+    rs.set("cursor_cam_weight", cursor_cam_weight);
     rs.set("cursor_speed", cursor_speed);
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_highlight_color", editor_highlight_color);
@@ -448,6 +452,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "auto_throw_mode",
             i2s(auto_throw_mode)
+        )
+    );
+    file->add(
+        new data_node(
+            "cursor_cam_weight",
+            f2s(cursor_cam_weight)
         )
     );
     file->add(

@@ -8,6 +8,7 @@
  * Area class, and related functions.
  */
 
+#include <algorithm>
 
 #include "area.h"
 

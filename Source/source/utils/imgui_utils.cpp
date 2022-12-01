@@ -9,6 +9,7 @@
  * These don't contain logic specific to the Pikifen project.
  */
 
+#include <algorithm>
 #include <cmath>
 
 #include "imgui_utils.h"
@@ -111,7 +112,7 @@ bool ImGui::DragTime2(
     const string format1, const string format2,
     const int limit1, const int limit2
 ) {
-    int part1 = std::floor(*total_amount / 60.0f);
+    int part1 = floor(*total_amount / 60.0f);
     int part2 = *total_amount % 60;
     
     ImGui::BeginGroup();
