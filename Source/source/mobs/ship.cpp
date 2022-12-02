@@ -88,8 +88,6 @@ ship::~ship() {
  */
 void ship::draw_mob() {
 
-    mob::draw_mob();
-    
     //Draw the rings on the control point.
     for(unsigned char b = 0; b < SHIP::CONTROL_POINT_RING_AMOUNT; ++b) {
         float ring_idx_ratio = b / (float) SHIP::CONTROL_POINT_RING_AMOUNT;
@@ -201,6 +199,8 @@ void ship::draw_mob() {
             ring_color
         );
     }
+    
+    mob::draw_mob();
 }
 
 
