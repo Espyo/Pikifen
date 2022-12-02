@@ -128,8 +128,10 @@ struct asset_file_names_struct {
     string bright_ring;
     //Bubble box.
     string bubble_box;
-    //Checkbox checkmark.
+    //Checkbox with a checkmark.
     string checkbox_check;
+    //Checkbox without a checkmark.
+    string checkbox_no_check;
     //Misc. control icons.
     string control_icons;
     //Counter font.
@@ -598,8 +600,10 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_bright_ring;
     //Bubble box.
     ALLEGRO_BITMAP* bmp_bubble_box;
-    //Checkbox checkmark.
+    //Checkbox with a checkmark.
     ALLEGRO_BITMAP* bmp_checkbox_check;
+    //Checkbox without a checkmark.
+    ALLEGRO_BITMAP* bmp_checkbox_no_check;
     //Misc. control icons.
     ALLEGRO_BITMAP* bmp_control_icons;
     //Leader cursor.

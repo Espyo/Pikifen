@@ -161,11 +161,11 @@ check_gui_item::check_gui_item(
         );
         
         draw_bitmap(
-            game.sys_assets.bmp_checkbox_check,
+            (*this->value) ?
+            game.sys_assets.bmp_checkbox_check :
+            game.sys_assets.bmp_checkbox_no_check,
             point((center.x + size.x * 0.5) - 40, center.y),
-            point(32, -1),
-            0,
-            (*this->value) ? map_gray(255) : al_map_rgba(32, 32, 32, 80)
+            point(32, -1)
         );
         
         ALLEGRO_COLOR box_tint =

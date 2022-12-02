@@ -1175,6 +1175,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.bubble_box);
     game.sys_assets.bmp_checkbox_check =
         game.bitmaps.get(game.asset_file_names.checkbox_check);
+    game.sys_assets.bmp_checkbox_no_check =
+        game.bitmaps.get(game.asset_file_names.checkbox_no_check);
     game.sys_assets.bmp_control_icons =
         game.bitmaps.get(game.asset_file_names.control_icons);
     game.sys_assets.bmp_cursor =
@@ -1892,6 +1894,7 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_bright_ring);
     game.bitmaps.detach(game.sys_assets.bmp_bubble_box);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_check);
+    game.bitmaps.detach(game.sys_assets.bmp_checkbox_no_check);
     game.bitmaps.detach(game.sys_assets.bmp_control_icons);
     game.bitmaps.detach(game.sys_assets.bmp_cursor);
     game.bitmaps.detach(game.sys_assets.bmp_enemy_spirit);

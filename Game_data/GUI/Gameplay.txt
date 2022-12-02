@@ -67,6 +67,7 @@ positions{
 files{
 	bubble=Bubble.png
 	checkbox_check=HUD/Checkbox_check.png
+	checkbox_no_check=HUD/Checkbox_no_check.png
 	counter_bubble_field=HUD/Counter_bubble_field.png
 	counter_bubble_group=HUD/Counter_bubble_group.png
 	counter_bubble_standby=HUD/Counter_bubble.png

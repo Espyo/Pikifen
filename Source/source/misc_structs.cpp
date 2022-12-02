@@ -112,6 +112,7 @@ asset_file_names_struct::asset_file_names_struct() :
     bright_ring("Bright_ring.png"),
     bubble_box("Bubble_box.png"),
     checkbox_check("Checkbox_check.png"),
+    checkbox_no_check("Checkbox_no_check.png"),
     control_icons("Control_icons.png"),
     counter_font("Counter_font.png"),
     cursor("Cursor.png"),
@@ -165,6 +166,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("bright_ring", bright_ring);
     rs.set("bubble_box", bubble_box);
     rs.set("checkbox_check", checkbox_check);
+    rs.set("checkbox_no_check", checkbox_no_check);
     rs.set("control_icons", control_icons);
     rs.set("counter_font", counter_font);
     rs.set("cursor", cursor);
@@ -1956,6 +1958,7 @@ system_asset_list::system_asset_list():
     bmp_bright_ring(nullptr),
     bmp_bubble_box(nullptr),
     bmp_checkbox_check(nullptr),
+    bmp_checkbox_no_check(nullptr),
     bmp_control_icons(nullptr),
     bmp_cursor(nullptr),
     bmp_enemy_spirit(nullptr),

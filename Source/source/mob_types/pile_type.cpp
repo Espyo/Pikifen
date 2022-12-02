@@ -30,8 +30,8 @@ pile_type::pile_type() :
     can_drop_multiple(false),
     show_amount(true),
     hide_when_empty(true),
-    delete_when_finished(true),
-    auto_shrink_smallest_radius(0.0f) {
+    auto_shrink_smallest_radius(0.0f),
+    delete_when_finished(true) {
     
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     
