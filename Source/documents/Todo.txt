@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -12,8 +12,6 @@ Next tasks (roughly sorted most important first)
     A property for pile types that lets the mob radius be changed on every phase (thanks Nataly)
     Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, Shift should toggle select-all (thanks Nataly)
     "one method I think used in pikmin 1 to get pikmin of only a certain type into your squad is to throw one pikmin of the desired color, and then when you dismiss, pikmin will try to group up with nearby pikmin that are already idle, so the pikmin of the desired color will all go to where you threw the first pikmin, and I think that's a neat little quirk that would be nice to have in pikifen, although idk how hard it'd be to implement" --Nataly
-    Spicy Pikmin should emit some rare sparkle particles (thanks Neo)
-    Check if the throw particles can be customized (thanks Neo)
     The Make menu should have a small blurb with like "Need help?" or "Others...", with a tooltip telling you to go to the manual for help and tutorials
     The faded checkbox graphic used in the options menu's widgets should instead be a faded unfilled box
     Editor improvements
@@ -801,6 +799,8 @@ Tasks for later on (I might never implement these)
         [NEEDS BRAINSTORMING] Colors should be able to also be in hexadecimal?
         [NEEDS BRAINSTORMING] A way to write out how much memory is being taken up by images, sounds, scripts, etc. so game makers can help make sure a level's not too bloated?
         If you write an event name wrong (or other things), give suggestions ("did you mean X?")
+            This may become useless if there's a script editor
+        Check if the throw particles can be customized (thanks Neo)
     "Puzzle"-type challenges. You might have a limited number of Pikmin, certain obstacles and paths, and you need to think what Pikmin to put where and when to proceed. Like Portal.
         Door objects
         Button objects (with a certain number of Pikmin needed to keep it depressed)

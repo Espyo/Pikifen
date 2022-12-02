@@ -199,6 +199,7 @@ particle_generator::particle_generator(
     follow_mob(nullptr),
     follow_z_offset(0),
     follow_angle(nullptr),
+    interval_deviation(0.0f),
     number_deviation(0),
     duration_deviation(0),
     friction_deviation(0),
@@ -307,7 +308,15 @@ void particle_generator::emit(particle_manager &manager) {
  * be used. Call this when copying from another generator.
  */
 void particle_generator::reset() {
-    emission_timer = emission_interval;
+    if(interval_deviation == 0.0f) {
+        emission_timer = emission_interval;
+    } else {
+        emission_timer =
+            randomf(
+                std::max(0.0f, emission_interval - interval_deviation),
+                emission_interval + interval_deviation
+            );
+    }
 }
 
 
@@ -326,7 +335,15 @@ void particle_generator::tick(const float delta_t, particle_manager &manager) {
     emission_timer -= delta_t;
     if(emission_timer <= 0.0f) {
         emit(manager);
-        emission_timer = emission_interval;
+        if(interval_deviation == 0.0f) {
+            emission_timer = emission_interval;
+        } else {
+            emission_timer =
+                randomf(
+                    std::max(0.0f, emission_interval - interval_deviation),
+                    emission_interval + interval_deviation
+                );
+        }
     }
 }
 

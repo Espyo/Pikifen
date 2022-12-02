@@ -156,7 +156,7 @@ private:
     size_t count;
     //Maximum number that can be stored.
     size_t max_nr;
-
+    
     void remove(const size_t pos);
     
 };
@@ -185,6 +185,8 @@ public:
     //Follow the given angle. e.g. a mob's angle.
     float* follow_angle;
     
+    //Maximum random deviation of interval.
+    float interval_deviation;
     //Maximum random deviation of amount.
     size_t number_deviation;
     //Maximum random deviation of duration.

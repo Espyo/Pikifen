@@ -823,6 +823,7 @@ void load_custom_particle_generators(const bool load_resources) {
         
         particle_generator new_pg(emission_interval_float, base_p, number_int);
         
+        grs.set("interval_deviation",    new_pg.interval_deviation);
         grs.set("number_deviation",      new_pg.number_deviation);
         grs.set("duration_deviation",    new_pg.duration_deviation);
         grs.set("friction_deviation",    new_pg.friction_deviation);
