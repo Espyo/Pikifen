@@ -287,6 +287,7 @@ void main_menu_state::init_make_page() {
     make_gui.register_coords("area_editor",      50, 71, 60, 10);
     make_gui.register_coords("gui_editor",       50, 83, 60, 10);
     make_gui.register_coords("back",              9, 91, 15,  6);
+    make_gui.register_coords("more",             90, 90, 15,  5);
     make_gui.register_coords("tooltip",          50, 95, 95,  8);
     make_gui.read_coords(gui_file.get_child_by_name("positions"));
     
@@ -350,6 +351,17 @@ void main_menu_state::init_make_page() {
         return "Return to the main page.";
     };
     make_gui.add_item(make_gui.back_item, "back");
+    
+    //More bullet point.
+    bullet_point_gui_item* more_bullet =
+        new bullet_point_gui_item("More...", game.fonts.standard);
+    more_bullet->on_get_tooltip =
+    [] () {
+        return
+            "For more help and more things that you can edit, "
+            "check out the manual in the game's folder.";
+    };
+    make_gui.add_item(more_bullet, "more");
     
     //Tooltip text.
     tooltip_gui_item* tooltip_text =
@@ -452,7 +464,7 @@ void main_menu_state::load() {
     init_main_page();
     init_play_page();
     init_make_page();
-
+    
     switch(page_to_load) {
     case MAIN_MENU_PAGE_MAIN: {
         main_gui.responsive = true;
