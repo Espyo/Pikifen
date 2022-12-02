@@ -60,6 +60,8 @@ public:
     bool show_amount;
     //Should the mob be hidden when it is empty?
     bool hide_when_empty;
+    //Auto-radius-shrinking's radius when there's only 1 resource. 0 = off.
+    float auto_shrink_smallest_radius;
     //Should the mob be deleted when it is no longer needed?
     bool delete_when_finished;
     

@@ -163,6 +163,15 @@ void pile::update() {
         START_ANIMATION_NO_RESTART
     );
     
+    if(pil_type->auto_shrink_smallest_radius != 0.0f) {
+        set_radius(
+            interpolate_number(
+                amount, 1, pil_type->max_amount,
+                pil_type->auto_shrink_smallest_radius, pil_type->radius
+            )
+        );
+    }
+    
     if(pil_type->hide_when_empty) {
         if(amount == 0) {
             enable_flag(flags, MOB_FLAG_HIDDEN);

@@ -46,6 +46,7 @@
     <h3 id="optional">Optional</h3>
 
     <ul>
+      <li><b><code>auto_shrink_smallest_radius</code></b>: If not 0, the pile's radius will start shrinking automatically as its amount decreases. This property specifies what the final radius should be, i.e. the radius when there's only one resource. Defaults to 0.</li>
       <li><b><code>can_drop_multiple</code></b>: If true, the pile can drop multiple resources at once in a single attack, if the damage requirements are met. This is useful if you want the pile to drop resources when struck with a bomb rock, for instance. Excess resources will not be delivered to a Pikmin, but will instead be thrown to the ground next to the pile. Defaults to false.</li>
       <li><b><code>delete_when_finished</code></b>: If true, the pile object is deleted when the harvesting has been done. The harvesting won't be considered finished until the last resource it had is successfully delivered. Defaults to true.</li>
       <li><b><code>hide_when_empty</code></b>: If true, the pile object will hide and become intangible when it has no resources at the moment. Defaults to true.</li>

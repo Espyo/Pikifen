@@ -30,7 +30,8 @@ pile_type::pile_type() :
     can_drop_multiple(false),
     show_amount(true),
     hide_when_empty(true),
-    delete_when_finished(true) {
+    delete_when_finished(true),
+    auto_shrink_smallest_radius(0.0f) {
     
     target_type = MOB_TARGET_TYPE_PIKMIN_OBSTACLE;
     
@@ -71,6 +72,7 @@ void pile_type::load_properties(data_node* file) {
     string size_animation_suffixes_str;
     data_node* contents_node = NULL;
     
+    rs.set("auto_shrink_smallest_radius", auto_shrink_smallest_radius);
     rs.set("can_drop_multiple", can_drop_multiple);
     rs.set("contents", contents_str, &contents_node);
     rs.set("delete_when_finished", delete_when_finished);
