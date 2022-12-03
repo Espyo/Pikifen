@@ -286,6 +286,8 @@ protected:
     };
     
     
+    //Mob categories sorted alphabetically.
+    vector<mob_category*> alphabetical_mob_cats;
     //Bitmap with all of the editor icons.
     ALLEGRO_BITMAP* bmp_editor_icons;
     //Top-left corner of the canvas.

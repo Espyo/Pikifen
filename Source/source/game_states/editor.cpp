@@ -955,6 +955,18 @@ void editor::load() {
         }
     }
     
+    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+        alphabetical_mob_cats.push_back(
+            game.mob_categories.get((MOB_CATEGORIES) c)
+        );
+    }
+    std::sort(
+        alphabetical_mob_cats.begin(), alphabetical_mob_cats.end(),
+    [] (const mob_category * c1, const mob_category * c2) -> bool {
+        return c1->name < c2->name;
+    }
+    );
+    
     last_input_was_keyboard = false;
     has_unsaved_changes = false;
     was_warned_about_unsaved_changes = false;
@@ -1249,22 +1261,22 @@ void editor::process_gui_mob_type_widgets(
     ImGui::PopStyleVar();
     if(search_button_pressed) {
         vector<picker_item> items;
-        for(unsigned char c = 0; c < N_MOB_CATEGORIES; ++c) {
-            if(c == MOB_CATEGORY_NONE) continue;
+        for(size_t c = 0; c < alphabetical_mob_cats.size(); ++c) {
+            mob_category* c_ptr = alphabetical_mob_cats[c];
+            if(c_ptr->id == MOB_CATEGORY_NONE) continue;
             
-            vector<string> names;
-            mob_category* c_ptr = game.mob_categories.get((MOB_CATEGORIES) c);
-            c_ptr->get_type_names(names);
-            string cat_name = game.mob_categories.get((MOB_CATEGORIES) c)->name;
+            vector<string> type_names;
+            c_ptr->get_type_names(type_names);
+            string cat_name = c_ptr->name;
             
-            for(size_t n = 0; n < names.size(); ++n) {
+            for(size_t n = 0; n < type_names.size(); ++n) {
                 if(
                     only_show_area_editor_types &&
-                    !c_ptr->get_type(names[n])->appears_in_area_editor
+                    !c_ptr->get_type(type_names[n])->appears_in_area_editor
                 ) {
                     continue;
                 }
-                items.push_back(picker_item(names[n], cat_name));
+                items.push_back(picker_item(type_names[n], cat_name));
             }
         }
         open_picker_dialog(
@@ -1292,16 +1304,19 @@ void editor::process_gui_mob_type_widgets(
     }
     
     vector<string> categories;
-    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        categories.push_back(game.mob_categories.get((MOB_CATEGORIES) c)->name);
+    int selected_category_idx = -1;
+    for(size_t c = 0; c < alphabetical_mob_cats.size(); ++c) {
+        categories.push_back(alphabetical_mob_cats[c]->name);
+        if(alphabetical_mob_cats[c]->name == (*cat)->name) {
+            selected_category_idx = c;
+        }
     }
-    int selected_category_nr = (*cat)->id;
     
-    if(ImGui::Combo("Category", &selected_category_nr, categories)) {
+    if(ImGui::Combo("Category", &selected_category_idx, categories)) {
         if(category_change_callback) {
             category_change_callback();
         }
-        *cat = game.mob_categories.get((MOB_CATEGORIES) selected_category_nr);
+        *cat = alphabetical_mob_cats[selected_category_idx];
         
         vector<string> type_names;
         (*cat)->get_type_names(type_names);
@@ -1526,6 +1541,7 @@ void editor::unload() {
         al_destroy_bitmap(bmp_editor_icons);
         bmp_editor_icons = NULL;
     }
+    alphabetical_mob_cats.clear();
 }
 
 

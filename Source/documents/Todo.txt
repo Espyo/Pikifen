@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.23.0 ---
     Editor improvements
-        Object categories in both editors should be sorted alphabetically (thanks Nataly)
         Mob types should be able to specify a custom category name for the editors. This way, stuff like a Burgeoning Spiderwort can go under a "category" called "Useful plants" or something, instead of "Piles"
             Aux: Adult Bulbmin stem, bamboo gate pillar, cardboard box flap, ceramic bridge base red, crystal wall pillar, electric gate pillar, eletrical wire 2, paper bag handle, reinforced wall pillar, seesaw block ropes, white bramble gate pillar, Beady Long Legs foot
             Bridge: all bridges, ceramic pile red, ceramic fragment red
