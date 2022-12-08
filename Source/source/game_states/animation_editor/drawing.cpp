@@ -76,7 +76,7 @@ void animation_editor::draw_canvas() {
     
     bool draw_hitboxes = hitboxes_visible;
     bool draw_mob_radius = mob_radius_visible;
-    bool draw_pikmin_silhouette = pikmin_silhouette_visible;
+    bool draw_leader_silhouette = leader_silhouette_visible;
     float grid_opacity = grid_visible ? 0.33f : 0.0f;
     
     if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_TOP) {
@@ -87,7 +87,7 @@ void animation_editor::draw_canvas() {
         grid_opacity = 0.0f;
         draw_hitboxes = false;
         draw_mob_radius = false;
-        draw_pikmin_silhouette = false;
+        draw_leader_silhouette = false;
         
         if(s && s->parent_bmp) {
             int bmp_w = al_get_bitmap_width(s->parent_bmp);
@@ -311,16 +311,16 @@ void animation_editor::draw_canvas() {
         }
     }
     
-    if(draw_pikmin_silhouette) {
+    if(draw_leader_silhouette) {
         float x_offset = 32;
         if(loaded_mob_type) {
             x_offset += loaded_mob_type->radius;
         }
         
         if(side_view && state == EDITOR_STATE_HITBOXES) {
-            draw_side_view_pikmin_silhouette(x_offset);
+            draw_side_view_leader_silhouette(x_offset);
         } else {
-            draw_top_down_view_pikmin_silhouette(x_offset);
+            draw_top_down_view_leader_silhouette(x_offset);
         }
     }
     
@@ -417,15 +417,15 @@ void animation_editor::draw_side_view_hitbox(
 
 
 /* ----------------------------------------------------------------------------
- * Draws a Pikmin silhouette on the canvas in the sideways view.
+ * Draws a leader's silhouette on the canvas in the sideways view.
  * x_offset:
  *   From the center, offset the silhouette this much to the right.
  */
-void animation_editor::draw_side_view_pikmin_silhouette(const float x_offset) {
+void animation_editor::draw_side_view_leader_silhouette(const float x_offset) {
     draw_bitmap(
-        game.sys_assets.bmp_pikmin_silhouette,
-        point(x_offset, -game.config.standard_pikmin_height / 2.0),
-        point(-1, game.config.standard_pikmin_height),
+        game.sys_assets.bmp_leader_silhouette_side,
+        point(x_offset, -game.config.standard_leader_height / 2.0),
+        point(-1, game.config.standard_leader_height),
         0, al_map_rgba(240, 240, 240, 160)
     );
 }
@@ -658,16 +658,16 @@ void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
 
 
 /* ----------------------------------------------------------------------------
- * Draws a Pikmin silhouette on the canvas in the standard top-down view.
+ * Draws a leader silhouette on the canvas in the standard top-down view.
  * x_offset:
- *   From the center, offset the Pikmin silhouette this much to the right.
+ *   From the center, offset the leader silhouette this much to the right.
  */
-void animation_editor::draw_top_down_view_pikmin_silhouette(
+void animation_editor::draw_top_down_view_leader_silhouette(
     const float x_offset
 ) {
     draw_bitmap(
-        game.sys_assets.bmp_pikmin_silhouette, point(x_offset, 0),
-        point(-1, game.config.standard_pikmin_height),
+        game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),
+        point(-1, game.config.standard_leader_radius * 2.0f),
         0, al_map_rgba(240, 240, 240, 160)
     );
 }

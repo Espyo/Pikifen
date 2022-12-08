@@ -150,6 +150,10 @@ struct asset_file_names_struct {
     string icon;
     //Idle glow.
     string idle_glow;
+    //Leader silhouette from the side.
+    string leader_silhouette_side;
+    //Leader silhouette from the top.
+    string leader_silhouette_top;
     //Main font.
     string main_font;
     //Main menu background.
@@ -174,8 +178,6 @@ struct asset_file_names_struct {
     string mouse_cursor;
     //Notification.
     string notification;
-    //Pikmin silhouette.
-    string pikmin_silhouette;
     //Pikmin spirit.
     string pikmin_spirit;
     //A rock.
@@ -616,6 +618,10 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_icon;
     //Idle glow.
     ALLEGRO_BITMAP* bmp_idle_glow;
+    //Leader silhouette from the side.
+    ALLEGRO_BITMAP* bmp_leader_silhouette_side;
+    //Leader silhouette from the top.
+    ALLEGRO_BITMAP* bmp_leader_silhouette_top;
     //Bronze mission medal.
     ALLEGRO_BITMAP* bmp_medal_bronze;
     //Gold mission medal.
@@ -636,8 +642,6 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_mouse_cursor;
     //Notification.
     ALLEGRO_BITMAP* bmp_notification;
-    //Pikmin silhouette.
-    ALLEGRO_BITMAP* bmp_pikmin_silhouette;
     //Pikmin spirit.
     ALLEGRO_BITMAP* bmp_pikmin_spirit;
     //A rock.

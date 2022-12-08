@@ -122,6 +122,8 @@ asset_file_names_struct::asset_file_names_struct() :
     focus_box("Focus_box.png"),
     icon("Icon.png"),
     idle_glow("Idle_glow.png"),
+    leader_silhouette_side("Leader_silhouette_side.png"),
+    leader_silhouette_top("Leader_silhouette_top.png"),
     main_font("Font.png"),
     main_menu("Main_menu.jpg"),
     medal_bronze("Medal_bronze.png"),
@@ -134,7 +136,6 @@ asset_file_names_struct::asset_file_names_struct() :
     more("More.png"),
     mouse_cursor("Mouse_cursor.png"),
     notification("Notification.png"),
-    pikmin_silhouette("Pikmin_silhouette.png"),
     pikmin_spirit("Pikmin_spirit.png"),
     rock("Rock.png"),
     slim_font("Slim_font.otf"),
@@ -176,6 +177,8 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("focus_box", focus_box);
     rs.set("icon", icon);
     rs.set("idle_glow", idle_glow);
+    rs.set("leader_silhouette_side", leader_silhouette_side);
+    rs.set("leader_silhouette_top", leader_silhouette_top);
     rs.set("main_font", main_font);
     rs.set("main_menu", main_menu);
     rs.set("medal_bronze", medal_bronze);
@@ -188,7 +191,6 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("more", more);
     rs.set("mouse_cursor", mouse_cursor);
     rs.set("notification", notification);
-    rs.set("pikmin_silhouette", pikmin_silhouette);
     rs.set("pikmin_spirit", pikmin_spirit);
     rs.set("shadow", shadow);
     rs.set("smack", smack);
@@ -1965,6 +1967,8 @@ system_asset_list::system_asset_list():
     bmp_focus_box(nullptr),
     bmp_icon(nullptr),
     bmp_idle_glow(nullptr),
+    bmp_leader_silhouette_side(nullptr),
+    bmp_leader_silhouette_top(nullptr),
     bmp_medal_bronze(nullptr),
     bmp_medal_gold(nullptr),
     bmp_medal_none(nullptr),
@@ -1975,7 +1979,6 @@ system_asset_list::system_asset_list():
     bmp_more(nullptr),
     bmp_mouse_cursor(nullptr),
     bmp_notification(nullptr),
-    bmp_pikmin_silhouette(nullptr),
     bmp_pikmin_spirit(nullptr),
     bmp_rock(nullptr),
     bmp_shadow(nullptr),

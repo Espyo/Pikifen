@@ -134,8 +134,8 @@ private:
     mob_type* loaded_mob_type;
     //Is the mob radius visible?
     bool mob_radius_visible;
-    //Is the Pikmin silhouette visible?
-    bool pikmin_silhouette_visible;
+    //Is the leader silhouette visible?
+    bool leader_silhouette_visible;
     //Before entering the sprite bitmap state, this was the camera position.
     point pre_sprite_bmp_cam_pos;
     //Before entering the sprite bitmap state, this was the camera zoom.
@@ -200,7 +200,7 @@ private:
         hitbox* h_ptr, const ALLEGRO_COLOR &color,
         const ALLEGRO_COLOR &outline_color, const float outline_thickness
     );
-    void draw_side_view_pikmin_silhouette(const float x_offset);
+    void draw_side_view_leader_silhouette(const float x_offset);
     void draw_side_view_sprite(sprite* s);
     void draw_timeline();
     void draw_top_down_view_hitbox(
@@ -208,7 +208,7 @@ private:
         const ALLEGRO_COLOR &outline_color, const float outline_thickness
     );
     void draw_top_down_view_mob_radius(mob_type* mt);
-    void draw_top_down_view_pikmin_silhouette(const float x_offset);
+    void draw_top_down_view_leader_silhouette(const float x_offset);
     void draw_top_down_view_sprite(sprite* s);
     
     //GUI functions.
@@ -224,7 +224,7 @@ private:
     void press_hitboxes_button();
     void press_load_button();
     void press_mob_radius_button();
-    void press_pikmin_silhouette_button();
+    void press_leader_silhouette_button();
     void press_play_animation_button();
     void press_quit_button();
     void press_reload_button();
@@ -247,7 +247,7 @@ private:
     void process_gui_menu_bar();
     void process_gui_status_bar();
     void process_gui_toolbar();
-
+    
     //Input handler functions.
     void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;
     void handle_key_down_anywhere(const ALLEGRO_EVENT &ev) override;

@@ -88,7 +88,7 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         press_load_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
-        press_pikmin_silhouette_button();
+        press_leader_silhouette_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
         press_quit_button();

@@ -16,6 +16,8 @@ standard_pikmin_height = 24
 standard_pikmin_radius = 5
 
 leader_order = Olimar;Louie;President;Alph;Brittany;Charlie
+standard_leader_height = 46
+standard_leader_radius = 16
 spray_order = Ultra-Bitter Spray;Ultra-Spicy Spray
 
 idle_task_range = 50

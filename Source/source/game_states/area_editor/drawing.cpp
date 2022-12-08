@@ -1486,27 +1486,31 @@ void area_editor::draw_canvas() {
             }
             
             if(central_sector) {
-                float pikmin_silhouette_w =
-                    game.config.standard_pikmin_radius * 2.0 * proportion;
-                float pikmin_silhouette_h =
-                    game.config.standard_pikmin_height * proportion;
-                float pikmin_silhouette_pivot_x =
+                float leader_silhouette_w =
+                    game.config.standard_leader_radius * 2.0 * proportion;
+                float leader_silhouette_h =
+                    game.config.standard_leader_height * proportion;
+                float leader_silhouette_pivot_x =
                     (
                         cross_section_window_start.x +
                         cross_section_window_end.x
                     ) / 2.0;
-                float pikmin_silhouette_pivot_y =
+                float leader_silhouette_pivot_y =
                     cross_section_window_end.y - 8 -
                     ((central_sector->z - lowest_z) * proportion);
                 al_draw_tinted_scaled_bitmap(
-                    game.sys_assets.bmp_pikmin_silhouette,
+                    game.sys_assets.bmp_leader_silhouette_side,
                     al_map_rgba(255, 255, 255, 128),
                     0, 0,
-                    al_get_bitmap_width(game.sys_assets.bmp_pikmin_silhouette),
-                    al_get_bitmap_height(game.sys_assets.bmp_pikmin_silhouette),
-                    pikmin_silhouette_pivot_x - pikmin_silhouette_w / 2.0,
-                    pikmin_silhouette_pivot_y - pikmin_silhouette_h,
-                    pikmin_silhouette_w, pikmin_silhouette_h,
+                    al_get_bitmap_width(
+                        game.sys_assets.bmp_leader_silhouette_side
+                    ),
+                    al_get_bitmap_height(
+                        game.sys_assets.bmp_leader_silhouette_side
+                    ),
+                    leader_silhouette_pivot_x - leader_silhouette_w / 2.0,
+                    leader_silhouette_pivot_y - leader_silhouette_h,
+                    leader_silhouette_w, leader_silhouette_h,
                     0
                 );
             }

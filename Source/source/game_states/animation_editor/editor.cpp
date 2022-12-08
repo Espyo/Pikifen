@@ -74,7 +74,7 @@ animation_editor::animation_editor() :
     hitboxes_visible(true),
     loaded_mob_type(nullptr),
     mob_radius_visible(false),
-    pikmin_silhouette_visible(false),
+    leader_silhouette_visible(false),
     reset_load_dialog(true),
     side_view(false),
     sprite_bmp_add_mode(false),
@@ -656,12 +656,12 @@ void animation_editor::press_mob_radius_button() {
 
 
 /* ----------------------------------------------------------------------------
- * Code to run when the Pikmin silhouette button widget is pressed.
+ * Code to run when the leader silhouette button widget is pressed.
  */
-void animation_editor::press_pikmin_silhouette_button() {
-    pikmin_silhouette_visible = !pikmin_silhouette_visible;
-    string state_str = (pikmin_silhouette_visible ? "Enabled" : "Disabled");
-    status_text = state_str + " Pikmin silhouette visibility.";
+void animation_editor::press_leader_silhouette_button() {
+    leader_silhouette_visible = !leader_silhouette_visible;
+    string state_str = (leader_silhouette_visible ? "Enabled" : "Disabled");
+    status_text = state_str + " Leader silhouette visibility.";
 }
 
 

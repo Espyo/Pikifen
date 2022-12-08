@@ -143,8 +143,8 @@ protected:
         ICON_GRID,
         //Mob radius.
         ICON_MOB_RADIUS,
-        //Pikmin silhouette.
-        ICON_PIKMIN_SILHOUETTE,
+        //Leader silhouette.
+        ICON_LEADER_SILHOUETTE,
         //Animations.
         ICON_ANIMATIONS,
         //Sprites.

@@ -59,6 +59,10 @@ const float DEF_ONION_OPEN_RANGE = 24.0f;
 const float DEF_PIKMIN_CHASE_RANGE = 200.0f;
 //Default value for the pluck range.
 const float DEF_PLUCK_RANGE = 30.0f;
+//Default value for the standard leader height.
+const float DEF_STANDARD_LEADER_HEIGHT = 46.0f;
+//Default value for the standard leader radius.
+const float DEF_STANDARD_LEADER_RADIUS = 16.0f;
 //Default value for the standard Pikmin height.
 const float DEF_STANDARD_PIKMIN_HEIGHT = 24.0f;
 //Default value for the standard Pikmin radius.
@@ -103,6 +107,8 @@ game_config::game_config() :
     onion_open_range(GAME_CONFIG::DEF_ONION_OPEN_RANGE),
     pikmin_chase_range(GAME_CONFIG::DEF_PIKMIN_CHASE_RANGE),
     pluck_range(GAME_CONFIG::DEF_PLUCK_RANGE),
+    standard_leader_height(GAME_CONFIG::DEF_STANDARD_LEADER_HEIGHT),
+    standard_leader_radius(GAME_CONFIG::DEF_STANDARD_LEADER_RADIUS),
     standard_pikmin_height(GAME_CONFIG::DEF_STANDARD_PIKMIN_HEIGHT),
     standard_pikmin_radius(GAME_CONFIG::DEF_STANDARD_PIKMIN_RADIUS),
     swarm_task_range(GAME_CONFIG::DEF_SWARM_TASK_RANGE),
@@ -143,6 +149,8 @@ void game_config::load(data_node* file) {
     rs.set("standard_pikmin_radius", standard_pikmin_radius);
     
     rs.set("leader_order", leader_order_str);
+    rs.set("standard_leader_height", standard_leader_height);
+    rs.set("standard_leader_radius", standard_leader_radius);
     rs.set("spray_order", spray_order_str);
     
     rs.set("idle_task_range", idle_task_range);

@@ -47,6 +47,8 @@ extern const ALLEGRO_COLOR DEF_NO_PIKMIN_COLOR;
 extern const float DEF_ONION_OPEN_RANGE;
 extern const float DEF_PIKMIN_CHASE_RANGE;
 extern const float DEF_PLUCK_RANGE;
+extern const float DEF_STANDARD_LEADER_HEIGHT;
+extern const float DEF_STANDARD_LEADER_RADIUS;
 extern const float DEF_STANDARD_PIKMIN_HEIGHT;
 extern const float DEF_STANDARD_PIKMIN_RADIUS;
 extern const float DEF_SWARM_TASK_RANGE;
@@ -116,6 +118,10 @@ struct game_config {
     float pluck_range;
     //Loaded strings representing the standard spray order. Used for later.
     vector<string> spray_order_strings;
+    //A standard leader is this tall.
+    float standard_leader_height;
+    //A standard leader has this radius.
+    float standard_leader_radius;
     //A standard Pikmin is this tall.
     float standard_pikmin_height;
     //A standard Pikmin has this radius.

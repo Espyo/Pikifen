@@ -2627,19 +2627,19 @@ void animation_editor::process_gui_toolbar() {
         "Ctrl + R"
     );
     
-    //Toggle Pikmin silhouette button.
+    //Toggle leader silhouette button.
     ImGui::SameLine();
     if(
         ImGui::ImageButton(
             "silhouetteButton",
-            editor_icons[ICON_PIKMIN_SILHOUETTE],
+            editor_icons[ICON_LEADER_SILHOUETTE],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
         )
     ) {
-        press_pikmin_silhouette_button();
+        press_leader_silhouette_button();
     }
     set_tooltip(
-        "Toggle visibility of a lying Pikmin silhouette.",
+        "Toggle visibility of a leader silhouette.",
         "Ctrl + P"
     );
 }
