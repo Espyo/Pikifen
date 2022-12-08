@@ -758,6 +758,18 @@ void area_editor::process_gui_options_dialog() {
             b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH) + "."
         );
         
+        //Show path link length checkbox.
+        ImGui::Checkbox(
+            "Show path link length",
+            &game.options.area_editor_show_path_link_length
+        );
+        set_tooltip(
+            "Show the length of nearby path links when drawing or\n"
+            "moving path stops.\n"
+            "Default: " +
+            b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH) + "."
+        );
+        
         //Show territory checkbox.
         ImGui::Checkbox(
             "Show territory/terrain radius",

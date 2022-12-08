@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.23.0 ---
     Editor improvements
-        "suggestion: a setting for path links to show their length like sector edges when moving a node/vertex" --Nataly
         Show the number of vertexes that you would get when making a circle sector somewhere (thanks Neo)
         "please make it possible to draw links as light load only and airborne only instead of needing to draw them first, then select them and apply those properties" --Nataly
         Find a way to make the path drawing process more friendly, since sometimes you want to draw a continuous path with multiple stops, but sometimes you just want to patch up an existing stop/link (thanks Neo)
@@ -45,6 +44,7 @@ Next tasks (roughly sorted most important first)
         Revamp the scripting tutorial
             Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
             Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
+    Investigate that CI/CD thing (thanks Helodity)
     
     --- v0.24.0 ---
     Add several pre-packaged areas, since players have nothing to play with right now

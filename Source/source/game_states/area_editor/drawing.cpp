@@ -794,6 +794,36 @@ void area_editor::draw_canvas() {
                     AREA_EDITOR::PATH_LINK_THICKNESS / game.cam.zoom
                 );
                 
+                if(
+                    state == EDITOR_STATE_PATHS &&
+                    moving &&
+                    game.options.area_editor_show_path_link_length
+                ) {
+                    bool draw_dist = false;
+                    point other_point;
+                    if(
+                        l_ptr->start_ptr == move_closest_stop &&
+                        selected_path_stops.find(l_ptr->end_ptr) ==
+                        selected_path_stops.end()
+                    ) {
+                        other_point.x = l_ptr->end_ptr->pos.x;
+                        other_point.y = l_ptr->end_ptr->pos.y;
+                        draw_dist = true;
+                    } else if(
+                        l_ptr->end_ptr == move_closest_stop &&
+                        selected_path_stops.find(l_ptr->start_ptr) ==
+                        selected_path_stops.end()
+                    ) {
+                        other_point.x = l_ptr->start_ptr->pos.x;
+                        other_point.y = l_ptr->start_ptr->pos.y;
+                        draw_dist = true;
+                    }
+                    
+                    if(draw_dist) {
+                        draw_line_dist(move_closest_stop->pos, other_point);
+                    }
+                }
+                
                 if(debug_path_nrs && (one_way || s < s_ptr->links[l]->end_nr)) {
                     point middle = (s_ptr->pos + s2_ptr->pos) / 2.0f;
                     float angle = get_angle(s_ptr->pos, s2_ptr->pos);
@@ -1220,6 +1250,10 @@ void area_editor::draw_canvas() {
                 al_map_rgb(64, 255, 64),
                 3.0 / game.cam.zoom
             );
+            
+            if(game.options.area_editor_show_path_link_length) {
+                draw_line_dist(hotspot, path_drawing_stop_1->pos);
+            }
         }
     }
     

@@ -27,6 +27,8 @@ const float DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
 const bool DEF_AREA_EDITOR_SEL_TRANS = false;
 //Default value for whether to show an edge's length in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
+//Default value for whether to show a path link's length in the area editor.
+const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH = true;
 //Default value for whether to show a mob's territory in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_TERRITORY = false;
 //Default value for the area editor snap mode.
@@ -109,6 +111,9 @@ options_struct::options_struct() :
     area_editor_grid_interval(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL),
     area_editor_sel_trans(OPTIONS::DEF_AREA_EDITOR_SEL_TRANS),
     area_editor_show_edge_length(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH),
+    area_editor_show_path_link_length(
+        OPTIONS::DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH
+    ),
     area_editor_show_territory(OPTIONS::DEF_AREA_EDITOR_SHOW_TERRITORY),
     area_editor_snap_mode(OPTIONS::DEF_AREA_EDITOR_SNAP_MODE),
     area_editor_snap_threshold(OPTIONS::DEF_AREA_EDITOR_SNAP_THRESHOLD),
@@ -219,6 +224,10 @@ void options_struct::load(data_node* file) {
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
     rs.set("area_editor_selection_transformation", area_editor_sel_trans);
     rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
+    rs.set(
+        "area_editor_show_path_link_length",
+        area_editor_show_path_link_length
+    );
     rs.set("area_editor_show_territory", area_editor_show_territory);
     rs.set("area_editor_snap_mode", editor_snap_mode_c);
     rs.set("area_editor_snap_threshold", area_editor_snap_threshold);
@@ -416,6 +425,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "area_editor_show_edge_length",
             b2s(area_editor_show_edge_length)
+        )
+    );
+    file->add(
+        new data_node(
+            "area_editor_show_path_link_length",
+            b2s(area_editor_show_path_link_length)
         )
     );
     file->add(

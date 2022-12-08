@@ -58,6 +58,7 @@ extern const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
 extern const float DEF_AREA_EDITOR_GRID_INTERVAL;
 extern const bool DEF_AREA_EDITOR_SEL_TRANS;
 extern const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
+extern const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH;
 extern const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
 extern const area_editor::SNAP_MODES DEF_AREA_EDITOR_SNAP_MODE;
 extern const size_t DEF_AREA_EDITOR_SNAP_THRESHOLD;
@@ -105,8 +106,10 @@ struct options_struct {
     float area_editor_grid_interval;
     //Can the user transform the selected vertexes?
     bool area_editor_sel_trans;
-    //Show the length of an edge that's being drawn?
+    //Show the length of an edge that's being drawn/moved?
     bool area_editor_show_edge_length;
+    //Show the length of a path link that's being drawn/moved?
+    bool area_editor_show_path_link_length;
     //Show the selected mob(s)'s territory?
     bool area_editor_show_territory;
     //Snap mode to use.
