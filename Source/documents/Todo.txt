@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.23.0 ---
     Editor improvements
-        "please make it possible to draw links as light load only and airborne only instead of needing to draw them first, then select them and apply those properties" --Nataly
         Find a way to make the path drawing process more friendly, since sometimes you want to draw a continuous path with multiple stops, but sometimes you just want to patch up an existing stop/link (thanks Neo)
             Idea: if when you're drawing, you click on an existing stop, then finish drawing. Otherwise, keep drawing more
         A button next to the medal point requirement widgets to set it to the combined amount of the goal

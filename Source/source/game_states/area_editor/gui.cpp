@@ -3892,7 +3892,7 @@ void area_editor::process_gui_panel_path_link() {
     link_type_names.push_back("Light load only");
     link_type_names.push_back("Airborne only");
     
-    int type_i = l_ptr->type;;
+    int type_i = l_ptr->type;
     if(ImGui::Combo("Type", &type_i, link_type_names)) {
         register_change("path link type change");
         l_ptr->type = (PATH_LINK_TYPES) type_i;
@@ -3949,6 +3949,28 @@ void area_editor::process_gui_panel_paths() {
         );
         
         path_drawing_normals = one_way_mode;
+        
+        //Type combobox.
+        vector<string> link_type_names;
+        link_type_names.push_back("No limit");
+        link_type_names.push_back("Script use only");
+        link_type_names.push_back("Light load only");
+        link_type_names.push_back("Airborne only");
+        
+        int type_i = path_drawing_type;
+        if(ImGui::Combo("Type", &type_i, link_type_names)) {
+            path_drawing_type = (PATH_LINK_TYPES) type_i;
+        }
+        set_tooltip(
+            "What type of link to draw."
+        );
+        
+        //Label text.
+        ImGui::InputText("Label", &path_drawing_label);
+        set_tooltip(
+            "If the new link is part of a path that you want\n"
+            "to address in a script, write the name here."
+        );
         
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));

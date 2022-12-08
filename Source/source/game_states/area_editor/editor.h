@@ -398,8 +398,12 @@ private:
     point octee_orig_scale;
     //Current on-canvas texture effect edit mode.
     OCTEE_MODES octee_mode;
+    //When drawing a path, use this label.
+    string path_drawing_label;
     //When drawing a path, create normal links. False for one-way links.
     bool path_drawing_normals;
+    //When drawing a path, use this type.
+    PATH_LINK_TYPES path_drawing_type;
     //First stop of the next link when drawing a path.
     path_stop* path_drawing_stop_1;
     //Path stops that make up the current path preview.
