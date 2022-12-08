@@ -1,6 +1,7 @@
 name = Paper bag
 description = A large overturned paper bag. It can be squashed down if enough weight is applied on top.
 
+custom_category_name = Obstacle, harmless
 goal_number = 20
 height = 128
 pushes = true

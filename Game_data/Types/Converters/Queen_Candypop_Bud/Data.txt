@@ -3,6 +3,7 @@ description = Converts any Pikmin thrown inside into a bunch of Pikmin of the do
 
 available_pikmin_types = Red Pikmin;Yellow Pikmin;Blue Pikmin;Rock Pikmin;Winged Pikmin
 buffer_size = 1
+custom_category_name = Candypop Bud
 height = 32
 pikmin_per_conversion = 9
 pushable = false

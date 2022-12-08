@@ -134,7 +134,6 @@ mob_category* mob_category_manager::get_from_name(const string &name) const {
     for(size_t n = 0; n < categories.size(); ++n) {
         if(categories[n]->name == name) return categories[n];
     }
-    log_error("Mob category \"" + name + "\" not found!");
     return NULL;
 }
 

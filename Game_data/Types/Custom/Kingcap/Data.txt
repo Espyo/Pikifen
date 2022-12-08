@@ -2,6 +2,7 @@ name = Kingcap
 description = Hard, giant mushrooms that are usually in the way.
 
 can_block_paths = true
+custom_category_name = Obstacle, harmless
 height = 110
 max_health = 750
 pushable = false

@@ -286,8 +286,6 @@ protected:
     };
     
     
-    //Mob categories sorted alphabetically.
-    vector<mob_category*> alphabetical_mob_cats;
     //Bitmap with all of the editor icons.
     ALLEGRO_BITMAP* bmp_editor_icons;
     //Top-left corner of the canvas.
@@ -296,6 +294,10 @@ protected:
     point canvas_br;
     //X coordinate of the canvas GUI separator. -1 = undefined.
     int canvas_separator_x;
+    //Maps a custom mob category name to an index of the types' vector.
+    map<string, size_t> custom_cat_name_idxs;
+    //What mob types belong in what custom mob category names.
+    vector<vector<mob_type*>> custom_cat_types;
     //Currently open dialogs, if any.
     vector<dialog_info*> dialogs;
     //If the next click is within this time, it's a double-click.
@@ -374,6 +376,7 @@ protected:
         const char* label, const vector<string> &items, string* picked_item
     );
     void leave();
+    void load_custom_mob_cat_types(const bool is_area_editor);
     void mark_new_changes();
     void open_dialog(
         const string &title,
@@ -395,11 +398,8 @@ protected:
         const std::function<string(const string &)> &name_display_callback,
         const std::function<void(const string &)> &pick_callback
     );
-    void process_gui_mob_type_widgets(
-        mob_category** cat, mob_type** typ,
-        const bool only_show_area_editor_types,
-        const std::function<void()> &category_change_callback = nullptr,
-        const std::function<void()> &type_change_callback = nullptr
+    bool process_gui_mob_type_widgets(
+        string* custom_cat_name, mob_type** type
     );
     bool process_gui_size_widgets(
         const char* label, point &size, const float v_speed,

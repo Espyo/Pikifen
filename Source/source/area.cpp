@@ -314,7 +314,6 @@ void area_data::clone(area_data &other) {
         mob_gen* m_ptr = mob_generators[m];
         mob_gen* om_ptr = other.mob_generators[m];
         om_ptr->angle = m_ptr->angle;
-        om_ptr->category = m_ptr->category;
         om_ptr->pos = m_ptr->pos;
         om_ptr->type = m_ptr->type;
         om_ptr->vars = m_ptr->vars;

@@ -3,6 +3,7 @@ description = Ropes attached above a seesaw block.
 
 appears_in_area_editor = false
 casts_shadow = false
+custom_category_name = Aux
 height = 500
 pushable = false
 pushes = false

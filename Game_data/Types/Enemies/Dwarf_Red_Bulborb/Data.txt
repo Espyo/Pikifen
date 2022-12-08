@@ -3,6 +3,7 @@ description = These beasts wander around in search of food, and can hunt down af
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
+custom_category_name = Enemy, aggressive
 drops_corpse = true
 height = 32
 itch_damage = 50

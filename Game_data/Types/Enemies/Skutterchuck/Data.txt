@@ -3,6 +3,7 @@ description = On its own, a Skutterchuck is fairly harmless, if feisty. But it c
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
+custom_category_name = Enemy, aggressive
 drops_corpse = true
 height = 32
 itch_damage = 20

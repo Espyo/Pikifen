@@ -201,6 +201,8 @@ public:
     string folder_name;
     //Mob category.
     mob_category* category;
+    //Custom category name. Used in editors.
+    string custom_category_name;
     
     //---Visuals---
     

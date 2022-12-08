@@ -3,6 +3,7 @@ description = A small piece of crystal. It can be broken easily with Rock Pikmin
 
 area_editor_tips = To make it capture another object, simply place both objects together such that they are touching.
 can_block_paths = true
+custom_category_name = Obstacle, harmless
 default_vulnerability = 0
 height = 100
 max_health = 60

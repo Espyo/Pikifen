@@ -385,8 +385,6 @@ bool edge_intersection::contains(edge* e) {
 
 /* ----------------------------------------------------------------------------
  * Creates a mob generation structure.
- * category:
- *   The mob category.
  * pos:
  *   Coordinates.
  * type:
@@ -397,10 +395,8 @@ bool edge_intersection::contains(edge* e) {
  *   String representation of the script vars.
  */
 mob_gen::mob_gen(
-    mob_category* category, const point &pos,
-    mob_type* type, const float angle, const string &vars
+    const point &pos, mob_type* type, const float angle, const string &vars
 ) :
-    category(category),
     type(type),
     pos(pos),
     angle(angle),

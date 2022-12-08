@@ -1,6 +1,7 @@
 name = 1 Pellet Posy
 description = This plant, when mature, houses a 1 pellet between its petals.
 
+custom_category_name = Pellet Posy
 height = 128
 max_health = 50
 pushable = false

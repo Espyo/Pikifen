@@ -111,7 +111,6 @@ area_editor::area_editor() :
     highlighted_path_stop(nullptr),
     highlighted_sector(nullptr),
     highlighted_vertex(nullptr),
-    last_mob_category(nullptr),
     last_mob_type(nullptr),
     load_dialog_picker(this),
     moving(false),
@@ -487,10 +486,7 @@ void area_editor::create_area(
     
     //Now add a leader. The first available.
     game.cur_area_data.mob_generators.push_back(
-        new mob_gen(
-            game.mob_categories.get(MOB_CATEGORY_LEADERS), point(),
-            game.config.leader_order[0], 0, ""
-        )
+        new mob_gen(point(), game.config.leader_order[0], 0, "")
     );
     
     //Set its name and type and whatnot.
@@ -555,18 +551,20 @@ void area_editor::create_mob_under_cursor() {
     sub_state = EDITOR_SUB_STATE_NONE;
     point hotspot = snap_point(game.mouse_cursor_w);
     
-    mob_category* category_to_use = last_mob_category;
+    string custom_cat_name_to_use = last_mob_custom_cat_name;
     mob_type* type_to_use = last_mob_type;
-    if(!category_to_use || category_to_use->id == MOB_CATEGORY_NONE) {
-        category_to_use = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
-        type_to_use = game.config.pikmin_order[0];
+    if(custom_cat_name_to_use.empty()) {
+        custom_cat_name_to_use =
+            game.config.pikmin_order[0]->custom_category_name;
+        type_to_use =
+            game.config.pikmin_order[0];
     }
     
     game.cur_area_data.mob_generators.push_back(
-        new mob_gen(category_to_use, hotspot, type_to_use)
+        new mob_gen(hotspot, type_to_use)
     );
     
-    last_mob_category = category_to_use;
+    last_mob_custom_cat_name = custom_cat_name_to_use;
     last_mob_type = type_to_use;
     
     selected_mobs.insert(game.cur_area_data.mob_generators.back());
@@ -1496,7 +1494,7 @@ void area_editor::load() {
     //Reset some variables.
     is_ctrl_pressed = false;
     is_shift_pressed = false;
-    last_mob_category = NULL;
+    last_mob_custom_cat_name.clear();
     last_mob_type = NULL;
     loaded_content_yet = false;
     selected_shadow = NULL;
@@ -1523,6 +1521,8 @@ void area_editor::load() {
     load_hazards();
     load_mob_types(false);
     load_weather();
+    
+    load_custom_mob_cat_types(true);
     
     //Set up stuff to show the player.
     
@@ -2573,8 +2573,11 @@ bool area_editor::save_area(const bool to_backup) {
     
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
-        data_node* mob_node =
-            new data_node(m_ptr->category->name, "");
+        string cat_name = "(Unknown)";
+        if(m_ptr->type && m_ptr->type->category) {
+            cat_name = m_ptr->type->category->name;
+        }
+        data_node* mob_node = new data_node(cat_name, "");
         mobs_node->add(mob_node);
         
         if(m_ptr->type) {

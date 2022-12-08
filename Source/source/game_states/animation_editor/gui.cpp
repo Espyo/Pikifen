@@ -295,22 +295,22 @@ void animation_editor::process_gui_load_dialog() {
     
     //Object animation node.
     if(saveable_tree_node("load", "Object animation")) {
-        static mob_category* cat = NULL;
-        static mob_type* typ = NULL;
+        static string custom_cat_name;
+        static mob_type* type = NULL;
         
         if(reset_load_dialog) {
-            cat = game.mob_categories.get(MOB_CATEGORY_PIKMIN);
-            typ = game.config.pikmin_order[0];
+            custom_cat_name = game.config.pikmin_order[0]->custom_category_name;
+            type = game.config.pikmin_order[0];
             reset_load_dialog = false;
         }
         
         //Category and type comboboxes.
-        process_gui_mob_type_widgets(&cat, &typ, false);
+        process_gui_mob_type_widgets(&custom_cat_name, &type);
         
         //Load button.
         if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
-            if(typ) {
-                loaded_mob_type = typ;
+            if(type) {
+                loaded_mob_type = type;
                 file_path =
                     loaded_mob_type->category->folder + "/" +
                     loaded_mob_type->folder_name + "/Animations.txt";

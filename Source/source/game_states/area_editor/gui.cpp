@@ -3522,32 +3522,38 @@ void area_editor::process_gui_panel_mob() {
     mob_gen* m_ptr = *selected_mobs.begin();
     
     //Category and type comboboxes.
-    mob_category* category_before = m_ptr->category;
-    mob_type* type_before = m_ptr->type;
+    string custom_cat_name = "";
+    if(m_ptr->type) custom_cat_name = m_ptr->type->custom_category_name;
+    mob_type* type = m_ptr->type;
     
-    process_gui_mob_type_widgets(
-        &m_ptr->category, &m_ptr->type, true,
-    [this] () { register_change("object category change"); },
-    [this] () { register_change("object type change"); }
-    );
-    
-    if(m_ptr->category != category_before) {
-        last_mob_category = m_ptr->category;
-    }
-    if(m_ptr->type != type_before) {
+    if(process_gui_mob_type_widgets(&custom_cat_name, &type)) {
+        register_change("object type change");
+        m_ptr->type = type;
+        last_mob_custom_cat_name = "";
+        if(m_ptr->type) {
+            last_mob_custom_cat_name = m_ptr->type->custom_category_name;
+        }
         last_mob_type = m_ptr->type;
     }
     
     if(m_ptr->type) {
         //Tips text.
         ImGui::TextDisabled("(%s info & tips)", m_ptr->type->name.c_str());
-        string full_str = word_wrap(m_ptr->type->description, 50);
+        string full_str =
+            "Internal object category: " + m_ptr->type->category->name + "\n" +
+            word_wrap(m_ptr->type->description, 50);
         if(!m_ptr->type->area_editor_tips.empty()) {
             full_str +=
                 "\n\n" +
                 word_wrap(m_ptr->type->area_editor_tips, 50);
         }
         set_tooltip(full_str);
+        
+        //If the mob type exists, obviously the missing mob type problem is
+        //gone, if it was active.
+        if(problem_type == EPT_TYPELESS_MOB) {
+            clear_problems();
+        }
     }
     
     //Spacer dummy widget.

@@ -1,6 +1,7 @@
 name = Bouncy Mushroom
 description = Bounces Pikmin and leaders high in the air, to some other location.
 
+custom_category_name = Useful
 height = 64
 pushable = false
 pushes = true

@@ -3,6 +3,7 @@ description = Once it senses prey, a Yellow Wollywog will jump in the air if it 
 
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile
+custom_category_name = Enemy, aggressive
 allow_ground_attacks = true
 drops_corpse = true
 health_regen = 0

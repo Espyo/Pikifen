@@ -3,6 +3,7 @@ description = This Burgeoning Spiderwort grows ultra-bitter berries, which can b
 
 can_drop_multiple = true
 contents = Bitter berry
+custom_category_name = Useful
 delete_when_finished = false
 health_per_resource = 200
 height = 160

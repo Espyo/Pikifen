@@ -3,6 +3,7 @@ description = A large block of crystal. It is so large it can fit other things i
 
 area_editor_tips = To make it capture another object, simply place both objects together such that they are touching.
 can_block_paths = true
+custom_category_name = Obstacle, harmless
 default_vulnerability = 0
 height = 200
 max_health = 160

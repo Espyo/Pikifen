@@ -363,11 +363,17 @@ void load_area(
             );
         mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
         
-        mob_ptr->category = game.mob_categories.get_from_name(mob_node->name);
-        if(!mob_ptr->category) continue;
-        
-        string mt = mob_node->get_child_by_name("type")->value;
-        mob_ptr->type = mob_ptr->category->get_type(mt);
+        string category_name = mob_node->name;
+        string type_name;
+        mob_category* category =
+            game.mob_categories.get_from_name(category_name);
+        if(category) {
+            type_name = mob_node->get_child_by_name("type")->value;
+            mob_ptr->type = category->get_type(type_name);
+        } else {
+            category = game.mob_categories.get(MOB_CATEGORY_NONE);
+            mob_ptr->type = NULL;
+        }
         
         vector<string> link_strs =
             split(mob_node->get_child_by_name("links")->value);
@@ -375,39 +381,23 @@ void load_area(
             mob_links_buffer.push_back(std::make_pair(m, s2i(link_strs[l])));
         }
         
-        bool problem = false;
-        
-        if(!mob_ptr->type && !load_for_editor) {
-            //Error.
-            log_error(
-                "Unknown \"" + mob_ptr->category->name +
-                "\" mob type \"" +
-                mt + "\"!",
-                mob_node
-            );
-            problem = true;
-        }
-        
-        if(
-            (
-                mob_ptr->category->id == MOB_CATEGORY_NONE ||
-                mob_ptr->category->id == INVALID
-            ) && !load_for_editor
-        ) {
-        
-            log_error(
-                "Unknown mob category \"" + mob_node->name + "\"!", mob_node
-            );
-            mob_ptr->category = game.mob_categories.get(MOB_CATEGORY_NONE);
-            problem = true;
+        bool valid =
+            category && category->id != MOB_CATEGORY_NONE &&
+            mob_ptr->type;
             
+        if(!valid) {
+            //Error.
+            mob_ptr->type = NULL;
+            if(!load_for_editor) {
+                log_error(
+                    "Unknown mob type \"" + type_name + "\" of category \"" +
+                    mob_node->name + "\"!",
+                    mob_node
+                );
+            }
         }
         
-        if(!problem) {
-            game.cur_area_data.mob_generators.push_back(mob_ptr);
-        } else {
-            delete mob_ptr;
-        }
+        game.cur_area_data.mob_generators.push_back(mob_ptr);
     }
     
     for(size_t l = 0; l < mob_links_buffer.size(); ++l) {

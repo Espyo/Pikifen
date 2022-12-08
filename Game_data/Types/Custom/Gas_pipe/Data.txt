@@ -1,6 +1,7 @@
 name = Gas pipe
 description = Some exposed pipe leaking out toxic gases.
 
+custom_category_name = Obstacle, dangerous
 height = 23
 max_health = 150
 pushable = false

@@ -3,6 +3,7 @@ description = A large stone that, when broken, drains a body of water.
 
 area_editor_tips = Place a clog object on a sector with water (or another liquid), or else it won't do anything!
 can_block_paths = true
+custom_category_name = Obstacle, harmless
 height = 64
 max_health = 2000
 pushable = false

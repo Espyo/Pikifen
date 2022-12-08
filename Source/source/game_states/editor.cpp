@@ -955,18 +955,6 @@ void editor::load() {
         }
     }
     
-    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        alphabetical_mob_cats.push_back(
-            game.mob_categories.get((MOB_CATEGORIES) c)
-        );
-    }
-    std::sort(
-        alphabetical_mob_cats.begin(), alphabetical_mob_cats.end(),
-    [] (const mob_category * c1, const mob_category * c2) -> bool {
-        return c1->name < c2->name;
-    }
-    );
-    
     last_input_was_keyboard = false;
     has_unsaved_changes = false;
     was_warned_about_unsaved_changes = false;
@@ -977,6 +965,68 @@ void editor::load() {
     update_style();
     
     ImGui::Reset();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads all mob types into the custom_cat_types list.
+ * is_area_editor:
+ *   If true, mob types that do not appear in the area editor will not
+ *   be counted for here.
+ */
+void editor::load_custom_mob_cat_types(const bool is_area_editor) {
+    //Load.
+    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+        mob_category* c_ptr = game.mob_categories.get((MOB_CATEGORIES) c);
+        vector<string> type_names;
+        c_ptr->get_type_names(type_names);
+        
+        for(size_t tn = 0; tn < type_names.size(); ++tn) {
+            mob_type* mt_ptr = c_ptr->get_type(type_names[tn]);
+            
+            if(is_area_editor && !mt_ptr->appears_in_area_editor) {
+                continue;
+            }
+            
+            string custom_cat_name = mt_ptr->custom_category_name;
+            size_t custom_cat_idx;
+            map<string, size_t>::iterator custom_cat_idx_it =
+                custom_cat_name_idxs.find(custom_cat_name);
+            if(custom_cat_idx_it == custom_cat_name_idxs.end()) {
+                custom_cat_name_idxs[custom_cat_name] =
+                    custom_cat_types.size();
+                custom_cat_types.push_back(vector<mob_type*>());
+            }
+            custom_cat_idx = custom_cat_name_idxs[custom_cat_name];
+            
+            custom_cat_types[custom_cat_idx].push_back(mt_ptr);
+        }
+    }
+    
+    //Sort.
+    std::sort(
+        custom_cat_types.begin(), custom_cat_types.end(),
+    [] (const vector<mob_type*> &c1, const vector<mob_type*> &c2) -> bool {
+        return
+        c1.front()->custom_category_name <
+        c2.front()->custom_category_name;
+    }
+    );
+    for(size_t c = 0; c < custom_cat_types.size(); ++c) {
+        vector<mob_type*> &types = custom_cat_types[c];
+        //Sort the types within a custom category.
+        std::sort(
+            types.begin(), types.end(),
+        [] (const mob_type * t1, const mob_type * t2) {
+            return t1->name < t2->name;
+        }
+        );
+        //Adjust custom_cat_name_idxs, since the list of custom category names
+        //got shuffled earlier.
+        custom_cat_name_idxs[
+        custom_cat_types[c][0]->custom_category_name
+        ] = c;
+    }
 }
 
 
@@ -1227,24 +1277,36 @@ void editor::process_gui_history(
 /* ----------------------------------------------------------------------------
  * Processes the category and type widgets that allow a user to select a mob
  * type.
- * cat:
- *   Pointer to the category reflected in the combo box.
- * typ:
+ * Returns true if the user changed the category or type, false otherwise.
+ * custom_cat_name:
+ *   Pointer to the custom category name reflected in the combo box.
+ * type:
  *   Pointer to the type reflected in the combo box.
- * only_show_area_editor_types:
- *   If true, object types that cannot appear in the area editor will not
- *   be included.
- * category_change_callback:
- *   If not NULL, this is called as soon as the category combobox is changed.
- * type_change_callback:
- *   If not NULL, this is called as soon as the type combobox is changed.
  */
-void editor::process_gui_mob_type_widgets(
-    mob_category** cat, mob_type** typ,
-    const bool only_show_area_editor_types,
-    const std::function<void()> &category_change_callback,
-    const std::function<void()> &type_change_callback
+bool editor::process_gui_mob_type_widgets(
+    string* custom_cat_name, mob_type** type
 ) {
+    bool result = false;
+    
+    //These are used to communicate with the picker dialog, since that one
+    //is processed somewhere else entirely.
+    static bool internal_changed_by_dialog = false;
+    static string internal_custom_cat_name;
+    static mob_type* internal_mob_type = NULL;
+    
+    if(internal_changed_by_dialog) {
+        //Somewhere else in the code, the picker dialog changed these variables
+        //to whatever the user picked. Let's use them now, instead of the
+        //ones passed by the function's arguments.
+        result = true;
+        internal_changed_by_dialog = false;
+    } else {
+        //The picker dialog hasn't changed these variables. Just use
+        //whatever the function's arguments state.
+        internal_custom_cat_name = *custom_cat_name;
+        internal_mob_type = *type;
+    }
+    
     //Column setup.
     ImGui::Columns(2, NULL, false);
     ImGui::SetColumnWidth(-1, 51.0f);
@@ -1259,35 +1321,35 @@ void editor::process_gui_mob_type_widgets(
             ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)
         );
     ImGui::PopStyleVar();
+    
     if(search_button_pressed) {
         vector<picker_item> items;
-        for(size_t c = 0; c < alphabetical_mob_cats.size(); ++c) {
-            mob_category* c_ptr = alphabetical_mob_cats[c];
-            if(c_ptr->id == MOB_CATEGORY_NONE) continue;
-            
-            vector<string> type_names;
-            c_ptr->get_type_names(type_names);
-            string cat_name = c_ptr->name;
-            
-            for(size_t n = 0; n < type_names.size(); ++n) {
-                if(
-                    only_show_area_editor_types &&
-                    !c_ptr->get_type(type_names[n])->appears_in_area_editor
-                ) {
-                    continue;
-                }
-                items.push_back(picker_item(type_names[n], cat_name));
+        for(size_t c = 0; c < custom_cat_types.size(); ++c) {
+            for(size_t n = 0; n < custom_cat_types[c].size(); ++n) {
+                mob_type* mt_ptr = custom_cat_types[c][n];
+                items.push_back(
+                    picker_item(mt_ptr->name, mt_ptr->custom_category_name)
+                );
             }
         }
         open_picker_dialog(
             "Pick an object type", items,
-            [cat, typ, category_change_callback, type_change_callback]
-        (const string & n, const string & c, const bool) {
-            if(type_change_callback) {
-                type_change_callback();
+        [this] (const string & n, const string & c, const bool) {
+            //For clarity, this code will NOT be run within the context
+            //of editor::process_gui_mob_type_widgets, but will instead
+            //be run wherever dialogs are processed.
+            internal_changed_by_dialog = true;
+            internal_custom_cat_name = c;
+            internal_mob_type = NULL;
+            size_t custom_cat_idx = custom_cat_name_idxs[c];
+            const vector<mob_type*> &types =
+                custom_cat_types[custom_cat_idx];
+            for(size_t t = 0; t < types.size(); ++t) {
+                if(types[t]->name == n) {
+                    internal_mob_type = types[t];
+                    return;
+                }
             }
-            (*cat) = game.mob_categories.get_from_name(c);
-            (*typ) = (*cat)->get_type(n);
         },
         "", false
         );
@@ -1299,60 +1361,49 @@ void editor::process_gui_mob_type_widgets(
     ImGui::NextColumn();
     
     //Object category combobox.
-    if(!(*cat)) {
-        *cat = game.mob_categories.get(MOB_CATEGORY_NONE);
-    }
-    
     vector<string> categories;
     int selected_category_idx = -1;
-    for(size_t c = 0; c < alphabetical_mob_cats.size(); ++c) {
-        categories.push_back(alphabetical_mob_cats[c]->name);
-        if(alphabetical_mob_cats[c]->name == (*cat)->name) {
+    for(size_t c = 0; c < custom_cat_types.size(); ++c) {
+        string cn =
+            custom_cat_types[c].front()->custom_category_name;
+        categories.push_back(cn);
+        if(cn == internal_custom_cat_name) {
             selected_category_idx = c;
         }
     }
     
     if(ImGui::Combo("Category", &selected_category_idx, categories)) {
-        if(category_change_callback) {
-            category_change_callback();
-        }
-        *cat = alphabetical_mob_cats[selected_category_idx];
-        
-        vector<string> type_names;
-        (*cat)->get_type_names(type_names);
-        
-        *typ = NULL;
-        if(!type_names.empty()) {
-            *typ = (*cat)->get_type(type_names[0]);
-        }
+        result = true;
+        internal_custom_cat_name = categories[selected_category_idx];
+        internal_mob_type = custom_cat_types[selected_category_idx][0];
     }
     set_tooltip(
         "What category this object belongs to: a Pikmin, a leader, etc."
     );
     
-    if((*cat)->id != MOB_CATEGORY_NONE) {
+    if(!internal_custom_cat_name.empty()) {
     
         //Object type combobox.
-        vector<string> types;
-        (*cat)->get_type_names(types);
-        for(size_t t = 0; t < types.size(); ) {
-            mob_type* t_ptr = (*cat)->get_type(types[t]);
-            if(only_show_area_editor_types && !t_ptr->appears_in_area_editor) {
-                types.erase(types.begin() + t);
-            } else {
-                ++t;
-            }
+        vector<string> type_names;
+        size_t custom_cat_idx = custom_cat_name_idxs[internal_custom_cat_name];
+        const vector<mob_type*> &types = custom_cat_types[custom_cat_idx];
+        for(size_t t = 0; t < types.size(); ++t) {
+            mob_type* t_ptr = types[t];
+            type_names.push_back(t_ptr->name);
         }
         
         string selected_type_name;
-        if(*typ) {
-            selected_type_name = (*typ)->name;
+        if(internal_mob_type) {
+            selected_type_name = internal_mob_type->name;
         }
-        if(ImGui::Combo("Type", &selected_type_name, types)) {
-            if(type_change_callback) {
-                type_change_callback();
+        if(ImGui::Combo("Type", &selected_type_name, type_names)) {
+            result = true;
+            for(size_t t = 0; t < types.size(); ++t) {
+                if(types[t]->name == selected_type_name) {
+                    internal_mob_type = types[t];
+                    break;
+                }
             }
-            *typ = (*cat)->get_type(selected_type_name);
         }
         set_tooltip(
             "The specific type of object this is, from the chosen category."
@@ -1360,6 +1411,13 @@ void editor::process_gui_mob_type_widgets(
     }
     
     ImGui::Columns();
+    
+    if(result) {
+        *custom_cat_name = internal_custom_cat_name;
+        *type = internal_mob_type;
+    }
+    
+    return result;
 }
 
 
@@ -1541,7 +1599,8 @@ void editor::unload() {
         al_destroy_bitmap(bmp_editor_icons);
         bmp_editor_icons = NULL;
     }
-    alphabetical_mob_cats.clear();
+    custom_cat_name_idxs.clear();
+    custom_cat_types.clear();
 }
 
 

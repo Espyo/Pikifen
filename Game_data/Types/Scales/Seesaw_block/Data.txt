@@ -3,6 +3,7 @@ description = One in a pair of seesaw blocks. They are connected with a pulley s
 
 area_editor_tips = Link this object to another seesaw block object, so they work in tandem. Remember to link the other back to this one, and remember that one of them should start in a "down" position! Raised height: 128. Lowered height: 8.
 casts_shadow = false
+custom_category_name = Obstacle, harmless
 height = 128
 pushes = true
 radius = 90

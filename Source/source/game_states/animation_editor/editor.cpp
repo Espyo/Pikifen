@@ -397,6 +397,8 @@ void animation_editor::load() {
     load_spike_damage_types();
     load_mob_types(false);
     
+    load_custom_mob_cat_types(false);
+    
     file_path.clear();
     animation_exists_on_disk = false;
     can_save = false;

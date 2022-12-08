@@ -3,6 +3,7 @@ description = Converts any Pikmin thrown inside into Rock Pikmin seeds.
 
 available_pikmin_types = Rock Pikmin
 buffer_size = 5
+custom_category_name = Candypop Bud
 height = 32
 pikmin_per_conversion = 1
 pushable = false

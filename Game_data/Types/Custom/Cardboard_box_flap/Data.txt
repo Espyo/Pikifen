@@ -3,6 +3,7 @@ description = The flap of a cardboard box.
 
 appears_in_area_editor = false
 casts_shadow = false
+custom_category_name = Aux
 height = 1
 pushable = false
 pushes = false

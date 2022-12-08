@@ -4,6 +4,7 @@ description = This plant's stem can be grabbed and tugged upward in order to unr
 area_editor_tips = To make it capture other objects, simply place those objects and this one together such that they are all touching.
 casts_shadow = true
 contribution_method = normal
+custom_category_name = Useful
 first_row_p1 = 8 -12
 first_row_p2 = 8 4
 flying_pikmin_only = true

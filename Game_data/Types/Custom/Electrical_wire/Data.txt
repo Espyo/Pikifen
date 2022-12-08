@@ -2,6 +2,7 @@ name = Electrical wire
 description = An exposed wire. It'll occasionally create an arc of electricity with a nearby wire.
 
 area_editor_tips = The object in the area editor represents the center between the two wires, which appear to the relative left and right.
+custom_category_name = Obstacle, dangerous
 height = 24
 max_health = 150
 pushable = false

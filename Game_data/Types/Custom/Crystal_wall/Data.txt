@@ -3,6 +3,7 @@ description = Wall made of crystal. Only Rock Pikmin or explosions can bring it 
 
 can_block_paths = true
 casts_shadow = false
+custom_category_name = Gate
 default_vulnerability = 0
 height = 0
 max_health = 400

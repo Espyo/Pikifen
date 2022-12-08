@@ -4,6 +4,7 @@ description = A gate made of five pieces of bamboo with handles at the top. Wing
 can_block_paths = true
 casts_shadow = false
 contribution_method = normal
+custom_category_name = Gate
 first_row_p1 = 0 -86
 first_row_p2 = 0 86
 flying_pikmin_only = true

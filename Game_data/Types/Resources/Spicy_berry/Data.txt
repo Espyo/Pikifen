@@ -2,6 +2,7 @@ name = Spicy berry
 description = Ultra-spicy berries can be gathered, and 10 of them are used to concoct a new dosage of ultra-spicy spray.
 
 carrying_destination = ship
+custom_category_name = Useful
 delivery_result = increase_ingredients
 height = 28
 max_carriers = 1

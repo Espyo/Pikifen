@@ -738,21 +738,28 @@ void gameplay_state::load() {
     
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+        bool valid = true;
         
-        if(
-            m_ptr->category->id == MOB_CATEGORY_PIKMIN &&
+        if(!m_ptr->type) {
+            valid = false;
+        } else if(
+            m_ptr->type->category->id == MOB_CATEGORY_PIKMIN &&
             game.states.gameplay->mobs.pikmin_list.size() >=
             game.config.max_pikmin_in_field
         ) {
-            continue;
+            valid = false;
         }
         
-        mobs_per_gen.push_back(
-            create_mob(
-                m_ptr->category, m_ptr->pos, m_ptr->type,
-                m_ptr->angle, m_ptr->vars
-            )
-        );
+        if(valid) {
+            mob* new_mob =
+                create_mob(
+                    m_ptr->type->category, m_ptr->pos, m_ptr->type,
+                    m_ptr->angle, m_ptr->vars
+                );
+            mobs_per_gen.push_back(new_mob);
+        } else {
+            mobs_per_gen.push_back(NULL);
+        }
     }
     
     //Mob links.
@@ -761,10 +768,13 @@ void gameplay_state::load() {
     //to keep the pointers to the created mobs in a vector, and use this
     //to link the mobs by (generator) number.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+        mob_gen* gen_ptr = game.cur_area_data.mob_generators[m];
+        mob* mob_ptr = mobs_per_gen[m];
         
-        for(size_t l = 0; l < m_ptr->link_nrs.size(); ++l) {
-            mobs_per_gen[m]->links.push_back(mobs_per_gen[m_ptr->link_nrs[l]]);
+        for(size_t l = 0; l < gen_ptr->link_nrs.size(); ++l) {
+            size_t link_target_gen_nr = gen_ptr->link_nrs[l];
+            mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_nr];
+            mob_ptr->links.push_back(link_target_mob_ptr);
         }
     }
     

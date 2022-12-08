@@ -1,6 +1,7 @@
 name = Sign
 description = A sign whose contents can be read by a leader.
 
+custom_category_name = Misc
 height = 16
 prompt_text = Read
 pushable = false

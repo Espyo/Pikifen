@@ -326,8 +326,6 @@ struct polygon {
  * position and type data, plus some other tiny things.
  */
 struct mob_gen {
-    //Mob category.
-    mob_category* category;
     //Mob type.
     mob_type* type;
     //Position.
@@ -342,7 +340,7 @@ struct mob_gen {
     vector<size_t> link_nrs;
     
     mob_gen(
-        mob_category* category = NULL, const point &pos = point(),
+        const point &pos = point(),
         mob_type* type = NULL, const float angle = 0, const string &vars = ""
     );
 };

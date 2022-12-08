@@ -44,6 +44,7 @@ const size_t ANIM_IDLING = 0;
  */
 mob_type::mob_type(MOB_CATEGORIES category_id) :
     category(game.mob_categories.get(category_id)),
+    custom_category_name(category->name),
     main_color(al_map_rgb(128, 128, 128)),
     show_health(true),
     casts_shadow(true),
@@ -353,6 +354,7 @@ void load_mob_type_from_file(
         "can_hurt", hurtable_targets_str, &hurtable_targets_node
     );
     rs.set("casts_shadow", mt->casts_shadow);
+    rs.set("custom_category_name", mt->custom_category_name);
     rs.set("default_vulnerability", mt->default_vulnerability);
     rs.set("description", mt->description);
     rs.set("has_group", mt->has_group);
@@ -876,6 +878,10 @@ void load_mob_type_from_file(
             (load_resources ? mt->anims.max_span : 0),
             mt->rectangular_dim
         );
+        
+    if(mt->custom_category_name.empty()) {
+        mt->custom_category_name = mt->category->name;
+    }
 }
 
 

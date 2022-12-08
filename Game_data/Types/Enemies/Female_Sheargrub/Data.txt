@@ -2,6 +2,7 @@ name = Female Sheargrub
 description = Typically found underground, the Female Sheargrub will emerge if there are Pikmin nearby, despite harmlessly circling around them.
 
 can_hunt = player; enemy
+custom_category_name = Enemy, peaceful
 drops_corpse = true
 height = 32
 max_carriers = 1

@@ -4,6 +4,7 @@ description = Pillar that holds a bamboo gate in place.
 appears_in_area_editor = false
 can_block_paths = false
 casts_shadow = false
+custom_category_name = Aux
 height = 0
 pushable = false
 pushes = true

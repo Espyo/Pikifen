@@ -2,6 +2,7 @@ name = Spotcap
 description = Small mushrooms that are sometimes found in the way.
 
 can_block_paths = true
+custom_category_name = Obstacle, harmless
 height = 48
 max_health = 110
 pushable = false

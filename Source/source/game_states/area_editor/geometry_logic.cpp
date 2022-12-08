@@ -592,9 +592,9 @@ void area_editor::find_problems() {
     bool has_leader = false;
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         if(
-            game.cur_area_data.mob_generators[m]->category->id ==
-            MOB_CATEGORY_LEADERS &&
-            game.cur_area_data.mob_generators[m]->type != NULL
+            game.cur_area_data.mob_generators[m]->type != NULL &&
+            game.cur_area_data.mob_generators[m]->type->category->id ==
+            MOB_CATEGORY_LEADERS
         ) {
             has_leader = true;
             break;
@@ -615,8 +615,8 @@ void area_editor::find_problems() {
             problem_type = EPT_TYPELESS_MOB;
             problem_title = "Mob with no type!";
             problem_description =
-                "It has a category set, but no valid type set. "
-                "Give it a type or delete it.";
+                "It has an invalid category or type set. "
+                "Give it a proper type or delete it.";
             return;
         }
     }
@@ -637,10 +637,11 @@ void area_editor::find_problems() {
     //Objects inside walls.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+        if(!m_ptr->type) continue;
         
         if(
-            m_ptr->category->id == MOB_CATEGORY_BRIDGES ||
-            m_ptr->category->id == MOB_CATEGORY_DECORATIONS
+            m_ptr->type->category->id == MOB_CATEGORY_BRIDGES ||
+            m_ptr->type->category->id == MOB_CATEGORY_DECORATIONS
         ) {
             continue;
         }
@@ -727,12 +728,14 @@ void area_editor::find_problems() {
     //Path from pile to bridge is blocked by said bridge.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
-        if(m_ptr->category->id != MOB_CATEGORY_PILES) {
+        if(!m_ptr->type) continue;
+        if(m_ptr->type->category->id != MOB_CATEGORY_PILES) {
             continue;
         }
         
         for(size_t l = 0; l < m_ptr->links.size(); ++l) {
-            if(m_ptr->links[l]->category->id != MOB_CATEGORY_BRIDGES) {
+            if(!m_ptr->links[l]->type) continue;
+            if(m_ptr->links[l]->type->category->id != MOB_CATEGORY_BRIDGES) {
                 continue;
             }
             
@@ -1534,7 +1537,6 @@ void area_editor::homogenize_selected_mobs() {
     for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
         if(m == selected_mobs.begin()) continue;
         mob_gen* m_ptr = *m;
-        m_ptr->category = base->category;
         m_ptr->type = base->type;
         m_ptr->angle = base->angle;
         m_ptr->vars = base->vars;

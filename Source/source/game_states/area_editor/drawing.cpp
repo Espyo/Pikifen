@@ -630,10 +630,12 @@ void area_editor::draw_canvas() {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
         
         float radius = get_mob_gen_radius(m_ptr);
-        ALLEGRO_COLOR c =
-            change_alpha(m_ptr->category->editor_color, mob_opacity * 255);
-        if(m_ptr == problem_mob_ptr) {
-            c = al_map_rgb(255, 0, 0);
+        ALLEGRO_COLOR c = al_map_rgb(255, 0, 0);
+        if(m_ptr->type && m_ptr != problem_mob_ptr) {
+            c =
+                change_alpha(
+                    m_ptr->type->category->editor_color, mob_opacity * 255
+                );
         }
         
         if(m_ptr->type && m_ptr->type->rectangular_dim.x != 0) {

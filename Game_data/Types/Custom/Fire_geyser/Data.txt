@@ -1,6 +1,7 @@
 name = Fire geyser
 description = A hole that occasionally spits out a column of fire, like a geyser.
 
+custom_category_name = Obstacle, dangerous
 height = 23
 max_health = 150
 pushable = false

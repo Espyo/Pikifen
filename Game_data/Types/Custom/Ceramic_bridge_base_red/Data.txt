@@ -3,6 +3,7 @@ description = A small pile of fragments indicating the start or end of a red cer
 
 can_block_paths = false
 casts_shadow = false
+custom_category_name = Bridge
 height = 9
 pushable = false
 pushes = false

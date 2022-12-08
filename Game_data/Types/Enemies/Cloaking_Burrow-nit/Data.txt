@@ -3,6 +3,7 @@ description = Its carapace looks like its face, but it is actually its backside,
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
+custom_category_name = Enemy, aggressive
 drops_corpse = true
 health_regen = 1
 height = 64

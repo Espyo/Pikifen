@@ -2,6 +2,7 @@ name = Ceramic fragment red
 description = A red fragment of ceramic. Regardless of what it belonged to, it can be used to build a bridge.
 
 carrying_destination = linked_mob
+custom_category_name = Bridge
 damage_mob_amount = 1
 delivery_result = damage_mob
 height = 8

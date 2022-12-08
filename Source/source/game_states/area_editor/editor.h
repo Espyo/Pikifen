@@ -347,8 +347,8 @@ private:
     sector* highlighted_sector;
     //Currently highlighted vertex, if any.
     vertex* highlighted_vertex;
-    //Category of the last mob placed.
-    mob_category* last_mob_category;
+    //Category name of the last mob placed.
+    string last_mob_custom_cat_name;
     //Mob type of the last mob placed.
     mob_type* last_mob_type;
     //Are we editing sectors or edges?

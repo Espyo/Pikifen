@@ -4,6 +4,7 @@ description = A pile of red ceramic fragments, used to build a bridge with.
 area_editor_tips = Link this object to a bridge object, so the Pikmin know what bridge to take the ceramic shards to.
 can_drop_multiple = false
 contents = Ceramic fragment red
+custom_category_name = Bridge
 delete_when_finished = true
 health_per_resource = 10
 height = 160

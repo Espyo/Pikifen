@@ -3,6 +3,7 @@ description = Handle placed at ground level on the sides of a paper bag.
 
 appears_in_area_editor = false
 casts_shadow = false
+custom_category_name = Aux
 height = 1
 pushable = false
 pushes = false

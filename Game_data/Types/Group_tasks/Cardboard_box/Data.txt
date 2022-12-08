@@ -3,6 +3,7 @@ description = A large box made of cardboard. It can be pushed out of the way if 
 
 acceleration = 15
 area_editor_tips = Link this object to another object, so that the box moves to that location when it's pushed. A "Dummy" object works perfectly for this.
+custom_category_name = Obstacle, harmless
 height = 64
 max_health = 50
 move_speed = 10

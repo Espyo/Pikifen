@@ -3,6 +3,7 @@ description = This Burgeoning Spiderwort grows ultra-spicy berries, which can be
 
 can_drop_multiple = true
 contents = Spicy berry
+custom_category_name = Useful
 delete_when_finished = false
 health_per_resource = 200
 height = 160

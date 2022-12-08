@@ -3,6 +3,7 @@ description = It can suck in air and spit out a stream of fire from its snout. I
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
+custom_category_name = Enemy, aggressive
 drops_corpse = true
 height = 70
 itch_damage = 50
