@@ -3928,9 +3928,8 @@ void area_editor::process_gui_panel_paths() {
         //Drawing explanation text.
         ImGui::TextWrapped(
             "Use the canvas to draw path links and path stops. "
-            "Each click places a stop and/or connects to a stop."
-            "Use the following controls the change the type of link that will "
-            "be drawn."
+            "Each click places a stop and/or connects to a stop. "
+            "Use the following widgets the change how new links will be."
         );
         
         int one_way_mode = path_drawing_normals;

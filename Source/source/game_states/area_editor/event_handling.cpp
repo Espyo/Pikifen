@@ -1002,6 +1002,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             path_stop* clicked_stop = get_path_stop_under_point(hotspot);
             
             if(path_drawing_stop_1) {
+                //A starting stop already exists, so now we create a link.
                 path_stop* next_stop = NULL;
                 if(clicked_stop) {
                     if(clicked_stop == path_drawing_stop_1) {
@@ -1031,12 +1032,18 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     }
                     game.cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
                     game.cur_area_data.fix_path_stop_nrs(next_stop);
-                    path_drawing_stop_1 = next_stop;
                     next_stop->calculate_dists_plus_neighbors();
                     status_text = "Created path link.";
+                    
+                    if(clicked_stop) {
+                        path_drawing_stop_1 = NULL;
+                    } else {
+                        path_drawing_stop_1 = next_stop;
+                    }
                 }
                 
             } else {
+                //We need to create or assign a starting stop.
                 if(clicked_stop) {
                     path_drawing_stop_1 = clicked_stop;
                 } else {
