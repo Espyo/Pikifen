@@ -46,6 +46,8 @@ const unsigned char MAX_CIRCLE_SECTOR_POINTS = 32;
 const float MAX_GRID_INTERVAL = 4096;
 //Maximum number of texture suggestions.
 const size_t MAX_TEXTURE_SUGGESTIONS = 20;
+//Text color for various measurement labels in the canvas.
+const ALLEGRO_COLOR MEASUREMENT_COLOR = al_map_rgb(64, 255, 64);
 //Minimum number of points that a circle sector can be created with.
 const unsigned char MIN_CIRCLE_SECTOR_POINTS = 3;
 //Minimum grid interval.

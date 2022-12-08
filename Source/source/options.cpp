@@ -27,6 +27,8 @@ const float DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
 const bool DEF_AREA_EDITOR_SEL_TRANS = false;
 //Default value for whether to show an edge's length in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
+//Default value for whether to show a circular sector's info in the area editor.
+const bool DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO = true;
 //Default value for whether to show a path link's length in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH = true;
 //Default value for whether to show a mob's territory in the area editor.
@@ -110,6 +112,7 @@ options_struct::options_struct() :
     area_editor_backup_interval(OPTIONS::DEF_AREA_EDITOR_BACKUP_INTERVAL),
     area_editor_grid_interval(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL),
     area_editor_sel_trans(OPTIONS::DEF_AREA_EDITOR_SEL_TRANS),
+    area_editor_show_circular_info(OPTIONS::DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO),
     area_editor_show_edge_length(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH),
     area_editor_show_path_link_length(
         OPTIONS::DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH
@@ -223,6 +226,7 @@ void options_struct::load(data_node* file) {
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
     rs.set("area_editor_selection_transformation", area_editor_sel_trans);
+    rs.set("area_editor_show_circular_info", area_editor_show_circular_info);
     rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
     rs.set(
         "area_editor_show_path_link_length",
@@ -419,6 +423,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "area_editor_selection_transformation",
             b2s(area_editor_sel_trans)
+        )
+    );
+    file->add(
+        new data_node(
+            "area_editor_show_circular_info",
+            b2s(area_editor_show_circular_info)
         )
     );
     file->add(

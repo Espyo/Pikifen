@@ -34,6 +34,7 @@ extern const float KEYBOARD_PAN_AMOUNT;
 extern const unsigned char MAX_CIRCLE_SECTOR_POINTS;
 extern const float MAX_GRID_INTERVAL;
 extern const size_t MAX_TEXTURE_SUGGESTIONS;
+extern const ALLEGRO_COLOR MEASUREMENT_COLOR;
 extern const unsigned char MIN_CIRCLE_SECTOR_POINTS;
 extern const float MIN_GRID_INTERVAL;
 extern const float MISSION_EXIT_MIN_SIZE;
@@ -705,7 +706,9 @@ private:
         const ALLEGRO_COLOR color, const point &where, const string &text,
         const unsigned char dots = 0
     );
-    void draw_line_dist(const point &focus, const point &other);
+    void draw_line_dist(
+        const point &focus, const point &other, const string &prefix = ""
+    );
     
     //GUI functions.
     void open_load_dialog();

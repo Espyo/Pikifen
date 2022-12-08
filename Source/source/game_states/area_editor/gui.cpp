@@ -758,6 +758,18 @@ void area_editor::process_gui_options_dialog() {
             b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_EDGE_LENGTH) + "."
         );
         
+        //Show circular sector info checkbox.
+        ImGui::Checkbox(
+            "Show circular sector info",
+            &game.options.area_editor_show_circular_info
+        );
+        set_tooltip(
+            "Show the radius and number of vertexes of a circular sector\n"
+            "when drawing one.\n"
+            "Default: " +
+            b2s(OPTIONS::DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO) + "."
+        );
+        
         //Show path link length checkbox.
         ImGui::Checkbox(
             "Show path link length",

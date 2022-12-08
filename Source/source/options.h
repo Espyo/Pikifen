@@ -57,6 +57,7 @@ namespace OPTIONS {
 extern const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
 extern const float DEF_AREA_EDITOR_GRID_INTERVAL;
 extern const bool DEF_AREA_EDITOR_SEL_TRANS;
+extern const bool DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO;
 extern const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH;
 extern const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH;
 extern const bool DEF_AREA_EDITOR_SHOW_TERRITORY;
@@ -106,6 +107,8 @@ struct options_struct {
     float area_editor_grid_interval;
     //Can the user transform the selected vertexes?
     bool area_editor_sel_trans;
+    //Show info of a circular sector that's being drawn?
+    bool area_editor_show_circular_info;
     //Show the length of an edge that's being drawn/moved?
     bool area_editor_show_edge_length;
     //Show the length of a path link that's being drawn/moved?

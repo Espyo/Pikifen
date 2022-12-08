@@ -1193,6 +1193,12 @@ void area_editor::draw_canvas() {
                 al_map_rgb(64, 255, 64),
                 3.0 / game.cam.zoom
             );
+            if(game.options.area_editor_show_circular_info) {
+                draw_line_dist(
+                    new_circle_sector_anchor, new_circle_sector_center,
+                    "Radius: "
+                );
+            }
             break;
             
         } case 2: {
@@ -1217,6 +1223,14 @@ void area_editor::draw_canvas() {
                     new_circle_sector_points[p].x,
                     new_circle_sector_points[p].y,
                     3.0 / game.cam.zoom, al_map_rgb(192, 255, 192)
+                );
+            }
+            
+            if(game.options.area_editor_show_circular_info) {
+                draw_debug_text(
+                    AREA_EDITOR::MEASUREMENT_COLOR,
+                    new_circle_sector_points[0],
+                    "Vertexes: " + i2s(new_circle_sector_points.size())
                 );
             }
             break;
@@ -1732,8 +1746,12 @@ void area_editor::draw_debug_text(
  *   The main point.
  * other:
  *   The point to measure against.
+ * prefix:
+ *   Text to show before the measurement, if any.
  */
-void area_editor::draw_line_dist(const point &focus, const point &other) {
+void area_editor::draw_line_dist(
+    const point &focus, const point &other, const string &prefix
+) {
     float d = dist(other, focus).to_float();
     if(d < 64) return;
     
@@ -1743,5 +1761,7 @@ void area_editor::draw_line_dist(const point &focus, const point &other) {
     length_nr_pos.y = focus.y + sin(angle) * 64.0;
     length_nr_pos.y -= 12;
     
-    draw_debug_text(al_map_rgb(64, 255, 64), length_nr_pos, i2s(d));
+    draw_debug_text(
+        AREA_EDITOR::MEASUREMENT_COLOR, length_nr_pos, prefix + i2s(d)
+    );
 }
