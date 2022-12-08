@@ -195,6 +195,8 @@ private:
         EPT_MOB_OOB,
         //Mob stuck in a wall.
         EPT_MOB_IN_WALL,
+        //Mob links to itself.
+        EPT_MOB_LINKS_TO_SELF,
         //Bridge mob missing a bridge sector.
         EPT_SECTORLESS_BRIDGE,
         //A path stop is all by itself.

@@ -725,6 +725,23 @@ void area_editor::find_problems() {
         
     }
     
+    //Objects that link to themselves.
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+        for(size_t l = 0; l < m_ptr->links.size(); ++l) {
+            if(m_ptr->links[l] == m_ptr) {
+                problem_mob_ptr = m_ptr;
+                problem_type = EPT_MOB_LINKS_TO_SELF;
+                problem_title = "Mob links to itself!";
+                problem_description =
+                    "This object has a link to itself. This will likely "
+                    "cause unexpected behaviors, so you should delete "
+                    "the link.";
+                return;
+            }
+        }
+    }
+    
     //Path from pile to bridge is blocked by said bridge.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = game.cur_area_data.mob_generators[m];

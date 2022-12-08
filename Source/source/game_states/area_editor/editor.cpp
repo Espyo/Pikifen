@@ -1396,6 +1396,7 @@ void area_editor::goto_problem() {
     } case EPT_TYPELESS_MOB:
     case EPT_MOB_OOB:
     case EPT_MOB_IN_WALL:
+    case EPT_MOB_LINKS_TO_SELF:
     case EPT_SECTORLESS_BRIDGE:
     case EPT_PILE_BRIDGE_PATH: {
 
