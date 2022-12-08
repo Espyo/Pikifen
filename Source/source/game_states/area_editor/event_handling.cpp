@@ -349,6 +349,20 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             }
         }
         
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L)) {
+        switch(state) {
+        case EDITOR_STATE_MOBS: {
+            if(selected_mobs.size() == 1 || selection_homogenized) {
+                if(sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK) {
+                    sub_state = EDITOR_SUB_STATE_NONE;
+                } else {
+                    sub_state = EDITOR_SUB_STATE_ADD_MOB_LINK;
+                }
+            }
+            break;
+        }
+        }
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_N)) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {

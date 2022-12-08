@@ -3637,7 +3637,8 @@ void area_editor::process_gui_panel_mob() {
         }
         set_tooltip(
             "Start creating a new object link.\n"
-            "Click on the other object you want to link to."
+            "Click on the other object you want to link to.",
+            "L"
         );
         
         //Object delete link button.
