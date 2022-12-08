@@ -664,7 +664,7 @@ void mob::tick_physics(const float delta_t) {
     );
     
     //Walk on top of another mob, if possible.
-    tick_walkable_riding_physics(delta_t);
+    if(type->can_walk_on_others) tick_walkable_riding_physics(delta_t);
     
     //Final setup.
     push_amount = 0;

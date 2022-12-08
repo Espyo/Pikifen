@@ -61,6 +61,7 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     pushes_with_hitboxes(false),
     terrain_radius(-1),
     walkable(false),
+    can_walk_on_others(true),
     can_block_paths(false),
     max_health(100),
     health_regen(0),
@@ -301,6 +302,7 @@ void create_special_mob_types() {
     bridge_component_type->name = "Bridge component";
     bridge_component_type->appears_in_area_editor = false;
     bridge_component_type->casts_shadow = false;
+    bridge_component_type->can_walk_on_others = false;
     bridge_component_type->height = 8.0f;
     bridge_component_type->max_span = 8.0f;
     bridge_component_type->radius = 8.0f;
@@ -353,6 +355,7 @@ void load_mob_type_from_file(
     rs.set(
         "can_hurt", hurtable_targets_str, &hurtable_targets_node
     );
+    rs.set("can_walk_on_others", mt->can_walk_on_others);
     rs.set("casts_shadow", mt->casts_shadow);
     rs.set("custom_category_name", mt->custom_category_name);
     rs.set("default_vulnerability", mt->default_vulnerability);

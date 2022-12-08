@@ -248,6 +248,8 @@ public:
     float terrain_radius;
     //Can you walk on top of this mob?
     bool walkable;
+    //Can this mob walk on top of other mobs?
+    bool can_walk_on_others;
     //If true, carrier Pikmin will be considered blocked if it's in the way.
     bool can_block_paths;
     

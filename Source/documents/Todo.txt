@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Bridges slanted up aren't working. This is because each bridge component is standing on top of the one that comes before it (thanks Helodity)
+    
     
     --- v0.23.0 ---
     Editor improvements
@@ -21,9 +21,9 @@ Next tasks (roughly sorted most important first)
     Bridges should push, have rectangular collision, and have more hitboxes a la gates (thanks Helodity)
     Statistics menu, which keeps track of:
         Engine use
-            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), actual gameplay total play time in in-world time (sans pause menus), number of times an area was entered, number of missions and how many have been platinum'd
+            Engine boot-up count, engine total play time, actual gameplay total play time (sans pause menus), number of times an area was entered, number of missions and how many have been cleared+platinum'd
         Pikmin life
-            Pikmin birth count total, Pikmin birth count per type, Pikmin death by swallowing count, Pikmin death for other reasons count (careful not to count Candypop Buds as deaths), Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
+            Pikmin birth count total, Pikmin death by swallowing count, Pikmin death by enemy hazard count, Pikmin death by terrain hazard count, Pikmin death for other reasons count (careful not to count Candypop Buds as deaths), Pikmin bloom count (bud or flower; leaf to flower only counts as one), Pikmin saved from burning/suffocating/etc. count, enemy kill count
         Leader control
             Pikmin throw count (not leaders), whistle use count, distance walked by the active leader (in meters), leader damage suffered count, punch damage caused, leader KO count (single leader, not full-squad wipe), sprays used
     Minor script improvements (thanks Helodity)
