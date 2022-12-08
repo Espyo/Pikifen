@@ -1901,6 +1901,7 @@ editor::picker_info::picker_info(editor* editor_ptr) :
  * Processes the picker for this frame.
  */
 void editor::picker_info::process() {
+    ImGuiStyle &style = ImGui::GetStyle();
     vector<string> category_names;
     vector<vector<picker_item> > final_items;
     string filter_lower = str_to_lower(filter);
@@ -2016,16 +2017,17 @@ void editor::picker_info::process() {
     
     if(ImGui::BeginPopup("newItemCategory")) {
         ImGui::Text("%s", "What is the category of the new item?");
-        static string chosen_category = *new_item_category_choices.begin();
-        ImGui::Combo(
-            "Category", &chosen_category, new_item_category_choices
-        );
-        if(ImGui::Button("Ok")) {
-            new_item_category = chosen_category;
-            ImGui::CloseCurrentPopup();
-            try_make_new();
+        
+        if(ImGui::BeginChild("categoryList", ImVec2(0.0f, 80.0f), true)) {
+            for(size_t c = 0; c < new_item_category_choices.size(); ++c) {
+                if(ImGui::Selectable(new_item_category_choices[c].c_str())) {
+                    new_item_category = new_item_category_choices[c];
+                    ImGui::CloseCurrentPopup();
+                    try_make_new();
+                }
+            }
+            ImGui::EndChild();
         }
-        ImGui::SameLine();
         if(ImGui::Button("Cancel")) {
             ImGui::CloseCurrentPopup();
         }
@@ -2038,7 +2040,6 @@ void editor::picker_info::process() {
     
     ImGui::BeginChild("list");
     
-    ImGuiStyle &style = ImGui::GetStyle();
     float picker_x2 =
         ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
         
