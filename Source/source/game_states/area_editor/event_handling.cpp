@@ -1421,7 +1421,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     NULL,
                     1.0f / game.cam.zoom,
                     false,
-                    AREA_EDITOR::MISSION_EXIT_MIN_SIZE
+                    AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
+                    is_alt_pressed
                 );
             }
             break;
@@ -1442,7 +1443,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         &selection_angle,
                         1.0f / game.cam.zoom,
                         false,
-                        AREA_EDITOR::SELECTION_TW_PADDING * 2.0f
+                        AREA_EDITOR::SELECTION_TW_PADDING * 2.0f,
+                        is_alt_pressed
                     );
                 if(tw_handled) {
                     if(!moving) {
@@ -1627,7 +1629,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         &selected_shadow->angle,
                         1.0f / game.cam.zoom,
                         selected_shadow_keep_aspect_ratio,
-                        -FLT_MAX
+                        -FLT_MAX,
+                        is_alt_pressed
                     )
                 ) {
                     forget_prepared_state(prepared_state);
@@ -1650,7 +1653,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 NULL,
                 1.0f / game.cam.zoom,
                 reference_keep_aspect_ratio,
-                5.0f
+                5.0f,
+                is_alt_pressed
             );
             
             break;

@@ -14,7 +14,6 @@ Next tasks (roughly sorted most important first)
             Idea: if when you're drawing, you click on an existing stop, then finish drawing. Otherwise, keep drawing more
         A button next to the medal point requirement widgets to set it to the combined amount of the goal
         "it would be nice to have a hotkey to quickly navigate the editor menus, like esc in any selection mode to go back to the root menu (the one with info, layout, objects, etc) and perhaps hotkeys to quickly get to selection modes such as L for layout, O for objects, etc" --Nataly
-        The ability to hold Shift or Ctrl or something to have the transformation widget corner handles reflect off the center instead of the opposite corner (thanks Nataly)
         The little silhouette of a Pikmin lying down is practically useless. A silhouette of a leader standing up, or a Pikmin standing up (maybe with arms outstretched so it's not just basically a circle) would be better (thanks Nataly)
         Add a copy-paste feature to the area editor
             It should only work when you select one and only one sector

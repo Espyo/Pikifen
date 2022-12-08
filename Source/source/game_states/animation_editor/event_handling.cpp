@@ -412,7 +412,8 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 &cur_sprite->angle,
                 1.0f / game.cam.zoom,
                 cur_sprite_keep_aspect_ratio,
-                -FLT_MAX
+                -FLT_MAX,
+                is_alt_pressed
             )
         ) {
             cur_sprite->scale = cur_sprite_size / cur_sprite->file_size;
@@ -435,7 +436,8 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         NULL,
                         1.0f / game.cam.zoom,
                         true,
-                        ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f
+                        ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
+                        is_alt_pressed
                     );
                 cur_hitbox->radius = hitbox_size.x / 2.0f;
             } else {
@@ -454,7 +456,8 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                         NULL,
                         1.0f / game.cam.zoom,
                         false,
-                        ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f
+                        ANIM_EDITOR::HITBOX_MIN_RADIUS * 2.0f,
+                        is_alt_pressed
                     );
                 cur_hitbox->pos.x = hitbox_center.x;
                 cur_hitbox->radius = hitbox_size.x / 2.0f;
@@ -477,7 +480,8 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 &cur_sprite->top_angle,
                 1.0f / game.cam.zoom,
                 top_keep_aspect_ratio,
-                ANIM_EDITOR::TOP_MIN_SIZE
+                ANIM_EDITOR::TOP_MIN_SIZE,
+                is_alt_pressed
             );
         }
         break;

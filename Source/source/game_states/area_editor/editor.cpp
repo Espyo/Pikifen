@@ -1496,6 +1496,7 @@ void area_editor::load() {
     editor::load();
     
     //Reset some variables.
+    is_alt_pressed = false;
     is_ctrl_pressed = false;
     is_shift_pressed = false;
     last_mob_custom_cat_name.clear();

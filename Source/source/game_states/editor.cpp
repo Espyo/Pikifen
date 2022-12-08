@@ -66,6 +66,7 @@ editor::editor() :
     bmp_editor_icons(nullptr),
     canvas_separator_x(-1),
     double_click_time(0),
+    is_alt_pressed(false),
     is_ctrl_pressed(false),
     is_m1_pressed(false),
     is_m2_pressed(false),
@@ -585,6 +586,12 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         ) {
             is_ctrl_pressed = true;
             
+        } else if(
+            ev.keyboard.keycode == ALLEGRO_KEY_ALT ||
+            ev.keyboard.keycode == ALLEGRO_KEY_ALTGR
+        ) {
+            is_alt_pressed = true;
+            
         }
         
         if(dialogs.empty()) {
@@ -616,6 +623,12 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             ev.keyboard.keycode == ALLEGRO_KEY_COMMAND
         ) {
             is_ctrl_pressed = false;
+            
+        } else if(
+            ev.keyboard.keycode == ALLEGRO_KEY_ALT ||
+            ev.keyboard.keycode == ALLEGRO_KEY_ALTGR
+        ) {
+            is_alt_pressed = false;
             
         }
         
@@ -2372,10 +2385,14 @@ bool editor::transformation_widget::handle_mouse_down(
  *   If true, aspect ratio is kept when resizing.
  * min_size:
  *   Minimum possible size for the width or height. Use -FLT_MAX for none.
+ * lock_center:
+ *   If true, scaling happens with the center locked. If false, the opposite
+ *   edge or corner is locked instead.
  */
 bool editor::transformation_widget::handle_mouse_move(
     const point &mouse_coords, point* center, point* size, float* angle,
-    const float zoom, const bool keep_aspect_ratio, const float min_size
+    const float zoom, const bool keep_aspect_ratio, const float min_size,
+    const bool lock_center
 ) {
     if(!center) return false;
     
@@ -2475,12 +2492,16 @@ bool editor::transformation_widget::handle_mouse_move(
     case 0:
     case 3:
     case 6: {
-        transformed_center.x = (size->x / 2.0f) - new_size.x / 2.0f;
+        if(!lock_center) {
+            transformed_center.x = (size->x / 2.0f) - new_size.x / 2.0f;
+        }
         break;
     } case 2:
     case 5:
     case 8: {
-        transformed_center.x = (-size->x / 2.0f) + new_size.x / 2.0f;
+        if(!lock_center) {
+            transformed_center.x = (-size->x / 2.0f) + new_size.x / 2.0f;
+        }
         break;
     }
     }
@@ -2489,12 +2510,16 @@ bool editor::transformation_widget::handle_mouse_move(
     case 0:
     case 1:
     case 2: {
-        transformed_center.y = (size->y / 2.0f) - new_size.y / 2.0f;
+        if(!lock_center) {
+            transformed_center.y = (size->y / 2.0f) - new_size.y / 2.0f;
+        }
         break;
     } case 6:
     case 7:
     case 8: {
-        transformed_center.y = (-size->y / 2.0f) + new_size.y / 2.0f;
+        if(!lock_center) {
+            transformed_center.y = (-size->y / 2.0f) + new_size.y / 2.0f;
+        }
         break;
     }
     }

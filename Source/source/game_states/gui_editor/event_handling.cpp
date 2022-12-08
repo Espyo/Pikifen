@@ -192,7 +192,8 @@ void gui_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 NULL,
                 1.0f / game.cam.zoom,
                 false,
-                0.10f
+                0.10f,
+                is_alt_pressed
             );
         if(tw_handled) {
             mark_new_changes();

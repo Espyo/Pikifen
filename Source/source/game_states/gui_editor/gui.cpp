@@ -434,7 +434,7 @@ void gui_editor::process_gui_panel_items() {
                 mark_new_changes();
             }
             set_tooltip(
-                "Whether this item is visible or not."
+                "Whether this item is visible in-game or not."
             );
             
             //Separator text.

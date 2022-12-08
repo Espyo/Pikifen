@@ -200,7 +200,8 @@ protected:
             const point &mouse_coords, point* center, point* size, float* angle,
             const float zoom = 1.0f,
             const bool keep_aspect_ratio = false,
-            const float min_size = -FLT_MAX
+            const float min_size = -FLT_MAX,
+            const bool lock_center = true
         );
         bool handle_mouse_up();
         bool is_moving_handle();
@@ -304,6 +305,8 @@ protected:
     float double_click_time;
     //List of every individual editor icon.
     vector<ALLEGRO_BITMAP*> editor_icons;
+    //Is the Alt key currently pressed down?
+    bool is_alt_pressed;
     //Is the Ctrl key currently pressed down?
     bool is_ctrl_pressed;
     //Is the left mouse button currently pressed down?
