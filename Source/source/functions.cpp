@@ -1626,6 +1626,41 @@ void save_screenshot() {
 
 
 /* ----------------------------------------------------------------------------
+ * Saves the engine's lifetime statistics.
+ */
+void save_statistics() {
+    data_node stats_file("", "");
+    const statistics_struct &s = game.statistics;
+    
+#define save(n, v) stats_file.add(new data_node(n, v))
+    
+    save("startups", i2s(s.startups));
+    save("runtime", f2s(s.runtime));
+    save("gameplay_time", f2s(s.gameplay_time));
+    save("area_entries", i2s(s.area_entries));
+    save("pikmin_births", i2s(s.pikmin_births));
+    save("pikmin_eaten", i2s(s.pikmin_eaten));
+    save("pikmin_enemy_hazard_deaths", i2s(s.pikmin_enemy_hazard_deaths));
+    save("pikmin_terrain_hazard_deaths", i2s(s.pikmin_terrain_hazard_deaths));
+    save("pikmin_misc_deaths", i2s(s.pikmin_misc_deaths));
+    save("pikmin_blooms", i2s(s.pikmin_blooms));
+    save("pikmin_saved", i2s(s.pikmin_saved));
+    save("enemy_deaths", i2s(s.enemy_deaths));
+    save("pikmin_thrown", i2s(s.pikmin_thrown));
+    save("whistle_uses", i2s(s.whistle_uses));
+    save("distance_walked", f2s(s.distance_walked));
+    save("leader_damage_suffered", f2s(s.leader_damage_suffered));
+    save("punch_damage_caused", f2s(s.punch_damage_caused));
+    save("leader_kos", i2s(s.leader_kos));
+    save("sprays_used", i2s(s.sprays_used));
+    
+#undef save
+    
+    stats_file.save_file(STATISTICS_FILE_PATH, true, true, true);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Given a list of items, chooses which item comes next geometrically in the
  * specified direction. Useful for menus with several buttons the player can
  * select multidirectionally in.

@@ -158,5 +158,8 @@ const string OPTIONS_FILE_PATH =
 //Relative path to the file with the performance log.
 const string PERFORMANCE_LOG_FILE_PATH =
     USER_DATA_FOLDER_PATH + "/Performance_log.txt";
+//Relative path to the file with the lifetime statistics.
+const string STATISTICS_FILE_PATH =
+    USER_DATA_FOLDER_PATH + "/Statistics.txt";
 
 #endif //ifndef CONST_INCLUDED

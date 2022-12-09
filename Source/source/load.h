@@ -28,7 +28,7 @@ void load_area(
     const AREA_TYPES requested_area_type,
     const bool load_for_editor, const bool from_backup
 );
-void load_area_mission_data(data_node* node, mission_data& data);
+void load_area_mission_data(data_node* node, mission_data &data);
 void load_asset_file_names();
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node = NULL,
@@ -48,6 +48,7 @@ void load_options();
 sample_struct load_sample(const string &file_name);
 void load_spike_damage_types();
 void load_spray_types(const bool load_resources);
+void load_statistics();
 void load_status_types(const bool load_resources);
 void load_system_animations();
 void load_weather();

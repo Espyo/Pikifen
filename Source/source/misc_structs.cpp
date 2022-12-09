@@ -1523,6 +1523,30 @@ void reader_setter::set(
  * child:
  *   Name of the child node.
  * var:
+ *   The var to set. This is an unsigned integer.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
+ */
+void reader_setter::set(
+    const string &child, unsigned int &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2i(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child:
+ *   Name of the child node.
+ * var:
  *   The var to set. This is an unsigned char.
  * child_node:
  *   If not-NULL, the node from whence the value came is placed here.
@@ -1578,6 +1602,30 @@ void reader_setter::set(
  */
 void reader_setter::set(
     const string &child, float &var, data_node** child_node
+) {
+    data_node* n = node->get_child_by_name(child);
+    if(!n->value.empty()) {
+        if(child_node) *child_node = n;
+        var = s2f(n->value);
+    } else {
+        if(child_node) *child_node = NULL;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child:
+ *   Name of the child node.
+ * var:
+ *   The var to set. This is a double.
+ * child_node:
+ *   If not-NULL, the node from whence the value came is placed here.
+ *   NULL is placed if the property does not exist or has no value.
+ */
+void reader_setter::set(
+    const string &child, double &var, data_node** child_node
 ) {
     data_node* n = node->get_child_by_name(child);
     if(!n->value.empty()) {
@@ -1846,6 +1894,34 @@ bool script_var_reader::get(const string &name, point &dest) const {
     }
     dest = s2p(v->second);
     return true;
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Constructs a new statistics struct instance.
+ */
+statistics_struct::statistics_struct() :
+    startups(0),
+    runtime(0.0f),
+    gameplay_time(0.0f),
+    area_entries(0),
+    pikmin_births(0),
+    pikmin_eaten(0),
+    pikmin_enemy_hazard_deaths(0),
+    pikmin_terrain_hazard_deaths(0),
+    pikmin_misc_deaths(0),
+    pikmin_blooms(0),
+    pikmin_saved(0),
+    enemy_deaths(0),
+    pikmin_thrown(0),
+    whistle_uses(0),
+    distance_walked(0.0f),
+    leader_damage_suffered(0.0f),
+    punch_damage_caused(0.0f),
+    leader_kos(0),
+    sprays_used(0) {
+    
 }
 
 

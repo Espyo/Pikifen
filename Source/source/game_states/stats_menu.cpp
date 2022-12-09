@@ -16,6 +16,7 @@
 #include "../functions.h"
 #include "../game.h"
 #include "../load.h"
+#include "../utils/string_utils.h"
 
 namespace STATS_MENU {
 //Path to the GUI information file.
@@ -218,17 +219,17 @@ void stats_menu_state::load() {
 void stats_menu_state::populate_stats_list() {
     add_header("Pikifen use");
     add_stat(
-        "Startups", "0",
+        "Startups", i2s(game.statistics.startups),
         "Total number of times Pikifen was started."
     );
     add_stat(
-        "Uptime", "00:00",
-        "Total amount of time Pikifen was running for."
+        "Runtime", "00:00",
+        "Total amount of time Pikifen was running for, in seconds."
     );
     add_stat(
         "Gameplay time", "00:00",
-        "Total amount of gameplay time. Menus, editors, pause menu, etc. "
-        "don't count."
+        "Total amount of gameplay time, in seconds. Menus, editors, "
+        "pause menu, etc. don't count."
     );
     add_stat(
         "Area entries", "0",
@@ -258,8 +259,8 @@ void stats_menu_state::populate_stats_list() {
     );
     add_stat(
         "Pikmin bloom count", "0",
-        "Total number of times Pikmin matured (either from leaf to bud, or "
-        "leaf to flower)."
+        "Total number of times Pikmin matured (leaf to bud, leaf to flower, "
+        "or bud to flower)."
     );
     add_stat(
         "Pikmin saved", "0",
@@ -273,7 +274,7 @@ void stats_menu_state::populate_stats_list() {
     
     add_header("Leader control");
     add_stat(
-        "Pikmin throws", "0",
+        "Pikmin thrown", "0",
         "Total number of times Pikmin were thrown. Leaders thrown don't count."
     );
     add_stat(

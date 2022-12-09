@@ -530,6 +530,9 @@ struct reader_setter {
         const string &child, int &var, data_node** child_node = NULL
     );
     void set(
+        const string &child, unsigned int &var, data_node** child_node = NULL
+    );
+    void set(
         const string &child, unsigned char &var, data_node** child_node = NULL
     );
     void set(
@@ -537,6 +540,9 @@ struct reader_setter {
     );
     void set(
         const string &child, float &var, data_node** child_node = NULL
+    );
+    void set(
+        const string &child, double &var, data_node** child_node = NULL
     );
     void set(
         const string &child, ALLEGRO_COLOR &var, data_node** child_node = NULL
@@ -976,6 +982,53 @@ struct spray_stats_struct {
     size_t nr_ingredients;
     
     spray_stats_struct() : nr_sprays(0), nr_ingredients(0) { }
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Contains info about the engine's lifetime statistics.
+ */
+struct statistics_struct {
+    //Times Pikifen was started.
+    uint32_t startups;
+    //Time Pikifen was running for, in seconds.
+    double runtime;
+    //Time gameplay happened for, in seconds.
+    double gameplay_time;
+    //Times areas were entered.
+    uint32_t area_entries;
+    //Times Pikmin were born from an Onion.
+    uint64_t pikmin_births;
+    //Times Pikmin died by being eaten.
+    uint64_t pikmin_eaten;
+    //Times Pikmin died from an enemy's hazard.
+    uint64_t pikmin_enemy_hazard_deaths;
+    //Times Pikmin died from a terrain hazard.
+    uint64_t pikmin_terrain_hazard_deaths;
+    //Times Pikmin died for other reasons.
+    uint64_t pikmin_misc_deaths;
+    //Times Pikmin bloomed (leaf to bud, leaf to flower, or bud to flower).
+    uint64_t pikmin_blooms;
+    //Times Pikmin were saved from a hazard by being whistled.
+    uint64_t pikmin_saved;
+    //Times enemies died.
+    uint64_t enemy_deaths;
+    //Times Pikmin were thrown. Leaders thrown don't count.
+    uint64_t pikmin_thrown;
+    //Times the whistle was used.
+    uint64_t whistle_uses;
+    //Distance walked by an active leader, in centimeters.
+    double distance_walked;
+    //Damage suffered by leaders.
+    double leader_damage_suffered;
+    //Damage caused by punches.
+    double punch_damage_caused;
+    //Times leaders were KO'd.
+    uint64_t leader_kos;
+    //Times sprays were used.
+    uint64_t sprays_used;
+    
+    statistics_struct();
 };
 
 

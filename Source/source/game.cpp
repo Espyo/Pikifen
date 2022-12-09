@@ -291,6 +291,9 @@ int game_class::start() {
     init_controls();
     load_options();
     save_options();
+    load_statistics();
+    statistics.startups++;
+    save_statistics();
     
     //Event stuff.
     init_event_things(logic_timer, logic_queue);

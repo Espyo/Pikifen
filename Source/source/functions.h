@@ -205,6 +205,7 @@ string sanitize_file_name(const string &s);
 void save_maker_tools();
 void save_options();
 void save_screenshot();
+void save_statistics();
 size_t select_next_item_directionally(
     const vector<point> &item_coordinates, const size_t selected_item,
     const float direction, const point &loop_region

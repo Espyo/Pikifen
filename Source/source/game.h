@@ -161,6 +161,8 @@ public:
     vector<spray_type> spray_types;
     //List of game states.
     game_state_list states;
+    //List of lifetime statistics.
+    statistics_struct statistics;
     //List of status types.
     map<string, status_type*> status_types;
     //All system assets.
