@@ -56,6 +56,8 @@ struct game_state_list {
     main_menu_state* main_menu;
     //Options menu.
     options_menu_state* options_menu;
+    //Statistics menu.
+    stats_menu_state* stats_menu;
     //Area results menu.
     results_state* results;
     

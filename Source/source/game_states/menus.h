@@ -57,6 +57,11 @@ extern const string GUI_FILE_PATH;
 }
 
 
+namespace STATS_MENU {
+extern const string GUI_FILE_PATH;
+}
+
+
 //Pages of the main menu.
 enum MAIN_MENU_PAGES {
     //Main page.
@@ -448,5 +453,34 @@ private:
     
 };
 
+
+/* ----------------------------------------------------------------------------
+ * Information about the statistics menu.
+ */
+class stats_menu_state : public game_state {
+public:
+    stats_menu_state();
+    void load() override;
+    void unload() override;
+    void handle_allegro_event(ALLEGRO_EVENT &ev) override;
+    void do_logic() override;
+    void do_drawing() override;
+    string get_name() const override;
+    
+private:
+    //Bitmap of the menu background.
+    ALLEGRO_BITMAP* bmp_menu_bg;
+    //Statistics list item.
+    list_gui_item* stats_list;
+    //GUI.
+    gui_manager gui;
+    
+    void add_header(const string &label);
+    void add_stat(
+        const string &label, const string &value, const string &description
+    );
+    void leave();
+    void populate_stats_list();
+};
 
 #endif //ifndef MENUS_INCLUDED

@@ -10,8 +10,8 @@ Next tasks (roughly sorted most important first)
     
     --- v0.23.0 ---
     Editor improvements
-        A button next to the medal point requirement widgets to set it to the combined amount of the goal
         "it would be nice to have a hotkey to quickly navigate the editor menus, like esc in any selection mode to go back to the root menu (the one with info, layout, objects, etc) and perhaps hotkeys to quickly get to selection modes such as L for layout, O for objects, etc" --Nataly
+            Add a beginner/advanced mode toggle in the options; if set to advanced, four extra buttons appear in the toolbar to quickly go to layout, mobs, paths, details
         Add a copy-paste feature to the area editor
             It should only work when you select one and only one sector
             It copies the shape of the sector, and then lets you paste that shape somewhere, same as if you were dragging a sector of that shape elsewhere
@@ -851,6 +851,8 @@ Tasks for later on (I might never implement these)
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     A competitive mode where each team's marble is out in the open, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
+    A button next to the medal point requirement widgets to set it to the combined amount of the goal
+        This is tricky to do because some goal amounts rely on some complicated logic and data, some of which may not be available to the area editor. e.g. Collect Treasures needs to know exactly how many resources a pile will end up having
     Story mode
         A way to choose what landing site of the area you want to start the day in
     [NEEDS BRAINSTORMING] Online play?
@@ -889,6 +891,5 @@ Tasks for later on (I might never implement these)
         An enemy that can heal, for instance, 20HP for each Pikmin eaten
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard
     [NEEDS BRAINSTORMING] Questions to be answered later
-        Change the logic of Pikmin chasing after opponents (pikmin_fsm::go_to_opponent, pikmin_fsm::rechase_opponent) to better suit rectangular objects?
         If P1's leader throws a mine at P2's leader, and it sticks on them, that leader will be *holding* the mine. This will probably break a lot of logic that assumes holding just refers to the pre-throw Pikmin hold
         Do Pikmin need to have a delay before their health regeneration kicks in?

@@ -344,21 +344,21 @@ void results_state::load() {
     text_to_animate.clear();
     
     //Menu items.
-    gui.register_coords("area_name",             50,    7, 45, 10);
-    gui.register_coords("area_subtitle",         50,   18, 40, 10);
-    gui.register_coords("goal_stamp",            15,   15, 22, 22);
-    gui.register_coords("end_reason",            15,   28, 26,  4);
-    gui.register_coords("medal",                 85,   15, 22, 22);
-    gui.register_coords("medal_reason",          85,   28, 26,  4);
-    gui.register_coords("conclusion_label",      50,   32, 36,  4);
-    gui.register_coords("conclusion",            50,   36, 96,  4);
-    gui.register_coords("stats_label",           50,   42, 36,  4);
-    gui.register_coords("stats",                 50,   63, 80, 38);
-    gui.register_coords("stats_scroll",          93,   63,  2, 38);
-    gui.register_coords("retry",                 20,   88, 24,  8);
-    gui.register_coords("continue",              50,   88, 24,  8);
-    gui.register_coords("pick_area",             80,   88, 24,  8);
-    gui.register_coords("tooltip",               50, 96.5, 96,  5);
+    gui.register_coords("area_name",        50,  7, 45, 10);
+    gui.register_coords("area_subtitle",    50, 18, 40, 10);
+    gui.register_coords("goal_stamp",       15, 15, 22, 22);
+    gui.register_coords("end_reason",       15, 28, 26,  4);
+    gui.register_coords("medal",            85, 15, 22, 22);
+    gui.register_coords("medal_reason",     85, 28, 26,  4);
+    gui.register_coords("conclusion_label", 50, 32, 36,  4);
+    gui.register_coords("conclusion",       50, 36, 96,  4);
+    gui.register_coords("stats_label",      50, 42, 36,  4);
+    gui.register_coords("stats",            50, 63, 80, 38);
+    gui.register_coords("stats_scroll",     93, 63,  2, 38);
+    gui.register_coords("retry",            20, 88, 24,  8);
+    gui.register_coords("continue",         50, 88, 24,  8);
+    gui.register_coords("pick_area",        80, 88, 24,  8);
+    gui.register_coords("tooltip",          50, 96, 96,  4);
     gui.read_coords(
         data_node(RESULTS::GUI_FILE_PATH).get_child_by_name("positions")
     );

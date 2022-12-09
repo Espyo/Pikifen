@@ -191,6 +191,7 @@ void main_menu_state::init_main_page() {
     main_gui.register_coords("play",    50, 58, 60, 12);
     main_gui.register_coords("make",    50, 72, 60, 12);
     main_gui.register_coords("options", 31, 83, 34,  6);
+    main_gui.register_coords("stats",   69, 83, 34,  6);
     main_gui.register_coords("exit",    91, 91, 14,  6);
     main_gui.register_coords("tooltip", 50, 96, 96,  4);
     main_gui.read_coords(gui_file.get_child_by_name("positions"));
@@ -247,6 +248,19 @@ void main_menu_state::init_main_page() {
     options_button->on_get_tooltip =
     [] () { return "Customize your playing experience."; };
     main_gui.add_item(options_button, "options");
+    
+    //Statistics button.
+    button_gui_item* stats_button =
+        new button_gui_item("Statistics", game.fonts.area_name);
+    stats_button->on_activate =
+    [] (const point &) {
+        game.fade_mgr.start_fade(false, [] () {
+            game.change_state(game.states.stats_menu);
+        });
+    };
+    stats_button->on_get_tooltip =
+    [] () { return "Check out some fun lifetime statistics."; };
+    main_gui.add_item(stats_button, "stats");
     
     //Exit button.
     main_gui.back_item =
