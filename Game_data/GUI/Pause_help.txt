@@ -1,64 +1,63 @@
-positions {
-    back =        15  8 20  8
-    gameplay =    22 25 35 10
-    controls =    22 37 35 10
-    pikmin =      22 49 35 10
-    objects =     22 61 35 10
-    manual =      22 73 35 10
-    category =    69 15 50  8
-    list =        69 50 50 60
-    list_scroll = 96 50  2 60
-    tooltip =     50 90 95 15
+positions{
+	back=12.0000 5.0000 20.0000 6.0000
+	gameplay=22.0000 25.0000 35.0000 10.0000
+	controls=22.0000 37.0000 35.0000 10.0000
+	pikmin=22.0000 49.0000 35.0000 10.0000
+	objects=22.0000 61.0000 35.0000 10.0000
+	manual=22.0000 73.0000 35.0000 10.0000
+	category=71.0000 10.0000 54.0000 8.0000
+	list=69.0000 50.0000 50.0000 60.0000
+	list_scroll=96.0000 50.0000 2.0000 60.0000
+	tooltip=50.0000 90.0000 95.0000 15.0000
 }
-
-tidbits {
-    gameplay {
-        Controlling leaders;You take control of a leader, and your job is to order your Pikmin to do tasks. Organization, planning, and multitasking are essential to make the most out of your time!
-        Calling idle Pikmin;You can call an idle Pikmin to your group by whistling it or bumping against it. Afterwards, it will start following you.
-        Throwing;Throw a Pikmin in your group towards a task or wildlife, in order to have it work on it or start attacking.
-        Idle Pikmin habits;Idle Pikmin have a glow to them. When idle, they will also work on nearby things on their own.
-        Making Pikmin idle;Throwing a Pikmin at an empty spot will leave it idling where it lands. It's also possible to dismiss them all directly.
-        Onion;Pikmin live in nests called Onions. When under an Onion, you can store Pikmin inside or call them out.
-        Growing Pikmin;Pikmin can carry things to the Onion. After delivery, the Onion will create new Pikmin!
-        Pikmin types;Different Pikmin types have different strengths and weaknesses. Always try to use the right Pikmin for the job!
-        Swapping Pikmin types;You will only throw Pikmin of the current standby type. Change the standby type to throw other Pikmin.
-        Carrying target;Some items need multiple Pikmin to carry. The type of Pikmin receiving the object at the Onion matches the majority of carriers.
-        Obstacles;Some obstacles will require multiple Pikmin to work together to clear them, sometimes by combining their strengths, sometimes their weights.
-        Leader swapping;You can swap control between leaders. Try leaving different leaders with different groups of Pikmin so you can multitask.
-        Balancing Pikmin amounts;The more Pikmin doing something together, the more efficient and effective they will be. But too many in one place means things like shortcut opening or reinforcement growing aren't getting done. Plan carefully!
-        Throwing teammates;Other leaders can also join your group, or be thrown like Pikmin. Use this to reach new places.
-        Pikmin deaths;Pikmin can be eaten, burned up, or die in other ways. Their strength lies in their numbers, however!
-        Enemy combat;Learn how each enemy works, and how best to attack them! Try aiming for their weak spots.
-        Saving Pikmin;If your Pikmin are in trouble, whistling them is generally a good catch-all way of saving them!
-        Sprays;Use sprays to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!
-        Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.
-        Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.
-        Getting up;If a Pikmin got knocked back, is lying on the floor, and about to be attacked, whistle it to make it get up faster.
-        Pikmin counters;Use the counters at the bottom of the HUD to keep an eye on Pikmin counts. These only count Pikmin, though the amount ready at standby can also refer to leaders if you have any selected.
-        Limited time;There are only so many minutes in a day. Keep your eye on the Sun Meter at the top of the screen to make sure you do everything you need to before the day ends.
-        Goal;There is no overarching goal yet, but try defeating as many enemies and gather as many goodies as you can! A results screen will show you how you did after you finish the area via the pause menu.
-    }
-    controls {
-        Move;Move around with \k move_up \k \k move_left \k \k move_down \k \k move_right \k.
-        Whistle;Whistle Pikmin with \k whistle \k. Hold to expand the whistle.
-        Throw;Throw a Pikmin of the currently selected standby type with \k throw \k.
-        Swap Pikmin type;Change the current Pikmin type on standby with \k prev_type \k and \k next_type \k. You can also put a leader in the group on standby this way.
-        Swarm;Swarm your squad of Pikmin towards the cursor with \k swarm_cursor \k, or in a specific direction with \k swarm_up \k \k swarm_left \k \k swarm_down \k \k swarm_right \k. They'll start working on whatever they touch.
-        Swap leader;Change to a different leader in the area with \k next_leader \k.
-        Dismiss;Dismiss your group with \k dismiss \k. If you're swarming, they will be dismissed in that direction.
-        Spray;Use sprays with \k use_spray_1 \k and \k use_spray_2 \k. If you have multiple, \k prev_spray \k and \k next_spray \k change which one is active, and \k use_spray \k uses it.
-        Punch;When you have no Pikmin in your group, throw a punch with \k throw \k.
-        Lie down;Lie down with \k lie_down \k. Nearby Pikmin will pick you up and carry you to an Onion, so use this opportunity to swap to a new leader and do something else.
-        Mouse cursor;When playing with a mouse, the leader's cursor follows your own mouse cursor. But regardless of control scheme, the leader cursor's range is limited, so pay attention to where the leader is really aiming!
-        Releasing held Pikmin;To drop a held Pikmin without throwing it, keep \k throw \k held, and press \k whistle \k.
-    }
-    objects {
-        Pellet;Pellets are like food for Pikmin, making them good sources for more Pikmin. The number on them specifies their weight. Try matching their color with the receiving Pikmin type!
-        Nectar;Pikmin that drink nectar will go up in maturity. The more mature a Pikmin, the faster it'll move.
-        Egg;Eggs usually have nectar inside, but if you're lucky, they can drop some spray drops.
-        Bomb rock;Bomb rocks can be picked up by any Pikmin. Throw a Pikmin with one to drop it and start its fuse. If a bomb rock Pikmin gets bit by an enemy, it'll snatch the bomb instead!
-        Reinforced wall;Reinforced walls cannot be destroyed by Pikmin directly. Try some explosive force instead.
-        Flukeweed;Flukeweeds look like spiraling plants, and usually hide something underneath their roots. Winged Pikmin can pull these plants out.
-        Bamboo gate;Bamboo gates have handles at the top, and can be lifted into the air by Winged Pikmin.
-    }
+tidbits{
+	gameplay{
+		Controlling leaders;You take control of a leader, and your job is to order your Pikmin to do tasks. Organization, planning, and multitasking are essential to make the most out of your time!
+		Calling idle Pikmin;You can call an idle Pikmin to your group by whistling it or bumping against it. Afterwards, it will start following you.
+		Throwing;Throw a Pikmin in your group towards a task or wildlife, in order to have it work on it or start attacking.
+		Idle Pikmin habits;Idle Pikmin have a glow to them. When idle, they will also work on nearby things on their own.
+		Making Pikmin idle;Throwing a Pikmin at an empty spot will leave it idling where it lands. It's also possible to dismiss them all directly.
+		Onion;Pikmin live in nests called Onions. When under an Onion, you can store Pikmin inside or call them out.
+		Growing Pikmin;Pikmin can carry things to the Onion. After delivery, the Onion will create new Pikmin!
+		Pikmin types;Different Pikmin types have different strengths and weaknesses. Always try to use the right Pikmin for the job!
+		Swapping Pikmin types;You will only throw Pikmin of the current standby type. Change the standby type to throw other Pikmin.
+		Carrying target;Some items need multiple Pikmin to carry. The type of Pikmin receiving the object at the Onion matches the majority of carriers.
+		Obstacles;Some obstacles will require multiple Pikmin to work together to clear them, sometimes by combining their strengths, sometimes their weights.
+		Leader swapping;You can swap control between leaders. Try leaving different leaders with different groups of Pikmin so you can multitask.
+		Balancing Pikmin amounts;The more Pikmin doing something together, the more efficient and effective they will be. But too many in one place means things like shortcut opening or reinforcement growing aren't getting done. Plan carefully!
+		Throwing teammates;Other leaders can also join your group, or be thrown like Pikmin. Use this to reach new places.
+		Pikmin deaths;Pikmin can be eaten, burned up, or die in other ways. Their strength lies in their numbers, however!
+		Enemy combat;Learn how each enemy works, and how best to attack them! Try aiming for their weak spots.
+		Saving Pikmin;If your Pikmin are in trouble, whistling them is generally a good catch-all way of saving them!
+		Sprays;Use sprays to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!
+		Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.
+		Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.
+		Getting up;If a Pikmin got knocked back, is lying on the floor, and about to be attacked, whistle it to make it get up faster.
+		Pikmin counters;Use the counters at the bottom of the HUD to keep an eye on Pikmin counts. These only count Pikmin, though the amount ready at standby can also refer to leaders if you have any selected.
+		Limited time;There are only so many minutes in a day. Keep your eye on the Sun Meter at the top of the screen to make sure you do everything you need to before the day ends.
+		Goal;There is no overarching goal yet, but try defeating as many enemies and gather as many goodies as you can! A results screen will show you how you did after you finish the area via the pause menu.
+	}
+	controls{
+		Move;Move around with \k move_up \k \k move_left \k \k move_down \k \k move_right \k.
+		Whistle;Whistle Pikmin with \k whistle \k. Hold to expand the whistle.
+		Throw;Throw a Pikmin of the currently selected standby type with \k throw \k.
+		Swap Pikmin type;Change the current Pikmin type on standby with \k prev_type \k and \k next_type \k. You can also put a leader in the group on standby this way.
+		Swarm;Swarm your squad of Pikmin towards the cursor with \k swarm_cursor \k, or in a specific direction with \k swarm_up \k \k swarm_left \k \k swarm_down \k \k swarm_right \k. They'll start working on whatever they touch.
+		Swap leader;Change to a different leader in the area with \k next_leader \k.
+		Dismiss;Dismiss your group with \k dismiss \k. If you're swarming, they will be dismissed in that direction.
+		Spray;Use sprays with \k use_spray_1 \k and \k use_spray_2 \k. If you have multiple, \k prev_spray \k and \k next_spray \k change which one is active, and \k use_spray \k uses it.
+		Punch;When you have no Pikmin in your group, throw a punch with \k throw \k.
+		Lie down;Lie down with \k lie_down \k. Nearby Pikmin will pick you up and carry you to an Onion, so use this opportunity to swap to a new leader and do something else.
+		Mouse cursor;When playing with a mouse, the leader's cursor follows your own mouse cursor. But regardless of control scheme, the leader cursor's range is limited, so pay attention to where the leader is really aiming!
+		Releasing held Pikmin;To drop a held Pikmin without throwing it, keep \k throw \k held, and press \k whistle \k.
+	}
+	objects{
+		Pellet;Pellets are like food for Pikmin, making them good sources for more Pikmin. The number on them specifies their weight. Try matching their color with the receiving Pikmin type!
+		Nectar;Pikmin that drink nectar will go up in maturity. The more mature a Pikmin, the faster it'll move.
+		Egg;Eggs usually have nectar inside, but if you're lucky, they can drop some spray drops.
+		Bomb rock;Bomb rocks can be picked up by any Pikmin. Throw a Pikmin with one to drop it and start its fuse. If a bomb rock Pikmin gets bit by an enemy, it'll snatch the bomb instead!
+		Reinforced wall;Reinforced walls cannot be destroyed by Pikmin directly. Try some explosive force instead.
+		Flukeweed;Flukeweeds look like spiraling plants, and usually hide something underneath their roots. Winged Pikmin can pull these plants out.
+		Bamboo gate;Bamboo gates have handles at the top, and can be lifted into the air by Winged Pikmin.
+	}
 }

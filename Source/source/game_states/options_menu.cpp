@@ -160,19 +160,18 @@ void options_menu_state::load() {
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu items.
-    
-    gui.register_coords("back",                 15.00,  8.75, 20.0,  7.5);
-    gui.register_coords("fullscreen",           25.00, 18.75, 40.0,  7.5);
-    gui.register_coords("resolution",           75.00, 18.75, 40.0,  7.5);
-    gui.register_coords("cursor_speed",         25.00, 33.75, 40.0,  7.5);
-    gui.register_coords("cursor_cam_weight",    75.00, 33.75, 40.0,  7.5);
-    gui.register_coords("auto_throw",           50.00, 43.75, 45.0,  7.5);
-    gui.register_coords("show_hud_controls",    50.00, 53.75, 45.0,  7.5);
-    gui.register_coords("controls",             50.00, 63.75, 45.0,  7.5);
-    gui.register_coords("leaving_confirmation", 50.00, 73.75, 45.0,  7.5);
-    gui.register_coords("advanced",             86.25, 85.00, 22.5, 10.0);
-    gui.register_coords("tooltip",              50.00, 95.00, 95.0,  5.0);
-    gui.register_coords("restart_warning",      62.50,  5.25, 70.0,  5.5);
+    gui.register_coords("back",                 12,  5, 20, 6);
+    gui.register_coords("fullscreen",           24, 18, 40, 8);
+    gui.register_coords("resolution",           76, 18, 40, 8);
+    gui.register_coords("cursor_speed",         24, 32, 40, 8);
+    gui.register_coords("cursor_cam_weight",    76, 32, 40, 8);
+    gui.register_coords("auto_throw",           50, 44, 44, 8);
+    gui.register_coords("show_hud_controls",    50, 54, 44, 8);
+    gui.register_coords("leaving_confirmation", 50, 64, 44, 8);
+    gui.register_coords("controls",             50, 74, 44, 8);
+    gui.register_coords("advanced",             87, 86, 22, 8);
+    gui.register_coords("tooltip",              50, 96, 96, 4);
+    gui.register_coords("restart_warning",      63,  5, 70, 6);
     gui.read_coords(
         data_node(OPTIONS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );

@@ -449,19 +449,19 @@ void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * Initializes the area info page GUI items.
  */
 void area_menu_state::init_gui_info_page() {
-    gui.register_coords("info_name",     36,  6, 68,  8);
-    gui.register_coords("subtitle",      36, 16, 68,  8);
-    gui.register_coords("thumbnail",     85, 14, 26, 24);
-    gui.register_coords("description",   50, 40, 96, 24);
-    gui.register_coords("record_label",  50, 56, 96,  4);
-    gui.register_coords("record_info",   50, 62, 36,  4);
-    gui.register_coords("record_stamp",  20, 65, 20, 14);
-    gui.register_coords("record_medal",  80, 65, 20, 14);
-    gui.register_coords("record_date",   50, 66, 28,  4);
-    gui.register_coords("difficulty",    50, 79, 96,  6);
-    gui.register_coords("tags",          50, 87, 96,  6);
-    gui.register_coords("maker",         28, 95, 52,  6);
-    gui.register_coords("version",       76, 95, 44,  6);
+    gui.register_coords("info_name",    36,  6, 68,  8);
+    gui.register_coords("subtitle",     36, 16, 68,  8);
+    gui.register_coords("thumbnail",    85, 14, 26, 24);
+    gui.register_coords("description",  50, 40, 96, 24);
+    gui.register_coords("record_label", 50, 56, 96,  4);
+    gui.register_coords("record_info",  50, 62, 36,  4);
+    gui.register_coords("record_stamp", 20, 65, 20, 14);
+    gui.register_coords("record_medal", 80, 65, 20, 14);
+    gui.register_coords("record_date",  50, 66, 28,  4);
+    gui.register_coords("difficulty",   50, 79, 96,  6);
+    gui.register_coords("tags",         50, 87, 96,  6);
+    gui.register_coords("maker",        28, 95, 52,  6);
+    gui.register_coords("version",      76, 95, 44,  6);
     gui.read_coords(
         data_node(AREA_MENU::INFO_GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -608,7 +608,7 @@ void area_menu_state::init_gui_main() {
     gui.register_coords("view_toggle",   83,  5, 30,  6);
     gui.register_coords("info_box",      70, 51, 56, 82);
     gui.register_coords("specs_box",     70, 51, 56, 82);
-    gui.register_coords("tooltip",       50, 96, 95,  4);
+    gui.register_coords("tooltip",       50, 96, 96,  4);
     gui.register_coords("no_areas_text", 50, 50, 96, 10);
     gui.read_coords(
         data_node(AREA_MENU::GUI_FILE_PATH).get_child_by_name("positions")

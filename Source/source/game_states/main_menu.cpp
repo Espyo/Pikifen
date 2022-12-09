@@ -188,11 +188,11 @@ void main_menu_state::init_main_page() {
     data_node gui_file(MAIN_MENU::GUI_FILE_PATH);
     
     //Menu items.
-    main_gui.register_coords("play",             50, 59, 60, 12.5);
-    main_gui.register_coords("make",             50, 74, 60, 12.5);
-    main_gui.register_coords("options",          50, 85, 40,  5);
-    main_gui.register_coords("exit",             91, 91, 15,  6);
-    main_gui.register_coords("tooltip",          50, 95, 95,  8);
+    main_gui.register_coords("play",    50, 58, 60, 12);
+    main_gui.register_coords("make",    50, 72, 60, 12);
+    main_gui.register_coords("options", 31, 83, 34,  6);
+    main_gui.register_coords("exit",    91, 91, 14,  6);
+    main_gui.register_coords("tooltip", 50, 96, 96,  4);
     main_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Play button.
@@ -286,9 +286,9 @@ void main_menu_state::init_make_page() {
     make_gui.register_coords("animation_editor", 50, 59, 60, 10);
     make_gui.register_coords("area_editor",      50, 71, 60, 10);
     make_gui.register_coords("gui_editor",       50, 83, 60, 10);
-    make_gui.register_coords("back",              9, 91, 15,  6);
-    make_gui.register_coords("more",             90, 90, 15,  5);
-    make_gui.register_coords("tooltip",          50, 95, 95,  8);
+    make_gui.register_coords("back",              9, 91, 14,  6);
+    make_gui.register_coords("more",             91, 91, 14,  6);
+    make_gui.register_coords("tooltip",          50, 96, 96,  4);
     make_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Animation editor button.
@@ -384,8 +384,8 @@ void main_menu_state::init_play_page() {
     //Menu items.
     play_gui.register_coords("simple",  50, 60, 60, 12.5);
     play_gui.register_coords("mission", 50, 78, 60, 12.5);
-    play_gui.register_coords("back",     9, 91, 15,  6);
-    play_gui.register_coords("tooltip", 50, 95, 95,  8);
+    play_gui.register_coords("back",     9, 91, 14,    6);
+    play_gui.register_coords("tooltip", 50, 96, 96,    4);
     play_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Play a simple area button.

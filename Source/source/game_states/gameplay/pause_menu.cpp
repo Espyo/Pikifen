@@ -436,12 +436,12 @@ void pause_menu_struct::init_confirmation_page() {
     data_node gui_file(PAUSE_MENU::CONFIRMATION_GUI_FILE_PATH);
     
     //Menu items.
-    confirmation_gui.register_coords("cancel",           15,  8, 20, 8);
-    confirmation_gui.register_coords("confirm",          22, 25, 35, 10);
-    confirmation_gui.register_coords("header",           22, 37, 35, 10);
-    confirmation_gui.register_coords("explanation",      22, 49, 35, 10);
-    confirmation_gui.register_coords("options_reminder", 22, 61, 35, 10);
-    confirmation_gui.register_coords("tooltip",          50, 90, 95, 15);
+    confirmation_gui.register_coords("cancel",           19, 83, 30, 10);
+    confirmation_gui.register_coords("confirm",          81, 83, 30, 10);
+    confirmation_gui.register_coords("header",           50,  8, 92,  8);
+    confirmation_gui.register_coords("explanation",      50, 40, 84, 20);
+    confirmation_gui.register_coords("options_reminder", 50, 69, 92, 10);
+    confirmation_gui.register_coords("tooltip",          50, 96, 96,  4);
     confirmation_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Cancel button.
@@ -549,13 +549,13 @@ void pause_menu_struct::init_help_page() {
     }
     
     //Menu items.
-    help_gui.register_coords("back",        15,  8, 20, 8);
+    help_gui.register_coords("back",        12,  5, 20,  6);
     help_gui.register_coords("gameplay",    22, 25, 35, 10);
     help_gui.register_coords("controls",    22, 37, 35, 10);
     help_gui.register_coords("pikmin",      22, 49, 35, 10);
     help_gui.register_coords("objects",     22, 61, 35, 10);
     help_gui.register_coords("manual",      22, 73, 35, 10);
-    help_gui.register_coords("category",    69, 15, 50,  8);
+    help_gui.register_coords("category",    71, 10, 54,  8);
     help_gui.register_coords("list",        69, 50, 50, 60);
     help_gui.register_coords("list_scroll", 96, 50,  2, 60);
     help_gui.register_coords("tooltip",     50, 90, 95, 15);

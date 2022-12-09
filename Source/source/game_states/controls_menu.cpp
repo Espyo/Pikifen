@@ -411,11 +411,11 @@ void controls_menu_state::load() {
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
     //Menu items.
-    gui.register_coords("back",        15, 10, 20,  6);
-    gui.register_coords("new",         80, 10, 30,  7);
-    gui.register_coords("list",        48, 53, 86, 76);
-    gui.register_coords("list_scroll", 94, 53,  2, 76);
-    gui.register_coords("tooltip",     50, 95, 95,  8);
+    gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("new",         83,  5, 30,  6);
+    gui.register_coords("list",        50, 51, 88, 82);
+    gui.register_coords("list_scroll", 97, 51,  2, 82);
+    gui.register_coords("tooltip",     50, 96, 96,  4);
     gui.read_coords(
         data_node(CONTROLS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
