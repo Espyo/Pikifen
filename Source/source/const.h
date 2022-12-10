@@ -62,6 +62,8 @@ const string NONE_OPTION = "(None)";
 constexpr int SMALLEST_WIN_HEIGHT = 480;
 //Smallest possible window width.
 constexpr int SMALLEST_WIN_WIDTH = 640;
+//Real-world centimeters per in-game-world pixel.
+constexpr float CM_PER_PIXEL = 0.05f;
 
 //Relative path to the folder with the game data.
 const string GAME_DATA_FOLDER_PATH = "Game_data";

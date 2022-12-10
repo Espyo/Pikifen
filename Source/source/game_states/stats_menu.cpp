@@ -29,7 +29,9 @@ const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Statistics_menu.txt";
  */
 stats_menu_state::stats_menu_state() :
     game_state(),
-    bmp_menu_bg(nullptr) {
+    bmp_menu_bg(nullptr),
+    stats_list(nullptr),
+    runtime_value_text(nullptr) {
     
 }
 
@@ -61,6 +63,7 @@ void stats_menu_state::add_header(const string &label) {
 
 /* ----------------------------------------------------------------------------
  * Adds a new stat to the stats list GUI item.
+ * Returns the text GUI item for the value.
  * label:
  *   Name of the statistic.
  * value:
@@ -68,7 +71,7 @@ void stats_menu_state::add_header(const string &label) {
  * description:
  *   Tooltip description.
  */
-void stats_menu_state::add_stat(
+text_gui_item* stats_menu_state::add_stat(
     const string &label, const string &value, const string &description
 ) {
     float list_bottom_y = stats_list->get_child_bottom();
@@ -101,6 +104,8 @@ void stats_menu_state::add_stat(
         point(0.44f, STAT_HEIGHT);
     stats_list->add_child(value_text);
     gui.add_item(value_text);
+    
+    return value_text;
 }
 
 
@@ -128,6 +133,8 @@ void stats_menu_state::do_drawing() {
  */
 void stats_menu_state::do_logic() {
     game.fade_mgr.tick(game.delta_t);
+    
+    update_runtime_value_text();
     
     gui.tick(game.delta_t);
 }
@@ -157,6 +164,7 @@ void stats_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * Leaves the statistics menu and goes to the main menu.
  */
 void stats_menu_state::leave() {
+    save_statistics();
     game.fade_mgr.start_fade(false, [] () {
         game.change_state(game.states.main_menu);
     });
@@ -217,88 +225,96 @@ void stats_menu_state::load() {
  * Populates the stats menu with bullet points.
  */
 void stats_menu_state::populate_stats_list() {
-    add_header("Pikifen use");
+    add_header(
+        (game.config.name.empty() ? "Pikifen" : game.config.name) +
+        " use"
+    );
     add_stat(
         "Startups", i2s(game.statistics.startups),
-        "Total number of times Pikifen was started."
+        "Total number of times " +
+        (game.config.name.empty() ? "Pikifen" : game.config.name) +
+        " was started."
     );
+    runtime_value_text =
+        add_stat(
+            "Runtime", "",
+            "Total amount of time " +
+            (game.config.name.empty() ? "Pikifen" : game.config.name) +
+            " was running for, in seconds."
+        );
+    update_runtime_value_text();
     add_stat(
-        "Runtime", "00:00",
-        "Total amount of time Pikifen was running for, in seconds."
-    );
-    add_stat(
-        "Gameplay time", "00:00",
+        "Gameplay time",
+        time_to_str3(game.statistics.gameplay_time, ":", ":", ""),
         "Total amount of gameplay time, in seconds. Menus, editors, "
         "pause menu, etc. don't count."
     );
     add_stat(
-        "Area entries", "0",
-        "Total number of times that areas were entered."
+        "Area entries", i2s(game.statistics.area_entries),
+        "Total number of times that areas were entered. Includes retries "
+        "and area editor tests."
     );
     
     add_header("Pikmin life");
     add_stat(
-        "Pikmin births", "0",
+        "Pikmin births", i2s(game.statistics.pikmin_births),
         "Total number of times Pikmin were born from an Onion."
     );
     add_stat(
-        "Pikmin eaten", "0",
+        "Pikmin deaths", i2s(game.statistics.pikmin_deaths),
+        "Total number of times Pikmin died in any way."
+    );
+    add_stat(
+        "Pikmin eaten", i2s(game.statistics.pikmin_eaten),
         "Total number of times Pikmin were swallowed by an enemy."
     );
     add_stat(
-        "Pikmin enemy hazard deaths", "0",
-        "Total number of times Pikmin died from an enemy's hazard."
+        "Pikmin hazard deaths", i2s(game.statistics.pikmin_hazard_deaths),
+        "Total number of times Pikmin died from a hazard."
     );
     add_stat(
-        "Pikmin terrain hazard deaths", "0",
-        "Total number of times Pikmin died from a hazard in the terrain."
-    );
-    add_stat(
-        "Pikmin misc. deaths", "0",
-        "Total number of times Pikmin died for other reasons."
-    );
-    add_stat(
-        "Pikmin bloom count", "0",
+        "Pikmin bloom count", i2s(game.statistics.pikmin_blooms),
         "Total number of times Pikmin matured (leaf to bud, leaf to flower, "
         "or bud to flower)."
     );
     add_stat(
-        "Pikmin saved", "0",
-        "Total number of times Pikmin were saved from a hazard by "
-        "being whistled."
+        "Pikmin saved", i2s(game.statistics.pikmin_saved),
+        "Total number of times the whistle saved Pikmin from a hazard that was "
+        "killing them."
     );
     add_stat(
-        "Enemy deaths", "0",
+        "Enemy deaths", i2s(game.statistics.enemy_deaths),
         "Total number of enemies that died."
     );
     
     add_header("Leader control");
     add_stat(
-        "Pikmin thrown", "0",
+        "Pikmin thrown", i2s(game.statistics.pikmin_thrown),
         "Total number of times Pikmin were thrown. Leaders thrown don't count."
     );
     add_stat(
-        "Whistle uses", "0",
+        "Whistle uses", i2s(game.statistics.whistle_uses),
         "Total number of times the whistle was used."
     );
     add_stat(
-        "Distance walked (m)", "0",
+        "Distance walked (m)",
+        f2s((game.statistics.distance_walked * CM_PER_PIXEL) / 100.0),
         "Total distance walked by an active leader, in meters."
     );
     add_stat(
-        "Leader damage suffered", "0",
+        "Leader damage suffered", i2s(game.statistics.leader_damage_suffered),
         "Total amount of damage suffered by leaders."
     );
     add_stat(
-        "Punch damage caused", "0",
+        "Punch damage caused", i2s(game.statistics.punch_damage_caused),
         "Total amount of damage caused by a leader punching."
     );
     add_stat(
-        "Leader KOs", "0",
+        "Leader KOs", i2s(game.statistics.leader_kos),
         "Total amount of times a leader got KO'd."
     );
     add_stat(
-        "Sprays used", "0",
+        "Sprays used", i2s(game.statistics.sprays_used),
         "Total amount of times a spray was used."
     );
 }
@@ -314,4 +330,13 @@ void stats_menu_state::unload() {
     
     //Menu items.
     gui.destroy();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the GUI text item for the runtime stat value.
+ */
+void stats_menu_state::update_runtime_value_text() {
+    runtime_value_text->text =
+        time_to_str3(game.statistics.runtime, ":", ":", "");
 }

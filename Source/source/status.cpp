@@ -20,6 +20,7 @@
  */
 status::status(status_type* type) :
     type(type),
+    from_hazard(false),
     to_delete(false) {
     
     time_left = type->auto_remove_time;

@@ -17,7 +17,7 @@
 spray_type::spray_type() :
     group(true),
     group_pikmin_only(true),
-    affects_user(true),
+    affects_user(false),
     angle(0),
     distance_range(0),
     angle_range(0),

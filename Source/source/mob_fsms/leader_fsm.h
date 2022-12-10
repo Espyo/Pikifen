@@ -28,6 +28,7 @@ void be_thrown(              mob* m, void* info1, void* info2);
 void be_thrown_by_bouncer(   mob* m, void* info1, void* info2);
 void become_active(          mob* m, void* info1, void* info2);
 void become_inactive(        mob* m, void* info1, void* info2);
+void check_punch_damage(     mob* m, void* info1, void* info2);
 void die(                    mob* m, void* info1, void* info2);
 void dismiss(                mob* m, void* info1, void* info2);
 void decide_pluck_action(    mob* m, void* info1, void* info2);

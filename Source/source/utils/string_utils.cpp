@@ -390,7 +390,7 @@ string str_to_upper(string s) {
 
 /* ----------------------------------------------------------------------------
  * Represents units of time in a more human-readable format, by dividing the
- * units by 60.
+ * units by 60 so that you end up with two portions.
  * units:
  *   How many units of time in total.
  * suffix1:
@@ -398,7 +398,7 @@ string str_to_upper(string s) {
  * suffix2:
  *   Suffix for the second portion.
  */
-string time_to_str(
+string time_to_str2(
     const size_t units, const string &suffix1, const string &suffix2
 ) {
     size_t first = units / 60;
@@ -410,6 +410,38 @@ string time_to_str(
         (second < 10 ? "0" : "") +
         i2s(second) +
         suffix2;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Represents units of time in a more human-readable format, by dividing the
+ * units by 60 so that you end up with three portions.
+ * units:
+ *   How many units of time in total.
+ * suffix1:
+ *   Suffix for the first portion.
+ * suffix2:
+ *   Suffix for the second portion.
+ * suffix3:
+ *   Suffix for the third portion.
+ */
+string time_to_str3(
+    const size_t units,
+    const string &suffix1, const string &suffix2, const string &suffix3
+) {
+    size_t first = units / 60 / 60;
+    size_t second = (units / 60) % 60;
+    size_t third = units % 60;
+    return
+        (first < 10 ? "0" : "") +
+        i2s(first) +
+        suffix1 +
+        (second < 10 ? "0" : "") +
+        i2s(second) +
+        suffix2 +
+        (third < 10 ? "0" : "") +
+        i2s(third) +
+        suffix3;
 }
 
 

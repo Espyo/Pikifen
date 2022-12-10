@@ -1639,10 +1639,9 @@ void save_statistics() {
     save("gameplay_time", f2s(s.gameplay_time));
     save("area_entries", i2s(s.area_entries));
     save("pikmin_births", i2s(s.pikmin_births));
+    save("pikmin_deaths", i2s(s.pikmin_deaths));
     save("pikmin_eaten", i2s(s.pikmin_eaten));
-    save("pikmin_enemy_hazard_deaths", i2s(s.pikmin_enemy_hazard_deaths));
-    save("pikmin_terrain_hazard_deaths", i2s(s.pikmin_terrain_hazard_deaths));
-    save("pikmin_misc_deaths", i2s(s.pikmin_misc_deaths));
+    save("pikmin_hazard_deaths", i2s(s.pikmin_hazard_deaths));
     save("pikmin_blooms", i2s(s.pikmin_blooms));
     save("pikmin_saved", i2s(s.pikmin_saved));
     save("enemy_deaths", i2s(s.enemy_deaths));

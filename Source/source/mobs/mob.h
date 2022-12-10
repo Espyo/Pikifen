@@ -394,7 +394,9 @@ public:
     void arachnorb_plan_logic(const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal);
     void arachnorb_foot_move_logic();
     
-    void apply_status_effect(status_type* s, const bool given_by_parent);
+    void apply_status_effect(
+        status_type* s, const bool given_by_parent, const bool from_hazard
+    );
     void delete_old_status_effects();
     void remove_particle_generator(const MOB_PARTICLE_GENERATOR_IDS id);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale) const;

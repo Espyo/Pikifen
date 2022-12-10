@@ -150,7 +150,9 @@ struct status {
     //Status type.
     status_type* type;
     //Time left, if this status effect auto-removes itself.
-    float time_left; 
+    float time_left;
+    //Was this status inflicted by a hazard?
+    bool from_hazard;
     //Should this status be deleted from the mob's statuses?
     bool to_delete;
     

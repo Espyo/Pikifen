@@ -213,6 +213,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EV_MOVE_END); {
             efc.run(leader_fsm::stop);
         }
+        efc.new_event(MOB_EV_HITBOX_TOUCH_A_N); {
+            efc.run(leader_fsm::check_punch_damage);
+        }
         efc.new_event(MOB_EV_HITBOX_TOUCH_N_A); {
             efc.run(leader_fsm::be_attacked);
         }
@@ -1151,6 +1154,7 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     hitbox_interaction* info = (hitbox_interaction*) info1;
     
     float damage = 0;
+    float health_before = m->health;
     if(!info->mob2->calculate_damage(m, info->h2, info->h1, &damage)) {
         return;
     }
@@ -1185,6 +1189,9 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
     }
     
     game.states.gameplay->last_hurt_leader_pos = m->pos;
+    if(health_before > 0.0f && m->health < health_before) {
+        game.statistics.leader_damage_suffered += health_before - m->health;
+    }
 }
 
 
@@ -1332,6 +1339,31 @@ void leader_fsm::become_inactive(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a leader should check how much damage they've caused with their punch.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void leader_fsm::check_punch_damage(mob* m, void* info1, void* info2) {
+    engine_assert(info1 != NULL, m->print_state_history());
+    
+    hitbox_interaction* info = (hitbox_interaction*) info1;
+    
+    float damage = 0;
+    if(
+        info->mob2->health > 0.0f &&
+        m->can_hurt(info->mob2) &&
+        m->calculate_damage(info->mob2, info->h1, info->h2, &damage)
+    ) {
+        game.statistics.punch_damage_caused += damage;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a leader must decide what to do next after plucking.
  * m:
  *   The mob.
@@ -1448,6 +1480,10 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
     game.sys_assets.sfx_throw.stop();
     game.sys_assets.sfx_throw.play(0, false);
+    
+    if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+        game.statistics.pikmin_thrown++;
+    }
 }
 
 
@@ -1542,7 +1578,7 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        m->apply_status_effect(dro_ptr->dro_type->status_to_give, false);
+        m->apply_status_effect(dro_ptr->dro_type->status_to_give, false, false);
         break;
     } default: {
         break;
@@ -2022,6 +2058,8 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     
     m->stop_chasing();
     m->set_animation(LEADER_ANIM_SPRAYING);
+    
+    game.statistics.sprays_used++;
 }
 
 
@@ -2274,11 +2312,11 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     if(!vuln.status_to_apply || !vuln.status_overrides) {
         for(size_t e = 0; e < h->effects.size(); ++e) {
-            l->apply_status_effect(h->effects[e], false);
+            l->apply_status_effect(h->effects[e], false, true);
         }
     }
     if(vuln.status_to_apply) {
-        l->apply_status_effect(vuln.status_to_apply, false);
+        l->apply_status_effect(vuln.status_to_apply, false, true);
     }
     
     if(h->associated_liquid) {
@@ -2325,7 +2363,7 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
     spray_type* s = (spray_type*) info1;
     
     for(size_t e = 0; e < s->effects.size(); ++e) {
-        l->apply_status_effect(s->effects[e], false);
+        l->apply_status_effect(s->effects[e], false, false);
     }
 }
 

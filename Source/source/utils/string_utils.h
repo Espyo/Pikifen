@@ -56,7 +56,11 @@ bool str_peek(const string &s, const size_t where, const string &match);
 string str_to_lower(string s);
 string str_to_title(string s);
 string str_to_upper(string s);
-string time_to_str(size_t units, const string &suffix1, const string &suffix2);
+string time_to_str2(size_t units, const string &suffix1, const string &suffix2);
+string time_to_str3(
+    size_t units,
+    const string &suffix1, const string &suffix2, const string &suffix3
+);
 string trim_spaces(const string &s, const bool left_only = false);
 
 #endif //ifndef STRING_UTILS_INCLUDED

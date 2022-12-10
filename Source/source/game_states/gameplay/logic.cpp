@@ -659,6 +659,27 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         *   Mobs   ()--> *
         *                *
         ******************/
+        
+        size_t old_nr_living_leaders = nr_living_leaders;
+        //Some setup to calculate how far the leader walks.
+        leader* old_leader = cur_leader_ptr;
+        point old_leader_pos;
+        bool old_leader_was_walking = false;
+        if(cur_leader_ptr) {
+            old_leader_pos = cur_leader_ptr->pos;
+            old_leader_was_walking =
+                cur_leader_ptr->active &&
+                !has_flag(
+                    cur_leader_ptr->chase_info.flags,
+                    CHASE_FLAG_TELEPORT
+                ) &&
+                !has_flag(
+                    cur_leader_ptr->chase_info.flags,
+                    CHASE_FLAG_TELEPORTS_CONSTANTLY
+                ) &&
+                cur_leader_ptr->chase_info.state == CHASE_STATE_CHASING;
+        }
+        
         size_t n_mobs = mobs.all.size();
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
@@ -680,8 +701,34 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             m++;
         }
         
-        
         do_gameplay_leader_logic(delta_t);
+        
+        if(
+            cur_leader_ptr && cur_leader_ptr == old_leader &&
+            old_leader_was_walking
+        ) {
+            //This more or less tells us how far the leader walked in this
+            //frame. It's not perfect, since it will also count the leader
+            //getting pushed and knocked back whilst in the chasing state.
+            //It also won't count the movement if the active leader changed
+            //midway through.
+            //But those are rare cases that don't really affect much in the
+            //grand scheme of things, and don't really matter for a fun stat.
+            game.statistics.distance_walked +=
+                dist(old_leader_pos, cur_leader_ptr->pos).to_float();
+        }
+        
+        nr_living_leaders = 0;
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            if(mobs.leaders[l]->health > 0.0f) {
+                nr_living_leaders++;
+            }
+        }
+        if(nr_living_leaders < old_nr_living_leaders) {
+            game.statistics.leader_kos +=
+                old_nr_living_leaders - nr_living_leaders;
+        }
+        leaders_kod = starting_nr_of_leaders - nr_living_leaders;
         
         
         /**************************
@@ -768,14 +815,6 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                 }
             }
         }
-        
-        size_t living_leaders = 0;
-        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-            if(mobs.leaders[l]->health > 0.0f) {
-                living_leaders++;
-            }
-        }
-        leaders_kod = starting_nr_of_leaders - living_leaders;
         
         float real_goal_ratio = 0.0f;
         int goal_cur_amount =

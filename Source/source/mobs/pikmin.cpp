@@ -344,8 +344,12 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
  *   Amount to increase by.
  */
 void pikmin::increase_maturity(const int amount) {
+    int old_maturity = maturity;
     int new_maturity = maturity + amount;
     maturity = clamp(new_maturity, 0, N_MATURITIES - 1);
+    if(maturity > old_maturity) {
+        game.statistics.pikmin_blooms++;
+    }
 }
 
 
@@ -419,8 +423,7 @@ void pikmin::read_script_vars(const script_var_reader &svr) {
     bool follow_link_var;
     
     if(svr.get("maturity", maturity_var)) {
-        maturity = 0;
-        increase_maturity(maturity_var);
+        maturity = clamp(maturity_var, 0, N_MATURITIES - 1);
     }
     if(svr.get("sprout", sprout_var)) {
         if(sprout_var) {
@@ -487,6 +490,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         
         game.states.gameplay->pikmin_deaths++;
         game.states.gameplay->last_pikmin_death_pos = pos;
+        game.statistics.pikmin_deaths++;
     }
     
     //Tick the timer for the "missed" attack animation.

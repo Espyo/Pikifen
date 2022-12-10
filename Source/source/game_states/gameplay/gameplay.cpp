@@ -139,6 +139,7 @@ gameplay_state::gameplay_state() :
     old_mission_fail_2_cur(0),
     mission_fail_2_cur_text(nullptr),
     cur_leaders_in_mission_exit(0),
+    nr_living_leaders(0),
     leaders_kod(0),
     starting_nr_of_leaders(0),
     goal_indicator_ratio(0.0f),
@@ -236,11 +237,14 @@ void gameplay_state::do_logic() {
         }
     }
     
+    float regular_delta_t = game.delta_t;
+    
     if(game.maker_tools.change_speed) {
         game.delta_t *= game.maker_tools.change_speed_mult;
     }
     
     if(!paused) {
+        game.statistics.gameplay_time += regular_delta_t;
         do_gameplay_logic(game.delta_t* delta_t_mult);
     }
     do_menu_logic();
@@ -628,6 +632,7 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
         game.perf_mon->set_paused(true);
     }
     
+    save_statistics();
     al_show_mouse_cursor(game.display);
     
     switch(target) {
@@ -670,6 +675,8 @@ void gameplay_state::load() {
     draw_loading_screen("", "", 1.0f);
     al_flip_display();
     
+    game.statistics.area_entries++;
+    
     //Game content.
     load_game_content();
     
@@ -704,6 +711,7 @@ void gameplay_state::load() {
     old_mission_goal_cur = 0;
     old_mission_fail_1_cur = 0;
     old_mission_fail_2_cur = 0;
+    nr_living_leaders = 0;
     leaders_kod = 0;
     
     game.framerate_last_avg_point = 0;

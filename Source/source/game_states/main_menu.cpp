@@ -267,6 +267,7 @@ void main_menu_state::init_main_page() {
         new button_gui_item("Exit", game.fonts.area_name);
     main_gui.back_item->on_activate =
     [] (const point &) {
+        save_statistics();
         game.is_game_running = false;
     };
     main_gui.back_item->on_get_tooltip =

@@ -150,6 +150,7 @@ void onion::spew() {
         
         spew_queue[t]--;
         
+        game.statistics.pikmin_births++;
         game.states.gameplay->pikmin_born++;
         game.states.gameplay->last_pikmin_born_pos = pos;
         

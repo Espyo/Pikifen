@@ -1061,7 +1061,7 @@ hud_struct::hud_struct() :
                     game.cur_area_data.mission.goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
-                    text = time_to_str(value, ":", "");
+                    text = time_to_str2(value, ":", "");
                 } else {
                     text = i2s(value);
                 }
@@ -1107,7 +1107,7 @@ hud_struct::hud_struct() :
                     game.cur_area_data.mission.goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
-                    text = time_to_str(value, ":", "");
+                    text = time_to_str2(value, ":", "");
                 } else {
                     text = i2s(value);
                 }
@@ -1581,7 +1581,7 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
                 get_cur_amount(game.states.gameplay);
             string text;
             if(cond == MISSION_FAIL_COND_TIME_LIMIT) {
-                text = time_to_str(value, ":", "");
+                text = time_to_str2(value, ":", "");
             } else {
                 text = i2s(value);
             }
@@ -1638,7 +1638,7 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
                 get_req_amount(game.states.gameplay);
             string text;
             if(cond == MISSION_FAIL_COND_TIME_LIMIT) {
-                text = time_to_str(value, ":", "");
+                text = time_to_str2(value, ":", "");
             } else {
                 text = i2s(value);
             }

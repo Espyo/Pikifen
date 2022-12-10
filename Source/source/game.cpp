@@ -204,8 +204,11 @@ void game_class::main_loop() {
                     reset_delta_t = false;
                 }
                 
+                float real_delta_t = cur_time - prev_frame_time;
+                game.statistics.runtime += real_delta_t;
+                
                 //Anti speed-burst cap.
-                delta_t = std::min(cur_time - prev_frame_time, 0.2);
+                delta_t = std::min(real_delta_t, 0.2f);
                 
                 time_passed += delta_t;
                 game_state* prev_state = cur_state;

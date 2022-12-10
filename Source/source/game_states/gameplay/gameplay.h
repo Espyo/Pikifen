@@ -228,6 +228,8 @@ public:
     gui_item* mission_fail_2_cur_text;
     //How many leaders are in the mission exit. Cache for convenience.
     size_t cur_leaders_in_mission_exit;
+    //Current number of living leaders. Cache for convenience.
+    size_t nr_living_leaders;
     //How many leaders have been lost so far. Cache for convenience.
     size_t leaders_kod;
     //Starting number of leader mobs.

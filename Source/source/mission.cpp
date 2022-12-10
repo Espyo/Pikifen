@@ -736,7 +736,7 @@ string mission_fail_time_limit::get_end_reason(
 ) const {
     return
         "Took " +
-        time_to_str(
+        time_to_str2(
             mission->fail_time_limit, "m", "s"
         ) +
         "...";
@@ -792,7 +792,7 @@ string mission_fail_time_limit::get_player_description(
 ) const {
     return
         "Run out of time. Time limit: " +
-        time_to_str(
+        time_to_str2(
             mission->fail_time_limit, "m", "s"
         ) + ".";
 }
@@ -823,7 +823,7 @@ string mission_fail_time_limit::get_status(
     const int cur, const int req, const float percentage
 ) const {
     return
-        time_to_str(cur, "m", "s") +
+        time_to_str2(cur, "m", "s") +
         " have passed so far. (" + i2s(percentage) + "%)";
 }
 
@@ -1863,7 +1863,7 @@ string mission_goal_timed_survival::get_end_reason(
 ) const {
     return
         "Survived for " +
-        time_to_str(
+        time_to_str2(
             mission->goal_amount, "m", "s"
         ) +
         "!";
@@ -1914,7 +1914,7 @@ string mission_goal_timed_survival::get_player_description(
 ) const {
     return
         "Survive for " +
-        time_to_str(
+        time_to_str2(
             mission->goal_amount, "m", "s"
         ) + ".";
 }
@@ -1946,7 +1946,7 @@ string mission_goal_timed_survival::get_status(
 ) const {
     return
         "You have survived for " +
-        time_to_str(cur, "m", "s") +
+        time_to_str2(cur, "m", "s") +
         " so far. (" + i2s(percentage) + "%)";
 }
 

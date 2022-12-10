@@ -1,6 +1,5 @@
 animations{
 	attacking{
-		hit_rate=50
 		frames{
 			attacking_gas{
 				duration=2.0000
@@ -759,3 +758,4 @@ body_parts{
 	gas
 	treasure
 }
+engine_version=0.22.0

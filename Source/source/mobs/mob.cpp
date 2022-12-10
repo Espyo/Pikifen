@@ -323,12 +323,14 @@ void mob::apply_knockback(const float knockback, const float knockback_angle) {
  *   Status effect to use.
  * given_by_parent:
  *   If true, this status effect was given to the mob by its parent mob.
+ * from_hazard:
+ *   If true, this status effect was given from a hazard.
  */
 void mob::apply_status_effect(
-    status_type* s, const bool given_by_parent
+    status_type* s, const bool given_by_parent, const bool from_hazard
 ) {
     if(parent && parent->relay_statuses && !given_by_parent) {
-        parent->m->apply_status_effect(s, false);
+        parent->m->apply_status_effect(s, false, from_hazard);
         if(!parent->handle_statuses) return;
     }
     
@@ -340,7 +342,7 @@ void mob::apply_status_effect(
     for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
         mob* m2_ptr = game.states.gameplay->mobs.all[m];
         if(m2_ptr->parent && m2_ptr->parent->m == this) {
-            m2_ptr->apply_status_effect(s, true);
+            m2_ptr->apply_status_effect(s, true, from_hazard);
         }
     }
     
@@ -350,7 +352,7 @@ void mob::apply_status_effect(
         if(vuln_it->second.status_to_apply) {
             //It must instead receive this status.
             apply_status_effect(
-                vuln_it->second.status_to_apply, given_by_parent
+                vuln_it->second.status_to_apply, given_by_parent, from_hazard
             );
             return;
         }
@@ -380,7 +382,9 @@ void mob::apply_status_effect(
     }
     
     //This status is not already inflicted. Let's do so.
-    this->statuses.push_back(status(s));
+    status new_status(s);
+    new_status.from_hazard = from_hazard;
+    this->statuses.push_back(new_status);
     handle_status_effect_gain(s);
     
     if(!s->animation_change.empty()) {
@@ -1024,7 +1028,9 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
     }
     
     if(type->spike_damage->status_to_apply) {
-        victim->apply_status_effect(type->spike_damage->status_to_apply, false);
+        victim->apply_status_effect(
+            type->spike_damage->status_to_apply, false, false
+        );
     }
     
     victim->set_health(true, false, -damage);
@@ -1042,7 +1048,9 @@ void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
         v != victim->type->spike_damage_vulnerabilities.end() &&
         v->second.status_to_apply
     ) {
-        victim->apply_status_effect(v->second.status_to_apply, false);
+        victim->apply_status_effect(
+            v->second.status_to_apply, false, false
+        );
     }
 }
 
@@ -1197,7 +1205,7 @@ void mob::circle_around(
  * Deletes all status effects asking to be deleted.
  */
 void mob::delete_old_status_effects() {
-    vector<status_type*> new_statuses_to_apply;
+    vector<std::pair<status_type*, bool> > new_statuses_to_apply;
     bool removed_forced_sprite = false;
     
     for(size_t s = 0; s < statuses.size(); ) {
@@ -1215,7 +1223,10 @@ void mob::delete_old_status_effects() {
             
             if(s_ptr.type->replacement_on_timeout && s_ptr.time_left <= 0.0f) {
                 new_statuses_to_apply.push_back(
-                    s_ptr.type->replacement_on_timeout
+                    std::make_pair(
+                        s_ptr.type->replacement_on_timeout,
+                        s_ptr.from_hazard
+                    )
                 );
                 if(s_ptr.type->replacement_on_timeout->freezes_animation) {
                     //Actually, never mind, let's keep the current forced
@@ -1232,7 +1243,10 @@ void mob::delete_old_status_effects() {
     
     //Apply new status effects.
     for(size_t s = 0; s < new_statuses_to_apply.size(); ++s) {
-        apply_status_effect(new_statuses_to_apply[s], false);
+        apply_status_effect(
+            new_statuses_to_apply[s].first,
+            false, new_statuses_to_apply[s].second
+        );
     }
     
     if(removed_forced_sprite) {
@@ -3080,6 +3094,9 @@ void mob::swallow_chomped_pikmin(const size_t nr) {
         chomping_mobs[p]->set_health(false, false, 0.0f);
         chomping_mobs[p]->cause_spike_damage(this, true);
         release(chomping_mobs[p]);
+        if(chomping_mobs[p]->type->category->id == MOB_CATEGORY_PIKMIN) {
+            game.statistics.pikmin_eaten++;
+        }
     }
     chomping_mobs.clear();
 }
@@ -3372,6 +3389,8 @@ void mob::tick_misc_logic(const float delta_t) {
             damage_mult = vuln_it->second.damage_mult;
         }
         
+        float health_before = health;
+        
         if(statuses[s].type->health_change != 0.0f) {
             set_health(
                 true, false,
@@ -3383,6 +3402,15 @@ void mob::tick_misc_logic(const float delta_t) {
                 true, true,
                 statuses[s].type->health_change_ratio * damage_mult * delta_t
             );
+        }
+        
+        if(health <= 0.0f && health_before > 0.0f) {
+            if(
+                type->category->id == MOB_CATEGORY_PIKMIN &&
+                statuses[s].from_hazard
+            ) {
+                game.statistics.pikmin_hazard_deaths++;
+            }
         }
     }
     delete_old_status_effects();
@@ -3668,12 +3696,23 @@ void mob::tick_script(const float delta_t) {
             MOB_EV_WHISTLED, (void*) game.states.gameplay->cur_leader_ptr
         );
         
+        bool saved_by_whistle = false;
         for(size_t s = 0; s < statuses.size(); ++s) {
             if(statuses[s].type->removable_with_whistle) {
                 statuses[s].to_delete = true;
+                if(
+                    statuses[s].type->health_change < 0.0f ||
+                    statuses[s].type->health_change_ratio < 0.0f
+                ) {
+                    saved_by_whistle = true;
+                }
             }
         }
         delete_old_status_effects();
+        
+        if(saved_by_whistle && type->category->id == MOB_CATEGORY_PIKMIN) {
+            game.statistics.pikmin_saved++;
+        }
     }
     
     //Following a leader.

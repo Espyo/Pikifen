@@ -472,15 +472,18 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     //Statistics list item.
     list_gui_item* stats_list;
+    //Runtime stat text item.
+    text_gui_item* runtime_value_text;
     //GUI.
     gui_manager gui;
     
     void add_header(const string &label);
-    void add_stat(
+    text_gui_item* add_stat(
         const string &label, const string &value, const string &description
     );
     void leave();
     void populate_stats_list();
+    void update_runtime_value_text();
 };
 
 #endif //ifndef MENUS_INCLUDED

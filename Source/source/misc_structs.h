@@ -999,14 +999,12 @@ struct statistics_struct {
     uint32_t area_entries;
     //Times Pikmin were born from an Onion.
     uint64_t pikmin_births;
+    //Times Pikmin died for other reasons.
+    uint64_t pikmin_deaths;
     //Times Pikmin died by being eaten.
     uint64_t pikmin_eaten;
-    //Times Pikmin died from an enemy's hazard.
-    uint64_t pikmin_enemy_hazard_deaths;
-    //Times Pikmin died from a terrain hazard.
-    uint64_t pikmin_terrain_hazard_deaths;
-    //Times Pikmin died for other reasons.
-    uint64_t pikmin_misc_deaths;
+    //Times Pikmin died from a hazard.
+    uint64_t pikmin_hazard_deaths;
     //Times Pikmin bloomed (leaf to bud, leaf to flower, or bud to flower).
     uint64_t pikmin_blooms;
     //Times Pikmin were saved from a hazard by being whistled.
@@ -1017,7 +1015,7 @@ struct statistics_struct {
     uint64_t pikmin_thrown;
     //Times the whistle was used.
     uint64_t whistle_uses;
-    //Distance walked by an active leader, in centimeters.
+    //Distance walked by an active leader, in pixels.
     double distance_walked;
     //Damage suffered by leaders.
     double leader_damage_suffered;

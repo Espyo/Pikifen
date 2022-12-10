@@ -786,6 +786,7 @@ void leader::start_whistling() {
     lea_type->sfx_whistle.play(0, false);
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
+    game.statistics.whistle_uses++;
 }
 
 

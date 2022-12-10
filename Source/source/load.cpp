@@ -1553,25 +1553,24 @@ void load_statistics() {
     statistics_struct &s = game.statistics;
     
     reader_setter rs(&stats_file);
-    rs.set("startups",                     s.startups);
-    rs.set("runtime",                      s.runtime);
-    rs.set("gameplay_time",                s.gameplay_time);
-    rs.set("area_entries",                 s.area_entries);
-    rs.set("pikmin_births",                s.pikmin_births);
-    rs.set("pikmin_eaten",                 s.pikmin_eaten);
-    rs.set("pikmin_enemy_hazard_deaths",   s.pikmin_enemy_hazard_deaths);
-    rs.set("pikmin_terrain_hazard_deaths", s.pikmin_terrain_hazard_deaths);
-    rs.set("pikmin_misc_deaths",           s.pikmin_misc_deaths);
-    rs.set("pikmin_blooms",                s.pikmin_blooms);
-    rs.set("pikmin_saved",                 s.pikmin_saved);
-    rs.set("enemy_deaths",                 s.enemy_deaths);
-    rs.set("pikmin_thrown",                s.pikmin_thrown);
-    rs.set("whistle_uses",                 s.whistle_uses);
-    rs.set("distance_walked",              s.distance_walked);
-    rs.set("leader_damage_suffered",       s.leader_damage_suffered);
-    rs.set("punch_damage_caused",          s.punch_damage_caused);
-    rs.set("leader_kos",                   s.leader_kos);
-    rs.set("sprays_used",                  s.sprays_used);
+    rs.set("startups",               s.startups);
+    rs.set("runtime",                s.runtime);
+    rs.set("gameplay_time",          s.gameplay_time);
+    rs.set("area_entries",           s.area_entries);
+    rs.set("pikmin_births",          s.pikmin_births);
+    rs.set("pikmin_deaths",          s.pikmin_deaths);
+    rs.set("pikmin_eaten",           s.pikmin_eaten);
+    rs.set("pikmin_hazard_deaths",   s.pikmin_hazard_deaths);
+    rs.set("pikmin_blooms",          s.pikmin_blooms);
+    rs.set("pikmin_saved",           s.pikmin_saved);
+    rs.set("enemy_deaths",           s.enemy_deaths);
+    rs.set("pikmin_thrown",          s.pikmin_thrown);
+    rs.set("whistle_uses",           s.whistle_uses);
+    rs.set("distance_walked",        s.distance_walked);
+    rs.set("leader_damage_suffered", s.leader_damage_suffered);
+    rs.set("punch_damage_caused",    s.punch_damage_caused);
+    rs.set("leader_kos",             s.leader_kos);
+    rs.set("sprays_used",            s.sprays_used);
 }
 
 
