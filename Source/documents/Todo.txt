@@ -10,8 +10,6 @@ Next tasks (roughly sorted most important first)
     
     --- v0.23.0 ---
     Editor improvements
-        "it would be nice to have a hotkey to quickly navigate the editor menus, like esc in any selection mode to go back to the root menu (the one with info, layout, objects, etc) and perhaps hotkeys to quickly get to selection modes such as L for layout, O for objects, etc" --Nataly
-            Add a beginner/advanced mode toggle in the options; if set to advanced, four extra buttons appear in the toolbar to quickly go to layout, mobs, paths, details
         Add a copy-paste feature to the area editor
             It should only work when you select one and only one sector
             It copies the shape of the sector, and then lets you paste that shape somewhere, same as if you were dragging a sector of that shape elsewhere

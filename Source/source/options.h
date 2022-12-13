@@ -54,6 +54,7 @@ enum LEAVING_CONFIRMATION_MODES {
 
 
 namespace OPTIONS {
+extern const bool DEF_AREA_EDITOR_ADVANCED_MODE;
 extern const float DEF_AREA_EDITOR_BACKUP_INTERVAL;
 extern const float DEF_AREA_EDITOR_GRID_INTERVAL;
 extern const bool DEF_AREA_EDITOR_SEL_TRANS;
@@ -101,6 +102,8 @@ extern const float DEF_ZOOM_MID_LEVEL;
  * Game options.
  */
 struct options_struct {
+    //Use the advanced interface mode in the area editor?
+    bool area_editor_advanced_mode;
     //Backup the area in the area editor every X seconds.
     float area_editor_backup_interval;
     //Grid interval in the area editor, in units.

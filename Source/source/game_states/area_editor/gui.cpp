@@ -875,6 +875,27 @@ void area_editor::process_gui_options_dialog() {
     //Misc. node.
     if(saveable_tree_node("options", "Misc.")) {
     
+        //Interface mode text.
+        ImGui::Text("Interface mode:");
+        
+        //Basic interface button.
+        int interface_mode_i = (int) game.options.area_editor_advanced_mode;
+        ImGui::Indent();
+        ImGui::RadioButton("Basic", &interface_mode_i, 0);
+        set_tooltip(
+            "Only show basic GUI items. See the \"Advanced\" option's\n"
+            "description for a list of such items."
+        );
+        
+        //Advanced interface button.
+        ImGui::RadioButton("Advanced", &interface_mode_i, 1);
+        set_tooltip(
+            "Shows and enables some advanced GUI items:\n"
+            "- Toolbar buttons (and shortcut keys) to quickly swap modes with."
+        );
+        ImGui::Unindent();
+        game.options.area_editor_advanced_mode = (bool) interface_mode_i;
+        
         //Selection transformation checkbox.
         ImGui::Checkbox(
             "Selection transformation", &game.options.area_editor_sel_trans
@@ -2121,45 +2142,13 @@ void area_editor::process_gui_panel_main() {
     //Spacer dummy widget.
     ImGui::Dummy(ImVec2(0, 16));
     
-    //Area info button.
-    if(
-        ImGui::ImageButtonAndText(
-            "infoButton",
-            editor_icons[ICON_INFO],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
-            "Info"
-        )
-    ) {
-        change_state(EDITOR_STATE_INFO);
-    }
-    set_tooltip(
-        "Set the area's name, weather, and other basic information here."
-    );
-    
-    //Area gameplay settings button.
-    if(
-        ImGui::ImageButtonAndText(
-            "gameplayButton",
-            editor_icons[ICON_GAMEPLAY],
-            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
-            "Gameplay settings"
-        )
-    ) {
-        change_state(EDITOR_STATE_GAMEPLAY);
-    }
-    set_tooltip(
-        "Specify how the player's gameplay experience in this area will be."
-    );
-    
     //Layout button.
     if(
         ImGui::ImageButtonAndText(
             "layoutButton",
             editor_icons[ICON_SECTORS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            24.0f,
             "Layout"
         )
     ) {
@@ -2175,7 +2164,7 @@ void area_editor::process_gui_panel_main() {
             "mobsButton",
             editor_icons[ICON_MOBS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            24.0f,
             "Objects"
         )
     ) {
@@ -2191,7 +2180,7 @@ void area_editor::process_gui_panel_main() {
             "pathsButton",
             editor_icons[ICON_PATHS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            24.0f,
             "Paths"
         )
     ) {
@@ -2207,7 +2196,7 @@ void area_editor::process_gui_panel_main() {
             "detailsButton",
             editor_icons[ICON_DETAILS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            24.0f,
             "Details"
         )
     ) {
@@ -2217,13 +2206,48 @@ void area_editor::process_gui_panel_main() {
         "Edit misc. details, like tree shadows."
     );
     
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
+    //Area info button.
+    if(
+        ImGui::ImageButtonAndText(
+            "infoButton",
+            editor_icons[ICON_INFO],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
+            8.0f,
+            "Info"
+        )
+    ) {
+        change_state(EDITOR_STATE_INFO);
+    }
+    set_tooltip(
+        "Set the area's name, weather, and other basic information here."
+    );
+    
+    //Area gameplay settings button.
+    if(
+        ImGui::ImageButtonAndText(
+            "gameplayButton",
+            editor_icons[ICON_GAMEPLAY],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
+            8.0f,
+            "Gameplay settings"
+        )
+    ) {
+        change_state(EDITOR_STATE_GAMEPLAY);
+    }
+    set_tooltip(
+        "Specify how the player's gameplay experience in this area will be."
+    );
+    
     //Review button.
     if(
         ImGui::ImageButtonAndText(
             "reviewButton",
             editor_icons[ICON_REVIEW],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            8.0f,
             "Review"
         )
     ) {
@@ -2240,7 +2264,7 @@ void area_editor::process_gui_panel_main() {
             "toolsButton",
             editor_icons[ICON_TOOLS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            8.0f,
             "Tools"
         )
     ) {
@@ -3638,7 +3662,7 @@ void area_editor::process_gui_panel_mob() {
         set_tooltip(
             "Start creating a new object link.\n"
             "Click on the other object you want to link to.",
-            "L"
+            "Shift+L"
         );
         
         //Object delete link button.
@@ -3842,7 +3866,7 @@ void area_editor::process_gui_panel_mobs() {
             set_tooltip(
                 "Start duplicating the selected objects.\n"
                 "Click on the canvas where you want the copied objects to be.",
-                "D"
+                "Ctrl+D"
             );
             
         }
@@ -5141,4 +5165,80 @@ void area_editor::process_gui_toolbar() {
         "Current snap mode: " + snap_mode_description,
         "X or Shift + X"
     );
+    
+    if(
+        game.options.area_editor_advanced_mode &&
+        (
+            state == EDITOR_STATE_LAYOUT ||
+            state == EDITOR_STATE_MOBS ||
+            state == EDITOR_STATE_PATHS ||
+            state == EDITOR_STATE_DETAILS
+        )
+    ) {
+    
+        //Layout mode button.
+        ImGui::SameLine(0, 16);
+        if(
+            ImGui::ImageButton(
+                "layoutButton",
+                editor_icons[ICON_SECTORS],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            change_state(EDITOR_STATE_LAYOUT);
+        }
+        set_tooltip(
+            "Swaps to the layout editing mode.",
+            "L"
+        );
+        
+        //Mobs mode button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "mobsButton",
+                editor_icons[ICON_MOBS],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            change_state(EDITOR_STATE_MOBS);
+        }
+        set_tooltip(
+            "Swaps to the objects editing mode.",
+            "O"
+        );
+        
+        //Paths mode button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "pathsButton",
+                editor_icons[ICON_PATHS],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            change_state(EDITOR_STATE_PATHS);
+        }
+        set_tooltip(
+            "Swaps to the paths editing mode.",
+            "P"
+        );
+        
+        //Details mode button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "detailsButton",
+                editor_icons[ICON_DETAILS],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            change_state(EDITOR_STATE_DETAILS);
+        }
+        set_tooltip(
+            "Swaps to the details editing mode.",
+            "D"
+        );
+        
+    }
 }

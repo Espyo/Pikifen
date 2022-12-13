@@ -298,9 +298,9 @@ void controls_menu_state::do_drawing() {
  * Ticks time by one frame of logic.
  */
 void controls_menu_state::do_logic() {
-    game.fade_mgr.tick(game.delta_t);
-    
     gui.tick(game.delta_t);
+
+    game.fade_mgr.tick(game.delta_t);
 }
 
 

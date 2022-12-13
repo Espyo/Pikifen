@@ -321,6 +321,20 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
+        if(
+            !moving && !selecting &&
+            game.options.area_editor_advanced_mode &&
+            (
+                state == EDITOR_STATE_LAYOUT ||
+                state == EDITOR_STATE_MOBS ||
+                state == EDITOR_STATE_PATHS ||
+                state == EDITOR_STATE_DETAILS
+            )
+        ) {
+            change_state(EDITOR_STATE_DETAILS);
+        }
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D, true)) {
         if(!moving && !selecting) {
             press_duplicate_mobs_button();
         }
@@ -350,6 +364,20 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L)) {
+        if(
+            !moving && !selecting &&
+            game.options.area_editor_advanced_mode &&
+            (
+                state == EDITOR_STATE_LAYOUT ||
+                state == EDITOR_STATE_MOBS ||
+                state == EDITOR_STATE_PATHS ||
+                state == EDITOR_STATE_DETAILS
+            )
+        ) {
+            change_state(EDITOR_STATE_LAYOUT);
+        }
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L, false, true)) {
         switch(state) {
         case EDITOR_STATE_MOBS: {
             if(selected_mobs.size() == 1 || selection_homogenized) {
@@ -378,6 +406,34 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             press_new_tree_shadow_button();
             break;
         }
+        }
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_O)) {
+        if(
+            !moving && !selecting &&
+            game.options.area_editor_advanced_mode &&
+            (
+                state == EDITOR_STATE_LAYOUT ||
+                state == EDITOR_STATE_MOBS ||
+                state == EDITOR_STATE_PATHS ||
+                state == EDITOR_STATE_DETAILS
+            )
+        ) {
+            change_state(EDITOR_STATE_MOBS);
+        }
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P)) {
+        if(
+            !moving && !selecting &&
+            game.options.area_editor_advanced_mode &&
+            (
+                state == EDITOR_STATE_LAYOUT ||
+                state == EDITOR_STATE_MOBS ||
+                state == EDITOR_STATE_PATHS ||
+                state == EDITOR_STATE_DETAILS
+            )
+        ) {
+            change_state(EDITOR_STATE_PATHS);
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DELETE)) {

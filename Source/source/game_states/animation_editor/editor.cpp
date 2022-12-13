@@ -661,7 +661,7 @@ void animation_editor::press_mob_radius_button() {
 void animation_editor::press_leader_silhouette_button() {
     leader_silhouette_visible = !leader_silhouette_visible;
     string state_str = (leader_silhouette_visible ? "Enabled" : "Disabled");
-    status_text = state_str + " Leader silhouette visibility.";
+    status_text = state_str + " leader silhouette visibility.";
 }
 
 

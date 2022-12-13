@@ -19,6 +19,8 @@
 
 
 namespace OPTIONS {
+//Default value for the area editor advanced mode setting.
+const bool DEF_AREA_EDITOR_ADVANCED_MODE = false;
 //Default value for the area editor backup interval.
 const float DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
 //Default value for the area editor grid interval.
@@ -109,6 +111,7 @@ const float DEF_ZOOM_MID_LEVEL = 1.4f;
  * Creates an options struct.
  */
 options_struct::options_struct() :
+    area_editor_advanced_mode(OPTIONS::DEF_AREA_EDITOR_ADVANCED_MODE),
     area_editor_backup_interval(OPTIONS::DEF_AREA_EDITOR_BACKUP_INTERVAL),
     area_editor_grid_interval(OPTIONS::DEF_AREA_EDITOR_GRID_INTERVAL),
     area_editor_sel_trans(OPTIONS::DEF_AREA_EDITOR_SEL_TRANS),
@@ -223,6 +226,7 @@ void options_struct::load(data_node* file) {
     unsigned char auto_throw_mode_c;
     unsigned char leaving_confirmation_mode_c;
     
+    rs.set("area_editor_advanced_mode", area_editor_advanced_mode);
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
     rs.set("area_editor_selection_transformation", area_editor_sel_trans);
@@ -407,6 +411,12 @@ void options_struct::save(data_node* file) const {
     if(!open_nodes_str.empty()) open_nodes_str.pop_back();
     
     //Other options.
+    file->add(
+        new data_node(
+            "area_editor_advanced_mode",
+            b2s(area_editor_advanced_mode)
+        )
+    );
     file->add(
         new data_node(
             "area_editor_backup_interval",

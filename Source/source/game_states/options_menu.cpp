@@ -105,9 +105,9 @@ void options_menu_state::do_drawing() {
  * Ticks one frame's worth of logic.
  */
 void options_menu_state::do_logic() {
-    game.fade_mgr.tick(game.delta_t);
-    
     gui.tick(game.delta_t);
+
+    game.fade_mgr.tick(game.delta_t);
 }
 
 

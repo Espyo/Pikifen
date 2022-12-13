@@ -1216,7 +1216,7 @@ void animation_editor::process_gui_panel_main() {
             "animsButton",
             editor_icons[ICON_ANIMATIONS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            24.0f,
             "Animations"
         )
     ) {
@@ -1236,7 +1236,7 @@ void animation_editor::process_gui_panel_main() {
             "spritesButton",
             editor_icons[ICON_SPRITES],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            24.0f,
             "Sprites"
         )
     ) {
@@ -1255,7 +1255,7 @@ void animation_editor::process_gui_panel_main() {
             "partsButton",
             editor_icons[ICON_BODY_PARTS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            24.0f,
             "Body parts"
         )
     ) {
@@ -1265,13 +1265,16 @@ void animation_editor::process_gui_panel_main() {
         "Change what body parts exist, and their order."
     );
     
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
     //Tools button.
     if(
         ImGui::ImageButtonAndText(
             "toolsButton",
             editor_icons[ICON_TOOLS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            16.0f,
+            8.0f,
             "Tools"
         )
     ) {
@@ -1280,9 +1283,6 @@ void animation_editor::process_gui_panel_main() {
     set_tooltip(
         "Special tools to help with specific tasks."
     );
-    
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
     
     //Stats node.
     if(saveable_tree_node("main", "Stats")) {
