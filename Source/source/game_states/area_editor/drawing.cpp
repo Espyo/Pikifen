@@ -185,20 +185,19 @@ void area_editor::draw_canvas() {
             false
         );
     }
-    size_t n_sectors = game.cur_area_data.sectors.size();
-    for(size_t s = 0; s < n_sectors; ++s) {
-        sector* s_ptr;
-        if(
+    area_data &area_data_to_use =
+        (
             pre_move_area_data &&
             moving &&
             (
                 state == EDITOR_STATE_LAYOUT
             )
-        ) {
-            s_ptr = pre_move_area_data->sectors[s];
-        } else {
-            s_ptr = game.cur_area_data.sectors[s];
-        }
+        ) ?
+        *pre_move_area_data :
+        game.cur_area_data;
+    size_t n_sectors = area_data_to_use.sectors.size();
+    for(size_t s = 0; s < n_sectors; ++s) {
+        sector* s_ptr = area_data_to_use.sectors[s];
         
         bool view_heightmap = false;
         bool view_brightness = false;
@@ -240,8 +239,8 @@ void area_editor::draw_canvas() {
             state == EDITOR_STATE_LAYOUT;
             
         if(
-            game.cur_area_data.problems.non_simples.find(s_ptr) !=
-            game.cur_area_data.problems.non_simples.end()
+            area_data_to_use.problems.non_simples.find(s_ptr) !=
+            area_data_to_use.problems.non_simples.end()
         ) {
             valid = false;
         }

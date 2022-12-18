@@ -2133,6 +2133,24 @@ void area_editor::process_gui_panel_layout() {
             );
         }
         
+        //Duplicate sectors button.
+        if(!selected_sectors.empty()) {
+            ImGui::SameLine();
+            if(
+                ImGui::ImageButton(
+                    "dupSectorsButton",
+                    editor_icons[ICON_DUPLICATE],
+                    ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+                )
+            ) {
+                press_duplicate_sectors_button();
+            }
+            set_tooltip(
+                "Duplicate the selected sectors.",
+                "Ctrl+D"
+            );
+        }
+        
         //Selection filter button.
         ALLEGRO_BITMAP* sel_filter_bmp = NULL;
         string sel_filter_description;

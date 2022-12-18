@@ -276,7 +276,15 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D, true)) {
         if(!moving && !selecting) {
-            press_duplicate_mobs_button();
+            switch(state) {
+            case EDITOR_STATE_LAYOUT: {
+                press_duplicate_sectors_button();
+                break;
+            } case EDITOR_STATE_MOBS: {
+                press_duplicate_mobs_button();
+                break;
+            }
+            }
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F)) {
@@ -602,6 +610,44 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 
             }
             
+            break;
+            
+        } case EDITOR_SUB_STATE_DUPLICATE_SECTOR: {
+    
+            //Edges where a side is marked as NULL could have had a different
+            //sector before the duplication. Let's find those, save what their
+            //new sector ought to be, and only then actually finish placing.
+            //Afterwards, we can go back, and all edges sides that neeed a
+            //new sector can get them.
+            map<edge*, std::pair<sector*, size_t> > edge_sectors;
+            for(edge* e : selected_edges) {
+                if(e->sectors[0] == NULL || e->sectors[1] == NULL) {
+                    size_t s_nr = INVALID;
+                    point p =
+                        (
+                            point(e->vertexes[0]->x, e->vertexes[0]->y) +
+                            point(e->vertexes[1]->x, e->vertexes[1]->y)
+                        ) / 2.0f;
+                    sector* s_ptr = get_sector(p, &s_nr, false);
+                    edge_sectors[e] = std::make_pair(s_ptr, s_nr);
+                }
+            }
+            finish_layout_moving();
+            
+            for(edge* e : selected_edges) {
+                auto edge_sector_it = edge_sectors.find(e);
+                if(edge_sector_it == edge_sectors.end()) continue;
+                for(size_t s = 0; s < 2; ++s) {
+                    if(e->sectors[0] == NULL) {
+                        game.cur_area_data.connect_edge_to_sector(
+                            e, edge_sector_it->second.first, s
+                        );
+                    }
+                }
+            }
+            
+            moving = false;
+            sub_state = EDITOR_SUB_STATE_NONE;
             break;
             
         } case EDITOR_SUB_STATE_OCTEE: {
@@ -1721,6 +1767,23 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
             }
             break;
         }
+        }
+    }
+    
+    if(moving) {
+    
+    
+        point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
+        point closest_vertex_new_p =
+            snap_point(
+                move_closest_vertex_start_pos + mouse_offset, true
+            );
+        point offset =
+            closest_vertex_new_p - move_closest_vertex_start_pos;
+        for(vertex* v : selected_vertexes) {
+            point orig = pre_move_vertex_coords[v];
+            v->x = orig.x + offset.x;
+            v->y = orig.y + offset.y;
         }
     }
     

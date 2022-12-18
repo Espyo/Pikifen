@@ -258,6 +258,8 @@ private:
         EDITOR_SUB_STATE_NEW_MOB,
         //Duplicating a mob.
         EDITOR_SUB_STATE_DUPLICATE_MOB,
+        //Duplicating a sector.
+        EDITOR_SUB_STATE_DUPLICATE_SECTOR,
         //Adding a mob link.
         EDITOR_SUB_STATE_ADD_MOB_LINK,
         //Deleting a mob link.
@@ -678,7 +680,7 @@ private:
     void start_mob_move();
     void start_path_stop_move();
     void start_shadow_move();
-    void start_vertex_move();
+    void start_vertex_move(const bool save_pre_move_area_data = true);
     void toggle_duplicate_mob_mode();
     void traverse_sector_for_split(
         sector* s_ptr, vertex* begin, vertex* checkpoint,
@@ -730,6 +732,7 @@ private:
     void press_delete_button();
     void press_delete_area_button();
     void press_duplicate_mobs_button();
+    void press_duplicate_sectors_button();
     void press_load_button();
     void press_grid_interval_decrease_button();
     void press_grid_interval_increase_button();

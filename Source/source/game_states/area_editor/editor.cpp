@@ -1892,6 +1892,148 @@ void area_editor::press_duplicate_mobs_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the duplicate sectors button widget is pressed.
+ */
+void area_editor::press_duplicate_sectors_button() {
+    if(sub_state != EDITOR_SUB_STATE_NONE) return;
+    
+    if(selected_sectors.empty()) {
+        status_text = "You have to select sectors to duplicate!";
+    } else {
+        status_text = "Use the canvas to place the duplicated sectors.";
+        sub_state = EDITOR_SUB_STATE_DUPLICATE_SECTOR;
+        
+        pre_move_area_data = prepare_state();
+        
+        map<sector*, sector*> new_sectors;
+        map<edge*, edge*> new_edges;
+        map<vertex*, vertex*> new_vertexes;
+        
+        //First, populate the map of new sectors.
+        for(sector* s : selected_sectors) {
+            sector* new_sector = game.cur_area_data.new_sector();
+            new_sectors[s] = new_sector;
+        }
+        
+        //Now that we know all new sectors, we can actually fill their data.
+        for(auto s : new_sectors) {
+            sector* old_sector = s.first;
+            sector* new_sector = s.second;
+            old_sector->clone(new_sector);
+            new_sector->texture_info = old_sector->texture_info;
+            
+            //Update the edges.
+            for(size_t e = 0; e < old_sector->edges.size(); ++e) {
+                edge* old_edge = old_sector->edges[e];
+                edge* new_edge = NULL;
+                
+                auto new_edge_it = new_edges.find(old_edge);
+                if(new_edge_it != new_edges.end()) {
+                    //This edge was already created. Just use it.
+                    new_edge = new_edge_it->second;
+                    
+                } else {
+                    //This edge needs to be created.
+                    new_edge = game.cur_area_data.new_edge();
+                    new_edges[old_edge] = new_edge;
+                    old_edge->clone(new_edge);
+                    
+                    //Update the vertexes on each side.
+                    for(size_t ev = 0; ev < 2; ++ev) {
+                        vertex* old_vertex = old_edge->vertexes[ev];
+                        vertex* new_vertex = NULL;
+                        
+                        auto new_vertex_it = new_vertexes.find(old_vertex);
+                        if(new_vertex_it != new_vertexes.end()) {
+                            //This vertex was already created. Just use it.
+                            new_vertex = new_vertex_it->second;
+                            
+                        } else {
+                            //This vertex needs to be created.
+                            new_vertex = game.cur_area_data.new_vertex();
+                            new_vertexes[old_vertex] = new_vertex;
+                            new_vertex->x = old_vertex->x;
+                            new_vertex->y = old_vertex->y;
+                        }
+                        
+                        new_vertex->edges.push_back(new_edge);
+                        new_edge->vertexes[ev] = new_vertex;
+                    }
+                    
+                    //Update the sectors on each side.
+                    for(size_t es = 0; es < 2; ++es) {
+                        sector* old_side_sector = old_edge->sectors[es];
+                        sector* new_side_sector = NULL;
+                        if(old_side_sector == old_sector) {
+                            //This side pointed to our sector, so just port it over.
+                            new_side_sector = new_sector;
+                        } else {
+                            auto edge_sector_it = selected_sectors.find(old_side_sector);
+                            if(edge_sector_it != selected_sectors.end()) {
+                                //This side pointed to one of the operation's sectors, so
+                                //find its duplicated equivalent.
+                                new_side_sector = new_sectors[old_side_sector];
+                            } else {
+                                //This side pointed to something else.
+                                //Let's leave it NULL now instead.
+                            }
+                        }
+                        new_edge->sectors[es] = new_side_sector;
+                    }
+                }
+                
+                new_sector->edges.push_back(new_edge);
+                
+            }
+            
+        }
+        
+        //Move the sectors to the mouse cursor.
+        vertex* closest_vertex = NULL;
+        dist closest_vertex_dist;
+        for(auto v : new_vertexes) {
+            dist d(point(v.second->x, v.second->y), game.mouse_cursor_w);
+            if(!closest_vertex || d < closest_vertex_dist) {
+                closest_vertex = v.second;
+                closest_vertex_dist = d;
+            }
+        }
+        point offset =
+            game.mouse_cursor_w -
+            point(closest_vertex->x, closest_vertex->y);
+        for(auto v : new_vertexes) {
+            v.second->x += offset.x;
+            v.second->y += offset.y;
+        }
+        
+        selected_sectors.clear();
+        selected_edges.clear();
+        selected_vertexes.clear();
+        unordered_set<sector*> sectors_to_update;
+        sectors_to_update.reserve(selected_sectors.size());
+        for(auto v : new_vertexes) {
+            game.cur_area_data.fix_vertex_nrs(v.second);
+            selected_vertexes.insert(v.second);
+        }
+        for(auto e : new_edges) {
+            game.cur_area_data.fix_edge_nrs(e.second);
+            selected_edges.insert(e.second);
+        }
+        for(auto s : new_sectors) {
+            game.cur_area_data.fix_sector_nrs(s.second);
+            selected_sectors.insert(s.second);
+            sectors_to_update.insert(s.second);
+        }
+        
+        update_affected_sectors(sectors_to_update);
+        
+        start_vertex_move(false);
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the grid interval decrease button is pressed.
  */
 void area_editor::press_grid_interval_decrease_button() {
@@ -3897,9 +4039,12 @@ void area_editor::start_shadow_move() {
 
 /* ----------------------------------------------------------------------------
  * Procedure to start moving the selected vertexes.
+ * save_pre_move_area_data:
+ *   If true, the state of the area as it is at the time of this function call
+ *   will be saved as the pre_move_area_data.
  */
-void area_editor::start_vertex_move() {
-    pre_move_area_data = prepare_state();
+void area_editor::start_vertex_move(const bool save_pre_move_area_data) {
+    if(save_pre_move_area_data) pre_move_area_data = prepare_state();
     
     move_closest_vertex = NULL;
     dist move_closest_vertex_dist;

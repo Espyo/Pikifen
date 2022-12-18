@@ -1,5 +1,13 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
-    
+Point I left on (so I can continue the next day without losing my train of thought)
+    Placing the duplicated sector on an outer sector that is not the same outer sector as pre-copy doesn't work
+        The reason is because we need to figure out what the outer sector is BEFORE actually placing the new sectors, otherwise when checking, we'll just conclude it's the new sector, instead of what was there before. But trying to sneak that logic in won't work very well because the code isn't modular enough
+    Remeber to add the keyboard shortcut
+    Add undo logic
+    Update the transformation widget after pasting
+    If the new location fails (e.g. edges overlap existing edges), don't accept and let the player continue trying to place
+    Allow cancelling the operation
+    Create a GUI panel just for duplication instructions
+    Optimize and cleanup the code
 
 Current tasks (tasks being worked on, but not yet committed)
     
