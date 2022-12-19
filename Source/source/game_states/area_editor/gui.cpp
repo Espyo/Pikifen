@@ -3727,7 +3727,7 @@ void area_editor::process_gui_panel_mobs() {
         //Duplication explanation text.
         ImGui::TextWrapped(
             "Use the canvas to place the new duplicated object(s). "
-            "It/They will appear where you click."
+            "It/they will appear where you click."
         );
         
         //Duplication cancel button.
@@ -4554,6 +4554,9 @@ void area_editor::process_gui_panel_sector() {
             if(ImGui::Checkbox("Bottomless pit", &sector_bottomless_pit)) {
                 register_change("sector bottomless pit change");
                 s_ptr->is_bottomless_pit = sector_bottomless_pit;
+                if(!sector_bottomless_pit) {
+                    update_sector_texture(s_ptr, s_ptr->texture_info.file_name);
+                }
             }
             set_tooltip(
                 "Is this sector's floor a bottomless pit?\n"
@@ -4592,6 +4595,9 @@ void area_editor::process_gui_panel_sector() {
         if(s_ptr->fade != (texture_type == 0)) {
             register_change("sector texture type change");
             s_ptr->fade = texture_type == 0;
+            if(!s_ptr->fade) {
+                update_sector_texture(s_ptr, s_ptr->texture_info.file_name);
+            }
         }
         
         if(!s_ptr->fade) {
