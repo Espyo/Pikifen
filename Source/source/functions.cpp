@@ -2103,7 +2103,15 @@ vector<string_token> tokenize_string(const string &s) {
     cur_token.type = STRING_TOKEN_CHAR;
     
     for(size_t c = 0; c < s.size(); ++c) {
-        if(str_peek(s, c, "\\k")) {
+        if(str_peek(s, c, "\\\\")) {
+            cur_token.content.push_back('\\');
+            if(cur_token.type == STRING_TOKEN_CHAR) {
+                if(!cur_token.content.empty()) tokens.push_back(cur_token);
+                cur_token.content.clear();
+            }
+            c++;
+            
+        } else if(str_peek(s, c, "\\k")) {
             if(!cur_token.content.empty()) tokens.push_back(cur_token);
             cur_token.content.clear();
             if(cur_token.type != STRING_TOKEN_CONTROL) {
