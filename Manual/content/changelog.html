@@ -17,69 +17,111 @@
     <p>The following is a general changelog for <i>Pikifen</i>. This changelog will only list the most notable differences between each version of the engine; for a more detailed list of changes throughout the development period, check the <a href="https://github.com/Espyo/Pikifen/commits/master">commit log on GitHub</a>.</p>
 
     <p>Some versions may be unable to read content created in older versions. If you want to keep your content from one version to the next, read the "Content making changes" list in that update's section.</p>
+
+    <p>Versions are numbered after the format <code>major.minor.revision</code>. The major number increases when the project is radically different from the major version before it. The minor number increases every time there are a bunch of changes. The revision number increases when there are bug fixes on the revision before it, and does not break compatibility.</p>
     
     <h2 id="0.23.0">0.23.0</h2>
     
-    <p><i>Date TBD &ndash; the "Mission Mode" update</i></p>
+    <p><i>Unreleased &ndash; the "Mission Mode" update</i></p>
 
     <p><b>Gameplay changes</b></p>
 
     <ul>
-      <li>Areas can now either be simple areas like before, or be missions. Gameplay during missions usually involves reaching a goal, avoiding some fail conditions, and getting medals based on several scoring criteria.</li>
-      <li>The main menu now has a "play" button and a "make" button, which shows the list of area types that can be played, and the list of editors, respectively.</li>
-      <li>The area selection screen now shows info about the area that is currently selected in the list.</li>
-      <li>The results screen was completely revamped to better suit a mission's completion screen.</li>
-      <li>Areas can now continued to be played when there are no available leaders, or even if there were none to begin with. There isn't much to do in this state other than move the camera, however.</li>
-      <li>The pause menu has been reworked, and now you are shown a confirmation message when you want to leave. This can be changed in the options. (Thanks Neo)</li>
-      <li>The camera is now also influenced by the group and the cursor. Added an option to control how much the cursor influences it.</li>
-      <li>Added a lifetime statistics menu.</li>
+      <li>
+        Missions:
+        <ul>
+          <li><span class="cl-a">Added</span> Mission-type areas. Gameplay during missions usually involves reaching a goal, avoiding some fail conditions, and getting medals based on several scoring criteria.</li>
+          <li><span class="cl-a">Added</span> Info about the area that is currently selected in the list, in the area selection screen.</li>
+          <li><span class="cl-a">Added</span> Mission information tab in the pause menu, if you're playing on a mission.</li>
+          <li><span class="cl-a">Added</span> A "play" button and a "make" button for the main menu, which show the list of area types that can be played, and the list of editors, respectively.</li>
+          <li><span class="cl-c">Changed</span> The results screen was completely revamped to better suit a mission's completion screen.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> The ability to play when there are no available leaders, or even if there were none to begin with. There isn't much to do in this state other than move the camera, however.</li>
+          <li><span class="cl-a">Added</span> The ability for the camera to be influenced by the group and the cursor. Added an option to control how much the cursor influences it.</li>
+          <li><span class="cl-a">Added</span> Lifetime statistics menu.</li>
+          <li><span class="cl-a">Added</span> A confirmation message for the pause menu, shown when you want to leave. This can be changed in the options. (Thanks Neo)</li>
+          <li><span class="cl-c">Changed</span> Misc. pause menu improvements.</li>
+        </ul>
+      </li>
     </ul>
 
     <p><b>Content making changes</b></p>
 
     <ul>
-      <li>Added a GUI editor. This should make it easier to position and resize GUI elements in menus and HUDs.</li>
-      <li>Ctrl+F12 now changes the <a href="maker_toolkit.html">auto-start maker tool</a>'s data to match the current mode and currently open content.</li>
-      <li>Added a "show collision" <a href="maker_toolkit.html">maker tool</a>. (Thanks Helodity)</li>
-      <li>The <a href="area.html">area editor</a> now has a history of opened folders.</li>
-      <li>The <a href="area.html">area editor</a> now has a "Gameplay" panel with the starting spray amounts (with a better interface), as well as the new mission stuff.</li>
-      <li>Areas can now have a description, tags, thumbnail, and difficulty.</li>
-      <li>Areas can now specify at what point of the in-game day they start, as well as day time speed or (for missions with time limit) the time of day they end. The <code>day_minutes_per_irl_sec</code> field was removed from the <a href="misc_config.html">config file</a> since it is no longer needed.</li>
-      <li><a href="mob_enemy.html">Enemy types</a> now have a <code>points</code> property.</li>
-      <li><a href="script.html">Scripts</a> now have a <code>states_ignoring_hazard</code> property.</li>
-      <li><a href="mob_type.html">Mob types</a> now have a <code>hold_offset_vertical_distance</code> property for children data.</li>
-      <li><a href="mob_type.html">Mob types</a> now have a <code>custom_category_name</code> property. With this, the pre-packaged mob types are now better organized in the editors.</li>
-      <li><a href="mob_type.html">Mob types</a> now have a <code>can_walk_on_others</code> property.</li>
-      <li>In editors, keyboard shortcuts made for the canvas will now work anywhere, so long as you aren't writing in a text box. Also, drag buttons now only need a single click in order to enter text input mode. (Thanks Neo)</li>
       <li>
-        <a href="area.html">Area editor</a> additions:
+        <a href="area.html">Area editor</a> improvements:
         <ul>
-          <li>New option: show path link length. (Thanks Nataly)</li>
-          <li>New option: show circular sector info. (Thanks Neo)</li>
-          <li>New option: basic/advanced interface mode.</li>
-          <li>You can now choose what type and label new path links will have as you're drawing them. (Thanks Nataly)</li>
-          <li>Hovering your mouse over a sector, mob, etc. now highlights it. (Thanks Helodity)</li>
-          <li>New toolbar buttons to swap to the layout, objects, paths, or details mode. (Thanks Nataly)</li>
-          <li>New shortcut key: H changes a sector's height.</li>
-          <li>New shortcut key: T copies a sector's texture.</li>
-          <li>New shortcut keys: L, O, P, D, to swap to the layout, objects, paths, and details mode. Advanced interface mode only. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> History of opened folders.</li>
+          <li><span class="cl-a">Added</span> "Gameplay" panel, with the starting spray amounts (with a better interface), as well as the new mission stuff.</li></li>
+          <li><span class="cl-a">Added</span> Description, tags, thumbnail, and difficulty properties for areas.</li>
+          <li><span class="cl-a">Added</span> Show path link length option. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> Show circular sector info option. (Thanks Neo)</li>
+          <li><span class="cl-a">Added</span> Basic/advanced interface mode option.</li>
+          <li><span class="cl-a">Added</span> The ability to choose what type and label new path links will have as you're drawing them. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> Highlights to a sector, mob, etc. when you hover your mouse over it. (Thanks Helodity)</li>
+          <li><span class="cl-a">Added</span> Toolbar buttons to swap to the layout, objects, paths, or details mode. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> H shortcut key to change a sector's height.</li>
+          <li><span class="cl-a">Added</span> T shortcut key to copy a sector's texture.</li>
+          <li><span class="cl-a">Added</span> L, O, P, D shortcut keys to swap to the layout, objects, paths, and details mode. Advanced interface mode only. (Thanks Nataly)</li>
+          <li><span class="cl-c">Changed</span> Areas can now specify at what point of the in-game day they start, as well as day time speed or (for missions with time limit) the time of day they end. The <code>day_minutes_per_irl_sec</code> field was removed from the <a href="misc_config.html">config file</a> since it is no longer needed.</li>
         </ul>
       </li>
-      <li><a href="mob_pikmin.html">Pikmin types</a> now have a <code>knocked_down_duration</code> property and a <code>knocked_down_whistle_bonus</code> property.</li>
-      <li><a href="mob_pile.html">Pile types</a> now have an <code>auto_shrink_smallest_radius</code> property.</li>
-      <li><a href="particle.html">Particle generators</a> now have a <code>interval_deviation</code> property.</li>
-      <li>In an editor's canvas, when dragging a side/corner handle of a transformation widget, you can now press Alt to lock the center, instead of locking the opposite side/corner. (Thanks Nataly)</li>
+      <li>
+        <a href="maker_toolkit.html">Maker tools</a>:
+        <ul>
+          <li><span class="cl-a">Added</span> Ctrl+F12 now changes the auto-start maker tool's data to match the current mode and currently open content.</li>
+          <li><span class="cl-a">Added</span> "Show collision" maker tool. (Thanks Helodity)</li>
+        </ul>
+      </li>
+      <li>
+        New properties:
+        <ul>
+          <li><span class="cl-a">Added</span> A <code>points</code> property to <a href="mob_enemy.html">enemy types</a>.</li>
+          <li><span class="cl-a">Added</span> A <code>states_ignoring_hazard</code> property for <a href="script.html">scripts</a>.</li>
+          <li><span class="cl-a">Added</span> A <code>hold_offset_vertical_distance</code> property for a <a href="mob_type.html">mob type</a>'s children data.</li>
+          <li><span class="cl-a">Added</span> A <code>custom_category_name</code> property for <a href="mob_type.html">mob types</a>. With this, the pre-packaged mob types are now better organized in the editors.</li>
+          <li><span class="cl-a">Added</span> A <code>can_walk_on_others</code> property for <a href="mob_type.html">mob types</a>.</li>
+          <li><span class="cl-a">Added</span> <code>knocked_down_duration</code> and <code>knocked_down_whistle_bonus</code> properties for <a href="mob_pikmin.html">Pikmin types</a>.</li>
+          <li><span class="cl-a">Added</span> An <code>auto_shrink_smallest_radius</code> property for <a href="mob_pile.html">pile types</a>.</li>
+          <li><span class="cl-a">Added</span> An <code>interval_deviation</code> property for <a href="particle.html">particle generators</a>.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-a">Added</span> GUI editor. This should make it easier to position and resize GUI elements in menus and HUDs.</li>
+          <li><span class="cl-a">Added</span> The ability to lock the center (as opposed to the opposite side/corner) by holding Alt, when you are dragging a side/corner handle of a transformation widget in an editor's canvas.</li>
+          <li><span class="cl-c">Changed</span> In editors, keyboard shortcuts made for the canvas will now work anywhere, so long as you aren't writing in a text box. (Thanks Neo)</li>
+          <li><span class="cl-c">Changed</span> Drag buttons in editors now only need a single click in order to enter text input mode.</li>
+        </ul>
+      </li>
     </ul>
 
     <p><b>Custom content compatibility warnings</b></p>
 
     <ul>
-      <li>Old area folders used to be in <code>Game_data/Areas/&lt;folder&gt;</code>, but must now be moved to <code>Game_data/Areas/Simple/&lt;folder&gt;</code>. If you care about auto-backups and reference image data, do the same to the area-related stuff in the <code>User_data</code> folder.</li>
-      <li>The main menu's <a href="gui.html">GUI</a> got a complete revamp.</li>
-      <li>The area menu's <a href="gui.html">GUI</a> got a complete revamp.</li>
-      <li>The results screen's <a href="gui.html">GUI</a> got a complete revamp.</li>
-      <li>The pause menu's <a href="gui.html">GUI</a> got a complete revamp.</li>
-      <li>The <a href="misc.html">system asset</a> for the Pikmin silhouette has been removed in favor of two leader silhouettes. On top of that, the <code>standard_leader_height</code> and <code>standard_leader_radius</code> game config properties have been added.</li>
+      <li>
+        Revamped the following <a href="gui.html">GUI</a>s:
+        <ul>
+          <li><span class="cl-c">Changed</span> The main menu's GUI got a complete revamp.</li>
+          <li><span class="cl-c">Changed</span> The area menu's GUI got a complete revamp.</li>
+          <li><span class="cl-c">Changed</span> The results screen's GUI got a complete revamp.</li>
+          <li><span class="cl-c">Changed</span> The pause menu's GUI got a complete revamp.</li>
+        </ul>
+      </li>
+      <li>
+        Others:
+        <ul>
+          <li><span class="cl-c">Changed</span> Old area folders used to be in <code>Game_data/Areas/&lt;folder&gt;</code>, but must now be moved to <code>Game_data/Areas/Simple/&lt;folder&gt;</code>. If you care about auto-backups and reference image data, do the same to the area-related stuff in the <code>User_data</code> folder.</li>
+          <li><span class="cl-r">Removed</span> The <a href="misc.html">system asset</a> for the Pikmin silhouette has been removed in favor of two leader silhouettes.</li>
+          <li><span class="cl-a">Added</span> Two leader silhouette graphics to replace the Pikmin silhouette image.</li>
+          <li><span class="cl-a">Added</span> <code>standard_leader_height</code> and <code>standard_leader_radius</code> game config properties.</li>
+        </ul>
+      </li>
     </ul>
     
     <h2 id="0.22.0">0.22.0</h2>

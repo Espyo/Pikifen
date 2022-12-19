@@ -9,11 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.23.0 ---
-    Editor improvements
-        Add a copy-paste feature to the area editor
-            It should only work when you select one and only one sector
-            It copies the shape of the sector, and then lets you paste that shape somewhere, same as if you were dragging a sector of that shape elsewhere
-        Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geomety and try to move it
     Bridges should push, have rectangular collision, and have more hitboxes a la gates (thanks Helodity)
     Minor script improvements (thanks Helodity)
         The ability to apply spawn momentum at a specific angle, when a mob spawns another. Right now that exists, but only for random angles
@@ -23,13 +18,12 @@ Next tasks (roughly sorted most important first)
         Some way to read a different mob's "focus mob memory"?
     Manual
         Update the area editor screenshots
-        Document the rich text format (\k, \n)
-        Revamp the scripting tutorial
-            Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
-            Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
     Investigate that CI/CD thing (thanks Helodity)
     
     --- v0.24.0 ---
+    Add a copy-paste feature to the area editor
+        Use the WIP branch
+    Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geomety and try to move it
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
@@ -733,6 +727,10 @@ Misc things (so I don't forget)
     Option to pause the game if the window is not focused
     An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
+    Manual
+        Revamp the scripting tutorial
+            Currently, the reader learns how to make a "weird" Red Bulborb; they should instead be learning to create a new creature (though it could still use an included spritesheet)
+            Add some help at the start about how it may be daunting to wrap your head around all of the FSM a mob will need, but the reader should focus on what states they need first and foremost, then connections, and then just script one event at a time, isolated
     Story mode
         Some treasures should weigh as much as the current army, after a boss battle
     Loose thoughts
