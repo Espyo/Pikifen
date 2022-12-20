@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -9,15 +9,12 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.23.0 ---
-    Bridges should push, have rectangular collision, and have more hitboxes a la gates (thanks Helodity)
     Minor script improvements (thanks Helodity)
         The ability to apply spawn momentum at a specific angle, when a mob spawns another. Right now that exists, but only for random angles
         The ability for a mob to spawn another mob at a random angle
         A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
         hold_focused_mob should be able to specify the hold rotation method
         Some way to read a different mob's "focus mob memory"?
-    Manual
-        Update the area editor screenshots
     Investigate that CI/CD thing (thanks Helodity)
     
     --- v0.24.0 ---
@@ -222,7 +219,7 @@ Next tasks (roughly sorted most important first)
         Candypop Buds should squash when they close
         Ceramic bridges should be reworked for the new bridge format
         Wooden bridges need to be 192px long, to fit the new bridge format
-            Add collisions to rolled up stick bridges?
+            Wood bridges should push, have rectangular collision, and have more hitboxes a la gates (thanks Helodity)
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
         Add a glow to the smack effect particle?

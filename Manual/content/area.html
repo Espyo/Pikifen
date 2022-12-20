@@ -78,7 +78,7 @@
       <dt><b>Open the area editor.</b></dt>
       <dd>To do so, from the engine's main menu, choose the "Area editor" option.</dd>
       <dt><b>In the dialog, type in the name of the new area and press Return.</b></dt>
-      <dd>The dialog will contain a list of existing areas for you to edit, but can also allow you to create your own. Type its name in the textbox, and press the plus button, or press your Return key, to create the new area. Let's call it <code>forest</code>. This is the internal name of the area, not the name that will appear on the loading screen.</dd>
+      <dd>The dialog will contain a list of existing areas for you to edit, but can also allow you to create your own. Type its name in the textbox, and press the plus button, or press your Return key. When asked what type of area to create, just pick simple for now. Let's call it <code>forest</code>. This is the internal name of the area, not the name that will appear on the loading screen.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>A new area will already have a default sector with a grassy texture, as well as a leader object.</li>
@@ -235,7 +235,7 @@
     
     <dl>
       <dt><b>Draw a sector around the entire area.</b></dt>
-      <dd>Make it big enough that it is hard for the player to see where it ends from within the play area. Making it rectangular is usually a good choice, but you can make it in any shape.</dd>
+      <dd>Make it big enough that it is hard for the player to see where it ends from within the play area. Making it the same shape as the general outline of your area is usually a good choice, but you can make it in any shape.</dd>
       <dt><b>Set its height to something tall, but reasonable.</b></dt>
       <dd>Something like 500 units above the usual ground level is a good number, and will ensure most of your area gets a wall shadow cast onto it. While you're here, set its texture to something different, like <code>Grass_light.jpg</code>.</dd>
       <dt><b>In the sector panel, go to the advanced behavior settings, and set the sector type to "Blocking".</b></dt>
@@ -271,7 +271,7 @@
       <dt><b>Move objects by clicking on them and dragging them.</b></dt>
       <dd>Let's move our leader object (likely Olimar) to near the southern edge of the grassy plain, so the player doesn't start in the middle of the rocks.</dd>
       <dt><b>Set an object's properties, like its angle, by selecting it and changing the widgets in the panel.</b></dt>
-      <dd>Let's make Olimar face north instead of east. Select him, and in the "Angle" widget, angle it up, or set it to 270 degrees.</dd>
+      <dd>Let's make Olimar face north instead of east. Select him, and in the "Angle" widget, set it to 270 degrees. You can best check the angle by looking at the object circle's arrow in the canvas.</dd>
       <dt><b>Add new objects by clicking the "+" button in the top of the panel, then clicking the area.</b></dt>
       <dd>When you press the button, you enter placement mode. You can now click on a spot in the area to place an object there. Click near the leader so we can place an Onion.</dd>
       <dt><b>The new object will be of the last type you placed, or a Red Pikmin by default. Use the "Category" and "type" boxes to set its type.</b></dt>
@@ -288,6 +288,11 @@
     </dl>
 
     <h3 id="linked-mobs">Linked objects</h3>
+
+    <div class="box box-right">
+      <img src="../images/object_links.png" alt="The bridge object linking to the dummy object.">
+      <p>The bridge object linking to the dummy object.</p>
+    </div>
 
     <p>Let's add a bridge to get on top of the rock. Simply place a wooden bridge object on the floor to the rock's west.</p>
 
@@ -335,11 +340,11 @@
       <dt><b>Click somewhere to place down a path stop.</b></dt>
       <dd>Path stops are a bit like bus stops. The carrier Pikmin go in a straight line from the previous stop to the next, then turn to face the next stop, and so on. The first stop you want to create should be very close to the Onion, or at least in the starting region.</dd>
       <dt><b>Click somewhere else to place a new stop, and connect the previous to the current one.</b></dt>
-      <dd>This will create the second stop and will also link the two. Now the Pikmin know that from one stop, they can go to the other. You should place the second stop to the south of the rock sector at the center. Keep clicking around to make a path that goes around the rock and ramps (remember that if the bridge is built, it will be a solid obstacle too!)</dd>
+      <dd>This will create the second stop and will also link the two. Now the Pikmin know that from one stop, they can go to the other. You should place the second stop to the south of the rock sector at the center. Keep clicking around to make a path that goes around the rock and ramps (remember to go around the bridge too, since when it's built, it will be a solid obstacle in the way too!)</dd>
       <dt><b>Normal links (recommended) allow Pikmin to go from A to B, and B to A. One-way links only allow from A to B. Change link types in the panel.</b></dt>
       <dd>Add a one-way link that goes from the top of the rock to the path stop at the south of the rock. It would make no sense to leave this one as a normal link since Pikmin could try to follow that path and bang against the rock's wall.</dd>
       <dt><b>Pikmin cannot take a line in the path if there is an obstacle object touching the line.</b></dt>
-      <dd>Make your paths go up the big rock from the west and east sides. When making these sorts of lines, pretend all bridges are built and all gates are taken down. And make sure the line between the path stops touches any important obstacle. If the obstacle is still up, the Pikmin will understand that they cannot take this line, and will either try a different path, or wait at the stop before the obstacle.</dd>
+      <dd>Back to two-way links, make your paths go up the big rock from the west and east sides. When making these sorts of lines, pretend all bridges are built and all gates are taken down. And make sure the line between the path stops touches any important obstacle. If the obstacle is still up, the Pikmin will understand that they cannot take this line, and will either try a different path, or wait at the stop before the obstacle.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>While outside of drawing mode, you can double-click a path link to split it into two, creating a stop where you click.</li>

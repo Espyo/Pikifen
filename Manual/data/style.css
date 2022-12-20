@@ -101,29 +101,17 @@ th {
 
 /* Changelog. */
 .cl-a, .cl-c, .cl-r {
-  border: 1px solid;
-  border-radius: 8px;
-  display: inline-block;
-  padding-left: 2px;
-  padding-right: 2px;
-  text-align: center;
-  width: 82px;
+  font-weight: bold;
 }
 
 .cl-a {
-  background-color: #d7e6d7;
-  border-color: #a4c4a4;
-  color: #020;
+  color: #060;
 }
 
 .cl-c {
-  background-color: #f2f1de;
-  border-color: #cacaab;
-  color: #220;
+  color: #660;
 }
 
 .cl-r {
-  background-color: #eee1e1;
-  border-color: #d5baba;
-  color: #200;
+  color: #600;
 }
