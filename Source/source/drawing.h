@@ -160,7 +160,8 @@ void draw_health(
     const bool just_chart = false
 );
 void draw_liquid(
-    sector* s_ptr, liquid* l_ptr, const point &where, const float scale
+    sector* s_ptr, liquid* l_ptr, const point &where, const float scale,
+    const float time
 );
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity

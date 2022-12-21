@@ -1733,7 +1733,8 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                         c_ptr->sector_ptr,
                         c_ptr->sector_ptr->hazards[h]->associated_liquid,
                         point(),
-                        1.0f
+                        1.0f,
+                        area_time_passed
                     );
                     break;
                 }

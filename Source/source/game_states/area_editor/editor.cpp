@@ -678,6 +678,10 @@ void area_editor::do_logic() {
         backup_timer.tick(game.delta_t);
     }
     
+    for(auto &l : game.liquids) {
+        l.second->anim_instance.tick(game.delta_t);
+    }
+    
     selection_effect += AREA_EDITOR::SELECTION_EFFECT_SPEED * game.delta_t;
     
     editor::do_logic_post();
@@ -1521,7 +1525,7 @@ void area_editor::load() {
     load_custom_particle_generators(false);
     load_status_types(false);
     load_spike_damage_types();
-    load_liquids(false);
+    load_liquids(true);
     load_spray_types(false);
     load_hazards();
     load_mob_types(false);

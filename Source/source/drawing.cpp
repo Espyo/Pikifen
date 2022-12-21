@@ -737,9 +737,12 @@ void draw_health(
  *   X and Y offset.
  * scale:
  *   Scale the sector by this much.
+ * time:
+ *   How much time has passed. Used to animate.
  */
 void draw_liquid(
-    sector* s_ptr, liquid* l_ptr, const point &where, const float scale
+    sector* s_ptr, liquid* l_ptr, const point &where, const float scale,
+    const float time
 ) {
 
     size_t n_vertexes = s_ptr->triangles.size() * 3;
@@ -769,7 +772,7 @@ void draw_liquid(
         
         float ground_wobble =
             -sin(
-                game.states.gameplay->area_time_passed *
+                time *
                 DRAWING::LIQUID_WOBBLE_TIME_SCALE
             ) * DRAWING::LIQUID_WOBBLE_DELTA_X;
         float ground_texture_dy =
@@ -859,7 +862,7 @@ void draw_liquid(
             av[v].y = vy - where.y;
             av[v].u =
                 vx +
-                (game.states.gameplay->area_time_passed * layer_speed[l]);
+                (time * layer_speed[l]);
             av[v].v = vy + (layer_2_dy * l);
             av[v].color =
                 al_map_rgba(

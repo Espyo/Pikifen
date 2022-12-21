@@ -215,6 +215,14 @@ void area_editor::draw_canvas() {
                 );
             }
             
+            if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
+                for(size_t h = 0; h < s_ptr->hazards.size(); ++h) {
+                    liquid* l_ptr = s_ptr->hazards[h]->associated_liquid;
+                    if(!l_ptr) continue;
+                    draw_liquid(s_ptr, l_ptr, point(), 1.0f, game.time_passed);
+                }
+            }
+            
         } else if(game.options.area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
             view_heightmap = true;
             

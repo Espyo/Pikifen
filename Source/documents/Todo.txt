@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -9,12 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.23.0 ---
-    Minor script improvements (thanks Helodity)
-        The ability to apply spawn momentum at a specific angle, when a mob spawns another. Right now that exists, but only for random angles
-        The ability for a mob to spawn another mob at a random angle
-        A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
-        hold_focused_mob should be able to specify the hold rotation method
-        Some way to read a different mob's "focus mob memory"?
     Investigate that CI/CD thing (thanks Helodity)
     
     --- v0.24.0 ---
@@ -72,6 +66,7 @@ Next tasks (roughly sorted most important first)
                 If a leader is currently going somewhere, the radar should show their path, whether they are the active leader or not
                 Figure out what to do with sleeping. Remove it? Keep it as is? Hide it in some other place like the proposed "inventory" system?
                     Maybe make it a different feature, one that makes the leader play dead so enemies stop targetting them (thanks Kolabold)
+                The leader should go slower if there are slow Pikmin in the group
             When it is opened, it should fade into view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is
             Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
                 Also, only pan if the mouse moved a certain amount of pixels
@@ -83,7 +78,7 @@ Next tasks (roughly sorted most important first)
             The total play time should be shown somewhere; useful for speedruns
         Pause menu page
             It's just the pause menu
-        Open it with Tab, and move leader swapping to X or middle mouse button or something
+        Open it with Tab, and move leader swapping to X or Shift or middle mouse button or something
     Other menu improvements
         Onion menu
             Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
@@ -156,6 +151,7 @@ Next tasks (roughly sorted most important first)
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
+    Mob rotation should have acceleration too
     General graphic file improvements
         Leader and Pikmin portrait images should
             Be a group, and then have a mask applied on top to fit the grid rectangle
@@ -574,7 +570,7 @@ Misc things (so I don't forget)
         With the current Pikmin "missed hitbox" register, it's possible that an enemy will want to attack with the same hitbox multiple times in the same animation, but all those times will be ignored for 1.5 seconds (think the Man-at-Legs's shots)
         Maybe make it so that when a mob touches a hitbox, it sets a flag, and if the next frame it also touches a hitbox, ignore the event; repeat until there is a frame where the hitbox hasn't been touched -- this could stop the mob from getting hit multiple times by the same hitbox
     Aesthetic
-        Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
+        [NEEDS BRAINSTORMING] Obstacles should have a different health meter, so it doesn't look like health, but rather completion progress
             Or not -- most obstacles already show their progress visually rather than with a health wheel
         A property for mob types to control whether the health is always visible, or disappears after X seconds, only to reappear when the cursor goes over them
         "I think carry weight should be displayed when you hover over an enemy corpse/pellet" (thanks Tenacious)
@@ -588,12 +584,12 @@ Misc things (so I don't forget)
                 Don't offset the camera negatively, but use something like offsetX = maxOffset * shake_mult * GetPerlinNoise(seed, time);  offsetY = maxOffset * shake_mult * GetPerlinNoise(seed + 1, time);
                     Or instead of PerlinNoise, use simple value noise http://www.scratchapixel.com/lessons/procedural-generation-virtual-worlds/procedural-patterns-noise-part-1/creating-simple-1D-noise
         Dust particles while walking
-        Camera should mostly center on the leader, but offset slightly towards where the group is, offsetting more the more the group is farther away, maybe also pointing a bit to where the leader is headed, etc.
         Mobs shrinking or increasing in size because of their height should be limited -- fall too much and your dimensions turn negative
         Add a way for a GUI element's drawing routine to receive alpha as a parameter? And then each element should be responsible for drawing with that alpha. Could be useful for fade ins and fade outs
-        On an object that can carry other objects, if you have a leader and their Pikmin, the Pikmin will kinda jerk along, not very smoothly
+        On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
         If a Pikmin type has black as the color, the idle glow needs to... not be black
         Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
+            Make it use the same logic as draw_texture, where a fade sector must draw the liquid twice, with the second time fading
         I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
         Maybe water should have random sparkle particles?
         Mob shadows could just be the sprite itself again, instead of a circle? (thanks Helodity)
@@ -620,6 +616,11 @@ Misc things (so I don't forget)
         Ships and Onions should also take in enemies and treasures (respectively). In P3's Mission Mode the SPERO can take enemies, and in Bingo Battle, the Onion can take treasures
     More powerful scripting
         Object types should have a list of tags. Then, via scripting, you can ask if a mob has a specific tag or not. The tags can be anything, like "flammable", "can_be_alerted", etc.
+        The ability to apply spawn momentum at a specific angle, when a mob spawns another. Right now that exists, but only for random angles
+        The ability for a mob to spawn another mob at a random angle
+        A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
+        hold_focused_mob should be able to specify the hold rotation method
+        Some way to read a different mob's "focus mob memory"?
         A way to run actions on other mobs
             You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
         Global script variables
@@ -656,10 +657,8 @@ Misc things (so I don't forget)
         Enemy spirits?
     Editor improvements
         Area editor
-            It should have a "toolbar" so you can swap from layout to mob to path real quick, instead of having to quit out. Also, shortcut keys for that in F1, F2, etc.
-                Or better yet, keyboard shortcuts to swap, only. This way the interface isn't cluttered, but power-users can still swap very easily
             A redo button
-            Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just haave a link to another area's geometry instead. It should allow it to be rotated, too
+            Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just have a link to another area's geometry instead. It should allow it to be rotated, too
             Pressing G should let you drag the currently selected things, instead of you being forced to precisely click on the tiny thing (e.g. Pikmin mob gen) before you can drag (thanks Neo)
             Shift+Ctrl+drag should start a selection box that adds to the current selection (thanks Neo)
             Allow pointless edges (and remove the "wouldn't split in any useful way" warning). This way, it's easier to create fade sectors, for instance
@@ -704,7 +703,6 @@ Misc things (so I don't forget)
     Missions
         A goal where you reach X sprays of type Y
         A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
-        A fail condition for killing an enemy
         A fail condition for an enemy/enemy type dying (thanks Neo)
         A fail condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
         A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)
@@ -735,8 +733,6 @@ Misc things (so I don't forget)
         Next time there are file format changes, past version 0.22.0, make it so that every time an area/animation is loaded it checks the engine version, and if it's outdated port to a new format, save the file again, and try loading again
     
 Tasks for later on (I might never implement these)
-    Known problems
-        Helodity found a crash on the area editor -- area with invalid shadow, restart engine, area editor, find problems, go to problem -> crash -- I can't reproduce, but it must have something to do with pointers not being cleared
     ...An AI opponent in 2-player mode? It would help me test...
     Mechanics
         The ability for enemies to eat other enemies
@@ -823,14 +819,13 @@ Tasks for later on (I might never implement these)
             [NEEDS BRAINSTORMING] Particles should have a "emits light?" property, right?
             Particles floating in the wind
             A background detail: those little floaty white things you see in forests
-        Beams of light shining between the leaves; they should spin with the sun, and sometimes fade out to non-existence
+        God rays -- beams of light shining between the leaves; they should spin with the sun, and sometimes fade out to non-existence
         Shadows of leaves should shift along the day, and become less opaque at the start and end
         Clovers, Margarets, etc. rustling should also maybe move north and south a bit, so that it's a bit of a circular motion (ellipse, really)
         Cloud shadows? When a cloud is casting a shadow, tree shadows shouldn't exist
         Water should reflect clouds and the sun... and maybe other things like an aurora borealis?
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
-        Water should be shown in the area editor's review mode
         When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
         Maybe decorative objects should have a script variable that determines whether or not they rotate; useful if you want to place some decorative objects with manual rotation for level design purposes (thanks Nutty171)
     Other details
@@ -846,7 +841,6 @@ Tasks for later on (I might never implement these)
         Good luck with floating point determinism lol
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
     Barely important format changes
-        Some way to let users organize their mob types into sub-folders, and have that reflect in the area editor
         Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
         In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
         Bud_icon.png and Flower_icon.png should be White_bud_icon.png and White_flower_icon.png, to fit with the pink and purple buds and flowers
