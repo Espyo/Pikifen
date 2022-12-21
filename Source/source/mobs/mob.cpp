@@ -2285,6 +2285,7 @@ bool mob::has_clear_line(mob* target_mob) const {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(!m_ptr->type->pushes) continue;
+        if(has_flag(m_ptr->flags, MOB_FLAG_INTANGIBLE)) continue;
         if(m_ptr->z < z && m_ptr->z < target_mob->z) continue;
         if(m_ptr == this || m_ptr == target_mob) continue;
         if(
