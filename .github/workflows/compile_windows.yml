@@ -1,5 +1,8 @@
 name: Compile for Windows
 
+on:
+  [workflow_dispatch]
+
 jobs:
   build:
     runs-on: windows-latest
