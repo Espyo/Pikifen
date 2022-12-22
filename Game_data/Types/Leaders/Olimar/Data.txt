@@ -16,6 +16,7 @@ rotation_speed = 360
 radius = 16
 vulnerabilities {
     poison = 0
+    water = 0
 }
 weight = 1
 whistle_sfx = Olimar_whistle.ogg

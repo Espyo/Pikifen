@@ -16,7 +16,7 @@
     
     <p>This page will explain how to compile the engine from its source code. If you have downloaded the zip file with the engine already built, in an <code>.exe</code>, then you don't need to do any of this in order to play or make content!</p>
     
-    <p>To begin, make sure you have downloaded the engine's source code, and you have a C++ compiler.</p>
+    <p>To begin, make sure you have downloaded <a href="https://github.com/Espyo/Pikifen">the engine's source code</a>, and you have a C++ compiler.</p>
     
     <h2 id="windows">Windows</h2>
     
@@ -59,6 +59,10 @@
     <h3 id="windows-vs-other">Other version of Visual Studio</h3>
     
     <p>Follow the instructions for <a href="#vs2019">Visual Studio 2019</a>, but go to the project properties, General, Platform Toolset, and set it to whatever you have.</p>
+
+    <h3 id="github-actions">GitHub actions</h3>
+
+    <p>You can also let <a href="https://github.com/Espyo/Pikifen">GitHub</a>, the website hosting the repository for the project's source code, do the work. If you have an account, you can use your own fork of the project and run the "Compile for Windows" action. This will generate an artifact which is basically the binary Pikifen.exe file.</p>
     
     <h2 id="linux">Linux</h2>
     
@@ -110,7 +114,6 @@
     
     <p>Note that I mainly develop on Linux, so it's not unusual for the Visual Studio projects to have missing files or some compilation errors. If you get errors:</p>
     <ul>
-      <li>Try adding any missing <code>.h</code> and <code>.cpp</code> files that are not in the project's files.</li>
       <li>Try adding <code>#include &lt;algorithm&gt;</code> to the top of any files that complain about <code>min()</code> or <code>max()</code> not existing.</li>
       <li>Try casting to <code>float</code> or <code>double</code> the parameters used in calls to <code>min()</code> or <code>max()</code>, if you get errors about unsuitable function calls.</li>
     </ul>
