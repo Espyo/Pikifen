@@ -9,7 +9,7 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.23.0 ---
-    Investigate that CI/CD thing (thanks Helodity)
+    
     
     --- v0.24.0 ---
     Add a copy-paste feature to the area editor
@@ -150,6 +150,7 @@ Next tasks (roughly sorted most important first)
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
+        Add Helodity's Plasm Wraith
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
     Mob rotation should have acceleration too
     General graphic file improvements
