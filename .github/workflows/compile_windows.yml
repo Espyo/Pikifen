@@ -25,8 +25,8 @@ jobs:
       
     - name: Copy Files to build directory
       run: |
-        new-item ${env:WORKSPACE}\build -itemtype directory
-        copy-item -Path ${env:WORKSPACE}\Source\visual_studio_2019\x64\Release\Pikifen.exe -Destination ${env:WORKSPACE}\build -PassThru
+        new-item ${{ github.workspace }}\build -itemtype directory
+        copy-item -Path ${{ github.workspace }}\Source\visual_studio_2019\x64\Release\Pikifen.exe -Destination ${{ github.workspace }}\build -PassThru
     
     - name: Publish artifact
       uses: actions/upload-artifact@v3.1.1
