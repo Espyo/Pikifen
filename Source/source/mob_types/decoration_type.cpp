@@ -26,6 +26,47 @@ decoration_type::decoration_type() :
     random_animation_delay(false) {
     
     target_type = MOB_TARGET_TYPE_NONE;
+
+    area_editor_prop_struct aep_random_anim_delay;
+    aep_random_anim_delay.name = "Random animation delay";
+    aep_random_anim_delay.var = "random_animation_delay";
+    aep_random_anim_delay.type = AEMP_BOOL;
+    aep_random_anim_delay.def_value = "true";
+    aep_random_anim_delay.tooltip =
+        "If this decoration type can have a random animation delay,\n"
+        "this property makes this decoration use it or not.";
+    area_editor_props.push_back(aep_random_anim_delay);
+    
+    area_editor_prop_struct aep_random_tint;
+    aep_random_tint.name = "Random tint";
+    aep_random_tint.var = "random_tint";
+    aep_random_tint.type = AEMP_BOOL;
+    aep_random_tint.def_value = "true";
+    aep_random_tint.tooltip =
+        "If this decoration type can have a random color tint,\n"
+        "this property makes this decoration use it or not.";
+    area_editor_props.push_back(aep_random_tint);
+    
+    area_editor_prop_struct aep_random_scale;
+    aep_random_scale.name = "Random scale";
+    aep_random_scale.var = "random_scale";
+    aep_random_scale.type = AEMP_BOOL;
+    aep_random_scale.def_value = "true";
+    aep_random_scale.tooltip =
+        "If this decoration type can have a random scale,\n"
+        "this property makes this decoration use it or not.";
+    area_editor_props.push_back(aep_random_scale);
+    
+    area_editor_prop_struct aep_random_rotation;
+    aep_random_rotation.name = "Random rotation";
+    aep_random_rotation.var = "random_rotation";
+    aep_random_rotation.type = AEMP_BOOL;
+    aep_random_rotation.def_value = "true";
+    aep_random_rotation.tooltip =
+        "If this decoration type can have a random scale,\n"
+        "this property makes this decoration use it or not.";
+    area_editor_props.push_back(aep_random_rotation);
+    
     decoration_fsm::create_fsm(this);
 }
 

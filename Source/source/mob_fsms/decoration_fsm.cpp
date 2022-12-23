@@ -78,7 +78,10 @@ void decoration_fsm::be_bumped(mob* m, void* info1, void* info2) {
  */
 void decoration_fsm::become_idle(mob* m, void* info1, void* info2) {
     decoration* dec_ptr = (decoration*) m;
-    if(dec_ptr->dec_type->random_animation_delay) {
+    if(
+        dec_ptr->dec_type->random_animation_delay &&
+        dec_ptr->individual_random_anim_delay
+    ) {
         m->set_animation(
             DECORATION_ANIM_IDLING, true,
             START_ANIMATION_RANDOM_TIME_ON_SPAWN

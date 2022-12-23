@@ -24,6 +24,8 @@ public:
     //What type of decoration it is.
     decoration_type* dec_type;
     
+    //Whether this decoration is allowed to use the random anim delay or not.
+    bool individual_random_anim_delay;
     //This decoration's random tint, if any.
     ALLEGRO_COLOR individual_tint;
     //This decoration's random scale, if any.
@@ -36,6 +38,8 @@ public:
     
     //Mob drawing routine.
     void draw_mob() override;
+    //Read script variables from the area data.
+    void read_script_vars(const script_var_reader &svr) override;
 };
 
 

@@ -28,6 +28,8 @@ decoration::decoration(
 ) :
     mob(pos, type, angle),
     dec_type(type),
+    individual_random_anim_delay(true),
+    individual_tint(COLOR_WHITE),
     individual_scale(1.0f),
     individual_rotation(0.0f) {
     
@@ -89,4 +91,38 @@ void decoration::draw_mob() {
     eff.rotation += individual_rotation;
     
     draw_bitmap_with_effects(s_ptr->bitmap, eff);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to use.
+ */
+void decoration::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    bool random_animation_delay_var;
+    bool random_tint_var;
+    bool random_scale_var;
+    bool random_rotation_var;
+    
+    if(svr.get("random_animation_delay", random_animation_delay_var)) {
+        individual_random_anim_delay = random_animation_delay_var;
+    }
+    if(svr.get("random_tint", random_tint_var)) {
+        if(!random_tint_var) {
+            individual_tint = COLOR_WHITE;
+        }
+    }
+    if(svr.get("random_scale", random_scale_var)) {
+        if(!random_scale_var) {
+            individual_scale = 1.0f;
+        }
+    }
+    if(svr.get("random_rotation", random_rotation_var)) {
+        if(!random_rotation_var) {
+            individual_rotation = 0.0f;
+        }
+    }
 }

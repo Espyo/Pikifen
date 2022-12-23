@@ -8,9 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     
-    --- v0.23.0 ---
-    
-    
     --- v0.24.0 ---
     Add a copy-paste feature to the area editor
         Use the WIP branch
@@ -148,7 +145,7 @@ Next tasks (roughly sorted most important first)
         Sounds really need a makeover...
         Mobs for decorative pebbles, stones, and sticks
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
-        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nutty171)
+        Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nathyn171)
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         Add Helodity's Plasm Wraith
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
@@ -788,7 +785,7 @@ Tasks for later on (I might never implement these)
             A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.
-            The problem searcher could detect when an enemy's spoils is set to an object that doesn't exist (thanks Nutty171)
+            The problem searcher could detect when an enemy's spoils is set to an object that doesn't exist (thanks Nathyn171)
         Animation editor
             "Sprite" -> "Pose"?
             You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.
@@ -828,7 +825,6 @@ Tasks for later on (I might never implement these)
             https://www.reddit.com/r/aestheticrain/comments/7m61zy/blossom_on_a_pond_1080p/
             See the Pikmin 2 ending movie, for instance
         When something contributes to the mission goal, score, or fail condition, it should fly into the HUD element
-        Maybe decorative objects should have a script variable that determines whether or not they rotate; useful if you want to place some decorative objects with manual rotation for level design purposes (thanks Nutty171)
     Other details
         Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     A competitive mode where each team's marble is out in the open, but you can throw Pikmin at piles of twigs, shards of iron, etc. found in the area. They carry it (like bomb rocks), and when thrown in the room where the marble is, they start working with the materials they have and build a solid block there. Creating complex mazes and traps with the blocks is what stops the enemy team from gathering the marble so easily.
