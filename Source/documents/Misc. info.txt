@@ -226,15 +226,16 @@ Procedure for every version release
             FAQ
             Roadmap
             Changelog
-                Particularly the update's release day, nickname, and version number
+                Particularly the update's version number, release day, and nickname
                 Double-check that it's organized, or if it could be sorted differently
+                Move the oldest version to the older changelog document
     Release candidate
         In Visual Studio
             Add all added source files, and remove removed source files, if needed
                 Use the helper tool to get a list, or run:
                     git diff --name-status $(git describe --abbrev=0 --tags) | grep ^\[AD\].Source/source
             Confirm that the subsystem option in the release build's linker options is set to Windows
-        Compile it on Windows a release x64 target build
+        Compile it on Windows with a release x64 target build
         Point down all changes that were necessary for this to compile
         Create a zip file (see below)
         Send it to beta testers so they can check for stuff that's immediately wrong
@@ -252,7 +253,6 @@ Procedure for every version release
                 cat filelist.txt | while read line; do pngcrush -brute $line $line.new; done;
         Update the Allegro version number on the Compiling page of the manual, if it changed
         Check any changes made on Windows in order to compile, and port them over
-        Update the version release date in the changelog, and move the oldest version to the older changelog document
     Final build
         Compile it once more on Linux just to be sure (full build)
         Delete Error_log.txt
@@ -261,10 +261,9 @@ Procedure for every version release
         Confirm that Error_log.txt reported no errors
     Release
         Commit all changes made in preparation for the next version, and push
-        Tag the commit (format "X.X.X"), but don't push
-        Compile it on Windows a release x64 target build
+        Compile it on Windows with a release x64 target build
         Create a zip (see below)
-        Push the tag
+        Tag the commit (format "X.X.X") and push it
         Release the new version on GitHub
     Starting the next
         Add to the todo for the start of the next version:

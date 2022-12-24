@@ -22,7 +22,7 @@
     
     <h2 id="0.23.0">0.23.0</h2>
     
-    <p><i>Under development &ndash; the "Mission Mode" update</i></p>
+    <p><i>December 25th, 2022 &ndash; the "Mission Mode" update</i></p>
 
     <p><b>Gameplay changes</b></p>
 
@@ -32,9 +32,15 @@
         <ul>
           <li><span class="cl-a">Added</span> mission-type areas. Gameplay during missions usually involves reaching a goal, avoiding some fail conditions, and getting medals based on several scoring criteria.</li>
           <li><span class="cl-a">Added</span> info about the area that is currently selected in the list, in the area selection screen.</li>
-          <li><span class="cl-a">Added</span> mission information tab in the pause menu, if you're playing on a mission.</li>
+          <li><span class="cl-a">Added</span> a mission information tab to the pause menu, if you're playing on a mission.</li>
           <li><span class="cl-a">Added</span> a "play" button and a "make" button for the main menu, which show the list of area types that can be played, and the list of editors, respectively.</li>
           <li><span class="cl-c">Changed</span> the results screen to better suit a mission's completion screen.</li>
+        </ul>
+      </li>
+      <li>
+        Lifetime statistics:
+        <ul>
+          <li><span class="cl-a">Added</span> lifetime statistics, accessible from a menu in the main menu. These are saved onto the disk.</li>
         </ul>
       </li>
       <li>
@@ -42,7 +48,6 @@
         <ul>
           <li><span class="cl-a">Added</span> the ability to play when there are no available leaders, or even if there were none to begin with. There isn't much to do in this state other than move the camera, however.</li>
           <li><span class="cl-a">Added</span> the ability for the camera to be influenced by the group and the cursor. Added an option to control how much the cursor influences it.</li>
-          <li><span class="cl-a">Added</span> lifetime statistics menu.</li>
           <li><span class="cl-a">Added</span> a confirmation message for the pause menu, shown when you want to leave. This can be changed in the options. (Thanks Neo)</li>
           <li><span class="cl-c">Changed</span> the pause menu with various improvements.</li>
         </ul>
@@ -63,13 +68,12 @@
           <li><span class="cl-a">Added</span> a basic/advanced interface mode option.</li>
           <li><span class="cl-a">Added</span> the ability to choose what type and label new path links will have as you're drawing them. (Thanks Nataly)</li>
           <li><span class="cl-a">Added</span> highlights to a sector, mob, etc. when you hover your mouse over it. (Thanks Helodity)</li>
-          <li><span class="cl-a">Added</span> toolbar buttons to swap to the layout, objects, paths, or details mode. (Thanks Nataly)</li>
+          <li><span class="cl-a">Added</span> toolbar buttons to swap to the layout, objects, paths, or details mode. Advanced interface mode only. (Thanks Nataly)</li>
           <li><span class="cl-a">Added</span> the H shortcut key to change a sector's height.</li>
           <li><span class="cl-a">Added</span> the T shortcut key to copy a sector's texture.</li>
           <li><span class="cl-a">Added</span> the L, O, P, D shortcut keys to swap to the layout, objects, paths, and details mode. Advanced interface mode only. (Thanks Nataly)</li>
           <li><span class="cl-a">Added</span> liquids to the area preview feature.</li>
-          <li><span class="cl-c">Changed</span> areas so that they can now specify at what point of the in-game day they start, as well as day time speed or (for missions with time limit) the time of day they end. The <code>day_minutes_per_irl_sec</code> field was removed from the <a href="misc_config.html">config file</a> since it is no longer needed.</li>
-          <li><span class="cl-r">Removed</span> the <code>day_minutes_per_irl_sec</code> field from the <a href="misc_config.html">config file</a> since it is no longer needed.</li>
+          <li><span class="cl-c">Added</span> the ability for areas to specify at what point of the in-game day they start, as well as day time speed or (for missions with time limit) the time of day they end.</li>
         </ul>
       </li>
       <li>
@@ -82,7 +86,7 @@
       <li>
         New properties:
         <ul>
-          <li><span class="cl-a">Added</span> a <code>points</code> property to <a href="mob_enemy.html">enemy types</a>.</li>
+          <li><span class="cl-a">Added</span> a <code>points</code> property for <a href="mob_enemy.html">enemy types</a>.</li>
           <li><span class="cl-a">Added</span> a <code>states_ignoring_hazard</code> property for <a href="script.html">scripts</a>.</li>
           <li><span class="cl-a">Added</span> a <code>hold_offset_vertical_distance</code> property for a <a href="mob_type.html">mob type</a>'s children data.</li>
           <li><span class="cl-a">Added</span> a <code>custom_category_name</code> property for <a href="mob_type.html">mob types</a>. With this, the pre-packaged mob types are now better organized in the editors.</li>
@@ -93,13 +97,18 @@
         </ul>
       </li>
       <li>
-        Others:
+        GUI editor:
         <ul>
           <li><span class="cl-a">Added</span> a GUI editor. This should make it easier to position and resize GUI elements in menus and HUDs.</li>
+        </ul>
+      <li>
+        Others:
+        <ul>
           <li><span class="cl-a">Added</span> the ability to lock the center (as opposed to the opposite side/corner) by holding Alt, when you are dragging a side/corner handle of a transformation widget in an editor's canvas.</li>
           <li><span class="cl-a">Added</span> script variables to <a href="mob_decoration.html">decoration</a> objects to allow them to disable the random property changes.</li>
           <li><span class="cl-a">Added</span> the <code>gentle_release</code> script variable to <a href="mob_tool.html">tool</a> objects so they can know if the Pikmin released it gently (i.e. the Pikmin is entering an Onion) or not.</li>
-          <li><span class="cl-c">Changed</span> keyboard shortcuts made for the edtior canvases to make them now work anywhere so long as you aren't writing in a text box. (Thanks Neo)</li>
+          <li><span class="cl-c">Changed</span> the duplicate mobs area editor keyboard shortcut from D to Ctrl+D, since D is now used to go to the details mode.</li>
+          <li><span class="cl-c">Changed</span> keyboard shortcuts made for the editor canvases to make them now work anywhere so long as you aren't writing in a text box. (Thanks Neo)</li>
           <li><span class="cl-c">Changed</span> drag buttons in editors to only need a single click in order to enter text input mode.</li>
         </ul>
       </li>
@@ -121,7 +130,8 @@
         Others:
         <ul>
           <li><span class="cl-c">Changed</span> the location of area folders, where simple areas used to be in <code>Game_data/Areas/&lt;folder&gt;</code>, but must now be moved to <code>Game_data/Areas/Simple/&lt;folder&gt;</code>. If you care about auto-backups and reference image data, do the same to the area-related stuff in the <code>User_data</code> folder.</li>
-          <li><span class="cl-r">Removed</span> the <a href="misc.html">system asset</a> for the Pikmin silhouette, in favor of two leader silhouettes.</li>
+          <li><span class="cl-r">Removed</span> the <code>day_minutes_per_irl_sec</code> field from the <a href="misc_config.html">config file</a> since now each area controls its speed.</li>
+          <li><span class="cl-r">Removed</span> the <a href="misc_config.html#system-asset">system asset</a> for the Pikmin silhouette, in favor of two leader silhouettes.</li>
           <li><span class="cl-a">Added</span> two leader silhouette graphics to replace the Pikmin silhouette image.</li>
           <li><span class="cl-a">Added</span> a <code>standard_leader_height</code> and a <code>standard_leader_radius</code> game config property.</li>
         </ul>
@@ -371,80 +381,6 @@
       </li>
       <li><a href="mob_converter.html">Converters</a> now need hitboxes for the Pikmin to touch when thrown.</li>
       <li>The <code>blocks_carrier_pikmin</code> <a href="mob_type.html">object type</a> property has been renamed to <code>can_block_paths</code>.</li>
-    </ul>
-    
-    <h2 id="0.20.0">0.20.0</h2>
-    
-    <p><i>April 24th, 2021 &ndash; the "missing menus" update</i></p>
-    
-    <p><b>Changes</b></p>
-    
-    <ul>
-      <li>
-        Revamped Onions.
-        <ul>
-          <li>Interacting with an Onion now displays a menu to manage the Pikmin with.</li>
-          <li>Pikmin now have logic to climb up an Onion's legs and enter, or to come out and slide down a leg.</li>
-          <li>An Onion can now manage multiple Pikmin types, not just one.</li>
-          <li>Ships can now store and manage Pikmin, just like Onions.</li>
-          <li>The pre-packaged Onion graphics now animate, and look like the more modern Onion designs.</li>
-          <li>Added a new Onion type that manages all three &ndash; the Master Onion.</li>
-        </ul>
-      </li>
-      <li>
-        Added a results screen.
-        <ul>
-          <li>When the player finishes playing in an area, the results screen gives them some basic stats: time taken, treasure points obtained, treasure points available, enemies killed, enemies available, Pikmin born, and Pikmin deaths.</li>
-          <li>The player is also given the option to retry, keep playing after hours, or pick a different area.</li>
-          <li>The results screen is entered when the player chooses to end the day via the pause menu, when the day time is over, or when all leaders are KO.
-          <li>Added a new property for treasure types: <code>points</code>. Use this to specify how many points they are worth.</li>
-        </ul>
-      </li>
-      <li>Added a pause menu. Players can retry, end the day, or quit to the area selection menu from here.</li>
-      <li>
-        Revamped GUI.
-        <ul>
-          <li>Updated all menus to have a better and more unified look.</li>
-          <li>The position of GUI items in all menus can now be customized, just like the HUD was customizable until now.</li>
-        </ul>
-      </li>
-      <li>
-        Revamped edge aesthetics.
-        <ul>
-          <li>You can go to the area editor, select edges, and edit their properties.</li>
-          <li>With this, you can control how and if walls cast a shadow, as well as their color and length. (Thanks Scruffy, Neo)</li>
-          <li>You can also now make the higher sector of a wall look smooth at the ledge, instead of the ledge abruptly cutting off to the lower sector. (Thanks Tenacious)</li>
-          <li>Finally, bodies of water will now have a simple foam effect around their limits.</li>
-          <li>Wall shadows have been revamped to work better in general.</li>
-        </ul>
-      </li>
-      <li>
-        Expanded the <code>get_info</code> action:
-        <ul>
-          <li>Added new data: <code>x</code>, <code>y</code>, and <code>z</code>. Use these to get the object's coordinates. (Thanks Kman)</li>
-          <li>Also added <code>focus_distance</code>. Use this to get the distance between this object and its focused object.</li>
-          <li>Added a new action: <code>get_focus_info</code>. It works like <code>get_info</code>, but when applicable, gets info from the focused mob instead. (Thanks Kman)</li>
-        </ul>
-      </li>
-      <li>Added a mob script event, <code>on_leave_hazard</code>, and added a way to get the name of the hazard via the <code>get_info</code> action, both for this event and <code>on_touch_hazard</code>. (Thanks Kman)</li>
-      <li>Pikmin now push each other slightly.</li>
-      <li>Health wheels now transition smoothly to their target value, and also fade away when they are empty. (Thanks Kman)</li>
-      <li>Added new system assets: <code>bubble_box</code>, used to draw box-like bubbles in the HUD and menus, <code>focus_box</code>, used to show which GUI item is focused, and <code>more</code>, used for menus to indicate there's more content beyond.</li>
-      <li>Holding Shift when the snapping mode is "nothing" will now snap to the grid in the area editor. The snapping mode is now also saved to the options. Finally, Shift+Plus and Shift+Minus change the grid spacing. (Thanks Nutty171, Neo)</li>
-      <li>Players can now customize the colors of the GUI widgets in the editors. (Thanks Kman)</li>
-      <li>The Beady Long Legs's logic was slightly cleaned up.</li>
-      <li>Revamped code and added instructions to make it possible to compile on Mac OS. (Thanks MidnightWhisper)</li>
-    </ul>
-    
-    <p><b>Compatibility warnings</b></p>
-    
-    <ul>
-      <li>Onion types now use the <code>pikmin_types</code> property instead of <code>pikmin_type</code>.</li>
-      <li>The mouse cursor graphic now displays at full-size, all the time. If you made a custom one, you'll probably want to resize its image file to 70% its old size.</li>
-      <li>The pre-packaged Pellet Posy graphics files are now split per-type, as opposed to per-size. This makes more sense for adding new types of Pikmin/pellet. (Thanks Kman)</li>
-      <li>The counter font now also includes a dot and a colon. If you changed this font, please update it accordingly.</li>
-      <li>The gameplay HUD information is now stored in <code>Game_data/GUI/Gameplay.txt</code>, and the title screen logo information now goes in <code>Game_data/GUI/Main_menu.txt</code>.</li>
-      <li>The sector property "always casts shadow" has been removed, and wall shadows should be slightly less dark than before in general. If you have walls that you need to look the same as before, you'll want to go to the edge properties and tweak their shadow's length and color.</li>
     </ul>
     
     <h2 id="older">Older</h2>
