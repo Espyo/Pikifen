@@ -3,6 +3,8 @@ death_state = exploding
 
 init {
     set_var will_be_swallowed false
+    //This gets set by the engine when the Pikmin releases it gently (e.g. entering an Onion).
+    set_var gentle_release false
 }
 
 script {
@@ -31,7 +33,11 @@ script {
             set_animation held
         }
         on_released {
-            set_state primed
+            if $gentle_release = true
+                set_state idling
+            else
+                set_state primed
+            end_if
         }
     }
     

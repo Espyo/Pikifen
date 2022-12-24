@@ -1315,7 +1315,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EV_GO_TO_ONION); {
-            efc.run(pikmin_fsm::release_tool);
             efc.change_state("going_to_onion");
         }
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
@@ -1368,7 +1367,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_stopped");
         }
         efc.new_event(MOB_EV_GO_TO_ONION); {
-            efc.run(pikmin_fsm::release_tool);
             efc.change_state("going_to_onion");
         }
         efc.new_event(MOB_EV_GRABBED_BY_FRIEND); {
@@ -1419,7 +1417,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("swarm_chasing");
         }
         efc.new_event(MOB_EV_GO_TO_ONION); {
-            efc.run(pikmin_fsm::release_tool);
             efc.change_state("going_to_onion");
         }
         efc.new_event(MOB_EV_ON_LEAVE); {
@@ -1476,7 +1473,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("swarm_stopped");
         }
         efc.new_event(MOB_EV_GO_TO_ONION); {
-            efc.run(pikmin_fsm::release_tool);
             efc.change_state("going_to_onion");
         }
         efc.new_event(MOB_EV_ON_LEAVE); {
@@ -2801,6 +2797,9 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
         enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
+    bool aux_b = true;
+    pikmin_fsm::release_tool(m, (void*) &aux_b, NULL);
+    
     m->focus_on_mob(nest_ptr->m_ptr);
     m->stop_chasing();
     m->chase(coords, nest_ptr->m_ptr->z);
@@ -3399,7 +3398,7 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
  * m:
  *   The mob.
  * info1:
- *   Unused.
+ *   If NULL, release as normal. Otherwise, this is a "gentle" release.
  * info2:
  *   Unused.
  */
@@ -3408,7 +3407,12 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     mob* too_ptr = *m->holding.begin();
     
-    m->release(too_ptr);
+    if(info1) {
+        too_ptr->set_var("gentle_release", "true");
+    } else {
+        too_ptr->set_var("gentle_release", "false");
+    }
+    pik_ptr->release(too_ptr);
     too_ptr->pos = m->pos;
     too_ptr->speed = point();
     too_ptr->push_amount = 0.0f;

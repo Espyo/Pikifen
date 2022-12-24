@@ -24,7 +24,7 @@
 
     <p>Tool object types dictate what happens when the Pikmin picks them up, and what happens when they are dropped. They also specify when they can and cannot be picked up, be it by Pikmin or by enemies, and when exactly it is that they get activated. Their behavior is specified by the user-made script.</p>
 
-    <p>Tool type objects are hardcoded in the engine to be chased out by the Pikmin (when appropriate), picked up, released, and optionally, get stuck to an object.</p>
+    <p>Tool type objects are hardcoded in the engine to be chased out by the Pikmin (when appropriate), picked up, released normally, released gently when the Pikmin needs to enter an Onion, and optionally, get stuck to an object.</p>
 
     <h2 id="props">Properties</h2>
 
@@ -56,7 +56,7 @@
 
     <h2 id="script">Script</h2>
 
-    <p>All of the tool type object's behavior is defined by the user-made <a href="script.html">script</a>. It is recommended that you use the <code>set_holdable</code> action at some point to make it so Pikmin can hold the tool, and listen out to the <code>on_held</code> and <code>on_released</code> events, to know when the tool has been picked up, and is ready to be used.</p>
+    <p>All of the tool type object's behavior is defined by the user-made <a href="script.html">script</a>. It is recommended that you use the <code>set_holdable</code> action at some point to make it so Pikmin can hold the tool, and listen out to the <code>on_held</code> and <code>on_released</code> events, to know when the tool has been picked up, and is ready to be used. The engine changes the <code>gentle_release</code> script variable to true when the Pikmin releases the tool "gently", i.e. when the Pikmin needs to go inside an Onion, and sets it to false otherwise, so you can use this to distinguish whether to leave the tool idling on the floor, or to activate it.</p>
 
     <p>Some <a href="script.html#vars">script variables</a> control special behavior, like the tool's starting team. To know which ones exist, you can go to the area editor, select a tool, and read the tooltip of each variable.</p>
 
