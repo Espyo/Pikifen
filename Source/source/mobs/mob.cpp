@@ -78,7 +78,7 @@ const float GROUP_SPOT_INTERVAL = 3.0f;
 //Group spots can randomly deviate in X or Y up to this much.
 const float GROUP_SPOT_MAX_DEVIATION = MOB::GROUP_SPOT_INTERVAL * 0.60f;
 //When using the height effect, scale the mob by this factor.
-const float HEIGHT_EFFECT_FACTOR = 0.0017;
+const float HEIGHT_EFFECT_FACTOR = 0.002;
 //Base horizontal speed at which mobs move due to attacks with knockback.
 const float KNOCKBACK_H_POWER = 64.0f;
 //Base vertical speed at which mobs move due to attacks with knockback.
@@ -1996,11 +1996,10 @@ void mob::get_sprite_bitmap_effects(
     }
     
     if(has_flag(effects, SPRITE_BITMAP_EFFECT_HEIGHT)) {
-        float height_effect_scale = 1.0;
-        
         if(height_effect_pivot != LARGE_FLOAT) {
+            float height_effect_scale = 1.0;
             //First, check for the mob being in the air.
-            height_effect_scale =
+            height_effect_scale +=
                 (z - height_effect_pivot) * MOB::HEIGHT_EFFECT_FACTOR;
             height_effect_scale = std::max(height_effect_scale, 1.0f);
             if(
@@ -2013,8 +2012,8 @@ void mob::get_sprite_bitmap_effects(
                     (z - ground_sector->z) /
                     (height_effect_pivot - ground_sector->z);
             }
+            info->scale *= height_effect_scale;
         }
-        info->scale *= height_effect_scale;
     }
     
     if(

@@ -19,7 +19,7 @@
 
 namespace AREA {
 //Default difficulty.
-const unsigned char DEF_DIFFICULTY = 3;
+const unsigned char DEF_DIFFICULTY = 0;
 //Default day time at the start of gameplay, in minutes.
 const size_t DEF_DAY_TIME_START = 7 * 60;
 //Default day time speed, in game-minutes per real-minutes.
