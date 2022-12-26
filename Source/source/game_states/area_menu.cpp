@@ -20,14 +20,44 @@
 
 
 namespace AREA_MENU {
-//Path to the area info GUI information file.
-const string INFO_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_info.txt";
 //Path to the main GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu.txt";
+//Path to the area info GUI information file.
+const string INFO_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_info.txt";
 //How long to animate the page swapping for.
 const float PAGE_SWAP_DURATION = 0.5f;
 //Path to the mission specs GUI information file.
 const string SPECS_GUI_FILE_PATH = GUI_FOLDER_PATH + "/Area_menu_specs.txt";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an "area menu" state.
+ */
+area_menu_state::area_menu_state() :
+    game_state(),
+    area_type(AREA_TYPE_SIMPLE),
+    bmp_menu_bg(nullptr),
+    prev_selected_item(nullptr),
+    list_box(nullptr),
+    info_name_text(nullptr),
+    specs_name_text(nullptr),
+    subtitle_text(nullptr),
+    cur_thumb(nullptr),
+    description_text(nullptr),
+    difficulty_text(nullptr),
+    tags_text(nullptr),
+    maker_text(nullptr),
+    version_text(nullptr),
+    record_info_text(nullptr),
+    cur_stamp(nullptr),
+    cur_medal(nullptr),
+    record_date_text(nullptr),
+    goal_text(nullptr),
+    fail_list(nullptr),
+    grading_list(nullptr),
+    show_mission_specs(false) {
+    
 }
 
 
@@ -108,36 +138,6 @@ void area_menu_state::animate_info_and_specs() {
             );
         }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an "area menu" state.
- */
-area_menu_state::area_menu_state() :
-    game_state(),
-    area_type(AREA_TYPE_SIMPLE),
-    bmp_menu_bg(nullptr),
-    prev_selected_item(nullptr),
-    list_box(nullptr),
-    info_name_text(nullptr),
-    specs_name_text(nullptr),
-    subtitle_text(nullptr),
-    cur_thumb(nullptr),
-    description_text(nullptr),
-    difficulty_text(nullptr),
-    tags_text(nullptr),
-    maker_text(nullptr),
-    version_text(nullptr),
-    record_info_text(nullptr),
-    cur_stamp(nullptr),
-    cur_medal(nullptr),
-    record_date_text(nullptr),
-    goal_text(nullptr),
-    fail_list(nullptr),
-    grading_list(nullptr),
-    show_mission_specs(false) {
-    
 }
 
 

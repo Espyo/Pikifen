@@ -10,9 +10,9 @@
 
 #include "mission.h"
 
+#include "functions.h"
 #include "game.h"
 #include "game_states/area_editor/editor.h"
-#include "functions.h"
 #include "utils/string_utils.h"
 
 
@@ -105,6 +105,8 @@ bool mission_fail_kill_enemies::get_end_zoom_data(
 
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
  */
 string mission_fail_kill_enemies::get_hud_label(
     gameplay_state* gameplay
@@ -241,6 +243,8 @@ bool mission_fail_lose_leaders::get_end_zoom_data(
 
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
  */
 string mission_fail_lose_leaders::get_hud_label(
     gameplay_state* gameplay
@@ -375,6 +379,8 @@ bool mission_fail_lose_pikmin::get_end_zoom_data(
 
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
  */
 string mission_fail_lose_pikmin::get_hud_label(
     gameplay_state* gameplay
@@ -499,6 +505,8 @@ bool mission_fail_pause_menu::get_end_zoom_data(
 
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
  */
 string mission_fail_pause_menu::get_hud_label(
     gameplay_state* gameplay
@@ -625,6 +633,8 @@ bool mission_fail_take_damage::get_end_zoom_data(
 
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
  */
 string mission_fail_take_damage::get_hud_label(
     gameplay_state* gameplay
@@ -763,6 +773,8 @@ bool mission_fail_time_limit::get_end_zoom_data(
 
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
  */
 string mission_fail_time_limit::get_hud_label(
     gameplay_state* gameplay
@@ -901,6 +913,8 @@ bool mission_fail_too_few_pikmin::get_end_zoom_data(
 
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
  */
 string mission_fail_too_few_pikmin::get_hud_label(
     gameplay_state* gameplay
@@ -1035,6 +1049,8 @@ bool mission_fail_too_many_pikmin::get_end_zoom_data(
 
 /* ----------------------------------------------------------------------------
  * HUD label for the player's current amount.
+ * gameplay:
+ *   Pointer to the gameplay state to get info from.
  */
 string mission_fail_too_many_pikmin::get_hud_label(
     gameplay_state* gameplay

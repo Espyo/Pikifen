@@ -3364,7 +3364,9 @@ void area_editor::process_gui_panel_mission() {
                 if(
                     ImGui::CheckboxFlags(
                         "Use in HUD counter##uihtp", &flags,
-                        get_index_bitmask(MISSION_SCORE_CRITERIA_TREASURE_POINTS)
+                        get_index_bitmask(
+                            MISSION_SCORE_CRITERIA_TREASURE_POINTS
+                        )
                     )
                 ) {
                     register_change("mission grading change");

@@ -217,7 +217,9 @@ bool ImGui::ListBox(
     
     return
         ImGui::ListBox(
-            label.c_str(), current_item, array, (int) items.size(), height_in_items
+            label.c_str(),
+            current_item, array, (int) items.size(),
+            height_in_items
         );
 }
 

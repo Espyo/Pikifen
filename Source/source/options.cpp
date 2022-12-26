@@ -27,10 +27,10 @@ const float DEF_AREA_EDITOR_BACKUP_INTERVAL = 120.0f;
 const float DEF_AREA_EDITOR_GRID_INTERVAL = 32.0f;
 //Default value for the area editor selection transformation widget.
 const bool DEF_AREA_EDITOR_SEL_TRANS = false;
-//Default value for whether to show an edge's length in the area editor.
-const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
 //Default value for whether to show a circular sector's info in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_CIRCULAR_INFO = true;
+//Default value for whether to show an edge's length in the area editor.
+const bool DEF_AREA_EDITOR_SHOW_EDGE_LENGTH = true;
 //Default value for whether to show a path link's length in the area editor.
 const bool DEF_AREA_EDITOR_SHOW_PATH_LINK_LENGTH = true;
 //Default value for whether to show a mob's territory in the area editor.
@@ -53,10 +53,10 @@ const float DEF_CURSOR_CAM_WEIGHT = 0.0f;
 const float DEF_CURSOR_SPEED = 500.0f;
 //Default value for the cursor trail.
 const bool DEF_DRAW_CURSOR_TRAIL = true;
-//Default value for whether the middle mouse button pans in editors.
-const bool DEF_EDITOR_MMB_PAN = false;
 //Default value for the editor highlights.
 const ALLEGRO_COLOR DEF_EDITOR_HIGHLIGHT_COLOR = { 1.0f, 1.0f, 1.0f, 1.0f };
+//Default value for whether the middle mouse button pans in editors.
+const bool DEF_EDITOR_MMB_PAN = false;
 //Default value for the editor mouse drag threshold.
 const float DEF_EDITOR_MOUSE_DRAG_THRESHOLD = 4;
 //Default value for the editor primary color.

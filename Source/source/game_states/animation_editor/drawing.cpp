@@ -638,6 +638,22 @@ void animation_editor::draw_top_down_view_hitbox(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws a leader silhouette on the canvas in the standard top-down view.
+ * x_offset:
+ *   From the center, offset the leader silhouette this much to the right.
+ */
+void animation_editor::draw_top_down_view_leader_silhouette(
+    const float x_offset
+) {
+    draw_bitmap(
+        game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),
+        point(-1, game.config.standard_leader_radius * 2.0f),
+        0, al_map_rgba(240, 240, 240, 160)
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the mob radius on the canvas in the standard top-down view.
  * mt:
  *   Type of the mob to draw.
@@ -654,22 +670,6 @@ void animation_editor::draw_top_down_view_mob_radius(mob_type* mt) {
             al_map_rgb(240, 240, 240), 1.0f / game.cam.zoom
         );
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws a leader silhouette on the canvas in the standard top-down view.
- * x_offset:
- *   From the center, offset the leader silhouette this much to the right.
- */
-void animation_editor::draw_top_down_view_leader_silhouette(
-    const float x_offset
-) {
-    draw_bitmap(
-        game.sys_assets.bmp_leader_silhouette_top, point(x_offset, 0),
-        point(-1, game.config.standard_leader_radius * 2.0f),
-        0, al_map_rgba(240, 240, 240, 160)
-    );
 }
 
 

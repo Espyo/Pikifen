@@ -18,20 +18,20 @@
 
 
 namespace AREA {
-//Default difficulty.
-const unsigned char DEF_DIFFICULTY = 0;
-//Default day time at the start of gameplay, in minutes.
-const size_t DEF_DAY_TIME_START = 7 * 60;
 //Default day time speed, in game-minutes per real-minutes.
 const float DEF_DAY_TIME_SPEED = 120;
+//Default day time at the start of gameplay, in minutes.
+const size_t DEF_DAY_TIME_START = 7 * 60;
+//Default difficulty.
+const unsigned char DEF_DIFFICULTY = 0;
 //Default mission bronze medal point requirement.
 const int DEF_MISSION_MEDAL_BRONZE_REQ = 1000;
-//Default mission silver medal point requirement.
-const int DEF_MISSION_MEDAL_SILVER_REQ = 2000;
 //Default mission gold medal point requirement.
 const int DEF_MISSION_MEDAL_GOLD_REQ = 3000;
 //Default mission platinum medal point requirement.
 const int DEF_MISSION_MEDAL_PLATINUM_REQ = 4000;
+//Default mission silver medal point requirement.
+const int DEF_MISSION_MEDAL_SILVER_REQ = 2000;
 //Default mission time limit duration, in seconds.
 const size_t DEF_MISSION_TIME_LIMIT = 60;
 };

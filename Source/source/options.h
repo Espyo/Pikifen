@@ -39,6 +39,7 @@ enum AUTO_THROW_MODES {
     N_AUTO_THROW_MODES,
 };
 
+
 //Modes for the pause menu leaving confirmation question.
 enum LEAVING_CONFIRMATION_MODES {
     //Never ask.

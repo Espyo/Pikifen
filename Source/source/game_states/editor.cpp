@@ -1249,6 +1249,12 @@ void editor::process_gui_editor_style() {
 
 /* ----------------------------------------------------------------------------
  * Processes the widgets that show the editor's history.
+ * name_display_callback:
+ *   When an entry's name needs to be displayed as button text, this function
+ *   gets called with the entry name as an argument, to determine what the
+ *   final button text will be.
+ * pick_callback:
+ *   Code to run when an entry is picked.
  */
 void editor::process_gui_history(
     const std::function<string(const string &)> &name_display_callback,

@@ -835,13 +835,13 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         if(game.cur_area_data.mission.fail_hud_primary_cond != INVALID) {
             float real_fail_ratio = 0.0f;
             int fail_cur_amount =
-                game.mission_fail_conds[game.cur_area_data.mission.fail_hud_primary_cond]->get_cur_amount(
-                    this
-                );
+                game.mission_fail_conds[
+            game.cur_area_data.mission.fail_hud_primary_cond
+            ]->get_cur_amount(this);
             int fail_req_amount =
-                game.mission_fail_conds[game.cur_area_data.mission.fail_hud_primary_cond]->get_req_amount(
-                    this
-                );
+                game.mission_fail_conds[
+            game.cur_area_data.mission.fail_hud_primary_cond
+            ]->get_req_amount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
             }
@@ -853,13 +853,13 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         if(game.cur_area_data.mission.fail_hud_secondary_cond != INVALID) {
             float real_fail_ratio = 0.0f;
             int fail_cur_amount =
-                game.mission_fail_conds[game.cur_area_data.mission.fail_hud_secondary_cond]->get_cur_amount(
-                    this
-                );
+                game.mission_fail_conds[
+            game.cur_area_data.mission.fail_hud_secondary_cond
+            ]->get_cur_amount(this);
             int fail_req_amount =
-                game.mission_fail_conds[game.cur_area_data.mission.fail_hud_secondary_cond]->get_req_amount(
-                    this
-                );
+                game.mission_fail_conds[
+            game.cur_area_data.mission.fail_hud_secondary_cond
+            ]->get_req_amount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
             }

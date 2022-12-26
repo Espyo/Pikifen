@@ -23,6 +23,7 @@ using std::deque;
 using std::size_t;
 using std::string;
 
+
 namespace AREA_EDITOR {
 extern const float COMFY_DIST;
 extern const float CROSS_SECTION_POINT_RADIUS;
@@ -563,11 +564,11 @@ private:
     void close_load_dialog();
     void close_options_dialog();
     void copy_sector_texture(const point &cursor);
-    void create_or_load_area(
+    void create_area(
         string requested_area_folder_name,
         const AREA_TYPES requested_area_type
     );
-    void create_area(
+    void create_or_load_area(
         string requested_area_folder_name,
         const AREA_TYPES requested_area_type
     );

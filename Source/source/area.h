@@ -27,13 +27,13 @@ enum AREA_TYPES {
 
 
 namespace AREA {
-extern const unsigned char DEF_DIFFICULTY;
-extern const size_t DEF_DAY_TIME_START;
 extern const float DEF_DAY_TIME_SPEED;
+extern const size_t DEF_DAY_TIME_START;
+extern const unsigned char DEF_DIFFICULTY;
 extern const int DEF_MISSION_MEDAL_BRONZE_REQ;
-extern const int DEF_MISSION_MEDAL_SILVER_REQ;
 extern const int DEF_MISSION_MEDAL_GOLD_REQ;
 extern const int DEF_MISSION_MEDAL_PLATINUM_REQ;
+extern const int DEF_MISSION_MEDAL_SILVER_REQ;
 extern const size_t DEF_MISSION_TIME_LIMIT;
 };
 
@@ -143,6 +143,7 @@ struct area_data {
     void remove_sector(const sector* s_ptr);
     void clear();
 };
+
 
 void get_area_info_from_path(
     const string &requested_area_path,

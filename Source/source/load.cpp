@@ -27,10 +27,10 @@ using std::set;
 
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
- * type:
+ * requested_area_folder_name:
+ *   Name of the folder where the area's data is.
+ * requested_area_type:
  *   Type of area this is. What folder it loads from depends on this value.
- * name:
- *   Name of the area's folder.
  * load_for_editor:
  *   If true, skips loading some things that the area editor won't need.
  * from_backup:

@@ -13,6 +13,7 @@
 #include "../../game.h"
 #include "../../utils/allegro_utils.h"
 
+
 /* ----------------------------------------------------------------------------
  * Handles the drawing part of the main loop of the GUI editor.
  */
@@ -93,7 +94,9 @@ void gui_editor::draw_canvas() {
         
         float clip_x = items[i].center.x - items[i].size.x / 2.0f;
         float clip_y = items[i].center.y - items[i].size.y / 2.0f;
-        al_transform_coordinates(&game.world_to_screen_transform, &clip_x, &clip_y);
+        al_transform_coordinates(
+            &game.world_to_screen_transform, &clip_x, &clip_y
+        );
         float clip_w = items[i].size.x * game.cam.zoom;
         float clip_h = items[i].size.y * game.cam.zoom;
         set_combined_clipping_rectangles(
@@ -104,8 +107,10 @@ void gui_editor::draw_canvas() {
             game.fonts.builtin,
             al_map_rgb(40, 40, 96),
             point(
-                (items[i].center.x - items[i].size.x / 2.0f) + (4.0f / game.cam.zoom),
-                (items[i].center.y - items[i].size.y / 2.0f) + (4.0f / game.cam.zoom)
+                (items[i].center.x - items[i].size.x / 2.0f) +
+                (4.0f / game.cam.zoom),
+                (items[i].center.y - items[i].size.y / 2.0f) +
+                (4.0f / game.cam.zoom)
             ),
             point(
                 1.0f / game.cam.zoom,

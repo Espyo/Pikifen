@@ -10,8 +10,8 @@
 
 #include "editor.h"
 
-#include "../../game.h"
 #include "../../functions.h"
+#include "../../game.h"
 #include "../../utils/string_utils.h"
 
 
@@ -40,6 +40,7 @@ gui_editor::gui_editor() :
     zoom_max_level = GUI_EDITOR::ZOOM_MAX_LEVEL;
     zoom_min_level = GUI_EDITOR::ZOOM_MIN_LEVEL;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Code to run when the load dialog is closed.
@@ -88,19 +89,19 @@ void gui_editor::draw_canvas_imgui_callback(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the name of this state.
- */
-string gui_editor::get_name() const {
-    return "GUI editor";
-}
-
-
-/* ----------------------------------------------------------------------------
  * In the options data file, options pertaining to an editor's history
  * have a prefix. This function returns that prefix.
  */
 string gui_editor::get_history_option_prefix() const {
     return "gui_editor_history";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of this state.
+ */
+string gui_editor::get_name() const {
+    return "GUI editor";
 }
 
 

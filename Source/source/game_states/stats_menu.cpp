@@ -18,6 +18,7 @@
 #include "../load.h"
 #include "../utils/string_utils.h"
 
+
 namespace STATS_MENU {
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Statistics_menu.txt";

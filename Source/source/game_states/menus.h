@@ -27,8 +27,8 @@ using std::vector;
 
 
 namespace AREA_MENU {
-extern const string DATA_GUI_FILE_PATH;
 extern const string GUI_FILE_PATH;
+extern const string INFO_GUI_FILE_PATH;
 extern const float PAGE_SWAP_DURATION;
 extern const string SPECS_GUI_FILE_PATH;
 }
@@ -485,5 +485,6 @@ private:
     void populate_stats_list();
     void update_runtime_value_text();
 };
+
 
 #endif //ifndef MENUS_INCLUDED

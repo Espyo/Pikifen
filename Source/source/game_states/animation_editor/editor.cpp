@@ -636,6 +636,16 @@ void animation_editor::press_hitboxes_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the leader silhouette button widget is pressed.
+ */
+void animation_editor::press_leader_silhouette_button() {
+    leader_silhouette_visible = !leader_silhouette_visible;
+    string state_str = (leader_silhouette_visible ? "Enabled" : "Disabled");
+    status_text = state_str + " leader silhouette visibility.";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the load file button widget is pressed.
  */
 void animation_editor::press_load_button() {
@@ -652,16 +662,6 @@ void animation_editor::press_mob_radius_button() {
     mob_radius_visible = !mob_radius_visible;
     string state_str = (mob_radius_visible ? "Enabled" : "Disabled");
     status_text = state_str + " object radius visibility.";
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to run when the leader silhouette button widget is pressed.
- */
-void animation_editor::press_leader_silhouette_button() {
-    leader_silhouette_visible = !leader_silhouette_visible;
-    string state_str = (leader_silhouette_visible ? "Enabled" : "Disabled");
-    status_text = state_str + " leader silhouette visibility.";
 }
 
 

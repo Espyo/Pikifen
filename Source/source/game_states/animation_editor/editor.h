@@ -207,8 +207,8 @@ private:
         hitbox* h_ptr, const ALLEGRO_COLOR &color,
         const ALLEGRO_COLOR &outline_color, const float outline_thickness
     );
-    void draw_top_down_view_mob_radius(mob_type* mt);
     void draw_top_down_view_leader_silhouette(const float x_offset);
+    void draw_top_down_view_mob_radius(mob_type* mt);
     void draw_top_down_view_sprite(sprite* s);
     
     //GUI functions.
@@ -222,9 +222,9 @@ private:
     );
     void press_grid_button();
     void press_hitboxes_button();
+    void press_leader_silhouette_button();
     void press_load_button();
     void press_mob_radius_button();
-    void press_leader_silhouette_button();
     void press_play_animation_button();
     void press_quit_button();
     void press_reload_button();

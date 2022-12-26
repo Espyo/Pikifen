@@ -15,6 +15,7 @@
 #include "../gui.h"
 #include "../mission.h"
 
+
 namespace RESULTS {
 extern const string GUI_FILE_PATH;
 }

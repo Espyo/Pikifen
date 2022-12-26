@@ -30,20 +30,20 @@ const float DEF_WHISTLE_RANGE = 80.0f;
 const float DISMISS_ANGLE_RANGE = TAU / 2;
 //Multiply the space members take up by this. Lower = more compact subgroups.
 const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
-//Amount of dismiss particles to spawn.
-const size_t DISMISS_PARTICLE_AMOUNT = WHISTLE::N_DOT_COLORS * 3;
 //Opacity of the dismiss particles.
 const float DISMISS_PARTICLE_ALPHA = 1.0f;
-//Dismiss particle minimum duration.
-const float DISMISS_PARTICLE_MIN_DURATION = 1.0f;
-//Dismiss particle maximum duration.
-const float DISMISS_PARTICLE_MAX_DURATION = 1.4f;
+//Amount of dismiss particles to spawn.
+const size_t DISMISS_PARTICLE_AMOUNT = WHISTLE::N_DOT_COLORS * 3;
 //Dismiss particle friction.
 const float DISMISS_PARTICLE_FRICTION = 3.2f;
-//Dismiss particle minimum speed.
-const float DISMISS_PARTICLE_MIN_SPEED = 170.0f;
+//Dismiss particle maximum duration.
+const float DISMISS_PARTICLE_MAX_DURATION = 1.4f;
 //Dismiss particle maximum speed.
 const float DISMISS_PARTICLE_MAX_SPEED = 210.0f;
+//Dismiss particle minimum duration.
+const float DISMISS_PARTICLE_MIN_DURATION = 1.0f;
+//Dismiss particle minimum speed.
+const float DISMISS_PARTICLE_MIN_SPEED = 170.0f;
 //Dismiss particle size.
 const float DISMISS_PARTICLE_SIZE = 8.0f;
 //Dismissed groups must have this much distance between them/the leader.

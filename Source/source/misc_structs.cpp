@@ -438,18 +438,6 @@ edge_offset_cache::edge_offset_cache() :
 
 
 /* ----------------------------------------------------------------------------
- * Returns the name of an item, given its index number.
- * Returns an empty string on error.
- * idx:
- *   Index number of the item.
- */
-string enum_name_database::get_name(const size_t nr) const {
-    if(nr < names.size()) return names[nr];
-    return "";
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the index number of an item, given its name.
  * Returns INVALID on error.
  * name:
@@ -460,6 +448,18 @@ size_t enum_name_database::get_idx(const string &name) const {
         if(names[n] == name) return n;
     }
     return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of an item, given its index number.
+ * Returns an empty string on error.
+ * idx:
+ *   Index number of the item.
+ */
+string enum_name_database::get_name(const size_t idx) const {
+    if(idx < names.size()) return names[idx];
+    return "";
 }
 
 
@@ -601,6 +601,24 @@ keyframe_interpolator::keyframe_interpolator(const float initial_value) {
 
 
 /* ----------------------------------------------------------------------------
+ * Adds a new keyframe.
+ * t:
+ *   Time in which this keyframe takes place. Ranges from 0 to 1.
+ * value:
+ *   Value of the thing to interpolate at the keyframe's moment.
+ * ease:
+ *   Easing method, if any.
+ */
+void keyframe_interpolator::add(
+    const float t, const float value, const EASING_METHODS ease
+) {
+    keyframe_times.push_back(t);
+    keyframe_values.push_back(value);
+    keyframe_eases.push_back(ease);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the value at a given point in time.
  * t:
  *   Time.
@@ -620,24 +638,6 @@ float keyframe_interpolator::get(const float t) {
     }
     
     return keyframe_values.back();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds a new keyframe.
- * t:
- *   Time in which this keyframe takes place. Ranges from 0 to 1.
- * value:
- *   Value of the thing to interpolate at the keyframe's moment.
- * ease:
- *   Easing method, if any.
- */
-void keyframe_interpolator::add(
-    const float t, const float value, const EASING_METHODS ease
-) {
-    keyframe_times.push_back(t);
-    keyframe_values.push_back(value);
-    keyframe_eases.push_back(ease);
 }
 
 

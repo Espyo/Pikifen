@@ -387,35 +387,6 @@ void area_editor::close_options_dialog() {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a new area or loads an existing one, depending on whether the
- * specified area exists or not.
- * requested_area_folder_name:
- *   Name of the folder of the requested area.
- * requested_area_type:
- *   Type of the requested area.
- */
-void area_editor::create_or_load_area(
-    string requested_area_folder_name,
-    const AREA_TYPES requested_area_type
-) {
-    string file_to_check =
-        get_base_area_folder_path(requested_area_type, true) +
-        "/" + requested_area_folder_name + "/" + AREA_GEOMETRY_FILE_NAME;
-    if(al_filename_exists(file_to_check.c_str())) {
-        //Area exists, load it.
-        load_area(
-            requested_area_folder_name, requested_area_type, false, true
-        );
-    } else {
-        //Area doesn't exist, create it.
-        create_area(requested_area_folder_name, requested_area_type);
-    }
-    
-    state = EDITOR_STATE_MAIN;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a new area to work on.
  * requested_area_folder_name:
  *   Name of the folder of the requested area.
@@ -573,6 +544,35 @@ void area_editor::create_mob_under_cursor() {
     selected_mobs.insert(game.cur_area_data.mob_generators.back());
     
     status_text = "Created object.";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new area or loads an existing one, depending on whether the
+ * specified area exists or not.
+ * requested_area_folder_name:
+ *   Name of the folder of the requested area.
+ * requested_area_type:
+ *   Type of the requested area.
+ */
+void area_editor::create_or_load_area(
+    string requested_area_folder_name,
+    const AREA_TYPES requested_area_type
+) {
+    string file_to_check =
+        get_base_area_folder_path(requested_area_type, true) +
+        "/" + requested_area_folder_name + "/" + AREA_GEOMETRY_FILE_NAME;
+    if(al_filename_exists(file_to_check.c_str())) {
+        //Area exists, load it.
+        load_area(
+            requested_area_folder_name, requested_area_type, false, true
+        );
+    } else {
+        //Area doesn't exist, create it.
+        create_area(requested_area_folder_name, requested_area_type);
+    }
+    
+    state = EDITOR_STATE_MAIN;
 }
 
 
