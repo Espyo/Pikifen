@@ -2022,7 +2022,7 @@ int mission_score_criterion_enemy_points::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
-        gameplay->enemy_deaths *
+        gameplay->enemy_points_collected *
         get_multiplier(mission);
 }
 

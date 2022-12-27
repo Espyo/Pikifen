@@ -4455,6 +4455,7 @@ void area_editor::process_gui_panel_sector() {
                         s_ptr->hazards_str += ";";
                     }
                     s_ptr->hazards_str += picked_hazard;
+                    s_ptr->hazards.push_back(&(game.hazards[picked_hazard]));
                     selected_hazard_nr = (int) list.size();
                     status_text =
                         "Added hazard \"" + picked_hazard +

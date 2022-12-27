@@ -2913,130 +2913,97 @@ bool area_editor::save_area(const bool to_backup) {
                 i2s(game.cur_area_data.mission.grading_mode)
             )
         );
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.points_per_pikmin_born > 0
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_points_per_pikmin_born",
-                    i2s(game.cur_area_data.mission.points_per_pikmin_born)
-                )
-            );
-        }
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.points_per_pikmin_death > 0
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_points_per_pikmin_death",
-                    i2s(game.cur_area_data.mission.points_per_pikmin_death)
-                )
-            );
-        }
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.points_per_sec_left > 0
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_points_per_sec_left",
-                    i2s(game.cur_area_data.mission.points_per_sec_left)
-                )
-            );
-        }
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.points_per_sec_passed > 0
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_points_per_sec_passed",
-                    i2s(game.cur_area_data.mission.points_per_sec_passed)
-                )
-            );
-        }
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.points_per_treasure_point > 0
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_points_per_treasure_point",
-                    i2s(game.cur_area_data.mission.points_per_treasure_point)
-                )
-            );
-        }
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.points_per_enemy_point > 0
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_points_per_enemy_point",
-                    i2s(game.cur_area_data.mission.points_per_enemy_point)
-                )
-            );
-        }
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.point_loss_data > 0
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_point_loss_data",
-                    i2s(game.cur_area_data.mission.point_loss_data)
-                )
-            );
-        }
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.point_hud_data != 255
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_point_hud_data",
-                    i2s(game.cur_area_data.mission.point_hud_data)
-                )
-            );
-        }
-        if(
-            game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
-            game.cur_area_data.mission.starting_points > 0
-        ) {
-            data_file.add(
-                new data_node(
-                    "mission_starting_points",
-                    i2s(game.cur_area_data.mission.starting_points)
-                )
-            );
-        }
         if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS) {
+            if(game.cur_area_data.mission.points_per_pikmin_born != 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_points_per_pikmin_born",
+                        i2s(game.cur_area_data.mission.points_per_pikmin_born)
+                    )
+                );
+            }
+            if(game.cur_area_data.mission.points_per_pikmin_death != 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_points_per_pikmin_death",
+                        i2s(game.cur_area_data.mission.points_per_pikmin_death)
+                    )
+                );
+            }
+            if(game.cur_area_data.mission.points_per_sec_left != 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_points_per_sec_left",
+                        i2s(game.cur_area_data.mission.points_per_sec_left)
+                    )
+                );
+            }
+            if(game.cur_area_data.mission.points_per_sec_passed != 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_points_per_sec_passed",
+                        i2s(game.cur_area_data.mission.points_per_sec_passed)
+                    )
+                );
+            }
+            if(game.cur_area_data.mission.points_per_treasure_point != 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_points_per_treasure_point",
+                        i2s(game.cur_area_data.mission.points_per_treasure_point)
+                    )
+                );
+            }
+            if(game.cur_area_data.mission.points_per_enemy_point != 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_points_per_enemy_point",
+                        i2s(game.cur_area_data.mission.points_per_enemy_point)
+                    )
+                );
+            }
+            if(game.cur_area_data.mission.point_loss_data > 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_point_loss_data",
+                        i2s(game.cur_area_data.mission.point_loss_data)
+                    )
+                );
+            }
+            if(game.cur_area_data.mission.point_hud_data != 255) {
+                data_file.add(
+                    new data_node(
+                        "mission_point_hud_data",
+                        i2s(game.cur_area_data.mission.point_hud_data)
+                    )
+                );
+            }
+            if(game.cur_area_data.mission.starting_points != 0) {
+                data_file.add(
+                    new data_node(
+                        "mission_starting_points",
+                        i2s(game.cur_area_data.mission.starting_points)
+                    )
+                );
+            }
             data_file.add(
                 new data_node(
                     "mission_bronze_req",
                     i2s(game.cur_area_data.mission.bronze_req)
                 )
             );
-        }
-        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS) {
             data_file.add(
                 new data_node(
                     "mission_silver_req",
                     i2s(game.cur_area_data.mission.silver_req)
                 )
             );
-        }
-        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS) {
             data_file.add(
                 new data_node(
                     "mission_gold_req",
                     i2s(game.cur_area_data.mission.gold_req)
                 )
             );
-        }
-        if(game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS) {
             data_file.add(
                 new data_node(
                     "mission_platinum_req",
