@@ -610,12 +610,15 @@ void results_state::load() {
     gui.add_item(stats_scroll, "stats_scroll");
     
     //Time taken bullet.
-    unsigned char ms = fmod(game.states.gameplay->area_time_passed * 100, 100);
-    unsigned char seconds = fmod(game.states.gameplay->area_time_passed, 60);
-    size_t minutes = game.states.gameplay->area_time_passed / 60.0f;
+    unsigned int ds =
+        fmod(game.states.gameplay->gameplay_time_passed * 10, 10);
+    unsigned char seconds =
+        fmod(game.states.gameplay->gameplay_time_passed, 60);
+    size_t minutes =
+        game.states.gameplay->gameplay_time_passed / 60.0f;
     add_stat(
         "Time taken:",
-        i2s(minutes) + ":" + pad_string(i2s(seconds), 2, '0') + "." + i2s(ms)
+        i2s(minutes) + ":" + pad_string(i2s(seconds), 2, '0') + "." + i2s(ds)
     );
     
     //Pikmin born bullet.

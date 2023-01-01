@@ -964,7 +964,12 @@ bool gui_manager::handle_menu_button(
         break;
         
     } case BUTTON_MENU_OK: {
-        if(is_down && selected_item && selected_item->is_responsive()) {
+        if(
+            is_down &&
+            selected_item &&
+            selected_item->on_activate &&
+            selected_item->is_responsive()
+        ) {
             selected_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
             auto_repeat_on = true;
             auto_repeat_duration = 0.0f;

@@ -4482,9 +4482,11 @@ void area_editor::process_gui_panel_sector() {
                         register_change("sector hazard removal");
                         string hazard_name = list[selected_hazard_nr];
                         s_ptr->hazards_str.clear();
+                        s_ptr->hazards.clear();
                         for(size_t h = 0; h < list.size(); ++h) {
                             if(h == (size_t) selected_hazard_nr) continue;
                             s_ptr->hazards_str += list[h] + ";";
+                            s_ptr->hazards.push_back(&(game.hazards[list[h]]));
                         }
                         if(!s_ptr->hazards_str.empty()) {
                             //Delete the trailing semicolon.

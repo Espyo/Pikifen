@@ -738,7 +738,7 @@ void area_menu_state::init_gui_main() {
                     
                     if(medal_bmp) {
                         draw_bitmap_in_box(
-                            game.sys_assets.bmp_medal_platinum, center, size
+                            medal_bmp, center, size
                         );
                     }
                 };
