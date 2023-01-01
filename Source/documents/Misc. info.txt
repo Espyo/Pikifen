@@ -216,7 +216,7 @@ Bag of notes (useful stuff)
 
 Procedure for every version release
     Before everything
-        Confirm that there are no more tasks in the todo document
+        Confirm that there are no more tasks in the todo document, open bug reports, etc.
         Confirm that I don't have any staged or unstaged changes on git
         Make sure the documentation is up-to-date, especially the following:
             Main tutorials
@@ -228,7 +228,7 @@ Procedure for every version release
             Changelog
                 Particularly the update's version number, release day, and nickname
                 Double-check that it's organized, or if it could be sorted differently
-                Move the oldest version to the older changelog document
+                In order for the main changelog file to keep the three most recent major/minor versions (i.e. revisions are ignored for this count), move older versions to the older changelog document if needed
     Release candidate
         In Visual Studio
             Add all added source files, and remove removed source files, if needed
@@ -243,7 +243,6 @@ Procedure for every version release
     Final preparations
         Change version number in the code
             Use the helper tool, or edit const.h and Pikifen.rc
-        Change version number of all areas
         Fix up all changed images since the last release
             Use the helper tool to get the list, or run:
                 git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*(png|jpg)'

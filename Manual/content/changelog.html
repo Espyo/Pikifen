@@ -18,8 +18,32 @@
 
     <p>Some versions may be unable to read content created in older versions. If you want to keep your content from one version to the next, read the "Content making changes" list in that update's section.</p>
 
-    <p>Versions are numbered after the format <code>major.minor.revision</code>. The major number increases when the project is radically different from the major version before it. The minor number increases every time there are a bunch of changes. The revision number increases when there are bug fixes on the revision before it, and does not break compatibility.</p>
+    <p>Versions are numbered after the format <code>major.minor.revision</code>. The major number increases when the project is radically different from the major version before it. The minor number increases every time there are a bunch of changes. The revision number increases when there are bug fixes on the revision before it, and does not break compatibility unless that's necessary to fix something.</p>
     
+    <h2 id="0.23.1">0.23.1</h2>
+    
+    <p><i>January 1st, 2023</i></p>
+
+    <p><b>Breaking changes</b></p>
+
+    <ul>
+      <li><span class="cl-c">Changed</span> how the mission records and statistics files are saved and loaded. This fixes a problem where the files wouldn't be read if they had certain characters. When you start 0.23.1, these files from 0.23.0, if any, will be deleted. If you <i>really</i> want to keep their content, get in contact with me by reading <code>README.txt</code>.</li>
+    </ul>
+
+    <p><b>Bug fixes and improvements</b></p>
+
+    <ul>
+      <li><span class="cl-f">Fixed</span> the edge length indicators not appearing in the area editor. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> negative point amounts for mission criteria not saving. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> the HUD using enemy kills when the mission specifies using enemy points instead. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> wall shadows not rendering when there are liquids in the area editor's preview. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> sectors not showing their liquid in the area editor's preview unless you reload the area. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> the area selection menu always showing a platinum medal next to the area name, if you have a medal. (Thanks Helodity)</li>
+      <li><span class="cl-f">Fixed</span> a crash when one selects a GUI item with no behavior and presses Enter.</li>
+      <li><span class="cl-f">Fixed</span> the results menu showing the centiseconds digit instead of the deciseconds digit.</li>
+      <li><span class="cl-c">Changed</span> the way gameplay time is calculated, so time spent during interludes (the starting countdown, mission end text, etc.) doesn't count. (Thanks Helodity)</li>
+    </ul>
+
     <h2 id="0.23.0">0.23.0</h2>
     
     <p><i>December 25th, 2022 &ndash; the "Mission Mode" update</i></p>
@@ -107,6 +131,7 @@
           <li><span class="cl-a">Added</span> the ability to lock the center (as opposed to the opposite side/corner) by holding Alt, when you are dragging a side/corner handle of a transformation widget in an editor's canvas.</li>
           <li><span class="cl-a">Added</span> script variables to <a href="mob_decoration.html">decoration</a> objects to allow them to disable the random property changes.</li>
           <li><span class="cl-a">Added</span> the <code>gentle_release</code> script variable to <a href="mob_tool.html">tool</a> objects so they can know if the Pikmin released it gently (i.e. the Pikmin is entering an Onion) or not.</li>
+          <li><span class="cl-a">Added</span> logic for rectangular objects to be able to push other rectangular objects. (Thanks Helodity)</li>
           <li><span class="cl-c">Changed</span> the duplicate mobs area editor keyboard shortcut from D to Ctrl+D, since D is now used to go to the details mode.</li>
           <li><span class="cl-c">Changed</span> keyboard shortcuts made for the editor canvases to make them now work anywhere so long as you aren't writing in a text box. (Thanks Neo)</li>
           <li><span class="cl-c">Changed</span> drag buttons in editors to only need a single click in order to enter text input mode.</li>

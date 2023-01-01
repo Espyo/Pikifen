@@ -1,6 +1,6 @@
 ﻿Pikifen
 
-A fan-made Pikmin engine that allows users to make and play their own Pikmin content.
+A fan-made Pikmin engine made by Espyo that allows users to make and play their own Pikmin content.
 
 To learn more about how to use the engine, please check the included manual, accessible by opening Manual.html. It includes, amongst other things, tutorials, list of controls, the changelog, troubleshooting information, compilation instructions, an FAQ, and credits.
 

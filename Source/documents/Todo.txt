@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -142,6 +142,7 @@ Next tasks (roughly sorted most important first)
     Demo content
         Add more treasures
             Ball of yarn treasure
+            Shizakipiki Soda bottle cap
         Sounds really need a makeover...
         Mobs for decorative pebbles, stones, and sticks
         Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
@@ -663,11 +664,13 @@ Misc things (so I don't forget)
             A way to blacklist path links for the tool that shows the shortest path
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
+            A way to change all sprites' bitmap files from file A to file B (Darthvato)
         Pressing Esc on the sprite/whatever rename pop-up should cancel
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?
             For the animation editor: reverse frames
         Customizable controls overall, including double-clicking any of the mouse buttons
+        Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
     Area sections?
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections

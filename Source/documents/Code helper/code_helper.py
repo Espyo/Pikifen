@@ -40,7 +40,7 @@ def change_version_numbers():
             for line in rc_contents:
                 o.write(line)
 
-    input('Done. Don\'t forget the area versions. Press Enter...')
+    input('Done. Press Enter...')
 
 
 ## Writes any code style problems found in source files.
@@ -126,10 +126,18 @@ def write_new_source_files():
 
 ## Writes any SVG file that has been added or removed.
 #  since the last version.
-def write_new_svg_files():
-    aux = system_call('git diff --name-status $(git describe --abbrev=0 --tags) | grep -E "^[AM].*svg"')
+def write_new_svg_files(prev_version = False):
+    if prev_version:
+        aux = system_call('git diff --name-status $(git describe --abbrev=0 --tags $(git describe --abbrev=0 --tags)^) | grep -E "^[AM].*svg"')
+    else:
+        aux = system_call('git diff --name-status $(git describe --abbrev=0 --tags) | grep -E "^[AM].*svg"')
     if len(aux) == 0:
-        print('No altered SVGs.')
+        if not prev_version:
+            print('No altered SVGs. Trying previous version...')
+            write_new_svg_files(True)
+            return
+        else:
+            print('No altered SVGs.')
     else:
         print('Altered SVGs:')
         for line in aux.splitlines():

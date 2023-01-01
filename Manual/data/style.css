@@ -100,7 +100,7 @@ th {
 }
 
 /* Changelog. */
-.cl-a, .cl-c, .cl-r {
+.cl-a, .cl-c, .cl-r, .cl-f {
   font-weight: bold;
 }
 
@@ -114,4 +114,8 @@ th {
 
 .cl-r {
   color: #600;
+}
+
+.cl-f {
+  color: #36C;
 }
