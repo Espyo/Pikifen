@@ -42,6 +42,61 @@ bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Like an std::getline(), but for ALLEGRO_FILE*.
+ * file:
+ *   Allegro file handle.
+ * line:
+ *   String to save the line into.
+ * encrypted:
+ *   If true, the document is encrypted and needs decrypting.
+ */
+void getline(ALLEGRO_FILE* file, string &line) {
+    line.clear();
+    if(!file) {
+        return;
+    }
+    
+    size_t bytes_read;
+    char* c_ptr = new char;
+    
+    bytes_read = al_fread(file, c_ptr, 1);
+    while(bytes_read > 0) {
+        unsigned char c = *((unsigned char*) c_ptr);
+        
+        if(c == '\r') {
+            //Let's check if the next character is a \n. If so, they should
+            //both be consumed by al_fread().
+            bytes_read = al_fread(file, c_ptr, 1);
+            unsigned char peek_c = *((unsigned char*) c_ptr);
+            if(bytes_read > 0) {
+                if(peek_c == '\n') {
+                    //Yep. Done.
+                    break;
+                } else {
+                    //Oops, we're reading an entirely new line. Let's go back.
+                    al_fseek(file, -1, ALLEGRO_SEEK_CUR);
+                    break;
+                }
+            }
+            
+        } else if(c == '\n') {
+            //Standard line break.
+            break;
+            
+        } else {
+            //Line content.
+            line.push_back(c);
+            
+        }
+        
+        bytes_read = al_fread(file, c_ptr, 1);
+    }
+    
+    delete c_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Calls al_set_clipping_rectangle, but makes sure that the new clipping
  * rectangle is inside of an older one, as to not suddenly start drawing
  * in places that the older rectangle said not to.

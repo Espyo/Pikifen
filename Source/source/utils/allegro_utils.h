@@ -12,12 +12,17 @@
 #ifndef ALLEGRO_UTILS_INCLUDED
 #define ALLEGRO_UTILS_INCLUDED
 
+#include <string>
+
 #include <allegro5/allegro.h>
+
+using std::string;
 
 
 bool operator==(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2);
 bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2);
 
+void getline(ALLEGRO_FILE* file, string &line);
 void set_combined_clipping_rectangles(
     float x1, float y1, float w1, float h1,
     float x2, float y2, float w2, float h2

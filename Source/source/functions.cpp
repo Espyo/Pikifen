@@ -34,6 +34,7 @@
 #include "game.h"
 #include "game_states/menus.h"
 #include "init.h"
+#include "utils/allegro_utils.h"
 #include "utils/backtrace.h"
 #include "utils/string_utils.h"
 

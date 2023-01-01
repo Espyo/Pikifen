@@ -51,6 +51,7 @@ using std::vector;
 
 
 namespace DATA_FILE {
+extern const unsigned char ENCRYPTION_MIN_VALUE;
 extern const unsigned char ENCRYPTION_ROT_AMOUNT;
 extern const string UTF8_MAGIC_NUMBER;
 }
@@ -121,12 +122,15 @@ private:
     vector<data_node*> dummy_children;
     
     data_node* create_dummy();
+    static unsigned char encrypt_char(const unsigned char c);
+    static void encrypt_string(string &s);
+    static unsigned char decrypt_char(const unsigned char c);
+    static void getline(
+        ALLEGRO_FILE* file, string &line, const bool encrypted = false
+    );
     static string trim_spaces(const string &s, const bool left_only = false);
     
 };
 
-
-void data_file_encrypt(string &str);
-void getline(ALLEGRO_FILE* file, string &line, const bool encrypted = false);
 
 #endif //ifndef DATA_FILE_INCLUDED

@@ -12,8 +12,10 @@ using std::vector;
 
 
 namespace DATA_FILE {
+//When encrypting, this is the lowest ASCII value that can be affected.
+const unsigned char ENCRYPTION_MIN_VALUE = 32; //Space character.
 //When encrypting, rotate the character values forward by this amount.
-const unsigned char ENCRYPTION_ROT_AMOUNT = 40;
+const unsigned char ENCRYPTION_ROT_AMOUNT = 111;
 //If a file starts with these bytes, then it's UTF-8.
 const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
 }
@@ -121,10 +123,66 @@ data_node* data_node::create_dummy() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns a child node given its number on the list (direct children only).
- * number:
- *   The index number of the child.
+ * "Encrypts" a character for saving in an encrypted data file.
+ * It does this by rotating each character's ASCII value backwards by 111,
+ * but only if it's a printable character, as other characters that tend
+ * to be reserved for important things, like \0 or EOF.
+ * c:
+ *   Character to encrypt.
  */
+unsigned char data_node::encrypt_char(unsigned char c) {
+    if(c < DATA_FILE::ENCRYPTION_MIN_VALUE) {
+        return c;
+    }
+    const unsigned char range = 255 - DATA_FILE::ENCRYPTION_MIN_VALUE;
+    int c2 = c;
+    c2 -= DATA_FILE::ENCRYPTION_MIN_VALUE;
+    c2 += DATA_FILE::ENCRYPTION_ROT_AMOUNT;
+    c2 %= range;
+    c2 += DATA_FILE::ENCRYPTION_MIN_VALUE;
+    return c2;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * "Encrypts" an entire string for saving in an encrypted data file.
+ * See encrypt_char for more info.
+ * s:
+ *   String to encrypt.
+ */
+void data_node::encrypt_string(string &s) {
+    for(size_t c = 0; c < s.size(); ++c) {
+        s[c] = encrypt_char(s[c]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * "Decrypts" a character for loading an encrypted data file.
+ * See encrypt_char for more info.
+ * c:
+ *   Character to decrypt.
+ */
+unsigned char data_node::decrypt_char(unsigned char c) {
+    if(c < DATA_FILE::ENCRYPTION_MIN_VALUE) {
+        return c;
+    }
+    const unsigned char range = 255 - DATA_FILE::ENCRYPTION_MIN_VALUE;
+    int c2 = c;
+    c2 -= DATA_FILE::ENCRYPTION_MIN_VALUE;
+    c2 += range; //Negative modulo isn't such a good idea.
+    c2 -= DATA_FILE::ENCRYPTION_ROT_AMOUNT;
+    c2 %= range;
+    c2 += DATA_FILE::ENCRYPTION_MIN_VALUE;
+    return c2;
+}
+
+
+/* ----------------------------------------------------------------------------
+* Returns a child node given its number on the list (direct children only).
+* number:
+*   The index number of the child.
+*/
 data_node* data_node::get_child(const size_t number) {
     if(number >= children.size()) return create_dummy();
     return children[number];
@@ -155,6 +213,70 @@ data_node* data_node::get_child_by_name(
     }
     
     return create_dummy();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Like an std::getline(), but for ALLEGRO_FILE*.
+ * file:
+ *   Allegro file handle.
+ * line:
+ *   String to save the line into.
+ * encrypted:
+ *   If true, the document is encrypted and needs decrypting.
+ */
+void data_node::getline(
+    ALLEGRO_FILE* file, string &line, const bool encrypted
+) {
+    line.clear();
+    if(!file) {
+        return;
+    }
+    
+    size_t bytes_read;
+    char* c_ptr = new char;
+    
+    bytes_read = al_fread(file, c_ptr, 1);
+    while(bytes_read > 0) {
+        unsigned char c = *((unsigned char*) c_ptr);
+        
+        if(encrypted) {
+            c = decrypt_char(c);
+        }
+        
+        if(c == '\r') {
+            //Let's check if the next character is a \n. If so, they should
+            //both be consumed by al_fread().
+            bytes_read = al_fread(file, c_ptr, 1);
+            unsigned char peek_c = *((unsigned char*) c_ptr);
+            if(encrypted) {
+                peek_c = decrypt_char(peek_c);
+            }
+            if(bytes_read > 0) {
+                if(peek_c == '\n') {
+                    //Yep. Done.
+                    break;
+                } else {
+                    //Oops, we're reading an entirely new line. Let's go back.
+                    al_fseek(file, -1, ALLEGRO_SEEK_CUR);
+                    break;
+                }
+            }
+            
+        } else if(c == '\n') {
+            //Standard line break.
+            break;
+            
+        } else {
+            //Line content.
+            line.push_back(c);
+            
+        }
+        
+        bytes_read = al_fread(file, c_ptr, 1);
+    }
+    
+    delete c_ptr;
 }
 
 
@@ -222,7 +344,7 @@ void data_node::load_file(
         while(!al_feof(file)) {
             getline(file, line, encrypted);
             
-            if(is_first_line) {
+            if(is_first_line && !encrypted) {
                 //Let's just check if it starts with the UTF-8 Magic Number.
                 if(
                     line.size() >= 3 &&
@@ -459,17 +581,17 @@ void data_node::save_node(
 ) const {
 
     string tabs_str(level, '\t');
-    if(encrypted) data_file_encrypt(tabs_str);
+    if(encrypted) tabs_str.clear();
     string name_str = name;
-    if(encrypted) data_file_encrypt(name_str);
+    if(encrypted) data_node::encrypt_string(name_str);
     string block_start_str = "{\n";
-    if(encrypted) data_file_encrypt(block_start_str);
+    if(encrypted) data_node::encrypt_string(block_start_str);
     string block_end_str = "}";
-    if(encrypted) data_file_encrypt(block_end_str);
+    if(encrypted) data_node::encrypt_string(block_end_str);
     string value_str = "=" + value;
-    if(encrypted) data_file_encrypt(value_str);
+    if(encrypted) data_node::encrypt_string(value_str);
     string newline_str = "\n";
-    if(encrypted) data_file_encrypt(newline_str);
+    if(encrypted) data_node::encrypt_string(newline_str);
     
     al_fwrite(file, tabs_str.c_str(), tabs_str.size());
     al_fwrite(file, name_str.c_str(), name_str.size());
@@ -524,78 +646,4 @@ string data_node::trim_spaces(const string &s, const bool left_only) {
     }
     
     return orig;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Encrypts a string for saving in an encrypted data file.
- * str:
- *   String to encrypt.
- */
-void data_file_encrypt(string &str) {
-    for(size_t c = 0; c < str.size(); ++c) {
-        str[c] =
-            (255 + ((int) (str[c] - DATA_FILE::ENCRYPTION_ROT_AMOUNT))) % 255;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Like an std::getline(), but for ALLEGRO_FILE*.
- * file:
- *   Allegro file handle.
- * line:
- *   String to save the line into.
- * encrypted:
- *   If true, the document is encrypted and needs decrypting.
- */
-void getline(ALLEGRO_FILE* file, string &line, const bool encrypted) {
-    line.clear();
-    if(!file) {
-        return;
-    }
-    
-    size_t bytes_read;
-    char* c_ptr = new char;
-    
-    bytes_read = al_fread(file, c_ptr, 1);
-    while(bytes_read > 0) {
-        unsigned char c = *((unsigned char*) c_ptr);
-        
-        if(encrypted) {
-            c = (c + DATA_FILE::ENCRYPTION_ROT_AMOUNT) % 255;
-        }
-        
-        if(c == '\r') {
-            //Let's check if the next character is a \n. If so, they should
-            //both be consumed by al_fread().
-            bytes_read = al_fread(file, c_ptr, 1);
-            unsigned char peek_c = *((unsigned char*) c_ptr);
-            if(encrypted) peek_c =
-                    (peek_c + DATA_FILE::ENCRYPTION_ROT_AMOUNT) % 255;
-            if(bytes_read > 0) {
-                if(peek_c == '\n') {
-                    //Yep. Done.
-                    break;
-                } else {
-                    //Oops, we're reading an entirely new line. Let's go back.
-                    al_fseek(file, -1, ALLEGRO_SEEK_CUR);
-                    break;
-                }
-            }
-            
-        } else if(c == '\n') {
-            //Standard line break.
-            break;
-            
-        } else {
-            //Line content.
-            line.push_back(c);
-            
-        }
-        
-        bytes_read = al_fread(file, c_ptr, 1);
-    }
-    
-    delete c_ptr;
 }
