@@ -95,7 +95,7 @@ public:
     
     //Is the player playing after hours?
     bool after_hours;
-    //How many seconds since area load. Only counts during actual gameplay.
+    //How many seconds since area load. Doesn't count when things are paused.
     float area_time_passed;
     //Timer used to fade out the area's title when the area is entered.
     timer area_title_fade_timer;
@@ -119,6 +119,8 @@ public:
     float delta_t_mult;
     //Replay of the gameplay.
     replay gameplay_replay;
+    //How many seconds of actual playtime. Only counts on player control.
+    float gameplay_time_passed;
     //Information about the in-game HUD.
     hud_struct* hud;
     //Position of the last enemy killed. LARGE_FLOAT for none.

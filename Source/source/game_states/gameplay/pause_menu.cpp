@@ -108,7 +108,7 @@ void pause_menu_struct::confirm_or_leave() {
         break;
     } case LEAVING_CONFIRMATION_1_MIN: {
         do_confirmation =
-            game.states.gameplay->area_time_passed >= 60.0f;
+            game.states.gameplay->gameplay_time_passed >= 60.0f;
         break;
     } case LEAVING_CONFIRMATION_ALWAYS: {
         do_confirmation = true;

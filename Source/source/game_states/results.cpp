@@ -643,7 +643,7 @@ void results_state::load() {
             i2s(
                 floor(
                     game.cur_area_data.mission.fail_time_limit -
-                    game.states.gameplay->area_time_passed
+                    game.states.gameplay->gameplay_time_passed
                 )
             )
         );
@@ -659,7 +659,7 @@ void results_state::load() {
         //Seconds passed bullet.
         add_stat(
             "Seconds passed:",
-            i2s(game.states.gameplay->area_time_passed)
+            i2s(game.states.gameplay->gameplay_time_passed)
         );
         
         //Seconds passed points bullet.

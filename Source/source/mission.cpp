@@ -732,7 +732,7 @@ bool mission_fail_take_damage::is_met(
 int mission_fail_time_limit::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->area_time_passed;
+    return gameplay->gameplay_time_passed;
 }
 
 
@@ -1864,7 +1864,7 @@ bool mission_goal_grow_pikmin::is_mob_applicable(
 int mission_goal_timed_survival::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->area_time_passed;
+    return gameplay->gameplay_time_passed;
 }
 
 
@@ -2139,7 +2139,7 @@ int mission_score_criterion_sec_left::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
-        floor(mission->fail_time_limit - gameplay->area_time_passed) *
+        floor(mission->fail_time_limit - gameplay->gameplay_time_passed) *
         get_multiplier(mission);
 }
 
@@ -2175,7 +2175,7 @@ int mission_score_criterion_sec_passed::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
-        floor(gameplay->area_time_passed) *
+        floor(gameplay->gameplay_time_passed) *
         get_multiplier(mission);
 }
 

@@ -582,6 +582,9 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         }
         
         area_time_passed += delta_t;
+        if(cur_interlude == INTERLUDE_NONE) {
+            gameplay_time_passed += delta_t;
+        }
         
         //Tick all particles.
         if(game.perf_mon) {

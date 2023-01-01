@@ -102,6 +102,7 @@ gameplay_state::gameplay_state() :
     day(1),
     day_minutes(0.0f),
     delta_t_mult(1.0f),
+    gameplay_time_passed(0.0f),
     hud(nullptr),
     leader_cursor_sector(nullptr),
     msg_box(nullptr),
@@ -688,6 +689,7 @@ void gameplay_state::load() {
     
     day_minutes = game.cur_area_data.day_time_start;
     area_time_passed = 0.0f;
+    gameplay_time_passed = 0.0f;
     game.maker_tools.reset_for_gameplay();
     area_title_fade_timer.start();
     
