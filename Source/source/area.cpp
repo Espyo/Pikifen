@@ -806,18 +806,18 @@ void area_data::generate_blockmap() {
 
 /* ----------------------------------------------------------------------------
  * Generates the blockmap for a set of edges.
- * edges:
+ * edge_list:
  *   Edges to generate the blockmap around.
  */
-void area_data::generate_edges_blockmap(vector<edge*> &edges) {
+void area_data::generate_edges_blockmap(vector<edge*> &edge_list) {
     size_t b_min_x, b_max_x, b_min_y, b_max_y;
     
-    for(size_t e = 0; e < edges.size(); ++e) {
+    for(size_t e = 0; e < edge_list.size(); ++e) {
     
         //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
         
-        edge* e_ptr = edges[e];
+        edge* e_ptr = edge_list[e];
         
         b_min_x =
             bmap.get_col(

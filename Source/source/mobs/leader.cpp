@@ -1034,7 +1034,7 @@ void change_to_next_leader(
             sum_and_wrap(
                 new_leader_nr,
                 (forward ? 1 : -1),
-                game.states.gameplay->available_leaders.size()
+                (int) game.states.gameplay->available_leaders.size()
             );
         new_leader_ptr = game.states.gameplay->available_leaders[new_leader_nr];
         

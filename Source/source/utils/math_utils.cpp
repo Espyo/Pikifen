@@ -42,28 +42,30 @@ float ease(const EASING_METHODS method, const float n) {
     case EASE_NONE: {
         return n;
     } case EASE_IN: {
-        return pow(n, 3);
+        return (float) pow(n, 3);
     }
     case EASE_OUT: {
-        return 1 - (pow((1 - n), 3));
+        return (float) (1 - (pow((1 - n), 3)));
     }
     case EASE_IN_BACK: {
         const float mag1 = 1.70158f;
         const float mag2 = mag1 + 1.0f;
-        return mag2 * n * n * n - mag1 * n * n;
+        return (float) (mag2 * n * n * n - mag1 * n * n);
     }
     case EASE_OUT_BACK: {
         const float mag1 = 1.70158f;
         const float mag2 = mag1 + 1.0f;
-        return 1.0f + mag2 * pow(n - 1.0f, 3) + mag1 * pow(n - 1.0f, 2);
+        return
+            (float)
+            (1.0f + mag2 * pow(n - 1.0f, 3) + mag1 * pow(n - 1.0f, 2));
     }
     case EASE_IN_OUT_BACK: {
         const float mag1 = 1.70158f;
         const float mag2 = mag1 * 1.525f;
         return
             n < 0.5 ?
-            (pow(2 * n, 2) * ((mag2 + 1.0f) * 2 * n - mag2)) / 2 :
-            (pow(2 * n - 2, 2) * ((mag2 + 1.0f) * (n * 2 - 2) + mag2) + 2) / 2;
+            (float) (pow(2 * n, 2) * ((mag2 + 1.0f) * 2 * n - mag2)) / 2 :
+            (float) (pow(2 * n - 2, 2) * ((mag2 + 1.0f) * (n * 2 - 2) + mag2) + 2) / 2;
     } case EASE_IN_ELASTIC: {
         const float mag = TAU / 3;
         return
@@ -71,7 +73,7 @@ float ease(const EASING_METHODS method, const float n) {
             0.0f :
             n == 1.0f ?
             1.0f :
-            -pow(2.0f, 10.0f * n - 10.0f) * sin((n * 10.0f - 10.75f) * mag);
+            (float) - pow(2.0f, 10.0f * n - 10.0f) * (float) sin((n * 10.0f - 10.75f) * mag);
     }
     case EASE_OUT_ELASTIC: {
         const float mag = TAU / 3;
@@ -80,10 +82,10 @@ float ease(const EASING_METHODS method, const float n) {
             0.0f :
             n == 1.0f ?
             1.0f :
-            pow(2.0f, -10.0f * n) * sin((n * 10.0f - 0.75f) * mag) + 1.0f;
+            (float) pow(2.0f, -10.0f * n) * (float) sin((n * 10.0f - 0.75f) * mag) + 1.0f;
     }
     case EASE_UP_AND_DOWN: {
-        return sin(n * TAU / 2);
+        return (float) sin(n * TAU / 2);
     }
     case EASE_UP_AND_DOWN_ELASTIC: {
         const float cp1 = 0.50f;
@@ -93,15 +95,15 @@ float ease(const EASING_METHODS method, const float n) {
         float aux;
         if(n < cp1) {
             aux = n * 1.0f / cp1;
-            return sin(aux * TAU / 2);
+            return (float) sin(aux * TAU / 2);
         } else if(n < cp2) {
             aux = n - cp1;
             aux *= 1.0f / (cp2 - cp1);
-            return sin(aux * TAU / 2) * mag1;
+            return (float) sin(aux * TAU / 2) * mag1;
         } else {
             aux = n - cp2;
             aux *= 1.0f / (1.0f - cp2);
-            return sin(aux * TAU / 2) * mag2;
+            return (float) sin(aux * TAU / 2) * mag2;
         }
     }
     
@@ -236,5 +238,5 @@ int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
  */
 float wrap_float(const float nr, const float minimum, const float maximum) {
     const float diff = maximum - minimum;
-    return minimum + fmod(diff + fmod(nr - minimum, diff), diff);
+    return minimum + (float) fmod(diff + (float) fmod(nr - minimum, diff), diff);
 }

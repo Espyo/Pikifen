@@ -959,8 +959,8 @@ void editor::load() {
             editor_icons[i] =
                 al_create_sub_bitmap(
                     bmp_editor_icons,
-                    EDITOR::ICON_BMP_SIZE * i +
-                    EDITOR::ICON_BMP_PADDING * i,
+                    (int) (EDITOR::ICON_BMP_SIZE * i) +
+                    (int) (EDITOR::ICON_BMP_PADDING * i),
                     0,
                     EDITOR::ICON_BMP_SIZE,
                     EDITOR::ICON_BMP_SIZE
@@ -1387,7 +1387,7 @@ bool editor::process_gui_mob_type_widgets(
             custom_cat_types[c].front()->custom_category_name;
         categories.push_back(cn);
         if(cn == internal_custom_cat_name) {
-            selected_category_idx = c;
+            selected_category_idx = (int) c;
         }
     }
     

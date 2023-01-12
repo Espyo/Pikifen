@@ -247,7 +247,7 @@ void gui_editor::press_grid_interval_decrease_button() {
  */
 void gui_editor::press_grid_interval_increase_button() {
     float new_grid_interval = GUI_EDITOR::GRID_INTERVALS.back();
-    for(int i = GUI_EDITOR::GRID_INTERVALS.size() - 1; i >= 0; --i) {
+    for(int i = (int) (GUI_EDITOR::GRID_INTERVALS.size() - 1); i >= 0; --i) {
         if(
             GUI_EDITOR::GRID_INTERVALS[i] <=
             game.options.gui_editor_grid_interval

@@ -2087,7 +2087,7 @@ void area_editor::press_remove_edge_button() {
         status_text =
             "Deleted " +
             amount_str(
-                (int) n_before - game.cur_area_data.edges.size(),
+                (int) (n_before - game.cur_area_data.edges.size()),
                 "edge"
             ) +
             " (" + i2s(n_selected) + " were selected).";
@@ -2124,7 +2124,7 @@ void area_editor::press_remove_mob_button() {
     status_text =
         "Deleted " +
         amount_str(
-            (int) n_before - game.cur_area_data.mob_generators.size(),
+            (int) (n_before - game.cur_area_data.mob_generators.size()),
             "object"
         ) +
         ".";
@@ -2164,12 +2164,12 @@ void area_editor::press_remove_path_button() {
     status_text =
         "Deleted " +
         amount_str(
-            (int) n_stops_before - game.cur_area_data.path_stops.size(),
+            (int) (n_stops_before - game.cur_area_data.path_stops.size()),
             "path stop"
         ) +
         ", " +
         amount_str(
-            (int) n_links_before - game.cur_area_data.get_nr_path_links(),
+            (int) (n_links_before - game.cur_area_data.get_nr_path_links()),
             "path link"
         ) +
         "."
@@ -3368,7 +3368,8 @@ void area_editor::set_selection_status_text() {
                 amount_str((int) selected_path_stops.size(), "path stop") +
                 ", " +
                 amount_str(
-                    (int) (normals_found / 2.0f) + one_ways_found, "path link"
+                    (int) ((normals_found / 2.0f) + one_ways_found),
+                    "path link"
                 ) +
                 ".";
         }

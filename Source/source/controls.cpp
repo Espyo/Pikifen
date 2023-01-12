@@ -680,7 +680,7 @@ void gameplay_state::handle_button(
             do {
                 next_maturity =
                     (size_t) sum_and_wrap(
-                        next_maturity,
+                        (int) next_maturity,
                         (button == BUTTON_NEXT_MATURITY ? 1 : -1),
                         N_MATURITIES
                     );

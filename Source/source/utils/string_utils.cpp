@@ -264,7 +264,7 @@ double s2f(const string &s) {
  *   String to convert.
  */
 int s2i(const string &s) {
-    return s2f(s);
+    return (int) s2f(s);
 }
 
 

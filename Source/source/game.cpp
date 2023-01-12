@@ -129,20 +129,20 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
     switch(ev.keyboard.keycode) {
     case ALLEGRO_KEY_F12: {
         if(has_flag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
-            string cur_state = get_cur_state_name();
-            if(cur_state == states.animation_ed->get_name()) {
+            string cur_state_name = get_cur_state_name();
+            if(cur_state_name == states.animation_ed->get_name()) {
                 maker_tools.auto_start_mode = "animation_editor";
                 maker_tools.auto_start_option =
                     states.animation_ed->get_opened_file_name();
-            } else if(cur_state == states.area_ed->get_name()) {
+            } else if(cur_state_name == states.area_ed->get_name()) {
                 maker_tools.auto_start_mode = "area_editor";
                 maker_tools.auto_start_option =
                     states.area_ed->get_opened_folder_path();
-            } else if(cur_state == states.gui_ed->get_name()) {
+            } else if(cur_state_name == states.gui_ed->get_name()) {
                 maker_tools.auto_start_mode = "gui_editor";
                 maker_tools.auto_start_option =
                     states.gui_ed->get_opened_file_name();
-            } else if(cur_state == states.gameplay->get_name()) {
+            } else if(cur_state_name == states.gameplay->get_name()) {
                 maker_tools.auto_start_mode = "play";
                 maker_tools.auto_start_option =
                     states.gameplay->path_of_area_to_load;

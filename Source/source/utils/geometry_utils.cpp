@@ -191,7 +191,7 @@ bool dist::operator!=(const dist &d2) const {
  */
 void dist::operator+=(const float d2) {
     if(!has_normal_distance) {
-        normal_distance = sqrt(distance_squared);
+        normal_distance = (float) sqrt(distance_squared);
         has_normal_distance = true;
     }
     normal_distance += d2;
@@ -210,7 +210,7 @@ void dist::operator+=(const dist &d2) {
         if(d2.has_normal_distance) {
             normal_distance += d2.normal_distance;
         } else {
-            normal_distance = sqrt(distance_squared);
+            normal_distance = (float) sqrt(distance_squared);
         }
     }
 }
@@ -237,7 +237,7 @@ void dist::operator-=(const dist &d2) {
         if(d2.has_normal_distance) {
             normal_distance -= d2.normal_distance;
         } else {
-            normal_distance = sqrt(distance_squared);
+            normal_distance = (float) sqrt(distance_squared);
         }
     }
 }
@@ -248,7 +248,7 @@ void dist::operator-=(const dist &d2) {
  */
 float dist::to_float() {
     if(!has_normal_distance) {
-        normal_distance = sqrt(distance_squared);
+        normal_distance = (float) sqrt(distance_squared);
         has_normal_distance = true;
     }
     return normal_distance;
@@ -438,7 +438,11 @@ const point point::operator *(const float m) const {
 point angle_to_coordinates(
     const float angle, const float magnitude
 ) {
-    return point(cos(angle) * magnitude, sin(angle) * magnitude);
+    return
+        point(
+            (float) cos(angle) * magnitude,
+            (float) sin(angle) * magnitude
+        );
 }
 
 
@@ -450,7 +454,7 @@ point angle_to_coordinates(
  *   Radius of the circle.
  */
 float angular_dist_to_linear(const float angular_dist, const float radius) {
-    return 2 * radius * tan(angular_dist / 2);
+    return (float) (2 * radius * tan(angular_dist / 2));
 }
 
 
@@ -542,7 +546,7 @@ void calculate_throw(
     //We start with the vertical speed. This will be constant regardless
     //of how far the mob is thrown. In order to reach the required max height,
     //the vertical speed needs to be set thusly:
-    *req_speed_z = sqrt(2.0 * (-gravity) * max_h);
+    *req_speed_z = (float) sqrt(2.0 * (-gravity) * max_h);
     
     //Now that we know the vertical speed, we can figure out how long it takes
     //for the mob to land at the target vertical coordinate. The formula for
@@ -552,7 +556,8 @@ void calculate_throw(
     //could end up negative. Let's cap it to zero.
     float sqrt_part =
         std::max(
-            0.0,
+            0.0f,
+            (float)
             sqrt(
                 (*req_speed_z) * (*req_speed_z) +
                 2.0 * (-gravity) * (height_delta)
@@ -613,7 +618,7 @@ bool circle_intersects_line_seg(
     float quad = b * b - (4 * a * c);
     if(quad >= 0) {
         //An infinite collision is happening, but let's not stop here.
-        float quadsqrt = sqrt(quad);
+        float quadsqrt = (float) sqrt(quad);
         for(int i = -1; i <= 1; i += 2) {
             //Returns the two coordinates of the intersection points.
             float t = (i * -b + quadsqrt) / (2 * a);
@@ -675,12 +680,12 @@ bool circle_intersects_rectangle(
         
     if(inside_x && inside_y) {
         point dist_to_pos(
-            rect_dim.x / 2.0 - circle_rel_pos.x,
-            rect_dim.y / 2.0 - circle_rel_pos.y
+            rect_dim.x / 2.0f - circle_rel_pos.x,
+            rect_dim.y / 2.0f - circle_rel_pos.y
         );
         point dist_to_neg(
-            -(-rect_dim.x / 2.0 - circle_rel_pos.x),
-            -(-rect_dim.y / 2.0 - circle_rel_pos.y)
+            -(-rect_dim.x / 2.0f - circle_rel_pos.x),
+            -(-rect_dim.y / 2.0f - circle_rel_pos.y)
         );
         float smallest_x = std::min(dist_to_neg.x, dist_to_pos.x);
         float smallest_y = std::min(dist_to_neg.y, dist_to_pos.y);
@@ -698,8 +703,8 @@ bool circle_intersects_rectangle(
     } else {
         nearest =
             point(
-                clamp(circle_rel_pos.x, -rect_dim.x / 2.0, rect_dim.x / 2.0),
-                clamp(circle_rel_pos.y, -rect_dim.y / 2.0, rect_dim.y / 2.0)
+                clamp(circle_rel_pos.x, -rect_dim.x / 2.0f, rect_dim.x / 2.0f),
+                clamp(circle_rel_pos.y, -rect_dim.y / 2.0f, rect_dim.y / 2.0f)
             );
     }
     
@@ -720,7 +725,7 @@ bool circle_intersects_rectangle(
             angle = get_angle(nearest, circle_rel_pos);
         }
         
-        angle = floor((angle + (TAU / 8)) / (TAU / 4)) * (TAU / 4);
+        angle = (float) floor((angle + (TAU / 8)) / (TAU / 4)) * (TAU / 4);
         *rectangle_side_angle = angle + rect_angle;
     }
     
@@ -790,7 +795,7 @@ void coordinates_to_angle(
     const point &coordinates, float* angle, float* magnitude
 ) {
     if(angle) {
-        *angle = atan2(coordinates.y, coordinates.x);
+        *angle = (float) atan2(coordinates.y, coordinates.x);
     }
     if(magnitude) {
         *magnitude = dist(point(0, 0), coordinates).to_float();
@@ -804,7 +809,7 @@ void coordinates_to_angle(
  *   Angle, in degrees.
  */
 float deg_to_rad(const float deg) {
-    return (M_PI / 180.0f) * deg;
+    return (float) (M_PI / 180.0f) * deg;
 }
 
 
@@ -826,7 +831,7 @@ float dot_product(const point &v1, const point &v2) {
  *   Point that the origin is focusing on.
  */
 float get_angle(const point &focus) {
-    return atan2(focus.y, focus.x);
+    return (float) atan2(focus.y, focus.x);
 }
 
 
@@ -840,7 +845,7 @@ float get_angle(const point &focus) {
  *   Point that the center is focusing on.
  */
 float get_angle(const point &center, const point &focus) {
-    return atan2(focus.y - center.y, focus.x - center.x);
+    return (float) atan2(focus.y - center.y, focus.x - center.x);
 }
 
 
@@ -868,7 +873,8 @@ float get_angle_cw_dif(float a1, float a2) {
  */
 float get_angle_smallest_dif(const float a1, const float a2) {
     return
-        M_PI - std::abs(
+        (float) M_PI -
+        (float) std::abs(
             std::abs(normalize_angle(a1) - normalize_angle(a2)) - M_PI
         );
 }
@@ -1070,10 +1076,10 @@ void get_transformed_rectangle_bounding_box(
     for(unsigned char p = 0; p < 4; ++p) {
         point corner, final_corner;
         
-        if(p == 0 || p == 1) corner.x = center.x - (dimensions.x * 0.5);
-        else                 corner.x = center.x + (dimensions.x * 0.5);
-        if(p == 0 || p == 2) corner.y = center.y - (dimensions.y * 0.5);
-        else                 corner.y = center.y + (dimensions.y * 0.5);
+        if(p == 0 || p == 1) corner.x = center.x - (dimensions.x * 0.5f);
+        else                 corner.x = center.x + (dimensions.x * 0.5f);
+        if(p == 0 || p == 2) corner.y = center.y - (dimensions.y * 0.5f);
+        else                 corner.y = center.y + (dimensions.y * 0.5f);
         
         corner -= center;
         final_corner = rotate_point(corner, angle);
@@ -1438,7 +1444,7 @@ bool line_segs_intersect(
  *   Radius of the circle.
  */
 float linear_dist_to_angular(const float linear_dist, const float radius) {
-    return 2 * atan(linear_dist / (2 * radius));
+    return (float) (2 * atan(linear_dist / (2 * radius)));
 }
 
 
@@ -1569,16 +1575,16 @@ void move_point(
     point* mov, float* angle, bool* reached, const float delta_t
 ) {
     point dif = target - start;
-    float dis = sqrt(dif.x * dif.x + dif.y * dif.y);
+    float dis = (float) sqrt(dif.x * dif.x + dif.y * dif.y);
     
     if(dis > reach_radius) {
         float move_amount =
-            std::min((double) (dis / delta_t / 2.0f), (double) speed);
+            (float) std::min((double) (dis / delta_t / 2.0f), (double) speed);
             
         dif *= (move_amount / dis);
         
         if(mov) *mov = dif;
-        if(angle) *angle = atan2(dif.y, dif.x);
+        if(angle) *angle = (float) atan2(dif.y, dif.x);
         if(reached) *reached = false;
         
     } else {
@@ -1595,7 +1601,7 @@ void move_point(
  *   Angle to normalize.
  */
 float normalize_angle(float a) {
-    a = fmod(a, (float) TAU);
+    a = (float) fmod(a, (float) TAU);
     if(a < 0) a += TAU;
     return a;
 }
@@ -1666,7 +1672,7 @@ void project_vertexes(
  *   Angle, in radians.
  */
 float rad_to_deg(const float rad) {
-    return (180.0f / M_PI) * rad;
+    return (float) (180.0f / M_PI) * rad;
 }
 
 
@@ -1848,7 +1854,7 @@ point resize_to_box_keeping_aspect_ratio(
  *   Angle to rotate by.
  */
 point rotate_point(const point &coords, const float angle) {
-    float c = cos(angle);
-    float s = sin(angle);
+    float c = (float) cos(angle);
+    float s = (float) sin(angle);
     return point(c * coords.x - s * coords.y, s * coords.x + c * coords.y);
 }

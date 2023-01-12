@@ -21,6 +21,7 @@
 #include "../../utils/string_utils.h"
 
 
+#pragma warning(disable: 4701)
 /* ----------------------------------------------------------------------------
  * Does the drawing for the main game loop.
  * bmp_output:
@@ -186,6 +187,7 @@ void gameplay_state::do_game_drawing(
     
     al_flip_display();
 }
+#pragma warning(default: 4701)
 
 
 /* ----------------------------------------------------------------------------

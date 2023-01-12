@@ -1575,10 +1575,10 @@ void area_editor::process_gui_panel_info() {
                     game.cur_area_data.mission.fail_time_limit / 60.0f;
             }
         }
-        int day_start_min = game.cur_area_data.day_time_start;
+        int day_start_min = (int) game.cur_area_data.day_time_start;
         day_start_min = wrap_float(day_start_min, 0, 60 * 24);
         float day_speed = game.cur_area_data.day_time_speed;
-        int day_end_min = day_start_min + mission_min * day_speed;
+        int day_end_min = (int) (day_start_min + mission_min * day_speed);
         day_end_min = wrap_float(day_end_min, 0, 60 * 24);
         
         //Area day time at start value.
@@ -2970,7 +2970,7 @@ void area_editor::process_gui_panel_mission() {
                         game.cur_area_data.mission.fail_hud_primary_cond
                     ) {
                         found = true;
-                        selected = c;
+                        selected = (int) c;
                     }
                 }
                 if(!found) {
@@ -3020,7 +3020,7 @@ void area_editor::process_gui_panel_mission() {
                         game.cur_area_data.mission.fail_hud_secondary_cond
                     ) {
                         found = true;
-                        selected = c;
+                        selected = (int) c;
                     }
                 }
                 if(!found) {

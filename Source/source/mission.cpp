@@ -61,7 +61,7 @@ mission_data::mission_data() :
 int mission_fail_kill_enemies::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->enemy_deaths;
+    return (int) gameplay->enemy_deaths;
 }
 
 
@@ -148,7 +148,7 @@ string mission_fail_kill_enemies::get_player_description(
 int mission_fail_kill_enemies::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return game.cur_area_data.mission.fail_enemies_killed;
+    return (int) game.cur_area_data.mission.fail_enemies_killed;
 }
 
 
@@ -199,7 +199,7 @@ bool mission_fail_kill_enemies::is_met(
 int mission_fail_lose_leaders::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->leaders_kod;
+    return (int) gameplay->leaders_kod;
 }
 
 
@@ -284,7 +284,7 @@ string mission_fail_lose_leaders::get_player_description(
 int mission_fail_lose_leaders::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return game.cur_area_data.mission.fail_leaders_kod;
+    return (int) game.cur_area_data.mission.fail_leaders_kod;
 }
 
 
@@ -335,7 +335,7 @@ bool mission_fail_lose_leaders::is_met(
 int mission_fail_lose_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->pikmin_deaths;
+    return (int) gameplay->pikmin_deaths;
 }
 
 
@@ -418,7 +418,7 @@ string mission_fail_lose_pikmin::get_player_description(
 int mission_fail_lose_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return game.cur_area_data.mission.fail_pik_killed;
+    return (int) game.cur_area_data.mission.fail_pik_killed;
 }
 
 
@@ -818,7 +818,7 @@ string mission_fail_time_limit::get_player_description(
 int mission_fail_time_limit::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return game.cur_area_data.mission.fail_time_limit;
+    return (int) game.cur_area_data.mission.fail_time_limit;
 }
 
 
@@ -869,7 +869,7 @@ bool mission_fail_time_limit::is_met(
 int mission_fail_too_few_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->get_total_pikmin_amount();
+    return (int) gameplay->get_total_pikmin_amount();
 }
 
 
@@ -952,7 +952,7 @@ string mission_fail_too_few_pikmin::get_player_description(
 int mission_fail_too_few_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return game.cur_area_data.mission.fail_too_few_pik_amount;
+    return (int) game.cur_area_data.mission.fail_too_few_pik_amount;
 }
 
 
@@ -1005,7 +1005,7 @@ bool mission_fail_too_few_pikmin::is_met(
 int mission_fail_too_many_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->get_total_pikmin_amount();
+    return (int) gameplay->get_total_pikmin_amount();
 }
 
 
@@ -1088,7 +1088,7 @@ string mission_fail_too_many_pikmin::get_player_description(
 int mission_fail_too_many_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return game.cur_area_data.mission.fail_too_many_pik_amount;
+    return (int) game.cur_area_data.mission.fail_too_many_pik_amount;
 }
 
 
@@ -1142,8 +1142,8 @@ int mission_goal_battle_enemies::get_cur_amount(
     gameplay_state* gameplay
 ) const {
     return
-        gameplay->mission_required_mob_amount -
-        gameplay->mission_remaining_mob_ids.size();
+        (int) gameplay->mission_required_mob_amount -
+        (int) gameplay->mission_remaining_mob_ids.size();
 }
 
 
@@ -1239,7 +1239,7 @@ string mission_goal_battle_enemies::get_player_description(
 int mission_goal_battle_enemies::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->mission_required_mob_amount;
+    return (int) gameplay->mission_required_mob_amount;
 }
 
 
@@ -1293,7 +1293,7 @@ bool mission_goal_battle_enemies::is_mob_applicable(
 int mission_goal_collect_treasures::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->goal_treasures_collected;
+    return (int) gameplay->goal_treasures_collected;
 }
 
 
@@ -1383,7 +1383,7 @@ string mission_goal_collect_treasures::get_player_description(
 int mission_goal_collect_treasures::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->goal_treasures_total;
+    return (int) gameplay->goal_treasures_total;
 }
 
 
@@ -1586,7 +1586,7 @@ bool mission_goal_end_manually::is_mob_applicable(
 int mission_goal_get_to_exit::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->cur_leaders_in_mission_exit;
+    return (int) gameplay->cur_leaders_in_mission_exit;
 }
 
 
@@ -1675,7 +1675,7 @@ string mission_goal_get_to_exit::get_player_description(
 int mission_goal_get_to_exit::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->mission_required_mob_amount;
+    return (int) gameplay->mission_required_mob_amount;
 }
 
 
@@ -1731,7 +1731,7 @@ bool mission_goal_get_to_exit::is_mob_applicable(
 int mission_goal_grow_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return gameplay->get_total_pikmin_amount();
+    return (int) gameplay->get_total_pikmin_amount();
 }
 
 
@@ -1810,7 +1810,7 @@ string mission_goal_grow_pikmin::get_player_description(
 int mission_goal_grow_pikmin::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return game.cur_area_data.mission.goal_amount;
+    return (int) game.cur_area_data.mission.goal_amount;
 }
 
 
@@ -1944,7 +1944,7 @@ string mission_goal_timed_survival::get_player_description(
 int mission_goal_timed_survival::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return game.cur_area_data.mission.goal_amount;
+    return (int) game.cur_area_data.mission.goal_amount;
 }
 
 
@@ -2022,6 +2022,7 @@ int mission_score_criterion_enemy_points::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
+        (int)
         gameplay->enemy_points_collected *
         get_multiplier(mission);
 }
@@ -2058,6 +2059,7 @@ int mission_score_criterion_pikmin_born::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
+        (int)
         gameplay->pikmin_born *
         get_multiplier(mission);
 }
@@ -2094,6 +2096,7 @@ int mission_score_criterion_pikmin_death::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
+        (int)
         gameplay->pikmin_deaths *
         get_multiplier(mission);
 }
@@ -2211,6 +2214,7 @@ int mission_score_criterion_treasure_points::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
+        (int)
         gameplay->treasure_points_collected *
         get_multiplier(mission);
 }
