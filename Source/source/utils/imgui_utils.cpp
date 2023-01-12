@@ -251,6 +251,10 @@ void ImGui::Reset() {
     io.AddKeyEvent(ImGuiKey_RightAlt, false);
     io.AddKeyEvent(ImGuiKey_LeftSuper, false);
     io.AddKeyEvent(ImGuiKey_RightSuper, false);
+    io.AddKeyEvent(ImGuiMod_Alt, false);
+    io.AddKeyEvent(ImGuiMod_Ctrl, false);
+    io.AddKeyEvent(ImGuiMod_Shift, false);
+    io.AddKeyEvent(ImGuiMod_Super, false);
 }
 
 

@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -42,6 +42,7 @@ Next tasks (roughly sorted most important first)
             https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?
                 Probably minimize the use of colors, because there can be tons of different Pikmin colors, and their icons should all be minimally visible
             Icons for treasures, leaders, Onions, ships, Pikmin, and whatever else of importance
+                Icons of Pikmin souls indicating Pikmin died here in the past 10 seconds or so
             Area name, North indicator
             Working Pikmin, idle Pikmin, and group Pikmin counts
             Controls instructions on the bottom
