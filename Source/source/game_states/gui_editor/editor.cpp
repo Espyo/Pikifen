@@ -323,6 +323,40 @@ void gui_editor::press_snap_mode_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the zoom and position reset button widget is pressed.
+ */
+void gui_editor::press_zoom_and_pos_reset_button() {
+    reset_cam(false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the zoom in button widget is pressed.
+ */
+void gui_editor::press_zoom_in_button() {
+    game.cam.target_zoom =
+        clamp(
+            game.cam.target_zoom +
+            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoom_min_level, zoom_max_level
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the zoom out button widget is pressed.
+ */
+void gui_editor::press_zoom_out_button() {
+    game.cam.target_zoom =
+        clamp(
+            game.cam.target_zoom -
+            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoom_min_level, zoom_max_level
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Resets the camera.
  * instantaneous:
  *   Whether the camera moves to its spot instantaneously or not.

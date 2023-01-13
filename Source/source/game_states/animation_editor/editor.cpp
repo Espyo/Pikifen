@@ -721,6 +721,89 @@ void animation_editor::press_save_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the zoom everything button widget is pressed.
+ */
+void animation_editor::press_zoom_everything_button() {
+
+    sprite* s_ptr = cur_sprite;
+    if(!s_ptr && cur_anim && cur_frame_nr != INVALID) {
+        string name =
+            cur_anim->frames[cur_frame_nr].sprite_name;
+        size_t s_pos = anims.find_sprite(name);
+        if(s_pos != INVALID) s_ptr = anims.sprites[s_pos];
+    }
+    if(!s_ptr || !s_ptr->bitmap) return;
+    
+    point cmin, cmax;
+    get_transformed_rectangle_bounding_box(
+        s_ptr->offset, s_ptr->file_size * s_ptr->scale,
+        s_ptr->angle, &cmin, &cmax
+    );
+    
+    if(s_ptr->top_visible) {
+        point top_min, top_max;
+        get_transformed_rectangle_bounding_box(
+            s_ptr->top_pos, s_ptr->top_size,
+            s_ptr->top_angle,
+            &top_min, &top_max
+        );
+        cmin.x = std::min(cmin.x, top_min.x);
+        cmin.y = std::min(cmin.y, top_min.y);
+        cmax.x = std::max(cmax.x, top_max.x);
+        cmax.y = std::max(cmax.y, top_max.y);
+    }
+    
+    for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
+        hitbox* h_ptr = &s_ptr->hitboxes[h];
+        cmin.x = std::min(cmin.x, h_ptr->pos.x - h_ptr->radius);
+        cmin.y = std::min(cmin.y, h_ptr->pos.y - h_ptr->radius);
+        cmax.x = std::max(cmax.x, h_ptr->pos.x + h_ptr->radius);
+        cmax.y = std::max(cmax.y, h_ptr->pos.y + h_ptr->radius);
+    }
+    
+    center_camera(cmin, cmax);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the zoom and position reset button widget is pressed.
+ */
+void animation_editor::press_zoom_and_pos_reset_button() {
+    if(game.cam.target_zoom == 1.0f) {
+        game.cam.target_pos = point();
+    } else {
+        game.cam.target_zoom = 1.0f;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the zoom in button widget is pressed.
+ */
+void animation_editor::press_zoom_in_button() {
+    game.cam.target_zoom =
+        clamp(
+            game.cam.target_zoom +
+            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoom_min_level, zoom_max_level
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the zoom out button widget is pressed.
+ */
+void animation_editor::press_zoom_out_button() {
+    game.cam.target_zoom =
+        clamp(
+            game.cam.target_zoom -
+            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoom_min_level, zoom_max_level
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Renames an animation to the given name.
  * anim:
  *   Animation to rename.

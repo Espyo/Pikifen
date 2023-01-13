@@ -727,6 +727,7 @@ private:
         const string &name, const string &category, const bool is_new
     );
     void press_circle_sector_button();
+    void press_delete_button();
     void press_delete_area_button();
     void press_duplicate_mobs_button();
     void press_load_button();
@@ -745,9 +746,14 @@ private:
     void press_quick_play_button();
     void press_quit_button();
     void press_save_button();
+    void press_select_all_button();
     void press_selection_filter_button();
     void press_snap_mode_button();
     void press_undo_button();
+    void press_zoom_and_pos_reset_button();
+    void press_zoom_everything_button();
+    void press_zoom_in_button();
+    void press_zoom_out_button();
     void process_gui();
     void process_gui_control_panel();
     void process_gui_delete_area_dialog();

@@ -297,20 +297,163 @@ void area_editor::process_gui_menu_bar() {
         //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
         
+            //Load or create area item.
+            if(ImGui::MenuItem("Load or create area...", "Ctrl+L")) {
+                load_widget_pos = get_last_widget_pos();
+                press_load_button();
+            }
+            set_tooltip(
+                "Pick an area to load, or create a new one.",
+                "Ctrl + L"
+            );
+            
             //Reload current area item.
             if(ImGui::MenuItem("Reload current area")) {
                 reload_widget_pos = get_last_widget_pos();
                 press_reload_button();
             }
+            set_tooltip(
+                "Lose all changes and reload the current area from the disk."
+            );
+            
+            //Save current area item.
+            if(ImGui::MenuItem("Save current area", "Ctrl+S")) {
+                press_save_button();
+            }
+            set_tooltip(
+                "Save the area into the files on disk.",
+                "Ctrl + S"
+            );
             
             //Delete current area item.
             if(ImGui::MenuItem("Delete current area")) {
                 press_delete_area_button();
             }
+            set_tooltip(
+                "Delete the current area from the disk."
+            );
+            
+            //Quick play item.
+            if(ImGui::MenuItem("Quick play", "Ctrl+P")) {
+                press_quick_play_button();
+            }
+            set_tooltip(
+                "Save, quit, and start playing the area. Leaving will return"
+                "to the editor.",
+                "Ctrl + P"
+            );
+            
+            //Separator item.
+            ImGui::Separator();
             
             //Options menu item.
-            if(ImGui::MenuItem("Options")) {
+            if(ImGui::MenuItem("Options...")) {
                 open_options_dialog();
+            }
+            set_tooltip(
+                "Open the options menu, so you can tweak your preferences."
+            );
+            
+            //Debug menu.
+            if(ImGui::BeginMenu("Debug")) {
+            
+                //Show edge numbers item.
+                if(
+                    ImGui::MenuItem(
+                        "Show edge numbers", "F1", &debug_edge_nrs
+                    )
+                ) {
+                    if(debug_edge_nrs) {
+                        status_text =
+                            "Enabled debug edge number display.";
+                    } else {
+                        status_text =
+                            "Disabled debug edge number display.";
+                    }
+                }
+                set_tooltip(
+                    "Shows what number each edge is.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                //Show sector numbers item.
+                if(
+                    ImGui::MenuItem(
+                        "Show sector numbers", "F2", &debug_sector_nrs
+                    )
+                ) {
+                    if(debug_sector_nrs) {
+                        status_text =
+                            "Enabled debug sector number display.";
+                    } else {
+                        status_text =
+                            "Disabled debug sector number display.";
+                    }
+                }
+                set_tooltip(
+                    "Shows the sector number on either side of an edge.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                //Show vertex numbers item.
+                if(
+                    ImGui::MenuItem(
+                        "Show vertex numbers", "F3", &debug_vertex_nrs
+                    )
+                ) {
+                    if(debug_vertex_nrs) {
+                        status_text =
+                            "Enabled debug vertex number display.";
+                    } else {
+                        status_text =
+                            "Disabled debug vertex number display.";
+                    }
+                }
+                set_tooltip(
+                    "Shows what number each vertex is.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                //Show sector triangulation item.
+                if(
+                    ImGui::MenuItem(
+                        "Show sector triangulation", "F4", &debug_triangulation
+                    )
+                ) {
+                    if(debug_triangulation) {
+                        status_text =
+                            "Enabled debug triangulation display.";
+                    } else {
+                        status_text =
+                            "Disabled debug triangulation display.";
+                    }
+                }
+                set_tooltip(
+                    "Shows what triangles make up the selected sector.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                //Show path numbers item.
+                if(
+                    ImGui::MenuItem(
+                        "Show path numbers", "F5", &debug_path_nrs
+                    )
+                ) {
+                    if(debug_path_nrs) {
+                        status_text =
+                            "Enabled debug path number display.";
+                    } else {
+                        status_text =
+                            "Disabled debug path number display.";
+                    }
+                }
+                set_tooltip(
+                    "Shows what number each path stop is.\n"
+                    "Mostly useful for debugging the engine."
+                );
+                
+                ImGui::EndMenu();
+                
             }
             
             //Quit editor item.
@@ -318,88 +461,95 @@ void area_editor::process_gui_menu_bar() {
                 quit_widget_pos = get_last_widget_pos();
                 press_quit_button();
             }
+            set_tooltip(
+                "Quit the area editor.",
+                "Ctrl + Q"
+            );
             
             ImGui::EndMenu();
             
         }
         
-        //Debug menu.
-        if(ImGui::BeginMenu("Debug")) {
+        //Edit menu.
+        if(ImGui::BeginMenu("Edit")) {
         
-            //Show edge numbers item.
-            if(
-                ImGui::MenuItem(
-                    "Show edge numbers", "F1", &debug_edge_nrs
-                )
-            ) {
-                if(debug_edge_nrs) {
-                    status_text =
-                        "Enabled debug edge number display.";
-                } else {
-                    status_text =
-                        "Disabled debug edge number display.";
-                }
+            //Undo item.
+            if(ImGui::MenuItem("Undo", "Ctrl+Z")) {
+                press_undo_button();
             }
+            string undo_text;
+            if(undo_history.empty()) {
+                undo_text = "Nothing to undo.";
+            } else {
+                undo_text = "Undo: " + undo_history[0].second + ".";
+            }
+            set_tooltip(
+                undo_text,
+                "Ctrl + Z"
+            );
             
-            //Show sector numbers item.
-            if(
-                ImGui::MenuItem(
-                    "Show sector numbers", "F2", &debug_sector_nrs
-                )
-            ) {
-                if(debug_sector_nrs) {
-                    status_text =
-                        "Enabled debug sector number display.";
-                } else {
-                    status_text =
-                        "Disabled debug sector number display.";
-                }
+            //Select all item.
+            if(ImGui::MenuItem("Select all", "Ctrl+A")) {
+                press_select_all_button();
             }
+            set_tooltip(
+                "Selects everything in the current mode, if applicable.",
+                "Ctrl + A"
+            );
             
-            //Show vertex numbers item.
-            if(
-                ImGui::MenuItem(
-                    "Show vertex numbers", "F3", &debug_vertex_nrs
-                )
-            ) {
-                if(debug_vertex_nrs) {
-                    status_text =
-                        "Enabled debug vertex number display.";
-                } else {
-                    status_text =
-                        "Disabled debug vertex number display.";
-                }
+            //Delete item.
+            if(ImGui::MenuItem("Delete", "Delete")) {
+                press_delete_button();
             }
+            set_tooltip(
+                "Deletes the selected things, if applicable.",
+                "Delete"
+            );
             
-            //Show sector triangulation item.
-            if(
-                ImGui::MenuItem(
-                    "Show sector triangulation", "F4", &debug_triangulation
-                )
-            ) {
-                if(debug_triangulation) {
-                    status_text =
-                        "Enabled debug triangulation display.";
-                } else {
-                    status_text =
-                        "Disabled debug triangulation display.";
-                }
-            }
+            ImGui::EndMenu();
             
-            //Show path numbers item.
-            if(
-                ImGui::MenuItem(
-                    "Show path numbers", "F5", &debug_path_nrs
-                )
-            ) {
-                if(debug_path_nrs) {
-                    status_text =
-                        "Enabled debug path number display.";
-                } else {
-                    status_text =
-                        "Disabled debug path number display.";
-                }
+        }
+        
+        //View menu.
+        if(ImGui::BeginMenu("View")) {
+        
+            //Zoom in item.
+            if(ImGui::MenuItem("Zoom in", "Plus")) {
+                press_zoom_in_button();
             }
+            set_tooltip(
+                "Zooms the camera in a bit.",
+                "Plus"
+            );
+            
+            //Zoom out item.
+            if(ImGui::MenuItem("Zoom out", "Minus")) {
+                press_zoom_out_button();
+            }
+            set_tooltip(
+                "Zooms the camera out a bit.",
+                "Minus"
+            );
+            
+            //Zoom and position reset item.
+            if(ImGui::MenuItem("Zoom/position reset", "0")) {
+                press_zoom_and_pos_reset_button();
+            }
+            set_tooltip(
+                "Reset the zoom level, and if pressed again,\n"
+                "reset the camera position.",
+                "0"
+            );
+            
+            //Zoom everything item.
+            if(ImGui::MenuItem("Zoom onto everything", "Home")) {
+                press_zoom_everything_button();
+            }
+            set_tooltip(
+                "Move and zoom the camera so that everything in the area\n"
+                "fits nicely into view.",
+                "Home"
+            );
             
             ImGui::EndMenu();
             
@@ -419,6 +569,11 @@ void area_editor::process_gui_menu_bar() {
                 status_text = state_str + " tooltips.";
                 save_options();
             }
+            set_tooltip(
+                "Whether tooltips should appear when you place your mouse on\n"
+                "top of something in the GUI. Like the tooltip you are\n"
+                "reading right now."
+            );
             
             //General help item.
             if(ImGui::MenuItem("Help...")) {
@@ -438,6 +593,9 @@ void area_editor::process_gui_menu_bar() {
                     help_str.c_str(), NULL, 0
                 );
             }
+            set_tooltip(
+                "Opens a general help message for this editor."
+            );
             
             ImGui::EndMenu();
             

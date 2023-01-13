@@ -107,22 +107,12 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
-        game.cam.target_zoom =
-            clamp(
-                game.cam.target_zoom -
-                game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-                zoom_min_level, zoom_max_level
-            );
-            
+        press_zoom_out_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        game.cam.target_zoom =
-            clamp(
-                game.cam.target_zoom +
-                game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-                zoom_min_level, zoom_max_level
-            );
-            
+        press_zoom_in_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
         press_grid_interval_decrease_button();
         
@@ -131,11 +121,7 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
         press_grid_interval_increase_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
-        if(game.cam.target_zoom == 1.0f) {
-            game.cam.target_pos = point();
-        } else {
-            game.cam.target_zoom = 1.0f;
-        }
+        press_zoom_and_pos_reset_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_R)) {
         if(state == EDITOR_STATE_MOBS && sub_state == EDITOR_SUB_STATE_NONE) {
@@ -267,53 +253,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_A, true)) {
-        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
-            if(state == EDITOR_STATE_LAYOUT) {
-                selected_edges.insert(
-                    game.cur_area_data.edges.begin(),
-                    game.cur_area_data.edges.end()
-                );
-                selected_sectors.insert(
-                    game.cur_area_data.sectors.begin(),
-                    game.cur_area_data.sectors.end()
-                );
-                selected_vertexes.insert(
-                    game.cur_area_data.vertexes.begin(),
-                    game.cur_area_data.vertexes.end()
-                );
-                
-            } else if(state == EDITOR_STATE_MOBS) {
-                selected_mobs.insert(
-                    game.cur_area_data.mob_generators.begin(),
-                    game.cur_area_data.mob_generators.end()
-                );
-                
-            } else if(state == EDITOR_STATE_PATHS) {
-                selected_path_stops.insert(
-                    game.cur_area_data.path_stops.begin(),
-                    game.cur_area_data.path_stops.end()
-                );
-            }
-            
-            update_vertex_selection();
-            set_selection_status_text();
-            
-        } else if(
-            sub_state == EDITOR_SUB_STATE_MISSION_MOBS
-        ) {
-            register_change("mission object requirements change");
-            for(
-                size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m
-            ) {
-                mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
-                if(
-                    game.mission_goals[game.cur_area_data.mission.goal]->
-                    is_mob_applicable(m_ptr->type)
-                ) {
-                    game.cur_area_data.mission.goal_mob_idxs.insert(m);
-                }
-            }
-        }
+        press_select_all_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C)) {
         if(!moving && !selecting) {
@@ -437,80 +377,10 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DELETE)) {
-        switch(state) {
-        case EDITOR_STATE_LAYOUT: {
-            press_remove_edge_button();
-            break;
-        } case EDITOR_STATE_MOBS: {
-            press_remove_mob_button();
-            break;
-        } case EDITOR_STATE_PATHS: {
-            press_remove_path_button();
-            break;
-        } case EDITOR_STATE_DETAILS: {
-            press_remove_tree_shadow_button();
-            break;
-        }
-        }
+        press_delete_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
-        bool got_something = false;
-        point min_coords, max_coords;
-        
-        for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
-            vertex* v_ptr = game.cur_area_data.vertexes[v];
-            if(v_ptr->x < min_coords.x || !got_something) {
-                min_coords.x = v_ptr->x;
-            }
-            if(v_ptr->y < min_coords.y || !got_something) {
-                min_coords.y = v_ptr->y;
-            }
-            if(v_ptr->x > max_coords.x || !got_something) {
-                max_coords.x = v_ptr->x;
-            }
-            if(v_ptr->y > max_coords.y || !got_something) {
-                max_coords.y = v_ptr->y;
-            }
-            got_something = true;
-        }
-        
-        for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
-            mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
-            if(m_ptr->pos.x < min_coords.x || !got_something) {
-                min_coords.x = m_ptr->pos.x;
-            }
-            if(m_ptr->pos.y < min_coords.y || !got_something) {
-                min_coords.y = m_ptr->pos.y;
-            }
-            if(m_ptr->pos.x > max_coords.x || !got_something) {
-                max_coords.x = m_ptr->pos.x;
-            }
-            if(m_ptr->pos.y > max_coords.y || !got_something) {
-                max_coords.y = m_ptr->pos.y;
-            }
-            got_something = true;
-        }
-        
-        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = game.cur_area_data.path_stops[s];
-            if(s_ptr->pos.x < min_coords.x || !got_something) {
-                min_coords.x = s_ptr->pos.x;
-            }
-            if(s_ptr->pos.y < min_coords.y || !got_something) {
-                min_coords.y = s_ptr->pos.y;
-            }
-            if(s_ptr->pos.x > max_coords.x || !got_something) {
-                max_coords.x = s_ptr->pos.x;
-            }
-            if(s_ptr->pos.y > max_coords.y || !got_something) {
-                max_coords.y = s_ptr->pos.y;
-            }
-            got_something = true;
-        }
-        
-        if(!got_something) return;
-        
-        center_camera(min_coords, max_coords);
+        press_zoom_everything_button();
         
     }
 }

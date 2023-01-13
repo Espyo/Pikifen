@@ -99,6 +99,16 @@ private:
     );
     
     //(Dear ImGui) GUI functions.
+    void press_grid_interval_decrease_button();
+    void press_grid_interval_increase_button();
+    void press_load_button();
+    void press_quit_button();
+    void press_reload_button();
+    void press_save_button();
+    void press_snap_mode_button();
+    void press_zoom_and_pos_reset_button();
+    void press_zoom_in_button();
+    void press_zoom_out_button();
     void process_gui();
     void process_gui_control_panel();
     void process_gui_load_dialog();
@@ -108,13 +118,6 @@ private:
     void process_gui_panel_items();
     void process_gui_status_bar();
     void process_gui_toolbar();
-    void press_grid_interval_decrease_button();
-    void press_grid_interval_increase_button();
-    void press_load_button();
-    void press_reload_button();
-    void press_save_button();
-    void press_snap_mode_button();
-    void press_quit_button();
     
     //Input handler functions.
     void handle_key_char_canvas(const ALLEGRO_EVENT &ev) override;

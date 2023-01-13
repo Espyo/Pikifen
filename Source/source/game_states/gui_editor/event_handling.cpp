@@ -36,22 +36,12 @@ void gui_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
-        game.cam.target_zoom =
-            clamp(
-                game.cam.target_zoom -
-                game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-                zoom_min_level, zoom_max_level
-            );
-            
+        press_zoom_out_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        game.cam.target_zoom =
-            clamp(
-                game.cam.target_zoom +
-                game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-                zoom_min_level, zoom_max_level
-            );
-            
+        press_zoom_in_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS, false, true)) {
         press_grid_interval_decrease_button();
         

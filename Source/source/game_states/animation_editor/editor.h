@@ -229,6 +229,10 @@ private:
     void press_quit_button();
     void press_reload_button();
     void press_save_button();
+    void press_zoom_and_pos_reset_button();
+    void press_zoom_everything_button();
+    void press_zoom_in_button();
+    void press_zoom_out_button();
     void process_gui();
     void process_gui_control_panel();
     void process_gui_hitbox_hazards();

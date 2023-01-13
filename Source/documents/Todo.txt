@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Bridges and Dummies emit light during blackout (Darthvato)
     
     --- v0.24.0 ---
     Add a copy-paste feature to the area editor
@@ -217,7 +217,7 @@ Next tasks (roughly sorted most important first)
         Wooden bridges need to be 192px long, to fit the new bridge format
             Wood bridges should push, have rectangular collision, and have more hitboxes a la gates (thanks Helodity)
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
-        Improve the explosions https://www.patreon.com/posts/explosions-part-7719254
+        Improve the explosions https://www.patreon.com/posts/explosions-part-7719254 https://www.youtube.com/watch?v=ZDopYzDX-Jg
         Add a glow to the smack effect particle?
         Spectralids shouldn't have their body dead center and only have the wings flap, their body should bob up and down aggressively like real butterflies
         Pikmin movement and other actions should have random offsets and delays of tiny amounts, just so that the army feels like a group of individuals, instead of several robots

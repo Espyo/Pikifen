@@ -40,28 +40,14 @@ void animation_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.cam.zoom;
             
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
-        game.cam.target_zoom =
-            clamp(
-                game.cam.target_zoom -
-                game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-                zoom_min_level, zoom_max_level
-            );
-            
+        press_zoom_out_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_EQUALS)) {
         //Nope, that's not a typo. The plus key is ALLEGRO_KEY_EQUALS.
-        game.cam.target_zoom =
-            clamp(
-                game.cam.target_zoom +
-                game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-                zoom_min_level, zoom_max_level
-            );
-            
+        press_zoom_in_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
-        if(game.cam.target_zoom == 1.0f) {
-            game.cam.target_pos = point();
-        } else {
-            game.cam.target_zoom = 1.0f;
-        }
+        press_zoom_and_pos_reset_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C, true)) {
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
@@ -113,43 +99,7 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         press_play_animation_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
-        sprite* s_ptr = cur_sprite;
-        if(!s_ptr && cur_anim && cur_frame_nr != INVALID) {
-            string name =
-                cur_anim->frames[cur_frame_nr].sprite_name;
-            size_t s_pos = anims.find_sprite(name);
-            if(s_pos != INVALID) s_ptr = anims.sprites[s_pos];
-        }
-        if(!s_ptr || !s_ptr->bitmap) return;
-        
-        point cmin, cmax;
-        get_transformed_rectangle_bounding_box(
-            s_ptr->offset, s_ptr->file_size * s_ptr->scale,
-            s_ptr->angle, &cmin, &cmax
-        );
-        
-        if(s_ptr->top_visible) {
-            point top_min, top_max;
-            get_transformed_rectangle_bounding_box(
-                s_ptr->top_pos, s_ptr->top_size,
-                s_ptr->top_angle,
-                &top_min, &top_max
-            );
-            cmin.x = std::min(cmin.x, top_min.x);
-            cmin.y = std::min(cmin.y, top_min.y);
-            cmax.x = std::max(cmax.x, top_max.x);
-            cmax.y = std::max(cmax.y, top_max.y);
-        }
-        
-        for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
-            hitbox* h_ptr = &s_ptr->hitboxes[h];
-            cmin.x = std::min(cmin.x, h_ptr->pos.x - h_ptr->radius);
-            cmin.y = std::min(cmin.y, h_ptr->pos.y - h_ptr->radius);
-            cmax.x = std::max(cmax.x, h_ptr->pos.x + h_ptr->radius);
-            cmax.y = std::max(cmax.y, h_ptr->pos.y + h_ptr->radius);
-        }
-        
-        center_camera(cmin, cmax);
+        press_zoom_everything_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
     

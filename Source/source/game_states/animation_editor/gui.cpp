@@ -403,22 +403,99 @@ void animation_editor::process_gui_menu_bar() {
         //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
         
+            //Load file item.
+            if(ImGui::MenuItem("Load file...", "Ctrl+L")) {
+                load_widget_pos = get_last_widget_pos();
+                press_load_button();
+            }
+            set_tooltip(
+                "Pick a file to load.",
+                "Ctrl + L"
+            );
+            
             //Reload current file item.
             if(ImGui::MenuItem("Reload current file")) {
                 reload_widget_pos = get_last_widget_pos();
                 press_reload_button();
             }
+            set_tooltip(
+                "Lose all changes and reload the current file from the disk."
+            );
+            
+            //Save current file item.
+            if(ImGui::MenuItem("Save current file", "Ctrl+S")) {
+                press_save_button();
+            }
+            set_tooltip(
+                "Save the animation data into the files on disk.",
+                "Ctrl + S"
+            );
+            
+            //Separator item.
+            ImGui::Separator();
             
             //Options menu item.
-            if(ImGui::MenuItem("Options")) {
+            if(ImGui::MenuItem("Options...")) {
                 open_options_dialog();
             }
+            set_tooltip(
+                "Open the options menu, so you can tweak your preferences."
+            );
             
             //Quit editor item.
             if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
                 quit_widget_pos = get_last_widget_pos();
                 press_quit_button();
             }
+            set_tooltip(
+                "Quit the animation editor.",
+                "Ctrl + Q"
+            );
+            
+            ImGui::EndMenu();
+            
+        }
+        
+        //View menu.
+        if(ImGui::BeginMenu("View")) {
+        
+            //Zoom in item.
+            if(ImGui::MenuItem("Zoom in", "Plus")) {
+                press_zoom_in_button();
+            }
+            set_tooltip(
+                "Zooms the camera in a bit.",
+                "Plus"
+            );
+            
+            //Zoom out item.
+            if(ImGui::MenuItem("Zoom out", "Minus")) {
+                press_zoom_out_button();
+            }
+            set_tooltip(
+                "Zooms the camera out a bit.",
+                "Minus"
+            );
+            
+            //Zoom and position reset item.
+            if(ImGui::MenuItem("Zoom/position reset", "0")) {
+                press_zoom_and_pos_reset_button();
+            }
+            set_tooltip(
+                "Reset the zoom level, and if pressed again,\n"
+                "reset the camera position.",
+                "0"
+            );
+            
+            //Zoom everything item.
+            if(ImGui::MenuItem("Zoom onto everything", "Home")) {
+                press_zoom_everything_button();
+            }
+            set_tooltip(
+                "Move and zoom the camera so that everything in the area\n"
+                "fits nicely into view.",
+                "Home"
+            );
             
             ImGui::EndMenu();
             
@@ -438,6 +515,11 @@ void animation_editor::process_gui_menu_bar() {
                 status_text = state_str + " tooltips.";
                 save_options();
             }
+            set_tooltip(
+                "Whether tooltips should appear when you place your mouse on\n"
+                "top of something in the GUI. Like the tooltip you are\n"
+                "reading right now."
+            );
             
             //General help item.
             if(ImGui::MenuItem("Help...")) {
@@ -456,6 +538,9 @@ void animation_editor::process_gui_menu_bar() {
                     help_str.c_str(), NULL, 0
                 );
             }
+            set_tooltip(
+                "Opens a general help message for this editor."
+            );
             
             ImGui::EndMenu();
             
