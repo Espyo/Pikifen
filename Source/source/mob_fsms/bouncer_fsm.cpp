@@ -72,7 +72,7 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     mob* toucher = (mob*) info1;
     mob* target_mob = NULL;
     
-    if(m->links.empty()) {
+    if(!bou_ptr->links.empty()) {
         target_mob = bou_ptr->links[0];
     }
     
