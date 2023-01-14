@@ -1,6 +1,7 @@
 name = Shoot
 description = A green shoot that splits into three leaves.
 
+blackout_radius = 0
 height = 160
 radius = 24
 random_animation_delay = true

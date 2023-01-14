@@ -48,6 +48,7 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     main_color(al_map_rgb(128, 128, 128)),
     show_health(true),
     casts_shadow(true),
+    blackout_radius(-1),
     move_speed(0),
     acceleration(MOB::DEF_ACCELERATION),
     rotation_speed(MOB::DEF_ROTATION_SPEED),
@@ -301,6 +302,7 @@ void create_special_mob_types() {
         
     mob_type* bridge_component_type = custom_category->create_type();
     bridge_component_type->name = "Bridge component";
+    bridge_component_type->blackout_radius = 0;
     bridge_component_type->appears_in_area_editor = false;
     bridge_component_type->casts_shadow = false;
     bridge_component_type->height = 8.0f;
@@ -350,6 +352,7 @@ void load_mob_type_from_file(
     rs.set("acceleration", mt->acceleration);
     rs.set("area_editor_tips", mt->area_editor_tips, &area_editor_tips_node);
     rs.set("appears_in_area_editor", mt->appears_in_area_editor);
+    rs.set("blackout_radius", mt->blackout_radius);
     rs.set("can_block_paths", mt->can_block_paths);
     rs.set("can_free_move", mt->can_free_move);
     rs.set(

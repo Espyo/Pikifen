@@ -1,6 +1,7 @@
 name = Leaves
 description = Three green leaves in a small bundle.
 
+blackout_radius = 0
 casts_shadow = false
 height = 2
 radius = 32
