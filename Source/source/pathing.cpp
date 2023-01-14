@@ -420,7 +420,7 @@ bool can_traverse_path_link(
     
     bool touching_hazard =
         !end_sector->hazard_floor ||
-        has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
         
     if(
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
