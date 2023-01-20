@@ -389,9 +389,9 @@ bool area_editor::delete_edges(const set<edge*> &which) {
 void area_editor::delete_mobs(const set<mob_gen*> &which) {
     for(auto sm : which) {
         //Get its index.
-        size_t m_i = 0;
-        for(; m_i < game.cur_area_data.mob_generators.size(); ++m_i) {
-            if(game.cur_area_data.mob_generators[m_i] == sm) break;
+        size_t m_idx = 0;
+        for(; m_idx < game.cur_area_data.mob_generators.size(); ++m_idx) {
+            if(game.cur_area_data.mob_generators[m_idx] == sm) break;
         }
         
         //Check all links to this mob.
@@ -401,7 +401,7 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
             mob_gen* m2_ptr = game.cur_area_data.mob_generators[m2];
             for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
             
-                if(m2_ptr->link_nrs[l] > m_i) {
+                if(m2_ptr->link_nrs[l] > m_idx) {
                     m2_ptr->link_nrs[l]--;
                 }
                 
@@ -410,15 +410,18 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
                     m2_ptr->link_nrs.erase(m2_ptr->link_nrs.begin() + l);
                 }
             }
+            if(m2_ptr->stored_inside == m_idx) {
+                m2_ptr->stored_inside = INVALID;
+            }
         }
         
         //Check the list of mission requirement objects.
         unordered_set<size_t> new_mrmi;
         new_mrmi.reserve(game.cur_area_data.mission.goal_mob_idxs.size());
         for(size_t m2 : game.cur_area_data.mission.goal_mob_idxs) {
-            if(m2 > m_i) {
+            if(m2 > m_idx) {
                 new_mrmi.insert(m2 - 1);
-            } else if (m2 != m_i) {
+            } else if (m2 != m_idx) {
                 new_mrmi.insert(m2);
             }
         }
@@ -426,7 +429,7 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
         
         //Finally, delete it.
         game.cur_area_data.mob_generators.erase(
-            game.cur_area_data.mob_generators.begin() + m_i
+            game.cur_area_data.mob_generators.begin() + m_idx
         );
         delete sm;
     }
@@ -739,6 +742,33 @@ void area_editor::find_problems() {
                     "the link.";
                 return;
             }
+        }
+    }
+    
+    //Objects stored inside other objects in a loop.
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+        if(m_ptr->stored_inside == INVALID) continue;
+        unordered_set<mob_gen*> visited_mobs;
+        visited_mobs.insert(m_ptr);
+        size_t next_idx = m_ptr->stored_inside;
+        while(next_idx != INVALID) {
+            mob_gen* next_ptr = game.cur_area_data.mob_generators[next_idx];
+            if(visited_mobs.find(next_ptr) != visited_mobs.end()) {
+                problem_mob_ptr = next_ptr;
+                problem_type = EPT_MOB_STORED_IN_LOOP;
+                problem_title = "Mobs stored in a loop!";
+                problem_description =
+                    "This object is stored inside of another object, which "
+                    "in turn is inside of another...and eventually, "
+                    "one of the objects in this chain is stored inside of the "
+                    "first one. This means none of these objects are "
+                    "really out in the open, and so will never really be used "
+                    "in the area. You probably want to unstore one of them.";
+                return;
+            }
+            visited_mobs.insert(next_ptr);
+            next_idx = next_ptr->stored_inside;
         }
     }
     
@@ -1558,6 +1588,7 @@ void area_editor::homogenize_selected_mobs() {
         m_ptr->angle = base->angle;
         m_ptr->vars = base->vars;
         m_ptr->links = base->links;
+        m_ptr->stored_inside = base->stored_inside;
         m_ptr->link_nrs = base->link_nrs;
     }
 }

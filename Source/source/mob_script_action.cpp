@@ -1349,14 +1349,7 @@ void mob_action_runners::release(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::release_stored_mobs(mob_action_run_data &data) {
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
-        mob* m_ptr = game.states.gameplay->mobs.all[m];
-        if(m_ptr->stored_inside_another == data.m) {
-            data.m->release(m_ptr);
-            m_ptr->stored_inside_another = NULL;
-            m_ptr->time_alive = 0.0f;
-        }
-    }
+    data.m->release_stored_mobs();
 }
 
 

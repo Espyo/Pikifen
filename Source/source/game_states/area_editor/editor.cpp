@@ -1401,6 +1401,7 @@ void area_editor::goto_problem() {
     case EPT_MOB_OOB:
     case EPT_MOB_IN_WALL:
     case EPT_MOB_LINKS_TO_SELF:
+    case EPT_MOB_STORED_IN_LOOP:
     case EPT_SECTORLESS_BRIDGE:
     case EPT_PILE_BRIDGE_PATH: {
 
@@ -1876,6 +1877,7 @@ void area_editor::press_duplicate_mobs_button() {
     if(
         sub_state == EDITOR_SUB_STATE_NEW_MOB ||
         sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        sub_state == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
         sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
         sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
@@ -1946,6 +1948,7 @@ void area_editor::press_new_mob_button() {
     if(
         sub_state == EDITOR_SUB_STATE_NEW_MOB ||
         sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+        sub_state == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
         sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
         sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
@@ -2798,6 +2801,12 @@ bool area_editor::save_area(const bool to_backup) {
         if(!links_str.empty()) {
             mob_node->add(
                 new data_node("links", links_str)
+            );
+        }
+        
+        if(m_ptr->stored_inside != INVALID) {
+            mob_node->add(
+                new data_node("stored_inside", i2s(m_ptr->stored_inside))
             );
         }
     }

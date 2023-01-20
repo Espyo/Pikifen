@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -6,22 +6,37 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Bridges and Dummies emit light during blackout (Darthvato)
+    Blue Pikmin don't want to carry the Water Dumple in Play?
+    "bomb rocks dont trigger when the pikmin collides with a mob mid throw" (thanks SIMPIN kaden)
+    The notification to stop plucking doesn't always disappear (thanks SIMPIN kaden)
+        Looks like it may happen if an inactive leader plucks 43:00
+    You can't throw if you're underneath a lifted bamboo gate
+    The hitbox for Candypop Buds is really not generous
+    Randomly, the camera may pan over to nothingness when you finish a mission with the leaders-at-the-exit goal
     
     --- v0.24.0 ---
+    ACB's rate of fire is just too quick
+    Help menu improvements
+        The help menu needs updating since there are missions now
+        Add screenshots to the help menu
+        Split the help categories between basic and advanced
     Add a copy-paste feature to the area editor
         Use the WIP branch
     Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geomety and try to move it
+    The ability to lock the cursor to an axis when dragging, in an editor, by holding Ctrl
+    Replace the function documentations with Doxygen so VS Code can make use of it in tooltips
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
             Linear, starts with an info spot that says welcome, and mentions the movement controls
             After a bit to the right, there's a Pikmin on a ledge, and a sign telling you to whistle it
             Farther up, a sign telling you to throw the Pikmin at a Pellet Posy on a ledge
+            Before you meet Yellow Pikmin, there should be a small alcove blocked by an electric gate, so you can try with regular Pikmin, and then come back to it with Yellow Pikmin
             You need to gather X Pikmin, to take down a paper bag or something
             Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
             Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
             Some signs should talk about dismissing, and group moving
+            Leave a bit of mistique and surprise, nonetheless
             Signs should talk about the relevant HUD icons when appropriate
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
             Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
@@ -239,6 +254,7 @@ Next tasks (roughly sorted most important first)
             Current leader should move slower if the analog stick is not held all the way
             If it's not done already, there should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
             If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
+            If the player's holding buttons at the area start interlude, the buttons should go into effect frame 1 when gameplay starts
         Things to fix
             If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
             If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
@@ -633,9 +649,6 @@ Misc things (so I don't forget)
     Mob data
         "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
         The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
-    Tweaks for mobs inside mobs
-        In the area editor, you should actually place the internal mob, and then link to it using a new type of link (carried by). In-game, it'd make use of the "store_focus_inside" feature. This way the engine will actually spawn the internal object in the area, which will help for things like the results screen calculation. Basically it's easy to determine what objects actually exist or will exist in the area, instead of having to read a string and in real time try to spawn an object of that type when the mob is defeated
-        A mob whose purpose is to just spawn a random pellet, of a given type. This way we can get rid of the random pellet spoils feature that enemies have
     Pikmin behaviors
         A way for a Pikmin type to control what its resistance to being shaken off is
         Add the feature that makes dead flower Pikmin sometimes drop a sprout, before the story mode is done? It could spawn a sprout for use later in the day
@@ -680,6 +693,7 @@ Misc things (so I don't forget)
     Area background improvements
         Support for backgrounds that don't tile -- what if you want a background that's a tree trunk, because you're on branches? It shouldn't tile, nor should the maker be forced to use a workaround where they have thousands of pixels of blank space for padding
         Add background viewing/editing to the area editor
+        The ability to tint the background image
         Foreground
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
@@ -699,6 +713,7 @@ Misc things (so I don't forget)
         The size, color, etc. parameters should be split into "start", "half", and "end" of life
         Additive blending and normal blending
         Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
+    Bridges and Dummies emit light during blackout (Darthvato)
     HUD element for a digital clock?
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
@@ -789,7 +804,6 @@ Tasks for later on (I might never implement these)
             A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.
-            The problem searcher could detect when an enemy's spoils is set to an object that doesn't exist (thanks Nathyn171)
         Animation editor
             "Sprite" -> "Pose"?
             You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.

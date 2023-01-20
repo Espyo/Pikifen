@@ -345,6 +345,7 @@ public:
     void start_height_effect();
     void stop_height_effect();
     void release_chomped_pikmin();
+    void release_stored_mobs();
     void send_message(mob* receiver, string &msg) const;
     mob* spawn(mob_type::spawn_struct* info, mob_type* type_ptr = NULL);
     void start_dying();

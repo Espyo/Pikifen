@@ -188,6 +188,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
             if(
                 sub_state == EDITOR_SUB_STATE_NEW_MOB ||
                 sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+                sub_state == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
                 sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
                 sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
             ) {
@@ -756,6 +757,39 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 "Duplicated " +
                 amount_str((int) selected_mobs.size(), "object") + ".";
                 
+            break;
+            
+        } case EDITOR_SUB_STATE_STORE_MOB_INSIDE: {
+    
+            //Store the mob inside another.
+            size_t target_idx;
+            mob_gen* target =
+                get_mob_under_point(game.mouse_cursor_w, &target_idx);
+            if(!target) return;
+            
+            for(auto m : selected_mobs) {
+                if(m == target) {
+                    status_text =
+                        "You can't store to an object inside itself!";
+                    return;
+                }
+            }
+            mob_gen* m_ptr = *(selected_mobs.begin());
+            if(m_ptr->stored_inside == target_idx) {
+                status_text =
+                    "The object is already stored inside that object!";
+                return;
+            }
+            
+            register_change("Object in object storing");
+            
+            m_ptr->stored_inside = target_idx;
+            
+            homogenize_selected_mobs();
+            
+            sub_state = EDITOR_SUB_STATE_NONE;
+            status_text = "Stored the object inside another.";
+            
             break;
             
         } case EDITOR_SUB_STATE_ADD_MOB_LINK: {

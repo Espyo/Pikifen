@@ -30,11 +30,6 @@ public:
     //What type of enemy it is.
     enemy_type* ene_type;
     
-    //Specific spoils that this enemy drops on death.
-    vector<mob_type*> specific_spoils;
-    //List of pellets it drops of random types. This is a list of pellet sizes.
-    vector<size_t> random_pellet_spoils;
-    
     //Constructor.
     enemy(const point &pos, enemy_type* type, const float angle);
     
@@ -44,8 +39,6 @@ public:
     void draw_mob() override;
     //Death finish class-specific logic.
     void finish_dying_class_specifics() override;
-    //Read script variables from the area data.
-    void read_script_vars(const script_var_reader &svr) override;
     //Death start class-specific logic.
     void start_dying_class_specifics() override;
 };

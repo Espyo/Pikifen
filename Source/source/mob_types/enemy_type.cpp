@@ -35,27 +35,6 @@ enemy_type::enemy_type() :
         
     starting_team = MOB_TEAM_ENEMY_1;
     
-    area_editor_prop_struct aep_spoils;
-    aep_spoils.name = "Spoils";
-    aep_spoils.var = "spoils";
-    aep_spoils.type = AEMP_TEXT;
-    aep_spoils.def_value = "";
-    aep_spoils.tooltip =
-        "What objects it drops upon defeat, separated by comma.";
-    area_editor_props.push_back(aep_spoils);
-    
-    area_editor_prop_struct aep_pellets;
-    aep_pellets.name = "Pellets";
-    aep_pellets.var = "random_pellet_spoils";
-    aep_pellets.type = AEMP_TEXT;
-    aep_pellets.def_value = "";
-    aep_pellets.tooltip =
-        "What pellets it drops upon defeat, separated by comma. "
-        "The color of each pellet is random (from the ones available in "
-        "the area), but the number matches what you type. "
-        "e.g.: \"1,1,5\" would spawn two 1 pellets and one 5 pellet.";
-    area_editor_props.push_back(aep_pellets);
-    
     add_carrying_states();
 }
 

@@ -51,6 +51,49 @@ void area_editor::do_drawing() {
 
 
 /* ----------------------------------------------------------------------------
+ * Draws an arrow, usually used for one mob to point to another.
+ */
+void area_editor::draw_arrow(
+    const point &start, const point &end,
+    const float start_offset, const float end_offset,
+    const float thickness, const ALLEGRO_COLOR &color
+) {
+    al_draw_line(
+        start.x, start.y, end.x, end.y,
+        color, thickness / game.cam.zoom
+    );
+    
+    if(game.cam.zoom >= 0.25) {
+        float angle =
+            get_angle(start, end);
+        point final_start = point(start_offset, 0);
+        final_start = rotate_point(final_start, angle);
+        final_start += start;
+        point final_end = point(end_offset, 0);
+        final_end = rotate_point(final_end, angle + TAU / 2.0);
+        final_end += end;
+        
+        point pivot(
+            final_start.x + (final_end.x - final_start.x) * 0.55,
+            final_start.y + (final_end.y - final_start.y) * 0.55
+        );
+        const float delta =
+            (thickness * 4) / game.cam.zoom;
+            
+        al_draw_filled_triangle(
+            pivot.x + cos(angle) * delta,
+            pivot.y + sin(angle) * delta,
+            pivot.x + cos(angle + TAU / 4) * delta,
+            pivot.y + sin(angle + TAU / 4) * delta,
+            pivot.x + cos(angle - TAU / 4) * delta,
+            pivot.y + sin(angle - TAU / 4) * delta,
+            color
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draw the canvas. This is called as a callback inside the
  * ImGui rendering process.
  */
@@ -216,7 +259,7 @@ void area_editor::draw_canvas() {
                     draw_liquid(s_ptr, l_ptr, point(), 1.0f, game.time_passed);
                 }
             }
-
+            
             if (wall_shadows_opacity > 0.0f) {
                 draw_sector_edge_offsets(
                     s_ptr, game.wall_offset_effect_buffer, wall_shadows_opacity
@@ -596,40 +639,23 @@ void area_editor::draw_canvas() {
                 if(!m_ptr->type) continue;
                 if(!m2_ptr->type) continue;
                 
-                al_draw_line(
-                    m_ptr->pos.x, m_ptr->pos.y,
-                    m2_ptr->pos.x, m2_ptr->pos.y,
-                    al_map_rgb(160, 224, 64),
-                    AREA_EDITOR::MOB_LINK_THICKNESS / game.cam.zoom
+                draw_arrow(
+                    m_ptr->pos, m2_ptr->pos,
+                    m_ptr->type->radius, m2_ptr->type->radius,
+                    AREA_EDITOR::MOB_LINK_THICKNESS,
+                    al_map_rgb(160, 224, 64)
                 );
-                
-                if(game.cam.zoom >= 0.25) {
-                    float angle =
-                        get_angle(m_ptr->pos, m2_ptr->pos);
-                    point start = point(m_ptr->type->radius, 0);
-                    start = rotate_point(start, angle);
-                    start += m_ptr->pos;
-                    point end = point(m2_ptr->type->radius, 0);
-                    end = rotate_point(end, angle + TAU / 2.0);
-                    end += m2_ptr->pos;
-                    
-                    point pivot(
-                        start.x + (end.x - start.x) * 0.55,
-                        start.y + (end.y - start.y) * 0.55
-                    );
-                    const float delta =
-                        (AREA_EDITOR::MOB_LINK_THICKNESS * 4) / game.cam.zoom;
-                        
-                    al_draw_filled_triangle(
-                        pivot.x + cos(angle) * delta,
-                        pivot.y + sin(angle) * delta,
-                        pivot.x + cos(angle + TAU / 4) * delta,
-                        pivot.y + sin(angle + TAU / 4) * delta,
-                        pivot.x + cos(angle - TAU / 4) * delta,
-                        pivot.y + sin(angle - TAU / 4) * delta,
-                        al_map_rgb(160, 224, 64)
-                    );
-                }
+            }
+            
+            if(m_ptr->stored_inside != INVALID) {
+                m2_ptr =
+                    game.cur_area_data.mob_generators[m_ptr->stored_inside];
+                draw_arrow(
+                    m_ptr->pos, m2_ptr->pos,
+                    m_ptr->type->radius, m2_ptr->type->radius,
+                    AREA_EDITOR::MOB_LINK_THICKNESS,
+                    al_map_rgb(224, 200, 200)
+                );
             }
         }
     }
@@ -1303,6 +1329,7 @@ void area_editor::draw_canvas() {
         sub_state == EDITOR_SUB_STATE_NEW_MOB ||
         sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
         sub_state == EDITOR_SUB_STATE_ADD_MOB_LINK ||
+        sub_state == EDITOR_SUB_STATE_STORE_MOB_INSIDE ||
         sub_state == EDITOR_SUB_STATE_PATH_DRAWING ||
         sub_state == EDITOR_SUB_STATE_NEW_SHADOW
     ) {

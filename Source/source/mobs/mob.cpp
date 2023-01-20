@@ -2641,6 +2641,26 @@ void mob::release_chomped_pikmin() {
 
 
 /* ----------------------------------------------------------------------------
+ * Releases any mobs stored inside.
+ */
+void mob::release_stored_mobs() {
+    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+        mob* m_ptr = game.states.gameplay->mobs.all[m];
+        if(m_ptr->stored_inside_another == this) {
+            release(m_ptr);
+            m_ptr->stored_inside_another = NULL;
+            m_ptr->time_alive = 0.0f;
+            float a = randomf(0, TAU);
+            const float momentum = 100;
+            m_ptr->speed.x = cos(a) * momentum;
+            m_ptr->speed.y = sin(a) * momentum;
+            m_ptr->speed_z = momentum * 7;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Removes all particle generators with the given ID.
  * id:
  *   ID of particle generators to remove.
@@ -2988,6 +3008,8 @@ void mob::start_dying() {
             member->leave_group();
         }
     }
+    
+    release_stored_mobs();
     
     start_dying_class_specifics();
 }

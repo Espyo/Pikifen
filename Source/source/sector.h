@@ -334,10 +334,12 @@ struct mob_gen {
     float angle;
     //Script vars.
     string vars;
+    //Indexes of linked objects.
+    vector<size_t> link_nrs;
+    //Index to the mob storing this one inside, if any.
+    size_t stored_inside;
     //Linked objects. Cache for performance.
     vector<mob_gen*> links;
-    //Index of linked objects.
-    vector<size_t> link_nrs;
     
     mob_gen(
         const point &pos = point(),

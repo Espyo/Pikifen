@@ -788,6 +788,19 @@ void gameplay_state::load() {
         }
     }
     
+    //Mobs stored inside other. Same logic as mob links.
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* holdee_gen_ptr = game.cur_area_data.mob_generators[m];
+        if(holdee_gen_ptr->stored_inside == INVALID) continue;
+        mob* holdee_ptr = mobs_per_gen[m];
+        mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->stored_inside];
+        holder_mob_ptr->hold(
+            holdee_ptr, INVALID, 0.0f, 0.0f, 0.5f,
+            false, HOLD_ROTATION_METHOD_NEVER
+        );
+        holdee_ptr->stored_inside_another = holder_mob_ptr;
+    }
+    
     //Save each path stop's sector.
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         game.cur_area_data.path_stops[s]->sector_ptr =
@@ -888,16 +901,6 @@ void gameplay_state::load() {
         treasures_total++;
         treasure_points_total +=
             mobs.treasures[t]->tre_type->points;
-    }
-    for(size_t e = 0; e < mobs.enemies.size(); ++e) {
-        for(size_t s = 0; s < mobs.enemies[e]->specific_spoils.size(); ++s) {
-            mob_type* s_type = mobs.enemies[e]->specific_spoils[s];
-            if(s_type->category->id == MOB_CATEGORY_TREASURES) {
-                treasures_total++;
-                treasure_points_total +=
-                    ((treasure_type*) s_type)->points;
-            }
-        }
     }
     for(size_t p = 0; p < mobs.piles.size(); ++p) {
         pile* p_ptr = mobs.piles[p];

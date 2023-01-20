@@ -198,6 +198,8 @@ private:
         EPT_MOB_IN_WALL,
         //Mob links to itself.
         EPT_MOB_LINKS_TO_SELF,
+        //Mobs stored in a loop.
+        EPT_MOB_STORED_IN_LOOP,
         //Bridge mob missing a bridge sector.
         EPT_SECTORLESS_BRIDGE,
         //A path stop is all by itself.
@@ -258,6 +260,8 @@ private:
         EDITOR_SUB_STATE_NEW_MOB,
         //Duplicating a mob.
         EDITOR_SUB_STATE_DUPLICATE_MOB,
+        //Storing a mob inside another.
+        EDITOR_SUB_STATE_STORE_MOB_INSIDE,
         //Adding a mob link.
         EDITOR_SUB_STATE_ADD_MOB_LINK,
         //Deleting a mob link.
@@ -702,6 +706,11 @@ private:
     void update_vertex_selection();
     
     //Drawing functions.
+    void draw_arrow(
+        const point &start, const point &end,
+        const float start_offset, const float end_offset,
+        const float thickness, const ALLEGRO_COLOR &color
+    );
     static void draw_canvas_imgui_callback(
         const ImDrawList* parent_list, const ImDrawCmd* cmd
     );

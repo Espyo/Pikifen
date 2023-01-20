@@ -381,6 +381,12 @@ void load_area(
             mob_links_buffer.push_back(std::make_pair(m, s2i(link_strs[l])));
         }
         
+        data_node* stored_inside_node =
+            mob_node->get_child_by_name("stored_inside");
+        if(!stored_inside_node->value.empty()) {
+            mob_ptr->stored_inside = s2i(stored_inside_node->value);
+        }
+        
         bool valid =
             category && category->id != MOB_CATEGORY_NONE &&
             mob_ptr->type;

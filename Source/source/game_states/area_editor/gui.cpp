@@ -3798,6 +3798,32 @@ void area_editor::process_gui_panel_mob() {
     //Object advanced node.
     if(saveable_tree_node("mobs", "Advanced")) {
     
+        if(m_ptr->stored_inside == INVALID) {
+            //Store inside another mob button.
+            if(ImGui::Button("Store inside...")) {
+                sub_state = EDITOR_SUB_STATE_STORE_MOB_INSIDE;
+            }
+            set_tooltip(
+                "If you want to store this object inside another object,\n"
+                "click here to choose which object will do the storing.\n"
+                "When that object dies, this one pops out."
+            );
+            
+        } else {
+        
+            //Unstore button.
+            if(ImGui::Button("Unstore")) {
+                m_ptr->stored_inside = INVALID;
+            }
+            set_tooltip(
+                "This object is currently stored inside another. Click here\n"
+                "to unstore it and make it a regular object instead."
+            );
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
         //Object link amount text.
         ImGui::Text(
             "%i link%s", (int) m_ptr->links.size(),
@@ -3897,6 +3923,24 @@ void area_editor::process_gui_panel_mobs() {
         }
         set_tooltip(
             "Cancel the duplication.",
+            "Escape"
+        );
+        
+    } else if(sub_state == EDITOR_SUB_STATE_STORE_MOB_INSIDE) {
+    
+        //Storing process explanation text.
+        ImGui::TextWrapped(
+            "Use the canvas to link to an object. Click on the object you "
+            "want this one to be stored inside of."
+        );
+        
+        //Storing process cancel button.
+        if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
+            status_text.clear();
+            sub_state = EDITOR_SUB_STATE_NONE;
+        }
+        set_tooltip(
+            "Cancel the storing process.",
             "Escape"
         );
         

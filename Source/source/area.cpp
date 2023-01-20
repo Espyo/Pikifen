@@ -318,6 +318,7 @@ void area_data::clone(area_data &other) {
         om_ptr->type = m_ptr->type;
         om_ptr->vars = m_ptr->vars;
         om_ptr->link_nrs = m_ptr->link_nrs;
+        om_ptr->stored_inside = m_ptr->stored_inside;
     }
     for(size_t m = 0; m < mob_generators.size(); ++m) {
         mob_gen* om_ptr = other.mob_generators[m];

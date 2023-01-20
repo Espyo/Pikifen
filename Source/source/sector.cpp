@@ -400,7 +400,8 @@ mob_gen::mob_gen(
     type(type),
     pos(pos),
     angle(angle),
-    vars(vars) {
+    vars(vars),
+    stored_inside(INVALID) {
     
 }
 
