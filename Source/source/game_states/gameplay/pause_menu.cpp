@@ -523,7 +523,7 @@ void pause_menu_struct::init_confirmation_page() {
  */
 void pause_menu_struct::init_help_page() {
     const vector<string> category_node_names {
-        "gameplay", "controls", "", "objects"
+        "gameplay_basics", "advanced_gameplay", "controls", "", "objects"
     };
     data_node gui_file(PAUSE_MENU::HELP_GUI_FILE_PATH);
     
@@ -550,11 +550,12 @@ void pause_menu_struct::init_help_page() {
     
     //Menu items.
     help_gui.register_coords("back",        12,  5, 20,  6);
-    help_gui.register_coords("gameplay",    22, 25, 35, 10);
-    help_gui.register_coords("controls",    22, 37, 35, 10);
-    help_gui.register_coords("pikmin",      22, 49, 35, 10);
-    help_gui.register_coords("objects",     22, 61, 35, 10);
-    help_gui.register_coords("manual",      22, 73, 35, 10);
+    help_gui.register_coords("gameplay1",   22, 24, 36,  8);
+    help_gui.register_coords("gameplay2",   22, 34, 36,  8);
+    help_gui.register_coords("controls",    22, 44, 36,  8);
+    help_gui.register_coords("pikmin",      22, 54, 36,  8);
+    help_gui.register_coords("objects",     22, 64, 36,  8);
+    help_gui.register_coords("manual",      22, 72, 36,  4);
     help_gui.register_coords("category",    71, 10, 54,  8);
     help_gui.register_coords("list",        69, 50, 50, 60);
     help_gui.register_coords("list_scroll", 96, 50,  2, 60);
@@ -583,18 +584,31 @@ void pause_menu_struct::init_help_page() {
     [] () { return "Return to the pause menu."; };
     help_gui.add_item(help_gui.back_item, "back");
     
-    //Gameplay button.
-    button_gui_item* gameplay_button =
-        new button_gui_item("Gameplay", game.fonts.standard);
-    gameplay_button->on_activate =
+    //Gameplay basics button.
+    button_gui_item* gameplay1_button =
+        new button_gui_item("Gameplay basics", game.fonts.standard);
+    gameplay1_button->on_activate =
     [this] (const point &) {
-        this->populate_help_tidbits(HELP_CATEGORY_GAMEPLAY);
+        this->populate_help_tidbits(HELP_CATEGORY_GAMEPLAY1);
     };
-    gameplay_button->on_get_tooltip =
+    gameplay1_button->on_get_tooltip =
     [] () {
-        return "Show help about gameplay features, along with some tips.";
+        return "Show help about basic gameplay features.";
     };
-    help_gui.add_item(gameplay_button, "gameplay");
+    help_gui.add_item(gameplay1_button, "gameplay1");
+    
+    //Gameplay advanced button.
+    button_gui_item* gameplay2_button =
+        new button_gui_item("Advanced gameplay", game.fonts.standard);
+    gameplay2_button->on_activate =
+    [this] (const point &) {
+        this->populate_help_tidbits(HELP_CATEGORY_GAMEPLAY2);
+    };
+    gameplay2_button->on_get_tooltip =
+    [] () {
+        return "Show advanced gameplay tips.";
+    };
+    help_gui.add_item(gameplay2_button, "gameplay2");
     
     //Controls button.
     button_gui_item* controls_button =
@@ -1096,8 +1110,11 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
     vector<string> &tidbit_list = tidbits[category];
     
     switch(category) {
-    case HELP_CATEGORY_GAMEPLAY: {
-        help_category_text->text = "Gameplay";
+    case HELP_CATEGORY_GAMEPLAY1: {
+        help_category_text->text = "Gameplay basics";
+        break;
+    } case HELP_CATEGORY_GAMEPLAY2: {
+        help_category_text->text = "Advanced gameplay";
         break;
     } case HELP_CATEGORY_CONTROLS: {
         help_category_text->text = "Controls";

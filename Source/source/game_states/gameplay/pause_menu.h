@@ -49,8 +49,10 @@ struct pause_menu_struct {
 public:
     //Categories of help page tidbits.
     enum HELP_CATEGORIES {
-        //Gameplay tidbits.
-        HELP_CATEGORY_GAMEPLAY,
+        //Gameplay basics tidbits.
+        HELP_CATEGORY_GAMEPLAY1,
+        //Gameplay advanced tidbits.
+        HELP_CATEGORY_GAMEPLAY2,
         //Control tidbits.
         HELP_CATEGORY_CONTROLS,
         //Player type tidbits.

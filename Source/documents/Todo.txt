@@ -10,14 +10,13 @@ Next tasks (roughly sorted most important first)
     
     --- v0.24.0 ---
     Help menu improvements
-        The help menu needs updating since there are missions now
         Add screenshots to the help menu
-        Split the help categories between basic and advanced
     Add a copy-paste feature to the area editor
         Use the WIP branch
     Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geomety and try to move it
     The ability to lock the cursor to an axis when dragging, in an editor, by holding Ctrl
     Replace the function documentations with Doxygen so VS Code can make use of it in tooltips
+    Fire geysers should emit smoke too
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
