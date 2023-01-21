@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    If you run out of time, the seconds left field in the results menu will say -1
     
     --- v0.24.0 ---
     Add a copy-paste feature to the area editor
@@ -844,6 +844,8 @@ Tasks for later on (I might never implement these)
         Status effects shouldn't have several "affects" properties, but just one, that takes a semicolon-separated list
         In area geometry files, path stops use the term "nr" to refer to links, even though they contain more than the end stop number
         Bud_icon.png and Flower_icon.png should be White_bud_icon.png and White_flower_icon.png, to fit with the pink and purple buds and flowers
+    Weird known issues
+        An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead
     Possible cleanup
         If feasible, make it so that every enemy checks if there are Pikmin around it (check one out of every two Pikmin), this check shouldn't be distance based, but dx and dy based. If there is any Pikmin or leader nearby, or it's on-camera, then fully work the mob as normal. Otherwise, don't do anything to the mob.
             Maybe keep a timer that goes back to ~2 seconds every time a Pikmin/leader nearby is detected, and until it reaches 0, do not check for loneliness.

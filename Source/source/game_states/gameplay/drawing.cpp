@@ -663,7 +663,8 @@ void gameplay_state::draw_lighting_filter() {
     al_use_transform(&game.identity_transform);
     
     //Draw the fog effect.
-    ALLEGRO_COLOR fog_c = get_fog_color();
+    ALLEGRO_COLOR fog_c =
+        game.cur_area_data.weather_condition.get_fog_color();
     if(fog_c.a > 0) {
         //Start by drawing the central fog fade out effect.
         
@@ -726,13 +727,15 @@ void gameplay_state::draw_lighting_filter() {
     }
     
     //Draw the daylight.
-    ALLEGRO_COLOR daylight_c = get_daylight_color();
+    ALLEGRO_COLOR daylight_c =
+        game.cur_area_data.weather_condition.get_daylight_color();
     if(daylight_c.a > 0) {
         al_draw_filled_rectangle(0, 0, game.win_w, game.win_h, daylight_c);
     }
     
     //Draw the blackout effect.
-    unsigned char blackout_s = get_blackout_strength();
+    unsigned char blackout_s =
+        game.cur_area_data.weather_condition.get_blackout_strength();
     if(blackout_s > 0) {
         //First, we'll create the lightmap.
         //This is inverted (white = darkness, black = light), because we'll
@@ -1500,7 +1503,10 @@ void gameplay_state::draw_tree_shadows() {
         tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
         
         unsigned char alpha =
-            ((s_ptr->alpha / 255.0) * get_sun_strength()) * 255;
+            (
+                (s_ptr->alpha / 255.0) *
+                game.cur_area_data.weather_condition.get_sun_strength()
+            ) * 255;
             
         draw_bitmap(
             s_ptr->bitmap,
