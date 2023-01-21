@@ -2150,7 +2150,7 @@ int mission_score_criterion_sec_left::get_score(
     gameplay_state* gameplay, mission_data* mission
 ) const {
     return
-        floor(mission->fail_time_limit - gameplay->gameplay_time_passed) *
+        mission->fail_time_limit - floor(gameplay->gameplay_time_passed) *
         get_multiplier(mission);
 }
 
