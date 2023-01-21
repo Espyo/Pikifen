@@ -2285,7 +2285,14 @@ bool mob::has_clear_line(mob* target_mob) const {
         
         if(!m_ptr->type->pushes) continue;
         if(has_flag(m_ptr->flags, MOB_FLAG_INTANGIBLE)) continue;
-        if(m_ptr->z < z && m_ptr->z < target_mob->z) continue;
+        const float m_ptr_max_z = m_ptr->z + m_ptr->height;
+        if(m_ptr_max_z < z && m_ptr_max_z < target_mob->z) continue;
+        if(
+            m_ptr->z > z + height &&
+            m_ptr->z > target_mob->z + target_mob->height
+        ) {
+            continue;
+        }
         if(m_ptr == this || m_ptr == target_mob) continue;
         if(
             !rectangles_intersect(
