@@ -127,8 +127,8 @@ void load_area(
             game.weather_conditions.end()
         ) {
             log_error(
-                "Area " + requested_area_folder_name +
-                " refers to an unknown weather condition, \"" +
+                "Area \"" + requested_area_folder_name +
+                "\" refers to an unknown weather condition, \"" +
                 game.cur_area_data.weather_name + "\"!",
                 weather_node
             );

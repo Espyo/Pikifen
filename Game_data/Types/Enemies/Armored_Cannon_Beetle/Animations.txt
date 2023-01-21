@@ -94,6 +94,12 @@ animations{
 			inhale5{
 				duration=0.1000
 			}
+			inhale2{
+				duration=0.1000
+			}
+			inhale3{
+				duration=0.1000
+			}
 			inhale1{
 				duration=0.1000
 			}
@@ -112,7 +118,7 @@ animations{
 				duration=0.1000
 			}
 			idling{
-				duration=0.3000
+				duration=0.8000
 			}
 		}
 	}
