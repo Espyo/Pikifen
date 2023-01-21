@@ -641,10 +641,8 @@ void results_state::load() {
         add_stat(
             "Seconds left:",
             i2s(
-                floor(
-                    game.cur_area_data.mission.fail_time_limit -
-                    game.states.gameplay->gameplay_time_passed
-                )
+                game.cur_area_data.mission.fail_time_limit -
+                floor(game.states.gameplay->gameplay_time_passed)
             )
         );
         

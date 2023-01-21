@@ -6,7 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If you run out of time, the seconds left field in the results menu will say -1
+    
     
     --- v0.24.0 ---
     Add a copy-paste feature to the area editor
