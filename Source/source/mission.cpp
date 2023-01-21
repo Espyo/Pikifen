@@ -1617,17 +1617,25 @@ string mission_goal_get_to_exit::get_end_reason(
 bool mission_goal_get_to_exit::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(!gameplay->mission_remaining_mob_ids.empty()) {
-        point avg_pos;
-        for(size_t m : gameplay->mission_remaining_mob_ids) {
-            avg_pos += gameplay->mobs.all[m]->pos;
-        }
-        avg_pos.x /= gameplay->mission_remaining_mob_ids.size();
-        avg_pos.y /= gameplay->mission_remaining_mob_ids.size();
-        *final_cam_pos = avg_pos;
-        return true;
+    if(gameplay->mission_remaining_mob_ids.empty()) {
+        return false;
     }
-    return false;
+    point avg_pos;
+    for(size_t leader_id : gameplay->mission_remaining_mob_ids) {
+        mob* leader_ptr = NULL;
+        for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
+            mob* m_ptr = game.states.gameplay->mobs.all[m];
+            if(m_ptr->id == leader_id) {
+                leader_ptr = m_ptr;
+                break;
+            }
+        }
+        avg_pos += leader_ptr->pos;
+    }
+    avg_pos.x /= gameplay->mission_remaining_mob_ids.size();
+    avg_pos.y /= gameplay->mission_remaining_mob_ids.size();
+    *final_cam_pos = avg_pos;
+    return true;
 }
 
 
