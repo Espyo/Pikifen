@@ -687,7 +687,6 @@ void gameplay_state::load() {
         spray_stats.push_back(spray_stats_struct());
     }
     
-    day_minutes = game.cur_area_data.day_time_start;
     area_time_passed = 0.0f;
     gameplay_time_passed = 0.0f;
     game.maker_tools.reset_for_gameplay();
@@ -937,6 +936,8 @@ void gameplay_state::load() {
     path_mgr.handle_area_load();
     
     init_hud();
+    
+    day_minutes = game.cur_area_data.day_time_start;
     
     map<string, string> spray_strs =
         get_var_map(game.cur_area_data.spray_amounts);
