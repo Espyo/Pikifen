@@ -1766,7 +1766,7 @@ void pikmin_fsm::be_attacked(mob* m, void* info1, void* info2) {
     m->leave_group();
     pikmin_fsm::be_released(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
-    pikmin_fsm::release_tool(m, info1, info2);
+    pikmin_fsm::release_tool(m, NULL, NULL);
     m->face(m->angle, NULL);
 }
 
@@ -2797,7 +2797,7 @@ void pikmin_fsm::go_to_onion(mob* m, void* info1, void* info2) {
         enable_flag(pik_ptr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    bool aux_b = true;
+    bool aux_b = true; //Needed for a gentle release.
     pikmin_fsm::release_tool(m, (void*) &aux_b, NULL);
     
     m->focus_on_mob(nest_ptr->m_ptr);
@@ -3098,7 +3098,7 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
     disable_flag(pik_ptr->flags, MOB_FLAG_WAS_THROWN);
     
     if(too_ptr->too_type->dropped_when_pikmin_lands_on_opponent) {
-        pikmin_fsm::release_tool(m, info1, info2);
+        pikmin_fsm::release_tool(m, NULL, NULL);
         m->fsm.set_state(PIKMIN_STATE_IDLING);
         
         if(too_ptr->too_type->stuck_when_pikmin_lands_on_opponent && info->h2) {
@@ -3154,7 +3154,7 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLING);
     
     if(too_ptr->too_type->dropped_when_pikmin_lands) {
-        pikmin_fsm::release_tool(m, info1, info2);
+        pikmin_fsm::release_tool(m, NULL, NULL);
         m->fsm.set_state(PIKMIN_STATE_IDLING);
         
         if(
@@ -3638,7 +3638,7 @@ void pikmin_fsm::start_drinking(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
-    pikmin_fsm::release_tool(m, info1, info2);
+    pikmin_fsm::release_tool(m, NULL, NULL);
     
     //If the Pikmin is following a moveable point, let's change it to
     //a static point. This will make the Pikmin continue to move
@@ -4125,13 +4125,13 @@ void pikmin_fsm::try_held_item_hotswap(mob* m, void* info1, void* info2) {
         has_flag(too_ptr->holdability_flags, HOLDABLE_BY_ENEMIES)
     ) {
         //This tool can't be hotswapped... The Pikmin has to get chomped.
-        pikmin_fsm::release_tool(m, info1, info2);
+        pikmin_fsm::release_tool(m, NULL, NULL);
         m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY);
         return;
     }
     
     //Start by dropping the tool.
-    pikmin_fsm::release_tool(m, info1, info2);
+    pikmin_fsm::release_tool(m, NULL, NULL);
     //Receive some invulnerability period to make sure it's not hurt by
     //the same attack.
     m->invuln_period.start();
@@ -4210,7 +4210,7 @@ void pikmin_fsm::whistled_while_holding(mob* m, void* info1, void* info2) {
         too_ptr->too_type->dropped_when_pikmin_is_whistled &&
         pik_ptr->is_tool_primed_for_whistle
     ) {
-        pikmin_fsm::release_tool(m, info1, info2);
+        pikmin_fsm::release_tool(m, NULL, NULL);
     }
     
     pik_ptr->is_tool_primed_for_whistle = false;
