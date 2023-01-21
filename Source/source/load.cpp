@@ -1809,7 +1809,7 @@ void load_weather() {
         new_w.fog_far = std::max(new_w.fog_far, new_w.fog_near);
         
         //Lighting.
-        vector<std::pair<size_t, string> > lighting_table =
+        vector<std::pair<int, string> > lighting_table =
             get_weather_table(file.get_child_by_name("lighting"));
             
         for(size_t p = 0; p < lighting_table.size(); ++p) {
@@ -1822,7 +1822,7 @@ void load_weather() {
         }
         
         //Sun's strength.
-        vector<std::pair<size_t, string> > sun_strength_table =
+        vector<std::pair<int, string> > sun_strength_table =
             get_weather_table(file.get_child_by_name("sun_strength"));
             
         for(size_t p = 0; p < sun_strength_table.size(); ++p) {
@@ -1835,7 +1835,7 @@ void load_weather() {
         }
         
         //Blackout effect's strength.
-        vector<std::pair<size_t, string> > blackout_strength_table =
+        vector<std::pair<int, string> > blackout_strength_table =
             get_weather_table(
                 file.get_child_by_name("blackout_strength")
             );
@@ -1850,7 +1850,7 @@ void load_weather() {
         }
         
         //Fog.
-        vector<std::pair<size_t, string> > fog_color_table =
+        vector<std::pair<int, string> > fog_color_table =
             get_weather_table(
                 file.get_child_by_name("fog_color")
             );

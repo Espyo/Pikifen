@@ -574,16 +574,14 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
         );
         
-        //Day time logic.
-        day_minutes +=
-            (game.cur_area_data.day_time_speed * delta_t / 60.0f);
-        if(day_minutes > 60 * 24) {
-            day_minutes -= 60 * 24;
-        }
-        
         area_time_passed += delta_t;
         if(cur_interlude == INTERLUDE_NONE) {
             gameplay_time_passed += delta_t;
+            day_minutes +=
+                (game.cur_area_data.day_time_speed * delta_t / 60.0f);
+            if(day_minutes > 60 * 24) {
+                day_minutes -= 60 * 24;
+            }
         }
         
         //Tick all particles.

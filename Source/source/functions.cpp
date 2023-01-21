@@ -437,45 +437,6 @@ vector<string> folder_to_vector(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the blackout effect's strength
- * for the current time and weather.
- */
-unsigned char get_blackout_strength() {
-    size_t n_points =
-        game.cur_area_data.weather_condition.blackout_strength.size();
-        
-    if(n_points == 0) {
-        return 0;
-    } else if(n_points == 1) {
-        return game.cur_area_data.weather_condition.blackout_strength[0].second;
-    }
-    
-    for(size_t p = 0; p < n_points - 1; ++p) {
-        auto cur_ptr =
-            &game.cur_area_data.weather_condition.blackout_strength[p];
-        auto next_ptr =
-            &game.cur_area_data.weather_condition.blackout_strength[p + 1];
-            
-        if(
-            game.states.gameplay->day_minutes >= cur_ptr->first &&
-            game.states.gameplay->day_minutes < next_ptr->first
-        ) {
-        
-            return
-                interpolate_number(
-                    game.states.gameplay->day_minutes,
-                    cur_ptr->first, next_ptr->first,
-                    cur_ptr->second, next_ptr->second
-                );
-        }
-    }
-    
-    //If anything goes wrong, return a failsafe.
-    return 0;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the mob that is closest to the mouse cursor.
  */
 mob* get_closest_mob_to_cursor() {
@@ -520,76 +481,6 @@ string get_current_time(const bool filename_friendly) {
         leading_zero(t.tm_min) +
         (filename_friendly ? "." : ":") +
         leading_zero(t.tm_sec);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the daylight effect color for the current time and weather.
- */
-ALLEGRO_COLOR get_daylight_color() {
-    size_t n_points = game.cur_area_data.weather_condition.daylight.size();
-    
-    if(n_points == 0) {
-        return al_map_rgba(255, 255, 255, 0);
-    } else if(n_points == 1) {
-        return game.cur_area_data.weather_condition.daylight[0].second;
-    }
-    
-    for(size_t p = 0; p < n_points - 1; ++p) {
-        auto cur_ptr = &game.cur_area_data.weather_condition.daylight[p];
-        auto next_ptr = &game.cur_area_data.weather_condition.daylight[p + 1];
-        
-        if(
-            game.states.gameplay->day_minutes >= cur_ptr->first &&
-            game.states.gameplay->day_minutes < next_ptr->first
-        ) {
-        
-            return
-                interpolate_color(
-                    game.states.gameplay->day_minutes,
-                    cur_ptr->first, next_ptr->first,
-                    cur_ptr->second, next_ptr->second
-                );
-        }
-    }
-    
-    //If anything goes wrong, return a failsafe.
-    return al_map_rgba(255, 255, 255, 0);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the fog color for the current time and weather.
- */
-ALLEGRO_COLOR get_fog_color() {
-    size_t n_points = game.cur_area_data.weather_condition.fog_color.size();
-    
-    if(n_points == 0) {
-        return al_map_rgba(255, 255, 255, 0);
-    } else if(n_points == 1) {
-        return game.cur_area_data.weather_condition.fog_color[0].second;
-    }
-    
-    for(size_t p = 0; p < n_points - 1; ++p) {
-        auto cur_ptr = &game.cur_area_data.weather_condition.fog_color[p];
-        auto next_ptr = &game.cur_area_data.weather_condition.fog_color[p + 1];
-        
-        if(
-            game.states.gameplay->day_minutes >= cur_ptr->first &&
-            game.states.gameplay->day_minutes < next_ptr->first
-        ) {
-        
-            return
-                interpolate_color(
-                    game.states.gameplay->day_minutes,
-                    cur_ptr->first, next_ptr->first,
-                    cur_ptr->second, next_ptr->second
-                );
-        }
-    }
-    
-    //If anything goes wrong, return a failsafe.
-    return al_map_rgba(255, 255, 255, 0);
 }
 
 
@@ -838,43 +729,6 @@ string get_subtitle_or_mission_goal(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the sun strength for the current time and weather.
- */
-float get_sun_strength() {
-    size_t n_points = game.cur_area_data.weather_condition.sun_strength.size();
-    
-    if(n_points == 0) {
-        return 1.0f;
-    } else if(n_points == 1) {
-        return game.cur_area_data.weather_condition.sun_strength[0].second;
-    }
-    
-    for(size_t p = 0; p < n_points - 1; ++p) {
-        auto cur_ptr =
-            &game.cur_area_data.weather_condition.sun_strength[p];
-        auto next_ptr =
-            &game.cur_area_data.weather_condition.sun_strength[p + 1];
-            
-        if(
-            game.states.gameplay->day_minutes >= cur_ptr->first &&
-            game.states.gameplay->day_minutes < next_ptr->first
-        ) {
-        
-            return
-                interpolate_number(
-                    game.states.gameplay->day_minutes,
-                    cur_ptr->first, next_ptr->first,
-                    cur_ptr->second, next_ptr->second
-                ) / 255.0f;
-        }
-    }
-    
-    //If anything goes wrong, return a failsafe.
-    return 1.0f;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Calculates the vertex info necessary to draw the throw preview line,
  * from a given start point to a given end point.
  * The vertexes returned always come in groups of four, and each group
@@ -1063,41 +917,49 @@ float get_wall_shadow_length(edge* e_ptr) {
  * node:
  *   Data node with the weather table.
  */
-vector<std::pair<size_t, string> > get_weather_table(data_node* node) {
-    vector<std::pair<size_t, string> > table;
+vector<std::pair<int, string> > get_weather_table(data_node* node) {
+    vector<std::pair<int, string> > table;
     size_t n_points = node->get_nr_of_children();
-    
-    bool have_midnight = false;
     
     for(size_t p = 0; p < n_points; ++p) {
         data_node* point_node = node->get_child(p);
         
-        size_t point_time = s2i(point_node->name);
+        int point_time = s2i(point_node->name);
         string point_value = point_node->value;
         
         table.push_back(make_pair(point_time, point_value));
-        
-        if(point_time == 24 * 60) have_midnight = true;
     }
     
     sort(
         table.begin(), table.end(),
         [] (
-            std::pair<size_t, string> p1,
-            std::pair<size_t, string> p2
+            std::pair<int, string> p1,
+            std::pair<int, string> p2
     ) -> bool {
         return p1.first < p2.first;
     }
     );
     
     if(!table.empty()) {
-        if(!have_midnight) {
-            //If there is no data for the last hour,
+        auto first = table.front();
+        auto last = table.back();
+        if(first.first > 0) {
+            //If there is no data for midnight (0),
+            //use the data from the last point
+            //(this is because the day loops after 24:00;
+            //needed for interpolation).
+            table.insert(
+                table.begin(),
+                make_pair(last.first - 24 * 60, last.second)
+            );
+        }
+        if(last.first < 24 * 60) {
+            //If there is no data for midnight (24),
             //use the data from the first point
             //(this is because the day loops after 24:00;
             //needed for interpolation).
             table.push_back(
-                make_pair(24 * 60, table[0].second)
+                make_pair(first.first + 24 * 60, first.second)
             );
         }
     }
