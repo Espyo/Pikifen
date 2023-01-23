@@ -29,7 +29,7 @@ using std::string;
 //update the numbers in the resouce (.rc) file.
 constexpr unsigned char VERSION_MAJOR = 0;
 constexpr unsigned char VERSION_MINOR = 23;
-constexpr unsigned char VERSION_REV   = 1;
+constexpr unsigned char VERSION_REV   = 2;
 
 //Cross-platform way of representing an invalid index.
 constexpr size_t INVALID = UINT32_MAX;
