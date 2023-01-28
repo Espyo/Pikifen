@@ -23,6 +23,7 @@ script {
         on_enter {
             set_timer 3
             set_animation shooting
+            start_particles fire_geyser_smoke 0 0 300
         }
         on_timer {
             set_state stopping
@@ -31,6 +32,7 @@ script {
     stopping {
         on_enter {
             set_animation stopping
+            stop_particles
         }
         on_animation_end {
             set_state safe
