@@ -720,6 +720,10 @@ void pause_menu_struct::init_help_page() {
     help_gui.set_selected_item(help_gui.back_item);
     help_gui.responsive = false;
     help_gui.hide_items();
+    help_gui.on_selection_changed =
+    [this] () {
+        cur_tidbit = NULL;
+    };
 }
 
 

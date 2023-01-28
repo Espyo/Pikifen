@@ -453,6 +453,7 @@ gui_manager::gui_manager() :
     back_item(nullptr),
     responsive(true),
     ignore_input_on_animation(true),
+    on_selection_changed(nullptr),
     right_pressed(false),
     up_pressed(false),
     left_pressed(false),
@@ -1083,12 +1084,17 @@ void gui_manager::set_selected_item(gui_item* item) {
     }
     
     auto_repeat_on = false;
+    
     if(selected_item) {
         selected_item->selected = false;
     }
     selected_item = item;
     if(selected_item) {
         selected_item->selected = true;
+    }
+    
+    if(on_selection_changed) on_selection_changed();
+    if(selected_item) {
         if(selected_item->on_selected) {
             selected_item->on_selected();
         }

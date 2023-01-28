@@ -405,10 +405,12 @@ private:
     gui_item* info_box;
     //Mission specs GUI item.
     gui_item* specs_box;
-    //Selected GUI item on the last frame.
-    gui_item* prev_selected_item;
+    //Currently selected area, or INVALID for none.
+    size_t cur_area_idx;
     //Area list box item.
     list_gui_item* list_box;
+    //Button of the first area available, if any.
+    button_gui_item* first_area_button;
     //Name text item, in the info page.
     text_gui_item* info_name_text;
     //Name text item, in the specs page.
@@ -446,6 +448,7 @@ private:
     
     void add_bullet(list_gui_item* list, const string &text);
     void animate_info_and_specs();
+    void change_info(const size_t area_idx);
     void init_gui_main();
     void init_gui_info_page();
     void init_gui_specs_page();

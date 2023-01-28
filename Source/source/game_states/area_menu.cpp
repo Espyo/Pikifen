@@ -38,8 +38,9 @@ area_menu_state::area_menu_state() :
     game_state(),
     area_type(AREA_TYPE_SIMPLE),
     bmp_menu_bg(nullptr),
-    prev_selected_item(nullptr),
+    cur_area_idx(INVALID),
     list_box(nullptr),
+    first_area_button(nullptr),
     info_name_text(nullptr),
     specs_name_text(nullptr),
     subtitle_text(nullptr),
@@ -142,6 +143,253 @@ void area_menu_state::animate_info_and_specs() {
 
 
 /* ----------------------------------------------------------------------------
+ * Changes the area information to a new area's information.
+ * area_idx:
+ *   Index of the newly-selected area.
+ */
+void area_menu_state::change_info(const size_t area_idx) {
+    if(area_idx == cur_area_idx) return;
+    cur_area_idx = area_idx;
+    
+    //Start by clearing them all, for sanitization's sake.
+    info_name_text->text.clear();
+    subtitle_text->text.clear();
+    description_text->text.clear();
+    difficulty_text->text.clear();
+    cur_thumb = NULL;
+    tags_text->text.clear();
+    maker_text->text.clear();
+    version_text->text.clear();
+    cur_stamp = NULL;
+    cur_medal = NULL;
+    if(area_type == AREA_TYPE_MISSION) {
+        record_info_text->text.clear();
+        record_date_text->text.clear();
+        goal_text->text.clear();
+        specs_name_text->text.clear();
+        fail_list->delete_all_children();
+        grading_list->delete_all_children();
+    }
+    
+    //Fill in the area's info.
+    info_name_text->text = area_names[area_idx];
+    subtitle_text->text =
+        get_subtitle_or_mission_goal(
+            area_subtitles[area_idx],
+            area_type,
+            area_mission_data[area_idx].goal
+        );
+    description_text->text = area_descriptions[area_idx];
+    if(area_difficulties[area_idx] == 0) {
+        difficulty_text->text.clear();
+    } else {
+        difficulty_text->text =
+            "Difficulty: " +
+            i2s(area_difficulties[area_idx]) + "/5 - ";
+        switch(area_difficulties[area_idx]) {
+        case 1: {
+            difficulty_text->text += "Very easy";
+            break;
+        } case 2: {
+            difficulty_text->text += "Easy";
+            break;
+        } case 3: {
+            difficulty_text->text += "Medium";
+            break;
+        } case 4: {
+            difficulty_text->text += "Hard";
+            break;
+        } case 5: {
+            difficulty_text->text += "Very hard";
+            break;
+        }
+        }
+    }
+    tags_text->text =
+        (
+            area_tags[area_idx].empty() ?
+            "" :
+            "Tags: " + area_tags[area_idx]
+        );
+    maker_text->text =
+        (
+            area_makers[area_idx].empty() ?
+            "Unknown maker" :
+            "Maker: " + area_makers[area_idx]
+        );
+    version_text->text =
+        (
+            area_versions[area_idx].empty() ?
+            "" :
+            "Version: " + area_versions[area_idx]
+        );
+    cur_thumb = area_thumbs[area_idx];
+    if(area_type == AREA_TYPE_MISSION) {
+        int score = area_record_scores[area_idx];
+        bool record_exists = !area_record_dates[area_idx].empty();
+        record_info_text->text =
+            !record_exists ?
+            "(None)" :
+            area_mission_data[area_idx].grading_mode ==
+            MISSION_GRADING_POINTS ?
+            nr_and_plural(score, "point") :
+            "";
+        cur_stamp =
+            !record_exists ?
+            NULL :
+            area_record_clears[area_idx] ?
+            game.sys_assets.bmp_mission_clear :
+            game.sys_assets.bmp_mission_fail;
+        if(!record_exists) {
+            cur_medal = NULL;
+        } else {
+            switch(area_mission_data[area_idx].grading_mode) {
+            case MISSION_GRADING_POINTS: {
+                if(score >= area_mission_data[area_idx].platinum_req) {
+                    cur_medal = game.sys_assets.bmp_medal_platinum;
+                } else if(score >= area_mission_data[area_idx].gold_req) {
+                    cur_medal = game.sys_assets.bmp_medal_gold;
+                } else if(score >= area_mission_data[area_idx].silver_req) {
+                    cur_medal = game.sys_assets.bmp_medal_silver;
+                } else if(score >= area_mission_data[area_idx].bronze_req) {
+                    cur_medal = game.sys_assets.bmp_medal_bronze;
+                } else {
+                    cur_medal = game.sys_assets.bmp_medal_none;
+                }
+                break;
+            } case MISSION_GRADING_GOAL: {
+                if(area_record_clears[area_idx]) {
+                    cur_medal = game.sys_assets.bmp_medal_platinum;
+                }
+                break;
+            } case MISSION_GRADING_PARTICIPATION: {
+                cur_medal = game.sys_assets.bmp_medal_platinum;
+                break;
+            }
+            }
+        }
+        record_date_text->text = area_record_dates[area_idx];
+    }
+    
+    //Now fill in the mission specs.
+    if(area_type == AREA_TYPE_MISSION) {
+        specs_name_text->text = area_names[area_idx];
+        mission_data &mission = area_mission_data[area_idx];
+        goal_text->text =
+            game.mission_goals[mission.goal]->
+            get_player_description(&mission);
+            
+        for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
+            if(has_flag(mission.fail_conditions, get_index_bitmask(f))) {
+                mission_fail* cond = game.mission_fail_conds[f];
+                add_bullet(
+                    fail_list,
+                    cond->get_player_description(&mission)
+                );
+            }
+        }
+        
+        if(mission.fail_conditions == 0) {
+            add_bullet(fail_list, "(None)");
+        }
+        
+        switch(mission.grading_mode) {
+        case MISSION_GRADING_POINTS: {
+            add_bullet(
+                grading_list,
+                "Your medal depends on your score:"
+            );
+            add_bullet(
+                grading_list,
+                "    Platinum: " + i2s(mission.platinum_req) + "+ points."
+            );
+            add_bullet(
+                grading_list,
+                "    Gold: " + i2s(mission.gold_req) + "+ points."
+            );
+            add_bullet(
+                grading_list,
+                "    Silver: " + i2s(mission.silver_req) + "+ points."
+            );
+            add_bullet(
+                grading_list,
+                "    Bronze: " + i2s(mission.bronze_req) + "+ points."
+            );
+            vector<string> score_notes;
+            for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+                mission_score_criterion* c_ptr =
+                    game.mission_score_criteria[c];
+                int mult = c_ptr->get_multiplier(&mission);
+                if(mult != 0) {
+                    score_notes.push_back(
+                        "    " + c_ptr->get_name() + " x " + i2s(mult) + "."
+                    );
+                }
+            }
+            if(!score_notes.empty()) {
+                add_bullet(
+                    grading_list,
+                    "Your score is calculated like so:"
+                );
+                for(size_t s = 0; s < score_notes.size(); ++s) {
+                    add_bullet(grading_list, score_notes[s]);
+                }
+            } else {
+                add_bullet(
+                    grading_list,
+                    "In this mission, your score will always be 0."
+                );
+            }
+            vector<string> loss_notes;
+            for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
+                mission_score_criterion* c_ptr =
+                    game.mission_score_criteria[c];
+                if(
+                    has_flag(
+                        mission.point_loss_data,
+                        get_index_bitmask(c)
+                    )
+                ) {
+                    loss_notes.push_back("    " + c_ptr->get_name());
+                }
+            }
+            if(!loss_notes.empty()) {
+                add_bullet(
+                    grading_list,
+                    "If you fail, you'll lose your score for:"
+                );
+                for(size_t l = 0; l < loss_notes.size(); ++l) {
+                    add_bullet(grading_list, loss_notes[l]);
+                }
+            }
+            break;
+        }
+        case MISSION_GRADING_GOAL: {
+            add_bullet(
+                grading_list,
+                "You get a platinum medal if you clear the goal."
+            );
+            add_bullet(
+                grading_list,
+                "You get no medal if you fail."
+            );
+            break;
+        }
+        case MISSION_GRADING_PARTICIPATION: {
+            add_bullet(
+                grading_list,
+                "You get a platinum medal just by playing the mission."
+            );
+            break;
+        }
+        }
+    }
+    
+    animate_info_and_specs();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the area menu.
  */
 void area_menu_state::do_drawing() {
@@ -163,262 +411,6 @@ void area_menu_state::do_drawing() {
  * Ticks time by one frame of logic.
  */
 void area_menu_state::do_logic() {
-    size_t area_idx = INVALID;
-    
-    if(!areas_to_pick.empty() && prev_selected_item != gui.selected_item) {
-        if(gui.selected_item && gui.selected_item->parent == list_box) {
-            //A new area button got selected. Figure out which.
-            for(size_t b = 0; b < area_buttons.size(); ++b) {
-                if(area_buttons[b] == gui.selected_item) {
-                    area_idx = b;
-                    break;
-                }
-            }
-        }
-    }
-    
-    if(area_idx < areas_to_pick.size()) {
-    
-        //Start by clearing them all, for sanitization's sake.
-        info_name_text->text.clear();
-        subtitle_text->text.clear();
-        description_text->text.clear();
-        difficulty_text->text.clear();
-        cur_thumb = NULL;
-        tags_text->text.clear();
-        maker_text->text.clear();
-        version_text->text.clear();
-        cur_stamp = NULL;
-        cur_medal = NULL;
-        if(area_type == AREA_TYPE_MISSION) {
-            record_info_text->text.clear();
-            record_date_text->text.clear();
-            goal_text->text.clear();
-            specs_name_text->text.clear();
-            fail_list->delete_all_children();
-            grading_list->delete_all_children();
-        }
-        
-        //Fill in the area's info.
-        info_name_text->text = area_names[area_idx];
-        subtitle_text->text =
-            get_subtitle_or_mission_goal(
-                area_subtitles[area_idx],
-                area_type,
-                area_mission_data[area_idx].goal
-            );
-        description_text->text = area_descriptions[area_idx];
-        if(area_difficulties[area_idx] == 0) {
-            difficulty_text->text.clear();
-        } else {
-            difficulty_text->text =
-                "Difficulty: " +
-                i2s(area_difficulties[area_idx]) + "/5 - ";
-            switch(area_difficulties[area_idx]) {
-            case 1: {
-                difficulty_text->text += "Very easy";
-                break;
-            } case 2: {
-                difficulty_text->text += "Easy";
-                break;
-            } case 3: {
-                difficulty_text->text += "Medium";
-                break;
-            } case 4: {
-                difficulty_text->text += "Hard";
-                break;
-            } case 5: {
-                difficulty_text->text += "Very hard";
-                break;
-            }
-            }
-        }
-        tags_text->text =
-            (
-                area_tags[area_idx].empty() ?
-                "" :
-                "Tags: " + area_tags[area_idx]
-            );
-        maker_text->text =
-            (
-                area_makers[area_idx].empty() ?
-                "Unknown maker" :
-                "Maker: " + area_makers[area_idx]
-            );
-        version_text->text =
-            (
-                area_versions[area_idx].empty() ?
-                "" :
-                "Version: " + area_versions[area_idx]
-            );
-        cur_thumb = area_thumbs[area_idx];
-        if(area_type == AREA_TYPE_MISSION) {
-            int score = area_record_scores[area_idx];
-            bool record_exists = !area_record_dates[area_idx].empty();
-            record_info_text->text =
-                !record_exists ?
-                "(None)" :
-                area_mission_data[area_idx].grading_mode ==
-                MISSION_GRADING_POINTS ?
-                nr_and_plural(score, "point") :
-                "";
-            cur_stamp =
-                !record_exists ?
-                NULL :
-                area_record_clears[area_idx] ?
-                game.sys_assets.bmp_mission_clear :
-                game.sys_assets.bmp_mission_fail;
-            if(!record_exists) {
-                cur_medal = NULL;
-            } else {
-                switch(area_mission_data[area_idx].grading_mode) {
-                case MISSION_GRADING_POINTS: {
-                    if(score >= area_mission_data[area_idx].platinum_req) {
-                        cur_medal = game.sys_assets.bmp_medal_platinum;
-                    } else if(score >= area_mission_data[area_idx].gold_req) {
-                        cur_medal = game.sys_assets.bmp_medal_gold;
-                    } else if(score >= area_mission_data[area_idx].silver_req) {
-                        cur_medal = game.sys_assets.bmp_medal_silver;
-                    } else if(score >= area_mission_data[area_idx].bronze_req) {
-                        cur_medal = game.sys_assets.bmp_medal_bronze;
-                    } else {
-                        cur_medal = game.sys_assets.bmp_medal_none;
-                    }
-                    break;
-                } case MISSION_GRADING_GOAL: {
-                    if(area_record_clears[area_idx]) {
-                        cur_medal = game.sys_assets.bmp_medal_platinum;
-                    }
-                    break;
-                } case MISSION_GRADING_PARTICIPATION: {
-                    cur_medal = game.sys_assets.bmp_medal_platinum;
-                    break;
-                }
-                }
-            }
-            record_date_text->text = area_record_dates[area_idx];
-        }
-        
-        //Now fill in the mission specs.
-        if(area_type == AREA_TYPE_MISSION) {
-            specs_name_text->text = area_names[area_idx];
-            mission_data &mission = area_mission_data[area_idx];
-            goal_text->text =
-                game.mission_goals[mission.goal]->
-                get_player_description(&mission);
-                
-            for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
-                if(has_flag(mission.fail_conditions, get_index_bitmask(f))) {
-                    mission_fail* cond = game.mission_fail_conds[f];
-                    add_bullet(
-                        fail_list,
-                        cond->get_player_description(&mission)
-                    );
-                }
-            }
-            
-            if(mission.fail_conditions == 0) {
-                add_bullet(fail_list, "(None)");
-            }
-            
-            switch(mission.grading_mode) {
-            case MISSION_GRADING_POINTS: {
-                add_bullet(
-                    grading_list,
-                    "Your medal depends on your score:"
-                );
-                add_bullet(
-                    grading_list,
-                    "    Platinum: " + i2s(mission.platinum_req) + "+ points."
-                );
-                add_bullet(
-                    grading_list,
-                    "    Gold: " + i2s(mission.gold_req) + "+ points."
-                );
-                add_bullet(
-                    grading_list,
-                    "    Silver: " + i2s(mission.silver_req) + "+ points."
-                );
-                add_bullet(
-                    grading_list,
-                    "    Bronze: " + i2s(mission.bronze_req) + "+ points."
-                );
-                vector<string> score_notes;
-                for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
-                    mission_score_criterion* c_ptr =
-                        game.mission_score_criteria[c];
-                    int mult = c_ptr->get_multiplier(&mission);
-                    if(mult != 0) {
-                        score_notes.push_back(
-                            "    " + c_ptr->get_name() + " x " + i2s(mult) + "."
-                        );
-                    }
-                }
-                if(!score_notes.empty()) {
-                    add_bullet(
-                        grading_list,
-                        "Your score is calculated like so:"
-                    );
-                    for(size_t s = 0; s < score_notes.size(); ++s) {
-                        add_bullet(grading_list, score_notes[s]);
-                    }
-                } else {
-                    add_bullet(
-                        grading_list,
-                        "In this mission, your score will always be 0."
-                    );
-                }
-                vector<string> loss_notes;
-                for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
-                    mission_score_criterion* c_ptr =
-                        game.mission_score_criteria[c];
-                    if(
-                        has_flag(
-                            mission.point_loss_data,
-                            get_index_bitmask(c)
-                        )
-                    ) {
-                        loss_notes.push_back("    " + c_ptr->get_name());
-                    }
-                }
-                if(!loss_notes.empty()) {
-                    add_bullet(
-                        grading_list,
-                        "If you fail, you'll lose your score for:"
-                    );
-                    for(size_t l = 0; l < loss_notes.size(); ++l) {
-                        add_bullet(grading_list, loss_notes[l]);
-                    }
-                }
-                break;
-            }
-            case MISSION_GRADING_GOAL: {
-                add_bullet(
-                    grading_list,
-                    "You get a platinum medal if you clear the goal."
-                );
-                add_bullet(
-                    grading_list,
-                    "You get no medal if you fail."
-                );
-                break;
-            }
-            case MISSION_GRADING_PARTICIPATION: {
-                add_bullet(
-                    grading_list,
-                    "You get a platinum medal just by playing the mission."
-                );
-                break;
-            }
-            }
-        }
-        
-        animate_info_and_specs();
-        
-        prev_selected_item = gui.selected_item;
-        
-    }
-    
     gui.tick(game.delta_t);
     
     game.fade_mgr.tick(game.delta_t);
@@ -635,8 +627,6 @@ void area_menu_state::init_gui_main() {
     );
     gui.add_item(pick_text, "pick_text");
     
-    button_gui_item* first_area_button = NULL;
-    
     if(!areas_to_pick.empty()) {
     
         //Area list box.
@@ -677,6 +667,8 @@ void area_menu_state::init_gui_main() {
                     game.change_state(game.states.gameplay);
                 });
             };
+            area_button->on_selected =
+            [this, a] () { change_info(a); };
             area_button->on_get_tooltip =
             [area_name] () { return "Play " + area_name + "."; };
             list_box->add_child(area_button);
@@ -820,11 +812,6 @@ void area_menu_state::init_gui_main() {
     tooltip_gui_item* tooltip_text =
         new tooltip_gui_item(&gui);
     gui.add_item(tooltip_text, "tooltip");
-    
-    //Finishing touches.
-    if(areas_to_pick.size() > 1) {
-        gui.set_selected_item(first_area_button);
-    }
 }
 
 
@@ -918,7 +905,8 @@ void area_menu_state::leave() {
  */
 void area_menu_state::load() {
     bmp_menu_bg = NULL;
-    prev_selected_item = NULL;
+    first_area_button = NULL;
+    cur_area_idx = INVALID;
     cur_thumb = NULL;
     cur_stamp = NULL;
     cur_medal = NULL;
@@ -1022,6 +1010,9 @@ void area_menu_state::load() {
         init_gui_specs_page();
         specs_box->visible = false;
         specs_box->responsive = false;
+    }
+    if(first_area_button) {
+        gui.set_selected_item(first_area_button);
     }
     
     game.fade_mgr.start_fade(true, nullptr);

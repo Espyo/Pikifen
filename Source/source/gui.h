@@ -352,6 +352,8 @@ public:
     bool responsive;
     //Should it ignore input while animating?
     bool ignore_input_on_animation;
+    //What to do when the currently selected item changes.
+    std::function<void()> on_selection_changed;
     
     //Add an item to the list.
     void add_item(gui_item* item, const string &id = "");
