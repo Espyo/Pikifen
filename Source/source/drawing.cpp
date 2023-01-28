@@ -168,6 +168,9 @@ void draw_bitmap(
  *   Center coordinates.
  * box_size:
  *   Width and height of the box.
+ * scale_up:
+ *   If true, the bitmap is scaled up to fit the box. If false, it stays
+ *   at its original size (unless it needs to be scaled down).
  * angle:
  *   Angle to rotate the bitmap by.
  *   The box does not take angling into account.
@@ -175,17 +178,21 @@ void draw_bitmap(
  *   Tint the bitmap with this color.
  */
 void draw_bitmap_in_box(
-    ALLEGRO_BITMAP* bmp, const point &center,
-    const point &box_size, const float angle, const ALLEGRO_COLOR &tint
+    ALLEGRO_BITMAP* bmp, const point &center, const point &box_size,
+    const bool scale_up, const float angle, const ALLEGRO_COLOR &tint
 ) {
     if(box_size.x == 0 || box_size.y == 0) return;
-    float w_diff = al_get_bitmap_width(bmp) / box_size.x;
-    float h_diff = al_get_bitmap_height(bmp) / box_size.y;
+    int bmp_w = al_get_bitmap_width(bmp);
+    int bmp_h = al_get_bitmap_height(bmp);
+    float w_diff = bmp_w / box_size.x;
+    float h_diff = bmp_h / box_size.y;
+    float max_w = scale_up ? box_size.x : std::min((int) box_size.x, bmp_w);
+    float max_h = scale_up ? box_size.y : std::min((int) box_size.y, bmp_h);
     
     if(w_diff > h_diff) {
-        draw_bitmap(bmp, center, point(box_size.x, -1), angle, tint);
+        draw_bitmap(bmp, center, point(max_w, -1), angle, tint);
     } else {
-        draw_bitmap(bmp, center, point(-1, box_size.y), angle, tint);
+        draw_bitmap(bmp, center, point(-1, max_h), angle, tint);
     }
 }
 
@@ -497,7 +504,7 @@ void draw_control_icon(
                 (icon_size + 1) * (int) bitmap_sprite, 0,
                 icon_size, icon_size
             );
-        draw_bitmap_in_box(bmp, where, max_size, 0.0f, map_alpha(alpha));
+        draw_bitmap_in_box(bmp, where, max_size, true, 0.0f, map_alpha(alpha));
         al_destroy_bitmap(bmp);
         return;
     }

@@ -9,14 +9,15 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.24.0 ---
-    Help menu improvements
-        Add screenshots to the help menu
     Add a copy-paste feature to the area editor
         Use the WIP branch
     Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geomety and try to move it
+    Add "passage only if you have X Pikmin type" and "passage only if you only have X Pikmin type" gates to the area tips
     The ability to lock the cursor to an axis when dragging, in an editor, by holding Ctrl
     Replace the function documentations with Doxygen so VS Code can make use of it in tooltips
     Fire geysers should emit smoke too
+    Could Queen Candypop Buds have script vars to control which types they can switch to? (thanks Darthvato)
+    The animation editor should show rectangular dimensions
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
@@ -686,6 +687,7 @@ Misc things (so I don't forget)
         Support for backgrounds that don't tile -- what if you want a background that's a tree trunk, because you're on branches? It shouldn't tile, nor should the maker be forced to use a workaround where they have thousands of pixels of blank space for padding
         Add background viewing/editing to the area editor
         The ability to tint the background image
+        Move it to the details section
         Foreground
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals

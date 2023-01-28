@@ -215,6 +215,7 @@ gui_item::gui_item(const bool selectable) :
     on_activate(nullptr),
     on_mouse_over(nullptr),
     on_menu_dir_button(nullptr),
+    on_selected(nullptr),
     on_child_selected(nullptr),
     on_get_tooltip(nullptr) {
     
@@ -1088,6 +1089,9 @@ void gui_manager::set_selected_item(gui_item* item) {
     selected_item = item;
     if(selected_item) {
         selected_item->selected = true;
+        if(selected_item->on_selected) {
+            selected_item->on_selected();
+        }
     }
 }
 

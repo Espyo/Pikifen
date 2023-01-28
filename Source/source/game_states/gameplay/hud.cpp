@@ -179,11 +179,11 @@ hud_struct::hud_struct() :
             );
             draw_bitmap_in_box(
                 icon.bmp,
-                final_center, final_size
+                final_center, final_size, true
             );
             draw_bitmap_in_box(
                 bmp_bubble,
-                final_center, final_size
+                final_center, final_size, true
             );
         };
         gui.add_item(leader_icon, "leader_" + i2s(l + 1) + "_icon");
@@ -246,7 +246,8 @@ hud_struct::hud_struct() :
             draw_bitmap_in_box(
                 bmp_hard_bubble,
                 final_center,
-                final_size
+                final_size,
+                true
             );
         };
         gui.add_item(leader_health, "leader_" + i2s(l + 1) + "_health");
@@ -379,7 +380,7 @@ hud_struct::hud_struct() :
     gui_item* day_bubble = new gui_item();
     day_bubble->on_draw =
     [this] (const point & center, const point & size) {
-        draw_bitmap_in_box(bmp_day_bubble, center, size);
+        draw_bitmap_in_box(bmp_day_bubble, center, size, true);
     };
     gui.add_item(day_bubble, "day_bubble");
     
@@ -524,12 +525,13 @@ hud_struct::hud_struct() :
             draw_bitmap_in_box(
                 standby_mat_bmp, center,
                 (size * 0.8) + standby_maturity_icon->get_juice_value(),
+                true,
                 0.0f, color
             );
             draw_bitmap_in_box(
                 bmp_bubble, center,
-                size + standby_maturity_icon->get_juice_value()
-                , 0.0f, color
+                size + standby_maturity_icon->get_juice_value(),
+                true, 0.0f, color
             );
         }
         
@@ -840,7 +842,8 @@ hud_struct::hud_struct() :
         if(bottom_spray_idx == INVALID) return;
         
         draw_bitmap_in_box(
-            game.spray_types[bottom_spray_idx].bmp_spray, center, size, 0.0f,
+            game.spray_types[bottom_spray_idx].bmp_spray, center, size, true,
+            0.0f,
             map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
         );
     };
@@ -1721,7 +1724,7 @@ void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
     
     if(!icon) return;
     draw_bitmap_in_box(
-        icon, final_center, final_size, 0.0f,
+        icon, final_center, final_size, true, 0.0f,
         map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
     );
 }
@@ -1746,7 +1749,7 @@ void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
     ALLEGRO_COLOR color =
         map_alpha(game.states.gameplay->hud->standby_items_opacity * 255);
         
-    draw_bitmap_in_box(icon, final_center, final_size * 0.8, 0.0f, color);
+    draw_bitmap_in_box(icon, final_center, final_size * 0.8, true, 0.0f, color);
     
     if(
         game.states.gameplay->closest_group_member_distant &&
@@ -1756,11 +1759,12 @@ void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
             bmp_distant_pikmin_marker,
             final_center,
             final_size * 0.8,
+            true,
             0.0f, color
         );
     }
     
-    draw_bitmap_in_box(bmp_bubble, final_center, final_size, 0.0f, color);
+    draw_bitmap_in_box(bmp_bubble, final_center, final_size, true, 0.0f, color);
 }
 
 

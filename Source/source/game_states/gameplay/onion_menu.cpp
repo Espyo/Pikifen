@@ -209,7 +209,7 @@ onion_menu_struct::onion_menu_struct(
                 float juicy_grow_amount = onion_icon->get_juice_value();
                 draw_bitmap_in_box(
                     t_ptr->pik_type->bmp_onion_icon, center,
-                    (size * 0.8f) + juicy_grow_amount
+                    (size * 0.8f) + juicy_grow_amount, true
                 );
             }
         };
@@ -317,7 +317,7 @@ onion_menu_struct::onion_menu_struct(
             if(t_ptr->pik_type->bmp_icon) {
                 draw_bitmap_in_box(
                     t_ptr->pik_type->bmp_icon, center,
-                    (size * 0.8f) + juicy_grow_amount
+                    (size * 0.8f) + juicy_grow_amount, true
                 );
             }
         };

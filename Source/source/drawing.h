@@ -114,7 +114,8 @@ void draw_bitmap(
 );
 void draw_bitmap_in_box(
     ALLEGRO_BITMAP* bmp, const point &center,
-    const point &box_size, const float angle = 0,
+    const point &box_size, const bool scale_up,
+    const float angle = 0,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
 void draw_bitmap_with_effects(

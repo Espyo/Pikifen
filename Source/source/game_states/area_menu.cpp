@@ -532,7 +532,7 @@ void area_menu_state::init_gui_info_page() {
             [this] (const point & center, const point & size) {
                 if(cur_stamp) {
                     draw_bitmap_in_box(
-                        cur_stamp, center, size
+                        cur_stamp, center, size, true
                     );
                 }
             };
@@ -545,7 +545,7 @@ void area_menu_state::init_gui_info_page() {
             [this] (const point & center, const point & size) {
                 if(cur_medal) {
                     draw_bitmap_in_box(
-                        cur_medal, center, size
+                        cur_medal, center, size, true
                     );
                 }
             };
@@ -697,7 +697,8 @@ void area_menu_state::init_gui_main() {
                 [this, a] (const point & center, const point & size) {
                     if(area_record_clears[a]) {
                         draw_bitmap_in_box(
-                            game.sys_assets.bmp_mission_clear, center, size
+                            game.sys_assets.bmp_mission_clear,
+                            center, size, true
                         );
                     }
                 };
@@ -738,7 +739,7 @@ void area_menu_state::init_gui_main() {
                     
                     if(medal_bmp) {
                         draw_bitmap_in_box(
-                            medal_bmp, center, size
+                            medal_bmp, center, size, true
                         );
                     }
                 };

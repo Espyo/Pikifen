@@ -87,6 +87,17 @@ public:
     void tick(const float delta_t);
     
 private:
+    struct tidbit {
+        //Name.
+        string name;
+        //Description.
+        string description;
+        //Image.
+        ALLEGRO_BITMAP* image;
+        //Constructor.
+        tidbit() : image(nullptr) {}
+    };
+    
     //Is it currently closing?
     bool closing;
     //Help page category text GUI item.
@@ -96,7 +107,9 @@ private:
     //Confirmation page explanation text.
     text_gui_item* confirmation_explanation_text;
     //All tidbits in the help page.
-    map<HELP_CATEGORIES, vector<string> > tidbits;
+    map<HELP_CATEGORIES, vector<tidbit> > tidbits;
+    //Currently shown help tidbit, if any.
+    tidbit* cur_tidbit;
     //Where the player intends to go by leaving.
     GAMEPLAY_LEAVE_TARGET leave_target;
     

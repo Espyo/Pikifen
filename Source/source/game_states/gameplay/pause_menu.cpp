@@ -43,6 +43,7 @@ pause_menu_struct::pause_menu_struct() :
     help_category_text(nullptr),
     help_tidbit_list(nullptr),
     confirmation_explanation_text(nullptr),
+    cur_tidbit(nullptr),
     leave_target(LEAVE_TO_AREA_SELECT) {
     
     init_main_pause_menu();
@@ -56,6 +57,15 @@ pause_menu_struct::pause_menu_struct() :
  * Destroys a pause menu struct.
  */
 pause_menu_struct::~pause_menu_struct() {
+    for(size_t c = 0; c < N_HELP_CATEGORIES; ++c) {
+        for(size_t t = 0; t < tidbits.size(); ++t) {
+            if(tidbits[(HELP_CATEGORIES) c][t].image) {
+                game.bitmaps.detach(tidbits[(HELP_CATEGORIES) c][t].image);
+            }
+        }
+    }
+    tidbits.clear();
+    
     gui.destroy();
     help_gui.destroy();
     mission_gui.destroy();
@@ -535,31 +545,39 @@ void pause_menu_struct::init_help_page() {
         data_node* category_node =
             tidbits_node->get_child_by_name(category_node_names[c]);
         size_t n_tidbits = category_node->get_nr_of_children();
-        vector<string> &category_tidbits = tidbits[(HELP_CATEGORIES) c];
+        vector<tidbit> &category_tidbits = tidbits[(HELP_CATEGORIES) c];
         category_tidbits.reserve(n_tidbits);
         for(size_t t = 0; t < n_tidbits; ++t) {
-            category_tidbits.push_back(category_node->get_child(t)->name);
+            vector<string> parts =
+                split(category_node->get_child(t)->name, ";");
+            tidbit new_t;
+            new_t.name = parts.size() > 0 ? parts[0] : "";
+            new_t.description = parts.size() > 1 ? parts[1] : "";
+            new_t.image = parts.size() > 2 ? game.bitmaps.get(parts[2]) : NULL;
+            category_tidbits.push_back(new_t);
         }
     }
     for(size_t p = 0; p < game.config.pikmin_order.size(); ++p) {
-        tidbits[HELP_CATEGORY_PIKMIN].push_back(
-            game.config.pikmin_order[p]->name + ";" +
-            game.config.pikmin_order[p]->description
-        );
+        tidbit new_t;
+        new_t.name = game.config.pikmin_order[p]->name;
+        new_t.description = game.config.pikmin_order[p]->description;
+        new_t.image = game.config.pikmin_order[p]->bmp_icon;
+        tidbits[HELP_CATEGORY_PIKMIN].push_back(new_t);
     }
     
     //Menu items.
     help_gui.register_coords("back",        12,  5, 20,  6);
-    help_gui.register_coords("gameplay1",   22, 24, 36,  8);
-    help_gui.register_coords("gameplay2",   22, 34, 36,  8);
-    help_gui.register_coords("controls",    22, 44, 36,  8);
-    help_gui.register_coords("pikmin",      22, 54, 36,  8);
-    help_gui.register_coords("objects",     22, 64, 36,  8);
-    help_gui.register_coords("manual",      22, 72, 36,  4);
-    help_gui.register_coords("category",    71, 10, 54,  8);
-    help_gui.register_coords("list",        69, 50, 50, 60);
-    help_gui.register_coords("list_scroll", 96, 50,  2, 60);
-    help_gui.register_coords("tooltip",     50, 90, 95, 15);
+    help_gui.register_coords("gameplay1",   22, 15, 36,  6);
+    help_gui.register_coords("gameplay2",   22, 23, 36,  6);
+    help_gui.register_coords("controls",    22, 31, 36,  6);
+    help_gui.register_coords("pikmin",      22, 39, 36,  6);
+    help_gui.register_coords("objects",     22, 47, 36,  6);
+    help_gui.register_coords("manual",      22, 54, 36,  4);
+    help_gui.register_coords("category",    71,  5, 54,  6);
+    help_gui.register_coords("list",        69, 39, 50, 54);
+    help_gui.register_coords("list_scroll", 96, 39,  2, 54);
+    help_gui.register_coords("image",       16, 83, 28, 30);
+    help_gui.register_coords("tooltip",     65, 83, 66, 30);
     help_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Back button.
@@ -671,6 +689,19 @@ void pause_menu_struct::init_help_page() {
     scroll_gui_item* list_scroll = new scroll_gui_item();
     list_scroll->list_item = help_tidbit_list;
     help_gui.add_item(list_scroll, "list_scroll");
+    
+    //Image item.
+    gui_item* image_item = new gui_item();
+    image_item->on_draw =
+    [this] (const point & center, const point & size) {
+        if(cur_tidbit == NULL) return;
+        if(cur_tidbit->image == NULL) return;
+        draw_bitmap_in_box(
+            cur_tidbit->image,
+            center, size, false
+        );
+    };
+    help_gui.add_item(image_item, "image");
     
     //Tooltip text.
     text_gui_item* tooltip_text =
@@ -1107,7 +1138,7 @@ void pause_menu_struct::init_mission_page() {
  *   Category of tidbits to use.
  */
 void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
-    vector<string> &tidbit_list = tidbits[category];
+    vector<tidbit> &tidbit_list = tidbits[category];
     
     switch(category) {
     case HELP_CATEGORY_GAMEPLAY1: {
@@ -1133,16 +1164,19 @@ void pause_menu_struct::populate_help_tidbits(const HELP_CATEGORIES category) {
     help_tidbit_list->delete_all_children();
     
     for(size_t t = 0; t < tidbit_list.size(); ++t) {
-        vector<string> parts = split(tidbit_list[t], ";");
+        tidbit* t_ptr = &tidbit_list[t];
         bullet_point_gui_item* tidbit_bullet =
             new bullet_point_gui_item(
-            parts.empty() ? "" : parts[0],
+            t_ptr->name,
             game.fonts.standard
         );
         tidbit_bullet->center = point(0.50f, 0.045f + t * 0.10f);
         tidbit_bullet->size = point(1.0f, 0.09f);
-        tidbit_bullet->on_get_tooltip = [this, parts] () {
-            return parts.size() < 2 ? "" : parts[1];
+        tidbit_bullet->on_get_tooltip = [this, t_ptr] () {
+            return t_ptr->description;
+        };
+        tidbit_bullet->on_selected = [this, t_ptr] () {
+            cur_tidbit = t_ptr;
         };
         tidbit_bullet->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM

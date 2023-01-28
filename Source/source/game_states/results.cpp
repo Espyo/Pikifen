@@ -395,7 +395,8 @@ void results_state::load() {
                 game.sys_assets.bmp_mission_clear :
                 game.sys_assets.bmp_mission_fail,
                 center,
-                size
+                size,
+                true
             );
         };
         gui.add_item(goal_stamp_item, "goal_stamp");
@@ -509,7 +510,7 @@ void results_state::load() {
                 break;
             }
             }
-            draw_bitmap_in_box(bmp, center, size);
+            draw_bitmap_in_box(bmp, center, size, true);
         };
         gui.add_item(medal_item, "medal");
         

@@ -142,6 +142,8 @@ public:
     std::function<void(const point &cursor_pos)> on_mouse_over;
     //What to do when a directional button's pressed with the item selected.
     std::function<bool(const size_t button_id)> on_menu_dir_button;
+    //What to do when it gets selected.
+    std::function<void()> on_selected;
     //What to do when one of its children became the selected item.
     std::function<void(const gui_item* child)> on_child_selected;
     //What to do when its tooltip needs to be retrieved.
