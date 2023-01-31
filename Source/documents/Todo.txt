@@ -8,6 +8,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
     Allow cancelling the operation
     Create a GUI panel just for duplication instructions
     Optimize and cleanup the code
+    Clicking the snap mode button on the toolbar in the pasting mode will finish pasting
 
 Current tasks (tasks being worked on, but not yet committed)
     

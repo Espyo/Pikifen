@@ -614,37 +614,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
         } case EDITOR_SUB_STATE_DUPLICATE_SECTOR: {
     
-            //Edges where a side is marked as NULL could have had a different
-            //sector before the duplication. Let's find those, save what their
-            //new sector ought to be, and only then actually finish placing.
-            //Afterwards, we can go back, and all edges sides that neeed a
-            //new sector can get them.
-            map<edge*, std::pair<sector*, size_t> > edge_sectors;
-            for(edge* e : selected_edges) {
-                if(e->sectors[0] == NULL || e->sectors[1] == NULL) {
-                    size_t s_nr = INVALID;
-                    point p =
-                        (
-                            point(e->vertexes[0]->x, e->vertexes[0]->y) +
-                            point(e->vertexes[1]->x, e->vertexes[1]->y)
-                        ) / 2.0f;
-                    sector* s_ptr = get_sector(p, &s_nr, false);
-                    edge_sectors[e] = std::make_pair(s_ptr, s_nr);
-                }
-            }
-            finish_layout_moving();
-            
-            for(edge* e : selected_edges) {
-                auto edge_sector_it = edge_sectors.find(e);
-                if(edge_sector_it == edge_sectors.end()) continue;
-                for(size_t s = 0; s < 2; ++s) {
-                    if(e->sectors[0] == NULL) {
-                        game.cur_area_data.connect_edge_to_sector(
-                            e, edge_sector_it->second.first, s
-                        );
-                    }
-                }
-            }
+            finish_sector_duplication();
             
             moving = false;
             sub_state = EDITOR_SUB_STATE_NONE;

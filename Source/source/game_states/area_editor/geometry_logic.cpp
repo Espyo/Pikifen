@@ -477,6 +477,213 @@ void area_editor::delete_path_stops(const set<path_stop*> &which) {
 
 
 /* ----------------------------------------------------------------------------
+ * Find merge vertexes and edges to split, if any.
+ */
+void area_editor::find_merge_vertexes_and_edges_to_split(
+    map<vertex*, vertex*> &merges,
+    map<vertex*, edge*> &edges_to_split
+) {
+    for(auto v : selected_vertexes) {
+        point p(v->x, v->y);
+        
+        vector<std::pair<dist, vertex*> > merge_vertexes =
+            get_merge_vertexes(
+                p, game.cur_area_data.vertexes,
+                AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
+            );
+            
+        for(size_t mv = 0; mv < merge_vertexes.size(); ) {
+            vertex* mv_ptr = merge_vertexes[mv].second;
+            if(
+                mv_ptr == v ||
+                selected_vertexes.find(mv_ptr) != selected_vertexes.end()
+            ) {
+                merge_vertexes.erase(merge_vertexes.begin() + mv);
+            } else {
+                ++mv;
+            }
+        }
+        
+        sort(
+            merge_vertexes.begin(), merge_vertexes.end(),
+        [] (std::pair<dist, vertex*> v1, std::pair<dist, vertex*> v2) -> bool {
+            return v1.first < v2.first;
+        }
+        );
+        
+        vertex* merge_v = NULL;
+        if(!merge_vertexes.empty()) {
+            merge_v = merge_vertexes[0].second;
+        }
+        
+        if(merge_v) {
+            merges[v] = merge_v;
+            
+        } else {
+            edge* e_ptr = NULL;
+            bool e_ptr_v1_selected = false;
+            bool e_ptr_v2_selected = false;
+            
+            do {
+                e_ptr = get_edge_under_point(p, e_ptr);
+                if(e_ptr) {
+                    e_ptr_v1_selected =
+                        selected_vertexes.find(e_ptr->vertexes[0]) !=
+                        selected_vertexes.end();
+                    e_ptr_v2_selected =
+                        selected_vertexes.find(e_ptr->vertexes[1]) !=
+                        selected_vertexes.end();
+                }
+            } while(
+                e_ptr != NULL &&
+                (
+                    v->has_edge(e_ptr) ||
+                    e_ptr_v1_selected || e_ptr_v2_selected
+                )
+            );
+            
+            if(e_ptr) {
+                edges_to_split[v] = e_ptr;
+            }
+        }
+    }
+    
+    set<edge*> moved_edges;
+    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = game.cur_area_data.edges[e];
+        bool both_selected = true;
+        for(size_t v = 0; v < 2; ++v) {
+            if(
+                selected_vertexes.find(e_ptr->vertexes[v]) ==
+                selected_vertexes.end()
+            ) {
+                both_selected = false;
+                break;
+            }
+        }
+        if(both_selected) {
+            moved_edges.insert(e_ptr);
+        }
+    }
+    
+    //If an edge is moving into a stationary vertex, it needs to be split.
+    //Let's find such edges.
+    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
+        vertex* v_ptr = game.cur_area_data.vertexes[v];
+        point p(v_ptr->x, v_ptr->y);
+        
+        if(selected_vertexes.find(v_ptr) != selected_vertexes.end()) {
+            continue;
+        }
+        bool is_merge_target = false;
+        for(auto &m : merges) {
+            if(m.second == v_ptr) {
+                //This vertex will have some other vertex merge into it; skip.
+                is_merge_target = true;
+                break;
+            }
+        }
+        if(is_merge_target) continue;
+        
+        edge* e_ptr = NULL;
+        bool valid = true;
+        do {
+            e_ptr = get_edge_under_point(p, e_ptr);
+            if(e_ptr) {
+                if(v_ptr->has_edge(e_ptr)) {
+                    valid = false;
+                }
+                if(moved_edges.find(e_ptr) == moved_edges.end()) {
+                    valid = false;
+                }
+            }
+        } while(e_ptr && !valid);
+        if(e_ptr) {
+            edges_to_split[v_ptr] = e_ptr;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Tries to find problems with the move operation.
+ * Returns true if problems were found, false otherwise.
+ */
+bool area_editor::find_move_problems(
+    map<vertex*, vertex*> &merges,
+    map<vertex*, edge*> &edges_to_split
+) {
+    //Start by checking all crossing edges, but removing all of the ones that
+    //come from edge splits or vertex merges.
+    vector<edge_intersection> intersections =
+        get_intersecting_edges();
+    for(auto &m : merges) {
+        for(size_t e1 = 0; e1 < m.first->edges.size(); ++e1) {
+            for(size_t e2 = 0; e2 < m.second->edges.size(); ++e2) {
+                for(size_t i = 0; i < intersections.size();) {
+                    if(
+                        intersections[i].contains(m.first->edges[e1]) &&
+                        intersections[i].contains(m.second->edges[e2])
+                    ) {
+                        intersections.erase(intersections.begin() + i);
+                    } else {
+                        ++i;
+                    }
+                }
+            }
+        }
+    }
+    for(auto &v : edges_to_split) {
+        for(size_t e = 0; e < v.first->edges.size(); ++e) {
+            for(size_t i = 0; i < intersections.size();) {
+                if(
+                    intersections[i].contains(v.first->edges[e]) &&
+                    intersections[i].contains(v.second)
+                ) {
+                    intersections.erase(intersections.begin() + i);
+                } else {
+                    ++i;
+                }
+            }
+        }
+    }
+    
+    //If we ended up with any intersection still, abort!
+    if(!intersections.empty()) {
+        cancel_layout_moving();
+        forget_prepared_state(pre_move_area_data);
+        pre_move_area_data = NULL;
+        status_text = "That move would cause edges to intersect!";
+        return true;
+    }
+    
+    //If there's a vertex between any dragged vertex and its merge, and this
+    //vertex was meant to be a merge destination itself, then don't do it.
+    //When the first merge happens, this vertex will be gone, and we'll be
+    //unable to use it for the second merge. There are no plans to support
+    //this complex corner case, so abort!
+    for(auto &m : merges) {
+        vertex* crushed_vertex = NULL;
+        if(m.first->is_2nd_degree_neighbor(m.second, &crushed_vertex)) {
+        
+            for(auto &m2 : merges) {
+                if(m2.second == crushed_vertex) {
+                    cancel_layout_moving();
+                    forget_prepared_state(pre_move_area_data);
+                    pre_move_area_data = NULL;
+                    status_text =
+                        "That move would crush an edge that's in the middle!";
+                    return true;
+                }
+            }
+        }
+    }
+    
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Tries to find problems with the area.
  * When it's done, sets the appropriate problem-related variables.
  */
@@ -1694,7 +1901,8 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
  *   List of sectors that will be affected by this merge.
  */
 void area_editor::merge_vertex(
-    vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
+    vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors,
+    map<edge*, edge*>* edge_destinations
 ) {
     vector<edge*> edges = v1->edges;
     //Find out what to do with every edge of the dragged vertex.
@@ -1711,6 +1919,7 @@ void area_editor::merge_vertex(
             
             //Delete it.
             delete_edge(e_ptr);
+            (*edge_destinations)[e_ptr] = NULL;
             
         } else {
         
@@ -1753,6 +1962,8 @@ void area_editor::merge_vertex(
                     //Delete it.
                     delete_edge(e_ptr);
                     
+                    (*edge_destinations)[e_ptr] = de_ptr;
+                    
                     break;
                 }
             }
@@ -1767,6 +1978,8 @@ void area_editor::merge_vertex(
                     affected_sectors->insert(v2->edges[v2e]->sectors[0]);
                     affected_sectors->insert(v2->edges[v2e]->sectors[1]);
                 }
+                
+                (*edge_destinations)[e_ptr] = e_ptr;
             }
         }
         
@@ -1778,6 +1991,7 @@ void area_editor::merge_vertex(
         edge* ve_ptr = v2->edges[ve];
         if(ve_ptr->sectors[0] == ve_ptr->sectors[1]) {
             delete_edge(ve_ptr);
+            (*edge_destinations)[ve_ptr] = NULL;
         } else {
             ++ve;
         }
@@ -2069,6 +2283,41 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
     }
     
     return new_v_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Splits edges and merges vertexes.
+ */
+void area_editor::split_edges_and_merge_vertexes(
+    map<vertex*, vertex*> &merges,
+    map<vertex*, edge*> &edges_to_split,
+    unordered_set<sector*> &affected_sectors,
+    map<edge*, edge*> &edge_destinations
+) {
+    for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
+        edge* edge_to_split = v->second;
+        vertex* new_vertex =
+            split_edge(edge_to_split, point(v->first->x, v->first->y));
+        merges[v->first] = new_vertex;
+        //This split could've thrown off the edge pointer of a different
+        //vertex to merge. Let's re-calculate.
+        edge* new_edge = game.cur_area_data.edges.back();
+        auto v2 = v;
+        ++v2;
+        for(; v2 != edges_to_split.end(); ++v2) {
+            if(edge_to_split != v2->second) continue;
+            v2->second =
+                get_correct_post_split_edge(v2->first, v2->second, new_edge);
+        }
+    }
+    
+    for(auto &m : merges) {
+        merge_vertex(
+            m.first, m.second,
+            &affected_sectors, &edge_destinations
+        );
+    }
 }
 
 

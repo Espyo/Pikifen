@@ -758,225 +758,30 @@ void area_editor::finish_circle_sector() {
  */
 void area_editor::finish_layout_moving() {
     unordered_set<sector*> affected_sectors;
-    get_affected_sectors(selected_vertexes, affected_sectors);
     map<vertex*, vertex*> merges;
     map<vertex*, edge*> edges_to_split;
-    unordered_set<sector*> merge_affected_sectors;
+    
+    //Get sectors that we already know will be affected.
+    get_affected_sectors(selected_vertexes, affected_sectors);
     
     //Find merge vertexes and edges to split, if any.
-    for(auto v : selected_vertexes) {
-        point p(v->x, v->y);
-        
-        vector<std::pair<dist, vertex*> > merge_vertexes =
-            get_merge_vertexes(
-                p, game.cur_area_data.vertexes,
-                AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
-            );
-            
-        for(size_t mv = 0; mv < merge_vertexes.size(); ) {
-            vertex* mv_ptr = merge_vertexes[mv].second;
-            if(
-                mv_ptr == v ||
-                selected_vertexes.find(mv_ptr) != selected_vertexes.end()
-            ) {
-                merge_vertexes.erase(merge_vertexes.begin() + mv);
-            } else {
-                ++mv;
-            }
-        }
-        
-        sort(
-            merge_vertexes.begin(), merge_vertexes.end(),
-        [] (std::pair<dist, vertex*> v1, std::pair<dist, vertex*> v2) -> bool {
-            return v1.first < v2.first;
-        }
-        );
-        
-        vertex* merge_v = NULL;
-        if(!merge_vertexes.empty()) {
-            merge_v = merge_vertexes[0].second;
-        }
-        
-        if(merge_v) {
-            merges[v] = merge_v;
-            
-        } else {
-            edge* e_ptr = NULL;
-            bool e_ptr_v1_selected = false;
-            bool e_ptr_v2_selected = false;
-            
-            do {
-                e_ptr = get_edge_under_point(p, e_ptr);
-                if(e_ptr) {
-                    e_ptr_v1_selected =
-                        selected_vertexes.find(e_ptr->vertexes[0]) !=
-                        selected_vertexes.end();
-                    e_ptr_v2_selected =
-                        selected_vertexes.find(e_ptr->vertexes[1]) !=
-                        selected_vertexes.end();
-                }
-            } while(
-                e_ptr != NULL &&
-                (
-                    v->has_edge(e_ptr) ||
-                    e_ptr_v1_selected || e_ptr_v2_selected
-                )
-            );
-            
-            if(e_ptr) {
-                edges_to_split[v] = e_ptr;
-            }
-        }
-    }
-    
-    set<edge*> moved_edges;
-    for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
-        edge* e_ptr = game.cur_area_data.edges[e];
-        bool both_selected = true;
-        for(size_t v = 0; v < 2; ++v) {
-            if(
-                selected_vertexes.find(e_ptr->vertexes[v]) ==
-                selected_vertexes.end()
-            ) {
-                both_selected = false;
-                break;
-            }
-        }
-        if(both_selected) {
-            moved_edges.insert(e_ptr);
-        }
-    }
-    
-    //If an edge is moving into a stationary vertex, it needs to be split.
-    //Let's find such edges.
-    for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
-        vertex* v_ptr = game.cur_area_data.vertexes[v];
-        point p(v_ptr->x, v_ptr->y);
-        
-        if(selected_vertexes.find(v_ptr) != selected_vertexes.end()) {
-            continue;
-        }
-        bool is_merge_target = false;
-        for(auto &m : merges) {
-            if(m.second == v_ptr) {
-                //This vertex will have some other vertex merge into it; skip.
-                is_merge_target = true;
-                break;
-            }
-        }
-        if(is_merge_target) continue;
-        
-        edge* e_ptr = NULL;
-        bool valid = true;
-        do {
-            e_ptr = get_edge_under_point(p, e_ptr);
-            if(e_ptr) {
-                if(v_ptr->has_edge(e_ptr)) {
-                    valid = false;
-                }
-                if(moved_edges.find(e_ptr) == moved_edges.end()) {
-                    valid = false;
-                }
-            }
-        } while(e_ptr && !valid);
-        if(e_ptr) {
-            edges_to_split[v_ptr] = e_ptr;
-        }
-    }
+    find_merge_vertexes_and_edges_to_split(merges, edges_to_split);
     
     //Before moving on and making changes, check if the move causes problems.
-    //Start by checking all crossing edges, but removing all of the ones that
-    //come from edge splits or vertex merges.
-    vector<edge_intersection> intersections =
-        get_intersecting_edges();
-    for(auto &m : merges) {
-        for(size_t e1 = 0; e1 < m.first->edges.size(); ++e1) {
-            for(size_t e2 = 0; e2 < m.second->edges.size(); ++e2) {
-                for(size_t i = 0; i < intersections.size();) {
-                    if(
-                        intersections[i].contains(m.first->edges[e1]) &&
-                        intersections[i].contains(m.second->edges[e2])
-                    ) {
-                        intersections.erase(intersections.begin() + i);
-                    } else {
-                        ++i;
-                    }
-                }
-            }
-        }
-    }
-    for(auto &v : edges_to_split) {
-        for(size_t e = 0; e < v.first->edges.size(); ++e) {
-            for(size_t i = 0; i < intersections.size();) {
-                if(
-                    intersections[i].contains(v.first->edges[e]) &&
-                    intersections[i].contains(v.second)
-                ) {
-                    intersections.erase(intersections.begin() + i);
-                } else {
-                    ++i;
-                }
-            }
-        }
-    }
-    
-    //If we ended up with any intersection still, abort!
-    if(!intersections.empty()) {
-        cancel_layout_moving();
-        forget_prepared_state(pre_move_area_data);
-        pre_move_area_data = NULL;
-        status_text = "That move would cause edges to intersect!";
+    if(find_move_problems(merges, edges_to_split)) {
         return;
     }
     
-    //If there's a vertex between any dragged vertex and its merge, and this
-    //vertex was meant to be a merge destination itself, then don't do it.
-    //When the first merge happens, this vertex will be gone, and we'll be
-    //unable to use it for the second merge. There are no plans to support
-    //this complex corner case, so abort!
-    for(auto &m : merges) {
-        vertex* crushed_vertex = NULL;
-        if(m.first->is_2nd_degree_neighbor(m.second, &crushed_vertex)) {
-        
-            for(auto &m2 : merges) {
-                if(m2.second == crushed_vertex) {
-                    cancel_layout_moving();
-                    forget_prepared_state(pre_move_area_data);
-                    pre_move_area_data = NULL;
-                    status_text =
-                        "That move would crush an edge that's in the middle!";
-                    return;
-                }
-            }
-        }
-    }
-    
     //Merge vertexes and split edges now.
-    for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
-        merges[v->first] =
-            split_edge(v->second, point(v->first->x, v->first->y));
-        //This split could've thrown off the edge pointer of a different
-        //vertex to merge. Let's re-calculate.
-        edge* new_edge = game.cur_area_data.edges.back();
-        auto v2 = v;
-        ++v2;
-        for(; v2 != edges_to_split.end(); ++v2) {
-            if(v->second != v2->second) continue;
-            v2->second =
-                get_correct_post_split_edge(v2->first, v2->second, new_edge);
-        }
-    }
-    for(auto &m : merges) {
-        merge_vertex(m.first, m.second, &merge_affected_sectors);
-    }
-    
-    affected_sectors.insert(
-        merge_affected_sectors.begin(), merge_affected_sectors.end()
+    map<edge*, edge*> dummy; //TODO
+    split_edges_and_merge_vertexes(
+        merges, edges_to_split, affected_sectors, dummy
     );
     
     //Update all affected sectors.
     update_affected_sectors(affected_sectors);
     
+    //Finish up.
     register_change("vertex movement", pre_move_area_data);
     pre_move_area_data = NULL;
     clear_layout_moving();
@@ -1096,6 +901,91 @@ void area_editor::finish_new_sector_drawing() {
         "Created sector with " +
         amount_str((int) new_sector->edges.size(), "edge") + ", " +
         amount_str((int) drawing_vertexes.size(), "vertex", "vertexes") + ".";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes a sector duplication.
+ */
+void area_editor::finish_sector_duplication() {
+    unordered_set<sector*> affected_sectors;
+    map<vertex*, vertex*> merges;
+    map<vertex*, edge*> edges_to_split;
+    map<edge*, sector*> edge_new_outer_sectors;
+    
+    //Edges where a side is marked as NULL could have had a different
+    //sector before the duplication. Let's find those, save what their
+    //new sector ought to be, and only then actually finish placing.
+    //Afterwards, we can go back, and all edges sides that neeed a
+    //new sector can get them.
+    map<edge*, std::pair<sector*, size_t> > edge_sectors;
+    for(edge* e : selected_edges) {
+        if(e->sectors[0] == NULL || e->sectors[1] == NULL) {
+            size_t s_nr = INVALID;
+            point p =
+                (
+                    point(e->vertexes[0]->x, e->vertexes[0]->y) +
+                    point(e->vertexes[1]->x, e->vertexes[1]->y)
+                ) / 2.0f;
+            sector* s_ptr = get_sector(p, &s_nr, false);
+            edge_sectors[e] = std::make_pair(s_ptr, s_nr);
+        }
+    }
+    
+    //Get sectors that we already know will be affected.
+    for(edge* e : selected_edges) {
+        if(e->sectors[0]) affected_sectors.insert(e->sectors[0]);
+        if(e->sectors[1]) affected_sectors.insert(e->sectors[1]);
+    }
+    get_affected_sectors(selected_vertexes, affected_sectors);
+    
+    //Find merge vertexes and edges to split, if any.
+    find_merge_vertexes_and_edges_to_split(merges, edges_to_split);
+    
+    //Before moving on and making changes, check if it causes problems.
+    if(find_move_problems(merges, edges_to_split)) {
+        return;
+    }
+    
+    //We need to figure out where moved edges have landed, so we can set their
+    //new outer sector.
+    for(edge* e : selected_edges) {
+        if(e->sectors[0] != NULL && e->sectors[1] != NULL) continue;
+        point midpoint =
+            point(e->vertexes[0]->x, e->vertexes[0]->y) +
+            point(e->vertexes[1]->x, e->vertexes[1]->y);
+        midpoint = midpoint / 2.0f;
+        sector* outer_sector = get_sector(midpoint, NULL, false);
+        edge_new_outer_sectors[e] = outer_sector;
+        affected_sectors.insert(outer_sector);
+    }
+    
+    //Split edges and merge vertexes now.
+    map<edge*, edge*> edge_merge_destinations;
+    split_edges_and_merge_vertexes(
+        merges, edges_to_split, affected_sectors, edge_merge_destinations
+    );
+    
+    //Apply the new outer sectors, if any.
+    for(edge* e : selected_edges) {
+        auto edge_sector_it = edge_sectors.find(e);
+        if(edge_sector_it == edge_sectors.end()) continue;
+        for(size_t s = 0; s < 2; ++s) {
+            if(e->sectors[0] == NULL) {
+                game.cur_area_data.connect_edge_to_sector(
+                    e, edge_sector_it->second.first, s
+                );
+            }
+        }
+    }
+    
+    //Update all affected sectors.
+    update_affected_sectors(affected_sectors);
+    
+    //Finish up.
+    register_change("vertex movement", pre_move_area_data);
+    pre_move_area_data = NULL;
+    clear_layout_moving();
 }
 
 

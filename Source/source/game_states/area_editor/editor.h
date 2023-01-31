@@ -250,6 +250,8 @@ private:
         EDITOR_SUB_STATE_DRAWING,
         //Drawing a circular sector.
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
+        //Duplicating a sector.
+        EDITOR_SUB_STATE_DUPLICATE_SECTOR,
         //On-canvas texture effect editing.
         EDITOR_SUB_STATE_OCTEE,
         //Quick sector height set.
@@ -587,10 +589,19 @@ private:
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
+    void find_merge_vertexes_and_edges_to_split(
+        map<vertex*, vertex*> &merges,
+        map<vertex*, edge*> &edges_to_split
+    );
+    bool find_move_problems(
+        map<vertex*, vertex*> &merges,
+        map<vertex*, edge*> &edges_to_split
+    );
     void find_problems();
     void finish_circle_sector();
     void finish_layout_moving();
     void finish_new_sector_drawing();
+    void finish_sector_duplication();
     void forget_prepared_state(area_data* prepared_change);
     void get_affected_sectors(
         sector* s_ptr, unordered_set<sector*> &list
@@ -647,7 +658,8 @@ private:
     void load_reference();
     bool merge_sectors(sector* s1, sector* s2);
     void merge_vertex(
-        vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
+        vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors,
+        map<edge*, edge*>* edge_destinations
     );
     void populate_texture_suggestions();
     area_data* prepare_state();
@@ -671,6 +683,12 @@ private:
     void set_selection_status_text();
     void set_new_circle_sector_points();
     point snap_point(const point &p, const bool ignore_selected = false);
+    void split_edges_and_merge_vertexes(
+        map<vertex*, vertex*> &merges,
+        map<vertex*, edge*> &edges_to_split,
+        unordered_set<sector*> &affected_sectors,
+        map<edge*, edge*> &edge_destinations
+    );
     void split_sector_with_drawing();
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(
