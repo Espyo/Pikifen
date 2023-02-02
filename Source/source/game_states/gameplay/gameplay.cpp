@@ -327,6 +327,12 @@ void gameplay_state::enter() {
     big_msg_time = 0.0f;
     delta_t_mult = 0.5f;
     
+    if(!game.states.area_ed->quick_play_area_path.empty()) {
+        //If this is an area editor quick play, skip the "Ready..." interlude.
+        interlude_time = GAMEPLAY::BIG_MSG_READY_DUR;
+        big_msg_time = GAMEPLAY::BIG_MSG_READY_DUR;
+    }
+    
     hud->gui.hide_items();
     if(went_to_results) {
         game.fade_mgr.start_fade(true, nullptr);

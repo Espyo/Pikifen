@@ -823,7 +823,7 @@ void pause_menu_struct::init_main_pause_menu() {
     );
     gui.add_item(area_name_text, "area_name");
     
-    //Area name.
+    //Area subtitle.
     text_gui_item* area_subtitle_text =
         new text_gui_item(
         get_subtitle_or_mission_goal(

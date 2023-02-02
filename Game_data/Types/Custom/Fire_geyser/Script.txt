@@ -41,6 +41,7 @@ script {
     destroyed {
         on_enter {
             set_animation destroyed
+            stop_particles
             start_dying
         }
     }
