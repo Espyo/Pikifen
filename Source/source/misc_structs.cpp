@@ -138,6 +138,7 @@ asset_file_names_struct::asset_file_names_struct() :
     mouse_cursor("Mouse_cursor.png"),
     notification("Notification.png"),
     pikmin_spirit("Pikmin_spirit.png"),
+    random("Random.png"),
     rock("Rock.png"),
     slim_font("Slim_font.otf"),
     shadow("Shadow.png"),
@@ -193,6 +194,8 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("mouse_cursor", mouse_cursor);
     rs.set("notification", notification);
     rs.set("pikmin_spirit", pikmin_spirit);
+    rs.set("random", random);
+    rs.set("rock", rock);
     rs.set("shadow", shadow);
     rs.set("smack", smack);
     rs.set("smoke", smoke);
@@ -2056,6 +2059,7 @@ system_asset_list::system_asset_list():
     bmp_mouse_cursor(nullptr),
     bmp_notification(nullptr),
     bmp_pikmin_spirit(nullptr),
+    bmp_random(nullptr),
     bmp_rock(nullptr),
     bmp_shadow(nullptr),
     bmp_smack(nullptr),

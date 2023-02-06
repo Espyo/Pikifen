@@ -594,14 +594,16 @@ void area_menu_state::init_gui_info_page() {
  */
 void area_menu_state::init_gui_main() {
     gui.register_coords("back",          12,  5, 20,  6);
-    gui.register_coords("pick_text",     45,  5, 42,  6);
+    gui.register_coords("pick_text",     40,  5, 32,  6);
     gui.register_coords("list",          20, 51, 36, 82);
     gui.register_coords("list_scroll",   40, 51,  2, 82);
-    gui.register_coords("view_toggle",   83,  5, 30,  6);
+    gui.register_coords("view_toggle",   74,  5, 32,  6);
     gui.register_coords("info_box",      70, 51, 56, 82);
     gui.register_coords("specs_box",     70, 51, 56, 82);
+    gui.register_coords("random",        95,  5,  6,  6);
     gui.register_coords("tooltip",       50, 96, 96,  4);
     gui.register_coords("no_areas_text", 50, 50, 96, 10);
+    
     gui.read_coords(
         data_node(AREA_MENU::GUI_FILE_PATH).get_child_by_name("positions")
     );
@@ -749,6 +751,29 @@ void area_menu_state::init_gui_main() {
             );
         };
         gui.add_item(info_box, "info_box");
+        
+        //Random button.
+        button_gui_item* random_button =
+            new button_gui_item("", game.fonts.standard);
+        random_button->on_draw =
+        [random_button] (const point & center, const point & size) {
+            draw_button(
+                center, size, "", game.fonts.standard, COLOR_WHITE,
+                random_button->selected
+            );
+            draw_bitmap_in_box(
+                game.sys_assets.bmp_random,
+                center, size - 8, true
+            );
+        };
+        random_button->on_activate =
+        [this] (const point &) {
+            size_t area_idx = randomi(0, area_buttons.size() - 1);
+            area_buttons[area_idx]->on_activate(point());
+        };
+        random_button->on_get_tooltip =
+        [] () { return "Pick a random area."; };
+        gui.add_item(random_button, "random");
         
         if(area_type == AREA_TYPE_MISSION) {
             //View toggle button.

@@ -9,9 +9,6 @@ Next tasks (roughly sorted most important first)
     
     
     --- v0.24.0 ---
-    Replace the function documentations with Doxygen so VS Code can make use of it in tooltips
-    Could Queen Candypop Buds have script vars to control which types they can switch to? (thanks Darthvato)
-    Random area button
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
@@ -874,8 +871,11 @@ Tasks for later on (I might never implement these)
         Suggestions
             Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
             An action with which to change a mob's home
+            Could Queen Candypop Buds have script vars to control which types they can switch to? (thanks Darthvato)
             A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
                 You can just give the mob a status effect that changes its speed
+        Code
+            Replace the function documentations with Doxygen so VS Code can make use of it in tooltips
     Possible solutions to known issues
         Regarding true fullscreen crashing when a message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features

@@ -180,6 +180,8 @@ struct asset_file_names_struct {
     string notification;
     //Pikmin spirit.
     string pikmin_spirit;
+    //Randomness symbol.
+    string random;
     //A rock.
     string rock;
     //Slim font.
@@ -650,6 +652,8 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_notification;
     //Pikmin spirit.
     ALLEGRO_BITMAP* bmp_pikmin_spirit;
+    //Randomness symbol.
+    ALLEGRO_BITMAP* bmp_random;
     //A rock.
     ALLEGRO_BITMAP* bmp_rock;
     //Mob shadow.

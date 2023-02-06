@@ -1209,6 +1209,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.notification);
     game.sys_assets.bmp_pikmin_spirit =
         game.bitmaps.get(game.asset_file_names.pikmin_spirit);
+    game.sys_assets.bmp_random =
+        game.bitmaps.get(game.asset_file_names.random);
     game.sys_assets.bmp_rock =
         game.bitmaps.get(game.asset_file_names.rock);
     game.sys_assets.bmp_shadow =
@@ -1944,6 +1946,7 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_mouse_cursor);
     game.bitmaps.detach(game.sys_assets.bmp_notification);
     game.bitmaps.detach(game.sys_assets.bmp_pikmin_spirit);
+    game.bitmaps.detach(game.sys_assets.bmp_random);
     game.bitmaps.detach(game.sys_assets.bmp_rock);
     game.bitmaps.detach(game.sys_assets.bmp_shadow);
     game.bitmaps.detach(game.sys_assets.bmp_smack);
