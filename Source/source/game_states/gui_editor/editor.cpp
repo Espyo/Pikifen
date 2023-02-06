@@ -410,20 +410,31 @@ bool gui_editor::save_file() {
  *   Point to snap.
  */
 point gui_editor::snap_point(const point &p) {
+    point final_point = p;
     bool do_snap = game.options.gui_editor_snap;
+    
+    if(is_ctrl_pressed) {
+        if(cur_transformation_widget.is_moving_center_handle()) {
+            final_point =
+                snap_point_to_axis(
+                    final_point, cur_transformation_widget.get_old_center()
+                );
+        }
+    }
+    
     if(is_shift_pressed) {
         do_snap = !do_snap;
     }
     
     if(!do_snap) {
-        return p;
+        return final_point;
     }
     
     return
         point(
-            round(p.x / game.options.gui_editor_grid_interval) *
+            round(final_point.x / game.options.gui_editor_grid_interval) *
             game.options.gui_editor_grid_interval,
-            round(p.y / game.options.gui_editor_grid_interval) *
+            round(final_point.y / game.options.gui_editor_grid_interval) *
             game.options.gui_editor_grid_interval
         );
 }

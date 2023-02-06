@@ -1459,10 +1459,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
                 point closest_vertex_new_p =
                     snap_point(
-                        move_closest_vertex_start_pos + mouse_offset, true
+                        move_start_pos + mouse_offset, true
                     );
                 point offset =
-                    closest_vertex_new_p - move_closest_vertex_start_pos;
+                    closest_vertex_new_p - move_start_pos;
                 for(vertex* v : selected_vertexes) {
                     point orig = pre_move_vertex_coords[v];
                     v->x = orig.x + offset.x;
@@ -1522,8 +1522,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 
                 point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
                 point closest_mob_new_p =
-                    snap_point(move_closest_mob_start_pos + mouse_offset);
-                point offset = closest_mob_new_p - move_closest_mob_start_pos;
+                    snap_point(move_start_pos + mouse_offset);
+                point offset = closest_mob_new_p - move_start_pos;
                 for(
                     auto m = selected_mobs.begin();
                     m != selected_mobs.end(); ++m
@@ -1548,8 +1548,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 
                 point mouse_offset = game.mouse_cursor_w - move_mouse_start_pos;
                 point closest_stop_new_p =
-                    snap_point(move_closest_stop_start_pos + mouse_offset);
-                point offset = closest_stop_new_p - move_closest_stop_start_pos;
+                    snap_point(move_start_pos + mouse_offset);
+                point offset = closest_stop_new_p - move_start_pos;
                 for(
                     auto s = selected_path_stops.begin();
                     s != selected_path_stops.end(); ++s

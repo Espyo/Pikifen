@@ -365,16 +365,12 @@ private:
     picker_info load_dialog_picker;
     //Closest mob to the mouse when moving.
     mob_gen* move_closest_mob;
-    //Closest mob was here when the move started (world coords).
-    point move_closest_mob_start_pos;
     //Closest path stop to the mouse when moving.
     path_stop* move_closest_stop;
-    //Closest path stop was here when the move started (world coords).
-    point move_closest_stop_start_pos;
     //Closest vertex to the mouse when moving.
     vertex* move_closest_vertex;
-    //Closest vertex was here when the move started (world coords).
-    point move_closest_vertex_start_pos;
+    //The moved thing was here when the move started (world coords).
+    point move_start_pos;
     //The mouse cursor was here when the move started (world coords).
     point move_mouse_start_pos;
     //Currently moving the selected vertexes, objects, etc.?
@@ -429,8 +425,6 @@ private:
     area_data* pre_move_area_data;
     //Position of the selected mobs before movement.
     map<mob_gen*, point> pre_move_mob_coords;
-    //Position of the selected tree shadow before movement.
-    point pre_move_shadow_coords;
     //Position of the selected path stops before movement.
     map<path_stop*, point> pre_move_stop_coords;
     //Position of the selected vertexes before movement.
@@ -681,7 +675,6 @@ private:
     );
     void start_mob_move();
     void start_path_stop_move();
-    void start_shadow_move();
     void start_vertex_move();
     void toggle_duplicate_mob_mode();
     void traverse_sector_for_split(

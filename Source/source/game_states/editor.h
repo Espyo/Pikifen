@@ -204,12 +204,16 @@ protected:
             const bool lock_center = true
         );
         bool handle_mouse_up();
+        bool is_moving_center_handle();
         bool is_moving_handle();
+        point get_old_center() const;
         
         transformation_widget();
     private:
         //What handle is being moved. -1 for none. 9 for the rotation handle.
         signed char moving_handle;
+        //Old center, before the user started dragging handles.
+        point old_center;
         //Old size, before the user started dragging handles.
         point old_size;
         //Old angle, before the user started dragging handles.
@@ -321,7 +325,7 @@ protected:
     bool is_shift_pressed;
     //Number of the mouse button pressed.
     size_t last_mouse_click;
-    //Location of the cursor on the last mouse button press.
+    //Screen location of the cursor on the last mouse button press.
     point last_mouse_click_pos;
     //Editor sub-state during the last mouse click.
     size_t last_mouse_click_sub_state;
@@ -415,6 +419,8 @@ protected:
         const string &explanation, const string &shortcut = "",
         const WIDGET_EXPLANATIONS widget_explanation = WIDGET_EXPLANATION_NONE
     );
+    point snap_point_to_axis(const point &p, const point &anchor);
+    point snap_point_to_grid(const point &p, const float grid_interval);
     void update_history(const string &n);
     void zoom_with_cursor(const float new_zoom);
     

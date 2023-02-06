@@ -11,7 +11,7 @@ Next tasks (roughly sorted most important first)
     --- v0.24.0 ---
     Replace the function documentations with Doxygen so VS Code can make use of it in tooltips
     Could Queen Candypop Buds have script vars to control which types they can switch to? (thanks Darthvato)
-    The ability to lock the cursor to an axis when dragging, in an editor, by holding Ctrl
+    Random area button
     Add several pre-packaged areas, since players have nothing to play with right now
         A tutorial area
             The area should be linear, but more intuitive and representative of the series
@@ -25,6 +25,7 @@ Next tasks (roughly sorted most important first)
             Some signs should talk about dismissing, and group moving
             Leave a bit of mistique and surprise, nonetheless
             Signs should talk about the relevant HUD icons when appropriate
+            When you press Play, if the stats say played areas = 0, a prompt should appear asking if you want to play the tutorial area first
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
             Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
         Helodity's Adventure area (see #content-sharing)
@@ -838,6 +839,9 @@ Tasks for later on (I might never implement these)
     Missions could have unlock criteria, like a mission only unlocking if another one is cleared, or if another one has a platinum medal, or if the player beat that other one with no Pikmin deaths (thanks Helodity)
     A button next to the medal point requirement widgets to set it to the combined amount of the goal
         This is tricky to do because some goal amounts rely on some complicated logic and data, some of which may not be available to the area editor. e.g. Collect Treasures needs to know exactly how many resources a pile will end up having
+    Observation spot
+        An interactable that makes the camera zoom out a lot for a few seconds, so you can get a good overview of the surrounding location
+        Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey
     Story mode
         A way to choose what landing site of the area you want to start the day in
     [NEEDS BRAINSTORMING] Online play?

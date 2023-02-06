@@ -1915,7 +1915,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
 
 /* ----------------------------------------------------------------------------
  * Snaps a point to the nearest available snapping space, based on the
- * current snap mode and Shift key state.
+ * current snap mode, Shift key state, and Ctrl key state.
  * p:
  *   Point to snap.
  * ignore_selected:
@@ -1924,6 +1924,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
  */
 point area_editor::snap_point(const point &p, const bool ignore_selected) {
     SNAP_MODES mode_to_use = game.options.area_editor_snap_mode;
+    point final_point = p;
     
     if(is_shift_pressed) {
         if(game.options.area_editor_snap_mode == SNAP_NOTHING) {
@@ -1933,16 +1934,25 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
         }
     }
     
+    if(is_ctrl_pressed) {
+        if(cur_transformation_widget.is_moving_center_handle()) {
+            final_point =
+                snap_point_to_axis(
+                    final_point, cur_transformation_widget.get_old_center()
+                );
+        } else if(moving) {
+            final_point =
+                snap_point_to_axis(final_point, move_start_pos);
+        }
+    }
+    
     switch(mode_to_use) {
     case SNAP_GRID: {
         return
-            point(
-                round(p.x / game.options.area_editor_grid_interval) *
-                game.options.area_editor_grid_interval,
-                round(p.y / game.options.area_editor_grid_interval) *
+            snap_point_to_grid(
+                final_point,
                 game.options.area_editor_grid_interval
             );
-            
         break;
         
     } case SNAP_VERTEXES: {
@@ -1964,12 +1974,12 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
         }
         vector<std::pair<dist, vertex*> > snappable_vertexes =
             get_merge_vertexes(
-                p, vertexes_to_check,
+                final_point, vertexes_to_check,
                 game.options.area_editor_snap_threshold / game.cam.zoom
             );
         if(snappable_vertexes.empty()) {
-            cursor_snap_cache = p;
-            return p;
+            cursor_snap_cache = final_point;
+            return final_point;
         } else {
             sort(
                 snappable_vertexes.begin(), snappable_vertexes.end(),
@@ -1997,7 +2007,6 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
         cursor_snap_timer.start();
         
         dist closest_dist;
-        point closest_point = p;
         bool got_one = false;
         
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -2022,7 +2031,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
                 get_closest_point_in_line_seg(
                     point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
                     point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                    p, &r
+                    final_point, &r
                 );
                 
             if(r < 0.0f) {
@@ -2031,7 +2040,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
                 edge_p = point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y);
             }
             
-            dist d(p, edge_p);
+            dist d(final_point, edge_p);
             if(d > game.options.area_editor_snap_threshold / game.cam.zoom) {
                 continue;
             }
@@ -2039,12 +2048,12 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
             if(!got_one || d < closest_dist) {
                 got_one = true;
                 closest_dist = d;
-                closest_point = edge_p;
+                final_point = edge_p;
             }
         }
         
-        cursor_snap_cache = closest_point;
-        return closest_point;
+        cursor_snap_cache = final_point;
+        return final_point;
         
         break;
         
@@ -2055,7 +2064,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
     }
     }
     
-    return p;
+    return final_point;
 }
 
 

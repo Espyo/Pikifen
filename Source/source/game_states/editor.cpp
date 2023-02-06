@@ -1607,6 +1607,41 @@ void editor::set_tooltip(
 
 
 /* ----------------------------------------------------------------------------
+ * Snaps a point to either the vertical axis or horizontal axis, depending
+ * on the anchor point.
+ * p:
+ *   Point to snap.
+ * anchor:
+ *   Anchor point.
+ */
+point editor::snap_point_to_axis(const point &p, const point &anchor) {
+    float h_diff = fabs(p.x - anchor.x);
+    float v_diff = fabs(p.y - anchor.y);
+    if(h_diff > v_diff) {
+        return point(p.x, anchor.y);
+    } else {
+        return point(anchor.x, p.y);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Snaps a point to the nearest grid intersection.
+ * p:
+ *   Point to snap.
+ * grid_interval:
+ *   Current grid interval.
+ */
+point editor::snap_point_to_grid(const point &p, const float grid_interval) {
+    return
+        point(
+            round(p.x / grid_interval) * grid_interval,
+            round(p.y / grid_interval) * grid_interval
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads loaded editor-related content.
  */
 void editor::unload() {
@@ -2319,6 +2354,14 @@ void editor::transformation_widget::get_locations(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the center point before the user dragged the central handle.
+ */
+point editor::transformation_widget::get_old_center() const {
+    return old_center;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the user having held the left mouse button down.
  * Returns true if the user did click on a handle.
  * mouse_coords:
@@ -2347,6 +2390,7 @@ bool editor::transformation_widget::handle_mouse_down(
         if(dist(handles[h], mouse_coords) <= EDITOR::TW_HANDLE_RADIUS * zoom) {
             if(h == 4) {
                 moving_handle = h;
+                old_center = *center;
                 return true;
             } else if(size) {
                 moving_handle = h;
@@ -2552,6 +2596,14 @@ bool editor::transformation_widget::handle_mouse_up() {
     
     moving_handle = -1;
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Is the user currently moving the central handle?
+ */
+bool editor::transformation_widget::is_moving_center_handle() {
+    return (moving_handle == 4);
 }
 
 

@@ -2380,7 +2380,8 @@ void area_editor::press_snap_mode_button() {
  */
 void area_editor::press_undo_button() {
     if(
-        sub_state != EDITOR_SUB_STATE_NONE || moving || selecting
+        sub_state != EDITOR_SUB_STATE_NONE ||
+        moving || selecting || cur_transformation_widget.is_moving_handle()
     ) {
         status_text = "Can't undo in the middle of an operation.";
         return;
@@ -3857,7 +3858,7 @@ void area_editor::start_mob_move() {
         if(!move_closest_mob || d < move_closest_mob_dist) {
             move_closest_mob = m;
             move_closest_mob_dist = d;
-            move_closest_mob_start_pos = m->pos;
+            move_start_pos = m->pos;
         }
     }
     
@@ -3884,20 +3885,9 @@ void area_editor::start_path_stop_move() {
         if(!move_closest_stop || d < move_closest_stop_dist) {
             move_closest_stop = *s;
             move_closest_stop_dist = d;
-            move_closest_stop_start_pos = (*s)->pos;
+            move_start_pos = (*s)->pos;
         }
     }
-    
-    move_mouse_start_pos = game.mouse_cursor_w;
-    moving = true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Procedure to start moving the selected tree shadow.
- */
-void area_editor::start_shadow_move() {
-    pre_move_shadow_coords = selected_shadow->center;
     
     move_mouse_start_pos = game.mouse_cursor_w;
     moving = true;
@@ -3920,7 +3910,7 @@ void area_editor::start_vertex_move() {
         if(!move_closest_vertex || d < move_closest_vertex_dist) {
             move_closest_vertex = v;
             move_closest_vertex_dist = d;
-            move_closest_vertex_start_pos = p;
+            move_start_pos = p;
         }
     }
     
