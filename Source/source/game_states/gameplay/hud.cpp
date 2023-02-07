@@ -1162,6 +1162,7 @@ hud_struct::hud_struct() :
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data.mission.grading_mode == MISSION_GRADING_POINTS &&
         game.cur_area_data.mission.point_hud_data != 0
     ) {
     
