@@ -1,0 +1,3 @@
+init {
+    start_particles geyser 0 0 16
+}

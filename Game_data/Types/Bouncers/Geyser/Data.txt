@@ -1,0 +1,9 @@
+name = Geyser
+description = A geyser of hot water that throws leaders elsewhere. Pikmin don't like the sensation, so they don't use it.
+
+custom_category_name = Useful
+height = 8
+pushable = false
+pushes = true
+riders = leaders
+radius = 24

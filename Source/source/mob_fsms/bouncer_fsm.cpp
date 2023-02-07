@@ -30,7 +30,6 @@ void bouncer_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EV_RIDER_ADDED); {
             efc.run(bouncer_fsm::handle_mob);
-            efc.change_state("bouncing");
         }
     }
     efc.new_state("bouncing", BOUNCER_STATE_BOUNCING); {
@@ -142,6 +141,8 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     toucher->face(angle, NULL, true);
     
     ev->run(toucher, (void*) m);
+    
+    m->fsm.set_state(BOUNCER_STATE_BOUNCING, info1, info2);
 }
 
 

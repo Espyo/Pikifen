@@ -1,24 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="Obstacles.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   inkscape:version="1.2 (dc2aeda, 2022-05-15)"
    version="1.1"
    id="svg4288"
-   viewBox="0 0 744.09448819 1052.3622047"
-   height="297mm"
-   width="210mm">
+   viewBox="0 0 793.70081 1122.5197"
+   height="1122.5197"
+   width="793.70081"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
      id="title1141">Obstacle spritesheets</title>
   <defs
      id="defs4290">
+    <linearGradient
+       id="fire-glow-7">
+      <stop
+         id="stop5674"
+         offset="0"
+         style="stop-color:#ff0000;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ff0000;stop-opacity:0.49803922;"
+         offset="0.6785714"
+         id="stop5676" />
+      <stop
+         id="stop5678"
+         offset="1"
+         style="stop-color:#ff0000;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       id="fire-5">
+      <stop
+         id="stop5583"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1" />
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1"
+         offset="0.45454547"
+         id="stop5585" />
+      <stop
+         id="stop5587"
+         offset="1"
+         style="stop-color:#ff0000;stop-opacity:1" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="large-crystal-4">
@@ -112,7 +142,12 @@
        stroke_width="2.8125"
        is_visible="true"
        id="path-effect3856"
-       effect="taper_stroke" />
+       effect="taper_stroke"
+       lpeversion="0"
+       start_smoothing="0.5"
+       end_smoothing="0.5"
+       start_shape="center"
+       end_shape="center" />
     <inkscape:path-effect
        effect="taper_stroke"
        id="path-effect3663"
@@ -122,7 +157,12 @@
        end_offset="0.99999"
        smoothing="0.5"
        jointype="extrapolated"
-       miter_limit="100" />
+       miter_limit="100"
+       lpeversion="0"
+       start_smoothing="0.5"
+       end_smoothing="0.5"
+       start_shape="center"
+       end_shape="center" />
     <inkscape:path-effect
        miter_limit="100"
        jointype="extrapolated"
@@ -132,7 +172,12 @@
        stroke_width="2.8125"
        is_visible="true"
        id="path-effect3566"
-       effect="taper_stroke" />
+       effect="taper_stroke"
+       lpeversion="0"
+       start_smoothing="0.5"
+       end_smoothing="0.5"
+       start_shape="center"
+       end_shape="center" />
     <linearGradient
        id="electrical-wire-insulator-2"
        inkscape:collect="always">
@@ -1224,36 +1269,30 @@
          id="stop4337" />
     </linearGradient>
     <linearGradient
-       id="fire-glow-7"
-       inkscape:collect="always">
+       id="water-glow">
       <stop
          id="stop11191"
          offset="0"
-         style="stop-color:#ff0000;stop-opacity:1;" />
+         style="stop-color:#0083ff;stop-opacity:1;" />
       <stop
-         style="stop-color:#ff0000;stop-opacity:0.49803922;"
+         style="stop-color:#0084ff;stop-opacity:0.49803922;"
          offset="0.6785714"
          id="stop11197" />
       <stop
          id="stop11193"
          offset="1"
-         style="stop-color:#ff0000;stop-opacity:0" />
+         style="stop-color:#0084ff;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
-       id="fire-5"
-       inkscape:collect="always">
+       id="water-geyser">
       <stop
-         id="stop10753"
-         offset="0"
-         style="stop-color:#ffffff;stop-opacity:1" />
-      <stop
-         style="stop-color:#ffff00;stop-opacity:1"
+         style="stop-color:#12d5d6;stop-opacity:1;"
          offset="0.45454547"
          id="stop10761" />
       <stop
          id="stop10755"
          offset="1"
-         style="stop-color:#ff0000;stop-opacity:1" />
+         style="stop-color:#3652f2;stop-opacity:1;" />
     </linearGradient>
     <linearGradient
        id="geyser-hole-6"
@@ -1334,16 +1373,16 @@
     <radialGradient
        r="14.90776"
        fy="1028.1168"
-       fx="73.467344"
+       fx="73.467346"
        cy="1028.1168"
-       cx="73.467344"
+       cx="73.467346"
        gradientTransform="matrix(1,0,0,0.99392849,50,6.242219)"
        gradientUnits="userSpaceOnUse"
        id="radialGradient11084"
        xlink:href="#geyser-hole-6"
        inkscape:collect="always" />
     <radialGradient
-       gradientTransform="translate(50,0)"
+       gradientTransform="translate(50)"
        r="24"
        fy="1028.3622"
        fx="74"
@@ -1359,7 +1398,7 @@
        fx="115"
        cy="1009.3622"
        cx="115"
-       gradientTransform="translate(214,0)"
+       gradientTransform="translate(214)"
        gradientUnits="userSpaceOnUse"
        id="radialGradient11140"
        xlink:href="#fire-5"
@@ -1496,9 +1535,9 @@
     </filter>
     <filter
        height="1.1510244"
-       y="-0.075512195"
+       y="-0.075512193"
        width="1.1376"
-       x="-0.0688"
+       x="-0.068799998"
        id="filter4748"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1509,9 +1548,9 @@
     </filter>
     <filter
        height="1.144"
-       y="-0.072"
+       y="-0.072000003"
        width="1.144"
-       x="-0.072"
+       x="-0.072000003"
        id="filter4768"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1522,9 +1561,9 @@
     </filter>
     <filter
        height="1.144"
-       y="-0.072"
+       y="-0.072000003"
        width="1.144"
-       x="-0.072"
+       x="-0.072000003"
        id="filter4776"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1548,9 +1587,9 @@
     </filter>
     <filter
        height="1.1445112"
-       y="-0.07225558"
+       y="-0.072255577"
        width="1.1434924"
-       x="-0.071746222"
+       x="-0.071746218"
        id="filter4800"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1561,9 +1600,9 @@
     </filter>
     <filter
        height="1.1446691"
-       y="-0.072334565"
+       y="-0.072334563"
        width="1.143337"
-       x="-0.071668516"
+       x="-0.071668515"
        id="filter4804"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1584,10 +1623,10 @@
        xlink:href="#dirt"
        inkscape:collect="always" />
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.8453027"
+       y="-0.42265135"
+       width="1.8344756"
+       x="-0.41723779"
        id="filter1222"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1621,10 +1660,10 @@
        xlink:href="#dirt"
        inkscape:collect="always" />
     <filter
-       height="1.1920584"
-       y="-0.096029195"
-       width="1.2017817"
-       x="-0.10089083"
+       height="1.193356"
+       y="-0.096678"
+       width="1.1828338"
+       x="-0.091416884"
        id="filter1451"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1634,10 +1673,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.5419559"
+       y="-0.27097795"
+       width="1.5497737"
+       x="-0.27488683"
        id="filter1222-3"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1647,10 +1686,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.3577052"
+       y="-0.17885262"
+       width="1.4990109"
+       x="-0.24950547"
        id="filter1222-7"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1660,10 +1699,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.5419559"
+       y="-0.27097795"
+       width="1.5497736"
+       x="-0.27488681"
        id="filter1222-3-2"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1673,10 +1712,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.1920584"
-       y="-0.096029192"
-       width="1.2017817"
-       x="-0.10089083"
+       height="1.1900051"
+       y="-0.095002548"
+       width="1.1852859"
+       x="-0.092642957"
        id="filter1451-6"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1686,10 +1725,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.3939792"
+       y="-0.19698962"
+       width="1.8598313"
+       x="-0.42991563"
        id="filter1222-9-0"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1710,10 +1749,10 @@
        xlink:href="#dirt"
        inkscape:collect="always" />
     <filter
-       height="1.1920584"
-       y="-0.096029192"
-       width="1.2017817"
-       x="-0.10089083"
+       height="1.1900052"
+       y="-0.095002595"
+       width="1.1805096"
+       x="-0.090254784"
        id="filter1451-6-1"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1723,10 +1762,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.5550662"
+       y="-0.27753311"
+       width="1.8200146"
+       x="-0.41000731"
        id="filter1222-3-2-5"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1736,10 +1775,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.3577052"
+       y="-0.17885262"
+       width="1.8768285"
+       x="-0.43841424"
        id="filter1222-7-0"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1749,10 +1788,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.1920584"
-       y="-0.096029192"
-       width="1.2017817"
-       x="-0.10089083"
+       height="1.1786452"
+       y="-0.089322599"
+       width="1.1893303"
+       x="-0.094665166"
        id="filter1451-6-1-8"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1762,10 +1801,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.4491243"
+       y="-0.22456213"
+       width="1.9402683"
+       x="-0.47013417"
        id="filter1222-7-0-8"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1775,10 +1814,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.3577052"
+       y="-0.17885262"
+       width="1.9814477"
+       x="-0.49072384"
        id="filter1222-7-0-8-2"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1788,10 +1827,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.1920584"
-       y="-0.096029192"
-       width="1.2017817"
-       x="-0.10089083"
+       height="1.1810317"
+       y="-0.090515867"
+       width="1.1758107"
+       x="-0.087905339"
        id="filter1451-6-1-8-2"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -1801,10 +1840,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.3362261"
-       y="-0.16811307"
-       width="1.3710926"
-       x="-0.18554628"
+       height="1.9341119"
+       y="-0.46705594"
+       width="1.7288565"
+       x="-0.36442823"
        id="filter1222-99"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2184,7 +2223,7 @@
          inkscape:connector-curvature="0"
          id="path3791"
          d="m 200.6351,898.61232 -12.82578,4.6875 -5.13031,10.3125 -1.92387,18.75 3.20644,15.00001 5.77161,5.625 h 5.13031 l 5.13031,5.625 7.05418,-4.6875 8.33676,1.875 3.84773,-9.375 0.64129,-10.31251 1.92387,-11.25 -1.28258,-15 -4.48902,-6.5625 -3.84774,-0.9375 z"
-         style="display:inline;opacity:1;vector-effect:none;fill:url(#radialGradient3793);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         style="display:inline;opacity:1;vector-effect:none;fill:url(#radialGradient3793);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </clipPath>
     <radialGradient
        r="28.125"
@@ -2291,7 +2330,11 @@
     <filter
        inkscape:label="Stone variance"
        id="filter2135"
-       style="color-interpolation-filters:sRGB">
+       style="color-interpolation-filters:sRGB"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          numOctaves="2"
          baseFrequency="0.051000000000000024"
@@ -2334,7 +2377,7 @@
        inkscape:collect="always" />
     <filter
        height="1.0231111"
-       y="-0.011555556"
+       y="-0.011555555"
        width="1.02496"
        x="-0.01248"
        id="filter2281"
@@ -2346,10 +2389,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.0579461"
-       y="-0.02897306"
-       width="1.0151341"
-       x="-0.0075670529"
+       height="1.0254278"
+       y="-0.012713915"
+       width="1.0131009"
+       x="-0.006550431"
        id="filter2392"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2359,10 +2402,10 @@
          inkscape:collect="always" />
     </filter>
     <filter
-       height="1.5546237"
-       y="-0.27731183"
-       width="1.2240826"
-       x="-0.11204131"
+       height="1.5711448"
+       y="-0.28557242"
+       width="1.2240865"
+       x="-0.11204326"
        id="filter2436"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2409,7 +2452,7 @@
        height="1.036973"
        y="-0.018486477"
        width="1.1026014"
-       x="-0.051300722"
+       x="-0.051300721"
        id="filter2635"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2420,7 +2463,7 @@
     </filter>
     <filter
        height="1.0365494"
-       y="-0.018274687"
+       y="-0.018274686"
        width="1.0708144"
        x="-0.035407205"
        id="filter2639"
@@ -2435,7 +2478,7 @@
        height="1.3776391"
        y="-0.18881954"
        width="1.0121775"
-       x="-0.0060887645"
+       x="-0.0060887644"
        id="filter2643"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2446,9 +2489,9 @@
     </filter>
     <filter
        height="1.0666905"
-       y="-0.033345236"
+       y="-0.033345235"
        width="1.0651259"
-       x="-0.032562941"
+       x="-0.03256294"
        id="filter2647"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2579,9 +2622,9 @@
     </pattern>
     <filter
        height="1.12"
-       y="-0.060000006"
+       y="-0.060000007"
        width="1.12"
-       x="-0.060000006"
+       x="-0.060000007"
        id="filter4956"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2592,9 +2635,9 @@
     </filter>
     <filter
        height="1.1387549"
-       y="-0.069377453"
+       y="-0.069377452"
        width="1.1869585"
-       x="-0.093479238"
+       x="-0.093479236"
        id="filter4992"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2605,9 +2648,9 @@
     </filter>
     <filter
        height="1.1387549"
-       y="-0.069377453"
+       y="-0.069377452"
        width="1.0558953"
-       x="-0.027947641"
+       x="-0.02794764"
        id="filter4996"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2618,9 +2661,9 @@
     </filter>
     <filter
        height="1.0891239"
-       y="-0.044561949"
+       y="-0.044561948"
        width="1.0558953"
-       x="-0.027947641"
+       x="-0.02794764"
        id="filter5000"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2631,9 +2674,9 @@
     </filter>
     <filter
        height="1.0891239"
-       y="-0.044561949"
+       y="-0.044561948"
        width="1.1869585"
-       x="-0.093479238"
+       x="-0.093479236"
        id="filter5004"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2677,7 +2720,7 @@
        x2="18.75"
        y1="499.23721"
        x1="103.125"
-       gradientTransform="rotate(-180,310.3125,499.23719)"
+       gradientTransform="rotate(180,310.3125,499.23719)"
        gradientUnits="userSpaceOnUse"
        id="linearGradient5133"
        xlink:href="#rope-lighting-2"
@@ -2697,7 +2740,7 @@
        x2="56.25"
        y1="432.67471"
        x1="18.75"
-       gradientTransform="rotate(-180,103.125,499.23719)"
+       gradientTransform="rotate(180,103.125,499.23719)"
        gradientUnits="userSpaceOnUse"
        id="linearGradient5187"
        xlink:href="#rope-shadow"
@@ -2734,10 +2777,10 @@
        xlink:href="#linearGradient4793"
        inkscape:collect="always" />
     <filter
-       height="1.1320723"
-       y="-0.066036145"
-       width="1.2307789"
-       x="-0.11538947"
+       height="1.1305"
+       y="-0.065250004"
+       width="1.230779"
+       x="-0.11538948"
        id="filter3686"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2763,14 +2806,14 @@
          sodipodi:nodetypes="ccccccccc"
          inkscape:connector-curvature="0"
          id="path3702"
-         d="m 352.5,316.42471 -27.1875,27.1875 c -1.875,1.875 -3.75,2.8125 -6.5625,2.8125 l -206.25,0 c -2.8125,0 -4.6875,-0.9375 -6.5625,-2.8125 L 78.75,316.42471 0,395.17471 h 431.25 z"
+         d="m 352.5,316.42471 -27.1875,27.1875 c -1.875,1.875 -3.75,2.8125 -6.5625,2.8125 H 112.5 c -2.8125,0 -4.6875,-0.9375 -6.5625,-2.8125 L 78.75,316.42471 0,395.17471 h 431.25 z"
          style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#5848d6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
     </clipPath>
     <filter
-       height="1.3010909"
-       y="-0.15054545"
-       width="1.0946286"
-       x="-0.047314286"
+       height="1.2615298"
+       y="-0.13076488"
+       width="1.0949299"
+       x="-0.047464969"
        id="filter3724"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2781,9 +2824,9 @@
     </filter>
     <filter
        height="1.0784286"
-       y="-0.039214286"
-       width="1.8784"
-       x="-0.4392"
+       y="-0.039214284"
+       width="1.3294"
+       x="-0.16469999"
        id="filter4336"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -2806,7 +2849,6 @@
        id="clipPath4483"
        clipPathUnits="userSpaceOnUse">
       <use
-         transform="translate(0,5.7594337e-6)"
          height="100%"
          width="100%"
          style="stroke-width:1"
@@ -2819,7 +2861,6 @@
        id="clipPath4491"
        clipPathUnits="userSpaceOnUse">
       <use
-         transform="translate(0,5.7594337e-6)"
          height="100%"
          width="100%"
          style="stroke-width:1"
@@ -2832,7 +2873,6 @@
        id="clipPath4503"
        clipPathUnits="userSpaceOnUse">
       <use
-         transform="translate(0,5.7594337e-6)"
          height="100%"
          width="100%"
          style="stroke-width:1"
@@ -2845,7 +2885,6 @@
        id="clipPath4555"
        clipPathUnits="userSpaceOnUse">
       <use
-         transform="translate(0,5.7594337e-6)"
          height="100%"
          width="100%"
          style="stroke-width:1"
@@ -2858,7 +2897,6 @@
        id="clipPath4563"
        clipPathUnits="userSpaceOnUse">
       <use
-         transform="translate(0,5.7594337e-6)"
          height="100%"
          width="100%"
          style="stroke-width:1"
@@ -2871,7 +2909,6 @@
        id="clipPath4571"
        clipPathUnits="userSpaceOnUse">
       <use
-         transform="translate(0,5.7594337e-6)"
          height="100%"
          width="100%"
          style="stroke-width:1"
@@ -2927,8 +2964,8 @@
     <filter
        height="1.25308"
        y="-0.12653999"
-       width="1.2812001"
-       x="-0.14060001"
+       width="1.2812"
+       x="-0.1406"
        id="filter4055-2"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -3009,7 +3046,7 @@
        y="0"
        x="0"
        id="filter3480"
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:menu-tooltip="Bark texture, vertical; use with deep colors"
        inkscape:menu="Textures"
        inkscape:label="Stick">
@@ -3033,7 +3070,7 @@
          id="feSpecularLighting3472"
          in="result6"
          result="result1"
-         lighting-color="rgb(255,255,255)"
+         lighting-color="#ffffff"
          surfaceScale="2"
          specularConstant="1"
          specularExponent="35">
@@ -3055,7 +3092,9 @@
          result="result4"
          operator="arithmetic"
          k2="1"
-         k3="1" />
+         k3="1"
+         k1="0"
+         k4="0" />
       <feBlend
          id="feBlend3478"
          in2="result4"
@@ -3118,9 +3157,9 @@
     </filter>
     <filter
        height="1.096"
-       y="-0.048"
+       y="-0.047999998"
        width="1.096"
-       x="-0.048"
+       x="-0.047999998"
        id="filter2080"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -3131,9 +3170,9 @@
     </filter>
     <filter
        height="1.144"
-       y="-0.072"
+       y="-0.071999994"
        width="1.144"
-       x="-0.072"
+       x="-0.071999994"
        id="filter2112"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -3197,7 +3236,7 @@
        id="mask30961"
        maskUnits="userSpaceOnUse">
       <path
-         d="M 0,1058.5197 A 64,64 0 0 1 64.000001,994.51965 L 64,1058.5197 Z"
+         d="m 0,1058.5197 a 64,64 0 0 1 64,-64.00005 v 64.00005 z"
          sodipodi:end="4.712389"
          sodipodi:start="3.1415927"
          sodipodi:ry="64"
@@ -3207,7 +3246,8 @@
          sodipodi:type="arc"
          mask="none"
          id="path30963"
-         style="opacity:1;fill:url(#linearGradient30965);fill-opacity:1;stroke:none;stroke-width:12.06795597" />
+         style="opacity:1;fill:url(#linearGradient30965);fill-opacity:1;stroke:none;stroke-width:12.068"
+         sodipodi:arc-type="slice" />
     </mask>
     <linearGradient
        y2="1058.5197"
@@ -3283,7 +3323,7 @@
        id="mask30954"
        maskUnits="userSpaceOnUse">
       <path
-         d="m 128,1058.5197 a 64,64 0 0 1 -63.999998,64 l -2e-6,-64 z"
+         d="m 128,1058.5197 a 64,64 0 0 1 -64,64 v -64 z"
          sodipodi:end="1.5707963"
          sodipodi:start="0"
          sodipodi:ry="64"
@@ -3293,7 +3333,8 @@
          sodipodi:type="arc"
          mask="none"
          id="path30956"
-         style="opacity:1;fill:url(#linearGradient30958);fill-opacity:1;stroke:none;stroke-width:12.06795597" />
+         style="opacity:1;fill:url(#linearGradient30958);fill-opacity:1;stroke:none;stroke-width:12.068"
+         sodipodi:arc-type="slice" />
     </mask>
     <linearGradient
        y2="1058.5197"
@@ -3317,10 +3358,10 @@
        xlink:href="#bouncy-mushroom-dot"
        inkscape:collect="always" />
     <filter
-       height="1.026808"
-       y="-0.01340401"
-       width="1.1524999"
-       x="-0.076249962"
+       height="1.0284835"
+       y="-0.014241762"
+       width="1.1592094"
+       x="-0.079604693"
        id="filter3963"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -3331,9 +3372,9 @@
     </filter>
     <filter
        height="1.026808"
-       y="-0.01340401"
-       width="1.1524999"
-       x="-0.076249965"
+       y="-0.013404011"
+       width="1.1619453"
+       x="-0.080972672"
        id="filter3975"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -3684,8 +3725,8 @@
     <filter
        height="1.0266551"
        y="-0.013327535"
-       width="1.1576458"
-       x="-0.0788229"
+       width="1.1576459"
+       x="-0.078822971"
        id="filter5432"
        style="color-interpolation-filters:sRGB"
        inkscape:collect="always">
@@ -4531,7 +4572,11 @@
     <filter
        inkscape:label="Nodule noise"
        id="filter2263"
-       style="color-interpolation-filters:sRGB">
+       style="color-interpolation-filters:sRGB"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          numOctaves="2"
          baseFrequency="0.34443496367735471"
@@ -4589,7 +4634,11 @@
     <filter
        inkscape:label="Large crystal noise"
        id="filter6524"
-       style="color-interpolation-filters:sRGB">
+       style="color-interpolation-filters:sRGB"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
       <feTurbulence
          numOctaves="2"
          baseFrequency="0.08834783825463427"
@@ -4727,6 +4776,372 @@
        y1="984.375"
        x2="665.625"
        y2="989.0625" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3412"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0.85130325,97.254148)"
+       cx="172.2247"
+       cy="1027.746"
+       fx="172.2247"
+       fy="1027.746"
+       r="8.7948189" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-glow"
+       id="radialGradient3414"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1666667,0,0,1.1666667,-28.833333,-74.755754)"
+       cx="173"
+       cy="1028.3622"
+       fx="173"
+       fy="1028.3622"
+       r="12" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3416"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,3.1816886e-6,-3.1818182e-6,1.0000407,295.0032,96.596574)"
+       cx="123"
+       cy="1028.3622"
+       fx="123"
+       fy="1028.3622"
+       r="22" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3418"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(263,96.63794)"
+       cx="115"
+       cy="1009.3622"
+       fx="115"
+       fy="1009.3622"
+       r="3" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3420"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(246,96.637922)"
+       cx="123"
+       cy="1028.3622"
+       fx="123"
+       fy="1028.3622"
+       r="22" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3422"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(195,95.63794)"
+       cx="115"
+       cy="1009.3622"
+       fx="115"
+       fy="1009.3622"
+       r="3" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3424"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(176,131.63794)"
+       cx="115"
+       cy="1009.3622"
+       fx="115"
+       fy="1009.3622"
+       r="3" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3426"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(197,96.638722)"
+       cx="123"
+       cy="1028.3622"
+       fx="123"
+       fy="1028.3622"
+       r="22" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3428"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(148,96.637918)"
+       cx="123"
+       cy="1028.3622"
+       fx="123"
+       fy="1028.3622"
+       r="22" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#electrical-wire-surface-light"
+       id="linearGradient3434"
+       gradientUnits="userSpaceOnUse"
+       x1="535.3125"
+       y1="160.7997"
+       x2="532.5"
+       y2="175.7997" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#electrical-wire-surface-light"
+       id="linearGradient3436"
+       gradientUnits="userSpaceOnUse"
+       x1="583.99835"
+       y1="149.84979"
+       x2="598.09937"
+       y2="139.01607" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#electrical-wire-surface-light"
+       id="linearGradient3438"
+       gradientUnits="userSpaceOnUse"
+       x1="583.6272"
+       y1="160.00226"
+       x2="579.68097"
+       y2="178.71823" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#electrical-wire-surface-light"
+       id="linearGradient3440"
+       gradientUnits="userSpaceOnUse"
+       x1="634.6875"
+       y1="158.9247"
+       x2="639.375"
+       y2="131.7372" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#electrical-wire-surface-light"
+       id="linearGradient3442"
+       gradientUnits="userSpaceOnUse"
+       x1="630.9375"
+       y1="162.6747"
+       x2="627.1875"
+       y2="180.4872" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#geyser-dirt-3"
+       id="radialGradient5685"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(197,96.637923)"
+       cx="74"
+       cy="1028.3622"
+       fx="74"
+       fy="1028.3622"
+       r="24" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#geyser-dirt-3"
+       id="radialGradient5689"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(99,96.637962)"
+       cx="74"
+       cy="1028.3622"
+       fx="74"
+       fy="1028.3622"
+       r="24" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#geyser-hole-6"
+       id="radialGradient5717"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.99392849,197,102.88014)"
+       cx="73.467346"
+       cy="1028.1168"
+       fx="73.467346"
+       fy="1028.1168"
+       r="14.90776" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#geyser-hole-6"
+       id="radialGradient5721"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.99392849,99,102.88018)"
+       cx="73.467346"
+       cy="1028.1168"
+       fx="73.467346"
+       fy="1028.1168"
+       r="14.90776" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient5775"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-48.148697,52.120756)"
+       cx="172.2247"
+       cy="1027.746"
+       fx="172.2247"
+       fy="1027.746"
+       r="8.7948189" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-glow"
+       id="radialGradient5777"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1666667,0,0,1.1666667,-77.833333,-74.755754)"
+       cx="173"
+       cy="1028.3622"
+       fx="173"
+       fy="1028.3622"
+       r="12" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#geyser-hole-6"
+       id="radialGradient5779"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.99392849,50,102.88018)"
+       cx="73.467346"
+       cy="1028.1168"
+       fx="73.467346"
+       fy="1028.1168"
+       r="14.90776" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#geyser-dirt-3"
+       id="radialGradient5781"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(50,96.637962)"
+       cx="74"
+       cy="1028.3622"
+       fx="74"
+       fy="1028.3622"
+       r="24" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient5911"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(49.851303,52.120756)"
+       cx="172.2247"
+       cy="1027.746"
+       fx="172.2247"
+       fy="1027.746"
+       r="8.7948189" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-glow"
+       id="radialGradient5913"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1666667,0,0,1.1666667,20.166667,-74.755754)"
+       cx="173"
+       cy="1028.3622"
+       fx="173"
+       fy="1028.3622"
+       r="12" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#geyser-hole-6"
+       id="radialGradient5915"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.99392849,148,102.88018)"
+       cx="73.467346"
+       cy="1028.1168"
+       fx="73.467346"
+       fy="1028.1168"
+       r="14.90776" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#geyser-dirt-3"
+       id="radialGradient5917"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(148,96.637962)"
+       cx="74"
+       cy="1028.3622"
+       fx="74"
+       fy="1028.3622"
+       r="24" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient3424-3"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(121,76.63785)"
+       cx="115"
+       cy="1009.3622"
+       fx="115"
+       fy="1009.3622"
+       r="3" />
+    <filter
+       height="1.24"
+       y="-0.12"
+       width="1.24"
+       x="-0.12"
+       id="filter4732-3"
+       style="color-interpolation-filters:sRGB"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur4734-5"
+         stdDeviation="0.3"
+         inkscape:collect="always" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient5969"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(121,76.63785)"
+       cx="115"
+       cy="1009.3622"
+       fx="115"
+       fy="1009.3622"
+       r="3" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#water-geyser"
+       id="radialGradient5977"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(121,76.63785)"
+       cx="115"
+       cy="1009.3622"
+       fx="115"
+       fy="1009.3622"
+       r="3" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9278">
+      <rect
+         style="color:#000000;overflow:visible;opacity:1;fill:#c54747;fill-opacity:1;fill-rule:evenodd;stroke-width:2;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+         id="rect9280"
+         width="48"
+         height="48"
+         x="247"
+         y="1101" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9282">
+      <rect
+         style="color:#000000;overflow:visible;opacity:1;fill:#c54747;fill-opacity:1;fill-rule:evenodd;stroke-width:2;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+         id="rect9284"
+         width="48"
+         height="48"
+         x="296"
+         y="1101" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9286">
+      <rect
+         style="color:#000000;overflow:visible;opacity:1;fill:#c54747;fill-opacity:1;fill-rule:evenodd;stroke-width:2;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+         id="rect9288"
+         width="48"
+         height="48"
+         x="345"
+         y="1101" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9290">
+      <rect
+         style="color:#000000;overflow:visible;opacity:1;fill:#c54747;fill-opacity:1;fill-rule:evenodd;stroke-width:2;stroke-linecap:round;stroke-linejoin:bevel;paint-order:fill markers stroke;stop-color:#000000"
+         id="rect9292"
+         width="48"
+         height="48"
+         x="394"
+         y="1101" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      inkscape:document-rotation="0"
@@ -4751,23 +5166,28 @@
      inkscape:window-maximized="1"
      inkscape:window-y="0"
      inkscape:window-x="48"
-     inkscape:window-height="1055"
+     inkscape:window-height="1051"
      inkscape:window-width="1872"
      showgrid="true"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      inkscape:document-units="px"
-     inkscape:cy="1058.326"
-     inkscape:cx="699.47186"
-     inkscape:zoom="1"
+     inkscape:cy="1125.4858"
+     inkscape:cx="272.74955"
+     inkscape:zoom="2.8561"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
      bordercolor="#666666"
      pagecolor="#ffffff"
-     id="base">
+     id="base"
+     inkscape:showpageshadow="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        id="grid4856"
-       type="xygrid" />
+       type="xygrid"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <metadata
      id="metadata4293">
@@ -5219,6 +5639,79 @@
        width="93.75"
        id="rect6576"
        style="display:inline;opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="../../../../Game_data/Graphics/Geyser.png"
+       y="1101"
+       x="247"
+       height="48"
+       width="48"
+       id="rect3154"
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3156"
+       xlink:href="#rect3154"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3158"
+       xlink:href="#rect3154"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3160"
+       xlink:href="#rect3154"
+       y="0"
+       x="0" />
+    <rect
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       y="1101"
+       x="149"
+       height="48"
+       width="48"
+       id="use3162"
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       y="1101"
+       x="100"
+       height="48"
+       width="48"
+       id="rect5743"
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       y="1101"
+       x="198"
+       height="48"
+       width="48"
+       id="rect5879"
+       style="fill:#008000;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
   <g
      style="display:inline;opacity:1"
@@ -10233,7 +10726,7 @@
        inkscape:connector-curvature="0"
        id="path4468"
        d="m 534.7561,164.59382 c -6.656,-1.00158 -12.489,1.09191 -13.0283,4.67594 -0.5393,3.58401 4.4193,7.30137 11.0753,8.30295 6.656,1.00157 12.489,-1.09192 13.0283,-4.67594 0.5393,-3.58402 -4.4193,-7.30138 -11.0753,-8.30295 z m -0.406,2.6979 c 4.6072,0.69326 8.087,2.95269 7.7731,5.04705 -0.3142,2.09503 -4.3057,3.23136 -8.9144,2.53785 -4.6088,-0.6935 -8.089,-2.95414 -7.7728,-5.04886 0.3163,-2.094 4.3069,-3.22932 8.9141,-2.53604 z"
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient4443);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient3434);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electrical_wire.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
@@ -10413,7 +10906,7 @@
        d="m 586.8155,146.92474 a 12.1875,11.249993 45.350684 0 0 16.5684,0.76433 12.1875,11.249993 45.350684 0 0 -0.5614,-16.57657 12.1875,11.249993 45.350684 0 0 -16.5685,-0.76433 12.1875,11.249993 45.350684 0 0 0.5615,16.57657 z m 2.4633,-2.43334 a 8.4375009,7.7884583 45.350684 0 1 -0.3894,-11.47539 8.4375009,7.7884583 45.350684 0 1 11.4711,0.52855 8.4375009,7.7884583 45.350684 0 1 0.3881,11.47669 8.4375009,7.7884583 45.350684 0 1 -11.4698,-0.52985 z"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient4089);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
     <path
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient4674);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient3436);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="m 586.8155,146.92474 a 12.1875,11.249993 45.350684 0 0 16.5684,0.76433 12.1875,11.249993 45.350684 0 0 -0.5614,-16.57657 12.1875,11.249993 45.350684 0 0 -16.5685,-0.76433 12.1875,11.249993 45.350684 0 0 0.5615,16.57657 z m 2.4633,-2.43334 a 8.4375009,7.7884583 45.350684 0 1 -0.3894,-11.47539 8.4375009,7.7884583 45.350684 0 1 11.4711,0.52855 8.4375009,7.7884583 45.350684 0 1 0.3881,11.47669 8.4375009,7.7884583 45.350684 0 1 -11.4698,-0.52985 z"
        id="path4676"
        inkscape:connector-curvature="0"
@@ -10549,7 +11042,7 @@
        d="m 582.5686,164.59382 c -6.656,-1.00158 -12.489,1.09191 -13.0283,4.67594 -0.5393,3.58401 4.4193,7.30137 11.0753,8.30295 6.656,1.00157 12.489,-1.09192 13.0283,-4.67594 0.5393,-3.58402 -4.4193,-7.30138 -11.0753,-8.30295 z m -0.406,2.6979 c 4.6072,0.69326 8.087,2.95269 7.7731,5.04705 -0.3142,2.09503 -4.3057,3.23136 -8.9144,2.53785 -4.6088,-0.6935 -8.089,-2.95414 -7.7728,-5.04886 0.3163,-2.094 4.3069,-3.22932 8.9141,-2.53604 z"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient4344);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
     <path
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient4741);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient3438);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="m 582.5686,164.59382 c -6.656,-1.00158 -12.489,1.09191 -13.0283,4.67594 -0.5393,3.58401 4.4193,7.30137 11.0753,8.30295 6.656,1.00157 12.489,-1.09192 13.0283,-4.67594 0.5393,-3.58402 -4.4193,-7.30138 -11.0753,-8.30295 z m -0.406,2.6979 c 4.6072,0.69326 8.087,2.95269 7.7731,5.04705 -0.3142,2.09503 -4.3057,3.23136 -8.9144,2.53785 -4.6088,-0.6935 -8.089,-2.95414 -7.7728,-5.04886 0.3163,-2.094 4.3069,-3.22932 8.9141,-2.53604 z"
        id="path4743"
        inkscape:connector-curvature="0"
@@ -10762,7 +11255,7 @@
        inkscape:connector-curvature="0"
        id="path5004"
        d="m 634.628,146.92474 a 12.1875,11.249993 45.350684 0 0 16.5684,0.76433 12.1875,11.249993 45.350684 0 0 -0.5614,-16.57657 12.1875,11.249993 45.350684 0 0 -16.5685,-0.76433 12.1875,11.249993 45.350684 0 0 0.5615,16.57657 z m 2.4633,-2.43334 a 8.4375009,7.7884583 45.350684 0 1 -0.3894,-11.47539 8.4375009,7.7884583 45.350684 0 1 11.4711,0.52855 8.4375009,7.7884583 45.350684 0 1 0.3881,11.47669 8.4375009,7.7884583 45.350684 0 1 -11.4698,-0.52985 z"
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient5047);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient3440);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electrical_wire.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
@@ -10897,7 +11390,7 @@
        inkscape:connector-curvature="0"
        id="path5233"
        d="m 630.3811,164.59382 c -6.656,-1.00158 -12.489,1.09191 -13.0283,4.67594 -0.5393,3.58401 4.4193,7.30137 11.0753,8.30295 6.656,1.00157 12.489,-1.09192 13.0283,-4.67594 0.5393,-3.58402 -4.4193,-7.30138 -11.0753,-8.30295 z m -0.406,2.6979 c 4.6072,0.69326 8.087,2.95269 7.7731,5.04705 -0.3142,2.09503 -4.3057,3.23136 -8.9144,2.53785 -4.6088,-0.6935 -8.089,-2.95414 -7.7728,-5.04886 0.3163,-2.094 4.3069,-3.22932 8.9141,-2.53604 z"
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient5231);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:url(#linearGradient3442);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.8125;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Electrical_wire.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
@@ -11896,5 +12389,1165 @@
        inkscape:export-ydpi="96"
        inkscape:label="crystal_noise"
        transform="translate(141.5625)" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="sccsccscscs"
+       inkscape:connector-curvature="0"
+       id="use3190"
+       d="m 295,1125 c 0,4.9043 -3,8 -3,12 0,4 -3,7 -8,10 -2,2 -9.7486,2 -13,2 -4.20834,0 -9,-1 -11,-4 -4,1 -9.244,-4.1594 -9.50346,-7.519 C 248,1134 247,1129.5715 247,1125 c 0,-7.1035 4,-13 8.97288,-16.7645 C 258,1104 264.84869,1101 271,1101 c 6.92306,0 13.0722,1.8152 17.45253,6.5044 C 293,1110 295,1118.6682 295,1125 Z"
+       style="fill:url(#radialGradient5685);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use3192"
+       d="m 268,1111 c -0.14604,-3.0454 -2.19929,-4.7797 -5,-6"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use3194"
+       d="m 281,1115 c 0.8824,-1.787 1.39177,-3.6735 4,-5"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use3196"
+       d="m 284,1120 6,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use3198"
+       d="m 277,1136 c 3.18555,2.1924 5.3131,4.8081 6,8"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3200"
+       d="m 263,1137 -3,8"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3202"
+       d="m 257,1121 -8,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="use3204"
+       d="m 271,1139 c 3,1 5.12375,0.1226 6,-3 2.34215,-0.099 4.15485,-0.9046 5,-3 2.89367,-1.5544 2.85207,-3.7995 3,-6 0.46282,-2.6177 0.82409,-5.1991 -1,-7 0.15789,-3.2877 -1.5637,-3.9442 -3,-5 -0.82197,-3.6894 -3.99938,-2.6679 -6,-4 -2.33333,-1.33 -4.66667,-1.5012 -7,0 -2.7017,-0.048 -4.96333,1.5542 -7,4 -2.94687,1.8992 -3.69126,3.936 -4,6 -3.00686,3.1307 -0.44313,6.0193 0,9 0.99812,3.2196 0.9048,7.4047 6,7 2.5062,1.7365 5.00637,3.5131 8,2 z"
+       style="fill:url(#radialGradient5717);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3206"
+       d="m 257,1129 -3,3"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3208"
+       d="m 261,1115 -3,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3210"
+       d="m 276,1111 2,-3"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3212"
+       d="m 282,1133 3,2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3214"
+       d="m 271,1139 v 4"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path3216"
+       d="m 287,1119 c 1.73825,3.3943 2.09786,3.9908 6,4 -2,2 -2,4 -5,5 2.1649,3.4453 2.14751,3.2991 1,6 -3.17437,1.2618 -3.52773,0.4095 -5,3 2.29662,2.5413 1,6 0,8 -0.91163,-3.2817 -1.3045,-2.6951 -9,-2 -5.88632,1.8475 -7.54691,1.4733 -8,4 -2.2332,-1.7871 -4.65533,-1.1926 -6,-5 -3.65739,0.3499 -5.4959,-2.4903 -8,2 -0.45107,-4.2744 -3.6132,-7.6364 0,-11 0.0742,-3.2127 0.64278,-4.1245 -4,-7 1.63073,-2.3275 -0.32552,-6.3762 6,-8 1.85102,-3.6246 1.63584,-4.8403 0,-8 2.6551,-1.7361 6.63788,-2.506 10,0 4.77042,-1.384 5.70028,-3.263 6,-7 5.08489,0.353 9.56179,2.412 9,7 4.13413,2.0027 4.27446,1.6926 7,-1 1.81318,4.2423 6.19619,8.3455 0,10 z"
+       style="opacity:0.85;fill:url(#radialGradient3428);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4768)"
+       clip-path="url(#clipPath9278)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3218"
+       xlink:href="#use3190"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3220"
+       xlink:href="#use3192"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3222"
+       xlink:href="#use3194"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3224"
+       xlink:href="#use3196"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3226"
+       xlink:href="#use3198"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3228"
+       xlink:href="#use3200"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3230"
+       xlink:href="#use3202"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3232"
+       xlink:href="#use3204"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3234"
+       xlink:href="#use3206"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3236"
+       xlink:href="#use3208"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3238"
+       xlink:href="#use3210"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3240"
+       xlink:href="#use3212"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       id="use3242"
+       xlink:href="#use3214"
+       y="0"
+       x="0"
+       transform="translate(49)" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path3244"
+       d="m 335,1117 c 2.88059,1.1005 6.44646,4.6416 7,9 -2.53746,-1.22 -3.85804,-0.8035 -5,1 -0.26401,3.1721 -1.58987,8.2427 1,9 -1.73672,1.8044 -4.49145,4.9871 -6,2 0.96539,2.9181 2.58738,4.8505 -2,8 -1.09323,-2.8135 -3.26043,-3.4791 -6,-3 -4.50837,0.01 -7.87039,0.7166 -7,4 -4.804,-0.9804 -7.41186,-3.8486 -8,-6 -3.51529,-1.4952 -4.59984,1.03 -6,4 -3.71024,-4.4052 -2.15348,-7.2984 0,-11 0.56874,-5.5148 -2.82826,-8.6932 -6,-10 1.00706,-5.7135 4.64425,-6.8628 8,-6 4.2202,-3.7598 2.61193,-6.9401 1,-10 4.19194,-1.6212 6.55169,-0.9942 7,3 0.87652,-3.2593 4.53392,-4.4657 7,-5 0.47259,2.7375 3.32181,3.599 8,4 4.17087,-3.515 7.39362,-0.072 10,2 -2.78379,2.0896 -3.73844,2.5049 -3,5 z"
+       style="display:inline;opacity:0.85;fill:url(#radialGradient3426);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4748)"
+       clip-path="url(#clipPath9282)" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       style="opacity:0.85;fill:url(#radialGradient3424);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4732)"
+       id="circle3246"
+       cx="291"
+       cy="1141"
+       r="3" />
+    <use
+       style="opacity:1"
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="matrix(0.6666667,0,0,0.6666667,56.99999,353.33335)"
+       id="use3248"
+       xlink:href="#circle3246"
+       y="0"
+       x="0" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       style="opacity:0.85;fill:url(#radialGradient3422);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4740)"
+       id="circle3250"
+       cx="310"
+       cy="1105"
+       r="3" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(-11,7.0000003)"
+       id="use3252"
+       xlink:href="#circle3250"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="matrix(0.66666667,0,0,0.66666667,139.66666,365.66673)"
+       id="use3254"
+       xlink:href="#use3252"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(1,25.999995)"
+       id="use3256"
+       xlink:href="#use3254"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="matrix(0.5,0,0,0.5,153,579.50009)"
+       id="use3258"
+       xlink:href="#use3256"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3260"
+       xlink:href="#use3190"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3262"
+       xlink:href="#use3192"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3264"
+       xlink:href="#use3194"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3266"
+       xlink:href="#use3196"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3268"
+       xlink:href="#use3198"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3270"
+       xlink:href="#use3200"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3272"
+       xlink:href="#use3202"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3274"
+       xlink:href="#use3204"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3276"
+       xlink:href="#use3206"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3278"
+       xlink:href="#use3208"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3280"
+       xlink:href="#use3210"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3282"
+       xlink:href="#use3212"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(98,2.226125e-5)"
+       id="use3284"
+       xlink:href="#use3214"
+       y="0"
+       x="0" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path3286"
+       d="m 384,1117 c 1.6927,3.8959 3.89561,5.7509 7,4 -0.64565,3.4678 -0.32813,8.0058 -5,7 2.61127,0.9062 3.15919,2.973 2,6 -2.49141,-0.897 -4.96992,-1.6391 -7,3 -1.2203,3.0734 -2.87409,6.2914 0,8 -4.10427,0.6293 -8.60577,1.624 -7,-3 -5.58688,0.8067 -6.56525,2.8315 -7,5 -4.15636,-0.8159 -6.37846,-2.5345 -7,-5 -2.20764,1.5911 -4.06954,3.5855 -9,2 4.18113,-3.2486 2.83419,-7.0499 0,-11 -3.80598,1.6229 -3.56702,-3.2261 -4,-7 3.64621,1.453 4.60365,-3.2783 6,-7 -3.65314,-1.1004 -2.155,-4.8794 0,-9 1.12771,3.283 4.04867,3.1289 8,1 0.74651,-5.6342 4.84588,-6.0867 8,-8 1.42956,4.689 5.28423,5.7403 9,7 3.52306,3.5784 5.58211,2.1792 8,2 0.8083,2.1829 1.77669,4.4218 -2,5 z"
+       style="display:inline;opacity:0.85;fill:url(#radialGradient3420);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4776)"
+       clip-path="url(#clipPath9286)" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       style="opacity:0.85;fill:url(#radialGradient3418);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4796)"
+       id="circle3288"
+       cx="378"
+       cy="1106"
+       r="3" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="matrix(0.33333333,0,0,0.33333333,226,737.33343)"
+       id="use3290"
+       xlink:href="#circle3288"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="matrix(4.0000001,0,0,4.0000001,-1022,-3286.0007)"
+       id="use3292"
+       xlink:href="#use3290"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3294"
+       xlink:href="#use3190"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3296"
+       xlink:href="#use3192"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3298"
+       xlink:href="#use3194"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3300"
+       xlink:href="#use3196"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3302"
+       xlink:href="#use3198"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3304"
+       xlink:href="#use3200"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3306"
+       xlink:href="#use3202"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3308"
+       xlink:href="#use3204"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3310"
+       xlink:href="#use3206"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3312"
+       xlink:href="#use3208"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3314"
+       xlink:href="#use3210"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3316"
+       xlink:href="#use3212"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="translate(147,2.226125e-5)"
+       id="use3318"
+       xlink:href="#use3214"
+       y="0"
+       x="0" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path3320"
+       d="m 434,1117 c 3.37419,-2.4559 4.39154,2.1587 6,5 -3.48972,0.6616 -3.86842,3.2541 -4,6 -1.24764,2.9918 -2.85526,6.1736 0,7 -1.19577,1.3421 -2.45415,2.2251 -4,1 1.06594,3.0753 2.21695,6.1544 -2,9 -1.45629,-2.7605 -3.9533,-4.0073 -8,-3 -4.52576,0.4974 -7.74558,1.6912 -7,5 -3.35425,-1.1152 -7.059,-1.9266 -7,-6 -1.15333,2.121 -3.48965,3.1182 -7,3 1.34464,-3.7568 1.12432,-7.1841 -2,-10 -4.03399,-1.5219 -3.4357,-5.3006 -3,-9 2.36479,-0.1031 4.21616,-2.876 6,-6 -1.99087,-1.6169 -2.54187,-4.1457 -1,-8 3.33333,1.9178 6.66667,0.1034 10,-1 3.51581,-1.792 5.7796,-4.0311 6,-7 5.52305,0.9384 7.52602,3.5958 8,7 1.10061,-2.5683 3.60129,-3.4365 8,-2 -2.54314,2.6248 -1.87367,5.6687 1,9 z"
+       style="display:inline;opacity:0.85;fill:url(#radialGradient3416);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4800)"
+       clip-path="url(#clipPath9290)" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="matrix(1.25,0,0,1.25,96.75,-287.99998)"
+       id="use3322"
+       xlink:href="#use3248"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="matrix(0.60000016,0,0,0.60000016,170.69993,483.29985)"
+       id="use3324"
+       xlink:href="#use3322"
+       y="0"
+       x="0" />
+    <use
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       height="100%"
+       width="100%"
+       transform="matrix(0.50000001,0,0,0.50000001,215.75,570.25007)"
+       id="use3326"
+       xlink:href="#use3324"
+       y="0"
+       x="0" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="sccsccscscs"
+       inkscape:connector-curvature="0"
+       id="use3328"
+       d="m 197,1125 c 0,4.9043 -3,8 -3,12 0,4 -3,7 -8,10 -2,2 -9.7486,2 -13,2 -4.20834,0 -9,-1 -11,-4 -4,1 -9.244,-4.1594 -9.50346,-7.519 C 150,1134 149,1129.5715 149,1125 c 0,-7.1035 4,-13 8.97288,-16.7645 C 160,1104 166.84869,1101 173,1101 c 6.92306,0 13.0722,1.8152 17.45253,6.5044 C 195,1110 197,1118.6682 197,1125 Z"
+       style="fill:url(#radialGradient5689);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use3330"
+       d="m 170,1111 c -0.14604,-3.0454 -2.19929,-4.7797 -5,-6"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use3332"
+       d="m 183,1115 c 0.8824,-1.787 1.39177,-3.6735 4,-5"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use3334"
+       d="m 186,1120 6,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="use3336"
+       d="m 179,1136 c 3.18555,2.1924 5.3131,4.8081 6,8"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3338"
+       d="m 165,1137 -3,8"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3340"
+       d="m 159,1121 -8,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="use3342"
+       d="m 173,1139 c 3,1 5.12375,0.1226 6,-3 2.34215,-0.099 4.15485,-0.9046 5,-3 2.89367,-1.5544 2.85207,-3.7995 3,-6 0.46282,-2.6177 0.82409,-5.1991 -1,-7 0.15789,-3.2877 -1.5637,-3.9442 -3,-5 -0.82197,-3.6894 -3.99938,-2.6679 -6,-4 -2.33333,-1.33 -4.66667,-1.5012 -7,0 -2.7017,-0.048 -4.96333,1.5542 -7,4 -2.94687,1.8992 -3.69126,3.936 -4,6 -3.00686,3.1307 -0.44313,6.0193 0,9 0.99812,3.2196 0.9048,7.4047 6,7 2.5062,1.7365 5.00637,3.5131 8,2 z"
+       style="fill:url(#radialGradient5721);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3344"
+       d="m 159,1129 -3,3"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3346"
+       d="m 163,1115 -3,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3348"
+       d="m 178,1111 2,-3"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3350"
+       d="m 184,1133 3,2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="use3352"
+       d="m 173,1139 v 4"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       r="14"
+       cy="1125"
+       cx="173"
+       id="circle3354"
+       style="opacity:1;fill:url(#radialGradient3414);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path3356"
+       d="m 180.02377,1124.8953 c -0.31109,1.6763 0.51655,2.4669 1.22816,3.3478 -0.66378,1.3703 -1.37091,2.6495 -3.18905,1.5957 0.5155,0.9771 0.33356,2.0239 -1.49883,3.2357 -0.36661,-1.028 -1.36878,-1.5112 -3.38331,-1.1267 0.87117,1.2734 -1.68838,1.0551 -3.34781,1.2282 0.99326,-1.7808 -0.75667,-2.2706 -1.59568,-3.1891 -1.64663,1.0423 -2.38076,-0.3922 -3.2357,-1.4988 1.04184,-0.6966 2.04411,-1.4189 1.12668,-3.3833 -2.13153,-0.3002 -1.13279,-2.0831 -1.22815,-3.3478 1.28624,1.1051 2.25016,-0.1536 3.18905,-1.5957 1.34348,-0.8149 2.03676,-1.8329 1.49882,-3.2357 1.7777,-0.038 2.90197,0.3398 3.38331,1.1267 2.69229,0.6692 2.78602,-0.4396 3.34781,-1.2282 1.53029,0.8134 1.94961,1.9046 1.59568,3.1891 0.92535,1.2657 1.95806,1.9946 3.2357,1.4988 0.13372,1.2061 0.2378,2.4077 -1.12668,3.3833 z"
+       style="display:inline;opacity:0.5;fill:url(#radialGradient3412);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4804)" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="sccsccscscs"
+       inkscape:connector-curvature="0"
+       id="path5745"
+       d="m 148,1125 c 0,4.9043 -3,8 -3,12 0,4 -3,7 -8,10 -2,2 -9.7486,2 -13,2 -4.20834,0 -9,-1 -11,-4 -4,1 -9.244,-4.1594 -9.50346,-7.519 C 101,1134 100,1129.5715 100,1125 c 0,-7.1035 4,-13 8.97288,-16.7645 C 111,1104 117.84869,1101 124,1101 c 6.92306,0 13.0722,1.8152 17.45253,6.5044 C 146,1110 148,1118.6682 148,1125 Z"
+       style="fill:url(#radialGradient5781);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5747"
+       d="m 121,1111 c -0.14604,-3.0454 -2.19929,-4.7797 -5,-6"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5749"
+       d="m 134,1115 c 0.8824,-1.787 1.39177,-3.6735 4,-5"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5751"
+       d="m 137,1120 6,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5753"
+       d="m 130,1136 c 3.18555,2.1924 5.3131,4.8081 6,8"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5755"
+       d="m 116,1137 -3,8"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5757"
+       d="m 110,1121 -8,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path5759"
+       d="m 124,1139 c 3,1 5.12375,0.1226 6,-3 2.34215,-0.099 4.15485,-0.9046 5,-3 2.89367,-1.5544 2.85207,-3.7995 3,-6 0.46282,-2.6177 0.82409,-5.1991 -1,-7 0.15789,-3.2877 -1.5637,-3.9442 -3,-5 -0.82197,-3.6894 -3.99938,-2.6679 -6,-4 -2.33333,-1.33 -4.66667,-1.5012 -7,0 -2.7017,-0.048 -4.96333,1.5542 -7,4 -2.94687,1.8992 -3.69126,3.936 -4,6 -3.00686,3.1307 -0.44313,6.0193 0,9 0.99812,3.2196 0.9048,7.4047 6,7 2.5062,1.7365 5.00637,3.5131 8,2 z"
+       style="fill:url(#radialGradient5779);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5761"
+       d="m 110,1129 -3,3"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5763"
+       d="m 114,1115 -3,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5765"
+       d="m 129,1111 2,-3"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5767"
+       d="m 135,1133 3,2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5769"
+       d="m 124,1139 v 4"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       r="14"
+       cy="1125"
+       cx="124"
+       id="circle5771"
+       style="opacity:1;fill:url(#radialGradient5777);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path5773"
+       d="m 131.02377,1079.762 c -0.31109,1.6763 0.51655,2.4669 1.22816,3.3478 -0.66378,1.3703 -1.37091,2.6495 -3.18905,1.5957 0.5155,0.9771 0.33356,2.0239 -1.49883,3.2357 -0.36661,-1.028 -1.36878,-1.5112 -3.38331,-1.1267 0.87117,1.2734 -1.68838,1.0551 -3.34781,1.2282 0.99326,-1.7808 -0.75667,-2.2706 -1.59568,-3.1891 -1.64663,1.0423 -2.38076,-0.3922 -3.2357,-1.4988 1.04184,-0.6966 2.04411,-1.4189 1.12668,-3.3833 -2.13153,-0.3002 -1.13279,-2.0831 -1.22815,-3.3478 1.28624,1.1051 2.25016,-0.1536 3.18905,-1.5957 1.34348,-0.8149 2.03676,-1.8329 1.49882,-3.2357 1.7777,-0.038 2.90197,0.3398 3.38331,1.1267 2.69229,0.6692 2.78602,-0.4396 3.34781,-1.2282 1.53029,0.8134 1.94961,1.9046 1.59568,3.1891 0.92535,1.2657 1.95806,1.9946 3.2357,1.4988 0.13372,1.2061 0.2378,2.4077 -1.12668,3.3833 z"
+       style="display:inline;opacity:0.5;fill:url(#radialGradient5775);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4804)"
+       transform="matrix(0,1,1,0,-955.8667,1001.0002)" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="sccsccscscs"
+       inkscape:connector-curvature="0"
+       id="path5881"
+       d="m 246,1125 c 0,4.9043 -3,8 -3,12 0,4 -3,7 -8,10 -2,2 -9.7486,2 -13,2 -4.20834,0 -9,-1 -11,-4 -4,1 -9.244,-4.1594 -9.50346,-7.519 C 199,1134 198,1129.5715 198,1125 c 0,-7.1035 4,-13 8.97288,-16.7645 C 209,1104 215.84869,1101 222,1101 c 6.92306,0 13.0722,1.8152 17.45253,6.5044 C 244,1110 246,1118.6682 246,1125 Z"
+       style="fill:url(#radialGradient5917);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5883"
+       d="m 219,1111 c -0.14604,-3.0454 -2.19929,-4.7797 -5,-6"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5885"
+       d="m 232,1115 c 0.8824,-1.787 1.39177,-3.6735 4,-5"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5887"
+       d="m 235,1120 6,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5889"
+       d="m 228,1136 c 3.18555,2.1924 5.3131,4.8081 6,8"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5891"
+       d="m 214,1137 -3,8"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5893"
+       d="m 208,1121 -8,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path5895"
+       d="m 222,1139 c 3,1 5.12375,0.1226 6,-3 2.34215,-0.099 4.15485,-0.9046 5,-3 2.89367,-1.5544 2.85207,-3.7995 3,-6 0.46282,-2.6177 0.82409,-5.1991 -1,-7 0.15789,-3.2877 -1.5637,-3.9442 -3,-5 -0.82197,-3.6894 -3.99938,-2.6679 -6,-4 -2.33333,-1.33 -4.66667,-1.5012 -7,0 -2.7017,-0.048 -4.96333,1.5542 -7,4 -2.94687,1.8992 -3.69126,3.936 -4,6 -3.00686,3.1307 -0.44313,6.0193 0,9 0.99812,3.2196 0.9048,7.4047 6,7 2.5062,1.7365 5.00637,3.5131 8,2 z"
+       style="fill:url(#radialGradient5915);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5897"
+       d="m 208,1129 -3,3"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5899"
+       d="m 212,1115 -3,-2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5901"
+       d="m 227,1111 2,-3"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5903"
+       d="m 233,1133 3,2"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       inkscape:connector-curvature="0"
+       id="path5905"
+       d="m 222,1139 v 4"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:0.25098" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       r="14"
+       cy="1125"
+       cx="222"
+       id="circle5907"
+       style="opacity:1;fill:url(#radialGradient5913);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       sodipodi:nodetypes="ccccccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path5909"
+       d="m 229.02377,1079.762 c -0.31109,1.6763 0.51655,2.4669 1.22816,3.3478 -0.66378,1.3703 -1.37091,2.6495 -3.18905,1.5957 0.5155,0.9771 0.33356,2.0239 -1.49883,3.2357 -0.36661,-1.028 -1.36878,-1.5112 -3.38331,-1.1267 0.87117,1.2734 -1.68838,1.0551 -3.34781,1.2282 0.99326,-1.7808 -0.75667,-2.2706 -1.59568,-3.1891 -1.64663,1.0423 -2.38076,-0.3922 -3.2357,-1.4988 1.04184,-0.6966 2.04411,-1.4189 1.12668,-3.3833 -2.13153,-0.3002 -1.13279,-2.0831 -1.22815,-3.3478 1.28624,1.1051 2.25016,-0.1536 3.18905,-1.5957 1.34348,-0.8149 2.03676,-1.8329 1.49882,-3.2357 1.7777,-0.038 2.90197,0.3398 3.38331,1.1267 2.69229,0.6692 2.78602,-0.4396 3.34781,-1.2282 1.53029,0.8134 1.94961,1.9046 1.59568,3.1891 0.92535,1.2657 1.95806,1.9946 3.2357,1.4988 0.13372,1.2061 0.2378,2.4077 -1.12668,3.3833 z"
+       style="display:inline;opacity:0.5;fill:url(#radialGradient5911);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4804)"
+       transform="rotate(90,199.43331,1102.4335)" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       style="display:inline;opacity:0.85;fill:url(#radialGradient3424-3);fill-opacity:1;stroke:none;stroke-width:4.96;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4732-3)"
+       id="circle3246-6"
+       cx="236"
+       cy="1086"
+       r="3"
+       transform="matrix(0.80645159,0,0,0.80645159,45.677424,255.32697)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#circle3246-6"
+       id="use5965"
+       transform="matrix(0.58666657,0,0,0.58666657,67.546691,454.11591)"
+       style="stroke-width:1.70455" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       style="display:inline;opacity:0.85;fill:url(#radialGradient5969);fill-opacity:1;stroke:none;stroke-width:4.96;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4732-3)"
+       id="circle5967"
+       cx="236"
+       cy="1086"
+       r="3"
+       transform="matrix(0.80645159,0,0,0.80645159,-21.322575,265.32697)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#circle5967"
+       id="use5971"
+       transform="matrix(0.58666657,0,0,0.58666657,90.85335,455.66859)"
+       style="stroke-width:1.70455" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#circle5967"
+       id="use5973"
+       transform="translate(-13,-20.999997)" />
+    <circle
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
+       style="display:inline;opacity:0.85;fill:url(#radialGradient5977);fill-opacity:1;stroke:none;stroke-width:4.96;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.25098;filter:url(#filter4732-3)"
+       id="circle5975"
+       cx="236"
+       cy="1086"
+       r="3"
+       transform="matrix(0.80645159,0,0,0.80645159,-50.322575,241.32697)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#circle5975"
+       id="use5979"
+       transform="matrix(1.6533333,0,0,1.5400193,-115.46666,-610.69292)"
+       style="stroke-width:0.626696" />
   </g>
 </svg>

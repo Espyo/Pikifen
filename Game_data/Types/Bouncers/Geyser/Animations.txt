@@ -1,0 +1,94 @@
+animations{
+	bouncing{
+		frames{
+			spraying1{
+				duration=0.1000
+			}
+			spraying2{
+				duration=0.1000
+			}
+			spraying3{
+				duration=0.1000
+			}
+			spraying4{
+				duration=0.1000
+			}
+			spraying1{
+				duration=0.1000
+			}
+			spraying2{
+				duration=0.1000
+			}
+			spraying3{
+				duration=0.1000
+			}
+			spraying4{
+				duration=0.1000
+			}
+			spraying1{
+				duration=0.1000
+			}
+			spraying2{
+				duration=0.1000
+			}
+			spraying3{
+				duration=0.1000
+			}
+			spraying4{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling1{
+				duration=0.1000
+			}
+			idling2{
+				duration=0.1000
+			}
+			idling3{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling1{
+		file=Geyser.png
+		file_pos=0.0000 0.0000
+		file_size=48.0000 48.0000
+	}
+	idling2{
+		file=Geyser.png
+		file_pos=49.0000 0.0000
+		file_size=48.0000 48.0000
+	}
+	idling3{
+		file=Geyser.png
+		file_pos=98.0000 0.0000
+		file_size=48.0000 48.0000
+	}
+	spraying1{
+		file=Geyser.png
+		file_pos=147.0000 0.0000
+		file_size=48.0000 48.0000
+	}
+	spraying2{
+		file=Geyser.png
+		file_pos=196.0000 0.0000
+		file_size=48.0000 48.0000
+	}
+	spraying3{
+		file=Geyser.png
+		file_pos=245.0000 0.0000
+		file_size=48.0000 48.0000
+	}
+	spraying4{
+		file=Geyser.png
+		file_pos=294.0000 0.0000
+		file_size=48.0000 48.0000
+	}
+}
+body_parts
+engine_version=0.23.2
