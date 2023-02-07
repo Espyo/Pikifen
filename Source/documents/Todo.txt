@@ -2,29 +2,30 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header
+    Area tip: To make it so the player can't whistle Pikmin on the other side of a blocked alcove, make them sprouts
+    Area tip: To stop Pikmin from carrying something somewhere you don't want, block it off with a tight corridor and a light-load path
+    Area tip: Gates for leaders only can be geysers
+    When you press Play, if the stats say played areas = 0, a prompt should appear asking if you want to play the tutorial area first
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Leaders shouldn't be able to be thrown on top of paper bags to weigh them down
+    If you quick test in the middle of a quick texture preview, when you return, the quick preview timer will be at the same spot
+    One of the Puffy Blowhog's dying frames is an attack frame
+    If you're in the mob mode, pressing C lets you start a circle sector
+    If you delete a mob in the area editor whose ID is lower than the ID of a holder mob (for the spoils thing), the IDs will mismatch
+    If you're editing a mob's text field in the panel, and you double-click an empty area, you'll select both the current mob and the new one
+    Changing a reference image's width via the text box widget will not set the height text box with it
     
     --- v0.24.0 ---
+    Shift+Ctrl should allow you to add to the selection and do a lasso
     Add several pre-packaged areas, since players have nothing to play with right now
-        A tutorial area
-            The area should be linear, but more intuitive and representative of the series
-            Linear, starts with an info spot that says welcome, and mentions the movement controls
-            After a bit to the right, there's a Pikmin on a ledge, and a sign telling you to whistle it
-            Farther up, a sign telling you to throw the Pikmin at a Pellet Posy on a ledge
-            Before you meet Yellow Pikmin, there should be a small alcove blocked by an electric gate, so you can try with regular Pikmin, and then come back to it with Yellow Pikmin
-            You need to gather X Pikmin, to take down a paper bag or something
-            Farther up, a sign telling you to throw Pikmin to Louie, and have him carry on
-            Should end in some way to reunite the leaders, but while trying to incentivize teamwork and multitasking
-            Some signs should talk about dismissing, and group moving
-            Leave a bit of mistique and surprise, nonetheless
-            Signs should talk about the relevant HUD icons when appropriate
-            When you press Play, if the stats say played areas = 0, a prompt should appear asking if you want to play the tutorial area first
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
             Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
+            Northwest quadrant for mobs, Northeast quadrant for mechanics, Southwest quadrant for tests, Southeast quadrant for misc?
+            Theme it like a laboratory
+            Computer terminals that act like signs should tell the player what's where
         Helodity's Adventure area (see #content-sharing)
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
         A puzzle stage

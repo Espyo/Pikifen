@@ -1,0 +1,21 @@
+name=Tutorial Meadow
+subtitle=Get the treasure!
+description=A tutorial area to help you learn how to play Pikifen!
+tags=Tutorial
+difficulty=1
+bg_bmp
+bg_color=0 0 0
+bg_dist=2.0000
+bg_zoom=1.0000
+weather
+day_time_start=420
+day_time_speed=0
+maker=Espyo
+version=1.0.0
+engine_version=0.23.2
+notes
+spray_amounts
+mission_goal=Collect treasures
+mission_goal_all_mobs=true
+mission_fail_conditions=128
+mission_grading_mode=1
