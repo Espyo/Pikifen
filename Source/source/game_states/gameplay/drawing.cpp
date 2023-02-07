@@ -83,7 +83,7 @@ void gameplay_state::do_game_drawing(
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Drawing -- In-game text");
     }
-    if(!bmp_output) {
+    if(!bmp_output && game.maker_tools.hud) {
         draw_ingame_text();
     }
     if(game.perf_mon) {
@@ -139,7 +139,7 @@ void gameplay_state::do_game_drawing(
         cursor_color =
             closest_group_member[BUBBLE_CURRENT]->type->main_color;
     }
-    if(cur_leader_ptr) {
+    if(cur_leader_ptr && game.maker_tools.hud) {
         cursor_color =
             change_color_lighting(cursor_color, cursor_height_diff_light);
         draw_leader_cursor(cursor_color);
@@ -149,19 +149,21 @@ void gameplay_state::do_game_drawing(
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Drawing -- HUD");
     }
-    al_use_transform(&game.identity_transform);
-    hud->gui.draw();
-    
-    draw_big_msg();
-    
-    if(msg_box) {
-        draw_message_box();
-    } else if(onion_menu) {
-        draw_onion_menu();
-    } else if(pause_menu) {
-        draw_pause_menu();
-    } else {
-        draw_mouse_cursor(cursor_color);
+    if(game.maker_tools.hud) {
+        al_use_transform(&game.identity_transform);
+        hud->gui.draw();
+        
+        draw_big_msg();
+        
+        if(msg_box) {
+            draw_message_box();
+        } else if(onion_menu) {
+            draw_onion_menu();
+        } else if(pause_menu) {
+            draw_pause_menu();
+        } else {
+            draw_mouse_cursor(cursor_color);
+        }
     }
     
     if(game.perf_mon) {
@@ -169,21 +171,24 @@ void gameplay_state::do_game_drawing(
     }
     
     //Layer 9 -- System stuff.
-    draw_system_stuff();
-    
-    if(area_title_fade_timer.time_left > 0) {
-        draw_loading_screen(
-            game.cur_area_data.name,
-            get_subtitle_or_mission_goal(
-                game.cur_area_data.subtitle,
-                game.cur_area_data.type,
-                game.cur_area_data.mission.goal
-            ),
-            area_title_fade_timer.get_ratio_left()
-        );
+    if(game.maker_tools.hud) {
+        draw_system_stuff();
+        
+        if(area_title_fade_timer.time_left > 0) {
+            draw_loading_screen(
+                game.cur_area_data.name,
+                get_subtitle_or_mission_goal(
+                    game.cur_area_data.subtitle,
+                    game.cur_area_data.type,
+                    game.cur_area_data.mission.goal
+                ),
+                area_title_fade_timer.get_ratio_left()
+            );
+        }
+        
+        game.fade_mgr.draw();
+        
     }
-    
-    game.fade_mgr.draw();
     
     al_flip_display();
 }

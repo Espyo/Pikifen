@@ -891,6 +891,10 @@ void gameplay_state::process_system_key_press(const int keycode) {
             game.maker_tools.used_helping_tools = true;
             break;
             
+        } case MAKER_TOOL_HUD: {
+            game.maker_tools.hud = !game.maker_tools.hud;
+            break;
+            
         } case MAKER_TOOL_HURT_MOB: {
             mob* m = get_closest_mob_to_cursor();
             if(m) {

@@ -96,6 +96,7 @@ const string NAMES[N_MAKER_TOOLS] = {
     "collision",
     "geometry_info",
     "hitboxes",
+    "hud",
     "hurt_mob",
     "mob_info",
     "new_pikmin",
@@ -658,6 +659,7 @@ maker_tools_info::maker_tools_info() :
     collision(false),
     geometry_info(false),
     hitboxes(false),
+    hud(true),
     info_lock(nullptr),
     info_print_duration(5.0f),
     info_print_fade_duration(3.0f),
@@ -682,6 +684,7 @@ void maker_tools_info::reset_for_gameplay() {
     collision = false;
     geometry_info = false;
     hitboxes = false;
+    hud = true;
     info_lock = NULL;
     last_pikmin_type = NULL;
     used_helping_tools = false;

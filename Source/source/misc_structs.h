@@ -84,6 +84,8 @@ enum MAKER_TOOL_TYPES {
     MAKER_TOOL_GEOMETRY_INFO,
     //Show hitboxes.
     MAKER_TOOL_HITBOXES,
+    //Toggle HUD visibility.
+    MAKER_TOOL_HUD,
     //Hurt mob beneath mouse cursor.
     MAKER_TOOL_HURT_MOB,
     //Get info on the mob beneath mouse cursor.
@@ -322,6 +324,8 @@ struct maker_tools_info {
     bool geometry_info;
     //Are hitboxes visible in-game?
     bool hitboxes;
+    //Is the HUD visible?
+    bool hud;
     //Mob currently locked-on to for the mob information tool. NULL if off.
     mob* info_lock;
     //If any maker info is being printed, this is how long it lasts on-screen.
