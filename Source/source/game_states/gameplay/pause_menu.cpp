@@ -58,6 +58,7 @@ pause_menu_struct::pause_menu_struct() :
  */
 pause_menu_struct::~pause_menu_struct() {
     for(size_t c = 0; c < N_HELP_CATEGORIES; ++c) {
+        if(c == HELP_CATEGORY_PIKMIN) continue;
         for(size_t t = 0; t < tidbits.size(); ++t) {
             if(tidbits[(HELP_CATEGORIES) c][t].image) {
                 game.bitmaps.detach(tidbits[(HELP_CATEGORIES) c][t].image);
