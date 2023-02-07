@@ -24,6 +24,8 @@ class scale : public mob {
 public:
     //What type of scale it is.
     scale_type* sca_type;
+    //Weight number that must be met to reach a goal. 0 for none. Type override.
+    size_t goal_number;
     
     //Return the weight currently on top of it.
     float calculate_cur_weight() const;
@@ -35,6 +37,8 @@ public:
     
     //Constructor.
     scale(const point &pos, scale_type* type, float angle);
+    //Read script variables from the area data.
+    void read_script_vars(const script_var_reader &svr) override;
 };
 
 

@@ -45,7 +45,7 @@ enum GROUP_TASK_CONTRIBUTION_METHODS {
  */
 class group_task_type : public mob_type {
 public:
-    //Power requirement in order to reach the goal.
+    //Default power requirement in order to reach the goal.
     size_t power_goal;
     //Maximum amount of Pikmin that can work.
     size_t max_pikmin;

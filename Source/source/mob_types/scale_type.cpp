@@ -23,6 +23,14 @@ scale_type::scale_type() :
     
     target_type = MOB_TARGET_TYPE_NONE;
     walkable = true;
+    
+    area_editor_prop_struct aep_goal;
+    aep_goal.name = "Goal weight";
+    aep_goal.var = "goal_number";
+    aep_goal.type = AEMP_INT;
+    aep_goal.def_value = i2s(goal_number);
+    aep_goal.tooltip = "Pikmin weight required for the goal, if any.";
+    area_editor_props.push_back(aep_goal);
 }
 
 
@@ -35,4 +43,6 @@ void scale_type::load_properties(data_node* file) {
     reader_setter rs(file);
     
     rs.set("goal_number", goal_number);
+    
+    area_editor_props.back().def_value = i2s(goal_number);
 }

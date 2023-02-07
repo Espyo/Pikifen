@@ -33,6 +33,13 @@ group_task_type::group_task_type() :
     
     target_type = MOB_TARGET_TYPE_NONE;
     
+    area_editor_prop_struct aep_power_goal;
+    aep_power_goal.name = "Power goal";
+    aep_power_goal.var = "power_goal";
+    aep_power_goal.type = AEMP_INT;
+    aep_power_goal.def_value = i2s(power_goal);
+    aep_power_goal.tooltip = "Pikmin power required for the task's goal.";
+    area_editor_props.push_back(aep_power_goal);
 }
 
 
@@ -102,4 +109,6 @@ void group_task_type::load_properties(data_node* file) {
             );
         }
     }
+    
+    area_editor_props.back().def_value = i2s(power_goal);
 }

@@ -41,7 +41,7 @@
     <h3 id="optional">Optional</h3>
 
     <ul>
-      <li><b><code>goal_number</code></b>: If not zero, the numbers above the object will be a fraction with the bottom number being this "goal" amount. Defaults to 0.</li>
+      <li><b><code>goal_number</code></b>: If not zero, the numbers above the object will be a fraction with the bottom number being this "goal" amount. Individual instances of a scale can override this with script variables. Defaults to 0.</li>
     </ul>
 
     <h2 id="animations">Animations</h2>
@@ -50,9 +50,9 @@
 
     <h2 id="script">Script</h2>
 
-    <p>All of the scale type object's behavior is defined by the user-made <a href="script.html">script</a>. You should be using the <code>on_weight_added</code> and <code>on_weight_removed</code> events to know when the weight atop a scale has changed, and also use the <code>get_info</code> action to know what the current weight is.</p>
+    <p>All of the scale type object's behavior is defined by the user-made <a href="script.html">script</a>. You should be using the <code>on_weight_added</code> and <code>on_weight_removed</code> events to know when the weight atop a scale has changed. Also, use the <code>get_info</code> action to know what the current weight is, and give a default value to and read the <code>goal_number</code> script variable, to know this individual scale instance's goal number.</p>
 
-    <p>Some <a href="script.html#vars">script variables</a> control special behavior, like the scale's starting team. To know which ones exist, you can go to the area editor, select a scale, and read the tooltip of each variable.</p>
+    <p>Some <a href="script.html#vars">script variables</a> control special behavior, like override the goal number. To know which ones exist, you can go to the area editor, select a scale, and read the tooltip of each variable.</p>
 
   </div>
 </body>

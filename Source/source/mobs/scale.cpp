@@ -24,7 +24,8 @@
  */
 scale::scale(const point &pos, scale_type* type, float angle) :
     mob(pos, type, angle),
-    sca_type(type) {
+    sca_type(type),
+    goal_number(type->goal_number) {
     
     
 }
@@ -78,7 +79,19 @@ bool scale::get_fraction_numbers_info(
     float weight = calculate_cur_weight();
     if(weight <= 0 || health <= 0) return false;
     *fraction_value_nr = weight;
-    *fraction_req_nr = sca_type->goal_number;
+    *fraction_req_nr = goal_number;
     *fraction_color = game.config.carrying_color_stop;
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to use.
+ */
+void scale::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    svr.get("goal_number", goal_number);
 }

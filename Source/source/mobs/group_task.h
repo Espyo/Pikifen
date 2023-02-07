@@ -25,6 +25,8 @@ class group_task : public mob {
 public:
     //What type of group task it is.
     group_task_type* tas_type;
+    //Power requirement in order to reach the goal. Group task type override.
+    size_t power_goal;
     
     //Struct with info about a spot.
     struct group_task_spot {
@@ -65,6 +67,9 @@ public:
     
     //Constructor.
     group_task(const point &pos, group_task_type* type, const float angle);
+    
+    //Read script variables from the area data.
+    void read_script_vars(const script_var_reader &svr) override;
     
 protected:
     //Tick class-specific logic.

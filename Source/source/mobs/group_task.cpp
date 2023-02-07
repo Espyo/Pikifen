@@ -27,6 +27,7 @@ group_task::group_task(
 ):
     mob(pos, type, angle),
     tas_type(type),
+    power_goal(type->power_goal),
     power(0),
     ran_task_finished_code(false) {
     
@@ -91,7 +92,7 @@ void group_task::add_worker(pikmin* who) {
         }
     }
     
-    bool had_goal = power >= tas_type->power_goal;
+    bool had_goal = power >= power_goal;
     
     switch(tas_type->contribution_method) {
     case GROUP_TASK_CONTRIBUTION_NORMAL: {
@@ -109,7 +110,7 @@ void group_task::add_worker(pikmin* who) {
     }
     }
     
-    if(!had_goal && power >= tas_type->power_goal) {
+    if(!had_goal && power >= power_goal) {
         string msg = "goal_reached";
         who->send_message(this, msg);
     }
@@ -152,7 +153,7 @@ void group_task::free_up_spot(pikmin* whose) {
     }
     
     if(was_contributing) {
-        bool had_goal = power >= tas_type->power_goal;
+        bool had_goal = power >= power_goal;
         
         switch(tas_type->contribution_method) {
         case GROUP_TASK_CONTRIBUTION_NORMAL: {
@@ -170,7 +171,7 @@ void group_task::free_up_spot(pikmin* whose) {
         }
         }
         
-        if(had_goal && power < tas_type->power_goal) {
+        if(had_goal && power < power_goal) {
             string msg = "goal_lost";
             whose->send_message(this, msg);
         }
@@ -196,7 +197,7 @@ bool group_task::get_fraction_numbers_info(
 ) const {
     if(get_power() <= 0) return false;
     *fraction_value_nr = get_power();
-    *fraction_req_nr = tas_type->power_goal;
+    *fraction_req_nr = power_goal;
     *fraction_color = game.config.carrying_color_stop;
     return true;
 }
@@ -251,6 +252,18 @@ point group_task::get_spot_pos(pikmin* whose) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Reads the provided script variables, if any, and does stuff with them.
+ * svr:
+ *   Script var reader to use.
+ */
+void group_task::read_script_vars(const script_var_reader &svr) {
+    mob::read_script_vars(svr);
+    
+    svr.get("power_goal", power_goal);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Reserves a spot for a Pikmin.
  * spot:
  *   Pointer to the spot to reserve.
@@ -280,14 +293,14 @@ void group_task::tick_class_specifics(const float delta_t) {
     
     if(
         chase_info.state == CHASE_STATE_CHASING &&
-        power >= tas_type->power_goal &&
+        power >= power_goal &&
         tas_type->speed_bonus != 0.0f
     ) {
         //Being moved and movements can go through speed bonuses?
         //Let's update the speed.
         chase_info.max_speed =
             type->move_speed +
-            (power - tas_type->power_goal) * tas_type->speed_bonus;
+            (power - power_goal) * tas_type->speed_bonus;
         chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     }
     
