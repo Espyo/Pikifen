@@ -3,10 +3,11 @@ description = A large overturned paper bag. It can be squashed down if enough we
 
 custom_category_name = Obstacle, harmless
 goal_number = 20
+can_block_paths = true
 height = 128
 pushes = true
-radius = 84
-rectangular_dimensions = 169 460
+radius = 42
+rectangular_dimensions = 84 196
 
 spawns {
     handle {

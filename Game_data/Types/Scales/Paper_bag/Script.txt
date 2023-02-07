@@ -1,5 +1,9 @@
 first_state = up
 
+init {
+    set_var goal_number 20
+}
+
 script {
     up {
         on_enter {
@@ -7,7 +11,7 @@ script {
         }
         on_weight_added {
             get_info t weight
-            if $t >= 20
+            if $t >= $goal_number
                 set_state crushed
             end_if
         }
