@@ -383,17 +383,17 @@ bool can_traverse_path_link(
     case PATH_LINK_TYPE_NORMAL: {
         break;
     } case PATH_LINK_TYPE_SCRIPT_ONLY: {
-        if(has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
+        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
             return false;
         }
         break;
     } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
-        if(has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
+        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
             return false;
         }
         break;
     } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
-        if(has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
+        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
             return false;
         }
         break;
