@@ -394,11 +394,12 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
             if(game.cur_area_data.mob_generators[m_idx] == sm) break;
         }
         
-        //Check all links to this mob.
+        //Update links.
         for(
             size_t m2 = 0; m2 < game.cur_area_data.mob_generators.size(); ++m2
         ) {
             mob_gen* m2_ptr = game.cur_area_data.mob_generators[m2];
+            
             for(size_t l = 0; l < m2_ptr->links.size(); ++l) {
             
                 if(m2_ptr->link_nrs[l] > m_idx) {
@@ -410,7 +411,13 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
                     m2_ptr->link_nrs.erase(m2_ptr->link_nrs.begin() + l);
                 }
             }
-            if(m2_ptr->stored_inside == m_idx) {
+            
+            if(
+                m2_ptr->stored_inside != INVALID &&
+                m2_ptr->stored_inside > m_idx
+            ) {
+                m2_ptr->stored_inside--;
+            } else if(m2_ptr->stored_inside == m_idx) {
                 m2_ptr->stored_inside = INVALID;
             }
         }
