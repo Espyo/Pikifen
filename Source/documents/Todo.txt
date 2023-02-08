@@ -3,10 +3,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header
-    Area tip: To make it so the player can't whistle Pikmin on the other side of a blocked alcove, make them sprouts
-    Area tip: To stop Pikmin from carrying something somewhere you don't want, block it off with a tight corridor and a light-load path
-    Area tip: Gates for leaders only can be geysers
-    When you press Play, if the stats say played areas = 0, a prompt should appear asking if you want to play the tutorial area first
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

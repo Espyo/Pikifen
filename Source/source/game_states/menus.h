@@ -44,6 +44,7 @@ extern const string GUI_FILE_PATH;
 extern const float HUD_MOVE_TIME;
 extern const string MAKE_GUI_FILE_PATH;
 extern const string PLAY_GUI_FILE_PATH;
+extern const string TUTORIAL_GUI_FILE_PATH;
 }
 
 
@@ -118,6 +119,8 @@ private:
     gui_manager play_gui;
     //GUI for the make page.
     gui_manager make_gui;
+    //GUI for the tutorial question page.
+    gui_manager tutorial_gui;
     //Top-left coordinates of the logo, in screen percentage.
     point logo_min_screen_limit;
     //Bottom-right coordinates of the logo, in screen percentage.
@@ -142,6 +145,7 @@ private:
     void init_main_page();
     void init_make_page();
     void init_play_page();
+    void init_tutorial_page();
 };
 
 

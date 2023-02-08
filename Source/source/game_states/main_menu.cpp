@@ -31,6 +31,9 @@ const string MAKE_GUI_FILE_PATH =
 //Path to the play page GUI information file.
 const string PLAY_GUI_FILE_PATH =
     GUI_FOLDER_PATH + "/Main_menu_play.txt";
+//Path to the tutorial question page GUI information file.
+const string TUTORIAL_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Main_menu_tutorial.txt";
 }
 
 
@@ -104,6 +107,7 @@ void main_menu_state::do_drawing() {
     main_gui.draw();
     play_gui.draw();
     make_gui.draw();
+    tutorial_gui.draw();
     
     game.fade_mgr.draw();
     
@@ -148,6 +152,7 @@ void main_menu_state::do_logic() {
     main_gui.tick(game.delta_t);
     play_gui.tick(game.delta_t);
     make_gui.tick(game.delta_t);
+    tutorial_gui.tick(game.delta_t);
     
     //Fade manager needs to come last, because if
     //the fade finishes and the state changes, and
@@ -177,6 +182,7 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     main_gui.handle_event(ev);
     play_gui.handle_event(ev);
     make_gui.handle_event(ev);
+    tutorial_gui.handle_event(ev);
 }
 
 
@@ -206,11 +212,19 @@ void main_menu_state::init_main_page() {
             GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             MAIN_MENU::HUD_MOVE_TIME
         );
-        play_gui.responsive = true;
-        play_gui.start_animation(
-            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
-            MAIN_MENU::HUD_MOVE_TIME
-        );
+        if(game.statistics.area_entries == 0) {
+            tutorial_gui.responsive = true;
+            tutorial_gui.start_animation(
+                GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+                MAIN_MENU::HUD_MOVE_TIME
+            );
+        } else {
+            play_gui.responsive = true;
+            play_gui.start_animation(
+                GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+                MAIN_MENU::HUD_MOVE_TIME
+            );
+        }
     };
     play_button->on_get_tooltip =
     [] () { return "Choose an area to play in."; };
@@ -470,6 +484,84 @@ void main_menu_state::init_play_page() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the GUI elements for the main menu's tutorial question page.
+ */
+void main_menu_state::init_tutorial_page() {
+    data_node gui_file(MAIN_MENU::TUTORIAL_GUI_FILE_PATH);
+    
+    //Menu items.
+    tutorial_gui.register_coords("question", 50,     60, 60,  12.5);
+    tutorial_gui.register_coords("no",       26, 80.875, 40, 10.25);
+    tutorial_gui.register_coords("yes",      74,     81, 40,    10);
+    tutorial_gui.register_coords("tooltip",  50,     96, 96,     4);
+    tutorial_gui.read_coords(gui_file.get_child_by_name("positions"));
+    
+    //Question text.
+    text_gui_item* question_text =
+        new text_gui_item(
+        "If you're new to Pikifen, it is recommended to play the "
+        "\"Tutorial Meadow\" mission first.\n\n"
+        "Do you want to play there now?",
+        game.fonts.standard
+    );
+    question_text->line_wrap = true;
+    tutorial_gui.add_item(question_text, "question");
+    
+    //No button.
+    tutorial_gui.back_item =
+        new button_gui_item("No", game.fonts.standard);
+    tutorial_gui.back_item->on_activate =
+    [this] (const point &) {
+        tutorial_gui.responsive = false;
+        tutorial_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
+        play_gui.responsive = true;
+        play_gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            MAIN_MENU::HUD_MOVE_TIME
+        );
+    };
+    tutorial_gui.back_item->on_get_tooltip =
+    [] () {
+        return
+            "Go to the standard area selection menu.";
+    };
+    tutorial_gui.add_item(tutorial_gui.back_item, "no");
+    
+    //Yes button.
+    button_gui_item* yes_button =
+        new button_gui_item("Yes", game.fonts.standard);
+    yes_button->on_activate =
+    [] (const point &) {
+        game.states.gameplay->path_of_area_to_load =
+            get_base_area_folder_path(AREA_TYPE_MISSION, true) + "/" +
+            "Tutorial Meadow";
+        game.fade_mgr.start_fade(false, [] () {
+            game.change_state(game.states.gameplay);
+        });
+    };
+    yes_button->on_get_tooltip =
+    [] () {
+        return
+            "Play Tutorial Meadow now.";
+    };
+    tutorial_gui.add_item(yes_button, "yes");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&tutorial_gui);
+    tutorial_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    tutorial_gui.set_selected_item(yes_button);
+    tutorial_gui.responsive = false;
+    tutorial_gui.hide_items();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the main menu into memory.
  */
 void main_menu_state::load() {
@@ -479,6 +571,7 @@ void main_menu_state::load() {
     init_main_page();
     init_play_page();
     init_make_page();
+    init_tutorial_page();
     
     switch(page_to_load) {
     case MAIN_MENU_PAGE_MAIN: {
@@ -620,6 +713,7 @@ void main_menu_state::unload() {
     main_gui.destroy();
     play_gui.destroy();
     make_gui.destroy();
+    tutorial_gui.destroy();
     
     //Misc.
     logo_pikmin.clear();
