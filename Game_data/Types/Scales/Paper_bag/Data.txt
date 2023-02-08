@@ -4,7 +4,7 @@ description = A large overturned paper bag. It can be squashed down if enough we
 custom_category_name = Obstacle, harmless
 goal_number = 20
 can_block_paths = true
-height = 128
+height = 200
 pushes = true
 radius = 42
 rectangular_dimensions = 84 196
@@ -15,6 +15,13 @@ spawns {
         relative = true
         coordinates = 0 0
         angle = 0
+    }
+    barrier {
+        object = Paper bag barrier
+        relative = true
+        coordinates = 0 0
+        angle = 0
+        link_object_to_spawn = true
     }
 }
 children {
@@ -33,5 +40,13 @@ children {
         hold_offset_vertical_distance = 0
         hold_offset_angle = 0
         hold_rotation_method = face_parent
+    }
+    barrier {
+        spawn = barrier
+        parent_holds = true
+        hold_offset_distance = 0
+        hold_offset_vertical_distance = 1
+        hold_offset_angle = 0
+        hold_rotation_method = copy_parent
     }
 }

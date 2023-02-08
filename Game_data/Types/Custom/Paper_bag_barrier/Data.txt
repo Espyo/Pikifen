@@ -1,0 +1,14 @@
+name = Paper bag barrier
+description = Invisible thin barrier that stops Pikmin from being thrown over a paper bag.
+
+appears_in_area_editor = false
+can_block_paths = false
+casts_shadow = false
+custom_category_name = Aux
+height = 1000
+pushable = false
+pushes = true
+radius = 8
+rectangular_dimensions = 16 196
+target_type = none
+team = none

@@ -10,7 +10,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Leaders shouldn't be able to be thrown on top of paper bags to weigh them down
     One of the Puffy Blowhog's dying frames is an attack frame
     If you delete a mob in the area editor whose ID is lower than the ID of a holder mob (for the spoils thing), the IDs will mismatch
     

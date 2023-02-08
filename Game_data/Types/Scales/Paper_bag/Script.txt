@@ -23,6 +23,7 @@ script {
             set_height 2
             set_health 0
             start_particles paper_bag_dust 0 0 200
+            send_message_to_links paper_bag_crushed
         }
         on_animation_end {
             stop_particles
