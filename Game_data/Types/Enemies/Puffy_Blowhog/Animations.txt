@@ -66,7 +66,7 @@ animations{
 			idling1{
 				duration=0.1000
 			}
-			attack8{
+			dying_pre{
 				duration=0.1000
 			}
 			dying01{
@@ -1520,6 +1520,36 @@ sprites{
 			}
 		}
 	}
+	dying_pre{
+		file=Puffy_Blowhog.png
+		file_pos=1819.0000 231.0000
+		file_size=387.0000 230.0000
+		offset=49.0000 0.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=128.0000
+				radius=80.0000
+				type=2
+				value=1.0000
+			}
+			head{
+				coords=110.0000 0.0000 0.0000
+				height=128.0000
+				radius=60.0000
+				type=2
+				value=1.0000
+			}
+			wind{
+				coords=400.0000 0.0000 -100.0000
+				height=100.0000
+				radius=100.0000
+				type=2
+				value=1.0000
+				hazards=wind
+			}
+		}
+	}
 	falling1{
 		file=Puffy_Blowhog.png
 		file_pos=735.0000 462.0000
@@ -2041,3 +2071,4 @@ body_parts{
 	head
 	wind
 }
+engine_version=0.23.2
