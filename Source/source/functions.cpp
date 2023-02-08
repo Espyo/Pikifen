@@ -1984,13 +1984,13 @@ vector<string_token> tokenize_string(const string &s) {
             }
             c++;
             
-        } else if(str_peek(s, c, "\\n")) {
+        } else if(s[c] == '\n' || str_peek(s, c, "\\n")) {
             if(!cur_token.content.empty()) tokens.push_back(cur_token);
             cur_token.content.clear();
             cur_token.type = STRING_TOKEN_LINE_BREAK;
             tokens.push_back(cur_token);
             cur_token.type = STRING_TOKEN_CHAR;
-            c++;
+            if(s[c] != '\n') c++;
             
         } else {
             cur_token.content.push_back(s[c]);

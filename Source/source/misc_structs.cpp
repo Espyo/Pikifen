@@ -801,7 +801,7 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     
     vector<string_token> line;
     for(size_t t = 0; t < tokens.size(); ++t) {
-        if(tokens[t].type == STRING_TOKEN_CHAR && tokens[t].content == "\n") {
+        if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
             tokens_per_line.push_back(line);
             line.clear();
         } else {
