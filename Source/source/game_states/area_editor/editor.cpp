@@ -128,6 +128,7 @@ area_editor::area_editor() :
     quick_height_set_start_height(0.0f),
     quick_preview_timer(AREA_EDITOR::QUICK_PREVIEW_DURATION),
     reference_bitmap(nullptr),
+    reference_keep_aspect_ratio(true),
     selected_shadow(nullptr),
     selected_shadow_keep_aspect_ratio(false),
     selecting(false),
@@ -1512,6 +1513,7 @@ void area_editor::load() {
     selection_homogenized = false;
     show_closest_stop = false;
     show_path_preview = false;
+    quick_preview_timer.stop();
     state = EDITOR_STATE_MAIN;
     status_text.clear();
     

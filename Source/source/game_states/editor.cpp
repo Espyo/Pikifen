@@ -463,7 +463,6 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
             
                 switch(ev.mouse.button) {
                 case 1: {
-            
                     handle_lmb_double_click(ev);
                     break;
                 } case 2: {
@@ -475,14 +474,11 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 }
                 }
                 
+                double_click_time = 0;
             }
-            
-            double_click_time = 0;
             
         } else {
             //Single-click.
-            
-            last_mouse_click_sub_state = sub_state;
             
             if(does_imgui_need_keyboard) {
                 //If Dear ImGui needs the keyboard, then a textbox is likely
@@ -492,6 +488,8 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 
             } else {
             
+                last_mouse_click_sub_state = sub_state;
+                
                 switch(ev.mouse.button) {
                 case 1: {
                     handle_lmb_down(ev);
@@ -505,12 +503,12 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 }
                 }
                 
+                last_mouse_click = ev.mouse.button;
+                last_mouse_click_pos.x = ev.mouse.x;
+                last_mouse_click_pos.y = ev.mouse.y;
+                double_click_time = EDITOR::DOUBLE_CLICK_TIMEOUT;
+                
             }
-            
-            last_mouse_click = ev.mouse.button;
-            last_mouse_click_pos.x = ev.mouse.x;
-            last_mouse_click_pos.y = ev.mouse.y;
-            double_click_time = EDITOR::DOUBLE_CLICK_TIMEOUT;
         }
         
         

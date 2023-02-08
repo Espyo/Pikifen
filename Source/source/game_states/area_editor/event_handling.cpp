@@ -257,7 +257,11 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         press_select_all_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C)) {
-        if(!moving && !selecting) {
+        if(
+            state == EDITOR_STATE_LAYOUT &&
+            sub_state == EDITOR_SUB_STATE_NONE &&
+            !moving && !selecting
+        ) {
             press_circle_sector_button();
         }
         

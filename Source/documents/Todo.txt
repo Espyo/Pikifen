@@ -11,12 +11,8 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Leaders shouldn't be able to be thrown on top of paper bags to weigh them down
-    If you quick test in the middle of a quick texture preview, when you return, the quick preview timer will be at the same spot
     One of the Puffy Blowhog's dying frames is an attack frame
-    If you're in the mob mode, pressing C lets you start a circle sector
     If you delete a mob in the area editor whose ID is lower than the ID of a holder mob (for the spoils thing), the IDs will mismatch
-    If you're editing a mob's text field in the panel, and you double-click an empty area, you'll select both the current mob and the new one
-    Changing a reference image's width via the text box widget will not set the height text box with it
     
     --- v0.24.0 ---
     Shift+Ctrl should allow you to add to the selection and do a lasso
