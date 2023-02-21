@@ -89,6 +89,8 @@ const float OPPONENT_HIT_REGISTER_TIMEOUT = 0.5f;
 const float PIKMIN_NEST_CALL_INTERVAL = 0.01f;
 //A little extra push amount when mobs intersect. Can't be throttled.
 const float PUSH_EXTRA_AMOUNT = 50.0f;
+//During push throttling, multiply the push by this.
+const float PUSH_THROTTLE_FACTOR = 0.1f;
 //Before this much time, a mob can't push others as effectively.
 const float PUSH_THROTTLE_TIMEOUT = 1.0f;
 //Multiply the stretch of the shadow by this much.

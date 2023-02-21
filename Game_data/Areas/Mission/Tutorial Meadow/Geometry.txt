@@ -4563,7 +4563,7 @@ mobs{
 	Treasure{
 		type=2 Euro
 		p=-1120.0000 384.0000
-		stored_inside=34
+		stored_inside=31
 	}
 	Pikmin{
 		type=Red Pikmin

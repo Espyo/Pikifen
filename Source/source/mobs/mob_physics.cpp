@@ -299,14 +299,6 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
         push_amount =
             std::min(push_amount, (float) (radius / delta_t) * 4);
             
-        //If the mob spawned recently, throttle its push. This avoids a bundle
-        //of recently-spawned objects from pushing each other with insane force.
-        //Setting the amount to 0 means it'll use the push provided by
-        //MOB_PUSH_EXTRA_AMOUNT exclusively.
-        if(time_alive < MOB::PUSH_THROTTLE_TIMEOUT) {
-            push_amount = 0;
-        }
-        
         move_speed->x +=
             cos(push_angle) * (push_amount + MOB::PUSH_EXTRA_AMOUNT);
         move_speed->y +=

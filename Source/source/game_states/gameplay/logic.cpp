@@ -1722,6 +1722,23 @@ void gameplay_state::process_mob_touches(
                     //Deviate the angle slightly. This way, if two Pikmin
                     //are in the same spot, they don't drag each other forever.
                     push_angle += 0.1f * (m > m2);
+                } else if(
+                    m_ptr->time_alive < MOB::PUSH_THROTTLE_TIMEOUT ||
+                    m2_ptr->time_alive < MOB::PUSH_THROTTLE_TIMEOUT
+                ) {
+                    //If either the pushed mob or the pusher mob spawned
+                    //recently, then throttle the push. This avoids stuff like
+                    //an enemy spoil pushing said enemy with insane force.
+                    //Especially if there are multiple spoils.
+                    //Setting the amount to 0.1 means it'll only really use the
+                    //push provided by MOB_PUSH_EXTRA_AMOUNT.
+                    float time_factor =
+                        std::min(m_ptr->time_alive, m2_ptr->time_alive);
+                    push_amount *=
+                        time_factor /
+                        MOB::PUSH_THROTTLE_TIMEOUT *
+                        MOB::PUSH_THROTTLE_FACTOR;
+                        
                 }
             }
         }

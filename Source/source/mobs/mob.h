@@ -70,6 +70,7 @@ extern const float KNOCKBACK_V_POWER;
 extern const float OPPONENT_HIT_REGISTER_TIMEOUT;
 extern const float PIKMIN_NEST_CALL_INTERVAL;
 extern const float PUSH_EXTRA_AMOUNT;
+extern const float PUSH_THROTTLE_FACTOR;
 extern const float PUSH_THROTTLE_TIMEOUT;
 extern const float SHADOW_STRETCH_MULT;
 extern const float SHADOW_Y_MULT;
