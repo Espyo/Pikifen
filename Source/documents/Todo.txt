@@ -8,7 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.24.0 ---
-    Shift+Ctrl should allow you to add to the selection and do a lasso
     Add several pre-packaged areas, since players have nothing to play with right now
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
             Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries

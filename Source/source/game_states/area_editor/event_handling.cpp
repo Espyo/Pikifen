@@ -657,7 +657,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 }
                 
                 if(start_new_selection) {
-                    clear_selection();
+                    if(!is_ctrl_pressed) clear_selection();
                     selecting = true;
                     selection_start = game.mouse_cursor_w;
                     selection_end = game.mouse_cursor_w;
@@ -931,7 +931,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             if(start_new_selection) {
-                clear_selection();
+                if(!is_ctrl_pressed) clear_selection();
                 selecting = true;
                 selection_start = game.mouse_cursor_w;
                 selection_end = game.mouse_cursor_w;
@@ -1066,7 +1066,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             if(start_new_selection) {
-                clear_selection();
+                if(!is_ctrl_pressed) clear_selection();
                 selecting = true;
                 selection_start = game.mouse_cursor_w;
                 selection_end = game.mouse_cursor_w;
@@ -1234,7 +1234,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         case EDITOR_STATE_LAYOUT: {
     
             //Selection box around the layout.
-            clear_selection();
+            if(!is_ctrl_pressed) clear_selection();
             
             for(size_t v = 0; v < game.cur_area_data.vertexes.size(); ++v) {
                 vertex* v_ptr = game.cur_area_data.vertexes[v];
@@ -1306,7 +1306,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         } case EDITOR_STATE_MOBS: {
     
             //Selection box around mobs.
-            clear_selection();
+            if(!is_ctrl_pressed) clear_selection();
             
             for(
                 size_t m = 0;
@@ -1333,7 +1333,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         } case EDITOR_STATE_PATHS: {
     
             //Selection box around path stops.
-            clear_selection();
+            if(!is_ctrl_pressed) clear_selection();
             
             for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
