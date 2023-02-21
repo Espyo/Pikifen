@@ -7,8 +7,6 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Fix the broken treasure inside some random decoration in Tutorial Meadow (thanks Helodity)
-    Fix the second electric wire object not having a bitmap, and that turning into the black-and-purple texture (thanks Helodity)
-    Sprite comparison crashes the engine (thanks Helodity)
     The treasure in Tutorial Meadow spawning is pushing the Puffy Blowhog too aggressively
     
     --- v0.24.0 ---

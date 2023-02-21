@@ -2461,9 +2461,14 @@ void animation_editor::process_gui_panel_sprite_transform() {
                 set_tooltip(
                     "Choose another sprite to serve as a comparison."
                 );
-                comparison_sprite =
-                    anims.sprites[anims.find_sprite(comparison_sprite_name)];
-                    
+                size_t comparison_sprite_idx =
+                    anims.find_sprite(comparison_sprite_name);
+                if(comparison_sprite_idx != INVALID) {
+                    comparison_sprite = anims.sprites[comparison_sprite_idx];
+                } else {
+                    comparison_sprite = NULL;
+                }
+                
                 //Comparison blinks checkbox.
                 ImGui::Checkbox("Blink comparison", &comparison_blink);
                 set_tooltip(
