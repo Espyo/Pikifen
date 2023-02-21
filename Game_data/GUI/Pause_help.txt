@@ -38,6 +38,7 @@ tidbits{
 		Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.;Help/Paths.jpg
 		Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.;Help/Saving_Pikmin.jpg
 		Getting up;If a Pikmin got knocked back, is lying on the floor, and about to be attacked, whistle it to make it get up faster.;Help/Getting_up.jpg
+		Onion menu;Whether you're ordering Pikmin to go in the Onion or calling some out, try holding down the button on-screen to choose your numbers faster.;Help/Onion_menu.jpg
 	}
 	controls{
 		Move;Move around with \k move_up \k \k move_left \k \k move_down \k \k move_right \k.;Help/Moving.jpg

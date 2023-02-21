@@ -2,11 +2,14 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Fix the broken treasure inside some random decoration in Tutorial Meadow (thanks Helodity)
+    Fix the second electric wire object not having a bitmap, and that turning into the black-and-purple texture (thanks Helodity)
+    Sprite comparison crashes the engine (thanks Helodity)
+    The treasure in Tutorial Meadow spawning is pushing the Puffy Blowhog too aggressively
     
     --- v0.24.0 ---
     Shift+Ctrl should allow you to add to the selection and do a lasso
@@ -60,6 +63,7 @@ Next tasks (roughly sorted most important first)
             Allow it to be panned by dragging any mouse button -- people who are used to dragging with RMB on the editors will be thankful
                 Also, only pan if the mouse moved a certain amount of pixels
             Panning should be limited to just slightly beyond the area's bounding box
+            The leader can't follow a path that goes through sectors that their Pikmin squad is vulnerable to
         Stats page
             Table with the amount of Pikmin of each type that is in the Onion, with you, working, idling
             Number of deaths today (careful not to count Candypop Buds as deaths)
@@ -69,8 +73,19 @@ Next tasks (roughly sorted most important first)
             It's just the pause menu
         Open it with Tab, and move leader swapping to X or Shift or middle mouse button or something
     Other menu improvements
+        Add the help menu to the main menu
         Onion menu
-            Buttons (maybe hidden) that instantly pulls out the max number of Pikmin possible, leaves you with 20 Pikmin of that type, or leaves you with 0.
+            A series of icon-only buttons on the left side (though tooltips should still work)
+                Store all -- sets the numbers to store all the Pikmin you have of the applicable Onions
+                Call max -- sets the numbers to call as many Pikmin from the Onion as possible, in equal amounts for each available type in the Onion
+                The button to toggle changing all types together
+            Make it so the list of Pikmin is a scrollable list that scrolls left and right, if the Onion has more than five types
+        Pause menu
+            Add the options menu and stats menu
+            The layout should probably be like:
+                      [Restart] [Finish]
+                   [Options] [Help] [Stats]
+                [Continue]             [Quit]
         The ability to load TTF fonts
         [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
     Music
@@ -204,6 +219,7 @@ Next tasks (roughly sorted most important first)
         Gates should have a different appearance depending on how damaged they are
         Yellow Wollywog should close its eyes when shaking
         Candypop Buds should squash when they close
+        Treasures should have sparkle particles
         Ceramic bridges should be reworked for the new bridge format
         Wooden bridges need to be 192px long, to fit the new bridge format
             Wood bridges should push, have rectangular collision, and have more hitboxes a la gates (thanks Helodity)
@@ -264,11 +280,11 @@ Next tasks (roughly sorted most important first)
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the button icons should show the name of the button instead of a number
         If an action has multiple controls, the icon to show should prioritize gamepad inputs if the last player input was a gamepad (for analog sticks only if > 0.5), and keyboard/mouse otherwise
         The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
+            Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
     Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     The ability for Blue Pikmin to rescue drowning Pikmin
-    Pause menu should include the options
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
