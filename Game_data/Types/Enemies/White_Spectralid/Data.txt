@@ -2,7 +2,7 @@ name = White Spectralid
 description = A simple, gentle flying creature. It's hard to hit, but likes to stop and rest at home periodically.
 
 can_hunt = player; enemy
-custom_category_name = Enemy, peaceful
+custom_category_name = Enemy, small and peaceful
 drops_corpse = true
 height = 32
 max_carriers = 1

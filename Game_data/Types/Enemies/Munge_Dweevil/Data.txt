@@ -3,7 +3,7 @@ description = This spider-like creature is afraid of Pikmin, and loves carrying 
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
-custom_category_name = Enemy, aggressive
+custom_category_name = Enemy, small and aggressive
 allow_ground_attacks = false
 drops_corpse = true
 height = 48

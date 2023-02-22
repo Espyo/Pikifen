@@ -3,7 +3,7 @@ description = Water Dumples are typically found near or in water. They have a st
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
-custom_category_name = Enemy, aggressive
+custom_category_name = Enemy, small and aggressive
 drops_corpse = true
 height = 32
 itch_damage = 50
