@@ -6,14 +6,22 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Obstacle SVG file broke?
     
     --- v0.24.0 ---
+    Area editor "copy properties" and "paste properties"
     Add several pre-packaged areas, since players have nothing to play with right now
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
-            Roughly copy the "Paths" area, and also add tests for Pikmin carrying bridge fragments and berries
-            Northwest quadrant for mobs, Northeast quadrant for mechanics, Southwest quadrant for tests, Southeast quadrant for misc?
+            Northwest quadrant for creatures and wildlife
+            Northeast quadrant for other mobs
+            Southwest quadrant for mechanics
+            Southeast quadrant for misc
+                A measuring pad that's just a big sector with nothing in it, but uses the measurement texture
+                Copy stuff from the Paths area, and also add tests for Pikmin carrying bridge fragments and berries
+                Copy stuff from the Tests area
             Theme it like a laboratory
             Computer terminals that act like signs should tell the player what's where
+            All leaders should be present
         Helodity's Adventure area (see #content-sharing)
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
         A puzzle stage
@@ -790,9 +798,11 @@ Tasks for later on (I might never implement these)
                 When an area is saved, delete the backup. When an area is loaded, if a backup is found, ask if they want to restore that backup instead.
                 If it detects an auto-backup that's younger than the saved area, it should ask the user if they want to continue from the backup
             The ability to add comments to specific spots in an area; they should show up as like a question mark, and when you click it, you see/edit the comment in the panel
+                Also, the ability to add them in-game with a maker tool, but they only exist in the area editor anyway
             A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
-            Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.
+            Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.?
+            A quicker way to quickly preview what an area will look like, instead of having to go to the review panel and checking an option
         Animation editor
             "Sprite" -> "Pose"?
             You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.

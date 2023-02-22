@@ -196,7 +196,6 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
                 status_text.clear();
             } else if(sub_state == EDITOR_SUB_STATE_MISSION_MOBS) {
                 change_state(EDITOR_STATE_GAMEPLAY);
-                sub_state = EDITOR_SUB_STATE_NONE;
             } else if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
                 selecting = false;
@@ -268,13 +267,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         if(
             !moving && !selecting &&
-            game.options.area_editor_advanced_mode &&
-            (
-                state == EDITOR_STATE_LAYOUT ||
-                state == EDITOR_STATE_MOBS ||
-                state == EDITOR_STATE_PATHS ||
-                state == EDITOR_STATE_DETAILS
-            )
+            game.options.area_editor_advanced_mode
         ) {
             change_state(EDITOR_STATE_DETAILS);
         }
@@ -311,13 +304,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_L)) {
         if(
             !moving && !selecting &&
-            game.options.area_editor_advanced_mode &&
-            (
-                state == EDITOR_STATE_LAYOUT ||
-                state == EDITOR_STATE_MOBS ||
-                state == EDITOR_STATE_PATHS ||
-                state == EDITOR_STATE_DETAILS
-            )
+            game.options.area_editor_advanced_mode
         ) {
             change_state(EDITOR_STATE_LAYOUT);
         }
@@ -356,13 +343,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_O)) {
         if(
             !moving && !selecting &&
-            game.options.area_editor_advanced_mode &&
-            (
-                state == EDITOR_STATE_LAYOUT ||
-                state == EDITOR_STATE_MOBS ||
-                state == EDITOR_STATE_PATHS ||
-                state == EDITOR_STATE_DETAILS
-            )
+            game.options.area_editor_advanced_mode
         ) {
             change_state(EDITOR_STATE_MOBS);
         }
@@ -370,13 +351,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P)) {
         if(
             !moving && !selecting &&
-            game.options.area_editor_advanced_mode &&
-            (
-                state == EDITOR_STATE_LAYOUT ||
-                state == EDITOR_STATE_MOBS ||
-                state == EDITOR_STATE_PATHS ||
-                state == EDITOR_STATE_DETAILS
-            )
+            game.options.area_editor_advanced_mode
         ) {
             change_state(EDITOR_STATE_PATHS);
         }

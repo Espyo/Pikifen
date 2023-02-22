@@ -2409,7 +2409,6 @@ void area_editor::process_gui_panel_main() {
             "Review"
         )
     ) {
-        clear_problems();
         change_state(EDITOR_STATE_REVIEW);
     }
     set_tooltip(
@@ -4008,7 +4007,6 @@ void area_editor::process_gui_panel_mobs() {
         //Finish button.
         if(ImGui::Button("Finish")) {
             change_state(EDITOR_STATE_GAMEPLAY);
-            sub_state = EDITOR_SUB_STATE_NONE;
         }
         set_tooltip("Click here to finish.");
         
@@ -4407,7 +4405,6 @@ void area_editor::process_gui_panel_review() {
     
     //Back button.
     if(ImGui::Button("Back")) {
-        clear_problems();
         change_state(EDITOR_STATE_MAIN);
     }
     
@@ -5379,15 +5376,7 @@ void area_editor::process_gui_toolbar() {
         "X or Shift + X"
     );
     
-    if(
-        game.options.area_editor_advanced_mode &&
-        (
-            state == EDITOR_STATE_LAYOUT ||
-            state == EDITOR_STATE_MOBS ||
-            state == EDITOR_STATE_PATHS ||
-            state == EDITOR_STATE_DETAILS
-        )
-    ) {
+    if(game.options.area_editor_advanced_mode) {
     
         //Layout mode button.
         ImGui::SameLine(0, 16);
