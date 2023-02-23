@@ -41,6 +41,7 @@ void area_editor::do_drawing() {
     ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
     
     draw_unsaved_changes_warning();
+    draw_op_error_cursor();
     
     //And the fade manager atop it all.
     game.fade_mgr.draw();

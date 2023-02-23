@@ -145,7 +145,7 @@ void gui_editor::load_file(
     file_node = data_node(GUI_FOLDER_PATH + "/" + file_name);
     
     if(!file_node.file_was_opened) {
-        status_text = "Failed to load the file \"" + file_name + "\"!";
+        set_status("Failed to load the file \"" + file_name + "\"!", true);
         open_load_dialog();
         return;
     }
@@ -184,7 +184,7 @@ void gui_editor::load_file(
         save_options(); //Save the history in the options.
     }
     
-    status_text = "Loaded GUI file successfully.";
+    set_status("Loaded GUI file successfully.");
 }
 
 
@@ -236,9 +236,10 @@ void gui_editor::press_grid_interval_decrease_button() {
         new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
     }
     game.options.gui_editor_grid_interval = new_grid_interval;
-    status_text =
+    set_status(
         "Decreased grid interval to " +
-        f2s(game.options.gui_editor_grid_interval) + ".";
+        f2s(game.options.gui_editor_grid_interval) + "."
+    );
 }
 
 
@@ -257,9 +258,10 @@ void gui_editor::press_grid_interval_increase_button() {
         new_grid_interval = GUI_EDITOR::GRID_INTERVALS[i];
     }
     game.options.gui_editor_grid_interval = new_grid_interval;
-    status_text =
+    set_status(
         "Increased grid interval to " +
-        f2s(game.options.gui_editor_grid_interval) + ".";
+        f2s(game.options.gui_editor_grid_interval) + "."
+    );
 }
 
 
@@ -278,7 +280,7 @@ void gui_editor::press_load_button() {
  */
 void gui_editor::press_quit_button() {
     if(!check_new_unsaved_changes(quit_widget_pos)) {
-        status_text = "Bye!";
+        set_status("Bye!");
         leave();
     }
 }
@@ -303,7 +305,7 @@ void gui_editor::press_save_button() {
     }
     has_unsaved_changes = false;
     was_warned_about_unsaved_changes = false;
-    status_text = "Saved GUI file successfully.";
+    set_status("Saved GUI file successfully.");
 }
 
 
@@ -312,13 +314,14 @@ void gui_editor::press_save_button() {
  */
 void gui_editor::press_snap_mode_button() {
     game.options.gui_editor_snap = !game.options.gui_editor_snap;
-    status_text = "Set snap mode to ";
+    string final_status_text = "Set snap mode to ";
     if(game.options.gui_editor_snap) {
-        status_text += "nothing";
+        final_status_text += "nothing";
     } else {
-        status_text += "grid";
+        final_status_text += "grid";
     }
-    status_text += ".";
+    final_status_text += ".";
+    set_status(final_status_text);
 }
 
 
@@ -391,10 +394,10 @@ bool gui_editor::save_file() {
             NULL,
             ALLEGRO_MESSAGEBOX_WARN
         );
-        status_text = "Could not save the GUI file!";
+        set_status("Could not save the GUI file!", true);
         return false;
     } else {
-        status_text = "Saved GUI file successfully.";
+        set_status("Saved GUI file successfully.");
     }
     has_unsaved_changes = false;
     was_warned_about_unsaved_changes = false;

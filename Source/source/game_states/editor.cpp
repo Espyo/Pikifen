@@ -36,6 +36,16 @@ const int ICON_BMP_PADDING = 1;
 const int ICON_BMP_SIZE = 24;
 //How much to zoom in/out with the keyboard keys.
 const float KEYBOARD_CAM_ZOOM = 0.25f;
+//How quickly the operation error red flash effect cursor shakes.
+const float OP_ERROR_CURSOR_SHAKE_SPEED = 55.0f;
+//How much the operation error red flash effect cursor shakes left and right.
+const float OP_ERROR_CURSOR_SHAKE_WIDTH = 10.0f;
+//Width or height of the operation error red flash effect cursor.
+const float OP_ERROR_CURSOR_SIZE = 32.0f;
+//Thickness of the operation error red flash effect cursor.
+const float OP_ERROR_CURSOR_THICKNESS = 5.0f;
+//Duration of the operation error red flash effect.
+const float OP_ERROR_FLASH_DURATION = 1.5f;
 //Picker dialog maximum button size.
 const float PICKER_IMG_BUTTON_MAX_SIZE = 160.0f;
 //Picker dialog minimum button size.
@@ -79,6 +89,7 @@ editor::editor() :
     loaded_content_yet(false),
     has_unsaved_changes(false),
     mouse_drag_confirmed(false),
+    op_error_flash_timer(EDITOR::OP_ERROR_FLASH_DURATION),
     state(0),
     sub_state(0),
     unsaved_changes_warning_timer(EDITOR::UNSAVED_CHANGES_WARNING_DURATION),
@@ -196,6 +207,7 @@ void editor::do_logic_pre() {
     game.cam.update_box();
     
     unsaved_changes_warning_timer.tick(game.delta_t);
+    op_error_flash_timer.tick(game.delta_t);
     
     update_transformations();
 }
@@ -277,6 +289,36 @@ void editor::draw_grid(
         }
         y += interval;
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a small red X on the cursor, signifying an operation has failed.
+ */
+void editor::draw_op_error_cursor() {
+    float error_flash_time_ratio = op_error_flash_timer.get_ratio_left();
+    if(error_flash_time_ratio <= 0.0f) return;
+    point pos = game.mouse_cursor_s;
+    pos.x +=
+        EDITOR::OP_ERROR_CURSOR_SHAKE_WIDTH *
+        sin(game.time_passed * EDITOR::OP_ERROR_CURSOR_SHAKE_SPEED) *
+        error_flash_time_ratio;
+    al_draw_line(
+        pos.x - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
+        pos.y - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
+        pos.x + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
+        pos.y + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
+        al_map_rgba_f(1.0f, 0.0f, 0.0f, error_flash_time_ratio),
+        EDITOR::OP_ERROR_CURSOR_THICKNESS
+    );
+    al_draw_line(
+        pos.x + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
+        pos.y - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
+        pos.x - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
+        pos.y + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
+        al_map_rgba_f(1.0f, 0.0f, 0.0f, error_flash_time_ratio),
+        EDITOR::OP_ERROR_CURSOR_THICKNESS
+    );
 }
 
 
@@ -1512,6 +1554,41 @@ bool editor::process_gui_size_widgets(
 
 
 /* ----------------------------------------------------------------------------
+ * Process the text widget in the status bar. This is responsible for
+ * showing the text if there's anything to say, showing "Ready." if there's
+ * nothing to say, and coloring the text in case it's an error that needs to be
+ * flashed red.
+ */
+void editor::process_gui_status_bar_text() {
+    float error_flash_time_ratio = op_error_flash_timer.get_ratio_left();
+    if(error_flash_time_ratio > 0.0f) {
+        ImVec4 normal_color_v = ImGui::GetStyle().Colors[ImGuiCol_Text];
+        ALLEGRO_COLOR normal_color;
+        normal_color.r = normal_color_v.x;
+        normal_color.g = normal_color_v.y;
+        normal_color.b = normal_color_v.z;
+        normal_color.a = normal_color_v.w;
+        ALLEGRO_COLOR error_flash_color =
+            interpolate_color(
+                error_flash_time_ratio,
+                0.0f, 1.0f,
+                normal_color, al_map_rgb(255, 0, 0)
+            );
+        ImVec4 error_flash_color_v;
+        error_flash_color_v.x = error_flash_color.r;
+        error_flash_color_v.y = error_flash_color.g;
+        error_flash_color_v.z = error_flash_color.b;
+        error_flash_color_v.w = error_flash_color.a;
+        ImGui::PushStyleColor(ImGuiCol_Text, error_flash_color_v);
+    }
+    ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
+    if(error_flash_time_ratio) {
+        ImGui::PopStyleColor();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes an ImGui::TreeNode, except it pre-emptively opens it or closes it
  * based on the user's preferences. It also saves the user's preferences as
  * they open and close the node.
@@ -1529,6 +1606,22 @@ bool editor::saveable_tree_node(const string &category, const string &label) {
     bool is_open = ImGui::TreeNode(label.c_str());
     game.options.editor_open_nodes[node_name] = is_open;
     return is_open;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the status bar, and notifies the user of an error, if it is an error,
+ * by flashing the text.
+ * text:
+ *   Text to put in the status bar.
+ * error:
+ *   Whether there was an error or not.
+ */
+void editor::set_status(const string &text, const bool error) {
+    status_text = text;
+    if(error) {
+        op_error_flash_timer.start();
+    }
 }
 
 

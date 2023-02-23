@@ -295,7 +295,7 @@ void gui_editor::process_gui_menu_bar() {
             ) {
                 string state_str =
                     game.options.editor_show_tooltips ? "Enabled" : "Disabled";
-                status_text = state_str + " tooltips.";
+                set_status(state_str + " tooltips.");
                 save_options();
             }
             set_tooltip(
@@ -540,7 +540,7 @@ void gui_editor::process_gui_panel_items() {
  */
 void gui_editor::process_gui_status_bar() {
     //Status bar text.
-    ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
+    process_gui_status_bar_text();
     
     //Spacer dummy widget.
     ImGui::SameLine();

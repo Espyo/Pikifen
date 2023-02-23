@@ -134,7 +134,7 @@ void animation_editor::change_state(const EDITOR_STATES new_state) {
     comparison = false;
     comparison_sprite = NULL;
     state = new_state;
-    status_text.clear();
+    set_status();
 }
 
 
@@ -537,7 +537,7 @@ void animation_editor::load_animation_database(
     change_state(EDITOR_STATE_MAIN);
     loaded_content_yet = true;
     
-    status_text = "Loaded file successfully.";
+    set_status("Loaded file successfully.");
 }
 
 
@@ -572,7 +572,7 @@ void animation_editor::pick_animation(
         anims.animations.push_back(new animation(name));
         anims.sort_alphabetically();
         mark_new_changes();
-        status_text = "Created animation \"" + name + "\".";
+        set_status("Created animation \"" + name + "\".");
     }
     cur_anim = anims.animations[anims.find_animation(name)];
     cur_frame_nr = (cur_anim->frames.size()) ? 0 : INVALID;
@@ -602,7 +602,7 @@ void animation_editor::pick_sprite(
             );
             anims.sort_alphabetically();
             mark_new_changes();
-            status_text = "Created sprite \"" + name + "\".";
+            set_status("Created sprite \"" + name + "\".");
         }
     }
     cur_sprite = anims.sprites[anims.find_sprite(name)];
@@ -621,7 +621,7 @@ void animation_editor::pick_sprite(
 void animation_editor::press_grid_button() {
     grid_visible = !grid_visible;
     string state_str = (grid_visible ? "Enabled" : "Disabled");
-    status_text = state_str + " grid visibility.";
+    set_status(state_str + " grid visibility.");
 }
 
 
@@ -631,7 +631,7 @@ void animation_editor::press_grid_button() {
 void animation_editor::press_hitboxes_button() {
     hitboxes_visible = !hitboxes_visible;
     string state_str = (hitboxes_visible ? "Enabled" : "Disabled");
-    status_text = state_str + " hitbox visibility.";
+    set_status(state_str + " hitbox visibility.");
 }
 
 
@@ -641,7 +641,7 @@ void animation_editor::press_hitboxes_button() {
 void animation_editor::press_leader_silhouette_button() {
     leader_silhouette_visible = !leader_silhouette_visible;
     string state_str = (leader_silhouette_visible ? "Enabled" : "Disabled");
-    status_text = state_str + " leader silhouette visibility.";
+    set_status(state_str + " leader silhouette visibility.");
 }
 
 
@@ -661,7 +661,7 @@ void animation_editor::press_load_button() {
 void animation_editor::press_mob_radius_button() {
     mob_radius_visible = !mob_radius_visible;
     string state_str = (mob_radius_visible ? "Enabled" : "Disabled");
-    status_text = state_str + " object radius visibility.";
+    set_status(state_str + " object radius visibility.");
 }
 
 
@@ -681,9 +681,9 @@ void animation_editor::press_play_animation_button() {
         }
         cur_frame_time = 0;
         if(anim_playing) {
-            status_text = "Animation playback started.";
+            set_status("Animation playback started.");
         } else {
-            status_text = "Animation playback stopped.";
+            set_status("Animation playback stopped.");
         }
     }
 }
@@ -694,7 +694,7 @@ void animation_editor::press_play_animation_button() {
  */
 void animation_editor::press_quit_button() {
     if(!check_new_unsaved_changes(quit_widget_pos)) {
-        status_text = "Bye!";
+        set_status("Bye!");
         leave();
     }
 }
@@ -822,21 +822,23 @@ void animation_editor::rename_animation(
     
     //Check if the name is the same.
     if(new_name == old_name) {
-        status_text.clear();
+        set_status();
         return;
     }
     
     //Check if the name is empty.
     if(new_name.empty()) {
-        status_text = "You need to specify the animation's new name!";
+        set_status("You need to specify the animation's new name!", true);
         return;
     }
     
     //Check if the name already exists.
     for(size_t a = 0; a < anims.animations.size(); ++a) {
         if(anims.animations[a]->name == new_name) {
-            status_text =
-                "An animation by the name \"" + new_name + "\" already exists!";
+            set_status(
+                "An animation by the name \"" + new_name + "\" already exists!",
+                true
+            );
             return;
         }
     }
@@ -846,8 +848,9 @@ void animation_editor::rename_animation(
     anims.sort_alphabetically();
     
     mark_new_changes();
-    status_text =
-        "Renamed animation \"" + old_name + "\" to \"" + new_name + "\".";
+    set_status(
+        "Renamed animation \"" + old_name + "\" to \"" + new_name + "\"."
+    );
 }
 
 
@@ -870,21 +873,23 @@ void animation_editor::rename_body_part(
     
     //Check if the name is the same.
     if(new_name == old_name) {
-        status_text.clear();
+        set_status();
         return;
     }
     
     //Check if the name is empty.
     if(new_name.empty()) {
-        status_text = "You need to specify the body part's new name!";
+        set_status("You need to specify the body part's new name!", true);
         return;
     }
     
     //Check if the name already exists.
     for(size_t b = 0; b < anims.body_parts.size(); ++b) {
         if(anims.body_parts[b]->name == new_name) {
-            status_text =
-                "A body part by the name \"" + new_name + "\" already exists!";
+            set_status(
+                "A body part by the name \"" + new_name + "\" already exists!",
+                true
+            );
             return;
         }
     }
@@ -901,8 +906,9 @@ void animation_editor::rename_body_part(
     update_hitboxes();
     
     mark_new_changes();
-    status_text =
-        "Renamed body part \"" + old_name + "\" to \"" + new_name + "\".";
+    set_status(
+        "Renamed body part \"" + old_name + "\" to \"" + new_name + "\"."
+    );
 }
 
 
@@ -925,21 +931,23 @@ void animation_editor::rename_sprite(
     
     //Check if the name is the same.
     if(new_name == old_name) {
-        status_text.clear();
+        set_status();
         return;
     }
     
     //Check if the name is empty.
     if(new_name.empty()) {
-        status_text = "You need to specify the sprite's new name!";
+        set_status("You need to specify the sprite's new name!", true);
         return;
     }
     
     //Check if the name already exists.
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         if(anims.sprites[s]->name == new_name) {
-            status_text =
-                "A sprite by the name \"" + new_name + "\" already exists!";
+            set_status(
+                "A sprite by the name \"" + new_name + "\" already exists!",
+                true
+            );
             return;
         }
     }
@@ -957,8 +965,9 @@ void animation_editor::rename_sprite(
     anims.sort_alphabetically();
     
     mark_new_changes();
-    status_text =
-        "Renamed sprite \"" + old_name + "\" to \"" + new_name + "\".";
+    set_status(
+        "Renamed sprite \"" + old_name + "\" to \"" + new_name + "\"."
+    );
 }
 
 
@@ -985,11 +994,13 @@ void animation_editor::reset_cam_zoom() {
  */
 void animation_editor::resize_everything(const float mult) {
     if(mult == 0.0f) {
-        status_text = "Can't resize everything to size 0!";
+        set_status("Can't resize everything to size 0!", true);
         return;
     }
     if(mult == 1.0f) {
-        status_text = "Resizing everything by 1 wouldn't make a difference!";
+        set_status(
+            "Resizing everything by 1 wouldn't make a difference!", true
+        );
         return;
     }
     
@@ -998,7 +1009,7 @@ void animation_editor::resize_everything(const float mult) {
     }
     
     mark_new_changes();
-    status_text = "Resized everything by " + f2s(mult) + ".";
+    set_status("Resized everything by " + f2s(mult) + ".");
 }
 
 
@@ -1011,11 +1022,11 @@ void animation_editor::resize_everything(const float mult) {
  */
 void animation_editor::resize_sprite(sprite* s, const float mult) {
     if(mult == 0.0f) {
-        status_text = "Can't resize a sprite to size 0!";
+        set_status("Can't resize a sprite to size 0!", true);
         return;
     }
     if(mult == 1.0f) {
-        status_text = "Resizing a sprite by 1 wouldn't make a difference!";
+        set_status("Resizing a sprite by 1 wouldn't make a difference!", true);
         return;
     }
     
@@ -1032,7 +1043,7 @@ void animation_editor::resize_sprite(sprite* s, const float mult) {
     }
     
     mark_new_changes();
-    status_text = "Resized sprite by " + f2s(mult) + ".";
+    set_status("Resized sprite by " + f2s(mult) + ".");
 }
 
 
@@ -1236,9 +1247,9 @@ void animation_editor::save_animation_database() {
             NULL,
             ALLEGRO_MESSAGEBOX_WARN
         );
-        status_text = "Could not save the animation file!";
+        set_status("Could not save the animation file!", true);
     } else {
-        status_text = "Saved file successfully.";
+        set_status("Saved file successfully.");
     }
     has_unsaved_changes = false;
     was_warned_about_unsaved_changes = false;
@@ -1252,7 +1263,7 @@ void animation_editor::save_animation_database() {
  */
 void animation_editor::set_all_sprite_scales(const float scale) {
     if(scale == 0) {
-        status_text = "The scales can't be 0!";
+        set_status("The scales can't be 0!", true);
         return;
     }
     
@@ -1263,7 +1274,7 @@ void animation_editor::set_all_sprite_scales(const float scale) {
     }
     
     mark_new_changes();
-    status_text = "Set all sprite scales to " + f2s(scale) + ".";
+    set_status("Set all sprite scales to " + f2s(scale) + ".");
 }
 
 

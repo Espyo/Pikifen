@@ -364,11 +364,9 @@ void area_editor::process_gui_menu_bar() {
                     )
                 ) {
                     if(debug_edge_nrs) {
-                        status_text =
-                            "Enabled debug edge number display.";
+                        set_status("Enabled debug edge number display.");
                     } else {
-                        status_text =
-                            "Disabled debug edge number display.";
+                        set_status("Disabled debug edge number display.");
                     }
                 }
                 set_tooltip(
@@ -383,11 +381,9 @@ void area_editor::process_gui_menu_bar() {
                     )
                 ) {
                     if(debug_sector_nrs) {
-                        status_text =
-                            "Enabled debug sector number display.";
+                        set_status("Enabled debug sector number display.");
                     } else {
-                        status_text =
-                            "Disabled debug sector number display.";
+                        set_status("Disabled debug sector number display.");
                     }
                 }
                 set_tooltip(
@@ -402,11 +398,9 @@ void area_editor::process_gui_menu_bar() {
                     )
                 ) {
                     if(debug_vertex_nrs) {
-                        status_text =
-                            "Enabled debug vertex number display.";
+                        set_status("Enabled debug vertex number display.");
                     } else {
-                        status_text =
-                            "Disabled debug vertex number display.";
+                        set_status("Disabled debug vertex number display.");
                     }
                 }
                 set_tooltip(
@@ -421,11 +415,9 @@ void area_editor::process_gui_menu_bar() {
                     )
                 ) {
                     if(debug_triangulation) {
-                        status_text =
-                            "Enabled debug triangulation display.";
+                        set_status("Enabled debug triangulation display.");
                     } else {
-                        status_text =
-                            "Disabled debug triangulation display.";
+                        set_status("Disabled debug triangulation display.");
                     }
                 }
                 set_tooltip(
@@ -440,11 +432,9 @@ void area_editor::process_gui_menu_bar() {
                     )
                 ) {
                     if(debug_path_nrs) {
-                        status_text =
-                            "Enabled debug path number display.";
+                        set_status("Enabled debug path number display.");
                     } else {
-                        status_text =
-                            "Disabled debug path number display.";
+                        set_status("Disabled debug path number display.");
                     }
                 }
                 set_tooltip(
@@ -566,7 +556,7 @@ void area_editor::process_gui_menu_bar() {
             ) {
                 string state_str =
                     game.options.editor_show_tooltips ? "Enabled" : "Disabled";
-                status_text = state_str + " tooltips.";
+                set_status(state_str + " tooltips.");
                 save_options();
             }
             set_tooltip(
@@ -1150,7 +1140,7 @@ void area_editor::process_gui_panel_details() {
         
         //Creation cancel button.
         if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
-            status_text.clear();
+            set_status();
             sub_state = EDITOR_SUB_STATE_NONE;
         }
         set_tooltip(
@@ -1229,15 +1219,17 @@ void area_editor::process_gui_panel_details() {
                     switch(result) {
                     case FILE_DIALOG_RES_WRONG_FOLDER: {
                         //File doesn't belong to the folder.
-                        status_text =
-                            "The chosen image is not in the textures folder!";
+                        set_status(
+                            "The chosen image is not in the textures folder!",
+                            true
+                        );
                         break;
                     } case FILE_DIALOG_RES_CANCELED: {
                         //User canceled.
                         break;
                     } case FILE_DIALOG_RES_SUCCESS: {
                         selected_shadow->file_name = f[0];
-                        status_text = "Picked an image successfully.";
+                        set_status("Picked an image successfully.");
                         break;
                     }
                     }
@@ -1901,14 +1893,17 @@ void area_editor::process_gui_panel_info() {
             switch(result) {
             case FILE_DIALOG_RES_WRONG_FOLDER: {
                 //File doesn't belong to the folder.
-                status_text = "The chosen image is not in the textures folder!";
+                set_status(
+                    "The chosen image is not in the textures folder!",
+                    true
+                );
                 break;
             } case FILE_DIALOG_RES_CANCELED: {
                 //User canceled.
                 break;
             } case FILE_DIALOG_RES_SUCCESS: {
                 bg_file_name = f[0];
-                status_text = "Picked an image successfully.";
+                set_status("Picked an image successfully.");
                 break;
             }
             }
@@ -3861,8 +3856,10 @@ void area_editor::process_gui_panel_mob() {
                 )
             ) {
                 if((*selected_mobs.begin())->links.empty()) {
-                    status_text =
-                        "This mob has no links to delete!";
+                    set_status(
+                        "This mob has no links to delete!",
+                        true
+                    );
                 } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
                     sub_state = EDITOR_SUB_STATE_NONE;
                 } else {
@@ -3899,7 +3896,7 @@ void area_editor::process_gui_panel_mobs() {
         
         //Creation cancel button.
         if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
-            status_text.clear();
+            set_status();
             sub_state = EDITOR_SUB_STATE_NONE;
         }
         set_tooltip(
@@ -3917,7 +3914,7 @@ void area_editor::process_gui_panel_mobs() {
         
         //Duplication cancel button.
         if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
-            status_text.clear();
+            set_status();
             sub_state = EDITOR_SUB_STATE_NONE;
         }
         set_tooltip(
@@ -3935,7 +3932,7 @@ void area_editor::process_gui_panel_mobs() {
         
         //Storing process cancel button.
         if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
-            status_text.clear();
+            set_status();
             sub_state = EDITOR_SUB_STATE_NONE;
         }
         set_tooltip(
@@ -3953,7 +3950,7 @@ void area_editor::process_gui_panel_mobs() {
         
         //Link addition cancel button.
         if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
-            status_text.clear();
+            set_status();
             sub_state = EDITOR_SUB_STATE_NONE;
         }
         set_tooltip(
@@ -3971,7 +3968,7 @@ void area_editor::process_gui_panel_mobs() {
         
         //Link deletion cancel button.
         if(ImGui::Button("Cancel", ImVec2(-1.0f, 32.0f))) {
-            status_text.clear();
+            set_status();
             sub_state = EDITOR_SUB_STATE_NONE;
         }
         set_tooltip(
@@ -4203,7 +4200,7 @@ void area_editor::process_gui_panel_paths() {
         
         //Drawing stop button.
         if(ImGui::Button("Done", ImVec2(-1.0f, 32.0f))) {
-            status_text.clear();
+            set_status();
             sub_state = EDITOR_SUB_STATE_NONE;
         }
         set_tooltip(
@@ -4419,8 +4416,10 @@ void area_editor::process_gui_panel_review() {
             if(sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW) {
                 find_problems();
             } else {
-                status_text =
-                    "Can't search for problems while in area preview mode.";
+                set_status(
+                    "Can't search for problems while in area preview mode!",
+                    true
+                );
             }
         }
         set_tooltip(
@@ -4656,9 +4655,10 @@ void area_editor::process_gui_panel_sector() {
                     s_ptr->hazards_str += picked_hazard;
                     s_ptr->hazards.push_back(&(game.hazards[picked_hazard]));
                     selected_hazard_nr = (int) list.size();
-                    status_text =
+                    set_status(
                         "Added hazard \"" + picked_hazard +
-                        "\" to the sector.";
+                        "\" to the sector."
+                    );
                 }
             }
             
@@ -4695,9 +4695,10 @@ void area_editor::process_gui_panel_sector() {
                             std::min(
                                 selected_hazard_nr, (int) list.size() - 2
                             );
-                        status_text =
+                        set_status(
                             "Removed hazard \"" + hazard_name +
-                            "\" from the sector.";
+                            "\" from the sector."
+                        );
                     }
                 }
                 set_tooltip(
@@ -5126,7 +5127,7 @@ void area_editor::process_gui_panel_tools() {
                 if(backup_exists) {
                     load_backup();
                 } else {
-                    status_text = "There is no backup available.";
+                    set_status("There is no backup available.");
                 }
             }
         }
@@ -5147,16 +5148,22 @@ void area_editor::process_gui_panel_tools() {
         ImGui::SameLine();
         if(ImGui::Button("Resize everything")) {
             if(resize_mults[0] == 0.0f || resize_mults[1] == 0.0f) {
-                status_text = "Can't resize everything to size 0!";
+                set_status(
+                    "Can't resize everything to size 0!",
+                    true
+                );
             } else if(resize_mults[0] == 1.0f && resize_mults[1] == 1.0f) {
-                status_text =
-                    "Resizing everything by 1 wouldn't make a difference!";
+                set_status(
+                    "Resizing everything by 1 wouldn't make a difference!",
+                    true
+                );
             } else {
                 register_change("global resize");
                 resize_everything(resize_mults);
-                status_text =
+                set_status(
                     "Resized everything by " + f2s(resize_mults[0]) + ", " +
-                    f2s(resize_mults[1]) + ".";
+                    f2s(resize_mults[1]) + "."
+                );
                 resize_mults[0] = 1.0f;
                 resize_mults[1] = 1.0f;
             }
@@ -5182,7 +5189,7 @@ void area_editor::process_gui_panel_tools() {
  */
 void area_editor::process_gui_status_bar() {
     //Status bar text.
-    ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
+    process_gui_status_bar_text();
     
     //Spacer dummy widget.
     ImGui::SameLine();

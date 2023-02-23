@@ -29,6 +29,11 @@ extern const float DOUBLE_CLICK_TIMEOUT;
 extern const int ICON_BMP_PADDING;
 extern const int ICON_BMP_SIZE;
 extern const float KEYBOARD_CAM_ZOOM;
+extern const float OP_ERROR_CURSOR_SHAKE_SPEED;
+extern const float OP_ERROR_CURSOR_SHAKE_WIDTH;
+extern const float OP_ERROR_CURSOR_SIZE;
+extern const float OP_ERROR_CURSOR_THICKNESS;
+extern const float OP_ERROR_FLASH_DURATION;
 extern const float PICKER_IMG_BUTTON_MAX_SIZE;
 extern const float PICKER_IMG_BUTTON_MIN_SIZE;
 extern const float TW_DEF_SIZE;
@@ -339,6 +344,8 @@ protected:
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
+    //Time left in the operation error red flash effect.
+    timer op_error_flash_timer;
     //Current state.
     size_t state;
     //Status bar text.
@@ -370,6 +377,7 @@ protected:
         const float interval,
         const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
     );
+    void draw_op_error_cursor();
     void draw_unsaved_changes_warning();
     point get_last_widget_pos();
     bool key_check(
@@ -413,8 +421,10 @@ protected:
         const bool keep_aspect_ratio, const float min_size,
         const std::function<void()> &pre_change_callback = nullptr
     );
+    void process_gui_status_bar_text();
     void panel_title(const char* title, const float width);
     bool saveable_tree_node(const string &category, const string &label);
+    void set_status(const string &text = "", const bool error = false);
     void set_tooltip(
         const string &explanation, const string &shortcut = "",
         const WIDGET_EXPLANATIONS widget_explanation = WIDGET_EXPLANATION_NONE

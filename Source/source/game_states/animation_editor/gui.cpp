@@ -214,8 +214,9 @@ void animation_editor::process_gui_hitbox_hazards() {
                 cur_hitbox->hazards_str += picked_hazard;
                 selected_hazard_nr = (int) list.size();
                 mark_new_changes();
-                status_text =
-                    "Added hazard \"" + picked_hazard + "\" to the hitbox.";
+                set_status(
+                    "Added hazard \"" + picked_hazard + "\" to the hitbox."
+                );
             }
         }
         
@@ -247,9 +248,10 @@ void animation_editor::process_gui_hitbox_hazards() {
                             selected_hazard_nr, (int) list.size() - 2
                         );
                     mark_new_changes();
-                    status_text =
+                    set_status(
                         "Removed hazard \"" + hazard_name +
-                        "\" from the hitbox.";
+                        "\" from the hitbox."
+                    );
                 }
             }
             set_tooltip(
@@ -512,7 +514,7 @@ void animation_editor::process_gui_menu_bar() {
             ) {
                 string state_str =
                     game.options.editor_show_tooltips ? "Enabled" : "Disabled";
-                status_text = state_str + " tooltips.";
+                set_status(state_str + " tooltips.");
                 save_options();
             }
             set_tooltip(
@@ -740,9 +742,9 @@ void animation_editor::process_gui_panel_animation() {
                 }
                 anim_playing = false;
                 mark_new_changes();
-                status_text = "Deleted animation \"" + cur_anim_name + "\".";
+                set_status("Deleted animation \"" + cur_anim_name + "\".");
             } else {
-                status_text = "You have to select an animation to delete!";
+                set_status("You have to select an animation to delete!", true);
             }
         }
         set_tooltip(
@@ -779,8 +781,9 @@ void animation_editor::process_gui_panel_animation() {
             string picked_anim;
             if(list_popup("importAnim", import_anim_names, &picked_anim)) {
                 import_animation_data(picked_anim);
-                status_text =
-                    "Imported animation data from \"" + picked_anim + "\".";
+                set_status(
+                    "Imported animation data from \"" + picked_anim + "\"."
+                );
             }
             
         }
@@ -968,7 +971,7 @@ void animation_editor::process_gui_panel_animation() {
                 }
                 frame_ptr = &(cur_anim->frames[cur_frame_nr]);
                 mark_new_changes();
-                status_text = "Added frame #" + i2s(cur_frame_nr + 1) + ".";
+                set_status("Added frame #" + i2s(cur_frame_nr + 1) + ".");
             }
             set_tooltip(
                 "Add a new frame after the curret one, by copying "
@@ -1011,8 +1014,9 @@ void animation_editor::process_gui_panel_animation() {
                             frame_ptr = &(cur_anim->frames[cur_frame_nr]);
                         }
                         mark_new_changes();
-                        status_text =
-                            "Deleted frame #" + i2s(deleted_frame_nr + 1) + ".";
+                        set_status(
+                            "Deleted frame #" + i2s(deleted_frame_nr + 1) + "."
+                        );
                     }
                 }
                 set_tooltip(
@@ -1089,8 +1093,9 @@ void animation_editor::process_gui_panel_animation() {
                         cur_anim->frames[i].duration = d;
                     }
                     mark_new_changes();
-                    status_text =
-                        "Applied the duration " + f2s(d) + " to all frames.";
+                    set_status(
+                        "Applied the duration " + f2s(d) + " to all frames."
+                    );
                 }
             }
             
@@ -1159,12 +1164,14 @@ void animation_editor::process_gui_panel_body_part() {
                 }
                 update_hitboxes();
                 mark_new_changes();
-                status_text = "Created body part \"" + new_part_name + "\".";
+                set_status("Created body part \"" + new_part_name + "\".");
                 new_part_name.clear();
             } else {
-                status_text =
+                set_status(
                     "A body part by the name \"" + new_part_name +
-                    "\" already exists!";
+                    "\" already exists!",
+                    true
+                );
             }
         }
     }
@@ -1194,8 +1201,9 @@ void animation_editor::process_gui_panel_body_part() {
                 }
                 update_hitboxes();
                 mark_new_changes();
-                status_text =
-                    "Deleted body part \"" + deleted_part_name + "\".";
+                set_status(
+                    "Deleted body part \"" + deleted_part_name + "\"."
+                );
             }
         }
         set_tooltip(
@@ -1533,9 +1541,9 @@ void animation_editor::process_gui_panel_sprite() {
                     pick_sprite(anims.sprites[nr]->name, "", false);
                 }
                 mark_new_changes();
-                status_text = "Deleted sprite \"" + deleted_sprite_name + "\".";
+                set_status("Deleted sprite \"" + deleted_sprite_name + "\".");
             } else {
-                status_text = "You have to select a sprite to delete!";
+                set_status("You have to select a sprite to delete!", true);
             }
         }
         set_tooltip(
@@ -1576,8 +1584,9 @@ void animation_editor::process_gui_panel_sprite() {
                 import_sprite_transformation_data(picked_sprite);
                 import_sprite_hitbox_data(picked_sprite);
                 import_sprite_top_data(picked_sprite);
-                status_text =
-                    "Imported all sprite data from \"" + picked_sprite + "\".";
+                set_status(
+                    "Imported all sprite data from \"" + picked_sprite + "\"."
+                );
             }
             
         }
@@ -1729,7 +1738,9 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         ) {
             import_sprite_file_data(picked_sprite);
             center_camera_on_sprite_bitmap(false);
-            status_text = "Imported file data from \"" + picked_sprite + "\".";
+            set_status(
+                "Imported file data from \"" + picked_sprite + "\"."
+            );
         }
         
     }
@@ -1753,7 +1764,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
         switch(result) {
         case FILE_DIALOG_RES_WRONG_FOLDER: {
             //File doesn't belong to the folder.
-            status_text = "The chosen image is not in the graphics folder!";
+            set_status("The chosen image is not in the graphics folder!", true);
             break;
         } case FILE_DIALOG_RES_CANCELED: {
             //User canceled.
@@ -1765,7 +1776,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
             last_spritesheet_used = f[0];
             center_camera_on_sprite_bitmap(true);
             mark_new_changes();
-            status_text = "Picked an image successfully.";
+            set_status("Picked an image successfully.");
             break;
         }
         }
@@ -1970,8 +1981,9 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
             )
         ) {
             import_sprite_hitbox_data(picked_sprite);
-            status_text =
-                "Imported hitbox data from \"" + picked_sprite + "\".";
+            set_status(
+                "Imported hitbox data from \"" + picked_sprite + "\"."
+            );
         }
         
     }
@@ -2236,8 +2248,9 @@ void animation_editor::process_gui_panel_sprite_top() {
             )
         ) {
             import_sprite_top_data(picked_sprite);
-            status_text =
-                "Imported Pikmin top data from \"" + picked_sprite + "\".";
+            set_status(
+                "Imported Pikmin top data from \"" + picked_sprite + "\"."
+            );
         }
         
     }
@@ -2361,8 +2374,9 @@ void animation_editor::process_gui_panel_sprite_transform() {
             )
         ) {
             import_sprite_transformation_data(picked_sprite);
-            status_text =
-                "Imported transformation data from \"" + picked_sprite + "\".";
+            set_status(
+                "Imported transformation data from \"" + picked_sprite + "\"."
+            );
         }
         
     }
@@ -2562,7 +2576,7 @@ void animation_editor::process_gui_panel_tools() {
  */
 void animation_editor::process_gui_status_bar() {
     //Status bar text.
-    ImGui::Text("%s", (status_text.empty() ? "Ready." : status_text.c_str()));
+    process_gui_status_bar_text();
     
     //Spacer dummy widget.
     ImGui::SameLine();

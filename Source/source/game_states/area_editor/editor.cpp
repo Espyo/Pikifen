@@ -195,7 +195,7 @@ float area_editor::calculate_day_speed(
 void area_editor::cancel_circle_sector() {
     clear_circle_sector();
     sub_state = EDITOR_SUB_STATE_NONE;
-    status_text.clear();
+    set_status();
 }
 
 
@@ -205,7 +205,7 @@ void area_editor::cancel_circle_sector() {
 void area_editor::cancel_layout_drawing() {
     clear_layout_drawing();
     sub_state = EDITOR_SUB_STATE_NONE;
-    status_text.clear();
+    set_status();
 }
 
 
@@ -230,7 +230,7 @@ void area_editor::change_state(const EDITOR_STATES new_state) {
     clear_selection();
     state = new_state;
     sub_state = EDITOR_SUB_STATE_NONE;
-    status_text.clear();
+    set_status();
 }
 
 
@@ -479,8 +479,9 @@ void area_editor::create_area(
     );
     save_options(); //Save the history in the options.
     
-    status_text =
-        "Created area \"" + requested_area_folder_name + "\" successfully.";
+    set_status(
+        "Created area \"" + requested_area_folder_name + "\" successfully."
+    );
 }
 
 
@@ -544,7 +545,7 @@ void area_editor::create_mob_under_cursor() {
     
     selected_mobs.insert(game.cur_area_data.mob_generators.back());
     
-    status_text = "Created object.";
+    set_status("Created object.");
 }
 
 
@@ -583,6 +584,7 @@ void area_editor::create_or_load_area(
 void area_editor::delete_current_area() {
     bool go_to_area_select = false;
     string final_status_text;
+    bool final_status_error = false;
     
     if(!area_exists_on_disk) {
         //If the area doesn't exist, since it was never saved,
@@ -627,12 +629,14 @@ void area_editor::delete_current_area() {
             final_status_text =
                 "Area \"" + game.cur_area_data.folder_name +
                 "\" deletion failed; folder not found!";
+            final_status_error = true;
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_HAS_IMPORTANT: {
             final_status_text =
                 "Deleted area \"" + game.cur_area_data.folder_name +
                 "\", but folder still has user files!";
+            final_status_error = true;
             go_to_area_select = false;
             break;
         } case WIPE_FOLDER_RESULT_DELETE_ERROR: {
@@ -640,6 +644,7 @@ void area_editor::delete_current_area() {
                 "Area \"" + game.cur_area_data.folder_name +
                 "\" deletion failed; error while deleting something! "
                 "(Permissions?)";
+            final_status_error = true;
             go_to_area_select = false;
             break;
         }
@@ -653,7 +658,7 @@ void area_editor::delete_current_area() {
         open_load_dialog();
     }
     
-    status_text = final_status_text;
+    set_status(final_status_text, final_status_error);
 }
 
 
@@ -713,20 +718,28 @@ void area_editor::emit_triangulation_error_status_bar_message(
 ) {
     switch(error) {
     case TRIANGULATION_ERROR_LONE_EDGES: {
-        status_text =
-            "Some sectors have lone edges!";
+        set_status(
+            "Some sectors have lone edges!",
+            true
+        );
         break;
     } case TRIANGULATION_ERROR_NO_EARS: {
-        status_text =
-            "Some sectors could not be triangulated!";
+        set_status(
+            "Some sectors could not be triangulated!",
+            true
+        );
         break;
     } case TRIANGULATION_ERROR_VERTEXES_REUSED: {
-        status_text =
-            "Some sectors reuse vertexes -- there are likely gaps!";
+        set_status(
+            "Some sectors reuse vertexes -- there are likely gaps!",
+            true
+        );
         break;
     } case TRIANGULATION_ERROR_INVALID_ARGS: {
-        status_text =
-            "An unknown error has occured with some sectors!";
+        set_status(
+            "An unknown error has occured with some sectors!",
+            true
+        );
         break;
     } case TRIANGULATION_NO_ERROR: {
         break;
@@ -926,7 +939,7 @@ void area_editor::finish_layout_moving() {
         cancel_layout_moving();
         forget_prepared_state(pre_move_area_data);
         pre_move_area_data = NULL;
-        status_text = "That move would cause edges to intersect!";
+        set_status("That move would cause edges to intersect!", true);
         return;
     }
     
@@ -944,8 +957,10 @@ void area_editor::finish_layout_moving() {
                     cancel_layout_moving();
                     forget_prepared_state(pre_move_area_data);
                     pre_move_area_data = NULL;
-                    status_text =
-                        "That move would crush an edge that's in the middle!";
+                    set_status(
+                        "That move would crush an edge that's in the middle!",
+                        true
+                    );
                     return;
                 }
             }
@@ -1001,7 +1016,10 @@ void area_editor::finish_new_sector_drawing() {
     if(!get_drawing_outer_sector(&outer_sector)) {
         //Something went wrong. Abort.
         cancel_layout_drawing();
-        status_text = "That sector wouldn't have a defined parent! Try again.";
+        set_status(
+            "That sector wouldn't have a defined parent! Try again.",
+            true
+        );
         return;
     }
     
@@ -1093,10 +1111,11 @@ void area_editor::finish_new_sector_drawing() {
     clear_layout_drawing();
     sub_state = EDITOR_SUB_STATE_NONE;
     
-    status_text =
+    set_status(
         "Created sector with " +
         amount_str((int) new_sector->edges.size(), "edge") + ", " +
-        amount_str((int) drawing_vertexes.size(), "vertex", "vertexes") + ".";
+        amount_str((int) drawing_vertexes.size(), "vertex", "vertexes") + "."
+    );
 }
 
 
@@ -1469,24 +1488,34 @@ void area_editor::handle_line_error() {
     new_sector_error_tint_timer.start();
     switch(drawing_line_error) {
     case DRAWING_LINE_LOOPS_IN_SPLIT: {
-        status_text =
-            "To split a sector, you can't end on the starting point!";
+        set_status(
+            "To split a sector, you can't end on the starting point!",
+            true
+        );
         break;
     } case DRAWING_LINE_HIT_EDGE_OR_VERTEX: {
-        status_text =
-            "To draw the shape of a sector, you can't hit an edge or vertex!";
+        set_status(
+            "To draw the shape of a sector, you can't hit an edge or vertex!",
+            true
+        );
         break;
     } case DRAWING_LINE_ALONG_EDGE: {
-        status_text =
-            "That line is drawn on top of an edge!";
+        set_status(
+            "That line is drawn on top of an edge!",
+            true
+        );
         break;
     } case DRAWING_LINE_CROSSES_DRAWING: {
-        status_text =
-            "That line crosses other lines in the drawing!";
+        set_status(
+            "That line crosses other lines in the drawing!",
+            true
+        );
         break;
     } case DRAWING_LINE_CROSSES_EDGES: {
-        status_text =
-            "That line crosses existing edges!";
+        set_status(
+            "That line crosses existing edges!",
+            true
+        );
         break;
     } case DRAWING_LINE_NO_ERROR: {
         break;
@@ -1515,7 +1544,7 @@ void area_editor::load() {
     show_path_preview = false;
     quick_preview_timer.stop();
     state = EDITOR_STATE_MAIN;
-    status_text.clear();
+    set_status();
     
     //Reset some other states.
     clear_problems();
@@ -1639,10 +1668,11 @@ void area_editor::load_area(
         save_options(); //Save the history in the options.
     }
     
-    status_text =
+    set_status(
         "Loaded area \"" + requested_area_folder_name + "\" " +
         (from_backup ? "from a backup " : "") +
-        "successfully.";
+        "successfully."
+    );
 }
 
 
@@ -1768,14 +1798,14 @@ void area_editor::pick_texture(
         switch(result) {
         case FILE_DIALOG_RES_WRONG_FOLDER: {
             //File doesn't belong to the folder.
-            status_text = "The chosen image is not in the textures folder!";
+            set_status("The chosen image is not in the textures folder!", true);
             return;
         } case FILE_DIALOG_RES_CANCELED: {
             //User canceled.
             return;
         } case FILE_DIALOG_RES_SUCCESS: {
             final_name = f[0];
-            status_text = "Picked an image successfully.";
+            set_status("Picked an image successfully.");
             break;
         }
         }
@@ -1825,15 +1855,17 @@ void area_editor::press_circle_sector_button() {
         !game.cur_area_data.problems.non_simples.empty() ||
         !game.cur_area_data.problems.lone_edges.empty()
     ) {
-        status_text =
+        set_status(
             "Please fix any broken sectors or edges before trying to make "
-            "a new sector!";
+            "a new sector!",
+            true
+        );
         return;
     }
     
     clear_selection();
     clear_circle_sector();
-    status_text = "Use the canvas to place a circular sector.";
+    set_status("Use the canvas to place a circular sector.");
     sub_state = EDITOR_SUB_STATE_CIRCLE_SECTOR;
 }
 
@@ -1887,9 +1919,9 @@ void area_editor::press_duplicate_mobs_button() {
     }
     
     if(selected_mobs.empty()) {
-        status_text = "You have to select mobs to duplicate!";
+        set_status("You have to select mobs to duplicate!", true);
     } else {
-        status_text = "Use the canvas to place the duplicated objects.";
+        set_status("Use the canvas to place the duplicated objects.");
         sub_state = EDITOR_SUB_STATE_DUPLICATE_MOB;
     }
 }
@@ -1904,9 +1936,10 @@ void area_editor::press_grid_interval_decrease_button() {
             game.options.area_editor_grid_interval * 0.5f,
             AREA_EDITOR::MIN_GRID_INTERVAL
         );
-    status_text =
+    set_status(
         "Decreased grid interval to " +
-        i2s(game.options.area_editor_grid_interval) + ".";
+        i2s(game.options.area_editor_grid_interval) + "."
+    );
 }
 
 
@@ -1919,9 +1952,10 @@ void area_editor::press_grid_interval_increase_button() {
             game.options.area_editor_grid_interval * 2.0f,
             AREA_EDITOR::MAX_GRID_INTERVAL
         );
-    status_text =
+    set_status(
         "Increased grid interval to " +
-        i2s(game.options.area_editor_grid_interval) + ".";
+        i2s(game.options.area_editor_grid_interval) + "."
+    );
 }
 
 
@@ -1958,7 +1992,7 @@ void area_editor::press_new_mob_button() {
     }
     
     clear_selection();
-    status_text = "Use the canvas to place a new object.";
+    set_status("Use the canvas to place a new object.");
     sub_state = EDITOR_SUB_STATE_NEW_MOB;
 }
 
@@ -1977,7 +2011,7 @@ void area_editor::press_new_path_button() {
     
     clear_selection();
     path_drawing_stop_1 = NULL;
-    status_text = "Use the canvas to draw a path.";
+    set_status("Use the canvas to draw a path.");
     sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
 }
 
@@ -2001,15 +2035,17 @@ void area_editor::press_new_sector_button() {
         !game.cur_area_data.problems.non_simples.empty() ||
         !game.cur_area_data.problems.lone_edges.empty()
     ) {
-        status_text =
+        set_status(
             "Please fix any broken sectors or edges before trying to make "
-            "a new sector!";
+            "a new sector!",
+            true
+        );
         return;
     }
     
     clear_selection();
     clear_layout_drawing();
-    status_text = "Use the canvas to draw a sector.";
+    set_status("Use the canvas to draw a sector.");
     sub_state = EDITOR_SUB_STATE_DRAWING;
 }
 
@@ -2027,7 +2063,7 @@ void area_editor::press_new_tree_shadow_button() {
     }
     
     clear_selection();
-    status_text = "Use the canvas to place a new tree shadow.";
+    set_status("Use the canvas to place a new tree shadow.");
     sub_state = EDITOR_SUB_STATE_NEW_SHADOW;
 }
 
@@ -2051,7 +2087,7 @@ void area_editor::press_quick_play_button() {
  */
 void area_editor::press_quit_button() {
     if(!check_new_unsaved_changes(quit_widget_pos)) {
-        status_text = "Bye!";
+        set_status("Bye!");
         leave();
     }
 }
@@ -2063,7 +2099,7 @@ void area_editor::press_quit_button() {
 void area_editor::press_reference_button() {
     show_reference = !show_reference;
     string state_str = (show_reference ? "Enabled" : "Disabled");
-    status_text = state_str + " reference image visibility.";
+    set_status(state_str + " reference image visibility.");
 }
 
 
@@ -2093,7 +2129,7 @@ void area_editor::press_remove_edge_button() {
     }
     
     if(selected_edges.empty()) {
-        status_text = "You have to select edges to delete!";
+        set_status("You have to select edges to delete!", true);
         return;
     }
     
@@ -2111,13 +2147,14 @@ void area_editor::press_remove_edge_button() {
     
     //Report.
     if(success) {
-        status_text =
+        set_status(
             "Deleted " +
             amount_str(
                 (int) (n_before - game.cur_area_data.edges.size()),
                 "edge"
             ) +
-            " (" + i2s(n_selected) + " were selected).";
+            " (" + i2s(n_selected) + " were selected)."
+        );
     }
 }
 
@@ -2132,7 +2169,7 @@ void area_editor::press_remove_mob_button() {
     }
     
     if(selected_mobs.empty()) {
-        status_text = "You have to select mobs to delete!";
+        set_status("You have to select mobs to delete!", true);
         return;
     }
     
@@ -2148,13 +2185,14 @@ void area_editor::press_remove_mob_button() {
     sub_state = EDITOR_SUB_STATE_NONE;
     
     //Report.
-    status_text =
+    set_status(
         "Deleted " +
         amount_str(
             (int) (n_before - game.cur_area_data.mob_generators.size()),
             "object"
         ) +
-        ".";
+        "."
+    );
 }
 
 
@@ -2168,7 +2206,7 @@ void area_editor::press_remove_path_button() {
     }
     
     if(selected_path_links.empty() && selected_path_stops.empty()) {
-        status_text = "You have to select something to delete!";
+        set_status("You have to select something to delete!", true);
         return;
     }
     
@@ -2188,7 +2226,7 @@ void area_editor::press_remove_path_button() {
     path_preview_timer.start(false);
     
     //Report.
-    status_text =
+    set_status(
         "Deleted " +
         amount_str(
             (int) (n_stops_before - game.cur_area_data.path_stops.size()),
@@ -2200,7 +2238,7 @@ void area_editor::press_remove_path_button() {
             "path link"
         ) +
         "."
-        ;
+    );
 }
 
 
@@ -2213,7 +2251,7 @@ void area_editor::press_remove_tree_shadow_button() {
     }
     
     if(!selected_shadow) {
-        status_text = "You have to select a shadow to delete!";
+        set_status("You have to select a shadow to delete!", true);
     } else {
         register_change("tree shadow deletion");
         for(
@@ -2233,7 +2271,7 @@ void area_editor::press_remove_tree_shadow_button() {
                 break;
             }
         }
-        status_text = "Deleted tree shadow.";
+        set_status("Deleted tree shadow.");
     }
 }
 
@@ -2249,7 +2287,7 @@ void area_editor::press_save_button() {
     change_state(EDITOR_STATE_MAIN);
     has_unsaved_changes = false;
     was_warned_about_unsaved_changes = false;
-    status_text = "Saved area successfully.";
+    set_status("Saved area successfully.");
 }
 
 
@@ -2322,22 +2360,23 @@ void area_editor::press_selection_filter_button() {
             sum_and_wrap(selection_filter, -1, N_SELECTION_FILTERS);
     }
     
-    status_text = "Set selection filter to ";
+    string final_status_text = "Set selection filter to ";
     switch(selection_filter) {
     case SELECTION_FILTER_SECTORS: {
-        status_text += "sectors + edges + vertexes";
+        final_status_text += "sectors + edges + vertexes";
         break;
     } case SELECTION_FILTER_EDGES: {
-        status_text += "edges + vertexes";
+        final_status_text += "edges + vertexes";
         break;
     } case SELECTION_FILTER_VERTEXES: {
-        status_text += "vertexes";
+        final_status_text += "vertexes";
         break;
     } case N_SELECTION_FILTERS: {
         break;
     }
     }
-    status_text += ".";
+    final_status_text += ".";
+    set_status(final_status_text);
 }
 
 
@@ -2355,25 +2394,26 @@ void area_editor::press_snap_mode_button() {
             sum_and_wrap(game.options.area_editor_snap_mode, -1, N_SNAP_MODES);
     }
     
-    status_text = "Set snap mode to ";
+    string final_status_text = "Set snap mode to ";
     switch(game.options.area_editor_snap_mode) {
     case SNAP_GRID: {
-        status_text += "grid";
+        final_status_text += "grid";
         break;
     } case SNAP_VERTEXES: {
-        status_text += "vertexes";
+        final_status_text += "vertexes";
         break;
     } case SNAP_EDGES: {
-        status_text += "edges";
+        final_status_text += "edges";
         break;
     } case SNAP_NOTHING: {
-        status_text += "nothing";
+        final_status_text += "nothing";
         break;
     } case N_SNAP_MODES: {
         break;
     }
     }
-    status_text += ".";
+    final_status_text += ".";
+    set_status(final_status_text);
 }
 
 
@@ -2385,7 +2425,7 @@ void area_editor::press_undo_button() {
         sub_state != EDITOR_SUB_STATE_NONE ||
         moving || selecting || cur_transformation_widget.is_moving_handle()
     ) {
-        status_text = "Can't undo in the middle of an operation.";
+        set_status("Can't undo in the middle of an operation!", true);
         return;
     }
     
@@ -3260,7 +3300,7 @@ bool area_editor::save_area(const bool to_backup) {
             ALLEGRO_MESSAGEBOX_WARN
         );
         
-        status_text = "Could not save the area!";
+        set_status("Could not save the area!", true);
         
     }
     
@@ -3504,7 +3544,7 @@ void area_editor::set_new_circle_sector_points() {
  * Sets the status text based on how many things are selected.
  */
 void area_editor::set_selection_status_text() {
-    status_text.clear();
+    set_status();
     
     if(!game.cur_area_data.problems.non_simples.empty()) {
         emit_triangulation_error_status_bar_message(
@@ -3515,7 +3555,7 @@ void area_editor::set_selection_status_text() {
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
         if(!selected_vertexes.empty()) {
-            status_text =
+            set_status(
                 "Selected " +
                 amount_str(
                     (int) selected_sectors.size(), "sector"
@@ -3528,16 +3568,18 @@ void area_editor::set_selection_status_text() {
                 amount_str(
                     (int) selected_vertexes.size(), "vertex", "vertexes"
                 ) +
-                ".";
+                "."
+            );
         }
         break;
         
     } case EDITOR_STATE_MOBS: {
         if(!selected_mobs.empty()) {
-            status_text =
+            set_status(
                 "Selected " +
                 amount_str((int) selected_mobs.size(), "object") +
-                ".";
+                "."
+            );
         }
         break;
         
@@ -3553,7 +3595,7 @@ void area_editor::set_selection_status_text() {
                     one_ways_found++;
                 }
             }
-            status_text =
+            set_status(
                 "Selected " +
                 amount_str((int) selected_path_stops.size(), "path stop") +
                 ", " +
@@ -3561,13 +3603,14 @@ void area_editor::set_selection_status_text() {
                     (int) ((normals_found / 2.0f) + one_ways_found),
                     "path link"
                 ) +
-                ".";
+                "."
+            );
         }
         break;
         
     } case EDITOR_STATE_DETAILS: {
         if(selected_shadow) {
-            status_text = "Selected a tree shadow.";
+            set_status("Selected a tree shadow.");
         }
         break;
         
@@ -3651,8 +3694,10 @@ void area_editor::split_sector_with_drawing() {
         clear_selection();
         clear_layout_drawing();
         sub_state = EDITOR_SUB_STATE_NONE;
-        status_text =
-            "That's not a valid split!";
+        set_status(
+            "That's not a valid split!",
+            true
+        );
         return;
     }
     
@@ -3669,8 +3714,10 @@ void area_editor::split_sector_with_drawing() {
         clear_selection();
         clear_layout_drawing();
         sub_state = EDITOR_SUB_STATE_NONE;
-        status_text =
-            "That wouldn't split the sector in any useful way!";
+        set_status(
+            "That wouldn't split the sector in any useful way!",
+            true
+        );
         return;
     }
     
@@ -3833,14 +3880,16 @@ void area_editor::split_sector_with_drawing() {
     
     register_change("sector split", pre_split_area_data);
     if(!working_sector) {
-        status_text =
+        set_status(
             "Created sector with " +
-            amount_str((int) new_sector->edges.size(), "edge") + ".";
+            amount_str((int) new_sector->edges.size(), "edge") + "."
+        );
     } else {
-        status_text =
+        set_status(
             "Split sector, creating one with " +
             amount_str((int) new_sector->edges.size(), "edge") + ", one with " +
-            amount_str((int) working_sector->edges.size(), "edge") + ".";
+            amount_str((int) working_sector->edges.size(), "edge") + "."
+        );
     }
 }
 
@@ -4033,7 +4082,7 @@ void area_editor::traverse_sector_for_split(
  */
 void area_editor::undo() {
     if(undo_history.empty()) {
-        status_text = "Nothing to undo.";
+        set_status("Nothing to undo.");
         return;
     }
     
@@ -4057,7 +4106,7 @@ void area_editor::undo() {
     path_preview_timer.start(false);
     
     mark_new_changes();
-    status_text = "Undo successful: " + operation_name + ".";
+    set_status("Undo successful: " + operation_name + ".");
 }
 
 

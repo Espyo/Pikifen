@@ -272,29 +272,34 @@ void area_editor::check_drawing_line(const point &pos) {
  */
 void area_editor::copy_sector_texture(const point &cursor) {
     if(selected_sectors.empty()) {
-        status_text =
-            "To copy a sector's texture, you must first select a sector!";
+        set_status(
+            "To copy a sector's texture, you must first select a sector!",
+            true
+        );
         return;
     }
     
     if(selected_sectors.size() > 1) {
-        status_text =
-            "To copy a sector's texture, you can only select 1 sector!";
+        set_status(
+            "To copy a sector's texture, you can only select 1 sector!",
+            true
+        );
         return;
     }
     
     sector* target_sector = get_sector_under_point(cursor);
     if(!target_sector) {
-        status_text =
-            "To copy a sector's texture, you must aim your cursor at a sector!";
+        set_status(
+            "To copy a sector's texture, you must aim your cursor at a sector!",
+            true
+        );
         return;
     }
     
     register_change("sector texture copy");
     
     target_sector->texture_info = (*selected_sectors.begin())->texture_info;
-    status_text =
-        "Successfully copied a sector's texture.";
+    set_status("Successfully copied a sector's texture.");
     return;
 }
 
@@ -1686,7 +1691,7 @@ bool area_editor::merge_sectors(sector* s1, sector* s2) {
     //However, if there are no common edges beween sectors,
     //this operation is invalid.
     if(common_edges.empty()) {
-        status_text = "Those two sectors are not neighbors!";
+        set_status("Those two sectors are not neighbors!", true);
         return false;
     }
     
@@ -1906,8 +1911,10 @@ void area_editor::resize_everything(const float mults[2]) {
  */
 void area_editor::rotate_mob_gens_to_point(const point &pos) {
     if(selected_mobs.empty()) {
-        status_text =
-            "To rotate objects, you must first select some objects!";
+        set_status(
+            "To rotate objects, you must first select some objects!",
+            true
+        );
         return;
     }
     
@@ -1916,7 +1923,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
     for(auto m : selected_mobs) {
         m->angle = get_angle(m->pos, pos);
     }
-    status_text = "Rotated objects to face " + p2s(pos) + ".";
+    set_status("Rotated objects to face " + p2s(pos) + ".");
 }
 
 

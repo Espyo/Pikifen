@@ -30,51 +30,41 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
     if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F1)) {
         debug_edge_nrs = !debug_edge_nrs;
         if(debug_edge_nrs) {
-            status_text =
-                "Enabled debug edge number display.";
+            set_status("Enabled debug edge number display.");
         } else {
-            status_text =
-                "Disabled debug edge number display.";
+            set_status("Disabled debug edge number display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F2)) {
         debug_sector_nrs = !debug_sector_nrs;
         if(debug_sector_nrs) {
-            status_text =
-                "Enabled debug sector number display.";
+            set_status("Enabled debug sector number display.");
         } else {
-            status_text =
-                "Disabled debug sector number display.";
+            set_status("Disabled debug sector number display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F3)) {
         debug_vertex_nrs = !debug_vertex_nrs;
         if(debug_vertex_nrs) {
-            status_text =
-                "Enabled debug vertex number display.";
+            set_status("Enabled debug vertex number display.");
         } else {
-            status_text =
-                "Disabled debug vertex number display.";
+            set_status("Disabled debug vertex number display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F4)) {
         debug_triangulation = !debug_triangulation;
         if(debug_triangulation) {
-            status_text =
-                "Enabled debug triangulation display.";
+            set_status("Enabled debug triangulation display.");
         } else {
-            status_text =
-                "Disabled debug triangulation display.";
+            set_status("Disabled debug triangulation display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_F5)) {
         debug_path_nrs = !debug_path_nrs;
         if(debug_path_nrs) {
-            status_text =
-                "Enabled debug path number display.";
+            set_status("Enabled debug path number display.");
         } else {
-            status_text =
-                "Disabled debug path number display.";
+            set_status("Disabled debug path number display.");
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Z, true)) {
@@ -193,7 +183,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
                 sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
             ) {
                 sub_state = EDITOR_SUB_STATE_NONE;
-                status_text.clear();
+                set_status();
             } else if(sub_state == EDITOR_SUB_STATE_MISSION_MOBS) {
                 change_state(EDITOR_STATE_GAMEPLAY);
             } else if(sub_state == EDITOR_SUB_STATE_NONE) {
@@ -204,7 +194,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         } else if(state == EDITOR_STATE_PATHS) {
             if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
                 sub_state = EDITOR_SUB_STATE_NONE;
-                status_text.clear();
+                set_status();
             } else if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
                 selecting = false;
@@ -213,7 +203,7 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         } else if(state == EDITOR_STATE_DETAILS) {
             if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
                 sub_state = EDITOR_SUB_STATE_NONE;
-                status_text.clear();
+                set_status();
             } else if(sub_state == EDITOR_SUB_STATE_NONE) {
                 clear_selection();
             }
@@ -287,17 +277,22 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_H)) {
         if(state == EDITOR_STATE_LAYOUT && sub_state == EDITOR_SUB_STATE_NONE) {
             if(selected_sectors.empty()) {
-                status_text =
-                    "To set a sector's height, you must first select a sector!";
+                set_status(
+                    "To set a sector's height, you must first select a sector!",
+                    true
+                );
             } else if(selected_sectors.size() > 1) {
-                status_text =
-                    "To set a sector's height, you can only select 1 sector!";
+                set_status(
+                    "To set a sector's height, you can only select 1 sector!",
+                    true
+                );
             } else {
                 sub_state = EDITOR_SUB_STATE_QUICK_HEIGHT_SET;
                 quick_height_set_start_pos = game.mouse_cursor_s;
                 quick_height_set_start_height = (*selected_sectors.begin())->z;
-                status_text =
-                    "Move the cursor up or down to change the sector's height.";
+                set_status(
+                    "Move the cursor up or down to change the sector's height."
+                );
             }
         }
         
@@ -378,7 +373,7 @@ void area_editor::handle_key_up_anywhere(const ALLEGRO_EVENT &ev) {
             sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET
         ) {
             sub_state = EDITOR_SUB_STATE_NONE;
-            status_text.clear();
+            set_status();
         }
     }
 }
@@ -574,8 +569,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     }
                 }
                 if(!all_valid) {
-                    status_text =
-                        "Some lines touch existing edges!";
+                    set_status("Some lines touch existing edges!", true);
                 } else {
                     finish_circle_sector();
                 }
@@ -732,10 +726,11 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             clear_selection();
             selected_mobs = mobs_to_select;
             
-            status_text =
+            set_status(
                 "Duplicated " +
-                amount_str((int) selected_mobs.size(), "object") + ".";
-                
+                amount_str((int) selected_mobs.size(), "object") + "."
+            );
+            
             break;
             
         } case EDITOR_SUB_STATE_STORE_MOB_INSIDE: {
@@ -748,15 +743,19 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             for(auto m : selected_mobs) {
                 if(m == target) {
-                    status_text =
-                        "You can't store to an object inside itself!";
+                    set_status(
+                        "You can't store to an object inside itself!",
+                        true
+                    );
                     return;
                 }
             }
             mob_gen* m_ptr = *(selected_mobs.begin());
             if(m_ptr->stored_inside == target_idx) {
-                status_text =
-                    "The object is already stored inside that object!";
+                set_status(
+                    "The object is already stored inside that object!",
+                    true
+                );
                 return;
             }
             
@@ -767,7 +766,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             homogenize_selected_mobs();
             
             sub_state = EDITOR_SUB_STATE_NONE;
-            status_text = "Stored the object inside another.";
+            set_status("Stored the object inside another.");
             
             break;
             
@@ -779,16 +778,20 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
             for(auto m : selected_mobs) {
                 if(m == target) {
-                    status_text =
-                        "You can't link to an object to itself!";
+                    set_status(
+                        "You can't link to an object to itself!",
+                        true
+                    );
                     return;
                 }
             }
             mob_gen* m_ptr = *(selected_mobs.begin());
             for(size_t l = 0; l < m_ptr->links.size(); ++l) {
                 if(m_ptr->links[l] == target) {
-                    status_text =
-                        "The object already links to that object!";
+                    set_status(
+                        "The object already links to that object!",
+                        true
+                    );
                     return;
                 }
             }
@@ -803,7 +806,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             homogenize_selected_mobs();
             
             sub_state = EDITOR_SUB_STATE_NONE;
-            status_text = "Linked the two objects.";
+            set_status("Linked the two objects.");
             
             break;
             
@@ -830,8 +833,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     data2.first != m_ptr &&
                     data2.second != m_ptr
                 ) {
-                    status_text =
-                        "That link does not belong to the current object!";
+                    set_status(
+                        "That link does not belong to the current object!",
+                        true
+                    );
                     return;
                 }
                 
@@ -850,8 +855,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             if(link_i == m_ptr->links.size()) {
-                status_text =
-                    "That object is not linked by the current one!";
+                set_status(
+                    "That object is not linked by the current one!",
+                    true
+                );
                 return;
             } else {
                 register_change("Object link deletion");
@@ -862,7 +869,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             homogenize_selected_mobs();
             
             sub_state = EDITOR_SUB_STATE_NONE;
-            status_text = "Deleted object link.";
+            set_status("Deleted object link.");
             
             break;
             
@@ -953,7 +960,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     register_change("path stop creation");
                     next_stop = new path_stop(hotspot);
                     game.cur_area_data.path_stops.push_back(next_stop);
-                    status_text = "Created path stop.";
+                    set_status("Created path stop.");
                 }
                 
                 if(next_stop) {
@@ -972,7 +979,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     game.cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
                     game.cur_area_data.fix_path_stop_nrs(next_stop);
                     next_stop->calculate_dists_plus_neighbors();
-                    status_text = "Created path link.";
+                    set_status("Created path link.");
                     
                     if(clicked_stop) {
                         path_drawing_stop_1 = NULL;
@@ -991,7 +998,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     game.cur_area_data.path_stops.push_back(
                         path_drawing_stop_1
                     );
-                    status_text = "Created path stop.";
+                    set_status("Created path stop.");
                 }
                 
             }
