@@ -413,7 +413,7 @@ void gui_editor::process_gui_panel_item() {
     if(
         ImGui::DragFloat2("Center", (float*) &cur_item_ptr->center, 0.10f)
     ) {
-        mark_new_changes();
+        changes_mgr.mark_as_changed();
     }
     set_tooltip(
         "Center coordinates of the item. e.g. 32,100 is 32% of the\n"
@@ -428,7 +428,7 @@ void gui_editor::process_gui_panel_item() {
             "Size", cur_item_ptr->size, 0.10f, false, 0.10f
         )
     ) {
-        mark_new_changes();
+        changes_mgr.mark_as_changed();
     }
     set_tooltip(
         "Width and height of the item. e.g. 40,90 is 40% of the screen width,\n"
@@ -473,7 +473,7 @@ void gui_editor::process_gui_panel_item() {
             cur_item_ptr->center = new_center;
             cur_item_ptr->size = new_size;
         }
-        mark_new_changes();
+        changes_mgr.mark_as_changed();
     }
 }
 
@@ -505,7 +505,7 @@ void gui_editor::process_gui_panel_items() {
                     items[i].size.x = 0.0f;
                     items[i].size.y = 0.0f;
                 }
-                mark_new_changes();
+                changes_mgr.mark_as_changed();
             }
             set_tooltip(
                 "Whether this item is visible in-game or not."
@@ -603,7 +603,7 @@ void gui_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "saveButton",
-            has_unsaved_changes ?
+            changes_mgr.has_unsaved_changes() ?
             editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)

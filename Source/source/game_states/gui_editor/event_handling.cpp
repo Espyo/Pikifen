@@ -186,7 +186,7 @@ void gui_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 is_alt_pressed
             );
         if(tw_handled) {
-            mark_new_changes();
+            changes_mgr.mark_as_changed();
         }
     }
 }

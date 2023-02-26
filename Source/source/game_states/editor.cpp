@@ -58,14 +58,6 @@ const float TW_HANDLE_RADIUS = 6.0f;
 const float TW_OUTLINE_THICKNESS = 2.0f;
 //Thickness of the rotation handle in the transformation widget.
 const float TW_ROTATION_HANDLE_THICKNESS = 8.0f;
-//How long the unsaved changes warning stays on-screen for.
-const float UNSAVED_CHANGES_WARNING_DURATION = 3.0f;
-//Height of the unsaved changes warning, sans spike.
-const int UNSAVED_CHANGES_WARNING_HEIGHT = 30;
-//Width and height of the unsaved changes warning's spike.
-const int UNSAVED_CHANGES_WARNING_SPIKE_SIZE = 16;
-//Width of the unsaved changes warning, sans spike.
-const int UNSAVED_CHANGES_WARNING_WIDTH = 150;
 }
 
 
@@ -75,6 +67,7 @@ const int UNSAVED_CHANGES_WARNING_WIDTH = 150;
 editor::editor() :
     bmp_editor_icons(nullptr),
     canvas_separator_x(-1),
+    changes_mgr(this),
     double_click_time(0),
     is_alt_pressed(false),
     is_ctrl_pressed(false),
@@ -87,13 +80,10 @@ editor::editor() :
     last_mouse_click_sub_state(INVALID),
     last_input_was_keyboard(false),
     loaded_content_yet(false),
-    has_unsaved_changes(false),
     mouse_drag_confirmed(false),
     op_error_flash_timer(EDITOR::OP_ERROR_FLASH_DURATION),
     state(0),
     sub_state(0),
-    unsaved_changes_warning_timer(EDITOR::UNSAVED_CHANGES_WARNING_DURATION),
-    was_warned_about_unsaved_changes(false),
     zoom_max_level(0),
     zoom_min_level(0) {
     
@@ -151,31 +141,6 @@ void editor::center_camera(
 
 
 /* ----------------------------------------------------------------------------
- * Checks if there are any unsaved changes that have not been notified yet.
- * Returns true if there are, and also sets up the unsaved changes warning.
- * Returns false if everything is okay to continue.
- * pos:
- *   Screen coordinates to show the warning on.
- *   If 0,0, then these will be set to the last processed widget's position.
- */
-bool editor::check_new_unsaved_changes(const point &pos) {
-    unsaved_changes_warning_timer.stop();
-    
-    if(!has_unsaved_changes || was_warned_about_unsaved_changes) return false;
-    
-    if(pos.x == 0 && pos.y == 0) {
-        unsaved_changes_warning_pos = get_last_widget_pos();
-    } else {
-        unsaved_changes_warning_pos = pos;
-    }
-    unsaved_changes_warning_timer.start();
-    was_warned_about_unsaved_changes = true;
-    
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Closes the topmost dialog.
  */
 void editor::close_top_dialog() {
@@ -206,7 +171,6 @@ void editor::do_logic_pre() {
     game.cam.tick(game.delta_t);
     game.cam.update_box();
     
-    unsaved_changes_warning_timer.tick(game.delta_t);
     op_error_flash_timer.tick(game.delta_t);
     
     update_transformations();
@@ -318,97 +282,6 @@ void editor::draw_op_error_cursor() {
         pos.y + EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         al_map_rgba_f(1.0f, 0.0f, 0.0f, error_flash_time_ratio),
         EDITOR::OP_ERROR_CURSOR_THICKNESS
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws the unsaved changes warning, if it is visible.
- */
-void editor::draw_unsaved_changes_warning() {
-    float r = unsaved_changes_warning_timer.get_ratio_left();
-    if(r == 0) return;
-    
-    ALLEGRO_COLOR back_color = al_map_rgba(192, 192, 64, r * 255);
-    ALLEGRO_COLOR outline_color = al_map_rgba(80, 80, 16, r * 255);
-    ALLEGRO_COLOR text_color = al_map_rgba(0, 0, 0, r * 255);
-    bool spike_up = unsaved_changes_warning_pos.y < game.win_h / 2.0;
-    
-    point box_center = unsaved_changes_warning_pos;
-    if(
-        unsaved_changes_warning_pos.x <
-        EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0
-    ) {
-        box_center.x +=
-            EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0 -
-            unsaved_changes_warning_pos.x;
-    } else if(
-        unsaved_changes_warning_pos.x >
-        game.win_w - EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0
-    ) {
-        box_center.x -=
-            unsaved_changes_warning_pos.x -
-            (game.win_w - EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0);
-    }
-    if(spike_up) {
-        box_center.y += EDITOR::UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
-        box_center.y += EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
-    } else {
-        box_center.y -= EDITOR::UNSAVED_CHANGES_WARNING_HEIGHT / 2.0;
-        box_center.y -= EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
-    }
-    
-    point box_tl(
-        box_center.x - EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
-        box_center.y - EDITOR::UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
-    );
-    point box_br(
-        box_center.x + EDITOR::UNSAVED_CHANGES_WARNING_WIDTH / 2.0,
-        box_center.y + EDITOR::UNSAVED_CHANGES_WARNING_HEIGHT / 2.0
-    );
-    point spike_p1(
-        unsaved_changes_warning_pos.x,
-        unsaved_changes_warning_pos.y
-    );
-    point spike_p2(
-        unsaved_changes_warning_pos.x -
-        EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
-        unsaved_changes_warning_pos.y +
-        EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
-    );
-    point spike_p3(
-        unsaved_changes_warning_pos.x +
-        EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE / 2.0,
-        unsaved_changes_warning_pos.y +
-        EDITOR::UNSAVED_CHANGES_WARNING_SPIKE_SIZE * (spike_up ? 1 : -1)
-    );
-    
-    al_draw_filled_rectangle(
-        box_tl.x, box_tl.y, box_br.x, box_br.y, back_color
-    );
-    al_draw_filled_triangle(
-        spike_p1.x, spike_p1.y, spike_p2.x, spike_p2.y, spike_p3.x, spike_p3.y,
-        back_color
-    );
-    al_draw_rectangle(
-        box_tl.x, box_tl.y, box_br.x, box_br.y, outline_color, 2
-    );
-    al_draw_line(
-        spike_p2.x, spike_p2.y, spike_p3.x, spike_p3.y,
-        back_color, 2
-    );
-    al_draw_line(
-        spike_p1.x, spike_p1.y, spike_p2.x, spike_p2.y,
-        outline_color, 2
-    );
-    al_draw_line(
-        spike_p1.x, spike_p1.y, spike_p3.x, spike_p3.y,
-        outline_color, 2
-    );
-    draw_text_lines(
-        game.fonts.builtin, text_color,
-        box_center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
-        "You have\nunsaved changes!"
     );
 }
 
@@ -690,6 +563,12 @@ void editor::handle_allegro_event(ALLEGRO_EVENT &ev) {
         }
         
     }
+    
+    if(!dialogs.empty()) {
+        if(dialogs.back()->event_callback) {
+            dialogs.back()->event_callback(&ev);
+        }
+    }
 }
 
 
@@ -956,6 +835,8 @@ void editor::leave() {
             game.change_state(game.states.gameplay);
         }
     });
+    
+    set_status("Bye!");
 }
 
 
@@ -1009,8 +890,7 @@ void editor::load() {
     }
     
     last_input_was_keyboard = false;
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
+    changes_mgr.reset();
     
     game.fade_mgr.start_fade(true, nullptr);
     
@@ -1080,15 +960,6 @@ void editor::load_custom_mob_cat_types(const bool is_area_editor) {
         custom_cat_types[c][0]->custom_category_name
         ] = c;
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Marks that the user has made new changes, which have not yet been saved.
- */
-void editor::mark_new_changes() {
-    has_unsaved_changes = true;
-    was_warned_about_unsaved_changes = false;
 }
 
 
@@ -1589,6 +1460,74 @@ void editor::process_gui_status_bar_text() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the Dear ImGui unsaved changes confirmation dialog for this frame.
+ */
+void editor::process_gui_unsaved_changes_dialog() {
+    //Explanation 1 text.
+    size_t nr_unsaved_changes = changes_mgr.get_unsaved_changes();
+    string explanation1_str =
+        "You have " +
+        nr_and_plural(nr_unsaved_changes, "unsaved change") +
+        ", made in the last " +
+        time_to_str3(
+            changes_mgr.get_unsaved_time_delta(),
+            "h", "m", "s",
+            TIME_TO_STR_FLAG_NO_LEADING_ZEROS |
+            TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS
+        ) +
+        ".";
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanation1_str.c_str()).x);
+    ImGui::Text("%s", explanation1_str.c_str());
+    
+    //Explanation 3 text.
+    string explanation2_str =
+        "Do you want to save before " +
+        changes_mgr.get_unsaved_warning_action_long() + "?";
+    ImGui::SetupCentering(ImGui::CalcTextSize(explanation2_str.c_str()).x);
+    ImGui::Text("%s", explanation2_str.c_str());
+    
+    //Cancel button.
+    ImGui::SetupCentering(180 + 180 + 180 + 20);
+    if(ImGui::Button("Cancel", ImVec2(180, 30))) {
+        close_top_dialog();
+    }
+    set_tooltip("Never mind and go back.", "Esc");
+    
+    //Save and then perform the action.
+    ImGui::SameLine(0.0f, 10);
+    string save_first_button_label =
+        "Save, then " +
+        changes_mgr.get_unsaved_warning_action_short() +
+        "##save";
+    if(ImGui::Button(save_first_button_label.c_str(), ImVec2(180, 30))) {
+        close_top_dialog();
+        const std::function<bool()> save_callback =
+            changes_mgr.get_unsaved_warning_save_callback();
+        const std::function<void()> action_callback =
+            changes_mgr.get_unsaved_warning_action_callback();
+        if(save_callback()) {
+            action_callback();
+        }
+    }
+    set_tooltip("Save first and then proceed.", "Ctrl + S");
+    
+    //Perform the action without saving button.
+    ImGui::SameLine(0.0f, 10);
+    string dont_save_button_label =
+        changes_mgr.get_unsaved_warning_action_short() +
+        " without saving##noSave";
+    dont_save_button_label[0] = toupper(dont_save_button_label[0]);
+    if(ImGui::Button(dont_save_button_label.c_str(), ImVec2(180, 30))) {
+        close_top_dialog();
+        const std::function<void()> action_callback =
+            changes_mgr.get_unsaved_warning_action_callback();
+        action_callback();
+    }
+    set_tooltip("Proceed without saving.", "Ctrl + D");
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes an ImGui::TreeNode, except it pre-emptively opens it or closes it
  * based on the user's preferences. It also saves the user's preferences as
  * they open and close the node.
@@ -1987,12 +1926,198 @@ void editor::zoom_with_cursor(const float new_zoom) {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new changes manager.
+ */
+editor::changes_manager::changes_manager(editor* ed) :
+    ed(ed),
+    unsaved_changes(0),
+    unsaved_time(0.0f),
+    unsaved_warning_action_callback(nullptr),
+    unsaved_warning_save_callback(nullptr) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * If there are no unsaved changes, performs a given action.
+ * Otherwise, it opens a dialog asking the user if they
+ * want to cancel, save and then do the action, or do the action without saving.
+ * Returns true if there are unsaved changes, false otherwise.
+ * pos:
+ *   Screen coordinates to show the warning on.
+ *   If 0,0, then these will be set to the last processed widget's position.
+ * action_long:
+ *   String representing the action the user is attempting in a long format.
+ *   This is for the main prompt of the warning dialog, so it can be as
+ *   long as you want. It should start with a lowercase.
+ * action_short:
+ *   String representing the action the user is attempting in a short format.
+ *   This is for the buttons of the warning dialog, so it should ideally be
+ *   only one word. It should start with a lowercase.
+ * action_callback:
+ *   Code to run to perform the action.
+ * save_callback:
+ *   Code to run when the unsaved changes must be saved.
+ */
+bool editor::changes_manager::ask_if_unsaved(
+    const point &pos,
+    const string &action_long, const string &action_short,
+    const std::function<void()> &action_callback,
+    const std::function<bool()> &save_callback
+) {
+    if(unsaved_changes > 0) {
+        unsaved_warning_action_long = action_long;
+        unsaved_warning_action_short = action_short;
+        unsaved_warning_action_callback = action_callback;
+        unsaved_warning_save_callback = save_callback;
+        
+        ed->open_dialog(
+            "Unsaved changes!",
+            std::bind(&editor::process_gui_unsaved_changes_dialog, ed)
+        );
+        ed->dialogs.back()->custom_pos = game.mouse_cursor_s;
+        ed->dialogs.back()->custom_size = point(580, 100);
+        ed->dialogs.back()->event_callback =
+        [this] (ALLEGRO_EVENT * ev) {
+            if(ev->type == ALLEGRO_EVENT_KEY_DOWN) {
+                if(
+                    ed->key_check(ev->keyboard.keycode, ALLEGRO_KEY_S, true)
+                ) {
+                    ed->close_top_dialog();
+                    const std::function<bool()> save_callback =
+                        this->get_unsaved_warning_save_callback();
+                    const std::function<void()> action_callback =
+                        this->get_unsaved_warning_action_callback();
+                    if(save_callback()) {
+                        action_callback();
+                    }
+                } else if(
+                    ed->key_check(ev->keyboard.keycode, ALLEGRO_KEY_D, true)
+                ) {
+                    ed->close_top_dialog();
+                    const std::function<void()> action_callback =
+                        this->get_unsaved_warning_action_callback();
+                    action_callback();
+                }
+            }
+        };
+        
+        return true;
+        
+    } else {
+    
+        action_callback();
+        
+        return false;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how many unsaved changes have been made so far since the last save.
+ */
+size_t editor::changes_manager::get_unsaved_changes() const {
+    return unsaved_changes;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how long ago was the last time the player went from saved to unsaved,
+ * in seconds. Returns 0 if it's currently saved.
+ */
+float editor::changes_manager::get_unsaved_time_delta() const {
+    if(unsaved_changes == 0) return 0.0f;
+    return game.time_passed - unsaved_time;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the current unsaved changes warning long action text.
+ */
+const string &editor::changes_manager::get_unsaved_warning_action_long()
+const {
+    return unsaved_warning_action_long;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the current unsaved changes warning short action text.
+ */
+const string &editor::changes_manager::get_unsaved_warning_action_short()
+const {
+    return unsaved_warning_action_short;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the current unsaved changes warning action callback.
+ */
+const std::function<void()> &
+editor::changes_manager::get_unsaved_warning_action_callback() const {
+    return unsaved_warning_action_callback;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the current unsaved changes warning save callback.
+ */
+const std::function<bool()> &
+editor::changes_manager::get_unsaved_warning_save_callback() const {
+    return unsaved_warning_save_callback;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether there are unsaved changes or not.
+ */
+bool editor::changes_manager::has_unsaved_changes() {
+    return unsaved_changes != 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks that the user has made new changes, which have obviously not yet
+ * been saved.
+ */
+void editor::changes_manager::mark_as_changed() {
+    if(unsaved_changes == 0) {
+        unsaved_changes++;
+        unsaved_time = game.time_passed;
+    } else {
+        unsaved_changes++;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks the state of the editor's file as saved.
+ * The unsaved changes warning dialog does not set this, so this should be
+ * called manually in those cases.
+ */
+void editor::changes_manager::mark_as_saved() {
+    unsaved_changes = 0;
+    unsaved_time = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the state of the changes manager.
+ */
+void editor::changes_manager::reset() {
+    unsaved_changes = 0;
+    unsaved_time = 0.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new dialog info.
  */
 editor::dialog_info::dialog_info() :
     process_callback(nullptr),
+    event_callback(nullptr),
     close_callback(nullptr),
-    is_open(true) {
+    is_open(true),
+    custom_pos(-1.0f, -1.0f) {
     
 }
 
@@ -2003,15 +2128,34 @@ editor::dialog_info::dialog_info() :
 void editor::dialog_info::process() {
     if(!is_open) return;
     
-    ImGui::SetNextWindowPos(
-        ImVec2(game.win_w / 2.0f, game.win_h / 2.0f),
-        ImGuiCond_Always, ImVec2(0.5f, 0.5f)
-    );
     point size = custom_size;
     if(custom_size.x == 0.0f && custom_size.y == 0.0f) {
         size.x = game.win_w * 0.8;
         size.y = game.win_h * 0.8;
     }
+    point pos = custom_pos;
+    if(custom_pos.x == -1.0f && custom_pos.y == -1.0f) {
+        pos.x = game.win_w / 2.0f;
+        pos.y = game.win_h / 2.0f;
+    }
+    point tl = pos - size / 2.0f;
+    point br = pos + size / 2.0f;
+    if(tl.x < 0.0f) {
+        pos.x -= tl.x;
+    }
+    if(br.x > game.win_w) {
+        pos.x -= br.x - game.win_w;
+    }
+    if(tl.y < 0.0f) {
+        pos.y -= tl.y;
+    }
+    if(br.y > game.win_h) {
+        pos.y -= br.y - game.win_h;
+    }
+    ImGui::SetNextWindowPos(
+        ImVec2(pos.x, pos.y),
+        ImGuiCond_Always, ImVec2(0.5f, 0.5f)
+    );
     ImGui::SetNextWindowSize(ImVec2(size.x, size.y), ImGuiCond_Once);
     ImGui::OpenPopup((title + "##dialog").c_str());
     

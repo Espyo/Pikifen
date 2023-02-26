@@ -26,7 +26,6 @@ void gui_editor::do_drawing() {
     al_clear_to_color(COLOR_BLACK);
     ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
     
-    draw_unsaved_changes_warning();
     draw_op_error_cursor();
     
     //And the fade manager atop it all.

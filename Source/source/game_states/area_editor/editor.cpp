@@ -277,8 +277,7 @@ void area_editor::clear_current_area() {
     
     game.cur_area_data.clear();
     
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
+    changes_mgr.reset();
     backup_timer.start(game.options.area_editor_backup_interval);
     
     thumbnail_needs_saving = false;
@@ -1684,7 +1683,7 @@ void area_editor::load_backup() {
         game.cur_area_data.folder_name, game.cur_area_data.type, true, false
     );
     backup_timer.start(game.options.area_editor_backup_interval);
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     
     //We don't know if the backup's thumbnail is different from the standard
     //copy's thumbnail. To be safe, just mark it as needing a save. Loading a
@@ -1967,9 +1966,12 @@ void area_editor::press_load_button() {
         return;
     }
     
-    if(!check_new_unsaved_changes(load_widget_pos)) {
-        open_load_dialog();
-    }
+    changes_mgr.ask_if_unsaved(
+        load_widget_pos,
+        "loading an area", "load",
+        std::bind(&area_editor::open_load_dialog, this),
+    [this] () { return save_area(false); }
+    );
 }
 
 
@@ -2086,10 +2088,12 @@ void area_editor::press_quick_play_button() {
  * Code to run when the quit button widget is pressed.
  */
 void area_editor::press_quit_button() {
-    if(!check_new_unsaved_changes(quit_widget_pos)) {
-        set_status("Bye!");
-        leave();
-    }
+    changes_mgr.ask_if_unsaved(
+        quit_widget_pos,
+        "quitting", "quit",
+        std::bind(&area_editor::leave, this),
+    [this] () { return save_area(false); }
+    );
 }
 
 
@@ -2110,12 +2114,17 @@ void area_editor::press_reload_button() {
     if(!area_exists_on_disk) {
         return;
     }
-    if(!check_new_unsaved_changes(reload_widget_pos)) {
+    changes_mgr.ask_if_unsaved(
+        reload_widget_pos,
+        "reloading the current area", "reload",
+    [this] () {
         load_area(
             game.cur_area_data.folder_name, game.cur_area_data.type,
             false, false
         );
-    }
+    },
+    [this] () { return save_area(false); }
+    );
 }
 
 
@@ -2283,11 +2292,6 @@ void area_editor::press_save_button() {
     if(!save_area(false)) {
         return;
     }
-    
-    change_state(EDITOR_STATE_MAIN);
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
-    set_status("Saved area successfully.");
 }
 
 
@@ -2571,7 +2575,7 @@ void area_editor::register_change(
     }
     undo_history.push_front(make_pair(new_state, operation_name));
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     undo_save_lock_operation = operation_name;
     undo_save_lock_timer.start();
     
@@ -3315,6 +3319,13 @@ bool area_editor::save_area(const bool to_backup) {
         //If this was a normal save, save the backup too, so that the
         //maker doesn't have an outdated backup.
         save_backup();
+    }
+    
+    //Finish up.
+    if(!to_backup && save_successful) {
+        change_state(EDITOR_STATE_MAIN);
+        changes_mgr.mark_as_saved();
+        set_status("Saved area successfully.");
     }
     
     return save_successful;
@@ -4105,7 +4116,7 @@ void area_editor::undo() {
     path_preview.clear(); //Clear so it doesn't reference deleted stops.
     path_preview_timer.start(false);
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     set_status("Undo successful: " + operation_name + ".");
 }
 

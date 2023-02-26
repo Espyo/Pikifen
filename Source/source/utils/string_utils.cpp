@@ -395,22 +395,40 @@ string str_to_upper(string s) {
  * units:
  *   How many units of time in total.
  * suffix1:
- *   Suffix for the first portion.
+ *   Suffix for the first portion. Can be empty.
  * suffix2:
- *   Suffix for the second portion.
+ *   Suffix for the second portion. Can be empty.
+ * flags:
+ *   Flags to change behavior with. Use the TIME_TO_STR_FLAGS bitmask.
  */
 string time_to_str2(
-    const size_t units, const string &suffix1, const string &suffix2
+    const size_t units,
+    const string &suffix1, const string &suffix2,
+    const uint8_t flags
 ) {
-    size_t first = units / 60;
-    size_t second = units % 60;
-    return
-        (first < 10 ? "0" : "") +
-        i2s(first) +
-        suffix1 +
-        (second < 10 ? "0" : "") +
-        i2s(second) +
+    size_t units1 = units / 60;
+    size_t units2 = units % 60;
+    bool has_leading_01 =
+        ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units1 < 10);
+    bool has_leading_02 =
+        ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units2 < 10);
+    string portion1;
+    if(
+        ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS) == 0) ||
+        units1 != 0
+    ) {
+        portion1 =
+            (has_leading_01 ? "0" : "") +
+            i2s(units1) +
+            suffix1;
+    }
+    string portion2 =
+        (has_leading_02 ? "0" : "") +
+        i2s(units2) +
         suffix2;
+        
+    return portion1 + portion2;
+    
 }
 
 
@@ -420,29 +438,56 @@ string time_to_str2(
  * units:
  *   How many units of time in total.
  * suffix1:
- *   Suffix for the first portion.
+ *   Suffix for the first portion. Can be empty.
  * suffix2:
- *   Suffix for the second portion.
+ *   Suffix for the second portion. Can be empty.
  * suffix3:
- *   Suffix for the third portion.
+ *   Suffix for the third portion. Can be empty.
+ * flags:
+ *   Flags to change behavior with. Use the TIME_TO_STR_FLAGS bitmask.
  */
 string time_to_str3(
     const size_t units,
-    const string &suffix1, const string &suffix2, const string &suffix3
+    const string &suffix1, const string &suffix2, const string &suffix3,
+    const uint8_t flags
 ) {
-    size_t first = units / 60 / 60;
-    size_t second = (units / 60) % 60;
-    size_t third = units % 60;
-    return
-        (first < 10 ? "0" : "") +
-        i2s(first) +
-        suffix1 +
-        (second < 10 ? "0" : "") +
-        i2s(second) +
-        suffix2 +
-        (third < 10 ? "0" : "") +
-        i2s(third) +
+    size_t units1 = units / 60 / 60;
+    size_t units2 = (units / 60) % 60;
+    size_t units3 = units % 60;
+    bool has_leading_01 =
+        ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units1 < 10);
+    bool has_leading_02 =
+        ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units2 < 10);
+    bool has_leading_03 =
+        ((flags & TIME_TO_STR_FLAG_NO_LEADING_ZEROS) == 0) && (units3 < 10);
+    string portion1;
+    if(
+        (flags & TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS) == 0 ||
+        units1 != 0
+    ) {
+        portion1 =
+            (has_leading_01 ? "0" : "") +
+            i2s(units1) +
+            suffix1;
+    }
+    string portion2;
+    if(
+        (flags & TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS) == 0 ||
+        units1 != 0 ||
+        units2 != 0
+    ) {
+        portion2 =
+            (has_leading_02 ? "0" : "") +
+            i2s(units2) +
+            suffix2;
+    }
+    string portion3 =
+        (has_leading_03 ? "0" : "") +
+        i2s(units3) +
         suffix3;
+        
+    return
+        portion1 + portion2 + portion3;
 }
 
 

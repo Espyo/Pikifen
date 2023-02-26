@@ -40,10 +40,6 @@ extern const float TW_DEF_SIZE;
 extern const float TW_HANDLE_RADIUS;
 extern const float TW_OUTLINE_THICKNESS;
 extern const float TW_ROTATION_HANDLE_THICKNESS;
-extern const float UNSAVED_CHANGES_WARNING_DURATION;
-extern const int UNSAVED_CHANGES_WARNING_HEIGHT;
-extern const int UNSAVED_CHANGES_WARNING_SPIKE_SIZE;
-extern const int UNSAVED_CHANGES_WARNING_WIDTH;
 }
 
 
@@ -237,13 +233,17 @@ protected:
     public:
         //Callback for when it's time to process the dialog's contents.
         std::function<void()> process_callback;
+        //Callback for when an Allegro event happens.
+        std::function<void(ALLEGRO_EVENT*)> event_callback;
         //Callback for when the user closes the dialog, if any.
         std::function<void()> close_callback;
         //Title to display on the dialog.
         string title;
         //Is it open?
         bool is_open;
-        //Custom dialog size.
+        //Custom dialog position (center point). -1,-1 for default.
+        point custom_pos;
+        //Custom dialog size. 0,0 for default.
         point custom_size;
         
         dialog_info();
@@ -295,6 +295,45 @@ protected:
         void process();
     };
     
+    struct changes_manager {
+    public:
+        bool ask_if_unsaved(
+            const point &pos,
+            const string &action_long, const string &action_short,
+            const std::function<void()> &action_callback,
+            const std::function<bool()> &save_callback
+        );
+        size_t get_unsaved_changes() const;
+        float get_unsaved_time_delta() const;
+        const string &get_unsaved_warning_action_long() const;
+        const string &get_unsaved_warning_action_short() const;
+        const std::function<void()> &
+        get_unsaved_warning_action_callback() const;
+        const std::function<bool()> &
+        get_unsaved_warning_save_callback() const;
+        bool has_unsaved_changes();
+        void mark_as_changed();
+        void mark_as_saved();
+        void reset();
+        changes_manager(editor* ed);
+        
+    private:
+        //Editor it belongs to.
+        editor* ed;
+        //Cummulative number of unsaved changes since the last save.
+        size_t unsaved_changes;
+        //When did it last go from saved to unsaved? 0 = no unsaved changes.
+        float unsaved_time;
+        //Long name of the action for the open unsaved changes warning dialog.
+        string unsaved_warning_action_long;
+        //Short name of the action for the open unsaved changes warning dialog.
+        string unsaved_warning_action_short;
+        //Action code callback for the open unsaved changes warning dialog.
+        std::function<void()> unsaved_warning_action_callback;
+        //Save code callback for the open unsaved changes warning dialog.
+        std::function<bool()> unsaved_warning_save_callback;
+    };
+    
     
     //Bitmap with all of the editor icons.
     ALLEGRO_BITMAP* bmp_editor_icons;
@@ -304,6 +343,8 @@ protected:
     point canvas_br;
     //X coordinate of the canvas GUI separator. -1 = undefined.
     int canvas_separator_x;
+    //Manager of (unsaved) changes.
+    changes_manager changes_mgr;
     //Maps a custom mob category name to an index of the types' vector.
     map<string, size_t> custom_cat_name_idxs;
     //What mob types belong in what custom mob category names.
@@ -338,8 +379,6 @@ protected:
     bool last_input_was_keyboard;
     //Has the user picked any content to load yet?
     bool loaded_content_yet;
-    //Has the user made any unsaved changes yet?
-    bool has_unsaved_changes;
     //Is this a real mouse drag, or just a shaky click?
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
@@ -352,12 +391,6 @@ protected:
     string status_text;
     //Current sub-state.
     size_t sub_state;
-    //When placing the unsaved changes warning, focus on these coordinates.
-    point unsaved_changes_warning_pos;
-    //Time left for the unsaved changes warning to be on-screen.
-    timer unsaved_changes_warning_timer;
-    //Has the user been warned about having unsaved changes yet?
-    bool was_warned_about_unsaved_changes;
     //Maximum zoom level allowed.
     float zoom_max_level;
     //Minimum zoom level allowed.
@@ -369,7 +402,6 @@ protected:
         const point &min_coords, const point &max_coords,
         const bool instantaneous = false
     );
-    bool check_new_unsaved_changes(const point &pos = point());
     void close_top_dialog();
     void do_logic_post();
     void do_logic_pre();
@@ -378,7 +410,6 @@ protected:
         const ALLEGRO_COLOR &major_color, const ALLEGRO_COLOR &minor_color
     );
     void draw_op_error_cursor();
-    void draw_unsaved_changes_warning();
     point get_last_widget_pos();
     bool key_check(
         const int pressed_key, const int match_key,
@@ -392,7 +423,7 @@ protected:
     );
     void leave();
     void load_custom_mob_cat_types(const bool is_area_editor);
-    void mark_new_changes();
+    void mark_as_changed();
     void open_dialog(
         const string &title,
         const std::function<void()> &process_callback
@@ -422,6 +453,7 @@ protected:
         const std::function<void()> &pre_change_callback = nullptr
     );
     void process_gui_status_bar_text();
+    void process_gui_unsaved_changes_dialog();
     void panel_title(const char* title, const float width);
     bool saveable_tree_node(const string &category, const string &label);
     void set_status(const string &text = "", const bool error = false);

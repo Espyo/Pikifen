@@ -168,8 +168,7 @@ void gui_editor::load_file(
     
     cur_item = INVALID;
     
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
+    changes_mgr.reset();
     loaded_content_yet = true;
     
     //We could reset the camera now, but if the player enters the editor via
@@ -269,9 +268,12 @@ void gui_editor::press_grid_interval_increase_button() {
  * Code to run when the load button widget is pressed.
  */
 void gui_editor::press_load_button() {
-    if(!check_new_unsaved_changes(load_widget_pos)) {
-        open_load_dialog();
-    }
+    changes_mgr.ask_if_unsaved(
+        load_widget_pos,
+        "loading a file", "load",
+        std::bind(&gui_editor::open_load_dialog, this),
+        std::bind(&gui_editor::save_file, this)
+    );
 }
 
 
@@ -279,10 +281,12 @@ void gui_editor::press_load_button() {
  * Code to run when the quit button widget is pressed.
  */
 void gui_editor::press_quit_button() {
-    if(!check_new_unsaved_changes(quit_widget_pos)) {
-        set_status("Bye!");
-        leave();
-    }
+    changes_mgr.ask_if_unsaved(
+        quit_widget_pos,
+        "quitting", "quit",
+        std::bind(&gui_editor::leave, this),
+        std::bind(&gui_editor::save_file, this)
+    );
 }
 
 
@@ -290,9 +294,12 @@ void gui_editor::press_quit_button() {
  * Code to run when the reload button widget is pressed.
  */
 void gui_editor::press_reload_button() {
-    if(!check_new_unsaved_changes(reload_widget_pos)) {
-        load_file(false);
-    }
+    changes_mgr.ask_if_unsaved(
+        reload_widget_pos,
+        "reloading the current file", "reload",
+    [this] () { load_file(false); },
+    std::bind(&gui_editor::save_file, this)
+    );
 }
 
 
@@ -303,9 +310,6 @@ void gui_editor::press_save_button() {
     if(!save_file()) {
         return;
     }
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
-    set_status("Saved GUI file successfully.");
 }
 
 
@@ -398,11 +402,9 @@ bool gui_editor::save_file() {
         return false;
     } else {
         set_status("Saved GUI file successfully.");
+        changes_mgr.mark_as_saved();
+        return true;
     }
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
-    
-    return true;
 }
 
 

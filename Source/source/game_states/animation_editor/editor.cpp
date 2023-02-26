@@ -304,7 +304,7 @@ void animation_editor::import_animation_data(const string &name) {
     cur_anim->hit_rate = a->hit_rate;
     cur_anim->loop_frame = a->loop_frame;
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
 }
 
 
@@ -318,7 +318,7 @@ void animation_editor::import_sprite_file_data(const string &name) {
     
     cur_sprite->set_bitmap(s->file, s->file_pos, s->file_size);
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
 }
 
 
@@ -336,7 +336,7 @@ void animation_editor::import_sprite_hitbox_data(const string &name) {
     
     update_cur_hitbox();
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
 }
 
 
@@ -352,7 +352,7 @@ void animation_editor::import_sprite_top_data(const string &name) {
     cur_sprite->top_size = s->top_size;
     cur_sprite->top_angle = s->top_angle;
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
 }
 
 
@@ -450,8 +450,7 @@ void animation_editor::load_animation_database(
     
     animation_exists_on_disk = true;
     can_save = true;
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
+    changes_mgr.reset();
     
     game.cam.set_pos(point());
     game.cam.set_zoom(1.0f);
@@ -571,7 +570,7 @@ void animation_editor::pick_animation(
     if(is_new) {
         anims.animations.push_back(new animation(name));
         anims.sort_alphabetically();
-        mark_new_changes();
+        changes_mgr.mark_as_changed();
         set_status("Created animation \"" + name + "\".");
     }
     cur_anim = anims.animations[anims.find_animation(name)];
@@ -601,7 +600,7 @@ void animation_editor::pick_sprite(
                 loaded_mob_type ? loaded_mob_type->radius : 32
             );
             anims.sort_alphabetically();
-            mark_new_changes();
+            changes_mgr.mark_as_changed();
             set_status("Created sprite \"" + name + "\".");
         }
     }
@@ -649,9 +648,12 @@ void animation_editor::press_leader_silhouette_button() {
  * Code to run when the load file button widget is pressed.
  */
 void animation_editor::press_load_button() {
-    if(!check_new_unsaved_changes(load_widget_pos)) {
-        open_load_dialog();
-    }
+    changes_mgr.ask_if_unsaved(
+        load_widget_pos,
+        "loading a file", "load",
+        std::bind(&animation_editor::open_load_dialog, this),
+        std::bind(&animation_editor::save_animation_database, this)
+    );
 }
 
 
@@ -693,10 +695,12 @@ void animation_editor::press_play_animation_button() {
  * Code to run when the quit button widget is pressed.
  */
 void animation_editor::press_quit_button() {
-    if(!check_new_unsaved_changes(quit_widget_pos)) {
-        set_status("Bye!");
-        leave();
-    }
+    changes_mgr.ask_if_unsaved(
+        quit_widget_pos,
+        "quitting", "quit",
+        std::bind(&animation_editor::leave, this),
+        std::bind(&animation_editor::save_animation_database, this)
+    );
 }
 
 
@@ -705,9 +709,12 @@ void animation_editor::press_quit_button() {
  */
 void animation_editor::press_reload_button() {
     if(!animation_exists_on_disk) return;
-    if(!check_new_unsaved_changes(reload_widget_pos)) {
-        load_animation_database(false);
-    }
+    changes_mgr.ask_if_unsaved(
+        reload_widget_pos,
+        "reloading the current file", "reload",
+    [this] () { load_animation_database(false); },
+    std::bind(&animation_editor::save_animation_database, this)
+    );
 }
 
 
@@ -847,7 +854,7 @@ void animation_editor::rename_animation(
     anim->name = new_name;
     anims.sort_alphabetically();
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     set_status(
         "Renamed animation \"" + old_name + "\" to \"" + new_name + "\"."
     );
@@ -905,7 +912,7 @@ void animation_editor::rename_body_part(
     part->name = new_name;
     update_hitboxes();
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     set_status(
         "Renamed body part \"" + old_name + "\" to \"" + new_name + "\"."
     );
@@ -964,7 +971,7 @@ void animation_editor::rename_sprite(
     }
     anims.sort_alphabetically();
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     set_status(
         "Renamed sprite \"" + old_name + "\" to \"" + new_name + "\"."
     );
@@ -1008,7 +1015,7 @@ void animation_editor::resize_everything(const float mult) {
         resize_sprite(anims.sprites[s], mult);
     }
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     set_status("Resized everything by " + f2s(mult) + ".");
 }
 
@@ -1042,15 +1049,16 @@ void animation_editor::resize_sprite(sprite* s, const float mult) {
         h_ptr->pos    *= mult;
     }
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     set_status("Resized sprite by " + f2s(mult) + ".");
 }
 
 
 /* ----------------------------------------------------------------------------
  * Saves the animation database onto the mob's file.
+ * Returns true on success, false otherwise.
  */
-void animation_editor::save_animation_database() {
+bool animation_editor::save_animation_database() {
     anims.engine_version =
         i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
         
@@ -1248,11 +1256,14 @@ void animation_editor::save_animation_database() {
             ALLEGRO_MESSAGEBOX_WARN
         );
         set_status("Could not save the animation file!", true);
+        return false;
+        
     } else {
         set_status("Saved file successfully.");
+        changes_mgr.mark_as_saved();
+        return true;
+        
     }
-    has_unsaved_changes = false;
-    was_warned_about_unsaved_changes = false;
 }
 
 
@@ -1273,7 +1284,7 @@ void animation_editor::set_all_sprite_scales(const float scale) {
         s_ptr->scale.y = scale;
     }
     
-    mark_new_changes();
+    changes_mgr.mark_as_changed();
     set_status("Set all sprite scales to " + f2s(scale) + ".");
 }
 

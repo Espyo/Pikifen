@@ -181,7 +181,7 @@ private:
     void rename_sprite(sprite* spr, const string &new_name);
     void resize_everything(const float mult);
     void resize_sprite(sprite* s, const float mult);
-    void save_animation_database();
+    bool save_animation_database();
     void set_all_sprite_scales(const float scale);
     void set_best_frame_sprite();
     void sprite_bmp_flood_fill(

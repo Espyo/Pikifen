@@ -5111,7 +5111,10 @@ void area_editor::process_gui_panel_tools() {
     
         //Load auto-backup button.
         if(ImGui::Button("Load auto-backup")) {
-            if(!check_new_unsaved_changes()) {
+            changes_mgr.ask_if_unsaved(
+                point(),
+                "loading the auto-backup", "load",
+            [this] () {
                 bool backup_exists = false;
                 if(!game.cur_area_data.folder_name.empty()) {
                     string file_path =
@@ -5129,7 +5132,9 @@ void area_editor::process_gui_panel_tools() {
                 } else {
                     set_status("There is no backup available.");
                 }
-            }
+            },
+            [this] () { return save_area(false); }
+            );
         }
         set_tooltip(
             "Discard all changes made and load the auto-backup, if any exists."
@@ -5252,7 +5257,7 @@ void area_editor::process_gui_toolbar() {
     if(
         ImGui::ImageButton(
             "saveButton",
-            has_unsaved_changes ?
+            changes_mgr.has_unsaved_changes() ?
             editor_icons[ICON_SAVE_UNSAVED] :
             editor_icons[ICON_SAVE],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)

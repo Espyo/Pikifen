@@ -21,6 +21,15 @@ using std::string;
 using std::vector;
 
 
+//Flags for the time-to-string functions. This is a bitmask.
+enum TIME_TO_STR_FLAGS {
+    //If true, leading zeros will not appear.
+    TIME_TO_STR_FLAG_NO_LEADING_ZEROS = 1,
+    //If true, leading portions to the left that are just zeros will not appear.
+    TIME_TO_STR_FLAG_NO_LEADING_ZERO_PORTIONS = 2,
+};
+
+
 //Converts an integer (or long) to a string.
 #define i2s(n) std::to_string((long long) (n))
 
@@ -56,10 +65,15 @@ bool str_peek(const string &s, const size_t where, const string &match);
 string str_to_lower(string s);
 string str_to_title(string s);
 string str_to_upper(string s);
-string time_to_str2(size_t units, const string &suffix1, const string &suffix2);
+string time_to_str2(
+    size_t units,
+    const string &suffix1, const string &suffix2,
+    const uint8_t flags = 0
+);
 string time_to_str3(
     size_t units,
-    const string &suffix1, const string &suffix2, const string &suffix3
+    const string &suffix1, const string &suffix2, const string &suffix3,
+    const uint8_t flags = 0
 );
 string trim_spaces(const string &s, const bool left_only = false);
 

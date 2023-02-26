@@ -367,7 +367,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             )
         ) {
             cur_sprite->scale = cur_sprite_size / cur_sprite->file_size;
-            mark_new_changes();
+            changes_mgr.mark_as_changed();
         }
         break;
         
@@ -416,7 +416,7 @@ void animation_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             }
             
             if(tw_handled) {
-                mark_new_changes();
+                changes_mgr.mark_as_changed();
             }
         }
         break;

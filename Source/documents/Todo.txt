@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Obstacle SVG file broke?
     
     --- v0.24.0 ---
     Area editor "copy properties" and "paste properties"
@@ -15,6 +14,7 @@ Next tasks (roughly sorted most important first)
             Northwest quadrant for creatures and wildlife
             Northeast quadrant for other mobs
             Southwest quadrant for mechanics
+                Moving floors
             Southeast quadrant for misc
                 A measuring pad that's just a big sector with nothing in it, but uses the measurement texture
                 Copy stuff from the Paths area, and also add tests for Pikmin carrying bridge fragments and berries
