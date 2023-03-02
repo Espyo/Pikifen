@@ -573,7 +573,6 @@ private:
     void copy_mob_properties();
     void copy_path_link_properties();
     void copy_sector_properties();
-    void copy_sector_texture(const point &cursor);
     void create_area(
         string requested_area_folder_name,
         const AREA_TYPES requested_area_type
@@ -660,6 +659,7 @@ private:
     void paste_mob_properties();
     void paste_path_link_properties();
     void paste_sector_properties();
+    void paste_sector_texture();
     area_data* prepare_state();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
@@ -752,6 +752,7 @@ private:
     void press_new_sector_button();
     void press_new_tree_shadow_button();
     void press_paste_properties_button();
+    void press_paste_texture_button();
     void press_quick_play_button();
     void press_quit_button();
     void press_reference_button();

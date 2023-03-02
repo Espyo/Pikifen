@@ -478,6 +478,9 @@ void area_editor::process_gui_menu_bar() {
                 "Ctrl + Z"
             );
             
+            //Separator.
+            ImGui::Separator();
+            
             //Copy properties item.
             if(ImGui::MenuItem("Copy properties", "Ctrl+C")) {
                 press_copy_properties_button();
@@ -496,6 +499,24 @@ void area_editor::process_gui_menu_bar() {
                 "if applicable.",
                 "Ctrl + V"
             );
+            
+            if(
+                state == EDITOR_STATE_LAYOUT &&
+                sub_state == EDITOR_SUB_STATE_NONE
+            ) {
+                //Paste texture item.
+                if(ImGui::MenuItem("Paste texture", "Ctrl+T")) {
+                    press_paste_texture_button();
+                }
+                set_tooltip(
+                    "Pastes a previously-copied sector's texture onto "
+                    "the sector you selected.",
+                    "Ctrl + T"
+                );
+            }
+            
+            //Separator.
+            ImGui::Separator();
             
             //Select all item.
             if(ImGui::MenuItem("Select all", "Ctrl+A")) {

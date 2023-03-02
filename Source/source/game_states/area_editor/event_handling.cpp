@@ -118,11 +118,6 @@ void area_editor::handle_key_char_canvas(const ALLEGRO_EVENT &ev) {
             rotate_mob_gens_to_point(game.mouse_cursor_w);
         }
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_T)) {
-        if(state == EDITOR_STATE_LAYOUT && sub_state == EDITOR_SUB_STATE_NONE) {
-            copy_sector_texture(game.mouse_cursor_w);
-        }
-        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
         press_snap_mode_button();
         
@@ -353,6 +348,9 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         ) {
             change_state(EDITOR_STATE_PATHS);
         }
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_T, true)) {
+        press_paste_texture_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_V, true)) {
         press_paste_properties_button();

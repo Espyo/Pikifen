@@ -405,46 +405,6 @@ void area_editor::copy_sector_properties() {
 
 
 /* ----------------------------------------------------------------------------
- * Copies the currently selected sector's texture onto the sector underneath
- * the mouse cursor.
- * cursor:
- *   Cursor position.
- */
-void area_editor::copy_sector_texture(const point &cursor) {
-    if(selected_sectors.empty()) {
-        set_status(
-            "To copy a sector's texture, you must first select a sector!",
-            true
-        );
-        return;
-    }
-    
-    if(selected_sectors.size() > 1) {
-        set_status(
-            "To copy a sector's texture, you can only select 1 sector!",
-            true
-        );
-        return;
-    }
-    
-    sector* target_sector = get_sector_under_point(cursor);
-    if(!target_sector) {
-        set_status(
-            "To copy a sector's texture, you must aim your cursor at a sector!",
-            true
-        );
-        return;
-    }
-    
-    register_change("sector texture copy");
-    
-    target_sector->texture_info = (*selected_sectors.begin())->texture_info;
-    set_status("Successfully copied a sector's texture.");
-    return;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a new sector for use in layout drawing operations.
  * This automatically clones it from another sector, if not NULL, or gives it
  * a recommended texture if the other sector NULL.
@@ -2004,6 +1964,8 @@ void area_editor::paste_edge_properties() {
         return;
     }
     
+    register_change("edge property paste");
+    
     for(edge* e : selected_edges) {
         copy_buffer_edge->clone(e);
     }
@@ -2034,6 +1996,8 @@ void area_editor::paste_mob_properties() {
         );
         return;
     }
+    
+    register_change("object property paste");
     
     for(mob_gen* m : selected_mobs) {
         copy_buffer_mob->clone(m, false);
@@ -2066,6 +2030,8 @@ void area_editor::paste_path_link_properties() {
         return;
     }
     
+    register_change("path link property paste");
+    
     for(path_link* l : selected_path_links) {
         copy_buffer_path_link->clone(l);
     }
@@ -2097,12 +2063,47 @@ void area_editor::paste_sector_properties() {
         return;
     }
     
+    register_change("sector property paste");
+    
     for(sector* s : selected_sectors) {
         copy_buffer_sector->clone(s);
         update_sector_texture(s, copy_buffer_sector->texture_info.file_name);
     }
     
     set_status("Successfully pasted sector properties.");
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pastes a previously-copied sector texture onto the selected sectors.
+ */
+void area_editor::paste_sector_texture() {
+    if(!copy_buffer_sector) {
+        set_status(
+            "To paste a sector texture, you must first copy the properties "
+            "from another one!",
+            true
+        );
+        return;
+    }
+    
+    if(selected_sectors.empty()) {
+        set_status(
+            "To paste a sector texture, you must first select which sector "
+            "to paste to!",
+            true
+        );
+        return;
+    }
+    
+    register_change("sector texture paste");
+    
+    for(sector* s : selected_sectors) {
+        update_sector_texture(s, copy_buffer_sector->texture_info.file_name);
+    }
+    
+    set_status("Successfully pasted sector texture.");
     return;
 }
 

@@ -2101,6 +2101,7 @@ void area_editor::press_new_tree_shadow_button() {
  * Code to run when the paste properties button widget is pressed.
  */
 void area_editor::press_paste_properties_button() {
+    if(sub_state != EDITOR_SUB_STATE_NONE) return;
     switch(state) {
     case EDITOR_STATE_LAYOUT: {
         if(!selected_sectors.empty()) {
@@ -2117,6 +2118,16 @@ void area_editor::press_paste_properties_button() {
         break;
     }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the paste texture button widget is pressed.
+ */
+void area_editor::press_paste_texture_button() {
+    if(state != EDITOR_STATE_LAYOUT) return;
+    if(sub_state != EDITOR_SUB_STATE_NONE) return;
+    paste_sector_texture();
 }
 
 
