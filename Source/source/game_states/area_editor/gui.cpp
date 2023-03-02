@@ -199,7 +199,7 @@ void area_editor::process_gui_control_panel() {
 
 
 /* ----------------------------------------------------------------------------
- * Processes the ImGui area deletion dialog for this frame.
+ * Processes the Dear ImGui area deletion dialog for this frame.
  */
 void area_editor::process_gui_delete_area_dialog() {
     //Explanation text.
@@ -476,6 +476,25 @@ void area_editor::process_gui_menu_bar() {
             set_tooltip(
                 undo_text,
                 "Ctrl + Z"
+            );
+            
+            //Copy properties item.
+            if(ImGui::MenuItem("Copy properties", "Ctrl+C")) {
+                press_copy_properties_button();
+            }
+            set_tooltip(
+                "Copies the properties of what you selected, if applicable.",
+                "Ctrl + C"
+            );
+            
+            //Paste properties item.
+            if(ImGui::MenuItem("Paste properties", "Ctrl+V")) {
+                press_paste_properties_button();
+            }
+            set_tooltip(
+                "Pastes previously-copied properties onto what you selected, "
+                "if applicable.",
+                "Ctrl + V"
             );
             
             //Select all item.
@@ -4294,6 +4313,7 @@ void area_editor::process_gui_panel_paths() {
             
             //Total travel distance text.
             if(show_path_preview) {
+                ImGui::Indent();
                 if(path_preview.empty() && !path_preview_straight) {
                     ImGui::Text("No valid path between A and B.");
                     ImGui::Text(" ");
@@ -4307,6 +4327,7 @@ void area_editor::process_gui_panel_paths() {
                         path_preview.size()
                     );
                 }
+                ImGui::Unindent();
             }
             
             //Select links with label button.

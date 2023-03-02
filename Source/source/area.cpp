@@ -313,12 +313,7 @@ void area_data::clone(area_data &other) {
     for(size_t m = 0; m < mob_generators.size(); ++m) {
         mob_gen* m_ptr = mob_generators[m];
         mob_gen* om_ptr = other.mob_generators[m];
-        om_ptr->angle = m_ptr->angle;
-        om_ptr->pos = m_ptr->pos;
-        om_ptr->type = m_ptr->type;
-        om_ptr->vars = m_ptr->vars;
-        om_ptr->link_nrs = m_ptr->link_nrs;
-        om_ptr->stored_inside = m_ptr->stored_inside;
+        m_ptr->clone(om_ptr);
     }
     for(size_t m = 0; m < mob_generators.size(); ++m) {
         mob_gen* om_ptr = other.mob_generators[m];
@@ -341,9 +336,8 @@ void area_data::clone(area_data &other) {
                 other.path_stops[s_ptr->links[l]->end_nr],
                 s_ptr->links[l]->end_nr
             );
+            s_ptr->links[l]->clone(new_link);
             new_link->distance = s_ptr->links[l]->distance;
-            new_link->type = s_ptr->links[l]->type;
-            new_link->label = s_ptr->links[l]->label;
             os_ptr->links.push_back(new_link);
         }
     }

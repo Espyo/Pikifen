@@ -99,6 +99,10 @@ area_editor::area_editor() :
     hack_skip_drawing(false),
     backup_timer(game.options.area_editor_backup_interval),
     area_exists_on_disk(false),
+    copy_buffer_edge(nullptr),
+    copy_buffer_mob(nullptr),
+    copy_buffer_path_link(nullptr),
+    copy_buffer_sector(nullptr),
     cur_hazard_nr(INVALID),
     cursor_snap_timer(AREA_EDITOR::CURSOR_SNAP_UPDATE_INTERVAL),
     debug_edge_nrs(false),
@@ -1836,6 +1840,29 @@ area_data* area_editor::prepare_state() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the copy properties button widget is pressed.
+ */
+void area_editor::press_copy_properties_button() {
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        if(!selected_sectors.empty()) {
+            copy_sector_properties();
+        } else {
+            copy_edge_properties();
+        }
+        break;
+    } case EDITOR_STATE_MOBS: {
+        copy_mob_properties();
+        break;
+    } case EDITOR_STATE_PATHS: {
+        copy_path_link_properties();
+        break;
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the circle sector button widget is pressed.
  */
 void area_editor::press_circle_sector_button() {
@@ -2067,6 +2094,29 @@ void area_editor::press_new_tree_shadow_button() {
     clear_selection();
     set_status("Use the canvas to place a new tree shadow.");
     sub_state = EDITOR_SUB_STATE_NEW_SHADOW;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the paste properties button widget is pressed.
+ */
+void area_editor::press_paste_properties_button() {
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        if(!selected_sectors.empty()) {
+            paste_sector_properties();
+        } else {
+            paste_edge_properties();
+        }
+        break;
+    } case EDITOR_STATE_MOBS: {
+        paste_mob_properties();
+        break;
+    } case EDITOR_STATE_PATHS: {
+        paste_path_link_properties();
+        break;
+    }
+    }
 }
 
 
@@ -4139,6 +4189,23 @@ void area_editor::unload() {
     editor::unload();
     
     clear_undo_history();
+    
+    if(copy_buffer_sector) {
+        delete copy_buffer_sector;
+        copy_buffer_sector = NULL;
+    }
+    if(copy_buffer_edge) {
+        delete copy_buffer_edge;
+        copy_buffer_edge = NULL;
+    }
+    if(copy_buffer_mob) {
+        delete copy_buffer_mob;
+        copy_buffer_mob = NULL;
+    }
+    if(copy_buffer_path_link) {
+        delete copy_buffer_path_link;
+        copy_buffer_path_link = NULL;
+    }
     
     clear_current_area();
     

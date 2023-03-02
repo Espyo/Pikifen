@@ -265,6 +265,146 @@ void area_editor::check_drawing_line(const point &pos) {
 
 
 /* ----------------------------------------------------------------------------
+ * Copies the currently selected edge's properties onto the copy buffer,
+ * so they can be then pasted onto another edge.
+ */
+void area_editor::copy_edge_properties() {
+    if(selected_edges.empty()) {
+        set_status(
+            "To copy an edge's properties, you must first select an edge "
+            "to copy from!",
+            true
+        );
+        return;
+    }
+    
+    if(selected_edges.size() > 1) {
+        set_status(
+            "To copy an edge's properties, you can only select 1 edge!",
+            true
+        );
+        return;
+    }
+    
+    edge* source_edge = *selected_edges.begin();
+    if(!copy_buffer_edge) {
+        copy_buffer_edge = new edge();
+    }
+    source_edge->clone(copy_buffer_edge);
+    set_status("Successfully copied the edge's properties.");
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Copies the currently selected mob's properties onto the copy buffer,
+ * so they can be then pasted onto another mob.
+ */
+void area_editor::copy_mob_properties() {
+    if(selected_mobs.empty()) {
+        set_status(
+            "To copy an object's properties, you must first select an object "
+            "to copy from!",
+            true
+        );
+        return;
+    }
+    
+    if(selected_mobs.size() > 1) {
+        set_status(
+            "To copy an object's properties, you can only select 1 object!",
+            true
+        );
+        return;
+    }
+    
+    mob_gen* source_mob = *selected_mobs.begin();
+    if(!copy_buffer_mob) {
+        copy_buffer_mob = new mob_gen();
+    }
+    source_mob->clone(copy_buffer_mob);
+    set_status("Successfully copied the object's properties.");
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Copies the currently selected path link's properties onto the copy buffer,
+ * so they can be then pasted onto another path link.
+ */
+void area_editor::copy_path_link_properties() {
+    if(selected_path_links.empty()) {
+        set_status(
+            "To copy a path link's properties, you must first select a path "
+            "link to copy from!",
+            true
+        );
+        return;
+    }
+    
+    size_t really_selected_nr = selected_path_links.size();
+    if(really_selected_nr == 2) {
+        //Check if these are just the two sides of the same two-way link.
+        //If so then yeah, we basically only have one link really selected.
+        path_link* l_ptr = *selected_path_links.begin();
+        if(!l_ptr->is_one_way()) {
+            really_selected_nr = 1;
+        }
+    }
+    
+    if(really_selected_nr > 1) {
+        set_status(
+            "To copy a path link's properties, you can only select 1 "
+            "path link!",
+            true
+        );
+        return;
+    }
+    
+    path_link* source_link = *selected_path_links.begin();
+    if(!copy_buffer_path_link) {
+        copy_buffer_path_link = new path_link(NULL, NULL, INVALID);
+    }
+    source_link->clone(copy_buffer_path_link);
+    set_status("Successfully copied the path link's properties.");
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Copies the currently selected sector's properties onto the copy buffer,
+ * so they can be then pasted onto another sector.
+ */
+void area_editor::copy_sector_properties() {
+    if(selected_sectors.empty()) {
+        set_status(
+            "To copy a sector's properties, you must first select a sector "
+            "to copy from!",
+            true
+        );
+        return;
+    }
+    
+    if(selected_sectors.size() > 1) {
+        set_status(
+            "To copy a sector's properties, you can only select 1 sector!",
+            true
+        );
+        return;
+    }
+    
+    sector* source_sector = *selected_sectors.begin();
+    if(!copy_buffer_sector) {
+        copy_buffer_sector = new sector();
+    }
+    source_sector->clone(copy_buffer_sector);
+    copy_buffer_sector->texture_info = source_sector->texture_info;
+    set_status("Successfully copied the sector's properties.");
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Copies the currently selected sector's texture onto the sector underneath
  * the mouse cursor.
  * cursor:
@@ -1595,13 +1735,7 @@ void area_editor::homogenize_selected_mobs() {
     mob_gen* base = *selected_mobs.begin();
     for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
         if(m == selected_mobs.begin()) continue;
-        mob_gen* m_ptr = *m;
-        m_ptr->type = base->type;
-        m_ptr->angle = base->angle;
-        m_ptr->vars = base->vars;
-        m_ptr->links = base->links;
-        m_ptr->stored_inside = base->stored_inside;
-        m_ptr->link_nrs = base->link_nrs;
+        base->clone(*m, false);
     }
 }
 
@@ -1621,9 +1755,7 @@ void area_editor::homogenize_selected_path_links() {
     ) {
         if(l == selected_path_links.begin()) continue;
         
-        path_link* l_ptr = *l;
-        l_ptr->type = base->type;
-        l_ptr->label = base->label;
+        base->clone(*l);
     }
 }
 
@@ -1847,6 +1979,131 @@ void area_editor::merge_vertex(
         }
     }
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pastes previously-copied edge properties onto the selected edges.
+ */
+void area_editor::paste_edge_properties() {
+    if(!copy_buffer_edge) {
+        set_status(
+            "To paste edge properties, you must first copy them "
+            "from another one!",
+            true
+        );
+        return;
+    }
+    
+    if(selected_edges.empty()) {
+        set_status(
+            "To paste edge properties, you must first select which edge "
+            "to paste to!",
+            true
+        );
+        return;
+    }
+    
+    for(edge* e : selected_edges) {
+        copy_buffer_edge->clone(e);
+    }
+    
+    set_status("Successfully pasted edge properties.");
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pastes previously-copied mob properties onto the selected mobs.
+ */
+void area_editor::paste_mob_properties() {
+    if(!copy_buffer_mob) {
+        set_status(
+            "To paste object properties, you must first copy them "
+            "from another one!",
+            true
+        );
+        return;
+    }
+    
+    if(selected_mobs.empty()) {
+        set_status(
+            "To paste object properties, you must first select which object "
+            "to paste to!",
+            true
+        );
+        return;
+    }
+    
+    for(mob_gen* m : selected_mobs) {
+        copy_buffer_mob->clone(m, false);
+    }
+    
+    set_status("Successfully pasted object properties.");
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pastes previously-copied path link properties onto the selected path links.
+ */
+void area_editor::paste_path_link_properties() {
+    if(!copy_buffer_path_link) {
+        set_status(
+            "To paste path link properties, you must first copy them "
+            "from another one!",
+            true
+        );
+        return;
+    }
+    
+    if(selected_path_links.empty()) {
+        set_status(
+            "To paste path link properties, you must first select which path "
+            "link to paste to!",
+            true
+        );
+        return;
+    }
+    
+    for(path_link* l : selected_path_links) {
+        copy_buffer_path_link->clone(l);
+    }
+    
+    set_status("Successfully pasted path link properties.");
+    return;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Pastes previously-copied sector properties onto the selected sectors.
+ */
+void area_editor::paste_sector_properties() {
+    if(!copy_buffer_sector) {
+        set_status(
+            "To paste sector properties, you must first copy them "
+            "from another one!",
+            true
+        );
+        return;
+    }
+    
+    if(selected_sectors.empty()) {
+        set_status(
+            "To paste sector properties, you must first select which sector "
+            "to paste to!",
+            true
+        );
+        return;
+    }
+    
+    for(sector* s : selected_sectors) {
+        copy_buffer_sector->clone(s);
+        update_sector_texture(s, copy_buffer_sector->texture_info.file_name);
+    }
+    
+    set_status("Successfully pasted sector properties.");
+    return;
 }
 
 

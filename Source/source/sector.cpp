@@ -190,14 +190,14 @@ edge::edge(size_t v1, size_t v2) :
 /* ----------------------------------------------------------------------------
  * Clones an edge's properties onto another,
  * not counting the sectors or vertexes.
- * new_edge:
+ * destination:
  *   Edge to clone the data into.
  */
-void edge::clone(edge* new_edge) const {
-    new_edge->wall_shadow_length = wall_shadow_length;
-    new_edge->wall_shadow_color = wall_shadow_color;
-    new_edge->ledge_smoothing_length = ledge_smoothing_length;
-    new_edge->ledge_smoothing_color = ledge_smoothing_color;
+void edge::clone(edge* destination) const {
+    destination->wall_shadow_length = wall_shadow_length;
+    destination->wall_shadow_color = wall_shadow_color;
+    destination->ledge_smoothing_length = ledge_smoothing_length;
+    destination->ledge_smoothing_color = ledge_smoothing_color;
 }
 
 
@@ -403,6 +403,23 @@ mob_gen::mob_gen(
     vars(vars),
     stored_inside(INVALID) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clones the properties of this mob generator onto another mob generator.
+ * destination:
+ *   Mob generator to clone the data into.
+ * position:
+ *   If true, the position is included too.
+ */
+void mob_gen::clone(mob_gen* destination, const bool include_position) const {
+    destination->angle = angle;
+    if(include_position) destination->pos = pos;
+    destination->type = type;
+    destination->vars = vars;
+    destination->link_nrs = link_nrs;
+    destination->stored_inside = stored_inside;
 }
 
 
@@ -799,22 +816,22 @@ void sector::calculate_bounding_box() {
  * Clones a sector's properties onto another,
  * not counting the list of edges, bounding box, or bitmap
  * (the file name is cloned too, though).
- * new_sector:
+ * destination:
  *   Sector to clone the data into.
  */
-void sector::clone(sector* new_sector) {
-    new_sector->type = type;
-    new_sector->is_bottomless_pit = is_bottomless_pit;
-    new_sector->z = z;
-    new_sector->tag = tag;
-    new_sector->hazard_floor = hazard_floor;
-    new_sector->hazards_str = hazards_str;
-    new_sector->brightness = brightness;
-    new_sector->texture_info.scale = texture_info.scale;
-    new_sector->texture_info.translation = texture_info.translation;
-    new_sector->texture_info.rot = texture_info.rot;
-    new_sector->texture_info.tint = texture_info.tint;
-    new_sector->fade = fade;
+void sector::clone(sector* destination) const {
+    destination->type = type;
+    destination->is_bottomless_pit = is_bottomless_pit;
+    destination->z = z;
+    destination->tag = tag;
+    destination->hazard_floor = hazard_floor;
+    destination->hazards_str = hazards_str;
+    destination->brightness = brightness;
+    destination->texture_info.scale = texture_info.scale;
+    destination->texture_info.translation = texture_info.translation;
+    destination->texture_info.rot = texture_info.rot;
+    destination->texture_info.tint = texture_info.tint;
+    destination->fade = fade;
 }
 
 

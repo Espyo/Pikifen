@@ -143,6 +143,8 @@ struct path_link {
     
     path_link(path_stop* start_ptr, path_stop* end_ptr, size_t end_nr);
     void calculate_dist(path_stop* start_ptr);
+    void clone(path_link* destination) const;
+    bool is_one_way() const;
 };
 
 

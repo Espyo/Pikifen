@@ -311,6 +311,14 @@ private:
     timer backup_timer;
     //Does the area exist on disk, or RAM only?
     bool area_exists_on_disk;
+    //When the player copies an edge's properties, they go here.
+    edge* copy_buffer_edge;
+    //When the player copies a mob's properties, they go here.
+    mob_gen* copy_buffer_mob;
+    //When the player copies a path link's properties, they go here.
+    path_link* copy_buffer_path_link;
+    //When the player copies a sector's properties, they go here.
+    sector* copy_buffer_sector;
     //Where the cross-section tool points are.
     point cross_section_checkpoints[2];
     //Cross-section window's start coordinates.
@@ -561,6 +569,10 @@ private:
     void clear_undo_history();
     void close_load_dialog();
     void close_options_dialog();
+    void copy_edge_properties();
+    void copy_mob_properties();
+    void copy_path_link_properties();
+    void copy_sector_properties();
     void copy_sector_texture(const point &cursor);
     void create_area(
         string requested_area_folder_name,
@@ -572,7 +584,6 @@ private:
     );
     void create_drawing_vertexes();
     void create_mob_under_cursor();
-    void create_new_from_picker(const size_t picker_id, const string &name);
     sector* create_sector_for_layout_drawing(sector* copy_from);
     void delete_current_area();
     void delete_edge(edge* e_ptr);
@@ -645,12 +656,14 @@ private:
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
-    void populate_texture_suggestions();
+    void paste_edge_properties();
+    void paste_mob_properties();
+    void paste_path_link_properties();
+    void paste_sector_properties();
     area_data* prepare_state();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
     );
-    bool remove_isolated_sector(sector* s_ptr);
     void remove_thumbnail();
     void resize_everything(const float mults[2]);
     void rollback_to_prepared_state(area_data* prepared_state);
@@ -658,7 +671,6 @@ private:
     bool save_area(const bool to_backup);
     void save_backup();
     void save_reference();
-    void select_different_hazard(const bool next);
     void select_edge(edge* e_ptr);
     void select_path_links_with_label(const string &label);
     void select_sector(sector* s_ptr);
@@ -676,7 +688,6 @@ private:
     void start_mob_move();
     void start_path_stop_move();
     void start_vertex_move();
-    void toggle_duplicate_mob_mode();
     void traverse_sector_for_split(
         sector* s_ptr, vertex* begin, vertex* checkpoint,
         vector<edge*>* edges, vector<vertex*>* vertexes,
@@ -728,6 +739,7 @@ private:
     void pick_texture(
         const string &name, const string &category, const bool is_new
     );
+    void press_copy_properties_button();
     void press_circle_sector_button();
     void press_delete_button();
     void press_delete_area_button();
@@ -739,14 +751,15 @@ private:
     void press_new_path_button();
     void press_new_sector_button();
     void press_new_tree_shadow_button();
+    void press_paste_properties_button();
+    void press_quick_play_button();
+    void press_quit_button();
     void press_reference_button();
     void press_reload_button();
     void press_remove_edge_button();
     void press_remove_mob_button();
     void press_remove_path_button();
     void press_remove_tree_shadow_button();
-    void press_quick_play_button();
-    void press_quit_button();
     void press_save_button();
     void press_select_all_button();
     void press_selection_filter_button();
@@ -771,7 +784,6 @@ private:
     void process_gui_panel_mission();
     void process_gui_panel_mob();
     void process_gui_panel_mobs();
-    void process_gui_panel_options();
     void process_gui_panel_path_link();
     void process_gui_panel_paths();
     void process_gui_panel_review();

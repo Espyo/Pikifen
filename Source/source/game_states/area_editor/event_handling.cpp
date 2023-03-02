@@ -254,6 +254,9 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
             press_circle_sector_button();
         }
         
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_C, true)) {
+        press_copy_properties_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D)) {
         if(
             !moving && !selecting &&
@@ -350,6 +353,9 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         ) {
             change_state(EDITOR_STATE_PATHS);
         }
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_V, true)) {
+        press_paste_properties_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_DELETE)) {
         press_delete_button();

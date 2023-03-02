@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -8,7 +8,7 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.24.0 ---
-    Area editor "copy properties" and "paste properties"
+    Advanced mode feature: a button on the toolbar to toggle preview mode
     Add several pre-packaged areas, since players have nothing to play with right now
         A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
             Northwest quadrant for creatures and wildlife
@@ -672,6 +672,8 @@ Misc things (so I don't forget)
             Shift+Ctrl+drag should start a selection box that adds to the current selection (thanks Neo)
             Allow pointless edges (and remove the "wouldn't split in any useful way" warning). This way, it's easier to create fade sectors, for instance
             A way to blacklist path links for the tool that shows the shortest path
+            View -> Show X in other modes
+                This would allow one to see edges+vertexes, mobs, and paths in modes that aren't layout, mobs, and paths, respectively
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
             A way to change all sprites' bitmap files from file A to file B (Darthvato)

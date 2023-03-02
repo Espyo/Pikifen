@@ -158,7 +158,7 @@ struct edge {
     ALLEGRO_COLOR ledge_smoothing_color;
     
     edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
-    void clone(edge* new_edge) const;
+    void clone(edge* destination) const;
     sector* get_other_sector(const sector* v_ptr) const;
     vertex* get_other_vertex(const vertex* v_ptr) const;
     size_t get_side_with_sector(sector* s_ptr) const;
@@ -243,7 +243,7 @@ struct sector {
     sector();
     void add_edge(edge* e_ptr, const size_t e_nr);
     void calculate_bounding_box();
-    void clone(sector* new_sector);
+    void clone(sector* destination) const;
     vertex* get_rightmost_vertex() const;
     void get_texture_merge_sectors(sector** s1, sector** s2) const;
     bool is_clockwise() const;
@@ -345,6 +345,8 @@ struct mob_gen {
         const point &pos = point(),
         mob_type* type = NULL, const float angle = 0, const string &vars = ""
     );
+    
+    void clone(mob_gen* destination, const bool include_position = true) const;
 };
 
 

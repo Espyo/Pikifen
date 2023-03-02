@@ -65,6 +65,27 @@ void path_link::calculate_dist(path_stop* start_ptr) {
 
 
 /* ----------------------------------------------------------------------------
+ * Clones a path link's properties onto another,
+ * not counting the path stops.
+ * destination:
+ *   Path link to clone the data into.
+ */
+void path_link::clone(path_link* destination) const {
+    destination->type = type;
+    destination->label = label;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if a path link is a plain one-way link, or if it's actually one part
+ * of a normal, two-way link.
+ */
+bool path_link::is_one_way() const {
+    return end_ptr->get_link(start_ptr) == NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears all info.
  */
 void path_manager::clear() {

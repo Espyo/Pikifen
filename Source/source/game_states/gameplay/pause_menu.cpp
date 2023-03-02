@@ -1131,7 +1131,7 @@ void pause_menu_struct::init_mission_page() {
     mission_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
-    //TODO mission_gui.set_selected_item(mission_gui.back_item);
+    mission_gui.set_selected_item(mission_gui.back_item);
     mission_gui.responsive = false;
     mission_gui.hide_items();
 }
