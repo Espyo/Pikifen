@@ -4642,8 +4642,36 @@ void area_editor::process_gui_panel_sector() {
             s_ptr->z = sector_z;
             update_all_edge_offset_caches();
         }
+        if(ImGui::BeginPopupContextItem()) {
+            //-50 height selectable.
+            if(ImGui::Selectable("-50")) {
+                register_change("sector height change");
+                s_ptr->z -= 50.0f;
+                update_all_edge_offset_caches();
+                ImGui::CloseCurrentPopup();
+            }
+            
+            //+50 height selectable.
+            if(ImGui::Selectable("+50")) {
+                register_change("sector height change");
+                s_ptr->z += 50.0f;
+                update_all_edge_offset_caches();
+                ImGui::CloseCurrentPopup();
+            }
+            
+            //Set to zero selectable.
+            if(ImGui::Selectable("Set to 0")) {
+                register_change("sector height change");
+                s_ptr->z = 0.0f;
+                update_all_edge_offset_caches();
+                ImGui::CloseCurrentPopup();
+            }
+            
+            ImGui::EndPopup();
+        }
         set_tooltip(
             "Height of the floor. Positive numbers are higher.\n"
+            "Right-click for some shortcuts.\n"
             "You can also hold H in the canvas to set a sector's height\n"
             "by moving the cursor up or down.",
             "", WIDGET_EXPLANATION_DRAG

@@ -26,7 +26,6 @@ pikmin_chase_range = 200
 max_pikmin_in_field = 100
 maturity_power_mult = 0.1
 maturity_speed_mult = 0.1
-nectar_amount = 5
 
 can_throw_leaders = true
 cursor_max_dist = 200
