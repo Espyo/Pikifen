@@ -225,8 +225,8 @@ void area_menu_state::change_info(const size_t area_idx) {
         );
     cur_thumb = area_thumbs[area_idx];
     if(area_type == AREA_TYPE_MISSION) {
-        int score = area_record_scores[area_idx];
-        bool record_exists = !area_record_dates[area_idx].empty();
+        int score = area_records[area_idx].score;
+        bool record_exists = !area_records[area_idx].date.empty();
         record_info_text->text =
             !record_exists ?
             "(None)" :
@@ -237,7 +237,7 @@ void area_menu_state::change_info(const size_t area_idx) {
         cur_stamp =
             !record_exists ?
             NULL :
-            area_record_clears[area_idx] ?
+            area_records[area_idx].clear ?
             game.sys_assets.bmp_mission_clear :
             game.sys_assets.bmp_mission_fail;
         if(!record_exists) {
@@ -258,7 +258,7 @@ void area_menu_state::change_info(const size_t area_idx) {
                 }
                 break;
             } case MISSION_GRADING_GOAL: {
-                if(area_record_clears[area_idx]) {
+                if(area_records[area_idx].clear) {
                     cur_medal = game.sys_assets.bmp_medal_platinum;
                 }
                 break;
@@ -268,7 +268,7 @@ void area_menu_state::change_info(const size_t area_idx) {
             }
             }
         }
-        record_date_text->text = area_record_dates[area_idx];
+        record_date_text->text = area_records[area_idx].date;
     }
     
     //Now fill in the mission specs.
@@ -689,7 +689,7 @@ void area_menu_state::init_gui_main() {
                     point(0.12f, BUTTON_HEIGHT * 0.60f);
                 stamp_item->on_draw =
                 [this, a] (const point & center, const point & size) {
-                    if(area_record_clears[a]) {
+                    if(area_records[a].clear) {
                         draw_bitmap_in_box(
                             game.sys_assets.bmp_mission_clear,
                             center, size, true
@@ -710,7 +710,7 @@ void area_menu_state::init_gui_main() {
                     ALLEGRO_BITMAP* medal_bmp = NULL;
                     switch(area_mission_data[a].grading_mode) {
                     case MISSION_GRADING_POINTS: {
-                        int score = area_record_scores[a];
+                        int score = area_records[a].score;
                         if(score >= area_mission_data[a].platinum_req) {
                             medal_bmp = game.sys_assets.bmp_medal_platinum;
                         } else if(score >= area_mission_data[a].gold_req) {
@@ -722,7 +722,7 @@ void area_menu_state::init_gui_main() {
                         }
                         break;
                     } case MISSION_GRADING_GOAL: {
-                        if(area_record_clears[a]) {
+                        if(area_records[a].clear) {
                             medal_bmp = game.sys_assets.bmp_medal_platinum;
                         }
                         break;
@@ -995,35 +995,20 @@ void area_menu_state::load() {
         mission_records.load_file(MISSION_RECORDS_FILE_PATH, true, false, true);
         
         for(size_t a = 0; a < areas_to_pick.size(); ++a) {
-            string mission_record_entry_name =
-                area_names[a] + ";" +
+            mission_record record;
+            
+            load_area_mission_record(
+                &mission_records,
+                area_names[a],
                 get_subtitle_or_mission_goal(
                     area_subtitles[a], area_type, area_mission_data[a].goal
-                ) + ";" +
-                area_makers[a] + ";" +
-                area_versions[a];
-                
-            bool record_clear = false;
-            int record_score = 0;
-            string record_date;
+                ),
+                area_makers[a],
+                area_versions[a],
+                record
+            );
             
-            vector<string> record_parts =
-                split(
-                    mission_records.get_child_by_name(
-                        mission_record_entry_name
-                    )->value,
-                    ";"
-                );
-                
-            if(record_parts.size() == 3) {
-                record_clear = record_parts[0] == "1";
-                record_score = s2i(record_parts[1]);
-                record_date = record_parts[2];
-            }
-            
-            area_record_clears.push_back(record_clear);
-            area_record_scores.push_back(record_score);
-            area_record_dates.push_back(record_date);
+            area_records.push_back(record);
         }
     }
     
@@ -1067,9 +1052,7 @@ void area_menu_state::unload() {
     area_makers.clear();
     area_versions.clear();
     area_mission_data.clear();
-    area_record_clears.clear();
-    area_record_scores.clear();
-    area_record_dates.clear();
+    area_records.clear();
     
     cur_thumb = NULL;
     cur_stamp = NULL;

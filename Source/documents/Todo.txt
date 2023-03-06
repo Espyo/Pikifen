@@ -53,8 +53,6 @@ Next tasks (roughly sorted most important first)
         Crop circle patterns under the Onion and ship
     Advanced mode feature: a button on the toolbar to toggle preview mode
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
-    All obstacles that should block paths should be 192px across -- some are 196px, others are all over the place
-    Stats for missions: missions cleared, missions platinum'd, combined mission point total
     Add several pre-packaged areas, since players have nothing to play with right now
         Helodity's Adventure area (see #content-sharing)
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
@@ -258,8 +256,6 @@ Next tasks (roughly sorted most important first)
         Candypop Buds should squash when they close
         Treasures should have sparkle particles
         Ceramic bridges should be reworked for the new bridge format
-        Wooden bridges need to be 192px long, to fit the new bridge format
-            Wood bridges should push, have rectangular collision, and have more hitboxes a la gates (thanks Helodity)
         Animate the Hocotate ship (use Helodity's zip) and the S.S. Drake
         Improve the explosions https://www.patreon.com/posts/explosions-part-7719254 https://www.youtube.com/watch?v=ZDopYzDX-Jg
         Add a glow to the smack effect particle?

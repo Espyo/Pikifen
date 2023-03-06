@@ -318,6 +318,74 @@ void stats_menu_state::populate_stats_list() {
         "Sprays used", i2s(game.statistics.sprays_used),
         "Total amount of times a spray was used."
     );
+    
+    vector<string> mission_folders =
+        folder_to_vector(
+            get_base_area_folder_path(AREA_TYPE_MISSION, true),
+            true
+        );
+        
+    data_node mission_records_file;
+    mission_records_file.load_file(
+        MISSION_RECORDS_FILE_PATH, true, false, true
+    );
+    
+    size_t mission_clears = 0;
+    size_t mission_platinums = 0;
+    long mission_scores = 0;
+    
+    for(size_t a = 0; a < mission_folders.size(); ++a) {
+        string name = mission_folders[a];
+        data_node data(
+            get_base_area_folder_path(AREA_TYPE_MISSION, true) +
+            "/" + mission_folders[a] + "/" + AREA_DATA_FILE_NAME
+        );
+        if(!data.file_was_opened) continue;
+        string s = data.get_child_by_name("name")->value;
+        if(!s.empty()) {
+            name = s;
+        }
+        mission_data mission;
+        mission_record record;
+        load_area_mission_data(&data, mission);
+        load_area_mission_record(
+            &mission_records_file,
+            name,
+            get_subtitle_or_mission_goal(
+                data.get_child_by_name("subtitle")->value,
+                AREA_TYPE_MISSION,
+                mission.goal
+            ),
+            data.get_child_by_name("maker")->value,
+            data.get_child_by_name("version")->value,
+            record
+        );
+        if(record.clear) {
+            mission_clears++;
+        }
+        if(record.is_platinum(mission)) {
+            mission_platinums++;
+        }
+        if(mission.grading_mode == MISSION_GRADING_POINTS) {
+            mission_scores += record.score;
+        }
+    }
+    
+    add_header("Missions");
+    add_stat(
+        "Cleared",
+        i2s(mission_clears) + "/" + i2s(mission_folders.size()),
+        "Total amount of missions where the current record is a goal clear."
+    );
+    add_stat(
+        "Platinum medals",
+        i2s(mission_platinums) + "/" + i2s(mission_folders.size()),
+        "Total amount of missions where the current record is a platinum medal."
+    );
+    add_stat(
+        "Combined score", i2s(mission_scores),
+        "Total combined score points of the current records of all missions."
+    );
 }
 
 

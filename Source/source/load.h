@@ -29,6 +29,12 @@ void load_area(
     const bool load_for_editor, const bool from_backup
 );
 void load_area_mission_data(data_node* node, mission_data &data);
+void load_area_mission_record(
+    data_node* file,
+    const string &area_name, const string &area_subtitle,
+    const string &area_maker, const string &area_version,
+    mission_record &record
+);
 void load_asset_file_names();
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node = NULL,

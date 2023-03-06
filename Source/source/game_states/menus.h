@@ -397,12 +397,8 @@ private:
     vector<ALLEGRO_BITMAP*> area_thumbs;
     //Mission data of each area available.
     vector<mission_data> area_mission_data;
-    //Record clear of each area available.
-    vector<bool> area_record_clears;
-    //Record scores of each area available.
-    vector<int> area_record_scores;
-    //Record dates of each area available.
-    vector<string> area_record_dates;
+    //Records of each area available.
+    vector<mission_record> area_records;
     //Main GUI.
     gui_manager gui;
     //Area info GUI item.

@@ -699,6 +699,49 @@ void load_area_mission_data(data_node* node, mission_data &data) {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads a mission's record.
+ * file:
+ *   File data node to load from.
+ * area_name:
+ *   Name of the area.
+ * area_subtitle:
+ *   Area subtitle, or mission goal if none.
+ * area_maker:
+ *   Area maker.
+ * area_version:
+ *   Area version.
+ * record:
+ *   Record object to fill.
+ */
+void load_area_mission_record(
+    data_node* file,
+    const string &area_name, const string &area_subtitle,
+    const string &area_maker, const string &area_version,
+    mission_record &record
+) {
+    string mission_record_entry_name =
+        area_name + ";" +
+        area_subtitle + ";" +
+        area_maker + ";" +
+        area_version;
+        
+    vector<string> record_parts =
+        split(
+            file->get_child_by_name(
+                mission_record_entry_name
+            )->value,
+            ";"
+        );
+        
+    if(record_parts.size() == 3) {
+        record.clear = record_parts[0] == "1";
+        record.score = s2i(record_parts[1]);
+        record.date = record_parts[2];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads asset file names.
  */
 void load_asset_file_names() {

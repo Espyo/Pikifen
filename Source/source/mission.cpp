@@ -2000,6 +2000,33 @@ bool mission_goal_timed_survival::is_mob_applicable(
 
 
 /* ----------------------------------------------------------------------------
+ * Constructs a new mission record.
+ */
+mission_record::mission_record() :
+    clear(false),
+    score(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not this record is a platinum medal.
+ */
+bool mission_record::is_platinum(const mission_data &mission) {
+    switch(mission.grading_mode) {
+    case MISSION_GRADING_POINTS: {
+        return score >= mission.platinum_req;
+    } case MISSION_GRADING_GOAL: {
+        return clear;
+    } case MISSION_GRADING_PARTICIPATION: {
+        return !date.empty();
+    }
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the mission score criterion's point multiplier.
  * mission:
  *   Mission data to get info from.

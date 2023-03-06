@@ -173,6 +173,22 @@ struct mission_data {
 
 
 /* ----------------------------------------------------------------------------
+ * Holds information about a given mission's record.
+ */
+struct mission_record {
+    //Has the mission's goal been cleared?
+    bool clear;
+    //Score obtained.
+    int score;
+    //Date of the record.
+    string date;
+    
+    mission_record();
+    bool is_platinum(const mission_data &mission);
+};
+
+
+/* ----------------------------------------------------------------------------
  * Class interface for a mission fail condition.
  */
 class mission_fail {
