@@ -19,7 +19,7 @@ script {
         on_enter {
             focus link
             move_to_target focused_mob
-            start_particles cardboard_box_dust -108 0 0
+            start_particles cardboard_box_dust -104 0 0
         }
         on_receive_message {
             get_info m message
