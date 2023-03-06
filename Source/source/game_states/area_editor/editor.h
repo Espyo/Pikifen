@@ -156,10 +156,10 @@ private:
     };
     
     
-    //Possible errors after a line drawing operation.
-    enum DRAWING_LINE_ERRORS {
+    //Possible results after a line drawing operation.
+    enum DRAWING_LINE_RESULTS {
         //No error.
-        DRAWING_LINE_NO_ERROR,
+        DRAWING_LINE_OK,
         //Made a loop while trying to split a sector.
         DRAWING_LINE_LOOPS_IN_SPLIT,
         //Hit an existing edge or vertex when drawing a new sector.
@@ -349,8 +349,8 @@ private:
     bool debug_vertex_nrs;
     //Nodes of the drawing.
     vector<layout_drawing_node> drawing_nodes;
-    //Reason why the current drawing line is invalid.
-    DRAWING_LINE_ERRORS drawing_line_error;
+    //Result of the current drawing line.
+    DRAWING_LINE_RESULTS drawing_line_result;
     //Currently highlighted edge, if any.
     edge* highlighted_edge;
     //Currently highlighted mob, if any.

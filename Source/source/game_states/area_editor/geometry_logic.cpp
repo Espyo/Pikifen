@@ -97,12 +97,12 @@ float area_editor::calculate_preview_path() {
 
 /* ----------------------------------------------------------------------------
  * Checks if the line the user is trying to draw is okay. Sets the line's status
- * to drawing_line_error.
+ * to drawing_line_result.
  * pos:
  *   Position the user is trying to finish the line on.
  */
 void area_editor::check_drawing_line(const point &pos) {
-    drawing_line_error = DRAWING_LINE_NO_ERROR;
+    drawing_line_result = DRAWING_LINE_OK;
     
     if(drawing_nodes.empty()) {
         return;
@@ -118,7 +118,7 @@ void area_editor::check_drawing_line(const point &pos) {
         dist(pos, drawing_nodes[0].snapped_spot) <=
         AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
     ) {
-        drawing_line_error = DRAWING_LINE_LOOPS_IN_SPLIT;
+        drawing_line_result = DRAWING_LINE_LOOPS_IN_SPLIT;
         return;
     }
     
@@ -128,7 +128,7 @@ void area_editor::check_drawing_line(const point &pos) {
         (!drawing_nodes[0].on_edge && !drawing_nodes[0].on_vertex) &&
         (tentative_node.on_edge || tentative_node.on_vertex)
     ) {
-        drawing_line_error = DRAWING_LINE_HIT_EDGE_OR_VERTEX;
+        drawing_line_result = DRAWING_LINE_HIT_EDGE_OR_VERTEX;
         return;
     }
     
@@ -137,28 +137,28 @@ void area_editor::check_drawing_line(const point &pos) {
         tentative_node.on_edge &&
         tentative_node.on_edge == prev_node->on_edge
     ) {
-        drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+        drawing_line_result = DRAWING_LINE_ALONG_EDGE;
         return;
     }
     if(
         tentative_node.on_vertex &&
         tentative_node.on_vertex->has_edge(prev_node->on_edge)
     ) {
-        drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+        drawing_line_result = DRAWING_LINE_ALONG_EDGE;
         return;
     }
     if(
         prev_node->on_vertex &&
         prev_node->on_vertex->has_edge(tentative_node.on_edge)
     ) {
-        drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+        drawing_line_result = DRAWING_LINE_ALONG_EDGE;
         return;
     }
     if(
         tentative_node.on_vertex &&
         tentative_node.on_vertex->is_neighbor(prev_node->on_vertex)
     ) {
-        drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+        drawing_line_result = DRAWING_LINE_ALONG_EDGE;
         return;
     }
     
@@ -179,7 +179,7 @@ void area_editor::check_drawing_line(const point &pos) {
                     prev_node->snapped_spot, pos, ep1, ep2
                 )
             ) {
-                drawing_line_error = DRAWING_LINE_ALONG_EDGE;
+                drawing_line_result = DRAWING_LINE_ALONG_EDGE;
                 return;
             }
         }
@@ -221,7 +221,7 @@ void area_editor::check_drawing_line(const point &pos) {
                 NULL, NULL
             )
         ) {
-            drawing_line_error = DRAWING_LINE_CROSSES_EDGES;
+            drawing_line_result = DRAWING_LINE_CROSSES_EDGES;
             return;
         }
     }
@@ -244,7 +244,7 @@ void area_editor::check_drawing_line(const point &pos) {
                     AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
                 ) {
                     //Only a problem if this isn't the user's drawing finish.
-                    drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
+                    drawing_line_result = DRAWING_LINE_CROSSES_DRAWING;
                     return;
                 }
             }
@@ -257,7 +257,7 @@ void area_editor::check_drawing_line(const point &pos) {
                 drawing_nodes[drawing_nodes.size() - 2].snapped_spot
             )
         ) {
-            drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
+            drawing_line_result = DRAWING_LINE_CROSSES_DRAWING;
             return;
         }
     }

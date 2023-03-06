@@ -519,7 +519,14 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
                 check_drawing_line(hotspot);
                 
-                if(drawing_line_error != DRAWING_LINE_NO_ERROR) {
+                bool needs_reverse = false;
+                if(drawing_line_result == DRAWING_LINE_HIT_EDGE_OR_VERTEX) {
+                    //Instead of throwing an error, let's swap the order around.
+                    needs_reverse = true;
+                    drawing_line_result = DRAWING_LINE_OK;
+                }
+                
+                if(drawing_line_result != DRAWING_LINE_OK) {
                     handle_line_error();
                     
                 } else if(
@@ -532,6 +539,13 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 } else {
                     //Add a new node.
                     drawing_nodes.push_back(layout_drawing_node(this, hotspot));
+                    
+                    if(needs_reverse) {
+                        //This is now a sector split drawing.
+                        std::reverse(
+                            drawing_nodes.begin(), drawing_nodes.end()
+                        );
+                    }
                     
                     if(
                         drawing_nodes.back().on_edge ||

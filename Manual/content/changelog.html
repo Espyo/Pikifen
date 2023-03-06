@@ -62,6 +62,7 @@
           <li><span class="cl-a">Added</span> some shortcut operations to the sector height widget as a context menu.</li>
           <li><span class="cl-c">Changed</span> the unsaved changes warning to be a dialog like in most programs. The idea of the old pop-up was to require fewer clicks and mouse movement when you were sure you wanted to not save, but some actions are hidden behind menus which forces you to go there twice. The dialog approach comes with many quality-of-life tweaks that make it an overall better feature.</li>
           <li><span class="cl-c">Changed</span> the way copying textures from a different sector works. Instead of selecting the source, then hovering the mouse over the destination and pressing T, you now copy the source sector's properties, then paste just the texture on the selected sectors.</li>
+          <li><span class="cl-c">Changed</span> what happens when the user is drawing a new sector and clicks on an edge or vertex. Instead of throwing an error, the editor now changes the drawing to a sector split drawing, and lets the user continue drawing from the opposite end.</li>
         </ul>
       </li>
       <li>Others:

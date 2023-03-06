@@ -110,7 +110,7 @@ area_editor::area_editor() :
     debug_path_nrs(false),
     debug_triangulation(false),
     debug_vertex_nrs(false),
-    drawing_line_error(DRAWING_LINE_NO_ERROR),
+    drawing_line_result(DRAWING_LINE_OK),
     highlighted_edge(nullptr),
     highlighted_mob(nullptr),
     highlighted_path_link(nullptr),
@@ -297,7 +297,7 @@ void area_editor::clear_current_area() {
  */
 void area_editor::clear_layout_drawing() {
     drawing_nodes.clear();
-    drawing_line_error = DRAWING_LINE_NO_ERROR;
+    drawing_line_result = DRAWING_LINE_OK;
 }
 
 
@@ -1489,7 +1489,7 @@ void area_editor::goto_problem() {
  */
 void area_editor::handle_line_error() {
     new_sector_error_tint_timer.start();
-    switch(drawing_line_error) {
+    switch(drawing_line_result) {
     case DRAWING_LINE_LOOPS_IN_SPLIT: {
         set_status(
             "To split a sector, you can't end on the starting point!",
@@ -1497,10 +1497,6 @@ void area_editor::handle_line_error() {
         );
         break;
     } case DRAWING_LINE_HIT_EDGE_OR_VERTEX: {
-        set_status(
-            "To draw the shape of a sector, you can't hit an edge or vertex!",
-            true
-        );
         break;
     } case DRAWING_LINE_ALONG_EDGE: {
         set_status(
@@ -1520,7 +1516,7 @@ void area_editor::handle_line_error() {
             true
         );
         break;
-    } case DRAWING_LINE_NO_ERROR: {
+    } case DRAWING_LINE_OK: {
         break;
     }
     }

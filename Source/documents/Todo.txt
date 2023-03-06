@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -52,7 +52,6 @@ Next tasks (roughly sorted most important first)
     Area tips: Add a section for Pikmin-specific details that usually look good
         Crop circle patterns under the Onion and ship
     Advanced mode feature: a button on the toolbar to toggle preview mode
-    If the user starts a new sector with the first node on top of a sector, then one of the nodes is on an edge/vertex, instead of cancelling, the editor should swap stuff around and make the user continue the line from the starting side
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
     All obstacles that should block paths should be 192px across -- some are 196px, others are all over the place
     Stats for missions: missions cleared, missions platinum'd, combined mission point total
