@@ -1,0 +1,20 @@
+name = Orb sign
+description = A generic orb that shows text when interacted with.
+
+casts_shadow = false
+custom_category_name = Misc
+height = 16
+prompt_text = Read
+pushable = false
+pushes = false
+radius = 16
+rotation_speed = 80
+trigger_range = 64
+
+area_editor_properties {
+    Text {
+        var = text
+        type = text
+        tooltip = Text to show when the player reads the orb. Use \\n to write a new line.
+    }
+}

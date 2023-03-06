@@ -1,27 +1,62 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
+        Northwest quadrant for creatures and wildlife
+        Northeast quadrant for other mobs
+        Southwest quadrant for paths
+            Normal link
+            One-way link
+            Script-only link
+            Light-load-only link
+            Airborne-only link
+            Combined limits
+            Label?
+            Pikmin waiting for a lake to be drained?
+            Copy stuff from the Paths area, and also add tests for Pikmin carrying bridge fragments and berries
+        Southeast quadrant for misc
+            A measuring pad that's just a big sector with nothing in it, but uses the measurement texture
+            A floor that has a ramp and stairs side-by-side
+            Floors with all hazards
+                Plus one that's ground + air
+            Blocking sector
+            Bottomless pit
+            Texture offsets, scales, angles, and tints, and sector brightness
+            Texture fader, one fading just the texture, the other fading everything
+            Edges with various wall shadow options
+            Edges with ledge smoothing
+            Gates with different healths
+            Pikmin with different starting properties
+            An object inside another
+            Small tree shadows; one normal, another with different scale, rotation, opacity, and sway
+            Sector outside of the main land (an island)
+            The weird Sheargrub enclosure in Tests
+            Bridges building up, bridges building over a gap, and bridges building over water
+            A Water Dumple in front of a bomb rock
+            Throw-height measures
+            All sorts of collision-testing terrain in Tests
+            All sorts of collision-testing terrain in the regressions document
+            All sorts of wall shadow testing-terrain in the regressions document
+            Sign testing characters
+            Moving floors
+        Theme it like a laboratory
+        Computer terminals that act like signs should tell the player what's where
+        All leaders should be present
+        Give it a starry sky background
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     
     --- v0.24.0 ---
+    Area tips: Add a section for Pikmin-specific details that usually look good
+        Crop circle patterns under the Onion and ship
     Advanced mode feature: a button on the toolbar to toggle preview mode
+    If the user starts a new sector with the first node on top of a sector, then one of the nodes is on an edge/vertex, instead of cancelling, the editor should swap stuff around and make the user continue the line from the starting side
+    Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
+    All obstacles that should block paths should be 192px across -- some are 196px, others are all over the place
+    Stats for missions: missions cleared, missions platinum'd, combined mission point total
     Add several pre-packaged areas, since players have nothing to play with right now
-        A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
-            Northwest quadrant for creatures and wildlife
-            Northeast quadrant for other mobs
-            Southwest quadrant for mechanics
-                Moving floors
-            Southeast quadrant for misc
-                A measuring pad that's just a big sector with nothing in it, but uses the measurement texture
-                Copy stuff from the Paths area, and also add tests for Pikmin carrying bridge fragments and berries
-                Copy stuff from the Tests area
-            Theme it like a laboratory
-            Computer terminals that act like signs should tell the player what's where
-            All leaders should be present
         Helodity's Adventure area (see #content-sharing)
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
         A puzzle stage

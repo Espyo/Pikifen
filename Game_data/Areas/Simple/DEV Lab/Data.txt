@@ -1,0 +1,17 @@
+name=D.E.V. Lab
+subtitle
+description=A collection of objects and scenarios that help showcase and test everything Pikifen has to offer. It actually takes place in a laboratory inside a space station that is dedicated to studying PNF-404 and making simulations!
+tags=Engine
+difficulty=0
+bg_bmp
+bg_color=0 0 0
+bg_dist=2.0000
+bg_zoom=1.0000
+weather
+day_time_start=420
+day_time_speed=120
+maker=Espyo
+version=1.0.0
+engine_version=0.23.2
+notes
+spray_amounts=Ultra-Bitter Spray=20;Ultra-Spicy Spray=20;
