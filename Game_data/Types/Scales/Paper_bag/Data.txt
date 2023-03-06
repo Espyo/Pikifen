@@ -6,8 +6,8 @@ goal_number = 20
 can_block_paths = true
 height = 200
 pushes = true
-radius = 42
-rectangular_dimensions = 84 196
+radius = 41
+rectangular_dimensions = 82 192
 
 spawns {
     handle {
@@ -28,7 +28,7 @@ children {
     lhandle {
         spawn = handle
         parent_holds = true
-        hold_offset_distance = 1.5
+        hold_offset_distance = 1.49
         hold_offset_vertical_distance = 0
         hold_offset_angle = 180
         hold_rotation_method = face_parent
@@ -36,7 +36,7 @@ children {
     rhandle {
         spawn = handle
         parent_holds = true
-        hold_offset_distance = 1.5
+        hold_offset_distance = 1.49
         hold_offset_vertical_distance = 0
         hold_offset_angle = 0
         hold_rotation_method = face_parent

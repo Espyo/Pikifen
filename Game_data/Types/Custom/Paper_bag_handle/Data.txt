@@ -7,5 +7,5 @@ custom_category_name = Aux
 height = 1
 pushable = false
 pushes = false
-radius = 46
+radius = 20
 target_type = none
