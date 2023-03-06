@@ -18,7 +18,7 @@ sprites{
 	idling{
 		file=Wood_bridge.png
 		file_pos=0.0000 0.0000
-		file_size=41.0000 128.0000
+		file_size=42.0000 192.0000
 		hitboxes{
 			center{
 				coords=0.0000 0.0000 0.0000
@@ -29,7 +29,7 @@ sprites{
 				can_pikmin_latch=true
 			}
 			left{
-				coords=0.0000 48.0000 0.0000
+				coords=0.0000 -60.0000 0.0000
 				height=64.0000
 				radius=32.0000
 				type=0
@@ -37,7 +37,7 @@ sprites{
 				can_pikmin_latch=true
 			}
 			right{
-				coords=0.0000 -48.0000 0.0000
+				coords=0.0000 60.0000 0.0000
 				height=64.0000
 				radius=32.0000
 				type=0
@@ -59,14 +59,14 @@ sprites{
 				value=1.0000
 			}
 			left{
-				coords=0.0000 0.0000 0.0000
+				coords=0.0000 -60.0000 0.0000
 				height=128.0000
 				radius=32.0000
 				type=2
 				value=1.0000
 			}
 			right{
-				coords=0.0000 0.0000 0.0000
+				coords=0.0000 60.0000 0.0000
 				height=128.0000
 				radius=32.0000
 				type=2
@@ -80,3 +80,4 @@ body_parts{
 	left
 	right
 }
+engine_version=0.23.2
