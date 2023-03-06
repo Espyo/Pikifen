@@ -2,7 +2,7 @@ first_state = safe
 death_state = destroyed
 
 init {
-    teleport_to_relative 0 -121 0
+    teleport_to_relative 0 -80 0
 }
 
 script {

@@ -30,314 +30,296 @@ animations{
 sprites{
 	destroyed{
 		file=Electrical_wire.png
-		file_pos=204.0000 0.0000
-		file_size=50.0000 292.0000
-		offset=0.0000 121.0000
+		file_pos=132.0000 0.0000
+		file_size=32.0000 192.0000
+		offset=0.0000 80.0000
 		hitboxes{
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=25.0000
+				radius=16.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap2{
-				coords=0.0000 60.0000 0.0000
+				coords=0.0000 40.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap3{
-				coords=0.0000 121.0000 0.0000
+				coords=0.0000 80.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap4{
-				coords=0.0000 182.0000 0.0000
+				coords=0.0000 120.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap5{
-				coords=0.0000 242.0000 0.0000
+				coords=0.0000 160.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	safe{
 		file=Electrical_wire.png
 		file_pos=0.0000 0.0000
-		file_size=50.0000 292.0000
-		offset=0.0000 121.0000
+		file_size=32.0000 192.0000
+		offset=0.0000 80.0000
 		hitboxes{
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=25.0000
+				radius=16.0000
 				type=0
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap2{
-				coords=0.0000 60.0000 0.0000
+				coords=0.0000 40.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap3{
-				coords=0.0000 121.0000 0.0000
+				coords=0.0000 80.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap4{
-				coords=0.0000 182.0000 0.0000
+				coords=0.0000 120.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap5{
-				coords=0.0000 242.0000 0.0000
+				coords=0.0000 160.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
 	zap1{
 		file=Electrical_wire.png
-		file_pos=51.0000 0.0000
-		file_size=50.0000 292.0000
-		offset=0.0000 121.0000
+		file_pos=33.0000 0.0000
+		file_size=32.0000 192.0000
+		offset=0.0000 80.0000
 		hitboxes{
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=25.0000
+				radius=16.0000
 				type=0
 				value=1.0000
-				hazards=fatal_electricity
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap2{
-				coords=0.0000 60.0000 0.0000
+				coords=0.0000 40.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap3{
-				coords=0.0000 121.0000 0.0000
+				coords=0.0000 80.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap4{
-				coords=0.0000 182.0000 0.0000
+				coords=0.0000 120.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap5{
-				coords=0.0000 242.0000 0.0000
+				coords=0.0000 160.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 		}
 	}
 	zap2{
 		file=Electrical_wire.png
-		file_pos=102.0000 0.0000
-		file_size=50.0000 292.0000
-		offset=0.0000 121.0000
+		file_pos=66.0000 0.0000
+		file_size=32.0000 192.0000
+		offset=0.0000 80.0000
 		hitboxes{
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=25.0000
+				radius=16.0000
 				type=0
 				value=1.0000
-				hazards=fatal_electricity
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap2{
-				coords=0.0000 60.0000 0.0000
+				coords=0.0000 40.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap3{
-				coords=0.0000 121.0000 0.0000
+				coords=0.0000 80.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap4{
-				coords=0.0000 182.0000 0.0000
+				coords=0.0000 120.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap5{
-				coords=0.0000 242.0000 0.0000
+				coords=0.0000 160.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 		}
 	}
 	zap3{
 		file=Electrical_wire.png
-		file_pos=153.0000 0.0000
-		file_size=50.0000 292.0000
-		offset=0.0000 121.0000
+		file_pos=99.0000 0.0000
+		file_size=32.0000 192.0000
+		offset=0.0000 80.0000
 		hitboxes{
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=25.0000
+				radius=16.0000
 				type=0
 				value=1.0000
-				hazards=fatal_electricity
-				knockback_outward=true
-				knockback=1.0000
 			}
 			zap1{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap2{
-				coords=0.0000 60.0000 0.0000
+				coords=0.0000 40.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap3{
-				coords=0.0000 121.0000 0.0000
+				coords=0.0000 80.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap4{
-				coords=0.0000 182.0000 0.0000
+				coords=0.0000 120.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 			zap5{
-				coords=0.0000 242.0000 0.0000
+				coords=0.0000 160.0000 0.0000
 				height=24.0000
-				radius=32.0000
+				radius=22.0000
 				type=1
 				value=30.0000
 				hazards=fatal_electricity
 				knockback_outward=true
+				knockback=1.0000
 			}
 		}
 	}
@@ -350,3 +332,4 @@ body_parts{
 	zap4
 	zap5
 }
+engine_version=0.23.2

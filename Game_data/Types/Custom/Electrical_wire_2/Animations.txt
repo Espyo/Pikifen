@@ -23,7 +23,7 @@ sprites{
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=25.0000
+				radius=16.0000
 				type=2
 				value=1.0000
 			}
@@ -37,7 +37,7 @@ sprites{
 			hit{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=25.0000
+				radius=16.0000
 				type=0
 				value=1.0000
 			}
