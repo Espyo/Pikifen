@@ -128,6 +128,7 @@ area_editor::area_editor() :
     path_drawing_type(PATH_LINK_TYPE_NORMAL),
     path_preview_straight(false),
     pre_move_area_data(nullptr),
+    preview_mode(false),
     problem_edge_intersection(NULL, NULL),
     quick_height_set_start_height(0.0f),
     quick_preview_timer(AREA_EDITOR::QUICK_PREVIEW_DURATION),
@@ -1541,6 +1542,7 @@ void area_editor::load() {
     selection_homogenized = false;
     show_closest_stop = false;
     show_path_preview = false;
+    preview_mode = false;
     quick_preview_timer.stop();
     state = EDITOR_STATE_MAIN;
     set_status();

@@ -596,9 +596,7 @@ void area_editor::delete_path_stops(const set<path_stop*> &which) {
  * When it's done, sets the appropriate problem-related variables.
  */
 void area_editor::find_problems() {
-    problem_sector_ptr = NULL;
-    problem_vertex_ptr = NULL;
-    problem_shadow_ptr = NULL;
+    clear_problems();
     
     //Check intersecting edges.
     vector<edge_intersection> intersections = get_intersecting_edges();

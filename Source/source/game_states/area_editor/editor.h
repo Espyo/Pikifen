@@ -272,8 +272,6 @@ private:
         EDITOR_SUB_STATE_PATH_DRAWING,
         //Adding a new tree shadow.
         EDITOR_SUB_STATE_NEW_SHADOW,
-        //In texture-view mode.
-        EDITOR_SUB_STATE_TEXTURE_VIEW,
     };
     
     //On-canvas texture effect editing modes.
@@ -437,6 +435,8 @@ private:
     map<path_stop*, point> pre_move_stop_coords;
     //Position of the selected vertexes before movement.
     map<vertex*, point> pre_move_vertex_coords;
+    //Is preview mode on?
+    bool preview_mode;
     //Description of the current problem found.
     string problem_description;
     //Information about the problematic intersecting edges, if any.

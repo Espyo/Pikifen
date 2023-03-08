@@ -155,7 +155,7 @@ void area_editor::draw_canvas() {
     }
     }
     
-    if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
+    if(preview_mode) {
         textures_opacity = 1.0f;
         wall_shadows_opacity = 1.0f;
         edges_opacity = 0.0f;
@@ -194,7 +194,7 @@ void area_editor::draw_canvas() {
         edges_opacity =
             interpolate_number(
                 t, 0.0f, quick_preview_timer.duration / 2.0f,
-                edges_opacity, 0.5f
+                edges_opacity, 0.0f
             );
         grid_opacity =
             interpolate_number(
@@ -248,11 +248,11 @@ void area_editor::draw_canvas() {
         
         if(
             game.options.area_editor_view_mode == VIEW_MODE_TEXTURES ||
-            sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW
+            preview_mode
         ) {
             draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
             
-            if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
+            if(preview_mode) {
                 for(size_t h = 0; h < s_ptr->hazards.size(); ++h) {
                     liquid* l_ptr = s_ptr->hazards[h]->associated_liquid;
                     if(!l_ptr) continue;
@@ -629,7 +629,7 @@ void area_editor::draw_canvas() {
     }
     
     //Mobs.
-    if(state == EDITOR_STATE_MOBS) {
+    if(state == EDITOR_STATE_MOBS && mob_opacity > 0.0f) {
         for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
             mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
             mob_gen* m2_ptr = NULL;
@@ -1040,13 +1040,13 @@ void area_editor::draw_canvas() {
     //Tree shadows.
     if(
         state == EDITOR_STATE_DETAILS ||
-        (sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW && show_shadows)
+        (preview_mode && show_shadows)
     ) {
         for(size_t s = 0; s < game.cur_area_data.tree_shadows.size(); ++s) {
         
             tree_shadow* s_ptr = game.cur_area_data.tree_shadows[s];
             if(
-                sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW &&
+                !preview_mode &&
                 s_ptr == selected_shadow
             ) {
                 //Draw a white rectangle to contrast the shadow better.

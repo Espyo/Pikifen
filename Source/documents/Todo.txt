@@ -51,7 +51,7 @@ Next tasks (roughly sorted most important first)
     --- v0.24.0 ---
     Area tips: Add a section for Pikmin-specific details that usually look good
         Crop circle patterns under the Onion and ship
-    Advanced mode feature: a button on the toolbar to toggle preview mode
+        Rocks should have ledge smoothing
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
     Add several pre-packaged areas, since players have nothing to play with right now
         Helodity's Adventure area (see #content-sharing)

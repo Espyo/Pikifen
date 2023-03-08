@@ -144,6 +144,9 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
         press_quick_play_button();
         
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, false, true)) {
+        preview_mode = !preview_mode;
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
         press_quit_button();
         

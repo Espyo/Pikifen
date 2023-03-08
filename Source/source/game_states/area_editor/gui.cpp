@@ -1079,7 +1079,9 @@ void area_editor::process_gui_options_dialog() {
         ImGui::RadioButton("Advanced", &interface_mode_i, 1);
         set_tooltip(
             "Shows and enables some advanced GUI items:\n"
-            "- Toolbar buttons (and shortcut keys) to quickly swap modes with."
+            "- Toolbar buttons (and shortcut keys) to quickly swap "
+            "modes with.\n"
+            "- Toolbar button to toggle preview mode with."
         );
         ImGui::Unindent();
         game.options.area_editor_advanced_mode = (bool) interface_mode_i;
@@ -4455,14 +4457,7 @@ void area_editor::process_gui_panel_review() {
     
         //Problem search button.
         if(ImGui::Button("Search for problems")) {
-            if(sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW) {
-                find_problems();
-            } else {
-                set_status(
-                    "Can't search for problems while in area preview mode!",
-                    true
-                );
-            }
+            find_problems();
         }
         set_tooltip(
             "Search for problems with the area."
@@ -4506,25 +4501,21 @@ void area_editor::process_gui_panel_review() {
     if(saveable_tree_node("review", "Preview")) {
     
         //Area preview checkbox.
-        bool see_textures = (sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW);
-        if(ImGui::Checkbox("Preview area", &see_textures)) {
-            clear_problems();
-            if(see_textures) {
-                sub_state = EDITOR_SUB_STATE_TEXTURE_VIEW;
-            } else {
-                sub_state = EDITOR_SUB_STATE_NONE;
-            }
-        }
+        ImGui::Checkbox("Preview area", &preview_mode);
         set_tooltip(
             "Preview how the area will look like, without any of the "
             "area editor's components in the way."
         );
         
         //Tree shadows checkbox.
-        if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
-            ImGui::Indent();
-            ImGui::Checkbox("Show tree shadows", &show_shadows);
-            ImGui::Unindent();
+        if(!preview_mode) {
+            ImGui::BeginDisabled();
+        }
+        ImGui::Indent();
+        ImGui::Checkbox("Show tree shadows", &show_shadows);
+        ImGui::Unindent();
+        if(!preview_mode) {
+            ImGui::EndDisabled();
         }
         
         ImGui::TreePop();
@@ -5522,6 +5513,22 @@ void area_editor::process_gui_toolbar() {
         set_tooltip(
             "Swaps to the details editing mode.",
             "D"
+        );
+        
+        //Toggle preview mode button.
+        ImGui::SameLine();
+        if(
+            ImGui::ImageButton(
+                "previewButton",
+                editor_icons[ICON_REVIEW],
+                ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
+            )
+        ) {
+            preview_mode = !preview_mode;
+        }
+        set_tooltip(
+            "Toggles area preview mode. More info in the review panel.",
+            "Shift + P"
         );
         
     }
