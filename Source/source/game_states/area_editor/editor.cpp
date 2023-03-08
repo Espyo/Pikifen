@@ -2683,12 +2683,17 @@ void area_editor::rollback_to_prepared_state(area_data* prepared_state) {
 bool area_editor::save_area(const bool to_backup) {
 
     //Before we start, let's get rid of unused sectors.
+    bool deleted_sectors = false;
     for(size_t s = 0; s < game.cur_area_data.sectors.size(); ) {
         if(game.cur_area_data.sectors[s]->edges.empty()) {
             game.cur_area_data.remove_sector(s);
+            deleted_sectors = true;
         } else {
             ++s;
         }
+    }
+    if(deleted_sectors && !selected_sectors.empty()) {
+        clear_selection();
     }
     
     //And some other cleanup.
@@ -3380,7 +3385,6 @@ bool area_editor::save_area(const bool to_backup) {
     
     //Finish up.
     if(!to_backup && save_successful) {
-        change_state(EDITOR_STATE_MAIN);
         changes_mgr.mark_as_saved();
         set_status("Saved area successfully.");
     }
