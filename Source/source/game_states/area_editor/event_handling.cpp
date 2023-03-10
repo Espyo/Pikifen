@@ -1594,24 +1594,25 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 sub_state == EDITOR_SUB_STATE_NONE
             ) {
                 //Move tree shadow.
-                area_data* prepared_state = prepare_state();
+                point shadow_center = selected_shadow->center;
+                point shadow_size = selected_shadow->size;
+                float shadow_angle = selected_shadow->angle;
                 if(
-                    !cur_transformation_widget.handle_mouse_move(
+                    cur_transformation_widget.handle_mouse_move(
                         snap_point(game.mouse_cursor_w),
-                        &selected_shadow->center,
-                        &selected_shadow->size,
-                        &selected_shadow->angle,
+                        &shadow_center,
+                        &shadow_size,
+                        &shadow_angle,
                         1.0f / game.cam.zoom,
                         selected_shadow_keep_aspect_ratio,
                         -FLT_MAX,
                         is_alt_pressed
                     )
                 ) {
-                    forget_prepared_state(prepared_state);
-                } else {
-                    register_change(
-                        "tree shadow transformation", prepared_state
-                    );
+                    register_change("tree shadow transformation");
+                    selected_shadow->center = shadow_center;
+                    selected_shadow->size = shadow_size;
+                    selected_shadow->angle = shadow_angle;
                 }
             }
             
