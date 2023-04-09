@@ -1659,7 +1659,7 @@ vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
  * text_font:
  *   Text font.
  * control_font:
- *   Font for control icons.
+ *   Font for control binding icons.
  * max_control_bitmap_height:
  *   If bitmap icons need to be condensed vertically to fit a certain space,
  *   then their width will be affected too. Specify the maximum height here.
@@ -1676,11 +1676,13 @@ void set_string_token_widths(
             tokens[t].width =
                 al_get_text_width(text_font, tokens[t].content.c_str());
             break;
-        } case STRING_TOKEN_CONTROL: {
+        } case STRING_TOKEN_CONTROL_BINDING: {
             tokens[t].content = trim_spaces(tokens[t].content);
             tokens[t].width =
-                get_control_icon_width(
-                    control_font, find_control(tokens[t].content), false,
+                get_control_binding_icon_width(
+                    control_font,
+                    game.player_actions.find_binding(tokens[t].content),
+                    false,
                     max_control_bitmap_height
                 );
         }
@@ -1977,8 +1979,8 @@ vector<string_token> tokenize_string(const string &s) {
         } else if(str_peek(s, c, "\\k")) {
             if(!cur_token.content.empty()) tokens.push_back(cur_token);
             cur_token.content.clear();
-            if(cur_token.type != STRING_TOKEN_CONTROL) {
-                cur_token.type = STRING_TOKEN_CONTROL;
+            if(cur_token.type != STRING_TOKEN_CONTROL_BINDING) {
+                cur_token.type = STRING_TOKEN_CONTROL_BINDING;
             } else {
                 cur_token.type = STRING_TOKEN_CHAR;
             }

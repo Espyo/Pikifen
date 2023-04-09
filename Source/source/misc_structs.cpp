@@ -154,6 +154,7 @@ asset_file_names_struct::asset_file_names_struct() :
     throw_preview("Throw_preview.png"),
     throw_preview_dashed("Throw_preview_dashed.png"),
     value_font("Value_font.png"),
+    vignette_box("Vignette_box.png"),
     wave_ring("Wave_ring.png") {
     
 }
@@ -173,7 +174,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("bubble_box", bubble_box);
     rs.set("checkbox_check", checkbox_check);
     rs.set("checkbox_no_check", checkbox_no_check);
-    rs.set("control_icons", control_icons);
+    rs.set("control_binding_icons", control_binding_icons);
     rs.set("counter_font", counter_font);
     rs.set("cursor", cursor);
     rs.set("cursor_counter_font", cursor_counter_font);
@@ -209,6 +210,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("throw_preview", throw_preview);
     rs.set("throw_preview_dashed", throw_preview_dashed);
     rs.set("value_font", value_font);
+    rs.set("vignette_box", vignette_box);
     rs.set("wave_ring", wave_ring);
 }
 
@@ -949,7 +951,6 @@ void msg_box_info::tick(const float delta_t) {
  */
 notification_struct::notification_struct() :
     enabled(true),
-    control(nullptr),
     visibility(0.0f) {
     
 }
@@ -996,10 +997,10 @@ void notification_struct::draw() const {
         map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
-    if(control) {
+    if(control.input_type != INPUT_TYPE_NONE) {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
-        draw_control_icon(
+        draw_control_binding_icon(
             game.fonts.standard, control,
             true,
             point(
@@ -1049,7 +1050,7 @@ float notification_struct::get_visibility() const {
  */
 void notification_struct::reset() {
     enabled = true;
-    control = NULL;
+    control.input_type = INPUT_TYPE_NONE;
     text.clear();
     pos = point();
     visibility = 0.0f;
@@ -1059,14 +1060,14 @@ void notification_struct::reset() {
 /* ----------------------------------------------------------------------------
  * Sets the contents to show.
  * control:
- *   Control icon to show.
+ *   Control binding icon to show.
  * text:
  *   Text to show.
  * pos:
  *   Where to show it in the game world.
  */
 void notification_struct::set_contents(
-    control_info* control, const string &text, const point &pos
+    control_binding control, const string &text, const point &pos
 ) {
     this->control = control;
     this->text = text;
@@ -2077,6 +2078,7 @@ system_asset_list::system_asset_list():
     bmp_throw_invalid(nullptr),
     bmp_throw_preview(nullptr),
     bmp_throw_preview_dashed(nullptr),
+    bmp_vignette_box(nullptr),
     bmp_wave_ring(nullptr) {
     
 }

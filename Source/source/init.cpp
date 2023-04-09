@@ -158,135 +158,134 @@ void init_allegro() {
  */
 void init_controls() {
     //Declare the existing buttons.
-    game.buttons.add(
-        BUTTON_NONE, "---", "", ""
+    game.player_actions.add(
+        PLAYER_ACTION_NONE, "---", "", ""
     );
-    game.buttons.add(
-        BUTTON_THROW, "Throw", "throw", "mb_1"
+    game.player_actions.add(
+        PLAYER_ACTION_THROW, "Throw", "throw", "mb_1"
     );
-    game.buttons.add(
-        BUTTON_WHISTLE, "Whistle", "whistle", "mb_2"
+    game.player_actions.add(
+        PLAYER_ACTION_WHISTLE, "Whistle", "whistle", "mb_2"
     );
-    game.buttons.add(
-        BUTTON_RIGHT, "Right", "move_right", "k_4"
+    game.player_actions.add(
+        PLAYER_ACTION_RIGHT, "Right", "move_right", "k_4"
     );
-    game.buttons.add(
-        BUTTON_UP, "Up", "move_up", "k_23"
+    game.player_actions.add(
+        PLAYER_ACTION_UP, "Up", "move_up", "k_23"
     );
-    game.buttons.add(
-        BUTTON_LEFT, "Left", "move_left", "k_1"
+    game.player_actions.add(
+        PLAYER_ACTION_LEFT, "Left", "move_left", "k_1"
     );
-    game.buttons.add(
-        BUTTON_DOWN, "Down", "move_down", "k_19"
+    game.player_actions.add(
+        PLAYER_ACTION_DOWN, "Down", "move_down", "k_19"
     );
-    game.buttons.add(
-        BUTTON_CURSOR_RIGHT, "Cursor right", "cursor_right", ""
+    game.player_actions.add(
+        PLAYER_ACTION_CURSOR_RIGHT, "Cursor right", "cursor_right", ""
     );
-    game.buttons.add(
-        BUTTON_CURSOR_UP, "Cursor up", "cursor_up", ""
+    game.player_actions.add(
+        PLAYER_ACTION_CURSOR_UP, "Cursor up", "cursor_up", ""
     );
-    game.buttons.add(
-        BUTTON_CURSOR_LEFT, "Cursor left", "cursor_left", ""
+    game.player_actions.add(
+        PLAYER_ACTION_CURSOR_LEFT, "Cursor left", "cursor_left", ""
     );
-    game.buttons.add(
-        BUTTON_CURSOR_DOWN, "Cursor down", "cursor_down", ""
+    game.player_actions.add(
+        PLAYER_ACTION_CURSOR_DOWN, "Cursor down", "cursor_down", ""
     );
-    game.buttons.add(
-        BUTTON_GROUP_RIGHT, "Swarm right", "swarm_right", ""
+    game.player_actions.add(
+        PLAYER_ACTION_GROUP_RIGHT, "Swarm right", "swarm_right", ""
     );
-    game.buttons.add(
-        BUTTON_GROUP_UP, "Swarm up", "swarm_up", ""
+    game.player_actions.add(
+        PLAYER_ACTION_GROUP_UP, "Swarm up", "swarm_up", ""
     );
-    game.buttons.add(
-        BUTTON_GROUP_LEFT, "Swarm left", "swarm_left", ""
+    game.player_actions.add(
+        PLAYER_ACTION_GROUP_LEFT, "Swarm left", "swarm_left", ""
     );
-    game.buttons.add(
-        BUTTON_GROUP_DOWN, "Swarm down", "swarm_down", ""
+    game.player_actions.add(
+        PLAYER_ACTION_GROUP_DOWN, "Swarm down", "swarm_down", ""
     );
-    game.buttons.add(
-        BUTTON_GROUP_CURSOR, "Swarm to cursor", "swarm_cursor", "k_75"
+    game.player_actions.add(
+        PLAYER_ACTION_GROUP_CURSOR, "Swarm to cursor", "swarm_cursor", "k_75"
     );
-    game.buttons.add(
-        BUTTON_NEXT_LEADER, "Next leader", "next_leader", "k_64"
+    game.player_actions.add(
+        PLAYER_ACTION_NEXT_LEADER, "Next leader", "next_leader", "k_64"
     );
-    game.buttons.add(
-        BUTTON_PREV_LEADER, "Prev. leader", "prev_leader", ""
+    game.player_actions.add(
+        PLAYER_ACTION_PREV_LEADER, "Prev. leader", "prev_leader", ""
     );
-    game.buttons.add(
-        BUTTON_DISMISS, "Dismiss", "dismiss", "k_217"
+    game.player_actions.add(
+        PLAYER_ACTION_DISMISS, "Dismiss", "dismiss", "k_217"
     );
-    game.buttons.add(
-        BUTTON_USE_SPRAY_1, "Use spray 1", "use_spray_1", "k_18"
+    game.player_actions.add(
+        PLAYER_ACTION_USE_SPRAY_1, "Use spray 1", "use_spray_1", "k_18"
     );
-    game.buttons.add(
-        BUTTON_USE_SPRAY_2, "Use spray 2", "use_spray_2", "k_6"
+    game.player_actions.add(
+        PLAYER_ACTION_USE_SPRAY_2, "Use spray 2", "use_spray_2", "k_6"
     );
-    game.buttons.add(
-        BUTTON_USE_SPRAY, "Use spray", "use_spray", "k_18"
+    game.player_actions.add(
+        PLAYER_ACTION_USE_SPRAY, "Use spray", "use_spray", "k_18"
     );
-    game.buttons.add(
-        BUTTON_NEXT_SPRAY, "Next spray", "next_spray", "k_5"
+    game.player_actions.add(
+        PLAYER_ACTION_NEXT_SPRAY, "Next spray", "next_spray", "k_5"
     );
-    game.buttons.add(
-        BUTTON_PREV_SPRAY, "Prev. spray", "prev_spray", "k_17"
+    game.player_actions.add(
+        PLAYER_ACTION_PREV_SPRAY, "Prev. spray", "prev_spray", "k_17"
     );
-    game.buttons.add(
-        BUTTON_CHANGE_ZOOM, "Change zoom", "change_zoom", "k_3"
+    game.player_actions.add(
+        PLAYER_ACTION_CHANGE_ZOOM, "Change zoom", "change_zoom", "k_3"
     );
-    game.buttons.add(
-        BUTTON_ZOOM_IN, "Zoom in", "zoom_in", ""
+    game.player_actions.add(
+        PLAYER_ACTION_ZOOM_IN, "Zoom in", "zoom_in", ""
     );
-    game.buttons.add(
-        BUTTON_ZOOM_OUT, "Zoom out", "zoom_out", ""
+    game.player_actions.add(
+        PLAYER_ACTION_ZOOM_OUT, "Zoom out", "zoom_out", ""
     );
-    game.buttons.add(
-        BUTTON_NEXT_TYPE, "Next Pikmin", "next_type", "mwd"
+    game.player_actions.add(
+        PLAYER_ACTION_NEXT_TYPE, "Next Pikmin", "next_type", "mwd"
     );
-    game.buttons.add(
-        BUTTON_PREV_TYPE, "Prev. Pikmin", "prev_type", "mwu"
+    game.player_actions.add(
+        PLAYER_ACTION_PREV_TYPE, "Prev. Pikmin", "prev_type", "mwu"
     );
-    game.buttons.add(
-        BUTTON_NEXT_MATURITY, "Next maturity", "next_maturity", ""
+    game.player_actions.add(
+        PLAYER_ACTION_NEXT_MATURITY, "Next maturity", "next_maturity", ""
     );
-    game.buttons.add(
-        BUTTON_PREV_MATURITY, "Prev. maturity", "prev_maturity", ""
+    game.player_actions.add(
+        PLAYER_ACTION_PREV_MATURITY, "Prev. maturity", "prev_maturity", ""
     );
-    game.buttons.add(
-        BUTTON_LIE_DOWN, "Lie down", "lie_down", "k_26"
+    game.player_actions.add(
+        PLAYER_ACTION_LIE_DOWN, "Lie down", "lie_down", "k_26"
     );
-    game.buttons.add(
-        BUTTON_PAUSE, "Pause", "pause", "k_59"
+    game.player_actions.add(
+        PLAYER_ACTION_PAUSE, "Pause", "pause", "k_59"
     );
-    game.buttons.add(
-        BUTTON_MENU_RIGHT, "Menu right", "menu_right", "k_83"
+    game.player_actions.add(
+        PLAYER_ACTION_MENU_RIGHT, "Menu right", "menu_right", "k_83"
     );
-    game.buttons.add(
-        BUTTON_MENU_UP, "Menu up", "menu_up", "k_84"
+    game.player_actions.add(
+        PLAYER_ACTION_MENU_UP, "Menu up", "menu_up", "k_84"
     );
-    game.buttons.add(
-        BUTTON_MENU_LEFT, "Menu left", "menu_left", "k_82"
+    game.player_actions.add(
+        PLAYER_ACTION_MENU_LEFT, "Menu left", "menu_left", "k_82"
     );
-    game.buttons.add(
-        BUTTON_MENU_DOWN, "Menu down", "menu_down", "k_85"
+    game.player_actions.add(
+        PLAYER_ACTION_MENU_DOWN, "Menu down", "menu_down", "k_85"
     );
-    game.buttons.add(
-        BUTTON_MENU_OK, "Menu OK", "menu_ok", "k_67"
+    game.player_actions.add(
+        PLAYER_ACTION_MENU_OK, "Menu OK", "menu_ok", "k_67"
     );
-    game.buttons.add(
-        BUTTON_MENU_BACK, "Menu back", "menu_back", "k_59"
+    game.player_actions.add(
+        PLAYER_ACTION_MENU_BACK, "Menu back", "menu_back", "k_59"
     );
     
-    game.options.controls.assign(MAX_PLAYERS, vector<control_info>());
-    
-    //Populate the controls information with some default controls for player 1.
+    //Populate the control bindings with some default controls for player 1.
     //If the options are loaded successfully, these controls are overwritten.
-    for(size_t b = 0; b < N_BUTTONS; ++b) {
-        string dc = game.buttons.list[b].default_control_str;
-        if(dc.empty()) continue;
+    for(size_t b = 0; b < N_PLAYER_ACTIONS; ++b) {
+        string def = game.player_actions.list[b].default_binding_str;
+        if(def.empty()) continue;
         
-        game.options.controls[0].push_back(
-            control_info(game.buttons.list[b].id, dc)
-        );
+        control_binding bind;
+        bind = game.player_actions.str_to_binding(def);
+        bind.action_type_id = game.player_actions.list[b].id;
+        game.controls_mgr.add_binding(bind);
     }
 }
 

@@ -16,6 +16,7 @@
 #include "game_states/game_state.h"
 
 #include "area.h"
+#include "controls_manager.h"
 #include "game_config.h"
 #include "game_states/animation_editor/editor.h"
 #include "game_states/area_editor/editor.h"
@@ -79,12 +80,14 @@ public:
     bmp_manager bitmaps;
     //The error bitmap used to represent bitmaps that were not loaded.
     ALLEGRO_BITMAP* bmp_error;
-    //List of all virtual "buttons" that a player can press.
-    button_manager buttons;
+    //List of all possible player actions.
+    player_action_type_manager player_actions;
     //Player 1's camera.
     camera_info cam;
     //Game's configuration.
     game_config config;
+    //Player controls manager.
+    controls_manager controls_mgr;
     //Info about the maker tools.
     maker_tools_info maker_tools;
     //Data about the area that's currently being used.

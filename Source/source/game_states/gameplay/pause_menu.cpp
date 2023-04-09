@@ -234,13 +234,13 @@ void pause_menu_struct::draw_tidbit(
     if(tokens_per_line.empty()) return;
     
     //Figure out if we need to scale things vertically.
-    //Control icons that are bitmaps will have their width unchanged, otherwise
-    //this would turn into a cat-and-mouse game of the Y scale shrinking causing
-    //a token width to shrink, which could cause the Y scale to grow,
-    //ad infinitum.
+    //Control binding icons that are bitmaps will have their width unchanged,
+    //otherwise this would turn into a cat-and-mouse game of the Y scale
+    //shrinking causing a token width to shrink, which could cause the
+    //Y scale to grow, ad infinitum.
     float y_scale = 1.0f;
     if(tokens_per_line.size() * line_height > max_size.y) {
-        y_scale = max_size.y / (tokens_per_line.size() * line_height);
+        y_scale = max_size.y / (tokens_per_line.size() * (line_height + 4));
     }
     
     //Draw!
@@ -249,7 +249,7 @@ void pause_menu_struct::draw_tidbit(
             tokens_per_line[l], game.fonts.standard, game.fonts.slim,
             point(
                 where.x,
-                where.y + l * line_height * y_scale -
+                where.y + l * (line_height + 4) * y_scale -
                 (tokens_per_line.size() * line_height * y_scale / 2.0f)
             ),
             ALLEGRO_ALIGN_CENTER, point(max_size.x, line_height * y_scale)

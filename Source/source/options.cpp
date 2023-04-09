@@ -182,22 +182,23 @@ void options_struct::load(data_node* file) {
      * joystick stick and axis, etc.
      * Check the constructor of control_info for more information.
      */
+    game.controls_mgr.clear_bindings();
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
-        controls[p].clear();
-        for(size_t b = 0; b < N_BUTTONS; ++b) {
-            string internal_name = game.buttons.list[b].internal_name;
+        for(size_t b = 0; b < N_PLAYER_ACTIONS; ++b) {
+            string internal_name = game.player_actions.list[b].internal_name;
             if(internal_name.empty()) continue;
-            load_control(game.buttons.list[b].id, p, internal_name, file);
-        }
-    }
-    
-    //Weed out controls that didn't parse correctly.
-    for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-        for(size_t c = 0; c < controls[p].size(); ) {
-            if(controls[p][c].action == BUTTON_NONE) {
-                controls[p].erase(controls[p].begin() + c);
-            } else {
-                c++;
+            data_node* control_node =
+                file->get_child_by_name("p" + i2s(p + 1) + "_" + internal_name);
+            vector<string> possible_controls =
+                semicolon_list_to_vector(control_node->value);
+                
+            for(size_t c = 0; c < possible_controls.size(); ++c) {
+                control_binding bind =
+                    game.player_actions.str_to_binding(possible_controls[c]);
+                if(bind.input_type == INPUT_TYPE_NONE) continue;
+                bind.action_type_id = game.player_actions.list[b].id;
+                bind.player_nr = p;
+                game.controls_mgr.add_binding(bind);
             }
         }
     }
@@ -320,36 +321,6 @@ void options_struct::load(data_node* file) {
 
 
 /* ----------------------------------------------------------------------------
- * Loads a game control from the options file.
- * action:
- *   Load the control corresponding to this action.
- * player:
- *   Load the control corresponding to this player.
- * name:
- *   Name of the option in the file.
- * file:
- *   File to load from.
- * def:
- *   Default value of this control. Only applicable for player 1.
- */
-void options_struct::load_control(
-    const BUTTONS action, const unsigned char player,
-    const string &name, data_node* file, const string &def
-) {
-    data_node* control_node =
-        file->get_child_by_name("p" + i2s((player + 1)) + "_" + name);
-    vector<string> possible_controls =
-        semicolon_list_to_vector(
-            control_node->get_value_or_default((player == 0) ? def : "")
-        );
-        
-    for(size_t c = 0; c < possible_controls.size(); ++c) {
-        controls[player].push_back(control_info(action, possible_controls[c]));
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Saves the player's options into a file.
  * file:
  *   File to write to.
@@ -360,27 +331,31 @@ void options_struct::save(data_node* file) const {
     
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
-        for(size_t b = 0; b < N_BUTTONS; ++b) {
-            string internal_name = game.buttons.list[b].internal_name;
+        for(size_t b = 0; b < N_PLAYER_ACTIONS; ++b) {
+            string internal_name = game.player_actions.list[b].internal_name;
             if(internal_name.empty()) continue;
             grouped_controls[prefix + internal_name].clear();
         }
     }
     
     //Write down their control strings.
-    for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        for(size_t c = 0; c < controls[p].size(); ++c) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
+        vector<control_binding> all_binds = game.controls_mgr.get_all_bindings();
+        for(size_t b = 0; b < all_binds.size(); ++b) {
+            if(all_binds[b].player_nr != p) continue;
             string name = "p" + i2s(p + 1) + "_";
             
-            for(size_t b = 0; b < N_BUTTONS; ++b) {
-                if(game.buttons.list[b].internal_name.empty()) continue;
-                if(controls[p][c].action == game.buttons.list[b].id) {
-                    name += game.buttons.list[b].internal_name;
+            for(size_t a = 0; a < N_PLAYER_ACTIONS; ++a) {
+                if(game.player_actions.list[a].internal_name.empty()) continue;
+                
+                if(all_binds[b].action_type_id == game.player_actions.list[a].id) {
+                    name += game.player_actions.list[a].internal_name;
                     break;
                 }
             }
             
-            grouped_controls[name] += controls[p][c].stringify() + ";";
+            grouped_controls[name] +=
+                game.player_actions.binding_to_str(all_binds[b]) + ";";
         }
     }
     

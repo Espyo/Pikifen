@@ -19,198 +19,137 @@
 
 #include <allegro5/allegro.h>
 
+#include "controls_manager.h"
+
 
 using std::size_t;
 using std::string;
 using std::vector;
 
 
-//List of "logical" buttons players can "press".
-enum BUTTONS {
+//List of player action types.
+enum PLAYER_ACTION_TYPES {
     //None.
-    BUTTON_NONE,
-    //Throw button.
-    BUTTON_THROW,
-    //Whistle button.
-    BUTTON_WHISTLE,
-    //Move right button.
-    BUTTON_RIGHT,
-    //Move up button.
-    BUTTON_UP,
-    //Move left button.
-    BUTTON_LEFT,
-    //Move down button.
-    BUTTON_DOWN,
-    //Move cursor right button.
-    BUTTON_CURSOR_RIGHT,
-    //Move cursor up button.
-    BUTTON_CURSOR_UP,
-    //Move cursor left button.
-    BUTTON_CURSOR_LEFT,
-    //Move cursor down button.
-    BUTTON_CURSOR_DOWN,
-    //Swarm group right button.
-    BUTTON_GROUP_RIGHT,
-    //Swarm group up button.
-    BUTTON_GROUP_UP,
-    //Swarm group left button.
-    BUTTON_GROUP_LEFT,
-    //Swarm group down button.
-    BUTTON_GROUP_DOWN,
-    //Swarm group towards cursor button.
-    BUTTON_GROUP_CURSOR,
-    //Swap to next leader button.
-    BUTTON_NEXT_LEADER,
-    //Swap to previous leader button.
-    BUTTON_PREV_LEADER,
-    //Dismiss button.
-    BUTTON_DISMISS,
-    //Use spray #1 button.
-    BUTTON_USE_SPRAY_1,
-    //Use spray #2 button.
-    BUTTON_USE_SPRAY_2,
-    //Use currently selected spray button.
-    BUTTON_USE_SPRAY,
-    //Swap to next spray button.
-    BUTTON_NEXT_SPRAY,
-    //Swap to previous spray button.
-    BUTTON_PREV_SPRAY,
-    //Change zoom level button.
-    BUTTON_CHANGE_ZOOM,
-    //Zoom in button.
-    BUTTON_ZOOM_IN,
-    //Zoom out button.
-    BUTTON_ZOOM_OUT,
-    //Swap to next standby type button.
-    BUTTON_NEXT_TYPE,
-    //Swap to previous standby type button.
-    BUTTON_PREV_TYPE,
-    //Swap to next standby type maturity button.
-    BUTTON_NEXT_MATURITY,
-    //Swap to previous standby type maturity button.
-    BUTTON_PREV_MATURITY,
-    //Lie down button.
-    BUTTON_LIE_DOWN,
-    //Pause button.
-    BUTTON_PAUSE,
-    //Menu navigation right button.
-    BUTTON_MENU_RIGHT,
-    //Menu navigation up button.
-    BUTTON_MENU_UP,
-    //Menu navigation left button.
-    BUTTON_MENU_LEFT,
-    //Menu navigation down button.
-    BUTTON_MENU_DOWN,
-    //Menu navigation OK button.
-    BUTTON_MENU_OK,
-    //Menu navigation back button.
-    BUTTON_MENU_BACK,
+    PLAYER_ACTION_NONE,
+    //Throw.
+    PLAYER_ACTION_THROW,
+    //Whistle.
+    PLAYER_ACTION_WHISTLE,
+    //Move right.
+    PLAYER_ACTION_RIGHT,
+    //Move up.
+    PLAYER_ACTION_UP,
+    //Move left.
+    PLAYER_ACTION_LEFT,
+    //Move down.
+    PLAYER_ACTION_DOWN,
+    //Move cursor right.
+    PLAYER_ACTION_CURSOR_RIGHT,
+    //Move cursor up.
+    PLAYER_ACTION_CURSOR_UP,
+    //Move cursor left.
+    PLAYER_ACTION_CURSOR_LEFT,
+    //Move cursor down.
+    PLAYER_ACTION_CURSOR_DOWN,
+    //Swarm group right.
+    PLAYER_ACTION_GROUP_RIGHT,
+    //Swarm group up.
+    PLAYER_ACTION_GROUP_UP,
+    //Swarm group left.
+    PLAYER_ACTION_GROUP_LEFT,
+    //Swarm group down.
+    PLAYER_ACTION_GROUP_DOWN,
+    //Swarm group towards cursor.
+    PLAYER_ACTION_GROUP_CURSOR,
+    //Swap to next leader.
+    PLAYER_ACTION_NEXT_LEADER,
+    //Swap to previous leader.
+    PLAYER_ACTION_PREV_LEADER,
+    //Dismiss.
+    PLAYER_ACTION_DISMISS,
+    //Use spray #1.
+    PLAYER_ACTION_USE_SPRAY_1,
+    //Use spray #2.
+    PLAYER_ACTION_USE_SPRAY_2,
+    //Use currently selected spray.
+    PLAYER_ACTION_USE_SPRAY,
+    //Swap to next spray.
+    PLAYER_ACTION_NEXT_SPRAY,
+    //Swap to previous spray.
+    PLAYER_ACTION_PREV_SPRAY,
+    //Change zoom level.
+    PLAYER_ACTION_CHANGE_ZOOM,
+    //Zoom in.
+    PLAYER_ACTION_ZOOM_IN,
+    //Zoom out.
+    PLAYER_ACTION_ZOOM_OUT,
+    //Swap to next standby type.
+    PLAYER_ACTION_NEXT_TYPE,
+    //Swap to previous standby type.
+    PLAYER_ACTION_PREV_TYPE,
+    //Swap to next standby type maturity.
+    PLAYER_ACTION_NEXT_MATURITY,
+    //Swap to previous standby type maturity.
+    PLAYER_ACTION_PREV_MATURITY,
+    //Lie down.
+    PLAYER_ACTION_LIE_DOWN,
+    //Pause.
+    PLAYER_ACTION_PAUSE,
+    //Menu navigation right.
+    PLAYER_ACTION_MENU_RIGHT,
+    //Menu navigation up.
+    PLAYER_ACTION_MENU_UP,
+    //Menu navigation left.
+    PLAYER_ACTION_MENU_LEFT,
+    //Menu navigation down.
+    PLAYER_ACTION_MENU_DOWN,
+    //Menu navigation OK.
+    PLAYER_ACTION_MENU_OK,
+    //Menu navigation back.
+    PLAYER_ACTION_MENU_BACK,
     
-    //Total amount of buttons.
-    N_BUTTONS,
-};
-
-
-//Types of hardware controls.
-enum CONTROL_TYPES {
-    //None.
-    CONTROL_TYPE_NONE,
-    //Keyboard key.
-    CONTROL_TYPE_KEYBOARD_KEY,
-    //Mouse button.
-    CONTROL_TYPE_MOUSE_BUTTON,
-    //Mouse wheel scrolled up.
-    CONTROL_TYPE_MOUSE_WHEEL_UP,
-    //Mouse wheel scrolled down.
-    CONTROL_TYPE_MOUSE_WHEEL_DOWN,
-    //Mouse wheel scrolled left.
-    CONTROL_TYPE_MOUSE_WHEEL_LEFT,
-    //Mouse wheel scrolled right.
-    CONTROL_TYPE_MOUSE_WHEEL_RIGHT,
-    //Joystick button.
-    CONTROL_TYPE_JOYSTICK_BUTTON,
-    //Joystick axis tilted in a positive position.
-    CONTROL_TYPE_JOYSTICK_AXIS_POS,
-    //Joystick axis tilted in a negative position.
-    CONTROL_TYPE_JOYSTICK_AXIS_NEG,
-};
-
-
-
-/* ----------------------------------------------------------------------------
- * This holds information over a user-specified
- * control. It has info over what hardware input
- * is required for this in-game control,
- * and what action it triggers.
- */
-struct control_info {
-    //Action number.
-    BUTTONS action;
-    //Type of control (hardware).
-    CONTROL_TYPES type;
-    //Device number. i.e. the gamepad number.
-    int device_nr;
-    //Button, whether the gamepad digital button, or the keyboard key.
-    int button;
-    //Stick on the gamepad.
-    int stick;
-    //Axis of the stick.
-    int axis;
-    
-    control_info(BUTTONS action, const string &s);
-    string stringify() const;
+    //Total amount of player action types.
+    N_PLAYER_ACTIONS,
 };
 
 
 /* ----------------------------------------------------------------------------
- * Information about an action obtained from an Allegro event.
+ * Data about a type of action that can be performed in the game.
  */
-struct action_from_event {
-    //Button representing this action.
-    BUTTONS button;
-    //How far the button has been pressed, from 0 to 1.
-    float pos;
-    //Player that pressed this button.
-    size_t player;
-    
-    action_from_event(
-        const BUTTONS button, const float pos, const size_t player
-    ) :
-        button(button),
-        pos(pos),
-        player(player) { }
+struct player_action_type {
+    //ID of the action type.
+    PLAYER_ACTION_TYPES id;
+    //Name, for use in stuff like the options menu.
+    string name;
+    //Its name in the options file.
+    string internal_name;
+    //String representing of this action type's default control binding.
+    string default_binding_str;
+    player_action_type();
 };
 
 
 /* ----------------------------------------------------------------------------
- * Manager for the different gameplay "buttons", associated with the controls.
+ * Manager for the types of player actions in the game.
  */
-struct button_manager {
-    struct button {
-        //ID of the button.
-        BUTTONS id;
-        //Name of the button.
-        string name;
-        //Its name in the options file.
-        string internal_name;
-        //String representing the default control to use for this button.
-        string default_control_str;
-    };
-    
-    //List of known buttons.
-    vector<button> list;
+struct player_action_type_manager {
+    //List of known action types.
+    vector<player_action_type> list;
     
     void add(
-        const BUTTONS id, const string &name, const string &internal_name,
-        const string &default_control_str
+        const PLAYER_ACTION_TYPES id,
+        const string &name, const string &internal_name,
+        const string &default_binding_str
     );
+    string binding_to_str(const control_binding &b) const;
+    void feed_event_to_controls_manager(const ALLEGRO_EVENT &ev);
+    control_binding find_binding(
+        const PLAYER_ACTION_TYPES action_type_id
+    ) const;
+    control_binding find_binding(
+        const string &action_type_name
+    ) const;
+    control_binding str_to_binding(const string &s) const;
 };
-
-
-
-control_info* find_control(const BUTTONS button);
-control_info* find_control(const string &button_name);
-vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev);
-
 
 #endif //ifndef CONTROLS_INCLUDED

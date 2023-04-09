@@ -272,8 +272,6 @@ public:
     
 private:
 
-    //Control ID for player 1's cancel button. Cache for convenience.
-    size_t cancel_control_id;
     //Points to an interactable close enough for player 1 to use, if any.
     interactable* close_to_interactable_to_use;
     //Points to a nest-like object close enough for player 1 to open, if any.
@@ -294,8 +292,6 @@ private:
     bool is_input_allowed;
     //Bitmap that lights up the area when in blackout mode.
     ALLEGRO_BITMAP* lightmap_bmp;
-    //Control ID for player 1's main button. Cache for convenience.
-    size_t main_control_id;
     //Movement of player 1's leader.
     movement_struct leader_movement;
     //Information about the current Onion menu, if any.
@@ -344,9 +340,7 @@ private:
         const float near_radius, const float far_radius
     );
     mob* get_closest_group_member(subgroup_type* type);
-    void handle_button(
-        const BUTTONS button, const float pos, const size_t player
-    );
+    void handle_player_action(const player_action &action);
     void init_hud();
     bool is_mission_clear_met();
     bool is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason);

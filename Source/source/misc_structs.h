@@ -113,8 +113,8 @@ enum STRING_TOKEN_TYPES {
     STRING_TOKEN_CHAR,
     //A line break.
     STRING_TOKEN_LINE_BREAK,
-    //A control icon.
-    STRING_TOKEN_CONTROL,
+    //A control binding icon.
+    STRING_TOKEN_CONTROL_BINDING,
 };
 
 
@@ -212,6 +212,8 @@ struct asset_file_names_struct {
     string throw_preview_dashed;
     //Value font.
     string value_font;
+    //Vignette effect box.
+    string vignette_box;
     //Wave ring.
     string wave_ring;
     
@@ -686,6 +688,8 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_throw_preview;
     //Dashed throw preview texture.
     ALLEGRO_BITMAP* bmp_throw_preview_dashed;
+    //Vignette effect box.
+    ALLEGRO_BITMAP* bmp_vignette_box;
     //Wave ring.
     ALLEGRO_BITMAP* bmp_wave_ring;
     
@@ -766,7 +770,7 @@ public:
     float get_visibility() const;
     void reset();
     void set_contents(
-        control_info* control, const string &text, const point &pos
+        control_binding control, const string &text, const point &pos
     );
     void set_enabled(const bool enabled);
     void tick(const float delta_t);
@@ -774,8 +778,8 @@ public:
 private:
     //Is it meant to exist?
     bool enabled;
-    //What control icon to show.
-    control_info* control;
+    //What control binding icon to show.
+    control_binding control;
     //What text to write.
     string text;
     //Coordinates of the focal point.

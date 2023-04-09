@@ -370,9 +370,7 @@ public:
     //Handle an Allegro event.
     void handle_event(const ALLEGRO_EVENT &ev);
     //Handle a button press or release.
-    bool handle_menu_button(
-        const BUTTONS action, const float pos, const size_t player
-    );
+    bool handle_player_action(const player_action& action);
     //Hides items until an animation shows them again.
     void hide_items();
     //Reads item coordinates from a data node.

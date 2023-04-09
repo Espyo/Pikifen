@@ -262,9 +262,10 @@ hud_struct::hud_struct() :
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_controls) return;
         if(game.states.gameplay->available_leaders.size() < 2) return;
-        control_info* c = find_control(BUTTON_NEXT_LEADER);
-        if(!c) return;
-        draw_control_icon(game.fonts.slim, c, true, center, size);
+        control_binding c =
+            game.player_actions.find_binding(PLAYER_ACTION_NEXT_LEADER);
+        if(c.input_type == INPUT_TYPE_NONE) return;
+        draw_control_binding_icon(game.fonts.slim, c, true, center, size);
     };
     gui.add_item(leader_next_button, "leader_next_button");
     
@@ -434,9 +435,10 @@ hud_struct::hud_struct() :
         ) {
             return;
         }
-        control_info* c = find_control(BUTTON_NEXT_TYPE);
-        if(!c) return;
-        draw_control_icon(
+        control_binding c =
+            game.player_actions.find_binding(PLAYER_ACTION_NEXT_TYPE);
+        if(c.input_type == INPUT_TYPE_NONE) return;
+        draw_control_binding_icon(
             game.fonts.slim, c, true, center, size,
             game.states.gameplay->hud->standby_items_opacity * 255
         );
@@ -475,9 +477,10 @@ hud_struct::hud_struct() :
         ) {
             return;
         }
-        control_info* c = find_control(BUTTON_PREV_TYPE);
-        if(!c) return;
-        draw_control_icon(
+        control_binding c =
+            game.player_actions.find_binding(PLAYER_ACTION_PREV_TYPE);
+        if(c.input_type == INPUT_TYPE_NONE) return;
+        draw_control_binding_icon(
             game.fonts.slim, c, true, center, size,
             game.states.gameplay->hud->standby_items_opacity * 255
         );
@@ -813,15 +816,15 @@ hud_struct::hud_struct() :
             return;
         }
         
-        control_info* c = NULL;
+        control_binding c;
         if(game.spray_types.size() <= 2) {
-            c = find_control(BUTTON_USE_SPRAY_1);
+            c = game.player_actions.find_binding(PLAYER_ACTION_USE_SPRAY_1);
         } else if(game.spray_types.size() > 0) {
-            c = find_control(BUTTON_USE_SPRAY);
+            c = game.player_actions.find_binding(PLAYER_ACTION_USE_SPRAY);
         }
-        if(!c) return;
+        if(c.input_type == INPUT_TYPE_NONE) return;
         
-        draw_control_icon(
+        draw_control_binding_icon(
             game.fonts.slim, c, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
@@ -891,13 +894,13 @@ hud_struct::hud_struct() :
             return;
         }
         
-        control_info* c = NULL;
+        control_binding c;
         if(game.spray_types.size() == 2) {
-            c = find_control(BUTTON_USE_SPRAY_2);
+            c = game.player_actions.find_binding(PLAYER_ACTION_USE_SPRAY_2);
         }
-        if(!c) return;
+        if(c.input_type == INPUT_TYPE_NONE) return;
         
-        draw_control_icon(
+        draw_control_binding_icon(
             game.fonts.slim, c, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
@@ -933,13 +936,13 @@ hud_struct::hud_struct() :
         }
         if(prev_spray_idx == INVALID) return;
         
-        control_info* c = NULL;
+        control_binding c;
         if(game.spray_types.size() >= 3) {
-            c = find_control(BUTTON_PREV_SPRAY);
+            c = game.player_actions.find_binding(PLAYER_ACTION_PREV_SPRAY);
         }
-        if(!c) return;
+        if(c.input_type == INPUT_TYPE_NONE) return;
         
-        draw_control_icon(
+        draw_control_binding_icon(
             game.fonts.slim, c, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );
@@ -975,13 +978,13 @@ hud_struct::hud_struct() :
         }
         if(next_spray_idx == INVALID) return;
         
-        control_info* c = NULL;
+        control_binding c;
         if(game.spray_types.size() >= 3) {
-            c = find_control(BUTTON_NEXT_SPRAY);
+            c = game.player_actions.find_binding(PLAYER_ACTION_NEXT_SPRAY);
         }
-        if(!c) return;
+        if(c.input_type == INPUT_TYPE_NONE) return;
         
-        draw_control_icon(
+        draw_control_binding_icon(
             game.fonts.slim, c, true, center, size,
             game.states.gameplay->hud->spray_items_opacity * 255
         );

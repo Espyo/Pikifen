@@ -129,8 +129,6 @@ struct options_struct {
     area_editor::VIEW_MODES area_editor_view_mode;
     //Auto-throw mode.
     AUTO_THROW_MODES auto_throw_mode;
-    //List of controls for each player.
-    vector<vector<control_info> > controls;
     //Cursor camera movement weight.
     float cursor_cam_weight;
     //Cursor speed, in pixels per second. N/A when using the mouse.
@@ -179,7 +177,7 @@ struct options_struct {
     bool mouse_moves_cursor[MAX_PLAYERS];
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling;
-    //Show control icons on top of HUD elements?
+    //Show control binding icons on top of HUD elements?
     bool show_hud_controls;
     //Target framerate.
     int target_fps;
@@ -195,13 +193,6 @@ struct options_struct {
     void save(data_node* file) const;
     
     options_struct();
-    
-private:
-
-    void load_control(
-        const BUTTONS action, const unsigned char player,
-        const string &name, data_node* file, const string &def = ""
-    );
     
 };
 

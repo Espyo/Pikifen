@@ -42,13 +42,15 @@ controls_menu_state::controls_menu_state() :
  * Adds a control to the player's controls.
  */
 void controls_menu_state::add_control() {
+    //TODO
+    /*
     if(game.options.controls[0].size()) {
-        BUTTONS last_action =
-            game.options.controls[0].back().action;
+        PLAYER_ACTION_TYPES last_action =
+            game.options.controls[0].back().action_type_id;
         game.options.controls[0].push_back(
             control_info(
-                (BUTTONS) (
-                    last_action == N_BUTTONS - 1 ?
+                (PLAYER_ACTION_TYPES) (
+                    last_action == N_PLAYER_ACTIONS - 1 ?
                     1 : //The "None" action is 0, so go to 1.
                     last_action + 1
                 ),
@@ -57,9 +59,10 @@ void controls_menu_state::add_control() {
         );
     } else {
         game.options.controls[0].push_back(
-            control_info(BUTTON_NONE, "")
+            control_info(PLAYER_ACTION_NONE, "")
         );
     }
+    */
 }
 
 
@@ -104,6 +107,8 @@ void controls_menu_state::add_control_gui_items(
     list_box->add_child(prev_action_button);
     gui.add_item(prev_action_button);
     
+    //TODO
+    /*
     //Action name.
     text_gui_item* action_name_text =
         new text_gui_item("", game.fonts.standard);
@@ -111,17 +116,17 @@ void controls_menu_state::add_control_gui_items(
         [this, index, action_name_text]
     (const point & center, const point & size) {
         control_info* c_ptr = &game.options.controls[0][index];
-        
+    
         string action_name;
-        for(size_t b = 0; b < N_BUTTONS; ++b) {
-            if(c_ptr->action == game.buttons.list[b].id) {
-                action_name = game.buttons.list[b].name;
+        for(size_t b = 0; b < N_PLAYER_ACTIONS; ++b) {
+            if(c_ptr->action == game.player_actions.list[b].id) {
+                action_name = game.player_actions.list[b].name;
                 break;
             }
         }
-        
+    
         float juicy_grow_amount = action_name_text->get_juice_value();
-        
+    
         draw_compressed_scaled_text(
             game.fonts.standard, map_gray(255),
             center,
@@ -133,7 +138,7 @@ void controls_menu_state::add_control_gui_items(
     action_name_text->center = point(0.40f, items_y);
     action_name_text->size = point(0.39f, 0.07f);
     list_box->add_child(action_name_text);
-    gui.add_item(action_name_text);
+    gui.add_item(action_name_text);*/
     
     //Next action button.
     button_gui_item* next_action_button =
@@ -149,6 +154,8 @@ void controls_menu_state::add_control_gui_items(
     list_box->add_child(next_action_button);
     gui.add_item(next_action_button);
     
+    //TODO
+    /*
     //Control button.
     button_gui_item* control_button =
         new button_gui_item("", game.fonts.standard);
@@ -160,9 +167,9 @@ void controls_menu_state::add_control_gui_items(
         [this, index, control_button]
     (const point & center, const point & size) {
         control_info* c_ptr = &game.options.controls[0][index];
-        
-        draw_control_icon(game.fonts.slim, c_ptr, false, center, size * 0.8f);
-        
+    
+        draw_control_binding_icon(game.fonts.slim, c_ptr, false, center, size * 0.8f);
+    
         draw_button(
             center, size, "", game.fonts.standard, map_gray(255),
             control_button->selected,
@@ -174,13 +181,14 @@ void controls_menu_state::add_control_gui_items(
     control_button->on_get_tooltip =
     [] () { return "The button used to perform this action."; };
     list_box->add_child(control_button);
-    gui.add_item(control_button);
+    gui.add_item(control_button);*/
     
     //Focus, if requested.
     if(focus) {
-        action_name_text->start_juice_animation(
+        //TODO
+        /*action_name_text->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-        );
+        );*/
         float list_bottom = list_box->get_child_bottom();
         if(list_bottom > 1.0f) {
             list_box->target_offset = list_bottom - 1.0f;
@@ -206,13 +214,15 @@ void controls_menu_state::choose_button(const size_t index) {
  *   Index number of the control.
  */
 void controls_menu_state::choose_next_action(const size_t index) {
+    //TODO
+    /*
     control_info* c_ptr = &game.options.controls[0][index];
     c_ptr->action =
-        (BUTTONS) sum_and_wrap((size_t) c_ptr->action, 1, N_BUTTONS);
+        (PLAYER_ACTION_TYPES) sum_and_wrap((size_t) c_ptr->action, 1, N_PLAYER_ACTIONS);
     gui_item* action_name_text = list_box->children[index * 5 + 2];
     ((text_gui_item*) action_name_text)->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-    );
+    );*/
 }
 
 
@@ -222,13 +232,15 @@ void controls_menu_state::choose_next_action(const size_t index) {
  *   Index number of the control.
  */
 void controls_menu_state::choose_prev_action(const size_t index) {
+    //TODO
+    /*
     control_info* c_ptr = &game.options.controls[0][index];
     c_ptr->action =
-        (BUTTONS) sum_and_wrap((size_t) c_ptr->action, -1, N_BUTTONS);
+        (PLAYER_ACTION_TYPES) sum_and_wrap((size_t) c_ptr->action, -1, N_PLAYER_ACTIONS);
     gui_item* action_name_text = list_box->children[index * 5 + 2];
     ((text_gui_item*) action_name_text)->start_juice_animation(
         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-    );
+    );*/
 }
 
 
@@ -238,9 +250,11 @@ void controls_menu_state::choose_prev_action(const size_t index) {
  *   Index number of the control.
  */
 void controls_menu_state::delete_control(const size_t index) {
+    //TODO
+    /*
     game.options.controls[0].erase(
         game.options.controls[0].begin() + index
-    );
+    );*/
 }
 
 
@@ -299,7 +313,7 @@ void controls_menu_state::do_drawing() {
  */
 void controls_menu_state::do_logic() {
     gui.tick(game.delta_t);
-
+    
     game.fade_mgr.tick(game.delta_t);
 }
 
@@ -318,6 +332,8 @@ string controls_menu_state::get_name() const {
  *   Event to handle.
  */
 void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
+    //TODO
+    /*
     if(game.fade_mgr.is_fading()) return;
     
     if(capturing_input) {
@@ -325,18 +341,18 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
         control_info* c_ptr =
             &game.options.controls[0][input_capture_control_nr];
         bool valid = true;
-        
+    
         switch(ev.type) {
         case ALLEGRO_EVENT_KEY_DOWN: {
             c_ptr->type = CONTROL_TYPE_KEYBOARD_KEY;
             c_ptr->button = ev.keyboard.keycode;
             break;
-            
+    
         } case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
             c_ptr->type = CONTROL_TYPE_MOUSE_BUTTON;
             c_ptr->button = ev.mouse.button;
             break;
-            
+    
         } case ALLEGRO_EVENT_MOUSE_AXES: {
             if(ev.mouse.dz > 0) {
                 c_ptr->type = CONTROL_TYPE_MOUSE_WHEEL_UP;
@@ -350,13 +366,13 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
                 valid = false;
             }
             break;
-            
+    
         } case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN: {
             c_ptr->type = CONTROL_TYPE_JOYSTICK_BUTTON;
             c_ptr->device_nr = game.joystick_numbers[ev.joystick.id];
             c_ptr->button = ev.joystick.button;
             break;
-            
+    
         } case ALLEGRO_EVENT_JOYSTICK_AXIS: {
             c_ptr->type =
                 (
@@ -368,23 +384,23 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
             c_ptr->stick = ev.joystick.stick;
             c_ptr->axis = ev.joystick.axis;
             break;
-            
+    
         } default: {
             valid = false;
             break;
-            
+    
         }
         }
-        
+    
         if(valid) {
             capturing_input = false;
         }
-        
+    
     } else {
     
         gui.handle_event(ev);
-        
-    }
+    
+    }*/
     
 }
 
@@ -446,7 +462,7 @@ void controls_menu_state::load() {
     new_button->on_activate =
     [this] (const point &) {
         add_control();
-        add_control_gui_items(game.options.controls[0].size() - 1, true);
+        //TODO add_control_gui_items(game.options.controls[0].size() - 1, true);
     };
     new_button->on_get_tooltip =
     [] () { return "Add a new button definition."; };
@@ -458,9 +474,10 @@ void controls_menu_state::load() {
     gui.add_item(tooltip_text, "tooltip");
     
     //Items for the different controls.
-    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
+    //TODO
+    /*for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
         add_control_gui_items(c, false);
-    }
+    }*/
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);

@@ -151,7 +151,6 @@ gameplay_state::gameplay_state() :
     interlude_time(0.0f),
     cur_big_msg(BIG_MESSAGE_NONE),
     big_msg_time(0.0f),
-    cancel_control_id(INVALID),
     close_to_interactable_to_use(nullptr),
     close_to_nest_to_open(nullptr),
     close_to_pikmin_to_pluck(nullptr),
@@ -160,7 +159,6 @@ gameplay_state::gameplay_state() :
     cursor_save_timer(GAMEPLAY::CURSOR_TRAIL_SAVE_INTERVAL),
     is_input_allowed(false),
     lightmap_bmp(nullptr),
-    main_control_id(INVALID),
     onion_menu(nullptr),
     pause_menu(nullptr),
     paused(false),
@@ -589,12 +587,10 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
         leader_movement.reset(); //TODO replace with a better solution.
     }
     
-    //Decode any inputs that result in gameplay actions.
-    vector<action_from_event> actions = get_actions_from_event(ev);
-    for(size_t a = 0; a < actions.size(); ++a) {
-        handle_button(actions[a].button, actions[a].pos, actions[a].player);
-    }
+    //Feed player inputs to the controls manager.
+    game.player_actions.feed_event_to_controls_manager(ev);
     
+    //Mouse controls.
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
         if(
             ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
@@ -965,19 +961,6 @@ void gameplay_state::load() {
         }
         
         spray_stats[spray_id].nr_sprays = s2i(s.second);
-    }
-    
-    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-        if(game.options.controls[0][c].action == BUTTON_THROW) {
-            main_control_id = c;
-            break;
-        }
-    }
-    for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-        if(game.options.controls[0][c].action == BUTTON_WHISTLE) {
-            cancel_control_id = c;
-            break;
-        }
     }
     
     //Effect caches.

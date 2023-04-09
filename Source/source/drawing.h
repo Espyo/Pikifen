@@ -20,7 +20,7 @@
 #include "misc_structs.h"
 
 
-namespace CONTROL_ICON {
+namespace CONTROL_BINDING_ICON {
 extern const ALLEGRO_COLOR BASE_OUTLINE_COLOR;
 extern const ALLEGRO_COLOR BASE_RECT_COLOR;
 extern const ALLEGRO_COLOR BASE_TEXT_COLOR;
@@ -41,53 +41,53 @@ extern const float NOTIFICATION_PADDING;
 }
 
 
-//Possible shapes for a control icon.
-enum CONTROL_ICON_SHAPES {
+//Possible shapes for a control binding icon.
+enum CONTROL_BINDING_ICON_SHAPES {
     //Doesn't really have a shape, but instead draws a bitmap.
-    CONTROL_ICON_SHAPE_BITMAP,
+    CONTROL_BINDING_ICON_SHAPE_BITMAP,
     //Rectangle shape, representing keyboard keys.
-    CONTROL_ICON_SHAPE_RECTANGLE,
+    CONTROL_BINDING_ICON_SHAPE_RECTANGLE,
     //Circle/rounded rectangle shape, representing buttons.
-    CONTROL_ICON_SHAPE_ROUNDED,
+    CONTROL_BINDING_ICON_SHAPE_ROUNDED,
 };
 
 
-//Control icon spritesheet sprites. The order matches what's in the spritesheet.
-enum CONTROL_ICON_SPRITES {
+//Control binding icon spritesheet sprites. The order matches what's in the spritesheet.
+enum CONTROL_BINDING_ICON_SPRITES {
     //Left mouse button.
-    CONTROL_ICON_SPRITE_LMB,
+    CONTROL_BINDING_ICON_SPRITE_LMB,
     //Right mouse button.
-    CONTROL_ICON_SPRITE_RMB,
+    CONTROL_BINDING_ICON_SPRITE_RMB,
     //Middle mouse button.
-    CONTROL_ICON_SPRITE_MMB,
+    CONTROL_BINDING_ICON_SPRITE_MMB,
     //Mouse wheel up.
-    CONTROL_ICON_SPRITE_MWU,
+    CONTROL_BINDING_ICON_SPRITE_MWU,
     //Mouse wheel down.
-    CONTROL_ICON_SPRITE_MWD,
+    CONTROL_BINDING_ICON_SPRITE_MWD,
     //Up key.
-    CONTROL_ICON_SPRITE_UP,
+    CONTROL_BINDING_ICON_SPRITE_UP,
     //Left key.
-    CONTROL_ICON_SPRITE_LEFT,
+    CONTROL_BINDING_ICON_SPRITE_LEFT,
     //Down key.
-    CONTROL_ICON_SPRITE_DOWN,
+    CONTROL_BINDING_ICON_SPRITE_DOWN,
     //Right key.
-    CONTROL_ICON_SPRITE_RIGHT,
+    CONTROL_BINDING_ICON_SPRITE_RIGHT,
     //Backspace key.
-    CONTROL_ICON_SPRITE_BACKSPACE,
+    CONTROL_BINDING_ICON_SPRITE_BACKSPACE,
     //Shift key.
-    CONTROL_ICON_SPRITE_SHIFT,
+    CONTROL_BINDING_ICON_SPRITE_SHIFT,
     //Tab key.
-    CONTROL_ICON_SPRITE_TAB,
+    CONTROL_BINDING_ICON_SPRITE_TAB,
     //Enter key.
-    CONTROL_ICON_SPRITE_ENTER,
-    //Gamepad analog stick up.
-    CONTROL_ICON_SPRITE_STICK_UP,
-    //Gamepad analog stick left.
-    CONTROL_ICON_SPRITE_STICK_LEFT,
-    //Gamepad analog stick down.
-    CONTROL_ICON_SPRITE_STICK_DOWN,
-    //Gamepad analog stick right.
-    CONTROL_ICON_SPRITE_STICK_RIGHT,
+    CONTROL_BINDING_ICON_SPRITE_ENTER,
+    //Game controller stick up.
+    CONTROL_BINDING_ICON_SPRITE_STICK_UP,
+    //Game controller stick left.
+    CONTROL_BINDING_ICON_SPRITE_STICK_LEFT,
+    //Game controller stick down.
+    CONTROL_BINDING_ICON_SPRITE_STICK_DOWN,
+    //Game controller stick right.
+    CONTROL_BINDING_ICON_SPRITE_STICK_RIGHT,
 };
 
 
@@ -127,9 +127,10 @@ void draw_button(
     const bool selected,
     const float juicy_grow_amount = 0.0f
 );
-void draw_control_icon(
-    const ALLEGRO_FONT* const font, const control_info* c, const bool condensed,
-    const point &where, const point &max_size, const unsigned char alpha = 228
+void draw_control_binding_icon(
+    const ALLEGRO_FONT* const font, const control_binding& c,
+    const bool condensed, const point &where, const point &max_size,
+    const unsigned char alpha = 228
 );
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
@@ -206,13 +207,14 @@ void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
-void get_control_icon_info(
-    const control_info* c, const bool condensed,
-    CONTROL_ICON_SHAPES* shape, CONTROL_ICON_SPRITES* bitmap_sprite,
+void get_control_binding_icon_info(
+    const control_binding& c, const bool condensed,
+    CONTROL_BINDING_ICON_SHAPES* shape,
+    CONTROL_BINDING_ICON_SPRITES* bitmap_sprite,
     string* text
 );
-float get_control_icon_width(
-    const ALLEGRO_FONT* font, const control_info* c, const bool condensed,
+float get_control_binding_icon_width(
+    const ALLEGRO_FONT* font, const control_binding& c, const bool condensed,
     const float max_bitmap_height = 0
 );
 

@@ -782,16 +782,8 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         mouse_involved = true;
     }
     
-    vector<action_from_event> actions = get_actions_from_event(ev);
-    for(size_t a = 0; a < actions.size(); ++a) {
-        if(
-            handle_menu_button(
-                actions[a].button, actions[a].pos, actions[a].player
-            )
-        ) {
-            input_happened = true;
-        }
-    }
+    //Feed player inputs to the controls manager.
+    game.player_actions.feed_event_to_controls_manager(ev);
     
     for(size_t i = 0; i < items.size(); ++i) {
         if(items[i]->is_responsive() && items[i]->on_event) {
@@ -799,9 +791,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         }
     }
     
-    if(input_happened) {
-        last_input_was_mouse = mouse_involved;
-    }
+    last_input_was_mouse = input_happened && mouse_involved;
 }
 
 
@@ -810,18 +800,9 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
  * a button release.
  * Returns true if the button was recognized.
  * action:
- *   The button's ID.
- * pos:
- *   The position of the button, i.e., how much it's "held".
- *   0 means it was released. 1 means it was fully pressed.
- *   For controls with more sensitivity, values between 0 and 1 are important.
- *   Like a 0.5 for swarming makes the group swarm at half distance.
- * player:
- *   Number of the player that pressed.
+ *   Data about the player action.
  */
-bool gui_manager::handle_menu_button(
-    const BUTTONS action, const float pos, const size_t player
-) {
+bool gui_manager::handle_player_action(const player_action &action) {
     if(!responsive) {
         return false;
     }
@@ -832,40 +813,40 @@ bool gui_manager::handle_menu_button(
         return false;
     }
     
-    bool is_down = (pos >= 0.5);
+    bool is_down = (action.value >= 0.5);
     bool button_recognized = true;
     
-    switch(action) {
-    case BUTTON_MENU_RIGHT:
-    case BUTTON_MENU_UP:
-    case BUTTON_MENU_LEFT:
-    case BUTTON_MENU_DOWN: {
+    switch(action.action_type_id) {
+    case PLAYER_ACTION_MENU_RIGHT:
+    case PLAYER_ACTION_MENU_UP:
+    case PLAYER_ACTION_MENU_LEFT:
+    case PLAYER_ACTION_MENU_DOWN: {
 
         //Selecting a different item with the arrow keys.
-        size_t pressed = BUTTON_NONE;
+        size_t pressed = PLAYER_ACTION_NONE;
         
-        switch(action) {
-        case BUTTON_MENU_RIGHT: {
+        switch(action.action_type_id) {
+        case PLAYER_ACTION_MENU_RIGHT: {
             if(!right_pressed && is_down) {
-                pressed = BUTTON_MENU_RIGHT;
+                pressed = PLAYER_ACTION_MENU_RIGHT;
             }
             right_pressed = is_down;
             break;
-        } case BUTTON_MENU_UP: {
+        } case PLAYER_ACTION_MENU_UP: {
             if(!up_pressed && is_down) {
-                pressed = BUTTON_MENU_UP;
+                pressed = PLAYER_ACTION_MENU_UP;
             }
             up_pressed = is_down;
             break;
-        } case BUTTON_MENU_LEFT: {
+        } case PLAYER_ACTION_MENU_LEFT: {
             if(!left_pressed && is_down) {
-                pressed = BUTTON_MENU_LEFT;
+                pressed = PLAYER_ACTION_MENU_LEFT;
             }
             left_pressed = is_down;
             break;
-        } case BUTTON_MENU_DOWN: {
+        } case PLAYER_ACTION_MENU_DOWN: {
             if(!down_pressed && is_down) {
-                pressed = BUTTON_MENU_DOWN;
+                pressed = PLAYER_ACTION_MENU_DOWN;
             }
             down_pressed = is_down;
             break;
@@ -874,7 +855,7 @@ bool gui_manager::handle_menu_button(
         }
         }
         
-        if(pressed == BUTTON_NONE) break;
+        if(pressed == PLAYER_ACTION_NONE) break;
         
         if(!selected_item) {
             for(size_t i = 0; i < items.size(); ++i) {
@@ -898,15 +879,15 @@ bool gui_manager::handle_menu_button(
         float direction = 0.0f;
         
         switch(pressed) {
-        case BUTTON_MENU_DOWN: {
+        case PLAYER_ACTION_MENU_DOWN: {
             direction = TAU * 0.25f;
             break;
         }
-        case BUTTON_MENU_LEFT: {
+        case PLAYER_ACTION_MENU_LEFT: {
             direction = TAU * 0.50f;
             break;
         }
-        case BUTTON_MENU_UP: {
+        case PLAYER_ACTION_MENU_UP: {
             direction = TAU * 0.75f;
             break;
         }
@@ -965,7 +946,7 @@ bool gui_manager::handle_menu_button(
         
         break;
         
-    } case BUTTON_MENU_OK: {
+    } case PLAYER_ACTION_MENU_OK: {
         if(
             is_down &&
             selected_item &&
@@ -981,7 +962,7 @@ bool gui_manager::handle_menu_button(
         }
         break;
         
-    } case BUTTON_MENU_BACK: {
+    } case PLAYER_ACTION_MENU_BACK: {
         if(is_down && back_item && back_item->is_responsive()) {
             back_item->on_activate(point(LARGE_FLOAT, LARGE_FLOAT));
         }
@@ -1132,6 +1113,15 @@ void gui_manager::start_animation(
  *   How long the frame's tick is, in seconds.
  */
 void gui_manager::tick(const float delta_t) {
+    //Controls.
+    game.controls_mgr.new_frame();
+    player_action action;
+    bool input_happened = false;
+    while(game.controls_mgr.get_action(action)) {
+        input_happened |= handle_player_action(action);
+    }
+    if(input_happened) last_input_was_mouse = false;
+    
     //Tick the animation.
     anim_timer.tick(delta_t);
     
@@ -1375,10 +1365,10 @@ picker_gui_item::picker_gui_item(
     
     on_menu_dir_button =
     [this] (const size_t button_id) -> bool{
-        if(button_id == BUTTON_MENU_RIGHT) {
+        if(button_id == PLAYER_ACTION_MENU_RIGHT) {
             on_next();
             return true;
-        } else if(button_id == BUTTON_MENU_LEFT) {
+        } else if(button_id == PLAYER_ACTION_MENU_LEFT) {
             on_previous();
             return true;
         }
