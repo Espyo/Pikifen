@@ -130,12 +130,14 @@ struct asset_file_names_struct {
     string bright_ring;
     //Bubble box.
     string bubble_box;
+    //Texture box for control buttons.
+    string button_box;
     //Checkbox with a checkmark.
     string checkbox_check;
     //Checkbox without a checkmark.
     string checkbox_no_check;
-    //Misc. control icons.
-    string control_icons;
+    //Misc. control binding icons.
+    string control_binding_icons;
     //Counter font.
     string counter_font;
     //Leader cursor.
@@ -152,6 +154,8 @@ struct asset_file_names_struct {
     string icon;
     //Idle glow.
     string idle_glow;
+    //Texture box for control keys.
+    string key_box;
     //Leader silhouette from the side.
     string leader_silhouette_side;
     //Leader silhouette from the top.
@@ -614,12 +618,14 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_bright_ring;
     //Bubble box.
     ALLEGRO_BITMAP* bmp_bubble_box;
+    //Box texture for control buttons.
+    ALLEGRO_BITMAP* bmp_button_box;
     //Checkbox with a checkmark.
     ALLEGRO_BITMAP* bmp_checkbox_check;
     //Checkbox without a checkmark.
     ALLEGRO_BITMAP* bmp_checkbox_no_check;
-    //Misc. control icons.
-    ALLEGRO_BITMAP* bmp_control_icons;
+    //Misc. control binding icons.
+    ALLEGRO_BITMAP* bmp_control_binding_icons;
     //Leader cursor.
     ALLEGRO_BITMAP* bmp_cursor;
     //Enemy spirit.
@@ -630,6 +636,8 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_icon;
     //Idle glow.
     ALLEGRO_BITMAP* bmp_idle_glow;
+    //Box texture for control keys.
+    ALLEGRO_BITMAP* bmp_key_box;
     //Leader silhouette from the side.
     ALLEGRO_BITMAP* bmp_leader_silhouette_side;
     //Leader silhouette from the top.

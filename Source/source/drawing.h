@@ -24,7 +24,7 @@ namespace CONTROL_ICON {
 extern const ALLEGRO_COLOR BASE_OUTLINE_COLOR;
 extern const ALLEGRO_COLOR BASE_RECT_COLOR;
 extern const ALLEGRO_COLOR BASE_TEXT_COLOR;
-extern const float CONTROL_ICON_PADDING;
+extern const float PADDING;
 extern const float OUTLINE_THICKNESS;
 }
 

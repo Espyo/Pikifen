@@ -1212,12 +1212,14 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.bright_ring);
     game.sys_assets.bmp_bubble_box =
         game.bitmaps.get(game.asset_file_names.bubble_box);
+    game.sys_assets.bmp_button_box =
+        game.bitmaps.get(game.asset_file_names.button_box);
     game.sys_assets.bmp_checkbox_check =
         game.bitmaps.get(game.asset_file_names.checkbox_check);
     game.sys_assets.bmp_checkbox_no_check =
         game.bitmaps.get(game.asset_file_names.checkbox_no_check);
-    game.sys_assets.bmp_control_icons =
-        game.bitmaps.get(game.asset_file_names.control_icons);
+    game.sys_assets.bmp_control_binding_icons =
+        game.bitmaps.get(game.asset_file_names.control_binding_icons);
     game.sys_assets.bmp_cursor =
         game.bitmaps.get(game.asset_file_names.cursor);
     game.sys_assets.bmp_enemy_spirit =
@@ -1226,6 +1228,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.focus_box);
     game.sys_assets.bmp_idle_glow =
         game.bitmaps.get(game.asset_file_names.idle_glow);
+    game.sys_assets.bmp_key_box =
+        game.bitmaps.get(game.asset_file_names.key_box);
     game.sys_assets.bmp_leader_silhouette_side =
         game.bitmaps.get(game.asset_file_names.leader_silhouette_side);
     game.sys_assets.bmp_leader_silhouette_top =
@@ -1968,14 +1972,16 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_bright_circle);
     game.bitmaps.detach(game.sys_assets.bmp_bright_ring);
     game.bitmaps.detach(game.sys_assets.bmp_bubble_box);
+    game.bitmaps.detach(game.sys_assets.bmp_button_box);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_check);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_no_check);
-    game.bitmaps.detach(game.sys_assets.bmp_control_icons);
+    game.bitmaps.detach(game.sys_assets.bmp_control_binding_icons);
     game.bitmaps.detach(game.sys_assets.bmp_cursor);
     game.bitmaps.detach(game.sys_assets.bmp_enemy_spirit);
     game.bitmaps.detach(game.sys_assets.bmp_focus_box);
     game.bitmaps.detach(game.sys_assets.bmp_icon);
     game.bitmaps.detach(game.sys_assets.bmp_idle_glow);
+    game.bitmaps.detach(game.sys_assets.bmp_key_box);
     game.bitmaps.detach(game.sys_assets.bmp_leader_silhouette_side);
     game.bitmaps.detach(game.sys_assets.bmp_leader_silhouette_top);
     game.bitmaps.detach(game.sys_assets.bmp_medal_bronze);

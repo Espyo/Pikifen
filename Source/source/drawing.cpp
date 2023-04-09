@@ -35,7 +35,7 @@ const ALLEGRO_COLOR BASE_TEXT_COLOR = {0.95f, 0.95f, 0.95f, 1.0f};
 //Rectangle outline thickness.
 const float OUTLINE_THICKNESS = 2.0f;
 //Padding between text and rectangle limit.
-const float PADDING = 2.0f;
+const float PADDING = 4.0f;
 }
 
 
@@ -497,10 +497,10 @@ void draw_control_icon(
     if(shape == CONTROL_ICON_SHAPE_BITMAP) {
         //All icons are square, and in a row, so the spritesheet height works.
         int icon_size =
-            al_get_bitmap_height(game.sys_assets.bmp_control_icons);
+            al_get_bitmap_height(game.sys_assets.bmp_control_binding_icons);
         ALLEGRO_BITMAP* bmp =
             al_create_sub_bitmap(
-                game.sys_assets.bmp_control_icons,
+                game.sys_assets.bmp_control_binding_icons,
                 (icon_size + 1) * (int) bitmap_sprite, 0,
                 icon_size, icon_size
             );
@@ -533,31 +533,16 @@ void draw_control_icon(
     
     //Now, draw the rectangle, either sharp or rounded.
     switch(shape) {
-    case CONTROL_ICON_SHAPE_RECTANGLE: {
-        al_draw_filled_rectangle(
-            where.x - total_width * 0.5, where.y - total_height * 0.5,
-            where.x + total_width * 0.5, where.y + total_height * 0.5,
-            final_rect_color
-        );
-        al_draw_rectangle(
-            where.x - total_width * 0.5, where.y - total_height * 0.5,
-            where.x + total_width * 0.5, where.y + total_height * 0.5,
-            final_outline_color,
-            CONTROL_ICON::OUTLINE_THICKNESS
+        draw_textured_box(
+            where, point(total_width, total_height),
+            game.sys_assets.bmp_key_box
         );
         break;
     }
     case CONTROL_ICON_SHAPE_ROUNDED: {
-        draw_filled_rounded_rectangle(
+        draw_textured_box(
             where, point(total_width, total_height),
-            16.0f,
-            final_rect_color
-        );
-        draw_rounded_rectangle(
-            where, point(total_width, total_height),
-            16.0f,
-            final_outline_color,
-            CONTROL_ICON::OUTLINE_THICKNESS
+            game.sys_assets.bmp_button_box
         );
         break;
     }
