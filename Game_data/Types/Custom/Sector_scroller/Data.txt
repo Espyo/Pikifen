@@ -1,0 +1,13 @@
+name = Sector scroller
+description = Scrolls the sector below it in whichever direction it is facing.
+
+custom_category_name = Misc
+
+area_editor_properties {
+    Speed {
+        var = speed
+        def_value = 50
+        type = decimal
+        tooltip = What speed the sector's floor scrolls at.
+    }
+}

@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="430.74167mm"
+   width="546.09998mm"
    height="67.733337mm"
-   viewBox="0 0 1627.9999 256.00002"
+   viewBox="0 0 2063.9998 256.00002"
    version="1.1"
    id="svg160"
    xml:space="preserve"
@@ -189,9 +189,9 @@
      borderopacity="0.30"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5"
-     inkscape:cx="1614"
-     inkscape:cy="76.333333"
+     inkscape:zoom="2.535"
+     inkscape:cx="1989.3491"
+     inkscape:cy="25.443787"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:showpageshadow="0"
@@ -308,7 +308,7 @@
          inkscape:export-ydpi="96" /></g><g
        id="g11151"
        transform="translate(-18.5,-17.5)"><circle
-         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#56dcdc;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill;filter:url(#filter12501);stop-color:#000000;stop-opacity:1;vector-effect:none;-inkscape-stroke:none"
+         style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#56dcdc;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;filter:url(#filter12501);stop-color:#000000;stop-opacity:1"
          id="circle11530"
          cx="1537"
          cy="36"
@@ -720,4 +720,20 @@
        y="0"
        xlink:href="#g11598"
        id="use13139"
-       transform="translate(70,69)" /></g></svg>
+       transform="translate(70,69)" /><g
+       id="g1399"><rect
+         style="color:#000000;overflow:visible;opacity:1;fill:#e4e404;fill-opacity:1;fill-rule:evenodd;stroke-width:1.28286;stroke-miterlimit:50;paint-order:markers stroke fill;stop-color:#000000"
+         id="rect497"
+         width="64"
+         height="64"
+         x="2000"
+         y="0" /><path
+         style="color:#000000;overflow:visible;opacity:1;fill:#252525;fill-opacity:1;fill-rule:evenodd;stroke-width:3;stroke-miterlimit:50;paint-order:markers stroke fill;stop-color:#000000"
+         d="m 2000,48 48,-48 h 16 v 16 l -48,48 h -16 z"
+         id="path1117" /><path
+         style="color:#000000;overflow:visible;opacity:1;fill:#252525;fill-opacity:1;fill-rule:evenodd;stroke-width:3;stroke-miterlimit:50;paint-order:markers stroke fill;stop-color:#000000"
+         d="m 2000,16 16,-16 h -16 z"
+         id="path1391" /><path
+         style="color:#000000;overflow:visible;opacity:1;fill:#252525;fill-opacity:1;fill-rule:evenodd;stroke-width:3;stroke-miterlimit:50;paint-order:markers stroke fill;stop-color:#000000"
+         d="m 2064,48 -16,16 h 16 z"
+         id="path1393" /></g></g></svg>

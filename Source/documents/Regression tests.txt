@@ -550,7 +550,7 @@ PHYSICS
 4. Walk off an edge and try to move in mid-air
 5. Go up and down a rising bridge
 6. Go up and down a rising bridge while also rubbing against the rail
-7. Walk against all the test walls in the Tests area
+7. Walk against all the test walls in the DEV Lab
 8. Try to wedge yourself between a pushing mob and a wall
 9. Fall on top of a walkable mob
 10. Go on top of a walkable mob that's flush to a wall and hug the walls
@@ -568,8 +568,8 @@ PHYSICS
 6. Have Pikmin carry something
 7. Have Pikmin latch on to something
 8. Have Pikmin drag something that can be pushed, like a cardboard box
-9. Move whilst on top of a moving walkable mob
-10. Move whilst on top of a mob that is changing its height
+9. Move whilst on top of a moving walkable mob, with Pikmin in your group
+10. Move whilst on top of a mob that is changing its height, with Pikmin in your group
 11. Get a non-Winged Pikmin to climb a climbing stick, and check their Z. It must go all the way to 250.
 11. Repeat, but with a Winged Pikmin.
 
@@ -625,7 +625,7 @@ In the diagram, numbers represent that sector's height.
 | +---+ |
 |       |
 +-------+
-The 0-height sector should only be 32 units tall. This test is meant to fail, since the engine has no way of compressing the shadows in tight spaces to avoid overlap.
+The 0-height sector should only be 32 units wide. This test is meant to fail, since the engine has no way of compressing the shadows in tight spaces to avoid overlap.
 
 
 +-----+-----+

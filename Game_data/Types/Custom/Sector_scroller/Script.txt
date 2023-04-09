@@ -1,0 +1,15 @@
+first_state = idling
+
+init {
+    set_var speed 50
+}
+
+script {
+    idling {
+        on_enter {
+            get_info a angle
+            get_coordinates_from_angle x y $a $speed
+            set_sector_scroll $x $y
+        }
+    }
+}

@@ -7,9 +7,9 @@ body {
 }
 
 h1, h2, h3, h4 {
-    text-decoration: underline;
-    padding-top: 30px;
-    clear: right;
+  text-decoration: underline;
+  padding-top: 30px;
+  clear: right;
 }
 
 h1 {
@@ -92,11 +92,11 @@ th {
 }
 
 .box p {
-    margin: 0px;
+  margin: 0px;
 }
 
 .code-faded {
-    color: #909090;
+  color: #909090;
 }
 
 /* Changelog. */

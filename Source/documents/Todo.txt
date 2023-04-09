@@ -3,8 +3,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
-        Northwest quadrant for creatures and wildlife
-        Northeast quadrant for other mobs
         Southwest quadrant for paths
             Normal link
             One-way link
@@ -15,31 +13,40 @@ Current tasks (tasks being worked on, but not yet committed)
             Label?
             Pikmin waiting for a lake to be drained?
             Copy stuff from the Paths area, and also add tests for Pikmin carrying bridge fragments and berries
-        Southeast quadrant for misc
-            A measuring pad that's just a big sector with nothing in it, but uses the measurement texture
-            A floor that has a ramp and stairs side-by-side
-            Floors with all hazards
-                Plus one that's ground + air
-            Blocking sector
-            Bottomless pit
-            Texture offsets, scales, angles, and tints, and sector brightness
-            Texture fader, one fading just the texture, the other fading everything
-            Edges with various wall shadow options
-            Edges with ledge smoothing
-            Gates with different healths
-            Pikmin with different starting properties
-            An object inside another
-            Small tree shadows; one normal, another with different scale, rotation, opacity, and sway
-            Sector outside of the main land (an island)
-            The weird Sheargrub enclosure in Tests
-            Bridges building up, bridges building over a gap, and bridges building over water
-            A Water Dumple in front of a bomb rock
-            Throw-height measures
-            All sorts of collision-testing terrain in Tests
-            All sorts of collision-testing terrain in the regressions document
-            All sorts of wall shadow testing-terrain in the regressions document
-            Sign testing characters
-            Moving floors
+        x Northwest quadrant for creatures and wildlife
+        x Northeast quadrant for other mobs
+        x Southeast quadrant for misc
+            x Terrain
+                x A floor that has a ramp and stairs side-by-side
+                x Blocking sector
+                x Really tight stair spiral
+                x The weird Sheargrub enclosure in Tests
+                x Throw-height measures
+                x All sorts of collision-testing terrain in Tests
+                x All sorts of collision-testing terrain in the regressions document
+            x Hazards
+                x Bottomless pit
+                x Floors with all hazards
+                x    Plus one that's ground + air
+            x Textures
+                x A measuring pad that's just a big sector with nothing in it, but uses the measurement texture
+                x Texture offsets, scales, angles, and tints, and sector brightness
+                x Texture fader, one fading just the texture, the other fading everything
+            x Edges
+                x Edges with various wall shadow options
+                x Edges with ledge smoothing
+                x All sorts of wall shadow testing-terrain in the regressions document
+            x Object behaviors
+                x Gates with different healths
+                x Pikmin with different starting properties
+                x An object inside another
+                x Bridges building up, bridges building over a gap, and bridges building over water
+                x A Water Dumple in front of a bomb rock
+                x A sign testing markup
+            x Misc
+                x Small tree shadows; one normal, another with different scale, rotation, opacity, and sway
+                x Sector outside of the main land (an island)
+                x Moving floors
         Theme it like a laboratory
         Computer terminals that act like signs should tell the player what's where
         All leaders should be present
@@ -47,11 +54,26 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    The maximum throw heights for leader/Pikmin types are not being respected
+    If you have preview mode on and make changes, the wall shadows won't get updated properly
+    Pasting a sector's properties does not update wall shadows properly
+    Ctrl+D should be ignored if you're not in mobs mode
+    Pikmin shouldn't make a sound when they start their life following a leader (i.e. Bulbmin)
+    Eggs and bomb rocks that spawn out of another mob will slide forever
+    If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
+    If you disable the area editor undo feature, areas are no longer recognized as changed (e.g. when you try to quit with unsaved changes)
     
     --- v0.24.0 ---
-    Area tips: Add a section for Pikmin-specific details that usually look good
-        Crop circle patterns under the Onion and ship
-        Rocks should have ledge smoothing
+    Try adding a background to Tutorial Meadow that's just the grass texture
+    Are flower Pikmin even completing tasks any faster?
+    Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4
+    Minor manual improvements
+        Area tips: Add a section for Pikmin-specific details that usually look good
+            Crop circle patterns under the Onion and ship
+            Rocks should have ledge smoothing
+        The header bar should have a button to go to the top of the page
+        Every section should have a small faded # symbol next to it that links to the section
+        Write down the best way to create a zip of custom content to share with others
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
     Add several pre-packaged areas, since players have nothing to play with right now
         Helodity's Adventure area (see #content-sharing)
@@ -549,6 +571,7 @@ Next tasks (roughly sorted most important first)
         Sprouts between areas, days, etc.
             Don't forget that sprouts should turn into flowers overnight
         Enemies respawning after some days
+        Treasures that started moving after being carried should start recording their coordinates, so that when the player comes back, the treasure spawns there instead of the original spot
         Area unlocking
         Pause menu
             When "end day" is chosen, it should warn about idle Pikmin that will get left behind
@@ -704,6 +727,7 @@ Misc things (so I don't forget)
             A way to blacklist path links for the tool that shows the shortest path
             View -> Show X in other modes
                 This would allow one to see edges+vertexes, mobs, and paths in modes that aren't layout, mobs, and paths, respectively
+            A way to visually show that you're in the layout mode, mobs mode, etc. I tried a vignette in the canvas, colored after the mode, but it's too ugly. Maybe coloring the Dear ImGui widgets based on the mode?
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
             A way to change all sprites' bitmap files from file A to file B (Darthvato)
@@ -725,6 +749,7 @@ Misc things (so I don't forget)
         Move it to the details section
         Foreground
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
+    The spray HUD icons should show a tiny bar with concoction progress
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end
         Apply fog, blackout, sector darkness, etc. on this

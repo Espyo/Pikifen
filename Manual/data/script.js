@@ -28,7 +28,7 @@ function make_toc () {
     }
     
     if(level > prev_level) {
-      new_ul = document.createElement('ul');
+      var new_ul = document.createElement('ul');
       cur_ul.appendChild(new_ul);
       cur_ul = new_ul;
     } else if(level < prev_level) {
