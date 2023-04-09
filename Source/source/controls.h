@@ -123,8 +123,8 @@ struct player_action_type {
     string name;
     //Its name in the options file.
     string internal_name;
-    //String representing of this action type's default control binding.
-    string default_binding_str;
+    //String representing of this action type's default control bind.
+    string default_bind_str;
     player_action_type();
 };
 
@@ -139,23 +139,23 @@ public:
         const PLAYER_ACTION_TYPES id,
         const string &name,
         const string &internal_name,
-        const string &default_binding_str
+        const string &default_bind_str
     );
     void clear_player_action_types();
     const vector<player_action_type> &get_all_player_action_types() const;
     
-    //Control binding functions.
-    void add_binding(const control_binding &binding);
-    string binding_to_str(const control_binding &b) const;
-    void clear_bindings();
-    control_binding find_binding(
+    //Control bind functions.
+    void add_bind(const control_bind &bind);
+    string bind_to_str(const control_bind &b) const;
+    void clear_binds();
+    control_bind find_bind(
         const PLAYER_ACTION_TYPES action_type_id
     ) const;
-    control_binding find_binding(
+    control_bind find_bind(
         const string &action_type_name
     ) const;
-    const vector<control_binding> &get_all_bindings() const;
-    control_binding str_to_binding(const string &s) const;
+    const vector<control_bind> &get_all_binds() const;
+    control_bind str_to_bind(const string &s) const;
     
     //Event loop functions.
     bool handle_allegro_event(const ALLEGRO_EVENT &ev);

@@ -171,10 +171,10 @@ player_action_type::player_action_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Adds a new binding between player input and game action type.
+ * Adds a new bind between player input and game action type.
  */
-void controls_mediator::add_binding(const control_binding &bind) {
-    mgr.add_binding(bind);
+void controls_mediator::add_bind(const control_bind &bind) {
+    mgr.add_bind(bind);
 }
 
 
@@ -186,33 +186,33 @@ void controls_mediator::add_binding(const control_binding &bind) {
  *   Its name.
  * internal_name:
  *   The name of its property in the options file.
- * default_binding_str:
- *   String representing of this action's default control binding.
+ * default_bind_str:
+ *   String representing of this action's default control bind.
  */
 void controls_mediator::add_player_action_type(
     const PLAYER_ACTION_TYPES id,
     const string &name, const string &internal_name,
-    const string &default_binding_str
+    const string &default_bind_str
 ) {
     player_action_type a;
     a.id = id;
     a.name = name;
     a.internal_name = internal_name;
-    a.default_binding_str = default_binding_str;
+    a.default_bind_str = default_bind_str;
     
     player_action_types.push_back(a);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Creates a string that represents a control binding.
+ * Creates a string that represents a control bind.
  * Ignores the player number.
  * Returns an empty string on error.
  * b:
- *   Control binding to read from.
+ *   Control bind to read from.
  */
-string controls_mediator::binding_to_str(
-    const control_binding &b
+string controls_mediator::bind_to_str(
+    const control_bind &b
 ) const {
     switch(b.input.type) {
     case INPUT_TYPE_KEYBOARD_KEY: {
@@ -245,10 +245,10 @@ string controls_mediator::binding_to_str(
 
 
 /* ----------------------------------------------------------------------------
- * Removes all registered control bindings.
+ * Removes all registered control binds.
  */
-void controls_mediator::clear_bindings() {
-    mgr.clear_bindings();
+void controls_mediator::clear_binds() {
+    mgr.clear_bind();
 }
 
 
@@ -261,40 +261,40 @@ void controls_mediator::clear_player_action_types() {
 
 
 /* ----------------------------------------------------------------------------
- * Finds a registered control binding for player 1 that matches
- * the requested action. Returns an empty binding if none is found.
+ * Finds a registered control bind for player 1 that matches
+ * the requested action. Returns an empty bind if none is found.
  * action_type_id:
  *   ID of the action type.
  */
-control_binding controls_mediator::find_binding(
+control_bind controls_mediator::find_bind(
     const PLAYER_ACTION_TYPES action_type_id
 ) const {
-    vector<control_binding> all_bindings =
-        mgr.get_all_bindings();
-    for(size_t b = 0; b < all_bindings.size(); b++) {
-        if(all_bindings[b].action_type_id == action_type_id) {
-            return all_bindings[b];
+    const vector<control_bind> &all_binds =
+        mgr.get_all_binds();
+    for(size_t b = 0; b < all_binds.size(); b++) {
+        if(all_binds[b].action_type_id == action_type_id) {
+            return all_binds[b];
         }
     }
-    return control_binding();
+    return control_bind();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Finds a registered control binding for player 1 that matches
- * the requested action. Returns an empty binding if none is found.
+ * Finds a registered control bind for player 1 that matches
+ * the requested action. Returns an empty bind if none is found.
  * action_name:
  *   Name of the action.
  */
-control_binding controls_mediator::find_binding(
+control_bind controls_mediator::find_bind(
     const string &action_name
 ) const {
     for(size_t b = 0; b < player_action_types.size(); ++b) {
         if(player_action_types[b].internal_name == action_name) {
-            return find_binding(player_action_types[b].id);
+            return find_bind(player_action_types[b].id);
         }
     }
-    return control_binding();
+    return control_bind();
 }
 
 
@@ -308,10 +308,10 @@ const vector<player_action_type>
 
 
 /* ----------------------------------------------------------------------------
- * Returns all registered bindings.
+ * Returns all registered bind.
  */
-const vector<control_binding> &controls_mediator::get_all_bindings() const {
-    return mgr.get_all_bindings();
+const vector<control_bind> &controls_mediator::get_all_binds() const {
+    return mgr.get_all_binds();
 }
 
 
@@ -395,7 +395,7 @@ bool controls_mediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
         break;
     }
     }
-
+    
     return false;
 }
 
@@ -420,16 +420,16 @@ bool controls_mediator::read_action(player_action &action) {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a control binding from a string representation.
+ * Creates a control bind from a string representation.
  * Ignores the player number.
- * Returns a default control binding instance on error.
+ * Returns a default control bind instance on error.
  * s:
  *   String to read from.
  */
-control_binding controls_mediator::str_to_binding(
+control_bind controls_mediator::str_to_bind(
     const string &s
 ) const {
-    control_binding bind;
+    control_bind bind;
     
     vector<string> parts = split(s, "_");
     size_t n_parts = parts.size();
@@ -484,7 +484,7 @@ control_binding controls_mediator::str_to_binding(
         
     } else {
         log_error(
-            "Unrecognized control binding \"" + s + "\"!"
+            "Unrecognized control bind \"" + s + "\"!"
         );
     }
     

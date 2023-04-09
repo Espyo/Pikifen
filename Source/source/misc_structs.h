@@ -113,8 +113,8 @@ enum STRING_TOKEN_TYPES {
     STRING_TOKEN_CHAR,
     //A line break.
     STRING_TOKEN_LINE_BREAK,
-    //A control binding icon.
-    STRING_TOKEN_CONTROL_BINDING,
+    //A control bind icon.
+    STRING_TOKEN_CONTROL_BIND,
 };
 
 
@@ -136,8 +136,8 @@ struct asset_file_names_struct {
     string checkbox_check;
     //Checkbox without a checkmark.
     string checkbox_no_check;
-    //Misc. control binding icons.
-    string control_binding_icons;
+    //Misc. control bind icons.
+    string control_bind_icons;
     //Counter font.
     string counter_font;
     //Leader cursor.
@@ -624,8 +624,8 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_checkbox_check;
     //Checkbox without a checkmark.
     ALLEGRO_BITMAP* bmp_checkbox_no_check;
-    //Misc. control binding icons.
-    ALLEGRO_BITMAP* bmp_control_binding_icons;
+    //Misc. control bind icons.
+    ALLEGRO_BITMAP* bmp_control_bind_icons;
     //Leader cursor.
     ALLEGRO_BITMAP* bmp_cursor;
     //Enemy spirit.
@@ -766,7 +766,7 @@ public:
     float get_visibility() const;
     void reset();
     void set_contents(
-        control_binding control, const string &text, const point &pos
+        control_bind control, const string &text, const point &pos
     );
     void set_enabled(const bool enabled);
     void tick(const float delta_t);
@@ -774,8 +774,8 @@ public:
 private:
     //Is it meant to exist?
     bool enabled;
-    //What control binding icon to show.
-    control_binding control;
+    //What control bind icon to show.
+    control_bind control;
     //What text to write.
     string text;
     //Coordinates of the focal point.

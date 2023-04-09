@@ -276,18 +276,18 @@ void init_controls() {
         PLAYER_ACTION_MENU_BACK, "Menu back", "menu_back", "k_59"
     );
     
-    //Populate the control bindings with some default controls for player 1.
+    //Populate the control binds with some default controls for player 1.
     //If the options are loaded successfully, these controls are overwritten.
-    const vector<player_action_type>& action_types =
+    const vector<player_action_type> &action_types =
         game.controls.get_all_player_action_types();
     for(size_t a = 0; a < N_PLAYER_ACTIONS; ++a) {
-        string def = action_types[a].default_binding_str;
+        string def = action_types[a].default_bind_str;
         if(def.empty()) continue;
         
-        control_binding bind;
-        bind = game.controls.str_to_binding(def);
+        control_bind bind;
+        bind = game.controls.str_to_bind(def);
         bind.action_type_id = action_types[a].id;
-        game.controls.add_binding(bind);
+        game.controls.add_bind(bind);
     }
 }
 

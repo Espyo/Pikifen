@@ -69,10 +69,10 @@ struct player_input {
 
 
 /* ----------------------------------------------------------------------------
- * Contains information about the binding between a specific input,
+ * Contains information about the bind between a specific input,
  * and a player action type.
  */
-struct control_binding {
+struct control_bind {
     //Action type ID.
     int action_type_id;
     //Player number, starting at 0.
@@ -80,7 +80,7 @@ struct control_binding {
     //Player input bound.
     player_input input;
     
-    control_binding();
+    control_bind();
 };
 
 
@@ -117,8 +117,8 @@ struct controls_manager_options {
  * that a key was pressed along with its key code, or the fact that a game
  * controller's button was released, along with the button code and game
  * controller number.
- * The manager holds a list of control bindings, and when an input is received,
- * it scans through all bindings to figure out what actions should be
+ * The manager holds a list of control binds, and when an input is received,
+ * it scans through all binds to figure out what actions should be
  * triggered.
  * It also has logic to do some cleanup like normalizing a game controller's
  * stick positions.
@@ -128,9 +128,9 @@ public:
     //Options.
     controls_manager_options options;
     
-    void add_binding(const control_binding &binding);
-    void clear_bindings();
-    const vector<control_binding> &get_all_bindings() const;
+    void add_bind(const control_bind &bind);
+    void clear_bind();
+    const vector<control_bind> &get_all_binds() const;
     void handle_input(
         INPUT_TYPES type, float value,
         int device_nr = 0, int button_nr = 0, int stick_nr = 0, int axis_nr = 0
@@ -141,8 +141,8 @@ public:
 private:
     //Queue of actions the game needs to handle this frame.
     vector<player_action> action_queue;
-    //Control bindings.
-    vector<control_binding> bindings;
+    //Control binds.
+    vector<control_bind> binds;
     //Each game action type's input state in the previous frame.
     map<int, float> old_action_type_states;
     //Each game action type's current input state.

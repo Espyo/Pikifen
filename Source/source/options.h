@@ -177,7 +177,7 @@ struct options_struct {
     bool mouse_moves_cursor[MAX_PLAYERS];
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling;
-    //Show control binding icons on top of HUD elements?
+    //Show control bind icons on top of HUD elements?
     bool show_hud_controls;
     //Target framerate.
     int target_fps;

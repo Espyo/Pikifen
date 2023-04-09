@@ -234,7 +234,7 @@ void pause_menu_struct::draw_tidbit(
     if(tokens_per_line.empty()) return;
     
     //Figure out if we need to scale things vertically.
-    //Control binding icons that are bitmaps will have their width unchanged,
+    //Control bind icons that are bitmaps will have their width unchanged,
     //otherwise this would turn into a cat-and-mouse game of the Y scale
     //shrinking causing a token width to shrink, which could cause the
     //Y scale to grow, ad infinitum.

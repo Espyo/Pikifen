@@ -20,7 +20,7 @@
 #include "misc_structs.h"
 
 
-namespace CONTROL_BINDING_ICON {
+namespace CONTROL_BIND_ICON {
 extern const ALLEGRO_COLOR BASE_OUTLINE_COLOR;
 extern const ALLEGRO_COLOR BASE_RECT_COLOR;
 extern const ALLEGRO_COLOR BASE_TEXT_COLOR;
@@ -41,53 +41,53 @@ extern const float NOTIFICATION_PADDING;
 }
 
 
-//Possible shapes for a control binding icon.
-enum CONTROL_BINDING_ICON_SHAPES {
+//Possible shapes for a control bind icon.
+enum CONTROL_BIND_ICON_SHAPES {
     //Doesn't really have a shape, but instead draws a bitmap.
-    CONTROL_BINDING_ICON_SHAPE_BITMAP,
+    CONTROL_BIND_ICON_SHAPE_BITMAP,
     //Rectangle shape, representing keyboard keys.
-    CONTROL_BINDING_ICON_SHAPE_RECTANGLE,
+    CONTROL_BIND_ICON_SHAPE_RECTANGLE,
     //Circle/rounded rectangle shape, representing buttons.
-    CONTROL_BINDING_ICON_SHAPE_ROUNDED,
+    CONTROL_BIND_ICON_SHAPE_ROUNDED,
 };
 
 
-//Control binding icon spritesheet sprites. The order matches what's in the spritesheet.
-enum CONTROL_BINDING_ICON_SPRITES {
+//Control bind icon spritesheet sprites. The order matches what's in the spritesheet.
+enum CONTROL_BIND_ICON_SPRITES {
     //Left mouse button.
-    CONTROL_BINDING_ICON_SPRITE_LMB,
+    CONTROL_BIND_ICON_SPRITE_LMB,
     //Right mouse button.
-    CONTROL_BINDING_ICON_SPRITE_RMB,
+    CONTROL_BIND_ICON_SPRITE_RMB,
     //Middle mouse button.
-    CONTROL_BINDING_ICON_SPRITE_MMB,
+    CONTROL_BIND_ICON_SPRITE_MMB,
     //Mouse wheel up.
-    CONTROL_BINDING_ICON_SPRITE_MWU,
+    CONTROL_BIND_ICON_SPRITE_MWU,
     //Mouse wheel down.
-    CONTROL_BINDING_ICON_SPRITE_MWD,
+    CONTROL_BIND_ICON_SPRITE_MWD,
     //Up key.
-    CONTROL_BINDING_ICON_SPRITE_UP,
+    CONTROL_BIND_ICON_SPRITE_UP,
     //Left key.
-    CONTROL_BINDING_ICON_SPRITE_LEFT,
+    CONTROL_BIND_ICON_SPRITE_LEFT,
     //Down key.
-    CONTROL_BINDING_ICON_SPRITE_DOWN,
+    CONTROL_BIND_ICON_SPRITE_DOWN,
     //Right key.
-    CONTROL_BINDING_ICON_SPRITE_RIGHT,
+    CONTROL_BIND_ICON_SPRITE_RIGHT,
     //Backspace key.
-    CONTROL_BINDING_ICON_SPRITE_BACKSPACE,
+    CONTROL_BIND_ICON_SPRITE_BACKSPACE,
     //Shift key.
-    CONTROL_BINDING_ICON_SPRITE_SHIFT,
+    CONTROL_BIND_ICON_SPRITE_SHIFT,
     //Tab key.
-    CONTROL_BINDING_ICON_SPRITE_TAB,
+    CONTROL_BIND_ICON_SPRITE_TAB,
     //Enter key.
-    CONTROL_BINDING_ICON_SPRITE_ENTER,
+    CONTROL_BIND_ICON_SPRITE_ENTER,
     //Game controller stick up.
-    CONTROL_BINDING_ICON_SPRITE_STICK_UP,
+    CONTROL_BIND_ICON_SPRITE_STICK_UP,
     //Game controller stick left.
-    CONTROL_BINDING_ICON_SPRITE_STICK_LEFT,
+    CONTROL_BIND_ICON_SPRITE_STICK_LEFT,
     //Game controller stick down.
-    CONTROL_BINDING_ICON_SPRITE_STICK_DOWN,
+    CONTROL_BIND_ICON_SPRITE_STICK_DOWN,
     //Game controller stick right.
-    CONTROL_BINDING_ICON_SPRITE_STICK_RIGHT,
+    CONTROL_BIND_ICON_SPRITE_STICK_RIGHT,
 };
 
 
@@ -127,8 +127,8 @@ void draw_button(
     const bool selected,
     const float juicy_grow_amount = 0.0f
 );
-void draw_control_binding_icon(
-    const ALLEGRO_FONT* const font, const control_binding& c,
+void draw_control_bind_icon(
+    const ALLEGRO_FONT* const font, const control_bind &c,
     const bool condensed, const point &where, const point &max_size,
     const unsigned char alpha = 228
 );
@@ -207,14 +207,14 @@ void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
-void get_control_binding_icon_info(
-    const control_binding& c, const bool condensed,
-    CONTROL_BINDING_ICON_SHAPES* shape,
-    CONTROL_BINDING_ICON_SPRITES* bitmap_sprite,
+void get_control_bind_icon_info(
+    const control_bind &c, const bool condensed,
+    CONTROL_BIND_ICON_SHAPES* shape,
+    CONTROL_BIND_ICON_SPRITES* bitmap_sprite,
     string* text
 );
-float get_control_binding_icon_width(
-    const ALLEGRO_FONT* font, const control_binding& c, const bool condensed,
+float get_control_bind_icon_width(
+    const ALLEGRO_FONT* font, const control_bind &c, const bool condensed,
     const float max_bitmap_height = 0
 );
 

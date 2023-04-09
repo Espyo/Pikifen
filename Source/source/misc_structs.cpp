@@ -116,7 +116,7 @@ asset_file_names_struct::asset_file_names_struct() :
     button_box("Button_box.png"),
     checkbox_check("Checkbox_check.png"),
     checkbox_no_check("Checkbox_no_check.png"),
-    control_binding_icons("Control_binding_icons.png"),
+    control_bind_icons("Control_bind_icons.png"),
     counter_font("Counter_font.png"),
     cursor("Cursor.png"),
     cursor_counter_font("Cursor_counter_font.png"),
@@ -173,7 +173,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("bubble_box", bubble_box);
     rs.set("checkbox_check", checkbox_check);
     rs.set("checkbox_no_check", checkbox_no_check);
-    rs.set("control_binding_icons", control_binding_icons);
+    rs.set("control_bind_icons", control_bind_icons);
     rs.set("counter_font", counter_font);
     rs.set("cursor", cursor);
     rs.set("cursor_counter_font", cursor_counter_font);
@@ -998,7 +998,7 @@ void notification_struct::draw() const {
     if(control.input.type != INPUT_TYPE_NONE) {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
-        draw_control_binding_icon(
+        draw_control_bind_icon(
             game.fonts.standard, control,
             true,
             point(
@@ -1058,14 +1058,14 @@ void notification_struct::reset() {
 /* ----------------------------------------------------------------------------
  * Sets the contents to show.
  * control:
- *   Control binding icon to show.
+ *   Control bind icon to show.
  * text:
  *   Text to show.
  * pos:
  *   Where to show it in the game world.
  */
 void notification_struct::set_contents(
-    control_binding control, const string &text, const point &pos
+    control_bind control, const string &text, const point &pos
 ) {
     this->control = control;
     this->text = text;
@@ -2045,7 +2045,7 @@ system_asset_list::system_asset_list():
     bmp_button_box(nullptr),
     bmp_checkbox_check(nullptr),
     bmp_checkbox_no_check(nullptr),
-    bmp_control_binding_icons(nullptr),
+    bmp_control_bind_icons(nullptr),
     bmp_cursor(nullptr),
     bmp_enemy_spirit(nullptr),
     bmp_focus_box(nullptr),

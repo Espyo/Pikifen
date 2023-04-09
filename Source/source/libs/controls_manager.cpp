@@ -15,19 +15,19 @@
 
 
 /* ----------------------------------------------------------------------------
- * Constructs a new control binding.
+ * Constructs a new control bind.
  */
-control_binding::control_binding() :
+control_bind::control_bind() :
     action_type_id(0),
     player_nr(0) {
 }
 
 
 /* ----------------------------------------------------------------------------
- * Adds a new binding between player input and game action type.
+ * Adds a new bind between player input and game action type.
  */
-void controls_manager::add_binding(const control_binding &binding) {
-    bindings.push_back(binding);
+void controls_manager::add_bind(const control_bind &bind) {
+    binds.push_back(bind);
 }
 
 
@@ -63,10 +63,10 @@ void controls_manager::clean_stick(
 
 
 /* ----------------------------------------------------------------------------
- * Removes all registered control bindings.
+ * Removes all registered control binds.
  */
-void controls_manager::clear_bindings() {
-    bindings.clear();
+void controls_manager::clear_binds() {
+    binds.clear();
 }
 
 
@@ -93,9 +93,9 @@ vector<int> controls_manager::get_action_types_from_input(
 ) {
     vector<int> action_types;
     
-    for(size_t b = 0; b < bindings.size(); ++b) {
+    for(size_t b = 0; b < binds.size(); ++b) {
     
-        const control_binding &bind = bindings[b];
+        const control_bind &bind = binds[b];
         
         if(bind.input.type != type) continue;
         
@@ -150,10 +150,10 @@ vector<int> controls_manager::get_action_types_from_input(
 
 
 /* ----------------------------------------------------------------------------
- * Returns all registered bindings.
+ * Returns all registered binds.
  */
-const vector<control_binding> &controls_manager::get_all_bindings() const {
-    return bindings;
+const vector<control_bind> &controls_manager::get_all_binds() const {
+    return binds;
 }
 
 

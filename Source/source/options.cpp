@@ -182,8 +182,8 @@ void options_struct::load(data_node* file) {
      * joystick stick and axis, etc.
      * Check the constructor of control_info for more information.
      */
-    game.controls.clear_bindings();
-    const vector<player_action_type>& player_action_types =
+    game.controls.clear_binds();
+    const vector<player_action_type> &player_action_types =
         game.controls.get_all_player_action_types();
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         for(size_t b = 0; b < N_PLAYER_ACTIONS; ++b) {
@@ -195,12 +195,12 @@ void options_struct::load(data_node* file) {
                 semicolon_list_to_vector(control_node->value);
                 
             for(size_t c = 0; c < possible_controls.size(); ++c) {
-                control_binding bind =
-                    game.controls.str_to_binding(possible_controls[c]);
+                control_bind bind =
+                    game.controls.str_to_bind(possible_controls[c]);
                 if(bind.input.type == INPUT_TYPE_NONE) continue;
                 bind.action_type_id = player_action_types[b].id;
                 bind.player_nr = p;
-                game.controls.add_binding(bind);
+                game.controls.add_bind(bind);
             }
         }
     }
@@ -331,7 +331,7 @@ void options_struct::save(data_node* file) const {
     //First, group the controls by action and player.
     map<string, string> grouped_controls;
     
-    const vector<player_action_type>& player_action_types =
+    const vector<player_action_type> &player_action_types =
         game.controls.get_all_player_action_types();
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
@@ -343,7 +343,7 @@ void options_struct::save(data_node* file) const {
     }
     
     //Write down their control strings.
-    vector<control_binding> all_binds = game.controls.get_all_bindings();
+    vector<control_bind> all_binds = game.controls.get_all_binds();
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         for(size_t b = 0; b < all_binds.size(); ++b) {
             if(all_binds[b].player_nr != p) continue;
@@ -359,7 +359,7 @@ void options_struct::save(data_node* file) const {
             }
             
             grouped_controls[name] +=
-                game.controls.binding_to_str(all_binds[b]) + ";";
+                game.controls.bind_to_str(all_binds[b]) + ";";
         }
     }
     
