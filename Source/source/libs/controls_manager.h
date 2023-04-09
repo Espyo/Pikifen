@@ -21,6 +21,7 @@ using std::string;
 using std::tuple;
 using std::vector;
 
+
 //Possible types of inputs.
 enum INPUT_TYPES {
     //None.
@@ -43,6 +44,27 @@ enum INPUT_TYPES {
     INPUT_TYPE_CONTROLLER_AXIS_POS,
     //Game controller stick/D-pad axis tilted in a negative position.
     INPUT_TYPE_CONTROLLER_AXIS_NEG,
+    //Some unknown type.
+    INPUT_TYPE_UNKNOWN,
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Defines an instance of a specific input.
+ */
+struct player_input {
+    //Type of input.
+    INPUT_TYPES type;
+    //Device number. i.e. the game controller number.
+    int device_nr;
+    //Button. Game controller button, keyboard key, mouse button, etc.
+    int button_nr;
+    //Game controller stick, if any.
+    int stick_nr;
+    //Game controller axis, if any.
+    int axis_nr;
+    
+    player_input();
 };
 
 
@@ -55,23 +77,15 @@ struct control_binding {
     int action_type_id;
     //Player number, starting at 0.
     int player_nr;
-    //Type of input.
-    INPUT_TYPES input_type;
-    //Device number. i.e. the game controller number.
-    int device_nr;
-    //Button. Game controller button, keyboard key, mouse button, etc.
-    int button_nr;
-    //Game controller stick.
-    int stick_nr;
-    //Game controller axis.
-    int axis_nr;
+    //Player input bound.
+    player_input input;
     
     control_binding();
 };
 
 
 /* ----------------------------------------------------------------------------
- * Defines an instance of a player action.
+ * Defines an instance of a specific player action.
  */
 struct player_action {
     //Action type ID.
@@ -98,6 +112,7 @@ struct controls_manager_options {
 
 /* ----------------------------------------------------------------------------
  * Manages the connections between inputs and player actions.
+ * The idea of this class is to be game-agnostic.
  * An input is data about some hardware signal. For instance, the fact
  * that a key was pressed along with its key code, or the fact that a game
  * controller's button was released, along with the button code and game
@@ -115,16 +130,16 @@ public:
     
     void add_binding(const control_binding &binding);
     void clear_bindings();
-    vector<control_binding> get_all_bindings() const;
+    const vector<control_binding> &get_all_bindings() const;
     void handle_input(
         INPUT_TYPES type, float value,
         int device_nr = 0, int button_nr = 0, int stick_nr = 0, int axis_nr = 0
     );
     void new_frame();
-    bool get_action(player_action &action);
+    bool read_action(player_action &action);
     
 private:
-    //Queue of actions the game needs to handle.
+    //Queue of actions the game needs to handle this frame.
     vector<player_action> action_queue;
     //Control bindings.
     vector<control_binding> bindings;

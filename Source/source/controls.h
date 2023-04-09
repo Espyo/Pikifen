@@ -6,8 +6,8 @@
  *
  * === FILE DESCRIPTION ===
  * Header for the control-related classes and functions.
- * This refers to both hardware input receiving
- * and the corresponding in-game actions.
+ * This is the mediator between Allegro inputs, Pikifen player actions,
+ * and the controls manager.
  */
 
 #ifndef CONTROLS_INCLUDED
@@ -19,7 +19,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "controls_manager.h"
+#include "libs/controls_manager.h"
 
 
 using std::size_t;
@@ -130,26 +130,45 @@ struct player_action_type {
 
 
 /* ----------------------------------------------------------------------------
- * Manager for the types of player actions in the game.
+ * Mediates everything control-related in Pikifen.
  */
-struct player_action_type_manager {
-    //List of known action types.
-    vector<player_action_type> list;
-    
-    void add(
+struct controls_mediator {
+public:
+    //Player action type functions.
+    void add_player_action_type(
         const PLAYER_ACTION_TYPES id,
-        const string &name, const string &internal_name,
+        const string &name,
+        const string &internal_name,
         const string &default_binding_str
     );
+    void clear_player_action_types();
+    const vector<player_action_type> &get_all_player_action_types() const;
+    
+    //Control binding functions.
+    void add_binding(const control_binding &binding);
     string binding_to_str(const control_binding &b) const;
-    void feed_event_to_controls_manager(const ALLEGRO_EVENT &ev);
+    void clear_bindings();
     control_binding find_binding(
         const PLAYER_ACTION_TYPES action_type_id
     ) const;
     control_binding find_binding(
         const string &action_type_name
     ) const;
+    const vector<control_binding> &get_all_bindings() const;
     control_binding str_to_binding(const string &s) const;
+    
+    //Event loop functions.
+    bool handle_allegro_event(const ALLEGRO_EVENT &ev);
+    void new_frame();
+    bool read_action(player_action &action);
+    
+private:
+    //List of known player action types.
+    vector<player_action_type> player_action_types;
+    //Controls manager.
+    controls_manager mgr;
+    
 };
+
 
 #endif //ifndef CONTROLS_INCLUDED

@@ -783,7 +783,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
     }
     
     //Feed player inputs to the controls manager.
-    game.player_actions.feed_event_to_controls_manager(ev);
+    game.controls.handle_allegro_event(ev);
     
     for(size_t i = 0; i < items.size(); ++i) {
         if(items[i]->is_responsive() && items[i]->on_event) {
@@ -1114,10 +1114,10 @@ void gui_manager::start_animation(
  */
 void gui_manager::tick(const float delta_t) {
     //Controls.
-    game.controls_mgr.new_frame();
+    game.controls.new_frame();
     player_action action;
     bool input_happened = false;
-    while(game.controls_mgr.get_action(action)) {
+    while(game.controls.read_action(action)) {
         input_happened |= handle_player_action(action);
     }
     if(input_happened) last_input_was_mouse = false;

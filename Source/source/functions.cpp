@@ -1681,7 +1681,7 @@ void set_string_token_widths(
             tokens[t].width =
                 get_control_binding_icon_width(
                     control_font,
-                    game.player_actions.find_binding(tokens[t].content),
+                    game.controls.find_binding(tokens[t].content),
                     false,
                     max_control_bitmap_height
                 );

@@ -1633,14 +1633,6 @@ void area_editor::draw_canvas() {
         );
     }
     
-    //Vignette.
-    draw_textured_box(
-        (canvas_tl + canvas_br) / 2.0f,
-        canvas_br - canvas_tl,
-        game.sys_assets.bmp_vignette_box,
-        al_map_rgba(255, 0, 0, 128)
-    );
-    
     //Finish up.
     al_reset_clipping_rectangle();
     al_use_transform(&game.identity_transform);

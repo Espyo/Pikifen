@@ -154,7 +154,6 @@ asset_file_names_struct::asset_file_names_struct() :
     throw_preview("Throw_preview.png"),
     throw_preview_dashed("Throw_preview_dashed.png"),
     value_font("Value_font.png"),
-    vignette_box("Vignette_box.png"),
     wave_ring("Wave_ring.png") {
     
 }
@@ -210,7 +209,6 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("throw_preview", throw_preview);
     rs.set("throw_preview_dashed", throw_preview_dashed);
     rs.set("value_font", value_font);
-    rs.set("vignette_box", vignette_box);
     rs.set("wave_ring", wave_ring);
 }
 
@@ -997,7 +995,7 @@ void notification_struct::draw() const {
         map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
-    if(control.input_type != INPUT_TYPE_NONE) {
+    if(control.input.type != INPUT_TYPE_NONE) {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
         draw_control_binding_icon(
@@ -1050,7 +1048,7 @@ float notification_struct::get_visibility() const {
  */
 void notification_struct::reset() {
     enabled = true;
-    control.input_type = INPUT_TYPE_NONE;
+    control.input.type = INPUT_TYPE_NONE;
     text.clear();
     pos = point();
     visibility = 0.0f;
@@ -2078,7 +2076,6 @@ system_asset_list::system_asset_list():
     bmp_throw_invalid(nullptr),
     bmp_throw_preview(nullptr),
     bmp_throw_preview_dashed(nullptr),
-    bmp_vignette_box(nullptr),
     bmp_wave_ring(nullptr) {
     
 }

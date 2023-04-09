@@ -588,7 +588,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     }
     
     //Feed player inputs to the controls manager.
-    game.player_actions.feed_event_to_controls_manager(ev);
+    game.controls.handle_allegro_event(ev);
     
     //Mouse controls.
     for(size_t p = 0; p < MAX_PLAYERS; p++) {

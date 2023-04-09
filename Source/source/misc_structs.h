@@ -212,8 +212,6 @@ struct asset_file_names_struct {
     string throw_preview_dashed;
     //Value font.
     string value_font;
-    //Vignette effect box.
-    string vignette_box;
     //Wave ring.
     string wave_ring;
     
@@ -688,8 +686,6 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_throw_preview;
     //Dashed throw preview texture.
     ALLEGRO_BITMAP* bmp_throw_preview_dashed;
-    //Vignette effect box.
-    ALLEGRO_BITMAP* bmp_vignette_box;
     //Wave ring.
     ALLEGRO_BITMAP* bmp_wave_ring;
     

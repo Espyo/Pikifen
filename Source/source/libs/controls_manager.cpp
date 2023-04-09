@@ -19,12 +19,7 @@
  */
 control_binding::control_binding() :
     action_type_id(0),
-    player_nr(0),
-    input_type(INPUT_TYPE_NONE),
-    device_nr(0),
-    button_nr(0),
-    stick_nr(0),
-    axis_nr(0) {
+    player_nr(0) {
 }
 
 
@@ -81,7 +76,7 @@ void controls_manager::clear_bindings() {
  * action:
  *   Action to fill.
  */
-bool controls_manager::get_action(player_action &action) {
+bool controls_manager::read_action(player_action &action) {
     if(action_queue.empty()) return false;
     action = action_queue.front();
     action_queue.erase(action_queue.begin());
@@ -102,16 +97,17 @@ vector<int> controls_manager::get_action_types_from_input(
     
         const control_binding &bind = bindings[b];
         
-        if(bind.input_type != type) continue;
+        if(bind.input.type != type) continue;
         
         switch(type) {
-        case INPUT_TYPE_NONE: {
+        case INPUT_TYPE_NONE:
+        case INPUT_TYPE_UNKNOWN: {
             continue;
             break;
         } case INPUT_TYPE_KEYBOARD_KEY:
         case INPUT_TYPE_MOUSE_BUTTON: {
             if(
-                bind.button_nr != button_nr
+                bind.input.button_nr != button_nr
             ) {
                 continue;
             }
@@ -125,8 +121,8 @@ vector<int> controls_manager::get_action_types_from_input(
         }
         case INPUT_TYPE_CONTROLLER_BUTTON: {
             if(
-                bind.device_nr != device_nr ||
-                bind.button_nr != button_nr
+                bind.input.device_nr != device_nr ||
+                bind.input.button_nr != button_nr
             ) {
                 continue;
             }
@@ -135,9 +131,9 @@ vector<int> controls_manager::get_action_types_from_input(
         case INPUT_TYPE_CONTROLLER_AXIS_POS:
         case INPUT_TYPE_CONTROLLER_AXIS_NEG: {
             if(
-                bind.device_nr != device_nr ||
-                bind.stick_nr != stick_nr ||
-                bind.axis_nr != axis_nr
+                bind.input.device_nr != device_nr ||
+                bind.input.stick_nr != stick_nr ||
+                bind.input.axis_nr != axis_nr
             ) {
                 continue;
             }
@@ -156,7 +152,7 @@ vector<int> controls_manager::get_action_types_from_input(
 /* ----------------------------------------------------------------------------
  * Returns all registered bindings.
  */
-vector<control_binding> controls_manager::get_all_bindings() const {
+const vector<control_binding> &controls_manager::get_all_bindings() const {
     return bindings;
 }
 
@@ -194,6 +190,8 @@ void controls_manager::handle_input(
  * Begins a new frame of gameplay.
  */
 void controls_manager::new_frame() {
+    action_queue.clear();
+    
     for(auto &a : action_type_states) {
         if(old_action_type_states[a.first] != a.second) {
             player_action new_action;
@@ -223,4 +221,16 @@ controls_manager_options::controls_manager_options() :
 player_action::player_action() :
     action_type_id(0),
     value(0.0f) {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Constructs a new player input.
+ */
+player_input::player_input() :
+    type(INPUT_TYPE_NONE),
+    device_nr(0),
+    button_nr(0),
+    stick_nr(0),
+    axis_nr(0) {
 }

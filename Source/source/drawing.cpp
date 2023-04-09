@@ -1515,7 +1515,7 @@ void draw_string_tokens(
         case STRING_TOKEN_CONTROL_BINDING: {
             draw_control_binding_icon(
                 control_font,
-                game.player_actions.find_binding(tokens[t].content),
+                game.controls.find_binding(tokens[t].content),
                 false,
                 point(
                     caret + token_final_width / 2.0f,
@@ -1732,7 +1732,7 @@ void draw_textured_box(
 
 /* ----------------------------------------------------------------------------
  * Returns information about how a control binding icon should be drawn.
- * c:
+ * b:
  *   Info on the control binding. If invalid, a "NONE" icon will be used.
  * condensed:
  *   If true, only the icon's fundamental information is presented. If false,
@@ -1749,7 +1749,7 @@ void draw_textured_box(
  *   returned if there's nothing to write.
  */
 void get_control_binding_icon_info(
-    const control_binding &c, const bool condensed,
+    const control_binding &b, const bool condensed,
     CONTROL_BINDING_ICON_SHAPES* shape,
     CONTROL_BINDING_ICON_SPRITES* bitmap_sprite,
     string* text
@@ -1758,85 +1758,85 @@ void get_control_binding_icon_info(
     *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_LMB;
     *text = "(NONE)";
     
-    if(c.input_type == INPUT_TYPE_NONE) return;
+    if(b.input.type == INPUT_TYPE_NONE) return;
     
     //Figure out if it's one of those that has a bitmap icon.
     //If so, just return that.
-    if(c.input_type == INPUT_TYPE_MOUSE_BUTTON) {
-        if(c.button_nr == 1) {
+    if(b.input.type == INPUT_TYPE_MOUSE_BUTTON) {
+        if(b.input.button_nr == 1) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_LMB;
             return;
-        } else if(c.button_nr == 2) {
+        } else if(b.input.button_nr == 2) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_RMB;
             return;
-        } else if(c.button_nr == 3) {
+        } else if(b.input.button_nr == 3) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_MMB;
             return;
         }
-    } else if(c.input_type == INPUT_TYPE_MOUSE_WHEEL_UP) {
+    } else if(b.input.type == INPUT_TYPE_MOUSE_WHEEL_UP) {
         *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
         *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_MWU;
         return;
-    } else if(c.input_type == INPUT_TYPE_MOUSE_WHEEL_DOWN) {
+    } else if(b.input.type == INPUT_TYPE_MOUSE_WHEEL_DOWN) {
         *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
         *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_MWD;
         return;
-    } else if(c.input_type == INPUT_TYPE_KEYBOARD_KEY) {
-        if(c.button_nr == ALLEGRO_KEY_UP) {
+    } else if(b.input.type == INPUT_TYPE_KEYBOARD_KEY) {
+        if(b.input.button_nr == ALLEGRO_KEY_UP) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_UP;
             return;
-        } else if(c.button_nr == ALLEGRO_KEY_LEFT) {
+        } else if(b.input.button_nr == ALLEGRO_KEY_LEFT) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_LEFT;
             return;
-        } else if(c.button_nr == ALLEGRO_KEY_DOWN) {
+        } else if(b.input.button_nr == ALLEGRO_KEY_DOWN) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_DOWN;
             return;
-        } else if(c.button_nr == ALLEGRO_KEY_RIGHT) {
+        } else if(b.input.button_nr == ALLEGRO_KEY_RIGHT) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_RIGHT;
             return;
-        } else if(c.button_nr == ALLEGRO_KEY_BACKSPACE) {
+        } else if(b.input.button_nr == ALLEGRO_KEY_BACKSPACE) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_BACKSPACE;
             return;
         } else if(
             condensed &&
-            (c.button_nr == ALLEGRO_KEY_LSHIFT || c.button_nr == ALLEGRO_KEY_RSHIFT)
+            (b.input.button_nr == ALLEGRO_KEY_LSHIFT || b.input.button_nr == ALLEGRO_KEY_RSHIFT)
         ) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_SHIFT;
             return;
-        } else if(c.button_nr == ALLEGRO_KEY_TAB) {
+        } else if(b.input.button_nr == ALLEGRO_KEY_TAB) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_TAB;
             return;
-        } else if(c.button_nr == ALLEGRO_KEY_ENTER) {
+        } else if(b.input.button_nr == ALLEGRO_KEY_ENTER) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_ENTER;
             return;
         }
-    } else if(c.input_type == INPUT_TYPE_CONTROLLER_AXIS_NEG && condensed) {
-        if(c.axis_nr == 0) {
+    } else if(b.input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG && condensed) {
+        if(b.input.axis_nr == 0) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_STICK_LEFT;
             return;
-        } else if(c.axis_nr == 1) {
+        } else if(b.input.axis_nr == 1) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_STICK_UP;
             return;
         }
-    } else if(c.input_type == INPUT_TYPE_CONTROLLER_AXIS_POS && condensed) {
-        if(c.axis_nr == 0) {
+    } else if(b.input.type == INPUT_TYPE_CONTROLLER_AXIS_POS && condensed) {
+        if(b.input.axis_nr == 0) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_STICK_RIGHT;
             return;
-        } else if(c.axis_nr == 1) {
+        } else if(b.input.axis_nr == 1) {
             *shape = CONTROL_BINDING_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BINDING_ICON_SPRITE_STICK_DOWN;
             return;
@@ -1844,10 +1844,10 @@ void get_control_binding_icon_info(
     }
     
     //Otherwise, use an actual shape and some text inside.
-    switch(c.input_type) {
+    switch(b.input.type) {
     case INPUT_TYPE_KEYBOARD_KEY: {
         *shape = CONTROL_BINDING_ICON_SHAPE_RECTANGLE;
-        *text = get_key_name(c.button_nr, condensed);
+        *text = get_key_name(b.input.button_nr, condensed);
         break;
         
     } case INPUT_TYPE_CONTROLLER_AXIS_NEG:
@@ -1855,40 +1855,40 @@ void get_control_binding_icon_info(
         *shape = CONTROL_BINDING_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
-                "Pad " + i2s(c.device_nr + 1) +
-                " stick " + i2s(c.stick_nr + 1);
+                "Pad " + i2s(b.input.device_nr + 1) +
+                " stick " + i2s(b.input.stick_nr + 1);
             if(
-                c.axis_nr == 0 &&
-                c.input_type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+                b.input.axis_nr == 0 &&
+                b.input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " left";
             } else if(
-                c.axis_nr == 0 &&
-                c.input_type == INPUT_TYPE_CONTROLLER_AXIS_POS
+                b.input.axis_nr == 0 &&
+                b.input.type == INPUT_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " right";
             } else if(
-                c.axis_nr == 1 &&
-                c.input_type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+                b.input.axis_nr == 1 &&
+                b.input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " up";
             } else if(
-                c.axis_nr == 1 &&
-                c.input_type == INPUT_TYPE_CONTROLLER_AXIS_POS
+                b.input.axis_nr == 1 &&
+                b.input.type == INPUT_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " down";
             } else {
                 *text +=
-                    " axis " + i2s(c.axis_nr) +
+                    " axis " + i2s(b.input.axis_nr) +
                     (
-                        c.input_type == INPUT_TYPE_CONTROLLER_AXIS_NEG ?
+                        b.input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG ?
                         "-" :
                         "+"
                     );
             }
             
         } else {
-            *text = "Stick " + i2s(c.stick_nr);
+            *text = "Stick " + i2s(b.input.stick_nr);
         }
         break;
         
@@ -1896,19 +1896,19 @@ void get_control_binding_icon_info(
         *shape = CONTROL_BINDING_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
-                "Pad " + i2s(c.device_nr + 1) +
-                " button " + i2s(c.button_nr + 1);
+                "Pad " + i2s(b.input.device_nr + 1) +
+                " button " + i2s(b.input.button_nr + 1);
         } else {
-            *text = i2s(c.button_nr + 1);
+            *text = i2s(b.input.button_nr + 1);
         }
         break;
         
     } case INPUT_TYPE_MOUSE_BUTTON: {
         *shape = CONTROL_BINDING_ICON_SHAPE_ROUNDED;
         if(!condensed) {
-            *text = "Mouse button " + i2s(c.button_nr);
+            *text = "Mouse button " + i2s(b.input.button_nr);
         } else {
-            *text = "M" + i2s(c.button_nr);
+            *text = "M" + i2s(b.input.button_nr);
         }
         break;
         

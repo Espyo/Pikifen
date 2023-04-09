@@ -1278,8 +1278,6 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.throw_preview);
     game.sys_assets.bmp_throw_preview_dashed =
         game.bitmaps.get(game.asset_file_names.throw_preview_dashed);
-    game.sys_assets.bmp_vignette_box =
-        game.bitmaps.get(game.asset_file_names.vignette_box);
     game.sys_assets.bmp_wave_ring =
         game.bitmaps.get(game.asset_file_names.wave_ring);
 }
@@ -2008,7 +2006,6 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_throw_invalid);
     game.bitmaps.detach(game.sys_assets.bmp_throw_preview);
     game.bitmaps.detach(game.sys_assets.bmp_throw_preview_dashed);
-    game.bitmaps.detach(game.sys_assets.bmp_vignette_box);
     game.bitmaps.detach(game.sys_assets.bmp_wave_ring);
     
     game.sys_assets.sfx_attack.destroy();

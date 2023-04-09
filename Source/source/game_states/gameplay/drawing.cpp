@@ -862,7 +862,7 @@ void gameplay_state::draw_message_box() {
     //Draw the button to advance, if it's time.
     draw_control_binding_icon(
         game.fonts.slim,
-        game.player_actions.find_binding(PLAYER_ACTION_THROW),
+        game.controls.find_binding(PLAYER_ACTION_THROW),
         true,
         point(
             game.win_w - (MSG_BOX::MARGIN + MSG_BOX::PADDING + 8.0f),
@@ -956,7 +956,7 @@ void gameplay_state::draw_message_box() {
             case STRING_TOKEN_CONTROL_BINDING: {
                 draw_control_binding_icon(
                     game.fonts.slim,
-                    game.player_actions.find_binding(cur_token.content),
+                    game.controls.find_binding(cur_token.content),
                     false,
                     point(
                         x + token_final_width / 2.0f,
