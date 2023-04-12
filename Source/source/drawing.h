@@ -127,11 +127,6 @@ void draw_button(
     const bool selected,
     const float juicy_grow_amount = 0.0f
 );
-void draw_control_bind_icon(
-    const ALLEGRO_FONT* const font, const control_bind &c,
-    const bool condensed, const point &where, const point &max_size,
-    const unsigned char alpha = 228
-);
 void draw_compressed_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point &where, const point &scale,
@@ -167,6 +162,11 @@ void draw_liquid(
 );
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity
+);
+void draw_player_input_icon(
+    const ALLEGRO_FONT* const font, const player_input &i,
+    const bool condensed, const point &where, const point &max_size,
+    const unsigned char alpha = 228
 );
 void draw_rounded_rectangle(
     const point &center, const point &size, const float radii,
@@ -207,14 +207,14 @@ void draw_textured_box(
     const point &center, const point &size, ALLEGRO_BITMAP* texture,
     const ALLEGRO_COLOR &tint = COLOR_WHITE
 );
-void get_control_bind_icon_info(
-    const control_bind &c, const bool condensed,
+void get_player_input_icon_info(
+    const player_input &i, const bool condensed,
     CONTROL_BIND_ICON_SHAPES* shape,
     CONTROL_BIND_ICON_SPRITES* bitmap_sprite,
     string* text
 );
-float get_control_bind_icon_width(
-    const ALLEGRO_FONT* font, const control_bind &c, const bool condensed,
+float get_player_input_icon_width(
+    const ALLEGRO_FONT* font, const player_input &i, const bool condensed,
     const float max_bitmap_height = 0
 );
 

@@ -182,7 +182,7 @@ void options_struct::load(data_node* file) {
      * joystick stick and axis, etc.
      * Check the constructor of control_info for more information.
      */
-    game.controls.clear_binds();
+    game.controls.binds().clear();
     const vector<player_action_type> &player_action_types =
         game.controls.get_all_player_action_types();
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
@@ -195,12 +195,14 @@ void options_struct::load(data_node* file) {
                 semicolon_list_to_vector(control_node->value);
                 
             for(size_t c = 0; c < possible_controls.size(); ++c) {
-                control_bind bind =
-                    game.controls.str_to_bind(possible_controls[c]);
-                if(bind.input.type == INPUT_TYPE_NONE) continue;
-                bind.action_type_id = player_action_types[b].id;
-                bind.player_nr = p;
-                game.controls.add_bind(bind);
+                player_input input =
+                    game.controls.str_to_input(possible_controls[c]);
+                if(input.type == INPUT_TYPE_NONE) continue;
+                control_bind new_bind;
+                new_bind.action_type_id = player_action_types[b].id;
+                new_bind.player_nr = p;
+                new_bind.input = input;
+                game.controls.binds().push_back(new_bind);
             }
         }
     }
@@ -342,8 +344,8 @@ void options_struct::save(data_node* file) const {
         }
     }
     
-    //Write down their control strings.
-    vector<control_bind> all_binds = game.controls.get_all_binds();
+    //Write down their input strings.
+    const vector<control_bind> &all_binds = game.controls.binds();
     for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         for(size_t b = 0; b < all_binds.size(); ++b) {
             if(all_binds[b].player_nr != p) continue;
@@ -359,7 +361,7 @@ void options_struct::save(data_node* file) const {
             }
             
             grouped_controls[name] +=
-                game.controls.bind_to_str(all_binds[b]) + ";";
+                game.controls.input_to_str(all_binds[b].input) + ";";
         }
     }
     

@@ -280,7 +280,7 @@ void draw_button(
     );
     
     ALLEGRO_COLOR box_tint =
-        selected ? al_map_rgb(87, 200, 208) : map_gray(255);
+        selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
         
     draw_textured_box(
         center, size, game.sys_assets.bmp_bubble_box, box_tint
@@ -447,122 +447,6 @@ void draw_compressed_text(
     al_use_transform(&scale_transform); {
         al_draw_text(font, color, 0, 0, flags, text.c_str());
     }; al_use_transform(&old_transform);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws an icon representing some control bind.
- * font:
- *   Font to use for the name, if necessary.
- * c:
- *   Info on the control bind. If invalid, a "NONE" icon will be used.
- * condensed:
- *   If true, only the icon's fundamental information is presented. If false,
- *   disambiguation information is included too. For instance, keyboard keys
- *   that come in pairs specify whether they are the left or right key,
- *   gamepad controls specify what gamepad number it is, etc.
- * where:
- *   Center of the place to draw at.
- * max_size:
- *   Max width or height. Used to compress it if needed. 0 = unlimited.
- * alpha:
- *   Opacity.
- */
-void draw_control_bind_icon(
-    const ALLEGRO_FONT* const font, const control_bind &c,
-    const bool condensed, const point &where, const point &max_size,
-    const unsigned char alpha
-) {
-    if(alpha == 0) return;
-    
-    //Final text color.
-    const ALLEGRO_COLOR final_text_color =
-        change_alpha(CONTROL_BIND_ICON::BASE_TEXT_COLOR, alpha);
-        
-    //Start by getting the icon's info for drawing.
-    CONTROL_BIND_ICON_SHAPES shape;
-    CONTROL_BIND_ICON_SPRITES bitmap_sprite;
-    string text;
-    get_control_bind_icon_info(
-        c, condensed,
-        &shape, &bitmap_sprite, &text
-    );
-    
-    //If it's a bitmap, just draw it and be done with it.
-    if(shape == CONTROL_BIND_ICON_SHAPE_BITMAP) {
-        //All icons are square, and in a row, so the spritesheet height works.
-        int icon_size =
-            al_get_bitmap_height(game.sys_assets.bmp_control_bind_icons);
-        ALLEGRO_BITMAP* bmp =
-            al_create_sub_bitmap(
-                game.sys_assets.bmp_control_bind_icons,
-                (icon_size + 1) * (int) bitmap_sprite, 0,
-                icon_size, icon_size
-            );
-        draw_bitmap_in_box(bmp, where, max_size, true, 0.0f, map_alpha(alpha));
-        al_destroy_bitmap(bmp);
-        return;
-    }
-    
-    //The size of the rectangle will depend on the text within.
-    int text_ox;
-    int text_oy;
-    int text_w;
-    int text_h;
-    al_get_text_dimensions(
-        font, text.c_str(),
-        &text_ox, &text_oy, &text_w, &text_h
-    );
-    float total_width =
-        std::min(
-            (float) (text_w + CONTROL_BIND_ICON::PADDING * 2),
-            (max_size.x == 0 ? FLT_MAX : max_size.x)
-        );
-    float total_height =
-        std::min(
-            (float) (text_h + CONTROL_BIND_ICON::PADDING * 2),
-            (max_size.y == 0 ? FLT_MAX : max_size.y)
-        );
-    //Force it to always be a square or horizontal rectangle. Never vertical.
-    total_width = std::max(total_width, total_height);
-    
-    //Now, draw the rectangle, either sharp or rounded.
-    switch(shape) {
-    case CONTROL_BIND_ICON_SHAPE_RECTANGLE: {
-        draw_textured_box(
-            where, point(total_width, total_height),
-            game.sys_assets.bmp_key_box
-        );
-        break;
-    }
-    case CONTROL_BIND_ICON_SHAPE_ROUNDED: {
-        draw_textured_box(
-            where, point(total_width, total_height),
-            game.sys_assets.bmp_button_box
-        );
-        break;
-    }
-    case CONTROL_BIND_ICON_SHAPE_BITMAP: {
-        break;
-    }
-    }
-    
-    //And finally, the text inside.
-    draw_compressed_text(
-        font,
-        final_text_color,
-        point(
-            where.x,
-            where.y
-        ),
-        ALLEGRO_ALIGN_CENTER,
-        TEXT_VALIGN_CENTER,
-        point(
-            (max_size.x == 0 ? 0 : max_size.x - CONTROL_BIND_ICON::PADDING),
-            (max_size.y == 0 ? 0 : max_size.y - CONTROL_BIND_ICON::PADDING)
-        ),
-        text
-    );
 }
 
 
@@ -1186,6 +1070,122 @@ void draw_mob_shadow(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws an icon representing some control bind.
+ * font:
+ *   Font to use for the name, if necessary.
+ * i:
+ *   Info on the player input. If invalid, a "NONE" icon will be used.
+ * condensed:
+ *   If true, only the icon's fundamental information is presented. If false,
+ *   disambiguation information is included too. For instance, keyboard keys
+ *   that come in pairs specify whether they are the left or right key,
+ *   gamepad controls specify what gamepad number it is, etc.
+ * where:
+ *   Center of the place to draw at.
+ * max_size:
+ *   Max width or height. Used to compress it if needed. 0 = unlimited.
+ * alpha:
+ *   Opacity.
+ */
+void draw_player_input_icon(
+    const ALLEGRO_FONT* const font, const player_input &i,
+    const bool condensed, const point &where, const point &max_size,
+    const unsigned char alpha
+) {
+    if(alpha == 0) return;
+    
+    //Final text color.
+    const ALLEGRO_COLOR final_text_color =
+        change_alpha(CONTROL_BIND_ICON::BASE_TEXT_COLOR, alpha);
+        
+    //Start by getting the icon's info for drawing.
+    CONTROL_BIND_ICON_SHAPES shape;
+    CONTROL_BIND_ICON_SPRITES bitmap_sprite;
+    string text;
+    get_player_input_icon_info(
+        i, condensed,
+        &shape, &bitmap_sprite, &text
+    );
+    
+    //If it's a bitmap, just draw it and be done with it.
+    if(shape == CONTROL_BIND_ICON_SHAPE_BITMAP) {
+        //All icons are square, and in a row, so the spritesheet height works.
+        int icon_size =
+            al_get_bitmap_height(game.sys_assets.bmp_control_bind_icons);
+        ALLEGRO_BITMAP* bmp =
+            al_create_sub_bitmap(
+                game.sys_assets.bmp_control_bind_icons,
+                (icon_size + 1) * (int) bitmap_sprite, 0,
+                icon_size, icon_size
+            );
+        draw_bitmap_in_box(bmp, where, max_size, true, 0.0f, map_alpha(alpha));
+        al_destroy_bitmap(bmp);
+        return;
+    }
+    
+    //The size of the rectangle will depend on the text within.
+    int text_ox;
+    int text_oy;
+    int text_w;
+    int text_h;
+    al_get_text_dimensions(
+        font, text.c_str(),
+        &text_ox, &text_oy, &text_w, &text_h
+    );
+    float total_width =
+        std::min(
+            (float) (text_w + CONTROL_BIND_ICON::PADDING * 2),
+            (max_size.x == 0 ? FLT_MAX : max_size.x)
+        );
+    float total_height =
+        std::min(
+            (float) (text_h + CONTROL_BIND_ICON::PADDING * 2),
+            (max_size.y == 0 ? FLT_MAX : max_size.y)
+        );
+    //Force it to always be a square or horizontal rectangle. Never vertical.
+    total_width = std::max(total_width, total_height);
+    
+    //Now, draw the rectangle, either sharp or rounded.
+    switch(shape) {
+    case CONTROL_BIND_ICON_SHAPE_RECTANGLE: {
+        draw_textured_box(
+            where, point(total_width, total_height),
+            game.sys_assets.bmp_key_box
+        );
+        break;
+    }
+    case CONTROL_BIND_ICON_SHAPE_ROUNDED: {
+        draw_textured_box(
+            where, point(total_width, total_height),
+            game.sys_assets.bmp_button_box
+        );
+        break;
+    }
+    case CONTROL_BIND_ICON_SHAPE_BITMAP: {
+        break;
+    }
+    }
+    
+    //And finally, the text inside.
+    draw_compressed_text(
+        font,
+        final_text_color,
+        point(
+            where.x,
+            where.y
+        ),
+        ALLEGRO_ALIGN_CENTER,
+        TEXT_VALIGN_CENTER,
+        point(
+            (max_size.x == 0 ? 0 : max_size.x - CONTROL_BIND_ICON::PADDING),
+            (max_size.y == 0 ? 0 : max_size.y - CONTROL_BIND_ICON::PADDING)
+        ),
+        text
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws a rotated rectangle.
  * center:
  *   Center of the rectangle.
@@ -1513,9 +1513,9 @@ void draw_string_tokens(
             break;
         }
         case STRING_TOKEN_CONTROL_BIND: {
-            draw_control_bind_icon(
+            draw_player_input_icon(
                 control_font,
-                game.controls.find_bind(tokens[t].content),
+                game.controls.find_bind(tokens[t].content).input,
                 false,
                 point(
                     caret + token_final_width / 2.0f,
@@ -1732,8 +1732,8 @@ void draw_textured_box(
 
 /* ----------------------------------------------------------------------------
  * Returns information about how a control bind icon should be drawn.
- * b:
- *   Info on the control bind. If invalid, a "NONE" icon will be used.
+ * i:
+ *   Info on the player input. If invalid, a "NONE" icon will be used.
  * condensed:
  *   If true, only the icon's fundamental information is presented. If false,
  *   disambiguation information is included too. For instance, keyboard keys
@@ -1748,8 +1748,8 @@ void draw_textured_box(
  *   The text to be written inside is returned here, or an empty string is
  *   returned if there's nothing to write.
  */
-void get_control_bind_icon_info(
-    const control_bind &b, const bool condensed,
+void get_player_input_icon_info(
+    const player_input &i, const bool condensed,
     CONTROL_BIND_ICON_SHAPES* shape,
     CONTROL_BIND_ICON_SPRITES* bitmap_sprite,
     string* text
@@ -1758,85 +1758,85 @@ void get_control_bind_icon_info(
     *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_LMB;
     *text = "(NONE)";
     
-    if(b.input.type == INPUT_TYPE_NONE) return;
+    if(i.type == INPUT_TYPE_NONE) return;
     
     //Figure out if it's one of those that has a bitmap icon.
     //If so, just return that.
-    if(b.input.type == INPUT_TYPE_MOUSE_BUTTON) {
-        if(b.input.button_nr == 1) {
+    if(i.type == INPUT_TYPE_MOUSE_BUTTON) {
+        if(i.button_nr == 1) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_LMB;
             return;
-        } else if(b.input.button_nr == 2) {
+        } else if(i.button_nr == 2) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_RMB;
             return;
-        } else if(b.input.button_nr == 3) {
+        } else if(i.button_nr == 3) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_MMB;
             return;
         }
-    } else if(b.input.type == INPUT_TYPE_MOUSE_WHEEL_UP) {
+    } else if(i.type == INPUT_TYPE_MOUSE_WHEEL_UP) {
         *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
         *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_MWU;
         return;
-    } else if(b.input.type == INPUT_TYPE_MOUSE_WHEEL_DOWN) {
+    } else if(i.type == INPUT_TYPE_MOUSE_WHEEL_DOWN) {
         *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
         *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_MWD;
         return;
-    } else if(b.input.type == INPUT_TYPE_KEYBOARD_KEY) {
-        if(b.input.button_nr == ALLEGRO_KEY_UP) {
+    } else if(i.type == INPUT_TYPE_KEYBOARD_KEY) {
+        if(i.button_nr == ALLEGRO_KEY_UP) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_UP;
             return;
-        } else if(b.input.button_nr == ALLEGRO_KEY_LEFT) {
+        } else if(i.button_nr == ALLEGRO_KEY_LEFT) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_LEFT;
             return;
-        } else if(b.input.button_nr == ALLEGRO_KEY_DOWN) {
+        } else if(i.button_nr == ALLEGRO_KEY_DOWN) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_DOWN;
             return;
-        } else if(b.input.button_nr == ALLEGRO_KEY_RIGHT) {
+        } else if(i.button_nr == ALLEGRO_KEY_RIGHT) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_RIGHT;
             return;
-        } else if(b.input.button_nr == ALLEGRO_KEY_BACKSPACE) {
+        } else if(i.button_nr == ALLEGRO_KEY_BACKSPACE) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_BACKSPACE;
             return;
         } else if(
             condensed &&
-            (b.input.button_nr == ALLEGRO_KEY_LSHIFT || b.input.button_nr == ALLEGRO_KEY_RSHIFT)
+            (i.button_nr == ALLEGRO_KEY_LSHIFT || i.button_nr == ALLEGRO_KEY_RSHIFT)
         ) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_SHIFT;
             return;
-        } else if(b.input.button_nr == ALLEGRO_KEY_TAB) {
+        } else if(i.button_nr == ALLEGRO_KEY_TAB) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_TAB;
             return;
-        } else if(b.input.button_nr == ALLEGRO_KEY_ENTER) {
+        } else if(i.button_nr == ALLEGRO_KEY_ENTER) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_ENTER;
             return;
         }
-    } else if(b.input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG && condensed) {
-        if(b.input.axis_nr == 0) {
+    } else if(i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG && condensed) {
+        if(i.axis_nr == 0) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_STICK_LEFT;
             return;
-        } else if(b.input.axis_nr == 1) {
+        } else if(i.axis_nr == 1) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_STICK_UP;
             return;
         }
-    } else if(b.input.type == INPUT_TYPE_CONTROLLER_AXIS_POS && condensed) {
-        if(b.input.axis_nr == 0) {
+    } else if(i.type == INPUT_TYPE_CONTROLLER_AXIS_POS && condensed) {
+        if(i.axis_nr == 0) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_STICK_RIGHT;
             return;
-        } else if(b.input.axis_nr == 1) {
+        } else if(i.axis_nr == 1) {
             *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
             *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_STICK_DOWN;
             return;
@@ -1844,10 +1844,10 @@ void get_control_bind_icon_info(
     }
     
     //Otherwise, use an actual shape and some text inside.
-    switch(b.input.type) {
+    switch(i.type) {
     case INPUT_TYPE_KEYBOARD_KEY: {
         *shape = CONTROL_BIND_ICON_SHAPE_RECTANGLE;
-        *text = get_key_name(b.input.button_nr, condensed);
+        *text = get_key_name(i.button_nr, condensed);
         break;
         
     } case INPUT_TYPE_CONTROLLER_AXIS_NEG:
@@ -1855,40 +1855,40 @@ void get_control_bind_icon_info(
         *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
-                "Pad " + i2s(b.input.device_nr + 1) +
-                " stick " + i2s(b.input.stick_nr + 1);
+                "Pad " + i2s(i.device_nr + 1) +
+                " stick " + i2s(i.stick_nr + 1);
             if(
-                b.input.axis_nr == 0 &&
-                b.input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+                i.axis_nr == 0 &&
+                i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " left";
             } else if(
-                b.input.axis_nr == 0 &&
-                b.input.type == INPUT_TYPE_CONTROLLER_AXIS_POS
+                i.axis_nr == 0 &&
+                i.type == INPUT_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " right";
             } else if(
-                b.input.axis_nr == 1 &&
-                b.input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+                i.axis_nr == 1 &&
+                i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
             ) {
                 *text += " up";
             } else if(
-                b.input.axis_nr == 1 &&
-                b.input.type == INPUT_TYPE_CONTROLLER_AXIS_POS
+                i.axis_nr == 1 &&
+                i.type == INPUT_TYPE_CONTROLLER_AXIS_POS
             ) {
                 *text += " down";
             } else {
                 *text +=
-                    " axis " + i2s(b.input.axis_nr) +
+                    " axis " + i2s(i.axis_nr) +
                     (
-                        b.input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG ?
+                        i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG ?
                         "-" :
                         "+"
                     );
             }
             
         } else {
-            *text = "Stick " + i2s(b.input.stick_nr);
+            *text = "Stick " + i2s(i.stick_nr);
         }
         break;
         
@@ -1896,19 +1896,19 @@ void get_control_bind_icon_info(
         *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
-                "Pad " + i2s(b.input.device_nr + 1) +
-                " button " + i2s(b.input.button_nr + 1);
+                "Pad " + i2s(i.device_nr + 1) +
+                " button " + i2s(i.button_nr + 1);
         } else {
-            *text = i2s(b.input.button_nr + 1);
+            *text = i2s(i.button_nr + 1);
         }
         break;
         
     } case INPUT_TYPE_MOUSE_BUTTON: {
         *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
         if(!condensed) {
-            *text = "Mouse button " + i2s(b.input.button_nr);
+            *text = "Mouse button " + i2s(i.button_nr);
         } else {
-            *text = "M" + i2s(b.input.button_nr);
+            *text = "M" + i2s(i.button_nr);
         }
         break;
         
@@ -1942,8 +1942,8 @@ void get_control_bind_icon_info(
  * Returns the width of a control bind icon, for drawing purposes.
  * font:
  *   Font to use for the name, if necessary.
- * c:
- *   Info on the control bind. If invalid, a "NONE" icon will be used.
+ * i:
+ *   Info on the player input. If invalid, a "NONE" icon will be used.
  * condensed:
  *   If true, only the icon's fundamental information is presented. If false,
  *   disambiguation information is included too. For instance, keyboard keys
@@ -1954,15 +1954,15 @@ void get_control_bind_icon_info(
  *   then their width will be affected too. Specify the maximum height here.
  *   Use 0 to indicate no maximum height.
  */
-float get_control_bind_icon_width(
-    const ALLEGRO_FONT* font, const control_bind &c, const bool condensed,
+float get_player_input_icon_width(
+    const ALLEGRO_FONT* font, const player_input &i, const bool condensed,
     const float max_bitmap_height
 ) {
     CONTROL_BIND_ICON_SHAPES shape;
     CONTROL_BIND_ICON_SPRITES bitmap_sprite;
     string text;
-    get_control_bind_icon_info(
-        c, condensed,
+    get_player_input_icon_info(
+        i, condensed,
         &shape, &bitmap_sprite, &text
     );
     

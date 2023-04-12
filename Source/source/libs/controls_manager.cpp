@@ -24,14 +24,6 @@ control_bind::control_bind() :
 
 
 /* ----------------------------------------------------------------------------
- * Adds a new bind between player input and game action type.
- */
-void controls_manager::add_bind(const control_bind &bind) {
-    binds.push_back(bind);
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a game controller stick input is received, it should be checked with
  * the state of that entire stick to see if it needs to be normalized,
  * deadzones should be applied, etc.
@@ -63,20 +55,12 @@ void controls_manager::clean_stick(
 
 
 /* ----------------------------------------------------------------------------
- * Removes all registered control binds.
- */
-void controls_manager::clear_binds() {
-    binds.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the oldest action in the queue. Returns true if there is one,
  * false if not.
  * action:
  *   Action to fill.
  */
-bool controls_manager::read_action(player_action &action) {
+bool controls_manager::poll_action(player_action &action) {
     if(action_queue.empty()) return false;
     action = action_queue.front();
     action_queue.erase(action_queue.begin());
@@ -88,8 +72,7 @@ bool controls_manager::read_action(player_action &action) {
  * Returns a list of action types that get triggered by the given input.
  */
 vector<int> controls_manager::get_action_types_from_input(
-    INPUT_TYPES type,
-    int device_nr, int button_nr, int stick_nr, int axis_nr
+    const player_input &input
 ) {
     vector<int> action_types;
     
@@ -97,9 +80,9 @@ vector<int> controls_manager::get_action_types_from_input(
     
         const control_bind &bind = binds[b];
         
-        if(bind.input.type != type) continue;
+        if(bind.input.type != input.type) continue;
         
-        switch(type) {
+        switch(input.type) {
         case INPUT_TYPE_NONE:
         case INPUT_TYPE_UNKNOWN: {
             continue;
@@ -107,7 +90,7 @@ vector<int> controls_manager::get_action_types_from_input(
         } case INPUT_TYPE_KEYBOARD_KEY:
         case INPUT_TYPE_MOUSE_BUTTON: {
             if(
-                bind.input.button_nr != button_nr
+                bind.input.button_nr != input.button_nr
             ) {
                 continue;
             }
@@ -121,8 +104,8 @@ vector<int> controls_manager::get_action_types_from_input(
         }
         case INPUT_TYPE_CONTROLLER_BUTTON: {
             if(
-                bind.input.device_nr != device_nr ||
-                bind.input.button_nr != button_nr
+                bind.input.device_nr != input.device_nr ||
+                bind.input.button_nr != input.button_nr
             ) {
                 continue;
             }
@@ -131,9 +114,9 @@ vector<int> controls_manager::get_action_types_from_input(
         case INPUT_TYPE_CONTROLLER_AXIS_POS:
         case INPUT_TYPE_CONTROLLER_AXIS_NEG: {
             if(
-                bind.input.device_nr != device_nr ||
-                bind.input.stick_nr != stick_nr ||
-                bind.input.axis_nr != axis_nr
+                bind.input.device_nr != input.device_nr ||
+                bind.input.stick_nr != input.stick_nr ||
+                bind.input.axis_nr != input.axis_nr
             ) {
                 continue;
             }
@@ -150,38 +133,31 @@ vector<int> controls_manager::get_action_types_from_input(
 
 
 /* ----------------------------------------------------------------------------
- * Returns all registered binds.
- */
-const vector<control_bind> &controls_manager::get_all_binds() const {
-    return binds;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Handles an input from hardware.
  */
 void controls_manager::handle_input(
-    INPUT_TYPES type, float value,
-    int device_nr, int button_nr, int stick_nr, int axis_nr
+    const player_input &input
 ) {
     //First, clean any game controller stick inputs.
+    //https://www.gamedeveloper.com/
+    //  disciplines/doing-thumbstick-dead-zones-right
+    //https://www.gamedeveloper.com/
+    //  design/interpreting-analog-sticks-in-inversus
     if(
-        type == INPUT_TYPE_CONTROLLER_AXIS_POS ||
-        type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+        input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ||
+        input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
     ) {
-        raw_sticks[device_nr][stick_nr][axis_nr] = value;
-        clean_stick(device_nr, stick_nr);
+        raw_sticks[input.device_nr][input.stick_nr][input.axis_nr] =
+            input.value;
+        clean_stick(input.device_nr, input.stick_nr);
     }
     
     //Find what game action types are associated with this input.
-    vector<int> action_types =
-        get_action_types_from_input(
-            type, device_nr, button_nr, stick_nr, axis_nr
-        );
-        
+    vector<int> action_types = get_action_types_from_input(input);
+    
     //Update each game action type's current input state, to be reported later.
     for(size_t a = 0; a < action_types.size(); ++a) {
-        action_type_states[action_types[a]] = value;
+        action_type_values[action_types[a]] = input.value;
     }
 }
 
@@ -192,8 +168,8 @@ void controls_manager::handle_input(
 void controls_manager::new_frame() {
     action_queue.clear();
     
-    for(auto &a : action_type_states) {
-        if(old_action_type_states[a.first] != a.second) {
+    for(auto &a : action_type_values) {
+        if(old_action_type_values[a.first] != a.second) {
             player_action new_action;
             new_action.action_type_id = a.first;
             new_action.value = a.second;
@@ -201,7 +177,7 @@ void controls_manager::new_frame() {
         }
     }
     
-    old_action_type_states = action_type_states;
+    old_action_type_values = action_type_values;
 }
 
 
@@ -232,5 +208,6 @@ player_input::player_input() :
     device_nr(0),
     button_nr(0),
     stick_nr(0),
-    axis_nr(0) {
+    axis_nr(0),
+    value(0.0f) {
 }

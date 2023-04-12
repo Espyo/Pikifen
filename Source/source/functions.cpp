@@ -1679,9 +1679,9 @@ void set_string_token_widths(
         } case STRING_TOKEN_CONTROL_BIND: {
             tokens[t].content = trim_spaces(tokens[t].content);
             tokens[t].width =
-                get_control_bind_icon_width(
+                get_player_input_icon_width(
                     control_font,
-                    game.controls.find_bind(tokens[t].content),
+                    game.controls.find_bind(tokens[t].content).input,
                     false,
                     max_control_bitmap_height
                 );

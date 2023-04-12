@@ -154,126 +154,288 @@ void init_allegro() {
 
 
 /* ----------------------------------------------------------------------------
- * Initializes the default controls.
+ * Initializes things related to the controls.
  */
 void init_controls() {
-    //Declare the existing buttons.
+    //Register the existing actions.
+    //They must be registered in the same order as the action types enum.
+    
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NONE, "---", "", ""
+        PLAYER_ACTION_NONE,
+        PLAYER_ACTION_CAT_NONE,
+        "---", "", "", ""
+    );
+    
+    //MAIN.
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_RIGHT,
+        PLAYER_ACTION_CAT_MAIN,
+        "Right",
+        "Move right.",
+        "move_right", "k_4"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_THROW, "Throw", "throw", "mb_1"
+        PLAYER_ACTION_UP,
+        PLAYER_ACTION_CAT_MAIN,
+        "Up",
+        "Move up.",
+        "move_up", "k_23"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_WHISTLE, "Whistle", "whistle", "mb_2"
+        PLAYER_ACTION_LEFT,
+        PLAYER_ACTION_CAT_MAIN,
+        "Left",
+        "Move left.",
+        "move_left", "k_1"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_RIGHT, "Right", "move_right", "k_4"
+        PLAYER_ACTION_DOWN,
+        PLAYER_ACTION_CAT_MAIN,
+        "Down",
+        "Move down.",
+        "move_down", "k_19"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_UP, "Up", "move_up", "k_23"
+        PLAYER_ACTION_THROW,
+        PLAYER_ACTION_CAT_MAIN,
+        "Throw",
+        "Throw a Pikmin.",
+        "throw", "mb_1"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_LEFT, "Left", "move_left", "k_1"
+        PLAYER_ACTION_WHISTLE,
+        PLAYER_ACTION_CAT_MAIN,
+        "Whistle",
+        "Whistle around the cursor.",
+        "whistle", "mb_2"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_DOWN, "Down", "move_down", "k_19"
+        PLAYER_ACTION_NEXT_TYPE,
+        PLAYER_ACTION_CAT_MAIN,
+        "Next Pikmin",
+        "Change to the next Pikmin type in the group.",
+        "next_type", "mwd"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_RIGHT, "Cursor right", "cursor_right", ""
+        PLAYER_ACTION_PREV_TYPE,
+        PLAYER_ACTION_CAT_MAIN,
+        "Prev. Pikmin",
+        "Change to the previous Pikmin type in the group.",
+        "prev_type", "mwu"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_UP, "Cursor up", "cursor_up", ""
+        PLAYER_ACTION_NEXT_LEADER,
+        PLAYER_ACTION_CAT_MAIN,
+        "Next leader",
+        "Change to the next leader.",
+        "next_leader", "k_64"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_LEFT, "Cursor left", "cursor_left", ""
+        PLAYER_ACTION_GROUP_CURSOR,
+        PLAYER_ACTION_CAT_MAIN,
+        "Swarm to cursor",
+        "Swarm all Pikmin towards the cursor.",
+        "swarm_cursor", "k_75"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CURSOR_DOWN, "Cursor down", "cursor_down", ""
+        PLAYER_ACTION_DISMISS,
+        PLAYER_ACTION_CAT_MAIN,
+        "Dismiss",
+        "Dismiss all Pikmin.",
+        "dismiss", "k_217"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_RIGHT, "Swarm right", "swarm_right", ""
+        PLAYER_ACTION_USE_SPRAY_1,
+        PLAYER_ACTION_CAT_MAIN,
+        "Use spray 1",
+        "Use the spray in slot 1.",
+        "use_spray_1", "k_18"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_UP, "Swarm up", "swarm_up", ""
+        PLAYER_ACTION_USE_SPRAY_2,
+        PLAYER_ACTION_CAT_MAIN,
+        "Use spray 2",
+        "Use the spray in slot 2.",
+        "use_spray_2", "k_6"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_LEFT, "Swarm left", "swarm_left", ""
+        PLAYER_ACTION_USE_SPRAY,
+        PLAYER_ACTION_CAT_MAIN,
+        "Use spray",
+        "Use the currently selected spray.",
+        "use_spray", "k_18"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_DOWN, "Swarm down", "swarm_down", ""
+        PLAYER_ACTION_NEXT_SPRAY,
+        PLAYER_ACTION_CAT_MAIN,
+        "Next spray",
+        "Change to the next spray.",
+        "next_spray", "k_5"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_GROUP_CURSOR, "Swarm to cursor", "swarm_cursor", "k_75"
+        PLAYER_ACTION_PREV_SPRAY,
+        PLAYER_ACTION_CAT_MAIN,
+        "Prev. spray",
+        "Change to the previous spray.",
+        "prev_spray", "k_17"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NEXT_LEADER, "Next leader", "next_leader", "k_64"
+        PLAYER_ACTION_PAUSE,
+        PLAYER_ACTION_CAT_MAIN,
+        "Pause",
+        "Pause the game.",
+        "pause", "k_59"
+    );
+    
+    //Menus.
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_MENU_RIGHT,
+        PLAYER_ACTION_CAT_MENUS,
+        "Menu right",
+        "Navigate right in a menu.",
+        "menu_right", "k_83"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PREV_LEADER, "Prev. leader", "prev_leader", ""
+        PLAYER_ACTION_MENU_UP,
+        PLAYER_ACTION_CAT_MENUS,
+        "Menu up",
+        "Navigate up in a menu.",
+        "menu_up", "k_84"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_DISMISS, "Dismiss", "dismiss", "k_217"
+        PLAYER_ACTION_MENU_LEFT,
+        PLAYER_ACTION_CAT_MENUS,
+        "Menu left",
+        "Navigate left in a menu.",
+        "menu_left", "k_82"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_USE_SPRAY_1, "Use spray 1", "use_spray_1", "k_18"
+        PLAYER_ACTION_MENU_DOWN,
+        PLAYER_ACTION_CAT_MENUS,
+        "Menu down",
+        "Navigate down in a menu.",
+        "menu_down", "k_85"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_USE_SPRAY_2, "Use spray 2", "use_spray_2", "k_6"
+        PLAYER_ACTION_MENU_OK,
+        PLAYER_ACTION_CAT_MENUS,
+        "Menu OK",
+        "Confirm the selected item in a menu.",
+        "menu_ok", "k_67"
+    );
+    
+    //Advanced.
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_CURSOR_RIGHT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor right",
+        "Move the cursor right. Useful if it's not mouse-controlled.",
+        "cursor_right", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_USE_SPRAY, "Use spray", "use_spray", "k_18"
+        PLAYER_ACTION_CURSOR_UP,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor up",
+        "Move the cursor up. Useful if it's not mouse-controlled.",
+        "cursor_up", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NEXT_SPRAY, "Next spray", "next_spray", "k_5"
+        PLAYER_ACTION_CURSOR_LEFT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor left",
+        "Move the cursor left. Useful if it's not mouse-controlled.",
+        "cursor_left", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PREV_SPRAY, "Prev. spray", "prev_spray", "k_17"
+        PLAYER_ACTION_CURSOR_DOWN,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Cursor down",
+        "Move the cursor down. Useful if it's not mouse-controlled.",
+        "cursor_down", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CHANGE_ZOOM, "Change zoom", "change_zoom", "k_3"
+        PLAYER_ACTION_GROUP_RIGHT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Swarm right",
+        "Swarm all Pikmin right.",
+        "swarm_right", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_ZOOM_IN, "Zoom in", "zoom_in", ""
+        PLAYER_ACTION_GROUP_UP,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Swarm up",
+        "Swarm all Pikmin up.",
+        "swarm_up", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_ZOOM_OUT, "Zoom out", "zoom_out", ""
+        PLAYER_ACTION_GROUP_LEFT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Swarm left",
+        "Swarm all Pikmin left.",
+        "swarm_left", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NEXT_TYPE, "Next Pikmin", "next_type", "mwd"
+        PLAYER_ACTION_GROUP_DOWN,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Swarm down",
+        "Swarm all Pikmin down.",
+        "swarm_down", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PREV_TYPE, "Prev. Pikmin", "prev_type", "mwu"
+        PLAYER_ACTION_PREV_LEADER,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Prev. leader",
+        "Change to the previous leader.",
+        "prev_leader", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_NEXT_MATURITY, "Next maturity", "next_maturity", ""
+        PLAYER_ACTION_CHANGE_ZOOM,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Change zoom",
+        "Change the current zoom level.",
+        "change_zoom", "k_3"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PREV_MATURITY, "Prev. maturity", "prev_maturity", ""
+        PLAYER_ACTION_ZOOM_IN,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Zoom in",
+        "Change to a closer zoom level.",
+        "zoom_in", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_LIE_DOWN, "Lie down", "lie_down", "k_26"
+        PLAYER_ACTION_ZOOM_OUT,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Zoom out",
+        "Change to a farther zoom level.",
+        "zoom_out", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_PAUSE, "Pause", "pause", "k_59"
+        PLAYER_ACTION_NEXT_MATURITY,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Next maturity",
+        "Change to a Pikmin of the next maturity.",
+        "next_maturity", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_RIGHT, "Menu right", "menu_right", "k_83"
+        PLAYER_ACTION_PREV_MATURITY,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Prev. maturity",
+        "Change to a Pikmin of the previous maturity.",
+        "prev_maturity", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_UP, "Menu up", "menu_up", "k_84"
+        PLAYER_ACTION_LIE_DOWN,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Lie down",
+        "Lie down so Pikmin can carry you.",
+        "lie_down", "k_26"
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_LEFT, "Menu left", "menu_left", "k_82"
-    );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_DOWN, "Menu down", "menu_down", "k_85"
-    );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_OK, "Menu OK", "menu_ok", "k_67"
-    );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_BACK, "Menu back", "menu_back", "k_59"
+        PLAYER_ACTION_MENU_BACK,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Menu shortcut - back",
+        "Go back or cancel in a menu.",
+        "menu_back", "k_59"
     );
     
     //Populate the control binds with some default controls for player 1.
@@ -285,9 +447,10 @@ void init_controls() {
         if(def.empty()) continue;
         
         control_bind bind;
-        bind = game.controls.str_to_bind(def);
         bind.action_type_id = action_types[a].id;
-        game.controls.add_bind(bind);
+        bind.player_nr = 0;
+        bind.input = game.controls.str_to_input(def);
+        game.controls.binds().push_back(bind);
     }
 }
 

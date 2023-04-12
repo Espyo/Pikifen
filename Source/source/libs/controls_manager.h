@@ -63,6 +63,8 @@ struct player_input {
     int stick_nr;
     //Game controller axis, if any.
     int axis_nr;
+    //Value associated, if applicable.
+    float value;
     
     player_input();
 };
@@ -125,28 +127,22 @@ struct controls_manager_options {
  */
 struct controls_manager {
 public:
+    //Control binds.
+    vector<control_bind> binds;
+    //Each game action type's current input value.
+    map<int, float> action_type_values;
     //Options.
     controls_manager_options options;
     
-    void add_bind(const control_bind &bind);
-    void clear_bind();
-    const vector<control_bind> &get_all_binds() const;
-    void handle_input(
-        INPUT_TYPES type, float value,
-        int device_nr = 0, int button_nr = 0, int stick_nr = 0, int axis_nr = 0
-    );
-    void new_frame();
-    bool read_action(player_action &action);
+    void handle_input(const player_input &input);
+    void new_frame(); //TODO merge with poll_action?
+    bool poll_action(player_action &action);
     
 private:
     //Queue of actions the game needs to handle this frame.
     vector<player_action> action_queue;
-    //Control binds.
-    vector<control_bind> binds;
-    //Each game action type's input state in the previous frame.
-    map<int, float> old_action_type_states;
-    //Each game action type's current input state.
-    map<int, float> action_type_states;
+    //Each game action type's input values in the previous frame.
+    map<int, float> old_action_type_values;
     //Raw state of each game controller stick.
     map<int, map<int, map<int, float> > > raw_sticks;
     //Clean state of each game controller stick.
@@ -154,8 +150,7 @@ private:
     
     void clean_stick(int device_nr, int stick_nr);
     vector<int> get_action_types_from_input(
-        INPUT_TYPES type,
-        int device_nr = 0, int button_nr = 0, int stick_nr = 0, int axis_nr = 0
+        const player_input &input
     );
 };
 

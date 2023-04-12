@@ -475,7 +475,7 @@ onion_menu_struct::onion_menu_struct(
         );
         
         draw_button(
-            center, size, "", game.fonts.standard, map_gray(255),
+            center, size, "", game.fonts.standard, COLOR_WHITE,
             prev_page_button->selected,
             prev_page_button->get_juice_value()
         );
@@ -500,7 +500,7 @@ onion_menu_struct::onion_menu_struct(
         );
         
         draw_button(
-            center, size, "", game.fonts.standard, map_gray(255),
+            center, size, "", game.fonts.standard, COLOR_WHITE,
             next_page_button->selected,
             next_page_button->get_juice_value()
         );

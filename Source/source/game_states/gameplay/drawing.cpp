@@ -205,7 +205,7 @@ void gameplay_state::draw_background(ALLEGRO_BITMAP* bmp_output) {
     
     ALLEGRO_VERTEX bg_v[4];
     for(unsigned char v = 0; v < 4; ++v) {
-        bg_v[v].color = map_gray(255);
+        bg_v[v].color = COLOR_WHITE;
         bg_v[v].z = 0;
     }
     
@@ -441,7 +441,7 @@ void gameplay_state::draw_ingame_text() {
                             rotate_point(h_ptr->pos, mob_ptr->angle);
                         al_draw_circle(
                             p.x, p.y,
-                            h_ptr->radius, map_gray(255), 1
+                            h_ptr->radius, COLOR_WHITE, 1
                         );
                     }
                 }
@@ -475,11 +475,11 @@ void gameplay_state::draw_ingame_text() {
                     rect_vertices[3].y
                 };
                 
-                al_draw_polygon(vertices, 4, 0, map_gray(255), 1, 10);
+                al_draw_polygon(vertices, 4, 0, COLOR_WHITE, 1, 10);
             } else {
                 al_draw_circle(
                     mob_ptr->pos.x, mob_ptr->pos.y,
-                    mob_ptr->radius, map_gray(255), 1
+                    mob_ptr->radius, COLOR_WHITE, 1
                 );
             }
         }
@@ -860,9 +860,9 @@ void gameplay_state::draw_message_box() {
     }
     
     //Draw the button to advance, if it's time.
-    draw_control_bind_icon(
+    draw_player_input_icon(
         game.fonts.slim,
-        game.controls.find_bind(PLAYER_ACTION_THROW),
+        game.controls.find_bind(PLAYER_ACTION_THROW).input,
         true,
         point(
             game.win_w - (MSG_BOX::MARGIN + MSG_BOX::PADDING + 8.0f),
@@ -954,9 +954,9 @@ void gameplay_state::draw_message_box() {
                 break;
             }
             case STRING_TOKEN_CONTROL_BIND: {
-                draw_control_bind_icon(
+                draw_player_input_icon(
                     game.fonts.slim,
-                    game.controls.find_bind(cur_token.content),
+                    game.controls.find_bind(cur_token.content).input,
                     false,
                     point(
                         x + token_final_width / 2.0f,

@@ -35,6 +35,8 @@ extern const string SPECS_GUI_FILE_PATH;
 
 
 namespace CONTROLS_MENU {
+extern const float BIND_BUTTON_HEIGHT;
+extern const float BIND_BUTTON_PADDING;
 extern const string GUI_FILE_PATH;
 }
 
@@ -337,20 +339,29 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     //GUI.
     gui_manager gui;
-    //Control list widget.
+    //GUI for the "more..." options of an action type.
+    gui_manager more_gui;
+    //Control list GUI item.
     list_gui_item* list_box;
     //Is it currently capturing input?
     bool capturing_input;
-    //If it's capturing input, this is the index of the control to capture for.
-    size_t input_capture_control_nr;
+    //Is it showing an action type's "more..." menu?
+    bool showing_more;
+    //List of binds per player action type.
+    vector<vector<control_bind> > binds_per_action_type;
+    //Current player action type.
+    PLAYER_ACTION_TYPES cur_action_type;
+    //Current global bind index we're working with.
+    size_t cur_bind_idx;
     
-    void add_control();
-    void add_control_gui_items(const size_t index, const bool focus);
-    void choose_button(const size_t index);
-    void choose_next_action(const size_t index);
-    void choose_prev_action(const size_t index);
-    void delete_control(const size_t index);
-    void delete_control_gui_items();
+    void choose_input(
+        const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
+    );
+    void delete_bind(
+        const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
+    );
+    void populate_binds();
+    void restore_defaults(const PLAYER_ACTION_TYPES action_type);
     void leave();
     
 };

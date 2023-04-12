@@ -766,7 +766,7 @@ public:
     float get_visibility() const;
     void reset();
     void set_contents(
-        control_bind control, const string &text, const point &pos
+        player_input input, const string &text, const point &pos
     );
     void set_enabled(const bool enabled);
     void tick(const float delta_t);
@@ -774,8 +774,8 @@ public:
 private:
     //Is it meant to exist?
     bool enabled;
-    //What control bind icon to show.
-    control_bind control;
+    //What player input icon to show.
+    player_input input;
     //What text to write.
     string text;
     //Coordinates of the focal point.

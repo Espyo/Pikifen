@@ -130,7 +130,7 @@ void area_editor::draw_canvas() {
     float edges_opacity = 0.25f;
     float grid_opacity = 1.0f;
     float mob_opacity = 0.15f;
-    ALLEGRO_COLOR highlight_color = map_gray(255);
+    ALLEGRO_COLOR highlight_color = COLOR_WHITE;
     if(game.options.editor_use_custom_style) {
         highlight_color = game.options.editor_highlight_color;
     }

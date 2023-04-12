@@ -169,7 +169,7 @@ check_gui_item::check_gui_item(
         );
         
         ALLEGRO_COLOR box_tint =
-            selected ? al_map_rgb(87, 200, 208) : map_gray(255);
+            selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
             
         draw_textured_box(
             center, size, game.sys_assets.bmp_bubble_box, box_tint
@@ -1117,7 +1117,7 @@ void gui_manager::tick(const float delta_t) {
     game.controls.new_frame();
     player_action action;
     bool input_happened = false;
-    while(game.controls.read_action(action)) {
+    while(game.controls.poll_action(action)) {
         input_happened |= handle_player_action(action);
     }
     if(input_happened) last_input_was_mouse = false;
@@ -1293,7 +1293,7 @@ picker_gui_item::picker_gui_item(
             real_arrow_highlight = arrow_highlight;
         }
         ALLEGRO_COLOR arrow_highlight_color = al_map_rgb(87, 200, 208);
-        ALLEGRO_COLOR arrow_regular_color = map_gray(255);
+        ALLEGRO_COLOR arrow_regular_color = COLOR_WHITE;
         point arrow_highlight_size = point(1.4f, 1.4f);
         point arrow_regular_size = point(1.0f, 1.0f);
         
@@ -1329,7 +1329,7 @@ picker_gui_item::picker_gui_item(
         float juicy_grow_amount = this->get_juice_value();
         
         draw_compressed_scaled_text(
-            game.fonts.standard, map_gray(255),
+            game.fonts.standard, COLOR_WHITE,
             point(center.x - size.x * 0.40, center.y),
             point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER,
@@ -1339,7 +1339,7 @@ picker_gui_item::picker_gui_item(
         );
         
         ALLEGRO_COLOR box_tint =
-            selected ? al_map_rgb(87, 200, 208) : map_gray(255);
+            selected ? al_map_rgb(87, 200, 208) : COLOR_WHITE;
             
         draw_textured_box(
             center, size, game.sys_assets.bmp_bubble_box, box_tint

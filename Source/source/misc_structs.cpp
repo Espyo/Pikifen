@@ -995,11 +995,11 @@ void notification_struct::draw() const {
         map_alpha(DRAWING::NOTIFICATION_ALPHA * visibility)
     );
     
-    if(control.input.type != INPUT_TYPE_NONE) {
+    if(input.type != INPUT_TYPE_NONE) {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
-        draw_control_bind_icon(
-            game.fonts.standard, control,
+        draw_player_input_icon(
+            game.fonts.standard, input,
             true,
             point(
                 -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
@@ -1048,7 +1048,7 @@ float notification_struct::get_visibility() const {
  */
 void notification_struct::reset() {
     enabled = true;
-    control.input.type = INPUT_TYPE_NONE;
+    input.type = INPUT_TYPE_NONE;
     text.clear();
     pos = point();
     visibility = 0.0f;
@@ -1057,17 +1057,17 @@ void notification_struct::reset() {
 
 /* ----------------------------------------------------------------------------
  * Sets the contents to show.
- * control:
- *   Control bind icon to show.
+ * input:
+ *   Player input icon to show.
  * text:
  *   Text to show.
  * pos:
  *   Where to show it in the game world.
  */
 void notification_struct::set_contents(
-    control_bind control, const string &text, const point &pos
+    player_input input, const string &text, const point &pos
 ) {
-    this->control = control;
+    this->input = input;
     this->text = text;
     this->pos = pos;
 }

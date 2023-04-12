@@ -20,6 +20,10 @@
 
 
 namespace CONTROLS_MENU {
+//Height of each bind button.
+const float BIND_BUTTON_HEIGHT = 0.07f;
+//Padding between each bind button.
+const float BIND_BUTTON_PADDING = 0.01f;
 //Path to the GUI information file.
 const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Controls_menu.txt";
 }
@@ -33,243 +37,66 @@ controls_menu_state::controls_menu_state() :
     bmp_menu_bg(NULL),
     list_box(nullptr),
     capturing_input(false),
-    input_capture_control_nr(0) {
+    showing_more(false),
+    cur_action_type(PLAYER_ACTION_NONE),
+    cur_bind_idx(0) {
     
 }
 
 
 /* ----------------------------------------------------------------------------
- * Adds a control to the player's controls.
+ * Chooses the input for a given action type's bind.
+ * If the bind index is greater than the number of existing binds for this
+ * action type, then a new one gets added.
+ * action_type:
+ *   Action type.
+ * bind_idx:
+ *   Index of that action type's bind.
  */
-void controls_menu_state::add_control() {
-    //TODO
-    /*
-    if(game.options.controls[0].size()) {
-        PLAYER_ACTION_TYPES last_action =
-            game.options.controls[0].back().action_type_id;
-        game.options.controls[0].push_back(
-            control_info(
-                (PLAYER_ACTION_TYPES) (
-                    last_action == N_PLAYER_ACTIONS - 1 ?
-                    1 : //The "None" action is 0, so go to 1.
-                    last_action + 1
-                ),
-                ""
-            )
-        );
-    } else {
-        game.options.controls[0].push_back(
-            control_info(PLAYER_ACTION_NONE, "")
-        );
-    }
-    */
-}
-
-
-/* ----------------------------------------------------------------------------
- * Adds GUI items about a control to the list.
- * index:
- *   Index number of the control.
- * focus:
- *   If true, focus on this new control.
- */
-void controls_menu_state::add_control_gui_items(
-    const size_t index, const bool focus
+void controls_menu_state::choose_input(
+    const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
 ) {
-    float items_y = 0.045f + index * 0.08f;
-    
-    //Delete button.
-    button_gui_item* delete_button =
-        new button_gui_item("-", game.fonts.standard);
-    delete_button->on_activate =
-    [this, index] (const point &) {
-        delete_control(index);
-        delete_control_gui_items();
-    };
-    delete_button->center = point(0.07f, items_y);
-    delete_button->size = point(0.08f, 0.07f);
-    delete_button->on_get_tooltip =
-    [] () { return "Delete this button definition."; };
-    list_box->add_child(delete_button);
-    gui.add_item(delete_button);
-    
-    //Previous action button.
-    button_gui_item* prev_action_button =
-        new button_gui_item("<", game.fonts.standard);
-    prev_action_button->on_activate =
-    [this, index] (const point &) {
-        choose_prev_action(index);
-    };
-    prev_action_button->center = point(0.16f, items_y);
-    prev_action_button->size = point(0.08f, 0.07f);
-    prev_action_button->on_get_tooltip =
-    [] () { return "Set a different action for this button."; };
-    list_box->add_child(prev_action_button);
-    gui.add_item(prev_action_button);
-    
-    //TODO
-    /*
-    //Action name.
-    text_gui_item* action_name_text =
-        new text_gui_item("", game.fonts.standard);
-    action_name_text->on_draw =
-        [this, index, action_name_text]
-    (const point & center, const point & size) {
-        control_info* c_ptr = &game.options.controls[0][index];
-    
-        string action_name;
-        for(size_t b = 0; b < N_PLAYER_ACTIONS; ++b) {
-            if(c_ptr->action == game.player_actions.list[b].id) {
-                action_name = game.player_actions.list[b].name;
-                break;
-            }
-        }
-    
-        float juicy_grow_amount = action_name_text->get_juice_value();
-    
-        draw_compressed_scaled_text(
-            game.fonts.standard, map_gray(255),
-            center,
-            point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
-            ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, true,
-            action_name
-        );
-    };
-    action_name_text->center = point(0.40f, items_y);
-    action_name_text->size = point(0.39f, 0.07f);
-    list_box->add_child(action_name_text);
-    gui.add_item(action_name_text);*/
-    
-    //Next action button.
-    button_gui_item* next_action_button =
-        new button_gui_item(">", game.fonts.standard);
-    next_action_button->on_activate =
-    [this, index] (const point &) {
-        choose_next_action(index);
-    };
-    next_action_button->center = point(0.65f, items_y);
-    next_action_button->size = point(0.08f, 0.07f);
-    next_action_button->on_get_tooltip =
-    [] () { return "Set a different action for this button."; };
-    list_box->add_child(next_action_button);
-    gui.add_item(next_action_button);
-    
-    //TODO
-    /*
-    //Control button.
-    button_gui_item* control_button =
-        new button_gui_item("", game.fonts.standard);
-    control_button->on_activate =
-    [this, index] (const point &) {
-        choose_button(index);
-    };
-    control_button->on_draw =
-        [this, index, control_button]
-    (const point & center, const point & size) {
-        control_info* c_ptr = &game.options.controls[0][index];
-    
-        draw_control_binding_icon(game.fonts.slim, c_ptr, false, center, size * 0.8f);
-    
-        draw_button(
-            center, size, "", game.fonts.standard, map_gray(255),
-            control_button->selected,
-            control_button->get_juice_value()
-        );
-    };
-    control_button->center = point(0.83f, items_y);
-    control_button->size = point(0.26f, 0.07f);
-    control_button->on_get_tooltip =
-    [] () { return "The button used to perform this action."; };
-    list_box->add_child(control_button);
-    gui.add_item(control_button);*/
-    
-    //Focus, if requested.
-    if(focus) {
-        //TODO
-        /*action_name_text->start_juice_animation(
-            gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-        );*/
-        float list_bottom = list_box->get_child_bottom();
-        if(list_bottom > 1.0f) {
-            list_box->target_offset = list_bottom - 1.0f;
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Chooses the button for a given control.
- * index:
- *   Index number of the control.
- */
-void controls_menu_state::choose_button(const size_t index) {
     capturing_input = true;
-    input_capture_control_nr = index;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Chooses the next action for a given control.
- * index:
- *   Index number of the control.
- */
-void controls_menu_state::choose_next_action(const size_t index) {
-    //TODO
-    /*
-    control_info* c_ptr = &game.options.controls[0][index];
-    c_ptr->action =
-        (PLAYER_ACTION_TYPES) sum_and_wrap((size_t) c_ptr->action, 1, N_PLAYER_ACTIONS);
-    gui_item* action_name_text = list_box->children[index * 5 + 2];
-    ((text_gui_item*) action_name_text)->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-    );*/
-}
-
-
-/* ----------------------------------------------------------------------------
- * Chooses the previous action for a given control.
- * index:
- *   Index number of the control.
- */
-void controls_menu_state::choose_prev_action(const size_t index) {
-    //TODO
-    /*
-    control_info* c_ptr = &game.options.controls[0][index];
-    c_ptr->action =
-        (PLAYER_ACTION_TYPES) sum_and_wrap((size_t) c_ptr->action, -1, N_PLAYER_ACTIONS);
-    gui_item* action_name_text = list_box->children[index * 5 + 2];
-    ((text_gui_item*) action_name_text)->start_juice_animation(
-        gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
-    );*/
-}
-
-
-/* ----------------------------------------------------------------------------
- * Deletes a control from the player's controls.
- * index:
- *   Index number of the control.
- */
-void controls_menu_state::delete_control(const size_t index) {
-    //TODO
-    /*
-    game.options.controls[0].erase(
-        game.options.controls[0].begin() + index
-    );*/
-}
-
-
-/* ----------------------------------------------------------------------------
- * Deletes the GUI items about a control in the list.
- */
-void controls_menu_state::delete_control_gui_items() {
-    //We only need to delete the latest control GUI items.
-    for(size_t i = 0; i < 5; ++i) {
-        //Iterate through all five items.
-        gui_item* i_ptr = list_box->children[list_box->children.size() - 1];
-        list_box->remove_child(i_ptr);
-        gui.remove_item(i_ptr);
-        delete i_ptr;
+    
+    const vector<control_bind> &all_binds = game.controls.binds();
+    size_t binds_counted = 0;
+    cur_action_type = action_type;
+    cur_bind_idx = all_binds.size();
+    
+    for(size_t b = 0; b < all_binds.size(); ++b) {
+        if(all_binds[b].action_type_id != action_type) continue;
+        if(binds_counted == bind_idx) {
+            cur_bind_idx = b;
+            break;
+        } else {
+            binds_counted++;
+        }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes a bind from an action type.
+ * index:
+ *   Index number of the control.
+ */
+void controls_menu_state::delete_bind(
+    const PLAYER_ACTION_TYPES action_type, const size_t bind_idx
+) {
+    vector<control_bind> &all_binds = game.controls.binds();
+    size_t binds_counted = 0;
+    
+    for(size_t b = 0; b < all_binds.size(); ++b) {
+        if(all_binds[b].action_type_id != action_type) continue;
+        if(binds_counted == bind_idx) {
+            all_binds.erase(all_binds.begin() + b);
+            break;
+        } else {
+            binds_counted++;
+        }
+    }
+    
+    populate_binds();
 }
 
 
@@ -332,75 +159,31 @@ string controls_menu_state::get_name() const {
  *   Event to handle.
  */
 void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
-    //TODO
-    /*
     if(game.fade_mgr.is_fading()) return;
     
     if(capturing_input) {
     
-        control_info* c_ptr =
-            &game.options.controls[0][input_capture_control_nr];
-        bool valid = true;
-    
-        switch(ev.type) {
-        case ALLEGRO_EVENT_KEY_DOWN: {
-            c_ptr->type = CONTROL_TYPE_KEYBOARD_KEY;
-            c_ptr->button = ev.keyboard.keycode;
-            break;
-    
-        } case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN: {
-            c_ptr->type = CONTROL_TYPE_MOUSE_BUTTON;
-            c_ptr->button = ev.mouse.button;
-            break;
-    
-        } case ALLEGRO_EVENT_MOUSE_AXES: {
-            if(ev.mouse.dz > 0) {
-                c_ptr->type = CONTROL_TYPE_MOUSE_WHEEL_UP;
-            } else if(ev.mouse.dz < 0) {
-                c_ptr->type = CONTROL_TYPE_MOUSE_WHEEL_DOWN;
-            } else if(ev.mouse.dw > 0) {
-                c_ptr->type = CONTROL_TYPE_MOUSE_WHEEL_RIGHT;
-            } else if(ev.mouse.dw < 0) {
-                c_ptr->type = CONTROL_TYPE_MOUSE_WHEEL_LEFT;
+        player_input input = game.controls.allegro_event_to_input(ev);
+        if(input.value >= 0.5f) {
+            vector<control_bind> &all_binds = game.controls.binds();
+            if(cur_bind_idx >= all_binds.size()) {
+                control_bind new_bind;
+                new_bind.action_type_id = cur_action_type;
+                new_bind.player_nr = 0;
+                new_bind.input = input;
+                all_binds.push_back(new_bind);
             } else {
-                valid = false;
+                game.controls.binds()[cur_bind_idx].input = input;
             }
-            break;
-    
-        } case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN: {
-            c_ptr->type = CONTROL_TYPE_JOYSTICK_BUTTON;
-            c_ptr->device_nr = game.joystick_numbers[ev.joystick.id];
-            c_ptr->button = ev.joystick.button;
-            break;
-    
-        } case ALLEGRO_EVENT_JOYSTICK_AXIS: {
-            c_ptr->type =
-                (
-                    ev.joystick.pos > 0 ?
-                    CONTROL_TYPE_JOYSTICK_AXIS_POS :
-                    CONTROL_TYPE_JOYSTICK_AXIS_NEG
-                );
-            c_ptr->device_nr = game.joystick_numbers[ev.joystick.id];
-            c_ptr->stick = ev.joystick.stick;
-            c_ptr->axis = ev.joystick.axis;
-            break;
-    
-        } default: {
-            valid = false;
-            break;
-    
-        }
-        }
-    
-        if(valid) {
             capturing_input = false;
+            populate_binds();
         }
-    
+        
     } else {
     
         gui.handle_event(ev);
-    
-    }*/
+        
+    }
     
 }
 
@@ -428,7 +211,6 @@ void controls_menu_state::load() {
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
-    gui.register_coords("new",         83,  5, 30,  6);
     gui.register_coords("list",        50, 51, 88, 82);
     gui.register_coords("list_scroll", 97, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
@@ -456,38 +238,346 @@ void controls_menu_state::load() {
     list_scroll->list_item = list_box;
     gui.add_item(list_scroll, "list_scroll");
     
-    //New control button.
-    button_gui_item* new_button =
-        new button_gui_item("New...", game.fonts.standard);
-    new_button->on_activate =
-    [this] (const point &) {
-        add_control();
-        //TODO add_control_gui_items(game.options.controls[0].size() - 1, true);
-    };
-    new_button->on_get_tooltip =
-    [] () { return "Add a new button definition."; };
-    gui.add_item(new_button, "new");
-    
     //Tooltip text.
     tooltip_gui_item* tooltip_text =
         new tooltip_gui_item(&gui);
     gui.add_item(tooltip_text, "tooltip");
     
-    //Items for the different controls.
-    //TODO
-    /*for(size_t c = 0; c < game.options.controls[0].size(); ++c) {
-        add_control_gui_items(c, false);
-    }*/
+    //Populate the list of binds.
+    populate_binds();
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
-    if(list_box->children.size()) {
-        gui.set_selected_item(list_box->children[4]);
-    } else {
-        gui.set_selected_item(gui.back_item);
-    }
+    gui.set_selected_item(gui.back_item);
     
     al_reconfigure_joysticks();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Populates the list of binds.
+ */
+void controls_menu_state::populate_binds() {
+    list_box->delete_all_children();
+    
+    const vector<player_action_type> &all_player_action_types =
+        game.controls.get_all_player_action_types();
+    vector<control_bind> &all_binds = game.controls.binds();
+    
+    binds_per_action_type.clear();
+    binds_per_action_type.assign(N_PLAYER_ACTIONS, vector<control_bind>());
+    
+    //Read all binds and sort them by player action type.
+    for(size_t b = 0; b < all_binds.size(); ++b) {
+        const control_bind &bind = all_binds[b];
+        if(bind.player_nr != 0) continue;
+        binds_per_action_type[bind.action_type_id].push_back(bind);
+    }
+    
+    PLAYER_ACTION_CATEGORIES last_cat = PLAYER_ACTION_CAT_NONE;
+    
+    for(size_t a = 0; a < N_PLAYER_ACTIONS; ++a) {
+        const player_action_type &action_type = all_player_action_types[a];
+        
+        if(action_type.internal_name.empty()) continue;
+        
+        float action_y =
+            list_box->get_child_bottom() + CONTROLS_MENU::BIND_BUTTON_PADDING;
+            
+        if(action_type.category != last_cat) {
+        
+            //Section header text.
+            string section_name;
+            switch(action_type.category) {
+            case PLAYER_ACTION_CAT_NONE: {
+                break;
+            } case PLAYER_ACTION_CAT_MAIN: {
+                section_name = "Main";
+                break;
+            } case PLAYER_ACTION_CAT_MENUS: {
+                section_name = "Menus";
+                break;
+            } case PLAYER_ACTION_CAT_ADVANCED: {
+                section_name = "Advanced";
+                break;
+            }
+            }
+            text_gui_item* section_text =
+                new text_gui_item(section_name, game.fonts.area_name);
+            section_text->center =
+                point(
+                    0.50f,
+                    action_y + CONTROLS_MENU::BIND_BUTTON_HEIGHT / 2.0f
+                );
+            section_text->size =
+                point(0.50f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            list_box->add_child(section_text);
+            gui.add_item(section_text);
+            
+            action_y =
+                list_box->get_child_bottom() + CONTROLS_MENU::BIND_BUTTON_PADDING;
+                
+            last_cat = action_type.category;
+            
+        }
+        
+        float cur_y = action_y + CONTROLS_MENU::BIND_BUTTON_HEIGHT / 2.0f;
+        
+        //Action type name bullet.
+        bullet_point_gui_item* name_bullet =
+            new bullet_point_gui_item(action_type.name, game.fonts.standard);
+        name_bullet->center = point(0.25f, cur_y);
+        name_bullet->size = point(0.40f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+        name_bullet->on_get_tooltip =
+        [action_type] () { return action_type.description; };
+        list_box->add_child(name_bullet);
+        gui.add_item(name_bullet);
+        
+        //More button.
+        button_gui_item* more_button =
+            new button_gui_item("...", game.fonts.standard);
+        more_button->on_activate =
+        [this, a] (const point &) {
+            if(showing_more && a == cur_action_type) {
+                showing_more = false;
+            } else {
+                cur_action_type = (PLAYER_ACTION_TYPES) a;
+                showing_more = true;
+            }
+            populate_binds();
+        };
+        more_button->center = point(0.92f, cur_y);
+        more_button->size = point(0.05f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+        string tooltip =
+            (showing_more && a == cur_action_type) ?
+            "Hide options." :
+            "Show information and options for this action.";
+        more_button->on_get_tooltip =
+        [tooltip] () { return tooltip; };
+        list_box->add_child(more_button);
+        gui.add_item(more_button);
+        if(a == cur_action_type) {
+            gui.set_selected_item(more_button);
+        }
+        
+        if(showing_more && a == cur_action_type) {
+        
+            //Default label.
+            text_gui_item* default_label_text =
+                new text_gui_item(
+                "Default:", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
+            );
+            default_label_text->center = point(0.70f, cur_y);
+            default_label_text->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            list_box->add_child(default_label_text);
+            gui.add_item(default_label_text);
+            
+            //Default icon.
+            player_input def_input =
+                game.controls.str_to_input(action_type.default_bind_str);
+            gui_item* default_icon = new gui_item();
+            default_icon->center = point(0.75f, cur_y);
+            default_icon->size = point(0.15f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            default_icon->on_draw =
+            [def_input] (const point & center, const point & size) {
+                draw_player_input_icon(
+                    game.fonts.standard, def_input, false, center, size
+                );
+            };
+            list_box->add_child(default_icon);
+            gui.add_item(default_icon);
+            
+            cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
+            
+            //Restore default button.
+            button_gui_item* restore_button =
+                new button_gui_item("Restore defaults", game.fonts.standard);
+            restore_button->center = point(0.70f, cur_y);
+            restore_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            restore_button->on_activate =
+            [this, a] (const point &) {
+                restore_defaults((PLAYER_ACTION_TYPES) a);
+            };
+            restore_button->on_get_tooltip =
+            [] () { return "Restore this action's default controls."; };
+            list_box->add_child(restore_button);
+            gui.add_item(restore_button);
+            
+            cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
+            
+        }
+        
+        vector<control_bind> a_binds = binds_per_action_type[a];
+        for(size_t b = 0; b < a_binds.size(); ++b) {
+        
+            //Change/remove bind button.
+            button_gui_item* bind_button =
+                new button_gui_item("", game.fonts.standard);
+            bind_button->on_activate =
+            [this, a, b] (const point &) {
+                if(showing_more && a == cur_action_type) {
+                    delete_bind((PLAYER_ACTION_TYPES) a, b);
+                } else {
+                    choose_input((PLAYER_ACTION_TYPES) a, b);
+                }
+            };
+            bind_button->on_draw =
+                [this, a, b, a_binds, bind_button]
+            (const point & center, const point & size) {
+                point icon_center =
+                    (showing_more && a == cur_action_type) ?
+                    point(center.x + size.x * 0.25f, center.y) :
+                    center;
+                point icon_size =
+                    (showing_more && a == cur_action_type) ?
+                    point(size.x / 2.0f, size.y) :
+                    size;
+                    
+                if(showing_more && a == cur_action_type) {
+                    float juice = bind_button->get_juice_value();
+                    draw_compressed_scaled_text(
+                        game.fonts.standard, COLOR_WHITE,
+                        point(center.x - size.x / 2.0f + 16.0f, center.y),
+                        point(1.0 + juice, 1.0 + juice),
+                        ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
+                        "Remove"
+                    );
+                }
+                
+                draw_player_input_icon(
+                    game.fonts.slim, a_binds[b].input, false, icon_center, icon_size * 0.8f
+                );
+                
+                draw_button(
+                    center, size,
+                    "", game.fonts.standard, COLOR_WHITE,
+                    bind_button->selected,
+                    bind_button->get_juice_value()
+                );
+            };
+            bind_button->center = point(0.70f, cur_y);
+            bind_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            string tooltip =
+                (showing_more && a == cur_action_type) ?
+                "Remove this control from this action." :
+                "Change the control for this action.";
+            bind_button->on_get_tooltip =
+            [tooltip] () { return tooltip; };
+            list_box->add_child(bind_button);
+            gui.add_item(bind_button);
+            
+            cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
+            
+        }
+        
+        if(showing_more && a == cur_action_type) {
+        
+            //Add button.
+            button_gui_item* add_button =
+                new button_gui_item("Add control", game.fonts.standard);
+            add_button->center = point(0.70f, cur_y);
+            add_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            add_button->on_activate =
+            [this, a, a_binds] (const point &) {
+                choose_input((PLAYER_ACTION_TYPES) a, a_binds.size());
+            };
+            add_button->on_get_tooltip =
+            [] () { return "Adds another control to this action."; };
+            list_box->add_child(add_button);
+            gui.add_item(add_button);
+            
+            cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
+            
+        } else if(a_binds.empty()) {
+        
+            //Add first bind button.
+            button_gui_item* bind_button =
+                new button_gui_item("", game.fonts.standard);
+            bind_button->on_activate =
+            [this, a] (const point &) {
+                choose_input((PLAYER_ACTION_TYPES) a, 0);
+            };
+            bind_button->on_draw =
+                [this, a, bind_button]
+            (const point & center, const point & size) {
+                draw_button(
+                    center, size, "", game.fonts.standard, COLOR_WHITE,
+                    bind_button->selected,
+                    bind_button->get_juice_value()
+                );
+            };
+            bind_button->center = point(0.70f, cur_y);
+            bind_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            bind_button->on_get_tooltip =
+            [] () { return "Choose an input for this action."; };
+            list_box->add_child(bind_button);
+            gui.add_item(bind_button);
+            
+        }
+        
+        if(a < N_PLAYER_ACTIONS - 1) {
+            //Spacer line.
+            gui_item* line = new gui_item();
+            line->center =
+                point(
+                    0.50f, list_box->get_child_bottom() + 0.01f
+                );
+            line->size = point(0.90f, 0.01f);
+            line->on_draw =
+            [] (const point & center, const point & size) {
+                al_draw_line(
+                    center.x - size.x / 2.0f,
+                    center.y,
+                    center.x + size.x / 2.0f,
+                    center.y,
+                    al_map_rgba(255, 255, 255, 128),
+                    1.0f
+                );
+            };
+            list_box->add_child(line);
+            gui.add_item(line);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Restores the default binds for a given player action.
+ * action_type_id:
+ *   Action type ID of the action to restore.
+ */
+void controls_menu_state::restore_defaults(
+    const PLAYER_ACTION_TYPES action_type_id
+) {
+    const player_action_type &action_type =
+        game.controls.get_all_player_action_types()[action_type_id];
+    vector<control_bind> &all_binds =
+        game.controls.binds();
+        
+    for(size_t b = 0; b < all_binds.size();) {
+        if(
+            all_binds[b].player_nr == 0 &&
+            all_binds[b].action_type_id == action_type_id
+        ) {
+            all_binds.erase(all_binds.begin() + b);
+        } else {
+            ++b;
+        }
+    }
+    
+    player_input def_input =
+        game.controls.str_to_input(action_type.default_bind_str);
+    control_bind new_bind;
+    
+    if(def_input.type != INPUT_TYPE_NONE) {
+        new_bind.action_type_id = action_type_id;
+        new_bind.player_nr = 0;
+        new_bind.input = def_input;
+        all_binds.push_back(new_bind);
+    }
+    
+    showing_more = false;
+    populate_binds();
 }
 
 
