@@ -116,7 +116,6 @@ asset_file_names_struct::asset_file_names_struct() :
     button_box("Button_box.png"),
     checkbox_check("Checkbox_check.png"),
     checkbox_no_check("Checkbox_no_check.png"),
-    control_bind_icons("Control_bind_icons.png"),
     counter_font("Counter_font.png"),
     cursor("Cursor.png"),
     cursor_counter_font("Cursor_counter_font.png"),
@@ -141,6 +140,7 @@ asset_file_names_struct::asset_file_names_struct() :
     mouse_cursor("Mouse_cursor.png"),
     notification("Notification.png"),
     pikmin_spirit("Pikmin_spirit.png"),
+    player_input_icons("Player_input_icons.png"),
     random("Random.png"),
     rock("Rock.png"),
     slim_font("Slim_font.otf"),
@@ -173,7 +173,7 @@ void asset_file_names_struct::load(data_node* file) {
     rs.set("bubble_box", bubble_box);
     rs.set("checkbox_check", checkbox_check);
     rs.set("checkbox_no_check", checkbox_no_check);
-    rs.set("control_bind_icons", control_bind_icons);
+    rs.set("player_input_icons", player_input_icons);
     rs.set("counter_font", counter_font);
     rs.set("cursor", cursor);
     rs.set("cursor_counter_font", cursor_counter_font);
@@ -999,7 +999,7 @@ void notification_struct::draw() const {
         text_box_x1 +=
             DRAWING::NOTIFICATION_CONTROL_SIZE + DRAWING::NOTIFICATION_PADDING;
         draw_player_input_icon(
-            game.fonts.standard, input,
+            game.fonts.slim, input,
             true,
             point(
                 -bmp_w * 0.5 + DRAWING::NOTIFICATION_PADDING +
@@ -2045,7 +2045,6 @@ system_asset_list::system_asset_list():
     bmp_button_box(nullptr),
     bmp_checkbox_check(nullptr),
     bmp_checkbox_no_check(nullptr),
-    bmp_control_bind_icons(nullptr),
     bmp_cursor(nullptr),
     bmp_enemy_spirit(nullptr),
     bmp_focus_box(nullptr),
@@ -2065,6 +2064,7 @@ system_asset_list::system_asset_list():
     bmp_mouse_cursor(nullptr),
     bmp_notification(nullptr),
     bmp_pikmin_spirit(nullptr),
+    bmp_player_input_icons(nullptr),
     bmp_random(nullptr),
     bmp_rock(nullptr),
     bmp_shadow(nullptr),

@@ -130,14 +130,12 @@ struct asset_file_names_struct {
     string bright_ring;
     //Bubble box.
     string bubble_box;
-    //Texture box for control buttons.
+    //Texture box for player input buttons.
     string button_box;
     //Checkbox with a checkmark.
     string checkbox_check;
     //Checkbox without a checkmark.
     string checkbox_no_check;
-    //Misc. control bind icons.
-    string control_bind_icons;
     //Counter font.
     string counter_font;
     //Leader cursor.
@@ -154,7 +152,7 @@ struct asset_file_names_struct {
     string icon;
     //Idle glow.
     string idle_glow;
-    //Texture box for control keys.
+    //Texture box for player input keys.
     string key_box;
     //Leader silhouette from the side.
     string leader_silhouette_side;
@@ -186,6 +184,8 @@ struct asset_file_names_struct {
     string notification;
     //Pikmin spirit.
     string pikmin_spirit;
+    //Misc. specific player input icons.
+    string player_input_icons;
     //Randomness symbol.
     string random;
     //A rock.
@@ -618,14 +618,12 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_bright_ring;
     //Bubble box.
     ALLEGRO_BITMAP* bmp_bubble_box;
-    //Box texture for control buttons.
+    //Box texture for player input buttons.
     ALLEGRO_BITMAP* bmp_button_box;
     //Checkbox with a checkmark.
     ALLEGRO_BITMAP* bmp_checkbox_check;
     //Checkbox without a checkmark.
     ALLEGRO_BITMAP* bmp_checkbox_no_check;
-    //Misc. control bind icons.
-    ALLEGRO_BITMAP* bmp_control_bind_icons;
     //Leader cursor.
     ALLEGRO_BITMAP* bmp_cursor;
     //Enemy spirit.
@@ -636,7 +634,7 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_icon;
     //Idle glow.
     ALLEGRO_BITMAP* bmp_idle_glow;
-    //Box texture for control keys.
+    //Box texture for player input keys.
     ALLEGRO_BITMAP* bmp_key_box;
     //Leader silhouette from the side.
     ALLEGRO_BITMAP* bmp_leader_silhouette_side;
@@ -664,6 +662,8 @@ struct system_asset_list {
     ALLEGRO_BITMAP* bmp_notification;
     //Pikmin spirit.
     ALLEGRO_BITMAP* bmp_pikmin_spirit;
+    //Misc. specific player input icons.
+    ALLEGRO_BITMAP* bmp_player_input_icons;
     //Randomness symbol.
     ALLEGRO_BITMAP* bmp_random;
     //A rock.

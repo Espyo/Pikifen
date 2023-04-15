@@ -1079,7 +1079,7 @@ void draw_mob_shadow(
  *   If true, only the icon's fundamental information is presented. If false,
  *   disambiguation information is included too. For instance, keyboard keys
  *   that come in pairs specify whether they are the left or right key,
- *   gamepad controls specify what gamepad number it is, etc.
+ *   controller inputs specify what controller number it is, etc.
  * where:
  *   Center of the place to draw at.
  * max_size:
@@ -1099,8 +1099,8 @@ void draw_player_input_icon(
         change_alpha(CONTROL_BIND_ICON::BASE_TEXT_COLOR, alpha);
         
     //Start by getting the icon's info for drawing.
-    CONTROL_BIND_ICON_SHAPES shape;
-    CONTROL_BIND_ICON_SPRITES bitmap_sprite;
+    PLAYER_INPUT_ICON_SHAPES shape;
+    PLAYER_INPUT_ICON_SPRITES bitmap_sprite;
     string text;
     get_player_input_icon_info(
         i, condensed,
@@ -1108,13 +1108,13 @@ void draw_player_input_icon(
     );
     
     //If it's a bitmap, just draw it and be done with it.
-    if(shape == CONTROL_BIND_ICON_SHAPE_BITMAP) {
+    if(shape == PLAYER_INPUT_ICON_SHAPE_BITMAP) {
         //All icons are square, and in a row, so the spritesheet height works.
         int icon_size =
-            al_get_bitmap_height(game.sys_assets.bmp_control_bind_icons);
+            al_get_bitmap_height(game.sys_assets.bmp_player_input_icons);
         ALLEGRO_BITMAP* bmp =
             al_create_sub_bitmap(
-                game.sys_assets.bmp_control_bind_icons,
+                game.sys_assets.bmp_player_input_icons,
                 (icon_size + 1) * (int) bitmap_sprite, 0,
                 icon_size, icon_size
             );
@@ -1147,21 +1147,21 @@ void draw_player_input_icon(
     
     //Now, draw the rectangle, either sharp or rounded.
     switch(shape) {
-    case CONTROL_BIND_ICON_SHAPE_RECTANGLE: {
+    case PLAYER_INPUT_ICON_SHAPE_RECTANGLE: {
         draw_textured_box(
             where, point(total_width, total_height),
             game.sys_assets.bmp_key_box
         );
         break;
     }
-    case CONTROL_BIND_ICON_SHAPE_ROUNDED: {
+    case PLAYER_INPUT_ICON_SHAPE_ROUNDED: {
         draw_textured_box(
             where, point(total_width, total_height),
             game.sys_assets.bmp_button_box
         );
         break;
     }
-    case CONTROL_BIND_ICON_SHAPE_BITMAP: {
+    case PLAYER_INPUT_ICON_SHAPE_BITMAP: {
         break;
     }
     }
@@ -1738,7 +1738,7 @@ void draw_textured_box(
  *   If true, only the icon's fundamental information is presented. If false,
  *   disambiguation information is included too. For instance, keyboard keys
  *   that come in pairs specify whether they are the left or right key,
- *   gamepad controls specify what gamepad number it is, etc.
+ *   controller inputs specify what controller number it is, etc.
  * shape:
  *   The shape is returned here.
  * bitmap_sprite:
@@ -1750,12 +1750,12 @@ void draw_textured_box(
  */
 void get_player_input_icon_info(
     const player_input &i, const bool condensed,
-    CONTROL_BIND_ICON_SHAPES* shape,
-    CONTROL_BIND_ICON_SPRITES* bitmap_sprite,
+    PLAYER_INPUT_ICON_SHAPES* shape,
+    PLAYER_INPUT_ICON_SPRITES* bitmap_sprite,
     string* text
 ) {
-    *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
-    *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_LMB;
+    *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
+    *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LMB;
     *text = "(NONE)";
     
     if(i.type == INPUT_TYPE_NONE) return;
@@ -1764,81 +1764,81 @@ void get_player_input_icon_info(
     //If so, just return that.
     if(i.type == INPUT_TYPE_MOUSE_BUTTON) {
         if(i.button_nr == 1) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_LMB;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LMB;
             return;
         } else if(i.button_nr == 2) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_RMB;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_RMB;
             return;
         } else if(i.button_nr == 3) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_MMB;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MMB;
             return;
         }
     } else if(i.type == INPUT_TYPE_MOUSE_WHEEL_UP) {
-        *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-        *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_MWU;
+        *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+        *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MWU;
         return;
     } else if(i.type == INPUT_TYPE_MOUSE_WHEEL_DOWN) {
-        *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-        *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_MWD;
+        *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+        *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_MWD;
         return;
     } else if(i.type == INPUT_TYPE_KEYBOARD_KEY) {
         if(i.button_nr == ALLEGRO_KEY_UP) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_UP;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_UP;
             return;
         } else if(i.button_nr == ALLEGRO_KEY_LEFT) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_LEFT;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_LEFT;
             return;
         } else if(i.button_nr == ALLEGRO_KEY_DOWN) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_DOWN;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_DOWN;
             return;
         } else if(i.button_nr == ALLEGRO_KEY_RIGHT) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_RIGHT;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_RIGHT;
             return;
         } else if(i.button_nr == ALLEGRO_KEY_BACKSPACE) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_BACKSPACE;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_BACKSPACE;
             return;
         } else if(
             condensed &&
             (i.button_nr == ALLEGRO_KEY_LSHIFT || i.button_nr == ALLEGRO_KEY_RSHIFT)
         ) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_SHIFT;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_SHIFT;
             return;
         } else if(i.button_nr == ALLEGRO_KEY_TAB) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_TAB;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_TAB;
             return;
         } else if(i.button_nr == ALLEGRO_KEY_ENTER) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_ENTER;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_ENTER;
             return;
         }
     } else if(i.type == INPUT_TYPE_CONTROLLER_AXIS_NEG && condensed) {
         if(i.axis_nr == 0) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_STICK_LEFT;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_LEFT;
             return;
         } else if(i.axis_nr == 1) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_STICK_UP;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_UP;
             return;
         }
     } else if(i.type == INPUT_TYPE_CONTROLLER_AXIS_POS && condensed) {
         if(i.axis_nr == 0) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_STICK_RIGHT;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT;
             return;
         } else if(i.axis_nr == 1) {
-            *shape = CONTROL_BIND_ICON_SHAPE_BITMAP;
-            *bitmap_sprite = CONTROL_BIND_ICON_SPRITE_STICK_DOWN;
+            *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
+            *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_STICK_DOWN;
             return;
         }
     }
@@ -1846,13 +1846,13 @@ void get_player_input_icon_info(
     //Otherwise, use an actual shape and some text inside.
     switch(i.type) {
     case INPUT_TYPE_KEYBOARD_KEY: {
-        *shape = CONTROL_BIND_ICON_SHAPE_RECTANGLE;
+        *shape = PLAYER_INPUT_ICON_SHAPE_RECTANGLE;
         *text = get_key_name(i.button_nr, condensed);
         break;
         
     } case INPUT_TYPE_CONTROLLER_AXIS_NEG:
     case INPUT_TYPE_CONTROLLER_AXIS_POS: {
-        *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
+        *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
                 "Pad " + i2s(i.device_nr + 1) +
@@ -1893,7 +1893,7 @@ void get_player_input_icon_info(
         break;
         
     } case INPUT_TYPE_CONTROLLER_BUTTON: {
-        *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
+        *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text =
                 "Pad " + i2s(i.device_nr + 1) +
@@ -1904,7 +1904,7 @@ void get_player_input_icon_info(
         break;
         
     } case INPUT_TYPE_MOUSE_BUTTON: {
-        *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
+        *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text = "Mouse button " + i2s(i.button_nr);
         } else {
@@ -1913,7 +1913,7 @@ void get_player_input_icon_info(
         break;
         
     } case INPUT_TYPE_MOUSE_WHEEL_LEFT: {
-        *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
+        *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text = "Mouse wheel left";
         } else {
@@ -1922,7 +1922,7 @@ void get_player_input_icon_info(
         break;
         
     } case INPUT_TYPE_MOUSE_WHEEL_RIGHT: {
-        *shape = CONTROL_BIND_ICON_SHAPE_ROUNDED;
+        *shape = PLAYER_INPUT_ICON_SHAPE_ROUNDED;
         if(!condensed) {
             *text = "Mouse wheel right";
         } else {
@@ -1948,7 +1948,7 @@ void get_player_input_icon_info(
  *   If true, only the icon's fundamental information is presented. If false,
  *   disambiguation information is included too. For instance, keyboard keys
  *   that come in pairs specify whether they are the left or right key,
- *   gamepad controls specify what gamepad number it is, etc.
+ *   controller inputs specify what controller number it is, etc.
  * max_bitmap_height:
  *   If bitmap icons need to be condensed vertically to fit a certain space,
  *   then their width will be affected too. Specify the maximum height here.
@@ -1958,18 +1958,18 @@ float get_player_input_icon_width(
     const ALLEGRO_FONT* font, const player_input &i, const bool condensed,
     const float max_bitmap_height
 ) {
-    CONTROL_BIND_ICON_SHAPES shape;
-    CONTROL_BIND_ICON_SPRITES bitmap_sprite;
+    PLAYER_INPUT_ICON_SHAPES shape;
+    PLAYER_INPUT_ICON_SPRITES bitmap_sprite;
     string text;
     get_player_input_icon_info(
         i, condensed,
         &shape, &bitmap_sprite, &text
     );
     
-    if(shape == CONTROL_BIND_ICON_SHAPE_BITMAP) {
+    if(shape == PLAYER_INPUT_ICON_SHAPE_BITMAP) {
         //All icons are square, and in a row, so the spritesheet height works.
         int bmp_height =
-            al_get_bitmap_height(game.sys_assets.bmp_control_bind_icons);
+            al_get_bitmap_height(game.sys_assets.bmp_player_input_icons);
         if(max_bitmap_height == 0.0f || bmp_height < max_bitmap_height) {
             return bmp_height;
         } else {

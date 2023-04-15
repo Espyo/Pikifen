@@ -36,6 +36,7 @@
       <dt>Action</dt>
       <dd>Something that an object can do in its <a href="#S">script</a>. This includes walking to a certain point, losing <a href="#H">health</a>, changing its <a href="#A">animation</a>, etc.</dd>
       <dd>Further reading: <a href="script.html">Object script</a>.</dd>
+      <dd>See also: <a href="#P">Player action</a>.</dd>
     </dl>
     <dl>
       <dt>Animation</dt>
@@ -60,9 +61,17 @@
       <dd>Further reading: <a href="animation.html">Making animations</a>.</dd>
     </dl>
     <dl>
+      <dt>Bind</dt>
+      <dd>The mapping between a <a href="#P">player input</a> and a <a href="#P">player action</a>.</dd>
+    </dl>
+    <dl>
       <dt>Bitmap</dt>
       <dd>An image. It contains a series of pixels, like most computer images.</dd>
       <dd>Further reading: <a href="http://en.wikipedia.org/wiki/Bitmap">Wikipedia's definition of bitmap</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Button</dt>
+      <dd>An on-screen button, or a button in the real world, that the player can press. For the latter case, it's usually a mouse button or a game <a href="#C">controller</a> button, but it may sometimes refer to a keyboard <a href="#K">key</a> too, but never to a game <a href="#C">controller</a> analog <a href="#S">stick.</a></dd>
     </dl>
     
     <h2 id="C">C</h2>
@@ -73,7 +82,7 @@
     </dl>
     <dl>
       <dt>Category</dt>
-      <dd>See <a href="#O">object category</a>.</dd>
+      <dd>See <a href="#O">Object category</a>.</dd>
     </dl>
     <dl>
       <dt>Child</dt>
@@ -83,6 +92,18 @@
     <dl>
       <dt>Clear</dt>
       <dd>A mission being cleared means the mission has ended because the player has completed the mission's goal. It has no bearing on the medal the player receives.</dd>
+    </dl>
+    <dl>
+      <dt>Control bind</dt>
+      <dd>See <a href="#B">Bind</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Controller, Game controller</dt>
+      <dd>Any video game controller in the real world, also known as gamepads or joysticsk (though not to be confused with <a href="#S">stick</a>). Examples include the GameCube Controller, the Nintendo Switch Pro Controller, the Xbox Wireless Controller, etc.</dd>
+    </dl>
+    <dl>
+      <dt>Controls</dt>
+      <dd>The entire subject regarding <a href="#P">player input</a>, control <a href="#B">binds</a>, and <a href="#P">player actions</a>.</dd>
     </dl>
     <dl>
       <dt>Coordinates</dt>
@@ -207,15 +228,27 @@
       <dd>An ingredient for concocting a spray. In the canon games, these are berries. After a certain number of ingredients of a certain type are collected, the player gains one more dosage of a certain spray.</dd>
     </dl>
     <dl>
+      <dt>Input</dt>
+      <dd>See <a href="#P">Player input</a>.</dd>
+    </dl>
+    <dl>
       <dt>Itch</dt>
       <dd>When an object has been taking damage for a while, an "itch" <a href="#E">event</a> will be triggered. This periodic event allows an enemy to shake Pikmin off when it is under attack. In order for the enemy to not shake several times in a row, an "itch" event will only be triggered if enough time has passed since the last one, and if enough damage has been done since the last one.</dd>
     </dl>
     
     <h2 id="J">J</h2>
 
+    <dl>
+      <dt>Joystick</dt>
+      <dd>See <a href="#C">Controller</a> and <a href="#S">Stick</a>.</dd>
+    </dl>
     
     <h2 id="K">K</h2>
 
+    <dl>
+      <dt>Key</dt>
+      <dd>A keyboard key.</dd>
+    </dl>
     <dl>
       <dt>Knockback</dt>
       <dd>Leaders and Pikmin, when hurt, can get blown backwards and land on the floor lying down. When this happens, it is said that they have suffered knockback.</dd>
@@ -272,6 +305,10 @@
       <dd>Any individual Pikmin, leader, obstacle, enemy, ship, etc. is an object. Each object is of an <a href="#O">object type</a>, and multiple objects of the same type can exist in the same area at once.</dd>
     </dl>
     <dl>
+      <dt>Object action</dt>
+      <dd>See <a href="#A">Action</a>.</dd>
+    </dl>
+    <dl>
       <dt>Object link</dt>
       <dd>A way for an object to send messages or refer to another object.</dd>
       <dd>Further reading: <a href="misc_features.html#mob-links">Object links</a>.</dd>
@@ -321,6 +358,15 @@
       <dt>Path stop link</dt>
       <dd>Path stop links refer to the connection between two path stops. This means an object can go from stop A to stop B when following a path. Path stop links can either be one-way or bidirectional.</dd>
       <dd>Further reading: <a href="area.html">Making areas</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Player action</dt>
+      <dd>After a player performs some <a href="#P">input</a> that is <a href="#B">bound</a> to an action type, then the player has executed that action, which is then processed by the game. Action types include grabbing+throwing, moving right, whistling, lying down, going up on a menu, etc. Actions also contain information about the player input's value (e.g. if the <a href="#B">button</a> was released or pressed, how far an analog <a href="#S">stick</a> was held, etc.).</dd>
+      <dd>See also: <a href="#A">Action</a>.</dd>
+    </dl>
+    <dl>
+      <dt>Player input</dt>
+      <dd>Any type of real world hardware input the player can perform. There are several types, including mouse button presses, game <a href="#C">controller</a> button releases, keyboard <a href="#K">key</a> presses, game controller analog <a href="#S">stick</a> tilts, mouse wheel scrolls, and so on.</dd>
     </dl>
     
     <h2 id="Q">Q</h2>
@@ -391,7 +437,7 @@
     </dl>
     <dl>
       <dt>Stairs</dt>
-      <dd>See <a href="#R">ramp</a>.</dd>
+      <dd>See <a href="#R">Ramp</a>.</dd>
     </dl>
     <dl>
       <dt>Status</dt>
@@ -399,8 +445,12 @@
       <dd>Further reading: <a href="status.html">Making status effects</a>.</dd>
     </dl>
     <dl>
+      <dt>Stick</dt>
+      <dd>An analog stick on a game <a href="#C">controller</a>. Due to hardware limitations, things like a D-pad or a bumper on a game controller may also be recognized internally as an analog stick. Sticks are also sometimes referred to as joysticks, though not to be confused game <a href="#C">controllers</a>.</dd>
+    </dl>
+    <dl>
       <dt>Stop</dt>
-      <dd>See <a href="#P">path stop</a>.</dd>
+      <dd>See <a href="#P">Path stop</a>.</dd>
     </dl>
     
     <h2 id="T">T</h2>
@@ -445,7 +495,7 @@
     </dl>
     <dl>
       <dt>Type</dt>
-      <dd>See <a href="#O">object type</a>.</dd>
+      <dd>See <a href="#O">Object type</a>.</dd>
     </dl>
     
     <h2 id="U">U</h2>
@@ -483,21 +533,21 @@
 
     <dl>
       <dt>X</dt>
-      <dd>See <a href="#C">coordinates</a>.</dd>
+      <dd>See <a href="#C">Coordinates</a>.</dd>
     </dl>
     
     <h2 id="Y">Y</h2>
 
     <dl>
       <dt>Y</dt>
-      <dd>See <a href="#C">coordinates</a>.</dd>
+      <dd>See <a href="#C">Coordinates</a>.</dd>
     </dl>
     
     <h2 id="Z">Z</h2>
 
     <dl>
       <dt>Z</dt>
-      <dd>See <a href="#C">coordinates</a>.</dd>
+      <dd>See <a href="#C">Coordinates</a>.</dd>
     </dl>
     
   </div>

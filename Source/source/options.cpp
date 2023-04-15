@@ -86,8 +86,8 @@ const size_t DEF_MAX_PARTICLES = 200;
 const bool DEF_MIPMAPS_ENABLED = true;
 //Default value for whether the mouse moves the cursor, for each player.
 const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
-//Default value for whether to show HUD controls.
-const bool DEF_SHOW_HUD_CONTROLS = true;
+//Default value for whether to show player input icons on the HUD.
+const bool DEF_SHOW_HUD_INPUT_ICONS = true;
 //Default value for whether to use smooth scaling.
 const bool DEF_SMOOTH_SCALING = true;
 //Default value for the default target framerate.
@@ -148,7 +148,7 @@ options_struct::options_struct() :
     max_particles(OPTIONS::DEF_MAX_PARTICLES),
     mipmaps_enabled(OPTIONS::DEF_MIPMAPS_ENABLED),
     smooth_scaling(OPTIONS::DEF_SMOOTH_SCALING),
-    show_hud_controls(OPTIONS::DEF_SHOW_HUD_CONTROLS),
+    show_hud_input_icons(OPTIONS::DEF_SHOW_HUD_INPUT_ICONS),
     target_fps(OPTIONS::DEF_TARGET_FPS),
     true_fullscreen(OPTIONS::DEF_TRUE_FULLSCREEN),
     window_position_hack(OPTIONS::DEF_WINDOW_POSITION_HACK),
@@ -169,17 +169,17 @@ options_struct::options_struct() :
 void options_struct::load(data_node* file) {
     reader_setter rs(file);
     
-    /* Load controls. Format of a control:
-     * "p<player>_<action>=<possible control 1>,<possible control 2>,<...>"
+    /* Load control binds. Format of a bind:
+     * "p<player>_<action>=<possible control 1>;<possible control 2>;<...>"
      * Format of a possible control:
-     * "<input method>_<parameters, underscore separated>"
-     * Input methods:
+     * "<input type>_<parameters, underscore separated>"
+     * Input types:
      * "k" (keyboard key), "mb" (mouse button),
      * "mwu" (mouse wheel up), "mwd" (down),
      * "mwl" (left), "mwr" (right), "jb" (joystick button),
      * "jap" (joystick axis, positive), "jan" (joystick axis, negative).
-     * The parameters are the key/button number, joystick number,
-     * joystick stick and axis, etc.
+     * The parameters are the key/button number, controller number,
+     * controller stick and axis, etc.
      * Check the constructor of control_info for more information.
      */
     game.controls.binds().clear();
@@ -270,7 +270,7 @@ void options_struct::load(data_node* file) {
     rs.set("mipmaps", mipmaps_enabled);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
-    rs.set("show_hud_controls", show_hud_controls);
+    rs.set("show_hud_input_icons", show_hud_input_icons);
     rs.set("true_fullscreen", true_fullscreen);
     rs.set("window_position_hack", window_position_hack);
     
@@ -617,8 +617,8 @@ void options_struct::save(data_node* file) const {
     );
     file->add(
         new data_node(
-            "show_hud_controls",
-            b2s(show_hud_controls)
+            "show_hud_input_icons",
+            b2s(show_hud_input_icons)
         )
     );
     file->add(

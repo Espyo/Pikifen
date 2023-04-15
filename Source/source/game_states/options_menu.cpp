@@ -106,7 +106,7 @@ void options_menu_state::do_drawing() {
  */
 void options_menu_state::do_logic() {
     gui.tick(game.delta_t);
-
+    
     game.fade_mgr.tick(game.delta_t);
 }
 
@@ -166,7 +166,7 @@ void options_menu_state::load() {
     gui.register_coords("cursor_speed",         24, 32, 40, 8);
     gui.register_coords("cursor_cam_weight",    76, 32, 40, 8);
     gui.register_coords("auto_throw",           50, 44, 44, 8);
-    gui.register_coords("show_hud_controls",    50, 54, 44, 8);
+    gui.register_coords("show_hud_input_icons",    50, 54, 44, 8);
     gui.register_coords("leaving_confirmation", 50, 64, 44, 8);
     gui.register_coords("controls",             50, 74, 44, 8);
     gui.register_coords("advanced",             87, 86, 22, 8);
@@ -279,29 +279,29 @@ void options_menu_state::load() {
         &game.options.auto_throw_mode,
         OPTIONS::DEF_AUTO_THROW_MODE,
     {AUTO_THROW_OFF, AUTO_THROW_HOLD, AUTO_THROW_TOGGLE},
-    {"Off", "Hold button", "Button toggles"}
+    {"Off", "Hold input", "Input toggles"}
     );
     auto_throw_picker->preset_descriptions = {
-        "Pikmin are only thrown when you release the button.",
-        "Auto-throw Pikmin periodically as long as the button is held.",
-        "Press once to auto-throw Pikmin periodically, and again to stop."
+        "Pikmin are only thrown when you release the throw input.",
+        "Auto-throw Pikmin periodically as long as the throw input is held.",
+        "Do the throw input once to auto-throw periodically, and again to stop."
     };
     auto_throw_picker->init();
     gui.add_item(auto_throw_picker, "auto_throw");
     
-    //Show HUD controls checkbox.
-    check_gui_item* show_hud_controls_check =
+    //Show HUD player input icons checkbox.
+    check_gui_item* show_hud_input_icons_check =
         new check_gui_item(
-        &game.options.show_hud_controls,
-        "Show controls on HUD", game.fonts.standard
+        &game.options.show_hud_input_icons,
+        "Show input icons on HUD", game.fonts.standard
     );
-    show_hud_controls_check->on_get_tooltip =
+    show_hud_input_icons_check->on_get_tooltip =
     [] () {
         return
-            "Show icons of the controls near relevant HUD items? Default: " +
-            b2s(OPTIONS::DEF_SHOW_HUD_CONTROLS) + ".";
+            "Show icons of the player inputs near relevant HUD items? "
+            "Default: " + b2s(OPTIONS::DEF_SHOW_HUD_INPUT_ICONS) + ".";
     };
-    gui.add_item(show_hud_controls_check, "show_hud_controls");
+    gui.add_item(show_hud_input_icons_check, "show_hud_input_icons");
     
     //Leaving confirmation mode.
     leaving_confirmation_picker =

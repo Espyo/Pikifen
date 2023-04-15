@@ -248,7 +248,7 @@ player_input controls_mediator::allegro_event_to_input(
     } case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN:
     case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP: {
         input.type = INPUT_TYPE_CONTROLLER_BUTTON;
-        input.device_nr = game.joystick_numbers[ev.joystick.id];
+        input.device_nr = game.controller_numbers[ev.joystick.id];
         input.button_nr = ev.joystick.button;
         input.value = (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0;
         break;
@@ -261,7 +261,7 @@ player_input controls_mediator::allegro_event_to_input(
             input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
             input.value = -ev.joystick.pos;
         }
-        input.device_nr = game.joystick_numbers[ev.joystick.id];
+        input.device_nr = game.controller_numbers[ev.joystick.id];
         input.stick_nr = ev.joystick.stick;
         input.axis_nr = ev.joystick.axis;
         break;

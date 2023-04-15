@@ -260,7 +260,7 @@ hud_struct::hud_struct() :
     gui_item* leader_next_button = new gui_item();
     leader_next_button->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
+        if(!game.options.show_hud_input_icons) return;
         if(game.states.gameplay->available_leaders.size() < 2) return;
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_NEXT_LEADER).input;
@@ -423,7 +423,7 @@ hud_struct::hud_struct() :
     gui_item* standby_next_button = new gui_item();
     standby_next_button->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
+        if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         subgroup_type* next_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
@@ -460,7 +460,7 @@ hud_struct::hud_struct() :
     gui_item* standby_prev_button = new gui_item();
     standby_prev_button->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
+        if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         subgroup_type* prev_type;
         game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
@@ -802,7 +802,7 @@ hud_struct::hud_struct() :
     gui_item* spray_1_button = new gui_item();
     spray_1_button->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
+        if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
@@ -882,7 +882,7 @@ hud_struct::hud_struct() :
     gui_item* spray_2_button = new gui_item();
     spray_2_button->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
+        if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
@@ -922,7 +922,7 @@ hud_struct::hud_struct() :
     gui_item* prev_spray_button = new gui_item();
     prev_spray_button->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
+        if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t prev_spray_idx = INVALID;
@@ -964,7 +964,7 @@ hud_struct::hud_struct() :
     gui_item* next_spray_button = new gui_item();
     next_spray_button->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.options.show_hud_controls) return;
+        if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t next_spray_idx = INVALID;

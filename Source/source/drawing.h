@@ -41,53 +41,54 @@ extern const float NOTIFICATION_PADDING;
 }
 
 
-//Possible shapes for a control bind icon.
-enum CONTROL_BIND_ICON_SHAPES {
+//Possible shapes for a player input icon.
+enum PLAYER_INPUT_ICON_SHAPES {
     //Doesn't really have a shape, but instead draws a bitmap.
-    CONTROL_BIND_ICON_SHAPE_BITMAP,
+    PLAYER_INPUT_ICON_SHAPE_BITMAP,
     //Rectangle shape, representing keyboard keys.
-    CONTROL_BIND_ICON_SHAPE_RECTANGLE,
-    //Circle/rounded rectangle shape, representing buttons.
-    CONTROL_BIND_ICON_SHAPE_ROUNDED,
+    PLAYER_INPUT_ICON_SHAPE_RECTANGLE,
+    //Circle/ellipse shape, representing buttons.
+    PLAYER_INPUT_ICON_SHAPE_ROUNDED,
 };
 
 
-//Control bind icon spritesheet sprites. The order matches what's in the spritesheet.
-enum CONTROL_BIND_ICON_SPRITES {
+//Player input icon spritesheet sprites.
+//The order matches what's in the spritesheet.
+enum PLAYER_INPUT_ICON_SPRITES {
     //Left mouse button.
-    CONTROL_BIND_ICON_SPRITE_LMB,
+    PLAYER_INPUT_ICON_SPRITE_LMB,
     //Right mouse button.
-    CONTROL_BIND_ICON_SPRITE_RMB,
+    PLAYER_INPUT_ICON_SPRITE_RMB,
     //Middle mouse button.
-    CONTROL_BIND_ICON_SPRITE_MMB,
+    PLAYER_INPUT_ICON_SPRITE_MMB,
     //Mouse wheel up.
-    CONTROL_BIND_ICON_SPRITE_MWU,
+    PLAYER_INPUT_ICON_SPRITE_MWU,
     //Mouse wheel down.
-    CONTROL_BIND_ICON_SPRITE_MWD,
+    PLAYER_INPUT_ICON_SPRITE_MWD,
     //Up key.
-    CONTROL_BIND_ICON_SPRITE_UP,
+    PLAYER_INPUT_ICON_SPRITE_UP,
     //Left key.
-    CONTROL_BIND_ICON_SPRITE_LEFT,
+    PLAYER_INPUT_ICON_SPRITE_LEFT,
     //Down key.
-    CONTROL_BIND_ICON_SPRITE_DOWN,
+    PLAYER_INPUT_ICON_SPRITE_DOWN,
     //Right key.
-    CONTROL_BIND_ICON_SPRITE_RIGHT,
+    PLAYER_INPUT_ICON_SPRITE_RIGHT,
     //Backspace key.
-    CONTROL_BIND_ICON_SPRITE_BACKSPACE,
+    PLAYER_INPUT_ICON_SPRITE_BACKSPACE,
     //Shift key.
-    CONTROL_BIND_ICON_SPRITE_SHIFT,
+    PLAYER_INPUT_ICON_SPRITE_SHIFT,
     //Tab key.
-    CONTROL_BIND_ICON_SPRITE_TAB,
+    PLAYER_INPUT_ICON_SPRITE_TAB,
     //Enter key.
-    CONTROL_BIND_ICON_SPRITE_ENTER,
+    PLAYER_INPUT_ICON_SPRITE_ENTER,
     //Game controller stick up.
-    CONTROL_BIND_ICON_SPRITE_STICK_UP,
+    PLAYER_INPUT_ICON_SPRITE_STICK_UP,
     //Game controller stick left.
-    CONTROL_BIND_ICON_SPRITE_STICK_LEFT,
+    PLAYER_INPUT_ICON_SPRITE_STICK_LEFT,
     //Game controller stick down.
-    CONTROL_BIND_ICON_SPRITE_STICK_DOWN,
+    PLAYER_INPUT_ICON_SPRITE_STICK_DOWN,
     //Game controller stick right.
-    CONTROL_BIND_ICON_SPRITE_STICK_RIGHT,
+    PLAYER_INPUT_ICON_SPRITE_STICK_RIGHT,
 };
 
 
@@ -209,8 +210,8 @@ void draw_textured_box(
 );
 void get_player_input_icon_info(
     const player_input &i, const bool condensed,
-    CONTROL_BIND_ICON_SHAPES* shape,
-    CONTROL_BIND_ICON_SPRITES* bitmap_sprite,
+    PLAYER_INPUT_ICON_SHAPES* shape,
+    PLAYER_INPUT_ICON_SPRITES* bitmap_sprite,
     string* text
 );
 float get_player_input_icon_width(

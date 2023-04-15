@@ -381,7 +381,7 @@ void controls_menu_state::populate_binds() {
             default_icon->on_draw =
             [def_input] (const point & center, const point & size) {
                 draw_player_input_icon(
-                    game.fonts.standard, def_input, false, center, size
+                    game.fonts.slim, def_input, false, center, size
                 );
             };
             list_box->add_child(default_icon);

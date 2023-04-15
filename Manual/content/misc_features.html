@@ -24,7 +24,7 @@
 
     <h2 id="markup">Markup</h2>
 
-    <p>When writing some text to show in-game, some features of the engine allow you to write special tags, which will be replaced with something else in-game, like a line break or the icon of a button. These tags always start with a backslash (<code>\</code>), so if you want the engine to show an actual backslash in-game as opposed to trying to understand some tag, write <code>\\</code> instead. Unless otherwise specificed, features that support markup will also automatically break into the next line when the current line is too long. The following features support markup:</p>
+    <p>When writing some text to show in-game, some features of the engine allow you to write special tags, which will be replaced with something else in-game, like a line break or the icon of a player input. These tags always start with a backslash (<code>\</code>), so if you want the engine to show an actual backslash in-game as opposed to trying to understand some tag, write <code>\\</code> instead. Unless otherwise specificed, features that support markup will also automatically break into the next line when the current line is too long. The following features support markup:</p>
 
     <ul>
       <li>An <a href="area.html">area's</a> description, to be shown on the area selection menu.</li>
@@ -37,7 +37,7 @@
     <ul>
       <li><code>\\</code>: Inserts an actual backslash (<code>\</code>).</li>
       <li><code>\n</code>: Inserts a line break, meaning the text will end the current line and go to the next.</li>
-      <li><code>\k</code>: Inserts a control's icon for a given action. This will automatically show the key, button, etc. that the player has mapped to the action you specify, and can even show "(NONE)" if none is bound. The name of the action needs to be placed between two of these tags, and you can use spaces between them to make it easier to read. So for instance, typing <code>\k throw \k</code> will show the button the player has currently assigned for throwing, so likely the icon for a left mouse button. The names of each action are pretty obvious, like <code>throw</code>, <code>move_up</code>, or <code>lie_down</code>, but you can open the <a href="options.html">options file</a> and check the properties that save the player's controls for a full list.</li>
+      <li><code>\k</code>: Inserts a control's icon for a given action. This will automatically show the key, button, etc. that the player has mapped to the action you specify, and can even show "(NONE)" if none is bound. The name of the action needs to be placed between two of these tags, and you can use spaces between them to make it easier to read. So for instance, typing <code>\k throw \k</code> will show the input the player has currently assigned for throwing, so likely the icon for a left mouse button. The names of each action are pretty obvious, like <code>throw</code>, <code>move_up</code>, or <code>lie_down</code>, but you can open the <a href="options.html">options file</a> and check the properties that save the player's controls for a full list.</li>
     </ul>
     
   </div>

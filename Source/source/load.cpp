@@ -1218,8 +1218,6 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.checkbox_check);
     game.sys_assets.bmp_checkbox_no_check =
         game.bitmaps.get(game.asset_file_names.checkbox_no_check);
-    game.sys_assets.bmp_control_bind_icons =
-        game.bitmaps.get(game.asset_file_names.control_bind_icons);
     game.sys_assets.bmp_cursor =
         game.bitmaps.get(game.asset_file_names.cursor);
     game.sys_assets.bmp_enemy_spirit =
@@ -1256,6 +1254,8 @@ void load_misc_graphics() {
         game.bitmaps.get(game.asset_file_names.notification);
     game.sys_assets.bmp_pikmin_spirit =
         game.bitmaps.get(game.asset_file_names.pikmin_spirit);
+    game.sys_assets.bmp_player_input_icons =
+        game.bitmaps.get(game.asset_file_names.player_input_icons);
     game.sys_assets.bmp_random =
         game.bitmaps.get(game.asset_file_names.random);
     game.sys_assets.bmp_rock =
@@ -1338,11 +1338,11 @@ void load_options() {
     data_node file = data_node(OPTIONS_FILE_PATH);
     if(!file.file_was_opened) return;
     
-    //Init joysticks.
-    game.joystick_numbers.clear();
+    //Init game controllers.
+    game.controller_numbers.clear();
     int n_joysticks = al_get_num_joysticks();
     for(int j = 0; j < n_joysticks; ++j) {
-        game.joystick_numbers[al_get_joystick(j)] = j;
+        game.controller_numbers[al_get_joystick(j)] = j;
     }
     
     //Read the main options.
@@ -1975,7 +1975,6 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_button_box);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_check);
     game.bitmaps.detach(game.sys_assets.bmp_checkbox_no_check);
-    game.bitmaps.detach(game.sys_assets.bmp_control_bind_icons);
     game.bitmaps.detach(game.sys_assets.bmp_cursor);
     game.bitmaps.detach(game.sys_assets.bmp_enemy_spirit);
     game.bitmaps.detach(game.sys_assets.bmp_focus_box);
@@ -1995,6 +1994,7 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_mouse_cursor);
     game.bitmaps.detach(game.sys_assets.bmp_notification);
     game.bitmaps.detach(game.sys_assets.bmp_pikmin_spirit);
+    game.bitmaps.detach(game.sys_assets.bmp_player_input_icons);
     game.bitmaps.detach(game.sys_assets.bmp_random);
     game.bitmaps.detach(game.sys_assets.bmp_rock);
     game.bitmaps.detach(game.sys_assets.bmp_shadow);
