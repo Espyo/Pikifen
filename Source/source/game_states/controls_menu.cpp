@@ -205,6 +205,9 @@ void controls_menu_state::leave() {
 void controls_menu_state::load() {
     bmp_menu_bg = NULL;
     capturing_input = false;
+    showing_more = false;
+    cur_action_type = PLAYER_ACTION_NONE;
+    cur_bind_idx = INVALID;
     
     //Resources.
     bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);

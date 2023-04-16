@@ -4,11 +4,11 @@
 Current tasks (tasks being worked on, but not yet committed)
     Input handling needs to be more robust and modular
         Each action should be able to specify if it allows button-downs without button-ups (for Pikmin, holding A to whistle, and then pressing B shouldn't restart the whistle, but in Rhythm Heaven, holding A to do a hit, and then pressing B should be another hit)
-        Implement assigning a 0-value to action types that have the opposite direction of the joystick that was just tilted
         Implement mouse wheel scrolls submitting their input multiple times
         Implement angular deadzones https://github.com/Minimuino/thumbstick-deadzones
         Implement player actions repeating over multiple frames if the code doesn't handle them that frame, with a TTL
         Allow for button combinations
+            Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
         Implement a screen stack system, with push&pop
             If the player's holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
             If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.

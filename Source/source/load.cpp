@@ -1382,6 +1382,14 @@ void load_options() {
             game.states.gui_ed->history[h]
         );
     }
+    
+    //Final setup.
+    controls_manager_options controls_mgr_options;
+    controls_mgr_options.stick_min_deadzone =
+        game.options.joystick_min_deadzone;
+    controls_mgr_options.stick_max_deadzone =
+        game.options.joystick_max_deadzone;
+    game.controls.set_options(controls_mgr_options);
 }
 
 

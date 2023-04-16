@@ -1803,7 +1803,7 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
     point final_coords;
     float dummy_angle;
     float dummy_magnitude;
-    mov->get_clean_info(
+    mov->get_info(
         &final_coords, &dummy_angle, &dummy_magnitude
     );
     final_coords *= lea_ptr->type->move_speed;

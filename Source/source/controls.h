@@ -178,6 +178,9 @@ public:
     control_bind find_bind(
         const string &action_type_name
     ) const;
+    float get_player_action_type_value(
+        PLAYER_ACTION_TYPES player_action_type_id
+    );
     player_input str_to_input(const string &s) const;
     
     //Event loop functions.
@@ -185,6 +188,9 @@ public:
     bool handle_allegro_event(const ALLEGRO_EVENT &ev);
     void new_frame();
     bool poll_action(player_action &action);
+    
+    //Others.
+    void set_options(const controls_manager_options &options);
     
 private:
     //List of known player action types.

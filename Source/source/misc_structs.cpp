@@ -716,45 +716,17 @@ movement_struct::movement_struct() :
  * magnitude:
  *   Magnitude from the center.
  */
-void movement_struct::get_clean_info(
-    point* coords, float* angle, float* magnitude
-) const {
-    get_raw_info(coords, angle, magnitude);
-    *magnitude =
-        clamp(
-            *magnitude,
-            game.options.joystick_min_deadzone,
-            game.options.joystick_max_deadzone
-        );
-    *magnitude =
-        interpolate_number(
-            *magnitude,
-            game.options.joystick_min_deadzone,
-            game.options.joystick_max_deadzone,
-            0.0f, 1.0f
-        );
-    *coords = angle_to_coordinates(*angle, *magnitude);
-}
-
-
-
-/* ----------------------------------------------------------------------------
- * Returns the values of the coordinates, magnitude, and angle,
- * exactly as they are right now, without being "cleaned".
- * Don't use this one for normal gameplay, please.
- * All parameters are mandatory.
- * coords:
- *   X and Y coordinates.
- * angle:
- *   Angle compared to the center.
- * magnitude:
- *   Magnitude from the center.
- */
-void movement_struct::get_raw_info(
+void movement_struct::get_info(
     point* coords, float* angle, float* magnitude
 ) const {
     *coords = point(right - left, down - up);
     coordinates_to_angle(*coords, angle, magnitude);
+    
+    //While analog sticks are already correctly clamped between 0 and 1 for
+    //magnitude, via the controls manager, digital inputs aren't, e.g. pressing
+    //W and D on the keyboard.
+    *magnitude = std::max(*magnitude, 0.0f);
+    *magnitude = std::min(*magnitude, 1.0f);
 }
 
 

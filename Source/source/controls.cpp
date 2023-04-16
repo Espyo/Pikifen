@@ -334,6 +334,16 @@ const vector<player_action_type>
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the current input value of a given action type.
+ */
+float controls_mediator::get_player_action_type_value(
+    PLAYER_ACTION_TYPES player_action_type_id
+) {
+    return mgr.action_type_values[(int) player_action_type_id];
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles an Allegro event.
  * Returns true if the event was handled, false otherwise.
  */
@@ -405,6 +415,16 @@ void controls_mediator::new_frame() {
  */
 bool controls_mediator::poll_action(player_action &action) {
     return mgr.poll_action(action);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the options for the controls manager.
+ * options:
+ *   Options.
+ */
+void controls_mediator::set_options(const controls_manager_options &options) {
+    mgr.options = options;
 }
 
 

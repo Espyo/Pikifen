@@ -190,6 +190,8 @@ void gameplay_state::do_game_drawing(
         
     }
     
+    draw_debug_tools();
+    
     al_flip_display();
 }
 #pragma warning(default: 4701)
@@ -381,6 +383,178 @@ void gameplay_state::draw_big_msg() {
         
     }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws any debug visualization tools useful for debugging.
+ */
+void gameplay_state::draw_debug_tools() {
+    /*
+    const float RAW_STICK_VIEWER_X = 8;
+    const float RAW_STICK_VIEWER_Y = 8;
+    const float RAW_STICK_VIEWER_SIZE = 100;
+    
+    point raw_stick_coords;
+    raw_stick_coords.x = game.controls.mgr.raw_sticks[0][0][0];
+    raw_stick_coords.y = game.controls.mgr.raw_sticks[0][0][1];
+    float raw_stick_angle;
+    float raw_stick_mag;
+    coordinates_to_angle(
+        raw_stick_coords, &raw_stick_angle, &raw_stick_mag
+    );
+    al_draw_filled_rectangle(
+        RAW_STICK_VIEWER_X,
+        RAW_STICK_VIEWER_Y,
+        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE,
+        al_map_rgba(0, 0, 0, 200)
+    );
+    al_draw_circle(
+        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
+        RAW_STICK_VIEWER_SIZE / 2.0f,
+        raw_stick_mag >= 0.99f ?
+        al_map_rgba(240, 64, 64, 200) :
+        al_map_rgba(240, 240, 240, 200),
+        1
+    );
+    al_draw_line(
+        RAW_STICK_VIEWER_X,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
+        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f,
+        fabs(raw_stick_coords.y) <= 0.01f ?
+        al_map_rgba(240, 64, 64, 200) :
+        al_map_rgba(240, 240, 240, 200),
+        1
+    );
+    al_draw_line(
+        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f,
+        RAW_STICK_VIEWER_Y,
+        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE,
+        fabs(raw_stick_coords.x) <= 0.01f ?
+        al_map_rgba(240, 64, 64, 200) :
+        al_map_rgba(240, 240, 240, 200),
+        1
+    );
+    point raw_draw_coords =
+        raw_stick_coords * RAW_STICK_VIEWER_SIZE / 2.0f;
+    al_draw_filled_circle(
+        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE / 2.0f +
+        raw_draw_coords.x,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE / 2.0f +
+        raw_draw_coords.y,
+        3.5f, al_map_rgb(255, 64, 64)
+    );
+    al_draw_filled_rectangle(
+        RAW_STICK_VIEWER_X,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
+        RAW_STICK_VIEWER_X + RAW_STICK_VIEWER_SIZE,
+        RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 10,
+        al_map_rgba(0, 0, 0, 200)
+    );
+    al_draw_text(
+        game.fonts.builtin,
+        al_map_rgb(255, 64, 64),
+        RAW_STICK_VIEWER_X, RAW_STICK_VIEWER_Y + RAW_STICK_VIEWER_SIZE + 1,
+        ALLEGRO_ALIGN_LEFT,
+        (
+            box_string(
+                (raw_stick_coords.x >= 0.0f ? " " : "") +
+                f2s(raw_stick_coords.x), 6
+            ) + " " + box_string(
+                (raw_stick_coords.y >= 0.0f ? " " : "") +
+                f2s(raw_stick_coords.y), 6
+            )
+        ).c_str()
+    );
+    
+    const float CLEAN_STICK_VIEWER_X = 116;
+    const float CLEAN_STICK_VIEWER_Y = 8;
+    const float CLEAN_STICK_VIEWER_SIZE = 100;
+    
+    point clean_stick_coords;
+    clean_stick_coords.x =
+        game.controls.get_player_action_type_value(PLAYER_ACTION_RIGHT) -
+        game.controls.get_player_action_type_value(PLAYER_ACTION_LEFT);
+    clean_stick_coords.y =
+        game.controls.get_player_action_type_value(PLAYER_ACTION_DOWN) -
+        game.controls.get_player_action_type_value(PLAYER_ACTION_UP);
+    float clean_stick_angle;
+    float clean_stick_mag;
+    coordinates_to_angle(
+        clean_stick_coords, &clean_stick_angle, &clean_stick_mag
+    );
+    al_draw_filled_rectangle(
+        CLEAN_STICK_VIEWER_X,
+        CLEAN_STICK_VIEWER_Y,
+        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE,
+        al_map_rgba(0, 0, 0, 200)
+    );
+    al_draw_circle(
+        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        clean_stick_mag >= 0.99f ?
+        al_map_rgba(240, 64, 64, 200) :
+        al_map_rgba(240, 240, 240, 200),
+        1
+    );
+    al_draw_line(
+        CLEAN_STICK_VIEWER_X,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        fabs(clean_stick_coords.y) <= 0.01f ?
+        al_map_rgba(240, 64, 64, 200) :
+        al_map_rgba(240, 240, 240, 200),
+        1
+    );
+    al_draw_line(
+        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        CLEAN_STICK_VIEWER_Y,
+        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE,
+        fabs(clean_stick_coords.x) <= 0.01f ?
+        al_map_rgba(240, 64, 64, 200) :
+        al_map_rgba(240, 240, 240, 200),
+        1
+    );
+    point clean_draw_coords =
+        clean_stick_coords * CLEAN_STICK_VIEWER_SIZE / 2.0f;
+    al_draw_filled_circle(
+        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE / 2.0f +
+        clean_draw_coords.x,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE / 2.0f +
+        clean_draw_coords.y,
+        3.5f, al_map_rgb(255, 64, 64)
+    );
+    al_draw_filled_rectangle(
+        CLEAN_STICK_VIEWER_X,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
+        CLEAN_STICK_VIEWER_X + CLEAN_STICK_VIEWER_SIZE,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 10,
+        al_map_rgba(0, 0, 0, 200)
+    );
+    al_draw_text(
+        game.fonts.builtin,
+        al_map_rgb(255, 64, 64),
+        CLEAN_STICK_VIEWER_X, CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
+        ALLEGRO_ALIGN_LEFT,
+        (
+            box_string(
+                (clean_stick_coords.x >= 0.0f ? " " : "") +
+                f2s(clean_stick_coords.x), 6
+            ) + " " + box_string(
+                (clean_stick_coords.y >= 0.0f ? " " : "") +
+                f2s(clean_stick_coords.y), 6
+            )
+        ).c_str()
+    );
+    */
 }
 
 

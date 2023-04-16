@@ -321,6 +321,7 @@ private:
     void do_gameplay_logic(const float delta_t);
     void do_menu_logic();
     void draw_background(ALLEGRO_BITMAP* bmp_output);
+    void draw_debug_tools();
     void draw_leader_cursor(const ALLEGRO_COLOR &color);
     void draw_ingame_text();
     void draw_big_msg();

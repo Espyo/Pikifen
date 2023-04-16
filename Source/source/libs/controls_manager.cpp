@@ -27,16 +27,23 @@ control_bind::control_bind() :
  * When a game controller stick input is received, it should be checked with
  * the state of that entire stick to see if it needs to be normalized,
  * deadzones should be applied, etc.
- * device_nr:
- *   Number of the game controller.
- * stick_nr:
- *   Number of the game controller's stick.
+ * The final cleaned stick positions can be found in the clean_sticks variable.
+ * input:
+ *   Input to clean.
  */
-void controls_manager::clean_stick(
-    int device_nr, int stick_nr
-) {
-    const float raw_x = raw_sticks[device_nr][stick_nr][0];
-    const float raw_y = raw_sticks[device_nr][stick_nr][1];
+void controls_manager::clean_stick(player_input input) {
+    //https://www.gamedeveloper.com/
+    //  disciplines/doing-thumbstick-dead-zones-right
+    //https://www.gamedeveloper.com/
+    //  design/interpreting-analog-sticks-in-inversus
+    
+    raw_sticks[input.device_nr][input.stick_nr][input.axis_nr] =
+        input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ?
+        input.value :
+        -input.value;
+        
+    const float raw_x = raw_sticks[input.device_nr][input.stick_nr][0];
+    const float raw_y = raw_sticks[input.device_nr][input.stick_nr][1];
     const float angle = (float) atan2(raw_y, raw_x);
     
     //Clamp the magnitude between the minimum and maximum allowed.
@@ -49,8 +56,13 @@ void controls_manager::clean_stick(
         (magnitude - options.stick_min_deadzone) /
         (float) (options.stick_max_deadzone - options.stick_min_deadzone);
         
-    clean_sticks[device_nr][stick_nr][0] = (float) cos(angle) * magnitude;
-    clean_sticks[device_nr][stick_nr][1] = (float) sin(angle) * magnitude;
+    magnitude = std::max(magnitude, 0.0f);
+    magnitude = std::min(magnitude, 1.0f);
+    
+    clean_sticks[input.device_nr][input.stick_nr][0] =
+        (float) cos(angle) * magnitude;
+    clean_sticks[input.device_nr][input.stick_nr][1] =
+        (float) sin(angle) * magnitude;
 }
 
 
@@ -133,31 +145,72 @@ vector<int> controls_manager::get_action_types_from_input(
 
 
 /* ----------------------------------------------------------------------------
- * Handles an input from hardware.
+ * Handles a final clean input.
  */
-void controls_manager::handle_input(
+void controls_manager::handle_clean_input(
     const player_input &input
 ) {
-    //First, clean any game controller stick inputs.
-    //https://www.gamedeveloper.com/
-    //  disciplines/doing-thumbstick-dead-zones-right
-    //https://www.gamedeveloper.com/
-    //  design/interpreting-analog-sticks-in-inversus
-    if(
-        input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ||
-        input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
-    ) {
-        raw_sticks[input.device_nr][input.stick_nr][input.axis_nr] =
-            input.value;
-        clean_stick(input.device_nr, input.stick_nr);
-    }
-    
     //Find what game action types are associated with this input.
     vector<int> action_types = get_action_types_from_input(input);
     
     //Update each game action type's current input state, to be reported later.
     for(size_t a = 0; a < action_types.size(); ++a) {
         action_type_values[action_types[a]] = input.value;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles an input from hardware.
+ */
+void controls_manager::handle_input(
+    const player_input &input
+) {
+    if(
+        input.type == INPUT_TYPE_CONTROLLER_AXIS_POS ||
+        input.type == INPUT_TYPE_CONTROLLER_AXIS_NEG
+    ) {
+        //Game controller stick inputs need to be cleaned up first,
+        //by implementing deadzone logic.
+        clean_stick(input);
+        
+        //We have to process both axes, so send two clean inputs.
+        //But we also need to process imaginary tilts in the opposite direction.
+        //If a player goes from walking left to walking right very quickly
+        //in one frame, the "walking left" action may never receive a zero
+        //value. So we should inject the zero manually with two more inputs.
+        player_input x_pos_input = input;
+        x_pos_input.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
+        x_pos_input.axis_nr = 0;
+        x_pos_input.value =
+            std::max(0.0f, clean_sticks[input.device_nr][input.stick_nr][0]);
+        handle_clean_input(x_pos_input);
+        
+        player_input x_neg_input = input;
+        x_neg_input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
+        x_neg_input.axis_nr = 0;
+        x_neg_input.value =
+            std::max(0.0f, -clean_sticks[input.device_nr][input.stick_nr][0]);
+        handle_clean_input(x_neg_input);
+        
+        player_input y_pos_input = input;
+        y_pos_input.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
+        y_pos_input.axis_nr = 1;
+        y_pos_input.value =
+            std::max(0.0f, clean_sticks[input.device_nr][input.stick_nr][1]);
+        handle_clean_input(y_pos_input);
+        
+        player_input y_neg_input = input;
+        y_neg_input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
+        y_neg_input.axis_nr = 1;
+        y_neg_input.value =
+            std::max(0.0f, -clean_sticks[input.device_nr][input.stick_nr][1]);
+        handle_clean_input(y_neg_input);
+        
+    } else {
+        //Regular input.
+        handle_clean_input(input);
+        
     }
 }
 

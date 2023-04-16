@@ -191,7 +191,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     point dummy_coords;
     float dummy_angle;
     float leader_move_magnitude;
-    leader_movement.get_clean_info(
+    leader_movement.get_info(
         &dummy_coords, &dummy_angle, &leader_move_magnitude
     );
     if(leader_move_magnitude < 0.75) {
@@ -441,7 +441,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     
     point mouse_cursor_speed;
     float dummy_magnitude;
-    cursor_movement.get_clean_info(
+    cursor_movement.get_info(
         &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
     );
     mouse_cursor_speed =
@@ -494,7 +494,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     float old_swarm_magnitude = swarm_magnitude;
     point swarm_coords;
     float new_swarm_angle;
-    swarm_movement.get_clean_info(
+    swarm_movement.get_info(
         &swarm_coords, &new_swarm_angle, &swarm_magnitude
     );
     if(swarm_magnitude > 0) {
@@ -545,7 +545,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         point coords;
         float dummy_angle;
         float dummy_magnitude;
-        leader_movement.get_clean_info(&coords, &dummy_angle, &dummy_magnitude);
+        leader_movement.get_info(&coords, &dummy_angle, &dummy_magnitude);
         game.cam.target_pos = game.cam.pos + (coords * 120.0f / game.cam.zoom);
     }
     
@@ -567,7 +567,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         point mouse_cursor_speed;
         float dummy_angle;
         float dummy_magnitude;
-        cursor_movement.get_clean_info(
+        cursor_movement.get_info(
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
