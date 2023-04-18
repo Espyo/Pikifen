@@ -186,8 +186,7 @@ public:
     //Event loop functions.
     player_input allegro_event_to_input(const ALLEGRO_EVENT &ev) const;
     bool handle_allegro_event(const ALLEGRO_EVENT &ev);
-    void new_frame();
-    bool poll_action(player_action &action);
+    vector<player_action> new_frame();
     
     //Others.
     void set_options(const controls_manager_options &options);

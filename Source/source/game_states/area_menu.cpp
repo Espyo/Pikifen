@@ -411,6 +411,11 @@ void area_menu_state::do_drawing() {
  * Ticks time by one frame of logic.
  */
 void area_menu_state::do_logic() {
+    vector<player_action> player_actions = game.controls.new_frame();
+    for(size_t a = 0; a < player_actions.size(); ++a) {
+        gui.handle_player_action(player_actions[a]);
+    }
+    
     gui.tick(game.delta_t);
     
     game.fade_mgr.tick(game.delta_t);
@@ -434,6 +439,7 @@ void area_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
     gui.handle_event(ev);
+    game.controls.handle_allegro_event(ev);
 }
 
 

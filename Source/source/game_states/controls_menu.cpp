@@ -139,6 +139,11 @@ void controls_menu_state::do_drawing() {
  * Ticks time by one frame of logic.
  */
 void controls_menu_state::do_logic() {
+    vector<player_action> player_actions = game.controls.new_frame();
+    for(size_t a = 0; a < player_actions.size(); ++a) {
+        gui.handle_player_action(player_actions[a]);
+    }
+    
     gui.tick(game.delta_t);
     
     game.fade_mgr.tick(game.delta_t);
@@ -182,6 +187,7 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     } else {
     
         gui.handle_event(ev);
+        game.controls.handle_allegro_event(ev);
         
     }
     
@@ -374,6 +380,9 @@ void controls_menu_state::populate_binds() {
             default_label_text->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
             list_box->add_child(default_label_text);
             gui.add_item(default_label_text);
+            default_label_text->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+            );
             
             //Default icon.
             player_input def_input =
@@ -405,6 +414,9 @@ void controls_menu_state::populate_binds() {
             [] () { return "Restore this action's default controls."; };
             list_box->add_child(restore_button);
             gui.add_item(restore_button);
+            restore_button->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+            );
             
             cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
             
@@ -469,6 +481,12 @@ void controls_menu_state::populate_binds() {
             list_box->add_child(bind_button);
             gui.add_item(bind_button);
             
+            if(a == cur_action_type) {
+                bind_button->start_juice_animation(
+                    gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+                );
+            }
+            
             cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
             
         }
@@ -488,6 +506,9 @@ void controls_menu_state::populate_binds() {
             [] () { return "Adds another control to this action."; };
             list_box->add_child(add_button);
             gui.add_item(add_button);
+            add_button->start_juice_animation(
+                gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
+            );
             
             cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
             

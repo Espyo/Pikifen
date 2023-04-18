@@ -242,6 +242,15 @@ void gameplay_state::do_logic() {
         game.delta_t *= game.maker_tools.change_speed_mult;
     }
     
+    //Controls.
+    vector<player_action> player_actions = game.controls.new_frame();
+    for(size_t a = 0; a < player_actions.size(); ++a) {
+        handle_player_action(player_actions[a]);
+        if(onion_menu) onion_menu->handle_player_action(player_actions[a]);
+        if(pause_menu) pause_menu->handle_player_action(player_actions[a]);
+    }
+    
+    //Game logic.
     if(!paused) {
         game.statistics.gameplay_time += regular_delta_t;
         do_gameplay_logic(game.delta_t* delta_t_mult);

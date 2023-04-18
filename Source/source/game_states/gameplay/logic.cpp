@@ -532,13 +532,6 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
  */
 void gameplay_state::do_gameplay_logic(const float delta_t) {
 
-    //Controls.
-    game.controls.new_frame();
-    player_action action;
-    while(game.controls.poll_action(action)) {
-        handle_player_action(action);
-    }
-    
     //Camera movement.
     if(!cur_leader_ptr) {
         //If there's no leader being controlled, might as well move the camera.

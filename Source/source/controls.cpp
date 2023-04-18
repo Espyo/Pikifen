@@ -400,21 +400,11 @@ string controls_mediator::input_to_str(
 
 
 /* ----------------------------------------------------------------------------
- * Begins a new frame of gameplay.
+ * Returns the player actions that occurred during the last frame of gameplay,
+ * and begins a new frame.
  */
-void controls_mediator::new_frame() {
-    mgr.new_frame();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the oldest action in the queue. Returns true if there is one,
- * false if not.
- * action:
- *   Action to fill.
- */
-bool controls_mediator::poll_action(player_action &action) {
-    return mgr.poll_action(action);
+vector<player_action> controls_mediator::new_frame() {
+    return mgr.new_frame();
 }
 
 

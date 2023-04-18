@@ -707,6 +707,16 @@ void onion_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles a player action.
+ * action:
+ *   Data about the player action.
+ */
+void onion_menu_struct::handle_player_action(const player_action &action) {
+    gui.handle_player_action(action);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes a given GUI item turn red.
  * item:
  *   The item.

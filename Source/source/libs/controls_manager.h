@@ -135,8 +135,7 @@ public:
     controls_manager_options options;
     
     void handle_input(const player_input &input);
-    void new_frame(); //TODO merge with poll_action?
-    bool poll_action(player_action &action);
+    vector<player_action> new_frame();
     
 private:
     //Queue of actions the game needs to handle this frame.
@@ -152,7 +151,7 @@ private:
     vector<int> get_action_types_from_input(
         const player_input &input
     );
-    void handle_clean_input(const player_input &input);
+    void handle_clean_input(const player_input &input, bool add_directly);
 };
 
 

@@ -1,45 +1,14 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Input handling needs to be more robust and modular
-        Each action should be able to specify if it allows button-downs without button-ups (for Pikmin, holding A to whistle, and then pressing B shouldn't restart the whistle, but in Rhythm Heaven, holding A to do a hit, and then pressing B should be another hit)
-        Implement mouse wheel scrolls submitting their input multiple times
-        Implement angular deadzones https://github.com/Minimuino/thumbstick-deadzones
-        Implement player actions repeating over multiple frames if the code doesn't handle them that frame, with a TTL
-        Allow for button combinations
-            Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
-        Implement a screen stack system, with push&pop
-            If the player's holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
-            If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
-            If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
-        [NEEDS BRAINSTORMING] Try to make it deterministic enough to support input playback (replays)?
+    Controls
         Tweaks
             Current leader should move slower if the analog stick is not held all the way
             If it's not done already, there should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
             If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Things to fix
             When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (thanks Ambrosia)
-    Controls cleanup
-        Rework the controls menu
-            In the controls menu, the player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
-                Then in the multiplayer setup screen, the player only picks what control scheme each player uses
-                It should come pre-packaged with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which, right?
-            When waiting for an input to assign, only detect a joystick tilt if it is above a certain threshold, otherwise even the gentlest breeze will make it assign a random joystick axis
-            For controller inputs, write the controller's name somewhere on-screen?
-            If the player assigns an input that is already assigned to something else, it should give a warning
-            If the player leaves the menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
-            When you set a leader move direction/group swarm direction/cursor direction, show a pop-up asking if you want to set all four automatically
-        Maker tools should be like controls, in that they should be able to be bound to any input, and use the same general system
-        Add default controls for menu navigation, for the D-pad, analog stick, arrow keys, spacebar, enter, escape, a controller button to confirm, and a controller button to cancel
-        Add controls for menu shortcut page left, menu shortcut page right, and menu shortcut special
-            Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, the "menu special" action should toggle select-all (thanks Nataly)
-        Save the controls in the options file inside a block, and possibly at the end of the options file
-        Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
-        Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
-        If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
-        The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
-            Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
     A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Southwest quadrant for paths
             Normal link
@@ -184,6 +153,8 @@ Next tasks (roughly sorted most important first)
                 [Continue]             [Quit]
         The ability to load TTF fonts
         [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
+    The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
+        Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
     Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
@@ -242,6 +213,33 @@ Next tasks (roughly sorted most important first)
             https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
         Fixes
             When you cancel holding a Pikmin, its standby squeal sound should stop
+    Controls improvements
+        Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
+            Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
+        Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
+        Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
+        Allow for button combinations
+            Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
+        Implement a screen stack system, with push&pop
+            If you're holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
+            If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
+            If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
+        Controls menu
+            In the controls menu, the player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
+                Then in the multiplayer setup screen, the player only picks what control scheme each player uses
+                It should come pre-packaged with a few schemes: "Keyboard+Mouse and Pro Controller" (default), "Keyboard+Mouse", "Single Joy-Con", etc. Careful with generic controllers though, since their buttons are as good as random. Also, if there are four players, and they all want JoyCons, there should be a way for them to choose which is which, right?
+                    Add default controls for menu navigation, for the D-pad, analog stick, arrow keys, spacebar, enter, escape, a controller button to confirm, and a controller button to cancel
+            For controller inputs, write the controller's name somewhere on-screen?
+            If the player assigns an input that is already assigned to something else, it should give a warning
+            If the player leaves the menu but some important actions don't have input binds, it should give a warning. Important actions are like throwing and whistling, not something like changing the leader backward
+            When you set a leader move direction/group swarm direction/cursor direction, show a pop-up asking if you want to set all four automatically
+        Maker tools should be like controls, in that they should be able to be bound to any input, and use the same general system
+        Add controls for menu shortcut page left, menu shortcut page right, and menu shortcut special
+            Try making it so the mouse wheel can be used to move Pikmin to the Onion and group, in the Onion menu. Also, the "menu special" action should toggle select-all (thanks Nataly)
+        Save the controls in the options file inside a block, and possibly at the end of the options file
+        Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
+        Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
+        If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
     Demo content
         Add more treasures
             Ball of yarn treasure

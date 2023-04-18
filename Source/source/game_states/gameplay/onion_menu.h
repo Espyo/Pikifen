@@ -118,6 +118,7 @@ public:
     void go_to_page(const size_t page);
     void grow_buttons();
     void handle_event(const ALLEGRO_EVENT &ev);
+    void handle_player_action(const player_action &action);
     void start_closing();
     void tick(const float delta_t);
     void toggle_select_all();

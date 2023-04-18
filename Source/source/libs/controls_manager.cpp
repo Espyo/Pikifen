@@ -67,20 +67,6 @@ void controls_manager::clean_stick(player_input input) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the oldest action in the queue. Returns true if there is one,
- * false if not.
- * action:
- *   Action to fill.
- */
-bool controls_manager::poll_action(player_action &action) {
-    if(action_queue.empty()) return false;
-    action = action_queue.front();
-    action_queue.erase(action_queue.begin());
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns a list of action types that get triggered by the given input.
  */
 vector<int> controls_manager::get_action_types_from_input(
@@ -146,16 +132,33 @@ vector<int> controls_manager::get_action_types_from_input(
 
 /* ----------------------------------------------------------------------------
  * Handles a final clean input.
+ * input:
+ *   Player input to process.
+ * add_directly:
+ *   If true, the player actions bound to this input will be added to the queue
+ *   of actions directly.
+ *   If false, the manager will save the player actions' current state, and
+ *   only add the actions at the end of the frame, if their state is different
+ *   from the last frame's state.
  */
 void controls_manager::handle_clean_input(
-    const player_input &input
+    const player_input &input, bool add_directly
 ) {
-    //Find what game action types are associated with this input.
+    //Find what game action types are bound to this input.
     vector<int> action_types = get_action_types_from_input(input);
     
-    //Update each game action type's current input state, to be reported later.
     for(size_t a = 0; a < action_types.size(); ++a) {
-        action_type_values[action_types[a]] = input.value;
+        if(add_directly) {
+            //Add it to the action queue directly.
+            player_action new_action;
+            new_action.action_type_id = action_types[a];
+            new_action.value = input.value;
+            action_queue.push_back(new_action);
+        } else {
+            //Update each game action type's current input state,
+            //so we can report them later.
+            action_type_values[action_types[a]] = input.value;
+        }
     }
 }
 
@@ -184,43 +187,58 @@ void controls_manager::handle_input(
         x_pos_input.axis_nr = 0;
         x_pos_input.value =
             std::max(0.0f, clean_sticks[input.device_nr][input.stick_nr][0]);
-        handle_clean_input(x_pos_input);
+        handle_clean_input(x_pos_input, false);
         
         player_input x_neg_input = input;
         x_neg_input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
         x_neg_input.axis_nr = 0;
         x_neg_input.value =
             std::max(0.0f, -clean_sticks[input.device_nr][input.stick_nr][0]);
-        handle_clean_input(x_neg_input);
+        handle_clean_input(x_neg_input, false);
         
         player_input y_pos_input = input;
         y_pos_input.type = INPUT_TYPE_CONTROLLER_AXIS_POS;
         y_pos_input.axis_nr = 1;
         y_pos_input.value =
             std::max(0.0f, clean_sticks[input.device_nr][input.stick_nr][1]);
-        handle_clean_input(y_pos_input);
+        handle_clean_input(y_pos_input, false);
         
         player_input y_neg_input = input;
         y_neg_input.type = INPUT_TYPE_CONTROLLER_AXIS_NEG;
         y_neg_input.axis_nr = 1;
         y_neg_input.value =
             std::max(0.0f, -clean_sticks[input.device_nr][input.stick_nr][1]);
-        handle_clean_input(y_neg_input);
+        handle_clean_input(y_neg_input, false);
+        
+    } else if(
+        input.type == INPUT_TYPE_MOUSE_WHEEL_UP ||
+        input.type == INPUT_TYPE_MOUSE_WHEEL_DOWN
+    ) {
+        //Mouse wheel inputs can have values over 1 to indicate the wheel
+        //spun a lot. We should process each one as an individual input.
+        //Plus, because mouse wheels have no physical state, the player
+        //has no way of changing the value of a player action back to 0
+        //using the mouse wheel. So whatever player actions we decide here
+        //have to be added to this frame's action queue directly.
+        for(unsigned int i = 0; i < input.value; i++) {
+            player_input single_input = input;
+            single_input.value = 1.0f;
+            handle_clean_input(single_input, true);
+        }
         
     } else {
         //Regular input.
-        handle_clean_input(input);
+        handle_clean_input(input, false);
         
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Begins a new frame of gameplay.
+ * Returns the player actions that occurred during the last frame of gameplay,
+ * and begins a new frame.
  */
-void controls_manager::new_frame() {
-    action_queue.clear();
-    
+vector<player_action> controls_manager::new_frame() {
     for(auto &a : action_type_values) {
         if(old_action_type_values[a.first] != a.second) {
             player_action new_action;
@@ -230,7 +248,12 @@ void controls_manager::new_frame() {
         }
     }
     
+    vector<player_action> result = action_queue;
+    
     old_action_type_values = action_type_values;
+    action_queue.clear();
+    
+    return result;
 }
 
 

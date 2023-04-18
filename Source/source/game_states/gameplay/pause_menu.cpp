@@ -441,6 +441,19 @@ void pause_menu_struct::handle_event(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles a player action.
+ * action:
+ *   Data about the player action.
+ */
+void pause_menu_struct::handle_player_action(const player_action &action) {
+    gui.handle_player_action(action);
+    help_gui.handle_player_action(action);
+    mission_gui.handle_player_action(action);
+    confirmation_gui.handle_player_action(action);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes the leaving confirmation page.
  */
 void pause_menu_struct::init_confirmation_page() {

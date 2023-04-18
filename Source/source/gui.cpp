@@ -726,6 +726,7 @@ bool gui_manager::get_item_draw_info(
 
 /* ----------------------------------------------------------------------------
  * Handle an Allegro event.
+ * Controls are handled in handle_player_action.
  * ev:
  *   Event.
  */
@@ -782,9 +783,6 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         mouse_involved = true;
     }
     
-    //Feed player inputs to the controls manager.
-    game.controls.handle_allegro_event(ev);
-    
     for(size_t i = 0; i < items.size(); ++i) {
         if(items[i]->is_responsive() && items[i]->on_event) {
             items[i]->on_event(ev);
@@ -796,9 +794,8 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles a button "press" in a GUI. Technically, it could also be
- * a button release.
- * Returns true if the button was recognized.
+ * Handles a player input.
+ * Returns true if the input was used.
  * action:
  *   Data about the player action.
  */
@@ -975,6 +972,8 @@ bool gui_manager::handle_player_action(const player_action &action) {
     }
     }
     
+    if(button_recognized) return true;
+    
     return button_recognized;
 }
 
@@ -1113,15 +1112,6 @@ void gui_manager::start_animation(
  *   How long the frame's tick is, in seconds.
  */
 void gui_manager::tick(const float delta_t) {
-    //Controls.
-    game.controls.new_frame();
-    player_action action;
-    bool input_happened = false;
-    while(game.controls.poll_action(action)) {
-        input_happened |= handle_player_action(action);
-    }
-    if(input_happened) last_input_was_mouse = false;
-    
     //Tick the animation.
     anim_timer.tick(delta_t);
     
