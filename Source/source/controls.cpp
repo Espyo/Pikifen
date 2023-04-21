@@ -409,6 +409,17 @@ vector<player_action> controls_mediator::new_frame() {
 
 
 /* ----------------------------------------------------------------------------
+ * Releases all player inputs. Basically, set all of their values to 0.
+ * Useful for when the game state is changed, or the window is out of focus.
+ */
+void controls_mediator::release_all() {
+    for(auto &a : mgr.action_type_values) {
+        a.second = 0.0f;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets the options for the controls manager.
  * options:
  *   Options.

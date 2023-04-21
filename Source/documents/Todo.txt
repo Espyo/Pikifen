@@ -7,8 +7,6 @@ Current tasks (tasks being worked on, but not yet committed)
             Current leader should move slower if the analog stick is not held all the way
             If it's not done already, there should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
             If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
-        Things to fix
-            When the window loses focus, it should reset the inputs, so that if you were holding a direction when the game lost focus, you won't have your leader keep walking (thanks Ambrosia)
     A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
         Southwest quadrant for paths
             Normal link
@@ -83,6 +81,7 @@ Next tasks (roughly sorted most important first)
         Write down the best way to create a zip of custom content to share with others
         Mention that the per-mob "max_health" property should be used responsibly
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
+        Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
     Add several pre-packaged areas, since players have nothing to play with right now
         Helodity's Adventure area (see #content-sharing)
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)

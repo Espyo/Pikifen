@@ -593,7 +593,7 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     }
     
     if (ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
-        leader_movement.reset(); //TODO replace with a better solution.
+        game.controls.release_all();
     }
     
     //Feed player inputs to the controls manager.

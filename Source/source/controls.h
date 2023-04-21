@@ -189,6 +189,7 @@ public:
     vector<player_action> new_frame();
     
     //Others.
+    void release_all();
     void set_options(const controls_manager_options &options);
     
 private:
