@@ -2,56 +2,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Controls
-        Tweaks
-            Current leader should move slower if the analog stick is not held all the way
-            If it's not done already, there should be a cap on how many Pikmin can be thrown per second -- if the player presses the button while in cooldown, it should probably queue the throw -- the same needs to be done for other buttons, probably
-            If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
     A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
-        Southwest quadrant for paths
-            Normal link
-            One-way link
-            Script-only link
-            Light-load-only link
-            Airborne-only link
-            Combined limits
-            Label?
-            Pikmin waiting for a lake to be drained?
-            Copy stuff from the Paths area, and also add tests for Pikmin carrying bridge fragments and berries
-        x Northwest quadrant for creatures and wildlife
-        x Northeast quadrant for other mobs
-        x Southeast quadrant for misc
-            x Terrain
-                x A floor that has a ramp and stairs side-by-side
-                x Blocking sector
-                x Really tight stair spiral
-                x The weird Sheargrub enclosure in Tests
-                x Throw-height measures
-                x All sorts of collision-testing terrain in Tests
-                x All sorts of collision-testing terrain in the regressions document
-            x Hazards
-                x Bottomless pit
-                x Floors with all hazards
-                x    Plus one that's ground + air
-            x Textures
-                x A measuring pad that's just a big sector with nothing in it, but uses the measurement texture
-                x Texture offsets, scales, angles, and tints, and sector brightness
-                x Texture fader, one fading just the texture, the other fading everything
-            x Edges
-                x Edges with various wall shadow options
-                x Edges with ledge smoothing
-                x All sorts of wall shadow testing-terrain in the regressions document
-            x Object behaviors
-                x Gates with different healths
-                x Pikmin with different starting properties
-                x An object inside another
-                x Bridges building up, bridges building over a gap, and bridges building over water
-                x A Water Dumple in front of a bomb rock
-                x A sign testing markup
-            x Misc
-                x Small tree shadows; one normal, another with different scale, rotation, opacity, and sway
-                x Sector outside of the main land (an island)
-                x Moving floors
         Theme it like a laboratory
         Computer terminals that act like signs should tell the player what's where
         All leaders should be present
@@ -67,8 +18,12 @@ Next tasks (roughly sorted most important first)
     Eggs and bomb rocks that spawn out of another mob will slide forever
     If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
     If you disable the area editor undo feature, areas are no longer recognized as changed (e.g. when you try to quit with unsaved changes)
+    The script-only and light-only paths in DEV Lab isn't working -- Pikmin are just focusing on the last stop they can go to and so take the wrong (or no) path
+    The Shift+P shortcut in the area editor shouldn't trigger if you're writing in a textbox
     
     --- v0.24.0 ---
+    Move more source files to the libs folder
+    Make the controls release feature toggleable in Options.txt
     Try adding a background to Tutorial Meadow that's just the grass texture
     Are flower Pikmin even completing tasks any faster?
     Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
@@ -152,6 +107,7 @@ Next tasks (roughly sorted most important first)
                 [Continue]             [Quit]
         The ability to load TTF fonts
         [NEEDS BRAINSTORMING] Should the secondary menus from the main menu also contain Pikmin formations in the background?
+        Allow the player to drag their mouse on the scrollbar GUI item
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
         Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
     Music
@@ -239,6 +195,8 @@ Next tasks (roughly sorted most important first)
         Spray management should really be inventory management -- See the multiplayer section in the TODO for more info
         Check the controller's name, and if it matches the "Switch Pro Controller" or whatever the name used for the Joy-Con is, the input icons should show the name of the button instead of a number
         If an action has multiple binds, the icon to show should prioritize controller inputs if the last player input was a controller (for analog sticks only if > 0.5), and keyboard/mouse otherwise
+        If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
+        Current leader should move slower if the analog stick is not held all the way
     Demo content
         Add more treasures
             Ball of yarn treasure

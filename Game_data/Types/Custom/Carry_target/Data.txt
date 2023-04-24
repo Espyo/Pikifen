@@ -1,0 +1,14 @@
+name = Carry target
+description = A target to deliver carried things to, with absolutely no purpose.
+
+can_block_paths = false
+casts_shadow = false
+custom_category_name = Misc
+height = 8
+max_health = 1000
+pushable = false
+pushes = false
+radius = 16
+show_health = false
+target_type = none
+team = none

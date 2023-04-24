@@ -1,0 +1,9 @@
+first_state = idling
+
+script {
+    idling {
+        on_finish_receiving_delivery {
+            set_health 1000
+        }
+    }
+}
