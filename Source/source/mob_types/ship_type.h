@@ -15,7 +15,7 @@
 
 #include "../misc_structs.h"
 #include "../mobs/mob_utils.h"
-#include "../utils/data_file.h"
+#include "../libs/data_file.h"
 #include "mob_type.h"
 
 

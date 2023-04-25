@@ -14,7 +14,7 @@
 #include <string>
 
 #include "../editor.h"
-#include "../../imgui/imgui_impl_allegro5.h"
+#include "../../libs/imgui/imgui_impl_allegro5.h"
 
 
 namespace ANIM_EDITOR {

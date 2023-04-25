@@ -15,7 +15,7 @@
 
 #include <vector>
 
-#include "utils/data_file.h"
+#include "libs/data_file.h"
 
 
 using std::size_t;
@@ -328,11 +328,11 @@ private:
  */
 struct hitbox_interaction {
     //Mob that touched our mob.
-    mob* mob2;  
+    mob* mob2;
     //Hitbox of our mob that got touched.
-    hitbox* h1; 
+    hitbox* h1;
     //Hitbox of the other mob.
-    hitbox* h2; 
+    hitbox* h2;
     hitbox_interaction(
         mob* mob2 = NULL,
         hitbox* h1 = NULL, hitbox* h2 = NULL

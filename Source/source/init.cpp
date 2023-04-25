@@ -27,7 +27,7 @@
 #include "game_states/game_state.h"
 #include "game_states/gameplay/gameplay.h"
 #include "game_states/menus.h"
-#include "imgui/imgui_impl_allegro5.h"
+#include "libs/imgui/imgui_impl_allegro5.h"
 #include "mob_categories/bouncer_category.h"
 #include "mob_categories/bridge_category.h"
 #include "mob_categories/converter_category.h"

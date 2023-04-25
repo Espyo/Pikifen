@@ -18,7 +18,6 @@ Next tasks (roughly sorted most important first)
     The Shift+P shortcut in the area editor shouldn't trigger if you're writing in a textbox
     
     --- v0.24.0 ---
-    Move more source files to the libs folder
     Make the controls release feature toggleable in Options.txt
     Try adding a background to Tutorial Meadow that's just the grass texture
     Are flower Pikmin even completing tasks any faster?

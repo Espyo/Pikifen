@@ -26,7 +26,7 @@
 #include "mobs/mob_enums.h"
 #include "hazard.h"
 #include "particle.h"
-#include "utils/data_file.h"
+#include "libs/data_file.h"
 #include "utils/geometry_utils.h"
 #include "utils/math_utils.h"
 
@@ -249,13 +249,13 @@ struct camera_info {
  * Just a list of different elements in an enum and what their names are.
  */
 struct enum_name_database {
-public:
+    public:
     void register_item(const size_t enum_idx, const string &name);
     size_t get_idx(const string &name) const;
     string get_name(const size_t idx) const;
     size_t get_nr_of_items() const;
     
-private:
+    private:
     //Known items.
     vector<string> names;
     
@@ -388,7 +388,7 @@ struct maker_tools_info {
  * are not the only thing using the bitmap manager.
  */
 struct bmp_manager {
-public:
+    public:
     explicit bmp_manager(const string &base_dir);
     ALLEGRO_BITMAP* get(
         const string &name, data_node* node = NULL,
@@ -401,7 +401,7 @@ public:
     long get_total_calls() const;
     size_t get_list_size() const;
     
-private:
+    private:
     struct bmp_info {
         //Bitmap pointer.
         ALLEGRO_BITMAP* b;
@@ -720,7 +720,7 @@ struct system_asset_list {
  * Manages fade ins/outs for transitions.
  */
 struct fade_manager {
-public:
+    public:
     fade_manager();
     void start_fade(const bool fade_in, const std::function<void()> &on_end);
     bool is_fade_in() const;
@@ -729,7 +729,7 @@ public:
     void tick(const float delta_t);
     void draw();
     
-private:
+    private:
     //Time left in the current fade in/out.
     float time_left;
     //True if fading in, false if fading out.
@@ -747,7 +747,7 @@ private:
  * what button to press to do something, like plucking.
  */
 struct notification_struct {
-public:
+    public:
     notification_struct();
     void draw() const;
     float get_visibility() const;
@@ -758,7 +758,7 @@ public:
     void set_enabled(const bool enabled);
     void tick(const float delta_t);
     
-private:
+    private:
     //Is it meant to exist?
     bool enabled;
     //What player input icon to show.
@@ -834,12 +834,12 @@ struct bitmap_effect_info {
  * for a given simple keyframe animation based on interpolation.
  */
 struct keyframe_interpolator {
-public:
+    public:
     float get(const float t);
     void add(const float t, const float value, EASING_METHODS ease = EASE_NONE);
     keyframe_interpolator(const float initial_value);
     
-private:
+    private:
     //Keyframe times.
     vector<float> keyframe_times;
     //Keyframe values.
@@ -863,7 +863,7 @@ enum PERF_MON_STATES {
  * to monitor performance with.
  */
 struct performance_monitor_struct {
-public:
+    public:
     performance_monitor_struct();
     void set_area_name(const string &name);
     void set_paused(const bool paused);
@@ -874,10 +874,10 @@ public:
     void save_log();
     void reset();
     
-private:
-
+    private:
+    
     struct page {
-    public:
+        public:
         //How long it lasted for in total.
         double duration;
         //Measurements took, and how long each one took.
@@ -886,7 +886,7 @@ private:
         page();
         void write(string &s);
         
-    private:
+        private:
         void write_measurement(
             string &str, const string &name,
             const double time, const float total
@@ -928,7 +928,7 @@ struct subgroup_type_manager;
  * a Red Pikmin, a Yellow Pikmin, a leader, etc.
  */
 struct subgroup_type {
-public:
+    public:
     SUBGROUP_TYPE_CATEGORIES get_category() const { return category; }
     ALLEGRO_BITMAP* get_icon() const { return icon; }
     
@@ -953,7 +953,7 @@ private:
  * Manages what types of subgroups exist.
  */
 struct subgroup_type_manager {
-public:
+    public:
     void register_type(
         const SUBGROUP_TYPE_CATEGORIES category,
         mob_type* specific_type = NULL,
@@ -968,7 +968,7 @@ public:
     subgroup_type* get_next_type(subgroup_type* sgt) const;
     void clear();
     
-private:
+    private:
     //Known types.
     vector<subgroup_type*> types;
 };

@@ -14,7 +14,7 @@
 #include <allegro5/allegro.h>
 
 #include "../misc_structs.h"
-#include "../utils/data_file.h"
+#include "../libs/data_file.h"
 #include "mob_type.h"
 #include "resource_type.h"
 

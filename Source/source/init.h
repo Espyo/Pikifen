@@ -12,7 +12,7 @@
 #define INIT_INCLUDED
 
 #include "animation.h"
-#include "utils/data_file.h"
+#include "libs/data_file.h"
 
 
 void init_allegro();

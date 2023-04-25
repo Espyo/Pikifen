@@ -16,7 +16,7 @@
 #include "../../area.h"
 #include "../editor.h"
 
-#include "../../imgui/imgui_impl_allegro5.h"
+#include "../../libs/imgui/imgui_impl_allegro5.h"
 
 
 using std::deque;

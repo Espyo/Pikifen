@@ -17,7 +17,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "../imgui/imgui_impl_allegro5.h"
+#include "../libs/imgui/imgui_impl_allegro5.h"
 
 
 using std::string;

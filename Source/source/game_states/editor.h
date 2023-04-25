@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "game_state.h"
-#include "../imgui/imgui.h"
+#include "../libs/imgui/imgui.h"
 
 
 using std::map;
@@ -187,7 +187,7 @@ protected:
      * meant to be fed into the widget's functions so it can edit them.
      */
     struct transformation_widget {
-    public:
+        public:
         void draw(
             const point* const center, const point* const size,
             const float* const angle, const float zoom = 1.0f
@@ -210,7 +210,7 @@ protected:
         point get_old_center() const;
         
         transformation_widget();
-    private:
+        private:
         //What handle is being moved. -1 for none. 9 for the rotation handle.
         signed char moving_handle;
         //Old center, before the user started dragging handles.
@@ -296,7 +296,7 @@ protected:
     };
     
     struct changes_manager {
-    public:
+        public:
         bool ask_if_unsaved(
             const point &pos,
             const string &action_long, const string &action_short,
@@ -317,7 +317,7 @@ protected:
         void reset();
         changes_manager(editor* ed);
         
-    private:
+        private:
         //Editor it belongs to.
         editor* ed;
         //Cummulative number of unsaved changes since the last save.

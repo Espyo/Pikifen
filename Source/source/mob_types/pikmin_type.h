@@ -17,7 +17,7 @@
 #include <allegro5/allegro.h>
 
 #include "../hazard.h"
-#include "../utils/data_file.h"
+#include "../libs/data_file.h"
 #include "mob_type.h"
 
 

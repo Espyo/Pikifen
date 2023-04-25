@@ -11,7 +11,7 @@
 #ifndef PELLET_TYPE_INCLUDED
 #define PELLET_TYPE_INCLUDED
 
-#include "../utils/data_file.h"
+#include "../libs/data_file.h"
 #include "mob_type.h"
 #include "pikmin_type.h"
 

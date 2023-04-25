@@ -22,7 +22,7 @@
 #include "const.h"
 #include "controls.h"
 #include "misc_structs.h"
-#include "utils/data_file.h"
+#include "libs/data_file.h"
 #include "utils/geometry_utils.h"
 
 
@@ -370,7 +370,7 @@ public:
     //Handle an Allegro event.
     void handle_event(const ALLEGRO_EVENT &ev);
     //Handle a button press or release.
-    bool handle_player_action(const player_action& action);
+    bool handle_player_action(const player_action &action);
     //Hides items until an animation shows them again.
     void hide_items();
     //Reads item coordinates from a data node.

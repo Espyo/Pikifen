@@ -15,7 +15,7 @@
 #include "../../drawing.h"
 #include "../../functions.h"
 #include "../../game.h"
-#include "../../imgui/imgui_impl_allegro5.h"
+#include "../../libs/imgui/imgui_impl_allegro5.h"
 #include "../../utils/string_utils.h"
 
 

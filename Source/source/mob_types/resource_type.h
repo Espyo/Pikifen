@@ -15,7 +15,7 @@
 
 #include "../misc_structs.h"
 #include "../spray_type.h"
-#include "../utils/data_file.h"
+#include "../libs/data_file.h"
 #include "../mobs/mob_enums.h"
 #include "../mob_types/mob_type.h"
 

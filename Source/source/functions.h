@@ -23,7 +23,7 @@
 #include "mobs/onion.h"
 #include "mobs/pikmin.h"
 #include "sector.h"
-#include "utils/data_file.h"
+#include "libs/data_file.h"
 
 
 //Possible results for the player interacting with a file dialog.

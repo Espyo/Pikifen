@@ -14,8 +14,6 @@
 
 #include "imgui_utils.h"
 
-#include "../imgui/imgui_impl_allegro5.h"
-
 
 /* ----------------------------------------------------------------------------
  * Helps creating an ImGui combo box, using a vector of strings for the
