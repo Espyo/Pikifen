@@ -67,7 +67,9 @@ function create_header(title, bc_names, bc_links) {
   header_div.innerHTML =
     '<img src="../images/logo.png" style="width: 24px; height: 24px; margin-right: 8px;">' +
     '<b><i>Pikifen manual</i></b> ' +
-    '<span style="margin-left: 10px; margin-right: 10px;">&mdash;</span> ' +
+    '<span style="margin-left: 10px; margin-right: 10px;">|</span> ' +
+    '<a href="#top" title="Go to the top of the page.">&UpArrowBar;</a> ' +
+    '<span style="margin-left: 10px; margin-right: 10px;">|</span> ' +
     '<span id="breadcrumbs"></span>';
   header_div.id = 'header';
   content_div = document.getElementById('content');

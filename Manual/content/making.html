@@ -60,6 +60,32 @@ block {
 
     <p>In addition, the <a href="maker_toolkit.html">maker toolkit</a> is a collection of tools to help you make and debug content.</p>
 
+    <h2 id="sharing">Sharing with others</h2>
+
+    <p>You may want to share custom content you've made with others across the web. You could just toss them the files you made or edited, and let them sort it out, but not everyone has the technical context you have to know what does what, what depends on which content, and which files go where. Plus having to work it out will discourage people from trying out your stuff. So here's a nice procedure you can follow to make everyone's life easier:</p>
+
+    <ol>
+      <li>Start by creating a folder somewhere, like on your desktop, with the name of your content.</li>
+      <li>Inside, create a <code>Game_data</code> folder. All of the content you're sharing will go here.</li>
+      <li>
+        Every component that your custom content has will need to be copied here. This goes for graphics, areas, objects, particle generators, etc. The folders you create here should have the same names and organization as your <i>Pikifen</i> installation's <code>Game_data</code> folder. So for instance, <code>My mod/Game_data/Graphics/Textures</code> would have any custom textures you have created or edited that are required for your content.
+        <ul>
+          <li>Does your creation have custom graphics? If so, create the folder <code>My mod/Game_data/Graphics</code> and put them inside.</li>
+          <li>Does your creation have custom textures? If so, create the folder <code>My mod/Game_data/Graphics/Textures</code> and put them inside.</li>
+          <li>Does your creation have custom areas? If so, create the folder <code>My mod/Game_data/Areas</code> and put them inside.</li>
+          <li>Does your creation have custom objects? If so, create the folder <code>My mod/Game_data/Types/&lt;object category&gt;/&lt;object type&gt;</code> and put them inside.</li>
+          <li>Does your creation have custom particle generators? If so, create the folder <code>My mod/Game_data/Particle_generators</code> and put them inside.</li>
+          <li>And so on, and so forth, for stuff like hazards, liquids, status effects, and anything else you've made for your custom content.</li>
+        </ul>
+      </li>
+      <li>Right-click your content's <code>Game_data</code> folder and zip it. The exact option you should click depends on your operative system and programs, but you're looking for an option to create a compressed archive file, otherwise known as a zip file.</li>
+      <li>Share it around!</li>
+    </ol>
+
+    <p>With this sort of zip file, any player that wants to try your content out simply needs to download your zip file, extract its <code>Game_data</code> folder into their <i>Pikifen</i> installation folder, and all of your custom content will be dumped into their own <code>Game_data</code> folder, with every file already in the correct spot.</p>
+
+    <p>More complex or unique creations may require different procedures. Feel free to do what you feel is best, but try to make life simple for the person installing it on the other end!</p>
+
     <h2 id="tips">Tips</h2>
 
     <ul>

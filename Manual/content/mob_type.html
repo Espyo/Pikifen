@@ -47,7 +47,7 @@
       <li><b><code>can_hunt</code></b>: This object will only want to hunt down objects of this target type. i.e. it will only consider those an "opponent" (provided they're also in an opposing team). See <code>target_type</code> below for more information. Defaults to "player" and "enemy".</li>
       <li><b><code>can_hurt</code></b>: This object can only cause damage to objects of this target type (provided they're also in an opposing team). See <code>target_type</code> below for more information. Defaults to "player", "enemy", and "fragile".</li>
       <li><b><code>height</code></b>: Object's height. This doesn't need to be <i>very</i> specific. For reference, leaders are usually 32, Pikmin are usually 24. Defaults to 0.</li>
-      <li><b><code>max_health</code></b>: The object's top health. For reference, leaders have 2000, and something like a Red Bulborb has 750. Defaults to 100.</li>
+      <li><b><code>max_health</code></b>: The object's top health. Use this responsibly, since players are used to seeing specific enemies with specific health amounts and plan accordingly, and if you change this their plans will be foiled. For reference, leaders have 2000, and something like a Red Bulborb has 750. Defaults to 100.</li>
       <li><b><code>move_speed</code></b>: Standard movement speed (in pixels per second). For reference, leaders move at 130. Defaults to 0.</li>
       <li><b><code>pushable</code></b>: <code>true</code> if this object can be pushed out of the way by other objects. <code>false</code> otherwise. Defaults to false.</li>
       <li><b><code>pushes</code></b>: <code>true</code> if this object can push "pushable" objects out of the way. <code>false</code> otherwise. Defaults to false.</li>

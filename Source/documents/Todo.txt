@@ -16,20 +16,12 @@ Next tasks (roughly sorted most important first)
     If you disable the area editor undo feature, areas are no longer recognized as changed (e.g. when you try to quit with unsaved changes)
     The script-only and light-only paths in DEV Lab isn't working -- Pikmin are just focusing on the last stop they can go to and so take the wrong (or no) path
     The Shift+P shortcut in the area editor shouldn't trigger if you're writing in a textbox
+    The "mob stuck in wall" area editor review error should only trigger if said wall isn't within stepping height (check Tutorial Meadow)
     
     --- v0.24.0 ---
     Make the controls release feature toggleable in Options.txt
-    Try adding a background to Tutorial Meadow that's just the grass texture
     Are flower Pikmin even completing tasks any faster?
     Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
-    Minor manual improvements
-        Area tips: Add a section for Pikmin-specific details that usually look good
-            Crop circle patterns under the Onion and ship
-            Rocks should have ledge smoothing
-        The header bar should have a button to go to the top of the page
-        Every section should have a small faded # symbol next to it that links to the section
-        Write down the best way to create a zip of custom content to share with others
-        Mention that the per-mob "max_health" property should be used responsibly
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
     Add several pre-packaged areas, since players have nothing to play with right now

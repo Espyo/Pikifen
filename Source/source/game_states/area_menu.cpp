@@ -214,7 +214,7 @@ void area_menu_state::change_info(const size_t area_idx) {
     maker_text->text =
         (
             area_makers[area_idx].empty() ?
-            "Unknown maker" :
+            "" :
             "Maker: " + area_makers[area_idx]
         );
     version_text->text =

@@ -3,9 +3,9 @@ subtitle=Get the treasure!
 description=A tutorial area to help you learn how to play Pikifen!
 tags=Tutorial
 difficulty=1
-bg_bmp
+bg_bmp=Grass_dark.jpg
 bg_color=0 0 0
-bg_dist=2.0000
+bg_dist=1.0000
 bg_zoom=1.0000
 weather
 day_time_start=420
