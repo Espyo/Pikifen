@@ -2,11 +2,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    A showcase area, with several corridors and rooms for the different enemies, objects, mechanics, collision tests, path tests, etc.
-        Theme it like a laboratory
-        Computer terminals that act like signs should tell the player what's where
-        All leaders should be present
-        Give it a starry sky background
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
