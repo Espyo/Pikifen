@@ -1,0 +1,24 @@
+name=Cryptic Atrium
+subtitle
+description=Three buttons, three markers on the floor... How should you go about pressing them to escape this room?
+tags=Puzzle; Short and sweet
+difficulty=3
+bg_bmp
+bg_color=0 0 0
+bg_dist=2.0000
+bg_zoom=1.0000
+weather
+day_time_start=420
+day_time_speed=120
+maker=Espyo
+version=1.0
+engine_version=0.23.2
+notes
+spray_amounts
+mission_goal=Get to the exit
+mission_goal_all_mobs=true
+mission_goal_exit_center=-544.0000 -576.0000
+mission_goal_exit_size=320.0000 256.0000
+mission_fail_conditions=136
+mission_fail_pik_killed=1
+mission_grading_mode=1
