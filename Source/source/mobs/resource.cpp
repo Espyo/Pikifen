@@ -29,4 +29,5 @@ resource::resource(const point &pos, resource_type* type, const float angle) :
     res_type(type),
     origin_pile(nullptr) {
     
+    become_carriable(res_type->carrying_destination);
 }

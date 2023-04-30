@@ -123,7 +123,8 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
                 game.states.gameplay->change_spray_count(type_nr, 1);
             }
             break;
-        } case RESOURCE_DELIVERY_RESULT_DAMAGE_MOB: {
+        } case RESOURCE_DELIVERY_RESULT_DAMAGE_MOB:
+        case RESOURCE_DELIVERY_RESULT_STAY: {
             break;
         }
         }

@@ -1,0 +1,14 @@
+name = Button
+description = A button that can be pressed down to activate something else.
+
+area_editor_tips = Link this object to another to actually make it do something.
+can_walk_on_others = false
+casts_shadow = false
+custom_category_name = Puzzle
+goal_number = 1
+height = 8
+pushable = false
+pushes = false
+radius = 40
+rectangular_dimensions = 80 80
+walkable = true

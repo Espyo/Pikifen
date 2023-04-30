@@ -91,6 +91,8 @@ void resource_type::load_properties(data_node* file) {
         delivery_result = RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS;
     } else if(delivery_result_str == "add_points") {
         delivery_result = RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS;
+    } else if(delivery_result_str == "stay") {
+        delivery_result = RESOURCE_DELIVERY_RESULT_STAY;
     } else {
         log_error(
             "Unknown delivery result \"" + delivery_result_str + "\"!",

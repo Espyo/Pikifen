@@ -1,0 +1,46 @@
+first_state = up
+
+init {
+    set_var goal_number 1
+    set_var weight 0
+}
+
+script {
+    up {
+        on_enter {
+            set_animation up
+            if $weight >= $goal_number
+                set_state down
+            end_if
+            send_message_to_links off
+        }
+        on_weight_added {
+            get_info weight weight
+            if $weight >= $goal_number
+                set_state down
+            end_if
+        }
+        on_weight_removed {
+            get_info weight weight
+        }
+    }
+    
+    down {
+        on_enter {
+            set_animation down
+            if $weight < $goal_number
+                set_state up
+            end_if
+            send_message_to_links on
+        }
+        on_weight_added {
+            get_info weight weight
+        }
+        on_weight_removed {
+            get_info weight weight
+            if $weight < $goal_number
+                set_state up
+            end_if
+        }
+    }
+}

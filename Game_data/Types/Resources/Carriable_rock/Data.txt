@@ -1,0 +1,14 @@
+name = Carriable rock
+description = A rock that can be carrieda round by the Pikmin. Useful for puzzles.
+
+carrying_destination = linked_mob_matching_type
+custom_category_name = Puzzle
+delivery_result = stay
+height = 32
+max_carriers = 20
+pushable = true
+pushes = true
+radius = 48
+vanish_on_drop = false
+walkable = true
+weight = 10

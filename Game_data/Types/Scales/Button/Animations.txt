@@ -1,0 +1,30 @@
+animations{
+	down{
+		frames{
+			down{
+				duration=0.1000
+			}
+		}
+	}
+	up{
+		frames{
+			up{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	down{
+		file=Button.png
+		file_pos=97.0000 0.0000
+		file_size=96.0000 96.0000
+	}
+	up{
+		file=Button.png
+		file_pos=0.0000 0.0000
+		file_size=96.0000 96.0000
+	}
+}
+body_parts
+engine_version=0.23.2

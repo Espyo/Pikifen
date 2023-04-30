@@ -1,0 +1,64 @@
+animations{
+	closed{
+		frames{
+			closed{
+				duration=0.1000
+			}
+		}
+	}
+	open{
+		frames{
+			open{
+				duration=0.1000
+			}
+		}
+	}
+	rattling{
+		frames{
+			rattling1{
+				duration=0.1000
+			}
+			rattling2{
+				duration=0.1000
+			}
+			rattling3{
+				duration=0.1000
+			}
+			closed{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	closed{
+		file=Automatic_gate.png
+		file_pos=0.0000 0.0000
+		file_size=40.0000 192.0000
+	}
+	open{
+		file=Automatic_gate.png
+		file_pos=41.0000 0.0000
+		file_size=40.0000 192.0000
+	}
+	rattling1{
+		file=Automatic_gate.png
+		file_pos=0.0000 0.0000
+		file_size=40.0000 192.0000
+		offset=1.0000 1.0000
+	}
+	rattling2{
+		file=Automatic_gate.png
+		file_pos=0.0000 0.0000
+		file_size=40.0000 192.0000
+		offset=1.0000 -1.0000
+	}
+	rattling3{
+		file=Automatic_gate.png
+		file_pos=0.0000 0.0000
+		file_size=40.0000 192.0000
+		offset=-1.0000 0.0000
+	}
+}
+body_parts
+engine_version=0.23.2

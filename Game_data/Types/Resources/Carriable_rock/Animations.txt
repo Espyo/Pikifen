@@ -1,0 +1,18 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Carriable_rock.png
+		file_pos=0.0000 0.0000
+		file_size=96.0000 96.0000
+	}
+}
+body_parts
+engine_version=0.23.2

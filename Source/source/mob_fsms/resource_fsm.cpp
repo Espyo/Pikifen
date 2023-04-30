@@ -68,7 +68,7 @@ void resource_fsm::create_fsm(mob_type* typ) {
             efc.run(gen_mob_fsm::carry_begin_move);
         }
         efc.new_event(MOB_EV_REACHED_DESTINATION); {
-            efc.run(gen_mob_fsm::carry_reach_destination);
+            efc.run(resource_fsm::handle_reach_destination);
         }
         efc.new_event(MOB_EV_PATH_BLOCKED); {
             efc.change_state("idle_stuck");
@@ -131,6 +131,25 @@ void resource_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state(
+        "staying_after_delivery", RESOURCE_STATE_STAYING_AFTER_DELIVERY
+    ); {
+        efc.new_event(MOB_EV_ON_ENTER); {
+            efc.run(resource_fsm::start_waiting);
+            efc.run(gen_mob_fsm::carry_stop_move);
+        }
+        efc.new_event(MOB_EV_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+        }
+        efc.new_event(MOB_EV_CARRIER_REMOVED); {
+            efc.run(gen_mob_fsm::handle_carrier_removed);
+        }
+        efc.new_event(MOB_EV_CARRY_BEGIN_MOVE); {
+            efc.run(gen_mob_fsm::carry_get_path);
+            efc.change_state("idle_moving");
+        }
+    }
+    
     
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idle_waiting", typ);
@@ -187,6 +206,26 @@ void resource_fsm::handle_dropped(mob* m, void* info1, void* info2) {
         resource_fsm::vanish(m, info1, info2);
     } else {
         res_ptr->set_timer(res_ptr->res_type->vanish_delay);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the resource reaches its carry destination.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void resource_fsm::handle_reach_destination(mob* m, void* info1, void* info2) {
+    resource* res_ptr = (resource*) m;
+    if(res_ptr->res_type->delivery_result == RESOURCE_DELIVERY_RESULT_STAY) {
+        m->stop_following_path();
+        m->fsm.set_state(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
+    } else {
+        gen_mob_fsm::carry_reach_destination(m, info1, info2);
     }
 }
 
@@ -253,7 +292,6 @@ void resource_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
 void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
     resource* res_ptr = (resource*) m;
     
-    res_ptr->become_carriable(res_ptr->res_type->carrying_destination);
     if(res_ptr->origin_pile) {
         res_ptr->carry_info->must_return = true;
         res_ptr->carry_info->return_point = res_ptr->origin_pile->pos;

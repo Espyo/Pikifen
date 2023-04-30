@@ -35,6 +35,8 @@ enum RESOURCE_DELIVERY_RESULTS {
     RESOURCE_DELIVERY_RESULT_INCREASE_INGREDIENTS,
     //Add some treasure points.
     RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS,
+    //The Pikmin stay on that spot.
+    RESOURCE_DELIVERY_RESULT_STAY,
 };
 
 
@@ -50,6 +52,8 @@ enum RESOURCE_STATES {
     RESOURCE_STATE_IDLE_THROWN,
     //Being delivered.
     RESOURCE_STATE_BEING_DELIVERED,
+    //Staying in place after being delivered.
+    RESOURCE_STATE_STAYING_AFTER_DELIVERY,
     
     //Total amount of resource object states.
     N_RESOURCE_STATES,

@@ -1,0 +1,13 @@
+name = Automatic gate
+description = A gate that lifts up by its own by command of a different source.
+
+can_block_paths = true
+can_walk_on_others = false
+casts_shadow = false
+custom_category_name = Gate
+height = 170
+move_speed = 150
+pushable = false
+pushes = true
+radius = 32
+rectangular_dimensions = 40 192

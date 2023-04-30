@@ -154,7 +154,7 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a mob reaches the destination or an obstacle when carrying.
+ * When a mob reaches the destination or an obstacle when being carried.
  * m:
  *   The mob.
  * info1:
