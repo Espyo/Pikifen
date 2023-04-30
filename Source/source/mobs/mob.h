@@ -434,6 +434,11 @@ protected:
     //Is it currently capable of blocking paths?
     bool can_block_paths;
     
+    //Returns what Pikmin type is decided when carrying something.
+    pikmin_type* decide_carry_pikmin_type(
+        const unordered_set<pikmin_type*> &available_types,
+        mob* added, mob* removed
+    ) const;
     //Returns a walkable mob to stand on.
     mob* get_mob_to_walk_on() const;
     //Returns edge intersections at a certain spot.

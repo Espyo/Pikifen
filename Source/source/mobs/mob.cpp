@@ -621,10 +621,10 @@ bool mob::calculate_carrying_destination(
 ) const {
     if(!carry_info) return false;
     
-    //For starters, check if this is to be carried to the ship.
-    //Get that out of the way if so.
-    if(carry_info->destination == CARRY_DESTINATION_SHIP) {
-    
+    switch(carry_info->destination) {
+    case CARRY_DESTINATION_SHIP: {
+
+        //Go to the nearest ship.
         ship* closest_ship = NULL;
         dist closest_ship_dist;
         
@@ -647,180 +647,150 @@ bool mob::calculate_carrying_destination(
             *target_mob = NULL;
             return false;
         }
-    }
-    
-    //Now, if it's towards a linked mob, just go there.
-    if(carry_info->destination == CARRY_DESTINATION_LINKED_MOB) {
-        if(!links.empty() && links[0]) {
-            *target_mob = links[0];
-            *target_point = (*target_mob)->pos;
-            return true;
-            
-        } else {
+        
+        break;
+        
+    } case CARRY_DESTINATION_ONION: {
+
+        //If it's meant for an Onion, we need to decide which Onion, based on
+        //the Pikmin. First, check which Onion Pikmin types are even available.
+        unordered_set<pikmin_type*> available_types;
+        for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
+            onion* o_ptr = game.states.gameplay->mobs.onions[o];
+            if(o_ptr->activated) {
+                for(
+                    size_t t = 0;
+                    t < o_ptr->oni_type->nest->pik_types.size();
+                    ++t
+                ) {
+                    available_types.insert(
+                        o_ptr->oni_type->nest->pik_types[t]
+                    );
+                }
+            }
+        }
+        
+        if(available_types.empty()) {
+            //No available types?! Well...make the Pikmin stuck.
             *target_mob = NULL;
             return false;
         }
-    }
-    
-    //If it's meant for an Onion, we need to decide which Onion, based on
-    //the Pikmin. Buckle up, because it's not as easy as it might seem.
-    
-    //How many of each Pikmin type are carrying.
-    map<pikmin_type*, unsigned> type_quantity;
-    //The Pikmin type with the most carriers.
-    vector<pikmin_type*> majority_types;
-    unordered_set<pikmin_type*> available_types;
-    
-    //First, check which Onion Pikmin types are even available.
-    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
-        onion* o_ptr = game.states.gameplay->mobs.onions[o];
-        if(o_ptr->activated) {
+        
+        pikmin_type* decided_type =
+            decide_carry_pikmin_type(available_types, added, removed);
+            
+        //Figure out where that type's Onion is.
+        size_t closest_onion_nr = INVALID;
+        dist closest_onion_dist;
+        for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
+            onion* o_ptr = game.states.gameplay->mobs.onions[o];
+            if(!o_ptr->activated) continue;
+            bool has_type = false;
             for(
                 size_t t = 0;
                 t < o_ptr->oni_type->nest->pik_types.size();
                 ++t
             ) {
-                available_types.insert(
-                    o_ptr->oni_type->nest->pik_types[t]
-                );
-            }
-        }
-    }
-    
-    if(available_types.empty()) {
-        //No available types?! Well...make the Pikmin stuck.
-        *target_mob = NULL;
-        return false;
-    }
-    
-    //Count how many of each type there are carrying.
-    for(size_t p = 0; p < type->max_carriers; ++p) {
-        pikmin* pik_ptr = NULL;
-        
-        if(carry_info->spot_info[p].state != CARRY_SPOT_USED) continue;
-        
-        pik_ptr = (pikmin*) carry_info->spot_info[p].pik_ptr;
-        
-        //If it doesn't have an Onion to carry to, it won't even count.
-        if(available_types.find(pik_ptr->pik_type) == available_types.end()) {
-            continue;
-        }
-        
-        type_quantity[pik_ptr->pik_type]++;
-    }
-    
-    //Then figure out what are the majority types.
-    unsigned most = 0;
-    for(auto &t : type_quantity) {
-        if(t.second > most) {
-            most = t.second;
-            majority_types.clear();
-        }
-        if(t.second == most) majority_types.push_back(t.first);
-    }
-    
-    //If we ended up with no candidates, pick a type at random,
-    //out of all possible types.
-    if(majority_types.empty()) {
-        for(
-            auto t = available_types.begin();
-            t != available_types.end(); ++t
-        ) {
-            majority_types.push_back(*t);
-        }
-    }
-    
-    pikmin_type* decided_type = NULL;
-    
-    //Now let's pick an Pikmin type from the candidates.
-    if(majority_types.size() == 1) {
-        //If there's only one possible type to pick, pick it.
-        decided_type = *majority_types.begin();
-        
-    } else {
-        //If there's a tie, let's take a careful look.
-        bool new_tie = false;
-        
-        //Is the Pikmin that just joined part of the majority types?
-        //If so, that means this Pikmin just created a NEW tie!
-        //So let's pick a random Onion again.
-        if(added) {
-            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-                if(added->type == majority_types[mt]) {
-                    new_tie = true;
+                if(o_ptr->oni_type->nest->pik_types[t] == decided_type) {
+                    has_type = true;
                     break;
                 }
             }
-        }
-        
-        //If a Pikmin left, check if it is related to the majority types.
-        //If not, then a new tie wasn't made, no worries.
-        //If it was related, a new tie was created.
-        if(removed) {
-            new_tie = false;
-            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-                if(removed->type == majority_types[mt]) {
-                    new_tie = true;
-                    break;
-                }
+            if(!has_type) continue;
+            
+            dist d(pos, o_ptr->pos);
+            if(closest_onion_nr == INVALID || d < closest_onion_dist) {
+                closest_onion_dist = d;
+                closest_onion_nr = o;
             }
         }
         
-        //Check if the previously decided type belongs to one of the majorities.
-        //If so, it can be chosen again, but if not, it cannot.
-        bool can_continue = false;
-        for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-            if(majority_types[mt] == decided_type) {
-                can_continue = true;
-                break;
+        //Finally, set the destination data.
+        *target_type = decided_type;
+        *target_mob = game.states.gameplay->mobs.onions[closest_onion_nr];
+        *target_point = (*target_mob)->pos;
+        
+        return true;
+        
+        break;
+        
+    } case CARRY_DESTINATION_LINKED_MOB: {
+
+        //If it's towards a linked mob, just go there.
+        if(links.empty() || !links[0]) {
+            *target_mob = NULL;
+            return false;
+        }
+        
+        *target_mob = links[0];
+        *target_point = (*target_mob)->pos;
+        return true;
+        
+        break;
+        
+    } case CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE: {
+
+        //Towards one of the linked mobs that matches the decided Pikmin type.
+        if(links.empty() || !links[0]) {
+            *target_mob = NULL;
+            return false;
+        }
+        
+        unordered_set<pikmin_type*> available_types;
+        vector<std::pair<mob*, pikmin_type*> > mobs_per_type;
+        
+        for(size_t l = 0; l < links.size(); ++l) {
+            if(!links[l]) continue;
+            string type_name =
+                links[l]->vars["carry_destination_type"];
+            mob_type* pik_type =
+                game.mob_categories.get(MOB_CATEGORY_PIKMIN)->
+                get_type(type_name);
+            if(!pik_type) continue;
+            
+            available_types.insert(
+                (pikmin_type*) pik_type
+            );
+            mobs_per_type.push_back(
+                std::make_pair(links[l], (pikmin_type*) pik_type)
+            );
+        }
+        
+        if(available_types.empty()) {
+            //No available types?! Well...make the Pikmin stuck.
+            *target_mob = NULL;
+            return false;
+        }
+        
+        pikmin_type* decided_type =
+            decide_carry_pikmin_type(available_types, added, removed);
+            
+        //Figure out which linked mob matches the decided type.
+        size_t closest_target_idx = INVALID;
+        dist closest_target_dist;
+        for(size_t m = 0; m < mobs_per_type.size(); ++m) {
+            if(mobs_per_type[m].second != decided_type) continue;
+            
+            dist d(pos, mobs_per_type[m].first->pos);
+            if(closest_target_idx == INVALID || d < closest_target_dist) {
+                closest_target_dist = d;
+                closest_target_idx = m;
             }
         }
-        if(!can_continue) decided_type = NULL;
         
-        //If the Pikmin that just joined is not a part of the majorities,
-        //then it had no impact on the existing ties.
-        //Go with the Onion that had been decided before.
-        if(new_tie || !decided_type) {
-            decided_type =
-                majority_types[
-                    randomi(0, (int) majority_types.size() - 1)
-            ];
-        }
+        //Finally, set the destination data.
+        *target_type = decided_type;
+        *target_mob = links[closest_target_idx];
+        *target_point = (*target_mob)->pos;
+        
+        return true;
+        
+        break;
+        
+    }
     }
     
-    
-    //Figure out where that type's Onion is.
-    size_t closest_onion_nr = INVALID;
-    dist closest_onion_dist;
-    for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
-        onion* o_ptr = game.states.gameplay->mobs.onions[o];
-        if(!o_ptr->activated) continue;
-        bool has_type = false;
-        for(
-            size_t t = 0;
-            t < o_ptr->oni_type->nest->pik_types.size();
-            ++t
-        ) {
-            if(o_ptr->oni_type->nest->pik_types[t] == decided_type) {
-                has_type = true;
-                break;
-            }
-        }
-        if(!has_type) continue;
-        
-        dist d(pos, o_ptr->pos);
-        if(closest_onion_nr == INVALID || d < closest_onion_dist) {
-            closest_onion_dist = d;
-            closest_onion_nr = o;
-        }
-    }
-    
-    //Finally, set the destination data.
-    *target_type = decided_type;
-    *target_mob = game.states.gameplay->mobs.onions[closest_onion_nr];
-    *target_point = (*target_mob)->pos;
-    
-    return true;
+    return false;
 }
 
 
@@ -1200,6 +1170,117 @@ void mob::circle_around(
     circling_info->can_free_move = can_free_move;
     circling_info->cur_angle =
         get_angle((m ? m->pos : p), pos);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns what Pikmin type is decided when carrying something.
+ */
+pikmin_type* mob::decide_carry_pikmin_type(
+    const unordered_set<pikmin_type*> &available_types,
+    mob* added, mob* removed
+) const {
+    //How many of each Pikmin type are carrying.
+    map<pikmin_type*, unsigned> type_quantity;
+    //The Pikmin type with the most carriers.
+    vector<pikmin_type*> majority_types;
+    
+    //Count how many of each type there are carrying.
+    for(size_t p = 0; p < type->max_carriers; ++p) {
+        pikmin* pik_ptr = NULL;
+        
+        if(carry_info->spot_info[p].state != CARRY_SPOT_USED) continue;
+        
+        pik_ptr = (pikmin*) carry_info->spot_info[p].pik_ptr;
+        
+        //If it doesn't have an Onion to carry to, it won't even count.
+        if(available_types.find(pik_ptr->pik_type) == available_types.end()) {
+            continue;
+        }
+        
+        type_quantity[pik_ptr->pik_type]++;
+    }
+    
+    //Then figure out what are the majority types.
+    unsigned most = 0;
+    for(auto &t : type_quantity) {
+        if(t.second > most) {
+            most = t.second;
+            majority_types.clear();
+        }
+        if(t.second == most) majority_types.push_back(t.first);
+    }
+    
+    //If we ended up with no candidates, pick a type at random,
+    //out of all possible types.
+    if(majority_types.empty()) {
+        for(
+            auto t = available_types.begin();
+            t != available_types.end(); ++t
+        ) {
+            majority_types.push_back(*t);
+        }
+    }
+    
+    pikmin_type* decided_type = NULL;
+    
+    //Now let's pick an Pikmin type from the candidates.
+    if(majority_types.size() == 1) {
+        //If there's only one possible type to pick, pick it.
+        decided_type = *majority_types.begin();
+        
+    } else {
+        //If there's a tie, let's take a careful look.
+        bool new_tie = false;
+        
+        //Is the Pikmin that just joined part of the majority types?
+        //If so, that means this Pikmin just created a NEW tie!
+        //So let's pick a random Onion again.
+        if(added) {
+            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
+                if(added->type == majority_types[mt]) {
+                    new_tie = true;
+                    break;
+                }
+            }
+        }
+        
+        //If a Pikmin left, check if it is related to the majority types.
+        //If not, then a new tie wasn't made, no worries.
+        //If it was related, a new tie was created.
+        if(removed) {
+            new_tie = false;
+            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
+                if(removed->type == majority_types[mt]) {
+                    new_tie = true;
+                    break;
+                }
+            }
+        }
+        
+        //Check if the previously decided type belongs to one of the majorities.
+        //If so, it can be chosen again, but if not, it cannot.
+        bool can_continue = false;
+        for(size_t mt = 0; mt < majority_types.size(); ++mt) {
+            if(majority_types[mt] == decided_type) {
+                can_continue = true;
+                break;
+            }
+        }
+        if(!can_continue) decided_type = NULL;
+        
+        //If the Pikmin that just joined is not a part of the majorities,
+        //then it had no impact on the existing ties.
+        //Go with the Onion that had been decided before.
+        if(new_tie || !decided_type) {
+            decided_type =
+                majority_types[
+                    randomi(0, (int) majority_types.size() - 1)
+                ];
+        }
+    }
+    
+    return decided_type;
 }
 
 
@@ -1758,11 +1839,10 @@ bool mob::get_fraction_numbers_info(
     ALLEGRO_COLOR* fraction_color
 ) const {
     if(!carry_info || carry_info->cur_carrying_strength <= 0) return false;
-    bool destination_is_onion =
+    bool destination_has_pikmin_type =
         carry_info->intended_mob &&
-        carry_info->intended_mob->type->category->id ==
-        MOB_CATEGORY_ONIONS;
-    if(type->weight <= 1 && !destination_is_onion) return false;
+        carry_info->intended_pik_type;
+    if(type->weight <= 1 && !destination_has_pikmin_type) return false;
     
     *fraction_value_nr = carry_info->cur_carrying_strength;
     *fraction_req_nr = type->weight;
@@ -1773,7 +1853,7 @@ bool mob::get_fraction_numbers_info(
         ) {
             *fraction_color = game.config.carrying_color_move;
             
-        } else if(destination_is_onion) {
+        } else if(destination_has_pikmin_type) {
             *fraction_color =
                 carry_info->intended_pik_type->main_color;
         } else {

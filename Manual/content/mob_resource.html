@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -33,7 +33,7 @@
     <h3 id="mandatory">Mandatory</h3>
 
     <ul>
-      <li><b><code>carrying_destination</code></b>: Specifies where this resource must be taken to. <code>ship</code> means it gets carried to the nearest ship, and <code>linked_mob</code> means it gets taken to whatever object is linked to the pile that originated this resource.</li>
+      <li><b><code>carrying_destination</code></b>: Specifies where this resource must be taken to. <code>ship</code> means it gets carried to the nearest ship. <code>linked_mob</code> means it gets taken to whatever object is linked to the this object or the pile that originated this resource. <code>linked_mob_matching_type</code> means it goes to whichever of the object or the pile's linked objects matches the Pikmin type decided from the carrier Pikmin (i.e. which object has the <code>carry_destination_type</code> <a href="script.html">script variable</a> set to the Pikmin type's name.)</li>
       <li><b><code>delivery_result</code></b>: Specifies what happens when the resource is successfully delivered. <code>damage_mob</code> causes some amount of damage to the delivery object, <code>increase_ingredients</code> causes an increase (by one) in the number of ingredients that make up a spray, <code>add_points</code> adds treasure points to the player's stash, and <code>stay</code> causes the Pikmin to stay with the object there.</li>
     </ul>
 

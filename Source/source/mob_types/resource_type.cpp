@@ -78,6 +78,8 @@ void resource_type::load_properties(data_node* file) {
         carrying_destination = CARRY_DESTINATION_SHIP;
     } else if(carrying_destination_str == "linked_mob") {
         carrying_destination = CARRY_DESTINATION_LINKED_MOB;
+    } else if(carrying_destination_str == "linked_mob_matching_type") {
+        carrying_destination = CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE;
     } else {
         log_error(
             "Unknown carrying destination \"" +

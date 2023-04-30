@@ -37,6 +37,8 @@ enum CARRY_DESTINATIONS {
     CARRY_DESTINATION_ONION,
     //To the linked mob.
     CARRY_DESTINATION_LINKED_MOB,
+    //To one of the linked mobs that match the decided Pikmin type.
+    CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE,
 };
 
 
