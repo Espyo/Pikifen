@@ -2,12 +2,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Put new objects in the DEV Lab
-    Path stuff for DEV Lab:
-        Path with stops that are underwater, as well as a clog to remove the water hazard from said stops
-        Paths with parallel limits
-        Paths to test all path result cases
-        Paths to test all block reasons
     Give can_walk_on_others = false to a whole lot more mobs
     Carriable rocks sway when dropped
     Particles on the button to be more satisfying

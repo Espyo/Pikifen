@@ -85,7 +85,9 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     
     if(!m->carry_info->destination_exists) {
         m->path_info->result = PATH_RESULT_NO_DESTINATION;
-        m->path_info->block_reason = PATH_BLOCK_REASON_NO_PATH;
+    }
+    
+    if(m->path_info->result < 0) {
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);
         return;
     }
