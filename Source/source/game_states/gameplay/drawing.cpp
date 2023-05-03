@@ -659,6 +659,105 @@ void gameplay_state::draw_ingame_text() {
         }
     }
     
+    //Maker tool -- draw path info.
+    if(
+        game.maker_tools.info_lock &&
+        game.maker_tools.path_info &&
+        game.maker_tools.info_lock->path_info
+    ) {
+        path_info_struct* path = game.maker_tools.info_lock->path_info;
+        point target_pos =
+            has_flag(path->settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB) ?
+            path->settings.target_mob->pos :
+            path->settings.target_point;
+            
+        //Faint lines for the entire path.
+        if(!path->path.empty()) {
+            for(size_t s = 0; s < path->path.size() - 1; ++s) {
+                al_draw_line(
+                    path->path[s]->pos.x,
+                    path->path[s]->pos.y,
+                    path->path[s + 1]->pos.x,
+                    path->path[s + 1]->pos.y,
+                    al_map_rgba(0, 0, 200, 150),
+                    2.0f
+                );
+            }
+            
+            //Colored circles for the first and last stops.
+            al_draw_filled_circle(
+                path->path[0]->pos.x,
+                path->path[0]->pos.y,
+                16.0f,
+                al_map_rgba(192, 0, 0, 200)
+            );
+            al_draw_filled_circle(
+                path->path.back()->pos.x,
+                path->path.back()->pos.y,
+                16.0f,
+                al_map_rgba(0, 192, 0, 200)
+            );
+        }
+        
+        if(
+            path->result == PATH_RESULT_DIRECT ||
+            path->result == PATH_RESULT_DIRECT_NO_STOPS ||
+            path->cur_path_stop_nr == path->path.size()
+        ) {
+            //Line directly to the target.
+            al_draw_line(
+                game.maker_tools.info_lock->pos.x,
+                game.maker_tools.info_lock->pos.y,
+                target_pos.x,
+                target_pos.y,
+                al_map_rgba(0, 0, 255, 200), 4.0f
+            );
+        } else if(path->cur_path_stop_nr < path->path.size()) {
+            //Line to the next stop, and circle for the next stop in blue.
+            al_draw_line(
+                game.maker_tools.info_lock->pos.x,
+                game.maker_tools.info_lock->pos.y,
+                path->path[path->cur_path_stop_nr]->pos.x,
+                path->path[path->cur_path_stop_nr]->pos.y,
+                al_map_rgba(0, 0, 255, 200), 4.0f
+            );
+            al_draw_filled_circle(
+                path->path[path->cur_path_stop_nr]->pos.x,
+                path->path[path->cur_path_stop_nr]->pos.y,
+                10.0f,
+                al_map_rgba(0, 0, 192, 200)
+            );
+        }
+        
+        //Square on the target spot, and target distance.
+        al_draw_filled_rectangle(
+            target_pos.x - 8.0f,
+            target_pos.y - 8.0f,
+            target_pos.x + 8.0f,
+            target_pos.y + 8.0f,
+            al_map_rgba(0, 192, 0, 200)
+        );
+        al_draw_circle(
+            target_pos.x,
+            target_pos.y,
+            path->settings.final_target_distance,
+            al_map_rgba(0, 255, 0, 200),
+            1.0f
+        );
+        
+        //Diamonds for faked starts and ends.
+        if(has_flag(path->settings.flags, PATH_FOLLOW_FLAG_FAKED_START)) {
+            draw_filled_diamond(
+                path->settings.faked_start, 8, al_map_rgba(255, 0, 0, 200)
+            );
+        }
+        if(has_flag(path->settings.flags, PATH_FOLLOW_FLAG_FAKED_END)) {
+            draw_filled_diamond(
+                path->settings.faked_end, 8, al_map_rgba(0, 255, 0, 200)
+            );
+        }
+    }
+    
     notification.draw();
 }
 

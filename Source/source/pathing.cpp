@@ -387,15 +387,21 @@ void path_stop::remove_link(path_stop* other_stop) {
  *   Link to check.
  * settings:
  *   Settings about how the path should be followed.
+ * reason:
+ *   If not NULL, the reason is returned here.
  */
 bool can_traverse_path_link(
-    path_link* link_ptr, const path_follow_settings &settings
+    path_link* link_ptr, const path_follow_settings &settings,
+    PATH_BLOCK_REASONS* reason
 ) {
+    if(reason) *reason = PATH_BLOCK_REASON_NONE;
+
     //Check if there's an obstacle in the way.
     if(
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
         link_ptr->blocked_by_obstacle
     ) {
+        if(reason) *reason = PATH_BLOCK_REASON_OBSTACLE;
         return false;
     }
     
@@ -405,16 +411,19 @@ bool can_traverse_path_link(
         break;
     } case PATH_LINK_TYPE_SCRIPT_ONLY: {
         if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
+            if(reason) *reason = PATH_BLOCK_REASON_NOT_IN_SCRIPT;
             return false;
         }
         break;
     } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
         if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
+            if(reason) *reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
             return false;
         }
         break;
     } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
         if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
+            if(reason) *reason = PATH_BLOCK_REASON_NOT_AIRBORNE;
             return false;
         }
         break;
@@ -423,6 +432,7 @@ bool can_traverse_path_link(
     
     //Check if the travel is limited to links with a certain label.
     if(!settings.label.empty() && link_ptr->label != settings.label) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_RIGHT_LABEL;
         return false;
     }
     
@@ -435,6 +445,7 @@ bool can_traverse_path_link(
         end_sector = get_sector(link_ptr->end_ptr->pos, NULL, false);
         if(!end_sector) {
             //It's really the void. Nothing that can be done here then.
+            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
         }
     }
@@ -461,6 +472,7 @@ bool can_traverse_path_link(
                 }
             }
             if(!invulnerable) {
+                if(reason) *reason = PATH_BLOCK_REASON_HAZARDOUS_STOP;
                 return false;
             }
         }
@@ -508,6 +520,9 @@ void depth_first_search(
 
 /* ----------------------------------------------------------------------------
  * Uses Dijkstra's algorithm to get the shortest path between two nodes.
+ * Returns the operation's result.
+ * final_path:
+ *   The stops to visit, in order, are returned here.
  * start_node:
  *   Start node.
  * end_node:
@@ -517,16 +532,20 @@ void depth_first_search(
  * total_dist:
  *   If not NULL, place the total path distance here.
  */
-vector<path_stop*> dijkstra(
+PATH_RESULTS dijkstra(
+    vector<path_stop*> &final_path,
     path_stop* start_node, path_stop* end_node,
     const path_follow_settings &settings,
     float* total_dist
 ) {
     //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
     
+    //All nodes that have never been visited.
     unordered_set<path_stop*> unvisited;
     //Distance from starting node + previous stop on the best solution.
     map<path_stop*, std::pair<float, path_stop*> > data;
+    //Whether the end node is in the same graph as the start node or not.
+    bool in_graph = true;
     
     //Initialize the algorithm.
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
@@ -538,47 +557,56 @@ vector<path_stop*> dijkstra(
     //The distance between the start node and the start node is 0.
     data[start_node].first = 0;
     
+    //Start iterating.
     while(!unvisited.empty()) {
     
-        //Figure out what node to work on.
+        //Figure out what node to work on in this iteration.
         path_stop* shortest_node = NULL;
         float shortest_node_dist = 0;
+        std::unordered_set<path_stop*>::iterator shortest_node_it =
+            unvisited.end();
+            
         std::pair<float, path_stop*> shortest_node_data;
         
-        for(auto u : unvisited) {
-            std::pair<float, path_stop*> d = data[u];
+        for(auto u = unvisited.begin(); u != unvisited.end(); u++) {
+            std::pair<float, path_stop*> d = data[*u];
             if(!shortest_node || d.first < shortest_node_dist) {
-                shortest_node = u;
+                shortest_node = *u;
                 shortest_node_dist = d.first;
                 shortest_node_data = d;
+                shortest_node_it = u;
             }
         }
         
-        //If we reached the end node, that's it, best path found!
+        //If the node we're processing is the end node, then
+        //that's it, best path found!
         if(shortest_node == end_node) {
         
-            vector<path_stop*> final_path;
-            path_stop* next = data[end_node].second;
-            final_path.push_back(end_node);
-            float td = data[end_node].first;
             //Construct the path.
+            float td = data[end_node].first;
+            final_path.clear();
+            final_path.push_back(end_node);
+            path_stop* next = data[end_node].second;
             while(next) {
                 final_path.insert(final_path.begin(), next);
                 next = data[next].second;
             }
             
             if(final_path.size() < 2) {
-                //This can't be right... Something went wrong.
+                //If we can't work our way back to the start node, that means
+                //the end node is not in the same graph as the start node.
+                in_graph = false;
                 break;
             } else {
+                //Success!
                 if(total_dist) *total_dist = td;
-                return final_path;
+                return PATH_RESULT_NORMAL_PATH;
             }
             
         }
         
         //This node's been visited.
-        unvisited.erase(unvisited.find(shortest_node));
+        unvisited.erase(shortest_node_it);
         
         //Check the neighbors.
         for(size_t l = 0; l < shortest_node->links.size(); ++l) {
@@ -588,9 +616,7 @@ vector<path_stop*> dijkstra(
             if(unvisited.find(l_ptr->end_ptr) == unvisited.end()) continue;
             
             //Can this link be traversed?
-            if(
-                !can_traverse_path_link(l_ptr, settings)
-            ) {
+            if(!can_traverse_path_link(l_ptr, settings)) {
                 continue;
             }
             
@@ -611,32 +637,45 @@ vector<path_stop*> dijkstra(
         //Let's try again, this time ignoring obstacles.
         path_follow_settings new_settings = settings;
         enable_flag(new_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
-        return
+        PATH_RESULTS new_result =
             dijkstra(
+                final_path,
                 start_node, end_node,
                 new_settings,
                 total_dist
             );
+        if(new_result == PATH_RESULT_NORMAL_PATH) {
+            //If we only managed to succeed with this ignore-obstacle attempt,
+            //then that means a path exists, but there are obstacles.
+            return PATH_RESULT_PATH_WITH_OBSTACLES;
+        } else {
+            return new_result;
+        }
+    }
+    
+    //Nothing that can be done. No path.
+    final_path.clear();
+    if(total_dist) *total_dist = 0;
+    if(!in_graph) {
+        return PATH_RESULT_END_STOP_UNREACHABLE;
     } else {
-        //Nothing that can be done. No path.
-        if(total_dist) *total_dist = 0;
-        return vector<path_stop*>();
+        return PATH_RESULT_ERROR;
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the shortest available path between two points, following
+ * Gets the shortest available path between two points, following
  * the area's path graph.
+ * Returns the operation's result.
  * start:
  *   Start coordinates.
  * end:
  *   End coordinates.
  * settings:
  *   Settings about how the path should be followed.
- * go_straight:
- *   This is set according to whether it's better
- *   to go straight to the end point.
+ * full_path:
+ *   The stops to visit, in order, are returned here, if any.
  * total_dist:
  *   If not NULL, place the total path distance here.
  * start_stop:
@@ -644,20 +683,18 @@ vector<path_stop*> dijkstra(
  * end_stop:
  *   If not NULL, the closest stop to the end is returned here.
  */
-vector<path_stop*> get_path(
+PATH_RESULTS get_path(
     const point &start, const point &end,
     const path_follow_settings &settings,
-    bool* go_straight, float* total_dist,
+    vector<path_stop*> &full_path, float* total_dist,
     path_stop** start_stop, path_stop** end_stop
 ) {
 
-    vector<path_stop*> full_path;
+    full_path.clear();
     
     if(game.cur_area_data.path_stops.empty()) {
-        if(go_straight) *go_straight = true;
-        return full_path;
-    } else {
-        if(go_straight) *go_straight = false;
+        if(total_dist) *total_dist = 0.0f;
+        return PATH_RESULT_DIRECT_NO_STOPS;
     }
     
     point start_to_use =
@@ -700,11 +737,10 @@ vector<path_stop*> get_path(
     //just go there right away!
     dist start_to_end_dist(start_to_use, end_to_use);
     if(start_to_end_dist <= closest_to_start_dist) {
-        if(go_straight) *go_straight = true;
         if(total_dist) {
             *total_dist = start_to_end_dist.to_float();
         }
-        return full_path;
+        return PATH_RESULT_DIRECT;
     }
     
     //If the start and destination share the same closest spot,
@@ -715,7 +751,7 @@ vector<path_stop*> get_path(
             *total_dist = closest_to_start_dist.to_float();
             *total_dist += closest_to_end_dist.to_float();
         }
-        return full_path;
+        return PATH_RESULT_PATH_WITH_SINGLE_STOP;
     }
     
     //Potential optimization: instead of calculating with this graph, consult
@@ -724,8 +760,9 @@ vector<path_stop*> get_path(
     //This means traversing fewer nodes when figuring out the shortest path.
     
     //Calculate the path.
-    full_path =
+    PATH_RESULTS result =
         dijkstra(
+            full_path,
             closest_to_start, closest_to_end,
             settings, total_dist
         );
@@ -737,7 +774,7 @@ vector<path_stop*> get_path(
             dist(full_path[full_path.size() - 1]->pos, end_to_use).to_float();
     }
     
-    return full_path;
+    return result;
 }
 
 
@@ -774,4 +811,85 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
     }
     
     return closest_obs;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a string representation of a path block reason.
+ * reason:
+ *   Reason to convert.
+ */
+string path_block_reason_to_string(PATH_BLOCK_REASONS reason) {
+    switch(reason) {
+    case PATH_BLOCK_REASON_NONE: {
+        return "None";
+        break;
+    } case PATH_BLOCK_REASON_NO_PATH: {
+        return "Invalid path";
+        break;
+    } case PATH_BLOCK_REASON_OBSTACLE: {
+        return "Obstacle mob in the way";
+        break;
+    } case PATH_BLOCK_REASON_NOT_IN_SCRIPT: {
+        return "Mob path should be from script";
+        break;
+    } case PATH_BLOCK_REASON_NOT_LIGHT_LOAD: {
+        return "Mob should be light load";
+        break;
+    } case PATH_BLOCK_REASON_NOT_AIRBORNE: {
+        return "Mob should be airborne";
+        break;
+    } case PATH_BLOCK_REASON_NOT_RIGHT_LABEL: {
+        return "Mob's following links with a different label";
+        break;
+    } case PATH_BLOCK_REASON_STOP_IN_VOID: {
+        return "Next path stop is in the void";
+        break;
+    } case PATH_BLOCK_REASON_HAZARDOUS_STOP: {
+        return "Next stop is in hazardous sector";
+        break;
+    }
+    }
+    return "";
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a string representation of a path result.
+ * result:
+ *   Result to convert.
+ */
+string path_result_to_string(PATH_RESULTS result) {
+    switch(result) {
+    case PATH_RESULT_NORMAL_PATH: {
+        return "Normal open path";
+        break;
+    } case PATH_RESULT_PATH_WITH_OBSTACLES: {
+        return "Path exists, but with obstacles";
+        break;
+    } case PATH_RESULT_PATH_WITH_SINGLE_STOP: {
+        return "Only a single stop is visited";
+        break;
+    } case PATH_RESULT_DIRECT: {
+        return "Go directly";
+        break;
+    } case PATH_RESULT_DIRECT_NO_STOPS: {
+        return "No stops, so go directly";
+        break;
+    } case PATH_RESULT_END_STOP_UNREACHABLE: {
+        return "Final stop cannot be reached from first stop";
+        break;
+    } case PATH_RESULT_NO_DESTINATION: {
+        return "Destination was never set";
+        break;
+    } case PATH_RESULT_ERROR: {
+        return "Could not calculate a path";
+        break;
+    } case PATH_RESULT_NOT_CALCULATED: {
+        return "Not calculated yet";
+        break;
+    }
+    }
+    return "";
 }

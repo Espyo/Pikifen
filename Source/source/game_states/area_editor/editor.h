@@ -423,8 +423,10 @@ private:
     path_stop* path_preview_closest[2];
     //Total distance of the previewed path.
     float path_preview_dist;
-    //Is the path preview going straight?
-    bool path_preview_straight;
+    //Settings for the path preview.
+    path_follow_settings path_preview_settings;
+    //Result of the path preview's calculation.
+    PATH_RESULTS path_preview_result;
     //Only calculate the preview path when this time is up.
     timer path_preview_timer;
     //Area data before vertex movement.

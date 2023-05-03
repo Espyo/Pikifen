@@ -2,6 +2,7 @@ name = Carry target
 description = A target to deliver carried things to, with absolutely no purpose.
 
 can_block_paths = false
+can_walk_on_others = false
 casts_shadow = false
 custom_category_name = Misc
 height = 8

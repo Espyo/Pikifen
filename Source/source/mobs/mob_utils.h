@@ -84,9 +84,11 @@ struct carry_info_struct {
     point intended_point;
     //When delivering to an Onion, this is the Pikmin type that will benefit.
     pikmin_type* intended_pik_type;
+    //True if a destination does exist, false otherwise.
+    bool destination_exists;
     //Is the Pikmin meant to return somewhere after carrying?
     bool must_return;
-    //Location to return true.
+    //Location to return to once they finish carrying.
     point return_point;
     //Distance from the return point to stop at.
     float return_dist;
@@ -415,11 +417,10 @@ struct path_info_struct {
     vector<path_stop*> path;
     //Index of the current stop in the projected carrying path.
     size_t cur_path_stop_nr;
-    //If true, it's best to go straight to the target point
-    //instead of taking a path.
-    bool go_straight;
-    //Is the way forward currently blocked?
-    bool is_blocked;
+    //Result of the path calculation.
+    PATH_RESULTS result;
+    //Is the way forward currently blocked? If so, why?
+    PATH_BLOCK_REASONS block_reason;
     //Settings about how the path should be followed.
     path_follow_settings settings;
     
@@ -427,7 +428,7 @@ struct path_info_struct {
         mob* m,
         const path_follow_settings &settings
     );
-    bool check_blockage();
+    bool check_blockage(PATH_BLOCK_REASONS* reason = NULL);
 };
 
 

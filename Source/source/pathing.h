@@ -64,6 +64,53 @@ enum PATH_FOLLOW_FLAGS {
 };
 
 
+//Possible results for when a path is decided.
+//Positive values mean the mob can go, negative values means it can't.
+enum PATH_RESULTS {
+    //An open path exists, and is to be followed normally.
+    PATH_RESULT_NORMAL_PATH = 1,
+    //A path exists, but is blocked by obstacles.
+    PATH_RESULT_PATH_WITH_OBSTACLES = 2,
+    //The shortest path passes through one stop only.
+    PATH_RESULT_PATH_WITH_SINGLE_STOP = 3,
+    //The shortest path is to go directly to the end point.
+    PATH_RESULT_DIRECT = 4,
+    //Area has no stops, so go directly to the end point.
+    PATH_RESULT_DIRECT_NO_STOPS = 5,
+    //The end stop cannot be reached from the start stop. No path.
+    PATH_RESULT_END_STOP_UNREACHABLE = -1,
+    //There is nowhere to go because the destination was never set.
+    PATH_RESULT_NO_DESTINATION = -2,
+    //Something went wrong. No path.
+    PATH_RESULT_ERROR = -3,
+    //A path has not been calculated yet.
+    PATH_RESULT_NOT_CALCULATED = -4,
+};
+
+
+//Possible reasons for the path ahead to be blocked.
+enum PATH_BLOCK_REASONS {
+    //Not blocked.
+    PATH_BLOCK_REASON_NONE,
+    //There's simply no valid path.
+    PATH_BLOCK_REASON_NO_PATH,
+    //There's an obstacle object in the way.
+    PATH_BLOCK_REASON_OBSTACLE,
+    //The link requires the path to be from a script, but it isn't.
+    PATH_BLOCK_REASON_NOT_IN_SCRIPT,
+    //The link requires a light load, but the object isn't travelling light.
+    PATH_BLOCK_REASON_NOT_LIGHT_LOAD,
+    //The link requires an airborne mob, but the object isn't.
+    PATH_BLOCK_REASON_NOT_AIRBORNE,
+    //The link has a label that the object doesn't want.
+    PATH_BLOCK_REASON_NOT_RIGHT_LABEL,
+    //The next path stop is in the void.
+    PATH_BLOCK_REASON_STOP_IN_VOID,
+    //The next path stop is in a sector with hazards the mob is vulnerable to.
+    PATH_BLOCK_REASON_HAZARDOUS_STOP,
+};
+
+
 /* ----------------------------------------------------------------------------
  * Structure with settings about how a mob should follow a path.
  */
@@ -173,24 +220,28 @@ struct path_manager {
 
 
 bool can_traverse_path_link(
-    path_link* link_ptr, const path_follow_settings &settings
+    path_link* link_ptr, const path_follow_settings &settings,
+    PATH_BLOCK_REASONS* reason = NULL
 );
 void depth_first_search(
     vector<path_stop*> &nodes,
     unordered_set<path_stop*> &visited, path_stop* start
 );
-vector<path_stop*> dijkstra(
+PATH_RESULTS dijkstra(
+    vector<path_stop*> &final_path,
     path_stop* start_node, path_stop* end_node,
     const path_follow_settings &settings,
     float* total_dist
 );
-vector<path_stop*> get_path(
+PATH_RESULTS get_path(
     const point &start, const point &end,
     const path_follow_settings &settings,
-    bool* go_straight, float* get_dist,
+    vector<path_stop*> &full_path, float* total_dist,
     path_stop** start_stop, path_stop** end_stop
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
+string path_block_reason_to_string(PATH_BLOCK_REASONS reason);
+string path_result_to_string(PATH_RESULTS result);
 
 
 #endif //ifndef PATHING_H_INCLUDED

@@ -603,7 +603,7 @@ void mob::become_uncarriable() {
  * given the sort of carry destination, what Pikmin are holding on, and what
  * Pikmin got added or removed.
  * Returns true on success, false if there are no available targets or if
- *   something went wrong.
+ * something went wrong.
  * added:
  *   The Pikmin that got added, if any.
  * removed:
@@ -619,6 +619,8 @@ bool mob::calculate_carrying_destination(
     mob* added, mob* removed,
     pikmin_type** target_type, mob** target_mob, point* target_point
 ) const {
+    *target_mob = NULL;
+    *target_point = pos;
     if(!carry_info) return false;
     
     switch(carry_info->destination) {
@@ -644,7 +646,6 @@ bool mob::calculate_carrying_destination(
             return true;
             
         } else {
-            *target_mob = NULL;
             return false;
         }
         
@@ -672,7 +673,6 @@ bool mob::calculate_carrying_destination(
         
         if(available_types.empty()) {
             //No available types?! Well...make the Pikmin stuck.
-            *target_mob = NULL;
             return false;
         }
         
@@ -718,7 +718,6 @@ bool mob::calculate_carrying_destination(
 
         //If it's towards a linked mob, just go there.
         if(links.empty() || !links[0]) {
-            *target_mob = NULL;
             return false;
         }
         
@@ -732,7 +731,6 @@ bool mob::calculate_carrying_destination(
 
         //Towards one of the linked mobs that matches the decided Pikmin type.
         if(links.empty() || !links[0]) {
-            *target_mob = NULL;
             return false;
         }
         
@@ -758,7 +756,6 @@ bool mob::calculate_carrying_destination(
         
         if(available_types.empty()) {
             //No available types?! Well...make the Pikmin stuck.
-            *target_mob = NULL;
             return false;
         }
         
@@ -1595,7 +1592,7 @@ bool mob::follow_path(
     
     //Some setup before we begin.
     if(has_flag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE) && path_info) {
-        was_blocked = path_info->is_blocked;
+        was_blocked = path_info->block_reason != PATH_BLOCK_REASON_NONE;
         if(path_info->cur_path_stop_nr < path_info->path.size()) {
             old_next_stop = path_info->path[path_info->cur_path_stop_nr];
         }
@@ -1664,14 +1661,16 @@ bool mob::follow_path(
     }
     
     if(path_info->path.size() >= 2 && path_info->cur_path_stop_nr > 0) {
-        if(path_info->check_blockage()) {
-            path_info->is_blocked = true;
+        if(path_info->check_blockage(&path_info->block_reason)) {
             fsm.run_event(MOB_EV_PATH_BLOCKED);
         }
     }
     
+    bool direct =
+        path_info->result == PATH_RESULT_DIRECT ||
+        path_info->result == PATH_RESULT_DIRECT_NO_STOPS;
     //Now, let's figure out how the mob should start its journey.
-    if(path_info->go_straight) {
+    if(direct) {
         //The path info is telling us to just go to the destination directly.
         move_to_path_end(speed, acceleration);
         
@@ -3399,17 +3398,24 @@ void mob::tick_brain(const float delta_t) {
             
         } else {
             //Reached the chase location.
-            
-            if(path_info && !path_info->go_straight && !path_info->is_blocked) {
+            bool direct =
+                path_info &&
+                (
+                    path_info->result == PATH_RESULT_DIRECT ||
+                    path_info->result == PATH_RESULT_DIRECT_NO_STOPS
+                );
+            if(
+                path_info && !direct &&
+                path_info->block_reason == PATH_BLOCK_REASON_NONE
+            ) {
             
                 path_info->cur_path_stop_nr++;
                 
                 if(path_info->cur_path_stop_nr < path_info->path.size()) {
                     //Reached a regular stop while traversing the path.
                     //Think about going to the next, if possible.
-                    if(path_info->check_blockage()) {
-                        //Oop, there's an obstacle!
-                        path_info->is_blocked = true;
+                    if(path_info->check_blockage(&path_info->block_reason)) {
+                        //Oop, there's an obstacle! Or some other blockage.
                         fsm.run_event(MOB_EV_PATH_BLOCKED);
                     } else {
                         //All good. Head to the next stop.

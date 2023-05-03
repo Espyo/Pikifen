@@ -837,12 +837,12 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             float real_fail_ratio = 0.0f;
             int fail_cur_amount =
                 game.mission_fail_conds[
-            game.cur_area_data.mission.fail_hud_primary_cond
-            ]->get_cur_amount(this);
+                    game.cur_area_data.mission.fail_hud_primary_cond
+                ]->get_cur_amount(this);
             int fail_req_amount =
                 game.mission_fail_conds[
-            game.cur_area_data.mission.fail_hud_primary_cond
-            ]->get_req_amount(this);
+                    game.cur_area_data.mission.fail_hud_primary_cond
+                ]->get_req_amount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
             }
@@ -855,12 +855,12 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             float real_fail_ratio = 0.0f;
             int fail_cur_amount =
                 game.mission_fail_conds[
-            game.cur_area_data.mission.fail_hud_secondary_cond
-            ]->get_cur_amount(this);
+                    game.cur_area_data.mission.fail_hud_secondary_cond
+                ]->get_cur_amount(this);
             int fail_req_amount =
                 game.mission_fail_conds[
-            game.cur_area_data.mission.fail_hud_secondary_cond
-            ]->get_req_amount(this);
+                    game.cur_area_data.mission.fail_hud_secondary_cond
+                ]->get_req_amount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
             }
@@ -1169,6 +1169,72 @@ void gameplay_state::do_menu_logic() {
             "Vars: " + vars_str,
             5.0f, 3.0f
         );
+    }
+    
+    //Print path info.
+    if(game.maker_tools.info_lock && game.maker_tools.path_info) {
+        if(game.maker_tools.info_lock->path_info) {
+        
+            path_info_struct* path = game.maker_tools.info_lock->path_info;
+            string result_str = path_result_to_string(path->result);
+            
+            string stops_str =
+                box_string(i2s(path->cur_path_stop_nr + 1), 3) +
+                "/" +
+                box_string(i2s(path->path.size()), 3);
+                
+            string settings_str;
+            auto flags = path->settings.flags;
+            if(has_flag(flags, PATH_FOLLOW_FLAG_CAN_CONTINUE)) {
+                settings_str += "can continue, ";
+            }
+            if(has_flag(flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES)) {
+                settings_str += "ignore obstacles, ";
+            }
+            if(has_flag(flags, PATH_FOLLOW_FLAG_FOLLOW_MOB)) {
+                settings_str += "follow mob, ";
+            }
+            if(has_flag(flags, PATH_FOLLOW_FLAG_FAKED_START)) {
+                settings_str += "faked start, ";
+            }
+            if(has_flag(flags, PATH_FOLLOW_FLAG_FAKED_END)) {
+                settings_str += "faked end, ";
+            }
+            if(has_flag(flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
+                settings_str += "script, ";
+            }
+            if(has_flag(flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
+                settings_str += "light load, ";
+            }
+            if(has_flag(flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
+                settings_str += "airborne, ";
+            }
+            if(settings_str.size() > 2) {
+                //Remove the extra comma and space.
+                settings_str.pop_back();
+                settings_str.pop_back();
+            } else {
+                settings_str = "none";
+            }
+            
+            string block_str = path_block_reason_to_string(path->block_reason);
+                
+            print_info(
+                "Path calculation result: " + result_str +
+                "\n" +
+                "Heading to stop " + stops_str +
+                "\n" +
+                "Settings: " + settings_str +
+                "\n" +
+                "Block reason: " + block_str,
+                5.0f, 3.0f
+            );
+            
+        } else {
+        
+            print_info("Mob is not following any path.", 5.0f, 3.0f);
+            
+        }
     }
     
     //Print mouse coordinates.

@@ -92,6 +92,8 @@ enum MAKER_TOOL_TYPES {
     MAKER_TOOL_MOB_INFO,
     //Create a new Pikmin beneath mouse cursor.
     MAKER_TOOL_NEW_PIKMIN,
+    //Show path info.
+    MAKER_TOOL_PATH_INFO,
     //Teleport to mouse cursor.
     MAKER_TOOL_TELEPORT,
     
@@ -346,6 +348,8 @@ struct maker_tools_info {
     pikmin_type* last_pikmin_type;
     //When hurting mobs with the hurting tool, dock this much of its max HP off.
     float mob_hurting_ratio;
+    //Show path info?
+    bool path_info;
     //Use the performance monitor?
     bool use_perf_mon;
     //Has the player made use of any tools that could help them play?

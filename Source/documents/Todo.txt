@@ -3,8 +3,13 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Put new objects in the DEV Lab
+    Path stuff for DEV Lab:
+        Path with stops that are underwater, as well as a clog to remove the water hazard from said stops
+        Paths with parallel limits
+        Paths to test all path result cases
+        Paths to test all block reasons
+    Give can_walk_on_others = false to a whole lot more mobs
     Carriable rocks sway when dropped
-    Carriable rocks are all weird, sometimes going elsewhere and getting stuck
     Particles on the button to be more satisfying
     Particles on the auto gate for when it lands
 
@@ -18,7 +23,6 @@ Next tasks (roughly sorted most important first)
     Eggs and bomb rocks that spawn out of another mob will slide forever
     If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
     If you disable the area editor undo feature, areas are no longer recognized as changed (e.g. when you try to quit with unsaved changes)
-    The script-only and light-only paths in DEV Lab isn't working -- Pikmin are just focusing on the last stop they can go to and so take the wrong (or no) path
     The Shift+P shortcut in the area editor shouldn't trigger if you're writing in a textbox
     The "mob stuck in wall" area editor review error should only trigger if said wall isn't within stepping height (check Tutorial Meadow)
     Paper bag dirt particles still use the old size
@@ -28,6 +32,7 @@ Next tasks (roughly sorted most important first)
     Preview mode doesn't show water half of the time
     
     --- v0.24.0 ---
+    If a stop is placed on top of a link, it should ask if it should split the link. Also if the new link intersects a stop. Or a stop on a stop. But not if the new link intersects another link. Do this both for drawing and dragging
     Are flower Pikmin even completing tasks any faster?
     Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
@@ -665,7 +670,6 @@ Misc things (so I don't forget)
             Pressing G should let you drag the currently selected things, instead of you being forced to precisely click on the tiny thing (e.g. Pikmin mob gen) before you can drag (thanks Neo)
             Shift+Ctrl+drag should start a selection box that adds to the current selection (thanks Neo)
             Allow pointless edges (and remove the "wouldn't split in any useful way" warning). This way, it's easier to create fade sectors, for instance
-            A way to blacklist path links for the tool that shows the shortest path
             View -> Show X in other modes
                 This would allow one to see edges+vertexes, mobs, and paths in modes that aren't layout, mobs, and paths, respectively
             A way to visually show that you're in the layout mode, mobs mode, etc. I tried a vignette in the canvas, colored after the mode, but it's too ugly. Maybe coloring the Dear ImGui widgets based on the mode?
@@ -764,10 +768,6 @@ Tasks for later on (I might never implement these)
         If you write an event name wrong (or other things), give suggestions ("did you mean X?")
             This may become useless if there's a script editor
         Check if the throw particles can be customized (thanks Neo)
-    "Puzzle"-type challenges. You might have a limited number of Pikmin, certain obstacles and paths, and you need to think what Pikmin to put where and when to proceed. Like Portal.
-        Door objects
-        Button objects (with a certain number of Pikmin needed to keep it depressed)
-        Marks on the floor -- Red Pikmin carry things to the red mark, Yellows to the yellow mark, etc.
     Roguelike mode
         Randomly generated sublevels; there's an endless amount of them until you die or run out of Pikmin
         Each sublevel has an item somewhere that when returned, improves something

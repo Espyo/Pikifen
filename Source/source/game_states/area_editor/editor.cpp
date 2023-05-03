@@ -126,7 +126,7 @@ area_editor::area_editor() :
     octee_mode(OCTEE_MODE_OFFSET),
     path_drawing_normals(true),
     path_drawing_type(PATH_LINK_TYPE_NORMAL),
-    path_preview_straight(false),
+    path_preview_result(PATH_RESULT_NOT_CALCULATED),
     pre_move_area_data(nullptr),
     preview_mode(false),
     problem_edge_intersection(NULL, NULL),
@@ -147,6 +147,7 @@ area_editor::area_editor() :
     thumbnail_needs_saving(false),
     thumbnail_backup_needs_saving(false) {
     
+    enable_flag(path_preview_settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
     path_preview_timer =
     timer(AREA_EDITOR::PATH_PREVIEW_TIMER_DUR, [this] () {
         path_preview_dist = calculate_preview_path();

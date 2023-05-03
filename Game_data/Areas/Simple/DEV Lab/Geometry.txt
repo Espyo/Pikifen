@@ -9452,7 +9452,7 @@ sectors{
 		texture_scale=0.7500 0.7500
 	}
 	s{
-		z=50.0000
+		z=-100.0000
 		texture=Stone.jpg
 		texture_scale=0.7500 0.7500
 	}
@@ -10955,6 +10955,7 @@ mobs{
 	Resource{
 		type=Ceramic fragment red
 		p=-1024.0000 416.0000
+		links=277
 	}
 	Custom{
 		type=Carry target
@@ -10998,6 +10999,7 @@ mobs{
 		type=Carry target
 		p=-928.0000 928.0000
 		angle=1.5708
+		vars=carry_destination_type=Red Pikmin
 	}
 	Custom{
 		type=Carry target
@@ -11238,6 +11240,16 @@ mobs{
 		type=Charlie
 		p=-1408.0000 1536.0000
 	}
+	Resource{
+		type=Carriable rock
+		p=-800.0000 928.0000
+		links=285
+	}
+	Resource{
+		type=Ceramic fragment red
+		p=-800.0000 1184.0000
+		links=298
+	}
 }
 path_stops{
 	s{
@@ -11352,6 +11364,7 @@ path_stops{
 		pos=-1184.0000 416.0000
 		links{
 			nr=17
+			nr=15
 		}
 	}
 	s{
@@ -11411,6 +11424,7 @@ path_stops{
 		links{
 			nr=24
 			nr=26
+			nr=102
 		}
 	}
 	s{
@@ -11944,6 +11958,12 @@ path_stops{
 		links{
 			nr=100
 			nr=95
+		}
+	}
+	s{
+		pos=-800.0000 864.0000
+		links{
+			nr=25
 		}
 	}
 }

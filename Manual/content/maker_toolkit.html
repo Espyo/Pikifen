@@ -126,6 +126,37 @@
       <li>Settings: none.</li>
     </ul>
     
+    <h3 id="path-info">Path info</h3>
+    
+    <p>When on, prints out important information about the path that the <a href="#mob-info">locked-on mob</a> is taking. It also draws its path on the area. Pressing the button toggles the feature on and off.</p>
+
+    <p>The information at the top is:</p>
+
+    <ul>
+      <li>The result of the path calculation, which helps explain how and why the object chose that path, or failed to find one.</li>
+      <li>The number of the stop it is heading to, and the total number of stops. These numbers refer to the stops in the list of the object's current path.</li>
+      <li>A list of settings about the path, like whether it's airborne, or a light load. Some of the settings listed are more internal for the engine.</li>
+      <li>Whether the path is currently blocked, and if so, why.</li>
+    </ul>
+    
+    <p>Drawn on the area are:</p>
+
+    <ul>
+      <li>Faint blue lines chart out the full path.</li>
+      <li>A colored red circle represents the first path stop in the path.</li>
+      <li>A colored green circle represents the last path stop in the path.</li>
+      <li>A thick blue line represents the direction towards the next stop, or the destination. If it's a stop, that stop is also highlighted with a smaller blue circle.</li>
+      <li>A square on the destination spot, with a thin circle representing the distance for which the object considers the pathing finished.</li>
+      <li>A red diamond shape if the starting position had to be faked, and a green one for the ending position. This is used, for instance, by ceramic bridges to make sure the Pikmin walks across the half-built bridge to deliver their fragment, even if it's out of the path.</li>
+    </ul>
+
+    <p>If an object is not following a path like you expect it to, using this tool will help you figure out why.</p>
+    
+    <ul>
+      <li>Tool ID: <code>path_info</code>.</li>
+      <li>Settings: none.</li>
+    </ul>
+
     <h3 id="collision">Show collision</h3>
     
     <p>Toggles visibility of mob collision boxes/bubbles. This is just a simple unfilled circle or rectangle, and for objects that push with their hitboxes, each hitbox's bubble will be shown too.</p>

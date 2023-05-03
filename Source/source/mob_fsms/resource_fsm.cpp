@@ -292,6 +292,8 @@ void resource_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
 void resource_fsm::start_waiting(mob* m, void* info1, void* info2) {
     resource* res_ptr = (resource*) m;
     
+    if(res_ptr->to_delete) return;
+    
     if(res_ptr->origin_pile) {
         res_ptr->carry_info->must_return = true;
         res_ptr->carry_info->return_point = res_ptr->origin_pile->pos;

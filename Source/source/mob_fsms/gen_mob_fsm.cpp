@@ -83,7 +83,9 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     enable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR) :
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
-    if(m->carry_info->intended_mob == NULL) {
+    if(!m->carry_info->destination_exists) {
+        m->path_info->result = PATH_RESULT_NO_DESTINATION;
+        m->path_info->block_reason = PATH_BLOCK_REASON_NO_PATH;
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);
         return;
     }
@@ -147,7 +149,11 @@ void gen_mob_fsm::carry_get_path(mob* m, void* info1, void* info2) {
         settings, m->carry_info->get_speed(), m->chase_info.acceleration
     );
     
-    if(m->path_info->path.empty() && !m->path_info->go_straight) {
+    if(!m->carry_info->destination_exists) {
+        m->path_info->result = PATH_RESULT_NO_DESTINATION;
+    }
+    if(m->path_info->result < 0) {
+        m->path_info->block_reason = PATH_BLOCK_REASON_NO_PATH;
         m->fsm.run_event(MOB_EV_PATH_BLOCKED);
     }
 }
@@ -268,12 +274,13 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     m->chase_info.max_speed = m->carry_info->get_speed();
     m->chase_info.acceleration = MOB::CARRIED_MOB_ACCELERATION;
     
-    m->calculate_carrying_destination(
-        pik_ptr, NULL,
-        &m->carry_info->intended_pik_type,
-        &m->carry_info->intended_mob, &m->carry_info->intended_point
-    );
-    
+    m->carry_info->destination_exists =
+        m->calculate_carrying_destination(
+            pik_ptr, NULL,
+            &m->carry_info->intended_pik_type,
+            &m->carry_info->intended_mob, &m->carry_info->intended_point
+        );
+        
     //Check if we need to update the path.
     bool must_update = false;
     

@@ -100,6 +100,7 @@ const string NAMES[N_MAKER_TOOLS] = {
     "hurt_mob",
     "mob_info",
     "new_pikmin",
+    "path_info",
     "teleport"
 };
 }
@@ -667,6 +668,7 @@ maker_tools_info::maker_tools_info() :
     info_print_fade_duration(3.0f),
     last_pikmin_type(nullptr),
     mob_hurting_ratio(0.75),
+    path_info(false),
     use_perf_mon(false),
     used_helping_tools(false) {
     
@@ -689,6 +691,7 @@ void maker_tools_info::reset_for_gameplay() {
     hud = true;
     info_lock = NULL;
     last_pikmin_type = NULL;
+    path_info = NULL;
     used_helping_tools = false;
 }
 

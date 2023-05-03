@@ -141,6 +141,11 @@ void gameplay_state::process_system_key_press(const int keycode) {
             
             break;
             
+        } case MAKER_TOOL_PATH_INFO: {
+            game.maker_tools.path_info = !game.maker_tools.path_info;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
         } case MAKER_TOOL_TELEPORT: {
             sector* mouse_sector =
                 get_sector(game.mouse_cursor_w, NULL, true);

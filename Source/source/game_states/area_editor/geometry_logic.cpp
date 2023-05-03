@@ -61,25 +61,21 @@ bool area_editor::are_nodes_traversable(
 
 
 /* ----------------------------------------------------------------------------
- * Calculates the preview path.
+ * Calculates the preview path. Returns the final distance.
  */
 float area_editor::calculate_preview_path() {
     if(!show_path_preview) return 0;
     
     float d = 0;
-    path_follow_settings settings;
-    settings.flags =
-        PATH_FOLLOW_FLAG_SCRIPT_USE |
-        PATH_FOLLOW_FLAG_LIGHT_LOAD |
-        PATH_FOLLOW_FLAG_AIRBORNE;
-    //We don't need to worry about specifying the invulnerabilities, since
+    
+    //We don't have a way to specify the invulnerabilities, since
     //hazards aren't saved to the sector data in the area editor.
-    path_preview =
+    path_preview_result =
         get_path(
             path_preview_checkpoints[0],
             path_preview_checkpoints[1],
-            settings,
-            &path_preview_straight, &d,
+            path_preview_settings,
+            path_preview, &d,
             &path_preview_closest[0], &path_preview_closest[1]
         );
         
@@ -901,13 +897,13 @@ void area_editor::find_problems() {
                 PATH_FOLLOW_FLAG_SCRIPT_USE |
                 PATH_FOLLOW_FLAG_LIGHT_LOAD |
                 PATH_FOLLOW_FLAG_AIRBORNE;
-            vector<path_stop*> path =
-                get_path(
-                    m_ptr->pos, m_ptr->links[l]->pos,
-                    settings,
-                    NULL, NULL, NULL, NULL
-                );
-                
+            vector<path_stop*> path;
+            get_path(
+                m_ptr->pos, m_ptr->links[l]->pos,
+                settings, path,
+                NULL, NULL, NULL
+            );
+            
             for(size_t s = 1; s < path.size(); ++s) {
                 if(
                     circle_intersects_line_seg(

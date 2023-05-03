@@ -260,10 +260,10 @@ void area_editor::process_gui_delete_area_dialog() {
 void area_editor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
-    [this](const string & name) -> string {
+    [this](const string &name) -> string {
         return get_path_short_name(name);
     },
-    [this](const string & name) {
+    [this](const string &name) {
         string folder_name;
         AREA_TYPES type;
         get_area_info_from_path(
@@ -4300,84 +4300,6 @@ void area_editor::process_gui_panel_paths() {
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
-        //Path tools node.
-        if(saveable_tree_node("paths", "Tools")) {
-        
-            //Show closest stop checkbox.
-            ImGui::Checkbox("Show closest stop", &show_closest_stop);
-            set_tooltip(
-                "Show the closest stop to the cursor.\n"
-                "Useful to know which stop "
-                "Pikmin will go to when starting to carry."
-            );
-            
-            //Show calculated path checkbox.
-            if(ImGui::Checkbox("Show calculated path", &show_path_preview)) {
-                if(
-                    show_path_preview &&
-                    path_preview_checkpoints[0].x == LARGE_FLOAT
-                ) {
-                    //No previous location. Place them on-camera.
-                    path_preview_checkpoints[0].x =
-                        game.cam.pos.x - AREA_EDITOR::COMFY_DIST;
-                    path_preview_checkpoints[0].y =
-                        game.cam.pos.y;
-                    path_preview_checkpoints[1].x =
-                        game.cam.pos.x + AREA_EDITOR::COMFY_DIST;
-                    path_preview_checkpoints[1].y =
-                        game.cam.pos.y;
-                }
-                path_preview_dist = calculate_preview_path();
-            }
-            set_tooltip(
-                "Show the path to take to travel from point A to point B.\n"
-                "These points can be dragged in the canvas."
-            );
-            
-            //Total travel distance text.
-            if(show_path_preview) {
-                ImGui::Indent();
-                if(path_preview.empty() && !path_preview_straight) {
-                    ImGui::Text("No valid path between A and B.");
-                    ImGui::Text(" ");
-                } else {
-                    ImGui::Text(
-                        "Total travel distance: %f",
-                        path_preview_dist
-                    );
-                    ImGui::Text(
-                        "Total stops visited: %lu",
-                        path_preview.size()
-                    );
-                }
-                ImGui::Unindent();
-            }
-            
-            //Select links with label button.
-            if(ImGui::Button("Select all links with label...")) {
-                ImGui::OpenPopup("selectLinks");
-            }
-            set_tooltip(
-                "Selects all links (and their stops) that have the\n"
-                "specified label. The search is case-sensitive."
-            );
-            
-            //Select links with label popup.
-            string label_name;
-            if(input_popup("selectLinks", "Label:", &label_name)) {
-                select_path_links_with_label(label_name);
-            }
-            
-            //Spacer dummy widget.
-            ImGui::Dummy(ImVec2(0, 16));
-            
-            ImGui::TreePop();
-            
-        }
-        
-        //Spacer dummy widget.
-        ImGui::Dummy(ImVec2(0, 16));
-        
         //Link properties node.
         if(saveable_tree_node("paths", "Link properties")) {
         
@@ -4427,6 +4349,186 @@ void area_editor::process_gui_panel_paths() {
                 }
             }
             
+            
+            ImGui::TreePop();
+            
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Path preview node.
+        if(saveable_tree_node("paths", "Path preview")) {
+        
+            //Show preview path checkbox.
+            if(ImGui::Checkbox("Show preview path", &show_path_preview)) {
+                if(
+                    show_path_preview &&
+                    path_preview_checkpoints[0].x == LARGE_FLOAT
+                ) {
+                    //No previous location. Place them on-camera.
+                    path_preview_checkpoints[0].x =
+                        game.cam.pos.x - AREA_EDITOR::COMFY_DIST;
+                    path_preview_checkpoints[0].y =
+                        game.cam.pos.y;
+                    path_preview_checkpoints[1].x =
+                        game.cam.pos.x + AREA_EDITOR::COMFY_DIST;
+                    path_preview_checkpoints[1].y =
+                        game.cam.pos.y;
+                }
+                path_preview_dist = calculate_preview_path();
+            }
+            set_tooltip(
+                "Show the path objects will take to travel from point A\n"
+                "to point B. These points can be dragged in the canvas.\n"
+                "Hazards and obstacles will not be taken into consideration\n"
+                "when calculating the preview path."
+            );
+            
+            //Spacer dummy widget.
+            ImGui::Dummy(ImVec2(0, 16));
+            
+            if(show_path_preview) {
+            
+                unsigned int flags_i = path_preview_settings.flags;
+                
+                //Can use script links checkbox.
+                if(
+                    ImGui::CheckboxFlags(
+                        "Can use script links",
+                        &flags_i,
+                        PATH_FOLLOW_FLAG_SCRIPT_USE
+                    )
+                ) {
+                    path_preview_settings.flags = flags_i;
+                    path_preview_dist = calculate_preview_path();
+                }
+                set_tooltip(
+                    "Whether the path preview feature is allowed to use\n"
+                    "script-only path links."
+                );
+                
+                //Can use light-load links checkbox.
+                if(
+                    ImGui::CheckboxFlags(
+                        "Can use light load links",
+                        &flags_i,
+                        PATH_FOLLOW_FLAG_LIGHT_LOAD
+                    )
+                ) {
+                    path_preview_settings.flags = flags_i;
+                    path_preview_dist = calculate_preview_path();
+                }
+                set_tooltip(
+                    "Whether the path preview feature is allowed to use\n"
+                    "light-load-only path links."
+                );
+                
+                //Can use airborne links checkbox.
+                if(
+                    ImGui::CheckboxFlags(
+                        "Can use airborne links",
+                        &flags_i,
+                        PATH_FOLLOW_FLAG_AIRBORNE
+                    )
+                ) {
+                    path_preview_settings.flags = flags_i;
+                    path_preview_dist = calculate_preview_path();
+                }
+                set_tooltip(
+                    "Whether the path preview feature is allowed to use\n"
+                    "airborne-only path links."
+                );
+                
+                //Use links with this name input.
+                if(
+                    ImGui::InputText(
+                        "Label",
+                        &path_preview_settings.label
+                    )
+                ) {
+                    path_preview_dist = calculate_preview_path();
+                }
+                set_tooltip(
+                    "To limit the path preview feature to only use links with\n"
+                    "a given label, write its name here, or leave it empty\n"
+                    "for no label enforcement."
+                );
+                
+                //Spacer dummy widget.
+                ImGui::Dummy(ImVec2(0, 16));
+                
+                string result;
+                float total_dist = 0.0f;
+                size_t total_nr_stops = 0;
+                bool success = false;
+
+                if(path_preview_result > 0) {
+                    total_dist = path_preview_dist;
+                    total_nr_stops = path_preview.size();
+                    success = true;
+                }
+
+                result = path_result_to_string(path_preview_result);
+                
+                //Path result header text.
+                ImGui::Text("Result:");
+                
+                //Path result text.
+                ImGui::BulletText("%s", result.c_str());
+                
+                //Path total travel distance text.
+                if(success) {
+                    ImGui::BulletText(
+                        "Total travel distance: %f", total_dist
+                    );
+                } else {
+                    ImGui::Text(" ");
+                }
+                
+                //Path total stops visited text.
+                if(success) {
+                    ImGui::BulletText(
+                        "Total stops visited: %lu", total_nr_stops
+                    );
+                } else {
+                    ImGui::Text(" ");
+                }
+                
+            }
+            
+            ImGui::TreePop();
+            
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Path tools node.
+        if(saveable_tree_node("paths", "Tools")) {
+        
+            //Show closest stop checkbox.
+            ImGui::Checkbox("Show closest stop", &show_closest_stop);
+            set_tooltip(
+                "Show the closest stop to the cursor.\n"
+                "Useful to know which stop "
+                "Pikmin will go to when starting to carry."
+            );
+            
+            //Select links with label button.
+            if(ImGui::Button("Select all links with label...")) {
+                ImGui::OpenPopup("selectLinks");
+            }
+            set_tooltip(
+                "Selects all links (and their stops) that have the\n"
+                "specified label. The search is case-sensitive."
+            );
+            
+            //Select links with label popup.
+            string label_name;
+            if(input_popup("selectLinks", "Label:", &label_name)) {
+                select_path_links_with_label(label_name);
+            }
             
             ImGui::TreePop();
             

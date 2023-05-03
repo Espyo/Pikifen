@@ -54,6 +54,7 @@ carry_info_struct::carry_info_struct(
     is_moving(false),
     intended_mob(nullptr),
     intended_pik_type(nullptr),
+    destination_exists(false),
     must_return(false),
     return_dist(0) {
     
@@ -758,22 +759,24 @@ path_info_struct::path_info_struct(
 ) :
     m(m),
     cur_path_stop_nr(0),
-    go_straight(false),
-    is_blocked(false),
+    result(PATH_RESULT_NOT_CALCULATED),
+    block_reason(PATH_BLOCK_REASON_NONE),
     settings(settings) {
     
-    path =
+    result =
         get_path(
             m->pos, settings.target_point, settings,
-            &go_straight, NULL, NULL, NULL
+            path, NULL, NULL, NULL
         );
 }
 
 
 /* ----------------------------------------------------------------------------
  * Calculates whether or not the way forward is currently blocked.
+ * reason:
+ *   If not NULL, the reason is returned here.
  */
-bool path_info_struct::check_blockage() {
+bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* reason) {
     if(
         path.size() >= 2 &&
         cur_path_stop_nr > 0 &&
@@ -785,9 +788,12 @@ bool path_info_struct::check_blockage() {
         return
             !can_traverse_path_link(
                 cur_stop->get_link(next_stop),
-                settings
+                settings,
+                reason
             );
     }
+
+    if(reason) *reason = PATH_BLOCK_REASON_NONE;
     return false;
 }
 

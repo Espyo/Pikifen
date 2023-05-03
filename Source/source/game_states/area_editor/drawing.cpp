@@ -816,7 +816,7 @@ void area_editor::draw_canvas() {
                     }
                     }
                     if(!one_way) {
-                        color = change_color_lighting(color, 0.2f);
+                        color = change_color_lighting(color, 0.33f);
                     }
                 }
                 
@@ -988,7 +988,10 @@ void area_editor::draw_canvas() {
                     path_preview_checkpoints[1].y,
                     lines_color, lines_thickness
                 );
-            } else if(path_preview_straight) {
+            } else if(
+                path_preview_result == PATH_RESULT_DIRECT ||
+                path_preview_result == PATH_RESULT_DIRECT_NO_STOPS
+            ) {
                 al_draw_line(
                     path_preview_checkpoints[0].x,
                     path_preview_checkpoints[0].y,
