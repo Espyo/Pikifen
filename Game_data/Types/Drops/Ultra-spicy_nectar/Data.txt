@@ -1,6 +1,7 @@
 name = Ultra-spicy nectar
 description = One instant dosage of ultra-spicy spray.
 
+can_walk_on_others = true
 consumer = leaders
 effect = increase_sprays
 increase_amount = 1

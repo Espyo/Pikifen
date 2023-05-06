@@ -7,6 +7,7 @@ allow_ground_attacks = false
 can_free_move = true
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile
+can_walk_on_others = true
 custom_category_name = Enemy, large and aggressive
 health_regen = 0.4
 height = 140

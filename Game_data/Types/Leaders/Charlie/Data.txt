@@ -2,6 +2,7 @@ name = Charlie
 description = A sturdy captain from Koppai. Has a hardy exterior, but a soft heart.
 
 acceleration = 800
+can_walk_on_others = true
 dismiss_sfx = Olimar_dismiss.ogg
 height = 46
 main_color = 119 238 102

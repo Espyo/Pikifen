@@ -3,6 +3,7 @@ description = This large Water Dumple can produce electricity from its whiskers 
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
+can_walk_on_others = true
 custom_category_name = Enemy, small and aggressive
 drops_corpse = true
 height = 56

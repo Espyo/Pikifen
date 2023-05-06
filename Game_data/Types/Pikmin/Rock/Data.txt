@@ -3,6 +3,7 @@ description = Rock Pikmin are resistant to being crushed and stabbed. They also 
 
 attack_method = impact
 can_carry_tools = true
+can_walk_on_others = true
 carry_speed = 4
 carry_strength = 1
 health_regen = 10

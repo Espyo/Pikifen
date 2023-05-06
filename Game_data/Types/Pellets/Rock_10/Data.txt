@@ -1,6 +1,7 @@
 name = Rock 10 pellet
 description = A gray 10 pellet that can be used to grow more Pikmin. Generates more Rock Pikmin than other types.
 
+can_walk_on_others = true
 height = 64
 match_seeds = 10
 max_carriers = 20

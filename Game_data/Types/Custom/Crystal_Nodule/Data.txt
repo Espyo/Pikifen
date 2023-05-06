@@ -3,6 +3,7 @@ description = A small crystal pebble that can be used as ammo by Skutterchucks.
 
 can_block_paths = false
 can_hurt = player; enemy; weak_plain_obstacle; fragile
+can_walk_on_others = true
 custom_category_name = Obstacle, harmless
 default_vulnerability = 0
 height = 40

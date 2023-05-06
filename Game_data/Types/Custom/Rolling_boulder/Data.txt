@@ -3,6 +3,7 @@ description = A boulder that rolls forward until it hits a wall, crushing things
 
 acceleration = 800
 appears_in_area_editor = false
+can_walk_on_others = true
 custom_category_name = Obstacle, dangerous
 height = 64
 max_health = 100

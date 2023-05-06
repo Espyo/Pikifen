@@ -4,6 +4,7 @@ description = This beetle's carapace is so hard that no Pikmin can damage it. If
 allow_ground_attacks = false
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
+can_walk_on_others = true
 custom_category_name = Enemy, large and aggressive
 drops_corpse = true
 health_regen = 0

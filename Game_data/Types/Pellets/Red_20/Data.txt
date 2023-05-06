@@ -1,6 +1,7 @@
 name = Red 20 pellet
 description = A red 20 pellet that can be used to grow more Pikmin. Generates more Red Pikmin than other types.
 
+can_walk_on_others = true
 height = 64
 match_seeds = 20
 max_carriers = 50

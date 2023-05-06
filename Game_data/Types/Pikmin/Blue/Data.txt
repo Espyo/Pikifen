@@ -2,6 +2,7 @@ name = Blue Pikmin
 description = Blue Pikmin can swim and withstand any water-based attack.
 
 can_carry_tools = true
+can_walk_on_others = true
 carry_speed = 4
 carry_strength = 1
 health_regen = 10

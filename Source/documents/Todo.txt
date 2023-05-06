@@ -2,7 +2,6 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Give can_walk_on_others = false to a whole lot more mobs
     Carriable rocks sway when dropped
     Particles on the button to be more satisfying
     Particles on the auto gate for when it lands

@@ -1,6 +1,7 @@
 name = Rock 1 pellet
 description = A gray 1 pellet that can be used to grow more Pikmin. Generates more Rock Pikmin than other types.
 
+can_walk_on_others = true
 height = 32
 match_seeds = 2
 max_carriers = 2

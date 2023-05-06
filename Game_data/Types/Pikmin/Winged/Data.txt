@@ -3,6 +3,7 @@ description = Winged Pikmin can fly. As such, they can carry objects above water
 
 can_carry_tools = true
 can_fly = true
+can_walk_on_others = true
 carry_speed = 3
 carry_strength = 1
 health_regen = 10

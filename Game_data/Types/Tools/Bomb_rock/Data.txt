@@ -3,6 +3,7 @@ description = If dropped by a Pikmin, or even just attacked, its fuse will start
 
 can_be_hotswapped = true
 can_hurt = player; enemy; weak_plain_obstacle; strong_plain_obstacle; explodable; explodable_pikmin_obstacle; fragile
+can_walk_on_others = true
 custom_category_name = Useful
 dropped_when_pikmin_lands = true
 dropped_when_pikmin_lands_on_opponent = true

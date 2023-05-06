@@ -2,6 +2,7 @@ name = Egg
 description = Contains nectar, though it can also contain a spray drop.
 
 custom_category_name = Useful
+can_walk_on_others = true
 height = 40
 max_health = 50
 pushable = true

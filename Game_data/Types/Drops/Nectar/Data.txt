@@ -1,6 +1,7 @@
 name = Nectar
 description = Nectar that can be drunk by Pikmin to instantly mature them to the flower stage.
 
+can_walk_on_others = true
 consumer = pikmin
 effect = maturate
 increase_amount = 2

@@ -4,6 +4,7 @@ description = It has the body of a small Red Bulborb, but is actually controlled
 acceleration = 100
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
+can_walk_on_others = true
 custom_category_name = Enemy, small and aggressive
 drops_corpse = true
 has_group = true

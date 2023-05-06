@@ -2,6 +2,7 @@ name = Alph
 description = A young engineer from Koppai. Has a lot of passion for his job.
 
 acceleration = 800
+can_walk_on_others = true
 dismiss_sfx = Olimar_dismiss.ogg
 height = 46
 main_color = 17 238 238

@@ -2,6 +2,7 @@ name = President
 description = President of Hocotate Freight from Hocotate. Treats his employees harshly, though not always.
 
 acceleration = 500
+can_walk_on_others = true
 dismiss_sfx = President_dismiss.ogg
 height = 46
 main_color = 238 238 34

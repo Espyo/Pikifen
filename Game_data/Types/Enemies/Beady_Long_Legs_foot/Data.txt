@@ -6,6 +6,7 @@ appears_in_area_editor = false
 can_free_move = true
 can_hunt = player; enemy
 can_hurt = player; enemy; weak_plain_obstacle; fragile
+can_walk_on_others = true
 custom_category_name = Aux
 height = 64
 move_speed = 250

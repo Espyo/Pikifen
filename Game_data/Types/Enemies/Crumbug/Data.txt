@@ -3,6 +3,7 @@ description = This small creature resembles a loaf of bread. It just meanders ab
 
 can_hunt = player; enemy
 can_hurt = player; enemy; fragile
+can_walk_on_others = true
 custom_category_name = Enemy, small and aggressive
 drops_corpse = true
 height = 24
