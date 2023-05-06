@@ -1684,7 +1684,84 @@ void area_editor::process_gui_panel_info() {
             "A general description about the area, like how it works."
         );
         
+        //Add area tags button.
+        if(ImGui::Button("+")) {
+            ImGui::OpenPopup("addTags");
+        }
+        set_tooltip(
+            "Add tags from a list of recommended tags.\n"
+            "You can still add your own, of course."
+        );
+        
+        //Add area tags popup.
+        if(ImGui::BeginPopup("addTags")) {
+        
+            string new_tag;
+            
+            //Gameplay tags combo.
+            vector<string> gameplay_tags = {
+                "Standard",
+                "Puzzle",
+                "Short and sweet",
+                "Exploration",
+                "Battle",
+                "Challenge",
+                "Gimmick",
+                "Custom game mode",
+            };
+            int gameplay_tag_idx;
+            if(ImGui::Combo("Gameplay", &gameplay_tag_idx, gameplay_tags)) {
+                new_tag = gameplay_tags[gameplay_tag_idx];
+            }
+            
+            //Theme tags combo.
+            vector<string> theme_tags = {
+                "Autumn",
+                "Beach",
+                "Cave",
+                "Concrete",
+                "Desert",
+                "Forest",
+                "Garden",
+                "House",
+                "Lakeside",
+                "Man-made",
+                "Metal",
+                "Snow",
+                "Swamp",
+                "Tiles",
+                "Toys",
+            };
+            int theme_tag_idx;
+            if(ImGui::Combo("Theme", &theme_tag_idx, theme_tags)) {
+                new_tag = theme_tags[theme_tag_idx];
+            }
+            
+            //Misc. tags combo.
+            vector<string> misc_tags = {
+                "Art",
+                "Technical",
+                "Troll",
+            };
+            int misc_tag_idx;
+            if(ImGui::Combo("Misc.", &misc_tag_idx, misc_tags)) {
+                new_tag = misc_tags[misc_tag_idx];
+            }
+            
+            if(!new_tag.empty()) {
+                register_change("area tags change");
+                if(!game.cur_area_data.tags.empty()) {
+                    game.cur_area_data.tags += "; ";
+                }
+                game.cur_area_data.tags += new_tag;
+                ImGui::CloseCurrentPopup();
+            }
+            
+            ImGui::EndPopup();
+        }
+        
         //Area tags input.
+        ImGui::SameLine();
         string tags = game.cur_area_data.tags;
         if(ImGui::InputText("Tags", &tags)) {
             register_change("area tags change");
