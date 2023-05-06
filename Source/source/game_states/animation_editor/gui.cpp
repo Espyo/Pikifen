@@ -281,10 +281,10 @@ void animation_editor::process_gui_hitbox_hazards() {
 void animation_editor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
-    [this](const string & name) -> string {
+    [this](const string  &name) -> string {
         return get_path_short_name(name);
     },
-    [this](const string & name) {
+    [this](const string  &name) {
         file_path = name;
         loaded_mob_type = NULL;
         load_animation_database(true);
@@ -608,7 +608,7 @@ void animation_editor::process_gui_panel_animation() {
     }
     
     //Panel title text.
-    panel_title("ANIMATIONS", 118.0f);
+    panel_title("ANIMATIONS");
     
     //Current animation text.
     size_t cur_anim_nr = INVALID;
@@ -1119,7 +1119,7 @@ void animation_editor::process_gui_panel_body_part() {
     }
     
     //Panel title text.
-    panel_title("BODY PARTS", 108.0f);
+    panel_title("BODY PARTS");
     
     static string new_part_name;
     static int selected_part = 0;
@@ -1414,7 +1414,7 @@ void animation_editor::process_gui_panel_sprite() {
     }
     
     //Panel title text.
-    panel_title("SPRITES", 88.0f);
+    panel_title("SPRITES");
     
     //Current sprite text.
     size_t cur_sprite_nr = INVALID;
@@ -1706,7 +1706,7 @@ void animation_editor::process_gui_panel_sprite_bitmap() {
     }
     
     //Panel title text.
-    panel_title("BITMAP", 78.0f);
+    panel_title("BITMAP");
     
     if(anims.sprites.size() > 1) {
     
@@ -1890,7 +1890,7 @@ void animation_editor::process_gui_panel_sprite_hitboxes() {
     }
     
     //Panel title text.
-    panel_title("HITBOXES", 96.0f);
+    panel_title("HITBOXES");
     
     //Hitbox name text.
     ImGui::Text(
@@ -2217,7 +2217,7 @@ void animation_editor::process_gui_panel_sprite_top() {
     }
     
     //Panel title text.
-    panel_title("TOP", 60.0f);
+    panel_title("TOP");
     
     if(anims.sprites.size() > 1) {
     
@@ -2343,7 +2343,7 @@ void animation_editor::process_gui_panel_sprite_transform() {
     }
     
     //Panel title text.
-    panel_title("TRANSFORM", 102.0f);
+    panel_title("TRANSFORM");
     
     if(anims.sprites.size() > 1) {
     
@@ -2527,7 +2527,7 @@ void animation_editor::process_gui_panel_tools() {
     }
     
     //Panel title text.
-    panel_title("TOOLS", 74.0f);
+    panel_title("TOOLS");
     
     //Resize everything value.
     static float resize_mult = 1.0f;

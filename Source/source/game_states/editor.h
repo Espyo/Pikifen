@@ -454,7 +454,7 @@ protected:
     );
     void process_gui_status_bar_text();
     void process_gui_unsaved_changes_dialog();
-    void panel_title(const char* title, const float width);
+    void panel_title(const char* title);
     bool saveable_tree_node(const string &category, const string &label);
     void set_status(const string &text = "", const bool error = false);
     void set_tooltip(

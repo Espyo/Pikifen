@@ -957,7 +957,7 @@ void editor::load_custom_mob_cat_types(const bool is_area_editor) {
         //Adjust custom_cat_name_idxs, since the list of custom category names
         //got shuffled earlier.
         custom_cat_name_idxs[
-        custom_cat_types[c][0]->custom_category_name
+            custom_cat_types[c][0]->custom_category_name
         ] = c;
     }
 }
@@ -1038,19 +1038,12 @@ void editor::open_picker_dialog(
  * right side of the panel.
  * title:
  *   Title to write.
- * width:
- *   Width to reserve for it.
  */
-void editor::panel_title(const char* title, const float width) {
-    //Spacer dummy widget.
-    ImGui::SameLine();
-    float size =
-        game.win_w - canvas_separator_x - ImGui::GetItemRectSize().x -
-        width;
-    ImGui::Dummy(ImVec2(size, 0));
-    
-    //Text widget.
-    ImGui::SameLine();
+void editor::panel_title(const char* title) {
+    ImGui::SameLine(
+        ImGui::GetContentRegionAvail().x -
+        (ImGui::CalcTextSize(title).x + 1)
+    );
     ImGui::TextDisabled("%s", title);
 }
 
@@ -1264,7 +1257,7 @@ bool editor::process_gui_mob_type_widgets(
         }
         open_picker_dialog(
             "Pick an object type", items,
-        [this] (const string & n, const string & c, const bool) {
+        [this] (const string  &n, const string  &c, const bool) {
             //For clarity, this code will NOT be run within the context
             //of editor::process_gui_mob_type_widgets, but will instead
             //be run wherever dialogs are processed.

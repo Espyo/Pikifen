@@ -1198,7 +1198,7 @@ void area_editor::process_gui_panel_details() {
         }
         
         //Panel title text.
-        panel_title("DETAILS", 88.0f);
+        panel_title("DETAILS");
         
         //Tree shadows node.
         if(saveable_tree_node("details", "Tree shadows")) {
@@ -1548,6 +1548,9 @@ void area_editor::process_gui_panel_edge() {
 void area_editor::process_gui_panel_gameplay() {
     ImGui::BeginChild("gameplay");
     
+    //Panel title text.
+    panel_title("GAMEPLAY");
+    
     switch(sub_state) {
     case EDITOR_SUB_STATE_MISSION_EXIT: {
 
@@ -1649,7 +1652,7 @@ void area_editor::process_gui_panel_info() {
     }
     
     //Panel title text.
-    panel_title("INFO", 64.0f);
+    panel_title("INFO");
     
     //General node.
     if(saveable_tree_node("info", "General")) {
@@ -2189,7 +2192,7 @@ void area_editor::process_gui_panel_layout() {
         }
         
         //Panel title text.
-        panel_title("LAYOUT", 80.0f);
+        panel_title("LAYOUT");
         
         //New sector button.
         if(
@@ -4134,7 +4137,7 @@ void area_editor::process_gui_panel_mobs() {
         }
         
         //Panel title text.
-        panel_title("OBJECTS", 90.0f);
+        panel_title("OBJECTS");
         
         //New object button.
         if(
@@ -4335,7 +4338,7 @@ void area_editor::process_gui_panel_paths() {
         }
         
         //Panel title text.
-        panel_title("PATHS", 72.0f);
+        panel_title("PATHS");
         
         //New path button.
         if(
@@ -4539,13 +4542,13 @@ void area_editor::process_gui_panel_paths() {
                 float total_dist = 0.0f;
                 size_t total_nr_stops = 0;
                 bool success = false;
-
+                
                 if(path_preview_result > 0) {
                     total_dist = path_preview_dist;
                     total_nr_stops = path_preview.size();
                     success = true;
                 }
-
+                
                 result = path_result_to_string(path_preview_result);
                 
                 //Path result header text.
@@ -4629,7 +4632,7 @@ void area_editor::process_gui_panel_review() {
     }
     
     //Panel title text.
-    panel_title("REVIEW", 80.0f);
+    panel_title("REVIEW");
     
     //Problem search node.
     if(saveable_tree_node("review", "Problem search")) {
@@ -4948,24 +4951,28 @@ void area_editor::process_gui_panel_sector() {
             }
             
             //Sector hazard list.
-            ImGui::ListBox(
-                "Hazards", &selected_hazard_nr,
-                semicolon_list_to_vector(s_ptr->hazards_str),
-                4
-            );
-            set_tooltip(
-                "List of hazards this sector has."
-            );
-            
-            bool sector_hazard_floor = s_ptr->hazard_floor;
-            if(ImGui::Checkbox("Floor only", &sector_hazard_floor)) {
-                register_change("sector hazard floor option change");
-                s_ptr->hazard_floor = sector_hazard_floor;
+            if(
+                !(*selected_sectors.begin())->hazards_str.empty()
+            ) {
+                ImGui::ListBox(
+                    "Hazards", &selected_hazard_nr,
+                    semicolon_list_to_vector(s_ptr->hazards_str),
+                    4
+                );
+                set_tooltip(
+                    "List of hazards this sector has."
+                );
+                
+                bool sector_hazard_floor = s_ptr->hazard_floor;
+                if(ImGui::Checkbox("Floor only", &sector_hazard_floor)) {
+                    register_change("sector hazard floor option change");
+                    s_ptr->hazard_floor = sector_hazard_floor;
+                }
+                set_tooltip(
+                    "Do the hazards only affects objects on the floor,\n"
+                    "or do they affect airborne objects in the sector too?"
+                );
             }
-            set_tooltip(
-                "Do the hazards only affects objects on the floor,\n"
-                "or do they affect airborne objects in the sector too?"
-            );
             
             ImGui::TreePop();
         }
@@ -5265,7 +5272,7 @@ void area_editor::process_gui_panel_tools() {
     }
     
     //Panel title text.
-    panel_title("TOOLS", 75.0f);
+    panel_title("TOOLS");
     
     //Reference image node.
     if(saveable_tree_node("tools", "Reference image")) {

@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -9,30 +9,35 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     The maximum throw heights for leader/Pikmin types are not being respected
-    If you have preview mode on and make changes, the wall shadows won't get updated properly
-    Pasting a sector's properties does not update wall shadows properly
-    Ctrl+D should be ignored if you're not in mobs mode
+    Area editor preview mode
+        If you have preview mode on and make changes, the wall shadows won't get updated properly
+        Preview mode doesn't show water half of the time
+        Pasting a sector's properties does not update wall shadows properly
     Pikmin shouldn't make a sound when they start their life following a leader (i.e. Bulbmin)
     Eggs and bomb rocks that spawn out of another mob will slide forever
     If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
     If you disable the area editor undo feature, areas are no longer recognized as changed (e.g. when you try to quit with unsaved changes)
-    The Shift+P shortcut in the area editor shouldn't trigger if you're writing in a textbox
     The "mob stuck in wall" area editor review error should only trigger if said wall isn't within stepping height (check Tutorial Meadow)
-    Paper bag dirt particles still use the old size
     Water is squashing the texture of the floor underneath to half its height (see the puzzle stage)
         It's also ignoring the tint of the texture
     Area editor doesn't memorize that you want the reference image to be hidden (at least when you press it from the toolbar)
-    Preview mode doesn't show water half of the time
     
     --- v0.24.0 ---
+    Only draw mob links if the mob is selected (be it as the linker or linkee)
     If a stop is placed on top of a link, it should ask if it should split the link. Also if the new link intersects a stop. Or a stop on a stop. But not if the new link intersects another link. Do this both for drawing and dragging
     Are flower Pikmin even completing tasks any faster?
     Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
     Add several pre-packaged areas, since players have nothing to play with right now
-        Helodity's Adventure area (see #content-sharing)
+        Helodity's Adventure area (see #content-sharing)?
+        Helodity's Crash Landing mission
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
+        Bring back Play?
+            Rename it to Playful Yard, and populate it with toy treasures and very active enemies like Crumbugs
+            Darken the hole in the root that you can go through
+            Have some puzzle with the two rocks north of the landing site
+            Make a post-mortem video
     
     --- Future ---
     Some tweaks to the HUD

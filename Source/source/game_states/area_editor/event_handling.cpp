@@ -144,9 +144,6 @@ void area_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, true)) {
         press_quick_play_button();
         
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, false, true)) {
-        preview_mode = !preview_mode;
-        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Q, true)) {
         press_quit_button();
         
@@ -264,7 +261,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_D, true)) {
-        if(!moving && !selecting) {
+        if(state == EDITOR_STATE_MOBS && !moving && !selecting) {
             press_duplicate_mobs_button();
         }
         
@@ -351,6 +348,9 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         ) {
             change_state(EDITOR_STATE_PATHS);
         }
+        
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_P, false, true)) {
+        preview_mode = !preview_mode;
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_T, true)) {
         press_paste_texture_button();
