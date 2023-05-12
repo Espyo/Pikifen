@@ -1720,6 +1720,16 @@ void editor::update_history(const string &n) {
  */
 void editor::update_style() {
 
+    ImGuiStyle* style = &ImGui::GetStyle();
+    style->FrameRounding = 3;
+    style->IndentSpacing = 25;
+    style->GrabMinSize = 15;
+    style->ScrollbarSize = 16;
+    style->WindowRounding = 5;
+    style->PopupRounding = 5;
+    style->GrabRounding = 4;
+    style->ScrollbarRounding = 12;
+    
     if(!game.options.editor_use_custom_style) {
         //Use the default style.
         memcpy(
@@ -1735,7 +1745,6 @@ void editor::update_style() {
         ALLEGRO_COLOR sec = game.options.editor_secondary_color;
         ALLEGRO_COLOR txt = game.options.editor_text_color;
         
-        ImGuiStyle* style = &ImGui::GetStyle();
         ImVec4* colors = style->Colors;
         
         colors[ImGuiCol_Text] =

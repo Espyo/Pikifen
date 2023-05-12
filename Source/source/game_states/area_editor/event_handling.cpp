@@ -1778,6 +1778,8 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
     if(sub_state == EDITOR_SUB_STATE_QUICK_HEIGHT_SET) {
         float offset = quick_height_set_start_pos.y - game.mouse_cursor_s.y;
         offset = floor(offset / 2.0f);
+        offset = floor(offset / 10.0f);
+        offset *= 10.0f;
         register_change("quick sector height set");
         (*selected_sectors.begin())->z = quick_height_set_start_height + offset;
     }

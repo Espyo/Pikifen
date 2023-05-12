@@ -1,7 +1,7 @@
 name=Cryptic Atrium
 subtitle
 description=Three buttons, three markers on the floor... How should you go about pressing them to escape this room?
-tags=Puzzle; Short and sweet
+tags=Puzzle; Short and sweet; Tiles
 difficulty=3
 bg_bmp
 bg_color=0 0 0

@@ -12321,6 +12321,46 @@ mobs{
 		type=Ceramic fragment red
 		p=-2176.0000 2656.0000
 	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
+	Pikmin{
+		type=Winged Pikmin
+		p=896.0000 -1248.0000
+	}
 }
 path_stops{
 	s{

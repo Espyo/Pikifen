@@ -61,7 +61,7 @@ const float MOUSE_COORDS_TEXT_WIDTH = 150.0f;
 //How long to tint the new sector's line(s) red for.
 const float NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
 //Thickness to use when drawing a path link line.
-const float PATH_LINK_THICKNESS = 2.0f;
+const float PATH_LINK_THICKNESS = 3.0f;
 //Radius to use when drawing a path preview checkpoint.
 const float PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 //Only fetch the path these many seconds after the player stops the checkpoints.

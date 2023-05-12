@@ -877,6 +877,24 @@ void area_editor::find_problems() {
             next_idx = next_ptr->stored_inside;
         }
     }
+
+    //Over the limit of Pikmin.
+    size_t n_pikmin_mobs = 0;
+    for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
+        if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+            n_pikmin_mobs++;
+            if(n_pikmin_mobs > game.config.max_pikmin_in_field) {
+                problem_type = EPT_PIKMIN_OVER_LIMIT;
+                problem_title = "Over the Pikmin limit!";
+                problem_description =
+                    "There are more Pikmin in the area than the limit allows. "
+                    "This means some of them will not appear. Current limit: "
+                    + i2s(game.config.max_pikmin_in_field) + ".";
+                return;
+            }
+        }
+    }
     
     //Path from pile to bridge is blocked by said bridge.
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {

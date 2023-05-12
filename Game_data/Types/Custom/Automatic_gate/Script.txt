@@ -29,6 +29,7 @@ script {
             set_animation rattling
             set_can_block_paths true
             move_to_absolute $x $y $z_open
+            start_particles falling_dirt 0 0 0
         }
         on_receive_message {
             get_info m message
@@ -45,6 +46,7 @@ script {
         on_enter {
             set_animation open
             set_can_block_paths false
+            stop_particles
         }
         on_receive_message {
             get_info m message
@@ -59,6 +61,7 @@ script {
             set_animation rattling
             set_can_block_paths true
             move_to_absolute $x $y $z_closed
+            start_particles falling_dirt 0 0 0
         }
         on_receive_message {
             get_info m message
@@ -67,6 +70,8 @@ script {
             end_if
         }
         on_reach_destination {
+            stop_particles
+            start_particles dust_explosion_gate 0 0 0
             set_state closed
         }
     }

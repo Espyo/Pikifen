@@ -29,9 +29,11 @@ script {
         on_enter {
             set_animation down
             if $weight < $goal_number
+                start_particles dust_button_click 0 0 16
                 set_state up
             end_if
             send_message_to_links on
+            start_particles dust_button_click 0 0 16
         }
         on_weight_added {
             get_info weight weight
@@ -39,6 +41,7 @@ script {
         on_weight_removed {
             get_info weight weight
             if $weight < $goal_number
+                start_particles dust_button_click 0 0 16
                 set_state up
             end_if
         }

@@ -634,28 +634,44 @@ void area_editor::draw_canvas() {
             mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
             mob_gen* m2_ptr = NULL;
             
+            bool is_selected =
+                selected_mobs.find(m_ptr) != selected_mobs.end();
+                
             for(size_t l = 0; l < m_ptr->links.size(); ++l) {
                 m2_ptr = m_ptr->links[l];
                 if(!m_ptr->type) continue;
                 if(!m2_ptr->type) continue;
                 
-                draw_arrow(
-                    m_ptr->pos, m2_ptr->pos,
-                    m_ptr->type->radius, m2_ptr->type->radius,
-                    AREA_EDITOR::MOB_LINK_THICKNESS,
-                    al_map_rgb(160, 224, 64)
-                );
+                bool show_link =
+                    is_selected ||
+                    selected_mobs.find(m2_ptr) != selected_mobs.end();
+                    
+                if(show_link) {
+                    draw_arrow(
+                        m_ptr->pos, m2_ptr->pos,
+                        m_ptr->type->radius, m2_ptr->type->radius,
+                        AREA_EDITOR::MOB_LINK_THICKNESS,
+                        al_map_rgb(160, 224, 64)
+                    );
+                }
             }
             
             if(m_ptr->stored_inside != INVALID) {
                 m2_ptr =
                     game.cur_area_data.mob_generators[m_ptr->stored_inside];
-                draw_arrow(
-                    m_ptr->pos, m2_ptr->pos,
-                    m_ptr->type->radius, m2_ptr->type->radius,
-                    AREA_EDITOR::MOB_LINK_THICKNESS,
-                    al_map_rgb(224, 200, 200)
-                );
+                    
+                bool show_store =
+                    is_selected ||
+                    selected_mobs.find(m2_ptr) != selected_mobs.end();
+                    
+                if(show_store) {
+                    draw_arrow(
+                        m_ptr->pos, m2_ptr->pos,
+                        m_ptr->type->radius, m2_ptr->type->radius,
+                        AREA_EDITOR::MOB_LINK_THICKNESS,
+                        al_map_rgb(224, 200, 200)
+                    );
+                }
             }
         }
     }
@@ -771,6 +787,50 @@ void area_editor::draw_canvas() {
     
     //Paths.
     if(state == EDITOR_STATE_PATHS) {
+    
+        //Stops.
+        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = game.cur_area_data.path_stops[s];
+            bool highlighted = highlighted_path_stop == s_ptr;
+            al_draw_filled_circle(
+                s_ptr->pos.x, s_ptr->pos.y,
+                AREA_EDITOR::PATH_STOP_RADIUS,
+                al_map_rgb(88, 177, 177)
+            );
+            
+            if(
+                selected_path_stops.find(s_ptr) !=
+                selected_path_stops.end()
+            ) {
+                al_draw_filled_circle(
+                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
+                    al_map_rgba(
+                        AREA_EDITOR::SELECTION_COLOR[0],
+                        AREA_EDITOR::SELECTION_COLOR[1],
+                        AREA_EDITOR::SELECTION_COLOR[2],
+                        selection_opacity * 255
+                    )
+                );
+            } else if(highlighted) {
+                al_draw_filled_circle(
+                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
+                    al_map_rgba(
+                        highlight_color.r * 255,
+                        highlight_color.g * 255,
+                        highlight_color.b * 255,
+                        128
+                    )
+                );
+            }
+            
+            if(debug_path_nrs) {
+                draw_debug_text(
+                    al_map_rgb(80, 192, 192), s_ptr->pos, i2s(s)
+                );
+            }
+        }
+        
+        //Links.
         for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
             for(size_t l = 0; l < s_ptr->links.size(); l++) {
@@ -820,10 +880,15 @@ void area_editor::draw_canvas() {
                     }
                 }
                 
-                
+                float angle =
+                    get_angle(s_ptr->pos, s2_ptr->pos);
+                point offset =
+                    angle_to_coordinates(angle, AREA_EDITOR::PATH_STOP_RADIUS);
                 al_draw_line(
-                    s_ptr->pos.x, s_ptr->pos.y,
-                    s2_ptr->pos.x, s2_ptr->pos.y,
+                    s_ptr->pos.x + offset.x,
+                    s_ptr->pos.y + offset.y,
+                    s2_ptr->pos.x - offset.x,
+                    s2_ptr->pos.y - offset.y,
                     color,
                     AREA_EDITOR::PATH_LINK_THICKNESS / game.cam.zoom
                 );
@@ -895,47 +960,7 @@ void area_editor::draw_canvas() {
             }
         }
         
-        for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = game.cur_area_data.path_stops[s];
-            bool highlighted = highlighted_path_stop == s_ptr;
-            al_draw_filled_circle(
-                s_ptr->pos.x, s_ptr->pos.y,
-                AREA_EDITOR::PATH_STOP_RADIUS,
-                al_map_rgb(80, 192, 192)
-            );
-            
-            if(
-                selected_path_stops.find(s_ptr) !=
-                selected_path_stops.end()
-            ) {
-                al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
-                    al_map_rgba(
-                        AREA_EDITOR::SELECTION_COLOR[0],
-                        AREA_EDITOR::SELECTION_COLOR[1],
-                        AREA_EDITOR::SELECTION_COLOR[2],
-                        selection_opacity * 255
-                    )
-                );
-            } else if(highlighted) {
-                al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
-                    al_map_rgba(
-                        highlight_color.r * 255,
-                        highlight_color.g * 255,
-                        highlight_color.b * 255,
-                        128
-                    )
-                );
-            }
-            
-            if(debug_path_nrs) {
-                draw_debug_text(
-                    al_map_rgb(80, 192, 192), s_ptr->pos, i2s(s)
-                );
-            }
-        }
-        
+        //Closest stop line.
         if(show_closest_stop) {
             path_stop* closest = NULL;
             dist closest_dist;
@@ -958,6 +983,7 @@ void area_editor::draw_canvas() {
             }
         }
         
+        //Path preview.
         if(show_path_preview) {
             //Draw the lines of the path.
             ALLEGRO_COLOR lines_color = al_map_rgb(255, 187, 136);

@@ -200,6 +200,8 @@ private:
         EPT_MOB_LINKS_TO_SELF,
         //Mobs stored in a loop.
         EPT_MOB_STORED_IN_LOOP,
+        //Pikmin amount goes over the limit.
+        EPT_PIKMIN_OVER_LIMIT,
         //Bridge mob missing a bridge sector.
         EPT_SECTORLESS_BRIDGE,
         //A path stop is all by itself.

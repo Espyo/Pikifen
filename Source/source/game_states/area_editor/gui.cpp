@@ -2205,7 +2205,7 @@ void area_editor::process_gui_panel_layout() {
             press_new_sector_button();
         }
         set_tooltip(
-            "Start creating a new sector.\n"
+            "Start drawing a new sector.\n"
             "Click on the canvas to draw the lines that make up the sector.",
             "N"
         );
