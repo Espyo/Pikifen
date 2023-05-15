@@ -9160,7 +9160,7 @@ sectors{
 	}
 	s{
 		z=120.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 		texture_scale=0.7500 0.7500
 	}
 	s{
@@ -10182,7 +10182,7 @@ sectors{
 	}
 	s{
 		z=0.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 		texture_scale=0.7500 0.7500
 	}
 	s{
@@ -10268,7 +10268,7 @@ sectors{
 	}
 	s{
 		z=0.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 		texture_scale=0.7500 0.7500
 	}
 	s{

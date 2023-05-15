@@ -559,7 +559,7 @@ sectors{
 	}
 	s{
 		z=0.0000
-		texture=Metal.png
+		texture=Metal_rusted.png
 	}
 	s{
 		z=0.0000
@@ -607,7 +607,7 @@ sectors{
 	}
 	s{
 		z=0.0000
-		texture=Metal.png
+		texture=Metal_rusted.png
 	}
 	s{
 		z=0.0000
@@ -631,7 +631,7 @@ sectors{
 	}
 	s{
 		z=0.0000
-		texture=Metal.png
+		texture=Metal_rusted.png
 	}
 }
 mobs{

@@ -2365,19 +2365,19 @@ sectors{
 	s{
 		type
 		z=16.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 	}
 	s{
 		type
 		z=192.0000
-		texture=Stump.jpg
+		texture=Wood_stump.jpg
 		texture_scale=0.2400 0.2400
 		texture_trans=200.0000 80.0000
 	}
 	s{
 		type
 		z=96.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 	}
 	s{
 		type
@@ -2387,12 +2387,12 @@ sectors{
 	s{
 		type
 		z=128.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 	}
 	s{
 		type
 		z=16.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 		texture_tint=162 162 162
 	}
 	s{
@@ -2511,7 +2511,7 @@ sectors{
 	s{
 		type
 		z=60.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 	}
 	s{
 		type

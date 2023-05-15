@@ -3920,14 +3920,14 @@ sectors{
 	}
 	s{
 		z=200.0000
-		texture=Stump.jpg
+		texture=Wood_stump.jpg
 		texture_scale=0.8000 0.8000
 		texture_trans=-44.4726 20.9579
 	}
 	s{
 		type=Blocking
 		z=300.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 		texture_scale=0.8000 0.8000
 		texture_trans=-156.3803 191.0640
 	}
@@ -4096,20 +4096,20 @@ sectors{
 	}
 	s{
 		z=8.0000
-		texture=Stump.jpg
+		texture=Wood_stump.jpg
 		texture_scale=0.8000 0.8000
 		texture_trans=-104.0607 -102.3264
 	}
 	s{
 		type=Blocking
 		z=700.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
 		type=Blocking
 		z=600.0000
-		texture=Bark.jpg
+		texture=Wood_bark.jpg
 		texture_scale=0.8000 0.8000
 	}
 	s{
