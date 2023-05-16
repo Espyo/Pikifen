@@ -707,9 +707,6 @@ void draw_liquid(
     
         sprite* anim_sprite = NULL;
         float layer_2_dy = 0;
-        float layer_speed[2];
-        layer_speed[0] = l_ptr->surface_speed[0];
-        layer_speed[1] = l_ptr->surface_speed[1];
         float alpha = l_ptr->surface_alpha * liquid_opacity_mult;
         
         if(l_ptr->anim_instance.get_cur_sprite()) {
@@ -734,7 +731,7 @@ void draw_liquid(
             av[v].y = vy - where.y;
             av[v].u =
                 vx +
-                (time * layer_speed[l]);
+                (time * l_ptr->surface_speed[l]);
             av[v].v = vy + (layer_2_dy * l);
             av[v].color =
                 al_map_rgba(
