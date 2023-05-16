@@ -40,7 +40,7 @@ struct liquid {
     //Animation instance for the liquid surface.
     animation_instance anim_instance;
     //Speed at which to scroll each layer of the surface.
-    float surface_speed[2];
+    point surface_speed[2];
     //Opacity of the surface.
     unsigned char surface_alpha;
     

@@ -43,9 +43,9 @@ namespace DRAWING {
 //Default healt wheel radius.
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 //Liquid surfaces wobble by offsetting X by this much, at most.
-const float LIQUID_WOBBLE_DELTA_X = 3.0f;
+const float LIQUID_WOBBLE_DELTA_X = 2.0f;
 //Liquid surfaces wobble using this time scale.
-const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
+const float LIQUID_WOBBLE_TIME_SCALE = 1.0f;
 //Loading screen subtitle text padding.
 const int LOADING_SCREEN_PADDING = 64;
 //Loading screen subtitle text scale.
@@ -731,8 +731,9 @@ void draw_liquid(
             av[v].y = vy - where.y;
             av[v].u =
                 vx +
-                (time * l_ptr->surface_speed[l]);
-            av[v].v = vy + (layer_2_dy * l);
+                (time * l_ptr->surface_speed[l].x);
+            av[v].v = vy + (layer_2_dy * l) +
+                (time * l_ptr->surface_speed[l].y);
             av[v].color =
                 al_map_rgba(
                     s_ptr->brightness,

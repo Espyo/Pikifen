@@ -18,6 +18,6 @@ liquid::liquid() :
     main_color(COLOR_EMPTY),
     surface_alpha(255) {
     
-    surface_speed[0] = 10;
-    surface_speed[1] = -13;
+    surface_speed[0] = point(10,0);
+    surface_speed[1] = point(-13, 0);
 }
