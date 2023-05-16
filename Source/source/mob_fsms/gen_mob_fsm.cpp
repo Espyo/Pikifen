@@ -211,7 +211,6 @@ void gen_mob_fsm::carry_stop_being_stuck(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
-    if(!m->path_info) return;
     m->carry_info->is_moving = false;
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->stop_following_path();

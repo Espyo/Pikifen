@@ -2315,17 +2315,19 @@ void pikmin_fsm::do_impact_bounce(mob* m, void* info1, void* info2) {
     float impact_speed = 0.0f;
     
     if(pik_ptr->focused_mob) {
-        if (pik_ptr->focused_mob->rectangular_dim.x != 0) {
-            bool is_inside = false;
-            impact_angle = get_angle(
-                get_closest_point_in_rotated_rectangle(pik_ptr->pos,
-                    pik_ptr->focused_mob->pos, pik_ptr->focused_mob->rectangular_dim,
-                    pik_ptr->focused_mob->angle,
-                    &is_inside
-                ),
-                pik_ptr->pos); 
-        }
-        else {
+        if(pik_ptr->focused_mob->rectangular_dim.x != 0) {
+            impact_angle =
+                get_angle(
+                    get_closest_point_in_rotated_rectangle(
+                        pik_ptr->pos,
+                        pik_ptr->focused_mob->pos,
+                        pik_ptr->focused_mob->rectangular_dim,
+                        pik_ptr->focused_mob->angle,
+                        NULL
+                    ),
+                    pik_ptr->pos
+                );
+        } else {
             impact_angle = get_angle(pik_ptr->focused_mob->pos, pik_ptr->pos);
         }
         impact_speed = 200.0f;

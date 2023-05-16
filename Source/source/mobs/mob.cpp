@@ -2009,6 +2009,7 @@ void mob::get_sprite_bitmap_effects(
     sprite* s_ptr, bitmap_effect_info* info, uint16_t effects
 ) const {
 
+    //Animation, position, angle, etc.
     if(has_flag(effects, SPRITE_BITMAP_EFFECT_STANDARD)) {
         info->translation +=
             point(
@@ -2024,6 +2025,7 @@ void mob::get_sprite_bitmap_effects(
         info->scale.y *= s_ptr->scale.y;
     }
     
+    //Status effects.
     if(has_flag(effects, SPRITE_BITMAP_EFFECT_STATUS)) {
         size_t n_glow_colors = 0;
         ALLEGRO_COLOR glow_color_sum = COLOR_EMPTY;
@@ -2070,12 +2072,14 @@ void mob::get_sprite_bitmap_effects(
         }
     }
     
+    //Sector brightness tint.
     if(has_flag(effects, SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS)) {
         info->tint_color.r *= (center_sector->brightness / 255.0);
         info->tint_color.g *= (center_sector->brightness / 255.0);
         info->tint_color.b *= (center_sector->brightness / 255.0);
     }
     
+    //Height effect.
     if(has_flag(effects, SPRITE_BITMAP_EFFECT_HEIGHT)) {
         if(height_effect_pivot != LARGE_FLOAT) {
             float height_effect_scale = 1.0;
@@ -2097,6 +2101,7 @@ void mob::get_sprite_bitmap_effects(
         }
     }
     
+    //Being delivered.
     if(
         has_flag(effects, SPRITE_BITMAP_EFFECT_DELIVERY) &&
         delivery_info &&
@@ -2234,6 +2239,7 @@ void mob::get_sprite_bitmap_effects(
         
     }
     
+    //Damage squash and stretch.
     if(
         has_flag(effects, SPRITE_BITMAP_EFFECT_DAMAGE) &&
         damage_squash_time > 0.0f
@@ -2271,6 +2277,7 @@ void mob::get_sprite_bitmap_effects(
         info->scale.x *= 1.0f / damage_scale_y;
     }
     
+    //Carry sway.
     if(
         has_flag(effects, SPRITE_BITMAP_EFFECT_CARRY) &&
         carry_info

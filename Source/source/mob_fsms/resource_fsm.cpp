@@ -148,6 +148,11 @@ void resource_fsm::create_fsm(mob_type* typ) {
             efc.run(gen_mob_fsm::carry_get_path);
             efc.change_state("idle_moving");
         }
+        efc.new_event(MOB_EV_CARRY_STOP_MOVE); {
+            efc.run(gen_mob_fsm::carry_stop_being_stuck);
+            efc.run(resource_fsm::handle_dropped);
+            efc.change_state("idle_waiting");
+        }
     }
     
     

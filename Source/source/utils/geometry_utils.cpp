@@ -930,7 +930,7 @@ point get_closest_point_in_line_seg(
  * rect_angle:
  *   Angle of the rectangle.
  * is_inside:
- *   If true, returns whether or not the reference point is inside
+ *   If not NULL, returns whether or not the reference point is inside
  *   the rectangle.
  */
 point get_closest_point_in_rotated_rectangle(

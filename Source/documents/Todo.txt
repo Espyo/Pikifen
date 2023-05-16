@@ -2,7 +2,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Carriable rocks sway when dropped
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -20,6 +20,7 @@ Next tasks (roughly sorted most important first)
         It's also ignoring the tint of the texture
     Area editor doesn't memorize that you want the reference image to be hidden (at least when you press it from the toolbar)
     You can't press Escape to cancel out of the rename hitbox in the animation editor
+    Backgrounds don't work properly if you disable the HUD (thanks Helodity)
     
     --- v0.24.0 ---
     Are flower Pikmin even completing tasks any faster?
@@ -797,7 +798,6 @@ Tasks for later on (I might never implement these)
             A way to set the opacity of mobs in layout mode; possibly others of the sort (thanks Helodity)
             A feature with which to search for mobs/sectors
             Buttons to align textures with the sectors, stretching them to fit, or to tile twice, three times, left-aligned, right-aligned, etc.?
-            A quicker way to quickly preview what an area will look like, instead of having to go to the review panel and checking an option
         Animation editor
             "Sprite" -> "Pose"?
             You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.
@@ -849,6 +849,7 @@ Tasks for later on (I might never implement these)
         Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey
     Story mode
         A way to choose what landing site of the area you want to start the day in
+    Discord rich presence
     [NEEDS BRAINSTORMING] Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/
         Good luck with floating point determinism lol
