@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    The maximum throw heights for leader/Pikmin types are not being respected
     Area editor preview mode
         If you have preview mode on and make changes, the wall shadows won't get updated properly
         Preview mode doesn't show water half of the time
@@ -23,6 +22,7 @@ Next tasks (roughly sorted most important first)
     Backgrounds don't work properly if you disable the HUD (thanks Helodity)
     
     --- v0.24.0 ---
+    Anything I can do about bridges blocking the path to themselves?
     Are flower Pikmin even completing tasks any faster?
     Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?

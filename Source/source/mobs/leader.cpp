@@ -942,6 +942,10 @@ void leader::update_throw_variables() {
     }
     }
     
+    //Due to floating point inaccuracies, it's hard for mobs to actually
+    //reach the intended value. Let's bump it up just a smidge.
+    max_height += 0.5f;
+    
     if(max_height >= (target_z - z)) {
         //Can reach.
         throwee_can_reach = true;

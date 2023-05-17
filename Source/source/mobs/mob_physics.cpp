@@ -737,8 +737,6 @@ void mob::tick_vertical_movement_physics(
     const bool was_teleport
 ) {
     bool apply_gravity = true;
-    float old_speed_z = speed_z;
-    speed_z = 0.0f;
     
     if(!standing_on_mob) {
         //If the current ground is one step (or less) below
@@ -768,6 +766,8 @@ void mob::tick_vertical_movement_physics(
         if(target_z < z) {
             speed_z = -speed_z;
         }
+        
+        z += speed_z * delta_t;
     }
     
     //Gravity.
@@ -775,11 +775,13 @@ void mob::tick_vertical_movement_physics(
         apply_gravity && !has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR) &&
         !holder.m && !was_teleport
     ) {
-        speed_z = old_speed_z + delta_t* gravity_mult * MOB::GRAVITY_ADDER;
+        //Use Velocity Verlet for better results.
+        //https://youtu.be/hG9SzQxaCm8
+        z +=
+            (speed_z * delta_t) +
+            ((MOB::GRAVITY_ADDER / 2.0f) * delta_t* delta_t);
+        speed_z += MOB::GRAVITY_ADDER * delta_t;
     }
-    
-    //Apply the change in Z.
-    z += speed_z * delta_t;
     
     //Landing.
     hazard* new_on_hazard = NULL;
