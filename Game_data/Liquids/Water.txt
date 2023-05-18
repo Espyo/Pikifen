@@ -3,6 +3,9 @@ description = Everyday body of water.
 
 color = 0 0 64 96
 animation = Water.txt
-surface_1_speed = 10 8
-surface_2_speed = -13 -5
-surface_alpha = 32
+surface_1_speed = 7 -3
+surface_1_color = 245 245 255 32
+surface_1_scale = 1
+surface_2_speed = -9 4
+surface_2_color = 255 255 255 48
+surface_2_scale = 1.4

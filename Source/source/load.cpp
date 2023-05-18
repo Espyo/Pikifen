@@ -1122,7 +1122,10 @@ void load_liquids(const bool load_resources) {
         rs.set("color", new_l->main_color);
         rs.set("surface_1_speed", new_l->surface_speed[0]);
         rs.set("surface_2_speed", new_l->surface_speed[1]);
-        rs.set("surface_alpha", new_l->surface_alpha);
+        rs.set("surface_1_color", new_l->surface_color[0]);
+        rs.set("surface_2_color", new_l->surface_color[1]);
+        rs.set("surface_1_scale", new_l->surface_scale[0]);
+        rs.set("surface_2_scale", new_l->surface_scale[1]);
         
         if(load_resources) {
             data_node anim_file =

@@ -707,7 +707,6 @@ void draw_liquid(
     
         sprite* anim_sprite = NULL;
         float layer_2_dy = 0;
-        float alpha = l_ptr->surface_alpha * liquid_opacity_mult;
         
         if(l_ptr->anim_instance.get_cur_sprite()) {
             anim_sprite =
@@ -734,17 +733,12 @@ void draw_liquid(
                 (time * l_ptr->surface_speed[l].x);
             av[v].v = vy + (layer_2_dy * l) +
                 (time * l_ptr->surface_speed[l].y);
-            av[v].color =
-                al_map_rgba(
-                    s_ptr->brightness,
-                    s_ptr->brightness,
-                    s_ptr->brightness,
-                    alpha
-                );
+            av[v].color = l_ptr->surface_color[l];
+            av[v].color.a *= liquid_opacity_mult;
             av[v].x *= scale;
             av[v].y *= scale;
-            av[v].u /= anim_sprite->scale.x;
-            av[v].v /= anim_sprite->scale.x;
+            av[v].u /= anim_sprite->scale.x * l_ptr->surface_scale[l];
+            av[v].v /= anim_sprite->scale.x * l_ptr->surface_scale[l];
         }
         
         al_draw_prim(
