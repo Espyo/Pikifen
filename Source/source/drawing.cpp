@@ -629,7 +629,8 @@ void draw_liquid(
         liquid_opacity_mult =
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
-    
+    float brightness_mult = s_ptr->brightness / 255.0;
+
     //Layer 1 - Transparent wobbling ground texture.
     if(s_ptr->texture_info.bitmap) {
         ALLEGRO_TRANSFORM tra;
@@ -662,10 +663,12 @@ void draw_liquid(
             al_transform_coordinates(&tra, &vx, &vy);
             av[v].u = vx + ground_wobble;
             av[v].v = vy + ground_texture_dy;
-            av[v].color =
-                al_map_rgba(
-                    s_ptr->brightness, s_ptr->brightness, s_ptr->brightness,
-                    128 * liquid_opacity_mult
+            av[v].color = 
+                al_map_rgba_f(
+                    s_ptr->texture_info.tint.r * brightness_mult,
+                    s_ptr->texture_info.tint.g * brightness_mult,
+                    s_ptr->texture_info.tint.b * brightness_mult,
+                    liquid_opacity_mult / 2
                 );
             av[v].x *= scale;
             av[v].y *= scale;
@@ -678,10 +681,14 @@ void draw_liquid(
     }
     
     //Layer 2 - Tint.
-    ALLEGRO_COLOR tint_color = l_ptr->main_color;
-    tint_color.r *= s_ptr->brightness / 255.0f;
-    tint_color.g *= s_ptr->brightness / 255.0f;
-    tint_color.b *= s_ptr->brightness / 255.0f;
+    ALLEGRO_COLOR tint_color = 
+    al_map_rgba_f(
+        l_ptr->main_color.r * brightness_mult,
+        l_ptr->main_color.g * brightness_mult,
+        l_ptr->main_color.b * brightness_mult,
+        l_ptr->main_color.a * liquid_opacity_mult
+    );
+
     for(size_t v = 0; v < n_vertexes; ++v) {
     
         const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
@@ -692,7 +699,6 @@ void draw_liquid(
         av[v].x = vx - where.x;
         av[v].y = vy - where.y;
         av[v].color = tint_color;
-        av[v].color.a *= liquid_opacity_mult;
         av[v].x *= scale;
         av[v].y *= scale;
     }
@@ -734,7 +740,7 @@ void draw_liquid(
             av[v].v = vy + (layer_2_dy * l) +
                 (time * l_ptr->surface_speed[l].y);
             av[v].color = l_ptr->surface_color[l];
-            av[v].color.a *= liquid_opacity_mult;
+            av[v].color.a *= liquid_opacity_mult * brightness_mult;
             av[v].x *= scale;
             av[v].y *= scale;
             av[v].u /= anim_sprite->scale.x * l_ptr->surface_scale[l];
