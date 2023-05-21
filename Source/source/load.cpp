@@ -1120,12 +1120,13 @@ void load_liquids(const bool load_resources) {
         rs.set("name", new_l->name);
         rs.set("animation", animation_str);
         rs.set("color", new_l->main_color);
-        rs.set("surface_1_speed", new_l->surface_speed[0]);
-        rs.set("surface_2_speed", new_l->surface_speed[1]);
-        rs.set("surface_1_color", new_l->surface_color[0]);
-        rs.set("surface_2_color", new_l->surface_color[1]);
-        rs.set("surface_1_scale", new_l->surface_scale[0]);
-        rs.set("surface_2_scale", new_l->surface_scale[1]);
+        //Invert order since layer 0 renders first, and surface 2 is on the bottom
+        rs.set("surface_1_speed", new_l->surface_speed[1]);
+        rs.set("surface_2_speed", new_l->surface_speed[0]);
+        rs.set("surface_1_color", new_l->surface_color[1]);
+        rs.set("surface_2_color", new_l->surface_color[0]);
+        rs.set("surface_1_scale", new_l->surface_scale[1]);
+        rs.set("surface_2_scale", new_l->surface_scale[0]);
         
         if(load_resources) {
             data_node anim_file =

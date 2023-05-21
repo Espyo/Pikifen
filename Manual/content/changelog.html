@@ -80,6 +80,14 @@
           <li><span class="cl-a">Added</span> the carry target object, which allows other things to be carried to it for no effect.</li>
         </ul>
       </li>
+	  <li>
+        New properties:
+        <ul>
+          <li><span class="cl-a">Added</span> <code>surface_1_scale</code> and <code>surface_2_scale</code> properties for <a href="hazard.html#liquid">liquids</a>. (Thanks Helodity)</li>
+		  <li><span class="cl-a">Added</span> <code>surface_1_color</code> and <code>surface_2_color</code> properties for <a href="hazard.html#liquid">liquids</a>. (Thanks Helodity)</li>
+		  <li><span class="cl-c">Changed</span> <code>surface_1_speed</code> and <code>surface_2_speed</code> properties for <a href="hazard.html#liquid">liquids</a> to use an <code>x y</code> format. (Thanks Helodity)</li>
+        </ul>
+      </li>
       <li>Others:
         <ul>
           <li><span class="cl-a">Added</span> the <code>hud</code> <a href="maker_toolkit.html">maker tool</a>.</li>
@@ -95,8 +103,11 @@
     <p><b>Breaking changes</b></p>
 
     <ul>
+	  <li><span class="cl-r">Removed</span> the assets <code>Water_2</code> through <code>Water_16</code></li>
+	  <li><span class="cl-r">Removed</span> the <code>surface_alpha</code> property for <a href="hazard.html#liquid">liquids</a>. Use the <code>surface_1_color</code> and <code>surface_2_color</code> properties instead.</li>
       <li><span class="cl-r">Removed</span> the ability for dead enemies to drop objects via the <code>spoils</code> and <code>random_pellet_spoils</code> script variables. Areas with such objects need to be adjusted.</li>
       <li><span class="cl-a">Added</span> the ability for dead enemies to drop objects via a "stored inside" feature in the area editor. This allows the engine to detect things like treasures inside enemies for the purposes of missions.</li>
+	  <li><span class="cl-c">Changed</span> the name of the asset <code>Water_1</code> to <code>Water</code></li>
       <li><span class="cl-c">Changed</span> the following obstacles to have a consistent 192px size: electrical wire (also now doesn't push), paper bag (also now blocks paths), cardboard box, wood bridge.</li>
       <li><span class="cl-c">Changed</span> the spritesheet for player input icons (formerly control icons). All properties and files changed from <code>control_icon</code> to <code>player_input_icon</code>.</li>
       <li><span class="cl-c">Changed</span> the <code>show_hud_controls</code> option to <code>show_hud_input_icons</code>.</li>
