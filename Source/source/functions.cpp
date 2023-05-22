@@ -1010,7 +1010,7 @@ void log_error(string s, data_node* d) {
     string output = "";
     if(game.errors_reported_so_far == 0) {
         string first_error_info =
-            "Pikifen version " +
+            "> Pikifen version " +
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
             "." + i2s(VERSION_REV);
         if(!game.config.version.empty()) {
@@ -1020,13 +1020,13 @@ void log_error(string s, data_node* d) {
         first_error_info += ":\n";
         output += first_error_info;
     }
-    output += "\t" + get_current_time(false) + ": " + s;
+    output += get_current_time(false) + ": " + s;
     if(d) {
         output += " (" + d->file_name;
         if (d->line_nr != 0) output += " line " + i2s(d->line_nr);
         output += ")";
     }
-
+    output += "\n";
     std::cout << output;
     
     string prev_error_log;
@@ -1038,6 +1038,7 @@ void log_error(string s, data_node* d) {
             getline(file_i, line);
             prev_error_log += line + "\n";
         }
+        prev_error_log.erase(prev_error_log.size() - 1);
         al_fclose(file_i);
     }
     

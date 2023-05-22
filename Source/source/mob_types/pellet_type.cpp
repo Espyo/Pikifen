@@ -69,7 +69,9 @@ void pellet_type::load_properties(data_node* file) {
             pik_type_node
         );
     }
-    pik_type = game.mob_types.pikmin[pik_type_str];
+    else {
+        pik_type = game.mob_types.pikmin[pik_type_str];
+    }
     
     weight = number;
 }
