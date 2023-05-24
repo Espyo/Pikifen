@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -10,7 +10,6 @@ Next tasks (roughly sorted most important first)
         If you have preview mode on and make changes, the wall shadows won't get updated properly
         Preview mode doesn't show water half of the time
         Pasting a sector's properties does not update wall shadows properly
-    Pikmin shouldn't make a sound when they start their life following a leader (i.e. Bulbmin)
     Eggs and bomb rocks that spawn out of another mob will slide forever
     If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
     If you disable the area editor undo feature, areas are no longer recognized as changed (e.g. when you try to quit with unsaved changes)
@@ -19,24 +18,97 @@ Next tasks (roughly sorted most important first)
         It's also ignoring the tint of the texture
     Area editor doesn't memorize that you want the reference image to be hidden (at least when you press it from the toolbar)
     You can't press Escape to cancel out of the rename hitbox in the animation editor
-    Backgrounds don't work properly if you disable the HUD (thanks Helodity)
     
     --- v0.24.0 ---
+    https://github.com/Espyo/Pikifen/pull/37
+    https://github.com/Espyo/Pikifen/pull/38
     Anything I can do about bridges blocking the path to themselves?
     Are flower Pikmin even completing tasks any faster?
+    What happens if Pikmin is drowning, and the water in that sector gets drained away?
+    Add a pause screen help tidbit for maturity
     Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
             Same with a sector reusing a vertex and other things maybe?
+    More puzzle elements
+        Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
+            Add maker notes indicating this
+        A lever. It flips position every time a Pikmin is thrown at it, or when a leader walks up to it and interacts
+        A button. After being depressed (and sending a 1 message) it pops back up (and sends a 0 message). Throwing a Pikmin at it or interacting with a leader will press it
+        A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
+        Logic gates
+            On message received, they should ask the sender's mob ID (-1 for none). Then, if their "i1id" var is -1, set it to whatever the sender mob's ID is. Then, when receiving a message from there on, if the mob's ID matches the the one in "i1id", set the value into the "i1" var. Otherwise, set it into the "i2" var.
+        A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
     Add several pre-packaged areas, since players have nothing to play with right now
         Helodity's Adventure area (see #content-sharing)?
         Helodity's Crash Landing mission
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
         Bring back Play?
             Rename it to Playful Yard, and populate it with toy treasures and very active enemies like Crumbugs
+            Puddles every here and there; on top of them being playful, it will make Blue Pikmin more powerful since they would take more direct paths instead of zigzagging through the puddles
             Darken the hole in the root that you can go through
             Have some puzzle with the two rocks north of the landing site
             Make a post-mortem video
+    
+    --- 0.25.0 ---
+    Music
+        Planned variant compatibility: Day + fight, sunset + fight, boss
+        Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
+            If we can't get away with many variants, explain in the FAQ why that is
+            What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
+        The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
+        Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
+        The area editor should have a music preview button
+        Add some songs
+    Revamp sound system
+        Rename sound files to .oga, instead of .ogg
+        Info
+            There are three types of sounds
+                Sounds that play "globally", like the "task complete jingle"
+                Sounds that play from any object that needs them, like there being three waterfalls in the area, and each one having the "waterfall" noise
+                Sounds that play connected to only one object at a time, like the Pikmin going "hop hop" when carrying something should only be connected to the closest carriable mob to the camera center
+                Or maybe there are these types of sounds, only:
+                    The global ones, like the "task complete jingle"
+                    Positional global ones, like Pikmin going "hop hop" when carrying
+                    Positional atomic ones, like a Fiery Blowhog spitting fire
+                    You register a source to the sound manager. For instance, you register two "Pikmin carrying" sound sources, and have their position pointers point to the carcass X/Y. The sound manager is then responsible for checking if the camera is close to either source, and if it's close to both, at what volume to play the sound.
+        Problems that the system needs to address:
+            If there are two things asking to play the same sound, they should/n't cut each other off/overlay for higher volume
+            If one thing is asking to stop a sound, make sure another doesn't need the sound (e.g. two carriable objects, one finishes being delivered)
+            If two things are playing the same sound but in different spots of the screen, the pan should be an average or so
+            If two things are playing the same sound but in different spots of the area, the volume should be an average or so
+            If a sound needs to have a sudden shift in volume or pan, it should be a smooth transition
+            The ability to handle randomized volumes and pitches (and maybe panning)
+            If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
+        For sounds that are tied to a mob, the farther the mob is from the center of the screen, the quieter; panning should be relative to the mob's position with the camera, too
+        Sounds shouldn't assume they're 44100Hz
+        A way to fade sounds in/out
+        Ducking
+        Load system sounds from System_asset_file_names.txt
+        Sounds should pause when you pause the game
+        Make it so that only 6 or so sounds can play at once?
+        Options
+            Volume control for sound effects, music, and ambiance sound effects separately
+                The standard should be at 75%, so players have leeway if they want everything louder
+            Mono/stereo
+        Footsteps should be tied to the terrain texture
+        It should be possible to play sounds both in specific frames of animation and in scripts as actions
+            The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
+        Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
+        Missing sounds
+            Pikmin seed landing
+            Pikmin sprout evolving/reverting
+            More...
+        Recreate the following sounds, as per user feedback
+            Plucking -- sounds like crap
+        This might help
+            https://www.allegro.cc/forums/thread/617315
+            https://youtu.be/Vjm--AqG04Y?t=713
+            https://www.allegro.cc/forums/thread/617707 ?
+            https://www.youtube.com/watch?v=PVA48I2n-qQ
+            https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
+        Fixes
+            When you cancel holding a Pikmin, its standby squeal sound should stop
     
     --- Future ---
     Some tweaks to the HUD
@@ -106,64 +178,6 @@ Next tasks (roughly sorted most important first)
         Allow the player to drag their mouse on the scrollbar GUI item
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
         Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
-    Music
-        Planned variant compatibility: Day + fight, sunset + fight, boss
-        Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
-            If we can't get away with many variants, explain in the FAQ why that is
-            What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
-        The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
-        Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
-        The area editor should have a music preview button
-        Add some songs
-    Revamp sound system
-        Rename sound files to .oga, instead of .ogg
-        Info
-            There are three types of sounds
-                Sounds that play "globally", like the "task complete jingle"
-                Sounds that play from any object that needs them, like there being three waterfalls in the area, and each one having the "waterfall" noise
-                Sounds that play connected to only one object at a time, like the Pikmin going "hop hop" when carrying something should only be connected to the closest carriable mob to the camera center
-                Or maybe there are these types of sounds, only:
-                    The global ones, like the "task complete jingle"
-                    Positional global ones, like Pikmin going "hop hop" when carrying
-                    Positional atomic ones, like a Fiery Blowhog spitting fire
-                    You register a source to the sound manager. For instance, you register two "Pikmin carrying" sound sources, and have their position pointers point to the carcass X/Y. The sound manager is then responsible for checking if the camera is close to either source, and if it's close to both, at what volume to play the sound.
-        Problems that the system needs to address:
-            If there are two things asking to play the same sound, they should/n't cut each other off/overlay for higher volume
-            If one thing is asking to stop a sound, make sure another doesn't need the sound (e.g. two carriable objects, one finishes being delivered)
-            If two things are playing the same sound but in different spots of the screen, the pan should be an average or so
-            If two things are playing the same sound but in different spots of the area, the volume should be an average or so
-            If a sound needs to have a sudden shift in volume or pan, it should be a smooth transition
-            The ability to handle randomized volumes and pitches (and maybe panning)
-            If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
-        For sounds that are tied to a mob, the farther the mob is from the center of the screen, the quieter; panning should be relative to the mob's position with the camera, too
-        Sounds shouldn't assume they're 44100Hz
-        A way to fade sounds in/out
-        Ducking
-        Load system sounds from System_asset_file_names.txt
-        Sounds should pause when you pause the game
-        Make it so that only 6 or so sounds can play at once?
-        Options
-            Volume control for sound effects, music, and ambiance sound effects separately
-                The standard should be at 75%, so players have leeway if they want everything louder
-            Mono/stereo
-        Footsteps should be tied to the terrain texture
-        It should be possible to play sounds both in specific frames of animation and in scripts as actions
-            The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
-        Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
-        Missing sounds
-            Pikmin seed landing
-            Pikmin sprout evolving/reverting
-            More...
-        Recreate the following sounds, as per user feedback
-            Plucking -- sounds like crap
-        This might help
-            https://www.allegro.cc/forums/thread/617315
-            https://youtu.be/Vjm--AqG04Y?t=713
-            https://www.allegro.cc/forums/thread/617707 ?
-            https://www.youtube.com/watch?v=PVA48I2n-qQ
-            https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
-        Fixes
-            When you cancel holding a Pikmin, its standby squeal sound should stop
     Controls improvements
         Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
             Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
@@ -514,6 +528,7 @@ Next tasks (roughly sorted most important first)
         Sprouts between areas, days, etc.
             Don't forget that sprouts should turn into flowers overnight
         Enemies respawning after some days
+            A way to specify if the mob should come back the next day if its collectible hasn't been reclaimed yet?
         Treasures that started moving after being carried should start recording their coordinates, so that when the player comes back, the treasure spawns there instead of the original spot
         Area unlocking
         Pause menu
@@ -694,6 +709,10 @@ Misc things (so I don't forget)
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     The spray HUD icons should show a tiny bar with concoction progress
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
+    [NEEDS BRAINSTORMING] Figure out how content sharing should work
+        Current problems
+            When makers want to share their content, they have to fish its requirements from several folders
+            When players want to install content, they have to place it in the right folders
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end
         Apply fog, blackout, sector darkness, etc. on this
         Check if this would have a large performance impact

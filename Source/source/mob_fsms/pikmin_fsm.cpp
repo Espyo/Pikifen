@@ -2030,7 +2030,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
  * info1:
  *   Pointer to the leader that called.
  * info2:
- *   Unused.
+ *   If not NULL, then the Pikmin must be silent.
  */
 void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     engine_assert(info1 != NULL, m->print_state_history());
@@ -2044,7 +2044,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     
     caller->add_to_group(pik_ptr);
     
-    game.sys_assets.sfx_pikmin_called.play(0.03, false);
+    if(info2 == NULL) game.sys_assets.sfx_pikmin_called.play(0.03, false);
 }
 
 

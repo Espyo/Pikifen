@@ -146,11 +146,13 @@ void gameplay_state::do_game_drawing(
     }
     
     //Layer 8 -- HUD.
+    al_use_transform(&game.identity_transform);
+    
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Drawing -- HUD");
     }
+    
     if(game.maker_tools.hud) {
-        al_use_transform(&game.identity_transform);
         hud->gui.draw();
         
         draw_big_msg();
