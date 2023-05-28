@@ -90,6 +90,9 @@ Tips for when you're making content
     Normally, you don't need to make your game feel different from the rest. After all, this is a ''Pikmin'' game, so it's normal that it feels like a ''Pikmin'' game. On the other hand, though, giving your game a more unique feel can make it look like a brand new thing, instead of just a bunch of new elements that follow a stale mold.
     ''Pikmin'' games take place over the course of several days, and the playable time in a day lasts from early dawn to night, normally. One of the engine's features is to cast a lighting effect that changes the lighting of the area as time passes, per weather condition. The standard one starts at a faint pink, goes to bright white, to sunset orange, to dark. However, if your game takes a more serious and dark tone, you could literally darken the lighting! Just decrease the existing weather lighting values by a small bit. It won't have much of a gameplay impact, but it'll feel darker, eerier, less cheery. On the other hand, if your game is more light-hearted, make the lighting slightly brighter.
     Spruce up the existing particle effects. Particle effects exist to complement the game's feel, so changing that changes the feel of the game.
+
+Technical prowesses
+    Edge offset effects
     
 
 Bag of notes (useful stuff)

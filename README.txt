@@ -34,7 +34,7 @@ Discord server: https://discord.gg/qbhz4u3
 ===============
     * Replicates most of the standard Pikmin gameplay.
     * Content that can be edited via text files, or just replacing the image and sound files.
-    * Area editor and animation editor.
+    * Intuitive and deep editso, such as an area editor and animation editor.
     * Scripting for custom objects.
     * Tools to help with debugging custom content.
     * A comprehensive manual to help with making content.

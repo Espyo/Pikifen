@@ -30,6 +30,7 @@ Next tasks (roughly sorted most important first)
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
             Same with a sector reusing a vertex and other things maybe?
+    Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     More puzzle elements
         Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
             Add maker notes indicating this

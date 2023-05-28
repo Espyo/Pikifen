@@ -207,6 +207,7 @@ bool ImGui::ListBox(
     const string &label, int* current_item, const vector<string> &items,
     const int height_in_items
 ) {
+    //TODO check if items is empty
     const char** array = new const char* [items.size()];
     
     for(size_t i = 0; i < items.size(); ++i) {
@@ -219,6 +220,7 @@ bool ImGui::ListBox(
             current_item, array, (int) items.size(),
             height_in_items
         );
+    //TODO free "array"
 }
 
 
