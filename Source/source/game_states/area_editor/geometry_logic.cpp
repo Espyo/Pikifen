@@ -877,7 +877,7 @@ void area_editor::find_problems() {
             next_idx = next_ptr->stored_inside;
         }
     }
-
+    
     //Over the limit of Pikmin.
     size_t n_pikmin_mobs = 0;
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
@@ -1982,6 +1982,8 @@ void area_editor::paste_edge_properties() {
         copy_buffer_edge->clone(e);
     }
     
+    update_all_edge_offset_caches();
+    
     set_status("Successfully pasted edge properties.");
     return;
 }
@@ -2081,6 +2083,8 @@ void area_editor::paste_sector_properties() {
         copy_buffer_sector->clone(s);
         update_sector_texture(s, copy_buffer_sector->texture_info.file_name);
     }
+    
+    update_all_edge_offset_caches();
     
     set_status("Successfully pasted sector properties.");
     return;

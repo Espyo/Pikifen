@@ -6,10 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Area editor preview mode
-        If you have preview mode on and make changes, the wall shadows won't get updated properly
-        Preview mode doesn't show water half of the time
-        Pasting a sector's properties does not update wall shadows properly
     If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
     If you disable the area editor undo feature, areas are no longer recognized as changed (e.g. when you try to quit with unsaved changes)
     The "mob stuck in wall" area editor review error should only trigger if said wall isn't within stepping height (check Tutorial Meadow)

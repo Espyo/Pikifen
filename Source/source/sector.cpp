@@ -824,6 +824,7 @@ void sector::clone(sector* destination) const {
     destination->is_bottomless_pit = is_bottomless_pit;
     destination->z = z;
     destination->tag = tag;
+    destination->hazards = hazards;
     destination->hazard_floor = hazard_floor;
     destination->hazards_str = hazards_str;
     destination->brightness = brightness;
