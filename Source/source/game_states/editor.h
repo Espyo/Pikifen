@@ -355,6 +355,8 @@ protected:
     float double_click_time;
     //List of every individual editor icon.
     vector<ALLEGRO_BITMAP*> editor_icons;
+    //If Escape was pressed the previous frame.
+    bool escape_was_pressed;
     //Is the Alt key currently pressed down?
     bool is_alt_pressed;
     //Is the Ctrl key currently pressed down?
@@ -438,6 +440,7 @@ protected:
         const bool can_make_new = false,
         const string &filter = ""
     );
+    bool popup(const char* label, ImGuiWindowFlags flags = 0);
     void process_dialogs();
     void process_gui_editor_style();
     void process_gui_history(

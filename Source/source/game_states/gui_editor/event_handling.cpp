@@ -75,6 +75,8 @@ void gui_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
         press_save_button();
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
+        escape_was_pressed = true;
+        
         if(!dialogs.empty()) {
             close_top_dialog();
         }

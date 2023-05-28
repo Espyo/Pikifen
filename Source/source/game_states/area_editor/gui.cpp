@@ -1697,7 +1697,7 @@ void area_editor::process_gui_panel_info() {
         );
         
         //Add area tags popup.
-        if(ImGui::BeginPopup("addTags")) {
+        if(popup("addTags")) {
         
             string new_tag;
             

@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -12,7 +12,6 @@ Next tasks (roughly sorted most important first)
     Water is squashing the texture of the floor underneath to half its height (see the puzzle stage)
         It's also ignoring the tint of the texture
     Area editor doesn't memorize that you want the reference image to be hidden (at least when you press it from the toolbar)
-    You can't press Escape to cancel out of the rename hitbox in the animation editor
     
     --- v0.24.0 ---
     https://github.com/Espyo/Pikifen/pull/37

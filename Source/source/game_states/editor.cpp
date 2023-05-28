@@ -69,6 +69,7 @@ editor::editor() :
     canvas_separator_x(-1),
     changes_mgr(this),
     double_click_time(0),
+    escape_was_pressed(false),
     is_alt_pressed(false),
     is_ctrl_pressed(false),
     is_m1_pressed(false),
@@ -154,6 +155,7 @@ void editor::close_top_dialog() {
  * be run after the editor's own logic code.
  */
 void editor::do_logic_post() {
+    escape_was_pressed = false;
     game.fade_mgr.tick(game.delta_t);
 }
 
@@ -760,6 +762,9 @@ bool editor::input_popup(
 ) {
     bool ret = false;
     if(ImGui::BeginPopup(label)) {
+        if(escape_was_pressed) {
+            ImGui::CloseCurrentPopup();
+        }
         ImGui::Text("%s", prompt);
         if(!ImGui::IsAnyItemActive()) {
             ImGui::SetKeyboardFocusHere();
@@ -856,6 +861,9 @@ bool editor::list_popup(
 ) {
     bool ret = false;
     if(ImGui::BeginPopup(label)) {
+        if(escape_was_pressed) {
+            ImGui::CloseCurrentPopup();
+        }
         for(size_t i = 0; i < items.size(); ++i) {
             string name = items[i];
             if(ImGui::Selectable(name.c_str())) {
@@ -1030,6 +1038,24 @@ void editor::open_picker_dialog(
     new_dialog->process_callback =
         std::bind(&editor::picker_info::process, new_picker);
     new_picker->dialog_ptr = new_dialog;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Begins a Dear ImGui popup, with logic to close it if Escape was pressed.
+ * label:
+ *   The popup's label.
+ * flags:
+ *   Any Dear ImGui popup flags.
+ */
+bool editor::popup(const char* label, ImGuiWindowFlags flags) {
+    bool result = ImGui::BeginPopup(label, flags);
+    if(result) {
+        if(escape_was_pressed) {
+            ImGui::CloseCurrentPopup();
+        }
+    }
+    return result;
 }
 
 
@@ -2306,7 +2332,7 @@ void editor::picker_info::process() {
         }
     }
     
-    if(ImGui::BeginPopup("newItemCategory")) {
+    if(editor_ptr->popup("newItemCategory")) {
         ImGui::Text("%s", "What is the category of the new item?");
         
         if(ImGui::BeginChild("categoryList", ImVec2(0.0f, 80.0f), true)) {

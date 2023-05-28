@@ -85,6 +85,22 @@ void animation_editor::handle_key_down_anywhere(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_S, true)) {
         press_save_button();
         
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
+    
+        escape_was_pressed = true;
+        
+        if(!dialogs.empty()) {
+            close_top_dialog();
+            
+        } else {
+            switch(state) {
+            case EDITOR_STATE_MAIN: {
+                press_quit_button();
+                break;
+            }
+            }
+        }
+        
     }
 }
 
@@ -100,20 +116,6 @@ void animation_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
         
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
         press_zoom_everything_button();
-        
-    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_ESCAPE)) {
-    
-        if(!dialogs.empty()) {
-            close_top_dialog();
-            
-        } else {
-            switch(state) {
-            case EDITOR_STATE_MAIN: {
-                press_quit_button();
-                break;
-            }
-            }
-        }
         
     }
 }
