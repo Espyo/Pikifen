@@ -31,6 +31,9 @@ script {
                 set_state idling_broken
             end_if
         }
+        on_land {
+            stop
+        }
     }
     idling_broken {
         on_enter {
@@ -42,10 +45,16 @@ script {
                 set_state idling_very_broken
             end_if
         }
+        on_land {
+            stop
+        }
     }
     idling_very_broken {
         on_enter {
             set_animation idling_very_broken
+        }
+        on_land {
+            stop
         }
     }
     destroyed {

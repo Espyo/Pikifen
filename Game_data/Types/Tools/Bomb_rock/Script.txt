@@ -17,7 +17,11 @@ script {
             set_state primed
         }
         on_held {
-            set_state held_by_pikmin
+            get_info h mob_category
+            print $h
+            if $h = Pikmin
+                set_state held_by_pikmin
+            end_if
         }
         on_hitbox_touch_eat {
             get_chomped
@@ -63,6 +67,9 @@ script {
         on_hitbox_touch_eat {
             get_chomped
             set_state held_by_enemy
+        }
+        on_land {
+            stop
         }
     }
     
