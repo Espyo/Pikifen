@@ -425,7 +425,6 @@ protected:
     );
     void leave();
     void load_custom_mob_cat_types(const bool is_area_editor);
-    void mark_as_changed();
     void open_dialog(
         const string &title,
         const std::function<void()> &process_callback

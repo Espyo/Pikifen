@@ -1715,12 +1715,14 @@ void area_editor::load_reference() {
                     "alpha"
                 )->get_value_or_default(i2s(AREA_EDITOR::DEF_REFERENCE_ALPHA))
             );
-            
+        show_reference = s2b(file.get_child_by_name("visible")->value);
+        
     } else {
         reference_file_name.clear();
         reference_center = point();
         reference_size = point();
         reference_alpha = 0;
+        show_reference = true;
     }
     
     update_reference();
@@ -2163,6 +2165,7 @@ void area_editor::press_quit_button() {
 void area_editor::press_reference_button() {
     show_reference = !show_reference;
     string state_str = (show_reference ? "Enabled" : "Disabled");
+    save_reference();
     set_status(state_str + " reference image visibility.");
 }
 
@@ -2614,6 +2617,8 @@ void area_editor::press_zoom_out_button() {
 void area_editor::register_change(
     const string &operation_name, area_data* pre_prepared_state
 ) {
+    changes_mgr.mark_as_changed();
+    
     if(game.options.area_editor_undo_limit == 0) {
         if(pre_prepared_state) {
             forget_prepared_state(pre_prepared_state);
@@ -2635,7 +2640,6 @@ void area_editor::register_change(
     }
     undo_history.push_front(make_pair(new_state, operation_name));
     
-    changes_mgr.mark_as_changed();
     undo_save_lock_operation = operation_name;
     undo_save_lock_timer.start();
     
@@ -3464,6 +3468,12 @@ void area_editor::save_reference() {
         new data_node(
             "alpha",
             i2s(reference_alpha)
+        )
+    );
+    reference_file.add(
+        new data_node(
+            "visible",
+            b2s(show_reference)
         )
     );
     

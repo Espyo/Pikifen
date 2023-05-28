@@ -807,13 +807,13 @@ void area_editor::find_problems() {
                     
                 } else if(
                     e_ptr->sectors[0] == mob_sector &&
-                    e_ptr->sectors[1]->z > mob_sector->z
+                    e_ptr->sectors[1]->z > mob_sector->z + GEOMETRY::STEP_HEIGHT
                 ) {
                     in_wall = true;
                     
                 } else if(
                     e_ptr->sectors[1] == mob_sector &&
-                    e_ptr->sectors[0]->z > mob_sector->z
+                    e_ptr->sectors[0]->z > mob_sector->z + GEOMETRY::STEP_HEIGHT
                 ) {
                     in_wall = true;
                     
