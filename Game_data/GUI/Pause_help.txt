@@ -34,6 +34,7 @@ tidbits{
 	advanced_gameplay{
 		Balancing Pikmin amounts;The more Pikmin doing something together, the more efficient and effective they will be. But too many in one place means things like shortcut opening or reinforcement growing aren't getting done. Plan carefully!;Help/Pikmin_balance.jpg
 		Saving Pikmin;If your Pikmin are in trouble, whistling them is generally a good catch-all way of saving them!;Help/Saving_Pikmin.jpg
+		Maturity;Pikmin with a leaf on their head walk and carry objects slowly. Bud Pikmin are a bit faster, and flower Pikmin are the fastest. To increase a Pikmin's maturity, let it stay underground for a while before plucking, or feed it nectar.;Help/Maturity.jpg
 		Sprays;Use sprays to help you out. Spicy sprays speed your Pikmin up, and bitter sprays freeze enemies!;Help/Sprays.jpg
 		Carrying path;Pikmin take the shortest path available to their destination. If a barrier is blocking a shorter path, consider taking it down.;Help/Paths.jpg
 		Excess suffering;Pikmin that have been recently burned, poisoned, etc. will survive for less time if it happens again! This "health" value eventually returns to normal over time.;Help/Saving_Pikmin.jpg

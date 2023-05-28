@@ -6,7 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
     Water is squashing the texture of the floor underneath to half its height (see the puzzle stage)
         It's also ignoring the tint of the texture
     
@@ -14,9 +13,7 @@ Next tasks (roughly sorted most important first)
     https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Espyo/Pikifen/pull/38
     Anything I can do about bridges blocking the path to themselves?
-    Are flower Pikmin even completing tasks any faster?
     What happens if Pikmin is drowning, and the water in that sector gets drained away?
-    Add a pause screen help tidbit for maturity
     Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
@@ -896,6 +893,8 @@ Tasks for later on (I might never implement these)
                 You can just give the mob a status effect that changes its speed
         Code
             Replace the function documentations with Doxygen so VS Code can make use of it in tooltips
+        If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
+            This is kinda correct? Either way not a big deal I guess
     Possible solutions to known issues
         Regarding true fullscreen crashing when a message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features
