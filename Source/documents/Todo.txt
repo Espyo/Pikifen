@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -12,12 +12,11 @@ Next tasks (roughly sorted most important first)
     --- v0.24.0 ---
     https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Espyo/Pikifen/pull/38
-    Anything I can do about bridges blocking the path to themselves?
-    What happens if Pikmin is drowning, and the water in that sector gets drained away?
     Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
             Same with a sector reusing a vertex and other things maybe?
+    If you start drawing a path on top of a link, it should split the link and start drawing on that stop
     Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     More puzzle elements
         Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power

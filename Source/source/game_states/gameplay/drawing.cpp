@@ -673,14 +673,24 @@ void gameplay_state::draw_ingame_text() {
             path->settings.target_mob->pos :
             path->settings.target_point;
             
-        //Faint lines for the entire path.
         if(!path->path.empty()) {
+        
+            //Faint lines for the entire path.
             for(size_t s = 0; s < path->path.size() - 1; ++s) {
+                bool is_blocked = false;
+                path_link* l_ptr = path->path[s]->get_link(path->path[s + 1]);
+                auto l_it = path_mgr.obstructions.find(l_ptr);
+                if(l_it != path_mgr.obstructions.end()) {
+                    is_blocked = !l_it->second.empty();
+                }
+                
                 al_draw_line(
                     path->path[s]->pos.x,
                     path->path[s]->pos.y,
                     path->path[s + 1]->pos.x,
                     path->path[s + 1]->pos.y,
+                    is_blocked ?
+                    al_map_rgba(200, 0, 0, 150) :
                     al_map_rgba(0, 0, 200, 150),
                     2.0f
                 );
@@ -699,6 +709,7 @@ void gameplay_state::draw_ingame_text() {
                 16.0f,
                 al_map_rgba(0, 192, 0, 200)
             );
+            
         }
         
         if(
@@ -706,27 +717,37 @@ void gameplay_state::draw_ingame_text() {
             path->result == PATH_RESULT_DIRECT_NO_STOPS ||
             path->cur_path_stop_nr == path->path.size()
         ) {
+            bool is_blocked = path->block_reason != PATH_BLOCK_REASON_NONE;
             //Line directly to the target.
             al_draw_line(
                 game.maker_tools.info_lock->pos.x,
                 game.maker_tools.info_lock->pos.y,
                 target_pos.x,
                 target_pos.y,
-                al_map_rgba(0, 0, 255, 200), 4.0f
+                is_blocked ?
+                al_map_rgba(255, 0, 0, 200) :
+                al_map_rgba(0, 0, 255, 200),
+                4.0f
             );
         } else if(path->cur_path_stop_nr < path->path.size()) {
+            bool is_blocked = path->block_reason != PATH_BLOCK_REASON_NONE;
             //Line to the next stop, and circle for the next stop in blue.
             al_draw_line(
                 game.maker_tools.info_lock->pos.x,
                 game.maker_tools.info_lock->pos.y,
                 path->path[path->cur_path_stop_nr]->pos.x,
                 path->path[path->cur_path_stop_nr]->pos.y,
-                al_map_rgba(0, 0, 255, 200), 4.0f
+                is_blocked ?
+                al_map_rgba(255, 0, 0, 200) :
+                al_map_rgba(0, 0, 255, 200),
+                4.0f
             );
             al_draw_filled_circle(
                 path->path[path->cur_path_stop_nr]->pos.x,
                 path->path[path->cur_path_stop_nr]->pos.y,
                 10.0f,
+                is_blocked ?
+                al_map_rgba(192, 0, 0, 200) :
                 al_map_rgba(0, 0, 192, 200)
             );
         }
