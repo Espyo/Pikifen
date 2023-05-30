@@ -15,7 +15,7 @@
 
 #include "game_states/game_state.h"
 
-#include "area.h"
+#include "area/area.h"
 #include "libs/controls_manager.h"
 #include "game_config.h"
 #include "game_states/animation_editor/editor.h"

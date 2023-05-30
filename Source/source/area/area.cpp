@@ -5,16 +5,19 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Area class, and related functions.
+ * Area class and related functions.
  */
 
-#include <algorithm>
+#include <vector>
 
 #include "area.h"
 
-#include "functions.h"
-#include "game.h"
-#include "utils/string_utils.h"
+#include "../functions.h"
+#include "../game.h"
+#include "../utils/string_utils.h"
+
+using std::size_t;
+using std::vector;
 
 
 namespace AREA {
@@ -1088,6 +1091,193 @@ void area_data::remove_vertex(const vertex* v_ptr) {
             return;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a blockmap.
+ */
+blockmap::blockmap() :
+    n_cols(0),
+    n_rows(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the info of the blockmap.
+ */
+void blockmap::clear() {
+    top_left_corner = point();
+    edges.clear();
+    sectors.clear();
+    n_cols = 0;
+    n_rows = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the block column in which an X coordinate is contained.
+ * Returns INVALID on error.
+ * x:
+ *   X coordinate.
+ */
+size_t blockmap::get_col(const float x) const {
+    if(x < top_left_corner.x) return INVALID;
+    float final_x = (x - top_left_corner.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+    if(final_x >= n_cols) return INVALID;
+    return final_x;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Obtains a list of edges that are within the specified rectangular region.
+ * Returns true on success, false on error.
+ * tl:
+ *   Top-left coordinates of the region.
+ * br:
+ *   Bottom-right coordinates of the region.
+ * edges:
+ *   Set to fill the edges into.
+ */
+bool blockmap::get_edges_in_region(
+    const point &tl, const point &br, set<edge*> &edges
+) const {
+
+    size_t bx1 = game.cur_area_data.bmap.get_col(tl.x);
+    size_t bx2 = game.cur_area_data.bmap.get_col(br.x);
+    size_t by1 = game.cur_area_data.bmap.get_row(tl.y);
+    size_t by2 = game.cur_area_data.bmap.get_row(br.y);
+    
+    if(
+        bx1 == INVALID || bx2 == INVALID ||
+        by1 == INVALID || by2 == INVALID
+    ) {
+        //Out of bounds.
+        return false;
+    }
+    
+    for(size_t bx = bx1; bx <= bx2; ++bx) {
+        for(size_t by = by1; by <= by2; ++by) {
+        
+            vector<edge*> &block_edges =
+                game.cur_area_data.bmap.edges[bx][by];
+                
+            for(size_t e = 0; e < block_edges.size(); ++e) {
+                edges.insert(block_edges[e]);
+            }
+        }
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the block row in which a Y coordinate is contained.
+ * Returns INVALID on error.
+ * y:
+ *   Y coordinate.
+ */
+size_t blockmap::get_row(const float y) const {
+    if(y < top_left_corner.y) return INVALID;
+    float final_y = (y - top_left_corner.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE;
+    if(final_y >= n_rows) return INVALID;
+    return final_y;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the top-left coordinates for the specified column and row.
+ * col:
+ *   Column to check.
+ * row:
+ *   Row to check.
+ */
+point blockmap::get_top_left_corner(const size_t col, const size_t row) const {
+    return
+        point(
+            col * GEOMETRY::BLOCKMAP_BLOCK_SIZE + top_left_corner.x,
+            row * GEOMETRY::BLOCKMAP_BLOCK_SIZE + top_left_corner.y
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a mob generation structure.
+ * pos:
+ *   Coordinates.
+ * type:
+ *   The mob type.
+ * angle:
+ *   Angle it is facing.
+ * vars:
+ *   String representation of the script vars.
+ */
+mob_gen::mob_gen(
+    const point &pos, mob_type* type, const float angle, const string &vars
+) :
+    type(type),
+    pos(pos),
+    angle(angle),
+    vars(vars),
+    stored_inside(INVALID) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clones the properties of this mob generator onto another mob generator.
+ * destination:
+ *   Mob generator to clone the data into.
+ * position:
+ *   If true, the position is included too.
+ */
+void mob_gen::clone(mob_gen* destination, const bool include_position) const {
+    destination->angle = angle;
+    if(include_position) destination->pos = pos;
+    destination->type = type;
+    destination->vars = vars;
+    destination->link_nrs = link_nrs;
+    destination->stored_inside = stored_inside;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a tree shadow.
+ * center:
+ *   Center coordinates.
+ * size:
+ *   Width and height.
+ * angle:
+ *   Angle it is rotated by.
+ * alpha:
+ *   How opaque it is [0-255].
+ * file_name:
+ *   Name of the file with the tree shadow's texture.
+ * sway:
+ *   Multiply the sway distance by this much, horizontally and vertically.
+ */
+tree_shadow::tree_shadow(
+    const point &center, const point &size, const float angle,
+    const unsigned char alpha, const string &file_name, const point &sway
+) :
+    file_name(file_name),
+    bitmap(nullptr),
+    center(center),
+    size(size),
+    angle(angle),
+    alpha(alpha),
+    sway(sway) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a tree shadow.
+ */
+tree_shadow::~tree_shadow() {
+    game.textures.detach(file_name);
 }
 
 

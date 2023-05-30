@@ -13,7 +13,9 @@
 
 #include <memory>
 
-#include "mission.h"
+#include "../mission.h"
+#include "../pathing.h"
+#include "../weather.h"
 #include "sector.h"
 
 
@@ -35,6 +37,99 @@ extern const int DEF_MISSION_MEDAL_GOLD_REQ;
 extern const int DEF_MISSION_MEDAL_PLATINUM_REQ;
 extern const int DEF_MISSION_MEDAL_SILVER_REQ;
 extern const size_t DEF_MISSION_TIME_LIMIT;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * The blockmap divides the entire area
+ * in a grid, so that collision detections only
+ * happen between stuff in the same grid cell.
+ * This is to avoid having, for instance, a Pikmin
+ * on the lake part of TIS check for collisions with
+ * a wall on the landing site part of TIS.
+ * It's also used when checking sectors in a certain spot.
+ */
+struct blockmap {
+    //Top-left corner of the blockmap.
+    point top_left_corner;
+    //Specifies a list of edges in each block.
+    vector<vector<vector<edge*> > > edges;
+    //Specifies a list of sectors in each block.
+    vector<vector<unordered_set<sector*> > >  sectors;
+    //Number of columns.
+    size_t n_cols;
+    //Number of rows.
+    size_t n_rows;
+    
+    blockmap();
+    size_t get_col(const float x) const;
+    size_t get_row(const float y) const;
+    bool get_edges_in_region(
+        const point &tl, const point &br, set<edge*> &edges
+    ) const;
+    point get_top_left_corner(const size_t col, const size_t row) const;
+    void clear();
+};
+
+
+/* ----------------------------------------------------------------------------
+ * This structure holds the information for a mob's generation.
+ * It is a mob's representation on the editor and in the area file,
+ * but it doesn't have the data of a LIVING mob. This only holds its
+ * position and type data, plus some other tiny things.
+ */
+struct mob_gen {
+    //Mob type.
+    mob_type* type;
+    //Position.
+    point pos;
+    //Angle.
+    float angle;
+    //Script vars.
+    string vars;
+    //Indexes of linked objects.
+    vector<size_t> link_nrs;
+    //Index to the mob storing this one inside, if any.
+    size_t stored_inside;
+    //Linked objects. Cache for performance.
+    vector<mob_gen*> links;
+    
+    mob_gen(
+        const point &pos = point(),
+        mob_type* type = NULL, const float angle = 0, const string &vars = ""
+    );
+    
+    void clone(mob_gen* destination, const bool include_position = true) const;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * A structure holding info on the shadows
+ * cast onto the area by a tree (or
+ * whatever the game maker desires).
+ */
+struct tree_shadow {
+    //File name of the tree shadow texture.
+    string file_name;
+    //Tree shadow texture.
+    ALLEGRO_BITMAP* bitmap;
+    //Center coordinates.
+    point center;
+    //Width and height.
+    point size;
+    //Angle.
+    float angle;
+    //Opacity.
+    unsigned char alpha;
+    //Swaying is multiplied by this.
+    point sway;
+    
+    tree_shadow(
+        const point &center = point(), const point &size = point(100, 100),
+        const float angle = 0, const unsigned char alpha = 255,
+        const string &file_name = "", const point &sway = point(1, 1)
+    );
+    ~tree_shadow();
 };
 
 

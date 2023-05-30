@@ -18,12 +18,12 @@
 #include <allegro5/allegro.h>
 
 #include "../animation.h"
+#include "../area/sector.h"
 #include "../game_states/gameplay/in_world_hud.h"
 #include "../misc_structs.h"
 #include "../mob_script.h"
 #include "../mob_script_action.h"
 #include "../particle.h"
-#include "../sector.h"
 #include "../status.h"
 #include "mob_utils.h"
 

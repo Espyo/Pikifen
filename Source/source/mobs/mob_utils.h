@@ -17,6 +17,7 @@
 #include <allegro5/allegro.h>
 
 #include "../animation.h"
+#include "../area/sector.h"
 #include "../misc_structs.h"
 #include "../mob_types/bouncer_type.h"
 #include "../mob_types/bridge_type.h"
@@ -36,7 +37,6 @@
 #include "../mob_types/track_type.h"
 #include "../mob_types/treasure_type.h"
 #include "../pathing.h"
-#include "../sector.h"
 #include "../utils/geometry_utils.h"
 #include "mob_enums.h"
 

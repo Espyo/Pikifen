@@ -13,7 +13,7 @@
 
 #include <deque>
 
-#include "../../area.h"
+#include "../../area/area.h"
 #include "../editor.h"
 
 #include "../../libs/imgui/imgui_impl_allegro5.h"

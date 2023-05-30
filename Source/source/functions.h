@@ -15,14 +15,15 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
 
-#include "area.h"
+#include "area/area.h"
 #include "controls.h"
 #include "mob_script.h"
 #include "mobs/leader.h"
 #include "mobs/onion.h"
 #include "mobs/pikmin.h"
-#include "sector.h"
+#include "area/sector.h"
 #include "libs/data_file.h"
 
 

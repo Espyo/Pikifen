@@ -15,7 +15,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "area.h"
+#include "area/area.h"
 #include "misc_structs.h"
 #include "libs/data_file.h"
 

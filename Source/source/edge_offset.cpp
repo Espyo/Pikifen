@@ -18,7 +18,7 @@
 #include "drawing.h"
 #include "functions.h"
 #include "game.h"
-#include "sector.h"
+#include "area/sector.h"
 
 
 /* ----------------------------------------------------------------------------
