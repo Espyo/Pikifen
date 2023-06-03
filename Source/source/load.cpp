@@ -583,7 +583,7 @@ void load_area(
         sector* s_ptr = game.cur_area_data.sectors[s];
         s_ptr->triangles.clear();
         TRIANGULATION_ERRORS res =
-            triangulate(s_ptr, &lone_edges, load_for_editor, false);
+            triangulate_sector(s_ptr, &lone_edges, false);
             
         if(res != TRIANGULATION_NO_ERROR && load_for_editor) {
             game.cur_area_data.problems.non_simples[s_ptr] = res;

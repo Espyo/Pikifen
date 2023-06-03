@@ -20,7 +20,7 @@
     
     <dl>
       <dt><b>Why did it crash?</b></dt>
-      <dd>If you made some content for it and you suspect that that is the problem, please check the <code>User_data/Error_log.txt</code> file, if it exists. It should tell you what went wrong, like a missing comma, or a misspelled name. Fix the problems and try again.</dd>
+      <dd>If you made some content for the engine and you suspect that that is the problem, please check the <code>User_data/Error_log.txt</code> file, if it exists. It should tell you what went wrong, like a missing comma, or a misspelled name. Fix the problems and try again.</dd>
       <dd>
         If you think the crash is due to a problem with the engine itself, then it could be one of the following:
         <ul>
@@ -32,11 +32,11 @@
       
       <dt><b>Why can't I see the game window?</b></dt>
       <dd>Because windows sometimes break under Windows.</dd>
-      <dd>Open <code>User_data/Options.txt</code>, go to the line with <code>window_pos_hack=false</code>, and change it to <code>window_pos_hack=true</code>.</dd>
+      <dd>In the <a href="options.html">options file</a>, there is a line that controls the window position hack feature. Set that property to <code>true</code>.</dd>
       
       <dt><b>Why is it running slowly?</b></dt>
-      <dd>Well, it IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural.</dd>
-      <dd>You can check the <code>User_data/Options.txt</code> file and use the Pikmin Fanon page for settings that you can change in order to sacrifice appearance for performance.</dd>
+      <dd>Well, it IS a complex engine running a lot of flexible logic that controls several dozens of entities, so it's only natural.</dd>
+      <dd>You can check tweak some <a href="options.html">options</a> in order to sacrifice appearance for performance.</dd>
       <dd>If you suspect some of the content you've made is having an impact on performance, try the <a href="maker_toolkit.html#perf-mon">performance monitor</a>.</dd>
       
       <dt><b>Why are some parts of the logic and physics so broken?</b></dt>
@@ -46,7 +46,7 @@
       <dd>Are you running it under Wine? If so, update Wine. That fixed the problem for a friend that had it. If not, contact me, and I'll try to see what's up.</dd>
       
       <dt><b>Why does the engine think I'm touching the analog stick when I'm not?</b></dt>
-      <dd>You can open <code>User_data/Options.txt</code> and set <code>joystick_min_deadzone</code> to a higher value. This way, a loose analog stick won't be accounted for if it is simply wiggling a bit.</dd>
+      <dd>You can open the <a href="options.html">options file</a> and adjust the option that controls the joystick minimum deadzone to a higher value. This way, a loose analog stick won't be accounted for if it is simply wiggling a bit.</dd>
     </dl>
     
     <h2 id="making">Problems while making</h2>
@@ -62,7 +62,7 @@
         <ul>
           <li>File names are case sensitive. Lowercase and uppercase matter.</li>
           <li>You need to include the <a href="glossary.html#E">extension</a>.</li>
-          <li>The engine only finds the image in one folder. General images go in <code>Game_data/Graphics</code>, and textures go in <code>Game_data/Graphics/Textures</code>.</li>
+          <li>The engine only searches for the image in one folder. General images go in <code>Game_data/Graphics</code>, and textures go in <code>Game_data/Graphics/Textures</code>.</li>
         </ul>
       </dd>
 
@@ -76,7 +76,7 @@
 
     <h2 id="known_issues">Known issues</h2>
 
-    <p>This is a list of glitches with the engine that are known to exist, but can't be solved right now, either because they are too difficult to fix, or because they are not a priority. When possible, a solution or workaround is presented too.</p>
+    <p>This is a list of problems with the engine that are known to exist, but can't be solved right now, either because they are too difficult to fix, or because they are not a priority. When possible, a solution or workaround is presented too.</p>
 
     <dl>
       <dt><b>In the area editor, when you have a square sector with another square sector inside, if you try to move an edge from the internal sector into the equivalent external sector's edge, but the external sector's edge has some moot vertexes (vertexes where both edges at 180 degrees), the area's geometry will break.</b></dt>
@@ -90,6 +90,9 @@
       
       <dt><b>Some wall shadows that fade away into a small size look really thin.</b></dt>
       <dd>Technically the engine is drawing the shapes of the shadows correctly, from a thick size to a small size, but the color interpolation done by the graphics backend sometimes does a bad job when the final two points of the shadow are so thin. There is not much that can be done to fix this.</dd>
+
+      <dt><b>Some wall shadows interfere with other nearby wall shadows.</b></dt>
+      <dd>Use the edge properties panel in the area editor to tweak the way the shadows work. Making them shorter is a good general solution.</dd>
 
       <dt><b>Objects can go from underneath a bridge to the top of it.</b></dt>
       <dd>So long as an object can climb onto one of the (disconnected) boards that make up a slanted bridge, the engine will let them do so. It's very difficult to detect if an object is going from "under" the bridge, since that's not a concept for the engine. The first <i>Pikmin</i> game has a very similar glitch. This shouldn't be a problem in most cases since if you can get underneath the bridge, chances are you can get to its starting point. Still, when designing areas, make sure players can't exploit this to get where they shouldn't.</dd>

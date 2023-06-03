@@ -50,10 +50,10 @@ enum TRIANGULATION_ERRORS {
     TRIANGULATION_NO_ERROR,
     //Invalid arguments provided.
     TRIANGULATION_ERROR_INVALID_ARGS,
+    //Non-simple sector: Sector is not closed.
+    TRIANGULATION_ERROR_NOT_CLOSED,
     //Non-simple sector: Lone edges break the sector.
     TRIANGULATION_ERROR_LONE_EDGES,
-    //Non-simple sector: Vertexes are used multiple times.
-    TRIANGULATION_ERROR_VERTEXES_REUSED,
     //Non-simple sector: Ran out of ears while triangulating.
     TRIANGULATION_ERROR_NO_EARS,
 };
@@ -73,7 +73,8 @@ struct triangle {
 
 
 /* ----------------------------------------------------------------------------
- * Represents a series of vertexes that make up a polygon.
+ * Represents a series of vertexes that make up a plain old geometric polygon.
+ * A polygon cannot have holes or islands.
  */
 struct polygon {
     //Ordered list of vertexes that represent the polygon.
@@ -108,19 +109,24 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const point &p, vector<vertex*> &all_vertexes, const float merge_radius
 );
 TRIANGULATION_ERRORS get_polys(
-    sector* s, polygon* outer, vector<polygon>* inners,
-    set<edge*>* lone_edges, const bool check_vertex_reuse
+    sector* s, polygon* outer, vector<polygon>* inners
 );
-vertex* get_rightmost_vertex(const map<edge*, bool> &edges);
+vertex* get_rightmost_vertex(const unordered_set<edge*> &edges);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 bool is_polygon_clockwise(vector<vertex*> &vertexes);
 bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr);
 bool is_vertex_ear(
     const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr
 );
-TRIANGULATION_ERRORS triangulate(
-    sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
-    const bool clear_lone_edges
+TRIANGULATION_ERRORS trace_edges(
+    vertex* start_v_ptr, sector* s_ptr, bool going_cw,
+    vector<vertex*>* vertexes, unordered_set<edge*>* unvisited_edges
+);
+TRIANGULATION_ERRORS triangulate_polygon(
+    polygon* poly, vector<triangle>* triangles
+);
+TRIANGULATION_ERRORS triangulate_sector(
+    sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
 );
 
 #endif //ifndef GEOMETRY_INCLUDED

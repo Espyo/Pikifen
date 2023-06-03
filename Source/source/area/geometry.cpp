@@ -128,8 +128,10 @@ void polygon::cut(vector<polygon>* inners) {
         return;
     }
     
+    //Start with the rightmost vertex.
     vertex* rightmost = get_rightmost_vertex();
     
+    //We have to make one cut for every inner.
     for(size_t i = 0; i < inners->size(); ++i) {
         polygon* inner_p = &(inners->at(i));
         vertex* closest_edge_v1 = NULL;
@@ -161,10 +163,8 @@ void polygon::cut(vector<polygon>* inners) {
             v1 = vertexes[v];
             v2 = get_next_in_vector(vertexes, v);
             if(
-                (v1->x >= start->x ||
-                 v2->x >= start->x) &&
-                (v1->x <= rightmost->x ||
-                 v2->x <= rightmost->x)
+                (v1->x >= start->x || v2->x >= start->x) &&
+                (v1->x <= rightmost->x || v2->x <= rightmost->x)
             ) {
                 float r;
                 if(
@@ -380,6 +380,92 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the next edge the trace algorithm should go to.
+ * Because at each vertex there can be multiple edges, including multiple
+ * edges that belong to the sector we are looking for, we should pick
+ * the next edge carefully.
+ * Based on information from the previous edge, we should continue travelling
+ * via the edge with the smallest angle difference (depending on the rotation
+ * direction we're heading.
+ * v_ptr:
+ *   Vertex to check.
+ * prev_v_ptr:
+ *   Vertex that we came from, if any. Used to ensure we don't go backwards.
+ * s_ptr:
+ *   Sector we are trying to trace.
+ * prev_e_angle:
+ *   Angle of the previous edge. This is the angle from the previous vertex to
+ *   the current vertex, so it's sent here cached for performance.
+ * best_is_closest_cw:
+ *   True if we want the edge that is closest clockwise from the previous edge.
+ *   False for the closest counter-clockwise.
+ * next_e_ptr:
+ *   The next edge is returned here. If there is none, NULL is returned.
+ * next_e_angle:
+ *   The next edge's angle is returned here. This is used to feed the next
+ *   iteration of the algorithm so it doesn't need to re-calculate the angle.
+ * next_v_ptr:
+ *   Opposing vertex of the next edge.
+ */
+void find_trace_edge(
+    vertex* v_ptr, vertex* prev_v_ptr, sector* s_ptr,
+    float prev_e_angle, bool best_is_closest_cw,
+    edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr
+) {
+    //Info about the best candidate edge, if any.
+    edge* best_e_ptr = NULL;
+    float best_e_angle = 0;
+    float best_e_angle_cw_dif = 0;
+    vertex* best_v_ptr = NULL;
+    
+    //Go through each edge to check for the best.
+    for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+    
+        edge* e_ptr = v_ptr->edges[e];
+        
+        if(e_ptr->sectors[0] != s_ptr && e_ptr->sectors[1] != s_ptr) {
+            //This edge is not related to our sector.
+            continue;
+        }
+        
+        vertex* other_v_ptr = e_ptr->get_other_vertex(v_ptr);
+        
+        if(other_v_ptr == prev_v_ptr) {
+            //This is where we came from.
+            continue;
+        }
+        
+        //Find this edge's angle,
+        //between our vertex and this edge's other vertex.
+        float e_angle =
+            get_angle(
+                point(v_ptr->x, v_ptr->y),
+                point(other_v_ptr->x, other_v_ptr->y)
+            );
+            
+        float angle_cw_dif = get_angle_cw_dif(prev_e_angle + TAU / 2.0f, e_angle);
+        
+        //Check if this is the best.
+        if(
+            !best_e_ptr ||
+            (best_is_closest_cw && angle_cw_dif < best_e_angle_cw_dif) ||
+            (!best_is_closest_cw && angle_cw_dif > best_e_angle_cw_dif)
+        ) {
+            best_e_ptr = e_ptr;
+            best_e_angle_cw_dif = angle_cw_dif;
+            best_e_angle = e_angle;
+            best_v_ptr = other_v_ptr;
+        }
+    }
+    
+    //Return our result.
+    *next_e_ptr = best_e_ptr;
+    *next_e_angle = best_e_angle;
+    *next_v_ptr = best_v_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Get the convex, concave and ear vertexes.
  * vertexes_left:
  *   List of vertexes left to be processed.
@@ -449,21 +535,16 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
  * Returns the outer polygon and inner polygons of a sector,
  * with the vertexes ordered counter-clockwise for the outer,
  * and clockwise for the inner.
- * Returns a number based on what happened. See TRIANGULATION_ERRORS.
+ * Returns an error code.
  * s_ptr:
  *   Pointer to the sector.
  * outer:
  *   Return the outer polygon here.
  * inners:
  *   Return the inner polygons here.
- * lone_edges:
- *   Return any lone edges found here.
- * check_vertex_reuse:
- *   True if the algorithm is meant to check for vertexes that get reused.
  */
 TRIANGULATION_ERRORS get_polys(
-    sector* s_ptr, polygon* outer, vector<polygon>* inners,
-    set<edge*>* lone_edges, const bool check_vertex_reuse
+    sector* s_ptr, polygon* outer, vector<polygon>* inners
 ) {
     if(!s_ptr || !outer || !inners) return TRIANGULATION_ERROR_INVALID_ARGS;
     TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
@@ -471,161 +552,32 @@ TRIANGULATION_ERRORS get_polys(
     bool doing_outer = true;
     
     //First, compile a list of all edges related to this sector.
-    map<edge*, bool> edges_done;
+    unordered_set<edge*> edges_left(s_ptr->edges.begin(), s_ptr->edges.end());
     
-    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-        edges_done[s_ptr->edges[e]] = false;
-    }
+    //Now trace along the edges, vertex by vertex, until we have no more left.
+    while(!edges_left.empty()) {
     
-    //Now travel along the edges, vertex by vertex, until we have no more left.
-    while(!edges_done.empty()) {
-        bool poly_done = false;
-        
         //Start with the rightmost vertex.
         //If we still haven't closed the outer polygon, then this vertex
         //mandatorily belongs to it. Otherwise, it belongs to an inner.
-        vertex* cur_vertex = get_rightmost_vertex(edges_done);
-        vertex* next_vertex = NULL;
-        vertex* prev_vertex = NULL;
-        edge* prev_edge = NULL;
+        vertex* first_v_ptr = get_rightmost_vertex(edges_left);
         
-        //At the start, assume the angle is left.
-        float prev_angle = TAU / 2;
-        
-        if(!doing_outer) {
+        polygon* cur_poly_ptr = NULL;
+        if(doing_outer) {
+            cur_poly_ptr = outer;
+        } else {
             inners->push_back(polygon());
+            cur_poly_ptr = &(inners->back());
         }
         
-        while(!poly_done) {
-        
-            float base_angle = prev_angle - TAU / 2; //The angle we came from.
-            
-            //For every edge attached to this vertex, find the closest one
-            //that hasn't been done, in the direction of travel.
-            
-            float best_angle_dif = 0;
-            edge* best_edge = NULL;
-            
-            for(size_t e = 0; e < cur_vertex->edges.size(); ++e) {
-                edge* e_ptr = cur_vertex->edges[e];
-                auto it = edges_done.find(e_ptr);
-                if(it == edges_done.end()) {
-                    //We're not meant to check this edge.
-                    continue;
-                }
-                
-                vertex* other_vertex =
-                    e_ptr->vertexes[0] == cur_vertex ?
-                    e_ptr->vertexes[1] :
-                    e_ptr->vertexes[0];
-                    
-                if(other_vertex == prev_vertex) {
-                    //This is where we came from.
-                    continue;
-                }
-                
-                //Find the angle between our vertex and this vertex.
-                float angle =
-                    get_angle(
-                        point(cur_vertex->x, cur_vertex->y),
-                        point(other_vertex->x, other_vertex->y)
-                    );
-                float angle_dif = get_angle_cw_dif(angle, base_angle);
-                
-                //For the outer poly, we're going counter-clockwise.
-                //So the lowest angle difference is best.
-                //For the inner ones, it's clockwise, so the highest.
-                if(
-                    !best_edge ||
-                    (doing_outer  && angle_dif < best_angle_dif) ||
-                    (!doing_outer && angle_dif > best_angle_dif)
-                ) {
-                    best_edge = e_ptr;
-                    best_angle_dif = angle_dif;
-                    prev_angle = angle;
-                    next_vertex = other_vertex;
-                }
-            }
-            
-            if(!best_edge) {
-            
-                //If there is no edge to go to next, something went wrong.
-                
-                //If this polygon is only one vertex, though, then
-                //that means it was a stray edge. Remove it.
-                //Otherwise, something just went wrong, and this is
-                //a non-simple sector.
-                poly_done = true;
-                if(!doing_outer && inners->back().vertexes.size() == 1) {
-                    if(lone_edges) {
-                        lone_edges->insert(
-                            inners->back().vertexes[0]->edges[0]
-                        );
-                    }
-                    inners->erase(inners->begin() + inners->size() - 1);
-                } else {
-                    if(prev_edge) {
-                        if(lone_edges) lone_edges->insert(prev_edge);
-                    }
-                    result = TRIANGULATION_ERROR_LONE_EDGES;
-                }
-                
-            } else if(edges_done[best_edge]) {
-            
-                //If we already did this edge, that's it, polygon closed.
-                poly_done = true;
-                
-            } else {
-            
-                if(doing_outer) {
-                    outer->vertexes.push_back(cur_vertex);
-                } else {
-                    inners->back().vertexes.push_back(cur_vertex);
-                }
-                
-                //Continue onto the next edge.
-                prev_vertex = cur_vertex;
-                cur_vertex = next_vertex;
-                prev_edge = best_edge;
-                edges_done[best_edge] = true;
-                
-            }
-        }
+        //Trace! For the outer poly, we're going counter-clockwise,
+        //while for the inner ones, it's clockwise.
+        trace_edges(
+            first_v_ptr, s_ptr, !doing_outer,
+            &cur_poly_ptr->vertexes, &edges_left
+        );
         
         doing_outer = false;
-        
-        //Remove all edges that were done from the list.
-        auto it = edges_done.begin();
-        while(it != edges_done.end()) {
-            if(it->second) {
-                edges_done.erase(it++);
-            } else {
-                ++it;
-            }
-        }
-    }
-    
-    //Before we quit, let's just check if the sector
-    //uses a vertex more than twice.
-    if(check_vertex_reuse) {
-        map<vertex*, size_t> vertex_count;
-        edge* e_ptr = NULL;
-        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
-            e_ptr = s_ptr->edges[e];
-            vertex_count[e_ptr->vertexes[0]]++;
-            vertex_count[e_ptr->vertexes[1]]++;
-        }
-        
-        for(auto &v : vertex_count) {
-            if(v.second > 2) {
-                //Unfortunately, it does...
-                //That means it's a non-simple sector.
-                //This likely caused an incorrect triangulation,
-                //so let's report it.
-                result = TRIANGULATION_ERROR_VERTEXES_REUSED;
-                break;
-            }
-        }
     }
     
     return result;
@@ -637,14 +589,14 @@ TRIANGULATION_ERRORS get_polys(
  * edges:
  *   Edges to check.
  */
-vertex* get_rightmost_vertex(const map<edge*, bool> &edges) {
+vertex* get_rightmost_vertex(const unordered_set<edge*> &edges) {
     vertex* rightmost = NULL;
     
     for(auto &e : edges) {
-        if(!rightmost) rightmost = e.first->vertexes[0];
+        if(!rightmost) rightmost = e->vertexes[0];
         
         for(unsigned char v = 0; v < 2; ++v) {
-            rightmost = get_rightmost_vertex(e.first->vertexes[v], rightmost);
+            rightmost = get_rightmost_vertex(e->vertexes[v], rightmost);
         }
     }
     
@@ -751,26 +703,245 @@ bool is_vertex_ear(
 
 
 /* ----------------------------------------------------------------------------
+ * Traces edges until it returns to the start, at which point it
+ * closes a polygon.
+ * Returns an error code.
+ * start_v_ptr:
+ *   Vertex to start on.
+ * s_ptr:
+ *   Sector to trace around.
+ * going_cw:
+ *   True if the travel direction should be clockwise,
+ *   false for counter-clockwise.
+ * vertexes:
+ *   The final list of vertexes is returned here.
+ * unvisited_edges:
+ *   List of edges that have not been visited, so the algorithm can
+ *   remove them from the list as it visits them.
+ */
+TRIANGULATION_ERRORS trace_edges(
+    vertex* start_v_ptr, sector* s_ptr, bool going_cw,
+    vector<vertex*>* vertexes, unordered_set<edge*>* unvisited_edges
+) {
+    if(!start_v_ptr || !s_ptr) return TRIANGULATION_ERROR_INVALID_ARGS;
+    
+    vertex* v_ptr = start_v_ptr;
+    
+    //At the start, no need to check if we're going to the previous vertex.
+    vertex* prev_v_ptr = NULL;
+    //At the start, assume the angle is left.
+    float prev_e_angle = TAU / 2.0f;
+    
+    edge* next_e_ptr = NULL;
+    vertex* next_v_ptr = NULL;
+    float next_e_angle = 0.0f;
+    
+    edge* first_e_ptr = NULL;
+    
+    TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
+    bool poly_done = false;
+    
+    //Trace around, vertex by vertex, until we're done.
+    while(!poly_done) {
+    
+        //Find the next edge to go to.
+        //For cases where the vertex only has two edges of our sector,
+        //it's pretty obvious -- just go to the edge that isn't the one we
+        //came from. But if the vertex has more edges, we need to pick based
+        //on the angle and what we're trying to do. There are two approaches:
+        //
+        //            Turn inward           |           Turn outward           
+        //----------------------------------+----------------------------------
+        //You can think of it like you're   |Same, but the cane must stay on
+        //walking on top of the lines, and  |the sector/s that are outside of
+        //you have a cane dragging on the   |the trace direction.
+        //floor to your left or right.      |
+        //This cane must stay on the        |
+        //sector/s that are inside of the   |
+        //trace direction.                  |
+        //----------------------------------+----------------------------------
+        //With this you traverse the shape  |With this you traverse the shape
+        //as deeply as possible, and enter  |as broadly as possible, and you
+        //and close loops as soon as        |don't enter any loop.
+        //possible.                         |
+        //----------------------------------+----------------------------------
+        //For outer polygons, this works    |For outer polygons, this will
+        //fine and can even be used to      |skip out on geometry inside shared
+        //detect islands.                   |vertexes (see fig. A).
+        //----------------------------------+----------------------------------
+        //For inner polygons, this works,   |For inner polygons the broad shape
+        //but the other method is better.   |is more convenient.
+        //----------------------------------+----------------------------------
+        //So basically this is the best     |Basically best suited for inner
+        //option for outer polygons. This   |polygons since when we land on
+        //way when we land on a shared      |a reused vertex, we can skip over
+        //vertex, we don't skip over parts  |loops and just get the final shape,
+        //of the outer polygon's geometry.  |instead of obtaining multiple
+        //e.g. see fig. A.                  |inner polygons.
+        //                                  |e.g. see fig. B.
+        //----------------------------------+----------------------------------
+        //You want the edge closest to you  |You want the edge closest to you
+        //in the opposite orientation to    |in the same orientation as
+        //your direction of travel (from the|your direction of travel (from the
+        //shared vertex). i.e. closest      |shared vertex). i.e. closest
+        //clockwise if you're traversing the|clockwise if you're traversing the
+        //edges counter-clockwise, closest  |edges clockwise, closest
+        //counter-clockwise if you're       |counter-clockwise if you're
+        //traversing clockwise.             |traversing counter-clockwise.
+        //
+        //Fig. A.
+        //  +--------+
+        //  |   +--+ |  1 = Sector 1
+        //  |   |   \|  2 = Sector 2
+        //  | 1 | 2  +
+        //  |   |   /|
+        //  |   +--+ |
+        //  +--------+
+        //
+        //Fig. B.
+        //  +---------+
+        //  |    +--+ |  1 = Sector 1
+        //  | 1  |2/  |  2 = Sector 2
+        //  |    |/   |  3 = Sector 3
+        //  | +--+    |
+        //  |  \3|    |
+        //  |   \|    |
+        //  |    +    |
+        //  +---------+
+        //
+        //With all of that said, the first iteration, where we find the first
+        //edge, needs to be selected according to what sort of polygon we're
+        //tracing. Counter-clockwise for outer, clockwise for inner. The edge
+        //we pick from the starting vertex will dictate the direction of travel.
+        //So for outer polygons, we want to start by picking the closest
+        //counter-clockwise edge, so we can set the trace orientation to
+        //counter-clockwise, and then swap over to picking the closest
+        //clockwise so we can turn inward.
+        //For inner polygons, start with the closest clockwise edge so we
+        //trace clockwise, then continue that way so we turn outward.
+        
+        bool best_is_closest_cw = going_cw;
+        if(prev_v_ptr != NULL) best_is_closest_cw = true;
+        
+        find_trace_edge(
+            v_ptr, prev_v_ptr, s_ptr, prev_e_angle, best_is_closest_cw,
+            &next_e_ptr, &next_e_angle, &next_v_ptr
+        );
+        
+        //Now that we have the edge, what do we do?
+        if(!next_e_ptr) {
+            //If there is no edge to go to next, this sector is not closed.
+            result = TRIANGULATION_ERROR_NOT_CLOSED;
+            poly_done = true;
+            
+        } else if(next_e_ptr == first_e_ptr) {
+            //If we already did this edge, that's it, polygon closed.
+            poly_done = true;
+            
+        } else {
+            //Part of the trace.
+            vertexes->push_back(v_ptr);
+            prev_e_angle = next_e_angle;
+            prev_v_ptr = v_ptr;
+            v_ptr = next_v_ptr;
+            
+        }
+        
+        //Finishing setup before the next iteration.
+        if(!first_e_ptr) {
+            first_e_ptr = next_e_ptr;
+        }
+        if(next_e_ptr) {
+            unvisited_edges->erase(next_e_ptr);
+        }
+        
+    }
+    
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Triangulates a polygon via the Triangulation by Ear Clipping algorithm.
+ * http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
+ * Returns an error code.
+ * poly:
+ *   The polygon to triangulate.
+ * triangles:
+ *   The final list of triangles is returned here.
+ */
+TRIANGULATION_ERRORS triangulate_polygon(
+    polygon* poly, vector<triangle>* triangles
+) {
+
+    TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
+    vector<vertex*> vertexes_left = poly->vertexes;
+    vector<size_t> ears;
+    vector<size_t> convex_vertexes;
+    vector<size_t> concave_vertexes;
+    
+    if(vertexes_left.size() > 3) {
+        triangles->reserve(vertexes_left.size() - 2);
+    }
+    
+    //Begin by making a list of all concave, convex, and ear vertexes.
+    get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);
+    
+    //We do the triangulation until we're left
+    //with three vertexes -- the final triangle.
+    while(vertexes_left.size() > 3) {
+    
+        if(ears.empty()) {
+            //Something went wrong, the polygon mightn't be simple.
+            result = TRIANGULATION_ERROR_NO_EARS;
+            break;
+            
+        } else {
+            //The ear, the previous, and the next vertexes make a triangle.
+            triangles->push_back(
+                triangle(
+                    vertexes_left[ears[0]],
+                    get_prev_in_vector(vertexes_left, ears[0]),
+                    get_next_in_vector(vertexes_left, ears[0])
+                )
+            );
+            
+            //Remove the ear.
+            vertexes_left.erase(vertexes_left.begin() + ears[0]);
+            
+            //Recalculate the ears, concave, and convex vertexes.
+            get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);
+        }
+    }
+    
+    //Finally, add the final triangle.
+    if(vertexes_left.size() == 3) {
+        triangles->push_back(
+            triangle(
+                vertexes_left[1], vertexes_left[0], vertexes_left[2]
+            )
+        );
+    }
+    
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Triangulates (turns into triangles) a sector.
  * This is because drawing concave polygons is not possible.
- * Returns a number based on what happened. See TRIANGULATION_ERRORS.
+ * Returns an error code.
  * s_ptr:
  *   Pointer to the sector.
  * lone_edges:
  *   Return lone edges found here.
- * check_vertex_reuse:
- *   True if the algorithm is meant to check for vertexes that get reused.
  * clear_lone_edges:
  *   Clear this sector's edges from the list of lone edges, if they are there.
  */
-TRIANGULATION_ERRORS triangulate(
-    sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
-    const bool clear_lone_edges
+TRIANGULATION_ERRORS triangulate_sector(
+    sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
 ) {
 
-    //We'll triangulate with the Triangulation by Ear Clipping algorithm.
-    //http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
-    
     polygon outer_poly;
     vector<polygon> inner_polys;
     
@@ -784,7 +955,8 @@ TRIANGULATION_ERRORS triangulate(
         }
     }
     
-    //First, we need to know what vertexes mark the outermost polygon,
+    //Step 1. Get polygons.
+    //We need to know what vertexes mark the outermost polygon,
     //and what vertexes mark the inner ones.
     //There can be no islands or polygons of our sector inside the inner ones.
     //Example of a sector's polygons:
@@ -802,11 +974,9 @@ TRIANGULATION_ERRORS triangulate(
      *     +-------------+
      */
     
-    TRIANGULATION_ERRORS result =
-        get_polys(
-            s_ptr, &outer_poly, &inner_polys, lone_edges, check_vertex_reuse
-        );
-        
+    TRIANGULATION_ERRORS result = get_polys(s_ptr, &outer_poly, &inner_polys);
+    if(result != TRIANGULATION_NO_ERROR) return result;
+    
     //Get rid of 0-length edges and 180-degree vertexes,
     //as they're redundant.
     outer_poly.clean();
@@ -814,57 +984,16 @@ TRIANGULATION_ERRORS triangulate(
         inner_polys[i].clean();
     }
     
+    //Step 2. Make cuts.
     //Make cuts on the outer polygon between where it and inner polygons exist,
-    //as to make it holeless.
+    //as to make the outer polygon one big holeless polygon.
     outer_poly.cut(&inner_polys);
     
-    vector<vertex*> vertexes_left = outer_poly.vertexes;
-    vector<size_t> ears;
-    vector<size_t> convex_vertexes;
-    vector<size_t> concave_vertexes;
+    //Step 3. Triangulate the polygon.
+    //Transforming the polygon into triangles.
     s_ptr->triangles.clear();
-    if(vertexes_left.size() > 3) {
-        s_ptr->triangles.reserve(vertexes_left.size() - 2);
-    }
+    result = triangulate_polygon(&outer_poly, &s_ptr->triangles);
     
-    //Begin by making a list of all concave, convex and ear vertexes.
-    get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);
-    
-    //We do a triangulation until we're left
-    //with three vertexes -- the final triangle.
-    while(vertexes_left.size() > 3) {
-    
-        if(ears.empty()) {
-            //Something went wrong, the polygon mightn't be simple.
-            result = TRIANGULATION_ERROR_NO_EARS;
-            break;
-            
-        } else {
-            //The ear, the previous and the next vertexes make a triangle.
-            s_ptr->triangles.push_back(
-                triangle(
-                    vertexes_left[ears[0]],
-                    get_prev_in_vector(vertexes_left, ears[0]),
-                    get_next_in_vector(vertexes_left, ears[0])
-                )
-            );
-            
-            //Remove the ear.
-            vertexes_left.erase(vertexes_left.begin() + ears[0]);
-            
-            //Recalculate the ears, concave and convex vertexes.
-            get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);
-        }
-    }
-    
-    //Finally, add the final triangle.
-    if(vertexes_left.size() == 3) {
-        s_ptr->triangles.push_back(
-            triangle(
-                vertexes_left[1], vertexes_left[0], vertexes_left[2]
-            )
-        );
-    }
-    
+    //Done!
     return result;
 }

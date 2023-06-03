@@ -662,18 +662,15 @@ void area_editor::find_problems() {
             problem_description =
                 "It contains lone edges. Try clearing them up.";
             break;
+        } case TRIANGULATION_ERROR_NOT_CLOSED: {
+            problem_description =
+                "It is not closed. Try closing it.";
+            break;
         } case TRIANGULATION_ERROR_NO_EARS: {
             problem_description =
                 "There's been a triangulation error. Try undoing or "
                 "deleting the sector, and then rebuild it. Make sure there "
                 "are no gaps, and keep it simple.";
-            break;
-        } case TRIANGULATION_ERROR_VERTEXES_REUSED: {
-            problem_description =
-                "Some vertexes are re-used. Make sure the sector "
-                "has no loops or that the same vertex is not re-used "
-                "by multiple edges of the sector. Split popular vertexes "
-                "if you must.";
             break;
         } case TRIANGULATION_ERROR_INVALID_ARGS: {
             problem_description =
@@ -2140,8 +2137,7 @@ void area_editor::resize_everything(const float mults[2]) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         s_ptr->texture_info.scale.x *= mults[0];
         s_ptr->texture_info.scale.y *= mults[1];
-        s_ptr->triangles.clear();
-        triangulate(s_ptr, NULL, false, false);
+        triangulate_sector(s_ptr, NULL, false);
         s_ptr->calculate_bounding_box();
     }
     
@@ -2479,7 +2475,7 @@ void area_editor::update_affected_sectors(
         
         set<edge*> triangulation_lone_edges;
         TRIANGULATION_ERRORS triangulation_error =
-            triangulate(s_ptr, &triangulation_lone_edges, true, true);
+            triangulate_sector(s_ptr, &triangulation_lone_edges, true);
             
         if(triangulation_error == TRIANGULATION_NO_ERROR) {
             auto it = game.cur_area_data.problems.non_simples.find(s_ptr);

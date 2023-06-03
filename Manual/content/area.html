@@ -470,7 +470,6 @@
       <li>Don't drag vertexes such that you would turn a sector inside out, nor that two lines would intersect.</li>
       <li>When stitching several vertexes, go one neighbor at a time. If you leave a gap, the engine might report an error on the gap sector until it is properly closed.</li>
       <li>Don't split a sector into two by inserting a different sector in-between. If a sector is split into two, it stops being one polygon and becomes two. The engine isn't ready to handle that, so fill in one of the two polygons with an entirely new sector.</li>
-      <li>Sectors must be simple. The only noteworthy part about this fact is that when making a sector, you can't have its edges share the same vertex more than twice.</li>
       <li>Areas are very complex in the engine, and crashes can happen. Save often, and if you happen to experience a crash and lose your work, open the area again, go to the tools menu in the area editor, and load the automatically-saved backup from there.</li>
       <li>Sector creation is equally complex. So long as you don't try to cut corners or do anything too fancy when creating a sector, it should all go fine.</li>
     </ul>
@@ -490,11 +489,6 @@
     <div class="box">
       <img src="../images/split_sector.png" alt="Don't split a sector in two like this. Instead, create another sector to fill in for one of the halves.">
       <p>Don't split a sector in two like this. Instead, create another sector to fill in for one of the halves.</p>
-    </div>
-    
-    <div class="box">
-      <img src="../images/non_simple.png" alt="Don't create non-simple sectors like this. Notice how the red sector has a 'loop' (the red triangle pointing south, which is also a different sector entirely). Instead, split the popular vertexes into multiple ones.">
-      <p>Don't create non-simple sectors like this. Notice how the red sector has a "loop" (the red triangle pointing south, which is also a different sector entirely). Instead, split the popular vertexes into multiple ones.</p>
     </div>
     
     <h2 id="troubleshooting">Troubleshooting</h2>
