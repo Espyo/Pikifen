@@ -528,7 +528,7 @@ void area_editor::draw_canvas() {
                     t_ptr->points[2]->x,
                     t_ptr->points[2]->y,
                     al_map_rgb(192, 0, 160),
-                    1.0f / game.cam.zoom
+                    2.0f / game.cam.zoom
                 );
             }
         }

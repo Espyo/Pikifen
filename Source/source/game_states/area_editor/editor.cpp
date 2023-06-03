@@ -728,15 +728,15 @@ void area_editor::emit_triangulation_error_status_bar_message(
             true
         );
         break;
-    } case TRIANGULATION_ERROR_NO_EARS: {
+    } case TRIANGULATION_ERROR_NOT_CLOSED: {
         set_status(
-            "Some sectors could not be triangulated!",
+            "Some sectors are not closed!",
             true
         );
         break;
-    } case TRIANGULATION_ERROR_VERTEXES_REUSED: {
+    } case TRIANGULATION_ERROR_NO_EARS: {
         set_status(
-            "Some sectors reuse vertexes -- there are likely gaps!",
+            "Some sectors could not be triangulated!",
             true
         );
         break;
@@ -1094,7 +1094,7 @@ void area_editor::finish_new_sector_drawing() {
     
     //The new sector is created, but only its outer edges exist.
     //Triangulate these so we can check what's inside.
-    triangulate(new_sector, NULL, true, false);
+    triangulate_sector(new_sector, NULL, false);
     
     //All sectors inside the new one need to know that
     //their outer sector changed.
@@ -3916,7 +3916,7 @@ void area_editor::split_sector_with_drawing() {
     
     //The new sector is created, but only its outer edges exist.
     //Triangulate these so we can check what's inside.
-    triangulate(new_sector, NULL, true, false);
+    triangulate_sector(new_sector, NULL, false);
     
     //All sectors inside the new one need to know that
     //their outer sector changed. Since we're only checking from the edges
