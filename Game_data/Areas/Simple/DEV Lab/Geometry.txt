@@ -12199,7 +12199,7 @@ mobs{
 		p=1408.0000 -1088.0000
 	}
 	Scale{
-		type=Button
+		type=Pressure plate
 		p=1536.0000 -1088.0000
 		vars=goal_number=3
 		links=339

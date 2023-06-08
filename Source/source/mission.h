@@ -47,7 +47,7 @@ enum MISSION_FAIL_CONDITIONS {
     MISSION_FAIL_COND_TIME_LIMIT,
     //Reaching a certain Pikmin amount or fewer. 0 = total extinction.
     MISSION_FAIL_COND_TOO_FEW_PIKMIN,
-    //Reaching a certain Pikmin amount or more. 0 = total extinction.
+    //Reaching a certain Pikmin amount or more.
     MISSION_FAIL_COND_TOO_MANY_PIKMIN,
     //Losing a certain amount of Pikmin.
     MISSION_FAIL_COND_LOSE_PIKMIN,

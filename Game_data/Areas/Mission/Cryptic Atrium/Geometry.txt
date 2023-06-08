@@ -7709,7 +7709,7 @@ mobs{
 		links=28 29 30
 	}
 	Scale{
-		type=Button
+		type=Pressure plate
 		p=320.0000 -32.0000
 		links=20
 	}
@@ -7718,7 +7718,7 @@ mobs{
 		p=416.0000 160.0000
 	}
 	Scale{
-		type=Button
+		type=Pressure plate
 		p=640.0000 0.0000
 		links=22
 	}
@@ -7742,13 +7742,13 @@ mobs{
 		angle=1.5708
 	}
 	Scale{
-		type=Button
+		type=Pressure plate
 		p=32.0000 256.0000
 		vars=goal_number=10
 		links=24
 	}
 	Scale{
-		type=Button
+		type=Pressure plate
 		p=32.0000 -32.0000
 		links=25
 	}

@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -6,27 +6,8 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Water is squashing the texture of the floor underneath to half its height (see the puzzle stage)
-        It's also ignoring the tint of the texture
     
     --- v0.24.0 ---
-    https://github.com/Espyo/Pikifen/pull/37
-    https://github.com/Espyo/Pikifen/pull/38
-    Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5
-    Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
-        Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
-            Same with a sector reusing a vertex and other things maybe?
-    If you start drawing a path on top of a link, it should split the link and start drawing on that stop
-    Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
-    More puzzle elements
-        Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
-            Add maker notes indicating this
-        A lever. It flips position every time a Pikmin is thrown at it, or when a leader walks up to it and interacts
-        A button. After being depressed (and sending a 1 message) it pops back up (and sends a 0 message). Throwing a Pikmin at it or interacting with a leader will press it
-        A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
-        Logic gates
-            On message received, they should ask the sender's mob ID (-1 for none). Then, if their "i1id" var is -1, set it to whatever the sender mob's ID is. Then, when receiving a message from there on, if the mob's ID matches the the one in "i1id", set the value into the "i1" var. Otherwise, set it into the "i2" var.
-        A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
     Add several pre-packaged areas, since players have nothing to play with right now
         Helodity's Adventure area (see #content-sharing)?
         Helodity's Crash Landing mission
@@ -37,8 +18,27 @@ Next tasks (roughly sorted most important first)
             Darken the hole in the root that you can go through
             Have some puzzle with the two rocks north of the landing site
             Make a post-mortem video
+    More puzzle elements
+        Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
+            Add maker notes indicating this
+        A lever. It flips position every time a Pikmin is thrown at it, or when a leader walks up to it and interacts, or when it receives power
+        A button. After being depressed (and sending a 1 message) it pops back up (and sends a 0 message). Throwing a Pikmin at it, or interacting with a leader, or receiving power will press it
+        A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
+        A cyclic lever? It automatically flips on and off over time
+        Logic gates
+            On message received, they should ask the sender's mob ID (-1 for none). Then, if their "i1id" var is -1, set it to whatever the sender mob's ID is. Then, when receiving a message from there on, if the mob's ID matches the the one in "i1id", set the value into the "i1" var. Otherwise, set it into the "i2" var.
+        A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
     
     --- 0.25.0 ---
+    If you start drawing a path on top of a link, it should split the link and start drawing on that stop
+    Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
+    https://github.com/Espyo/Pikifen/pull/37
+    https://github.com/Espyo/Pikifen/pull/38
+    Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5 https://github.com/ocornut/imgui/releases/tag/v1.89.6
+    Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
+        Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
+            Same with a sector reusing a vertex and other things maybe?
+    Use the pretty cursor (spinning flower + trail) everywhere? Probably not in editors though
     Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
@@ -106,6 +106,9 @@ Next tasks (roughly sorted most important first)
             This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?
         Remove some of the elements?
             Stuff like a leader's health might not be necessary if it's full
+        A mission's data should control how each HUD element displays its information
+            Number of things the player's achieved vs. number of things remaining
+            Display a slash and an out-of-total count vs. not displaying it
     Radar
         Radar page
             https://en.wikipedia.org/wiki/Topography topographic drawing, a zoom-out, an abstract texture like P1/P2, ...?
@@ -557,6 +560,7 @@ Next tasks (roughly sorted most important first)
             Completion time, in seconds
         Misc.
             The ability for some Candypop Buds to not spawn if the player has over X Pikmin of that type in total
+            The radar should only draw visited portions (though this can be changed in Config.txt)
     More editors
         Weather editor
         Particle editor
@@ -683,6 +687,10 @@ Misc things (so I don't forget)
             For the animation editor: reverse frames
         Customizable controls overall, including double-clicking any of the mouse buttons
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
+        Juice
+            Pop line particles when something gets created
+            Puffs of smoke when something gets deleted
+            Change the cursor for when you're dragging, drawing, placing something new, etc.
     Area sections?
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections
