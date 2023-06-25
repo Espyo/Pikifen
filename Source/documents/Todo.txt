@@ -1,23 +1,44 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Bring back Play?
+        Tiny layout details
+            Add water inside the box
+            Add more toys to the box, including a horse-shaped wood block
+            Dirt lump surrounding the cylinder in the northern cave
+            Stuff in the area tips
+        New treasures
+        Reorganize tree shadows
+        Stuff in the manual
+        Make a post-mortem video
+        Info
+            Rename it to Playful Yard, and populate it with toy treasures and very active enemies like Crumbugs
+            Puddles every here and there; on top of them being playful, it will make Blue Pikmin more powerful since they would take more direct paths instead of zigzagging through the puddles
+            Have some puzzle with the two rocks north of the landing site
+            Theme: Mix of forest and playbox
+            Difficulty: easy
+            Shape: Like Play but a whole lot better
+            Content:
+                Mostly playful things and enemies, like puddles, bouncy mushrooms, Crumbugs, toybox elements, toy treasures
+                Like an old toybox abandoned in the middle of the woods?
+                Avoid rocks, use mostly dirt, grass, and wood
+            Sections:
+                Some platforms that can only be accessed via bouncy mushrooms
+                The central open area
+                The toybox
+        Delete Play
+    Add the "power" thing to the pressure plate and the automatic gate
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    
+    Quick-setting a sector's height or splitting an edge does not update edge effects
+
     --- v0.24.0 ---
     Add several pre-packaged areas, since players have nothing to play with right now
         Helodity's Adventure area (see #content-sharing)?
         Helodity's Crash Landing mission
         A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
-        Bring back Play?
-            Rename it to Playful Yard, and populate it with toy treasures and very active enemies like Crumbugs
-            Puddles every here and there; on top of them being playful, it will make Blue Pikmin more powerful since they would take more direct paths instead of zigzagging through the puddles
-            Darken the hole in the root that you can go through
-            Have some puzzle with the two rocks north of the landing site
-            Make a post-mortem video
     More puzzle elements
         Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
             Add maker notes indicating this
@@ -30,6 +51,7 @@ Next tasks (roughly sorted most important first)
         A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
     
     --- 0.25.0 ---
+    [NEEDS BRAINSTORMING] Path links that are one-way for drop-offs don't make much sense, since Winged Pikmin can fly up them...
     If you start drawing a path on top of a link, it should split the link and start drawing on that stop
     Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     https://github.com/Espyo/Pikifen/pull/37
@@ -39,6 +61,8 @@ Next tasks (roughly sorted most important first)
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
             Same with a sector reusing a vertex and other things maybe?
     Use the pretty cursor (spinning flower + trail) everywhere? Probably not in editors though
+    Ice Pikmin
+    Glow Pikmin
     Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
@@ -199,6 +223,7 @@ Next tasks (roughly sorted most important first)
         If the player is using a controller on any of their inputs, and the controller in question disconnects, the game should pause and let them know the controller's been disconnected. In order to avoid chaos, this should only happen during the gameplay state, and should simply enter the pause menu (if it's not already there)
         Current leader should move slower if the analog stick is not held all the way
         Make it so a player can control their leader via mouse cursor
+        Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
     Demo content
         Add more treasures
             Ball of yarn treasure
@@ -322,6 +347,7 @@ Next tasks (roughly sorted most important first)
             Add HUD support for all the different split-screen layouts
             In competitive modes, tint each player's HUD with their team color or something
             [NEEDS BRAINSTORMING] Bingo Battle in P3 is organized such that the two players' HUDs are mirrored. This is so the bingo cards can be center screen right next to one another, considering your card is just as important as your opponent's. If Pikifen lets you specify one layout and all players use the same layout, we lose this bit of design, but if Pikifen forces you to specify a different layout for all players, that'll get really annoying really quickly (or not? I mean, you only set up the HUD once...)
+            The cursor that highlights the currently selected GUI item should have a "P1" icon on the corner, or whatever the number is for the player currently controlling it
         Make sure that:
             Leaders can't steal each other's group members
                 This includes Pikmin that are knocked down and get whistled, and sprouts
@@ -434,6 +460,7 @@ Next tasks (roughly sorted most important first)
             Only areas that can be played with the victory rules specified in the current ruleset will actually appear in the list
         Mission high scores need to be saved independently for each player amount
         Make some areas about multiplayer puzzles? Hopefully ones that can also be completed by a single player so long as they swap leaders
+        An option that makes it so the audio of players on the left side of the screen plays louder on the left speaker and vice-versa, or if all players' sounds play normally across both speakers
     Buried treasure
     Breadbugs should carry treasure
     Weather improvements
@@ -543,6 +570,7 @@ Next tasks (roughly sorted most important first)
         Collectibles (ship parts, treasures, etc.) and how they impact the story
             Allow multiple "point systems" -- ship power, juice, fruits, Pokos, Sparklium, etc.
         Upgrades (like the Exploration Kit)
+            The ability to turn them off in the pause menu
         Extinction
             Be careful with Candypop Buds
             Cave extinction should probably be named something else, since the Pikmin species aren't necessarily extinct...
@@ -685,6 +713,7 @@ Misc things (so I don't forget)
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?
             For the animation editor: reverse frames
+        An option to toggle the grid visibility
         Customizable controls overall, including double-clicking any of the mouse buttons
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
         Juice
