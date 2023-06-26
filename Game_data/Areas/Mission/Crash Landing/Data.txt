@@ -1,0 +1,30 @@
+name=Crash Landing
+subtitle=Escape the cargo ship!
+description=The Koppaites' cargo ship is going to crash, recover the treasure from the cargo bays before they become a pile of dust! Don't forget yourself as well!
+tags=Short and sweet; Metal
+difficulty=5
+bg_bmp=Space.jpg
+bg_color=0 0 0
+bg_dist=2.0000
+bg_zoom=3.0000
+weather=Red Alert
+day_time_start=0
+day_time_speed=600
+maker=Helodity
+version=1.2.2
+engine_version=0.23.2
+notes
+spray_amounts
+mission_goal=Collect treasures
+mission_goal_all_mobs=true
+mission_fail_conditions=129
+mission_fail_time_limit=100
+mission_fail_hud_primary_cond=0
+mission_grading_mode=0
+mission_points_per_sec_left=5
+mission_points_per_treasure_point=1
+mission_point_hud_data=251
+mission_bronze_req=200
+mission_silver_req=800
+mission_gold_req=1400
+mission_platinum_req=2600
