@@ -11508,7 +11508,7 @@ mobs{
 	}
 	Treasure{
 		type=Billiards Ball
-		p=576.0000 -2720.0000
+		p=544.0000 -2720.0000
 	}
 	Drop{
 		type=Nectar
@@ -12360,6 +12360,10 @@ mobs{
 	Pikmin{
 		type=Winged Pikmin
 		p=896.0000 -1248.0000
+	}
+	Treasure{
+		type=Fidget Spinner
+		p=816.0000 -2720.0000
 	}
 }
 path_stops{

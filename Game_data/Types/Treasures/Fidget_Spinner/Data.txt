@@ -1,0 +1,12 @@
+name = Fidget Spinner
+description = Some sort of spinning object.
+
+can_walk_on_others = true
+custom_carry_spots = 70 0; 64 -20; 38 -27; 15 -26; 4 -48; -16 -64; -36 -62; -48 -46; -42 -20; -30 0; -42 20; -48 46; -36 62; -16 64; 4 48; 15 26; 38 27; 64 20
+height = 20
+max_carriers = 18
+points = 200
+pushable = false
+pushes = true
+radius = 28
+weight = 10

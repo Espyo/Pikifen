@@ -1,0 +1,18 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Fidget_spinner.png
+		file_pos=0.0000 0.0000
+		file_size=140.0000 140.0000
+	}
+}
+body_parts
+engine_version=0.23.2
