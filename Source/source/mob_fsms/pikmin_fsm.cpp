@@ -2685,10 +2685,14 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     size_t closest_spot = INVALID;
     dist closest_spot_dist;
     carrier_spot_struct* closest_spot_ptr = NULL;
+    point closest_spot_offset;
     
     //If this is the first Pikmin to go to the carriable mob, rotate
     //the points such that 0 faces this Pikmin instead.
-    if(carriable_mob->carry_info->is_empty()) {
+    if(
+        carriable_mob->carry_info->is_empty() &&
+        carriable_mob->type->custom_carry_spots.empty()
+    ) {
         carriable_mob->carry_info->rotate_points(
             get_angle(carriable_mob->pos, pik_ptr->pos)
         );
@@ -2699,13 +2703,15 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
             &carriable_mob->carry_info->spot_info[s];
         if(spot_ptr->state != CARRY_SPOT_FREE) continue;
         
-        dist d(
-            pik_ptr->pos, carriable_mob->pos + spot_ptr->pos
-        );
+        point spot_offset =
+            rotate_point(spot_ptr->pos, carriable_mob->angle);
+        dist d(pik_ptr->pos, carriable_mob->pos + spot_offset);
+        
         if(closest_spot == INVALID || d < closest_spot_dist) {
             closest_spot = s;
             closest_spot_dist = d;
             closest_spot_ptr = spot_ptr;
+            closest_spot_offset = spot_offset;
         }
     }
     
@@ -2716,7 +2722,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     
     pik_ptr->chase(
         &carriable_mob->pos, &carriable_mob->z,
-        closest_spot_ptr->pos, 0.0f
+        closest_spot_offset, 0.0f
     );
     pik_ptr->set_timer(PIKMIN::GOTO_TIMEOUT);
     
@@ -3322,13 +3328,16 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     mob* carriable_mob = pik_ptr->carrying_mob;
     
-    point final_pos =
-        carriable_mob->pos +
-        carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos;
-        
+    point spot_offset =
+        rotate_point(
+            carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos,
+            carriable_mob->angle
+        );
+    point final_pos = carriable_mob->pos + spot_offset;
+    
     pik_ptr->chase(
         &carriable_mob->pos, &carriable_mob->z,
-        carriable_mob->carry_info->spot_info[pik_ptr->temp_i].pos, 0.0f,
+        spot_offset, 0.0f,
         CHASE_FLAG_TELEPORT |
         CHASE_FLAG_TELEPORTS_CONSTANTLY
     );

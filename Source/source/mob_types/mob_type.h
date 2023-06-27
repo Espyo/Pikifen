@@ -252,6 +252,8 @@ public:
     bool can_walk_on_others;
     //If true, carrier Pikmin will be considered blocked if it's in the way.
     bool can_block_paths;
+    //Override the carrying spots with these coordinates, if not-empty.
+    vector<point> custom_carry_spots;
     
     //---General behavior---
     

@@ -331,12 +331,14 @@ void load_mob_type_from_file(
 
     reader_setter rs(&file);
     
+    string custom_carry_spots_str;
     string spike_damage_str;
     string target_type_str;
     string huntable_targets_str;
     string hurtable_targets_str;
     string team_str;
     data_node* area_editor_tips_node = NULL;
+    data_node* custom_carry_spots_node = NULL;
     data_node* spike_damage_node = NULL;
     data_node* target_type_node = NULL;
     data_node* huntable_targets_node = NULL;
@@ -356,6 +358,9 @@ void load_mob_type_from_file(
     );
     rs.set("can_walk_on_others", mt->can_walk_on_others);
     rs.set("casts_shadow", mt->casts_shadow);
+    rs.set(
+        "custom_carry_spots", custom_carry_spots_str, &custom_carry_spots_node
+    );
     rs.set("custom_category_name", mt->custom_category_name);
     rs.set("default_vulnerability", mt->default_vulnerability);
     rs.set("description", mt->description);
@@ -386,6 +391,23 @@ void load_mob_type_from_file(
     
     if(area_editor_tips_node) {
         mt->area_editor_tips = unescape_string(mt->area_editor_tips);
+    }
+    
+    if(!custom_carry_spots_str.empty()) {
+        vector<string> points =
+            semicolon_list_to_vector(custom_carry_spots_str);
+        if(points.size() != mt->max_carriers) {
+            log_error(
+                "The number of custom carry spots (" + i2s(points.size()) +
+                ") does not match the number of max carriers (" +
+                i2s(mt->max_carriers) + ")!",
+                custom_carry_spots_node
+            );
+        } else {
+            for(size_t p = 0; p < points.size(); ++p) {
+                mt->custom_carry_spots.push_back(s2p(points[p]));
+            }
+        }
     }
     
     mt->rotation_speed = deg_to_rad(mt->rotation_speed);

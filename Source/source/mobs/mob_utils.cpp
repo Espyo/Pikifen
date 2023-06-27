@@ -59,11 +59,19 @@ carry_info_struct::carry_info_struct(
     return_dist(0) {
     
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
-        float angle = TAU / m->type->max_carriers * c;
-        point p(
-            cos(angle) * (m->radius + game.config.standard_pikmin_radius),
-            sin(angle) * (m->radius + game.config.standard_pikmin_radius)
-        );
+        point p;
+        if(m->type->custom_carry_spots.empty()) {
+            float angle = TAU / m->type->max_carriers * c;
+            p =
+                point(
+                    cos(angle) *
+                    (m->radius + game.config.standard_pikmin_radius),
+                    sin(angle) *
+                    (m->radius + game.config.standard_pikmin_radius)
+                );
+        } else {
+            p = m->type->custom_carry_spots[c];
+        }
         spot_info.push_back(carrier_spot_struct(p));
     }
 }
@@ -792,7 +800,7 @@ bool path_info_struct::check_blockage(PATH_BLOCK_REASONS* reason) {
                 reason
             );
     }
-
+    
     if(reason) *reason = PATH_BLOCK_REASON_NONE;
     return false;
 }
