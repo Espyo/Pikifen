@@ -1784,6 +1784,7 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         offset *= 10.0f;
         register_change("quick sector height set");
         (*selected_sectors.begin())->z = quick_height_set_start_height + offset;
+        update_all_edge_offset_caches();
     }
 }
 

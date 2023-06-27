@@ -32,7 +32,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Quick-setting a sector's height or splitting an edge does not update edge effects
+    
 
     --- v0.24.0 ---
     Add several pre-packaged areas, since players have nothing to play with right now

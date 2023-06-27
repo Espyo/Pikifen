@@ -1184,6 +1184,7 @@ void area_editor::draw_canvas() {
     //Reference image.
     if(
         reference_bitmap &&
+        !preview_mode &&
         (show_reference || state == EDITOR_STATE_TOOLS)
     ) {
         draw_bitmap(

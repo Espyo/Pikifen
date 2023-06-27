@@ -2396,6 +2396,8 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
         );
     }
     
+    update_all_edge_offset_caches();
+    
     return new_v_ptr;
 }
 

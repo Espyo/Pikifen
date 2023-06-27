@@ -4187,6 +4187,8 @@ void area_editor::undo() {
     clear_layout_moving();
     clear_problems();
     
+    update_all_edge_offset_caches();
+    
     path_preview.clear(); //Clear so it doesn't reference deleted stops.
     path_preview_timer.start(false);
     

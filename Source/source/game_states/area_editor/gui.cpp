@@ -2465,13 +2465,16 @@ void area_editor::process_gui_panel_main() {
         "Draw movement paths, and their stops."
     );
     
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
+    
     //Details button.
     if(
         ImGui::ImageButtonAndText(
             "detailsButton",
             editor_icons[ICON_DETAILS],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            24.0f,
+            12.0f,
             "Details"
         )
     ) {
@@ -2481,16 +2484,13 @@ void area_editor::process_gui_panel_main() {
         "Edit misc. details, like tree shadows."
     );
     
-    //Spacer dummy widget.
-    ImGui::Dummy(ImVec2(0, 16));
-    
     //Area info button.
     if(
         ImGui::ImageButtonAndText(
             "infoButton",
             editor_icons[ICON_INFO],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            8.0f,
+            12.0f,
             "Info"
         )
     ) {
@@ -2506,7 +2506,7 @@ void area_editor::process_gui_panel_main() {
             "gameplayButton",
             editor_icons[ICON_GAMEPLAY],
             ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
-            8.0f,
+            12.0f,
             "Gameplay settings"
         )
     ) {
@@ -2515,6 +2515,9 @@ void area_editor::process_gui_panel_main() {
     set_tooltip(
         "Specify how the player's gameplay experience in this area will be."
     );
+    
+    //Spacer dummy widget.
+    ImGui::Dummy(ImVec2(0, 16));
     
     //Review button.
     if(
