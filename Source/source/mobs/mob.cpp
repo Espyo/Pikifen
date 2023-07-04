@@ -2475,10 +2475,10 @@ bool mob::has_clear_line(mob* target_mob) const {
             }
         }
         if(
-            e_ptr->sectors[0]->z < z &&
-            e_ptr->sectors[0]->z < target_mob->z &&
-            e_ptr->sectors[1]->z < z &&
-            e_ptr->sectors[1]->z < target_mob->z
+            e_ptr->sectors[0]->z <= z &&
+            e_ptr->sectors[0]->z <= target_mob->z &&
+            e_ptr->sectors[1]->z <= z &&
+            e_ptr->sectors[1]->z <= target_mob->z
         ) {
             //If both mobs are above both sectors, it doesn't count.
             continue;

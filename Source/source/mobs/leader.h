@@ -113,6 +113,8 @@ public:
     
     //Returns whether or not a leader can throw.
     bool check_throw_ok() const;
+    //Returns whether or not a leader can grab the specified mob.
+    bool can_grab_group_member(mob* m) const;
     //Dismiss current group.
     void dismiss();
     //Order some Pikmin to get in the Onion.
