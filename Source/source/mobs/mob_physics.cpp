@@ -779,8 +779,8 @@ void mob::tick_vertical_movement_physics(
         //https://youtu.be/hG9SzQxaCm8
         z +=
             (speed_z * delta_t) +
-            ((MOB::GRAVITY_ADDER / 2.0f) * delta_t* delta_t);
-        speed_z += MOB::GRAVITY_ADDER * delta_t;
+            ((MOB::GRAVITY_ADDER * gravity_mult / 2.0f) * delta_t * delta_t);
+        speed_z += MOB::GRAVITY_ADDER * delta_t * gravity_mult;
     }
     
     //Landing.
