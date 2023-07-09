@@ -1,5 +1,5 @@
 name=Tutorial Meadow
-subtitle=Get the treasure!
+subtitle=Get the treasure
 description=A tutorial area to help you learn how to play Pikifen!
 tags=Tutorial
 difficulty=1

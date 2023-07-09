@@ -217,6 +217,7 @@ Bag of notes (useful stuff)
     Why do some areas have erratic framerates?
         It's the Pikmin amount, most likely. For some reason I didn't confirm, many Pikmin make the framerate vary a bunch.
     Looks like ImGui has some leak of sorts. If I leave the animation editor or area editor on for a few hours, eventually my system starts to slow down; even the mouse cursor updates slowly, even outside Pikifen. Leaving to the main menu, or playing the game proper returns everything to normality, and entering an editor again brings everything to a crawl again. There is no increase in CPU or RAM usage, so I have no idea why this is happening...
+    The mathematical term for when you want to grow a polygon outward is called buffering or offsetting (like the edge offset mechanism in the engine)
 
 
 Procedure for every version release
