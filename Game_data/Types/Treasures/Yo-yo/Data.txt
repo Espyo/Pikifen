@@ -1,0 +1,11 @@
+name = Yo-yo
+description = Some sort of spinning object with a cord.
+
+can_walk_on_others = true
+height = 20
+max_carriers = 20
+points = 200
+pushable = false
+pushes = true
+radius = 80
+weight = 12

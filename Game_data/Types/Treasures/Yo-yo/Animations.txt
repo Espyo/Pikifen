@@ -1,0 +1,18 @@
+animations{
+	idling{
+		frames{
+			idling{
+				duration=0.0000
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Yo-yo.png
+		file_pos=0.0000 0.0000
+		file_size=160 160
+		scale=1.0 1.0
+	}
+}
+body_parts

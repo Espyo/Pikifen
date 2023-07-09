@@ -1,0 +1,11 @@
+name = Jigsaw Puzzle Piece
+description = Some sort of block that fits within other blocks.
+
+can_walk_on_others = true
+height = 2
+max_carriers = 6
+points = 50
+pushable = false
+pushes = true
+radius = 32
+weight = 2
