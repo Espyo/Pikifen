@@ -1407,7 +1407,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param("angle", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
     reg_action(
         MOB_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
