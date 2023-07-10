@@ -1007,28 +1007,27 @@ ALLEGRO_COLOR interpolate_color(
  *   and line that caused the error.
  */
 void log_error(string s, data_node* d) {
-    if(d) {
-        s += " (" + d->file_name;
-        if(d->line_nr != 0) s += " line " + i2s(d->line_nr);
-        s += ")";
-    }
-    s += "\n";
-    
-    std::cout << s;
-    
+    string output = "";
     if(game.errors_reported_so_far == 0) {
-        s =
-            "\n" +
-            get_current_time(false) +
-            "; Pikifen version " +
+        string first_error_info =
+            "> Pikifen version " +
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
             "." + i2s(VERSION_REV);
         if(!game.config.version.empty()) {
-            s +=
-                ", game version " +
-                game.config.version + "\n" + s;
+            first_error_info +=
+                ", " + game.config.name + " version " + game.config.version;
         }
+        first_error_info += ":\n";
+        output += first_error_info;
     }
+    output += get_current_time(false) + ": " + s;
+    if(d) {
+        output += " (" + d->file_name;
+        if (d->line_nr != 0) output += " line " + i2s(d->line_nr);
+        output += ")";
+    }
+    output += "\n";
+    std::cout << output;
     
     string prev_error_log;
     string line;
@@ -1046,7 +1045,7 @@ void log_error(string s, data_node* d) {
     ALLEGRO_FILE* file_o =
         al_fopen(ERROR_LOG_FILE_PATH.c_str(), "w");
     if(file_o) {
-        al_fwrite(file_o, prev_error_log + s);
+        al_fwrite(file_o, prev_error_log + output);
         al_fclose(file_o);
     }
     
