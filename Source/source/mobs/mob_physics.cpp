@@ -438,11 +438,6 @@ void mob::tick_horizontal_movement_physics(
             new_ground_sector = new_center_sector;
         }
         
-        if(z < new_center_sector->z) {
-            //If it'd end up under the ground, refuse the move.
-            return;
-        }
-        
         //Get all edges it collides against in this new position.
         vector<edge*> intersecting_edges;
         if(
