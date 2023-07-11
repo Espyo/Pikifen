@@ -548,7 +548,11 @@ void init_event_things(
         );
         game.display = al_create_display(game.win_w, game.win_h);
     }
-    
+
+    //For some reason some resolutions aren't properly created
+    //Fix that here.
+    al_resize_display(game.display, game.win_w, game.win_h);
+
     if(!game.display) {
         report_fatal_error("Could not create a display!");
     }
@@ -1403,7 +1407,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param("angle", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("angle or x coordinate", MOB_ACTION_PARAM_FLOAT, false, false);
+    reg_param("y coordinate", MOB_ACTION_PARAM_FLOAT, false, true);
     reg_action(
         MOB_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",

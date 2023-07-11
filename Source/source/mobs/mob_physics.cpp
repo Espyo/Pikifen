@@ -438,11 +438,6 @@ void mob::tick_horizontal_movement_physics(
             new_ground_sector = new_center_sector;
         }
         
-        if(z < new_center_sector->z) {
-            //If it'd end up under the ground, refuse the move.
-            return;
-        }
-        
         //Get all edges it collides against in this new position.
         vector<edge*> intersecting_edges;
         if(
@@ -779,8 +774,8 @@ void mob::tick_vertical_movement_physics(
         //https://youtu.be/hG9SzQxaCm8
         z +=
             (speed_z * delta_t) +
-            ((MOB::GRAVITY_ADDER / 2.0f) * delta_t* delta_t);
-        speed_z += MOB::GRAVITY_ADDER * delta_t;
+            ((MOB::GRAVITY_ADDER * gravity_mult / 2.0f) * delta_t * delta_t);
+        speed_z += MOB::GRAVITY_ADDER * delta_t * gravity_mult;
     }
     
     //Landing.

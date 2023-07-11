@@ -4,6 +4,7 @@ death_state = dying
 init {
     set_var ignoring false
     set_var has_nodule false
+    set_var throw_range 250
 }
 
 script {
@@ -200,6 +201,18 @@ script {
         on_enter {
             stop
             set_animation preparing
+            load_focused_mob_memory 2
+        }
+        on_tick {
+            get_focus_info target_x x
+            get_focus_info target_y y
+            get_focus_info target_z z		
+            get_info self_x x
+            get_info self_y y
+            get_distance dist $self_x $self_y $target_x $target_y				
+            if $dist > $throw_range	
+                set_state looking_for_target
+            end_if
         }
         on_animation_end {
             set_state flinging
@@ -214,12 +227,8 @@ script {
             set_animation flinging
         }
         on_frame_signal {
-            load_focused_mob_memory 2
-            get_focus_info x x
-            get_focus_info y y
-            get_focus_info z z
             load_focused_mob_memory 1
-            throw_focused_mob $x $y $z 300
+            throw_focused_mob $target_x $target_y $target_z 300
             send_message_to_focus be_flung
             set_var has_nodule false
         }

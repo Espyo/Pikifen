@@ -886,7 +886,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             
-            mission_score = 0;
+            mission_score = game.cur_area_data.mission.starting_points;
             for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
                 if(
                     !has_flag(

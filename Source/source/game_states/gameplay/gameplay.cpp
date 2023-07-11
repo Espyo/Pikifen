@@ -872,6 +872,7 @@ void gameplay_state::load() {
         if(game.cur_area_data.mission.goal_all_mobs) {
             for(size_t m = 0; m < mobs_per_gen.size(); ++m) {
                 if(
+                    mobs_per_gen[m] &&
                     game.mission_goals[game.cur_area_data.mission.goal]->
                     is_mob_applicable(mobs_per_gen[m]->type)
                 ) {
