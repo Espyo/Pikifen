@@ -1334,6 +1334,11 @@ void save_maker_tools() {
     );
     file.add(
         new data_node(
+            "area_image_padding", b2s(game.maker_tools.area_image_padding)
+        )
+    );
+    file.add(
+        new data_node(
             "area_image_shadows", b2s(game.maker_tools.area_image_shadows)
         )
     );

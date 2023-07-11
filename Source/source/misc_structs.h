@@ -310,6 +310,8 @@ struct timer {
 struct maker_tools_info {
     //Are the tools enabled?
     bool enabled;
+    //Padding around the area in the area image tool.
+    float area_image_padding;
     //Show tree shadows in the area image tool?
     bool area_image_shadows;
     //Maximum width or height of the area image.

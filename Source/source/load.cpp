@@ -1183,6 +1183,7 @@ void load_maker_tools() {
     data_node* mob_hurting_percentage_node = NULL;
     
     rs.set("area_image_mobs", game.maker_tools.area_image_mobs);
+    rs.set("area_image_padding", game.maker_tools.area_image_padding);
     rs.set("area_image_shadows", game.maker_tools.area_image_shadows);
     rs.set("area_image_size", game.maker_tools.area_image_size);
     rs.set("change_speed_multiplier", game.maker_tools.change_speed_mult);

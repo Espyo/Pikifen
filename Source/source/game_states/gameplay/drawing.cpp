@@ -1769,8 +1769,8 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     }
     
     //Figure out the scale that will fit on the image.
-    float area_w = max_x - min_x;
-    float area_h = max_y - min_y;
+    float area_w = max_x - min_x + game.maker_tools.area_image_padding;
+    float area_h = max_y - min_y + game.maker_tools.area_image_padding;
     float scale = 1.0f;
     float final_bmp_w = game.maker_tools.area_image_size;
     float final_bmp_h = final_bmp_w;
@@ -1788,7 +1788,11 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     
     ALLEGRO_TRANSFORM t;
     al_identity_transform(&t);
-    al_translate_transform(&t, -min_x, -min_y);
+    al_translate_transform(
+        &t,
+        -min_x + game.maker_tools.area_image_padding / 2.0f,
+        -min_y + game.maker_tools.area_image_padding / 2.0f
+    );
     al_scale_transform(&t, scale, scale);
     
     //Begin drawing!

@@ -654,6 +654,7 @@ float keyframe_interpolator::get(const float t) {
  */
 maker_tools_info::maker_tools_info() :
     enabled(true),
+    area_image_padding(32.0f),
     area_image_shadows(true),
     area_image_size(2048),
     area_image_mobs(true),
