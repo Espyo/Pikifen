@@ -1,0 +1,8 @@
+name = Smoke Generator
+description = Dummy object for area-making purposes.
+
+area_editor_tips = This object can be used to tell other objects where to go, but it's extra useful for objects you can walk on. It will act like an obstacle for carrying purposes, until the walkable object reaches its destination.
+can_block_paths = true
+casts_shadow = false
+custom_category_name = Decoration
+radius = 16
