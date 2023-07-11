@@ -7,14 +7,9 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Winged Pikmin that fall in the water should fly up when whistled
-    Helodity's ledge throw scenarios
     Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
 
     --- v0.24.0 ---
-    Add several pre-packaged areas, since players have nothing to play with right now
-        Helodity's Adventure area (see #content-sharing)?
-        Helodity's Crash Landing mission
-        A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
     More puzzle elements
         Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
             Add maker notes indicating this
@@ -733,6 +728,9 @@ Misc things (so I don't forget)
             Scuttlebug?
             A completely original enemy
         Cyan Pikmin and Green Pikmin?
+        Areas
+            A small area with ten small items, inspired by Smash's Break the Targets. The targets aren't far, but they are in different platforms, different directions, different paths. You only have like 3 or 4 Pikmin. The idea is to finish in around 30 seconds, but you have to strategize what items to pick up first. Poor strategies will result in a lot of downtime as the Pikmin return and you're waiting for them, but better strategies will always keep you on the move. Basically what Mission Mode already is, but this is a sort of a "lite" version, and I guess more action-packed, and with less worries (like if you have enough Pikmin for carrying back heavy objects and such)
+            Helodity's Turbulent Tundra?
     Particle improvements
         https://www.youtube.com/watch?v=bIjrSvGddDQ
         Particles should have a secondary way of dying - shrinking instead of exclusively fading to transparent

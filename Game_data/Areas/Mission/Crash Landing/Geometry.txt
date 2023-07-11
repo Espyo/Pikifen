@@ -46,7 +46,7 @@ vertexes{
 	v=397.7424 408.1345
 	v=640.2573 -465.5937
 	v=680.0000 -160.0000
-	v=676.6312 -458.7016
+	v=680.0062 -458.2016
 	v=384.0000 -200.0000
 	v=432.0000 -200.0000
 	v=432.0000 -160.0000
@@ -291,10 +291,6 @@ vertexes{
 	v=1028.0000 120.0000
 	v=936.0000 -184.0000
 	v=936.0000 88.0000
-	v=1184.0000 -96.0000
-	v=1184.0000 -80.0000
-	v=1184.0000 -16.0000
-	v=1184.0000 0.0000
 	v=-1304.0000 -424.0000
 	v=-1257.7109 -164.5353
 	v=-840.0000 -456.0000
@@ -319,8 +315,7 @@ vertexes{
 	v=-896.0000 464.0000
 	v=-1272.0000 -344.0000
 	v=-1184.0000 -264.0000
-	v=-1088.0000 -272.0000
-	v=-1008.0000 -288.0000
+	v=-1040.0000 -280.0000
 	v=-928.0000 -312.0000
 	v=-936.9896 -405.7030
 	v=-904.7656 -425.7433
@@ -394,7 +389,7 @@ vertexes{
 	v=344.0000 -493.9909
 	v=383.2560 -493.3076
 	v=640.2450 -452.8788
-	v=676.7492 -448.2380
+	v=680.0000 -448.0000
 	v=352.0000 404.7877
 	v=397.8358 395.8819
 	v=112.0638 410.3512
@@ -404,17 +399,16 @@ vertexes{
 	v=-692.0000 192.0000
 	v=-692.0000 152.0000
 	v=-680.0000 -280.0000
-	v=-671.1605 -296.7708
 	v=-699.0079 -280.0000
 	v=-695.1328 -308.0378
 	v=1248.0000 -288.0000
 	v=1152.0000 -152.0000
 	v=1216.0000 -296.0000
-	v=1247.4293 198.3514
+	v=1248.0000 192.0000
 	v=1152.0000 56.0000
 	v=1216.0000 208.0000
 	v=-231.9920 -515.3831
-	v=-191.2766 -516.5763
+	v=-192.0000 -512.0000
 	v=-530.9475 -376.5376
 	v=-493.5674 -414.5567
 	v=-453.6313 -424.1414
@@ -431,42 +425,48 @@ vertexes{
 	v=-756.3419 -393.0694
 	v=-753.8292 -371.9490
 	v=-721.9773 -349.3783
+	v=1168.0000 -96.0000
+	v=1168.0000 -128.0000
+	v=1168.0000 0.0000
+	v=1168.0000 32.0000
+	v=1184.0000 -80.0000
+	v=1184.0000 -16.0000
 }
 edges{
 	e{
-		s=71 91
+		s=70 90
 		v=40 3
 	}
 	e{
-		s=45 85
-		v=1 35
+		s=70 45
+		v=35 1
 	}
 	e{
-		s=57 45
-		v=9 2
+		s=45 70
+		v=2 9
 	}
 	e{
-		s=72 65
+		s=71 64
 		v=18 4
 	}
 	e{
-		s=78 70
+		s=77 69
 		v=34 6
 	}
 	e{
-		s=70 6
-		v=17 352
+		s=69 6
+		v=17 347
 	}
 	e{
-		s=65 -1
-		v=10 369
+		s=64 -1
+		v=10 364
 	}
 	e{
-		s=-1 91
+		s=-1 90
 		v=57 11
 	}
 	e{
-		s=-1 91
+		s=-1 90
 		v=197 12
 	}
 	e{
@@ -482,11 +482,11 @@ edges{
 		v=15 16
 	}
 	e{
-		s=72 65
-		v=355 18
+		s=71 64
+		v=350 18
 	}
 	e{
-		s=44 83
+		s=44 82
 		v=26 192
 	}
 	e{
@@ -494,31 +494,31 @@ edges{
 		v=21 188
 	}
 	e{
-		s=72 84
-		v=22 407
+		s=71 83
+		v=22 401
 	}
 	e{
-		s=65 91
-		v=370 22
+		s=64 90
+		v=365 22
 	}
 	e{
 		s=35 1
 		v=19 162
 	}
 	e{
-		s=84 91
+		s=83 90
 		v=22 24
 	}
 	e{
 		s=34 1
-		v=23 404
+		v=23 399
 	}
 	e{
-		s=34 83
+		s=34 82
 		v=38 175
 	}
 	e{
-		s=44 83
+		s=44 82
 		v=25 26
 	}
 	e{
@@ -526,139 +526,139 @@ edges{
 		v=20 19
 	}
 	e{
-		s=2 56
+		s=2 42
 		v=186 190
 	}
 	e{
-		s=2 85
+		s=2 84
 		v=27 28
 	}
 	e{
-		s=2 85
-		v=28 415
+		s=2 84
+		v=28 409
 	}
 	e{
-		s=70 85
+		s=69 84
 		v=29 6
 	}
 	e{
-		s=89 70
+		s=88 69
 		v=29 30
 	}
 	e{
-		s=3 85
+		s=3 84
 		v=31 50
 	}
 	e{
-		s=3 85
+		s=3 84
 		v=32 31
 	}
 	e{
-		s=3 85
+		s=3 84
 		v=33 32
 	}
 	e{
-		s=3 85
-		v=68 393
+		s=3 84
+		v=68 388
 	}
 	e{
-		s=70 55
+		s=69 55
 		v=67 206
 	}
 	e{
-		s=80 91
+		s=79 90
 		v=7 44
 	}
 	e{
-		s=88 91
+		s=87 90
 		v=249 66
 	}
 	e{
-		s=45 42
-		v=179 36
+		s=70 45
+		v=36 179
 	}
 	e{
-		s=57 45
-		v=2 36
+		s=45 70
+		v=36 2
 	}
 	e{
-		s=81 91
+		s=80 90
 		v=37 77
 	}
 	e{
-		s=71 91
+		s=70 90
 		v=5 73
 	}
 	e{
-		s=34 91
-		v=308 39
+		s=34 90
+		v=304 39
 	}
 	e{
 		s=34 0
-		v=39 403
+		v=39 398
 	}
 	e{
-		s=0 91
+		s=0 90
 		v=39 40
 	}
 	e{
-		s=71 83
-		v=72 402
+		s=70 82
+		v=72 397
 	}
 	e{
-		s=57 4
-		v=42 401
+		s=56 4
+		v=42 396
 	}
 	e{
-		s=57 4
+		s=56 4
 		v=41 78
 	}
 	e{
-		s=57 91
+		s=56 90
 		v=44 59
 	}
 	e{
-		s=57 80
-		v=7 396
+		s=56 79
+		v=7 391
 	}
 	e{
-		s=57 8
+		s=56 8
 		v=43 71
 	}
 	e{
-		s=70 85
+		s=69 84
 		v=34 45
 	}
 	e{
-		s=79 70
+		s=78 69
 		v=47 45
 	}
 	e{
-		s=79 85
-		v=45 394
+		s=78 84
+		v=45 389
 	}
 	e{
-		s=5 85
+		s=5 84
 		v=65 46
 	}
 	e{
-		s=5 85
-		v=46 395
+		s=5 84
+		v=46 390
 	}
 	e{
-		s=3 85
+		s=3 84
 		v=49 48
 	}
 	e{
-		s=3 85
+		s=3 84
 		v=50 49
 	}
 	e{
-		s=57 8
+		s=56 8
 		v=51 76
 	}
 	e{
-		s=65 -1
+		s=64 -1
 		v=54 10
 	}
 	e{
@@ -667,14 +667,14 @@ edges{
 	}
 	e{
 		s=6 -1
-		v=52 360
+		v=52 355
 	}
 	e{
-		s=66 -1
-		v=53 340
+		s=65 -1
+		v=53 335
 	}
 	e{
-		s=7 91
+		s=7 90
 		v=12 57
 	}
 	e{
@@ -690,99 +690,99 @@ edges{
 		v=56 57
 	}
 	e{
-		s=57 91
-		v=363 62
+		s=56 90
+		v=358 62
 	}
 	e{
-		s=70 85
+		s=69 84
 		v=47 60
 	}
 	e{
-		s=70 85
+		s=69 84
 		v=60 61
 	}
 	e{
-		s=70 85
-		v=61 364
+		s=69 84
+		v=61 359
 	}
 	e{
-		s=5 85
+		s=5 84
 		v=63 64
 	}
 	e{
-		s=5 85
+		s=5 84
 		v=64 65
 	}
 	e{
-		s=70 85
-		v=198 205
+		s=70 69
+		v=205 198
 	}
 	e{
-		s=78 85
-		v=6 392
+		s=77 84
+		v=6 387
 	}
 	e{
-		s=3 85
+		s=3 84
 		v=48 68
 	}
 	e{
-		s=57 8
-		v=76 397
+		s=56 8
+		v=76 392
 	}
 	e{
-		s=57 4
+		s=56 4
 		v=78 42
 	}
 	e{
-		s=57 4
+		s=56 4
 		v=70 41
 	}
 	e{
-		s=57 8
+		s=56 8
 		v=71 51
 	}
 	e{
-		s=71 82
-		v=73 400
+		s=70 81
+		v=73 395
 	}
 	e{
-		s=82 91
+		s=81 90
 		v=73 74
 	}
 	e{
-		s=57 91
+		s=56 90
 		v=74 37
 	}
 	e{
-		s=57 9
+		s=56 9
 		v=75 69
 	}
 	e{
-		s=57 81
-		v=37 398
+		s=56 80
+		v=37 393
 	}
 	e{
-		s=57 9
-		v=69 399
+		s=56 9
+		v=69 394
 	}
 	e{
-		s=57 91
+		s=56 90
 		v=77 7
 	}
 	e{
-		s=57 10
+		s=56 10
 		v=82 79
 	}
 	e{
-		s=57 10
+		s=56 10
 		v=79 80
 	}
 	e{
-		s=57 10
+		s=56 10
 		v=80 81
 	}
 	e{
-		s=57 10
+		s=56 10
 		v=81 82
 	}
 	e{
@@ -806,19 +806,19 @@ edges{
 		shadow_length=6.0000
 	}
 	e{
-		s=57 12
+		s=56 12
 		v=90 87
 	}
 	e{
-		s=57 12
+		s=56 12
 		v=87 88
 	}
 	e{
-		s=57 12
+		s=56 12
 		v=88 89
 	}
 	e{
-		s=57 12
+		s=56 12
 		v=89 90
 	}
 	e{
@@ -842,19 +842,19 @@ edges{
 		shadow_length=6.0000
 	}
 	e{
-		s=57 14
+		s=56 14
 		v=98 95
 	}
 	e{
-		s=57 14
+		s=56 14
 		v=95 96
 	}
 	e{
-		s=57 14
+		s=56 14
 		v=96 97
 	}
 	e{
-		s=57 14
+		s=56 14
 		v=97 98
 	}
 	e{
@@ -874,15 +874,15 @@ edges{
 		v=102 99
 	}
 	e{
-		s=85 16
+		s=84 16
 		v=103 104
 	}
 	e{
-		s=85 16
+		s=84 16
 		v=104 105
 	}
 	e{
-		s=85 16
+		s=84 16
 		v=105 106
 	}
 	e{
@@ -902,11 +902,11 @@ edges{
 		v=113 110
 	}
 	e{
-		s=85 16
+		s=84 16
 		v=106 111
 	}
 	e{
-		s=85 16
+		s=84 16
 		v=111 112
 	}
 	e{
@@ -914,11 +914,11 @@ edges{
 		v=117 112
 	}
 	e{
-		s=16 85
+		s=16 84
 		v=103 114
 	}
 	e{
-		s=16 85
+		s=16 84
 		v=114 115
 	}
 	e{
@@ -954,7 +954,7 @@ edges{
 		v=120 109
 	}
 	e{
-		s=85 19
+		s=84 19
 		v=112 115
 	}
 	e{
@@ -998,47 +998,47 @@ edges{
 		v=131 143
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=141 132
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=132 133
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=133 134
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=134 135
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=135 136
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=136 137
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=137 144
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=138 139
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=139 142
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=140 141
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=142 140
 	}
 	e{
@@ -1046,7 +1046,7 @@ edges{
 		v=143 121
 	}
 	e{
-		s=85 21
+		s=84 21
 		v=144 138
 	}
 	e{
@@ -1178,7 +1178,7 @@ edges{
 		v=162 169
 	}
 	e{
-		s=35 83
+		s=35 82
 		v=168 25
 	}
 	e{
@@ -1210,7 +1210,7 @@ edges{
 		v=169 23
 	}
 	e{
-		s=36 83
+		s=36 82
 		v=175 168
 	}
 	e{
@@ -1258,59 +1258,47 @@ edges{
 		v=170 163
 	}
 	e{
-		s=71 91
+		s=70 90
 		v=3 5
 	}
 	e{
-		s=45 56
-		v=35 176
+		s=70 45
+		v=176 35
 	}
 	e{
-		s=71 56
-		v=176 293
-	}
-	e{
-		s=71 56
+		s=70 42
 		v=177 181
 	}
 	e{
-		s=71 45
-		v=179 176
+		s=45 70
+		v=176 179
 	}
 	e{
-		s=57 42
-		v=36 295
+		s=70 91
+		v=178 431
 	}
 	e{
-		s=71 42
-		v=178 294
-	}
-	e{
-		s=56 85
-		v=35 292
-	}
-	e{
-		s=56 85
+		s=42 84
 		v=180 189
 	}
 	e{
-		s=57 42
+		s=56 91
 		v=182 194
 	}
 	e{
-		s=71 42
+		s=70 91
 		v=183 178
 	}
 	e{
-		s=71 43
+		s=70 43
 		v=184 185
 	}
 	e{
-		s=71 2
-		v=186 391
+		s=70 2
+		v=186 386
 	}
 	e{
-		s=71 56
+		s=70 42
 		v=181 186
 	}
 	e{
@@ -1322,19 +1310,19 @@ edges{
 		v=188 20
 	}
 	e{
-		s=71 43
+		s=70 43
 		v=21 184
 	}
 	e{
-		s=56 85
+		s=42 84
 		v=189 190
 	}
 	e{
-		s=2 85
+		s=2 84
 		v=190 27
 	}
 	e{
-		s=71 43
+		s=70 43
 		v=185 72
 	}
 	e{
@@ -1346,83 +1334,83 @@ edges{
 		v=192 191
 	}
 	e{
-		s=43 83
+		s=43 82
 		v=192 72
 	}
 	e{
-		s=57 4
+		s=56 4
 		v=193 70
 	}
 	e{
-		s=57 42
+		s=56 91
 		v=194 193
 	}
 	e{
-		s=71 42
+		s=70 91
 		v=195 183
 	}
 	e{
-		s=42 4
-		v=195 193
+		s=4 91
+		v=193 195
 	}
 	e{
-		s=70 -1
+		s=69 -1
 		v=196 17
 	}
 	e{
-		s=-1 91
+		s=-1 90
 		v=13 197
 	}
 	e{
-		s=45 91
+		s=45 90
 		v=9 13
 	}
 	e{
-		s=45 70
+		s=45 69
 		v=16 8
 	}
 	e{
-		s=70 -1
+		s=69 -1
 		v=16 196
 	}
 	e{
-		s=57 91
-		v=62 199
+		s=56 90
+		v=62 429
 	}
 	e{
-		s=70 85
-		v=408 8
+		s=70 69
+		v=8 402
 	}
 	e{
-		s=70 86
-		v=200 409
+		s=69 85
+		v=200 403
 	}
 	e{
-		s=57 91
-		v=199 201
+		s=90 70
+		v=201 199
 	}
 	e{
-		s=70 55
+		s=69 55
 		v=202 248
 	}
 	e{
-		s=88 91
+		s=87 90
 		v=291 203
 	}
 	e{
-		s=57 91
-		v=201 204
+		s=90 70
+		v=204 201
 	}
 	e{
-		s=70 85
-		v=205 200
+		s=70 69
+		v=200 205
 	}
 	e{
-		s=70 55
-		v=206 410
+		s=69 55
+		v=206 404
 	}
 	e{
-		s=88 91
+		s=87 90
 		v=66 207
 	}
 	e{
@@ -1622,11 +1610,11 @@ edges{
 		shadow_length=6.0000
 	}
 	e{
-		s=70 55
+		s=69 55
 		v=248 67
 	}
 	e{
-		s=88 91
+		s=87 90
 		v=203 249
 	}
 	e{
@@ -1670,42 +1658,42 @@ edges{
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=265 258
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=258 267
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=259 273
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=260 261
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=261 271
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=262 263
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=263 264
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=264 268
 		shadow_length=6.0000
 	}
@@ -1715,12 +1703,12 @@ edges{
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=267 259
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=268 265
 		shadow_length=6.0000
 	}
@@ -1735,7 +1723,7 @@ edges{
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=271 262
 		shadow_length=6.0000
 	}
@@ -1745,7 +1733,7 @@ edges{
 		shadow_length=6.0000
 	}
 	e{
-		s=52 88
+		s=52 87
 		v=273 260
 		shadow_length=6.0000
 	}
@@ -1826,716 +1814,728 @@ edges{
 		v=288 289
 	}
 	e{
-		s=70 55
+		s=69 55
 		v=290 202
 	}
 	e{
-		s=88 91
-		v=412 291
+		s=87 90
+		v=406 291
 	}
 	e{
-		s=56 85
-		v=292 180
+		s=70 45
+		v=1 8
 	}
 	e{
-		s=71 56
-		v=293 177
-	}
-	e{
-		s=71 42
-		v=294 179
-	}
-	e{
-		s=57 42
-		v=295 182
-	}
-	e{
-		s=45 85
-		v=8 1
-	}
-	e{
-		s=57 91
-		v=411 9
-	}
-	e{
-		s=-1 64
-		v=297 348
-	}
-	e{
-		s=-1 64
-		v=362 338
-	}
-	e{
-		s=-1 61
-		v=296 365
-	}
-	e{
-		s=-1 61
-		v=298 311
-	}
-	e{
-		s=69 58
-		v=299 430
+		s=90 70
+		v=9 405
 	}
 	e{
 		s=-1 63
-		v=302 347
+		v=293 343
 	}
 	e{
 		s=-1 63
-		v=300 316
+		v=357 333
 	}
 	e{
-		s=59 91
-		v=306 301
+		s=-1 60
+		v=292 360
 	}
 	e{
-		s=59 91
-		v=314 306
+		s=-1 60
+		v=294 307
 	}
 	e{
-		s=59 91
-		v=313 303
+		s=68 57
+		v=295 424
 	}
 	e{
 		s=-1 62
-		v=304 317
-	}
-	e{
-		s=69 61
-		v=305 429
-	}
-	e{
-		s=60 91
-		v=315 58
-	}
-	e{
-		s=34 91
-		v=24 307
-	}
-	e{
-		s=34 91
-		v=309 308
-	}
-	e{
-		s=34 91
-		v=310 309
-	}
-	e{
-		s=34 91
-		v=307 310
-	}
-	e{
-		s=-1 61
-		v=311 305
-	}
-	e{
-		s=58 91
-		v=58 312
-	}
-	e{
-		s=59 91
-		v=301 313
-	}
-	e{
-		s=-1 59
-		v=314 304
-	}
-	e{
-		s=-1 91
-		v=11 314
-	}
-	e{
-		s=61 -1
-		v=298 380
-	}
-	e{
-		s=64 91
-		v=428 315
+		v=298 342
 	}
 	e{
 		s=-1 62
-		v=316 358
+		v=296 312
 	}
 	e{
-		s=-1 63
-		v=317 302
+		s=58 90
+		v=302 297
 	}
 	e{
-		s=62 63
-		v=316 317
+		s=58 90
+		v=310 302
 	}
 	e{
-		s=59 62
-		v=303 304
-	}
-	e{
-		s=61 64
-		v=296 318
-	}
-	e{
-		s=61 64
-		v=318 319
-	}
-	e{
-		s=61 64
-		v=319 320
-	}
-	e{
-		s=61 64
-		v=320 321
-	}
-	e{
-		s=61 64
-		v=321 322
-	}
-	e{
-		s=61 64
-		v=322 323
-	}
-	e{
-		s=61 64
-		v=323 366
+		s=58 90
+		v=309 299
 	}
 	e{
 		s=-1 61
-		v=325 425
+		v=300 313
 	}
 	e{
-		s=46 -1
-		v=336 357
+		s=68 60
+		v=301 423
 	}
 	e{
-		s=46 91
-		v=330 329
+		s=59 90
+		v=311 58
 	}
 	e{
-		s=46 91
-		v=331 330
+		s=34 90
+		v=24 303
 	}
 	e{
-		s=46 91
-		v=332 331
+		s=34 90
+		v=305 304
 	}
 	e{
-		s=46 91
-		v=333 332
+		s=34 90
+		v=306 305
 	}
 	e{
-		s=46 91
-		v=303 333
+		s=34 90
+		v=303 306
 	}
 	e{
-		s=46 -1
-		v=334 356
+		s=-1 60
+		v=307 301
 	}
 	e{
-		s=46 -1
-		v=335 358
+		s=57 90
+		v=58 308
 	}
 	e{
-		s=-1 64
-		v=337 297
+		s=58 90
+		v=297 309
 	}
 	e{
-		s=-1 64
-		v=338 337
+		s=-1 58
+		v=310 300
 	}
 	e{
-		s=66 -1
-		v=339 53
+		s=-1 90
+		v=11 310
 	}
 	e{
-		s=6 -1
-		v=340 352
+		s=60 -1
+		v=294 375
 	}
 	e{
-		s=66 -1
-		v=343 353
-	}
-	e{
-		s=66 6
-		v=340 341
-	}
-	e{
-		s=66 6
-		v=341 342
-	}
-	e{
-		s=66 6
-		v=342 359
-	}
-	e{
-		s=-1 63
-		v=344 300
-	}
-	e{
-		s=67 63
-		v=347 344
-	}
-	e{
-		s=67 -1
-		v=344 345
-	}
-	e{
-		s=67 -1
-		v=345 346
-	}
-	e{
-		s=67 -1
-		v=346 347
-	}
-	e{
-		s=64 68
-		v=351 348
-	}
-	e{
-		s=-1 64
-		v=351 296
-	}
-	e{
-		s=-1 68
-		v=348 349
-	}
-	e{
-		s=-1 68
-		v=349 350
-	}
-	e{
-		s=-1 68
-		v=350 351
-	}
-	e{
-		s=69 -1
-		v=0 305
-	}
-	e{
-		s=70 -1
-		v=352 354
-	}
-	e{
-		s=66 -1
-		v=353 339
-	}
-	e{
-		s=65 -1
-		v=354 54
-	}
-	e{
-		s=72 70
-		v=30 355
-	}
-	e{
-		s=70 65
-		v=354 355
-	}
-	e{
-		s=46 -1
-		v=356 335
-	}
-	e{
-		s=46 -1
-		v=357 334
-	}
-	e{
-		s=46 62
-		v=358 303
-	}
-	e{
-		s=66 6
-		v=359 360
-	}
-	e{
-		s=66 -1
-		v=360 361
-	}
-	e{
-		s=66 -1
-		v=361 343
-	}
-	e{
-		s=46 -1
-		v=362 336
-	}
-	e{
-		s=57 91
-		v=59 363
-	}
-	e{
-		s=70 85
-		v=364 198
+		s=63 90
+		v=422 311
 	}
 	e{
 		s=-1 61
-		v=365 326
+		v=312 353
 	}
 	e{
-		s=60 64
-		v=366 315
+		s=-1 62
+		v=313 298
 	}
 	e{
-		s=61 60
-		v=366 324
-	}
-	e{
-		s=72 65
-		v=368 367
-	}
-	e{
-		s=72 65
-		v=4 368
-	}
-	e{
-		s=65 -1
-		v=369 376
-	}
-	e{
-		s=69 65
-		v=370 378
-	}
-	e{
-		s=72 1
-		v=371 405
-	}
-	e{
-		s=71 1
-		v=372 21
-	}
-	e{
-		s=72 65
-		v=367 374
-	}
-	e{
-		s=72 65
-		v=374 373
-	}
-	e{
-		s=1 77
-		v=372 375
-	}
-	e{
-		s=65 -1
-		v=376 377
-	}
-	e{
-		s=65 -1
-		v=377 378
-	}
-	e{
-		s=72 65
-		v=373 22
-	}
-	e{
-		s=69 -1
-		v=378 0
-	}
-	e{
-		s=60 61
-		v=379 324
-	}
-	e{
-		s=58 60
-		v=379 58
+		s=61 62
+		v=312 313
 	}
 	e{
 		s=58 61
-		v=429 379
+		v=299 300
 	}
 	e{
-		s=61 -1
-		v=380 328
+		s=60 63
+		v=292 314
 	}
 	e{
-		s=72 2
-		v=386 414
+		s=60 63
+		v=314 315
 	}
 	e{
-		s=72 77
-		v=375 382
+		s=60 63
+		v=315 316
 	}
 	e{
-		s=72 76
-		v=382 383
+		s=60 63
+		v=316 317
 	}
 	e{
-		s=72 75
-		v=383 384
+		s=60 63
+		v=317 318
 	}
 	e{
-		s=72 74
-		v=384 385
+		s=60 63
+		v=318 361
 	}
 	e{
-		s=73 72
-		v=386 385
+		s=-1 60
+		v=320 419
 	}
 	e{
-		s=73 2
-		v=391 386
+		s=46 -1
+		v=331 352
 	}
 	e{
-		s=71 77
-		v=387 372
+		s=46 90
+		v=325 324
+	}
+	e{
+		s=46 90
+		v=326 325
+	}
+	e{
+		s=46 90
+		v=327 326
+	}
+	e{
+		s=46 90
+		v=328 327
+	}
+	e{
+		s=46 90
+		v=299 328
+	}
+	e{
+		s=46 -1
+		v=329 351
+	}
+	e{
+		s=46 -1
+		v=330 353
+	}
+	e{
+		s=-1 63
+		v=332 293
+	}
+	e{
+		s=-1 63
+		v=333 332
+	}
+	e{
+		s=65 -1
+		v=334 53
+	}
+	e{
+		s=6 -1
+		v=335 347
+	}
+	e{
+		s=65 -1
+		v=338 348
+	}
+	e{
+		s=65 6
+		v=335 336
+	}
+	e{
+		s=65 6
+		v=336 337
+	}
+	e{
+		s=65 6
+		v=337 354
+	}
+	e{
+		s=-1 62
+		v=339 296
+	}
+	e{
+		s=66 62
+		v=342 339
+	}
+	e{
+		s=66 -1
+		v=339 340
+	}
+	e{
+		s=66 -1
+		v=340 341
+	}
+	e{
+		s=66 -1
+		v=341 342
+	}
+	e{
+		s=63 67
+		v=346 343
+	}
+	e{
+		s=-1 63
+		v=346 292
+	}
+	e{
+		s=-1 67
+		v=343 344
+	}
+	e{
+		s=-1 67
+		v=344 345
+	}
+	e{
+		s=-1 67
+		v=345 346
+	}
+	e{
+		s=68 -1
+		v=0 301
+	}
+	e{
+		s=69 -1
+		v=347 349
+	}
+	e{
+		s=65 -1
+		v=348 334
+	}
+	e{
+		s=64 -1
+		v=349 54
+	}
+	e{
+		s=71 69
+		v=30 350
+	}
+	e{
+		s=69 64
+		v=349 350
+	}
+	e{
+		s=46 -1
+		v=351 330
+	}
+	e{
+		s=46 -1
+		v=352 329
+	}
+	e{
+		s=46 61
+		v=353 299
+	}
+	e{
+		s=65 6
+		v=354 355
+	}
+	e{
+		s=65 -1
+		v=355 356
+	}
+	e{
+		s=65 -1
+		v=356 338
+	}
+	e{
+		s=46 -1
+		v=357 331
+	}
+	e{
+		s=56 90
+		v=59 358
+	}
+	e{
+		s=69 84
+		v=359 427
+	}
+	e{
+		s=-1 60
+		v=360 321
+	}
+	e{
+		s=59 63
+		v=361 311
+	}
+	e{
+		s=60 59
+		v=361 319
+	}
+	e{
+		s=71 64
+		v=363 362
+	}
+	e{
+		s=71 64
+		v=4 363
+	}
+	e{
+		s=64 -1
+		v=364 371
+	}
+	e{
+		s=68 64
+		v=365 373
+	}
+	e{
+		s=70 1
+		v=367 21
+	}
+	e{
+		s=71 64
+		v=362 369
+	}
+	e{
+		s=71 64
+		v=369 368
+	}
+	e{
+		s=1 76
+		v=367 370
+	}
+	e{
+		s=64 -1
+		v=371 372
+	}
+	e{
+		s=64 -1
+		v=372 373
+	}
+	e{
+		s=71 64
+		v=368 22
+	}
+	e{
+		s=68 -1
+		v=373 0
+	}
+	e{
+		s=59 60
+		v=374 319
+	}
+	e{
+		s=57 59
+		v=374 58
+	}
+	e{
+		s=57 60
+		v=423 374
+	}
+	e{
+		s=60 -1
+		v=375 323
+	}
+	e{
+		s=71 2
+		v=381 408
 	}
 	e{
 		s=71 76
-		v=388 387
+		v=370 377
 	}
 	e{
 		s=71 75
-		v=389 388
+		v=377 378
 	}
 	e{
 		s=71 74
-		v=390 389
+		v=378 379
 	}
 	e{
-		s=73 71
-		v=390 391
+		s=71 73
+		v=379 380
+	}
+	e{
+		s=72 71
+		v=381 380
+	}
+	e{
+		s=72 2
+		v=386 381
+	}
+	e{
+		s=70 76
+		v=382 367
+	}
+	e{
+		s=70 75
+		v=383 382
+	}
+	e{
+		s=70 74
+		v=384 383
+	}
+	e{
+		s=70 73
+		v=385 384
+	}
+	e{
+		s=72 70
+		v=385 386
+	}
+	e{
+		s=72 73
+		v=380 385
 	}
 	e{
 		s=73 74
-		v=385 390
+		v=379 384
 	}
 	e{
 		s=74 75
-		v=384 389
+		v=378 383
 	}
 	e{
 		s=75 76
-		v=383 388
+		v=377 382
 	}
 	e{
-		s=76 77
-		v=382 387
+		s=3 84
+		v=387 33
 	}
 	e{
-		s=3 85
-		v=392 33
+		s=77 84
+		v=388 34
 	}
 	e{
-		s=78 85
-		v=393 34
+		s=77 3
+		v=387 388
 	}
 	e{
-		s=78 3
-		v=392 393
+		s=5 84
+		v=389 63
 	}
 	e{
-		s=5 85
-		v=394 63
+		s=78 84
+		v=390 47
 	}
 	e{
-		s=79 85
-		v=395 47
+		s=78 5
+		v=389 390
 	}
 	e{
-		s=79 5
-		v=394 395
+		s=56 8
+		v=391 43
 	}
 	e{
-		s=57 8
-		v=396 43
+		s=56 79
+		v=392 44
 	}
 	e{
-		s=57 80
-		v=397 44
+		s=8 79
+		v=391 392
 	}
 	e{
-		s=8 80
-		v=396 397
+		s=56 9
+		v=393 75
 	}
 	e{
-		s=57 9
-		v=398 75
+		s=56 80
+		v=394 77
 	}
 	e{
-		s=57 81
-		v=399 77
+		s=9 80
+		v=393 394
 	}
 	e{
-		s=9 81
-		v=398 399
+		s=70 4
+		v=395 195
 	}
 	e{
-		s=71 4
-		v=400 195
+		s=56 81
+		v=396 74
 	}
 	e{
-		s=57 82
-		v=401 74
+		s=4 81
+		v=395 396
 	}
 	e{
-		s=4 82
-		v=400 401
+		s=70 0
+		v=397 40
 	}
 	e{
-		s=71 0
-		v=402 40
+		s=34 82
+		v=398 38
 	}
 	e{
-		s=34 83
-		v=403 38
-	}
-	e{
-		s=0 83
-		v=402 403
+		s=0 82
+		v=397 398
 	}
 	e{
 		s=34 1
-		v=404 406
+		v=399 400
 	}
 	e{
-		s=72 1
-		v=405 375
+		s=71 1
+		v=366 370
 	}
 	e{
-		s=34 84
-		v=406 24
+		s=34 83
+		v=400 24
 	}
 	e{
-		s=1 84
-		v=407 406
+		s=1 83
+		v=401 400
 	}
 	e{
-		s=72 1
-		v=407 371
+		s=71 1
+		v=401 366
 	}
 	e{
-		s=85 86
-		v=408 200
+		s=70 85
+		v=402 200
 	}
 	e{
-		s=70 55
-		v=409 290
+		s=69 55
+		v=403 290
 	}
 	e{
-		s=70 86
-		v=410 408
+		s=69 85
+		v=404 402
 	}
 	e{
-		s=55 86
-		v=409 410
+		s=55 85
+		v=403 404
 	}
 	e{
-		s=87 91
-		v=413 411
+		s=86 90
+		v=407 405
 	}
 	e{
-		s=57 87
-		v=204 411
+		s=86 70
+		v=405 204
 	}
 	e{
-		s=87 91
-		v=204 412
+		s=86 90
+		v=204 406
 	}
 	e{
-		s=88 91
-		v=207 413
+		s=87 90
+		v=207 407
 	}
 	e{
-		s=87 88
+		s=86 87
+		v=406 407
+	}
+	e{
+		s=88 71
+		v=30 408
+	}
+	e{
+		s=88 84
+		v=409 29
+	}
+	e{
+		s=88 2
+		v=408 409
+	}
+	e{
+		s=71 89
+		v=413 410
+		shadow_length=3.0000
+	}
+	e{
+		s=71 89
+		v=410 411
+		shadow_length=3.0000
+	}
+	e{
+		s=71 89
+		v=411 412
+		shadow_length=3.0000
+	}
+	e{
+		s=71 89
 		v=412 413
-	}
-	e{
-		s=89 72
-		v=30 414
-	}
-	e{
-		s=89 85
-		v=415 29
-	}
-	e{
-		s=89 2
-		v=414 415
-	}
-	e{
-		s=72 90
-		v=419 416
 		shadow_length=3.0000
 	}
 	e{
-		s=72 90
-		v=416 417
-		shadow_length=3.0000
+		s=-1 60
+		v=414 323
 	}
 	e{
-		s=72 90
-		v=417 418
-		shadow_length=3.0000
+		s=-1 60
+		v=420 320
 	}
 	e{
-		s=72 90
-		v=418 419
-		shadow_length=3.0000
+		s=-1 60
+		v=376 420
 	}
 	e{
-		s=-1 61
-		v=420 328
+		s=-1 60
+		v=415 421
 	}
 	e{
-		s=-1 61
-		v=426 325
+		s=-1 60
+		v=421 376
 	}
 	e{
-		s=-1 61
-		v=381 426
+		s=-1 60
+		v=322 415
 	}
 	e{
-		s=-1 61
-		v=421 427
+		s=-1 60
+		v=416 418
 	}
 	e{
-		s=-1 61
-		v=427 381
+		s=-1 60
+		v=417 322
 	}
 	e{
-		s=-1 61
-		v=327 421
+		s=-1 60
+		v=418 417
 	}
 	e{
-		s=-1 61
-		v=422 424
+		s=-1 60
+		v=419 414
 	}
 	e{
-		s=-1 61
-		v=423 327
+		s=-1 60
+		v=321 416
 	}
 	e{
-		s=-1 61
-		v=424 423
+		s=46 90
+		v=324 422
 	}
 	e{
-		s=-1 61
-		v=425 420
+		s=46 63
+		v=422 357
 	}
 	e{
-		s=-1 61
-		v=326 422
+		s=68 57
+		v=423 295
 	}
 	e{
-		s=46 91
-		v=329 428
+		s=57 90
+		v=308 424
 	}
 	e{
-		s=46 64
-		v=428 362
+		s=68 90
+		v=424 425
 	}
 	e{
-		s=69 58
-		v=429 299
+		s=68 90
+		v=425 365
 	}
 	e{
-		s=58 91
-		v=312 430
+		s=42 84
+		v=426 180
 	}
 	e{
-		s=69 91
-		v=430 431
+		s=69 42
+		v=427 198
 	}
 	e{
-		s=69 91
-		v=431 370
+		s=84 42
+		v=426 427
+	}
+	e{
+		s=70 42
+		v=198 430
+	}
+	e{
+		s=70 42
+		v=430 177
+	}
+	e{
+		s=56 91
+		v=428 182
+	}
+	e{
+		s=90 91
+		v=199 429
+	}
+	e{
+		s=56 91
+		v=429 428
+	}
+	e{
+		s=70 91
+		v=431 199
 	}
 }
 sectors{
@@ -2543,7 +2543,7 @@ sectors{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=Metal_scratched.jpg
+		texture=Metal_clean.jpg
 		texture_rotate=0.2449
 	}
 	s{
@@ -2572,13 +2572,11 @@ sectors{
 		texture=Metal_clean.jpg
 	}
 	s{
-		type
 		z=250.0000
 		texture=Metal_clean.jpg
 		texture_tint=0 255 255
 	}
 	s{
-		type
 		z=250.0000
 		texture=Metal_clean.jpg
 		texture_tint=100 255 255
@@ -2594,222 +2592,187 @@ sectors{
 		texture=Metal_clean.jpg
 	}
 	s{
-		type
 		z=200.0000
 		texture=Wood_stump.jpg
 		texture_trans=75.0000 0.0000
 	}
 	s{
-		type
 		z=200.0000
 		texture=Wood_bridge_rail.jpg
 	}
 	s{
-		type
 		z=200.0000
 		texture=Wood_stump.jpg
 		texture_trans=-66.0000 0.0000
 	}
 	s{
-		type
 		z=200.0000
 		texture=Concrete.jpg
 	}
 	s{
-		type
 		z=200.0000
 		texture=Wood_stump.jpg
 		texture_scale=1.0800 1.0000
 	}
 	s{
-		type
 		z=200.0000
 		texture=Stone.jpg
 	}
 	s{
-		type
 		z=300.0000
 		texture=Wood_stump.jpg
 		texture_scale=1.0000 1.4400
 		texture_trans=205.0000 0.0000
 	}
 	s{
-		type
 		z=100.0000
 		texture=Wood_bridge_rail.jpg
 		texture_trans=205.0000 0.0000
 	}
 	s{
-		type
 		z=150.0000
 		texture=Wood_bridge_rail.jpg
 		texture_trans=205.0000 0.0000
 	}
 	s{
-		type
 		z=50.0000
 		fade=true
-		texture=Metal.png
+		texture=Metal_clean.jpg
 		texture_tint=128 128 128
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=0.0000
 		texture=Ceramic_bridge_red.png
 		texture_tint=205 205 205
 	}
 	s{
-		type
 		z=5.0000
 		texture=Grass_light.jpg
 		texture_tint=192 192 192
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=5.0000
 		fade=true
 		texture=Grass_light.jpg
 		texture_tint=222 222 222
 	}
 	s{
-		type
 		z=0.0000
 		texture=Dirt.jpg
 		texture_tint=186 186 186
 	}
 	s{
-		type
 		z=0.0000
 		texture=Ceramic_bridge_red.png
 		texture_tint=161 161 161
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=Dirt.jpg
 	}
 	s{
-		type
 		z=0.0000
 		texture=White.png
 		texture_tint=0 158 158
 	}
 	s{
-		type
 		z=0.0000
 		texture=White.png
 		texture_tint=0 158 158
 	}
 	s{
-		type
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_tint=100 100 100
@@ -2825,109 +2788,86 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
-		type
 		z=25.0000
 		texture=Stone.jpg
 		texture_tint=161 161 161
 	}
 	s{
-		type
 		z=0.0000
 		texture=Stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
-		type
 		z=0.0000
 		texture=White.png
 		texture_scale=0.2000 1.0000
 		texture_tint=74 74 22
 	}
 	s{
-		type
 		z=0.0000
 		texture=Stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
-		type
 		z=0.0000
 		texture=White.png
 		texture_tint=75 75 22
 	}
 	s{
-		type
 		z=25.0000
 		texture=Stone.jpg
 		texture_tint=161 161 161
 	}
 	s{
-		type
 		z=0.0000
 		texture=Stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
-		type
 		z=0.0000
 		texture=Stone.jpg
 		texture_tint=230 230 230
 	}
 	s{
-		type
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_tint=100 100 100
 	}
 	s{
-		type
-		z=0.0000
-		texture=White.png
-		texture_tint=0 158 158
-	}
-	s{
-		type
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_tint=100 100 100
 	}
 	s{
-		type
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_tint=137 137 137
 	}
 	s{
-		type
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_tint=137 137 137
 	}
 	s{
-		type
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_tint=30 255 255
 	}
 	s{
-		type
 		z=600.0000
 		texture=Metal_rusted.png
 	}
 	s{
-		type
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_tint=0 255 255
 	}
 	s{
-		type
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_tint=137 137 137
 	}
 	s{
-		type
 		z=600.0000
 		texture=Metal_clean.jpg
 		texture_tint=137 137 137
@@ -2938,17 +2878,14 @@ sectors{
 		texture=Metal_rusted.png
 	}
 	s{
-		type
 		z=250.0000
 		texture=Metal_rusted.png
 	}
 	s{
-		type
 		z=0.0000
 		texture=Metal_clean.jpg
 	}
 	s{
-		type
 		z=0.0000
 		texture=Metal_clean.jpg
 	}
@@ -2965,47 +2902,40 @@ sectors{
 		texture_tint=200 200 200
 	}
 	s{
-		type
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_tint=85 85 85
 	}
 	s{
-		type
 		z=0.0000
 		texture=Metal_rusted.png
 		texture_tint=85 85 85
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=White.png
 		texture_tint=85 85 85
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=White.png
 		texture_tint=85 85 85
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=White.png
 		texture_tint=85 85 85
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=White.png
 		texture_tint=85 85 85
 	}
 	s{
-		type
 		z=0.0000
 		fade=true
 		texture=White.png
@@ -3015,31 +2945,31 @@ sectors{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=Metal_scratched.jpg
+		texture=Metal_clean.jpg
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=Metal_scratched.jpg
+		texture=Metal_clean.jpg
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=Metal_scratched.jpg
+		texture=Metal_clean.jpg
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=Metal_scratched.jpg
+		texture=Metal_clean.jpg
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=Metal_scratched.jpg
+		texture=Metal_clean.jpg
 	}
 	s{
 		type=Blocking
@@ -3049,27 +2979,24 @@ sectors{
 	s{
 		type=Blocking
 		z=500.0000
-		fade=true
-		texture=Metal_scratched.jpg
+		texture=Metal_clean.jpg
 	}
 	s{
-		type
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_tint=100 100 100
 	}
 	s{
-		type
+		type=Blocking
 		z=400.0000
 		texture=Metal_clean.jpg
 	}
 	s{
-		type
+		type=Blocking
 		z=400.0000
 		texture=Metal_clean.jpg
 	}
 	s{
-		type
 		z=0.0000
 		texture=Metal_clean.jpg
 		texture_tint=100 100 100
@@ -3078,10 +3005,9 @@ sectors{
 		type=Blocking
 		z=500.0000
 		fade=true
-		texture=Metal_scratched.jpg
+		texture=Metal_clean.jpg
 	}
 	s{
-		type
 		z=50.0000
 		texture=Metal_rusted.png
 	}
@@ -3090,6 +3016,11 @@ sectors{
 		z=500.0000
 		texture=Metal_clean.jpg
 		texture_tint=200 200 200
+	}
+	s{
+		z=0.0000
+		texture=White.png
+		texture_tint=0 158 158
 	}
 }
 mobs{
@@ -3422,7 +3353,7 @@ mobs{
 	}
 	Custom{
 		type=Smoke Generator
-		p=-484.0000 -472.0000
+		p=-482.8266 -461.8304
 	}
 	Custom{
 		type=Smoke Generator
@@ -3430,23 +3361,23 @@ mobs{
 	}
 	Custom{
 		type=Smoke Generator
-		p=-320.0000 -576.0000
+		p=-301.2041 -577.4619
 	}
 	Custom{
 		type=Smoke Generator
-		p=-48.0000 -608.0000
+		p=-46.9528 -598.8373
 	}
 	Custom{
 		type=Smoke Generator
-		p=64.0000 -608.0000
+		p=66.0943 -601.1934
 	}
 	Custom{
 		type=Smoke Generator
-		p=-840.0000 -440.0000
+		p=-853.7748 -436.9164
 	}
 	Custom{
 		type=Smoke Generator
-		p=-896.0000 -144.0000
+		p=-895.3961 -145.5098
 	}
 	Custom{
 		type=Smoke Generator
@@ -3510,6 +3441,7 @@ path_stops{
 		pos=-592.0000 -112.0000
 		links{
 			nr=21
+			nr=27
 		}
 	}
 	s{
@@ -3616,6 +3548,7 @@ path_stops{
 		pos=256.0000 -384.0000
 		links{
 			nr=26
+			nr=28
 		}
 	}
 	s{
@@ -3630,6 +3563,7 @@ path_stops{
 		pos=592.0000 256.0000
 		links{
 			nr=23
+			nr=29
 		}
 	}
 	s{
@@ -3672,6 +3606,24 @@ path_stops{
 		links{
 			nr=0
 			nr=18
+		}
+	}
+	s{
+		pos=-592.0000 64.0000
+		links{
+			nr=3
+		}
+	}
+	s{
+		pos=-96.0000 -464.0000
+		links{
+			nr=18
+		}
+	}
+	s{
+		pos=448.0000 304.0000
+		links{
+			nr=20
 		}
 	}
 }

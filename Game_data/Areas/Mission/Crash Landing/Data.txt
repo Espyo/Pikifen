@@ -1,6 +1,6 @@
 name=Crash Landing
 subtitle=Escape the cargo ship!
-description=The Koppaites' cargo ship is going to crash, recover the treasure from the cargo bays before they become a pile of dust! Don't forget yourself as well!
+description=The Koppaites' cargo ship is going to crash! Get all three leaders to the cockpit so they can escape! But if you can rescue some of the treasures along the way, all the better...
 tags=Short and sweet; Metal
 difficulty=5
 bg_bmp=Space.jpg
@@ -15,8 +15,10 @@ version=1.2.2
 engine_version=0.23.2
 notes
 spray_amounts
-mission_goal=Collect treasures
+mission_goal=Get to the exit
 mission_goal_all_mobs=true
+mission_goal_exit_center=1392.0000 -44.0000
+mission_goal_exit_size=416.0000 504.0000
 mission_fail_conditions=129
 mission_fail_time_limit=100
 mission_fail_hud_primary_cond=0
