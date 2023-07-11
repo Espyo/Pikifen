@@ -248,7 +248,7 @@ void results_state::load() {
         (MISSION_FAIL_CONDITIONS) INVALID;
         
     //Calculate score things.
-    final_mission_score = 0;
+    final_mission_score = game.cur_area_data.mission.starting_points;
     
     for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
         mission_score_criterion* c_ptr =
@@ -616,6 +616,17 @@ void results_state::load() {
     stats_scroll->list_item = stats_list;
     gui.add_item(stats_scroll, "stats_scroll");
     
+    if(game.cur_area_data.type == AREA_TYPE_MISSION &&
+        game.cur_area_data.mission.starting_points != 0
+    ) {
+        //Starting score bullet.
+        add_stat(
+            "Starting score: ",
+            i2s(game.cur_area_data.mission.starting_points),
+            COLOR_GOLD
+        );
+    }
+
     //Time taken bullet.
     unsigned int ds =
         fmod(game.states.gameplay->gameplay_time_passed * 10, 10);
