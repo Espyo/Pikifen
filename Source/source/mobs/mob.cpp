@@ -2529,17 +2529,16 @@ void mob::hold(
  */
 bool mob::is_off_camera() const {
     if(parent) return false;
-    
-    float radius_to_use;
-    if(rectangular_dim.x == 0) {
-        radius_to_use = radius;
-    } else {
-        radius_to_use =
-            std::max(
-                rectangular_dim.x / 2.0,
-                rectangular_dim.y / 2.0
-            );
-    }
+
+    sprite* sprite = anim.get_cur_sprite();
+    if(!sprite) return true;
+
+    point sprite_size = sprite->file_size;
+    float radius_to_use =
+        std::max(
+            sprite_size.x / 2.0,
+            sprite_size.y / 2.0
+        );
     
     return !bbox_check(game.cam.box[0], game.cam.box[1], pos, radius_to_use);
 }
