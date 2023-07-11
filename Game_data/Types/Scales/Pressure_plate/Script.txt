@@ -12,7 +12,7 @@ script {
             if $weight >= $goal_number
                 set_state down
             end_if
-            send_message_to_links off
+            send_message_to_links 0
         }
         on_weight_added {
             get_info weight weight
@@ -32,7 +32,7 @@ script {
                 start_particles dust_pressure_plate_click 0 0 16
                 set_state up
             end_if
-            send_message_to_links on
+            send_message_to_links $weight
             start_particles dust_pressure_plate_click 0 0 16
         }
         on_weight_added {

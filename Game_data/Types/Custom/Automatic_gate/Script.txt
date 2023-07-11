@@ -18,7 +18,7 @@ script {
         }
         on_receive_message {
             get_info m message
-            if $m = on
+            if $m > 0
                 set_state opening
             end_if
         }
@@ -33,7 +33,7 @@ script {
         }
         on_receive_message {
             get_info m message
-            if $m = off
+            if $m = 0
                 set_state closing
             end_if
         }
@@ -50,7 +50,7 @@ script {
         }
         on_receive_message {
             get_info m message
-            if $m = off
+            if $m = 0
                 set_state closing
             end_if
         }
@@ -65,7 +65,7 @@ script {
         }
         on_receive_message {
             get_info m message
-            if $m = on
+            if $m > 0
                 set_state opening
             end_if
         }

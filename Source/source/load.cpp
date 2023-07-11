@@ -611,6 +611,9 @@ void load_area(
  *   Data object to fill.
  */
 void load_area_mission_data(data_node* node, mission_data &data) {
+    data.fail_hud_primary_cond = INVALID;
+    data.fail_hud_secondary_cond = INVALID;
+    
     reader_setter rs(node);
     string goal_str;
     string required_mobs_str;

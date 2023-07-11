@@ -5432,14 +5432,14 @@ path_stops{
 		pos=1024.0000 352.0000
 		links{
 			nr=5
-			nr=76
+			nr=72
 		}
 	}
 	s{
 		pos=1152.0000 -0.0000
 		links{
 			nr=8
-			nr=76
+			nr=72
 		}
 	}
 	s{
@@ -5460,14 +5460,14 @@ path_stops{
 		pos=1504.0000 -320.0000
 		links{
 			nr=9
-			nr=87
+			nr=81
 		}
 	}
 	s{
 		pos=1536.0000 -96.0000
 		links{
 			nr=13
-			nr=87
+			nr=81
 		}
 	}
 	s{
@@ -5488,17 +5488,17 @@ path_stops{
 		links{
 			nr=13
 			nr=15
-			nr=71
+			nr=67
 		}
 	}
 	s{
 		pos=1344.0000 160.0000
 		links{
 			nr=14
-			nr=73
-			nr=74
-			nr=75
+			nr=69
+			nr=70
 			nr=71
+			nr=67
 		}
 	}
 	s{
@@ -5506,7 +5506,7 @@ path_stops{
 		links{
 			nr=17
 			nr=21
-			nr=71
+			nr=67
 		}
 	}
 	s{
@@ -5534,7 +5534,7 @@ path_stops{
 		pos=1347.6995 751.7653
 		links{
 			nr=19
-			nr=54
+			nr=51
 		}
 	}
 	s{
@@ -5555,218 +5555,192 @@ path_stops{
 		pos=2075.7493 497.1870
 		links{
 			nr=22
-			nr=81 2
 		}
 	}
 	s{
 		pos=2213.4653 603.9333
 		links{
 			nr=25
-			nr=81 2
-		}
-	}
-	s{
-		pos=2208.0000 864.0000
-		links{
-			nr=24
-			nr=26
-			nr=53
 		}
 	}
 	s{
 		pos=2208.0000 1024.0000
 		links{
-			nr=25
-			nr=27
+			nr=26
+			nr=24
 		}
 	}
 	s{
 		pos=2144.0000 1184.0000
 		links{
-			nr=26
-			nr=82
+			nr=25
+			nr=77
 		}
 	}
 	s{
-		pos=2041.1196 846.6411
+		pos=1888.0000 1024.0000
 		links{
-			nr=29 2
-			nr=53 2
-		}
-	}
-	s{
-		pos=1934.0924 899.3907
-		links{
-			nr=28 2
-			nr=30
+			nr=28
 		}
 	}
 	s{
 		pos=1837.2007 1190.3560
 		links{
-			nr=29
-			nr=72
-			nr=77
+			nr=27
+			nr=68
+			nr=73
 		}
 	}
 	s{
 		pos=1984.0000 1376.0000
 		links{
-			nr=72
-			nr=84
+			nr=68
+			nr=79
 		}
 	}
 	s{
 		pos=1696.0000 1344.0000
 		links{
-			nr=72
-			nr=80
+			nr=68
+			nr=76
 		}
 	}
 	s{
 		pos=1376.0000 1760.0000
 		links{
-			nr=34
-			nr=80
+			nr=32
+			nr=76
 		}
 	}
 	s{
 		pos=1248.0000 1856.0000
 		links{
+			nr=31
 			nr=33
-			nr=35
 		}
 	}
 	s{
 		pos=1120.0000 1824.0000
 		links{
-			nr=34
-			nr=78
+			nr=32
+			nr=74
 		}
 	}
 	s{
 		pos=1120.0000 1280.0000
 		links{
-			nr=37
-			nr=79
+			nr=35
+			nr=75
 		}
 	}
 	s{
 		pos=928.0000 1152.0000
 		links{
+			nr=34
 			nr=36
-			nr=38
 		}
 	}
 	s{
 		pos=512.0000 1088.0000
 		links{
+			nr=35
 			nr=37
-			nr=39
-			nr=48
+			nr=46
 		}
 	}
 	s{
-		pos=210.9916 998.5042
+		pos=301.9771 1037.0741
 		links{
-			nr=38
-			nr=86 2
+			nr=36
 		}
 	}
 	s{
 		pos=288.0000 1312.0000
 		links{
-			nr=41
-			nr=48
+			nr=39
+			nr=46
 		}
 	}
 	s{
 		pos=96.0000 1536.0000
+		links{
+			nr=38
+			nr=40
+		}
+	}
+	s{
+		pos=96.0000 1792.0000
+		links{
+			nr=39
+			nr=41
+		}
+	}
+	s{
+		pos=224.0000 2016.0000
 		links{
 			nr=40
 			nr=42
 		}
 	}
 	s{
-		pos=96.0000 1792.0000
+		pos=352.0000 1856.0000
 		links{
 			nr=41
 			nr=43
 		}
 	}
 	s{
-		pos=224.0000 2016.0000
-		links{
-			nr=42
-			nr=44
-		}
-	}
-	s{
-		pos=352.0000 1856.0000
-		links{
-			nr=43
-			nr=45
-		}
-	}
-	s{
 		pos=384.0000 1696.0000
 		links{
-			nr=44
+			nr=42
 		}
 	}
 	s{
 		pos=576.0000 1504.0000
 		links{
-			nr=47
 			nr=45
+			nr=43
 		}
 	}
 	s{
 		pos=672.0000 1344.0000
 		links{
+			nr=44
+			nr=47
 			nr=46
-			nr=49
-			nr=48
 		}
 	}
 	s{
 		pos=480.0000 1248.0000
 		links{
-			nr=38
+			nr=36
 		}
 	}
 	s{
 		pos=864.0000 1344.0000
 		links{
-			nr=47
-			nr=50
+			nr=45
+			nr=48
 		}
 	}
 	s{
 		pos=960.0000 1440.0000
 		links{
+			nr=47
 			nr=49
-			nr=51
 		}
 	}
 	s{
 		pos=992.0000 1728.0000
 		links{
-			nr=52
+			nr=50
 		}
 	}
 	s{
 		pos=832.0000 1728.0000
 		links{
-			nr=51
-			nr=47
-		}
-	}
-	s{
-		pos=2144.0000 864.0000
-		links{
-			nr=25
-			nr=28 2
+			nr=49
+			nr=45
 		}
 	}
 	s{
@@ -5783,124 +5757,117 @@ path_stops{
 		}
 	}
 	s{
-		pos=-23.6484 955.1283
-		links{
-			nr=85
-			nr=86 2
-		}
-	}
-	s{
 		pos=-256.0000 832.0000
 		links{
-			nr=70
-			nr=85
+			nr=66
+			nr=80
 		}
 	}
 	s{
 		pos=-640.0000 672.0000
 		links{
-			nr=59
-			nr=60
+			nr=55
+			nr=56
+			nr=62
 			nr=66
-			nr=70
 		}
 	}
 	s{
 		pos=-960.0000 480.0000
 		links{
-			nr=58
-			nr=60
-			nr=66
-			nr=65
-			nr=64
-			nr=63
+			nr=54
+			nr=56
 			nr=62
 			nr=61
+			nr=60
+			nr=59
+			nr=58
+			nr=57
 		}
 	}
 	s{
 		pos=-544.0000 416.0000
 		links{
-			nr=59
-			nr=58
-			nr=61
+			nr=55
+			nr=54
+			nr=57
 		}
 	}
 	s{
 		pos=-672.0000 224.0000
 		links{
-			nr=60
-			nr=62
-			nr=59
-			nr=67
+			nr=56
+			nr=58
+			nr=55
+			nr=63
 		}
 	}
 	s{
 		pos=-960.0000 96.0000
 		links{
-			nr=61
-			nr=63
+			nr=57
 			nr=59
+			nr=55
 		}
 	}
 	s{
 		pos=-1248.0000 256.0000
 		links{
-			nr=62
-			nr=64
-			nr=59
+			nr=58
+			nr=60
+			nr=55
 		}
 	}
 	s{
 		pos=-1312.0000 512.0000
 		links{
-			nr=63
-			nr=65
 			nr=59
+			nr=61
+			nr=55
 		}
 	}
 	s{
 		pos=-1184.0000 800.0000
 		links{
-			nr=64
-			nr=66
-			nr=59
+			nr=60
+			nr=62
+			nr=55
 		}
 	}
 	s{
 		pos=-896.0000 800.0000
 		links{
-			nr=65
-			nr=58
-			nr=59
+			nr=61
+			nr=54
+			nr=55
 		}
 	}
 	s{
 		pos=-544.0000 96.0000
 		links{
-			nr=61
-			nr=68
+			nr=57
+			nr=64
 		}
 	}
 	s{
 		pos=-384.0000 32.0000
 		links{
-			nr=67
-			nr=69
+			nr=63
+			nr=65
 		}
 	}
 	s{
 		pos=-224.0000 0.0000
 		links{
-			nr=68
+			nr=64
 			nr=0
 		}
 	}
 	s{
 		pos=-480.0000 832.0000
 		links{
-			nr=57
-			nr=58
+			nr=53
+			nr=54
 		}
 	}
 	s{
@@ -5914,32 +5881,32 @@ path_stops{
 	s{
 		pos=1836.9321 1343.5111
 		links{
+			nr=28
+			nr=29
 			nr=30
-			nr=31
-			nr=32
 		}
 	}
 	s{
 		pos=1216.0000 160.0000
 		links{
 			nr=15
-			nr=75
-			nr=74
-			nr=76
+			nr=71
+			nr=70
+			nr=72
 		}
 	}
 	s{
 		pos=1280.0000 64.0000
 		links{
 			nr=15
-			nr=73
+			nr=69
 		}
 	}
 	s{
 		pos=1280.0000 256.0000
 		links{
 			nr=15
-			nr=73
+			nr=69
 		}
 	}
 	s{
@@ -5952,70 +5919,55 @@ path_stops{
 	s{
 		pos=1952.0000 1184.0000
 		links{
-			nr=30
+			nr=28
 		}
 	}
 	s{
 		pos=1120.0000 1728.0000
 		links{
-			nr=35
-			nr=79
+			nr=33
+			nr=75
 		}
 	}
 	s{
 		pos=1120.0000 1440.0000
 		links{
-			nr=36
-			nr=78
+			nr=34
+			nr=74
 		}
 	}
 	s{
 		pos=1568.0000 1504.0000
 		links{
-			nr=32
-			nr=33
-		}
-	}
-	s{
-		pos=2195.0049 519.3704
-		links{
-			nr=23 2
-			nr=24 2
+			nr=30
+			nr=31
 		}
 	}
 	s{
 		pos=2272.0000 1248.0000
 		links{
-			nr=27
-			nr=83
+			nr=26
+			nr=78
 		}
 	}
 	s{
 		pos=2304.0000 1344.0000
 		links{
-			nr=82
-			nr=84
+			nr=77
+			nr=79
 		}
 	}
 	s{
 		pos=2207.1160 1391.0941
 		links{
-			nr=83
-			nr=31
+			nr=78
+			nr=29
 		}
 	}
 	s{
 		pos=-56.5278 939.8198
 		links{
-			nr=56
-			nr=57
-		}
-	}
-	s{
-		pos=89.3440 976.0162
-		links{
-			nr=39 2
-			nr=56 2
+			nr=53
 		}
 	}
 	s{

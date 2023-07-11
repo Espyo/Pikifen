@@ -9,16 +9,16 @@ Pikmin Fanon page: https://www.pikminfanon.com/wiki/Pikifen
 Discord server: https://discord.gg/qbhz4u3
 
 ===============
-1) Overview
-2) Notable features
-3) Get the latest version
-4) Playing and making
-5) Troubleshooting
-6) Disclaimer
+1. Overview
+2. Notable features
+3. Get the latest version
+4. Playing and making
+5. Troubleshooting
+6. Disclaimer
 ===============
 
 ===============
-1) Overview
+1. Overview
 ===============
     Pikifen (formerly known as the Pikmin fangame engine) is an engine capable of creating and playing Pikmin fan content. It is an open-source engine, currently under development, and can handle gameplay similar to the Pikmin games, in that it allows leaders to whistle and throw Pikmin, allows Pikmin to carry objects, etc. Although the idea is for fans to create their own content (enemies, areas, etc.) so the engine can read it and turn it into something playable, the project also comes with some pre-packaged content, which makes it possible for people who download it to experiment with its features right away.
     
@@ -30,7 +30,7 @@ Discord server: https://discord.gg/qbhz4u3
 
 
 ===============
-2) Notable features
+2. Notable features
 ===============
     * Replicates most of the standard Pikmin gameplay.
     * Content that can be edited via text files, or just replacing the image and sound files.
@@ -45,7 +45,7 @@ Discord server: https://discord.gg/qbhz4u3
 
 
 ===============
-3) Get the latest version
+3. Get the latest version
 ===============
     Upgrading from an older version
         If you are upgrading from an older version of the engine, you should extract it into a new folder and use that one instead. If you do this, remember to copy over the "User_data" folder from the previous version, if you care about your settings and personal backups. If you have any custom-made content you want to keep, copy that too, and remember to also follow any instructions noted in the changelog, inside the included manual.
@@ -61,9 +61,9 @@ Discord server: https://discord.gg/qbhz4u3
 
 
 ===============
-4) Playing and making
+4. Playing and making
 ===============
-    To play, just pick an area and start playing!
+    To play, just double-click Pikifen.exe (if you can't find it, make sure you followed "Get the latest version" above), then pick an area and start playing!
     To make content for the engine, just edit the image, sound, or text files in the "Game_data" folder. Some things can also be edited using the built-in editors.
     Alternatively, you can download some content made by other players (check the Discord server!)
     This project is still under construction, so expect some things to be incomplete!
@@ -71,13 +71,13 @@ Discord server: https://discord.gg/qbhz4u3
 
 
 ===============
-5) Troubleshooting
+5. Troubleshooting
 ===============
     If you have any issue, please check the included manual's troubleshooting and FAQ pages.
 
 
 ===============
-6) Disclaimer
+6. Disclaimer
 ===============
     Licensing info can be found in LICENSE.TXT.
     

@@ -8,12 +8,9 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     Winged Pikmin that fall in the water should fly up when whistled
     Helodity's ledge throw scenarios
-    If a carrier Pikmin gets eaten, its spot isn't marked as free
     Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
-    Carried objects shouldn't be able to push anything (thanks Helodity)
 
     --- v0.24.0 ---
-    https://github.com/Espyo/Pikifen/pull/38
     Add several pre-packaged areas, since players have nothing to play with right now
         Helodity's Adventure area (see #content-sharing)?
         Helodity's Crash Landing mission
@@ -31,6 +28,7 @@ Next tasks (roughly sorted most important first)
     
     --- 0.25.0 ---
     Make a post-mortem video for Play
+    Make the error log prettier: remove the two empty lines at the start and indent things properly
     Reorganize tree shadows - they should be building blocks that area makers can mix and match
     [NEEDS BRAINSTORMING] Path links that are one-way for drop-offs don't make much sense, since Winged Pikmin can fly up them...
     If you start drawing a path on top of a link, it should split the link and start drawing on that stop
@@ -531,6 +529,7 @@ Next tasks (roughly sorted most important first)
                     Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
         Sprouts between areas, days, etc.
             Don't forget that sprouts should turn into flowers overnight
+        Objects should be able to specify what days they do and don't appear in
         Enemies respawning after some days
             A way to specify if the mob should come back the next day if its collectible hasn't been reclaimed yet?
         Treasures that started moving after being carried should start recording their coordinates, so that when the player comes back, the treasure spawns there instead of the original spot
