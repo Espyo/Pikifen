@@ -3,7 +3,6 @@ description = Yellow Pikmin are resitant to electricity. They can also be thrown
 
 can_carry_tools = true
 can_walk_on_others = true
-carry_speed = 1
 carry_strength = 1
 health_regen = 10
 height = 24
