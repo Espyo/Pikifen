@@ -68,8 +68,7 @@ void pellet_type::load_properties(data_node* file) {
             "Unknown Pikmin type \"" + pik_type_str + "\"!",
             pik_type_node
         );
-    }
-    else {
+    } else {
         pik_type = game.mob_types.pikmin[pik_type_str];
     }
     

@@ -427,7 +427,7 @@ vector<string> folder_to_vector(
     al_destroy_fs_entry(folder);
     
     
-    sort(v.begin(), v.end(), [] (const string & s1, const string & s2) -> bool {
+    sort(v.begin(), v.end(), [] (const string  &s1, const string  &s2) -> bool {
         return str_to_lower(s1) < str_to_lower(s2);
     });
     
@@ -1010,7 +1010,8 @@ void log_error(string s, data_node* d) {
     string output = "";
     if(game.errors_reported_so_far == 0) {
         string first_error_info =
-            "> Pikifen version " +
+            "\n\n"
+            "Pikifen version " +
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
             "." + i2s(VERSION_REV);
         if(!game.config.version.empty()) {
@@ -1020,7 +1021,7 @@ void log_error(string s, data_node* d) {
         first_error_info += ":\n";
         output += first_error_info;
     }
-    output += get_current_time(false) + ": " + s;
+    output += " " + get_current_time(false) + ": " + s;
     if(d) {
         output += " (" + d->file_name;
         if (d->line_nr != 0) output += " line " + i2s(d->line_nr);

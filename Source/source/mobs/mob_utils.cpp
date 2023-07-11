@@ -1328,10 +1328,14 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
                 m2_ptr->stored_inside_another = NULL;
             }
             if(m2_ptr->carry_info) {
-                for(size_t c = 0; c < m2_ptr->carry_info->spot_info.size(); ++c) {
+                for(
+                    size_t c = 0; c < m2_ptr->carry_info->spot_info.size(); ++c
+                ) {
                     if(m2_ptr->carry_info->spot_info[c].pik_ptr == m_ptr) {
-                        m2_ptr->carry_info->spot_info[c].pik_ptr = NULL;
-                        m2_ptr->carry_info->spot_info[c].state = CARRY_SPOT_FREE;
+                        m2_ptr->carry_info->spot_info[c].pik_ptr =
+                            NULL;
+                        m2_ptr->carry_info->spot_info[c].state =
+                            CARRY_SPOT_FREE;
                     }
                 }
             }

@@ -416,8 +416,8 @@ void results_state::load() {
         } else {
             end_reason =
                 game.mission_fail_conds[
-            game.states.gameplay->mission_fail_reason
-            ]->get_end_reason(
+                    game.states.gameplay->mission_fail_reason
+                ]->get_end_reason(
                     &game.cur_area_data.mission
                 );
         }
@@ -616,7 +616,8 @@ void results_state::load() {
     stats_scroll->list_item = stats_list;
     gui.add_item(stats_scroll, "stats_scroll");
     
-    if(game.cur_area_data.type == AREA_TYPE_MISSION &&
+    if(
+        game.cur_area_data.type == AREA_TYPE_MISSION &&
         game.cur_area_data.mission.starting_points != 0
     ) {
         //Starting score bullet.
@@ -626,7 +627,7 @@ void results_state::load() {
             COLOR_GOLD
         );
     }
-
+    
     //Time taken bullet.
     unsigned int ds =
         fmod(game.states.gameplay->gameplay_time_passed * 10, 10);
