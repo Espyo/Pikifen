@@ -965,7 +965,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EV_PATHS_CHANGED); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);
             efc.run(gen_mob_fsm::carry_get_path);
-            efc.change_state("sleeping_moving");
+            efc.change_state("inactive_sleeping_moving");
         }
         efc.new_event(LEADER_EV_CANCEL); {
             efc.run(gen_mob_fsm::carry_stop_being_stuck);
