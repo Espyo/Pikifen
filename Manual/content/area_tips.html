@@ -16,14 +16,294 @@
     
     <p>When making a <i>Pikmin</i> area, there are some tips and guidelines you can follow to make sure your area looks good and plays well. This guide is made for <i>Pikifen</i>, but it can also work for any fan-made <i>Pikmin</i>-like area. This page will not include very obvious tips, like "your area should have objects".</p>
 
-    <p>Don't take the tips here to heart. It's perfectly possible to make an incredible area that uses none of these tips. Areas can be so insanely diverse that one guide can't establish the ideal way to do them all. So trust your instincts and follow player feedback more than anything. Plus, some tips here are just educated guesses or theoretical, and not outright proven to be better.</p>
+    <p>The tips and processes in this page are just recommendations. Feel free to follow them to the letter, change them up, or skip them altogether. Trust your instincts and follow player feedback more than anything.</p>
 
-    <h2 id="tips">Tips</h2>
+    <p>As you follow this page, feel free to tick the checkmarks to make sure no potential problem escapes your grasp! (Keep in mind the checks may be lost if you close or reload the page, though.)</p>
 
-    <h3 id="gameplay">Gameplay</h3>
+    <h2 id="stages">Stages</h2>
 
-    <p>Tips on how to make it so playing the area is fun and intuitive.</p>
+    <dl>
+      <dt><b>Developing an area involves a lot of iterating.</b></dt>
+      <dd>Every once in a while, things like the area's design, geometry, difficulty, gimmicks, pacing, and so on need to be partially or completely rebuilt as you come up with bug fixes, improvements, or better ideas.</dd>
+      <dt><b>Ideally, you should create an area with this page's top-down approach.</b></dt>
+      <dd>By creating your area while following this series of steps, you start from a general idea, and finish at the fully-detailed area. This way, you can keep tabs on a lot of problems you wouldn't otherwise think of, as well as minimize how much content goes to waste due to iterating.</dd>
+      <dt><b>It's okay to not have all the right answers at first.</b></dt>
+      <dd>During an area's development, it's very normal to change your mind many times, going back and redoing things, or not having all of the answers to the questions posed in each stage.</dd>
+    </dl>
 
+    <h3 id="concept">Concept stage</h3>
+
+    <h4 id="concept-overview">Overview</h4>
+
+    <dl>
+      <dt><b>The concept stage is all about detailing what you want out of the area, so that you can keep a consistent plan all throughout.</b></dt>
+      <dd>Without it, your area will feel disconnected and random, and you won't even have a good grasp on what things are right or wrong for the area you are trying to make.</dd>
+      <dt><b>You'll want to actually write the overview down.</b></dt>
+      <dd>For this, you should really create a text file or grab a piece of paper.</dd>
+      <dt><b>Jot down everything you can think of. The following checklist will help.</b></dt>
+      <dd>As you write down what the area should be like, you should try going from the most important things to the least important. If you follow the following checklist, try to do it in order.</dd>
+    </dl>
+
+    <h4 id="concept-checklist">Checklist</h4>
+
+    <input type="checkbox" id="cb-concept-experience"><label for="cb-concept-experience">The type of experience it aims to bring to the player.</label>
+
+    <div class="indent example">e.g. Make them feel pressured, give them some pretty sights, show them the power of bomb rocks, etc.</div>
+
+    <input type="checkbox" id="cb-concept-gimmick"><label for="cb-concept-gimmick">Its gameplay gimmicks.</label>
+
+    <div class="indent example">e.g. Cardboard box maze, many levels of altitude, bottomless pits everywhere, etc.</div>
+
+    <input type="checkbox" id="cb-concept-objective"><label for="cb-concept-objective">Gameplay objective, including mission info if applicable.</label>
+
+    <div class="indent example">e.g. Kill all enemies with few Pikmin, collect treasures, just explore, etc.</div>
+
+    <input type="checkbox" id="cb-concept-pikmin"><label for="cb-concept-pikmin">What Pikmin types it will use, along with the reasoning. This includes Candypop Buds.</label>
+
+    <div class="indent example">e.g. Red Pikmin and Blue Pikmin for the many water shortcuts, Yellow Pikmin and Candypop Purple Pikmin for the weight puzzles and electrical theme, just White Pikmin to focus on carrying stuff quickly, etc.</div>
+
+    <input type="checkbox" id="cb-concept-difficulty"><label for="cb-concept-difficulty">Its difficulty.</label>
+
+    <div class="indent example">e.g. Medium, easy section with challenging end, high skill ceiling, etc.</div>
+
+    <input type="checkbox" id="cb-concept-theme"><label for="cb-concept-theme">Its theme.</label>
+
+    <div class="indent example">e.g. Snowy, forest with a lot of rain, marshlands, etc.</div>
+
+    <input type="checkbox" id="cb-concept-landmarks"><label for="cb-concept-landmarks">2 or 3 important landmarks.</label>
+
+    <div class="indent example">e.g. A mossy spiral pillar, a ramune bottle, a boss arena, etc.</div>
+
+    <input type="checkbox" id="cb-concept-obstacles"><label for="cb-concept-obstacles">What obstacles and dangers it will use, and ideally why.</label>
+
+    <div class="indent example">e.g. Crystals to match the glassy vibe, wood bridges to make things look archaic, Crumbugs to swarm the player with many small threats, etc.</div>
+
+    <input type="checkbox" id="cb-concept-textures"><label for="cb-concept-textures">What kind of textures and decorations to use, and if applicable, which ones to avoid.</label>
+
+    <div class="indent example">e.g. Snow textures with some ice and concrete, forest textures without wood and a bigger focus on rocks, kid's room carpets and floors, etc.</div>
+    
+    <h3 id="bubble-diagram">Bubble diagram stage</h3>
+
+    <h4 id="bubble-overview">Overview</h4>
+
+    <dl>
+      <dt><b><i>Pikmin</i> gameplay involves a lot of complex navigation, and it's important that your area nails this aspect.</b></dt>
+      <dd>This includes moving back-and-forth from the base to points of interest, taking multiple paths, opening shortcuts, managing the movement of the player's leader and their Pikmin simultaneously, and more.</dd>
+      <dt><b>The bubble diagram will help you make a solid foundation.</b></dt>
+      <dd>With it, you'll get a good feel for the flow of movement, physicality, space, and size of the area and its components.</dd>
+      <dt><b>You'll want to actually draw the diagram.</b></dt>
+      <dd>For this, you can start a new digital drawing or grab a sheet of paper.</dd>
+      <dt><b>The idea is to draw area sections and their connections.</b></dt>
+      <dd>Each bubble in the diagram represents a section of your area.</dd>
+    </dl>
+    
+    <h4 id="bubble-sections">Sections</h4>
+
+    <dl>
+      <dt><b>A section is any part of the area that is distinct from the other parts.</b></dt>
+      <dd>So stuff like the landing site, a room, an arena, a clearing, and so on.</dd>
+      <dt><b>Try to give each one a name.</b></dt>
+      <dd>If you can't come up with one, then it probably doesn't qualify.</dd>
+      <dt><b>When thinking about what sections of the area you want, keep in mind their nature, physicality, and lore.</b></dt>
+      <dd>Things like how rivers are usually born on rocky terrain, how tree stumps don't usually come in small sizes, and how ceramic fragments are usually not too far off from a broken vase.</dd>
+      <dt><b>Landmarks are important.</b></dt>
+      <dd>As detailed <a href="#guidelines-landmarks">here</a>, players need landmarks in order to help mentally map out the area. Striking a good balance with landmark location, importance, and amount is important.</dd>
+      <dt><b>Keep in mind the gameplay aspects.</b></dt>
+      <dd>Like how long it takes to get from one segment to another, how many times each one is revisited, etc.</dd>
+      <dt><b>There is no problem with a few of them being a bit undefined for now.</b></dt>
+      <dd>Suppose you have nothing to add between these two sections but you know something has to go there. You can just have a section that's like "a generic shared room with some enemies". But keep that to a minimum, otherwise your area will have no sense of cohesion or theme.</dd>
+    </dl>
+
+    <h4 id="bubbles-and-connections">Bubbles and connections</h4>
+
+    <dl>
+      <dt><b>Bubble sizes matter, but locations don't.</b></dt>
+      <dd>Each bubble's size should match the general size of that section, so a simple dead end with a treasure should be small while the landing site should probably be large. Since what matters most about this diagram is the connections between sections, the exact location of each bubble doesn't matter yet. At a later point, if you want, you can redo the diagram to put each section in its correct geographical place though.</dd>
+      <dt><b>Bubbles should have some space between them.</b></dt>
+      <dd>Give enough space between bubbles so you have enough room for the connections and for any adjustments.</dd>
+      <dt><b>Bubbles should contain important information about the section.</b></dt>
+      <dd>Inside each bubble, write down its section's name and any extra notes you think of.</dd>
+      <dt><b>Connections represent which sections can be accessed from which.</b></dt>
+      <dd>Typically a connection is a corridor, doorway, or drop-off ledge, though it is up to you if you want to make a given corridor or doorway a section or not.</dd>
+      <dt><b>Connections are drawn with lines, and you can use line styles and numbers for more info.</b></dt>
+      <dd>Draw a line from one bubble to another when you want players or Pikmin to be able to go from one to the other. The style of the line can be used to convey information about how the movement occurs, and if you want, you can write a number nearby to indicate how many of that connection should exist. Some suggestions for line types can be found in the next section.</dd>
+    </dl>
+    
+    <h4 id="bubble-line-types">Line type suggestions</h4>
+    
+    <ul>
+      <li>Simple connections can be represented with a straight line, and just mean that the player and their Pikmin can walk between section A and section B freely.</li>
+      <li>If you want to make it so the player can go from A to B but not the other way around, like if there is a drop-off, draw that connection with an arrow. It is possible to have an arrow from A to B, and also another from B to A, since that just means that there are two one-way paths the player can take.</li>
+      <li>If the player can go from A to B if they open a shortcut, draw that as a dashed or dotted line.</li>
+      <li>Finally, if the player can go from A to B in a special way (like a Bouncy Mushroom), draw that with a line styled in whichever special way you prefer.</li>
+    </ul>
+
+    <h4 id="bubble-observations">Checklist</h4>
+
+    <p>With the final diagram in front of you, you should be able to tell a lot of things about the area:</p>
+    
+    <input type="checkbox" id="cb-bubble-image"><label for="cb-bubble-image">Can I conjure a better mental image of the final area with this?</label>
+    
+    <div class="indent">If not, your idea of the area might be too fuzzy and need work.</div>
+    
+    <input type="checkbox" id="cb-bubble-organized"><label for="cb-bubble-organized">Does it look like a proper organized area?</label>
+    
+    <div class="indent">If not, you should try again until you can feel it.</div>
+
+    <input type="checkbox" id="cb-bubble-flow"><label for="cb-bubble-flow">Is the player able to flow well between sections?</label>
+    
+    <div class="indent">If not, different connections may be needed.</div>
+    
+    <input type="checkbox" id="cb-bubble-important"><label for="cb-bubble-important">Are important sections placed in key locations and with appropriate sizes?</label>
+    
+    <div class="indent">If not, you may need to move them or adjust connections.</div>
+    
+    <input type="checkbox" id="cb-bubble-time"><label for="cb-bubble-time">Are players going to spend an appropriate amount of time traversing repeated areas?</label>
+    
+    <div class="indent">If not, some sections may need to be longer or shorter, or some connections may need to be added or removed.</div>
+    
+    <input type="checkbox" id="cb-bubble-connections"><label for="cb-bubble-connections">Are the connections between sections interesting enough?</label>
+    
+    <div class="indent">If not, they may be too plain or confusing, so you may need to add or remove some.</div>
+    
+    <input type="checkbox" id="cb-bubble-stuck"><label for="cb-bubble-stuck">Is the player safe from getting stuck in a part of the area?</label>
+
+    <div class="indent">If not, you need to add connections so players can always go from any point to any point.</div>
+
+    <h3 id="sketch">Sketch stage</h3>
+
+    <h4 id="sketch-overview">Overview</h4>
+
+    <dl>
+      <dt><b>The idea is to draw a sketch of the area that goes into detail.</b></dt>
+      <dd>This sketch will be based on the concept document and the bubble diagram. It will make it easier to develop the area in <i>Pikifen</i> itself, since erasing or moving some scribbles is much easier than doing the same to complex video game geometry. Again, since we're drawing, you can either go digital or physical.</dd>
+      <dt><b>Draw the shapes of sections and connections.</b></dt>
+      <dd>Simply put, draw the shape and location of each room, alcove, opening, corridor, ledge, wall, and so on. You don't have to go into very fine detail, and it doesn't need to match the exact dimensions of the bubble diagram since those were just for comparison between sections.</dd>
+      <dt><b>Keep dimensions in mind.</b></dt>
+      <dd>Particularly, when you are drawing things that belong to the real world, try making their sizes match.</dd>
+      <dt><b>Also draw objects and important info.</b></dt>
+      <dd>Include important objects as well as any special graphical information you think will be important to hold on to, like the destination for obstacles that can be pushed, any special carrying paths, whether a given section is higher or lower than a neighboring one, or other notes.</dd>
+    </dl>
+
+    <h4 id="sketch-guidelines">Guidelines</h4>
+
+    <p>Gameplay:</p>
+
+    <input type="checkbox" id="cb-sketch-replayability"><label for="cb-sketch-replayability">Make the area such that players are encouraged to replay it.</label> <a href="#guidelines-replayability">(Details)</a><br>
+    
+    <input type="checkbox" id="cb-sketch-empty-sections"><label for="cb-sketch-empty-sections">Don't have too many empty sections.</label> <a href="#guidelines-replayability">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-options"><label for="cb-sketch-options">Give the player plenty of options.</label> <a href="#guidelines-replayability">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-start"><label for="cb-sketch-start">Make the start interesting.</label> <a href="#guidelines-replayability">(Details)</a><br>
+    
+    <input type="checkbox" id="cb-sketch-verticality"><label for="cb-sketch-verticality">Make good use of verticality.</label> <a href="#guidelines-space">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-splits"><label for="cb-sketch-splits">Consider making some splits more interesting than just left-right path splits.</label> <a href="#guidelines-space">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-performance"><label for="cb-sketch-performance">Keep performance in mind.</label> <a href="#guidelines-performance">(Details)</a><br>
+    
+    <input type="checkbox" id="cb-sketch-shortcut-costs"><label for="cb-sketch-shortcut-costs">Make sure that shortcuts cost resources.</label> <a href="#guidelines-shortcuts">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-stuck"><label for="cb-sketch-stuck">Make sure the player can't get stuck.</label> <a href="#guidelines-stuck">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-landing-site"><label for="cb-sketch-landing-site">Make the landing site identify the area.</label> <a href="#guidelines-identity">(Details)</a><br>
+
+    <p>Aesthetic:</p>
+
+    <input type="checkbox" id="cb-sketch-detail-space"><label for="cb-sketch-detail-space">Save some space for details.</label> <a href="#guidelines-visual-details">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-natural-elements"><label for="cb-sketch-natural-elements">Think of the logic behind the placement and shape of the area's elements.</label> <a href="#guidelines-natural">(Details)</a><br>
+    
+    <input type="checkbox" id="cb-sketch-geometric-cleanliness"><label for="cb-sketch-geometric-cleanliness">Avoid geometric cleanliness.</label> <a href="#guidelines-natural">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-thematic-textures"><label for="cb-sketch-thematic-textures">Use varied textures, but keep them thematic.</label> <a href="#guidelines-natural">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-subtle-effects"><label for="cb-sketch-subtle-effects">Make sure special effects are subtle.</label> <a href="#guidelines-visual-details">(Details)</a><br>
+
+    <input type="checkbox" id="cb-sketch-visual-noise"><label for="cb-sketch-visual-noise">Avoid visual noise.</label> <a href="#guidelines-visual-details">(Details)</a><br>
+    
+    <input type="checkbox" id="cb-sketch-oob-color"><label for="cb-sketch-oob-color">Make the out-of-bounds terrain unappealing.</label> <a href="#guidelines-oob">(Details)</a><br>
+    
+    <input type="checkbox" id="cb-sketch-oob-edge"><label for="cb-sketch-oob-edge">Make sure the out-of-bounds edges aren't jarring.</label> <a href="#guidelines-oob">(Details)</a><br>
+    
+    <h3 id="implementation">Implementation stage</h3>
+
+    <h4 id="implementation-overview">Overview</h4>
+
+    <dl>
+      <dt><b>In this stage, you implement the area in the engine's area editor.</b></dt>
+      <dd>Once you are content with the previous stages, boot up the engine, go to the area editor, create a new area, and start applying the contents of the area into the editor.</dd>
+      <dt><b>You can import sketches into the editor.</b></dt>
+      <dd>With the sketch inside the area editor, you can draw your geometry on top of it, and even control its position, size, opacity, and more.</dd>
+      <dt><b>Playtest often.</b></dt>
+      <dd>As you make changes, try quick-playing what you have made to make sure everything feels interesting and flows well.</dd>
+      <dt><b>Focus on gameplay and don't worry about details.</b></dt>
+      <dd>The details aren't likely to change, but corrections to the area for the sake of gameplay will be plenty. If you add details now, you will have to redo them whenever you change parts of the area.</dd>
+    </dl>
+
+    <h4 id="implementation-process">Process</h4>
+
+    <input type="checkbox" id="cb-implementation-layout"><label for="cb-implementation-layout">Draw the area's layout, including all gameplay sector properties and basic textures.</label><br>
+
+    <input type="checkbox" id="cb-implementation-mobs"><label for="cb-implementation-mobs">Add all gameplay-related mobs (no decorations), and set their properties.</label><br>
+
+    <input type="checkbox" id="cb-implementation-paths"><label for="cb-implementation-paths">Draw the path graphs.</label><br>
+
+    <input type="checkbox" id="cb-implementation-info"><label for="cb-implementation-info">Set the area's info and gameplay settings.</label><br>
+
+    <input type="checkbox" id="cb-implementation-stuck"><label for="cb-implementation-stuck">Make sure the player cannot get stuck anywhere.</label><br>
+
+    <input type="checkbox" id="cb-implementation-cheese"><label for="cb-implementation-cheese">Make sure the player can't cheese their way into reaching a certain place or object before you intend them too.</label><br>
+
+    <h3 id="polish">Polish stage</h3>
+
+    <p>Once you're done making a functional area, you should worry about polish. Add details, tweak the textures, use the review panel to make sure there are no problems, and apply some final tips to make sure your area is really nice and fun. Here's a checklist of tips:</p>
+
+    <p>Gameplay:</p>
+
+    <input type="checkbox" id="cb-polish-onion-stops"><label for="cb-polish-onion-stops">Make sure there is a path stop very close (but not directly on top of) each ship and each Onion.</label><br>
+      
+    <p>Aesthetic:</p>
+
+    <input type="checkbox" id="cb-polish-decorations"><label for="cb-polish-decorations">Add decorations. This includes objects and geometry, if you want. Probably more decorations outside the playable terrain than inside.</label><br>
+
+    <input type="checkbox" id="cb-polish-layout"><label for="cb-polish-layout">Add small pieces of world-building objects and geometry in the area layout, like debris next to broken things.</label><br>
+
+    <input type="checkbox" id="cb-polish-angles"><label for="cb-polish-angles">Make treasures, eggs, Candypop Buds, generic obstacles, Pikmin, and so on all face different angles so they don't look robotic.</label><br>
+      
+    <input type="checkbox" id="cb-polish-puddle"><label for="cb-polish-puddle">Make the terrain under and around puddles a darker color.</label><br>
+      
+    <input type="checkbox" id="cb-polish-ledge-smoothing"><label for="cb-polish-ledge-smoothing">Apply ledge smoothing to smooth surfaces that would look better with it, like rocks.</label><br>
+      
+    <input type="checkbox" id="cb-polish-fader"><label for="cb-polish-fader">Make sure to use texture fader sectors appropriately.</label><br>
+
+    <input type="checkbox" id="cb-polish-outside-light"><label for="cb-polish-outside-light">Create some brighter-lit sectors next the openings to caves and underpasses as to give an effect of light from the outside seeping in. Also, a fade sector after them.</label><br>
+      
+    <input type="checkbox" id="cb-polish-rotate-textures"><label for="cb-polish-rotate-textures">Rotate the floor textures of different sections by random amounts to make the terrain not look too samey.</label><br>
+      
+    <input type="checkbox" id="cb-polish-tint-textures"><label for="cb-polish-tint-textures">Tint the floor textures of different sections, or even within the same section, to make the terrain not look too samey.</label><br>
+      
+    <input type="checkbox" id="cb-polish-tree-shadow"><label for="cb-polish-tree-shadow">Add tree shadows.</label><br>
+      
+    <input type="checkbox" id="cb-polish-bg"><label for="cb-polish-bg">Add a background, if applicable.</label><br>
+
+    <input type="checkbox" id="cb-polish-spread-decorations"><label for="cb-polish-spread-decorations">Make it so randomly spread decorations are distributed in an unbalanced way, since that's unnatural.</label><br>
+
+    <p>Final steps:</p>
+      
+    <input type="checkbox" id="cb-polish-thumb"><label for="cb-polish-thumb">Make an area thumbnail.</label><br>
+      
+    <input type="checkbox" id="cb-polish-review"><label for="cb-polish-review">The review panel's problem search feature doesn't report a single problem.</label><br>
+
+    <input type="checkbox" id="cb-polish-mission"><label for="cb-polish-mission">Playtest and find an appropriate time limit, point requirement, and other mission stuff, if applicable.</label><br>
+    
+    <p>After this, you should likely send it to other people to playtest. Having others chime in will help you find problems, glitches, and improvements.</p>
+
+    <h2 id="guidelines">Guideline details</h2>
+
+    <h3 id="guidelines-landmarks">Landmarks</h3>
+    
     <dl>
       <dt><b>Landmarks are very important. Also, don't have too many or too few.</b></dt>
       <dd>The spatial awareness challenge in <i>Pikmin</i> comes from understanding where everything is, will be, and must go to, and what paths there are in the area to achieve that. The player will naturally map the area in their head, so most of the time, they'll understand its layout from heart, even if they may still check the radar sometimes. However, having the area mapped out in your head becomes next to impossible if it is just made of several nondescript corridors. Dedicate some parts of the area to include something no other part has.</dd>
@@ -31,21 +311,46 @@
       <dd>All of that said, you can have fewer landmarks to make your area harder to understand on purpose. But don't push it, and make sure the area is still interesting in other ways.</dd>
     </dl>
 
+    <h3 id="guidelines-replayability">Replayability</h3>
+
     <dl>
       <dt><b>Players should be encouraged to replay areas.</b></dt>
       <dd>Don't make the stage so easy or manageable that the player can ace it and get bored with it after one run. The idea is to get the player to play more than once so they start to get a better understanding of the area, as well as refine their own strategies. Add small things that would go over the heads of players who don't explore thoroughly. Have several different ways to approach problems, so that the player can feel encouraged to try something different next time, and learn what works best and what doesn't.</dd>
       <dd>Practical examples include multiple paths, unlockable shortcuts, and special objects that can be used in multiple ways (like bomb rocks for enemies or for shortcut opening).</dd>
-    </dl>
-
-    <dl>
       <dt><b>Don't have too many empty sections.</b></dt>
       <dd>Although some large open areas are fine, if they are filled with nothing, the player will get bored, and will need to walk for several seconds before they reach anything important. This is especially bad in a game of the <i>Pikmin</i> series, where players need to cross the same sections multiple times, back and forth.</dd>
-    </dl>
-
-    <dl>
       <dt><b><i>Pikmin</i> is a real-time strategy series. Have loads of options to keep the player deciding what to have their Pikmin do next.</b></dt>
       <dd>If your area is too linear, then there isn't much the player can pick from when deciding what to do next. Similarly, if every task is just defeating an enemy, the player doesn't need to decide either, because their goal is "defeat all enemies", and the order doesn't really matter. But if there are bridges to build, gates to take down, Pellet Posies to farm, and enemies to defeat, the player will have a lot of possible ways to tackle the tasks, in different orders, and with different Pikmin amounts.</dd>
+      <dt><b>The start shouldn't be repetitive.</b></dt>
+      <dd>The fun of a <i>Pikmin</i> area is in exploring and trying out different strategies. Players that are chasing after high scores, and even you yourself when playtesting the area during development, will both be repeating the start of the area a lot. So it's in everyone's best interest if the player isn't forced to do the same repetitive motions every time they start.</dd>
+      <dd>For instance, if at the start there's a 15-weight paper bag blocking the way, 15 plucked Pikmin, and nothing else of interest to do in the area except pluck them and weigh down the bag, then players will quickly get frustrated that they need to tediously pluck and throw the Pikmin every single time. It's not even challenging. Having the Pikmin idling instead is much more convenient, since the player can quickly whistle them. Or better yet, get rid of the paper bag entirely.</dd>
+      <dd>This isn't to say starting with plucking is a bad thing; that's how most Challenge Mode areas are in the first <i>Pikmin</i> game. If there are a lot of Pikmin to pluck, but a lot of small tasks at the ready, the player can decide how many Pikmin they want to pluck before putting them to work and resuming the plucking.</dd>
+      <dd>In addition, try having some easy enemies around. Growing your army using just pellets gets a bit unengaging.</dd>
     </dl>
+
+    <h3 id="guidelines-space">Space</h3>
+
+    <dl>
+      <dt><b>Use a lot of verticality, but don't go overboard.</b></dt>
+      <dd>Areas work best when they have a lot to explore and a lot to do. In two dimensions, you already have a lot of movement possible, but with three dimensions, you have even more. Whenever you can, make your layout have ledges and ramps here and there. These provide visual variety and gameplay control (since objects can only go one way through ledges). But don't overdo it, otherwise there will be too many places that are hard to read, and the player won't be able to make anything out of the area.</dd>
+      <dt><b>Path splits aren't just left-or-right choices.</b></dt>
+      <dd>If you want to split a path into two, you are not limited to creating a wall between the two corridors. Make one of the paths be parallel to the other, but go up or down instead. Or have an open area with several exits. Or make a section of the area seem normal and (sensibly) cluttered with decorative geometry, and if the player goes around some of the clutter, they'll find themselves in a completely different place than if they had gone the other way. Or split the paths with an obstacle that can be walked on as well, like water or terrain in some other elevation (higher or lower). Just use your creativity. You can even have two different paths that are separated by a very small wall, such that it is possible to throw Pikmin or leaders to the other side.</dd>
+    </dl>
+
+    <h3 id="guidelines-performance">Performance</h3>
+
+    <p>These tips help make your area not set machines on fire. When making an area, if there's too much going on, the game can slow down. Even if it doesn't on your machine, it could on weaker computers. Even if you don't use these tips, it's important to keep them in mind to stop your area from being too bloated and running into performance problems. These tips mostly apply to <i>Pikifen</i>, but can also be useful when editing areas or caves in the canon games.</p>
+
+    <dl>
+      <dt><b>More content means more processing time.</b></dt>
+      <dd>The more geometry and objects in an area, the longer the game will have to take to process all of them, from figuring out their physics and logic, to rendering them on-screen. As a general rule of thumb, try not to bloat your area with too much content if you're worried about performance.</dd>
+      <dt><b>Pikmin and enemies are the biggest performance hogs.</b></dt>
+      <dd>The logic behind a gate is no more complicated than "lose health if you get hit". But Pikmin and enemies use a lot more logic than that. Try not to have an area with a massive amount of enemies just because, and consider reworking its design to make the numbers more manageable by the game's engine.</dd>
+      <dt><b>Walls don't need to be very smooth to be convincing.</b></dt>
+      <dd>To make a smooth curve, you'll need several lines. But you can probably create a decent curve using less lines than you think. Unless the player passes by and rubs against that wall a lot of times, you probably don't need to make it very smooth. The simpler it is, the less processing time for checking collisions and rendering. Even the <a href="https://www.pikminwiki.com/File:Tropical_Wilds_cave_entrance.jpg">canon games have jagged geometry</a>.</dd>
+    </dl>
+    
+    <h3 id="guidelines-shortcuts">Shortcuts</h3>
 
     <dl>
       <dt><b>Shortcuts need to cost resources.</b></dt>
@@ -53,223 +358,101 @@
       <dd>Instead of blocking shortcuts, you can also try making them more dangerous, which requires the player to decide if they want to risk it just to be faster.</dd>
     </dl>
 
-    <dl>
-      <dt><b>Path splits aren't just left-or-right choices.</b></dt>
-      <dd>If you want to split a path into two, you are not limited to creating a wall between the two corridors. Make one of the paths be parallel to the other, but go up or down instead. Or have an open area with several exits. Or make a section of the area seem normal and (sensibly) cluttered with decorative geometry, and if the player goes around some of the clutter, they'll find themselves in a completely different place than if they had gone the other way. Or split the paths with an obstacle that can be walked on as well, like water or terrain in some other elevation (higher or lower). Just use your creativity. You can even have two different paths that are separated by a very small wall, such that it is possible to throw Pikmin or leaders to the other side.</dd>
-    </dl>
-
-    <dl>
-      <dt><b>Use a lot of verticality, but don't go overboard.</b></dt>
-      <dd>Areas work best when they have a lot to explore and a lot to do. In two dimensions, you already have a lot of movement possible, but with three dimensions, you have even more. Whenever you can, make your layout have ledges and ramps here and there. These provide visual variety and gameplay control (since objects can only go one way through ledges). But don't overdo it, otherwise there will be too many places that are hard to read, and the player won't be able to make anything out of the area.</dd>
-    </dl>
+    <h3 id="guidelines-stuck">Getting stuck</h3>
 
     <dl>
       <dt><b>Make sure the player can't get themselves stuck.</b></dt>
       <dd>Whenever there is a drop-down somewhere, make sure your leader has a way to get out. The player shouldn't have to remain stuck forever just because they fell in a hole. A thin one-way tunnel that ends on a drop outside of the hole is a good strategy. If you somehow want to punish the player for falling, at least don't make the punishment keeping them stuck &ndash; place them in a hazard or make the drop be a bottomless pit instead. This tip also applies to Pikmin, but since they're disposable, it's not as important as the player's leader. There are other ways the player can get stuck too, like whistling and/or killing Pikmin that were keeping the exit open, throwing an important puzzle element into a bottomless pit, etc.</dd>
     </dl>
-    
-    <dl>
-        <dt><b>The start shouldn't be repetitive.</b></dt>
-        <dd>The fun of a <i>Pikmin</i> area is in exploring and trying out different strategies. Players that are chasing after high scores, and even you yourself when playtesting the area during development, will both be repeating the start of the area a lot. So it's in everyone's best interest if the player isn't forced to do the same repetitive motions every time they start.</dd>
-        <dd>For instance, if at the start there's a 15-weight paper bag blocking the way, 15 plucked Pikmin, and nothing else of interest to do in the area except pluck them and weigh down the bag, then players will quickly get frustrated that they need to tediously pluck and throw the Pikmin every single time. It's not even challenging. Having the Pikmin idling instead is much more convenient, since the player can quickly whistle them. Or better yet, get rid of the paper bag entirely.</dd>
-        <dd>This isn't to say starting with plucking is a bad thing; that's how most Challenge Mode areas are in the first <i>Pikmin</i> game. If there are a lot of Pikmin to pluck, but a lot of small tasks at the ready, the player can decide how many Pikmin they want to pluck before putting them to work and resuming the plucking.</dd>
-    </dl>
 
-    <h3 id="appearance">Appearance</h3>
-
-    <p>Tips on how to make it so your area looks good.</p>
-
-    <dl>
-      <dt><b>Avoid geometric cleanliness.</b></dt>
-      <dd>Unless your area takes place in a more mechanical or man-made environment, chances are you shouldn't have many symmetric layouts, or many walls and walkways that bend at rough 90 degree angles. Try some wobbly lines, make use of diverse angles, and don't be afraid of rounder shapes.</dd>
-    </dl>
-
-    <dl>
-      <dt><b>Save some space for details.</b></dt>
-      <dd>Not every part of an area needs to have something to do. It's perfectly fine to reserve a small alcove or roundabout in an open plain that just serves to add detail to the area. A forest area with no branches or stones in sight is going to look weird, and if all branches and stones are tucked away outside of play, the area won't look natural. That said, don't sacrifice gameplay just for these details.</dd>
-    </dl>
+    <h3 id="guidelines-identity">Area identity</h3>
     
     <dl>
       <dt><b>The landing site should identify what your area is about right away.</b></dt>
       <dd>If your area follows a certain theme, or a certain gimmick, you should try to make it visible right from the landing site. The landing site is where players spend most of their time, and is engraved into their memory more easily than most parts. So if you want your area to be recognizable and stand out, make sure its defining features are present in the landing site, though keep in mind not to overload the scene, or to expose players to any dangerous gimmick here.</dd>
     </dl>
 
+    <h3 id="guidelines-visual-details">Visual details</h3>
+    
     <dl>
-      <dt><b>When there is a fork in the path such that one side ramps up or down, try adding a boulder in the splitting point.</b></dt>
-      <dd>Imagine you have a path, and then further ahead that path splits into the plain you started on to the left, and a path ramping up to the right, such that this path is a wall to the path below. You can have that split happen just like that, but you may want to consider placing a boulder or some natural solid decoration in the place where the path splits exactly, to make the cut seem less jarring. This is used extensively in <i>Xenoblade Chronicles</i> (<a href="https://youtu.be/s0SAlxu-h9o?t=415">example</a>).</dd>
+      <dt><b>Save some space for details.</b></dt>
+      <dd>Not every part of an area needs to have something to do. It's perfectly fine to reserve a small alcove or roundabout in an open plain that just serves to add detail to the area. A forest area with no branches or stones in sight is going to look weird, and if all branches and stones are tucked away outside of play, the area won't look natural. That said, don't sacrifice gameplay just for these details.</dd>
+      <dt><b>Special effects aren't as subtle as you think.</b></dt>
+      <dd>To give an area some mood, you can use some special lighting, for instance. It's easy to exaggerate it, though. Using a fog effect to limit the player's visibility can be a great gameplay mechanic, but remember the type of game you're working for. In <i>Pikmin</i> games, the player needs to be aware of the state of the world, even in parts where they cannot see right now, which means the fog effect adds a neat, but perfectly fair challenge. If it is too strong though, the player will take much longer to explore and scout the status of their troops, making adapting the plans difficult or nearly impossible. That is neither fun, nor what <i>Pikmin</i> is about.</dd>
+      <dd>Even if an obscuring effect looks subtle to you as a maker, you have to remember that you know the area and the player doesn't. Plus, combine that with the fact that the player needs to focus on <i>playing</i> the game while trying to explore.</dd>
+      <dt><b>Visual detail shouldn't stand out.</b></dt>
+      <dd>Any visual details that you add to your area to make it look better shouldn't use colors and shapes that are very different from their surroundings. Otherwise, they will call the player's attention, making it harder for the player to focus on the parts of the area that are really important.</dd>
     </dl>
+
+    <h3 id="guidelines-natural">Natural look</h3>
+
+    <dl>
+      <dt><b>Avoid geometric cleanliness.</b></dt>
+      <dd>Unless your area takes place in a more mechanical or man-made environment, chances are you shouldn't have many symmetric layouts, or many walls and walkways that bend at rough 90 degree angles. Try some wobbly lines, make use of diverse angles, and don't be afraid of rounder shapes.</dd>
+      <dt><b>Think of the logic behind the placement and shape of the area's elements.</b></dt>
+      <dd>You may need to create a maze inside this tree trunk that leads to a small stony cave with some Pellet Posies. If you must do exactly that for your level to play well, then do so, but if not, try to take a step back and check if that makes real-world sense. A dirt pathway can be twisted and have all sorts of openings, but a maze path inside a tree trunk? Who carved it, and why is it so convoluted? If you don't have an answer to that, you may want to try changing the setting behind the maze (again, to dirt, for example), or remove the maze entirely. And what about the reward at the end? Why are there Pellet Posies growing inside a cave? Don't plants need water, soil, and sunlight to grow? Maybe consider changing your reward to some eggs or, again, rework the setting around the reward.</dd>
+      <dd>You don't need to constantly run away from <a href="https://tvtropes.org/pmwiki/pmwiki.php/Main/BlatantItemPlacement">this trope</a>, since often, the level's layout and flow will be more important than the realistic object placement. Don't sacrifice your gameplay just because one object doesn't entirely fit its surroundings. You could also want to combine elements in a non-realistic fashion to create a creepy vibe. But other than that, try to keep this detail in mind when making areas.</dd>
+      <dt><b>Use varied textures, but keep them thematic.</b></dt>
+      <dd>A beach area that mostly uses a sand texture and a rock texture can get very confusing to navigate in. Using sand textures of different shades, using rock textures of different patterns, and even adding some more textures to the mix, like gravel or dirt, can help make an area that still has a bunch of beach-themed textures, while keeping things varied and engaging for the player.</dd>
+    </dl>
+
+    <h3 id="guidelines-oob">Out of bounds</h3>
 
     <dl>
       <dt><b>The out-of-bounds terrain should be cluttered and/or colored darker.</b></dt>
       <dd>When you see the entire area from afar, it's easy to tell what is out-of-bounds scenery. But when you're playing, that ledge up there could as well be reachable later, as far as the player knows. To make sure the player understands the limits of the area and doesn't get lost, try picking darker floor textures for the out-of-bounds terrain (this is because light is usually attractive). You can also fill it with foliage or debris to make it an unwelcoming place to navigate in. This should hint to the player that they aren't meant to go up there.</dd>
       <dd>Don't go overboard with this though, otherwise the player will feel caged off in an artificially crafted room.</dd>
-    </dl>
-
-    <dl>
-      <dt><b>Use varied textures, but keep them thematic.</b></dt>
-      <dd>A beach area that mostly uses a sand texture and a rock texture can get very confusing to navigate in. Using sand textures of different shades, using rock textures of different patterns, and even adding some more textures to the mix, like gravel or dirt, can help make an area that still has a bunch of beach-themed textures, while keeping things varied and engaging for the player.</dd>
-    </dl>
-
-    <dl>
-      <dt><b>Think of the logic behind the placement and shape of the area's elements.</b></dt>
-      <dd>You may need to create a maze inside this tree trunk that leads to a small stony cave with some Pellet Posies. If you must do exactly that for your level to play well, then do so, but if not, try to take a step back and check if that makes real-world sense. A dirt pathway can be twisted and have all sorts of openings, but a maze path inside a tree trunk? Who carved it, and why is it so convoluted? If you don't have an answer to that, you may want to try changing the setting behind the maze (again, to dirt, for example), or remove the maze entirely. And what about the reward at the end? Why are there Pellet Posies growing inside a cave? Don't plants need water, soil, and sunlight to grow? Maybe consider changing your reward to some eggs or, again, rework the setting around the reward.</dd>
-      <dd>You don't need to constantly run away from <a href="https://tvtropes.org/pmwiki/pmwiki.php/Main/BlatantItemPlacement">this trope</a>, since often, the level's layout and flow will be more important than the realistic object placement. Don't sacrifice your gameplay just because one object doesn't entirely fit its surroundings. You could also want to combine elements in a non-realistic fashion to create a creepy vibe. But other than that, try to keep this detail in mind when making areas.</dd>
-    </dl>
-
-    <dl>
       <dt><b>The edges of the world shouldn't be easily visible.</b></dt>
       <dd>The out-of-bounds geometry has to end eventually, and beyond that, there's only the void that encompasses the game world. It's good practice to make that geometry fade out into the darkness so the cut isn't so jarring. On top of that, the player shouldn't be able to see this darkness, most of the time. If they do, it might throw them out of their immersion, since the void isn't very realistic. Make the edges be far away from the playable area. Since you can't stop the player from seeing it all the time (the player can use a far away zoom level, high screen resolution, etc.), you shouldn't stress on placing them <i>super</i> far away. Some stages look good when purposely enveloped in a dark void, or they have some other stylized void which fits the theme, so this tip may not apply to all areas.</dd>
     </dl>
 
-    <dl>
-      <dt><b>Special effects aren't as subtle as you think.</b></dt>
-      <dd>To give an area some mood, you can use some special lighting, for instance. It's easy to exaggerate it, though. Using a fog effect to limit the player's visibility can be a great gameplay mechanic, but remember the type of game you're working for. In <i>Pikmin</i> games, the player needs to be aware of the state of the world, even in parts where they cannot see right now, which means the fog effect adds a neat, but perfectly fair challenge. If it is too strong though, the player will take much longer to explore and scout the status of their troops, making adapting the plans difficult or nearly impossible. That is neither fun, nor what <i>Pikmin</i> is about.</dd>
-      <dd>Even if an obscuring effect looks subtle to you as a maker, you have to remember that you know the area and the player doesn't. Plus, combine that with the fact that the player needs to focus on <i>playing</i> the game while trying to explore.</dd>
-    </dl>
+    <h2 id="ideas">Ideas</h2>
 
-    <dl>
-      <dt><b>Visual detail shouldn't stand out.</b></dt>
-      <dd>Any visual details that you add to your area to make it look better shouldn't use colors and shapes that are very different from their surroundings. Otherwise, they will call the player's attention, making it harder for the player to focus on the parts of the area that are really important.</dd>
-    </dl>
+    <p>Tips and tricks that might not apply to all areas, but can provide some nice ideas or help you overcome creativity roadblocks.</p>
 
-    <h3 id="performance">Performance</h3>
-
-    <p>Tips on how to make your area not set machines on fire. When making an area, if there's too much going on, the game can slow down. Even if it doesn't on your machine, it could on weaker computers. Even if you don't use these tips, it's important to keep them in mind to stop your area from being too bloated and running into performance problems. These tips mostly apply to <i>Pikifen</i>, but can also be useful when editing areas or caves in the canon games.</p>
-
-    <dl>
-      <dt><b>More content means more processing time.</b></dt>
-      <dd>The more geometry and objects in an area, the longer the game will have to take to process all of them, from figuring out their physics and logic, to rendering them on-screen. As a general rule of thumb, try not to bloat your area with too much content if you're worried about performance.</dd>
-    </dl>
-
-    <dl>
-      <dt><b>Pikmin and enemies are the biggest performance hogs.</b></dt>
-      <dd>The logic behind a gate is no more complicated than "lose health if you get hit". But Pikmin and enemies use a lot more logic than that. Try not to have an area with a massive amount of enemies just because, and consider reworking its design to make the numbers more manageable by the game's engine.</dd>
-    </dl>
-
-    <dl>
-      <dt><b>Walls don't need to be very smooth to be convincing.</b></dt>
-      <dd>To make a smooth curve, you'll need several lines. But you can probably create a decent curve using less lines than you think. Unless the player passes by and rubs against that wall a lot of times, you probably don't need to make it very smooth. The simpler it is, the less processing time for checking collisions and rendering. Even the <a href="https://www.pikminwiki.com/File:Tropical_Wilds_cave_entrance.jpg">canon games have jagged geometry</a>.</dd>
-    </dl>
-
-    <h3 id="ideas">Ideas</h3>
-
-    <p>Tips that might not apply to all areas, but can provide some nice ideas.</p>
+    <h3 id="ideas-emotion">Player emotion</h3>
 
     <dl>
       <dt><b>Entice the player by letting them see something good before they can get to it.</b></dt>
       <dd>For instance, have a large Pellet Posy on top of a ledge that requires a long path to get to, or is behind some gate. This will keep the player interested, and they will have to measure if the time and Pikmin investment is worth it. The longer the player goes without being able to get their reward, the better it will feel when they get it, but keep it within reasonable limits!</dd>
     </dl>
 
+    <h3 id="ideas-appearance">Appearance</h3>
+
     <dl>
+      <dt><b>When there is a fork in the path such that one side ramps up or down, try adding a boulder in the splitting point.</b></dt>
+      <dd>Imagine you have a path, and then further ahead that path splits into the plain you started on to the left, and a path ramping up to the right, such that this path is a wall to the path below. You can have that split happen just like that, but you may want to consider placing a boulder or some natural solid decoration in the place where the path splits exactly, to make the cut seem less jarring. This is used extensively in <i>Xenoblade Chronicles</i> (<a href="https://youtu.be/s0SAlxu-h9o?t=415">example</a>).</dd>
       <dt><b>Try the <a href="http://en.wikipedia.org/wiki/Golden_ratio">golden ratio</a> to make things look more natural.</b></dt>
       <dd>The golden ratio is supposedly present in a lot of things in nature. If you're struggling to come up with a layout that looks neat, try resizing the openings, floors, curves, etc. to relate with the golden ratio to other such openings, floors, or curves. It may make it better, or it may have no effect at all, but it's worth a shot.</dd>
     </dl>
 
-    <h3 id="misc">Misc. tips</h3>
+    <h3 id="ideas-gates">Gating</h3>
 
-    <p>Some random tips and tricks to help you overcome creativity roadblocks.</p>
+    <p>In game design, gates are any form of terrain feature, object, or gimmick that stops the player from doing something. These are especially important in puzzle stages, when you don't want the player to just be able to walk right up to the exit. Instead of creating some custom artificial object that limits the player in the exact way you intend, you should make use of natural features of a typical area to achieve the desired effect. Here are some ideas:</p>
 
     <ul>
-      <li>
-        In game design, gates are any form of terrain feature, object, or gimmick that stops the player from doing something. These are especially important in puzzle stages, when you don't want the player to just be able to walk right up to the exit. Instead of creating some custom artificial object that limits the player in the exact way you intend, you should make use of natural features of a typical area to achieve the desired effect. Here are some ideas:
-        <ul>
-          <li>Keys and locks: A type of gate where the player cannot proceed unless they have something with them from elsewhere that they can use to open the path. The best tools for the job are bomb rocks (keys) and reinforced walls (locks). Another type could be a hazardous obstacle (lock) that can only be destroyed by the Pikmin types (keys) immune to that hazard.</li>
-          <li>One-way: Ledges naturally force the player to go down one way, but be unable to go back from where they came.</li>
-          <li>No Pikmin: Your best bet for a path that only leaders can go through, but not Pikmin, is to use some hazard that is harmful to the Pikmin available but is harmless to leaders. Geysers can also be used, but remember that Winged Pikmin can probably follow the leader up.</li>
-          <li>No leaders: Use a high thin wall that Pikmin can be thrown over, but leaders cannot climb past.</li>
-          <li>No grounded Pikmin: Make some long path suspended above a cliff, such that leaders can't throw Pikmin from one ledge to the other, but Winged Pikmin can traverse just fine. Remember you can also tweak an area's path links to limit them to flying objects only.</li>
-          <li>No carrier Pikmin: Path links in an area can be limited to only allow light-load Pikmin to go through. This means Pikmin that are not carrying anything (or are carrying a small one-weight item) are the only ones that will take said path. To make this look natural, you should have this path in a tight corridor, which should make it clear to the player why larger objects can't be carried through.</li>
-          <li>No access besides X Pikmin: To make locations that only certain Pikmin types can traverse, surround the place with a hazard that only those Pikmin are immune to.</li>
-        </ul>
-      </li>
+      <li>Keys and locks: A type of gate where the player cannot proceed unless they have something with them from elsewhere that they can use to open the path. The best tools for the job are bomb rocks (keys) and reinforced walls (locks). Another type could be a hazardous obstacle (lock) that can only be destroyed by the Pikmin types (keys) immune to that hazard.</li>
+      <li>One-way: Ledges naturally force the player to go down one way, but be unable to go back from where they came.</li>
+      <li>No Pikmin: Your best bet for a path that only leaders can go through, but not Pikmin, is to use some hazard that is harmful to the Pikmin available but is harmless to leaders. Geysers can also be used, but remember that Winged Pikmin can probably follow the leader up.</li>
+      <li>No leaders: Use a high thin wall that Pikmin can be thrown over, but leaders cannot climb past.</li>
+      <li>No grounded Pikmin: Make some long path suspended above a cliff, such that leaders can't throw Pikmin from one ledge to the other, but Winged Pikmin can traverse just fine. Remember you can also tweak an area's path links to limit them to flying objects only.</li>
+      <li>No carrier Pikmin: Path links in an area can be limited to only allow light-load Pikmin to go through. This means Pikmin that are not carrying anything (or are carrying a small one-weight item) are the only ones that will take said path. To make this look natural, you should have this path in a tight corridor, which should make it clear to the player why larger objects can't be carried through.</li>
+      <li>No access besides X Pikmin: To make locations that only certain Pikmin types can traverse, surround the place with a hazard that only those Pikmin are immune to.</li>
+    </ul>
+
+    <h3 id="ideas-misc">Misc.</h3>
+    <ul>
       <li>To stop the player from being able to whistle Pikmin on the other side of a wall, either put those Pikmin too far away to reach, or make them sprouts.</li>
       <li>Ledge smoothing looks particularly good on rocks.</li>
       <li>Try adding some crop circle pattern underneath the Onion and ship landing spots.</li>
       <li>To represent the path that an object is going to take, try changing the floor texture to dirt, or some other beaten-down texture. This way, the player can know what to expect.</li>
     </ul>
 
-    <h2 id="process">Process</h2>
+    <h2 id="external">External links</h2>
 
-    <p>The following is an outline of the process behind an area's creation, from the moment an idea sparks into your mind, to the final playable thing. On top of giving you an overview of each stage, you are also given checklists, so you can keep tabs on the tips from before that you've applied and which ones you haven't. You can actually tick the checks in the checkboxes if you want, but the checks will be lost if you close or reload this page.</p>
-
-    <p>As usual, you don't have to follow these steps to the letter.</p>
-
-    <h3 id="concept">Concept stage</h3>
-
-    <p>At the very start, you should just write down in a text file or a piece of paper the basic overview of what the area is. What the theme of the area is supposed to be, its landmarks, difficulty, gimmicks, type of experience it wants to bring (including mission info), etc. Figuring this out early will let you keep a cohesive idea in mind all throughout.</p>
-
-    <dl>
-      <dt>Tips that should be done at the end of this stage:</dt>
-      <dd>
-        <input type="checkbox" id="check-landmarks-1"><label for="check-landmarks-1">Landmarks are prevalent and balanced</label><br>
-        <input type="checkbox" id="check-replayability-1"><label for="check-replayability-1">Players are encouraged to replay the area</label><br>
-      </dd>
-    </dl>
-
-    <h3 id="overview">Overview sketch stage</h3>
-
-    <p>Aferwards, you should make a very rough sketch of the area, using very broad aspects. This can be a digital sketch or a physical one on paper, but you probably want to draw an actual sketch, instead of trying to commit everything to memory. You don't need to be an artist for it, just draw general shapes.</p>
-    <p>This sketch should represent where each segment of the area is and how they are connected. Keep in mind the physicality of places (e.g. rivers are usually born on rocky terrain), and use this opportunity to outline world-building and lore, if possible. Also, of course, keep in mind the gameplay aspect, like how long it takes to get from one segment to another, how many times each one is revisited, etc. Outlining these things now will stop you from realizing late into development that that section over there is too boring, or that that path over there is completely pointless.</p>
-
-    <dl>
-      <dt>Tips that should be done at the end of this stage:</dt>
-      <dd>
-        <input type="checkbox" id="check-landmarks-2"><label for="check-landmarks-2">Landmarks are prevalent and balanced</label><br>
-        <input type="checkbox" id="check-replayability-2"><label for="check-replayability-2">Players are encouraged to replay the area</label><br>
-        <input type="checkbox" id="check-no-emptiness"><label for="check-no-emptiness">Large empty sections are kept to a minimum</label><br>
-        <input type="checkbox" id="check-options"><label for="check-options">There are multiple options so players can try different strategies</label><br>
-        <input type="checkbox" id="check-shortcut-costs"><label for="check-shortcut-costs">Shortcuts have costs</label><br>
-        <input type="checkbox" id="check-path-splits-1"><label for="check-path-splits-1">Path splits are more interesting than left/right choices</label><br>
-        <input type="checkbox" id="check-verticality-1"><label for="check-verticality-1">Verticality is well used</label><br>
-        <input type="checkbox" id="check-geometric-1"><label for="check-geometric-1">Natural environments have little geometric cleanliness</label><br>
-        <input type="checkbox" id="check-detail-space-1"><label for="check-detail-space-1">There's appropriate space for details</label><br>
-        <input type="checkbox" id="check-landing-site"><label for="check-landing-site">The landing site is interesting and representative of the area</label><br>
-        <input type="checkbox" id="check-logical-elements-1"><label for="check-logical-elements-1">Elements are logically-placed</label><br>
-      </dd>
-    </dl>
-
-    <h3 id="detailed">Detailed sketch stage</h3>
-
-    <p>Next, make a new sketch that actually goes into detail, based on your overview sketch. These details should define where the corridors, ledges, obstacles, objects, broad decorations, etc. are located. With this, you establish the flow and friction of each part of the area, and save yourself the trouble of learning too late that this section is too dangerous for the Pikmin the player has early on, or that that remote room has too few rewards for how far it is.</p>
-
-    <dl>
-      <dt>Tips that should be done at the end of this stage:</dt>
-      <dd>
-        <input type="checkbox" id="check-path-splits-2"><label for="check-path-splits-2">Path splits are more interesting than left/right choices</label><br>
-        <input type="checkbox" id="check-verticality-2"><label for="check-verticality-2">Verticality is well used</label><br>
-        <input type="checkbox" id="check-stuck"><label for="check-stuck">Players cannot get stuck</label><br>
-        <input type="checkbox" id="check-geometric-2"><label for="check-geometric-2">Natural environments have little geometric cleanliness</label><br>
-        <input type="checkbox" id="check-detail-space-2"><label for="check-detail-space-2">There's appropriate space for details</label><br>
-        <input type="checkbox" id="check-forks"><label for="check-forks">Forks in the road are interesting</label><br>
-        <input type="checkbox" id="check-texture-balance-1"><label for="check-texture-balance-1">Textures are diverse but balanced</label><br>
-        <input type="checkbox" id="check-logical-elements-2"><label for="check-logical-elements-2">Elements are logically-placed</label><br>
-        <input type="checkbox" id="check-repetitive-start"><label for="check-repetitive-start">The start shouldn't be repetitive</label><br>
-      </dd>
-    </dl>
-
-    <h3 id="implementation">Implementation stage</h3>
-
-    <p>In this stage, you actually implement your area into the engine's area editor. You can even import your sketch into the editor, so you can draw on top of it. As you make changes, try quick-playing what you have made to make sure everything feels interesting and flows well. Don't worry about the minute details in this stage, since you might learn that you need to make adjustments or even delete some sections outright.</p>
-
-    <dl>
-      <dt>Tips that should be done at the end of this stage:</dt>
-      <dd>
-        <input type="checkbox" id="check-subtle-effects"><label for="check-subtle-effects">Special effects are subtle</label><br>
-        <input type="checkbox" id="check-texture-balance-2"><label for="check-texture-balance-2">Textures are diverse but balanced</label><br>
-      </dd>
-    </dl>
-
-    <h3 id="polish">Polish stage</h3>
-
-    <p>Once you're done applying your sketch to the area editor and making a functional area, you should worry about polish. Add details, tweak the textures, use the review panel to make sure there are no problems, and apply the final tips to make sure your area is really nice and fun.</p>
-
-    <dl>
-      <dt>Tips that should be done at the end of this stage:</dt>
-      <dd>
-        <input type="checkbox" id="check-oob"><label for="check-oob">Out of bounds areas are unappealing</label><br>
-        <input type="checkbox" id="check-invisible-edges"><label for="check-invisible-edges">The edges of the world are not visible</label><br>
-      </dd>
-    </dl> 
+    <ul>
+      <li><a href="https://book.leveldesignbook.com/">The Level Design Book</a></li>
+    </ul>
     
   </div>
 </body>

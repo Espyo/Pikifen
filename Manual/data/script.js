@@ -32,7 +32,9 @@ function make_toc () {
       cur_ul.appendChild(new_ul);
       cur_ul = new_ul;
     } else if(level < prev_level) {
-      cur_ul = cur_ul.parentNode;
+      for(var l = 0; l < prev_level - level; l++) {
+        cur_ul = cur_ul.parentNode;
+      }
     }
 
     var link = document.createElement('a');
@@ -65,7 +67,7 @@ function make_toc () {
 function create_header(title, bc_names, bc_links) {
   var header_div = document.createElement('div');
   header_div.innerHTML =
-    '<img src="../images/logo.png" style="width: 24px; height: 24px; margin-right: 8px;">' +
+    '<img src="../images/logo.png" style="width: 24px; height: 24px; margin-right: 8px; vertical-align: top">' +
     '<b><i>Pikifen manual</i></b> ' +
     '<span style="margin-left: 10px; margin-right: 10px;">|</span> ' +
     '<a href="#top" title="Go to the top of the page.">&UpArrowBar;</a> ' +
