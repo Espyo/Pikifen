@@ -16,6 +16,197 @@
     
     <p>Older entries of the <a href="changelog.html">changelog</a>.</p>
 
+    <h2 id="0.21.1">0.21.1</h2>
+    
+    <p><i>November 5th, 2021</i></p>
+
+    <ul>
+      <li>Fixed Rock Pikmin not causing damage by charging. Custom Pikmin that attack via lunging need their <code>attacking</code> animation changed.</li>
+      <li>Fixed a crash if Pikmin were thrown at an object and it disappeared during their <code>mob_landing</code> state. (Thanks Sharker, Kman)</li>
+      <li>Fixed the manual's header not working under Chrome. (Thanks Kman)</li>
+    </ul>
+    
+    <h2 id="0.21.0">0.21.0</h2>
+    
+    <p><i>October 22nd, 2021 &ndash; the "Pikmin 3" update</i></p>
+    
+    <p><b>Gameplay changes</b></p>
+
+    <ul>
+      <li>
+        Added Rock Pikmin.
+        <ul>
+          <li>When thrown at an enemy, they cause damage when they collide, and then bounce back.</li>
+          <li>They also lunge forward on their own when they get close to an enemy they are chasing on foot. This impact works just like a throw, bounce back included.</li>
+          <li>Also, updated the pellets, Pellet Posies, Candypop Buds, and Onions to support Rock Pikmin.</li>
+          <li>Plus, added cystal walls, crystal nodules, large crystals, small crystals, and Skutterchucks.</li>
+        </ul>
+      </li>
+      <li>
+        Added Winged Pikmin.
+        <ul>
+          <li>If their target is above or below them, they can move up and down in the air to get to it.</li>
+          <li>When following a leader, they try to stay a bit above the leader, and when idling, they also try to idle some distance above-ground.</li>
+          <li>Because they are flying in the air when following a leader, they can travel over bodies of water. That said, leaders that are underwater can't grab or throw them.</li>
+          <li>Also, updated the pellets, Pellet Posies, Candypop Buds, and Onions to support Winged Pikmin.</li>
+          <li>Plus, added bamboo gates, Flukeweeds, and Puffy Blowhogs.</li>
+        </ul>
+      </li>
+      <li>Added Bulbmin, both adults and young. They are invulnerable to all elemental hazards, but the young lack an Onion or ship to go to.</li>
+      <li>Added Alph, Brittany, and Charlie, as well as the S.S. Drake. The Hocotatian leaders also got a glow-up. The President's color was changed to yellow, otherwise half of the leaders would be blue.</li>
+      <li>Purple Pikmin now cause a bit of collision damage when they land on an enemy after being thrown.</li>
+      <li>Enemies petrified with the ultra-bitter spray now shake before breaking free, their petrification visually bursts when it's over, and their animations now properly freeze.</li>
+      <li>Munge Dweevils can now pick up treasure.</li>
+      <li>Pikmin will now only take paths that they can survive. e.g. a carcass with 1 Red Pikmin and 9 Blue Pikmin carrying it will take a path that doesn't go through water, but a carcass carried by 10 Blue Pikmin might take that water path.</li>
+      <li>Objects now move with acceleration. This should make them a bit smoother when moving.</li>
+      <li>
+        Revamped the cursor.
+        <ul>
+          <li>The leader cursor's color now matches the standby Pikmin's color. If there is none, it uses a faded cyan color.</li>
+          <li>The number of Pikmin of the standby type now also appears next to the cursor.</li>
+          <li>There is now a line connecting the leader to the cursor. When the leader has a group member, the line changes to represent a preview of how that member would be thrown. This helps to show which ledges can and can't be reached.</li>
+          <li>Added an option to set the cursor's speed, used when controlling it without a mouse. (Thanks MonkeyUhOh)</li>
+        </ul>
+      </li>
+      <li>If a Pikmin is lying down, a leader can now whistle it to make it get up faster, and return to the leader once it does.</li>
+      <li>Added an option to allow the leader to auto-throw. If you prefer not to mash the throw button, consider turning this on.</li>
+      <li>If a new leader shows up from a defeated enemy, their HUD information will now display properly. (Thanks pikminjosh)</li>
+      <li>All menus now have a tooltip for the currently selected item.</li>
+      <li>The in-game message box now looks like other boxes, instead of a stretched flat image.</li>
+      <li>Fullscreen mode now uses a simple borderless window. True fullscreen mode can still be enabled in the <a href="options.html">options</a> file, but comes with risks.</li>
+    </ul>
+
+    <p><b>Content making changes</b></p>
+    
+    <ul>
+      <li>
+        Rock Pikmin-related features:
+        <ul>
+          <li>Added a property for <a href="mob_pikmin.html">Pikmin types</a>, <code>attack_method</code>, that controls how the Pikmin attacks. If set to <code>impact</code>, that Pikmin attacks like a Rock Pikmin, as explained above.</li>
+          <li>Their on-foot lunges use the attack animation, so it should ideally be in a pose where they lunge forward, and have a hitbox.</li>
+        </ul>
+      </li>
+      <li>
+        Winged Pikmin-related features:
+        <ul>
+          <li>Added a property for <a href="mob_pikmin.html">Pikmin types</a>, <code>can_fly</code>, that makes a Pikmin fly like a Winged Pikmin, as explained above.</li>
+          <li>These Pikmin can only move vertically if the state they are in allows it (e.g. they can't fly if they're being knocked back).</li>
+          <li>Technically, if a leader is on a floor with a hazard (liquid or otherwise), they will be unable to grab Pikmin that are outside it and are vulnerable to the hazard. If they grab and bring those Pikmin to said floor, the Pikmin will suffer the effects.</li>
+        </ul>
+      </li>
+      <li>Pikmin now have a new state that is entered when they land on a mob, <code>mob_landing</code>. In it, they change to an animation of the same name. It is only after this animation ends that they latch on or bounce back. As such, this animation is a good opportunity to get the Pikmin to cause damage upon collision.</li>
+      <li>
+        Revamped paths.
+        <ul>
+          <li>If a path stop is on top of a sector with hazards, objects will now be unable to traverse it if they are vulnerable to the hazards. In the case of a carried object, this applies to the carrier Pikmin. If there is another path, they will take it, otherwise they will stay stuck in front of that path stop. If the hazard is only on the floor, and the object or carrier Pikmin can fly, then they will still take that path.</li>
+          <li>Path links now have a type. "Normal" works like normal, "custom only" can only be used by objects that need that path for scripting, "light load only" can only be taken by objects carrying a weight of 1 or nothing, and "airborne only" can only be taken by flying objects.</li>
+        </ul>
+      </li>
+      <li>
+        Revamped the <a href="status.html">status</a> system.
+        <ul>
+          <li>Added the <code>animation_change</code> property, which lets the object's animation be changed when the status is applied.</li>
+          <li>Added the <code>freezes_animation</code> property. If true, the object will stay stuck in its current sprite until the status effect is removed.</li>
+          <li>Added the <code>reapply_rule</code> property, which controls what happens to the auto-remove time of a status effect in case it is re-applied.</li>
+          <li>Added the <code>remove_on_hazard_leave</code> property. This is now used for statuses like drowning, where the status effect is removed once the object leaves the hazard that was applying the status effect.</li>
+          <li>Added the <code>replacement_on_timeout</code> property, which lets a status effect be swapped for another when its time runs out.</li>
+          <li>Added the <code>state_change_type</code> and <code>state_change_name</code> properties, so status effects can change the object's state when applied.</li>
+          <li>Added the <code>shaking_effect</code> property, which makes the object shake left and right while under the effects of the status effect.</li>
+          <li>Object types, in their hazard vulnerability data and spike damage vulnerability data, can now be told to receive a status effect when interacting with one.</li>
+          <li>Plus other changes noted below in the compatibility warnings.</li>
+        </ul>
+      </li>
+      <li>
+        New <a href="script.html">mob script</a> actions:
+        <ul>
+          <li><code>load_focused_mob_memory</code> and <code>save_focused_mob_memory</code> let the currently focused object be saved into a memory, and be recalled later. This allows the object to keep track of more than one object at a time, although it still only focuses on one at a time.</li>
+          <li><code>link_with_focused_mob</code> lets the object be linked to whatever object it has in focus.</li>
+          <li><code>hold_focused_mob</code> lets the object hold whatever object it has in focus, much like how a leader holds a Pikmin.</li>
+          <li><code>throw_focused_mob</code> lets the focused object be thrown in an arc towards a destination.</li>
+          <li><code>store_focus_inside</code> lets the object store another one inside, to be released later.</li>
+          <li><code>release_stored_mobs</code> lets the object release any other object that is stored inside.</li>
+          <li><code>get_angle</code> lets the script obtain the angle between two sets of coordinates.</li>
+          <li><code>get_coordinates_from_angle</code> lets the script obtain the X and Y coordinates calculated from a given angle and distance.</li>
+          <li><code>get_distance</code> lets the script obtain the distance between two sets of coordinates.</li>
+          <li><code>get_floor_z</code> lets the script obtain the Z coordinate of the floor at the specified coordinates.</li>
+          <li><code>set_can_block_paths</code> lets the object block or stop blocking the paths of others.</li>
+          <li><code>set_flying</code> lets the object move in mid air at will, unaffected by gravity.</li>
+          <li><code>set_radius</code> lets the object's radius be changed.</li>
+          <li><code>set_shadow_visibility</code> lets the object's shadow be hidden.</li>
+          <li><code>follow_path_to_absolute</code> lets the object follow path stops to get to the specified coordinates.</li>
+          <li><code>follow_path_randomly</code> lets the object follow path stops to get to a random stop in the area.</li>
+        </ul>
+      </li>
+      <li>
+        Other <a href="script.html">mob script</a> changes:
+        <ul>
+          <li>The <code>move_to_absolute</code> and <code>move_to_relative</code> actions can now use an optional Z coordinate argument.</li>
+          <li>The <code>turn_to_absolute</code> and <code>turn_to_relative</code> actions can now either use an angle argument, or coordinate arguments.</li>
+          <li>Added <code>group_task_power</code> and <code>angle</code> to the <code>get_info</code> action, so a group task object can obtain the current "Pikmin power" applied to it, and so an object can obtain its current angle, respectively.</li>
+          <li>The <code>on_hitbox_touch_a_n</code> event used to trigger regardless of the first hitbox's type. This has now been fixed, and <code>on_hitbox_touch_n_n</code> was created for when the both hitboxes are of the normal type.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="mob_group_task.html">Group task object type</a> improvements:
+        <ul>
+          <li>Added the <code>flying_pikmin_only</code> property.</li>
+          <li>Added the <code>spots_z</code> property to allow control of the vertical position of the contribution spots.</li>
+          <li>Added the <code>carrying</code> value to the <code>worker_pikmin_pose</code> property (though it doesn't change anything yet).</li>
+        </ul>
+      </li>
+      <li>
+        New <a href="mob_type.html">object type</a> properties:
+        <ul>
+          <li><code>acceleration</code> controls the object type's acceleration.</li>
+          <li><code>has_group</code> lets the object have a group of other objects (usually Pikmin) following it.</li>
+        </ul>
+      </li>
+      <li>
+        New <a href="misc_config.html">game configuration</a> properties:
+        <ul>
+          <li><code>no_pikmin_color</code> controls the color the cursor shows when no Pikmin are available.</li>
+          <li><code>throw_max_dist</code> and <code>whistle_max_dist</code> control the maximum distances at which the leader can throw or whistle.</li>
+        </ul>
+      </li>
+      <li>
+        Minor editor tweaks.
+        <ul>
+          <li>In the animation editor's sprite or animation picker, the buttons now shows thumbnails of the sprite or the animation's first frame.</li>
+          <li>Double-clicking in the area editor while in object editing mode now creates a new object where you clicked.</li>
+          <li>In the area editor, you can now specify a different horizontal and vertical scale, when resizing everything.</li>
+          <li>Path links in the area editor are now colored based on their type, and whether they are one-way.</li>
+          <li>Revamped the area editor's problem finder and path preview.</li>
+          <li>You can now delete an area inside the area editor.</li>
+        </ul>
+      </li>
+      <li>Added the <code>group_pikmin_only</code> and <code>affects_user</code> properties to <a href="spray.html">spray types</a>. One controls whether a spray affects only the Pikmin in the group or leaders as well, and the other controls whether the leader that used the spray gets sprayed too.</li>
+    </ul>
+
+    <p><b>Custom content compatibility warnings</b></p>
+    
+    <ul>
+      <li>
+        Animation changes. These are needed in order for <a href="mob_pikmin.html">Pikmin</a> to get up when whistled, and for Purple Pikmin and Rock Pikmin to cause collision damage:
+        <ul>
+          <li><code>lying</code> is now just the Pikmin lying down forever.</li>
+          <li><code>knocked_back</code> is a new animation for the Pikmin getting knocked back forever.</li>
+          <li><code>getting_up</code> is a new animation for the Pikmin getting up from lying down.</li>
+          <li><code>mob_landing</code> is a new animation for the thrown Pikmin landing on a mob and getting ready, and/or causing damage.</li>
+        </ul>
+      </li>
+      <li>
+        <a href="status.html">Status effect</a> changes:
+        <ul>
+          <li>Turned the <code>disabled_state_inedible</code> status effect type property to <code>turns_inedible</code> instead. This way, any status can make a Pikmin inedible while under its effects.</li>
+          <li>The <code>causes_*</code> status effect type properties were removed in favor of the <code>state_change_type</code> property. Anything related to the Pikmin's "disabled" state has now also been renamed to the more apt term "helpless".</li>
+          <li>The <code>on_hitbox_touch_a_n</code> event was corrected, so if you relied on the incorrect behavior, use <code>on_hitbox_touch_n_n</code> instead.</li>
+          <li>The <code>animation</code> and <code>animation_mob_scale</code> properties have been renamed to <code>overlay_animation</code> and <code>overlay_anim_mob_scale</code>, respectively.</li>
+        </ul>
+      </li>
+      <li><a href="mob_converter.html">Converters</a> now need hitboxes for the Pikmin to touch when thrown.</li>
+      <li>The <code>blocks_carrier_pikmin</code> <a href="mob_type.html">object type</a> property has been renamed to <code>can_block_paths</code>.</li>
+    </ul>
+    
     <h2 id="0.20.0">0.20.0</h2>
     
     <p><i>April 24th, 2021 &ndash; the "missing menus" update</i></p>

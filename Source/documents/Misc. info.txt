@@ -116,11 +116,16 @@ Bag of notes (useful stuff)
     Pathing
         The only possible way to calculate the stops is by doing it first, before paths. If the engine could decide any stop at will, then were would the threshold be? What would stop it from deciding the last stop is like on the opposite side of the map from the target spot?
         Mobs that care about paths can only be in one of two stats: moving, or stuck
-        When an obstacle is freed, it can only matter to the mob in one of the following ways:
+        When an obstacle is freed, it can only relate to a mob in one of the following ways:
             It is irrelevant to the mob's goal
             If blocked, it unblocks its current path
             If blocked, it unblocks a new path
             If unblocked, it unblocks a faster path than the current one
+        The ideal pathing system would:
+            Allow Pikmin to not pick stops on the other side of a wall, or on a tall ledge
+                This could be achieved with stops with radii
+            Allow Winged Pikmin to go up and down two stops that other Pikmin should only go down from
+                This could be achieved by, on load, having all links whose stops have a height difference of over 50 check if there's a ramp between them or not, and tag the link in memory accordingly
     Area editor
         Open problems
             If the user turns a sector inside out, there's not much the engine can do...

@@ -2529,7 +2529,7 @@ void mob::hold(
  */
 bool mob::is_off_camera() const {
     if(parent) return false;
-
+    
     float sprite_bound = 0;
     sprite* sprite = anim.get_cur_sprite();
     if(sprite) {
@@ -2540,7 +2540,7 @@ bool mob::is_off_camera() const {
                 sprite_size.y / 2.0
             );
     }
-
+    
     float collision_bound = 0;
     if(rectangular_dim.x == 0) {
         collision_bound = radius;
@@ -2551,7 +2551,7 @@ bool mob::is_off_camera() const {
                 rectangular_dim.y / 2.0
             );
     }
-
+    
     float radius_to_use = std::max(sprite_bound, collision_bound);
     return !bbox_check(game.cam.box[0], game.cam.box[1], pos, radius_to_use);
 }
