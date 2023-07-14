@@ -1921,6 +1921,7 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void pikmin_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
+    disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->set_animation(PIKMIN_ANIM_THROWN);
     
     ((pikmin*) m)->start_throw_trail();
