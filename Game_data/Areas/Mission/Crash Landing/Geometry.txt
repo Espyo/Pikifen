@@ -398,7 +398,6 @@ vertexes{
 	v=-175.6093 421.1034
 	v=-692.0000 192.0000
 	v=-692.0000 152.0000
-	v=-680.0000 -280.0000
 	v=-699.0079 -280.0000
 	v=-695.1328 -308.0378
 	v=1248.0000 -288.0000
@@ -456,30 +455,37 @@ edges{
 	e{
 		s=69 6
 		v=17 347
+		smoothing_length=40.0000
 	}
 	e{
 		s=64 -1
 		v=10 364
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 90
 		v=57 11
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 90
 		v=197 12
+		smoothing_length=40.0000
 	}
 	e{
 		s=45 -1
 		v=13 14
+		smoothing_length=20.0000
 	}
 	e{
 		s=45 -1
 		v=14 15
+		smoothing_length=20.0000
 	}
 	e{
 		s=45 -1
 		v=15 16
+		smoothing_length=20.0000
 	}
 	e{
 		s=71 64
@@ -495,7 +501,7 @@ edges{
 	}
 	e{
 		s=71 83
-		v=22 401
+		v=22 400
 	}
 	e{
 		s=64 90
@@ -535,7 +541,7 @@ edges{
 	}
 	e{
 		s=2 84
-		v=28 409
+		v=28 408
 	}
 	e{
 		s=69 84
@@ -660,34 +666,42 @@ edges{
 	e{
 		s=64 -1
 		v=54 10
+		smoothing_length=40.0000
 	}
 	e{
 		s=6 -1
 		v=17 52
+		smoothing_length=40.0000
 	}
 	e{
 		s=6 -1
 		v=52 355
+		smoothing_length=40.0000
 	}
 	e{
 		s=65 -1
 		v=53 335
+		smoothing_length=40.0000
 	}
 	e{
 		s=7 90
 		v=12 57
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 7
 		v=12 55
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 7
 		v=55 56
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 7
 		v=56 57
+		smoothing_length=40.0000
 	}
 	e{
 		s=56 90
@@ -1275,7 +1289,7 @@ edges{
 	}
 	e{
 		s=70 91
-		v=178 431
+		v=178 430
 	}
 	e{
 		s=42 84
@@ -1356,10 +1370,12 @@ edges{
 	e{
 		s=69 -1
 		v=196 17
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 90
 		v=13 197
+		smoothing_length=40.0000
 	}
 	e{
 		s=45 90
@@ -1372,18 +1388,19 @@ edges{
 	e{
 		s=69 -1
 		v=16 196
+		smoothing_length=40.0000
 	}
 	e{
 		s=56 90
-		v=62 429
+		v=62 428
 	}
 	e{
 		s=70 69
-		v=8 402
+		v=8 401
 	}
 	e{
 		s=69 85
-		v=200 403
+		v=200 402
 	}
 	e{
 		s=90 70
@@ -1407,7 +1424,7 @@ edges{
 	}
 	e{
 		s=69 55
-		v=206 404
+		v=206 403
 	}
 	e{
 		s=87 90
@@ -1819,7 +1836,7 @@ edges{
 	}
 	e{
 		s=87 90
-		v=406 291
+		v=405 291
 	}
 	e{
 		s=70 45
@@ -1827,59 +1844,60 @@ edges{
 	}
 	e{
 		s=90 70
-		v=9 405
+		v=9 404
 	}
 	e{
 		s=-1 63
 		v=293 343
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 63
 		v=357 333
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 60
 		v=292 360
+		smoothing_length=7.8000
 	}
 	e{
 		s=-1 60
 		v=294 307
+		smoothing_length=40.0000
 	}
 	e{
 		s=68 57
-		v=295 424
+		v=295 423
 	}
 	e{
 		s=-1 62
 		v=298 342
-	}
-	e{
-		s=-1 62
-		v=296 312
+		smoothing_length=20.0000
 	}
 	e{
 		s=58 90
 		v=302 297
-	}
-	e{
-		s=58 90
-		v=310 302
+		smoothing_length=40.0000
 	}
 	e{
 		s=58 90
 		v=309 299
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 61
 		v=300 313
+		smoothing_length=40.0000
 	}
 	e{
 		s=68 60
-		v=301 423
+		v=301 422
 	}
 	e{
 		s=59 90
 		v=311 58
+		smoothing_length=40.0000
 	}
 	e{
 		s=34 90
@@ -1900,38 +1918,47 @@ edges{
 	e{
 		s=-1 60
 		v=307 301
+		smoothing_length=40.0000
 	}
 	e{
 		s=57 90
 		v=58 308
+		smoothing_length=40.0000
 	}
 	e{
 		s=58 90
 		v=297 309
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 58
 		v=310 300
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 90
 		v=11 310
+		smoothing_length=40.0000
 	}
 	e{
 		s=60 -1
 		v=294 375
+		smoothing_length=40.0000
 	}
 	e{
 		s=63 90
-		v=422 311
+		v=421 311
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 61
 		v=312 353
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 62
 		v=313 298
+		smoothing_length=40.0000
 	}
 	e{
 		s=61 62
@@ -1967,7 +1994,8 @@ edges{
 	}
 	e{
 		s=-1 60
-		v=320 419
+		v=320 418
+		smoothing_length=40.0000
 	}
 	e{
 		s=46 -1
@@ -2004,22 +2032,27 @@ edges{
 	e{
 		s=-1 63
 		v=332 293
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 63
 		v=333 332
+		smoothing_length=40.0000
 	}
 	e{
 		s=65 -1
 		v=334 53
+		smoothing_length=40.0000
 	}
 	e{
 		s=6 -1
 		v=335 347
+		smoothing_length=40.0000
 	}
 	e{
 		s=65 -1
 		v=338 348
+		smoothing_length=40.0000
 	}
 	e{
 		s=65 6
@@ -2036,58 +2069,72 @@ edges{
 	e{
 		s=-1 62
 		v=339 296
+		smoothing_length=20.0000
 	}
 	e{
 		s=66 62
 		v=342 339
+		smoothing_length=10.0000
 	}
 	e{
 		s=66 -1
 		v=339 340
+		smoothing_length=10.0000
 	}
 	e{
 		s=66 -1
 		v=340 341
+		smoothing_length=20.0000
 	}
 	e{
 		s=66 -1
 		v=341 342
+		smoothing_length=10.0000
 	}
 	e{
 		s=63 67
 		v=346 343
+		smoothing_length=26.4000
 	}
 	e{
 		s=-1 63
 		v=346 292
+		smoothing_length=22.8000
 	}
 	e{
 		s=-1 67
 		v=343 344
+		smoothing_length=10.0000
 	}
 	e{
 		s=-1 67
 		v=344 345
+		smoothing_length=20.0000
 	}
 	e{
 		s=-1 67
 		v=345 346
+		smoothing_length=10.0000
 	}
 	e{
 		s=68 -1
 		v=0 301
+		smoothing_length=40.0000
 	}
 	e{
 		s=69 -1
 		v=347 349
+		smoothing_length=40.0000
 	}
 	e{
 		s=65 -1
 		v=348 334
+		smoothing_length=40.0000
 	}
 	e{
 		s=64 -1
 		v=349 54
+		smoothing_length=40.0000
 	}
 	e{
 		s=71 69
@@ -2108,6 +2155,7 @@ edges{
 	e{
 		s=46 61
 		v=353 299
+		smoothing_length=40.0000
 	}
 	e{
 		s=65 6
@@ -2116,10 +2164,12 @@ edges{
 	e{
 		s=65 -1
 		v=355 356
+		smoothing_length=40.0000
 	}
 	e{
 		s=65 -1
 		v=356 338
+		smoothing_length=40.0000
 	}
 	e{
 		s=46 -1
@@ -2131,11 +2181,12 @@ edges{
 	}
 	e{
 		s=69 84
-		v=359 427
+		v=359 426
 	}
 	e{
 		s=-1 60
 		v=360 321
+		smoothing_length=17.8000
 	}
 	e{
 		s=59 63
@@ -2156,6 +2207,7 @@ edges{
 	e{
 		s=64 -1
 		v=364 371
+		smoothing_length=40.0000
 	}
 	e{
 		s=68 64
@@ -2180,10 +2232,12 @@ edges{
 	e{
 		s=64 -1
 		v=371 372
+		smoothing_length=40.0000
 	}
 	e{
 		s=64 -1
 		v=372 373
+		smoothing_length=13.4000
 	}
 	e{
 		s=71 64
@@ -2192,6 +2246,7 @@ edges{
 	e{
 		s=68 -1
 		v=373 0
+		smoothing_length=8.8000
 	}
 	e{
 		s=59 60
@@ -2203,15 +2258,16 @@ edges{
 	}
 	e{
 		s=57 60
-		v=423 374
+		v=422 374
 	}
 	e{
 		s=60 -1
 		v=375 323
+		smoothing_length=40.0000
 	}
 	e{
 		s=71 2
-		v=381 408
+		v=381 407
 	}
 	e{
 		s=71 76
@@ -2346,76 +2402,77 @@ edges{
 		v=397 398
 	}
 	e{
-		s=34 1
-		v=399 400
-	}
-	e{
 		s=71 1
 		v=366 370
 	}
 	e{
 		s=34 83
-		v=400 24
+		v=399 24
 	}
 	e{
 		s=1 83
-		v=401 400
+		v=400 399
 	}
 	e{
 		s=71 1
-		v=401 366
+		v=400 366
 	}
 	e{
 		s=70 85
-		v=402 200
+		v=401 200
 	}
 	e{
 		s=69 55
-		v=403 290
+		v=402 290
 	}
 	e{
 		s=69 85
-		v=404 402
+		v=403 401
 	}
 	e{
 		s=55 85
-		v=403 404
+		v=402 403
 	}
 	e{
 		s=86 90
-		v=407 405
+		v=406 404
 	}
 	e{
 		s=86 70
-		v=405 204
+		v=404 204
 	}
 	e{
 		s=86 90
-		v=204 406
+		v=204 405
 	}
 	e{
 		s=87 90
-		v=207 407
+		v=207 406
 	}
 	e{
 		s=86 87
-		v=406 407
+		v=405 406
 	}
 	e{
 		s=88 71
-		v=30 408
+		v=30 407
 	}
 	e{
 		s=88 84
-		v=409 29
+		v=408 29
 	}
 	e{
 		s=88 2
-		v=408 409
+		v=407 408
 	}
 	e{
 		s=71 89
-		v=413 410
+		v=412 409
+		shadow_length=3.0000
+	}
+	e{
+		s=71 89
+		v=409 410
 		shadow_length=3.0000
 	}
 	e{
@@ -2429,113 +2486,131 @@ edges{
 		shadow_length=3.0000
 	}
 	e{
-		s=71 89
-		v=412 413
-		shadow_length=3.0000
+		s=-1 60
+		v=413 323
+		smoothing_length=26.6000
 	}
 	e{
 		s=-1 60
-		v=414 323
+		v=419 320
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 60
-		v=420 320
+		v=376 419
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 60
-		v=376 420
+		v=414 420
+		smoothing_length=12.8000
 	}
 	e{
 		s=-1 60
-		v=415 421
+		v=420 376
+		smoothing_length=28.8000
 	}
 	e{
 		s=-1 60
-		v=421 376
+		v=322 414
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 60
-		v=322 415
+		v=415 417
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 60
-		v=416 418
+		v=416 322
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 60
-		v=417 322
+		v=417 416
+		smoothing_length=40.0000
 	}
 	e{
 		s=-1 60
-		v=418 417
+		v=418 413
+		smoothing_length=23.0000
 	}
 	e{
 		s=-1 60
-		v=419 414
-	}
-	e{
-		s=-1 60
-		v=321 416
+		v=321 415
+		smoothing_length=16.6000
 	}
 	e{
 		s=46 90
-		v=324 422
+		v=324 421
 	}
 	e{
 		s=46 63
-		v=422 357
+		v=421 357
+		smoothing_length=40.0000
 	}
 	e{
 		s=68 57
-		v=423 295
+		v=422 295
 	}
 	e{
 		s=57 90
-		v=308 424
+		v=308 423
+		smoothing_length=5.0000
 	}
 	e{
 		s=68 90
-		v=424 425
+		v=423 424
 	}
 	e{
 		s=68 90
-		v=425 365
+		v=424 365
 	}
 	e{
 		s=42 84
-		v=426 180
+		v=425 180
 	}
 	e{
 		s=69 42
-		v=427 198
+		v=426 198
 	}
 	e{
 		s=84 42
-		v=426 427
+		v=425 426
 	}
 	e{
 		s=70 42
-		v=198 430
+		v=198 429
 	}
 	e{
 		s=70 42
-		v=430 177
+		v=429 177
 	}
 	e{
 		s=56 91
-		v=428 182
+		v=427 182
 	}
 	e{
 		s=90 91
-		v=199 429
+		v=199 428
 	}
 	e{
 		s=56 91
-		v=429 428
+		v=428 427
 	}
 	e{
 		s=70 91
-		v=431 199
+		v=430 199
+	}
+	e{
+		s=-1 62
+		v=296 312
+		smoothing_length=40.0000
+	}
+	e{
+		s=58 90
+		v=310 302
+		smoothing_length=40.0000
 	}
 }
 sectors{
@@ -2574,6 +2649,7 @@ sectors{
 	s{
 		z=250.0000
 		texture=Metal_clean.jpg
+		texture_rotate=1.5708
 		texture_tint=0 255 255
 	}
 	s{
@@ -2593,8 +2669,9 @@ sectors{
 	}
 	s{
 		z=200.0000
-		texture=Wood_stump.jpg
+		texture=Wood_plank.jpg
 		texture_trans=75.0000 0.0000
+		texture_tint=168 126 79
 	}
 	s{
 		z=200.0000
@@ -2602,8 +2679,9 @@ sectors{
 	}
 	s{
 		z=200.0000
-		texture=Wood_stump.jpg
+		texture=Wood_plank.jpg
 		texture_trans=-66.0000 0.0000
+		texture_tint=168 126 79
 	}
 	s{
 		z=200.0000
@@ -2611,8 +2689,9 @@ sectors{
 	}
 	s{
 		z=200.0000
-		texture=Wood_stump.jpg
+		texture=Wood_plank.jpg
 		texture_scale=1.0800 1.0000
+		texture_tint=167 125 78
 	}
 	s{
 		z=200.0000
@@ -2620,9 +2699,10 @@ sectors{
 	}
 	s{
 		z=300.0000
-		texture=Wood_stump.jpg
+		texture=Wood_plank.jpg
 		texture_scale=1.0000 1.4400
 		texture_trans=205.0000 0.0000
+		texture_tint=168 126 79
 	}
 	s{
 		z=100.0000
@@ -2775,6 +2855,7 @@ sectors{
 	s{
 		z=0.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
@@ -2786,6 +2867,7 @@ sectors{
 		type=Blocking
 		z=500.0000
 		texture=Metal_rusted.png
+		texture_rotate=1.5708
 	}
 	s{
 		z=25.0000
@@ -2831,26 +2913,31 @@ sectors{
 	s{
 		z=0.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
 		z=0.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
 		z=600.0000
 		texture=Metal_clean.jpg
+		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
 		z=600.0000
 		texture=Metal_clean.jpg
+		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
 		z=600.0000
 		texture=Metal_clean.jpg
+		texture_rotate=3.5954
 		texture_tint=30 255 255
 	}
 	s{
@@ -2860,22 +2947,26 @@ sectors{
 	s{
 		z=600.0000
 		texture=Metal_clean.jpg
+		texture_rotate=3.5954
 		texture_tint=0 255 255
 	}
 	s{
 		z=600.0000
 		texture=Metal_clean.jpg
+		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
 		z=600.0000
 		texture=Metal_clean.jpg
+		texture_rotate=3.5954
 		texture_tint=137 137 137
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		texture=Metal_rusted.png
+		texture_rotate=1.0472
 	}
 	s{
 		z=250.0000
@@ -2884,26 +2975,31 @@ sectors{
 	s{
 		z=0.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.5379
 	}
 	s{
 		z=0.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.5379
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		texture=Metal_rusted.png
+		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		texture=Metal_clean.jpg
+		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
 		z=0.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.7124
 		texture_tint=85 85 85
 	}
 	s{
@@ -2979,26 +3075,31 @@ sectors{
 	s{
 		type=Blocking
 		z=500.0000
+		fade=true
 		texture=Metal_clean.jpg
 	}
 	s{
 		z=0.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
 		type=Blocking
 		z=400.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.1015
 	}
 	s{
 		type=Blocking
 		z=400.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.1015
 	}
 	s{
 		z=0.0000
 		texture=Metal_clean.jpg
+		texture_rotate=4.7124
 		texture_tint=100 100 100
 	}
 	s{
@@ -3010,11 +3111,13 @@ sectors{
 	s{
 		z=50.0000
 		texture=Metal_rusted.png
+		texture_rotate=2.7925
 	}
 	s{
 		type=Blocking
 		z=500.0000
 		texture=Metal_clean.jpg
+		texture_rotate=1.0472
 		texture_tint=200 200 200
 	}
 	s{
@@ -3027,6 +3130,7 @@ mobs{
 	Leader{
 		type=Brittany
 		p=192.0000 -352.0000
+		angle=0.6144
 	}
 	Custom{
 		type=Electric gate
@@ -3042,38 +3146,47 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=-301.5958 -350.9765
+		angle=1.5641
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-323.8334 -351.6912
+		angle=-2.0978
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-329.2021 -399.4883
+		angle=-1.7960
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-310.4406 -403.1188
+		angle=-0.5421
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-361.5109 -395.1430
+		angle=2.4213
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-358.5464 -371.8334
+		angle=-0.5737
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-337.3322 -383.8456
+		angle=-0.5606
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-288.0000 -384.0000
+		angle=1.0958
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-344.7963 -357.9288
+		angle=2.8343
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -3082,10 +3195,12 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=-322.7129 -368.2029
+		angle=-2.5806
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-299.4033 -368.2029
+		angle=2.7965
 	}
 	Ship{
 		type=S.S. Drake
@@ -3095,46 +3210,57 @@ mobs{
 	Converter{
 		type=Gray Candypop Bud
 		p=60.4883 -382.6116
+		angle=0.1299
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-573.5958 -193.5837
+		angle=-3.0689
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-572.5239 -165.9289
+		angle=2.4343
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-521.7623 -223.1310
+		angle=1.4486
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-544.0000 -192.0000
+		angle=1.7868
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-603.3460 -209.3808
+		angle=-1.4784
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-616.3331 -175.3339
+		angle=-1.4194
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-584.5845 -234.7858
+		angle=2.8157
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-541.0355 -240.5118
+		angle=-2.5224
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-632.5845 -202.7858
+		angle=2.2290
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=-565.2628 -214.5950
+		angle=-0.5672
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -3143,6 +3269,7 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=-617.6079 -237.5473
+		angle=1.6712
 	}
 	Custom{
 		type=White bramble gate
@@ -3157,42 +3284,52 @@ mobs{
 	Treasure{
 		type=2 Euro
 		p=40.2391 345.9574
+		angle=-2.2763
 	}
 	Leader{
 		type=Alph
 		p=-264.0000 -472.0000
+		angle=2.0612
 	}
 	Leader{
 		type=Charlie
 		p=-264.0000 304.0000
+		angle=2.3561
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=270.6678 -303.8456
+		angle=2.8395
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=297.5594 -323.1188
+		angle=-0.9976
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=263.2037 -277.9288
+		angle=1.5173
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=285.2871 -288.2029
+		angle=-2.9317
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=306.4042 -270.9765
+		angle=-2.6295
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=308.5967 -288.2029
+		angle=2.4236
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=246.4891 -315.1430
+		angle=-1.3064
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -3201,26 +3338,32 @@ mobs{
 	Pikmin{
 		type=Red Pikmin
 		p=302.1561 -304.8690
+		angle=1.6616
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=284.1666 -271.6912
+		angle=-2.0509
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=278.7979 -319.4883
+		angle=0.7154
 	}
 	Pikmin{
 		type=Red Pikmin
 		p=249.4536 -291.8334
+		angle=1.8146
 	}
 	Treasure{
 		type=2 Euro
 		p=456.0000 240.0000
+		angle=1.7273
 	}
 	Treasure{
 		type=2 Euro
 		p=-57.6735 154.7822
+		angle=-0.6429
 	}
 	Custom{
 		type=Crystal wall
@@ -3231,58 +3374,72 @@ mobs{
 	Treasure{
 		type=2 Euro
 		p=218.6460 385.5209
+		angle=2.1342
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-339.8335 397.5473
+		angle=-2.3810
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-416.0000 368.0000
+		angle=-0.1354
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-288.0000 368.0000
+		angle=1.0942
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-310.2377 399.1310
+		angle=-0.4184
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-382.5708 415.7971
+		angle=1.6643
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-350.8222 356.3452
+		angle=1.5810
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-398.8222 388.3452
+		angle=-1.7837
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-331.5005 376.5360
+		angle=0.8110
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-383.8456 353.5837
+		angle=0.6093
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-307.2732 350.6192
+		angle=-1.2028
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-369.5837 381.7502
+		angle=2.5375
 	}
 	Pikmin{
 		type=Yellow Pikmin
 		p=-363.8093 405.2142
+		angle=-3.0159
 	}
 	Converter{
 		type=Pink Candypop Bud
 		p=-74.8488 -422.1186
+		angle=2.2686
 	}
 	Custom{
 		type=White bramble gate
@@ -3298,6 +3455,7 @@ mobs{
 	Converter{
 		type=Pink Candypop Bud
 		p=-596.0000 68.0000
+		angle=-0.9490
 	}
 	Custom{
 		type=White bramble gate
@@ -3308,42 +3466,52 @@ mobs{
 	Treasure{
 		type=2 Euro
 		p=456.0000 -368.0000
+		angle=1.0437
 	}
 	Treasure{
 		type=2 Euro
 		p=715.3754 256.0621
+		angle=-2.4032
 	}
 	Treasure{
 		type=2 Euro
 		p=304.0000 -464.0000
+		angle=2.4693
 	}
 	Treasure{
 		type=2 Euro
 		p=812.9583 -308.5626
+		angle=3.0763
 	}
 	Treasure{
 		type=2 Euro
 		p=-624.0000 272.0000
+		angle=0.8256
 	}
 	Treasure{
 		type=2 Euro
 		p=-113.0056 323.6722
+		angle=0.2405
 	}
 	Treasure{
 		type=2 Euro
 		p=504.0000 -416.0000
+		angle=-0.8944
 	}
 	Treasure{
 		type=2 Euro
 		p=537.8546 270.4791
+		angle=-1.7578
 	}
 	Treasure{
 		type=2 Euro
 		p=734.4791 -374.0834
+		angle=-0.3096
 	}
 	Converter{
 		type=Ivory Candypop Bud
 		p=-704.0000 -100.0000
+		angle=0.9243
 	}
 	Custom{
 		type=White bramble gate
