@@ -1,6 +1,7 @@
 name = Ceramic bridge red
 description = A red ceramic bridge. Pikmin can piece red fragments together to form the bridge.
 
+can_walk_on_others = true
 custom_category_name = Bridge
 main_texture = Ceramic_bridge_red.png
 left_rail_texture = Ceramic_bridge_rail_red_left.png
