@@ -217,7 +217,8 @@ bool bridge::check_health() {
     point offset(chunk_width * chunks - 32.0f, 0);
     offset = rotate_point(offset, angle);
     pos = start_pos + offset;
-    
+    ground_sector = prev_chunk_components[0]->ground_sector;
+
     return true;
 }
 
