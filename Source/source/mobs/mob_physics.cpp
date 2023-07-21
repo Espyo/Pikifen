@@ -437,7 +437,10 @@ void mob::tick_horizontal_movement_physics(
         } else {
             new_ground_sector = new_center_sector;
         }
-        
+        if (z + GEOMETRY::STEP_HEIGHT < new_center_sector->z) {
+            //We can't walk onto this sector. Refuse the move.
+            return;
+        }
         //Get all edges it collides against in this new position.
         vector<edge*> intersecting_edges;
         if(
