@@ -716,21 +716,34 @@ bool mob::calculate_carrying_destination(
         
     } case CARRY_DESTINATION_LINKED_MOB: {
 
-        //If it's towards a linked mob, just go there.
-        if(links.empty() || !links[0]) {
+        //If it's towards a linked mob, just go to the closest one.
+        mob* closest_link = NULL;
+        dist closest_link_dist;
+
+        for(size_t s = 0; s < links.size(); ++s) {
+            dist d(pos, links[s]->pos);
+
+            if(!closest_link || d < closest_link_dist) {
+                closest_link = links[s];
+                closest_link_dist = d;
+            }
+        }
+
+        if(closest_link) {
+            *target_mob = closest_link;
+            *target_point = closest_link->pos;
+            return true;
+
+        } else {
             return false;
         }
-        
-        *target_mob = links[0];
-        *target_point = (*target_mob)->pos;
-        return true;
-        
+
         break;
         
     } case CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE: {
 
         //Towards one of the linked mobs that matches the decided Pikmin type.
-        if(links.empty() || !links[0]) {
+        if(links.empty()) {
             return false;
         }
         
