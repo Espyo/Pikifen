@@ -392,6 +392,7 @@ public:
     );
     point get_chase_target(float* z = NULL) const;
     virtual float get_base_speed() const;
+    float get_speed_multiplier() const;
     
     void arachnorb_head_turn_logic();
     void arachnorb_plan_logic(const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal);
