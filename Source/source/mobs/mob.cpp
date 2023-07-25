@@ -1728,6 +1728,20 @@ float mob::get_base_speed() const {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the speed multiplier for this mob.
+ */
+float mob::get_speed_multiplier() const {
+    float move_speed_mult = 1.0f;
+    for (size_t s = 0; s < this->statuses.size(); ++s) {
+        if(!statuses[s].to_delete) {
+            move_speed_mult *= this->statuses[s].type->speed_multiplier;
+        }
+    }
+    return move_speed_mult;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the actual location of the movement target.
  * z:
  *   If not NULL, the Z coordinate is returned here.

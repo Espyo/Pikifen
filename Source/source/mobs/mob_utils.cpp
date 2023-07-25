@@ -144,7 +144,7 @@ float carry_info_struct::get_speed() const {
         if(s_ptr->state != CARRY_SPOT_USED) continue;
         
         pikmin* p_ptr = (pikmin*) s_ptr->pik_ptr;
-        max_speed += p_ptr->get_base_speed();
+        max_speed += p_ptr->get_base_speed() * p_ptr->get_speed_multiplier();
     }
     max_speed /= cur_n_carriers;
     

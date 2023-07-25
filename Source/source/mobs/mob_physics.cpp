@@ -617,10 +617,7 @@ void mob::tick_physics(const float delta_t) {
     }
     
     //Initial setup.
-    float move_speed_mult = 1.0f;
-    for(size_t s = 0; s < this->statuses.size(); ++s) {
-        move_speed_mult *= this->statuses[s].type->speed_multiplier;
-    }
+    float move_speed_mult = get_speed_multiplier();
     
     point pre_move_pos = pos;
     point move_speed = speed;

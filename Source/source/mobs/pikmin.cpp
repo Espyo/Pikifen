@@ -271,6 +271,10 @@ void pikmin::handle_status_effect_gain(status_type* sta_type) {
     }
     
     increase_maturity(sta_type->maturity_change_amount);
+
+    if(carrying_mob) {
+        carrying_mob->chase_info.max_speed = carrying_mob->carry_info->get_speed();
+    }
 }
 
 
@@ -333,6 +337,10 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
         pikmin_fsm::stand_still(this, NULL, NULL);
         invuln_period.start();
         
+    }
+
+    if(carrying_mob) {
+        carrying_mob->chase_info.max_speed = carrying_mob->carry_info->get_speed();
     }
 }
 
