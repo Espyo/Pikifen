@@ -2274,7 +2274,9 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
             data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
             data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
             data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EV_HELD
+            data.call->parent_event == MOB_EV_HELD ||
+            data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
+            data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
         ) {
             *var = ((mob*)(data.custom_data_1))->type->category->name;
         }
@@ -2286,7 +2288,9 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
             data.call->parent_event == MOB_EV_TOUCHED_OPPONENT ||
             data.call->parent_event == MOB_EV_OBJECT_IN_REACH ||
             data.call->parent_event == MOB_EV_OPPONENT_IN_REACH ||
-            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED
+            data.call->parent_event == MOB_EV_THROWN_PIKMIN_LANDED ||
+            data.call->parent_event == MOB_EV_STARTED_RECEIVING_DELIVERY ||
+            data.call->parent_event == MOB_EV_FINISHED_RECEIVING_DELIVERY
         ) {
             *var = ((mob*)(data.custom_data_1))->type->name;
         }
