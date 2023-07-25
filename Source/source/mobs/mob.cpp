@@ -1238,7 +1238,9 @@ pikmin_type* mob::decide_carry_pikmin_type(
     
     //If we ended up with no candidates, pick a type at random,
     //out of all possible types.
+    bool force_random = false;
     if(majority_types.empty()) {
+        force_random = true;
         for(
             auto t = available_types.begin();
             t != available_types.end(); ++t
@@ -1255,49 +1257,19 @@ pikmin_type* mob::decide_carry_pikmin_type(
         decided_type = *majority_types.begin();
         
     } else {
-        //If there's a tie, let's take a careful look.
-        bool new_tie = false;
-        
-        //Is the Pikmin that just joined part of the majority types?
-        //If so, that means this Pikmin just created a NEW tie!
-        //So let's pick a random Onion again.
-        if(added) {
-            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-                if(added->type == majority_types[mt]) {
-                    new_tie = true;
-                    break;
-                }
-            }
-        }
-        
-        //If a Pikmin left, check if it is related to the majority types.
-        //If not, then a new tie wasn't made, no worries.
-        //If it was related, a new tie was created.
-        if(removed) {
-            new_tie = false;
-            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-                if(removed->type == majority_types[mt]) {
-                    new_tie = true;
-                    break;
-                }
-            }
-        }
-        
-        //Check if the previously decided type belongs to one of the majorities.
-        //If so, it can be chosen again, but if not, it cannot.
-        bool can_continue = false;
-        for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-            if(majority_types[mt] == decided_type) {
-                can_continue = true;
-                break;
-            }
-        }
-        if(!can_continue) decided_type = NULL;
-        
-        //If the Pikmin that just joined is not a part of the majorities,
-        //then it had no impact on the existing ties.
-        //Go with the Onion that had been decided before.
-        if(new_tie || !decided_type) {
+        //If the current type is a majority, it takes priority.
+        //Otherwise, pick a majority at random.
+        if(
+            carry_info->intended_pik_type &&
+            !force_random &&
+            find(
+                majority_types.begin(), 
+                majority_types.end(), 
+                carry_info->intended_pik_type
+            ) != majority_types.end()
+        ) {
+            decided_type = carry_info->intended_pik_type;
+        } else {
             decided_type =
                 majority_types[
                     randomi(0, (int) majority_types.size() - 1)
