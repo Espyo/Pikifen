@@ -2052,13 +2052,18 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                     break;
                 }
             }
-            
+
+            float liquid_opacity_mult = 1.0f;
+            if (c_ptr->sector_ptr->draining_liquid) {
+                liquid_opacity_mult =
+                    c_ptr->sector_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
+            }
             draw_sector_edge_offsets(
                 c_ptr->sector_ptr,
                 bmp_output ?
                 custom_liquid_limit_effect_buffer :
                 game.liquid_limit_effect_buffer,
-                1.0f
+                liquid_opacity_mult
             );
             draw_sector_edge_offsets(
                 c_ptr->sector_ptr,

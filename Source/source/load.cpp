@@ -1124,7 +1124,7 @@ void load_liquids(const bool load_resources) {
         rs.set("animation", animation_str);
         rs.set("color", new_l->main_color);
         rs.set("surface_1_speed", new_l->surface_speed[0]);
-        rs.set("surface_2_speed", new_l->surface_speed[0]);
+        rs.set("surface_2_speed", new_l->surface_speed[1]);
         rs.set("surface_alpha", new_l->surface_alpha);
         
         if(load_resources) {
