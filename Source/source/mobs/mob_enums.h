@@ -60,7 +60,7 @@ enum CHASE_FLAGS {
     //When teleporting, do not consider the chase finished.
     CHASE_FLAG_TELEPORTS_CONSTANTLY = 2,
     //The mob can move in any angle instead of just where it's facing.
-    CHASE_FLAG_ANY_ANGLE = 4
+    CHASE_FLAG_ANY_ANGLE = 4,
 };
 
 
