@@ -3414,7 +3414,7 @@ void mob::tick_brain(const float delta_t) {
     
     //Chasing a target.
     if(
-        chase_info.state == CHASE_STATE_CHASING &&
+        (chase_info.state == CHASE_STATE_CHASING || chase_info.state == CHASE_STATE_ARRIVING) &&
         !has_flag(chase_info.flags, CHASE_FLAG_TELEPORT) &&
         (speed_z == 0 || has_flag(flags, MOB_FLAG_CAN_MOVE_MIDAIR))
     ) {
@@ -3436,7 +3436,8 @@ void mob::tick_brain(const float delta_t) {
             //If it still hasn't reached its target
             //(or close enough to the target),
             //time to make it think about how to get there.
-            
+            chase_info.state = CHASE_STATE_CHASING;
+
             //Let the mob think about facing the actual target.
             if(!type->can_free_move && horiz_dist > 0.0f) {
                 face(get_angle(pos, final_target_pos), NULL);
@@ -3506,9 +3507,12 @@ void mob::tick_brain(const float delta_t) {
                 }
                 
             } else {
-                chase_info.state = CHASE_STATE_FINISHED;
+                if(chase_info.state == CHASE_STATE_ARRIVING) {
+                    chase_info.state = CHASE_STATE_FINISHED;
+                } else {
+                    chase_info.state = CHASE_STATE_ARRIVING;
+                }
             }
-            
             if(chase_info.state == CHASE_STATE_FINISHED) {
                 //Reached the final destination.
                 fsm.run_event(MOB_EV_REACHED_DESTINATION);

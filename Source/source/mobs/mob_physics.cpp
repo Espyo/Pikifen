@@ -285,7 +285,8 @@ H_MOVE_RESULTS mob::get_physics_horizontal_movement(
             move_speed->y = sin(movement_angle) * move_amount;
         }
         
-    } else {
+    } 
+    if(chase_info.state == CHASE_STATE_FINISHED || chase_info.state == CHASE_STATE_STOPPED) {
         chase_info.acceleration = 0.0f;
         chase_info.cur_speed = 0.0f;
         chase_info.max_speed = 0.0f;
