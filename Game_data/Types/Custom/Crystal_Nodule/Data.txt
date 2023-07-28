@@ -10,6 +10,7 @@ height = 40
 max_health = 20
 pushable = true
 pushes = true
+pushes_softly = true
 radius = 20
 show_health = false
 target_type = explodable_pikmin_obstacle

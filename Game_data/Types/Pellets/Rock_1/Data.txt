@@ -11,4 +11,5 @@ number_image = Pellet_1.png
 pikmin_type = Rock Pikmin
 pushable = true
 pushes = true
+pushes_softly = true
 radius = 16

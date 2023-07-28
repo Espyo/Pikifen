@@ -11,6 +11,7 @@ hide_when_empty = false
 max_amount = 5
 pushable = false
 pushes = true
+pushes_softly = true
 radius = 10
 recharge_amount = 1
 recharge_interval = 60

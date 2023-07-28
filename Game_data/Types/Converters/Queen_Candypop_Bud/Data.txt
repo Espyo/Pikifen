@@ -8,6 +8,7 @@ height = 32
 pikmin_per_conversion = 9
 pushable = false
 pushes = true
+pushes_softly = true
 same_type_counts_for_output = true
 radius = 48
 total_input_pikmin = 1

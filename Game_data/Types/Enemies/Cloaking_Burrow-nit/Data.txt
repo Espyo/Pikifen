@@ -17,6 +17,7 @@ pikmin_seeds = 10
 points = 30
 pushable = true
 pushes = true
+pushes_softly = true
 radius = 30
 reaches {
     wake_up = 20 360

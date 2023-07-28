@@ -11,4 +11,5 @@ number_image = Pellet_10.png
 pikmin_type = Yellow Pikmin
 pushable = true
 pushes = true
+pushes_softly = true
 radius = 48

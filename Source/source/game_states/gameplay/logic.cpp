@@ -1218,7 +1218,7 @@ void gameplay_state::do_menu_logic() {
             }
             
             string block_str = path_block_reason_to_string(path->block_reason);
-                
+            
             print_info(
                 "Path calculation result: " + result_str +
                 "\n" +
@@ -1780,6 +1780,13 @@ void gameplay_state::process_mob_touches(
             
             if(xy_collision) {
                 push_amount = temp_push_amount;
+                if(m2_ptr->type->pushes_softly) {
+                    push_amount =
+                        std::min(
+                            push_amount,
+                            (float) (MOB::PUSH_SOFTLY_AMOUNT * game.delta_t)
+                        );
+                }
                 push_angle = temp_push_angle;
                 if(both_idle_pikmin) {
                     //Lower the push.

@@ -6,6 +6,7 @@ height = 64
 max_health = 4000
 pushable = false
 pushes = true
+pushes_softly = true
 radius = 20
 target_type = pikmin_obstacle
 team = obstacle

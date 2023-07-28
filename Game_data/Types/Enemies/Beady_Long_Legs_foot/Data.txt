@@ -12,6 +12,7 @@ height = 64
 move_speed = 250
 pushable = true
 pushes = true
+pushes_softly = true
 radius = 37.5
 rotation_speed = 200
 target_type = enemy

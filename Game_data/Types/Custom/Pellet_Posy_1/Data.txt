@@ -6,6 +6,7 @@ height = 128
 max_health = 50
 pushable = false
 pushes = true
+pushes_softly = true
 radius = 10
 target_type = weak_plain_obstacle
 team = obstacle

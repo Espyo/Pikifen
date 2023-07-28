@@ -16,6 +16,7 @@ pikmin_seeds = 8
 points = 30
 pushable = true
 pushes = true
+pushes_softly = true
 radius = 35
 reaches {
     search = 250 90 30 360

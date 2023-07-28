@@ -50,7 +50,7 @@
       <li><b><code>max_health</code></b>: The object's top health. Use this responsibly, since players are used to seeing specific enemies with specific health amounts and plan accordingly, and if you change this their plans will be foiled. For reference, leaders have 2000, and something like a Red Bulborb has 750. Defaults to 100.</li>
       <li><b><code>move_speed</code></b>: Standard movement speed (in pixels per second). For reference, leaders move at 130. Defaults to 0.</li>
       <li><b><code>pushable</code></b>: <code>true</code> if this object can be pushed out of the way by other objects. <code>false</code> otherwise. Defaults to false.</li>
-      <li><b><code>pushes</code></b>: <code>true</code> if this object can push "pushable" objects out of the way. <code>false</code> otherwise. Defaults to false.</li>
+      <li><b><code>pushes</code></b>: <code>true</code> if this object can push "pushable" objects out of the way. <code>false</code> otherwise. Defaults to false. See also: <code>pushes_softly</code>.</li>
       <li><b><code>radius</code></b>: The object's size, represented by the circle's radius (in pixels). Leaders are 32 pixels wide, so their radius is 16. Pikmin have a radius of 10. Defaults to 0.</li>
       <li><b><code>rotation_speed</code></b>: How fast the object turns when moving, in degrees per second. For reference, leaders use around 360, Pikmin use around 630, and a Red Bulborb uses around 114. Defaults to 630.</li>
       <li>
@@ -98,6 +98,7 @@
       <li><b><code>itch_time</code></b>: In order for the enemy to not shake over and over, if you keep damaging it, you can also specify a minimum time requirement between itches, in seconds. Defaults to 0.</li>
       <li><b><code>main_color</code></b>: A color to represent the object by. The format is <code>R G B</code> (values range from 0 to 255). Defaults to black.</li>
       <li><b><code>max_carriers</code></b>: Maximum number of Pikmin that can carry this object, when it is made carriable. Defaults to 0.</li>
+      <li><b><code>pushes_softly</code></b>: If true, and if this object can push others, then the push is fairly soft, allowing leaders and Pikmin to squeeze through if they persist for long enough. Defaults to false.</li>
       <li><b><code>pushes_with_hitboxes</code></b>: If true, this object pushes with its (normal or attack) hitboxes, instead of pushing using its object's center and radius. Defaults to false.</li>
       <li><b><code>rectangular_dimensions</code></b>: If this object is meant to have rectangular collision, specify the rectangle's dimensions here, in the format <code>&lt;width&gt; &lt;height&gt;</code>. This is useful for objects like gates. Defaults to no rectangular dimensions.</li>
       <li><b><code>show_health</code></b>: If set to <code>false</code>, the object's health wheel will not appear on top of it. Defaults to true.</li>

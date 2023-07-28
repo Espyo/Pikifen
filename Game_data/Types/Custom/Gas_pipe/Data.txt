@@ -6,6 +6,7 @@ height = 23
 max_health = 150
 pushable = false
 pushes = true
+pushes_softly = true
 radius = 24
 target_type = strong_plain_obstacle
 can_hurt = player

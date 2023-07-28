@@ -16,6 +16,7 @@ pikmin_seeds = 3
 points = 15
 pushable = true
 pushes = true
+pushes_softly = true
 radius = 30
 reaches {
     nodule_search = 150 360

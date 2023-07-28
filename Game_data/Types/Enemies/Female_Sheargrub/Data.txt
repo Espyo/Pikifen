@@ -13,6 +13,7 @@ pikmin_seeds = 2
 points = 5
 pushable = true
 pushes = true
+pushes_softly = true
 radius = 14
 reaches {
     chase = 80 360

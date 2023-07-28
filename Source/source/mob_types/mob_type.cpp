@@ -58,6 +58,7 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     max_carriers(0),
     pushes(false),
     pushable(false),
+    pushes_softly(false),
     pushes_with_hitboxes(false),
     terrain_radius(-1),
     walkable(false),
@@ -308,6 +309,7 @@ void create_special_mob_types() {
     bridge_component_type->walkable = true;
     bridge_component_type->draw_mob_callback = bridge::draw_component;
     bridge_component_type->pushes = true;
+    bridge_component_type->pushes_softly = false;
     custom_category->register_type(bridge_component_type);
 }
 
@@ -376,6 +378,7 @@ void load_mob_type_from_file(
     rs.set("name", mt->name);
     rs.set("pushable", mt->pushable);
     rs.set("pushes", mt->pushes);
+    rs.set("pushes_softly", mt->pushes_softly);
     rs.set("pushes_with_hitboxes", mt->pushes_with_hitboxes);
     rs.set("radius", mt->radius);
     rs.set("rectangular_dimensions", mt->rectangular_dim);

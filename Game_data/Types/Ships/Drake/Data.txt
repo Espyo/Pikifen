@@ -7,5 +7,6 @@ control_point_radius = 45
 height = 200
 pushable = false
 pushes = true
+pushes_softly = true
 radius = 90
 receptacle_offset = 131 5

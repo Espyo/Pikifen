@@ -242,7 +242,9 @@ public:
     bool pushes;
     //Can be pushed by other mobs.
     bool pushable;
-    //If true, the push is via hitbox, as opposed to the mob's radius?
+    //If true, the push is soft and allows squeezing through with persistance.
+    bool pushes_softly;
+    //If true, the push is via hitbox, as opposed to the mob's radius.
     bool pushes_with_hitboxes;
     //Radius for terrain collision. Negative = use regular radius property.
     float terrain_radius;

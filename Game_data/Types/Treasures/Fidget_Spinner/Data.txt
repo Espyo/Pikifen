@@ -8,5 +8,6 @@ max_carriers = 18
 points = 200
 pushable = false
 pushes = true
+pushes_softly = true
 radius = 28
 weight = 10
