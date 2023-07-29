@@ -1556,6 +1556,21 @@ void gameplay_state::process_mob_misc_interactions(
         }
         
     }
+    
+    //"Bumped" by the active leader being nearby.
+    mob_event* touch_le_ev =
+        m_ptr->fsm.get_event(MOB_EV_TOUCHED_ACTIVE_LEADER);
+    if(
+        touch_le_ev &&
+        m2_ptr == cur_leader_ptr &&
+        //Small hack. This way,
+        //Pikmin don't get bumped by leaders that are,
+        //for instance, lying down.
+        m2_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE &&
+        d <= game.config.idle_bump_range
+    ) {
+        touch_le_ev->run(m_ptr, (void*) m2_ptr);
+    }
 }
 
 
@@ -1829,14 +1844,9 @@ void gameplay_state::process_mob_touches(
     //only the object radii (or rectangular width/height).
     mob_event* touch_op_ev =
         m_ptr->fsm.get_event(MOB_EV_TOUCHED_OPPONENT);
-    mob_event* touch_le_ev =
-        m_ptr->fsm.get_event(MOB_EV_TOUCHED_ACTIVE_LEADER);
     mob_event* touch_ob_ev =
         m_ptr->fsm.get_event(MOB_EV_TOUCHED_OBJECT);
-    if(
-        touch_op_ev || touch_le_ev ||
-        touch_ob_ev
-    ) {
+    if(touch_op_ev || touch_ob_ev) {
     
         bool z_touch;
         if(
@@ -1894,15 +1904,6 @@ void gameplay_state::process_mob_touches(
             }
             if(touch_op_ev && m_ptr->can_hunt(m2_ptr)) {
                 touch_op_ev->run(m_ptr, (void*) m2_ptr);
-            }
-            if(
-                touch_le_ev && m2_ptr == cur_leader_ptr &&
-                //Small hack. This way,
-                //Pikmin don't get bumped by leaders that are,
-                //for instance, lying down.
-                m2_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE
-            ) {
-                touch_le_ev->run(m_ptr, (void*) m2_ptr);
             }
         }
         

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -64,6 +64,7 @@
     <br>
 
     <ul>
+      <li><b><code>idle_bump_range</code></b>: Minimum distance between an idle Pikmin and the active leader for the Pikmin to be called to the group.</li>
       <li><b><code>idle_task_range</code></b>: Minimum distance between a Pikmin and a task before the Pikmin can take the task, when the Pikmin is idling.</li>
       <li><b><code>swarm_task_range</code></b>: Same as above, but for a Pikmin in the group during swarming.</li>
       <li><b><code>max_pikmin_in_field</code></b>: Maximum number of Pikmin that can be on the field.</li>
@@ -78,7 +79,7 @@
       <li><b><code>can_throw_leaders</code></b>: "true" if it's possible to throw leaders, "false" if not.</li>
       <li><b><code>cursor_max_dist</code></b>: Maximum distance away from the leader that their cursor can go to.</li>
       <li><b><code>cursor_spin_speed</code></b>: How quickly the mouse cursor's icon spins, in degrees per second.</li>
-      <li><b><code>next_pluck_range</code></b>: When auto-plucking, a leader will only choose the next Pikmin if it is within this distance.</li>
+      <li><b><code>next_pluck_range</code></b>: When auto-plucking, a leader will only choose the next Pikmin if it is within this distance. Also affects the range at which idle leaders will go pluck.</li>
       <li><b><code>no_pikmin_color</code></b>: Color that represents the absence of Pikmin.</li>
       <li><b><code>onion_open_range</code></b>: Leaders can open an Onion if they're within this range from the center of the Onion object.</li>
       <li><b><code>group_member_grab_range</code></b>: A leader can grab the closest group member only if it is within this distance.</li>

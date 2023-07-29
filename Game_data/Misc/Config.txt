@@ -20,6 +20,7 @@ standard_leader_height = 46
 standard_leader_radius = 16
 spray_order = Ultra-Bitter Spray;Ultra-Spicy Spray
 
+idle_bump_range = 90
 idle_task_range = 50
 swarm_task_range = 3
 pikmin_chase_range = 200
@@ -30,7 +31,7 @@ maturity_speed_mult = 0.1
 can_throw_leaders = true
 cursor_max_dist = 200
 cursor_spin_speed = 180
-next_pluck_range = 160
+next_pluck_range = 200
 no_pikmin_color = 168 190 230
 onion_open_range = 24
 group_member_grab_range = 128
