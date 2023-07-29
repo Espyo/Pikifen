@@ -677,7 +677,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         }
     }
     
-    if(ImGui::Combo("Team", &team_nr, team_names)) {
+    if(ImGui::Combo("Team", &team_nr, team_names, 15)) {
         register_change("object script vars change");
         if(team_nr > 0) {
             //0 is reserved in this widget for "default".
@@ -806,7 +806,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         } case AEMP_LIST: {
     
             string value_s = value;
-            if(ImGui::Combo(p_ptr->name, &value_s, p_ptr->value_list)) {
+            if(ImGui::Combo(p_ptr->name, &value_s, p_ptr->value_list, 15)) {
                 register_change("object script vars change");
                 value = value_s;
             }
@@ -816,7 +816,7 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
         } case AEMP_NUMBER_LIST: {
     
             int item_nr = s2i(value);
-            if(ImGui::Combo(p_ptr->name, &item_nr, p_ptr->value_list)) {
+            if(ImGui::Combo(p_ptr->name, &item_nr, p_ptr->value_list, 15)) {
                 register_change("object script vars change");
                 value = i2s(item_nr);
             }
@@ -1713,7 +1713,7 @@ void area_editor::process_gui_panel_info() {
                 "Custom game mode",
             };
             int gameplay_tag_idx;
-            if(ImGui::Combo("Gameplay", &gameplay_tag_idx, gameplay_tags)) {
+            if(ImGui::Combo("Gameplay", &gameplay_tag_idx, gameplay_tags, 15)) {
                 new_tag = gameplay_tags[gameplay_tag_idx];
             }
             
@@ -1736,7 +1736,7 @@ void area_editor::process_gui_panel_info() {
                 "Toys",
             };
             int theme_tag_idx;
-            if(ImGui::Combo("Theme", &theme_tag_idx, theme_tags)) {
+            if(ImGui::Combo("Theme", &theme_tag_idx, theme_tags, 15)) {
                 new_tag = theme_tags[theme_tag_idx];
             }
             
@@ -1747,7 +1747,7 @@ void area_editor::process_gui_panel_info() {
                 "Troll",
             };
             int misc_tag_idx;
-            if(ImGui::Combo("Misc.", &misc_tag_idx, misc_tags)) {
+            if(ImGui::Combo("Misc.", &misc_tag_idx, misc_tags, 15)) {
                 new_tag = misc_tags[misc_tag_idx];
             }
             
@@ -1785,7 +1785,7 @@ void area_editor::process_gui_panel_info() {
             "4 - Hard",
             "5 - Very hard"
         };
-        if(ImGui::Combo("Difficulty", &difficulty, difficulty_options)) {
+        if(ImGui::Combo("Difficulty", &difficulty, difficulty_options, 15)) {
             register_change("difficulty change");
             game.cur_area_data.difficulty = difficulty;
         }
@@ -1816,7 +1816,7 @@ void area_editor::process_gui_panel_info() {
             game.cur_area_data.weather_name = NONE_OPTION;
         }
         string weather_name = game.cur_area_data.weather_name;
-        if(ImGui::Combo("Weather", &weather_name, weather_conditions)) {
+        if(ImGui::Combo("Weather", &weather_name, weather_conditions, 15)) {
             register_change("area weather change");
             game.cur_area_data.weather_name = weather_name;
         }
@@ -2578,7 +2578,7 @@ void area_editor::process_gui_panel_mission() {
             goals_list.push_back(game.mission_goals[g]->get_name());
         }
         int mission_goal = game.cur_area_data.mission.goal;
-        if(ImGui::Combo("Goal", &mission_goal, goals_list)) {
+        if(ImGui::Combo("Goal", &mission_goal, goals_list, 15)) {
             register_change("mission requirements change");
             game.cur_area_data.mission.goal_mob_idxs.clear();
             game.cur_area_data.mission.goal_amount = 1;
@@ -3255,7 +3255,9 @@ void area_editor::process_gui_panel_mission() {
                 }
                 ImGui::Indent();
                 if(
-                    ImGui::Combo("Primary condition", &selected, cond_strings)
+                    ImGui::Combo(
+                        "Primary condition", &selected, cond_strings, 15
+                    )
                 ) {
                     register_change("mission fail conditions change");
                     game.cur_area_data.mission.fail_hud_primary_cond =
@@ -3305,7 +3307,9 @@ void area_editor::process_gui_panel_mission() {
                 }
                 ImGui::Indent();
                 if(
-                    ImGui::Combo("Secondary condition", &selected, cond_strings)
+                    ImGui::Combo(
+                        "Secondary condition", &selected, cond_strings, 15
+                    )
                 ) {
                     register_change("mission fail conditions change");
                     game.cur_area_data.mission.fail_hud_secondary_cond =
@@ -4242,7 +4246,7 @@ void area_editor::process_gui_panel_path_link() {
     link_type_names.push_back("Airborne only");
     
     int type_i = l_ptr->type;
-    if(ImGui::Combo("Type", &type_i, link_type_names)) {
+    if(ImGui::Combo("Type", &type_i, link_type_names, 15)) {
         register_change("path link type change");
         l_ptr->type = (PATH_LINK_TYPES) type_i;
     }
@@ -4306,7 +4310,7 @@ void area_editor::process_gui_panel_paths() {
         link_type_names.push_back("Airborne only");
         
         int type_i = path_drawing_type;
-        if(ImGui::Combo("Type", &type_i, link_type_names)) {
+        if(ImGui::Combo("Type", &type_i, link_type_names, 15)) {
             path_drawing_type = (PATH_LINK_TYPES) type_i;
         }
         set_tooltip(
@@ -4996,7 +5000,7 @@ void area_editor::process_gui_panel_sector() {
                 );
             }
             int sector_type = s_ptr->type;
-            if(ImGui::Combo("Type", &sector_type, types_list)) {
+            if(ImGui::Combo("Type", &sector_type, types_list, 15)) {
                 register_change("sector type change");
                 s_ptr->type = (SECTOR_TYPES) sector_type;
             }

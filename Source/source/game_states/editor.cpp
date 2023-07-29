@@ -1321,7 +1321,7 @@ bool editor::process_gui_mob_type_widgets(
         }
     }
     
-    if(ImGui::Combo("Category", &selected_category_idx, categories)) {
+    if(ImGui::Combo("Category", &selected_category_idx, categories, 15)) {
         result = true;
         internal_custom_cat_name = categories[selected_category_idx];
         internal_mob_type = custom_cat_types[selected_category_idx][0];
@@ -1345,7 +1345,7 @@ bool editor::process_gui_mob_type_widgets(
         if(internal_mob_type) {
             selected_type_name = internal_mob_type->name;
         }
-        if(ImGui::Combo("Type", &selected_type_name, type_names)) {
+        if(ImGui::Combo("Type", &selected_type_name, type_names, 15)) {
             result = true;
             for(size_t t = 0; t < types.size(); ++t) {
                 if(types[t]->name == selected_type_name) {

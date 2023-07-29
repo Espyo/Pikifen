@@ -339,7 +339,7 @@ void animation_editor::process_gui_load_dialog() {
         if(!global_anim_files_cache.empty() && chosen_anim.empty()) {
             chosen_anim = global_anim_files_cache[0];
         }
-        ImGui::Combo("Animation", &chosen_anim, global_anim_files_cache);
+        ImGui::Combo("Animation", &chosen_anim, global_anim_files_cache, 20);
         
         //Load button.
         if(ImGui::Button("Load", ImVec2(96.0f, 32.0f))) {
@@ -1034,7 +1034,7 @@ void animation_editor::process_gui_panel_animation() {
                 }
                 if(
                     ImGui::Combo(
-                        "Sprite", &frame_ptr->sprite_name, sprite_names
+                        "Sprite", &frame_ptr->sprite_name, sprite_names, 15
                     )
                 ) {
                     changes_mgr.mark_as_changed();
@@ -2471,7 +2471,9 @@ void animation_editor::process_gui_panel_sprite_transform() {
                     all_sprites.push_back(anims.sprites[s]->name);
                 }
                 static string comparison_sprite_name;
-                ImGui::Combo("Sprite", &comparison_sprite_name, all_sprites);
+                ImGui::Combo(
+                    "Sprite", &comparison_sprite_name, all_sprites, 15
+                );
                 set_tooltip(
                     "Choose another sprite to serve as a comparison."
                 );
