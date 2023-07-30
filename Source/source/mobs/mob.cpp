@@ -2415,6 +2415,12 @@ bool mob::has_clear_line(mob* target_mob) const {
         ) {
             continue;
         }
+        if(
+            target_mob->standing_on_mob == m_ptr &&
+            fabs(z - target_mob->z) <= GEOMETRY::STEP_HEIGHT
+        ) {
+            continue;
+        }
         if(m_ptr == this || m_ptr == target_mob) continue;
         if(
             !rectangles_intersect(
