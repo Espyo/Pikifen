@@ -883,8 +883,8 @@ bool mob::calculate_damage(
     if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
         //It's easier to calculate the maturity attack boost here.
         pikmin* pik_ptr = (pikmin*) this;
-        attacker_offense +=
-            game.config.maturity_power_mult * pik_ptr->maturity;
+        attacker_offense *=
+            1 + (game.config.maturity_power_mult * pik_ptr->maturity);
     }
     
     *damage = attacker_offense * (1.0f / defense_multiplier);
