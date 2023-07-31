@@ -21,6 +21,8 @@
 namespace BRIDGE {
 //Width of the bridge's main floor, i.e., sans rails.
 const float FLOOR_WIDTH = 192.0f;
+//How far apart bridge steps are
+const float STEP_HEIGHT = 10;
 }
 
 
@@ -82,13 +84,13 @@ bool bridge::check_health() {
             z_offset = delta_z;
         } else {
             size_t steps_needed =
-                ceil(fabs(delta_z) / GEOMETRY::STEP_HEIGHT) + 1;
+                ceil(fabs(delta_z) / BRIDGE::STEP_HEIGHT) + 1;
             float cur_completion =
                 chunks / (float) total_chunks_needed;
             size_t step_idx =
                 cur_completion * steps_needed;
             z_offset =
-                step_idx * GEOMETRY::STEP_HEIGHT * sign(delta_z);
+                step_idx * BRIDGE::STEP_HEIGHT * sign(delta_z);
         }
         
         if(z_offset == prev_chunk_z_offset) {
