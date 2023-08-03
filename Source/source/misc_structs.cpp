@@ -1240,9 +1240,7 @@ void performance_monitor_struct::save_log() {
     string s =
         "\n" +
         get_current_time(false) +
-        "; Pikifen version " +
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
-        "." + i2s(VERSION_REV);
+        "; Pikifen version " + get_engine_version_string();
     if(!game.config.version.empty()) {
         s += ", game version " + game.config.version;
     }

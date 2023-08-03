@@ -880,6 +880,13 @@ map<string, string> get_var_map(const string &vars_string) {
     return final_map;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the engine's version as a string.
+ */
+string get_engine_version_string() {
+    return i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
+}
+
 
 /* ----------------------------------------------------------------------------
  * Returns the color a wall's shadow should be.
@@ -1011,9 +1018,7 @@ void log_error(string s, data_node* d) {
     if(game.errors_reported_so_far == 0) {
         string first_error_info =
             "\n\n"
-            "Pikifen version " +
-            i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
-            "." + i2s(VERSION_REV);
+            "Pikifen version " + get_engine_version_string();
         if(!game.config.version.empty()) {
             first_error_info +=
                 ", " + game.config.name + " version " + game.config.version;

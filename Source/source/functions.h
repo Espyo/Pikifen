@@ -175,6 +175,7 @@ unsigned char get_throw_preview_vertexes(
     const bool vary_thickness
 );
 map<string, string> get_var_map(const string &vars_string);
+string get_engine_version_string();
 ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr);
 float get_wall_shadow_length(edge* e_ptr);
 vector<std::pair<int, string> > get_weather_table(data_node* node);
