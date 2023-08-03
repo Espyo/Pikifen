@@ -3458,65 +3458,75 @@ void mob::tick_brain(const float delta_t) {
             
         } else {
             //Reached the chase location.
-            bool direct =
-                path_info &&
-                (
-                    path_info->result == PATH_RESULT_DIRECT ||
-                    path_info->result == PATH_RESULT_DIRECT_NO_STOPS
-                );
-            if(
-                path_info && !direct &&
-                path_info->block_reason == PATH_BLOCK_REASON_NONE
-            ) {
-            
-                path_info->cur_path_stop_nr++;
-                
-                if(path_info->cur_path_stop_nr < path_info->path.size()) {
-                    //Reached a regular stop while traversing the path.
-                    //Think about going to the next, if possible.
-                    if(path_info->check_blockage(&path_info->block_reason)) {
-                        //Oop, there's an obstacle! Or some other blockage.
-                        fsm.run_event(MOB_EV_PATH_BLOCKED);
-                    } else {
-                        //All good. Head to the next stop.
-                        path_stop* next_stop =
-                            path_info->path[path_info->cur_path_stop_nr];
-                        float next_stop_z = z;
-                        if(
-                            (
-                                path_info->settings.flags &
-                                PATH_FOLLOW_FLAG_AIRBORNE
-                            ) &&
-                            next_stop->sector_ptr
+
+            if(path_info) {
+                //Our mob moved! Recalculate!
+                if (
+                    carry_info && carry_info->intended_mob && 
+                    carry_info->intended_mob->pos != carry_info->intended_point
+                ) {
+                    carry_info->intended_point = carry_info->intended_mob->pos;
+                    fsm.run_event(MOB_EV_PATHS_CHANGED);
+                } else {
+                    bool direct =
+                        path_info->result == PATH_RESULT_DIRECT ||
+                        path_info->result == PATH_RESULT_DIRECT_NO_STOPS;
+
+                    if(
+                        !direct && 
+                        path_info->block_reason == PATH_BLOCK_REASON_NONE
+                    ) {
+                        path_info->cur_path_stop_nr++;
+
+                        if(path_info->cur_path_stop_nr < path_info->path.size()) {
+                            //Reached a regular stop while traversing the path.
+                            //Think about going to the next, if possible.
+                            if(path_info->check_blockage(&path_info->block_reason)) {
+                                //Oop, there's an obstacle! Or some other blockage.
+                                fsm.run_event(MOB_EV_PATH_BLOCKED);
+                            } else {
+                                //All good. Head to the next stop.
+                                path_stop* next_stop =
+                                    path_info->path[path_info->cur_path_stop_nr];
+                                float next_stop_z = z;
+                                if(
+                                    has_flag(
+                                        path_info->settings.flags, 
+                                        PATH_FOLLOW_FLAG_AIRBORNE
+                                    ) &&
+                                    next_stop->sector_ptr
+                                ) {
+                                    next_stop_z =
+                                        next_stop->sector_ptr->z +
+                                        pikmin::FLIER_ABOVE_FLOOR_HEIGHT;
+                                }
+
+                                chase(
+                                    next_stop->pos, next_stop_z,
+                                    CHASE_FLAG_ANY_ANGLE,
+                                    MOB::DEF_CHASE_TARGET_DISTANCE,
+                                    chase_info.max_speed
+                                );
+                            }
+
+                        } else if(
+                            path_info->cur_path_stop_nr == path_info->path.size()
                         ) {
-                            next_stop_z =
-                                next_stop->sector_ptr->z +
-                                pikmin::FLIER_ABOVE_FLOOR_HEIGHT;
+                            //Reached the final stop of the path, but not the goal.
+                            //Let's head there.
+                            move_to_path_end(
+                                chase_info.max_speed, chase_info.acceleration
+                            );
+
+                        } else if(
+                            path_info->cur_path_stop_nr == path_info->path.size() + 1
+                        ) {
+                            //Reached the path's goal.
+                            chase_info.state = CHASE_STATE_FINISHED;
                         }
-                        
-                        chase(
-                            next_stop->pos, next_stop_z,
-                            CHASE_FLAG_ANY_ANGLE,
-                            MOB::DEF_CHASE_TARGET_DISTANCE,
-                            chase_info.max_speed
-                        );
+                    } else {
+                        chase_info.state = CHASE_STATE_FINISHED;
                     }
-                    
-                } else if(
-                    path_info->cur_path_stop_nr == path_info->path.size()
-                ) {
-                    //Reached the final stop of the path, but not the goal.
-                    //Let's head there.
-                    move_to_path_end(
-                        chase_info.max_speed, chase_info.acceleration
-                    );
-                    
-                } else if(
-                    path_info->cur_path_stop_nr == path_info->path.size() + 1
-                ) {
-                    //Reached the path's goal.
-                    chase_info.state = CHASE_STATE_FINISHED;
-                    
                 }
                 
             } else {

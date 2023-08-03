@@ -279,5 +279,6 @@ void ship::tick_class_specifics(const float delta_t) {
             r++;
         }
     }
-    
+    control_point_final_pos = rotate_point(shi_type->control_point_offset, angle) + pos;
+    receptacle_final_pos = rotate_point(shi_type->receptacle_offset, angle) + pos;
 }
