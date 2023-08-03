@@ -1059,8 +1059,7 @@ void animation_editor::resize_sprite(sprite* s, const float mult) {
  * Returns true on success, false otherwise.
  */
 bool animation_editor::save_animation_database() {
-    anims.engine_version =
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
+    anims.engine_version = get_engine_version_string();
         
     data_node file_node = data_node("", "");
     

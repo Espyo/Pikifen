@@ -94,8 +94,7 @@ void main_menu_state::do_drawing() {
         version_text += ", powered by ";
     }
     version_text +=
-        "Pikifen " +
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV);
+        "Pikifen " + get_engine_version_string();
     draw_scaled_text(
         game.fonts.standard, COLOR_WHITE,
         point(game.win_w - 8, game.win_h  - 8),

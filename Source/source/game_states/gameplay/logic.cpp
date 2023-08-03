@@ -1081,10 +1081,6 @@ void gameplay_state::do_menu_logic() {
             game.cur_area_data.maker.empty() ?
             "-" :
             game.cur_area_data.maker;
-        string engine_v_str =
-            i2s(VERSION_MAJOR) + "." +
-            i2s(VERSION_MINOR) + "." +
-            i2s(VERSION_REV);
         string game_v_str =
             game.config.version.empty() ? "-" : game.config.version;
             
@@ -1097,7 +1093,7 @@ void gameplay_state::do_menu_logic() {
             "\n"
             "Area version " + area_v_str + ", by " + area_maker_str +
             "\n"
-            "Pikifen version " + engine_v_str +
+            "Pikifen version " + get_engine_version_string() +
             ", game version " + game_v_str,
             1.0f, 1.0f
         );

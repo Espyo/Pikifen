@@ -2707,8 +2707,7 @@ bool area_editor::save_area(const bool to_backup) {
     if(game.cur_area_data.weather_name == NONE_OPTION) {
         game.cur_area_data.weather_name.clear();
     }
-    game.cur_area_data.engine_version =
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
+    game.cur_area_data.engine_version = get_engine_version_string();
         
     //First, the geometry file.
     data_node geometry_file("", "");
