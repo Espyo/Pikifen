@@ -806,11 +806,7 @@ void gameplay_state::load() {
         if(holdee_gen_ptr->stored_inside == INVALID) continue;
         mob* holdee_ptr = mobs_per_gen[m];
         mob* holder_mob_ptr = mobs_per_gen[holdee_gen_ptr->stored_inside];
-        holder_mob_ptr->hold(
-            holdee_ptr, INVALID, 0.0f, 0.0f, 0.5f,
-            false, HOLD_ROTATION_METHOD_NEVER
-        );
-        holdee_ptr->stored_inside_another = holder_mob_ptr;
+        holder_mob_ptr->store_mob_inside(holdee_ptr);
     }
     
     //Save each path stop's sector.

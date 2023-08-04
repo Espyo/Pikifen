@@ -1870,14 +1870,8 @@ void mob_action_runners::stop_vertically(mob_action_run_data &data) {
  *   Data about the action call.
  */
 void mob_action_runners::store_focus_inside(mob_action_run_data &data) {
-    if(data.m->focused_mob) {
-        if(!data.m->focused_mob->stored_inside_another) {
-            data.m->hold(
-                data.m->focused_mob, INVALID, 0.0f, 0.0f, 0.5f,
-                false, HOLD_ROTATION_METHOD_NEVER
-            );
-            data.m->focused_mob->stored_inside_another = data.m;
-        }
+    if(data.m->focused_mob && !data.m->focused_mob->is_stored_inside_mob()) {
+        data.m->store_mob_inside(data.m->focused_mob);   
     }
 }
 

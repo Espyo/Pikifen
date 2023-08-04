@@ -325,6 +325,7 @@ public:
         mob* attacker, hitbox* attack_h, hitbox* victim_h,
         const float damage, const float knockback
     );
+    bool is_stored_inside_mob() const;
     bool is_off_camera() const;
     bool is_point_on(const point &p) const;
     void focus_on_mob(mob* m);
@@ -346,6 +347,7 @@ public:
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();
     void stop_height_effect();
+    void store_mob_inside(mob* m);
     void release_chomped_pikmin();
     void release_stored_mobs();
     void send_message(mob* receiver, string &msg) const;

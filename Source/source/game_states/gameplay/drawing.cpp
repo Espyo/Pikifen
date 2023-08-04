@@ -1936,7 +1936,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
         }
         
         if(has_flag(mob_ptr->flags, MOB_FLAG_HIDDEN)) continue;
-        if(mob_ptr->stored_inside_another) continue;
+        if(mob_ptr->is_stored_inside_mob()) continue;
         
         //Shadows.
         if(
