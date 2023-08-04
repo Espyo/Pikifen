@@ -791,7 +791,8 @@ void gameplay_state::load() {
     for(size_t m = 0; m < game.cur_area_data.mob_generators.size(); ++m) {
         mob_gen* gen_ptr = game.cur_area_data.mob_generators[m];
         mob* mob_ptr = mobs_per_gen[m];
-        
+        if(!mob_ptr) continue;
+
         for(size_t l = 0; l < gen_ptr->link_nrs.size(); ++l) {
             size_t link_target_gen_nr = gen_ptr->link_nrs[l];
             mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_nr];
