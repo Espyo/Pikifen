@@ -2565,6 +2565,17 @@ void mob::hold(
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if a mob or its parent is stored inside another mob.
+ */
+bool mob::is_stored_inside_mob() const {
+    if(stored_inside_another) return true;
+    if(parent && parent->m->stored_inside_another) return true;
+    return false;
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Checks if a mob is completely off-camera.
  */
 bool mob::is_off_camera() const {
@@ -2715,6 +2726,20 @@ string mob::print_state_history() const {
     str += ".";
     
     return str;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stores a mob inside of this one
+ * m:
+ *  The mob to store.
+ */
+void mob::store_mob_inside(mob* m) {
+    hold(
+        m, INVALID, 0.0f, 0.0f, 0.5f,
+        false, HOLD_ROTATION_METHOD_NEVER
+    );
+    m->stored_inside_another = this;
 }
 
 
