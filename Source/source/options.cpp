@@ -94,6 +94,8 @@ const bool DEF_SMOOTH_SCALING = true;
 const unsigned int DEF_TARGET_FPS = 60;
 //Default value for whether to use true fullscreen.
 const bool DEF_TRUE_FULLSCREEN = false;
+//Default value for whether to use vsync.
+const bool DEF_VSYNC_ENABLED = false;
 //Default value for whether to use the window position hack.
 const bool DEF_WINDOW_POSITION_HACK = false;
 //Default value for whether to use fullscreen.
@@ -272,6 +274,7 @@ void options_struct::load(data_node* file) {
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("show_hud_input_icons", show_hud_input_icons);
     rs.set("true_fullscreen", true_fullscreen);
+    rs.set("vsync", vsync_enabled);
     rs.set("window_position_hack", window_position_hack);
     
     auto_throw_mode =
@@ -625,6 +628,12 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "true_fullscreen",
             b2s(true_fullscreen)
+        )
+    );
+    file->add(
+        new data_node(
+            "vsync",
+            b2s(vsync_enabled)
         )
     );
     file->add(

@@ -91,6 +91,7 @@ extern const bool DEF_SMOOTH_SCALING;
 extern const bool DEF_SHOW_HUD_INPUT_ICONS;
 extern const unsigned int DEF_TARGET_FPS;
 extern const bool DEF_TRUE_FULLSCREEN;
+extern const bool DEF_VSYNC_ENABLED;
 extern const bool DEF_WIN_FULLSCREEN;
 extern const unsigned int DEF_WIN_H;
 extern const bool DEF_WINDOW_POSITION_HACK;
@@ -183,6 +184,8 @@ struct options_struct {
     int target_fps;
     //When using fullscreen, is this true fullscreen, or borderless window?
     bool true_fullscreen;
+    //Should we use vsync?
+    bool vsync_enabled;
     //Should we force the window's positioning?
     //(on some machines it appears out-of-bounds by default)
     bool window_position_hack;
