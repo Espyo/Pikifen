@@ -3224,7 +3224,7 @@ void area_editor::process_gui_panel_mission() {
                 register_change("mission fail conditions change");
                 game.cur_area_data.mission.fail_hud_primary_cond =
                     show_primary ?
-                    active_conditions[0] :
+                    (size_t) active_conditions[0] :
                     INVALID;
             }
             set_tooltip(
@@ -3276,7 +3276,7 @@ void area_editor::process_gui_panel_mission() {
                 register_change("mission fail conditions change");
                 game.cur_area_data.mission.fail_hud_secondary_cond =
                     show_secondary ?
-                    active_conditions[0] :
+                    (size_t) active_conditions[0] :
                     INVALID;
             }
             set_tooltip(

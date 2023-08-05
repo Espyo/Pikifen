@@ -43,8 +43,8 @@ struct point {
     point operator -=(const point &p);
     point operator +=(const float n);
     point operator *=(const float n);
-    const bool operator ==(const point &p) const;
-    const bool operator !=(const point &p) const;
+    bool operator ==(const point &p) const;
+    bool operator !=(const point &p) const;
     const point operator *(const float m) const;
 };
 

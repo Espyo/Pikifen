@@ -434,7 +434,7 @@ void results_state::load() {
         }
         
         //Medal reason text, if any.
-        MISSION_MEDALS medal;
+        MISSION_MEDALS medal = MISSION_MEDAL_NONE;
         string medal_reason;
         ALLEGRO_COLOR medal_reason_color;
         switch(game.cur_area_data.mission.grading_mode) {

@@ -1306,10 +1306,12 @@ void gameplay_state::do_menu_logic() {
         if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
             cur_big_msg = BIG_MESSAGE_NONE;
         }
+        break;
     } case BIG_MESSAGE_MISSION_FAILED: {
         if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) {
             cur_big_msg = BIG_MESSAGE_NONE;
         }
+        break;
     }
     }
     

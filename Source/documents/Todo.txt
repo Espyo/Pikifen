@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -14,7 +14,6 @@ Next tasks (roughly sorted most important first)
     Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
     Pass all code files through AStyle
     If this is a big release:
-        Compile with -Wall and correct all problems
         Use cppcheck on the code and correct the problems
             cppcheck . -i imgui --config-exclude=imgui --suppress="*:imgui/*" --suppress="cstyleCast" -U_WIN32 -U_MSC_VER -U__APPLE__ -U__linux__ --std=c++14 --enable=all 2>~/Desktop/errors.txt
         Confirm that there are no superfluous #includes (how?)

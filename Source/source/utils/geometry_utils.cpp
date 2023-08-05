@@ -402,7 +402,7 @@ point point::operator *=(const float n) {
  * p:
  *   Other point to compare against.
  */
-const bool point::operator ==(const point &p) const {
+bool point::operator ==(const point &p) const {
     return x == p.x && y == p.y;
 }
 
@@ -412,7 +412,7 @@ const bool point::operator ==(const point &p) const {
  * p:
  *   Other point to compare against.
  */
-const bool point::operator !=(const point &p) const {
+bool point::operator !=(const point &p) const {
     return x != p.x || y != p.y;
 }
 
