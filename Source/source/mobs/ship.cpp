@@ -204,6 +204,11 @@ void ship::draw_mob() {
 }
 
 
+point ship::get_delivery_point() {
+    return control_point_final_pos;
+}
+
+
 /* ----------------------------------------------------------------------------
 * Heals a leader, causes particle effects, etc.
 * l:

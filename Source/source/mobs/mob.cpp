@@ -623,32 +623,16 @@ bool mob::calculate_carrying_destination(
     *target_point = pos;
     if(!carry_info) return false;
     
+    vector<mob*> potential_mobs;
+
     switch(carry_info->destination) {
     case CARRY_DESTINATION_SHIP: {
 
-        //Go to the nearest ship.
-        ship* closest_ship = NULL;
-        dist closest_ship_dist;
-        
+        //All ships are potential targets
         for(size_t s = 0; s < game.states.gameplay->mobs.ships.size(); ++s) {
             ship* s_ptr = game.states.gameplay->mobs.ships[s];
-            dist d(pos, s_ptr->control_point_final_pos);
-            
-            if(!closest_ship || d < closest_ship_dist) {
-                closest_ship = s_ptr;
-                closest_ship_dist = d;
-            }
+            potential_mobs.push_back(s_ptr);
         }
-        
-        if(closest_ship) {
-            *target_mob = closest_ship;
-            *target_point = closest_ship->control_point_final_pos;
-            return true;
-            
-        } else {
-            return false;
-        }
-        
         break;
         
     } case CARRY_DESTINATION_ONION: {
@@ -658,16 +642,15 @@ bool mob::calculate_carrying_destination(
         unordered_set<pikmin_type*> available_types;
         for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); o++) {
             onion* o_ptr = game.states.gameplay->mobs.onions[o];
-            if(o_ptr->activated) {
-                for(
-                    size_t t = 0;
-                    t < o_ptr->oni_type->nest->pik_types.size();
-                    ++t
-                ) {
-                    available_types.insert(
-                        o_ptr->oni_type->nest->pik_types[t]
-                    );
-                }
+            if(!o_ptr->activated) continue;
+            for(
+                size_t t = 0;
+                t < o_ptr->oni_type->nest->pik_types.size();
+                ++t
+            ) {
+                available_types.insert(
+                    o_ptr->oni_type->nest->pik_types[t]
+                );
             }
         }
         
@@ -678,75 +661,35 @@ bool mob::calculate_carrying_destination(
         
         pikmin_type* decided_type =
             decide_carry_pikmin_type(available_types, added, removed);
-            
-        //Figure out where that type's Onion is.
-        size_t closest_onion_nr = INVALID;
-        dist closest_onion_dist;
+        *target_type = decided_type;
+
         for(size_t o = 0; o < game.states.gameplay->mobs.onions.size(); ++o) {
             onion* o_ptr = game.states.gameplay->mobs.onions[o];
             if(!o_ptr->activated) continue;
-            bool has_type = false;
-            for(
-                size_t t = 0;
-                t < o_ptr->oni_type->nest->pik_types.size();
-                ++t
-            ) {
-                if(o_ptr->oni_type->nest->pik_types[t] == decided_type) {
-                    has_type = true;
-                    break;
-                }
-            }
-            if(!has_type) continue;
-            
-            dist d(pos, o_ptr->pos);
-            if(closest_onion_nr == INVALID || d < closest_onion_dist) {
-                closest_onion_dist = d;
-                closest_onion_nr = o;
+            bool has_type = 
+                std::find(
+                    o_ptr->oni_type->nest->pik_types.begin(),
+                    o_ptr->oni_type->nest->pik_types.end(),
+                    decided_type
+                ) != o_ptr->oni_type->nest->pik_types.end();
+
+            if(has_type) {
+                potential_mobs.push_back(o_ptr);
             }
         }
-        
-        //Finally, set the destination data.
-        *target_type = decided_type;
-        *target_mob = game.states.gameplay->mobs.onions[closest_onion_nr];
-        *target_point = (*target_mob)->pos;
-        
-        return true;
-        
         break;
         
     } case CARRY_DESTINATION_LINKED_MOB: {
-
-        //If it's towards a linked mob, just go to the closest one.
-        mob* closest_link = NULL;
-        dist closest_link_dist;
-
         for(size_t s = 0; s < links.size(); ++s) {
-            dist d(pos, links[s]->pos);
-
-            if(!closest_link || d < closest_link_dist) {
-                closest_link = links[s];
-                closest_link_dist = d;
+            if(links[s]) {
+                potential_mobs.push_back(links[s]);
             }
         }
-
-        if(closest_link) {
-            *target_mob = closest_link;
-            *target_point = closest_link->pos;
-            return true;
-
-        } else {
-            return false;
-        }
-
         break;
         
     } case CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE: {
 
         //Towards one of the linked mobs that matches the decided Pikmin type.
-        if(links.empty()) {
-            return false;
-        }
-        
         unordered_set<pikmin_type*> available_types;
         vector<std::pair<mob*, pikmin_type*> > mobs_per_type;
         
@@ -774,30 +717,67 @@ bool mob::calculate_carrying_destination(
         
         pikmin_type* decided_type =
             decide_carry_pikmin_type(available_types, added, removed);
-            
+        *target_type = decided_type;
+
         //Figure out which linked mob matches the decided type.
-        size_t closest_target_idx = INVALID;
-        dist closest_target_dist;
         for(size_t m = 0; m < mobs_per_type.size(); ++m) {
             if(mobs_per_type[m].second != decided_type) continue;
-            
-            dist d(pos, mobs_per_type[m].first->pos);
-            if(closest_target_idx == INVALID || d < closest_target_dist) {
-                closest_target_dist = d;
-                closest_target_idx = m;
-            }
+
+            potential_mobs.push_back(mobs_per_type[m].first);
         }
-        
-        //Finally, set the destination data.
-        *target_type = decided_type;
-        *target_mob = links[closest_target_idx];
-        *target_point = (*target_mob)->pos;
-        
-        return true;
-        
         break;
         
     }
+    }
+
+    //Use some temporary settings so we can determine whether paths are blocked
+    path_follow_settings temp_settings;
+
+    //Check if this carriable is considered light load.
+    if(type->weight == 1) {
+        enable_flag(temp_settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD);
+    }
+    //The object will only be airborne if all its carriers can fly.
+    if(carry_info->can_fly()) {
+        enable_flag(temp_settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
+    }
+
+    //The object is only as invulnerable as the Pikmin carrying it.
+    temp_settings.invulnerabilities =
+        carry_info->get_carrier_invulnerabilities();
+
+    mob* closest_mob = NULL;
+    float closest_dist;
+    bool closest_blocked = false;
+
+    for(size_t m = 0; m < potential_mobs.size(); ++m) {
+        temp_settings.target_mob = potential_mobs[m];
+        temp_settings.target_point = potential_mobs[m]->get_delivery_point();
+
+        vector<path_stop*> path;
+        float dist;
+        PATH_RESULTS results = get_path(
+            pos, temp_settings.target_point, temp_settings,
+            path, &dist, NULL, NULL
+        );
+        bool is_blocked = 
+            results < 0 || 
+            results == PATH_RESULT_PATH_WITH_OBSTACLES;
+        //If we have an unblocked destination, ignore this one.
+        if(is_blocked && !closest_blocked) continue;
+
+        //If we don't have an unblocked destination and we find one, make that our target.
+        if(!closest_mob || dist < closest_dist || !is_blocked && closest_blocked) {
+            closest_dist = dist;
+            closest_mob = potential_mobs[m];
+            closest_blocked = is_blocked;
+        }
+    }
+
+    if(closest_mob) {
+        *target_mob = closest_mob;
+        *target_point = closest_mob->get_delivery_point();
+        return true;
     }
     
     return false;
@@ -1197,6 +1177,20 @@ pikmin_type* mob::decide_carry_pikmin_type(
     const unordered_set<pikmin_type*> &available_types,
     mob* added, mob* removed
 ) const {
+    //We didn't change the pikmin type we have
+    //so don't change the target
+    if(!added && !removed) {
+        if(
+            std::find(
+                available_types.begin(),
+                available_types.end(),
+                carry_info->intended_pik_type
+            ) == available_types.end()
+        ) {
+            return carry_info->intended_pik_type;
+        }
+    }
+
     //How many of each Pikmin type are carrying.
     map<pikmin_type*, unsigned> type_quantity;
     //The Pikmin type with the most carriers.
@@ -1799,6 +1793,15 @@ hitbox* mob::get_closest_hitbox(
     if(d) *d = closest_hitbox_dist;
     
     return closest_hitbox;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns where deliveries to this mob should go.
+ * Meant for children to override this.
+ */
+point mob::get_delivery_point() {
+    return pos;
 }
 
 
@@ -3488,9 +3491,8 @@ void mob::tick_brain(const float delta_t) {
                 //Our mob moved! Recalculate!
                 if (
                     carry_info && carry_info->intended_mob && 
-                    carry_info->intended_mob->pos != carry_info->intended_point
+                    carry_info->intended_mob->get_delivery_point() != carry_info->intended_point
                 ) {
-                    carry_info->intended_point = carry_info->intended_mob->pos;
                     fsm.run_event(MOB_EV_PATHS_CHANGED);
                 } else {
                     bool direct =

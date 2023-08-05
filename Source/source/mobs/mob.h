@@ -313,6 +313,7 @@ public:
     ) const;
     void cause_spike_damage(mob* victim, const bool is_ingestion);
     void chomp(mob* m, hitbox* hitbox_info);
+    virtual point get_delivery_point();
     sprite* get_cur_sprite() const;
     void get_hitbox_hold_point(
         mob* mob_to_hold, hitbox* h_ptr,

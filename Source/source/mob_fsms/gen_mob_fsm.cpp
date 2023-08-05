@@ -428,6 +428,29 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Generic handler for when a mob was delivered to an Onion/ship.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void gen_mob_fsm::handle_path_changed(mob* m, void* info1, void* info2) {
+    mob* prev_mob = m->carry_info->intended_mob;
+    pikmin_type* prev_pik_type = m->carry_info->intended_pik_type;
+    m->calculate_carrying_destination(
+        NULL, NULL,
+        &m->carry_info->intended_pik_type,
+        &m->carry_info->intended_mob, &m->carry_info->intended_point
+    );
+
+    //Send a move begin event to follow the new path.
+    m->fsm.run_event(MOB_EV_CARRY_BEGIN_MOVE);
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a mob has to lose its momentum.
  * m:
  *   The mob.

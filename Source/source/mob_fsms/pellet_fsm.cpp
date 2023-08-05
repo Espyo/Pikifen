@@ -68,8 +68,7 @@ void pellet_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idle_stuck");
         }
         efc.new_event(MOB_EV_PATHS_CHANGED); {
-            efc.run(gen_mob_fsm::carry_get_path);
-            efc.run(gen_mob_fsm::carry_begin_move);
+            efc.run(gen_mob_fsm::handle_path_changed);
         }
         efc.new_event(MOB_EV_CARRY_DELIVERED); {
             efc.change_state("being_delivered");
@@ -99,9 +98,7 @@ void pellet_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idle_waiting");
         }
         efc.new_event(MOB_EV_PATHS_CHANGED); {
-            efc.run(gen_mob_fsm::carry_stop_being_stuck);
-            efc.run(gen_mob_fsm::carry_get_path);
-            efc.change_state("idle_moving");
+            efc.run(gen_mob_fsm::handle_path_changed);
         }
     }
     

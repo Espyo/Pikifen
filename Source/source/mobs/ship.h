@@ -57,6 +57,9 @@ public:
     //Checks if a leader is on the control point.
     bool is_leader_on_cp(leader* l) const;
     
+    //Get treasure delivery location.
+    point get_delivery_point() override;
+
     //Constructor.
     ship(const point &pos, ship_type* type, float angle);
     //Destructor.

@@ -30,6 +30,7 @@ void fall_down_pit(mob* m, void* info1, void* info2);
 void handle_carrier_added(mob* m, void* info1, void* info2);
 void handle_carrier_removed(mob* m, void* info1, void* info2);
 void handle_delivery(mob* m, void* info1, void* info2);
+void handle_path_changed(mob* m, void* info1, void* info2);
 void lose_momentum(mob* m, void* info1, void* info2);
 void start_being_delivered(mob* m, void* info1, void* info2);
 void touch_hazard(mob* m, void* info1, void* info2);
