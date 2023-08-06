@@ -163,8 +163,6 @@ public:
     vector<spray_stats_struct> spray_stats;
     //All types of subgroups.
     subgroup_type_manager subgroup_types;
-    //What mobs are subscribed to which control_types
-    vector<vector<mob*>> control_subscribed;
     //Angle at which player 1 is swarming.
     float swarm_angle;
     //General intensity of player 1's swarm in the specified angle.

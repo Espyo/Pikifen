@@ -24,6 +24,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
     if(cur_interlude != INTERLUDE_NONE) return;
     
     bool is_down = (action.value >= 0.5);
+    
     if(!msg_box && !onion_menu && !pause_menu) {
     
         switch(action.action_type_id) {
