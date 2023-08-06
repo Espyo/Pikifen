@@ -2252,6 +2252,18 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         *var = f2s(target_mob->health / target_mob->max_health);
         break;
         
+    } case MOB_ACTION_GET_INFO_INPUT: {
+        if(data.call->parent_event == MOB_EV_RECEIVE_INPUT) {
+            *var =*((string*)(data.custom_data_1));
+        }
+        break;
+        
+    } case MOB_ACTION_GET_INFO_INPUT_NAME: {
+        if(data.call->parent_event == MOB_EV_RECEIVE_INPUT) {
+            *var = *((string*)(data.custom_data_2));
+        }
+        break;
+        
     } case MOB_ACTION_GET_INFO_LATCHED_PIKMIN: {
         *var = i2s(target_mob->get_latched_pikmin_amount());
         break;
@@ -2335,18 +2347,6 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         if(target_mob->type->category->id == MOB_CATEGORY_SCALES) {
             scale* s_ptr = (scale*)(target_mob);
             *var = i2s(s_ptr->calculate_cur_weight());
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_INPUT: {
-        if(data.call->parent_event == MOB_EV_RECEIVE_INPUT) {
-            *var =*((string*)(data.custom_data_1));
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_INPUT_NAME: {
-        if(data.call->parent_event == MOB_EV_RECEIVE_INPUT) {
-            *var = *((string*)(data.custom_data_2));
         }
         break;
         
