@@ -839,6 +839,10 @@ void gameplay_state::load() {
         game.perf_mon->finish_measurement();
     }
     
+    //In case a leader is stored in another mob,
+    //update the availible list.
+    update_available_leaders();
+
     cur_leader_nr = INVALID;
     cur_leader_ptr = NULL;
     starting_nr_of_leaders = mobs.leaders.size();
@@ -1203,6 +1207,7 @@ void gameplay_state::update_available_leaders() {
     for(size_t l = 0; l < mobs.leaders.size(); ++l) {
         if(mobs.leaders[l]->health <= 0.0f) continue;
         if(mobs.leaders[l]->to_delete) continue;
+        if(mobs.leaders[l]->is_stored_inside_mob()) continue;
         available_leaders.push_back(mobs.leaders[l]);
     }
     
