@@ -326,6 +326,10 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
     } else if(call.args[1] == "health_ratio") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH_RATIO);
+    } else if(call.args[1] == "input") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT);
+    } else if(call.args[1] == "input_name") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT_NAME);
     } else if(call.args[1] == "latched_pikmin") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
     } else if(call.args[1] == "latched_pikmin_weight") {
@@ -348,10 +352,6 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_Z);
     } else if(call.args[1] == "weight") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
-    } else if(call.args[1] == "input") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT);
-    } else if(call.args[1] == "input_name") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT_NAME);
     } else {
         report_enum_error(call, 1);
         return false;
