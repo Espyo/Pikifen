@@ -348,10 +348,6 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_Z);
     } else if(call.args[1] == "weight") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_WEIGHT);
-    } else if(call.args[1] == "input") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT);
-    } else if(call.args[1] == "input_name") {
-        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT_NAME);
     } else {
         report_enum_error(call, 1);
         return false;
@@ -2335,18 +2331,6 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         if(target_mob->type->category->id == MOB_CATEGORY_SCALES) {
             scale* s_ptr = (scale*)(target_mob);
             *var = i2s(s_ptr->calculate_cur_weight());
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_INPUT: {
-        if(data.call->parent_event == MOB_EV_RECEIVE_INPUT) {
-            *var =*((string*)(data.custom_data_1));
-        }
-        break;
-        
-    } case MOB_ACTION_GET_INFO_INPUT_NAME: {
-        if(data.call->parent_event == MOB_EV_RECEIVE_INPUT) {
-            *var = *((string*)(data.custom_data_2));
         }
         break;
         
