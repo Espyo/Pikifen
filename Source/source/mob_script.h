@@ -82,6 +82,8 @@ enum MOB_EV_TYPES {
     MOB_EV_THROWN_PIKMIN_LANDED,
     //When it reaches its destination.
     MOB_EV_REACHED_DESTINATION,
+    //When it receives an input from the game.
+    MOB_EV_RECEIVE_INPUT,
     //When it receives a message from another mob.
     MOB_EV_RECEIVE_MESSAGE,
     //When it is safely released from the leader's/enemy's grasp.
