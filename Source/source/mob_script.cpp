@@ -174,6 +174,7 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_object_in_reach",             MOB_EV_OBJECT_IN_REACH);
     r("on_opponent_in_reach",           MOB_EV_OPPONENT_IN_REACH);
     r("on_pikmin_land",                 MOB_EV_THROWN_PIKMIN_LANDED);
+    r("on_receive_input",               MOB_EV_RECEIVE_INPUT);
     r("on_receive_message",             MOB_EV_RECEIVE_MESSAGE);
     r("on_released",                    MOB_EV_RELEASED);
     r("on_reach_destination",           MOB_EV_REACHED_DESTINATION);
