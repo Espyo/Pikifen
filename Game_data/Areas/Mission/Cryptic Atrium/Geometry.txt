@@ -7643,19 +7643,19 @@ mobs{
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-80.0000 32.0000
+		p=-80.0000 96.0000
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-32.0000 0.0000
+		p=-32.0000 64.0000
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-64.0000 16.0000
+		p=-64.0000 80.0000
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-112.0000 16.0000
+		p=-112.0000 80.0000
 	}
 	Pikmin{
 		type=Red Pikmin

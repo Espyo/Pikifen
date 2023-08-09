@@ -3129,7 +3129,7 @@ sectors{
 mobs{
 	Leader{
 		type=Brittany
-		p=192.0000 -352.0000
+		p=160.0000 -336.0000
 		angle=0.6144
 	}
 	Custom{
@@ -3145,61 +3145,61 @@ mobs{
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-301.5958 -350.9765
+		p=-304.0000 -320.0000
 		angle=1.5641
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-323.8334 -351.6912
+		p=-326.2376 -320.7147
 		angle=-2.0978
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-329.2021 -399.4883
+		p=-331.6063 -368.5118
 		angle=-1.7960
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-310.4406 -403.1188
+		p=-312.8448 -372.1423
 		angle=-0.5421
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-361.5109 -395.1430
+		p=-363.9151 -364.1665
 		angle=2.4213
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-358.5464 -371.8334
+		p=-360.9506 -340.8569
 		angle=-0.5737
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-337.3322 -383.8456
+		p=-339.7364 -352.8691
 		angle=-0.5606
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-288.0000 -384.0000
+		p=-290.4042 -353.0235
 		angle=1.0958
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-344.7963 -357.9288
+		p=-347.2005 -326.9523
 		angle=2.8343
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-305.8439 -384.8690
+		p=-308.2481 -353.8925
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-322.7129 -368.2029
+		p=-325.1171 -337.2264
 		angle=-2.5806
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-299.4033 -368.2029
+		p=-301.8075 -337.2264
 		angle=2.7965
 	}
 	Ship{
@@ -3328,7 +3328,7 @@ mobs{
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=246.4891 -315.1430
+		p=320.0000 -272.0000
 		angle=-1.3064
 	}
 	Pikmin{
@@ -3378,62 +3378,62 @@ mobs{
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-339.8335 397.5473
+		p=-371.8335 397.5473
 		angle=-2.3810
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-416.0000 368.0000
+		p=-448.0000 368.0000
 		angle=-0.1354
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-288.0000 368.0000
+		p=-368.0000 416.0000
 		angle=1.0942
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-310.2377 399.1310
+		p=-342.2377 399.1310
 		angle=-0.4184
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-382.5708 415.7971
+		p=-414.5708 415.7971
 		angle=1.6643
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-350.8222 356.3452
+		p=-382.8222 356.3452
 		angle=1.5810
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-398.8222 388.3452
+		p=-430.8222 388.3452
 		angle=-1.7837
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-331.5005 376.5360
+		p=-363.5005 376.5360
 		angle=0.8110
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-383.8456 353.5837
+		p=-415.8456 353.5837
 		angle=0.6093
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-307.2732 350.6192
+		p=-432.0000 352.0000
 		angle=-1.2028
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-369.5837 381.7502
+		p=-401.5837 381.7502
 		angle=2.5375
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-363.8093 405.2142
+		p=-395.8093 405.2142
 		angle=-3.0159
 	}
 	Converter{
