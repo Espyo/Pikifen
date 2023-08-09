@@ -387,6 +387,8 @@ protected:
     point mouse_drag_start;
     //Time left in the operation error red flash effect.
     timer op_error_flash_timer;
+    //Position of the operation error red flash effect.
+    point op_error_pos;
     //Current state.
     size_t state;
     //Status bar text.

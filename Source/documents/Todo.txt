@@ -2,13 +2,12 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    The cursor turning into a shaking X is too violent and detracts from the message (thanks Nataly171)
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Winged Pikmin that fall in the water should fly up when whistled
     Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
-    Spicy sprays aren't speeding up a Pikmin's carrying speed
     Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
 
     --- 0.25.0 ---

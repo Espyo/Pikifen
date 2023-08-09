@@ -39,7 +39,7 @@ const float KEYBOARD_CAM_ZOOM = 0.25f;
 //How quickly the operation error red flash effect cursor shakes.
 const float OP_ERROR_CURSOR_SHAKE_SPEED = 55.0f;
 //How much the operation error red flash effect cursor shakes left and right.
-const float OP_ERROR_CURSOR_SHAKE_WIDTH = 10.0f;
+const float OP_ERROR_CURSOR_SHAKE_WIDTH = 6.0f;
 //Width or height of the operation error red flash effect cursor.
 const float OP_ERROR_CURSOR_SIZE = 32.0f;
 //Thickness of the operation error red flash effect cursor.
@@ -264,11 +264,25 @@ void editor::draw_grid(
 void editor::draw_op_error_cursor() {
     float error_flash_time_ratio = op_error_flash_timer.get_ratio_left();
     if(error_flash_time_ratio <= 0.0f) return;
-    point pos = game.mouse_cursor_s;
+    point pos = op_error_pos;
+    draw_bitmap(
+        game.sys_assets.bmp_notification,
+        point(
+            pos.x,
+            pos.y - EDITOR::OP_ERROR_CURSOR_SIZE
+        ),
+        point(
+            EDITOR::OP_ERROR_CURSOR_SIZE * 2.5f,
+            EDITOR::OP_ERROR_CURSOR_SIZE * 2.0f
+        ),
+        0.0f,
+        map_alpha(error_flash_time_ratio * 192)
+    );
     pos.x +=
         EDITOR::OP_ERROR_CURSOR_SHAKE_WIDTH *
         sin(game.time_passed * EDITOR::OP_ERROR_CURSOR_SHAKE_SPEED) *
         error_flash_time_ratio;
+    pos.y -= EDITOR::OP_ERROR_CURSOR_SIZE;
     al_draw_line(
         pos.x - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.y - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
@@ -1579,6 +1593,7 @@ void editor::set_status(const string &text, const bool error) {
     status_text = text;
     if(error) {
         op_error_flash_timer.start();
+        op_error_pos = game.mouse_cursor_s;
     }
 }
 
