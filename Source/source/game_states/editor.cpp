@@ -1624,48 +1624,50 @@ void editor::set_tooltip(
         ImGui::IsItemHovered(
             ImGuiHoveredFlags_AllowWhenDisabled |
             ImGuiHoveredFlags_DelayNormal |
-            ImGuiHoveredFlags_NoSharedDelay
+            ImGuiHoveredFlags_NoSharedDelay |
+            ImGuiHoveredFlags_Stationary
         )
     ) {
-        ImGui::BeginTooltip();
+        if(ImGui::BeginTooltip()) {
         
-        ImGui::Text("%s", explanation.c_str());
-        
-        string widget_explanation_text;
-        switch(widget_explanation) {
-        case WIDGET_EXPLANATION_NONE: {
-            break;
+            ImGui::Text("%s", explanation.c_str());
+            
+            string widget_explanation_text;
+            switch(widget_explanation) {
+            case WIDGET_EXPLANATION_NONE: {
+                break;
+            }
+            case WIDGET_EXPLANATION_DRAG: {
+                widget_explanation_text =
+                    "Click and drag left or right to change.\n"
+                    "Hold Alt or Shift to change speed.\n"
+                    "Click once or Ctrl + click to write a value.";
+                break;
+            }
+            case WIDGET_EXPLANATION_SLIDER: {
+                widget_explanation_text =
+                    "Click and/or drag left or right to change.\n"
+                    "Ctrl + click to write a value.";
+                break;
+            }
+            }
+            
+            if(!widget_explanation_text.empty()) {
+                ImGui::TextColored(
+                    ImVec4(0.50f, 0.50f, 0.50f, 1.0f),
+                    "%s", widget_explanation_text.c_str()
+                );
+            }
+            
+            if(!shortcut.empty()) {
+                ImGui::TextColored(
+                    ImVec4(0.70f, 0.70f, 0.70f, 1.0f),
+                    "Shortcut key: %s", shortcut.c_str()
+                );
+            }
+            
+            ImGui::EndTooltip();
         }
-        case WIDGET_EXPLANATION_DRAG: {
-            widget_explanation_text =
-                "Click and drag left or right to change.\n"
-                "Hold Alt or Shift to change speed.\n"
-                "Click once or Ctrl + click to write a value.";
-            break;
-        }
-        case WIDGET_EXPLANATION_SLIDER: {
-            widget_explanation_text =
-                "Click and/or drag left or right to change.\n"
-                "Ctrl + click to write a value.";
-            break;
-        }
-        }
-        
-        if(!widget_explanation_text.empty()) {
-            ImGui::TextColored(
-                ImVec4(0.50f, 0.50f, 0.50f, 1.0f),
-                "%s", widget_explanation_text.c_str()
-            );
-        }
-        
-        if(!shortcut.empty()) {
-            ImGui::TextColored(
-                ImVec4(0.70f, 0.70f, 0.70f, 1.0f),
-                "Shortcut key: %s", shortcut.c_str()
-            );
-        }
-        
-        ImGui::EndTooltip();
     }
 }
 

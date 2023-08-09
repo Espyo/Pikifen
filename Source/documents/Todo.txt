@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -11,7 +11,6 @@ Next tasks (roughly sorted most important first)
     Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
 
     --- 0.25.0 ---
-    Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
     Code cleanup
         Confirm that no line goes over 80 characters
             Use the helper tool, or run:
@@ -57,7 +56,6 @@ Next tasks (roughly sorted most important first)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
     https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5 https://github.com/ocornut/imgui/releases/tag/v1.89.6 https://github.com/ocornut/imgui/releases/tag/v1.89.7 https://github.com/ocornut/imgui/releases/tag/v1.89.8
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
             Same with a sector reusing a vertex and other things maybe?
