@@ -247,8 +247,6 @@ void leader::dismiss() {
     
     
     struct subgroup_dismiss_info {
-        //Subgroup type.
-        subgroup_type* type;
         //Radius of the group.
         float radius;
         //Group members of this subgroup type.
@@ -658,7 +656,7 @@ void leader::get_group_spot_info(
  *   Amount of Pikmin of the given type to order.
  */
 bool leader::order_pikmin_to_onion(
-    pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
+    const pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
 ) {
     //Find Pikmin of that type.
     vector<std::pair<dist, pikmin*>> candidates;
@@ -1130,22 +1128,4 @@ bool grab_closest_group_member() {
     );
     
     return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Checks if there are leaders alive. If not, then it finishes gameplay.
- * Returns true if there is a total leader KO.
- */
-bool process_total_leader_ko() {
-    size_t living_leaders = 0;
-    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
-        if(
-            game.states.gameplay->mobs.leaders[l]->health > 0 &&
-            !game.states.gameplay->mobs.leaders[l]->to_delete
-        ) {
-            living_leaders++;
-        }
-    }
-    return living_leaders == 0;
 }

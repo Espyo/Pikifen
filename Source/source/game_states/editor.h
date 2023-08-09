@@ -315,7 +315,7 @@ protected:
         void mark_as_changed();
         void mark_as_saved();
         void reset();
-        changes_manager(editor* ed);
+        explicit changes_manager(editor* ed);
         
         private:
         //Editor it belongs to.

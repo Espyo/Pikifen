@@ -359,7 +359,7 @@ hud_struct::hud_struct() :
             game.cur_area_data.day_time_speed * delta_t / 60.0f;
         float post_tick_day_minutes =
             game.states.gameplay->day_minutes;
-        float checkpoints[3] = {0.25f, 0.50f, 0.75f};
+        const float checkpoints[3] = {0.25f, 0.50f, 0.75f};
         for(unsigned char c = 0; c < 3; ++c) {
             float checkpoint =
                 game.config.day_minutes_start + day_length * checkpoints[c];
@@ -778,10 +778,10 @@ hud_struct::hud_struct() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
-        if(game.spray_types.size() <= 2) {
-            top_spray_idx = 0;
-        } else if(game.spray_types.size() > 0) {
+        if(game.spray_types.size() > 2) {
             top_spray_idx = game.states.gameplay->selected_spray;
+        } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
+            top_spray_idx = 0;
         }
         if(top_spray_idx == INVALID) return;
         
@@ -806,10 +806,10 @@ hud_struct::hud_struct() :
         if(!game.states.gameplay->cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
-        if(game.spray_types.size() <= 2) {
-            top_spray_idx = 0;
-        } else if(game.spray_types.size() > 0) {
+        if(game.spray_types.size() > 2) {
             top_spray_idx = game.states.gameplay->selected_spray;
+        } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
+            top_spray_idx = 0;
         }
         if(top_spray_idx == INVALID) return;
         if(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays == 0) {
@@ -817,10 +817,10 @@ hud_struct::hud_struct() :
         }
         
         player_input i;
-        if(game.spray_types.size() <= 2) {
-            i = game.controls.find_bind(PLAYER_ACTION_USE_SPRAY_1).input;
-        } else if(game.spray_types.size() > 0) {
+        if(game.spray_types.size() > 2) {
             i = game.controls.find_bind(PLAYER_ACTION_USE_SPRAY).input;
+        } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
+            i = game.controls.find_bind(PLAYER_ACTION_USE_SPRAY_1).input;
         }
         if(i.type == INPUT_TYPE_NONE) return;
         
@@ -1876,10 +1876,10 @@ void hud_struct::tick(const float delta_t) {
     
     //Update spray bubbles.
     size_t top_spray_idx = INVALID;
-    if(game.spray_types.size() <= 2) {
-        top_spray_idx = 0;
-    } else if(game.spray_types.size() > 0) {
+    if(game.spray_types.size() > 2) {
         top_spray_idx = game.states.gameplay->selected_spray;
+    } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
+        top_spray_idx = 0;
     }
     spray_icon_mgr.update(
         BUBBLE_CURRENT,

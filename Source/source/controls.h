@@ -166,7 +166,6 @@ public:
         const string &internal_name,
         const string &default_bind_str
     );
-    void clear_player_action_types();
     const vector<player_action_type> &get_all_player_action_types() const;
     
     //Control bind functions.

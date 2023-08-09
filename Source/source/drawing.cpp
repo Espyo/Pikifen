@@ -1299,6 +1299,7 @@ void draw_scaled_text(
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity
 ) {
+    if(!s_ptr) return;
     if(s_ptr->is_bottomless_pit) return;
     
     unsigned char n_textures = 1;
@@ -1316,10 +1317,6 @@ void draw_sector_texture(
         
     } else {
         texture_sector[0] = s_ptr;
-        if(!texture_sector[0]) {
-            //Can't draw this sector.
-            return;
-        }
         
     }
     
@@ -1473,7 +1470,7 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
  *   Scale each token by this amount.
  */
 void draw_string_tokens(
-    vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
+    const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, const point &where,
     const int flags, const point &max_size, const point &scale
 ) {

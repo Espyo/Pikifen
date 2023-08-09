@@ -339,7 +339,7 @@ void path_stop::calculate_dists_plus_neighbors() {
  * other_stop:
  *   Path stop to check against.
  */
-path_link* path_stop::get_link(path_stop* other_stop) const {
+path_link* path_stop::get_link(const path_stop* other_stop) const {
     for(size_t l = 0; l < links.size(); ++l) {
         if(links[l]->end_ptr == other_stop) return links[l];
     }
@@ -353,7 +353,7 @@ path_link* path_stop::get_link(path_stop* other_stop) const {
  * link_ptr:
  *   Pointer to the link to remove.
  */
-void path_stop::remove_link(path_link* link_ptr) {
+void path_stop::remove_link(const path_link* link_ptr) {
     for(size_t l = 0; l < links.size(); ++l) {
         if(links[l] == link_ptr) {
             delete links[l];
@@ -370,7 +370,7 @@ void path_stop::remove_link(path_link* link_ptr) {
  * other_stop:
  *   Path stop to remove the link from.
  */
-void path_stop::remove_link(path_stop* other_stop) {
+void path_stop::remove_link(const path_stop* other_stop) {
     for(size_t l = 0; l < links.size(); ++l) {
         if(links[l]->end_ptr == other_stop) {
             delete links[l];
@@ -395,7 +395,7 @@ bool can_traverse_path_link(
     PATH_BLOCK_REASONS* reason
 ) {
     if(reason) *reason = PATH_BLOCK_REASON_NONE;
-
+    
     //Check if there's an obstacle in the way.
     if(
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES) &&
@@ -775,42 +775,6 @@ PATH_RESULTS get_path(
     }
     
     return result;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns what active obstacle stands in the way of these two stops, if any.
- * If multiple ones do, it returns the closest.
- * s1:
- *   First path stop to check.
- * s2:
- *   Second path stop to check.
- */
-mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
-    mob* closest_obs = NULL;
-    dist closest_obs_dist;
-    
-    for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
-        mob* m_ptr = game.states.gameplay->mobs.all[m];
-        if(!m_ptr->type->can_block_paths) continue;
-        
-        if(
-            m_ptr->health != 0 &&
-            circle_intersects_line_seg(
-                m_ptr->pos,
-                m_ptr->radius,
-                s1->pos, s2->pos
-            )
-        ) {
-            dist d(s1->pos, m_ptr->pos);
-            if(!closest_obs || d < closest_obs_dist) {
-                closest_obs = m_ptr;
-                closest_obs_dist = d;
-            }
-        }
-    }
-    
-    return closest_obs;
 }
 
 

@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -9,14 +9,10 @@ Next tasks (roughly sorted most important first)
     Winged Pikmin that fall in the water should fly up when whistled
     Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
     Spicy sprays aren't speeding up a Pikmin's carrying speed
+    Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
 
     --- 0.25.0 ---
     Update Dear ImGui, and try compiling with IMGUI_DISABLE_OBSOLETE_FUNCTIONS defined
-    Pass all code files through AStyle
-    If this is a big release:
-        Use cppcheck on the code and correct the problems
-            cppcheck . -i imgui --config-exclude=imgui --suppress="*:imgui/*" --suppress="cstyleCast" -U_WIN32 -U_MSC_VER -U__APPLE__ -U__linux__ --std=c++14 --enable=all 2>~/Desktop/errors.txt
-        Confirm that there are no superfluous #includes (how?)
     Code cleanup
         Confirm that no line goes over 80 characters
             Use the helper tool, or run:
@@ -51,8 +47,9 @@ Next tasks (roughly sorted most important first)
         Logic gates
             On message received, they should ask the sender's mob ID (-1 for none). Then, if their "i1id" var is -1, set it to whatever the sender mob's ID is. Then, when receiving a message from there on, if the mob's ID matches the the one in "i1id", set the value into the "i1" var. Otherwise, set it into the "i2" var.
         A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
-    Make a post-mortem video for Play
     Make the error log prettier: remove the two empty lines at the start and indent things properly
+        It should also warn in-game if something happens mid-gameplay
+        The in-game warning should also say what the warning is on top of the reminder to check the error log file
     Reorganize tree shadows - they should be building blocks that area makers can mix and match
     [NEEDS BRAINSTORMING] Path links that are one-way for drop-offs don't make much sense, since Winged Pikmin can fly up them...
     If you start drawing a path on top of a link, it should split the link and start drawing on that stop
@@ -61,7 +58,7 @@ Next tasks (roughly sorted most important first)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
     https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5 https://github.com/ocornut/imgui/releases/tag/v1.89.6 https://github.com/ocornut/imgui/releases/tag/v1.89.7
+    Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.89.4 https://github.com/ocornut/imgui/releases/tag/v1.89.5 https://github.com/ocornut/imgui/releases/tag/v1.89.6 https://github.com/ocornut/imgui/releases/tag/v1.89.7 https://github.com/ocornut/imgui/releases/tag/v1.89.8
     Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
             Same with a sector reusing a vertex and other things maybe?

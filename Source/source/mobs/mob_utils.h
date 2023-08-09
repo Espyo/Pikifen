@@ -213,7 +213,7 @@ struct group_info_struct {
     void init_spots(mob* affected_mob_ptr = NULL);
     void sort(subgroup_type* leading_type);
     void change_standby_type_if_needed();
-    size_t get_amount_by_type(mob_type* type) const;
+    size_t get_amount_by_type(const mob_type* type) const;
     point get_average_member_pos() const;
     bool get_next_standby_type(
         const bool move_backwards, subgroup_type** new_type
@@ -457,7 +457,7 @@ struct pikmin_nest_type_struct {
  * like an Onion or a ship.
  */
 struct pikmin_nest_struct {
-public:
+    public:
     //Pointer to the nest mob responsible.
     mob* m_ptr;
     //Pointer to the type of nest.
@@ -474,7 +474,7 @@ public:
     //Call a Pikmin out.
     bool call_pikmin(mob* m_ptr, const size_t type_idx);
     //Get how many are inside by a given type.
-    size_t get_amount_by_type(pikmin_type* type);
+    size_t get_amount_by_type(const pikmin_type* type);
     //Reads nest-related script variables.
     void read_script_vars(const script_var_reader &svr);
     //Requests that Pikmin of the given type get called out.

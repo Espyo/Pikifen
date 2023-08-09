@@ -130,6 +130,7 @@ gameplay_state::gameplay_state() :
     enemy_total(0),
     enemy_points_collected(0),
     enemy_points_total(0),
+    mission_fail_reason((MISSION_FAIL_CONDITIONS) INVALID),
     mission_score(0),
     old_mission_score(0),
     mission_score_cur_text(nullptr),
@@ -456,7 +457,7 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  * type:
  *   Type to search for.
  */
-mob* gameplay_state::get_closest_group_member(subgroup_type* type) {
+mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
     if(!cur_leader_ptr) return NULL;
     
     mob* result = NULL;

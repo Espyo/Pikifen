@@ -36,6 +36,7 @@ options_menu_state::options_menu_state() :
     resolution_picker(nullptr),
     cursor_speed_picker(nullptr),
     cursor_cam_weight_picker(nullptr),
+    leaving_confirmation_picker(nullptr),
     warning_text(nullptr) {
     
     //Let's fill in the list of preset resolutions. For that, we'll get

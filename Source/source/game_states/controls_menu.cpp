@@ -472,12 +472,12 @@ void controls_menu_state::populate_binds() {
             };
             bind_button->center = point(0.70f, cur_y);
             bind_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
-            string tooltip =
+            string bind_button_tooltip =
                 (showing_more && a == cur_action_type) ?
                 "Remove this control from this action." :
                 "Change the control for this action.";
             bind_button->on_get_tooltip =
-            [tooltip] () { return tooltip; };
+            [bind_button_tooltip] () { return bind_button_tooltip; };
             list_box->add_child(bind_button);
             gui.add_item(bind_button);
             

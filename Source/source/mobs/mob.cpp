@@ -1798,7 +1798,7 @@ sprite* mob::get_cur_sprite() const {
  *   This should help with performance. Otherwise, use NULL.
  */
 dist mob::get_distance_between(
-    mob* m2_ptr, dist* regular_distance_cache
+    mob* m2_ptr, const dist* regular_distance_cache
 ) const {
     dist mob_to_hotspot_dist;
     float dist_padding;
@@ -2592,7 +2592,7 @@ bool mob::is_point_on(const point &p) const {
  * hazards:
  *   List of hazards to check.
  */
-bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) const {
+bool mob::is_resistant_to_hazards(const vector<hazard*> &hazards) const {
     for(size_t h = 0; h < hazards.size(); ++h) {
         if(get_hazard_vulnerability(hazards[h]).damage_mult != 0.0f) {
             return false;
@@ -2699,9 +2699,9 @@ void mob::read_script_vars(const script_var_reader &svr) {
         MOB_TEAMS team_nr = string_to_team_nr(team_var);
         if(team_nr == INVALID) {
             log_error(
-                "Unknown team name \"" + team_var + "\", when trying to "
-                "create a mob of type " + type->name + ", at coordinates " +
-                p2s(pos) + "!", NULL
+                "Unknown team name \"" + team_var +
+                "\", when trying to create mob (" +
+                get_error_message_mob_info(this) + ")!", NULL
             );
         } else {
             team = team_nr;
@@ -2842,7 +2842,8 @@ void mob::set_animation(
     
     if(final_nr == INVALID) {
         log_error(
-            "Mob " + this->type->name + " tried to switch from " +
+            "Mob (" + get_error_message_mob_info(this) +
+            ") tried to switch from " +
             (
                 anim.cur_anim ? "animation \"" + anim.cur_anim->name + "\"" :
                 "no animation"
@@ -3008,7 +3009,8 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     
     if(!type_ptr) {
         log_error(
-            "Object \"" + type->name + "\" tried to spawn an object of the "
+            "Mob (" + get_error_message_mob_info(this) +
+            ") tried to spawn an object of the "
             "type \"" + info->mob_type_name + "\", but there is no such "
             "object type!"
         );

@@ -158,9 +158,9 @@ struct path_stop {
     );
     ~path_stop();
     void add_link(path_stop* other_stop, const bool normal);
-    path_link* get_link(path_stop* other_stop) const;
-    void remove_link(path_link* link_ptr);
-    void remove_link(path_stop* other_stop);
+    path_link* get_link(const path_stop* other_stop) const;
+    void remove_link(const path_link* link_ptr);
+    void remove_link(const path_stop* other_stop);
     void calculate_dists();
     void calculate_dists_plus_neighbors();
 };
@@ -239,7 +239,6 @@ PATH_RESULTS get_path(
     vector<path_stop*> &full_path, float* total_dist,
     path_stop** start_stop, path_stop** end_stop
 );
-mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 string path_block_reason_to_string(PATH_BLOCK_REASONS reason);
 string path_result_to_string(PATH_RESULTS result);
 

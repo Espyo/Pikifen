@@ -400,7 +400,7 @@ struct bmp_manager {
         const string &name, data_node* node = NULL,
         const bool report_errors = true
     );
-    void detach(ALLEGRO_BITMAP* bmp);
+    void detach(const ALLEGRO_BITMAP* bmp);
     void detach(const string &name);
     void clear();
     
@@ -759,7 +759,7 @@ struct notification_struct {
     float get_visibility() const;
     void reset();
     void set_contents(
-        player_input input, const string &text, const point &pos
+        const player_input &input, const string &text, const point &pos
     );
     void set_enabled(const bool enabled);
     void tick(const float delta_t);
@@ -843,7 +843,7 @@ struct keyframe_interpolator {
     public:
     float get(const float t);
     void add(const float t, const float value, EASING_METHODS ease = EASE_NONE);
-    keyframe_interpolator(const float initial_value);
+    explicit keyframe_interpolator(const float initial_value);
     
     private:
     //Keyframe times.
@@ -967,11 +967,11 @@ struct subgroup_type_manager {
     );
     subgroup_type* get_type(
         const SUBGROUP_TYPE_CATEGORIES category,
-        mob_type* specific_type = NULL
+        const mob_type* specific_type = NULL
     ) const;
     subgroup_type* get_first_type() const;
-    subgroup_type* get_prev_type(subgroup_type* sgt) const;
-    subgroup_type* get_next_type(subgroup_type* sgt) const;
+    subgroup_type* get_prev_type(const subgroup_type* sgt) const;
+    subgroup_type* get_next_type(const subgroup_type* sgt) const;
     void clear();
     
     private:

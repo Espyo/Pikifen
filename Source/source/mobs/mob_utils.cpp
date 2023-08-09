@@ -304,7 +304,7 @@ void group_info_struct::change_standby_type_if_needed() {
  * type:
  *   Type to check.
  */
-size_t group_info_struct::get_amount_by_type(mob_type* type) const {
+size_t group_info_struct::get_amount_by_type(const mob_type* type) const {
     size_t amount = 0;
     for(size_t m = 0; m < members.size(); ++m) {
         if(members[m]->type == type) {
@@ -605,7 +605,7 @@ void group_info_struct::reassign_spots() {
             }
         }
         
-        closest_mob->group_spot_index = s;
+        if(closest_mob) closest_mob->group_spot_index = s;
     }
 }
 
@@ -906,7 +906,7 @@ bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
  * type:
  *   Type to check.
  */
-size_t pikmin_nest_struct::get_amount_by_type(pikmin_type* type) {
+size_t pikmin_nest_struct::get_amount_by_type(const pikmin_type* type) {
     size_t amount = 0;
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
         if(nest_type->pik_types[t] == type) {

@@ -292,7 +292,7 @@ void bmp_manager::detach(const string &name) {
  * bmp:
  *   Bitmap to detach.
  */
-void bmp_manager::detach(ALLEGRO_BITMAP* bmp) {
+void bmp_manager::detach(const ALLEGRO_BITMAP* bmp) {
     if(!bmp || bmp == game.bmp_error) return;
     
     auto it = list.begin();
@@ -1041,7 +1041,7 @@ void notification_struct::reset() {
  *   Where to show it in the game world.
  */
 void notification_struct::set_contents(
-    player_input input, const string &text, const point &pos
+    const player_input &input, const string &text, const point &pos
 ) {
     this->input = input;
     this->text = text;
@@ -1934,7 +1934,7 @@ subgroup_type* subgroup_type_manager::get_first_type() const {
  *   Subgroup type to iterate from.
  */
 subgroup_type* subgroup_type_manager::get_next_type(
-    subgroup_type* sgt
+    const subgroup_type* sgt
 ) const {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t] == sgt) {
@@ -1951,7 +1951,7 @@ subgroup_type* subgroup_type_manager::get_next_type(
  *   Subgroup type to iterate from.
  */
 subgroup_type* subgroup_type_manager::get_prev_type(
-    subgroup_type* sgt
+    const subgroup_type* sgt
 ) const {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t] == sgt) {
@@ -1972,7 +1972,7 @@ subgroup_type* subgroup_type_manager::get_prev_type(
  */
 subgroup_type* subgroup_type_manager::get_type(
     const SUBGROUP_TYPE_CATEGORIES category,
-    mob_type* specific_type
+    const mob_type* specific_type
 ) const {
     for(size_t t = 0; t < types.size(); ++t) {
         subgroup_type* t_ptr = types[t];

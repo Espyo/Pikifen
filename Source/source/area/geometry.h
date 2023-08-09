@@ -101,11 +101,12 @@ struct geometry_problems {
 
 
 void get_cce(
-    vector<vertex> &vertexes_left, vector<size_t> &ears,
+    const vector<vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
 );
 vector<std::pair<dist, vertex*> > get_merge_vertexes(
-    const point &p, vector<vertex*> &all_vertexes, const float merge_radius
+    const point &p, const vector<vertex*> &all_vertexes,
+    const float merge_radius
 );
 TRIANGULATION_ERRORS get_polys(
     sector* s, polygon* outer, vector<polygon>* inners,

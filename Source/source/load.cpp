@@ -37,7 +37,7 @@ using std::set;
  *   If true, load from a backup, if any.
  */
 void load_area(
-    string requested_area_folder_name,
+    const string &requested_area_folder_name,
     const AREA_TYPES requested_area_type,
     const bool load_for_editor, const bool from_backup
 ) {

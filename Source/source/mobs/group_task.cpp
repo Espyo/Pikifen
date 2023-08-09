@@ -241,7 +241,7 @@ float group_task::get_power() const {
  * whose:
  *   Pikmin whose spot to check.
  */
-point group_task::get_spot_pos(pikmin* whose) const {
+point group_task::get_spot_pos(const pikmin* whose) const {
     for(size_t s = 0; s < spots.size(); ++s) {
         if(spots[s].pikmin_here == whose) {
             return spots[s].absolute_pos;

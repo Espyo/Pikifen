@@ -400,7 +400,7 @@ void area_editor::close_options_dialog() {
  *   Type of the requested area.
  */
 void area_editor::create_area(
-    string requested_area_folder_name,
+    const string &requested_area_folder_name,
     const AREA_TYPES requested_area_type
 ) {
     clear_current_area();
@@ -563,7 +563,7 @@ void area_editor::create_mob_under_cursor() {
  *   Type of the requested area.
  */
 void area_editor::create_or_load_area(
-    string requested_area_folder_name,
+    const string &requested_area_folder_name,
     const AREA_TYPES requested_area_type
 ) {
     string file_to_check =
@@ -1611,7 +1611,7 @@ void area_editor::load() {
  *   If true, this loading process should update the user's folder open history.
  */
 void area_editor::load_area(
-    string requested_area_folder_name,
+    const string &requested_area_folder_name,
     const AREA_TYPES requested_area_type,
     const bool from_backup, const bool should_update_history
 ) {
@@ -3388,10 +3388,7 @@ bool area_editor::save_area(const bool to_backup) {
         //If this was a normal save, save the backup too, so that the
         //maker doesn't have an outdated backup.
         save_backup();
-    }
-    
-    //Finish up.
-    if(!to_backup && save_successful) {
+        
         changes_mgr.mark_as_saved();
         set_status("Saved area successfully.");
     }
@@ -4086,7 +4083,7 @@ void area_editor::start_vertex_move() {
  *   working sector is to the left, and false if to the right.
  */
 void area_editor::traverse_sector_for_split(
-    sector* s_ptr, vertex* begin, vertex* checkpoint,
+    const sector* s_ptr, vertex* begin, vertex* checkpoint,
     vector<edge*>* edges, vector<vertex*>* vertexes,
     bool* working_sector_left
 ) {

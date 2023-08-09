@@ -972,8 +972,6 @@ bool gui_manager::handle_player_action(const player_action &action) {
     }
     }
     
-    if(button_recognized) return true;
-    
     return button_recognized;
 }
 

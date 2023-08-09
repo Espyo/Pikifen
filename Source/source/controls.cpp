@@ -286,14 +286,6 @@ vector<control_bind> &controls_mediator::binds() {
 
 
 /* ----------------------------------------------------------------------------
- * Removes all registered player action types.
- */
-void controls_mediator::clear_player_action_types() {
-    player_action_types.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Finds a registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
  * action_type_id:

@@ -194,7 +194,7 @@ void draw_scaled_text(
 );
 void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects);
 void draw_string_tokens(
-    vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
+    const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, const point &where,
     const int flags, const point &max_size,
     const point &scale = point(1.0f, 1.0f)

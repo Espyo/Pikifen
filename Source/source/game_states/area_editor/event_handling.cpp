@@ -764,7 +764,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 get_mob_under_point(game.mouse_cursor_w, &target_idx);
             if(!target) return;
             
-            for(auto m : selected_mobs) {
+            for(const auto m : selected_mobs) {
                 if(m == target) {
                     set_status(
                         "You can't store to an object inside itself!",
@@ -799,7 +799,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             mob_gen* target = get_mob_under_point(game.mouse_cursor_w);
             if(!target) return;
             
-            for(auto m : selected_mobs) {
+            for(const auto m : selected_mobs) {
                 if(m == target) {
                     set_status(
                         "You can't link to an object to itself!",

@@ -180,7 +180,7 @@ public:
     */
     options_menu_picker_gui_item(
         const string &base_text, t* cur_value, const t &def_value,
-        const vector<t> preset_values, const vector<string> preset_names,
+        const vector<t> &preset_values, const vector<string> &preset_names,
         const string &tooltip = ""
     ) :
         picker_gui_item(base_text, ""),
@@ -269,7 +269,6 @@ public:
         
         *cur_value = preset_values[cur_option_idx];
         option = get_cur_option_name();
-        cur_option_idx = cur_option_idx;
         start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );

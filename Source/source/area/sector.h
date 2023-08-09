@@ -106,7 +106,7 @@ struct sector {
     void get_texture_merge_sectors(sector** s1, sector** s2) const;
     bool is_clockwise() const;
     bool is_point_in_sector(const point &p) const;
-    void remove_edge(edge* e_ptr);
+    void remove_edge(const edge* e_ptr);
     void get_neighbor_sectors_conditionally(
         const std::function<bool(sector* s_ptr)> &condition,
         vector<sector*> &sector_list

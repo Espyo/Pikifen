@@ -342,7 +342,7 @@ public:
     mob_type::vulnerability_struct get_hazard_vulnerability(
         hazard* h_ptr
     ) const;
-    bool is_resistant_to_hazards(vector<hazard*> &hazards) const;
+    bool is_resistant_to_hazards(const vector<hazard*> &hazards) const;
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();
     void stop_height_effect();
@@ -354,7 +354,7 @@ public:
     void finish_dying();
     void respawn();
     dist get_distance_between(
-        mob* m2_ptr, dist* regular_distance_cache = NULL
+        mob* m2_ptr, const dist* regular_distance_cache = NULL
     ) const;
     hitbox* get_hitbox(const size_t nr) const;
     hitbox* get_closest_hitbox(

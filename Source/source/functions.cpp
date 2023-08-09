@@ -46,7 +46,7 @@
  * s:
  *   String to write.
  */
-void al_fwrite(ALLEGRO_FILE* f, string s) {
+void al_fwrite(ALLEGRO_FILE* f, const string &s) {
     al_fwrite(f, s.c_str(), s.size());
 }
 
@@ -1006,7 +1006,7 @@ ALLEGRO_COLOR interpolate_color(
  *   If not null, this will be used to obtain the file name
  *   and line that caused the error.
  */
-void log_error(string s, data_node* d) {
+void log_error(const string &s, data_node* d) {
     string output = "";
     if(game.errors_reported_so_far == 0) {
         string first_error_info =
@@ -1906,7 +1906,7 @@ string standardize_path(const string &path) {
  * speaker_bmp:
  *   Bitmap representing the speaker.
  */
-void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
+void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
     if(!text.empty()) {
         string final_text = unescape_string(text);
         game.states.gameplay->msg_box =
@@ -2171,7 +2171,7 @@ string word_wrap(const string &s, const size_t n_chars_per_line) {
     size_t cur_line_width = 0;
     for(size_t c = 0; c < s.size() + 1; ++c) {
     
-        if(s[c] != ' ' && s[c] != '\n' && c < s.size()) {
+        if(c < s.size() && s[c] != ' ' && s[c] != '\n') {
             //Keep building the current word.
             
             word_in_queue.push_back(s[c]);

@@ -1445,7 +1445,9 @@ bool area_editor::get_drawing_outer_sector(sector** result) const {
  * after:
  *   Only check edges that come after this one.
  */
-edge* area_editor::get_edge_under_point(const point &p, edge* after) const {
+edge* area_editor::get_edge_under_point(
+    const point &p, const edge* after
+) const {
     bool found_after = (!after ? true : false);
     
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -2251,7 +2253,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
         
         vector<vertex*> vertexes_to_check = game.cur_area_data.vertexes;
         if(ignore_selected) {
-            for(vertex* v : selected_vertexes) {
+            for(const vertex* v : selected_vertexes) {
                 for(size_t v2 = 0; v2 < vertexes_to_check.size(); ++v2) {
                     if(vertexes_to_check[v2] == v) {
                         vertexes_to_check.erase(vertexes_to_check.begin() + v2);
@@ -2523,7 +2525,7 @@ void area_editor::update_affected_sectors(
  */
 void area_editor::update_inner_sectors_outer_sector(
     const vector<edge*> &edges_to_check,
-    sector* old_outer, sector* new_outer
+    const sector* old_outer, sector* new_outer
 ) {
     for(size_t e = 0; e < edges_to_check.size(); ++e) {
         edge* e_ptr = edges_to_check[e];

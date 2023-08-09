@@ -27,7 +27,9 @@ const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Results_menu.txt";
  */
 results_state::results_state() :
     game_state(),
-    gui_time_spent(0.0f) {
+    gui_time_spent(0.0f),
+    stats_list(nullptr),
+    final_mission_score(0) {
     
 }
 

@@ -807,9 +807,7 @@ void area_data::generate_blockmap() {
  * edge_list:
  *   Edges to generate the blockmap around.
  */
-void area_data::generate_edges_blockmap(vector<edge*> &edge_list) {
-    size_t b_min_x, b_max_x, b_min_y, b_max_y;
-    
+void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
     for(size_t e = 0; e < edge_list.size(); ++e) {
     
         //Get which blocks this edge belongs to, via bounding-box,
@@ -817,19 +815,19 @@ void area_data::generate_edges_blockmap(vector<edge*> &edge_list) {
         
         edge* e_ptr = edge_list[e];
         
-        b_min_x =
+        size_t b_min_x =
             bmap.get_col(
                 std::min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x)
             );
-        b_max_x =
+        size_t b_max_x =
             bmap.get_col(
                 std::max(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x)
             );
-        b_min_y =
+        size_t b_min_y =
             bmap.get_row(
                 std::min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
             );
-        b_max_y =
+        size_t b_max_y =
             bmap.get_row(
                 std::max(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
             );

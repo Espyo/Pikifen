@@ -391,7 +391,7 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  *   List of concave vertexes found.
  */
 void get_cce(
-    vector<vertex*> &vertexes_left, vector<size_t> &ears,
+    const vector<vertex*> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
 ) {
     ears.clear();
@@ -427,7 +427,8 @@ void get_cce(
  *   level into account.
  */
 vector<std::pair<dist, vertex*> > get_merge_vertexes(
-    const point &pos, vector<vertex*> &all_vertexes, const float merge_radius
+    const point &pos, const vector<vertex*> &all_vertexes,
+    const float merge_radius
 ) {
 
     vector<std::pair<dist, vertex*> > result;

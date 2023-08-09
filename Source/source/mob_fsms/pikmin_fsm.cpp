@@ -2740,6 +2740,8 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         }
     }
     
+    if(!closest_spot_ptr) return;
+    
     pik_ptr->focus_on_mob(carriable_mob);
     pik_ptr->temp_i = closest_spot;
     closest_spot_ptr->state = CARRY_SPOT_RESERVED;

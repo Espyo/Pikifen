@@ -578,11 +578,11 @@ private:
     void copy_path_link_properties();
     void copy_sector_properties();
     void create_area(
-        string requested_area_folder_name,
+        const string &requested_area_folder_name,
         const AREA_TYPES requested_area_type
     );
     void create_or_load_area(
-        string requested_area_folder_name,
+        const string &requested_area_folder_name,
         const AREA_TYPES requested_area_type
     );
     void create_drawing_vertexes();
@@ -625,7 +625,9 @@ private:
         vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
     ) const;
     bool get_drawing_outer_sector(sector** result) const;
-    edge* get_edge_under_point(const point &p, edge* after = NULL) const;
+    edge* get_edge_under_point(
+        const point &p, const edge* after = NULL
+    ) const;
     vector<edge_intersection> get_intersecting_edges() const;
     size_t get_mission_required_mob_count() const;
     float get_mob_gen_radius(mob_gen* m) const;
@@ -649,7 +651,7 @@ private:
     void homogenize_selected_path_links();
     void homogenize_selected_sectors();
     void load_area(
-        string requested_area_folder_name,
+        const string &requested_area_folder_name,
         const AREA_TYPES requested_area_type,
         const bool from_backup, const bool should_update_history
     );
@@ -693,7 +695,7 @@ private:
     void start_path_stop_move();
     void start_vertex_move();
     void traverse_sector_for_split(
-        sector* s_ptr, vertex* begin, vertex* checkpoint,
+        const sector* s_ptr, vertex* begin, vertex* checkpoint,
         vector<edge*>* edges, vector<vertex*>* vertexes,
         bool* working_sector_left
     );
@@ -705,7 +707,7 @@ private:
     void update_all_edge_offset_caches();
     void update_inner_sectors_outer_sector(
         const vector<edge*> &edges_to_check,
-        sector* old_outer, sector* new_outer
+        const sector* old_outer, sector* new_outer
     );
     void update_reference();
     void update_sector_texture(sector* s_ptr, const string &file_name);

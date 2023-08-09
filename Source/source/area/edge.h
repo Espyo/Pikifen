@@ -46,7 +46,7 @@ struct edge {
     void clone(edge* destination) const;
     sector* get_other_sector(const sector* v_ptr) const;
     vertex* get_other_vertex(const vertex* v_ptr) const;
-    size_t get_side_with_sector(sector* s_ptr) const;
+    size_t get_side_with_sector(const sector* s_ptr) const;
     vertex* has_neighbor(edge* other) const;
     bool is_valid() const;
     size_t remove_from_sectors();
@@ -69,7 +69,7 @@ struct edge_intersection {
     edge* e2;
     
     edge_intersection(edge* e1, edge* e2);
-    bool contains(edge* e);
+    bool contains(const edge* e);
 };
 
 #endif //ifndef EDGE_INCLUDED

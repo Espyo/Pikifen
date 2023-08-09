@@ -30,7 +30,7 @@
  *   Transformation to use when drawing to a bitmap.
  */
 void gameplay_state::do_game_drawing(
-    ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transform
+    ALLEGRO_BITMAP* bmp_output, const ALLEGRO_TRANSFORM* bmp_transform
 ) {
 
     /*  ***************************************

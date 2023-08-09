@@ -925,7 +925,6 @@ void area_editor::draw_canvas() {
                 
                 if(debug_path_nrs && (one_way || s < s_ptr->links[l]->end_nr)) {
                     point middle = (s_ptr->pos + s2_ptr->pos) / 2.0f;
-                    float angle = get_angle(s_ptr->pos, s2_ptr->pos);
                     draw_debug_text(
                         al_map_rgb(96, 104, 224),
                         point(
@@ -942,8 +941,6 @@ void area_editor::draw_canvas() {
                         (s_ptr->pos.x + s2_ptr->pos.x) / 2.0f;
                     float mid_y =
                         (s_ptr->pos.y + s2_ptr->pos.y) / 2.0f;
-                    float angle =
-                        get_angle(s_ptr->pos, s2_ptr->pos);
                     const float delta =
                         (AREA_EDITOR::PATH_LINK_THICKNESS * 4) / game.cam.zoom;
                         
@@ -1115,12 +1112,7 @@ void area_editor::draw_canvas() {
                 if(selected_shadow != s_ptr) {
                     al_draw_rectangle(
                         min_coords.x, min_coords.y, max_coords.x, max_coords.y,
-                        (
-                            s_ptr == selected_shadow ?
-                            al_map_rgb(224, 224, 64) :
-                            al_map_rgb(128, 128, 64)
-                        ),
-                        2.0 / game.cam.zoom
+                        al_map_rgb(128, 128, 64), 2.0 / game.cam.zoom
                     );
                 }
             }

@@ -315,7 +315,7 @@ private:
     void do_aesthetic_logic(const float delta_t);
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = NULL,
-        ALLEGRO_TRANSFORM* bmp_transform = NULL
+        const ALLEGRO_TRANSFORM* bmp_transform = NULL
     );
     void do_gameplay_leader_logic(const float delta_t);
     void do_gameplay_logic(const float delta_t);
@@ -340,7 +340,7 @@ private:
     ALLEGRO_BITMAP* generate_fog_bitmap(
         const float near_radius, const float far_radius
     );
-    mob* get_closest_group_member(subgroup_type* type);
+    mob* get_closest_group_member(const subgroup_type* type);
     void handle_player_action(const player_action &action);
     void init_hud();
     bool is_mission_clear_met();

@@ -728,24 +728,20 @@ void animation_editor::process_gui_panel_animation() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            if(cur_anim) {
-                string cur_anim_name = cur_anim->name;
-                size_t nr = anims.find_animation(cur_anim_name);
-                anims.animations.erase(anims.animations.begin() + nr);
-                if(anims.animations.empty()) {
-                    nr = INVALID;
-                    cur_anim = NULL;
-                    cur_frame_nr = INVALID;
-                } else {
-                    nr = std::min(nr, anims.animations.size() - 1);
-                    pick_animation(anims.animations[nr]->name, "", false);
-                }
-                anim_playing = false;
-                changes_mgr.mark_as_changed();
-                set_status("Deleted animation \"" + cur_anim_name + "\".");
+            string cur_anim_name = cur_anim->name;
+            size_t nr = anims.find_animation(cur_anim_name);
+            anims.animations.erase(anims.animations.begin() + nr);
+            if(anims.animations.empty()) {
+                nr = INVALID;
+                cur_anim = NULL;
+                cur_frame_nr = INVALID;
             } else {
-                set_status("You have to select an animation to delete!", true);
+                nr = std::min(nr, anims.animations.size() - 1);
+                pick_animation(anims.animations[nr]->name, "", false);
             }
+            anim_playing = false;
+            changes_mgr.mark_as_changed();
+            set_status("Deleted animation \"" + cur_anim_name + "\".");
         }
         set_tooltip(
             "Delete the current animation."
@@ -1527,24 +1523,20 @@ void animation_editor::process_gui_panel_sprite() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            if(cur_sprite) {
-                string deleted_sprite_name = cur_sprite->name;
-                size_t nr = anims.find_sprite(deleted_sprite_name);
-                anims.sprites.erase(anims.sprites.begin() + nr);
-                if(anims.sprites.empty()) {
-                    nr = INVALID;
-                    cur_sprite = NULL;
-                    cur_hitbox = NULL;
-                    cur_hitbox_nr = INVALID;
-                } else {
-                    nr = std::min(nr, anims.sprites.size() - 1);
-                    pick_sprite(anims.sprites[nr]->name, "", false);
-                }
-                changes_mgr.mark_as_changed();
-                set_status("Deleted sprite \"" + deleted_sprite_name + "\".");
+            string deleted_sprite_name = cur_sprite->name;
+            size_t nr = anims.find_sprite(deleted_sprite_name);
+            anims.sprites.erase(anims.sprites.begin() + nr);
+            if(anims.sprites.empty()) {
+                nr = INVALID;
+                cur_sprite = NULL;
+                cur_hitbox = NULL;
+                cur_hitbox_nr = INVALID;
             } else {
-                set_status("You have to select a sprite to delete!", true);
+                nr = std::min(nr, anims.sprites.size() - 1);
+                pick_sprite(anims.sprites[nr]->name, "", false);
             }
+            changes_mgr.mark_as_changed();
+            set_status("Deleted sprite \"" + deleted_sprite_name + "\".");
         }
         set_tooltip(
             "Delete the current sprite."

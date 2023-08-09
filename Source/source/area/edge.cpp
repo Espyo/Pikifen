@@ -80,7 +80,7 @@ vertex* edge::get_other_vertex(const vertex* v_ptr) const {
  * s_ptr:
  *   Sector to check.
  */
-size_t edge::get_side_with_sector(sector* s_ptr) const {
+size_t edge::get_side_with_sector(const sector* s_ptr) const {
     for(unsigned char s = 0; s < 2; ++s) {
         if(sectors[s] == s_ptr) return s;
     }
@@ -230,6 +230,6 @@ edge_intersection::edge_intersection(edge* e1, edge* e2) :
  * e:
  *   Edge to check.
  */
-bool edge_intersection::contains(edge* e) {
+bool edge_intersection::contains(const edge* e) {
     return e1 == e || e2 == e;
 }
