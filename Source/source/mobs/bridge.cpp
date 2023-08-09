@@ -21,7 +21,7 @@
 namespace BRIDGE {
 //Width of the bridge's main floor, i.e., sans rails.
 const float FLOOR_WIDTH = 192.0f;
-//How far apart bridge steps are
+//How far apart bridge steps are.
 const float STEP_HEIGHT = 10;
 }
 
@@ -221,7 +221,7 @@ bool bridge::check_health() {
     pos = start_pos + offset;
     z = start_z + prev_chunk_components[0]->z;
     ground_sector = prev_chunk_components[0]->ground_sector;
-
+    
     return true;
 }
 

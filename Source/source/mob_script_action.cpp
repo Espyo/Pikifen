@@ -1871,7 +1871,7 @@ void mob_action_runners::stop_vertically(mob_action_run_data &data) {
  */
 void mob_action_runners::store_focus_inside(mob_action_run_data &data) {
     if(data.m->focused_mob && !data.m->focused_mob->is_stored_inside_mob()) {
-        data.m->store_mob_inside(data.m->focused_mob);   
+        data.m->store_mob_inside(data.m->focused_mob);
     }
 }
 

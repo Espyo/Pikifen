@@ -792,7 +792,7 @@ void gameplay_state::load() {
         mob_gen* gen_ptr = game.cur_area_data.mob_generators[m];
         mob* mob_ptr = mobs_per_gen[m];
         if(!mob_ptr) continue;
-
+        
         for(size_t l = 0; l < gen_ptr->link_nrs.size(); ++l) {
             size_t link_target_gen_nr = gen_ptr->link_nrs[l];
             mob* link_target_mob_ptr = mobs_per_gen[link_target_gen_nr];
@@ -842,7 +842,7 @@ void gameplay_state::load() {
     //In case a leader is stored in another mob,
     //update the availible list.
     update_available_leaders();
-
+    
     cur_leader_nr = INVALID;
     cur_leader_ptr = NULL;
     starting_nr_of_leaders = mobs.leaders.size();

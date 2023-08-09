@@ -2052,7 +2052,7 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
                     break;
                 }
             }
-
+            
             float liquid_opacity_mult = 1.0f;
             if (c_ptr->sector_ptr->draining_liquid) {
                 liquid_opacity_mult =

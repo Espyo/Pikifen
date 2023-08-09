@@ -630,7 +630,7 @@ void draw_liquid(
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
     float brightness_mult = s_ptr->brightness / 255.0;
-
+    
     //Layer 1 - Transparent wobbling ground texture.
     if(s_ptr->texture_info.bitmap) {
         ALLEGRO_TRANSFORM tra;
@@ -649,7 +649,7 @@ void draw_liquid(
                 DRAWING::LIQUID_WOBBLE_TIME_SCALE
             ) * DRAWING::LIQUID_WOBBLE_DELTA_X;
         float ground_texture_dy =
-            al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.5;
+            al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.8;
             
         for(size_t v = 0; v < n_vertexes; ++v) {
         
@@ -663,7 +663,7 @@ void draw_liquid(
             al_transform_coordinates(&tra, &vx, &vy);
             av[v].u = vx + ground_wobble;
             av[v].v = vy + ground_texture_dy;
-            av[v].color = 
+            av[v].color =
                 al_map_rgba_f(
                     s_ptr->texture_info.tint.r * brightness_mult,
                     s_ptr->texture_info.tint.g * brightness_mult,
@@ -681,14 +681,14 @@ void draw_liquid(
     }
     
     //Layer 2 - Tint.
-    ALLEGRO_COLOR tint_color = 
-    al_map_rgba_f(
-        l_ptr->main_color.r * brightness_mult,
-        l_ptr->main_color.g * brightness_mult,
-        l_ptr->main_color.b * brightness_mult,
-        l_ptr->main_color.a * liquid_opacity_mult
-    );
-
+    ALLEGRO_COLOR tint_color =
+        al_map_rgba_f(
+            l_ptr->main_color.r * brightness_mult,
+            l_ptr->main_color.g * brightness_mult,
+            l_ptr->main_color.b * brightness_mult,
+            l_ptr->main_color.a * liquid_opacity_mult
+        );
+        
     for(size_t v = 0; v < n_vertexes; ++v) {
     
         const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
