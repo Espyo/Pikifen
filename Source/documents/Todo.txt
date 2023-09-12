@@ -2,7 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    Update Dear ImGui
+    
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
