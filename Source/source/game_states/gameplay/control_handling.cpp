@@ -305,7 +305,8 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     selected_spray =
                         sum_and_wrap(
                             (int) selected_spray,
-                            action.action_type_id == PLAYER_ACTION_NEXT_SPRAY ? +1 : -1,
+                            action.action_type_id ==
+                            PLAYER_ACTION_NEXT_SPRAY ? +1 : -1,
                             (int) game.spray_types.size()
                         );
                     game.states.gameplay->hud->
@@ -536,7 +537,10 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 next_maturity =
                     (size_t) sum_and_wrap(
                         (int) next_maturity,
-                        (action.action_type_id == PLAYER_ACTION_NEXT_MATURITY ? 1 : -1),
+                        (
+                            action.action_type_id ==
+                            PLAYER_ACTION_NEXT_MATURITY ? 1 : -1
+                        ),
                         N_MATURITIES
                     );
                     
@@ -565,7 +569,12 @@ void gameplay_state::handle_player_action(const player_action &action) {
     } else if(msg_box) {
     
         //Displaying a message.
-        if((action.action_type_id == PLAYER_ACTION_THROW || action.action_type_id == PLAYER_ACTION_PAUSE) && is_down) {
+        if(
+            (
+                action.action_type_id == PLAYER_ACTION_THROW ||
+                action.action_type_id == PLAYER_ACTION_PAUSE
+            ) && is_down
+        ) {
             msg_box->advance();
         }
         

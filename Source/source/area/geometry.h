@@ -18,10 +18,12 @@
 
 #include "../utils/geometry_utils.h"
 
+
 using std::map;
 using std::set;
 using std::unordered_set;
 using std::vector;
+
 
 struct edge;
 struct sector;

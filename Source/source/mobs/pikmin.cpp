@@ -23,12 +23,12 @@
 
 
 namespace PIKMIN {
-//How long a Pikmin should ignore leader bumps after being dismissed.
-const float DISMISS_BUMP_LOCK_DURATION = 5.0f;
 //How long a Pikmin that got knocked down stays on the floor for, if left alone.
 const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
 //A whistled Pikmin that got knocked down loses this much in lie-down time.
 const float DEF_KNOCKED_DOWN_WHISTLE_BONUS = 1.2f;
+//How long a Pikmin should ignore leader bumps after being dismissed.
+const float DISMISS_BUMP_LOCK_DURATION = 5.0f;
 //Time until moving Pikmin timeout and stay in place, after being dismissed.
 const float DISMISS_TIMEOUT = 4.0f;
 //Timeout before a Pikmin gives up, when ordered to go to something.
@@ -275,7 +275,8 @@ void pikmin::handle_status_effect_gain(status_type* sta_type) {
     increase_maturity(sta_type->maturity_change_amount);
     
     if(carrying_mob) {
-        carrying_mob->chase_info.max_speed = carrying_mob->carry_info->get_speed();
+        carrying_mob->chase_info.max_speed =
+            carrying_mob->carry_info->get_speed();
     }
 }
 
@@ -342,7 +343,8 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
     }
     
     if(carrying_mob) {
-        carrying_mob->chase_info.max_speed = carrying_mob->carry_info->get_speed();
+        carrying_mob->chase_info.max_speed =
+            carrying_mob->carry_info->get_speed();
     }
 }
 

@@ -122,9 +122,9 @@ private:
     vector<data_node*> dummy_children;
     
     data_node* create_dummy();
+    static unsigned char decrypt_char(const unsigned char c);
     static unsigned char encrypt_char(const unsigned char c);
     static void encrypt_string(string &s);
-    static unsigned char decrypt_char(const unsigned char c);
     static void getline(
         ALLEGRO_FILE* file, string &line, const bool encrypted = false
     );

@@ -2089,25 +2089,6 @@ void pikmin_fsm::called_while_knocked_down(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin should check if the leader bumping it should result in it
- * being added to the group or not.
- * m:
- *   The mob.
- * info1:
- *   Unused.
- * info2:
- *   Unused.
- */
-void pikmin_fsm::check_leader_bump(mob* m, void* info1, void* info2) {
-    if(m->script_timer.time_left > 0.0f) {
-        return;
-    }
-    pikmin_fsm::called(m, info1, info2);
-    m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
-}
-
-
-/* ----------------------------------------------------------------------------
  * When a Pikmin should check the attack it has just received.
  * If the attack is successful, another event is triggered. Otherwise
  * nothing happens.
@@ -2142,6 +2123,25 @@ void pikmin_fsm::check_incoming_attack(mob* m, void* info1, void* info2) {
     
     //If we got to this point, then greenlight for the attack.
     m->fsm.run_event(MOB_EV_PIKMIN_DAMAGE_CONFIRMED, info1, info2);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin should check if the leader bumping it should result in it
+ * being added to the group or not.
+ * m:
+ *   The mob.
+ * info1:
+ *   Unused.
+ * info2:
+ *   Unused.
+ */
+void pikmin_fsm::check_leader_bump(mob* m, void* info1, void* info2) {
+    if(m->script_timer.time_left > 0.0f) {
+        return;
+    }
+    pikmin_fsm::called(m, info1, info2);
+    m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
 }
 
 

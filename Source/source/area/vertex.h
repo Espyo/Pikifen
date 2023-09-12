@@ -13,8 +13,10 @@
 
 #include <vector>
 
+
 using std::size_t;
 using std::vector;
+
 
 struct edge;
 
@@ -46,5 +48,6 @@ struct vertex {
     bool is_neighbor(const vertex* v_ptr) const;
     void remove_edge(const edge* e_ptr);
 };
+
 
 #endif //ifndef VERTEX_INCLUDED

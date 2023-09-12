@@ -20,9 +20,9 @@ class leader;
 
 
 namespace PIKMIN {
-extern const float DISMISS_BUMP_LOCK_DURATION;
 extern const float DEF_KNOCKED_DOWN_DURATION;
 extern const float DEF_KNOCKED_DOWN_WHISTLE_BONUS;
+extern const float DISMISS_BUMP_LOCK_DURATION;
 extern const float DISMISS_TIMEOUT;
 extern const float GOTO_TIMEOUT;
 extern const float GROUNDED_ATTACK_DIST;

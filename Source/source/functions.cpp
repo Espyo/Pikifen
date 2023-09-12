@@ -219,7 +219,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         NULL, "Program crash!",
         "Pikifen has crashed!",
         "Sorry about that! To help fix this problem, please read the "
-        "FAQ & troubleshooting section of the included manual. Thanks!",
+        "troubleshooting section of the included manual. Thanks!",
         NULL,
         ALLEGRO_MESSAGEBOX_ERROR
     );
@@ -481,6 +481,17 @@ string get_current_time(const bool filename_friendly) {
         leading_zero(t.tm_min) +
         (filename_friendly ? "." : ":") +
         leading_zero(t.tm_sec);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the engine's version as a string.
+ */
+string get_engine_version_string() {
+    return
+        i2s(VERSION_MAJOR) + "." +
+        i2s(VERSION_MINOR) + "." +
+        i2s(VERSION_REV);
 }
 
 
@@ -878,13 +889,6 @@ map<string, string> get_var_map(const string &vars_string) {
         final_map[trim_spaces(raw_parts[0])] = trim_spaces(raw_parts[1]);
     }
     return final_map;
-}
-
-/* ----------------------------------------------------------------------------
- * Returns the engine's version as a string.
- */
-string get_engine_version_string() {
-    return i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
 }
 
 

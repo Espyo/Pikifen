@@ -728,6 +728,18 @@ void animation_editor::press_save_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the zoom and position reset button widget is pressed.
+ */
+void animation_editor::press_zoom_and_pos_reset_button() {
+    if(game.cam.target_zoom == 1.0f) {
+        game.cam.target_pos = point();
+    } else {
+        game.cam.target_zoom = 1.0f;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the zoom everything button widget is pressed.
  */
 void animation_editor::press_zoom_everything_button() {
@@ -769,18 +781,6 @@ void animation_editor::press_zoom_everything_button() {
     }
     
     center_camera(cmin, cmax);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom and position reset button widget is pressed.
- */
-void animation_editor::press_zoom_and_pos_reset_button() {
-    if(game.cam.target_zoom == 1.0f) {
-        game.cam.target_pos = point();
-    } else {
-        game.cam.target_zoom = 1.0f;
-    }
 }
 
 

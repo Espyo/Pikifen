@@ -52,6 +52,20 @@ void area_editor::do_drawing() {
 
 /* ----------------------------------------------------------------------------
  * Draws an arrow, usually used for one mob to point to another.
+ * start:
+ *   Starting point of the arrow.
+ * end:
+ *   Ending point of the arrow, where the arrow points to.
+ * start_offset:
+ *   When considering where to place the triangle in the line, pretend that
+ *   the starting point is actually this distance away from start.
+ *   Useful for when mobs of different radii are involved.
+ * end_offset:
+ *   Same as start_offset, but for the end point.
+ * thickness:
+ *   Thickness of the arrow's line.
+ * color:
+ *   Arrow color.
  */
 void area_editor::draw_arrow(
     const point &start, const point &end,

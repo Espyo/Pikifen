@@ -544,7 +544,8 @@ void gameplay_state::draw_debug_tools() {
     al_draw_text(
         game.fonts.builtin,
         al_map_rgb(255, 64, 64),
-        CLEAN_STICK_VIEWER_X, CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
+        CLEAN_STICK_VIEWER_X,
+        CLEAN_STICK_VIEWER_Y + CLEAN_STICK_VIEWER_SIZE + 1,
         ALLEGRO_ALIGN_LEFT,
         (
             box_string(
@@ -2056,7 +2057,8 @@ void gameplay_state::draw_world_components(ALLEGRO_BITMAP* bmp_output) {
             float liquid_opacity_mult = 1.0f;
             if (c_ptr->sector_ptr->draining_liquid) {
                 liquid_opacity_mult =
-                    c_ptr->sector_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
+                    c_ptr->sector_ptr->liquid_drain_left /
+                    GEOMETRY::LIQUID_DRAIN_DURATION;
             }
             draw_sector_edge_offsets(
                 c_ptr->sector_ptr,

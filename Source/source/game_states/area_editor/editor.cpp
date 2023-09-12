@@ -1841,29 +1841,6 @@ area_data* area_editor::prepare_state() {
 
 
 /* ----------------------------------------------------------------------------
- * Code to run when the copy properties button widget is pressed.
- */
-void area_editor::press_copy_properties_button() {
-    switch(state) {
-    case EDITOR_STATE_LAYOUT: {
-        if(!selected_sectors.empty()) {
-            copy_sector_properties();
-        } else {
-            copy_edge_properties();
-        }
-        break;
-    } case EDITOR_STATE_MOBS: {
-        copy_mob_properties();
-        break;
-    } case EDITOR_STATE_PATHS: {
-        copy_path_link_properties();
-        break;
-    }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Code to run when the circle sector button widget is pressed.
  */
 void area_editor::press_circle_sector_button() {
@@ -1898,6 +1875,41 @@ void area_editor::press_circle_sector_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the copy properties button widget is pressed.
+ */
+void area_editor::press_copy_properties_button() {
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        if(!selected_sectors.empty()) {
+            copy_sector_properties();
+        } else {
+            copy_edge_properties();
+        }
+        break;
+    } case EDITOR_STATE_MOBS: {
+        copy_mob_properties();
+        break;
+    } case EDITOR_STATE_PATHS: {
+        copy_path_link_properties();
+        break;
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the delete current area button widget is pressed.
+ */
+void area_editor::press_delete_area_button() {
+    open_dialog(
+        "Delete area?",
+        std::bind(&area_editor::process_gui_delete_area_dialog, this)
+    );
+    dialogs.back()->custom_size = point(400, 150);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the delete button widget is pressed.
  */
 void area_editor::press_delete_button() {
@@ -1916,18 +1928,6 @@ void area_editor::press_delete_button() {
         break;
     }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to run when the delete current area button widget is pressed.
- */
-void area_editor::press_delete_area_button() {
-    open_dialog(
-        "Delete area?",
-        std::bind(&area_editor::process_gui_delete_area_dialog, this)
-    );
-    dialogs.back()->custom_size = point(400, 150);
 }
 
 
@@ -2513,19 +2513,6 @@ void area_editor::press_zoom_and_pos_reset_button() {
 
 
 /* ----------------------------------------------------------------------------
- * Code to run when the zoom in button widget is pressed.
- */
-void area_editor::press_zoom_in_button() {
-    game.cam.target_zoom =
-        clamp(
-            game.cam.target_zoom +
-            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoom_min_level, zoom_max_level
-        );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Code to run when the zoom everything button widget is pressed.
  */
 void area_editor::press_zoom_everything_button() {
@@ -2586,6 +2573,19 @@ void area_editor::press_zoom_everything_button() {
     if(!got_something) return;
     
     center_camera(min_coords, max_coords);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the zoom in button widget is pressed.
+ */
+void area_editor::press_zoom_in_button() {
+    game.cam.target_zoom =
+        clamp(
+            game.cam.target_zoom +
+            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoom_min_level, zoom_max_level
+        );
 }
 
 
@@ -3252,7 +3252,9 @@ bool area_editor::save_area(const bool to_backup) {
                 data_file.add(
                     new data_node(
                         "mission_points_per_treasure_point",
-                        i2s(game.cur_area_data.mission.points_per_treasure_point)
+                        i2s(
+                            game.cur_area_data.mission.points_per_treasure_point
+                        )
                     )
                 );
             }

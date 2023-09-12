@@ -77,7 +77,9 @@ void controls_menu_state::choose_input(
 
 /* ----------------------------------------------------------------------------
  * Deletes a bind from an action type.
- * index:
+ * action_type:
+ *   Action type it belongs to.
+ * bind_idx:
  *   Index number of the control.
  */
 void controls_menu_state::delete_bind(
@@ -324,7 +326,8 @@ void controls_menu_state::populate_binds() {
             gui.add_item(section_text);
             
             action_y =
-                list_box->get_child_bottom() + CONTROLS_MENU::BIND_BUTTON_PADDING;
+                list_box->get_child_bottom() +
+                CONTROLS_MENU::BIND_BUTTON_PADDING;
                 
             last_cat = action_type.category;
             
@@ -376,8 +379,10 @@ void controls_menu_state::populate_binds() {
                 new text_gui_item(
                 "Default:", game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
             );
-            default_label_text->center = point(0.70f, cur_y);
-            default_label_text->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            default_label_text->center =
+                point(0.70f, cur_y);
+            default_label_text->size =
+                point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
             list_box->add_child(default_label_text);
             gui.add_item(default_label_text);
             default_label_text->start_juice_animation(
@@ -388,8 +393,10 @@ void controls_menu_state::populate_binds() {
             player_input def_input =
                 game.controls.str_to_input(action_type.default_bind_str);
             gui_item* default_icon = new gui_item();
-            default_icon->center = point(0.75f, cur_y);
-            default_icon->size = point(0.15f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            default_icon->center =
+                point(0.75f, cur_y);
+            default_icon->size =
+                point(0.15f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
             default_icon->on_draw =
             [def_input] (const point & center, const point & size) {
                 draw_player_input_icon(
@@ -399,13 +406,17 @@ void controls_menu_state::populate_binds() {
             list_box->add_child(default_icon);
             gui.add_item(default_icon);
             
-            cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
-            
+            cur_y +=
+                CONTROLS_MENU::BIND_BUTTON_HEIGHT +
+                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                
             //Restore default button.
             button_gui_item* restore_button =
                 new button_gui_item("Restore defaults", game.fonts.standard);
-            restore_button->center = point(0.70f, cur_y);
-            restore_button->size = point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
+            restore_button->center =
+                point(0.70f, cur_y);
+            restore_button->size =
+                point(0.30f, CONTROLS_MENU::BIND_BUTTON_HEIGHT);
             restore_button->on_activate =
             [this, a] (const point &) {
                 restore_defaults((PLAYER_ACTION_TYPES) a);
@@ -418,8 +429,10 @@ void controls_menu_state::populate_binds() {
                 gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
             
-            cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
-            
+            cur_y +=
+                CONTROLS_MENU::BIND_BUTTON_HEIGHT +
+                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                
         }
         
         vector<control_bind> a_binds = binds_per_action_type[a];
@@ -460,7 +473,8 @@ void controls_menu_state::populate_binds() {
                 }
                 
                 draw_player_input_icon(
-                    game.fonts.slim, a_binds[b].input, false, icon_center, icon_size * 0.8f
+                    game.fonts.slim, a_binds[b].input, false,
+                    icon_center, icon_size * 0.8f
                 );
                 
                 draw_button(
@@ -487,8 +501,10 @@ void controls_menu_state::populate_binds() {
                 );
             }
             
-            cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
-            
+            cur_y +=
+                CONTROLS_MENU::BIND_BUTTON_HEIGHT +
+                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                
         }
         
         if(showing_more && a == cur_action_type) {
@@ -510,8 +526,10 @@ void controls_menu_state::populate_binds() {
                 gui_item::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
             
-            cur_y += CONTROLS_MENU::BIND_BUTTON_HEIGHT + CONTROLS_MENU::BIND_BUTTON_PADDING;
-            
+            cur_y +=
+                CONTROLS_MENU::BIND_BUTTON_HEIGHT +
+                CONTROLS_MENU::BIND_BUTTON_PADDING;
+                
         } else if(a_binds.empty()) {
         
             //Add first bind button.

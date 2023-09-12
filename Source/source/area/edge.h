@@ -17,6 +17,7 @@
 
 #include "../const.h"
 
+
 struct sector;
 
 
@@ -71,5 +72,6 @@ struct edge_intersection {
     edge_intersection(edge* e1, edge* e2);
     bool contains(const edge* e);
 };
+
 
 #endif //ifndef EDGE_INCLUDED

@@ -1056,6 +1056,21 @@ void editor::open_picker_dialog(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates widgets with the goal of placing a disabled text widget to the
+ * right side of the panel.
+ * title:
+ *   Title to write.
+ */
+void editor::panel_title(const char* title) {
+    ImGui::SameLine(
+        ImGui::GetContentRegionAvail().x -
+        (ImGui::CalcTextSize(title).x + 1)
+    );
+    ImGui::TextDisabled("%s", title);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Begins a Dear ImGui popup, with logic to close it if Escape was pressed.
  * label:
  *   The popup's label.
@@ -1070,21 +1085,6 @@ bool editor::popup(const char* label, ImGuiWindowFlags flags) {
         }
     }
     return result;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates widgets with the goal of placing a disabled text widget to the
- * right side of the panel.
- * title:
- *   Title to write.
- */
-void editor::panel_title(const char* title) {
-    ImGui::SameLine(
-        ImGui::GetContentRegionAvail().x -
-        (ImGui::CalcTextSize(title).x + 1)
-    );
-    ImGui::TextDisabled("%s", title);
 }
 
 
@@ -1972,6 +1972,8 @@ void editor::zoom_with_cursor(const float new_zoom) {
 
 /* ----------------------------------------------------------------------------
  * Creates a new changes manager.
+ * ed:
+ *   Pointer to the editor.
  */
 editor::changes_manager::changes_manager(editor* ed) :
     ed(ed),

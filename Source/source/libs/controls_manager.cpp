@@ -68,6 +68,8 @@ void controls_manager::clean_stick(player_input input) {
 
 /* ----------------------------------------------------------------------------
  * Returns a list of action types that get triggered by the given input.
+ * input:
+ *   The input.
  */
 vector<int> controls_manager::get_action_types_from_input(
     const player_input &input
@@ -165,6 +167,8 @@ void controls_manager::handle_clean_input(
 
 /* ----------------------------------------------------------------------------
  * Handles an input from hardware.
+ * input:
+ *   The input.
  */
 void controls_manager::handle_input(
     const player_input &input

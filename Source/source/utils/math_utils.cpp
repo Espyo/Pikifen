@@ -64,8 +64,10 @@ float ease(const EASING_METHODS method, const float n) {
         const float mag2 = mag1 * 1.525f;
         return
             n < 0.5 ?
-            (float) (pow(2 * n, 2) * ((mag2 + 1.0f) * 2 * n - mag2)) / 2 :
-            (float) (pow(2 * n - 2, 2) * ((mag2 + 1.0f) * (n * 2 - 2) + mag2) + 2) / 2;
+            (float)
+            (pow(2 * n, 2) * ((mag2 + 1.0f) * 2 * n - mag2)) / 2 :
+            (float)
+            (pow(2 * n - 2, 2) * ((mag2 + 1.0f) * (n * 2 - 2) + mag2) + 2) / 2;
     } case EASE_IN_ELASTIC: {
         const float mag = TAU / 3;
         return
@@ -73,7 +75,8 @@ float ease(const EASING_METHODS method, const float n) {
             0.0f :
             n == 1.0f ?
             1.0f :
-            (float) - pow(2.0f, 10.0f * n - 10.0f) * (float) sin((n * 10.0f - 10.75f) * mag);
+            (float) - pow(2.0f, 10.0f * n - 10.0f) *
+            (float) sin((n * 10.0f - 10.75f) * mag);
     }
     case EASE_OUT_ELASTIC: {
         const float mag = TAU / 3;
@@ -82,7 +85,8 @@ float ease(const EASING_METHODS method, const float n) {
             0.0f :
             n == 1.0f ?
             1.0f :
-            (float) pow(2.0f, -10.0f * n) * (float) sin((n * 10.0f - 0.75f) * mag) + 1.0f;
+            (float) pow(2.0f, -10.0f * n) *
+            (float) sin((n * 10.0f - 0.75f) * mag) + 1.0f;
     }
     case EASE_UP_AND_DOWN: {
         return (float) sin(n * TAU / 2);
@@ -238,5 +242,6 @@ int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
  */
 float wrap_float(const float nr, const float minimum, const float maximum) {
     const float diff = maximum - minimum;
-    return minimum + (float) fmod(diff + (float) fmod(nr - minimum, diff), diff);
+    return
+        minimum + (float) fmod(diff + (float) fmod(nr - minimum, diff), diff);
 }

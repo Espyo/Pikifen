@@ -1193,6 +1193,12 @@ void mob::circle_around(
 
 /* ----------------------------------------------------------------------------
  * Returns what Pikmin type is decided when carrying something.
+ * available_types:
+ *   List of Pikmin types that are currently available in the area.
+ * added:
+ *   If a Pikmin got added to the carriers, specify it here.
+ * removed:
+ *   If a Pikmin got removed from the carriers, specify it here.
  */
 pikmin_type* mob::decide_carry_pikmin_type(
     const unordered_set<pikmin_type*> &available_types,
@@ -1736,20 +1742,6 @@ float mob::get_base_speed() const {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the speed multiplier for this mob.
- */
-float mob::get_speed_multiplier() const {
-    float move_speed_mult = 1.0f;
-    for (size_t s = 0; s < this->statuses.size(); ++s) {
-        if(!statuses[s].to_delete) {
-            move_speed_mult *= this->statuses[s].type->speed_multiplier;
-        }
-    }
-    return move_speed_mult;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the actual location of the movement target.
  * z:
  *   If not NULL, the Z coordinate is returned here.
@@ -2027,6 +2019,20 @@ float mob::get_latched_pikmin_weight() const {
         total += p_ptr->type->weight;
     }
     return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the speed multiplier for this mob.
+ */
+float mob::get_speed_multiplier() const {
+    float move_speed_mult = 1.0f;
+    for (size_t s = 0; s < this->statuses.size(); ++s) {
+        if(!statuses[s].to_delete) {
+            move_speed_mult *= this->statuses[s].type->speed_multiplier;
+        }
+    }
+    return move_speed_mult;
 }
 
 
@@ -2565,16 +2571,6 @@ void mob::hold(
 }
 
 
-/* ----------------------------------------------------------------------------
- * Checks if a mob or its parent is stored inside another mob.
- */
-bool mob::is_stored_inside_mob() const {
-    if(stored_inside_another) return true;
-    if(parent && parent->m->stored_inside_another) return true;
-    return false;
-}
-
-
 
 /* ----------------------------------------------------------------------------
  * Checks if a mob is completely off-camera.
@@ -2642,6 +2638,16 @@ bool mob::is_resistant_to_hazards(const vector<hazard*> &hazards) const {
         }
     }
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if a mob or its parent is stored inside another mob.
+ */
+bool mob::is_stored_inside_mob() const {
+    if(stored_inside_another) return true;
+    if(parent && parent->m->stored_inside_another) return true;
+    return false;
 }
 
 
@@ -2727,20 +2733,6 @@ string mob::print_state_history() const {
     str += ".";
     
     return str;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Stores a mob inside of this one
- * m:
- *  The mob to store.
- */
-void mob::store_mob_inside(mob* m) {
-    hold(
-        m, INVALID, 0.0f, 0.0f, 0.5f,
-        false, HOLD_ROTATION_METHOD_NEVER
-    );
-    m->stored_inside_another = this;
 }
 
 
@@ -3274,6 +3266,20 @@ void mob::stop_track_ride() {
  */
 void mob::stop_turning() {
     face(angle, NULL, true);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stores a mob inside of this one
+ * m:
+ *  The mob to store.
+ */
+void mob::store_mob_inside(mob* m) {
+    hold(
+        m, INVALID, 0.0f, 0.0f, 0.5f,
+        false, HOLD_ROTATION_METHOD_NEVER
+    );
+    m->stored_inside_another = this;
 }
 
 

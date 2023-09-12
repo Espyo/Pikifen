@@ -1810,7 +1810,10 @@ void get_player_input_icon_info(
             return;
         } else if(
             condensed &&
-            (i.button_nr == ALLEGRO_KEY_LSHIFT || i.button_nr == ALLEGRO_KEY_RSHIFT)
+            (
+                i.button_nr == ALLEGRO_KEY_LSHIFT ||
+                i.button_nr == ALLEGRO_KEY_RSHIFT
+            )
         ) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_SHIFT;

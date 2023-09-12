@@ -2011,6 +2011,8 @@ mission_record::mission_record() :
 
 /* ----------------------------------------------------------------------------
  * Returns whether or not this record is a platinum medal.
+ * mission:
+ *   Mission data to get info from.
  */
 bool mission_record::is_platinum(const mission_data &mission) {
     switch(mission.grading_mode) {

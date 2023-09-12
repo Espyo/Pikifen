@@ -15,10 +15,10 @@
 
 #include <allegro5/allegro_image.h>
 
+#include "area/sector.h"
 #include "drawing.h"
 #include "functions.h"
 #include "game.h"
-#include "area/sector.h"
 
 
 /* ----------------------------------------------------------------------------

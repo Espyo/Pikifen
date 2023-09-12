@@ -16,6 +16,7 @@
 #include "../game.h"
 #include "../utils/string_utils.h"
 
+
 using std::size_t;
 using std::vector;
 
@@ -1228,7 +1229,7 @@ mob_gen::mob_gen(
  * Clones the properties of this mob generator onto another mob generator.
  * destination:
  *   Mob generator to clone the data into.
- * position:
+ * include_position:
  *   If true, the position is included too.
  */
 void mob_gen::clone(mob_gen* destination, const bool include_position) const {

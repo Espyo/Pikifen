@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -9,20 +9,13 @@ Next tasks (roughly sorted most important first)
     Winged Pikmin that fall in the water should fly up when whistled
     Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
     Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
+    If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
+        Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
+    Port the latest fixes from Helodity's bugfix branch
 
     --- 0.25.0 ---
     Code cleanup
-        Confirm that no line goes over 80 characters
-            Use the helper tool, or run:
-                grep -Enr --include="*.cpp" ^.\{81,\}$
-        Confirm that all function definitions are sorted alphabetically, and by namespace
-            Use the helper tool
-        Confirm that all includes are sorted alphabetically
-            Use the helper tool
-        Confirm that all functions have documentation, and that it has no missing/extra parameters
-            Use the helper tool
-        Confirm that all function definitions and blocks of includes have two empty lines of space before what comes next
-            Use the helper tool
+        Move the cppcheck suppressions to their own file, with comments explaining the reasoning
     Fix up all changed SVG files
         Use the helper tool to get the list, or run:
             git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'
@@ -72,6 +65,57 @@ Next tasks (roughly sorted most important first)
         The area editor should have a music preview button
         Add some songs
     Revamp sound system
+        Candidate list of all needed sounds, for now
+            Pikmin
+                Squealing in pain
+                Struggling to lift
+                Carrying
+                Knocked back
+                Seed landing
+            Menus
+                Menu item highlight
+                Menu item selected
+                Menu backed out of
+                Changing an option's value, toggling stuff like all Pikmin types in the Onion, etc.
+            HUD
+                Ready...
+                GO!
+                TODO Mission stuff
+            Leader
+                Footsteps
+                Alph, Brittany, and Charlie
+                Spray
+                Swarming
+            Enemies
+                Generic sucking in air
+                Generic spitting
+                Generic big stomp
+                Generic shaking
+                Generic whisk (Burrow-nit stabbing)
+                Generic biting
+                Generic eletric attack
+                Generic fire attack
+                Generic water attack
+                Generic bubble attack
+                Generic gulping
+                Bould rolling
+                Burrowing sound
+                Enemy spirit floating
+            Other mobs
+                Onion/ship beam
+                Onion/ship object entered
+                Onion/Candypop spitting
+                Gate moving
+            Others
+                Generic sparkles (Spiderworts regrowing, Pikmin flowering)
+                Boing (Bouncy Mushrooms)
+                Thud (carriable rock landing, airborne enemy enemy lands)
+                Ceramic clunk (ceramic bridge piece fitting)
+                Sticks clacking (climbing stick growing)
+                Rocks crumbling (clog being destroyed)
+                Crystal shattering
+                Leaves rustling (vegetation)
+                Explosion
         Rename sound files to .oga, instead of .ogg
         Info
             There are three types of sounds
@@ -106,10 +150,6 @@ Next tasks (roughly sorted most important first)
         It should be possible to play sounds both in specific frames of animation and in scripts as actions
             The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
         Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
-        Missing sounds
-            Pikmin seed landing
-            Pikmin sprout evolving/reverting
-            More...
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
         This might help
@@ -120,6 +160,7 @@ Next tasks (roughly sorted most important first)
             https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
         Fixes
             When you cancel holding a Pikmin, its standby squeal sound should stop
+    Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
     
     --- Future ---
     Some tweaks to the HUD
@@ -169,6 +210,8 @@ Next tasks (roughly sorted most important first)
                 Also, only pan if the mouse moved a certain amount of pixels
             Panning should be limited to just slightly beyond the area's bounding box
             The leader can't follow a path that goes through sectors that their Pikmin squad is vulnerable to
+        Survey drone? It'd just be a way for the player to view the area with free-cam (same as if there are no players)
+            The ability to place beacons?
         Stats page
             Table with the amount of Pikmin of each type that is in the Onion, with you, working, idling
             Number of deaths today (careful not to count Candypop Buds as deaths)
@@ -197,16 +240,18 @@ Next tasks (roughly sorted most important first)
     The code that determines what GUI item to go to via keyboard navigation isn't working so well for stuff inside box GUI items. In the results menu, with a mission with a lot of stuff in the stats, select "Retry" and press right. It'll select an unrelated item in the stats list
         Here's an idea: items that are inside of a scrollable box but are currently not visible should be considered as being outside the box, but with an ultra-tiny offset. For instance, a GUI item that spans from Y=10 to Y=50 on-screen and is a vertical list of buttons. The buttons currently visible on-screen inside this item are at Y=15, Y=25, Y=35, and Y=45. The next three buttons would technically be at Y=55, Y=65, and Y=75, but they're not applicable because they're beyond the bounds of the list GUI item. When calculating their position for the sake of keyboard navigation, just pretend their coordinates are at Y=50 (bottom of the list item) + 0.001 for the first item, 0.002 for the second item, 0.003 for the third. To keep relative dimensions intact, which may be a good idea, it's probably best to grab their offset from the bottom of the list item (so 55-50=5 for the first, 65-50=15 for the second, 75-50=25 for the third) and multiply them by 0.001.
     Controls improvements
-        Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
-            Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
-        Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
-        Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
-        Allow for button combinations
-            Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
-        Implement a screen stack system, with push&pop
-            If you're holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
-            If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
-            If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
+        Controls manager
+            Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
+                Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
+            Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
+            Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
+            Allow for button combinations
+                Basically, the bind struct has a chord variable, of the input type, and if this is not-none-typed, then this input is required before the main input is performed
+            Implement a screen stack system, with push&pop
+                If you're holding inputs at the area start interlude, the inputs should go into effect frame 1 when gameplay starts
+                If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
+                If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
+            Add an option to allow event coalescing. Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
         Controls menu
             In the controls menu, the player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
                 Then in the multiplayer setup screen, the player only picks what control scheme each player uses
@@ -654,6 +699,11 @@ Misc things (so I don't forget)
     Mechanics
         An option for the cursor to snap to the nearest object in-game, with an adjustable radius
             The mouse cursor, i.e. the spinning flower, should always show where the real "player" cursor is. It's just the leader's cursor, i.e. the outer shell, that locks
+            Alternatively, a button that locks the cursor in place
+                If on the floor, it just locks the cursor there
+                If on an enemy, it locks to that position of the enemy, like its back
+                While locked, movement on the mouse or gyro (if gyro is ever added) is ignored -- this allows the player to recenter their perhipheral
+                An option in the options for it to either lock with holding the button, or toggling
         Water depth (thanks ThyCheshireCat)
             Either way, consider giving water surfaces their own Z. Not just for drawing, but for the purposes of considering something submerged, too
         Enemies could have individual territories -- a circle that can be anywhere (detached from the mob) and have any radius, and the mob has to be confined to that
@@ -721,6 +771,10 @@ Misc things (so I don't forget)
             View -> Show X in other modes
                 This would allow one to see edges+vertexes, mobs, and paths in modes that aren't layout, mobs, and paths, respectively
             A way to visually show that you're in the layout mode, mobs mode, etc. I tried a vignette in the canvas, colored after the mode, but it's too ugly. Maybe coloring the Dear ImGui widgets based on the mode?
+            Should sectors et al have a UID that persists between operations and undos? It might make some calculations simpler
+            Sectors et al should probably inherit from a "selectable" class
+            Sectors et al used in the editor should probably be classes that inherit from the base class, since in the editor they need a lot of stuff that's not necessary in-game
+            Make sectors et al have a member of the "reference" type, which is used to refer to another sector, edge, etc.? This would probably make the organization between pointers and indexes more foolproof
         Animation editor
             Animations should be able to clone the hitbox, timing, etc. data of a different animation file. Basically if you want to create a skin of a leader, you can just clone everything and merely change the spritesheet
             A way to change all sprites' bitmap files from file A to file B (Darthvato)
@@ -748,6 +802,9 @@ Misc things (so I don't forget)
         The ability to tint the background image
         Move it to the details section
         Foreground
+    Message pop-ups
+        Useful for making characters talk mid-mission, via scripting
+        Also useful for stating that an obstacle was destroyed and stuff like that from Pikmin 4
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, etc. to the area's terrain without using sectors or objects
     The spray HUD icons should show a tiny bar with concoction progress
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
@@ -774,6 +831,7 @@ Misc things (so I don't forget)
         The size, color, etc. parameters should be split into "start", "half", and "end" of life
         Additive blending and normal blending
         Spawning some distance beyond the center -- good to get the smoke from the BLL's stomp to start near the edges of the feet, not the center
+        The ability for particle generators to consist of multiple particle generators
     Bridges and Dummies emit light during blackout (Darthvato)
     HUD element for a digital clock?
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?

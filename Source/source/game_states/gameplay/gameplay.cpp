@@ -18,12 +18,12 @@
 #include "../../drawing.h"
 #include "../../functions.h"
 #include "../../game.h"
+#include "../../libs/data_file.h"
 #include "../../load.h"
 #include "../../misc_structs.h"
 #include "../../mobs/converter.h"
 #include "../../mobs/pile.h"
 #include "../../mobs/resource.h"
-#include "../../libs/data_file.h"
 #include "../../utils/string_utils.h"
 
 

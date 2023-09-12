@@ -47,8 +47,6 @@ bool operator!=(const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
  *   Allegro file handle.
  * line:
  *   String to save the line into.
- * encrypted:
- *   If true, the document is encrypted and needs decrypting.
  */
 void getline(ALLEGRO_FILE* file, string &line) {
     line.clear();
