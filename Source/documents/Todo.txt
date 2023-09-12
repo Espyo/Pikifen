@@ -2,7 +2,7 @@
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Update Dear ImGui
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -11,23 +11,8 @@ Next tasks (roughly sorted most important first)
     Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
     If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
         Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
-    Port the latest fixes from Helodity's bugfix branch
 
     --- 0.25.0 ---
-    Code cleanup
-        Move the cppcheck suppressions to their own file, with comments explaining the reasoning
-    Fix up all changed SVG files
-        Use the helper tool to get the list, or run:
-            git diff --name-status $(git describe --abbrev=0 --tags) | grep -E '^[AM].*svg'
-        Remove large reference images and screenshots
-        Use the cleanup document tool in Inkscape
-        Make sure they have a license
-            https://opensource.org/licenses/MIT
-        Make sure they have metadata
-            Title: <Object name> spritesheet
-            Author: Andr� "Espyo" Silva
-            Keywords: Pikifen spritesheet
-            Description: Spritesheet for the <object name> pre-packaged in Pikifen. See https://www.pikminfanon.com/wiki/Pikifen
     More puzzle elements
         Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
             Add maker notes indicating this
