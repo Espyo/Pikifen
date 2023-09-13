@@ -106,7 +106,7 @@ void find_trace_edge(
     vertex* v_ptr, vertex* prev_v_ptr, sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
     edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
-    unordered_set<edge*>* unvisited_edges
+    unordered_set<edge*>* other_polygon_edges
 );
 void get_cce(
     const vector<vertex> &vertexes_left, vector<size_t> &ears,
@@ -132,7 +132,9 @@ bool is_vertex_ear(
 );
 TRIANGULATION_ERRORS trace_edges(
     vertex* start_v_ptr, sector* s_ptr, bool going_cw,
-    vector<vertex*>* vertexes, unordered_set<edge*>* unvisited_edges
+    vector<vertex*>* vertexes,
+    unordered_set<edge*>* unvisited_edges,
+    unordered_set<edge*>* polygon_edges_so_far
 );
 TRIANGULATION_ERRORS triangulate_polygon(
     polygon* poly, vector<triangle>* triangles

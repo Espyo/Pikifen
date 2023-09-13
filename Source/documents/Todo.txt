@@ -40,7 +40,7 @@ Next tasks (roughly sorted most important first)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
     https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Find a way for the "That split wouldn't do anything!" to not happen... like commit that line and let the user draw a new line?
+    Find a way for the "That wouldn't split the sector in any useful way!" to not happen... like commit that line and let the user draw a new line?
         Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
             Same with a sector reusing a vertex and other things maybe?
     Use the pretty cursor (spinning flower + trail) everywhere? Probably not in editors though

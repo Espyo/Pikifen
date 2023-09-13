@@ -408,14 +408,14 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  *   iteration of the algorithm so it doesn't need to re-calculate the angle.
  * next_v_ptr:
  *   Opposing vertex of the next edge.
- * unvisited_edges:
- *   List of edges that have not been visited yet.
+ * other_polygon_edges:
+ *   List of edges that belong to other polygons, and should not be checked.
  */
 void find_trace_edge(
     vertex* v_ptr, vertex* prev_v_ptr, sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
     edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
-    unordered_set<edge*>* unvisited_edges
+    unordered_set<edge*>* other_polygon_edges
 ) {
     //Info about the best candidate edge, if any.
     edge* best_e_ptr = NULL;
@@ -434,10 +434,10 @@ void find_trace_edge(
         }
         if(
             std::find(
-                unvisited_edges->begin(), unvisited_edges->end(), e_ptr
-            ) == unvisited_edges->end()
+                other_polygon_edges->begin(), other_polygon_edges->end(), e_ptr
+            ) != other_polygon_edges->end()
         ) {
-            //This edge has already been processed.
+            //This edge already belongs to another polygon of this sector.
             continue;
         }
         
@@ -567,6 +567,7 @@ TRIANGULATION_ERRORS get_polys(
     
     //First, compile a list of all edges related to this sector.
     unordered_set<edge*> edges_left(s_ptr->edges.begin(), s_ptr->edges.end());
+    unordered_set<edge*> polygon_edges_so_far;
     
     //Now trace along the edges, vertex by vertex, until we have no more left.
     while(!edges_left.empty()) {
@@ -594,7 +595,8 @@ TRIANGULATION_ERRORS get_polys(
         //while for the inner ones, it's clockwise.
         trace_edges(
             first_v_ptr, s_ptr, !is_outer,
-            &cur_poly_ptr->vertexes, &edges_left
+            &cur_poly_ptr->vertexes,
+            &edges_left, &polygon_edges_so_far
         );
         
         doing_first_polygon = false;
@@ -824,11 +826,14 @@ bool is_vertex_ear(
  */
 TRIANGULATION_ERRORS trace_edges(
     vertex* start_v_ptr, sector* s_ptr, bool going_cw,
-    vector<vertex*>* vertexes, unordered_set<edge*>* unvisited_edges
+    vector<vertex*>* vertexes,
+    unordered_set<edge*>* unvisited_edges,
+    unordered_set<edge*>* polygon_edges_so_far
 ) {
     if(!start_v_ptr || !s_ptr) return TRIANGULATION_ERROR_INVALID_ARGS;
     
     vertex* v_ptr = start_v_ptr;
+    unordered_set<edge*> polygon_edges;
     
     //At the start, no need to check if we're going to the previous vertex.
     vertex* prev_v_ptr = NULL;
@@ -928,7 +933,7 @@ TRIANGULATION_ERRORS trace_edges(
         
         find_trace_edge(
             v_ptr, prev_v_ptr, s_ptr, prev_e_angle, best_is_closest_cw,
-            &next_e_ptr, &next_e_angle, &next_v_ptr, unvisited_edges
+            &next_e_ptr, &next_e_angle, &next_v_ptr, polygon_edges_so_far
         );
         
         //Now that we have the edge, what do we do?
@@ -956,9 +961,12 @@ TRIANGULATION_ERRORS trace_edges(
         }
         if(next_e_ptr) {
             unvisited_edges->erase(next_e_ptr);
+            polygon_edges.insert(next_e_ptr);
         }
         
     }
+    
+    polygon_edges_so_far->insert(polygon_edges.begin(), polygon_edges.end());
     
     return result;
 }
