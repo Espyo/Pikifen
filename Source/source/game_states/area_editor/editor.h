@@ -160,8 +160,6 @@ private:
     enum DRAWING_LINE_RESULTS {
         //No error.
         DRAWING_LINE_OK,
-        //Made a loop while trying to split a sector.
-        DRAWING_LINE_LOOPS_IN_SPLIT,
         //Hit an existing edge or vertex when drawing a new sector.
         DRAWING_LINE_HIT_EDGE_OR_VERTEX,
         //Trying to draw along an existing edge.

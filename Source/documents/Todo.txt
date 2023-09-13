@@ -5,8 +5,6 @@
     update manual
         update the images on how to unstitch sectors
         changelog
-    allow starting and ending on a vertex/edge when drawing a new sector
-        update manual
 
 Current tasks (tasks being worked on, but not yet committed)
     

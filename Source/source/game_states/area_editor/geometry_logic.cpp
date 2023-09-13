@@ -107,17 +107,6 @@ void area_editor::check_drawing_line(const point &pos) {
     layout_drawing_node* prev_node = &drawing_nodes.back();
     layout_drawing_node tentative_node(this, pos);
     
-    //Check if the user is trying to close a loop, but the drawing is meant
-    //to be a split between two sectors.
-    if(
-        (drawing_nodes[0].on_edge || drawing_nodes[0].on_vertex) &&
-        dist(pos, drawing_nodes[0].snapped_spot) <=
-        AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
-    ) {
-        drawing_line_result = DRAWING_LINE_LOOPS_IN_SPLIT;
-        return;
-    }
-    
     //Check if the user hits a vertex or an edge, but the drawing is
     //meant to be a new sector shape.
     if(

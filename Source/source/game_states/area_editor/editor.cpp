@@ -1492,13 +1492,7 @@ void area_editor::goto_problem() {
 void area_editor::handle_line_error() {
     new_sector_error_tint_timer.start();
     switch(drawing_line_result) {
-    case DRAWING_LINE_LOOPS_IN_SPLIT: {
-        set_status(
-            "To split a sector, you can't end on the starting point!",
-            true
-        );
-        break;
-    } case DRAWING_LINE_HIT_EDGE_OR_VERTEX: {
+    case DRAWING_LINE_HIT_EDGE_OR_VERTEX: {
         break;
     } case DRAWING_LINE_ALONG_EDGE: {
         set_status(
