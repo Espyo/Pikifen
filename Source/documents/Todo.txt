@@ -1,6 +1,4 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    add island (sub-sector) support (right now it's crashing)
-        I guess this approach might work: the first polygon is always an outer. for every iteration thereafter, start with the rightmost vertex, face east, and find the closest clockwise edge (go clockwise since more often than not the next polygon is an inner, so we'll already save some time). for this closest clockwise edge, check the sectors on either side. facing from the starting vertex to the edge's other vertex, if our sector is to the left side, then this is an inner. otherwise, it's an outer
     to test
         test what happens if the first vertex of the outer polygon trace is a vertex with many edges
         test what happens if the first vertex of an inner polygon trace is a vertex with many edges
@@ -15,6 +13,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Reloading an area in the area editor just loads an "" area
     Winged Pikmin that fall in the water should fly up when whistled
     Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
     Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)

@@ -102,7 +102,12 @@ struct geometry_problems {
 };
 
 
-
+void find_trace_edge(
+    vertex* v_ptr, vertex* prev_v_ptr, sector* s_ptr,
+    float prev_e_angle, bool best_is_closest_cw,
+    edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
+    unordered_set<edge*>* unvisited_edges
+);
 void get_cce(
     const vector<vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
@@ -112,7 +117,11 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
     const float merge_radius
 );
 TRIANGULATION_ERRORS get_polys(
-    sector* s, polygon* outer, vector<polygon>* inners
+    sector* s_ptr, vector<polygon>* outers, vector<vector<polygon>>* inners
+);
+bool get_polys_is_outer(
+    vertex* v_ptr, sector* s_ptr, unordered_set<edge*> edges_left,
+    bool doing_first_polygon
 );
 vertex* get_rightmost_vertex(const unordered_set<edge*> &edges);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);

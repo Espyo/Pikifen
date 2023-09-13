@@ -10,6 +10,7 @@
 
 #define _USE_MATH_DEFINES
 
+#include <algorithm>
 #include <cmath>
 #include <vector>
 
@@ -407,11 +408,14 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  *   iteration of the algorithm so it doesn't need to re-calculate the angle.
  * next_v_ptr:
  *   Opposing vertex of the next edge.
+ * unvisited_edges:
+ *   List of edges that have not been visited yet.
  */
 void find_trace_edge(
     vertex* v_ptr, vertex* prev_v_ptr, sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
-    edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr
+    edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
+    unordered_set<edge*>* unvisited_edges
 ) {
     //Info about the best candidate edge, if any.
     edge* best_e_ptr = NULL;
@@ -426,6 +430,14 @@ void find_trace_edge(
         
         if(e_ptr->sectors[0] != s_ptr && e_ptr->sectors[1] != s_ptr) {
             //This edge is not related to our sector.
+            continue;
+        }
+        if(
+            std::find(
+                unvisited_edges->begin(), unvisited_edges->end(), e_ptr
+            ) == unvisited_edges->end()
+        ) {
+            //This edge has already been processed.
             continue;
         }
         
@@ -534,24 +546,24 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the outer polygon and inner polygons of a sector,
+ * Returns the outer polygons and inner polygons of a sector,
  * with the vertexes ordered counter-clockwise for the outer,
  * and clockwise for the inner.
  * Returns an error code.
  * s_ptr:
  *   Pointer to the sector.
  * outer:
- *   Return the outer polygon here.
+ *   Return the outer polygons here.
  * inners:
- *   Return the inner polygons here.
+ *   Return the inner polygons here, for each outer.
  */
 TRIANGULATION_ERRORS get_polys(
-    sector* s_ptr, polygon* outer, vector<polygon>* inners
+    sector* s_ptr, vector<polygon>* outers, vector<vector<polygon>>* inners
 ) {
-    if(!s_ptr || !outer || !inners) return TRIANGULATION_ERROR_INVALID_ARGS;
+    if(!s_ptr || !outers || !inners) return TRIANGULATION_ERROR_INVALID_ARGS;
     TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
     
-    bool doing_outer = true;
+    bool doing_first_polygon = true;
     
     //First, compile a list of all edges related to this sector.
     unordered_set<edge*> edges_left(s_ptr->edges.begin(), s_ptr->edges.end());
@@ -560,29 +572,118 @@ TRIANGULATION_ERRORS get_polys(
     while(!edges_left.empty()) {
     
         //Start with the rightmost vertex.
-        //If we still haven't closed the outer polygon, then this vertex
-        //mandatorily belongs to it. Otherwise, it belongs to an inner.
         vertex* first_v_ptr = get_rightmost_vertex(edges_left);
         
+        //Figure out if the polygon we are going to trace is an outer polygon
+        //or an inner one.
         polygon* cur_poly_ptr = NULL;
-        if(doing_outer) {
-            cur_poly_ptr = outer;
+        bool is_outer =
+            get_polys_is_outer(
+                first_v_ptr, s_ptr, edges_left, doing_first_polygon
+            );
+        if(is_outer) {
+            outers->push_back(polygon());
+            inners->push_back(vector<polygon>());
+            cur_poly_ptr = &(outers->back());
         } else {
-            inners->push_back(polygon());
-            cur_poly_ptr = &(inners->back());
+            inners->back().push_back(polygon());
+            cur_poly_ptr = &(inners->back().back());
         }
         
         //Trace! For the outer poly, we're going counter-clockwise,
         //while for the inner ones, it's clockwise.
         trace_edges(
-            first_v_ptr, s_ptr, !doing_outer,
+            first_v_ptr, s_ptr, !is_outer,
             &cur_poly_ptr->vertexes, &edges_left
         );
         
-        doing_outer = false;
+        doing_first_polygon = false;
     }
     
     return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Helper function that returns whether we are going to trace an outer polygon
+ * or an inner polygon.
+ * Returns true if it's an outer polygon.
+ * v_ptr:
+ *   Pointer to the vertex the trace is starting on.
+ * s_ptr:
+ *   Pointer to the sector we're working on.
+ * edges_left:
+ *   Edges that are still remaining to get polygons from.
+ * doing_first_polygon:
+ *   True if we're doing the first polygon of the sector, false otherwise.
+ */
+bool get_polys_is_outer(
+    vertex* v_ptr, sector* s_ptr, unordered_set<edge*> edges_left,
+    bool doing_first_polygon
+) {
+    if(doing_first_polygon) {
+        //If we're working on the first polygon, then it's mandatorily an
+        //outer polygon, since we always start with the rightmost vertex.
+        return true;
+    }
+    
+    //First, from the starting vertex (rightmost vertex available),
+    //imagine an arrow pointing straight right. Obviously no other vertex of
+    //the sector can be this way. But let's start rotating the arrow clockwise
+    //along the vertex's edges and find the one closest.
+    edge* closest_edge_cw = NULL;
+    float closest_edge_cw_angle = FLT_MAX;
+    
+    for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+    
+        edge* e_ptr = v_ptr->edges[e];
+        if(e_ptr->sectors[0] != s_ptr && e_ptr->sectors[1] != s_ptr) {
+            //This edge is irrelevant to our sector.
+            continue;
+        }
+        if(
+            std::find(edges_left.begin(), edges_left.end(), e_ptr) ==
+            edges_left.end()
+        ) {
+            //This edge was already processed.
+            continue;
+        }
+        
+        vertex* e_other_v_ptr = e_ptr->get_other_vertex(v_ptr);
+        float edge_angle =
+            get_angle(
+                point(v_ptr->x, v_ptr->y),
+                point(e_other_v_ptr->x, e_other_v_ptr->y)
+            );
+        float edge_cw_angle = get_angle_cw_dif(0.0f, edge_angle);
+        if(!closest_edge_cw || edge_cw_angle < closest_edge_cw_angle) {
+            closest_edge_cw = e_ptr;
+            closest_edge_cw_angle = edge_cw_angle;
+        }
+        
+    }
+    
+    //With the closest clockwise edge, we just need to check to which side our
+    //sector is. If we stand on our vertex and face the edge's other vertex,
+    //our sector being on the right means it's inside the shape, so an outer
+    //polygon. Otherwise, it's outside the shape and this is an inner polygon.
+    if(closest_edge_cw->sectors[0] == s_ptr) {
+        if(closest_edge_cw->vertexes[0] == v_ptr) {
+            //Our sector's to the left.
+            return false;
+        } else {
+            //Our sector's to the right.
+            return true;
+        }
+    } else {
+        if(closest_edge_cw->vertexes[0] == v_ptr) {
+            //Our sector's to the right.
+            return true;
+        } else {
+            //Our sector's to the left.
+            return false;
+        }
+    }
 }
 
 
@@ -752,7 +853,7 @@ TRIANGULATION_ERRORS trace_edges(
         //came from. But if the vertex has more edges, we need to pick based
         //on the angle and what we're trying to do. There are two approaches:
         //
-        //            Turn inward           |           Turn outward           
+        //            Turn inward           |           Turn outward
         //----------------------------------+----------------------------------
         //You can think of it like you're   |Same, but the cane must stay on
         //walking on top of the lines, and  |the sector/s that are outside of
@@ -827,7 +928,7 @@ TRIANGULATION_ERRORS trace_edges(
         
         find_trace_edge(
             v_ptr, prev_v_ptr, s_ptr, prev_e_angle, best_is_closest_cw,
-            &next_e_ptr, &next_e_angle, &next_v_ptr
+            &next_e_ptr, &next_e_angle, &next_v_ptr, unvisited_edges
         );
         
         //Now that we have the edge, what do we do?
@@ -882,7 +983,7 @@ TRIANGULATION_ERRORS triangulate_polygon(
     vector<size_t> convex_vertexes;
     vector<size_t> concave_vertexes;
     
-    if(vertexes_left.size() > 3) {
+    if(vertexes_left.size() > 3 && triangles->empty()) {
         triangles->reserve(vertexes_left.size() - 2);
     }
     
@@ -944,8 +1045,8 @@ TRIANGULATION_ERRORS triangulate_sector(
     sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
 ) {
 
-    polygon outer_poly;
-    vector<polygon> inner_polys;
+    vector<polygon> outer_polys;
+    vector<vector<polygon>> inner_polys;
     
     //Let's clear any "lone" edges here.
     if(clear_lone_edges) {
@@ -976,25 +1077,33 @@ TRIANGULATION_ERRORS triangulate_sector(
      *     +-------------+
      */
     
-    TRIANGULATION_ERRORS result = get_polys(s_ptr, &outer_poly, &inner_polys);
+    TRIANGULATION_ERRORS result = get_polys(s_ptr, &outer_polys, &inner_polys);
     if(result != TRIANGULATION_NO_ERROR) return result;
     
     //Get rid of 0-length edges and 180-degree vertexes,
     //as they're redundant.
-    outer_poly.clean();
-    for(size_t i = 0; i < inner_polys.size(); ++i) {
-        inner_polys[i].clean();
+    for(size_t p = 0; p < outer_polys.size(); ++p) {
+        outer_polys[p].clean();
+    }
+    for(size_t p = 0; p < inner_polys.size(); ++p) {
+        for(size_t p2 = 0; p2 < inner_polys[p].size(); ++p2) {
+            inner_polys[p][p2].clean();
+        }
     }
     
     //Step 2. Make cuts.
-    //Make cuts on the outer polygon between where it and inner polygons exist,
-    //as to make the outer polygon one big holeless polygon.
-    outer_poly.cut(&inner_polys);
+    //Make cuts on the outer polygons between where it and inner polygons exist,
+    //as to make each outer polygon one big holeless polygon.
+    for(size_t p = 0; p < outer_polys.size(); ++p) {
+        outer_polys[p].cut(&inner_polys[p]);
+    }
     
-    //Step 3. Triangulate the polygon.
-    //Transforming the polygon into triangles.
+    //Step 3. Triangulate the polygons.
+    //Transforming the polygons into triangles.
     s_ptr->triangles.clear();
-    result = triangulate_polygon(&outer_poly, &s_ptr->triangles);
+    for(size_t p = 0; p < outer_polys.size(); ++p) {
+        result = triangulate_polygon(&outer_polys[p], &s_ptr->triangles);
+    }
     
     //Done!
     return result;
