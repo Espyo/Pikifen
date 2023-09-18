@@ -556,8 +556,50 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                         drawing_nodes.back().on_edge ||
                         drawing_nodes.back().on_vertex
                     ) {
-                        //Finish splitting the sector.
-                        split_sector_with_drawing();
+                        //Split the sector.
+                        setup_sector_split();
+                        SECTOR_SPLIT_RESULTS result =
+                            get_sector_split_evaluation();
+                        switch(result) {
+                        case SECTOR_SPLIT_OK: {
+                            do_sector_split();
+                            break;
+                            
+                        } case SECTOR_SPLIT_INVALID: {
+                            rollback_to_prepared_state(
+                                sector_split_info.pre_split_area_data
+                            );
+                            forget_prepared_state(
+                                sector_split_info.pre_split_area_data
+                            );
+                            clear_selection();
+                            clear_layout_drawing();
+                            sub_state = EDITOR_SUB_STATE_NONE;
+                            set_status(
+                                "That's not a valid split!",
+                                true
+                            );
+                            break;
+                            
+                        } case SECTOR_SPLIT_USELESS: {
+                            rollback_to_prepared_state(
+                                sector_split_info.pre_split_area_data
+                            );
+                            forget_prepared_state(
+                                sector_split_info.pre_split_area_data
+                            );
+                            clear_selection();
+                            clear_layout_drawing();
+                            sub_state = EDITOR_SUB_STATE_NONE;
+                            set_status(
+                                "That wouldn't split the sector "
+                                "in any useful way!",
+                                true
+                            );
+                            break;
+                            
+                        }
+                        }
                     }
                 }
             }

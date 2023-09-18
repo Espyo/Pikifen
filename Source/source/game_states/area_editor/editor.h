@@ -155,6 +155,21 @@ private:
         layout_drawing_node();
     };
     
+    //Info pertaining a sector split operation.
+    struct sector_split_info_struct {
+        //Area data from before the split.
+        area_data* pre_split_area_data = NULL;
+        //Sector being worked on in a sector split operation.
+        sector* working_sector = NULL;
+        //Edges of the sector split sector, before the split operation.
+        vector<edge*> working_sector_old_edges;
+        //Edges traversed in each step.
+        vector<edge*> traversed_edges[2];
+        //Vertexes traversed in each step.
+        vector<vertex*> traversed_vertexes[2];
+        //During stage 1, was the working sector to the left?
+        bool is_working_at_stage_1_left = false;
+    };
     
     //Possible results after a line drawing operation.
     enum DRAWING_LINE_RESULTS {
@@ -168,6 +183,16 @@ private:
         DRAWING_LINE_CROSSES_EDGES,
         //Crosses previous parts of the drawing.
         DRAWING_LINE_CROSSES_DRAWING,
+    };
+    
+    //Possible errors for a sector split operation.
+    enum SECTOR_SPLIT_RESULTS {
+        //Ok to split.
+        SECTOR_SPLIT_OK,
+        //The split is invalid.
+        SECTOR_SPLIT_INVALID,
+        //That wouldn't split the sector in any useful way.
+        SECTOR_SPLIT_USELESS,
     };
     
     //Types of problems in the area.
@@ -475,6 +500,8 @@ private:
     string reference_file_name;
     //Keep the aspect ratio when resizing the reference?
     bool reference_keep_aspect_ratio;
+    //Info about the current sector split operation.
+    sector_split_info_struct sector_split_info;
     //Currently selected edges.
     set<edge*> selected_edges;
     //Currently selected mobs.
@@ -592,6 +619,7 @@ private:
     void delete_mobs(const set<mob_gen*> &which);
     void delete_path_links(const set<path_link*> &which);
     void delete_path_stops(const set<path_stop*> &which);
+    void do_sector_split();
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
@@ -640,6 +668,7 @@ private:
     ) const;
     string get_path_short_name(const string &p) const;
     path_stop* get_path_stop_under_point(const point &p) const;
+    SECTOR_SPLIT_RESULTS get_sector_split_evaluation();
     sector* get_sector_under_point(const point &p) const;
     vertex* get_vertex_under_point(const point &p) const;
     void goto_problem();
@@ -682,8 +711,8 @@ private:
     void select_vertex(vertex* v_ptr);
     void set_selection_status_text();
     void set_new_circle_sector_points();
+    void setup_sector_split();
     point snap_point(const point &p, const bool ignore_selected = false);
-    void split_sector_with_drawing();
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(
         path_link* l1, path_link* l2,
