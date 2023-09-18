@@ -2857,6 +2857,17 @@ void area_editor::press_zoom_out_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Recreates the current drawing's nodes. Useful if the data the nodes were
+ * holding is stale, like if the area's state had to be reverted mid-drawing.
+ */
+void area_editor::recreate_drawing_nodes() {
+    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
+        drawing_nodes[n] = layout_drawing_node(this, drawing_nodes[n].raw_spot);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the state of the area in the undo history.
  * When this happens, a timer is set. During this timer, if the next change's
  * operation is the same as the previous one's, then it is ignored.

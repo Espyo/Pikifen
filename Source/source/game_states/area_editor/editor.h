@@ -694,6 +694,7 @@ private:
     void paste_sector_properties();
     void paste_sector_texture();
     area_data* prepare_state();
+    void recreate_drawing_nodes();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
     );

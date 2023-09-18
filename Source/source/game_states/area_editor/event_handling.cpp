@@ -588,13 +588,11 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                             forget_prepared_state(
                                 sector_split_info.pre_split_area_data
                             );
-                            clear_selection();
-                            clear_layout_drawing();
-                            sub_state = EDITOR_SUB_STATE_NONE;
+                            recreate_drawing_nodes();
                             set_status(
-                                "That wouldn't split the sector "
-                                "in any useful way!",
-                                true
+                                "To split this sector, continue your "
+                                "drawing to make a new sector.",
+                                false
                             );
                             break;
                             

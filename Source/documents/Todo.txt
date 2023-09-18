@@ -1,9 +1,11 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     to test
         test what happens if the first vertex of the outer polygon trace is a vertex with many edges
         test what happens if the first vertex of an inner polygon trace is a vertex with many edges
+        add all of the test areas to the regression tests doc
     update manual
         update the images on how to unstitch sectors
+        mention how sectors can be divided into sub-sectors
         changelog
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -46,9 +48,6 @@ Next tasks (roughly sorted most important first)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
     https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Find a way for the "That wouldn't split the sector in any useful way!" to not happen... like commit that line and let the user draw a new line?
-        Actually let it create edges with the same sector on both sides. Due to the way it walks along edges, it might just work
-            Same with a sector reusing a vertex and other things maybe?
     Use the pretty cursor (spinning flower + trail) everywhere? Probably not in editors though
     Ice Pikmin
     Glow Pikmin
