@@ -103,10 +103,10 @@ struct geometry_problems {
 
 
 void find_trace_edge(
-    vertex* v_ptr, vertex* prev_v_ptr, sector* s_ptr,
+    vertex* v_ptr, vertex* prev_v_ptr, const sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
     edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
-    unordered_set<edge*>* other_polygon_edges
+    unordered_set<edge*>* excluded_edges
 );
 void get_cce(
     const vector<vertex> &vertexes_left, vector<size_t> &ears,

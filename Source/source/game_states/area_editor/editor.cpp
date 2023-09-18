@@ -4082,72 +4082,63 @@ void area_editor::traverse_sector_for_split(
     vector<edge*>* edges, vector<vertex*>* vertexes,
     bool* working_sector_left
 ) {
-    edge* first_edge = NULL;
+    edge* first_e_ptr = NULL;
+    unsigned char first_edge_visits = 0;
     
     for(unsigned char s = 0; s < 2; ++s) {
         vertex* v_ptr = begin;
-        vertex* prev_vertex = NULL;
+        vertex* prev_v_ptr = NULL;
+        float prev_e_angle = TAU / 2.0f;
         
         while(true) {
-            edge* next_edge = NULL;
-            vertex* next_vertex = NULL;
+            edge* next_e_ptr = NULL;
+            float next_e_angle = 0.0f;
+            vertex* next_v_ptr = NULL;
             
-            for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-                edge* e_ptr = v_ptr->edges[e];
-                if(e_ptr->sectors[0] != s_ptr && e_ptr->sectors[1] != s_ptr) {
-                    //The working sector is not in this edge. This is some
-                    //unrelated edge that won't help us.
-                    continue;
-                }
-                if(e_ptr == first_edge) {
-                    //This will only be true at the start of stage 2, when the
-                    //algorithm tries to take the first edge's direction again.
-                    continue;
-                }
-                next_vertex = e_ptr->get_other_vertex(v_ptr);
-                if(next_vertex == prev_vertex) {
-                    //This is the vertex we came from.
-                    continue;
-                }
-                
-                next_edge = e_ptr;
-                break;
-            }
+            find_trace_edge(
+                v_ptr, prev_v_ptr, s_ptr, prev_e_angle, s == 0,
+                &next_e_ptr, &next_e_angle, &next_v_ptr, NULL
+            );
             
-            if(!next_edge) {
+            if(!next_e_ptr) {
                 return;
             }
             
-            if(!first_edge) {
-                first_edge = next_edge;
+            if(!first_e_ptr) {
+                first_e_ptr = next_e_ptr;
                 //In stage 1, travelling in this direction, is the
                 //working sector to the left or to the right?
-                if(next_edge->vertexes[0] == begin) {
+                if(next_e_ptr->vertexes[0] == begin) {
                     //This edge travels in the same direction as us. Side 0 is
                     //to the left, side 1 is to the right, so just check if the
                     //working sector is to the left.
-                    *working_sector_left = (next_edge->sectors[0] == s_ptr);
+                    *working_sector_left = (next_e_ptr->sectors[0] == s_ptr);
                 } else {
                     //This edge travels the opposite way. Same logic as above,
                     //but reversed.
-                    *working_sector_left = (next_edge->sectors[1] == s_ptr);
+                    *working_sector_left = (next_e_ptr->sectors[1] == s_ptr);
                 }
             }
             
-            prev_vertex = v_ptr;
-            v_ptr = next_vertex;
+            prev_v_ptr = v_ptr;
+            prev_e_angle = next_e_angle;
+            v_ptr = next_v_ptr;
             
-            edges[s].push_back(next_edge);
-            vertexes[s].push_back(next_vertex);
+            edges[s].push_back(next_e_ptr);
+            vertexes[s].push_back(next_v_ptr);
             
-            if(next_vertex == checkpoint) {
+            if(next_v_ptr == checkpoint) {
                 //Enter stage 2, or quit.
                 break;
             }
             
-            if(next_vertex == begin) {
-                //We found the start again? Finish the algorithm right now.
-                return;
+            if(next_e_ptr == first_e_ptr) {
+                first_edge_visits++;
+                if(first_edge_visits == 2) {
+                    //We retreaded old ground without finding the checkpoint?
+                    //Finish the algorithm right now.
+                    return;
+                }
             }
         }
     }

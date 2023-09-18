@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     to test
         test what happens if the first vertex of the outer polygon trace is a vertex with many edges
         test what happens if the first vertex of an inner polygon trace is a vertex with many edges
@@ -11,6 +11,12 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Pikmin should want to go to nectar by themselves when idling
+    Winged Pikmin hover so high up most enemy hitboxes don't hit them
+    Winged Pikmin cannot be crushed
+    Winged Pikmin don't drink nectar on their own
+    Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
+    Apparently Dweevils shake treasures off far too strongly?
     Reloading an area in the area editor just loads an "" area
     Winged Pikmin that fall in the water should fly up when whistled
     Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
@@ -273,8 +279,24 @@ Next tasks (roughly sorted most important first)
             Shizakipiki Soda bottle cap
         Sounds really need a makeover...
         Mobs for decorative pebbles, stones, and sticks
-        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc. In general, they could all stand to be slightly easier, and to take longer to react to things
+        Pellet Posies should regrow
+        Rebalance enemies. Some are too weak, some are too strong, some are too tricky, etc.
+            In general, they could all stand to be slightly easier, and to take longer to react to things
+            Shake hitboxes last way too long across the board
+            Red Bulborb could be a smidge tougher
+            For the dumples, longer startup lag and endlag
+            Dweevil should be slower
+            Skutterchuck should wait a bit before throwing
+            Do _something_ to the Yellow Wollywog
+            Puffy Blowhog should have a lower territory radius
+            Beady Long Legs should rest for longer so the player has more time to throw other Pikmin at it
+        Leaders that get knocked backwards need more invulnerability time
+        Leaders should be a bit faster
+        Leader damage from enemies should be standardized
+        Leaf Pikmin should be able to follow leaders in walking
+        Water Dumples should wander around a small bit
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
+        Bitter sprays should last for a short time
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         Add Helodity's Plasm Wraith
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
@@ -354,7 +376,6 @@ Next tasks (roughly sorted most important first)
         Dismissing should either dismiss everyone, or keep the current standby type
         When switching to a leader, all nearby idle Pikmin should be called over too
     An option to set how close you need to be to an idle Pikmin to get it into your group: touching, close, or nearby.
-    Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
     Enemy revival
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
     The ability for Blue Pikmin to rescue drowning Pikmin
@@ -658,6 +679,7 @@ Small tasks (for when I'm feeling lazy)
     
 Misc things (so I don't forget)
     Attack improvements
+        Normal hitboxes should specify what happens when a thrown Pikmin touches it -- latches, bounces off, or ignores (right now, all non-latchers are bouncers, so throwing a Pikmin while on top of a fire geyser results in the Pikmin bouncing back)
         A checkbox for the attack hitboxes that make it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
         A way to add random variation to the knockback angle of a hitbox
         With the current Pikmin "missed hitbox" register, it's possible that an enemy will want to attack with the same hitbox multiple times in the same animation, but all those times will be ignored for 1.5 seconds (think the Man-at-Legs's shots)

@@ -408,14 +408,14 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  *   iteration of the algorithm so it doesn't need to re-calculate the angle.
  * next_v_ptr:
  *   Opposing vertex of the next edge.
- * other_polygon_edges:
- *   List of edges that belong to other polygons, and should not be checked.
+ * excluded_edges:
+ *   List of edges that must not be checked, if any.
  */
 void find_trace_edge(
-    vertex* v_ptr, vertex* prev_v_ptr, sector* s_ptr,
+    vertex* v_ptr, vertex* prev_v_ptr, const sector* s_ptr,
     float prev_e_angle, bool best_is_closest_cw,
     edge** next_e_ptr, float* next_e_angle, vertex** next_v_ptr,
-    unordered_set<edge*>* other_polygon_edges
+    unordered_set<edge*>* excluded_edges
 ) {
     //Info about the best candidate edge, if any.
     edge* best_e_ptr = NULL;
@@ -433,11 +433,12 @@ void find_trace_edge(
             continue;
         }
         if(
+            excluded_edges &&
             std::find(
-                other_polygon_edges->begin(), other_polygon_edges->end(), e_ptr
-            ) != other_polygon_edges->end()
+                excluded_edges->begin(), excluded_edges->end(), e_ptr
+            ) != excluded_edges->end()
         ) {
-            //This edge already belongs to another polygon of this sector.
+            //This edge is not meant to be checked.
             continue;
         }
         
@@ -456,8 +457,9 @@ void find_trace_edge(
                 point(other_v_ptr->x, other_v_ptr->y)
             );
             
-        float angle_cw_dif = get_angle_cw_dif(prev_e_angle + TAU / 2.0f, e_angle);
-        
+        float angle_cw_dif =
+            get_angle_cw_dif(prev_e_angle + TAU / 2.0f, e_angle);
+            
         //Check if this is the best.
         if(
             !best_e_ptr ||
