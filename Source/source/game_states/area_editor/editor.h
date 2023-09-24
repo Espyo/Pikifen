@@ -183,6 +183,8 @@ private:
         DRAWING_LINE_CROSSES_EDGES,
         //Crosses previous parts of the drawing.
         DRAWING_LINE_CROSSES_DRAWING,
+        //Goes towards a sector different from the working sector.
+        DRAWING_LINE_WAYWARD_SECTOR,
     };
     
     //Possible errors for a sector split operation.
@@ -191,7 +193,7 @@ private:
         SECTOR_SPLIT_OK,
         //The split is invalid.
         SECTOR_SPLIT_INVALID,
-        //That wouldn't split the sector in any useful way.
+        //That wouldn't split in any useful way. e.g. Slice through a donut.
         SECTOR_SPLIT_USELESS,
     };
     

@@ -246,6 +246,49 @@ void area_editor::check_drawing_line(const point &pos) {
             return;
         }
     }
+    
+    //Check if this line is entering a sector different from the one the
+    //rest of the drawing is on.
+    if(drawing_nodes.size() >= 2) {
+        //This check only makes sense from the third node onward.
+        //Since both the first and the second node can't be on edges or
+        //vertexes, and no node can cross edges or vertexes,
+        //this means we can grab the midpoint of the first
+        //and second nodes to get the sector the second node is on, or the
+        //sector the second node is passing through. Basically,
+        //the working sector.
+        //This check is useful when the player tries to split a sector with
+        //a useless split, and is tasked with continuing the drawing.
+        point working_sector_point(
+            (
+                drawing_nodes[0].snapped_spot.x +
+                drawing_nodes[1].snapped_spot.x
+            ) / 2.0f,
+            (
+                drawing_nodes[0].snapped_spot.y +
+                drawing_nodes[1].snapped_spot.y
+            ) / 2.0f
+        );
+        sector* working_sector = get_sector_under_point(working_sector_point);
+        
+        point latest_sector_point(
+            (
+                drawing_nodes.back().snapped_spot.x +
+                pos.x
+            ) / 2.0f,
+            (
+                drawing_nodes.back().snapped_spot.y +
+                pos.y
+            ) / 2.0f
+        );
+        sector* latest_sector = get_sector_under_point(latest_sector_point);
+        
+        if(latest_sector != working_sector) {
+            drawing_line_result = DRAWING_LINE_WAYWARD_SECTOR;
+            return;
+        }
+    }
+    
 }
 
 

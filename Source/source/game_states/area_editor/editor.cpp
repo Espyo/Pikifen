@@ -1772,6 +1772,12 @@ void area_editor::handle_line_error() {
             true
         );
         break;
+    } case DRAWING_LINE_WAYWARD_SECTOR: {
+        set_status(
+            "That line goes out of the sector you're drawing on!",
+            true
+        );
+        break;
     } case DRAWING_LINE_OK: {
         break;
     }
