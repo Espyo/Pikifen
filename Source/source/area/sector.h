@@ -59,7 +59,7 @@ struct sector_texture_info {
 /* ----------------------------------------------------------------------------
  * A sector, like the ones in DOOM.
  * It's composed of edges (linedefs), so it's essentially
- * a polygon. It has a certain height, and its appearance
+ * a polygon (or multiple). It has a certain height, and its appearance
  * is determined by its floors.
  */
 struct sector {

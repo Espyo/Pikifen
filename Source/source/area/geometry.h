@@ -77,14 +77,23 @@ struct triangle {
 /* ----------------------------------------------------------------------------
  * Represents a series of vertexes that make up a plain old geometric polygon.
  * A polygon cannot have holes or islands.
+ * Since a polygon can have children polygons, this is effectively a node
+ * in a polygon tree. If it has no vertexes, then instead it represents the
+ * root of said tree.
  */
 struct polygon {
     //Ordered list of vertexes that represent the polygon.
     vector<vertex*> vertexes;
+    //Children, if any.
+    vector<polygon*> children;
     
-    void clean();
-    void cut(vector<polygon>* inners);
+    void clean(bool recursive);
+    void cut();
+    void cut_all_as_root();
+    void destroy();
     vertex* get_rightmost_vertex() const;
+    bool insert_child(polygon* p);
+    bool is_point_inside(const point &p) const;
     
     polygon();
     explicit polygon(const vector<vertex*> &vertexes);

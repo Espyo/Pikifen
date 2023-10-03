@@ -75,8 +75,10 @@ polygon::polygon(const vector<vertex*> &vertexes) :
 /* ----------------------------------------------------------------------------
  * Cleans a polygon's vertexes.
  * This deletes 0-length edges, and 180-degree vertexes.
+ * recursive:
+ *   If true, clean the children polyon too recursively.
  */
-void polygon::clean() {
+void polygon::clean(bool recursive) {
     for(size_t v = 0; v < vertexes.size();) {
         bool should_delete = false;
         vertex* prev_v = get_prev_in_vector(vertexes, v);
@@ -115,16 +117,20 @@ void polygon::clean() {
             ++v;
         }
     }
+    
+    if(recursive) {
+        for(size_t c = 0; c < children.size(); ++c) {
+            children[c]->clean(true);
+        }
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
- * When this polygon has inner polygons, a cut must be made between it
- * and the inner polygons, as to make this one holeless.
- * inners:
- *   List of inner polygons.
+ * When this polygon has children polygons, a cut must be made between it
+ * and the children polygons, as to make this one holeless.
  */
-void polygon::cut(vector<polygon>* inners) {
+void polygon::cut() {
     if(vertexes.size() < 3) {
         //Some error happened.
         return;
@@ -134,8 +140,8 @@ void polygon::cut(vector<polygon>* inners) {
     vertex* rightmost = get_rightmost_vertex();
     
     //We have to make one cut for every inner.
-    for(size_t i = 0; i < inners->size(); ++i) {
-        polygon* inner_p = &(inners->at(i));
+    for(size_t c = 0; c < children.size(); ++c) {
+        polygon* child_ptr = children[c];
         vertex* closest_edge_v1 = NULL;
         vertex* closest_edge_v2 = NULL;
         float closest_edge_r = FLT_MAX;
@@ -144,7 +150,7 @@ void polygon::cut(vector<polygon>* inners) {
         vertex* best_vertex = NULL;
         
         //Find the rightmost vertex on this inner.
-        vertex* start = inner_p->get_rightmost_vertex();
+        vertex* start = child_ptr->get_rightmost_vertex();
         
         if(!start) {
             //Some error occured.
@@ -308,22 +314,22 @@ void polygon::cut(vector<polygon>* inners) {
         //circle the inner, and go back to the outer vertex.
         //Let's just find where the start vertex is...
         size_t iv = 0;
-        for(; iv < inner_p->vertexes.size(); ++iv) {
-            if(inner_p->vertexes[iv] == start) {
+        for(; iv < child_ptr->vertexes.size(); ++iv) {
+            if(child_ptr->vertexes[iv] == start) {
                 break;
             }
         }
         
-        auto it = inner_p->vertexes.begin() + iv;
-        size_t n_after = inner_p->vertexes.size() - iv;
+        auto it = child_ptr->vertexes.begin() + iv;
+        size_t n_after = child_ptr->vertexes.size() - iv;
         //Finally, make the bridge.
         vertexes.insert(
             vertexes.begin() + insertion_vertex_nr + 1,
-            it, inner_p->vertexes.end()
+            it, child_ptr->vertexes.end()
         );
         vertexes.insert(
             vertexes.begin() + insertion_vertex_nr + 1 + n_after,
-            inner_p->vertexes.begin(), it
+            child_ptr->vertexes.begin(), it
         );
         //This last one closes the inner polygon.
         vertexes.insert(
@@ -347,6 +353,46 @@ void polygon::cut(vector<polygon>* inners) {
 
 
 /* ----------------------------------------------------------------------------
+ * Cuts all children polygons, as the root of the polygon tree.
+ */
+void polygon::cut_all_as_root() {
+    for(size_t o = 0; o < children.size(); ++o) {
+        //For each outer polygon...
+        polygon* outer_ptr = children[o];
+        outer_ptr->cut();
+        
+        for(size_t i = 0; i < outer_ptr->children.size(); ++i) {
+            //For each inner polygon...
+            polygon* inner_ptr = outer_ptr->children[i];
+            
+            //An inner polygon's children are outer polygons again.
+            //Now that we did the cut, we can add those back to the root list.
+            children.insert(
+                children.end(),
+                inner_ptr->children.begin(),
+                inner_ptr->children.end()
+            );
+            
+            //Delete this outer's children, since they are now
+            //part of the outer.
+            outer_ptr->children.clear();
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys the polygon, deleting from memory all children, recursively.
+ */
+void polygon::destroy() {
+    for(size_t c = 0; c < children.size(); ++c) {
+        children[c]->destroy();
+        delete children[c];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the vertex farthest to the right in a polygon.
  */
 vertex* polygon::get_rightmost_vertex() const {
@@ -362,6 +408,75 @@ vertex* polygon::get_rightmost_vertex() const {
     }
     
     return rightmost;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a polygon as a child of this polygon, or as a child of one of
+ * its children, recursively.
+ * It does this by checking if the polygon goes inside or not.
+ * Returns true if it got inserted, false if not.
+ * p:
+ *   Polygon to insert.
+ */
+bool polygon::insert_child(polygon* p) {
+    //First, check if it can be inserted in a child.
+    for(size_t c = 0; c < children.size(); ++c) {
+        if(children[c]->insert_child(p)) return true;
+    }
+    
+    //Check if it can be inserted in the polygon proper.
+    if(!vertexes.empty()) {
+        if(is_point_inside(point(p->vertexes[0]->x, p->vertexes[0]->y))) {
+            children.push_back(p);
+            return true;
+        }
+    }
+    
+    //If this is the polygon tree root and nothing else worked, insert it here.
+    if(vertexes.empty()) {
+        children.push_back(p);
+        return true;
+    }
+    
+    //Can't insert.
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a point is inside of the polygon.
+ * p:
+ *   Point to check.
+ */
+bool polygon::is_point_inside(const point &p) const {
+    //http://paulbourke.net/geometry/polygonmesh/index.html#insidepoly
+    
+    point p1 = point(vertexes[0]->x, vertexes[0]->y);
+    point p2;
+    size_t nr_crossings = 0;
+    float x_inters = 0.0f;
+    
+    for(size_t v = 1; v <= vertexes.size(); ++v) {
+        p2.x = vertexes[v % vertexes.size()]->x;
+        p2.y = vertexes[v % vertexes.size()]->y;
+        
+        if(
+            p.y > std::min(p1.y, p2.y) &&
+            p.y <= std::max(p1.y, p2.y) &&
+            p.x <= std::max(p1.x, p2.x) &&
+            p1.y != p2.y
+        ) {
+            x_inters = (p.y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y) + p1.x;
+            if(p1.x == p2.x || p.x <= x_inters) {
+                nr_crossings++;
+            }
+        }
+        
+        p1 = p2;
+    }
+    
+    return nr_crossings % 2 != 0;
 }
 
 
@@ -548,21 +663,22 @@ vector<std::pair<dist, vertex*> > get_merge_vertexes(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the outer polygons and inner polygons of a sector,
- * with the vertexes ordered counter-clockwise for the outer,
- * and clockwise for the inner.
+ * Returns the polygons of a sector. Polygons can include child polygons.
+ * Outer polygons are all the ones that contain the sector inside, and inner
+ * polygons do not contain the sector inside. (In theory, since in practice
+ * an inner polygon could contain another outer polygon inside.)
+ * The vertexes are ordered counter-clockwise for the outer polygons,
+ * and clockwise for the inner ones.
  * Returns an error code.
  * s_ptr:
  *   Pointer to the sector.
- * outer:
- *   Return the outer polygons here.
- * inners:
- *   Return the inner polygons here, for each outer.
+ * polys:
+ *   Return the polygons here.
  */
 TRIANGULATION_ERRORS get_polys(
-    sector* s_ptr, vector<polygon>* outers, vector<vector<polygon>>* inners
+    sector* s_ptr, polygon* polys
 ) {
-    if(!s_ptr || !outers || !inners) return TRIANGULATION_ERROR_INVALID_ARGS;
+    if(!s_ptr || !polys) return TRIANGULATION_ERROR_INVALID_ARGS;
     TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
     
     bool doing_first_polygon = true;
@@ -579,27 +695,22 @@ TRIANGULATION_ERRORS get_polys(
         
         //Figure out if the polygon we are going to trace is an outer polygon
         //or an inner one.
-        polygon* cur_poly_ptr = NULL;
+        polygon* new_poly = new polygon();
         bool is_outer =
             get_polys_is_outer(
                 first_v_ptr, s_ptr, edges_left, doing_first_polygon
             );
-        if(is_outer) {
-            outers->push_back(polygon());
-            inners->push_back(vector<polygon>());
-            cur_poly_ptr = &(outers->back());
-        } else {
-            inners->back().push_back(polygon());
-            cur_poly_ptr = &(inners->back().back());
-        }
-        
+            
         //Trace! For the outer poly, we're going counter-clockwise,
         //while for the inner ones, it's clockwise.
         trace_edges(
             first_v_ptr, s_ptr, !is_outer,
-            &cur_poly_ptr->vertexes,
+            &new_poly->vertexes,
             &edges_left, &polygon_edges_so_far
         );
+        
+        //Add this polygon to the polygon tree.
+        polys->insert_child(new_poly);
         
         doing_first_polygon = false;
     }
@@ -1055,8 +1166,8 @@ TRIANGULATION_ERRORS triangulate_sector(
     sector* s_ptr, set<edge*>* lone_edges, const bool clear_lone_edges
 ) {
 
-    vector<polygon> outer_polys;
-    vector<vector<polygon>> inner_polys;
+    //Root of the polygon tree.
+    polygon root;
     
     //Let's clear any "lone" edges here.
     if(clear_lone_edges) {
@@ -1068,53 +1179,71 @@ TRIANGULATION_ERRORS triangulate_sector(
         }
     }
     
+    
+    //------------------------------
     //Step 1. Get polygons.
     //We need to know what vertexes mark the outermost polygon,
     //and what vertexes mark the inner ones.
-    //There can be no islands or polygons of our sector inside the inner ones.
+    //Because there can be islands or polygons of our sector inside some inner
+    //ones, we need a polygon tree to know what's inside of what.
     //Example of a sector's polygons:
     /*
-     * +-------+     +---+
-     * | OUTER  \    |   |
-     * |         +---+   |
-     * |   +----+        |
-     * |  /INNER|   +--+ |
-     * | +------+   |  | |
-     * +---+    +---+  | |
-     *     |   /INNER  | |
-     *     |  /        | |
-     *     | +---------+ |
-     *     +-------------+
+     * +-------+     +-----------+  +-----+
+     * | OUTER  \    |           |  |OUTER \
+     * |         +---+           |  +-------+
+     * |   +----+                |
+     * |  /INNER|   +----------+ |
+     * | +------+   |          | |
+     * +---+    +---+  +-----+ | |
+     *     |   /INNER  |OUTER| | |
+     *     |  /        +-----+ | |
+     *     | +-----------------+ |
+     *     +---------------------+
      */
     
-    TRIANGULATION_ERRORS result = get_polys(s_ptr, &outer_polys, &inner_polys);
-    if(result != TRIANGULATION_NO_ERROR) return result;
+    TRIANGULATION_ERRORS result = get_polys(s_ptr, &root);
+    if(result != TRIANGULATION_NO_ERROR) {
+        root.destroy();
+        return result;
+    }
     
     //Get rid of 0-length edges and 180-degree vertexes,
-    //as they're redundant.
-    for(size_t p = 0; p < outer_polys.size(); ++p) {
-        outer_polys[p].clean();
-    }
-    for(size_t p = 0; p < inner_polys.size(); ++p) {
-        for(size_t p2 = 0; p2 < inner_polys[p].size(); ++p2) {
-            inner_polys[p][p2].clean();
-        }
-    }
+    //as they're redundant. Do this recursively for all.
+    root.clean(true);
     
+    
+    //------------------------------
     //Step 2. Make cuts.
     //Make cuts on the outer polygons between where it and inner polygons exist,
     //as to make each outer polygon one big holeless polygon.
-    for(size_t p = 0; p < outer_polys.size(); ++p) {
-        outer_polys[p].cut(&inner_polys[p]);
-    }
+    //Example of the process:
+    /*
+     * +-----------+    +-----------+
+     * | OUTER     |    |           |
+     * |           |    |           |
+     * |  +-----+  |    |  +-----+--+ <--- 0-width gap
+     * |  |INNER|  | -> |  |     +--+ <-´
+     * |  |     |  |    |  |     |  |
+     * |  +-----+  |    |  +-----+  |
+     * |           |    |           |
+     * +-----------+    +-----------+
+     */
+    root.cut_all_as_root();
     
+    
+    //------------------------------
     //Step 3. Triangulate the polygons.
     //Transforming the polygons into triangles.
     s_ptr->triangles.clear();
-    for(size_t p = 0; p < outer_polys.size(); ++p) {
-        result = triangulate_polygon(&outer_polys[p], &s_ptr->triangles);
+    for(size_t p = 0; p < root.children.size(); ++p) {
+        TRIANGULATION_ERRORS poly_result =
+            triangulate_polygon(root.children[p], &s_ptr->triangles);
+        if(poly_result != TRIANGULATION_NO_ERROR) {
+            result = poly_result;
+        }
     }
     
     //Done!
+    root.destroy();
     return result;
 }
