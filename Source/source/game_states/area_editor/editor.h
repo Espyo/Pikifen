@@ -277,7 +277,7 @@ private:
         EDITOR_SUB_STATE_NONE,
         //Picking a mission exit region.
         EDITOR_SUB_STATE_MISSION_EXIT,
-        //Drawing a sector.
+        //Drawing the layout.
         EDITOR_SUB_STATE_DRAWING,
         //Drawing a circular sector.
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
@@ -742,7 +742,7 @@ private:
         const sector* old_outer, sector* new_outer
     );
     void update_reference();
-    void update_sector_drawing_status_text();
+    void update_layout_drawing_status_text();
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_texture_suggestions(const string &n);
     void update_undo_history();
@@ -788,7 +788,7 @@ private:
     void press_grid_interval_increase_button();
     void press_new_mob_button();
     void press_new_path_button();
-    void press_new_sector_button();
+    void press_layout_drawing_button();
     void press_new_tree_shadow_button();
     void press_paste_properties_button();
     void press_paste_texture_button();

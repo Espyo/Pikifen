@@ -1,18 +1,14 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    to test
-        test what happens if the first vertex of the outer polygon trace is a vertex with many edges
-        test what happens if the first vertex of an inner polygon trace is a vertex with many edges
-        add all of the test areas to the regression tests doc
-    update manual
-        update the images on how to unstitch sectors
-        mention how sectors can be divided into sub-sectors
-        changelog
+    
 
 Current tasks (tasks being worked on, but not yet committed)
     
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Pressing Tab to go to the next Dear ImGui widget isn't working
+    Bridges are broken
+    Bridges should be darker in darker sectors (thanks Pikmin Expert)
     Pikmin should want to go to nectar by themselves when idling
     Winged Pikmin hover so high up most enemy hitboxes don't hit them
     Winged Pikmin cannot be crushed
@@ -27,6 +23,10 @@ Next tasks (roughly sorted most important first)
         Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
 
     --- 0.25.0 ---
+    Pikmin sprouts should have MOB_FLAG_INTANGIBLE instead (thanks Helodity)
+    Add area editor regression-testing in-game
+    Area editor redo
+    The ability to ctrl+click a selected vertex, edge, etc. to unselect it (thanks Neo)
     More puzzle elements
         Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
             Add maker notes indicating this
@@ -60,6 +60,10 @@ Next tasks (roughly sorted most important first)
         Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
         The area editor should have a music preview button
         Add some songs
+            Start with a leitmotif?
+            Title screen
+            Editors
+            A couple of gameplay songs
     Revamp sound system
         Candidate list of all needed sounds, for now
             Pikmin
@@ -583,7 +587,12 @@ Next tasks (roughly sorted most important first)
                 Cave unit sizes are measured in cells. A dead end is 1x1, a corridor is like 1x2, etc. Each cell length should probably be 256px so it fits with the grid nicely. Each door should be 192px (or maybe more, so that the gate pillars can fit?)
                 The maker has to specify at least one spawn point of each type, right? Maybe it should depend on the cave unit type or size...
                 The maker has to specify where doors are. Door centers have to be at the center of a cell's edge.
-            Allow it to create caves
+            Allow it to create cave sublevels
+                The maker chooses whether to create a sublevel using regular layout drawings, or via cave units
+                When making the sublevel out of cave units:
+                    The maker indicates a list of possible cave units
+                    They can place some, none, or all units in fixed locations
+                    If there are gaps that the game is meant to fill in with randomly-placed units, the maker must specify stuff like the number of rooms, the room-to-corridor ratio, etc.
                 Basically the maker just specifies what units it can use, and what objects spawn
                 For object spawning:
                     The maker should be able to add groups at will
@@ -797,12 +806,22 @@ Misc things (so I don't forget)
         An option to toggle the grid visibility
         Smooth scrolling https://github.com/ocornut/imgui/issues/2462 (thanks Nataly171)
         Customizable controls overall, including double-clicking any of the mouse buttons
+        Show a preview of the object's position and size when you duplicate one or are about to place it (thanks GuyWhoLikesCats)
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
-        A better font than just the built-in one
-        Juice
-            Pop line particles when something gets created
-            Puffs of smoke when something gets deleted
-            Change the cursor for when you're dragging, drawing, placing something new, etc.
+        Aesthetic
+            A better font than just the built-in one
+            Juice
+                Pop line particles when something gets created
+                Puffs of smoke when something gets deleted
+                Change the cursor for when you're dragging, drawing, placing something new, etc.
+                Glow and grow the new sector when it is created
+            Cursors
+                Normal cursor
+                For when you're drawing something
+                For when you can place something
+                For when the thing you're hovering over can be un/selected
+                For when the thing you're hovering over can be dragged
+                For when the thing you're hovering over can be deleted
     Area sections?
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections
@@ -851,6 +870,7 @@ Misc things (so I don't forget)
     Missions
         A goal where you reach X sprays of type Y
         A goal where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
+        A goal where you have to construct a wonder
         A fail condition for an enemy/enemy type dying (thanks Neo)
         A fail condition for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
         A way for something to give bonus points to the score (in score grading mode) (thanks Helodity)

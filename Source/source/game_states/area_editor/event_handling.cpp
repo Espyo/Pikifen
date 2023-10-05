@@ -321,7 +321,7 @@ void area_editor::handle_key_down_canvas(const ALLEGRO_EVENT &ev) {
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_N)) {
         switch(state) {
         case EDITOR_STATE_LAYOUT: {
-            press_new_sector_button();
+            press_layout_drawing_button();
             break;
         } case EDITOR_STATE_MOBS: {
             press_new_mob_button();
@@ -591,7 +591,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                             recreate_drawing_nodes();
                             sector_split_info.useless_split_part_2_checkpoint =
                                 drawing_nodes.size();
-                            update_sector_drawing_status_text();
+                            update_layout_drawing_status_text();
                             break;
                         }
                         }

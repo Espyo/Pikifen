@@ -2248,6 +2248,40 @@ void area_editor::press_grid_interval_increase_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the layout drawing button widget is pressed.
+ */
+void area_editor::press_layout_drawing_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(
+        sub_state == EDITOR_SUB_STATE_DRAWING ||
+        sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR
+    ) {
+        return;
+    }
+    
+    if(
+        !game.cur_area_data.problems.non_simples.empty() ||
+        !game.cur_area_data.problems.lone_edges.empty()
+    ) {
+        set_status(
+            "Please fix any broken sectors or edges before trying to make "
+            "a new sector!",
+            true
+        );
+        return;
+    }
+    
+    clear_selection();
+    clear_layout_drawing();
+    update_layout_drawing_status_text();
+    sub_state = EDITOR_SUB_STATE_DRAWING;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the load area button widget is pressed.
  */
 void area_editor::press_load_button() {
@@ -2304,40 +2338,6 @@ void area_editor::press_new_path_button() {
     path_drawing_stop_1 = NULL;
     set_status("Use the canvas to draw a path.");
     sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to run when the new sector button widget is pressed.
- */
-void area_editor::press_new_sector_button() {
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(
-        sub_state == EDITOR_SUB_STATE_DRAWING ||
-        sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR
-    ) {
-        return;
-    }
-    
-    if(
-        !game.cur_area_data.problems.non_simples.empty() ||
-        !game.cur_area_data.problems.lone_edges.empty()
-    ) {
-        set_status(
-            "Please fix any broken sectors or edges before trying to make "
-            "a new sector!",
-            true
-        );
-        return;
-    }
-    
-    clear_selection();
-    clear_layout_drawing();
-    update_sector_drawing_status_text();
-    sub_state = EDITOR_SUB_STATE_DRAWING;
 }
 
 
@@ -4248,7 +4248,7 @@ void area_editor::undo_layout_drawing_node() {
         //Back to before useless split part 2. Remove the checkpoint.
         sector_split_info.useless_split_part_2_checkpoint = INVALID;
     }
-    update_sector_drawing_status_text();
+    update_layout_drawing_status_text();
 }
 
 
@@ -4330,6 +4330,32 @@ void area_editor::update_all_edge_offset_caches() {
 
 
 /* ----------------------------------------------------------------------------
+ * Updates the status text according to what's going on in the current
+ * sector drawing.
+ */
+void area_editor::update_layout_drawing_status_text() {
+    bool useless_split_part_2 = false;
+    if(
+        sector_split_info.useless_split_part_2_checkpoint !=
+        INVALID &&
+        drawing_nodes.size() >=
+        sector_split_info.useless_split_part_2_checkpoint
+    ) {
+        useless_split_part_2 = true;
+    }
+    
+    if(useless_split_part_2) {
+        set_status(
+            "To split this sector, continue your "
+            "drawing to make a new sector."
+        );
+    } else {
+        set_status("Use the canvas to draw a sector.");
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Updates the reference image's bitmap, since its file name just changed.
  */
 void area_editor::update_reference() {
@@ -4354,32 +4380,6 @@ void area_editor::update_reference() {
     } else {
         reference_center = point();
         reference_size = point();
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Updates the status text according to what's going on in the current
- * sector drawing.
- */
-void area_editor::update_sector_drawing_status_text() {
-    bool useless_split_part_2 = false;
-    if(
-        sector_split_info.useless_split_part_2_checkpoint !=
-        INVALID &&
-        drawing_nodes.size() >=
-        sector_split_info.useless_split_part_2_checkpoint
-    ) {
-        useless_split_part_2 = true;
-    }
-    
-    if(useless_split_part_2) {
-        set_status(
-            "To split this sector, continue your "
-            "drawing to make a new sector."
-        );
-    } else {
-        set_status("Use the canvas to draw a sector.");
     }
 }
 

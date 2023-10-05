@@ -2144,9 +2144,10 @@ void area_editor::process_gui_panel_layout() {
     if(sub_state == EDITOR_SUB_STATE_DRAWING) {
         //Drawing explanation text.
         ImGui::TextWrapped(
-            "Use the canvas to draw a sector. Each click places a vertex. "
-            "Either draw edges from one edge/vertex to another edge/vertex, "
-            "or draw a sector's shape and finish on the starting vertex."
+            "Use the canvas to draw your layout. Each click places a vertex. "
+            "You either draw edges from one edge/vertex to another "
+            "edge/vertex, or draw a sector's shape and finish on the "
+            "starting vertex."
         );
         
         //Drawing cancel button.
@@ -2202,7 +2203,7 @@ void area_editor::process_gui_panel_layout() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            press_new_sector_button();
+            press_layout_drawing_button();
         }
         set_tooltip(
             "Start drawing a new sector.\n"

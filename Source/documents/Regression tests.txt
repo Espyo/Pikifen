@@ -48,15 +48,17 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +-+    +-+
 | | -> | @@@
 +-+    +-+
-* Starting drawing somewhere that's not an edge/vertex, and draw one or more lines ending on an existing edge.
-* The line will be rejected, since drawing a new sector shouldn't hit an edge or vertex.
+* Start drawing somewhere that's not an edge/vertex, and draw one or more lines ending on an existing edge.
+* The drawing will start working in reverse, so you can continue from the point that's not on the edge.
+* Implemented in 6220be8a4d9a2c6adcdf8d1168303fc86c9fa892.
 
 
 +-+    +-@@@
 | | -> | |
 +-+    +-+
-* Starting drawing somewhere that's not an edge/vertex, and draw one or more lines ending on an existing vertex.
-* The line will be rejected, since drawing a new sector shouldn't hit an edge or vertex.
+* Start drawing somewhere that's not an edge/vertex, and draw one or more lines ending on an existing vertex.
+* The drawing will start working in reverse, so you can continue from the point that's not on the vertex.
+* Implemented in 6220be8a4d9a2c6adcdf8d1168303fc86c9fa892.
 
 
 +--+    +--+
@@ -64,7 +66,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 |  | -> | @@@
 |  |    |  |
 +--+    +--+
-* Starting drawing somewhere that's not an edge/vertex, and draw a line going through an existing edge.
+* Start drawing somewhere that's not an edge/vertex, and draw a line going through an existing edge.
 * The editor doesn't let you draw through edges.
 
 
@@ -72,7 +74,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 +-+    +-@
 | | -> | |@
 +-+    +-+ @
-* Starting drawing somewhere that's not an edge/vertex, and draw a line going through an existing vertex.
+* Start drawing somewhere that's not an edge/vertex, and draw a line going through an existing vertex.
 * The editor doesn't let you draw through vertexes.
 
 
@@ -85,8 +87,23 @@ When testing, test with the specified sectors in the void, and inside a big sect
 | |         | |
 +-+         +-+
 * Have a triangle sector where one vertex is at the midpoint of a rectangle sector's edge. Then, start drawing in a free space.
-* If the two sectors are in the void, everything should be normal. Otherwise the editor shouldn't let you draw something new because there are broken sectors.
+* The editor should let you draw like normal.
+* Implemented in 4875e616cbdafb191b46243728931ee2d95f6c66.
 
+
++---------+    +---------+    +---------+
+| +-----+ |    | +-----+ |    | +-----+ |
+| | +-+ | |    | | +-+ | |    | | +-+ | |
+| | | | | |    | | | | | |    | | | | | |
+| | | | | | -> | | | @@@ | -> | | | @@@@@
+| | | | | |    | | | | | |    | | | | | |
+| | +-+ | |    | | +-+ | |    | | +-+ | |
+| +-----+ |    | +-----+ |    | +-----+ |
++---------+    +---------+    +---------+
+* Have three square sectors, nested between themselves. Then, draw a line from the inner one's right edge to the middle one's right edge. Then, to the outer one's right edge.
+* The editor will first let you continue drawing to make a meaningful split, but for the second, won't let you go out of the currently working sector.
+* Also try with multiple drawing nodes before trying to cross to another sector.
+* Also try just landing inside the outermost sector instead of crossing from one edge to another.
 
 
 ###################################
@@ -185,19 +202,6 @@ When testing, test with the specified sectors in the void, and inside a big sect
 * A new sector will have been created, neighboring both sectors.
 
 
-+-----+
-|     |
-| +-+ |
-| | | |
-@@@ | |
-| | | |
-| +-+ |
-|     |
-+-----+
-* Have a rectangle sector with another rectangle sector inside, without shared edges. Then, draw a line going from the outer rectangle to the inner.
-* The editor won't let you do that split, since it would be meaningless.
-
-
 +---+
 |   |
 +-+ |
@@ -239,15 +243,6 @@ When testing, test with the specified sectors in the void, and inside a big sect
 * A new sector will have been created, neighboring sector 1, and becoming a parent of sector 2.
 
 
-+-+ +-+
-| | | |
-| @@@ |
-| | | |
-+-+ +-+
-* Have a rectangle sector, and another rectangle sector nearby, but both isolated. Then, draw a line between the two.
-* The editor won't let you do that split, since it would be meaningless.
-
-
 +-----+
 |     |
 | +-@-+
@@ -278,12 +273,38 @@ When testing, test with the specified sectors in the void, and inside a big sect
 * Found a problem with this, and fixed it in 64875fb5b7bada3dccefcc9505db87556ba0f518, though this was before the drawing modes changed in fd2dfaef5d99a04af726b1be5c59a8884a755884.
 
 
-+-@@@@
-| |@ @
-| | @@
-+-+  @
-* Have a rectangle sector. Then, draw a line starting at a vertex, doing some shape, and ending in the same vertex.
-* The editor won't let you finish it, since sector splits shouldn't loop back onto themselves.
++-+ +-+
+| | | |
+| @@@ |
+| | | |
++-+ +-+
+* Have a rectangle sector, and another rectangle sector nearby, but both isolated. Then, draw a line between the two.
+* The editor won't try to split, and will instead let you continue draw it so you can make a new sector.
+* Implemented in 89b3897d1aa20df5b0f05a1522d345520f563aee.
+
+
++-----+
+|     |
+| +-+ |
+| | @@@
+| +-+ |
+|     |
++-----+
+* Have a rectangle sector inside another rectangle sector. Then, draw a line from the inner rectangle to the outer.
+* The editor won't try to split, and will instead let you continue draw it so you can make a new sector.
+* Implemented in 89b3897d1aa20df5b0f05a1522d345520f563aee.
+
+
++---------+
+| +     @ |
+| |\   @@ |
+| | \ @ @ |
+| +--@@@@ |
++---------+
+* Have a sector with a triangle sector inside. Then, draw a new triangle sector that shares one vertex with the other triangle. The first point of the drawing should not be the shared vertex.
+* Try again, now with the first point of the drawing being the shared vertex.
+* The new sector will have been created successfully.
+* Implemented in 4875e616cbdafb191b46243728931ee2d95f6c66 and de7131ca801b1896a67ca5ccebb31c03b9297b25.
 
 
 ###################################
@@ -430,7 +451,7 @@ When testing, test with the specified sectors in the void, and inside a big sect
 | | | -> | |\|
 +-+@+    +-+ +
 * Have two neighboring rectangle sectors. Then, split one of the edges neighboring the common edge. Then, grab that vertex and merge it with the common edge's vertex on the opposite side.
-* The sector whose edge got split will have turned into a triangle, and the outer sector, if any, will have become broken.
+* The sector whose edge got split will have turned into a triangle.
 
 
 +-+---+    +-+ @--+
@@ -533,8 +554,49 @@ When testing, test with the specified sectors in the void, and inside a big sect
 | |             | |
 +-+             +-+
 * Have a rectangle sector and a triangle sector side by side, such that one of the triangle's vertexes is close to one of the rectangle's edges. Then, drag the triangle such that its vertex melds with the rectangle's edge, splitting it.
-* The triangle will have moved. If the two sectors are in the void, everything is fine. Otherwise, the outer sector will have become broken, due to a "loop" in the inner sector edges.
+* The triangle will have moved correctly and the vertex will have been merged.
+* Implemented in 4875e616cbdafb191b46243728931ee2d95f6c66.
 
+
++-----+    +-@---+
+|     |    | |\  |
+| @-+ | -> | | + |
+| | | |    | | | |
++-+ +-+    +-+ +-+
+* Have a C-shaped sector. Then, grab one of the innermost vertexes and drag it to the edge it's pointing towards so the sector is split into two.
+* The sector will work like normal, and selecting either of the "sub-sectors" will select the whole sector.
+* Try also dragging the other vertex so there's a clean division, instead of a shared vertex.
+* Try also making them share a vertex again, after splitting them cleanly.
+* Implemented in 344719689924b964218c37597180df892a404b81.
+
+
++----------+    +----------+
+| +------+ |    | +------+ |
+| |      | |    | |      | |
+| |  +---+ |    | |  +-@@@ |
+| |  |     |    | |  | | | |
+| |  | @@@ | -> | |  | | | |
+| |  | | | |    | |  | | | |
+| |  +-+ + |    | |  +-+ + |
+| |      | |    | |      | |
+| +------+ |    | +------+ |
++----------+    +----------+
+* Have a rectangular sector. Inside, have a G-shaped sector. Then, grab the hook of the G-shaped sector and drag it up so it becomes an O-shaped sector.
+* The rectangular sector will be split into two "sub-sectors", one outside the O-shaped sector, and another inside. Selecting either of the "sub-sectors" will select the whole sector.
+* Implemented in 344719689924b964218c37597180df892a404b81.
+
+
++----+    +----+
+|    |    |    |
+| +--+    | +--@
+| |    -> | | /|
+| |       | |/ |
+| +--@    | +  |
+|    |    |    |
++----+    +----+
+* Have a C-shaped sector. Then, drag either one of the two vertexes in the center-right, and drag it to the other one.
+* The sector will work like normal.
+* Implemented in 4875e616cbdafb191b46243728931ee2d95f6c66.
 
 
 ###################################

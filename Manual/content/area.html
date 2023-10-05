@@ -127,7 +127,7 @@
     
     <dl>
       <dt><b>Click on the "+" button at the top of the layout panel.</b></dt>
-      <dd>This will enter the sector creation mode.</dd>
+      <dd>This will enter the layout drawing mode.</dd>
       <dt><b>Click on the area to place the first vertex.</b></dt>
       <dd>Let's place the first vertex of our rock a bit to the east of the center of the area (which should be the origin, more or less).</dd>
       <dt><b>Click in other spots to place the next vertexes in order.</b></dt>
@@ -136,7 +136,7 @@
       <dd>Once you do, the new sector will have been created, with a rough diamond shape!</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
-        <li>Your drawings should represent a sector entirely, so don't try to cut through other sectors.</li>
+        <li>Your drawings should represent one sector only, so don't try to cut through other sectors.</li>
         <li>If you start on an edge or vertex, you can finish on another edge or vertex to split one sector into two.</li>
       </ul><dd>
     </dl>
@@ -392,8 +392,19 @@
     <h3 id="other-basics">Other basic operations</h3>
     
     <ul>
-      <li><b>Deleting edges and sectors</b>: You can delete a sector by merging the sector's edges, one vertex at a time, until it has no more edges left. If you select an edge and press the panel's "Delete" button, the edge will be removed, and because sectors cannot exist without being a closed polygon, any sector that depended on that edge will be gone, as will all edges that depended on that sector.</li>
-      <li><b>Unstitching a sector</b>: To separate two previously-stitched sectors, create a vertex on either one of the sectors, next to the vertex where the connection begins. Then create another vertex in the middle of that and start dragging it through the stitch, connecting it to the next vertex of the stitch. This made an opening. Continue with this process of moving the opening along the stitch and you should soon separate them. Imagine this as having a ball of plasticine and squeezing one end with a finger until it eventually splits. Alternatively, draw a sector between them, and then delete one of the edges that is exclusive to that sector.</li>
+      <li>
+        <b>Deleting edges and sectors</b>:
+        <ol>
+          <li>Crushing: You can delete a sector by merging the sector's edges, one vertex at a time, until it has no more edges left. If you select an edge and press the panel's "Delete" button, the edge will be removed, and because sectors cannot exist without being a closed polygon, any sector that depended on that edge will be gone, as will all edges that depended on that sector.</li>
+          <li>Leaking: You can also select one or more of its edges, then press the "Delete" button in the panel. This will delete that edge, and because sectors &ndash; which are polygons &ndash; can't be left open, the sector that was on the opposite side of the edge will "leak in" and take up the space of the sector you deleted. When this happens, the sector tries to "leak" the larger sector into the smaller one, so if you wanted the opposite, you can make adjustments before deleting or delete it with the other method.</li>
+        </ol>
+      </li>
+      <li><b>Unstitching a sector</b>:
+        <ol>
+          <li>Pulling vertexes apart: To separate two previously-stitched sectors, create a vertex on either one of the sectors, next to the vertex where the connection begins. Then create another vertex in the middle of that and start dragging it through the stitch, connecting it to the next vertex of the stitch. This made an opening. Continue with this process of moving the opening along the stitch and you should soon separate them. Imagine this as having a ball of plasticine and squeezing one end with a finger until it eventually splits.</li>
+          <li>Deleting an auxiliary sector: You can draw a new sector between the two sectors you want to unstitch. Then, delete one of its edges (see above), and the gap will have been made.</li>
+        </ol>
+      </li>
       <li><b>Making a bottomless pit</b>: Just check the "bottomless pit" checkbox in the advanced behavior settings. Objects that touch the floor of this sector will be considered as falling into the pit. The floor is also not visible, so you see the background, or just black.</li>
       <li><b>Making a circular sector</b>: You can't draw actual circles, since those don't have lines, but you can get close by drawing a polygon with a lot of same-length lines. Instead of painstakingly drawing out the lines, you can click the button next to the new sector creation button to start the process of drawing a circular sector. Start by specifying the center of the circle, then its radius, and finally, how smooth it is.</li>
     </ul>
@@ -403,8 +414,12 @@
       <p>How to delete a sector by crushing it.</p>
     </div>
     <div class="box">
-      <img src="../images/unstitch.png" alt="How to unstitch a sector.">
-      <p>How to unstitch a sector.</p>
+      <img src="../images/unstitch_pull.png" alt="How to unstitch a sector by pulling the vertexes apart.">
+      <p>How to unstitch a sector by pulling the vertexes apart.</p>
+    </div>
+    <div class="box">
+      <img src="../images/unstitch_aux.png" alt="How to unstitch a sector with an auxiliary sector.">
+      <p>How to unstitch a sector with an auxiliary sector.</p>
     </div>
 
     <h2 id="advanced">Advanced</h2>
@@ -468,8 +483,6 @@
     
     <ul>
       <li>Don't drag vertexes such that you would turn a sector inside out, nor that two lines would intersect.</li>
-      <li>When stitching several vertexes, go one neighbor at a time. If you leave a gap, the engine might report an error on the gap sector until it is properly closed.</li>
-      <li>Don't split a sector into two by inserting a different sector in-between. If a sector is split into two, it stops being one polygon and becomes two. The engine isn't ready to handle that, so fill in one of the two polygons with an entirely new sector.</li>
       <li>Areas are very complex in the engine, and crashes can happen. Save often, and if you happen to experience a crash and lose your work, open the area again, go to the tools menu in the area editor, and load the automatically-saved backup from there.</li>
       <li>Sector creation is equally complex. So long as you don't try to cut corners or do anything too fancy when creating a sector, it should all go fine.</li>
     </ul>
@@ -481,23 +494,19 @@
       <p>Don't turn a sector inside-out like this.</p>
     </div>
     
-    <div class="box">
-      <img src="../images/stitch_gap.png" alt="Don't leave gaps while stitching like this.">
-      <p>Don't leave gaps while stitching like this.</p>
-    </div>
-    
-    <div class="box">
-      <img src="../images/split_sector.png" alt="Don't split a sector in two like this. Instead, create another sector to fill in for one of the halves.">
-      <p>Don't split a sector in two like this. Instead, create another sector to fill in for one of the halves.</p>
-    </div>
-    
     <h2 id="troubleshooting">Troubleshooting</h2>
     
     <ul>
       <li>If the area editor crashes or something breaks the area, remember that backups are automatically created. Before the game overwrites the backup with something you don't want, consider going into the area editor's tools, and loading from the backup.</li>
       <li>If Pikmin that are following a path to get to an object reach their destination, but aren't interacting with the object and are instead walking against it, that's probably because they're trying to reach the path stop inside the object. Consider placing the path stop outside.</li>
       <li>If objects that are following a path are entering a path stop but not realizing where to go next, keep in mind that unless told to go straight, or told the path is impossible, an object will always head to the closest stop first, and try to leave the path graph at the stop closest to their destination. Maybe the start or end stop isn't where you think it is. Try using the path preview tool to understand what's going on.</li>
+      <li>If when you select one sector you realize two sectors get selected, that might be because it's still just the one sector, but you ended up dividing its geometry into two separate polygons, or "sub-sectors". Nothing is wrong with this per se, but you might be better off creating a new sector inside one of the sub-sectors, or just splitting one of the sub-sectors, and try to fill it out entirely using your new sector. That way both polygons will have one clearly defined sector each.</li>
     </ul>
+
+    <div class="box">
+      <img src="../images/sub_sectors.png" alt="Splitting a sector like this can cause it two divide into two sub-sectors.">
+      <p>Splitting a sector like this can cause it two divide into two sub-sectors.</p>
+    </div>
 
     <h2 id="controls">Controls</h2>
 
