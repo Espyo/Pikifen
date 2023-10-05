@@ -589,13 +589,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                                 sector_split_info.pre_split_area_data
                             );
                             recreate_drawing_nodes();
-                            set_status(
-                                "To split this sector, continue your "
-                                "drawing to make a new sector.",
-                                false
-                            );
+                            sector_split_info.useless_split_part_2_checkpoint =
+                                drawing_nodes.size();
+                            update_sector_drawing_status_text();
                             break;
-                            
                         }
                         }
                     }

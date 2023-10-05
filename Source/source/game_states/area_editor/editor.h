@@ -169,6 +169,8 @@ private:
         vector<vertex*> traversed_vertexes[2];
         //During stage 1, was the working sector to the left?
         bool is_working_at_stage_1_left = false;
+        //Nr. of drawing nodes before a useless split part 2. Or INVALID.
+        size_t useless_split_part_2_checkpoint = INVALID;
     };
     
     //Possible results after a line drawing operation.
@@ -740,6 +742,7 @@ private:
         const sector* old_outer, sector* new_outer
     );
     void update_reference();
+    void update_sector_drawing_status_text();
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_texture_suggestions(const string &n);
     void update_undo_history();

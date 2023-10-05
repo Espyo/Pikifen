@@ -300,6 +300,7 @@ void area_editor::clear_current_area() {
 void area_editor::clear_layout_drawing() {
     drawing_nodes.clear();
     drawing_line_result = DRAWING_LINE_OK;
+    sector_split_info.useless_split_part_2_checkpoint = INVALID;
 }
 
 
@@ -2335,7 +2336,7 @@ void area_editor::press_new_sector_button() {
     
     clear_selection();
     clear_layout_drawing();
-    set_status("Use the canvas to draw a sector.");
+    update_sector_drawing_status_text();
     sub_state = EDITOR_SUB_STATE_DRAWING;
 }
 
@@ -4240,6 +4241,14 @@ void area_editor::undo_layout_drawing_node() {
     drawing_nodes.erase(
         drawing_nodes.begin() + drawing_nodes.size() - 1
     );
+    if(
+        sector_split_info.useless_split_part_2_checkpoint != INVALID &&
+        drawing_nodes.size() < sector_split_info.useless_split_part_2_checkpoint
+    ) {
+        //Back to before useless split part 2. Remove the checkpoint.
+        sector_split_info.useless_split_part_2_checkpoint = INVALID;
+    }
+    update_sector_drawing_status_text();
 }
 
 
@@ -4345,6 +4354,32 @@ void area_editor::update_reference() {
     } else {
         reference_center = point();
         reference_size = point();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the status text according to what's going on in the current
+ * sector drawing.
+ */
+void area_editor::update_sector_drawing_status_text() {
+    bool useless_split_part_2 = false;
+    if(
+        sector_split_info.useless_split_part_2_checkpoint !=
+        INVALID &&
+        drawing_nodes.size() >=
+        sector_split_info.useless_split_part_2_checkpoint
+    ) {
+        useless_split_part_2 = true;
+    }
+    
+    if(useless_split_part_2) {
+        set_status(
+            "To split this sector, continue your "
+            "drawing to make a new sector."
+        );
+    } else {
+        set_status("Use the canvas to draw a sector.");
     }
 }
 
