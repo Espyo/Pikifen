@@ -138,7 +138,7 @@ protected:
         ICON_TOOLS,
         //Options.
         ICON_OPTIONS,
-        //Undo.
+        //Undo (and redo, when mirrored).
         ICON_UNDO,
         //Grid.
         ICON_GRID,

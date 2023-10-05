@@ -25,7 +25,6 @@ Next tasks (roughly sorted most important first)
     --- 0.25.0 ---
     Pikmin sprouts should have MOB_FLAG_INTANGIBLE instead (thanks Helodity)
     Add area editor regression-testing in-game
-    Area editor redo
     The ability to ctrl+click a selected vertex, edge, etc. to unselect it (thanks Neo)
     More puzzle elements
         Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
@@ -784,7 +783,6 @@ Misc things (so I don't forget)
         Enemy spirits?
     Editor improvements
         Area editor
-            A redo button
             Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just have a link to another area's geometry instead. It should allow it to be rotated, too
             Pressing G should let you drag the currently selected things, instead of you being forced to precisely click on the tiny thing (e.g. Pikmin mob gen) before you can drag (thanks Neo)
             Shift+Ctrl+drag should start a selection box that adds to the current selection (thanks Neo)

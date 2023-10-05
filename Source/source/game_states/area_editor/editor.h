@@ -492,6 +492,8 @@ private:
     point quick_height_set_start_pos;
     //Time left in the quick preview mode, including fade out.
     timer quick_preview_timer;
+    //Redo history, with the state of the area at each point. Front = latest.
+    deque<std::pair<area_data*, string> > redo_history;
     //Opacity of the reference image.
     unsigned char reference_alpha;
     //Reference image center.
@@ -560,12 +562,6 @@ private:
     bool show_shadows;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
-    //Undo history, with the state of the area at each point.
-    std::deque<std::pair<area_data*, string> > undo_history;
-    //Name of the undo operation responsible for the lock.
-    string undo_save_lock_operation;
-    //During this timer, don't save state for operations matching the last one.
-    timer undo_save_lock_timer;
     //Position of the load widget.
     point load_widget_pos;
     //Position of the reload widget.
@@ -576,6 +572,12 @@ private:
     bool thumbnail_needs_saving;
     //Was the area's thumbnail changed in any way since the last backup save?
     bool thumbnail_backup_needs_saving;
+    //Undo history, with the state of the area at each point. Front = latest.
+    deque<std::pair<area_data*, string> > undo_history;
+    //Name of the undo operation responsible for the lock.
+    string undo_save_lock_operation;
+    //During this timer, don't save state for operations matching the last one.
+    timer undo_save_lock_timer;
     
     //General functions.
     bool are_nodes_traversable(
@@ -675,6 +677,7 @@ private:
     SECTOR_SPLIT_RESULTS get_sector_split_evaluation();
     sector* get_sector_under_point(const point &p) const;
     vertex* get_vertex_under_point(const point &p) const;
+    void go_to_undo_history_point(size_t p);
     void goto_problem();
     void handle_line_error();
     void homogenize_selected_edges();
@@ -699,6 +702,7 @@ private:
     void paste_sector_texture();
     area_data* prepare_state();
     void recreate_drawing_nodes();
+    void redo();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
     );
@@ -714,8 +718,9 @@ private:
     void select_sector(sector* s_ptr);
     void select_tree_shadow(tree_shadow* s_ptr);
     void select_vertex(vertex* v_ptr);
-    void set_selection_status_text();
     void set_new_circle_sector_points();
+    void set_selection_status_text();
+    void set_state_from_undo_or_redo_history(area_data* state);
     void setup_sector_split();
     point snap_point(const point &p, const bool ignore_selected = false);
     vertex* split_edge(edge* e_ptr, const point &where);
@@ -794,6 +799,7 @@ private:
     void press_paste_texture_button();
     void press_quick_play_button();
     void press_quit_button();
+    void press_redo_button();
     void press_reference_button();
     void press_reload_button();
     void press_remove_edge_button();
