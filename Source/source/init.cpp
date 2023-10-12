@@ -414,21 +414,21 @@ void init_controls() {
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom A",
         "To be used in Scripts.",
-        "custom_a", "k_6"
+        "custom_a", "k_7"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_CUSTOM_B,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom B",
         "To be used in Scripts.",
-        "custom_b", "k_7"
+        "custom_b", "k_8"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_CUSTOM_C,
         PLAYER_ACTION_CAT_ADVANCED,
         "Custom C",
         "To be used in Scripts.",
-        "custom_c", "k_8"
+        "custom_c", "k_10"
     );
     game.controls.add_player_action_type(
         PLAYER_ACTION_NEXT_MATURITY,
