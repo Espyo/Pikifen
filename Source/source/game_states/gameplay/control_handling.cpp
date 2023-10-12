@@ -27,58 +27,58 @@ void gameplay_state::handle_player_action(const player_action &action) {
     
     if(!msg_box && !onion_menu && !pause_menu) {
     
-        switch(action.action_type_id) {
+        switch (action.action_type_id) {
         case PLAYER_ACTION_THROW: {
-    
+
             /*******************
             *             .-.  *
             *   Throw    /   O *
             *           &      *
             *******************/
-            
-            if(is_down) { //Button press.
-            
+
+            if (is_down) { //Button press.
+
                 bool done = false;
-                
+
                 //Check if the player wants to cancel auto-throw.
-                if(
+                if (
                     cur_leader_ptr &&
                     game.options.auto_throw_mode == AUTO_THROW_TOGGLE &&
                     cur_leader_ptr->auto_throwing
-                ) {
+                    ) {
                     cur_leader_ptr->stop_auto_throwing();
                     done = true;
                 }
-                
+
                 //Check if the leader should heal themselves on the ship.
-                if(
+                if (
                     !done &&
                     cur_leader_ptr &&
                     close_to_ship_to_heal
-                ) {
+                    ) {
                     close_to_ship_to_heal->heal_leader(cur_leader_ptr);
                     done = true;
                 }
-                
+
                 //Check if the leader should pluck a Pikmin.
-                if(
+                if (
                     !done &&
                     cur_leader_ptr &&
                     close_to_pikmin_to_pluck
-                ) {
+                    ) {
                     cur_leader_ptr->fsm.run_event(
                         LEADER_EV_GO_PLUCK,
-                        (void*) close_to_pikmin_to_pluck
+                        (void*)close_to_pikmin_to_pluck
                     );
                     done = true;
                 }
-                
+
                 //Now check if the leader should open an Onion's menu.
-                if(
+                if (
                     !done &&
                     cur_leader_ptr &&
                     close_to_nest_to_open
-                ) {
+                    ) {
                     onion_menu = new onion_menu_struct(
                         close_to_nest_to_open,
                         cur_leader_ptr
@@ -88,34 +88,34 @@ void gameplay_state::handle_player_action(const player_action &action) {
                         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
                     );
                     paused = true;
-                    
+
                     //TODO replace with a better solution.
                     cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
-                    
+
                     done = true;
                 }
-                
+
                 //Now check if the leader should interact with an interactable.
-                if(
+                if (
                     !done &&
                     cur_leader_ptr &&
                     close_to_interactable_to_use
-                ) {
+                    ) {
                     string msg = "interact";
                     cur_leader_ptr->send_message(
                         close_to_interactable_to_use, msg
                     );
                     done = true;
                 }
-                
+
                 //Now check if the leader should grab a Pikmin.
-                if(
+                if (
                     !done &&
                     cur_leader_ptr &&
                     cur_leader_ptr->holding.empty() &&
                     cur_leader_ptr->group->cur_standby_type &&
                     !closest_group_member_distant
-                ) {
+                    ) {
                     switch (game.options.auto_throw_mode) {
                     case AUTO_THROW_OFF: {
                         done = grab_closest_group_member();
@@ -131,19 +131,20 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     }
                     }
                 }
-                
+
                 //Now check if the leader should punch.
-                if(
+                if (
                     !done &&
                     cur_leader_ptr
-                ) {
+                    ) {
                     cur_leader_ptr->fsm.run_event(LEADER_EV_PUNCH);
                     done = true;
                 }
-                
-            } else { //Button release.
-            
-                if(cur_leader_ptr) {
+
+            }
+            else { //Button release.
+
+                if (cur_leader_ptr) {
                     switch (game.options.auto_throw_mode) {
                     case AUTO_THROW_OFF: {
                         cur_leader_ptr->queue_throw();
@@ -158,80 +159,124 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     }
                     }
                 }
-                
+
             }
-            
+
             break;
-            
+
         } case PLAYER_ACTION_WHISTLE: {
-    
+
             /********************
             *              .--= *
             *   Whistle   ( @ ) *
             *              '-'  *
             ********************/
-            
-            if(is_down) {
+
+            if (is_down) {
                 //Button pressed.
-                
-                if(cur_leader_ptr) {
+
+                if (cur_leader_ptr) {
                     mob_event* cancel_ev =
                         cur_leader_ptr->fsm.get_event(LEADER_EV_CANCEL);
-                        
-                    if(cancel_ev) {
+
+                    if (cancel_ev) {
                         //Cancel auto-pluck, lying down, etc.
                         cancel_ev->run(cur_leader_ptr);
-                    } else {
+                    }
+                    else {
                         //Start whistling.
                         cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
                     }
                 }
-                
-            } else {
+
+            }
+            else {
                 //Button released.
-                
-                if(cur_leader_ptr) {
+
+                if (cur_leader_ptr) {
                     cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
                 }
-                
+
             }
-            
+
             break;
-            
+
         } case PLAYER_ACTION_NEXT_LEADER:
         case PLAYER_ACTION_PREV_LEADER: {
-    
+
             /******************************
             *                    \O/  \O/ *
             *   Switch leader     | -> |  *
             *                    / \  / \ *
             ******************************/
-            
-            if(!is_down) return;
-            
+
+            if (!is_down) return;
+
             change_to_next_leader(
                 action.action_type_id == PLAYER_ACTION_NEXT_LEADER,
                 false, false
             );
-            
+
             break;
-            
+
         } case PLAYER_ACTION_DISMISS: {
-    
+
             /***********************
             *             \O/ / *  *
             *   Dismiss    |   - * *
             *             / \ \ *  *
             ***********************/
-            
-            if(!is_down) return;
-            
-            if(cur_leader_ptr) {
+
+            if (!is_down) return;
+
+            if (cur_leader_ptr) {
                 cur_leader_ptr->fsm.run_event(LEADER_EV_DISMISS);
             }
-            
+
             break;
-            
+
+        } case PLAYER_ACTION_CUSTOM_A: {
+
+            /********************
+            *               _   *
+            *   Custom_A     /  *
+            *               ·   *
+            ********************/
+
+            if (!is_down) return;
+
+            if (cur_leader_ptr) {
+                cur_leader_ptr->fsm.run_event(MOB_EV_CUSTOM_A);
+            }
+            break;
+        } case PLAYER_ACTION_CUSTOM_B: {
+
+            /********************
+            *               _   *
+            *   Custom_B     /  *
+            *               ·   *
+            ********************/
+
+            if (!is_down) return;
+
+            if (cur_leader_ptr) {
+                cur_leader_ptr->fsm.run_event(MOB_EV_CUSTOM_B);
+            }
+            break;
+        } case PLAYER_ACTION_CUSTOM_C: {
+
+            /********************
+            *               _   *
+            *   Custom_C     /  *
+            *               ·   *
+            ********************/
+
+            if (!is_down) return;
+
+            if (cur_leader_ptr) {
+                cur_leader_ptr->fsm.run_event(MOB_EV_CUSTOM_C);
+            }
+            break;
         } case PLAYER_ACTION_PAUSE: {
     
             /********************

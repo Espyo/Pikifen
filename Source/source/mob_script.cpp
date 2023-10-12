@@ -185,6 +185,9 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_touch_wall",                  MOB_EV_TOUCHED_WALL);
     r("on_weight_added",                MOB_EV_WEIGHT_ADDED);
     r("on_weight_removed",              MOB_EV_WEIGHT_REMOVED);
+    r("on_custom_a",                    MOB_EV_CUSTOM_A);
+    r("on_custom_b",                    MOB_EV_CUSTOM_B);
+    r("on_custom_c",                    MOB_EV_CUSTOM_C);
     else {
         type = MOB_EV_UNKNOWN;
         log_error("Unknown script event name \"" + n + "\"!", node);
