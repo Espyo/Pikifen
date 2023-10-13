@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -16,7 +16,6 @@ Next tasks (roughly sorted most important first)
             Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
     Winged Pikmin stuff
         Winged Pikmin hover so high up most enemy hitboxes don't hit them
-        Winged Pikmin cannot be crushed
         Winged Pikmin don't drink nectar on their own
     Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
     Apparently Dweevils shake treasures off far too strongly?
@@ -298,6 +297,7 @@ Next tasks (roughly sorted most important first)
         Leaf Pikmin should be able to follow leaders in walking
         Water Dumples should wander around a small bit
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
+        There should be some petal particle effects when a Pikmin loses their maturity
         Bitter sprays should last for a short time
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         Add Helodity's Plasm Wraith

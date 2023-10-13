@@ -129,7 +129,7 @@ script {
             set_gravity 0
             stop
             stop_vertically
-            set_timer 1
+            set_timer 1.4
             set_animation floating
         }
         on_timer {
