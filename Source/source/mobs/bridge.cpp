@@ -234,6 +234,12 @@ bool bridge::check_health() {
 void bridge::draw_component(mob* m) {
     if(m->links.empty() || !m->links[0]) return;
     
+    bitmap_effect_info eff;
+    m->get_sprite_bitmap_effects(
+        NULL, &eff,
+        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS
+    );
+    
     bridge* bri_ptr = (bridge*) m->links[0];
     string side = m->vars["side"];
     ALLEGRO_BITMAP* texture =
@@ -252,7 +258,7 @@ void bridge::draw_component(mob* m) {
     
     ALLEGRO_VERTEX vertexes[4];
     for(size_t v = 0; v < 4; ++v) {
-        vertexes[v].color = COLOR_WHITE;
+        vertexes[v].color = eff.tint_color;
         vertexes[v].z = 0.0f;
     }
     

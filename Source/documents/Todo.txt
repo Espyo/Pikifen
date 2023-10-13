@@ -6,21 +6,21 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Reloading an area in the area editor just loads an "" area
+        area_editor::load_area has a reference to the area name, but when it calls clear_current_area, that reference is gone
     Pressing Tab to go to the next Dear ImGui widget isn't working
-    Bridges are broken
-    Bridges should be darker in darker sectors (thanks Pikmin Expert)
-    Pikmin should want to go to nectar by themselves when idling
-    Winged Pikmin hover so high up most enemy hitboxes don't hit them
-    Winged Pikmin cannot be crushed
-    Winged Pikmin don't drink nectar on their own
+    Bridge stuff
+        Bridges are broken
+        Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
+        If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
+            Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
+    Winged Pikmin stuff
+        Winged Pikmin hover so high up most enemy hitboxes don't hit them
+        Winged Pikmin cannot be crushed
+        Winged Pikmin don't drink nectar on their own
     Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
     Apparently Dweevils shake treasures off far too strongly?
-    Reloading an area in the area editor just loads an "" area
-    Winged Pikmin that fall in the water should fly up when whistled
-    Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
     Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
-    If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
-        Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
 
     --- 0.25.0 ---
     Pikmin sprouts should have MOB_FLAG_INTANGIBLE instead (thanks Helodity)
@@ -763,6 +763,8 @@ Misc things (so I don't forget)
         "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
         The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
     Pikmin behaviors
+        Winged Pikmin that fall in the water should fly up when whistled
+        Pikmin should want to go to nectar by themselves when idling
         A way for a Pikmin type to control what its resistance to being shaken off is
         Add the feature that makes dead flower Pikmin sometimes drop a sprout, before the story mode is done? It could spawn a sprout for use later in the day
         Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
@@ -786,7 +788,6 @@ Misc things (so I don't forget)
             Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just have a link to another area's geometry instead. It should allow it to be rotated, too
             Pressing G should let you drag the currently selected things, instead of you being forced to precisely click on the tiny thing (e.g. Pikmin mob gen) before you can drag (thanks Neo)
             Shift+Ctrl+drag should start a selection box that adds to the current selection (thanks Neo)
-            Allow pointless edges (and remove the "wouldn't split in any useful way" warning). This way, it's easier to create fade sectors, for instance
             View -> Show X in other modes
                 This would allow one to see edges+vertexes, mobs, and paths in modes that aren't layout, mobs, and paths, respectively
             A way to visually show that you're in the layout mode, mobs mode, etc. I tried a vignette in the canvas, colored after the mode, but it's too ugly. Maybe coloring the Dear ImGui widgets based on the mode?
