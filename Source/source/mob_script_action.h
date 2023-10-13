@@ -268,6 +268,10 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_HEALTH_RATIO,
     //Get amount of latched Pikmin.
     MOB_ACTION_GET_INFO_LATCHED_PIKMIN,
+    //Get the name of the input that triggered the event.
+    MOB_ACTION_GET_INFO_INPUT_NAME,
+    //Get the value of the input that triggered the event.
+    MOB_ACTION_GET_INFO_INPUT_VALUE,
     //Get total weight of latched Pikmin.
     MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT,
     //Get message that triggered the event.
