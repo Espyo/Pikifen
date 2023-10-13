@@ -27,27 +27,15 @@ void gameplay_state::handle_player_action(const player_action &action) {
 
     bool is_down = (action.value >= 0.5);
 
-
-
     //Before we do the actions, we'll tell the Leader object it's recieved an input, which will trigger an event.
-    if (is_down) {
-        //Button pressed.
-        if (cur_leader_ptr) {
-            cur_leader_ptr->set_var("recieved_input", game.controls.internal_name_from_id(action.action_type_id) );
-            cur_leader_ptr->fsm.run_event(MOB_EV_INPUT_RECIEVED);
-        }
+    if (cur_leader_ptr) {
+        string recieved_input;
+        recieved_input = game.controls.internal_name_from_id(action.action_type_id);
+        if (!is_down) recieved_input += "_released";
+        cur_leader_ptr->set_var("recieved_input", recieved_input);
+        cur_leader_ptr->fsm.run_event(MOB_EV_INPUT_RECIEVED);
     }
-    else {
-        //Button released.
-        if (cur_leader_ptr) {
-            cur_leader_ptr->set_var("recieved_input", game.controls.internal_name_from_id(action.action_type_id) + "_released");
-            cur_leader_ptr->fsm.run_event(MOB_EV_INPUT_RECIEVED);
-        }
-    }
-
-
-
-
+    
 
     if(!msg_box && !onion_menu && !pause_menu) {
     
