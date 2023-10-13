@@ -458,13 +458,7 @@ void init_controls() {
         "Go back or cancel in a menu.",
         "menu_back", "k_59"
     );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_MENU_BACK,
-        PLAYER_ACTION_CAT_ADVANCED,
-        "Menu shortcut - back",
-        "Go back or cancel in a menu.",
-        "menu_back", "k_59"
-    );
+
     
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.

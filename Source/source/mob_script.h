@@ -108,12 +108,10 @@ enum MOB_EV_TYPES {
     MOB_EV_WEIGHT_ADDED,
     //When weight was removed from on top of it. Only if this mob's walkable.
     MOB_EV_WEIGHT_REMOVED,
-    //When the player holds Custom Button A
-    MOB_EV_CUSTOM_A,
-    //When the player holds Custom Button B
-    MOB_EV_CUSTOM_B,
-    //When the player holds Custom Button C  
-    MOB_EV_CUSTOM_C,
+    //When the player sends an Input
+    MOB_EV_INPUT_RECIEVED,
+
+
     //More internal script stuff.
     
     //When it is plucked off the ground (Pikmin only).

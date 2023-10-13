@@ -196,6 +196,7 @@ public:
     //Others.
     void release_all();
     void set_options(const controls_manager_options &options);
+    string internal_name_from_id(const int &action_id);
     
 private:
     //List of known player action types.

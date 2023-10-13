@@ -23,8 +23,32 @@ void gameplay_state::handle_player_action(const player_action &action) {
     if(!ready_for_input || !is_input_allowed) return;
     if(cur_interlude != INTERLUDE_NONE) return;
     
+
+
     bool is_down = (action.value >= 0.5);
-    
+
+
+
+    //Before we do the actions, we'll tell the Leader object it's recieved an input, which will trigger an event.
+    if (is_down) {
+        //Button pressed.
+        if (cur_leader_ptr) {
+            cur_leader_ptr->set_var("recieved_input", game.controls.internal_name_from_id(action.action_type_id) );
+            cur_leader_ptr->fsm.run_event(MOB_EV_INPUT_RECIEVED);
+        }
+    }
+    else {
+        //Button released.
+        if (cur_leader_ptr) {
+            cur_leader_ptr->set_var("recieved_input", game.controls.internal_name_from_id(action.action_type_id) + "_released");
+            cur_leader_ptr->fsm.run_event(MOB_EV_INPUT_RECIEVED);
+        }
+    }
+
+
+
+
+
     if(!msg_box && !onion_menu && !pause_menu) {
     
         switch (action.action_type_id) {
@@ -45,7 +69,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     cur_leader_ptr &&
                     game.options.auto_throw_mode == AUTO_THROW_TOGGLE &&
                     cur_leader_ptr->auto_throwing
-                    ) {
+                ) {
                     cur_leader_ptr->stop_auto_throwing();
                     done = true;
                 }
@@ -55,7 +79,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     !done &&
                     cur_leader_ptr &&
                     close_to_ship_to_heal
-                    ) {
+                ) {
                     close_to_ship_to_heal->heal_leader(cur_leader_ptr);
                     done = true;
                 }
@@ -78,7 +102,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     !done &&
                     cur_leader_ptr &&
                     close_to_nest_to_open
-                    ) {
+                ) {
                     onion_menu = new onion_menu_struct(
                         close_to_nest_to_open,
                         cur_leader_ptr
@@ -100,7 +124,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     !done &&
                     cur_leader_ptr &&
                     close_to_interactable_to_use
-                    ) {
+                ) {
                     string msg = "interact";
                     cur_leader_ptr->send_message(
                         close_to_interactable_to_use, msg
@@ -115,7 +139,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     cur_leader_ptr->holding.empty() &&
                     cur_leader_ptr->group->cur_standby_type &&
                     !closest_group_member_distant
-                    ) {
+                ) {
                     switch (game.options.auto_throw_mode) {
                     case AUTO_THROW_OFF: {
                         done = grab_closest_group_member();
@@ -136,7 +160,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 if (
                     !done &&
                     cur_leader_ptr
-                    ) {
+                ) {
                     cur_leader_ptr->fsm.run_event(LEADER_EV_PUNCH);
                     done = true;
                 }
@@ -182,15 +206,13 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     if (cancel_ev) {
                         //Cancel auto-pluck, lying down, etc.
                         cancel_ev->run(cur_leader_ptr);
-                    }
-                    else {
+                    } else {
                         //Start whistling.
                         cur_leader_ptr->fsm.run_event(LEADER_EV_START_WHISTLE);
                     }
                 }
 
-            }
-            else {
+            } else {
                 //Button released.
 
                 if (cur_leader_ptr) {
@@ -235,48 +257,6 @@ void gameplay_state::handle_player_action(const player_action &action) {
 
             break;
 
-        } case PLAYER_ACTION_CUSTOM_A: {
-
-            /********************
-            *               _   *
-            *   Custom_A     /  *
-            *               ·   *
-            ********************/
-
-            if (!is_down) return;
-
-            if (cur_leader_ptr) {
-                cur_leader_ptr->fsm.run_event(MOB_EV_CUSTOM_A);
-            }
-            break;
-        } case PLAYER_ACTION_CUSTOM_B: {
-
-            /********************
-            *               _   *
-            *   Custom_B     /  *
-            *               ·   *
-            ********************/
-
-            if (!is_down) return;
-
-            if (cur_leader_ptr) {
-                cur_leader_ptr->fsm.run_event(MOB_EV_CUSTOM_B);
-            }
-            break;
-        } case PLAYER_ACTION_CUSTOM_C: {
-
-            /********************
-            *               _   *
-            *   Custom_C     /  *
-            *               ·   *
-            ********************/
-
-            if (!is_down) return;
-
-            if (cur_leader_ptr) {
-                cur_leader_ptr->fsm.run_event(MOB_EV_CUSTOM_C);
-            }
-            break;
         } case PLAYER_ACTION_PAUSE: {
     
             /********************
