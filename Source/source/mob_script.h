@@ -109,7 +109,7 @@ enum MOB_EV_TYPES {
     //When weight was removed from on top of it. Only if this mob's walkable.
     MOB_EV_WEIGHT_REMOVED,
     //When the player sends an Input
-    MOB_EV_INPUT_RECIEVED,
+    MOB_EV_INPUT_RECEIVED,
 
 
     //More internal script stuff.
