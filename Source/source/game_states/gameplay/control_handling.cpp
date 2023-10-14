@@ -27,7 +27,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
 
     //Before we do the actions, we'll tell the Leader object it's recieved an input, which will trigger an event.
     if(cur_leader_ptr) {
-        cur_leader_ptr->fsm.run_event(MOB_EV_INPUT_RECIEVED,
+        cur_leader_ptr->fsm.run_event(MOB_EV_INPUT_RECEIVED,
             (void*)&action
         );
     }

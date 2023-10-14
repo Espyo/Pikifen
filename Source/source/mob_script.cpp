@@ -185,7 +185,7 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     r("on_touch_wall",                  MOB_EV_TOUCHED_WALL);
     r("on_weight_added",                MOB_EV_WEIGHT_ADDED);
     r("on_weight_removed",              MOB_EV_WEIGHT_REMOVED);
-    r("on_input_recieved",              MOB_EV_INPUT_RECIEVED);
+    r("on_input_received",              MOB_EV_INPUT_RECEIVED);
 
     else {
         type = MOB_EV_UNKNOWN;
