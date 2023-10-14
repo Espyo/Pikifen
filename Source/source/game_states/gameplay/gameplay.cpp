@@ -246,11 +246,82 @@ void gameplay_state::do_logic() {
     //Controls.
     vector<player_action> player_actions = game.controls.new_frame();
     for(size_t a = 0; a < player_actions.size(); ++a) {
+        vector<player_action_type> control_types = game.controls.get_all_player_action_types();
+        
+        for(size_t m = 0; m < mobs.all.size(); ++m) {
+            mob* m_ptr = mobs.all[m];
+            string variable = f2s(player_actions[a].value);
+            m_ptr->fsm.run_event(
+                MOB_EV_RECEIVE_INPUT,
+                &variable,
+                &control_types[player_actions[a].action_type_id].internal_name
+                );
+        }
+        
         handle_player_action(player_actions[a]);
         if(onion_menu) onion_menu->handle_player_action(player_actions[a]);
         if(pause_menu) pause_menu->handle_player_action(player_actions[a]);
     }
-    
+    for(size_t m = 0; m < mobs.all.size(); ++m) {
+        mob* m_ptr = mobs.all[m];
+
+        string mouse_cursor_s_x = "mouse_cursor_screen_x";
+        string mouse_cursor_s_y = "mouse_cursor_screen_y";
+        string mouse_cursor_w_x = "mouse_cursor_world_x";
+        string mouse_cursor_w_y = "mouse_cursor_world_y";
+        string leader_cursor_s_x = "leader_cursor_screen_x";
+        string leader_cursor_s_y = "leader_cursor_screen_y";
+        string leader_cursor_w_x = "leader_cursor_world_x";
+        string leader_cursor_w_y = "leader_cursor_world_y";
+        string variable = f2s(game.mouse_cursor_s.x);
+        m_ptr->fsm.run_event(
+            MOB_EV_RECEIVE_INPUT,
+            &variable,
+            &mouse_cursor_s_x
+        );
+        variable = f2s(game.mouse_cursor_s.y);
+        m_ptr->fsm.run_event(
+            MOB_EV_RECEIVE_INPUT,
+            &variable,
+            &mouse_cursor_s_y
+        );
+        variable = f2s(game.mouse_cursor_w.x);
+        m_ptr->fsm.run_event(
+            MOB_EV_RECEIVE_INPUT,
+            &variable,
+            &mouse_cursor_w_x
+        );
+        variable = f2s(game.mouse_cursor_w.y);
+        m_ptr->fsm.run_event(
+            MOB_EV_RECEIVE_INPUT,
+            &variable, 
+            &mouse_cursor_w_y
+        );
+        variable = f2s(leader_cursor_s.x);
+        m_ptr->fsm.run_event(
+            MOB_EV_RECEIVE_INPUT,
+            &variable,
+            &leader_cursor_s_x
+        );
+        variable = f2s(leader_cursor_s.y);
+        m_ptr->fsm.run_event(
+            MOB_EV_RECEIVE_INPUT,
+            &variable,
+            &leader_cursor_s_y
+        );
+        variable = f2s(leader_cursor_w.x);
+        m_ptr->fsm.run_event(
+            MOB_EV_RECEIVE_INPUT,
+            &variable,
+            &leader_cursor_w_x
+        );
+        variable = f2s(leader_cursor_w.y);
+        m_ptr->fsm.run_event(
+            MOB_EV_RECEIVE_INPUT,
+            &variable,
+            &leader_cursor_w_y
+        );
+    }
     //Game logic.
     if(!paused) {
         game.statistics.gameplay_time += regular_delta_t;
