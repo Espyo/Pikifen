@@ -172,6 +172,10 @@
         <th style="text-align: left;"><code>on_weight_removed</code></th>
         <td>Triggered when an object that was standing atop this one leaves, thus removing weight.</td>
       </tr>
+       <tr>
+        <th style="text-align: left;"><code>on_input_received</code></th>
+        <td>Triggered when an action key is pressed. The action and value can be obtained with the <code>get_info</code> action. This event is only run on the currently active <a href="mob_leader.html">leader</a>.</td>
+      </tr>
     </table>
     
     <h2 id="actions">Actions</h2>
@@ -598,6 +602,8 @@
               <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
               <li><code><b>health</b></code>: The object's current health.</li>
               <li><code><b>health_ratio</b></code>: The object's current health ratio. 0 for 0%, 1 for 100%, 0.5 for 50%, etc.</li>
+              <li><code><b>input_name</b></code>: The name of the input that triggered an <code>on_input_received</code> event.</li>
+              <li><code><b>input_value</b></code>: The value of the input that triggered an <code>on_input_received</code> event. 1 when fully pressed, 0 when fully released.</li>
               <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
               <li><code><b>latched_pikmin_weight</b></code>: Total weight of the Pikmin that are currently latched on to it.</li>
               <li><code><b>message</b></code>: What the message was that got sent when the <code>on_receive_message</code> event got triggered.</li>
