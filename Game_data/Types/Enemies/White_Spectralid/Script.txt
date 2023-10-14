@@ -2,9 +2,9 @@ first_state = resting
 death_state = dying
 
 init {
-    get_info home_x x
-    get_info home_y y
-    get_info home_z z
+    get_mob_info home_x self x
+    get_mob_info home_y self y
+    get_mob_info home_z self z
 }
 
 script {

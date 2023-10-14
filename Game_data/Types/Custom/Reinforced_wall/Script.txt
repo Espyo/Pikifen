@@ -4,7 +4,7 @@ death_state = destroyed
 script {
     checking_health {
         on_enter {
-            get_info t health_ratio
+            get_mob_info t self health_ratio
             if $t < 0.35
                 set_state stage_3_idling
             end_if
@@ -19,7 +19,7 @@ script {
             set_animation stage_1_idling
         }
         on_damage {
-            get_info t health_ratio
+            get_mob_info t self health_ratio
             if $t < 0.35
                 set_state stage_3_shaking
             end_if
@@ -37,7 +37,7 @@ script {
             set_state stage_1_idling
         }
         on_damage {
-            get_info t health_ratio
+            get_mob_info t self health_ratio
             if $t < 0.35
                 set_state stage_3_shaking
             end_if
@@ -51,7 +51,7 @@ script {
             set_animation stage_2_idling
         }
         on_damage {
-            get_info t health_ratio
+            get_mob_info t self health_ratio
             if $t < 0.35
                 set_state stage_3_shaking
             end_if
@@ -66,7 +66,7 @@ script {
             set_state stage_2_idling
         }
         on_damage {
-            get_info t health_ratio
+            get_mob_info t self health_ratio
             if $t < 0.35
                 set_state stage_3_shaking
             end_if

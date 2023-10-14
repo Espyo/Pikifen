@@ -861,6 +861,15 @@ void init_mob_actions() {
         mob_action_runners::get_angle,
         nullptr
     );
+
+    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_GET_AREA_INFO,
+        "get_area_info",
+        mob_action_runners::get_area_info,
+        mob_action_loaders::get_area_info
+    );
     
     reg_action(
         MOB_ACTION_GET_CHOMPED,
@@ -893,6 +902,15 @@ void init_mob_actions() {
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_GET_EVENT_INFO,
+        "get_event_info",
+        mob_action_runners::get_event_info,
+        mob_action_loaders::get_event_info
+    );
+
+    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
@@ -900,15 +918,6 @@ void init_mob_actions() {
         "get_floor_z",
         mob_action_runners::get_floor_z,
         nullptr
-    );
-    
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
-        MOB_ACTION_GET_FOCUS_INFO,
-        "get_focus_info",
-        mob_action_runners::get_focus_info,
-        mob_action_loaders::get_info
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
@@ -920,13 +929,14 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
-        MOB_ACTION_GET_INFO,
-        "get_info",
-        mob_action_runners::get_info,
-        mob_action_loaders::get_info
+        MOB_ACTION_GET_MOB_INFO,
+        "get_mob_info",
+        mob_action_runners::get_mob_info,
+        mob_action_loaders::get_mob_info
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);

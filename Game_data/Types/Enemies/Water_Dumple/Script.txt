@@ -50,7 +50,7 @@ script {
         }
         on_animation_end {
             stop_chomping
-            get_info t chomped_pikmin
+            get_mob_info t self chomped_pikmin
             if $t > 0
                 set_state eating
             else

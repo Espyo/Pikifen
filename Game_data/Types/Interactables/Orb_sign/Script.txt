@@ -11,7 +11,7 @@ script{
             set_timer 1
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = interact
                 show_message_from_var text
             end_if

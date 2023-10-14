@@ -5,9 +5,9 @@ init {
     start_height_effect
     set_flying true
     teleport_to_relative 0 0 100
-    get_info home_x x
-    get_info home_y y
-    get_info home_z z
+    get_mob_info home_x self x
+    get_mob_info home_y self y
+    get_mob_info home_z self z
 }
 
 script {
@@ -68,10 +68,10 @@ script {
             set_timer 0.5
             turn_to_target focused_mob
 
-            get_info x x
-            get_info y y
-            get_focus_info fx x
-            get_focus_info fy y
+            get_mob_info x self x
+            get_mob_info y self y
+            get_mob_info fx focus x
+            get_mob_info fy focus y
             get_angle a $x $y $fx $fy
         }
         on_far_from_home {
@@ -87,8 +87,8 @@ script {
         on_timer {
             //Periodically update the position compared to the opponent.
             get_coordinates_from_angle x y $a 400
-            get_focus_info fx x
-            get_focus_info fy y
+            get_mob_info fx focus x
+            get_mob_info fy focus y
             calculate x $fx - $x
             calculate y $fy - $y
 
@@ -111,8 +111,8 @@ script {
             stop
 
             //Finish rising to the right Z.
-            get_info x x
-            get_info y y
+            get_mob_info x self x
+            get_mob_info y self y
             get_floor_z z $x $y
             calculate z $z + 100
             move_to_absolute $x $y $z
@@ -151,7 +151,7 @@ script {
     shaking {
         on_enter {
             stop
-            get_info t latched_pikmin_weight
+            get_mob_info t self latched_pikmin_weight
             if $t > 15
                 set_state falling
             else
@@ -206,7 +206,7 @@ script {
             set_animation dying
         }
         on_frame_signal {
-            get_info t frame_signal
+            get_event_info t frame_signal
             if $t = 0
                 set_flying false
                 set_shadow_visibility false

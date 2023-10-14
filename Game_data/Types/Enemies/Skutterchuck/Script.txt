@@ -25,7 +25,7 @@ script {
         }
         on_object_in_reach {
             if $ignoring = false
-                get_info t mob_type
+                get_mob_info t trigger mob_type
                 if $t = Crystal nodule
                     focus trigger
                     save_focused_mob_memory 1
@@ -83,7 +83,7 @@ script {
             set_state shaking
         }
         on_object_in_reach {
-            get_info t mob_type
+            get_mob_info t trigger mob_type
             if $t = Crystal nodule
                 set_state picking_up
             end_if
@@ -204,11 +204,11 @@ script {
             load_focused_mob_memory 2
         }
         on_tick {
-            get_focus_info target_x x
-            get_focus_info target_y y
-            get_focus_info target_z z		
-            get_info self_x x
-            get_info self_y y
+            get_mob_info target_x focus x
+            get_mob_info target_y focus y
+            get_mob_info target_z focus z		
+            get_mob_info self_x self x
+            get_mob_info self_y self y
             get_distance dist $self_x $self_y $target_x $target_y				
             if $dist > $throw_range	
                 set_state looking_for_target
