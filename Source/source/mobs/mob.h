@@ -326,6 +326,9 @@ public:
     //Cache for performance.
     float physical_span = 0.0f;
     
+    //Cached value of how far its hitboxes, radius, and reaches can reach from the center.
+    float max_interaction_radius;
+    
     //It's invisible due to a status effect. Cache for performance.
     bool has_invisibility_status = false;
     
@@ -488,6 +491,9 @@ public:
     bool tick_track_ride();
     void stop_track_ride();
     
+    void update_max_interaction_radius();
+    
+    //Drawing tools.
     void get_sprite_bitmap_effects(
         sprite* s_ptr, sprite* next_s_ptr, float interpolation_factor,
         bitmap_effect_t* info, bitmask_16_t effects

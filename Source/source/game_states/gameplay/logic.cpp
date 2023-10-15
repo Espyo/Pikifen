@@ -1499,6 +1499,9 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         
         dist d(m_ptr->pos, m2_ptr->pos);
         
+        if (d > m_ptr->max_interaction_radius + m2_ptr->max_span)
+            continue;
+            
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Objects -- Touching others");
         }
