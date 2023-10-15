@@ -206,6 +206,8 @@ mob::mob(const point &pos, mob_type* type, const float angle) :
     if(type->has_group) {
         group = new group_info_struct(this);
     }
+
+    update_max_interaction_radius();
 }
 
 
@@ -2027,6 +2029,34 @@ float mob::get_latched_pikmin_weight() const {
         total += p_ptr->type->weight;
     }
     return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Recalculates the max distance a mob can interact with another mob.
+ */
+void mob::update_max_interaction_radius() {
+    float cur_max = max_span;
+
+    if(far_reach != INVALID) {
+        cur_max = std::max(
+            std::max(
+                type->reaches[far_reach].radius_1,
+                type->reaches[far_reach].radius_2
+            ),
+            max_span
+        );
+    }
+    if(near_reach != INVALID) {
+        cur_max = std::max(
+            std::max(
+                type->reaches[near_reach].radius_1,
+                type->reaches[near_reach].radius_2
+            ),
+            max_span
+        );
+    }
+    max_interaction_radius = cur_max;
 }
 
 

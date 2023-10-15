@@ -1396,11 +1396,14 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         if(m2_ptr->is_stored_inside_mob()) continue;
         
         dist d(m_ptr->pos, m2_ptr->pos);
-        
+
+        if (d > m_ptr->max_interaction_radius + m2_ptr->max_span)
+            continue;
+
         if(game.perf_mon) {
             game.perf_mon->start_measurement("Objects -- Touching others");
         }
-        
+
         if(d <= m_ptr->max_span + m2_ptr->max_span) {
             //Only check if their radii or hitboxes
             //can (theoretically) reach each other.

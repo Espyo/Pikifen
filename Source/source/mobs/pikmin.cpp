@@ -91,7 +91,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
         );
     near_reach = 0;
     far_reach = 2;
-    
+    update_max_interaction_radius();
     missed_attack_timer =
         timer(
             MISSED_ATTACK_DURATION,

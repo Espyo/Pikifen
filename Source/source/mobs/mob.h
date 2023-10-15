@@ -267,6 +267,8 @@ public:
     float angle_cos;
     //Cached value of the angle's sine.
     float angle_sin;
+    //Cached value of how far its hitboxes, radius, and reaches can reach from the center.
+    float max_interaction_radius;
     //Cached value of how far its hitboxes or radius can reach from the center.
     float max_span;
     //It's invisible due to a status effect. Cache for performance.
@@ -422,6 +424,8 @@ public:
     bool tick_track_ride();
     void stop_track_ride();
     
+    void update_max_interaction_radius();
+
     //Drawing tools.
     void get_sprite_bitmap_effects(
         sprite* s_ptr, bitmap_effect_info* info, uint16_t effects
