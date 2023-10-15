@@ -8,7 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     Reloading an area in the area editor just loads an "" area
         area_editor::load_area has a reference to the area name, but when it calls clear_current_area, that reference is gone
-    Pressing Tab to go to the next Dear ImGui widget isn't working
     Bridge stuff
         Bridges are broken
         Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
@@ -26,9 +25,6 @@ Next tasks (roughly sorted most important first)
     Add area editor regression-testing in-game
     The ability to ctrl+click a selected vertex, edge, etc. to unselect it (thanks Neo)
     More puzzle elements
-        Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
-            Add maker notes indicating this
-        A lever. It flips position every time a Pikmin is thrown at it, or when a leader walks up to it and interacts, or when it receives power
         A button. After being depressed (and sending a 1 message) it pops back up (and sends a 0 message). Throwing a Pikmin at it, or interacting with a leader, or receiving power will press it
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
@@ -302,6 +298,7 @@ Next tasks (roughly sorted most important first)
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         Add Helodity's Plasm Wraith
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
+    Give sprites a "tint" property
     Mob rotation should have acceleration too
     General graphic file improvements
         Leader and Pikmin portrait images should
@@ -864,6 +861,7 @@ Misc things (so I don't forget)
         The ability for particle generators to consist of multiple particle generators
     Bridges and Dummies emit light during blackout (Darthvato)
     HUD element for a digital clock?
+    GUI elements should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Missions

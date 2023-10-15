@@ -1,0 +1,92 @@
+animations{
+	flipping_off{
+		frames{
+			flipping_off{
+				duration=0.0500
+			}
+		}
+	}
+	flipping_on{
+		frames{
+			flipping_on{
+				duration=0.0500
+			}
+		}
+	}
+	off{
+		frames{
+			off{
+				duration=0.1000
+			}
+		}
+	}
+	on{
+		frames{
+			on{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	flipping_off{
+		file=Lever.png
+		file_pos=65.0000 33.0000
+		file_size=64.0000 32.0000
+		hitboxes{
+			main{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	flipping_on{
+		file=Lever.png
+		file_pos=65.0000 0.0000
+		file_size=64.0000 32.0000
+		hitboxes{
+			main{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	off{
+		file=Lever.png
+		file_pos=0.0000 0.0000
+		file_size=64.0000 32.0000
+		hitboxes{
+			main{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+	on{
+		file=Lever.png
+		file_pos=0.0000 33.0000
+		file_size=64.0000 32.0000
+		hitboxes{
+			main{
+				coords=0.0000 0.0000 0.0000
+				height=16.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+			}
+		}
+	}
+}
+body_parts{
+	main
+}
+engine_version=0.24.0
