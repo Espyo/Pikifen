@@ -339,6 +339,10 @@ void area_editor::clear_problems() {
  * Clears the data about the current selection.
  */
 void area_editor::clear_selection() {
+    if(sub_state == EDITOR_SUB_STATE_OCTEE) {
+        sub_state = EDITOR_SUB_STATE_NONE;
+    }
+    
     selected_vertexes.clear();
     selected_edges.clear();
     selected_sectors.clear();
