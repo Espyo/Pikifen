@@ -13,15 +13,11 @@ Next tasks (roughly sorted most important first)
         Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
         If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
             Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
-    Winged Pikmin stuff
-        Winged Pikmin hover so high up most enemy hitboxes don't hit them
-        Winged Pikmin don't drink nectar on their own
     Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
-    Apparently Dweevils shake treasures off far too strongly?
+        This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
     Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
 
     --- 0.25.0 ---
-    Pikmin sprouts should have MOB_FLAG_INTANGIBLE instead (thanks Helodity)
     Add area editor regression-testing in-game
     The ability to ctrl+click a selected vertex, edge, etc. to unselect it (thanks Neo)
     More puzzle elements
@@ -761,6 +757,7 @@ Misc things (so I don't forget)
     Pikmin behaviors
         Winged Pikmin that fall in the water should fly up when whistled
         Pikmin should want to go to nectar by themselves when idling
+            Particularly important because Winged Pikmin don't drink nectar on their own
         A way for a Pikmin type to control what its resistance to being shaken off is
         Add the feature that makes dead flower Pikmin sometimes drop a sprout, before the story mode is done? It could spawn a sprout for use later in the day
         Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion

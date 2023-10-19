@@ -164,7 +164,7 @@ script {
                 get_info x x
                 get_info y y
                 get_info z z
-                get_coordinates_from_angle ox oy $a -200
+                get_coordinates_from_angle ox oy $a -120
                 calculate x $x + $ox
                 calculate y $y + $oy
                 throw_focused_mob $x $y $z 100
