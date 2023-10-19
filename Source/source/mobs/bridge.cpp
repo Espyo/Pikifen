@@ -21,7 +21,7 @@
 namespace BRIDGE {
 //Width of the bridge's main floor, i.e., sans rails.
 const float FLOOR_WIDTH = 192.0f;
-//How far apart bridge steps are.
+//How far apart bridge steps are, vertically.
 const float STEP_HEIGHT = 10;
 }
 
@@ -326,7 +326,7 @@ void bridge::setup() {
         total_chunks_needed =
             std::max(
                 total_chunks_needed,
-                (size_t) (ceil(fabs(delta_z) / GEOMETRY::STEP_HEIGHT) + 1)
+                (size_t) (ceil(fabs(delta_z) / BRIDGE::STEP_HEIGHT) + 1)
             );
     }
     
