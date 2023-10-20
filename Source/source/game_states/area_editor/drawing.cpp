@@ -977,7 +977,7 @@ void area_editor::draw_canvas() {
             dist closest_dist;
             for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
-                dist d(game.mouse_cursor_w, s_ptr->pos);
+                dist d(game.mouse_cursor.w_pos, s_ptr->pos);
                 
                 if(!closest || d < closest_dist) {
                     closest = s_ptr;
@@ -987,7 +987,7 @@ void area_editor::draw_canvas() {
             
             if(closest) {
                 al_draw_line(
-                    game.mouse_cursor_w.x, game.mouse_cursor_w.y,
+                    game.mouse_cursor.w_pos.x, game.mouse_cursor.w_pos.y,
                     closest->pos.x, closest->pos.y,
                     al_map_rgb(192, 128, 32), 2.0 / game.cam.zoom
                 );
@@ -1231,7 +1231,7 @@ void area_editor::draw_canvas() {
                     al_map_rgb(255, 0, 0),
                     al_map_rgb(64, 255, 64)
                 );
-            point hotspot = snap_point(game.mouse_cursor_w);
+            point hotspot = snap_point(game.mouse_cursor.w_pos);
             
             al_draw_line(
                 drawing_nodes.back().snapped_spot.x,
@@ -1325,7 +1325,7 @@ void area_editor::draw_canvas() {
     //Path drawing.
     if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
         if(path_drawing_stop_1) {
-            point hotspot = snap_point(game.mouse_cursor_w);
+            point hotspot = snap_point(game.mouse_cursor.w_pos);
             al_draw_line(
                 path_drawing_stop_1->pos.x,
                 path_drawing_stop_1->pos.y,
@@ -1369,7 +1369,7 @@ void area_editor::draw_canvas() {
         sub_state == EDITOR_SUB_STATE_PATH_DRAWING ||
         sub_state == EDITOR_SUB_STATE_NEW_SHADOW
     ) {
-        point marker = game.mouse_cursor_w;
+        point marker = game.mouse_cursor.w_pos;
         
         if(sub_state != EDITOR_SUB_STATE_ADD_MOB_LINK) {
             marker = snap_point(marker);
@@ -1395,7 +1395,7 @@ void area_editor::draw_canvas() {
     if(
         sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK
     ) {
-        point marker = game.mouse_cursor_w;
+        point marker = game.mouse_cursor.w_pos;
         
         al_draw_line(
             marker.x - 10 / game.cam.zoom,
@@ -1637,7 +1637,7 @@ void area_editor::draw_canvas() {
         float cursor_segment_ratio = 0;
         get_closest_point_in_line_seg(
             cross_section_checkpoints[0], cross_section_checkpoints[1],
-            point(game.mouse_cursor_w.x, game.mouse_cursor_w.y),
+            point(game.mouse_cursor.w_pos.x, game.mouse_cursor.w_pos.y),
             &cursor_segment_ratio
         );
         if(cursor_segment_ratio >= 0 && cursor_segment_ratio <= 1) {

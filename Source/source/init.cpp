@@ -604,6 +604,8 @@ void init_event_things(
  * Initializes miscellaneous things and settings.
  */
 void init_misc() {
+    game.mouse_cursor.init();
+    
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
     int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;

@@ -895,6 +895,8 @@ bool editor::list_popup(
  * Loads content common for all editors.
  */
 void editor::load() {
+    game.mouse_cursor.show();
+    
     bmp_editor_icons =
         load_bmp(game.asset_file_names.editor_icons, NULL, true, false);
     if(bmp_editor_icons) {
@@ -1593,7 +1595,7 @@ void editor::set_status(const string &text, const bool error) {
     status_text = text;
     if(error) {
         op_error_flash_timer.start();
-        op_error_pos = game.mouse_cursor_s;
+        op_error_pos = game.mouse_cursor.s_pos;
     }
 }
 
@@ -1721,6 +1723,7 @@ void editor::unload() {
     }
     custom_cat_name_idxs.clear();
     custom_cat_types.clear();
+    game.mouse_cursor.hide();
 }
 
 
@@ -1938,34 +1941,34 @@ void editor::update_transformations() {
  */
 void editor::zoom_with_cursor(const float new_zoom) {
     //Keep a backup of the old mouse coordinates.
-    point old_mouse_pos = game.mouse_cursor_w;
+    point old_mouse_pos = game.mouse_cursor.w_pos;
     
     //Do the zoom.
     game.cam.set_zoom(clamp(new_zoom, zoom_min_level, zoom_max_level));
     update_transformations();
     
     //Figure out where the mouse will be after the zoom.
-    game.mouse_cursor_w = game.mouse_cursor_s;
+    game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
     al_transform_coordinates(
         &game.screen_to_world_transform,
-        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+        &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
     );
     
     //Readjust the transformation by shifting the camera
     //so that the cursor ends up where it was before.
     game.cam.set_pos(
         point(
-            game.cam.pos.x += (old_mouse_pos.x - game.mouse_cursor_w.x),
-            game.cam.pos.y += (old_mouse_pos.y - game.mouse_cursor_w.y)
+            game.cam.pos.x += (old_mouse_pos.x - game.mouse_cursor.w_pos.x),
+            game.cam.pos.y += (old_mouse_pos.y - game.mouse_cursor.w_pos.y)
         )
     );
     
     //Update the mouse coordinates again.
     update_transformations();
-    game.mouse_cursor_w = game.mouse_cursor_s;
+    game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
     al_transform_coordinates(
         &game.screen_to_world_transform,
-        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+        &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
     );
 }
 
@@ -2022,7 +2025,7 @@ bool editor::changes_manager::ask_if_unsaved(
             "Unsaved changes!",
             std::bind(&editor::process_gui_unsaved_changes_dialog, ed)
         );
-        ed->dialogs.back()->custom_pos = game.mouse_cursor_s;
+        ed->dialogs.back()->custom_pos = game.mouse_cursor.s_pos;
         ed->dialogs.back()->custom_size = point(580, 100);
         ed->dialogs.back()->event_callback =
         [this] (ALLEGRO_EVENT * ev) {

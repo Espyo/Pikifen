@@ -1105,7 +1105,7 @@ void gameplay_state::draw_lighting_filter() {
  */
 void gameplay_state::draw_message_box() {
     //Mouse cursor.
-    draw_mouse_cursor(al_map_rgb(188, 230, 230));
+    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
     al_use_transform(&game.identity_transform);
     
@@ -1274,124 +1274,6 @@ void gameplay_state::draw_message_box() {
 
 
 /* ----------------------------------------------------------------------------
- * Draws the mouse cursor.
- * color:
- *   Color to tint it with.
- */
-void gameplay_state::draw_mouse_cursor(const ALLEGRO_COLOR &color) {
-    al_use_transform(&game.identity_transform);
-    
-    //Cursor trail.
-    if(game.options.draw_cursor_trail) {
-        size_t anchor = 0;
-        
-        for(size_t s = 1; s < cursor_spots.size(); ++s) {
-            point anchor_diff = cursor_spots[anchor] - cursor_spots[s];
-            if(
-                fabs(anchor_diff.x) < GAMEPLAY::CURSOR_TRAIL_MIN_SPOT_DIFF &&
-                fabs(anchor_diff.y) < GAMEPLAY::CURSOR_TRAIL_MIN_SPOT_DIFF
-            ) {
-                continue;
-            }
-            
-            float start_ratio = anchor / (float) cursor_spots.size();
-            float start_thickness =
-                GAMEPLAY::CURSOR_TRAIL_MAX_WIDTH * start_ratio;
-            unsigned char start_alpha =
-                GAMEPLAY::CURSOR_TRAIL_MAX_ALPHA * start_ratio;
-            ALLEGRO_COLOR start_color =
-                change_alpha(color, start_alpha);
-            point start_p1;
-            point start_p2;
-            
-            float end_ratio =
-                s / (float) GAMEPLAY::CURSOR_TRAIL_SAVE_N_SPOTS;
-            float end_thickness =
-                GAMEPLAY::CURSOR_TRAIL_MAX_WIDTH * end_ratio;
-            unsigned char end_alpha =
-                GAMEPLAY::CURSOR_TRAIL_MAX_ALPHA * end_ratio;
-            ALLEGRO_COLOR end_color =
-                change_alpha(color, end_alpha);
-            point end_p1;
-            point end_p2;
-            
-            if(anchor == 0) {
-                point cur_to_next = cursor_spots[s] - cursor_spots[anchor];
-                point cur_to_next_normal(-cur_to_next.y, cur_to_next.x);
-                cur_to_next_normal = normalize_vector(cur_to_next_normal);
-                point spot_offset = cur_to_next_normal * start_thickness / 2.0f;
-                start_p1 = cursor_spots[anchor] - spot_offset;
-                start_p2 = cursor_spots[anchor] + spot_offset;
-            } else {
-                get_miter_points(
-                    cursor_spots[anchor - 1],
-                    cursor_spots[anchor],
-                    cursor_spots[anchor + 1],
-                    -start_thickness,
-                    &start_p1,
-                    &start_p2
-                );
-            }
-            
-            if(s == cursor_spots.size() - 1) {
-                point prev_to_cur = cursor_spots[s] - cursor_spots[anchor];
-                point prev_to_cur_normal(-prev_to_cur.y, prev_to_cur.x);
-                prev_to_cur_normal = normalize_vector(prev_to_cur_normal);
-                point spot_offset = prev_to_cur_normal * start_thickness / 2.0f;
-                end_p1 = cursor_spots[s] - spot_offset;
-                end_p2 = cursor_spots[s] + spot_offset;
-            } else {
-                get_miter_points(
-                    cursor_spots[s - 1],
-                    cursor_spots[s],
-                    cursor_spots[s + 1],
-                    -end_thickness,
-                    &end_p1,
-                    &end_p2
-                );
-            }
-            
-            ALLEGRO_VERTEX vertexes[4];
-            for(unsigned char v = 0; v < 4; ++v) {
-                vertexes[v].z = 0.0f;
-            }
-            
-            vertexes[0].x = start_p1.x;
-            vertexes[0].y = start_p1.y;
-            vertexes[0].color = start_color;
-            vertexes[1].x = start_p2.x;
-            vertexes[1].y = start_p2.y;
-            vertexes[1].color = start_color;
-            vertexes[2].x = end_p1.x;
-            vertexes[2].y = end_p1.y;
-            vertexes[2].color = end_color;
-            vertexes[3].x = end_p2.x;
-            vertexes[3].y = end_p2.y;
-            vertexes[3].color = end_color;
-            
-            al_draw_prim(
-                vertexes, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
-            );
-            
-            anchor = s;
-        }
-    }
-    
-    //Mouse cursor.
-    draw_bitmap(
-        game.sys_assets.bmp_mouse_cursor,
-        game.mouse_cursor_s,
-        point(
-            al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor),
-            al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor)
-        ),
-        -(game.time_passed * game.config.cursor_spin_speed),
-        color
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws the current Onion menu.
  */
 void gameplay_state::draw_onion_menu() {
@@ -1402,7 +1284,7 @@ void gameplay_state::draw_onion_menu() {
     
     onion_menu->gui.draw();
     
-    draw_mouse_cursor(al_map_rgb(188, 230, 230));
+    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
 }
 
 
@@ -1417,7 +1299,7 @@ void gameplay_state::draw_pause_menu() {
     
     pause_menu->draw();
     
-    draw_mouse_cursor(al_map_rgb(188, 230, 230));
+    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
 }
 
 

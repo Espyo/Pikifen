@@ -473,7 +473,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
                 
                 create_mob(
                     game.mob_categories.get(MOB_CATEGORY_PIKMIN),
-                    game.mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
+                    game.mouse_cursor.w_pos, new_pikmin_type, 0, "maturity=2"
                 );
             }
             game.maker_tools.used_helping_tools = true;
@@ -487,13 +487,13 @@ void gameplay_state::process_system_key_press(const int keycode) {
             
         } case MAKER_TOOL_TELEPORT: {
             sector* mouse_sector =
-                get_sector(game.mouse_cursor_w, NULL, true);
+                get_sector(game.mouse_cursor.w_pos, NULL, true);
             if(mouse_sector && cur_leader_ptr) {
                 cur_leader_ptr->chase(
-                    game.mouse_cursor_w, mouse_sector->z,
+                    game.mouse_cursor.w_pos, mouse_sector->z,
                     CHASE_FLAG_TELEPORT
                 );
-                game.cam.set_pos(game.mouse_cursor_w);
+                game.cam.set_pos(game.mouse_cursor.w_pos);
             }
             game.maker_tools.used_helping_tools = true;
             break;

@@ -6,8 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Reloading an area in the area editor just loads an "" area
-        area_editor::load_area has a reference to the area name, but when it calls clear_current_area, that reference is gone
     Bridge stuff
         Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
         If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
@@ -37,7 +35,6 @@ Next tasks (roughly sorted most important first)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
     https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
-    Use the pretty cursor (spinning flower + trail) everywhere? Probably not in editors though
     Ice Pikmin
     Glow Pikmin
     Music

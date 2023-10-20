@@ -747,6 +747,79 @@ void movement_struct::reset() {
 
 
 /* ----------------------------------------------------------------------------
+ * Hides the OS mouse in the game window.
+ */
+void mouse_cursor_struct::hide() const {
+    al_hide_mouse_cursor(game.display);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes everything.
+ */
+void mouse_cursor_struct::init() {
+    hide();
+    reset();
+    
+    save_timer.on_end = [this] () {
+        save_timer.start();
+        history.push_back(s_pos);
+        if(history.size() > GAME::CURSOR_TRAIL_SAVE_N_SPOTS) {
+            history.erase(history.begin());
+        }
+    };
+    save_timer.start(GAME::CURSOR_TRAIL_SAVE_INTERVAL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the cursor's state.
+ */
+void mouse_cursor_struct::reset() {
+    ALLEGRO_MOUSE_STATE mouse_state;
+    al_get_mouse_state(&mouse_state);
+    game.mouse_cursor.s_pos.x = al_get_mouse_state_axis(&mouse_state, 0);
+    game.mouse_cursor.s_pos.y = al_get_mouse_state_axis(&mouse_state, 1);
+    game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
+    );
+    history.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Shows the OS mouse in the game window.
+ */
+void mouse_cursor_struct::show() const {
+    al_show_mouse_cursor(game.display);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the coordinates from an Allegro mouse event.
+ * ev:
+ *   Event to handle.
+ * screen_to_world_transform:
+ *   Transformation to use to get the screen coordinates.
+ */
+void mouse_cursor_struct::update_pos(
+    const ALLEGRO_EVENT &ev,
+    ALLEGRO_TRANSFORM &screen_to_world_transform
+) {
+    s_pos.x = ev.mouse.x;
+    s_pos.y = ev.mouse.y;
+    w_pos = s_pos;
+    al_transform_coordinates(
+        &screen_to_world_transform,
+        &w_pos.x, &w_pos.y
+    );
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Creates a message box information struct.
  * text:
  *   Text to display.

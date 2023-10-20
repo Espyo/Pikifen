@@ -41,9 +41,6 @@ extern const string BIG_MSG_READY_TEXT;
 extern const float CAMERA_BOX_MARGIN;
 extern const float CAMERA_SMOOTHNESS_MULT;
 extern const unsigned char COLLISION_OPACITY;
-extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
-extern const float CURSOR_TRAIL_MAX_WIDTH;
-extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
 extern const int FOG_BITMAP_SIZE;
 extern const unsigned char PREVIEW_OPACITY;
 extern const float PREVIEW_TEXTURE_SCALE;
@@ -51,8 +48,6 @@ extern const float PREVIEW_TEXTURE_TIME_MULT;
 extern const float REPLAY_SAVE_FREQUENCY;
 extern const float TREE_SHADOW_SWAY_AMOUNT;
 extern const float TREE_SHADOW_SWAY_SPEED;
-extern const float CURSOR_TRAIL_SAVE_INTERVAL;
-extern const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
 extern const float MENU_ENTRY_HUD_MOVE_TIME;
 extern const float MENU_EXIT_HUD_MOVE_TIME;
 extern const float SWARM_ARROW_SPEED;
@@ -284,10 +279,6 @@ private:
     float cursor_height_diff_light;
     //Movement of player 1's cursor via non-mouse means.
     movement_struct cursor_movement;
-    //Spots the cursor has been through. Used for the faint trail left behind.
-    vector<point> cursor_spots;
-    //Time left until the position of the cursor is saved on the vector.
-    timer cursor_save_timer;
     //Is input enabled, for reasons outside the ready_for_input variable?
     bool is_input_allowed;
     //Bitmap that lights up the area when in blackout mode.
@@ -327,7 +318,6 @@ private:
     void draw_big_msg();
     void draw_lighting_filter();
     void draw_message_box();
-    void draw_mouse_cursor(const ALLEGRO_COLOR &color);
     void draw_onion_menu();
     void draw_pause_menu();
     void draw_precipitation();

@@ -539,7 +539,7 @@ void area_editor::create_drawing_vertexes() {
 void area_editor::create_mob_under_cursor() {
     register_change("object creation");
     sub_state = EDITOR_SUB_STATE_NONE;
-    point hotspot = snap_point(game.mouse_cursor_w);
+    point hotspot = snap_point(game.mouse_cursor.w_pos);
     
     string custom_cat_name_to_use = last_mob_custom_cat_name;
     mob_type* type_to_use = last_mob_type;
@@ -1379,20 +1379,20 @@ string area_editor::get_history_option_prefix() const {
 void area_editor::get_hovered_layout_element(
     vertex** hovered_vertex, edge** hovered_edge, sector** hovered_sector
 ) const {
-    *hovered_vertex = get_vertex_under_point(game.mouse_cursor_w);
+    *hovered_vertex = get_vertex_under_point(game.mouse_cursor.w_pos);
     *hovered_edge = NULL;
     *hovered_sector = NULL;
     
     if(*hovered_vertex) return;
     
     if(selection_filter != SELECTION_FILTER_VERTEXES) {
-        *hovered_edge = get_edge_under_point(game.mouse_cursor_w);
+        *hovered_edge = get_edge_under_point(game.mouse_cursor.w_pos);
     }
     
     if(*hovered_edge) return;
     
     if(selection_filter == SELECTION_FILTER_SECTORS) {
-        *hovered_sector = get_sector_under_point(game.mouse_cursor_w);
+        *hovered_sector = get_sector_under_point(game.mouse_cursor.w_pos);
     }
 }
 
@@ -1884,10 +1884,12 @@ void area_editor::load_area(
     const AREA_TYPES requested_area_type,
     const bool from_backup, const bool should_update_history
 ) {
+    string new_area_name = requested_area_folder_name;
+    
     clear_current_area();
     
     ::load_area(
-        requested_area_folder_name, requested_area_type, true, from_backup
+        new_area_name, requested_area_type, true, from_backup
     );
     
     //Calculate texture suggestions.
@@ -1934,13 +1936,13 @@ void area_editor::load_area(
     if(should_update_history) {
         update_history(
             get_base_area_folder_path(requested_area_type, true) + "/" +
-            requested_area_folder_name
+            new_area_name
         );
         save_options(); //Save the history in the options.
     }
     
     set_status(
-        "Loaded area \"" + requested_area_folder_name + "\" " +
+        "Loaded area \"" + new_area_name + "\" " +
         (from_backup ? "from a backup " : "") +
         "successfully."
     );
@@ -3890,7 +3892,7 @@ void area_editor::set_new_circle_sector_points() {
     float anchor_angle =
         get_angle(new_circle_sector_center, new_circle_sector_anchor);
     float cursor_angle =
-        get_angle(new_circle_sector_center, game.mouse_cursor_w);
+        get_angle(new_circle_sector_center, game.mouse_cursor.w_pos);
     float radius =
         dist(
             new_circle_sector_center, new_circle_sector_anchor
@@ -4120,7 +4122,7 @@ void area_editor::start_mob_move() {
     for(auto m : selected_mobs) {
         pre_move_mob_coords[m] = m->pos;
         
-        dist d(game.mouse_cursor_w, m->pos);
+        dist d(game.mouse_cursor.w_pos, m->pos);
         if(!move_closest_mob || d < move_closest_mob_dist) {
             move_closest_mob = m;
             move_closest_mob_dist = d;
@@ -4128,7 +4130,7 @@ void area_editor::start_mob_move() {
         }
     }
     
-    move_mouse_start_pos = game.mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor.w_pos;
     moving = true;
 }
 
@@ -4147,7 +4149,7 @@ void area_editor::start_path_stop_move() {
     ) {
         pre_move_stop_coords[*s] = (*s)->pos;
         
-        dist d(game.mouse_cursor_w, (*s)->pos);
+        dist d(game.mouse_cursor.w_pos, (*s)->pos);
         if(!move_closest_stop || d < move_closest_stop_dist) {
             move_closest_stop = *s;
             move_closest_stop_dist = d;
@@ -4155,7 +4157,7 @@ void area_editor::start_path_stop_move() {
         }
     }
     
-    move_mouse_start_pos = game.mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor.w_pos;
     moving = true;
 }
 
@@ -4172,7 +4174,7 @@ void area_editor::start_vertex_move() {
         point p(v->x, v->y);
         pre_move_vertex_coords[v] = p;
         
-        dist d(game.mouse_cursor_w, p);
+        dist d(game.mouse_cursor.w_pos, p);
         if(!move_closest_vertex || d < move_closest_vertex_dist) {
             move_closest_vertex = v;
             move_closest_vertex_dist = d;
@@ -4180,7 +4182,7 @@ void area_editor::start_vertex_move() {
         }
     }
     
-    move_mouse_start_pos = game.mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor.w_pos;
     moving = true;
 }
 

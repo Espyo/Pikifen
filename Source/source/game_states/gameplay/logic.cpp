@@ -141,11 +141,6 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
  *   How long the frame's tick is, in seconds.
  */
 void gameplay_state::do_aesthetic_logic(const float delta_t) {
-    //Cursor trail.
-    if(game.options.draw_cursor_trail) {
-        cursor_save_timer.tick(delta_t);
-    }
-    
     //Leader stuff.
     do_aesthetic_leader_logic(delta_t);
     
@@ -447,7 +442,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     mouse_cursor_speed =
         mouse_cursor_speed * delta_t* game.options.cursor_speed;
         
-    leader_cursor_w = game.mouse_cursor_w;
+    leader_cursor_w = game.mouse_cursor.w_pos;
     
     float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
     
@@ -464,11 +459,11 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
             //If we're speeding the mouse cursor (via analog stick),
             //don't let it go beyond the edges.
-            game.mouse_cursor_w = leader_cursor_w;
-            game.mouse_cursor_s = game.mouse_cursor_w;
+            game.mouse_cursor.w_pos = leader_cursor_w;
+            game.mouse_cursor.s_pos = game.mouse_cursor.w_pos;
             al_transform_coordinates(
                 &game.world_to_screen_transform,
-                &game.mouse_cursor_s.x, &game.mouse_cursor_s.y
+                &game.mouse_cursor.s_pos.x, &game.mouse_cursor.s_pos.y
             );
         }
     }
@@ -566,12 +561,12 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         mouse_cursor_speed =
             mouse_cursor_speed * delta_t* game.options.cursor_speed;
             
-        game.mouse_cursor_s += mouse_cursor_speed;
+        game.mouse_cursor.s_pos += mouse_cursor_speed;
         
-        game.mouse_cursor_w = game.mouse_cursor_s;
+        game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
         al_transform_coordinates(
             &game.screen_to_world_transform,
-            &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+            &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
         );
         
         area_time_passed += delta_t;
@@ -1236,17 +1231,17 @@ void gameplay_state::do_menu_logic() {
     //Print mouse coordinates.
     if(game.maker_tools.geometry_info) {
         sector* mouse_sector =
-            get_sector(game.mouse_cursor_w, NULL, true);
+            get_sector(game.mouse_cursor.w_pos, NULL, true);
             
         string coords_str =
-            box_string(f2s(game.mouse_cursor_w.x), 6) + " " +
-            box_string(f2s(game.mouse_cursor_w.y), 6);
+            box_string(f2s(game.mouse_cursor.w_pos.x), 6) + " " +
+            box_string(f2s(game.mouse_cursor.w_pos.y), 6);
         string blockmap_str =
             box_string(
-                i2s(game.cur_area_data.bmap.get_col(game.mouse_cursor_w.x)),
+                i2s(game.cur_area_data.bmap.get_col(game.mouse_cursor.w_pos.x)),
                 5, " "
             ) +
-            i2s(game.cur_area_data.bmap.get_row(game.mouse_cursor_w.y));
+            i2s(game.cur_area_data.bmap.get_row(game.mouse_cursor.w_pos.y));
         string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
             sector_z_str =

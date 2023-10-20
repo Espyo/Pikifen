@@ -164,6 +164,7 @@ void draw_liquid(
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity
 );
+void draw_mouse_cursor(const ALLEGRO_COLOR &color);
 void draw_player_input_icon(
     const ALLEGRO_FONT* const font, const player_input &i,
     const bool condensed, const point &where, const point &max_size,

@@ -54,16 +54,6 @@ const float CAMERA_BOX_MARGIN = 128.0f;
 const float CAMERA_SMOOTHNESS_MULT = 4.5f;
 //Opacity of the collision bubbles in the maker tool.
 const unsigned char COLLISION_OPACITY = 192;
-//Maximum alpha of the cursor's trail -- the alpha value near the cursor.
-const unsigned char CURSOR_TRAIL_MAX_ALPHA = 72;
-//Maximum width of the cursor's trail -- the width value near the cursor.
-const float CURSOR_TRAIL_MAX_WIDTH = 30.0f;
-//How far the cursor must move from its current spot before the next spot.
-const float CURSOR_TRAIL_MIN_SPOT_DIFF = 4.0f;
-//Every X seconds, the cursor's position is saved, to create the trail effect.
-const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
-//Number of positions of the cursor to keep track of.
-const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
 //How long the HUD moves for when a menu is entered.
@@ -157,7 +147,6 @@ gameplay_state::gameplay_state() :
     close_to_pikmin_to_pluck(nullptr),
     close_to_ship_to_heal(nullptr),
     cursor_height_diff_light(0.0f),
-    cursor_save_timer(GAMEPLAY::CURSOR_TRAIL_SAVE_INTERVAL),
     is_input_allowed(false),
     lightmap_bmp(nullptr),
     onion_menu(nullptr),
@@ -313,7 +302,6 @@ void gameplay_state::end_mission(const bool cleared) {
  * from the result menu's "keep playing" option.
  */
 void gameplay_state::enter() {
-    al_hide_mouse_cursor(game.display);
     update_transformations();
     
     last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
@@ -351,17 +339,10 @@ void gameplay_state::enter() {
     
     ready_for_input = false;
     
-    ALLEGRO_MOUSE_STATE mouse_state;
-    al_get_mouse_state(&mouse_state);
-    game.mouse_cursor_s.x = al_get_mouse_state_axis(&mouse_state, 0);
-    game.mouse_cursor_s.y = al_get_mouse_state_axis(&mouse_state, 1);
-    game.mouse_cursor_w = game.mouse_cursor_s;
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
-    );
-    leader_cursor_w = game.mouse_cursor_w;
-    leader_cursor_s = game.mouse_cursor_s;
+    game.mouse_cursor.reset();
+    leader_cursor_w = game.mouse_cursor.w_pos;
+    leader_cursor_s = game.mouse_cursor.s_pos;
+    
     notification.reset();
     
     if(cur_leader_ptr) {
@@ -600,23 +581,6 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     //Feed player inputs to the controls manager.
     game.controls.handle_allegro_event(ev);
     
-    //Mouse controls.
-    for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        if(
-            ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
-            game.options.mouse_moves_cursor[p]
-        ) {
-            game.mouse_cursor_s.x = ev.mouse.x;
-            game.mouse_cursor_s.y = ev.mouse.y;
-            game.mouse_cursor_w = game.mouse_cursor_s;
-            
-            al_transform_coordinates(
-                &game.screen_to_world_transform,
-                &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
-            );
-        }
-    }
-    
     //Finally, let the HUD handle events.
     hud->gui.handle_event(ev);
     
@@ -646,7 +610,6 @@ void gameplay_state::leave(const GAMEPLAY_LEAVE_TARGET target) {
     }
     
     save_statistics();
-    al_show_mouse_cursor(game.display);
     
     switch(target) {
     case LEAVE_TO_RETRY: {
@@ -857,15 +820,6 @@ void gameplay_state::load() {
         game.cam.set_pos(point());
     }
     game.cam.set_zoom(game.options.zoom_mid_level);
-    
-    cursor_save_timer.on_end = [this] () {
-        cursor_save_timer.start();
-        cursor_spots.push_back(game.mouse_cursor_s);
-        if(cursor_spots.size() > GAMEPLAY::CURSOR_TRAIL_SAVE_N_SPOTS) {
-            cursor_spots.erase(cursor_spots.begin());
-        }
-    };
-    cursor_save_timer.start();
     
     //Memorize mobs required by the mission.
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
@@ -1115,8 +1069,6 @@ void gameplay_state::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
  */
 void gameplay_state::unload() {
     unloading = true;
-    
-    al_show_mouse_cursor(game.display);
     
     if(hud) {
         hud->gui.destroy();

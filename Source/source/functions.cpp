@@ -449,7 +449,7 @@ mob* get_closest_mob_to_cursor() {
         if(!m_ptr->fsm.cur_state) continue;
         if(m_ptr->is_stored_inside_mob()) continue;
         
-        dist d = dist(game.mouse_cursor_w, m_ptr->pos);
+        dist d = dist(game.mouse_cursor.w_pos, m_ptr->pos);
         if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;

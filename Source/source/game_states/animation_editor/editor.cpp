@@ -227,7 +227,7 @@ float animation_editor::get_cursor_timeline_time() {
     }
     float anim_x1 = canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING;
     float anim_w = (canvas_br.x - ANIM_EDITOR::TIMELINE_PADDING) - anim_x1;
-    float mouse_x = game.mouse_cursor_s.x - anim_x1;
+    float mouse_x = game.mouse_cursor.s_pos.x - anim_x1;
     mouse_x = clamp(mouse_x, 0.0f, anim_w);
     return cur_anim->get_duration() * (mouse_x / anim_w);
 }
@@ -376,10 +376,10 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
 bool animation_editor::is_cursor_in_timeline() {
     return
         state == EDITOR_STATE_ANIMATION &&
-        game.mouse_cursor_s.x >= canvas_tl.x &&
-        game.mouse_cursor_s.x <= canvas_br.x &&
-        game.mouse_cursor_s.y >= canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT &&
-        game.mouse_cursor_s.y <= canvas_br.y;
+        game.mouse_cursor.s_pos.x >= canvas_tl.x &&
+        game.mouse_cursor.s_pos.x <= canvas_br.x &&
+        game.mouse_cursor.s_pos.y >= canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT &&
+        game.mouse_cursor.s_pos.y <= canvas_br.y;
 }
 
 

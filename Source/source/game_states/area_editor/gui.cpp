@@ -5480,8 +5480,8 @@ void area_editor::process_gui_status_bar() {
         ImGui::SameLine();
         ImGui::Text(
             "%s, %s",
-            box_string(f2s(game.mouse_cursor_w.x), 7).c_str(),
-            box_string(f2s(game.mouse_cursor_w.y), 7).c_str()
+            box_string(f2s(game.mouse_cursor.w_pos.x), 7).c_str(),
+            box_string(f2s(game.mouse_cursor.w_pos.y), 7).c_str()
         );
     }
 }

@@ -363,6 +363,31 @@ struct maker_tools_info {
 
 
 /* ----------------------------------------------------------------------------
+ * Mouse cursor struct.
+ * Holds information about the operative system's mouse cursor.
+ */
+struct mouse_cursor_struct {
+    //Position, in screen coordinates.
+    point s_pos;
+    //Position, in world coordinates, if applicable.
+    point w_pos;
+    //Spots the cursor has been through. Used for the faint trail left behind.
+    vector<point> history;
+    //Time left until the position of the cursor is saved on the vector.
+    timer save_timer;
+    
+    void hide() const;
+    void init();
+    void reset();
+    void show() const;
+    void update_pos(
+        const ALLEGRO_EVENT &ev,
+        ALLEGRO_TRANSFORM &screen_to_world_transform
+    );
+};
+
+
+/* ----------------------------------------------------------------------------
  * Bitmap manager.
  * When you have the likes of an animation, every
  * frame in it is normally a sub-bitmap of the same

@@ -108,6 +108,8 @@ void main_menu_state::do_drawing() {
     make_gui.draw();
     tutorial_gui.draw();
     
+    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
+    
     game.fade_mgr.draw();
     
     al_flip_display();
