@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -29,6 +29,7 @@
     <ul>
       <li><span class="cl-a">Added</span> <a href="mob_interactable.html">levers</a>. Interact with a leader or throw a Pikmin to power or stop powering devices.</li>
       <li><span class="cl-a">Added</span> <a href="mob_interactable.html">buttons</a>. Interact with a leader or throw a Pikmin to power devices for a split-second.</li>
+      <li><span class="cl-a">Added</span> <a href="mob_custom.html">logic gates</a>. These allow for complex mechanisms, like a gate that only opens if two different power sources are on.</li>
       <li><span class="cl-c">Changed</span> how some objects push against each other. Now, leaders and Pikmin can squeeze through them to get unstuck. This does not apply to more "solid" objects like gates.</li>
       <li><span class="cl-c">Changed</span> the range for an idle Pikmin to be considered "bumped" by the active leader, so they can be called from farther away.</li>
       <li><span class="cl-c">Changed</span> the way the Yellow Wollywog works to make the fight easier and a bit more dynamic.</li>
@@ -48,6 +49,7 @@
       <li><span class="cl-a">Added</span> the <code>on_input_received</code> <a href="events_and_actions.html">object script event</a>.</li>
       <li><span class="cl-a">Added</span> the <code>input_name</code> and <code>input_value</code> properties to the <code>get_info</code> <a href="events_and_actions.html">object script action</a>.</li>
       <li><span class="cl-c">Added</span> the <code>on_ready</code> <a href="script.html">mob event</a>.</li>
+      <li><span class="cl-c">Added</span> the <code>message_sender_id</code> value to the <code>get_info</code> <a href="script.html">mob event</a>.</li>
     </ul>
 
     <h2 id="0.24.0">0.24.0</h2>

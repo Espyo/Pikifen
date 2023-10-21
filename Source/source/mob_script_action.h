@@ -278,6 +278,8 @@ enum MOB_ACTION_GET_INFO_TYPES {
     MOB_ACTION_GET_INFO_MESSAGE,
     //Get name of the message sender mob type that triggered the event.
     MOB_ACTION_GET_INFO_MESSAGE_SENDER,
+    //Get id of the message sender mob that triggered the event.
+    MOB_ACTION_GET_INFO_MESSAGE_SENDER_ID,
     //Get category of mob that triggered the event.
     MOB_ACTION_GET_INFO_MOB_CATEGORY,
     //Get type of mob that triggered the event.

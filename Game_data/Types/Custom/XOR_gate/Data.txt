@@ -1,0 +1,4 @@
+name = XOR gate
+description = Connect two power sources here. When JUST A OR JUST B are giving power, this mob will output power to devices.
+
+custom_category_name = Puzzle

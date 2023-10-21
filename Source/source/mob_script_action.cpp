@@ -338,6 +338,8 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE);
     } else if(call.args[1] == "message_sender") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER);
+    } else if(call.args[1] == "message_sender_id") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_MESSAGE_SENDER_ID);
     } else if(call.args[1] == "mob_category") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_MOB_CATEGORY);
     } else if(call.args[1] == "mob_type") {
@@ -2275,6 +2277,12 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
     } case MOB_ACTION_GET_INFO_MESSAGE_SENDER: {
         if(data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
             *var = ((mob*)(data.custom_data_2))->type->name;
+        }
+        break;
+        
+    } case MOB_ACTION_GET_INFO_MESSAGE_SENDER_ID: {
+        if(data.call->parent_event == MOB_EV_RECEIVE_MESSAGE) {
+            *var = i2s(((mob*)(data.custom_data_2))->id);
         }
         break;
         
