@@ -158,6 +158,7 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     if(n == "on_enter") type =          MOB_EV_ON_ENTER;
     r("on_leave",                       MOB_EV_ON_LEAVE);
     r("on_tick",                        MOB_EV_ON_TICK);
+    r("on_ready",                       MOB_EV_ON_READY);
     r("on_animation_end",               MOB_EV_ANIMATION_END);
     r("on_damage",                      MOB_EV_DAMAGE);
     r("on_far_from_home",               MOB_EV_FAR_FROM_HOME);

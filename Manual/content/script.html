@@ -590,6 +590,12 @@ reaches {
       <li>When changing a state, make sure that the new state's <code>on_enter</code> event doesn't change to another state in a way that could create an infinite loop. For instance, if changing to state A causes it to change to state B, which causes it to change to state C, which causes it to change to state A again, the engine will crash.</li>
     </ul>
 
+    <h2 id="tips">Tips</h2>
+
+    <ul>
+        <li>The <code>init</code> block of the script file runs right as soon as the object spawns. Directly after that, the object changes to its first state and runs that state's <code>on_enter</code> event. Finally, in the first frame of gameplay after the object's creation, the <code>on_ready</code> event will fire. When you want to run something at the start of the object's life, it's important to pick which of these three points to use.</li>
+    </ul>
+
     <h2 id="see-also">See also</h2>
 
     <ul>

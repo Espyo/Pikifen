@@ -45,6 +45,10 @@
         <td>Triggered when one of the frames of the current animation has launched a signal. The number of the signal can be obtained with the <code>get_info</code> action.</td>
       </tr>
       <tr>
+        <th style="text-align: left;"><code>on_ready</code></th>
+        <td>Triggered when the object has been initialized and is ready to do things, like all of its links have been properly placed. The <code>init</code> block in the script file and the <code>on_enter</code> event of the first state are triggered before this.</td>
+      </tr>
+      <tr>
         <th style="text-align: left;"><code>on_tick</code></th>
         <td>Triggered every single game frame. Because a frame can last for any amount of time, this is not an appropriate way to make things change over time. It is more useful for when you want to constantly update something, like make the object constantly turn to its focused object's position.</td>
       </tr>
