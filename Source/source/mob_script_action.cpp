@@ -1131,7 +1131,7 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
     
     switch(op) {
     case MOB_ACTION_IF_OP_EQUAL: {
-        if(is_number(lhs)) {
+        if(is_number(lhs) && is_number(rhs)) {
             data.return_value = (s2f(lhs) == s2f(rhs));
         } else {
             data.return_value = (lhs == rhs);
@@ -1139,7 +1139,7 @@ void mob_action_runners::if_function(mob_action_run_data &data) {
         break;
         
     } case MOB_ACTION_IF_OP_NOT: {
-        if(is_number(lhs)) {
+        if(is_number(lhs) && is_number(rhs)) {
             data.return_value = (s2f(lhs) != s2f(rhs));
         } else {
             data.return_value = (lhs != rhs);

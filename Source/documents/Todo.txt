@@ -1,5 +1,5 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    lever and button need to activate when they receive power
+    
 
 Current tasks (tasks being worked on, but not yet committed)
     

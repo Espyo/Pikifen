@@ -10,6 +10,10 @@ script{
             get_info m message
             if $m = interact
                 set_state down
+            else
+                if $m > 0
+                    set_state down
+                end_if
             end_if
         }
         on_pikmin_land {

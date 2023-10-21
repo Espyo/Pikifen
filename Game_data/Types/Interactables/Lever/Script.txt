@@ -10,6 +10,10 @@ script{
             get_info m message
             if $m = interact
                 set_state flipping_on
+            else
+                if $m > 0
+                    set_state flipping_on
+                end_if
             end_if
         }
         on_pikmin_land {
@@ -35,6 +39,10 @@ script{
             get_info m message
             if $m = interact
                 set_state flipping_off
+            else
+                if $m > 0
+                    set_state flipping_off
+                end_if
             end_if
         }
         on_pikmin_land {
