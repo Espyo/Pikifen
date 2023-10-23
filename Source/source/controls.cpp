@@ -250,6 +250,16 @@ string controls_mediator::input_to_str(
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the internal name from the input id, used in the on_input_recieved event
+ */
+string controls_mediator::internal_name_from_id(const int &action_id) {
+    for (size_t b = 0; b < player_action_types.size(); ++b) {
+        if (player_action_types[b].id == action_id) {
+            return player_action_types[b].internal_name;
+        }
+    }
+}
 
 /* ----------------------------------------------------------------------------
  * Returns the player actions that occurred during the last frame of gameplay,

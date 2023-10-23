@@ -326,6 +326,10 @@ bool mob_action_loaders::get_info(mob_action_call &call) {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH);
     } else if(call.args[1] == "health_ratio") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_HEALTH_RATIO);
+    } else if (call.args[1] == "input_name") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT_NAME);
+    } else if (call.args[1] == "input_value") {
+        call.args[1] = i2s(MOB_ACTION_GET_INFO_INPUT_VALUE);
     } else if(call.args[1] == "latched_pikmin") {
         call.args[1] = i2s(MOB_ACTION_GET_INFO_LATCHED_PIKMIN);
     } else if(call.args[1] == "latched_pikmin_weight") {
@@ -2242,6 +2246,18 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         *var = f2s(target_mob->health / target_mob->max_health);
         break;
         
+    } case MOB_ACTION_GET_INFO_INPUT_NAME: {
+        if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
+            *var = game.controls.internal_name_from_id(((player_action*)(data.custom_data_1))->action_type_id);
+        }
+        break;
+
+    } case MOB_ACTION_GET_INFO_INPUT_VALUE: {
+        if (data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
+            *var = f2s(((player_action*)(data.custom_data_1))->value);
+        }
+        break;
+
     } case MOB_ACTION_GET_INFO_LATCHED_PIKMIN: {
         *var = i2s(target_mob->get_latched_pikmin_amount());
         break;

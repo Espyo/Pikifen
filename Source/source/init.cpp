@@ -410,6 +410,27 @@ void init_controls() {
         "zoom_out", ""
     );
     game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_A,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom A",
+        "To be used in Scripts.",
+        "custom_a", "k_7"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_B,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom B",
+        "To be used in Scripts.",
+        "custom_b", "k_8"
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_C,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom C",
+        "To be used in Scripts.",
+        "custom_c", "k_10"
+    );
+    game.controls.add_player_action_type(
         PLAYER_ACTION_NEXT_MATURITY,
         PLAYER_ACTION_CAT_ADVANCED,
         "Next maturity",
@@ -437,6 +458,7 @@ void init_controls() {
         "Go back or cancel in a menu.",
         "menu_back", "k_59"
     );
+
     
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.
