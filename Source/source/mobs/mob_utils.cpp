@@ -263,11 +263,12 @@ delivery_info_struct::delivery_info_struct() :
  *   Mob this group info struct belongs to.
  */
 group_info_struct::group_info_struct(mob* leader_ptr) :
-    radius(0),
+    radius(0.0f),
     anchor(leader_ptr->pos),
+    anchor_angle(TAU / 2.0f),
     transform(game.identity_transform),
     cur_standby_type(nullptr),
-    follow_mode(false) {
+    mode(MODE_SHUFFLE) {
 }
 
 

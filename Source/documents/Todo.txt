@@ -8,7 +8,6 @@ Next tasks (roughly sorted most important first)
     --- To fix ---
     Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
         This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
-    Tapping the swarm button makes all Pikmin go to the swarm place, despite the fact that you let go
 
     --- 0.25.0 ---
     More puzzle elements
@@ -24,7 +23,6 @@ Next tasks (roughly sorted most important first)
     Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     Make Rock Pikmin colors darker (thanks Nataly171)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
-    Helodity's liquid revamps https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Revamp sound system
         Candidate list of all needed sounds, for now
@@ -227,6 +225,7 @@ Next tasks (roughly sorted most important first)
                 If you're holding a direction as you read a sign, you'll continue to go in that direction, even if you let go. Pressing again fixes this. Make sure this is fixed.
                 If you're whistling, pause the game, release the whistle, and unpause, the game will probably not detect the release -- do something about it
             Add an option to allow event coalescing. Basically, if before a frame we received an event for analog stick right 0.3 and also a 0.4, just coalesce into a single event of 0.4
+            Some sort of priority system, or maybe just some logic for button combination overlap? If I bind M+A to take be the area image creator tool, I don't want my leader to walk to the left
         Controls menu
             In the controls menu, the player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
                 Then in the multiplayer setup screen, the player only picks what control scheme each player uses

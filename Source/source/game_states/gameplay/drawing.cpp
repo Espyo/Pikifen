@@ -392,6 +392,7 @@ void gameplay_state::draw_big_msg() {
  * Draws any debug visualization tools useful for debugging.
  */
 void gameplay_state::draw_debug_tools() {
+    //Raw analog stick viewer.
     /*
     const float RAW_STICK_VIEWER_X = 8;
     const float RAW_STICK_VIEWER_Y = 8;
@@ -471,8 +472,10 @@ void gameplay_state::draw_debug_tools() {
                 f2s(raw_stick_coords.y), 6
             )
         ).c_str()
-    );
+    );*/
     
+    //Clean analog stick viewer.
+    /*
     const float CLEAN_STICK_VIEWER_X = 116;
     const float CLEAN_STICK_VIEWER_Y = 8;
     const float CLEAN_STICK_VIEWER_SIZE = 100;
@@ -556,6 +559,44 @@ void gameplay_state::draw_debug_tools() {
                 f2s(clean_stick_coords.y), 6
             )
         ).c_str()
+    );
+    */
+    
+    //Group stuff.
+    /*
+    al_use_transform(&game.world_to_screen_transform);
+    for(size_t m = 0; m < cur_leader_ptr->group->members.size(); ++m) {
+        point offset = cur_leader_ptr->group->get_spot_offset(m);
+        al_draw_filled_circle(
+            cur_leader_ptr->group->anchor.x + offset.x,
+            cur_leader_ptr->group->anchor.y + offset.y,
+            3.0f,
+            al_map_rgba(0, 0, 0, 192)
+        );
+    }
+    al_draw_circle(
+        cur_leader_ptr->group->anchor.x,
+        cur_leader_ptr->group->anchor.y,
+        3.0f,
+        cur_leader_ptr->group->mode == group_info_struct::MODE_SHUFFLE ?
+        al_map_rgba(0, 255, 0, 192) :
+        cur_leader_ptr->group->mode == group_info_struct::MODE_FOLLOW_BACK ?
+        al_map_rgba(255, 255, 0, 192) :
+        al_map_rgba(255, 0, 0, 192),
+        2.0f
+    );
+    
+    point group_mid_point =
+        cur_leader_ptr->group->anchor +
+        rotate_point(
+            point(cur_leader_ptr->group->radius, 0.0f),
+            cur_leader_ptr->group->anchor_angle
+        );
+    al_draw_filled_circle(
+        group_mid_point.x,
+        group_mid_point.y,
+        3.0f,
+        al_map_rgb(0, 0, 255)
     );
     */
 }

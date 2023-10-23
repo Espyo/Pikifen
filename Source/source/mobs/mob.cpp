@@ -256,6 +256,7 @@ void mob::add_to_group(mob* new_member) {
     if(group->members.size() == 1) {
         //If this is the first member, update the anchor position.
         group->anchor = pos;
+        group->anchor_angle = TAU / 2.0f;
     }
 }
 
@@ -3699,99 +3700,109 @@ void mob::tick_misc_logic(const float delta_t) {
     //Group stuff.
     if(group && group->members.size()) {
     
-        bool must_reassign_spots = false;
-        
-        bool is_swarming =
-            (
-                game.states.gameplay->swarm_magnitude &&
-                game.states.gameplay->cur_leader_ptr == this
-            );
-            
-        if(
+        group_info_struct::MODES old_mode = group->mode;
+        bool is_holding = !holding.empty();
+        bool is_far_from_group =
             dist(group->get_average_member_pos(), pos) >
-            MOB::GROUP_SHUFFLE_DIST + (group->radius + radius)
-        ) {
-            if(!group->follow_mode) {
-                must_reassign_spots = true;
-            }
-            group->follow_mode = true;
+            MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);
+        bool is_swarming =
+            game.states.gameplay->swarm_magnitude &&
+            game.states.gameplay->cur_leader_ptr == this;
             
-        } else if(is_swarming || !holding.empty()) {
-            group->follow_mode = true;
-            
+        //Find what mode we're in on this frame.
+        if(is_swarming) {
+            group->mode = group_info_struct::MODE_SWARM;
+        } else if(is_holding || is_far_from_group) {
+            group->mode = group_info_struct::MODE_FOLLOW_BACK;
         } else {
-            group->follow_mode = false;
-            
+            group->mode = group_info_struct::MODE_SHUFFLE;
         }
         
-        group->transform = game.identity_transform;
-        
-        if(group->follow_mode) {
-            //Follow mode. Try to stay on the leader's back.
-            
-            if(is_swarming) {
-            
-                point move_anchor_offset =
-                    rotate_point(
-                        point(
-                            -(radius + MOB::GROUP_SPOT_INTERVAL * 2),
-                            0
-                        ), game.states.gameplay->swarm_angle + TAU / 2
-                    );
-                group->anchor = pos + move_anchor_offset;
-                
-                float intensity_dist =
-                    game.config.cursor_max_dist *
-                    game.states.gameplay->swarm_magnitude;
-                al_translate_transform(
-                    &group->transform, -MOB::SWARM_MARGIN, 0
+        //Change things depending on the mode.
+        switch(group->mode) {
+        case group_info_struct::MODE_FOLLOW_BACK: {
+    
+            //Follow the leader's back.
+            group->anchor_angle = angle + TAU / 2.0f;
+            point new_anchor_rel_pos =
+                rotate_point(
+                    point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
+                    group->anchor_angle
                 );
-                al_scale_transform(
-                    &group->transform,
-                    intensity_dist / (group->radius * 2),
-                    1 -
-                    (
-                        MOB::SWARM_VERTICAL_SCALE*
-                        game.states.gameplay->swarm_magnitude
-                    )
-                );
-                al_rotate_transform(
-                    &group->transform,
-                    game.states.gameplay->swarm_angle + TAU / 2
-                );
-                
-            } else {
+            group->anchor = pos + new_anchor_rel_pos;
             
-                point leader_back_offset =
-                    rotate_point(
-                        point(
-                            -(radius + MOB::GROUP_SPOT_INTERVAL * 2),
-                            0
-                        ), angle
-                    );
-                group->anchor = pos + leader_back_offset;
-                
-                al_rotate_transform(&group->transform, angle);
-                
-            }
+            al_identity_transform(&group->transform);
+            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            break;
             
-            if(must_reassign_spots) group->reassign_spots();
-            
-        } else {
-            //Shuffle mode. Keep formation, but shuffle with the leader,
-            //if needed.
+        } case group_info_struct::MODE_SHUFFLE: {
+    
+            //Casually shuffle with the leader, if needed.
             point mov;
+            point group_mid_point =
+                group->anchor +
+                rotate_point(
+                    point(group->radius, 0.0f),
+                    group->anchor_angle
+                );
             move_point(
-                group->anchor - point(group->radius, 0),
+                group_mid_point,
                 pos,
                 type->move_speed,
-                group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2,
-                &mov, NULL, NULL, delta_t
+                group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2.0f,
+                &mov,
+                NULL, NULL, delta_t
             );
             group->anchor += mov * delta_t;
+            
+            al_identity_transform(&group->transform);
+            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            break;
+            
+        } case group_info_struct::MODE_SWARM: {
+    
+            //Swarming.
+            group->anchor_angle = game.states.gameplay->swarm_angle;
+            point new_anchor_rel_pos =
+                rotate_point(
+                    point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
+                    group->anchor_angle
+                );
+            group->anchor = pos + new_anchor_rel_pos;
+            
+            float intensity_dist =
+                game.config.cursor_max_dist *
+                game.states.gameplay->swarm_magnitude;
+            al_identity_transform(&group->transform);
+            al_translate_transform(
+                &group->transform, -MOB::SWARM_MARGIN, 0
+            );
+            al_scale_transform(
+                &group->transform,
+                intensity_dist / (group->radius * 2),
+                1 -
+                (
+                    MOB::SWARM_VERTICAL_SCALE*
+                    game.states.gameplay->swarm_magnitude
+                )
+            );
+            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            break;
+        }
+        }
+        
+        if(
+            old_mode != group_info_struct::MODE_SHUFFLE &&
+            group->mode == group_info_struct::MODE_SHUFFLE
+        ) {
+            //Started shuffling. Since it's a "casual" formation, we should
+            //reassign the spots so Pikmin don't have to keep their order from
+            //before.
+            group->reassign_spots();
         }
     }
     
+    //Damage squash stuff.
     if(damage_squash_time > 0.0f) {
         damage_squash_time -= delta_t;
         damage_squash_time = std::max(0.0f, damage_squash_time);
