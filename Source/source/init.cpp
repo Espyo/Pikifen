@@ -410,27 +410,6 @@ void init_controls() {
         "zoom_out", ""
     );
     game.controls.add_player_action_type(
-        PLAYER_ACTION_CUSTOM_A,
-        PLAYER_ACTION_CAT_ADVANCED,
-        "Custom A",
-        "To be used in Scripts.",
-        "custom_a", "k_7"
-    );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_CUSTOM_B,
-        PLAYER_ACTION_CAT_ADVANCED,
-        "Custom B",
-        "To be used in Scripts.",
-        "custom_b", "k_8"
-    );
-    game.controls.add_player_action_type(
-        PLAYER_ACTION_CUSTOM_C,
-        PLAYER_ACTION_CAT_ADVANCED,
-        "Custom C",
-        "To be used in Scripts.",
-        "custom_c", "k_10"
-    );
-    game.controls.add_player_action_type(
         PLAYER_ACTION_NEXT_MATURITY,
         PLAYER_ACTION_CAT_ADVANCED,
         "Next maturity",
@@ -452,13 +431,34 @@ void init_controls() {
         "lie_down", "k_26"
     );
     game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_A,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom A",
+        "Custom action A, if the current leader supports it.",
+        "custom_a", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_B,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom B",
+        "Custom action B, if the current leader supports it.",
+        "custom_b", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_C,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom C",
+        "Custom action C, if the current leader supports it.",
+        "custom_c", ""
+    );
+    game.controls.add_player_action_type(
         PLAYER_ACTION_MENU_BACK,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - back",
         "Go back or cancel in a menu.",
         "menu_back", "k_59"
     );
-
+    
     
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.

@@ -105,18 +105,18 @@ enum PLAYER_ACTION_TYPES {
     PLAYER_ACTION_ZOOM_IN,
     //Zoom out.
     PLAYER_ACTION_ZOOM_OUT,
-    //Custom A.
-    PLAYER_ACTION_CUSTOM_A,
-    //Custom B.
-    PLAYER_ACTION_CUSTOM_B,
-    //Custom C.
-    PLAYER_ACTION_CUSTOM_C,
     //Swap to next standby type maturity.
     PLAYER_ACTION_NEXT_MATURITY,
     //Swap to previous standby type maturity.
     PLAYER_ACTION_PREV_MATURITY,
     //Lie down.
     PLAYER_ACTION_LIE_DOWN,
+    //Custom A.
+    PLAYER_ACTION_CUSTOM_A,
+    //Custom B.
+    PLAYER_ACTION_CUSTOM_B,
+    //Custom C.
+    PLAYER_ACTION_CUSTOM_C,
     //Menu navigation back.
     PLAYER_ACTION_MENU_BACK,
     
@@ -196,7 +196,7 @@ public:
     //Others.
     void release_all();
     void set_options(const controls_manager_options &options);
-    string internal_name_from_id(const int &action_id);
+    string get_player_action_type_internal_name(const int &action_id);
     
 private:
     //List of known player action types.

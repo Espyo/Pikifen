@@ -157,6 +157,10 @@
         <td>Triggered when the object takes a certain amount of damage after the last itch, as defined by the <code>itch_damage</code> property. It will also only trigger if it's been a certain amount of time since the last itch, as per <code>itch_time</code>. If the current state cannot handle this event, it will continue being sent until an event shows up that can handle it.</td>
       </tr>
       <tr>
+        <th style="text-align: left;"><code>on_input_received</code></th>
+        <td>Triggered when the player performs an input. The action and value can be obtained with the <code>get_info</code> action. This event is only run on the currently active <a href="mob_leader.html">leader</a>.</td>
+      </tr>
+      <tr>
         <th style="text-align: left;"><code>on_receive_message</code></th>
         <td>Triggered when another object sent it a message. The contents of the message can be obtained with the <code>get_info</code> action.</td>
       </tr>
@@ -175,10 +179,6 @@
       <tr>
         <th style="text-align: left;"><code>on_weight_removed</code></th>
         <td>Triggered when an object that was standing atop this one leaves, thus removing weight.</td>
-      </tr>
-       <tr>
-        <th style="text-align: left;"><code>on_input_received</code></th>
-        <td>Triggered when an action key is pressed. The action and value can be obtained with the <code>get_info</code> action. This event is only run on the currently active <a href="mob_leader.html">leader</a>.</td>
       </tr>
     </table>
     

@@ -182,6 +182,24 @@ const vector<player_action_type>
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the internal name from an input id,
+ * used in the on_input_recieved event. Returns an empty string on failure.
+ * action_id:
+ *   ID of the player action.
+ */
+string controls_mediator::get_player_action_type_internal_name(
+    const int &action_id
+) {
+    for(size_t b = 0; b < player_action_types.size(); ++b) {
+        if(player_action_types[b].id == action_id) {
+            return player_action_types[b].internal_name;
+        }
+    }
+    return "";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the current input value of a given action type.
  * player_action_type_id:
  *   Action type to use.
@@ -250,16 +268,6 @@ string controls_mediator::input_to_str(
     }
 }
 
-/* ----------------------------------------------------------------------------
- * Returns the internal name from the input id, used in the on_input_recieved event
- */
-string controls_mediator::internal_name_from_id(const int &action_id) {
-    for (size_t b = 0; b < player_action_types.size(); ++b) {
-        if (player_action_types[b].id == action_id) {
-            return player_action_types[b].internal_name;
-        }
-    }
-}
 
 /* ----------------------------------------------------------------------------
  * Returns the player actions that occurred during the last frame of gameplay,

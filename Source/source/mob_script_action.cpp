@@ -2250,16 +2250,19 @@ void get_info_runner(mob_action_run_data &data, mob* target_mob) {
         
     } case MOB_ACTION_GET_INFO_INPUT_NAME: {
         if(data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
-            *var = game.controls.internal_name_from_id(((player_action*)(data.custom_data_1))->action_type_id);
+            *var =
+                game.controls.get_player_action_type_internal_name(
+                    ((player_action*) (data.custom_data_1))->action_type_id
+                );
         }
         break;
-
+        
     } case MOB_ACTION_GET_INFO_INPUT_VALUE: {
         if (data.call->parent_event == MOB_EV_INPUT_RECEIVED) {
-            *var = f2s(((player_action*)(data.custom_data_1))->value);
+            *var = f2s(((player_action*) (data.custom_data_1))->value);
         }
         break;
-
+        
     } case MOB_ACTION_GET_INFO_LATCHED_PIKMIN: {
         *var = i2s(target_mob->get_latched_pikmin_amount());
         break;

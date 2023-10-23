@@ -70,6 +70,8 @@ enum MOB_EV_TYPES {
     MOB_EV_HELD,
     //When one of its normal hitboxes touches another mob's eating hitbox.
     MOB_EV_HITBOX_TOUCH_EAT,
+    //When the player performs an input.
+    MOB_EV_INPUT_RECEIVED,
     //When it has been damaged enough to want to shake.
     MOB_EV_ITCH,
     //When it leaves a hazard in a sector.
@@ -108,10 +110,7 @@ enum MOB_EV_TYPES {
     MOB_EV_WEIGHT_ADDED,
     //When weight was removed from on top of it. Only if this mob's walkable.
     MOB_EV_WEIGHT_REMOVED,
-    //When the player sends an Input
-    MOB_EV_INPUT_RECEIVED,
-
-
+    
     //More internal script stuff.
     
     //When it is plucked off the ground (Pikmin only).
@@ -213,7 +212,7 @@ enum MOB_EV_TYPES {
     //When the leader's pluck is canceled.
     LEADER_EV_CANCEL,
     
-
+    
     //Total.
     
     //Total amount of mob event types.

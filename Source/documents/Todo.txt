@@ -11,7 +11,6 @@ Next tasks (roughly sorted most important first)
     Tapping the swarm button makes all Pikmin go to the swarm place, despite the fact that you let go
 
     --- 0.25.0 ---
-    -S-'s custom controls commit
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
@@ -25,7 +24,7 @@ Next tasks (roughly sorted most important first)
     Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     Make Rock Pikmin colors darker (thanks Nataly171)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
-    https://github.com/Espyo/Pikifen/pull/37
+    Helodity's liquid revamps https://github.com/Espyo/Pikifen/pull/37
     https://github.com/Helodity/Pikifen/tree/throwing-improvements
     Revamp sound system
         Candidate list of all needed sounds, for now
