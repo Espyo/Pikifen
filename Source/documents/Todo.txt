@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -6,32 +6,21 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Pressing Tab to go to the next Dear ImGui widget isn't working
-    Bridges are broken
-    Bridges should be darker in darker sectors (thanks Pikmin Expert)
-    Pikmin should want to go to nectar by themselves when idling
-    Winged Pikmin hover so high up most enemy hitboxes don't hit them
-    Winged Pikmin cannot be crushed
-    Winged Pikmin don't drink nectar on their own
-    Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
-    Apparently Dweevils shake treasures off far too strongly?
     Reloading an area in the area editor just loads an "" area
-    Winged Pikmin that fall in the water should fly up when whistled
-    Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
+        area_editor::load_area has a reference to the area name, but when it calls clear_current_area, that reference is gone
+    Bridge stuff
+        Treasures under a bridge can be carried by Pikmin over the bridge (thanks Helodity)
+        If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
+            Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
+    Throw a Pikmin while on the water, and the Pikmin won't lose the water waves particle effect
+        This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
     Pikmin that gain some status from nectar will keep sipping the whole thing (thanks Neo)
-    If both you and the Pikmin are on bridge objects, just assume that it's fair-game to throw, it's easier that way
-        Or maybe give bridge objects a property that's the bridge ID, and check if it's the same bridge ID?
+    Tapping the swarm button makes all Pikmin go to the swarm place, despite the fact that you let go
 
     --- 0.25.0 ---
-    Pikmin sprouts should have MOB_FLAG_INTANGIBLE instead (thanks Helodity)
     Add area editor regression-testing in-game
-    Area editor redo
     The ability to ctrl+click a selected vertex, edge, etc. to unselect it (thanks Neo)
     More puzzle elements
-        Change the existing button to a pressure plate, and to instead send the weight number as a message (or 0 if not activated). All puzzle device mobs should use a power number, in that 0 means no power, and >0 means whatever power
-            Add maker notes indicating this
-        A lever. It flips position every time a Pikmin is thrown at it, or when a leader walks up to it and interacts, or when it receives power
-        A button. After being depressed (and sending a 1 message) it pops back up (and sends a 0 message). Throwing a Pikmin at it, or interacting with a leader, or receiving power will press it
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
         Logic gates
@@ -299,10 +288,12 @@ Next tasks (roughly sorted most important first)
         Leaf Pikmin should be able to follow leaders in walking
         Water Dumples should wander around a small bit
         Maybe decrease the territory radius of the pre-packaged enemies? (thanks Nataly171)
+        There should be some petal particle effects when a Pikmin loses their maturity
         Bitter sprays should last for a short time
         Paper bags should do one final puff of dust when they finish their squashing animation. The particles should also be more brown than white
         Add Helodity's Plasm Wraith
     Allow any animation to interpolate the transformations (rotation, scale, etc.)
+    Give sprites a "tint" property
     Mob rotation should have acceleration too
     General graphic file improvements
         Leader and Pikmin portrait images should
@@ -764,6 +755,9 @@ Misc things (so I don't forget)
         "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
         The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
     Pikmin behaviors
+        Winged Pikmin that fall in the water should fly up when whistled
+        Pikmin should want to go to nectar by themselves when idling
+            Particularly important because Winged Pikmin don't drink nectar on their own
         A way for a Pikmin type to control what its resistance to being shaken off is
         Add the feature that makes dead flower Pikmin sometimes drop a sprout, before the story mode is done? It could spawn a sprout for use later in the day
         Seeds should take time to transform into sprouts -- this encourages the player to multitask instead of waiting for loot to be delivered to the Onion
@@ -784,11 +778,9 @@ Misc things (so I don't forget)
         Enemy spirits?
     Editor improvements
         Area editor
-            A redo button
             Areas should be able to clone the geometry of a different area. Basically instead of having their own geometry, they just have a link to another area's geometry instead. It should allow it to be rotated, too
             Pressing G should let you drag the currently selected things, instead of you being forced to precisely click on the tiny thing (e.g. Pikmin mob gen) before you can drag (thanks Neo)
             Shift+Ctrl+drag should start a selection box that adds to the current selection (thanks Neo)
-            Allow pointless edges (and remove the "wouldn't split in any useful way" warning). This way, it's easier to create fade sectors, for instance
             View -> Show X in other modes
                 This would allow one to see edges+vertexes, mobs, and paths in modes that aren't layout, mobs, and paths, respectively
             A way to visually show that you're in the layout mode, mobs mode, etc. I tried a vignette in the canvas, colored after the mode, but it's too ugly. Maybe coloring the Dear ImGui widgets based on the mode?
@@ -865,6 +857,7 @@ Misc things (so I don't forget)
         The ability for particle generators to consist of multiple particle generators
     Bridges and Dummies emit light during blackout (Darthvato)
     HUD element for a digital clock?
+    GUI elements should draw with opacity (or a tint color), set by the GUI manager in the same way as position and size
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     The ability for any object to fade when the leader/cursor is nearby. It's important for large walkable objects that block the view, like bridges, as well as ships like the Research Pod (thanks Neo)
     Missions

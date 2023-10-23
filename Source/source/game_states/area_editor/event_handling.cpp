@@ -67,6 +67,9 @@ void area_editor::handle_key_char_anywhere(const ALLEGRO_EVENT &ev) {
             set_status("Disabled debug path number display.");
         }
         
+    } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Y, true)) {
+        press_redo_button();
+        
     } else if(key_check(ev.keyboard.keycode, ALLEGRO_KEY_Z, true)) {
         press_undo_button();
         

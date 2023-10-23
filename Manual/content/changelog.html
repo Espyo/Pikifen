@@ -27,8 +27,11 @@
     <p><b>Gameplay changes</b></p>
 
     <ul>
+      <li><span class="cl-a">Added</span> <a href="mob_interactable.html">levers</a>. Interact with a leader or throw a Pikmin to power or stop powering devices.</li>
+      <li><span class="cl-a">Added</span> <a href="mob_interactable.html">buttons</a>. Interact with a leader or throw a Pikmin to power devices for a split-second.</li>
       <li><span class="cl-c">Changed</span> how some objects push against each other. Now, leaders and Pikmin can squeeze through them to get unstuck. This does not apply to more "solid" objects like gates.</li>
       <li><span class="cl-c">Changed</span> the range for an idle Pikmin to be considered "bumped" by the active leader, so they can be called from farther away.</li>
+      <li><span class="cl-c">Changed</span> the way the Yellow Wollywog works to make the fight easier and a bit more dynamic.</li>
     </ul>
 
     <p><b>Content making changes</b></p>
@@ -40,6 +43,7 @@
       <li><span class="cl-c">Added</span> the ability for a sector to reuse the same vertex. Before, it just considered the sector broken.</li>
       <li><span class="cl-c">Added</span> the ability to create sub-sectors. This happens if one sector's polygon ends up getting split into two. While not recommended, it stops the maker from receiving warnings and from the sector to be considered broken.</li>
       <li><span class="cl-c">Added</span> the ability to keep drawing a new sector, for when you try to split a sector but the engine considers that split useless.</li>
+      <li><span class="cl-c">Added</span> a redo feature to the area editor.</li>
       <li><span class="cl-a">Added</span> three new controls: <code>custom_a</code>, <code>custom_b</code> and <code>custom_c</code>. These do nothing on their own, but can be detected through <a href="mob_leader.html">leader</a> scripts. (Thanks WanderingLetterS)</li>
       <li><span class="cl-a">Added</span> the <code>on_input_received</code> <a href="events_and_actions.html">object script event</a>.</li>
       <li><span class="cl-a">Added</span> the <code>input_name</code> and <code>input_value</code> properties to the <code>get_info</code> <a href="events_and_actions.html">object script action</a>.</li>

@@ -471,11 +471,28 @@ void area_editor::process_gui_menu_bar() {
             if(undo_history.empty()) {
                 undo_text = "Nothing to undo.";
             } else {
-                undo_text = "Undo: " + undo_history[0].second + ".";
+                undo_text = "Undo: " + undo_history.front().second + ".";
             }
             set_tooltip(
                 undo_text,
                 "Ctrl + Z"
+            );
+            
+            //Redo item.
+            if(ImGui::MenuItem("Redo", "Ctrl+Y")) {
+                press_redo_button();
+            }
+            string redo_text;
+            if(redo_history.empty()) {
+                redo_text =
+                    "Nothing to redo.";
+            } else {
+                redo_text =
+                    "Redo: " + redo_history.front().second + ".";
+            }
+            set_tooltip(
+                redo_text,
+                "Ctrl + Y"
             );
             
             //Separator.
@@ -5562,11 +5579,40 @@ void area_editor::process_gui_toolbar() {
     if(undo_history.empty()) {
         undo_text = "Nothing to undo.";
     } else {
-        undo_text = "Undo: " + undo_history[0].second + ".";
+        undo_text = "Undo: " + undo_history.front().second + ".";
     }
     set_tooltip(
         undo_text,
         "Ctrl + Z"
+    );
+    
+    //Redo button.
+    float redo_opacity = redo_history.empty() ? 0.2f : 1.0f;
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "redoButton",
+            editor_icons[ICON_UNDO],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
+            ImVec2(1.0f, 0.0f),
+            ImVec2(0.0f, 1.0f),
+            ImVec4(0.0f, 0.0f, 0.0f, 0.0f),
+            ImVec4(1.0f, 1.0f, 1.0f, redo_opacity)
+        )
+    ) {
+        press_redo_button();
+    }
+    string redo_text;
+    if(redo_history.empty()) {
+        redo_text =
+            "Nothing to redo.";
+    } else {
+        redo_text =
+            "Redo: " + redo_history.front().second + ".";
+    }
+    set_tooltip(
+        redo_text,
+        "Ctrl + Y"
     );
     
     if(!reference_file_name.empty()) {

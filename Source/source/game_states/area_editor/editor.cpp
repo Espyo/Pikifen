@@ -339,6 +339,10 @@ void area_editor::clear_problems() {
  * Clears the data about the current selection.
  */
 void area_editor::clear_selection() {
+    if(sub_state == EDITOR_SUB_STATE_OCTEE) {
+        sub_state = EDITOR_SUB_STATE_NONE;
+    }
+    
     selected_vertexes.clear();
     selected_edges.clear();
     selected_sectors.clear();
@@ -370,6 +374,10 @@ void area_editor::clear_undo_history() {
         delete undo_history[h].first;
     }
     undo_history.clear();
+    for(size_t h = 0; h < redo_history.size(); ++h) {
+        delete redo_history[h].first;
+    }
+    redo_history.clear();
 }
 
 
@@ -2421,6 +2429,22 @@ void area_editor::press_quit_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the redo button widget is pressed.
+ */
+void area_editor::press_redo_button() {
+    if(
+        sub_state != EDITOR_SUB_STATE_NONE ||
+        moving || selecting || cur_transformation_widget.is_moving_handle()
+    ) {
+        set_status("Can't redo in the middle of an operation!", true);
+        return;
+    }
+    
+    redo();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the toggle reference button widget is pressed.
  */
 void area_editor::press_reference_button() {
@@ -2875,6 +2899,34 @@ void area_editor::recreate_drawing_nodes() {
 
 
 /* ----------------------------------------------------------------------------
+ * Redoes the latest undone change to the area using the undo history,
+ * if available.
+ */
+void area_editor::redo() {
+    if(redo_history.empty()) {
+        set_status("Nothing to redo.");
+        return;
+    }
+    
+    //Let's first save the state of things right now so we can feed it into
+    //the undo history afterwards.
+    area_data* new_state = new area_data();
+    game.cur_area_data.clone(*new_state);
+    string operation_name = redo_history.front().second;
+    
+    //Change the area state.
+    set_state_from_undo_or_redo_history(redo_history.front().first);
+    
+    //Feed the previous state into the undo history.
+    undo_history.push_front(make_pair(new_state, operation_name));
+    delete redo_history.front().first;
+    redo_history.pop_front();
+    
+    set_status("Redo successful: " + operation_name + ".");
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the state of the area in the undo history.
  * When this happens, a timer is set. During this timer, if the next change's
  * operation is the same as the previous one's, then it is ignored.
@@ -2911,6 +2963,11 @@ void area_editor::register_change(
         game.cur_area_data.clone(*new_state);
     }
     undo_history.push_front(make_pair(new_state, operation_name));
+    
+    for(size_t h = 0; h < redo_history.size(); ++h) {
+        delete redo_history[h].first;
+    }
+    redo_history.clear();
     
     undo_save_lock_operation = operation_name;
     undo_save_lock_timer.start();
@@ -3975,6 +4032,34 @@ void area_editor::set_selection_status_text() {
 
 
 /* ----------------------------------------------------------------------------
+ * Changes the state of the area using one of the saved states in the undo
+ * history or redo history.
+ * state:
+ *   State to load.
+ */
+void area_editor::set_state_from_undo_or_redo_history(area_data* state) {
+    state->clone(game.cur_area_data);
+    
+    undo_save_lock_timer.stop();
+    undo_save_lock_operation.clear();
+    update_undo_history();
+    
+    clear_selection();
+    clear_circle_sector();
+    clear_layout_drawing();
+    clear_layout_moving();
+    clear_problems();
+    
+    update_all_edge_offset_caches();
+    
+    path_preview.clear(); //Clear so it doesn't reference deleted stops.
+    path_preview_timer.start(false);
+    
+    changes_mgr.mark_as_changed();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets up the editor's logic to split a sector.
  */
 void area_editor::setup_sector_split() {
@@ -4207,28 +4292,20 @@ void area_editor::undo() {
         return;
     }
     
-    string operation_name = undo_history[0].second;
+    //Let's first save the state of things right now so we can feed it into
+    //the redo history afterwards.
+    area_data* new_state = new area_data();
+    game.cur_area_data.clone(*new_state);
+    string operation_name = undo_history.front().second;
     
-    undo_history[0].first->clone(game.cur_area_data);
-    delete undo_history[0].first;
+    //Change the area state.
+    set_state_from_undo_or_redo_history(undo_history.front().first);
+    
+    //Feed the previous state into the redo history.
+    redo_history.push_front(make_pair(new_state, operation_name));
+    delete undo_history.front().first;
     undo_history.pop_front();
     
-    undo_save_lock_timer.stop();
-    undo_save_lock_operation.clear();
-    update_undo_history();
-    
-    clear_selection();
-    clear_circle_sector();
-    clear_layout_drawing();
-    clear_layout_moving();
-    clear_problems();
-    
-    update_all_edge_offset_caches();
-    
-    path_preview.clear(); //Clear so it doesn't reference deleted stops.
-    path_preview_timer.start(false);
-    
-    changes_mgr.mark_as_changed();
     set_status("Undo successful: " + operation_name + ".");
 }
 

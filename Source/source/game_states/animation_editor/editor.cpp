@@ -1302,6 +1302,7 @@ void animation_editor::set_best_frame_sprite() {
     //sift out results that technically match, but likely aren't the same
     //term. Example: If the animation is called "running", and there is no
     //"runnning" sprite, we probably don't want a match with "rummaging".
+    //Unless it's the exact same word.
     //Also, set the final sprite index to 0 so that if something goes wrong,
     //we default to the first sprite on the list.
     size_t final_sprite_idx = 0;
@@ -1310,11 +1311,20 @@ void animation_editor::set_best_frame_sprite() {
     if(anims.sprites.size() > 1) {
         size_t best_score = 3;
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
-            size_t score =
-                get_matching_string_starts(
-                    str_to_lower(cur_anim->name),
-                    str_to_lower(anims.sprites[s]->name)
-                ).size();
+            size_t score = 0;
+            if(
+                str_to_lower(cur_anim->name) ==
+                str_to_lower(anims.sprites[s]->name)
+            ) {
+                score = 9999;
+            } else {
+                score =
+                    get_matching_string_starts(
+                        str_to_lower(cur_anim->name),
+                        str_to_lower(anims.sprites[s]->name)
+                    ).size();
+            }
+            
             if(score < best_score) {
                 continue;
             }

@@ -1,0 +1,10 @@
+name = Button
+description = A button that can be clicked by a leader or a thrown Pikmin. Sends power for a split-second when clicked.
+
+custom_category_name = Puzzle
+height = 16
+prompt_text = Click button
+pushable = false
+pushes = false
+radius = 16
+trigger_range = 64

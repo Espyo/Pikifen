@@ -311,8 +311,8 @@ vertexes{
 	v=1984.0000 -512.0000
 	v=192.0000 -896.0000
 	v=192.0000 -1280.0000
-	v=1792.0000 -1280.0000
-	v=1792.0000 -896.0000
+	v=2240.0000 -1280.0000
+	v=2240.0000 -896.0000
 	v=192.0000 -1344.0000
 	v=192.0000 -1664.0000
 	v=2816.0000 -1664.0000
@@ -12692,6 +12692,26 @@ mobs{
 		type=Orb sign
 		p=76.0000 3104.0000
 		vars=text=Tricky sectors
+	}
+	Custom{
+		type=Automatic gate
+		p=1728.0000 -1088.0000
+	}
+	Interactable{
+		type=Lever
+		p=1824.0000 -1088.0000
+		vars=goal_number=3
+		links=382
+	}
+	Custom{
+		type=Automatic gate
+		p=1984.0000 -1088.0000
+	}
+	Interactable{
+		type=Button
+		p=2112.0000 -1088.0000
+		vars=goal_number=3
+		links=384
 	}
 }
 path_stops{

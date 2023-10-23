@@ -1992,7 +1992,7 @@ void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
     m->leave_group();
-    enable_flag(m->flags, MOB_FLAG_UNPUSHABLE);
+    enable_flag(m->flags, MOB_FLAG_INTANGIBLE);
     enable_flag(m->flags, MOB_FLAG_NON_HUNTABLE);
     enable_flag(m->flags, MOB_FLAG_NON_HURTABLE);
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -2021,7 +2021,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     pik_ptr->focus_on_mob(lea_ptr);
     disable_flag(m->flags, MOB_FLAG_NON_HUNTABLE);
     disable_flag(m->flags, MOB_FLAG_NON_HURTABLE);
-    disable_flag(m->flags, MOB_FLAG_UNPUSHABLE);
+    disable_flag(m->flags, MOB_FLAG_INTANGIBLE);
     pik_ptr->is_seed_or_sprout = false;
     m->set_timer(0);
     

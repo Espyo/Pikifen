@@ -49,7 +49,7 @@ const float THROW_VER_SPEED = 900.0f;
 
 
 //Height above the floor that a flying Pikmin prefers to stay at.
-const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 100.0f;
+const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 50.0f;
 //How long to remember a missed incoming attack for.
 const float pikmin::MISSED_ATTACK_DURATION = 1.5f;
 //Chance of circling the opponent instead of striking, when grounded.
