@@ -3724,9 +3724,11 @@ void mob::tick_misc_logic(const float delta_t) {
             
         }
         
+        group->transform = game.identity_transform;
+        
         if(group->follow_mode) {
-            group->transform = game.identity_transform;
             //Follow mode. Try to stay on the leader's back.
+            
             if(is_swarming) {
             
                 point move_anchor_offset =
@@ -3779,10 +3781,8 @@ void mob::tick_misc_logic(const float delta_t) {
             //Shuffle mode. Keep formation, but shuffle with the leader,
             //if needed.
             point mov;
-            point offset = point(group->radius, 0);
-            al_transform_coordinates(&group->transform, &offset.x, &offset.y);
             move_point(
-                group->anchor - offset,
+                group->anchor - point(group->radius, 0),
                 pos,
                 type->move_speed,
                 group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2,
