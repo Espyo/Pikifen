@@ -498,7 +498,12 @@ void pikmin::tick_class_specifics(const float delta_t) {
         par.color = pik_type->main_color;
         game.states.gameplay->particles.add(par);
         
-        game.sys_assets.sfx_pikmin_dying.play(0.03, false);
+        game.audio.create_sound_source(
+            game.sys_assets.sfx_pikmin_dying,
+            SOUND_TYPE_POSITIONAL,
+            SOUND_FLAG_DESTROY_ON_PLAYBACK_END,
+            0.03f
+        );
         
         game.states.gameplay->pikmin_deaths++;
         game.states.gameplay->last_pikmin_death_pos = pos;

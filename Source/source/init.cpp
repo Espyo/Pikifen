@@ -92,9 +92,7 @@ void destroy_misc() {
     al_destroy_font(game.fonts.standard);
     al_destroy_font(game.fonts.value);
     
-    al_detach_voice(game.voice);
-    al_destroy_mixer(game.mixer);
-    al_destroy_voice(game.voice);
+    game.audio.destroy();
 }
 
 

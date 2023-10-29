@@ -584,28 +584,6 @@ struct reader_setter {
 
 
 /* ----------------------------------------------------------------------------
- * Structure that holds informatio about a sample.
- * It also has info about sample instances, which control
- * the sound playing from the sample.
- */
-struct sample_struct {
-    //Pointer to the sample.
-    ALLEGRO_SAMPLE* sample;
-    //Pointer to the instance.
-    ALLEGRO_SAMPLE_INSTANCE* instance;
-    
-    sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
-    void play(
-        const float max_override_pos, const bool loop,
-        const float gain = 1.0, const float pan = 0.5, const float speed = 1.0
-    );
-    void stop();
-    void destroy();
-};
-
-
-
-/* ----------------------------------------------------------------------------
  * Makes it easy to read script variables, and make changes based on which
  * ones exist, and what values they have.
  */
@@ -709,35 +687,35 @@ struct system_asset_list {
     
     //Sound effects.
     //Attack.
-    sample_struct sfx_attack;
+    ALLEGRO_SAMPLE* sfx_attack;
     //Camera zoom level.
-    sample_struct sfx_camera;
+    ALLEGRO_SAMPLE* sfx_camera;
     //Pikmin attacking.
-    sample_struct sfx_pikmin_attack;
+    ALLEGRO_SAMPLE* sfx_pikmin_attack;
     //Pikmin called.
-    sample_struct sfx_pikmin_called;
+    ALLEGRO_SAMPLE* sfx_pikmin_called;
     //Pikmin carrying.
-    sample_struct sfx_pikmin_carrying;
+    ALLEGRO_SAMPLE* sfx_pikmin_carrying;
     //Pikmin grabbing on to carry.
-    sample_struct sfx_pikmin_carrying_grab;
+    ALLEGRO_SAMPLE* sfx_pikmin_carrying_grab;
     //Pikmin caught.
-    sample_struct sfx_pikmin_caught;
+    ALLEGRO_SAMPLE* sfx_pikmin_caught;
     //Pikmin dying.
-    sample_struct sfx_pikmin_dying;
+    ALLEGRO_SAMPLE* sfx_pikmin_dying;
     //Pikmin held by leader.
-    sample_struct sfx_pikmin_held;
+    ALLEGRO_SAMPLE* sfx_pikmin_held;
     //Pikmin idling.
-    sample_struct sfx_pikmin_idle;
+    ALLEGRO_SAMPLE* sfx_pikmin_idle;
     //Pluck sound effect.
-    sample_struct sfx_pluck;
+    ALLEGRO_SAMPLE* sfx_pluck;
     //Pikmin being plucked.
-    sample_struct sfx_pikmin_plucked;
+    ALLEGRO_SAMPLE* sfx_pikmin_plucked;
     //Pikmin being thrown.
-    sample_struct sfx_pikmin_thrown;
+    ALLEGRO_SAMPLE* sfx_pikmin_thrown;
     //Switching standby Pikmin type.
-    sample_struct sfx_switch_pikmin;
+    ALLEGRO_SAMPLE* sfx_switch_pikmin;
     //Throwing.
-    sample_struct sfx_throw;
+    ALLEGRO_SAMPLE* sfx_throw;
     
     //Animations.
     //Leader damage spark.

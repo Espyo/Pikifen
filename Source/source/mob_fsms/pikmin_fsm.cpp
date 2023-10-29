@@ -1797,7 +1797,12 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->chase(*((point*) info1), m->z);
     
     m->set_animation(PIKMIN_ANIM_IDLING);
-    game.sys_assets.sfx_pikmin_idle.play(0, false);
+    game.audio.create_sound_source(
+        game.sys_assets.sfx_pikmin_idle,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END,
+        0.01f
+    );
 }
 
 
@@ -1824,7 +1829,12 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pik_ptr->leave_group();
     
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
-    game.sys_assets.sfx_pikmin_caught.play(0.2, 0);
+    game.audio.create_sound_source(
+        game.sys_assets.sfx_pikmin_caught,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END,
+        0.2f
+    );
     
 }
 
@@ -1841,7 +1851,11 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->set_animation(PIKMIN_ANIM_IDLING);
-    game.sys_assets.sfx_pikmin_held.play(0, false);
+    game.audio.create_sound_source(
+        game.sys_assets.sfx_pikmin_held,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
+    );
 }
 
 
@@ -1872,9 +1886,12 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
     m->set_animation(PIKMIN_ANIM_THROWN);
-    game.sys_assets.sfx_pikmin_held.stop();
-    game.sys_assets.sfx_pikmin_thrown.stop();
-    game.sys_assets.sfx_pikmin_thrown.play(0, false);
+    game.audio.stop_all_playbacks(game.sys_assets.sfx_pikmin_held);
+    game.audio.create_sound_source(
+        game.sys_assets.sfx_pikmin_thrown,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END | SOUND_FLAG_STOP_OTHER_PLAYBACKS
+    );
     ((pikmin*) m)->start_throw_trail();
 }
 
@@ -1895,8 +1912,16 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     m->face(throw_angle, NULL, true);
     
     m->set_animation(PIKMIN_ANIM_THROWN);
-    game.sys_assets.sfx_pikmin_plucked.play(0, false);
-    game.sys_assets.sfx_pluck.play(0, false);
+    game.audio.create_sound_source(
+        game.sys_assets.sfx_pikmin_plucked,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
+    );
+    game.audio.create_sound_source(
+        game.sys_assets.sfx_pluck,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
+    );
     ((pikmin*) m)->start_throw_trail();
     
     particle par(
@@ -2051,7 +2076,14 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     
     caller->add_to_group(pik_ptr);
     
-    if(info2 == NULL) game.sys_assets.sfx_pikmin_called.play(0.03, false);
+    if(info2 == NULL) {
+        game.audio.create_sound_source(
+            game.sys_assets.sfx_pikmin_called,
+            SOUND_TYPE_POSITIONAL,
+            SOUND_FLAG_DESTROY_ON_PLAYBACK_END,
+            0.03f
+        );
+    }
 }
 
 

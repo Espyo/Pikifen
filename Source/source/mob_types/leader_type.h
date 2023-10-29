@@ -140,11 +140,11 @@ public:
     //How high it can reach when thrown.
     float max_throw_height;
     //Sound effect for when it whistles.
-    sample_struct sfx_whistle;
+    ALLEGRO_SAMPLE* sfx_whistle;
     //Sound effect for when it dismisses.
-    sample_struct sfx_dismiss;
+    ALLEGRO_SAMPLE* sfx_dismiss;
     //Sound effect for when it is swapped to.
-    sample_struct sfx_name_call;
+    ALLEGRO_SAMPLE* sfx_name_call;
     //Standby icon.
     ALLEGRO_BITMAP* bmp_icon;
     

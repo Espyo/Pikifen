@@ -15,6 +15,7 @@
 
 #include "game_states/game_state.h"
 
+#include "audio.h"
 #include "area/area.h"
 #include "libs/controls_manager.h"
 #include "game_config.h"
@@ -82,6 +83,8 @@ class game_class {
 public:
     //List of asset file names.
     asset_file_names_struct asset_file_names;
+    //Audio.
+    audio_manager audio;
     //Manager of all main bitmaps (not floor textures).
     bmp_manager bitmaps;
     //The error bitmap used to represent bitmaps that were not loaded.
@@ -148,8 +151,6 @@ public:
     vector<mission_goal*> mission_goals;
     //Database of all mission score criteria.
     vector<mission_score_criterion*> mission_score_criteria;
-    //Global audio mixer.
-    ALLEGRO_MIXER* mixer;
     //User options.
     options_struct options;
     //Performance monitor.
@@ -196,8 +197,6 @@ public:
     unsigned int win_w;
     //World to screen coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM world_to_screen_transform;
-    //Allegro voice from which the sound effects play.
-    ALLEGRO_VOICE* voice;
     
     //Change to a different state.
     void change_state(

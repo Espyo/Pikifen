@@ -506,7 +506,11 @@ void leader::dismiss() {
     }
     
     //Final things.
-    lea_type->sfx_dismiss.play(0, false);
+    game.audio.create_sound_source(
+        lea_type->sfx_dismiss,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
+    );
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; ++p) {
         particle par;
         const unsigned char* color_idx =
@@ -781,7 +785,12 @@ void leader::start_throw_trail() {
  */
 void leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
-    lea_type->sfx_whistle.play(0, false);
+    
+    game.audio.create_sound_source(
+        lea_type->sfx_whistle,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
+    );
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
     game.statistics.whistle_uses++;
@@ -802,7 +811,7 @@ void leader::stop_auto_throwing() {
 void leader::stop_whistling() {
     if(!game.states.gameplay->whistle.whistling) return;
     game.states.gameplay->whistle.stop_whistling();
-    lea_type->sfx_whistle.stop();
+    game.audio.stop_all_playbacks(lea_type->sfx_whistle);
 }
 
 
@@ -831,7 +840,12 @@ void leader::swap_held_pikmin(mob* new_pik) {
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     
-    game.sys_assets.sfx_switch_pikmin.play(0, false);
+    
+    game.audio.create_sound_source(
+        game.sys_assets.sfx_switch_pikmin,
+        SOUND_TYPE_POSITIONAL,
+        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
+    );
 }
 
 

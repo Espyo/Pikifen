@@ -1291,17 +1291,9 @@ void load_misc_graphics() {
  * Loads miscellaneous fixed sound effects.
  */
 void load_misc_sounds() {
-    //Sound effects.
-    game.voice =
-        al_create_voice(
-            44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2
-        );
-    game.mixer =
-        al_create_mixer(
-            44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
-        );
-    al_attach_mixer_to_voice(game.mixer, game.voice);
+    game.audio.init();
     
+    //Sound effects.
     game.sys_assets.sfx_attack =
         load_sample("Attack.ogg");
     game.sys_assets.sfx_pikmin_attack =
@@ -1401,15 +1393,22 @@ void load_options() {
  * Loads an audio sample from the game's content.
  * file_name:
  *   Name of the file to load.
+ * node:
+ *   If not NULL, blame this data node if the file doesn't exist.
+ * report_errors:
+ *   Only issues errors if this is true.
  */
-sample_struct load_sample(const string &file_name) {
+ALLEGRO_SAMPLE* load_sample(
+    const string &file_name, data_node* node, bool report_errors
+) {
     ALLEGRO_SAMPLE* sample =
         al_load_sample((AUDIO_FOLDER_PATH + "/" + file_name).c_str());
-    if(!sample) {
-        log_error("Could not open audio sample " + file_name + "!");
+        
+    if(!sample && report_errors) {
+        log_error("Could not open audio sample " + file_name + "!", node);
     }
     
-    return sample_struct(sample, game.mixer);
+    return sample;
 }
 
 
@@ -2020,20 +2019,19 @@ void unload_misc_resources() {
     game.bitmaps.detach(game.sys_assets.bmp_throw_preview_dashed);
     game.bitmaps.detach(game.sys_assets.bmp_wave_ring);
     
-    game.sys_assets.sfx_attack.destroy();
-    game.sys_assets.sfx_pikmin_attack.destroy();
-    game.sys_assets.sfx_pikmin_carrying.destroy();
-    game.sys_assets.sfx_pikmin_carrying_grab.destroy();
-    game.sys_assets.sfx_pikmin_caught.destroy();
-    game.sys_assets.sfx_pikmin_dying.destroy();
-    game.sys_assets.sfx_pikmin_held.destroy();
-    game.sys_assets.sfx_pikmin_idle.destroy();
-    game.sys_assets.sfx_pikmin_thrown.destroy();
-    game.sys_assets.sfx_pikmin_plucked.destroy();
-    game.sys_assets.sfx_pikmin_called.destroy();
-    game.sys_assets.sfx_throw.destroy();
-    game.sys_assets.sfx_switch_pikmin.destroy();
-    game.sys_assets.sfx_camera.destroy();
+    game.audio.samples.detach(game.sys_assets.sfx_attack);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_carrying);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_carrying_grab);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_caught);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_dying);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_held);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_idle);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_thrown);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_plucked);
+    game.audio.samples.detach(game.sys_assets.sfx_pikmin_called);
+    game.audio.samples.detach(game.sys_assets.sfx_throw);
+    game.audio.samples.detach(game.sys_assets.sfx_switch_pikmin);
+    game.audio.samples.detach(game.sys_assets.sfx_camera);
 }
 
 

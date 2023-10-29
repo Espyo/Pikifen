@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -10,6 +10,10 @@ Next tasks (roughly sorted most important first)
         This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
 
     --- 0.25.0 ---
+    Add some #define to code_debug.h that are macros for creating benchmarking start and benchmarking stop statements
+    Idle Pikmin shouldn't be called by "bumping" until some seconds, since if you throw a Pikmin nearby, it'll be hard to get it to stay
+        Maybe it should only count as bumped if the leader had previously moved a certain distance from it?
+    The cursor trail effect sometimes creates massive spikes
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
@@ -110,6 +114,7 @@ Next tasks (roughly sorted most important first)
         It should be possible to play sounds both in specific frames of animation and in scripts as actions
             The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
         Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
+        Create a "Sounds" and a "Music" folder in the "Audio" folder
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
         This might help
@@ -484,6 +489,7 @@ Next tasks (roughly sorted most important first)
                 Number of leaders for each team (if this is, for instance, set to 1, but players play 2v2, then each team will forcefully have 2 leaders instead)
                 Pikmin killed by other Pikmin are reborn at the Onion, or lost permanently
                 If Pikmin can attack each other
+                If Pikmin can attack leaders
                 If a given item can suddenly be worth double or triple the normal amount (like in Dandori Battles)
             A special "random" ruleset, included with the engine, and that cannot be deleted. Picking this will pick a ruleset at random after every match
                 Maybe add a way for this feature to exclude certain rulesets? Some people can make meme rulesets to use once or twice, and don't want them to be picked during a chill everyday "random ruleset" session

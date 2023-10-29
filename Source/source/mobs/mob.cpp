@@ -1446,7 +1446,13 @@ void mob::do_attack_effects(
     
     if(!useless) {
         //Play the sound.
-        game.sys_assets.sfx_attack.play(0.06, false, 0.6f);
+        
+        game.audio.create_sound_source(
+            game.sys_assets.sfx_attack,
+            SOUND_TYPE_POSITIONAL,
+            SOUND_FLAG_DESTROY_ON_PLAYBACK_END,
+            0.06f, 0.6f
+        );
         
         //Damage squash-and-stretch animation.
         if(damage_squash_time == 0.0f) {

@@ -58,7 +58,6 @@ game_class::game_class() :
     liquid_limit_effect_buffer(nullptr),
     loading_subtext_bmp(nullptr),
     loading_text_bmp(nullptr),
-    mixer(nullptr),
     perf_mon(nullptr),
     show_system_info(false),
     textures(TEXTURES_FOLDER_NAME),
@@ -67,7 +66,6 @@ game_class::game_class() :
     win_fullscreen(OPTIONS::DEF_WIN_FULLSCREEN),
     win_h(OPTIONS::DEF_WIN_H),
     win_w(OPTIONS::DEF_WIN_W),
-    voice(nullptr),
     cur_state(nullptr),
     logic_queue(nullptr),
     logic_timer(nullptr),
@@ -180,6 +178,9 @@ void game_class::do_global_logic() {
     if(options.draw_cursor_trail) {
         game.mouse_cursor.save_timer.tick(delta_t);
     }
+    
+    //Audio.
+    game.audio.tick(delta_t, point(), point());
 }
 
 
