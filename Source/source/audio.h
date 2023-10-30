@@ -70,10 +70,19 @@ enum SFX_STACK_MODES {
 enum SFX_FLAGS {
     //Normally, sources are destroyed when playback ends. This keeps them.
     SFX_FLAG_KEEP_ON_PLAYBACK_END = 0x01,
-    //Stop all playbacks when the source is destroyed.
-    SFX_FLAG_STOP_PLAYBACK_ON_DESTROY = 0x02,
-    //Normally, creating a sound source emits on creation. This prevents that.
+    //Normally, playbacks stop when the source is destroyed. This keeps them.
+    SFX_FLAG_KEEP_PLAYBACK_ON_DESTROY = 0x02,
+    //Normally, creating a sound source emits a playback. This prevents that.
     SFX_FLAG_DONT_EMIT_ON_CREATION = 0x04,
+};
+
+
+//Possible states for a playback.
+enum SFX_PLAYBACK_STATES {
+    //Playing like normal.
+    SFX_PLAYBACK_PLAYING,
+    //Finished playing and needs to be destroyed.
+    SFX_PLAYBACK_DESTROYED,
 };
 
 
@@ -120,6 +129,8 @@ struct sfx_source_struct {
     point pos;
     //Time left until the next emission.
     float emit_time_left = 0.0f;
+    //Does it need to be deleted?
+    bool destroyed = false;
 };
 
 
@@ -132,6 +143,8 @@ struct sfx_playback_struct {
     size_t source_id = 0;
     //Its Allegro sample instance.
     ALLEGRO_SAMPLE_INSTANCE* allegro_sample_instance = NULL;
+    //State.
+    SFX_PLAYBACK_STATES state = SFX_PLAYBACK_PLAYING;
 };
 
 
@@ -196,6 +209,7 @@ public:
     bool emit(size_t source_id);
     void init();
     void set_camera_pos(const point &cam_tl, const point &cam_br);
+    bool set_sfx_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(ALLEGRO_SAMPLE* filter);
     void tick(float delta_t);
     audio_manager();
@@ -222,7 +236,7 @@ private:
         const sfx_source_config_struct &config,
         const point &pos
     );
-    bool destroy_playback(size_t playback_idx);
+    bool destroy_sfx_playback(size_t playback_idx);
     sfx_source_struct* get_source(size_t source_id);
     void set_playback_gain_and_pan(size_t playback_idx);
 };

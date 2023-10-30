@@ -158,6 +158,9 @@ protected:
     void tick_class_specifics(const float delta_t) override;
     
 private:
+    //Sound effect source ID of the whistle, or 0 for none.
+    size_t whistle_sfx_source_id;
+    
     //Returns how many rows are needed for all members' dismissal.
     size_t get_dismiss_rows(const size_t n_members) const;
 };

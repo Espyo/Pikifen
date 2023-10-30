@@ -120,7 +120,8 @@ leader::leader(const point &pos, leader_type* type, const float angle) :
     throwee_speed_z(0.0f),
     throwee_can_reach(false),
     health_wheel_visible_ratio(1.0f),
-    health_wheel_caution_timer(0.0f) {
+    health_wheel_caution_timer(0.0f),
+    whistle_sfx_source_id(0) {
     
     team = MOB_TEAM_PLAYER_1;
     invuln_period = timer(LEADER::INVULN_PERIOD);
@@ -785,10 +786,11 @@ void leader::start_throw_trail() {
 void leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
     
-    game.audio.create_pos_sfx_source(
-        lea_type->sfx_whistle,
-        pos
-    );
+    whistle_sfx_source_id =
+        game.audio.create_pos_sfx_source(
+            lea_type->sfx_whistle,
+            game.states.gameplay->leader_cursor_w
+        );
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
     game.statistics.whistle_uses++;
@@ -809,7 +811,8 @@ void leader::stop_auto_throwing() {
 void leader::stop_whistling() {
     if(!game.states.gameplay->whistle.whistling) return;
     game.states.gameplay->whistle.stop_whistling();
-    game.audio.stop_all_playbacks(lea_type->sfx_whistle);
+    game.audio.destroy_sfx_source(whistle_sfx_source_id);
+    whistle_sfx_source_id = 0;
 }
 
 
@@ -888,6 +891,13 @@ void leader::tick_class_specifics(const float delta_t) {
         
     if(group && group->members.empty()) {
         stop_auto_throwing();
+    }
+    
+    if(game.states.gameplay->whistle.whistling) {
+        game.audio.set_sfx_source_pos(
+            whistle_sfx_source_id,
+            game.states.gameplay->leader_cursor_w
+        );
     }
     
     //Health wheel logic.

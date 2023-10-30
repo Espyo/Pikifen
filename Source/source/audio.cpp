@@ -31,7 +31,7 @@ audio_manager::audio_manager() :
     samples(""),
     mixer(nullptr),
     voice(nullptr),
-    next_sfx_source_id(0) {
+    next_sfx_source_id(1) {
 }
 
 
@@ -94,15 +94,18 @@ size_t audio_manager::create_sfx_source(
 ) {
     if(!sample) return 0;
     
-    next_sfx_source_id++; //Hopefully there will be no collisions.
-    sources[next_sfx_source_id] = sfx_source_struct();
-    sources[next_sfx_source_id].sample = sample;
-    sources[next_sfx_source_id].type = type;
-    sources[next_sfx_source_id].config = config;
-    sources[next_sfx_source_id].pos = pos;
-    emit(next_sfx_source_id);
+    size_t id = next_sfx_source_id;
     
-    return next_sfx_source_id;
+    sources[id] = sfx_source_struct();
+    sources[id].sample = sample;
+    sources[id].type = type;
+    sources[id].config = config;
+    sources[id].pos = pos;
+    emit(id);
+    
+    next_sfx_source_id++; //Hopefully there will be no collisions.
+    
+    return id;
 }
 
 
@@ -122,16 +125,28 @@ void audio_manager::destroy() {
  * playback_idx:
  *   Index of the playback in the list of playbacks.
  */
-bool audio_manager::destroy_playback(size_t playback_idx) {
+bool audio_manager::destroy_sfx_playback(size_t playback_idx) {
+    sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
+    if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) return false;
+    playback_ptr->state = SFX_PLAYBACK_DESTROYED;
+    
+    sfx_source_struct* source_ptr = get_source(playback_ptr->source_id);
+    
+    //Destroy the source, if applicable.
+    if(source_ptr) {
+        if(!has_flag(source_ptr->config.flags, SFX_FLAG_KEEP_ON_PLAYBACK_END)) {
+            destroy_sfx_source(playback_ptr->source_id);
+        }
+    }
+    
+    //Destroy the Allegro sample instance.
     ALLEGRO_SAMPLE_INSTANCE* instance =
-        playbacks[playback_idx].allegro_sample_instance;
+        playback_ptr->allegro_sample_instance;
     if(instance) {
         al_set_sample_instance_playing(instance, false);
         al_detach_sample_instance(instance);
         if(instance) al_destroy_sample_instance(instance);
     }
-    
-    playbacks.erase(playbacks.begin() + playback_idx);
     
     return true;
 }
@@ -144,29 +159,25 @@ bool audio_manager::destroy_playback(size_t playback_idx) {
  *   ID of the sound source to destroy.
  */
 bool audio_manager::destroy_sfx_source(size_t source_id) {
-    auto source_it = sources.find(source_id);
-    if(source_it == sources.end()) return false;
+    sfx_source_struct* source_ptr = get_source(source_id);
+    if(!source_ptr) return false;
+    
+    if(source_ptr->destroyed) return false;
+    source_ptr->destroyed = true;
     
     //Check if we must stop playbacks.
     if(
-        has_flag(
-            source_it->second.config.flags,
-            SFX_FLAG_STOP_PLAYBACK_ON_DESTROY
+        !has_flag(
+            source_ptr->config.flags,
+            SFX_FLAG_KEEP_PLAYBACK_ON_DESTROY
         )
     ) {
-        for(size_t p = 0; p < playbacks.size();) {
+        for(size_t p = 0; p < playbacks.size(); ++p) {
             if(playbacks[p].source_id == source_id) {
-                //TODO prevent infinite recursion if
-                //SFX_FLAG_KEEP_ON_PLAYBACK_END is not set.
-                destroy_playback(p);
-            } else {
-                ++p;
+                destroy_sfx_playback(p);
             }
         }
     }
-    
-    //Finally, destroy it.
-    sources.erase(source_it);
     
     return true;
 }
@@ -224,14 +235,13 @@ bool audio_manager::emit(size_t source_id) {
     
     //Check if other playbacks exist and if we need to stop them.
     if(source_ptr->config.stack_mode == SFX_STACK_OVERRIDE) {
-        for(size_t p = 0; p < playbacks.size();) {
+        for(size_t p = 0; p < playbacks.size(); ++p) {
             sfx_playback_struct* playback = &playbacks[p];
             sfx_source_struct* p_source_ptr = get_source(playback->source_id);
             if(!p_source_ptr || p_source_ptr->sample != sample) {
-                ++p;
                 continue;
             }
-            destroy_playback(p);
+            destroy_sfx_playback(p);
         }
     }
     
@@ -306,9 +316,23 @@ void audio_manager::init() {
 void audio_manager::set_camera_pos(const point &cam_tl, const point &cam_br) {
     this->cam_tl = cam_tl;
     this->cam_br = cam_br;
-    for(size_t p = 0; p < playbacks.size(); ++p) {
-        set_playback_gain_and_pan(p);
-    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the position of a positional sound effect source.
+ * source_id:
+ *   ID of the sound effect source.
+ * pos:
+ *   New position.
+ */
+bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
+    sfx_source_struct* source_ptr = get_source(source_id);
+    if(!source_ptr) return false;
+    
+    source_ptr->pos = pos;
+    
+    return true;
 }
 
 
@@ -370,7 +394,7 @@ void audio_manager::set_playback_gain_and_pan(size_t playback_idx) {
  *   Sound sample to filter by, or NULL to stop all playbacks.
  */
 void audio_manager::stop_all_playbacks(ALLEGRO_SAMPLE* filter) {
-    for(size_t p = 0; p < playbacks.size();) {
+    for(size_t p = 0; p < playbacks.size(); ++p) {
         bool to_stop = false;
         
         if(!filter) {
@@ -385,9 +409,7 @@ void audio_manager::stop_all_playbacks(ALLEGRO_SAMPLE* filter) {
         }
         
         if(to_stop) {
-            destroy_playback(p);
-        } else {
-            ++p;
+            destroy_sfx_playback(p);
         }
     }
 }
@@ -399,20 +421,34 @@ void audio_manager::stop_all_playbacks(ALLEGRO_SAMPLE* filter) {
  *   How long the frame's tick is, in seconds.
  */
 void audio_manager::tick(float delta_t) {
-    for(size_t p = 0; p < playbacks.size();) {
+    //Update playbacks.
+    for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_struct* playback = &playbacks[p];
         
         if(!al_get_sample_instance_playing(playback->allegro_sample_instance)) {
             //Finished playing.
-            uint8_t flags = sources[playback->source_id].config.flags;
-            if(!has_flag(flags, SFX_FLAG_KEEP_ON_PLAYBACK_END)) {
-                destroy_sfx_source(playback->source_id);
-            }
-            destroy_playback(p);
+            destroy_sfx_playback(p);
+        } else {
+            set_playback_gain_and_pan(p);
+        }
+    }
+    
+    //Delete destroyed playbacks.
+    for(size_t p = 0; p < playbacks.size();) {
+        if(playbacks[p].state == SFX_PLAYBACK_DESTROYED) {
+            playbacks.erase(playbacks.begin() + p);
         } else {
             ++p;
         }
-        
+    }
+    
+    //Delete destroyed sources.
+    for(auto s = sources.begin(); s != sources.end();) {
+        if(s->second.destroyed) {
+            s = sources.erase(s);
+        } else {
+            ++s;
+        }
     }
 }
 
