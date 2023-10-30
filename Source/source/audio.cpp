@@ -16,14 +16,22 @@
 #include "load.h"
 
 
+namespace AUDIO {
+//Default min stack pos. Let's use a value higher than 0, since if for any
+//reason the same sound plays multiple times at once, they are actually
+//stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
+const float DEF_STACK_MIN_POS = 0.02f;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Constructs the audio manager.
  */
 audio_manager::audio_manager() :
+    samples(""),
     mixer(nullptr),
     voice(nullptr),
-    samples(""),
-    next_sound_source_id(0) {
+    next_sfx_source_id(0) {
 }
 
 
@@ -35,34 +43,23 @@ audio_manager::audio_manager() :
  *   Sound sample that this source will emit.
  * type:
  *   Type of sound.
- * flags:
- *   Sound flags. Use SOUND_FLAGS.
- * stack_min_pos:
- *   If this sound is being played back somewhere, and it hasn't reached
- *   these many seconds of the sound yet, then emission should be cancelled.
- * gain:
- *   Volume, from 0 to 1.
+ * config:
+ *   Configuration.
  */
-size_t audio_manager::create_sound_source(
+size_t audio_manager::create_sfx_source(
     ALLEGRO_SAMPLE* sample,
-    SOUND_TYPE type,
-    uint8_t flags,
-    float stack_min_pos,
-    float gain
+    SFX_TYPE type,
+    const sfx_source_config_struct &config
 ) {
     if(!sample) return 0;
     
-    gain = clamp(gain, 0.0f, 1.0f);
+    next_sfx_source_id++; //Hopefully there will be no collisions.
+    sources[next_sfx_source_id] = sfx_source_struct();
+    sources[next_sfx_source_id].sample = sample;
+    sources[next_sfx_source_id].config = config;
+    emit(next_sfx_source_id);
     
-    next_sound_source_id++; //Hopefully there will be no collisions.
-    sources[next_sound_source_id] = sound_source_struct();
-    sources[next_sound_source_id].sample = sample;
-    sources[next_sound_source_id].flags = flags;
-    sources[next_sound_source_id].stack_min_pos = stack_min_pos;
-    sources[next_sound_source_id].gain = gain;
-    emit(next_sound_source_id);
-    
-    return next_sound_source_id;
+    return next_sfx_source_id;
 }
 
 
@@ -83,7 +80,8 @@ void audio_manager::destroy() {
  *   Index of the playback in the list of playbacks.
  */
 bool audio_manager::destroy_playback(size_t playback_idx) {
-    ALLEGRO_SAMPLE_INSTANCE* instance = playbacks[playback_idx].instance;
+    ALLEGRO_SAMPLE_INSTANCE* instance =
+        playbacks[playback_idx].allegro_sample_instance;
     if(instance) {
         al_set_sample_instance_playing(instance, false);
         al_detach_sample_instance(instance);
@@ -102,16 +100,21 @@ bool audio_manager::destroy_playback(size_t playback_idx) {
  * source_id:
  *   ID of the sound source to destroy.
  */
-bool audio_manager::destroy_sound_source(size_t source_id) {
+bool audio_manager::destroy_sfx_source(size_t source_id) {
     auto source_it = sources.find(source_id);
     if(source_it == sources.end()) return false;
     
     //Check if we must stop playbacks.
-    if(has_flag(source_it->second.flags, SOUND_FLAG_STOP_PLAYBACK_ON_DESTROY)) {
+    if(
+        has_flag(
+            source_it->second.config.flags,
+            SFX_FLAG_STOP_PLAYBACK_ON_DESTROY
+        )
+    ) {
         for(size_t p = 0; p < playbacks.size();) {
             if(playbacks[p].source_id == source_id) {
                 //TODO prevent infinite recursion if
-                //SOUND_FLAG_DESTROY_ON_PLAYBACK_END is also set.
+                //SFX_FLAG_KEEP_ON_PLAYBACK_END is not set.
                 destroy_playback(p);
             } else {
                 ++p;
@@ -134,7 +137,7 @@ bool audio_manager::destroy_sound_source(size_t source_id) {
  */
 bool audio_manager::emit(size_t source_id) {
     //Setup.
-    sound_source_struct* source_ptr = get_source(source_id);
+    sfx_source_struct* source_ptr = get_source(source_id);
     if(!source_ptr) return false;
     
     ALLEGRO_SAMPLE* sample = source_ptr->sample;
@@ -143,31 +146,32 @@ bool audio_manager::emit(size_t source_id) {
     //Check if other playbacks exist to prevent stacking.
     float lowest_stacking_playback_pos = FLT_MAX;
     if(
-        source_ptr->stack_min_pos > 0.0f ||
-        has_flag(source_ptr->flags, SOUND_FLAG_NEVER_STACK)
+        source_ptr->config.stack_min_pos > 0.0f ||
+        source_ptr->config.stack_mode == SFX_STACK_NEVER
     ) {
         for(size_t p = 0; p < playbacks.size(); ++p) {
-            sound_playback_struct* playback = &playbacks[p];
-            sound_source_struct* p_source_ptr = get_source(playback->source_id);
+            sfx_playback_struct* playback = &playbacks[p];
+            sfx_source_struct* p_source_ptr = get_source(playback->source_id);
             if(!p_source_ptr || p_source_ptr->sample != sample) continue;
             
             float playback_pos =
-                al_get_sample_instance_position(playback->instance) /
-                (float) 44100;
+                al_get_sample_instance_position(
+                    playback->allegro_sample_instance
+                ) / 44100.0f;
             lowest_stacking_playback_pos =
                 std::min(lowest_stacking_playback_pos, playback_pos);
         }
         
         if(
-            source_ptr->stack_min_pos > 0.0f &&
-            lowest_stacking_playback_pos < source_ptr->stack_min_pos
+            source_ptr->config.stack_min_pos > 0.0f &&
+            lowest_stacking_playback_pos < source_ptr->config.stack_min_pos
         ) {
             //Can't emit. This would stack the sounds, and there are other
             //playbacks that haven't reached the minimum stack threshold yet.
             return false;
         }
         if(
-            has_flag(source_ptr->flags, SOUND_FLAG_NEVER_STACK) &&
+            source_ptr->config.stack_mode == SFX_STACK_NEVER &&
             lowest_stacking_playback_pos < FLT_MAX
         ) {
             //Can't emit. This would stack the sounds.
@@ -176,10 +180,10 @@ bool audio_manager::emit(size_t source_id) {
     }
     
     //Check if other playbacks exist and if we need to stop them.
-    if(has_flag(source_ptr->flags, SOUND_FLAG_STOP_OTHER_PLAYBACKS)) {
+    if(source_ptr->config.stack_mode == SFX_STACK_OVERRIDE) {
         for(size_t p = 0; p < playbacks.size();) {
-            sound_playback_struct* playback = &playbacks[p];
-            sound_source_struct* p_source_ptr = get_source(playback->source_id);
+            sfx_playback_struct* playback = &playbacks[p];
+            sfx_source_struct* p_source_ptr = get_source(playback->source_id);
             if(!p_source_ptr || p_source_ptr->sample != sample) {
                 ++p;
                 continue;
@@ -189,25 +193,40 @@ bool audio_manager::emit(size_t source_id) {
     }
     
     //Create the playback.
-    sound_playback_struct playback;
+    sfx_playback_struct playback;
     playback.source_id = source_id;
-    playback.instance = al_create_sample_instance(sample);
-    if(!playback.instance) return false;
+    playback.allegro_sample_instance = al_create_sample_instance(sample);
+    if(!playback.allegro_sample_instance) return false;
     
     playbacks.push_back(playback);
     
     //Play.
-    al_attach_sample_instance_to_mixer(playback.instance, mixer);
+    al_attach_sample_instance_to_mixer(playback.allegro_sample_instance, mixer);
     
     al_set_sample_instance_playmode(
-        playback.instance, ALLEGRO_PLAYMODE_ONCE
+        playback.allegro_sample_instance, ALLEGRO_PLAYMODE_ONCE
     );
-    al_set_sample_instance_gain(playback.instance, source_ptr->gain);
-    al_set_sample_instance_pan(playback.instance, source_ptr->pan);
-    al_set_sample_instance_speed(playback.instance, source_ptr->speed);
+    al_set_sample_instance_gain(
+        playback.allegro_sample_instance,
+        clamp(source_ptr->config.gain, 0.0f, 1.0f)
+    );
+    al_set_sample_instance_pan(
+        playback.allegro_sample_instance,
+        clamp(source_ptr->config.pan, -1.0f, 1.0f)
+    );
+    al_set_sample_instance_speed(
+        playback.allegro_sample_instance,
+        std::max(0.0f, source_ptr->config.speed)
+    );
     
-    al_set_sample_instance_position(playback.instance, 0);
-    al_set_sample_instance_playing(playback.instance, true);
+    al_set_sample_instance_position(
+        playback.allegro_sample_instance,
+        0.0f
+    );
+    al_set_sample_instance_playing(
+        playback.allegro_sample_instance,
+        true
+    );
     
     return true;
 }
@@ -218,7 +237,7 @@ bool audio_manager::emit(size_t source_id) {
  * source_id:
  *   ID of the sound source.
  */
-sound_source_struct* audio_manager::get_source(size_t source_id) {
+sfx_source_struct* audio_manager::get_source(size_t source_id) {
     auto source_it = sources.find(source_id);
     if(source_it == sources.end()) return NULL;
     return &source_it->second;
@@ -254,8 +273,8 @@ void audio_manager::stop_all_playbacks(ALLEGRO_SAMPLE* filter) {
         if(!filter) {
             to_stop = true;
         } else {
-            sound_playback_struct* playback_ptr = &playbacks[p];
-            sound_source_struct* source_ptr =
+            sfx_playback_struct* playback_ptr = &playbacks[p];
+            sfx_source_struct* source_ptr =
                 get_source(playback_ptr->source_id);
             if(source_ptr && source_ptr->sample == filter) {
                 to_stop = true;
@@ -287,13 +306,13 @@ void audio_manager::tick(
     this->cam_br = cam_br;
     
     for(size_t p = 0; p < playbacks.size();) {
-        sound_playback_struct* playback = &playbacks[p];
+        sfx_playback_struct* playback = &playbacks[p];
         
-        if(!al_get_sample_instance_playing(playback->instance)) {
+        if(!al_get_sample_instance_playing(playback->allegro_sample_instance)) {
             //Finished playing.
-            uint8_t flags = sources[playback->source_id].flags;
-            if(has_flag(flags, SOUND_FLAG_DESTROY_ON_PLAYBACK_END)) {
-                destroy_sound_source(playback->source_id);
+            uint8_t flags = sources[playback->source_id].config.flags;
+            if(!has_flag(flags, SFX_FLAG_KEEP_ON_PLAYBACK_END)) {
+                destroy_sfx_source(playback->source_id);
             }
             destroy_playback(p);
         } else {
@@ -310,7 +329,7 @@ void audio_manager::tick(
  * base_dir:
  *   Base directory its files belong to.
  */
-sound_sample_manager::sound_sample_manager(const string &base_dir) :
+sfx_sample_manager::sfx_sample_manager(const string &base_dir) :
     base_dir(base_dir),
     total_calls(0) {
     
@@ -320,7 +339,7 @@ sound_sample_manager::sound_sample_manager(const string &base_dir) :
 /* ----------------------------------------------------------------------------
  * Deletes all samples loaded and clears the list.
  */
-void sound_sample_manager::clear() {
+void sfx_sample_manager::clear() {
     for(auto &s : list) {
         al_destroy_sample(s.second.s);
     }
@@ -335,7 +354,7 @@ void sound_sample_manager::clear() {
  * it:
  *   Iterator from the map for the sample.
  */
-void sound_sample_manager::detach(map<string, sample_info>::iterator it) {
+void sfx_sample_manager::detach(map<string, sample_info>::iterator it) {
     if(it == list.end()) return;
     
     it->second.calls--;
@@ -353,7 +372,7 @@ void sound_sample_manager::detach(map<string, sample_info>::iterator it) {
  * name:
  *   Sound sample's file name.
  */
-void sound_sample_manager::detach(const string &name) {
+void sfx_sample_manager::detach(const string &name) {
     if(name.empty()) return;
     detach(list.find(name));
 }
@@ -365,7 +384,7 @@ void sound_sample_manager::detach(const string &name) {
  * s:
  *   Sample to detach.
  */
-void sound_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
+void sfx_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
     if(!s) return;
     
     auto it = list.begin();
@@ -386,7 +405,7 @@ void sound_sample_manager::detach(const ALLEGRO_SAMPLE* s) {
  * report_errors:
  *   Only issues errors if this is true.
  */
-ALLEGRO_SAMPLE* sound_sample_manager::get(
+ALLEGRO_SAMPLE* sfx_sample_manager::get(
     const string &name, data_node* node,
     const bool report_errors
 ) {
@@ -409,7 +428,7 @@ ALLEGRO_SAMPLE* sound_sample_manager::get(
 /* ----------------------------------------------------------------------------
  * Returns the size of the list. Used for debugging.
  */
-size_t sound_sample_manager::get_list_size() const {
+size_t sfx_sample_manager::get_list_size() const {
     return list.size();
 }
 
@@ -418,7 +437,7 @@ size_t sound_sample_manager::get_list_size() const {
 /* ----------------------------------------------------------------------------
  * Returns the total number of calls. Used for debugging.
  */
-long sound_sample_manager::get_total_calls() const {
+long sfx_sample_manager::get_total_calls() const {
     return total_calls;
 }
 
@@ -428,38 +447,8 @@ long sound_sample_manager::get_total_calls() const {
  * s:
  *   The sample.
  */
-sound_sample_manager::sample_info::sample_info(ALLEGRO_SAMPLE* s) :
+sfx_sample_manager::sample_info::sample_info(ALLEGRO_SAMPLE* s) :
     s(s),
     calls(1) {
-    
-}
-
-
-
-/* ----------------------------------------------------------------------------
- * Creates a sound playback.
- */
-sound_playback_struct::sound_playback_struct() :
-    source_id(0),
-    instance(nullptr) {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a sound source.
- */
-sound_source_struct::sound_source_struct() :
-    sample(nullptr),
-    type(SOUND_TYPE_GLOBAL),
-    flags(0),
-    stack_min_pos(0.0f),
-    gain(1.0f),
-    pan(0.0f),
-    speed(1.0f),
-    gain_deviation(0.0f),
-    pan_deviation(0.0f),
-    speed_deviation(0.0f),
-    interval(0.0f),
-    emit_time_left(0.0f) {
     
 }

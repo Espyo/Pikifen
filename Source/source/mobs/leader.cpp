@@ -506,10 +506,9 @@ void leader::dismiss() {
     }
     
     //Final things.
-    game.audio.create_sound_source(
+    game.audio.create_sfx_source(
         lea_type->sfx_dismiss,
-        SOUND_TYPE_POSITIONAL,
-        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
+        SFX_TYPE_POSITIONAL
     );
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; ++p) {
         particle par;
@@ -786,10 +785,9 @@ void leader::start_throw_trail() {
 void leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
     
-    game.audio.create_sound_source(
+    game.audio.create_sfx_source(
         lea_type->sfx_whistle,
-        SOUND_TYPE_POSITIONAL,
-        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
+        SFX_TYPE_POSITIONAL
     );
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);
@@ -823,28 +821,23 @@ void leader::stop_whistling() {
 void leader::swap_held_pikmin(mob* new_pik) {
     if(holding.empty()) return;
     
-    mob_event* old_pik_ev = holding[0]->fsm.get_event(MOB_EV_RELEASED);
+    mob* old_pik = holding[0];
+    
+    mob_event* old_pik_ev = old_pik->fsm.get_event(MOB_EV_RELEASED);
     mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EV_GRABBED_BY_FRIEND);
     
     group->sort(new_pik->subgroup_type_ptr);
     
     if(!old_pik_ev || !new_pik_ev) return;
     
-    new_pik_ev->run(new_pik);
-    
     release(holding[0]);
+    
+    new_pik_ev->run(new_pik);
     hold(
         new_pik, INVALID,
         LEADER::HELD_GROUP_MEMBER_H_DIST, LEADER::HELD_GROUP_MEMBER_ANGLE,
         LEADER::HELD_GROUP_MEMBER_V_DIST,
         false, HOLD_ROTATION_METHOD_FACE_HOLDER
-    );
-    
-    
-    game.audio.create_sound_source(
-        game.sys_assets.sfx_switch_pikmin,
-        SOUND_TYPE_POSITIONAL,
-        SOUND_FLAG_DESTROY_ON_PLAYBACK_END
     );
 }
 

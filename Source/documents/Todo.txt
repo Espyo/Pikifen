@@ -2,7 +2,28 @@ Point I left on (so I can continue the next day without losing my train of thoug
     
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Audio system
+        Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
+        [NEEDS BRAINSTORMING] If multiple Pikmin sources try to play a sound, like carrying, which one should play and when?
+        Problems that the system needs to address:
+            If there are two things asking to play the same sound, they should/n't cut each other off/overlay for higher volume
+            If one thing is asking to stop a sound, make sure another doesn't need the sound (e.g. two carriable objects, one finishes being delivered)
+            If two things are playing the same sound but in different spots of the screen, the pan should be an average or so
+            If two things are playing the same sound but in different spots of the area, the volume should be an average or so
+            If a sound needs to have a sudden shift in volume or pan, it should be a smooth transition
+            The ability to handle randomized volumes and pitches (and maybe panning)
+            If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
+            When you cancel holding a Pikmin, its standby squeal sound should stop
+        For sounds that are tied to a mob, the farther the mob is from the center of the screen, the quieter; panning should be relative to the mob's position with the camera, too
+        Sounds shouldn't assume they're 44100Hz
+        A way for sounds to repeat with an interval from the same source
+        A way to fade sounds in/out
+        Ducking
+        Load system sounds from System_asset_file_names.txt
+        Sounds should pause when you pause the game
+        Make it so that only 6 or so sounds can play at once?
+        Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
+
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
@@ -81,31 +102,6 @@ Next tasks (roughly sorted most important first)
                 Leaves rustling (vegetation)
                 Explosion
         Rename sound files to .oga, instead of .ogg
-        Info
-            There are three types of sounds
-                Sounds that play "globally", like the "task complete jingle"
-                Sounds that play from any object that needs them, like there being three waterfalls in the area, and each one having the "waterfall" noise
-                Sounds that play connected to only one object at a time, like the Pikmin going "hop hop" when carrying something should only be connected to the closest carriable mob to the camera center
-                Or maybe there are these types of sounds, only:
-                    The global ones, like the "task complete jingle"
-                    Positional global ones, like Pikmin going "hop hop" when carrying
-                    Positional atomic ones, like a Fiery Blowhog spitting fire
-                    You register a source to the sound manager. For instance, you register two "Pikmin carrying" sound sources, and have their position pointers point to the carcass X/Y. The sound manager is then responsible for checking if the camera is close to either source, and if it's close to both, at what volume to play the sound.
-        Problems that the system needs to address:
-            If there are two things asking to play the same sound, they should/n't cut each other off/overlay for higher volume
-            If one thing is asking to stop a sound, make sure another doesn't need the sound (e.g. two carriable objects, one finishes being delivered)
-            If two things are playing the same sound but in different spots of the screen, the pan should be an average or so
-            If two things are playing the same sound but in different spots of the area, the volume should be an average or so
-            If a sound needs to have a sudden shift in volume or pan, it should be a smooth transition
-            The ability to handle randomized volumes and pitches (and maybe panning)
-            If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
-        For sounds that are tied to a mob, the farther the mob is from the center of the screen, the quieter; panning should be relative to the mob's position with the camera, too
-        Sounds shouldn't assume they're 44100Hz
-        A way to fade sounds in/out
-        Ducking
-        Load system sounds from System_asset_file_names.txt
-        Sounds should pause when you pause the game
-        Make it so that only 6 or so sounds can play at once?
         Options
             Volume control for sound effects, music, and ambiance sound effects separately
                 The standard should be at 75%, so players have leeway if they want everything louder
@@ -113,7 +109,6 @@ Next tasks (roughly sorted most important first)
         Footsteps should be tied to the terrain texture
         It should be possible to play sounds both in specific frames of animation and in scripts as actions
             The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
-        Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
         Create a "Sounds" and a "Music" folder in the "Audio" folder
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
@@ -123,8 +118,6 @@ Next tasks (roughly sorted most important first)
             https://www.allegro.cc/forums/thread/617707 ?
             https://www.youtube.com/watch?v=PVA48I2n-qQ
             https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
-        Fixes
-            When you cancel holding a Pikmin, its standby squeal sound should stop
     Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
