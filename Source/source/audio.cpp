@@ -36,27 +36,70 @@ audio_manager::audio_manager() :
 
 
 /* ----------------------------------------------------------------------------
- * Creates a sound source and returns its ID. This is basically how you can
- * get the engine to produce a sound.
+ * Creates a global sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a sound that doesn't
+ * involve a position in the game world.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_global_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_GLOBAL, config, point());
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a positional sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a sound that
+ * involves a position in the game world.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * pos:
+ *   Starting position in the game world.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_pos_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const point &pos,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_POSITIONAL, config, pos);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a sound effect source and returns its ID.
  * Returns 0 on failure.
  * sample:
  *   Sound sample that this source will emit.
  * type:
- *   Type of sound.
+ *   Sound type.
  * config:
  *   Configuration.
+ * pos:
+ *   Position in the game world, if applicable.
  */
 size_t audio_manager::create_sfx_source(
     ALLEGRO_SAMPLE* sample,
     SFX_TYPE type,
-    const sfx_source_config_struct &config
+    const sfx_source_config_struct &config,
+    const point &pos
 ) {
     if(!sample) return 0;
     
     next_sfx_source_id++; //Hopefully there will be no collisions.
     sources[next_sfx_source_id] = sfx_source_struct();
     sources[next_sfx_source_id].sample = sample;
+    sources[next_sfx_source_id].type = type;
     sources[next_sfx_source_id].config = config;
+    sources[next_sfx_source_id].pos = pos;
     emit(next_sfx_source_id);
     
     return next_sfx_source_id;
@@ -206,18 +249,11 @@ bool audio_manager::emit(size_t source_id) {
     al_set_sample_instance_playmode(
         playback.allegro_sample_instance, ALLEGRO_PLAYMODE_ONCE
     );
-    al_set_sample_instance_gain(
-        playback.allegro_sample_instance,
-        clamp(source_ptr->config.gain, 0.0f, 1.0f)
-    );
-    al_set_sample_instance_pan(
-        playback.allegro_sample_instance,
-        clamp(source_ptr->config.pan, -1.0f, 1.0f)
-    );
     al_set_sample_instance_speed(
         playback.allegro_sample_instance,
         std::max(0.0f, source_ptr->config.speed)
     );
+    set_playback_gain_and_pan(playbacks.size() - 1);
     
     al_set_sample_instance_position(
         playback.allegro_sample_instance,
@@ -261,6 +297,73 @@ void audio_manager::init() {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets the camera's position.
+ * cam_tl:
+ *   Current coordinates of the camera's top-left corner.
+ * cam_br:
+ *   Current coordinates of the camera's bottom-right corner.
+ */
+void audio_manager::set_camera_pos(const point &cam_tl, const point &cam_br) {
+    this->cam_tl = cam_tl;
+    this->cam_br = cam_br;
+    for(size_t p = 0; p < playbacks.size(); ++p) {
+        set_playback_gain_and_pan(p);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates a playback's gain and pan based on distance from the camera.
+ * playback_idx:
+ *   Index of the playback in the list.
+ */
+void audio_manager::set_playback_gain_and_pan(size_t playback_idx) {
+    if(playback_idx >= playbacks.size()) return;
+    sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
+    
+    sfx_source_struct* source_ptr = get_source(playback_ptr->source_id);
+    if(!source_ptr || source_ptr->type != SFX_TYPE_POSITIONAL) return;
+    
+    //Calculate screen and camera things.
+    point screen_size = cam_br - cam_tl;
+    if(screen_size.x == 0.0f || screen_size.y == 0.0f) return;
+    
+    point cam_center = (cam_tl + cam_br) / 2.0f;
+    
+    //Get how many screens of distance it is from the center, for X and Y.
+    point delta = (source_ptr->pos - cam_center) / screen_size;
+    
+    float max_delta = std::max(fabs(delta.x), fabs(delta.y));
+    
+    //Set the gain.
+    float gain =
+        interpolate_number(
+            fabs(max_delta),
+            0.2f, 0.8f,
+            1.0f, 0.0f
+        );
+    al_set_sample_instance_gain(
+        playback_ptr->allegro_sample_instance,
+        clamp(gain, 0.0f, 1.0f)
+    );
+    
+    //Set the pan.
+    float pan_abs =
+        interpolate_number(
+            fabs(delta.x),
+            0.2f, 0.6f,
+            0.0f, 1.0f
+        );
+    pan_abs = clamp(pan_abs, 0.0f, 1.0f);
+    float pan = delta.x > 0.0f ? pan_abs : -pan_abs;
+    al_set_sample_instance_pan(
+        playback_ptr->allegro_sample_instance,
+        clamp(pan, -1.0f, 1.0f)
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Stops all playbacks. Alternatively, stops all playbacks of a given sound
  * sample.
  * filter:
@@ -294,17 +397,8 @@ void audio_manager::stop_all_playbacks(ALLEGRO_SAMPLE* filter) {
  * Ticks the audio manager by one frame of logic.
  * delta_t:
  *   How long the frame's tick is, in seconds.
- * cam_tl:
- *   Current coordinates of the camera's top-left corner.
- * cam_br:
- *   Current coordinates of the camera's bottom-right corner.
  */
-void audio_manager::tick(
-    float delta_t, const point  &cam_tl, const point  &cam_br
-) {
-    this->cam_tl = cam_tl;
-    this->cam_br = cam_br;
-    
+void audio_manager::tick(float delta_t) {
     for(size_t p = 0; p < playbacks.size();) {
         sfx_playback_struct* playback = &playbacks[p];
         

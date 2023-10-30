@@ -1798,9 +1798,9 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->chase(*((point*) info1), m->z);
     
     m->set_animation(PIKMIN_ANIM_IDLING);
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         game.sys_assets.sfx_pikmin_idle,
-        SFX_TYPE_POSITIONAL
+        m->pos
     );
 }
 
@@ -1828,9 +1828,9 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pik_ptr->leave_group();
     
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         game.sys_assets.sfx_pikmin_caught,
-        SFX_TYPE_POSITIONAL
+        pik_ptr->pos
     );
     
 }
@@ -1848,9 +1848,9 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     disable_flag(m->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     m->set_animation(PIKMIN_ANIM_IDLING);
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         game.sys_assets.sfx_pikmin_held,
-        SFX_TYPE_POSITIONAL
+        m->pos
     );
 }
 
@@ -1886,9 +1886,9 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     game.audio.stop_all_playbacks(game.sys_assets.sfx_pikmin_held);
     sfx_source_config_struct throw_sfx_config;
     throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         game.sys_assets.sfx_pikmin_thrown,
-        SFX_TYPE_POSITIONAL,
+        m->pos,
         throw_sfx_config
     );
     ((pikmin*) m)->start_throw_trail();
@@ -1911,13 +1911,13 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
     m->face(throw_angle, NULL, true);
     
     m->set_animation(PIKMIN_ANIM_THROWN);
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         game.sys_assets.sfx_pikmin_plucked,
-        SFX_TYPE_POSITIONAL
+        m->pos
     );
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         game.sys_assets.sfx_pluck,
-        SFX_TYPE_POSITIONAL
+        m->pos
     );
     ((pikmin*) m)->start_throw_trail();
     
@@ -2074,9 +2074,9 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     caller->add_to_group(pik_ptr);
     
     if(info2 == NULL) {
-        game.audio.create_sfx_source(
+        game.audio.create_pos_sfx_source(
             game.sys_assets.sfx_pikmin_called,
-            SFX_TYPE_POSITIONAL
+            pik_ptr->pos
         );
     }
 }

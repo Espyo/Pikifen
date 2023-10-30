@@ -424,6 +424,9 @@ void camera_info::update_box() {
         &game.screen_to_world_transform,
         &box[1].x, &box[1].y
     );
+    
+    game.audio.set_camera_pos(box[0], box[1]);
+    
     box[0].x -= GAMEPLAY::CAMERA_BOX_MARGIN;
     box[0].y -= GAMEPLAY::CAMERA_BOX_MARGIN;
     box[1].x += GAMEPLAY::CAMERA_BOX_MARGIN;

@@ -15,7 +15,13 @@ Current tasks (tasks being worked on, but not yet committed)
             If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
             When you cancel holding a Pikmin, its standby squeal sound should stop
         For sounds that are tied to a mob, the farther the mob is from the center of the screen, the quieter; panning should be relative to the mob's position with the camera, too
-        Sounds shouldn't assume they're 44100Hz
+        Reorganize the backend
+            Sounds shouldn't assume they're 44100Hz
+            There should be multiple mixers, which can feed into other mixers, until eventually the "master" mixer connects to the Allegro voice
+        Playback FSM
+            Waiting: Waiting some time before starting to play. Can go to Playing
+            Playing: Can go to Waiting or Stopping
+            Stopping: Quickly fading out so it can then be destroyed
         A way for sounds to repeat with an interval from the same source
         A way to fade sounds in/out
         Ducking
@@ -44,6 +50,7 @@ Next tasks (roughly sorted most important first)
         The in-game warning should also say what the warning is on top of the reminder to check the error log file
     Path things
         [NEEDS BRAINSTORMING] Path links that are one-way for drop-offs don't make much sense, since Winged Pikmin can fly up them...
+            Check what P3 does, maybe P4
         If you start drawing a path on top of a link, it should split the link and start drawing on that stop
     Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     Make Rock Pikmin colors darker (thanks Nataly171)
@@ -101,6 +108,7 @@ Next tasks (roughly sorted most important first)
                 Crystal shattering
                 Leaves rustling (vegetation)
                 Explosion
+                Ambiance sounds
         Rename sound files to .oga, instead of .ogg
         Options
             Volume control for sound effects, music, and ambiance sound effects separately

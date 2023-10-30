@@ -180,7 +180,7 @@ void game_class::do_global_logic() {
     }
     
     //Audio.
-    game.audio.tick(delta_t, point(), point());
+    game.audio.tick(delta_t);
 }
 
 

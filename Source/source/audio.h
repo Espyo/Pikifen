@@ -182,17 +182,22 @@ public:
     //Manager of samples.
     sfx_sample_manager samples;
     
-    size_t create_sfx_source(
+    size_t create_global_sfx_source(
         ALLEGRO_SAMPLE* sample,
-        SFX_TYPE type = SFX_TYPE_GLOBAL,
+        const sfx_source_config_struct &config = sfx_source_config_struct()
+    );
+    size_t create_pos_sfx_source(
+        ALLEGRO_SAMPLE* sample,
+        const point &pos,
         const sfx_source_config_struct &config = sfx_source_config_struct()
     );
     bool destroy_sfx_source(size_t source_id);
     void destroy();
     bool emit(size_t source_id);
     void init();
+    void set_camera_pos(const point &cam_tl, const point &cam_br);
     void stop_all_playbacks(ALLEGRO_SAMPLE* filter);
-    void tick(float delta_t, const point &cam_tl, const point &cam_br);
+    void tick(float delta_t);
     audio_manager();
     
 private:
@@ -211,8 +216,15 @@ private:
     //Bottom-right camera coordinates.
     point cam_br;
     
+    size_t create_sfx_source(
+        ALLEGRO_SAMPLE* sample,
+        SFX_TYPE type,
+        const sfx_source_config_struct &config,
+        const point &pos
+    );
     bool destroy_playback(size_t playback_idx);
     sfx_source_struct* get_source(size_t source_id);
+    void set_playback_gain_and_pan(size_t playback_idx);
 };
 
 

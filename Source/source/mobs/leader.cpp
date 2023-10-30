@@ -506,9 +506,9 @@ void leader::dismiss() {
     }
     
     //Final things.
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         lea_type->sfx_dismiss,
-        SFX_TYPE_POSITIONAL
+        pos
     );
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; ++p) {
         particle par;
@@ -785,9 +785,9 @@ void leader::start_throw_trail() {
 void leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
     
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         lea_type->sfx_whistle,
-        SFX_TYPE_POSITIONAL
+        pos
     );
     set_animation(LEADER_ANIM_WHISTLING);
     script_timer.start(2.5f);

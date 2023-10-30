@@ -1317,9 +1317,9 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
         //If we're in the middle of loading or of an interlude, that probably
         //means it's the first leader at the start of the area.
         //We should probably be quiet.
-        game.audio.create_sfx_source(
+        game.audio.create_pos_sfx_source(
             lea_ptr->lea_type->sfx_name_call,
-            SFX_TYPE_POSITIONAL
+            lea_ptr->pos
         );
     }
 }
@@ -1483,9 +1483,9 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
     sfx_source_config_struct throw_sfx_config;
     throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
-    game.audio.create_sfx_source(
+    game.audio.create_pos_sfx_source(
         game.sys_assets.sfx_throw,
-        SFX_TYPE_POSITIONAL,
+        leader_ptr->pos,
         throw_sfx_config
     );
     
