@@ -474,6 +474,7 @@ void audio_manager::tick(float delta_t) {
     
     //Update the position of sources tied to mobs.
     for(auto s : sources) {
+        if(s.second.destroyed) continue;
         auto mob_source_it = mob_sources.find(s.first);
         if(mob_source_it == mob_sources.end()) continue;
         mob* mob_ptr = mob_source_it->second;
@@ -483,9 +484,14 @@ void audio_manager::tick(float delta_t) {
     
     //Update playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
-        sfx_playback_struct* playback = &playbacks[p];
+        sfx_playback_struct* playback_ptr = &playbacks[p];
+        if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) continue;
         
-        if(!al_get_sample_instance_playing(playback->allegro_sample_instance)) {
+        if(
+            !al_get_sample_instance_playing(
+                playback_ptr->allegro_sample_instance
+            )
+        ) {
             //Finished playing.
             destroy_sfx_playback(p);
         } else {
