@@ -14,7 +14,6 @@ Current tasks (tasks being worked on, but not yet committed)
             The ability to handle randomized volumes and pitches (and maybe panning)
             If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
             When you cancel holding a Pikmin, its standby squeal sound should stop
-        For sounds that are tied to a mob, the farther the mob is from the center of the screen, the quieter; panning should be relative to the mob's position with the camera, too
         Reorganize the backend
             Sounds shouldn't assume they're 44100Hz
             There should be multiple mixers, which can feed into other mixers, until eventually the "master" mixer connects to the Allegro voice
@@ -38,6 +37,7 @@ Next tasks (roughly sorted most important first)
 
     --- 0.25.0 ---
     Add some #define to code_debug.h that are macros for creating benchmarking start and benchmarking stop statements
+    Revamp get_info
     Idle Pikmin shouldn't be called by "bumping" until some seconds, since if you throw a Pikmin nearby, it'll be hard to get it to stay
         Maybe it should only count as bumped if the leader had previously moved a certain distance from it?
     The cursor trail effect sometimes creates massive spikes
@@ -816,6 +816,8 @@ Misc things (so I don't forget)
                 For when the thing you're hovering over can be un/selected
                 For when the thing you're hovering over can be dragged
                 For when the thing you're hovering over can be deleted
+                For when you're panning
+                For when you're zooming
     Area sections?
         Large rectangles that are imposed on the area to specify certain things
         Ideas of sections

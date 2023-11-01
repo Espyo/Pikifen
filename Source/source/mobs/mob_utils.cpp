@@ -1355,6 +1355,8 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
         m_ptr->fsm.set_state(INVALID);
     }
     
+    game.audio.handle_mob_deletion(m_ptr);
+    
     m_ptr->type->category->erase_mob(m_ptr);
     game.states.gameplay->mobs.all.erase(
         find(

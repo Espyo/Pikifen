@@ -498,6 +498,8 @@ void pikmin::tick_class_specifics(const float delta_t) {
         par.color = pik_type->main_color;
         game.states.gameplay->particles.add(par);
         
+        //Create a positional sound source instead of a mob sound source,
+        //since the Pikmin is basically deleted.
         game.audio.create_pos_sfx_source(
             game.sys_assets.sfx_pikmin_dying,
             pos

@@ -30,6 +30,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
+#include "mobs/mob.h"
 #include "libs/data_file.h"
 #include "utils/geometry_utils.h"
 
@@ -199,6 +200,11 @@ public:
         ALLEGRO_SAMPLE* sample,
         const sfx_source_config_struct &config = sfx_source_config_struct()
     );
+    size_t create_mob_sfx_source(
+        ALLEGRO_SAMPLE* sample,
+        mob* m_ptr,
+        const sfx_source_config_struct &config = sfx_source_config_struct()
+    );
     size_t create_pos_sfx_source(
         ALLEGRO_SAMPLE* sample,
         const point &pos,
@@ -207,6 +213,7 @@ public:
     bool destroy_sfx_source(size_t source_id);
     void destroy();
     bool emit(size_t source_id);
+    void handle_mob_deletion(mob* m_ptr);
     void init();
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
@@ -221,6 +228,8 @@ private:
     ALLEGRO_VOICE* voice;
     //Incremental ID, used for the next source to create.
     size_t next_sfx_source_id;
+    //Mob-specific sound effect sources.
+    map<size_t, mob*> mob_sources;
     //All sound effect sources.
     map<size_t, sfx_source_struct> sources;
     //All sound effects being played right now.

@@ -507,9 +507,9 @@ void leader::dismiss() {
     }
     
     //Final things.
-    game.audio.create_pos_sfx_source(
+    game.audio.create_mob_sfx_source(
         lea_type->sfx_dismiss,
-        pos
+        this
     );
     for(size_t p = 0; p < LEADER::DISMISS_PARTICLE_AMOUNT; ++p) {
         particle par;

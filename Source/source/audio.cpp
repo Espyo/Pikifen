@@ -54,6 +54,31 @@ size_t audio_manager::create_global_sfx_source(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a mob sound effect source and returns its ID.
+ * This is like create_pos_sfx_source, but ties the source to the mob, meaning
+ * the audio manager is responsible for updating the source's position
+ * every frame to match the mob's.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * m_ptr:
+ *   Pointer to the mob.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_mob_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    mob* m_ptr,
+    const sfx_source_config_struct &config
+) {
+    size_t source_id =
+        create_sfx_source(sample, SFX_TYPE_POSITIONAL, config, m_ptr->pos);
+    mob_sources[source_id] = m_ptr;
+    return source_id;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a positional sound effect source and returns its ID.
  * This is basically how you can get the engine to produce a sound that
  * involves a position in the game world.
@@ -291,6 +316,22 @@ sfx_source_struct* audio_manager::get_source(size_t source_id) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles a mob being deleted.
+ * m_ptr:
+ *   Mob that got deleted.
+ */
+void audio_manager::handle_mob_deletion(mob* m_ptr) {
+    for(auto s = mob_sources.begin(); s != mob_sources.end();) {
+        if(s->second == m_ptr) {
+            s = mob_sources.erase(s);
+        } else {
+            ++s;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes the audio manager.
  */
 void audio_manager::init() {
@@ -421,6 +462,25 @@ void audio_manager::stop_all_playbacks(ALLEGRO_SAMPLE* filter) {
  *   How long the frame's tick is, in seconds.
  */
 void audio_manager::tick(float delta_t) {
+    //Clear deleted mob sources.
+    for(auto s = mob_sources.begin(); s != mob_sources.end();) {
+        mob* mob_ptr = s->second;
+        if(!mob_ptr || mob_ptr->to_delete) {
+            s = mob_sources.erase(s);
+        } else {
+            ++s;
+        }
+    }
+    
+    //Update the position of sources tied to mobs.
+    for(auto s : sources) {
+        auto mob_source_it = mob_sources.find(s.first);
+        if(mob_source_it == mob_sources.end()) continue;
+        mob* mob_ptr = mob_source_it->second;
+        if(!mob_ptr || mob_ptr->to_delete) continue;
+        s.second.pos = mob_ptr->pos;
+    }
+    
     //Update playbacks.
     for(size_t p = 0; p < playbacks.size(); ++p) {
         sfx_playback_struct* playback = &playbacks[p];

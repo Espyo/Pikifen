@@ -1310,16 +1310,17 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     game.states.gameplay->cur_leader_nr = new_leader_nr;
     lea_ptr->active = true;
     
+    //Check if we're in the middle of loading or of an interlude. If so
+    //that probably means it's the first leader at the start of the area.
+    //We should probably not play the name call then.
     if(
         !game.states.gameplay->loading &&
         game.states.gameplay->cur_interlude == INTERLUDE_NONE
     ) {
-        //If we're in the middle of loading or of an interlude, that probably
-        //means it's the first leader at the start of the area.
-        //We should probably be quiet.
-        game.audio.create_pos_sfx_source(
-            lea_ptr->lea_type->sfx_name_call,
-            lea_ptr->pos
+        //Play the name call as a global sound, so that even leaders far away
+        //can have their name call play clearly.
+        game.audio.create_global_sfx_source(
+            lea_ptr->lea_type->sfx_name_call
         );
     }
 }
@@ -1483,9 +1484,9 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader_ptr->set_animation(LEADER_ANIM_THROWING);
     sfx_source_config_struct throw_sfx_config;
     throw_sfx_config.stack_mode = SFX_STACK_OVERRIDE;
-    game.audio.create_pos_sfx_source(
+    game.audio.create_mob_sfx_source(
         game.sys_assets.sfx_throw,
-        leader_ptr->pos,
+        leader_ptr,
         throw_sfx_config
     );
     
