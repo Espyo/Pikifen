@@ -505,6 +505,10 @@ void audio_manager::tick(float delta_t) {
     //Delete destroyed sources.
     for(auto s = sources.begin(); s != sources.end();) {
         if(s->second.destroyed) {
+            auto mob_source_it = mob_sources.find(s->first);
+            if(mob_source_it != mob_sources.end()) {
+                mob_sources.erase(mob_source_it);
+            }
             s = sources.erase(s);
         } else {
             ++s;

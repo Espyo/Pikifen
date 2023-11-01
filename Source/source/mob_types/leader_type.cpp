@@ -26,7 +26,10 @@ leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS),
     whistle_range(LEADER::DEF_WHISTLE_RANGE),
     max_throw_height(0),
-    bmp_icon(nullptr) {
+    bmp_icon(nullptr),
+    sfx_whistle(nullptr),
+    sfx_dismiss(nullptr),
+    sfx_name_call(nullptr) {
     
     main_color = al_map_rgb(128, 128, 128);
     show_health = false;

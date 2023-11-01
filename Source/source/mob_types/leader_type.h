@@ -139,14 +139,14 @@ public:
     float whistle_range;
     //How high it can reach when thrown.
     float max_throw_height;
+    //Standby icon.
+    ALLEGRO_BITMAP* bmp_icon;
     //Sound effect for when it whistles.
     ALLEGRO_SAMPLE* sfx_whistle;
     //Sound effect for when it dismisses.
     ALLEGRO_SAMPLE* sfx_dismiss;
     //Sound effect for when it is swapped to.
     ALLEGRO_SAMPLE* sfx_name_call;
-    //Standby icon.
-    ALLEGRO_BITMAP* bmp_icon;
     
     leader_type();
     void load_properties(data_node* file) override;

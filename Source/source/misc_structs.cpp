@@ -2046,7 +2046,22 @@ system_asset_list::system_asset_list():
     bmp_throw_invalid(nullptr),
     bmp_throw_preview(nullptr),
     bmp_throw_preview_dashed(nullptr),
-    bmp_wave_ring(nullptr) {
+    bmp_wave_ring(nullptr),
+    sfx_attack(nullptr),
+    sfx_camera(nullptr),
+    sfx_pikmin_attack(nullptr),
+    sfx_pikmin_called(nullptr),
+    sfx_pikmin_carrying(nullptr),
+    sfx_pikmin_carrying_grab(nullptr),
+    sfx_pikmin_caught(nullptr),
+    sfx_pikmin_dying(nullptr),
+    sfx_pikmin_held(nullptr),
+    sfx_pikmin_idle(nullptr),
+    sfx_pluck(nullptr),
+    sfx_pikmin_plucked(nullptr),
+    sfx_pikmin_thrown(nullptr),
+    sfx_switch_pikmin(nullptr),
+    sfx_throw(nullptr) {
     
 }
 
