@@ -1028,12 +1028,13 @@ void get_miter_points(
     float miter_length =
         (thickness / 2.0f) / dot_product(miter_direction, normal_a);
         
-    if(std::isinf(miter_length)) {
+    if(isinf(miter_length)) {
         miter_length = 1.0f;
     }
     if(max_miter_length > 0.0f && fabs(miter_length) > max_miter_length) {
         float miter_sign = miter_length >= 0.0f ? 1.0f : -1.0f;
-        miter_length = std::min(fabs(miter_length), max_miter_length);
+        miter_length =
+            std::min((float) fabs(miter_length), max_miter_length);
         miter_length *= miter_sign;
     }
     
