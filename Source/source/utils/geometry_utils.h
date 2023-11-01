@@ -62,7 +62,7 @@ struct point {
  * to LARGE_FLOAT if it is uncached.
  */
 struct dist {
-public:
+    public:
     dist(const point &p1, const point &p2);
     dist(const float d = 0.0f);
     dist &operator =(const float d);
@@ -84,7 +84,7 @@ public:
     void operator -=(const dist &d2);
     float to_float();
     
-private:
+    private:
     //Distance squared. Most operations are based on this number.
     float distance_squared;
     //Square root of the distance squared. Only used if necessary.
@@ -146,7 +146,7 @@ point get_closest_point_in_rotated_rectangle(
 );
 void get_miter_points(
     const point &a, const point &b, const point &c, const float thickness,
-    point* miter_point_1, point* miter_point_2
+    point* miter_point_1, point* miter_point_2, float max_miter_length = 0.0f
 );
 float get_point_sign(
     const point &p, const point &lp1, const point &lp2

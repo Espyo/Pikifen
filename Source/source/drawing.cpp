@@ -1088,7 +1088,9 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
         size_t anchor = 0;
         
         for(size_t s = 1; s < game.mouse_cursor.history.size(); ++s) {
-            point anchor_diff = game.mouse_cursor.history[anchor] - game.mouse_cursor.history[s];
+            point anchor_diff =
+                game.mouse_cursor.history[anchor] -
+                game.mouse_cursor.history[s];
             if(
                 fabs(anchor_diff.x) < GAME::CURSOR_TRAIL_MIN_SPOT_DIFF &&
                 fabs(anchor_diff.y) < GAME::CURSOR_TRAIL_MIN_SPOT_DIFF
@@ -1096,7 +1098,8 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
                 continue;
             }
             
-            float start_ratio = anchor / (float) game.mouse_cursor.history.size();
+            float start_ratio =
+                anchor / (float) game.mouse_cursor.history.size();
             float start_thickness =
                 GAME::CURSOR_TRAIL_MAX_WIDTH * start_ratio;
             unsigned char start_alpha =
@@ -1119,7 +1122,8 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
             
             if(anchor == 0) {
                 point cur_to_next =
-                    game.mouse_cursor.history[s] - game.mouse_cursor.history[anchor];
+                    game.mouse_cursor.history[s] -
+                    game.mouse_cursor.history[anchor];
                 point cur_to_next_normal(-cur_to_next.y, cur_to_next.x);
                 cur_to_next_normal = normalize_vector(cur_to_next_normal);
                 point spot_offset = cur_to_next_normal * start_thickness / 2.0f;
@@ -1132,13 +1136,15 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
                     game.mouse_cursor.history[anchor + 1],
                     -start_thickness,
                     &start_p1,
-                    &start_p2
+                    &start_p2,
+                    30.0f
                 );
             }
             
             if(s == game.mouse_cursor.history.size() - 1) {
                 point prev_to_cur =
-                    game.mouse_cursor.history[s] - game.mouse_cursor.history[anchor];
+                    game.mouse_cursor.history[s] -
+                    game.mouse_cursor.history[anchor];
                 point prev_to_cur_normal(-prev_to_cur.y, prev_to_cur.x);
                 prev_to_cur_normal = normalize_vector(prev_to_cur_normal);
                 point spot_offset = prev_to_cur_normal * start_thickness / 2.0f;
@@ -1151,7 +1157,8 @@ void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
                     game.mouse_cursor.history[s + 1],
                     -end_thickness,
                     &end_p1,
-                    &end_p2
+                    &end_p2,
+                    30.0f
                 );
             }
             
