@@ -21,6 +21,10 @@ namespace AUDIO {
 //reason the same sound plays multiple times at once, they are actually
 //stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
 const float DEF_STACK_MIN_POS = 0.02f;
+//Maximum change speed for a playback's gain, measured in amount per second.
+const float GAIN_CHANGE_SPEED = 3.0f;
+//Maximum change speed for a playback's pan, measured in amount per second.
+const float PAN_CHANGE_SPEED = 8.0f;
 }
 
 
@@ -271,31 +275,36 @@ bool audio_manager::emit(size_t source_id) {
     }
     
     //Create the playback.
-    sfx_playback_struct playback;
-    playback.source_id = source_id;
-    playback.allegro_sample_instance = al_create_sample_instance(sample);
-    if(!playback.allegro_sample_instance) return false;
-    
-    playbacks.push_back(playback);
+    playbacks.push_back(sfx_playback_struct());
+    sfx_playback_struct* playback_ptr = &playbacks.back();
+    playback_ptr->source_id = source_id;
+    playback_ptr->allegro_sample_instance = al_create_sample_instance(sample);
+    if(!playback_ptr->allegro_sample_instance) return false;
     
     //Play.
-    al_attach_sample_instance_to_mixer(playback.allegro_sample_instance, mixer);
+    update_playback_target_gain_and_pan(playbacks.size() - 1);
+    playback_ptr->gain = playback_ptr->target_gain;
+    playback_ptr->pan = playback_ptr->target_pan;
+    
+    al_attach_sample_instance_to_mixer(
+        playback_ptr->allegro_sample_instance, mixer
+    );
     
     al_set_sample_instance_playmode(
-        playback.allegro_sample_instance, ALLEGRO_PLAYMODE_ONCE
+        playback_ptr->allegro_sample_instance, ALLEGRO_PLAYMODE_ONCE
     );
     al_set_sample_instance_speed(
-        playback.allegro_sample_instance,
+        playback_ptr->allegro_sample_instance,
         std::max(0.0f, source_ptr->config.speed)
     );
-    set_playback_gain_and_pan(playbacks.size() - 1);
+    update_playback_gain_and_pan(playbacks.size() - 1);
     
     al_set_sample_instance_position(
-        playback.allegro_sample_instance,
+        playback_ptr->allegro_sample_instance,
         0.0f
     );
     al_set_sample_instance_playing(
-        playback.allegro_sample_instance,
+        playback_ptr->allegro_sample_instance,
         true
     );
     
@@ -378,57 +387,6 @@ bool audio_manager::set_sfx_source_pos(size_t source_id, const point &pos) {
 
 
 /* ----------------------------------------------------------------------------
- * Updates a playback's gain and pan based on distance from the camera.
- * playback_idx:
- *   Index of the playback in the list.
- */
-void audio_manager::set_playback_gain_and_pan(size_t playback_idx) {
-    if(playback_idx >= playbacks.size()) return;
-    sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
-    
-    sfx_source_struct* source_ptr = get_source(playback_ptr->source_id);
-    if(!source_ptr || source_ptr->type != SFX_TYPE_POSITIONAL) return;
-    
-    //Calculate screen and camera things.
-    point screen_size = cam_br - cam_tl;
-    if(screen_size.x == 0.0f || screen_size.y == 0.0f) return;
-    
-    point cam_center = (cam_tl + cam_br) / 2.0f;
-    
-    //Get how many screens of distance it is from the center, for X and Y.
-    point delta = (source_ptr->pos - cam_center) / screen_size;
-    
-    float max_delta = std::max(fabs(delta.x), fabs(delta.y));
-    
-    //Set the gain.
-    float gain =
-        interpolate_number(
-            fabs(max_delta),
-            0.2f, 0.8f,
-            1.0f, 0.0f
-        );
-    al_set_sample_instance_gain(
-        playback_ptr->allegro_sample_instance,
-        clamp(gain, 0.0f, 1.0f)
-    );
-    
-    //Set the pan.
-    float pan_abs =
-        interpolate_number(
-            fabs(delta.x),
-            0.2f, 0.6f,
-            0.0f, 1.0f
-        );
-    pan_abs = clamp(pan_abs, 0.0f, 1.0f);
-    float pan = delta.x > 0.0f ? pan_abs : -pan_abs;
-    al_set_sample_instance_pan(
-        playback_ptr->allegro_sample_instance,
-        clamp(pan, -1.0f, 1.0f)
-    );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Stops all playbacks. Alternatively, stops all playbacks of a given sound
  * sample.
  * filter:
@@ -473,7 +431,7 @@ void audio_manager::tick(float delta_t) {
     }
     
     //Update the position of sources tied to mobs.
-    for(auto s : sources) {
+    for(auto &s : sources) {
         if(s.second.destroyed) continue;
         auto mob_source_it = mob_sources.find(s.first);
         if(mob_source_it == mob_sources.end()) continue;
@@ -494,8 +452,24 @@ void audio_manager::tick(float delta_t) {
         ) {
             //Finished playing.
             destroy_sfx_playback(p);
+            
         } else {
-            set_playback_gain_and_pan(p);
+            update_playback_target_gain_and_pan(p);
+            
+            playback_ptr->gain =
+                inch_towards(
+                    playback_ptr->gain,
+                    playback_ptr->target_gain,
+                    AUDIO::GAIN_CHANGE_SPEED * delta_t
+                );
+            playback_ptr->pan =
+                inch_towards(
+                    playback_ptr->pan,
+                    playback_ptr->target_pan,
+                    AUDIO::PAN_CHANGE_SPEED * delta_t
+                );
+                
+            update_playback_gain_and_pan(p);
         }
     }
     
@@ -520,6 +494,78 @@ void audio_manager::tick(float delta_t) {
             ++s;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Instantly updates a playback's current gain and pan, using its member
+ * variables. This also clamps the variables if needed.
+ * playback_idx:
+ *   Index of the playback in the list.
+ */
+void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
+    if(playback_idx >= playbacks.size()) return;
+    sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
+    
+    playback_ptr->gain = clamp(playback_ptr->gain, 0.0f, 1.0f);
+    al_set_sample_instance_gain(
+        playback_ptr->allegro_sample_instance,
+        playback_ptr->gain
+    );
+    
+    playback_ptr->pan = clamp(playback_ptr->pan, -1.0f, 1.0f);
+    al_set_sample_instance_pan(
+        playback_ptr->allegro_sample_instance,
+        playback_ptr->pan
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates a playback's target gain and target pan, based on distance
+ * from the camera. This won't update the gain and pan yet, but each audio
+ * manager tick will be responsible for bringing the gain and pan to these
+ * values smoothly over time.
+ * playback_idx:
+ *   Index of the playback in the list.
+ */
+void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
+    if(playback_idx >= playbacks.size()) return;
+    sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
+    
+    sfx_source_struct* source_ptr = get_source(playback_ptr->source_id);
+    if(!source_ptr || source_ptr->type != SFX_TYPE_POSITIONAL) return;
+    
+    //Calculate screen and camera things.
+    point screen_size = cam_br - cam_tl;
+    if(screen_size.x == 0.0f || screen_size.y == 0.0f) return;
+    
+    point cam_center = (cam_tl + cam_br) / 2.0f;
+    
+    //Get how many screens of distance it is from the center, for X and Y.
+    point delta = (source_ptr->pos - cam_center) / screen_size;
+    
+    float max_delta = std::max(fabs(delta.x), fabs(delta.y));
+    
+    //Set the gain.
+    float gain =
+        interpolate_number(
+            fabs(max_delta),
+            0.2f, 0.8f,
+            1.0f, 0.0f
+        );
+    playback_ptr->target_gain = gain;
+    
+    //Set the pan.
+    float pan_abs =
+        interpolate_number(
+            fabs(delta.x),
+            0.2f, 0.6f,
+            0.0f, 1.0f
+        );
+    pan_abs = clamp(pan_abs, 0.0f, 1.0f);
+    float pan = delta.x > 0.0f ? pan_abs : -pan_abs;
+    playback_ptr->target_pan = pan;
 }
 
 

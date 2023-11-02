@@ -60,6 +60,7 @@ float clamp(const float number, const float minimum, const float maximum);
 float ease(const EASING_METHODS method, float n);
 uint32_t hash_nr(const unsigned int input);
 uint32_t hash_nr2(const unsigned int input1, const unsigned int input2);
+float inch_towards(float start, float target, float max_step);
 float interpolate_number(
     const float input, const float input_start, const float input_end,
     const float output_start, const float output_end

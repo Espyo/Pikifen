@@ -160,6 +160,23 @@ uint32_t hash_nr2(const unsigned int input1, const unsigned int input2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Given a starting number, it increases or decreases it towards the target
+ * value, but the change will not be higher than the max step.
+ * start:
+ *   Starting value.
+ * target:
+ *   Target value.
+ * max_step:
+ *   Maximum change in value allowed.
+ */
+float inch_towards(float start, float target, float max_step) {
+    if(fabs(target - start) <= max_step) return target;
+    if(start < target) return start + max_step;
+    return start - max_step;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the interpolation between two numbers, given a number in an interval.
  * input:
  *   The input number.
