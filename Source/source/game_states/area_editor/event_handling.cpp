@@ -779,7 +779,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             point selection_center = (selection_br + selection_tl) / 2.0;
             set<mob_gen*> mobs_to_select;
             
-            for(auto m : selected_mobs) {
+            for(auto &m : selected_mobs) {
                 mob_gen* new_mg = new mob_gen(*m);
                 new_mg->pos = point(hotspot + (m->pos) - selection_center);
                 game.cur_area_data.mob_generators.push_back(new_mg);
@@ -804,7 +804,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 get_mob_under_point(game.mouse_cursor.w_pos, &target_idx);
             if(!target) return;
             
-            for(const auto m : selected_mobs) {
+            for(const auto &m : selected_mobs) {
                 if(m == target) {
                     set_status(
                         "You can't store to an object inside itself!",
@@ -839,7 +839,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             mob_gen* target = get_mob_under_point(game.mouse_cursor.w_pos);
             if(!target) return;
             
-            for(const auto m : selected_mobs) {
+            for(const auto &m : selected_mobs) {
                 if(m == target) {
                     set_status(
                         "You can't link to an object to itself!",

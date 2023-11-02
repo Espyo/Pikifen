@@ -862,14 +862,14 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     }
     
     string other_vars_str;
-    for(auto v : vars_map) {
+    for(auto &v : vars_map) {
         if(!vars_in_widgets[v.first]) {
             other_vars_str += v.first + "=" + v.second + ";";
         }
     }
     
     m_ptr->vars.clear();
-    for(auto v : new_vars_map) {
+    for(auto &v : new_vars_map) {
         m_ptr->vars += v.first + "=" + v.second + ";";
     }
     m_ptr->vars += other_vars_str;
@@ -1626,7 +1626,7 @@ void area_editor::process_gui_panel_gameplay() {
                     register_change("area spray amounts change");
                     spray_strs[game.spray_types[s].name] = i2s(amount);
                     game.cur_area_data.spray_amounts.clear();
-                    for(auto v : spray_strs) {
+                    for(auto &v : spray_strs) {
                         game.cur_area_data.spray_amounts +=
                             v.first + "=" + v.second + ";";
                     }
@@ -1826,7 +1826,7 @@ void area_editor::process_gui_panel_info() {
         //Area weather combobox.
         vector<string> weather_conditions;
         weather_conditions.push_back(NONE_OPTION);
-        for(auto w : game.weather_conditions) {
+        for(auto &w : game.weather_conditions) {
             weather_conditions.push_back(w.first);
         }
         if(game.cur_area_data.weather_name.empty()) {
@@ -4900,7 +4900,7 @@ void area_editor::process_gui_panel_sector() {
             
             //Sector hazard addition popup.
             vector<string> all_hazards_list;
-            for(auto h : game.hazards) {
+            for(auto &h : game.hazards) {
                 all_hazards_list.push_back(h.first);
             }
             string picked_hazard;

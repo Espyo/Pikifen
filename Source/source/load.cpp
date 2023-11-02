@@ -1804,7 +1804,7 @@ void load_status_types(const bool load_resources) {
     for(size_t s = 0; s < types_with_replacements.size(); ++s) {
         string rn = types_with_replacements_names[s];
         bool found = false;
-        for(auto s2 : game.status_types) {
+        for(auto &s2 : game.status_types) {
             if(s2.first == rn) {
                 types_with_replacements[s]->replacement_on_timeout =
                     s2.second;

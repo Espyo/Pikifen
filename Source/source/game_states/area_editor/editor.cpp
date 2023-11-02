@@ -219,7 +219,7 @@ void area_editor::cancel_layout_drawing() {
  * Cancels the vertex moving operation.
  */
 void area_editor::cancel_layout_moving() {
-    for(auto v : selected_vertexes) {
+    for(auto &v : selected_vertexes) {
         v->x = pre_move_vertex_coords[v].x;
         v->y = pre_move_vertex_coords[v].y;
     }
@@ -1005,7 +1005,7 @@ void area_editor::finish_layout_moving() {
     unordered_set<sector*> merge_affected_sectors;
     
     //Find merge vertexes and edges to split, if any.
-    for(auto v : selected_vertexes) {
+    for(auto &v : selected_vertexes) {
         point p(v->x, v->y);
         
         vector<std::pair<dist, vertex*> > merge_vertexes =
@@ -4119,7 +4119,7 @@ void area_editor::start_mob_move() {
     
     move_closest_mob = NULL;
     dist move_closest_mob_dist;
-    for(auto m : selected_mobs) {
+    for(auto &m : selected_mobs) {
         pre_move_mob_coords[m] = m->pos;
         
         dist d(game.mouse_cursor.w_pos, m->pos);
@@ -4170,7 +4170,7 @@ void area_editor::start_vertex_move() {
     
     move_closest_vertex = NULL;
     dist move_closest_vertex_dist;
-    for(auto v : selected_vertexes) {
+    for(auto &v : selected_vertexes) {
         point p(v->x, v->y);
         pre_move_vertex_coords[v] = p;
         

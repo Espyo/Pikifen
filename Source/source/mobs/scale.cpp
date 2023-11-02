@@ -52,7 +52,7 @@ float scale::calculate_cur_weight() const {
     
     //Now, add up their weights.
     float w = 0;
-    for(auto m : weighing_mobs) {
+    for(auto &m : weighing_mobs) {
         w += m->type->weight;
     }
     

@@ -2042,7 +2042,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         
     }
     
-    for(auto am : affected_mobs) {
+    for(auto &am : affected_mobs) {
         am->fsm.run_event(
             MOB_EV_TOUCHED_SPRAY, (void*) &game.spray_types[spray_nr]
         );

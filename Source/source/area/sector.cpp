@@ -345,7 +345,7 @@ sector* get_sector(
             
         if(sectors->size() == 1) return *sectors->begin();
         
-        for(auto s : (*sectors)) {
+        for(auto &s : (*sectors)) {
         
             if(!s) {
                 continue;
