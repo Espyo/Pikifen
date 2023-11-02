@@ -1668,7 +1668,7 @@ bool mob::follow_path(
             carry_info->get_carrier_invulnerabilities();
     } else {
         //Use the object's standard invulnerabilities.
-        for(auto v : type->hazard_vulnerabilities) {
+        for(auto &v : type->hazard_vulnerabilities) {
             if(v.second.damage_mult == 0.0f) {
                 final_settings.invulnerabilities.push_back(v.first);
             }
@@ -2481,7 +2481,7 @@ bool mob::has_clear_line(mob* target_mob) const {
         return false;
     }
     
-    for(auto e_ptr : candidate_edges) {
+    for(auto &e_ptr : candidate_edges) {
         if(
             !line_segs_intersect(
                 pos, target_mob->pos,

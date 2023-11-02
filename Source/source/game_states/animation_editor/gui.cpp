@@ -193,7 +193,7 @@ void animation_editor::process_gui_hitbox_hazards() {
         
         //Hitbox hazard addition popup.
         vector<string> all_hazards_list;
-        for(auto h : game.hazards) {
+        for(auto &h : game.hazards) {
             all_hazards_list.push_back(h.first);
         }
         string picked_hazard;

@@ -520,7 +520,7 @@ bool area_editor::delete_edges(const set<edge*> &which) {
  *   Mobs to delete.
  */
 void area_editor::delete_mobs(const set<mob_gen*> &which) {
-    for(auto sm : which) {
+    for(auto &sm : which) {
         //Get its index.
         size_t m_idx = 0;
         for(; m_idx < game.cur_area_data.mob_generators.size(); ++m_idx) {
@@ -582,7 +582,7 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
  *   Path links to delete.
  */
 void area_editor::delete_path_links(const set<path_link*> &which) {
-    for(auto l : which) {
+    for(auto &l : which) {
         l->start_ptr->remove_link(l);
     }
 }
@@ -594,7 +594,7 @@ void area_editor::delete_path_links(const set<path_link*> &which) {
  *   Path stops to delete.
  */
 void area_editor::delete_path_stops(const set<path_stop*> &which) {
-    for(auto s : which) {
+    for(auto &s : which) {
         //Check all links that end at this stop.
         for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); ++s2) {
             path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
@@ -1207,7 +1207,7 @@ void area_editor::get_affected_sectors(
 void area_editor::get_affected_sectors(
     const set<sector*> &sectors, unordered_set<sector*> &list
 ) const {
-    for(auto s : sectors) {
+    for(auto &s : sectors) {
         get_affected_sectors(s, list);
     }
 }
@@ -1224,7 +1224,7 @@ void area_editor::get_affected_sectors(
 void area_editor::get_affected_sectors(
     const set<vertex*> &vertexes, unordered_set<sector*> &list
 ) const {
-    for(auto v : vertexes) {
+    for(auto &v : vertexes) {
         for(size_t e = 0; e < v->edges.size(); ++e) {
             list.insert(v->edges[e]->sectors[0]);
             list.insert(v->edges[e]->sectors[1]);
@@ -1369,7 +1369,7 @@ bool area_editor::get_common_sector(
     //and we can easily find out which is the inner one with this method.
     float best_rightmost_x = 0;
     sector* best_rightmost_sector = NULL;
-    for(auto s : sectors) {
+    for(auto &s : sectors) {
         if(s == NULL) continue;
         vertex* v_ptr = s->get_rightmost_vertex();
         if(!best_rightmost_sector || v_ptr->x < best_rightmost_x) {
@@ -2224,7 +2224,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
     
     register_change("object rotation");
     selection_homogenized = false;
-    for(auto m : selected_mobs) {
+    for(auto &m : selected_mobs) {
         m->angle = get_angle(m->pos, pos);
     }
     set_status("Rotated objects to face " + p2s(pos) + ".");

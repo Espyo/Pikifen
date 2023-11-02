@@ -107,8 +107,8 @@ vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
     
     //Now, count how many types are invulnerable to each detected hazard.
     map<hazard*, size_t> inv_instances;
-    for(auto t : carrier_types) {
-        for(auto h : t->hazard_vulnerabilities) {
+    for(auto &t : carrier_types) {
+        for(auto &h : t->hazard_vulnerabilities) {
             if(h.second.damage_mult == 0.0f) {
                 inv_instances[h.first]++;
             }
@@ -117,7 +117,7 @@ vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
     
     //Finally, only accept those that ALL types are invulnerable to.
     vector<hazard*> invulnerabilities;
-    for(auto i : inv_instances) {
+    for(auto &i : inv_instances) {
         if(i.second == carrier_types.size()) {
             invulnerabilities.push_back(i.first);
         }
