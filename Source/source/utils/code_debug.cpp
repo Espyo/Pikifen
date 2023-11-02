@@ -8,6 +8,8 @@
  * Code debugging tools. See the header file for more information.
  */
 
+#include <allegro5/allegro.h>
+
 #include "code_debug.h"
 
 
@@ -85,5 +87,20 @@ void* operator new[](size_t size, char* file, int line) {
     return ptr;
 }
 
-
 #endif //ifndef CODE_DEBUG_NEW
+
+
+/* ----------------------------------------------------------------------------
+ * Starts a time measurement for benchmarking.
+ */
+void code_debug_benchmark_start() {
+    code_debug_benchmark_time = al_get_time();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes a time measurement for benchmarking. Returns the time difference.
+ */
+double code_debug_benchmark_end() {
+    return al_get_time() - code_debug_benchmark_time;
+}
