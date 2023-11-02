@@ -21,6 +21,7 @@ Current tasks (tasks being worked on, but not yet committed)
             Waiting: Waiting some time before starting to play. Can go to Playing
             Playing: Can go to Waiting or Stopping
             Stopping: Quickly fading out so it can then be destroyed
+            Destroyed: Unusable, and ready to be deleted
         A way for sounds to repeat with an interval from the same source
         A way to fade sounds in/out
         Ducking
@@ -36,8 +37,15 @@ Next tasks (roughly sorted most important first)
         This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
 
     --- 0.25.0 ---
-    Add some #define to code_debug.h that are macros for creating benchmarking start and benchmarking stop statements
-    Revamp get_info
+    Script improvements
+        Revamp get_info
+            Add get_info state
+            https://github.com/Helodity/Pikifen/tree/get_info-rework
+        Make it so you can run an action on behalf of another mob
+            Be careful with state switching, variables, and focus
+            Don't allow actions like if, else, end_if, goto, label?
+            Maybe have a "start_running_as" action and a "stop_running_as"
+        Action groups (like functions)
     Idle Pikmin shouldn't be called by "bumping" until some seconds, since if you throw a Pikmin nearby, it'll be hard to get it to stay
         Maybe it should only count as bumped if the leader had previously moved a certain distance from it?
     More puzzle elements
@@ -51,6 +59,8 @@ Next tasks (roughly sorted most important first)
         [NEEDS BRAINSTORMING] Path links that are one-way for drop-offs don't make much sense, since Winged Pikmin can fly up them...
             Check what P3 does, maybe P4
         If you start drawing a path on top of a link, it should split the link and start drawing on that stop
+        The stops should get the properties, not the links
+        Path stops should have a radius
     Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     Make Rock Pikmin colors darker (thanks Nataly171)
     If a Pikmin catches on fire it should lose its maturity and go back to a leaf
@@ -139,6 +149,13 @@ Next tasks (roughly sorted most important first)
             Editors
             A couple of gameplay songs
     Maybe stuff like interactables and carriable corpses should be delegated to an entity component system on the mob class
+    Find some way of making content sharing easier
+        Maybe the Game_data folder should have a "base" folder where everything goes, and people can make their own folders for their own content. Then, they simply share that folder
+        A content manager, which knows what areas exist, what graphics exist, what enemies exist, etc.
+            This should be able to figure out a dependency tree
+        Current problems
+            When makers want to share their content, they have to fish its requirements from several folders
+            When players want to install content, they have to place it in the right folders
     
     --- Future ---
     Some tweaks to the HUD
@@ -252,9 +269,6 @@ Next tasks (roughly sorted most important first)
         Current leader should move slower if the analog stick is not held all the way
         Make it so a player can control their leader via mouse cursor
         Make it so the player can hold down a directional key and the menu selector moves on its own. When it gets to the end it should probably stop until the player presses that direction again so it can wrap around and continue.
-    Rethink the way paths work
-        The stops should get the properties, not the links
-        Path stops should have a radius
     Demo content
         Ice Pikmin
         Glow Pikmin
@@ -702,6 +716,7 @@ Misc things (so I don't forget)
         Loading screen area names and subtitles should have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         On a walkable object, if you have a leader and their Pikmin on top, the Pikmin will kinda jerk along, not very smoothly
         If a Pikmin type has black as the color, the idle glow needs to... not be black
+        When a Pikmin latches, offset its position randomly slightly. This way, if the player throws many Pikmin at the same spot, there's at least some variety
         Water isn't fading with darkness if you have fader textures https://cdn.discordapp.com/attachments/347158607734767636/449334153763356672/Pikifen_alpha_5_24_2018_6_12_41_PM.png https://cdn.discordapp.com/attachments/459094782648778772/491739297548992513/unknown.png
             Make it use the same logic as draw_texture, where a fade sector must draw the liquid twice, with the second time fading
         I think I found a way to do addictive blending right -- for instance, to draw a mob green, first you draw it multiplied by green (0, 255, 0, 255), then you draw an addictive sprite on top with 0, 255, 0, 128 -- seems to work well on GIMP
@@ -835,10 +850,6 @@ Misc things (so I don't forget)
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     The spray HUD icons should show a tiny bar with concoction progress
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
-    [NEEDS BRAINSTORMING] Figure out how content sharing should work
-        Current problems
-            When makers want to share their content, they have to fish its requirements from several folders
-            When players want to install content, they have to place it in the right folders
     Calculate the entirety of the scene's lighting in a lightmap, that gets overlaid in the end
         Apply fog, blackout, sector darkness, etc. on this
         Check if this would have a large performance impact

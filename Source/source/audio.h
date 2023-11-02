@@ -44,6 +44,8 @@ class audio_manager;
 
 namespace AUDIO {
 extern const float DEF_STACK_MIN_POS;
+extern const float GAIN_CHANGE_SPEED;
+extern const float PAN_CHANGE_SPEED;
 }
 
 
@@ -146,6 +148,14 @@ struct sfx_playback_struct {
     ALLEGRO_SAMPLE_INSTANCE* allegro_sample_instance = NULL;
     //State.
     SFX_PLAYBACK_STATES state = SFX_PLAYBACK_PLAYING;
+    //Current gain.
+    float gain = 1.0f;
+    //Gain that it wants to be at.
+    float target_gain = 1.0f;
+    //Current pan.
+    float pan = 0.0f;
+    //Pan that it wants to be at.
+    float target_pan = 0.0f;
 };
 
 
@@ -247,7 +257,8 @@ private:
     );
     bool destroy_sfx_playback(size_t playback_idx);
     sfx_source_struct* get_source(size_t source_id);
-    void set_playback_gain_and_pan(size_t playback_idx);
+    void update_playback_gain_and_pan(size_t playback_idx);
+    void update_playback_target_gain_and_pan(size_t playback_idx);
 };
 
 
