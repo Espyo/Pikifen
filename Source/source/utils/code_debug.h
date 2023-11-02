@@ -66,4 +66,10 @@ void operator delete[](void* ptr, size_t size) noexcept;
 
 #endif //ifdef CODE_DEBUG_NEW
 
+
+double code_debug_benchmark_time;
+
+void code_debug_benchmark_start();
+double code_debug_benchmark_end();
+
 #endif //ifndef CODE_DEBUG_INCLUDED
