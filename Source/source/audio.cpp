@@ -20,7 +20,7 @@ namespace AUDIO {
 //Default min stack pos. Let's use a value higher than 0, since if for any
 //reason the same sound plays multiple times at once, they are actually
 //stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
-const float DEF_STACK_MIN_POS = 0.02f;
+const float DEF_STACK_MIN_POS = 0.1f;
 //Maximum change speed for a playback's gain, measured in amount per second.
 const float GAIN_CHANGE_SPEED = 3.0f;
 //Maximum change speed for a playback's pan, measured in amount per second.
@@ -240,7 +240,8 @@ bool audio_manager::emit(size_t source_id) {
             float playback_pos =
                 al_get_sample_instance_position(
                     playback->allegro_sample_instance
-                ) / 44100.0f;
+                ) /
+                (float) al_get_sample_frequency(p_source_ptr->sample);
             lowest_stacking_playback_pos =
                 std::min(lowest_stacking_playback_pos, playback_pos);
         }

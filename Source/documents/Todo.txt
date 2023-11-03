@@ -15,7 +15,6 @@ Current tasks (tasks being worked on, but not yet committed)
             If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
             When you cancel holding a Pikmin, its standby squeal sound should stop
         Reorganize the backend
-            Sounds shouldn't assume they're 44100Hz
             There should be multiple mixers, which can feed into other mixers, until eventually the "master" mixer connects to the Allegro voice
         Playback FSM
             Waiting: Waiting some time before starting to play. Can go to Playing
@@ -782,6 +781,7 @@ Misc things (so I don't forget)
         "Oh, yeah, quick suggestion, make all of the pikmin that a leader has get disbanded and maybe panic around for a bit when the leader dies" (thanks Neo)
         Try to find some way for Pikmin to smoothly follow behind when they are faster than the leaders. Right now, they quickly catch up to where they should be in the group, stop, and then slowly accelerate back to continue catching up, over and over
         When they finish breaking a gate, or delivering something, they should probably return to the closest leader's group, right?
+        When they kill an enemy that leaves a corpse, they should stay near it, waiting for the enemy to finish dying, so they can carry it right away
     Add shaders
         Can the grid in the editors be more contrasting? Darker on top of light things and vice-versa...
         Make the water ripples be via shader
