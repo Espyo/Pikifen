@@ -538,12 +538,12 @@ PATH_RESULTS dijkstra(
     const path_follow_settings &settings,
     float* total_dist
 ) {
-    //https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+    //https://en.wikipedia.org/wiki/A*_search_algorithm
     
     //All nodes that have never been visited.
     unordered_set<path_stop*> unvisited;
-    //Distance from starting node + previous stop on the best solution.
-    map<path_stop*, std::pair<float, path_stop*> > data;
+    //Distance from starting node + Estimated distance + previous stop on the best solution.
+    map<path_stop*, std::tuple<float, float, path_stop*>> data;
     //Whether the end node is in the same graph as the start node or not.
     bool in_graph = true;
     
@@ -551,11 +551,11 @@ PATH_RESULTS dijkstra(
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         unvisited.insert(s_ptr);
-        data[s_ptr] = std::make_pair(FLT_MAX, (path_stop*) NULL);
+        data[s_ptr] = std::make_tuple(FLT_MAX, FLT_MAX, (path_stop*) NULL);
     }
     
     //The distance between the start node and the start node is 0.
-    data[start_node].first = 0;
+    std::get<0>(data[start_node]) = 0;
     
     //Start iterating.
     while(!unvisited.empty()) {
@@ -566,13 +566,15 @@ PATH_RESULTS dijkstra(
         std::unordered_set<path_stop*>::iterator shortest_node_it =
             unvisited.end();
             
-        std::pair<float, path_stop*> shortest_node_data;
+        std::tuple<float, float, path_stop*> shortest_node_data;
         
         for(auto u = unvisited.begin(); u != unvisited.end(); u++) {
-            std::pair<float, path_stop*> d = data[*u];
-            if(!shortest_node || d.first < shortest_node_dist) {
+            std::tuple<float, float, path_stop*> d = data[*u];
+            float dist = std::get<0>(d) + std::get<1>(d);
+
+            if(!shortest_node || dist < shortest_node_dist) {
                 shortest_node = *u;
-                shortest_node_dist = d.first;
+                shortest_node_dist = dist;
                 shortest_node_data = d;
                 shortest_node_it = u;
             }
@@ -583,13 +585,13 @@ PATH_RESULTS dijkstra(
         if(shortest_node == end_node) {
         
             //Construct the path.
-            float td = data[end_node].first;
+            float td = std::get<0>(data[end_node]);
             final_path.clear();
             final_path.push_back(end_node);
-            path_stop* next = data[end_node].second;
+            path_stop* next = std::get<2>(data[end_node]);
             while(next) {
                 final_path.insert(final_path.begin(), next);
-                next = data[next].second;
+                next = std::get<2>(data[next]);
             }
             
             if(final_path.size() < 2) {
@@ -619,14 +621,19 @@ PATH_RESULTS dijkstra(
             if(!can_traverse_path_link(l_ptr, settings)) {
                 continue;
             }
-            
-            float dist_so_far = shortest_node_data.first + l_ptr->distance;
+                    
             auto d = &data[l_ptr->end_ptr];
-            
-            if(dist_so_far < d->first) {
+
+            float cur_dist = std::get<0>(shortest_node_data) + l_ptr->distance;
+            if(cur_dist < std::get<0>(*d)) {
                 //Found a shorter path to this node.
-                d->first = dist_so_far;
-                d->second = shortest_node;
+                std::get<0>(*d) = cur_dist;
+                std::get<2>(*d) = shortest_node;
+                //If this is the first time we're checking this node, then
+                //calculate the estimated distance to the end node.
+                if(std::get<1>(*d) == FLT_MAX) {
+                    std::get<1>(*d) = dist(l_ptr->end_ptr->pos, end_node->pos).to_float();
+                }
             }
         }
     }
