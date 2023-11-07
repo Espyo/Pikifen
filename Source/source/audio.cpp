@@ -25,6 +25,8 @@ const float DEF_STACK_MIN_POS = 0.1f;
 const float GAIN_CHANGE_SPEED = 3.0f;
 //Maximum change speed for a playback's pan, measured in amount per second.
 const float PAN_CHANGE_SPEED = 8.0f;
+//Change speed of playback gain when un/pausing measured in amount per second.
+const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
 }
 
 
@@ -33,34 +35,35 @@ const float PAN_CHANGE_SPEED = 8.0f;
  */
 audio_manager::audio_manager() :
     samples(""),
-    mixer(nullptr),
+    world_sfx_mixer(nullptr),
+    world_ambiance_sfx_mixer(nullptr),
+    ui_sfx_mixer(nullptr),
     voice(nullptr),
     next_sfx_source_id(1) {
 }
 
 
 /* ----------------------------------------------------------------------------
- * Creates a global sound effect source and returns its ID.
- * This is basically how you can get the engine to produce a sound that doesn't
- * involve a position in the game world.
+ * Creates a global UI sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a UI sound.
  * Returns 0 on failure.
  * sample:
  *   Sound sample that this source will emit.
  * config:
  *   Configuration.
  */
-size_t audio_manager::create_global_sfx_source(
+size_t audio_manager::create_ui_sfx_source(
     ALLEGRO_SAMPLE* sample,
     const sfx_source_config_struct &config
 ) {
-    return create_sfx_source(sample, SFX_TYPE_GLOBAL, config, point());
+    return create_sfx_source(sample, SFX_TYPE_UI, config, point());
 }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a mob sound effect source and returns its ID.
- * This is like create_pos_sfx_source, but ties the source to the mob, meaning
- * the audio manager is responsible for updating the source's position
+ * This is like create_world_pos_sfx_source, but ties the source to the mob,
+ * meaning the audio manager is responsible for updating the source's position
  * every frame to match the mob's.
  * Returns 0 on failure.
  * sample:
@@ -76,14 +79,14 @@ size_t audio_manager::create_mob_sfx_source(
     const sfx_source_config_struct &config
 ) {
     size_t source_id =
-        create_sfx_source(sample, SFX_TYPE_POSITIONAL, config, m_ptr->pos);
+        create_sfx_source(sample, SFX_TYPE_WORLD_POS, config, m_ptr->pos);
     mob_sources[source_id] = m_ptr;
     return source_id;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Creates a positional sound effect source and returns its ID.
+ * Creates an in-world positional sound effect source and returns its ID.
  * This is basically how you can get the engine to produce a sound that
  * involves a position in the game world.
  * Returns 0 on failure.
@@ -94,12 +97,30 @@ size_t audio_manager::create_mob_sfx_source(
  * config:
  *   Configuration.
  */
-size_t audio_manager::create_pos_sfx_source(
+size_t audio_manager::create_world_pos_sfx_source(
     ALLEGRO_SAMPLE* sample,
     const point &pos,
     const sfx_source_config_struct &config
 ) {
-    return create_sfx_source(sample, SFX_TYPE_POSITIONAL, config, pos);
+    return create_sfx_source(sample, SFX_TYPE_WORLD_POS, config, pos);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an in-world global sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a sound that doesn't
+ * involve a position in the game world.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_world_global_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_WORLD_GLOBAL, config, point());
 }
 
 
@@ -143,7 +164,9 @@ size_t audio_manager::create_sfx_source(
  */
 void audio_manager::destroy() {
     al_detach_voice(voice);
-    al_destroy_mixer(mixer);
+    al_destroy_mixer(world_sfx_mixer);
+    al_destroy_mixer(world_ambiance_sfx_mixer);
+    al_destroy_mixer(ui_sfx_mixer);
     al_destroy_voice(voice);
 }
 
@@ -287,6 +310,21 @@ bool audio_manager::emit(size_t source_id) {
     playback_ptr->gain = playback_ptr->target_gain;
     playback_ptr->pan = playback_ptr->target_pan;
     
+    ALLEGRO_MIXER* mixer = NULL;
+    switch(source_ptr->type) {
+    case SFX_TYPE_WORLD_GLOBAL:
+    case SFX_TYPE_WORLD_POS: {
+        mixer = world_sfx_mixer;
+        break;
+    } case SFX_TYPE_WORLD_AMBIANCE: {
+        mixer = world_ambiance_sfx_mixer;
+        break;
+    } case SFX_TYPE_UI: {
+        mixer = ui_sfx_mixer;
+        break;
+    }
+    }
+    
     al_attach_sample_instance_to_mixer(
         playback_ptr->allegro_sample_instance, mixer
     );
@@ -342,6 +380,62 @@ void audio_manager::handle_mob_deletion(mob* m_ptr) {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles the gameplay of the game world being paused.
+ */
+void audio_manager::handle_world_pause() {
+    for(size_t p = 0; p < playbacks.size(); ++p) {
+        sfx_playback_struct* playback_ptr = &playbacks[p];
+        if(!playback_ptr || playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
+            continue;
+        }
+        
+        sfx_source_struct* source_ptr = get_source(playback_ptr->source_id);
+        if(!source_ptr) continue;
+        
+        if(
+            source_ptr->type == SFX_TYPE_WORLD_GLOBAL ||
+            source_ptr->type == SFX_TYPE_WORLD_POS ||
+            source_ptr->type == SFX_TYPE_WORLD_AMBIANCE
+        ) {
+            playback_ptr->state = SFX_PLAYBACK_PAUSING;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the gameplay of the game world being unpaused.
+ */
+void audio_manager::handle_world_unpause() {
+    for(size_t p = 0; p < playbacks.size(); ++p) {
+        sfx_playback_struct* playback_ptr = &playbacks[p];
+        if(!playback_ptr || playback_ptr->state == SFX_PLAYBACK_DESTROYED) {
+            continue;
+        }
+        
+        sfx_source_struct* source_ptr = get_source(playback_ptr->source_id);
+        if(!source_ptr) continue;
+        
+        if(
+            source_ptr->type == SFX_TYPE_WORLD_GLOBAL ||
+            source_ptr->type == SFX_TYPE_WORLD_POS ||
+            source_ptr->type == SFX_TYPE_WORLD_AMBIANCE
+        ) {
+            playback_ptr->state = SFX_PLAYBACK_UNPAUSING;
+            al_set_sample_instance_playing(
+                playback_ptr->allegro_sample_instance,
+                true
+            );
+            al_set_sample_instance_position(
+                playback_ptr->allegro_sample_instance,
+                playback_ptr->pre_pause_pos
+            );
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes the audio manager.
  */
 void audio_manager::init() {
@@ -349,11 +443,24 @@ void audio_manager::init() {
         al_create_voice(
             44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2
         );
-    mixer =
+        
+    world_sfx_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_voice(mixer, voice);
+    al_attach_mixer_to_voice(world_sfx_mixer, voice);
+    
+    world_ambiance_sfx_mixer =
+        al_create_mixer(
+            44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
+        );
+    al_attach_mixer_to_voice(world_ambiance_sfx_mixer, voice);
+    
+    ui_sfx_mixer =
+        al_create_mixer(
+            44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
+        );
+    al_attach_mixer_to_voice(ui_sfx_mixer, voice);
 }
 
 
@@ -449,14 +556,18 @@ void audio_manager::tick(float delta_t) {
         if(
             !al_get_sample_instance_playing(
                 playback_ptr->allegro_sample_instance
-            )
+            ) &&
+            playback_ptr->state != SFX_PLAYBACK_PAUSED
         ) {
             //Finished playing.
             destroy_sfx_playback(p);
             
         } else {
+            //Update target gain and pan, based on in-world position,
+            //if applicable.
             update_playback_target_gain_and_pan(p);
             
+            //Inch the gain and pan to the target values.
             playback_ptr->gain =
                 inch_towards(
                     playback_ptr->gain,
@@ -470,6 +581,32 @@ void audio_manager::tick(float delta_t) {
                     AUDIO::PAN_CHANGE_SPEED * delta_t
                 );
                 
+            //Pausing and unpausing.
+            if(playback_ptr->state == SFX_PLAYBACK_PAUSING) {
+                playback_ptr->pause_gain_mult -=
+                    AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * delta_t;
+                if(playback_ptr->pause_gain_mult <= 0.0f) {
+                    playback_ptr->pause_gain_mult = 0.0f;
+                    playback_ptr->state = SFX_PLAYBACK_PAUSED;
+                    playback_ptr->pre_pause_pos =
+                        al_get_sample_instance_position(
+                            playback_ptr->allegro_sample_instance
+                        );
+                    al_set_sample_instance_playing(
+                        playback_ptr->allegro_sample_instance,
+                        false
+                    );
+                }
+            } else if(playback_ptr->state == SFX_PLAYBACK_UNPAUSING) {
+                playback_ptr->pause_gain_mult +=
+                    AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * delta_t;
+                if(playback_ptr->pause_gain_mult >= 1.0f) {
+                    playback_ptr->pause_gain_mult = 1.0f;
+                    playback_ptr->state = SFX_PLAYBACK_PLAYING;
+                }
+            }
+            
+            //Update the final gain and pan values.
             update_playback_gain_and_pan(p);
         }
     }
@@ -509,9 +646,11 @@ void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
     sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
     
     playback_ptr->gain = clamp(playback_ptr->gain, 0.0f, 1.0f);
+    float final_gain = playback_ptr->gain * playback_ptr->pause_gain_mult;
+    final_gain = clamp(final_gain, 0.0f, 1.0f);
     al_set_sample_instance_gain(
         playback_ptr->allegro_sample_instance,
-        playback_ptr->gain
+        final_gain
     );
     
     playback_ptr->pan = clamp(playback_ptr->pan, -1.0f, 1.0f);
@@ -535,7 +674,7 @@ void audio_manager::update_playback_target_gain_and_pan(size_t playback_idx) {
     sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
     
     sfx_source_struct* source_ptr = get_source(playback_ptr->source_id);
-    if(!source_ptr || source_ptr->type != SFX_TYPE_POSITIONAL) return;
+    if(!source_ptr || source_ptr->type != SFX_TYPE_WORLD_POS) return;
     
     //Calculate screen and camera things.
     point screen_size = cam_br - cam_tl;

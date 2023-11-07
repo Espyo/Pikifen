@@ -46,15 +46,20 @@ namespace AUDIO {
 extern const float DEF_STACK_MIN_POS;
 extern const float GAIN_CHANGE_SPEED;
 extern const float PAN_CHANGE_SPEED;
+extern const float PLAYBACK_PAUSE_GAIN_SPEED;
 }
 
 
 //Types of sound effects.
 enum SFX_TYPE {
-    //Global sound effect, like a chime or UI sound.
-    SFX_TYPE_GLOBAL,
-    //Sound effect emitted from a specific position in the game world.
-    SFX_TYPE_POSITIONAL,
+    //In-world global sound effect, like a chime or name call.
+    SFX_TYPE_WORLD_GLOBAL,
+    //In-world sound effect from a specific position in the game world.
+    SFX_TYPE_WORLD_POS,
+    //In-world ambient sound effect.
+    SFX_TYPE_WORLD_AMBIANCE,
+    //UI sound effect, that persists through pausing the gameplay.
+    SFX_TYPE_UI,
 };
 
 
@@ -84,6 +89,12 @@ enum SFX_FLAGS {
 enum SFX_PLAYBACK_STATES {
     //Playing like normal.
     SFX_PLAYBACK_PLAYING,
+    //In the process of fading out to pause.
+    SFX_PLAYBACK_PAUSING,
+    //Paused.
+    SFX_PLAYBACK_PAUSED,
+    //In the process of fading in to unpause.
+    SFX_PLAYBACK_UNPAUSING,
     //Finished playing and needs to be destroyed.
     SFX_PLAYBACK_DESTROYED,
 };
@@ -125,7 +136,7 @@ struct sfx_source_struct {
     //Allegro sound sample that it plays.
     ALLEGRO_SAMPLE* sample = nullptr;
     //Type of sound effect.
-    SFX_TYPE type = SFX_TYPE_GLOBAL;
+    SFX_TYPE type = SFX_TYPE_WORLD_GLOBAL;
     //Configuration.
     sfx_source_config_struct config;
     //Position in the game world, if applicable.
@@ -156,6 +167,10 @@ struct sfx_playback_struct {
     float pan = 0.0f;
     //Pan that it wants to be at.
     float target_pan = 0.0f;
+    //Multiply the gain by this much, due to playback un/pausing.
+    float pause_gain_mult = 1.0f;
+    //Position before pausing.
+    unsigned int pre_pause_pos = 0;
 };
 
 
@@ -206,7 +221,7 @@ public:
     //Manager of samples.
     sfx_sample_manager samples;
     
-    size_t create_global_sfx_source(
+    size_t create_ui_sfx_source(
         ALLEGRO_SAMPLE* sample,
         const sfx_source_config_struct &config = sfx_source_config_struct()
     );
@@ -215,7 +230,11 @@ public:
         mob* m_ptr,
         const sfx_source_config_struct &config = sfx_source_config_struct()
     );
-    size_t create_pos_sfx_source(
+    size_t create_world_global_sfx_source(
+        ALLEGRO_SAMPLE* sample,
+        const sfx_source_config_struct &config = sfx_source_config_struct()
+    );
+    size_t create_world_pos_sfx_source(
         ALLEGRO_SAMPLE* sample,
         const point &pos,
         const sfx_source_config_struct &config = sfx_source_config_struct()
@@ -224,6 +243,8 @@ public:
     void destroy();
     bool emit(size_t source_id);
     void handle_mob_deletion(mob* m_ptr);
+    void handle_world_pause();
+    void handle_world_unpause();
     void init();
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
@@ -232,8 +253,12 @@ public:
     audio_manager();
     
 private:
-    //Global audio mixer.
-    ALLEGRO_MIXER* mixer;
+    //General in-world sound effect mixer.
+    ALLEGRO_MIXER* world_sfx_mixer;
+    //In-world ambiance sound effect mixer.
+    ALLEGRO_MIXER* world_ambiance_sfx_mixer;
+    //UI sound effect mixer.
+    ALLEGRO_MIXER* ui_sfx_mixer;
     //Allegro voice from which the sound effects play.
     ALLEGRO_VOICE* voice;
     //Incremental ID, used for the next source to create.

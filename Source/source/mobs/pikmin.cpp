@@ -500,7 +500,7 @@ void pikmin::tick_class_specifics(const float delta_t) {
         
         //Create a positional sound source instead of a mob sound source,
         //since the Pikmin is basically deleted.
-        game.audio.create_pos_sfx_source(
+        game.audio.create_world_pos_sfx_source(
             game.sys_assets.sfx_pikmin_dying,
             pos
         );

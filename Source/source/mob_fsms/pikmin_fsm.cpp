@@ -1915,7 +1915,7 @@ void pikmin_fsm::be_thrown_after_pluck(mob* m, void* info1, void* info2) {
         game.sys_assets.sfx_pikmin_plucked,
         m
     );
-    game.audio.create_pos_sfx_source(
+    game.audio.create_world_pos_sfx_source(
         game.sys_assets.sfx_pluck,
         m->pos
     );

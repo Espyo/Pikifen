@@ -787,7 +787,7 @@ void leader::start_whistling() {
     game.states.gameplay->whistle.start_whistling();
     
     whistle_sfx_source_id =
-        game.audio.create_pos_sfx_source(
+        game.audio.create_world_pos_sfx_source(
             lea_type->sfx_whistle,
             game.states.gameplay->leader_cursor_w
         );

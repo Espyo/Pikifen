@@ -22,10 +22,10 @@ Current tasks (tasks being worked on, but not yet committed)
             Stopping: Quickly fading out so it can then be destroyed
             Destroyed: Unusable, and ready to be deleted
         A way for sounds to repeat with an interval from the same source
-        A way to fade sounds in/out
+        Sounds that are being destroyed should fade out quickly
         Ducking
         Load system sounds from System_asset_file_names.txt
-        Sounds should pause when you pause the game
+        Resetting when an area is entered or exited
         Make it so that only 6 or so sounds can play at once?
         Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
 
@@ -47,6 +47,9 @@ Next tasks (roughly sorted most important first)
         Action groups (like functions)
     Idle Pikmin shouldn't be called by "bumping" until some seconds, since if you throw a Pikmin nearby, it'll be hard to get it to stay
         Maybe it should only count as bumped if the leader had previously moved a certain distance from it?
+    Use a screenshot for the title screen
+    Add faint icons to the title screen buttons?
+    Draw a gradient at the edges of "list" GUI items when there's more stuff below or above scrolled out of view
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
@@ -141,6 +144,11 @@ Next tasks (roughly sorted most important first)
             What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
         The music manager should support fading in/out, lowering volume for when gameplay is paused, start at arbitrary points, loop at arbitrary points
         Editor music should continue from where it left off, so that tweak-test cycles don't force the player to listen to the same 3 seconds at the beginning over and over
+        Area editor music options?
+            Off
+            Standard editor music
+            Area's music
+            Area's music, but with a low-pass filter
         The area editor should have a music preview button
         Add some songs
             Start with a leitmotif?
@@ -822,7 +830,8 @@ Misc things (so I don't forget)
                 Pop line particles when something gets created
                 Puffs of smoke when something gets deleted
                 Change the cursor for when you're dragging, drawing, placing something new, etc.
-                Glow and grow the new sector when it is created
+                Glow and grow the new sector, object, etc. when it is created
+                Slightly grow the current thing when you select it, or maybe when you drag it?
             Cursors
                 Normal cursor
                 For when you're drawing something
