@@ -334,7 +334,7 @@ void depth_first_search(
     vector<path_stop*> &nodes,
     unordered_set<path_stop*> &visited, path_stop* start
 );
-PATH_RESULT dijkstra(
+PATH_RESULT a_star(
     vector<path_stop*> &out_path,
     path_stop* start_node, path_stop* end_node,
     const path_follow_settings &settings,
