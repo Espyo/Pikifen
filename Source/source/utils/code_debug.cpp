@@ -90,17 +90,32 @@ void* operator new[](size_t size, char* file, int line) {
 #endif //ifndef CODE_DEBUG_NEW
 
 
+
 /* ----------------------------------------------------------------------------
  * Starts a time measurement for benchmarking.
  */
-void code_debug_benchmark_start() {
-    code_debug_benchmark_time = al_get_time();
+void code_debug_benchmark_start_measuring() {
+    code_debug_benchmark_measure_start = al_get_time();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Finishes a time measurement for benchmarking. Returns the time difference.
+ * Finishes a time measurement for benchmarking. Stores and returns the
+ * time difference.
  */
-double code_debug_benchmark_end() {
-    return al_get_time() - code_debug_benchmark_time;
+double code_debug_benchmark_end_measuring() {
+    double duration = al_get_time() - code_debug_benchmark_measure_start;
+    code_debug_benchmark_sum += duration;
+    code_debug_benchmark_iterations++;
+    return duration;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the average duration of all measurements taken so far.
+ */
+double code_debug_benchmark_get_avg_duration() {
+    if(code_debug_benchmark_iterations == 0) return 0.0f;
+    return
+        code_debug_benchmark_sum / (double) code_debug_benchmark_iterations;
 }
