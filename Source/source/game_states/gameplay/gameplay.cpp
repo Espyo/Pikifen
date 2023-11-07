@@ -645,7 +645,7 @@ void gameplay_state::load() {
     }
     
     loading = true;
-    size_t errors_reported_at_start = game.errors_reported_so_far;
+    game.errors.prepare_area_load();
     went_to_results = false;
     
     draw_loading_screen("", "", 1.0f);
@@ -918,7 +918,7 @@ void gameplay_state::load() {
             }
         }
         if(spray_id == game.spray_types.size()) {
-            log_error(
+            game.errors.report(
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
                 "area \"" + game.cur_area_data.name + "\"!", NULL
@@ -996,13 +996,7 @@ void gameplay_state::load() {
     gameplay_replay.clear();*/
     
     //Report any errors with the loading process.
-    if(game.errors_reported_so_far > errors_reported_at_start) {
-        print_info(
-            "\n\n\nERRORS FOUND!\n"
-            "See \"" + ERROR_LOG_FILE_PATH + "\".\n\n\n",
-            20.0f, 3.0f
-        );
-    }
+    game.errors.report_area_load_errors();
     
     if(game.perf_mon) {
         game.perf_mon->set_area_name(game.cur_area_data.name);

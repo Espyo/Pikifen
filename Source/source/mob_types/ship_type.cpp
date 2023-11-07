@@ -11,6 +11,7 @@
 #include "ship_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/ship_fsm.h"
 #include "../mobs/ship.h"
 #include "../utils/string_utils.h"
@@ -90,7 +91,7 @@ void ship_type::load_resources(data_node* file) {
     //Now's a good time to check the leg body parts.
     for(size_t b = 0; b < nest->leg_body_parts.size(); ++b) {
         if(anims.find_body_part(nest->leg_body_parts[b]) == INVALID) {
-            log_error(
+            game.errors.report(
                 "The ship type \"" + name + "\" specifies a leg body part "
                 "called \"" + nest->leg_body_parts[b] + "\", "
                 "but no such body part exists!"

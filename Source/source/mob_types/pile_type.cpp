@@ -88,7 +88,7 @@ void pile_type::load_properties(data_node* file) {
     if(res_type != game.mob_types.resource.end()) {
         contents = res_type->second;
     } else {
-        log_error(
+        game.errors.report(
             "Unknown resource type \"" + contents_str + "\"!", contents_node
         );
     }

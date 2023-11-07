@@ -54,9 +54,6 @@ Next tasks (roughly sorted most important first)
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
         A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
-    Make the error log prettier: remove the two empty lines at the start and indent things properly
-        It should also warn in-game if something happens mid-gameplay
-        The in-game warning should also say what the warning is on top of the reminder to check the error log file
     Path things
         [NEEDS BRAINSTORMING] Path links that are one-way for drop-offs don't make much sense, since Winged Pikmin can fly up them...
             Check what P3 does, maybe P4

@@ -647,7 +647,7 @@ void main_menu_state::load() {
             if(row[c] == '.') continue;
             if(logo_type_bitmaps.find(row[c]) == logo_type_bitmaps.end()) {
                 map_ok = false;
-                log_error(
+                game.errors.report(
                     "Title screen Pikmin logo map has an unknown character \"" +
                     string(1, row[c]) + "\" on row " + i2s(r + 1) +
                     ", column " + i2s(c + 1) + "!"

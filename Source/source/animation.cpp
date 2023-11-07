@@ -231,7 +231,7 @@ void animation_database::create_conversions(
         size_t a_pos = find_animation(conversions[c].second);
         pre_named_conversions[conversions[c].first] = a_pos;
         if(a_pos == INVALID) {
-            log_error(
+            game.errors.report(
                 "Animation \"" + conversions[c].second + "\" is required "
                 "by the engine, but does not exist!", file
             );
@@ -798,7 +798,7 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             for(size_t hs = 0; hs < hazards_strs.size(); ++hs) {
                 string hazard_name = hazards_strs[hs];
                 if(game.hazards.find(hazard_name) == game.hazards.end()) {
-                    log_error(
+                    game.errors.report(
                         "Unknown hazard \"" + hazard_name + "\"!",
                         hazards_node
                     );

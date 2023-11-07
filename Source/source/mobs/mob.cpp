@@ -2755,7 +2755,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
     if(svr.get("team", team_var)) {
         MOB_TEAMS team_nr = string_to_team_nr(team_var);
         if(team_nr == INVALID) {
-            log_error(
+            game.errors.report(
                 "Unknown team name \"" + team_var +
                 "\", when trying to create mob (" +
                 get_error_message_mob_info(this) + ")!", NULL
@@ -2898,7 +2898,7 @@ void mob::set_animation(
     }
     
     if(final_nr == INVALID) {
-        log_error(
+        game.errors.report(
             "Mob (" + get_error_message_mob_info(this) +
             ") tried to switch from " +
             (
@@ -3065,7 +3065,7 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     }
     
     if(!type_ptr) {
-        log_error(
+        game.errors.report(
             "Mob (" + get_error_message_mob_info(this) +
             ") tried to spawn an object of the "
             "type \"" + info->mob_type_name + "\", but there is no such "

@@ -11,6 +11,7 @@
 #include "track_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/track_fsm.h"
 #include "../utils/string_utils.h"
 
@@ -68,7 +69,7 @@ void track_type::load_properties(data_node* file) {
             } else if(riders_str_words[r] == "leaders") {
                 enable_flag(riders, TRACK_RIDER_LEADERS);
             } else {
-                log_error(
+                game.errors.report(
                     "Unknown type of rider \"" + riders_str_words[r] + "\"!",
                     riders_node
                 );
@@ -84,7 +85,7 @@ void track_type::load_properties(data_node* file) {
         } else if(riding_pose_str == "climbing") {
             riding_pose = TRACK_RIDING_POSE_CLIMBING;
         } else {
-            log_error(
+            game.errors.report(
                 "Unknown type of riding pose \"" + riding_pose_str + "\"!",
                 riding_pose_node
             );
@@ -104,7 +105,7 @@ void track_type::load_resources(data_node* file) {
     //is run, then the animations are definitely loaded.
     //Now's a good time to check if the track has 2+ checkpoints.
     if(anims.body_parts.size() < 2) {
-        log_error(
+        game.errors.report(
             "The track type \"" + name + "\" needs to have at least 2 "
             "checkpoints (body parts), but it only has " +
             i2s(anims.body_parts.size()) + "!"

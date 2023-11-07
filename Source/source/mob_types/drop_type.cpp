@@ -79,7 +79,7 @@ void drop_type::load_properties(data_node* file) {
     } else if(consumer_str == "leaders") {
         consumer = DROP_CONSUMER_LEADERS;
     } else {
-        log_error("Unknown consumer \"" + consumer_str + "\"!", consumer_node);
+        game.errors.report("Unknown consumer \"" + consumer_str + "\"!", consumer_node);
     }
     
     if(effect_str == "maturate") {
@@ -89,7 +89,7 @@ void drop_type::load_properties(data_node* file) {
     } else if(effect_str == "give_status") {
         effect = DROP_EFFECT_GIVE_STATUS;
     } else {
-        log_error("Unknown drop effect \"" + effect_str + "\"!", effect_node);
+        game.errors.report("Unknown drop effect \"" + effect_str + "\"!", effect_node);
     }
     
     if(effect == DROP_EFFECT_INCREASE_SPRAYS) {
@@ -100,7 +100,7 @@ void drop_type::load_properties(data_node* file) {
             }
         }
         if(spray_type_to_increase == INVALID) {
-            log_error(
+            game.errors.report(
                 "Unknown spray type \"" + spray_name_str + "\"!",
                 spray_name_node
             );
@@ -112,7 +112,7 @@ void drop_type::load_properties(data_node* file) {
         if(s != game.status_types.end()) {
             status_to_give = s->second;
         } else {
-            log_error(
+            game.errors.report(
                 "Unknown status type \"" + status_name_str + "\"!",
                 status_name_node
             );
@@ -120,7 +120,7 @@ void drop_type::load_properties(data_node* file) {
     }
     
     if(total_doses == 0) {
-        log_error(
+        game.errors.report(
             "The number of total doses cannot be zero!", total_doses_node
         );
     }
