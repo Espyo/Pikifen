@@ -96,15 +96,15 @@ hud_struct::hud_struct() :
     gui.register_coords("leader_1_health",              16,   90,  8, 10);
     gui.register_coords("leader_2_health",              12,   80,  5,  9);
     gui.register_coords("leader_3_health",              12,   72,  5,  9);
-    gui.register_coords("leader_next_button",            4,   83,  3,  3);
+    gui.register_coords("leader_next_input",            4,   83,  3,  3);
     gui.register_coords("standby_icon",                 50,   91,  8, 10);
     gui.register_coords("standby_amount",               50,   96, 15,  8);
     gui.register_coords("standby_bubble",                0,    0,  0,  0);
     gui.register_coords("standby_maturity_icon",        54,   88,  4,  8);
     gui.register_coords("standby_next_icon",            58,   93,  6,  8);
-    gui.register_coords("standby_next_button",          60,   96,  3,  3);
+    gui.register_coords("standby_next_input",           60,   96,  3,  3);
     gui.register_coords("standby_prev_icon",            42,   93,  6,  8);
-    gui.register_coords("standby_prev_button",          40,   96,  3,  3);
+    gui.register_coords("standby_prev_input",           40,   96,  3,  3);
     gui.register_coords("group_amount",                 73,   91, 15, 14);
     gui.register_coords("group_bubble",                 73,   91, 15, 14);
     gui.register_coords("field_amount",                 91,   91, 15, 14);
@@ -117,14 +117,14 @@ hud_struct::hud_struct() :
     gui.register_coords("counters_slash_3",              0,    0,  0,  0);
     gui.register_coords("spray_1_icon",                  6,   36,  4,  7);
     gui.register_coords("spray_1_amount",               13,   37, 10,  5);
-    gui.register_coords("spray_1_button",                4,   39,  3,  3);
+    gui.register_coords("spray_1_input",                 4,   39,  3,  3);
     gui.register_coords("spray_2_icon",                  6,   52,  4,  7);
     gui.register_coords("spray_2_amount",               13,   53, 10,  5);
-    gui.register_coords("spray_2_button",                4,   55,  3,  3);
+    gui.register_coords("spray_2_input",                 4,   55,  3,  3);
     gui.register_coords("spray_prev_icon",               6,   48,  3,  5);
-    gui.register_coords("spray_prev_button",             4,   51,  4,  4);
+    gui.register_coords("spray_prev_input",              4,   51,  4,  4);
     gui.register_coords("spray_next_icon",              12,   48,  3,  5);
-    gui.register_coords("spray_next_button",            14,   51,  4,  4);
+    gui.register_coords("spray_next_input",             14,   51,  4,  4);
     gui.register_coords("mission_goal_bubble",          18,    8, 32, 12);
     gui.register_coords("mission_goal_cur_label",      9.5, 11.5, 13,  3);
     gui.register_coords("mission_goal_cur",            9.5,  6.5, 13,  7);
@@ -256,9 +256,9 @@ hud_struct::hud_struct() :
     }
     
     
-    //Next leader button.
-    gui_item* leader_next_button = new gui_item();
-    leader_next_button->on_draw =
+    //Next leader input.
+    gui_item* leader_next_input = new gui_item();
+    leader_next_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(game.states.gameplay->available_leaders.size() < 2) return;
@@ -267,7 +267,7 @@ hud_struct::hud_struct() :
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(game.fonts.slim, i, true, center, size);
     };
-    gui.add_item(leader_next_button, "leader_next_button");
+    gui.add_item(leader_next_input, "leader_next_input");
     
     
     //Sun Meter.
@@ -419,9 +419,9 @@ hud_struct::hud_struct() :
     standby_icon_mgr.register_bubble(BUBBLE_NEXT, standby_next_icon);
     
     
-    //Next standby subgroup button.
-    gui_item* standby_next_button = new gui_item();
-    standby_next_button->on_draw =
+    //Next standby subgroup input.
+    gui_item* standby_next_input = new gui_item();
+    standby_next_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
@@ -443,7 +443,7 @@ hud_struct::hud_struct() :
             game.states.gameplay->hud->standby_items_opacity * 255
         );
     };
-    gui.add_item(standby_next_button, "standby_next_button");
+    gui.add_item(standby_next_input, "standby_next_input");
     
     
     //Previous standby subgroup icon.
@@ -456,9 +456,9 @@ hud_struct::hud_struct() :
     standby_icon_mgr.register_bubble(BUBBLE_PREVIOUS, standby_prev_icon);
     
     
-    //Previous standby subgroup button.
-    gui_item* standby_prev_button = new gui_item();
-    standby_prev_button->on_draw =
+    //Previous standby subgroup input.
+    gui_item* standby_prev_input = new gui_item();
+    standby_prev_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
@@ -485,7 +485,7 @@ hud_struct::hud_struct() :
             game.states.gameplay->hud->standby_items_opacity * 255
         );
     };
-    gui.add_item(standby_prev_button, "standby_prev_button");
+    gui.add_item(standby_prev_input, "standby_prev_input");
     
     
     //Standby group member maturity.
@@ -798,9 +798,9 @@ hud_struct::hud_struct() :
     gui.add_item(spray_1_amount, "spray_1_amount");
     
     
-    //Spray 1 button.
-    gui_item* spray_1_button = new gui_item();
-    spray_1_button->on_draw =
+    //Spray 1 input.
+    gui_item* spray_1_input = new gui_item();
+    spray_1_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
@@ -829,7 +829,7 @@ hud_struct::hud_struct() :
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
-    gui.add_item(spray_1_button, "spray_1_button");
+    gui.add_item(spray_1_input, "spray_1_input");
     
     
     //Spray 2 icon.
@@ -878,9 +878,9 @@ hud_struct::hud_struct() :
     gui.add_item(spray_2_amount, "spray_2_amount");
     
     
-    //Spray 2 button.
-    gui_item* spray_2_button = new gui_item();
-    spray_2_button->on_draw =
+    //Spray 2 input.
+    gui_item* spray_2_input = new gui_item();
+    spray_2_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
@@ -905,7 +905,7 @@ hud_struct::hud_struct() :
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
-    gui.add_item(spray_2_button, "spray_2_button");
+    gui.add_item(spray_2_input, "spray_2_input");
     
     
     //Previous spray icon.
@@ -918,9 +918,9 @@ hud_struct::hud_struct() :
     spray_icon_mgr.register_bubble(BUBBLE_PREVIOUS, prev_spray_icon);
     
     
-    //Previous spray button.
-    gui_item* prev_spray_button = new gui_item();
-    prev_spray_button->on_draw =
+    //Previous spray input.
+    gui_item* prev_spray_input = new gui_item();
+    prev_spray_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
@@ -947,7 +947,7 @@ hud_struct::hud_struct() :
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
-    gui.add_item(prev_spray_button, "spray_prev_button");
+    gui.add_item(prev_spray_input, "spray_prev_input");
     
     
     //Next spray icon.
@@ -960,9 +960,9 @@ hud_struct::hud_struct() :
     spray_icon_mgr.register_bubble(BUBBLE_NEXT, next_spray_icon);
     
     
-    //Next spray button.
-    gui_item* next_spray_button = new gui_item();
-    next_spray_button->on_draw =
+    //Next spray input.
+    gui_item* next_spray_input = new gui_item();
+    next_spray_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
         if(!game.states.gameplay->cur_leader_ptr) return;
@@ -989,7 +989,7 @@ hud_struct::hud_struct() :
             game.states.gameplay->hud->spray_items_opacity * 255
         );
     };
-    gui.add_item(next_spray_button, "spray_next_button");
+    gui.add_item(next_spray_input, "spray_next_input");
     
     
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
