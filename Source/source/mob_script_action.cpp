@@ -106,7 +106,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     }
     
     if(!action) {
-        log_error("Unknown script action name \"" + name + "\"!", dn);
+        game.errors.report("Unknown script action name \"" + name + "\"!", dn);
         return false;
     }
     
@@ -120,7 +120,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     }
     
     if(words.size() < mandatory_parameters) {
-        log_error(
+        game.errors.report(
             "The \"" + action->name + "\" action needs " +
             i2s(mandatory_parameters) + " arguments, but this call only "
             "has " + i2s(words.size()) + "! You're missing the \"" +
@@ -132,7 +132,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     
     if(mandatory_parameters == action->parameters.size()) {
         if(words.size() > action->parameters.size()) {
-            log_error(
+            game.errors.report(
                 "The \"" + action->name + "\" action only needs " +
                 i2s(action->parameters.size()) + " arguments, but this call "
                 "has " + i2s(words.size()) + "!",
@@ -155,7 +155,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
         
         if(is_var) {
             if(action->parameters[param_nr].force_const) {
-                log_error(
+                game.errors.report(
                     "Argument #" + i2s(w) + " (\"" + words[w] + "\") is a "
                     "variable, but the parameter \"" +
                     action->parameters[param_nr].name + "\" can only be "
@@ -168,7 +168,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
             words[w].erase(words[w].begin()); //Remove the '$'.
             
             if(words[w].empty()) {
-                log_error(
+                game.errors.report(
                     "Argument #" + i2s(w) + " is trying to use a variable "
                     "with no name!",
                     dn
@@ -185,7 +185,7 @@ bool mob_action_call::load_from_data_node(data_node* dn, mob_type* mt) {
     if(action->extra_load_logic) {
         bool success = action->extra_load_logic(*this);
         if(!custom_error.empty()) {
-            log_error(custom_error, dn);
+            game.errors.report(custom_error, dn);
         }
         return success;
     }
@@ -2059,7 +2059,7 @@ bool assert_actions(
             break;
         } case MOB_ACTION_ELSE: {
             if(if_level == 0) {
-                log_error(
+                game.errors.report(
                     "Found an \"else\" action without a matching "
                     "\"if\" action!", dn
                 );
@@ -2068,7 +2068,7 @@ bool assert_actions(
             break;
         } case MOB_ACTION_END_IF: {
             if(if_level == 0) {
-                log_error(
+                game.errors.report(
                     "Found an \"end_if\" action without a matching "
                     "\"if\" action!", dn
                 );
@@ -2082,7 +2082,7 @@ bool assert_actions(
         }
     }
     if(if_level > 0) {
-        log_error(
+        game.errors.report(
             "Some \"if\" actions don't have a matching \"end_if\" action!",
             dn
         );
@@ -2097,7 +2097,7 @@ bool assert_actions(
             string name = actions[a]->args[0];
             
             if(labels.find(name) != labels.end()) {
-                log_error(
+                game.errors.report(
                     "There are multiple labels called \"" + name + "\"!", dn
                 );
                 return false;
@@ -2110,7 +2110,7 @@ bool assert_actions(
         if(actions[a]->action->type == MOB_ACTION_GOTO) {
             string name = actions[a]->args[0];
             if(labels.find(name) == labels.end()) {
-                log_error(
+                game.errors.report(
                     "There is no label called \"" + name + "\", even though "
                     "there are \"goto\" actions that need it!", dn
                 );
@@ -2137,7 +2137,7 @@ bool assert_actions(
             break;
         } default: {
             if(passed_set_state) {
-                log_error(
+                game.errors.report(
                     "There is an action \"" + actions[a]->action->name + "\" "
                     "placed after a \"set_state\" action, which means it will "
                     "never get run! Make sure you didn't mean to call it "

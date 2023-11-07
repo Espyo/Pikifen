@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <iostream>
 
 #include "misc_structs.h"
 
@@ -498,6 +499,152 @@ void enum_name_database::register_item(
     names[idx] = name;
 }
 
+
+
+/* ----------------------------------------------------------------------------
+ * Emits an error in the gameplay "info" window.
+ * s:
+ *   Full error description.
+ */
+void error_manager::emit_in_gameplay(const string &s) {
+    string info_str =
+        "\n\n\n"
+        "ERROR: " + s + "\n\n"
+        "(Saved to \"" + ERROR_LOG_FILE_PATH + "\".)\n\n";
+    print_info(info_str, 30.0f, 3.0f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Logs an error to stdout (i.e. the console).
+ * s:
+ *   Full error description.
+ */
+void error_manager::log_to_console(const string &s) {
+    std::cout << s << std::endl;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Logs an error to the log file.
+ * s:
+ *   Full error description.
+ */
+void error_manager::log_to_file(const string &s) {
+    string prev_error_log;
+    string output = "";
+    
+    //Get the previous contents of the log file, if any.
+    string line;
+    ALLEGRO_FILE* file_i =
+        al_fopen(ERROR_LOG_FILE_PATH.c_str(), "r");
+    if(file_i) {
+        while(!al_feof(file_i)) {
+            getline(file_i, line);
+            prev_error_log += line + "\n";
+        }
+        prev_error_log.erase(prev_error_log.size() - 1);
+        al_fclose(file_i);
+    }
+    
+    //Write this session's header, if necessary.
+    if(nr_session_errors == 0) {
+        string header;
+        if(!prev_error_log.empty()) {
+            header += "\n\n";
+        }
+        header += "Pikifen version " + get_engine_version_string();
+        if(!game.config.version.empty()) {
+            header +=
+                ", " + game.config.name + " version " + game.config.version;
+        }
+        header += ":\n";
+        output += header;
+    }
+    
+    //Log this error.
+    vector<string> lines = split(s, "\n");
+    output += "  " + get_current_time(false) + ": " + lines[0] + "\n";
+    for(size_t l = 1; l < lines.size(); ++l) {
+        output += "  " + lines[l] + "\n";
+    }
+    
+    //Save it.
+    ALLEGRO_FILE* file_o =
+        al_fopen(ERROR_LOG_FILE_PATH.c_str(), "w");
+    if(file_o) {
+        al_fwrite(file_o, prev_error_log + output);
+        al_fclose(file_o);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Prepares everything for an area load.
+ */
+void error_manager::prepare_area_load() {
+    nr_errors_on_area_load = nr_session_errors;
+    first_area_load_error.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reports an error to the user and logs it.
+ * s:
+ *   String that represents the error.
+ * d:
+ *   If not null, this will be used to obtain the file name
+ *   and line that caused the error.
+ */
+void error_manager::report(const string &s, data_node* d) {
+    string full_error = s;
+    if(d) {
+        full_error += " (" + d->file_name;
+        if (d->line_nr != 0) full_error += " line " + i2s(d->line_nr);
+        full_error += ")";
+    }
+    
+    if(first_area_load_error.empty()) first_area_load_error = full_error;
+    
+    log_to_console(full_error);
+    log_to_file(full_error);
+    emit_in_gameplay(full_error);
+    
+    nr_session_errors++;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reports to the gameplay "info" window if any errors happened during
+ * area load.
+ * This will override whatever is in the "info" window, which is likely
+ * the latest error, but that's okay since this information is more important.
+ */
+void error_manager::report_area_load_errors() {
+    if(nr_session_errors <= nr_errors_on_area_load) return;
+    
+    size_t nr_errors_found =
+        nr_session_errors - nr_errors_on_area_load;
+        
+    string info_str =
+        "\n\n\n"
+        "ERROR: " + first_area_load_error + "\n\n";
+    if(nr_errors_found > 1) {
+        info_str += "(+" + i2s(nr_errors_found - 1) + " more) ";
+    }
+    info_str +=
+        "(Saved to \"" + ERROR_LOG_FILE_PATH + "\".)\n\n";
+        
+    print_info(info_str, 30.0f, 3.0f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether this session has had any error reports.
+ */
+bool error_manager::session_has_errors() {
+    return nr_session_errors > 0;
+}
 
 
 /* ----------------------------------------------------------------------------

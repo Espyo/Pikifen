@@ -107,8 +107,8 @@ public:
     ALLEGRO_DISPLAY* display;
     //A dummy mob state for mobs with no state to use.
     mob_state* dummy_mob_state;
-    //How many errors have been reported this application session.
-    size_t errors_reported_so_far = 0;
+    //Error manager.
+    error_manager errors;
     //Manager for all full-screen fade-ins and fade-outs.
     fade_manager fade_mgr;
     //List of fonts.

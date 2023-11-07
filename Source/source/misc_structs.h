@@ -248,6 +248,29 @@ struct camera_info {
 
 
 /* ----------------------------------------------------------------------------
+ * Manages any errors that occur with the engine's content or logic.
+ */
+struct error_manager {
+    void report(const string &s, data_node* d = NULL);
+    void report_area_load_errors();
+    void prepare_area_load();
+    bool session_has_errors();
+
+private:
+    //How many errors have been reported this application session.
+    size_t nr_session_errors = 0;
+    //Errors reported by the time the area load started.
+    size_t nr_errors_on_area_load = 0;
+    //First error reported during area load.
+    string first_area_load_error;
+    
+    void emit_in_gameplay(const string &s);
+    void log_to_console(const string &s);
+    void log_to_file(const string &s);
+};
+
+
+/* ----------------------------------------------------------------------------
  * Just a list of different elements in an enum and what their names are.
  */
 struct enum_name_database {
