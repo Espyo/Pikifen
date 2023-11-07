@@ -985,6 +985,7 @@ void gameplay_state::do_menu_logic() {
             delete onion_menu;
             onion_menu = NULL;
             paused = false;
+            game.audio.handle_world_unpause();
         }
     } else if(pause_menu) {
         if(!pause_menu->to_delete) {
@@ -993,6 +994,7 @@ void gameplay_state::do_menu_logic() {
             delete pause_menu;
             pause_menu = NULL;
             paused = false;
+            game.audio.handle_world_unpause();
         }
     }
     

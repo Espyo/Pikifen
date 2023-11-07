@@ -1449,7 +1449,7 @@ void mob::do_attack_effects(
         
         sfx_source_config_struct attack_sfx_config;
         attack_sfx_config.gain = 0.6f;
-        game.audio.create_pos_sfx_source(
+        game.audio.create_world_pos_sfx_source(
             game.sys_assets.sfx_attack,
             pos,
             attack_sfx_config
