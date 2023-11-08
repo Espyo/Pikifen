@@ -72,6 +72,8 @@ public:
     
     //Is it active? i.e. being controlled by a player.
     bool active;
+    //Which player controls this leader? -1 for none
+    int active_player;
     //Is it currently auto-plucking?
     bool auto_plucking;
     //Pikmin it wants to pluck.
@@ -167,8 +169,8 @@ private:
 
 
 void change_to_next_leader(
-    const bool forward, const bool force_success, const bool keep_idx
+    const bool forward, const bool force_success, const bool keep_idx,const size_t player_id
 );
-bool grab_closest_group_member();
+bool grab_closest_group_member(const size_t player_id);
 
 #endif //ifndef LEADER_INCLUDED

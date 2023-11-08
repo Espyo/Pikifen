@@ -110,12 +110,12 @@ void enemy::finish_dying_class_specifics() {
  * Sets up stuff for the beginning of the enemy's death process.
  */
 void enemy::start_dying_class_specifics() {
-    game.states.gameplay->enemy_deaths++;
-    game.states.gameplay->enemy_points_collected += ene_type->points;
-    game.states.gameplay->last_enemy_killed_pos = pos;
+    game.states.gameplay->mission_info[0].enemy_deaths++;
+    game.states.gameplay->mission_info[0].enemy_points_collected += ene_type->points;
+    game.states.gameplay->mission_info[0].last_enemy_killed_pos = pos;
     game.statistics.enemy_deaths++;
     
     if(game.cur_area_data.mission.goal == MISSION_GOAL_BATTLE_ENEMIES) {
-        game.states.gameplay->mission_remaining_mob_ids.erase(id);
+        game.states.gameplay->mission_info[0].mission_remaining_mob_ids.erase(id);
     }
 }

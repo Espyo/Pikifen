@@ -107,8 +107,8 @@ vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
     
     //Now, count how many types are invulnerable to each detected hazard.
     map<hazard*, size_t> inv_instances;
-    for(auto &t : carrier_types) {
-        for(auto &h : t->hazard_vulnerabilities) {
+    for(auto t : carrier_types) {
+        for(auto h : t->hazard_vulnerabilities) {
             if(h.second.damage_mult == 0.0f) {
                 inv_instances[h.first]++;
             }
@@ -117,7 +117,7 @@ vector<hazard*> carry_info_struct::get_carrier_invulnerabilities() const {
     
     //Finally, only accept those that ALL types are invulnerable to.
     vector<hazard*> invulnerabilities;
-    for(auto &i : inv_instances) {
+    for(auto i : inv_instances) {
         if(i.second == carrier_types.size()) {
             invulnerabilities.push_back(i.first);
         }
@@ -1058,12 +1058,12 @@ void pikmin_nest_type_struct::load_properties(
     
     leg_body_parts = semicolon_list_to_vector(legs_str);
     if(pik_types_node && leg_body_parts.empty()) {
-        game.errors.report(
+        log_error(
             "A nest-like object type needs a list of leg body parts!",
             file
         );
     } else if(legs_node && leg_body_parts.size() % 2 == 1) {
-        game.errors.report(
+        log_error(
             "A nest-like object type needs an even number of leg body parts!",
             legs_node
         );
@@ -1076,7 +1076,7 @@ void pikmin_nest_type_struct::load_properties(
             game.mob_types.pikmin.find(str) ==
             game.mob_types.pikmin.end()
         ) {
-            game.errors.report(
+            log_error(
                 "Unknown Pikmin type \"" + str + "\"!",
                 pik_types_node
             );
@@ -1206,7 +1206,7 @@ mob* create_mob(
         }
         
         if(!spawn_info) {
-            game.errors.report(
+            log_error(
                 "Object \"" + type->name + "\" tried to spawn a child with the "
                 "spawn name \"" + child_info->spawn_name + "\", but that name "
                 "does not exist in the list of spawn data!"
@@ -1242,7 +1242,7 @@ mob* create_mob(
                 p_info->limb_anim.cur_anim = anim_to_use;
                 p_info->limb_anim.start();
             } else {
-                game.errors.report(
+                log_error(
                     "Object \"" + new_mob->type->name + "\", child object of "
                     "object \"" + type->name + "\", tried to use animation \"" +
                     child_info->limb_anim_name + "\" for a limb, but that "

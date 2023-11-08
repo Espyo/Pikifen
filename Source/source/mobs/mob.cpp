@@ -1668,7 +1668,7 @@ bool mob::follow_path(
             carry_info->get_carrier_invulnerabilities();
     } else {
         //Use the object's standard invulnerabilities.
-        for(auto &v : type->hazard_vulnerabilities) {
+        for(auto v : type->hazard_vulnerabilities) {
             if(v.second.damage_mult == 0.0f) {
                 final_settings.invulnerabilities.push_back(v.first);
             }
@@ -2481,7 +2481,7 @@ bool mob::has_clear_line(mob* target_mob) const {
         return false;
     }
     
-    for(auto &e_ptr : candidate_edges) {
+    for(auto e_ptr : candidate_edges) {
         if(
             !line_segs_intersect(
                 pos, target_mob->pos,
@@ -2680,8 +2680,10 @@ void mob::leave_group() {
     group_leader->group->change_standby_type_if_needed();
     
     following_group = NULL;
-    
-    game.states.gameplay->update_closest_group_members();
+    if(group_leader->type->category->id == MOB_CATEGORY_LEADERS){
+        leader* l_ptr = (leader*)group_leader;
+        game.states.gameplay->player_info[l_ptr->active_player].update_closest_group_members();
+    }
 }
 
 
@@ -2755,7 +2757,7 @@ void mob::read_script_vars(const script_var_reader &svr) {
     if(svr.get("team", team_var)) {
         MOB_TEAMS team_nr = string_to_team_nr(team_var);
         if(team_nr == INVALID) {
-            game.errors.report(
+            log_error(
                 "Unknown team name \"" + team_var +
                 "\", when trying to create mob (" +
                 get_error_message_mob_info(this) + ")!", NULL
@@ -2898,7 +2900,7 @@ void mob::set_animation(
     }
     
     if(final_nr == INVALID) {
-        game.errors.report(
+        log_error(
             "Mob (" + get_error_message_mob_info(this) +
             ") tried to switch from " +
             (
@@ -3065,7 +3067,7 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     }
     
     if(!type_ptr) {
-        game.errors.report(
+        log_error(
             "Mob (" + get_error_message_mob_info(this) +
             ") tried to spawn an object of the "
             "type \"" + info->mob_type_name + "\", but there is no such "
@@ -3712,10 +3714,12 @@ void mob::tick_misc_logic(const float delta_t) {
         bool is_far_from_group =
             dist(group->get_average_member_pos(), pos) >
             MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);
+        for (size_t p = 0; p<MAX_PLAYERS;++p){
+            if(game.states.gameplay->player_info[p].cur_leader_ptr== NULL) continue;
         bool is_swarming =
-            game.states.gameplay->swarm_magnitude &&
-            game.states.gameplay->cur_leader_ptr == this;
-            
+            game.states.gameplay->player_info[p].swarm_magnitude &&
+            game.states.gameplay->player_info[p].cur_leader_ptr == this;
+        
         //Find what mode we're in on this frame.
         if(is_swarming) {
             group->mode = group_info_struct::MODE_SWARM;
@@ -3724,7 +3728,6 @@ void mob::tick_misc_logic(const float delta_t) {
         } else {
             group->mode = group_info_struct::MODE_SHUFFLE;
         }
-        
         //Change things depending on the mode.
         switch(group->mode) {
         case group_info_struct::MODE_FOLLOW_BACK: {
@@ -3769,7 +3772,7 @@ void mob::tick_misc_logic(const float delta_t) {
         } case group_info_struct::MODE_SWARM: {
     
             //Swarming.
-            group->anchor_angle = game.states.gameplay->swarm_angle;
+            group->anchor_angle = game.states.gameplay->player_info[p].swarm_angle;
             point new_anchor_rel_pos =
                 rotate_point(
                     point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
@@ -3779,7 +3782,7 @@ void mob::tick_misc_logic(const float delta_t) {
             
             float intensity_dist =
                 game.config.cursor_max_dist *
-                game.states.gameplay->swarm_magnitude;
+                game.states.gameplay->player_info[p].swarm_magnitude;
             al_identity_transform(&group->transform);
             al_translate_transform(
                 &group->transform, -MOB::SWARM_MARGIN, 0
@@ -3790,7 +3793,7 @@ void mob::tick_misc_logic(const float delta_t) {
                 1 -
                 (
                     MOB::SWARM_VERTICAL_SCALE*
-                    game.states.gameplay->swarm_magnitude
+                    game.states.gameplay->player_info[p].swarm_magnitude
                 )
             );
             al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
@@ -3807,8 +3810,9 @@ void mob::tick_misc_logic(const float delta_t) {
             //before.
             group->reassign_spots();
         }
-    }
+        }
     
+    }
     //Damage squash stuff.
     if(damage_squash_time > 0.0f) {
         damage_squash_time -= delta_t;
@@ -3913,15 +3917,18 @@ void mob::tick_script(const float delta_t) {
         set_health(true, false, type->health_regen * delta_t);
     }
     
+    for (size_t p = 0; p<MAX_PLAYERS;++p){
+        if(game.states.gameplay->player_info[p].cur_leader_ptr== NULL) continue;
+
     //Check if it got whistled.
     if(
-        game.states.gameplay->cur_leader_ptr &&
-        game.states.gameplay->whistle.whistling &&
-        dist(pos, game.states.gameplay->whistle.center) <=
-        game.states.gameplay->whistle.radius
+        game.states.gameplay->player_info[p].cur_leader_ptr &&
+        game.states.gameplay->player_info[p].whistle.whistling &&
+        dist(pos, game.states.gameplay->player_info[p].whistle.center) <=
+        game.states.gameplay->player_info[p].whistle.radius
     ) {
         fsm.run_event(
-            MOB_EV_WHISTLED, (void*) game.states.gameplay->cur_leader_ptr
+            MOB_EV_WHISTLED, (void*) game.states.gameplay->player_info[p].cur_leader_ptr
         );
         
         bool saved_by_whistle = false;
@@ -3941,8 +3948,9 @@ void mob::tick_script(const float delta_t) {
         if(saved_by_whistle && type->category->id == MOB_CATEGORY_PIKMIN) {
             game.statistics.pikmin_saved++;
         }
+        break;
     }
-    
+    }
     //Following a leader.
     if(following_group) {
         mob_event* spot_far_ev =  fsm.get_event(MOB_EV_SPOT_IS_FAR);
