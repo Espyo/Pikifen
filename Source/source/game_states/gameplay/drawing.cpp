@@ -30,6 +30,7 @@
  *   Transformation to use when drawing to a bitmap.
  */
 void gameplay_state::do_game_drawing(
+    const size_t &player_id,
     ALLEGRO_BITMAP* bmp_output, const ALLEGRO_TRANSFORM* bmp_transform
 ) {
 
@@ -44,8 +45,8 @@ void gameplay_state::do_game_drawing(
         blend_old_aop, blend_old_asrc, blend_old_adst;
         
     if(bmp_output) {
-        old_world_to_screen_transform = game.world_to_screen_transform;
-        game.world_to_screen_transform = *bmp_transform;
+        old_world_to_screen_transform = player_info[player_id].world_to_screen_transform;
+        player_info[player_id].world_to_screen_transform = *bmp_transform;
         al_set_target_bitmap(bmp_output);
         al_get_separate_blender(
             &blend_old_op, &blend_old_src, &blend_old_dst,
@@ -56,6 +57,9 @@ void gameplay_state::do_game_drawing(
             ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD,
             ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
         );
+        game.cam = player_info[player_id].cam;
+        game.world_to_screen_transform = player_info[player_id].world_to_screen_transform;
+        game.screen_to_world_transform = player_info[player_id].screen_to_world_transform;
     }
     
     al_clear_to_color(game.cur_area_data.bg_color);
@@ -73,7 +77,7 @@ void gameplay_state::do_game_drawing(
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Drawing -- World");
     }
-    al_use_transform(&game.world_to_screen_transform);
+    al_use_transform(&player_info[player_id].world_to_screen_transform);
     draw_world_components(bmp_output);
     if(game.perf_mon) {
         game.perf_mon->finish_measurement();
@@ -83,7 +87,7 @@ void gameplay_state::do_game_drawing(
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Drawing -- In-game text");
     }
-    if(!bmp_output && game.maker_tools.hud) {
+    if( game.maker_tools.hud) {
         draw_ingame_text();
     }
     if(game.perf_mon) {
@@ -113,15 +117,7 @@ void gameplay_state::do_game_drawing(
     }
     
     //Finish dumping to a bitmap image here.
-    if(bmp_output) {
-        al_set_separate_blender(
-            blend_old_op, blend_old_src, blend_old_dst,
-            blend_old_aop, blend_old_asrc, blend_old_adst
-        );
-        game.world_to_screen_transform = old_world_to_screen_transform;
-        al_set_target_backbuffer(game.display);
-        return;
-    }
+
     
     //Layer 6 -- Lighting filter.
     if(game.perf_mon) {
@@ -133,16 +129,16 @@ void gameplay_state::do_game_drawing(
     }
     
     //Layer 7 -- Leader cursor.
-    al_use_transform(&game.world_to_screen_transform);
+    al_use_transform(&player_info[player_id].world_to_screen_transform);
     ALLEGRO_COLOR cursor_color = game.config.no_pikmin_color;
-    if(closest_group_member[BUBBLE_CURRENT]) {
+    if(player_info[player_id].closest_group_member[BUBBLE_CURRENT]) {
         cursor_color =
-            closest_group_member[BUBBLE_CURRENT]->type->main_color;
+            player_info[player_id].closest_group_member[BUBBLE_CURRENT]->type->main_color;
     }
-    if(cur_leader_ptr && game.maker_tools.hud) {
+    if(player_info[player_id].cur_leader_ptr && game.maker_tools.hud) {
         cursor_color =
-            change_color_lighting(cursor_color, cursor_height_diff_light);
-        draw_leader_cursor(cursor_color);
+            change_color_lighting(cursor_color, player_info[player_id].cursor_height_diff_light);
+        draw_leader_cursor(player_id,cursor_color);
     }
     
     //Layer 8 -- HUD.
@@ -153,14 +149,14 @@ void gameplay_state::do_game_drawing(
     }
     
     if(game.maker_tools.hud) {
-        hud->gui.draw();
+        player_info[player_id].hud->gui.draw();
         
         draw_big_msg();
         
-        if(msg_box) {
-            draw_message_box();
-        } else if(onion_menu) {
-            draw_onion_menu();
+        if(player_info[player_id].msg_box) {
+            draw_message_box(player_id);
+        } else if(player_info[player_id].onion_menu) {
+            draw_onion_menu(player_id);
         } else if(pause_menu) {
             draw_pause_menu();
         } else {
@@ -193,7 +189,15 @@ void gameplay_state::do_game_drawing(
     }
     
     draw_debug_tools();
-    
+    if(bmp_output) {
+        al_set_separate_blender(
+            blend_old_op, blend_old_src, blend_old_dst,
+            blend_old_aop, blend_old_asrc, blend_old_adst
+        );
+        player_info[player_id].world_to_screen_transform = old_world_to_screen_transform;
+        al_set_target_backbuffer(game.display);
+        return;
+    }
     al_flip_display();
 }
 #pragma warning(default: 4701)
@@ -832,53 +836,53 @@ void gameplay_state::draw_ingame_text() {
  * color:
  *   Color to tint it by.
  */
-void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
-    if(!cur_leader_ptr) return;
+void gameplay_state::draw_leader_cursor(const size_t &player_id,const ALLEGRO_COLOR &color) {
+    if(player_info[player_id].cur_leader_ptr==NULL) return;
     
-    size_t n_arrows = cur_leader_ptr->swarm_arrows.size();
+    size_t n_arrows = player_info[player_id].cur_leader_ptr->swarm_arrows.size();
     for(size_t a = 0; a < n_arrows; ++a) {
         point pos(
-            cos(swarm_angle) * cur_leader_ptr->swarm_arrows[a],
-            sin(swarm_angle) * cur_leader_ptr->swarm_arrows[a]
+            cos(player_info[player_id].swarm_angle) * player_info[player_id].cur_leader_ptr->swarm_arrows[a],
+            sin(player_info[player_id].swarm_angle) * player_info[player_id].cur_leader_ptr->swarm_arrows[a]
         );
         float alpha =
             64 + std::min(
                 191,
                 (int) (
                     191 *
-                    (cur_leader_ptr->swarm_arrows[a] /
+                    (player_info[player_id].cur_leader_ptr->swarm_arrows[a] /
                      (game.config.cursor_max_dist * 0.4))
                 )
             );
         draw_bitmap(
             game.sys_assets.bmp_swarm_arrow,
-            cur_leader_ptr->pos + pos,
+            player_info[player_id].cur_leader_ptr->pos + pos,
             point(
-                16 * (1 + cur_leader_ptr->swarm_arrows[a] /
+                16 * (1 + player_info[player_id].cur_leader_ptr->swarm_arrows[a] /
                       game.config.cursor_max_dist),
                 -1
             ),
-            swarm_angle,
+            player_info[player_id].swarm_angle,
             map_alpha(alpha)
         );
     }
     
-    size_t n_rings = whistle.rings.size();
+    size_t n_rings = player_info[player_id].whistle.rings.size();
     float cursor_angle =
-        get_angle(cur_leader_ptr->pos, leader_cursor_w);
+        get_angle(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
     float cursor_distance =
-        dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
+        dist(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w).to_float();
     for(size_t r = 0; r < n_rings; ++r) {
         point pos(
-            cur_leader_ptr->pos.x + cos(cursor_angle) * whistle.rings[r],
-            cur_leader_ptr->pos.y + sin(cursor_angle) * whistle.rings[r]
+            player_info[player_id].cur_leader_ptr->pos.x + cos(cursor_angle) * player_info[player_id].whistle.rings[r],
+            player_info[player_id].cur_leader_ptr->pos.y + sin(cursor_angle) * player_info[player_id].whistle.rings[r]
         );
-        float ring_to_whistle_distance = cursor_distance - whistle.rings[r];
+        float ring_to_whistle_distance = cursor_distance - player_info[player_id].whistle.rings[r];
         float scale =
             interpolate_number(
                 ring_to_whistle_distance,
                 0, cursor_distance,
-                whistle.radius * 2, 0
+                player_info[player_id].whistle.radius * 2, 0
             );
         float alpha =
             interpolate_number(
@@ -886,7 +890,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                 0, cursor_distance,
                 0, 100
             );
-        unsigned char n = whistle.ring_colors[r];
+        unsigned char n = player_info[player_id].whistle.ring_colors[r];
         draw_bitmap(
             game.sys_assets.bmp_bright_ring,
             pos,
@@ -901,10 +905,10 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         );
     }
     
-    if(whistle.radius > 0 || whistle.fade_timer.time_left > 0.0f) {
+    if(player_info[player_id].whistle.radius > 0 || player_info[player_id].whistle.fade_timer.time_left > 0.0f) {
         al_draw_filled_circle(
-            whistle.center.x, whistle.center.y,
-            whistle.radius,
+            player_info[player_id].whistle.center.x, player_info[player_id].whistle.center.y,
+            player_info[player_id].whistle.radius,
             al_map_rgba(48, 128, 120, 64)
         );
         
@@ -918,10 +922,10 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                     WHISTLE::DOT_SPIN_SPEED * area_time_passed;
                     
                 point dot_pos(
-                    whistle.center.x +
-                    cos(angle) * whistle.dot_radius[d],
-                    whistle.center.y +
-                    sin(angle) * whistle.dot_radius[d]
+                    player_info[player_id].whistle.center.x +
+                    cos(angle) * player_info[player_id].whistle.dot_radius[d],
+                    player_info[player_id].whistle.center.y +
+                    sin(angle) * player_info[player_id].whistle.dot_radius[d]
                 );
                 
                 ALLEGRO_COLOR dot_color =
@@ -931,8 +935,8 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
                         WHISTLE::DOT_COLORS[d][2]
                     );
                 unsigned char dot_alpha = 255;
-                if(whistle.fade_timer.time_left > 0.0f) {
-                    dot_alpha = 255 * whistle.fade_timer.get_ratio_left();
+                if(player_info[player_id].whistle.fade_timer.time_left > 0.0f) {
+                    dot_alpha = 255 * player_info[player_id].whistle.fade_timer.get_ratio_left();
                 }
                 
                 draw_bitmap(
@@ -950,29 +954,29 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
     
     draw_bitmap(
         game.sys_assets.bmp_cursor,
-        leader_cursor_w,
+        player_info[player_id].leader_cursor_w,
         point(bmp_cursor_w * 0.5, bmp_cursor_h * 0.5),
         cursor_angle,
         change_color_lighting(
             color,
-            cursor_height_diff_light
+            player_info[player_id].cursor_height_diff_light
         )
     );
     
     //Throw preview.
-    draw_throw_preview();
+    draw_throw_preview(player_id);
     
     //Standby type count.
     size_t n_standby_pikmin = 0;
-    if(cur_leader_ptr->group->cur_standby_type) {
+    if(player_info[player_id].cur_leader_ptr->group->cur_standby_type) {
         for(
-            size_t m = 0; m < cur_leader_ptr->group->members.size();
+            size_t m = 0; m < player_info[player_id].cur_leader_ptr->group->members.size();
             ++m
         ) {
-            mob* m_ptr = cur_leader_ptr->group->members[m];
+            mob* m_ptr = player_info[player_id].cur_leader_ptr->group->members[m];
             if(
                 m_ptr->subgroup_type_ptr ==
-                cur_leader_ptr->group->cur_standby_type
+                player_info[player_id].cur_leader_ptr->group->cur_standby_type
             ) {
                 n_standby_pikmin++;
             }
@@ -988,7 +992,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         draw_scaled_text(
             game.fonts.cursor_counter,
             color,
-            leader_cursor_s +
+            player_info[player_id].leader_cursor_s +
             point(count_offset, count_offset),
             point(1.0f, 1.0f),
             ALLEGRO_ALIGN_LEFT,
@@ -997,7 +1001,7 @@ void gameplay_state::draw_leader_cursor(const ALLEGRO_COLOR &color) {
         );
     }
     
-    al_use_transform(&game.world_to_screen_transform);
+    al_use_transform(&player_info[player_id].world_to_screen_transform);
 }
 
 
@@ -1144,7 +1148,7 @@ void gameplay_state::draw_lighting_filter() {
 /* ----------------------------------------------------------------------------
  * Draws a message box.
  */
-void gameplay_state::draw_message_box() {
+void gameplay_state::draw_message_box(const size_t &player_id) {
     //Mouse cursor.
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
@@ -1152,9 +1156,9 @@ void gameplay_state::draw_message_box() {
     
     //Transition things.
     float transition_ratio =
-        msg_box->transition_in ?
-        msg_box->transition_timer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
-        (1 - msg_box->transition_timer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
+        player_info[player_id].msg_box->transition_in ?
+        player_info[player_id].msg_box->transition_timer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
+        (1 - player_info[player_id].msg_box->transition_timer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
     int line_height = al_get_font_line_height(game.fonts.standard);
     float box_height = line_height * 4;
     float offset =
@@ -1178,9 +1182,9 @@ void gameplay_state::draw_message_box() {
     );
     
     //Draw the speaker's icon, if any.
-    if(msg_box->speaker_icon) {
+    if(player_info[player_id].msg_box->speaker_icon) {
         draw_bitmap(
-            msg_box->speaker_icon,
+            player_info[player_id].msg_box->speaker_icon,
             point(
                 40,
                 game.win_h - box_height - 16 + offset
@@ -1188,7 +1192,7 @@ void gameplay_state::draw_message_box() {
             point(48, 48)
         );
         draw_bitmap(
-            hud->bmp_bubble,
+            player_info[player_id].hud->bmp_bubble,
             point(
                 40,
                 game.win_h - box_height - 16 + offset
@@ -1208,22 +1212,22 @@ void gameplay_state::draw_message_box() {
             offset
         ),
         point(32.0f, 32.0f),
-        msg_box->advance_button_alpha * 255
+        player_info[player_id].msg_box->advance_button_alpha * 255
     );
     
     //Draw the message's text.
     size_t token_idx = 0;
     for(size_t l = 0; l < 3; ++l) {
-        size_t line_idx = msg_box->cur_section * 3 + l;
-        if(line_idx >= msg_box->tokens_per_line.size()) {
+        size_t line_idx = player_info[player_id].msg_box->cur_section * 3 + l;
+        if(line_idx >= player_info[player_id].msg_box->tokens_per_line.size()) {
             break;
         }
         
         //Figure out what scaling is necessary, if any.
         unsigned int total_width = 0;
         float x_scale = 1.0f;
-        for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); ++t) {
-            total_width += msg_box->tokens_per_line[line_idx][t].width;
+        for(size_t t = 0; t < player_info[player_id].msg_box->tokens_per_line[line_idx].size(); ++t) {
+            total_width += player_info[player_id].msg_box->tokens_per_line[line_idx][t].width;
         }
         const float max_text_width = (MSG_BOX::MARGIN + MSG_BOX::PADDING) * 2;
         if(total_width > game.win_w - max_text_width) {
@@ -1235,10 +1239,10 @@ void gameplay_state::draw_message_box() {
         float start_y =
             game.win_h - line_height * 4 + MSG_BOX::PADDING + offset;
             
-        for(size_t t = 0; t < msg_box->tokens_per_line[line_idx].size(); ++t) {
+        for(size_t t = 0; t < player_info[player_id].msg_box->tokens_per_line[line_idx].size(); ++t) {
             token_idx++;
-            if(token_idx >= msg_box->cur_token) break;
-            string_token &cur_token = msg_box->tokens_per_line[line_idx][t];
+            if(token_idx >= player_info[player_id].msg_box->cur_token) break;
+            string_token &cur_token = player_info[player_id].msg_box->tokens_per_line[line_idx][t];
             
             float x = caret;
             float y = start_y + line_height * l;
@@ -1247,11 +1251,11 @@ void gameplay_state::draw_message_box() {
             
             //Change the token's position and alpha, if it needs animating.
             //First, check for the typing animation.
-            if(token_idx >= msg_box->skipped_at_token) {
-                this_token_anim_time = msg_box->total_skip_anim_time;
+            if(token_idx >= player_info[player_id].msg_box->skipped_at_token) {
+                this_token_anim_time = player_info[player_id].msg_box->total_skip_anim_time;
             } else {
                 this_token_anim_time =
-                    msg_box->total_token_anim_time -
+                    player_info[player_id].msg_box->total_token_anim_time -
                     ((token_idx + 1) * game.config.message_char_interval);
             }
             if(
@@ -1270,9 +1274,9 @@ void gameplay_state::draw_message_box() {
             }
             
             //Now, for the swiping animation.
-            if(msg_box->swipe_timer > 0.0f) {
+            if(player_info[player_id].msg_box->swipe_timer > 0.0f) {
                 float ratio =
-                    1 - (msg_box->swipe_timer / MSG_BOX::TOKEN_SWIPE_DURATION);
+                    1 - (player_info[player_id].msg_box->swipe_timer / MSG_BOX::TOKEN_SWIPE_DURATION);
                 x += MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
                 y += MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
                 alpha = std::max(0, (signed int) (alpha - ratio * 255));
@@ -1317,13 +1321,13 @@ void gameplay_state::draw_message_box() {
 /* ----------------------------------------------------------------------------
  * Draws the current Onion menu.
  */
-void gameplay_state::draw_onion_menu() {
+void gameplay_state::draw_onion_menu(const size_t &player_id) {
     al_draw_filled_rectangle(
         0, 0, game.win_w, game.win_h,
-        al_map_rgba(24, 64, 60, 220 * onion_menu->bg_alpha_mult)
+        al_map_rgba(24, 64, 60, 220 * player_info[player_id].onion_menu->bg_alpha_mult)
     );
     
-    onion_menu->gui.draw();
+    player_info[player_id].onion_menu->gui.draw();
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
 }
@@ -1421,17 +1425,17 @@ void gameplay_state::draw_system_stuff() {
 /* ----------------------------------------------------------------------------
  * Draws a leader's throw preview.
  */
-void gameplay_state::draw_throw_preview() {
-    if(!cur_leader_ptr) return;
+void gameplay_state::draw_throw_preview(const size_t &player_id) {
+    if(!player_info[player_id].cur_leader_ptr) return;
     
     ALLEGRO_VERTEX vertexes[16];
     
-    if(!cur_leader_ptr->throwee) {
+    if(!player_info[player_id].cur_leader_ptr->throwee) {
         //Just draw a simple line and leave.
         unsigned char n_vertexes =
             get_throw_preview_vertexes(
                 vertexes, 0.0f, 1.0f,
-                cur_leader_ptr->pos, throw_dest,
+                player_info[player_id].cur_leader_ptr->pos, player_info[player_id].throw_dest,
                 change_alpha(
                     game.config.no_pikmin_color,
                     GAMEPLAY::PREVIEW_OPACITY / 2.0f
@@ -1454,12 +1458,12 @@ void gameplay_state::draw_throw_preview() {
     
     game.cur_area_data.bmap.get_edges_in_region(
         point(
-            std::min(cur_leader_ptr->pos.x, throw_dest.x),
-            std::min(cur_leader_ptr->pos.y, throw_dest.y)
+            std::min(player_info[player_id].cur_leader_ptr->pos.x, player_info[player_id].throw_dest.x),
+            std::min(player_info[player_id].cur_leader_ptr->pos.y, player_info[player_id].throw_dest.y)
         ),
         point(
-            std::max(cur_leader_ptr->pos.x, throw_dest.x),
-            std::max(cur_leader_ptr->pos.y, throw_dest.y)
+            std::max(player_info[player_id].cur_leader_ptr->pos.x, player_info[player_id].throw_dest.x),
+            std::max(player_info[player_id].cur_leader_ptr->pos.y, player_info[player_id].throw_dest.y)
         ),
         candidate_edges
     );
@@ -1467,17 +1471,17 @@ void gameplay_state::draw_throw_preview() {
     float wall_collision_r = 2.0f;
     bool wall_is_blocking_sector = false;
     dist leader_to_dest_dist(
-        cur_leader_ptr->pos, throw_dest
+        player_info[player_id].cur_leader_ptr->pos, player_info[player_id].throw_dest
     );
     float throw_h_angle = 0.0f;
     float throw_v_angle = 0.0f;
     float throw_speed = 0.0f;
     float throw_h_speed = 0.0f;
     coordinates_to_angle(
-        cur_leader_ptr->throwee_speed, &throw_h_angle, &throw_h_speed
+        player_info[player_id].cur_leader_ptr->throwee_speed, &throw_h_angle, &throw_h_speed
     );
     coordinates_to_angle(
-        point(throw_h_speed, cur_leader_ptr->throwee_speed_z),
+        point(throw_h_speed, player_info[player_id].cur_leader_ptr->throwee_speed_z),
         &throw_v_angle, &throw_speed
     );
     float texture_offset =
@@ -1496,8 +1500,8 @@ void gameplay_state::draw_throw_preview() {
         float r = 0.0f;
         if(
             !line_segs_intersect(
-                cur_leader_ptr->pos,
-                throw_dest,
+                player_info[player_id].cur_leader_ptr->pos,
+                player_info[player_id].throw_dest,
                 point(e->vertexes[0]->x, e->vertexes[0]->y),
                 point(e->vertexes[1]->x, e->vertexes[1]->y),
                 &r, NULL
@@ -1540,7 +1544,7 @@ void gameplay_state::draw_throw_preview() {
                     cos(throw_v_angle) * cos(throw_v_angle)
                 )
             ) * x_at_edge * x_at_edge;
-        y_at_edge += cur_leader_ptr->z;
+        y_at_edge += player_info[player_id].cur_leader_ptr->z;
         
         //If the throwee would hit the wall at these coordinates, collision.
         if(edge_z >= y_at_edge && r < wall_collision_r) {
@@ -1566,9 +1570,9 @@ void gameplay_state::draw_throw_preview() {
         unsigned char n_vertexes =
             get_throw_preview_vertexes(
                 vertexes, 0.0f, 1.0f,
-                cur_leader_ptr->pos, throw_dest,
+                player_info[player_id].cur_leader_ptr->pos, player_info[player_id].throw_dest,
                 change_alpha(
-                    cur_leader_ptr->throwee->type->main_color,
+                    player_info[player_id].cur_leader_ptr->throwee->type->main_color,
                     GAMEPLAY::PREVIEW_OPACITY
                 ),
                 texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
@@ -1585,23 +1589,23 @@ void gameplay_state::draw_throw_preview() {
         //Wall collision.
         
         point collision_point(
-            cur_leader_ptr->pos.x +
-            (throw_dest.x - cur_leader_ptr->pos.x) *
+            player_info[player_id].cur_leader_ptr->pos.x +
+            (player_info[player_id].throw_dest.x - player_info[player_id].cur_leader_ptr->pos.x) *
             wall_collision_r,
-            cur_leader_ptr->pos.y +
-            (throw_dest.y - cur_leader_ptr->pos.y) *
+            player_info[player_id].cur_leader_ptr->pos.y +
+            (player_info[player_id].throw_dest.y - player_info[player_id].cur_leader_ptr->pos.y) *
             wall_collision_r
         );
         
-        if(!cur_leader_ptr->throwee_can_reach || wall_is_blocking_sector) {
+        if(!player_info[player_id].cur_leader_ptr->throwee_can_reach || wall_is_blocking_sector) {
             //It's impossible to reach.
             
             unsigned char n_vertexes =
                 get_throw_preview_vertexes(
                     vertexes, 0.0f, wall_collision_r,
-                    cur_leader_ptr->pos, throw_dest,
+                    player_info[player_id].cur_leader_ptr->pos, player_info[player_id].throw_dest,
                     change_alpha(
-                        cur_leader_ptr->throwee->type->main_color,
+                        player_info[player_id].cur_leader_ptr->throwee->type->main_color,
                         GAMEPLAY::PREVIEW_OPACITY
                     ),
                     texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
@@ -1618,7 +1622,7 @@ void gameplay_state::draw_throw_preview() {
                 game.sys_assets.bmp_throw_invalid,
                 collision_point, point(32, 32), throw_h_angle,
                 change_alpha(
-                    cur_leader_ptr->throwee->type->main_color,
+                    player_info[player_id].cur_leader_ptr->throwee->type->main_color,
                     GAMEPLAY::PREVIEW_OPACITY
                 )
             );
@@ -1629,9 +1633,9 @@ void gameplay_state::draw_throw_preview() {
             unsigned char n_vertexes =
                 get_throw_preview_vertexes(
                     vertexes, 0.0f, wall_collision_r,
-                    cur_leader_ptr->pos, throw_dest,
+                    player_info[player_id].cur_leader_ptr->pos, player_info[player_id].throw_dest,
                     change_alpha(
-                        cur_leader_ptr->throwee->type->main_color,
+                        player_info[player_id].cur_leader_ptr->throwee->type->main_color,
                         GAMEPLAY::COLLISION_OPACITY
                     ),
                     texture_offset, GAMEPLAY::PREVIEW_TEXTURE_SCALE, true
@@ -1647,9 +1651,9 @@ void gameplay_state::draw_throw_preview() {
             n_vertexes =
                 get_throw_preview_vertexes(
                     vertexes, wall_collision_r, 1.0f,
-                    cur_leader_ptr->pos, throw_dest,
+                    player_info[player_id].cur_leader_ptr->pos, player_info[player_id].throw_dest,
                     change_alpha(
-                        cur_leader_ptr->throwee->type->main_color,
+                        player_info[player_id].cur_leader_ptr->throwee->type->main_color,
                         GAMEPLAY::PREVIEW_OPACITY
                     ),
                     0.0f, 1.0f, true
@@ -1666,7 +1670,7 @@ void gameplay_state::draw_throw_preview() {
                 game.sys_assets.bmp_throw_invalid,
                 collision_point, point(16, 16), throw_h_angle,
                 change_alpha(
-                    cur_leader_ptr->throwee->type->main_color,
+                    player_info[player_id].cur_leader_ptr->throwee->type->main_color,
                     GAMEPLAY::PREVIEW_OPACITY
                 )
             );
@@ -1720,7 +1724,7 @@ ALLEGRO_BITMAP* gameplay_state::draw_to_bitmap() {
     al_scale_transform(&t, scale, scale);
     
     //Begin drawing!
-    do_game_drawing(bmp, &t);
+    do_game_drawing(0,bmp, &t);
     
     return bmp;
 }

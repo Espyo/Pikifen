@@ -734,7 +734,7 @@ void onion_menu_struct::start_closing() {
     gui.start_animation(
         GUI_MANAGER_ANIM_CENTER_TO_UP, GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
-    game.states.gameplay->hud->gui.start_animation(
+    game.states.gameplay->player_info[l_ptr->active_player].hud->gui.start_animation(
         GUI_MANAGER_ANIM_OUT_TO_IN,
         GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
