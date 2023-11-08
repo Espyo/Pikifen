@@ -86,6 +86,8 @@ const size_t DEF_MAX_PARTICLES = 200;
 const bool DEF_MIPMAPS_ENABLED = true;
 //Default value for whether the mouse moves the cursor, for each player.
 const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS] = {true, false, false, false};
+//Default value for the amounf of Players Participating
+const size_t DEF_PLAYERS_PLAYING = 1;
 //Default value for whether to show player input icons on the HUD.
 const bool DEF_SHOW_HUD_INPUT_ICONS = true;
 //Default value for whether to use smooth scaling.
@@ -147,6 +149,7 @@ options_struct::options_struct() :
     leaving_confirmation_mode(OPTIONS::DEF_LEAVING_CONFIRMATION_MODE),
     max_particles(OPTIONS::DEF_MAX_PARTICLES),
     mipmaps_enabled(OPTIONS::DEF_MIPMAPS_ENABLED),
+    players_playing(OPTIONS::DEF_PLAYERS_PLAYING),
     smooth_scaling(OPTIONS::DEF_SMOOTH_SCALING),
     show_hud_input_icons(OPTIONS::DEF_SHOW_HUD_INPUT_ICONS),
     target_fps(OPTIONS::DEF_TARGET_FPS),
@@ -268,6 +271,7 @@ void options_struct::load(data_node* file) {
     rs.set("max_particles", max_particles);
     rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("mipmaps", mipmaps_enabled);
+    rs.set("players_playing", players_playing);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("show_hud_input_icons", show_hud_input_icons);
@@ -384,7 +388,7 @@ void options_struct::save(data_node* file) const {
     
     //Figure out the value for the editor tree node preferences.
     string open_nodes_str;
-    for(auto &n : editor_open_nodes) {
+    for(auto n : editor_open_nodes) {
         if(n.second) {
             open_nodes_str += n.first + ";";
         }
@@ -600,6 +604,13 @@ void options_struct::save(data_node* file) const {
         new data_node(
             "mipmaps",
             b2s(mipmaps_enabled)
+        )
+    );
+
+    file->add(
+        new data_node(
+            "players_playing",
+            i2s(players_playing)
         )
     );
     file->add(

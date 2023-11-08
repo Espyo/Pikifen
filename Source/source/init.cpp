@@ -553,7 +553,7 @@ void init_event_things(
     //It's possible that this resolution is not valid for fullscreen.
     //Detect this and try again in windowed.
     if(!game.display && game.win_fullscreen) {
-        game.errors.report(
+        log_error(
             "Could not create a fullscreen window with the resolution " +
             i2s(game.win_w) + "x" + i2s(game.win_h) + ". "
             "Setting the fullscreen option back to false. "
@@ -606,7 +606,7 @@ void init_misc() {
     
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
-    int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
+    int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA|ALLEGRO_VIDEO_BITMAP|ALLEGRO_NO_PRESERVE_TEXTURE;
     if(game.options.smooth_scaling) {
         enable_flag(new_bitmap_flags, ALLEGRO_MAG_LINEAR);
         enable_flag(new_bitmap_flags, ALLEGRO_MIN_LINEAR);
@@ -621,9 +621,10 @@ void init_misc() {
     
     srand(time(NULL));
     
-    game.states.gameplay->whistle.next_dot_timer.start();
-    game.states.gameplay->whistle.next_ring_timer.start();
-    
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+    game.states.gameplay->player_info[p].whistle.next_dot_timer.start();
+    game.states.gameplay->player_info[p].whistle.next_ring_timer.start();
+    }
     game.states.gameplay->particles =
         particle_manager(game.options.max_particles);
         

@@ -363,7 +363,7 @@ player_input controls_mediator::str_to_input(
         input.axis_nr = s2i(parts[3]);
         
     } else {
-        game.errors.report(
+        log_error(
             "Unrecognized input \"" + s + "\"!"
         );
     }
@@ -409,7 +409,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
                 "_" + get_current_time(true) + ".png";
                 
             if(!al_save_bitmap(file_name.c_str(), bmp)) {
-                game.errors.report(
+                log_error(
                     "Could not save the area onto an image,"
                     " with the name \"" + file_name + "\"!"
                 );
@@ -496,8 +496,8 @@ void gameplay_state::process_system_key_press(const int keycode) {
         } case MAKER_TOOL_TELEPORT: {
             sector* mouse_sector =
                 get_sector(game.mouse_cursor.w_pos, NULL, true);
-            if(mouse_sector && cur_leader_ptr) {
-                cur_leader_ptr->chase(
+            if(mouse_sector && player_info[0].cur_leader_ptr) {
+                player_info[0].cur_leader_ptr->chase(
                     game.mouse_cursor.w_pos, mouse_sector->z,
                     CHASE_FLAG_TELEPORT
                 );

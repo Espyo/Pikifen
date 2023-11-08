@@ -61,7 +61,7 @@ mission_data::mission_data() :
 int mission_fail_kill_enemies::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->enemy_deaths;
+    return (int) gameplay->mission_info[0].enemy_deaths;
 }
 
 
@@ -94,8 +94,8 @@ string mission_fail_kill_enemies::get_end_reason(
 bool mission_fail_kill_enemies::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_enemy_killed_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_enemy_killed_pos;
+    if(gameplay->mission_info[0].last_enemy_killed_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_enemy_killed_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -199,7 +199,7 @@ bool mission_fail_kill_enemies::is_met(
 int mission_fail_lose_leaders::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->leaders_kod;
+    return (int) gameplay->mission_info[0].leaders_kod;
 }
 
 
@@ -232,8 +232,8 @@ string mission_fail_lose_leaders::get_end_reason(
 bool mission_fail_lose_leaders::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_hurt_leader_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_hurt_leader_pos;
+    if(gameplay->mission_info[0].last_hurt_leader_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_hurt_leader_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -335,7 +335,7 @@ bool mission_fail_lose_leaders::is_met(
 int mission_fail_lose_pikmin::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->pikmin_deaths;
+    return (int) gameplay->mission_info[0].pikmin_deaths;
 }
 
 
@@ -368,8 +368,8 @@ string mission_fail_lose_pikmin::get_end_reason(
 bool mission_fail_lose_pikmin::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_pikmin_death_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_pikmin_death_pos;
+    if(gameplay->mission_info[0].last_pikmin_death_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_pikmin_death_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -622,8 +622,8 @@ string mission_fail_take_damage::get_end_reason(
 bool mission_fail_take_damage::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_hurt_leader_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_hurt_leader_pos;
+    if(gameplay->mission_info[0].last_hurt_leader_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_hurt_leader_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -715,7 +715,7 @@ bool mission_fail_take_damage::is_met(
             return true;
         }
     }
-    if(gameplay->mobs.leaders.size() < gameplay->starting_nr_of_leaders) {
+    if(gameplay->mobs.leaders.size() < gameplay->mission_info[0].starting_nr_of_leaders) {
         //If one of them vanished, they got forcefully KO'd, which...
         //really should count as taking damage.
         return true;
@@ -902,8 +902,8 @@ string mission_fail_too_few_pikmin::get_end_reason(
 bool mission_fail_too_few_pikmin::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_pikmin_death_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_pikmin_death_pos;
+    if(gameplay->mission_info[0].last_pikmin_death_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_pikmin_death_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -1038,8 +1038,8 @@ string mission_fail_too_many_pikmin::get_end_reason(
 bool mission_fail_too_many_pikmin::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_pikmin_born_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_pikmin_born_pos;
+    if(gameplay->mission_info[0].last_pikmin_born_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_pikmin_born_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -1142,8 +1142,8 @@ int mission_goal_battle_enemies::get_cur_amount(
     gameplay_state* gameplay
 ) const {
     return
-        (int) gameplay->mission_required_mob_amount -
-        (int) gameplay->mission_remaining_mob_ids.size();
+        (int) gameplay->mission_info[0].mission_required_mob_amount -
+        (int) gameplay->mission_info[0].mission_remaining_mob_ids.size();
 }
 
 
@@ -1186,8 +1186,8 @@ string mission_goal_battle_enemies::get_end_reason(
 bool mission_goal_battle_enemies::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_enemy_killed_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_enemy_killed_pos;
+    if(gameplay->mission_info[0].last_enemy_killed_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_enemy_killed_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -1239,7 +1239,7 @@ string mission_goal_battle_enemies::get_player_description(
 int mission_goal_battle_enemies::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->mission_required_mob_amount;
+    return (int) gameplay->mission_info[0].mission_required_mob_amount;
 }
 
 
@@ -1269,7 +1269,7 @@ string mission_goal_battle_enemies::get_status(
 bool mission_goal_battle_enemies::is_met(
     gameplay_state* gameplay
 ) const {
-    return gameplay->mission_remaining_mob_ids.empty();
+    return gameplay->mission_info[0].mission_remaining_mob_ids.empty();
 }
 
 
@@ -1293,7 +1293,7 @@ bool mission_goal_battle_enemies::is_mob_applicable(
 int mission_goal_collect_treasures::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->goal_treasures_collected;
+    return (int) gameplay->mission_info[0].goal_treasures_collected;
 }
 
 
@@ -1330,8 +1330,8 @@ string mission_goal_collect_treasures::get_end_reason(
 bool mission_goal_collect_treasures::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_ship_that_got_treasure_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_ship_that_got_treasure_pos;
+    if(gameplay->mission_info[0].last_ship_that_got_treasure_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_ship_that_got_treasure_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -1383,7 +1383,7 @@ string mission_goal_collect_treasures::get_player_description(
 int mission_goal_collect_treasures::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->goal_treasures_total;
+    return (int) gameplay->mission_info[0].goal_treasures_total;
 }
 
 
@@ -1414,8 +1414,8 @@ bool mission_goal_collect_treasures::is_met(
     gameplay_state* gameplay
 ) const {
     return
-        gameplay->goal_treasures_collected >=
-        gameplay->goal_treasures_total;
+        gameplay->mission_info[0].goal_treasures_collected >=
+        gameplay->mission_info[0].goal_treasures_total;
 }
 
 
@@ -1586,7 +1586,7 @@ bool mission_goal_end_manually::is_mob_applicable(
 int mission_goal_get_to_exit::get_cur_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->cur_leaders_in_mission_exit;
+    return (int) gameplay->mission_info[0].cur_leaders_in_mission_exit;
 }
 
 
@@ -1617,11 +1617,11 @@ string mission_goal_get_to_exit::get_end_reason(
 bool mission_goal_get_to_exit::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->mission_remaining_mob_ids.empty()) {
+    if(gameplay->mission_info[0].mission_remaining_mob_ids.empty()) {
         return false;
     }
     point avg_pos;
-    for(size_t leader_id : gameplay->mission_remaining_mob_ids) {
+    for(size_t leader_id : gameplay->mission_info[0].mission_remaining_mob_ids) {
         mob* leader_ptr = NULL;
         for(size_t m = 0; m < game.states.gameplay->mobs.all.size(); ++m) {
             mob* m_ptr = game.states.gameplay->mobs.all[m];
@@ -1632,8 +1632,8 @@ bool mission_goal_get_to_exit::get_end_zoom_data(
         }
         avg_pos += leader_ptr->pos;
     }
-    avg_pos.x /= gameplay->mission_remaining_mob_ids.size();
-    avg_pos.y /= gameplay->mission_remaining_mob_ids.size();
+    avg_pos.x /= gameplay->mission_info[0].mission_remaining_mob_ids.size();
+    avg_pos.y /= gameplay->mission_info[0].mission_remaining_mob_ids.size();
     *final_cam_pos = avg_pos;
     return true;
 }
@@ -1683,7 +1683,7 @@ string mission_goal_get_to_exit::get_player_description(
 int mission_goal_get_to_exit::get_req_amount(
     gameplay_state* gameplay
 ) const {
-    return (int) gameplay->mission_required_mob_amount;
+    return (int) gameplay->mission_info[0].mission_required_mob_amount;
 }
 
 
@@ -1773,8 +1773,8 @@ string mission_goal_grow_pikmin::get_end_reason(
 bool mission_goal_grow_pikmin::get_end_zoom_data(
     gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
 ) const {
-    if(gameplay->last_pikmin_born_pos.x != LARGE_FLOAT) {
-        *final_cam_pos = gameplay->last_pikmin_born_pos;
+    if(gameplay->mission_info[0].last_pikmin_born_pos.x != LARGE_FLOAT) {
+        *final_cam_pos = gameplay->mission_info[0].last_pikmin_born_pos;
         *final_cam_zoom = game.config.zoom_max_level;
         return true;
     }
@@ -2060,7 +2060,7 @@ int mission_score_criterion_enemy_points::get_score(
 ) const {
     return
         (int)
-        gameplay->enemy_points_collected *
+        gameplay->mission_info[0].enemy_points_collected *
         get_multiplier(mission);
 }
 
@@ -2097,7 +2097,7 @@ int mission_score_criterion_pikmin_born::get_score(
 ) const {
     return
         (int)
-        gameplay->pikmin_born *
+        gameplay->mission_info[0].pikmin_born *
         get_multiplier(mission);
 }
 
@@ -2134,7 +2134,7 @@ int mission_score_criterion_pikmin_death::get_score(
 ) const {
     return
         (int)
-        gameplay->pikmin_deaths *
+        gameplay->mission_info[0].pikmin_deaths *
         get_multiplier(mission);
 }
 
@@ -2252,6 +2252,6 @@ int mission_score_criterion_treasure_points::get_score(
 ) const {
     return
         (int)
-        gameplay->treasure_points_collected *
+        gameplay->mission_info[0].treasure_points_collected *
         get_multiplier(mission);
 }
