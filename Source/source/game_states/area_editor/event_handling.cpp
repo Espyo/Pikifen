@@ -1007,9 +1007,11 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         case EDITOR_SUB_STATE_PATH_DRAWING: {
     
             //Drawing a path.
-            point hotspot = snap_point(game.mouse_cursor.w_pos);
-            path_stop* clicked_stop = get_path_stop_under_point(hotspot);
-            
+            point hotspot =
+                snap_point(game.mouse_cursor.w_pos);
+            path_stop* clicked_stop =
+                get_path_stop_under_point(game.mouse_cursor.w_pos);
+                
             if(path_drawing_stop_1) {
                 //A starting stop already exists, so now we create a link.
                 path_stop* next_stop = NULL;

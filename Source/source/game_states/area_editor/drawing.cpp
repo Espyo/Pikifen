@@ -648,12 +648,13 @@ void area_editor::draw_canvas() {
             mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
             mob_gen* m2_ptr = NULL;
             
+            if(!m_ptr->type) continue;
+            
             bool is_selected =
                 selected_mobs.find(m_ptr) != selected_mobs.end();
                 
             for(size_t l = 0; l < m_ptr->links.size(); ++l) {
                 m2_ptr = m_ptr->links[l];
-                if(!m_ptr->type) continue;
                 if(!m2_ptr->type) continue;
                 
                 bool show_link =
@@ -673,7 +674,8 @@ void area_editor::draw_canvas() {
             if(m_ptr->stored_inside != INVALID) {
                 m2_ptr =
                     game.cur_area_data.mob_generators[m_ptr->stored_inside];
-                    
+                if(!m2_ptr->type) continue;
+                
                 bool show_store =
                     is_selected ||
                     selected_mobs.find(m2_ptr) != selected_mobs.end();
