@@ -178,7 +178,7 @@ void controls_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
             if(cur_bind_idx >= all_binds.size()) {
                 control_bind new_bind;
                 new_bind.action_type_id = cur_action_type;
-                new_bind.player_nr = 0;
+                new_bind.player_nr = cur_player_nr;
                 new_bind.input = input;
                 all_binds.push_back(new_bind);
             } else {
@@ -224,6 +224,7 @@ void controls_menu_state::load() {
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("player",        12,  15, 20,  6);
     gui.register_coords("list",        50, 51, 88, 82);
     gui.register_coords("list_scroll", 97, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
@@ -241,7 +242,24 @@ void controls_menu_state::load() {
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the options menu."; };
     gui.add_item(gui.back_item, "back");
-    
+
+    options_menu_picker_gui_item<size_t>* player_picker =
+        new options_menu_picker_gui_item<size_t>(
+        "Player: ",
+        &game.states.controls_menu->cur_player_nr,
+        0,
+    {0, 1, 2, 3},
+    {"1", "2", "3", "4"},
+    "Player."
+    );
+    player_picker->value_to_string = [] (const float v) {
+        return i2s(v);
+    };
+    player_picker->after_change = [this] () {
+        this->populate_binds();
+    };
+    player_picker->init();
+    gui.add_item(player_picker, "player");
     //Controls list box.
     list_box = new list_gui_item();
     gui.add_item(list_box, "list");
@@ -283,7 +301,7 @@ void controls_menu_state::populate_binds() {
     //Read all binds and sort them by player action type.
     for(size_t b = 0; b < all_binds.size(); ++b) {
         const control_bind &bind = all_binds[b];
-        if(bind.player_nr != 0) continue;
+        if(bind.player_nr != cur_player_nr) continue;
         binds_per_action_type[bind.action_type_id].push_back(bind);
     }
     
@@ -600,7 +618,7 @@ void controls_menu_state::restore_defaults(
         
     for(size_t b = 0; b < all_binds.size();) {
         if(
-            all_binds[b].player_nr == 0 &&
+            all_binds[b].player_nr == cur_player_nr &&
             all_binds[b].action_type_id == action_type_id
         ) {
             all_binds.erase(all_binds.begin() + b);
@@ -615,7 +633,7 @@ void controls_menu_state::restore_defaults(
     
     if(def_input.type != INPUT_TYPE_NONE) {
         new_bind.action_type_id = action_type_id;
-        new_bind.player_nr = 0;
+        new_bind.player_nr = cur_player_nr;
         new_bind.input = def_input;
         all_binds.push_back(new_bind);
     }
