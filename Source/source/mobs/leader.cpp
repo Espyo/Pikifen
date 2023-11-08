@@ -1057,8 +1057,12 @@ void change_to_next_leader(
     leader* original_leader_ptr = game.states.gameplay->player_info[player_id].cur_leader_ptr;
     bool cant_find_new_leader = false;
     bool success = false;
-    
+    int search_count = 0;
     while(searching) {
+        search_count+=1;
+        if (search_count > game.states.gameplay->mobs.leaders.size()*2){
+            searching = false;
+        }
         new_leader_nr =
             sum_and_wrap(
                 new_leader_nr,
