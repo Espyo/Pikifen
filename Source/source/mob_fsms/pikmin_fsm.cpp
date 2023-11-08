@@ -3198,9 +3198,9 @@ void pikmin_fsm::land_on_mob_while_holding(mob* m, void* info1, void* info2) {
         
         if(
             too_ptr->too_type->pikmin_returns_after_using &&
-            game.states.gameplay->cur_leader_ptr
+            ((pikmin*) m)->leader_to_return_to
         ) {
-            pikmin_fsm::called(m, game.states.gameplay->cur_leader_ptr, NULL);
+            pikmin_fsm::called(m, ((pikmin*) m)->leader_to_return_to, NULL);
             m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
         }
     }
@@ -3234,9 +3234,9 @@ void pikmin_fsm::land_while_holding(mob* m, void* info1, void* info2) {
         
         if(
             too_ptr->too_type->pikmin_returns_after_using &&
-            game.states.gameplay->cur_leader_ptr
+            ((pikmin*) m)->leader_to_return_to
         ) {
-            pikmin_fsm::called(m, game.states.gameplay->cur_leader_ptr, NULL);
+            pikmin_fsm::called(m, ((pikmin*) m)->leader_to_return_to, NULL);
             m->fsm.set_state(PIKMIN_STATE_IN_GROUP_CHASING);
         }
     } else {
@@ -3500,7 +3500,11 @@ void pikmin_fsm::release_tool(mob* m, void* info1, void* info2) {
         );
     if(m->following_group) {
         m->following_group->group->change_standby_type_if_needed();
-        game.states.gameplay->update_closest_group_members();
+        if (m->following_group->type->category->id == MOB_CATEGORY_LEADERS){
+            leader* lea_ptr = (leader*)m->following_group;
+
+            game.states.gameplay->player_info[lea_ptr->active_player].update_closest_group_members();
+        }
     }
 }
 
