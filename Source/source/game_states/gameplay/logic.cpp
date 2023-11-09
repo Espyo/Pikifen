@@ -445,6 +445,13 @@ void gameplay_state::do_gameplay_leader_logic(const size_t &player_id,const floa
         mouse_cursor_speed * delta_t* game.options.cursor_speed;
     if(game.options.mouse_moves_cursor[player_id]){
     player_info[player_id].leader_cursor_w = game.mouse_cursor.w_pos;
+    }else{
+        player_info[player_id].leader_cursor_w += mouse_cursor_speed;
+        player_info[player_id].leader_cursor_s = player_info[player_id].leader_cursor_w;
+        al_transform_coordinates(
+                &player_info[player_id].world_to_screen_transform,
+                &player_info[player_id].leader_cursor_s.x, &player_info[player_id].leader_cursor_s.y
+        );
     }
     float cursor_angle = get_angle(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
     
@@ -461,18 +468,18 @@ void gameplay_state::do_gameplay_leader_logic(const size_t &player_id,const floa
         if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
             //If we're speeding the mouse cursor (via analog stick),
             //don't let it go beyond the edges.
-            game.mouse_cursor.w_pos = player_info[player_id].leader_cursor_w;
-            game.mouse_cursor.s_pos = game.mouse_cursor.w_pos;
+            player_info[player_id].leader_cursor_w = player_info[player_id].leader_cursor_w;
+            player_info[player_id].leader_cursor_s = player_info[player_id].leader_cursor_w;
             al_transform_coordinates(
                 &player_info[player_id].world_to_screen_transform,
-                &game.mouse_cursor.s_pos.x, &game.mouse_cursor.s_pos.y
+                &player_info[player_id].leader_cursor_s.x, &player_info[player_id].leader_cursor_s.y
             );
         }
     }
     
     player_info[player_id].leader_cursor_s = player_info[player_id].leader_cursor_w;
     al_transform_coordinates(
-        &game.world_to_screen_transform,
+        &player_info[player_id].world_to_screen_transform,
         &player_info[player_id].leader_cursor_s.x, &player_info[player_id].leader_cursor_s.y
     );
     
@@ -554,25 +561,25 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         *   Timer things - gameplay   ( L ) *
         *                              `-´  *
         *************************************/
-        
+ for(size_t p = 0; p < MAX_PLAYERS;++p){       
         //Mouse cursor.
         point mouse_cursor_speed;
         float dummy_angle;
         float dummy_magnitude;
-        player_info[0].cursor_movement.get_info(
+        player_info[p].cursor_movement.get_info(
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
             mouse_cursor_speed * delta_t* game.options.cursor_speed;
             
-        game.mouse_cursor.s_pos += mouse_cursor_speed;
+        player_info[p].leader_cursor_s += mouse_cursor_speed;
         
-        game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
+        player_info[p].leader_cursor_w = player_info[p].leader_cursor_s;
         al_transform_coordinates(
-            &player_info[0].screen_to_world_transform,
-            &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
+            &player_info[p].screen_to_world_transform,
+            &player_info[p].leader_cursor_w.x, &player_info[p].leader_cursor_w.y
         );
-        
+        }
         area_time_passed += delta_t;
         if(cur_interlude == INTERLUDE_NONE) {
             gameplay_time_passed += delta_t;
