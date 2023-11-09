@@ -54,7 +54,7 @@ mob* leader_category::create_mob(
 ) {
     leader* m = new leader(pos, (leader_type*) type, angle);
     game.states.gameplay->mobs.leaders.push_back(m);
-    game.states.gameplay->update_available_leaders();
+    game.states.gameplay->team_info[m->team-MOB_TEAM_PLAYER_1].update_available_leaders();
     return m;
 }
 

@@ -119,7 +119,7 @@ mob_category* mob_category_manager::get_from_folder_name(
     for(size_t n = 0; n < categories.size(); ++n) {
         if(categories[n]->folder == name) return categories[n];
     }
-    game.errors.report("Mob category with the folder name \"" + name + "\" not found!");
+    log_error("Mob category with the folder name \"" + name + "\" not found!");
     return NULL;
 }
 
