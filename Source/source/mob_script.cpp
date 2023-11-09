@@ -17,7 +17,6 @@
 #include "mob_script.h"
 
 #include "functions.h"
-#include "game.h"
 #include "mob_fsms/gen_mob_fsm.h"
 #include "mob_script_action.h"
 #include "mob_types/mob_type.h"
@@ -191,7 +190,7 @@ mob_event::mob_event(data_node* node, const vector<mob_action_call*> &actions) :
     
     else {
         type = MOB_EV_UNKNOWN;
-        game.errors.report("Unknown script event name \"" + n + "\"!", node);
+        log_error("Unknown script event name \"" + n + "\"!", node);
     }
     
     for(size_t a = 0; a < this->actions.size(); ++a) {
@@ -530,7 +529,7 @@ size_t fix_states(
                     
                     if(!found_state) {
                         state_nr = INVALID;
-                        game.errors.report(
+                        log_error(
                             "State \"" + state->name +
                             "\" of the mob type \"" + mt->name + "\" has an "
                             "action to switch to an unknown state: \"" +

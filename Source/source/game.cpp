@@ -52,6 +52,7 @@ game_class::game_class() :
     delta_t(0.0),
     display(nullptr),
     dummy_mob_state(nullptr),
+    errors_reported_so_far(0),
     framerate_last_avg_point(0),
     is_game_running(true),
     liquid_limit_effect_buffer(nullptr),
@@ -175,11 +176,11 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
 void game_class::do_global_logic() {
     //Cursor trail.
     if(options.draw_cursor_trail) {
-        mouse_cursor.save_timer.tick(delta_t);
+        game.mouse_cursor.save_timer.tick(delta_t);
     }
     
     //Audio.
-    audio.tick(delta_t);
+    game.audio.tick(delta_t);
 }
 
 
@@ -206,7 +207,7 @@ void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
-        mouse_cursor.update_pos(ev, screen_to_world_transform);
+        mouse_cursor.update_pos(ev, game.screen_to_world_transform);
     }
 }
 

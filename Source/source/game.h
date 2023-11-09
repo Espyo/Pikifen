@@ -89,7 +89,7 @@ public:
     bmp_manager bitmaps;
     //The error bitmap used to represent bitmaps that were not loaded.
     ALLEGRO_BITMAP* bmp_error;
-    //Player 1's camera.
+    //General camera.
     camera_info cam;
     //Game's configuration.
     game_config config;
@@ -107,8 +107,8 @@ public:
     ALLEGRO_DISPLAY* display;
     //A dummy mob state for mobs with no state to use.
     mob_state* dummy_mob_state;
-    //Error manager.
-    error_manager errors;
+    //How many errors have been reported this application session.
+    size_t errors_reported_so_far = 0;
     //Manager for all full-screen fade-ins and fade-outs.
     fade_manager fade_mgr;
     //List of fonts.

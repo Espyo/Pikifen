@@ -94,8 +94,8 @@ enum WIPE_FOLDER_RESULTS {
 #define map_gray(g) al_map_rgb((g), (g), (g))
 
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
-#define task_range(p) \
-    (((p)->following_group == cur_leader_ptr && swarm_magnitude) ? \
+#define task_range(p,player_id) \
+    (((p)->following_group == player_info[player_id].cur_leader_ptr && player_info[player_id].swarm_magnitude) ? \
      game.config.swarm_task_range : game.config.idle_task_range)
 
 
@@ -184,6 +184,7 @@ ALLEGRO_COLOR interpolate_color(
     const float input, const float input_start, const float input_end,
     const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
 );
+void log_error(const string &s, data_node* d = NULL);
 void print_info(
     const string &text,
     const float total_duration = 5.0f,
@@ -229,7 +230,7 @@ vector<vector<string_token> > split_long_string_with_tokens(
     const vector<string_token> &tokens, const int max_width
 );
 string standardize_path(const string &path);
-void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp);
+void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp,const int &player_id=0);
 vector<string_token> tokenize_string(const string &s);
 string unescape_string(const string &s);
 void update_offset_effect_buffer(

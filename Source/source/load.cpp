@@ -126,7 +126,7 @@ void load_area(
             game.weather_conditions.find(game.cur_area_data.weather_name) ==
             game.weather_conditions.end()
         ) {
-            game.errors.report(
+            log_error(
                 "Area \"" + requested_area_folder_name +
                 "\" refers to an unknown weather condition, \"" +
                 game.cur_area_data.weather_name + "\"!",
@@ -317,7 +317,7 @@ void load_area(
         for(size_t h = 0; h < hazards_strs.size(); ++h) {
             string hazard_name = hazards_strs[h];
             if(game.hazards.find(hazard_name) == game.hazards.end()) {
-                game.errors.report(
+                log_error(
                     "Unknown hazard \"" + hazard_name +
                     "\"!", hazards_node
                 );
@@ -395,7 +395,7 @@ void load_area(
             //Error.
             mob_ptr->type = NULL;
             if(!load_for_editor) {
-                game.errors.report(
+                log_error(
                     "Unknown mob type \"" + type_name + "\" of category \"" +
                     mob_node->name + "\"!",
                     mob_node
@@ -511,7 +511,7 @@ void load_area(
         s_ptr->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
         if(s_ptr->bitmap == game.bmp_error && !load_for_editor) {
-            game.errors.report(
+            log_error(
                 "Unknown tree shadow texture \"" + s_ptr->file_name + "\"!",
                 shadow_node
             );
@@ -791,7 +791,7 @@ ALLEGRO_BITMAP* load_bmp(
         
     if(!b) {
         if(report_error) {
-            game.errors.report("Could not open image " + file_name + "!", node);
+            log_error("Could not open image " + file_name + "!", node);
         }
         if(error_bmp_on_error) {
             b = game.bmp_error;
@@ -904,7 +904,7 @@ void load_custom_particle_generators(const bool load_resources) {
 data_node load_data_file(const string &file_name) {
     data_node n = data_node(file_name);
     if(!n.file_was_opened) {
-        game.errors.report("Could not open data file " + file_name + "!");
+        log_error("Could not open data file " + file_name + "!");
     }
     
     return n;
@@ -1065,7 +1065,7 @@ void load_hazards() {
                     game.status_types.find(effect_name) ==
                     game.status_types.end()
                 ) {
-                    game.errors.report(
+                    log_error(
                         "Unknown status effect \"" + effect_name + "\"!",
                         effects_node
                     );
@@ -1079,7 +1079,7 @@ void load_hazards() {
         
         if(liquid_node) {
             if(game.liquids.find(liquid_str) == game.liquids.end()) {
-                game.errors.report(
+                log_error(
                     "Unknown liquid \"" + liquid_str + "\"!",
                     liquid_node
                 );
@@ -1405,7 +1405,7 @@ ALLEGRO_SAMPLE* load_sample(
         al_load_sample((AUDIO_FOLDER_PATH + "/" + file_name).c_str());
         
     if(!sample && report_errors) {
-        game.errors.report("Could not open audio sample " + file_name + "!", node);
+        log_error("Could not open audio sample " + file_name + "!", node);
     }
     
     return sample;
@@ -1452,7 +1452,7 @@ void load_spike_damage_types() {
                 game.custom_particle_generators.find(particle_generator_name) ==
                 game.custom_particle_generators.end()
             ) {
-                game.errors.report(
+                log_error(
                     "Unknown particle generator \"" +
                     particle_generator_name + "\"!", particle_generator_node
                 );
@@ -1472,7 +1472,7 @@ void load_spike_damage_types() {
             if(s != game.status_types.end()) {
                 new_t.status_to_apply = s->second;
             } else {
-                game.errors.report(
+                log_error(
                     "Unknown status type \"" + status_name + "\"!",
                     status_name_node
                 );
@@ -1539,7 +1539,7 @@ void load_spray_types(const bool load_resources) {
                     game.status_types.find(effect_name) ==
                     game.status_types.end()
                 ) {
-                    game.errors.report(
+                    log_error(
                         "Unknown status effect \"" + effect_name + "\"!",
                         effects_node
                     );
@@ -1595,7 +1595,7 @@ void load_spray_types(const bool load_resources) {
         }
         
         if(!found) {
-            game.errors.report(
+            log_error(
                 "Unknown spray type \"" + s + "\" found "
                 "in the spray order list in the config file!"
             );
@@ -1732,7 +1732,7 @@ void load_status_types(const bool load_resources) {
             } else if(reapply_rule_str == "add_time") {
                 new_t->reapply_rule = STATUS_REAPPLY_ADD_TIME;
             } else {
-                game.errors.report(
+                log_error(
                     "Unknown reapply rule \"" +
                     reapply_rule_str + "\"!", reapply_rule_node
                 );
@@ -1749,7 +1749,7 @@ void load_status_types(const bool load_resources) {
             } else if(sc_type_str == "custom") {
                 new_t->state_change_type = STATUS_STATE_CHANGE_CUSTOM;
             } else {
-                game.errors.report(
+                log_error(
                     "Unknown state change type \"" +
                     sc_type_str + "\"!", sc_type_node
                 );
@@ -1761,7 +1761,7 @@ void load_status_types(const bool load_resources) {
                 game.custom_particle_generators.find(particle_gen_str) ==
                 game.custom_particle_generators.end()
             ) {
-                game.errors.report(
+                log_error(
                     "Unknown particle generator \"" +
                     particle_gen_str + "\"!", particle_gen_node
                 );
@@ -1804,7 +1804,7 @@ void load_status_types(const bool load_resources) {
     for(size_t s = 0; s < types_with_replacements.size(); ++s) {
         string rn = types_with_replacements_names[s];
         bool found = false;
-        for(auto &s2 : game.status_types) {
+        for(auto s2 : game.status_types) {
             if(s2.first == rn) {
                 types_with_replacements[s]->replacement_on_timeout =
                     s2.second;
@@ -1814,7 +1814,7 @@ void load_status_types(const bool load_resources) {
         }
         if(found) continue;
         
-        game.errors.report(
+        log_error(
             "The status effect type \"" + types_with_replacements[s]->name +
             "\" has a replacement effect called \"" + rn + "\", but there is "
             "no status effect with that name!"
