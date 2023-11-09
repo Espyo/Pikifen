@@ -65,6 +65,7 @@ void controls_menu_state::choose_input(
     
     for(size_t b = 0; b < all_binds.size(); ++b) {
         if(all_binds[b].action_type_id != action_type) continue;
+        if(all_binds[b].player_nr != cur_player_nr) continue;
         if(binds_counted == bind_idx) {
             cur_bind_idx = b;
             break;
@@ -90,6 +91,7 @@ void controls_menu_state::delete_bind(
     
     for(size_t b = 0; b < all_binds.size(); ++b) {
         if(all_binds[b].action_type_id != action_type) continue;
+        if(all_binds[b].player_nr != cur_player_nr) continue;
         if(binds_counted == bind_idx) {
             all_binds.erase(all_binds.begin() + b);
             break;
@@ -300,14 +302,15 @@ void controls_menu_state::populate_binds() {
     
     //Read all binds and sort them by player action type.
     for(size_t b = 0; b < all_binds.size(); ++b) {
+
         const control_bind &bind = all_binds[b];
         if(bind.player_nr != cur_player_nr) continue;
-        binds_per_action_type[bind.action_type_id].push_back(bind);
+        binds_per_action_type[(bind.action_type_id)].push_back(bind);
     }
-    
     PLAYER_ACTION_CATEGORIES last_cat = PLAYER_ACTION_CAT_NONE;
     
-    for(size_t a = 0; a < N_PLAYER_ACTIONS; ++a) {
+    for(size_t av = 0; av < N_PLAYER_ACTIONS; ++av) {
+        size_t a = av%N_PLAYER_ACTIONS;
         const player_action_type &action_type = all_player_action_types[a];
         
         if(action_type.internal_name.empty()) continue;
@@ -458,6 +461,7 @@ void controls_menu_state::populate_binds() {
         vector<control_bind> a_binds = binds_per_action_type[a];
         for(size_t b = 0; b < a_binds.size(); ++b) {
         
+            if(a_binds[b].player_nr != cur_player_nr) continue;
             //Change/remove bind button.
             button_gui_item* bind_button =
                 new button_gui_item("", game.fonts.standard);
