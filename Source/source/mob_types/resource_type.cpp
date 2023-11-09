@@ -81,7 +81,7 @@ void resource_type::load_properties(data_node* file) {
     } else if(carrying_destination_str == "linked_mob_matching_type") {
         carrying_destination = CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE;
     } else {
-        game.errors.report(
+        log_error(
             "Unknown carrying destination \"" +
             carrying_destination_str + "\"!", carrying_destination_node
         );
@@ -96,7 +96,7 @@ void resource_type::load_properties(data_node* file) {
     } else if(delivery_result_str == "stay") {
         delivery_result = RESOURCE_DELIVERY_RESULT_STAY;
     } else {
-        game.errors.report(
+        log_error(
             "Unknown delivery result \"" + delivery_result_str + "\"!",
             delivery_result_node
         );
@@ -110,7 +110,7 @@ void resource_type::load_properties(data_node* file) {
             }
         }
         if(spray_to_concoct == INVALID) {
-            game.errors.report(
+            log_error(
                 "Unknown spray type \"" + spray_to_concoct_str + "\"!",
                 spray_to_concoct_node
             );

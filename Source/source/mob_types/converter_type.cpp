@@ -85,7 +85,7 @@ void converter_type::load_properties(data_node* file) {
         if(type_ptr) {
             available_pikmin_types.push_back((pikmin_type*) type_ptr);
         } else {
-            game.errors.report(
+            log_error(
                 "Unknown Pikmin type \"" + pikmin_types_strs[t] + "\"!",
                 pikmin_types_node
             );
@@ -102,7 +102,7 @@ void converter_type::load_properties(data_node* file) {
     }
     
     if(available_pikmin_types.empty()) {
-        game.errors.report(
+        log_error(
             "A converter needs to have at least one available Pikmin type! "
             "Please fill in the \"available_pikmin_types\" property.",
             file
@@ -110,7 +110,7 @@ void converter_type::load_properties(data_node* file) {
     }
     
     if(animation_group_suffixes.size() != available_pikmin_types.size()) {
-        game.errors.report(
+        log_error(
             "The number of animation type suffixes needs to match the "
             "number of available Pikmin types! Did you forget an animation "
             "suffix or a Pikmin type?",

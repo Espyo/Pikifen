@@ -11,7 +11,6 @@
 #include "group_task_type.h"
 
 #include "../functions.h"
-#include "../game.h"
 #include "../mobs/mob.h"
 #include "../utils/string_utils.h"
 
@@ -85,7 +84,7 @@ void group_task_type::load_properties(data_node* file) {
         } else if(contribution_method_str == "push_strength") {
             contribution_method = GROUP_TASK_CONTRIBUTION_PUSH_STRENGTH;
         } else {
-            game.errors.report(
+            log_error(
                 "Unknown contribution type \"" +
                 contribution_method_str + "\"!", contribution_method_node
             );
@@ -104,7 +103,7 @@ void group_task_type::load_properties(data_node* file) {
         } else if(worker_pikmin_pose_str == "carrying") {
             worker_pikmin_pose = GROUP_TASK_PIKMIN_POSE_CARRYING;
         } else {
-            game.errors.report(
+            log_error(
                 "Unknown pose \"" + worker_pikmin_pose_str + "\"!",
                 worker_pikmin_pose_node
             );

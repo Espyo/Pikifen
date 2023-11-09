@@ -164,7 +164,7 @@ void pikmin_type::load_properties(data_node* file) {
         } else if(attack_method_str == "impact") {
             attack_method = PIKMIN_ATTACK_IMPACT;
         } else {
-            game.errors.report(
+            log_error(
                 "Unknown Pikmin attack type \"" + attack_method_str + "\"!",
                 attack_method_node
             );
