@@ -710,7 +710,35 @@ void area_editor::draw_canvas() {
                 m_ptr->angle, c, 1.0f / game.cam.zoom
             );
         }
-        
+
+        //Render children of this mob
+        for(size_t i = 0; i < m_ptr->type->children.size(); ++i) {
+            mob_type::child_struct* child_info = &m_ptr->type->children[i];
+
+            mob_type::spawn_struct* spawn_info = get_spawn_info_from_child_info(m_ptr->type, &m_ptr->type->children[i]);
+            if(!spawn_info) continue;
+
+            point c_pos = m_ptr->pos + rotate_point(spawn_info->coords_xy, m_ptr->angle);
+
+            mob_type* type_ptr = game.mob_categories.find_mob_type(spawn_info->mob_type_name);
+            if(!type_ptr) continue;
+
+            if(type_ptr->rectangular_dim.x != 0) {
+                float c_rot = m_ptr->angle + spawn_info->angle;
+                draw_rotated_rectangle(
+                    c_pos, type_ptr->rectangular_dim,
+                    c_rot, c, 1.0f / game.cam.zoom
+                );
+            }
+            else {
+                al_draw_circle(
+                    c_pos.x, c_pos.y, type_ptr->radius, 
+                    c, 1.0f / game.cam.zoom
+                );
+            }
+
+        }
+
         al_draw_filled_circle(
             m_ptr->pos.x, m_ptr->pos.y,
             radius, c
