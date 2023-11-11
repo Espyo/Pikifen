@@ -687,19 +687,29 @@ void update_offset_effect_buffer(
             //Off-camera.
             continue;
         }
+
+        bool fully_on_camera = false;
+        if(s_ptr->bbox[0].x > cam_tl.x &&
+           s_ptr->bbox[1].x < cam_tl.x &&
+           s_ptr->bbox[0].y > cam_tl.y &&
+           s_ptr->bbox[1].y < cam_tl.y) {
+            fully_on_camera = true;
+        }
         
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            point ls1(
-                s_ptr->edges[e]->vertexes[0]->x,
-                s_ptr->edges[e]->vertexes[0]->y
-            );
-            point ls2(
-                s_ptr->edges[e]->vertexes[1]->x,
-                s_ptr->edges[e]->vertexes[1]->y
-            );
+            if(!fully_on_camera) {
+                point ls1(
+                    s_ptr->edges[e]->vertexes[0]->x,
+                    s_ptr->edges[e]->vertexes[0]->y
+                );
+                point ls2(
+                    s_ptr->edges[e]->vertexes[1]->x,
+                    s_ptr->edges[e]->vertexes[1]->y
+                );
 
-            if(!line_seg_intersects_rectangle(cam_tl, cam_br, ls1, ls2)) {
-                continue;
+                if(!line_seg_intersects_rectangle(cam_tl, cam_br, ls1, ls2)) {
+                    continue;
+                }
             }
 
             edges.insert(s_ptr->edge_nrs[e]);
