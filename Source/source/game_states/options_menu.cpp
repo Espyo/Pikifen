@@ -175,7 +175,7 @@ void options_menu_state::load() {
     gui.register_coords("cursor_speed",         24, 32, 40, 8);
     gui.register_coords("cursor_cam_weight",    76, 32, 40, 8);
     gui.register_coords("auto_throw",           50, 44, 44, 8);
-    gui.register_coords("show_hud_input_icons",    50, 54, 44, 8);
+    gui.register_coords("show_hud_input_icons", 50, 54, 44, 8);
     gui.register_coords("leaving_confirmation", 50, 64, 44, 8);
     gui.register_coords("controls",             50, 74, 44, 8);
     gui.register_coords("advanced",             87, 86, 22, 8);

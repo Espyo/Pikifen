@@ -68,11 +68,11 @@ void operator delete[](void* ptr, size_t size) noexcept;
 
 
 //Timestamp for the start of the current benchmark measurement.
-double code_debug_benchmark_measure_start;
+extern double code_debug_benchmark_measure_start;
 //Sum of the durations of all code benchmarking iterations.
-double code_debug_benchmark_sum;
+extern double code_debug_benchmark_sum;
 //Number of code benchmarking iterations so far.
-unsigned int code_debug_benchmark_iterations;
+extern unsigned int code_debug_benchmark_iterations;
 
 void code_debug_benchmark_start_measuring();
 double code_debug_benchmark_end_measuring();

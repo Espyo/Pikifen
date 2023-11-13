@@ -323,12 +323,12 @@ void main_menu_state::init_make_page() {
     data_node gui_file(MAIN_MENU::MAKE_GUI_FILE_PATH);
     
     //Menu items.
-    make_gui.register_coords("animation_editor", 50, 59, 60, 10);
-    make_gui.register_coords("area_editor",      50, 71, 60, 10);
-    make_gui.register_coords("gui_editor",       50, 83, 60, 10);
-    make_gui.register_coords("back",              9, 91, 14,  6);
-    make_gui.register_coords("more",             91, 91, 14,  6);
-    make_gui.register_coords("tooltip",          50, 96, 96,  4);
+    make_gui.register_coords("animation_editor", 50, 59,   60, 10);
+    make_gui.register_coords("area_editor",      50, 71,   60, 10);
+    make_gui.register_coords("gui_editor",       50, 81.5, 50,  7);
+    make_gui.register_coords("back",              9, 91,   14,  6);
+    make_gui.register_coords("more",             91, 91,   14,  6);
+    make_gui.register_coords("tooltip",          50, 96,   96,  4);
     make_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Animation editor button.
