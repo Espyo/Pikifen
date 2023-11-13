@@ -35,28 +35,12 @@ const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
  */
 audio_manager::audio_manager() :
     samples(""),
+    master_mixer(nullptr),
     world_sfx_mixer(nullptr),
     world_ambiance_sfx_mixer(nullptr),
     ui_sfx_mixer(nullptr),
     voice(nullptr),
     next_sfx_source_id(1) {
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates a global UI sound effect source and returns its ID.
- * This is basically how you can get the engine to produce a UI sound.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * config:
- *   Configuration.
- */
-size_t audio_manager::create_ui_sfx_source(
-    ALLEGRO_SAMPLE* sample,
-    const sfx_source_config_struct &config
-) {
-    return create_sfx_source(sample, SFX_TYPE_UI, config, point());
 }
 
 
@@ -86,6 +70,24 @@ size_t audio_manager::create_mob_sfx_source(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates an in-world global sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a sound that doesn't
+ * involve a position in the game world.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_world_global_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_WORLD_GLOBAL, config, point());
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an in-world positional sound effect source and returns its ID.
  * This is basically how you can get the engine to produce a sound that
  * involves a position in the game world.
@@ -103,24 +105,6 @@ size_t audio_manager::create_world_pos_sfx_source(
     const sfx_source_config_struct &config
 ) {
     return create_sfx_source(sample, SFX_TYPE_WORLD_POS, config, pos);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates an in-world global sound effect source and returns its ID.
- * This is basically how you can get the engine to produce a sound that doesn't
- * involve a position in the game world.
- * Returns 0 on failure.
- * sample:
- *   Sound sample that this source will emit.
- * config:
- *   Configuration.
- */
-size_t audio_manager::create_world_global_sfx_source(
-    ALLEGRO_SAMPLE* sample,
-    const sfx_source_config_struct &config
-) {
-    return create_sfx_source(sample, SFX_TYPE_WORLD_GLOBAL, config, point());
 }
 
 
@@ -160,6 +144,23 @@ size_t audio_manager::create_sfx_source(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a global UI sound effect source and returns its ID.
+ * This is basically how you can get the engine to produce a UI sound.
+ * Returns 0 on failure.
+ * sample:
+ *   Sound sample that this source will emit.
+ * config:
+ *   Configuration.
+ */
+size_t audio_manager::create_ui_sfx_source(
+    ALLEGRO_SAMPLE* sample,
+    const sfx_source_config_struct &config
+) {
+    return create_sfx_source(sample, SFX_TYPE_UI, config, point());
+}
+
+
+/* ----------------------------------------------------------------------------
  * Destroys the audio manager.
  */
 void audio_manager::destroy() {
@@ -167,6 +168,7 @@ void audio_manager::destroy() {
     al_destroy_mixer(world_sfx_mixer);
     al_destroy_mixer(world_ambiance_sfx_mixer);
     al_destroy_mixer(ui_sfx_mixer);
+    al_destroy_mixer(master_mixer);
     al_destroy_voice(voice);
 }
 
@@ -444,23 +446,29 @@ void audio_manager::init() {
             44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2
         );
         
+    master_mixer =
+        al_create_mixer(
+            44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
+        );
+    al_attach_mixer_to_voice(master_mixer, voice);
+    
     world_sfx_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_voice(world_sfx_mixer, voice);
+    al_attach_mixer_to_mixer(world_sfx_mixer, master_mixer);
     
     world_ambiance_sfx_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_voice(world_ambiance_sfx_mixer, voice);
+    al_attach_mixer_to_mixer(world_ambiance_sfx_mixer, master_mixer);
     
     ui_sfx_mixer =
         al_create_mixer(
             44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
         );
-    al_attach_mixer_to_voice(ui_sfx_mixer, voice);
+    al_attach_mixer_to_mixer(ui_sfx_mixer, master_mixer);
 }
 
 

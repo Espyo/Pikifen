@@ -253,6 +253,8 @@ public:
     audio_manager();
     
 private:
+    //Master mixer.
+    ALLEGRO_MIXER* master_mixer;
     //General in-world sound effect mixer.
     ALLEGRO_MIXER* world_sfx_mixer;
     //In-world ambiance sound effect mixer.

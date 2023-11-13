@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -825,6 +825,10 @@ Misc things (so I don't forget)
                 Change the cursor for when you're dragging, drawing, placing something new, etc.
                 Glow and grow the new sector, object, etc. when it is created
                 Slightly grow the current thing when you select it, or maybe when you drag it?
+                The snapped cursor position should interpolate smoothly (but if you finish your operation when it's interpolating, it should finish instantly)
+                When you're going to place something new:
+                    Show a dotted outline of the location the new thing will go to
+                    As the cursor moves, the icon for the thing wobbles around, as if fixed to an anchor at the mouse
             Cursors
                 Normal cursor
                 For when you're drawing something
