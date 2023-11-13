@@ -861,7 +861,7 @@ void init_mob_actions() {
         mob_action_runners::get_angle,
         nullptr
     );
-
+    
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
@@ -909,7 +909,7 @@ void init_mob_actions() {
         mob_action_runners::get_event_info,
         mob_action_loaders::get_event_info
     );
-
+    
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
@@ -929,8 +929,8 @@ void init_mob_actions() {
         nullptr
     );
     
-    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
         MOB_ACTION_GET_MOB_INFO,

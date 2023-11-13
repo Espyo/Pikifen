@@ -1,4 +1,4 @@
-Point I left on (so I can continue the next day without losing my train of thought)
+﻿Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -37,9 +37,6 @@ Next tasks (roughly sorted most important first)
 
     --- 0.25.0 ---
     Script improvements
-        Revamp get_info
-            Add get_info state
-            https://github.com/Helodity/Pikifen/tree/get_info-rework
         Make it so you can run an action on behalf of another mob
             Be careful with state switching, variables, and focus
             Don't allow actions like if, else, end_if, goto, label?

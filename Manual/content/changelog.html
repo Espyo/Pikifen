@@ -47,9 +47,19 @@
       <li><span class="cl-c">Added</span> a redo feature to the area editor.</li>
       <li><span class="cl-a">Added</span> three new player actions to the controls: <code>custom_a</code>, <code>custom_b</code>, and <code>custom_c</code>. These do nothing on their own, but can be detected through <a href="script.html">leader scripts</a>. (Thanks WanderingLetterS)</li>
       <li><span class="cl-a">Added</span> the <code>on_input_received</code> <a href="events_and_actions.html">object script event</a>.</li>
-      <li><span class="cl-a">Added</span> the <code>input_name</code> and <code>input_value</code> properties to the <code>get_info</code> <a href="events_and_actions.html">object script action</a>.</li>
       <li><span class="cl-c">Added</span> the <code>on_ready</code> <a href="script.html">mob event</a>.</li>
-      <li><span class="cl-c">Added</span> the <code>message_sender_id</code> value to the <code>get_info</code> <a href="script.html">mob event</a>.</li>
+      <li><span class="cl-a">Added</span> the <code>get_area_info</code>, <code>get_event_info</code>, and <code>get_mob_info</code> <a href="script.html">mob actions</a>. All data obtained from <code>get_info</code> are now obtained by the corresponding actions.  (Thanks Helodity)</li>
+      <li><span class="cl-r">Removed</span> the <code>get_info</code> <a href="script.html">mob action</a>, since it was replaced by the previous three actions. (Thanks Helodity)</li>
+      <li><span class="cl-r">Removed</span> the <code>get_focus_info</code> <a href="script.html">mob action</a>, since it was replaced by <code>get_mob_info</code> with the <code>focus</code> target. (Thanks Helodity)</li>
+      <li><span class="cl-a">Added</span> the <code>input_name</code> and <code>input_value</code> properties to the <code>get_event_info</code> <a href="events_and_actions.html">mob action</a>.</li>
+      <li><span class="cl-c">Added</span> the <code>id</code> and <code>state</code> data types to the <code>get_mob_info</code> <a href="script.html">mob action</a>. (Thanks Helodity)</li>
+    </ul>
+
+    <p><b>Breaking changes</b></p>
+
+    <ul>
+      <li><span class="cl-r">Removed</span> the <code>get_info</code> <a href="script.html">mob action</a>, per above.</li>
+      <li><span class="cl-r">Removed</span> the <code>get_focus_info</code> <a href="script.html">mob action</a>, per above.</li>
     </ul>
 
     <h2 id="0.24.0">0.24.0</h2>

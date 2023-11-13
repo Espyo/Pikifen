@@ -6,7 +6,7 @@ script {
             send_message_to_links 1
         }
         on_receive_message {
-            get_info msg message
+            get_event_info msg message
             
             if $msg = 0
                 send_message_to_links 1

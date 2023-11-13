@@ -249,60 +249,73 @@ enum MOB_ACTION_GET_INFO_TARGET_TYPES {
     MOB_ACTION_GET_INFO_TARGET_SELF,
     //Gets info about its focus.
     MOB_ACTION_GET_INFO_TARGET_FOCUS,
-    //Gets info trigger.
+    //Gets info about the mob that triggered the event.
     MOB_ACTION_GET_INFO_TARGET_TRIGGER,
 };
 
-//Get info action info types.
-enum MOB_ACTION_GET_INFO_TYPES {
-    //Get angle.
-    MOB_ACTION_GET_INFO_ANGLE,
-    //Get body part that triggered the event.
-    MOB_ACTION_GET_INFO_BODY_PART,
-    //Get amount of chomped Pikmin.
-    MOB_ACTION_GET_INFO_CHOMPED_PIKMIN,
+
+//Get area info action info types.
+enum MOB_ACTION_GET_AREA_INFO_TYPES {
     //Get time of day, in minutes.
-    MOB_ACTION_GET_INFO_DAY_MINUTES,
+    MOB_ACTION_GET_AREA_INFO_DAY_MINUTES,
     //Get number of Pikmin on the field.
-    MOB_ACTION_GET_INFO_FIELD_PIKMIN,
-    //Get distance towards focused mob.
-    MOB_ACTION_GET_INFO_FOCUS_DISTANCE,
+    MOB_ACTION_GET_AREA_INFO_FIELD_PIKMIN,
+};
+
+
+//Get event info action info types.
+enum MOB_ACTION_GET_EV_INFO_TYPES {
+    //Get body part that triggered the event.
+    MOB_ACTION_GET_EV_INFO_BODY_PART,
     //Get frame signal that triggered the event.
-    MOB_ACTION_GET_INFO_FRAME_SIGNAL,
-    //Get total power on the group task.
-    MOB_ACTION_GET_INFO_GROUP_TASK_POWER,
+    MOB_ACTION_GET_EV_INFO_FRAME_SIGNAL,
     //Get name of hazard that triggered the event.
-    MOB_ACTION_GET_INFO_HAZARD,
-    //Get health.
-    MOB_ACTION_GET_INFO_HEALTH,
-    //Get health ratio.
-    MOB_ACTION_GET_INFO_HEALTH_RATIO,
+    MOB_ACTION_GET_EV_INFO_HAZARD,
     //Get the name of the input that triggered the event.
-    MOB_ACTION_GET_INFO_INPUT_NAME,
+    MOB_ACTION_GET_EV_INFO_INPUT_NAME,
     //Get the value of the input that triggered the event.
-    MOB_ACTION_GET_INFO_INPUT_VALUE,
-    //Get amount of latched Pikmin.
-    MOB_ACTION_GET_INFO_LATCHED_PIKMIN,
-    //Get total weight of latched Pikmin.
-    MOB_ACTION_GET_INFO_LATCHED_PIKMIN_WEIGHT,
+    MOB_ACTION_GET_EV_INFO_INPUT_VALUE,
     //Get message that triggered the event.
-    MOB_ACTION_GET_INFO_MESSAGE,
-    //Get category of mob that triggered the event.
-    MOB_ACTION_GET_INFO_MOB_CATEGORY,
-    //Get type of mob that triggered the event.
-    MOB_ACTION_GET_INFO_MOB_TYPE,
+    MOB_ACTION_GET_EV_INFO_MESSAGE,
     //Get the other body part that triggered the event.
-    MOB_ACTION_GET_INFO_OTHER_BODY_PART,
+    MOB_ACTION_GET_EV_INFO_OTHER_BODY_PART,
+};
+
+
+//Get mob info action info types.
+enum MOB_ACTION_GET_MOB_INFO_TYPES {
+    //Get angle.
+    MOB_ACTION_GET_MOB_INFO_ANGLE,
+    //Get amount of chomped Pikmin.
+    MOB_ACTION_GET_MOB_INFO_CHOMPED_PIKMIN,
+    //Get distance towards focused mob.
+    MOB_ACTION_GET_MOB_INFO_FOCUS_DISTANCE,
+    //Get total power on the group task.
+    MOB_ACTION_GET_MOB_INFO_GROUP_TASK_POWER,
+    //Get health.
+    MOB_ACTION_GET_MOB_INFO_HEALTH,
+    //Get health ratio.
+    MOB_ACTION_GET_MOB_INFO_HEALTH_RATIO,
+    //Get the numerical ID.
+    MOB_ACTION_GET_MOB_INFO_ID,
+    //Get amount of latched Pikmin.
+    MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN,
+    //Get total weight of latched Pikmin.
+    MOB_ACTION_GET_MOB_INFO_LATCHED_PIKMIN_WEIGHT,
+    //Get category of mob that triggered the event.
+    MOB_ACTION_GET_MOB_INFO_MOB_CATEGORY,
+    //Get type of mob that triggered the event.
+    MOB_ACTION_GET_MOB_INFO_MOB_TYPE,
     //Get name of current state.
-    MOB_ACTION_GET_INFO_STATE,
-    //Get X.
-    MOB_ACTION_GET_INFO_X,
-    //Get Y.
-    MOB_ACTION_GET_INFO_Y,
-    //Get Z.
-    MOB_ACTION_GET_INFO_Z,
+    MOB_ACTION_GET_MOB_INFO_STATE,
     //Get current weight on top of it.
-    MOB_ACTION_GET_INFO_WEIGHT,
+    MOB_ACTION_GET_MOB_INFO_WEIGHT,
+    //Get X.
+    MOB_ACTION_GET_MOB_INFO_X,
+    //Get Y.
+    MOB_ACTION_GET_MOB_INFO_Y,
+    //Get Z.
+    MOB_ACTION_GET_MOB_INFO_Z,
 };
 
 
