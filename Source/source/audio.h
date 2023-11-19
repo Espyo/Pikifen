@@ -47,6 +47,7 @@ extern const float DEF_STACK_MIN_POS;
 extern const float GAIN_CHANGE_SPEED;
 extern const float PAN_CHANGE_SPEED;
 extern const float PLAYBACK_PAUSE_GAIN_SPEED;
+extern const float PLAYBACK_STOP_GAIN_SPEED;
 }
 
 
@@ -95,6 +96,8 @@ enum SFX_PLAYBACK_STATES {
     SFX_PLAYBACK_PAUSED,
     //In the process of fading in to unpause.
     SFX_PLAYBACK_UNPAUSING,
+    //In the process of fading out to stop.
+    SFX_PLAYBACK_STOPPING,
     //Finished playing and needs to be destroyed.
     SFX_PLAYBACK_DESTROYED,
 };
@@ -167,8 +170,8 @@ struct sfx_playback_struct {
     float pan = 0.0f;
     //Pan that it wants to be at.
     float target_pan = 0.0f;
-    //Multiply the gain by this much, due to playback un/pausing.
-    float pause_gain_mult = 1.0f;
+    //Multiply the gain by this much, due to the playback's state.
+    float state_gain_mult = 1.0f;
     //Position before pausing.
     unsigned int pre_pause_pos = 0;
 };
@@ -284,6 +287,7 @@ private:
     );
     bool destroy_sfx_playback(size_t playback_idx);
     sfx_source_struct* get_source(size_t source_id);
+    bool stop_sfx_playback(size_t playback_idx);
     void update_playback_gain_and_pan(size_t playback_idx);
     void update_playback_target_gain_and_pan(size_t playback_idx);
 };

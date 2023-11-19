@@ -21,12 +21,14 @@ namespace AUDIO {
 //reason the same sound plays multiple times at once, they are actually
 //stopped under the SFX_STACK_NORMAL mode, thus perventing a super-loud sound.
 const float DEF_STACK_MIN_POS = 0.1f;
-//Maximum change speed for a playback's gain, measured in amount per second.
+//Change speed for a playback's gain, measured in amount per second.
 const float GAIN_CHANGE_SPEED = 3.0f;
-//Maximum change speed for a playback's pan, measured in amount per second.
+//Change speed for a playback's pan, measured in amount per second.
 const float PAN_CHANGE_SPEED = 8.0f;
-//Change speed of playback gain when un/pausing measured in amount per second.
+//Change speed of playback gain when un/pausing, measured in amount per second.
 const float PLAYBACK_PAUSE_GAIN_SPEED = 5.0f;
+//Change speed of playback gain when stopping, measured in amount per second.
+const float PLAYBACK_STOP_GAIN_SPEED = 8.0f;
 }
 
 
@@ -174,7 +176,8 @@ void audio_manager::destroy() {
 
 
 /* ----------------------------------------------------------------------------
- * Destroys a playback object.
+ * Destroys a playback object directly.
+ * The "stopping" state is not relevant here.
  * Returns whether it succeeded.
  * playback_idx:
  *   Index of the playback in the list of playbacks.
@@ -228,7 +231,7 @@ bool audio_manager::destroy_sfx_source(size_t source_id) {
     ) {
         for(size_t p = 0; p < playbacks.size(); ++p) {
             if(playbacks[p].source_id == source_id) {
-                destroy_sfx_playback(p);
+                stop_sfx_playback(p);
             }
         }
     }
@@ -296,7 +299,7 @@ bool audio_manager::emit(size_t source_id) {
             if(!p_source_ptr || p_source_ptr->sample != sample) {
                 continue;
             }
-            destroy_sfx_playback(p);
+            stop_sfx_playback(p);
         }
     }
     
@@ -524,9 +527,24 @@ void audio_manager::stop_all_playbacks(ALLEGRO_SAMPLE* filter) {
         }
         
         if(to_stop) {
-            destroy_sfx_playback(p);
+            stop_sfx_playback(p);
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stops a playback, putting it in the "stopping" state.
+ * Returns whether it succeeded.
+ * playback_idx:
+ *   Index of the playback in the list of playbacks.
+ */
+bool audio_manager::stop_sfx_playback(size_t playback_idx) {
+    sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
+    if(playback_ptr->state == SFX_PLAYBACK_STOPPING) return false;
+    if(playback_ptr->state == SFX_PLAYBACK_DESTROYED) return false;
+    playback_ptr->state = SFX_PLAYBACK_STOPPING;
+    return true;
 }
 
 
@@ -567,7 +585,7 @@ void audio_manager::tick(float delta_t) {
             ) &&
             playback_ptr->state != SFX_PLAYBACK_PAUSED
         ) {
-            //Finished playing.
+            //Finished playing entirely.
             destroy_sfx_playback(p);
             
         } else {
@@ -591,10 +609,10 @@ void audio_manager::tick(float delta_t) {
                 
             //Pausing and unpausing.
             if(playback_ptr->state == SFX_PLAYBACK_PAUSING) {
-                playback_ptr->pause_gain_mult -=
+                playback_ptr->state_gain_mult -=
                     AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * delta_t;
-                if(playback_ptr->pause_gain_mult <= 0.0f) {
-                    playback_ptr->pause_gain_mult = 0.0f;
+                if(playback_ptr->state_gain_mult <= 0.0f) {
+                    playback_ptr->state_gain_mult = 0.0f;
                     playback_ptr->state = SFX_PLAYBACK_PAUSED;
                     playback_ptr->pre_pause_pos =
                         al_get_sample_instance_position(
@@ -606,11 +624,20 @@ void audio_manager::tick(float delta_t) {
                     );
                 }
             } else if(playback_ptr->state == SFX_PLAYBACK_UNPAUSING) {
-                playback_ptr->pause_gain_mult +=
+                playback_ptr->state_gain_mult +=
                     AUDIO::PLAYBACK_PAUSE_GAIN_SPEED * delta_t;
-                if(playback_ptr->pause_gain_mult >= 1.0f) {
-                    playback_ptr->pause_gain_mult = 1.0f;
+                if(playback_ptr->state_gain_mult >= 1.0f) {
+                    playback_ptr->state_gain_mult = 1.0f;
                     playback_ptr->state = SFX_PLAYBACK_PLAYING;
+                }
+            }
+            
+            //Stopping.
+            if(playback_ptr->state == SFX_PLAYBACK_STOPPING) {
+                playback_ptr->state_gain_mult -=
+                    AUDIO::PLAYBACK_STOP_GAIN_SPEED * delta_t;
+                if(playback_ptr->state_gain_mult <= 0.0f) {
+                    destroy_sfx_playback(p);
                 }
             }
             
@@ -654,7 +681,7 @@ void audio_manager::update_playback_gain_and_pan(size_t playback_idx) {
     sfx_playback_struct* playback_ptr = &playbacks[playback_idx];
     
     playback_ptr->gain = clamp(playback_ptr->gain, 0.0f, 1.0f);
-    float final_gain = playback_ptr->gain * playback_ptr->pause_gain_mult;
+    float final_gain = playback_ptr->gain * playback_ptr->state_gain_mult;
     final_gain = clamp(final_gain, 0.0f, 1.0f);
     al_set_sample_instance_gain(
         playback_ptr->allegro_sample_instance,

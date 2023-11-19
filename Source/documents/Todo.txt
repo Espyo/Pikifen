@@ -14,15 +14,7 @@ Current tasks (tasks being worked on, but not yet committed)
             The ability to handle randomized volumes and pitches (and maybe panning)
             If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
             When you cancel holding a Pikmin, its standby squeal sound should stop
-        Reorganize the backend
-            There should be multiple mixers, which can feed into other mixers, until eventually the "master" mixer connects to the Allegro voice
-        Playback FSM
-            Waiting: Waiting some time before starting to play. Can go to Playing
-            Playing: Can go to Waiting or Stopping
-            Stopping: Quickly fading out so it can then be destroyed
-            Destroyed: Unusable, and ready to be deleted
         A way for sounds to repeat with an interval from the same source
-        Sounds that are being destroyed should fade out quickly
         Ducking
         Load system sounds from System_asset_file_names.txt
         Resetting when an area is entered or exited
@@ -36,6 +28,9 @@ Next tasks (roughly sorted most important first)
         This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
 
     --- 0.25.0 ---
+    Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.90
+        BeginChild that has a true as the third argument needs to change
+        Tooltips now default to appear on disabled items? Try it with the undo button
     Script improvements
         Make it so you can run an action on behalf of another mob
             Be careful with state switching, variables, and focus
@@ -43,6 +38,7 @@ Next tasks (roughly sorted most important first)
             Maybe have a "start_running_as" action and a "stop_running_as"
         Action groups (like functions)
     Idle Pikmin shouldn't be called by "bumping" until some seconds, since if you throw a Pikmin nearby, it'll be hard to get it to stay
+        Just giving a timeout isn't good enough, since you can't bump them at the start of the area, etc.
         Maybe it should only count as bumped if the leader had previously moved a certain distance from it?
     Use a screenshot for the title screen
     Add faint icons to the title screen buttons?
@@ -125,11 +121,7 @@ Next tasks (roughly sorted most important first)
         Recreate the following sounds, as per user feedback
             Plucking -- sounds like crap
         This might help
-            https://www.allegro.cc/forums/thread/617315
             https://youtu.be/Vjm--AqG04Y?t=713
-            https://www.allegro.cc/forums/thread/617707 ?
-            https://www.youtube.com/watch?v=PVA48I2n-qQ
-            https://askagamedev.tumblr.com/post/188860396561/one-thing-i-love-about-your-blog-is-learning-about a sort of priority system
     Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
