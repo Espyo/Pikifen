@@ -1263,8 +1263,8 @@ pikmin_type* mob::decide_carry_pikmin_type(
             carry_info->intended_pik_type &&
             !force_random &&
             find(
-                majority_types.begin(), 
-                majority_types.end(), 
+                majority_types.begin(),
+                majority_types.end(),
                 carry_info->intended_pik_type
             ) != majority_types.end()
         ) {

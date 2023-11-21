@@ -48,7 +48,7 @@ mob_type::mob_type(MOB_CATEGORIES category_id) :
     main_color(al_map_rgb(128, 128, 128)),
     show_health(true),
     casts_shadow(true),
-    blackout_radius(-1),
+    blackout_radius(-1.0f),
     move_speed(0),
     acceleration(MOB::DEF_ACCELERATION),
     rotation_speed(MOB::DEF_ROTATION_SPEED),

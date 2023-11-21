@@ -7,4 +7,3 @@ random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.1
 tint_random_maximum = 159 255 159
-blackout_radius = 0

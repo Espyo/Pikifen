@@ -40,15 +40,15 @@ Next tasks (roughly sorted most important first)
     Idle Pikmin shouldn't be called by "bumping" until some seconds, since if you throw a Pikmin nearby, it'll be hard to get it to stay
         Just giving a timeout isn't good enough, since you can't bump them at the start of the area, etc.
         Maybe it should only count as bumped if the leader had previously moved a certain distance from it?
+        Each Pikmin should have a bump lock time variable. Only idling from a throw or dismiss set the time (to 5 seconds?). Whenever the active leader gets into range (100 units?), the timer is reset, and stays frozen until the leader leaves. Pikmin where the bump lock time > 0 cannot be bumped
     Use a screenshot for the title screen
-    Add faint icons to the title screen buttons?
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
         A cyclic lever? It automatically flips on and off over time
         A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
     Path things
         [NEEDS BRAINSTORMING] Path links that are one-way for drop-offs don't make much sense, since Winged Pikmin can fly up them...
-            Check what P3 does, maybe P4
+            Mobs check the path stop's Z (the sector's Z). If it's within 50 units higher, or if the mob can fly, it can go there. This means ramps need to have a stop per step
         If you start drawing a path on top of a link, it should split the link and start drawing on that stop
         The stops should get the properties, not the links
         Path stops should have a radius

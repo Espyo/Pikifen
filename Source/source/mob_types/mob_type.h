@@ -214,7 +214,7 @@ public:
     bool show_health;
     //Does it cast a shadow?
     bool casts_shadow;
-    //How much light does it cast in a blackout?
+    //How much light does it cast in a blackout? <0 to use the mob's radius.
     float blackout_radius;
     
     //---Movement---

@@ -1,7 +1,6 @@
 name = Margaret
 description = A cluster of yellow margarets.
 
-blackout_radius = 0
 height = 160
 radius = 32
 random_animation_delay = true
