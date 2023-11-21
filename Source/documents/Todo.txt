@@ -28,9 +28,6 @@ Next tasks (roughly sorted most important first)
         This is because the Pikmin forcefully receives a hazard entry event, so that leaders can't grab or drag vulnerable Pikmin into water. The Pikmin never receives any organic hazard departure event
 
     --- 0.25.0 ---
-    Update Dear ImGui https://github.com/ocornut/imgui/releases/tag/v1.90
-        BeginChild that has a true as the third argument needs to change
-        Tooltips now default to appear on disabled items? Try it with the undo button
     Script improvements
         Make it so you can run an action on behalf of another mob
             Be careful with state switching, variables, and focus
