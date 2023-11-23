@@ -918,6 +918,9 @@ void area_editor::draw_canvas() {
                     } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
                         color = al_map_rgba(187, 102, 153, 224);
                         break;
+                    } case PATH_LINK_TYPE_LEDGE: {
+                        color = al_map_rgba(128, 77, 147, 224);
+                        break;
                     }
                     }
                     if(!one_way) {

@@ -405,6 +405,35 @@ bool can_traverse_path_link(
         return false;
     }
     
+    //Check if the travel is limited to links with a certain label.
+    if(!settings.label.empty() && link_ptr->label != settings.label) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_RIGHT_LABEL;
+        return false;
+    }
+    
+    //Get the start and end sectors.
+    sector* start_sector = link_ptr->start_ptr->sector_ptr;
+    if(!start_sector) {
+        //We're probably in the area editor, where things change too often
+        //for us to cache the sector pointer and access said cache.
+        //Let's calculate now real quick.
+        start_sector = get_sector(link_ptr->start_ptr->pos, NULL, false);
+        if(!start_sector) {
+            //It's really the void. Nothing that can be done here then.
+            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
+            return false;
+        }
+    }
+    sector* end_sector = link_ptr->end_ptr->sector_ptr;
+    if(!end_sector) {
+        //Same as above.
+        end_sector = get_sector(link_ptr->end_ptr->pos, NULL, false);
+        if(!end_sector) {
+            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
+            return false;
+        }
+    }
+    
     //Check if the link has limitations based on link type.
     switch(link_ptr->type) {
     case PATH_LINK_TYPE_NORMAL: {
@@ -427,29 +456,19 @@ bool can_traverse_path_link(
             return false;
         }
         break;
-    }
-    }
-    
-    //Check if the travel is limited to links with a certain label.
-    if(!settings.label.empty() && link_ptr->label != settings.label) {
-        if(reason) *reason = PATH_BLOCK_REASON_NOT_RIGHT_LABEL;
-        return false;
-    }
-    
-    //Check if the link's end path stop is hazardous, by checking its sector.
-    sector* end_sector = link_ptr->end_ptr->sector_ptr;
-    if(!end_sector) {
-        //We're probably in the area editor, where things change too often
-        //for us to cache the sector pointer and access said cache.
-        //Let's calculate now real quick.
-        end_sector = get_sector(link_ptr->end_ptr->pos, NULL, false);
-        if(!end_sector) {
-            //It's really the void. Nothing that can be done here then.
-            if(reason) *reason = PATH_BLOCK_REASON_STOP_IN_VOID;
+    } case PATH_LINK_TYPE_LEDGE: {
+        if(
+            !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
+            (end_sector->z - start_sector->z) > GEOMETRY::STEP_HEIGHT
+        ) {
+            if(reason) *reason = PATH_BLOCK_REASON_UP_LEDGE;
             return false;
         }
+        break;
+    }
     }
     
+    //Check if the end stop is hazardous, by checking its sector.
     bool touching_hazard =
         !end_sector->hazard_floor ||
         !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE);
@@ -478,6 +497,7 @@ bool can_traverse_path_link(
         }
     }
     
+    //All good!
     return true;
 }
 
@@ -802,6 +822,9 @@ string path_block_reason_to_string(PATH_BLOCK_REASONS reason) {
         break;
     } case PATH_BLOCK_REASON_NOT_AIRBORNE: {
         return "Mob should be airborne";
+        break;
+    } case PATH_BLOCK_REASON_UP_LEDGE: {
+        return "Mob cannot go up ledge";
         break;
     } case PATH_BLOCK_REASON_NOT_RIGHT_LABEL: {
         return "Mob's following links with a different label";

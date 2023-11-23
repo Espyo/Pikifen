@@ -4262,6 +4262,7 @@ void area_editor::process_gui_panel_path_link() {
     link_type_names.push_back("Script use only");
     link_type_names.push_back("Light load only");
     link_type_names.push_back("Airborne only");
+    link_type_names.push_back("Ledge");
     
     int type_i = l_ptr->type;
     if(ImGui::Combo("Type", &type_i, link_type_names, 15)) {
@@ -4326,6 +4327,7 @@ void area_editor::process_gui_panel_paths() {
         link_type_names.push_back("Script use only");
         link_type_names.push_back("Light load only");
         link_type_names.push_back("Airborne only");
+        link_type_names.push_back("Ledge");
         
         int type_i = path_drawing_type;
         if(ImGui::Combo("Type", &type_i, link_type_names, 15)) {

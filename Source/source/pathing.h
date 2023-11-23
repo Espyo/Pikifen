@@ -40,6 +40,9 @@ enum PATH_LINK_TYPES {
     PATH_LINK_TYPE_LIGHT_LOAD_ONLY,
     //Only for objects that can fly.
     PATH_LINK_TYPE_AIRBORNE_ONLY,
+    //One-way fall for normal mobs, two-way for airborne mobs.
+    PATH_LINK_TYPE_LEDGE,
+};
 };
 
 
@@ -102,6 +105,8 @@ enum PATH_BLOCK_REASONS {
     PATH_BLOCK_REASON_NOT_LIGHT_LOAD,
     //The link requires an airborne mob, but the object isn't.
     PATH_BLOCK_REASON_NOT_AIRBORNE,
+    //The link is through a ledge the mob can't climb up.
+    PATH_BLOCK_REASON_UP_LEDGE,
     //The link has a label that the object doesn't want.
     PATH_BLOCK_REASON_NOT_RIGHT_LABEL,
     //The next path stop is in the void.
