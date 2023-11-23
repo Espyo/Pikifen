@@ -2442,55 +2442,10 @@ bool mob::has_clear_line(mob* target_mob) const {
     }
     
     //Check against walls.
-    set<edge*> candidate_edges;
-    if(
-        !game.cur_area_data.bmap.get_edges_in_region(
-            bb_tl, bb_br,
-            candidate_edges
-        )
-    ) {
-        //Somehow out of bounds.
+    //We can ignore walls that are below both mobs, so use the lowest of the
+    //two Zs as a cut-off point.
+    if(are_walls_between(pos, target_mob->pos, std::min(z, target_mob->z))) {
         return false;
-    }
-    
-    for(auto &e_ptr : candidate_edges) {
-        if(
-            !line_segs_intersect(
-                pos, target_mob->pos,
-                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                NULL
-            )
-        ) {
-            continue;
-        }
-        for(size_t s = 0; s < 2; ++s) {
-            if(!e_ptr->sectors[s]) {
-                //No sectors means there's out-of-bounds geometry in the way.
-                return false;
-            }
-            if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
-                //If a blocking sector is in the way, no clear line.
-                return false;
-            }
-        }
-        if(
-            e_ptr->sectors[0]->z < z &&
-            e_ptr->sectors[0]->z < target_mob->z &&
-            e_ptr->sectors[1]->z < z &&
-            e_ptr->sectors[1]->z < target_mob->z
-        ) {
-            //If both mobs are above both sectors, it doesn't count.
-            continue;
-        }
-        if(
-            fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
-            GEOMETRY::STEP_HEIGHT
-        ) {
-            //The walls are more than stepping height in difference.
-            //So it's a genuine wall in the way.
-            return false;
-        }
     }
     
     //Check for when they're (not) standing on different mobs.

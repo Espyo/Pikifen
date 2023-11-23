@@ -52,6 +52,85 @@ void al_fwrite(ALLEGRO_FILE* f, const string &s) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if there are any walls between two points. i.e. any edges that a
+ * mob can't simply step up to.
+ * p1:
+ *   First point.
+ * p2:
+ *   Second point.
+ * ignore_walls_below_z:
+ *   Any walls whose sector Zs are below this value get ignored.
+ *   Use -FLT_MAX to not ignore any wall.
+ * impassable_walls:
+ *   If not NULL, true will be returned here if any of the walls are
+ *   impassable, i.e. the void or "blocking"-type sectors. False otherwise.
+ */
+bool are_walls_between(
+    const point &p1, const point &p2,
+    float ignore_walls_below_z, bool* impassable_walls
+) {
+    point bb_tl(std::min(p1.x, p2.x), std::min(p1.y, p2.y));
+    point bb_br(std::max(p1.x, p1.x), std::max(p2.y, p2.y));
+    
+    set<edge*> candidate_edges;
+    if(
+        !game.cur_area_data.bmap.get_edges_in_region(
+            bb_tl, bb_br,
+            candidate_edges
+        )
+    ) {
+        //Somehow out of bounds.
+        if(impassable_walls) *impassable_walls = true;
+        return true;
+    }
+    
+    for(auto &e_ptr : candidate_edges) {
+        if(
+            !line_segs_intersect(
+                p1, p2,
+                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                NULL
+            )
+        ) {
+            continue;
+        }
+        for(size_t s = 0; s < 2; ++s) {
+            if(!e_ptr->sectors[s]) {
+                //No sectors means there's out-of-bounds geometry in the way.
+                if(impassable_walls) *impassable_walls = true;
+                return true;
+            }
+            if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
+                //If a blocking sector is in the way, no clear line.
+                if(impassable_walls) *impassable_walls = true;
+                return true;
+            }
+        }
+        if(
+            e_ptr->sectors[0]->z < ignore_walls_below_z &&
+            e_ptr->sectors[1]->z < ignore_walls_below_z
+        ) {
+            //This wall was chosen to be ignored.
+            continue;
+        }
+        if(
+            fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
+            GEOMETRY::STEP_HEIGHT
+        ) {
+            //The walls are more than stepping height in difference.
+            //So it's a genuine wall in the way.
+            if(impassable_walls) *impassable_walls = false;
+            return true;
+        }
+    }
+    
+    if(impassable_walls) *impassable_walls = false;
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Converts a color to its string representation.
  * c:
  *   Color to convert.
