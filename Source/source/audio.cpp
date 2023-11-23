@@ -137,7 +137,12 @@ size_t audio_manager::create_sfx_source(
     sources[id].type = type;
     sources[id].config = config;
     sources[id].pos = pos;
-    emit(id);
+    
+    schedule_emission(id, true);
+    if(sources[id].emit_time_left <= 0.0f) {
+        emit(id);
+        schedule_emission(id, false);
+    }
     
     next_sfx_source_id++; //Hopefully there will be no collisions.
     
@@ -476,6 +481,27 @@ void audio_manager::init() {
 
 
 /* ----------------------------------------------------------------------------
+ * Schedules a sound effect source's emission. This includes things
+ * like randomly delaying it if configured to do so.
+ * Returns whether it succeeded.
+ * source_id:
+ *   ID of the sound source.
+ */
+bool audio_manager::schedule_emission(size_t source_id, bool first) {
+    sfx_source_struct* source_ptr = get_source(source_id);
+    if(!source_ptr) return false;
+    
+    source_ptr->emit_time_left = first ? 0.0f : source_ptr->config.interval;
+    if(first || source_ptr->config.interval > 0.0f) {
+        source_ptr->emit_time_left +=
+            randomf(0, source_ptr->config.random_delay);
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets the camera's position.
  * cam_tl:
  *   Current coordinates of the camera's top-left corner.
@@ -572,6 +598,18 @@ void audio_manager::tick(float delta_t) {
         mob* mob_ptr = mob_source_it->second;
         if(!mob_ptr || mob_ptr->to_delete) continue;
         s.second.pos = mob_ptr->pos;
+    }
+    
+    //Emit playbacks from sources that want to emit.
+    for(auto &s : sources) {
+        if(s.second.destroyed) continue;
+        if(s.second.emit_time_left == 0.0f) continue;
+        
+        s.second.emit_time_left -= delta_t;
+        if(s.second.emit_time_left <= 0.0f) {
+            emit(s.first);
+            schedule_emission(s.first, false);
+        }
     }
     
     //Update playbacks.

@@ -125,6 +125,8 @@ struct sfx_source_config_struct {
     float pan_deviation = 0.0f;
     //Randomness to the pan every time it emits the sound. 0 for none.
     float speed_deviation = 0.0f;
+    //Randomly delay the emission between 0 and this amount. 0 for none.
+    float random_delay = 0.0f;
     //Interval between emissions of the sound. 0 means it plays once.
     float interval = 0.0f;
 };
@@ -249,6 +251,7 @@ public:
     void handle_world_pause();
     void handle_world_unpause();
     void init();
+    bool schedule_emission(size_t source_id, bool first);
     void set_camera_pos(const point &cam_tl, const point &cam_br);
     bool set_sfx_source_pos(size_t source_id, const point &pos);
     void stop_all_playbacks(ALLEGRO_SAMPLE* filter);

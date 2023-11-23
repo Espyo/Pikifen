@@ -1,4 +1,4 @@
-﻿Point I left on (so I can continue the next day without losing my train of thought)
+Point I left on (so I can continue the next day without losing my train of thought)
     
 
 Current tasks (tasks being worked on, but not yet committed)
@@ -14,12 +14,10 @@ Current tasks (tasks being worked on, but not yet committed)
             The ability to handle randomized volumes and pitches (and maybe panning)
             If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
             When you cancel holding a Pikmin, its standby squeal sound should stop
-        A way for sounds to repeat with an interval from the same source
         Ducking
         Load system sounds from System_asset_file_names.txt
         Resetting when an area is entered or exited
         Make it so that only 6 or so sounds can play at once?
-        Some sounds should be able to start a random of amount of time after they're supposed to. This helps everything feel organic instead of robotic and calculated.
 
 
 Next tasks (roughly sorted most important first)
