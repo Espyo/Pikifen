@@ -1024,6 +1024,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 } else {
                     register_change("path stop creation");
                     next_stop = new path_stop(hotspot);
+                    next_stop->flags = path_drawing_flags;
+                    next_stop->label = path_drawing_label;
                     game.cur_area_data.path_stops.push_back(next_stop);
                     set_status("Created path stop.");
                 }
@@ -1060,6 +1062,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 } else {
                     register_change("path stop creation");
                     path_drawing_stop_1 = new path_stop(hotspot);
+                    path_drawing_stop_1->flags = path_drawing_flags;
+                    path_drawing_stop_1->label = path_drawing_label;
                     game.cur_area_data.path_stops.push_back(
                         path_drawing_stop_1
                     );

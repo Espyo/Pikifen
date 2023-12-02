@@ -433,11 +433,9 @@ void load_area(
             
         path_stop* s_ptr = new path_stop();
         
-        vector<string> words =
-            split(path_stop_node->get_child_by_name("pos")->value);
-        s_ptr->pos.x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->pos.y = (words.size() >= 2 ? s2f(words[1]) : 0);
-        
+        s_ptr->pos = s2p(path_stop_node->get_child_by_name("pos")->value);
+        s_ptr->flags = s2i(path_stop_node->get_child_by_name("flags")->value);
+        s_ptr->label = path_stop_node->get_child_by_name("label")->value;
         data_node* links_node = path_stop_node->get_child_by_name("links");
         size_t n_links = links_node->get_nr_of_children();
         

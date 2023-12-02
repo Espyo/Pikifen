@@ -4289,6 +4289,66 @@ void area_editor::process_gui_panel_path_link() {
 
 
 /* ----------------------------------------------------------------------------
+ * Processes the ImGui path stop control panel for this frame.
+ */
+void area_editor::process_gui_panel_path_stop() {
+    path_stop* s_ptr = *selected_path_stops.begin();
+    
+    int flags_i = s_ptr->flags;
+    if(
+        ImGui::CheckboxFlags(
+            "Script use only",
+            &flags_i,
+            PATH_STOP_SCRIPT_ONLY
+        )
+    ) {
+        s_ptr->flags = flags_i;
+    }
+    set_tooltip(
+        "Can only be used by objects if their script tells them to."
+    );
+    
+    //Light load only checkbox.
+    if(
+        ImGui::CheckboxFlags(
+            "Light load only",
+            &flags_i,
+            PATH_STOP_LIGHT_LOAD_ONLY
+        )
+    ) {
+        s_ptr->flags = flags_i;
+    }
+    set_tooltip(
+        "Can only be used by objects that are not carrying anything, "
+        "or by objects that only have a weight of 1."
+    );
+    
+    //Airborne only checkbox.
+    if(
+        ImGui::CheckboxFlags(
+            "Airborne only",
+            &flags_i,
+            PATH_STOP_AIRBORNE_ONLY
+        )
+    ) {
+        s_ptr->flags = flags_i;
+    }
+    set_tooltip(
+        "Can only be used by objects that can fly."
+    );
+    
+    //Label text.
+    ImGui::InputText("Label", &s_ptr->label);
+    set_tooltip(
+        "If this stop is part of a path that you want\n"
+        "to address in a script, write the name here."
+    );
+    
+    homogenize_selected_path_stops();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Processes the ImGui paths control panel for this frame.
  */
 void area_editor::process_gui_panel_paths() {
@@ -4302,6 +4362,13 @@ void area_editor::process_gui_panel_paths() {
             "Each click places a stop and/or connects to a stop. "
             "Use the following widgets the change how new links will be."
         );
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Link settings text.
+        ImGui::Text("New path link settings:");
+        ImGui::Indent();
         
         int one_way_mode = path_drawing_normals;
         
@@ -4336,13 +4403,66 @@ void area_editor::process_gui_panel_paths() {
         set_tooltip(
             "What type of link to draw."
         );
+        ImGui::Unindent();
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Stop settings text.
+        ImGui::Text("New path stop settings:");
+        
+        //Script use only checkbox.
+        ImGui::Indent();
+        int flags_i = path_drawing_flags;
+        if(
+            ImGui::CheckboxFlags(
+                "Script use only",
+                &flags_i,
+                PATH_STOP_SCRIPT_ONLY
+            )
+        ) {
+            path_drawing_flags = flags_i;
+        }
+        set_tooltip(
+            "Can only be used by objects if their script tells them to."
+        );
+        
+        //Light load only checkbox.
+        if(
+            ImGui::CheckboxFlags(
+                "Light load only",
+                &flags_i,
+                PATH_STOP_LIGHT_LOAD_ONLY
+            )
+        ) {
+            path_drawing_flags = flags_i;
+        }
+        set_tooltip(
+            "Can only be used by objects that are not carrying anything, "
+            "or by objects that only have a weight of 1."
+        );
+        
+        //Airborne only checkbox.
+        if(
+            ImGui::CheckboxFlags(
+                "Airborne only",
+                &flags_i,
+                PATH_STOP_AIRBORNE_ONLY
+            )
+        ) {
+            path_drawing_flags = flags_i;
+        }
+        set_tooltip(
+            "Can only be used by objects that can fly."
+        );
         
         //Label text.
         ImGui::InputText("Label", &path_drawing_label);
         set_tooltip(
-            "If the new link is part of a path that you want\n"
+            "If the new stop is part of a path that you want\n"
             "to address in a script, write the name here."
         );
+        ImGui::Unindent();
         
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
@@ -4402,6 +4522,46 @@ void area_editor::process_gui_panel_paths() {
                 "Delete all selected path stops and/or path links.\n",
                 "Delete"
             );
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Stop properties node.
+        if(saveable_tree_node("paths", "Stop properties")) {
+        
+            bool ok_to_edit =
+                (selected_path_stops.size() == 1) || selection_homogenized;
+                
+            if(ok_to_edit) {
+            
+                process_gui_panel_path_stop();
+                
+            } else if(selected_path_stops.empty()) {
+            
+                //"No stop selected" text.
+                ImGui::TextDisabled("(No path stop selected)");
+                
+            } else {
+            
+                //Non-homogenized stops warning.
+                ImGui::TextWrapped(
+                    "Multiple different path stops selected. "
+                    "To make all their properties the same and "
+                    "edit them all together, click here:"
+                );
+                
+                //Homogenize stops button.
+                if(ImGui::Button("Edit all together")) {
+                    register_change("path stop combining");
+                    selection_homogenized = true;
+                    homogenize_selected_path_stops();
+                }
+            }
+            
+            
+            ImGui::TreePop();
+            
         }
         
         //Spacer dummy widget.
@@ -4622,19 +4782,19 @@ void area_editor::process_gui_panel_paths() {
                 "Pikmin will go to when starting to carry."
             );
             
-            //Select links with label button.
-            if(ImGui::Button("Select all links with label...")) {
-                ImGui::OpenPopup("selectLinks");
+            //Select stops with label button.
+            if(ImGui::Button("Select all stops with label...")) {
+                ImGui::OpenPopup("selectStops");
             }
             set_tooltip(
-                "Selects all links (and their stops) that have the\n"
-                "specified label. The search is case-sensitive."
+                "Selects all stops that have the specified label.\n"
+                "The search is case-sensitive."
             );
             
-            //Select links with label popup.
+            //Select stops with label popup.
             string label_name;
-            if(input_popup("selectLinks", "Label:", &label_name)) {
-                select_path_links_with_label(label_name);
+            if(input_popup("selectStops", "Label:", &label_name)) {
+                select_path_stops_with_label(label_name);
             }
             
             ImGui::TreePop();

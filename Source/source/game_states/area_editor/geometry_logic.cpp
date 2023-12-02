@@ -1764,6 +1764,26 @@ void area_editor::homogenize_selected_path_links() {
 
 
 /* ----------------------------------------------------------------------------
+ * Homogenizes all selected path stops,
+ * based on the one at the head of the selection.
+ */
+void area_editor::homogenize_selected_path_stops() {
+    if(selected_path_stops.size() < 2) return;
+    
+    path_stop* base = *selected_path_stops.begin();
+    for(
+        auto s = selected_path_stops.begin();
+        s != selected_path_stops.end();
+        ++s
+    ) {
+        if(s == selected_path_stops.begin()) continue;
+        
+        base->clone(*s);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Homogenizes all selected sectors,
  * based on the one at the head of the selection.
  */

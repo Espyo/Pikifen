@@ -332,6 +332,17 @@ void path_stop::calculate_dists_plus_neighbors() {
 
 
 /* ----------------------------------------------------------------------------
+ * Clones a path stop's properties onto another, not counting the links.
+ * destination:
+ *   Path stop to clone the data into.
+ */
+void path_stop::clone(path_stop* destination) const {
+    destination->flags = flags;
+    destination->label = label;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the pointer of the link between this stop and another.
  * The links in memory are one-way, meaning that if the only link
  * is from the other stop to this one, it will not count.
@@ -405,8 +416,24 @@ bool can_traverse_path_link(
         return false;
     }
     
-    //Check if the travel is limited to links with a certain label.
-    if(!settings.label.empty() && link_ptr->label != settings.label) {
+    //Check if the end stop has limitations based on the stop flags.
+    if(
+        has_flag(link_ptr->end_ptr->flags, PATH_STOP_SCRIPT_ONLY) &&
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)
+    ) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_IN_SCRIPT;
+        return false;
+    }
+    if(
+        has_flag(link_ptr->end_ptr->flags, PATH_STOP_LIGHT_LOAD_ONLY) &&
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)
+    ) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
+        return false;
+    }
+    
+    //Check if the travel is limited to stops with a certain label.
+    if(!settings.label.empty() && link_ptr->end_ptr->label != settings.label) {
         if(reason) *reason = PATH_BLOCK_REASON_NOT_RIGHT_LABEL;
         return false;
     }

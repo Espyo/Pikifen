@@ -436,6 +436,8 @@ private:
     point octee_orig_scale;
     //Current on-canvas texture effect edit mode.
     OCTEE_MODES octee_mode;
+    //When drawing a path, use these stop flags.
+    uint8_t path_drawing_flags;
     //When drawing a path, use this label.
     string path_drawing_label;
     //When drawing a path, create normal links. False for one-way links.
@@ -683,6 +685,7 @@ private:
     void homogenize_selected_edges();
     void homogenize_selected_mobs();
     void homogenize_selected_path_links();
+    void homogenize_selected_path_stops();
     void homogenize_selected_sectors();
     void load_area(
         const string &requested_area_folder_name,
@@ -715,6 +718,7 @@ private:
     void save_reference();
     void select_edge(edge* e_ptr);
     void select_path_links_with_label(const string &label);
+    void select_path_stops_with_label(const string &label);
     void select_sector(sector* s_ptr);
     void select_tree_shadow(tree_shadow* s_ptr);
     void select_vertex(vertex* v_ptr);
@@ -831,6 +835,7 @@ private:
     void process_gui_panel_mob();
     void process_gui_panel_mobs();
     void process_gui_panel_path_link();
+    void process_gui_panel_path_stop();
     void process_gui_panel_paths();
     void process_gui_panel_review();
     void process_gui_panel_sector();

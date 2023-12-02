@@ -124,6 +124,7 @@ area_editor::area_editor() :
     moving_cross_section_point(-1),
     new_sector_error_tint_timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION),
     octee_mode(OCTEE_MODE_OFFSET),
+    path_drawing_flags(0),
     path_drawing_normals(true),
     path_drawing_type(PATH_LINK_TYPE_NORMAL),
     path_preview_result(PATH_RESULT_NOT_CALCULATED),
@@ -3269,6 +3270,16 @@ bool area_editor::save_area(const bool to_backup) {
         path_stop_node->add(
             new data_node("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
         );
+        if(s_ptr->flags != 0) {
+            path_stop_node->add(
+                new data_node("flags", i2s(s_ptr->flags))
+            );
+        }
+        if(!s_ptr->label.empty()) {
+            path_stop_node->add(
+                new data_node("label", s_ptr->label)
+            );
+        }
         
         data_node* links_node = new data_node("links", "");
         path_stop_node->add(links_node);
@@ -3841,6 +3852,23 @@ void area_editor::select_path_links_with_label(const string &label) {
                 selected_path_stops.insert(s_ptr);
                 selected_path_stops.insert(l_ptr->end_ptr);
             }
+        }
+    }
+    set_selection_status_text();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Selects all path stops with the given label.
+ * label:
+ *   Label to search for.
+ */
+void area_editor::select_path_stops_with_label(const string &label) {
+    clear_selection();
+    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = game.cur_area_data.path_stops[s];
+        if(s_ptr->label == label) {
+            selected_path_stops.insert(s_ptr);
         }
     }
     set_selection_status_text();

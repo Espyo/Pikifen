@@ -837,10 +837,20 @@ void area_editor::draw_canvas() {
         for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
             bool highlighted = highlighted_path_stop == s_ptr;
+            ALLEGRO_COLOR color;
+            if(has_flag(s_ptr->flags, PATH_STOP_SCRIPT_ONLY)) {
+                color = al_map_rgba(187, 102, 34, 224);
+            } else if(has_flag(s_ptr->flags, PATH_STOP_LIGHT_LOAD_ONLY)) {
+                color = al_map_rgba(102, 170, 34, 224);
+            } else if(has_flag(s_ptr->flags, PATH_STOP_AIRBORNE_ONLY)) {
+                color = al_map_rgba(187, 102, 153, 224);
+            } else {
+                color = al_map_rgb(88, 177, 177);
+            }
             al_draw_filled_circle(
                 s_ptr->pos.x, s_ptr->pos.y,
                 AREA_EDITOR::PATH_STOP_RADIUS,
-                al_map_rgb(88, 177, 177)
+                color
             );
             
             if(

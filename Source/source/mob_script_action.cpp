@@ -938,16 +938,11 @@ void mob_action_runners::follow_path_randomly(mob_action_run_data &data) {
             game.cur_area_data.path_stops.end()
         );
     } else {
-        //If there's a label, it'd be nice to only pick stops that have SOME
-        //connection to the label. Checking the stop's outgoing links is
-        //the best we can do, as to not overengineer or hurt performance.
+        //If there's a label, we should only pick stops that have the label.
         for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = game.cur_area_data.path_stops[s];
-            for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-                if(s_ptr->links[l]->label == label) {
-                    choices.push_back(s_ptr);
-                    break;
-                }
+            if(s_ptr->label == label) {
+                choices.push_back(s_ptr);
             }
         }
     }

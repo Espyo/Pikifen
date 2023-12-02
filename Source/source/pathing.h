@@ -34,7 +34,7 @@ struct path_link;
 enum PATH_LINK_TYPES {
     //Normal.
     PATH_LINK_TYPE_NORMAL,
-    //Only useable by mob scripts that reference it.
+    //Only usable by mob scripts that reference it.
     PATH_LINK_TYPE_SCRIPT_ONLY,
     //Only for mobs carrying nothing, or a 1-weight mob.
     PATH_LINK_TYPE_LIGHT_LOAD_ONLY,
@@ -43,6 +43,16 @@ enum PATH_LINK_TYPES {
     //One-way fall for normal mobs, two-way for airborne mobs.
     PATH_LINK_TYPE_LEDGE,
 };
+
+
+//Flags for path stops.
+enum PATH_STOP_FLAGS {
+    //Only usable by mob scripts that reference it.
+    PATH_STOP_SCRIPT_ONLY = 0x01,
+    //Only for mobs carrying nothing, or a 1-weight mob.
+    PATH_STOP_LIGHT_LOAD_ONLY = 0x02,
+    //Only for mobs that can fly.
+    PATH_STOP_AIRBORNE_ONLY = 0x04,
 };
 
 
@@ -152,6 +162,10 @@ struct path_follow_settings {
 struct path_stop {
     //Coordinates.
     point pos;
+    //Flags. Use PATH_STOP_FLAGS.
+    uint8_t flags;
+    //Its label, if any.
+    string label;
     //Links that go to other stops.
     vector<path_link*> links;
     //Sector it's on. Only applicable during gameplay. Cache for performance.
@@ -162,6 +176,7 @@ struct path_stop {
         const vector<path_link*> &links = vector<path_link*>()
     );
     ~path_stop();
+    void clone(path_stop* destination) const;
     void add_link(path_stop* other_stop, const bool normal);
     path_link* get_link(const path_stop* other_stop) const;
     void remove_link(const path_link* link_ptr);
