@@ -920,7 +920,7 @@ void area_editor::draw_canvas() {
                         color = al_map_rgba(34, 136, 187, 224);
                         break;
                     } case PATH_LINK_TYPE_LEDGE: {
-                        color = al_map_rgba(128, 77, 180, 224);
+                        color = al_map_rgba(180, 180, 64, 224);
                         break;
                     }
                     }

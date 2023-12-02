@@ -4516,14 +4516,14 @@ void area_editor::process_gui_panel_paths() {
             bool ok_to_edit =
                 (selected_path_stops.size() == 1) || selection_homogenized;
                 
-            if(ok_to_edit) {
-            
-                process_gui_panel_path_stop();
-                
-            } else if(selected_path_stops.empty()) {
+            if(selected_path_stops.empty()) {
             
                 //"No stop selected" text.
                 ImGui::TextDisabled("(No path stop selected)");
+                
+            } else if(ok_to_edit) {
+            
+                process_gui_panel_path_stop();
                 
             } else {
             
@@ -4538,6 +4538,9 @@ void area_editor::process_gui_panel_paths() {
                 if(ImGui::Button("Edit all together")) {
                     register_change("path stop combining");
                     selection_homogenized = true;
+                    //Unselect path links otherwise those will be considered
+                    //homogenized too.
+                    selected_path_links.clear();
                     homogenize_selected_path_stops();
                 }
             }
@@ -4573,14 +4576,14 @@ void area_editor::process_gui_panel_paths() {
                 }
             }
             
-            if(ok_to_edit) {
-            
-                process_gui_panel_path_link();
-                
-            } else if(selected_path_links.empty()) {
+            if(selected_path_links.empty()) {
             
                 //"No link selected" text.
                 ImGui::TextDisabled("(No path link selected)");
+                
+            } else if(ok_to_edit) {
+            
+                process_gui_panel_path_link();
                 
             } else {
             
@@ -4595,6 +4598,9 @@ void area_editor::process_gui_panel_paths() {
                 if(ImGui::Button("Edit all together")) {
                     register_change("path link combining");
                     selection_homogenized = true;
+                    //Unselect path stops otherwise those will be considered
+                    //homogenized too.
+                    selected_path_stops.clear();
                     homogenize_selected_path_links();
                 }
             }
@@ -4776,7 +4782,7 @@ void area_editor::process_gui_panel_paths() {
             );
             
             //Select stops with label popup.
-            string label_name;
+            static string label_name;
             if(input_popup("selectStops", "Label:", &label_name)) {
                 select_path_stops_with_label(label_name);
             }

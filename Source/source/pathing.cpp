@@ -427,6 +427,13 @@ bool can_traverse_path_link(
         if(reason) *reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
         return false;
     }
+    if(
+        has_flag(link_ptr->end_ptr->flags, PATH_STOP_AIRBORNE_ONLY) &&
+        !has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)
+    ) {
+        if(reason) *reason = PATH_BLOCK_REASON_NOT_AIRBORNE;
+        return false;
+    }
     
     //Check if the travel is limited to stops with a certain label.
     if(!settings.label.empty() && link_ptr->end_ptr->label != settings.label) {
