@@ -3287,11 +3287,8 @@ bool area_editor::save_area(const bool to_backup) {
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = s_ptr->links[l];
             string link_data = i2s(l_ptr->end_nr);
-            if(l_ptr->type != PATH_LINK_TYPE_NORMAL || !l_ptr->label.empty()) {
+            if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
                 link_data += " " + i2s(l_ptr->type);
-            }
-            if(!l_ptr->label.empty()) {
-                link_data += " " + l_ptr->label;
             }
             data_node* link_node = new data_node("nr", link_data);
             links_node->add(link_node);
@@ -3831,28 +3828,6 @@ void area_editor::select_edge(edge* e) {
     selected_edges.insert(e);
     for(size_t v = 0; v < 2; ++v) {
         select_vertex(e->vertexes[v]);
-    }
-    set_selection_status_text();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Selects all path links with the given label.
- * label:
- *   Label to search for.
- */
-void area_editor::select_path_links_with_label(const string &label) {
-    clear_selection();
-    for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
-        path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            path_link* l_ptr = s_ptr->links[l];
-            if(l_ptr->label == label) {
-                selected_path_links.insert(l_ptr);
-                selected_path_stops.insert(s_ptr);
-                selected_path_stops.insert(l_ptr->end_ptr);
-            }
-        }
     }
     set_selection_status_text();
 }

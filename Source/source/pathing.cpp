@@ -72,7 +72,6 @@ void path_link::calculate_dist(path_stop* start_ptr) {
  */
 void path_link::clone(path_link* destination) const {
     destination->type = type;
-    destination->label = label;
 }
 
 
@@ -280,7 +279,6 @@ void path_stop::add_link(path_stop* other_stop, const bool normal) {
     }
     if(old_link_data) {
         link_type = old_link_data->type;
-        link_label = old_link_data->label;
     }
     
     remove_link(old_link_data);
@@ -288,13 +286,11 @@ void path_stop::add_link(path_stop* other_stop, const bool normal) {
     
     path_link* new_link = new path_link(this, other_stop, INVALID);
     new_link->type = link_type;
-    new_link->label = link_label;
     links.push_back(new_link);
     
     if(normal) {
         new_link = new path_link(other_stop, this, INVALID);
         new_link->type = link_type;
-        new_link->label = link_label;
         other_stop->links.push_back(new_link);
     }
 }
@@ -464,24 +460,6 @@ bool can_traverse_path_link(
     //Check if the link has limitations based on link type.
     switch(link_ptr->type) {
     case PATH_LINK_TYPE_NORMAL: {
-        break;
-    } case PATH_LINK_TYPE_SCRIPT_ONLY: {
-        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE)) {
-            if(reason) *reason = PATH_BLOCK_REASON_NOT_IN_SCRIPT;
-            return false;
-        }
-        break;
-    } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
-        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_LIGHT_LOAD)) {
-            if(reason) *reason = PATH_BLOCK_REASON_NOT_LIGHT_LOAD;
-            return false;
-        }
-        break;
-    } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
-        if(!has_flag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
-            if(reason) *reason = PATH_BLOCK_REASON_NOT_AIRBORNE;
-            return false;
-        }
         break;
     } case PATH_LINK_TYPE_LEDGE: {
         if(

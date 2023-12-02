@@ -2482,7 +2482,6 @@ path_stop* area_editor::split_path_link(
     path_stop* old_start_ptr = l1->start_ptr;
     path_stop* old_end_ptr = l1->end_ptr;
     PATH_LINK_TYPES old_link_type = l1->type;
-    string old_link_label = l1->label;
     l1->start_ptr->remove_link(l1->end_ptr);
     if(normal_link) {
         l2->start_ptr->remove_link(l2->end_ptr);
@@ -2498,14 +2497,10 @@ path_stop* area_editor::split_path_link(
     game.cur_area_data.fix_path_stop_nrs(new_stop_ptr);
     
     old_start_ptr->get_link(new_stop_ptr)->type = old_link_type;
-    old_start_ptr->get_link(new_stop_ptr)->label = old_link_label;
     new_stop_ptr->get_link(old_end_ptr)->type = old_link_type;
-    new_stop_ptr->get_link(old_end_ptr)->label = old_link_label;
     if(normal_link) {
         new_stop_ptr->get_link(old_start_ptr)->type = old_link_type;
-        new_stop_ptr->get_link(old_start_ptr)->label = old_link_label;
         old_end_ptr->get_link(new_stop_ptr)->type = old_link_type;
-        old_end_ptr->get_link(new_stop_ptr)->label = old_link_label;
     }
     
     //Update the distances.

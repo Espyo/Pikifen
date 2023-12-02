@@ -4258,10 +4258,7 @@ void area_editor::process_gui_panel_path_link() {
     
     //Type combobox.
     vector<string> link_type_names;
-    link_type_names.push_back("No limit");
-    link_type_names.push_back("Script use only");
-    link_type_names.push_back("Light load only");
-    link_type_names.push_back("Airborne only");
+    link_type_names.push_back("Normal");
     link_type_names.push_back("Ledge");
     
     int type_i = l_ptr->type;
@@ -4271,17 +4268,6 @@ void area_editor::process_gui_panel_path_link() {
     }
     set_tooltip(
         "What type of link this is."
-    );
-    
-    //Label text.
-    string label = l_ptr->label;
-    if(ImGui::InputText("Label", &label)) {
-        register_change("path link label change");
-        l_ptr->label = label;
-    }
-    set_tooltip(
-        "If this link is part of a path that you want\n"
-        "to address in a script, write the name here."
     );
     
     homogenize_selected_path_links();
@@ -4390,10 +4376,7 @@ void area_editor::process_gui_panel_paths() {
         
         //Type combobox.
         vector<string> link_type_names;
-        link_type_names.push_back("No limit");
-        link_type_names.push_back("Script use only");
-        link_type_names.push_back("Light load only");
-        link_type_names.push_back("Airborne only");
+        link_type_names.push_back("Normal");
         link_type_names.push_back("Ledge");
         
         int type_i = path_drawing_type;
@@ -4659,10 +4642,10 @@ void area_editor::process_gui_panel_paths() {
             
                 unsigned int flags_i = path_preview_settings.flags;
                 
-                //Can use script links checkbox.
+                //Is from script checkbox.
                 if(
                     ImGui::CheckboxFlags(
-                        "Can use script links",
+                        "Is from script",
                         &flags_i,
                         PATH_FOLLOW_FLAG_SCRIPT_USE
                     )
@@ -4671,14 +4654,14 @@ void area_editor::process_gui_panel_paths() {
                     path_preview_dist = calculate_preview_path();
                 }
                 set_tooltip(
-                    "Whether the path preview feature is allowed to use\n"
-                    "script-only path links."
+                    "Whether the path preview feature is considered to be\n"
+                    "from a script, meaning it can use script-only stops."
                 );
                 
-                //Can use light-load links checkbox.
+                //Has light load checkbox.
                 if(
                     ImGui::CheckboxFlags(
-                        "Can use light load links",
+                        "Has light load",
                         &flags_i,
                         PATH_FOLLOW_FLAG_LIGHT_LOAD
                     )
@@ -4687,14 +4670,14 @@ void area_editor::process_gui_panel_paths() {
                     path_preview_dist = calculate_preview_path();
                 }
                 set_tooltip(
-                    "Whether the path preview feature is allowed to use\n"
-                    "light-load-only path links."
+                    "Whether the path preview feature is considered to have\n"
+                    "a light load, meaning it can use light load-only stops."
                 );
                 
-                //Can use airborne links checkbox.
+                //Is airborne checkbox.
                 if(
                     ImGui::CheckboxFlags(
-                        "Can use airborne links",
+                        "Is airborne",
                         &flags_i,
                         PATH_FOLLOW_FLAG_AIRBORNE
                     )
@@ -4703,11 +4686,12 @@ void area_editor::process_gui_panel_paths() {
                     path_preview_dist = calculate_preview_path();
                 }
                 set_tooltip(
-                    "Whether the path preview feature is allowed to use\n"
-                    "airborne-only path links."
+                    "Whether the path preview feature is considered to be\n"
+                    "airborne, meaning it can use airborne-only stops\n"
+                    "and go up ledges."
                 );
                 
-                //Use links with this name input.
+                //Use stops with this label input.
                 if(
                     ImGui::InputText(
                         "Label",
@@ -4717,7 +4701,7 @@ void area_editor::process_gui_panel_paths() {
                     path_preview_dist = calculate_preview_path();
                 }
                 set_tooltip(
-                    "To limit the path preview feature to only use links with\n"
+                    "To limit the path preview feature to only use stops with\n"
                     "a given label, write its name here, or leave it empty\n"
                     "for no label enforcement."
                 );

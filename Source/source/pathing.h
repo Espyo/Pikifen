@@ -34,12 +34,6 @@ struct path_link;
 enum PATH_LINK_TYPES {
     //Normal.
     PATH_LINK_TYPE_NORMAL,
-    //Only usable by mob scripts that reference it.
-    PATH_LINK_TYPE_SCRIPT_ONLY,
-    //Only for mobs carrying nothing, or a 1-weight mob.
-    PATH_LINK_TYPE_LIGHT_LOAD_ONLY,
-    //Only for objects that can fly.
-    PATH_LINK_TYPE_AIRBORNE_ONLY,
     //One-way fall for normal mobs, two-way for airborne mobs.
     PATH_LINK_TYPE_LEDGE,
 };
@@ -200,8 +194,6 @@ struct path_link {
     
     //Type. Used for special restrictions and behaviors.
     PATH_LINK_TYPES type;
-    //Its label, if any.
-    string label;
     
     //Distance between the two stops.
     float distance;

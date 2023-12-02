@@ -1038,10 +1038,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     path_link* l1 = path_drawing_stop_1->get_link(next_stop);
                     path_link* l2 = next_stop->get_link(path_drawing_stop_1);
                     l1->type = path_drawing_type;
-                    l1->label = path_drawing_label;
                     if(l2) {
                         l2->type = path_drawing_type;
-                        l2->label = path_drawing_label;
                     }
                     game.cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
                     game.cur_area_data.fix_path_stop_nrs(next_stop);

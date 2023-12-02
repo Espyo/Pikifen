@@ -919,17 +919,8 @@ void area_editor::draw_canvas() {
                     case PATH_LINK_TYPE_NORMAL: {
                         color = al_map_rgba(34, 136, 187, 224);
                         break;
-                    } case PATH_LINK_TYPE_SCRIPT_ONLY: {
-                        color = al_map_rgba(187, 102, 34, 224);
-                        break;
-                    } case PATH_LINK_TYPE_LIGHT_LOAD_ONLY: {
-                        color = al_map_rgba(102, 170, 34, 224);
-                        break;
-                    } case PATH_LINK_TYPE_AIRBORNE_ONLY: {
-                        color = al_map_rgba(187, 102, 153, 224);
-                        break;
                     } case PATH_LINK_TYPE_LEDGE: {
-                        color = al_map_rgba(128, 77, 147, 224);
+                        color = al_map_rgba(128, 77, 180, 224);
                         break;
                     }
                     }

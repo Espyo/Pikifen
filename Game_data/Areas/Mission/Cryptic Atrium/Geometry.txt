@@ -7873,8 +7873,10 @@ path_stops{
 	}
 	s{
 		pos=288.0000 -480.0000
+		flags=2
 		links{
-			nr=13 2
+			nr=32
+			nr=34
 		}
 	}
 	s{
@@ -7882,6 +7884,7 @@ path_stops{
 		links{
 			nr=4
 			nr=5
+			nr=34 1
 		}
 	}
 	s{
@@ -7904,7 +7907,7 @@ path_stops{
 		links{
 			nr=15
 			nr=14
-			nr=18 2
+			nr=35
 		}
 	}
 	s{
@@ -7919,6 +7922,7 @@ path_stops{
 		links{
 			nr=5
 			nr=8
+			nr=35 1
 		}
 	}
 	s{
@@ -7949,7 +7953,7 @@ path_stops{
 		links{
 			nr=21
 			nr=23
-			nr=24 2
+			nr=33
 		}
 	}
 	s{
@@ -7963,6 +7967,7 @@ path_stops{
 		links{
 			nr=25
 			nr=27
+			nr=33 1
 		}
 	}
 	s{
@@ -8019,7 +8024,30 @@ path_stops{
 		links{
 			nr=9
 			nr=10
-			nr=12 2
+			nr=12
+		}
+	}
+	s{
+		pos=480.0000 416.0000
+		flags=18
+		links{
+			nr=22
+			nr=24 1
+		}
+	}
+	s{
+		pos=288.0000 -416.0000
+		links{
+			nr=12
+			nr=13 1
+		}
+	}
+	s{
+		pos=-352.0000 -160.0000
+		flags=226
+		links{
+			nr=16
+			nr=18 1
 		}
 	}
 }

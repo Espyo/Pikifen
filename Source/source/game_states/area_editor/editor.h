@@ -717,7 +717,6 @@ private:
     void save_backup();
     void save_reference();
     void select_edge(edge* e_ptr);
-    void select_path_links_with_label(const string &label);
     void select_path_stops_with_label(const string &label);
     void select_sector(sector* s_ptr);
     void select_tree_shadow(tree_shadow* s_ptr);

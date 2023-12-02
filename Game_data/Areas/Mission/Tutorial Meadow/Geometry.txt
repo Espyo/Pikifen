@@ -5391,6 +5391,7 @@ path_stops{
 		pos=96.0000 0.0000
 		links{
 			nr=1
+			nr=65 1
 		}
 	}
 	s{
@@ -5412,6 +5413,7 @@ path_stops{
 		links{
 			nr=2
 			nr=4
+			nr=52 1
 		}
 	}
 	s{
@@ -5426,6 +5428,7 @@ path_stops{
 		links{
 			nr=4
 			nr=6
+			nr=52 1
 		}
 	}
 	s{
@@ -5468,12 +5471,13 @@ path_stops{
 		links{
 			nr=13
 			nr=81
+			nr=12 1
 		}
 	}
 	s{
 		pos=1440.0000 -192.0000
 		links{
-			nr=11
+			nr=11 1
 		}
 	}
 	s{
@@ -5658,7 +5662,7 @@ path_stops{
 		pos=288.0000 1312.0000
 		links{
 			nr=39
-			nr=46
+			nr=46 1
 		}
 	}
 	s{
@@ -5693,13 +5697,14 @@ path_stops{
 		pos=384.0000 1696.0000
 		links{
 			nr=42
+			nr=44 1
 		}
 	}
 	s{
 		pos=576.0000 1504.0000
 		links{
 			nr=45
-			nr=43
+			nr=43 1
 		}
 	}
 	s{
@@ -5707,13 +5712,16 @@ path_stops{
 		links{
 			nr=44
 			nr=47
-			nr=46
+			nr=50 1
+			nr=46 1
 		}
 	}
 	s{
 		pos=480.0000 1248.0000
 		links{
 			nr=36
+			nr=45 1
+			nr=38 1
 		}
 	}
 	s{
@@ -5727,20 +5735,21 @@ path_stops{
 		pos=960.0000 1440.0000
 		links{
 			nr=47
-			nr=49
+			nr=49 1
 		}
 	}
 	s{
 		pos=992.0000 1728.0000
 		links{
 			nr=50
+			nr=48 1
 		}
 	}
 	s{
 		pos=832.0000 1728.0000
 		links{
 			nr=49
-			nr=45
+			nr=45 1
 		}
 	}
 	s{
@@ -5752,8 +5761,8 @@ path_stops{
 	s{
 		pos=704.0000 416.0000
 		links{
-			nr=5
-			nr=3
+			nr=3 1
+			nr=5 1
 		}
 	}
 	s{
@@ -5860,7 +5869,7 @@ path_stops{
 		pos=-224.0000 0.0000
 		links{
 			nr=64
-			nr=0
+			nr=0 1
 		}
 	}
 	s{
@@ -5892,7 +5901,7 @@ path_stops{
 			nr=15
 			nr=71
 			nr=70
-			nr=72
+			nr=72 1
 		}
 	}
 	s{
@@ -5914,6 +5923,7 @@ path_stops{
 		links{
 			nr=6
 			nr=7
+			nr=69 1
 		}
 	}
 	s{

@@ -451,9 +451,6 @@ void load_area(
             if(link_data_parts.size() >= 2) {
                 l_struct->type = (PATH_LINK_TYPES) s2i(link_data_parts[1]);
             }
-            if(link_data_parts.size() >= 3) {
-                l_struct->label = link_data_parts[2];
-            }
             
             s_ptr->links.push_back(l_struct);
             
