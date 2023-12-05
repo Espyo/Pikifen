@@ -3,9 +3,7 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Path things
-        If you start drawing a path on top of a link, it should split the link and start drawing on that stop
-        Port all areas to the new system
-        Update the manual's area editor tutorial
+        Pikmin can still start taking an invalid stop
     Audio system
         Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
         [NEEDS BRAINSTORMING] If multiple Pikmin sources try to play a sound, like carrying, which one should play and when?
