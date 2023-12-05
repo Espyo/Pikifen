@@ -21,6 +21,12 @@ using std::unordered_set;
 using std::vector;
 
 
+namespace PATHS {
+//Minimum radius of a path stop.
+const float MIN_STOP_RADIUS = 16.0f;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Creates an instance of a structure with settings about how to follow a path.
  */
@@ -243,6 +249,8 @@ void path_manager::handle_sector_hazard_change(sector* sector_ptr) {
  */
 path_stop::path_stop(const point &pos, const vector<path_link*> &links) :
     pos(pos),
+    radius(PATHS::MIN_STOP_RADIUS),
+    flags(0),
     links(links),
     sector_ptr(nullptr) {
     
@@ -333,6 +341,7 @@ void path_stop::calculate_dists_plus_neighbors() {
  *   Path stop to clone the data into.
  */
 void path_stop::clone(path_stop* destination) const {
+    destination->radius = radius;
     destination->flags = flags;
     destination->label = label;
 }
@@ -742,14 +751,18 @@ PATH_RESULTS get_path(
     //Start by finding the closest stops to the start and finish.
     path_stop* closest_to_start = NULL;
     path_stop* closest_to_end = NULL;
-    dist closest_to_start_dist;
-    dist closest_to_end_dist;
+    float closest_to_start_dist;
+    float closest_to_end_dist;
     
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
-        dist dist_to_start(start_to_use, s_ptr->pos);
-        dist dist_to_end(end_to_use, s_ptr->pos);
+        float dist_to_start =
+            dist(start_to_use, s_ptr->pos).to_float() - s_ptr->radius;
+        float dist_to_end =
+            dist(end_to_use, s_ptr->pos).to_float() - s_ptr->radius;
+        dist_to_start = std::max(0.0f, dist_to_start);
+        dist_to_end = std::max(0.0f, dist_to_end);
         
         if(!closest_to_start || dist_to_start < closest_to_start_dist) {
             closest_to_start_dist = dist_to_start;
@@ -780,8 +793,8 @@ PATH_RESULTS get_path(
     if(closest_to_start == closest_to_end) {
         full_path.push_back(closest_to_start);
         if(total_dist) {
-            *total_dist = closest_to_start_dist.to_float();
-            *total_dist += closest_to_end_dist.to_float();
+            *total_dist = closest_to_start_dist;
+            *total_dist += closest_to_end_dist;
         }
         return PATH_RESULT_PATH_WITH_SINGLE_STOP;
     }

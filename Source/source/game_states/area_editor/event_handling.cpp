@@ -1389,13 +1389,13 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     s_ptr->pos.x -
-                    AREA_EDITOR::PATH_STOP_RADIUS >= selection_x1 &&
+                    s_ptr->radius >= selection_x1 &&
                     s_ptr->pos.x +
-                    AREA_EDITOR::PATH_STOP_RADIUS <= selection_x2 &&
+                    s_ptr->radius <= selection_x2 &&
                     s_ptr->pos.y -
-                    AREA_EDITOR::PATH_STOP_RADIUS >= selection_y1 &&
+                    s_ptr->radius >= selection_y1 &&
                     s_ptr->pos.y +
-                    AREA_EDITOR::PATH_STOP_RADIUS <= selection_y2
+                    s_ptr->radius <= selection_y2
                 ) {
                     selected_path_stops.insert(s_ptr);
                 }

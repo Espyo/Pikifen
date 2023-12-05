@@ -332,6 +332,7 @@ void area_data::clone(area_data &other) {
         path_stop* s_ptr = path_stops[s];
         path_stop* os_ptr = other.path_stops[s];
         os_ptr->pos = s_ptr->pos;
+        s_ptr->clone(os_ptr);
         os_ptr->links.reserve(s_ptr->links.size());
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
             path_link* new_link =

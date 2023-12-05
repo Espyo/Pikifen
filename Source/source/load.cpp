@@ -434,6 +434,7 @@ void load_area(
         path_stop* s_ptr = new path_stop();
         
         s_ptr->pos = s2p(path_stop_node->get_child_by_name("pos")->value);
+        s_ptr->radius = s2f(path_stop_node->get_child_by_name("radius")->value);
         s_ptr->flags = s2i(path_stop_node->get_child_by_name("flags")->value);
         s_ptr->label = path_stop_node->get_child_by_name("label")->value;
         data_node* links_node = path_stop_node->get_child_by_name("links");
@@ -455,6 +456,8 @@ void load_area(
             s_ptr->links.push_back(l_struct);
             
         }
+        
+        s_ptr->radius = std::max(s_ptr->radius, PATHS::MIN_STOP_RADIUS);
         
         game.cur_area_data.path_stops.push_back(s_ptr);
     }

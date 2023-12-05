@@ -66,8 +66,6 @@ const float PATH_LINK_THICKNESS = 3.0f;
 const float PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 //Only fetch the path these many seconds after the player stops the checkpoints.
 const float PATH_PREVIEW_TIMER_DUR = 0.1f;
-//Radius to use when drawing a path stop circle.
-const float PATH_STOP_RADIUS = 16.0f;
 //Scale the letters on the "points" of various features by this much.
 const float POINT_LETTER_TEXT_SCALE = 1.5f;
 //Quick previewing lasts this long in total, including the fade out.
@@ -3270,6 +3268,11 @@ bool area_editor::save_area(const bool to_backup) {
         path_stop_node->add(
             new data_node("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
         );
+        if(s_ptr->radius != PATHS::MIN_STOP_RADIUS) {
+            path_stop_node->add(
+                new data_node("radius", f2s(s_ptr->radius))
+            );
+        }
         if(s_ptr->flags != 0) {
             path_stop_node->add(
                 new data_node("flags", i2s(s_ptr->flags))

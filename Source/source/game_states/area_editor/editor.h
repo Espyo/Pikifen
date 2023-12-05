@@ -45,7 +45,6 @@ extern const float NEW_SECTOR_ERROR_TINT_DURATION;
 extern const float PATH_LINK_THICKNESS;
 extern const float PATH_PREVIEW_CHECKPOINT_RADIUS;
 extern const float PATH_PREVIEW_TIMER_DUR;
-extern const float PATH_STOP_RADIUS;
 extern const float POINT_LETTER_TEXT_SCALE;
 extern const float REFERENCE_MIN_SIZE;
 extern const float QUICK_PREVIEW_DURATION;

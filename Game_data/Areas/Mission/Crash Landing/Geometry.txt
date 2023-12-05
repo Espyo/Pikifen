@@ -3595,18 +3595,22 @@ path_stops{
 	}
 	s{
 		pos=1240.0000 -48.0000
+		radius=97.5000
 		links{
 			nr=17
 		}
 	}
 	s{
 		pos=-320.0000 -448.0000
+		radius=83.0000
 		links{
 			nr=21
+			nr=30
 		}
 	}
 	s{
 		pos=-592.0000 -112.0000
+		radius=84.0000
 		links{
 			nr=21
 			nr=27
@@ -3614,14 +3618,16 @@ path_stops{
 	}
 	s{
 		pos=256.0000 -48.0000
+		radius=44.5000
 		links{
 			nr=5
 			nr=9
-			nr=13
+			nr=31
 		}
 	}
 	s{
 		pos=256.0000 192.0000
+		radius=37.0000
 		links{
 			nr=4
 			nr=6
@@ -3671,7 +3677,8 @@ path_stops{
 		}
 	}
 	s{
-		pos=-544.0000 304.0000
+		pos=-592.0000 304.0000
+		radius=107.0000
 		links{
 			nr=11
 		}
@@ -3679,9 +3686,9 @@ path_stops{
 	s{
 		pos=-80.0000 -48.0000
 		links{
-			nr=4
 			nr=0
 			nr=19
+			nr=31
 		}
 	}
 	s{
@@ -3695,12 +3702,14 @@ path_stops{
 	}
 	s{
 		pos=256.0000 352.0000
+		radius=35.0000
 		links{
 			nr=5
 		}
 	}
 	s{
 		pos=768.0000 -352.0000
+		radius=27.5000
 		links{
 			nr=14
 		}
@@ -3729,6 +3738,7 @@ path_stops{
 	}
 	s{
 		pos=592.0000 256.0000
+		radius=42.0000
 		links{
 			nr=23
 			nr=29
@@ -3778,20 +3788,38 @@ path_stops{
 	}
 	s{
 		pos=-592.0000 64.0000
+		radius=86.5000
 		links{
 			nr=3
 		}
 	}
 	s{
 		pos=-96.0000 -464.0000
+		radius=88.0000
 		links{
 			nr=18
 		}
 	}
 	s{
 		pos=448.0000 304.0000
+		radius=32.5000
 		links{
 			nr=20
+		}
+	}
+	s{
+		pos=-576.0000 -336.0000
+		radius=68.5000
+		links{
+			nr=2
+		}
+	}
+	s{
+		pos=80.0000 -48.0000
+		radius=38.5000
+		links{
+			nr=4
+			nr=13
 		}
 	}
 }
