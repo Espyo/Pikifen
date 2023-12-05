@@ -238,6 +238,14 @@ struct path_manager {
 };
 
 
+bool can_take_path_stop(
+    path_stop* stop_ptr, const path_follow_settings &settings,
+    PATH_BLOCK_REASONS* reason = NULL
+);
+bool can_take_path_stop(
+    path_stop* stop_ptr, const path_follow_settings &settings,
+    sector* sector_ptr, PATH_BLOCK_REASONS* reason = NULL
+);
 bool can_traverse_path_link(
     path_link* link_ptr, const path_follow_settings &settings,
     PATH_BLOCK_REASONS* reason = NULL
