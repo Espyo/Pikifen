@@ -3,21 +3,19 @@ Point I left on (so I can continue the next day without losing my train of thoug
 
 Current tasks (tasks being worked on, but not yet committed)
     Audio system
-        Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
-        [NEEDS BRAINSTORMING] If multiple Pikmin sources try to play a sound, like carrying, which one should play and when?
-        Problems that the system needs to address:
-            If there are two things asking to play the same sound, they should/n't cut each other off/overlay for higher volume
-            If one thing is asking to stop a sound, make sure another doesn't need the sound (e.g. two carriable objects, one finishes being delivered)
-            If two things are playing the same sound but in different spots of the screen, the pan should be an average or so
-            If two things are playing the same sound but in different spots of the area, the volume should be an average or so
-            If a sound needs to have a sudden shift in volume or pan, it should be a smooth transition
-            The ability to handle randomized volumes and pitches (and maybe panning)
-            If a sound needs to stop suddenly, it should fade out (very quickly). This stops the sound from crackling
-            When you cancel holding a Pikmin, its standby squeal sound should stop
-        Ducking
         Load system sounds from System_asset_file_names.txt
         Resetting when an area is entered or exited
-        Make it so that only 6 or so sounds can play at once?
+        Options
+            Volume control for sound effects, music, and ambiance sound effects separately
+                The standard should be at 75%, so players have leeway if they want everything louder
+            Mono/stereo
+        It should be possible to play sounds both in specific frames of animation and in scripts as actions
+            The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
+        Create a "Sounds" and a "Music" folder in the "Audio" folder
+        Recreate the following sounds, as per user feedback
+            Plucking -- sounds like crap
+        This might help
+            https://youtu.be/Vjm--AqG04Y?t=713
 
 
 Next tasks (roughly sorted most important first)
@@ -97,19 +95,7 @@ Next tasks (roughly sorted most important first)
                 Leaves rustling (vegetation)
                 Explosion
                 Ambiance sounds
-        Rename sound files to .oga, instead of .ogg
-        Options
-            Volume control for sound effects, music, and ambiance sound effects separately
-                The standard should be at 75%, so players have leeway if they want everything louder
-            Mono/stereo
-        Footsteps should be tied to the terrain texture
-        It should be possible to play sounds both in specific frames of animation and in scripts as actions
-            The animation editor should have a mute button, so you can scrub through frames at will without having your ears destroyed
-        Create a "Sounds" and a "Music" folder in the "Audio" folder
-        Recreate the following sounds, as per user feedback
-            Plucking -- sounds like crap
-        This might help
-            https://youtu.be/Vjm--AqG04Y?t=713
+        Rename sound files to .oga, instead of .ogg?
     Music
         Planned variant compatibility: Day + fight, sunset + fight, boss
         Figure out how many variants can play simultaneously so that the engine can smoothly increase and decrease their volumes to blend.
@@ -719,6 +705,11 @@ Misc things (so I don't forget)
             When a leader approaches, when a Pikmin approaches, when carrying, etc.
         Game config parameters:
             Nectars: Work like in the engine, or like in the classics?
+    Audio
+        Add a safeguard -- if the same sample is playing like 4 times, don't allow any more
+            However, I may want to play the same long sample multiple times with like a .5s interval between each one, which won't burst anyone's ears...
+        Ducking
+        Footsteps should be tied to the terrain texture
     Carrying stuff
         [NEEDS BRAINSTORMING] A traffic system? Here's my idea:
             Each stop link can hold a capacity number. The maximum value is the length of the link. Whenever a mob is taking this link, the mob's diameter (plus some padding?) is added to the value, and when a mob is no longer taking it, it is removed. When a mob that is carrying something is trying to enter a full link, it will stand in place instead of proceeding.

@@ -200,7 +200,7 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 /* ----------------------------------------------------------------------------
  * Loads the GUI elements for the main menu's main page.
  */
-void main_menu_state::init_main_page() {
+void main_menu_state::init_gui_main_page() {
 
     data_node gui_file(MAIN_MENU::GUI_FILE_PATH);
     
@@ -267,6 +267,7 @@ void main_menu_state::init_main_page() {
     options_button->on_activate =
     [] (const point &) {
         game.fade_mgr.start_fade(false, [] () {
+            game.states.options_menu->page_to_load = OPTIONS_MENU_PAGE_TOP;
             game.change_state(game.states.options_menu);
         });
     };
@@ -319,7 +320,7 @@ void main_menu_state::init_main_page() {
 /* ----------------------------------------------------------------------------
  * Loads the GUI elements for the main menu's make page.
  */
-void main_menu_state::init_make_page() {
+void main_menu_state::init_gui_make_page() {
     data_node gui_file(MAIN_MENU::MAKE_GUI_FILE_PATH);
     
     //Menu items.
@@ -418,7 +419,7 @@ void main_menu_state::init_make_page() {
 /* ----------------------------------------------------------------------------
  * Loads the GUI elements for the main menu's play page.
  */
-void main_menu_state::init_play_page() {
+void main_menu_state::init_gui_play_page() {
     data_node gui_file(MAIN_MENU::PLAY_GUI_FILE_PATH);
     
     //Menu items.
@@ -497,7 +498,7 @@ void main_menu_state::init_play_page() {
 /* ----------------------------------------------------------------------------
  * Loads the GUI elements for the main menu's tutorial question page.
  */
-void main_menu_state::init_tutorial_page() {
+void main_menu_state::init_gui_tutorial_page() {
     data_node gui_file(MAIN_MENU::TUTORIAL_GUI_FILE_PATH);
     
     //Menu items.
@@ -579,10 +580,10 @@ void main_menu_state::load() {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
-    init_main_page();
-    init_play_page();
-    init_make_page();
-    init_tutorial_page();
+    init_gui_main_page();
+    init_gui_play_page();
+    init_gui_make_page();
+    init_gui_tutorial_page();
     
     switch(page_to_load) {
     case MAIN_MENU_PAGE_MAIN: {

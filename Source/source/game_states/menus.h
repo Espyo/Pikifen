@@ -34,7 +34,7 @@ extern const string SPECS_GUI_FILE_PATH;
 }
 
 
-namespace CONTROLS_MENU {
+namespace CONTROL_BINDS_MENU {
 extern const float BIND_BUTTON_HEIGHT;
 extern const float BIND_BUTTON_PADDING;
 extern const string GUI_FILE_PATH;
@@ -51,7 +51,12 @@ extern const string TUTORIAL_GUI_FILE_PATH;
 
 
 namespace OPTIONS_MENU {
-extern const string GUI_FILE_PATH;
+extern const string AUDIO_GUI_FILE_PATH;
+extern const string CONTROLS_GUI_FILE_PATH;
+extern const string GRAPHICS_GUI_FILE_PATH;
+extern const float HUD_MOVE_TIME;
+extern const string MISC_GUI_FILE_PATH;
+extern const string TOP_GUI_FILE_PATH;
 }
 
 
@@ -73,6 +78,14 @@ enum MAIN_MENU_PAGES {
     MAIN_MENU_PAGE_PLAY,
     //Make page.
     MAIN_MENU_PAGE_MAKE,
+};
+
+//Pages of the options menu.
+enum OPTIONS_MENU_PAGES {
+    //Top-level page.
+    OPTIONS_MENU_PAGE_TOP,
+    //Controls page.
+    OPTIONS_MENU_PAGE_CONTROLS,
 };
 
 
@@ -144,10 +157,10 @@ private:
     //Map of what characters represent what Pikmin top bitmaps.
     map<unsigned char, ALLEGRO_BITMAP*> logo_type_bitmaps;
     
-    void init_main_page();
-    void init_make_page();
-    void init_play_page();
-    void init_tutorial_page();
+    void init_gui_main_page();
+    void init_gui_make_page();
+    void init_gui_play_page();
+    void init_gui_tutorial_page();
 };
 
 
@@ -291,6 +304,8 @@ public:
     void do_drawing() override;
     string get_name() const override;
     
+    OPTIONS_MENU_PAGES page_to_load;
+    
 private:
     //Known good resolution presets.
     vector<std::pair<int, int> > resolution_presets;
@@ -298,8 +313,16 @@ private:
     std::pair<int, int> cur_resolution_option;
     //Bitmap of the menu background.
     ALLEGRO_BITMAP* bmp_menu_bg;
-    //GUI.
-    gui_manager gui;
+    //GUI for the top-level page.
+    gui_manager top_gui;
+    //GUI for the controls options page.
+    gui_manager controls_gui;
+    //GUI for the graphics options page.
+    gui_manager graphics_gui;
+    //GUI for the audio options page.
+    gui_manager audio_gui;
+    //GUI for the misc. options page.
+    gui_manager misc_gui;
     //Auto-throw picker widget.
     options_menu_picker_gui_item<AUTO_THROW_MODES>* auto_throw_picker;
     //Resolution picker widget.
@@ -314,7 +337,12 @@ private:
     //Restart warning text widget.
     text_gui_item* warning_text;
     
-    void go_to_controls();
+    void go_to_control_binds();
+    void init_gui_audio_page();
+    void init_gui_controls_page();
+    void init_gui_graphics_page();
+    void init_gui_misc_page();
+    void init_gui_top_page();
     void leave();
     void trigger_restart_warning();
 };
@@ -323,9 +351,9 @@ private:
 /* ----------------------------------------------------------------------------
  * Information about the controls menu.
  */
-class controls_menu_state : public game_state {
+class control_binds_menu_state : public game_state {
 public:
-    controls_menu_state();
+    control_binds_menu_state();
     void load() override;
     void unload() override;
     void handle_allegro_event(ALLEGRO_EVENT &ev) override;

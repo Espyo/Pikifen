@@ -21,8 +21,23 @@
 
 
 namespace OPTIONS_MENU {
-//Path to the GUI information file.
-const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Options_menu.txt";
+//Path to the audio menu GUI information file.
+const string AUDIO_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Options_menu_audio.txt";
+//Path to the controls menu GUI information file.
+const string CONTROLS_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Options_menu_controls.txt";
+//Path to the graphics menu GUI information file.
+const string GRAPHICS_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Options_menu_graphics.txt";
+//How long the menu items take to move when switching pages.
+const float HUD_MOVE_TIME = 0.5f;
+//Path to the misc menu GUI information file.
+const string MISC_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Options_menu_misc.txt";
+//Path to the top-level menu GUI information file.
+const string TOP_GUI_FILE_PATH =
+    GUI_FOLDER_PATH + "/Options_menu_top.txt";
 }
 
 
@@ -94,7 +109,11 @@ void options_menu_state::do_drawing() {
         point(game.win_w, game.win_h), 0, map_gray(64)
     );
     
-    gui.draw();
+    top_gui.draw();
+    controls_gui.draw();
+    graphics_gui.draw();
+    audio_gui.draw();
+    misc_gui.draw();
     
     draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
@@ -110,10 +129,18 @@ void options_menu_state::do_drawing() {
 void options_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
     for(size_t a = 0; a < player_actions.size(); ++a) {
-        gui.handle_player_action(player_actions[a]);
+        top_gui.handle_player_action(player_actions[a]);
+        controls_gui.handle_player_action(player_actions[a]);
+        graphics_gui.handle_player_action(player_actions[a]);
+        audio_gui.handle_player_action(player_actions[a]);
+        misc_gui.handle_player_action(player_actions[a]);
     }
     
-    gui.tick(game.delta_t);
+    top_gui.tick(game.delta_t);
+    controls_gui.tick(game.delta_t);
+    graphics_gui.tick(game.delta_t);
+    audio_gui.tick(game.delta_t);
+    misc_gui.tick(game.delta_t);
     
     game.fade_mgr.tick(game.delta_t);
 }
@@ -130,9 +157,9 @@ string options_menu_state::get_name() const {
 /* ----------------------------------------------------------------------------
  * Goes to the controls menu.
  */
-void options_menu_state::go_to_controls() {
+void options_menu_state::go_to_control_binds() {
     game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.controls_menu);
+        game.change_state(game.states.control_binds_menu);
     });
 }
 
@@ -145,56 +172,184 @@ void options_menu_state::go_to_controls() {
 void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     if(game.fade_mgr.is_fading()) return;
     
-    gui.handle_event(ev);
+    top_gui.handle_event(ev);
+    controls_gui.handle_event(ev);
+    graphics_gui.handle_event(ev);
+    audio_gui.handle_event(ev);
+    misc_gui.handle_event(ev);
     game.controls.handle_allegro_event(ev);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Leaves the options menu and goes to the main menu.
+ * Initializes the audio options menu GUI.
  */
-void options_menu_state::leave() {
-    game.fade_mgr.start_fade(false, [] () {
-        game.change_state(game.states.main_menu);
-    });
-    save_options();
+void options_menu_state::init_gui_audio_page() {
+    //Menu items.
+    audio_gui.register_coords("back",    12,  5, 20, 6);
+    audio_gui.register_coords("tooltip", 50, 96, 96, 4);
+    audio_gui.read_coords(
+        data_node(OPTIONS_MENU::AUDIO_GUI_FILE_PATH).
+        get_child_by_name("positions")
+    );
+    
+    //Back button.
+    audio_gui.back_item =
+        new button_gui_item("Back", game.fonts.standard);
+    audio_gui.back_item->on_activate =
+    [this] (const point &) {
+        audio_gui.responsive = false;
+        audio_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        top_gui.responsive = true;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+    };
+    audio_gui.back_item->on_get_tooltip =
+    [] () { return "Return to the top-level options menu."; };
+    audio_gui.add_item(audio_gui.back_item, "back");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&audio_gui);
+    audio_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    //TODO audio_gui.set_selected_item();
+    audio_gui.responsive = false;
+    audio_gui.hide_items();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Loads the options menu into memory.
+ * Initializes the controls options menu GUI.
  */
-void options_menu_state::load() {
-    //Resources.
-    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
-    
+void options_menu_state::init_gui_controls_page() {
     //Menu items.
-    gui.register_coords("back",                 12,  5, 20, 6);
-    gui.register_coords("fullscreen",           24, 18, 40, 8);
-    gui.register_coords("resolution",           76, 18, 40, 8);
-    gui.register_coords("cursor_speed",         24, 32, 40, 8);
-    gui.register_coords("cursor_cam_weight",    76, 32, 40, 8);
-    gui.register_coords("auto_throw",           50, 44, 44, 8);
-    gui.register_coords("show_hud_input_icons", 50, 54, 44, 8);
-    gui.register_coords("leaving_confirmation", 50, 64, 44, 8);
-    gui.register_coords("controls",             50, 74, 44, 8);
-    gui.register_coords("advanced",             87, 86, 22, 8);
-    gui.register_coords("tooltip",              50, 96, 96, 4);
-    gui.register_coords("restart_warning",      63,  5, 70, 6);
-    gui.read_coords(
-        data_node(OPTIONS_MENU::GUI_FILE_PATH).get_child_by_name("positions")
+    controls_gui.register_coords("back",          12,  5,   20,  6);
+    controls_gui.register_coords("control_binds", 50, 22.5, 70, 15);
+    controls_gui.register_coords("cursor_speed",  50, 45,   70, 15);
+    controls_gui.register_coords("auto_throw",    50, 62.5, 70, 15);
+    controls_gui.register_coords("tooltip",       50, 96,   96,  4);
+    controls_gui.read_coords(
+        data_node(OPTIONS_MENU::CONTROLS_GUI_FILE_PATH).
+        get_child_by_name("positions")
     );
     
     //Back button.
-    gui.back_item =
+    controls_gui.back_item =
         new button_gui_item("Back", game.fonts.standard);
-    gui.back_item->on_activate =
+    controls_gui.back_item->on_activate =
     [this] (const point &) {
-        leave();
+        controls_gui.responsive = false;
+        controls_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        top_gui.responsive = true;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
     };
-    gui.back_item->on_get_tooltip =
-    [] () { return "Return to the main menu."; };
-    gui.add_item(gui.back_item, "back");
+    controls_gui.back_item->on_get_tooltip =
+    [] () { return "Return to the top-level options menu."; };
+    controls_gui.add_item(controls_gui.back_item, "back");
+    
+    //Control binds button.
+    button_gui_item* control_binds_button =
+        new button_gui_item("Edit control binds...", game.fonts.standard);
+    control_binds_button->on_activate =
+    [this] (const point &) {
+        go_to_control_binds();
+    };
+    control_binds_button->on_get_tooltip =
+    [] () { return "Choose what buttons do what."; };
+    controls_gui.add_item(control_binds_button, "control_binds");
+    
+    //Cursor speed.
+    cursor_speed_picker =
+        new options_menu_picker_gui_item<float>(
+        "Cursor speed: ",
+        &game.options.cursor_speed,
+        OPTIONS::DEF_CURSOR_SPEED,
+    {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f},
+    {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
+    "Cursor speed, when controlling without a mouse."
+    );
+    cursor_speed_picker->value_to_string = [] (const float v) {
+        return f2s(v);
+    };
+    cursor_speed_picker->init();
+    controls_gui.add_item(cursor_speed_picker, "cursor_speed");
+    
+    //Auto-throw mode.
+    auto_throw_picker =
+        new options_menu_picker_gui_item<AUTO_THROW_MODES>(
+        "Auto-throw: ",
+        &game.options.auto_throw_mode,
+        OPTIONS::DEF_AUTO_THROW_MODE,
+    {AUTO_THROW_OFF, AUTO_THROW_HOLD, AUTO_THROW_TOGGLE},
+    {"Off", "Hold input", "Input toggles"}
+    );
+    auto_throw_picker->preset_descriptions = {
+        "Pikmin are only thrown when you release the throw input.",
+        "Auto-throw Pikmin periodically as long as the throw input is held.",
+        "Do the throw input once to auto-throw periodically, and again to stop."
+    };
+    auto_throw_picker->init();
+    controls_gui.add_item(auto_throw_picker, "auto_throw");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&controls_gui);
+    controls_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    controls_gui.set_selected_item(control_binds_button);
+    controls_gui.responsive = false;
+    controls_gui.hide_items();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the graphics options menu GUI.
+ */
+void options_menu_state::init_gui_graphics_page() {
+    //Menu items.
+    graphics_gui.register_coords("back",            12,  5,   20,  6);
+    graphics_gui.register_coords("fullscreen",      50, 22.5, 70, 15);
+    graphics_gui.register_coords("resolution",      50, 40,   70, 15);
+    graphics_gui.register_coords("tooltip",         50, 96,   96,  4);
+    graphics_gui.register_coords("restart_warning", 63,  5,   70,  6);
+    graphics_gui.read_coords(
+        data_node(OPTIONS_MENU::GRAPHICS_GUI_FILE_PATH).
+        get_child_by_name("positions")
+    );
+    
+    //Back button.
+    graphics_gui.back_item =
+        new button_gui_item("Back", game.fonts.standard);
+    graphics_gui.back_item->on_activate =
+    [this] (const point &) {
+        graphics_gui.responsive = false;
+        graphics_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        top_gui.responsive = true;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+    };
+    graphics_gui.back_item->on_get_tooltip =
+    [] () { return "Return to the top-level options menu."; };
+    graphics_gui.add_item(graphics_gui.back_item, "back");
     
     //Fullscreen checkbox.
     check_gui_item* fullscreen_check =
@@ -217,7 +372,7 @@ void options_menu_state::load() {
             "Show the game in fullscreen, or in a window? Default: " +
             b2s(OPTIONS::DEF_WIN_FULLSCREEN) + ".";
     };
-    gui.add_item(fullscreen_check, "fullscreen");
+    graphics_gui.add_item(fullscreen_check, "fullscreen");
     
     //Resolution picker.
     vector<string> resolution_preset_names;
@@ -247,23 +402,63 @@ void options_menu_state::load() {
         return i2s(v.first) + "x" + i2s(v.second);
     };
     resolution_picker->init();
-    gui.add_item(resolution_picker, "resolution");
+    graphics_gui.add_item(resolution_picker, "resolution");
     
-    //Cursor speed.
-    cursor_speed_picker =
-        new options_menu_picker_gui_item<float>(
-        "Cursor speed: ",
-        &game.options.cursor_speed,
-        OPTIONS::DEF_CURSOR_SPEED,
-    {250.0f, 350.0f, 500.0f, 700.0f, 1000.0f},
-    {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
-    "Cursor speed, when controlling without a mouse."
+    //Warning text.
+    warning_text =
+        new text_gui_item(
+        "Please restart for the changes to take effect.",
+        game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    cursor_speed_picker->value_to_string = [] (const float v) {
-        return f2s(v);
+    warning_text->visible = false;
+    graphics_gui.add_item(warning_text, "restart_warning");
+    
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&graphics_gui);
+    graphics_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    graphics_gui.set_selected_item(fullscreen_check);
+    graphics_gui.responsive = false;
+    graphics_gui.hide_items();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the misc. options menu GUI.
+ */
+void options_menu_state::init_gui_misc_page() {
+    //Menu items.
+    misc_gui.register_coords("back",                 12,  5,   20,  6);
+    misc_gui.register_coords("cursor_cam_weight",    50, 20,   70, 15);
+    misc_gui.register_coords("show_hud_input_icons", 50, 37.5, 70, 15);
+    misc_gui.register_coords("leaving_confirmation", 50, 55,   70, 15);
+    misc_gui.register_coords("tooltip",              50, 96,   96,  4);
+    misc_gui.read_coords(
+        data_node(OPTIONS_MENU::MISC_GUI_FILE_PATH).
+        get_child_by_name("positions")
+    );
+    
+    //Back button.
+    misc_gui.back_item =
+        new button_gui_item("Back", game.fonts.standard);
+    misc_gui.back_item->on_activate =
+    [this] (const point &) {
+        misc_gui.responsive = false;
+        misc_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        top_gui.responsive = true;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_LEFT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
     };
-    cursor_speed_picker->init();
-    gui.add_item(cursor_speed_picker, "cursor_speed");
+    misc_gui.back_item->on_get_tooltip =
+    [] () { return "Return to the top-level options menu."; };
+    misc_gui.add_item(misc_gui.back_item, "back");
     
     //Cursor camera weight.
     cursor_cam_weight_picker =
@@ -279,24 +474,7 @@ void options_menu_state::load() {
         return f2s(v);
     };
     cursor_cam_weight_picker->init();
-    gui.add_item(cursor_cam_weight_picker, "cursor_cam_weight");
-    
-    //Auto-throw mode.
-    auto_throw_picker =
-        new options_menu_picker_gui_item<AUTO_THROW_MODES>(
-        "Auto-throw: ",
-        &game.options.auto_throw_mode,
-        OPTIONS::DEF_AUTO_THROW_MODE,
-    {AUTO_THROW_OFF, AUTO_THROW_HOLD, AUTO_THROW_TOGGLE},
-    {"Off", "Hold input", "Input toggles"}
-    );
-    auto_throw_picker->preset_descriptions = {
-        "Pikmin are only thrown when you release the throw input.",
-        "Auto-throw Pikmin periodically as long as the throw input is held.",
-        "Do the throw input once to auto-throw periodically, and again to stop."
-    };
-    auto_throw_picker->init();
-    gui.add_item(auto_throw_picker, "auto_throw");
+    misc_gui.add_item(cursor_cam_weight_picker, "cursor_cam_weight");
     
     //Show HUD player input icons checkbox.
     check_gui_item* show_hud_input_icons_check =
@@ -310,7 +488,7 @@ void options_menu_state::load() {
             "Show icons of the player inputs near relevant HUD items? "
             "Default: " + b2s(OPTIONS::DEF_SHOW_HUD_INPUT_ICONS) + ".";
     };
-    gui.add_item(show_hud_input_icons_check, "show_hud_input_icons");
+    misc_gui.add_item(show_hud_input_icons_check, "show_hud_input_icons");
     
     //Leaving confirmation mode.
     leaving_confirmation_picker =
@@ -331,18 +509,127 @@ void options_menu_state::load() {
         "When leaving from the pause menu, never ask to confirm."
     };
     leaving_confirmation_picker->init();
-    gui.add_item(leaving_confirmation_picker, "leaving_confirmation");
+    misc_gui.add_item(leaving_confirmation_picker, "leaving_confirmation");
     
-    //Controls button.
+    //Tooltip text.
+    tooltip_gui_item* tooltip_text =
+        new tooltip_gui_item(&misc_gui);
+    misc_gui.add_item(tooltip_text, "tooltip");
+    
+    //Finishing touches.
+    misc_gui.set_selected_item(cursor_cam_weight_picker);
+    misc_gui.responsive = false;
+    misc_gui.hide_items();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes the top-level menu GUI.
+ */
+void options_menu_state::init_gui_top_page() {
+    //Menu items.
+    top_gui.register_coords("back",     12,  5,   20,  6);
+    top_gui.register_coords("controls", 50, 27.5, 65, 10);
+    top_gui.register_coords("graphics", 50, 42.5, 65, 10);
+    top_gui.register_coords("audio",    50, 57.5, 65, 10);
+    top_gui.register_coords("misc",     50, 72.5, 50, 10);
+    top_gui.register_coords("advanced", 87, 86,   22,  8);
+    top_gui.register_coords("tooltip",  50, 96,   96,  4);
+    top_gui.read_coords(
+        data_node(OPTIONS_MENU::TOP_GUI_FILE_PATH).
+        get_child_by_name("positions")
+    );
+    
+    //Back button.
+    top_gui.back_item =
+        new button_gui_item("Back", game.fonts.standard);
+    top_gui.back_item->on_activate =
+    [this] (const point &) {
+        leave();
+    };
+    top_gui.back_item->on_get_tooltip =
+    [] () { return "Return to the main menu."; };
+    top_gui.add_item(top_gui.back_item, "back");
+    
+    //Controls options button.
     button_gui_item* controls_button =
-        new button_gui_item("Edit controls...", game.fonts.standard);
+        new button_gui_item("Controls", game.fonts.standard);
     controls_button->on_activate =
     [this] (const point &) {
-        go_to_controls();
+        top_gui.responsive = false;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        controls_gui.responsive = true;
+        controls_gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
     };
     controls_button->on_get_tooltip =
-    [] () { return "Choose what buttons do what."; };
-    gui.add_item(controls_button, "controls");
+    [] () { return "Change the way you control the game."; };
+    top_gui.add_item(controls_button, "controls");
+    
+    //Graphics options button.
+    button_gui_item* graphics_button =
+        new button_gui_item("Graphics", game.fonts.standard);
+    graphics_button->on_activate =
+    [this] (const point &) {
+        top_gui.responsive = false;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        graphics_gui.responsive = true;
+        graphics_gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+    };
+    graphics_button->on_get_tooltip =
+    [] () { return "Change some options about how the game looks."; };
+    top_gui.add_item(graphics_button, "graphics");
+    
+    //Audio options button.
+    button_gui_item* audio_button =
+        new button_gui_item("Audio", game.fonts.standard);
+    audio_button->on_activate =
+    [this] (const point &) {
+        top_gui.responsive = false;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        audio_gui.responsive = true;
+        audio_gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+    };
+    audio_button->on_get_tooltip =
+    [] () { return "Change options about the way the game sounds."; };
+    top_gui.add_item(audio_button, "audio");
+    
+    //Misc. options button.
+    button_gui_item* misc_button =
+        new button_gui_item("Misc.", game.fonts.standard);
+    misc_button->on_activate =
+    [this] (const point &) {
+        top_gui.responsive = false;
+        top_gui.start_animation(
+            GUI_MANAGER_ANIM_CENTER_TO_LEFT,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+        misc_gui.responsive = true;
+        misc_gui.start_animation(
+            GUI_MANAGER_ANIM_RIGHT_TO_CENTER,
+            OPTIONS_MENU::HUD_MOVE_TIME
+        );
+    };
+    misc_button->on_get_tooltip =
+    [] () { return "Change some miscellaneous gameplay and game options."; };
+    top_gui.add_item(misc_button, "misc");
     
     //Advanced bullet point.
     bullet_point_gui_item* advanced_bullet =
@@ -353,26 +640,55 @@ void options_menu_state::load() {
             "For more advanced options, check out the "
             "manual in the game's folder.";
     };
-    gui.add_item(advanced_bullet, "advanced");
+    top_gui.add_item(advanced_bullet, "advanced");
     
     //Tooltip text.
     tooltip_gui_item* tooltip_text =
-        new tooltip_gui_item(&gui);
-    gui.add_item(tooltip_text, "tooltip");
-    
-    //Warning text.
-    warning_text =
-        new text_gui_item(
-        "Please restart for the changes to take effect.",
-        game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
-    );
-    warning_text->visible = false;
-    gui.add_item(warning_text, "restart_warning");
+        new tooltip_gui_item(&top_gui);
+    top_gui.add_item(tooltip_text, "tooltip");
     
     //Finishing touches.
     game.fade_mgr.start_fade(true, nullptr);
-    gui.set_selected_item(gui.back_item);
+    top_gui.set_selected_item(controls_button);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Leaves the options menu and goes to the main menu.
+ */
+void options_menu_state::leave() {
+    game.fade_mgr.start_fade(false, [] () {
+        game.change_state(game.states.main_menu);
+    });
+    save_options();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the options menu into memory.
+ */
+void options_menu_state::load() {
+    //Resources.
+    bmp_menu_bg = load_bmp(game.asset_file_names.main_menu);
     
+    init_gui_top_page();
+    init_gui_controls_page();
+    init_gui_graphics_page();
+    init_gui_audio_page();
+    init_gui_misc_page();
+    
+    switch(page_to_load) {
+    case OPTIONS_MENU_PAGE_TOP: {
+        top_gui.responsive = true;
+        top_gui.show_items();
+        break;
+    } case OPTIONS_MENU_PAGE_CONTROLS: {
+        controls_gui.responsive = true;
+        controls_gui.show_items();
+        break;
+    }
+    }
+    page_to_load = OPTIONS_MENU_PAGE_TOP;
 }
 
 
@@ -398,5 +714,9 @@ void options_menu_state::unload() {
     al_destroy_bitmap(bmp_menu_bg);
     
     //Menu items.
-    gui.destroy();
+    top_gui.destroy();
+    controls_gui.destroy();
+    graphics_gui.destroy();
+    audio_gui.destroy();
+    misc_gui.destroy();
 }
