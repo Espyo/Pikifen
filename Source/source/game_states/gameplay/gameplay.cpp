@@ -337,7 +337,7 @@ void gameplay_state::end_mission(const bool cleared) {
     
     if(cleared) {
         mission_goal* goal =
-            game.mission_goals[game.cur_area_data.mission.goal];
+            game.mission_goals[game.cur_area_data.mission.team_data[0].goal];
         if(goal->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
             player_info[p].cam.target_pos = new_cam_pos;
             player_info[p].cam.target_zoom = new_cam_zoom;
@@ -947,11 +947,11 @@ void gameplay_state::load() {
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
         unordered_set<size_t> mission_required_mob_gen_idxs;
         
-        if(game.cur_area_data.mission.goal_all_mobs) {
+        if(game.cur_area_data.mission.team_data[0].goal_all_mobs) {
             for(size_t m = 0; m < mobs_per_gen.size(); ++m) {
                 if(
                     mobs_per_gen[m] &&
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     is_mob_applicable(mobs_per_gen[m]->type)
                 ) {
                     mission_required_mob_gen_idxs.insert(m);
@@ -960,7 +960,7 @@ void gameplay_state::load() {
             
         } else {
             mission_required_mob_gen_idxs =
-                game.cur_area_data.mission.goal_mob_idxs;
+                game.cur_area_data.mission.team_data[0].goal_mob_idxs;
         }
         
         for(size_t i : mission_required_mob_gen_idxs) {
@@ -968,7 +968,7 @@ void gameplay_state::load() {
         }
         mission_info[0].mission_required_mob_amount = mission_info[0].mission_remaining_mob_ids.size();
         
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        if(game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_COLLECT_TREASURE) {
             //Since the collect treasure goal can accept piles and resources
             //meant to add treasure points, we'll need some special treatment.
             for(size_t i : mission_required_mob_gen_idxs) {

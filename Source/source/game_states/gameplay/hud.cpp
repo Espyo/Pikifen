@@ -1035,7 +1035,7 @@ hud_struct::hud_struct(const size_t &m_player_id) :
         
         
         string goal_cur_label_text =
-            game.mission_goals[game.cur_area_data.mission.goal]->
+            game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
             get_hud_label();
             
         if(!goal_cur_label_text.empty()) {
@@ -1061,11 +1061,11 @@ hud_struct::hud_struct(const size_t &m_player_id) :
                 [this, mission_goal_cur]
             (const point & center, const point & size) {
                 int value =
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     get_cur_amount(game.states.gameplay);
                 string text;
                 if(
-                    game.cur_area_data.mission.goal ==
+                    game.cur_area_data.mission.team_data[0].goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
                     text = time_to_str2(value, ":", "");
@@ -1107,11 +1107,11 @@ hud_struct::hud_struct(const size_t &m_player_id) :
             mission_goal_req->on_draw =
             [this] (const point & center, const point & size) {
                 int value =
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     get_req_amount(game.states.gameplay);
                 string text;
                 if(
-                    game.cur_area_data.mission.goal ==
+                    game.cur_area_data.mission.team_data[0].goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
                     text = time_to_str2(value, ":", "");
@@ -1154,7 +1154,7 @@ hud_struct::hud_struct(const size_t &m_player_id) :
                     center, point(1.0f, 1.0f),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                     size, true,
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     get_name()
                 );
             };
@@ -1431,13 +1431,13 @@ hud_struct::hud_struct(const size_t &m_player_id) :
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.fail_hud_primary_cond != INVALID
+        game.cur_area_data.mission.team_data[0].fail_hud_primary_cond != INVALID
     ) {
         create_mission_fail_cond_items(true);
     }
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.fail_hud_secondary_cond != INVALID
+        game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond != INVALID
     ) {
         create_mission_fail_cond_items(false);
     }
@@ -1504,9 +1504,9 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
     MISSION_FAIL_CONDITIONS cond =
         primary ?
         (MISSION_FAIL_CONDITIONS)
-        game.cur_area_data.mission.fail_hud_primary_cond :
+        game.cur_area_data.mission.team_data[0].fail_hud_primary_cond :
         (MISSION_FAIL_CONDITIONS)
-        game.cur_area_data.mission.fail_hud_secondary_cond;
+        game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond;
         
     //Mission fail condition bubble.
     gui_item* mission_fail_bubble = new gui_item();

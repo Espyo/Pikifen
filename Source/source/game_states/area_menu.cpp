@@ -179,7 +179,7 @@ void area_menu_state::change_info(const size_t area_idx) {
         get_subtitle_or_mission_goal(
             area_subtitles[area_idx],
             area_type,
-            area_mission_data[area_idx].goal
+            area_mission_data[area_idx].team_data[0].goal
         );
     description_text->text = area_descriptions[area_idx];
     if(area_difficulties[area_idx] == 0) {
@@ -278,11 +278,11 @@ void area_menu_state::change_info(const size_t area_idx) {
         specs_name_text->text = area_names[area_idx];
         mission_data &mission = area_mission_data[area_idx];
         goal_text->text =
-            game.mission_goals[mission.goal]->
+            game.mission_goals[mission.team_data[0].goal]->
             get_player_description(&mission);
             
         for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
-            if(has_flag(mission.fail_conditions, get_index_bitmask(f))) {
+            if(has_flag(mission.team_data[0].fail_conditions, get_index_bitmask(f))) {
                 mission_fail* cond = game.mission_fail_conds[f];
                 add_bullet(
                     fail_list,
@@ -291,7 +291,7 @@ void area_menu_state::change_info(const size_t area_idx) {
             }
         }
         
-        if(mission.fail_conditions == 0) {
+        if(mission.team_data[0].fail_conditions == 0) {
             add_bullet(fail_list, "(None)");
         }
         
@@ -1011,7 +1011,7 @@ void area_menu_state::load() {
                 &mission_records,
                 area_names[a],
                 get_subtitle_or_mission_goal(
-                    area_subtitles[a], area_type, area_mission_data[a].goal
+                    area_subtitles[a], area_type, area_mission_data[a].team_data[0].goal
                 ),
                 area_makers[a],
                 area_versions[a],

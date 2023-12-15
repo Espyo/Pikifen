@@ -165,23 +165,23 @@ void area_data::clear() {
     bg_color = COLOR_BLACK;
     bg_dist = 2.0f;
     bg_bmp_zoom = 1.0f;
-    mission.goal = MISSION_GOAL_END_MANUALLY;
-    mission.goal_all_mobs = true;
-    mission.goal_mob_idxs.clear();
-    mission.goal_amount = 1;
-    mission.goal_exit_center = point();
-    mission.goal_exit_size =
+    mission.team_data[0].goal = MISSION_GOAL_END_MANUALLY;
+    mission.team_data[0].goal_all_mobs = true;
+    mission.team_data[0].goal_mob_idxs.clear();
+    mission.team_data[0].goal_amount = 1;
+    mission.team_data[0].goal_exit_center = point();
+    mission.team_data[0].goal_exit_size =
         point(
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE,
             AREA_EDITOR::MISSION_EXIT_MIN_SIZE
         );
-    mission.fail_conditions = 0;
-    mission.fail_too_few_pik_amount = 0;
-    mission.fail_too_many_pik_amount = 1;
-    mission.fail_pik_killed = 1;
-    mission.fail_leaders_kod = 1;
-    mission.fail_enemies_killed = 1;
-    mission.fail_time_limit = AREA::DEF_MISSION_TIME_LIMIT;
+    mission.team_data[0].fail_conditions = 0;
+    mission.team_data[0].fail_too_few_pik_amount = 0;
+    mission.team_data[0].fail_too_many_pik_amount = 1;
+    mission.team_data[0].fail_pik_killed = 1;
+    mission.team_data[0].fail_leaders_kod = 1;
+    mission.team_data[0].fail_enemies_killed = 1;
+    mission.team_data[0].fail_time_limit = AREA::DEF_MISSION_TIME_LIMIT;
     mission.grading_mode = MISSION_GRADING_GOAL;
     mission.points_per_pikmin_born = 0;
     mission.points_per_pikmin_death = 0;
@@ -377,19 +377,19 @@ void area_data::clone(area_data &other) {
     
     other.thumbnail = thumbnail;
     
-    other.mission.goal = mission.goal;
-    other.mission.goal_all_mobs = mission.goal_all_mobs;
-    other.mission.goal_mob_idxs = mission.goal_mob_idxs;
-    other.mission.goal_amount = mission.goal_amount;
-    other.mission.goal_exit_center = mission.goal_exit_center;
-    other.mission.goal_exit_size = mission.goal_exit_size;
-    other.mission.fail_conditions = mission.fail_conditions;
-    other.mission.fail_too_few_pik_amount = mission.fail_too_few_pik_amount;
-    other.mission.fail_too_many_pik_amount = mission.fail_too_many_pik_amount;
-    other.mission.fail_pik_killed = mission.fail_pik_killed;
-    other.mission.fail_leaders_kod = mission.fail_leaders_kod;
-    other.mission.fail_enemies_killed = mission.fail_enemies_killed;
-    other.mission.fail_time_limit = mission.fail_time_limit;
+    other.mission.team_data[0].goal = mission.team_data[0].goal;
+    other.mission.team_data[0].goal_all_mobs = mission.team_data[0].goal_all_mobs;
+    other.mission.team_data[0].goal_mob_idxs = mission.team_data[0].goal_mob_idxs;
+    other.mission.team_data[0].goal_amount = mission.team_data[0].goal_amount;
+    other.mission.team_data[0].goal_exit_center = mission.team_data[0].goal_exit_center;
+    other.mission.team_data[0].goal_exit_size = mission.team_data[0].goal_exit_size;
+    other.mission.team_data[0].fail_conditions = mission.team_data[0].fail_conditions;
+    other.mission.team_data[0].fail_too_few_pik_amount = mission.team_data[0].fail_too_few_pik_amount;
+    other.mission.team_data[0].fail_too_many_pik_amount = mission.team_data[0].fail_too_many_pik_amount;
+    other.mission.team_data[0].fail_pik_killed = mission.team_data[0].fail_pik_killed;
+    other.mission.team_data[0].fail_leaders_kod = mission.team_data[0].fail_leaders_kod;
+    other.mission.team_data[0].fail_enemies_killed = mission.team_data[0].fail_enemies_killed;
+    other.mission.team_data[0].fail_time_limit = mission.team_data[0].fail_time_limit;
     other.mission.grading_mode = mission.grading_mode;
     other.mission.points_per_pikmin_born = mission.points_per_pikmin_born;
     other.mission.points_per_pikmin_death = mission.points_per_pikmin_death;

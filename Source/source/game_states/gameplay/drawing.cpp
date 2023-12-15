@@ -178,7 +178,7 @@ void gameplay_state::do_game_drawing(
                 get_subtitle_or_mission_goal(
                     game.cur_area_data.subtitle,
                     game.cur_area_data.type,
-                    game.cur_area_data.mission.goal
+                    game.cur_area_data.mission.team_data[0].goal
                 ),
                 area_title_fade_timer.get_ratio_left()
             );

@@ -796,7 +796,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         *******************/
         if(
             game.cur_area_data.type == AREA_TYPE_MISSION &&
-            game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
+            game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_GET_TO_EXIT
         ) {
             mission_info[0].cur_leaders_in_mission_exit = 0;
             for(size_t l = 0; l < mobs.leaders.size(); ++l) {
@@ -815,14 +815,14 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                 if(
                     fabs(
                         l_ptr->pos.x -
-                        game.cur_area_data.mission.goal_exit_center.x
+                        game.cur_area_data.mission.team_data[0].goal_exit_center.x
                     ) <=
-                    game.cur_area_data.mission.goal_exit_size.x / 2.0f &&
+                    game.cur_area_data.mission.team_data[0].goal_exit_size.x / 2.0f &&
                     fabs(
                         l_ptr->pos.y -
-                        game.cur_area_data.mission.goal_exit_center.y
+                        game.cur_area_data.mission.team_data[0].goal_exit_center.y
                     ) <=
-                    game.cur_area_data.mission.goal_exit_size.y / 2.0f
+                    game.cur_area_data.mission.team_data[0].goal_exit_size.y / 2.0f
                 ) {
                     mission_info[0].cur_leaders_in_mission_exit++;
                 }
@@ -831,11 +831,11 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         
         float real_goal_ratio = 0.0f;
         int goal_cur_amount =
-            game.mission_goals[game.cur_area_data.mission.goal]->get_cur_amount(
+            game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->get_cur_amount(
                 this
             );
         int goal_req_amount =
-            game.mission_goals[game.cur_area_data.mission.goal]->get_req_amount(
+            game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->get_req_amount(
                 this
             );
         if(goal_req_amount != 0.0f) {
@@ -845,15 +845,15 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             (real_goal_ratio - mission_info[0].goal_indicator_ratio) *
             (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
             
-        if(game.cur_area_data.mission.fail_hud_primary_cond != INVALID) {
+        if(game.cur_area_data.mission.team_data[0].fail_hud_primary_cond != INVALID) {
             float real_fail_ratio = 0.0f;
             int fail_cur_amount =
                 game.mission_fail_conds[
-                    game.cur_area_data.mission.fail_hud_primary_cond
+                    game.cur_area_data.mission.team_data[0].fail_hud_primary_cond
                 ]->get_cur_amount(this);
             int fail_req_amount =
                 game.mission_fail_conds[
-                    game.cur_area_data.mission.fail_hud_primary_cond
+                    game.cur_area_data.mission.team_data[0].fail_hud_primary_cond
                 ]->get_req_amount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
@@ -863,15 +863,15 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                 (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
         }
         
-        if(game.cur_area_data.mission.fail_hud_secondary_cond != INVALID) {
+        if(game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond != INVALID) {
             float real_fail_ratio = 0.0f;
             int fail_cur_amount =
                 game.mission_fail_conds[
-                    game.cur_area_data.mission.fail_hud_secondary_cond
+                    game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond
                 ]->get_cur_amount(this);
             int fail_req_amount =
                 game.mission_fail_conds[
-                    game.cur_area_data.mission.fail_hud_secondary_cond
+                    game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond
                 ]->get_req_amount(this);
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
@@ -926,7 +926,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                 (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * delta_t);
                 
             int goal_cur =
-                game.mission_goals[game.cur_area_data.mission.goal]->
+                game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                 get_cur_amount(game.states.gameplay);
             if(goal_cur != mission_info[0].old_mission_goal_cur) {
                 mission_info[0].mission_goal_cur_text->start_juice_animation(
@@ -936,11 +936,11 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             }
             
             if(
-                game.cur_area_data.mission.fail_hud_primary_cond !=
+                game.cur_area_data.mission.team_data[0].fail_hud_primary_cond !=
                 INVALID
             ) {
                 size_t cond =
-                    game.cur_area_data.mission.fail_hud_primary_cond;
+                    game.cur_area_data.mission.team_data[0].fail_hud_primary_cond;
                 int fail_1_cur =
                     game.mission_fail_conds[cond]->get_cur_amount(
                         game.states.gameplay
@@ -953,11 +953,11 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                 }
             }
             if(
-                game.cur_area_data.mission.fail_hud_secondary_cond !=
+                game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond !=
                 INVALID
             ) {
                 size_t cond =
-                    game.cur_area_data.mission.fail_hud_secondary_cond;
+                    game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond;
                 int fail_2_cur =
                     game.mission_fail_conds[cond]->get_cur_amount(
                         game.states.gameplay
@@ -1367,7 +1367,7 @@ void gameplay_state::do_menu_logic(const size_t &player_id) {
  * Checks if the mission goal has been met.
  */
 bool gameplay_state::is_mission_clear_met() {
-    return game.mission_goals[game.cur_area_data.mission.goal]->is_met(this);
+    return game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->is_met(this);
 }
 
 
@@ -1380,7 +1380,7 @@ bool gameplay_state::is_mission_fail_met(MISSION_FAIL_CONDITIONS* reason) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(f)
             )
         ) {

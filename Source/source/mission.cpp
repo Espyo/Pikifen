@@ -1148,7 +1148,7 @@ int mission_fail_win_list::get_cur_amount(
     
     for(size_t p = 0; p < 4; ++p){
         if (p == team_nr) continue;
-            if(gameplay->mission_info[p].succeeded == true && hit_list.count(p)>=1
+            if(gameplay->mission_info[p].suceeded == true && hit_list.count(p)>=1
             ){
                 has_won+=1;
         }
@@ -1265,7 +1265,7 @@ string mission_fail_win_list::get_status(
     for(size_t p = 0; p < 4; ++p){
         if (p == team_nr) continue;
         int fail_conditions = game.cur_area_data.mission.team_data[p].fail_conditions;
-        bool success = game.states.gameplay->mission_info[p].succeeded;
+        bool success = game.states.gameplay->mission_info[p].suceeded;
         if(fail_conditions != 0 && hit_list.count(p)>=1 && success){
                 hit_names += i2s(p+1);
         }
@@ -1309,7 +1309,7 @@ int mission_fail_win_amount::get_cur_amount(
     int has_won = 0;
     for(size_t p = 0; p < 4; ++p){
         if (p == team_nr) continue;
-            if(gameplay->mission_info[p].succeeded == true
+            if(gameplay->mission_info[p].suceeded == true
             ){
                 has_won+=1;
                 break;
@@ -2306,7 +2306,7 @@ int mission_goal_anyone_wins::get_cur_amount(
 ) const {
     int wins = 0;
     for(size_t p = 0; p < 4UL; ++p){
-        wins += (gameplay->mission_info[p].succeeded == true)? 1 : 0;
+        wins += (gameplay->mission_info[p].suceeded == true)? 1 : 0;
     }
     return wins;
 }

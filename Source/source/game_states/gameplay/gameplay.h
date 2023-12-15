@@ -158,6 +158,10 @@ struct player_info_struct {
 };
 
 struct mission_info_struct {
+    //For VS marks if the player has suceeded
+    bool suceeded;
+    // Marks if the player has suceeded for VS
+    bool failure;
     //Position of the last enemy killed. LARGE_FLOAT for none.
     point last_enemy_killed_pos;
     //Position of the last leader to get hurt. LARGE_FLOAT for none.

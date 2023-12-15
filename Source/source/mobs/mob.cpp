@@ -3721,7 +3721,6 @@ void mob::tick_misc_logic(const float delta_t) {
                 (
                     MOB::SWARM_VERTICAL_SCALE*
                     game.states.gameplay->player_info[p].swarm_magnitude
-                    game.states.gameplay->swarm_magnitude
                 )
             );
             al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);

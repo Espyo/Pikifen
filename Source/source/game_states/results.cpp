@@ -282,7 +282,7 @@ void results_state::load() {
         game.cur_area_data.name + ";" +
         get_subtitle_or_mission_goal(
             game.cur_area_data.subtitle, game.cur_area_data.type,
-            game.cur_area_data.mission.goal
+            game.cur_area_data.mission.team_data[0].goal
         ) + ";" +
         game.cur_area_data.maker + ";" +
         game.cur_area_data.version;
@@ -386,7 +386,7 @@ void results_state::load() {
         get_subtitle_or_mission_goal(
             game.cur_area_data.subtitle,
             game.cur_area_data.type,
-            game.cur_area_data.mission.goal
+            game.cur_area_data.mission.team_data[0].goal
         );
     if(!subtitle.empty()) {
         text_gui_item* area_subtitle_text =
@@ -415,7 +415,7 @@ void results_state::load() {
         string end_reason;
         if(goal_was_cleared) {
             end_reason =
-                game.mission_goals[game.cur_area_data.mission.goal]->
+                game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                 get_end_reason(&game.cur_area_data.mission);
         } else {
             end_reason =
@@ -664,7 +664,7 @@ void results_state::load() {
         add_stat(
             "Seconds left:",
             i2s(
-                game.cur_area_data.mission.fail_time_limit -
+                game.cur_area_data.mission.team_data[0].fail_time_limit -
                 floor(game.states.gameplay->gameplay_time_passed)
             )
         );

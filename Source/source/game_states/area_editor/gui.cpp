@@ -1579,15 +1579,15 @@ void area_editor::process_gui_panel_gameplay() {
         //Region center text.
         ImGui::Text(
             "Exit region center: %s,%s",
-            f2s(game.cur_area_data.mission.goal_exit_center.x).c_str(),
-            f2s(game.cur_area_data.mission.goal_exit_center.y).c_str()
+            f2s(game.cur_area_data.mission.team_data[0].goal_exit_center.x).c_str(),
+            f2s(game.cur_area_data.mission.team_data[0].goal_exit_center.y).c_str()
         );
         
         //Region center text.
         ImGui::Text(
             "Exit region size: %s x %s",
-            f2s(game.cur_area_data.mission.goal_exit_size.x).c_str(),
-            f2s(game.cur_area_data.mission.goal_exit_size.y).c_str()
+            f2s(game.cur_area_data.mission.team_data[0].goal_exit_size.x).c_str(),
+            f2s(game.cur_area_data.mission.team_data[0].goal_exit_size.y).c_str()
         );
         
         //Finish button.
@@ -1848,20 +1848,20 @@ void area_editor::process_gui_panel_info() {
         float mission_min = 0;
         if(game.cur_area_data.type == AREA_TYPE_MISSION) {
             if(
-                game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL
+                game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_TIMED_SURVIVAL
             ) {
                 has_time_limit = true;
                 mission_min =
-                    game.cur_area_data.mission.goal_amount / 60.0f;
+                    game.cur_area_data.mission.team_data[0].goal_amount / 60.0f;
             } else if(
                 has_flag(
-                    game.cur_area_data.mission.fail_conditions,
+                    game.cur_area_data.mission.team_data[0].fail_conditions,
                     get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
                 has_time_limit = true;
                 mission_min =
-                    game.cur_area_data.mission.fail_time_limit / 60.0f;
+                    game.cur_area_data.mission.team_data[0].fail_time_limit / 60.0f;
             }
         }
         int day_start_min = (int) game.cur_area_data.day_time_start;
@@ -2582,9 +2582,9 @@ void area_editor::process_gui_panel_main() {
 void area_editor::process_gui_panel_mission() {
 
     float old_mission_survival_min =
-        game.cur_area_data.mission.goal_amount / 60.0f;
+        game.cur_area_data.mission.team_data[0].goal_amount / 60.0f;
     float old_mission_time_limit_min =
-        game.cur_area_data.mission.fail_time_limit / 60.0f;
+        game.cur_area_data.mission.team_data[0].fail_time_limit / 60.0f;
     bool day_duration_needs_update = false;
     
     //Mission goal node.
@@ -2595,21 +2595,21 @@ void area_editor::process_gui_panel_mission() {
         for(size_t g = 0; g < game.mission_goals.size(); ++g) {
             goals_list.push_back(game.mission_goals[g]->get_name());
         }
-        int mission_goal = game.cur_area_data.mission.goal;
+        int mission_goal = game.cur_area_data.mission.team_data[0].goal;
         if(ImGui::Combo("Goal", &mission_goal, goals_list, 15)) {
             register_change("mission requirements change");
-            game.cur_area_data.mission.goal_mob_idxs.clear();
-            game.cur_area_data.mission.goal_amount = 1;
-            game.cur_area_data.mission.goal = (MISSION_GOALS) mission_goal;
+            game.cur_area_data.mission.team_data[0].goal_mob_idxs.clear();
+            game.cur_area_data.mission.team_data[0].goal_amount = 1;
+            game.cur_area_data.mission.team_data[0].goal = (MISSION_GOALS) mission_goal;
             if(
-                game.cur_area_data.mission.goal ==
+                game.cur_area_data.mission.team_data[0].goal ==
                 MISSION_GOAL_TIMED_SURVIVAL
             ) {
                 day_duration_needs_update = true;
             }
         }
         
-        switch(game.cur_area_data.mission.goal) {
+        switch(game.cur_area_data.mission.team_data[0].goal) {
         case MISSION_GOAL_END_MANUALLY: {
     
             //Explanation text.
@@ -2635,12 +2635,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Treasure requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission.goal_all_mobs ? 0 : 1;
+                game.cur_area_data.mission.team_data[0].goal_all_mobs ? 0 : 1;
                 
             //All treasures requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data.mission.team_data[0].goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2655,7 +2655,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data.mission.team_data[0].goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2664,7 +2664,7 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which treasures these are."
             );
             
-            if(!game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data.mission.team_data[0].goal_all_mobs) {
             
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick treasures...")) {
@@ -2700,12 +2700,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Enemy requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission.goal_all_mobs ? 0 : 1;
+                game.cur_area_data.mission.team_data[0].goal_all_mobs ? 0 : 1;
                 
             //All enemies requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data.mission.team_data[0].goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2720,7 +2720,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data.mission.team_data[0].goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2729,7 +2729,7 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which enemies these are."
             );
             
-            if(!game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data.mission.team_data[0].goal_all_mobs) {
             
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick enemies...")) {
@@ -2762,11 +2762,11 @@ void area_editor::process_gui_panel_mission() {
             
             //Time values.
             int total_seconds =
-                (int) game.cur_area_data.mission.goal_amount;
+                (int) game.cur_area_data.mission.team_data[0].goal_amount;
             if(ImGui::DragTime2("Time", &total_seconds)) {
                 register_change("mission requirements change");
                 total_seconds = std::max(total_seconds, 1);
-                game.cur_area_data.mission.goal_amount =
+                game.cur_area_data.mission.team_data[0].goal_amount =
                     (size_t) total_seconds;
                 day_duration_needs_update = true;
             }
@@ -2800,15 +2800,15 @@ void area_editor::process_gui_panel_mission() {
             //Region center text.
             ImGui::Text(
                 "Exit region center: %s,%s",
-                f2s(game.cur_area_data.mission.goal_exit_center.x).c_str(),
-                f2s(game.cur_area_data.mission.goal_exit_center.y).c_str()
+                f2s(game.cur_area_data.mission.team_data[0].goal_exit_center.x).c_str(),
+                f2s(game.cur_area_data.mission.team_data[0].goal_exit_center.y).c_str()
             );
             
             //Region center text.
             ImGui::Text(
                 "Exit region size: %s x %s",
-                f2s(game.cur_area_data.mission.goal_exit_size.x).c_str(),
-                f2s(game.cur_area_data.mission.goal_exit_size.y).c_str()
+                f2s(game.cur_area_data.mission.team_data[0].goal_exit_size.x).c_str(),
+                f2s(game.cur_area_data.mission.team_data[0].goal_exit_size.y).c_str()
             );
             
             //Spacer dummy widget.
@@ -2818,12 +2818,12 @@ void area_editor::process_gui_panel_mission() {
             ImGui::Text("Leader requirements:");
             
             int requires_all_option =
-                game.cur_area_data.mission.goal_all_mobs ? 0 : 1;
+                game.cur_area_data.mission.team_data[0].goal_all_mobs ? 0 : 1;
                 
             //All leaders requirement radio button.
             if(ImGui::RadioButton("All", &requires_all_option, 0)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data.mission.team_data[0].goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2838,7 +2838,7 @@ void area_editor::process_gui_panel_mission() {
                 ImGui::RadioButton("Specific ones", &requires_all_option, 1)
             ) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_all_mobs =
+                game.cur_area_data.mission.team_data[0].goal_all_mobs =
                     requires_all_option == 0;
             }
             set_tooltip(
@@ -2847,7 +2847,7 @@ void area_editor::process_gui_panel_mission() {
                 "You must specify which leaders these are."
             );
             
-            if(!game.cur_area_data.mission.goal_all_mobs) {
+            if(!game.cur_area_data.mission.team_data[0].goal_all_mobs) {
             
                 //Start mob selector mode button.
                 if(ImGui::Button("Pick leaders...")) {
@@ -2881,11 +2881,11 @@ void area_editor::process_gui_panel_mission() {
             
             //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission.goal_amount;
+                (int) game.cur_area_data.mission.team_data[0].goal_amount;
             ImGui::SetNextItemWidth(80);
             if(ImGui::DragInt("Amount", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission requirements change");
-                game.cur_area_data.mission.goal_amount =
+                game.cur_area_data.mission.team_data[0].goal_amount =
                     (size_t) amount;
             }
             set_tooltip(
@@ -2909,12 +2909,12 @@ void area_editor::process_gui_panel_mission() {
     if(saveable_tree_node("gameplay", "Mission fail conditions")) {
     
         unsigned int fail_flags =
-            (unsigned int) game.cur_area_data.mission.fail_conditions;
+            (unsigned int) game.cur_area_data.mission.team_data[0].fail_conditions;
         bool fail_flags_changed = false;
         
         //Pause menu end checkbox.
         bool pause_menu_end_is_fail =
-            game.cur_area_data.mission.goal != MISSION_GOAL_END_MANUALLY;
+            game.cur_area_data.mission.team_data[0].goal != MISSION_GOAL_END_MANUALLY;
         ImGui::BeginDisabled();
         ImGui::CheckboxFlags(
             "End from pause menu",
@@ -2924,7 +2924,7 @@ void area_editor::process_gui_panel_mission() {
         ImGui::EndDisabled();
         if(pause_menu_end_is_fail) {
             enable_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
             set_tooltip(
@@ -2935,7 +2935,7 @@ void area_editor::process_gui_panel_mission() {
             );
         } else {
             disable_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
             set_tooltip(
@@ -2945,13 +2945,13 @@ void area_editor::process_gui_panel_mission() {
         }
         
         //Time limit checkbox.
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        if(game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_TIMED_SURVIVAL) {
             disable_flag(
                 fail_flags,
                 get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
             disable_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             );
             ImGui::BeginDisabled();
@@ -2972,7 +2972,7 @@ void area_editor::process_gui_panel_mission() {
         ) {
             day_duration_needs_update = true;
         }
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        if(game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_TIMED_SURVIVAL) {
             ImGui::EndDisabled();
             set_tooltip(
                 "The mission's goal is to survive for a certain amount of\n"
@@ -2994,12 +2994,12 @@ void area_editor::process_gui_panel_mission() {
         ) {
             //Time limit values.
             int seconds =
-                (int) game.cur_area_data.mission.fail_time_limit;
+                (int) game.cur_area_data.mission.team_data[0].fail_time_limit;
             ImGui::Indent();
             if(ImGui::DragTime2("Time limit", &seconds)) {
                 register_change("mission fail conditions change");
                 seconds = std::max(seconds, 1);
-                game.cur_area_data.mission.fail_time_limit = (size_t) seconds;
+                game.cur_area_data.mission.team_data[0].fail_time_limit = (size_t) seconds;
                 day_duration_needs_update = true;
             }
             set_tooltip(
@@ -3036,11 +3036,11 @@ void area_editor::process_gui_panel_mission() {
             
             //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission.fail_too_few_pik_amount;
+                (int) game.cur_area_data.mission.team_data[0].fail_too_few_pik_amount;
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Amount##fctfpa", &amount, 0.1f, 0, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_too_few_pik_amount =
+                game.cur_area_data.mission.team_data[0].fail_too_few_pik_amount =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3074,11 +3074,11 @@ void area_editor::process_gui_panel_mission() {
             
             //Pikmin amount value.
             int amount =
-                (int) game.cur_area_data.mission.fail_too_many_pik_amount;
+                (int) game.cur_area_data.mission.team_data[0].fail_too_many_pik_amount;
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Amount##fctmpa", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_too_many_pik_amount =
+                game.cur_area_data.mission.team_data[0].fail_too_many_pik_amount =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3109,12 +3109,12 @@ void area_editor::process_gui_panel_mission() {
         ) {
             //Pikmin deaths value.
             int amount =
-                (int) game.cur_area_data.mission.fail_pik_killed;
+                (int) game.cur_area_data.mission.team_data[0].fail_pik_killed;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Deaths", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_pik_killed =
+                game.cur_area_data.mission.team_data[0].fail_pik_killed =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3161,12 +3161,12 @@ void area_editor::process_gui_panel_mission() {
         ) {
             //Leader KOs value.
             int amount =
-                (int) game.cur_area_data.mission.fail_leaders_kod;
+                (int) game.cur_area_data.mission.team_data[0].fail_leaders_kod;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("KOs", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_leaders_kod =
+                game.cur_area_data.mission.team_data[0].fail_leaders_kod =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3197,12 +3197,12 @@ void area_editor::process_gui_panel_mission() {
         ) {
             //Enemy kills value.
             int amount =
-                (int) game.cur_area_data.mission.fail_enemies_killed;
+                (int) game.cur_area_data.mission.team_data[0].fail_enemies_killed;
             ImGui::Indent();
             ImGui::SetNextItemWidth(50);
             if(ImGui::DragInt("Kills", &amount, 0.1f, 1, INT_MAX)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_enemies_killed =
+                game.cur_area_data.mission.team_data[0].fail_enemies_killed =
                     (size_t) amount;
             }
             set_tooltip(
@@ -3215,7 +3215,7 @@ void area_editor::process_gui_panel_mission() {
         
         if(fail_flags_changed) {
             register_change("mission fail conditions change");
-            game.cur_area_data.mission.fail_conditions =
+            game.cur_area_data.mission.team_data[0].fail_conditions =
                 (uint8_t) fail_flags;
         }
         
@@ -3223,7 +3223,7 @@ void area_editor::process_gui_panel_mission() {
         for(size_t c = 0; c < game.mission_fail_conds.size(); ++c) {
             if(
                 has_flag(
-                    game.cur_area_data.mission.fail_conditions,
+                    game.cur_area_data.mission.team_data[0].fail_conditions,
                     get_index_bitmask(c)
                 )
             ) {
@@ -3237,10 +3237,10 @@ void area_editor::process_gui_panel_mission() {
             
             //Primary HUD condition checkbox.
             bool show_primary =
-                game.cur_area_data.mission.fail_hud_primary_cond != INVALID;
+                game.cur_area_data.mission.team_data[0].fail_hud_primary_cond != INVALID;
             if(ImGui::Checkbox("Show primary HUD element", &show_primary)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_hud_primary_cond =
+                game.cur_area_data.mission.team_data[0].fail_hud_primary_cond =
                     show_primary ?
                     (size_t) active_conditions[0] :
                     INVALID;
@@ -3262,14 +3262,14 @@ void area_editor::process_gui_panel_mission() {
                     );
                     if(
                         cond_id ==
-                        game.cur_area_data.mission.fail_hud_primary_cond
+                        game.cur_area_data.mission.team_data[0].fail_hud_primary_cond
                     ) {
                         found = true;
                         selected = (int) c;
                     }
                 }
                 if(!found) {
-                    game.cur_area_data.mission.fail_hud_secondary_cond = 0;
+                    game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond = 0;
                 }
                 ImGui::Indent();
                 if(
@@ -3278,7 +3278,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission fail conditions change");
-                    game.cur_area_data.mission.fail_hud_primary_cond =
+                    game.cur_area_data.mission.team_data[0].fail_hud_primary_cond =
                         active_conditions[selected];
                 }
                 set_tooltip(
@@ -3289,10 +3289,10 @@ void area_editor::process_gui_panel_mission() {
             
             //Secondary HUD condition checkbox.
             bool show_secondary =
-                game.cur_area_data.mission.fail_hud_secondary_cond != INVALID;
+                game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond != INVALID;
             if(ImGui::Checkbox("Show secondary HUD element", &show_secondary)) {
                 register_change("mission fail conditions change");
-                game.cur_area_data.mission.fail_hud_secondary_cond =
+                game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond =
                     show_secondary ?
                     (size_t) active_conditions[0] :
                     INVALID;
@@ -3314,14 +3314,14 @@ void area_editor::process_gui_panel_mission() {
                     );
                     if(
                         cond_id ==
-                        game.cur_area_data.mission.fail_hud_secondary_cond
+                        game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond
                     ) {
                         found = true;
                         selected = (int) c;
                     }
                 }
                 if(!found) {
-                    game.cur_area_data.mission.fail_hud_secondary_cond = 0;
+                    game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond = 0;
                 }
                 ImGui::Indent();
                 if(
@@ -3330,7 +3330,7 @@ void area_editor::process_gui_panel_mission() {
                     )
                 ) {
                     register_change("mission fail conditions change");
-                    game.cur_area_data.mission.fail_hud_secondary_cond =
+                    game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond =
                         active_conditions[selected];
                 }
                 set_tooltip(
@@ -3340,8 +3340,8 @@ void area_editor::process_gui_panel_mission() {
             }
             
         } else {
-            game.cur_area_data.mission.fail_hud_primary_cond = INVALID;
-            game.cur_area_data.mission.fail_hud_secondary_cond = INVALID;
+            game.cur_area_data.mission.team_data[0].fail_hud_primary_cond = INVALID;
+            game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond = INVALID;
             
         }
         
@@ -3509,7 +3509,7 @@ void area_editor::process_gui_panel_mission() {
             
             if(
                 has_flag(
-                    game.cur_area_data.mission.fail_conditions,
+                    game.cur_area_data.mission.team_data[0].fail_conditions,
                     get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
                 )
             ) {
@@ -3843,12 +3843,12 @@ void area_editor::process_gui_panel_mission() {
         float day_speed = game.cur_area_data.day_time_speed;
         float old_mission_min = 0;
         size_t mission_seconds = 0;
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL) {
+        if(game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_TIMED_SURVIVAL) {
             old_mission_min = old_mission_survival_min;
-            mission_seconds = game.cur_area_data.mission.goal_amount;
+            mission_seconds = game.cur_area_data.mission.team_data[0].goal_amount;
         } else {
             old_mission_min = old_mission_time_limit_min;
-            mission_seconds = game.cur_area_data.mission.fail_time_limit;
+            mission_seconds = game.cur_area_data.mission.team_data[0].fail_time_limit;
         }
         float old_day_end_min = day_start_min + old_mission_min * day_speed;
         old_day_end_min = wrap_float(old_day_end_min, 0, 60 * 24);
@@ -4126,10 +4126,10 @@ void area_editor::process_gui_panel_mobs() {
     } else if(sub_state == EDITOR_SUB_STATE_MISSION_MOBS) {
     
         string cat_name =
-            game.cur_area_data.mission.goal ==
+            game.cur_area_data.mission.team_data[0].goal ==
             MISSION_GOAL_COLLECT_TREASURE ?
             "treasure/pile/resource" :
-            game.cur_area_data.mission.goal ==
+            game.cur_area_data.mission.team_data[0].goal ==
             MISSION_GOAL_BATTLE_ENEMIES ?
             "enemy" :
             "leader";
@@ -4145,7 +4145,7 @@ void area_editor::process_gui_panel_mobs() {
         //Total objects required text.
         ImGui::Text(
             "Total objects required: %lu",
-            game.cur_area_data.mission.goal_mob_idxs.size()
+            game.cur_area_data.mission.team_data[0].goal_mob_idxs.size()
         );
         
         //Finish button.

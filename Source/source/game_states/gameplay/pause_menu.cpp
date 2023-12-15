@@ -142,7 +142,7 @@ void pause_menu_struct::confirm_or_leave() {
                 "results menu.";
             if(game.cur_area_data.type == AREA_TYPE_MISSION) {
                 if(
-                    game.cur_area_data.mission.goal ==
+                    game.cur_area_data.mission.team_data[0].goal ==
                     MISSION_GOAL_END_MANUALLY
                 ) {
                     confirmation_explanation_text->text +=
@@ -267,7 +267,7 @@ void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
     for(size_t f = 0; f < game.mission_fail_conds.size(); ++f) {
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(f)
             )
         ) {
@@ -293,7 +293,7 @@ void pause_menu_struct::fill_mission_fail_list(list_gui_item* list) {
         }
     }
     
-    if(game.cur_area_data.mission.fail_conditions == 0) {
+    if(game.cur_area_data.mission.team_data[0].fail_conditions == 0) {
         add_bullet(list, "(None)");
     }
 }
@@ -412,17 +412,17 @@ void pause_menu_struct::fill_mission_grading_list(list_gui_item* list) {
 string pause_menu_struct::get_mission_goal_status() {
     float percentage = 0.0f;
     int cur =
-        game.mission_goals[game.cur_area_data.mission.goal]->
+        game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
         get_cur_amount(game.states.gameplay);
     int req =
-        game.mission_goals[game.cur_area_data.mission.goal]->
+        game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
         get_req_amount(game.states.gameplay);
     if(req != 0.0f) {
         percentage = cur / (float) req;
     }
     percentage *= 100;
     return
-        game.mission_goals[game.cur_area_data.mission.goal]->
+        game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
         get_status(cur, req, percentage);
 }
 
@@ -842,7 +842,7 @@ void pause_menu_struct::init_main_pause_menu() {
         new text_gui_item(
         get_subtitle_or_mission_goal(
             game.cur_area_data.subtitle, game.cur_area_data.type,
-            game.cur_area_data.mission.goal
+            game.cur_area_data.mission.team_data[0].goal
         ),
         game.fonts.area_name,
         change_alpha(COLOR_WHITE, 192)
@@ -911,7 +911,7 @@ void pause_menu_struct::init_main_pause_menu() {
     [] () {
         bool as_fail =
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
             );
         return
@@ -1101,7 +1101,7 @@ void pause_menu_struct::init_mission_page() {
     //Goal explanation text.
     text_gui_item* goal_text =
         new text_gui_item(
-        game.mission_goals[game.cur_area_data.mission.goal]->
+        game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
         get_player_description(&game.cur_area_data.mission),
         game.fonts.standard,
         al_map_rgb(255, 255, 200)
@@ -1233,7 +1233,7 @@ void pause_menu_struct::start_leaving_gameplay() {
     if(
         leave_target == LEAVE_TO_END &&
         has_flag(
-            game.cur_area_data.mission.fail_conditions,
+            game.cur_area_data.mission.team_data[0].fail_conditions,
             get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         )
     ) {
