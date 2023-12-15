@@ -12,7 +12,7 @@ day_time_start=0
 day_time_speed=600
 maker=Helodity
 version=1.2.2
-engine_version=0.23.2
+engine_version=0.24.0
 notes
 spray_amounts
 mission_goal=Get to the exit

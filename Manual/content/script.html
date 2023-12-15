@@ -358,7 +358,7 @@ script {
         }
         on_animation_end {
             stop_chomping
-            get_info pim chomped_pikmin
+            get_mob_info pim self chomped_pikmin
         }
     }
     <span class="code-faded">(...)</span>
@@ -369,9 +369,9 @@ script {
     <p>The Red Bulborb lunges. But did it capture any Pikmin? We actually need to know this in order to decide if the creature should start chomping, or if it should flop to the ground.</p>
     
     <dl>
-      <dt><b>You can ask the engine for information using the <code>get_info</code> action.</b></dt>
-      <dd>When the attack animation ends, we want to know how many Pikmin the Red Bulborb has chomped, so let's ask with <code>get_info pim chomped_pikmin</code>. Here, <code>chomped_pikmin</code> is a special word that means we want to know, well, how many Pikmin are chomped.</dd>
-      <dt><b>Information, like the answer to the <code>get_info</code> questions, is saved in a variable.</b></dt>
+      <dt><b>You can ask the engine for information about an object using the <code>get_mob_info</code> action.</b></dt>
+      <dd>When the attack animation ends, we want to know how many Pikmin the Red Bulborb has chomped, so let's ask with <code>get_mob_info pim self chomped_pikmin</code>. Here, <code>chomped_pikmin</code> is a special word that means we want to know, well, how many Pikmin are chomped.</dd>
+      <dt><b>Information, like the answer to the <code>get_mob_info</code> questions, is saved in a variable.</b></dt>
       <dd>In the action you wrote, <code>pim</code> is the name of a variable (or "var"). This is some place in the object's memory that will hold information for us. Its name can be whatever, but in this tutorial, let's go with "pim", which is short for "Pikmin in mouth". After that action is run, the number of Pikmin chomped will reside inside the "pim" variable in the object's memory, from here on. You can have as many variables as you want.</dd>
       <dt><b>The value inside of a variable can be accessed in an action by writing the variable's name after a dollar sign.</b></dt>
       <dd>After the "pim" variable received a value, we can get that value and make use of it in the script, simply by typing <code>$pim</code>. When the script is run, it will replace that <code>$pim</code> with 0, or 1, or whatever else the "pim" variable is worth at the time.</dd>
@@ -400,7 +400,7 @@ script {
         }
         on_animation_end {
             stop_chomping
-            get_info pim chomped_pikmin
+            get_mob_info pim self chomped_pikmin
             if $pim > 0
                 set_state eating
             else
@@ -588,6 +588,12 @@ reaches {
     <ul>
       <li>When you want to change states, make sure that the action that switches the state is the last one that will be run on the event's code. This is because when a state change action happens, it skips over all other actions that were written after it.</li>
       <li>When changing a state, make sure that the new state's <code>on_enter</code> event doesn't change to another state in a way that could create an infinite loop. For instance, if changing to state A causes it to change to state B, which causes it to change to state C, which causes it to change to state A again, the engine will crash.</li>
+    </ul>
+
+    <h2 id="tips">Tips</h2>
+
+    <ul>
+        <li>The <code>init</code> block of the script file runs right as soon as the object spawns. Directly after that, the object changes to its first state and runs that state's <code>on_enter</code> event. Finally, in the first frame of gameplay after the object's creation, the <code>on_ready</code> event will fire. When you want to run something at the start of the object's life, it's important to pick which of these three points to use.</li>
     </ul>
 
     <h2 id="see-also">See also</h2>

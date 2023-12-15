@@ -363,7 +363,7 @@ player_input controls_mediator::str_to_input(
         input.axis_nr = s2i(parts[3]);
         
     } else {
-        log_error(
+        game.errors.report(
             "Unrecognized input \"" + s + "\"!"
         );
     }
@@ -409,7 +409,7 @@ void gameplay_state::process_system_key_press(const int keycode) {
                 "_" + get_current_time(true) + ".png";
                 
             if(!al_save_bitmap(file_name.c_str(), bmp)) {
-                log_error(
+                game.errors.report(
                     "Could not save the area onto an image,"
                     " with the name \"" + file_name + "\"!"
                 );

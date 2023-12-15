@@ -10,7 +10,7 @@ script {
             set_animation up
         }
         on_weight_added {
-            get_info t weight
+            get_mob_info t self weight
             if $t >= $goal_number
                 set_state crushed
             end_if

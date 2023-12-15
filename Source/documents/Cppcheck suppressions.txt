@@ -1,0 +1,15 @@
+//Don't notifiy about Dear ImGui problems.
+*:libs/imgui/*
+
+//Pikifen uses C-style casts a lot, and I've never had a problem with them.
+cstyleCast
+
+//IMO, using an STL algorithm is often overengineering and more verbose than just writing the code directly.
+useStlAlgorithm
+
+//Not really very important.
+noCopyConstructor
+noOperatorEq
+
+//I like this because if, say, the code in a switch-case changes and a return is removed, we don't accidentally introduce a fallthrough.
+duplicateBreak

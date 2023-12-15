@@ -27,7 +27,7 @@ script {
             set_animation idling random_time_on_spawn
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = goal_reached
                 set_state pulled
             end_if
@@ -38,7 +38,7 @@ script {
         on_enter {
             set_animation pulled
 
-            get_info p group_task_power
+            get_mob_info p self group_task_power
             if $p = 3
                 set_timer 1.5
             else
@@ -52,7 +52,7 @@ script {
         on_timer {
             add_health -20
 
-            get_info p group_task_power
+            get_mob_info p self group_task_power
             if $p = 3
                 set_timer 1.5
             else
@@ -64,7 +64,7 @@ script {
             end_if
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = goal_lost
                 set_state idling
             end_if

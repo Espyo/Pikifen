@@ -607,7 +607,7 @@ void depth_first_search(
         }
     }
     
-    for(auto l : links) {
+    for(auto &l : links) {
         if(visited.find(l) != visited.end()) continue;
         depth_first_search(nodes, visited, l);
     }

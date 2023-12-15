@@ -788,7 +788,6 @@ void leader::start_throw_trail() {
  * Makes the leader start whistling.
  */
 void leader::start_whistling() {
-
     if (active_player < 0) return;
     game.states.gameplay->player_info[active_player].whistle.start_whistling();
     

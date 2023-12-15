@@ -15,13 +15,13 @@ script {
             send_message_to_links 0
         }
         on_weight_added {
-            get_info weight weight
+            get_mob_info weight self weight
             if $weight >= $goal_number
                 set_state down
             end_if
         }
         on_weight_removed {
-            get_info weight weight
+            get_mob_info weight self weight
         }
     }
     
@@ -36,10 +36,10 @@ script {
             start_particles dust_pressure_plate_click 0 0 16
         }
         on_weight_added {
-            get_info weight weight
+            get_mob_info weight self weight
         }
         on_weight_removed {
-            get_info weight weight
+            get_mob_info weight self weight
             if $weight < $goal_number
                 start_particles dust_pressure_plate_click 0 0 16
                 set_state up

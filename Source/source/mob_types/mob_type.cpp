@@ -403,7 +403,7 @@ void load_mob_type_from_file(
         vector<string> points =
             semicolon_list_to_vector(custom_carry_spots_str);
         if(points.size() != mt->max_carriers) {
-            log_error(
+            game.errors.report(
                 "The number of custom carry spots (" + i2s(points.size()) +
                 ") does not match the number of max carriers (" +
                 i2s(mt->max_carriers) + ")!",
@@ -439,7 +439,7 @@ void load_mob_type_from_file(
         auto status_it = game.status_types.find(status_name);
         
         if(hazard_it == game.hazards.end()) {
-            log_error(
+            game.errors.report(
                 "Unknown hazard \"" + vuln_node->name + "\"!",
                 vuln_node
             );
@@ -447,7 +447,7 @@ void load_mob_type_from_file(
         } else if(
             !status_name.empty() && status_it == game.status_types.end()
         ) {
-            log_error(
+            game.errors.report(
                 "Unknown status type \"" + status_name + "\"!",
                 vuln_node
             );
@@ -466,7 +466,7 @@ void load_mob_type_from_file(
     auto sd_it = game.spike_damage_types.find(spike_damage_str);
     if(spike_damage_node) {
         if(sd_it == game.spike_damage_types.end()) {
-            log_error(
+            game.errors.report(
                 "Unknown spike damage type \"" + spike_damage_str + "\"!",
                 spike_damage_node
             );
@@ -480,7 +480,7 @@ void load_mob_type_from_file(
         if(t != INVALID) {
             mt->starting_team = t;
         } else {
-            log_error(
+            game.errors.report(
                 "Invalid team \"" + team_str + "\"!",
                 team_node
             );
@@ -507,7 +507,7 @@ void load_mob_type_from_file(
         auto status_it = game.status_types.find(status_name);
         
         if(sdv_it == game.spike_damage_types.end()) {
-            log_error(
+            game.errors.report(
                 "Unknown spike damage type \"" + vul_node->name + "\"!",
                 vul_node
             );
@@ -515,7 +515,7 @@ void load_mob_type_from_file(
         } else if(
             !status_name.empty() && status_it == game.status_types.end()
         ) {
-            log_error(
+            game.errors.report(
                 "Unknown status type \"" + status_name + "\"!",
                 vul_node
             );
@@ -548,7 +548,7 @@ void load_mob_type_from_file(
         auto status_override_it = game.status_types.find(status_override_name);
         
         if(sv_it == game.status_types.end()) {
-            log_error(
+            game.errors.report(
                 "Unknown status type \"" + vul_node->name + "\"!",
                 vul_node
             );
@@ -557,7 +557,7 @@ void load_mob_type_from_file(
             !status_override_name.empty() &&
             status_override_it == game.status_types.end()
         ) {
-            log_error(
+            game.errors.report(
                 "Unknown status type \"" + status_override_name + "\"!",
                 vul_node
             );
@@ -582,7 +582,7 @@ void load_mob_type_from_file(
         vector<string> r_strings = split(reaches_node->get_child(r)->value);
         
         if(r_strings.size() != 2 && r_strings.size() != 4) {
-            log_error(
+            game.errors.report(
                 "Reach \"" + new_reach.name +
                 "\" isn't made up of 2 or 4 words!",
                 reaches_node->get_child(r)
@@ -681,7 +681,7 @@ void load_mob_type_from_file(
             } else if(limb_draw_method == "above_both") {
                 new_child.limb_draw_method = LIMB_DRAW_ABOVE_BOTH;
             } else {
-                log_error(
+                game.errors.report(
                     "Unknow limb draw method \"" +
                     limb_draw_method + "\"!", limb_draw_node
                 );
@@ -699,7 +699,7 @@ void load_mob_type_from_file(
                 new_child.hold_rotation_method =
                     HOLD_ROTATION_METHOD_COPY_HOLDER;
             } else {
-                log_error(
+                game.errors.report(
                     "Unknow parent holding rotation method \"" +
                     hold_rotation_method + "\"!", hold_rotation_node
                 );
@@ -732,7 +732,7 @@ void load_mob_type_from_file(
         prop_rs.set("tooltip", new_prop.tooltip);
         
         if(new_prop.var.empty()) {
-            log_error(
+            game.errors.report(
                 "You need to specify the area editor property's name!",
                 prop_node
             );
@@ -751,7 +751,7 @@ void load_mob_type_from_file(
         } else if(type_str == "number_list") {
             new_prop.type = AEMP_NUMBER_LIST;
         } else {
-            log_error(
+            game.errors.report(
                 "Unknown area editor property type \"" + type_str + "\"!",
                 type_node
             );
@@ -763,7 +763,7 @@ void load_mob_type_from_file(
         
         if(new_prop.type == AEMP_LIST || new_prop.type == AEMP_NUMBER_LIST) {
             if(list_str.empty()) {
-                log_error(
+                game.errors.report(
                     "For this area editor property type, you need to specify "
                     "a list of values!", prop_node
                 );
@@ -781,7 +781,7 @@ void load_mob_type_from_file(
         MOB_TARGET_TYPES target_type_value =
             string_to_mob_target_type(target_type_str);
         if(target_type_value == INVALID) {
-            log_error(
+            game.errors.report(
                 "Unknown target type \"" + target_type_str + "\"!",
                 target_type_node
             );
@@ -798,7 +798,7 @@ void load_mob_type_from_file(
     for(size_t h = 0; h < huntable_targets_strs.size(); ++h) {
         size_t v = string_to_mob_target_type(huntable_targets_strs[h]);
         if(v == INVALID) {
-            log_error(
+            game.errors.report(
                 "Unknown target type \"" + huntable_targets_strs[h] + "\"!",
                 huntable_targets_node
             );
@@ -815,7 +815,7 @@ void load_mob_type_from_file(
     for(size_t h = 0; h < hurtable_targets_strs.size(); ++h) {
         size_t v = string_to_mob_target_type(hurtable_targets_strs[h]);
         if(v == INVALID) {
-            log_error(
+            game.errors.report(
                 "Unknown target type \"" + hurtable_targets_strs[h] + "\"!",
                 hurtable_targets_node
             );
@@ -870,7 +870,7 @@ void load_mob_type_from_file(
                 }
             }
             if(mt->first_state_nr == INVALID) {
-                log_error(
+                game.errors.report(
                     "Unknown state \"" + first_state_name + "\" "
                     "to set as the first state!",
                     first_state_name_node
@@ -885,7 +885,7 @@ void load_mob_type_from_file(
                     }
                 }
                 if(mt->death_state_nr == INVALID) {
-                    log_error(
+                    game.errors.report(
                         "Unknown state \"" + mt->death_state_name + "\" "
                         "to set as the death state!",
                         death_state_name_node
@@ -972,7 +972,7 @@ void load_mob_types(bool load_resources) {
         if(game.mob_types.pikmin.find(s) != game.mob_types.pikmin.end()) {
             game.config.pikmin_order.push_back(game.mob_types.pikmin[s]);
         } else {
-            log_error(
+            game.errors.report(
                 "Unknown Pikmin type \"" + s + "\" found "
                 "in the Pikmin order list in the config file!"
             );
@@ -1009,7 +1009,7 @@ void load_mob_types(bool load_resources) {
         if(game.mob_types.leader.find(s) != game.mob_types.leader.end()) {
             game.config.leader_order.push_back(game.mob_types.leader[s]);
         } else {
-            log_error(
+            game.errors.report(
                 "Unknown leader type \"" + s + "\" found "
                 "in the leader order list in the config file!"
             );
@@ -1033,7 +1033,7 @@ void load_mob_types(mob_category* category, bool load_resources) {
     vector<string> types =
         folder_to_vector(category->folder, true, &folder_found);
     if(!folder_found) {
-        log_error("Folder \"" + category->folder + "\" not found!");
+        game.errors.report("Folder \"" + category->folder + "\" not found!");
     }
     
     for(size_t t = 0; t < types.size(); ++t) {

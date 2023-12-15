@@ -124,8 +124,9 @@ def get_functions_in_file(file_path):
         if r is not None:
             f = Function()
             f.line = line_nr
-            
+
             f.namespace = r.group(1).strip()
+            f.namespace = f.namespace.replace('&', '')
             last_space_pos = f.namespace.rfind(' ')
             if last_space_pos != -1:
                 f.namespace = f.namespace[last_space_pos + 1:]
@@ -226,6 +227,8 @@ def get_namespace_constants_in_file(file_path):
                 c = NamespaceConstant()
                 c.name = name
                 c.namespace = in_namespace
+                if c.namespace[0] == '&':
+                    c.namespace = c.namespace[1:]
                 c.line = line_nr
                 constants.append(c)
                 continue

@@ -1,0 +1,35 @@
+first_state = idling
+
+init {
+    set_var i1 0
+    set_var i2 0
+    set_var i1id none
+}
+
+script {
+    idling {
+        on_enter {
+            send_message_to_links 0
+        }
+        on_receive_message {
+            get_event_info msg message
+            get_mob_info id trigger id
+            
+            if $i1id = none
+                set_var i1id $id
+            end_if
+            if $id = $i1id
+                set_var i1 $msg
+            else
+                set_var i2 $msg
+            end_if
+
+            calculate sum $i1 + $i2
+            if $sum > 0
+                send_message_to_links 1
+            else
+                send_message_to_links 0
+            end_if
+        }
+    }
+}

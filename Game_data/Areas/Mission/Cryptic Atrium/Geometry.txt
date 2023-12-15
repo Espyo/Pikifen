@@ -7643,19 +7643,19 @@ mobs{
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-80.0000 32.0000
+		p=-80.0000 96.0000
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-32.0000 0.0000
+		p=-32.0000 64.0000
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-64.0000 16.0000
+		p=-64.0000 80.0000
 	}
 	Pikmin{
 		type=Yellow Pikmin
-		p=-112.0000 16.0000
+		p=-112.0000 80.0000
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -7838,12 +7838,14 @@ path_stops{
 	}
 	s{
 		pos=-768.0000 160.0000
+		radius=67.5000
 		links{
 			nr=14
 		}
 	}
 	s{
 		pos=-256.0000 160.0000
+		radius=44.0000
 		links{
 			nr=6
 			nr=14
@@ -7873,8 +7875,10 @@ path_stops{
 	}
 	s{
 		pos=288.0000 -480.0000
+		flags=2
 		links{
-			nr=13 2
+			nr=32
+			nr=34
 		}
 	}
 	s{
@@ -7882,10 +7886,12 @@ path_stops{
 		links{
 			nr=4
 			nr=5
+			nr=34 1
 		}
 	}
 	s{
 		pos=-544.0000 160.0000
+		radius=66.5000
 		links{
 			nr=7
 			nr=8
@@ -7895,16 +7901,18 @@ path_stops{
 	}
 	s{
 		pos=-544.0000 -560.0000
+		radius=96.0000
 		links{
 			nr=16
 		}
 	}
 	s{
 		pos=-544.0000 -160.0000
+		radius=48.0000
 		links{
 			nr=15
 			nr=14
-			nr=18 2
+			nr=35
 		}
 	}
 	s{
@@ -7916,9 +7924,11 @@ path_stops{
 	}
 	s{
 		pos=-256.0000 -160.0000
+		radius=39.0000
 		links{
 			nr=5
 			nr=8
+			nr=35 1
 		}
 	}
 	s{
@@ -7949,7 +7959,7 @@ path_stops{
 		links{
 			nr=21
 			nr=23
-			nr=24 2
+			nr=33
 		}
 	}
 	s{
@@ -7963,6 +7973,7 @@ path_stops{
 		links{
 			nr=25
 			nr=27
+			nr=33 1
 		}
 	}
 	s{
@@ -8019,7 +8030,30 @@ path_stops{
 		links{
 			nr=9
 			nr=10
-			nr=12 2
+			nr=12
+		}
+	}
+	s{
+		pos=480.0000 416.0000
+		flags=18
+		links{
+			nr=22
+			nr=24 1
+		}
+	}
+	s{
+		pos=288.0000 -416.0000
+		links{
+			nr=12
+			nr=13 1
+		}
+	}
+	s{
+		pos=-352.0000 -160.0000
+		flags=226
+		links{
+			nr=16
+			nr=18 1
 		}
 	}
 }

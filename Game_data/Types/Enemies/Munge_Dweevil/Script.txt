@@ -21,7 +21,7 @@ script {
         }
         on_object_in_reach {
             if $has_treasure = false
-                get_info t mob_category
+                get_mob_info t trigger mob_category
                 if $t = Treasure
                     focus trigger
                     save_focused_mob_memory 1
@@ -31,7 +31,7 @@ script {
         }
         on_damage {
             if $has_treasure = true
-                get_info t health
+                get_mob_info t self health
                 if $t < $treasure_hp_check
                     set_state dropping_treasure
                 end_if
@@ -64,7 +64,7 @@ script {
         }
         on_damage {
             if $has_treasure = true
-                get_info t health
+                get_mob_info t self health
                 if $t < $treasure_hp_check
                     set_state dropping_treasure
                 end_if
@@ -85,7 +85,7 @@ script {
             set_state relaxing
         }
         on_object_in_reach {
-            get_info t mob_category
+            get_mob_info t trigger mob_category
             if $t = Treasure
                 set_state picking_up
             end_if
@@ -101,7 +101,7 @@ script {
             hold_focused_mob treasure
             set_var has_treasure true
             receive_status dweevil_with_treasure
-            get_info treasure_hp_check health
+            get_mob_info treasure_hp_check self health
             calculate treasure_hp_check $treasure_hp_check - 5
         }
         on_focus_off_reach {
@@ -122,7 +122,7 @@ script {
         }
         on_damage {
             if $has_treasure = true
-                get_info t health
+                get_mob_info t self health
                 if $t < $treasure_hp_check
                     set_state dropping_treasure
                 end_if
@@ -160,11 +160,11 @@ script {
             if $has_treasure = true
                 remove_status dweevil_with_treasure
                 load_focused_mob_memory 1
-                get_info a angle
-                get_info x x
-                get_info y y
-                get_info z z
-                get_coordinates_from_angle ox oy $a -200
+                get_mob_info a self angle
+                get_mob_info x self x
+                get_mob_info y self y
+                get_mob_info z self z
+                get_coordinates_from_angle ox oy $a -120
                 calculate x $x + $ox
                 calculate y $y + $oy
                 throw_focused_mob $x $y $z 100
@@ -173,7 +173,7 @@ script {
             end_if
         }
         on_animation_end {
-            get_info t health
+            get_mob_info t self health
             if $t <= 0
                 set_state dying
             else

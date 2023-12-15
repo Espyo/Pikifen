@@ -187,7 +187,6 @@ ALLEGRO_COLOR interpolate_color(
     const float input, const float input_start, const float input_end,
     const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
 );
-void log_error(const string &s, data_node* d = NULL);
 void print_info(
     const string &text,
     const float total_duration = 5.0f,

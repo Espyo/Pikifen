@@ -28,7 +28,7 @@ script {
             set_animation healthy
         }
         on_damage {
-            get_info t health_ratio
+            get_mob_info t self health_ratio
             if $t < 0.85
                 set_state broken_shaking
             end_if
@@ -44,7 +44,7 @@ script {
             set_state healthy
         }
         on_damage {
-            get_info t health_ratio
+            get_mob_info t self health_ratio
             if $t < 0.85
                 set_state broken_shaking
             end_if

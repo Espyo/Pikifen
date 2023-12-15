@@ -87,7 +87,7 @@ script {
     squatting {
         on_enter {
             stop
-            get_info t latched_pikmin_weight
+            get_mob_info t self latched_pikmin_weight
             if $t >= 30
                 set_state struggling
             else
@@ -106,9 +106,9 @@ script {
             set_animation jumping_up
             set_flying true
             if $has_focus = true
-                get_focus_info x x
-                get_focus_info y y
-                get_focus_info z z
+                get_mob_info x focus x
+                get_mob_info y focus y
+                get_mob_info z focus z
                 calculate z $z + 100
                 move_to_absolute $x $y $z
             else
@@ -129,7 +129,7 @@ script {
             set_gravity 0
             stop
             stop_vertically
-            set_timer 1
+            set_timer 1.4
             set_animation floating
         }
         on_timer {

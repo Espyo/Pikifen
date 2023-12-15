@@ -4,4 +4,9 @@ script {
             start_particles dust_explosion_small 0 0 200
         }
     }
+    destroyed {
+        on_enter {
+            set_hiding true
+        }
+    }
 }

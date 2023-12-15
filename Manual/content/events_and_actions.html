@@ -42,7 +42,11 @@
       </tr>
       <tr>
         <th style="text-align: left;"><code>on_frame_signal</code></th>
-        <td>Triggered when one of the frames of the current animation has launched a signal. The number of the signal can be obtained with the <code>get_info</code> action.</td>
+        <td>Triggered when one of the frames of the current animation has launched a signal. The number of the signal can be obtained with the <code>get_event_info</code> action.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left;"><code>on_ready</code></th>
+        <td>Triggered when the object has been initialized and is ready to do things, like all of its links have been properly placed. The <code>init</code> block in the script file and the <code>on_enter</code> event of the first state are triggered before this.</td>
       </tr>
       <tr>
         <th style="text-align: left;"><code>on_tick</code></th>
@@ -153,8 +157,12 @@
         <td>Triggered when the object takes a certain amount of damage after the last itch, as defined by the <code>itch_damage</code> property. It will also only trigger if it's been a certain amount of time since the last itch, as per <code>itch_time</code>. If the current state cannot handle this event, it will continue being sent until an event shows up that can handle it.</td>
       </tr>
       <tr>
+        <th style="text-align: left;"><code>on_input_received</code></th>
+        <td>Triggered when the player performs an input. The action and value can be obtained with the <code>get_event_info</code> action. This event is only run on the currently active <a href="mob_leader.html">leader</a>.</td>
+      </tr>
+      <tr>
         <th style="text-align: left;"><code>on_receive_message</code></th>
-        <td>Triggered when another object sent it a message. The contents of the message can be obtained with the <code>get_info</code> action.</td>
+        <td>Triggered when another object sent it a message. The contents of the message can be obtained with the <code>get_event_info</code> action.</td>
       </tr>
       <tr>
         <th style="text-align: left;"><code>on_released</code></th>
@@ -205,8 +213,8 @@
           <dd>
             &lt;left&gt; and &lt;right&gt; are two values, and &lt;operator&gt; is how you want to compare them. As such, it makes sense to replace at least one of the values with a variable. Note that due to scripting limitations, only &lt;right&gt; may have spaces, if it is a string. The possible operators are:
             <ul>
-              <li><code><b>=</b></code>: True if &lt;left&gt; matches &lt;right&gt;. It works with text too.</li>
-              <li><code><b>!=</b></code>: True if they don't match; also works with text.</li>
+              <li><code><b>=</b></code>: True if &lt;left&gt; matches &lt;right&gt;. Works with numbers or text.</li>
+              <li><code><b>!=</b></code>: True if they don't match; also works with numbers or text.</li>
               <li><code><b>&lt;</b></code>: True if the number in &lt;left&gt; is less than the number in &lt;right&gt;.</li>
               <li><code><b>&gt;</b></code>: Greater than.</li>
               <li><code><b>&lt;=</b></code>: Less than or equal.</li>
@@ -546,6 +554,19 @@
         </dl></td>
       </tr>
       <tr>
+        <th><code>get_area_info</code></th>
+        <td><dl>
+          <dt><code><b>get_area_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
+          <dd>
+            Sets the variable &lt;destination_variable_name&gt; to some special information about the area. The possible data are:
+            <ul>
+              <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
+              <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
+      <tr>
         <th><code>get_coordinates_from_angle</code></th>
         <td><dl>
           <dt><code><b>get_coordinates_from_angle</b> &lt;x_destination_variable_name&gt; &lt;y_destination_variable_name&gt; &lt;angle&gt; &lt;distance&gt;</code></dt>
@@ -560,17 +581,28 @@
         </dl></td>
       </tr>
       <tr>
+        <th><code>get_event_info</code></th>
+        <td><dl>
+          <dt><code><b>get_event_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
+          <dd>
+            Sets the variable &lt;destination_variable_name&gt; to some special information about the script event. The possible data are:
+            <ul>
+              <li><code><b>body_part</b></code>: For events that deal with hitboxes, this is the name of this mob's body part that's responsible.</li>
+              <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code>on_frame_signal</code> event.</li>
+              <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
+              <li><code><b>input_name</b></code>: The name of the input that triggered an <code>on_input_received</code> event.</li>
+              <li><code><b>input_value</b></code>: The value of the input that triggered an <code>on_input_received</code> event. 1 when fully pressed, 0 when fully released.</li>
+              <li><code><b>message</b></code>: What the message was that got sent when the <code>on_receive_message</code> event got triggered.</li>
+              <li><code><b>other_body_part</b></code>: For events that deal with hitboxes, this is the name of the other mob's body part that's responsible.</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
+      <tr>
         <th><code>get_floor_z</code></th>
         <td><dl>
           <dt><code><b>get_floor_z</b> &lt;destination_variable_name&gt; &lt;x&gt; &lt;y&gt;</code></dt>
           <dd>Sets the variable &lt;destination_variable_name&gt; to the Z coordinate of the floor at the specified coordinates. If there is no sector at those coordinates, the variable will receive the value 0.</dd>
-        </dl></td>
-      </tr>
-      <tr>
-        <th><code>get_focus_info</code></th>
-        <td><dl>
-          <dt><code><b>get_focus_info</b> &lt;destination_variable_name&gt; &lt;information_from_focus&gt;</code></dt>
-          <dd>Works like the <code>get_info</code> action, but when applicable, returns information from the focused mob instead, if any.</dd>
         </dl></td>
       </tr>
       <tr>
@@ -581,34 +613,33 @@
         </dl></td>
       </tr>
       <tr>
-        <th><code>get_info</code></th>
+        <th><code>get_mob_info</code></th>
         <td><dl>
-          <dt><code><b>get_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
+          <dt><code><b>get_mob_info</b> &lt;destination_variable_name&gt; &lt;target&gt; &lt;information&gt;</code></dt>
           <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information. The possible data are:
+            Sets the variable &lt;destination_variable_name&gt; to some special information about a given object. The possible target types are:
+            <ul>
+              <li><code><b>self</b></code>: The object that the script belongs to.</li>
+              <li><code><b>focus</b></code>: The object that is currently focused. The action does nothing if none is focused.</li>
+              <li><code><b>trigger</b></code>: The object that triggered the event. The action does nothing if this is not applicable.</li>
+            </ul>
+            The possible data are:
             <ul>
               <li><code><b>angle</b></code>: Current angle.</li>
-              <li><code><b>body_part</b></code>: For events that deal with hitboxes, this is the name of this mob's body part that's responsible.</li>
               <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
-              <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
-              <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
               <li><code><b>focus_distance</b></code>: Distance between the object and the focused object.</li>
-              <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code>on_frame_signal</code> event.</li>
               <li><code><b>group_task_power</b></code>: For group task type objects, this is the "Pikmin power" currently being applied.</li>
-              <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
               <li><code><b>health</b></code>: The object's current health.</li>
               <li><code><b>health_ratio</b></code>: The object's current health ratio. 0 for 0%, 1 for 100%, 0.5 for 50%, etc.</li>
               <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
               <li><code><b>latched_pikmin_weight</b></code>: Total weight of the Pikmin that are currently latched on to it.</li>
-              <li><code><b>message</b></code>: What the message was that got sent when the <code>on_receive_message</code> event got triggered.</li>
-              <li><code><b>message_sender</b></code>: Name of the type of object that sent the message, when an <code>on_receive_message</code> event gets triggered.</li>
-              <li><code><b>mob_category</b></code>: Category of the mob that triggered the event. This is the same name as the corresponding folder in <code>Game_data/Types</code>. Only available for certain events.</li>
-              <li><code><b>mob_type</b></code>: Type of the mob that triggered the event. This is the name defined in the <code>name</code> property of the object type's <code>Data.txt</code> file. Only available for certain events.</li>
-              <li><code><b>other_body_part</b></code>: For events that deal with hitboxes, this is the name of the other mob's body part that's responsible.</li>
+              <li><code><b>mob_category</b></code>: Category of the mob. This is the same name as the corresponding folder in <code>Game_data/Types</code>. Only available for certain events.</li>
+              <li><code><b>mob_type</b></code>: Type of the mob. This is the name defined in the <code>name</code> property of the object type's <code>Data.txt</code> file. Only available for certain events.</li>
+              <li><code><b>state</b></code>: Name of the current script state.</li>
+              <li><code><b>weight</b></code>: Current weight on top of it.</li>
               <li><code><b>x</b></code>: Current X coordinate.</li>
               <li><code><b>y</b></code>: Current Y coordinate.</li>
               <li><code><b>z</b></code>: Current Z coordinate.</li>
-              <li><code><b>weight</b></code>: Current weight on top of it.</li>
             </ul>
           </dd>
         </dl></td>

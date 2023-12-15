@@ -127,7 +127,7 @@
     
     <dl>
       <dt><b>Click on the "+" button at the top of the layout panel.</b></dt>
-      <dd>This will enter the sector creation mode.</dd>
+      <dd>This will enter the layout drawing mode.</dd>
       <dt><b>Click on the area to place the first vertex.</b></dt>
       <dd>Let's place the first vertex of our rock a bit to the east of the center of the area (which should be the origin, more or less).</dd>
       <dt><b>Click in other spots to place the next vertexes in order.</b></dt>
@@ -136,7 +136,7 @@
       <dd>Once you do, the new sector will have been created, with a rough diamond shape!</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
-        <li>Your drawings should represent a sector entirely, so don't try to cut through other sectors.</li>
+        <li>Your drawings should represent one sector only, so don't try to cut through other sectors.</li>
         <li>If you start on an edge or vertex, you can finish on another edge or vertex to split one sector into two.</li>
       </ul><dd>
     </dl>
@@ -332,7 +332,7 @@
       <p>Some carrying paths all laid out.</p>
     </div>
     
-    <p>If you go to northeast of the central rock with some Pikmin, and lie down to have them carry you, they will most likely get stuck on the rock as they beeline to the Onion. This is because they don't know what path to take. So let's define the general path Pikmin can take around the area, and what way they should go to avoid obstacles. First of all, from the main menu panel, enter the "Paths" mode.</p>
+    <p>If you go to northeast of the central rock with some Pikmin, and lie down to have them carry you, they will most likely get stuck on the rock as they beeline to the Onion. This is because they don't know what path to take. So let's define the general path Pikmin can take around the area, and what way they should go to avoid walls. First of all, from the main menu panel, enter the "Paths" mode.</p>
     
     <dl>
       <dt><b>Press the "+" button on the panel to enter the path drawing mode.</b></dt>
@@ -341,15 +341,15 @@
       <dd>Path stops are a bit like bus stops. The carrier Pikmin go in a straight line from the previous stop to the next, then turn to face the next stop, and so on. The first stop you want to create should be very close to the Onion, or at least in the starting region.</dd>
       <dt><b>Click somewhere else to place a new stop, and connect the previous to the current one.</b></dt>
       <dd>This will create the second stop and will also link the two. Now the Pikmin know that from one stop, they can go to the other. You should place the second stop to the south of the rock sector at the center. Keep clicking around to make a path that goes around the rock and ramps (remember to go around the bridge too, since when it's built, it will be a solid obstacle in the way too!)</dd>
-      <dt><b>Normal links (recommended) allow Pikmin to go from A to B, and B to A. One-way links only allow from A to B. Change link types in the panel.</b></dt>
-      <dd>Add a one-way link that goes from the top of the rock to the path stop at the south of the rock. It would make no sense to leave this one as a normal link since Pikmin could try to follow that path and bang against the rock's wall.</dd>
+      <dt><b>Normal links allow any Pikmin to go from A to B, and B to A. Ledge links are one-way down the ledge, for walking Pikmin. Change link types in the panel.</b></dt>
+      <dd>Add a ledge-type link that goes from the top of the rock to the path stop at the south of the rock. It would make no sense to leave this one as a normal link since Pikmin could try to follow that path and bang against the rock's wall. By making it a ledge link, Pikmin atop the rock know to follow the link to drop down, but not the other way around. Unless they're Winged Pikmin!</dd>
       <dt><b>Pikmin cannot take a line in the path if there is an obstacle object touching the line.</b></dt>
       <dd>Back to two-way links, make your paths go up the big rock from the west and east sides. When making these sorts of lines, pretend all bridges are built and all gates are taken down. And make sure the line between the path stops touches any important obstacle. If the obstacle is still up, the Pikmin will understand that they cannot take this line, and will either try a different path, or wait at the stop before the obstacle.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>While outside of drawing mode, you can double-click a path link to split it into two, creating a stop where you click.</li>
         <li>Keep in mind Pikmin will be carrying large objects through these paths, so make sure there's enough space around them.</li>
-        <li>Pikmin go to the nearest stop when they begin carrying. Make sure that for most places, the nearest stop is not on the other side of a wall or through a hazard.</li>
+        <li>Pikmin go to the nearest stop when they begin carrying. Make sure that for most places the nearest stop is not on the other side of a wall or through a hazard.</li>
         <li>To make a path that only certain Pikmin can take, place one of that path's stops on top of a sector with a hazard. For instance, if a stop is on top of a water-hazard sector, only Blue Pikmin will go through there. Winged Pikmin will go over sectors with hazards anyway, if the hazard is on the floor only.</li>
         <li>Don't worry about making your paths 100% foolproof, since <a href="https://www.pikminwiki.com/Path_oversights">not even the canon developers can do it</a>.</li>
       </ul></dd>
@@ -392,8 +392,19 @@
     <h3 id="other-basics">Other basic operations</h3>
     
     <ul>
-      <li><b>Deleting edges and sectors</b>: You can delete a sector by merging the sector's edges, one vertex at a time, until it has no more edges left. If you select an edge and press the panel's "Delete" button, the edge will be removed, and because sectors cannot exist without being a closed polygon, any sector that depended on that edge will be gone, as will all edges that depended on that sector.</li>
-      <li><b>Unstitching a sector</b>: To separate two previously-stitched sectors, create a vertex on either one of the sectors, next to the vertex where the connection begins. Then create another vertex in the middle of that and start dragging it through the stitch, connecting it to the next vertex of the stitch. This made an opening. Continue with this process of moving the opening along the stitch and you should soon separate them. Imagine this as having a ball of plasticine and squeezing one end with a finger until it eventually splits. Alternatively, draw a sector between them, and then delete one of the edges that is exclusive to that sector.</li>
+      <li>
+        <b>Deleting edges and sectors</b>:
+        <ol>
+          <li>Crushing: You can delete a sector by merging the sector's edges, one vertex at a time, until it has no more edges left. If you select an edge and press the panel's "Delete" button, the edge will be removed, and because sectors cannot exist without being a closed polygon, any sector that depended on that edge will be gone, as will all edges that depended on that sector.</li>
+          <li>Leaking: You can also select one or more of its edges, then press the "Delete" button in the panel. This will delete that edge, and because sectors &ndash; which are polygons &ndash; can't be left open, the sector that was on the opposite side of the edge will "leak in" and take up the space of the sector you deleted. When this happens, the sector tries to "leak" the larger sector into the smaller one, so if you wanted the opposite, you can make adjustments before deleting or delete it with the other method.</li>
+        </ol>
+      </li>
+      <li><b>Unstitching a sector</b>:
+        <ol>
+          <li>Pulling vertexes apart: To separate two previously-stitched sectors, create a vertex on either one of the sectors, next to the vertex where the connection begins. Then create another vertex in the middle of that and start dragging it through the stitch, connecting it to the next vertex of the stitch. This made an opening. Continue with this process of moving the opening along the stitch and you should soon separate them. Imagine this as having a ball of plasticine and squeezing one end with a finger until it eventually splits.</li>
+          <li>Deleting an auxiliary sector: You can draw a new sector between the two sectors you want to unstitch. Then, delete one of its edges (see above), and the gap will have been made.</li>
+        </ol>
+      </li>
       <li><b>Making a bottomless pit</b>: Just check the "bottomless pit" checkbox in the advanced behavior settings. Objects that touch the floor of this sector will be considered as falling into the pit. The floor is also not visible, so you see the background, or just black.</li>
       <li><b>Making a circular sector</b>: You can't draw actual circles, since those don't have lines, but you can get close by drawing a polygon with a lot of same-length lines. Instead of painstakingly drawing out the lines, you can click the button next to the new sector creation button to start the process of drawing a circular sector. Start by specifying the center of the circle, then its radius, and finally, how smooth it is.</li>
     </ul>
@@ -403,8 +414,12 @@
       <p>How to delete a sector by crushing it.</p>
     </div>
     <div class="box">
-      <img src="../images/unstitch.png" alt="How to unstitch a sector.">
-      <p>How to unstitch a sector.</p>
+      <img src="../images/unstitch_pull.png" alt="How to unstitch a sector by pulling the vertexes apart.">
+      <p>How to unstitch a sector by pulling the vertexes apart.</p>
+    </div>
+    <div class="box">
+      <img src="../images/unstitch_aux.png" alt="How to unstitch a sector with an auxiliary sector.">
+      <p>How to unstitch a sector with an auxiliary sector.</p>
     </div>
 
     <h2 id="advanced">Advanced</h2>
@@ -457,20 +472,16 @@
     <ol>
       <li>If a path link is blocked by an obstacle, it can't be used until the obstacle is destroyed.</li>
       <li>Objects won't take a path stop if that stop is on a sector with a hazard that they are vulnerable to. If the object or its carriers can fly, and the hazard is floor-only, then this rule is ignored since the object can naturally fly over the hazard without a care. Objects can take this path again if the sector loses that hazard (e.g. a destroyed clog drains the sector's water).</li>
-      <li>Path links of the "script use only" type can only be used by objects if their script tells them to. This means Pikmin won't use this for carrying, for returning to piles, etc.</li>
-      <li>Path links of the "light load only " type can only be used by objects that are not carrying anything, or by objects that only have a weight of 1. An object that's simply holding another won't count for this, like a leader holding a Pikmin, a Pikmin holding a tool, or an enemy with Pikmin latched onto it.</li>
-      <li>Path links of the "airborne only" type can only be used by objects that can fly.</li>
+      <li>Path stops with the "script use only" property can only be used by objects if their script tells them to. This means Pikmin won't use this for carrying, for returning to piles, etc.</li>
+      <li>Path stops with the "light load only" property can only be used by objects that are not carrying anything, or are carrying objects that only have a weight of 1. An object that's simply holding another won't count for this, like a leader holding a Pikmin, a Pikmin holding a tool, or an enemy with Pikmin latched onto it.</li>
+      <li>Path stops with the "airborne only" property can only be used by objects that can fly.</li>
     </ol>
-    <p>It's also worth keeping in mind that flying objects that follow a path will still go from one stop to the next in a linear fashion, but they will also go for the spot that's 100 units above the next path stop. This means, for instance, that Winged Pikmin carrying a corpse will aim for the spot 100 units above the path stop closest to the Onion, and then will need to descend to 0 height in order to deliver to the Onion. If you separate your path stops from the destination objects, this descent will happen sooner, but don't separate them so much that your pathing becomes unreliable!</p>
-    <p>If you want a given pathway to have multiple limitations, you can just split it into two, and give each half a different type. For instance, if you want a mid-air path for light load carcasses, split that link into two, where one gets the "light load only" type, and the other gets the "airborne only" type. Grounded carcasses won't go that way because one of the links is limiting it, and airborne heavy corpses won't pass there either because of the other link's limitation.</p>
+    <p>It's also worth keeping in mind that flying objects that follow a path will still go from one stop to the next in a linear fashion, but they will also go for the spot that's 50 units above the next path stop. This means, for instance, that Winged Pikmin carrying a corpse will aim for the spot 50 units above the path stop closest to the Onion, and then will need to descend to 0 height in order to deliver to the Onion. If you separate your path stops from the destination objects, this descent will happen sooner, but don't separate them so much that your pathing becomes unreliable!</p>
 
     <h2 id="precautions">Precautions</h2>
     
     <ul>
       <li>Don't drag vertexes such that you would turn a sector inside out, nor that two lines would intersect.</li>
-      <li>When stitching several vertexes, go one neighbor at a time. If you leave a gap, the engine might report an error on the gap sector until it is properly closed.</li>
-      <li>Don't split a sector into two by inserting a different sector in-between. If a sector is split into two, it stops being one polygon and becomes two. The engine isn't ready to handle that, so fill in one of the two polygons with an entirely new sector.</li>
-      <li>Sectors must be simple. The only noteworthy part about this fact is that when making a sector, you can't have its edges share the same vertex more than twice.</li>
       <li>Areas are very complex in the engine, and crashes can happen. Save often, and if you happen to experience a crash and lose your work, open the area again, go to the tools menu in the area editor, and load the automatically-saved backup from there.</li>
       <li>Sector creation is equally complex. So long as you don't try to cut corners or do anything too fancy when creating a sector, it should all go fine.</li>
     </ul>
@@ -482,28 +493,19 @@
       <p>Don't turn a sector inside-out like this.</p>
     </div>
     
-    <div class="box">
-      <img src="../images/stitch_gap.png" alt="Don't leave gaps while stitching like this.">
-      <p>Don't leave gaps while stitching like this.</p>
-    </div>
-    
-    <div class="box">
-      <img src="../images/split_sector.png" alt="Don't split a sector in two like this. Instead, create another sector to fill in for one of the halves.">
-      <p>Don't split a sector in two like this. Instead, create another sector to fill in for one of the halves.</p>
-    </div>
-    
-    <div class="box">
-      <img src="../images/non_simple.png" alt="Don't create non-simple sectors like this. Notice how the red sector has a 'loop' (the red triangle pointing south, which is also a different sector entirely). Instead, split the popular vertexes into multiple ones.">
-      <p>Don't create non-simple sectors like this. Notice how the red sector has a "loop" (the red triangle pointing south, which is also a different sector entirely). Instead, split the popular vertexes into multiple ones.</p>
-    </div>
-    
     <h2 id="troubleshooting">Troubleshooting</h2>
     
     <ul>
       <li>If the area editor crashes or something breaks the area, remember that backups are automatically created. Before the game overwrites the backup with something you don't want, consider going into the area editor's tools, and loading from the backup.</li>
       <li>If Pikmin that are following a path to get to an object reach their destination, but aren't interacting with the object and are instead walking against it, that's probably because they're trying to reach the path stop inside the object. Consider placing the path stop outside.</li>
       <li>If objects that are following a path are entering a path stop but not realizing where to go next, keep in mind that unless told to go straight, or told the path is impossible, an object will always head to the closest stop first, and try to leave the path graph at the stop closest to their destination. Maybe the start or end stop isn't where you think it is. Try using the path preview tool to understand what's going on.</li>
+      <li>If when you select one sector you realize two sectors get selected, that might be because it's still just the one sector, but you ended up dividing its geometry into two separate polygons, or "sub-sectors". Nothing is wrong with this per se, but you might be better off creating a new sector inside one of the sub-sectors, or just splitting one of the sub-sectors, and try to fill it out entirely using your new sector. That way both polygons will have one clearly defined sector each.</li>
     </ul>
+
+    <div class="box">
+      <img src="../images/sub_sectors.png" alt="Splitting a sector like this can cause it two divide into two sub-sectors.">
+      <p>Splitting a sector like this can cause it two divide into two sub-sectors.</p>
+    </div>
 
     <h2 id="controls">Controls</h2>
 

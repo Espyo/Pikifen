@@ -220,7 +220,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         "  Reason: " + reason + ".\n"
         "  Info: " + info + "\n"
         "  Time: " + get_current_time(false) + ".\n";
-    if(game.errors_reported_so_far > 0) {
+    if(game.errors.session_has_errors()) {
         error_str += "  Error log has messages!\n";
     }
     error_str +=
@@ -292,7 +292,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         error_str += "none.";
     }
     
-    log_error(error_str);
+    game.errors.report(error_str);
     
     show_message_box(
         NULL, "Program crash!",
@@ -1089,60 +1089,6 @@ ALLEGRO_COLOR interpolate_color(
 
 
 /* ----------------------------------------------------------------------------
- * Prints something onto the error log.
- * s:
- *   String that represents the error.
- * d:
- *   If not null, this will be used to obtain the file name
- *   and line that caused the error.
- */
-void log_error(const string &s, data_node* d) {
-    string output = "";
-    if(game.errors_reported_so_far == 0) {
-        string first_error_info =
-            "\n\n"
-            "Pikifen version " + get_engine_version_string();
-        if(!game.config.version.empty()) {
-            first_error_info +=
-                ", " + game.config.name + " version " + game.config.version;
-        }
-        first_error_info += ":\n";
-        output += first_error_info;
-    }
-    output += " " + get_current_time(false) + ": " + s;
-    if(d) {
-        output += " (" + d->file_name;
-        if (d->line_nr != 0) output += " line " + i2s(d->line_nr);
-        output += ")";
-    }
-    output += "\n";
-    std::cout << output;
-    
-    string prev_error_log;
-    string line;
-    ALLEGRO_FILE* file_i =
-        al_fopen(ERROR_LOG_FILE_PATH.c_str(), "r");
-    if(file_i) {
-        while(!al_feof(file_i)) {
-            getline(file_i, line);
-            prev_error_log += line + "\n";
-        }
-        prev_error_log.erase(prev_error_log.size() - 1);
-        al_fclose(file_i);
-    }
-    
-    ALLEGRO_FILE* file_o =
-        al_fopen(ERROR_LOG_FILE_PATH.c_str(), "w");
-    if(file_o) {
-        al_fwrite(file_o, prev_error_log + output);
-        al_fclose(file_o);
-    }
-    
-    game.errors_reported_so_far++;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Converts a point to a string.
  * p:
  *   Point to convert.
@@ -1285,7 +1231,7 @@ ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
  *   File to log the error into, if any.
  */
 void report_fatal_error(const string &s, data_node* dn) {
-    log_error(s, dn);
+    game.errors.report(s, dn);
     
     show_message_box(
         NULL, "Fatal error!",

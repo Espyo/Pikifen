@@ -1,0 +1,10 @@
+name = Lever
+description = A lever that can be flipped by a leader or a thrown Pikmin. Sends power when in the "on" position.
+
+custom_category_name = Puzzle
+height = 16
+prompt_text = Flip lever
+pushable = false
+pushes = false
+radius = 16
+trigger_range = 64

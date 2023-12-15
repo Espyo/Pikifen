@@ -71,6 +71,7 @@ animations{
 	}
 	jumping_up{
 		loop_frame=1
+		hit_rate=10
 		frames{
 			jump_up_damage{
 				duration=0.0400
@@ -111,6 +112,7 @@ animations{
 		}
 	}
 	landing{
+		hit_rate=95
 		frames{
 			landing{
 				duration=0.1000
@@ -197,8 +199,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -206,8 +206,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -224,8 +222,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -233,8 +229,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -251,8 +245,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -260,8 +252,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -278,8 +268,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -287,8 +275,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -305,8 +291,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -314,8 +298,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -332,8 +314,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -341,8 +321,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -359,8 +337,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -368,8 +344,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -387,8 +361,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -396,8 +368,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -415,8 +385,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -424,8 +392,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -442,8 +408,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -451,8 +415,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -469,8 +431,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -478,8 +438,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -496,8 +454,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -505,8 +461,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -523,8 +477,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -532,8 +484,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=20.0000
-				knockback_outward=true
-				wither_chance=20
 			}
 		}
 	}
@@ -550,8 +500,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -559,8 +507,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -577,8 +523,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -586,8 +530,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -603,12 +545,10 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
-				coords=7.0000 0.0000 -100.0000
-				height=64.0000
+				coords=7.0000 0.0000 -64.0000
+				height=60.0000
 				radius=48.0000
 				type=1
 				value=40.0000
@@ -630,12 +570,10 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
-				coords=7.0000 0.0000 -100.0000
-				height=64.0000
+				coords=7.0000 0.0000 -64.0000
+				height=60.0000
 				radius=48.0000
 				type=1
 				value=40.0000
@@ -657,12 +595,10 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
-				coords=7.0000 0.0000 -100.0000
-				height=64.0000
+				coords=7.0000 0.0000 -64.0000
+				height=60.0000
 				radius=48.0000
 				type=1
 				value=40.0000
@@ -684,12 +620,10 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
-				coords=7.0000 0.0000 -100.0000
-				height=64.0000
+				coords=7.0000 0.0000 -64.0000
+				height=60.0000
 				radius=48.0000
 				type=1
 				value=40.0000
@@ -712,18 +646,16 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
-				coords=3.0000 0.0000 -0.0000
-				height=100.0000
-				radius=48.0000
+				coords=3.0000 0.0000 -8.0000
+				height=130.0000
+				radius=60.0000
 				type=1
 				value=0.0000
 				knockback_outward=true
-				knockback=0.0100
-				wither_chance=20
+				knockback=1.0000
+				wither_chance=30
 			}
 		}
 	}
@@ -738,8 +670,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=0.0000 0.0000 0.0000
@@ -747,8 +677,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -763,8 +691,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=0.0000 0.0000 0.0000
@@ -772,8 +698,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -789,8 +713,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=-5.0000 7.0000 0.0000
@@ -798,8 +720,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -814,8 +734,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=0.0000 7.0000 0.0000
@@ -823,8 +741,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -839,8 +755,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=6.0000 2.0000 0.0000
@@ -848,8 +762,6 @@ sprites{
 				radius=40.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -866,18 +778,16 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
-				coords=7.0000 0.0000 -0.0000
+				coords=5.0000 0.0000 -0.0000
 				height=100.0000
-				radius=48.0000
+				radius=49.0000
 				type=1
 				value=20.0000
 				knockback_outward=true
-				knockback=0.0100
-				wither_chance=20
+				knockback=0.4000
+				wither_chance=30
 			}
 		}
 	}
@@ -895,8 +805,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -904,8 +812,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -923,8 +829,6 @@ sprites{
 				type=0
 				value=1.0000
 				can_pikmin_latch=true
-				knockback_outward=true
-				knockback=1.0000
 			}
 			damage{
 				coords=7.0000 0.0000 0.0000
@@ -932,8 +836,6 @@ sprites{
 				radius=42.0000
 				type=2
 				value=1.0000
-				knockback_outward=true
-				knockback=1.0000
 			}
 		}
 	}
@@ -942,3 +844,4 @@ body_parts{
 	body
 	damage
 }
+engine_version=0.24.0

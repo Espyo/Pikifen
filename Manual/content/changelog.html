@@ -27,16 +27,50 @@
     <p><b>Gameplay changes</b></p>
 
     <ul>
+      <li><span class="cl-a">Added</span> <a href="mob_interactable.html">levers</a>. Interact with a leader or throw a Pikmin to power or stop powering devices.</li>
+      <li><span class="cl-a">Added</span> <a href="mob_interactable.html">buttons</a>. Interact with a leader or throw a Pikmin to power devices for a split-second.</li>
+      <li><span class="cl-a">Added</span> <a href="mob_custom.html">logic gates</a>. These allow for complex mechanisms, like a gate that only opens if two different power sources are on.</li>
       <li><span class="cl-c">Changed</span> how some objects push against each other. Now, leaders and Pikmin can squeeze through them to get unstuck. This does not apply to more "solid" objects like gates.</li>
       <li><span class="cl-c">Changed</span> the range for an idle Pikmin to be considered "bumped" by the active leader, so they can be called from farther away.</li>
+      <li><span class="cl-c">Changed</span> the way the Yellow Wollywog works to make the fight easier and a bit more dynamic.</li>
     </ul>
 
     <p><b>Content making changes</b></p>
 
     <ul>
       <li><span class="cl-a">Added</span> the <code>pushes_softly</code> property to <a href="mob_type.html">mob types</a>.</li>
+      <li><span class="cl-c">Added</span> the <code>blackout_radius</code> <a href="mob_type.html">mob type</a> property. (Thanks Helodity)</li>
       <li><span class="cl-a">Added</span> support for the thus far-unused <code>maturity_power_mult</code> property of the <a href="misc_config.html">game configuration</a>.</li>
       <li><span class="cl-a">Added</span> the <code>idle_bump_range</code> property to the <a href="misc_config.html">game configuration</a>.</li>
+      <li><span class="cl-c">Added</span> the ability for a sector to reuse the same vertex. Before, it just considered the sector broken.</li>
+      <li><span class="cl-c">Added</span> the ability to create sub-sectors. This happens if one sector's polygon ends up getting split into two. While not recommended, it stops the maker from receiving warnings and from the sector to be considered broken.</li>
+      <li><span class="cl-c">Added</span> the ability to keep drawing a new sector, for when you try to split a sector but the engine considers that split useless.</li>
+      <li><span class="cl-c">Added</span> a redo feature to the area editor.</li>
+      <li><span class="cl-a">Added</span> three new player actions to the controls: <code>custom_a</code>, <code>custom_b</code>, and <code>custom_c</code>. These do nothing on their own, but can be detected through <a href="script.html">leader scripts</a>. (Thanks WanderingLetterS)</li>
+      <li><span class="cl-a">Added</span> the <code>on_input_received</code> <a href="events_and_actions.html">object script event</a>.</li>
+      <li><span class="cl-c">Added</span> the <code>on_ready</code> <a href="script.html">mob event</a>.</li>
+      <li><span class="cl-a">Added</span> the <code>get_area_info</code>, <code>get_event_info</code>, and <code>get_mob_info</code> <a href="script.html">mob actions</a>. All data obtained from <code>get_info</code> are now obtained by the corresponding actions.  (Thanks Helodity)</li>
+      <li><span class="cl-r">Removed</span> the <code>get_info</code> <a href="script.html">mob action</a>, since it was replaced by the previous three actions. (Thanks Helodity)</li>
+      <li><span class="cl-r">Removed</span> the <code>get_focus_info</code> <a href="script.html">mob action</a>, since it was replaced by <code>get_mob_info</code> with the <code>focus</code> target. (Thanks Helodity)</li>
+      <li><span class="cl-a">Added</span> the <code>input_name</code> and <code>input_value</code> properties to the <code>get_event_info</code> <a href="events_and_actions.html">mob action</a>.</li>
+      <li><span class="cl-c">Added</span> the <code>id</code> and <code>state</code> data types to the <code>get_mob_info</code> <a href="script.html">mob action</a>. (Thanks Helodity)</li>
+      <li><span class="cl-c">Added</span> an outline of child objects when viewing an object in the area editor. (Thanks Helodity)</li>
+      <li>
+        Pathing changes:
+        <ul>
+          <li><span class="cl-c">Added</span> the "ledge" link type. Normal mobs can go from a higher path stop to a lower one but not the other way around, unless they are airborne.</li>
+          <li><span class="cl-c">Added</span> the "script use only", "light load only", and "airborne only" settings to stops. These replace the equivalent link types. Also, added labels to stops, which replace labels in links.</li>
+          <li><span class="cl-r">Removed</span> all link types except for the newly-added "ledge" type, since they were replaced by the equivalent stop settings. Also, removed link labels, since they too were replaced with a stop property.</li>
+          <li><span class="cl-c">Added</span> a radius property to path stops.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><b>Breaking changes</b></p>
+
+    <ul>
+      <li><span class="cl-r">Removed</span> the <code>get_info</code> <a href="script.html">mob action</a>, per above.</li>
+      <li><span class="cl-r">Removed</span> the <code>get_focus_info</code> <a href="script.html">mob action</a>, per above.</li>
     </ul>
 
     <h2 id="0.24.0">0.24.0</h2>

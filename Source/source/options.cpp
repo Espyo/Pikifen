@@ -388,7 +388,7 @@ void options_struct::save(data_node* file) const {
     
     //Figure out the value for the editor tree node preferences.
     string open_nodes_str;
-    for(auto n : editor_open_nodes) {
+    for(auto &n : editor_open_nodes) {
         if(n.second) {
             open_nodes_str += n.first + ";";
         }

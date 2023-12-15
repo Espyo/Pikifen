@@ -33,7 +33,7 @@ script {
             set_animation idling
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = landed
                 stop_height_effect
                 set_state resting
@@ -105,7 +105,7 @@ script {
             turn_to_target arachnorb_head_logic
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = landed
                 stabilize_z highest 300
                 set_state move_fl
@@ -123,7 +123,7 @@ script {
             turn_to_target arachnorb_head_logic
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = landed
                 stabilize_z highest 300
                 set_state move_br
@@ -141,7 +141,7 @@ script {
             turn_to_target arachnorb_head_logic
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = landed
                 stabilize_z highest 300
                 set_state move_bl
@@ -159,7 +159,7 @@ script {
             turn_to_target arachnorb_head_logic
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = landed
                 stabilize_z highest 300
                 set_state deciding

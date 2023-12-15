@@ -1,9 +1,9 @@
 first_state = closed
 
 init {
-    get_info x x
-    get_info y y
-    get_info z_closed z
+    get_mob_info x self x
+    get_mob_info y self y
+    get_mob_info z_closed self z
     set_var z_open $z_closed
     calculate z_open $z_open + 150
     set_flying true
@@ -17,7 +17,7 @@ script {
             set_can_block_paths true
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m > 0
                 set_state opening
             end_if
@@ -32,7 +32,7 @@ script {
             start_particles falling_dirt 0 0 0
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = 0
                 set_state closing
             end_if
@@ -49,7 +49,7 @@ script {
             stop_particles
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m = 0
                 set_state closing
             end_if
@@ -64,7 +64,7 @@ script {
             start_particles falling_dirt 0 0 0
         }
         on_receive_message {
-            get_info m message
+            get_event_info m message
             if $m > 0
                 set_state opening
             end_if

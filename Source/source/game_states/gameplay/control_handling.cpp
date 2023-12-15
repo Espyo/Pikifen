@@ -29,7 +29,6 @@ void gameplay_state::handle_player_action(const player_action &action) {
     //it's recieved an input, which will trigger an event.
     int player_id = action.player_id;
     leader* cur_leader_ptr = player_info[player_id].cur_leader_ptr;
-
     if(cur_leader_ptr) {
         cur_leader_ptr->fsm.run_event(
             MOB_EV_INPUT_RECEIVED,
@@ -100,6 +99,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
                     );
                     paused = true;
+                    game.audio.handle_world_pause();
                     
                     //TODO replace with a better solution.
                     cur_leader_ptr->fsm.run_event(LEADER_EV_STOP_WHISTLE);
@@ -257,6 +257,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             pause_menu = new pause_menu_struct();
             paused = true;
+            game.audio.handle_world_pause();
             player_info[player_id].hud->gui.start_animation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
@@ -368,7 +369,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 }
             }
             
-            game.audio.create_world_global_sfx_source(game.sys_assets.sfx_camera);
+            game.audio.create_ui_sfx_source(game.sys_assets.sfx_camera);
             
             break;
             
@@ -406,7 +407,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             sfx_source_config_struct cam_sfx_config;
             cam_sfx_config.stack_mode = SFX_STACK_NEVER;
-            game.audio.create_world_global_sfx_source(
+            game.audio.create_ui_sfx_source(
                 game.sys_assets.sfx_camera,
                 cam_sfx_config
             );
@@ -497,7 +498,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 }
                 
                 if(switch_successful) {
-                    game.audio.create_world_global_sfx_source(
+                    game.audio.create_ui_sfx_source(
                         game.sys_assets.sfx_switch_pikmin
                     );
                 }

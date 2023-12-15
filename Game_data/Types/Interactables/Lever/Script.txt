@@ -1,0 +1,61 @@
+first_state = off
+
+script{
+    off {
+        on_enter {
+            set_animation off
+            send_message_to_links 0
+        }
+        on_receive_message {
+            get_event_info m message
+            if $m = interact
+                set_state flipping_on
+            else
+                if $m > 0
+                    set_state flipping_on
+                end_if
+            end_if
+        }
+        on_pikmin_land {
+            set_state flipping_on
+        }
+    }
+
+    flipping_on {
+        on_enter {
+            set_animation flipping_on
+        }
+        on_animation_end {
+            set_state on
+        }
+    }
+
+    on {
+        on_enter {
+            set_animation on
+            send_message_to_links 1
+        }
+        on_receive_message {
+            get_event_info m message
+            if $m = interact
+                set_state flipping_off
+            else
+                if $m > 0
+                    set_state flipping_off
+                end_if
+            end_if
+        }
+        on_pikmin_land {
+            set_state flipping_off
+        }
+    }
+
+    flipping_off {
+        on_enter {
+            set_animation flipping_off
+        }
+        on_animation_end {
+            set_state off
+        }
+    }
+}

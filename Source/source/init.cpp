@@ -556,7 +556,7 @@ void init_event_things(
     //It's possible that this resolution is not valid for fullscreen.
     //Detect this and try again in windowed.
     if(!game.display && game.win_fullscreen) {
-        log_error(
+        game.errors.report(
             "Could not create a fullscreen window with the resolution " +
             i2s(game.win_w) + "x" + i2s(game.win_h) + ". "
             "Setting the fullscreen option back to false. "

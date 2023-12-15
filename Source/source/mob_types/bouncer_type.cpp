@@ -11,6 +11,7 @@
 #include "bouncer_type.h"
 
 #include "../functions.h"
+#include "../game.h"
 #include "../mob_fsms/bouncer_fsm.h"
 #include "../utils/string_utils.h"
 
@@ -71,7 +72,7 @@ void bouncer_type::load_properties(data_node* file) {
             } else if(riders_str_words[r] == "leaders") {
                 enable_flag(riders, BOUNCER_RIDER_LEADERS);
             } else {
-                log_error(
+                game.errors.report(
                     "Unknown type of rider \"" + riders_str_words[r] + "\"!",
                     riders_node
                 );
@@ -85,7 +86,7 @@ void bouncer_type::load_properties(data_node* file) {
         } else if(riding_pose_str == "somersault") {
             riding_pose = BOUNCER_RIDING_POSE_SOMERSAULT;
         } else {
-            log_error(
+            game.errors.report(
                 "Unknown type of riding pose \"" + riding_pose_str + "\"!",
                 riding_pose_node
             );

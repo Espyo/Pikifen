@@ -454,6 +454,7 @@ void gameplay_state::do_gameplay_leader_logic(const size_t &player_id,const floa
         );
     }
     float cursor_angle = get_angle(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
+
     
     dist leader_to_cursor_dist(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
     if(leader_to_cursor_dist > game.config.cursor_max_dist) {
@@ -1003,6 +1004,7 @@ void gameplay_state::do_menu_logic(const size_t &player_id) {
             delete player_info[player_id].onion_menu;
             player_info[player_id].onion_menu = NULL;
             paused = false;
+            game.audio.handle_world_unpause();
         }
     } else if(pause_menu) {
         if(!pause_menu->to_delete) {
@@ -1011,6 +1013,7 @@ void gameplay_state::do_menu_logic(const size_t &player_id) {
             delete pause_menu;
             pause_menu = NULL;
             paused = false;
+            game.audio.handle_world_unpause();
         }
     }
     

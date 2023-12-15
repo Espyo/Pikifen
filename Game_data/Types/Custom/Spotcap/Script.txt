@@ -18,7 +18,7 @@ script {
             turn_to_relative $t
         }
 		on_pikmin_land {
-            get_info t mob_type
+            get_mob_info t trigger mob_type
 			if $t != White Pikmin
 				set_state destroyed
 			end_if

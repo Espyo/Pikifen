@@ -9,8 +9,8 @@ ALLEGRO_PKGS := allegro-5 allegro_main-5 allegro_acodec-5 allegro_audio-5 allegr
 CXXFLAGS     := -std=c++0x -rdynamic -D_GLIBCXX_USE_CXX11_ABI=0 -MMD $(shell pkg-config --cflags $(ALLEGRO_PKGS))
 LDFLAGS      += -lm $(shell pkg-config --libs $(ALLEGRO_PKGS))
 DEBUGFLAGS   := -g -ggdb -Wall -Wno-unknown-pragmas -O0
-RELEASEFLAGS := -Wall -Wextra -Wno-unknown-pragmas -O2
-ANALYZEFLAGS := -Wall -Wextra -Wno-unknown-pragmas -fanalyzer
+RELEASEFLAGS := -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -O2
+ANALYZEFLAGS := -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas -fanalyzer
 
 .PHONY: all
 all: release
