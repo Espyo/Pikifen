@@ -4280,6 +4280,21 @@ void area_editor::process_gui_panel_path_link() {
 void area_editor::process_gui_panel_path_stop() {
     path_stop* s_ptr = *selected_path_stops.begin();
     
+    //Radius value.
+    float radius = s_ptr->radius;
+    if(ImGui::DragFloat("Radius", &radius, 0.5f, PATHS::MIN_STOP_RADIUS)) {
+        radius = std::max(PATHS::MIN_STOP_RADIUS, radius);
+        register_change("path stop radius change");
+        s_ptr->radius = radius;
+        path_preview_timer.start(false);
+    }
+    set_tooltip(
+        "Radius of the stop. Used when mobs want to find the closest\n"
+        "start/end stop.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    
+    //Script use only checkbox.
     int flags_i = s_ptr->flags;
     if(
         ImGui::CheckboxFlags(

@@ -9068,6 +9068,7 @@ path_stops{
 	}
 	s{
 		pos=1088.0000 -784.0000
+		radius=42.5000
 		links{
 			nr=77
 			nr=84
@@ -9172,6 +9173,7 @@ path_stops{
 	}
 	s{
 		pos=-176.0000 912.0000
+		radius=29.0000
 		links{
 			nr=94
 			nr=96

@@ -332,7 +332,7 @@
       <p>Some carrying paths all laid out.</p>
     </div>
     
-    <p>If you go to northeast of the central rock with some Pikmin, and lie down to have them carry you, they will most likely get stuck on the rock as they beeline to the Onion. This is because they don't know what path to take. So let's define the general path Pikmin can take around the area, and what way they should go to avoid obstacles. First of all, from the main menu panel, enter the "Paths" mode.</p>
+    <p>If you go to northeast of the central rock with some Pikmin, and lie down to have them carry you, they will most likely get stuck on the rock as they beeline to the Onion. This is because they don't know what path to take. So let's define the general path Pikmin can take around the area, and what way they should go to avoid walls. First of all, from the main menu panel, enter the "Paths" mode.</p>
     
     <dl>
       <dt><b>Press the "+" button on the panel to enter the path drawing mode.</b></dt>
@@ -341,15 +341,15 @@
       <dd>Path stops are a bit like bus stops. The carrier Pikmin go in a straight line from the previous stop to the next, then turn to face the next stop, and so on. The first stop you want to create should be very close to the Onion, or at least in the starting region.</dd>
       <dt><b>Click somewhere else to place a new stop, and connect the previous to the current one.</b></dt>
       <dd>This will create the second stop and will also link the two. Now the Pikmin know that from one stop, they can go to the other. You should place the second stop to the south of the rock sector at the center. Keep clicking around to make a path that goes around the rock and ramps (remember to go around the bridge too, since when it's built, it will be a solid obstacle in the way too!)</dd>
-      <dt><b>Normal links (recommended) allow Pikmin to go from A to B, and B to A. One-way links only allow from A to B. Change link types in the panel.</b></dt>
-      <dd>Add a one-way link that goes from the top of the rock to the path stop at the south of the rock. It would make no sense to leave this one as a normal link since Pikmin could try to follow that path and bang against the rock's wall.</dd>
+      <dt><b>Normal links allow any Pikmin to go from A to B, and B to A. Ledge links are one-way down the ledge, for walking Pikmin. Change link types in the panel.</b></dt>
+      <dd>Add a ledge-type link that goes from the top of the rock to the path stop at the south of the rock. It would make no sense to leave this one as a normal link since Pikmin could try to follow that path and bang against the rock's wall. By making it a ledge link, Pikmin atop the rock know to follow the link to drop down, but not the other way around. Unless they're Winged Pikmin!</dd>
       <dt><b>Pikmin cannot take a line in the path if there is an obstacle object touching the line.</b></dt>
       <dd>Back to two-way links, make your paths go up the big rock from the west and east sides. When making these sorts of lines, pretend all bridges are built and all gates are taken down. And make sure the line between the path stops touches any important obstacle. If the obstacle is still up, the Pikmin will understand that they cannot take this line, and will either try a different path, or wait at the stop before the obstacle.</dd>
       <dt><b>Notes:</b></dt>
       <dd><ul>
         <li>While outside of drawing mode, you can double-click a path link to split it into two, creating a stop where you click.</li>
         <li>Keep in mind Pikmin will be carrying large objects through these paths, so make sure there's enough space around them.</li>
-        <li>Pikmin go to the nearest stop when they begin carrying. Make sure that for most places, the nearest stop is not on the other side of a wall or through a hazard.</li>
+        <li>Pikmin go to the nearest stop when they begin carrying. Make sure that for most places the nearest stop is not on the other side of a wall or through a hazard.</li>
         <li>To make a path that only certain Pikmin can take, place one of that path's stops on top of a sector with a hazard. For instance, if a stop is on top of a water-hazard sector, only Blue Pikmin will go through there. Winged Pikmin will go over sectors with hazards anyway, if the hazard is on the floor only.</li>
         <li>Don't worry about making your paths 100% foolproof, since <a href="https://www.pikminwiki.com/Path_oversights">not even the canon developers can do it</a>.</li>
       </ul></dd>
@@ -472,12 +472,11 @@
     <ol>
       <li>If a path link is blocked by an obstacle, it can't be used until the obstacle is destroyed.</li>
       <li>Objects won't take a path stop if that stop is on a sector with a hazard that they are vulnerable to. If the object or its carriers can fly, and the hazard is floor-only, then this rule is ignored since the object can naturally fly over the hazard without a care. Objects can take this path again if the sector loses that hazard (e.g. a destroyed clog drains the sector's water).</li>
-      <li>Path links of the "script use only" type can only be used by objects if their script tells them to. This means Pikmin won't use this for carrying, for returning to piles, etc.</li>
-      <li>Path links of the "light load only " type can only be used by objects that are not carrying anything, or by objects that only have a weight of 1. An object that's simply holding another won't count for this, like a leader holding a Pikmin, a Pikmin holding a tool, or an enemy with Pikmin latched onto it.</li>
-      <li>Path links of the "airborne only" type can only be used by objects that can fly.</li>
+      <li>Path stops with the "script use only" property can only be used by objects if their script tells them to. This means Pikmin won't use this for carrying, for returning to piles, etc.</li>
+      <li>Path stops with the "light load only" property can only be used by objects that are not carrying anything, or are carrying objects that only have a weight of 1. An object that's simply holding another won't count for this, like a leader holding a Pikmin, a Pikmin holding a tool, or an enemy with Pikmin latched onto it.</li>
+      <li>Path stops with the "airborne only" property can only be used by objects that can fly.</li>
     </ol>
-    <p>It's also worth keeping in mind that flying objects that follow a path will still go from one stop to the next in a linear fashion, but they will also go for the spot that's 100 units above the next path stop. This means, for instance, that Winged Pikmin carrying a corpse will aim for the spot 100 units above the path stop closest to the Onion, and then will need to descend to 0 height in order to deliver to the Onion. If you separate your path stops from the destination objects, this descent will happen sooner, but don't separate them so much that your pathing becomes unreliable!</p>
-    <p>If you want a given pathway to have multiple limitations, you can just split it into two, and give each half a different type. For instance, if you want a mid-air path for light load carcasses, split that link into two, where one gets the "light load only" type, and the other gets the "airborne only" type. Grounded carcasses won't go that way because one of the links is limiting it, and airborne heavy corpses won't pass there either because of the other link's limitation.</p>
+    <p>It's also worth keeping in mind that flying objects that follow a path will still go from one stop to the next in a linear fashion, but they will also go for the spot that's 50 units above the next path stop. This means, for instance, that Winged Pikmin carrying a corpse will aim for the spot 50 units above the path stop closest to the Onion, and then will need to descend to 0 height in order to deliver to the Onion. If you separate your path stops from the destination objects, this descent will happen sooner, but don't separate them so much that your pathing becomes unreliable!</p>
 
     <h2 id="precautions">Precautions</h2>
     

@@ -1030,7 +1030,7 @@ void area_editor::find_problems() {
                 
                 if(
                     circle_intersects_line_seg(
-                        s_ptr->pos, AREA_EDITOR::PATH_STOP_RADIUS,
+                        s_ptr->pos, s_ptr->radius,
                         link_start_ptr->pos, link_end_ptr->pos
                     )
                 ) {
@@ -1663,7 +1663,7 @@ path_stop* area_editor::get_path_stop_under_point(const point &p) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
-        if(dist(s_ptr->pos, p) <= AREA_EDITOR::PATH_STOP_RADIUS) {
+        if(dist(s_ptr->pos, p) <= s_ptr->radius) {
             return s_ptr;
         }
     }

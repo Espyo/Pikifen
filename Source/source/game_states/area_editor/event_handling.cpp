@@ -1012,6 +1012,27 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             path_stop* clicked_stop =
                 get_path_stop_under_point(game.mouse_cursor.w_pos);
                 
+            //Split a link, if one was clicked.
+            if(!clicked_stop) {
+                path_link* clicked_link_1;
+                path_link* clicked_link_2;
+                bool clicked_link =
+                    get_path_link_under_point(
+                        game.mouse_cursor.w_pos,
+                        &clicked_link_1, &clicked_link_2
+                    );
+                if(clicked_link) {
+                    register_change("path link split");
+                    clicked_stop =
+                        split_path_link(
+                            clicked_link_1, clicked_link_2,
+                            game.mouse_cursor.w_pos
+                        );
+                    clear_selection();
+                    selected_path_stops.insert(clicked_stop);
+                }
+            }
+            
             if(path_drawing_stop_1) {
                 //A starting stop already exists, so now we create a link.
                 path_stop* next_stop = NULL;
@@ -1389,13 +1410,13 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     s_ptr->pos.x -
-                    AREA_EDITOR::PATH_STOP_RADIUS >= selection_x1 &&
+                    s_ptr->radius >= selection_x1 &&
                     s_ptr->pos.x +
-                    AREA_EDITOR::PATH_STOP_RADIUS <= selection_x2 &&
+                    s_ptr->radius <= selection_x2 &&
                     s_ptr->pos.y -
-                    AREA_EDITOR::PATH_STOP_RADIUS >= selection_y1 &&
+                    s_ptr->radius >= selection_y1 &&
                     s_ptr->pos.y +
-                    AREA_EDITOR::PATH_STOP_RADIUS <= selection_y2
+                    s_ptr->radius <= selection_y2
                 ) {
                     selected_path_stops.insert(s_ptr);
                 }

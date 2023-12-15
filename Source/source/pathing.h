@@ -120,6 +120,11 @@ enum PATH_BLOCK_REASONS {
 };
 
 
+namespace PATHS {
+extern const float MIN_STOP_RADIUS;
+}
+
+
 /* ----------------------------------------------------------------------------
  * Structure with settings about how a mob should follow a path.
  */
@@ -156,6 +161,8 @@ struct path_follow_settings {
 struct path_stop {
     //Coordinates.
     point pos;
+    //Radius.
+    float radius;
     //Flags. Use PATH_STOP_FLAGS.
     uint8_t flags;
     //Its label, if any.
@@ -231,6 +238,14 @@ struct path_manager {
 };
 
 
+bool can_take_path_stop(
+    path_stop* stop_ptr, const path_follow_settings &settings,
+    PATH_BLOCK_REASONS* reason = NULL
+);
+bool can_take_path_stop(
+    path_stop* stop_ptr, const path_follow_settings &settings,
+    sector* sector_ptr, PATH_BLOCK_REASONS* reason = NULL
+);
 bool can_traverse_path_link(
     path_link* link_ptr, const path_follow_settings &settings,
     PATH_BLOCK_REASONS* reason = NULL

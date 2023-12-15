@@ -849,7 +849,7 @@ void area_editor::draw_canvas() {
             }
             al_draw_filled_circle(
                 s_ptr->pos.x, s_ptr->pos.y,
-                AREA_EDITOR::PATH_STOP_RADIUS,
+                s_ptr->radius,
                 color
             );
             
@@ -858,7 +858,7 @@ void area_editor::draw_canvas() {
                 selected_path_stops.end()
             ) {
                 al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
+                    s_ptr->pos.x, s_ptr->pos.y, s_ptr->radius,
                     al_map_rgba(
                         AREA_EDITOR::SELECTION_COLOR[0],
                         AREA_EDITOR::SELECTION_COLOR[1],
@@ -868,7 +868,7 @@ void area_editor::draw_canvas() {
                 );
             } else if(highlighted) {
                 al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y, AREA_EDITOR::PATH_STOP_RADIUS,
+                    s_ptr->pos.x, s_ptr->pos.y, s_ptr->radius,
                     al_map_rgba(
                         highlight_color.r * 255,
                         highlight_color.g * 255,
@@ -931,13 +931,15 @@ void area_editor::draw_canvas() {
                 
                 float angle =
                     get_angle(s_ptr->pos, s2_ptr->pos);
-                point offset =
-                    angle_to_coordinates(angle, AREA_EDITOR::PATH_STOP_RADIUS);
+                point offset1 =
+                    angle_to_coordinates(angle, s_ptr->radius);
+                point offset2 =
+                    angle_to_coordinates(angle, s2_ptr->radius);
                 al_draw_line(
-                    s_ptr->pos.x + offset.x,
-                    s_ptr->pos.y + offset.y,
-                    s2_ptr->pos.x - offset.x,
-                    s2_ptr->pos.y - offset.y,
+                    s_ptr->pos.x + offset1.x,
+                    s_ptr->pos.y + offset1.y,
+                    s2_ptr->pos.x - offset2.x,
+                    s2_ptr->pos.y - offset2.y,
                     color,
                     AREA_EDITOR::PATH_LINK_THICKNESS / game.cam.zoom
                 );
@@ -1009,11 +1011,13 @@ void area_editor::draw_canvas() {
         //Closest stop line.
         if(show_closest_stop) {
             path_stop* closest = NULL;
-            dist closest_dist;
+            float closest_dist;
             for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = game.cur_area_data.path_stops[s];
-                dist d(game.mouse_cursor.w_pos, s_ptr->pos);
-                
+                float d =
+                    dist(game.mouse_cursor.w_pos, s_ptr->pos).to_float() -
+                    s_ptr->radius;
+                    
                 if(!closest || d < closest_dist) {
                     closest = s_ptr;
                     closest_dist = d;
