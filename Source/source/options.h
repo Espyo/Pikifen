@@ -87,6 +87,7 @@ extern const LEAVING_CONFIRMATION_MODES DEF_LEAVING_CONFIRMATION_MODE;
 extern const size_t DEF_MAX_PARTICLES;
 extern const bool DEF_MIPMAPS_ENABLED;
 extern const bool DEF_MOUSE_MOVES_CURSOR[MAX_PLAYERS];
+extern const size_t DEF_PLAYERS_PLAYING;
 extern const bool DEF_SMOOTH_SCALING;
 extern const bool DEF_SHOW_HUD_INPUT_ICONS;
 extern const unsigned int DEF_TARGET_FPS;
@@ -175,6 +176,8 @@ struct options_struct {
     bool mipmaps_enabled;
     //For each player, does the mouse move their leader's cursor?
     bool mouse_moves_cursor[MAX_PLAYERS];
+    //How many players are playing?
+    size_t players_playing;
     //True to use interpolation when graphics are scaled up/down.
     bool smooth_scaling;
     //Show control bind icons on top of HUD elements?

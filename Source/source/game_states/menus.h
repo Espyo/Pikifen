@@ -313,7 +313,8 @@ private:
     leaving_confirmation_picker;
     //Restart warning text widget.
     text_gui_item* warning_text;
-    
+    //Players picker widget.
+    options_menu_picker_gui_item<size_t>* player_picker;
     void go_to_controls();
     void leave();
     void trigger_restart_warning();
@@ -352,6 +353,8 @@ private:
     PLAYER_ACTION_TYPES cur_action_type;
     //Current global bind index we're working with.
     size_t cur_bind_idx;
+    //Current Player nr we're binding to
+    size_t cur_player_nr;
     
     void choose_input(
         const PLAYER_ACTION_TYPES action_type, const size_t bind_idx

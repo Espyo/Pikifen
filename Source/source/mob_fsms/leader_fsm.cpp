@@ -1188,7 +1188,7 @@ void leader_fsm::be_attacked(mob* m, void* info1, void* info2) {
         
     }
     
-    game.states.gameplay->last_hurt_leader_pos = m->pos;
+    game.states.gameplay->mission_info[0].last_hurt_leader_pos = m->pos;
     if(health_before > 0.0f && m->health < health_before) {
         game.statistics.leader_damage_suffered += health_before - m->health;
     }
@@ -1278,8 +1278,8 @@ void leader_fsm::be_thrown_by_bouncer(mob* m, void* info1, void* info2) {
 void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     
-    if(game.states.gameplay->cur_leader_ptr) {
-        game.states.gameplay->cur_leader_ptr->fsm.run_event(
+    if(game.states.gameplay->player_info[lea_ptr->active_player].cur_leader_ptr) {
+        game.states.gameplay->player_info[lea_ptr->active_player].cur_leader_ptr->fsm.run_event(
             LEADER_EV_INACTIVATED
         );
     }
@@ -1298,16 +1298,16 @@ void leader_fsm::become_active(mob* m, void* info1, void* info2) {
     }
     
     //Update pointers and such.
-    size_t new_leader_nr = game.states.gameplay->cur_leader_nr;
-    for(size_t l = 0; l < game.states.gameplay->available_leaders.size(); ++l) {
-        if(game.states.gameplay->available_leaders[l] == lea_ptr) {
+    size_t new_leader_nr = game.states.gameplay->player_info[lea_ptr->active_player].cur_leader_nr;
+    for(size_t l = 0; l < game.states.gameplay->team_info[game.states.gameplay->player_info[lea_ptr->active_player].team-MOB_TEAM_PLAYER_1].available_leaders.size(); ++l) {
+        if(game.states.gameplay->team_info[game.states.gameplay->player_info[lea_ptr->active_player].team-MOB_TEAM_PLAYER_1].available_leaders[l] == lea_ptr) {
             new_leader_nr = l;
             break;
         }
     }
     
-    game.states.gameplay->cur_leader_ptr = lea_ptr;
-    game.states.gameplay->cur_leader_nr = new_leader_nr;
+    game.states.gameplay->player_info[lea_ptr->active_player].cur_leader_ptr = lea_ptr;
+    game.states.gameplay->player_info[lea_ptr->active_player].cur_leader_nr = new_leader_nr;
     lea_ptr->active = true;
     
     //Check if we're in the middle of loading or of an interlude. If so
@@ -1417,19 +1417,20 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
     if(game.states.gameplay->unloading) {
         return;
     }
-    
-    game.states.gameplay->update_available_leaders();
-    if(m == game.states.gameplay->cur_leader_ptr) {
-        change_to_next_leader(true, true, true);
+    leader* lea_ptr = (leader*)m;
+    game.states.gameplay->team_info[lea_ptr->team-MOB_TEAM_PLAYER_1].update_available_leaders();
+    for(size_t p = 0; p < MAX_PLAYERS;++p){
+    if(m == game.states.gameplay->player_info[p].cur_leader_ptr) {
+        change_to_next_leader(true, true, true,lea_ptr->active_player);
     }
-    
+    }
     leader_fsm::release(m, info1, info2);
     leader_fsm::dismiss(m, info1, info2);
     m->stop_chasing();
     m->become_uncarriable();
     m->set_animation(LEADER_ANIM_LYING);
     
-    game.states.gameplay->last_hurt_leader_pos = m->pos;
+    game.states.gameplay->mission_info[0].last_hurt_leader_pos = m->pos;
 }
 
 
@@ -1583,7 +1584,8 @@ void leader_fsm::finish_drinking(mob* m, void* info1, void* info2) {
     case DROP_EFFECT_INCREASE_SPRAYS: {
         game.states.gameplay->change_spray_count(
             dro_ptr->dro_type->spray_type_to_increase,
-            dro_ptr->dro_type->increase_amount
+            dro_ptr->dro_type->increase_amount,m->team-MOB_TEAM_PLAYER_1,
+           0 
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
@@ -1752,10 +1754,16 @@ void leader_fsm::land(mob* m, void* info1, void* info2) {
     m->speed.x = m->speed.y = 0;
     
     m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
-    
-    if(m == game.states.gameplay->cur_leader_ptr) {
-        m->fsm.set_state(LEADER_STATE_ACTIVE);
-    } else {
+    bool is_cur_leader = false;
+    for (size_t p = 0; p < MAX_PLAYERS; ++p){
+        if(m == game.states.gameplay->player_info[p].cur_leader_ptr) {
+            m->fsm.set_state(LEADER_STATE_ACTIVE);
+            is_cur_leader = true;
+            break;
+        }
+
+    }
+    if (!is_cur_leader){
         m->fsm.set_state(LEADER_STATE_IDLING);
     }
 }
@@ -1982,13 +1990,13 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     size_t spray_nr = *((size_t*) info1);
     spray_type &spray_type_ref = game.spray_types[spray_nr];
     
-    if(game.states.gameplay->spray_stats[spray_nr].nr_sprays == 0) {
+    if(game.states.gameplay->team_info[m->team-MOB_TEAM_PLAYER_1].spray_stats[spray_nr].nr_sprays == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
         return;
     }
-    
+    leader* lea_ptr = (leader*)m;
     float cursor_angle =
-        get_angle(m->pos, game.states.gameplay->leader_cursor_w);
+        get_angle(m->pos, game.states.gameplay->player_info[lea_ptr->active_player].leader_cursor_w);
     float shoot_angle =
         cursor_angle + ((spray_type_ref.angle) ? TAU / 2 : 0);
         
@@ -2063,7 +2071,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     pg.size_deviation = 0.5;
     pg.emit(game.states.gameplay->particles);
     
-    game.states.gameplay->change_spray_count(spray_nr, -1);
+    game.states.gameplay->change_spray_count(spray_nr, -1,m->team-MOB_TEAM_PLAYER_1,lea_ptr->active_player);
     
     m->stop_chasing();
     m->set_animation(LEADER_ANIM_SPRAYING);
@@ -2276,7 +2284,8 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
  *   Unused.
  */
 void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
-    m->face(get_angle(m->pos, game.states.gameplay->leader_cursor_w), NULL);
+    leader* lea_ptr = (leader*)m;
+    m->face(get_angle(m->pos, game.states.gameplay->player_info[lea_ptr->active_player].leader_cursor_w), NULL);
 }
 
 

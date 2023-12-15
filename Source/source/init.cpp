@@ -462,14 +462,17 @@ void init_controls() {
     //If the options are loaded successfully, these binds are overwritten.
     const vector<player_action_type> &action_types =
         game.controls.get_all_player_action_types();
-    for(size_t a = 0; a < N_PLAYER_ACTIONS; ++a) {
-        string def = action_types[a].default_bind_str;
+    for(size_t a = 0; a < N_PLAYER_ACTIONS*4; ++a) {
+        size_t av = a %N_PLAYER_ACTIONS;
+        string def = action_types[av].default_bind_str;
         if(def.empty()) continue;
         
         control_bind bind;
-        bind.action_type_id = action_types[a].id;
-        bind.player_nr = 0;
+        bind.action_type_id = action_types[av].id;
+        bind.player_nr = a/N_PLAYER_ACTIONS;
+        if (bind.player_nr == 0){
         bind.input = game.controls.str_to_input(def);
+        }
         game.controls.binds().push_back(bind);
     }
 }
@@ -606,7 +609,7 @@ void init_misc() {
     
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
-    int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
+    int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA|ALLEGRO_VIDEO_BITMAP|ALLEGRO_NO_PRESERVE_TEXTURE;
     if(game.options.smooth_scaling) {
         enable_flag(new_bitmap_flags, ALLEGRO_MAG_LINEAR);
         enable_flag(new_bitmap_flags, ALLEGRO_MIN_LINEAR);
@@ -621,9 +624,10 @@ void init_misc() {
     
     srand(time(NULL));
     
-    game.states.gameplay->whistle.next_dot_timer.start();
-    game.states.gameplay->whistle.next_ring_timer.start();
-    
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+    game.states.gameplay->player_info[p].whistle.next_dot_timer.start();
+    game.states.gameplay->player_info[p].whistle.next_ring_timer.start();
+    }
     game.states.gameplay->particles =
         particle_manager(game.options.max_particles);
         

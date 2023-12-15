@@ -89,7 +89,7 @@ public:
     bmp_manager bitmaps;
     //The error bitmap used to represent bitmaps that were not loaded.
     ALLEGRO_BITMAP* bmp_error;
-    //Player 1's camera.
+    //General camera.
     camera_info cam;
     //Game's configuration.
     game_config config;

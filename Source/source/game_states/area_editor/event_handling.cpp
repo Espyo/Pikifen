@@ -487,8 +487,8 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
             cur_transformation_widget.handle_mouse_down(
                 game.mouse_cursor.w_pos,
-                &game.cur_area_data.mission.goal_exit_center,
-                &game.cur_area_data.mission.goal_exit_size,
+                &game.cur_area_data.mission.team_data[0].goal_exit_center,
+                &game.cur_area_data.mission.team_data[0].goal_exit_size,
                 NULL,
                 1.0f / game.cam.zoom
             );
@@ -944,20 +944,20 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 
             if(
                 clicked_mob_idx != INVALID &&
-                game.mission_goals[game.cur_area_data.mission.goal]->
+                game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                 is_mob_applicable(clicked_mob->type)
             ) {
                 register_change("mission object requirements change");
                 auto it =
-                    game.cur_area_data.mission.goal_mob_idxs.find(
+                    game.cur_area_data.mission.team_data[0].goal_mob_idxs.find(
                         clicked_mob_idx
                     );
-                if(it == game.cur_area_data.mission.goal_mob_idxs.end()) {
-                    game.cur_area_data.mission.goal_mob_idxs.insert(
+                if(it == game.cur_area_data.mission.team_data[0].goal_mob_idxs.end()) {
+                    game.cur_area_data.mission.team_data[0].goal_mob_idxs.insert(
                         clicked_mob_idx
                     );
                 } else {
-                    game.cur_area_data.mission.goal_mob_idxs.erase(it);
+                    game.cur_area_data.mission.team_data[0].goal_mob_idxs.erase(it);
                 }
             }
             
@@ -1457,8 +1457,8 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             if(sub_state == EDITOR_SUB_STATE_MISSION_EXIT) {
                 cur_transformation_widget.handle_mouse_move(
                     snap_point(game.mouse_cursor.w_pos, true),
-                    &game.cur_area_data.mission.goal_exit_center,
-                    &game.cur_area_data.mission.goal_exit_size,
+                    &game.cur_area_data.mission.team_data[0].goal_exit_center,
+                    &game.cur_area_data.mission.team_data[0].goal_exit_size,
                     NULL,
                     1.0f / game.cam.zoom,
                     false,

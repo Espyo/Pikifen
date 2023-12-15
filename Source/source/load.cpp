@@ -107,7 +107,7 @@ void load_area(
         get_subtitle_or_mission_goal(
             game.cur_area_data.subtitle,
             game.cur_area_data.type,
-            game.cur_area_data.mission.goal
+            game.cur_area_data.mission.team_data[0].goal
         ),
         1.0f
     );
@@ -609,8 +609,8 @@ void load_area(
  *   Data object to fill.
  */
 void load_area_mission_data(data_node* node, mission_data &data) {
-    data.fail_hud_primary_cond = INVALID;
-    data.fail_hud_secondary_cond = INVALID;
+    data.team_data[0]. fail_hud_primary_cond = INVALID;
+    data.team_data[0].fail_hud_secondary_cond = INVALID;
     
     reader_setter rs(node);
     string goal_str;
@@ -618,20 +618,20 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     int mission_grading_mode_int = MISSION_GRADING_GOAL;
     
     rs.set("mission_goal", goal_str);
-    rs.set("mission_goal_amount", data.goal_amount);
-    rs.set("mission_goal_all_mobs", data.goal_all_mobs);
+    rs.set("mission_goal_amount", data.team_data[0].goal_amount);
+    rs.set("mission_goal_all_mobs", data.team_data[0].goal_all_mobs);
     rs.set("mission_required_mobs", required_mobs_str);
-    rs.set("mission_goal_exit_center", data.goal_exit_center);
-    rs.set("mission_goal_exit_size", data.goal_exit_size);
-    rs.set("mission_fail_conditions", data.fail_conditions);
-    rs.set("mission_fail_too_few_pik_amount", data.fail_too_few_pik_amount);
-    rs.set("mission_fail_too_many_pik_amount", data.fail_too_many_pik_amount);
-    rs.set("mission_fail_pik_killed", data.fail_pik_killed);
-    rs.set("mission_fail_leaders_kod", data.fail_leaders_kod);
-    rs.set("mission_fail_enemies_killed", data.fail_enemies_killed);
-    rs.set("mission_fail_time_limit", data.fail_time_limit);
-    rs.set("mission_fail_hud_primary_cond", data.fail_hud_primary_cond);
-    rs.set("mission_fail_hud_secondary_cond", data.fail_hud_secondary_cond);
+    rs.set("mission_goal_exit_center", data.team_data[0].goal_exit_center);
+    rs.set("mission_goal_exit_size", data.team_data[0].goal_exit_size);
+    rs.set("mission_fail_conditions", data.team_data[0].fail_conditions);
+    rs.set("mission_fail_too_few_pik_amount", data.team_data[0].fail_too_few_pik_amount);
+    rs.set("mission_fail_too_many_pik_amount", data.team_data[0].fail_too_many_pik_amount);
+    rs.set("mission_fail_pik_killed", data.team_data[0].fail_pik_killed);
+    rs.set("mission_fail_leaders_kod", data.team_data[0].fail_leaders_kod);
+    rs.set("mission_fail_enemies_killed", data.team_data[0].fail_enemies_killed);
+    rs.set("mission_fail_time_limit", data.team_data[0].fail_time_limit);
+    rs.set("mission_fail_hud_primary_cond", data.team_data[0].fail_hud_primary_cond);
+    rs.set("mission_fail_hud_secondary_cond", data.team_data[0].fail_hud_secondary_cond);
     rs.set("mission_grading_mode", mission_grading_mode_int);
     rs.set("mission_points_per_pikmin_born", data.points_per_pikmin_born);
     rs.set("mission_points_per_pikmin_death", data.points_per_pikmin_death);
@@ -647,34 +647,34 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     rs.set("mission_gold_req", data.gold_req);
     rs.set("mission_platinum_req", data.platinum_req);
     
-    data.goal = MISSION_GOAL_END_MANUALLY;
+    data.team_data[0].goal = MISSION_GOAL_END_MANUALLY;
     for(size_t g = 0; g < game.mission_goals.size(); ++g) {
         if(game.mission_goals[g]->get_name() == goal_str) {
-            data.goal = (MISSION_GOALS) g;
+            data.team_data[0].goal = (MISSION_GOALS) g;
             break;
         }
     }
     vector<string> mission_required_mobs_strs =
         split(required_mobs_str, ";");
-    data.goal_mob_idxs.reserve(
+    data.team_data[0].goal_mob_idxs.reserve(
         mission_required_mobs_strs.size()
     );
     for(size_t m = 0; m < mission_required_mobs_strs.size(); ++m) {
-        data.goal_mob_idxs.insert(
+        data.team_data[0].goal_mob_idxs.insert(
             s2i(mission_required_mobs_strs[m])
         );
     }
     data.grading_mode = (MISSION_GRADING_MODES) mission_grading_mode_int;
     
     //Automatically turn the pause menu fail condition on/off for convenience.
-    if(data.goal == MISSION_GOAL_END_MANUALLY) {
+    if(data.team_data[0].goal == MISSION_GOAL_END_MANUALLY) {
         disable_flag(
-            data.fail_conditions,
+            data.team_data[0].fail_conditions,
             get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     } else {
         enable_flag(
-            data.fail_conditions,
+            data.team_data[0].fail_conditions,
             get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         );
     }
@@ -682,7 +682,7 @@ void load_area_mission_data(data_node* node, mission_data &data) {
     //Automatically turn off the seconds left score criterion for convenience.
     if(
         !has_flag(
-            data.fail_conditions,
+            data.team_data[0].fail_conditions,
             get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
         )
     ) {

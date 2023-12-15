@@ -500,8 +500,8 @@ void gameplay_state::process_system_key_press(const int keycode) {
         } case MAKER_TOOL_TELEPORT: {
             sector* mouse_sector =
                 get_sector(game.mouse_cursor.w_pos, NULL, true);
-            if(mouse_sector && cur_leader_ptr) {
-                cur_leader_ptr->chase(
+            if(mouse_sector && player_info[0].cur_leader_ptr) {
+                player_info[0].cur_leader_ptr->chase(
                     game.mouse_cursor.w_pos, mouse_sector->z,
                     CHASE_FLAG_TELEPORT
                 );

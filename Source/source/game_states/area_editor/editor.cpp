@@ -1402,7 +1402,7 @@ void area_editor::get_hovered_layout_element(
 size_t area_editor::get_mission_required_mob_count() const {
     size_t total_required = 0;
     
-    if(game.cur_area_data.mission.goal_all_mobs) {
+    if(game.cur_area_data.mission.team_data[0].goal_all_mobs) {
         for(
             size_t m = 0;
             m < game.cur_area_data.mob_generators.size();
@@ -1410,15 +1410,15 @@ size_t area_editor::get_mission_required_mob_count() const {
         ) {
             mob_gen* g = game.cur_area_data.mob_generators[m];
             if(
-                game.mission_goals[game.cur_area_data.mission.goal]->
-                is_mob_applicable(g->type)
+                game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
+                is_mob_applicable(g->type,0)
             ) {
                 total_required++;
             }
         }
     } else {
         total_required =
-            game.cur_area_data.mission.goal_mob_idxs.size();
+            game.cur_area_data.mission.team_data[0].goal_mob_idxs.size();
     }
     
     return total_required;
@@ -2688,10 +2688,10 @@ void area_editor::press_select_all_button() {
         ) {
             mob_gen* m_ptr = game.cur_area_data.mob_generators[m];
             if(
-                game.mission_goals[game.cur_area_data.mission.goal]->
+                game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                 is_mob_applicable(m_ptr->type)
             ) {
-                game.cur_area_data.mission.goal_mob_idxs.insert(m);
+                game.cur_area_data.mission.team_data[0].goal_mob_idxs.insert(m);
             }
         }
     }
@@ -3390,39 +3390,39 @@ bool area_editor::save_area(const bool to_backup) {
     );
     
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
-        if(game.cur_area_data.mission.goal != MISSION_GOAL_END_MANUALLY) {
+        if(game.cur_area_data.mission.team_data[0].goal != MISSION_GOAL_END_MANUALLY) {
             data_file.add(
                 new data_node(
                     "mission_goal",
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     get_name()
                 )
             );
         }
         if(
-            game.cur_area_data.mission.goal == MISSION_GOAL_TIMED_SURVIVAL ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_GROW_PIKMIN
+            game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_TIMED_SURVIVAL ||
+            game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_GROW_PIKMIN
         ) {
             data_file.add(
                 new data_node(
                     "mission_goal_amount",
-                    i2s(game.cur_area_data.mission.goal_amount)
+                    i2s(game.cur_area_data.mission.team_data[0].goal_amount)
                 )
             );
         }
         if(
-            game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_BATTLE_ENEMIES ||
-            game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
+            game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_COLLECT_TREASURE ||
+            game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_BATTLE_ENEMIES ||
+            game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_GET_TO_EXIT
         ) {
             data_file.add(
                 new data_node(
                     "mission_goal_all_mobs",
-                    b2s(game.cur_area_data.mission.goal_all_mobs)
+                    b2s(game.cur_area_data.mission.team_data[0].goal_all_mobs)
                 )
             );
             string mission_mob_idxs;
-            for(size_t i : game.cur_area_data.mission.goal_mob_idxs) {
+            for(size_t i : game.cur_area_data.mission.team_data[0].goal_mob_idxs) {
                 if(!mission_mob_idxs.empty()) mission_mob_idxs += ";";
                 mission_mob_idxs += i2s(i);
             }
@@ -3435,119 +3435,119 @@ bool area_editor::save_area(const bool to_backup) {
                 );
             }
         }
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT) {
+        if(game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_GET_TO_EXIT) {
             data_file.add(
                 new data_node(
                     "mission_goal_exit_center",
-                    p2s(game.cur_area_data.mission.goal_exit_center)
+                    p2s(game.cur_area_data.mission.team_data[0].goal_exit_center)
                 )
             );
             data_file.add(
                 new data_node(
                     "mission_goal_exit_size",
-                    p2s(game.cur_area_data.mission.goal_exit_size)
+                    p2s(game.cur_area_data.mission.team_data[0].goal_exit_size)
                 )
             );
         }
-        if(game.cur_area_data.mission.fail_conditions > 0) {
+        if(game.cur_area_data.mission.team_data[0].fail_conditions > 0) {
             data_file.add(
                 new data_node(
                     "mission_fail_conditions",
-                    i2s(game.cur_area_data.mission.fail_conditions)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_conditions)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_TOO_FEW_PIKMIN)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_too_few_pik_amount",
-                    i2s(game.cur_area_data.mission.fail_too_few_pik_amount)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_too_few_pik_amount)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_TOO_MANY_PIKMIN)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_too_many_pik_amount",
-                    i2s(game.cur_area_data.mission.fail_too_many_pik_amount)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_too_many_pik_amount)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_LOSE_PIKMIN)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_pik_killed",
-                    i2s(game.cur_area_data.mission.fail_pik_killed)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_pik_killed)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_LOSE_LEADERS)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_leaders_kod",
-                    i2s(game.cur_area_data.mission.fail_leaders_kod)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_leaders_kod)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_KILL_ENEMIES)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_enemies_killed",
-                    i2s(game.cur_area_data.mission.fail_enemies_killed)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_enemies_killed)
                 )
             );
         }
         if(
             has_flag(
-                game.cur_area_data.mission.fail_conditions,
+                game.cur_area_data.mission.team_data[0].fail_conditions,
                 get_index_bitmask(MISSION_FAIL_COND_TIME_LIMIT)
             )
         ) {
             data_file.add(
                 new data_node(
                     "mission_fail_time_limit",
-                    i2s(game.cur_area_data.mission.fail_time_limit)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_time_limit)
                 )
             );
         }
-        if(game.cur_area_data.mission.fail_hud_primary_cond != INVALID) {
+        if(game.cur_area_data.mission.team_data[0].fail_hud_primary_cond != INVALID) {
             data_file.add(
                 new data_node(
                     "mission_fail_hud_primary_cond",
-                    i2s(game.cur_area_data.mission.fail_hud_primary_cond)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_hud_primary_cond)
                 )
             );
         }
-        if(game.cur_area_data.mission.fail_hud_secondary_cond != INVALID) {
+        if(game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond != INVALID) {
             data_file.add(
                 new data_node(
                     "mission_fail_hud_secondary_cond",
-                    i2s(game.cur_area_data.mission.fail_hud_secondary_cond)
+                    i2s(game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond)
                 )
             );
         }

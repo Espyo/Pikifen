@@ -151,8 +151,8 @@ void onion::spew() {
         spew_queue[t]--;
         
         game.statistics.pikmin_births++;
-        game.states.gameplay->pikmin_born++;
-        game.states.gameplay->last_pikmin_born_pos = pos;
+        game.states.gameplay->mission_info[0].pikmin_born++;
+        game.states.gameplay->mission_info[0].last_pikmin_born_pos = pos;
         
         size_t total_after =
             game.states.gameplay->mobs.pikmin_list.size() + 1;
@@ -206,12 +206,12 @@ void onion::tick_class_specifics(const float delta_t) {
         }
         
         unsigned char final_alpha = 255;
-        
+        for(size_t p = 0; p < MAX_PLAYERS;++p){
         if(
-            game.states.gameplay->cur_leader_ptr &&
+            game.states.gameplay->player_info[p].cur_leader_ptr &&
             bbox_check(
-                game.states.gameplay->cur_leader_ptr->pos, o_ptr->pos,
-                game.states.gameplay->cur_leader_ptr->radius +
+                game.states.gameplay->player_info[p].cur_leader_ptr->pos, o_ptr->pos,
+                game.states.gameplay->player_info[p].cur_leader_ptr->radius +
                 o_ptr->radius * 3
             )
         ) {
@@ -219,16 +219,16 @@ void onion::tick_class_specifics(const float delta_t) {
         }
         
         if(
-            game.states.gameplay->cur_leader_ptr &&
+            game.states.gameplay->player_info[p].cur_leader_ptr &&
             bbox_check(
-                game.states.gameplay->leader_cursor_w, o_ptr->pos,
-                game.states.gameplay->cur_leader_ptr->radius +
+                game.states.gameplay->player_info[p].leader_cursor_w, o_ptr->pos,
+                game.states.gameplay->player_info[p].cur_leader_ptr->radius +
                 o_ptr->radius * 3
             )
         ) {
             final_alpha = ONION::SEETHROUGH_ALPHA;
         }
-        
+        }
         if(o_ptr->seethrough != final_alpha) {
             if(final_alpha < o_ptr->seethrough) {
                 o_ptr->seethrough =

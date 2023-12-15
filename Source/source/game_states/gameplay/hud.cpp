@@ -53,7 +53,7 @@ const float UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
 /* ----------------------------------------------------------------------------
  * Creates a new HUD structure instance.
  */
-hud_struct::hud_struct() :
+hud_struct::hud_struct(const size_t &m_player_id) :
     bmp_bubble(nullptr),
     bmp_counter_bubble_group(nullptr),
     bmp_counter_bubble_field(nullptr),
@@ -66,6 +66,7 @@ hud_struct::hud_struct() :
     bmp_sun(nullptr),
     leader_icon_mgr(&gui),
     leader_health_mgr(&gui),
+    player_id(m_player_id),
     standby_icon_mgr(&gui),
     spray_icon_mgr(&gui),
     standby_items_opacity(0.0f),
@@ -163,7 +164,7 @@ hud_struct::hud_struct() :
             leader_icon_bubble icon;
             point final_center;
             point final_size;
-            game.states.gameplay->hud->leader_icon_mgr.get_drawing_info(
+            this->leader_icon_mgr.get_drawing_info(
                 l, &icon, &final_center, &final_size
             );
             
@@ -197,7 +198,7 @@ hud_struct::hud_struct() :
             leader_health_bubble health;
             point final_center;
             point final_size;
-            game.states.gameplay->hud->leader_health_mgr.get_drawing_info(
+            this->leader_health_mgr.get_drawing_info(
                 l, &health, &final_center, &final_size
             );
             
@@ -261,7 +262,7 @@ hud_struct::hud_struct() :
     leader_next_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
-        if(game.states.gameplay->available_leaders.size() < 2) return;
+        if(game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].available_leaders.size() < 2) return;
         player_input i =
             game.controls.find_bind(PLAYER_ACTION_NEXT_LEADER).input;
         if(i.type == INPUT_TYPE_NONE) return;
@@ -403,7 +404,7 @@ hud_struct::hud_struct() :
     gui_item* standby_icon = new gui_item();
     standby_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(BUBBLE_CURRENT);
+        this->draw_standby_icon(BUBBLE_CURRENT);
     };
     gui.add_item(standby_icon, "standby_icon");
     standby_icon_mgr.register_bubble(BUBBLE_CURRENT, standby_icon);
@@ -413,7 +414,7 @@ hud_struct::hud_struct() :
     gui_item* standby_next_icon = new gui_item();
     standby_next_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(BUBBLE_NEXT);
+        this->draw_standby_icon(BUBBLE_NEXT);
     };
     gui.add_item(standby_next_icon, "standby_next_icon");
     standby_icon_mgr.register_bubble(BUBBLE_NEXT, standby_next_icon);
@@ -424,14 +425,14 @@ hud_struct::hud_struct() :
     standby_next_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         subgroup_type* next_type;
-        game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
+        game.states.gameplay->player_info[this->player_id].cur_leader_ptr->group->get_next_standby_type(
             false, &next_type
         );
         if(
             next_type ==
-            game.states.gameplay->cur_leader_ptr->group->cur_standby_type
+            game.states.gameplay->player_info[this->player_id].cur_leader_ptr->group->cur_standby_type
         ) {
             return;
         }
@@ -440,7 +441,7 @@ hud_struct::hud_struct() :
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
             game.fonts.slim, i, true, center, size,
-            game.states.gameplay->hud->standby_items_opacity * 255
+            this->standby_items_opacity * 255
         );
     };
     gui.add_item(standby_next_input, "standby_next_input");
@@ -450,7 +451,7 @@ hud_struct::hud_struct() :
     gui_item* standby_prev_icon = new gui_item();
     standby_prev_icon->on_draw =
     [this] (const point & center, const point & size) {
-        game.states.gameplay->hud->draw_standby_icon(BUBBLE_PREVIOUS);
+        this->draw_standby_icon(BUBBLE_PREVIOUS);
     };
     gui.add_item(standby_prev_icon, "standby_prev_icon");
     standby_icon_mgr.register_bubble(BUBBLE_PREVIOUS, standby_prev_icon);
@@ -461,18 +462,18 @@ hud_struct::hud_struct() :
     standby_prev_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         subgroup_type* prev_type;
-        game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
+        game.states.gameplay->player_info[this->player_id].cur_leader_ptr->group->get_next_standby_type(
             true, &prev_type
         );
         subgroup_type* next_type;
-        game.states.gameplay->cur_leader_ptr->group->get_next_standby_type(
+        game.states.gameplay->player_info[this->player_id].cur_leader_ptr->group->get_next_standby_type(
             false, &next_type
         );
         if(
             prev_type ==
-            game.states.gameplay->cur_leader_ptr->group->cur_standby_type ||
+            game.states.gameplay->player_info[this->player_id].cur_leader_ptr->group->cur_standby_type ||
             prev_type == next_type
         ) {
             return;
@@ -482,7 +483,7 @@ hud_struct::hud_struct() :
         if(i.type == INPUT_TYPE_NONE) return;
         draw_player_input_icon(
             game.fonts.slim, i, true, center, size,
-            game.states.gameplay->hud->standby_items_opacity * 255
+            this->standby_items_opacity * 255
         );
     };
     gui.add_item(standby_prev_input, "standby_prev_input");
@@ -493,14 +494,14 @@ hud_struct::hud_struct() :
     standby_maturity_icon->on_draw =
     [this, standby_maturity_icon] (const point & center, const point & size) {
         //Standby group member preparations.
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         
         ALLEGRO_BITMAP* standby_mat_bmp = NULL;
-        leader* l_ptr = game.states.gameplay->cur_leader_ptr;
+        leader* l_ptr = game.states.gameplay->player_info[this->player_id].cur_leader_ptr;
         if(!l_ptr || !l_ptr->group) return;
         
         mob* closest =
-            game.states.gameplay->closest_group_member[BUBBLE_CURRENT];
+            game.states.gameplay->player_info[this->player_id].closest_group_member[BUBBLE_CURRENT];
             
         if(l_ptr->group->cur_standby_type && closest) {
             SUBGROUP_TYPE_CATEGORIES c =
@@ -522,7 +523,7 @@ hud_struct::hud_struct() :
         }
         
         ALLEGRO_COLOR color =
-            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255);
+            map_alpha(this->standby_items_opacity * 255);
             
         if(standby_mat_bmp) {
             draw_bitmap_in_box(
@@ -561,7 +562,7 @@ hud_struct::hud_struct() :
             center,
             size,
             0.0f,
-            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255)
+            map_alpha(this->standby_items_opacity * 255)
         );
     };
     gui.add_item(standby_bubble, "standby_bubble");
@@ -572,7 +573,7 @@ hud_struct::hud_struct() :
     standby_amount->on_draw =
     [this] (const point & center, const point & size) {
         size_t n_standby_pikmin = 0;
-        leader* l_ptr = game.states.gameplay->cur_leader_ptr;
+        leader* l_ptr = game.states.gameplay->player_info[this->player_id].cur_leader_ptr;
         
         if(l_ptr && l_ptr->group->cur_standby_type) {
             for(size_t m = 0; m < l_ptr->group->members.size(); ++m) {
@@ -592,7 +593,7 @@ hud_struct::hud_struct() :
         
         draw_compressed_scaled_text(
             game.fonts.counter,
-            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
+            map_alpha(this->standby_items_opacity * 255),
             center,
             point(1.0f, 1.0f) + standby_amount->get_juice_value(),
             ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
@@ -606,7 +607,7 @@ hud_struct::hud_struct() :
     gui_item* group_bubble = new gui_item();
     group_bubble->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         draw_bitmap(
             bmp_counter_bubble_group,
             center,
@@ -620,9 +621,9 @@ hud_struct::hud_struct() :
     group_amount = new gui_item();
     group_amount->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         size_t n_group_pikmin =
-            game.states.gameplay->cur_leader_ptr->group->members.size();
+            game.states.gameplay->player_info[this->player_id].cur_leader_ptr->group->members.size();
         for(
             size_t l = 0;
             l < game.states.gameplay->mobs.leaders.size();
@@ -633,7 +634,7 @@ hud_struct::hud_struct() :
             //Subtract them from the group count total.
             if(
                 game.states.gameplay->mobs.leaders[l]->following_group ==
-                game.states.gameplay->cur_leader_ptr
+                game.states.gameplay->player_info[this->player_id].cur_leader_ptr
             ) {
                 n_group_pikmin--;
             }
@@ -739,7 +740,7 @@ hud_struct::hud_struct() :
     [this] (const point & center, const point & size) {
         draw_compressed_text(
             game.fonts.counter,
-            map_alpha(game.states.gameplay->hud->standby_items_opacity * 255),
+            map_alpha(this->standby_items_opacity * 255),
             center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "x"
         );
     };
@@ -751,7 +752,7 @@ hud_struct::hud_struct() :
         gui_item* counter_slash = new gui_item();
         counter_slash->on_draw =
         [this] (const point & center, const point & size) {
-            if(!game.states.gameplay->cur_leader_ptr) return;
+            if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
             draw_compressed_text(
                 game.fonts.counter, COLOR_WHITE,
                 center, ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER, size, "/"
@@ -775,11 +776,11 @@ hud_struct::hud_struct() :
     spray_1_amount = new gui_item();
     spray_1_amount->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
         if(game.spray_types.size() > 2) {
-            top_spray_idx = game.states.gameplay->selected_spray;
+            top_spray_idx = game.states.gameplay->player_info[this->player_id].selected_spray;
         } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
             top_spray_idx = 0;
         }
@@ -787,12 +788,12 @@ hud_struct::hud_struct() :
         
         draw_compressed_scaled_text(
             game.fonts.counter,
-            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
+            map_alpha(this->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_1_amount->get_juice_value(),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
             "x" +
-            i2s(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays)
+            i2s(game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats[top_spray_idx].nr_sprays)
         );
     };
     gui.add_item(spray_1_amount, "spray_1_amount");
@@ -803,16 +804,16 @@ hud_struct::hud_struct() :
     spray_1_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         
         size_t top_spray_idx = INVALID;
         if(game.spray_types.size() > 2) {
-            top_spray_idx = game.states.gameplay->selected_spray;
+            top_spray_idx = game.states.gameplay->player_info[this->player_id].selected_spray;
         } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
             top_spray_idx = 0;
         }
         if(top_spray_idx == INVALID) return;
-        if(game.states.gameplay->spray_stats[top_spray_idx].nr_sprays == 0) {
+        if(game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats[top_spray_idx].nr_sprays == 0) {
             return;
         }
         
@@ -826,7 +827,7 @@ hud_struct::hud_struct() :
         
         draw_player_input_icon(
             game.fonts.slim, i, true, center, size,
-            game.states.gameplay->hud->spray_items_opacity * 255
+            this->spray_items_opacity * 255
         );
     };
     gui.add_item(spray_1_input, "spray_1_input");
@@ -836,7 +837,7 @@ hud_struct::hud_struct() :
     gui_item* spray_2_icon = new gui_item();
     spray_2_icon->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
         if(game.spray_types.size() == 2) {
@@ -847,7 +848,7 @@ hud_struct::hud_struct() :
         draw_bitmap_in_box(
             game.spray_types[bottom_spray_idx].bmp_spray, center, size, true,
             0.0f,
-            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
+            map_alpha(this->spray_items_opacity * 255)
         );
     };
     gui.add_item(spray_2_icon, "spray_2_icon");
@@ -857,7 +858,7 @@ hud_struct::hud_struct() :
     spray_2_amount = new gui_item();
     spray_2_amount->on_draw =
     [this] (const point & center, const point & size) {
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
         if(game.spray_types.size() == 2) {
@@ -867,12 +868,12 @@ hud_struct::hud_struct() :
         
         draw_compressed_scaled_text(
             game.fonts.counter,
-            map_alpha(game.states.gameplay->hud->spray_items_opacity * 255),
+            map_alpha(this->spray_items_opacity * 255),
             point(center.x - size.x / 2.0, center.y),
             point(1.0f, 1.0f) + spray_2_amount->get_juice_value(),
             ALLEGRO_ALIGN_LEFT, TEXT_VALIGN_CENTER, size, true,
             "x" +
-            i2s(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays)
+            i2s(game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats[bottom_spray_idx].nr_sprays)
         );
     };
     gui.add_item(spray_2_amount, "spray_2_amount");
@@ -883,14 +884,14 @@ hud_struct::hud_struct() :
     spray_2_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         
         size_t bottom_spray_idx = INVALID;
         if(game.spray_types.size() == 2) {
             bottom_spray_idx = 1;
         }
         if(bottom_spray_idx == INVALID) return;
-        if(game.states.gameplay->spray_stats[bottom_spray_idx].nr_sprays == 0) {
+        if(game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats[bottom_spray_idx].nr_sprays == 0) {
             return;
         }
         
@@ -902,7 +903,7 @@ hud_struct::hud_struct() :
         
         draw_player_input_icon(
             game.fonts.slim, i, true, center, size,
-            game.states.gameplay->hud->spray_items_opacity * 255
+            this->spray_items_opacity * 255
         );
     };
     gui.add_item(spray_2_input, "spray_2_input");
@@ -923,13 +924,13 @@ hud_struct::hud_struct() :
     prev_spray_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         
         size_t prev_spray_idx = INVALID;
         if(game.spray_types.size() >= 3) {
             prev_spray_idx =
                 sum_and_wrap(
-                    (int) game.states.gameplay->selected_spray,
+                    (int) game.states.gameplay->player_info[this->player_id].selected_spray,
                     -1,
                     (int) game.spray_types.size()
                 );
@@ -944,7 +945,7 @@ hud_struct::hud_struct() :
         
         draw_player_input_icon(
             game.fonts.slim, i, true, center, size,
-            game.states.gameplay->hud->spray_items_opacity * 255
+            this->spray_items_opacity * 255
         );
     };
     gui.add_item(prev_spray_input, "spray_prev_input");
@@ -965,13 +966,13 @@ hud_struct::hud_struct() :
     next_spray_input->on_draw =
     [this] (const point & center, const point & size) {
         if(!game.options.show_hud_input_icons) return;
-        if(!game.states.gameplay->cur_leader_ptr) return;
+        if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
         
         size_t next_spray_idx = INVALID;
         if(game.spray_types.size() >= 3) {
             next_spray_idx =
                 sum_and_wrap(
-                    (int) game.states.gameplay->selected_spray,
+                    (int) game.states.gameplay->player_info[this->player_id].selected_spray,
                     1,
                     (int) game.spray_types.size()
                 );
@@ -986,7 +987,7 @@ hud_struct::hud_struct() :
         
         draw_player_input_icon(
             game.fonts.slim, i, true, center, size,
-            game.states.gameplay->hud->spray_items_opacity * 255
+            this->spray_items_opacity * 255
         );
     };
     gui.add_item(next_spray_input, "spray_next_input");
@@ -1007,7 +1008,7 @@ hud_struct::hud_struct() :
                 cx, cy, cw, ch,
                 center.x - size.x / 2.0f,
                 center.y - size.y / 2.0f,
-                size.x * game.states.gameplay->goal_indicator_ratio + 1,
+                size.x * game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].goal_indicator_ratio + 1,
                 size.y
             );
             draw_filled_rounded_rectangle(
@@ -1016,9 +1017,9 @@ hud_struct::hud_struct() :
             set_combined_clipping_rectangles(
                 cx, cy, cw, ch,
                 center.x - size.x / 2.0f +
-                size.x * game.states.gameplay->goal_indicator_ratio,
+                size.x * game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].goal_indicator_ratio,
                 center.y - size.y / 2.0f,
-                size.x * (1 - game.states.gameplay->goal_indicator_ratio),
+                size.x * (1 - game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].goal_indicator_ratio),
                 size.y
             );
             draw_filled_rounded_rectangle(
@@ -1034,7 +1035,7 @@ hud_struct::hud_struct() :
         
         
         string goal_cur_label_text =
-            game.mission_goals[game.cur_area_data.mission.goal]->
+            game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
             get_hud_label();
             
         if(!goal_cur_label_text.empty()) {
@@ -1060,11 +1061,11 @@ hud_struct::hud_struct() :
                 [this, mission_goal_cur]
             (const point & center, const point & size) {
                 int value =
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     get_cur_amount(game.states.gameplay);
                 string text;
                 if(
-                    game.cur_area_data.mission.goal ==
+                    game.cur_area_data.mission.team_data[0].goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
                     text = time_to_str2(value, ":", "");
@@ -1083,7 +1084,7 @@ hud_struct::hud_struct() :
                 );
             };
             gui.add_item(mission_goal_cur, "mission_goal_cur");
-            game.states.gameplay->mission_goal_cur_text = mission_goal_cur;
+            game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].mission_goal_cur_text = mission_goal_cur;
             
             
             //Mission goal requirement label.
@@ -1106,11 +1107,11 @@ hud_struct::hud_struct() :
             mission_goal_req->on_draw =
             [this] (const point & center, const point & size) {
                 int value =
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     get_req_amount(game.states.gameplay);
                 string text;
                 if(
-                    game.cur_area_data.mission.goal ==
+                    game.cur_area_data.mission.team_data[0].goal ==
                     MISSION_GOAL_TIMED_SURVIVAL
                 ) {
                     text = time_to_str2(value, ":", "");
@@ -1153,7 +1154,7 @@ hud_struct::hud_struct() :
                     center, point(1.0f, 1.0f),
                     ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                     size, true,
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     get_name()
                 );
             };
@@ -1211,11 +1212,11 @@ hud_struct::hud_struct() :
                 point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
                 ALLEGRO_ALIGN_CENTER, TEXT_VALIGN_CENTER,
                 size, true,
-                i2s(game.states.gameplay->mission_score)
+                i2s(game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].mission_score)
             );
         };
         gui.add_item(mission_score_points, "mission_score_points");
-        game.states.gameplay->mission_score_cur_text = mission_score_points;
+        game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].mission_score_cur_text = mission_score_points;
         
         
         //Mission score "points" label.
@@ -1239,10 +1240,10 @@ hud_struct::hud_struct() :
         [this] (const point & center, const point & size) {
             //Setup.
             const float ruler_start_value =
-                game.states.gameplay->score_indicator -
+                game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].score_indicator -
                 HUD::SCORE_RULER_RANGE / 2.0f;
             const float ruler_end_value =
-                game.states.gameplay->score_indicator +
+                game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].score_indicator +
                 HUD::SCORE_RULER_RANGE / 2.0f;
             const float ruler_scale =
                 size.x / (float) HUD::SCORE_RULER_RANGE;
@@ -1294,11 +1295,11 @@ hud_struct::hud_struct() :
                 if(seg_start_value > ruler_end_value) continue;
                 float seg_start_x =
                     center.x -
-                    (game.states.gameplay->score_indicator - seg_start_value) *
+                    (game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].score_indicator - seg_start_value) *
                     ruler_scale;
                 float seg_end_x =
                     center.x +
-                    (seg_end_value - game.states.gameplay->score_indicator) *
+                    (seg_end_value - game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].score_indicator) *
                     ruler_scale;
                 seg_start_x = std::max(seg_start_x, ruler_start_x);
                 seg_end_x = std::min(ruler_end_x, seg_end_x);
@@ -1333,7 +1334,7 @@ hud_struct::hud_struct() :
                 if(m < 0.0f || m < ruler_start_value) continue;
                 float marking_x =
                     center.x -
-                    (game.states.gameplay->score_indicator - m) *
+                    (game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].score_indicator - m) *
                     ruler_scale;
                 float marking_length =
                     fmod(m, 100) == 0 ?
@@ -1364,7 +1365,7 @@ hud_struct::hud_struct() :
                 HUD::MEDAL_ICON_SCALE_MULT;
             for(int s = 0; s < 6; ++s) {
                 float seg_start_value = seg_limits[s];
-                if(seg_start_value <= game.states.gameplay->score_indicator) {
+                if(seg_start_value <= game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].score_indicator) {
                     cur_seg = s;
                 }
                 if(seg_start_value <= ruler_start_value) {
@@ -1377,7 +1378,7 @@ hud_struct::hud_struct() :
                 if(seg_start_value < ruler_start_value) continue;
                 float seg_start_x =
                     center.x -
-                    (game.states.gameplay->score_indicator - seg_start_value) *
+                    (game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].score_indicator - seg_start_value) *
                     ruler_scale;
                 float icon_x = seg_start_x;
                 unsigned char icon_alpha = 255;
@@ -1430,13 +1431,13 @@ hud_struct::hud_struct() :
     
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.fail_hud_primary_cond != INVALID
+        game.cur_area_data.mission.team_data[0].fail_hud_primary_cond != INVALID
     ) {
         create_mission_fail_cond_items(true);
     }
     if(
         game.cur_area_data.type == AREA_TYPE_MISSION &&
-        game.cur_area_data.mission.fail_hud_secondary_cond != INVALID
+        game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond != INVALID
     ) {
         create_mission_fail_cond_items(false);
     }
@@ -1503,9 +1504,9 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
     MISSION_FAIL_CONDITIONS cond =
         primary ?
         (MISSION_FAIL_CONDITIONS)
-        game.cur_area_data.mission.fail_hud_primary_cond :
+        game.cur_area_data.mission.team_data[0].fail_hud_primary_cond :
         (MISSION_FAIL_CONDITIONS)
-        game.cur_area_data.mission.fail_hud_secondary_cond;
+        game.cur_area_data.mission.team_data[0].fail_hud_secondary_cond;
         
     //Mission fail condition bubble.
     gui_item* mission_fail_bubble = new gui_item();
@@ -1517,8 +1518,8 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
         int ch = 0;
         float ratio =
             primary ?
-            game.states.gameplay->fail_1_indicator_ratio :
-            game.states.gameplay->fail_2_indicator_ratio;
+            game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].fail_1_indicator_ratio :
+            game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].fail_2_indicator_ratio;
         al_get_clipping_rectangle(&cx, &cy, &cw, &ch);
         set_combined_clipping_rectangles(
             cx, cy, cw, ch,
@@ -1609,9 +1610,9 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
             "mission_fail_2_cur"
         );
         if(primary) {
-            game.states.gameplay->mission_fail_1_cur_text = mission_fail_cur;
+            game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].mission_fail_1_cur_text = mission_fail_cur;
         } else {
-            game.states.gameplay->mission_fail_2_cur_text = mission_fail_cur;
+            game.states.gameplay->mission_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].mission_fail_2_cur_text = mission_fail_cur;
         }
         
         
@@ -1717,19 +1718,19 @@ void hud_struct::create_mission_fail_cond_items(const bool primary) {
  *   or the next type's.
  */
 void hud_struct::draw_spray_icon(BUBBLE_RELATIONS which) {
-    if(!game.states.gameplay->cur_leader_ptr) return;
+    if(!game.states.gameplay->player_info[this->player_id].cur_leader_ptr) return;
     
     point final_center;
     point final_size;
     ALLEGRO_BITMAP* icon;
-    game.states.gameplay->hud->spray_icon_mgr.get_drawing_info(
+    this->spray_icon_mgr.get_drawing_info(
         which, &icon, &final_center, &final_size
     );
     
     if(!icon) return;
     draw_bitmap_in_box(
         icon, final_center, final_size, true, 0.0f,
-        map_alpha(game.states.gameplay->hud->spray_items_opacity * 255)
+        map_alpha(this->spray_items_opacity * 255)
     );
 }
 
@@ -1744,19 +1745,19 @@ void hud_struct::draw_standby_icon(BUBBLE_RELATIONS which) {
     point final_center;
     point final_size;
     ALLEGRO_BITMAP* icon;
-    game.states.gameplay->hud->standby_icon_mgr.get_drawing_info(
+    this->standby_icon_mgr.get_drawing_info(
         which, &icon, &final_center, &final_size
     );
     
     if(!icon) return;
     
     ALLEGRO_COLOR color =
-        map_alpha(game.states.gameplay->hud->standby_items_opacity * 255);
+        map_alpha(this->standby_items_opacity * 255);
         
     draw_bitmap_in_box(icon, final_center, final_size * 0.8, true, 0.0f, color);
     
     if(
-        game.states.gameplay->closest_group_member_distant &&
+        game.states.gameplay->player_info[this->player_id].closest_group_member_distant &&
         which == BUBBLE_CURRENT
     ) {
         draw_bitmap_in_box(
@@ -1781,14 +1782,14 @@ void hud_struct::tick(const float delta_t) {
     //Update leader bubbles.
     for(size_t l = 0; l < 3; ++l) {
         leader* l_ptr = NULL;
-        if(l < game.states.gameplay->available_leaders.size()) {
+        if(l < game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].available_leaders.size()) {
             size_t l_idx =
                 (size_t) sum_and_wrap(
-                    (int) game.states.gameplay->cur_leader_nr,
+                    (int) game.states.gameplay->player_info[this->player_id].cur_leader_nr,
                     (int) l,
-                    (int) game.states.gameplay->available_leaders.size()
+                    (int) game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].available_leaders.size()
                 );
-            l_ptr = game.states.gameplay->available_leaders[l_idx];
+            l_ptr = game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].available_leaders[l_idx];
         }
         
         leader_icon_bubble icon;
@@ -1817,8 +1818,8 @@ void hud_struct::tick(const float delta_t) {
     for(unsigned char s = 0; s < 3; ++s) {
     
         ALLEGRO_BITMAP* icon = NULL;
-        leader* cur_leader_ptr = game.states.gameplay->cur_leader_ptr;
-        mob* member = game.states.gameplay->closest_group_member[s];
+        leader* cur_leader_ptr = game.states.gameplay->player_info[this->player_id].cur_leader_ptr;
+        mob* member = game.states.gameplay->player_info[this->player_id].closest_group_member[s];
         subgroup_type* type = NULL;
         
         if(cur_leader_ptr) {
@@ -1877,14 +1878,14 @@ void hud_struct::tick(const float delta_t) {
     //Update spray bubbles.
     size_t top_spray_idx = INVALID;
     if(game.spray_types.size() > 2) {
-        top_spray_idx = game.states.gameplay->selected_spray;
+        top_spray_idx = game.states.gameplay->player_info[this->player_id].selected_spray;
     } else if(!game.spray_types.empty() && game.spray_types.size() <= 2) {
         top_spray_idx = 0;
     }
     spray_icon_mgr.update(
         BUBBLE_CURRENT,
         top_spray_idx == INVALID ? NULL :
-        &game.states.gameplay->spray_stats[top_spray_idx],
+        &game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats[top_spray_idx],
         top_spray_idx == INVALID ? NULL :
         game.spray_types[top_spray_idx].bmp_spray
     );
@@ -1893,7 +1894,7 @@ void hud_struct::tick(const float delta_t) {
     if(game.spray_types.size() >= 3) {
         prev_spray_idx =
             sum_and_wrap(
-                (int) game.states.gameplay->selected_spray,
+                (int) game.states.gameplay->player_info[this->player_id].selected_spray,
                 -1,
                 (int) game.spray_types.size()
             );
@@ -1901,7 +1902,7 @@ void hud_struct::tick(const float delta_t) {
     spray_icon_mgr.update(
         BUBBLE_PREVIOUS,
         prev_spray_idx == INVALID ? NULL :
-        &game.states.gameplay->spray_stats[prev_spray_idx],
+        &game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats[prev_spray_idx],
         prev_spray_idx == INVALID ? NULL :
         game.spray_types[prev_spray_idx].bmp_spray
     );
@@ -1910,7 +1911,7 @@ void hud_struct::tick(const float delta_t) {
     if(game.spray_types.size() >= 3) {
         next_spray_idx =
             sum_and_wrap(
-                (int) game.states.gameplay->selected_spray,
+                (int) game.states.gameplay->player_info[this->player_id].selected_spray,
                 1,
                 (int) game.spray_types.size()
             );
@@ -1918,7 +1919,7 @@ void hud_struct::tick(const float delta_t) {
     spray_icon_mgr.update(
         BUBBLE_NEXT,
         next_spray_idx == INVALID ? NULL :
-        &game.states.gameplay->spray_stats[next_spray_idx],
+        &game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats[next_spray_idx],
         next_spray_idx == INVALID ? NULL :
         game.spray_types[next_spray_idx].bmp_spray
     );
@@ -1927,8 +1928,8 @@ void hud_struct::tick(const float delta_t) {
     
     //Update the standby items opacity.
     if(
-        !game.states.gameplay->cur_leader_ptr ||
-        game.states.gameplay->cur_leader_ptr->group->members.empty()
+        !game.states.gameplay->player_info[this->player_id].cur_leader_ptr ||
+        game.states.gameplay->player_info[this->player_id].cur_leader_ptr->group->members.empty()
     ) {
         if(standby_items_fade_timer > 0.0f) {
             standby_items_fade_timer -= delta_t;
@@ -1946,9 +1947,9 @@ void hud_struct::tick(const float delta_t) {
     
     //Update the spray items opacity.
     size_t total_sprays = 0;
-    for(size_t s = 0; s < game.states.gameplay->spray_stats.size(); ++s) {
+    for(size_t s = 0; s < game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats.size(); ++s) {
         total_sprays +=
-            game.states.gameplay->spray_stats[s].nr_sprays;
+            game.states.gameplay->team_info[game.states.gameplay->player_info[this->player_id].team-MOB_TEAM_PLAYER_1].spray_stats[s].nr_sprays;
     }
     if(total_sprays == 0) {
         if(spray_items_fade_timer > 0.0f) {

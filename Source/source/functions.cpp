@@ -246,16 +246,16 @@ void crash(const string &reason, const string &info, const int exit_status) {
     
     error_str += "  Current leader: ";
     
-    if(game.states.gameplay->cur_leader_ptr) {
+    if(game.states.gameplay->player_info[0].cur_leader_ptr) {
         error_str +=
-            game.states.gameplay->cur_leader_ptr->type->name + ", at " +
-            p2s(game.states.gameplay->cur_leader_ptr->pos) +
+            game.states.gameplay->player_info[0].cur_leader_ptr->type->name + ", at " +
+            p2s(game.states.gameplay->player_info[0].cur_leader_ptr->pos) +
             ", state history: " +
-            game.states.gameplay->cur_leader_ptr->fsm.cur_state->name;
+            game.states.gameplay->player_info[0].cur_leader_ptr->fsm.cur_state->name;
         for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
             error_str +=
                 " " +
-                game.states.gameplay->cur_leader_ptr->
+                game.states.gameplay->player_info[0].cur_leader_ptr->
                 fsm.prev_state_names[h];
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
@@ -267,11 +267,11 @@ void crash(const string &reason, const string &info, const int exit_status) {
         [] (pikmin * p1, pikmin * p2) -> bool {
             return
             dist(
-                game.states.gameplay->cur_leader_ptr->pos,
+                game.states.gameplay->player_info[0].cur_leader_ptr->pos,
                 p1->pos
             ).to_float() <
             dist(
-                game.states.gameplay->cur_leader_ptr->pos,
+                game.states.gameplay->player_info[0].cur_leader_ptr->pos,
                 p2->pos
             ).to_float();
         }
@@ -1940,19 +1940,19 @@ string standardize_path(const string &path) {
  * speaker_bmp:
  *   Bitmap representing the speaker.
  */
-void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp) {
+void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp,const int &player_id) {
     if(!text.empty()) {
         string final_text = unescape_string(text);
-        game.states.gameplay->msg_box =
+        game.states.gameplay->player_info[player_id].msg_box =
             new msg_box_info(final_text, speaker_bmp);
-        game.states.gameplay->hud->gui.start_animation(
+        game.states.gameplay->player_info[player_id].hud->gui.start_animation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
         );
     } else {
-        delete game.states.gameplay->msg_box;
-        game.states.gameplay->msg_box = NULL;
-        game.states.gameplay->hud->gui.start_animation(
+        delete game.states.gameplay->player_info[player_id].msg_box;
+        game.states.gameplay->player_info[player_id].msg_box = NULL;
+        game.states.gameplay->player_info[player_id ].hud->gui.start_animation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );

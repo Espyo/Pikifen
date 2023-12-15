@@ -362,7 +362,7 @@ void stats_menu_state::populate_stats_list() {
             get_subtitle_or_mission_goal(
                 data.get_child_by_name("subtitle")->value,
                 AREA_TYPE_MISSION,
-                mission.goal
+                mission.team_data[0].goal
             ),
             data.get_child_by_name("maker")->value,
             data.get_child_by_name("version")->value,

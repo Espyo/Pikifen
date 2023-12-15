@@ -506,8 +506,8 @@ void pikmin::tick_class_specifics(const float delta_t) {
             pos
         );
         
-        game.states.gameplay->pikmin_deaths++;
-        game.states.gameplay->last_pikmin_death_pos = pos;
+        game.states.gameplay->mission_info[0].pikmin_deaths++;
+        game.states.gameplay->mission_info[0].last_pikmin_death_pos = pos;
         game.statistics.pikmin_deaths++;
     }
     

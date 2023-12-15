@@ -76,37 +76,11 @@ const float TREE_SHADOW_SWAY_AMOUNT = 8.0f;
 const float TREE_SHADOW_SWAY_SPEED = TAU / 8;
 }
 
+/*
+Creates the Mission Info struct
+*/
+mission_info_struct::mission_info_struct():
 
-/* ----------------------------------------------------------------------------
- * Creates the "gameplay" state.
- */
-gameplay_state::gameplay_state() :
-    game_state(),
-    after_hours(false),
-    area_time_passed(0.0f),
-    area_title_fade_timer(GAMEPLAY::AREA_TITLE_FADE_DURATION),
-    bmp_fog(nullptr),
-    closest_group_member_distant(false),
-    cur_leader_nr(0),
-    cur_leader_ptr(nullptr),
-    day(1),
-    day_minutes(0.0f),
-    delta_t_mult(1.0f),
-    gameplay_time_passed(0.0f),
-    hud(nullptr),
-    leader_cursor_sector(nullptr),
-    msg_box(nullptr),
-    next_mob_id(0),
-    particles(0),
-    precipitation(0),
-    selected_spray(0),
-    swarm_angle(0),
-    swarm_magnitude(0.0f),
-    throw_dest_mob(nullptr),
-    throw_dest_sector(nullptr),
-    loading(false),
-    unloading(false),
-    went_to_results(false),
     mission_required_mob_amount(0),
     pikmin_born(0),
     pikmin_deaths(0),
@@ -137,28 +111,70 @@ gameplay_state::gameplay_state() :
     goal_indicator_ratio(0.0f),
     fail_1_indicator_ratio(0.0f),
     fail_2_indicator_ratio(0.0f),
-    score_indicator(0.0f),
-    cur_interlude(INTERLUDE_NONE),
-    interlude_time(0.0f),
-    cur_big_msg(BIG_MESSAGE_NONE),
-    big_msg_time(0.0f),
+    score_indicator(0.0f)
+{
+
+};
+/*
+Creates the Player Info struct
+*/
+player_info_struct::player_info_struct():
+    bmp(nullptr),
+    closest_group_member_distant(false),
+    cur_leader_nr(0),
+    cur_leader_ptr(NULL),
+    hud(nullptr),
+    leader_cursor_sector(nullptr),
+    msg_box(nullptr),
+    selected_spray(0),
+    swarm_angle(0),
+    swarm_magnitude(0.0f),
+    throw_dest_mob(nullptr),
+    throw_dest_sector(nullptr),
     close_to_interactable_to_use(nullptr),
     close_to_nest_to_open(nullptr),
     close_to_pikmin_to_pluck(nullptr),
     close_to_ship_to_heal(nullptr),
     cursor_height_diff_light(0.0f),
-    is_input_allowed(false),
-    lightmap_bmp(nullptr),
     onion_menu(nullptr),
-    pause_menu(nullptr),
-    paused(false),
-    ready_for_input(false),
-    swarm_cursor(false) {
-    
+    swarm_cursor(false){
     closest_group_member[BUBBLE_PREVIOUS] = NULL;
     closest_group_member[BUBBLE_CURRENT] = NULL;
     closest_group_member[BUBBLE_NEXT] = NULL;
-    
+};
+
+/* ----------------------------------------------------------------------------
+ * Creates the "gameplay" state.
+ */
+gameplay_state::gameplay_state() :
+    game_state(),
+    after_hours(false),
+    area_time_passed(0.0f),
+    area_title_fade_timer(GAMEPLAY::AREA_TITLE_FADE_DURATION),
+    bmp_fog(nullptr),
+    day(1),
+    day_minutes(0.0f),
+    delta_t_mult(1.0f),
+    gameplay_time_passed(0.0f),
+    next_mob_id(0),
+    particles(0),
+    precipitation(0),
+
+    loading(false),
+    unloading(false),
+    went_to_results(false),
+    cur_interlude(INTERLUDE_NONE),
+    interlude_time(0.0f),
+    cur_big_msg(BIG_MESSAGE_NONE),
+    big_msg_time(0.0f),
+
+
+    is_input_allowed(false),
+    lightmap_bmp(nullptr),
+    pause_menu(nullptr),
+    paused(false),
+    ready_for_input(false) {
+        
 }
 
 
@@ -171,24 +187,25 @@ gameplay_state::gameplay_state() :
  *   Amount to change by.
  */
 void gameplay_state::change_spray_count(
-    const size_t type_nr, signed int amount
+    const size_t type_nr, signed int amount, const size_t team_id,
+    const size_t player_id
 ) {
-    spray_stats[type_nr].nr_sprays =
+    team_info[team_id].spray_stats[type_nr].nr_sprays =
         std::max(
-            (signed int) spray_stats[type_nr].nr_sprays + amount,
+            (signed int) team_info[team_id].spray_stats[type_nr].nr_sprays + amount,
             (signed int) 0
         );
         
     gui_item* spray_hud_item = NULL;
     if(game.spray_types.size() > 2) {
-        if(selected_spray == type_nr) {
-            spray_hud_item = hud->spray_1_amount;
+        if(player_info[player_id].selected_spray == type_nr) {
+            spray_hud_item = player_info[player_id].hud->spray_1_amount;
         }
     } else {
         if(type_nr == 0) {
-            spray_hud_item = hud->spray_1_amount;
+            spray_hud_item = player_info[player_id].hud->spray_1_amount;
         } else {
-            spray_hud_item = hud->spray_2_amount;
+            spray_hud_item = player_info[player_id].hud->spray_2_amount;
         }
     }
     if(spray_hud_item) {
@@ -203,8 +220,50 @@ void gameplay_state::change_spray_count(
  * Draw the gameplay.
  */
 void gameplay_state::do_drawing() {
-    do_game_drawing();
-    
+    vector<int> ap;
+   int max_players = 0;
+    for(size_t p = 0; p<MAX_PLAYERS;++p){
+        if(player_info[p].cur_leader_ptr == NULL) continue;
+        do_game_drawing(p,player_info[p].bmp,&player_info[p].world_to_screen_transform);
+        max_players+= 1;
+        ap.push_back(p);
+    }
+    al_set_target_backbuffer(game.display);
+    switch (max_players) {
+	case 1: {
+
+		al_clear_to_color(game.cur_area_data.bg_color);
+        draw_bitmap(player_info[ap[0]].bmp, point(game.win_w* 0.5, game.win_h* 0.5), point(game.win_w, game.win_h), 0);
+		break;
+	}
+	case 2: {
+		al_clear_to_color(game.cur_area_data.bg_color);
+		draw_bitmap(player_info[ap[0]].bmp, point(game.win_w * 0.5, game.win_h * 0.25), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+		draw_bitmap(player_info[ap[1]].bmp, point(game.win_w * 0.5, game.win_h * 0.75), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+	
+		break;
+	}
+	case 3: {
+		al_clear_to_color(game.cur_area_data.bg_color);
+		draw_bitmap(player_info[ap[0]].bmp, point(game.win_w * 0.25, game.win_h * 0.25), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+		draw_bitmap(player_info[ap[1]].bmp, point(game.win_w * 0.75, game.win_h * 0.25), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+		draw_bitmap(player_info[ap[2]].bmp, point(game.win_w * 0.25, game.win_h * 0.75), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+	
+		break;
+	}
+	case 4: {
+
+		al_clear_to_color(game.cur_area_data.bg_color);
+		draw_bitmap(player_info[ap[0]].bmp, point(game.win_w * 0.25, game.win_h * 0.25), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+		draw_bitmap(player_info[ap[1]].bmp, point(game.win_w * 0.75, game.win_h * 0.25), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+		draw_bitmap(player_info[ap[2]].bmp, point(game.win_w * 0.25, game.win_h * 0.75), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+		draw_bitmap(player_info[ap[3]].bmp, point(game.win_w * 0.75, game.win_h * 0.75), point(game.win_w * 0.48, game.win_h * 0.48), 0);
+	
+		break;
+	}
+    }
+
+    al_flip_display();
     if(game.perf_mon) {
         game.perf_mon->leave_state();
     }
@@ -235,8 +294,11 @@ void gameplay_state::do_logic() {
     //Controls.
     vector<player_action> player_actions = game.controls.new_frame();
     for(size_t a = 0; a < player_actions.size(); ++a) {
+        int player_id = player_actions[a].player_id;
+        if(player_info[player_id].cur_leader_ptr == NULL) continue;
+        if(!is_input_allowed) continue;
         handle_player_action(player_actions[a]);
-        if(onion_menu) onion_menu->handle_player_action(player_actions[a]);
+        if(player_info[player_id].onion_menu) player_info[player_id].onion_menu->handle_player_action(player_actions[a]);
         if(pause_menu) pause_menu->handle_player_action(player_actions[a]);
     }
     
@@ -245,8 +307,12 @@ void gameplay_state::do_logic() {
         game.statistics.gameplay_time += regular_delta_t;
         do_gameplay_logic(game.delta_t* delta_t_mult);
     }
-    do_menu_logic();
-    do_aesthetic_logic(game.delta_t* delta_t_mult);
+    
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+         if(player_info[p].cur_leader_ptr == NULL) continue;
+        do_menu_logic(p);
+    }
+    do_aesthetic_logic(0,game.delta_t* delta_t_mult);
 }
 
 
@@ -262,38 +328,44 @@ void gameplay_state::end_mission(const bool cleared) {
     cur_interlude = INTERLUDE_MISSION_END;
     interlude_time = 0.0f;
     delta_t_mult = 0.5f;
-    leader_movement.reset(); //TODO replace with a better solution.
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        player_info[p].leader_movement.reset(); //TODO replace with a better solution.
     
     //Zoom in on the reason, if possible.
-    point new_cam_pos = game.cam.target_pos;
-    float new_cam_zoom = game.cam.target_zoom;
+    point new_cam_pos = player_info[p].cam.target_pos;
+    float new_cam_zoom = player_info[p].cam.target_zoom;
+    
     if(cleared) {
         mission_goal* goal =
-            game.mission_goals[game.cur_area_data.mission.goal];
+            game.mission_goals[game.cur_area_data.mission.team_data[0].goal];
         if(goal->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
-            game.cam.target_pos = new_cam_pos;
-            game.cam.target_zoom = new_cam_zoom;
+            player_info[p].cam.target_pos = new_cam_pos;
+            player_info[p].cam.target_zoom = new_cam_zoom;
         }
         
     } else {
         mission_fail* cond =
-            game.mission_fail_conds[mission_fail_reason];
+            game.mission_fail_conds[mission_info[0].mission_fail_reason];
         if(cond->get_end_zoom_data(this, &new_cam_pos, &new_cam_zoom)) {
-            game.cam.target_pos = new_cam_pos;
-            game.cam.target_zoom = new_cam_zoom;
+            player_info[p].cam.target_pos = new_cam_pos;
+            player_info[p].cam.target_zoom = new_cam_zoom;
         }
     }
-    
+    }
     if(cleared) {
         cur_big_msg = BIG_MESSAGE_MISSION_CLEAR;
     } else {
         cur_big_msg = BIG_MESSAGE_MISSION_FAILED;
     }
     big_msg_time = 0.0f;
-    hud->gui.start_animation(
+
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        if(player_info[p].cur_leader_ptr == NULL) continue;
+        player_info[p].hud->gui.start_animation(
         GUI_MANAGER_ANIM_IN_TO_OUT,
         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
     );
+    }
 }
 
 
@@ -304,18 +376,19 @@ void gameplay_state::end_mission(const bool cleared) {
 void gameplay_state::enter() {
     update_transformations();
     
-    last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-    last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-    last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-    last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-    last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+    mission_info[0].last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    mission_info[0].last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    mission_info[0].last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    mission_info[0].last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+    mission_info[0].last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
     
-    mission_fail_reason = (MISSION_FAIL_CONDITIONS) INVALID;
-    goal_indicator_ratio = 0.0f;
-    fail_1_indicator_ratio = 0.0f;
-    fail_2_indicator_ratio = 0.0f;
-    score_indicator = 0.0f;
-    
+    mission_info[0].mission_fail_reason = (MISSION_FAIL_CONDITIONS) INVALID;
+    mission_info[0].goal_indicator_ratio = 0.0f;
+    mission_info[0].fail_1_indicator_ratio = 0.0f;
+    mission_info[0].fail_2_indicator_ratio = 0.0f;
+    mission_info[0].score_indicator = 0.0f;
+    }
     paused = false;
     cur_interlude = INTERLUDE_READY;
     interlude_time = 0.0f;
@@ -329,7 +402,10 @@ void gameplay_state::enter() {
         big_msg_time = GAMEPLAY::BIG_MSG_READY_DUR;
     }
     
-    hud->gui.hide_items();
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        if(player_info[p].cur_leader_ptr == NULL) continue;
+        player_info[p].hud->gui.hide_items();
+    }
     if(went_to_results) {
         game.fade_mgr.start_fade(true, nullptr);
         if(pause_menu) {
@@ -340,15 +416,17 @@ void gameplay_state::enter() {
     ready_for_input = false;
     
     game.mouse_cursor.reset();
-    leader_cursor_w = game.mouse_cursor.w_pos;
-    leader_cursor_s = game.mouse_cursor.s_pos;
-    
+    player_info[0].leader_cursor_w = game.mouse_cursor.w_pos;
+    player_info[0].leader_cursor_s = game.mouse_cursor.s_pos;
     notification.reset();
-    
-    if(cur_leader_ptr) {
-        cur_leader_ptr->stop_whistling();
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        if(player_info[p].cur_leader_ptr == NULL) continue;
+        
+        if(player_info[p].cur_leader_ptr) {
+            player_info[p].cur_leader_ptr->stop_whistling();
+        }
+        player_info[p].update_closest_group_members();
     }
-    update_closest_group_members();
 }
 
 
@@ -438,7 +516,7 @@ ALLEGRO_BITMAP* gameplay_state::generate_fog_bitmap(
  * type:
  *   Type to search for.
  */
-mob* gameplay_state::get_closest_group_member(const subgroup_type* type) {
+mob* player_info_struct::get_closest_group_member(const subgroup_type* type) {
     if(!cur_leader_ptr) return NULL;
     
     mob* result = NULL;
@@ -563,9 +641,15 @@ size_t gameplay_state::get_total_pikmin_amount() {
  */
 void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     //Handle the Onion menu first so events don't bleed from gameplay to it.
-    if(onion_menu) {
-        onion_menu->handle_event(ev);
-    } else if(pause_menu) {
+    bool there_is_an_onion = false;
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        if(player_info[p].cur_leader_ptr == NULL) continue;
+        if(player_info[p].onion_menu) {
+            player_info[p].onion_menu->handle_event(ev);
+            there_is_an_onion = true;
+        } 
+    }
+    if(pause_menu && !there_is_an_onion) {
         pause_menu->handle_event(ev);
     }
     
@@ -582,7 +666,11 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     game.controls.handle_allegro_event(ev);
     
     //Finally, let the HUD handle events.
-    hud->gui.handle_event(ev);
+
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        if(player_info[p].cur_leader_ptr == NULL) continue;
+        player_info[p].hud->gui.handle_event(ev);
+    }
     
 }
 
@@ -591,7 +679,10 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
  * Initializes the HUD.
  */
 void gameplay_state::init_hud() {
-    hud = new hud_struct();
+
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        player_info[p].hud = new hud_struct(p);
+    }
 }
 
 
@@ -656,39 +747,56 @@ void gameplay_state::load() {
     //Game content.
     load_game_content();
     
+
     //Initialize some important things.
     size_t n_spray_types = game.spray_types.size();
-    for(size_t s = 0; s < n_spray_types; ++s) {
-        spray_stats.push_back(spray_stats_struct());
+    for (int p = MOB_TEAM_PLAYER_1; p <MOB_TEAM_PLAYER_4+1; ++p){
+        team_info[p-MOB_TEAM_PLAYER_1].team = p;
     }
-    
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        for(size_t s = 0; s < n_spray_types; ++s) {
+          team_info[p].spray_stats.push_back(spray_stats_struct());
+        }
+        int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA|ALLEGRO_VIDEO_BITMAP|ALLEGRO_NO_PRESERVE_TEXTURE;
+        al_set_new_bitmap_flags(new_bitmap_flags);
+        player_info[p].bmp = al_create_bitmap(game.win_w, game.win_h);
+        if(game.options.smooth_scaling) {
+         enable_flag(new_bitmap_flags, ALLEGRO_MAG_LINEAR);
+            enable_flag(new_bitmap_flags, ALLEGRO_MIN_LINEAR);
+        }
+        if(game.options.mipmaps_enabled) {
+            enable_flag(new_bitmap_flags, ALLEGRO_MIPMAP);
+        }
+        al_set_new_bitmap_flags(new_bitmap_flags);
+    }
     area_time_passed = 0.0f;
     gameplay_time_passed = 0.0f;
     game.maker_tools.reset_for_gameplay();
     area_title_fade_timer.start();
     
     after_hours = false;
-    pikmin_born = 0;
-    pikmin_deaths = 0;
-    treasures_collected = 0;
-    treasures_total = 0;
-    goal_treasures_collected = 0;
-    goal_treasures_total = 0;
-    treasure_points_collected = 0;
-    treasure_points_total = 0;
-    enemy_deaths = 0;
-    enemy_total = 0;
-    enemy_points_collected = 0;
-    enemy_points_total = 0;
-    cur_leaders_in_mission_exit = 0;
-    mission_required_mob_amount = 0;
-    mission_score = 0;
-    old_mission_score = 0;
-    old_mission_goal_cur = 0;
-    old_mission_fail_1_cur = 0;
-    old_mission_fail_2_cur = 0;
-    nr_living_leaders = 0;
-    leaders_kod = 0;
+    
+    mission_info[0].pikmin_born = 0;
+    mission_info[0].pikmin_deaths = 0;
+    mission_info[0].treasures_collected = 0;
+    mission_info[0].treasures_total = 0;
+    mission_info[0].goal_treasures_collected = 0;
+    mission_info[0].goal_treasures_total = 0;
+    mission_info[0].treasure_points_collected = 0;
+    mission_info[0].treasure_points_total = 0;
+    mission_info[0].enemy_deaths = 0;
+    mission_info[0].enemy_total = 0;
+    mission_info[0].enemy_points_collected = 0;
+    mission_info[0].enemy_points_total = 0;
+    mission_info[0].cur_leaders_in_mission_exit = 0;
+    mission_info[0].mission_required_mob_amount = 0;
+    mission_info[0].mission_score = 0;
+    mission_info[0].old_mission_score = 0;
+    mission_info[0].old_mission_goal_cur = 0;
+    mission_info[0].old_mission_fail_1_cur = 0;
+    mission_info[0].old_mission_fail_2_cur = 0;
+    mission_info[0].nr_living_leaders = 0;
+    mission_info[0].leaders_kod = 0;
     
     game.framerate_last_avg_point = 0;
     game.framerate_history.clear();
@@ -804,32 +912,46 @@ void gameplay_state::load() {
     
     //In case a leader is stored in another mob,
     //update the availible list.
-    update_available_leaders();
-    
-    cur_leader_nr = INVALID;
-    cur_leader_ptr = NULL;
-    starting_nr_of_leaders = mobs.leaders.size();
-    
+
+    for (int p = MOB_TEAM_PLAYER_1; p <MOB_TEAM_PLAYER_4+1; ++p){
+        team_info[p-MOB_TEAM_PLAYER_1].update_available_leaders();
+        player_info[p-MOB_TEAM_PLAYER_1].team = MOB_TEAM_PLAYER_1;
+    }
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        player_info[p].cur_leader_nr = INVALID;
+        player_info[p].cur_leader_ptr = NULL;
+        mission_info[p].starting_nr_of_leaders = 0;
+        for (size_t l = 0; l < mobs.leaders.size(); ++l){
+            leader* l_ptr= mobs.leaders[l];
+            if(l_ptr->team == player_info[p].team){
+                mission_info[p].starting_nr_of_leaders += 1;
+            }
+
+        };
+    }
+    for (int p = 0; p <game.options.players_playing; ++p){
     if(!mobs.leaders.empty()) {
-        change_to_next_leader(true, false, false);
+        change_to_next_leader(true, false, false,p);
     }
-    
-    if(cur_leader_ptr) {
-        game.cam.set_pos(cur_leader_ptr->pos);
-    } else {
-        game.cam.set_pos(point());
     }
-    game.cam.set_zoom(game.options.zoom_mid_level);
-    
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        if(player_info[p].cur_leader_ptr == NULL) continue;
+        if(player_info[p].cur_leader_ptr) {
+           player_info[p].cam.set_pos(player_info[p].cur_leader_ptr->pos);
+        } else {
+        player_info[p].cam.set_pos(point());
+        }
+        player_info[p].cam.set_zoom(game.options.zoom_mid_level);
+    }
     //Memorize mobs required by the mission.
     if(game.cur_area_data.type == AREA_TYPE_MISSION) {
         unordered_set<size_t> mission_required_mob_gen_idxs;
         
-        if(game.cur_area_data.mission.goal_all_mobs) {
+        if(game.cur_area_data.mission.team_data[0].goal_all_mobs) {
             for(size_t m = 0; m < mobs_per_gen.size(); ++m) {
                 if(
                     mobs_per_gen[m] &&
-                    game.mission_goals[game.cur_area_data.mission.goal]->
+                    game.mission_goals[game.cur_area_data.mission.team_data[0].goal]->
                     is_mob_applicable(mobs_per_gen[m]->type)
                 ) {
                     mission_required_mob_gen_idxs.insert(m);
@@ -838,15 +960,15 @@ void gameplay_state::load() {
             
         } else {
             mission_required_mob_gen_idxs =
-                game.cur_area_data.mission.goal_mob_idxs;
+                game.cur_area_data.mission.team_data[0].goal_mob_idxs;
         }
         
         for(size_t i : mission_required_mob_gen_idxs) {
-            mission_remaining_mob_ids.insert(mobs_per_gen[i]->id);
+            mission_info[0].mission_remaining_mob_ids.insert(mobs_per_gen[i]->id);
         }
-        mission_required_mob_amount = mission_remaining_mob_ids.size();
+        mission_info[0].mission_required_mob_amount = mission_info[0].mission_remaining_mob_ids.size();
         
-        if(game.cur_area_data.mission.goal == MISSION_GOAL_COLLECT_TREASURE) {
+        if(game.cur_area_data.mission.team_data[0].goal == MISSION_GOAL_COLLECT_TREASURE) {
             //Since the collect treasure goal can accept piles and resources
             //meant to add treasure points, we'll need some special treatment.
             for(size_t i : mission_required_mob_gen_idxs) {
@@ -855,9 +977,9 @@ void gameplay_state::load() {
                     MOB_CATEGORY_PILES
                 ) {
                     pile* pil_ptr = (pile*) mobs_per_gen[i];
-                    goal_treasures_total += pil_ptr->amount;
+                    mission_info[0].goal_treasures_total += pil_ptr->amount;
                 } else {
-                    goal_treasures_total++;
+                    mission_info[0].goal_treasures_total++;
                 }
             }
         }
@@ -865,8 +987,8 @@ void gameplay_state::load() {
     
     //Figure out the total amount of treasures and their points.
     for(size_t t = 0; t < mobs.treasures.size(); ++t) {
-        treasures_total++;
-        treasure_points_total +=
+        mission_info[0].treasures_total++;
+        mission_info[0].treasure_points_total +=
             mobs.treasures[t]->tre_type->points;
     }
     for(size_t p = 0; p < mobs.piles.size(); ++p) {
@@ -878,8 +1000,8 @@ void gameplay_state::load() {
         ) {
             continue;
         }
-        treasures_total += p_ptr->amount;
-        treasure_points_total +=
+        mission_info[0].treasures_total += p_ptr->amount;
+        mission_info[0].treasure_points_total +=
             p_ptr->amount * res_type->point_amount;
     }
     for(size_t r = 0; r < mobs.resources.size(); ++r) {
@@ -890,14 +1012,14 @@ void gameplay_state::load() {
         ) {
             continue;
         }
-        treasures_total++;
-        treasure_points_total += r_ptr->res_type->point_amount;
+        mission_info[0].treasures_total++;
+        mission_info[0].treasure_points_total += r_ptr->res_type->point_amount;
     }
     
     //Figure out the total amount of enemies and their points.
-    enemy_total = mobs.enemies.size();
+    mission_info[0].enemy_total = mobs.enemies.size();
     for(size_t e = 0; e < mobs.enemies.size(); ++e) {
-        enemy_points_total += mobs.enemies[e]->ene_type->points;
+        mission_info[0].enemy_points_total += mobs.enemies[e]->ene_type->points;
     }
     
     //Initialize some other things.
@@ -926,7 +1048,9 @@ void gameplay_state::load() {
             continue;
         }
         
-        spray_stats[spray_id].nr_sprays = s2i(s.second);
+        for (int p = 0; p <MAX_PLAYERS; ++p){
+            team_info[p].spray_stats[spray_id].nr_sprays = s2i(s.second);
+        }
     }
     
     //Effect caches.
@@ -1063,21 +1187,33 @@ void gameplay_state::start_leaving(const GAMEPLAY_LEAVE_TARGET target) {
  */
 void gameplay_state::unload() {
     unloading = true;
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        if(player_info[p].hud) {
+            player_info[p].hud->gui.destroy();
+            delete player_info[p].hud;
+            player_info[p].hud = NULL;
+        }
     
-    if(hud) {
-        hud->gui.destroy();
-        delete hud;
-        hud = NULL;
+        player_info[p].cur_leader_nr = INVALID;
+        player_info[p].cur_leader_ptr = NULL;
+    
+        player_info[p].close_to_interactable_to_use = NULL;
+        player_info[p].close_to_nest_to_open = NULL;
+        player_info[p].close_to_pikmin_to_pluck = NULL;
+        player_info[p].close_to_ship_to_heal = NULL;
+        if(player_info[p].msg_box) {
+            delete player_info[p].msg_box;
+            player_info[p].msg_box = NULL;
+        }
+        if(player_info[p].onion_menu) {
+            delete player_info[p].onion_menu;
+            player_info[p].onion_menu = NULL;
+        }
+        if(player_info[p].bmp) {
+        al_destroy_bitmap(player_info[p].bmp);
+        player_info[p].bmp = NULL;
+        }
     }
-    
-    cur_leader_nr = INVALID;
-    cur_leader_ptr = NULL;
-    
-    close_to_interactable_to_use = NULL;
-    close_to_nest_to_open = NULL;
-    close_to_pikmin_to_pluck = NULL;
-    close_to_ship_to_heal = NULL;
-    
     game.cam.set_pos(point());
     game.cam.set_zoom(1.0f);
     
@@ -1092,14 +1228,18 @@ void gameplay_state::unload() {
     
     unload_area();
     
-    mission_remaining_mob_ids.clear();
+    mission_info[0].mission_remaining_mob_ids.clear();
     
     path_mgr.clear();
-    spray_stats.clear();
+
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        team_info[p].spray_stats.clear();
+    }
     particles.clear();
     
-    leader_movement.reset(); //TODO replace with a better solution.
-    
+    for (int p = 0; p <MAX_PLAYERS; ++p){
+        player_info[p].leader_movement.reset(); //TODO replace with a better solution.
+    }
     unload_game_content();
     
     if(bmp_fog) {
@@ -1107,14 +1247,7 @@ void gameplay_state::unload() {
         bmp_fog = NULL;
     }
     
-    if(msg_box) {
-        delete msg_box;
-        msg_box = NULL;
-    }
-    if(onion_menu) {
-        delete onion_menu;
-        onion_menu = NULL;
-    }
+
     if(pause_menu) {
         delete pause_menu;
         pause_menu = NULL;
@@ -1147,14 +1280,15 @@ void gameplay_state::unload_game_content() {
 /* ----------------------------------------------------------------------------
  * Updates the list of leaders available to be controlled.
  */
-void gameplay_state::update_available_leaders() {
+void team_info_struct::update_available_leaders() {
     //Build the list.
     available_leaders.clear();
-    for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-        if(mobs.leaders[l]->health <= 0.0f) continue;
-        if(mobs.leaders[l]->to_delete) continue;
-        if(mobs.leaders[l]->is_stored_inside_mob()) continue;
-        available_leaders.push_back(mobs.leaders[l]);
+    for(size_t l = 0; l < game.states.gameplay->mobs.leaders.size(); ++l) {
+        if(game.states.gameplay->mobs.leaders[l]->health <= 0.0f) continue;
+        if(game.states.gameplay->mobs.leaders[l]->to_delete) continue;
+        if(game.states.gameplay->mobs.leaders[l]->is_stored_inside_mob()) continue;
+        //if(game.states.gameplay->mobs.leaders[l]->team != team) continue;
+        available_leaders.push_back(game.states.gameplay->mobs.leaders[l]);
     }
     
     if(available_leaders.empty()) {
@@ -1181,11 +1315,13 @@ void gameplay_state::update_available_leaders() {
     );
     
     //Update the current leader's index, which could've changed.
+    for(size_t p = 0; p < MAX_PLAYERS; ++p){
     for(size_t l = 0; l < available_leaders.size(); ++l) {
-        if(available_leaders[l] == cur_leader_ptr) {
-            cur_leader_nr = l;
+        if(available_leaders[l] == game.states.gameplay->player_info[p].cur_leader_ptr) {
+            game.states.gameplay->player_info[p].cur_leader_nr = l;
             break;
         }
+    }
     }
 }
 
@@ -1199,7 +1335,7 @@ void gameplay_state::update_available_leaders() {
  * and more mature one.
  * Sets to NULL if there is no member of that subgroup available.
  */
-void gameplay_state::update_closest_group_members() {
+void player_info_struct::update_closest_group_members() {
     closest_group_member[BUBBLE_PREVIOUS] = NULL;
     closest_group_member[BUBBLE_CURRENT] = NULL;
     closest_group_member[BUBBLE_NEXT] = NULL;
@@ -1276,17 +1412,19 @@ void gameplay_state::update_closest_group_members() {
  */
 void gameplay_state::update_transformations() {
     //World coordinates to screen coordinates.
-    game.world_to_screen_transform = game.identity_transform;
+    for(size_t p = 0; p < MAX_PLAYERS; ++p){
+    player_info[p].world_to_screen_transform = game.identity_transform;
     al_translate_transform(
-        &game.world_to_screen_transform,
-        -game.cam.pos.x + game.win_w / 2.0 / game.cam.zoom,
-        -game.cam.pos.y + game.win_h / 2.0 / game.cam.zoom
+        &player_info[p].world_to_screen_transform,
+        -player_info[p].cam.pos.x + game.win_w / 2.0 / player_info[p].cam.zoom,
+        -player_info[p].cam.pos.y + game.win_h / 2.0 / player_info[p].cam.zoom
     );
     al_scale_transform(
-        &game.world_to_screen_transform, game.cam.zoom, game.cam.zoom
+        &player_info[p].world_to_screen_transform, player_info[p].cam.zoom, player_info[p].cam.zoom
     );
     
     //Screen coordinates to world coordinates.
-    game.screen_to_world_transform = game.world_to_screen_transform;
-    al_invert_transform(&game.screen_to_world_transform);
+    player_info[p].screen_to_world_transform = player_info[p].world_to_screen_transform;
+    al_invert_transform(&player_info[p].screen_to_world_transform);
+    }
 }
