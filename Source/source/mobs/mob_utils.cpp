@@ -144,7 +144,7 @@ float carry_info_struct::get_speed() const {
         if(s_ptr->state != CARRY_SPOT_USED) continue;
         
         pikmin* p_ptr = (pikmin*) s_ptr->pik_ptr;
-        max_speed += p_ptr->get_base_speed();
+        max_speed += p_ptr->get_base_speed() * p_ptr->get_speed_multiplier();
     }
     max_speed /= cur_n_carriers;
     
@@ -263,11 +263,12 @@ delivery_info_struct::delivery_info_struct() :
  *   Mob this group info struct belongs to.
  */
 group_info_struct::group_info_struct(mob* leader_ptr) :
-    radius(0),
+    radius(0.0f),
     anchor(leader_ptr->pos),
+    anchor_angle(TAU / 2.0f),
     transform(game.identity_transform),
     cur_standby_type(nullptr),
-    follow_mode(false) {
+    mode(MODE_SHUFFLE) {
 }
 
 
@@ -304,7 +305,7 @@ void group_info_struct::change_standby_type_if_needed() {
  * type:
  *   Type to check.
  */
-size_t group_info_struct::get_amount_by_type(mob_type* type) const {
+size_t group_info_struct::get_amount_by_type(const mob_type* type) const {
     size_t amount = 0;
     for(size_t m = 0; m < members.size(); ++m) {
         if(members[m]->type == type) {
@@ -605,7 +606,7 @@ void group_info_struct::reassign_spots() {
             }
         }
         
-        closest_mob->group_spot_index = s;
+        if(closest_mob) closest_mob->group_spot_index = s;
     }
 }
 
@@ -906,7 +907,7 @@ bool pikmin_nest_struct::call_pikmin(mob* m_ptr, const size_t type_idx) {
  * type:
  *   Type to check.
  */
-size_t pikmin_nest_struct::get_amount_by_type(pikmin_type* type) {
+size_t pikmin_nest_struct::get_amount_by_type(const pikmin_type* type) {
     size_t amount = 0;
     for(size_t t = 0; t < nest_type->pik_types.size(); ++t) {
         if(nest_type->pik_types[t] == type) {
@@ -1194,16 +1195,11 @@ mob* create_mob(
     };
     
     for(size_t c = 0; c < type->children.size(); ++c) {
-        mob_type::child_struct* child_info = &type->children[c];
-        
-        mob_type::spawn_struct* spawn_info = NULL;
-        for(size_t s = 0; s < type->spawns.size(); ++s) {
-            if(type->spawns[s].name == child_info->spawn_name) {
-                spawn_info = &type->spawns[s];
-                break;
-            }
-        }
-        
+        mob_type::child_struct* child_info =
+            &type->children[c];
+        mob_type::spawn_struct* spawn_info =
+            get_spawn_info_from_child_info(m_ptr->type, &type->children[c]);
+            
         if(!spawn_info) {
             log_error(
                 "Object \"" + type->name + "\" tried to spawn a child with the "
@@ -1354,6 +1350,8 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
         m_ptr->fsm.set_state(INVALID);
     }
     
+    game.audio.handle_mob_deletion(m_ptr);
+    
     m_ptr->type->category->erase_mob(m_ptr);
     game.states.gameplay->mobs.all.erase(
         find(
@@ -1377,6 +1375,26 @@ string get_error_message_mob_info(mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
         p2s(m->pos) + ", area \"" + game.cur_area_data.name + "\"";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Given a child info block, returns the spawn info block that matches.
+ * Returns NULL if not found.
+ * type:
+ *   Mob type that owns the children and spawn blocks.
+ * child_info:
+ *   Child info to check.
+ */
+mob_type::spawn_struct* get_spawn_info_from_child_info(
+    mob_type* type, mob_type::child_struct* child_info
+) {
+    for(size_t s = 0; s < type->spawns.size(); ++s) {
+        if(type->spawns[s].name == child_info->spawn_name) {
+            return &type->spawns[s];
+        }
+    }
+    return NULL;
 }
 
 

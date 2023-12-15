@@ -26,7 +26,7 @@ decoration_type::decoration_type() :
     random_animation_delay(false) {
     
     target_type = MOB_TARGET_TYPE_NONE;
-
+    
     area_editor_prop_struct aep_random_anim_delay;
     aep_random_anim_delay.name = "Random animation delay";
     aep_random_anim_delay.var = "random_animation_delay";
@@ -66,6 +66,8 @@ decoration_type::decoration_type() :
         "If this decoration type can have a random scale,\n"
         "this property makes this decoration use it or not.";
     area_editor_props.push_back(aep_random_rotation);
+    
+    blackout_radius = 0.0f;
     
     decoration_fsm::create_fsm(this);
 }

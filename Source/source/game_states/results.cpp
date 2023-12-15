@@ -27,7 +27,9 @@ const string GUI_FILE_PATH = GUI_FOLDER_PATH + "/Results_menu.txt";
  */
 results_state::results_state() :
     game_state(),
-    gui_time_spent(0.0f) {
+    gui_time_spent(0.0f),
+    stats_list(nullptr),
+    final_mission_score(0) {
     
 }
 
@@ -53,7 +55,7 @@ void results_state::add_score_stat(const MISSION_SCORE_CRITERIA criterion) {
     if(mult == 0) return;
     
     bool goal_was_cleared =
-        game.states.gameplay->mission_fail_reason ==
+        game.states.gameplay->mission_info[0].mission_fail_reason ==
         (MISSION_FAIL_CONDITIONS) INVALID;
     bool lost =
         has_flag(
@@ -133,7 +135,7 @@ void results_state::add_stat(
 void results_state::continue_playing() {
     game.fade_mgr.start_fade(false, [] () {
         game.states.gameplay->after_hours = true;
-        game.states.gameplay->mission_fail_reason =
+        game.states.gameplay->mission_info[0].mission_fail_reason =
             (MISSION_FAIL_CONDITIONS) INVALID;
         game.change_state(game.states.gameplay, true, false);
         game.states.gameplay->enter();
@@ -158,6 +160,8 @@ void results_state::do_drawing() {
     );
     
     gui.draw();
+    
+    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
     game.fade_mgr.draw();
     
@@ -244,7 +248,7 @@ void results_state::leave() {
  */
 void results_state::load() {
     bool goal_was_cleared =
-        game.states.gameplay->mission_fail_reason ==
+        game.states.gameplay->mission_info[0].mission_fail_reason ==
         (MISSION_FAIL_CONDITIONS) INVALID;
         
     //Calculate score things.
@@ -416,7 +420,7 @@ void results_state::load() {
         } else {
             end_reason =
                 game.mission_fail_conds[
-                    game.states.gameplay->mission_fail_reason
+                    game.states.gameplay->mission_info[0].mission_fail_reason
                 ]->get_end_reason(
                     &game.cur_area_data.mission
                 );
@@ -434,7 +438,7 @@ void results_state::load() {
         }
         
         //Medal reason text, if any.
-        MISSION_MEDALS medal;
+        MISSION_MEDALS medal = MISSION_MEDAL_NONE;
         string medal_reason;
         ALLEGRO_COLOR medal_reason_color;
         switch(game.cur_area_data.mission.grading_mode) {
@@ -641,13 +645,13 @@ void results_state::load() {
     );
     
     //Pikmin born bullet.
-    add_stat("Pikmin born:", i2s(game.states.gameplay->pikmin_born));
+    add_stat("Pikmin born:", i2s(game.states.gameplay->mission_info[0].pikmin_born));
     
     //Pikmin born points bullet.
     add_score_stat(MISSION_SCORE_CRITERIA_PIKMIN_BORN);
     
     //Pikmin deaths bullet.
-    add_stat("Pikmin deaths:", i2s(game.states.gameplay->pikmin_deaths));
+    add_stat("Pikmin deaths:", i2s(game.states.gameplay->mission_info[0].pikmin_deaths));
     
     //Pikmin death points bullet.
     add_score_stat(MISSION_SCORE_CRITERIA_PIKMIN_DEATH);
@@ -686,15 +690,15 @@ void results_state::load() {
     //Treasures bullet.
     add_stat(
         "Treasures:",
-        i2s(game.states.gameplay->treasures_collected) + "/" +
-        i2s(game.states.gameplay->treasures_total)
+        i2s(game.states.gameplay->mission_info[0].treasures_collected) + "/" +
+        i2s(game.states.gameplay->mission_info[0].treasures_total)
     );
     
     //Treasure points bullet.
     add_stat(
         "Treasure points:",
-        i2s(game.states.gameplay->treasure_points_collected) + "/" +
-        i2s(game.states.gameplay->treasure_points_total)
+        i2s(game.states.gameplay->mission_info[0].treasure_points_collected) + "/" +
+        i2s(game.states.gameplay->mission_info[0].treasure_points_total)
     );
     
     //Treasure points points bullet.
@@ -703,15 +707,15 @@ void results_state::load() {
     //Enemy deaths bullet.
     add_stat(
         "Enemy deaths:",
-        i2s(game.states.gameplay->enemy_deaths) + "/" +
-        i2s(game.states.gameplay->enemy_total)
+        i2s(game.states.gameplay->mission_info[0].enemy_deaths) + "/" +
+        i2s(game.states.gameplay->mission_info[0].enemy_total)
     );
     
     //Enemy points bullet.
     add_stat(
         "Enemy kill points:",
-        i2s(game.states.gameplay->enemy_points_collected) + "/" +
-        i2s(game.states.gameplay->enemy_points_total)
+        i2s(game.states.gameplay->mission_info[0].enemy_points_collected) + "/" +
+        i2s(game.states.gameplay->mission_info[0].enemy_points_total)
     );
     
     //Enemy points points bullet.
@@ -747,7 +751,7 @@ void results_state::load() {
     
     //Keep playing button.
     if(
-        game.states.gameplay->mission_fail_reason ==
+        game.states.gameplay->mission_info[0].mission_fail_reason ==
         MISSION_FAIL_COND_TIME_LIMIT
     ) {
         button_gui_item* continue_button =

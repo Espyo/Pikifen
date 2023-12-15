@@ -224,7 +224,7 @@ struct area_data {
     void fix_vertex_nrs(vertex* v_ptr);
     void fix_vertex_pointers(vertex* v_ptr);
     void generate_blockmap();
-    void generate_edges_blockmap(vector<edge*> &edges);
+    void generate_edges_blockmap(const vector<edge*> &edges);
     size_t get_nr_path_links();
     void load_thumbnail(const string &thumbnail_path);
     edge* new_edge();

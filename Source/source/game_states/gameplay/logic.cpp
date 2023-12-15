@@ -29,27 +29,27 @@
  * delta_t:
  *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
-    if(!cur_leader_ptr) return;
+void gameplay_state::do_aesthetic_leader_logic(const size_t &player_id,const float delta_t) {
+    if(!player_info[player_id].cur_leader_ptr) return;
     
     //Swarming arrows.
-    if(swarm_magnitude) {
-        cur_leader_ptr->swarm_next_arrow_timer.tick(delta_t);
+    if(player_info[player_id].swarm_magnitude) {
+        player_info[player_id].cur_leader_ptr->swarm_next_arrow_timer.tick(delta_t);
     }
     
-    dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
-    for(size_t a = 0; a < cur_leader_ptr->swarm_arrows.size(); ) {
-        cur_leader_ptr->swarm_arrows[a] +=
+    dist leader_to_cursor_dist(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
+    for(size_t a = 0; a < player_info[player_id].cur_leader_ptr->swarm_arrows.size(); ) {
+        player_info[player_id].cur_leader_ptr->swarm_arrows[a] +=
             GAMEPLAY::SWARM_ARROW_SPEED * delta_t;
             
         dist max_dist =
-            (swarm_magnitude > 0) ?
-            game.config.cursor_max_dist * swarm_magnitude :
+            (player_info[player_id].swarm_magnitude > 0) ?
+            game.config.cursor_max_dist * player_info[player_id].swarm_magnitude :
             leader_to_cursor_dist;
             
-        if(max_dist < cur_leader_ptr->swarm_arrows[a]) {
-            cur_leader_ptr->swarm_arrows.erase(
-                cur_leader_ptr->swarm_arrows.begin() + a
+        if(max_dist < player_info[player_id].cur_leader_ptr->swarm_arrows[a]) {
+            player_info[player_id].cur_leader_ptr->swarm_arrows.erase(
+                player_info[player_id].cur_leader_ptr->swarm_arrows.begin() + a
             );
         } else {
             a++;
@@ -63,36 +63,36 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
     if(leader_to_cursor_dist > game.config.whistle_max_dist) {
         whistle_dist = game.config.whistle_max_dist;
         float whistle_angle =
-            get_angle(cur_leader_ptr->pos, leader_cursor_w);
+            get_angle(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
         whistle_pos = angle_to_coordinates(whistle_angle, whistle_dist);
-        whistle_pos += cur_leader_ptr->pos;
+        whistle_pos += player_info[player_id].cur_leader_ptr->pos;
     } else {
         whistle_dist = leader_to_cursor_dist.to_float();
-        whistle_pos = leader_cursor_w;
+        whistle_pos = player_info[player_id].leader_cursor_w;
     }
     
-    whistle.tick(
+     player_info[player_id].whistle.tick(
         delta_t, whistle_pos,
-        cur_leader_ptr->lea_type->whistle_range, whistle_dist
+        player_info[player_id].cur_leader_ptr->lea_type->whistle_range, whistle_dist
     );
     
     //Where the cursor is.
-    cursor_height_diff_light = 0;
+    player_info[player_id].cursor_height_diff_light = 0;
     
     if(leader_to_cursor_dist > game.config.throw_max_dist) {
         float throw_angle =
-            get_angle(cur_leader_ptr->pos, leader_cursor_w);
-        throw_dest =
+            get_angle(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
+        player_info[player_id].throw_dest =
             angle_to_coordinates(throw_angle, game.config.throw_max_dist);
-        throw_dest += cur_leader_ptr->pos;
+        player_info[player_id].throw_dest += player_info[player_id].cur_leader_ptr->pos;
     } else {
-        throw_dest = leader_cursor_w;
+        player_info[player_id].throw_dest = player_info[player_id].leader_cursor_w;
     }
     
-    throw_dest_mob = NULL;
+    player_info[player_id].throw_dest_mob = NULL;
     for(size_t m = 0; m < mobs.all.size(); ++m) {
         mob* m_ptr = mobs.all[m];
-        if(!bbox_check(throw_dest, m_ptr->pos, m_ptr->max_span)) {
+        if(!bbox_check(player_info[player_id].throw_dest, m_ptr->pos, m_ptr->max_span)) {
             //Too far away; of course the cursor isn't on it.
             continue;
         }
@@ -102,33 +102,33 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
             continue;
         }
         if(
-            throw_dest_mob &&
+            player_info[player_id].throw_dest_mob &&
             m_ptr->z + m_ptr->height <
-            throw_dest_mob->z + throw_dest_mob->height
+            player_info[player_id].throw_dest_mob->z + player_info[player_id].throw_dest_mob->height
         ) {
             //If this mob is lower than the previous known "under cursor" mob,
             //then forget it.
             continue;
         }
-        if(!m_ptr->is_point_on(throw_dest)) {
+        if(!m_ptr->is_point_on(player_info[player_id].throw_dest)) {
             //The cursor is not really on top of this mob.
             continue;
         }
         
-        throw_dest_mob = m_ptr;
+        player_info[player_id].throw_dest_mob = m_ptr;
     }
     
-    leader_cursor_sector =
-        get_sector(leader_cursor_w, NULL, true);
+    player_info[player_id].leader_cursor_sector =
+        get_sector(player_info[player_id].leader_cursor_w, NULL, true);
         
-    throw_dest_sector =
-        get_sector(throw_dest, NULL, true);
+    player_info[player_id].throw_dest_sector =
+        get_sector(player_info[player_id].throw_dest, NULL, true);
         
-    if(leader_cursor_sector) {
-        cursor_height_diff_light =
-            (leader_cursor_sector->z - cur_leader_ptr->z) * 0.001;
-        cursor_height_diff_light =
-            clamp(cursor_height_diff_light, -0.1f, 0.1f);
+    if(player_info[player_id].leader_cursor_sector) {
+        player_info[player_id].cursor_height_diff_light =
+            (player_info[player_id].leader_cursor_sector->z - player_info[player_id].cur_leader_ptr->z) * 0.001;
+        player_info[player_id].cursor_height_diff_light =
+            clamp(player_info[player_id].cursor_height_diff_light, -0.1f, 0.1f);
     }
     
 }
@@ -140,15 +140,12 @@ void gameplay_state::do_aesthetic_leader_logic(const float delta_t) {
  * delta_t:
  *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_aesthetic_logic(const float delta_t) {
-    //Cursor trail.
-    if(game.options.draw_cursor_trail) {
-        cursor_save_timer.tick(delta_t);
-    }
-    
+void gameplay_state::do_aesthetic_logic(const size_t &player_id,const float delta_t) {
     //Leader stuff.
-    do_aesthetic_leader_logic(delta_t);
-    
+
+    for (size_t p = 0; p < MAX_PLAYERS; ++p){
+    do_aesthetic_leader_logic(p,delta_t);
+    }
     //Specific animations.
     game.sys_assets.spark_animation.instance.tick(delta_t);
 }
@@ -159,16 +156,16 @@ void gameplay_state::do_aesthetic_logic(const float delta_t) {
  * delta_t:
  *   How long the frame's tick is, in seconds.
  */
-void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
-    if(!cur_leader_ptr) return;
+void gameplay_state::do_gameplay_leader_logic(const size_t &player_id,const float delta_t) {
+    if(!player_info[player_id].cur_leader_ptr) return;
     
     if(game.perf_mon) {
         game.perf_mon->start_measurement("Logic -- Current leader");
     }
     
-    if(cur_leader_ptr->to_delete) {
-        game.states.gameplay->update_available_leaders();
-        change_to_next_leader(true, true, true);
+    if(player_info[player_id].cur_leader_ptr->to_delete) {
+        game.states.gameplay->team_info[player_info[player_id].team-MOB_TEAM_PLAYER_1].update_available_leaders();
+        change_to_next_leader(true, true, true,player_id);
     }
     
     /********************
@@ -178,12 +175,12 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     ********************/
     
     if(
-        whistle.whistling &&
-        whistle.radius < cur_leader_ptr->lea_type->whistle_range
+         player_info[player_id].whistle.whistling &&
+         player_info[player_id].whistle.radius < player_info[player_id].cur_leader_ptr->lea_type->whistle_range
     ) {
-        whistle.radius += game.config.whistle_growth_speed * delta_t;
-        if(whistle.radius > cur_leader_ptr->lea_type->whistle_range) {
-            whistle.radius = cur_leader_ptr->lea_type->whistle_range;
+         player_info[player_id].whistle.radius += game.config.whistle_growth_speed * delta_t;
+        if(player_info[player_id].whistle.radius > player_info[player_id].cur_leader_ptr->lea_type->whistle_range) {
+            player_info[player_id].whistle.radius = player_info[player_id].cur_leader_ptr->lea_type->whistle_range;
         }
     }
     
@@ -191,16 +188,16 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     point dummy_coords;
     float dummy_angle;
     float leader_move_magnitude;
-    leader_movement.get_info(
+     player_info[player_id].leader_movement.get_info(
         &dummy_coords, &dummy_angle, &leader_move_magnitude
     );
     if(leader_move_magnitude < 0.75) {
-        cur_leader_ptr->fsm.run_event(
-            LEADER_EV_MOVE_END, (void*) &leader_movement
+        player_info[player_id].cur_leader_ptr->fsm.run_event(
+            LEADER_EV_MOVE_END, (void*) & player_info[player_id].leader_movement
         );
     } else {
-        cur_leader_ptr->fsm.run_event(
-            LEADER_EV_MOVE_START, (void*) &leader_movement
+        player_info[player_id].cur_leader_ptr->fsm.run_event(
+            LEADER_EV_MOVE_START, (void*) & player_info[player_id].leader_movement
         );
     }
     
@@ -210,12 +207,12 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         float cursor_weight = game.options.cursor_cam_weight;
         float group_weight = 0.0f;
         
-        point group_center = cur_leader_ptr->pos;
-        if(!cur_leader_ptr->group->members.empty()) {
-            point tl = cur_leader_ptr->group->members[0]->pos;
-            point br = cur_leader_ptr->group->members[0]->pos;
-            for(size_t m = 1; m < cur_leader_ptr->group->members.size(); ++m) {
-                mob* member = cur_leader_ptr->group->members[m];
+        point group_center = player_info[player_id].cur_leader_ptr->pos;
+        if(!player_info[player_id].cur_leader_ptr->group->members.empty()) {
+            point tl = player_info[player_id].cur_leader_ptr->group->members[0]->pos;
+            point br = player_info[player_id].cur_leader_ptr->group->members[0]->pos;
+            for(size_t m = 1; m < player_info[player_id].cur_leader_ptr->group->members.size(); ++m) {
+                mob* member = player_info[player_id].cur_leader_ptr->group->members[m];
                 tl.x = std::min(tl.x, member->pos.x);
                 tl.y = std::min(tl.y, member->pos.y);
                 br.x = std::max(tl.x, member->pos.x);
@@ -232,9 +229,9 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         cursor_weight /= weight_sums;
         group_weight /= weight_sums;
         
-        game.cam.target_pos =
-            cur_leader_ptr->pos * leader_weight +
-            leader_cursor_w * cursor_weight +
+        player_info[player_id].cam.target_pos =
+            player_info[player_id].cur_leader_ptr->pos * leader_weight +
+            player_info[player_id].leader_cursor_w * cursor_weight +
             group_center * group_weight;
     }
     
@@ -246,15 +243,15 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     //Lying down stop notification.
     if(
         !notification_done &&
-        cur_leader_ptr->carry_info
+        player_info[player_id].cur_leader_ptr->carry_info
     ) {
         notification.set_enabled(true);
         notification.set_contents(
             game.controls.find_bind(PLAYER_ACTION_WHISTLE).input,
             "Get up",
             point(
-                cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                player_info[player_id].cur_leader_ptr->pos.x,
+                player_info[player_id].cur_leader_ptr->pos.y - player_info[player_id].cur_leader_ptr->radius
             )
         );
         notification_done = true;
@@ -263,7 +260,7 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     //Auto-throw stop notification.
     if(
         !notification_done &&
-        cur_leader_ptr->auto_throwing &&
+        player_info[player_id].cur_leader_ptr->auto_throwing &&
         game.options.auto_throw_mode == AUTO_THROW_TOGGLE
     ) {
         notification.set_enabled(true);
@@ -271,8 +268,8 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
             game.controls.find_bind(PLAYER_ACTION_THROW).input,
             "Stop throwing",
             point(
-                cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                player_info[player_id].cur_leader_ptr->pos.x,
+                player_info[player_id].cur_leader_ptr->pos.y - player_info[player_id].cur_leader_ptr->radius
             )
         );
         notification_done = true;
@@ -281,49 +278,49 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     //Pluck stop notification.
     if(
         !notification_done &&
-        cur_leader_ptr->auto_plucking
+        player_info[player_id].cur_leader_ptr->auto_plucking
     ) {
         notification.set_enabled(true);
         notification.set_contents(
             game.controls.find_bind(PLAYER_ACTION_WHISTLE).input,
             "Stop",
             point(
-                cur_leader_ptr->pos.x,
-                cur_leader_ptr->pos.y - cur_leader_ptr->radius
+                player_info[player_id].cur_leader_ptr->pos.x,
+                player_info[player_id].cur_leader_ptr->pos.y - player_info[player_id].cur_leader_ptr->radius
             )
         );
         notification_done = true;
     }
     
-    if(!cur_leader_ptr->auto_plucking) {
+    if(!player_info[player_id].cur_leader_ptr->auto_plucking) {
         dist closest_d = 0;
         dist d = 0;
         
         //Ship healing notification.
-        close_to_ship_to_heal = NULL;
+        player_info[player_id].close_to_ship_to_heal = NULL;
         for(size_t s = 0; s < mobs.ships.size(); ++s) {
             ship* s_ptr = mobs.ships[s];
-            d = dist(cur_leader_ptr->pos, s_ptr->pos);
-            if(!s_ptr->is_leader_on_cp(cur_leader_ptr)) {
+            d = dist(player_info[player_id].cur_leader_ptr->pos, s_ptr->pos);
+            if(!s_ptr->is_leader_on_cp(player_info[player_id].cur_leader_ptr)) {
                 continue;
             }
-            if(cur_leader_ptr->health == cur_leader_ptr->max_health) {
+            if(player_info[player_id].cur_leader_ptr->health == player_info[player_id].cur_leader_ptr->max_health) {
                 continue;
             }
             if(!s_ptr->shi_type->can_heal) {
                 continue;
             }
-            if(d < closest_d || !close_to_ship_to_heal) {
-                close_to_ship_to_heal = s_ptr;
+            if(d < closest_d || !player_info[player_id].close_to_ship_to_heal) {
+                player_info[player_id].close_to_ship_to_heal = s_ptr;
                 closest_d = d;
                 notification.set_enabled(true);
                 notification.set_contents(
                     game.controls.find_bind(PLAYER_ACTION_THROW).input,
                     "Repair suit",
                     point(
-                        close_to_ship_to_heal->pos.x,
-                        close_to_ship_to_heal->pos.y -
-                        close_to_ship_to_heal->radius
+                        player_info[player_id].close_to_ship_to_heal->pos.x,
+                        player_info[player_id].close_to_ship_to_heal->pos.y -
+                        player_info[player_id].close_to_ship_to_heal->radius
                     )
                 );
                 notification_done = true;
@@ -333,24 +330,24 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         //Interactable mob notification.
         closest_d = 0;
         d = 0;
-        close_to_interactable_to_use = NULL;
+        player_info[player_id].close_to_interactable_to_use = NULL;
         if(!notification_done) {
             for(size_t i = 0; i < mobs.interactables.size(); ++i) {
-                d = dist(cur_leader_ptr->pos, mobs.interactables[i]->pos);
+                d = dist(player_info[player_id].cur_leader_ptr->pos, mobs.interactables[i]->pos);
                 if(d > mobs.interactables[i]->int_type->trigger_range) {
                     continue;
                 }
-                if(d < closest_d || !close_to_interactable_to_use) {
-                    close_to_interactable_to_use = mobs.interactables[i];
+                if(d < closest_d || !player_info[player_id].close_to_interactable_to_use) {
+                    player_info[player_id].close_to_interactable_to_use = mobs.interactables[i];
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
                         game.controls.find_bind(PLAYER_ACTION_THROW).input,
-                        close_to_interactable_to_use->int_type->prompt_text,
+                        player_info[player_id].close_to_interactable_to_use->int_type->prompt_text,
                         point(
-                            close_to_interactable_to_use->pos.x,
-                            close_to_interactable_to_use->pos.y -
-                            close_to_interactable_to_use->radius
+                            player_info[player_id].close_to_interactable_to_use->pos.x,
+                            player_info[player_id].close_to_interactable_to_use->pos.y -
+                            player_info[player_id].close_to_interactable_to_use->radius
                         )
                     );
                     notification_done = true;
@@ -361,11 +358,11 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         //Pikmin pluck notification.
         closest_d = 0;
         d = 0;
-        close_to_pikmin_to_pluck = NULL;
+        player_info[player_id].close_to_pikmin_to_pluck = NULL;
         if(!notification_done) {
-            pikmin* p = get_closest_sprout(cur_leader_ptr->pos, &d, false);
+            pikmin* p = get_closest_sprout(player_info[player_id].cur_leader_ptr->pos, &d, false);
             if(p && d <= game.config.pluck_range) {
-                close_to_pikmin_to_pluck = p;
+                player_info[player_id].close_to_pikmin_to_pluck = p;
                 notification.set_enabled(true);
                 notification.set_contents(
                     game.controls.find_bind(PLAYER_ACTION_THROW).input,
@@ -383,46 +380,46 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
         //Nest open notification.
         closest_d = 0;
         d = 0;
-        close_to_nest_to_open = NULL;
+        player_info[player_id].close_to_nest_to_open = NULL;
         if(!notification_done) {
             for(size_t o = 0; o < mobs.onions.size(); ++o) {
-                d = dist(cur_leader_ptr->pos, mobs.onions[o]->pos);
+                d = dist(player_info[player_id].cur_leader_ptr->pos, mobs.onions[o]->pos);
                 if(d > game.config.onion_open_range) continue;
-                if(d < closest_d || !close_to_nest_to_open) {
-                    close_to_nest_to_open = mobs.onions[o]->nest;
+                if(d < closest_d || !player_info[player_id].close_to_nest_to_open) {
+                    player_info[player_id].close_to_nest_to_open = mobs.onions[o]->nest;
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
                         game.controls.find_bind(PLAYER_ACTION_THROW).input,
                         "Check",
                         point(
-                            close_to_nest_to_open->m_ptr->pos.x,
-                            close_to_nest_to_open->m_ptr->pos.y -
-                            close_to_nest_to_open->m_ptr->radius
+                            player_info[player_id].close_to_nest_to_open->m_ptr->pos.x,
+                            player_info[player_id].close_to_nest_to_open->m_ptr->pos.y -
+                            player_info[player_id].close_to_nest_to_open->m_ptr->radius
                         )
                     );
                     notification_done = true;
                 }
             }
             for(size_t s = 0; s < mobs.ships.size(); ++s) {
-                d = dist(cur_leader_ptr->pos, mobs.ships[s]->pos);
-                if(!mobs.ships[s]->is_leader_on_cp(cur_leader_ptr)) {
+                d = dist(player_info[player_id].cur_leader_ptr->pos, mobs.ships[s]->pos);
+                if(!mobs.ships[s]->is_leader_on_cp(player_info[player_id].cur_leader_ptr)) {
                     continue;
                 }
                 if(mobs.ships[s]->shi_type->nest->pik_types.empty()) {
                     continue;
                 }
-                if(d < closest_d || !close_to_nest_to_open) {
-                    close_to_nest_to_open = mobs.ships[s]->nest;
+                if(d < closest_d || !player_info[player_id].close_to_nest_to_open) {
+                    player_info[player_id].close_to_nest_to_open = mobs.ships[s]->nest;
                     closest_d = d;
                     notification.set_enabled(true);
                     notification.set_contents(
                         game.controls.find_bind(PLAYER_ACTION_THROW).input,
                         "Check",
                         point(
-                            close_to_nest_to_open->m_ptr->pos.x,
-                            close_to_nest_to_open->m_ptr->pos.y -
-                            close_to_nest_to_open->m_ptr->radius
+                            player_info[player_id].close_to_nest_to_open->m_ptr->pos.x,
+                            player_info[player_id].close_to_nest_to_open->m_ptr->pos.y -
+                            player_info[player_id].close_to_nest_to_open->m_ptr->radius
                         )
                     );
                     notification_done = true;
@@ -441,42 +438,49 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     
     point mouse_cursor_speed;
     float dummy_magnitude;
-    cursor_movement.get_info(
+    player_info[player_id].cursor_movement.get_info(
         &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
     );
     mouse_cursor_speed =
         mouse_cursor_speed * delta_t* game.options.cursor_speed;
-        
-    leader_cursor_w = game.mouse_cursor_w;
+    if(game.options.mouse_moves_cursor[player_id]){
+    player_info[player_id].leader_cursor_w = game.mouse_cursor.w_pos;
+    }else{
+        player_info[player_id].leader_cursor_w += mouse_cursor_speed;
+        player_info[player_id].leader_cursor_s = player_info[player_id].leader_cursor_w;
+        al_transform_coordinates(
+                &player_info[player_id].world_to_screen_transform,
+                &player_info[player_id].leader_cursor_s.x, &player_info[player_id].leader_cursor_s.y
+        );
+    }
+    float cursor_angle = get_angle(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
     
-    float cursor_angle = get_angle(cur_leader_ptr->pos, leader_cursor_w);
-    
-    dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
+    dist leader_to_cursor_dist(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
     if(leader_to_cursor_dist > game.config.cursor_max_dist) {
         //Cursor goes beyond the range limit.
-        leader_cursor_w.x =
-            cur_leader_ptr->pos.x +
+        player_info[player_id].leader_cursor_w.x =
+            player_info[player_id].cur_leader_ptr->pos.x +
             (cos(cursor_angle) * game.config.cursor_max_dist);
-        leader_cursor_w.y =
-            cur_leader_ptr->pos.y +
+        player_info[player_id].leader_cursor_w.y =
+            player_info[player_id].cur_leader_ptr->pos.y +
             (sin(cursor_angle) * game.config.cursor_max_dist);
             
         if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
             //If we're speeding the mouse cursor (via analog stick),
             //don't let it go beyond the edges.
-            game.mouse_cursor_w = leader_cursor_w;
-            game.mouse_cursor_s = game.mouse_cursor_w;
+            player_info[player_id].leader_cursor_w = player_info[player_id].leader_cursor_w;
+            player_info[player_id].leader_cursor_s = player_info[player_id].leader_cursor_w;
             al_transform_coordinates(
-                &game.world_to_screen_transform,
-                &game.mouse_cursor_s.x, &game.mouse_cursor_s.y
+                &player_info[player_id].world_to_screen_transform,
+                &player_info[player_id].leader_cursor_s.x, &player_info[player_id].leader_cursor_s.y
             );
         }
     }
     
-    leader_cursor_s = leader_cursor_w;
+    player_info[player_id].leader_cursor_s = player_info[player_id].leader_cursor_w;
     al_transform_coordinates(
-        &game.world_to_screen_transform,
-        &leader_cursor_s.x, &leader_cursor_s.y
+        &player_info[player_id].world_to_screen_transform,
+        &player_info[player_id].leader_cursor_s.x, &player_info[player_id].leader_cursor_s.y
     );
     
     
@@ -486,35 +490,35 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
     *                             ***  *
     ************************************/
     
-    update_closest_group_members();
-    if(!cur_leader_ptr->holding.empty()) {
-        closest_group_member[BUBBLE_CURRENT] = cur_leader_ptr->holding[0];
+    player_info[player_id].update_closest_group_members();
+    if(!player_info[player_id].cur_leader_ptr->holding.empty()) {
+        player_info[player_id].closest_group_member[BUBBLE_CURRENT] = player_info[player_id].cur_leader_ptr->holding[0];
     }
     
-    float old_swarm_magnitude = swarm_magnitude;
+    float old_swarm_magnitude = player_info[player_id].swarm_magnitude;
     point swarm_coords;
     float new_swarm_angle;
-    swarm_movement.get_info(
-        &swarm_coords, &new_swarm_angle, &swarm_magnitude
+     player_info[player_id].swarm_movement.get_info(
+        &swarm_coords, &new_swarm_angle, &player_info[player_id].swarm_magnitude
     );
-    if(swarm_magnitude > 0) {
+    if(player_info[player_id].swarm_magnitude > 0) {
         //This stops arrows that were fading away to the left from
         //turning to angle 0 because the magnitude reached 0.
-        swarm_angle = new_swarm_angle;
+        player_info[player_id].swarm_angle = new_swarm_angle;
     }
     
-    if(swarm_cursor) {
-        swarm_angle = cursor_angle;
-        leader_to_cursor_dist = dist(cur_leader_ptr->pos, leader_cursor_w);
-        swarm_magnitude =
+    if(player_info[player_id].swarm_cursor) {
+        player_info[player_id].swarm_angle = cursor_angle;
+        leader_to_cursor_dist = dist(player_info[player_id].cur_leader_ptr->pos, player_info[player_id].leader_cursor_w);
+        player_info[player_id].swarm_magnitude =
             leader_to_cursor_dist.to_float() / game.config.cursor_max_dist;
     }
     
-    if(old_swarm_magnitude != swarm_magnitude) {
-        if(swarm_magnitude != 0) {
-            cur_leader_ptr->signal_swarm_start();
+    if(old_swarm_magnitude != player_info[player_id].swarm_magnitude) {
+        if(player_info[player_id].swarm_magnitude != 0) {
+            player_info[player_id].cur_leader_ptr->signal_swarm_start();
         } else {
-            cur_leader_ptr->signal_swarm_end();
+            player_info[player_id].cur_leader_ptr->signal_swarm_end();
         }
     }
     
@@ -533,47 +537,49 @@ void gameplay_state::do_gameplay_leader_logic(const float delta_t) {
 void gameplay_state::do_gameplay_logic(const float delta_t) {
 
     //Camera movement.
-    if(!cur_leader_ptr) {
+    for (size_t p = 0; p < MAX_PLAYERS; ++p){
+    if(!player_info[p].cur_leader_ptr) {
         //If there's no leader being controlled, might as well move the camera.
         point coords;
         float dummy_angle;
         float dummy_magnitude;
-        leader_movement.get_info(&coords, &dummy_angle, &dummy_magnitude);
-        game.cam.target_pos = game.cam.pos + (coords * 120.0f / game.cam.zoom);
+        player_info[p].leader_movement.get_info(&coords, &dummy_angle, &dummy_magnitude);
+        player_info[p].cam.target_pos = player_info[p].cam.pos + (coords * 120.0f / player_info[p].cam.zoom);
     }
-    
-    game.cam.tick(delta_t);
-    
+
+    player_info[p].cam.tick(delta_t);
     update_transformations();
     
-    game.cam.update_box();
+    player_info[p].cam.update_box();
+    }
     
-    if(!msg_box) {
+    
+    
     
         /************************************
         *                              .-.  *
         *   Timer things - gameplay   ( L ) *
         *                              `-´  *
         *************************************/
-        
+ for(size_t p = 0; p < MAX_PLAYERS;++p){       
         //Mouse cursor.
         point mouse_cursor_speed;
         float dummy_angle;
         float dummy_magnitude;
-        cursor_movement.get_info(
+        player_info[p].cursor_movement.get_info(
             &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
         );
         mouse_cursor_speed =
             mouse_cursor_speed * delta_t* game.options.cursor_speed;
             
-        game.mouse_cursor_s += mouse_cursor_speed;
+        player_info[p].leader_cursor_s += mouse_cursor_speed;
         
-        game.mouse_cursor_w = game.mouse_cursor_s;
+        player_info[p].leader_cursor_w = player_info[p].leader_cursor_s;
         al_transform_coordinates(
-            &game.screen_to_world_transform,
-            &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+            &player_info[p].screen_to_world_transform,
+            &player_info[p].leader_cursor_w.x, &player_info[p].leader_cursor_w.y
         );
-        
+        }
         area_time_passed += delta_t;
         if(cur_interlude == INTERLUDE_NONE) {
             gameplay_time_passed += delta_t;
@@ -660,33 +666,62 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         *   Mobs   ()--> *
         *                *
         ******************/
+        for(size_t player_id = 0; player_id <MAX_PLAYERS; ++player_id){
+        if(player_info[player_id].cur_leader_ptr == NULL)continue;
         
-        size_t old_nr_living_leaders = nr_living_leaders;
+        size_t old_nr_living_leaders = mission_info[0].nr_living_leaders;
         //Some setup to calculate how far the leader walks.
-        leader* old_leader = cur_leader_ptr;
+        leader* old_leader = player_info[player_id].cur_leader_ptr;
         point old_leader_pos;
         bool old_leader_was_walking = false;
-        if(cur_leader_ptr) {
-            old_leader_pos = cur_leader_ptr->pos;
+        if(player_info[player_id].cur_leader_ptr) {
+            old_leader_pos = player_info[player_id].cur_leader_ptr->pos;
             old_leader_was_walking =
-                cur_leader_ptr->active &&
+                player_info[player_id].cur_leader_ptr->active &&
                 !has_flag(
-                    cur_leader_ptr->chase_info.flags,
+                    player_info[player_id].cur_leader_ptr->chase_info.flags,
                     CHASE_FLAG_TELEPORT
                 ) &&
                 !has_flag(
-                    cur_leader_ptr->chase_info.flags,
+                    player_info[player_id].cur_leader_ptr->chase_info.flags,
                     CHASE_FLAG_TELEPORTS_CONSTANTLY
                 ) &&
-                cur_leader_ptr->chase_info.state == CHASE_STATE_CHASING;
+                player_info[player_id].cur_leader_ptr->chase_info.state == CHASE_STATE_CHASING;
         }
-        
+        if(
+            player_info[player_id].cur_leader_ptr && player_info[player_id].cur_leader_ptr == old_leader &&
+            old_leader_was_walking
+        ) {
+            //This more or less tells us how far the leader walked in this
+            //frame. It's not perfect, since it will also count the leader
+            //getting pushed and knocked back whilst in the chasing state.
+            //It also won't count the movement if the active leader changed
+            //midway through.
+            //But those are rare cases that don't really affect much in the
+            //grand scheme of things, and don't really matter for a fun stat.
+            game.statistics.distance_walked +=
+                dist(old_leader_pos, player_info[player_id].cur_leader_ptr->pos).to_float();
+        }
+         mission_info[0].nr_living_leaders = 0;
+        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
+            if(mobs.leaders[l]->health > 0.0f) {
+                mission_info[0].nr_living_leaders++;
+            }
+        }
+        if(mission_info[0].nr_living_leaders < old_nr_living_leaders) {
+            game.statistics.leader_kos +=
+               old_nr_living_leaders - mission_info[0].nr_living_leaders;
+        }
+        mission_info[0].leaders_kod = mission_info[0].starting_nr_of_leaders - mission_info[0].nr_living_leaders;
+        }
+       
+    
         size_t n_mobs = mobs.all.size();
         for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
             m_ptr->tick(delta_t);
-            if(!m_ptr->stored_inside_another) {
+            if(!m_ptr->is_stored_inside_mob()) {
                 process_mob_interactions(m_ptr, m);
             }
         }
@@ -702,34 +737,10 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             m++;
         }
         
-        do_gameplay_leader_logic(delta_t);
-        
-        if(
-            cur_leader_ptr && cur_leader_ptr == old_leader &&
-            old_leader_was_walking
-        ) {
-            //This more or less tells us how far the leader walked in this
-            //frame. It's not perfect, since it will also count the leader
-            //getting pushed and knocked back whilst in the chasing state.
-            //It also won't count the movement if the active leader changed
-            //midway through.
-            //But those are rare cases that don't really affect much in the
-            //grand scheme of things, and don't really matter for a fun stat.
-            game.statistics.distance_walked +=
-                dist(old_leader_pos, cur_leader_ptr->pos).to_float();
+        for(size_t player_id = 0; player_id <MAX_PLAYERS; ++player_id){
+        if(player_info[player_id].cur_leader_ptr == NULL)continue;
+         do_gameplay_leader_logic(player_id,delta_t);
         }
-        
-        nr_living_leaders = 0;
-        for(size_t l = 0; l < mobs.leaders.size(); ++l) {
-            if(mobs.leaders[l]->health > 0.0f) {
-                nr_living_leaders++;
-            }
-        }
-        if(nr_living_leaders < old_nr_living_leaders) {
-            game.statistics.leader_kos +=
-                old_nr_living_leaders - nr_living_leaders;
-        }
-        leaders_kod = starting_nr_of_leaders - nr_living_leaders;
         
         
         /**************************
@@ -786,16 +797,16 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             game.cur_area_data.type == AREA_TYPE_MISSION &&
             game.cur_area_data.mission.goal == MISSION_GOAL_GET_TO_EXIT
         ) {
-            cur_leaders_in_mission_exit = 0;
+            mission_info[0].cur_leaders_in_mission_exit = 0;
             for(size_t l = 0; l < mobs.leaders.size(); ++l) {
                 mob* l_ptr = mobs.leaders[l];
                 if(
                     std::find(
-                        mission_remaining_mob_ids.begin(),
-                        mission_remaining_mob_ids.end(),
+                        mission_info[0].mission_remaining_mob_ids.begin(),
+                        mission_info[0].mission_remaining_mob_ids.end(),
                         mobs.leaders[l]->id
                     ) ==
-                    mission_remaining_mob_ids.end()
+                    mission_info[0].mission_remaining_mob_ids.end()
                 ) {
                     //Not a required leader.
                     continue;
@@ -812,7 +823,7 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                     ) <=
                     game.cur_area_data.mission.goal_exit_size.y / 2.0f
                 ) {
-                    cur_leaders_in_mission_exit++;
+                    mission_info[0].cur_leaders_in_mission_exit++;
                 }
             }
         }
@@ -829,8 +840,8 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
         if(goal_req_amount != 0.0f) {
             real_goal_ratio = goal_cur_amount / (float) goal_req_amount;
         }
-        goal_indicator_ratio +=
-            (real_goal_ratio - goal_indicator_ratio) *
+        mission_info[0].goal_indicator_ratio +=
+            (real_goal_ratio - mission_info[0].goal_indicator_ratio) *
             (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
             
         if(game.cur_area_data.mission.fail_hud_primary_cond != INVALID) {
@@ -846,8 +857,8 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
             }
-            fail_1_indicator_ratio +=
-                (real_fail_ratio - fail_1_indicator_ratio) *
+            mission_info[0].fail_1_indicator_ratio +=
+                (real_fail_ratio - mission_info[0].fail_1_indicator_ratio) *
                 (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
         }
         
@@ -864,8 +875,8 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             if(fail_req_amount != 0.0f) {
                 real_fail_ratio = fail_cur_amount / (float) fail_req_amount;
             }
-            fail_2_indicator_ratio +=
-                (real_fail_ratio - fail_2_indicator_ratio) *
+            mission_info[0].fail_2_indicator_ratio +=
+                (real_fail_ratio - mission_info[0].fail_2_indicator_ratio) *
                 (HUD::GOAL_INDICATOR_SMOOTHNESS_MULT * delta_t);
         }
         
@@ -873,20 +884,20 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             if(cur_interlude == INTERLUDE_NONE) {
                 if(is_mission_clear_met()) {
                     end_mission(true);
-                } else if(is_mission_fail_met(&mission_fail_reason)) {
+                } else if(is_mission_fail_met(&mission_info[0].mission_fail_reason)) {
                     end_mission(false);
                 }
             }
             //Reset the positions of the last mission-end-related things,
             //since if they didn't get used in end_mission, then they
             //may be stale from here on.
-            last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-            last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-            last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-            last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
-            last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            mission_info[0].last_enemy_killed_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            mission_info[0].last_hurt_leader_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            mission_info[0].last_pikmin_born_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            mission_info[0].last_pikmin_death_pos = point(LARGE_FLOAT, LARGE_FLOAT);
+            mission_info[0].last_ship_that_got_treasure_pos = point(LARGE_FLOAT, LARGE_FLOAT);
             
-            mission_score = game.cur_area_data.mission.starting_points;
+            mission_info[0].mission_score = game.cur_area_data.mission.starting_points;
             for(size_t c = 0; c < game.mission_score_criteria.size(); ++c) {
                 if(
                     !has_flag(
@@ -900,27 +911,27 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                     game.mission_score_criteria[c];
                 int c_score =
                     c_ptr->get_score(this, &game.cur_area_data.mission);
-                mission_score += c_score;
+                mission_info[0].mission_score += c_score;
             }
-            if(mission_score != old_mission_score) {
-                mission_score_cur_text->start_juice_animation(
+            if(mission_info[0].mission_score != mission_info[0].old_mission_score) {
+                mission_info[0].mission_score_cur_text->start_juice_animation(
                     gui_item::JUICE_TYPE_GROW_TEXT_HIGH
                 );
-                old_mission_score = mission_score;
+                mission_info[0].old_mission_score = mission_info[0].mission_score;
             }
             
-            score_indicator +=
-                (mission_score - score_indicator) *
+            mission_info[0].score_indicator +=
+                (mission_info[0].mission_score - mission_info[0].score_indicator) *
                 (HUD::SCORE_INDICATOR_SMOOTHNESS_MULT * delta_t);
                 
             int goal_cur =
                 game.mission_goals[game.cur_area_data.mission.goal]->
                 get_cur_amount(game.states.gameplay);
-            if(goal_cur != old_mission_goal_cur) {
-                mission_goal_cur_text->start_juice_animation(
+            if(goal_cur != mission_info[0].old_mission_goal_cur) {
+                mission_info[0].mission_goal_cur_text->start_juice_animation(
                     gui_item::JUICE_TYPE_GROW_TEXT_HIGH
                 );
-                old_mission_goal_cur = goal_cur;
+                mission_info[0].old_mission_goal_cur = goal_cur;
             }
             
             if(
@@ -933,11 +944,11 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                     game.mission_fail_conds[cond]->get_cur_amount(
                         game.states.gameplay
                     );
-                if(fail_1_cur != old_mission_fail_1_cur) {
-                    mission_fail_1_cur_text->start_juice_animation(
+                if(fail_1_cur != mission_info[0].old_mission_fail_1_cur) {
+                    mission_info[0].mission_fail_1_cur_text->start_juice_animation(
                         gui_item::JUICE_TYPE_GROW_TEXT_HIGH
                     );
-                    old_mission_fail_1_cur = fail_1_cur;
+                    mission_info[0].old_mission_fail_1_cur = fail_1_cur;
                 }
             }
             if(
@@ -950,24 +961,26 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
                     game.mission_fail_conds[cond]->get_cur_amount(
                         game.states.gameplay
                     );
-                if(fail_2_cur != old_mission_fail_2_cur) {
-                    mission_fail_2_cur_text->start_juice_animation(
+                if(fail_2_cur != mission_info[0].old_mission_fail_2_cur) {
+                    mission_info[0].mission_fail_2_cur_text->start_juice_animation(
                         gui_item::JUICE_TYPE_GROW_TEXT_HIGH
                     );
-                    old_mission_fail_2_cur = fail_2_cur;
+                    mission_info[0].old_mission_fail_2_cur = fail_2_cur;
                 }
             }
             
         }
         
-    } else { //Displaying a message.
-    
-        msg_box->tick(delta_t);
-        if(msg_box->to_delete) {
-            start_message("", NULL);
+     //Displaying a message.
+    for (size_t p =0; p < MAX_PLAYERS; ++p){
+        if(player_info[p].cur_leader_ptr == NULL) continue;
+        if(!player_info[p].msg_box) continue;
+        player_info[p].msg_box->tick(delta_t);
+        if(player_info[p].msg_box->to_delete) {
+            start_message("", NULL,p);
         }
-        
     }
+
     
     replay_timer.tick(delta_t);
     
@@ -982,13 +995,13 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Ticks the logic of in-game menu-related things.
  */
-void gameplay_state::do_menu_logic() {
-    if(onion_menu) {
-        if(!onion_menu->to_delete) {
-            onion_menu->tick(game.delta_t);
+void gameplay_state::do_menu_logic(const size_t &player_id) {
+    if(player_info[player_id].onion_menu) {
+        if(!player_info[player_id].onion_menu->to_delete) {
+            player_info[player_id].onion_menu->tick(game.delta_t);
         } else {
-            delete onion_menu;
-            onion_menu = NULL;
+            delete player_info[player_id].onion_menu;
+            player_info[player_id].onion_menu = NULL;
             paused = false;
         }
     } else if(pause_menu) {
@@ -1001,7 +1014,7 @@ void gameplay_state::do_menu_logic() {
         }
     }
     
-    hud->tick(game.delta_t);
+    player_info[player_id].hud->tick(game.delta_t);
     
     //Process and print framerate and system info.
     if(game.show_system_info) {
@@ -1081,10 +1094,6 @@ void gameplay_state::do_menu_logic() {
             game.cur_area_data.maker.empty() ?
             "-" :
             game.cur_area_data.maker;
-        string engine_v_str =
-            i2s(VERSION_MAJOR) + "." +
-            i2s(VERSION_MINOR) + "." +
-            i2s(VERSION_REV);
         string game_v_str =
             game.config.version.empty() ? "-" : game.config.version;
             
@@ -1097,7 +1106,7 @@ void gameplay_state::do_menu_logic() {
             "\n"
             "Area version " + area_v_str + ", by " + area_maker_str +
             "\n"
-            "Pikifen version " + engine_v_str +
+            "Pikifen version " + get_engine_version_string() +
             ", game version " + game_v_str,
             1.0f, 1.0f
         );
@@ -1240,17 +1249,17 @@ void gameplay_state::do_menu_logic() {
     //Print mouse coordinates.
     if(game.maker_tools.geometry_info) {
         sector* mouse_sector =
-            get_sector(game.mouse_cursor_w, NULL, true);
+            get_sector(game.mouse_cursor.w_pos, NULL, true);
             
         string coords_str =
-            box_string(f2s(game.mouse_cursor_w.x), 6) + " " +
-            box_string(f2s(game.mouse_cursor_w.y), 6);
+            box_string(f2s(game.mouse_cursor.w_pos.x), 6) + " " +
+            box_string(f2s(game.mouse_cursor.w_pos.y), 6);
         string blockmap_str =
             box_string(
-                i2s(game.cur_area_data.bmap.get_col(game.mouse_cursor_w.x)),
+                i2s(game.cur_area_data.bmap.get_col(game.mouse_cursor.w_pos.x)),
                 5, " "
             ) +
-            i2s(game.cur_area_data.bmap.get_row(game.mouse_cursor_w.y));
+            i2s(game.cur_area_data.bmap.get_row(game.mouse_cursor.w_pos.y));
         string sector_z_str, sector_light_str, sector_tex_str;
         if(mouse_sector) {
             sector_z_str =
@@ -1306,10 +1315,12 @@ void gameplay_state::do_menu_logic() {
         if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_CLEAR_DUR) {
             cur_big_msg = BIG_MESSAGE_NONE;
         }
+        break;
     } case BIG_MESSAGE_MISSION_FAILED: {
         if(big_msg_time >= GAMEPLAY::BIG_MSG_MISSION_FAILED_DUR) {
             cur_big_msg = BIG_MESSAGE_NONE;
         }
+        break;
     }
     }
     
@@ -1325,7 +1336,7 @@ void gameplay_state::do_menu_logic() {
         if(interlude_time >= GAMEPLAY::BIG_MSG_READY_DUR) {
             cur_interlude = INTERLUDE_NONE;
             delta_t_mult = 1.0f;
-            hud->gui.start_animation(
+            player_info[player_id].hud->gui.start_animation(
                 GUI_MANAGER_ANIM_OUT_TO_IN,
                 GAMEPLAY::AREA_INTRO_HUD_MOVE_TIME
             );
@@ -1398,7 +1409,7 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
         
         mob* m2_ptr = mobs.all[m2];
         if(m2_ptr->to_delete) continue;
-        if(m2_ptr->stored_inside_another) continue;
+        if(m2_ptr->is_stored_inside_mob()) continue;
         
         dist d(m_ptr->pos, m2_ptr->pos);
         
@@ -1507,10 +1518,14 @@ void gameplay_state::process_mob_misc_interactions(
         !m2_ptr->carry_info->is_full()
     ) {
         dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
-        if(d_between <= task_range(m_ptr)) {
+        
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+         if(player_info[p].cur_leader_ptr == NULL) continue;
+        if(d_between <= task_range(m_ptr,p)) {
             pending_intermob_events.push_back(
                 pending_intermob_event(d_between, nco_event, m2_ptr)
             );
+        }
         }
     }
     
@@ -1522,7 +1537,10 @@ void gameplay_state::process_mob_misc_interactions(
         typeid(*m2_ptr) == typeid(tool)
     ) {
         dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
-        if(d_between <= task_range(m_ptr)) {
+
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+         if(player_info[p].cur_leader_ptr == NULL) continue;
+        if(d_between <= task_range(m_ptr,p)) {
             tool* too_ptr = (tool*) m2_ptr;
             if(too_ptr->reserved && too_ptr->reserved != m_ptr) {
                 //Another Pikmin is already going for it. Ignore it.
@@ -1532,6 +1550,7 @@ void gameplay_state::process_mob_misc_interactions(
                 );
             }
         }
+    }
     }
     
     //Find a group task mob.
@@ -1543,7 +1562,9 @@ void gameplay_state::process_mob_misc_interactions(
         typeid(*m2_ptr) == typeid(group_task)
     ) {
         dist d_between = m_ptr->get_distance_between(m2_ptr, &d);
-        if(d_between <= task_range(m_ptr)) {
+        for (size_t p = 0; p < MAX_PLAYERS;++p){
+            if(player_info[p].cur_leader_ptr == NULL) continue;
+        if(d_between <= task_range(m_ptr,p)) {
             group_task* tas_ptr = (group_task*) m2_ptr;
             group_task::group_task_spot* free_spot = tas_ptr->get_free_spot();
             if(!free_spot) {
@@ -1555,14 +1576,18 @@ void gameplay_state::process_mob_misc_interactions(
             }
         }
         
+        }
     }
     
     //"Bumped" by the active leader being nearby.
     mob_event* touch_le_ev =
         m_ptr->fsm.get_event(MOB_EV_TOUCHED_ACTIVE_LEADER);
+
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+         if(player_info[p].cur_leader_ptr == NULL) continue;
     if(
         touch_le_ev &&
-        m2_ptr == cur_leader_ptr &&
+        m2_ptr == player_info[p].cur_leader_ptr &&
         //Small hack. This way,
         //Pikmin don't get bumped by leaders that are,
         //for instance, lying down.
@@ -1570,6 +1595,7 @@ void gameplay_state::process_mob_misc_interactions(
         d <= game.config.idle_bump_range
     ) {
         touch_le_ev->run(m_ptr, (void*) m2_ptr);
+    }
     }
 }
 

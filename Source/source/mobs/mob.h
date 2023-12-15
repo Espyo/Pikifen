@@ -325,6 +325,7 @@ public:
         mob* attacker, hitbox* attack_h, hitbox* victim_h,
         const float damage, const float knockback
     );
+    bool is_stored_inside_mob() const;
     bool is_off_camera() const;
     bool is_point_on(const point &p) const;
     void focus_on_mob(mob* m);
@@ -342,10 +343,11 @@ public:
     mob_type::vulnerability_struct get_hazard_vulnerability(
         hazard* h_ptr
     ) const;
-    bool is_resistant_to_hazards(vector<hazard*> &hazards) const;
+    bool is_resistant_to_hazards(const vector<hazard*> &hazards) const;
     void swallow_chomped_pikmin(size_t nr);
     void start_height_effect();
     void stop_height_effect();
+    void store_mob_inside(mob* m);
     void release_chomped_pikmin();
     void release_stored_mobs();
     void send_message(mob* receiver, string &msg) const;
@@ -354,7 +356,7 @@ public:
     void finish_dying();
     void respawn();
     dist get_distance_between(
-        mob* m2_ptr, dist* regular_distance_cache = NULL
+        mob* m2_ptr, const dist* regular_distance_cache = NULL
     ) const;
     hitbox* get_hitbox(const size_t nr) const;
     hitbox* get_closest_hitbox(
@@ -392,6 +394,7 @@ public:
     );
     point get_chase_target(float* z = NULL) const;
     virtual float get_base_speed() const;
+    float get_speed_multiplier() const;
     
     void arachnorb_head_turn_logic();
     void arachnorb_plan_logic(const MOB_ACTION_ARACHNORB_PLAN_LOGIC_TYPES goal);

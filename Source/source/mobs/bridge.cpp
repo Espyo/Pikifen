@@ -21,6 +21,8 @@
 namespace BRIDGE {
 //Width of the bridge's main floor, i.e., sans rails.
 const float FLOOR_WIDTH = 192.0f;
+//How far apart bridge steps are, vertically.
+const float STEP_HEIGHT = 10;
 }
 
 
@@ -82,13 +84,13 @@ bool bridge::check_health() {
             z_offset = delta_z;
         } else {
             size_t steps_needed =
-                ceil(fabs(delta_z) / GEOMETRY::STEP_HEIGHT) + 1;
+                ceil(fabs(delta_z) / BRIDGE::STEP_HEIGHT) + 1;
             float cur_completion =
                 chunks / (float) total_chunks_needed;
             size_t step_idx =
                 cur_completion * steps_needed;
             z_offset =
-                step_idx * GEOMETRY::STEP_HEIGHT * sign(delta_z);
+                step_idx * BRIDGE::STEP_HEIGHT * sign(delta_z);
         }
         
         if(z_offset == prev_chunk_z_offset) {
@@ -217,6 +219,8 @@ bool bridge::check_health() {
     point offset(chunk_width * chunks - 32.0f, 0);
     offset = rotate_point(offset, angle);
     pos = start_pos + offset;
+    z = start_z + prev_chunk_components[0]->z;
+    ground_sector = prev_chunk_components[0]->ground_sector;
     
     return true;
 }
@@ -229,6 +233,12 @@ bool bridge::check_health() {
  */
 void bridge::draw_component(mob* m) {
     if(m->links.empty() || !m->links[0]) return;
+    
+    bitmap_effect_info eff;
+    m->get_sprite_bitmap_effects(
+        NULL, &eff,
+        SPRITE_BITMAP_EFFECT_SECTOR_BRIGHTNESS
+    );
     
     bridge* bri_ptr = (bridge*) m->links[0];
     string side = m->vars["side"];
@@ -248,7 +258,7 @@ void bridge::draw_component(mob* m) {
     
     ALLEGRO_VERTEX vertexes[4];
     for(size_t v = 0; v < 4; ++v) {
-        vertexes[v].color = COLOR_WHITE;
+        vertexes[v].color = eff.tint_color;
         vertexes[v].z = 0.0f;
     }
     
@@ -316,7 +326,7 @@ void bridge::setup() {
         total_chunks_needed =
             std::max(
                 total_chunks_needed,
-                (size_t) (ceil(fabs(delta_z) / GEOMETRY::STEP_HEIGHT) + 1)
+                (size_t) (ceil(fabs(delta_z) / BRIDGE::STEP_HEIGHT) + 1)
             );
     }
     

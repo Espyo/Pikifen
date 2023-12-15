@@ -46,8 +46,87 @@
  * s:
  *   String to write.
  */
-void al_fwrite(ALLEGRO_FILE* f, string s) {
+void al_fwrite(ALLEGRO_FILE* f, const string &s) {
     al_fwrite(f, s.c_str(), s.size());
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if there are any walls between two points. i.e. any edges that a
+ * mob can't simply step up to.
+ * p1:
+ *   First point.
+ * p2:
+ *   Second point.
+ * ignore_walls_below_z:
+ *   Any walls whose sector Zs are below this value get ignored.
+ *   Use -FLT_MAX to not ignore any wall.
+ * impassable_walls:
+ *   If not NULL, true will be returned here if any of the walls are
+ *   impassable, i.e. the void or "blocking"-type sectors. False otherwise.
+ */
+bool are_walls_between(
+    const point &p1, const point &p2,
+    float ignore_walls_below_z, bool* impassable_walls
+) {
+    point bb_tl(std::min(p1.x, p2.x), std::min(p1.y, p2.y));
+    point bb_br(std::max(p1.x, p1.x), std::max(p2.y, p2.y));
+    
+    set<edge*> candidate_edges;
+    if(
+        !game.cur_area_data.bmap.get_edges_in_region(
+            bb_tl, bb_br,
+            candidate_edges
+        )
+    ) {
+        //Somehow out of bounds.
+        if(impassable_walls) *impassable_walls = true;
+        return true;
+    }
+    
+    for(auto &e_ptr : candidate_edges) {
+        if(
+            !line_segs_intersect(
+                p1, p2,
+                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                NULL
+            )
+        ) {
+            continue;
+        }
+        for(size_t s = 0; s < 2; ++s) {
+            if(!e_ptr->sectors[s]) {
+                //No sectors means there's out-of-bounds geometry in the way.
+                if(impassable_walls) *impassable_walls = true;
+                return true;
+            }
+            if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
+                //If a blocking sector is in the way, no clear line.
+                if(impassable_walls) *impassable_walls = true;
+                return true;
+            }
+        }
+        if(
+            e_ptr->sectors[0]->z < ignore_walls_below_z &&
+            e_ptr->sectors[1]->z < ignore_walls_below_z
+        ) {
+            //This wall was chosen to be ignored.
+            continue;
+        }
+        if(
+            fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
+            GEOMETRY::STEP_HEIGHT
+        ) {
+            //The walls are more than stepping height in difference.
+            //So it's a genuine wall in the way.
+            if(impassable_walls) *impassable_walls = false;
+            return true;
+        }
+    }
+    
+    if(impassable_walls) *impassable_walls = false;
+    return false;
 }
 
 
@@ -167,16 +246,16 @@ void crash(const string &reason, const string &info, const int exit_status) {
     
     error_str += "  Current leader: ";
     
-    if(game.states.gameplay->cur_leader_ptr) {
+    if(game.states.gameplay->player_info[0].cur_leader_ptr) {
         error_str +=
-            game.states.gameplay->cur_leader_ptr->type->name + ", at " +
-            p2s(game.states.gameplay->cur_leader_ptr->pos) +
+            game.states.gameplay->player_info[0].cur_leader_ptr->type->name + ", at " +
+            p2s(game.states.gameplay->player_info[0].cur_leader_ptr->pos) +
             ", state history: " +
-            game.states.gameplay->cur_leader_ptr->fsm.cur_state->name;
+            game.states.gameplay->player_info[0].cur_leader_ptr->fsm.cur_state->name;
         for(size_t h = 0; h < STATE_HISTORY_SIZE; ++h) {
             error_str +=
                 " " +
-                game.states.gameplay->cur_leader_ptr->
+                game.states.gameplay->player_info[0].cur_leader_ptr->
                 fsm.prev_state_names[h];
         }
         error_str += "\n  10 closest Pikmin to that leader:\n";
@@ -188,11 +267,11 @@ void crash(const string &reason, const string &info, const int exit_status) {
         [] (pikmin * p1, pikmin * p2) -> bool {
             return
             dist(
-                game.states.gameplay->cur_leader_ptr->pos,
+                game.states.gameplay->player_info[0].cur_leader_ptr->pos,
                 p1->pos
             ).to_float() <
             dist(
-                game.states.gameplay->cur_leader_ptr->pos,
+                game.states.gameplay->player_info[0].cur_leader_ptr->pos,
                 p2->pos
             ).to_float();
         }
@@ -219,7 +298,7 @@ void crash(const string &reason, const string &info, const int exit_status) {
         NULL, "Program crash!",
         "Pikifen has crashed!",
         "Sorry about that! To help fix this problem, please read the "
-        "FAQ & troubleshooting section of the included manual. Thanks!",
+        "troubleshooting section of the included manual. Thanks!",
         NULL,
         ALLEGRO_MESSAGEBOX_ERROR
     );
@@ -447,9 +526,9 @@ mob* get_closest_mob_to_cursor() {
         mob* m_ptr = game.states.gameplay->mobs.all[m];
         
         if(!m_ptr->fsm.cur_state) continue;
-        if(m_ptr->stored_inside_another) continue;
+        if(m_ptr->is_stored_inside_mob()) continue;
         
-        dist d = dist(game.mouse_cursor_w, m_ptr->pos);
+        dist d = dist(game.mouse_cursor.w_pos, m_ptr->pos);
         if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;
@@ -481,6 +560,17 @@ string get_current_time(const bool filename_friendly) {
         leading_zero(t.tm_min) +
         (filename_friendly ? "." : ":") +
         leading_zero(t.tm_sec);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the engine's version as a string.
+ */
+string get_engine_version_string() {
+    return
+        i2s(VERSION_MAJOR) + "." +
+        i2s(VERSION_MINOR) + "." +
+        i2s(VERSION_REV);
 }
 
 
@@ -1006,14 +1096,12 @@ ALLEGRO_COLOR interpolate_color(
  *   If not null, this will be used to obtain the file name
  *   and line that caused the error.
  */
-void log_error(string s, data_node* d) {
+void log_error(const string &s, data_node* d) {
     string output = "";
     if(game.errors_reported_so_far == 0) {
         string first_error_info =
             "\n\n"
-            "Pikifen version " +
-            i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
-            "." + i2s(VERSION_REV);
+            "Pikifen version " + get_engine_version_string();
         if(!game.config.version.empty()) {
             first_error_info +=
                 ", " + game.config.name + " version " + game.config.version;
@@ -1334,7 +1422,7 @@ void save_maker_tools() {
     );
     file.add(
         new data_node(
-            "area_image_padding", b2s(game.maker_tools.area_image_padding)
+            "area_image_padding", f2s(game.maker_tools.area_image_padding)
         )
     );
     file.add(
@@ -1906,19 +1994,19 @@ string standardize_path(const string &path) {
  * speaker_bmp:
  *   Bitmap representing the speaker.
  */
-void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
+void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp,const int &player_id) {
     if(!text.empty()) {
         string final_text = unescape_string(text);
-        game.states.gameplay->msg_box =
+        game.states.gameplay->player_info[player_id].msg_box =
             new msg_box_info(final_text, speaker_bmp);
-        game.states.gameplay->hud->gui.start_animation(
+        game.states.gameplay->player_info[player_id].hud->gui.start_animation(
             GUI_MANAGER_ANIM_IN_TO_OUT,
             GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
         );
     } else {
-        delete game.states.gameplay->msg_box;
-        game.states.gameplay->msg_box = NULL;
-        game.states.gameplay->hud->gui.start_animation(
+        delete game.states.gameplay->player_info[player_id].msg_box;
+        game.states.gameplay->player_info[player_id].msg_box = NULL;
+        game.states.gameplay->player_info[player_id ].hud->gui.start_animation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
@@ -2171,7 +2259,7 @@ string word_wrap(const string &s, const size_t n_chars_per_line) {
     size_t cur_line_width = 0;
     for(size_t c = 0; c < s.size() + 1; ++c) {
     
-        if(s[c] != ' ' && s[c] != '\n' && c < s.size()) {
+        if(c < s.size() && s[c] != ' ' && s[c] != '\n') {
             //Keep building the current word.
             
             word_in_queue.push_back(s[c]);

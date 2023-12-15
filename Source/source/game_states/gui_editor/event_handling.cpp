@@ -118,7 +118,7 @@ void gui_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
         tw_handled =
             cur_transformation_widget.handle_mouse_down(
-                game.mouse_cursor_w,
+                game.mouse_cursor.w_pos,
                 &items[cur_item].center,
                 &items[cur_item].size,
                 NULL,
@@ -132,7 +132,7 @@ void gui_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             item* item_ptr = &items[i];
             if(
                 is_point_in_rectangle(
-                    game.mouse_cursor_w,
+                    game.mouse_cursor.w_pos,
                     item_ptr->center,
                     item_ptr->size
                 )
@@ -178,7 +178,7 @@ void gui_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     if(cur_item != INVALID && items[cur_item].size.x != 0.0f) {
         bool tw_handled =
             cur_transformation_widget.handle_mouse_move(
-                snap_point(game.mouse_cursor_w),
+                snap_point(game.mouse_cursor.w_pos),
                 &items[cur_item].center,
                 &items[cur_item].size,
                 NULL,
@@ -234,13 +234,7 @@ void gui_editor::handle_mmb_drag(const ALLEGRO_EVENT &ev) {
  *   Event to handle.
  */
 void gui_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
-    game.mouse_cursor_s.x = ev.mouse.x;
-    game.mouse_cursor_s.y = ev.mouse.y;
-    game.mouse_cursor_w = game.mouse_cursor_s;
-    al_transform_coordinates(
-        &game.screen_to_world_transform,
-        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
-    );
+
 }
 
 

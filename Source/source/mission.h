@@ -38,6 +38,16 @@ enum MISSION_GOALS {
     MISSION_GOAL_GET_TO_EXIT,
     //The player must grow enough Pikmin to reach a certain total.
     MISSION_GOAL_GROW_PIKMIN,
+    //Anyone other than the team reaches their goal
+    //This team is inserted into first place, and the other team goes in second,
+    // unless this one is eliminated
+    MISSION_GOAL_ANYONE_WINS,
+    //The team must eliminate all teams on the list
+    MISSION_GOAL_ELIMINATE_LIST,
+    //The team must cause this amount of teams to fail
+    MISSION_GOAL_ELIMINATE_AMOUNT,
+    //A mob sends out a success action aimed at this team
+//    MISSION_GOAL_SCRIPTED,
 };
 
 
@@ -59,6 +69,15 @@ enum MISSION_FAIL_CONDITIONS {
     MISSION_FAIL_COND_KILL_ENEMIES,
     //Ending from the pause menu.
     MISSION_FAIL_COND_PAUSE_MENU,
+    //The goal condition is no longer reachable
+    MISSION_FAIL_COND_MISSION_IMPOSSIBLE,
+    //Anyone other than the team reaches their goal
+    MISSION_FAIL_COND_AMOUNT_WINS,
+    //Everybody else reaches their goal
+    MISSION_FAIL_COND_LIST_ALL_WIN,
+    //Everybody else reaches their goal
+    //A mob sends out a failure action aimed at this team
+//    MISSION_FAIL_COND_SCRIPTED,
 };
 
 
@@ -104,11 +123,19 @@ enum MISSION_SCORE_CRITERIA {
     MISSION_SCORE_CRITERIA_ENEMY_POINTS,
 };
 
-
-/* ----------------------------------------------------------------------------
- * Holds information about a given area's mission.
- */
-struct mission_data {
+enum MISSION_RANKING_ORDER {
+    // based on Completion order
+    MISSION_RANKING_ORDER_COMPLETION_TIME,
+    // based on who reached the goal first
+    MISSION_RANKING_ORDER_FIRST_PAST_THE_POST,
+    // based on who failed and who won
+    MISSION_RANKING_ORDER_WINNERS_AND_LOSERS,
+    // based on The medal they obtained
+    MISSION_RANKING_ORDER_MEDAL,
+    // based on the amount of points they have
+    MISSION_RANKING_ORDER_POINTS,
+};
+struct mission_team_data {
     //Mission goal.
     MISSION_GOALS goal;
     //Does the mission goal require all relevant items, or just specific ones?
@@ -122,7 +149,7 @@ struct mission_data {
     //Mission exit region dimensions.
     point goal_exit_size;
     //Mission fail conditions bitmask. Use MISSION_FAIL_COND_*'s indexes.
-    uint8_t fail_conditions;
+    uint16_t fail_conditions;
     //Amount for the "reach too few Pikmin" mission fail condition.
     size_t fail_too_few_pik_amount;
     //Amount for the "reach too many Pikmin" mission fail condition.
@@ -139,6 +166,17 @@ struct mission_data {
     size_t fail_hud_primary_cond;
     //Secondary HUD element's fail condition. INVALID for none.
     size_t fail_hud_secondary_cond;
+    //If the mission goal requires specific items, their mob indexes go here.
+    unordered_set<size_t> fail_if_win_idxs;
+    //Total amount of something required for the current mission goal.
+    size_t fail_if_win_amount;
+    mission_team_data();
+};
+/* ----------------------------------------------------------------------------
+ * Holds information about a given area's mission.
+ */
+struct mission_data {
+    mission_team_data team_data[4UL];
     //Mission grading mode.
     MISSION_GRADING_MODES grading_mode;
     //Mission point multiplier for each Pikmin born.
@@ -167,7 +205,8 @@ struct mission_data {
     int gold_req;
     //Platinum medal point requirement.
     int platinum_req;
-    
+    //Mission Ranking mode, for ranking who won a versus Missions
+    MISSION_RANKING_ORDER ranking_order;
     mission_data();
 };
 
@@ -196,27 +235,31 @@ public:
     //The condition's name.
     virtual string get_name() const = 0;
     //Returns the player's current amount for whatever the condition needs.
-    virtual int get_cur_amount(gameplay_state* gameplay) const = 0;
+    virtual int get_cur_amount(gameplay_state* gameplay,const int team_nr) const = 0;
     //Returns the player's required amount for whatever the condition needs.
-    virtual int get_req_amount(gameplay_state* gameplay) const = 0;
+    virtual int get_req_amount(gameplay_state* gameplay,const int team_nr) const = 0;
     //A description for the player, fed from the mission data.
-    virtual string get_player_description(mission_data* mission) const = 0;
+    virtual string get_player_description(mission_data* mission,
+    const int team_nr) const = 0;
     //Status for the pause menu.
     virtual string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,
+        const int team_nr
     ) const = 0;
     //Explains why the player lost, with values fed from the mission data.
-    virtual string get_end_reason(mission_data* mission) const = 0;
+    virtual string get_end_reason(mission_data* mission,
+    const int team_nr) const = 0;
     //Returns where the camera should go to to zoom on the mission end reason.
     virtual bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,
+        const int team_nr
     ) const = 0;
     //HUD label for the player's current amount.
-    virtual string get_hud_label(gameplay_state* gameplay) const = 0;
+    virtual string get_hud_label(gameplay_state* gameplay,const int team_nr) const = 0;
     //Whether it has anything to show in the HUD.
     virtual bool has_hud_content() const = 0;
     //Checks if its conditions have been met to end the mission as a fail.
-    virtual bool is_met(gameplay_state* gameplay) const = 0;
+    virtual bool is_met(gameplay_state* gameplay,const int team_nr) const = 0;
 };
 
 
@@ -226,19 +269,19 @@ public:
 class mission_fail_kill_enemies : public mission_fail {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
-    string get_hud_label(gameplay_state* gameplay) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
     bool has_hud_content() const override;
-    bool is_met(gameplay_state* gameplay) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
 };
 
 
@@ -248,19 +291,19 @@ public:
 class mission_fail_lose_leaders : public mission_fail {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
-    string get_hud_label(gameplay_state* gameplay) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
     bool has_hud_content() const override;
-    bool is_met(gameplay_state* gameplay) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
 };
 
 
@@ -270,19 +313,19 @@ public:
 class mission_fail_lose_pikmin : public mission_fail {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
-    string get_hud_label(gameplay_state* gameplay) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
     bool has_hud_content() const override;
-    bool is_met(gameplay_state* gameplay) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
 };
 
 
@@ -292,19 +335,19 @@ public:
 class mission_fail_pause_menu : public mission_fail {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
-    string get_hud_label(gameplay_state* gameplay) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
     bool has_hud_content() const override;
-    bool is_met(gameplay_state* gameplay) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
 };
 
 
@@ -314,19 +357,19 @@ public:
 class mission_fail_take_damage : public mission_fail {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
-    string get_hud_label(gameplay_state* gameplay) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
     bool has_hud_content() const override;
-    bool is_met(gameplay_state* gameplay) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
 };
 
 
@@ -336,19 +379,19 @@ public:
 class mission_fail_time_limit: public mission_fail {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
-    string get_hud_label(gameplay_state* gameplay) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
     bool has_hud_content() const override;
-    bool is_met(gameplay_state* gameplay) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
 };
 
 
@@ -358,19 +401,19 @@ public:
 class mission_fail_too_few_pikmin : public mission_fail {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
-    string get_hud_label(gameplay_state* gameplay) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
     bool has_hud_content() const override;
-    bool is_met(gameplay_state* gameplay) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
 };
 
 
@@ -380,22 +423,63 @@ public:
 class mission_fail_too_many_pikmin : public mission_fail {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
-    string get_hud_label(gameplay_state* gameplay) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
     bool has_hud_content() const override;
-    bool is_met(gameplay_state* gameplay) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+};
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "eliminate everyone else" mission fail.
+ */
+class mission_fail_win_list : public mission_fail {
+public:
+    string get_name() const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
+    string get_status(
+        const int cur, const int req, const float percentage,const int team_nr
+    ) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
+    bool get_end_zoom_data(
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
+    ) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
+    bool has_hud_content() const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Class representing the "eliminate anyone" mission fail.
+ */
+class mission_fail_win_amount : public mission_fail {
+public:
+    string get_name() const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
+    string get_status(
+        const int cur, const int req, const float percentage,const int team_nr
+    ) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
+    bool get_end_zoom_data(
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
+    ) const override;
+    string get_hud_label(gameplay_state* gameplay,const int team_nr) const override;
+    bool has_hud_content() const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+};
 /* ----------------------------------------------------------------------------
  * Class interface for a mission goal.
  */
@@ -404,27 +488,27 @@ public:
     //The goal's name.
     virtual string get_name() const = 0;
     //Returns the player's current amount for whatever the goal needs.
-    virtual int get_cur_amount(gameplay_state* gameplay) const = 0;
+    virtual int get_cur_amount(gameplay_state* gameplay,const int team_nr) const = 0;
     //Returns the player's required amount for whatever the goal needs.
-    virtual int get_req_amount(gameplay_state* gameplay) const = 0;
+    virtual int get_req_amount(gameplay_state* gameplay,const int team_nr) const = 0;
     //A description for the player, fed from the mission data.
-    virtual string get_player_description(mission_data* mission) const = 0;
+    virtual string get_player_description(mission_data* mission,const int team_nr) const = 0;
     //Status for the pause menu.
     virtual string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const = 0;
     //Celebrates the player's victory with values fed from the mission data.
-    virtual string get_end_reason(mission_data* mission) const = 0;
+    virtual string get_end_reason(mission_data* mission,const int team_nr) const = 0;
     //Returns where the camera should go to to zoom on the mission end reason.
     virtual bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const = 0;
     //HUD label for the player's current amount.
     virtual string get_hud_label() const = 0;
     //Checks if its conditions have been met to end the mission as a clear.
-    virtual bool is_met(gameplay_state* gameplay) const = 0;
+    virtual bool is_met(gameplay_state* gameplay,const int team_nr) const = 0;
     //Returns whether a given mob is applicable to this goal's required mobs.
-    virtual bool is_mob_applicable(mob_type* type) const = 0;
+    virtual bool is_mob_applicable(mob_type* type,const int team_nr) const = 0;
 };
 
 
@@ -434,19 +518,19 @@ public:
 class mission_goal_battle_enemies : public mission_goal {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
     string get_hud_label() const override;
-    bool is_met(gameplay_state* gameplay) const override;
-    bool is_mob_applicable(mob_type* type) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
 };
 
 
@@ -456,19 +540,19 @@ public:
 class mission_goal_collect_treasures : public mission_goal {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
     string get_hud_label() const override;
-    bool is_met(gameplay_state* gameplay) const override;
-    bool is_mob_applicable(mob_type* type) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
 };
 
 
@@ -478,19 +562,19 @@ public:
 class mission_goal_end_manually : public mission_goal {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
     string get_hud_label() const override;
-    bool is_met(gameplay_state* gameplay) const override;
-    bool is_mob_applicable(mob_type* type) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
 };
 
 
@@ -500,19 +584,19 @@ public:
 class mission_goal_get_to_exit : public mission_goal {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
     string get_hud_label() const override;
-    bool is_met(gameplay_state* gameplay) const override;
-    bool is_mob_applicable(mob_type* type) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
 };
 
 
@@ -522,19 +606,19 @@ public:
 class mission_goal_grow_pikmin : public mission_goal {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
     string get_hud_label() const override;
-    bool is_met(gameplay_state* gameplay) const override;
-    bool is_mob_applicable(mob_type* type) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
 };
 
 
@@ -544,20 +628,110 @@ public:
 class mission_goal_timed_survival : public mission_goal {
 public:
     string get_name() const override;
-    int get_cur_amount(gameplay_state* gameplay) const override;
-    int get_req_amount(gameplay_state* gameplay) const override;
-    string get_player_description(mission_data* mission) const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
     string get_status(
-        const int cur, const int req, const float percentage
+        const int cur, const int req, const float percentage,const int team_nr
     ) const override;
-    string get_end_reason(mission_data* mission) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
     bool get_end_zoom_data(
-        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
     ) const override;
     string get_hud_label() const override;
-    bool is_met(gameplay_state* gameplay) const override;
-    bool is_mob_applicable(mob_type* type) const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
 };
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "anyone else wins" mission goal.
+ */
+class mission_goal_anyone_wins : public mission_goal {
+public:
+    string get_name() const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
+    string get_status(
+        const int cur, const int req, const float percentage,const int team_nr
+    ) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
+    bool get_end_zoom_data(
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
+    ) const override;
+    string get_hud_label() const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "eliminate everyone else" mission goal.
+ */
+class mission_goal_eliminate_list : public mission_goal {
+public:
+    string get_name() const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
+    string get_status(
+        const int cur, const int req, const float percentage,const int team_nr
+    ) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
+    bool get_end_zoom_data(
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
+    ) const override;
+    string get_hud_label() const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "eliminate anyone" mission goal.
+ */
+class mission_goal_eliminate_amount : public mission_goal {
+public:
+    string get_name() const override;
+    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+    string get_player_description(mission_data* mission,const int team_nr) const override;
+    string get_status(
+        const int cur, const int req, const float percentage,const int team_nr
+    ) const override;
+    string get_end_reason(mission_data* mission,const int team_nr) const override;
+    bool get_end_zoom_data(
+        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
+    ) const override;
+    string get_hud_label() const override;
+    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
+};
+
+
+
+
+/* ----------------------------------------------------------------------------
+ * Class representing the "scripted" mission goal.
+ */
+//class mission_goal_scripted : public mission_goal {
+//public:
+//    string get_name() const override;
+//    int get_cur_amount(gameplay_state* gameplay,const int team_nr) const override;
+//    int get_req_amount(gameplay_state* gameplay,const int team_nr) const override;
+//    string get_player_description(mission_data* mission,const int team_nr) const override;
+//    string get_status(
+//        const int cur, const int req, const float percentage,const int team_nr
+//    ) const override;
+//    string get_end_reason(mission_data* mission,const int team_nr) const override;
+//    bool get_end_zoom_data(
+//        gameplay_state* gameplay, point* final_cam_pos, float* final_cam_zoom,const int team_nr
+//    ) const override;
+//    string get_hud_label() const override;
+//    bool is_met(gameplay_state* gameplay,const int team_nr) const override;
+//    bool is_mob_applicable(mob_type* type,const int team_nr) const override;
+//};
 
 
 /* ----------------------------------------------------------------------------
@@ -568,10 +742,10 @@ public:
     //The criterion's name.
     virtual string get_name() const = 0;
     //The criterion's point multiplier.
-    virtual int get_multiplier(mission_data* mission) const = 0;
+    virtual int get_multiplier(mission_data* mission,const int team_nr=0) const = 0;
     //Returns the player's score for this criterion.
     virtual int get_score(
-        gameplay_state* gameplay, mission_data* mission
+        gameplay_state* gameplay, mission_data* mission,const int team_nr
     ) const = 0;
 };
 
@@ -582,9 +756,9 @@ public:
 class mission_score_criterion_enemy_points : public mission_score_criterion {
 public:
     string get_name() const override;
-    int get_multiplier(mission_data* mission) const override;
+    int get_multiplier(mission_data* mission,const int team_nr=0) const override;
     int get_score(
-        gameplay_state* gameplay, mission_data* mission
+        gameplay_state* gameplay, mission_data* mission,const int team_nr
     ) const override;
 };
 
@@ -595,9 +769,9 @@ public:
 class mission_score_criterion_pikmin_born : public mission_score_criterion {
 public:
     string get_name() const override;
-    int get_multiplier(mission_data* mission) const override;
+    int get_multiplier(mission_data* mission,const int team_nr=0) const override;
     int get_score(
-        gameplay_state* gameplay, mission_data* mission
+        gameplay_state* gameplay, mission_data* mission,const int team_nr
     ) const override;
 };
 
@@ -608,9 +782,9 @@ public:
 class mission_score_criterion_pikmin_death : public mission_score_criterion {
 public:
     string get_name() const override;
-    int get_multiplier(mission_data* mission) const override;
+    int get_multiplier(mission_data* mission,const int team_nr=0) const override;
     int get_score(
-        gameplay_state* gameplay, mission_data* mission
+        gameplay_state* gameplay, mission_data* mission,const int team_nr
     ) const override;
 };
 
@@ -621,9 +795,9 @@ public:
 class mission_score_criterion_sec_left : public mission_score_criterion {
 public:
     string get_name() const override;
-    int get_multiplier(mission_data* mission) const override;
+    int get_multiplier(mission_data* mission,const int team_nr=0) const override;
     int get_score(
-        gameplay_state* gameplay, mission_data* mission
+        gameplay_state* gameplay, mission_data* mission,const int team_nr
     ) const override;
 };
 
@@ -634,9 +808,9 @@ public:
 class mission_score_criterion_sec_passed : public mission_score_criterion {
 public:
     string get_name() const override;
-    int get_multiplier(mission_data* mission) const override;
+    int get_multiplier(mission_data* mission,const int team_nr=0) const override;
     int get_score(
-        gameplay_state* gameplay, mission_data* mission
+        gameplay_state* gameplay, mission_data* mission,const int team_nr
     ) const override;
 };
 
@@ -647,9 +821,9 @@ public:
 class mission_score_criterion_treasure_points : public mission_score_criterion {
 public:
     string get_name() const override;
-    int get_multiplier(mission_data* mission) const override;
+    int get_multiplier(mission_data* mission,const int team_nr=0) const override;
     int get_score(
-        gameplay_state* gameplay, mission_data* mission
+        gameplay_state* gameplay, mission_data* mission,const int team_nr
     ) const override;
 };
 

@@ -36,7 +36,9 @@ options_menu_state::options_menu_state() :
     resolution_picker(nullptr),
     cursor_speed_picker(nullptr),
     cursor_cam_weight_picker(nullptr),
-    warning_text(nullptr) {
+    leaving_confirmation_picker(nullptr),
+    warning_text(nullptr),
+    player_picker(nullptr) {
     
     //Let's fill in the list of preset resolutions. For that, we'll get
     //the display modes fetched by Allegro. These are usually nice round
@@ -94,6 +96,8 @@ void options_menu_state::do_drawing() {
     );
     
     gui.draw();
+    
+    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
     game.fade_mgr.draw();
     
@@ -167,12 +171,13 @@ void options_menu_state::load() {
     
     //Menu items.
     gui.register_coords("back",                 12,  5, 20, 6);
+    gui.register_coords("players",              12,  50, 20, 6);
     gui.register_coords("fullscreen",           24, 18, 40, 8);
     gui.register_coords("resolution",           76, 18, 40, 8);
     gui.register_coords("cursor_speed",         24, 32, 40, 8);
     gui.register_coords("cursor_cam_weight",    76, 32, 40, 8);
     gui.register_coords("auto_throw",           50, 44, 44, 8);
-    gui.register_coords("show_hud_input_icons",    50, 54, 44, 8);
+    gui.register_coords("show_hud_input_icons", 50, 54, 44, 8);
     gui.register_coords("leaving_confirmation", 50, 64, 44, 8);
     gui.register_coords("controls",             50, 74, 44, 8);
     gui.register_coords("advanced",             87, 86, 22, 8);
@@ -192,7 +197,20 @@ void options_menu_state::load() {
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the main menu."; };
     gui.add_item(gui.back_item, "back");
-    
+    player_picker =
+        new options_menu_picker_gui_item<size_t>(
+        "Players Amount: ",
+        &game.options.players_playing,
+        OPTIONS::DEF_PLAYERS_PLAYING,
+    {1, 2, 3, 4},
+    {"1", "2", "3", "4"},
+    "Players Playing Today."
+    );
+    player_picker->value_to_string = [] (const float v) {
+        return i2s(v);
+    };
+    player_picker->init();
+    gui.add_item(player_picker, "players");
     //Fullscreen checkbox.
     check_gui_item* fullscreen_check =
         new check_gui_item(

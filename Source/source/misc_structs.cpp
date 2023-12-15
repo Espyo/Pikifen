@@ -292,7 +292,7 @@ void bmp_manager::detach(const string &name) {
  * bmp:
  *   Bitmap to detach.
  */
-void bmp_manager::detach(ALLEGRO_BITMAP* bmp) {
+void bmp_manager::detach(const ALLEGRO_BITMAP* bmp) {
     if(!bmp || bmp == game.bmp_error) return;
     
     auto it = list.begin();
@@ -424,6 +424,9 @@ void camera_info::update_box() {
         &game.screen_to_world_transform,
         &box[1].x, &box[1].y
     );
+    
+    game.audio.set_camera_pos(box[0], box[1]);
+    
     box[0].x -= GAMEPLAY::CAMERA_BOX_MARGIN;
     box[0].y -= GAMEPLAY::CAMERA_BOX_MARGIN;
     box[1].x += GAMEPLAY::CAMERA_BOX_MARGIN;
@@ -747,6 +750,79 @@ void movement_struct::reset() {
 
 
 /* ----------------------------------------------------------------------------
+ * Hides the OS mouse in the game window.
+ */
+void mouse_cursor_struct::hide() const {
+    al_hide_mouse_cursor(game.display);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes everything.
+ */
+void mouse_cursor_struct::init() {
+    hide();
+    reset();
+    
+    save_timer.on_end = [this] () {
+        save_timer.start();
+        history.push_back(s_pos);
+        if(history.size() > GAME::CURSOR_TRAIL_SAVE_N_SPOTS) {
+            history.erase(history.begin());
+        }
+    };
+    save_timer.start(GAME::CURSOR_TRAIL_SAVE_INTERVAL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets the cursor's state.
+ */
+void mouse_cursor_struct::reset() {
+    ALLEGRO_MOUSE_STATE mouse_state;
+    al_get_mouse_state(&mouse_state);
+    game.mouse_cursor.s_pos.x = al_get_mouse_state_axis(&mouse_state, 0);
+    game.mouse_cursor.s_pos.y = al_get_mouse_state_axis(&mouse_state, 1);
+    game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
+    al_transform_coordinates(
+        &game.screen_to_world_transform,
+        &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
+    );
+    history.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Shows the OS mouse in the game window.
+ */
+void mouse_cursor_struct::show() const {
+    al_show_mouse_cursor(game.display);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the coordinates from an Allegro mouse event.
+ * ev:
+ *   Event to handle.
+ * screen_to_world_transform:
+ *   Transformation to use to get the screen coordinates.
+ */
+void mouse_cursor_struct::update_pos(
+    const ALLEGRO_EVENT &ev,
+    ALLEGRO_TRANSFORM &screen_to_world_transform
+) {
+    s_pos.x = ev.mouse.x;
+    s_pos.y = ev.mouse.y;
+    w_pos = s_pos;
+    al_transform_coordinates(
+        &screen_to_world_transform,
+        &w_pos.x, &w_pos.y
+    );
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Creates a message box information struct.
  * text:
  *   Text to display.
@@ -1041,7 +1117,7 @@ void notification_struct::reset() {
  *   Where to show it in the game world.
  */
 void notification_struct::set_contents(
-    player_input input, const string &text, const point &pos
+    const player_input &input, const string &text, const point &pos
 ) {
     this->input = input;
     this->text = text;
@@ -1240,9 +1316,7 @@ void performance_monitor_struct::save_log() {
     string s =
         "\n" +
         get_current_time(false) +
-        "; Pikifen version " +
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
-        "." + i2s(VERSION_REV);
+        "; Pikifen version " + get_engine_version_string();
     if(!game.config.version.empty()) {
         s += ", game version " + game.config.version;
     }
@@ -1647,86 +1721,6 @@ void reader_setter::set(
 
 
 /* ----------------------------------------------------------------------------
- * Creates a structure with sample info.
- * s:
- *   Allegro sample.
- * mixer:
- *   Allegro mixer.
- */
-sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) :
-    sample(s),
-    instance(NULL) {
-    
-    if(!s) return;
-    instance = al_create_sample_instance(s);
-    al_attach_sample_instance_to_mixer(instance, mixer);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys a structure with sample info.
- */
-void sample_struct::destroy() {
-    //TODO uncommenting this is causing a crash.
-    //al_detach_sample_instance(instance);
-    if(instance) al_destroy_sample_instance(instance);
-    if(sample) al_destroy_sample(sample);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Play the sample.
- * max_override_pos:
- *   Override the currently playing sound
- *   only if it's already in this position, or beyond.
- *   This is in seconds. 0 means always override. -1 means never override.
- * loop:
- *   Loop the sound?
- * gain:
- *   Volume, 0 - 1.
- * pan:
- *   Panning, 0 - 1 (0.5 is centered).
- * speed:
- *   Playing speed.
- */
-void sample_struct::play(
-    const float max_override_pos, const bool loop, const float gain,
-    const float pan, const float speed
-) {
-    if(!sample || !instance) return;
-    
-    if(max_override_pos != 0 && al_get_sample_instance_playing(instance)) {
-        float secs = al_get_sample_instance_position(instance) / (float) 44100;
-        if(
-            (secs < max_override_pos && max_override_pos > 0) ||
-            max_override_pos == -1
-        ) {
-            return;
-        }
-    }
-    
-    al_set_sample_instance_playmode(
-        instance, (loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE)
-    );
-    al_set_sample_instance_gain(instance, gain);
-    al_set_sample_instance_pan(instance, pan);
-    al_set_sample_instance_speed(instance, speed);
-    
-    al_set_sample_instance_position(instance, 0);
-    al_set_sample_instance_playing( instance, true);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Stops a playing sample instance.
- */
-void sample_struct::stop() {
-    if(!instance) return;
-    al_set_sample_instance_playing(instance, false);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a "script var reader".
  * vars:
  *   Map of variables to read from.
@@ -1934,7 +1928,7 @@ subgroup_type* subgroup_type_manager::get_first_type() const {
  *   Subgroup type to iterate from.
  */
 subgroup_type* subgroup_type_manager::get_next_type(
-    subgroup_type* sgt
+    const subgroup_type* sgt
 ) const {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t] == sgt) {
@@ -1951,7 +1945,7 @@ subgroup_type* subgroup_type_manager::get_next_type(
  *   Subgroup type to iterate from.
  */
 subgroup_type* subgroup_type_manager::get_prev_type(
-    subgroup_type* sgt
+    const subgroup_type* sgt
 ) const {
     for(size_t t = 0; t < types.size(); ++t) {
         if(types[t] == sgt) {
@@ -1972,7 +1966,7 @@ subgroup_type* subgroup_type_manager::get_prev_type(
  */
 subgroup_type* subgroup_type_manager::get_type(
     const SUBGROUP_TYPE_CATEGORIES category,
-    mob_type* specific_type
+    const mob_type* specific_type
 ) const {
     for(size_t t = 0; t < types.size(); ++t) {
         subgroup_type* t_ptr = types[t];
@@ -2052,7 +2046,22 @@ system_asset_list::system_asset_list():
     bmp_throw_invalid(nullptr),
     bmp_throw_preview(nullptr),
     bmp_throw_preview_dashed(nullptr),
-    bmp_wave_ring(nullptr) {
+    bmp_wave_ring(nullptr),
+    sfx_attack(nullptr),
+    sfx_camera(nullptr),
+    sfx_pikmin_attack(nullptr),
+    sfx_pikmin_called(nullptr),
+    sfx_pikmin_carrying(nullptr),
+    sfx_pikmin_carrying_grab(nullptr),
+    sfx_pikmin_caught(nullptr),
+    sfx_pikmin_dying(nullptr),
+    sfx_pikmin_held(nullptr),
+    sfx_pikmin_idle(nullptr),
+    sfx_pluck(nullptr),
+    sfx_pikmin_plucked(nullptr),
+    sfx_pikmin_thrown(nullptr),
+    sfx_switch_pikmin(nullptr),
+    sfx_throw(nullptr) {
     
 }
 

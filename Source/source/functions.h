@@ -69,6 +69,7 @@ enum WIPE_FOLDER_RESULTS {
         info += "). Extra info: "; \
         info += message; \
         crash("Assert", info, 1); \
+        return; \
     }
 
 //Returns the bitmask corresponding to a certain index. Useful for flags.
@@ -93,8 +94,8 @@ enum WIPE_FOLDER_RESULTS {
 #define map_gray(g) al_map_rgb((g), (g), (g))
 
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
-#define task_range(p) \
-    (((p)->following_group == cur_leader_ptr && swarm_magnitude) ? \
+#define task_range(p,player_id) \
+    (((p)->following_group == player_info[player_id].cur_leader_ptr && player_info[player_id].swarm_magnitude) ? \
      game.config.swarm_task_range : game.config.idle_task_range)
 
 
@@ -106,9 +107,12 @@ typedef ALLEGRO_COLOR (*offset_effect_color_getter_ptr)(edge*);
 typedef float (*offset_effect_length_getter_ptr)(edge*);
 
 
+bool are_walls_between(
+    const point &p1, const point &p2,
+    float ignore_walls_below_z = -FLT_MAX, bool* impassable_walls = NULL
+);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
-void change_game_state(unsigned int new_state);
 void clear_area_textures();
 void crash(const string &reason, const string &info, const int exit_status);
 bool does_edge_have_ledge_smoothing(
@@ -152,12 +156,12 @@ void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
 );
 void get_next_edge(
-    vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
-    edge** final_edge, float* final_angle, float* final_diff
+    vertex* v_ptr, const float pivot_angle, const bool clockwise,
+    const edge* ignore, edge** final_edge, float* final_angle, float* final_diff
 );
 void get_next_offset_effect_edge(
-    vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
-    offset_effect_checker_ptr edge_checker,
+    vertex* v_ptr, const float pivot_angle, const bool clockwise,
+    const edge* ignore, offset_effect_checker_ptr edge_checker,
     edge** final_edge, float* final_angle, float* final_diff,
     float* final_base_shadow_angle,
     bool* final_shadow_cw
@@ -175,6 +179,7 @@ unsigned char get_throw_preview_vertexes(
     const bool vary_thickness
 );
 map<string, string> get_var_map(const string &vars_string);
+string get_engine_version_string();
 ALLEGRO_COLOR get_wall_shadow_color(edge* e_ptr);
 float get_wall_shadow_length(edge* e_ptr);
 vector<std::pair<int, string> > get_weather_table(data_node* node);
@@ -182,7 +187,7 @@ ALLEGRO_COLOR interpolate_color(
     const float input, const float input_start, const float input_end,
     const ALLEGRO_COLOR &output_start, const ALLEGRO_COLOR &output_end
 );
-void log_error(string s, data_node* d = NULL);
+void log_error(const string &s, data_node* d = NULL);
 void print_info(
     const string &text,
     const float total_duration = 5.0f,
@@ -228,7 +233,7 @@ vector<vector<string_token> > split_long_string_with_tokens(
     const vector<string_token> &tokens, const int max_width
 );
 string standardize_path(const string &path);
-void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
+void start_message(const string &text, ALLEGRO_BITMAP* speaker_bmp,const int &player_id=0);
 vector<string_token> tokenize_string(const string &s);
 string unescape_string(const string &s);
 void update_offset_effect_buffer(
@@ -249,7 +254,7 @@ WIPE_FOLDER_RESULTS wipe_folder(
 );
 string word_wrap(const string &s, const size_t n_chars_per_line);
 
-void al_fwrite(ALLEGRO_FILE* f, string s);
+void al_fwrite(ALLEGRO_FILE* f, const string &s);
 string c2s(const ALLEGRO_COLOR &c);
 ALLEGRO_COLOR s2c(const string &s);
 string p2s(const point &p, float* z = NULL);

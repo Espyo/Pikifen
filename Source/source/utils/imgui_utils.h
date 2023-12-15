@@ -36,7 +36,7 @@ bool Combo(
 );
 bool DragTime2(
     const string &label, int* total_amount,
-    const string format1 = "m", const string format2 = "s",
+    const string &format1 = "m", const string &format2 = "s",
     const int limit1 = INT_MAX, const int limit2 = 59
 );
 bool ImageButtonAndText(

@@ -68,6 +68,8 @@ void controls_manager::clean_stick(player_input input) {
 
 /* ----------------------------------------------------------------------------
  * Returns a list of action types that get triggered by the given input.
+ * input:
+ *   The input.
  */
 vector<int> controls_manager::get_action_types_from_input(
     const player_input &input
@@ -121,7 +123,7 @@ vector<int> controls_manager::get_action_types_from_input(
             break;
         }
         }
-        
+        action_types.push_back(bind.player_nr);
         action_types.push_back(bind.action_type_id);
         
     }
@@ -147,17 +149,18 @@ void controls_manager::handle_clean_input(
     //Find what game action types are bound to this input.
     vector<int> action_types = get_action_types_from_input(input);
     
-    for(size_t a = 0; a < action_types.size(); ++a) {
+    for(size_t a = 0; a < action_types.size()/2; ++a) {
         if(add_directly) {
             //Add it to the action queue directly.
             player_action new_action;
-            new_action.action_type_id = action_types[a];
+            new_action.action_type_id = action_types[a*2+1];
             new_action.value = input.value;
+            new_action.player_id = action_types[a*2];
             action_queue.push_back(new_action);
         } else {
             //Update each game action type's current input state,
             //so we can report them later.
-            action_type_values[action_types[a]] = input.value;
+            action_type_values[action_types[a*2+1]] = input.value+(action_types[a*2]+1.0)*2.0;
         }
     }
 }
@@ -165,6 +168,8 @@ void controls_manager::handle_clean_input(
 
 /* ----------------------------------------------------------------------------
  * Handles an input from hardware.
+ * input:
+ *   The input.
  */
 void controls_manager::handle_input(
     const player_input &input
@@ -242,8 +247,21 @@ vector<player_action> controls_manager::new_frame() {
     for(auto &a : action_type_values) {
         if(old_action_type_values[a.first] != a.second) {
             player_action new_action;
+            float player_id = a.second;
+            if (player_id >= 0.0 && player_id < 3.1){
+                player_id = 1.0;
+            }else if (player_id >= 2.0 && player_id < 5.1){
+                player_id = 2.0;
+
+            }else if(player_id >= 4.0 && player_id < 7.1){
+                player_id = 3.0;
+            }else if(player_id >= 6.0 && player_id < 9.1){
+                player_id = 4.0;
+
+            }
+            new_action.player_id = player_id-1.0;
             new_action.action_type_id = a.first;
-            new_action.value = a.second;
+            new_action.value = a.second-player_id*2.0;
             action_queue.push_back(new_action);
         }
     }

@@ -98,6 +98,8 @@ struct hud_struct {
     hud_bubble_manager<leader_icon_bubble> leader_icon_mgr;
     //Bubble manager for leader health items.
     hud_bubble_manager<leader_health_bubble> leader_health_mgr;
+    //The Player index that owns this Hud
+    size_t player_id;
     //Bubble manager for the standby type.
     hud_bubble_manager<ALLEGRO_BITMAP*> standby_icon_mgr;
     //Bubble manager for the spray icons.
@@ -135,7 +137,7 @@ struct hud_struct {
     //Total count text. Cache for convenience.
     gui_item* total_amount;
     
-    hud_struct();
+    hud_struct(const size_t &m_player_id);
     ~hud_struct();
     void tick(const float delta_t);
     

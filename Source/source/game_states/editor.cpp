@@ -39,7 +39,7 @@ const float KEYBOARD_CAM_ZOOM = 0.25f;
 //How quickly the operation error red flash effect cursor shakes.
 const float OP_ERROR_CURSOR_SHAKE_SPEED = 55.0f;
 //How much the operation error red flash effect cursor shakes left and right.
-const float OP_ERROR_CURSOR_SHAKE_WIDTH = 10.0f;
+const float OP_ERROR_CURSOR_SHAKE_WIDTH = 6.0f;
 //Width or height of the operation error red flash effect cursor.
 const float OP_ERROR_CURSOR_SIZE = 32.0f;
 //Thickness of the operation error red flash effect cursor.
@@ -264,11 +264,25 @@ void editor::draw_grid(
 void editor::draw_op_error_cursor() {
     float error_flash_time_ratio = op_error_flash_timer.get_ratio_left();
     if(error_flash_time_ratio <= 0.0f) return;
-    point pos = game.mouse_cursor_s;
+    point pos = op_error_pos;
+    draw_bitmap(
+        game.sys_assets.bmp_notification,
+        point(
+            pos.x,
+            pos.y - EDITOR::OP_ERROR_CURSOR_SIZE
+        ),
+        point(
+            EDITOR::OP_ERROR_CURSOR_SIZE * 2.5f,
+            EDITOR::OP_ERROR_CURSOR_SIZE * 2.0f
+        ),
+        0.0f,
+        map_alpha(error_flash_time_ratio * 192)
+    );
     pos.x +=
         EDITOR::OP_ERROR_CURSOR_SHAKE_WIDTH *
         sin(game.time_passed * EDITOR::OP_ERROR_CURSOR_SHAKE_SPEED) *
         error_flash_time_ratio;
+    pos.y -= EDITOR::OP_ERROR_CURSOR_SIZE;
     al_draw_line(
         pos.x - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
         pos.y - EDITOR::OP_ERROR_CURSOR_SIZE / 2.0f,
@@ -881,6 +895,8 @@ bool editor::list_popup(
  * Loads content common for all editors.
  */
 void editor::load() {
+    game.mouse_cursor.show();
+    
     bmp_editor_icons =
         load_bmp(game.asset_file_names.editor_icons, NULL, true, false);
     if(bmp_editor_icons) {
@@ -1042,6 +1058,21 @@ void editor::open_picker_dialog(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates widgets with the goal of placing a disabled text widget to the
+ * right side of the panel.
+ * title:
+ *   Title to write.
+ */
+void editor::panel_title(const char* title) {
+    ImGui::SameLine(
+        ImGui::GetContentRegionAvail().x -
+        (ImGui::CalcTextSize(title).x + 1)
+    );
+    ImGui::TextDisabled("%s", title);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Begins a Dear ImGui popup, with logic to close it if Escape was pressed.
  * label:
  *   The popup's label.
@@ -1056,21 +1087,6 @@ bool editor::popup(const char* label, ImGuiWindowFlags flags) {
         }
     }
     return result;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Creates widgets with the goal of placing a disabled text widget to the
- * right side of the panel.
- * title:
- *   Title to write.
- */
-void editor::panel_title(const char* title) {
-    ImGui::SameLine(
-        ImGui::GetContentRegionAvail().x -
-        (ImGui::CalcTextSize(title).x + 1)
-    );
-    ImGui::TextDisabled("%s", title);
 }
 
 
@@ -1579,6 +1595,7 @@ void editor::set_status(const string &text, const bool error) {
     status_text = text;
     if(error) {
         op_error_flash_timer.start();
+        op_error_pos = game.mouse_cursor.s_pos;
     }
 }
 
@@ -1609,48 +1626,50 @@ void editor::set_tooltip(
         ImGui::IsItemHovered(
             ImGuiHoveredFlags_AllowWhenDisabled |
             ImGuiHoveredFlags_DelayNormal |
-            ImGuiHoveredFlags_NoSharedDelay
+            ImGuiHoveredFlags_NoSharedDelay |
+            ImGuiHoveredFlags_Stationary
         )
     ) {
-        ImGui::BeginTooltip();
+        if(ImGui::BeginTooltip()) {
         
-        ImGui::Text("%s", explanation.c_str());
-        
-        string widget_explanation_text;
-        switch(widget_explanation) {
-        case WIDGET_EXPLANATION_NONE: {
-            break;
+            ImGui::Text("%s", explanation.c_str());
+            
+            string widget_explanation_text;
+            switch(widget_explanation) {
+            case WIDGET_EXPLANATION_NONE: {
+                break;
+            }
+            case WIDGET_EXPLANATION_DRAG: {
+                widget_explanation_text =
+                    "Click and drag left or right to change.\n"
+                    "Hold Alt or Shift to change speed.\n"
+                    "Click once or Ctrl + click to write a value.";
+                break;
+            }
+            case WIDGET_EXPLANATION_SLIDER: {
+                widget_explanation_text =
+                    "Click and/or drag left or right to change.\n"
+                    "Ctrl + click to write a value.";
+                break;
+            }
+            }
+            
+            if(!widget_explanation_text.empty()) {
+                ImGui::TextColored(
+                    ImVec4(0.50f, 0.50f, 0.50f, 1.0f),
+                    "%s", widget_explanation_text.c_str()
+                );
+            }
+            
+            if(!shortcut.empty()) {
+                ImGui::TextColored(
+                    ImVec4(0.70f, 0.70f, 0.70f, 1.0f),
+                    "Shortcut key: %s", shortcut.c_str()
+                );
+            }
+            
+            ImGui::EndTooltip();
         }
-        case WIDGET_EXPLANATION_DRAG: {
-            widget_explanation_text =
-                "Click and drag left or right to change.\n"
-                "Hold Alt or Shift to change speed.\n"
-                "Click once or Ctrl + click to write a value.";
-            break;
-        }
-        case WIDGET_EXPLANATION_SLIDER: {
-            widget_explanation_text =
-                "Click and/or drag left or right to change.\n"
-                "Ctrl + click to write a value.";
-            break;
-        }
-        }
-        
-        if(!widget_explanation_text.empty()) {
-            ImGui::TextColored(
-                ImVec4(0.50f, 0.50f, 0.50f, 1.0f),
-                "%s", widget_explanation_text.c_str()
-            );
-        }
-        
-        if(!shortcut.empty()) {
-            ImGui::TextColored(
-                ImVec4(0.70f, 0.70f, 0.70f, 1.0f),
-                "Shortcut key: %s", shortcut.c_str()
-            );
-        }
-        
-        ImGui::EndTooltip();
     }
 }
 
@@ -1704,6 +1723,7 @@ void editor::unload() {
     }
     custom_cat_name_idxs.clear();
     custom_cat_types.clear();
+    game.mouse_cursor.hide();
 }
 
 
@@ -1921,40 +1941,42 @@ void editor::update_transformations() {
  */
 void editor::zoom_with_cursor(const float new_zoom) {
     //Keep a backup of the old mouse coordinates.
-    point old_mouse_pos = game.mouse_cursor_w;
+    point old_mouse_pos = game.mouse_cursor.w_pos;
     
     //Do the zoom.
     game.cam.set_zoom(clamp(new_zoom, zoom_min_level, zoom_max_level));
     update_transformations();
     
     //Figure out where the mouse will be after the zoom.
-    game.mouse_cursor_w = game.mouse_cursor_s;
+    game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
     al_transform_coordinates(
         &game.screen_to_world_transform,
-        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+        &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
     );
     
     //Readjust the transformation by shifting the camera
     //so that the cursor ends up where it was before.
     game.cam.set_pos(
         point(
-            game.cam.pos.x += (old_mouse_pos.x - game.mouse_cursor_w.x),
-            game.cam.pos.y += (old_mouse_pos.y - game.mouse_cursor_w.y)
+            game.cam.pos.x += (old_mouse_pos.x - game.mouse_cursor.w_pos.x),
+            game.cam.pos.y += (old_mouse_pos.y - game.mouse_cursor.w_pos.y)
         )
     );
     
     //Update the mouse coordinates again.
     update_transformations();
-    game.mouse_cursor_w = game.mouse_cursor_s;
+    game.mouse_cursor.w_pos = game.mouse_cursor.s_pos;
     al_transform_coordinates(
         &game.screen_to_world_transform,
-        &game.mouse_cursor_w.x, &game.mouse_cursor_w.y
+        &game.mouse_cursor.w_pos.x, &game.mouse_cursor.w_pos.y
     );
 }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a new changes manager.
+ * ed:
+ *   Pointer to the editor.
  */
 editor::changes_manager::changes_manager(editor* ed) :
     ed(ed),
@@ -2003,7 +2025,7 @@ bool editor::changes_manager::ask_if_unsaved(
             "Unsaved changes!",
             std::bind(&editor::process_gui_unsaved_changes_dialog, ed)
         );
-        ed->dialogs.back()->custom_pos = game.mouse_cursor_s;
+        ed->dialogs.back()->custom_pos = game.mouse_cursor.s_pos;
         ed->dialogs.back()->custom_size = point(580, 100);
         ed->dialogs.back()->event_callback =
         [this] (ALLEGRO_EVENT * ev) {
@@ -2335,7 +2357,11 @@ void editor::picker_info::process() {
     if(editor_ptr->popup("newItemCategory")) {
         ImGui::Text("%s", "What is the category of the new item?");
         
-        if(ImGui::BeginChild("categoryList", ImVec2(0.0f, 80.0f), true)) {
+        if(
+            ImGui::BeginChild(
+                "categoryList", ImVec2(0.0f, 80.0f), ImGuiChildFlags_Border
+            )
+        ) {
             for(size_t c = 0; c < new_item_category_choices.size(); ++c) {
                 if(ImGui::Selectable(new_item_category_choices[c].c_str())) {
                     new_item_category = new_item_category_choices[c];

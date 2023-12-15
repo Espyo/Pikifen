@@ -227,7 +227,7 @@ float animation_editor::get_cursor_timeline_time() {
     }
     float anim_x1 = canvas_tl.x + ANIM_EDITOR::TIMELINE_PADDING;
     float anim_w = (canvas_br.x - ANIM_EDITOR::TIMELINE_PADDING) - anim_x1;
-    float mouse_x = game.mouse_cursor_s.x - anim_x1;
+    float mouse_x = game.mouse_cursor.s_pos.x - anim_x1;
     mouse_x = clamp(mouse_x, 0.0f, anim_w);
     return cur_anim->get_duration() * (mouse_x / anim_w);
 }
@@ -376,10 +376,10 @@ void animation_editor::import_sprite_transformation_data(const string &name) {
 bool animation_editor::is_cursor_in_timeline() {
     return
         state == EDITOR_STATE_ANIMATION &&
-        game.mouse_cursor_s.x >= canvas_tl.x &&
-        game.mouse_cursor_s.x <= canvas_br.x &&
-        game.mouse_cursor_s.y >= canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT &&
-        game.mouse_cursor_s.y <= canvas_br.y;
+        game.mouse_cursor.s_pos.x >= canvas_tl.x &&
+        game.mouse_cursor.s_pos.x <= canvas_br.x &&
+        game.mouse_cursor.s_pos.y >= canvas_br.y - ANIM_EDITOR::TIMELINE_HEIGHT &&
+        game.mouse_cursor.s_pos.y <= canvas_br.y;
 }
 
 
@@ -728,6 +728,18 @@ void animation_editor::press_save_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the zoom and position reset button widget is pressed.
+ */
+void animation_editor::press_zoom_and_pos_reset_button() {
+    if(game.cam.target_zoom == 1.0f) {
+        game.cam.target_pos = point();
+    } else {
+        game.cam.target_zoom = 1.0f;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the zoom everything button widget is pressed.
  */
 void animation_editor::press_zoom_everything_button() {
@@ -769,18 +781,6 @@ void animation_editor::press_zoom_everything_button() {
     }
     
     center_camera(cmin, cmax);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to run when the zoom and position reset button widget is pressed.
- */
-void animation_editor::press_zoom_and_pos_reset_button() {
-    if(game.cam.target_zoom == 1.0f) {
-        game.cam.target_pos = point();
-    } else {
-        game.cam.target_zoom = 1.0f;
-    }
 }
 
 
@@ -1059,9 +1059,8 @@ void animation_editor::resize_sprite(sprite* s, const float mult) {
  * Returns true on success, false otherwise.
  */
 bool animation_editor::save_animation_database() {
-    anims.engine_version =
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
-        
+    anims.engine_version = get_engine_version_string();
+    
     data_node file_node = data_node("", "");
     
     data_node* animations_node = new data_node("animations", "");
@@ -1303,6 +1302,7 @@ void animation_editor::set_best_frame_sprite() {
     //sift out results that technically match, but likely aren't the same
     //term. Example: If the animation is called "running", and there is no
     //"runnning" sprite, we probably don't want a match with "rummaging".
+    //Unless it's the exact same word.
     //Also, set the final sprite index to 0 so that if something goes wrong,
     //we default to the first sprite on the list.
     size_t final_sprite_idx = 0;
@@ -1311,11 +1311,20 @@ void animation_editor::set_best_frame_sprite() {
     if(anims.sprites.size() > 1) {
         size_t best_score = 3;
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
-            size_t score =
-                get_matching_string_starts(
-                    str_to_lower(cur_anim->name),
-                    str_to_lower(anims.sprites[s]->name)
-                ).size();
+            size_t score = 0;
+            if(
+                str_to_lower(cur_anim->name) ==
+                str_to_lower(anims.sprites[s]->name)
+            ) {
+                score = 9999;
+            } else {
+                score =
+                    get_matching_string_starts(
+                        str_to_lower(cur_anim->name),
+                        str_to_lower(anims.sprites[s]->name)
+                    ).size();
+            }
+            
             if(score < best_score) {
                 continue;
             }

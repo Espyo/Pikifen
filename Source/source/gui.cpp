@@ -972,8 +972,6 @@ bool gui_manager::handle_player_action(const player_action &action) {
     }
     }
     
-    if(button_recognized) return true;
-    
     return button_recognized;
 }
 
@@ -1179,6 +1177,83 @@ list_gui_item::list_gui_item() :
         draw_rounded_rectangle(
             center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
         );
+        if(offset > 0.0f) {
+            //Shade effect at the top.
+            ALLEGRO_VERTEX vertexes[8];
+            for(size_t v = 0; v < 8; ++v) {
+                vertexes[v].z = 0.0f;
+            }
+            float y1 = center.y - size.y / 2.0f;
+            float y2 = y1 + 20.0f;
+            ALLEGRO_COLOR c_opaque = al_map_rgba(255, 255, 255, 64);
+            ALLEGRO_COLOR c_empty = al_map_rgba(255, 255, 255, 0);
+            vertexes[0].x = center.x - size.x * 0.49;
+            vertexes[0].y = y1;
+            vertexes[0].color = c_empty;
+            vertexes[1].x = center.x - size.x * 0.49;
+            vertexes[1].y = y2;
+            vertexes[1].color = c_empty;
+            vertexes[2].x = center.x - size.x * 0.47;
+            vertexes[2].y = y1;
+            vertexes[2].color = c_opaque;
+            vertexes[3].x = center.x - size.x * 0.47;
+            vertexes[3].y = y2;
+            vertexes[3].color = c_empty;
+            vertexes[4].x = center.x + size.x * 0.47;
+            vertexes[4].y = y1;
+            vertexes[4].color = c_opaque;
+            vertexes[5].x = center.x + size.x * 0.47;
+            vertexes[5].y = y2;
+            vertexes[5].color = c_empty;
+            vertexes[6].x = center.x + size.x * 0.49;
+            vertexes[6].y = y1;
+            vertexes[6].color = c_empty;
+            vertexes[7].x = center.x + size.x * 0.49;
+            vertexes[7].y = y2;
+            vertexes[7].color = c_empty;
+            al_draw_prim(
+                vertexes, NULL, NULL, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
+            );
+        }
+        float child_bottom = get_child_bottom();
+        if(child_bottom > 1.0f && offset < child_bottom - 1.0f) {
+            //Shade effect at the bottom.
+            ALLEGRO_VERTEX vertexes[8];
+            for(size_t v = 0; v < 8; ++v) {
+                vertexes[v].z = 0.0f;
+            }
+            float y1 = center.y + size.y / 2.0f;
+            float y2 = y1 - 20.0f;
+            ALLEGRO_COLOR c_opaque = al_map_rgba(255, 255, 255, 64);
+            ALLEGRO_COLOR c_empty = al_map_rgba(255, 255, 255, 0);
+            vertexes[0].x = center.x - size.x * 0.49;
+            vertexes[0].y = y1;
+            vertexes[0].color = c_empty;
+            vertexes[1].x = center.x - size.x * 0.49;
+            vertexes[1].y = y2;
+            vertexes[1].color = c_empty;
+            vertexes[2].x = center.x - size.x * 0.47;
+            vertexes[2].y = y1;
+            vertexes[2].color = c_opaque;
+            vertexes[3].x = center.x - size.x * 0.47;
+            vertexes[3].y = y2;
+            vertexes[3].color = c_empty;
+            vertexes[4].x = center.x + size.x * 0.47;
+            vertexes[4].y = y1;
+            vertexes[4].color = c_opaque;
+            vertexes[5].x = center.x + size.x * 0.47;
+            vertexes[5].y = y2;
+            vertexes[5].color = c_empty;
+            vertexes[6].x = center.x + size.x * 0.49;
+            vertexes[6].y = y1;
+            vertexes[6].color = c_empty;
+            vertexes[7].x = center.x + size.x * 0.49;
+            vertexes[7].y = y2;
+            vertexes[7].color = c_empty;
+            al_draw_prim(
+                vertexes, NULL, NULL, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
+            );
+        }
     };
     on_tick =
     [this] (const float delta_t) {
@@ -1190,6 +1265,12 @@ list_gui_item::list_gui_item() :
             target_offset = clamp(target_offset, 0.0f, child_bottom - 1.0f);
             offset += (target_offset - offset) * (10.0f * delta_t);
             offset = clamp(offset, 0.0f, child_bottom - 1.0f);
+            if(offset <= 0.01f) offset = 0.0f;
+            if(child_bottom > 1.0f) {
+                if(child_bottom - offset - 1.0f <= 0.01f) {
+                    offset = child_bottom - 1.0f;
+                }
+            }
         }
     };
     on_event =

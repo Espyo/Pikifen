@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <cstdlib>
 #include <iomanip>
 #include <sstream>
 

@@ -180,7 +180,7 @@ public:
     */
     options_menu_picker_gui_item(
         const string &base_text, t* cur_value, const t &def_value,
-        const vector<t> preset_values, const vector<string> preset_names,
+        const vector<t> &preset_values, const vector<string> &preset_names,
         const string &tooltip = ""
     ) :
         picker_gui_item(base_text, ""),
@@ -269,7 +269,6 @@ public:
         
         *cur_value = preset_values[cur_option_idx];
         option = get_cur_option_name();
-        cur_option_idx = cur_option_idx;
         start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
@@ -314,7 +313,8 @@ private:
     leaving_confirmation_picker;
     //Restart warning text widget.
     text_gui_item* warning_text;
-    
+    //Players picker widget.
+    options_menu_picker_gui_item<size_t>* player_picker;
     void go_to_controls();
     void leave();
     void trigger_restart_warning();
@@ -353,6 +353,8 @@ private:
     PLAYER_ACTION_TYPES cur_action_type;
     //Current global bind index we're working with.
     size_t cur_bind_idx;
+    //Current Player nr we're binding to
+    size_t cur_player_nr;
     
     void choose_input(
         const PLAYER_ACTION_TYPES action_type, const size_t bind_idx

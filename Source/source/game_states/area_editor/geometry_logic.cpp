@@ -107,17 +107,6 @@ void area_editor::check_drawing_line(const point &pos) {
     layout_drawing_node* prev_node = &drawing_nodes.back();
     layout_drawing_node tentative_node(this, pos);
     
-    //Check if the user is trying to close a loop, but the drawing is meant
-    //to be a split between two sectors.
-    if(
-        (drawing_nodes[0].on_edge || drawing_nodes[0].on_vertex) &&
-        dist(pos, drawing_nodes[0].snapped_spot) <=
-        AREA_EDITOR::VERTEX_MERGE_RADIUS / game.cam.zoom
-    ) {
-        drawing_line_result = DRAWING_LINE_LOOPS_IN_SPLIT;
-        return;
-    }
-    
     //Check if the user hits a vertex or an edge, but the drawing is
     //meant to be a new sector shape.
     if(
@@ -257,6 +246,49 @@ void area_editor::check_drawing_line(const point &pos) {
             return;
         }
     }
+    
+    //Check if this line is entering a sector different from the one the
+    //rest of the drawing is on.
+    if(drawing_nodes.size() >= 2) {
+        //This check only makes sense from the third node onward.
+        //Since both the first and the second node can't be on edges or
+        //vertexes, and no node can cross edges or vertexes,
+        //this means we can grab the midpoint of the first
+        //and second nodes to get the sector the second node is on, or the
+        //sector the second node is passing through. Basically,
+        //the working sector.
+        //This check is useful when the player tries to split a sector with
+        //a useless split, and is tasked with continuing the drawing.
+        point working_sector_point(
+            (
+                drawing_nodes[0].snapped_spot.x +
+                drawing_nodes[1].snapped_spot.x
+            ) / 2.0f,
+            (
+                drawing_nodes[0].snapped_spot.y +
+                drawing_nodes[1].snapped_spot.y
+            ) / 2.0f
+        );
+        sector* working_sector = get_sector_under_point(working_sector_point);
+        
+        point latest_sector_point(
+            (
+                drawing_nodes.back().snapped_spot.x +
+                pos.x
+            ) / 2.0f,
+            (
+                drawing_nodes.back().snapped_spot.y +
+                pos.y
+            ) / 2.0f
+        );
+        sector* latest_sector = get_sector_under_point(latest_sector_point);
+        
+        if(latest_sector != working_sector) {
+            drawing_line_result = DRAWING_LINE_WAYWARD_SECTOR;
+            return;
+        }
+    }
+    
 }
 
 
@@ -488,7 +520,7 @@ bool area_editor::delete_edges(const set<edge*> &which) {
  *   Mobs to delete.
  */
 void area_editor::delete_mobs(const set<mob_gen*> &which) {
-    for(auto sm : which) {
+    for(auto &sm : which) {
         //Get its index.
         size_t m_idx = 0;
         for(; m_idx < game.cur_area_data.mob_generators.size(); ++m_idx) {
@@ -550,7 +582,7 @@ void area_editor::delete_mobs(const set<mob_gen*> &which) {
  *   Path links to delete.
  */
 void area_editor::delete_path_links(const set<path_link*> &which) {
-    for(auto l : which) {
+    for(auto &l : which) {
         l->start_ptr->remove_link(l);
     }
 }
@@ -562,7 +594,7 @@ void area_editor::delete_path_links(const set<path_link*> &which) {
  *   Path stops to delete.
  */
 void area_editor::delete_path_stops(const set<path_stop*> &which) {
-    for(auto s : which) {
+    for(auto &s : which) {
         //Check all links that end at this stop.
         for(size_t s2 = 0; s2 < game.cur_area_data.path_stops.size(); ++s2) {
             path_stop* s2_ptr = game.cur_area_data.path_stops[s2];
@@ -662,18 +694,15 @@ void area_editor::find_problems() {
             problem_description =
                 "It contains lone edges. Try clearing them up.";
             break;
+        } case TRIANGULATION_ERROR_NOT_CLOSED: {
+            problem_description =
+                "It is not closed. Try closing it.";
+            break;
         } case TRIANGULATION_ERROR_NO_EARS: {
             problem_description =
                 "There's been a triangulation error. Try undoing or "
                 "deleting the sector, and then rebuild it. Make sure there "
                 "are no gaps, and keep it simple.";
-            break;
-        } case TRIANGULATION_ERROR_VERTEXES_REUSED: {
-            problem_description =
-                "Some vertexes are re-used. Make sure the sector "
-                "has no loops or that the same vertex is not re-used "
-                "by multiple edges of the sector. Split popular vertexes "
-                "if you must.";
             break;
         } case TRIANGULATION_ERROR_INVALID_ARGS: {
             problem_description =
@@ -1001,7 +1030,7 @@ void area_editor::find_problems() {
                 
                 if(
                     circle_intersects_line_seg(
-                        s_ptr->pos, AREA_EDITOR::PATH_STOP_RADIUS,
+                        s_ptr->pos, s_ptr->radius,
                         link_start_ptr->pos, link_end_ptr->pos
                     )
                 ) {
@@ -1178,7 +1207,7 @@ void area_editor::get_affected_sectors(
 void area_editor::get_affected_sectors(
     const set<sector*> &sectors, unordered_set<sector*> &list
 ) const {
-    for(auto s : sectors) {
+    for(auto &s : sectors) {
         get_affected_sectors(s, list);
     }
 }
@@ -1195,7 +1224,7 @@ void area_editor::get_affected_sectors(
 void area_editor::get_affected_sectors(
     const set<vertex*> &vertexes, unordered_set<sector*> &list
 ) const {
-    for(auto v : vertexes) {
+    for(auto &v : vertexes) {
         for(size_t e = 0; e < v->edges.size(); ++e) {
             list.insert(v->edges[e]->sectors[0]);
             list.insert(v->edges[e]->sectors[1]);
@@ -1340,7 +1369,7 @@ bool area_editor::get_common_sector(
     //and we can easily find out which is the inner one with this method.
     float best_rightmost_x = 0;
     sector* best_rightmost_sector = NULL;
-    for(auto s : sectors) {
+    for(auto &s : sectors) {
         if(s == NULL) continue;
         vertex* v_ptr = s->get_rightmost_vertex();
         if(!best_rightmost_sector || v_ptr->x < best_rightmost_x) {
@@ -1445,7 +1474,9 @@ bool area_editor::get_drawing_outer_sector(sector** result) const {
  * after:
  *   Only check edges that come after this one.
  */
-edge* area_editor::get_edge_under_point(const point &p, edge* after) const {
+edge* area_editor::get_edge_under_point(
+    const point &p, const edge* after
+) const {
     bool found_after = (!after ? true : false);
     
     for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
@@ -1632,7 +1663,7 @@ path_stop* area_editor::get_path_stop_under_point(const point &p) const {
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
         
-        if(dist(s_ptr->pos, p) <= AREA_EDITOR::PATH_STOP_RADIUS) {
+        if(dist(s_ptr->pos, p) <= s_ptr->radius) {
             return s_ptr;
         }
     }
@@ -1728,6 +1759,26 @@ void area_editor::homogenize_selected_path_links() {
         if(l == selected_path_links.begin()) continue;
         
         base->clone(*l);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Homogenizes all selected path stops,
+ * based on the one at the head of the selection.
+ */
+void area_editor::homogenize_selected_path_stops() {
+    if(selected_path_stops.size() < 2) return;
+    
+    path_stop* base = *selected_path_stops.begin();
+    for(
+        auto s = selected_path_stops.begin();
+        s != selected_path_stops.end();
+        ++s
+    ) {
+        if(s == selected_path_stops.begin()) continue;
+        
+        base->clone(*s);
     }
 }
 
@@ -2140,8 +2191,7 @@ void area_editor::resize_everything(const float mults[2]) {
         sector* s_ptr = game.cur_area_data.sectors[s];
         s_ptr->texture_info.scale.x *= mults[0];
         s_ptr->texture_info.scale.y *= mults[1];
-        s_ptr->triangles.clear();
-        triangulate(s_ptr, NULL, false, false);
+        triangulate_sector(s_ptr, NULL, false);
         s_ptr->calculate_bounding_box();
     }
     
@@ -2194,7 +2244,7 @@ void area_editor::rotate_mob_gens_to_point(const point &pos) {
     
     register_change("object rotation");
     selection_homogenized = false;
-    for(auto m : selected_mobs) {
+    for(auto &m : selected_mobs) {
         m->angle = get_angle(m->pos, pos);
     }
     set_status("Rotated objects to face " + p2s(pos) + ".");
@@ -2251,7 +2301,7 @@ point area_editor::snap_point(const point &p, const bool ignore_selected) {
         
         vector<vertex*> vertexes_to_check = game.cur_area_data.vertexes;
         if(ignore_selected) {
-            for(vertex* v : selected_vertexes) {
+            for(const vertex* v : selected_vertexes) {
                 for(size_t v2 = 0; v2 < vertexes_to_check.size(); ++v2) {
                     if(vertexes_to_check[v2] == v) {
                         vertexes_to_check.erase(vertexes_to_check.begin() + v2);
@@ -2432,7 +2482,6 @@ path_stop* area_editor::split_path_link(
     path_stop* old_start_ptr = l1->start_ptr;
     path_stop* old_end_ptr = l1->end_ptr;
     PATH_LINK_TYPES old_link_type = l1->type;
-    string old_link_label = l1->label;
     l1->start_ptr->remove_link(l1->end_ptr);
     if(normal_link) {
         l2->start_ptr->remove_link(l2->end_ptr);
@@ -2448,14 +2497,10 @@ path_stop* area_editor::split_path_link(
     game.cur_area_data.fix_path_stop_nrs(new_stop_ptr);
     
     old_start_ptr->get_link(new_stop_ptr)->type = old_link_type;
-    old_start_ptr->get_link(new_stop_ptr)->label = old_link_label;
     new_stop_ptr->get_link(old_end_ptr)->type = old_link_type;
-    new_stop_ptr->get_link(old_end_ptr)->label = old_link_label;
     if(normal_link) {
         new_stop_ptr->get_link(old_start_ptr)->type = old_link_type;
-        new_stop_ptr->get_link(old_start_ptr)->label = old_link_label;
         old_end_ptr->get_link(new_stop_ptr)->type = old_link_type;
-        old_end_ptr->get_link(new_stop_ptr)->label = old_link_label;
     }
     
     //Update the distances.
@@ -2481,7 +2526,7 @@ void area_editor::update_affected_sectors(
         
         set<edge*> triangulation_lone_edges;
         TRIANGULATION_ERRORS triangulation_error =
-            triangulate(s_ptr, &triangulation_lone_edges, true, true);
+            triangulate_sector(s_ptr, &triangulation_lone_edges, true);
             
         if(triangulation_error == TRIANGULATION_NO_ERROR) {
             auto it = game.cur_area_data.problems.non_simples.find(s_ptr);
@@ -2523,7 +2568,7 @@ void area_editor::update_affected_sectors(
  */
 void area_editor::update_inner_sectors_outer_sector(
     const vector<edge*> &edges_to_check,
-    sector* old_outer, sector* new_outer
+    const sector* old_outer, sector* new_outer
 ) {
     for(size_t e = 0; e < edges_to_check.size(); ++e) {
         edge* e_ptr = edges_to_check[e];

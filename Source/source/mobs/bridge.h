@@ -17,6 +17,7 @@
 
 namespace BRIDGE {
 extern const float FLOOR_WIDTH;
+extern const float STEP_HEIGHT;
 }
 
 

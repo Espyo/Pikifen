@@ -296,7 +296,7 @@ bool sector::is_point_in_sector(const point &p) const {
  * e_ptr:
  *   Edge to remove.
  */
-void sector::remove_edge(edge* e_ptr) {
+void sector::remove_edge(const edge* e_ptr) {
     size_t i = 0;
     for(; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
@@ -345,7 +345,7 @@ sector* get_sector(
             
         if(sectors->size() == 1) return *sectors->begin();
         
-        for(auto s : (*sectors)) {
+        for(auto &s : (*sectors)) {
         
             if(!s) {
                 continue;

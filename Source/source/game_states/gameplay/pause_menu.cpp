@@ -858,10 +858,14 @@ void pause_menu_struct::init_main_pause_menu() {
             GUI_MANAGER_ANIM_CENTER_TO_UP,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        game.states.gameplay->hud->gui.start_animation(
+
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+         if(game.states.gameplay->player_info[p].cur_leader_ptr == NULL) continue;
+        game.states.gameplay->player_info[p].hud->gui.start_animation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
+    }
         start_closing();
     };
     gui.back_item->on_get_tooltip =
@@ -1075,10 +1079,14 @@ void pause_menu_struct::init_mission_page() {
             GUI_MANAGER_ANIM_CENTER_TO_UP,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-        game.states.gameplay->hud->gui.start_animation(
+        
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+            if(game.states.gameplay->player_info[p].cur_leader_ptr == NULL) continue;
+            game.states.gameplay->player_info[p].hud->gui.start_animation(
             GUI_MANAGER_ANIM_OUT_TO_IN,
             GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
+    }
         start_closing();
     };
     mission_gui.back_item->on_get_tooltip =
@@ -1229,7 +1237,7 @@ void pause_menu_struct::start_leaving_gameplay() {
             get_index_bitmask(MISSION_FAIL_COND_PAUSE_MENU)
         )
     ) {
-        game.states.gameplay->mission_fail_reason =
+        game.states.gameplay->mission_info[0].mission_fail_reason =
             MISSION_FAIL_COND_PAUSE_MENU;
     }
     game.states.gameplay->start_leaving(leave_target);

@@ -53,7 +53,7 @@ void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
  * neighbor:
  *   The neighbor vertex to check.
  */
-edge* vertex::get_edge_by_neighbor(vertex* neighbor) const {
+edge* vertex::get_edge_by_neighbor(const vertex* neighbor) const {
     for(size_t e = 0; e < edges.size(); ++e) {
         if(edges[e]->get_other_vertex(this) == neighbor) {
             return edges[e];
@@ -68,7 +68,7 @@ edge* vertex::get_edge_by_neighbor(vertex* neighbor) const {
  * e_ptr:
  *   Edge to check.
  */
-bool vertex::has_edge(edge* e_ptr) const {
+bool vertex::has_edge(const edge* e_ptr) const {
     for(size_t e = 0; e < edges.size(); ++e) {
         if(edges[e] == e_ptr) return true;
     }
@@ -85,7 +85,7 @@ bool vertex::has_edge(edge* e_ptr) const {
  *   Return the common neighbor between them here, if the result is true.
  */
 bool vertex::is_2nd_degree_neighbor(
-    vertex* other_v, vertex** first_neighbor
+    const vertex* other_v, vertex** first_neighbor
 ) const {
     //Let's crawl forward through all edges and stop at the second level.
     //If other_v is at that distance, then we found it!
@@ -114,7 +114,7 @@ bool vertex::is_2nd_degree_neighbor(
  *   Return the common neighbor between them here, if the result is true.
  */
 bool vertex::is_2nd_degree_neighbor(
-    edge* other_e, vertex** first_neighbor
+    const edge* other_e, vertex** first_neighbor
 ) const {
     //Let's crawl forward through all edges and stop at the second level.
     //If other_e is at that distance, then we found it!
@@ -140,7 +140,7 @@ bool vertex::is_2nd_degree_neighbor(
  * other_v:
  *   The vertex to compare against.
  */
-bool vertex::is_neighbor(vertex* other_v) const {
+bool vertex::is_neighbor(const vertex* other_v) const {
     for(size_t e = 0; e < edges.size(); ++e) {
         if(edges[e]->get_other_vertex(this) == other_v) {
             return true;
@@ -155,7 +155,7 @@ bool vertex::is_neighbor(vertex* other_v) const {
  * e_ptr:
  *   Edge to remove.
  */
-void vertex::remove_edge(edge* e_ptr) {
+void vertex::remove_edge(const edge* e_ptr) {
     size_t i = 0;
     for(; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {

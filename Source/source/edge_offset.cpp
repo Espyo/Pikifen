@@ -15,10 +15,10 @@
 
 #include <allegro5/allegro_image.h>
 
+#include "area/sector.h"
 #include "drawing.h"
 #include "functions.h"
 #include "game.h"
-#include "area/sector.h"
 
 
 /* ----------------------------------------------------------------------------
@@ -523,8 +523,8 @@ void get_edge_offset_intersection(
  *   Difference in angle between the two.
  */
 void get_next_edge(
-    vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
-    edge** final_edge, float* final_angle, float* final_diff
+    vertex* v_ptr, const float pivot_angle, const bool clockwise,
+    const edge* ignore, edge** final_edge, float* final_angle, float* final_diff
 ) {
     edge* best_edge = NULL;
     float best_edge_diff = 0.0f;
@@ -588,8 +588,8 @@ void get_next_edge(
  *   Is the effect cast clockwise?
  */
 void get_next_offset_effect_edge(
-    vertex* v_ptr, const float pivot_angle, const bool clockwise, edge* ignore,
-    offset_effect_checker_ptr edge_checker,
+    vertex* v_ptr, const float pivot_angle, const bool clockwise,
+    const edge* ignore, offset_effect_checker_ptr edge_checker,
     edge** final_edge, float* final_angle, float* final_diff,
     float* final_base_effect_angle,
     bool* final_effect_cw

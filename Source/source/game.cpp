@@ -16,12 +16,24 @@
 
 #include "drawing.h"
 #include "functions.h"
-#include "libs/imgui/imgui_impl_allegro5.h"
 #include "init.h"
+#include "libs/imgui/imgui_impl_allegro5.h"
 #include "load.h"
 
 
 namespace GAME {
+//Standard color of the mouse cursor.
+const ALLEGRO_COLOR CURSOR_STANDARD_COLOR = al_map_rgb(188, 230, 230);
+//Maximum alpha of the cursor's trail -- the alpha value near the cursor.
+const unsigned char CURSOR_TRAIL_MAX_ALPHA = 72;
+//Maximum width of the cursor's trail -- the width value near the cursor.
+const float CURSOR_TRAIL_MAX_WIDTH = 30.0f;
+//How far the cursor must move from its current spot before the next spot.
+const float CURSOR_TRAIL_MIN_SPOT_DIFF = 4.0f;
+//Every X seconds, the cursor's position is saved, to create the trail effect.
+const float CURSOR_TRAIL_SAVE_INTERVAL = 0.016f;
+//Number of positions of the cursor to keep track of.
+const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS = 16;
 //Duration of full-screen fades.
 const float FADE_DURATION = 0.15f;
 //When getting a framerate average, use a sample of this size.
@@ -46,7 +58,6 @@ game_class::game_class() :
     liquid_limit_effect_buffer(nullptr),
     loading_subtext_bmp(nullptr),
     loading_text_bmp(nullptr),
-    mixer(nullptr),
     perf_mon(nullptr),
     show_system_info(false),
     textures(TEXTURES_FOLDER_NAME),
@@ -55,7 +66,6 @@ game_class::game_class() :
     win_fullscreen(OPTIONS::DEF_WIN_FULLSCREEN),
     win_h(OPTIONS::DEF_WIN_H),
     win_w(OPTIONS::DEF_WIN_W),
-    voice(nullptr),
     cur_state(nullptr),
     logic_queue(nullptr),
     logic_timer(nullptr),
@@ -161,6 +171,20 @@ void game_class::check_system_key_press(const ALLEGRO_EVENT &ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Performs some global logic to run every frame.
+ */
+void game_class::do_global_logic() {
+    //Cursor trail.
+    if(options.draw_cursor_trail) {
+        game.mouse_cursor.save_timer.tick(delta_t);
+    }
+    
+    //Audio.
+    game.audio.tick(delta_t);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the name of the current state.
  */
 string game_class::get_cur_state_name() const {
@@ -168,6 +192,23 @@ string game_class::get_cur_state_name() const {
         return cur_state->get_name();
     }
     return "none";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles an Allegro event.
+ * ev:
+ *   Event to handle.
+ */
+void game_class::global_handle_allegro_event(const ALLEGRO_EVENT &ev) {
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
+        ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
+    ) {
+        mouse_cursor.update_pos(ev, game.screen_to_world_transform);
+    }
 }
 
 
@@ -192,6 +233,7 @@ void game_class::main_loop() {
         
         al_wait_for_event(logic_queue, &ev);
         
+        global_handle_allegro_event(ev);
         cur_state->handle_allegro_event(ev);
         
         switch(ev.type) {
@@ -205,7 +247,7 @@ void game_class::main_loop() {
                 }
                 
                 float real_delta_t = cur_time - prev_frame_time;
-                game.statistics.runtime += real_delta_t;
+                statistics.runtime += real_delta_t;
                 
                 //Anti speed-burst cap.
                 delta_t = std::min(real_delta_t, 0.2f);
@@ -213,6 +255,7 @@ void game_class::main_loop() {
                 time_passed += delta_t;
                 game_state* prev_state = cur_state;
                 
+                do_global_logic();
                 cur_state->do_logic();
                 if(cur_state == prev_state) {
                     //Only draw if we didn't change states in the meantime.
@@ -234,7 +277,7 @@ void game_class::main_loop() {
         }  case ALLEGRO_EVENT_DISPLAY_SWITCH_IN: {
             //On Windows, when you tab out then back in, sometimes you'd see
             //weird artifacts. This workaround fixes it.
-            al_resize_display(game.display, game.win_w, game.win_h);
+            al_resize_display(display, win_w, win_h);
             break;
             
         }
@@ -327,45 +370,45 @@ int game_class::start() {
     
     dummy_mob_state = new mob_state("dummy");
     
-    if(game.maker_tools.use_perf_mon) {
-        game.perf_mon = new performance_monitor_struct();
+    if(maker_tools.use_perf_mon) {
+        perf_mon = new performance_monitor_struct();
     }
     
     if(
-        game.maker_tools.enabled &&
-        game.maker_tools.auto_start_mode == "play" &&
-        !game.maker_tools.auto_start_option.empty()
+        maker_tools.enabled &&
+        maker_tools.auto_start_mode == "play" &&
+        !maker_tools.auto_start_option.empty()
     ) {
-        game.states.gameplay->path_of_area_to_load =
-            game.maker_tools.auto_start_option;
-        game.change_state(game.states.gameplay);
+        states.gameplay->path_of_area_to_load =
+            maker_tools.auto_start_option;
+        change_state(states.gameplay);
         
     } else if(
-        game.maker_tools.enabled &&
-        game.maker_tools.auto_start_mode == "animation_editor"
+        maker_tools.enabled &&
+        maker_tools.auto_start_mode == "animation_editor"
     ) {
-        game.states.animation_ed->auto_load_anim =
-            game.maker_tools.auto_start_option;
-        game.change_state(game.states.animation_ed);
+        states.animation_ed->auto_load_anim =
+            maker_tools.auto_start_option;
+        change_state(states.animation_ed);
         
     } else if(
-        game.maker_tools.enabled &&
-        game.maker_tools.auto_start_mode == "area_editor"
+        maker_tools.enabled &&
+        maker_tools.auto_start_mode == "area_editor"
     ) {
-        game.states.area_ed->auto_load_area =
-            game.maker_tools.auto_start_option;
-        game.change_state(game.states.area_ed);
+        states.area_ed->auto_load_area =
+            maker_tools.auto_start_option;
+        change_state(states.area_ed);
         
     } else if(
-        game.maker_tools.enabled &&
-        game.maker_tools.auto_start_mode == "gui_editor"
+        maker_tools.enabled &&
+        maker_tools.auto_start_mode == "gui_editor"
     ) {
-        game.states.gui_ed->auto_load_file =
-            game.maker_tools.auto_start_option;
-        game.change_state(game.states.gui_ed);
+        states.gui_ed->auto_load_file =
+            maker_tools.auto_start_option;
+        change_state(states.gui_ed);
         
     } else {
-        game.change_state(game.states.main_menu);
+        change_state(states.main_menu);
     }
     
     return 0;

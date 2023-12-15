@@ -471,11 +471,28 @@ void area_editor::process_gui_menu_bar() {
             if(undo_history.empty()) {
                 undo_text = "Nothing to undo.";
             } else {
-                undo_text = "Undo: " + undo_history[0].second + ".";
+                undo_text = "Undo: " + undo_history.front().second + ".";
             }
             set_tooltip(
                 undo_text,
                 "Ctrl + Z"
+            );
+            
+            //Redo item.
+            if(ImGui::MenuItem("Redo", "Ctrl+Y")) {
+                press_redo_button();
+            }
+            string redo_text;
+            if(redo_history.empty()) {
+                redo_text =
+                    "Nothing to redo.";
+            } else {
+                redo_text =
+                    "Redo: " + redo_history.front().second + ".";
+            }
+            set_tooltip(
+                redo_text,
+                "Ctrl + Y"
             );
             
             //Separator.
@@ -845,14 +862,14 @@ void area_editor::process_gui_mob_script_vars(mob_gen* m_ptr) {
     }
     
     string other_vars_str;
-    for(auto v : vars_map) {
+    for(auto &v : vars_map) {
         if(!vars_in_widgets[v.first]) {
             other_vars_str += v.first + "=" + v.second + ";";
         }
     }
     
     m_ptr->vars.clear();
-    for(auto v : new_vars_map) {
+    for(auto &v : new_vars_map) {
         m_ptr->vars += v.first + "=" + v.second + ";";
     }
     m_ptr->vars += other_vars_str;
@@ -1609,7 +1626,7 @@ void area_editor::process_gui_panel_gameplay() {
                     register_change("area spray amounts change");
                     spray_strs[game.spray_types[s].name] = i2s(amount);
                     game.cur_area_data.spray_amounts.clear();
-                    for(auto v : spray_strs) {
+                    for(auto &v : spray_strs) {
                         game.cur_area_data.spray_amounts +=
                             v.first + "=" + v.second + ";";
                     }
@@ -1809,7 +1826,7 @@ void area_editor::process_gui_panel_info() {
         //Area weather combobox.
         vector<string> weather_conditions;
         weather_conditions.push_back(NONE_OPTION);
-        for(auto w : game.weather_conditions) {
+        for(auto &w : game.weather_conditions) {
             weather_conditions.push_back(w.first);
         }
         if(game.cur_area_data.weather_name.empty()) {
@@ -2144,9 +2161,10 @@ void area_editor::process_gui_panel_layout() {
     if(sub_state == EDITOR_SUB_STATE_DRAWING) {
         //Drawing explanation text.
         ImGui::TextWrapped(
-            "Use the canvas to draw a sector. Each click places a vertex. "
-            "Either draw edges from one edge/vertex to another edge/vertex, "
-            "or draw a sector's shape and finish on the starting vertex."
+            "Use the canvas to draw your layout. Each click places a vertex. "
+            "You either draw edges from one edge/vertex to another "
+            "edge/vertex, or draw a sector's shape and finish on the "
+            "starting vertex."
         );
         
         //Drawing cancel button.
@@ -2202,7 +2220,7 @@ void area_editor::process_gui_panel_layout() {
                 ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            press_new_sector_button();
+            press_layout_drawing_button();
         }
         set_tooltip(
             "Start drawing a new sector.\n"
@@ -3224,7 +3242,7 @@ void area_editor::process_gui_panel_mission() {
                 register_change("mission fail conditions change");
                 game.cur_area_data.mission.fail_hud_primary_cond =
                     show_primary ?
-                    active_conditions[0] :
+                    (size_t) active_conditions[0] :
                     INVALID;
             }
             set_tooltip(
@@ -3276,7 +3294,7 @@ void area_editor::process_gui_panel_mission() {
                 register_change("mission fail conditions change");
                 game.cur_area_data.mission.fail_hud_secondary_cond =
                     show_secondary ?
-                    active_conditions[0] :
+                    (size_t) active_conditions[0] :
                     INVALID;
             }
             set_tooltip(
@@ -4240,10 +4258,8 @@ void area_editor::process_gui_panel_path_link() {
     
     //Type combobox.
     vector<string> link_type_names;
-    link_type_names.push_back("No limit");
-    link_type_names.push_back("Script use only");
-    link_type_names.push_back("Light load only");
-    link_type_names.push_back("Airborne only");
+    link_type_names.push_back("Normal");
+    link_type_names.push_back("Ledge");
     
     int type_i = l_ptr->type;
     if(ImGui::Combo("Type", &type_i, link_type_names, 15)) {
@@ -4254,18 +4270,82 @@ void area_editor::process_gui_panel_path_link() {
         "What type of link this is."
     );
     
-    //Label text.
-    string label = l_ptr->label;
-    if(ImGui::InputText("Label", &label)) {
-        register_change("path link label change");
-        l_ptr->label = label;
+    homogenize_selected_path_links();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes the ImGui path stop control panel for this frame.
+ */
+void area_editor::process_gui_panel_path_stop() {
+    path_stop* s_ptr = *selected_path_stops.begin();
+    
+    //Radius value.
+    float radius = s_ptr->radius;
+    if(ImGui::DragFloat("Radius", &radius, 0.5f, PATHS::MIN_STOP_RADIUS)) {
+        radius = std::max(PATHS::MIN_STOP_RADIUS, radius);
+        register_change("path stop radius change");
+        s_ptr->radius = radius;
+        path_preview_timer.start(false);
     }
     set_tooltip(
-        "If this link is part of a path that you want\n"
+        "Radius of the stop. Used when mobs want to find the closest\n"
+        "start/end stop.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    
+    //Script use only checkbox.
+    int flags_i = s_ptr->flags;
+    if(
+        ImGui::CheckboxFlags(
+            "Script use only",
+            &flags_i,
+            PATH_STOP_SCRIPT_ONLY
+        )
+    ) {
+        s_ptr->flags = flags_i;
+    }
+    set_tooltip(
+        "Can only be used by objects if their script tells them to."
+    );
+    
+    //Light load only checkbox.
+    if(
+        ImGui::CheckboxFlags(
+            "Light load only",
+            &flags_i,
+            PATH_STOP_LIGHT_LOAD_ONLY
+        )
+    ) {
+        s_ptr->flags = flags_i;
+    }
+    set_tooltip(
+        "Can only be used by objects that are not carrying anything, "
+        "or by objects that only have a weight of 1."
+    );
+    
+    //Airborne only checkbox.
+    if(
+        ImGui::CheckboxFlags(
+            "Airborne only",
+            &flags_i,
+            PATH_STOP_AIRBORNE_ONLY
+        )
+    ) {
+        s_ptr->flags = flags_i;
+    }
+    set_tooltip(
+        "Can only be used by objects that can fly."
+    );
+    
+    //Label text.
+    ImGui::InputText("Label", &s_ptr->label);
+    set_tooltip(
+        "If this stop is part of a path that you want\n"
         "to address in a script, write the name here."
     );
     
-    homogenize_selected_path_links();
+    homogenize_selected_path_stops();
 }
 
 
@@ -4283,6 +4363,13 @@ void area_editor::process_gui_panel_paths() {
             "Each click places a stop and/or connects to a stop. "
             "Use the following widgets the change how new links will be."
         );
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Link settings text.
+        ImGui::Text("New path link settings:");
+        ImGui::Indent();
         
         int one_way_mode = path_drawing_normals;
         
@@ -4304,10 +4391,8 @@ void area_editor::process_gui_panel_paths() {
         
         //Type combobox.
         vector<string> link_type_names;
-        link_type_names.push_back("No limit");
-        link_type_names.push_back("Script use only");
-        link_type_names.push_back("Light load only");
-        link_type_names.push_back("Airborne only");
+        link_type_names.push_back("Normal");
+        link_type_names.push_back("Ledge");
         
         int type_i = path_drawing_type;
         if(ImGui::Combo("Type", &type_i, link_type_names, 15)) {
@@ -4316,13 +4401,66 @@ void area_editor::process_gui_panel_paths() {
         set_tooltip(
             "What type of link to draw."
         );
+        ImGui::Unindent();
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
+        //Stop settings text.
+        ImGui::Text("New path stop settings:");
+        
+        //Script use only checkbox.
+        ImGui::Indent();
+        int flags_i = path_drawing_flags;
+        if(
+            ImGui::CheckboxFlags(
+                "Script use only",
+                &flags_i,
+                PATH_STOP_SCRIPT_ONLY
+            )
+        ) {
+            path_drawing_flags = flags_i;
+        }
+        set_tooltip(
+            "Can only be used by objects if their script tells them to."
+        );
+        
+        //Light load only checkbox.
+        if(
+            ImGui::CheckboxFlags(
+                "Light load only",
+                &flags_i,
+                PATH_STOP_LIGHT_LOAD_ONLY
+            )
+        ) {
+            path_drawing_flags = flags_i;
+        }
+        set_tooltip(
+            "Can only be used by objects that are not carrying anything, "
+            "or by objects that only have a weight of 1."
+        );
+        
+        //Airborne only checkbox.
+        if(
+            ImGui::CheckboxFlags(
+                "Airborne only",
+                &flags_i,
+                PATH_STOP_AIRBORNE_ONLY
+            )
+        ) {
+            path_drawing_flags = flags_i;
+        }
+        set_tooltip(
+            "Can only be used by objects that can fly."
+        );
         
         //Label text.
         ImGui::InputText("Label", &path_drawing_label);
         set_tooltip(
-            "If the new link is part of a path that you want\n"
+            "If the new stop is part of a path that you want\n"
             "to address in a script, write the name here."
         );
+        ImGui::Unindent();
         
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
@@ -4387,6 +4525,49 @@ void area_editor::process_gui_panel_paths() {
         //Spacer dummy widget.
         ImGui::Dummy(ImVec2(0, 16));
         
+        //Stop properties node.
+        if(saveable_tree_node("paths", "Stop properties")) {
+        
+            bool ok_to_edit =
+                (selected_path_stops.size() == 1) || selection_homogenized;
+                
+            if(selected_path_stops.empty()) {
+            
+                //"No stop selected" text.
+                ImGui::TextDisabled("(No path stop selected)");
+                
+            } else if(ok_to_edit) {
+            
+                process_gui_panel_path_stop();
+                
+            } else {
+            
+                //Non-homogenized stops warning.
+                ImGui::TextWrapped(
+                    "Multiple different path stops selected. "
+                    "To make all their properties the same and "
+                    "edit them all together, click here:"
+                );
+                
+                //Homogenize stops button.
+                if(ImGui::Button("Edit all together")) {
+                    register_change("path stop combining");
+                    selection_homogenized = true;
+                    //Unselect path links otherwise those will be considered
+                    //homogenized too.
+                    selected_path_links.clear();
+                    homogenize_selected_path_stops();
+                }
+            }
+            
+            
+            ImGui::TreePop();
+            
+        }
+        
+        //Spacer dummy widget.
+        ImGui::Dummy(ImVec2(0, 16));
+        
         //Link properties node.
         if(saveable_tree_node("paths", "Link properties")) {
         
@@ -4410,14 +4591,14 @@ void area_editor::process_gui_panel_paths() {
                 }
             }
             
-            if(ok_to_edit) {
-            
-                process_gui_panel_path_link();
-                
-            } else if(selected_path_links.empty()) {
+            if(selected_path_links.empty()) {
             
                 //"No link selected" text.
                 ImGui::TextDisabled("(No path link selected)");
+                
+            } else if(ok_to_edit) {
+            
+                process_gui_panel_path_link();
                 
             } else {
             
@@ -4432,6 +4613,9 @@ void area_editor::process_gui_panel_paths() {
                 if(ImGui::Button("Edit all together")) {
                     register_change("path link combining");
                     selection_homogenized = true;
+                    //Unselect path stops otherwise those will be considered
+                    //homogenized too.
+                    selected_path_stops.clear();
                     homogenize_selected_path_links();
                 }
             }
@@ -4479,10 +4663,10 @@ void area_editor::process_gui_panel_paths() {
             
                 unsigned int flags_i = path_preview_settings.flags;
                 
-                //Can use script links checkbox.
+                //Is from script checkbox.
                 if(
                     ImGui::CheckboxFlags(
-                        "Can use script links",
+                        "Is from script",
                         &flags_i,
                         PATH_FOLLOW_FLAG_SCRIPT_USE
                     )
@@ -4491,14 +4675,14 @@ void area_editor::process_gui_panel_paths() {
                     path_preview_dist = calculate_preview_path();
                 }
                 set_tooltip(
-                    "Whether the path preview feature is allowed to use\n"
-                    "script-only path links."
+                    "Whether the path preview feature is considered to be\n"
+                    "from a script, meaning it can use script-only stops."
                 );
                 
-                //Can use light-load links checkbox.
+                //Has light load checkbox.
                 if(
                     ImGui::CheckboxFlags(
-                        "Can use light load links",
+                        "Has light load",
                         &flags_i,
                         PATH_FOLLOW_FLAG_LIGHT_LOAD
                     )
@@ -4507,14 +4691,14 @@ void area_editor::process_gui_panel_paths() {
                     path_preview_dist = calculate_preview_path();
                 }
                 set_tooltip(
-                    "Whether the path preview feature is allowed to use\n"
-                    "light-load-only path links."
+                    "Whether the path preview feature is considered to have\n"
+                    "a light load, meaning it can use light load-only stops."
                 );
                 
-                //Can use airborne links checkbox.
+                //Is airborne checkbox.
                 if(
                     ImGui::CheckboxFlags(
-                        "Can use airborne links",
+                        "Is airborne",
                         &flags_i,
                         PATH_FOLLOW_FLAG_AIRBORNE
                     )
@@ -4523,11 +4707,12 @@ void area_editor::process_gui_panel_paths() {
                     path_preview_dist = calculate_preview_path();
                 }
                 set_tooltip(
-                    "Whether the path preview feature is allowed to use\n"
-                    "airborne-only path links."
+                    "Whether the path preview feature is considered to be\n"
+                    "airborne, meaning it can use airborne-only stops\n"
+                    "and go up ledges."
                 );
                 
-                //Use links with this name input.
+                //Use stops with this label input.
                 if(
                     ImGui::InputText(
                         "Label",
@@ -4537,7 +4722,7 @@ void area_editor::process_gui_panel_paths() {
                     path_preview_dist = calculate_preview_path();
                 }
                 set_tooltip(
-                    "To limit the path preview feature to only use links with\n"
+                    "To limit the path preview feature to only use stops with\n"
                     "a given label, write its name here, or leave it empty\n"
                     "for no label enforcement."
                 );
@@ -4602,19 +4787,19 @@ void area_editor::process_gui_panel_paths() {
                 "Pikmin will go to when starting to carry."
             );
             
-            //Select links with label button.
-            if(ImGui::Button("Select all links with label...")) {
-                ImGui::OpenPopup("selectLinks");
+            //Select stops with label button.
+            if(ImGui::Button("Select all stops with label...")) {
+                ImGui::OpenPopup("selectStops");
             }
             set_tooltip(
-                "Selects all links (and their stops) that have the\n"
-                "specified label. The search is case-sensitive."
+                "Selects all stops that have the specified label.\n"
+                "The search is case-sensitive."
             );
             
-            //Select links with label popup.
-            string label_name;
-            if(input_popup("selectLinks", "Label:", &label_name)) {
-                select_path_links_with_label(label_name);
+            //Select stops with label popup.
+            static string label_name;
+            if(input_popup("selectStops", "Label:", &label_name)) {
+                select_path_stops_with_label(label_name);
             }
             
             ImGui::TreePop();
@@ -4882,7 +5067,7 @@ void area_editor::process_gui_panel_sector() {
             
             //Sector hazard addition popup.
             vector<string> all_hazards_list;
-            for(auto h : game.hazards) {
+            for(auto &h : game.hazards) {
                 all_hazards_list.push_back(h.first);
             }
             string picked_hazard;
@@ -5462,8 +5647,8 @@ void area_editor::process_gui_status_bar() {
         ImGui::SameLine();
         ImGui::Text(
             "%s, %s",
-            box_string(f2s(game.mouse_cursor_w.x), 7).c_str(),
-            box_string(f2s(game.mouse_cursor_w.y), 7).c_str()
+            box_string(f2s(game.mouse_cursor.w_pos.x), 7).c_str(),
+            box_string(f2s(game.mouse_cursor.w_pos.y), 7).c_str()
         );
     }
 }
@@ -5561,11 +5746,40 @@ void area_editor::process_gui_toolbar() {
     if(undo_history.empty()) {
         undo_text = "Nothing to undo.";
     } else {
-        undo_text = "Undo: " + undo_history[0].second + ".";
+        undo_text = "Undo: " + undo_history.front().second + ".";
     }
     set_tooltip(
         undo_text,
         "Ctrl + Z"
+    );
+    
+    //Redo button.
+    float redo_opacity = redo_history.empty() ? 0.2f : 1.0f;
+    ImGui::SameLine();
+    if(
+        ImGui::ImageButton(
+            "redoButton",
+            editor_icons[ICON_UNDO],
+            ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE),
+            ImVec2(1.0f, 0.0f),
+            ImVec2(0.0f, 1.0f),
+            ImVec4(0.0f, 0.0f, 0.0f, 0.0f),
+            ImVec4(1.0f, 1.0f, 1.0f, redo_opacity)
+        )
+    ) {
+        press_redo_button();
+    }
+    string redo_text;
+    if(redo_history.empty()) {
+        redo_text =
+            "Nothing to redo.";
+    } else {
+        redo_text =
+            "Redo: " + redo_history.front().second + ".";
+    }
+    set_tooltip(
+        redo_text,
+        "Ctrl + Y"
     );
     
     if(!reference_file_name.empty()) {

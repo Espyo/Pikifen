@@ -256,6 +256,7 @@ void mob::add_to_group(mob* new_member) {
     if(group->members.size() == 1) {
         //If this is the first member, update the anchor position.
         group->anchor = pos;
+        group->anchor_angle = TAU / 2.0f;
     }
 }
 
@@ -718,21 +719,33 @@ bool mob::calculate_carrying_destination(
         
     } case CARRY_DESTINATION_LINKED_MOB: {
 
-        //If it's towards a linked mob, just go there.
-        if(links.empty() || !links[0]) {
-            return false;
+        //If it's towards a linked mob, just go to the closest one.
+        mob* closest_link = NULL;
+        dist closest_link_dist;
+        
+        for(size_t s = 0; s < links.size(); ++s) {
+            dist d(pos, links[s]->pos);
+            
+            if(!closest_link || d < closest_link_dist) {
+                closest_link = links[s];
+                closest_link_dist = d;
+            }
         }
         
-        *target_mob = links[0];
-        *target_point = (*target_mob)->pos;
-        return true;
+        if(closest_link) {
+            *target_mob = closest_link;
+            *target_point = closest_link->pos;
+            return true;
+        } else {
+            return false;
+        }
         
         break;
         
     } case CARRY_DESTINATION_LINKED_MOB_MATCHING_TYPE: {
 
         //Towards one of the linked mobs that matches the decided Pikmin type.
-        if(links.empty() || !links[0]) {
+        if(links.empty()) {
             return false;
         }
         
@@ -872,8 +885,8 @@ bool mob::calculate_damage(
     if(this->type->category->id == MOB_CATEGORY_PIKMIN) {
         //It's easier to calculate the maturity attack boost here.
         pikmin* pik_ptr = (pikmin*) this;
-        attacker_offense +=
-            game.config.maturity_power_mult * pik_ptr->maturity;
+        attacker_offense *=
+            1 + (game.config.maturity_power_mult * pik_ptr->maturity);
     }
     
     *damage = attacker_offense * (1.0f / defense_multiplier);
@@ -1181,6 +1194,12 @@ void mob::circle_around(
 
 /* ----------------------------------------------------------------------------
  * Returns what Pikmin type is decided when carrying something.
+ * available_types:
+ *   List of Pikmin types that are currently available in the area.
+ * added:
+ *   If a Pikmin got added to the carriers, specify it here.
+ * removed:
+ *   If a Pikmin got removed from the carriers, specify it here.
  */
 pikmin_type* mob::decide_carry_pikmin_type(
     const unordered_set<pikmin_type*> &available_types,
@@ -1219,7 +1238,9 @@ pikmin_type* mob::decide_carry_pikmin_type(
     
     //If we ended up with no candidates, pick a type at random,
     //out of all possible types.
+    bool force_random = false;
     if(majority_types.empty()) {
+        force_random = true;
         for(
             auto t = available_types.begin();
             t != available_types.end(); ++t
@@ -1236,49 +1257,19 @@ pikmin_type* mob::decide_carry_pikmin_type(
         decided_type = *majority_types.begin();
         
     } else {
-        //If there's a tie, let's take a careful look.
-        bool new_tie = false;
-        
-        //Is the Pikmin that just joined part of the majority types?
-        //If so, that means this Pikmin just created a NEW tie!
-        //So let's pick a random Onion again.
-        if(added) {
-            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-                if(added->type == majority_types[mt]) {
-                    new_tie = true;
-                    break;
-                }
-            }
-        }
-        
-        //If a Pikmin left, check if it is related to the majority types.
-        //If not, then a new tie wasn't made, no worries.
-        //If it was related, a new tie was created.
-        if(removed) {
-            new_tie = false;
-            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-                if(removed->type == majority_types[mt]) {
-                    new_tie = true;
-                    break;
-                }
-            }
-        }
-        
-        //Check if the previously decided type belongs to one of the majorities.
-        //If so, it can be chosen again, but if not, it cannot.
-        bool can_continue = false;
-        for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-            if(majority_types[mt] == decided_type) {
-                can_continue = true;
-                break;
-            }
-        }
-        if(!can_continue) decided_type = NULL;
-        
-        //If the Pikmin that just joined is not a part of the majorities,
-        //then it had no impact on the existing ties.
-        //Go with the Onion that had been decided before.
-        if(new_tie || !decided_type) {
+        //If the current type is a majority, it takes priority.
+        //Otherwise, pick a majority at random.
+        if(
+            carry_info->intended_pik_type &&
+            !force_random &&
+            find(
+                majority_types.begin(),
+                majority_types.end(),
+                carry_info->intended_pik_type
+            ) != majority_types.end()
+        ) {
+            decided_type = carry_info->intended_pik_type;
+        } else {
             decided_type =
                 majority_types[
                     randomi(0, (int) majority_types.size() - 1)
@@ -1427,7 +1418,14 @@ void mob::do_attack_effects(
     
     if(!useless) {
         //Play the sound.
-        game.sys_assets.sfx_attack.play(0.06, false, 0.6f);
+        
+        sfx_source_config_struct attack_sfx_config;
+        attack_sfx_config.gain = 0.6f;
+        game.audio.create_world_pos_sfx_source(
+            game.sys_assets.sfx_attack,
+            pos,
+            attack_sfx_config
+        );
         
         //Damage squash-and-stretch animation.
         if(damage_squash_time == 0.0f) {
@@ -1798,7 +1796,7 @@ sprite* mob::get_cur_sprite() const {
  *   This should help with performance. Otherwise, use NULL.
  */
 dist mob::get_distance_between(
-    mob* m2_ptr, dist* regular_distance_cache
+    mob* m2_ptr, const dist* regular_distance_cache
 ) const {
     dist mob_to_hotspot_dist;
     float dist_padding;
@@ -2001,6 +1999,20 @@ float mob::get_latched_pikmin_weight() const {
         total += p_ptr->type->weight;
     }
     return total;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the speed multiplier for this mob.
+ */
+float mob::get_speed_multiplier() const {
+    float move_speed_mult = 1.0f;
+    for (size_t s = 0; s < this->statuses.size(); ++s) {
+        if(!statuses[s].to_delete) {
+            move_speed_mult *= this->statuses[s].type->speed_multiplier;
+        }
+    }
+    return move_speed_mult;
 }
 
 
@@ -2390,6 +2402,12 @@ bool mob::has_clear_line(mob* target_mob) const {
         ) {
             continue;
         }
+        if(
+            target_mob->standing_on_mob == m_ptr &&
+            fabs(z - target_mob->z) <= GEOMETRY::STEP_HEIGHT
+        ) {
+            continue;
+        }
         if(m_ptr == this || m_ptr == target_mob) continue;
         if(
             !rectangles_intersect(
@@ -2424,55 +2442,10 @@ bool mob::has_clear_line(mob* target_mob) const {
     }
     
     //Check against walls.
-    set<edge*> candidate_edges;
-    if(
-        !game.cur_area_data.bmap.get_edges_in_region(
-            bb_tl, bb_br,
-            candidate_edges
-        )
-    ) {
-        //Somehow out of bounds.
+    //We can ignore walls that are below both mobs, so use the lowest of the
+    //two Zs as a cut-off point.
+    if(are_walls_between(pos, target_mob->pos, std::min(z, target_mob->z))) {
         return false;
-    }
-    
-    for(auto e_ptr : candidate_edges) {
-        if(
-            !line_segs_intersect(
-                pos, target_mob->pos,
-                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                NULL
-            )
-        ) {
-            continue;
-        }
-        for(size_t s = 0; s < 2; ++s) {
-            if(!e_ptr->sectors[s]) {
-                //No sectors means there's out-of-bounds geometry in the way.
-                return false;
-            }
-            if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
-                //If a blocking sector is in the way, no clear line.
-                return false;
-            }
-        }
-        if(
-            e_ptr->sectors[0]->z < z &&
-            e_ptr->sectors[0]->z < target_mob->z &&
-            e_ptr->sectors[1]->z < z &&
-            e_ptr->sectors[1]->z < target_mob->z
-        ) {
-            //If both mobs are above both sectors, it doesn't count.
-            continue;
-        }
-        if(
-            fabs(e_ptr->sectors[0]->z - e_ptr->sectors[1]->z) >
-            GEOMETRY::STEP_HEIGHT
-        ) {
-            //The walls are more than stepping height in difference.
-            //So it's a genuine wall in the way.
-            return false;
-        }
     }
     
     //Check for when they're (not) standing on different mobs.
@@ -2531,6 +2504,7 @@ void mob::hold(
         }
     }
 }
+
 
 
 /* ----------------------------------------------------------------------------
@@ -2592,13 +2566,23 @@ bool mob::is_point_on(const point &p) const {
  * hazards:
  *   List of hazards to check.
  */
-bool mob::is_resistant_to_hazards(vector<hazard*> &hazards) const {
+bool mob::is_resistant_to_hazards(const vector<hazard*> &hazards) const {
     for(size_t h = 0; h < hazards.size(); ++h) {
         if(get_hazard_vulnerability(hazards[h]).damage_mult != 0.0f) {
             return false;
         }
     }
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if a mob or its parent is stored inside another mob.
+ */
+bool mob::is_stored_inside_mob() const {
+    if(stored_inside_another) return true;
+    if(parent && parent->m->stored_inside_another) return true;
+    return false;
 }
 
 
@@ -2623,8 +2607,10 @@ void mob::leave_group() {
     group_leader->group->change_standby_type_if_needed();
     
     following_group = NULL;
-    
-    game.states.gameplay->update_closest_group_members();
+    if(group_leader->type->category->id == MOB_CATEGORY_LEADERS){
+        leader* l_ptr = (leader*)group_leader;
+        game.states.gameplay->player_info[l_ptr->active_player].update_closest_group_members();
+    }
 }
 
 
@@ -2699,9 +2685,9 @@ void mob::read_script_vars(const script_var_reader &svr) {
         MOB_TEAMS team_nr = string_to_team_nr(team_var);
         if(team_nr == INVALID) {
             log_error(
-                "Unknown team name \"" + team_var + "\", when trying to "
-                "create a mob of type " + type->name + ", at coordinates " +
-                p2s(pos) + "!", NULL
+                "Unknown team name \"" + team_var +
+                "\", when trying to create mob (" +
+                get_error_message_mob_info(this) + ")!", NULL
             );
         } else {
             team = team_nr;
@@ -2842,7 +2828,8 @@ void mob::set_animation(
     
     if(final_nr == INVALID) {
         log_error(
-            "Mob " + this->type->name + " tried to switch from " +
+            "Mob (" + get_error_message_mob_info(this) +
+            ") tried to switch from " +
             (
                 anim.cur_anim ? "animation \"" + anim.cur_anim->name + "\"" :
                 "no animation"
@@ -3008,7 +2995,8 @@ mob* mob::spawn(mob_type::spawn_struct* info, mob_type* type_ptr) {
     
     if(!type_ptr) {
         log_error(
-            "Object \"" + type->name + "\" tried to spawn an object of the "
+            "Mob (" + get_error_message_mob_info(this) +
+            ") tried to spawn an object of the "
             "type \"" + info->mob_type_name + "\", but there is no such "
             "object type!"
         );
@@ -3215,6 +3203,20 @@ void mob::stop_track_ride() {
  */
 void mob::stop_turning() {
     face(angle, NULL, true);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Stores a mob inside of this one
+ * m:
+ *  The mob to store.
+ */
+void mob::store_mob_inside(mob* m) {
+    hold(
+        m, INVALID, 0.0f, 0.0f, 0.5f,
+        false, HOLD_ROTATION_METHOD_NEVER
+    );
+    m->stored_inside_another = this;
 }
 
 
@@ -3634,99 +3636,111 @@ void mob::tick_misc_logic(const float delta_t) {
     //Group stuff.
     if(group && group->members.size()) {
     
-        bool must_reassign_spots = false;
-        
-        bool is_swarming =
-            (
-                game.states.gameplay->swarm_magnitude &&
-                game.states.gameplay->cur_leader_ptr == this
-            );
-            
-        if(
+        group_info_struct::MODES old_mode = group->mode;
+        bool is_holding = !holding.empty();
+        bool is_far_from_group =
             dist(group->get_average_member_pos(), pos) >
-            MOB::GROUP_SHUFFLE_DIST + (group->radius + radius)
-        ) {
-            if(!group->follow_mode) {
-                must_reassign_spots = true;
-            }
-            group->follow_mode = true;
-            
-        } else if(is_swarming || !holding.empty()) {
-            group->follow_mode = true;
-            
+            MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);
+        for (size_t p = 0; p<MAX_PLAYERS;++p){
+            if(game.states.gameplay->player_info[p].cur_leader_ptr== NULL) continue;
+        bool is_swarming =
+            game.states.gameplay->player_info[p].swarm_magnitude &&
+            game.states.gameplay->player_info[p].cur_leader_ptr == this;
+        
+        //Find what mode we're in on this frame.
+        if(is_swarming) {
+            group->mode = group_info_struct::MODE_SWARM;
+        } else if(is_holding || is_far_from_group) {
+            group->mode = group_info_struct::MODE_FOLLOW_BACK;
         } else {
-            group->follow_mode = false;
-            
+            group->mode = group_info_struct::MODE_SHUFFLE;
         }
-        
-        group->transform = game.identity_transform;
-        
-        if(group->follow_mode) {
-            //Follow mode. Try to stay on the leader's back.
-            
-            if(is_swarming) {
-            
-                point move_anchor_offset =
-                    rotate_point(
-                        point(
-                            -(radius + MOB::GROUP_SPOT_INTERVAL * 2),
-                            0
-                        ), game.states.gameplay->swarm_angle + TAU / 2
-                    );
-                group->anchor = pos + move_anchor_offset;
-                
-                float intensity_dist =
-                    game.config.cursor_max_dist *
-                    game.states.gameplay->swarm_magnitude;
-                al_translate_transform(
-                    &group->transform, -MOB::SWARM_MARGIN, 0
+        //Change things depending on the mode.
+        switch(group->mode) {
+        case group_info_struct::MODE_FOLLOW_BACK: {
+    
+            //Follow the leader's back.
+            group->anchor_angle = angle + TAU / 2.0f;
+            point new_anchor_rel_pos =
+                rotate_point(
+                    point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
+                    group->anchor_angle
                 );
-                al_scale_transform(
-                    &group->transform,
-                    intensity_dist / (group->radius * 2),
-                    1 -
-                    (
-                        MOB::SWARM_VERTICAL_SCALE*
-                        game.states.gameplay->swarm_magnitude
-                    )
-                );
-                al_rotate_transform(
-                    &group->transform,
-                    game.states.gameplay->swarm_angle + TAU / 2
-                );
-                
-            } else {
+            group->anchor = pos + new_anchor_rel_pos;
             
-                point leader_back_offset =
-                    rotate_point(
-                        point(
-                            -(radius + MOB::GROUP_SPOT_INTERVAL * 2),
-                            0
-                        ), angle
-                    );
-                group->anchor = pos + leader_back_offset;
-                
-                al_rotate_transform(&group->transform, angle);
-                
-            }
+            al_identity_transform(&group->transform);
+            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            break;
             
-            if(must_reassign_spots) group->reassign_spots();
-            
-        } else {
-            //Shuffle mode. Keep formation, but shuffle with the leader,
-            //if needed.
+        } case group_info_struct::MODE_SHUFFLE: {
+    
+            //Casually shuffle with the leader, if needed.
             point mov;
+            point group_mid_point =
+                group->anchor +
+                rotate_point(
+                    point(group->radius, 0.0f),
+                    group->anchor_angle
+                );
             move_point(
-                group->anchor - point(group->radius, 0),
+                group_mid_point,
                 pos,
                 type->move_speed,
-                group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2,
-                &mov, NULL, NULL, delta_t
+                group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2.0f,
+                &mov,
+                NULL, NULL, delta_t
             );
             group->anchor += mov * delta_t;
-        }
-    }
+            
+            al_identity_transform(&group->transform);
+            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            break;
+            
+        } case group_info_struct::MODE_SWARM: {
     
+            //Swarming.
+            group->anchor_angle = game.states.gameplay->player_info[p].swarm_angle;
+            point new_anchor_rel_pos =
+                rotate_point(
+                    point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
+                    group->anchor_angle
+                );
+            group->anchor = pos + new_anchor_rel_pos;
+            
+            float intensity_dist =
+                game.config.cursor_max_dist *
+                game.states.gameplay->player_info[p].swarm_magnitude;
+            al_identity_transform(&group->transform);
+            al_translate_transform(
+                &group->transform, -MOB::SWARM_MARGIN, 0
+            );
+            al_scale_transform(
+                &group->transform,
+                intensity_dist / (group->radius * 2),
+                1 -
+                (
+                    MOB::SWARM_VERTICAL_SCALE*
+                    game.states.gameplay->player_info[p].swarm_magnitude
+                )
+            );
+            al_rotate_transform(&group->transform, group->anchor_angle + TAU / 2.0f);
+            break;
+        }
+        }
+        
+        if(
+            old_mode != group_info_struct::MODE_SHUFFLE &&
+            group->mode == group_info_struct::MODE_SHUFFLE
+        ) {
+            //Started shuffling. Since it's a "casual" formation, we should
+            //reassign the spots so Pikmin don't have to keep their order from
+            //before.
+            group->reassign_spots();
+        }
+        }
+    
+    }
+    //Damage squash stuff.
     if(damage_squash_time > 0.0f) {
         damage_squash_time -= delta_t;
         damage_squash_time = std::max(0.0f, damage_squash_time);
@@ -3830,15 +3844,18 @@ void mob::tick_script(const float delta_t) {
         set_health(true, false, type->health_regen * delta_t);
     }
     
+    for (size_t p = 0; p<MAX_PLAYERS;++p){
+        if(game.states.gameplay->player_info[p].cur_leader_ptr== NULL) continue;
+
     //Check if it got whistled.
     if(
-        game.states.gameplay->cur_leader_ptr &&
-        game.states.gameplay->whistle.whistling &&
-        dist(pos, game.states.gameplay->whistle.center) <=
-        game.states.gameplay->whistle.radius
+        game.states.gameplay->player_info[p].cur_leader_ptr &&
+        game.states.gameplay->player_info[p].whistle.whistling &&
+        dist(pos, game.states.gameplay->player_info[p].whistle.center) <=
+        game.states.gameplay->player_info[p].whistle.radius
     ) {
         fsm.run_event(
-            MOB_EV_WHISTLED, (void*) game.states.gameplay->cur_leader_ptr
+            MOB_EV_WHISTLED, (void*) game.states.gameplay->player_info[p].cur_leader_ptr
         );
         
         bool saved_by_whistle = false;
@@ -3858,8 +3875,9 @@ void mob::tick_script(const float delta_t) {
         if(saved_by_whistle && type->category->id == MOB_CATEGORY_PIKMIN) {
             game.statistics.pikmin_saved++;
         }
+        break;
     }
-    
+    }
     //Following a leader.
     if(following_group) {
         mob_event* spot_far_ev =  fsm.get_event(MOB_EV_SPOT_IS_FAR);

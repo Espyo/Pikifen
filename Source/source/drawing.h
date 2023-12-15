@@ -164,6 +164,7 @@ void draw_liquid(
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity
 );
+void draw_mouse_cursor(const ALLEGRO_COLOR &color);
 void draw_player_input_icon(
     const ALLEGRO_FONT* const font, const player_input &i,
     const bool condensed, const point &where, const point &max_size,
@@ -194,7 +195,7 @@ void draw_scaled_text(
 );
 void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects);
 void draw_string_tokens(
-    vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
+    const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, const point &where,
     const int flags, const point &max_size,
     const point &scale = point(1.0f, 1.0f)

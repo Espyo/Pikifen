@@ -92,9 +92,7 @@ void destroy_misc() {
     al_destroy_font(game.fonts.standard);
     al_destroy_font(game.fonts.value);
     
-    al_detach_voice(game.voice);
-    al_destroy_mixer(game.mixer);
-    al_destroy_voice(game.voice);
+    game.audio.destroy();
 }
 
 
@@ -431,6 +429,27 @@ void init_controls() {
         "lie_down", "k_26"
     );
     game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_A,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom A",
+        "Custom action A, if the current leader supports it.",
+        "custom_a", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_B,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom B",
+        "Custom action B, if the current leader supports it.",
+        "custom_b", ""
+    );
+    game.controls.add_player_action_type(
+        PLAYER_ACTION_CUSTOM_C,
+        PLAYER_ACTION_CAT_ADVANCED,
+        "Custom C",
+        "Custom action C, if the current leader supports it.",
+        "custom_c", ""
+    );
+    game.controls.add_player_action_type(
         PLAYER_ACTION_MENU_BACK,
         PLAYER_ACTION_CAT_ADVANCED,
         "Menu shortcut - back",
@@ -438,18 +457,22 @@ void init_controls() {
         "menu_back", "k_59"
     );
     
+    
     //Populate the control binds with some default control binds for player 1.
     //If the options are loaded successfully, these binds are overwritten.
     const vector<player_action_type> &action_types =
         game.controls.get_all_player_action_types();
-    for(size_t a = 0; a < N_PLAYER_ACTIONS; ++a) {
-        string def = action_types[a].default_bind_str;
+    for(size_t a = 0; a < N_PLAYER_ACTIONS*4; ++a) {
+        size_t av = a %N_PLAYER_ACTIONS;
+        string def = action_types[av].default_bind_str;
         if(def.empty()) continue;
         
         control_bind bind;
-        bind.action_type_id = action_types[a].id;
-        bind.player_nr = 0;
+        bind.action_type_id = action_types[av].id;
+        bind.player_nr = a/N_PLAYER_ACTIONS;
+        if (bind.player_nr == 0){
         bind.input = game.controls.str_to_input(def);
+        }
         game.controls.binds().push_back(bind);
     }
 }
@@ -582,9 +605,11 @@ void init_event_things(
  * Initializes miscellaneous things and settings.
  */
 void init_misc() {
+    game.mouse_cursor.init();
+    
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(game.display, "Pikifen");
-    int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
+    int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA|ALLEGRO_VIDEO_BITMAP|ALLEGRO_NO_PRESERVE_TEXTURE;
     if(game.options.smooth_scaling) {
         enable_flag(new_bitmap_flags, ALLEGRO_MAG_LINEAR);
         enable_flag(new_bitmap_flags, ALLEGRO_MIN_LINEAR);
@@ -599,9 +624,10 @@ void init_misc() {
     
     srand(time(NULL));
     
-    game.states.gameplay->whistle.next_dot_timer.start();
-    game.states.gameplay->whistle.next_ring_timer.start();
-    
+    for (size_t p = 0; p < MAX_PLAYERS;++p){
+    game.states.gameplay->player_info[p].whistle.next_dot_timer.start();
+    game.states.gameplay->player_info[p].whistle.next_ring_timer.start();
+    }
     game.states.gameplay->particles =
         particle_manager(game.options.max_particles);
         
@@ -840,6 +866,15 @@ void init_mob_actions() {
         nullptr
     );
     
+    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_GET_AREA_INFO,
+        "get_area_info",
+        mob_action_runners::get_area_info,
+        mob_action_loaders::get_area_info
+    );
+    
     reg_action(
         MOB_ACTION_GET_CHOMPED,
         "get_chomped",
@@ -871,6 +906,15 @@ void init_mob_actions() {
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
+    reg_action(
+        MOB_ACTION_GET_EVENT_INFO,
+        "get_event_info",
+        mob_action_runners::get_event_info,
+        mob_action_loaders::get_event_info
+    );
+    
+    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("x", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_param("y", MOB_ACTION_PARAM_FLOAT, false, false);
     reg_action(
@@ -878,15 +922,6 @@ void init_mob_actions() {
         "get_floor_z",
         mob_action_runners::get_floor_z,
         nullptr
-    );
-    
-    reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
-    reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
-    reg_action(
-        MOB_ACTION_GET_FOCUS_INFO,
-        "get_focus_info",
-        mob_action_runners::get_focus_info,
-        mob_action_loaders::get_info
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
@@ -899,12 +934,13 @@ void init_mob_actions() {
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);
+    reg_param("target", MOB_ACTION_PARAM_STRING, true, false);
     reg_param("info", MOB_ACTION_PARAM_STRING, true, false);
     reg_action(
-        MOB_ACTION_GET_INFO,
-        "get_info",
-        mob_action_runners::get_info,
-        mob_action_loaders::get_info
+        MOB_ACTION_GET_MOB_INFO,
+        "get_mob_info",
+        mob_action_runners::get_mob_info,
+        mob_action_loaders::get_mob_info
     );
     
     reg_param("destination var name", MOB_ACTION_PARAM_STRING, true, false);

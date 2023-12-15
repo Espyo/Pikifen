@@ -111,6 +111,12 @@ enum PLAYER_ACTION_TYPES {
     PLAYER_ACTION_PREV_MATURITY,
     //Lie down.
     PLAYER_ACTION_LIE_DOWN,
+    //Custom A.
+    PLAYER_ACTION_CUSTOM_A,
+    //Custom B.
+    PLAYER_ACTION_CUSTOM_B,
+    //Custom C.
+    PLAYER_ACTION_CUSTOM_C,
     //Menu navigation back.
     PLAYER_ACTION_MENU_BACK,
     
@@ -166,7 +172,6 @@ public:
         const string &internal_name,
         const string &default_bind_str
     );
-    void clear_player_action_types();
     const vector<player_action_type> &get_all_player_action_types() const;
     
     //Control bind functions.
@@ -191,6 +196,7 @@ public:
     //Others.
     void release_all();
     void set_options(const controls_manager_options &options);
+    string get_player_action_type_internal_name(const int &action_id);
     
 private:
     //List of known player action types.

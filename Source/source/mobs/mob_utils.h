@@ -185,6 +185,15 @@ struct delivery_info_struct {
  */
 struct group_info_struct {
 
+    enum MODES {
+        //Follow the leader's back.
+        MODE_FOLLOW_BACK,
+        //Casually shuffle with the leader, if needed.
+        MODE_SHUFFLE,
+        //Swarming.
+        MODE_SWARM,
+    };
+    
     struct group_spot {
         //Position relative to the anchor.
         point pos;
@@ -201,19 +210,21 @@ struct group_info_struct {
     vector<group_spot> spots;
     //Radius of the group.
     float radius;
-    //Position of element 0 of the group (frontmost member).
+    //Absolute position of element 0 of the group (frontmost member).
     point anchor;
+    //Angle from the leader to the anchor.
+    float anchor_angle;
     //Transformation to apply to the group, like from swarming.
     ALLEGRO_TRANSFORM transform;
     //Currently selected standby type.
     subgroup_type* cur_standby_type;
-    //Are the group members in follow mode, or shuffle mode?
-    bool follow_mode;
+    //Mode of operation.
+    MODES mode;
     
     void init_spots(mob* affected_mob_ptr = NULL);
     void sort(subgroup_type* leading_type);
     void change_standby_type_if_needed();
-    size_t get_amount_by_type(mob_type* type) const;
+    size_t get_amount_by_type(const mob_type* type) const;
     point get_average_member_pos() const;
     bool get_next_standby_type(
         const bool move_backwards, subgroup_type** new_type
@@ -457,7 +468,7 @@ struct pikmin_nest_type_struct {
  * like an Onion or a ship.
  */
 struct pikmin_nest_struct {
-public:
+    public:
     //Pointer to the nest mob responsible.
     mob* m_ptr;
     //Pointer to the type of nest.
@@ -474,7 +485,7 @@ public:
     //Call a Pikmin out.
     bool call_pikmin(mob* m_ptr, const size_t type_idx);
     //Get how many are inside by a given type.
-    size_t get_amount_by_type(pikmin_type* type);
+    size_t get_amount_by_type(const pikmin_type* type);
     //Reads nest-related script variables.
     void read_script_vars(const script_var_reader &svr);
     //Requests that Pikmin of the given type get called out.
@@ -524,6 +535,9 @@ mob* create_mob(
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
 string get_error_message_mob_info(mob* m);
+mob_type::spawn_struct* get_spawn_info_from_child_info(
+    mob_type* type, mob_type::child_struct* child_info
+);
 MOB_TARGET_TYPES string_to_mob_target_type(const string &type_str);
 MOB_TEAMS string_to_team_nr(const string &team_str);
 

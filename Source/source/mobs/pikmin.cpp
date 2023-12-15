@@ -23,8 +23,8 @@
 
 
 namespace PIKMIN {
-//How long a Pikmin should ignore leader bumps after being dismissed.
-const float DISMISS_BUMP_LOCK_DURATION = 5.0f;
+//How long a Pikmin should ignore leader bumps for.
+const float BUMP_LOCK_DURATION = 5.0f;
 //How long a Pikmin that got knocked down stays on the floor for, if left alone.
 const float DEF_KNOCKED_DOWN_DURATION = 1.8f;
 //A whistled Pikmin that got knocked down loses this much in lie-down time.
@@ -49,7 +49,7 @@ const float THROW_VER_SPEED = 900.0f;
 
 
 //Height above the floor that a flying Pikmin prefers to stay at.
-const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 100.0f;
+const float pikmin::FLIER_ABOVE_FLOOR_HEIGHT = 50.0f;
 //How long to remember a missed incoming attack for.
 const float pikmin::MISSED_ATTACK_DURATION = 1.5f;
 //Chance of circling the opponent instead of striking, when grounded.
@@ -81,6 +81,7 @@ pikmin::pikmin(const point &pos, pikmin_type* type, const float angle) :
     latched(false),
     is_tool_primed_for_whistle(false),
     must_follow_link_as_leader(false),
+    bump_lock(0.0f),
     temp_i(0) {
     
     invuln_period = timer(PIKMIN::INVULN_PERIOD);
@@ -273,6 +274,11 @@ void pikmin::handle_status_effect_gain(status_type* sta_type) {
     }
     
     increase_maturity(sta_type->maturity_change_amount);
+    
+    if(carrying_mob) {
+        carrying_mob->chase_info.max_speed =
+            carrying_mob->carry_info->get_speed();
+    }
 }
 
 
@@ -335,6 +341,11 @@ void pikmin::handle_status_effect_loss(status_type* sta_type) {
         pikmin_fsm::stand_still(this, NULL, NULL);
         invuln_period.start();
         
+    }
+    
+    if(carrying_mob) {
+        carrying_mob->chase_info.max_speed =
+            carrying_mob->carry_info->get_speed();
     }
 }
 
@@ -488,15 +499,21 @@ void pikmin::tick_class_specifics(const float delta_t) {
         par.color = pik_type->main_color;
         game.states.gameplay->particles.add(par);
         
-        game.sys_assets.sfx_pikmin_dying.play(0.03, false);
+        //Create a positional sound source instead of a mob sound source,
+        //since the Pikmin is basically deleted.
+        game.audio.create_world_pos_sfx_source(
+            game.sys_assets.sfx_pikmin_dying,
+            pos
+        );
         
-        game.states.gameplay->pikmin_deaths++;
-        game.states.gameplay->last_pikmin_death_pos = pos;
+        game.states.gameplay->mission_info[0].pikmin_deaths++;
+        game.states.gameplay->mission_info[0].last_pikmin_death_pos = pos;
         game.statistics.pikmin_deaths++;
     }
     
-    //Tick the timer for the "missed" attack animation.
+    //Tick some timers.
     missed_attack_timer.tick(delta_t);
+    bump_lock = std::max(bump_lock - delta_t, 0.0f);
     
     //Forcefully follow another mob as a leader.
     if(must_follow_link_as_leader) {

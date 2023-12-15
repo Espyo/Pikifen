@@ -402,7 +402,7 @@ point point::operator *=(const float n) {
  * p:
  *   Other point to compare against.
  */
-const bool point::operator ==(const point &p) const {
+bool point::operator ==(const point &p) const {
     return x == p.x && y == p.y;
 }
 
@@ -412,7 +412,7 @@ const bool point::operator ==(const point &p) const {
  * p:
  *   Other point to compare against.
  */
-const bool point::operator !=(const point &p) const {
+bool point::operator !=(const point &p) const {
     return x != p.x || y != p.y;
 }
 
@@ -1004,10 +1004,12 @@ point get_closest_point_in_rotated_rectangle(
  *   The first point is returned here.
  * miter_point_2:
  *   The second point is returned here.
+ * max_miter_length:
+ *   If not 0, the miter is limited to this length.
  */
 void get_miter_points(
     const point &a, const point &b, const point &c, const float thickness,
-    point* miter_point_1, point* miter_point_2
+    point* miter_point_1, point* miter_point_2, float max_miter_length
 ) {
     //https://blog.scottlogic.com/2019/11/18/drawing-lines-with-webgl.html
     
@@ -1026,6 +1028,16 @@ void get_miter_points(
     float miter_length =
         (thickness / 2.0f) / dot_product(miter_direction, normal_a);
         
+    if(isinf(miter_length)) {
+        miter_length = 1.0f;
+    }
+    if(max_miter_length > 0.0f && fabs(miter_length) > max_miter_length) {
+        float miter_sign = miter_length >= 0.0f ? 1.0f : -1.0f;
+        miter_length =
+            std::min((float) fabs(miter_length), max_miter_length);
+        miter_length *= miter_sign;
+    }
+    
     //Return the final point.
     *miter_point_1 = b + miter_direction * miter_length;
     *miter_point_2 = b - miter_direction * miter_length;

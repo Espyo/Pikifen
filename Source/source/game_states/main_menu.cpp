@@ -94,8 +94,7 @@ void main_menu_state::do_drawing() {
         version_text += ", powered by ";
     }
     version_text +=
-        "Pikifen " +
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV);
+        "Pikifen " + get_engine_version_string();
     draw_scaled_text(
         game.fonts.standard, COLOR_WHITE,
         point(game.win_w - 8, game.win_h  - 8),
@@ -108,6 +107,8 @@ void main_menu_state::do_drawing() {
     play_gui.draw();
     make_gui.draw();
     tutorial_gui.draw();
+    
+    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
     game.fade_mgr.draw();
     
@@ -322,12 +323,12 @@ void main_menu_state::init_make_page() {
     data_node gui_file(MAIN_MENU::MAKE_GUI_FILE_PATH);
     
     //Menu items.
-    make_gui.register_coords("animation_editor", 50, 59, 60, 10);
-    make_gui.register_coords("area_editor",      50, 71, 60, 10);
-    make_gui.register_coords("gui_editor",       50, 83, 60, 10);
-    make_gui.register_coords("back",              9, 91, 14,  6);
-    make_gui.register_coords("more",             91, 91, 14,  6);
-    make_gui.register_coords("tooltip",          50, 96, 96,  4);
+    make_gui.register_coords("animation_editor", 50, 59,   60, 10);
+    make_gui.register_coords("area_editor",      50, 71,   60, 10);
+    make_gui.register_coords("gui_editor",       50, 81.5, 50,  7);
+    make_gui.register_coords("back",              9, 91,   14,  6);
+    make_gui.register_coords("more",             91, 91,   14,  6);
+    make_gui.register_coords("tooltip",          50, 96,   96,  4);
     make_gui.read_coords(gui_file.get_child_by_name("positions"));
     
     //Animation editor button.

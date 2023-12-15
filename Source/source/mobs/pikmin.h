@@ -20,7 +20,7 @@ class leader;
 
 
 namespace PIKMIN {
-extern const float DISMISS_BUMP_LOCK_DURATION;
+extern const float BUMP_LOCK_DURATION;
 extern const float DEF_KNOCKED_DOWN_DURATION;
 extern const float DEF_KNOCKED_DOWN_WHISTLE_BONUS;
 extern const float DISMISS_TIMEOUT;
@@ -53,7 +53,7 @@ public:
     //How many hits in a row have done no damage.
     unsigned char consecutive_dud_hits;
     
-    //0: leaf. 1: bud. 2: flower.
+    //Maturity. 0: leaf. 1: bud. 2: flower.
     unsigned char maturity;
     //Is this Pikmin currently a seed or a sprout?
     bool is_seed_or_sprout;
@@ -70,6 +70,8 @@ public:
     bool is_tool_primed_for_whistle;
     //Does this Pikmin have to follow its linked mob as its leader?
     bool must_follow_link_as_leader;
+    //Leader bump lock. Leaders close and timer running = timer resets.
+    float bump_lock;
     
     //Temporary variable. Hacky, but effective. Only use within the same state!
     size_t temp_i;

@@ -107,7 +107,7 @@ bool ImGui::Combo(
  */
 bool ImGui::DragTime2(
     const string &label, int* total_amount,
-    const string format1, const string format2,
+    const string &format1, const string &format2,
     const int limit1, const int limit2
 ) {
     int part1 = floor(*total_amount / 60.0f);

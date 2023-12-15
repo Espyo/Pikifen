@@ -90,6 +90,8 @@ struct control_bind {
  * Defines an instance of a specific player action.
  */
 struct player_action {
+    //The Player responsible for this action
+    int player_id;
     //Action type ID.
     int action_type_id;
     //Value associated. 0 to 1.

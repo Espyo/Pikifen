@@ -123,6 +123,27 @@ data_node* data_node::create_dummy() {
 
 
 /* ----------------------------------------------------------------------------
+ * "Decrypts" a character for loading an encrypted data file.
+ * See encrypt_char for more info.
+ * c:
+ *   Character to decrypt.
+ */
+unsigned char data_node::decrypt_char(unsigned char c) {
+    if(c < DATA_FILE::ENCRYPTION_MIN_VALUE) {
+        return c;
+    }
+    const unsigned char range = 255 - DATA_FILE::ENCRYPTION_MIN_VALUE;
+    int c2 = c;
+    c2 -= DATA_FILE::ENCRYPTION_MIN_VALUE;
+    c2 += range; //Negative modulo isn't such a good idea.
+    c2 -= DATA_FILE::ENCRYPTION_ROT_AMOUNT;
+    c2 %= range;
+    c2 += DATA_FILE::ENCRYPTION_MIN_VALUE;
+    return c2;
+}
+
+
+/* ----------------------------------------------------------------------------
  * "Encrypts" a character for saving in an encrypted data file.
  * It does this by rotating each character's ASCII value backwards by 111,
  * but only if it's a printable character, as other characters that tend
@@ -154,65 +175,6 @@ void data_node::encrypt_string(string &s) {
     for(size_t c = 0; c < s.size(); ++c) {
         s[c] = encrypt_char(s[c]);
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * "Decrypts" a character for loading an encrypted data file.
- * See encrypt_char for more info.
- * c:
- *   Character to decrypt.
- */
-unsigned char data_node::decrypt_char(unsigned char c) {
-    if(c < DATA_FILE::ENCRYPTION_MIN_VALUE) {
-        return c;
-    }
-    const unsigned char range = 255 - DATA_FILE::ENCRYPTION_MIN_VALUE;
-    int c2 = c;
-    c2 -= DATA_FILE::ENCRYPTION_MIN_VALUE;
-    c2 += range; //Negative modulo isn't such a good idea.
-    c2 -= DATA_FILE::ENCRYPTION_ROT_AMOUNT;
-    c2 %= range;
-    c2 += DATA_FILE::ENCRYPTION_MIN_VALUE;
-    return c2;
-}
-
-
-/* ----------------------------------------------------------------------------
-* Returns a child node given its number on the list (direct children only).
-* number:
-*   The index number of the child.
-*/
-data_node* data_node::get_child(const size_t number) {
-    if(number >= children.size()) return create_dummy();
-    return children[number];
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the nth child with this name on the list (direct children only).
- * name:
- *   The name the child must have.
- * occurrence_number:
- *   This function will return the nth child with the specified name.
- */
-data_node* data_node::get_child_by_name(
-    const string &name, const size_t occurrence_number
-) {
-    size_t cur_occurrence_number = 0;
-    
-    for(size_t c = 0; c < children.size(); ++c) {
-        if(name == children[c]->name) {
-            if(cur_occurrence_number == occurrence_number) {
-                //We found it.
-                return children[c];
-            } else {
-                ++cur_occurrence_number;
-            }
-        }
-    }
-    
-    return create_dummy();
 }
 
 
@@ -277,6 +239,44 @@ void data_node::getline(
     }
     
     delete c_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+* Returns a child node given its number on the list (direct children only).
+* number:
+*   The index number of the child.
+*/
+data_node* data_node::get_child(const size_t number) {
+    if(number >= children.size()) return create_dummy();
+    return children[number];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the nth child with this name on the list (direct children only).
+ * name:
+ *   The name the child must have.
+ * occurrence_number:
+ *   This function will return the nth child with the specified name.
+ */
+data_node* data_node::get_child_by_name(
+    const string &name, const size_t occurrence_number
+) {
+    size_t cur_occurrence_number = 0;
+    
+    for(size_t c = 0; c < children.size(); ++c) {
+        if(name == children[c]->name) {
+            if(cur_occurrence_number == occurrence_number) {
+                //We found it.
+                return children[c];
+            } else {
+                ++cur_occurrence_number;
+            }
+        }
+    }
+    
+    return create_dummy();
 }
 
 

@@ -77,8 +77,8 @@ void bouncer_fsm::handle_mob(mob* m, void* info1, void* info2) {
     
     if(!target_mob) {
         log_error(
-            "The bouncer at " + p2s(m->pos) + ", of the type \"" +
-            m->type->name + "\" has no linked mob to serve as a target!"
+            "The bouncer (" + get_error_message_mob_info(m) +
+            ") has no linked mob to serve as a target!"
         );
         return;
     }

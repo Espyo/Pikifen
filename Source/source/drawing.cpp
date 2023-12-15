@@ -629,6 +629,7 @@ void draw_liquid(
         liquid_opacity_mult =
             s_ptr->liquid_drain_left / GEOMETRY::LIQUID_DRAIN_DURATION;
     }
+    float brightness_mult = s_ptr->brightness / 255.0;
     
     //Layer 1 - Transparent wobbling ground texture.
     if(s_ptr->texture_info.bitmap) {
@@ -648,7 +649,7 @@ void draw_liquid(
                 DRAWING::LIQUID_WOBBLE_TIME_SCALE
             ) * DRAWING::LIQUID_WOBBLE_DELTA_X;
         float ground_texture_dy =
-            al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.5;
+            al_get_bitmap_height(s_ptr->texture_info.bitmap) * 0.8;
             
         for(size_t v = 0; v < n_vertexes; ++v) {
         
@@ -663,9 +664,11 @@ void draw_liquid(
             av[v].u = vx + ground_wobble;
             av[v].v = vy + ground_texture_dy;
             av[v].color =
-                al_map_rgba(
-                    s_ptr->brightness, s_ptr->brightness, s_ptr->brightness,
-                    128 * liquid_opacity_mult
+                al_map_rgba_f(
+                    s_ptr->texture_info.tint.r * brightness_mult,
+                    s_ptr->texture_info.tint.g * brightness_mult,
+                    s_ptr->texture_info.tint.b * brightness_mult,
+                    liquid_opacity_mult / 2
                 );
             av[v].x *= scale;
             av[v].y *= scale;
@@ -678,10 +681,14 @@ void draw_liquid(
     }
     
     //Layer 2 - Tint.
-    ALLEGRO_COLOR tint_color = l_ptr->main_color;
-    tint_color.r *= s_ptr->brightness / 255.0f;
-    tint_color.g *= s_ptr->brightness / 255.0f;
-    tint_color.b *= s_ptr->brightness / 255.0f;
+    ALLEGRO_COLOR tint_color =
+        al_map_rgba_f(
+            l_ptr->main_color.r * brightness_mult,
+            l_ptr->main_color.g * brightness_mult,
+            l_ptr->main_color.b * brightness_mult,
+            l_ptr->main_color.a * liquid_opacity_mult
+        );
+        
     for(size_t v = 0; v < n_vertexes; ++v) {
     
         const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
@@ -692,7 +699,6 @@ void draw_liquid(
         av[v].x = vx - where.x;
         av[v].y = vy - where.y;
         av[v].color = tint_color;
-        av[v].color.a *= liquid_opacity_mult;
         av[v].x *= scale;
         av[v].y *= scale;
     }
@@ -741,7 +747,7 @@ void draw_liquid(
                     s_ptr->brightness,
                     s_ptr->brightness,
                     s_ptr->brightness,
-                    alpha
+                    alpha * brightness_mult
                 );
             av[v].x *= scale;
             av[v].y *= scale;
@@ -1070,6 +1076,133 @@ void draw_mob_shadow(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws the mouse cursor.
+ * color:
+ *   Color to tint it with.
+ */
+void draw_mouse_cursor(const ALLEGRO_COLOR &color) {
+    al_use_transform(&game.identity_transform);
+    
+    //Cursor trail.
+    if(game.options.draw_cursor_trail) {
+        size_t anchor = 0;
+        
+        for(size_t s = 1; s < game.mouse_cursor.history.size(); ++s) {
+            point anchor_diff =
+                game.mouse_cursor.history[anchor] -
+                game.mouse_cursor.history[s];
+            if(
+                fabs(anchor_diff.x) < GAME::CURSOR_TRAIL_MIN_SPOT_DIFF &&
+                fabs(anchor_diff.y) < GAME::CURSOR_TRAIL_MIN_SPOT_DIFF
+            ) {
+                continue;
+            }
+            
+            float start_ratio =
+                anchor / (float) game.mouse_cursor.history.size();
+            float start_thickness =
+                GAME::CURSOR_TRAIL_MAX_WIDTH * start_ratio;
+            unsigned char start_alpha =
+                GAME::CURSOR_TRAIL_MAX_ALPHA * start_ratio;
+            ALLEGRO_COLOR start_color =
+                change_alpha(color, start_alpha);
+            point start_p1;
+            point start_p2;
+            
+            float end_ratio =
+                s / (float) GAME::CURSOR_TRAIL_SAVE_N_SPOTS;
+            float end_thickness =
+                GAME::CURSOR_TRAIL_MAX_WIDTH * end_ratio;
+            unsigned char end_alpha =
+                GAME::CURSOR_TRAIL_MAX_ALPHA * end_ratio;
+            ALLEGRO_COLOR end_color =
+                change_alpha(color, end_alpha);
+            point end_p1;
+            point end_p2;
+            
+            if(anchor == 0) {
+                point cur_to_next =
+                    game.mouse_cursor.history[s] -
+                    game.mouse_cursor.history[anchor];
+                point cur_to_next_normal(-cur_to_next.y, cur_to_next.x);
+                cur_to_next_normal = normalize_vector(cur_to_next_normal);
+                point spot_offset = cur_to_next_normal * start_thickness / 2.0f;
+                start_p1 = game.mouse_cursor.history[anchor] - spot_offset;
+                start_p2 = game.mouse_cursor.history[anchor] + spot_offset;
+            } else {
+                get_miter_points(
+                    game.mouse_cursor.history[anchor - 1],
+                    game.mouse_cursor.history[anchor],
+                    game.mouse_cursor.history[anchor + 1],
+                    -start_thickness,
+                    &start_p1,
+                    &start_p2,
+                    30.0f
+                );
+            }
+            
+            if(s == game.mouse_cursor.history.size() - 1) {
+                point prev_to_cur =
+                    game.mouse_cursor.history[s] -
+                    game.mouse_cursor.history[anchor];
+                point prev_to_cur_normal(-prev_to_cur.y, prev_to_cur.x);
+                prev_to_cur_normal = normalize_vector(prev_to_cur_normal);
+                point spot_offset = prev_to_cur_normal * start_thickness / 2.0f;
+                end_p1 = game.mouse_cursor.history[s] - spot_offset;
+                end_p2 = game.mouse_cursor.history[s] + spot_offset;
+            } else {
+                get_miter_points(
+                    game.mouse_cursor.history[s - 1],
+                    game.mouse_cursor.history[s],
+                    game.mouse_cursor.history[s + 1],
+                    -end_thickness,
+                    &end_p1,
+                    &end_p2,
+                    30.0f
+                );
+            }
+            
+            ALLEGRO_VERTEX vertexes[4];
+            for(unsigned char v = 0; v < 4; ++v) {
+                vertexes[v].z = 0.0f;
+            }
+            
+            vertexes[0].x = start_p1.x;
+            vertexes[0].y = start_p1.y;
+            vertexes[0].color = start_color;
+            vertexes[1].x = start_p2.x;
+            vertexes[1].y = start_p2.y;
+            vertexes[1].color = start_color;
+            vertexes[2].x = end_p1.x;
+            vertexes[2].y = end_p1.y;
+            vertexes[2].color = end_color;
+            vertexes[3].x = end_p2.x;
+            vertexes[3].y = end_p2.y;
+            vertexes[3].color = end_color;
+            
+            al_draw_prim(
+                vertexes, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP
+            );
+            
+            anchor = s;
+        }
+    }
+    
+    //Mouse cursor graphic.
+    draw_bitmap(
+        game.sys_assets.bmp_mouse_cursor,
+        game.mouse_cursor.s_pos,
+        point(
+            al_get_bitmap_width(game.sys_assets.bmp_mouse_cursor),
+            al_get_bitmap_height(game.sys_assets.bmp_mouse_cursor)
+        ),
+        -(game.time_passed * game.config.cursor_spin_speed),
+        color
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws an icon representing some control bind.
  * font:
  *   Font to use for the name, if necessary.
@@ -1299,6 +1432,7 @@ void draw_scaled_text(
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale, const float opacity
 ) {
+    if(!s_ptr) return;
     if(s_ptr->is_bottomless_pit) return;
     
     unsigned char n_textures = 1;
@@ -1316,10 +1450,6 @@ void draw_sector_texture(
         
     } else {
         texture_sector[0] = s_ptr;
-        if(!texture_sector[0]) {
-            //Can't draw this sector.
-            return;
-        }
         
     }
     
@@ -1473,7 +1603,7 @@ void draw_status_effect_bmp(mob* m, bitmap_effect_info &effects) {
  *   Scale each token by this amount.
  */
 void draw_string_tokens(
-    vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
+    const vector<string_token> &tokens, const ALLEGRO_FONT* const text_font,
     const ALLEGRO_FONT* const control_font, const point &where,
     const int flags, const point &max_size, const point &scale
 ) {
@@ -1807,7 +1937,10 @@ void get_player_input_icon_info(
             return;
         } else if(
             condensed &&
-            (i.button_nr == ALLEGRO_KEY_LSHIFT || i.button_nr == ALLEGRO_KEY_RSHIFT)
+            (
+                i.button_nr == ALLEGRO_KEY_LSHIFT ||
+                i.button_nr == ALLEGRO_KEY_RSHIFT
+            )
         ) {
             *shape = PLAYER_INPUT_ICON_SHAPE_BITMAP;
             *bitmap_sprite = PLAYER_INPUT_ICON_SPRITE_SHIFT;

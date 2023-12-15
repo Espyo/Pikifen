@@ -66,8 +66,6 @@ const float PATH_LINK_THICKNESS = 3.0f;
 const float PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 //Only fetch the path these many seconds after the player stops the checkpoints.
 const float PATH_PREVIEW_TIMER_DUR = 0.1f;
-//Radius to use when drawing a path stop circle.
-const float PATH_STOP_RADIUS = 16.0f;
 //Scale the letters on the "points" of various features by this much.
 const float POINT_LETTER_TEXT_SCALE = 1.5f;
 //Quick previewing lasts this long in total, including the fade out.
@@ -124,6 +122,7 @@ area_editor::area_editor() :
     moving_cross_section_point(-1),
     new_sector_error_tint_timer(AREA_EDITOR::NEW_SECTOR_ERROR_TINT_DURATION),
     octee_mode(OCTEE_MODE_OFFSET),
+    path_drawing_flags(0),
     path_drawing_normals(true),
     path_drawing_type(PATH_LINK_TYPE_NORMAL),
     path_preview_result(PATH_RESULT_NOT_CALCULATED),
@@ -219,7 +218,7 @@ void area_editor::cancel_layout_drawing() {
  * Cancels the vertex moving operation.
  */
 void area_editor::cancel_layout_moving() {
-    for(auto v : selected_vertexes) {
+    for(auto &v : selected_vertexes) {
         v->x = pre_move_vertex_coords[v].x;
         v->y = pre_move_vertex_coords[v].y;
     }
@@ -300,6 +299,7 @@ void area_editor::clear_current_area() {
 void area_editor::clear_layout_drawing() {
     drawing_nodes.clear();
     drawing_line_result = DRAWING_LINE_OK;
+    sector_split_info.useless_split_part_2_checkpoint = INVALID;
 }
 
 
@@ -338,6 +338,10 @@ void area_editor::clear_problems() {
  * Clears the data about the current selection.
  */
 void area_editor::clear_selection() {
+    if(sub_state == EDITOR_SUB_STATE_OCTEE) {
+        sub_state = EDITOR_SUB_STATE_NONE;
+    }
+    
     selected_vertexes.clear();
     selected_edges.clear();
     selected_sectors.clear();
@@ -369,6 +373,10 @@ void area_editor::clear_undo_history() {
         delete undo_history[h].first;
     }
     undo_history.clear();
+    for(size_t h = 0; h < redo_history.size(); ++h) {
+        delete redo_history[h].first;
+    }
+    redo_history.clear();
 }
 
 
@@ -400,7 +408,7 @@ void area_editor::close_options_dialog() {
  *   Type of the requested area.
  */
 void area_editor::create_area(
-    string requested_area_folder_name,
+    const string &requested_area_folder_name,
     const AREA_TYPES requested_area_type
 ) {
     clear_current_area();
@@ -530,7 +538,7 @@ void area_editor::create_drawing_vertexes() {
 void area_editor::create_mob_under_cursor() {
     register_change("object creation");
     sub_state = EDITOR_SUB_STATE_NONE;
-    point hotspot = snap_point(game.mouse_cursor_w);
+    point hotspot = snap_point(game.mouse_cursor.w_pos);
     
     string custom_cat_name_to_use = last_mob_custom_cat_name;
     mob_type* type_to_use = last_mob_type;
@@ -563,7 +571,7 @@ void area_editor::create_mob_under_cursor() {
  *   Type of the requested area.
  */
 void area_editor::create_or_load_area(
-    string requested_area_folder_name,
+    const string &requested_area_folder_name,
     const AREA_TYPES requested_area_type
 ) {
     string file_to_check =
@@ -700,6 +708,219 @@ void area_editor::do_logic() {
 
 
 /* ----------------------------------------------------------------------------
+ * Splits the sector using the user's final drawing.
+ */
+void area_editor::do_sector_split() {
+    //Create the drawing's new edges and connect them.
+    vector<edge*> drawing_edges;
+    for(size_t n = 0; n < drawing_nodes.size() - 1; ++n) {
+        layout_drawing_node* n_ptr = &drawing_nodes[n];
+        layout_drawing_node* next_node = &drawing_nodes[n + 1];
+        
+        edge* new_node_edge = game.cur_area_data.new_edge();
+        
+        game.cur_area_data.connect_edge_to_vertex(
+            new_node_edge, n_ptr->on_vertex, 0
+        );
+        game.cur_area_data.connect_edge_to_vertex(
+            new_node_edge, next_node->on_vertex, 1
+        );
+        
+        drawing_edges.push_back(new_node_edge);
+    }
+    
+    //Most of the time, the new sector can be made using the drawing edges
+    //and the traversed edges from traversal stage 1. However, if the drawing
+    //is made against an inner sector of our working sector, then there's a
+    //50-50 chance that using the first set of traversed edges would result in
+    //a sector that would engulf that inner sector. Instead, we'll have to use
+    //the traversed edges from traversal stage 2.
+    //Let's figure out which stage to use now.
+    vector<edge*> new_sector_edges = drawing_edges;
+    vector<vertex*> new_sector_vertexes;
+    for(size_t d = 0; d < drawing_nodes.size(); ++d) {
+        new_sector_vertexes.push_back(drawing_nodes[d].on_vertex);
+    }
+    
+    //To figure it out, pretend we're using stage 1's data, and gather
+    //the vertexes that would make the new sector. Then, check if
+    //the result is clockwise or not.
+    //Since the new sector is supposed to replace area from the working sector,
+    //we can use that orientation and see if it matches with the sides that
+    //the working sector belongs to. If not, we need the data from stage 2.
+    //Oh, and in this loop, we can skip the last, since it's already
+    //the same as the first drawing node.
+    for(
+        size_t t = 0;
+        t < sector_split_info.traversed_vertexes[0].size() - 1;
+        ++t
+    ) {
+        new_sector_vertexes.push_back(
+            sector_split_info.traversed_vertexes[0][t]
+        );
+    }
+    
+    bool is_new_clockwise = is_polygon_clockwise(new_sector_vertexes);
+    
+    if(is_new_clockwise == sector_split_info.is_working_at_stage_1_left) {
+        //Darn, the new sector goes clockwise, which means the new sector's to
+        //the right of these edges, when traversing them in stage 1's order,
+        //but we know from before that the working sector is to the left!
+        //(Or vice-versa.) This means that the drawing is against an inner
+        //sector (it's the only way this can happen), and that this selection
+        //of vertexes would result in a sector that's going around that
+        //inner sector. Let's swap to the traversal stage 2 data.
+        
+        new_sector_vertexes.clear();
+        for(size_t d = 0; d < drawing_nodes.size(); ++d) {
+            new_sector_vertexes.push_back(drawing_nodes[d].on_vertex);
+        }
+        //Same as before, skip the last.
+        for(
+            size_t t = 0;
+            t < sector_split_info.traversed_vertexes[1].size() - 1;
+            ++t
+        ) {
+            new_sector_vertexes.push_back(
+                sector_split_info.traversed_vertexes[1][t]
+            );
+        }
+        
+        for(
+            size_t t = 0;
+            t < sector_split_info.traversed_edges[1].size();
+            ++t
+        ) {
+            new_sector_edges.push_back(
+                sector_split_info.traversed_edges[1][t]
+            );
+        }
+        
+    } else {
+        //We can use stage 1's data!
+        //The vertexes are already in place, so let's fill in the edges.
+        for(
+            size_t t = 0;
+            t < sector_split_info.traversed_edges[0].size();
+            ++t
+        ) {
+            new_sector_edges.push_back(
+                sector_split_info.traversed_edges[0][t]
+            );
+        }
+        
+    }
+    
+    //Organize all edge vertexes such that they follow the same order.
+    for(size_t e = 0; e < new_sector_edges.size(); ++e) {
+        if(new_sector_edges[e]->vertexes[0] != new_sector_vertexes[e]) {
+            new_sector_edges[e]->swap_vertexes();
+        }
+    }
+    
+    //Create the new sector, empty.
+    sector* new_sector =
+        create_sector_for_layout_drawing(sector_split_info.working_sector);
+        
+    //Connect the edges to the sectors.
+    unsigned char new_sector_side = (is_new_clockwise ? 1 : 0);
+    unsigned char working_sector_side = (is_new_clockwise ? 0 : 1);
+    
+    for(size_t e = 0; e < new_sector_edges.size(); ++e) {
+        edge* e_ptr = new_sector_edges[e];
+        
+        if(!e_ptr->sectors[0] && !e_ptr->sectors[1]) {
+            //If it's a new edge, set it up properly.
+            game.cur_area_data.connect_edge_to_sector(
+                e_ptr, sector_split_info.working_sector, working_sector_side
+            );
+            game.cur_area_data.connect_edge_to_sector(
+                e_ptr, new_sector, new_sector_side
+            );
+            
+        } else {
+            //If not, let's transfer from the working sector to the new one.
+            game.cur_area_data.connect_edge_to_sector(
+                e_ptr, new_sector, new_sector_side
+            );
+            
+        }
+    }
+    
+    //The new sector is created, but only its outer edges exist.
+    //Triangulate these so we can check what's inside.
+    triangulate_sector(new_sector, NULL, false);
+    
+    //All sectors inside the new one need to know that
+    //their outer sector changed. Since we're only checking from the edges
+    //that used to be long to the working sector, the edges that were created
+    //with the drawing will not be included.
+    update_inner_sectors_outer_sector(
+        sector_split_info.working_sector_old_edges,
+        sector_split_info.working_sector,
+        new_sector
+    );
+    
+    //Finally, update all affected sectors. Only the working sector and
+    //the new sector have had their triangles changed, so work only on those.
+    unordered_set<sector*> affected_sectors;
+    affected_sectors.insert(sector_split_info.working_sector);
+    affected_sectors.insert(new_sector);
+    update_affected_sectors(affected_sectors);
+    
+    //Select one of the two sectors, making it ready for editing.
+    //We want to select the smallest of the two, because it's the "most new".
+    //If you have a sector that's a really complex shape, and you split
+    //such that one of the post-split sectors is a triangle, chances are you
+    //had that complex shape, and you wanted to make a new triangle from it,
+    //not that you had a "triangle" and wanted to make a complex shape.
+    clear_selection();
+    
+    if(!sector_split_info.working_sector) {
+        select_sector(new_sector);
+    } else {
+        float working_sector_area =
+            (
+                sector_split_info.working_sector->bbox[1].x -
+                sector_split_info.working_sector->bbox[0].x
+            ) * (
+                sector_split_info.working_sector->bbox[1].y -
+                sector_split_info.working_sector->bbox[0].y
+            );
+        float new_sector_area =
+            (new_sector->bbox[1].x - new_sector->bbox[0].x) *
+            (new_sector->bbox[1].y - new_sector->bbox[0].y);
+            
+        if(working_sector_area < new_sector_area) {
+            select_sector(sector_split_info.working_sector);
+        } else {
+            select_sector(new_sector);
+        }
+    }
+    
+    clear_layout_drawing();
+    sub_state = EDITOR_SUB_STATE_NONE;
+    
+    register_change("sector split", sector_split_info.pre_split_area_data);
+    if(!sector_split_info.working_sector) {
+        set_status(
+            "Created sector with " +
+            amount_str((int) new_sector->edges.size(), "edge") + "."
+        );
+    } else {
+        set_status(
+            "Split sector, creating one with " +
+            amount_str((int) new_sector->edges.size(), "edge") + ", one with " +
+            amount_str(
+                (int) sector_split_info.working_sector->edges.size(),
+                "edge"
+            ) + "."
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Dear ImGui callback for when the canvas needs to be drawn on-screen.
  * parent_list:
  *   Unused.
@@ -728,15 +949,15 @@ void area_editor::emit_triangulation_error_status_bar_message(
             true
         );
         break;
-    } case TRIANGULATION_ERROR_NO_EARS: {
+    } case TRIANGULATION_ERROR_NOT_CLOSED: {
         set_status(
-            "Some sectors could not be triangulated!",
+            "Some sectors are not closed!",
             true
         );
         break;
-    } case TRIANGULATION_ERROR_VERTEXES_REUSED: {
+    } case TRIANGULATION_ERROR_NO_EARS: {
         set_status(
-            "Some sectors reuse vertexes -- there are likely gaps!",
+            "Some sectors could not be triangulated!",
             true
         );
         break;
@@ -783,7 +1004,7 @@ void area_editor::finish_layout_moving() {
     unordered_set<sector*> merge_affected_sectors;
     
     //Find merge vertexes and edges to split, if any.
-    for(auto v : selected_vertexes) {
+    for(auto &v : selected_vertexes) {
         point p(v->x, v->y);
         
         vector<std::pair<dist, vertex*> > merge_vertexes =
@@ -1094,7 +1315,7 @@ void area_editor::finish_new_sector_drawing() {
     
     //The new sector is created, but only its outer edges exist.
     //Triangulate these so we can check what's inside.
-    triangulate(new_sector, NULL, true, false);
+    triangulate_sector(new_sector, NULL, false);
     
     //All sectors inside the new one need to know that
     //their outer sector changed.
@@ -1157,20 +1378,20 @@ string area_editor::get_history_option_prefix() const {
 void area_editor::get_hovered_layout_element(
     vertex** hovered_vertex, edge** hovered_edge, sector** hovered_sector
 ) const {
-    *hovered_vertex = get_vertex_under_point(game.mouse_cursor_w);
+    *hovered_vertex = get_vertex_under_point(game.mouse_cursor.w_pos);
     *hovered_edge = NULL;
     *hovered_sector = NULL;
     
     if(*hovered_vertex) return;
     
     if(selection_filter != SELECTION_FILTER_VERTEXES) {
-        *hovered_edge = get_edge_under_point(game.mouse_cursor_w);
+        *hovered_edge = get_edge_under_point(game.mouse_cursor.w_pos);
     }
     
     if(*hovered_edge) return;
     
     if(selection_filter == SELECTION_FILTER_SECTORS) {
-        *hovered_sector = get_sector_under_point(game.mouse_cursor_w);
+        *hovered_sector = get_sector_under_point(game.mouse_cursor.w_pos);
     }
 }
 
@@ -1240,6 +1461,53 @@ string area_editor::get_path_short_name(const string &p) const {
     }
     
     return p.substr(start + match.size() + 1);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Evaluates the user's drawing to figure out how the split is going to work.
+ */
+area_editor::SECTOR_SPLIT_RESULTS area_editor::get_sector_split_evaluation() {
+    sector_split_info.traversed_edges[0].clear();
+    sector_split_info.traversed_edges[1].clear();
+    sector_split_info.traversed_vertexes[0].clear();
+    sector_split_info.traversed_vertexes[1].clear();
+    
+    //Traverse the sector, starting on the last point of the drawing,
+    //going edge by edge, until we hit that point again.
+    //During traversal, collect a list of traversed edges and vertexes.
+    //This traversal happens in two stages. In the first stage, collect them
+    //into the first set of vectors. Once the traversal reaches the checkpoint,
+    //it restarts and goes in the opposite direction, collecting edges and
+    //vertexes into the second set of vectors from here on out. Normally,
+    //we only need the data from stage 1 to create a sector, but as we'll see
+    //later on, we may need to use data from stage 2 instead.
+    traverse_sector_for_split(
+        sector_split_info.working_sector,
+        drawing_nodes.back().on_vertex,
+        drawing_nodes[0].on_vertex,
+        sector_split_info.traversed_edges,
+        sector_split_info.traversed_vertexes,
+        &sector_split_info.is_working_at_stage_1_left
+    );
+    
+    if(sector_split_info.traversed_edges[0].empty()) {
+        //Something went wrong.
+        return SECTOR_SPLIT_INVALID;
+    }
+    
+    if(sector_split_info.traversed_edges[1].empty()) {
+        //If the sector's neighboring edges were traversed entirely
+        //without finding the drawing's last point, then that point is in a set
+        //of edges different from the drawing's first point. This can happen
+        //if the points are in different inner sectors, or if only
+        //one of them is in an inner sector.
+        //If the user were to split in this way, the sector would still be
+        //in one piece, except with a disallowed gash. Cancel.
+        return SECTOR_SPLIT_USELESS;
+    }
+    
+    return SECTOR_SPLIT_OK;
 }
 
 
@@ -1492,13 +1760,7 @@ void area_editor::goto_problem() {
 void area_editor::handle_line_error() {
     new_sector_error_tint_timer.start();
     switch(drawing_line_result) {
-    case DRAWING_LINE_LOOPS_IN_SPLIT: {
-        set_status(
-            "To split a sector, you can't end on the starting point!",
-            true
-        );
-        break;
-    } case DRAWING_LINE_HIT_EDGE_OR_VERTEX: {
+    case DRAWING_LINE_HIT_EDGE_OR_VERTEX: {
         break;
     } case DRAWING_LINE_ALONG_EDGE: {
         set_status(
@@ -1515,6 +1777,12 @@ void area_editor::handle_line_error() {
     } case DRAWING_LINE_CROSSES_EDGES: {
         set_status(
             "That line crosses existing edges!",
+            true
+        );
+        break;
+    } case DRAWING_LINE_WAYWARD_SECTOR: {
+        set_status(
+            "That line goes out of the sector you're drawing on!",
             true
         );
         break;
@@ -1611,14 +1879,16 @@ void area_editor::load() {
  *   If true, this loading process should update the user's folder open history.
  */
 void area_editor::load_area(
-    string requested_area_folder_name,
+    const string &requested_area_folder_name,
     const AREA_TYPES requested_area_type,
     const bool from_backup, const bool should_update_history
 ) {
+    string new_area_name = requested_area_folder_name;
+    
     clear_current_area();
     
     ::load_area(
-        requested_area_folder_name, requested_area_type, true, from_backup
+        new_area_name, requested_area_type, true, from_backup
     );
     
     //Calculate texture suggestions.
@@ -1665,13 +1935,13 @@ void area_editor::load_area(
     if(should_update_history) {
         update_history(
             get_base_area_folder_path(requested_area_type, true) + "/" +
-            requested_area_folder_name
+            new_area_name
         );
         save_options(); //Save the history in the options.
     }
     
     set_status(
-        "Loaded area \"" + requested_area_folder_name + "\" " +
+        "Loaded area \"" + new_area_name + "\" " +
         (from_backup ? "from a backup " : "") +
         "successfully."
     );
@@ -1841,29 +2111,6 @@ area_data* area_editor::prepare_state() {
 
 
 /* ----------------------------------------------------------------------------
- * Code to run when the copy properties button widget is pressed.
- */
-void area_editor::press_copy_properties_button() {
-    switch(state) {
-    case EDITOR_STATE_LAYOUT: {
-        if(!selected_sectors.empty()) {
-            copy_sector_properties();
-        } else {
-            copy_edge_properties();
-        }
-        break;
-    } case EDITOR_STATE_MOBS: {
-        copy_mob_properties();
-        break;
-    } case EDITOR_STATE_PATHS: {
-        copy_path_link_properties();
-        break;
-    }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Code to run when the circle sector button widget is pressed.
  */
 void area_editor::press_circle_sector_button() {
@@ -1898,6 +2145,41 @@ void area_editor::press_circle_sector_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the copy properties button widget is pressed.
+ */
+void area_editor::press_copy_properties_button() {
+    switch(state) {
+    case EDITOR_STATE_LAYOUT: {
+        if(!selected_sectors.empty()) {
+            copy_sector_properties();
+        } else {
+            copy_edge_properties();
+        }
+        break;
+    } case EDITOR_STATE_MOBS: {
+        copy_mob_properties();
+        break;
+    } case EDITOR_STATE_PATHS: {
+        copy_path_link_properties();
+        break;
+    }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the delete current area button widget is pressed.
+ */
+void area_editor::press_delete_area_button() {
+    open_dialog(
+        "Delete area?",
+        std::bind(&area_editor::process_gui_delete_area_dialog, this)
+    );
+    dialogs.back()->custom_size = point(400, 150);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the delete button widget is pressed.
  */
 void area_editor::press_delete_button() {
@@ -1916,18 +2198,6 @@ void area_editor::press_delete_button() {
         break;
     }
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to run when the delete current area button widget is pressed.
- */
-void area_editor::press_delete_area_button() {
-    open_dialog(
-        "Delete area?",
-        std::bind(&area_editor::process_gui_delete_area_dialog, this)
-    );
-    dialogs.back()->custom_size = point(400, 150);
 }
 
 
@@ -1983,6 +2253,40 @@ void area_editor::press_grid_interval_increase_button() {
         "Increased grid interval to " +
         i2s(game.options.area_editor_grid_interval) + "."
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the layout drawing button widget is pressed.
+ */
+void area_editor::press_layout_drawing_button() {
+    if(moving || selecting) {
+        return;
+    }
+    
+    if(
+        sub_state == EDITOR_SUB_STATE_DRAWING ||
+        sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR
+    ) {
+        return;
+    }
+    
+    if(
+        !game.cur_area_data.problems.non_simples.empty() ||
+        !game.cur_area_data.problems.lone_edges.empty()
+    ) {
+        set_status(
+            "Please fix any broken sectors or edges before trying to make "
+            "a new sector!",
+            true
+        );
+        return;
+    }
+    
+    clear_selection();
+    clear_layout_drawing();
+    update_layout_drawing_status_text();
+    sub_state = EDITOR_SUB_STATE_DRAWING;
 }
 
 
@@ -2043,40 +2347,6 @@ void area_editor::press_new_path_button() {
     path_drawing_stop_1 = NULL;
     set_status("Use the canvas to draw a path.");
     sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Code to run when the new sector button widget is pressed.
- */
-void area_editor::press_new_sector_button() {
-    if(moving || selecting) {
-        return;
-    }
-    
-    if(
-        sub_state == EDITOR_SUB_STATE_DRAWING ||
-        sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR
-    ) {
-        return;
-    }
-    
-    if(
-        !game.cur_area_data.problems.non_simples.empty() ||
-        !game.cur_area_data.problems.lone_edges.empty()
-    ) {
-        set_status(
-            "Please fix any broken sectors or edges before trying to make "
-            "a new sector!",
-            true
-        );
-        return;
-    }
-    
-    clear_selection();
-    clear_layout_drawing();
-    set_status("Use the canvas to draw a sector.");
-    sub_state = EDITOR_SUB_STATE_DRAWING;
 }
 
 
@@ -2156,6 +2426,22 @@ void area_editor::press_quit_button() {
         std::bind(&area_editor::leave, this),
     [this] () { return save_area(false); }
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Code to run when the redo button widget is pressed.
+ */
+void area_editor::press_redo_button() {
+    if(
+        sub_state != EDITOR_SUB_STATE_NONE ||
+        moving || selecting || cur_transformation_widget.is_moving_handle()
+    ) {
+        set_status("Can't redo in the middle of an operation!", true);
+        return;
+    }
+    
+    redo();
 }
 
 
@@ -2513,19 +2799,6 @@ void area_editor::press_zoom_and_pos_reset_button() {
 
 
 /* ----------------------------------------------------------------------------
- * Code to run when the zoom in button widget is pressed.
- */
-void area_editor::press_zoom_in_button() {
-    game.cam.target_zoom =
-        clamp(
-            game.cam.target_zoom +
-            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
-            zoom_min_level, zoom_max_level
-        );
-}
-
-
-/* ----------------------------------------------------------------------------
  * Code to run when the zoom everything button widget is pressed.
  */
 void area_editor::press_zoom_everything_button() {
@@ -2590,6 +2863,19 @@ void area_editor::press_zoom_everything_button() {
 
 
 /* ----------------------------------------------------------------------------
+ * Code to run when the zoom in button widget is pressed.
+ */
+void area_editor::press_zoom_in_button() {
+    game.cam.target_zoom =
+        clamp(
+            game.cam.target_zoom +
+            game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
+            zoom_min_level, zoom_max_level
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Code to run when the zoom out button widget is pressed.
  */
 void area_editor::press_zoom_out_button() {
@@ -2599,6 +2885,45 @@ void area_editor::press_zoom_out_button() {
             game.cam.zoom * EDITOR::KEYBOARD_CAM_ZOOM,
             zoom_min_level, zoom_max_level
         );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Recreates the current drawing's nodes. Useful if the data the nodes were
+ * holding is stale, like if the area's state had to be reverted mid-drawing.
+ */
+void area_editor::recreate_drawing_nodes() {
+    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
+        drawing_nodes[n] = layout_drawing_node(this, drawing_nodes[n].raw_spot);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Redoes the latest undone change to the area using the undo history,
+ * if available.
+ */
+void area_editor::redo() {
+    if(redo_history.empty()) {
+        set_status("Nothing to redo.");
+        return;
+    }
+    
+    //Let's first save the state of things right now so we can feed it into
+    //the undo history afterwards.
+    area_data* new_state = new area_data();
+    game.cur_area_data.clone(*new_state);
+    string operation_name = redo_history.front().second;
+    
+    //Change the area state.
+    set_state_from_undo_or_redo_history(redo_history.front().first);
+    
+    //Feed the previous state into the undo history.
+    undo_history.push_front(make_pair(new_state, operation_name));
+    delete redo_history.front().first;
+    redo_history.pop_front();
+    
+    set_status("Redo successful: " + operation_name + ".");
 }
 
 
@@ -2639,6 +2964,11 @@ void area_editor::register_change(
         game.cur_area_data.clone(*new_state);
     }
     undo_history.push_front(make_pair(new_state, operation_name));
+    
+    for(size_t h = 0; h < redo_history.size(); ++h) {
+        delete redo_history[h].first;
+    }
+    redo_history.clear();
     
     undo_save_lock_operation = operation_name;
     undo_save_lock_timer.start();
@@ -2707,9 +3037,8 @@ bool area_editor::save_area(const bool to_backup) {
     if(game.cur_area_data.weather_name == NONE_OPTION) {
         game.cur_area_data.weather_name.clear();
     }
-    game.cur_area_data.engine_version =
-        i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) + "." + i2s(VERSION_REV);
-        
+    game.cur_area_data.engine_version = get_engine_version_string();
+    
     //First, the geometry file.
     data_node geometry_file("", "");
     
@@ -2939,6 +3268,21 @@ bool area_editor::save_area(const bool to_backup) {
         path_stop_node->add(
             new data_node("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
         );
+        if(s_ptr->radius != PATHS::MIN_STOP_RADIUS) {
+            path_stop_node->add(
+                new data_node("radius", f2s(s_ptr->radius))
+            );
+        }
+        if(s_ptr->flags != 0) {
+            path_stop_node->add(
+                new data_node("flags", i2s(s_ptr->flags))
+            );
+        }
+        if(!s_ptr->label.empty()) {
+            path_stop_node->add(
+                new data_node("label", s_ptr->label)
+            );
+        }
         
         data_node* links_node = new data_node("links", "");
         path_stop_node->add(links_node);
@@ -2946,11 +3290,8 @@ bool area_editor::save_area(const bool to_backup) {
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = s_ptr->links[l];
             string link_data = i2s(l_ptr->end_nr);
-            if(l_ptr->type != PATH_LINK_TYPE_NORMAL || !l_ptr->label.empty()) {
+            if(l_ptr->type != PATH_LINK_TYPE_NORMAL) {
                 link_data += " " + i2s(l_ptr->type);
-            }
-            if(!l_ptr->label.empty()) {
-                link_data += " " + l_ptr->label;
             }
             data_node* link_node = new data_node("nr", link_data);
             links_node->add(link_node);
@@ -3253,7 +3594,9 @@ bool area_editor::save_area(const bool to_backup) {
                 data_file.add(
                     new data_node(
                         "mission_points_per_treasure_point",
-                        i2s(game.cur_area_data.mission.points_per_treasure_point)
+                        i2s(
+                            game.cur_area_data.mission.points_per_treasure_point
+                        )
                     )
                 );
             }
@@ -3388,10 +3731,7 @@ bool area_editor::save_area(const bool to_backup) {
         //If this was a normal save, save the backup too, so that the
         //maker doesn't have an outdated backup.
         save_backup();
-    }
-    
-    //Finish up.
-    if(!to_backup && save_successful) {
+        
         changes_mgr.mark_as_saved();
         set_status("Saved area successfully.");
     }
@@ -3497,21 +3837,16 @@ void area_editor::select_edge(edge* e) {
 
 
 /* ----------------------------------------------------------------------------
- * Selects all path links with the given label.
+ * Selects all path stops with the given label.
  * label:
  *   Label to search for.
  */
-void area_editor::select_path_links_with_label(const string &label) {
+void area_editor::select_path_stops_with_label(const string &label) {
     clear_selection();
     for(size_t s = 0; s < game.cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = game.cur_area_data.path_stops[s];
-        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            path_link* l_ptr = s_ptr->links[l];
-            if(l_ptr->label == label) {
-                selected_path_links.insert(l_ptr);
-                selected_path_stops.insert(s_ptr);
-                selected_path_stops.insert(l_ptr->end_ptr);
-            }
+        if(s_ptr->label == label) {
+            selected_path_stops.insert(s_ptr);
         }
     }
     set_selection_status_text();
@@ -3563,7 +3898,7 @@ void area_editor::set_new_circle_sector_points() {
     float anchor_angle =
         get_angle(new_circle_sector_center, new_circle_sector_anchor);
     float cursor_angle =
-        get_angle(new_circle_sector_center, game.mouse_cursor_w);
+        get_angle(new_circle_sector_center, game.mouse_cursor.w_pos);
     float radius =
         dist(
             new_circle_sector_center, new_circle_sector_anchor
@@ -3705,15 +4040,43 @@ void area_editor::set_selection_status_text() {
 
 
 /* ----------------------------------------------------------------------------
- * Splits a sector into two sectors using the user's current drawing.
+ * Changes the state of the area using one of the saved states in the undo
+ * history or redo history.
+ * state:
+ *   State to load.
  */
-void area_editor::split_sector_with_drawing() {
+void area_editor::set_state_from_undo_or_redo_history(area_data* state) {
+    state->clone(game.cur_area_data);
+    
+    undo_save_lock_timer.stop();
+    undo_save_lock_operation.clear();
+    update_undo_history();
+    
+    clear_selection();
+    clear_circle_sector();
+    clear_layout_drawing();
+    clear_layout_moving();
+    clear_problems();
+    
+    update_all_edge_offset_caches();
+    
+    path_preview.clear(); //Clear so it doesn't reference deleted stops.
+    path_preview_timer.start(false);
+    
+    changes_mgr.mark_as_changed();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up the editor's logic to split a sector.
+ */
+void area_editor::setup_sector_split() {
     if(drawing_nodes.size() < 2) {
         cancel_layout_drawing();
         return;
     }
     
-    area_data* pre_split_area_data = prepare_state();
+    sector_split_info.pre_split_area_data = prepare_state();
     
     //The idea is as follows: To split the working sector, we create a new
     //sector that takes up some of the same area as the working sector.
@@ -3731,251 +4094,26 @@ void area_editor::split_sector_with_drawing() {
     //Figure out what the working sector is.
     //The middle point of two drawing nodes will always be in the working
     //sector, so it's a great place to check.
-    sector* working_sector =
+    sector_split_info.working_sector =
         get_sector_under_point(
             (drawing_nodes[0].snapped_spot + drawing_nodes[1].snapped_spot) /
             2.0f
         );
-    vector<edge*> working_sector_old_edges;
-    if(working_sector) {
-        working_sector_old_edges = working_sector->edges;
+    sector_split_info.working_sector_old_edges.clear();
+    if(sector_split_info.working_sector) {
+        sector_split_info.working_sector_old_edges =
+            sector_split_info.working_sector->edges;
     } else {
         for(size_t e = 0; e < game.cur_area_data.edges.size(); ++e) {
             edge* e_ptr = game.cur_area_data.edges[e];
             if(e_ptr->sectors[0] == NULL || e_ptr->sectors[1] == NULL) {
-                working_sector_old_edges.push_back(e_ptr);
+                sector_split_info.working_sector_old_edges.push_back(e_ptr);
             }
         }
     }
     
     //First, create vertexes wherever necessary.
     create_drawing_vertexes();
-    
-    //Traverse the sector, starting on the last point of the drawing,
-    //going edge by edge, until we hit that point again.
-    //During traversal, collect a list of traversed edges and vertexes.
-    //This traversal happens in two stages. In the first stage, collect them
-    //into the first set of vectors. Once the traversal reaches the checkpoint,
-    //it restarts and goes in the opposite direction, collecting edges and
-    //vertexes into the second set of vectors from here on out. Normally,
-    //we only need the data from stage 1 to create a sector, but as we'll see
-    //later on, we may need to use data from stage 2 instead.
-    vector<edge*> traversed_edges[2];
-    vector<vertex*> traversed_vertexes[2];
-    bool is_working_at_stage_1_left;
-    traverse_sector_for_split(
-        working_sector,
-        drawing_nodes.back().on_vertex,
-        drawing_nodes[0].on_vertex,
-        traversed_edges,
-        traversed_vertexes,
-        &is_working_at_stage_1_left
-    );
-    
-    if(traversed_edges[0].empty()) {
-        //Something went wrong.
-        rollback_to_prepared_state(pre_split_area_data);
-        forget_prepared_state(pre_split_area_data);
-        clear_selection();
-        clear_layout_drawing();
-        sub_state = EDITOR_SUB_STATE_NONE;
-        set_status(
-            "That's not a valid split!",
-            true
-        );
-        return;
-    }
-    
-    if(traversed_edges[1].empty()) {
-        //If the sector's neighboring edges were traversed entirely
-        //without finding the drawing's last point, then that point is in a set
-        //of edges different from the drawing's first point. This can happen
-        //if the points are in different inner sectors, or if only
-        //one of them is in an inner sector.
-        //If the user were to split in this way, the sector would still be
-        //in one piece, except with a disallowed gash. Cancel.
-        rollback_to_prepared_state(pre_split_area_data);
-        forget_prepared_state(pre_split_area_data);
-        clear_selection();
-        clear_layout_drawing();
-        sub_state = EDITOR_SUB_STATE_NONE;
-        set_status(
-            "That wouldn't split the sector in any useful way!",
-            true
-        );
-        return;
-    }
-    
-    //Create the drawing's new edges and connect them.
-    vector<edge*> drawing_edges;
-    for(size_t n = 0; n < drawing_nodes.size() - 1; ++n) {
-        layout_drawing_node* n_ptr = &drawing_nodes[n];
-        layout_drawing_node* next_node = &drawing_nodes[n + 1];
-        
-        edge* new_node_edge = game.cur_area_data.new_edge();
-        
-        game.cur_area_data.connect_edge_to_vertex(
-            new_node_edge, n_ptr->on_vertex, 0
-        );
-        game.cur_area_data.connect_edge_to_vertex(
-            new_node_edge, next_node->on_vertex, 1
-        );
-        
-        drawing_edges.push_back(new_node_edge);
-    }
-    
-    //Most of the time, the new sector can be made using the drawing edges
-    //and the traversed edges from traversal stage 1. However, if the drawing
-    //is made against an inner sector of our working sector, then there's a
-    //50-50 chance that using the first set of traversed edges would result in
-    //a sector that would engulf that inner sector. Instead, we'll have to use
-    //the traversed edges from traversal stage 2.
-    //Let's figure out which stage to use now.
-    vector<edge*> new_sector_edges = drawing_edges;
-    vector<vertex*> new_sector_vertexes;
-    for(size_t d = 0; d < drawing_nodes.size(); ++d) {
-        new_sector_vertexes.push_back(drawing_nodes[d].on_vertex);
-    }
-    
-    //To figure it out, pretend we're using stage 1's data, and gather
-    //the vertexes that would make the new sector. Then, check if
-    //the result is clockwise or not.
-    //Since the new sector is supposed to replace area from the working sector,
-    //we can use that orientation and see if it matches with the sides that
-    //the working sector belongs to. If not, we need the data from stage 2.
-    //Oh, and in this loop, we can skip the last, since it's already
-    //the same as the first drawing node.
-    for(size_t t = 0; t < traversed_vertexes[0].size() - 1; ++t) {
-        new_sector_vertexes.push_back(traversed_vertexes[0][t]);
-    }
-    
-    bool is_new_clockwise = is_polygon_clockwise(new_sector_vertexes);
-    
-    if(is_new_clockwise == is_working_at_stage_1_left) {
-        //Darn, the new sector goes clockwise, which means the new sector's to
-        //the right of these edges, when traversing them in stage 1's order,
-        //but we know from before that the working sector is to the left!
-        //(Or vice-versa.) This means that the drawing is against an inner
-        //sector (it's the only way this can happen), and that this selection
-        //of vertexes would result in a sector that's going around that
-        //inner sector. Let's swap to the traversal stage 2 data.
-        
-        new_sector_vertexes.clear();
-        for(size_t d = 0; d < drawing_nodes.size(); ++d) {
-            new_sector_vertexes.push_back(drawing_nodes[d].on_vertex);
-        }
-        //Same as before, skip the last.
-        for(size_t t = 0; t < traversed_vertexes[1].size() - 1; ++t) {
-            new_sector_vertexes.push_back(traversed_vertexes[1][t]);
-        }
-        for(size_t t = 0; t < traversed_edges[1].size(); ++t) {
-            new_sector_edges.push_back(traversed_edges[1][t]);
-        }
-        
-    } else {
-        //We can use stage 1's data!
-        //The vertexes are already in place, so let's fill in the edges.
-        for(size_t t = 0; t < traversed_edges[0].size(); ++t) {
-            new_sector_edges.push_back(traversed_edges[0][t]);
-        }
-        
-    }
-    
-    //Organize all edge vertexes such that they follow the same order.
-    for(size_t e = 0; e < new_sector_edges.size(); ++e) {
-        if(new_sector_edges[e]->vertexes[0] != new_sector_vertexes[e]) {
-            new_sector_edges[e]->swap_vertexes();
-        }
-    }
-    
-    //Create the new sector, empty.
-    sector* new_sector = create_sector_for_layout_drawing(working_sector);
-    
-    //Connect the edges to the sectors.
-    unsigned char new_sector_side = (is_new_clockwise ? 1 : 0);
-    unsigned char working_sector_side = (is_new_clockwise ? 0 : 1);
-    
-    for(size_t e = 0; e < new_sector_edges.size(); ++e) {
-        edge* e_ptr = new_sector_edges[e];
-        
-        if(!e_ptr->sectors[0] && !e_ptr->sectors[1]) {
-            //If it's a new edge, set it up properly.
-            game.cur_area_data.connect_edge_to_sector(
-                e_ptr, working_sector, working_sector_side
-            );
-            game.cur_area_data.connect_edge_to_sector(
-                e_ptr, new_sector, new_sector_side
-            );
-            
-        } else {
-            //If not, let's transfer from the working sector to the new one.
-            game.cur_area_data.connect_edge_to_sector(
-                e_ptr, new_sector, new_sector_side
-            );
-            
-        }
-    }
-    
-    //The new sector is created, but only its outer edges exist.
-    //Triangulate these so we can check what's inside.
-    triangulate(new_sector, NULL, true, false);
-    
-    //All sectors inside the new one need to know that
-    //their outer sector changed. Since we're only checking from the edges
-    //that used to be long to the working sector, the edges that were created
-    //with the drawing will not be included.
-    update_inner_sectors_outer_sector(
-        working_sector_old_edges, working_sector, new_sector
-    );
-    
-    //Finally, update all affected sectors. Only the working sector and
-    //the new sector have had their triangles changed, so work only on those.
-    unordered_set<sector*> affected_sectors;
-    affected_sectors.insert(working_sector);
-    affected_sectors.insert(new_sector);
-    update_affected_sectors(affected_sectors);
-    
-    //Select one of the two sectors, making it ready for editing.
-    //We want to select the smallest of the two, because it's the "most new".
-    //If you have a sector that's a really complex shape, and you split
-    //such that one of the post-split sectors is a triangle, chances are you
-    //had that complex shape, and you wanted to make a new triangle from it,
-    //not that you had a "triangle" and wanted to make a complex shape.
-    clear_selection();
-    
-    if(!working_sector) {
-        select_sector(new_sector);
-    } else {
-        float working_sector_area =
-            (working_sector->bbox[1].x - working_sector->bbox[0].x) *
-            (working_sector->bbox[1].y - working_sector->bbox[0].y);
-        float new_sector_area =
-            (new_sector->bbox[1].x - new_sector->bbox[0].x) *
-            (new_sector->bbox[1].y - new_sector->bbox[0].y);
-            
-        if(working_sector_area < new_sector_area) {
-            select_sector(working_sector);
-        } else {
-            select_sector(new_sector);
-        }
-    }
-    
-    clear_layout_drawing();
-    sub_state = EDITOR_SUB_STATE_NONE;
-    
-    register_change("sector split", pre_split_area_data);
-    if(!working_sector) {
-        set_status(
-            "Created sector with " +
-            amount_str((int) new_sector->edges.size(), "edge") + "."
-        );
-    } else {
-        set_status(
-            "Split sector, creating one with " +
-            amount_str((int) new_sector->edges.size(), "edge") + ", one with " +
-            amount_str((int) working_sector->edges.size(), "edge") + "."
-        );
-    }
 }
 
 
@@ -3987,10 +4125,10 @@ void area_editor::start_mob_move() {
     
     move_closest_mob = NULL;
     dist move_closest_mob_dist;
-    for(auto m : selected_mobs) {
+    for(auto &m : selected_mobs) {
         pre_move_mob_coords[m] = m->pos;
         
-        dist d(game.mouse_cursor_w, m->pos);
+        dist d(game.mouse_cursor.w_pos, m->pos);
         if(!move_closest_mob || d < move_closest_mob_dist) {
             move_closest_mob = m;
             move_closest_mob_dist = d;
@@ -3998,7 +4136,7 @@ void area_editor::start_mob_move() {
         }
     }
     
-    move_mouse_start_pos = game.mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor.w_pos;
     moving = true;
 }
 
@@ -4017,7 +4155,7 @@ void area_editor::start_path_stop_move() {
     ) {
         pre_move_stop_coords[*s] = (*s)->pos;
         
-        dist d(game.mouse_cursor_w, (*s)->pos);
+        dist d(game.mouse_cursor.w_pos, (*s)->pos);
         if(!move_closest_stop || d < move_closest_stop_dist) {
             move_closest_stop = *s;
             move_closest_stop_dist = d;
@@ -4025,7 +4163,7 @@ void area_editor::start_path_stop_move() {
         }
     }
     
-    move_mouse_start_pos = game.mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor.w_pos;
     moving = true;
 }
 
@@ -4038,11 +4176,11 @@ void area_editor::start_vertex_move() {
     
     move_closest_vertex = NULL;
     dist move_closest_vertex_dist;
-    for(auto v : selected_vertexes) {
+    for(auto &v : selected_vertexes) {
         point p(v->x, v->y);
         pre_move_vertex_coords[v] = p;
         
-        dist d(game.mouse_cursor_w, p);
+        dist d(game.mouse_cursor.w_pos, p);
         if(!move_closest_vertex || d < move_closest_vertex_dist) {
             move_closest_vertex = v;
             move_closest_vertex_dist = d;
@@ -4050,7 +4188,7 @@ void area_editor::start_vertex_move() {
         }
     }
     
-    move_mouse_start_pos = game.mouse_cursor_w;
+    move_mouse_start_pos = game.mouse_cursor.w_pos;
     moving = true;
 }
 
@@ -4086,76 +4224,67 @@ void area_editor::start_vertex_move() {
  *   working sector is to the left, and false if to the right.
  */
 void area_editor::traverse_sector_for_split(
-    sector* s_ptr, vertex* begin, vertex* checkpoint,
+    const sector* s_ptr, vertex* begin, vertex* checkpoint,
     vector<edge*>* edges, vector<vertex*>* vertexes,
     bool* working_sector_left
 ) {
-    edge* first_edge = NULL;
+    edge* first_e_ptr = NULL;
+    unsigned char first_edge_visits = 0;
     
     for(unsigned char s = 0; s < 2; ++s) {
         vertex* v_ptr = begin;
-        vertex* prev_vertex = NULL;
+        vertex* prev_v_ptr = NULL;
+        float prev_e_angle = TAU / 2.0f;
         
         while(true) {
-            edge* next_edge = NULL;
-            vertex* next_vertex = NULL;
+            edge* next_e_ptr = NULL;
+            float next_e_angle = 0.0f;
+            vertex* next_v_ptr = NULL;
             
-            for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
-                edge* e_ptr = v_ptr->edges[e];
-                if(e_ptr->sectors[0] != s_ptr && e_ptr->sectors[1] != s_ptr) {
-                    //The working sector is not in this edge. This is some
-                    //unrelated edge that won't help us.
-                    continue;
-                }
-                if(e_ptr == first_edge) {
-                    //This will only be true at the start of stage 2, when the
-                    //algorithm tries to take the first edge's direction again.
-                    continue;
-                }
-                next_vertex = e_ptr->get_other_vertex(v_ptr);
-                if(next_vertex == prev_vertex) {
-                    //This is the vertex we came from.
-                    continue;
-                }
-                
-                next_edge = e_ptr;
-                break;
-            }
+            find_trace_edge(
+                v_ptr, prev_v_ptr, s_ptr, prev_e_angle, s == 0,
+                &next_e_ptr, &next_e_angle, &next_v_ptr, NULL
+            );
             
-            if(!next_edge) {
+            if(!next_e_ptr) {
                 return;
             }
             
-            if(!first_edge) {
-                first_edge = next_edge;
+            if(!first_e_ptr) {
+                first_e_ptr = next_e_ptr;
                 //In stage 1, travelling in this direction, is the
                 //working sector to the left or to the right?
-                if(next_edge->vertexes[0] == begin) {
+                if(next_e_ptr->vertexes[0] == begin) {
                     //This edge travels in the same direction as us. Side 0 is
                     //to the left, side 1 is to the right, so just check if the
                     //working sector is to the left.
-                    *working_sector_left = (next_edge->sectors[0] == s_ptr);
+                    *working_sector_left = (next_e_ptr->sectors[0] == s_ptr);
                 } else {
                     //This edge travels the opposite way. Same logic as above,
                     //but reversed.
-                    *working_sector_left = (next_edge->sectors[1] == s_ptr);
+                    *working_sector_left = (next_e_ptr->sectors[1] == s_ptr);
                 }
             }
             
-            prev_vertex = v_ptr;
-            v_ptr = next_vertex;
+            prev_v_ptr = v_ptr;
+            prev_e_angle = next_e_angle;
+            v_ptr = next_v_ptr;
             
-            edges[s].push_back(next_edge);
-            vertexes[s].push_back(next_vertex);
+            edges[s].push_back(next_e_ptr);
+            vertexes[s].push_back(next_v_ptr);
             
-            if(next_vertex == checkpoint) {
+            if(next_v_ptr == checkpoint) {
                 //Enter stage 2, or quit.
                 break;
             }
             
-            if(next_vertex == begin) {
-                //We found the start again? Finish the algorithm right now.
-                return;
+            if(next_e_ptr == first_e_ptr) {
+                first_edge_visits++;
+                if(first_edge_visits == 2) {
+                    //We retreaded old ground without finding the checkpoint?
+                    //Finish the algorithm right now.
+                    return;
+                }
             }
         }
     }
@@ -4171,28 +4300,20 @@ void area_editor::undo() {
         return;
     }
     
-    string operation_name = undo_history[0].second;
+    //Let's first save the state of things right now so we can feed it into
+    //the redo history afterwards.
+    area_data* new_state = new area_data();
+    game.cur_area_data.clone(*new_state);
+    string operation_name = undo_history.front().second;
     
-    undo_history[0].first->clone(game.cur_area_data);
-    delete undo_history[0].first;
+    //Change the area state.
+    set_state_from_undo_or_redo_history(undo_history.front().first);
+    
+    //Feed the previous state into the redo history.
+    redo_history.push_front(make_pair(new_state, operation_name));
+    delete undo_history.front().first;
     undo_history.pop_front();
     
-    undo_save_lock_timer.stop();
-    undo_save_lock_operation.clear();
-    update_undo_history();
-    
-    clear_selection();
-    clear_circle_sector();
-    clear_layout_drawing();
-    clear_layout_moving();
-    clear_problems();
-    
-    update_all_edge_offset_caches();
-    
-    path_preview.clear(); //Clear so it doesn't reference deleted stops.
-    path_preview_timer.start(false);
-    
-    changes_mgr.mark_as_changed();
     set_status("Undo successful: " + operation_name + ".");
 }
 
@@ -4205,6 +4326,14 @@ void area_editor::undo_layout_drawing_node() {
     drawing_nodes.erase(
         drawing_nodes.begin() + drawing_nodes.size() - 1
     );
+    if(
+        sector_split_info.useless_split_part_2_checkpoint != INVALID &&
+        drawing_nodes.size() < sector_split_info.useless_split_part_2_checkpoint
+    ) {
+        //Back to before useless split part 2. Remove the checkpoint.
+        sector_split_info.useless_split_part_2_checkpoint = INVALID;
+    }
+    update_layout_drawing_status_text();
 }
 
 
@@ -4282,6 +4411,32 @@ void area_editor::update_all_edge_offset_caches() {
         get_wall_shadow_length,
         get_wall_shadow_color
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the status text according to what's going on in the current
+ * sector drawing.
+ */
+void area_editor::update_layout_drawing_status_text() {
+    bool useless_split_part_2 = false;
+    if(
+        sector_split_info.useless_split_part_2_checkpoint !=
+        INVALID &&
+        drawing_nodes.size() >=
+        sector_split_info.useless_split_part_2_checkpoint
+    ) {
+        useless_split_part_2 = true;
+    }
+    
+    if(useless_split_part_2) {
+        set_status(
+            "To split this sector, continue your "
+            "drawing to make a new sector."
+        );
+    } else {
+        set_status("Use the canvas to draw a sector.");
+    }
 }
 
 

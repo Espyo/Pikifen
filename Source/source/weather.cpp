@@ -10,9 +10,9 @@
 
 #include "weather.h"
 
-#include "utils/math_utils.h"
 #include "functions.h"
 #include "game.h"
+#include "utils/math_utils.h"
 
 
 /* ----------------------------------------------------------------------------

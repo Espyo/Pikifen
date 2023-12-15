@@ -26,157 +26,6 @@
 
 
 /* ----------------------------------------------------------------------------
- * Processes a key press to check if it should do some "system" action,
- * like toggle the framerate, or activate a maker tool.
- * keycode:
- *   Allegro keycode of the pressed key.
- */
-void gameplay_state::process_system_key_press(const int keycode) {
-    if(keycode == ALLEGRO_KEY_F1) {
-    
-        game.show_system_info = !game.show_system_info;
-        
-    } else if(
-        game.maker_tools.enabled &&
-        (
-            (keycode >= ALLEGRO_KEY_F2 && keycode <= ALLEGRO_KEY_F11) ||
-            (keycode >= ALLEGRO_KEY_0 && keycode <= ALLEGRO_KEY_9)
-        )
-    ) {
-    
-        unsigned char id;
-        if(keycode >= ALLEGRO_KEY_F2 && keycode <= ALLEGRO_KEY_F11) {
-            //The first ten indexes are the F2 - F11 keys.
-            id = game.maker_tools.keys[keycode - ALLEGRO_KEY_F2];
-        } else {
-            //The second ten indexes are the 0 - 9 keys.
-            id = game.maker_tools.keys[10 + (keycode - ALLEGRO_KEY_0)];
-        }
-        
-        switch(id) {
-        case MAKER_TOOL_AREA_IMAGE: {
-            ALLEGRO_BITMAP* bmp = draw_to_bitmap();
-            string file_name =
-                USER_DATA_FOLDER_PATH + "/Area_" +
-                sanitize_file_name(game.cur_area_data.name) +
-                "_" + get_current_time(true) + ".png";
-                
-            if(!al_save_bitmap(file_name.c_str(), bmp)) {
-                log_error(
-                    "Could not save the area onto an image,"
-                    " with the name \"" + file_name + "\"!"
-                );
-            }
-            
-            break;
-            
-        } case MAKER_TOOL_CHANGE_SPEED: {
-            game.maker_tools.change_speed =
-                !game.maker_tools.change_speed;
-            game.maker_tools.used_helping_tools = true;
-            break;
-            
-        } case MAKER_TOOL_COLLISION: {
-            game.maker_tools.collision =
-                !game.maker_tools.collision;
-            game.maker_tools.used_helping_tools = true;
-            break;
-            
-        } case MAKER_TOOL_GEOMETRY_INFO: {
-            game.maker_tools.geometry_info =
-                !game.maker_tools.geometry_info;
-            game.maker_tools.used_helping_tools = true;
-            break;
-            
-        } case MAKER_TOOL_HITBOXES: {
-            game.maker_tools.hitboxes =
-                !game.maker_tools.hitboxes;
-            game.maker_tools.used_helping_tools = true;
-            break;
-            
-        } case MAKER_TOOL_HUD: {
-            game.maker_tools.hud = !game.maker_tools.hud;
-            break;
-            
-        } case MAKER_TOOL_HURT_MOB: {
-            mob* m = get_closest_mob_to_cursor();
-            if(m) {
-                m->set_health(
-                    true, true, -game.maker_tools.mob_hurting_ratio
-                );
-            }
-            game.maker_tools.used_helping_tools = true;
-            break;
-            
-        } case MAKER_TOOL_MOB_INFO: {
-            mob* m = get_closest_mob_to_cursor();
-            game.maker_tools.info_lock =
-                (game.maker_tools.info_lock == m ? NULL : m);
-            game.maker_tools.used_helping_tools = true;
-            break;
-            
-        } case MAKER_TOOL_NEW_PIKMIN: {
-            if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
-                pikmin_type* new_pikmin_type =
-                    game.mob_types.pikmin.begin()->second;
-                    
-                auto p = game.mob_types.pikmin.begin();
-                for(; p != game.mob_types.pikmin.end(); ++p) {
-                    if(p->second == game.maker_tools.last_pikmin_type) {
-                        ++p;
-                        if(p != game.mob_types.pikmin.end()) {
-                            new_pikmin_type = p->second;
-                        }
-                        break;
-                    }
-                }
-                game.maker_tools.last_pikmin_type = new_pikmin_type;
-                
-                create_mob(
-                    game.mob_categories.get(MOB_CATEGORY_PIKMIN),
-                    game.mouse_cursor_w, new_pikmin_type, 0, "maturity=2"
-                );
-            }
-            game.maker_tools.used_helping_tools = true;
-            
-            break;
-            
-        } case MAKER_TOOL_PATH_INFO: {
-            game.maker_tools.path_info = !game.maker_tools.path_info;
-            game.maker_tools.used_helping_tools = true;
-            break;
-            
-        } case MAKER_TOOL_TELEPORT: {
-            sector* mouse_sector =
-                get_sector(game.mouse_cursor_w, NULL, true);
-            if(mouse_sector && cur_leader_ptr) {
-                cur_leader_ptr->chase(
-                    game.mouse_cursor_w, mouse_sector->z,
-                    CHASE_FLAG_TELEPORT
-                );
-                game.cam.set_pos(game.mouse_cursor_w);
-            }
-            game.maker_tools.used_helping_tools = true;
-            break;
-            
-        }
-        }
-        
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Constructs a new player action type.
- */
-player_action_type::player_action_type() :
-    id(PLAYER_ACTION_NONE),
-    category(PLAYER_ACTION_CAT_NONE) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Adds a new player action to the list.
  * id:
  *   Its ID.
@@ -184,6 +33,8 @@ player_action_type::player_action_type() :
  *   Its category.
  * name:
  *   Its name.
+ * description:
+ *   Its descripton.
  * internal_name:
  *   The name of its property in the options file.
  * default_bind_str:
@@ -286,14 +137,6 @@ vector<control_bind> &controls_mediator::binds() {
 
 
 /* ----------------------------------------------------------------------------
- * Removes all registered player action types.
- */
-void controls_mediator::clear_player_action_types() {
-    player_action_types.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Finds a registered control bind for player 1 that matches
  * the requested action. Returns an empty bind if none is found.
  * action_type_id:
@@ -339,7 +182,27 @@ const vector<player_action_type>
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the internal name from an input id,
+ * used in the on_input_recieved event. Returns an empty string on failure.
+ * action_id:
+ *   ID of the player action.
+ */
+string controls_mediator::get_player_action_type_internal_name(
+    const int &action_id
+) {
+    for(size_t b = 0; b < player_action_types.size(); ++b) {
+        if(player_action_types[b].id == action_id) {
+            return player_action_types[b].internal_name;
+        }
+    }
+    return "";
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the current input value of a given action type.
+ * player_action_type_id:
+ *   Action type to use.
  */
 float controls_mediator::get_player_action_type_value(
     PLAYER_ACTION_TYPES player_action_type_id
@@ -351,6 +214,8 @@ float controls_mediator::get_player_action_type_value(
 /* ----------------------------------------------------------------------------
  * Handles an Allegro event.
  * Returns true if the event was handled, false otherwise.
+ * ev:
+ *   The Allegro event.
  */
 bool controls_mediator::handle_allegro_event(const ALLEGRO_EVENT &ev) {
     player_input input = allegro_event_to_input(ev);
@@ -504,4 +369,159 @@ player_input controls_mediator::str_to_input(
     }
     
     return input;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Processes a key press to check if it should do some "system" action,
+ * like toggle the framerate, or activate a maker tool.
+ * keycode:
+ *   Allegro keycode of the pressed key.
+ */
+void gameplay_state::process_system_key_press(const int keycode) {
+    if(keycode == ALLEGRO_KEY_F1) {
+    
+        game.show_system_info = !game.show_system_info;
+        
+    } else if(
+        game.maker_tools.enabled &&
+        (
+            (keycode >= ALLEGRO_KEY_F2 && keycode <= ALLEGRO_KEY_F11) ||
+            (keycode >= ALLEGRO_KEY_0 && keycode <= ALLEGRO_KEY_9)
+        )
+    ) {
+    
+        unsigned char id;
+        if(keycode >= ALLEGRO_KEY_F2 && keycode <= ALLEGRO_KEY_F11) {
+            //The first ten indexes are the F2 - F11 keys.
+            id = game.maker_tools.keys[keycode - ALLEGRO_KEY_F2];
+        } else {
+            //The second ten indexes are the 0 - 9 keys.
+            id = game.maker_tools.keys[10 + (keycode - ALLEGRO_KEY_0)];
+        }
+        
+        switch(id) {
+        case MAKER_TOOL_AREA_IMAGE: {
+            ALLEGRO_BITMAP* bmp = draw_to_bitmap();
+            string file_name =
+                USER_DATA_FOLDER_PATH + "/Area_" +
+                sanitize_file_name(game.cur_area_data.name) +
+                "_" + get_current_time(true) + ".png";
+                
+            if(!al_save_bitmap(file_name.c_str(), bmp)) {
+                log_error(
+                    "Could not save the area onto an image,"
+                    " with the name \"" + file_name + "\"!"
+                );
+            }
+            
+            break;
+            
+        } case MAKER_TOOL_CHANGE_SPEED: {
+            game.maker_tools.change_speed =
+                !game.maker_tools.change_speed;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_COLLISION: {
+            game.maker_tools.collision =
+                !game.maker_tools.collision;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_GEOMETRY_INFO: {
+            game.maker_tools.geometry_info =
+                !game.maker_tools.geometry_info;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_HITBOXES: {
+            game.maker_tools.hitboxes =
+                !game.maker_tools.hitboxes;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_HUD: {
+            game.maker_tools.hud = !game.maker_tools.hud;
+            break;
+            
+        } case MAKER_TOOL_HURT_MOB: {
+            mob* m = get_closest_mob_to_cursor();
+            if(m) {
+                m->set_health(
+                    true, true, -game.maker_tools.mob_hurting_ratio
+                );
+            }
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_MOB_INFO: {
+            mob* m = get_closest_mob_to_cursor();
+            mob* prev_lock_mob = game.maker_tools.info_lock;
+            game.maker_tools.info_lock =
+                (game.maker_tools.info_lock == m ? NULL : m);
+            if(prev_lock_mob != NULL && game.maker_tools.info_lock == NULL) {
+                print_info("Mob: None.", 2.0f, 2.0f);
+            }
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_NEW_PIKMIN: {
+            if(mobs.pikmin_list.size() < game.config.max_pikmin_in_field) {
+                pikmin_type* new_pikmin_type =
+                    game.mob_types.pikmin.begin()->second;
+                    
+                auto p = game.mob_types.pikmin.begin();
+                for(; p != game.mob_types.pikmin.end(); ++p) {
+                    if(p->second == game.maker_tools.last_pikmin_type) {
+                        ++p;
+                        if(p != game.mob_types.pikmin.end()) {
+                            new_pikmin_type = p->second;
+                        }
+                        break;
+                    }
+                }
+                game.maker_tools.last_pikmin_type = new_pikmin_type;
+                
+                create_mob(
+                    game.mob_categories.get(MOB_CATEGORY_PIKMIN),
+                    game.mouse_cursor.w_pos, new_pikmin_type, 0, "maturity=2"
+                );
+            }
+            game.maker_tools.used_helping_tools = true;
+            
+            break;
+            
+        } case MAKER_TOOL_PATH_INFO: {
+            game.maker_tools.path_info = !game.maker_tools.path_info;
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        } case MAKER_TOOL_TELEPORT: {
+            sector* mouse_sector =
+                get_sector(game.mouse_cursor.w_pos, NULL, true);
+            if(mouse_sector && player_info[0].cur_leader_ptr) {
+                player_info[0].cur_leader_ptr->chase(
+                    game.mouse_cursor.w_pos, mouse_sector->z,
+                    CHASE_FLAG_TELEPORT
+                );
+                game.cam.set_pos(game.mouse_cursor.w_pos);
+            }
+            game.maker_tools.used_helping_tools = true;
+            break;
+            
+        }
+        }
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Constructs a new player action type.
+ */
+player_action_type::player_action_type() :
+    id(PLAYER_ACTION_NONE),
+    category(PLAYER_ACTION_CAT_NONE) {
+    
 }

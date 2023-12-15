@@ -72,6 +72,8 @@ public:
     
     //Is it active? i.e. being controlled by a player.
     bool active;
+    //Which player controls this leader? -1 for none
+    int active_player;
     //Is it currently auto-plucking?
     bool auto_plucking;
     //Pikmin it wants to pluck.
@@ -117,7 +119,7 @@ public:
     void dismiss();
     //Order some Pikmin to get in the Onion.
     bool order_pikmin_to_onion(
-        pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
+        const pikmin_type* type, pikmin_nest_struct* n_ptr, const size_t amount
     );
     //Queues up a throw.
     void queue_throw();
@@ -158,15 +160,17 @@ protected:
     void tick_class_specifics(const float delta_t) override;
     
 private:
+    //Sound effect source ID of the whistle, or 0 for none.
+    size_t whistle_sfx_source_id;
+    
     //Returns how many rows are needed for all members' dismissal.
     size_t get_dismiss_rows(const size_t n_members) const;
 };
 
 
 void change_to_next_leader(
-    const bool forward, const bool force_success, const bool keep_idx
+    const bool forward, const bool force_success, const bool keep_idx,const size_t player_id
 );
-bool grab_closest_group_member();
-bool process_total_leader_ko();
+bool grab_closest_group_member(const size_t player_id);
 
 #endif //ifndef LEADER_INCLUDED

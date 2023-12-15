@@ -363,6 +363,31 @@ struct maker_tools_info {
 
 
 /* ----------------------------------------------------------------------------
+ * Mouse cursor struct.
+ * Holds information about the operative system's mouse cursor.
+ */
+struct mouse_cursor_struct {
+    //Position, in screen coordinates.
+    point s_pos;
+    //Position, in world coordinates, if applicable.
+    point w_pos;
+    //Spots the cursor has been through. Used for the faint trail left behind.
+    vector<point> history;
+    //Time left until the position of the cursor is saved on the vector.
+    timer save_timer;
+    
+    void hide() const;
+    void init();
+    void reset();
+    void show() const;
+    void update_pos(
+        const ALLEGRO_EVENT &ev,
+        ALLEGRO_TRANSFORM &screen_to_world_transform
+    );
+};
+
+
+/* ----------------------------------------------------------------------------
  * Bitmap manager.
  * When you have the likes of an animation, every
  * frame in it is normally a sub-bitmap of the same
@@ -400,7 +425,7 @@ struct bmp_manager {
         const string &name, data_node* node = NULL,
         const bool report_errors = true
     );
-    void detach(ALLEGRO_BITMAP* bmp);
+    void detach(const ALLEGRO_BITMAP* bmp);
     void detach(const string &name);
     void clear();
     
@@ -559,28 +584,6 @@ struct reader_setter {
 
 
 /* ----------------------------------------------------------------------------
- * Structure that holds informatio about a sample.
- * It also has info about sample instances, which control
- * the sound playing from the sample.
- */
-struct sample_struct {
-    //Pointer to the sample.
-    ALLEGRO_SAMPLE* sample;
-    //Pointer to the instance.
-    ALLEGRO_SAMPLE_INSTANCE* instance;
-    
-    sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
-    void play(
-        const float max_override_pos, const bool loop,
-        const float gain = 1.0, const float pan = 0.5, const float speed = 1.0
-    );
-    void stop();
-    void destroy();
-};
-
-
-
-/* ----------------------------------------------------------------------------
  * Makes it easy to read script variables, and make changes based on which
  * ones exist, and what values they have.
  */
@@ -684,35 +687,35 @@ struct system_asset_list {
     
     //Sound effects.
     //Attack.
-    sample_struct sfx_attack;
+    ALLEGRO_SAMPLE* sfx_attack;
     //Camera zoom level.
-    sample_struct sfx_camera;
+    ALLEGRO_SAMPLE* sfx_camera;
     //Pikmin attacking.
-    sample_struct sfx_pikmin_attack;
+    ALLEGRO_SAMPLE* sfx_pikmin_attack;
     //Pikmin called.
-    sample_struct sfx_pikmin_called;
+    ALLEGRO_SAMPLE* sfx_pikmin_called;
     //Pikmin carrying.
-    sample_struct sfx_pikmin_carrying;
+    ALLEGRO_SAMPLE* sfx_pikmin_carrying;
     //Pikmin grabbing on to carry.
-    sample_struct sfx_pikmin_carrying_grab;
+    ALLEGRO_SAMPLE* sfx_pikmin_carrying_grab;
     //Pikmin caught.
-    sample_struct sfx_pikmin_caught;
+    ALLEGRO_SAMPLE* sfx_pikmin_caught;
     //Pikmin dying.
-    sample_struct sfx_pikmin_dying;
+    ALLEGRO_SAMPLE* sfx_pikmin_dying;
     //Pikmin held by leader.
-    sample_struct sfx_pikmin_held;
+    ALLEGRO_SAMPLE* sfx_pikmin_held;
     //Pikmin idling.
-    sample_struct sfx_pikmin_idle;
+    ALLEGRO_SAMPLE* sfx_pikmin_idle;
     //Pluck sound effect.
-    sample_struct sfx_pluck;
+    ALLEGRO_SAMPLE* sfx_pluck;
     //Pikmin being plucked.
-    sample_struct sfx_pikmin_plucked;
+    ALLEGRO_SAMPLE* sfx_pikmin_plucked;
     //Pikmin being thrown.
-    sample_struct sfx_pikmin_thrown;
+    ALLEGRO_SAMPLE* sfx_pikmin_thrown;
     //Switching standby Pikmin type.
-    sample_struct sfx_switch_pikmin;
+    ALLEGRO_SAMPLE* sfx_switch_pikmin;
     //Throwing.
-    sample_struct sfx_throw;
+    ALLEGRO_SAMPLE* sfx_throw;
     
     //Animations.
     //Leader damage spark.
@@ -759,7 +762,7 @@ struct notification_struct {
     float get_visibility() const;
     void reset();
     void set_contents(
-        player_input input, const string &text, const point &pos
+        const player_input &input, const string &text, const point &pos
     );
     void set_enabled(const bool enabled);
     void tick(const float delta_t);
@@ -843,7 +846,7 @@ struct keyframe_interpolator {
     public:
     float get(const float t);
     void add(const float t, const float value, EASING_METHODS ease = EASE_NONE);
-    keyframe_interpolator(const float initial_value);
+    explicit keyframe_interpolator(const float initial_value);
     
     private:
     //Keyframe times.
@@ -967,11 +970,11 @@ struct subgroup_type_manager {
     );
     subgroup_type* get_type(
         const SUBGROUP_TYPE_CATEGORIES category,
-        mob_type* specific_type = NULL
+        const mob_type* specific_type = NULL
     ) const;
     subgroup_type* get_first_type() const;
-    subgroup_type* get_prev_type(subgroup_type* sgt) const;
-    subgroup_type* get_next_type(subgroup_type* sgt) const;
+    subgroup_type* get_prev_type(const subgroup_type* sgt) const;
+    subgroup_type* get_next_type(const subgroup_type* sgt) const;
     void clear();
     
     private:

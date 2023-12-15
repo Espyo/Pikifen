@@ -138,7 +138,7 @@ protected:
         ICON_TOOLS,
         //Options.
         ICON_OPTIONS,
-        //Undo.
+        //Undo (and redo, when mirrored).
         ICON_UNDO,
         //Grid.
         ICON_GRID,
@@ -315,7 +315,7 @@ protected:
         void mark_as_changed();
         void mark_as_saved();
         void reset();
-        changes_manager(editor* ed);
+        explicit changes_manager(editor* ed);
         
         private:
         //Editor it belongs to.
@@ -387,6 +387,8 @@ protected:
     point mouse_drag_start;
     //Time left in the operation error red flash effect.
     timer op_error_flash_timer;
+    //Position of the operation error red flash effect.
+    point op_error_pos;
     //Current state.
     size_t state;
     //Status bar text.

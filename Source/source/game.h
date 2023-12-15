@@ -15,6 +15,7 @@
 
 #include "game_states/game_state.h"
 
+#include "audio.h"
 #include "area/area.h"
 #include "libs/controls_manager.h"
 #include "game_config.h"
@@ -31,6 +32,12 @@
 
 
 namespace GAME {
+extern const ALLEGRO_COLOR CURSOR_STANDARD_COLOR;
+extern const unsigned char CURSOR_TRAIL_MAX_ALPHA;
+extern const float CURSOR_TRAIL_MAX_WIDTH;
+extern const float CURSOR_TRAIL_MIN_SPOT_DIFF;
+extern const float CURSOR_TRAIL_SAVE_INTERVAL;
+extern const unsigned char CURSOR_TRAIL_SAVE_N_SPOTS;
 extern const float FADE_DURATION;
 extern const size_t FRAMERATE_AVG_SAMPLE_SIZE;
 extern const size_t FRAMERATE_HISTORY_SIZE;
@@ -76,11 +83,13 @@ class game_class {
 public:
     //List of asset file names.
     asset_file_names_struct asset_file_names;
+    //Audio.
+    audio_manager audio;
     //Manager of all main bitmaps (not floor textures).
     bmp_manager bitmaps;
     //The error bitmap used to represent bitmaps that were not loaded.
     ALLEGRO_BITMAP* bmp_error;
-    //Player 1's camera.
+    //General camera.
     camera_info cam;
     //Game's configuration.
     game_config config;
@@ -134,18 +143,14 @@ public:
     mob_category_manager mob_categories;
     //All mob types.
     mob_type_lists mob_types;
-    //OS mouse cursor position, in screen coordinates.
-    point mouse_cursor_s;
-    //OS mouse cursor position, in world coordinates.
-    point mouse_cursor_w;
+    //Mouse cursor information.
+    mouse_cursor_struct mouse_cursor;
     //Database of all mission fail conditions.
     vector<mission_fail*> mission_fail_conds;
     //Database of all mission goals.
     vector<mission_goal*> mission_goals;
     //Database of all mission score criteria.
     vector<mission_score_criterion*> mission_score_criteria;
-    //Global audio mixer.
-    ALLEGRO_MIXER* mixer;
     //User options.
     options_struct options;
     //Performance monitor.
@@ -192,8 +197,6 @@ public:
     unsigned int win_w;
     //World to screen coordinate matrix. Cache for convenience.
     ALLEGRO_TRANSFORM world_to_screen_transform;
-    //Allegro voice from which the sound effects play.
-    ALLEGRO_VOICE* voice;
     
     //Change to a different state.
     void change_state(
@@ -223,6 +226,8 @@ private:
     bool reset_delta_t;
     
     void check_system_key_press(const ALLEGRO_EVENT &ev);
+    void do_global_logic();
+    void global_handle_allegro_event(const ALLEGRO_EVENT &ev);
     
 };
 

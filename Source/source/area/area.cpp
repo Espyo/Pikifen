@@ -16,6 +16,7 @@
 #include "../game.h"
 #include "../utils/string_utils.h"
 
+
 using std::size_t;
 using std::vector;
 
@@ -331,6 +332,7 @@ void area_data::clone(area_data &other) {
         path_stop* s_ptr = path_stops[s];
         path_stop* os_ptr = other.path_stops[s];
         os_ptr->pos = s_ptr->pos;
+        s_ptr->clone(os_ptr);
         os_ptr->links.reserve(s_ptr->links.size());
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
             path_link* new_link =
@@ -807,9 +809,7 @@ void area_data::generate_blockmap() {
  * edge_list:
  *   Edges to generate the blockmap around.
  */
-void area_data::generate_edges_blockmap(vector<edge*> &edge_list) {
-    size_t b_min_x, b_max_x, b_min_y, b_max_y;
-    
+void area_data::generate_edges_blockmap(const vector<edge*> &edge_list) {
     for(size_t e = 0; e < edge_list.size(); ++e) {
     
         //Get which blocks this edge belongs to, via bounding-box,
@@ -817,19 +817,19 @@ void area_data::generate_edges_blockmap(vector<edge*> &edge_list) {
         
         edge* e_ptr = edge_list[e];
         
-        b_min_x =
+        size_t b_min_x =
             bmap.get_col(
                 std::min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x)
             );
-        b_max_x =
+        size_t b_max_x =
             bmap.get_col(
                 std::max(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x)
             );
-        b_min_y =
+        size_t b_min_y =
             bmap.get_row(
                 std::min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
             );
-        b_max_y =
+        size_t b_max_y =
             bmap.get_row(
                 std::max(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y)
             );
@@ -1230,7 +1230,7 @@ mob_gen::mob_gen(
  * Clones the properties of this mob generator onto another mob generator.
  * destination:
  *   Mob generator to clone the data into.
- * position:
+ * include_position:
  *   If true, the position is included too.
  */
 void mob_gen::clone(mob_gen* destination, const bool include_position) const {

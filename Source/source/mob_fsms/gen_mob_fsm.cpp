@@ -462,7 +462,7 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     enable_flag(m->flags, MOB_FLAG_INTANGIBLE);
     m->become_uncarriable();
     
-    m->focused_mob->fsm.run_event(MOB_EV_STARTED_RECEIVING_DELIVERY);
+    m->focused_mob->fsm.run_event(MOB_EV_STARTED_RECEIVING_DELIVERY, m);
     
     switch(m->delivery_info->anim_type) {
     case DELIVERY_ANIM_SUCK: {

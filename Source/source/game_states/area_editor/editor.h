@@ -45,7 +45,6 @@ extern const float NEW_SECTOR_ERROR_TINT_DURATION;
 extern const float PATH_LINK_THICKNESS;
 extern const float PATH_PREVIEW_CHECKPOINT_RADIUS;
 extern const float PATH_PREVIEW_TIMER_DUR;
-extern const float PATH_STOP_RADIUS;
 extern const float POINT_LETTER_TEXT_SCALE;
 extern const float REFERENCE_MIN_SIZE;
 extern const float QUICK_PREVIEW_DURATION;
@@ -155,13 +154,28 @@ private:
         layout_drawing_node();
     };
     
+    //Info pertaining a sector split operation.
+    struct sector_split_info_struct {
+        //Area data from before the split.
+        area_data* pre_split_area_data = NULL;
+        //Sector being worked on in a sector split operation.
+        sector* working_sector = NULL;
+        //Edges of the sector split sector, before the split operation.
+        vector<edge*> working_sector_old_edges;
+        //Edges traversed in each step.
+        vector<edge*> traversed_edges[2];
+        //Vertexes traversed in each step.
+        vector<vertex*> traversed_vertexes[2];
+        //During stage 1, was the working sector to the left?
+        bool is_working_at_stage_1_left = false;
+        //Nr. of drawing nodes before a useless split part 2. Or INVALID.
+        size_t useless_split_part_2_checkpoint = INVALID;
+    };
     
     //Possible results after a line drawing operation.
     enum DRAWING_LINE_RESULTS {
         //No error.
         DRAWING_LINE_OK,
-        //Made a loop while trying to split a sector.
-        DRAWING_LINE_LOOPS_IN_SPLIT,
         //Hit an existing edge or vertex when drawing a new sector.
         DRAWING_LINE_HIT_EDGE_OR_VERTEX,
         //Trying to draw along an existing edge.
@@ -170,6 +184,18 @@ private:
         DRAWING_LINE_CROSSES_EDGES,
         //Crosses previous parts of the drawing.
         DRAWING_LINE_CROSSES_DRAWING,
+        //Goes towards a sector different from the working sector.
+        DRAWING_LINE_WAYWARD_SECTOR,
+    };
+    
+    //Possible errors for a sector split operation.
+    enum SECTOR_SPLIT_RESULTS {
+        //Ok to split.
+        SECTOR_SPLIT_OK,
+        //The split is invalid.
+        SECTOR_SPLIT_INVALID,
+        //That wouldn't split in any useful way. e.g. Slice through a donut.
+        SECTOR_SPLIT_USELESS,
     };
     
     //Types of problems in the area.
@@ -250,7 +276,7 @@ private:
         EDITOR_SUB_STATE_NONE,
         //Picking a mission exit region.
         EDITOR_SUB_STATE_MISSION_EXIT,
-        //Drawing a sector.
+        //Drawing the layout.
         EDITOR_SUB_STATE_DRAWING,
         //Drawing a circular sector.
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
@@ -409,6 +435,8 @@ private:
     point octee_orig_scale;
     //Current on-canvas texture effect edit mode.
     OCTEE_MODES octee_mode;
+    //When drawing a path, use these stop flags.
+    uint8_t path_drawing_flags;
     //When drawing a path, use this label.
     string path_drawing_label;
     //When drawing a path, create normal links. False for one-way links.
@@ -465,6 +493,8 @@ private:
     point quick_height_set_start_pos;
     //Time left in the quick preview mode, including fade out.
     timer quick_preview_timer;
+    //Redo history, with the state of the area at each point. Front = latest.
+    deque<std::pair<area_data*, string> > redo_history;
     //Opacity of the reference image.
     unsigned char reference_alpha;
     //Reference image center.
@@ -477,6 +507,8 @@ private:
     string reference_file_name;
     //Keep the aspect ratio when resizing the reference?
     bool reference_keep_aspect_ratio;
+    //Info about the current sector split operation.
+    sector_split_info_struct sector_split_info;
     //Currently selected edges.
     set<edge*> selected_edges;
     //Currently selected mobs.
@@ -531,12 +563,6 @@ private:
     bool show_shadows;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
-    //Undo history, with the state of the area at each point.
-    std::deque<std::pair<area_data*, string> > undo_history;
-    //Name of the undo operation responsible for the lock.
-    string undo_save_lock_operation;
-    //During this timer, don't save state for operations matching the last one.
-    timer undo_save_lock_timer;
     //Position of the load widget.
     point load_widget_pos;
     //Position of the reload widget.
@@ -547,6 +573,12 @@ private:
     bool thumbnail_needs_saving;
     //Was the area's thumbnail changed in any way since the last backup save?
     bool thumbnail_backup_needs_saving;
+    //Undo history, with the state of the area at each point. Front = latest.
+    deque<std::pair<area_data*, string> > undo_history;
+    //Name of the undo operation responsible for the lock.
+    string undo_save_lock_operation;
+    //During this timer, don't save state for operations matching the last one.
+    timer undo_save_lock_timer;
     
     //General functions.
     bool are_nodes_traversable(
@@ -578,11 +610,11 @@ private:
     void copy_path_link_properties();
     void copy_sector_properties();
     void create_area(
-        string requested_area_folder_name,
+        const string &requested_area_folder_name,
         const AREA_TYPES requested_area_type
     );
     void create_or_load_area(
-        string requested_area_folder_name,
+        const string &requested_area_folder_name,
         const AREA_TYPES requested_area_type
     );
     void create_drawing_vertexes();
@@ -594,6 +626,7 @@ private:
     void delete_mobs(const set<mob_gen*> &which);
     void delete_path_links(const set<path_link*> &which);
     void delete_path_stops(const set<path_stop*> &which);
+    void do_sector_split();
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
@@ -625,7 +658,9 @@ private:
         vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
     ) const;
     bool get_drawing_outer_sector(sector** result) const;
-    edge* get_edge_under_point(const point &p, edge* after = NULL) const;
+    edge* get_edge_under_point(
+        const point &p, const edge* after = NULL
+    ) const;
     vector<edge_intersection> get_intersecting_edges() const;
     size_t get_mission_required_mob_count() const;
     float get_mob_gen_radius(mob_gen* m) const;
@@ -640,16 +675,19 @@ private:
     ) const;
     string get_path_short_name(const string &p) const;
     path_stop* get_path_stop_under_point(const point &p) const;
+    SECTOR_SPLIT_RESULTS get_sector_split_evaluation();
     sector* get_sector_under_point(const point &p) const;
     vertex* get_vertex_under_point(const point &p) const;
+    void go_to_undo_history_point(size_t p);
     void goto_problem();
     void handle_line_error();
     void homogenize_selected_edges();
     void homogenize_selected_mobs();
     void homogenize_selected_path_links();
+    void homogenize_selected_path_stops();
     void homogenize_selected_sectors();
     void load_area(
-        string requested_area_folder_name,
+        const string &requested_area_folder_name,
         const AREA_TYPES requested_area_type,
         const bool from_backup, const bool should_update_history
     );
@@ -665,6 +703,8 @@ private:
     void paste_sector_properties();
     void paste_sector_texture();
     area_data* prepare_state();
+    void recreate_drawing_nodes();
+    void redo();
     void register_change(
         const string &operation_name, area_data* pre_prepared_change = NULL
     );
@@ -676,14 +716,15 @@ private:
     void save_backup();
     void save_reference();
     void select_edge(edge* e_ptr);
-    void select_path_links_with_label(const string &label);
+    void select_path_stops_with_label(const string &label);
     void select_sector(sector* s_ptr);
     void select_tree_shadow(tree_shadow* s_ptr);
     void select_vertex(vertex* v_ptr);
-    void set_selection_status_text();
     void set_new_circle_sector_points();
+    void set_selection_status_text();
+    void set_state_from_undo_or_redo_history(area_data* state);
+    void setup_sector_split();
     point snap_point(const point &p, const bool ignore_selected = false);
-    void split_sector_with_drawing();
     vertex* split_edge(edge* e_ptr, const point &where);
     path_stop* split_path_link(
         path_link* l1, path_link* l2,
@@ -693,7 +734,7 @@ private:
     void start_path_stop_move();
     void start_vertex_move();
     void traverse_sector_for_split(
-        sector* s_ptr, vertex* begin, vertex* checkpoint,
+        const sector* s_ptr, vertex* begin, vertex* checkpoint,
         vector<edge*>* edges, vector<vertex*>* vertexes,
         bool* working_sector_left
     );
@@ -705,9 +746,10 @@ private:
     void update_all_edge_offset_caches();
     void update_inner_sectors_outer_sector(
         const vector<edge*> &edges_to_check,
-        sector* old_outer, sector* new_outer
+        const sector* old_outer, sector* new_outer
     );
     void update_reference();
+    void update_layout_drawing_status_text();
     void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_texture_suggestions(const string &n);
     void update_undo_history();
@@ -753,12 +795,13 @@ private:
     void press_grid_interval_increase_button();
     void press_new_mob_button();
     void press_new_path_button();
-    void press_new_sector_button();
+    void press_layout_drawing_button();
     void press_new_tree_shadow_button();
     void press_paste_properties_button();
     void press_paste_texture_button();
     void press_quick_play_button();
     void press_quit_button();
+    void press_redo_button();
     void press_reference_button();
     void press_reload_button();
     void press_remove_edge_button();
@@ -790,6 +833,7 @@ private:
     void process_gui_panel_mob();
     void process_gui_panel_mobs();
     void process_gui_panel_path_link();
+    void process_gui_panel_path_stop();
     void process_gui_panel_paths();
     void process_gui_panel_review();
     void process_gui_panel_sector();

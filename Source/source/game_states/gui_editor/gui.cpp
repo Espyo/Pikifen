@@ -166,10 +166,10 @@ void gui_editor::process_gui_control_panel() {
 void gui_editor::process_gui_load_dialog() {
     //History node.
     process_gui_history(
-    [this](const string & name) -> string {
+    [this](const string &name) -> string {
         return name;
     },
-    [this](const string & name) {
+    [this](const string &name) {
         file_name = name;
         load_file(true);
         close_top_dialog();
@@ -486,7 +486,11 @@ void gui_editor::process_gui_panel_items() {
     ImGui::Text("Items:");
     
     //Item list.
-    if(ImGui::BeginChild("itemsList", ImVec2(0.0f, 300.0f), true)) {
+    if(
+        ImGui::BeginChild(
+            "itemsList", ImVec2(0.0f, 300.0f), ImGuiChildFlags_Border
+        )
+    ) {
         for(size_t i = 0; i < items.size(); ++i) {
         
             //Item checkbox.
@@ -554,8 +558,8 @@ void gui_editor::process_gui_status_bar() {
         ImGui::SameLine();
         ImGui::Text(
             "%s, %s",
-            box_string(f2s(game.mouse_cursor_w.x), 7, "%").c_str(),
-            box_string(f2s(game.mouse_cursor_w.y), 7, "%").c_str()
+            box_string(f2s(game.mouse_cursor.w_pos.x), 7, "%").c_str(),
+            box_string(f2s(game.mouse_cursor.w_pos.y), 7, "%").c_str()
         );
     }
 }

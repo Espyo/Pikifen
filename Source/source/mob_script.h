@@ -70,6 +70,8 @@ enum MOB_EV_TYPES {
     MOB_EV_HELD,
     //When one of its normal hitboxes touches another mob's eating hitbox.
     MOB_EV_HITBOX_TOUCH_EAT,
+    //When the player performs an input.
+    MOB_EV_INPUT_RECEIVED,
     //When it has been damaged enough to want to shake.
     MOB_EV_ITCH,
     //When it leaves a hazard in a sector.
@@ -209,6 +211,7 @@ enum MOB_EV_TYPES {
     LEADER_EV_MUST_SEARCH_SEED,
     //When the leader's pluck is canceled.
     LEADER_EV_CANCEL,
+    
     
     //Total.
     

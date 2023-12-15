@@ -437,7 +437,10 @@ void mob::tick_horizontal_movement_physics(
         } else {
             new_ground_sector = new_center_sector;
         }
-        
+        if (z + GEOMETRY::STEP_HEIGHT < new_center_sector->z) {
+            //We can't walk onto this sector. Refuse the move.
+            return;
+        }
         //Get all edges it collides against in this new position.
         vector<edge*> intersecting_edges;
         if(
@@ -614,10 +617,7 @@ void mob::tick_physics(const float delta_t) {
     }
     
     //Initial setup.
-    float move_speed_mult = 1.0f;
-    for(size_t s = 0; s < this->statuses.size(); ++s) {
-        move_speed_mult *= this->statuses[s].type->speed_multiplier;
-    }
+    float move_speed_mult = get_speed_multiplier();
     
     point pre_move_pos = pos;
     point move_speed = speed;

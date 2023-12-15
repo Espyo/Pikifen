@@ -184,12 +184,11 @@ onion_menu_struct::onion_menu_struct(
     );
     select_all_check->on_activate =
     [this, select_all_check] (const point &) {
-        select_all = !select_all;
         grow_buttons();
         select_all_check->start_juice_animation(
             gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
-        update();
+        toggle_select_all();
     };
     select_all_check->visible = types.size() > 1;
     select_all_check->selectable = types.size() > 1;
@@ -735,7 +734,7 @@ void onion_menu_struct::start_closing() {
     gui.start_animation(
         GUI_MANAGER_ANIM_CENTER_TO_UP, GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );
-    game.states.gameplay->hud->gui.start_animation(
+    game.states.gameplay->player_info[l_ptr->active_player].hud->gui.start_animation(
         GUI_MANAGER_ANIM_OUT_TO_IN,
         GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
     );

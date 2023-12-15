@@ -26,7 +26,10 @@ leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS),
     whistle_range(LEADER::DEF_WHISTLE_RANGE),
     max_throw_height(0),
-    bmp_icon(nullptr) {
+    bmp_icon(nullptr),
+    sfx_whistle(nullptr),
+    sfx_dismiss(nullptr),
+    sfx_name_call(nullptr) {
     
     main_color = al_map_rgb(128, 128, 128);
     show_health = false;
@@ -99,7 +102,6 @@ void leader_type::load_resources(data_node* file) {
     rs.set("name_call_sfx", name_call_sfx_str);
     rs.set("whistle_sfx", whistle_sfx_str);
     
-    //TODO Replace load_sample with something better when it exists.
     bmp_icon = game.bitmaps.get(icon_str, icon_node);
     if(!dismiss_sfx_str.empty()) {
         sfx_dismiss = load_sample(dismiss_sfx_str);
@@ -118,10 +120,7 @@ void leader_type::load_resources(data_node* file) {
  */
 void leader_type::unload_resources() {
     game.bitmaps.detach(bmp_icon);
-    //TODO these samples are only being destroyed here because
-    //they're being created in load_resource() with load_samples.
-    //When the loading changes, update this unload accordingly.
-    sfx_dismiss.destroy();
-    sfx_name_call.destroy();
-    sfx_whistle.destroy();
+    game.audio.samples.detach(sfx_dismiss);
+    game.audio.samples.detach(sfx_name_call);
+    game.audio.samples.detach(sfx_whistle);
 }

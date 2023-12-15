@@ -24,7 +24,7 @@ using std::string;
 
 
 void load_area(
-    string requested_area_folder_name,
+    const string &requested_area_folder_name,
     const AREA_TYPES requested_area_type,
     const bool load_for_editor, const bool from_backup
 );
@@ -51,7 +51,10 @@ void load_liquids(const bool load_resources);
 void load_misc_graphics();
 void load_misc_sounds();
 void load_options();
-sample_struct load_sample(const string &file_name);
+ALLEGRO_SAMPLE* load_sample(
+    const string &file_name, data_node* node = NULL,
+    bool report_errors = true
+);
 void load_spike_damage_types();
 void load_spray_types(const bool load_resources);
 void load_statistics();

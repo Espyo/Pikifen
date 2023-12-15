@@ -25,7 +25,19 @@ void gameplay_state::handle_player_action(const player_action &action) {
     
     bool is_down = (action.value >= 0.5);
     
-    if(!msg_box && !onion_menu && !pause_menu) {
+    //Before we do the actions, we'll tell the leader object
+    //it's recieved an input, which will trigger an event.
+    int player_id = action.player_id;
+    leader* cur_leader_ptr = player_info[player_id].cur_leader_ptr;
+
+    if(cur_leader_ptr) {
+        cur_leader_ptr->fsm.run_event(
+            MOB_EV_INPUT_RECEIVED,
+            (void*) &action
+        );
+    }
+    
+    if(!player_info[player_id].msg_box && !player_info[player_id].onion_menu && !pause_menu) {
     
         switch(action.action_type_id) {
         case PLAYER_ACTION_THROW: {
@@ -54,9 +66,9 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 if(
                     !done &&
                     cur_leader_ptr &&
-                    close_to_ship_to_heal
+                    player_info[player_id].close_to_ship_to_heal
                 ) {
-                    close_to_ship_to_heal->heal_leader(cur_leader_ptr);
+                    player_info[player_id].close_to_ship_to_heal->heal_leader(cur_leader_ptr);
                     done = true;
                 }
                 
@@ -64,11 +76,11 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 if(
                     !done &&
                     cur_leader_ptr &&
-                    close_to_pikmin_to_pluck
+                    player_info[player_id].close_to_pikmin_to_pluck
                 ) {
                     cur_leader_ptr->fsm.run_event(
                         LEADER_EV_GO_PLUCK,
-                        (void*) close_to_pikmin_to_pluck
+                        (void*)player_info[player_id].close_to_pikmin_to_pluck
                     );
                     done = true;
                 }
@@ -77,13 +89,13 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 if(
                     !done &&
                     cur_leader_ptr &&
-                    close_to_nest_to_open
+                    player_info[player_id].close_to_nest_to_open
                 ) {
-                    onion_menu = new onion_menu_struct(
-                        close_to_nest_to_open,
+                    player_info[player_id].onion_menu = new onion_menu_struct(
+                        player_info[player_id].close_to_nest_to_open,
                         cur_leader_ptr
                     );
-                    hud->gui.start_animation(
+                    player_info[player_id].hud->gui.start_animation(
                         GUI_MANAGER_ANIM_IN_TO_OUT,
                         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
                     );
@@ -99,11 +111,11 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 if(
                     !done &&
                     cur_leader_ptr &&
-                    close_to_interactable_to_use
+                    player_info[player_id].close_to_interactable_to_use
                 ) {
                     string msg = "interact";
                     cur_leader_ptr->send_message(
-                        close_to_interactable_to_use, msg
+                        player_info[player_id].close_to_interactable_to_use, msg
                     );
                     done = true;
                 }
@@ -114,11 +126,11 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     cur_leader_ptr &&
                     cur_leader_ptr->holding.empty() &&
                     cur_leader_ptr->group->cur_standby_type &&
-                    !closest_group_member_distant
+                    !player_info[player_id].closest_group_member_distant
                 ) {
                     switch (game.options.auto_throw_mode) {
                     case AUTO_THROW_OFF: {
-                        done = grab_closest_group_member();
+                        done = grab_closest_group_member(player_id);
                         break;
                     } case AUTO_THROW_HOLD:
                     case AUTO_THROW_TOGGLE: {
@@ -211,7 +223,8 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             change_to_next_leader(
                 action.action_type_id == PLAYER_ACTION_NEXT_LEADER,
-                false, false
+                false, false,
+                player_id
             );
             
             break;
@@ -244,7 +257,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             pause_menu = new pause_menu_struct();
             paused = true;
-            hud->gui.start_animation(
+            player_info[player_id].hud->gui.start_animation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
                 GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME
             );
@@ -302,13 +315,14 @@ void gameplay_state::handle_player_action(const player_action &action) {
             
             if(cur_leader_ptr) {
                 if(game.spray_types.size() > 2) {
-                    selected_spray =
+                    player_info[player_id].selected_spray =
                         sum_and_wrap(
-                            (int) selected_spray,
-                            action.action_type_id == PLAYER_ACTION_NEXT_SPRAY ? +1 : -1,
+                            (int) player_info[player_id].selected_spray,
+                            action.action_type_id ==
+                            PLAYER_ACTION_NEXT_SPRAY ? +1 : -1,
                             (int) game.spray_types.size()
                         );
-                    game.states.gameplay->hud->
+                    game.states.gameplay->player_info[player_id].hud->
                     spray_1_amount->start_juice_animation(
                         gui_item::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
                     );
@@ -325,7 +339,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 if(game.spray_types.size() > 2) {
                     cur_leader_ptr->fsm.run_event(
                         LEADER_EV_SPRAY,
-                        (void*) &selected_spray
+                        (void*) &player_info[player_id].selected_spray
                     );
                 }
             }
@@ -354,7 +368,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 }
             }
             
-            game.sys_assets.sfx_camera.play(0, false);
+            game.audio.create_world_global_sfx_source(game.sys_assets.sfx_camera);
             
             break;
             
@@ -390,7 +404,12 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 game.cam.target_zoom = game.config.zoom_min_level;
             }
             
-            game.sys_assets.sfx_camera.play(-1, false);
+            sfx_source_config_struct cam_sfx_config;
+            cam_sfx_config.stack_mode = SFX_STACK_NEVER;
+            game.audio.create_world_global_sfx_source(
+                game.sys_assets.sfx_camera,
+                cam_sfx_config
+            );
             
             break;
             
@@ -461,8 +480,8 @@ void gameplay_state::handle_player_action(const player_action &action) {
                             
                         } else {
                             //Switched to a new subgroup.
-                            update_closest_group_members();
-                            if(!closest_group_member_distant) {
+                            player_info[player_id].update_closest_group_members();
+                            if(!player_info[player_id].closest_group_member_distant) {
                                 finish = true;
                             }
                             
@@ -472,13 +491,15 @@ void gameplay_state::handle_player_action(const player_action &action) {
                     
                     if(switch_successful) {
                         cur_leader_ptr->swap_held_pikmin(
-                            closest_group_member[BUBBLE_CURRENT]
+                            player_info[player_id].closest_group_member[BUBBLE_CURRENT]
                         );
                     }
                 }
                 
                 if(switch_successful) {
-                    game.sys_assets.sfx_switch_pikmin.play(0, false);
+                    game.audio.create_world_global_sfx_source(
+                        game.sys_assets.sfx_switch_pikmin
+                    );
                 }
             }
             
@@ -536,7 +557,10 @@ void gameplay_state::handle_player_action(const player_action &action) {
                 next_maturity =
                     (size_t) sum_and_wrap(
                         (int) next_maturity,
-                        (action.action_type_id == PLAYER_ACTION_NEXT_MATURITY ? 1 : -1),
+                        (
+                            action.action_type_id ==
+                            PLAYER_ACTION_NEXT_MATURITY ? 1 : -1
+                        ),
                         N_MATURITIES
                     );
                     
@@ -562,11 +586,16 @@ void gameplay_state::handle_player_action(const player_action &action) {
         }
         }
         
-    } else if(msg_box) {
+    } else if(player_info[player_id].msg_box) {
     
         //Displaying a message.
-        if((action.action_type_id == PLAYER_ACTION_THROW || action.action_type_id == PLAYER_ACTION_PAUSE) && is_down) {
-            msg_box->advance();
+        if(
+            (
+                action.action_type_id == PLAYER_ACTION_THROW ||
+                action.action_type_id == PLAYER_ACTION_PAUSE
+            ) && is_down
+        ) {
+            player_info[player_id].msg_box->advance();
         }
         
     }
@@ -585,16 +614,16 @@ void gameplay_state::handle_player_action(const player_action &action) {
         
         switch(action.action_type_id) {
         case PLAYER_ACTION_RIGHT: {
-            leader_movement.right = action.value;
+            player_info[player_id].leader_movement.right = action.value;
             break;
         } case PLAYER_ACTION_LEFT: {
-            leader_movement.left = action.value;
+            player_info[player_id].leader_movement.left = action.value;
             break;
         } case PLAYER_ACTION_UP: {
-            leader_movement.up = action.value;
+            player_info[player_id].leader_movement.up = action.value;
             break;
         } case PLAYER_ACTION_DOWN: {
-            leader_movement.down = action.value;
+            player_info[player_id].leader_movement.down = action.value;
             break;
         } default: {
             break;
@@ -615,16 +644,16 @@ void gameplay_state::handle_player_action(const player_action &action) {
         
         switch(action.action_type_id) {
         case PLAYER_ACTION_CURSOR_RIGHT: {
-            cursor_movement.right = action.value;
+            player_info[player_id].cursor_movement.right = action.value;
             break;
         } case PLAYER_ACTION_CURSOR_LEFT: {
-            cursor_movement.left = action.value;
+            player_info[player_id].cursor_movement.left = action.value;
             break;
         } case PLAYER_ACTION_CURSOR_UP: {
-            cursor_movement.up = action.value;
+            player_info[player_id].cursor_movement.up = action.value;
             break;
         } case PLAYER_ACTION_CURSOR_DOWN: {
-            cursor_movement.down = action.value;
+            player_info[player_id].cursor_movement.down = action.value;
             break;
         } default: {
             break;
@@ -645,16 +674,16 @@ void gameplay_state::handle_player_action(const player_action &action) {
         
         switch(action.action_type_id) {
         case PLAYER_ACTION_GROUP_RIGHT: {
-            swarm_movement.right = action.value;
+            player_info[player_id].swarm_movement.right = action.value;
             break;
         } case PLAYER_ACTION_GROUP_LEFT: {
-            swarm_movement.left = action.value;
+            player_info[player_id].swarm_movement.left = action.value;
             break;
         } case PLAYER_ACTION_GROUP_UP: {
-            swarm_movement.up = action.value;
+            player_info[player_id].swarm_movement.up = action.value;
             break;
         } case PLAYER_ACTION_GROUP_DOWN: {
-            swarm_movement.down = action.value;
+            player_info[player_id].swarm_movement.down = action.value;
             break;
         } default: {
             break;
@@ -665,7 +694,7 @@ void gameplay_state::handle_player_action(const player_action &action) {
         
     } case PLAYER_ACTION_GROUP_CURSOR: {
 
-        swarm_cursor = is_down;
+        player_info[player_id].swarm_cursor = is_down;
         
         break;
         

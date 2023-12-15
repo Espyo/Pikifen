@@ -38,6 +38,8 @@ area_menu_state::area_menu_state() :
     game_state(),
     area_type(AREA_TYPE_SIMPLE),
     bmp_menu_bg(nullptr),
+    info_box(nullptr),
+    specs_box(nullptr),
     cur_area_idx(INVALID),
     list_box(nullptr),
     first_area_button(nullptr),
@@ -400,6 +402,8 @@ void area_menu_state::do_drawing() {
     );
     
     gui.draw();
+    
+    draw_mouse_cursor(GAME::CURSOR_STANDARD_COLOR);
     
     game.fade_mgr.draw();
     
