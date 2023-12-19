@@ -4002,11 +4002,11 @@ void area_editor::process_gui_panel_mob() {
                     ImVec2(EDITOR::ICON_BMP_SIZE, EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                if((*selected_mobs.begin())->links.empty()) {
-                    set_status(
-                        "This mob has no links to delete!",
-                        true
-                    );
+                if((*selected_mobs.begin())->links.size() == 1) {
+                    register_change("Object link deletion");
+                    m_ptr->links.erase(m_ptr->links.begin());
+                    m_ptr->link_nrs.erase(m_ptr->link_nrs.begin());
+                    homogenize_selected_mobs();
                 } else if(sub_state == EDITOR_SUB_STATE_DEL_MOB_LINK) {
                     sub_state = EDITOR_SUB_STATE_NONE;
                 } else {
@@ -4014,9 +4014,10 @@ void area_editor::process_gui_panel_mob() {
                 }
             }
             set_tooltip(
-                "Start deleting an object link.\n"
-                "Click on the other object whose link you want to delete, "
-                "or click the link proper."
+                "Delete an object link.\n"
+                "If there is only one, it gets deleted automatically.\n"
+                "Otherwise, you must click on the other object whose\n"
+                "link you want to delete, or click the link proper."
             );
         }
         
