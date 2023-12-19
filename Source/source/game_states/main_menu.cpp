@@ -151,11 +151,13 @@ void main_menu_state::do_logic() {
     }
     
     vector<player_action> player_actions = game.controls.new_frame();
-    for(size_t a = 0; a < player_actions.size(); ++a) {
-        main_gui.handle_player_action(player_actions[a]);
-        play_gui.handle_player_action(player_actions[a]);
-        make_gui.handle_player_action(player_actions[a]);
-        tutorial_gui.handle_player_action(player_actions[a]);
+    if(!game.fade_mgr.is_fading()) {
+        for(size_t a = 0; a < player_actions.size(); ++a) {
+            main_gui.handle_player_action(player_actions[a]);
+            play_gui.handle_player_action(player_actions[a]);
+            make_gui.handle_player_action(player_actions[a]);
+            tutorial_gui.handle_player_action(player_actions[a]);
+        }
     }
     
     main_gui.tick(game.delta_t);
@@ -192,8 +194,6 @@ void main_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     play_gui.handle_event(ev);
     make_gui.handle_event(ev);
     tutorial_gui.handle_event(ev);
-    
-    game.controls.handle_allegro_event(ev);
 }
 
 

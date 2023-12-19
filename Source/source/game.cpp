@@ -103,7 +103,7 @@ game_class::game_class() :
  * unload_current:
  *   If true, the current state is unloaded from memory.
  * load_new:
- *   If true, the new state is loaded from memory. If you try to change to
+ *   If true, the new state is loaded to memory. If you try to change to
  *   that state when it is not loaded, things will go wrong.
  */
 void game_class::change_state(
@@ -234,6 +234,7 @@ void game_class::main_loop() {
         
         global_handle_allegro_event(ev);
         cur_state->handle_allegro_event(ev);
+        controls.handle_allegro_event(ev);
         
         switch(ev.type) {
         case ALLEGRO_EVENT_TIMER: {

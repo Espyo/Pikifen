@@ -578,9 +578,6 @@ void gameplay_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
         game.controls.release_all();
     }
     
-    //Feed player inputs to the controls manager.
-    game.controls.handle_allegro_event(ev);
-    
     //Finally, let the HUD handle events.
     hud->gui.handle_event(ev);
     

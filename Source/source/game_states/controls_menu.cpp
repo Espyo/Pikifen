@@ -191,7 +191,6 @@ void control_binds_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     } else {
     
         gui.handle_event(ev);
-        game.controls.handle_allegro_event(ev);
         
     }
     

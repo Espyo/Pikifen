@@ -128,12 +128,14 @@ void options_menu_state::do_drawing() {
  */
 void options_menu_state::do_logic() {
     vector<player_action> player_actions = game.controls.new_frame();
-    for(size_t a = 0; a < player_actions.size(); ++a) {
-        top_gui.handle_player_action(player_actions[a]);
-        controls_gui.handle_player_action(player_actions[a]);
-        graphics_gui.handle_player_action(player_actions[a]);
-        audio_gui.handle_player_action(player_actions[a]);
-        misc_gui.handle_player_action(player_actions[a]);
+    if(!game.fade_mgr.is_fading()) {
+        for(size_t a = 0; a < player_actions.size(); ++a) {
+            top_gui.handle_player_action(player_actions[a]);
+            controls_gui.handle_player_action(player_actions[a]);
+            graphics_gui.handle_player_action(player_actions[a]);
+            audio_gui.handle_player_action(player_actions[a]);
+            misc_gui.handle_player_action(player_actions[a]);
+        }
     }
     
     top_gui.tick(game.delta_t);
@@ -177,7 +179,6 @@ void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
     graphics_gui.handle_event(ev);
     audio_gui.handle_event(ev);
     misc_gui.handle_event(ev);
-    game.controls.handle_allegro_event(ev);
 }
 
 
