@@ -766,7 +766,7 @@ void pause_menu_struct::init_main_pause_menu() {
     text_gui_item* header_text =
         new text_gui_item(
         "PAUSED", game.fonts.area_name,
-        al_map_rgba(255, 255, 255, 128)
+        COLOR_TRANSPARENT_WHITE
     );
     gui.add_item(header_text, "header");
     
@@ -824,7 +824,7 @@ void pause_menu_struct::init_main_pause_menu() {
             center,
             point(size.x, 3.0f),
             2.0f,
-            al_map_rgba(255, 255, 255, 128)
+            COLOR_TRANSPARENT_WHITE
         );
     };
     gui.add_item(line, "line");
@@ -1005,7 +1005,7 @@ void pause_menu_struct::init_mission_page() {
     text_gui_item* header_text =
         new text_gui_item(
         "MISSION", game.fonts.area_name,
-        al_map_rgba(255, 255, 255, 128)
+        COLOR_TRANSPARENT_WHITE
     );
     mission_gui.add_item(header_text, "header");
     
@@ -1061,7 +1061,7 @@ void pause_menu_struct::init_mission_page() {
             center,
             point(size.x, 3.0f),
             2.0f,
-            al_map_rgba(255, 255, 255, 128)
+            COLOR_TRANSPARENT_WHITE
         );
     };
     mission_gui.add_item(line, "line");

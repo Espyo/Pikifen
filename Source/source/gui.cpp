@@ -1174,7 +1174,7 @@ list_gui_item::list_gui_item() :
     on_draw =
     [this] (const point & center, const point & size) {
         draw_rounded_rectangle(
-            center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+            center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 1.0f
         );
         if(offset > 0.0f) {
             //Shade effect at the top.

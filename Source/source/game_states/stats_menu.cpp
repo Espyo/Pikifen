@@ -190,6 +190,7 @@ void stats_menu_state::load() {
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("header",      50,  5, 50,  6);
     gui.register_coords("list",        50, 51, 76, 82);
     gui.register_coords("list_scroll", 91, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
@@ -207,6 +208,14 @@ void stats_menu_state::load() {
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the main menu."; };
     gui.add_item(gui.back_item, "back");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "STATISTICS",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    gui.add_item(header_text, "header");
     
     //Statistics list.
     stats_list = new list_gui_item();

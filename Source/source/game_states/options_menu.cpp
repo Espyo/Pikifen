@@ -188,6 +188,7 @@ void options_menu_state::handle_allegro_event(ALLEGRO_EVENT &ev) {
 void options_menu_state::init_gui_audio_page() {
     //Menu items.
     audio_gui.register_coords("back",    12,  5, 20, 6);
+    audio_gui.register_coords("header",  50, 10, 50, 6);
     audio_gui.register_coords("tooltip", 50, 96, 96, 4);
     audio_gui.read_coords(
         data_node(OPTIONS_MENU::AUDIO_GUI_FILE_PATH).
@@ -214,6 +215,14 @@ void options_menu_state::init_gui_audio_page() {
     [] () { return "Return to the top-level options menu."; };
     audio_gui.add_item(audio_gui.back_item, "back");
     
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "AUDIO OPTIONS",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    audio_gui.add_item(header_text, "header");
+    
     //Tooltip text.
     tooltip_gui_item* tooltip_text =
         new tooltip_gui_item(&audio_gui);
@@ -232,9 +241,10 @@ void options_menu_state::init_gui_audio_page() {
 void options_menu_state::init_gui_controls_page() {
     //Menu items.
     controls_gui.register_coords("back",          12,  5,   20,  6);
-    controls_gui.register_coords("control_binds", 50, 22.5, 70, 15);
-    controls_gui.register_coords("cursor_speed",  50, 45,   70, 15);
-    controls_gui.register_coords("auto_throw",    50, 62.5, 70, 15);
+    controls_gui.register_coords("header",        50, 10,   50,  6);
+    controls_gui.register_coords("control_binds", 50, 27.5, 70, 15);
+    controls_gui.register_coords("cursor_speed",  50, 50,   70, 15);
+    controls_gui.register_coords("auto_throw",    50, 67.5, 70, 15);
     controls_gui.register_coords("tooltip",       50, 96,   96,  4);
     controls_gui.read_coords(
         data_node(OPTIONS_MENU::CONTROLS_GUI_FILE_PATH).
@@ -260,6 +270,14 @@ void options_menu_state::init_gui_controls_page() {
     controls_gui.back_item->on_get_tooltip =
     [] () { return "Return to the top-level options menu."; };
     controls_gui.add_item(controls_gui.back_item, "back");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "CONTROLS OPTIONS",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    controls_gui.add_item(header_text, "header");
     
     //Control binds button.
     button_gui_item* control_binds_button =
@@ -323,10 +341,11 @@ void options_menu_state::init_gui_controls_page() {
 void options_menu_state::init_gui_graphics_page() {
     //Menu items.
     graphics_gui.register_coords("back",            12,  5,   20,  6);
-    graphics_gui.register_coords("fullscreen",      50, 22.5, 70, 15);
-    graphics_gui.register_coords("resolution",      50, 40,   70, 15);
+    graphics_gui.register_coords("header",          50, 10,   50,  6);
+    graphics_gui.register_coords("fullscreen",      50, 27.5, 70, 15);
+    graphics_gui.register_coords("resolution",      50, 45,   70, 15);
     graphics_gui.register_coords("tooltip",         50, 96,   96,  4);
-    graphics_gui.register_coords("restart_warning", 63,  5,   70,  6);
+    graphics_gui.register_coords("restart_warning", 50, 85,   70,  6);
     graphics_gui.read_coords(
         data_node(OPTIONS_MENU::GRAPHICS_GUI_FILE_PATH).
         get_child_by_name("positions")
@@ -351,6 +370,14 @@ void options_menu_state::init_gui_graphics_page() {
     graphics_gui.back_item->on_get_tooltip =
     [] () { return "Return to the top-level options menu."; };
     graphics_gui.add_item(graphics_gui.back_item, "back");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "GRAPHICS OPTIONS",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    graphics_gui.add_item(header_text, "header");
     
     //Fullscreen checkbox.
     check_gui_item* fullscreen_check =
@@ -409,7 +436,7 @@ void options_menu_state::init_gui_graphics_page() {
     warning_text =
         new text_gui_item(
         "Please restart for the changes to take effect.",
-        game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
+        game.fonts.standard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
     );
     warning_text->visible = false;
     graphics_gui.add_item(warning_text, "restart_warning");
@@ -432,9 +459,10 @@ void options_menu_state::init_gui_graphics_page() {
 void options_menu_state::init_gui_misc_page() {
     //Menu items.
     misc_gui.register_coords("back",                 12,  5,   20,  6);
-    misc_gui.register_coords("cursor_cam_weight",    50, 20,   70, 15);
-    misc_gui.register_coords("show_hud_input_icons", 50, 37.5, 70, 15);
-    misc_gui.register_coords("leaving_confirmation", 50, 55,   70, 15);
+    misc_gui.register_coords("header",               50, 10,   50,  6);
+    misc_gui.register_coords("cursor_cam_weight",    50, 25,   70, 15);
+    misc_gui.register_coords("show_hud_input_icons", 50, 42.5, 70, 15);
+    misc_gui.register_coords("leaving_confirmation", 50, 60,   70, 15);
     misc_gui.register_coords("tooltip",              50, 96,   96,  4);
     misc_gui.read_coords(
         data_node(OPTIONS_MENU::MISC_GUI_FILE_PATH).
@@ -460,6 +488,14 @@ void options_menu_state::init_gui_misc_page() {
     misc_gui.back_item->on_get_tooltip =
     [] () { return "Return to the top-level options menu."; };
     misc_gui.add_item(misc_gui.back_item, "back");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "MISC. OPTIONS",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    misc_gui.add_item(header_text, "header");
     
     //Cursor camera weight.
     cursor_cam_weight_picker =
@@ -530,6 +566,7 @@ void options_menu_state::init_gui_misc_page() {
 void options_menu_state::init_gui_top_page() {
     //Menu items.
     top_gui.register_coords("back",     12,  5,   20,  6);
+    top_gui.register_coords("header",   50, 10,   50,  6);
     top_gui.register_coords("controls", 50, 27.5, 65, 10);
     top_gui.register_coords("graphics", 50, 42.5, 65, 10);
     top_gui.register_coords("audio",    50, 57.5, 65, 10);
@@ -551,6 +588,14 @@ void options_menu_state::init_gui_top_page() {
     top_gui.back_item->on_get_tooltip =
     [] () { return "Return to the main menu."; };
     top_gui.add_item(top_gui.back_item, "back");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "OPTIONS",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    top_gui.add_item(header_text, "header");
     
     //Controls options button.
     button_gui_item* controls_button =

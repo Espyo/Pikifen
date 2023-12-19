@@ -611,7 +611,7 @@ void results_state::load() {
             center, size, 8.0f, al_map_rgba(0, 0, 0, 40)
         );
         draw_rounded_rectangle(
-            center, size, 8.0f, al_map_rgba(255, 255, 255, 128), 1.0f
+            center, size, 8.0f, COLOR_TRANSPARENT_WHITE, 1.0f
         );
     };
     gui.add_item(stats_list, "stats");

@@ -1610,7 +1610,7 @@ void area_editor::draw_canvas() {
                     ((central_sector->z - lowest_z) * proportion);
                 al_draw_tinted_scaled_bitmap(
                     game.sys_assets.bmp_leader_silhouette_side,
-                    al_map_rgba(255, 255, 255, 128),
+                    COLOR_TRANSPARENT_WHITE,
                     0, 0,
                     al_get_bitmap_width(
                         game.sys_assets.bmp_leader_silhouette_side

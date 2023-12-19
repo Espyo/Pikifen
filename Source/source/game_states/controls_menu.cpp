@@ -224,6 +224,7 @@ void control_binds_menu_state::load() {
     
     //Menu items.
     gui.register_coords("back",        12,  5, 20,  6);
+    gui.register_coords("header",      50,  5, 50,  6);
     gui.register_coords("list",        50, 51, 88, 82);
     gui.register_coords("list_scroll", 97, 51,  2, 82);
     gui.register_coords("tooltip",     50, 96, 96,  4);
@@ -241,6 +242,14 @@ void control_binds_menu_state::load() {
     gui.back_item->on_get_tooltip =
     [] () { return "Return to the options menu."; };
     gui.add_item(gui.back_item, "back");
+    
+    //Header text.
+    text_gui_item* header_text =
+        new text_gui_item(
+        "CONTROL BINDS",
+        game.fonts.area_name, COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_CENTER
+    );
+    gui.add_item(header_text, "header");
     
     //Controls list box.
     list_box = new list_gui_item();
@@ -574,7 +583,7 @@ void control_binds_menu_state::populate_binds() {
                     center.y,
                     center.x + size.x / 2.0f,
                     center.y,
-                    al_map_rgba(255, 255, 255, 128),
+                    COLOR_TRANSPARENT_WHITE,
                     1.0f
                 );
             };
