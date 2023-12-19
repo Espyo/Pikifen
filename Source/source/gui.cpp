@@ -734,8 +734,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
     if(!responsive) return;
     if(anim_timer.get_ratio_left() > 0.0f && ignore_input_on_animation) return;
     
-    bool input_happened = false;
-    bool mouse_involved = false;
+    bool mouse_moved = false;
     
     //Mousing over an item and clicking.
     if(
@@ -758,8 +757,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             }
         }
         set_selected_item(selection_result);
-        input_happened = true;
-        mouse_involved = true;
+        mouse_moved = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
@@ -773,14 +771,12 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
             auto_repeat_duration = 0.0f;
             auto_repeat_next_activation = GUI::AUTO_REPEAT_MAX_INTERVAL;
         }
-        input_happened = true;
-        mouse_involved = true;
+        mouse_moved = true;
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
         auto_repeat_on = false;
-        input_happened = true;
-        mouse_involved = true;
+        mouse_moved = true;
     }
     
     for(size_t i = 0; i < items.size(); ++i) {
@@ -789,7 +785,7 @@ void gui_manager::handle_event(const ALLEGRO_EVENT &ev) {
         }
     }
     
-    last_input_was_mouse = input_happened && mouse_involved;
+    if(mouse_moved) last_input_was_mouse = true;
 }
 
 
@@ -972,6 +968,9 @@ bool gui_manager::handle_player_action(const player_action &action) {
     }
     }
     
+    if(button_recognized) {
+        last_input_was_mouse = false;
+    }
     return button_recognized;
 }
 

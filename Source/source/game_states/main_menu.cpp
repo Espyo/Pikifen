@@ -75,7 +75,9 @@ void main_menu_state::do_drawing() {
     for(size_t p = 0; p < logo_pikmin.size(); ++p) {
         logo_pik* pik = &logo_pikmin[p];
         
-        draw_bitmap_in_box(pik->top, pik->pos, pik_size, pik->angle, true);
+        draw_bitmap_in_box(
+            pik->top, pik->pos, pik_size, true, pik->angle
+        );
     }
     
     draw_scaled_text(

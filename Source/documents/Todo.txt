@@ -31,7 +31,7 @@ Next tasks (roughly sorted most important first)
             Maybe have a "start_running_as" action and a "stop_running_as"
         Action groups (like functions)
     Use a screenshot for the title screen
-    If a mob only has one link, pressing the delete link button should instantly delete that one, not make the user choose
+    All menus should have some text somewhere with their name
     Idle Pikmin should prioritize checking for tasks instead of leaders. This way one can spawn a Pikmin nearby on a task and it'll do the task, instead of going to the leader
     More puzzle elements
         A timed lever. There's a vine connected to it that keeps tugging at the handle, keeping it in the off position. Flipping it (like a normal lever) turns it into the on position, and the vine pulling means there's a time limit until the lever flips back to off. Throwing a Pikmin at it or interacting with it while it's in the on position and being pulled will make it toggle to the off position so the player can reset the situation and try again (and so that the player can't arbitrarily extend the timer forever)
