@@ -204,6 +204,7 @@ Next tasks (roughly sorted most important first)
         Controls manager
             Each action type should be able to specify if it allows button-downs without button-ups (for Pikmin, holding button 1 to whistle, and then pressing button 2 shouldn't restart the whistle, but in Rhythm Heaven, holding button 1 to do a hit, and then pressing button 2 should be another hit)
                 Basically, this means if it should always add to the action queue whenever an event drops, or if it should use the state variables, to then do events when a new frame starts
+                Also, a way for an action type to specify if it's digital in nature (only 0 or 1). This way, the player can bind zoom to an analog trigger in a controller and not have the game change zoom multiple times because their trigger press amount went from 0.62 to 0.63 to 0.65 to 0.61 etc.
             Implement game controller stick angular deadzones https://github.com/Minimuino/thumbstick-deadzones
             Implement the ability for a player actions to go back in the queue if the game code doesn't handle that action in that frame. Doing this should count that action's TTL down by delta_t
             Allow for button combinations
@@ -965,6 +966,7 @@ Tasks for later on (I might never implement these)
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
         Make the main menu's highlighter move from one place to another gradually, based on how far it is (like the camera moves in-game)
         The music should change to swing for Louie
+        In message boxes, the "menu ok" input that makes it say the next message should oscillate in size
         Particles
             Splash particles for going in water
             [NEEDS BRAINSTORMING] Particles should have a "emits light?" property, right?

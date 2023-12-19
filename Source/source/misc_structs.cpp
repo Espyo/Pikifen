@@ -997,7 +997,7 @@ msg_box_info::msg_box_info(const string &text, ALLEGRO_BITMAP* speaker_icon):
     vector<string_token> tokens = tokenize_string(message);
     set_string_token_widths(
         tokens, game.fonts.standard, game.fonts.slim,
-        al_get_font_line_height(game.fonts.standard)
+        al_get_font_line_height(game.fonts.standard), true
     );
     
     vector<string_token> line;

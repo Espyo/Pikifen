@@ -217,7 +217,7 @@ vector<string> semicolon_list_to_vector(
 void set_string_token_widths(
     vector<string_token> &tokens,
     const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
-    const float max_control_bitmap_height = 0
+    const float max_control_bitmap_height = 0, bool control_condensed = false
 );
 int show_message_box(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,

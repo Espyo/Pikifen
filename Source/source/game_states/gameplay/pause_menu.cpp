@@ -225,7 +225,7 @@ void pause_menu_struct::draw_tidbit(
     
     int line_height = al_get_font_line_height(font);
     
-    set_string_token_widths(tokens, font, game.fonts.slim, line_height);
+    set_string_token_widths(tokens, font, game.fonts.slim, line_height, true);
     
     //Split long lines.
     vector<vector<string_token> > tokens_per_line =

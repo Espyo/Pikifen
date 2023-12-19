@@ -1302,7 +1302,7 @@ void gameplay_state::draw_message_box() {
                 draw_player_input_icon(
                     game.fonts.slim,
                     game.controls.find_bind(cur_token.content).input,
-                    false,
+                    true,
                     point(
                         x + token_final_width / 2.0f,
                         y + line_height / 2.0f

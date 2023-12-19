@@ -1703,11 +1703,13 @@ vector<string> semicolon_list_to_vector(const string &s, const string &sep) {
  *   If bitmap icons need to be condensed vertically to fit a certain space,
  *   then their width will be affected too. Specify the maximum height here.
  *   Use 0 to indicate no maximum height.
+ * control_condensed:
+ *   If true, control bind player icons are condensed.
  */
 void set_string_token_widths(
     vector<string_token> &tokens,
     const ALLEGRO_FONT* text_font, const ALLEGRO_FONT* control_font,
-    const float max_control_bitmap_height
+    const float max_control_bitmap_height, bool control_condensed
 ) {
     for(size_t t = 0; t < tokens.size(); ++t) {
         switch(tokens[t].type) {
@@ -1721,7 +1723,7 @@ void set_string_token_widths(
                 get_player_input_icon_width(
                     control_font,
                     game.controls.find_bind(tokens[t].content).input,
-                    false,
+                    control_condensed,
                     max_control_bitmap_height
                 );
         }

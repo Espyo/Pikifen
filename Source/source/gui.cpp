@@ -1562,7 +1562,7 @@ text_gui_item::text_gui_item(
             vector<string_token> tokens =
                 tokenize_string(this->text);
             set_string_token_widths(
-                tokens, game.fonts.standard, game.fonts.slim, line_height
+                tokens, game.fonts.standard, game.fonts.slim, line_height, false
             );
             vector<vector<string_token> > tokens_per_line =
                 split_long_string_with_tokens(tokens, size.x);
