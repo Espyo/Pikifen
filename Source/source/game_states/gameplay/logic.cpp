@@ -681,10 +681,16 @@ void gameplay_state::do_gameplay_logic(const float delta_t) {
             //Tick the mob.
             mob* m_ptr = mobs.all[m];
             m_ptr->tick(delta_t);
-            if(!m_ptr->is_stored_inside_mob()) {
+        }
+        mobs.sort_all_lists();
+        n_mobs = mobs.all_sorted_min.size();
+        for (size_t m = 0; m < n_mobs; ++m) {
+            mob* m_ptr = mobs.all_sorted_min[m];
+            if (!m_ptr->is_stored_inside_mob()) {
                 process_mob_interactions(m_ptr, m);
             }
         }
+
         
         for(size_t m = 0; m < n_mobs;) {
             //Mob deletion.
@@ -1387,14 +1393,18 @@ void gameplay_state::process_mob_interactions(mob* m_ptr, size_t m) {
     vector<pending_intermob_event> pending_intermob_events;
     mob_state* state_before = m_ptr->fsm.cur_state;
     
-    size_t n_mobs = mobs.all.size();
+    size_t n_mobs = mobs.all_sorted_min.size();
     for(size_t m2 = 0; m2 < n_mobs; ++m2) {
         if(m == m2) continue;
         
-        mob* m2_ptr = mobs.all[m2];
+        mob* m2_ptr = mobs.all_sorted_min[m2];
         if(m2_ptr->to_delete) continue;
         if(m2_ptr->is_stored_inside_mob()) continue;
         
+        //This mob is out of reach, all follow up mobs are as well!
+        if(m2_ptr->pos.x - m2_ptr->max_span > m_ptr->pos.x + m_ptr->max_interaction_radius)
+            break;
+
         dist d(m_ptr->pos, m2_ptr->pos);
 
         if (d > m_ptr->max_interaction_radius + m2_ptr->max_span)

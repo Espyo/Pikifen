@@ -292,6 +292,10 @@ class ship_type;
 struct mob_lists {
     //All mobs in the area.
     vector<mob*> all;
+    //all the mobs sorted by their x position
+    vector<mob*> all_sorted_min;
+    vector<mob*> all_sorted_max;
+
     //Bouncers.
     vector<bouncer*> bouncers;
     //Bridges.
@@ -330,6 +334,9 @@ struct mob_lists {
     vector<track*> tracks;
     //Treasures.
     vector<treasure*> treasures;
+
+    void sort_all_lists();
+
 };
 
 
