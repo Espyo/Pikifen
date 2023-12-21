@@ -287,6 +287,22 @@ bool vectors_contain_same(const vector<t> &v1, const vector<t> &v2) {
     return true;
 }
 
+template<typename t, class pr>
+void insertion_sort(vector<t>& vec, const pr _pr) {
+    int i, j;
+    t key;
+    for (i = 1; i < vec.size(); i++) {
+        key = vec[i];
+        j = i - 1;
+
+        while (j >= 0 && _pr(vec[j]) > _pr(key)) {
+            vec[j + 1] = vec[j];
+            j = j - 1;
+        }
+        vec[j + 1] = key;
+    }
+}
+
 
 #if defined(_WIN32)
 string strsignal(const int signum);

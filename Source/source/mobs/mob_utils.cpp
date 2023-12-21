@@ -731,42 +731,6 @@ point hold_info_struct::get_final_pos(float* final_z) const {
 }
 
 
-void mob_lists::sort_all_lists() {
-    //sort min list
-    int i, j;
-    mob* key;
-    for (i = 1; i < all_sorted_min.size(); i++) {
-        key = all_sorted_min[i];
-        j = i - 1;
-
-        // Move elements of arr[0..i-1],
-        // that are greater than key, 
-        // to one position ahead of their
-        // current position
-        while (j >= 0 && all_sorted_min[j]->pos.x - all_sorted_min[j]->max_interaction_radius > key->pos.x - key->max_interaction_radius) {
-            all_sorted_min[j + 1] = all_sorted_min[j];
-            j = j - 1;
-        }
-        all_sorted_min[j + 1] = key;
-    }
-    return;
-    //sort max list
-    for (i = 1; i < all_sorted_max.size(); i++) {
-        key = all_sorted_max[i];
-        j = i - 1;
-
-        // Move elements of arr[0..i-1],
-        // that are greater than key, 
-        // to one position ahead of their
-        // current position
-        while (j >= 0 && all_sorted_max[j]->pos.x + all_sorted_max[j]->max_interaction_radius > key->pos.x + key->max_interaction_radius) {
-            all_sorted_max[j + 1] = all_sorted_max[j];
-            j = j - 1;
-        }
-        all_sorted_max[j + 1] = key;
-    }
-}
-
 
 /* ----------------------------------------------------------------------------
  * Initializes a parent mob information struct.
@@ -1311,8 +1275,6 @@ mob* create_mob(
     }
     
     game.states.gameplay->mobs.all.push_back(m_ptr);
-    game.states.gameplay->mobs.all_sorted_max.push_back(m_ptr);
-    game.states.gameplay->mobs.all_sorted_min.push_back(m_ptr);
     return m_ptr;
 }
 
@@ -1400,20 +1362,6 @@ void delete_mob(mob* m_ptr, const bool complete_destruction) {
         find(
             game.states.gameplay->mobs.all.begin(),
             game.states.gameplay->mobs.all.end(),
-            m_ptr
-        )
-    );
-    game.states.gameplay->mobs.all_sorted_max.erase(
-        find(
-            game.states.gameplay->mobs.all_sorted_max.begin(),
-            game.states.gameplay->mobs.all_sorted_max.end(),
-            m_ptr
-        )
-    );
-    game.states.gameplay->mobs.all_sorted_min.erase(
-        find(
-            game.states.gameplay->mobs.all_sorted_min.begin(),
-            game.states.gameplay->mobs.all_sorted_min.end(),
             m_ptr
         )
     );
